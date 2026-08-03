@@ -23,6 +23,11 @@
   nav button{background:none;border:1px solid transparent;color:var(--dim);
              padding:6px 12px;border-radius:6px;cursor:pointer;font:inherit}
   nav button.on{background:var(--panel2);border-color:var(--line);color:var(--ink)}
+  nav a.cta{background:var(--accent);color:#08111f;font-weight:600;padding:6px 12px;
+            border-radius:6px;text-decoration:none;font-size:13px}
+  nav a.lnk{color:var(--dim);padding:6px 12px;border:1px solid var(--line);
+            border-radius:6px;text-decoration:none;font-size:13px}
+  nav a.lnk:hover{color:var(--ink);border-color:var(--accent)}
   main{display:grid;grid-template-columns:180px minmax(0,1fr) 360px;gap:1px;
        background:var(--line);height:calc(100vh - 53px)}
   /* below ~1000px the three columns crush the middle one to nothing and the page
@@ -92,6 +97,10 @@
   .strip img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:5px;
              border:1px solid var(--line);display:block}
   .strip figcaption{font-size:11px;color:var(--dim);padding-top:3px;text-align:center}
+  .sheet{width:100%;border-radius:7px;border:1px solid var(--line);display:block}
+  .rev{margin-top:9px;font-size:12px;color:var(--dim)}
+  .rev summary{cursor:pointer;color:var(--warn)}
+  .vcard .strip figcaption em{color:var(--accent);font-style:normal}
 </style>
 </head>
 <body>
@@ -99,11 +108,37 @@
   <h1>studio</h1>
   <span class="sub" id="stat">loading…</span>
   <nav>
-    <button id="tabBuild" class="on">Build a scene</button>
+    <a class="cta" href="/wizard">★ Direct a scene</a>
+    <a class="lnk" href="/gallery">Gallery</a>
+    <button id="tabBuild" class="on">Pick presets</button>
     <button id="tabCards">What options look like</button>
     <button id="tabVars">All variables</button>
   </nav>
 </header>
+
+<!-- A first-time visitor lands here and has no idea which of three tabs is the start.
+     Say it plainly, once, and let them dismiss it. -->
+<div id="hello" style="padding:12px 18px;border-bottom:1px solid var(--line);
+     background:var(--panel2);font-size:13px;display:flex;gap:14px;align-items:center;
+     flex-wrap:wrap">
+  <b>New here?</b>
+  <span style="color:var(--dim)">
+    <a href="/wizard" style="color:var(--accent)">Direct a scene</a> walks you through it
+    step by step and renders the result — start there.
+    This page is the reference: every option, and what each one actually looks like.
+  </span>
+  <button id="hellox" style="margin-left:auto;background:none;border:1px solid var(--line);
+    color:var(--dim);border-radius:6px;padding:4px 10px;cursor:pointer;font:inherit">
+    got it</button>
+</div>
+<script>
+  (function(){
+    var h=document.getElementById('hello');
+    if(localStorage.getItem('studio_hello')==='1') h.style.display='none';
+    document.getElementById('hellox').onclick=function(){
+      h.style.display='none'; localStorage.setItem('studio_hello','1'); };
+  })();
+</script>
 
 <main id="build">
   <div class="col" id="groups"></div>
@@ -252,18 +287,56 @@ $('#st').addEventListener('change', drawVars);
 let CARDS = [];
 async function drawCardTab(){
   if (!CARDS.length) CARDS = await (await fetch('/api/cards')).json();
-  $('#cardlist').innerHTML = CARDS.map(c => `
+  // Only 11 of 209 cards carry look_at and only 3 carry a verdict, because those are
+  // written from LOOKING at the panels and that pass has barely been done. This used to
+  // print `${c.look_at}` unconditionally, so 198 cards displayed
+  // "What to notice: undefined" - which reads as a broken app rather than as an honest
+  // gap. Absent fields are now absent, and the gap is stated once where it is true.
+  //
+  // 72 cards are `not_visual`: the variable is real but a still cannot show it (a camera
+  // MOVE, a scheduling priority, a relationship to a different shot). Those say why
+  // instead of showing an empty strip.
+  //
+  // 137 now have a contact `sheet` - one labelled grid instead of eight loose images -
+  // which is both faster to load and far easier to compare across.
+  $('#cardlist').innerHTML = CARDS.map(c => {
+    const panels = c.panels || [];
+    let body;
+    if (c.not_visual) {
+      body = `<p class="lookat"><b>Nothing to show, and that is the honest answer:</b>
+              ${c.not_visual}</p>
+              ${(c.options||[]).length
+                ? `<p class="method">values: ${(c.options||[]).map(o=>
+                    typeof o==='string'?o:o.value).join(' · ')}</p>` : ''}`;
+    } else if (c.sheet) {
+      body = `<img class="sheet" src="${c.sheet}" loading="lazy"
+                   alt="${c.variable} options">`;
+    } else if (panels.length) {
+      body = `<div class="strip">${panels.map(p => `
+        <figure><img src="${p.sample}" loading="lazy" alt="${p.value}">
+          <figcaption><code>${p.value}</code>${p.control?' <em>control</em>':''}</figcaption>
+        </figure>`).join('')}</div>`;
+    } else {
+      body = `<p class="method">no panels rendered yet</p>`;
+    }
+    const rev = (c.review||[]).length
+      ? `<details class="rev"><summary>${c.review.length} reviewer note(s)</summary>
+         ${c.review.map(r=>`<p class="method"><b>${r.issue||''}</b><br>${r.fix||''}</p>`).join('')}
+         </details>` : '';
+    return `
     <section class="vcard">
       <h3>${c.variable}</h3>
-      <p class="claim">${c.claim}</p>
+      <p class="claim">${c.claim||''}</p>
       ${c.verdict ? `<p class="verdict"><b>Verdict:</b> ${c.verdict}</p>` : ''}
-      <div class="strip">${c.panels.map(p => `
-        <figure><img src="${p.sample}" loading="lazy" alt="${p.value}">
-          <figcaption><code>${p.value}</code></figcaption></figure>`).join('')}</div>
-      <p class="lookat"><b>What to notice:</b> ${c.look_at}</p>
-      <p class="method">${c.method} · ${c.model}</p>
-    </section>`).join('')
-    || '<p class="empty">no cards yet — run studio/make_cards.py</p>';
+      ${body}
+      ${c.look_at ? `<p class="lookat"><b>What to notice:</b> ${c.look_at}</p>`
+                  : (c.not_visual ? '' :
+                     `<p class="lookat">No verdict yet — these panels have been rendered
+                      but not yet looked at, so treat the claim above as untested.</p>`)}
+      ${rev}
+      ${c.method ? `<p class="method">${c.method}${c.model?' · '+c.model:''}</p>` : ''}
+    </section>`;}).join('')
+    || '<p class="empty">no cards yet — run studio/gen_cards.py</p>';
 }
 
 function show(which){
