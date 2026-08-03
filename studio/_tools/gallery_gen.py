@@ -184,8 +184,20 @@ def generate(tpl_id, tpl, shot_i, vary_key, vary_val, libs, dry=False):
             flags.append("too_dark")
         elif y > 210:
             flags.append("blown_out")
-    if s is not None and s < 6:
-        flags.append("near_greyscale")
+    # NO SATURATION FLAG.
+    #
+    # There was one, at sat < 6, and it produced 76 of the first 79 flags - every one a
+    # false positive. The values it fired on hardest were bleach, bleach_bypass and noir,
+    # at 100%: looks whose entire job is to remove colour. Flagging those is flagging a
+    # black-and-white film as broken.
+    #
+    # The giveaway was in the corpus itself. Every weather value came back flagged in
+    # exactly one of two templates, which cannot be a property of weather - it was the
+    # template's LOOK driving saturation. The measure was reading intent and calling it
+    # failure.
+    #
+    # `sat` is still recorded, because it is genuinely useful for comparing looks against
+    # each other. It is just not evidence of a defect on its own.
 
     return {
         "id": rid,
