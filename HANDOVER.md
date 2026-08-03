@@ -164,7 +164,7 @@ coloured shapes.
 | `transition` | **compiles but does nothing.** short.py is all hard cuts by design; the 12 transition presets change nothing. epic.py does honour them. |
 | 131 prompt-driven cards | still unverified against their own claims. The contact sheets exist now, so this is a matter of looking, not of tooling. |
 | `type`, `logline`, `negative`, `blocking`, `lipsync` | parsed and dropped |
-| L-cuts / J-cuts | ~20 lines, and the highest craft-value-per-line item available. We cut picture and sound on the same frame at every transition, which is the loudest tell of an amateur edit. |
+| L-cuts / J-cuts | **built** — `audio_lead` on any beat, in seconds, negative to bring a line in early; `transition: l_cut` / `j_cut` is sugar for −0.6s on the scene's first line. Off by default. See the caveat below before using it. |
 | `layer.depth_map` | unblocks dolly_zoom, rack_focus, parallax and per-plane blur together. Depth Anything 3 is already installed. |
 | MANAGER | has no reference sheet, so IPAdapter drops to 0.0 on his shots and his face drifts. `compile.py` warns. |
 
@@ -197,9 +197,43 @@ the fix.
 
 ---
 
+## The one that matters most: short.py breaks the project's own Law 1
+
+Building L-cuts turned up something bigger than L-cuts.
+
+I added a guard that warns when two voice cues collide. It fired on the very first run:
+
+```
+!! voice overlap: VIRO runs 1.59s into MANAGER at 20.94s
+```
+
+That is **not** caused by the audio offset. VIRO's tunnel line is 4.20s long and its beat
+is shorter, so the voice already spilled about 1s into the next scene — and nothing had
+ever reported it. Removing the 0.6s lead leaves 0.99s of overlap.
+
+The root cause is structural. `FILMCRAFT.md`'s first law reads:
+
+> Generate in dependency order. Speak every line first, measure with ffprobe, then derive
+> each shot's frame count from the real duration. Nothing ever needs padding.
+
+`epic.py` does exactly that. **`short.py` does not** — it renders keyframes and clips first,
+voices fourth, and sizes every shot from a fixed template (`clip_secs: 6` scaled by pace).
+So any line longer than its template silently overruns into the next scene, and the fixed
+`min(vd, ...)` cap only ever shortened the *caption*, never the audio.
+
+Consequence: `audio_lead` works, but this film's timing cannot absorb it. I reverted the
+example scene to a plain `cut`. Using an L-cut is only safe once shot length follows
+speech length.
+
+**The fix** is to run `voices` before `clips` in `short.py`'s stage order and derive each
+beat's `clip_secs` from the measured line duration plus the documented `LEAD 0.30 + TAIL
+1.15`. That is a real change to the stage graph, not a tweak, which is why I stopped at
+diagnosing it rather than starting it with an hour left.
+
 ## If I had another six hours
 
-1. **L-cuts/J-cuts.** ~20 lines, biggest craft return available.
+1. **Make shot length follow speech length in short.py** (see above). It unblocks L-cuts,
+   removes the pre-existing dialogue overruns, and is the project's own stated first law.
 2. **Look at the 131 unverified cards** and write their verdicts from the sheets. The
    tooling is done; this is now just looking.
 3. **Rebuild every post-tier card deterministically.** The two I did prove the method; the

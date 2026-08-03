@@ -82,6 +82,7 @@ VARS = collections.OrderedDict([
     ("camera",      ("any",     "static",    "studio/cameras/*.json - default move for shots here")),
     ("fx",          ("any",     "",          "punch shake aberr glow flash hot ramp smear whiteout")),
     ("transition",  ("scene",   "cut",       "studio/transitions/*.json - how we ENTER this scene")),
+    ("audio_lead",  ("any",     0,           "seconds to shift dialogue against picture. NEGATIVE = hear it early")),
     ("cue",         ("any",     "",          "studio/cues/*.json - music under this scene")),
     ("silence",     ("scene",   False,       "drop all score. use before an impact")),
     ("wear",        ("any",     0,           "damage continuity 0-4. never decreases")),
@@ -267,6 +268,7 @@ def compile_movie(path):
             wear = int(v.get("wear", 0))
             scale = PACE.get(str(v.get("pace", "normal")), 1.0)
             scene_start, scene_len = clock, 0.0
+            spoken_in_scene = False   # only the scene's FIRST line gets the boundary lead
 
             for i, b in enumerate(sc["beats"]):
                 bid = f"{ch['id']}_{sc['id']}_{i:02d}"
@@ -333,6 +335,29 @@ def compile_movie(path):
                 d["motion"] = "Slow deliberate movement only."
                 if b.get("text"):
                     d["line"] = {"who": who, "text": b["text"]}
+                    # Audio/picture offset. An explicit `audio_lead` always wins; the
+                    # l_cut / j_cut transitions are sugar for -0.6s applied to the FIRST
+                    # spoken beat of the scene, i.e. the boundary, which is the only
+                    # place the overlap means anything.
+                    #
+                    # TERMINOLOGY WARNING: studio/transitions/l_cut.json and j_cut.json
+                    # define these the OPPOSITE way round from standard film usage.
+                    # Standard: an L-cut is the OUTGOING audio lagging into the next shot;
+                    # a J-cut is the INCOMING audio leading its own picture. The presets
+                    # say the reverse. Both are implemented here as "bring this line in
+                    # early" because that is the only movement the mixer needs - the
+                    # voice already plays its full length past its own shot, so the
+                    # lagging half happens for free. Rename the presets if you want them
+                    # to match how a cutting room would say it.
+                    try:
+                        lead = float(v.get("audio_lead", 0) or 0)
+                    except (TypeError, ValueError):
+                        lead = 0.0
+                    if not lead and tr["id"] in ("l_cut", "j_cut") and not spoken_in_scene:
+                        lead = -0.6
+                    if lead:
+                        d["audio_lead"] = round(lead, 3)
+                    spoken_in_scene = True
                 beats.append(d)
                 scene_len += beat_seconds(d)
 

@@ -463,9 +463,36 @@ def cut(film, out):
         if b.get("line"):
             vp = f"{out}/voice/{b['id']}.mp3"
             vd = adur(vp) if os.path.exists(vp) else 1.2
-            cues.append((line_start, min(vd, t - line_start), b["line"], vp))
+            # AUDIO / PICTURE OFFSET. Cutting picture and sound on the same frame at
+            # every transition is the loudest tell of an amateur edit; real dialogue
+            # scenes overlap.
+            #
+            # Note what is actually welded to the picture here, because it is not what
+            # you would guess: the voice is mixed with `adelay` at `start` and then plays
+            # its WHOLE file, so audio already runs past the end of its own shot. The
+            # `length` below only drives how long the caption stays up. So the one thing
+            # that needs to move is the START.
+            #
+            # audio_lead is in seconds, NEGATIVE to bring the line in early (you hear the
+            # next scene before you see it). Clamped at 0 so a lead longer than everything
+            # before it cannot push the cue to a negative timestamp, which adelay would
+            # reject.
+            lead = float(b.get("audio_lead", 0.0) or 0.0)
+            cue_start = max(0.0, line_start + lead)
+            cues.append((cue_start, min(vd, max(t - cue_start, 0.4)), b["line"], vp))
     print(f"  {len(pieces)} shots, {t:.1f}s, median "
           f"{sorted(dur(p) for p in pieces)[len(pieces)//2]:.2f}s")
+
+    # Once cues can move they can collide, and two voices talking over each other is
+    # not an L-cut, it is a mistake. Check against the REAL audio length rather than the
+    # caption length, because the voice keeps playing after its caption disappears.
+    ordered = sorted(cues, key=lambda c: c[0])
+    for (s1, _, l1, p1), (s2, _, l2, _) in zip(ordered, ordered[1:]):
+        end1 = s1 + (adur(p1) if os.path.exists(p1) else 1.2)
+        if end1 > s2 + 0.05:
+            print(f"    !! voice overlap: {l1['who']} runs {end1 - s2:.2f}s into "
+                  f"{l2['who']} at {s2:.2f}s - reduce the audio_lead on that beat",
+                  file=sys.stderr)
 
     # ---- concat: this format is ALL hard cuts, no dissolves anywhere ----------
     lst = f"{work}/list.txt"
