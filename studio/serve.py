@@ -33,7 +33,8 @@ MIME = {".webp": "image/webp", ".png": "image/png", ".jpg": "image/jpeg",
 
 # folders that hold pickable presets, in the order the UI should show them
 GROUPS = ["shots", "cameras", "transitions", "looks", "lighting", "layers",
-          "weather", "emotions", "soundscapes", "pacing", "places", "characters", "cues"]
+          "weather", "emotions", "soundscapes", "pacing", "places", "characters", "cues",
+          "prompts"]
 
 
 def library():

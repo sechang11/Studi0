@@ -3,8 +3,15 @@
   "name": "Viro",
   "desc": "The playmaker. Number 7. Has never beaten his rival.",
   "status": "ready",
-  "tags": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, teal soccer jersey, orange trim, number 7",
+  "tags": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud",
+  "wear_tags": [
+    "clean teal soccer jersey, orange trim, number 7, neat hair",
+    "teal soccer jersey, orange trim, number 7, sweaty, damp hair, flushed",
+    "dirty teal soccer jersey, orange trim, number 7, grass stains, messy hair, breathing hard",
+    "torn teal soccer jersey, orange trim, number 7, dirt and grass stains, scraped knee, dishevelled hair, exhausted",
+    "torn bloodied teal soccer jersey, orange trim, number 7, cut on cheek, bloodied lip, mud, trembling, utterly exhausted"
+  ],
   "sheet": "sheet_anime_viro.png",
   "voice": "higgs_v3 voices_examples/higgs_audio/vex.wav",
-  "note": "Two specified items beat five - see craft/CINEMATOGRAPHY.md. The jersey colour and the number are the load-bearing tokens; drop the rest before dropping those."
+  "note": "THE GARMENT LIVES IN wear_tags, NOT IN tags. Verified 2026-08-03: with the jersey described as pristine in `tags` and the damage appended afterwards as 'torn bloodied uniform', wear:4 rendered a completely clean uniform - the model resolves the contradiction in favour of the earlier, more specific description. Damage has to modify the garment noun itself. `tags` therefore carries only what never changes: face, hair, build."
 }

@@ -1,0 +1,10 @@
+{
+  "id": "sfx_hit",
+  "title": "Stable Audio one-shot",
+  "dialect": "sfx",
+  "model": "Stable Audio 3 Medium",
+  "workflow": "10_stableaudio_sfx",
+  "prompt": "a single sharp leather football being struck hard, close, dry, no music",
+  "why": "ONE sound per bed. 100 steps, cfg 7, dpmpp_3m_sde - unlike ACE-Step this model is NOT distilled, so cfg 1.0 is wrong here and clips. Normalise every result: measured spread across generations is ~15 dB, with some files peaking at exactly 0.0 dBFS.",
+  "status": "ready"
+}

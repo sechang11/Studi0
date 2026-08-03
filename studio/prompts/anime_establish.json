@@ -1,0 +1,11 @@
+{
+  "id": "anime_establish",
+  "title": "Anime establishing wide",
+  "dialect": "danbooru",
+  "model": "animagine-xl-4.0",
+  "workflow": "22_anime_kf_ipadapter / 13_qwen_t2i_styled",
+  "prompt": "no humans, empty soccer stadium at night, floodlights, empty stands, confetti on wet grass, wide shot, scenery, cinematic lighting, masterpiece, best quality, very aesthetic, absurdres",
+  "why": "Danbooru grammar: comma-separated tags, subject first, camera word ('wide shot') as a tag rather than a sentence. `no humans` is a real danbooru tag and the reliable way to get an empty frame - it is NOT negation, which SDXL cannot do in a positive prompt.",
+  "status": "ready",
+  "sample": "/samples/prompts/anime_establish.webp"
+}

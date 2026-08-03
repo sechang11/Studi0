@@ -1,0 +1,10 @@
+{
+  "id": "music_cue",
+  "title": "ACE-Step score cue",
+  "dialect": "music-tags",
+  "model": "ACE-Step 1.5 Turbo",
+  "workflow": "06_acestep_music",
+  "prompt": "sparse melancholy piano, single sustained cello, empty stadium, defeat, restrained, instrumental",
+  "why": "Tags plus bpm plus key, and cfg 1.0 - which is CORRECT for a distilled turbo model, not a bug. Always say 'instrumental' unless you want it to invent lyrics. ACE-Step has no hit-point conditioning and cannot spot to picture, so generate longer than the scene and trim in the mix.",
+  "status": "ready"
+}

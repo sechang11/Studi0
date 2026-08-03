@@ -1,0 +1,10 @@
+{
+  "id": "ltx_motion",
+  "title": "LTX image-to-video motion clause",
+  "dialect": "ltx-motion",
+  "model": "LTX-2.3 22B",
+  "workflow": "12_ltx23_i2v_audio",
+  "prompt": "A slow forward dolly shot. The player lifts his head and looks up. Confetti drifts down through the floodlight beams, his hair moves slightly in the wind. Distant crowd murmur and a low wind.",
+  "why": "ORDER IS LOAD-BEARING: camera clause first and ONE move only, then subject motion, then ambient motion, then a soundscape clause (LTX generates audio natively). Nine motion shapes reliably fail - sequential beats ('X, then Y'), two actors doing separate things, motion contradicting the keyframe, subjects entering or leaving frame, dematerialisation, prop hand-offs, screen content changes, time-lapse and split-screen. Ambient motion is safe three or four at a time.",
+  "status": "ready"
+}
