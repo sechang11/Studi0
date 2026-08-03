@@ -274,6 +274,31 @@ def anime_keyframe(film, b, out, seed):
                                                 "animagine-xl-4.0.safetensors"))
     refs = b.get("ref") or []
     sheets = film.get("anime_sheets", {})
+
+    # A TRAINED CHARACTER LORA, if this beat's character has one.
+    #
+    # This is the payoff of the whole cast pipeline. IPAdapter refines a face from one
+    # reference and a weight sweep on this box found the character "already recognisable
+    # at ZERO" - so the sheet was carrying much less than assumed and identity drifted
+    # anyway. A LoRA trained on that character is a change to the weights, not a hint,
+    # and it holds across scenes the sheet never covered.
+    #
+    # Inserted between the checkpoint and whatever consumes its MODEL, so the graph stays
+    # valid regardless of node order. IPAdapter still runs alongside: they are refining
+    # the same thing from different directions, and the sheet costs nothing when a LoRA
+    # is present.
+    loras = film.get("character_loras") or {}
+    if refs and loras.get(refs[0]):
+        wf["90"] = {"class_type": "LoraLoaderModelOnly",
+                    "inputs": {"model": ["1", 0], "lora_name": loras[refs[0]],
+                               "strength_model": float(film.get("character_lora_weight",
+                                                                0.85))}}
+        for nid, node in list(wf.items()):
+            if nid in ("1", "90") or not isinstance(node, dict):
+                continue
+            for k, v in (node.get("inputs") or {}).items():
+                if isinstance(v, list) and len(v) == 2 and v[0] == "1" and v[1] == 0:
+                    node["inputs"][k] = ["90", 0]
     if refs and refs[0] in sheets:
         set_path(wf, "2.inputs.image", sheets[refs[0]])
         set_path(wf, "4.inputs.weight", float(film.get("ipadapter_weight", 0.6)))

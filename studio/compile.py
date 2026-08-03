@@ -576,6 +576,11 @@ def compile_movie(path):
         anime_sheets=sheets,
         sheets=sheets,
         characters={c: c for c in used},
+        # Trained character LoRAs, for the cast members that have one. short.py inserts
+        # these between the checkpoint and the sampler per beat. A sheet is a hint; a
+        # trained LoRA is a change to the weights, and it holds in scenes the sheet
+        # never covered.
+        character_loras={c: cast[c]["lora"] for c in used if cast[c].get("lora")},
         voices={c: {"engine": cast[c]["voice"].split()[0],
                     "voice": cast[c]["voice"].split()[-1]}
                 for c in used if cast[c].get("voice")},
