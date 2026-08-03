@@ -1,0 +1,19 @@
+{
+  "id": "motion_blur",
+  "term": "motion blur",
+  "family": "light",
+  "means": "Smearing along the direction of movement, as a real shutter records a moving subject.",
+  "does": "On this model it softens the whole frame rather than only the moving part, so faces and edges lose definition and the image reads as out of focus instead of fast.",
+  "reach_for_it": "never in the positive. Speed comes from `motion lines`, `speed lines` and the post-processing fx chain, all of which are exact.",
+  "strength": "negative-only",
+  "pairs_with": [],
+  "fights_with": [
+    "best quality",
+    "absurdres",
+    "sharp"
+  ],
+  "negative_instead": true,
+  "used_in": "the standing negative prompt of every anime keyframe in this project",
+  "example": "/samples/tags/motion_blur.webp",
+  "example_base": "1boy, solo, male focus, short dark hair, plain jacket, standing, city street, daytime"
+}

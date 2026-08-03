@@ -218,6 +218,23 @@ class H(http.server.SimpleHTTPRequestHandler):
             if not os.path.exists(p):
                 return self._send(b"make.html is missing", 500, "text/plain")
             return self._send(open(p, "rb").read(), 200, "text/html; charset=utf-8")
+        if path in ("/tags", "/tags.html"):
+            p = f"{HERE}/tags.html"
+            if not os.path.exists(p):
+                return self._send(b"tags.html is missing", 500, "text/plain")
+            return self._send(open(p, "rb").read(), 200, "text/html; charset=utf-8")
+        if path == "/api/tags":
+            d = f"{HERE}/tags"
+            if not os.path.isdir(d):
+                return self._send([])
+            out = []
+            for fn in sorted(os.listdir(d)):
+                if fn.endswith(".json"):
+                    try:
+                        out.append(json.load(open(f"{d}/{fn}", encoding="utf-8")))
+                    except Exception:
+                        pass
+            return self._send(out)
         if path == "/api/domains":
             return self._send(domains())
         if path == "/api/render/status":
