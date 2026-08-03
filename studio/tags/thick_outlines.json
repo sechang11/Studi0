@@ -1,0 +1,22 @@
+{
+  "id": "thick_outlines",
+  "term": "thick outlines",
+  "family": "style",
+  "means": "A heavy, high-contrast keyline around characters and props - the ink weight of the drawing, independent of how it is coloured.",
+  "does": "Bolds the character keyline and separates figures hard from the background. Reads punchy and shounen. The tested clause is 'thick lineart, bold heavy outlines' and it does register - but studio/cards/anime_draw_line_weight.json measured that there is NO degree control at the other end: 'extremely thin lineart, hairline outlines' and 'thin lineart, delicate outlines' render identically, because the model has one thin-lineart feature and no fine gradation on it. So thick versus normal is a real switch; fine weight steps are not.",
+  "reach_for_it": "when figures are getting lost against a busy background, or when you want the frame to read as TV animation rather than as illustration",
+  "strength": "moderate",
+  "pairs_with": [
+    "cel shading",
+    "flat colour",
+    "anime",
+    "manga"
+  ],
+  "fights_with": [
+    "painterly",
+    "watercolour",
+    "photorealistic"
+  ],
+  "negative_instead": false,
+  "used_in": "anime.draw.line_weight/thick"
+}

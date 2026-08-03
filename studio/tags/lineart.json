@@ -1,0 +1,23 @@
+{
+  "id": "lineart",
+  "term": "lineart",
+  "family": "style",
+  "means": "The line layer alone - outlines with no colour underneath. On danbooru it is a binary page attribute: the image IS lines only.",
+  "does": "Danbooru grammar, not description. It removes the fills, so every colour tag elsewhere in the prompt is contradicted and the frame goes black-on-white. This is the clearest contradiction case in the style set: 'lineart' next to 'teal soccer jersey, orange trim, number 7' asks for two incompatible pictures, and you get an unstable one rather than a compromise. Note the difference between the bare attribute and the MODIFIER forms - 'thick lineart', 'clean lineart', 'colored lineart' describe the line while leaving the fill alone, and those are what the line_weight card is built from.",
+  "reach_for_it": "title cards, ending-sequence stills, a deliberately un-inked beat. If you only want to describe the LINE and still want a coloured frame, use a modifier form instead of the bare tag.",
+  "strength": "strong",
+  "pairs_with": [
+    "monochrome",
+    "sketch",
+    "manga",
+    "thick outlines"
+  ],
+  "fights_with": [
+    "cel shading",
+    "flat colour",
+    "painterly",
+    "any tag naming a colour"
+  ],
+  "negative_instead": false,
+  "used_in": "the modifier form throughout anime.draw.line_weight ('clean lineart, even line weight'); the bare attribute is in no current film"
+}

@@ -1,0 +1,23 @@
+{
+  "id": "manga",
+  "term": "manga",
+  "family": "style",
+  "means": "The printed page rather than the screen - a comic as it appears on paper: panel borders, screentone dots in place of flat colour, speech bubbles, and no colour at all.",
+  "does": "Brings the whole printed-page package, not just a line style. Expect greyscale, halftone screentone, and often panel borders or a gutter intruding into the frame. This is danbooru GRAMMAR: on the corpus 'manga' is a page-format attribute, so it drags panelling and monochrome in with it whether you asked or not, and it will silently kill every colour tag in the prompt. Treat it as a decision about what KIND of image this is, not as a flavour on top of one.",
+  "reach_for_it": "for a deliberate page-as-image beat - a flashback rendered as a comic, a title card, an eyecatch - never as the general style of a colour film",
+  "strength": "strong",
+  "pairs_with": [
+    "monochrome",
+    "screentone",
+    "lineart",
+    "thick outlines"
+  ],
+  "fights_with": [
+    "cel shading",
+    "flat colour",
+    "cinematic",
+    "any tag naming a colour"
+  ],
+  "negative_instead": false,
+  "used_in": "no current film house style; adjacent to shot.fx.screentone, whose card review warns that 'monochrome' inside a screentone clause greyscales the entire frame"
+}

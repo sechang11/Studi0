@@ -1,0 +1,24 @@
+{
+  "id": "2boys",
+  "term": "2boys",
+  "family": "subject",
+  "means": "The exact danbooru count tag for two males. Note the form - digit prefixed, no space. 'two boys' is prose and carries far less signal than 2boys.",
+  "does": "Reliably puts two male figures in the frame; the count itself lands. What does not land is which one is where. The model holds no blocking, so left-right ordering re-rolls between shots and consecutive cuts will silently swap your characters. Anatomy is the second cost and it is measured: 8 of 35 beats in THE DERBY - 23 percent of the film - came back with merged bodies and distorted limbs, concentrated on the action beats, so the damage landed exactly where the piece should have been strongest. And it revokes solo; never ship both.",
+  "reach_for_it": "two-shots you cannot stage any other way - a confrontation, a handshake, a challenge - then look at the render instead of trusting it",
+  "strength": "strong",
+  "pairs_with": [
+    "male focus",
+    "from behind",
+    "over the shoulder"
+  ],
+  "fights_with": [
+    "solo",
+    "1boy",
+    "no humans"
+  ],
+  "negative_instead": false,
+  "used_in": "one single use across all nine films, in derby.json - the avoidance is deliberate. roadmap/blocking.md lists the three ways out: facing tags held consistent, SDPose/ControlNet conditioning, or compositing two single-character renders",
+  "example": "/samples/tags/2boys.webp",
+  "example_base": "1boy, solo, male focus, short dark hair, plain jacket, standing, city street, daytime",
+  "read_it_as": "Compare the SHADING, colour and line - not the pose or framing. Adding any clause re-rolls the model's conditioning, so composition moves between the two panels even at a fixed seed. An img2img pass from one fixed base image would isolate the tag properly; that is not built yet."
+}

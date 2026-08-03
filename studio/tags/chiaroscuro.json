@@ -1,0 +1,24 @@
+{
+  "id": "chiaroscuro",
+  "term": "chiaroscuro",
+  "family": "light",
+  "means": "The Renaissance-painting term for extreme light-against-dark modelling: a small lit area surrounded by deep shadow, with the figure emerging out of blackness.",
+  "does": "On its own, close to nothing. It is an art-history word rather than danbooru vocabulary, so the model has no trained picture filed under it - precisely the QUALITY-naming tag this project has measured to be unreliable, as against tags that name a THING. The library already treats it correctly: studio/lighting/split.json spends its budget on concrete consequences - half of the face lit, half of the face in darkness, hard shadow edge running down the bridge of the nose, one eye catching light - and only then appends chiaroscuro as a trailing hint. Copy that pattern. The concrete clauses do the work; the word is a label for you, not an instruction to the model.",
+  "reach_for_it": "as a trailing hint after you have already described which half of the face is lit - never as the whole lighting instruction",
+  "strength": "weak",
+  "pairs_with": [
+    "split lighting",
+    "hard shadow edge",
+    "deep shadows",
+    "low key",
+    "high contrast"
+  ],
+  "fights_with": [
+    "soft lighting",
+    "flat even lighting",
+    "overcast flat lighting",
+    "high key"
+  ],
+  "negative_instead": false,
+  "used_in": "the tail of studio/lighting/split.json key; studio/cards/light_direction.json and light_ratio.json; studio/templates/noir_interrogation.json"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "full_body",
+  "term": "full body",
+  "family": "framing",
+  "means": "A danbooru CROP tag, not a distance: head to feet inside the frame with nothing cut off.",
+  "does": "Guarantees the whole figure fits, and to fit the feet in the model pulls the camera back - so it silently shrinks the head and simplifies the face as a side effect. Its real job is preventing the crop, not setting the distance. This is danbooru grammar rather than description: full body / upper body / portrait / close-up are one mutually exclusive crop family that the model resolves almost as syntax. Give it two of them and you get a coin flip, not a compromise.",
+  "reach_for_it": "when the POSE is the point - a leap, a volley, a stance, a fall - and cutting the legs would kill the shot",
+  "strength": "strong",
+  "pairs_with": ["dynamic pose", "dynamic angle", "wide shot", "standing", "speed lines"],
+  "fights_with": ["upper body", "close-up", "portrait", "extreme close-up"],
+  "negative_instead": false,
+  "used_in": "the establish clause of shot.purpose; the sakuga and action shots of studio/movies/derby-ep1.json; studio/templates/sports_climax.json, chase_on_foot.json and comeback_moment.json all end their action clause with \"dynamic angle, full body\""
+}

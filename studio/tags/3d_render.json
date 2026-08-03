@@ -1,0 +1,25 @@
+{
+  "id": "3d_render",
+  "term": "3d render",
+  "family": "style",
+  "means": "CGI - geometry lit by a renderer, with specular highlights, ambient occlusion and perspective-correct surfaces. What a game engine or Blender produces.",
+  "does": "In the positive it plasticises faces and hair and destroys the keyline. In the NEGATIVE it is genuinely useful on this checkpoint, because SDXL anime models drift toward glossy 3D-ish rendering on hair highlights and eyes when the prompt runs long. One practical note: the trained danbooru tag is the bare '3d', which is the form this project standing negative actually uses - write '3d', not '3d render', if you want it to bite.",
+  "reach_for_it": "never in the positive. In the negative, always - it is one of the three medium tags this project keeps there permanently.",
+  "strength": "negative-only",
+  "pairs_with": [
+    "photorealistic",
+    "western comic",
+    "worst quality"
+  ],
+  "fights_with": [
+    "anime",
+    "cel shading",
+    "thick outlines",
+    "flat colour"
+  ],
+  "negative_instead": true,
+  "used_in": "the standing negative in craft/ANIME_MODELS.md, as '3d'",
+  "example": "/samples/tags/3d_render.webp",
+  "example_base": "1boy, solo, male focus, short dark hair, plain jacket, standing, city street, daytime",
+  "read_it_as": "Compare the SHADING, colour and line - not the pose or framing. Adding any clause re-rolls the model's conditioning, so composition moves between the two panels even at a fixed seed. An img2img pass from one fixed base image would isolate the tag properly; that is not built yet."
+}

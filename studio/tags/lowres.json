@@ -1,0 +1,22 @@
+{
+  "id": "lowres",
+  "term": "lowres",
+  "family": "quality",
+  "means": "Danbooru file metadata again, the bottom band - auto-applied to small uploads, under roughly 500px. Its training images are small, soft, often rescaled thumbnails.",
+  "does": "In the positive it delivers precisely that: mushy detail, soft edges, upscaled-thumbnail texture. In the NEGATIVE it is the natural counterweight to absurdres and works reliably for the same structural reason - it is a metadata pole rather than a quality adjective, so the model has a clean direction to move away from. Standing negative here, always next to 'worst quality'.",
+  "reach_for_it": "never in the positive. Keep it in the standing negative, paired with absurdres in the positive.",
+  "strength": "negative-only",
+  "pairs_with": [
+    "worst quality",
+    "blurry",
+    "bad anatomy"
+  ],
+  "fights_with": [
+    "absurdres",
+    "highres",
+    "masterpiece",
+    "best quality"
+  ],
+  "negative_instead": true,
+  "used_in": "the standing negative in craft/ANIME_MODELS.md"
+}

@@ -1,0 +1,22 @@
+{
+  "id": "chibi",
+  "term": "chibi",
+  "family": "style",
+  "means": "Super-deformed proportions - a two-to-three-head-tall figure with an oversized head, tiny limbs and simplified features. Japanese comedy shorthand.",
+  "does": "Danbooru grammar with real force: it does not decorate a character, it REPLACES the character design. Everything you wrote about build, height, posture and costume detail is overridden, because chibi carries its own body plan. studio/cards/anime_fx_deform_mode.json makes exactly this point - chibi swaps the character for a comedy design rather than applying an effect to them, which is why it lives in its own variable - and the emote_symbols card review flags chibi_pop as wrongly filed for the same reason, noting it will redraw the whole character while every other option on that card is a small addition.",
+  "reach_for_it": "comedy beats where the stakes are being deliberately reset. Decide the SCOPE first - a chibi inset in the corner of a serious frame and a whole chibi shot are different jokes with different timing.",
+  "strength": "strong",
+  "pairs_with": [
+    "super deformed",
+    "flat colour",
+    "thick outlines",
+    "chibi inset"
+  ],
+  "fights_with": [
+    "cinematic",
+    "modern sports anime",
+    "every character build tag"
+  ],
+  "negative_instead": false,
+  "used_in": "anime.fx.deform_mode/sd_chibi ('chibi, super deformed') and /mini_inset"
+}

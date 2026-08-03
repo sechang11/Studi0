@@ -1,0 +1,23 @@
+{
+  "id": "best_quality",
+  "term": "best quality",
+  "family": "quality",
+  "means": "The top end of the same score axis whose bottom end is 'worst quality' - a training-set quality bucket, not a visible property of the image.",
+  "does": "Part of the four-tag block this project measured as load-bearing; it contributes finish and sharpness rather than any specific content. Because it is a POLE ON AN AXIS rather than a description, it is the natural partner to putting 'worst quality' in the negative - you push the same scalar from both ends at once. That is the standard Animagine recipe and the reason both words appear in this project prompts, one in each half.",
+  "reach_for_it": "always, on the anime path, as part of the block - and pair it with 'worst quality' in the negative rather than using either pole alone",
+  "strength": "strong",
+  "pairs_with": [
+    "masterpiece",
+    "very aesthetic",
+    "absurdres"
+  ],
+  "fights_with": [
+    "worst quality",
+    "lowres"
+  ],
+  "negative_instead": false,
+  "used_in": "the tail of every prompt in movies/derby-ep1.json and derby-qwen.json, opposite 'worst quality, lowres' in the standing negative",
+  "example": "/samples/tags/best_quality.webp",
+  "example_base": "1boy, solo, male focus, short dark hair, plain jacket, standing, city street, daytime",
+  "read_it_as": "Compare the SHADING, colour and line - not the pose or framing. Adding any clause re-rolls the model's conditioning, so composition moves between the two panels even at a fixed seed. An img2img pass from one fixed base image would isolate the tag properly; that is not built yet."
+}

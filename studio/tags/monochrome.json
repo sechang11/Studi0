@@ -1,0 +1,23 @@
+{
+  "id": "monochrome",
+  "term": "monochrome",
+  "family": "style",
+  "means": "No colour information at all - one hue worth of values, in practice black and white.",
+  "does": "Greyscales the ENTIRE frame, and it is among the strongest tags in this whole vocabulary. studio/cards/shot_fx_screentone.json measured exactly this: a clause meant to lay a subtle tonal veil over a thinking face ('tonal overlay, monochrome shading, screentone wash') came back fully greyscale, and the review states plainly that monochrome is a very strong danbooru tag and will greyscale the entire frame. Pure danbooru grammar - a binary attribute, not a mood - so it silently overrides every colour tag in the prompt.",
+  "reach_for_it": "flashbacks, manga inserts, a noir beat - when you want the colour GONE, all of it. If what you actually want is DESATURATED rather than absent, do it in the grade instead: studio/looks/noir.json uses hue=s=0 and measured SATAVG at exactly 0.000, deterministically and for free, with no token spent and no risk of it half-landing.",
+  "strength": "strong",
+  "pairs_with": [
+    "greyscale",
+    "manga",
+    "lineart",
+    "sketch",
+    "high contrast"
+  ],
+  "fights_with": [
+    "cel shading",
+    "flat colour",
+    "every tag naming a colour"
+  ],
+  "negative_instead": false,
+  "used_in": "studio/looks/noir.json tags ('monochrome, greyscale, high contrast, dramatic shadow, film noir'), and anime.color.setting/monochrome_memory"
+}

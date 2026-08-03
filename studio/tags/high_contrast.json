@@ -1,0 +1,25 @@
+{
+  "id": "high_contrast",
+  "term": "high contrast",
+  "family": "grade",
+  "means": "A wide gap between the darkest and brightest parts of the frame - blacks that are properly black, highlights that are properly bright, and less in the middle.",
+  "does": "As a tag it deepens shadows and lifts highlights and reads hard, graphic, unforgiving. It is real danbooru vocabulary and one of the better-behaved quality words here, because contrast is something the model genuinely learned to draw in cel art. It is far better as a GRADE, though, where it is exact: studio/looks/bleach.json is eq=contrast=1.35:saturation=0.45, noir.json is contrast 1.32 over a true greyscale (measured SATAVG exactly 0.000, which is why that steep a curve is safe there). The project position is blunt - grading is deterministic, prompting is not. One hazard: these filters MULTIPLY. Contrast in the look, plus hot at contrast 1.10 and saturation 1.18, plus glow, is how a third of a film went magenta, which is why every high-contrast look here takes saturation DOWN to leave headroom.",
+  "reach_for_it": "for noir, threat, heat, bleach-bypass grit - and set it in the look's grade string, treating the tag as a bonus",
+  "strength": "moderate",
+  "pairs_with": [
+    "low key",
+    "harsh light",
+    "deep shadows",
+    "monochrome",
+    "chiaroscuro"
+  ],
+  "fights_with": [
+    "washed out",
+    "high key",
+    "pastel colors",
+    "soft lighting",
+    "faded colours"
+  ],
+  "negative_instead": false,
+  "used_in": "the tag strings and grades of studio/looks/bleach.json, bleach_bypass.json and noir.json; the low_key and bleach_bypass options of studio/cards/grade_preset.json"
+}

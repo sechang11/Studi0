@@ -1,0 +1,24 @@
+{
+  "id": "silhouette",
+  "term": "silhouette",
+  "family": "light",
+  "means": "The figure reduced to a flat featureless shape - solid black, or one flat colour, against a much brighter background. You get outline and nothing else.",
+  "does": "Fills the subject with a single dark tone and throws away face, costume detail and colour, keeping only the contour. This is danbooru GRAMMAR, not description: it is an instruction about what the subject IS, in the same class as 1boy / solo / no humans, and it overrides the rest of your subject block. If you also write yellow eyes, dark red hair, scar on eyebrow, you have contradicted yourself, and the model splits the difference into a half-lit figure that is neither a silhouette nor a character. Strip the identity tags when you use it. The upside this project measured is large: the model reproduces silhouette far more reliably than it reproduces identity, and the summit and lantern shots of CHRONO use figures as pure shapes and have no consistency problem at all.",
+  "reach_for_it": "for a reveal, a threat, a figure whose identity is being withheld - and as a deliberate consistency dodge; budgeting roughly a third of your character shots as backs and silhouettes makes a film more consistent, not less",
+  "strength": "strong",
+  "pairs_with": [
+    "backlighting",
+    "strong backlight",
+    "rim lighting",
+    "sunset",
+    "moonlight"
+  ],
+  "fights_with": [
+    "hair colour and eye colour tags",
+    "facial detail",
+    "front lighting",
+    "flat even lighting"
+  ],
+  "negative_instead": false,
+  "used_in": "studio/lighting/silhouette.json (ratio 12.0, which crushes the face to shape, against backlit at 7.0 which keeps it readable); studio/looks/moonlit.json tags; studio/cards/anime_fx_silhouette_mode.json"
+}

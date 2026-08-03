@@ -1,0 +1,23 @@
+{
+  "id": "overexposed",
+  "term": "overexposed",
+  "family": "grade",
+  "means": "Too much light reached the sensor - highlights clipped to flat white with no detail left inside them, and the whole image pushed up the scale.",
+  "does": "Standing member of the house NEGATIVE, for the same reason as washed out: blown, detail-free highlights are a failure this checkpoint falls into on its own, especially under floodlights and especially when motion blur is in the positive. In the positive it is unreliable and, when it does land, indiscriminate - it does not blow one window, it blows the frame. If you WANT clipped whites, take them deterministically: short.py fx hot (contrast 1.10, saturation 1.18, vibrance 0.22), flash (a 0.55 brightness spike decaying over about an eighth of a second) or whiteout (a ramp to full white as saturation collapses). Note that studio/looks/heat_haze.json gets its bleached, overexposed COLOUR entirely from its grade - measured YAVG 103 to 119 - while its note is careful to say the shimmer the name promises does nothing, because no allowed filter can displace pixels.",
+  "reach_for_it": "in the negative. For blown highlights on purpose use fx hot / flash / whiteout",
+  "strength": "negative-only",
+  "pairs_with": [
+    "washed out",
+    "motion blur",
+    "blurry",
+    "white background"
+  ],
+  "fights_with": [
+    "low key",
+    "deep shadows",
+    "night",
+    "high contrast"
+  ],
+  "negative_instead": true,
+  "used_in": "the standing negative in craft/ANIME_MODELS.md; the hot option of studio/cards/shot_fx.json carries it as a positive clause; studio/looks/heat_haze.json delivers the look via grade instead"
+}

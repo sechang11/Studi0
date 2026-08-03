@@ -1,0 +1,23 @@
+{
+  "id": "sketch",
+  "term": "sketch",
+  "family": "style",
+  "means": "The drawing before cleanup - construction lines still showing, several searching strokes per contour, no finished fills.",
+  "does": "DOMINATES whatever clause it appears in. studio/cards/anime_draw_line_weight.json measured that 'rough sketch' overrides everything around it - it is the reason line_weight/rough_genga and shot.fx.impact_frame/sketch_frame return the same image, with the review stating that 'rough sketch' dominates both. Expect it to strip colour, leave pencil texture, and override your line weight, shading and finish tags. Powerful, and hard to scope.",
+  "reach_for_it": "one-frame intrusions - an impact frame, a genga flash on a hit, a title card. Almost never for a whole shot, and never inside a house style tag, because it will eat the rest of the style block.",
+  "strength": "strong",
+  "pairs_with": [
+    "monochrome",
+    "lineart",
+    "genga",
+    "unfinished lineart"
+  ],
+  "fights_with": [
+    "cel shading",
+    "flat colour",
+    "masterpiece",
+    "absurdres"
+  ],
+  "negative_instead": false,
+  "used_in": "anime.draw.line_weight/rough_genga ('rough sketch, unfinished lineart, genga') and shot.fx.impact_frame/sketch_frame"
+}

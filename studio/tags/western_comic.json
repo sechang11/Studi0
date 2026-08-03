@@ -1,0 +1,21 @@
+{
+  "id": "western_comic",
+  "term": "western comic",
+  "family": "style",
+  "means": "American and European comic-book art - heavier rendered musculature, cross-hatched or airbrushed modelling, and face and eye proportions unlike anime.",
+  "does": "In the positive it does not give you a stylish crossover, it gives you a confused hybrid - anime eyes on comic-book anatomy - or a full drift off the model competence. It is in the standing negative here for that reason. There is a second, sharper reason to keep it out, documented under character consistency in craft/ANIME_MODELS.md: a Western-comic character sheet fed to an anime checkpoint fights itself, and the sheets on this project had to be regenerated with the anime model before IPAdapter would behave.",
+  "reach_for_it": "never in the positive on this checkpoint. If you genuinely want that look, change checkpoints - do not try to tag your way there.",
+  "strength": "negative-only",
+  "pairs_with": [
+    "photorealistic",
+    "3d render",
+    "multiple views"
+  ],
+  "fights_with": [
+    "anime",
+    "cel shading",
+    "manga"
+  ],
+  "negative_instead": true,
+  "used_in": "the standing negative in craft/ANIME_MODELS.md"
+}

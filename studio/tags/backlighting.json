@@ -1,0 +1,27 @@
+{
+  "id": "backlighting",
+  "term": "backlighting",
+  "family": "light",
+  "means": "The key light is BEHIND the subject, pointing back toward camera. Not a mood word - a statement about where the lamp is standing.",
+  "does": "Blows the background bright, drops the front of the subject into soft shadow, and throws a glowing outline around hair and shoulders. It is the reliable spelling on this model: where rim lighting describes the result, backlighting is a heavily trained danbooru tag and is what actually delivers the rim. It behaves close to GRAMMAR - it fixes the light direction for the whole frame, so a second lighting tag naming a different direction (harsh overhead sunlight, underlight, front lighting) is a direct contradiction and the model splits the difference into mush. One light direction per prompt.",
+  "reach_for_it": "when you want a figure glowing at the edges against a bright window, doorway or sky - it is also the cheap route toward a silhouette without committing to a full black shape",
+  "strength": "strong",
+  "pairs_with": [
+    "rim lighting",
+    "silhouette",
+    "lens flare",
+    "god rays",
+    "sunset"
+  ],
+  "fights_with": [
+    "harsh overhead sunlight",
+    "underlight",
+    "front lighting",
+    "flat even lighting"
+  ],
+  "negative_instead": false,
+  "used_in": "studio/looks/blockbuster.json and sunset.json tag strings; studio/lighting/backlit.json; the rim_only option of studio/cards/anime_fx_silhouette_mode.json",
+  "example": "/samples/tags/backlighting.webp",
+  "example_base": "1boy, solo, male focus, short dark hair, plain jacket, standing, city street, daytime",
+  "read_it_as": "Compare the SHADING, colour and line - not the pose or framing. Adding any clause re-rolls the model's conditioning, so composition moves between the two panels even at a fixed seed. An img2img pass from one fixed base image would isolate the tag properly; that is not built yet."
+}

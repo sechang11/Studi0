@@ -1,0 +1,20 @@
+{
+  "id": "very_aesthetic",
+  "term": "very aesthetic",
+  "family": "quality",
+  "means": "An Animagine-specific quality bucket from the checkpoint own training recipe, derived from an aesthetic-scoring pass over the dataset rather than from any danbooru tag a human typed. It names a score band and nothing visible.",
+  "does": "Pushes composition and colour toward whatever the aesthetic scorer rewarded - cleaner framing, more pleasing palettes, better-finished faces. Part of the measured load-bearing block. TWO HONEST CAVEATS: it is checkpoint-specific vocabulary, so it means nothing to a non-Animagine SDXL and nothing at all to Qwen; and like the rest of the block its individual contribution here has never been isolated.",
+  "reach_for_it": "on the anime path, as part of the standard block. Drop it if you ever move off Animagine - carrying the block over unexamined spends tokens on a word the new model never learned.",
+  "strength": "strong",
+  "pairs_with": [
+    "masterpiece",
+    "best quality",
+    "absurdres"
+  ],
+  "fights_with": [
+    "worst quality",
+    "lowres"
+  ],
+  "negative_instead": false,
+  "used_in": "the tail of every prompt in movies/derby-ep1.json and derby-qwen.json"
+}

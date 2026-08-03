@@ -1,0 +1,23 @@
+{
+  "id": "washed_out",
+  "term": "washed out",
+  "family": "grade",
+  "means": "Colour and contrast drained away - lifted blacks, weak highlights, everything crowding toward a pale middle grey.",
+  "does": "It is a standing member of this project's NEGATIVE prompt, sitting beside motion blur and overexposed, because that pale hazy result is the characteristic bad render on this checkpoint - and the thing it most often guards against is motion blur, which produces exactly it. Keep it there. Be aware of a real contradiction in the library: studio/looks/bleach_bypass.json and faded_film.json both carry washed out in their positive TAG strings. Those looks work, but they work through their GRADES - bleach_bypass is eq=contrast=1.30:saturation=0.28 with a measured SATAVG drop from 39.1 to 11.4, and faded_film lifts input level 40 to 77 through gamma so nothing in frame is ever truly black. The tag half is decoration. Take the grade and drop the tag, or you are asking for the thing you are simultaneously forbidding.",
+  "reach_for_it": "in the negative, always. For a genuinely faded picture use the faded_film or bleach_bypass grade",
+  "strength": "negative-only",
+  "pairs_with": [
+    "motion blur",
+    "blurry",
+    "overexposed",
+    "lowres"
+  ],
+  "fights_with": [
+    "high contrast",
+    "vivid colors",
+    "deep shadows",
+    "best quality"
+  ],
+  "negative_instead": true,
+  "used_in": "the standing negative in craft/ANIME_MODELS.md; contradicted by the positive tag strings of studio/looks/bleach_bypass.json and faded_film.json"
+}

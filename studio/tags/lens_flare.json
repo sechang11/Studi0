@@ -1,0 +1,23 @@
+{
+  "id": "lens_flare",
+  "term": "lens flare",
+  "family": "lens",
+  "means": "Light bouncing around inside the lens instead of landing on the sensor - streaks, coloured ghosts and starbursts smeared across the frame from a bright source pointed near camera.",
+  "does": "Adds streaks and blooming discs around a bright source already in the frame and lifts the blacks around them. It is a real danbooru tag and it lands well - under floodlights or a low sun the model often volunteers it unasked, which makes it nearly free. THE TRAP: SDXL has no negation in a positive prompt. This project shipped a none option whose clause read 'no lens flare, clean image' and it ADDS flare, because the model sees the tokens and not the word no. To remove flare, delete the tag or move it to the negative - never write no lens flare. The measured sweep shows the damage: none and anamorphic_streak came back the CLOSEST pair on that card at 23.35.",
+  "reach_for_it": "when a hard light source is in or just off frame - stadium floodlights, a low sun, a doorway - and you want the shot to feel photographed rather than drawn",
+  "strength": "strong",
+  "pairs_with": [
+    "backlighting",
+    "floodlights",
+    "sunset",
+    "starburst",
+    "anamorphic lens flare"
+  ],
+  "fights_with": [
+    "clean lens",
+    "overcast flat lighting",
+    "soft lighting"
+  ],
+  "negative_instead": false,
+  "used_in": "studio/looks/blockbuster.json tags; studio/lighting/backlit.json key; studio/cards/shot_lens_flare.json (six options); films/carriage-seven.json"
+}

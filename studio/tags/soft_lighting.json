@@ -1,0 +1,25 @@
+{
+  "id": "soft_lighting",
+  "term": "soft lighting",
+  "family": "light",
+  "means": "Light from a large or diffused source, so shadow borders fade out over a distance instead of stopping at a line - a window on an overcast day rather than a bare bulb.",
+  "does": "Widens and lightens the shadow terminator and wraps light around the far side of a face, which reads tender, flattering, forgiving. Two honest limits here. First it fights the medium: anime shading is CEL shading, flat tones with a hard border, so asking for soft shadows asks the model to abandon its default and it only half complies. Second the gradations do not separate - light.quality measured medium against soft as its closest pair at 22.40, on a card classed RECOMPOSED, so even that number is mostly the shot re-rolling rather than the light changing. Use it as one step away from hard, not as a five-position dial.",
+  "reach_for_it": "for tenderness, convalescence, memory, an interior on a grey day - when a face should look kind",
+  "strength": "moderate",
+  "pairs_with": [
+    "soft shadow edges",
+    "overcast",
+    "diffused light",
+    "airbrush shading",
+    "memory"
+  ],
+  "fights_with": [
+    "cel shading",
+    "hard light",
+    "harsh shadow",
+    "high contrast",
+    "chiaroscuro"
+  ],
+  "negative_instead": false,
+  "used_in": "the soft and very_soft options of studio/cards/light_quality.json; the flat preset in studio/lighting/ ('soft even lighting')"
+}

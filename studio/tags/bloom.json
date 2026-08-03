@@ -1,0 +1,24 @@
+{
+  "id": "bloom",
+  "term": "bloom",
+  "family": "lens",
+  "means": "Bright areas bleeding a soft halo into the pixels around them, so a lamp or a lit edge glows outward instead of stopping at its border.",
+  "does": "As a prompt tag, nothing you can rely on - it is a whole-image property, and this project measured that such clauses re-roll the composition rather than apply the effect. What works is the deterministic path: short.py fx glow is a gblur sigma=18 copy screen-blended back at 0.38 opacity, which IS bloom, and is byte-identical every run. Prefer it. Two warnings when you do: these filters multiply, and glow stacked with hot (contrast 1.10, saturation 1.18, vibrance 0.22) destroyed the climax shot of the first studio-compiled film as an unreadable purple smear - which is why short.py now drops hot to bare contrast 1.08 whenever glow, flash or whiteout is also present.",
+  "reach_for_it": "for a dream, a memory, a holy or overwhelming light - and reach for the fx, not the tag",
+  "strength": "weak",
+  "pairs_with": [
+    "glowing",
+    "soft glow",
+    "heavy diffusion",
+    "dreamy",
+    "pastel colors"
+  ],
+  "fights_with": [
+    "clean lens",
+    "crisp contrast",
+    "high contrast",
+    "hot"
+  ],
+  "negative_instead": false,
+  "used_in": "studio/looks/dream.json tags; the glow option of studio/cards/shot_fx.json ('glowing, bloom, soft glow'); short.py fx_chain() glow branch"
+}

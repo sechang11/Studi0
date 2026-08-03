@@ -1,0 +1,13 @@
+{
+  "id": "multiple_boys",
+  "term": "multiple boys",
+  "family": "subject",
+  "means": "The danbooru count tag for 'more than one male, number unspecified'. Counting grammar, like 1boy - it sets the population of the frame.",
+  "does": "Puts two or more males in frame but leaves the number to the model, which usually settles on three or more and degrades as it climbs. Critically, it REVOKES solo: leaving solo in the prompt beside it is a flat contradiction and the model resolves it by merging bodies - shared limbs, two heads on one torso, faces that land as neither character. Prefer an exact count whenever you have one; 2boys is a sharper instruction than this.",
+  "reach_for_it": "background groupings where the exact head count genuinely does not matter - and almost never for a staged two-hander",
+  "strength": "moderate",
+  "pairs_with": ["2boys", "male focus", "crowd"],
+  "fights_with": ["solo", "1boy", "no humans"],
+  "negative_instead": false,
+  "used_in": "zero uses across the nine authored films - the library avoids it. studio/roadmap/blocking.md warns at 3 or more characters, calling it where the model reliably falls apart"
+}

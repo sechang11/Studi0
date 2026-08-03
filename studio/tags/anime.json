@@ -1,0 +1,24 @@
+{
+  "id": "anime",
+  "term": "anime",
+  "family": "style",
+  "means": "The medium itself - Japanese commercial animation drawing convention: large eyes, simplified noses, flat cel colour, a black keyline.",
+  "does": "Very little here, because it is already the model default. animagine-xl-4.0 is an anime SDXL trained on danbooru; asking it for anime is asking water to be wet. The tag does not make a frame more anime, it spends a token. The reliable way to hold the medium on this box runs the other direction - push the competing media OUT through the negative prompt, which is what craft/ANIME_MODELS.md does with 'photorealistic, 3d, western comic'.",
+  "reach_for_it": "only as a counterweight, when a photographic or live-action noun in the subject line is dragging the render off-medium and you want something in the positive pushing back",
+  "strength": "weak",
+  "pairs_with": [
+    "cel shading",
+    "masterpiece",
+    "best quality"
+  ],
+  "fights_with": [
+    "photorealistic",
+    "3d render",
+    "western comic"
+  ],
+  "negative_instead": false,
+  "used_in": "implicit in every render on this box; the explicit word appears only inside compound style phrases such as 'modern sports anime'",
+  "example": "/samples/tags/anime.webp",
+  "example_base": "1boy, solo, male focus, short dark hair, plain jacket, standing, city street, daytime",
+  "read_it_as": "Compare the SHADING, colour and line - not the pose or framing. Adding any clause re-rolls the model's conditioning, so composition moves between the two panels even at a fixed seed. An img2img pass from one fixed base image would isolate the tag properly; that is not built yet."
+}

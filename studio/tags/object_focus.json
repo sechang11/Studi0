@@ -1,0 +1,13 @@
+{
+  "id": "object_focus",
+  "term": "object focus",
+  "family": "subject",
+  "means": "A danbooru tag for an image whose subject is a thing rather than a person - the object is centred, lit and rendered as the point of the picture.",
+  "does": "Puts the object at the centre of attention and lets shallow depth of field and rim light actually attach to it rather than to a face. Paired with no humans this is the highest-adherence shot type available on this box: no face, no character consistency risk, near-perfect prompt adherence, and about 4.5 seconds of GPU. It is also how you fake coverage, since no model here holds a persistent 3D space to cut around.",
+  "reach_for_it": "inserts and cutaways - and reach for it more often than feels necessary, because it is the cheapest and least failure-prone shot in the project",
+  "strength": "strong",
+  "pairs_with": ["no humans", "extreme close-up", "shallow depth of field"],
+  "fights_with": ["scenery", "1boy", "solo", "wide shot"],
+  "negative_instead": false,
+  "used_in": "prompts/anime_macro_insert.json, titled there 'the cheapest shot you can make'; the insert value of shot.purpose. craft/ANIME_EPISODE.md asks for one insert per act minimum and says to make it an object"
+}

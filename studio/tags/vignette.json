@@ -1,0 +1,21 @@
+{
+  "id": "vignette",
+  "term": "vignette",
+  "family": "lens",
+  "means": "The corners and edges of the frame falling darker than the centre, so the image sits inside a soft oval of light.",
+  "does": "Unreliable in the prompt. It is a property of the frame EDGE rather than of anything in the picture, so there is no object for the model to draw - this is the class studio/_tools/panel_diff.py explicitly names as unshowable, where changing the clause re-rolls the picture instead of darkening the corners. The variable shot.lens.vignette sits on the census with no consumer behind it, so nothing reads it today either. Vignetting is also among the easiest things in the world to do deterministically after the fact, which is exactly where this project's bias says it belongs. Danbooru spells it vignetting if you insist on trying.",
+  "reach_for_it": "when you want the eye pushed to the centre, or an old-camera feel - do it in the grade, not the prompt",
+  "strength": "weak",
+  "pairs_with": [
+    "old film",
+    "vintage",
+    "low key"
+  ],
+  "fights_with": [
+    "high key",
+    "flat even lighting",
+    "clean lens"
+  ],
+  "negative_instead": false,
+  "used_in": "listed as shot.lens.vignette in the STATE.md variable census with no consumer; appears only incidentally in studio/cards/story_reality_layer.json and story_structure.json"
+}

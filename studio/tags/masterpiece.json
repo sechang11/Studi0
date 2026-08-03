@@ -1,0 +1,21 @@
+{
+  "id": "masterpiece",
+  "term": "masterpiece",
+  "family": "quality",
+  "means": "Not a description of the picture at all - a training-set score bucket. It labels images that sat in the top aesthetic band of the data, so it is a request for whatever the highly-rated images had in common, not for any specific content.",
+  "does": "Measured load-bearing on this checkpoint. craft/ANIME_MODELS.md is explicit that the block 'masterpiece, best quality, very aesthetic, absurdres' is not decoration for this model family, that without it output is markedly softer and flatter, and that it should be appended to every positive prompt. HONEST CAVEAT: the four were tested TOGETHER as a block and nobody here has isolated what masterpiece alone contributes - treat the block, not the word, as the unit.",
+  "reach_for_it": "append it to every positive prompt on the anime path. Do NOT carry it to the Qwen path - PROMPTING.md records that CLIP-era quality tokens do close to nothing on the Qwen2.5-VL text encoder and just waste context.",
+  "strength": "strong",
+  "pairs_with": [
+    "best quality",
+    "very aesthetic",
+    "absurdres"
+  ],
+  "fights_with": [
+    "worst quality",
+    "lowres",
+    "sketch"
+  ],
+  "negative_instead": false,
+  "used_in": "the tail of every prompt in movies/derby-ep1.json and derby-qwen.json"
+}

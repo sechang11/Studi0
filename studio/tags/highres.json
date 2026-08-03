@@ -1,0 +1,20 @@
+{
+  "id": "highres",
+  "term": "highres",
+  "family": "quality",
+  "means": "The same kind of danbooru file metadata as absurdres, one band down - auto-applied at roughly 1600px on a side. Again a fact about the file, not about the picture.",
+  "does": "The same detail-density push as absurdres but weaker, and largely redundant beside it: on the corpus every absurdres image is also a highres image, so the two overlap heavily and stacking both spends a token restating the first. This project standardised on absurdres and left highres out, which is the right call.",
+  "reach_for_it": "as a SUBSTITUTE for absurdres when fine detail is coming back noisy or over-busy and you want a gentler nudge - not alongside it",
+  "strength": "weak",
+  "pairs_with": [
+    "masterpiece",
+    "best quality",
+    "very aesthetic"
+  ],
+  "fights_with": [
+    "lowres",
+    "worst quality"
+  ],
+  "negative_instead": false,
+  "used_in": "nothing here - the standard block standardised on absurdres instead"
+}

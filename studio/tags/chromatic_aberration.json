@@ -1,0 +1,21 @@
+{
+  "id": "chromatic_aberration",
+  "term": "chromatic aberration",
+  "family": "lens",
+  "means": "Colour fringing at high-contrast edges - a red or cyan halo where the lens failed to bring all wavelengths to focus on the same plane.",
+  "does": "Almost nothing as a prompt tag. The effect lives at the scale of one or two pixels on an edge, below anything a diffusion sampler steers reliably, so asking for it mostly re-rolls the frame. It IS available exactly and for free in post: short.py fx aberr is rgbashift=rh=4:bh=-4:rv=-2:bv=2, shifting red four pixels one way and blue four the other. Use that. One hazard - aberr shifts channels, the grade tints, and hot pushes saturation; stacked they compounded into solid magenta across a third of a film, which is why the day-for-night grade now holds saturation down at 0.72 to leave headroom.",
+  "reach_for_it": "for damage, glitch, a broken reality layer, a cheap lens - and reach for the fx, not the tag",
+  "strength": "weak",
+  "pairs_with": [
+    "glitch",
+    "damaged film",
+    "reality layer",
+    "aberr"
+  ],
+  "fights_with": [
+    "clean lens",
+    "crisp contrast"
+  ],
+  "negative_instead": false,
+  "used_in": "the aberr option of studio/cards/shot_fx.json ('chromatic aberration, color fringing'); short.py fx_chain() aberr branch; studio/cards/story_reality_layer.json"
+}

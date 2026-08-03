@@ -1,0 +1,22 @@
+{
+  "id": "cinematic",
+  "term": "cinematic",
+  "family": "style",
+  "means": "Borrowed from live-action film: dramatic lighting, shallow depth, considered framing, wide aspect. It names a QUALITY, not a thing in the picture.",
+  "does": "On this box, close to nothing you can point at. studio/effects.json records the measured rule for the prompt tier - tags that name a THING (locker room, number 7, floodlights) land reliably, tags that name a QUALITY (night, cold, exhausted, melancholy) frequently do not - and 'cinematic' is squarely the second kind. It sits in the house style of every film here and is not the reason those films look cinematic: the deterministic grade in short.py and the explicit camera and lighting tags are.",
+  "reach_for_it": "rarely on its own. If you want the cinematic look, name it - 'from below', 'dynamic angle', 'floodlights', 'backlighting', 'depth of field' - or move it out of the prompt entirely and into the grade, which is exactly what this project did with the look variable after finding the prompt half inert.",
+  "strength": "weak",
+  "pairs_with": [
+    "cinematic lighting",
+    "from below",
+    "dynamic angle",
+    "depth of field"
+  ],
+  "fights_with": [
+    "flat colour",
+    "chibi",
+    "lineart"
+  ],
+  "negative_instead": false,
+  "used_in": "the house style tag of every film here, where it is largely inherited habit - see studio/looks/*.json for the deterministic version of the same intent"
+}

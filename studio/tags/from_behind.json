@@ -1,0 +1,13 @@
+{
+  "id": "from_behind",
+  "term": "from behind",
+  "family": "camera",
+  "means": "The camera sits behind the subject and you see their back. A camera-position tag, not a description of body language.",
+  "does": "Rebuilds the whole shot. You lose the face and every expression tag with it - brow, mouth, gaze and tears are all spent on pixels that are no longer in frame - and in exchange you gain the character's view of whatever they are facing. It also carries a downstream cost the still frame will not warn you about: the video model cannot turn a character around who is already facing away, and asking it to is what produces the warping people blame on the model. One vocabulary trap - if you want the face turned back over the shoulder, the tag is 'looking back', not this plus looking at viewer. And in the prose-dialect films the same words appear as ordinary English ('firing from behind an overturned pew'), where they mean something else entirely.",
+  "reach_for_it": "an entrance, a character facing down what is in front of them, or withholding a face the audience wants to see",
+  "strength": "strong",
+  "pairs_with": ["wide shot", "scenery", "2boys", "full body"],
+  "fights_with": ["looking at viewer", "close-up", "furrowed brow", "wide-eyed"],
+  "negative_instead": false,
+  "used_in": "28 uses across nine films - berserk, carriage-seven, chrono, derby, episode01, her-name, hollow-choir, hound and last-good-year - making it far the most-used tag in this set after the count tags. Exposed in the authoring layer as shot.facing back and back_three_quarter"
+}

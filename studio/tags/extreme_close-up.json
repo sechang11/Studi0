@@ -1,0 +1,13 @@
+{
+  "id": "extreme_close-up",
+  "term": "extreme close-up",
+  "family": "framing",
+  "means": "Past the face to a single feature filling the frame - an eye, a mouth, a hand, one object.",
+  "does": "Crops to one thing. The shot_size sweep's extreme_close panel is a single eye, iris edge to edge; the shot_purpose detail panel is the same. Because nothing else is in frame, everything else in your prompt stops rendering - costume, location, other characters, weather all silently drop out. That is the trap: an extreme close-up discards most of what you wrote, so tag the FEATURE, not the character.",
+  "reach_for_it": "an insert or a detail beat - the pendant blazing, the number on the shirt, the eye going wide. One per scene; two in a row and the audience loses the room.",
+  "strength": "strong",
+  "pairs_with": ["object focus", "cropped", "macro", "no humans"],
+  "fights_with": ["full body", "wide shot", "scenery", "close-up"],
+  "negative_instead": false,
+  "used_in": "the detail clause of shot.purpose; the macro option of shot.lens.look (\"macro lens, extreme close-up, macro photography\"); the pendant inserts 080_pendant and 100_dropped in films/chrono.json"
+}

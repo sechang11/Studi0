@@ -1,0 +1,13 @@
+{
+  "id": "upper_body",
+  "term": "upper body",
+  "family": "framing",
+  "means": "The danbooru crop tag for chest-or-waist up: head, shoulders and arms in frame, legs gone.",
+  "does": "Sets the standard dialogue and reaction distance. Close enough that mouth, brows and eye tags are drawn at real size and actually land, wide enough that a gesture still reads. In the shot_purpose sweep the dialogue panel (\"upper body, open mouth, talking\") came back as a clean chest-up framing, clearly separated from both the wides and the close-ups. Same crop family as full body and close-up - only one of them wins per prompt.",
+  "reach_for_it": "the default for anyone talking or reacting. Reach for it before close-up, which is stronger than most beats need.",
+  "strength": "strong",
+  "pairs_with": ["open mouth", "talking", "looking at viewer", "blurry background", "wide-eyed"],
+  "fights_with": ["full body", "wide shot", "extreme close-up", "scenery"],
+  "negative_instead": false,
+  "used_in": "the dialogue clause of shot.purpose (\"upper body, open mouth, talking\") and the reaction clause of shot.framing_type (\"upper body, wide-eyed, open mouth\")"
+}

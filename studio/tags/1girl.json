@@ -1,0 +1,24 @@
+{
+  "id": "1girl",
+  "term": "1girl",
+  "family": "subject",
+  "means": "The danbooru count tag for one female figure. The exact mirror of 1boy, and the same kind of instruction: a declaration of how many bodies exist, not a description of any of them.",
+  "does": "Fixes the count at one female and gives every following tag something to attach to. It carries a local hazard on this box worth knowing before you use it: gen_cards.py, make_cards.py and make_samples.py all hardcode '1girl, female' into their NEGATIVE prompt, because every panel they render is of a male subject. A positive 1girl pushed through any of those scripts is fighting the negative and comes back mangled or male.",
+  "reach_for_it": "as the first tag of any shot with exactly one female character - and only through a render path whose negative prompt you have actually read",
+  "strength": "strong",
+  "pairs_with": [
+    "solo",
+    "female focus"
+  ],
+  "fights_with": [
+    "1boy",
+    "2boys",
+    "no humans",
+    "scenery"
+  ],
+  "negative_instead": false,
+  "used_in": "no female characters exist in studio/characters/ yet - the library is male-only, which is exactly why 1girl currently sits in the sample generators' negative",
+  "example": "/samples/tags/1girl.webp",
+  "example_base": "1boy, solo, male focus, short dark hair, plain jacket, standing, city street, daytime",
+  "read_it_as": "Compare the SHADING, colour and line - not the pose or framing. Adding any clause re-rolls the model's conditioning, so composition moves between the two panels even at a fixed seed. An img2img pass from one fixed base image would isolate the tag properly; that is not built yet."
+}

@@ -1,0 +1,25 @@
+{
+  "id": "1boy",
+  "term": "1boy",
+  "family": "subject",
+  "means": "The danbooru count tag for 'there is one male figure in this image'. This is grammar, not description - it declares the population of the frame before anything else describes what is in it.",
+  "does": "Fixes the head count at one male and anchors the whole tag stack: everything after it is read as belonging to that figure. Dropping it from a character shot is the fastest way to get two half-drawn people or a face that drifts androgynous. One trap in this library - MANAGER.json opens with '1man', which is not a danbooru count tag; the count that actually registers is 1boy, with age carried separately by 'mature male'.",
+  "reach_for_it": "as the first tag of every shot containing exactly one male character - before hair, eyes, clothing or camera",
+  "strength": "strong",
+  "pairs_with": [
+    "solo",
+    "male focus",
+    "mature male"
+  ],
+  "fights_with": [
+    "2boys",
+    "multiple boys",
+    "no humans",
+    "scenery"
+  ],
+  "negative_instead": false,
+  "used_in": "the opening tag of characters/RASK.json and VIRO.json, every character beat in movies/derby-ep1.json, and the fixed subject sentence of all 976 capability-card panels",
+  "example": "/samples/tags/1boy.webp",
+  "example_base": "1boy, solo, male focus, short dark hair, plain jacket, standing, city street, daytime",
+  "read_it_as": "Compare the SHADING, colour and line - not the pose or framing. Adding any clause re-rolls the model's conditioning, so composition moves between the two panels even at a fixed seed. An img2img pass from one fixed base image would isolate the tag properly; that is not built yet."
+}

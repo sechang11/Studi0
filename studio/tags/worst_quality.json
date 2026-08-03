@@ -1,0 +1,23 @@
+{
+  "id": "worst_quality",
+  "term": "worst quality",
+  "family": "quality",
+  "means": "The bottom bucket of the same score axis as 'best quality' - the training-set label for the images nobody rated well.",
+  "does": "In the POSITIVE it is self-sabotage: soft, muddy, badly drawn output, which is exactly what it labelled. In the NEGATIVE it is one of the most reliable tags available on this checkpoint, because pushing away from a score-axis pole is a well-formed request in a way that most negative content tags are not - there is a clean gradient to move along. It sits in this project standing negative, always beside 'lowres'.",
+  "reach_for_it": "never in the positive. Keep it in the standing negative on every anime render, with 'best quality' in the positive so the same scalar is pushed from both ends.",
+  "strength": "negative-only",
+  "pairs_with": [
+    "lowres",
+    "bad anatomy",
+    "bad hands",
+    "blurry"
+  ],
+  "fights_with": [
+    "best quality",
+    "masterpiece",
+    "absurdres",
+    "very aesthetic"
+  ],
+  "negative_instead": true,
+  "used_in": "the standing negative in craft/ANIME_MODELS.md"
+}

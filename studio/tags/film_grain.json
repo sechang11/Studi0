@@ -1,0 +1,22 @@
+{
+  "id": "film_grain",
+  "term": "film grain",
+  "family": "grade",
+  "means": "The random speck texture of photographic emulsion - a fine sandy noise laid over the whole image, heaviest through the midtones.",
+  "does": "On this checkpoint, nothing you can rely on, and this is the best-measured failure in the set. studio/_tools/panel_diff.py records by eye that grade.grain_size's four panels - fine, normal, coarse, clumpy - came back as four unrelated portraits at different framings with no visible grain difference at all. The clause shifted the conditioning enough to re-roll the shot and never touched the texture. The numbers agree: fine against normal measured 19.44 at thumbnail size while the card's layout spread was 26.57, so the difference IS recomposition. Grain is a per-pixel property of the whole frame and a diffusion sampler has no handle on it. A grade cannot make grain either - studio/looks/faded_film.json deliberately leaves film grain OUT of its tags rather than promise a texture it has no way to deliver. Add it in post with an ffmpeg noise filter if you need it.",
+  "reach_for_it": "when you want a period or degraded-stock feel - but plan to add it in post, not in the prompt",
+  "strength": "weak",
+  "pairs_with": [
+    "old film",
+    "vintage",
+    "faded colours",
+    "retro"
+  ],
+  "fights_with": [
+    "clean",
+    "absurdres",
+    "modern digital"
+  ],
+  "negative_instead": false,
+  "used_in": "studio/cards/grade_grain_size.json (four grades, measured indistinguishable); named in the note of studio/looks/faded_film.json as deliberately excluded"
+}

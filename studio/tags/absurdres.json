@@ -1,0 +1,26 @@
+{
+  "id": "absurdres",
+  "term": "absurdres",
+  "family": "quality",
+  "means": "Literal danbooru FILE METADATA, not a description: absurdly high resolution, applied automatically on the site to uploads at or above roughly 3200px on a side. It says nothing about content - it describes the file the image arrived in.",
+  "does": "Because it was auto-applied, the model learned it as a correlate of what very large scans and illustrations look like: dense fine detail, crisp hair strands, fully rendered backgrounds. So it buys DETAIL DENSITY. It does NOT and cannot change your output resolution - that is a graph parameter (EmptyLatentImage, 1344x768 here), not a prompt tag. Expecting absurdres to produce a bigger image is the classic misreading of this tag, and it is the clearest example in the set of danbooru grammar being metadata rather than description.",
+  "reach_for_it": "on the anime path as part of the standard block, and especially on wide establishing shots where you want the background fully rendered rather than suggested",
+  "strength": "strong",
+  "pairs_with": [
+    "masterpiece",
+    "best quality",
+    "very aesthetic",
+    "highres"
+  ],
+  "fights_with": [
+    "lowres",
+    "worst quality",
+    "sketch",
+    "flat colour"
+  ],
+  "negative_instead": false,
+  "used_in": "the tail of every prompt in movies/derby-ep1.json and derby-qwen.json",
+  "example": "/samples/tags/absurdres.webp",
+  "example_base": "1boy, solo, male focus, short dark hair, plain jacket, standing, city street, daytime",
+  "read_it_as": "Compare the SHADING, colour and line - not the pose or framing. Adding any clause re-rolls the model's conditioning, so composition moves between the two panels even at a fixed seed. An img2img pass from one fixed base image would isolate the tag properly; that is not built yet."
+}

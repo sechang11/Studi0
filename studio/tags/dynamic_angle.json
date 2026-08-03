@@ -1,0 +1,13 @@
+{
+  "id": "dynamic_angle",
+  "term": "dynamic angle",
+  "family": "camera",
+  "means": "Danbooru's catch-all for a viewpoint that is not level and not boring - tilted, canted or steeply angled, chosen for energy rather than for information.",
+  "does": "Adds tilt and diagonal energy to the whole frame. The story.genre action panel (\"action, dynamic angle, motion blur, high contrast\") is a hard diagonal with the figure canted against streaks, clearly apart from the level panels around it. What it will NOT tell you is which angle you get - it is a mood applied to the camera, not a geometry, so it is not repeatable shot to shot. It also never appears alone in this library, always beside from below, speed lines or full body, so some of the credit belongs to its neighbours.",
+  "reach_for_it": "action and sakuga beats where you want energy and do not care about exact framing. When you DO care, name the angle: \"from below\" is deterministic where this is not.",
+  "strength": "moderate",
+  "pairs_with": ["from below", "speed lines", "full body", "foreshortening", "dutch angle"],
+  "fights_with": ["eye level", "centered composition", "straight-on", "level horizon"],
+  "negative_instead": false,
+  "used_in": "the canonical example prompt in craft/ANIME_MODELS.md; story.genre action; the sakuga beats in films/build_episode.py; studio/templates/sports_climax.json, chase_on_foot.json and comeback_moment.json. WARNING: all of those clauses pair it with \"motion blur\" in the POSITIVE prompt, and craft/ANIME_MODELS.md documents that motion blur in the positive hazed four keyframes into being unusable. Pair it with speed lines instead and keep motion blur in the negative."
+}

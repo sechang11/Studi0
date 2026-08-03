@@ -1,0 +1,22 @@
+{
+  "id": "storybook_anime",
+  "term": "storybook anime",
+  "family": "style",
+  "means": "Intended to mean children picture-book illustration crossed with anime - soft edges, warm limited palette, hand-made texture, gentle rounded shapes.",
+  "does": "Not a danbooru tag and not a phrase the corpus contains, so the model has no single feature to fire and parses it loosely as 'anime' plus a vague warmth. This is the invented-phrasing failure the card reviews in studio/cards/ catch repeatedly - 'per region colored lineart' is called out there as phrasing the model cannot scope, and this is the same shape of mistake. Do not expect it to do anything you can measure.",
+  "reach_for_it": "do not reach for the phrase. Build the look out of tags the model actually holds: 'watercolor (medium)', 'soft lighting', 'pastel colors', 'thick lineart', 'picture book'. Naming the parts instead of the mood is the whole lesson of the prompt tier on this box.",
+  "strength": "weak",
+  "pairs_with": [
+    "watercolour",
+    "flat colour",
+    "thick outlines",
+    "painterly"
+  ],
+  "fights_with": [
+    "modern sports anime",
+    "cinematic",
+    "monochrome"
+  ],
+  "negative_instead": false,
+  "used_in": "nothing here - documented because it turns up in authoring UIs as a house-style preset and needs to be recognised as a wish rather than a tag"
+}

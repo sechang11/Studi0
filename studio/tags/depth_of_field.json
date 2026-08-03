@@ -1,0 +1,23 @@
+{
+  "id": "depth_of_field",
+  "term": "depth of field",
+  "family": "lens",
+  "means": "How much of the scene in front of and behind the focus point stays sharp. Shallow means a thin slice is sharp and everything else dissolves; deep means all of it is sharp.",
+  "does": "Blurs the background and lifts the subject off it - the fastest character-from-background separation there is, and the knob that decides whether your world is a place or a texture. It is a real danbooru tag and it lands. But the model has TWO states, not a dial: deep focus, and blurry background. The card review says so and the measurement agrees - medium against shallow was that card's closest pair at 34.32, and split_diopter has essentially no representation and returns ordinary deep focus. It also behaves as GRAMMAR: writing depth of field declares the background is blurred, so a sharp background or scenery detail tag elsewhere in the same prompt cancels it, and you get neither.",
+  "reach_for_it": "when the background is doing nothing for you and you want it gone, or on a close-up where the subject must be the only fact in the frame",
+  "strength": "strong",
+  "pairs_with": [
+    "bokeh",
+    "blurry background",
+    "close-up",
+    "portrait"
+  ],
+  "fights_with": [
+    "deep focus",
+    "everything in focus",
+    "sharp background",
+    "scenery"
+  ],
+  "negative_instead": false,
+  "used_in": "studio/cards/shot_focus_dof.json, shot_focus.json and shot_focus_point.json"
+}

@@ -1,0 +1,23 @@
+{
+  "id": "retro_anime",
+  "term": "retro anime",
+  "family": "style",
+  "means": "The look of pre-digital TV and OVA animation - physical cel paint, slightly off-register line, faded or limited palette, film-era colour.",
+  "does": "Works, but the load is carried by the DECADE, not by the word retro. studio/cards/anime_draw_era.json tested 'retro artstyle' against explicit decade tags and its review concluded to keep the decade tags carrying the load - '1970s (style)', '1980s (style)' - and to drop the shared 'retro artstyle, faded colors' tail, because the two panels that shared it landed in the same place and stopped being distinguishable. Bare retro anime buys you a vague oldness; '1980s (style), cel animation, airbrush shading' buys you a decade.",
+  "reach_for_it": "flashbacks, in-world archive footage, or a whole film dated on purpose - but always write the decade alongside it",
+  "strength": "moderate",
+  "pairs_with": [
+    "cel animation",
+    "faded colors",
+    "1990s (style)",
+    "ova screencap"
+  ],
+  "fights_with": [
+    "modern anime style",
+    "clean digital coloring",
+    "3d render",
+    "modern sports anime"
+  ],
+  "negative_instead": false,
+  "used_in": "anime.draw.era, whose options are decade-anchored for exactly this reason"
+}

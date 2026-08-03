@@ -1,0 +1,23 @@
+{
+  "id": "flat_colour",
+  "term": "flat colour",
+  "family": "style",
+  "means": "Fills with no shading at all - each region is one solid tone, edge to edge. The extreme end of cel logic: not two tones and a terminator, one tone and none.",
+  "does": "Strips modelling out of skin and cloth and leaves the outline carrying the entire drawing. Reads graphic, poster-like, deliberately cheap. SPELLING MATTERS: the trained danbooru tag is the American 'flat color', which is what studio/cards/anime_draw_shading_steps.json uses for its flat_0 panel ('flat color, no shading'). The British spelling is a different token sequence and lands weaker - write the American form in the actual prompt even if the glossary and the UI say colour.",
+  "reach_for_it": "title cards, eyecatches, silhouette beats and comedy inserts - anywhere you want the frame to stop pretending to be lit",
+  "strength": "moderate",
+  "pairs_with": [
+    "cel shading",
+    "thick outlines",
+    "chibi",
+    "lineart"
+  ],
+  "fights_with": [
+    "painterly",
+    "watercolour",
+    "3d render",
+    "photorealistic"
+  ],
+  "negative_instead": false,
+  "used_in": "anime.draw.shading_steps/flat_0 ('flat color, no shading') and the anime.bg.style/cel_flat clause"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "looking_away",
+  "term": "looking away",
+  "family": "gaze",
+  "means": "Eyes directed off-camera - the character is deliberately not meeting the viewer.",
+  "does": "Breaks eye contact and turns the gaze out of frame. It is vaguer and weaker than its opposite because it names an absence instead of a direction: the model has to invent where 'away' is, and it invents inconsistently. Naming the direction lands far harder - looking down, looking to the side, downcast eyes, averted gaze - which is exactly what this project's emotion presets reach for. Treat looking away as a fallback for when the direction genuinely does not matter.",
+  "reach_for_it": "evasion, shame and discomfort - and pair it with an actual direction unless you want the gaze to wander",
+  "strength": "moderate",
+  "pairs_with": ["half-closed eyes", "looking down", "averted gaze", "sweatdrop"],
+  "fights_with": ["looking at viewer", "eye contact", "staring"],
+  "negative_instead": false,
+  "used_in": "the eyes field of emotions/cold.json and embarrassed.json. Note that shame, doubt and focus all deliberately use 'looking down' instead - the more specific tag wins"
+}

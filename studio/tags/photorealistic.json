@@ -1,0 +1,23 @@
+{
+  "id": "photorealistic",
+  "term": "photorealistic",
+  "family": "style",
+  "means": "Photographic rendering - real skin texture, real optics, continuous tone, no keyline. A camera made this, not a pen.",
+  "does": "In the POSITIVE prompt on this checkpoint it fights the model entire training and returns the worst of both worlds: waxy semi-real faces, lost line, uncanny proportions. That is why it sits in this project standing NEGATIVE. Put it there and it does real work - it pushes the render back toward clean anime when a photographic noun in the subject line is dragging it off-medium.",
+  "reach_for_it": "never in the positive on this model. Keep it in the standing negative on every anime render.",
+  "strength": "negative-only",
+  "pairs_with": [
+    "3d render",
+    "western comic",
+    "worst quality",
+    "lowres"
+  ],
+  "fights_with": [
+    "anime",
+    "cel shading",
+    "flat colour",
+    "thick outlines"
+  ],
+  "negative_instead": true,
+  "used_in": "the standing negative documented in craft/ANIME_MODELS.md"
+}

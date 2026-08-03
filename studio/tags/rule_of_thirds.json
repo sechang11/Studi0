@@ -1,0 +1,13 @@
+{
+  "id": "rule_of_thirds",
+  "term": "rule of thirds",
+  "family": "composition",
+  "means": "The classical framing rule that the subject sits about a third of the way across the frame rather than in the middle.",
+  "does": "Nothing measurable on this model. The shot.comp.thirds_bias sweep rendered eight placement options at one fixed seed - center, left_third, right_third, golden_l, golden_r, symmetrical, edge_left, edge_right - and the subject is in effectively the same central position in ALL EIGHT panels. \"rule of thirds\" did not move him a third of the way anywhere, and \"subject on the left third\" did not either. This is the same failure family this project already measured with night and dark background: the tag describes a QUALITY of the arrangement instead of naming a THING, and SDXL has a strong centering prior plus no reliable left/right vocabulary to fight it with.",
+  "reach_for_it": "don't. If the subject must be off-centre, do it deterministically - render wider than delivery and crop, or put a named object on the other side of the frame so the composition has a physical reason to shift.",
+  "strength": "weak",
+  "pairs_with": [],
+  "fights_with": ["centered composition", "symmetrical"],
+  "negative_instead": false,
+  "used_in": "the left_third and right_third options of shot.comp.thirds_bias, whose review already recommends cutting the card down and accepting that L/R cannot be fixed in the still pass"
+}

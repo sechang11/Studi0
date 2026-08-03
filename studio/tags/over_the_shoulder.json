@@ -1,0 +1,13 @@
+{
+  "id": "over_the_shoulder",
+  "term": "over the shoulder",
+  "family": "camera",
+  "means": "A two-person framing: we stand behind one character's shoulder and look past it at the other, so a near shoulder and the back of a head sit blurred in the foreground.",
+  "does": "It can land - the shot_framing_type over_shoulder panel has a genuine blurred foreground head at frame left with the subject facing us across it. But read the clause that produced it: \"over the shoulder, 2boys, blurry foreground shoulder\". The literal foreground noun is doing at least as much work as the OTS tag. THIS IS DANBOORU GRAMMAR: it requires a character count of two, and count tags (1boy / 2boys / solo / no humans) are resolved FIRST and bend everything else around them. Put \"over the shoulder\" in a prompt that also says \"1boy, solo\" and it loses - the project's card review found six of ten framing options collapsing back to the same lone figure for exactly this reason.",
+  "reach_for_it": "dialogue coverage between two characters - and only after you have changed the count tag to 2boys or 2girls and removed solo. Spell out the foreground: \"blurry foreground shoulder\" or \"from behind\".",
+  "strength": "moderate",
+  "pairs_with": ["2boys", "blurry foreground", "from behind", "upper body", "blurry background"],
+  "fights_with": ["solo", "1boy", "pov", "no humans"],
+  "negative_instead": false,
+  "used_in": "shot.framing_type over_shoulder. FILM-CRAFT-AUDIT.md separately lists \"over the shoulder\" and \"reverse angle\" as unreliable tokens for the video pass - write direction as geometry there instead."
+}
