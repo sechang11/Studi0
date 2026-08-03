@@ -1,0 +1,14 @@
+{
+  "id": "turntable_clay",
+  "desc": "An untextured clay-style orbit, for judging form before spending a mesh run. Clay mode is documented but unrendered here.",
+  "status": "partial",
+  "path": "triposplat",
+  "source_prompt": "a single stylised animal figurine standing on a round flat base, thick limbs tucked close to the body, rounded solid forms, the whole figurine inside the frame with margin on all sides, three-quarter view, flat mid-grey seamless background, even frontal light, no cast shadow, no other objects",
+  "steps": 20,
+  "cfg": 3.0,
+  "dials": { "num_gaussians": 262144, "erode_radius": 1, "preprocess_size": 1024, "orbit_yaw": 35.0, "orbit_pitch": 20.0, "orbit_distance": 2.5, "fov": 35.0, "frames": 90, "render_width": 1024, "render_height": 1024, "sharpen": 2.0, "render_style": "clay", "background": "#848484", "fps": 25.0 },
+  "output": "90-frame 1024x1024 orbit MP4 (3.6 s at 25 fps) plus a .spz Gaussian splat file. No GLB mesh.",
+  "usable_for": "judging silhouette and form without colour hiding defects, deciding whether a subject is worth a 19.5 s Hunyuan3D run",
+  "not_usable_for": "any mesh or game use - no faces, no UVs. Clay shading here is a render style on a splat, not a real untextured mesh.",
+  "note": "PARTIAL, and here is exactly which part: render_style is set to clay, and clay is listed as an accepted value of RenderSplat in workflow 25's notes alongside depth and normal - but only the default color has ever actually been rendered on this box. Treat clay as untested. If it errors, the value is wrong or the node build differs; fall back to color, which is verified. Everything else in this preset is identical to the two verified turntables."
+}

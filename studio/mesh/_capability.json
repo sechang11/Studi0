@@ -1,0 +1,88 @@
+{
+  "id": "_capability",
+  "title": "mesh - 3D from a single image",
+  "status": "partial",
+  "verdict": "Both paths run today and produce files in 19.5 s. Neither produces a usable game asset. Every preset in this library ends in off-box work.",
+  "updated": "2026-08-03",
+  "authored_by": "library author, from the installed workflows and the existing outputs on disk. No renders were run to produce this library.",
+
+  "paths": {
+    "hunyuan3d": {
+      "workflow": "24_hunyuan3d_mesh.json",
+      "model": "hunyuan_3d_v2.1.safetensors (6.9 GB, present on disk)",
+      "produces": "a .glb triangle mesh",
+      "measured": "187,314 vertices / 525,708 triangles / 8.5 MB / 19.5 s / ~4.6 GB VRAM",
+      "verified_how": "the existing hunyuan3d_mesh_00001_.glb was parsed directly from its binary for this card - glTF primitive attributes are exactly [POSITION], mode 4 (TRIANGLES), material null, materials null, images null, 187314 vertices, 1577124 indices",
+      "hard_limit": "GEOMETRY ONLY. No vertex colour, no normals, no UVs, no material, no texture. Not one byte of colour leaves this graph."
+    },
+    "triposplat": {
+      "workflow": "25_triposplat.json",
+      "model": "triposplat_fp16.safetensors + dino_v3_vit_h + flux2-vae + triposplat_vae_decoder + birefnet (all present on disk)",
+      "produces": "a 90-frame 360 orbit MP4 (3.6 s at 25 fps) and a .spz Gaussian splat file",
+      "measured": "orbit MP4 773 KB, .spz 3.2 MB, 19.5 s, ~3.7 GB VRAM",
+      "hard_limit": "A Gaussian splat is not a mesh. No faces, no edges, no UVs. It cannot be imported to a game engine, decimated, retopologised or printed. It carries its own colour, which the mesh path does not."
+    }
+  },
+
+  "the_one_craft_rule": "Image-to-3D wants ONE object, centred, plain background, evenly lit, whole object visible with margin on all four sides. There is no text prompt anywhere in either graph - the input image IS the prompt, so composing it is the entire craft. A cinematic shot makes a terrible source: depth of field, rim light, cast shadows, crops and companion objects are all read as geometry. Every source_prompt in this library is written to that discipline.",
+
+  "source_image_checklist": [
+    "One object. A second object in frame becomes part of the same mesh.",
+    "Centred, with margin on all four sides. Hunyuan3D's CLIPVisionEncode uses crop 'center', so a non-square source is centre-cropped and anything near an edge is amputated before reconstruction. Feed it square.",
+    "Flat seamless background, mid-grey. Hunyuan3D has NO background removal in its graph - the background is reconstructed as geometry. TripoSplat does matte with BiRefNet first, but a busy background still defeats the matte.",
+    "Even frontal light. No cast shadow, no rim light, no coloured light - a cast shadow is read as a surface.",
+    "Whole object visible, nothing cropped, nothing occluding it.",
+    "Avoid transparent, mirrored, glass, chrome and very dark subjects entirely - single-view depth estimation fails on all of them."
+  ],
+
+  "dial_map": {
+    "note": "which node each dial in a preset belongs to",
+    "hunyuan3d": {
+      "steps / cfg": "KSampler (node 7) - template is 30 / 5.0. This model has no distilled or turbo variant, so there is no 4-step shortcut.",
+      "latent_resolution": "EmptyLatentHunyuan3Dv2 (node 6) - a latent token count, NOT pixels. 3072 is the node default, 4096 the template.",
+      "octree_resolution": "VAEDecodeHunyuan3D (node 8) - the real mesh detail dial. 256 balanced, 384 much finer and much heavier.",
+      "threshold / algorithm": "VoxelToMesh (node 9) - iso-surface level. Lower (~0.45) to keep thin parts, raise (~0.7) if bloated. 'surface net' is smoother than 'basic'."
+    },
+    "triposplat": {
+      "steps / cfg": "KSampler (node 10) - template is 20 / 3.0",
+      "num_gaussians": "VAEDecodeTripoSplat (node 11) - main quality/VRAM dial. 131072 halves memory with visible softening.",
+      "orbit_yaw / orbit_pitch / orbit_distance / fov": "CreateCameraInfo (node 12), dotted sub-inputs mode.yaw / mode.pitch / mode.distance",
+      "frames / render_width / render_height / sharpen / render_style / background": "RenderSplat (node 13)",
+      "fps": "CreateVideo (node 14)"
+    }
+  },
+
+  "not_served": {
+    "note": "Use cases deliberately left without a preset, because writing one would be dishonest.",
+    "items": [
+      "Game-ready or textured assets. Nothing in either path emits a UV or a texel. This is not a tuning problem.",
+      "Rigged or animated characters. Nothing on this box rigs a mesh - not a dial, not a missing model, simply absent.",
+      "Vehicles. Single-view invents the far side with no symmetry constraint, and wheels, wheel arches and undercarriage self-occlude and collapse. A preset would set you up to fail.",
+      "Mechanical greebles and panel-line kitbash. Surface net at octree 256 mushes fine raised detail into a smooth swell.",
+      "Sharp-edged hard-surface props needing crisp bevels. Iso-surface extraction rounds every edge; no threshold value fixes this.",
+      "Interiors, rooms and scenes. The paths reconstruct one object's outer shell, with no interior behind it.",
+      "CAD or dimensionally accurate parts. The GLB carries no units and no guaranteed straight edge or true right angle.",
+      "Anything carrying text, a logo or a decal. The mesh has no colour and the raised-lettering geometry does not resolve.",
+      "Transparent, mirrored, glass or chrome subjects, on either path."
+    ]
+  },
+
+  "downstream_work_required": "Hunyuan3D output at 525k triangles is unwieldy: decimate to 5-10 percent, shade-smooth to generate normals, UV unwrap, and bake a texture - all in Blender, none of it on this box. That is why nine of the twelve presets are marked partial rather than ready.",
+
+  "status_key": {
+    "ready": "the box produces the described deliverable end to end, no off-box step inside the description - the two colour turntables only",
+    "partial": "some named part does not happen on this box; each preset's note says exactly which"
+  },
+
+  "untested_in_this_library": [
+    "No renders were run while authoring this library, as instructed. Every dial value is either the workflow template value or the workflow's own documented guidance.",
+    "Non-template threshold values (0.45, 0.5, 0.55) and octree_resolution 384 follow workflow 24's documented advice for thin parts and fine gaps, but have not been rendered per-preset here.",
+    "render_style 'clay' in turntable_clay is documented as accepted by RenderSplat but only 'color' has ever been rendered on this box."
+  ],
+
+  "doc_conflicts_found": [
+    "workflow 24_hunyuan3d_mesh.json's _comment claims 'textured 3D MESH' you can 'drop straight into Unity, Unreal or Blender'. That is false and the same file's own _notes and the GLB binary both contradict it - the mesh has a POSITION attribute and nothing else. Treat the _comment as stale.",
+    "workflow 25_triposplat.json's _notes describe three outputs including 'a mesh converted via SplatToMesh'. There is no SplatToMesh node in that graph. Node 16 is SplatToFile3D with format 'spz' feeding SaveGLB, and the file actually written was triposplat_splat_00001_.spz. Workflow 25 produces no mesh at all, despite the SaveGLB node name.",
+    "CAPABILITIES.md still lists '3D meshes or Gaussian splats | no Hunyuan3D / TripoSplat | ~7 GB', i.e. not installed. Both are installed and both have run. That line is stale."
+  ]
+}

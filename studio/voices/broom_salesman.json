@@ -1,0 +1,11 @@
+{
+  "id": "broom_salesman",
+  "name": "Broom Salesman (wandmaker)",
+  "file": "voices_examples/higgs_audio/broom_salesman.wav",
+  "engine": "higgs_v3",
+  "status": "ready",
+  "sounds_like": "Low-mid male at 108 Hz with an 11-semitone theatrical lilt - it lands on words deliberately, as if imparting something. Mid-dark (centroid 1464 Hz), even loudness (17.2 dB range), 5.0 onsets per second with pauses to 0.52s. 19.2s of formal, faintly mystical shopkeeper speech about wand cores and the bond between a wand and its owner.",
+  "casts_well_as": "Shopkeeper, wandmaker, mentor, wizened tradesman, curator, any character who exists to hand the hero an object and explain it.",
+  "avoid_for": "Casual modern banter, youth, or action. The cadence is formal and will make throwaway lines sound portentous.",
+  "note": "The only stereo file in the library (2 channels, 44.1 kHz); all others are mono. This is safe - utils/audio/librosa_fallback.py loads references with mono=True and downmixes anything with more than one channel."
+}

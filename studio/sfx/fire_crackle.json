@@ -1,0 +1,12 @@
+{
+  "id": "fire_crackle",
+  "desc": "Hearth, campfire, burning building. Warmth or threat depending on level.",
+  "status": "ready",
+  "prompt": "a wood fire burning close, dry logs popping and cracking irregularly, dry and detailed",
+  "negative": "music, speech, tonal, wind, rain, crowd",
+  "seconds": 12,
+  "steps": 100,
+  "cfg": 7,
+  "sampler": "dpmpp_3m_sde",
+  "note": "ONE SOURCE. The earlier prompt also asked for 'a low roar of flame underneath' and 'embers ticking' - three sources in one bed, which the model cannot layer. Render the flame roar as its own bed and combine with AudioMerge."
+}

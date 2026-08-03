@@ -1,10 +1,12 @@
 {
   "id": "door_wood",
   "desc": "A heavy wooden door opened - entrance, reveal, someone leaving.",
-  "status": "ready",
+  "status": "partial",
   "prompt": "a heavy wooden door on dry iron hinges pushed open slowly, hinges groaning and creaking, then the door stopping against the frame with a dull wooden knock, close microphone, dry",
   "negative": "music, speech, tonal, reverb, crowd",
   "seconds": 4,
-  "steps": 100, "cfg": 7, "sampler": "dpmpp_3m_sde",
-  "note": "Two events in one bed (creak, then knock) and the model will sometimes hand you only one of them. Run three seeds and keep the one with both - that is cheaper than trying to prompt around it. For a slam rather than an open, use impact_hit; do not ask this prompt for a slam."
+  "steps": 100,
+  "cfg": 7,
+  "sampler": "dpmpp_3m_sde",
+  "note": "PARTIAL: two events in one bed (creak, then the stop). The model will sometimes return only one. Run three seeds and keep the one with both, or split into door_creak and door_knock and merge in post."
 }

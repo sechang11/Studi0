@@ -1,0 +1,14 @@
+{
+  "id": "turntable_product",
+  "desc": "One object turned through a full 360 as a rendered video. The deliverable is the video, not an asset.",
+  "status": "ready",
+  "path": "triposplat",
+  "source_prompt": "a single ceramic teapot standing upright, curved spout, round lid with a knob, one loop handle, the whole teapot inside the frame with margin on all sides, three-quarter view, flat mid-grey seamless background, even frontal light, no cast shadow, no table, no cups, no steam",
+  "steps": 20,
+  "cfg": 3.0,
+  "dials": { "num_gaussians": 262144, "erode_radius": 1, "preprocess_size": 1024, "orbit_yaw": 35.0, "orbit_pitch": 20.0, "orbit_distance": 2.5, "fov": 35.0, "frames": 90, "render_width": 1024, "render_height": 1024, "sharpen": 2.0, "render_style": "color", "background": "#848484", "fps": 25.0 },
+  "output": "90-frame 1024x1024 orbit MP4 (3.6 s at 25 fps) plus a .spz Gaussian splat file (~3.2 MB). No GLB mesh - see note.",
+  "usable_for": "showing a 3D result to a person, client or art-direction review, concept sign-off, reference turntable for a modeller",
+  "not_usable_for": "any mesh use whatsoever - a splat has no faces, no edges, no UVs. It cannot be imported into a game engine, decimated, retopologised or 3D printed.",
+  "note": "Correction worth knowing: this graph's SaveGLB node is fed by SplatToFile3D with format spz, and the file it actually wrote on this box is triposplat_splat_00001_.spz, not a .glb. Despite the node name there is no mesh on this path at all. The .spz opens in Gaussian-splat viewers, not in Blender. BiRefNet mattes the subject inside this graph before reconstruction, so the background is removed for you - but a busy or low-contrast background still defeats the matte and leaves floating gaussians orbiting the subject, so keep the plain background anyway."
+}

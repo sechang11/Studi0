@@ -1,0 +1,14 @@
+{
+  "id": "turntable_character",
+  "desc": "A standing figure turned through 360. More forgiving than the mesh path, because a splat never has to be watertight.",
+  "status": "ready",
+  "path": "triposplat",
+  "source_prompt": "a single standing adult figure in a plain long coat, arms at the sides, feet together, facing the camera, full body from head to feet inside the frame with margin on all sides, flat mid-grey seamless background, even frontal light, no cast shadow, no props, no other people, no floor line",
+  "steps": 20,
+  "cfg": 3.0,
+  "dials": { "num_gaussians": 262144, "erode_radius": 1, "preprocess_size": 1024, "orbit_yaw": 35.0, "orbit_pitch": 20.0, "orbit_distance": 2.5, "fov": 35.0, "frames": 90, "render_width": 1024, "render_height": 1024, "sharpen": 2.0, "render_style": "color", "background": "#848484", "fps": 25.0 },
+  "output": "90-frame 1024x1024 orbit MP4 (3.6 s at 25 fps) plus a .spz Gaussian splat file. No GLB mesh.",
+  "usable_for": "character concept sign-off, checking that a design reads from all sides, reference turntable for a modeller",
+  "not_usable_for": "any mesh or game use - no faces, no UVs. No rigging or animation: nothing on this box rigs anything, splat or mesh.",
+  "note": "Watch the back of the figure on the orbit before trusting anything - the model never saw it and invented it wholesale, and that is the single most useful thing this turntable tells you. Figures work better here than on the mesh path because a splat has no manifold or thin-part requirement, so fingers and coat hems degrade into softness rather than collapsing into webbed geometry. Arms at the sides and feet together still help: limbs held away from the body occlude less but reconstruct softer."
+}
