@@ -1,0 +1,33 @@
+{
+  "id": "bad_news",
+  "name": "Bad news delivered",
+  "desc": "The news arrives and we never hear it. We cut to the person who did.",
+  "genre": ["drama"],
+  "beats": 5,
+  "runtime_s": 17,
+  "sets": {
+    "look": "cold",
+    "pace": "normal",
+    "cue": "unease",
+    "emotion": "grief",
+    "camera": "static",
+    "wear": 0,
+    "place": "small living room, late afternoon, one lamp off, indoors",
+    "transition": "fade_black"
+  },
+  "shots": [
+    {"template": "establish", "camera": "static",
+     "desc": "a small living room in late afternoon, a phone face-down on a low table, an unlit lamp, no humans, wide shot"},
+    {"template": "insert", "camera": "static",
+     "desc": "a phone screen lit up on a table, vibrating, close-up, no humans"},
+    {"template": "react", "camera": "push",
+     "desc": "phone held to one ear, face crumpling, free hand reaching back for a chair, close-up"},
+    {"template": "hold_silent", "camera": "static",
+     "desc": "standing motionless in the middle of a room, phone lowered to the side, head down, wide shot"},
+    {"template": "pillow", "camera": "static",
+     "desc": "an open wardrobe and an unmade bed seen through a doorway, still air, no humans, medium shot"}
+  ],
+  "why": "For the moment a life changes, built so the engine can actually render it. The news comes by phone and the caller never appears, which solves a real limitation rather than papering over it: emotion is a scene-level variable, so a two-hander would put grief's 'crying, tears, trembling, hunched' on the person delivering the news as well as the person receiving it. Keeping one face on screen makes the scene emotion correct for everyone in it. The first two shots are peopleless, and peopleless shots take no emotion tags at all, so the grief cannot leak backwards onto someone who has not heard yet - the template is dry until the phone is answered and wet immediately after. There is no speak shot anywhere: we cut from a ringing phone straight to someone already hearing it, so the cut does the work and no dialogue has to be written or voiced. wear stays 0 so grief's body tag 'hunched' survives into the two person shots.",
+  "status": "partial",
+  "note": "Shots, the cold grade, pace, camera and wear render today. Not working: (1) transition 'fade_black' is recorded but short.py cuts hard on every boundary. (2) emotion 'grief' is status:partial - its face/eyes/mouth/body tags render, but voice_style 'broken' is not routed to TTS. On the cue: unease is bpm 0, i.e. unmetered, so you cannot cut to it - it is a bed, not a rhythm. It is chosen for the ringing-phone half of the template; the scene that follows this one should move to desolate. At wear 0 the fallback WEAR list appends 'clean uniform, neat hair' to shots 3 and 4 - give the character a wear_tags override or they will take the call in uniform."
+}

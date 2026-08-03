@@ -1,0 +1,31 @@
+{
+  "id": "rainy_window_melancholy",
+  "name": "Rainy window melancholy",
+  "desc": "Grief with nothing left to do. The rain does the talking.",
+  "genre": ["drama", "romance"],
+  "beats": 4,
+  "runtime_s": 18,
+  "sets": {
+    "look": "cold",
+    "pace": "slow",
+    "cue": "melancholy_piano",
+    "emotion": "grief",
+    "camera": "static",
+    "wear": 0,
+    "place": "small room, window streaked with rain, grey daylight, blurred city beyond the glass",
+    "transition": "dissolve"
+  },
+  "shots": [
+    {"template": "establish", "camera": "static",
+     "desc": "rain running down a window pane, city lights blurred beyond the wet glass, grey daylight, no humans"},
+    {"template": "master", "camera": "pull",
+     "desc": "figure sitting on the floor with back against the wall beside the window, knees drawn up, room in shadow, wide shot"},
+    {"template": "react", "camera": "push",
+     "desc": "face lit by grey window light, tears, downcast eyes, trembling mouth, forehead against the glass, close-up"},
+    {"template": "pillow", "camera": "static",
+     "desc": "an untouched cup gone cold on the windowsill, no steam, rain on the glass behind it, no humans"}
+  ],
+  "why": "Grief is written as water, temperature and posture - never as the word. emotion:grief expands to crying, tears, downcast eyes, trembling, hunched, which is the exact substitution that was verified to work after 'mood: melancholy, defeat' rendered the character smiling. The static camera is the point: three of the four shots do not move, so the pull on the master is the only movement in the template and it reads as the room growing around her. wear stays 0 deliberately - this is sorrow, not damage, and the wear ladder describes physical wreckage that would fight the stillness. Use it for an aftermath, the scene after the loss rather than the loss itself.",
+  "status": "partial",
+  "note": "transition 'dissolve' is advisory - short.py renders hard cuts only. emotion 'grief' is itself status partial, but only its voice_style ('broken') is unrouted and this template carries no dialogue, so nothing here is lost; add a spoken line and compile.py will warn that the broken delivery is not reaching TTS. The rain is prompt tags in `place` only - no particle system drives it, so it will differ shot to shot."
+}

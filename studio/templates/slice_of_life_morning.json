@@ -1,0 +1,31 @@
+{
+  "id": "slice_of_life_morning",
+  "name": "Slice-of-life morning",
+  "desc": "Nothing happens, carefully.",
+  "genre": ["slice of life", "drama"],
+  "beats": 4,
+  "runtime_s": 18,
+  "sets": {
+    "look": "golden",
+    "pace": "slow",
+    "cue": "warm_memory",
+    "emotion": "neutral",
+    "camera": "static",
+    "wear": 0,
+    "place": "small apartment kitchen at dawn, low wooden table, thin curtains, cluttered counter, rice cooker, worn floorboards",
+    "transition": "dissolve"
+  },
+  "shots": [
+    {"template": "establish", "camera": "pan_l",
+     "desc": "small apartment kitchen at dawn, low wooden table set for one, thin curtains glowing with morning sun, dust motes drifting in the light, worn floorboards, wide shot, no humans"},
+    {"template": "master", "camera": "static",
+     "desc": "standing at the kitchen counter in pyjamas pouring tea into a chipped cup, back three-quarters to the camera, morning light from the side, wide shot, full body"},
+    {"template": "react", "camera": "push",
+     "desc": "sitting at the low table, chin resting on one hand, looking out of frame toward the window, half-lidded eyes, faint smile, close-up"},
+    {"template": "pillow", "camera": "static",
+     "desc": "a chipped cup of tea cooling on a low wooden table, thin steam rising, a single sunbeam crossing the tabletop, no humans"}
+  ],
+  "why": "This is the template most likely to fail, so it is built directly against the known failure: the rejected twenty-minute film was held shots with a slow zoom and nothing to hold on to. Every hold here has a subject - a room becoming visible, a task being performed, a face doing nothing on purpose, a cup going cold. The table is set for ONE, which is the only piece of story in the template and the reason it is not merely pretty; a director who wants the scene to be about loneliness does not have to change a single tag, and one who does not can set it for two. The camera is static except for a single push on the react, so the scene reads as composed rather than roaming. look:golden with cue:warm_memory is the pairing the cue library itself recommends, and warm_memory in C major against a minor-key film reads as then rather than now - useful if this morning is a flashback, worth knowing if it is not. wear:0 and emotion:neutral keep the character unremarkable, which is the genre.",
+  "note": "transition:dissolve is intent only - short.py ignores transitions and hard-cuts. Deliberate substitution worth flagging: pace:contemplative is the natural choice for this scene and its card advertises scale 1.6, but compile.py PACE map contains only slow, normal and fast, so contemplative silently resolves to 1.0 and does nothing at all. pace:slow is used instead because it genuinely scales shots by 1.35x, and that is where the 18s runtime comes from. Everything else lands today; emotion:neutral is status:partial upstream, so its face tags render and voice_style does not.",
+  "status": "partial"
+}

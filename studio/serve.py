@@ -63,6 +63,31 @@ def library():
     return out
 
 
+def gallery():
+    """Every generation, newest first, with the full recipe that produced it.
+
+    Read fresh from the append-only manifest on each request, so a run in progress shows
+    up on refresh without restarting anything. A malformed line is skipped rather than
+    taking the whole endpoint down - the writer appends while this reads, so a torn final
+    line is normal rather than exceptional.
+    """
+    p = f"{HERE}/gallery/manifest.jsonl"
+    if not os.path.exists(p):
+        return []
+    out = []
+    with open(p, encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                out.append(json.loads(line))
+            except Exception:
+                continue
+    out.reverse()
+    return out
+
+
 def templates():
     """Clickable scene templates - a bundle that sets many variables at once AND brings
     its own shots, so you start from something that works instead of a blank page.
@@ -152,6 +177,13 @@ class H(http.server.SimpleHTTPRequestHandler):
             if not os.path.exists(p):
                 return self._send({"tiers": {}, "vars": {}})
             return self._send(json.load(open(p, encoding="utf-8")))
+        if path in ("/gallery", "/gallery.html"):
+            p = f"{HERE}/gallery.html"
+            if not os.path.exists(p):
+                return self._send(b"gallery.html is missing", 500, "text/plain")
+            return self._send(open(p, "rb").read(), 200, "text/html; charset=utf-8")
+        if path == "/api/gallery":
+            return self._send(gallery())
         if path == "/api/templates":
             return self._send(templates())
         if path == "/api/library":

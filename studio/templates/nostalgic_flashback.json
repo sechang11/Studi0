@@ -1,0 +1,31 @@
+{
+  "id": "nostalgic_flashback",
+  "name": "Nostalgic flashback",
+  "desc": "A better afternoon, remembered by someone who knows how it ended.",
+  "genre": ["drama", "slice of life"],
+  "beats": 4,
+  "runtime_s": 16,
+  "sets": {
+    "look": "memory",
+    "pace": "slow",
+    "cue": "warm_memory",
+    "emotion": "joy",
+    "camera": "push",
+    "wear": 0,
+    "place": "sunlit classroom in summer, dust motes in the air, open window, white curtains",
+    "transition": "dissolve"
+  },
+  "shots": [
+    {"template": "establish", "camera": "push",
+     "desc": "empty sunlit classroom, dust motes drifting in a shaft of light, open window, curtains moving, no humans"},
+    {"template": "react", "camera": "static",
+     "desc": "laughing, head tilted back, bright eyes, open smile, hair backlit by the window, close-up"},
+    {"template": "pillow", "camera": "static",
+     "desc": "white curtains lifting in a warm breeze, sunlight through the fabric, no humans"},
+    {"template": "insert", "camera": "push",
+     "desc": "two empty desks pushed together by a window, initials carved into one lid, warm light, close-up, no humans"}
+  ],
+  "why": "The tense is carried by the picture, not by a caption saying THEN. look:memory is the only grade in the library that softens as well as fades - contrast 0.92, saturation 0.60 and a gblur at sigma 1.4 - so a flashback is visibly a different image even in a single frame, and cue warm_memory is deliberately C major against a minor-key film, which reads as 'then' rather than 'now'. The sting is in the last shot: the desks are EMPTY, so the template ends by removing the person it just showed laughing. That is the shot that makes it nostalgia instead of simply a happy scene.",
+  "status": "partial",
+  "note": "transition 'dissolve' is advisory - short.py renders hard cuts, which costs this template more than the others, since a dissolve is the conventional grammar for entering a memory. Until transitions land, sell the jump on the look change alone. Also important: wear 0 here is a request compile.py may refuse. wear is resolved as max() across movie, chapter and scene and is never allowed to decrease, so dropping this template into a film that has already reached wear 3 renders the flashback in torn, bloodied clothing. To use it late in a film, author it as its own chapter with wear reset at movie level, or accept the damage."
+}

@@ -1,0 +1,33 @@
+{
+  "id": "lonely_night_city",
+  "name": "Lonely night city",
+  "desc": "One person, a city that does not notice. Nobody speaks.",
+  "genre": ["drama", "noir"],
+  "beats": 5,
+  "runtime_s": 21,
+  "sets": {
+    "look": "night",
+    "pace": "slow",
+    "cue": "desolate",
+    "emotion": "exhausted",
+    "camera": "pull",
+    "wear": 1,
+    "place": "city street at night, neon signs, wet asphalt, tall buildings, empty road",
+    "transition": "dissolve"
+  },
+  "shots": [
+    {"template": "establish", "camera": "push",
+     "desc": "empty city street at night, neon signs reflected in wet asphalt, tall buildings, deep perspective, no humans"},
+    {"template": "master", "camera": "pull",
+     "desc": "lone figure walking away down the centre of the empty street, seen from behind, small in frame, wide shot"},
+    {"template": "react", "camera": "push",
+     "desc": "face lit from below by a phone screen, half-closed eyes, white breath in cold air, close-up"},
+    {"template": "insert", "camera": "static",
+     "desc": "a single lit vending machine glowing on an empty corner, bright against dark, close-up, no humans"},
+    {"template": "pillow", "camera": "tilt_u",
+     "desc": "power lines against a dark sky, one lit window in a tower block, no humans"}
+  ],
+  "why": "The isolation is built by the cut order, not by any adjective. Two of the five shots contain nobody at all, and the one wide shot puts the figure small and walking away, so the city gets more screen time than the person in it - that ratio is the whole feeling. The pull camera on the master does the emotional work (studio/cameras/pull.json: isolation, abandonment, endings). Darkness comes from the look:night ffmpeg grade rather than the prompt, which is the only way it actually gets dark; the same words as tags moved measured mean luma 170 to 161, i.e. nothing. Reach for this when a character has to be alone and you do not want them to say so.",
+  "status": "partial",
+  "note": "transition 'dissolve' is advisory - short.py ignores transitions and renders every boundary as a hard cut. Everything else lands: the night grade, pace slow, the desolate cue, the exhausted face tags, all five cameras, wear, place. wear 1 renders through the character card wear_tags ladder; the fallback ladder in compile.py says 'uniform', so a character with no wear_tags list of its own picks up a uniform it may not own - use wear 0 for a non-uniformed cast."
+}

@@ -1,0 +1,33 @@
+{
+  "id": "reconciliation",
+  "name": "Reconciliation",
+  "desc": "Two people who stopped speaking, sitting down again. No apology is spoken.",
+  "genre": ["drama"],
+  "beats": 5,
+  "runtime_s": 21,
+  "sets": {
+    "look": "golden",
+    "pace": "slow",
+    "cue": "silence",
+    "emotion": "resolve",
+    "camera": "push",
+    "wear": 0,
+    "place": "front porch, late afternoon, wooden steps, open door, long shadows, outdoors",
+    "transition": "dissolve"
+  },
+  "shots": [
+    {"template": "establish", "camera": "static",
+     "desc": "a front porch in late afternoon, two wooden chairs side by side, one door standing open, long shadows across the boards, no humans, wide shot"},
+    {"template": "master", "camera": "static",
+     "desc": "standing at the foot of the porch steps, hands at sides, looking up toward the open door, full body, wide shot"},
+    {"template": "react", "camera": "push",
+     "desc": "eyes lifting to meet another, brow softening, small nod, close-up"},
+    {"template": "insert", "camera": "static",
+     "desc": "a second cup set down on a porch rail beside the first, steam rising, close-up, no humans"},
+    {"template": "pillow", "camera": "static",
+     "desc": "two empty chairs on a porch turned to face the same garden, long shadows, no humans, wide shot"}
+  ],
+  "why": "For the scene where the apology is not the point and would ruin it if spoken. There is no speak shot here, for a craft reason and a mechanical one. The craft reason is that a reconciliation played in dialogue almost always overstates itself. The mechanical one is that resolve - the only emotion in the library reading as calm certainty - has the mouth tag 'closed mouth', which sits earlier in the prompt than any shot desc and would shut the mouth of a talking shot anyway. So the reconciliation is carried by objects and one look: a second cup appearing beside the first, and two chairs facing the same way. The cue is silence, which drops all score - its own card calls it the most under-used cue in the library, and it is right here, because a warm string cue would tell the audience how to feel about something the images are already doing. warm_memory was the obvious pick and is wrong: its own note says a major key against a minor-key film reads as 'then', not 'now', and this scene has to be happening now. Every shot holds exactly one person or none - no framing asks for two people at once, because character cards carry the tag 'solo' near the front of the prompt and it beats any later request for a second figure.",
+  "status": "partial",
+  "note": "Shots, the golden grade, pace, camera and wear render today. Not working: (1) transition 'dissolve' is recorded but short.py cuts hard on every boundary. (2) emotion 'resolve' is status:partial - voice_style 'steady' is not routed to TTS, which costs nothing here because nobody speaks. One thing to watch: resolve's body tag is 'upright, still' and it applies at wear 0, so this template deliberately never asks anyone to sit down on camera - the sitting-together image is delivered by the peopleless pillow shot of two chairs instead. At wear 0 the fallback WEAR list appends 'clean uniform, neat hair' to shots 2 and 3 - give these characters a wear_tags override or they will reconcile in uniform."
+}

@@ -1,0 +1,33 @@
+{
+  "id": "argument_small_room",
+  "name": "Argument in a small room",
+  "desc": "Two people, one room, and no door out of the conversation.",
+  "genre": ["drama"],
+  "beats": 5,
+  "runtime_s": 11,
+  "sets": {
+    "look": "bleach",
+    "pace": "fast",
+    "cue": "tense_strings",
+    "emotion": "angry",
+    "camera": "handheld",
+    "wear": 0,
+    "place": "narrow kitchen, night, fluorescent light, cluttered counter, closed window, indoors",
+    "transition": "smash"
+  },
+  "shots": [
+    {"template": "establish", "camera": "static",
+     "desc": "a narrow kitchen at night, a table pushed against a wall, one chair overturned, fluorescent light overhead, no humans, wide shot"},
+    {"template": "speak", "camera": "handheld",
+     "desc": "shouting, mouth wide open, leaning forward over a table, one arm braced on the tabletop, upper body, medium shot"},
+    {"template": "react", "camera": "static",
+     "desc": "flinching, jaw set, staring back without blinking, close-up"},
+    {"template": "insert", "camera": "static",
+     "desc": "a mug knocked on its side, spilled tea spreading across a table edge, close-up, no humans"},
+    {"template": "speak", "camera": "handheld",
+     "desc": "speaking quietly, mouth barely open, eyes down, turned half away, close-up"}
+  ],
+  "why": "For the domestic row that has nowhere to escalate to except volume, then quiet. The shape is the argument itself: shout, receive, an object breaks the rhythm, then the quiet line that actually does the damage. Pace fast (0.7x) pulls the five shots to about 11 seconds, so the cutting carries the pressure rather than any per-shot motion - the right bet, because this checkpoint gives you held poses and the edit is where energy actually comes from. bleach is the look because its grade (contrast 1.35, saturation 0.45) is the harsh drained fluorescent of a kitchen at night, and it does that in the grade where it is deterministic instead of asking the model for 'harsh light'. wear stays 0 so angry's body tag 'tense, clenched fists' survives - it is dropped at any wear above 0. The overturned chair lives in the establish shot and the spilled mug in the insert, both peopleless, so the room tells you what happened without a character having to perform it.",
+  "status": "partial",
+  "note": "Shots, the bleach grade, pace, camera and wear render today. Not working: (1) transition 'smash' is recorded but short.py cuts hard everywhere, so it is documentation only. (2) emotion 'angry' is status:partial - voice_style 'angry' is not routed to TTS. One real prompt conflict to know about: angry's mouth tag is 'gritted teeth' and it sits earlier in the prompt than the shot desc, so it competes with 'mouth wide open' on shot 2 and 'mouth barely open' on shot 5. Bared teeth mid-shout is a tolerable read; on the quiet final line it is not, and that shot may render more clenched than intended. At wear 0 the fallback WEAR list appends 'clean uniform, neat hair' to every character shot - give these characters a wear_tags override on their character card or they will argue in uniform."
+}

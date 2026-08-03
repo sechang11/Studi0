@@ -1,0 +1,31 @@
+{
+  "id": "noir_interrogation",
+  "name": "Noir interrogation",
+  "desc": "A question, a refusal, and a cigarette burning down between them.",
+  "genre": ["noir", "crime", "drama"],
+  "beats": 4,
+  "runtime_s": 16,
+  "sets": {
+    "look": "bleach",
+    "pace": "slow",
+    "cue": "tense_strings",
+    "emotion": "cold",
+    "camera": "static",
+    "wear": 1,
+    "place": "bare interrogation room, single hanging lamp, steel table, concrete walls, one closed door",
+    "transition": "fade_black"
+  },
+  "shots": [
+    {"template": "establish", "camera": "push",
+     "desc": "empty steel table under a single hanging lamp, two chairs facing each other across it, bare concrete walls, harsh overhead light, deep shadows in the corners, wide shot, no humans"},
+    {"template": "speak", "camera": "static",
+     "desc": "seated at the steel table leaning forward into the lamplight, both hands flat on the metal, sleeves rolled up, medium shot, half the face in shadow"},
+    {"template": "react", "camera": "push",
+     "desc": "seated leaning back out of the lamplight, expressionless, eyes fixed on nothing, not blinking, close-up, most of the face in shadow"},
+    {"template": "insert", "camera": "static",
+     "desc": "a cigarette burnt down to a long grey ash in a dented tin ashtray, thin smoke rising straight up, harsh light from above, close-up, no humans"}
+  ],
+  "why": "The scene where nothing physically happens and everything is decided. It is built on one asymmetry: the interrogator spends words, the suspect spends nothing, and the camera refuses to help either of them. look:bleach is doing the real work here, because contrast 1.35 with saturation dropped to 0.45 is the only way to get chiaroscuro out of this model - asking the prompt for darkness measurably does not work. The camera is static almost throughout so that the single push on the react shot is the only movement in the scene and therefore reads as pressure. emotion:cold supplies the physical refusal - expressionless, flat eyes, closed mouth, still - rather than the useless word guarded. The closing insert is the point of the whole template: a cigarette burnt to a long ash is how you say an hour passed without a line of dialogue saying it, and it ends the scene on a thing rather than on a face.",
+  "note": "transition:fade_black is intent only - short.py ignores transitions entirely and hard-cuts between every shot. Everything else lands today: shot templates, cameras, look tags plus the deterministic ffmpeg grade, cue, wear, and the emotion face/eyes/mouth/body tags. emotion:cold is itself status:partial upstream - its voice_style flat applies only on a TTS engine that accepts an emotion vector, so the picture is fully honoured and the voice is not.",
+  "status": "partial"
+}

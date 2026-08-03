@@ -1,0 +1,33 @@
+{
+  "id": "scifi_reveal",
+  "name": "Sci-fi reveal",
+  "desc": "The walk, the stop, and the thing that was there the whole time.",
+  "genre": ["sci-fi", "mystery"],
+  "beats": 5,
+  "runtime_s": 18,
+  "sets": {
+    "look": "cold",
+    "pace": "normal",
+    "cue": "unease",
+    "emotion": "fear",
+    "camera": "pull",
+    "wear": 1,
+    "place": "vast hangar interior, cold blue worklights, exposed girders, narrow catwalks, condensation in the air",
+    "transition": "flash"
+  },
+  "shots": [
+    {"template": "master", "camera": "pull",
+     "desc": "walking along a narrow catwalk high in a vast dark interior, small in frame, handrails and girders all around, back to the camera, wide shot, full body"},
+    {"template": "hold_silent", "camera": "static",
+     "desc": "stopped at the end of the catwalk, standing motionless facing away into the dark, tiny against the empty space, wide shot, full body"},
+    {"template": "insert", "camera": "static",
+     "desc": "a bank of industrial worklights snapping on one after another in the dark, cold blue beams cutting through condensation, no humans"},
+    {"template": "establish", "camera": "pull",
+     "desc": "colossal ribbed alien hull filling the entire hangar, cold blue worklights raking across its surface, catwalks dwarfed against it, extreme wide shot, no humans"},
+    {"template": "react", "camera": "push",
+     "desc": "head tilted back staring upward, wide eyes, shrunken pupils, mouth open, lit from below by cold blue light, close-up"}
+  ],
+  "why": "The establish is deliberately the FOURTH shot rather than the first, and that inversion is the entire template. Reveal grammar means the audience does not learn where they are until the moment the character does, so the scene opens on a wide that shows a person and no context, and only later admits what the room actually contains. hold_silent is the 5.5s pivot - the longest shot available anywhere in the library and the one place this piece stops moving - and it sits immediately before the lights come on, because silence before an impact is what makes the impact land. emotion:fear is chosen over any word like awe or wonder, which render as nothing at all: wide eyes, shrunken pupils, an open mouth and a head tilted back IS awe, described physically. The two pulls bracket the sequence, so scale is expressed by the camera retreating twice rather than by any adjective about size, which the model would ignore.",
+  "note": "transition:flash is intent only - short.py ignores transitions and hard-cuts, and this template loses more to that than the others, since a flash into the reveal is the obvious edit. cue:unease is bpm 0 and unmetered, and ACE-Step has no hit-point conditioning, so it cannot spot to the light-up on shot 3 - treat the music as a bed, not a sting. Everything else lands today; emotion:fear is status:partial upstream, so its face tags render but voice_style shaky needs a TTS engine that accepts an emotion vector.",
+  "status": "partial"
+}

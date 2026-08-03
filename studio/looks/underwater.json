@@ -1,0 +1,7 @@
+{
+  "id": "underwater",
+  "tags": "underwater, submerged, bubbles, light rays, water, blue",
+  "grade": "eq=contrast=0.94:saturation=0.85:brightness=-0.04,colorbalance=bm=0.14:gm=0.08:rm=-0.12:rh=-0.06,eq=gamma=1.02",
+  "status": "partial",
+  "note": "The COLOUR is exact and does render: red is absorbed first underwater, so rm goes down while blue and green both go up, giving a cyan cast rather than a plain blue one (input 128 -> 105,117,115). Contrast drops for the murk. What this does NOT do is any caustics, godrays, floating particulate or refraction wobble - no filter in the allowed set can, and the bubbles and light rays entries in tags are prompt-side hopes only. Treat this as the water colour and get the movement elsewhere."
+}

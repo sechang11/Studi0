@@ -1,0 +1,31 @@
+{
+  "id": "confession",
+  "name": "Confession",
+  "desc": "One person finally says the thing. The scene is the withholding, not the sentence.",
+  "genre": ["drama", "romance"],
+  "beats": 4,
+  "runtime_s": 21,
+  "sets": {
+    "look": "golden",
+    "pace": "slow",
+    "cue": "melancholy_piano",
+    "emotion": "fear",
+    "camera": "push",
+    "wear": 1,
+    "place": "small bedroom, evening, warm lamp, curtains drawn, indoors",
+    "transition": "dissolve"
+  },
+  "shots": [
+    {"template": "establish", "camera": "static",
+     "desc": "an unmade bed, two coats on a hook by a door, warm lamplight across a bare wall, no humans, wide shot"},
+    {"template": "hold_silent", "camera": "push",
+     "desc": "sitting on the edge of a bed, hands flat on knees, shoulders raised, head turned away from the door, medium shot"},
+    {"template": "speak", "camera": "static",
+     "desc": "mouth open mid-sentence, eyes lifted, one hand gripping own sleeve, upper body, close-up"},
+    {"template": "react", "camera": "push",
+     "desc": "listening, eyes widening, head tilted slightly back, close-up"}
+  ],
+  "why": "For the scene where someone has decided to say something they cannot take back. The 5.5s hold_silent before the line is the whole template - it buys the silence that makes one sentence land, and it is the only shot here allowed to be long. Two mechanical choices make it work. First, emotion is fear because the library has no vulnerability preset and fear's face tags (wide eyes, open mouth) are the physical signature of being exposed; its body tag is 'recoiling', which would read as horror, so wear is set to 1 to suppress it - compile.py drops an emotion's body tag whenever wear > 0, and WEAR[1] is 'sweaty, damp hair, flushed', which is nervous sweat and contains no garment noun, so it is safe indoors. Second, speak is placed under an emotion whose mouth tag is 'open mouth'; emotions with 'closed mouth' (resolve, cold, determined, neutral) sit earlier in the prompt than the shot desc and would render a shut mouth on a talking shot. The establish shot is peopleless by design, so it carries no identity or emotion tags at all and renders the room clean.",
+  "status": "partial",
+  "note": "Shots, the golden grade, pace, camera and wear all render today. Two parts do not. (1) transition 'dissolve' is recorded but short.py cuts hard on every boundary, so it documents intent and produces no effect. (2) emotion 'fear' is a status:partial card - its face/eyes/mouth tags render, but voice_style 'shaky' is not routed to TTS. On wear: this template uses wear 1 so the fallback WEAR list never contributes a garment noun, but any character card without its own wear_tags falls back to the project's sports vocabulary at other levels. Give interior-drama characters a wear_tags override."
+}

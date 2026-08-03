@@ -1,0 +1,31 @@
+{
+  "id": "quiet_aftermath",
+  "name": "Quiet aftermath",
+  "desc": "The room after. Nobody says anything, and that is the scene.",
+  "genre": ["drama"],
+  "beats": 4,
+  "runtime_s": 18,
+  "sets": {
+    "look": "cold",
+    "pace": "slow",
+    "cue": "desolate",
+    "emotion": "cold",
+    "camera": "static",
+    "wear": 0,
+    "place": "living room, grey morning, curtains half drawn, indoors",
+    "transition": "fade_black"
+  },
+  "shots": [
+    {"template": "pillow", "camera": "static",
+     "desc": "a ceiling fan turning slowly, flat grey light, no humans, low angle"},
+    {"template": "hold_silent", "camera": "static",
+     "desc": "sitting on the floor with back against a sofa, knees drawn up, head tilted back against the cushion, wide shot"},
+    {"template": "insert", "camera": "static",
+     "desc": "two cups on a low table, one full and untouched, no steam, close-up, no humans"},
+    {"template": "pillow", "camera": "static",
+     "desc": "a curtain moving slightly at a half-open window, empty room beyond, no humans, medium shot"}
+  ],
+  "why": "For the beat after the event, where the job is to let the audience catch up rather than to advance anything. Three of the four shots are peopleless, which is both the Ozu grammar this borrows from and the cheapest, most reliable thing this pipeline does - pillow and insert take no identity or emotion tags at all, so they render a room instead of a portrait and cannot drift between shots. The emotion is cold, not grief and not exhausted: cold is 'expressionless, blank, flat eyes looking away, still, arms at sides', which is numbness after the fact, whereas exhausted is 'open mouth, panting, hands on knees' - physical breathlessness inherited from the sports story this library grew out of, and badly wrong in a living room. Every camera is static and every cut lands on a held frame; the only movement in the whole template is a fan and a curtain, both of which the model can actually draw. The two cups in the insert are the only plot in it.",
+  "status": "partial",
+  "note": "Shots, the cold grade, pace, camera and wear render today. Not working: (1) transition 'fade_black' is recorded but short.py cuts hard, so no fade is produced - which matters more here than elsewhere, since a fade to black is the natural way out of this scene and you will not get one. (2) emotion 'cold' is status:partial - voice_style 'flat' is not routed to TTS, though nobody speaks here so nothing is lost. Pace is 'slow' rather than 'contemplative' on purpose: compile.py's PACE map contains only slow/normal/fast and silently treats every other value as 1.0, so 'contemplative' would have rendered at normal speed despite studio/pacing/contemplative.json declaring scale 1.6. At wear 0 the fallback WEAR list appends 'clean uniform, neat hair' to shot 2 - give the character a wear_tags override or they will sit on the floor in uniform."
+}

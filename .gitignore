@@ -31,3 +31,8 @@ __pycache__/
 # ~/ComfyUI/output/claude-generated/studio_cards/.
 *.png
 !studio/samples/**/*.png
+
+# The generation corpus. The MANIFEST is tracked - it is the reproducible recipe for
+# every image and the thing worth reviewing in a diff - but the images themselves are
+# regenerable from it and would grow without bound.
+studio/samples/gallery/

@@ -1,0 +1,31 @@
+{
+  "id": "heroic_arrival",
+  "name": "Heroic arrival",
+  "desc": "The one who was not going to make it walks into the square.",
+  "genre": ["action", "fantasy", "shounen"],
+  "beats": 4,
+  "runtime_s": 12,
+  "sets": {
+    "look": "golden",
+    "pace": "normal",
+    "cue": "triumphant_build",
+    "emotion": "resolve",
+    "camera": "push",
+    "wear": 3,
+    "place": "ruined town square at sunset, broken cobblestones, overturned cart, smoke drifting between shattered buildings",
+    "transition": "smash"
+  },
+  "shots": [
+    {"template": "establish", "camera": "pan_r",
+     "desc": "ruined town square at sunset, overturned cart, smoke drifting between shattered buildings, long shadows across broken cobblestones, low sun, wide shot, no humans"},
+    {"template": "insert", "camera": "static",
+     "desc": "the point of a sword dragging a shallow line through dust and grit, dirt parting around the blade, low angle, close-up, no humans"},
+    {"template": "react", "camera": "static",
+     "desc": "looking up toward the far end of the square, mouth open, dawning recognition, lit by low golden sun, close-up"},
+    {"template": "master", "camera": "push",
+     "desc": "standing alone at the mouth of the square, backlit by the low sun, torn coat moving in the wind, long shadow stretching toward the camera, wide shot, full body, low angle"}
+  ],
+  "why": "An arrival only means something if the room has been established as lost before the arriver is in it, so the reveal is held to the last shot and the wide comes fourth instead of first. The sword-in-the-dust insert announces the character before their face or body appears, which is cheaper and better than a slow walk-in. wear:3 is the deliberate choice that makes this template work - torn uniform, dirt and grass stains, dishevelled - because a hero who arrives clean has not come from anywhere. Tag order is what keeps that from ruining the shot: identity, then face, then garment-in-its-state, so emotion:resolve with its steady gaze and upright stillness wins on the expression while wear:3 still wrecks the clothes. Battered body, calm face - that contrast is the whole beat. The push on the closing master is the only camera move that matters here, and it should be the only one in the sequence.",
+  "note": "transition:smash is intent only - short.py ignores transitions and hard-cuts. cue:triumphant_build carries its own upstream warning: one per film, because a second one makes the first mean nothing. If the film already spends it elsewhere, swap this to driving_pulse. Everything else lands today; emotion:resolve is status:partial upstream, so its face tags render but voice_style steady needs a TTS engine that accepts an emotion vector.",
+  "status": "partial"
+}

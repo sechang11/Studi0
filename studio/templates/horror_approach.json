@@ -1,0 +1,33 @@
+{
+  "id": "horror_approach",
+  "name": "Horror approach",
+  "desc": "Something is coming down the corridor. You never see it.",
+  "genre": ["horror", "thriller"],
+  "beats": 5,
+  "runtime_s": 15,
+  "sets": {
+    "look": "night",
+    "pace": "normal",
+    "cue": "unease",
+    "emotion": "fear",
+    "camera": "push",
+    "wear": 2,
+    "place": "narrow institutional corridor, flickering fluorescent tube, peeling paint, closed doors on both sides, wet floor",
+    "transition": "dissolve"
+  },
+  "shots": [
+    {"template": "establish", "camera": "push",
+     "desc": "long narrow corridor receding into darkness, one flickering fluorescent tube overhead, closed doors down both walls, wet reflective floor, peeling paint, wide shot, no humans"},
+    {"template": "pillow", "camera": "static",
+     "desc": "a single door at the far end of the corridor standing slightly ajar, a black gap between door and frame, darkness beyond it, no humans"},
+    {"template": "react", "camera": "static",
+     "desc": "pressed back flat against the corridor wall, head turned toward the sound, wide eyes, shrunken pupils, one hand clamped over the mouth, close-up"},
+    {"template": "build", "camera": "handheld",
+     "desc": "backing away down the corridor, looking back over one shoulder, stumbling, arms out for balance, full body, low angle, motion blur"},
+    {"template": "insert", "camera": "static",
+     "desc": "a brass doorknob turning slowly, dim light on the metal, close-up, no humans"}
+  ],
+  "why": "Approach horror is a withholding engine, so this template never shows the thing. It shows the corridor, the gap in the door, the face, the retreat, and then the handle turning, and then it stops. The order is deliberate: the two peopleless shots come first and establish that the space itself is wrong before any character is in danger, which is what makes the react shot land when it arrives. look:night is essential and is the one variable a director must not try to replace with prompt words - darkness here comes from the grade at brightness -0.15 and gamma 0.92, because prompting for night moved measured mean luma by nine points, which is nothing. build is the only multi-cut shot in the piece and its three accelerating cuts supply the escalation without spending sakuga. Ending on the insert rather than on a scream is what separates dread from a jump scare: the last frame is a door that has not opened yet.",
+  "note": "transition:dissolve is intent only - short.py ignores transitions and hard-cuts. cue:unease is bpm 0, meaning unmetered, so do not try to cut picture to it. camera:handheld on the build shot is status:ready and does move. Everything else lands today; emotion:fear is status:partial upstream, meaning its face, eyes, mouth and body tags render but voice_style shaky needs a TTS engine that accepts an emotion vector.",
+  "status": "partial"
+}

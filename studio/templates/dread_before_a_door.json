@@ -1,0 +1,33 @@
+{
+  "id": "dread_before_a_door",
+  "name": "Dread before a door",
+  "desc": "Whatever is behind it, we do not open it inside this template.",
+  "genre": ["horror", "thriller"],
+  "beats": 5,
+  "runtime_s": 17,
+  "sets": {
+    "look": "bleach",
+    "pace": "normal",
+    "cue": "unease",
+    "emotion": "fear",
+    "camera": "push",
+    "wear": 2,
+    "place": "narrow corridor, single closed door at the far end, harsh overhead light, peeling paint",
+    "transition": "smash"
+  },
+  "shots": [
+    {"template": "establish", "camera": "push",
+     "desc": "a closed door at the end of a narrow corridor, harsh overhead light, peeling paint, deep one-point perspective, no humans"},
+    {"template": "react", "camera": "static",
+     "desc": "face in profile staring down the corridor, wide eyes, shrunken pupils, sweat, clenched jaw, close-up"},
+    {"template": "build", "camera": "push",
+     "desc": "walking slowly toward the door, seen from behind, one hand out for the wall, medium shot"},
+    {"template": "insert", "camera": "static",
+     "desc": "a brass door handle, unturned, scratches around the lock plate, extreme close-up, no humans"},
+    {"template": "hold_silent", "camera": "push",
+     "desc": "standing motionless facing the closed door, seen from behind, shoulders rising with breath, medium shot"}
+  ],
+  "why": "This is the one structure where withholding is the content, so the template deliberately never shows what is behind the door - it ends on hold_silent, the longest shot in the library at 5.5s, and stops. The push camera repeats on three of the five shots so the film keeps advancing on a thing it never reaches. look:bleach drops saturation to 0.45 and lifts contrast to 1.35, which drains the corridor without darkening it - fluorescent dread rather than night dread, and it stays legible. Cut the reveal in as the NEXT scene so this template's silence is what makes it land.",
+  "status": "partial",
+  "note": "transition 'smash' is advisory - short.py renders hard cuts, so the smash has to come from the next scene's content, not from this setting. pace is deliberately 'normal', not 'slow': hold_silent is 5.5s and compile.py hands every beat clip_secs 6, so slow pace would stretch it to 7.4s and short.py silently truncates any cut longer than its clip. cue 'unease' is bpm 0, unmetered - do not try to cut to it. Separately, the pace values brisk, contemplative, decelerating and frantic are accepted by the schema but compile.py's PACE table only knows slow, normal and fast, so those four silently render at normal speed."
+}
