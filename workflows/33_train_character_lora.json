@@ -1,0 +1,83 @@
+{
+  "_doc": "Train a character LoRA from a folder of images+captions under ComfyUI/input. Set 1.inputs.folder to the dataset, 5.inputs.steps to the budget, 6.inputs.prefix to where it lands. Driven by studio/_tools/train_character.py.",
+  "1": {
+    "class_type": "LoadImageTextDataSetFromFolder",
+    "inputs": {
+      "folder": "viro_train"
+    },
+    "_note": "the dropdown lists directories under ComfyUI/input only. A dataset anywhere else is invisible to this node however well formed."
+  },
+  "2": {
+    "class_type": "CheckpointLoaderSimple",
+    "inputs": {
+      "ckpt_name": "animagine-xl-4.0.safetensors"
+    },
+    "_note": "train against the SAME checkpoint the films render on. A LoRA is a delta on specific weights; trained against one base and applied to another it degrades or does nothing."
+  },
+  "3": {
+    "class_type": "MakeTrainingDataset",
+    "inputs": {
+      "images": [
+        "1",
+        0
+      ],
+      "texts": [
+        "1",
+        1
+      ],
+      "vae": [
+        "2",
+        2
+      ],
+      "clip": [
+        "2",
+        1
+      ]
+    }
+  },
+  "5": {
+    "class_type": "TrainLoraNode",
+    "inputs": {
+      "model": [
+        "2",
+        0
+      ],
+      "latents": [
+        "3",
+        0
+      ],
+      "positive": [
+        "3",
+        1
+      ],
+      "batch_size": 1,
+      "grad_accumulation_steps": 1,
+      "steps": 1000,
+      "learning_rate": 0.0005,
+      "rank": 16,
+      "optimizer": "AdamW",
+      "loss_function": "MSE",
+      "seed": 7311,
+      "training_dtype": "bf16",
+      "lora_dtype": "bf16",
+      "quantized_backward": false,
+      "algorithm": "LoRA",
+      "gradient_checkpointing": true,
+      "checkpoint_depth": 1,
+      "offloading": false,
+      "existing_lora": "[None]",
+      "bucket_mode": false,
+      "bypass_mode": false
+    }
+  },
+  "6": {
+    "class_type": "SaveLoRA",
+    "inputs": {
+      "lora": [
+        "5",
+        0
+      ],
+      "prefix": "loras/character_viro"
+    }
+  }
+}
