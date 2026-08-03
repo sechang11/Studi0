@@ -98,31 +98,58 @@ function draw(){
 }
 
 function drawCard(c){
+  // YOU DO NOT NEED TO KNOW THE TERMS.
+  //
+  // The first version asked "does extreme_wide work?", which is unanswerable unless you
+  // already know what extreme_wide is supposed to look like - and the cards exist to
+  // TEACH that, so requiring it first was backwards.
+  //
+  // The question that matters most needs no expertise at all: are the options
+  // distinguishable from each other? A variable whose options render identically is
+  // broken no matter what the labels mean, and that is the single most common defect in
+  // this set. So that is asked first, in plain language, and the expert judgement is
+  // optional afterwards.
+  const n=c.panels.length;
   $("wrap").innerHTML=`
-    <div class="why"><b>Does this variable actually do what the claim says?</b>
-      Both predictions ever checked against these pixels turned out wrong, so your eyes
-      here are worth more than any amount of reasoning about the option names.
-      <kbd>1</kbd> works · <kbd>2</kbd> mixed · <kbd>3</kbd> fails · <kbd>s</kbd> skip</div>
+    <div class="why"><b>You don't need to know these terms.</b> The question below is
+      about whether the pictures are <em>different from each other</em> — that is what
+      tells us the setting does anything at all. If you also happen to know whether it
+      looks right, there is a second question. <b>"Not sure" is a real answer</b> and more
+      useful than a guess: a wrong verdict is worse than none.</div>
+
     <h2>${esc(c.variable)}</h2>
     <p class="claim">${esc(c.claim)}</p>
+
     ${c.sheet?`<img class="sheet" src="${esc(c.sheet)}" alt="">`
              :`<div class="strip">${c.panels.map(p=>`
                 <figure><img src="${esc(p.sample)}" alt=""><figcaption>${esc(p.value)}</figcaption></figure>`
               ).join("")}</div>`}
-    ${c.panels.length?`<div class="hint" style="margin-top:10px">Click any option below that
-      is broken or indistinguishable from its neighbour — that list is saved too.</div>
-      <div class="strip" style="margin-top:6px">${c.panels.map(p=>`
-        <figure><img data-opt="${esc(p.value)}" src="${esc(p.sample)}" alt="">
-        <figcaption>${esc(p.value)}${p.control?" ·ctl":""}</figcaption></figure>`).join("")}</div>`:""}
-    <div class="acts">
-      <button class="btn b-works" data-v="works">Works</button>
-      <button class="btn b-mixed" data-v="mixed">Mixed</button>
-      <button class="btn b-fails" data-v="fails">Fails</button>
+
+    <h3 style="margin:20px 0 4px;font-size:15px">1. Are these ${n} pictures different from each other?</h3>
+    <div class="hint" style="margin-bottom:8px">Ignore whether they look <em>good</em>.
+      Just: could you tell them apart if the labels were removed?</div>
+    <div class="acts" style="margin-top:0">
+      <button class="btn b-works" data-v="works">Yes — clearly different</button>
+      <button class="btn b-mixed" data-v="mixed">Some are, some look the same</button>
+      <button class="btn b-fails" data-v="fails">No — they all look the same</button>
+      <button class="btn b-ghost" data-v="unsure">Not sure</button>
       <button class="btn b-skip"  data-v="skip">Skip</button>
       <span class="hint" id="saving"></span>
     </div>
-    <textarea id="look" placeholder="What should someone notice here? (optional — this becomes the card's 'what to notice')"></textarea>
-    ${(c.review||[]).length?`<details class="rev"><summary>${c.review.length} reviewer note(s) written before rendering</summary>
+
+    ${c.panels.length?`
+      <h3 style="margin:22px 0 4px;font-size:15px">2. Optional — is any single one obviously wrong?</h3>
+      <div class="hint" style="margin-bottom:8px">Click a picture if it looks broken, or if
+        it is a duplicate of the one next to it. Each shows what it was asked for.
+        Skip this if you are not sure.</div>
+      <div class="strip">${c.panels.map(p=>`
+        <figure><img data-opt="${esc(p.value)}" src="${esc(p.sample)}" alt="">
+        <figcaption><b>${esc(p.value)}</b>${p.control?" · control":""}<br>
+        <span style="opacity:.75">${esc(p.clause||"—")}</span></figcaption></figure>`).join("")}</div>`:""}
+
+    <h3 style="margin:22px 0 4px;font-size:15px">3. Optional — anything worth telling the next person?</h3>
+    <textarea id="look" placeholder="e.g. 'the last two are identical' or 'the wide one loses the character completely'. Plain words are fine."></textarea>
+    ${(c.review||[]).length?`<details class="rev"><summary>${c.review.length} note(s) written BEFORE these were rendered — predictions, not observations</summary>
       ${c.review.map(r=>`<p><b>${esc(r.issue||"")}</b><br>${esc(r.fix||"")}</p>`).join("")}</details>`:""}`;
   document.querySelectorAll("[data-opt]").forEach(el=>el.onclick=()=>{
     const v=el.dataset.opt;
@@ -134,28 +161,33 @@ function drawCard(c){
 
 function drawTag(t){
   $("wrap").innerHTML=`
-    <div class="why"><b>Does this pair actually demonstrate the tag?</b>
-      Left is without, right is with. If the difference is invisible — because the base
-      image already had the effect, or the composition moved too much to compare — it is
-      a bad example and should be rerolled on another seed. The definition stays either
-      way; only the picture is at fault.
-      <kbd>1</kbd> good · <kbd>r</kbd> reroll · <kbd>s</kbd> skip</div>
+    <div class="why"><b>You don't need to know this term either.</b> Read the two lines
+      below — they say what the tag is supposed to do — then look at the pair.
+      <b>Left is without it, right is with it.</b> The only question is whether you can
+      see that happening.</div>
     <h2>${esc(t.term)}</h2>
-    <p class="claim">${esc(t.does||t.means||"")}</p>
+    <div style="background:var(--panel);border:1px solid var(--line);border-radius:9px;
+                padding:12px 15px;margin-bottom:14px;max-width:80ch">
+      <div class="hint" style="margin:0 0 3px">what it means</div>
+      <p style="margin:0 0 9px">${esc(t.means||"—")}</p>
+      <div class="hint" style="margin:0 0 3px">so the right-hand picture should look…</div>
+      <p style="margin:0"><b>${esc(t.does||"—")}</b></p>
+    </div>
     ${t.example?`<img class="sheet" src="${esc(t.example)}?v=${Date.now()}" alt="">`
                :`<div class="done">no example rendered yet</div>`}
-    <div class="acts">
-      <button class="btn b-works" data-t="good">Good — keep it</button>
-      <button class="btn b-mixed" data-t="reroll">Reroll — doesn't show the tag</button>
-      <button class="btn b-fails" data-t="slop">Reroll — looks like slop</button>
+    <h3 style="margin:18px 0 4px;font-size:15px">Can you see that difference between the two?</h3>
+    <div class="acts" style="margin-top:6px">
+      <button class="btn b-works" data-t="good">Yes — keep it</button>
+      <button class="btn b-mixed" data-t="reroll">No — they look the same</button>
+      <button class="btn b-fails" data-t="slop">They differ, but it looks bad</button>
+      <button class="btn b-ghost" data-t="unsure">Not sure</button>
       <button class="btn b-skip"  data-t="skip">Skip</button>
       <span class="hint" id="saving"></span>
     </div>
-    <div class="hint">Two different rejections, because they are different problems.
-      <b>Doesn't show the tag</b> means the comparison failed — the base already had the
-      effect, or the composition moved too much to read. <b>Looks like slop</b> means the
-      comparison worked but the picture is not worth showing. Both reroll; the second also
-      records that this tag needs a better base.</div>
+    <div class="hint">Both middle buttons reroll on a new seed — they are different
+      problems though. <b>Look the same</b> means the comparison failed. <b>Looks bad</b>
+      means it worked but the picture is not worth showing, and records that this tag
+      needs a better base rather than just another roll.</div>
     <div class="hint">strength: <b>${esc(t.strength||"?")}</b>${
       t.negative_instead?" · belongs in the NEGATIVE prompt":""} · seed ${esc(t.example_seed||"?")}</div>`;
   document.querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>tagAct(t,b.dataset.t));
@@ -174,7 +206,7 @@ async function saveCard(c,v){
 }
 
 async function tagAct(t,act){
-  if(act==="skip"){ i++; draw(); return; }
+  if(act==="skip"||act==="unsure"){ i++; draw(); return; }
   if(act==="good"){ TAGSDONE++; i++; draw(); return; }
   $("saving").textContent="rerolling… ~6s";
   try{
@@ -194,11 +226,13 @@ document.onkeydown=e=>{
     if(e.key==="1") saveCard(q[i],"works");
     if(e.key==="2") saveCard(q[i],"mixed");
     if(e.key==="3") saveCard(q[i],"fails");
+    if(e.key==="4"||e.key==="u") saveCard(q[i],"unsure");
     if(e.key==="s"){ i++; draw(); }
   }else{
     if(e.key==="1") tagAct(q[i],"good");
-    if(e.key==="r") tagAct(q[i],"reroll");
-    if(e.key==="2") tagAct(q[i],"slop");
+    if(e.key==="2"||e.key==="r") tagAct(q[i],"reroll");
+    if(e.key==="3") tagAct(q[i],"slop");
+    if(e.key==="4"||e.key==="u") tagAct(q[i],"unsure");
     if(e.key==="s"){ i++; draw(); }
   }
 };

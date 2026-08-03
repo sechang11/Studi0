@@ -104,8 +104,11 @@ def verify_queue():
             "variable": c.get("variable", fn[:-5]),
             "claim": c.get("claim", ""),
             "sheet": c.get("sheet"),
+            # the clause is what the option ASKED FOR, in the model's own words. Showing
+            # it means a reviewer does not need to know the term to judge the picture.
             "panels": [{"value": p.get("value"), "sample": p.get("sample"),
-                        "control": bool(p.get("control"))}
+                        "control": bool(p.get("control")),
+                        "clause": p.get("clause") or ""}
                        for p in (c.get("panels") or [])],
             "verdict": c.get("verdict"),
             "look_at": c.get("look_at"),
@@ -401,13 +404,22 @@ class H(http.server.SimpleHTTPRequestHandler):
         if not slug or not os.path.exists(p):
             return self._send({"error": f"unknown card: {slug}"}, 404)
         verdict = str(data.get("verdict", "")).strip()[:40]
-        if verdict not in ("works", "mixed", "fails", ""):
-            return self._send({"error": "verdict must be works, mixed, fails or empty"}, 400)
+        # "unsure" is a first-class answer, not a failure to answer. A reviewer who does
+        # not know the term should be able to say so, and that is far more useful than a
+        # guess - every predicted verdict here that was later checked was wrong.
+        if verdict not in ("works", "mixed", "fails", "unsure", ""):
+            return self._send({"error": "verdict must be works, mixed, fails, unsure "
+                                        "or empty"}, 400)
         try:
             c = json.load(open(p, encoding="utf-8"))
         except Exception as e:
             return self._send({"error": f"unreadable card: {e}"}, 500)
-        if verdict:
+        if verdict == "unsure":
+            # record that a human looked and could not judge, WITHOUT claiming a verdict.
+            # The card stays in the queue for someone who knows the term.
+            c["seen_unsure"] = int(c.get("seen_unsure", 0)) + 1
+            c.pop("verdict", None)
+        elif verdict:
             c["verdict"] = verdict
             c["verified_by"] = "human"
             c["verified_at"] = __import__("time").strftime("%Y-%m-%dT%H:%M:%S")
