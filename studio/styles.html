@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>studio · styles</title>
+<style>
+  :root{--bg:#0f1115;--panel:#161a21;--panel2:#1c2129;--line:#272d38;--ink:#e6e9ef;
+        --dim:#8b94a3;--accent:#6ea8fe;--ok:#4ec9a0;--warn:#e0b252;--bad:#e07a5f}
+  @media (prefers-color-scheme:light){
+    :root{--bg:#f6f7f9;--panel:#fff;--panel2:#f0f2f5;--line:#dde1e8;--ink:#141821;--dim:#5d6470}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font:14px/1.55 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  header{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;padding:13px 18px;
+         border-bottom:1px solid var(--line);background:var(--panel);position:sticky;top:0;z-index:9}
+  header h1{margin:0;font-size:15px;letter-spacing:.07em;text-transform:uppercase}
+  header .sub{color:var(--dim);font-size:12px}
+  header .right{margin-left:auto;display:flex;gap:8px}
+  header a{color:var(--dim);font-size:12px;text-decoration:none;border:1px solid var(--line);
+           padding:5px 10px;border-radius:6px}
+  header a:hover{color:var(--ink);border-color:var(--accent)}
+  .bar{display:flex;gap:8px;flex-wrap:wrap;padding:12px 18px;border-bottom:1px solid var(--line);
+       background:var(--panel);position:sticky;top:52px;z-index:8}
+  input[type=search],select{background:var(--panel2);border:1px solid var(--line);color:var(--ink);
+       border-radius:7px;padding:7px 10px;font:inherit}
+  button{background:var(--panel2);border:1px solid var(--line);color:var(--ink);border-radius:7px;
+       padding:7px 11px;font:inherit;cursor:pointer}
+  button:hover{border-color:var(--accent)}
+
+  .key{padding:14px 18px 0;color:var(--dim);font-size:12.5px;max-width:110ch}
+  .key b{color:var(--ink)}
+  .key .row{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:7px}
+  .key .row span{white-space:nowrap}
+
+  .grid{padding:18px;display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(268px,1fr))}
+  .s{background:var(--panel);border:1px solid var(--line);border-radius:11px;overflow:hidden;
+     cursor:pointer;display:flex;flex-direction:column}
+  .s:hover{border-color:var(--accent)}
+  .s img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;background:var(--panel2)}
+  .s .noimg{aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;
+            color:var(--dim);font-size:12px;background:var(--panel2)}
+  .s .b{padding:12px 14px}
+  .s h3{margin:0;font-size:15px}
+  .s .id{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--dim)}
+  .s .fam{float:right;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);
+          border:1px solid var(--line);border-radius:99px;padding:1px 8px}
+  .s p{margin:8px 0 0;font-size:12.5px;color:var(--dim)}
+  /* injects and replaces change how the style behaves next to other layers, so they get a
+     stripe you can see from across the grid rather than a badge you have to read. */
+  .c-replaces{border-color:var(--warn)}
+  .c-injects{border-color:var(--bad)}
+  .c-inert{opacity:.6}
+  .flag{font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;padding:5px 14px;
+        border-top:1px solid var(--line);font-family:ui-monospace,Menlo,monospace}
+  .f-replaces{background:color-mix(in srgb,var(--warn) 16%,transparent);color:var(--warn)}
+  .f-injects{background:color-mix(in srgb,var(--bad) 16%,transparent);color:var(--bad)}
+  .f-inert{background:var(--panel2);color:var(--dim)}
+  .f-unavailable{background:color-mix(in srgb,var(--bad) 26%,transparent);color:var(--bad)}
+  .f-weak{background:var(--panel2);color:var(--warn)}
+
+  .pill{display:inline-block;font-size:10px;letter-spacing:.05em;text-transform:uppercase;
+        border:1px solid currentColor;border-radius:99px;padding:1px 8px;margin:0 4px 4px 0;
+        color:var(--dim)}
+  .pills{margin-top:9px}
+  .p-ok{color:var(--ok)} .p-no{color:var(--bad)} .p-part{color:var(--warn)}
+  .p-eng{color:var(--accent)}
+
+  dialog{border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--ink);
+         max-width:min(1250px,95vw);max-height:92vh;padding:0}
+  dialog::backdrop{background:#000b}
+  .dh{display:flex;align-items:baseline;gap:12px;padding:14px 18px;border-bottom:1px solid var(--line);
+      position:sticky;top:0;background:var(--panel);z-index:2}
+  .dh h3{margin:0;font-size:17px}
+  .dh .id{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--dim)}
+  .dh button.x{margin-left:auto;background:none;border:0;color:var(--dim);font-size:22px;cursor:pointer}
+  .db{padding:18px}
+  .pans{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;margin-bottom:6px}
+  .pans figure{margin:0}
+  .pans img{width:100%;border-radius:8px;border:1px solid var(--line);display:block;background:var(--panel2)}
+  .pans figcaption{font-size:11px;color:var(--dim);padding-top:4px;text-align:center}
+  .pans figcaption b{color:var(--ink);font-family:ui-monospace,Menlo,monospace}
+  .lbl{color:var(--dim);font-size:11px;letter-spacing:.06em;text-transform:uppercase;margin-top:16px}
+  .db p{margin:5px 0 0;font-size:13px}
+  .verdict{margin-top:6px;padding:10px 12px;border-left:2px solid var(--accent);background:var(--panel2);
+           border-radius:0 7px 7px 0;font-size:13px}
+  .warnbox{margin-top:6px;padding:10px 12px;border-left:2px solid var(--warn);background:var(--panel2);
+           border-radius:0 7px 7px 0;font-size:13px}
+  .badbox{margin-top:6px;padding:10px 12px;border-left:2px solid var(--bad);background:var(--panel2);
+          border-radius:0 7px 7px 0;font-size:13px}
+  code,.mono{font-family:ui-monospace,Menlo,monospace;font-size:12px}
+  .contrib{margin-top:6px;padding:9px 11px;background:var(--panel2);border:1px solid var(--line);
+           border-radius:8px;font-family:ui-monospace,Menlo,monospace;font-size:12px;
+           white-space:pre-wrap;word-break:break-word}
+  .none{color:var(--dim);font-style:italic}
+  table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:8px}
+  td{padding:5px 7px;border-bottom:1px solid var(--line);vertical-align:top}
+  td:first-child{color:var(--dim);width:22%;font-family:ui-monospace,Menlo,monospace}
+  .empty{padding:40px 18px;color:var(--dim)}
+</style>
+</head>
+<body>
+<header>
+  <h1>styles</h1><span class="sub" id="stat">loading…</span>
+  <div class="right">
+    <a href="/wizard">direct a scene</a><a href="/cast">cast</a>
+    <a href="/make">make</a><a href="/tags">tags</a>
+    <a href="/verify">verify</a><a href="/gallery">gallery</a><a href="/">library</a>
+  </div>
+</header>
+
+<div class="bar">
+  <input type="search" id="q" placeholder="search a style, what it means, or how it failed…"
+         style="flex:1;min-width:220px">
+  <select id="fam"><option value="">every family</option></select>
+  <select id="eng">
+    <option value="">either engine</option>
+    <option value="anime">anime — the illustration engine</option>
+    <option value="qwen">qwen — the photographic engine</option>
+  </select>
+  <select id="cmp">
+    <option value="">any behaviour</option>
+    <option value="safe">safe — stacks cleanly</option>
+    <option value="replaces">replaces — owns the background</option>
+    <option value="injects">injects — draws its own noun</option>
+    <option value="inert">inert — does nothing</option>
+  </select>
+  <select id="st">
+    <option value="">any status</option>
+    <option value="ready">ready</option>
+    <option value="weak">weak</option>
+    <option value="unavailable">unavailable</option>
+  </select>
+</div>
+
+<div class="key">
+  Every card here was rendered on both engines against the same subject at the same seed and then
+  <b>looked at</b>. The picture on each card is the render from the engine that card routes to;
+  open one to see both engines side by side.
+  <div class="row">
+    <span><b>safe</b> re-renders the same scene in a new idiom</span>
+    <span style="color:var(--warn)"><b>replaces</b> rebuilds the background too</span>
+    <span style="color:var(--bad)"><b>injects</b> draws the noun in its name as a prop</span>
+    <span><b>inert</b> did nothing at all</span>
+  </div>
+</div>
+
+<div class="grid" id="grid"></div>
+<div class="empty" id="empty" style="display:none"></div>
+
+<dialog id="dlg">
+  <div class="dh"><h3 id="dname"></h3><span class="id" id="did"></span>
+    <button class="x" id="dx" title="close">&times;</button></div>
+  <div class="db" id="dbody"></div>
+</dialog>
+
+<script>
+let ALL=[], CONTROL=null, BYID={};
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+// What each `compose` value means for someone combining this style with a place, a character
+// and a look. These are the plain-English readings of a field that is otherwise a bare word.
+const COMPOSE={
+  safe:{flag:"", short:"stacks cleanly with everything",
+    long:"Safe to combine. It re-renders whatever you already set up in a new idiom — your place, "+
+         "your character and your look all survive it."},
+  replaces:{flag:"replaces — this style owns the background",
+    short:"rebuilds the setting as well as the rendering",
+    long:"This style brings its own world with it. If you also pick a place, the style wins and the "+
+         "place is paid for in prompt space and then lost. That is by design on several of these "+
+         "cards, not a fault — reach for it when you want the style to choose the background."},
+  injects:{flag:"injects — the noun in its name gets drawn as a prop",
+    short:"puts an object in the frame instead of restyling",
+    long:"The thing this style is named after gets drawn as an object in the shot, usually straight "+
+         "into the subject's hands. It corrupts the scene rather than rendering it differently, and "+
+         "because the prop is not in your shot description it will not be consistent between shots."},
+  inert:{flag:"inert — no visible change from the control",
+    short:"did nothing measurable",
+    long:"Rendered against the no-style control at the same seed and the same subject, this produced "+
+         "no visible difference. Picking it costs a full generation and buys nothing."}
+};
+const STATUS={
+  ready:{cls:"p-ok", long:"Rendered and checked against the control. It does what the card says."},
+  weak:{cls:"p-part", flag:"weak — rendered, but it barely moved the image",
+    long:"This was rendered and it barely changed anything. On several of these the difference is "+
+         "small enough to be seed noise."},
+  unavailable:{cls:"p-no", flag:"unavailable — the engine cannot do this",
+    long:"Neither prompt wording nor settings get this out of the model. The verdict says exactly "+
+         "how it failed, which is worth reading before you try to talk it into working."}
+};
+const ENGINE={
+  anime:"animagine-xl-4.0 — the illustration engine. Reads danbooru tags. Does watercolour, "+
+        "ukiyo-e, oil paint and woodcut despite the name.",
+  qwen:"Qwen-Image 2512 — the photographic engine. Reads prose. It cannot be talked out of "+
+       "photography by any prompt.",
+  either:"Renders on both engines."
+};
+
+// The plain `<id>.webp` beside the two suffixed files is NOT reliably the routed engine's
+// render, so always pick through the card's own `engine` field.
+function routed(c){
+  const ex=c.examples||{};
+  const want=c.engine==="qwen"?"qwen":"anime";
+  if(ex[want]) return {url:ex[want],eng:want};
+  if(ex.anime) return {url:ex.anime,eng:"anime"};
+  if(ex.qwen)  return {url:ex.qwen,eng:"qwen"};
+  return null;
+}
+
+function draw(){
+  const q=$("q").value.trim().toLowerCase(), fam=$("fam").value,
+        eng=$("eng").value, cmp=$("cmp").value, st=$("st").value;
+  const v=ALL.filter(c=>
+    (!fam||c.family===fam) &&
+    (!eng||c.engine===eng||c.engine==="either") &&
+    (!cmp||c.compose===cmp) &&
+    (!st ||c.status===st) &&
+    (!q  ||[c.id,c.name,c.means,c.verdict,c.tags,c.prose,c.family,c.works_for,c.note]
+            .join(" ").toLowerCase().includes(q)));
+  $("stat").textContent=`${v.length} of ${ALL.length} styles`;
+  $("empty").style.display=v.length?"none":"block";
+  $("empty").textContent=ALL.length?"Nothing matches those filters."
+    :"No style cards found in studio/styles/.";
+  $("grid").innerHTML=v.map(card).join("");
+  document.querySelectorAll("[data-id]").forEach(el=>el.onclick=()=>open_(el.dataset.id));
+}
+
+function card(c){
+  const r=routed(c), co=COMPOSE[c.compose]||{}, sf=(STATUS[c.status]||{}).flag;
+  const flags=[];
+  if(sf) flags.push(`<div class="flag f-${esc(c.status)}">${esc(sf)}</div>`);
+  if(co.flag) flags.push(`<div class="flag f-${esc(c.compose)}">${esc(co.flag)}</div>`);
+  return `<div class="s c-${esc(c.compose||"")}" data-id="${esc(c.id)}">
+    ${r?`<img loading="lazy" src="${esc(r.url)}" alt="${esc(c.name)} rendered on ${esc(r.eng)}">`
+       :`<div class="noimg">no example rendered yet</div>`}
+    <div class="b">
+      <h3>${esc(c.name||c.id)}<span class="fam">${esc(c.family||"")}</span></h3>
+      <div class="id">${esc(c.id)} · ${esc(c.engine||"")}</div>
+      <p>${esc(c.means||"")}</p>
+    </div>
+    ${flags.join("")}</div>`;
+}
+
+function panel(url,eng,routedEng,label){
+  return `<figure><img loading="lazy" src="${esc(url)}" alt="${esc(label||eng)}">
+    <figcaption><b>${esc(eng)}</b>${label?" — "+esc(label)
+      :(eng===routedEng?" — the engine this card routes to":" — the other engine, for comparison")}
+    </figcaption></figure>`;
+}
+
+function open_(id){
+  const c=BYID[id]; if(!c) return;
+  const co=COMPOSE[c.compose]||{}, sm=STATUS[c.status]||{}, ex=c.examples||{}, r=routed(c);
+  const pans=[];
+  ["anime","qwen"].forEach(e=>{ if(ex[e]) pans.push(panel(ex[e],e,r&&r.eng)); });
+  const cex=(CONTROL&&CONTROL.examples)||{};
+  const ctl=["anime","qwen"].filter(e=>ex[e]&&cex[e])
+    .map(e=>panel(cex[e],e,null,"no style, same seed and subject")).join("");
+
+  $("dname").textContent=c.name||c.id;
+  $("did").textContent=c.id+" · "+(c.family||"")+" · "+(c.engine||"");
+  $("dbody").innerHTML=`
+    <div class="pans">${pans.join("")||'<p class="none">No renders on disk for this card.</p>'}</div>
+    ${ctl?`<button id="ctlbtn">compare with the no-style control</button>
+           <div class="pans" id="ctlpans" style="display:none;margin-top:12px">${ctl}</div>`:""}
+
+    ${sm.flag?`<div class="${c.status==="unavailable"?"badbox":"warnbox"}">
+        <b>${esc(sm.flag)}</b><br>${esc(sm.long)}</div>`:""}
+
+    <div class="lbl">what it means</div>
+    <p>${esc(c.means||"")}</p>
+
+    <div class="lbl">what it actually did</div>
+    ${c.verdict?`<div class="verdict">${esc(c.verdict)}</div>`
+               :`<p class="none">Not verified against pixels yet.</p>`}
+
+    <div class="lbl">how it combines — ${esc(c.compose||"unrecorded")}</div>
+    <div class="${c.compose==="injects"?"badbox":c.compose==="replaces"?"warnbox":"verdict"}">
+      ${esc(co.long||"This card records no compose value.")}</div>
+
+    <div class="lbl">what it adds to your prompt</div>
+    <table>
+      <tr><td>engine</td><td>${esc(c.engine||"")} — ${esc(ENGINE[c.engine]||"")}</td></tr>
+      <tr><td>tags<br><span style="font-size:10px">anime path</span></td><td>${
+        c.tags?`<span class="mono">${esc(c.tags)}</span>`
+              :`<span class="none">nothing — this card contributes no danbooru tags, so on the anime engine it would do nothing at all</span>`}</td></tr>
+      <tr><td>prose<br><span style="font-size:10px">qwen path</span></td><td>${
+        c.prose?esc(c.prose):`<span class="none">nothing</span>`}</td></tr>
+      <tr><td>negative_add</td><td>${c.negative_add?`<span class="mono">${esc(c.negative_add)}</span>`
+        :`<span class="none">none</span>`}</td></tr>
+      <tr><td>strength</td><td>${esc(c.strength||"")}</td></tr>
+      <tr><td>suits_looks</td><td>${(c.suits_looks||[]).length
+        ?c.suits_looks.map(l=>`<span class="pill">${esc(l)}</span>`).join("")
+        :`<span class="none">no looks checked against this card</span>`}</td></tr>
+    </table>
+
+    ${c.works_for?`<div class="lbl">in video</div><p>${esc(c.works_for)}</p>`:""}
+    ${c.note?`<div class="lbl">note</div><p style="color:var(--dim)">${esc(c.note)}</p>`:""}
+    ${c.verified_by?`<div class="lbl">how this was checked</div>
+       <p style="color:var(--dim);font-size:12px">${esc(c.verified_by)}</p>`:""}
+
+    <div class="lbl">resolve it</div>
+    <p style="color:var(--dim);font-size:12.5px">Ask the compositor what this style becomes in a
+      real prompt, and what it argues with.</p>
+    <button id="cbtn" data-id="${esc(c.id)}">resolve this style</button>
+    <div id="cout"></div>`;
+
+  const cb=$("ctlbtn");
+  if(cb) cb.onclick=()=>{ const p=$("ctlpans");
+    const on=p.style.display==="none"; p.style.display=on?"grid":"none";
+    cb.textContent=on?"hide the control":"compare with the no-style control"; };
+  $("cbtn").onclick=()=>compose(c.id);
+  $("dlg").showModal();
+  $("dlg").scrollTop=0;
+}
+
+// POST /api/compose is resolution only - it never renders. The resolver lives in
+// studio/compose.py and is the same code path the compiler uses.
+async function compose(id){
+  const out=$("cout");
+  out.innerHTML=`<p class="none" style="margin-top:8px">resolving…</p>`;
+  let j;
+  try{
+    const r=await fetch("/api/compose",{method:"POST",
+      headers:{"Content-Type":"application/json"},body:JSON.stringify({style:id})});
+    j=await r.json();
+    if(!r.ok){
+      out.innerHTML=`<div class="warnbox"><b>${esc(j.error||"could not resolve")}</b>${
+        j.detail?"<br><span class=\"mono\">"+esc(j.detail)+"</span>":""}</div>`;
+      return;
+    }
+  }catch(e){ out.innerHTML=`<div class="warnbox">${esc(e)}</div>`; return; }
+
+  const sev={error:"badbox",warning:"warnbox",note:"verdict"};
+  out.innerHTML=`
+    <table>
+      <tr><td>engine</td><td>${esc(j.engine||"")} — ${esc(j.engine_reason||"")}</td></tr>
+      ${j.lora!==undefined?`<tr><td>character LoRA</td><td>${
+        j.lora?esc(j.lora):"<span class=\"none\">none</span>"}${
+        j.lora_reason?" — "+esc(j.lora_reason):""}</td></tr>`:""}
+    </table>
+    <div class="lbl">positive prompt</div><div class="contrib">${esc(j.prompt||"")}</div>
+    ${j.negative?`<div class="lbl">negative</div><div class="contrib">${esc(j.negative)}</div>`:""}
+    ${(j.layers||[]).length?`<div class="lbl">what each layer contributed</div><table>${
+      j.layers.map(l=>`<tr><td>${esc(l.layer||"")}</td><td>${esc(l.name||l.id||"")}${
+        l.contributed?`<br><span class="mono">${esc(l.contributed)}</span>`:""}</td></tr>`).join("")
+    }</table>`:""}
+    ${(j.conflicts||[]).length?`<div class="lbl">conflicts</div>${
+      j.conflicts.map(k=>`<div class="${sev[k.severity]||"verdict"}"><b>${
+        esc((k.layers||[]).join(" + "))}</b> — ${esc(k.message||"")}${
+        k.fix?`<br><span style="color:var(--dim)">${esc(k.fix)}</span>`:""}</div>`).join("")
+    }`:`<div class="lbl">conflicts</div><p class="none">none on its own.</p>`}`;
+}
+
+(async function(){
+  let d={};
+  try{ d=await fetch("/api/styles").then(r=>r.json()); }catch(e){ d={}; }
+  ALL=d.styles||[]; CONTROL=d.control||null;
+  ALL.sort((a,b)=>(a.family||"").localeCompare(b.family||"")
+                 ||(a.name||a.id).localeCompare(b.name||b.id));
+  ALL.forEach(c=>BYID[c.id]=c);
+  const fams=(d.families&&d.families.length?d.families
+              :[...new Set(ALL.map(c=>c.family).filter(Boolean))].sort());
+  $("fam").innerHTML='<option value="">every family</option>'+
+    fams.map(f=>`<option>${esc(f)}</option>`).join("");
+  ["q","fam","eng","cmp","st"].forEach(id=>{$(id).oninput=draw; $(id).onchange=draw;});
+  $("dx").onclick=()=>$("dlg").close();
+  $("dlg").onclick=e=>{ if(e.target===$("dlg")) $("dlg").close(); };
+  draw();
+})();
+</script>
+</body>
+</html>

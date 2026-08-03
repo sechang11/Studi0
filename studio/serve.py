@@ -15,7 +15,8 @@ Endpoints:
     /api/movies       .movie files found in studio/movies
     /api/save         POST {name, text} -> writes studio/movies/<name>.movie
 """
-import http.server, json, os, re, socket, socketserver, subprocess, sys, urllib.parse
+import http.server, importlib, inspect, json, os, re, socket, socketserver, subprocess, \
+       sys, traceback, urllib.parse
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 PORT = int(os.environ.get("STUDIO_PORT", "8777"))
@@ -229,6 +230,58 @@ def templates():
     return out
 
 
+SAMPLE_URL = re.compile(r"^/samples/styles/[A-Za-z0-9._-]+$")
+
+
+def styles():
+    """The style library, with each card's per-engine example CHECKED AGAINST DISK.
+
+    Deliberately not part of GROUPS/library(). That loop resolves one `sample` string by
+    trying <id>.webp, and for styles the plain copy beside the two suffixed ones is not
+    reliably the render from the engine the card routes to - 19 of 131 disagree with their
+    own `engine` field. A page that wants to show "what this style looks like" has to pick
+    through the card, so it needs both engines, not one guess. Hence `examples` here rather
+    than `sample`, and hence a separate endpoint.
+
+    _control is returned separately: it is the no-style baseline every other example in the
+    library is read against, not a style you can pick.
+    """
+    d = f"{HERE}/styles"
+    if not os.path.isdir(d):
+        return {"styles": [], "families": [], "count": 0, "control": None}
+    out, control = [], None
+    for fn in sorted(os.listdir(d)):
+        if not fn.endswith(".json"):
+            continue
+        try:
+            c = json.load(open(f"{d}/{fn}", encoding="utf-8"))
+        except Exception as e:
+            c = {"id": fn[:-5], "name": fn[:-5], "status": "error",
+                 "means": f"UNREADABLE: {e}"}
+        if not c.get("id"):
+            c["id"] = fn[:-5]
+        # Only claim an example the browser can actually load. The card is authored by
+        # hand, so a path in it may name a file that was never rendered or was deleted.
+        declared = c.get("examples") if isinstance(c.get("examples"), dict) else {}
+        have = {}
+        for eng, url in declared.items():
+            if isinstance(url, str) and SAMPLE_URL.match(url) \
+                    and os.path.isfile(f"{HERE}{url}"):
+                have[eng] = url
+        for eng in ("anime", "qwen"):
+            if eng not in have:
+                url = f"/samples/styles/{c['id']}__{eng}.webp"
+                if os.path.isfile(f"{HERE}{url}"):
+                    have[eng] = url
+        c["examples"] = have
+        if c["id"] == "_control":
+            control = c
+        else:
+            out.append(c)
+    fams = sorted({c.get("family") for c in out if c.get("family")})
+    return {"styles": out, "families": fams, "count": len(out), "control": control}
+
+
 def cards():
     d = f"{HERE}/cards"
     if not os.path.isdir(d):
@@ -240,6 +293,28 @@ def cards():
 def variables():
     p = f"{HERE}/variables.json"
     return json.load(open(p, encoding="utf-8")) if os.path.exists(p) else []
+
+
+def _call_resolve(fn, req):
+    """Call compose.resolve() however it ended up being written.
+
+    This endpoint and studio/compose.py were built in parallel against a written contract.
+    The contract fixes the request KEYS and the response SHAPE, which are what the page and
+    the wizard depend on; it does not fix whether the function takes eight keyword arguments
+    or one dict, which nothing depends on. So adapt to whichever it is instead of failing
+    over a detail neither side cares about.
+    """
+    try:
+        params = inspect.signature(fn).parameters
+    except (TypeError, ValueError):
+        return fn(**req)
+    if any(p.kind == p.VAR_KEYWORD for p in params.values()):
+        return fn(**req)
+    named = [n for n, p in params.items()
+             if p.kind in (p.POSITIONAL_OR_KEYWORD, p.KEYWORD_ONLY)]
+    if len(named) == 1 and named[0] not in req:
+        return fn(req)                      # resolve(request_dict)
+    return fn(**{k: v for k, v in req.items() if k in named})
 
 
 def movies():
@@ -325,6 +400,13 @@ class H(http.server.SimpleHTTPRequestHandler):
                     except Exception:
                         pass
             return self._send(out)
+        if path in ("/styles", "/styles.html"):
+            p = f"{HERE}/styles.html"
+            if not os.path.exists(p):
+                return self._send(b"styles.html is missing", 500, "text/plain")
+            return self._send(open(p, "rb").read(), 200, "text/html; charset=utf-8")
+        if path == "/api/styles":
+            return self._send(styles())
         if path == "/api/domains":
             return self._send(domains())
         if path == "/api/render/status":
@@ -584,10 +666,57 @@ class H(http.server.SimpleHTTPRequestHandler):
             "tail": "\n".join(txt.splitlines()[-24:]),
         })
 
+    def _compose(self, data):
+        """Resolve a set of picked cards into one prompt, its negative, and the arguments
+        between the layers. RESOLUTION ONLY - this never renders and never touches the GPU.
+
+        The logic lives in studio/compose.py because the compiler uses the same code path.
+        A second implementation here would drift from what actually gets rendered, which is
+        the exact failure this endpoint exists to prevent - so if that module will not
+        import, say so plainly rather than guessing an answer that looks authoritative.
+
+        Reloaded per request for the same reason the library is read from disk per request:
+        editing the resolver and refreshing should show the change.
+        """
+        if HERE not in sys.path:
+            sys.path.insert(0, HERE)
+        try:
+            import compose as composer
+            if getattr(composer, "__file__", "").startswith(HERE):
+                composer = importlib.reload(composer)
+        except Exception as e:
+            return self._send({
+                "error": "the compositor is not wired up yet",
+                "detail": f"{type(e).__name__}: {e}",
+                "hint": "studio/compose.py must exist and define resolve()"}, 503)
+        fn = getattr(composer, "resolve", None)
+        if not callable(fn):
+            return self._send({
+                "error": "the compositor is not wired up yet",
+                "detail": "studio/compose.py imported but has no resolve()",
+                "hint": "studio/compose.py must define resolve()"}, 503)
+        req = {}
+        for k in ("style", "place", "character", "look", "wear",
+                  "lighting", "weather", "engine"):
+            v = data.get(k)
+            req[k] = (v.strip() or None) if isinstance(v, str) else v
+        try:
+            out = _call_resolve(fn, req)
+        except Exception as e:
+            return self._send({
+                "error": "the compositor could not resolve that combination",
+                "detail": f"{type(e).__name__}: {e}",
+                "trace": "".join(traceback.format_exc()).splitlines()[-6:]}, 500)
+        if not isinstance(out, dict):
+            return self._send({
+                "error": "the compositor returned something unexpected",
+                "detail": f"resolve() returned {type(out).__name__}, expected a dict"}, 500)
+        return self._send(out)
+
     def do_POST(self):
         p = urllib.parse.urlparse(self.path).path
         if p not in ("/api/save", "/api/render", "/api/make", "/api/workflow",
-                     "/api/verify", "/api/tag/reroll"):
+                     "/api/verify", "/api/tag/reroll", "/api/compose"):
             return self._send({"error": "not found"}, 404)
         n = int(self.headers.get("Content-Length", 0))
         try:
@@ -607,6 +736,8 @@ class H(http.server.SimpleHTTPRequestHandler):
             return self._verify(data)
         if p == "/api/tag/reroll":
             return self._reroll(data)
+        if p == "/api/compose":
+            return self._compose(data)
         name = "".join(c for c in str(data.get("name", "")) if c.isalnum() or c in "-_")
         if not name:
             return self._send({"error": "name required"}, 400)
