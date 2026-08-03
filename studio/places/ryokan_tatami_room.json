@@ -1,0 +1,23 @@
+{
+  "id": "ryokan_tatami_room",
+  "name": "Ryokan tatami room",
+  "family": "interior",
+  "desc": "Stillness and hospitality; difficult things said very politely across a low table.",
+  "tags": "tatami room, tatami mats with visible seams, shoji screen doors, low wooden table, zabuton cushions, tokonoma alcove, hanging scroll, ikebana arrangement, wooden ceiling beams, sliding paper door, engawa veranda beyond, garden through the opening",
+  "prose": "a ryokan room floored with tatami, shoji screens filtering daylight along one wall, a low table with flat cushions set around it and a scroll hanging in the tokonoma alcove",
+  "suits_looks": [
+    "neutral",
+    "dawn",
+    "golden",
+    "memory"
+  ],
+  "time_of_day": [
+    "dawn",
+    "day",
+    "dusk",
+    "night"
+  ],
+  "scale": "room",
+  "status": "ready",
+  "note": "The anime path knows this room and builds it correctly from tatami and shoji alone. The photoreal path does not: without the alcove and the visible mat SEAMS it returns a beige carpeted room with paper blinds, so keep the mat grid in shot. Do not name a laid-out futon and the low table in the same prompt unless you want both - the model merges them into furniture that makes no sense."
+}
