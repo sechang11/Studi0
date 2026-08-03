@@ -127,7 +127,22 @@ def fx_chain(fx, w, h, fps, seed=0, length=2.0):
         # Cut away AT contact. The audience supplies a bigger hit than we could render.
         out.append("eq=brightness='min(1,2.2*max(0,t-0.10))':saturation='max(0,1-6*max(0,t-0.10))'")
     if "hot" in fx:
-        out.append("eq=contrast=1.10:saturation=1.18,vibrance=intensity=0.22")
+        # `hot` is appended LAST, so it lands on whatever the earlier effects produced.
+        # Stacked on a brightening effect it is what turns a shot magenta: `glow` screen-
+        # blends a blurred bright copy, then `hot` pushes saturation 1.18 and vibrance
+        # 0.22 on the already-blown result. The sakuga template asks for exactly that
+        # pair on its final cut, which destroyed the climax of the first film compiled
+        # from the studio layer - the single most important shot came back an unreadable
+        # purple smear.
+        #
+        # The grade above already carries the film's colour intent, so when something has
+        # already lifted the image, `hot` keeps its contrast and gives up its saturation.
+        # This is the same lesson the day-for-night comment records: these filters
+        # MULTIPLY, and the fix is to stop compounding, not to re-tune each one.
+        if any(f in fx for f in ("glow", "flash", "whiteout")):
+            out.append("eq=contrast=1.08")
+        else:
+            out.append("eq=contrast=1.10:saturation=1.18,vibrance=intensity=0.22")
     return ",".join(out)
 
 
@@ -561,11 +576,27 @@ def cut(film, out):
                   f"box=1:boxcolor=black@0.55:boxborderw=10:"
                   f"shadowcolor=black@0.9:shadowx=2:shadowy=2:"
                   f"enable='between(t,{cs:.2f},{ce:.2f})'")
+    # DIALOGUE CAPTIONS WRAP TOO.
+    #
+    # Story captions have gone through wrap_caption since it was written; spoken lines
+    # never did, and drawtext does not wrap - it runs a long line straight off both
+    # sides of the frame. "Nine years. Nine years we have come here and gone home quiet."
+    # rendered as "ne years. Nine years we have come here and gone home qui", losing the
+    # beginning AND the end of the sentence, which is worse than useless because it still
+    # looks deliberate.
+    #
+    # These are set at fontsize cw*0.036 against the story captions' cw*0.026, so they
+    # need a TIGHTER wrap than the 46-char default, not the same one. Lines are stacked
+    # upward from the baseline so a two-line caption grows away from the bottom edge
+    # instead of through it.
+    dlg_size = int(cw * 0.036)
     for start, length, line, _ in cues:
-        txt = ffesc(line["text"])
-        vf.append(f"drawtext={ff}text='{txt}':fontcolor=white:fontsize={int(cw*0.036)}:"
-                  f"x=(w-text_w)/2:y={int(ch*0.70)}:box=1:boxcolor=black@0.55:boxborderw=12:"
-                  f"enable='between(t,{start:.2f},{start+max(length,0.8):.2f})'")
+        lines = wrap_caption(line["text"], width=34)
+        for li, ln in enumerate(lines):
+            y = int(ch * 0.70) - (len(lines) - 1 - li) * int(dlg_size * 1.35)
+            vf.append(f"drawtext={ff}text='{ffesc(ln)}':fontcolor=white:fontsize={dlg_size}:"
+                      f"x=(w-text_w)/2:y={y}:box=1:boxcolor=black@0.55:boxborderw=12:"
+                      f"enable='between(t,{start:.2f},{start+max(length,0.8):.2f})'")
     vertical = f"{work}/_vertical.mp4"
     sh("ffmpeg", "-y", "-v", "error", "-i", joined, "-vf", ",".join(vf),
        "-c:v", "libx264", "-crf", "17", "-preset", "medium", "-pix_fmt", "yuv420p",

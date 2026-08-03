@@ -178,7 +178,20 @@ def parse(path):
             cur_sc["beats"].append({"who": raw_k, "text": v})
             continue
         if k in ("shot", "beat"):
-            cur_sc["beats"].append({"shot": v})
+            # `shot: TEMPLATE | what is happening`
+            #
+            # The description is the single most important thing on the line and it did
+            # not exist until now. Without it a beat's entire prompt was identity + wear
+            # + look + place, so an anime checkpoint given nothing but a character
+            # description renders the only thing it can: a portrait of that character
+            # standing still. Every shot in the first film compiled from this format came
+            # back a posed close-up, INCLUDING the sakuga beat that is supposed to be the
+            # money shot of the episode.
+            #
+            # screenplay.py has always had this as the line under a shot; the .movie
+            # format simply lost it. Same field, same purpose.
+            tmpl, _, desc = v.partition("|")
+            cur_sc["beats"].append({"shot": tmpl.strip(), "desc": desc.strip()})
             continue
         # ENFORCE the movie-level locks this file documents. They were described as
         # "LOCKED, compile error if set at chapter/scene" from the beginning and were
@@ -329,6 +342,20 @@ def compile_movie(path):
                     bits.append(wear_tags[min(wear, len(wear_tags) - 1)])
                 else:
                     bits = []
+                # WHAT IS HAPPENING. Placed exactly where screenplay.py places it: after
+                # identity and garment-state, before the world. Until this existed a
+                # beat's whole prompt was identity + wear + look + place, and an anime
+                # checkpoint handed nothing but a character description renders the only
+                # thing it can - that character, posed, standing still. Every shot of the
+                # first film compiled from this format came back a portrait, including
+                # the sakuga beat meant to be the money shot.
+                #
+                # A shot with no description gets a framing hint rather than nothing, so
+                # the model is at least told how close to stand.
+                desc = (b.get("desc") or "").strip()
+                if not desc:
+                    desc = "close-up" if who else "scenery, no humans"
+                bits.append(desc)
                 bits += [v["tags"], look["tags"], v["mood"], v["place"], v["time"], Q]
                 d["tags"] = ", ".join(x for x in bits if x)
                 d["prompt"] = d["tags"]
