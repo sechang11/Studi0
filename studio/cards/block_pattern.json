@@ -77,5 +77,6 @@
       "issue": "Most of the options are trajectories, and a still only shows the instantaneous arrangement. approach / face_off / circle all reduce to \"two boys facing each other\"; pass_by / cross both reduce to \"two boys walking in different directions\"; retreat / follow both come back as two backs walking away. That is the same argument the card set already accepts for layer.fg.motion and block.entrance's reveal_by_pan — applied inconsistently here.",
       "fix": "Either mark the variable renderable:false with a motion skip_reason, or keep only the values with a distinct frozen geometry (static, face_off, side_by_side, follow, gather, scatter) and demote approach/retreat/circle/pass_by/cross to a clip demo with a note in the claim."
     }
-  ]
+  ],
+  "sheet": "/samples/sheets/block_pattern.jpg"
 }

@@ -1,0 +1,38 @@
+{
+  "variable": "camera",
+  "claim": "The camera move is the one directorial choice on this box that is completely exact. It is NOT asked of the video model - short.py implements it as an ffmpeg zoompan or crop applied to the already-generated clip, so asking for a slow push gives you a slow push every time. This is the opposite of most variables here, and it is why camera is the right place to spend your attention.",
+  "method": "One keyframe, held still, driven for 3.0s through each move in short.py fx_chain(). Content frozen so the camera is the only variable. Verified by measurement as well as by eye: pan_l vs pan_r differ by 70.9 mean absolute pixel value at the final frame, tilt_u vs tilt_d by 65.0.",
+  "verdict": "works - all eight land, and the directions are correct mirrors. Measured 2026-08-03, the first time this was ever tested rather than inferred.",
+  "look_at": "Watch the big screen in the stand. Under pan_l it travels right across the frame (camera moving left); under pan_r it travels left. push tightens onto it; pull opens out. handheld barely reads at all at 3 seconds - that is by design, it is unease, not motion.",
+  "sheet": "/samples/_scratch/cams6.jpg",
+  "panels": [
+    {"value": "static", "clause": "", "control": true, "sample": "/samples/cameras/static.mp4",
+     "note": "The correct choice more often than people expect. It is also the only one that costs nothing and cannot go wrong."},
+    {"value": "push", "clause": "", "sample": "/samples/cameras/push.mp4",
+     "note": "zoompan 1.00 -> 1.10 over the shot. Interest, intimacy, pressure. The most useful move in the set."},
+    {"value": "pull", "clause": "", "sample": "/samples/cameras/pull.mp4",
+     "note": "zoompan 1.12 -> 1.02. Isolation, reveal, endings."},
+    {"value": "pan_l", "clause": "", "sample": "/samples/cameras/pan_l.mp4",
+     "note": "Scale 1.16x then traverse the crop. 8% of frame width over the shot."},
+    {"value": "pan_r", "clause": "", "sample": "/samples/cameras/pan_r.mp4",
+     "note": "Exact mirror of pan_l. Confirmed: 70.9 mean abs difference at the final frame."},
+    {"value": "tilt_u", "clause": "", "sample": "/samples/cameras/tilt_u.mp4",
+     "note": "Vertical equivalent. Reads more strongly than a pan because frames are wider than they are tall, so the same 8% is a bigger fraction of the short axis."},
+    {"value": "tilt_d", "clause": "", "sample": "/samples/cameras/tilt_d.mp4",
+     "note": "Mirror of tilt_u. 65.0 mean abs difference."},
+    {"value": "handheld", "clause": "", "sample": "/samples/cameras/handheld.mp4",
+     "note": "A 2px sin/cos wobble. Deliberately almost invisible - 6.1 mean abs difference against static, the subtlest in the set. Documentary unease, not shake; use `shake` if you want to be felt."}
+  ],
+  "not_available": [
+    {"value": "dolly_zoom", "why": "Needs a depth map to counter-zoom the background against the subject. Depth Anything 3 is installed but no workflow reaches it. compile.py warns and falls back to static."},
+    {"value": "orbit", "why": "Needs a real camera trajectory around a subject; text alone drifts into a pan. No parametric camera path exists on this box."},
+    {"value": "rack_focus", "why": "Needs per-plane separation, i.e. the same depth map as dolly_zoom. One piece of work unblocks both, plus parallax and per-plane blur."}
+  ],
+  "review": [
+    {
+      "variable": "camera",
+      "issue": "The first run of this sweep used a generated CLIP as its source and produced eight panels that looked identical, which nearly shipped as 'the moves do not work'. The clip's own content changed by 78.6 mean abs value between first and last frame - a face becoming a ball becoming a dust cloud - which completely swamps a ~100px camera translation.",
+      "fix": "Sweep against a STILL. Content frozen, camera the only variable. Same discipline the option panels already use: fix the subject and the seed, vary exactly one thing. Any future motion card must do this or it measures the wrong thing."
+    }
+  ]
+}

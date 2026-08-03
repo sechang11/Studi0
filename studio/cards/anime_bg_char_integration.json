@@ -47,5 +47,6 @@
       "issue": "Almost every clause is prose describing a compositing relationship, not danbooru tags: \"background lineart matching character lineart, unified line weight\", \"ambient color bleed onto character, background color reflected on subject\", \"fully composited character, matched grain lighting and lines, seamless integration\". None of those are tokens Animagine has any handle on, and the model has no way to express \"the character is welded to the plate\" as image content. line_match, color_bleed, shared_grain and full_comp will all return the ordinary baseline render, i.e. four identical panels, and \"none\" (\"cutout character pasted on background, no contact shadow\") will not produce a cutout either since the negation is ignored. This is the weakest card in the set.",
       "fix": "Cut it back to the one axis that has a real tag anchor and mark the rest non-renderable: keep none (empty clause, baseline) and ao_contact (\"cast shadow, shadow under feet\"), and either drop line_match / color_bleed / shared_grain / full_comp or set the whole variable renderable:false with a skip_reason saying integration is a compositing property of the render, not depictable content in a single still."
     }
-  ]
+  ],
+  "sheet": "/samples/sheets/anime_bg_char_integration.jpg"
 }

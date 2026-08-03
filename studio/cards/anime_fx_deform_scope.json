@@ -29,5 +29,6 @@
       "issue": "The card duplicates anime.fx.deform_mode. whole_shot (\"chibi, super deformed, full frame\") is the same render as deform_mode/sd_chibi (\"chibi, super deformed\"); inset (\"chibi inset panel in the corner, main figure normally proportioned\") is the same render as deform_mode/mini_inset (\"chibi inset panel, small super deformed figure in a corner box\"); punch_in_beat is empty, i.e. the plain baseline. Every panel in this card already exists in the other one. The inset clauses are also prose - the model will not honour \"main figure normally proportioned\" and will just chibify everything.",
       "fix": "Either mark the variable renderable:false with skip_reason \"scope is a duration/layout decision; the two visible states are already covered by deform_mode\", or delete the overlapping options from deform_mode and let deform_scope own whole_shot vs inset with tag-only clauses (\"chibi, super deformed\" vs \"chibi inset, 2koma, inset panel\")."
     }
-  ]
+  ],
+  "sheet": "/samples/sheets/anime_fx_deform_scope.jpg"
 }

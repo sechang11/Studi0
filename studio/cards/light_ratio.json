@@ -47,5 +47,6 @@
       "issue": "The clauses are camera-department jargon rather than tags: \"gentle key to fill contrast, slightly darker shadow side\" and \"classic lighting ratio, clearly darker shadow side, shadow detail retained\". Danbooru has no vocabulary for key-to-fill ratios, so low_2_1 and normal_4_1 will land on the model as noise plus the weak phrase \"darker shadow side\" and will very likely render as the same mildly shaded face. Only flat_1_1, chiaroscuro_16_1 and silhouette have real tag equivalents.",
       "fix": "Rewrite in what the shadow looks like, which the tag space does have: low_2_1 \"soft shadow on one cheek, open shadows, low contrast\"; normal_4_1 \"clear shadow on one side of the face, visible shading, moderate contrast\"; dramatic_8_1 \"high contrast, deep black shadow side, narrow lit strip\". Drop the numeric ratio language from the clause entirely — it belongs in the value name, not in the prompt."
     }
-  ]
+  ],
+  "sheet": "/samples/sheets/light_ratio.jpg"
 }

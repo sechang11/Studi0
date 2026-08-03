@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>studio · direct a scene</title>
+<style>
+  :root{
+    --bg:#0f1115; --panel:#161a21; --panel2:#1c2129; --line:#272d38;
+    --ink:#e6e9ef; --dim:#8b94a3; --accent:#6ea8fe;
+    --post:#4ec9a0; --graph:#6ea8fe; --prompt:#e0b252; --none:#e07a5f;
+  }
+  @media (prefers-color-scheme:light){
+    :root{--bg:#f6f7f9;--panel:#fff;--panel2:#f0f2f5;--line:#dde1e8;--ink:#141821;--dim:#5d6470}
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font:14px/1.55 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  header{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;padding:13px 18px;
+         border-bottom:1px solid var(--line);background:var(--panel);position:sticky;top:0;z-index:5}
+  header h1{margin:0;font-size:15px;letter-spacing:.07em;text-transform:uppercase}
+  header .sub{color:var(--dim);font-size:12px}
+  header a{margin-left:auto;color:var(--dim);font-size:12px;text-decoration:none;
+           border:1px solid var(--line);padding:5px 10px;border-radius:6px}
+  header a:hover{color:var(--ink);border-color:var(--accent)}
+
+  .wrap{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:1px;background:var(--line);
+        min-height:calc(100vh - 52px)}
+  @media (max-width:980px){.wrap{grid-template-columns:1fr}}
+  .main{background:var(--bg);padding:18px;min-width:0}
+  .side{background:var(--bg);padding:18px;min-width:0}
+  @media (min-width:981px){.side{position:sticky;top:52px;height:calc(100vh - 52px);overflow:auto}}
+
+  .steps{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px}
+  .steps button{background:none;border:1px solid var(--line);color:var(--dim);
+      padding:6px 11px;border-radius:99px;cursor:pointer;font:inherit;font-size:12px}
+  .steps button.on{background:var(--accent);border-color:var(--accent);color:#08111f;font-weight:600}
+  .steps button.done{color:var(--post);border-color:var(--post)}
+
+  h2{margin:0 0 4px;font-size:19px}
+  .lede{margin:0 0 18px;color:var(--dim);max-width:70ch}
+  .why{margin:0 0 18px;padding:10px 13px;border-left:3px solid var(--line);
+       background:var(--panel);border-radius:0 7px 7px 0;color:var(--dim);font-size:13px;max-width:80ch}
+  .why b{color:var(--ink)}
+
+  .field{margin-bottom:18px;max-width:62ch}
+  .field label{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;
+               color:var(--dim);margin-bottom:5px}
+  input,select,textarea{width:100%;background:var(--panel);border:1px solid var(--line);
+      color:var(--ink);border-radius:7px;padding:8px 10px;font:inherit}
+  textarea{min-height:72px;resize:vertical;font-family:ui-monospace,Menlo,monospace;font-size:12px}
+  .hint{color:var(--dim);font-size:12px;margin-top:4px}
+
+  .opts{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:11px}
+  .opt{background:var(--panel);border:1px solid var(--line);border-radius:9px;overflow:hidden;
+       cursor:pointer;text-align:left;padding:0;color:inherit;font:inherit;display:flex;
+       flex-direction:column}
+  .opt:hover{border-color:var(--accent)}
+  .opt.on{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+  .opt img,.opt video{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;
+       background:var(--panel2);border-bottom:1px solid var(--line)}
+  .opt .noimg{width:100%;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;
+       background:var(--panel2);color:var(--dim);font-size:11px;text-align:center;padding:0 10px;
+       border-bottom:1px solid var(--line)}
+  .opt .body{padding:9px 11px}
+  .opt .name{font-family:ui-monospace,Menlo,monospace;font-size:13px}
+  .opt .desc{color:var(--dim);font-size:12px;margin-top:3px}
+
+  .tier{display:inline-block;font-size:10px;letter-spacing:.06em;text-transform:uppercase;
+        padding:1px 7px;border-radius:99px;border:1px solid currentColor;margin-left:6px;
+        vertical-align:middle;font-weight:600}
+  .t-post{color:var(--post)} .t-graph{color:var(--graph)}
+  .t-prompt{color:var(--prompt)} .t-none{color:var(--none)}
+  .tierline{font-size:12px;color:var(--dim);margin:0 0 14px;max-width:80ch}
+
+  .beats{list-style:none;margin:0 0 14px;padding:0}
+  .beats li{display:flex;gap:9px;align-items:flex-start;background:var(--panel);
+      border:1px solid var(--line);border-radius:8px;padding:8px 11px;margin-bottom:7px}
+  .beats .g{flex:1;min-width:0}
+  .beats .k{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--accent)}
+  .beats .t{font-size:13px;word-break:break-word}
+  .beats button{background:none;border:0;color:var(--none);cursor:pointer;font:inherit;padding:0 2px}
+
+  .btn{background:var(--accent);border:0;color:#08111f;border-radius:7px;padding:8px 15px;
+       cursor:pointer;font:inherit;font-weight:600}
+  .btn.ghost{background:var(--panel2);color:var(--ink);border:1px solid var(--line);font-weight:400}
+  .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .nav{display:flex;gap:8px;margin-top:24px;padding-top:16px;border-top:1px solid var(--line)}
+
+  pre{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px;
+      overflow:auto;font-size:12px;white-space:pre;margin:0;font-family:ui-monospace,Menlo,monospace}
+  .side h3{margin:0 0 8px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+  .side .sec{margin-bottom:20px}
+  code.cmd{display:block;background:var(--panel);border:1px solid var(--line);border-radius:7px;
+      padding:9px 11px;font-size:11.5px;font-family:ui-monospace,Menlo,monospace;
+      overflow-x:auto;white-space:pre;margin-top:5px}
+  .warn{color:var(--none);font-size:12px}
+  .ok{color:var(--post);font-size:12px}
+</style>
+</head>
+<body>
+<header>
+  <h1>Direct a scene</h1>
+  <span class="sub" id="stat">loading…</span>
+  <a href="/">← browse the library</a>
+</header>
+
+<div class="wrap">
+  <div class="main">
+    <div class="steps" id="steps"></div>
+    <div id="panel"></div>
+    <div class="nav">
+      <button class="btn ghost" id="prev">← Back</button>
+      <button class="btn" id="next">Next →</button>
+    </div>
+  </div>
+
+  <div class="side">
+    <div class="sec">
+      <h3>Your .movie</h3>
+      <pre id="out">…</pre>
+    </div>
+    <div class="sec">
+      <h3>Save &amp; render</h3>
+      <div class="row">
+        <input id="fname" value="my-scene" style="flex:1">
+        <button class="btn" id="save">Save</button>
+      </div>
+      <div id="saved" class="hint"></div>
+      <code class="cmd" id="cmd"></code>
+    </div>
+    <div class="sec">
+      <h3>Where your choices land</h3>
+      <div id="tally" class="hint"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const S = {
+  title:"MY SCENE", canvas:"1920x1080", fps:"24",
+  checkpoint:"animagine-xl-4.0.safetensors", style:"modern sports anime, cel shading, cinematic",
+  seed_root:"", look:"neutral", pace:"normal", cue:"", place:"", time:"",
+  mood:"", camera:"static", cast:[], beats:[], scene:"my_scene", chapter:"act_one",
+};
+let LIB={}, EFF={tiers:{},vars:{}}, CARDS=[], step=0;
+
+const STEPS = [
+  {id:"format", name:"Format"},
+  {id:"look",   name:"Look & pace"},
+  {id:"world",  name:"Place & time"},
+  {id:"cast",   name:"Cast"},
+  {id:"shots",  name:"Shots"},
+  {id:"review", name:"Review"},
+];
+
+const esc = s => String(s==null?"":s).replace(/[&<>"]/g, c => (
+  {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function tierBadge(v){
+  const e = EFF.vars[v]; if(!e) return "";
+  const t = EFF.tiers[e.tier] || {};
+  return `<span class="tier t-${e.tier}" title="${esc(t.desc||"")}">${esc(t.label||e.tier)}</span>`;
+}
+function tierLine(v){
+  const e = EFF.vars[v]; if(!e) return "";
+  const t = EFF.tiers[e.tier] || {};
+  return `<p class="tierline">${esc(t.desc||"")}${e.note?" <b>"+esc(e.note)+"</b>":""}</p>`;
+}
+
+function optCard(it, sel, onclick){
+  const img = it.sample
+    ? (it.sample.endsWith(".mp4")
+        ? `<video src="${esc(it.sample)}" muted loop playsinline onmouseover="this.play()" onmouseout="this.pause()"></video>`
+        : `<img loading="lazy" src="${esc(it.sample)}" alt="">`)
+    : `<div class="noimg">no sample rendered yet</div>`;
+  const road = it.status && it.status!=="ready"
+    ? ` <span class="tier t-${it.status==="roadmap"?"none":"prompt"}">${esc(it.status)}</span>` : "";
+  return `<button class="opt${sel?" on":""}" data-pick="${esc(onclick)}" data-val="${esc(it.id)}">
+    ${img}<div class="body"><div class="name">${esc(it.id)}${road}</div>
+    <div class="desc">${esc(it.desc||"")}</div></div></button>`;
+}
+
+function grid(group, key){
+  const items = LIB[group]||[];
+  if(!items.length) return `<p class="hint">nothing in studio/${group}/ yet</p>`;
+  return `<div class="opts">${items.map(i=>optCard(i, S[key]===i.id, key)).join("")}</div>`;
+}
+
+function render(){
+  document.getElementById("steps").innerHTML = STEPS.map((s,i)=>
+    `<button class="${i===step?"on":(i<step?"done":"")}" data-step="${i}">${i+1}. ${s.name}</button>`).join("");
+
+  const p = document.getElementById("panel");
+  const s = STEPS[step].id;
+
+  if(s==="format") p.innerHTML = `
+    <h2>Format</h2>
+    <p class="lede">These are locked for the whole film. They are first because getting them
+    wrong is only discovered at the very end.</p>
+    <div class="why"><b>Why locked:</b> every micro-shot is re-encoded and then joined with
+    <code>ffmpeg concat -c copy</code>. A stream copy of mixed fps or mixed canvas fails or
+    judders <b>after the entire render is spent</b>. compile.py now refuses these at
+    chapter or scene level rather than ignoring them.</div>
+    <div class="field"><label>Title ${tierBadge("canvas")}</label>
+      <input id="f-title" value="${esc(S.title)}">
+      <div class="hint">The output directory is derived from this. Reusing a title archives
+      the previous master rather than overwriting it.</div></div>
+    <div class="field"><label>Canvas</label>
+      <select id="f-canvas">${["1920x1080","1280x720","1080x1920"].map(v=>
+        `<option ${S.canvas===v?"selected":""}>${v}</option>`).join("")}</select>
+      <div class="hint">1080x1920 is the vertical short format. Generation size is fixed
+      (1664x928 keyframe, 1280x704 clip) — canvas only changes the final composite.</div></div>
+    <div class="field"><label>FPS</label>
+      <select id="f-fps">${["24","30"].map(v=>`<option ${S.fps===v?"selected":""}>${v}</option>`).join("")}</select>
+      <div class="hint">LTX is a 24fps model. Wan is 16. Mixing engines in one film is a trap.</div></div>
+    <div class="field"><label>House style tags</label>
+      <textarea id="f-style">${esc(S.style)}</textarea>
+      <div class="hint">Appended to every prompt in the film.</div></div>`;
+
+  if(s==="look") p.innerHTML = `
+    <h2>Look &amp; pace</h2>
+    <p class="lede">Chapter-level. This is the most important step for precision, because
+    <em>look</em> is the one quality that is applied deterministically.</p>
+    ${tierLine("look")}
+    ${grid("looks","look")}
+    <h2 style="margin-top:26px">Pace ${tierBadge("pace")}</h2>
+    <p class="lede">Scales every shot length. Density really comes from shot <em>count</em>.</p>
+    ${grid("pacing","pace")}
+    <h2 style="margin-top:26px">Score ${tierBadge("cue")}</h2>
+    <p class="lede">Start time and length are measured from your real timeline, so inserting
+    a scene later cannot desync the music.</p>
+    ${grid("cues","cue")}`;
+
+  if(s==="world") p.innerHTML = `
+    <h2>Place &amp; time</h2>
+    <p class="lede">These become prompt tags.</p>
+    ${tierLine("place")}
+    <div class="field"><label>Place ${tierBadge("place")}</label>
+      <input id="f-place" value="${esc(S.place)}" placeholder="locker room, benches, hanging jerseys">
+      <div class="hint"><b>Name things, not qualities.</b> "locker room, benches, fluorescent light"
+      lands reliably. "oppressive, tense atmosphere" does not.</div></div>
+    <div class="field"><label>Time ${tierBadge("time")}</label>
+      <input id="f-time" value="${esc(S.time)}" placeholder="night">
+      <div class="hint">Weak on its own — "night" moved measured brightness by about 5%.
+      Use the <em>look</em> grade for darkness; this only nudges content.</div></div>
+    <div class="field"><label>Mood ${tierBadge("mood")}</label>
+      <input id="f-mood" value="${esc(S.mood)}" placeholder="melancholy, defeat">
+      <div class="hint">Verified 2026-08-03: a scene set melancholy/defeat rendered the
+      character smiling. Treat as a hint, and carry real mood in the look and the cut.</div></div>
+    <h2 style="margin-top:26px">Lighting</h2>
+    ${grid("lighting","lighting")}`;
+
+  if(s==="cast"){
+    const cast = LIB.characters||[];
+    p.innerHTML = `
+      <h2>Cast</h2>
+      <p class="lede">Who is in this scene. A declared character gets their tags spliced into
+      every prompt and their reference sheet into IPAdapter.</p>
+      <div class="why"><b>A character with no reference sheet still compiles</b>, but IPAdapter
+      drops to weight 0 and their face drifts between shots — invisible until playback.
+      compile.py warns; the badge below shows which are affected.</div>
+      <div class="opts">${cast.map(c=>{
+        const sel = S.cast.includes(c.id);
+        const warn = c.sheet ? "" : ` <span class="tier t-none">no sheet</span>`;
+        return `<button class="opt${sel?" on":""}" data-cast="${esc(c.id)}">
+          <div class="noimg">${c.sheet?esc(c.sheet):"no reference sheet"}</div>
+          <div class="body"><div class="name">${esc(c.id)}${warn}</div>
+          <div class="desc">${esc(c.desc||"")}</div></div></button>`;}).join("")}</div>
+      ${cast.length?"":'<p class="hint">no character cards in studio/characters/ yet</p>'}`;
+  }
+
+  if(s==="shots"){
+    const shots = LIB.shots||[], cams = LIB.cameras||[];
+    p.innerHTML = `
+      <h2>Shots</h2>
+      <p class="lede">A scene is a run of shots. Dialogue lines are shots too — the speaker is
+      resolved automatically and gets their own voice.</p>
+      <div class="why"><b>establish, insert and pillow deliberately have no one in them.</b>
+      No video model here has a persistent 3D space, so you cannot cut from a wide to a
+      matching close-up of the same room and have the room agree. Coverage is faked by scale
+      contrast, and the cutaway must be of a <em>thing</em>.</div>
+      <ul class="beats" id="beatlist">${S.beats.map((b,i)=>
+        `<li><div class="g"><div class="k">${esc(b.who?b.who+":":b.shot)}</div>
+         <div class="t">${esc(b.who?b.text:(b.camera||""))}</div></div>
+         <button data-del="${i}">remove</button></li>`).join("")||
+         '<li><div class="g"><div class="t" style="color:var(--dim)">no shots yet</div></div></li>'}</ul>
+
+      <div class="field"><label>Add a shot ${tierBadge("camera")}</label>
+        <div class="row">
+          <select id="s-kind" style="flex:1">${shots.map(x=>
+            `<option value="${esc(x.id)}">${esc(x.id)} — ${esc((x.desc||"").slice(0,44))}</option>`).join("")}</select>
+          <select id="s-cam" style="flex:1">${cams.map(x=>
+            `<option value="${esc(x.id)}" ${x.status!=="ready"?"disabled":""}>${esc(x.id)}${
+              x.status!=="ready"?" (not implemented)":""}</option>`).join("")}</select>
+          <button class="btn" id="addShot">Add shot</button>
+        </div></div>
+
+      <div class="field"><label>Add a line of dialogue</label>
+        <div class="row">
+          <select id="s-who" style="flex:0 0 130px">${(S.cast.length?S.cast:["(pick cast first)"]).map(c=>
+            `<option>${esc(c)}</option>`).join("")}</select>
+          <input id="s-text" placeholder="Nine years. Nine years we have come here and gone home quiet." style="flex:1">
+          <button class="btn" id="addLine">Add line</button>
+        </div></div>
+      ${tierLine("camera")}
+      <div class="opts">${cams.map(c=>optCard(c, S.camera===c.id, "camera")).join("")}</div>`;
+  }
+
+  if(s==="review"){
+    p.innerHTML = `
+      <h2>Review</h2>
+      <p class="lede">This is the whole scene as a text file. It is the source of truth — the
+      wizard only writes it, and you can edit it by hand afterwards.</p>
+      <div class="field"><label>.movie</label><textarea id="f-raw" style="min-height:340px">${esc(movieText())}</textarea>
+      <div class="hint">Edits here are kept when you save.</div></div>`;
+  }
+
+  document.getElementById("out").textContent = movieText();
+  document.getElementById("cmd").textContent =
+    `cd ~/shared/comfy-studio\npython3 studio/compile.py studio/movies/${
+      document.getElementById("fname").value||"my-scene"}.movie --timeline\npython3 scripts/short.py studio/movies/${
+      document.getElementById("fname").value||"my-scene"}.json`;
+  tally();
+  wire();
+}
+
+function movieText(){
+  const L=[];
+  L.push(`// generated by the studio wizard`);
+  L.push(`MOVIE ${S.scene}`);
+  L.push(`  title: ${S.title}`);
+  L.push(`  canvas: ${S.canvas}`);
+  L.push(`  fps: ${S.fps}`);
+  L.push(`  checkpoint: ${S.checkpoint}`);
+  if(S.style) L.push(`  tags: ${S.style}`);
+  if(S.seed_root) L.push(`  seed_root: ${S.seed_root}`);
+  L.push("");
+  L.push(`CHAPTER ${S.chapter}`);
+  L.push(`  look: ${S.look}`);
+  L.push(`  pace: ${S.pace}`);
+  if(S.cue) L.push(`  cue: ${S.cue}`);
+  if(S.place) L.push(`  place: ${S.place}`);
+  if(S.time) L.push(`  time: ${S.time}`);
+  if(S.mood) L.push(`  mood: ${S.mood}`);
+  L.push("");
+  L.push(`  SCENE ${S.scene}`);
+  if(S.cast.length) L.push(`    characters: ${S.cast.join(", ")}`);
+  if(S.camera) L.push(`    camera: ${S.camera}`);
+  for(const b of S.beats){
+    if(b.who) L.push(`    ${b.who}: ${b.text}`);
+    else L.push(`    shot: ${b.shot}`);
+  }
+  if(!S.beats.length) L.push(`    shot: establish`);
+  return L.join("\n");
+}
+
+function tally(){
+  const counts={post:0,graph:0,prompt:0,none:0};
+  const used=["canvas","fps","look","pace","camera","place","time","mood","characters","cue"];
+  for(const v of used){ const e=EFF.vars[v]; if(e) counts[e.tier]=(counts[e.tier]||0)+1; }
+  document.getElementById("tally").innerHTML = Object.entries(counts)
+    .filter(([,n])=>n).map(([k,n])=>{
+      const t=EFF.tiers[k]||{};
+      return `<div><span class="tier t-${k}">${esc(t.label||k)}</span> ${n} of your choices — ${esc(t.reliability||"")}</div>`;
+    }).join("");
+}
+
+function wire(){
+  document.querySelectorAll("[data-step]").forEach(b=>b.onclick=()=>{step=+b.dataset.step;render();});
+  document.querySelectorAll("[data-pick]").forEach(b=>b.onclick=()=>{
+    const k=b.dataset.pick; S[k] = (S[k]===b.dataset.val)?"":b.dataset.val; render();});
+  document.querySelectorAll("[data-cast]").forEach(b=>b.onclick=()=>{
+    const id=b.dataset.cast, i=S.cast.indexOf(id);
+    if(i<0) S.cast.push(id); else S.cast.splice(i,1); render();});
+  document.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{
+    S.beats.splice(+b.dataset.del,1); render();});
+
+  const bind=(id,key)=>{const el=document.getElementById(id); if(el) el.oninput=()=>{S[key]=el.value;
+    document.getElementById("out").textContent=movieText();};};
+  bind("f-title","title"); bind("f-style","style"); bind("f-place","place");
+  bind("f-time","time"); bind("f-mood","mood");
+  const cv=document.getElementById("f-canvas"); if(cv) cv.onchange=()=>{S.canvas=cv.value;render();};
+  const fp=document.getElementById("f-fps"); if(fp) fp.onchange=()=>{S.fps=fp.value;render();};
+
+  const add=document.getElementById("addShot");
+  if(add) add.onclick=()=>{S.beats.push({shot:document.getElementById("s-kind").value,
+     camera:document.getElementById("s-cam").value}); render();};
+  const addl=document.getElementById("addLine");
+  if(addl) addl.onclick=()=>{const t=document.getElementById("s-text");
+     if(t.value.trim() && S.cast.length){S.beats.push({who:document.getElementById("s-who").value,
+     text:t.value.trim()}); t.value=""; render();}};
+
+  document.getElementById("prev").onclick=()=>{if(step>0){step--;render();}};
+  document.getElementById("next").onclick=()=>{if(step<STEPS.length-1){step++;render();}};
+  document.getElementById("save").onclick=save;
+}
+
+async function save(){
+  const name=document.getElementById("fname").value||"my-scene";
+  const raw=document.getElementById("f-raw");
+  const text=raw?raw.value:movieText();
+  const el=document.getElementById("saved");
+  try{
+    const r=await fetch("/api/save",{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({name,text})});
+    const j=await r.json();
+    el.innerHTML = j.ok ? `<span class="ok">saved → ${esc(j.path)}</span>`
+                        : `<span class="warn">${esc(j.error||"failed")}</span>`;
+  }catch(e){ el.innerHTML=`<span class="warn">${esc(e.message)}</span>`; }
+}
+
+(async function(){
+  const [lib,eff,cards] = await Promise.all([
+    fetch("/api/library").then(r=>r.json()).catch(()=>({})),
+    fetch("/api/effects").then(r=>r.json()).catch(()=>({tiers:{},vars:{}})),
+    fetch("/api/cards").then(r=>r.json()).catch(()=>([])),
+  ]);
+  LIB=lib; EFF=eff; CARDS=cards;
+  const n=Object.values(lib).reduce((a,v)=>a+v.length,0);
+  document.getElementById("stat").textContent =
+    `${n} presets · ${cards.length} capability cards · every choice labelled by where it takes effect`;
+  render();
+})();
+</script>
+</body>
+</html>

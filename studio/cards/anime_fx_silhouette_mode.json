@@ -41,5 +41,6 @@
       "issue": "\"none\" and \"strobe_silhouette\" both have empty clauses, so those two panels are the identical baseline image. Separately, rim_only (\"backlighting, dark figure with bright rim outline\") is the same render as anime.color.setting/backlit (\"backlighting, strong rim light, dark front\"), and full_silhouette (\"silhouette, solid black figure, featureless\") is the same render as shot.fx.impact_frame/silhouette_pop.",
       "fix": "Mark strobe_silhouette renderable:false per-option so it is not shown as a panel. Then decide which card owns backlighting and which owns silhouette - drop rim_only here (it is a lighting state) and drop silhouette_pop from impact_frame (or restrict it to \"silhouette, high contrast, one frame flash\"), so the two cards stop teaching the same picture."
     }
-  ]
+  ],
+  "sheet": "/samples/sheets/anime_fx_silhouette_mode.jpg"
 }

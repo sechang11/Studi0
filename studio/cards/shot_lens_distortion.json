@@ -41,5 +41,6 @@
       "issue": "fisheye duplicates lens.look.fisheye and comp.perspective.fisheye across cards. mild_barrel (\"slight barrel distortion, gently curved edges\") is an intensity step below strong_barrel that the model does not grade, so it will read as none. pincushion has almost no representation in this model and will likely be a third copy of the none panel.",
       "fix": "Own fisheye here and remove it from lens.look and comp.perspective. Drop mild_barrel, or replace the pair with one barrel option plus fisheye as the extreme. Keep pincushion only if you are prepared for it to be the card's null result — and say so in the claim rather than after the render."
     }
-  ]
+  ],
+  "sheet": "/samples/sheets/shot_lens_distortion.jpg"
 }

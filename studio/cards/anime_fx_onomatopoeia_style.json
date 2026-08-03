@@ -47,5 +47,6 @@
       "issue": "katakana_brush and kanji_heavy both ask for CJK lettering, which Animagine renders as illegible glyph soup; brush katakana vs heavy calligraphic kanji will not be separable in the output. glitch also smuggles a global effect - \"chromatic aberration text\" will fringe the whole frame, not just the letters, so that panel changes the render rather than the lettering.",
       "fix": "Merge katakana_brush and kanji_heavy into one japanese-lettering option (\"sound effects, japanese text, brush stroke lettering\") and keep latin_comic and hand_scrawl, which differ by glyph shape rather than script. glitch -> \"sound effects, glitched text\" without the chromatic aberration."
     }
-  ]
+  ],
+  "sheet": "/samples/sheets/anime_fx_onomatopoeia_style.jpg"
 }

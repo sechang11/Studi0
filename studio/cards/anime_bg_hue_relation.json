@@ -53,5 +53,6 @@
       "issue": "Every clause tries to scope a colour move to the background (\"cooler toned background\", \"darker background, low key scenery\"), but SDXL grades globally - the character will shift with the plate, which destroys the exact thing the variable exists to demonstrate (figure/ground separation). The results will also collide with anime.color.setting: lower_key reads as night, warmer reads as dusk, desaturated reads as storm.",
       "fix": "Keep the card but state the boundary in the clause with tags the model can localise - \"blue background, cool background\" rather than \"cooler toned background, blue shifted scenery\" - and cut lower_key and higher_key, which are indistinguishable from color.setting/night and color.setting/flashbulb once the grade goes global."
     }
-  ]
+  ],
+  "sheet": "/samples/sheets/anime_bg_hue_relation.jpg"
 }

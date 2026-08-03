@@ -65,5 +65,6 @@
       "issue": "The card is renderable:true but punch, shake and ramp carry empty clauses. Three of the nine panels will therefore be the unmodified baseline and identical to each other, with no machine-readable reason attached — everywhere else in this set \"cannot be shown\" is expressed as renderable:false + skip_reason. Separately, flash (\"bright white flash, blinding light\") and whiteout (\"whiteout, white screen, blinding white\") are the same instruction, and hot (\"overexposed, blown highlights, clipped whites\") sits on the same blow-out axis: three options, probably one or two pictures.",
       "fix": "Add a per-option renderable:false + skip_reason for punch/shake/ramp (\"timing operation, no single-frame state\") so the schema is honest at option level, and either merge flash into whiteout or scope hot to a partial blow-out (\"overexposed, blown highlights\" with the frame still legible) versus whiteout as the fully white frame."
     }
-  ]
+  ],
+  "sheet": "/samples/sheets/shot_fx.jpg"
 }

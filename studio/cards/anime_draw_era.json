@@ -53,5 +53,6 @@
       "issue": "cel_70s (\"retro artstyle, 1970s (style), cel animation, faded colors\") and film_stock_retro (\"film grain, 35mm film look, faded colors, retro artstyle\") share \"retro artstyle\" + \"faded colors\" and will land in the same place - the model's grip on 1970s vs a faded film look is not that fine. film_stock_retro also duplicates anime.draw.cel_artifacts/film_grain, which is a different variable's job.",
       "fix": "Let era be decades only and delete film_stock_retro - photographic damage already lives in cel_artifacts. Keep the decade tags carrying the load (\"1970s (style)\", \"1980s (style)\") and drop the shared \"retro artstyle, faded colors\" tail from at least one of them so the panels can separate."
     }
-  ]
+  ],
+  "sheet": "/samples/sheets/anime_draw_era.jpg"
 }

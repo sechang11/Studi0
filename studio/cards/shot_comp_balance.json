@@ -59,5 +59,6 @@
       "issue": "weighted_bottom, weighted_top and radial are written in critic's language, not tags — \"visual weight at the bottom\", \"heavy lower frame\", \"empty upper frame\" have no danbooru counterpart and will read as baseline. asym_left/asym_right restate thirds_bias.left_third/right_third and hit the left/right gap. symmetrical duplicates thirds_bias.symmetrical, and radial (\"radial composition, elements radiating from the center\") duplicates comp.leading_lines.radial (\"radial lines, lines radiating from the center\") almost word for word.",
       "fix": "Delete the values other cards already own (asym_*, symmetrical, radial) and express the weighting values as content the model can actually draw — e.g. weighted_top as \"towering structure above, small figure below\", weighted_bottom as \"low horizon, open sky above\" — or drop them. What is left that is genuinely this card's own is diagonal and chaotic."
     }
-  ]
+  ],
+  "sheet": "/samples/sheets/shot_comp_balance.jpg"
 }

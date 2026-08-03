@@ -35,5 +35,6 @@
       "issue": "\"between_fg_mid\" is written as descriptive prose fragments with no tag the model knows — \"subject just ahead of midground\", \"near foreground plane\", \"slight foreground overlap\" — and semantically it sits inside the gap between fg and mid, so it will land on top of one of them. The fg/mid/bg clauses are also non-tag phrasings (\"subject at middle distance\", \"midground plane\") that rely on the text encoder parsing English relations.",
       "fix": "Rewrite on tags the model responds to: fg = \"close-up, subject near camera, blurry background, depth of field\"; mid = \"cowboy shot, subject at middle distance, background in focus\"; bg = \"wide shot, tiny figure, distant subject\". Drop between_fg_mid or give it a concrete occlusion cue (\"partially occluded by foreground object\") so it has something of its own to render."
     }
-  ]
+  ],
+  "sheet": "/samples/sheets/layer_character_plane.jpg"
 }

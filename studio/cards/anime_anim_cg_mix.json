@@ -53,5 +53,6 @@
       "issue": "\"none\" and \"camera_3d\" both have empty clauses - two identical baseline panels in one card. Beyond that, SDXL cannot scope a render style to one named object: \"cg prop, 3d model object, cel shaded\", \"cg vehicle...\", \"cg crowd...\", \"cg environment...\" will each push the whole frame toward 3DCG, so the four scoped options plus full_3dcg largely converge. \"cel shaded\" also does no work here - it is what an anime checkpoint already draws.",
       "fix": "Mark camera_3d renderable:false per-option. For the rest, hang the 3d tag on the element and drop the dead \"cel shaded\" token - e.g. crowd_3d \"3d, cg crowd, mmd background characters\", environment_3d \"3d background, cg scenery\" - and expect props_3d/vehicles_3d to bleed globally. vehicles_3d additionally has no referent in the subject sentence (there is no vehicle in a soccer stadium), so it will either force an incongruous car onto the pitch or be ignored; consider dropping it."
     }
-  ]
+  ],
+  "sheet": "/samples/sheets/anime_anim_cg_mix.jpg"
 }

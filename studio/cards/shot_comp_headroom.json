@@ -35,5 +35,6 @@
       "issue": "\"tight headroom\" and \"normal headroom\" are not trained phrases — danbooru expresses headroom only through shot-size and crop tags — so tight and normal are likely to be the same picture, and normal is the baseline anyway. cropped_top is the one value with real vocabulary behind it (\"head out of frame\").",
       "fix": "Give normal an empty clause, keep tight / loose / cropped_top, and lean on the crop tags the model knows: tight \"head near top edge, cropped at top\" is weak but survivable, loose \"large empty space above head, small figure\" is the one worth authoring carefully."
     }
-  ]
+  ],
+  "sheet": "/samples/sheets/shot_comp_headroom.jpg"
 }

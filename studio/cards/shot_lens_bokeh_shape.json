@@ -47,5 +47,6 @@
       "issue": "Aperture-blade shape is not in the danbooru vocabulary. Animagine has one \"bokeh\" concept, so hexagonal, oval_anamorphic and cats_eye will most likely all render as ordinary round highlights — six options for roughly three looks (generic bokeh / swirly / bloom). Compounding it, the fixed subject sentence contains no shallow-DOF cue, so any panel whose clause does not itself say \"blurry background\" may have no bokeh at all to shape. bloom_blobs also duplicates lens.flare.warm_bloom and fx.glow.",
       "fix": "Put an identical DOF anchor in every clause (\"blurry background, bokeh\" in all six — constant across panels, so the method still holds), and cut the card to the shapes the model can draw: circular, swirly, oval_anamorphic, plus bloom_blobs only if flare.warm_bloom is dropped."
     }
-  ]
+  ],
+  "sheet": "/samples/sheets/shot_lens_bokeh_shape.jpg"
 }

@@ -65,5 +65,6 @@
       "issue": "\"ankle height camera\", \"knee height camera\", \"waist height camera\" and \"chest height camera\" are invented phrases with no danbooru training behind them; the only signal Animagine reads in those clauses is \"low viewpoint\" ≈ \"from below\". ground/ankle/knee/waist therefore collapse toward one low-angle panel and chest/eye toward the baseline — nine options for roughly four pictures. The card also overlaps shot.cam.angle wholesale: height.high/overhead/aerial and angle.high/birds_eye/top_down all resolve through the same \"from above\" token, so the claim that height is authored independently of tilt is not expressible in this model.",
       "fix": "Cut to values the vocabulary supports — ground / low / eye / high / overhead — using real tags (\"from below\", \"eye level\", \"from above\", \"directly from above\"). Then either merge this card into shot.cam.angle or state in the claim that in the still pass height and angle share one control, and let the card demonstrate only the extremes."
     }
-  ]
+  ],
+  "sheet": "/samples/sheets/shot_cam_height.jpg"
 }

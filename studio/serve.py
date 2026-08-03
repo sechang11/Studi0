@@ -107,6 +107,16 @@ class H(http.server.SimpleHTTPRequestHandler):
                 return self._send({"error": "no sample"}, 404)
             ct = MIME.get(os.path.splitext(fp)[1].lower(), "application/octet-stream")
             return self._send(open(fp, "rb").read(), 200, ct)
+        if path in ("/wizard", "/wizard.html"):
+            p = f"{HERE}/wizard.html"
+            if not os.path.exists(p):
+                return self._send(b"wizard.html is missing", 500, "text/plain")
+            return self._send(open(p, "rb").read(), 200, "text/html; charset=utf-8")
+        if path == "/api/effects":
+            p = f"{HERE}/effects.json"
+            if not os.path.exists(p):
+                return self._send({"tiers": {}, "vars": {}})
+            return self._send(json.load(open(p, encoding="utf-8")))
         if path == "/api/library":
             return self._send(library())
         if path == "/api/cards":

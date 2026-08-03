@@ -52,5 +52,6 @@
       "issue": "color_trace (\"colored lineart, colored outlines\") and per_region_trace (\"colored inner lines, per region colored lineart\") will render the same way. \"colored inner lines\" is a real danbooru tag but it fires the same feature as \"colored lineart\"; \"per region colored lineart\" is invented phrasing the model cannot scope to skin vs hair vs cloth.",
       "fix": "Either drop per_region_trace, or differentiate it by naming the region the trace applies to in tag form - e.g. \"colored inner lines, brown skin outlines, colored lineart on skin\" - and accept it may still converge."
     }
-  ]
+  ],
+  "sheet": "/samples/sheets/anime_draw_line_color.jpg"
 }

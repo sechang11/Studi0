@@ -23,5 +23,6 @@
       "issue": "The option list is not an enum. \"plus any char.emotion value\" is a meta-description, not a value, so the card cannot produce one panel per option — it produces two panels, one empty and one hardcoded example. The single clause \"smiling, teary eyes, furrowed brow\" also carries the PRIMARY emotion (smiling) inside a clause that is supposed to express only the secondary layer.",
       "fix": "Hold one primary fixed and enumerate real secondary values against it, one panel each. e.g. primary is always \"smile\" in the subject-adjacent slot, then options: none (\"smile\"), grief (\"smile, teary eyes\"), anger (\"smile, furrowed brow, tense jaw\"), fear (\"smile, wide eyes, sweatdrop\"), exhaustion (\"smile, half-closed eyes, eye bags\"), contempt (\"smile, half-lidded eyes, one raised eyebrow\"). If the schema really is a free cross-product, the card should say so and render 4-6 representative pairs as the demonstration set."
     }
-  ]
+  ],
+  "sheet": "/samples/sheets/char_emotion_secondary.jpg"
 }

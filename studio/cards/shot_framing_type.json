@@ -71,5 +71,6 @@
       "issue": "Six of ten options directly contradict the fixed subject sentence, which hard-pins \"1boy, solo\". two_shot/three_shot/group/over_shoulder push 2boys / 3boys / multiple boys / 6+boys against \"solo\"; insert_object and empty_frame push \"no humans\" against \"1boy, solo, male focus\". Animagine weights the subject tags first, so those panels come back as the same lone boy (or with mangled duplicate anatomy) and the card teaches nothing about the value it exists to show. single (\"solo focus, one person in frame\") also just restates \"solo\", and crowd restates the \"crowd\" tag already in the subject. \"one person in frame\" and \"spectators fill frame\" are prose, not tags.",
       "fix": "This variable rewrites the subject's character count, which the identical-subject-sentence method forbids. Either mark renderable:false with that as the skip_reason, or declare an explicit documented subject exception for this card only (drop \"solo\" and the count tag from the fixed sentence) rather than shipping clauses that silently lose to the subject. If it stays, give single an empty clause (it is the baseline) and rewrite crowd so it adds foreground crowd occlusion rather than restating \"crowd\"."
     }
-  ]
+  ],
+  "sheet": "/samples/sheets/shot_framing_type.jpg"
 }

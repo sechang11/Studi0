@@ -77,5 +77,6 @@
       "issue": "top (\"top-down lighting, light from directly above, shadowed eye sockets\") and bottom (\"underlighting, lit from below, upward cast shadows on the face\") are elevation, not azimuth, and duplicate light.key_elev.overhead (\"light from directly overhead, top-down lighting, black eye sockets\") and light.key_elev.below (\"underlighting, light from below, upward cast shadows, lit chin\") almost word for word. The card's own claim says key_dir is \"where the main light sits on the compass\" — top and bottom are not on the compass. ambient_none is not a direction either.",
       "fix": "Cut top, bottom and ambient_none from light.key_dir and let light.key_elev own the vertical axis and light.motivation.unmotivated own the sourceless case. That leaves key_dir a clean 8-point azimuth, which is also the only way the two cards read as different variables when an author flips between them."
     }
-  ]
+  ],
+  "sheet": "/samples/sheets/light_key_dir.jpg"
 }

@@ -71,5 +71,6 @@
       "issue": "The no_sky clause is almost entirely negation: \"no sky visible, ... sky blocked from view\". SDXL has no negation operator in the positive prompt, so those tokens push sky into the frame rather than out of it, and \"sky blocked from view\" is prose.",
       "fix": "State the occluder positively and let it do the work: \"stadium roof, ceiling, girders overhead, covered stand\". Anything you actually want absent belongs in the negative prompt, not the clause."
     }
-  ]
+  ],
+  "sheet": "/samples/sheets/world_sky_state.jpg"
 }

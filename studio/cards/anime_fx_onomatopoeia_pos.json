@@ -59,5 +59,6 @@
       "issue": "SDXL has no spatial conditioning from text, and \"top left corner text\" / \"bottom right corner text\" / \"centered text\" are not danbooru tags. tl, tr, bl, br and center will each drop garbled lettering wherever the sampler feels like it, so the five panels differ randomly rather than by option - the card teaches nothing and, worse, teaches something false if one panel happens to land in its corner.",
       "fix": "Keep only the options that are about relationship rather than coordinates - auto (\"sound effects\"), over_subject (\"sound effects, text over the character\") and diagonal (\"sound effects, diagonal text\") - and mark tl/tr/bl/br/center non-renderable, or set the whole variable renderable:false with skip_reason \"quadrant placement is a layout parameter the sampler does not accept\"."
     }
-  ]
+  ],
+  "sheet": "/samples/sheets/anime_fx_onomatopoeia_pos.jpg"
 }

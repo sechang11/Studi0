@@ -59,5 +59,6 @@
       "issue": "Four of the eight options collapse. \"spanish text\", \"french text\", \"german text\" are not danbooru tags at all — the trained tags are english/japanese/korean/chinese/russian text — so es, fr, de and en will all render the same Latin-script gibberish on a banner. Worse, this card contradicts render.watermark, whose skip_reason argues that prompting \"english text\" only demonstrates SDXL's garbled-lettering failure mode. Both cards cannot be right. Separately, \"other\" carries an empty clause on a renderable:true card with no note explaining why.",
       "fix": "Keep only the script-distinct values that have real tags (en, ja, zh, ko) and mark es/fr/de as sharing the Latin-script panel, or mark the whole variable renderable:false reusing the watermark argument and demo the caption font via an ffmpeg overlay. Add a sentence to the claim explaining that \"other\" is an author passthrough with no canonical panel, the way layer.fg.content does for `custom`."
     }
-  ]
+  ],
+  "sheet": "/samples/sheets/movie_language.jpg"
 }

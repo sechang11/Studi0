@@ -41,5 +41,6 @@
       "issue": "shadows_only and highlights_only are written in invented vocabulary (\"blue tinted shadows\", \"cool highlight tint\", \"neutral highlights\") that has no danbooru anchor. SDXL has no tonal-mask concept, so both will read as a globally blue frame — i.e. indistinguishable from each other and from full_frame, making three of five panels the same. This is the same class of failure the render.watermark card correctly refuses: a post-generation mask being faked with tags.",
       "fix": "Keep the three values the model can actually express — full_frame, exclude_characters (\"spot color\" is a real, reliable tag) and hue_range (\"selective color\" likewise) — and demonstrate shadows_only/highlights_only as ffmpeg-masked grades over one identical render, exactly as the watermark card proposes."
     }
-  ]
+  ],
+  "sheet": "/samples/sheets/grade_scope.jpg"
 }

@@ -65,5 +65,6 @@
       "issue": "left (\"looking to the side, eyes turned left\") and right differ only by a word the model has no tag for, and off_left/off_right stack \"looking away\" on top of that same non-tag. All four carry one instruction — \"looking to the side / looking away\" — so four options produce one or two pictures. at_object (\"looking at object, gaze fixed on prop\") points at a prop the fixed subject sentence does not contain, so the model must invent one and the panel changes more than the option.",
       "fix": "Reduce to the trained set: into_lens \"looking at viewer, eye contact\", to_side \"looking to the side\", away \"looking away\", up \"looking up\", down \"looking down\", closed \"closed eyes\". If L/R values must survive the enum, say in the claim that the still pass cannot fix the side. Point at_object at an object the scene already owns: \"looking at soccer ball\"."
     }
-  ]
+  ],
+  "sheet": "/samples/sheets/shot_comp_eyeline.jpg"
 }

@@ -146,14 +146,25 @@ def wrap_caption(txt, width=46):
     return lines
 
 
-def make_cut(src, at, length, fx, dst, seed=0):
+def make_cut(src, at, length, fx, dst, seed=0, grade=None):
     w, h = VID
     chain = fx_chain(fx, w, h, FPS, seed, length)
     # Every cut is graded the same so the short reads as one piece. Keep this GENTLE:
     # it multiplies with the `hot` effect, and at 1.12x1.45 saturation whole shots
     # turned neon magenta.
     base = "eq=contrast=1.06:saturation=1.12"
-    if NIGHT:
+    # A PER-BEAT grade from the authored `look` wins. studio/looks/*.json each carry a
+    # distinct, tuned grade string, compile.py writes one onto every beat - and until
+    # now nothing read it, so night / cold / golden / day_for_night all produced exactly
+    # the same picture. That is the whole reason `look` appeared not to work: it was
+    # being applied as a prompt tag ("night, dark, moonlight") to a model that ignores
+    # such tags, while the deterministic half of it sat unused on the beat.
+    #
+    # Confirmed by rendering: a scene set look:night came back in bright daylight.
+    # Grading is deterministic; prompting is not - so let the grade do the work.
+    if grade:
+        base = grade
+    elif NIGHT:
         # DAY-FOR-NIGHT. Animagine renders bright stadiums no matter what the prompt says
         # - "night, dark, dark background" plus a full daylight negative moved mean luma
         # from 170 to 161, i.e. nothing. Grading is deterministic; prompting is not.
@@ -435,7 +446,7 @@ def cut(film, out):
             if at + ln > avail:
                 at = max(0.0, avail - ln)
             p = f"{work}/{n:04d}_{b['id']}_{ci}.mp4"
-            make_cut(src, at, ln, c.get("fx", []), p, seed=n)
+            make_cut(src, at, ln, c.get("fx", []), p, seed=n, grade=b.get("grade"))
             if line_start is None:
                 line_start = t
             pieces.append(p)
