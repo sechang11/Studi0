@@ -113,13 +113,27 @@ function form(){
     ${(d.fields||[]).map(f=>fieldHtml(f)).join("")}
     <div class="row" style="margin-top:20px">
       <button class="btn" id="go">Generate</button>
+      <button class="btn ghost" id="peek">Preview workflow</button>
       <span class="hint" id="going"></span>
+    </div>
+    <div id="wfbox" style="display:none;margin-top:16px">
+      <div class="row" style="margin-bottom:6px">
+        <b style="font-size:13px">The graph this would run</b>
+        <button class="btn ghost" id="wfdl" style="padding:4px 10px;font-size:12px">Download JSON</button>
+        <a class="btn ghost" href="http://${location.hostname}:8188" target="_blank"
+           style="padding:4px 10px;font-size:12px;text-decoration:none">Open ComfyUI</a>
+      </div>
+      <div class="hint" style="margin-bottom:6px">Built by the same code path that runs it,
+        so this is exactly what executes. ComfyUI loads it via <em>Workflow → Load (API
+        format)</em> if you want to tweak it by hand.</div>
+      <pre id="wfjson" style="max-height:380px"></pre>
     </div>`;
   (d.fields||[]).forEach(f=>{
     const el=$("f-"+f.key); if(!el) return;
     el.oninput=el.onchange=()=>{ VALS[f.key]=el.value; recipe(); };
   });
   $("go").onclick=go;
+  $("peek").onclick=peek;
   recipe();
 }
 
@@ -152,6 +166,35 @@ function recipe(){
   $("recipe").innerHTML = Object.entries(VALS).filter(([,v])=>v!=="")
     .map(([k,v])=>`<tr><td>${esc(k)}</td><td>${esc(v)}</td></tr>`).join("")
     + `<tr><td>workflow</td><td>${esc(CUR.workflow)}</td></tr>`;
+}
+
+let WF=null;
+async function peek(){
+  const b=$("peek"); b.disabled=true; b.textContent="building…";
+  let j;
+  try{
+    j=await (await fetch("/api/workflow",{method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({domain:CUR.id,set:VALS})})).json();
+  }catch(e){ j={error:e.message}; }
+  b.disabled=false; b.textContent="Preview workflow";
+  const box=$("wfbox");
+  if(j.error){
+    box.style.display=""; $("wfjson").textContent=(j.error+"\n\n"+(j.detail||""));
+    return;
+  }
+  WF=j.graph;
+  box.style.display="";
+  // resolved values first - that is the part you actually read - then the graph
+  $("wfjson").textContent =
+    "// workflow: "+j.workflow+"\n// resolved values:\n"+
+    JSON.stringify(j.resolved,null,2)+"\n\n// graph:\n"+JSON.stringify(j.graph,null,2);
+  $("wfdl").onclick=()=>{
+    const blob=new Blob([JSON.stringify(WF,null,2)],{type:"application/json"});
+    const a=document.createElement("a");
+    a.href=URL.createObjectURL(blob); a.download=CUR.id+"_workflow_api.json"; a.click();
+    URL.revokeObjectURL(a.href);
+  };
 }
 
 async function go(){

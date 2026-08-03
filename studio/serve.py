@@ -323,6 +323,34 @@ class H(http.server.SimpleHTTPRequestHandler):
         return self._send({"error": "generation failed",
                            "detail": out.strip()[-1500:]}, 500)
 
+    def _workflow(self, data):
+        """The exact ComfyUI graph this would submit, without submitting it.
+
+        Built by the same code path as a real run, so it cannot drift from what actually
+        executes. Useful for three things: seeing which node a setting lands on, checking
+        a prompt before spending GPU, and loading the graph into ComfyUI itself to tweak
+        by hand (its Load-API-format menu takes this JSON directly).
+        """
+        dom = safe_name(data.get("domain", ""))
+        if not dom or not os.path.exists(f"{HERE}/domains/{dom}.json"):
+            return self._send({"error": f"unknown domain: {dom}"}, 404)
+        cmd = [sys.executable, f"{HERE}/_tools/domain_gen.py", dom, "--show"]
+        for k, v in (data.get("set") or {}).items():
+            k = "".join(c for c in str(k) if c.isalnum() or c == "_")[:40]
+            if k and v not in (None, ""):
+                cmd += ["--set", f"{k}={v}"]
+        try:
+            r = subprocess.run(cmd, capture_output=True, text=True, cwd=ROOT, timeout=90)
+        except subprocess.TimeoutExpired:
+            return self._send({"error": "timed out building the workflow"}, 504)
+        try:
+            # the runner prints warnings before the JSON, so take from the first brace
+            txt = r.stdout[r.stdout.index("{"):]
+            return self._send(json.loads(txt))
+        except Exception:
+            return self._send({"error": "could not build the workflow",
+                               "detail": ((r.stdout or "") + (r.stderr or ""))[-1200:]}, 500)
+
     def _render_status(self, name):
         name = safe_name(name)
         log = f"/tmp/render-{name}.log"
@@ -355,7 +383,7 @@ class H(http.server.SimpleHTTPRequestHandler):
 
     def do_POST(self):
         p = urllib.parse.urlparse(self.path).path
-        if p not in ("/api/save", "/api/render", "/api/make"):
+        if p not in ("/api/save", "/api/render", "/api/make", "/api/workflow"):
             return self._send({"error": "not found"}, 404)
         n = int(self.headers.get("Content-Length", 0))
         try:
@@ -369,6 +397,8 @@ class H(http.server.SimpleHTTPRequestHandler):
                 return self._send({"error": "compile timed out"}, 504)
         if p == "/api/make":
             return self._make(data)
+        if p == "/api/workflow":
+            return self._workflow(data)
         name = "".join(c for c in str(data.get("name", "")) if c.isalnum() or c in "-_")
         if not name:
             return self._send({"error": "name required"}, 400)

@@ -42,7 +42,7 @@ Any variable the renderer cannot honour yet still compiles - it warns once, fall
 named alternative, and points at studio/roadmap/ where the path to implementing it is
 written down. A knob that quietly has no effect is worse than no knob.
 """
-import argparse, collections, hashlib, json, os, sys
+import argparse, collections, hashlib, json, os, re, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
@@ -90,6 +90,8 @@ VARS = collections.OrderedDict([
     ("wear",        ("any",     0,           "damage continuity 0-4. never decreases")),
     ("characters",  ("scene",   [],          "who is in it. must be declared in studio/characters/")),
     ("pace",        ("scene",   "normal",    "slow / normal / fast - scales shot lengths")),
+    ("clip_secs",   ("any",     6,           "seconds of video generated per shot, 1-10. "
+                                             "per-shot: `shot: sakuga @8s | ...`")),
     ("type",        ("scene",   "dialogue",  "dialogue / action / montage / quiet / reveal")),
     ("captions",    ("any",     True,        "burnt-in subtitles on/off")),
     ("lipsync",     ("any",     False,       "ROADMAP: studio/roadmap/lipsync.md")),
@@ -119,6 +121,34 @@ def liblist(kind):
         if fn.endswith(".json"):
             out[fn[:-5]] = json.load(open(f"{d}/{fn}", encoding="utf-8"))
     return out
+
+
+def clamp_secs(secs, bid, warns):
+    """How long the generated CLIP is, in seconds.
+
+    LTX-2.3 quantises to 8n+1 frames at 24fps, so short.py computes
+    max(9, ceil(secs*24/8)*8+1) and you land on the nearest step of 1/3 s. Its practical
+    ceiling before the picture drifts is about 10s (FRAME_CAP 241) - past that you chain
+    from the previous frame instead.
+
+    Cost is nearly FLAT in length: 193 frames measured 13.7s against 97 frames at 13.5s.
+    So a longer clip is very nearly free, while an extra shot costs a whole keyframe plus
+    a whole clip. Asking for more seconds is usually the cheap way to buy the edit room.
+    """
+    try:
+        s = float(secs)
+    except (TypeError, ValueError):
+        warns.append(f"{bid}: clip_secs {secs!r} is not a number -> using 6")
+        return 6.0
+    if s < 1:
+        warns.append(f"{bid}: clip_secs {s} is below 1s -> using 1")
+        return 1.0
+    if s > 10:
+        warns.append(f"{bid}: clip_secs {s} exceeds LTX's ~10s drift ceiling -> clamped "
+                     f"to 10. For longer, chain shots with from_prev rather than asking "
+                     f"one clip to hold.")
+        return 10.0
+    return s
 
 
 def beat_seconds(beat):
@@ -205,11 +235,25 @@ def parse(path):
             # short.py has always honoured beat["camera"] (it strips the template's move
             # fx and substitutes this one). The gap was only that nothing could express it.
             tmpl, _, desc = v.partition("|")
-            tmpl, cam_ = tmpl.strip(), ""
-            if "@" in tmpl:
-                tmpl, _, cam_ = tmpl.partition("@")
-                tmpl, cam_ = tmpl.strip(), cam_.strip()
-            cur_sc["beats"].append({"shot": tmpl, "desc": desc.strip(), "camera": cam_})
+            # `shot: TEMPLATE [@camera] [@Ns] | what is happening`
+            #
+            # @-tokens in any order: a camera name, or a duration like @8s. Duration is
+            # how long the CLIP is generated for, which is the thing that decides how much
+            # room the edit has to cut inside. It was hardcoded at 6s for every shot in
+            # every film.
+            tmpl, cam_, secs_ = tmpl.strip(), "", None
+            while "@" in tmpl:
+                tmpl, _, tok = tmpl.rpartition("@")
+                tmpl, tok = tmpl.strip(), tok.strip()
+                m = re.fullmatch(r"(\d+(?:\.\d+)?)s?", tok)
+                if m:
+                    secs_ = float(m.group(1))
+                elif tok:
+                    cam_ = tok
+            b = {"shot": tmpl, "desc": desc.strip(), "camera": cam_}
+            if secs_:
+                b["clip_secs"] = secs_
+            cur_sc["beats"].append(b)
             continue
         # ENFORCE the movie-level locks this file documents. They were described as
         # "LOCKED, compile error if set at chapter/scene" from the beginning and were
@@ -328,7 +372,12 @@ def compile_movie(path):
                         bcam = cam
                 d = collections.OrderedDict(
                     id=bid, template=tmpl,
-                    clip_secs=6, intensity=round(1.0 / scale, 3),
+                    # per-shot @Ns wins, else the scene/chapter/movie value, else 6.
+                    # LTX quantises to 8n+1 frames at 24fps and drifts past ~10s, so
+                    # anything above that is clamped rather than silently mangled.
+                    clip_secs=clamp_secs(b.get("clip_secs") or v.get("clip_secs") or 6,
+                                         bid, warns),
+                    intensity=round(1.0 / scale, 3),
                     camera=bcam["id"] if bcam.get("status") == "ready" else "static",
                     transition=tr["id"] if tr.get("status") == "ready" else "cut",
                     grade=look["grade"],
