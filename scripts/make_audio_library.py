@@ -36,7 +36,11 @@ import json, os, sys, time, urllib.request
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 os.environ.setdefault("COMFY_ROOT", "Z:/ComfyUI")
-os.environ.setdefault("COMFY_HOST", "192.168.1.46:8188")
+# Default to the LOCAL ComfyUI. This used to hardcode 192.168.1.46, which broke
+# when DHCP moved the box to .45, and which also sent every render request across
+# a NIC measured dropping 10% of packets. Nothing here needs the network: these
+# scripts run ON the box. Set COMFY_HOST to drive a remote instance.
+os.environ.setdefault("COMFY_HOST", "127.0.0.1:8188")
 from comfy import run, set_path                      # noqa: E402
 from epic import norm_to, COMFY, HOST                # noqa: E402
 
