@@ -68,7 +68,9 @@ VARS = collections.OrderedDict([
     ("title",       ("movie",   None,        "film name. also seeds the render id")),
     ("fps",         ("movie",   24,          "LOCKED at movie level: concat -c copy breaks on mixed fps")),
     ("canvas",      ("movie",   "1920x1080", "LOCKED at movie level, same reason")),
-    ("checkpoint",  ("movie",   "animagine-xl-4.0.safetensors", "anime SDXL model")),
+    ("checkpoint",  ("movie",   "animagine-xl-4.0.safetensors", "anime SDXL model (engine: anime only)")),
+    ("engine",      ("movie",   "anime",     "anime = danbooru tags + IPAdapter faces. "
+                                             "qwen = prose prompts, photoreal or illustrated")),
     ("face_weight", ("movie",   0.6,         "IPAdapter strength. per-scene changes make faces drift")),
     ("seed_root",   ("movie",   None,        "stable seed base. defaults to hash(title)")),
     ("logline",     ("movie",   "",          "one sentence. if you can't write it, the film has no spine")),
@@ -259,6 +261,17 @@ def compile_movie(path):
     root = movie["vars"].get("seed_root") or movie["vars"].get("title", "untitled")
     cast = liblist("characters")
     cuelib = liblist("cues")
+    # Which image family renders the keyframes. Movie-level, because the two want
+    # opposite prompt formats and mixing them mid-film would change every face anyway.
+    engine = str(movie["vars"].get("engine", "anime")).strip().lower()
+    if engine not in ("anime", "qwen"):
+        raise SystemExit(f"unknown engine {engine!r}\n"
+                         f"  anime  danbooru tags + IPAdapter faces (animagine-xl-4.0)\n"
+                         f"  qwen   prose prompts, photoreal or illustrated (Qwen-Image 2512)")
+    if engine != "anime":
+        warns.append("engine 'qwen': character faces are held by reference SHEETS through "
+                     "Qwen-Edit rather than IPAdapter, which is a weaker lock - expect more "
+                     "drift between shots than the anime path gives you")
     beats = []
     used = []                 # character ids actually referenced, in first-seen order
     spoke = set()             # character ids that have a spoken line
@@ -340,6 +353,8 @@ def compile_movie(path):
                     who = declared[0]
 
                 card = cast.get(who or "", {})
+                emo_card = {}          # the qwen prose path reads this too
+                wear_tags = card.get("wear_tags") or WEAR
                 if who:
                     d["ref"] = [who]
                     wear_tags = card.get("wear_tags") or WEAR
@@ -355,7 +370,7 @@ def compile_movie(path):
                     bits = [card.get("tags", ""), MALE]
                     emo = str(v.get("emotion", "")).strip()
                     if emo:
-                        e = lib("emotions", emo)
+                        e = emo_card = lib("emotions", emo)
                         bits += [e.get("face", ""), e.get("eyes", ""), e.get("mouth", "")]
                         if wear == 0:
                             # at wear 0 nothing else is describing the body, so the
@@ -385,7 +400,42 @@ def compile_movie(path):
                 bits.append(desc)
                 bits += [v["tags"], look["tags"], v["mood"], v["place"], v["time"], Q]
                 d["tags"] = ", ".join(x for x in bits if x)
-                d["prompt"] = d["tags"]
+                # TWO PROMPTS, because the two model families want OPPOSITE formats and
+                # feeding one the other's is how you get abstract colour shapes.
+                #
+                #   tags   danbooru, comma separated, for the anime SDXL path
+                #   prompt prose, for the Qwen path (13_qwen_t2i_styled / 14_qwen_edit_ref)
+                #
+                # These used to be the same string, which was harmless only because
+                # keyframe_engine was hardcoded to "anime" and the Qwen branch was
+                # unreachable from an authored film. Now that a film can choose, they
+                # have to differ. The character's human-readable `desc` is used here
+                # rather than its danbooru tags, for the same reason.
+                if engine == "anime":
+                    d["prompt"] = d["tags"]
+                else:
+                    # `prose` on a character is a VISUAL description; `desc` is the
+                    # narrative one ("Has never beaten his rival"), which tells an image
+                    # model nothing it can draw. Fall back to the danbooru tags rather
+                    # than to desc - tags at least name things that exist in frame.
+                    who_prose = (card.get("prose") or card.get("tags", "")) if who else ""
+                    emo_prose = ""
+                    if who and emo_card:
+                        emo_prose = ", ".join(x for x in (emo_card.get("face", ""),
+                                                          emo_card.get("eyes", ""),
+                                                          emo_card.get("mouth", "")) if x)
+                    wear_prose = wear_tags[min(wear, len(wear_tags) - 1)] if who else ""
+                    parts = [desc, who_prose, emo_prose, wear_prose,
+                             v["place"], v["time"], v["mood"],
+                             look.get("prose") or look.get("tags", "")]
+                    # The film's house style is appended LAST and only if it does not
+                    # contradict the engine - "cel shading" on a photoreal render is the
+                    # author asking for two different pictures at once.
+                    style = v["tags"]
+                    if style and not any(w in style.lower() for w in
+                                         ("anime", "cel shad", "manga", "danbooru")):
+                        parts.append(style)
+                    d["prompt"] = ". ".join(x.strip(" .,") for x in parts if x.strip(" .,")) + "."
                 d["motion"] = "Slow deliberate movement only."
                 if b.get("text"):
                     d["line"] = {"who": who, "text": b["text"]}
@@ -468,7 +518,7 @@ def compile_movie(path):
     film = collections.OrderedDict(
         title=movie["vars"].get("title", movie["id"]),
         fps=int(movie["vars"].get("fps", 24)), canvas=[int(cw), int(ch_)],
-        engine="higgs_v3", keyframe_engine="anime",
+        engine="higgs_v3", keyframe_engine=engine,
         anime_ckpt=movie["vars"].get("checkpoint", "animagine-xl-4.0.safetensors"),
         ipadapter_weight=float(movie["vars"].get("face_weight", 0.6)),
         style=movie["vars"].get("tags", ""),

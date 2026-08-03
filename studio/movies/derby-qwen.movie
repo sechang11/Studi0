@@ -1,0 +1,82 @@
+// THE DERBY - Episode 1.  Recompile with:
+//   python3 studio/compile.py studio/movies/derby-ep1.movie --timeline
+//
+// A shot line is:   shot: TEMPLATE | what is happening
+// The part after the | is what the image model actually renders. Without it you get a
+// portrait of whoever is in the scene, standing still, every single time.
+
+MOVIE derby-ep1
+  // Distinct from the delivered "THE DERBY EP1" - short.py derives its output directory
+  // from the title, so reusing one archives that film's master.
+  title: DERBY QWEN TEST
+  logline: A playmaker who has never beaten his rival learns he was never really playing.
+  canvas: 1920x1080
+  fps: 24
+  checkpoint: animagine-xl-4.0.safetensors
+  face_weight: 0.6
+  seed_root: derby-s2
+  engine: qwen
+  tags: modern sports anime, cel shading, cinematic
+
+CHAPTER cold_open
+  look: night
+  place: empty night stadium, confetti on wet grass
+  pace: slow
+  cue: melancholy_piano
+
+  SCENE last_year
+    transition: fade_black
+    characters: VIRO
+    emotion: grief
+    camera: pull
+    shot: establish | empty floodlit stand, confetti falling, nobody left in the seats, wide shot
+    VIRO: ...Again.
+    shot: pillow | a number 7 sign lying face down on a wet empty seat, close-up
+
+CHAPTER act_one
+  look: cold
+  place: stadium tunnel, wet concrete, harsh strip light
+  pace: normal
+  wear: 0
+  cue: tense_strings
+
+  SCENE tunnel
+    transition: dissolve
+    characters: VIRO
+    emotion: determined
+    camera: push
+    shot: establish | long empty concrete tunnel receding to a bright doorway, no humans
+    VIRO: Same tunnel. Same smell of wet concrete. Nine times now.
+
+  SCENE locker
+    transition: cut
+    place: locker room, benches, hanging jerseys
+    characters: VIRO, MANAGER
+    emotion: neutral
+    MANAGER: Nine years. Nine years we have come here and gone home quiet.
+    VIRO: I know what the record is.
+    MANAGER: Then stop trying to beat him. Beat the team.
+
+CHAPTER climax
+  look: day_for_night
+  place: night pitch, floodlights, packed stands
+  pace: fast
+  wear: 4
+  cue: triumphant_build
+
+  SCENE silence_before
+    transition: smash
+    silence: true
+    characters: VIRO
+    emotion: resolve
+    camera: static
+    shot: hold_silent | standing over the ball, one boot resting on it, head down, medium shot
+
+  SCENE the_goal
+    transition: flash
+    characters: VIRO
+    emotion: determined
+    camera: push
+    shot: sakuga | leaping mid-air volley, body twisted, boot striking the ball, motion lines, dynamic angle, full body
+    shot: insert | the ball hitting the back of the net, net stretching, close-up, no humans
+    VIRO: Not this year.

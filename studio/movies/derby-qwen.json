@@ -1,0 +1,268 @@
+{
+  "title": "DERBY QWEN TEST",
+  "fps": 24,
+  "canvas": [
+    1920,
+    1080
+  ],
+  "engine": "higgs_v3",
+  "keyframe_engine": "qwen",
+  "anime_ckpt": "animagine-xl-4.0.safetensors",
+  "ipadapter_weight": 0.6,
+  "style": "modern sports anime, cel shading, cinematic",
+  "anime_sheets": {
+    "VIRO": "sheet_anime_viro.png"
+  },
+  "sheets": {
+    "VIRO": "sheet_anime_viro.png"
+  },
+  "characters": {
+    "VIRO": "VIRO",
+    "MANAGER": "MANAGER"
+  },
+  "voices": {
+    "VIRO": {
+      "engine": "higgs_v3",
+      "voice": "voices_examples/higgs_audio/vex.wav"
+    },
+    "MANAGER": {
+      "engine": "indextts2",
+      "voice": "voices_examples/male/male_01.wav"
+    }
+  },
+  "music": [
+    {
+      "prefix": "melancholy_piano_00",
+      "tags": "sparse melancholy piano, single sustained cello, restrained, instrumental",
+      "seconds": 16,
+      "at": 0.0,
+      "level": 0.8,
+      "bpm": 72,
+      "key": "D minor"
+    },
+    {
+      "prefix": "tense_strings_01",
+      "tags": "quiet tense strings, low pulse, anticipation, restrained orchestral, instrumental",
+      "seconds": 19,
+      "at": 14.04,
+      "level": 0.7,
+      "bpm": 88,
+      "key": "A minor"
+    },
+    {
+      "prefix": "triumphant_build_02",
+      "tags": "soaring orchestral build, taiko drums, brass, choir, triumphant desperate, huge, instrumental",
+      "seconds": 7,
+      "at": 34.88,
+      "level": 1.0,
+      "bpm": 140,
+      "key": "D minor"
+    }
+  ],
+  "beats": [
+    {
+      "id": "cold_open_last_year_00",
+      "template": "establish",
+      "clip_secs": 6,
+      "intensity": 0.741,
+      "camera": "pull",
+      "transition": "fade_black",
+      "grade": "eq=brightness=-0.15:contrast=1.20:saturation=0.72,colorbalance=bs=0.05:rs=-0.03,eq=gamma=0.92",
+      "seed": 4094071958,
+      "tags": "empty floodlit stand, confetti falling, nobody left in the seats, wide shot, modern sports anime, cel shading, cinematic, night, dark, moonlight, empty night stadium, confetti on wet grass, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "empty floodlit stand, confetti falling, nobody left in the seats, wide shot. empty night stadium, confetti on wet grass. night, dark, moonlight.",
+      "motion": "Slow deliberate movement only."
+    },
+    {
+      "id": "cold_open_last_year_01",
+      "template": "speak",
+      "clip_secs": 6,
+      "intensity": 0.741,
+      "camera": "pull",
+      "transition": "fade_black",
+      "grade": "eq=brightness=-0.15:contrast=1.20:saturation=0.72,colorbalance=bs=0.05:rs=-0.03,eq=gamma=0.92",
+      "seed": 3781434508,
+      "ref": [
+        "VIRO"
+      ],
+      "tags": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, male focus, mature male, masculine, crying, grieving, tears, downcast eyes, trembling, hunched, clean teal soccer jersey, orange trim, number 7, neat hair, close-up, modern sports anime, cel shading, cinematic, night, dark, moonlight, empty night stadium, confetti on wet grass, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "close-up. a young man with long dark brown curly hair tied in a ponytail, brown eyes, a small gold ear stud. crying, grieving, tears, downcast eyes, trembling. clean teal soccer jersey, orange trim, number 7, neat hair. empty night stadium, confetti on wet grass. night, dark, moonlight.",
+      "motion": "Slow deliberate movement only.",
+      "line": {
+        "who": "VIRO",
+        "text": "...Again."
+      }
+    },
+    {
+      "id": "cold_open_last_year_02",
+      "template": "pillow",
+      "clip_secs": 6,
+      "intensity": 0.741,
+      "camera": "pull",
+      "transition": "fade_black",
+      "grade": "eq=brightness=-0.15:contrast=1.20:saturation=0.72,colorbalance=bs=0.05:rs=-0.03,eq=gamma=0.92",
+      "seed": 1698447036,
+      "tags": "a number 7 sign lying face down on a wet empty seat, close-up, modern sports anime, cel shading, cinematic, night, dark, moonlight, empty night stadium, confetti on wet grass, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "a number 7 sign lying face down on a wet empty seat, close-up. empty night stadium, confetti on wet grass. night, dark, moonlight.",
+      "motion": "Slow deliberate movement only."
+    },
+    {
+      "id": "act_one_tunnel_00",
+      "template": "establish",
+      "clip_secs": 6,
+      "intensity": 1.0,
+      "camera": "push",
+      "transition": "dissolve",
+      "grade": "eq=contrast=1.10:saturation=0.72,colorbalance=bs=0.10:rs=-0.05",
+      "seed": 686797650,
+      "tags": "long empty concrete tunnel receding to a bright doorway, no humans, modern sports anime, cel shading, cinematic, overcast, cold lighting, desaturated, stadium tunnel, wet concrete, harsh strip light, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "long empty concrete tunnel receding to a bright doorway, no humans. stadium tunnel, wet concrete, harsh strip light. overcast, cold lighting, desaturated.",
+      "motion": "Slow deliberate movement only."
+    },
+    {
+      "id": "act_one_tunnel_01",
+      "template": "speak",
+      "clip_secs": 6,
+      "intensity": 1.0,
+      "camera": "push",
+      "transition": "dissolve",
+      "grade": "eq=contrast=1.10:saturation=0.72,colorbalance=bs=0.10:rs=-0.05",
+      "seed": 2016105072,
+      "ref": [
+        "VIRO"
+      ],
+      "tags": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, male focus, mature male, masculine, determined expression, serious, sharp eyes, furrowed brow, closed mouth, squared shoulders, clean teal soccer jersey, orange trim, number 7, neat hair, close-up, modern sports anime, cel shading, cinematic, overcast, cold lighting, desaturated, stadium tunnel, wet concrete, harsh strip light, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "close-up. a young man with long dark brown curly hair tied in a ponytail, brown eyes, a small gold ear stud. determined expression, serious, sharp eyes, furrowed brow, closed mouth. clean teal soccer jersey, orange trim, number 7, neat hair. stadium tunnel, wet concrete, harsh strip light. overcast, cold lighting, desaturated.",
+      "motion": "Slow deliberate movement only.",
+      "line": {
+        "who": "VIRO",
+        "text": "Same tunnel. Same smell of wet concrete. Nine times now."
+      }
+    },
+    {
+      "id": "act_one_locker_00",
+      "template": "speak",
+      "clip_secs": 6,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "cut",
+      "grade": "eq=contrast=1.10:saturation=0.72,colorbalance=bs=0.10:rs=-0.05",
+      "seed": 676407255,
+      "ref": [
+        "MANAGER"
+      ],
+      "tags": "1man, solo, grey hair, short beard, lined face, dark tracksuit, team crest, male focus, mature male, masculine, neutral expression, looking at viewer, closed mouth, relaxed posture, clean uniform, neat hair, close-up, modern sports anime, cel shading, cinematic, overcast, cold lighting, desaturated, locker room, benches, hanging jerseys, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "close-up. an older man with grey hair and a short beard, a lined weathered face. neutral expression, looking at viewer, closed mouth. clean uniform, neat hair. locker room, benches, hanging jerseys. overcast, cold lighting, desaturated.",
+      "motion": "Slow deliberate movement only.",
+      "line": {
+        "who": "MANAGER",
+        "text": "Nine years. Nine years we have come here and gone home quiet."
+      }
+    },
+    {
+      "id": "act_one_locker_01",
+      "template": "speak",
+      "clip_secs": 6,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "cut",
+      "grade": "eq=contrast=1.10:saturation=0.72,colorbalance=bs=0.10:rs=-0.05",
+      "seed": 4026877289,
+      "ref": [
+        "VIRO"
+      ],
+      "tags": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, male focus, mature male, masculine, neutral expression, looking at viewer, closed mouth, relaxed posture, clean teal soccer jersey, orange trim, number 7, neat hair, close-up, modern sports anime, cel shading, cinematic, overcast, cold lighting, desaturated, locker room, benches, hanging jerseys, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "close-up. a young man with long dark brown curly hair tied in a ponytail, brown eyes, a small gold ear stud. neutral expression, looking at viewer, closed mouth. clean teal soccer jersey, orange trim, number 7, neat hair. locker room, benches, hanging jerseys. overcast, cold lighting, desaturated.",
+      "motion": "Slow deliberate movement only.",
+      "line": {
+        "who": "VIRO",
+        "text": "I know what the record is."
+      }
+    },
+    {
+      "id": "act_one_locker_02",
+      "template": "speak",
+      "clip_secs": 6,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "cut",
+      "grade": "eq=contrast=1.10:saturation=0.72,colorbalance=bs=0.10:rs=-0.05",
+      "seed": 2705458661,
+      "ref": [
+        "MANAGER"
+      ],
+      "tags": "1man, solo, grey hair, short beard, lined face, dark tracksuit, team crest, male focus, mature male, masculine, neutral expression, looking at viewer, closed mouth, relaxed posture, clean uniform, neat hair, close-up, modern sports anime, cel shading, cinematic, overcast, cold lighting, desaturated, locker room, benches, hanging jerseys, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "close-up. an older man with grey hair and a short beard, a lined weathered face. neutral expression, looking at viewer, closed mouth. clean uniform, neat hair. locker room, benches, hanging jerseys. overcast, cold lighting, desaturated.",
+      "motion": "Slow deliberate movement only.",
+      "line": {
+        "who": "MANAGER",
+        "text": "Then stop trying to beat him. Beat the team."
+      }
+    },
+    {
+      "id": "climax_silence_before_00",
+      "template": "hold_silent",
+      "clip_secs": 6,
+      "intensity": 1.429,
+      "camera": "static",
+      "transition": "smash",
+      "grade": "eq=brightness=-0.15:contrast=1.20:saturation=0.72,colorbalance=bs=0.05:rs=-0.03,eq=gamma=0.92",
+      "seed": 2881569967,
+      "ref": [
+        "VIRO"
+      ],
+      "tags": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, male focus, mature male, masculine, calm resolve, quiet certainty, steady gaze, closed mouth, torn bloodied teal soccer jersey, orange trim, number 7, cut on cheek, bloodied lip, mud, trembling, utterly exhausted, standing over the ball, one boot resting on it, head down, medium shot, modern sports anime, cel shading, cinematic, night, floodlights, night pitch, floodlights, packed stands, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "standing over the ball, one boot resting on it, head down, medium shot. a young man with long dark brown curly hair tied in a ponytail, brown eyes, a small gold ear stud. calm resolve, quiet certainty, steady gaze, closed mouth. torn bloodied teal soccer jersey, orange trim, number 7, cut on cheek, bloodied lip, mud, trembling, utterly exhausted. night pitch, floodlights, packed stands. night, floodlights.",
+      "motion": "Slow deliberate movement only."
+    },
+    {
+      "id": "climax_the_goal_00",
+      "template": "sakuga",
+      "clip_secs": 6,
+      "intensity": 1.429,
+      "camera": "push",
+      "transition": "flash",
+      "grade": "eq=brightness=-0.15:contrast=1.20:saturation=0.72,colorbalance=bs=0.05:rs=-0.03,eq=gamma=0.92",
+      "seed": 549726470,
+      "ref": [
+        "VIRO"
+      ],
+      "tags": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, male focus, mature male, masculine, determined expression, serious, sharp eyes, furrowed brow, closed mouth, torn bloodied teal soccer jersey, orange trim, number 7, cut on cheek, bloodied lip, mud, trembling, utterly exhausted, leaping mid-air volley, body twisted, boot striking the ball, motion lines, dynamic angle, full body, modern sports anime, cel shading, cinematic, night, floodlights, night pitch, floodlights, packed stands, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "leaping mid-air volley, body twisted, boot striking the ball, motion lines, dynamic angle, full body. a young man with long dark brown curly hair tied in a ponytail, brown eyes, a small gold ear stud. determined expression, serious, sharp eyes, furrowed brow, closed mouth. torn bloodied teal soccer jersey, orange trim, number 7, cut on cheek, bloodied lip, mud, trembling, utterly exhausted. night pitch, floodlights, packed stands. night, floodlights.",
+      "motion": "Slow deliberate movement only."
+    },
+    {
+      "id": "climax_the_goal_01",
+      "template": "insert",
+      "clip_secs": 6,
+      "intensity": 1.429,
+      "camera": "push",
+      "transition": "flash",
+      "grade": "eq=brightness=-0.15:contrast=1.20:saturation=0.72,colorbalance=bs=0.05:rs=-0.03,eq=gamma=0.92",
+      "seed": 917277296,
+      "tags": "the ball hitting the back of the net, net stretching, close-up, no humans, modern sports anime, cel shading, cinematic, night, floodlights, night pitch, floodlights, packed stands, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "the ball hitting the back of the net, net stretching, close-up, no humans. night pitch, floodlights, packed stands. night, floodlights.",
+      "motion": "Slow deliberate movement only."
+    },
+    {
+      "id": "climax_the_goal_02",
+      "template": "speak",
+      "clip_secs": 6,
+      "intensity": 1.429,
+      "camera": "push",
+      "transition": "flash",
+      "grade": "eq=brightness=-0.15:contrast=1.20:saturation=0.72,colorbalance=bs=0.05:rs=-0.03,eq=gamma=0.92",
+      "seed": 3858509524,
+      "ref": [
+        "VIRO"
+      ],
+      "tags": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, male focus, mature male, masculine, determined expression, serious, sharp eyes, furrowed brow, closed mouth, torn bloodied teal soccer jersey, orange trim, number 7, cut on cheek, bloodied lip, mud, trembling, utterly exhausted, close-up, modern sports anime, cel shading, cinematic, night, floodlights, night pitch, floodlights, packed stands, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "close-up. a young man with long dark brown curly hair tied in a ponytail, brown eyes, a small gold ear stud. determined expression, serious, sharp eyes, furrowed brow, closed mouth. torn bloodied teal soccer jersey, orange trim, number 7, cut on cheek, bloodied lip, mud, trembling, utterly exhausted. night pitch, floodlights, packed stands. night, floodlights.",
+      "motion": "Slow deliberate movement only.",
+      "line": {
+        "who": "VIRO",
+        "text": "Not this year."
+      }
+    }
+  ]
+}
