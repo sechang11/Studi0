@@ -1,0 +1,13 @@
+{
+  "id": "animagine_xl_4",
+  "name": "Animagine XL 4.0",
+  "file": "animagine-xl-4.0.safetensors",
+  "desc": "The house anime model. Every film and every capability panel in this project was rendered on it.",
+  "status": "ready",
+  "family": "anime SDXL",
+  "prompt_style": "danbooru tags, subject first then camera then scene",
+  "quality_tags": "masterpiece, best quality, very aesthetic, absurdres",
+  "steps": 28, "cfg": 5.0, "sampler": "euler_ancestral", "scheduler": "normal",
+  "size": [1344, 768],
+  "note": "Quality tokens are LOAD-BEARING - dropping them measurably degrades output. Feeding it cinematic prose instead of tags returns abstract colour shapes. `motion blur` belongs in the negative, never the positive."
+}
