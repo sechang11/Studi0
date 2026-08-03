@@ -74,3 +74,58 @@ of whoever is in the scene, standing still.
 Anything you want to be exact — colour, camera move, pacing, captions, loudness — should
 live in a deterministic stage rather than the prompt. `studio/effects.json` records which
 tier every variable lands in and cites the code that consumes it.
+
+## Building a character that stays the same person
+
+Open **/cast**. A character is a reusable identity, not a description you retype, and
+there are three stages of making one hold. Each is stronger than the last.
+
+### 1 · A reference sheet
+
+One portrait, used by IPAdapter to refine faces during a render.
+
+    python3 scripts/make_sheets.py
+
+Worth knowing what this buys, because it is less than it appears: a weight sweep on this
+box found the character was *already recognisable at zero* IPAdapter strength. The sheet
+refines a face; it is not what makes the character.
+
+### 2 · A turnaround
+
+Sixteen views of the same person — angles first, then expressions, with framing held
+constant throughout.
+
+    python3 studio/_tools/turnaround.py VIRO
+
+This uses `qwen-image-edit-2511-multiple-angles-lora` to RE-POSE the person in your source
+image rather than generating someone new who matches the description. That distinction is
+the whole point. It produces two things at once: a far stronger reference, and the
+training set for stage 3.
+
+The framing is written into every prompt on purpose. A LoRA learns whatever the set holds
+constant as "the character" and whatever it varies as "not the character" — so a set that
+is half close-up and half full-body teaches a muddle, and a costume that changes across
+the set teaches that the costume is optional.
+
+### 3 · A trained LoRA
+
+The character stops being a prompt and becomes a model.
+
+    python3 studio/_tools/train_character.py VIRO
+    python3 studio/_tools/train_character.py VIRO --steps 1500 --rank 16
+
+About ten minutes for 1000 steps on sixteen images, at roughly 1.7 steps/sec and 20 GB of
+VRAM. It trains against `animagine-xl-4.0` because a LoRA is a delta on specific weights —
+trained against one base and applied to another it degrades or does nothing.
+
+### Then look at it
+
+    python3 studio/_tools/lora_check.py VIRO
+
+Same prompt, same seed, with and without the LoRA, side by side, in a scene the character
+was never trained in. A loss curve cannot tell you whether this worked; the two failure
+modes are invisible in a number and obvious in a picture.
+
+    identical pair            undertrained — the LoRA is doing nothing
+    the training portrait     overfit — it memorised instead of learning
+    same person, new scene    it worked
