@@ -1,0 +1,62 @@
+{
+  "variable": "story.reality_layer",
+  "claim": "Reality layer says whether what we are watching actually happened, and non-real layers get a consistent visual and audio treatment applied automatically so you never author the haze twice. Anime tells the audience 'this is a memory' with grain and desaturation rather than a line of dialogue, and this is the variable that buys that.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "real",
+      "clause": "clear focus, natural color, unaltered",
+      "control": false,
+      "sample": "/samples/vars/story_reality_layer/real.webp"
+    },
+    {
+      "value": "dream",
+      "clause": "dreamlike, hazy soft glow, surreal, drifting",
+      "control": false,
+      "sample": "/samples/vars/story_reality_layer/dream.webp"
+    },
+    {
+      "value": "memory",
+      "clause": "memory, faded warm color, soft vignette, gentle haze",
+      "control": false,
+      "sample": "/samples/vars/story_reality_layer/memory.webp"
+    },
+    {
+      "value": "flashback",
+      "clause": "flashback, desaturated, high contrast, heavy film grain",
+      "control": false,
+      "sample": "/samples/vars/story_reality_layer/flashback.webp"
+    },
+    {
+      "value": "hallucination",
+      "clause": "hallucination, chromatic aberration, warped melting color, unstable",
+      "control": false,
+      "sample": "/samples/vars/story_reality_layer/hallucination.webp"
+    },
+    {
+      "value": "imagined",
+      "clause": "imagination, pale pastel unreality, soft sketch lines, weightless",
+      "control": false,
+      "sample": "/samples/vars/story_reality_layer/imagined.webp"
+    },
+    {
+      "value": "story_within",
+      "clause": "storybook illustration, picture-book painting, illustrated border",
+      "control": false,
+      "sample": "/samples/vars/story_reality_layer/story_within.webp"
+    },
+    {
+      "value": "digital",
+      "clause": "digital, glitch artifacts, scanlines, wireframe, cyan data glow",
+      "control": false,
+      "sample": "/samples/vars/story_reality_layer/digital.webp"
+    },
+    {
+      "value": "afterlife",
+      "clause": "afterlife, ethereal white glow, weightless, pale otherworldly light",
+      "control": false,
+      "sample": "/samples/vars/story_reality_layer/afterlife.webp"
+    }
+  ]
+}

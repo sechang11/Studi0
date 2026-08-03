@@ -1,0 +1,14 @@
+{
+  "variable": "layer.bg.motion",
+  "claim": "States how the background plane travels during a clip: held, drifting, parallaxing at two speeds, or scrolling sideways under a locked character. This is the engine of the anime pan — the character holds a pose while the painting moves behind them.",
+  "not_visual": "Purely inter-frame motion of the background plane. In one still, static, drift and parallax_slow are the same image, and scroll_l versus scroll_r cannot be distinguished at all — direction only exists across frames. Any clause would have to fake it with motion blur, which belongs to shot.cam and shot.fx, not this variable. Demo with a 2-second LTX clip instead.",
+  "options": [
+    "static",
+    "drift",
+    "parallax_slow",
+    "parallax_fast",
+    "scroll_l",
+    "scroll_r"
+  ],
+  "panels": []
+}

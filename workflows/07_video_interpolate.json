@@ -1,0 +1,17 @@
+{
+  "_comment": "Frame-rate fix for generated video: 16fps -> 32fps via FILM interpolation. Cheap (~5s for an 81-frame clip) and it removes the most obvious 'AI video' tell. multiplier=2 -> 32fps; multiplier=4 -> 64fps (good for a 2x slow-motion retime afterwards). Set node 1's `file` to a video in ComfyUI/input/ and keep node 7's fps = source_fps * multiplier.",
+  "_warning": "Do NOT chain a 4x GAN upscale onto this. ImageUpscaleWithModel processes the whole frame batch at once: 161 frames at 1280x720 upscaled 4x = 5120x2880x161x3 channels in float32 ~= 28 GB, which OOM-kills the server. Upscale stills with 09_image_upscale.json, or upscale video in small frame batches.",
+
+  "1": { "class_type": "LoadVideo", "inputs": { "file": "film_clip.mp4" } },
+  "2": { "class_type": "GetVideoComponents", "inputs": { "video": ["1", 0] } },
+  "3": { "class_type": "FrameInterpolationModelLoader", "inputs": { "model_name": "film_net_fp16.safetensors" } },
+  "4": {
+    "class_type": "FrameInterpolate",
+    "inputs": { "interp_model": ["3", 0], "images": ["2", 0], "multiplier": 2 }
+  },
+  "7": { "class_type": "CreateVideo", "inputs": { "images": ["4", 0], "fps": 32.0 } },
+  "8": {
+    "class_type": "SaveVideo",
+    "inputs": { "video": ["7", 0], "filename_prefix": "claude-generated/interp32", "format": "auto", "codec": "auto" }
+  }
+}

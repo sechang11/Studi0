@@ -1,0 +1,56 @@
+{
+  "_comment": "IndexTTS-2 via TTS-Audio-Suite. This replaces the Chatterbox + rubberband approach: characters are cast by picking a distinct REFERENCE VOICE on node 30 (narrator_voice) and directed by setting emotion weights on node 20. No pitch shifting - shifting one voice pack +/-30% is what made the earlier films sound like one actor on a varispeed tape.",
+  "_notes": [
+    "Node 30 narrator_voice: use only the GENERIC samples (higgs_audio/*, male/*, female/*). Do NOT use the Clint_Eastwood / David_Attenborough / Morgan_Freeman / Sophie_Anderson samples that ship with the pack - those are clones of real identifiable people.",
+    "Node 20 emotion weights are 0.0-1.0 each: Happy Angry Sad Surprised Afraid Disgusted Calm Melancholic. emotion_alpha on node 10 scales the whole emotion vector.",
+    "repetition_penalty defaults to 10.0, which is high; lower it toward 2-4 if delivery sounds clipped or words get dropped.",
+    "Weights auto-download to models/TTS on first run."
+  ],
+  "10": {
+    "class_type": "IndexTTSEngineNode",
+    "inputs": {
+      "model_path": "IndexTTS-2",
+      "device": "auto",
+      "emotion_alpha": 1.0,
+      "use_random": false,
+      "max_text_tokens_per_segment": 120,
+      "interval_silence": 200,
+      "temperature": 0.8,
+      "top_p": 0.8,
+      "top_k": 30,
+      "do_sample": true,
+      "length_penalty": 0.0,
+      "num_beams": 3,
+      "repetition_penalty": 10.0,
+      "max_mel_tokens": 1500,
+      "use_fp16": true,
+      "use_deepspeed": false,
+      "emotion_control": ["20", 0]
+    }
+  },
+  "20": {
+    "class_type": "IndexTTSEmotionOptionsNode",
+    "inputs": {
+      "Happy": 0.0, "Angry": 0.0, "Sad": 0.0, "Surprised": 0.0,
+      "Afraid": 0.0, "Disgusted": 0.0, "Calm": 0.0, "Melancholic": 0.0
+    }
+  },
+  "30": {
+    "class_type": "UnifiedTTSTextNode",
+    "inputs": {
+      "TTS_engine": ["10", 0],
+      "text": "placeholder line",
+      "narrator_voice": "voices_examples/male/male_01.wav",
+      "seed": 1,
+      "enable_chunking": true,
+      "max_chars_per_chunk": 400,
+      "chunk_combination_method": "auto",
+      "silence_between_chunks_ms": 100,
+      "enable_audio_cache": false
+    }
+  },
+  "40": {
+    "class_type": "SaveAudioMP3",
+    "inputs": { "audio": ["30", 0], "filename_prefix": "claude-generated/10-voice/voice", "quality": "320k" }
+  }
+}

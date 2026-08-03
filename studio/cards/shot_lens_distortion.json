@@ -1,0 +1,45 @@
+{
+  "variable": "shot.lens.distortion",
+  "claim": "Distortion is the deliberate bulge or pinch of the frame's straight lines, and in anime it is a device rather than a defect. Strong_barrel and fisheye are what a panic beat or a comedy blow-up look like from the inside.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "none",
+      "clause": "rectilinear, straight lines, no distortion",
+      "control": true,
+      "sample": "/samples/vars/shot_lens_distortion/none.webp"
+    },
+    {
+      "value": "mild_barrel",
+      "clause": "slight barrel distortion, gently curved edges",
+      "control": false,
+      "sample": "/samples/vars/shot_lens_distortion/mild_barrel.webp"
+    },
+    {
+      "value": "strong_barrel",
+      "clause": "strong barrel distortion, bulging center, curved lines",
+      "control": false,
+      "sample": "/samples/vars/shot_lens_distortion/strong_barrel.webp"
+    },
+    {
+      "value": "fisheye",
+      "clause": "fisheye, fisheye lens, circular distortion",
+      "control": false,
+      "sample": "/samples/vars/shot_lens_distortion/fisheye.webp"
+    },
+    {
+      "value": "pincushion",
+      "clause": "pincushion distortion, inward curving edges",
+      "control": false,
+      "sample": "/samples/vars/shot_lens_distortion/pincushion.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "shot.lens.distortion",
+      "issue": "fisheye duplicates lens.look.fisheye and comp.perspective.fisheye across cards. mild_barrel (\"slight barrel distortion, gently curved edges\") is an intensity step below strong_barrel that the model does not grade, so it will read as none. pincushion has almost no representation in this model and will likely be a third copy of the none panel.",
+      "fix": "Own fisheye here and remove it from lens.look and comp.perspective. Drop mild_barrel, or replace the pair with one barrel option plus fisheye as the extreme. Keep pincushion only if you are prepared for it to be the card's null result — and say so in the claim rather than after the render."
+    }
+  ]
+}

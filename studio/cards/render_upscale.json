@@ -1,0 +1,12 @@
+{
+  "variable": "render.upscale",
+  "claim": "Buys resolution after the diffusion pass, so a hero shot can carry the line detail that survives a big screen while a two-second cutaway stays cheap. Reach for it only on shots held long enough for the audience to inspect them; upscaling everything multiplies render time for detail nobody sees at cut speed.",
+  "not_visual": "Post-generation resolution pass, not a prompt input. With the subject sentence and seed fixed the prompt is byte-identical across all four values, so every panel is the same image at a different pixel count. Tags like 'absurdres' or 'highres' would fake it by asking the model for a different, busier drawing, which is not what an upscaler does. Compare it instead by rendering one seed and running the upscaler at each factor, inspected at 100% - a resolution test, not a capability card.",
+  "options": [
+    "none",
+    "1_5x",
+    "2x",
+    "4x"
+  ],
+  "panels": []
+}

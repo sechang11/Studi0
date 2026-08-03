@@ -1,0 +1,81 @@
+{
+  "variable": "light.key_dir",
+  "claim": "Where the main light sits on the compass around the subject, which is the single biggest control over how a face is shaped. Front flattens and reassures, side splits the face into a lit half and a hidden half, and back throws the whole read away and keeps only the outline.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "front",
+      "clause": "frontal lighting, lit straight on, flat face with no side shadow",
+      "control": false,
+      "sample": "/samples/vars/light_key_dir/front.webp"
+    },
+    {
+      "value": "front_l",
+      "clause": "lit from the front left, light on the left of the face, soft shadow on the right",
+      "control": false,
+      "sample": "/samples/vars/light_key_dir/front_l.webp"
+    },
+    {
+      "value": "front_r",
+      "clause": "lit from the front right, light on the right of the face, soft shadow on the left",
+      "control": false,
+      "sample": "/samples/vars/light_key_dir/front_r.webp"
+    },
+    {
+      "value": "side_l",
+      "clause": "side lighting from the left, half lit face, hard shadow over the right half",
+      "control": false,
+      "sample": "/samples/vars/light_key_dir/side_l.webp"
+    },
+    {
+      "value": "side_r",
+      "clause": "side lighting from the right, half lit face, hard shadow over the left half",
+      "control": false,
+      "sample": "/samples/vars/light_key_dir/side_r.webp"
+    },
+    {
+      "value": "back_l",
+      "clause": "backlit from rear left, rim light along the left edge, face in shadow",
+      "control": false,
+      "sample": "/samples/vars/light_key_dir/back_l.webp"
+    },
+    {
+      "value": "back_r",
+      "clause": "backlit from rear right, rim light along the right edge, face in shadow",
+      "control": false,
+      "sample": "/samples/vars/light_key_dir/back_r.webp"
+    },
+    {
+      "value": "back",
+      "clause": "backlighting, contre-jour, glowing outline, face in shadow",
+      "control": false,
+      "sample": "/samples/vars/light_key_dir/back.webp"
+    },
+    {
+      "value": "top",
+      "clause": "top-down lighting, light from directly above, shadowed eye sockets",
+      "control": false,
+      "sample": "/samples/vars/light_key_dir/top.webp"
+    },
+    {
+      "value": "bottom",
+      "clause": "underlighting, lit from below, upward cast shadows on the face",
+      "control": false,
+      "sample": "/samples/vars/light_key_dir/bottom.webp"
+    },
+    {
+      "value": "ambient_none",
+      "clause": "ambient light only, no key light, flat shadowless illumination",
+      "control": false,
+      "sample": "/samples/vars/light_key_dir/ambient_none.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "light.key_dir",
+      "issue": "top (\"top-down lighting, light from directly above, shadowed eye sockets\") and bottom (\"underlighting, lit from below, upward cast shadows on the face\") are elevation, not azimuth, and duplicate light.key_elev.overhead (\"light from directly overhead, top-down lighting, black eye sockets\") and light.key_elev.below (\"underlighting, light from below, upward cast shadows, lit chin\") almost word for word. The card's own claim says key_dir is \"where the main light sits on the compass\" — top and bottom are not on the compass. ambient_none is not a direction either.",
+      "fix": "Cut top, bottom and ambient_none from light.key_dir and let light.key_elev own the vertical axis and light.motivation.unmotivated own the sourceless case. That leaves key_dir a clean 8-point azimuth, which is also the only way the two cards read as different variables when an author flips between them."
+    }
+  ]
+}

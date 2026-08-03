@@ -1,0 +1,57 @@
+{
+  "variable": "anime.draw.line_weight",
+  "claim": "The character-art equivalent of lens choice: hairline reads delicate and expensive, thick reads punchy and shounen, rough_genga reads like the key animation was shot before cleanup. It is the first thing the eye registers about a drawing.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "hairline",
+      "clause": "extremely thin lineart, hairline outlines",
+      "control": false,
+      "sample": "/samples/vars/anime_draw_line_weight/hairline.webp"
+    },
+    {
+      "value": "thin",
+      "clause": "thin lineart, delicate outlines",
+      "control": false,
+      "sample": "/samples/vars/anime_draw_line_weight/thin.webp"
+    },
+    {
+      "value": "normal",
+      "clause": "clean lineart, even line weight",
+      "control": false,
+      "sample": "/samples/vars/anime_draw_line_weight/normal.webp"
+    },
+    {
+      "value": "thick",
+      "clause": "thick lineart, bold heavy outlines",
+      "control": false,
+      "sample": "/samples/vars/anime_draw_line_weight/thick.webp"
+    },
+    {
+      "value": "variable",
+      "clause": "tapered lineart, varying line weight, expressive lines",
+      "control": false,
+      "sample": "/samples/vars/anime_draw_line_weight/variable.webp"
+    },
+    {
+      "value": "brush",
+      "clause": "brush stroke lineart, inked brush lines",
+      "control": false,
+      "sample": "/samples/vars/anime_draw_line_weight/brush.webp"
+    },
+    {
+      "value": "rough_genga",
+      "clause": "rough sketch, unfinished lineart, genga",
+      "control": false,
+      "sample": "/samples/vars/anime_draw_line_weight/rough_genga.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "anime.draw.line_weight",
+      "issue": "hairline (\"extremely thin lineart, hairline outlines\") and thin (\"thin lineart, delicate outlines\") will render identically - the model has one \"thin lineart\" feature and no degree control on it. Separately, rough_genga (\"rough sketch, unfinished lineart, genga\") is the same render as shot.fx.impact_frame/sketch_frame (\"rough sketch, genga, pencil lines, unfinished drawing\"); \"rough sketch\" dominates both.",
+      "fix": "Drop hairline (or fold it into thin). For rough_genga, let line_weight own it and change impact_frame/sketch_frame to something that reads as a one-frame intrusion rather than a whole-drawing style - e.g. \"rough sketch, monochrome, high contrast\" - or accept the duplication and cut one."
+    }
+  ]
+}

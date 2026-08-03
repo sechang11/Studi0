@@ -1,0 +1,11 @@
+{
+  "variable": "shot.keyframe_mode",
+  "claim": "Keyframe mode decides whether the shot is a single still driven into motion by i2v or an interpolation between two or three authored frames. Reach for start_end when the shot has to arrive somewhere specific, and start_mid_end when the middle of the move is the point.",
+  "not_visual": "The variable is about how many authored frames feed the video pass and what happens between them. A still is by definition one frame, so all three values produce the identical panel.",
+  "options": [
+    "start_only",
+    "start_end",
+    "start_mid_end"
+  ],
+  "panels": []
+}

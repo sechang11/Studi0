@@ -1,0 +1,19 @@
+{
+  "variable": "world.ambient_life",
+  "claim": "The living background sound bed of a location — cicadas, birds, distant traffic, waves — which is what makes a place feel inhabited in the gaps between lines. It selects audio layers and nothing else.",
+  "not_visual": "Every value in this enum names a sound, not a visible thing. Cicadas, crickets, frogs, wind chimes, distant traffic, school noise, machinery, waves and river all select an ambience stem at mix time; none of them changes a pixel of a still. A clause that drew a visible cicada or visible waves would be silently testing set dressing (world.biome, world.air_particles) under this variable's name, and the resulting panels would be evidence about the wrong control.",
+  "options": [
+    "none",
+    "cicadas",
+    "birds",
+    "crickets",
+    "frogs",
+    "wind_chimes",
+    "distant_traffic",
+    "school_noise",
+    "machinery",
+    "waves",
+    "river"
+  ],
+  "panels": []
+}

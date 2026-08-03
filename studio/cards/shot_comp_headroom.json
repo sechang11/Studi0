@@ -1,0 +1,39 @@
+{
+  "variable": "shot.comp.headroom",
+  "claim": "Headroom is simultaneously the most common framing mistake and the most common deliberate tension device. Tight presses a character against the top of the frame and makes the space feel too small for him; loose strands him at the bottom of an empty sky.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "tight",
+      "clause": "tight headroom, head near top of frame",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_headroom/tight.webp"
+    },
+    {
+      "value": "normal",
+      "clause": "normal headroom, balanced space above head",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_headroom/normal.webp"
+    },
+    {
+      "value": "loose",
+      "clause": "loose headroom, large empty space above head",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_headroom/loose.webp"
+    },
+    {
+      "value": "cropped_top",
+      "clause": "head out of frame, cropped head, top of head cut off",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_headroom/cropped_top.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "shot.comp.headroom",
+      "issue": "\"tight headroom\" and \"normal headroom\" are not trained phrases — danbooru expresses headroom only through shot-size and crop tags — so tight and normal are likely to be the same picture, and normal is the baseline anyway. cropped_top is the one value with real vocabulary behind it (\"head out of frame\").",
+      "fix": "Give normal an empty clause, keep tight / loose / cropped_top, and lean on the crop tags the model knows: tight \"head near top edge, cropped at top\" is weak but survivable, loose \"large empty space above head, small figure\" is the one worth authoring carefully."
+    }
+  ]
+}

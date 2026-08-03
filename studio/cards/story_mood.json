@@ -1,0 +1,86 @@
+{
+  "variable": "story.mood",
+  "claim": "Mood is scene-level emotional colour — the same tone played in a different room — biasing tags, grade, music and lighting together. Where tone sets the film's key, mood decides whether this particular scene is lonely or euphoric, and it is the fastest handle when a scene reads flat.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "neutral",
+      "clause": "neutral expression, even balanced lighting, natural colors",
+      "control": true,
+      "sample": "/samples/vars/story_mood/neutral.webp"
+    },
+    {
+      "value": "warm",
+      "clause": "warm color palette, golden glow, cozy light",
+      "control": false,
+      "sample": "/samples/vars/story_mood/warm.webp"
+    },
+    {
+      "value": "hopeful",
+      "clause": "hopeful, soft smile, bright rising light, luminous",
+      "control": false,
+      "sample": "/samples/vars/story_mood/hopeful.webp"
+    },
+    {
+      "value": "lonely",
+      "clause": "lonely, solitary figure, empty surrounding space, cold muted palette",
+      "control": false,
+      "sample": "/samples/vars/story_mood/lonely.webp"
+    },
+    {
+      "value": "anxious",
+      "clause": "anxious, worried expression, sweating, restless unease",
+      "control": false,
+      "sample": "/samples/vars/story_mood/anxious.webp"
+    },
+    {
+      "value": "grieving",
+      "clause": "grieving, tears, hollow expression, drained color",
+      "control": false,
+      "sample": "/samples/vars/story_mood/grieving.webp"
+    },
+    {
+      "value": "angry",
+      "clause": "angry, furrowed brow, red hot tones, harsh contrast",
+      "control": false,
+      "sample": "/samples/vars/story_mood/angry.webp"
+    },
+    {
+      "value": "euphoric",
+      "clause": "euphoric, ecstatic expression, blown-out bright light, saturated color",
+      "control": false,
+      "sample": "/samples/vars/story_mood/euphoric.webp"
+    },
+    {
+      "value": "numb",
+      "clause": "numb, blank expression, flat dull lighting, desaturated",
+      "control": false,
+      "sample": "/samples/vars/story_mood/numb.webp"
+    },
+    {
+      "value": "nostalgic",
+      "clause": "nostalgic, faded warm colors, soft haze, film grain",
+      "control": false,
+      "sample": "/samples/vars/story_mood/nostalgic.webp"
+    },
+    {
+      "value": "ominous",
+      "clause": "ominous, encroaching shadow, cold blue cast, foreboding",
+      "control": false,
+      "sample": "/samples/vars/story_mood/ominous.webp"
+    },
+    {
+      "value": "intimate",
+      "clause": "intimate, quiet warmth, soft close glow, hushed",
+      "control": false,
+      "sample": "/samples/vars/story_mood/intimate.webp"
+    },
+    {
+      "value": "chaotic",
+      "clause": "chaotic, clashing colors, cluttered frenetic energy",
+      "control": false,
+      "sample": "/samples/vars/story_mood/chaotic.webp"
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "variable": "shot.comp.lookroom",
+  "claim": "Lookroom is the space in front of a character's gaze, and its absence is instantly claustrophobic. Give him room and the frame is balanced and forward-looking; take it away and he is pressed into the edge of his own shot.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "auto",
+      "clause": "balanced lookroom, open space in front of the gaze",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_lookroom/auto.webp"
+    },
+    {
+      "value": "left",
+      "clause": "empty space at frame left, subject on the right",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_lookroom/left.webp"
+    },
+    {
+      "value": "right",
+      "clause": "empty space at frame right, subject on the left",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_lookroom/right.webp"
+    },
+    {
+      "value": "center",
+      "clause": "equal space on both sides, centered subject",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_lookroom/center.webp"
+    },
+    {
+      "value": "none",
+      "clause": "no lookroom, face pressed against the frame edge",
+      "control": true,
+      "sample": "/samples/vars/shot_comp_lookroom/none.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "shot.comp.lookroom",
+      "issue": "Lookroom is space in front of a gaze, and the fixed subject sentence sets no gaze. With no eyeline in the panel, \"empty space at frame left, subject on the right\" is nothing but lateral placement — i.e. shot.comp.thirds_bias again, with the same unreliable left/right vocabulary. auto (\"balanced lookroom, open space in front of the gaze\") is prose about the concept rather than anything the model can draw, and none is a negation.",
+      "fix": "Honest call is renderable:false: the option is only legible relative to an eyeline the fixed subject does not fix, and once you add one you are rendering shot.comp.eyeline. If it stays renderable, pin one identical gaze tag (\"looking to the side\") in every clause of this card and state in the claim that the panels will look like thirds_bias."
+    }
+  ]
+}

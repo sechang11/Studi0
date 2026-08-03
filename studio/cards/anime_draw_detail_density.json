@@ -1,0 +1,45 @@
+{
+  "variable": "anime.draw.detail_density",
+  "claim": "Line count per drawing, which is really a production tier: minimal is a weekly TV budget, film is a theatrical one. Push it up for hero shots and let it inherit low everywhere else, because ultra on every cut just reads as noise.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "minimal",
+      "clause": "minimal detail, simple shapes, few lines",
+      "control": false,
+      "sample": "/samples/vars/anime_draw_detail_density/minimal.webp"
+    },
+    {
+      "value": "tv_standard",
+      "clause": "tv anime detail, moderate detail",
+      "control": false,
+      "sample": "/samples/vars/anime_draw_detail_density/tv_standard.webp"
+    },
+    {
+      "value": "ova",
+      "clause": "ova quality, high detail lineart",
+      "control": false,
+      "sample": "/samples/vars/anime_draw_detail_density/ova.webp"
+    },
+    {
+      "value": "film",
+      "clause": "theatrical film quality, very detailed, intricate linework",
+      "control": false,
+      "sample": "/samples/vars/anime_draw_detail_density/film.webp"
+    },
+    {
+      "value": "ultra",
+      "clause": "extremely detailed, ultra detailed, intricate",
+      "control": false,
+      "sample": "/samples/vars/anime_draw_detail_density/ultra.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "anime.draw.detail_density",
+      "issue": "film (\"theatrical film quality, very detailed, intricate linework\") and ultra (\"extremely detailed, ultra detailed, intricate\") are both generic quality-boost token piles; on Animagine they hit the same aesthetic bucket and will render the same. \"ova quality\" and \"theatrical film quality\" are also not danbooru tags, so ova and film lean on \"high detail\"/\"very detailed\" and sit close too.",
+      "fix": "Anchor the low end and let the high end be one option: minimal, tv_standard, and a single \"detailed\" tier (\"extremely detailed, intricate details\"). If five tiers must survive, differentiate by what gets the detail (\"detailed background, detailed clothes\" vs \"detailed face, detailed eyes\") rather than by intensity adverbs."
+    }
+  ]
+}

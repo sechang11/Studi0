@@ -1,0 +1,105 @@
+{
+  "variable": "grade.preset",
+  "claim": "The one-word look that sets the entire colour stack, so the same frame can read as a warm memory, a cold procedural or a horror beat without a single subject tag changing. It is the first knob a director turns because it re-scores the emotion of footage that is already shot.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "neutral",
+      "clause": "natural colors, neutral color balance",
+      "control": true,
+      "sample": "/samples/vars/grade_preset/neutral.webp"
+    },
+    {
+      "value": "warm_film",
+      "clause": "warm colors, orange tint, golden tone",
+      "control": false,
+      "sample": "/samples/vars/grade_preset/warm_film.webp"
+    },
+    {
+      "value": "cool_film",
+      "clause": "cool colors, blue tint, cold color palette",
+      "control": false,
+      "sample": "/samples/vars/grade_preset/cool_film.webp"
+    },
+    {
+      "value": "teal_orange",
+      "clause": "teal and orange, cyan shadows, orange highlights, complementary colors",
+      "control": false,
+      "sample": "/samples/vars/grade_preset/teal_orange.webp"
+    },
+    {
+      "value": "bleach_bypass",
+      "clause": "bleach bypass, desaturated, high contrast, silver tone",
+      "control": false,
+      "sample": "/samples/vars/grade_preset/bleach_bypass.webp"
+    },
+    {
+      "value": "sepia",
+      "clause": "sepia, sepia tone, brown theme",
+      "control": false,
+      "sample": "/samples/vars/grade_preset/sepia.webp"
+    },
+    {
+      "value": "monochrome",
+      "clause": "monochrome, greyscale",
+      "control": false,
+      "sample": "/samples/vars/grade_preset/monochrome.webp"
+    },
+    {
+      "value": "high_key",
+      "clause": "high key, bright, low contrast, washed out",
+      "control": false,
+      "sample": "/samples/vars/grade_preset/high_key.webp"
+    },
+    {
+      "value": "low_key",
+      "clause": "low key, dark, deep shadows, high contrast",
+      "control": false,
+      "sample": "/samples/vars/grade_preset/low_key.webp"
+    },
+    {
+      "value": "faded_memory",
+      "clause": "faded colors, muted color, lifted blacks, low saturation",
+      "control": false,
+      "sample": "/samples/vars/grade_preset/faded_memory.webp"
+    },
+    {
+      "value": "night_blue",
+      "clause": "blue theme, deep blue shadows, cool tint",
+      "control": false,
+      "sample": "/samples/vars/grade_preset/night_blue.webp"
+    },
+    {
+      "value": "sodium_street",
+      "clause": "sodium vapor light, amber tint, yellow theme, monochromatic orange",
+      "control": false,
+      "sample": "/samples/vars/grade_preset/sodium_street.webp"
+    },
+    {
+      "value": "pastel_soft",
+      "clause": "pastel colors, soft colors, low contrast",
+      "control": false,
+      "sample": "/samples/vars/grade_preset/pastel_soft.webp"
+    },
+    {
+      "value": "vivid_pop",
+      "clause": "vivid colors, saturated colors, colorful, high saturation",
+      "control": false,
+      "sample": "/samples/vars/grade_preset/vivid_pop.webp"
+    },
+    {
+      "value": "horror_green",
+      "clause": "green theme, sickly green tint, desaturated green",
+      "control": false,
+      "sample": "/samples/vars/grade_preset/horror_green.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "grade.preset",
+      "issue": "cool_film (\"cool colors, blue tint, cold color palette\") and night_blue (\"blue theme, deep blue shadows, cool tint\") are the same instruction to the model expressed twice; with a floodlit night stadium as the fixed subject both will also sit close to the ungraded baseline, so the pair reads as a render glitch rather than two looks.",
+      "fix": "Give night_blue a value component the other lacks — \"blue theme, night, dark, deep blue shadows\" — so one panel is a hue shift and the other is a hue shift plus a darkening, or fold the two values together."
+    }
+  ]
+}

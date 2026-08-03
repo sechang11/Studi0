@@ -1,0 +1,63 @@
+{
+  "variable": "shot.comp.balance",
+  "claim": "Balance is the distribution of visual weight, and it is what an author actually means when they say a frame feels wrong but cannot say why. Symmetrical is formal and inhuman, weighted_top crushes the subject, chaotic is what a frame looks like when nothing is under control.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "symmetrical",
+      "clause": "symmetrical composition, mirrored framing, centered",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_balance/symmetrical.webp"
+    },
+    {
+      "value": "asym_left",
+      "clause": "subject on the left, empty space on the right",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_balance/asym_left.webp"
+    },
+    {
+      "value": "asym_right",
+      "clause": "subject on the right, empty space on the left",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_balance/asym_right.webp"
+    },
+    {
+      "value": "weighted_bottom",
+      "clause": "visual weight at the bottom, heavy lower frame, empty upper frame",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_balance/weighted_bottom.webp"
+    },
+    {
+      "value": "weighted_top",
+      "clause": "visual weight at the top, heavy upper frame, empty lower frame",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_balance/weighted_top.webp"
+    },
+    {
+      "value": "diagonal",
+      "clause": "diagonal composition, elements arranged along a diagonal",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_balance/diagonal.webp"
+    },
+    {
+      "value": "radial",
+      "clause": "radial composition, elements radiating from the center",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_balance/radial.webp"
+    },
+    {
+      "value": "chaotic",
+      "clause": "chaotic composition, unbalanced, cluttered frame",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_balance/chaotic.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "shot.comp.balance",
+      "issue": "weighted_bottom, weighted_top and radial are written in critic's language, not tags — \"visual weight at the bottom\", \"heavy lower frame\", \"empty upper frame\" have no danbooru counterpart and will read as baseline. asym_left/asym_right restate thirds_bias.left_third/right_third and hit the left/right gap. symmetrical duplicates thirds_bias.symmetrical, and radial (\"radial composition, elements radiating from the center\") duplicates comp.leading_lines.radial (\"radial lines, lines radiating from the center\") almost word for word.",
+      "fix": "Delete the values other cards already own (asym_*, symmetrical, radial) and express the weighting values as content the model can actually draw — e.g. weighted_top as \"towering structure above, small figure below\", weighted_bottom as \"low horizon, open sky above\" — or drop them. What is left that is genuinely this card's own is diagonal and chaotic."
+    }
+  ]
+}

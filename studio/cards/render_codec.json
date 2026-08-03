@@ -1,0 +1,13 @@
+{
+  "variable": "render.codec",
+  "claim": "Decides who can open the file and how much of the grade survives the squeeze. h264 when it simply has to play everywhere, prores when the cut goes back into an edit or a second grade pass, h265/vp9/av1 when file size beats compatibility. Flat cel colour and hard line art are exactly what cheap codecs band and ring.",
+  "not_visual": "Codecs apply to video encoding; a still is never encoded as h264 or prores. The real content of the variable - banding across flat cel fills, mosquito noise crawling on hard line art, how much grade headroom is left - only appears after compression at a real bitrate over real motion. Needs an encoded-clip comparison viewed at 100%, on a shot with large flat colour areas and a gradient sky.",
+  "options": [
+    "h264",
+    "h265",
+    "prores",
+    "vp9",
+    "av1"
+  ],
+  "panels": []
+}

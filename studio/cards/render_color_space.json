@@ -1,0 +1,11 @@
+{
+  "variable": "render.color_space",
+  "claim": "Declares what the numbers in the file actually mean, so a grade built in preview still looks like itself after encode. rec709 is the correct default for video delivery, srgb for web stills, rec2020 only when the entire downstream chain honours it - otherwise the wide primaries get clipped back and every saturation decision lands wrong.",
+  "not_visual": "An encode-time transfer and primaries declaration, not something the prompt can express. Animagine emits the same pixels regardless of this setting; in a correctly managed chain all three values look identical, and when they visibly differ that is a mismatch bug rather than a look. Simulating it with saturation or contrast tags would document a grade, not a colour space, and would teach the author the wrong lesson.",
+  "options": [
+    "srgb",
+    "rec709",
+    "rec2020"
+  ],
+  "panels": []
+}

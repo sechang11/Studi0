@@ -1,0 +1,38 @@
+{
+  "variable": "light.key_elev",
+  "claim": "How high the key sits vertically, separate from which side it comes from. Below is the campfire horror angle, above is normal and flattering, and overhead hollows the eyes out and makes a character look condemned.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "below",
+      "clause": "underlighting, light from below, upward cast shadows, lit chin",
+      "control": false,
+      "sample": "/samples/vars/light_key_elev/below.webp"
+    },
+    {
+      "value": "eye",
+      "clause": "light at eye level, horizontal key, almost no nose shadow",
+      "control": false,
+      "sample": "/samples/vars/light_key_elev/eye.webp"
+    },
+    {
+      "value": "above",
+      "clause": "light from above, downward shadows under the brow and nose",
+      "control": false,
+      "sample": "/samples/vars/light_key_elev/above.webp"
+    },
+    {
+      "value": "steep_above",
+      "clause": "steep light from high above, deep eye socket shadows, short nose shadow",
+      "control": false,
+      "sample": "/samples/vars/light_key_elev/steep_above.webp"
+    },
+    {
+      "value": "overhead",
+      "clause": "light from directly overhead, top-down lighting, black eye sockets, bright lit hair",
+      "control": false,
+      "sample": "/samples/vars/light_key_elev/overhead.webp"
+    }
+  ]
+}

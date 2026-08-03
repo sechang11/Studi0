@@ -1,0 +1,50 @@
+{
+  "variable": "char.tears",
+  "claim": "Picks the discrete drawn stage of crying, which a generic emotion word cannot select. A director cares because welling and streaming are different beats in the same scene, and dried tracks say the crying already happened offscreen.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "none",
+      "clause": "",
+      "control": true,
+      "sample": "/samples/vars/char_tears/none.webp"
+    },
+    {
+      "value": "welling",
+      "clause": "tearing up, watery eyes, tears welling",
+      "control": false,
+      "sample": "/samples/vars/char_tears/welling.webp"
+    },
+    {
+      "value": "single",
+      "clause": "single tear, one tear on cheek",
+      "control": false,
+      "sample": "/samples/vars/char_tears/single.webp"
+    },
+    {
+      "value": "streaming",
+      "clause": "crying, streaming tears, tears down face",
+      "control": false,
+      "sample": "/samples/vars/char_tears/streaming.webp"
+    },
+    {
+      "value": "wiped",
+      "clause": "wiping tears, hand at eye, wet cheeks",
+      "control": false,
+      "sample": "/samples/vars/char_tears/wiped.webp"
+    },
+    {
+      "value": "dried_tracks",
+      "clause": "tear tracks, dried tears, red rimmed eyes",
+      "control": false,
+      "sample": "/samples/vars/char_tears/dried_tracks.webp"
+    },
+    {
+      "value": "comedic_fountain",
+      "clause": "waterfall tears, comedic crying, exaggerated tears",
+      "control": false,
+      "sample": "/samples/vars/char_tears/comedic_fountain.webp"
+    }
+  ]
+}

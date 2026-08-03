@@ -1,0 +1,39 @@
+{
+  "variable": "shot.angle",
+  "claim": "Camera height relative to the subject. Low makes a figure powerful, high makes them small. This is how a frame states a power relationship without dialogue.",
+  "look_at": "low_angle and high_angle are strong and reliable. dutch works. worms_eye and birds_eye are extreme and the model sometimes settles for merely low or high.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "eye_level",
+      "clause": "eye level shot, neutral angle",
+      "sample": "/samples/vars/shot_angle/eye_level.webp"
+    },
+    {
+      "value": "low_angle",
+      "clause": "from below, low angle, looking up at subject",
+      "sample": "/samples/vars/shot_angle/low_angle.webp"
+    },
+    {
+      "value": "high_angle",
+      "clause": "from above, high angle, looking down at subject",
+      "sample": "/samples/vars/shot_angle/high_angle.webp"
+    },
+    {
+      "value": "worms_eye",
+      "clause": "worms eye view, extreme low angle, ground level",
+      "sample": "/samples/vars/shot_angle/worms_eye.webp"
+    },
+    {
+      "value": "birds_eye",
+      "clause": "birds eye view, from directly above, overhead shot",
+      "sample": "/samples/vars/shot_angle/birds_eye.webp"
+    },
+    {
+      "value": "dutch",
+      "clause": "dutch angle, tilted horizon, canted frame",
+      "sample": "/samples/vars/shot_angle/dutch.webp"
+    }
+  ]
+}

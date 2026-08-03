@@ -1,0 +1,51 @@
+{
+  "variable": "light.ratio",
+  "claim": "How dark the shadow side is allowed to get relative to the key, which is the numeric handle on drama. Flat_1_1 is comedy and daytime television, chiaroscuro_16_1 is a confession scene, and silhouette throws the face away entirely to buy a shape.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "flat_1_1",
+      "clause": "flat lighting, evenly lit face, no shadow side",
+      "control": false,
+      "sample": "/samples/vars/light_ratio/flat_1_1.webp"
+    },
+    {
+      "value": "low_2_1",
+      "clause": "gentle key to fill contrast, slightly darker shadow side",
+      "control": false,
+      "sample": "/samples/vars/light_ratio/low_2_1.webp"
+    },
+    {
+      "value": "normal_4_1",
+      "clause": "classic lighting ratio, clearly darker shadow side, shadow detail retained",
+      "control": false,
+      "sample": "/samples/vars/light_ratio/normal_4_1.webp"
+    },
+    {
+      "value": "dramatic_8_1",
+      "clause": "dramatic lighting, deep black shadow side, narrow bright key side",
+      "control": false,
+      "sample": "/samples/vars/light_ratio/dramatic_8_1.webp"
+    },
+    {
+      "value": "chiaroscuro_16_1",
+      "clause": "chiaroscuro, sliver of light on the face, surrounded by blackness",
+      "control": false,
+      "sample": "/samples/vars/light_ratio/chiaroscuro_16_1.webp"
+    },
+    {
+      "value": "silhouette",
+      "clause": "silhouette, black featureless figure, backlit shape",
+      "control": false,
+      "sample": "/samples/vars/light_ratio/silhouette.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "light.ratio",
+      "issue": "The clauses are camera-department jargon rather than tags: \"gentle key to fill contrast, slightly darker shadow side\" and \"classic lighting ratio, clearly darker shadow side, shadow detail retained\". Danbooru has no vocabulary for key-to-fill ratios, so low_2_1 and normal_4_1 will land on the model as noise plus the weak phrase \"darker shadow side\" and will very likely render as the same mildly shaded face. Only flat_1_1, chiaroscuro_16_1 and silhouette have real tag equivalents.",
+      "fix": "Rewrite in what the shadow looks like, which the tag space does have: low_2_1 \"soft shadow on one cheek, open shadows, low contrast\"; normal_4_1 \"clear shadow on one side of the face, visible shading, moderate contrast\"; dramatic_8_1 \"high contrast, deep black shadow side, narrow lit strip\". Drop the numeric ratio language from the clause entirely — it belongs in the value name, not in the prompt."
+    }
+  ]
+}

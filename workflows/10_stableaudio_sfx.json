@@ -1,0 +1,40 @@
+{
+  "_comment": "Stable Audio 3 Medium: text -> sound effects / ambience. This is the direct path with the optional LLM re-prompting stage from the official template stripped out. Sampler settings (8 steps, cfg 1.0, lcm/simple) come from that template. Describe the SOUND, not the scene: 'wind moving through dry grass on an exposed headland, distant surf, occasional gust' beats 'a lonely coastal morning'. qwen3.5_2b_bf16 is only needed for the LLM re-prompt path, so it is not loaded here.",
+
+  "1": { "class_type": "CheckpointLoaderSimple", "inputs": { "ckpt_name": "stable_audio_3_medium.safetensors" } },
+  "2": {
+    "class_type": "CLIPLoader",
+    "inputs": { "clip_name": "t5gemma_b_b_ul2.safetensors", "type": "stable_audio", "device": "default" }
+  },
+
+  "3": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "clip": ["2", 0],
+      "text": "Steady cold wind moving over an exposed coastal headland, dry grass hissing and rattling, distant heavy surf breaking on rocks far below, occasional stronger gust, no music, no voices, field recording"
+    }
+  },
+  "4": { "class_type": "CLIPTextEncode", "inputs": { "clip": ["2", 0], "text": "" } },
+  "5": { "class_type": "EmptyLatentAudio", "inputs": { "seconds": 30.0, "batch_size": 1 } },
+
+  "6": {
+    "class_type": "KSampler",
+    "inputs": {
+      "model": ["1", 0],
+      "seed": 5150,
+      "steps": 8,
+      "cfg": 1.0,
+      "sampler_name": "lcm",
+      "scheduler": "simple",
+      "positive": ["3", 0],
+      "negative": ["4", 0],
+      "latent_image": ["5", 0],
+      "denoise": 1.0
+    }
+  },
+  "7": { "class_type": "VAEDecodeAudio", "inputs": { "samples": ["6", 0], "vae": ["1", 2] } },
+  "8": {
+    "class_type": "SaveAudioMP3",
+    "inputs": { "audio": ["7", 0], "filename_prefix": "claude-generated/sfx", "quality": "320k" }
+  }
+}

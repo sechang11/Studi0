@@ -1,0 +1,38 @@
+{
+  "variable": "light.god_rays",
+  "claim": "Whether the air itself is visible as shafts of light, which turns empty space into a graphic element. Subtle adds atmosphere, strong makes the light a character in the frame, and dusty is the one that also tells you the room has been shut up for years.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "none",
+      "clause": "clear air, no light shafts",
+      "control": true,
+      "sample": "/samples/vars/light_god_rays/none.webp"
+    },
+    {
+      "value": "subtle",
+      "clause": "faint light rays, soft light shafts",
+      "control": false,
+      "sample": "/samples/vars/light_god_rays/subtle.webp"
+    },
+    {
+      "value": "strong",
+      "clause": "god rays, bold volumetric light beams, sunbeam",
+      "control": false,
+      "sample": "/samples/vars/light_god_rays/strong.webp"
+    },
+    {
+      "value": "dusty",
+      "clause": "dusty light shafts, dust motes in the beams, hazy air",
+      "control": false,
+      "sample": "/samples/vars/light_god_rays/dusty.webp"
+    },
+    {
+      "value": "underwater",
+      "clause": "underwater light rays, rippling caustic shafts through water",
+      "control": false,
+      "sample": "/samples/vars/light_god_rays/underwater.webp"
+    }
+  ]
+}

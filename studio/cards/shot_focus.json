@@ -1,0 +1,29 @@
+{
+  "variable": "shot.focus",
+  "claim": "Depth of field. Shallow focus separates a subject from the world; deep focus keeps the world present and pressing in.",
+  "look_at": "shallow works well. deep focus is hard to force - the model likes a blurred background by default, so deep often looks like medium.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "deep",
+      "clause": "deep focus, everything sharp, background in focus",
+      "sample": "/samples/vars/shot_focus/deep.webp"
+    },
+    {
+      "value": "medium",
+      "clause": "medium depth of field",
+      "sample": "/samples/vars/shot_focus/medium.webp"
+    },
+    {
+      "value": "shallow",
+      "clause": "shallow depth of field, bokeh, blurred background",
+      "sample": "/samples/vars/shot_focus/shallow.webp"
+    },
+    {
+      "value": "rack",
+      "clause": "selective focus, foreground sharp, background heavily blurred",
+      "sample": "/samples/vars/shot_focus/rack.webp"
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "variable": "layer.fg.content",
+  "claim": "Names the object that sits between the lens and the character, which is the cheapest way to make a flat SDXL generation read as three-dimensional. Reach for it when a frame looks like a poster instead of a photograph — foliage and railings buy depth, glass and doorframes buy confinement. Note that `custom` is an author-supplied tag passthrough with no fixed appearance, so it gets no canonical panel.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "none",
+      "clause": "",
+      "control": true,
+      "sample": "/samples/vars/layer_fg_content/none.webp"
+    },
+    {
+      "value": "foliage",
+      "clause": "foliage in foreground, leaves in foreground, blurry foreground",
+      "control": false,
+      "sample": "/samples/vars/layer_fg_content/foliage.webp"
+    },
+    {
+      "value": "railing",
+      "clause": "foreground railing, metal railing across frame, blurry foreground",
+      "control": false,
+      "sample": "/samples/vars/layer_fg_content/railing.webp"
+    },
+    {
+      "value": "crowd",
+      "clause": "blurry foreground heads, silhouetted spectators in foreground",
+      "control": false,
+      "sample": "/samples/vars/layer_fg_content/crowd.webp"
+    },
+    {
+      "value": "glass",
+      "clause": "shot through window, glass in foreground, reflection on glass",
+      "control": false,
+      "sample": "/samples/vars/layer_fg_content/glass.webp"
+    },
+    {
+      "value": "curtain",
+      "clause": "curtain in foreground, hanging fabric across frame, blurry foreground",
+      "control": false,
+      "sample": "/samples/vars/layer_fg_content/curtain.webp"
+    },
+    {
+      "value": "doorframe",
+      "clause": "view through doorway, doorframe in foreground, dark frame edges",
+      "control": false,
+      "sample": "/samples/vars/layer_fg_content/doorframe.webp"
+    },
+    {
+      "value": "rain",
+      "clause": "rain in foreground, raindrops close to lens, blurry foreground droplets",
+      "control": false,
+      "sample": "/samples/vars/layer_fg_content/rain.webp"
+    },
+    {
+      "value": "dust",
+      "clause": "dust motes in foreground, floating particles near lens, foreground bokeh",
+      "control": false,
+      "sample": "/samples/vars/layer_fg_content/dust.webp"
+    },
+    {
+      "value": "shoulder",
+      "clause": "over the shoulder, out of focus shoulder in foreground, blurry foreground",
+      "control": false,
+      "sample": "/samples/vars/layer_fg_content/shoulder.webp"
+    },
+    {
+      "value": "hand",
+      "clause": "hand in foreground, out of focus hand near lens, blurry foreground",
+      "control": false,
+      "sample": "/samples/vars/layer_fg_content/hand.webp"
+    },
+    {
+      "value": "custom",
+      "clause": "",
+      "control": true,
+      "sample": "/samples/vars/layer_fg_content/custom.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "layer.fg.content",
+      "issue": "Two clauses fight the fixed sentence. \"crowd\" restates a tag the subject sentence already contains (\"crowd\"), so it is the panel most likely to come back reading as the `none` baseline. \"shoulder\" opens with \"over the shoulder\", which is a shot-framing tag that implies a second body and collides with \"solo\" — it also belongs to shot.frame, not this variable.",
+      "fix": "For crowd, push the clause entirely into the near plane and drop the word the subject already owns: \"out of focus heads at bottom of frame, silhouetted heads close to lens, blurry foreground\". For shoulder, cut \"over the shoulder\" and keep \"out of focus shoulder in foreground, blurry foreground\"."
+    }
+  ]
+}

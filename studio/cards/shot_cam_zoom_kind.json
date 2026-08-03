@@ -1,0 +1,10 @@
+{
+  "variable": "shot.cam.zoom_kind",
+  "claim": "Zoom kind documents whether a zoom is faked in post by cropping pixels or sold as an optical change - which is the whole reason renders are made oversized. Digital_crop is free and costs resolution; optical_feel costs overscan and keeps detail.",
+  "not_visual": "A render-pipeline bookkeeping flag about crop versus overscan during a zoom. It has no still-frame signature and only two values, neither of which changes what the generator draws.",
+  "options": [
+    "optical_feel",
+    "digital_crop"
+  ],
+  "panels": []
+}

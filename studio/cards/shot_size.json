@@ -1,0 +1,44 @@
+{
+  "variable": "shot.size",
+  "claim": "How much of the subject the frame contains. The single most load-bearing compositional choice - it decides whether a shot is about a person or about a place.",
+  "look_at": "extreme_wide and wide reliably put the figure small in frame. medium_close and close are dependable. extreme_close is the weak one: the model often pulls back to a normal close-up rather than filling frame with one feature.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "extreme_wide",
+      "clause": "extremely wide shot, tiny figure, vast environment, scenery",
+      "sample": "/samples/vars/shot_size/extreme_wide.webp"
+    },
+    {
+      "value": "wide",
+      "clause": "wide shot, full body, environment dominant",
+      "sample": "/samples/vars/shot_size/wide.webp"
+    },
+    {
+      "value": "medium_wide",
+      "clause": "medium wide shot, full body, knees up",
+      "sample": "/samples/vars/shot_size/medium_wide.webp"
+    },
+    {
+      "value": "medium",
+      "clause": "medium shot, waist up",
+      "sample": "/samples/vars/shot_size/medium.webp"
+    },
+    {
+      "value": "medium_close",
+      "clause": "medium close-up, chest up",
+      "sample": "/samples/vars/shot_size/medium_close.webp"
+    },
+    {
+      "value": "close",
+      "clause": "close-up, head and shoulders",
+      "sample": "/samples/vars/shot_size/close.webp"
+    },
+    {
+      "value": "extreme_close",
+      "clause": "extreme close-up, eyes only, macro detail",
+      "sample": "/samples/vars/shot_size/extreme_close.webp"
+    }
+  ]
+}

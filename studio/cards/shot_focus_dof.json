@@ -1,0 +1,45 @@
+{
+  "variable": "shot.focus.dof",
+  "claim": "Depth of field is the fastest character-from-background separation there is, and it decides whether the world is a place or a texture. Deep keeps the stadium a fact; very_shallow deletes it and leaves only a boy and some coloured light.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "deep",
+      "clause": "deep focus, everything in focus, sharp background",
+      "control": false,
+      "sample": "/samples/vars/shot_focus_dof/deep.webp"
+    },
+    {
+      "value": "medium",
+      "clause": "moderate depth of field, slightly soft background",
+      "control": false,
+      "sample": "/samples/vars/shot_focus_dof/medium.webp"
+    },
+    {
+      "value": "shallow",
+      "clause": "depth of field, blurry background, bokeh",
+      "control": false,
+      "sample": "/samples/vars/shot_focus_dof/shallow.webp"
+    },
+    {
+      "value": "very_shallow",
+      "clause": "extremely shallow depth of field, heavily blurred background, bokeh",
+      "control": false,
+      "sample": "/samples/vars/shot_focus_dof/very_shallow.webp"
+    },
+    {
+      "value": "split_diopter",
+      "clause": "split diopter, foreground and background both sharp, split focus",
+      "control": false,
+      "sample": "/samples/vars/shot_focus_dof/split_diopter.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "shot.focus.dof",
+      "issue": "medium (\"moderate depth of field, slightly soft background\") sits between the two states Animagine actually has — \"deep focus\" and \"blurry background\" — and will not separate from deep. split_diopter has essentially no representation in the model and will most likely come back as ordinary deep focus, a second copy of the deep panel.",
+      "fix": "Reduce to deep / shallow / very_shallow. Keep split_diopter only with an explicit note in the card that it is the one value the still pass is expected to miss (it is really an ffmpeg/composite job), or mark it as a per-option skip."
+    }
+  ]
+}

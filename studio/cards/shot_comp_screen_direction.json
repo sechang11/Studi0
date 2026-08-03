@@ -1,0 +1,45 @@
+{
+  "variable": "shot.comp.screen_direction",
+  "claim": "Screen direction keeps travel and chase geometry consistent so a runner does not silently reverse himself between cuts. Set it once for a sequence and every shot in the pursuit agrees which way the goal is.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "l_to_r",
+      "clause": "moving to the right, running to the right",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_screen_direction/l_to_r.webp"
+    },
+    {
+      "value": "r_to_l",
+      "clause": "moving to the left, running to the left",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_screen_direction/r_to_l.webp"
+    },
+    {
+      "value": "to_camera",
+      "clause": "running toward viewer, approaching camera, foreshortening",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_screen_direction/to_camera.webp"
+    },
+    {
+      "value": "away_from_camera",
+      "clause": "running away from viewer, receding into the distance",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_screen_direction/away_from_camera.webp"
+    },
+    {
+      "value": "static",
+      "clause": "standing still, no movement",
+      "control": true,
+      "sample": "/samples/vars/shot_comp_screen_direction/static.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "shot.comp.screen_direction",
+      "issue": "l_to_r and r_to_l hit the same missing left/right vocabulary and will mirror at random. Separately, every clause injects \"running\" or \"moving\", a pose the option does not own and which shot.purpose.action already teaches — the panels will read as \"the subject is now running\" as much as as direction. static's \"no movement\" is a negation.",
+      "fix": "Keep to_camera and away_from_camera, which do work (\"facing viewer\" / \"from behind\" are trained tags), fold the lateral pair into one \"moving across frame, profile\" option or accept the coin flip explicitly, and give static an empty clause."
+    }
+  ]
+}

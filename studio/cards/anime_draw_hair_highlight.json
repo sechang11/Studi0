@@ -1,0 +1,51 @@
+{
+  "variable": "anime.draw.hair_highlight",
+  "claim": "The shine band across the hair, which is one of the most reliable ways to date a film to a decade. angel_ring is 90s shoujo, segmented is the modern TV default, none reads as gritty or as a corpse.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "none",
+      "clause": "matte hair, no hair highlight",
+      "control": true,
+      "sample": "/samples/vars/anime_draw_hair_highlight/none.webp"
+    },
+    {
+      "value": "soft",
+      "clause": "soft hair highlight, subtle sheen",
+      "control": false,
+      "sample": "/samples/vars/anime_draw_hair_highlight/soft.webp"
+    },
+    {
+      "value": "angel_ring",
+      "clause": "angel ring hair highlight, halo shaped shine, shiny hair",
+      "control": false,
+      "sample": "/samples/vars/anime_draw_hair_highlight/angel_ring.webp"
+    },
+    {
+      "value": "segmented",
+      "clause": "segmented hair highlight, blocky hair shine",
+      "control": false,
+      "sample": "/samples/vars/anime_draw_hair_highlight/segmented.webp"
+    },
+    {
+      "value": "glossy",
+      "clause": "glossy hair, strong specular highlight",
+      "control": false,
+      "sample": "/samples/vars/anime_draw_hair_highlight/glossy.webp"
+    },
+    {
+      "value": "multi_band",
+      "clause": "multiple hair highlight bands, layered hair shine",
+      "control": false,
+      "sample": "/samples/vars/anime_draw_hair_highlight/multi_band.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "anime.draw.hair_highlight",
+      "issue": "The \"none\" clause \"matte hair, no hair highlight\" carries a negation that will be ignored while the words \"hair highlight\" stay in the conditioning. segmented (\"segmented hair highlight, blocky hair shine\") and multi_band (\"multiple hair highlight bands, layered hair shine\") are both \"more than one band of shine\" and will render the same.",
+      "fix": "none -> \"matte hair, dull hair\" (positive only). Drop multi_band, or make it visibly different by count-free means: \"shiny hair, two hair highlight bands, glossy\" is not reliable, so cutting it is the safer call."
+    }
+  ]
+}

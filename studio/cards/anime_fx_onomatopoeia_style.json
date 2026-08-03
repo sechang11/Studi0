@@ -1,0 +1,51 @@
+{
+  "variable": "anime.fx.onomatopoeia_style",
+  "claim": "The lettering style of the drawn sound word, which carries the whole tone of the moment: brushed katakana is a serious impact, latin comic lettering is a gag, hand scrawl is panic. Same sound, completely different scene.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "katakana_brush",
+      "clause": "sound effects, katakana onomatopoeia, brush lettering",
+      "control": false,
+      "sample": "/samples/vars/anime_fx_onomatopoeia_style/katakana_brush.webp"
+    },
+    {
+      "value": "kanji_heavy",
+      "clause": "sound effects, kanji onomatopoeia, heavy calligraphy",
+      "control": false,
+      "sample": "/samples/vars/anime_fx_onomatopoeia_style/kanji_heavy.webp"
+    },
+    {
+      "value": "latin_comic",
+      "clause": "sound effects, english onomatopoeia, comic book lettering",
+      "control": false,
+      "sample": "/samples/vars/anime_fx_onomatopoeia_style/latin_comic.webp"
+    },
+    {
+      "value": "hand_scrawl",
+      "clause": "sound effects, handwritten scrawled onomatopoeia",
+      "control": false,
+      "sample": "/samples/vars/anime_fx_onomatopoeia_style/hand_scrawl.webp"
+    },
+    {
+      "value": "glitch",
+      "clause": "sound effects, glitched digital lettering, chromatic aberration text",
+      "control": false,
+      "sample": "/samples/vars/anime_fx_onomatopoeia_style/glitch.webp"
+    },
+    {
+      "value": "none",
+      "clause": "",
+      "control": true,
+      "sample": "/samples/vars/anime_fx_onomatopoeia_style/none.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "anime.fx.onomatopoeia_style",
+      "issue": "katakana_brush and kanji_heavy both ask for CJK lettering, which Animagine renders as illegible glyph soup; brush katakana vs heavy calligraphic kanji will not be separable in the output. glitch also smuggles a global effect - \"chromatic aberration text\" will fringe the whole frame, not just the letters, so that panel changes the render rather than the lettering.",
+      "fix": "Merge katakana_brush and kanji_heavy into one japanese-lettering option (\"sound effects, japanese text, brush stroke lettering\") and keep latin_comic and hand_scrawl, which differ by glyph shape rather than script. glitch -> \"sound effects, glitched text\" without the chromatic aberration."
+    }
+  ]
+}

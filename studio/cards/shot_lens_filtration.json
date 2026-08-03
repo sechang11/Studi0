@@ -1,0 +1,51 @@
+{
+  "variable": "shot.lens.filtration",
+  "claim": "Diffusion is the cheapest way to make twenty separately generated shots feel like one film, which is why it should be set high in the hierarchy and inherited. Pro_mist lifts the blacks and haloes every floodlight; heavy_diffusion turns the whole frame into a memory.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "none",
+      "clause": "clean lens, crisp contrast, no diffusion",
+      "control": true,
+      "sample": "/samples/vars/shot_lens_filtration/none.webp"
+    },
+    {
+      "value": "light_diffusion",
+      "clause": "light diffusion filter, gentle halo on highlights",
+      "control": false,
+      "sample": "/samples/vars/shot_lens_filtration/light_diffusion.webp"
+    },
+    {
+      "value": "pro_mist",
+      "clause": "pro-mist filter, misty halation, lifted blacks",
+      "control": false,
+      "sample": "/samples/vars/shot_lens_filtration/pro_mist.webp"
+    },
+    {
+      "value": "heavy_diffusion",
+      "clause": "heavy diffusion, dreamy soft focus, blooming highlights",
+      "control": false,
+      "sample": "/samples/vars/shot_lens_filtration/heavy_diffusion.webp"
+    },
+    {
+      "value": "glimmer",
+      "clause": "glimmer filter, sparkling highlights, twinkle",
+      "control": false,
+      "sample": "/samples/vars/shot_lens_filtration/glimmer.webp"
+    },
+    {
+      "value": "smoke_glass",
+      "clause": "smoked glass filter, hazy, muted contrast",
+      "control": false,
+      "sample": "/samples/vars/shot_lens_filtration/smoke_glass.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "shot.lens.filtration",
+      "issue": "none is baseline plus a negation, and light_diffusion (\"light diffusion filter, gentle halo on highlights\") is a weaker phrasing of pro_mist (\"pro-mist filter, misty halation, lifted blacks\"); smoke_glass (\"hazy, muted contrast\") sits on the same haze axis. Six options, probably three separable looks.",
+      "fix": "none → empty clause; merge light_diffusion into pro_mist; keep heavy_diffusion as the extreme and glimmer as the genuine outlier (\"sparkle\" is a strong trained anime tag, so that panel really will diverge); keep smoke_glass only if it drops \"hazy\" and leans on \"muted contrast, desaturated\"."
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "variable": "char.build",
+  "claim": "Fixes the silhouette — the shape you recognise before any face is legible. Petite and heavy read as completely different people in the same jersey, and without it the model re-rolls the body on every seed.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "petite",
+      "clause": "petite, short, small frame",
+      "control": false,
+      "sample": "/samples/vars/char_build/petite.webp"
+    },
+    {
+      "value": "slim",
+      "clause": "slim, slender, narrow shoulders",
+      "control": false,
+      "sample": "/samples/vars/char_build/slim.webp"
+    },
+    {
+      "value": "average",
+      "clause": "average build, ordinary proportions",
+      "control": false,
+      "sample": "/samples/vars/char_build/average.webp"
+    },
+    {
+      "value": "athletic",
+      "clause": "toned, athletic build, lean muscle",
+      "control": false,
+      "sample": "/samples/vars/char_build/athletic.webp"
+    },
+    {
+      "value": "stocky",
+      "clause": "stocky, thick neck, broad shoulders, short",
+      "control": false,
+      "sample": "/samples/vars/char_build/stocky.webp"
+    },
+    {
+      "value": "heavy",
+      "clause": "chubby, heavyset, wide torso",
+      "control": false,
+      "sample": "/samples/vars/char_build/heavy.webp"
+    },
+    {
+      "value": "tall_lean",
+      "clause": "tall, lanky, long limbs",
+      "control": false,
+      "sample": "/samples/vars/char_build/tall_lean.webp"
+    },
+    {
+      "value": "muscular",
+      "clause": "muscular male, broad shoulders, thick arms",
+      "control": false,
+      "sample": "/samples/vars/char_build/muscular.webp"
+    }
+  ]
+}

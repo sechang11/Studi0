@@ -1,0 +1,50 @@
+{
+  "variable": "char.brow",
+  "claim": "Drives the eyebrows on their own, separate from the overall emotion word. Brows carry more of an anime face's read than the mouth does, so a director overrides them to get scepticism onto an otherwise neutral face without restating the performance.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "neutral",
+      "clause": "relaxed eyebrows, neutral brow",
+      "control": true,
+      "sample": "/samples/vars/char_brow/neutral.webp"
+    },
+    {
+      "value": "raised",
+      "clause": "raised eyebrows, arched eyebrows",
+      "control": false,
+      "sample": "/samples/vars/char_brow/raised.webp"
+    },
+    {
+      "value": "furrowed",
+      "clause": "furrowed brow, knitted eyebrows",
+      "control": false,
+      "sample": "/samples/vars/char_brow/furrowed.webp"
+    },
+    {
+      "value": "one_raised",
+      "clause": "raised eyebrow, one eyebrow up, asymmetric brows",
+      "control": false,
+      "sample": "/samples/vars/char_brow/one_raised.webp"
+    },
+    {
+      "value": "flat",
+      "clause": "flat eyebrows, straight level brows",
+      "control": true,
+      "sample": "/samples/vars/char_brow/flat.webp"
+    },
+    {
+      "value": "pleading",
+      "clause": "sad eyebrows, raised inner eyebrows, worried brow",
+      "control": false,
+      "sample": "/samples/vars/char_brow/pleading.webp"
+    },
+    {
+      "value": "angry_v",
+      "clause": "angry eyebrows, v-shaped brows, sharply angled eyebrows",
+      "control": false,
+      "sample": "/samples/vars/char_brow/angry_v.webp"
+    }
+  ]
+}

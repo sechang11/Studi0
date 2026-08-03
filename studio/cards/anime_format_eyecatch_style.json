@@ -1,0 +1,51 @@
+{
+  "variable": "anime.format.eyecatch_style",
+  "claim": "The design of the act-break card itself, a tiny authored image that tells the audience what kind of show this is. A logo card says prestige, a chibi gag says the stakes reset every week, a silhouette card says somebody is still hiding something.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "logo_card",
+      "clause": "logo card, centered emblem, flat graphic background",
+      "control": false,
+      "sample": "/samples/vars/anime_format_eyecatch_style/logo_card.webp"
+    },
+    {
+      "value": "character_pose",
+      "clause": "pin-up pose card, single posed figure, plain flat background",
+      "control": false,
+      "sample": "/samples/vars/anime_format_eyecatch_style/character_pose.webp"
+    },
+    {
+      "value": "prop_still",
+      "clause": "still life insert, single object close-up, plain background",
+      "control": false,
+      "sample": "/samples/vars/anime_format_eyecatch_style/prop_still.webp"
+    },
+    {
+      "value": "chibi_gag",
+      "clause": "chibi, super deformed comedic pose, flat background",
+      "control": false,
+      "sample": "/samples/vars/anime_format_eyecatch_style/chibi_gag.webp"
+    },
+    {
+      "value": "title_typography",
+      "clause": "large decorative title typography, text card",
+      "control": false,
+      "sample": "/samples/vars/anime_format_eyecatch_style/title_typography.webp"
+    },
+    {
+      "value": "silhouette_card",
+      "clause": "silhouette, solid figure on flat color background",
+      "control": false,
+      "sample": "/samples/vars/anime_format_eyecatch_style/silhouette_card.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "anime.format.eyecatch_style",
+      "issue": "prop_still (\"still life insert, single object close-up, plain background\") is unrenderable under this method — the subject sentence mandates \"1boy, solo, male focus\" plus full character description, so the panel will be the boy, not a prop. It will not show what the option does. Also, five of the six clauses carry a flat/plain background tag against the subject's \"soccer stadium, floodlights, crowd\", so most of the card ends up measuring whether the background override wins rather than the differences between card designs.",
+      "fix": "Mark prop_still renderable:false at the option level (or accept it is a known-invalid panel and say so). For the rest, standardise the background tag to one identical phrase across all options — e.g. always \"simple background\" — so the only thing varying between panels is the card design itself (\"logo\", \"chibi\", \"silhouette\", \"text\") rather than five different phrasings of \"flat\"."
+    }
+  ]
+}

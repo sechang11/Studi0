@@ -1,0 +1,57 @@
+{
+  "variable": "anime.draw.era",
+  "claim": "Bundles line, colour, finish and photographic artefacts into the decade an author actually thinks in, so 'ova_90s' delivers the whole package instead of eight separate sliders. It is the fastest way to date a film on purpose.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "cel_70s",
+      "clause": "retro artstyle, 1970s (style), cel animation, faded colors",
+      "control": false,
+      "sample": "/samples/vars/anime_draw_era/cel_70s.webp"
+    },
+    {
+      "value": "cel_80s",
+      "clause": "retro artstyle, 1980s (style), cel animation, airbrush shading",
+      "control": false,
+      "sample": "/samples/vars/anime_draw_era/cel_80s.webp"
+    },
+    {
+      "value": "ova_90s",
+      "clause": "retro artstyle, 1990s (style), ova screencap, cel animation",
+      "control": false,
+      "sample": "/samples/vars/anime_draw_era/ova_90s.webp"
+    },
+    {
+      "value": "early_digital_00s",
+      "clause": "2000s (style), early digital anime, flat digital coloring",
+      "control": false,
+      "sample": "/samples/vars/anime_draw_era/early_digital_00s.webp"
+    },
+    {
+      "value": "modern_digital",
+      "clause": "modern anime style, clean digital coloring, crisp lineart",
+      "control": false,
+      "sample": "/samples/vars/anime_draw_era/modern_digital.webp"
+    },
+    {
+      "value": "modern_web",
+      "clause": "modern anime screencap, glossy digital coloring, soft gradients",
+      "control": false,
+      "sample": "/samples/vars/anime_draw_era/modern_web.webp"
+    },
+    {
+      "value": "film_stock_retro",
+      "clause": "film grain, 35mm film look, faded colors, retro artstyle",
+      "control": false,
+      "sample": "/samples/vars/anime_draw_era/film_stock_retro.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "anime.draw.era",
+      "issue": "cel_70s (\"retro artstyle, 1970s (style), cel animation, faded colors\") and film_stock_retro (\"film grain, 35mm film look, faded colors, retro artstyle\") share \"retro artstyle\" + \"faded colors\" and will land in the same place - the model's grip on 1970s vs a faded film look is not that fine. film_stock_retro also duplicates anime.draw.cel_artifacts/film_grain, which is a different variable's job.",
+      "fix": "Let era be decades only and delete film_stock_retro - photographic damage already lives in cel_artifacts. Keep the decade tags carrying the load (\"1970s (style)\", \"1980s (style)\") and drop the shared \"retro artstyle, faded colors\" tail from at least one of them so the panels can separate."
+    }
+  ]
+}

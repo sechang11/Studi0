@@ -1,0 +1,39 @@
+{
+  "variable": "time.of_day",
+  "claim": "Hour of the day. Note this fights the grade: prompting darkness barely works, so night here is reinforced by the look/grade, not by the tag alone.",
+  "look_at": "dawn, dusk and night are distinct. morning and afternoon are nearly identical - if you need those to differ, use light.direction rather than this.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "dawn",
+      "clause": "dawn, early morning light, mist",
+      "sample": "/samples/vars/time_of_day/dawn.webp"
+    },
+    {
+      "value": "morning",
+      "clause": "morning, bright clear daylight",
+      "sample": "/samples/vars/time_of_day/morning.webp"
+    },
+    {
+      "value": "noon",
+      "clause": "noon, harsh overhead sun, short shadows",
+      "sample": "/samples/vars/time_of_day/noon.webp"
+    },
+    {
+      "value": "afternoon",
+      "clause": "afternoon, warm angled light",
+      "sample": "/samples/vars/time_of_day/afternoon.webp"
+    },
+    {
+      "value": "dusk",
+      "clause": "dusk, golden hour, long shadows",
+      "sample": "/samples/vars/time_of_day/dusk.webp"
+    },
+    {
+      "value": "night",
+      "clause": "night, dark, floodlights, artificial light",
+      "sample": "/samples/vars/time_of_day/night.webp"
+    }
+  ]
+}

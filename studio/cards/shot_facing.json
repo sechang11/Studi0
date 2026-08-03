@@ -1,0 +1,57 @@
+{
+  "variable": "shot.facing",
+  "claim": "Facing is which way the body is turned, independent of where the camera sits or where the eyes go. It is the first thing a viewer reads off a character: to_camera confronts, three-quarter is the workhorse of conversation, and back withholds the face entirely.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "to_camera",
+      "clause": "facing viewer, front view, body facing forward",
+      "control": false,
+      "sample": "/samples/vars/shot_facing/to_camera.webp"
+    },
+    {
+      "value": "three_quarter_left",
+      "clause": "three-quarter view, body turned left",
+      "control": false,
+      "sample": "/samples/vars/shot_facing/three_quarter_left.webp"
+    },
+    {
+      "value": "three_quarter_right",
+      "clause": "three-quarter view, body turned right",
+      "control": false,
+      "sample": "/samples/vars/shot_facing/three_quarter_right.webp"
+    },
+    {
+      "value": "profile_left",
+      "clause": "profile, from side, facing left",
+      "control": false,
+      "sample": "/samples/vars/shot_facing/profile_left.webp"
+    },
+    {
+      "value": "profile_right",
+      "clause": "profile, from side, facing right",
+      "control": false,
+      "sample": "/samples/vars/shot_facing/profile_right.webp"
+    },
+    {
+      "value": "back_three_quarter",
+      "clause": "from behind, three-quarter view, shoulder toward viewer",
+      "control": false,
+      "sample": "/samples/vars/shot_facing/back_three_quarter.webp"
+    },
+    {
+      "value": "back",
+      "clause": "from behind, facing away, back turned",
+      "control": false,
+      "sample": "/samples/vars/shot_facing/back.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "shot.facing",
+      "issue": "Danbooru/Animagine has no reliable lateral vocabulary: \"body turned left\", \"facing left\", \"facing right\" are not trained tags, and the model mirrors at random. three_quarter_left vs three_quarter_right and profile_left vs profile_right will come back as two arbitrary pairs — four options, two pictures. back and back_three_quarter are both dominated by \"from behind\" and will read the same; \"shoulder toward viewer\" carries no weight against it.",
+      "fix": "Use the tags that exist — \"facing viewer\", \"profile\" / \"from side\", \"from behind\", \"facing away\" — and either collapse each L/R pair into one option or keep them while stating in the claim that direction is a coin flip this model will not honour. Give back_three_quarter a real separator such as \"looking back\" or \"looking over shoulder\"."
+    }
+  ]
+}

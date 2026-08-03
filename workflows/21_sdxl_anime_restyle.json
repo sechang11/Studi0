@@ -1,0 +1,68 @@
+{
+  "1": {
+    "class_type": "CheckpointLoaderSimple",
+    "inputs": { "ckpt_name": "animagine-xl-4.0.safetensors" }
+  },
+  "2": {
+    "class_type": "LoadImage",
+    "inputs": { "image": "restyle_in.png", "upload": "image" }
+  },
+  "3": {
+    "class_type": "ImageScale",
+    "inputs": {
+      "image": ["2", 0],
+      "upscale_method": "lanczos",
+      "width": 1344,
+      "height": 768,
+      "crop": "disabled"
+    }
+  },
+  "4": {
+    "class_type": "VAEEncode",
+    "inputs": { "pixels": ["3", 0], "vae": ["1", 2] }
+  },
+  "5": {
+    "class_type": "CLIPTextEncode",
+    "inputs": { "clip": ["1", 1], "text": "anime screencap, cel shading, flat colour" }
+  },
+  "6": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "clip": ["1", 1],
+      "text": "photorealistic, 3d render, western comic, realistic skin texture, airbrush, muted colors, blurry, lowres, worst quality, watermark, signature, text"
+    }
+  },
+  "7": {
+    "class_type": "KSampler",
+    "inputs": {
+      "model": ["1", 0],
+      "positive": ["5", 0],
+      "negative": ["6", 0],
+      "latent_image": ["4", 0],
+      "seed": 12345,
+      "steps": 28,
+      "cfg": 5.5,
+      "sampler_name": "dpmpp_2m",
+      "scheduler": "karras",
+      "denoise": 0.5
+    }
+  },
+  "8": {
+    "class_type": "VAEDecode",
+    "inputs": { "samples": ["7", 0], "vae": ["1", 2] }
+  },
+  "9": {
+    "class_type": "ImageScale",
+    "inputs": {
+      "image": ["8", 0],
+      "upscale_method": "lanczos",
+      "width": 1664,
+      "height": 928,
+      "crop": "disabled"
+    }
+  },
+  "10": {
+    "class_type": "SaveImage",
+    "inputs": { "images": ["9", 0], "filename_prefix": "claude-generated/restyle/out" }
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "variable": "light.contrast_scheme",
+  "claim": "The colour relationship between the key and everything filling in behind it, which buys depth without adding a single light. Teal_orange is the blockbuster reflex, cool_key_warm_rim is the anime night reflex, and monochrome_wash flattens the frame into one emotional colour on purpose.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "neutral",
+      "clause": "neutral white lighting, no colour contrast between sources",
+      "control": true,
+      "sample": "/samples/vars/light_contrast_scheme/neutral.webp"
+    },
+    {
+      "value": "warm_key_cool_fill",
+      "clause": "warm key light, cool blue shadows",
+      "control": false,
+      "sample": "/samples/vars/light_contrast_scheme/warm_key_cool_fill.webp"
+    },
+    {
+      "value": "cool_key_warm_rim",
+      "clause": "cool blue key light, warm orange rim light",
+      "control": false,
+      "sample": "/samples/vars/light_contrast_scheme/cool_key_warm_rim.webp"
+    },
+    {
+      "value": "teal_orange",
+      "clause": "teal and orange lighting, orange highlights, teal shadows",
+      "control": false,
+      "sample": "/samples/vars/light_contrast_scheme/teal_orange.webp"
+    },
+    {
+      "value": "magenta_cyan",
+      "clause": "magenta and cyan lighting, pink key light, cyan fill",
+      "control": false,
+      "sample": "/samples/vars/light_contrast_scheme/magenta_cyan.webp"
+    },
+    {
+      "value": "sodium_night",
+      "clause": "sodium vapour lighting, amber monochrome night, orange cast",
+      "control": false,
+      "sample": "/samples/vars/light_contrast_scheme/sodium_night.webp"
+    },
+    {
+      "value": "monochrome_wash",
+      "clause": "single colour light wash, monochromatic lighting",
+      "control": false,
+      "sample": "/samples/vars/light_contrast_scheme/monochrome_wash.webp"
+    },
+    {
+      "value": "candle_vs_moon",
+      "clause": "warm candlelight on one side, cold moonlight on the other",
+      "control": false,
+      "sample": "/samples/vars/light_contrast_scheme/candle_vs_moon.webp"
+    }
+  ]
+}

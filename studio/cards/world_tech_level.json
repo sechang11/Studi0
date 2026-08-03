@@ -1,0 +1,63 @@
+{
+  "variable": "world.tech_level",
+  "claim": "How advanced the working machinery is, kept deliberately separate from period so a feudal world can carry magitech and a far-future one can be pre-industrial. It decides whether a character reaches for a torch, a switch or a hologram.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "pre_industrial",
+      "clause": "torch, oil lamp, hand tools, no machinery",
+      "control": false,
+      "sample": "/samples/vars/world_tech_level/pre_industrial.webp"
+    },
+    {
+      "value": "industrial",
+      "clause": "steam engine, iron machinery, smokestack, rivets",
+      "control": false,
+      "sample": "/samples/vars/world_tech_level/industrial.webp"
+    },
+    {
+      "value": "electric",
+      "clause": "incandescent bulb, exposed wiring, utility pole, analog switch",
+      "control": false,
+      "sample": "/samples/vars/world_tech_level/electric.webp"
+    },
+    {
+      "value": "digital",
+      "clause": "computer monitor, crt screen, keyboard, led display",
+      "control": false,
+      "sample": "/samples/vars/world_tech_level/digital.webp"
+    },
+    {
+      "value": "networked",
+      "clause": "holographic display, floating ui, drones, wireless antenna",
+      "control": false,
+      "sample": "/samples/vars/world_tech_level/networked.webp"
+    },
+    {
+      "value": "cyber",
+      "clause": "cybernetic implants, neon circuitry, augmented visor, wired ports",
+      "control": false,
+      "sample": "/samples/vars/world_tech_level/cyber.webp"
+    },
+    {
+      "value": "spacefaring",
+      "clause": "spaceship hull, airlock, control console, starship interior",
+      "control": false,
+      "sample": "/samples/vars/world_tech_level/spacefaring.webp"
+    },
+    {
+      "value": "magitech",
+      "clause": "magic circle, glowing runes, arcane machinery, enchanted device",
+      "control": false,
+      "sample": "/samples/vars/world_tech_level/magitech.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "world.tech_level",
+      "issue": "pre_industrial ends on \"no machinery\", a negation that tends to summon machinery — the failure is doubly likely here because the surrounding subject (stadium, floodlights) is loudly electric.",
+      "fix": "Positive only: \"torch, oil lamp, hand tools, wooden cart\". Push \"machinery, wires, electric light\" into the negative prompt if the floodlights bleed through."
+    }
+  ]
+}

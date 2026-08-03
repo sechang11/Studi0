@@ -1,0 +1,51 @@
+{
+  "variable": "world.signage_language",
+  "claim": "The standing policy for on-screen text, which is otherwise the most reliable generation artefact in any populated exterior. Blurred and none are the working choices that survive a render; ja and invented are the ones that tell the audience what world they are in.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "inherit",
+      "clause": "",
+      "control": true,
+      "sample": "/samples/vars/world_signage_language/inherit.webp"
+    },
+    {
+      "value": "ja",
+      "clause": "japanese text, kanji signage, japanese billboard",
+      "control": false,
+      "sample": "/samples/vars/world_signage_language/ja.webp"
+    },
+    {
+      "value": "en",
+      "clause": "english text, latin letters, english signage",
+      "control": false,
+      "sample": "/samples/vars/world_signage_language/en.webp"
+    },
+    {
+      "value": "none",
+      "clause": "blank signs, unmarked surfaces, no lettering",
+      "control": true,
+      "sample": "/samples/vars/world_signage_language/none.webp"
+    },
+    {
+      "value": "invented",
+      "clause": "fictional script, invented alphabet, alien lettering",
+      "control": false,
+      "sample": "/samples/vars/world_signage_language/invented.webp"
+    },
+    {
+      "value": "blurred",
+      "clause": "blurry text, illegible signage, out of focus lettering",
+      "control": false,
+      "sample": "/samples/vars/world_signage_language/blurred.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "world.signage_language",
+      "issue": "The none clause ends on \"no lettering\", a negation that will tend to produce lettering. \"blank signs\" and \"unmarked surfaces\" already carry the option on their own.",
+      "fix": "\"blank signs, unmarked surfaces, plain white panels\" — and put \"text, watermark, signature\" in the negative prompt for this panel."
+    }
+  ]
+}

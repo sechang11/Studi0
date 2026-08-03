@@ -1,0 +1,32 @@
+{
+  "variable": "light.eye_shadow_bar",
+  "claim": "The hard band of shadow dropped across the eyes, anime's standing notation for menace, dissociation or a character who has stopped being safe. Full hides them completely, glint_only leaves one point of light inside the dark and is the villain reveal.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "none",
+      "clause": "clearly visible eyes, no shadow across the eyes",
+      "control": true,
+      "sample": "/samples/vars/light_eye_shadow_bar/none.webp"
+    },
+    {
+      "value": "half",
+      "clause": "shadow across the upper half of the eyes, shaded brow, pupils still visible",
+      "control": false,
+      "sample": "/samples/vars/light_eye_shadow_bar/half.webp"
+    },
+    {
+      "value": "full",
+      "clause": "shaded face, eyes obscured by shadow, dark band across the eyes",
+      "control": false,
+      "sample": "/samples/vars/light_eye_shadow_bar/full.webp"
+    },
+    {
+      "value": "glint_only",
+      "clause": "shaded face, eyes hidden in shadow, single bright glint, glowing eyes",
+      "control": false,
+      "sample": "/samples/vars/light_eye_shadow_bar/glint_only.webp"
+    }
+  ]
+}

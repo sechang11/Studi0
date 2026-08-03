@@ -1,0 +1,32 @@
+{
+  "variable": "grade.grain_size",
+  "claim": "Sets the texture of the emulsion the image is pretending to have been shot on. Fine reads modern and clinical, while coarse and clumpy push the frame back decades and conveniently give the eye something to chew on instead of generation artefacts.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "fine",
+      "clause": "film grain, fine grain, subtle noise",
+      "control": false,
+      "sample": "/samples/vars/grade_grain_size/fine.webp"
+    },
+    {
+      "value": "normal",
+      "clause": "film grain, grainy",
+      "control": false,
+      "sample": "/samples/vars/grade_grain_size/normal.webp"
+    },
+    {
+      "value": "coarse",
+      "clause": "heavy film grain, coarse grain, noisy texture",
+      "control": false,
+      "sample": "/samples/vars/grade_grain_size/coarse.webp"
+    },
+    {
+      "value": "clumpy",
+      "clause": "heavy grain, clumpy grain, blotchy noise, degraded film stock",
+      "control": false,
+      "sample": "/samples/vars/grade_grain_size/clumpy.webp"
+    }
+  ]
+}

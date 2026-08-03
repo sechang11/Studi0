@@ -1,0 +1,45 @@
+{
+  "variable": "light.fill",
+  "claim": "What happens inside the shadow, which is the difference between moody and muddy. Bounce and soft_fill keep information alive in the dark side, negative_fill actively subtracts light to sculpt a jaw, and none lets the shadow go to pure black.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "none",
+      "clause": "no fill light, unlit black shadow side",
+      "control": true,
+      "sample": "/samples/vars/light_fill/none.webp"
+    },
+    {
+      "value": "bounce",
+      "clause": "bounced fill light, faint light returning into the shadow side",
+      "control": false,
+      "sample": "/samples/vars/light_fill/bounce.webp"
+    },
+    {
+      "value": "soft_fill",
+      "clause": "soft fill light, open shadows, low contrast shading",
+      "control": false,
+      "sample": "/samples/vars/light_fill/soft_fill.webp"
+    },
+    {
+      "value": "negative_fill",
+      "clause": "negative fill, deepened shadow side, darkened cheek edge",
+      "control": false,
+      "sample": "/samples/vars/light_fill/negative_fill.webp"
+    },
+    {
+      "value": "ambient_sky",
+      "clause": "cool blue ambient sky fill, blue light in the shadows",
+      "control": false,
+      "sample": "/samples/vars/light_fill/ambient_sky.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "light.fill",
+      "issue": "Same jargon problem, worse: \"bounced fill light, faint light returning into the shadow side\", \"negative fill, deepened shadow side, darkened cheek edge\", \"soft fill light, open shadows, low contrast shading\". \"Fill\", \"bounce\" and \"negative fill\" are crew words with no danbooru presence, and the residual instructions (bounce = a bit of light in the shadow, soft_fill = open shadows) are also what light.ratio.low_2_1 asks for. bounce, soft_fill and negative_fill are the three most likely to come back indistinguishable; only ambient_sky has a hook the model understands, and that hook is its colour.",
+      "fix": "Describe the contents of the shadow, not the instrument: none \"pitch black shadows, crushed shadow side\"; bounce \"faint detail visible in the shadows, dark but readable shadow side\"; soft_fill \"open shadows, evenly lit, low contrast shading\"; negative_fill \"darkened cheek edge, shadow deepening toward the jaw\"; ambient_sky \"blue shadows, cool blue light in the shadow side\". If bounce and soft_fill still will not separate, the honest move is to merge them rather than ship two identical panels."
+    }
+  ]
+}

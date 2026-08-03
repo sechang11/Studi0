@@ -1,0 +1,68 @@
+{
+  "variable": "world.time_of_day",
+  "claim": "The single strongest driver of colour temperature and mood in the entire system. Golden_hour flatters everyone, blue_hour isolates a figure against lights coming on, and deep_night lets you simply delete everything you did not choose to light.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "pre_dawn",
+      "clause": "pre-dawn, dark blue sky, faint horizon glow, before sunrise",
+      "control": false,
+      "sample": "/samples/vars/world_time_of_day/pre_dawn.webp"
+    },
+    {
+      "value": "dawn",
+      "clause": "sunrise, dawn, orange horizon, low sun",
+      "control": false,
+      "sample": "/samples/vars/world_time_of_day/dawn.webp"
+    },
+    {
+      "value": "morning",
+      "clause": "morning, morning light, bright clear light",
+      "control": false,
+      "sample": "/samples/vars/world_time_of_day/morning.webp"
+    },
+    {
+      "value": "midday",
+      "clause": "midday, noon, overhead sun, short shadows",
+      "control": false,
+      "sample": "/samples/vars/world_time_of_day/midday.webp"
+    },
+    {
+      "value": "afternoon",
+      "clause": "afternoon, afternoon light, warm daylight",
+      "control": false,
+      "sample": "/samples/vars/world_time_of_day/afternoon.webp"
+    },
+    {
+      "value": "golden_hour",
+      "clause": "golden hour, warm orange light, long shadows, low sun",
+      "control": false,
+      "sample": "/samples/vars/world_time_of_day/golden_hour.webp"
+    },
+    {
+      "value": "dusk",
+      "clause": "dusk, sunset, twilight, purple orange sky",
+      "control": false,
+      "sample": "/samples/vars/world_time_of_day/dusk.webp"
+    },
+    {
+      "value": "blue_hour",
+      "clause": "blue hour, deep blue twilight, lights turning on",
+      "control": false,
+      "sample": "/samples/vars/world_time_of_day/blue_hour.webp"
+    },
+    {
+      "value": "night",
+      "clause": "night, dark sky, artificial lights",
+      "control": false,
+      "sample": "/samples/vars/world_time_of_day/night.webp"
+    },
+    {
+      "value": "deep_night",
+      "clause": "deep night, midnight, near total darkness, few lights",
+      "control": false,
+      "sample": "/samples/vars/world_time_of_day/deep_night.webp"
+    }
+  ]
+}

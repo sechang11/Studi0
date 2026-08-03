@@ -1,0 +1,12 @@
+{
+  "variable": "render.placeholder",
+  "claim": "Decides whether a rough cut containing a failed shot is still watchable. keyframe_still holds the shot's own frame so timing and continuity survive the gap; last_good hides the failure but lies about what the cut does; slate labels the hole so nobody grades a broken shot by accident; black is honest and brutal.",
+  "not_visual": "The four values are substituted frames, not prompted content: a black fill, a text slate, a frame borrowed from a different shot, and the shot's own keyframe. None can be produced by adding a tag clause to a fixed subject sentence - black and slate would have to erase the subject entirely, which breaks the method's core rule, and Animagine cannot render legible slate text. The right demo is compositing all four substitutions into a real cut and watching it, which is a pipeline demo rather than a tag comparison.",
+  "options": [
+    "black",
+    "slate",
+    "last_good",
+    "keyframe_still"
+  ],
+  "panels": []
+}

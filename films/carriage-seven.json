@@ -1,0 +1,150 @@
+{
+  "title": "CARRIAGE SEVEN",
+  "subtitle": "a mystery",
+  "ar": "16:9",
+  "fps": 24,
+  "seconds": 4,
+  "transition": 0.35,
+
+  "style": "stylized 3D animated film still, cinematic rain-soaked retro-futurist noir, moody low-key lighting, deep teal and sodium-orange palette, volumetric haze, wet reflective surfaces, shallow depth of field, anamorphic lens flare, film grain, highly detailed, no humans",
+
+  "characters": {
+    "VESK": "VESK, a weathered detective automaton, dented brass head with a single large amber lens cracked diagonally across the glass, riveted jaw plate, long dark oilcloth trench coat beaded with rain, heavy mechanical hands",
+    "KEEPER": "THE KEEPER, a tall spindly antique station automaton, verdigris-green copper body streaked with water stains, glass dome head containing one dim green pilot flame, a brass ticket-punch in place of its right hand, wearing a rotted navy conductor's cap"
+  },
+
+  "voices": {
+    "VESK":     { "exaggeration": 0.3,  "cfg_weight": 0.3,  "temperature": 0.65, "pitch": 0.80, "rate": 0.92 },
+    "KEEPER":   { "exaggeration": 0.6,  "cfg_weight": 0.35, "temperature": 0.9,  "pitch": 1.14, "rate": 0.86 },
+    "DISPATCH": { "exaggeration": 0.25, "cfg_weight": 0.3,  "temperature": 0.6,  "pitch": 0.96, "rate": 1.0,
+                  "filter": "highpass=f=450,lowpass=f=2900,acrusher=bits=7:mode=log:aa=1,volume=1.3",
+                  "radio": true }
+  },
+
+  "music": [
+    { "at": 0,    "prefix": "cue1_mystery",
+      "bpm": 62, "key": "C minor", "seconds": 40,
+      "tags": "sparse noir underscore, muted upright bass pizzicato, distant brushed cymbal, lonely muted trumpet, tape hiss, rain, patient and unresolved, film noir, instrumental, no drums" },
+    { "at": 40,   "prefix": "cue2_action",
+      "bpm": 138, "key": "D minor", "seconds": 26,
+      "tags": "urgent orchestral action cue, driving staccato low strings ostinato, hammered piano, timpani hits, brass stabs, rising tension, chase sequence, cinematic, instrumental" },
+    { "at": 64,   "prefix": "cue3_reveal",
+      "bpm": 54, "key": "A major", "seconds": 34,
+      "tags": "tender melancholy resolution, solo felt piano, warm sustained strings, distant music box, bittersweet, spacious, slow, cinematic, instrumental, no drums" }
+  ],
+
+  "shots": [
+    { "id": "01_platform", "seconds": 5,
+      "prompt": "Wide establishing shot of a deserted elevated subway platform at night in heavy rain, sodium lamps haloed in the downpour, wet tiles mirroring orange light, a dark city of pipes and neon signage beyond, twin headlights of a train approaching from the far tunnel mouth",
+      "motion": "Rain hammers down, puddles rippling. The distant headlights grow slowly brighter and larger. Steam vents on the platform. Locked-off camera, faint drift.",
+      "sfx": "Heavy rain on a metal station canopy, water running through gutters, a distant electric train approaching through a tunnel, low rumble growing" },
+
+    { "id": "02_arrival", "seconds": 3,
+      "prompt": "Low angle beside the platform edge as a long retro-futurist subway train slides to a stop, most carriage windows glowing warm yellow, but one single carriage in the middle is completely black inside, a stencilled number 7 on its wet flank",
+      "motion": "The train slides in from the left and brakes to a halt, spray peeling off the wheels, warm light from the windows sweeping across the wet platform. The dark carriage seven comes to rest dead centre of frame.",
+      "sfx": "Electric train braking to a stop, metal wheels squealing on rail, pneumatic hiss, heavy machinery settling" },
+
+    { "id": "03_vesk", "seconds": 4,
+      "prompt": "Medium shot of {VESK} standing alone on the platform in the rain, coat soaked and streaming, his cracked amber lens reflecting the dark windows of carriage seven, collar turned up, motionless",
+      "motion": "Rain runs down Vesk's brass face and coat. His amber lens iris contracts slightly as it focuses. He turns his head a few degrees toward the dark carriage. Almost no other movement.",
+      "line": { "who": "DISPATCH", "text": "Inspector. Carriage seven again. That's the seventh night." } },
+
+    { "id": "04_counter", "seconds": 2,
+      "prompt": "Extreme close-up macro of a brass mechanical passenger counter set into a wet enamel panel, its numbered drums clicking over from zero to one, condensation on the glass cover, harsh sodium light raking across it",
+      "motion": "The counter drum snaps over from 0 to 1 with a mechanical click. A single drop of water tracks down the glass. Camera absolutely still.",
+      "sfx": "Single sharp mechanical counter click, faint clockwork whirr, rain in the background" },
+
+    { "id": "05_board", "seconds": 3,
+      "prompt": "Over-the-shoulder shot from behind {VESK} as he steps up into the black doorway of carriage seven, the interior swallowing him in darkness, warm platform light behind him, rain slanting through the open door",
+      "motion": "Vesk steps up and forward into the dark doorway. Behind him the doors slide shut with a pneumatic hiss, cutting off the warm light. Rain slants past.",
+      "line": { "who": "VESK", "text": "Doors open every night. Nobody ever gets off." },
+      "sfx": "Heavy footstep on metal step, pneumatic door closing, muffled interior acoustic" },
+
+    { "id": "06_interior", "seconds": 5,
+      "prompt": "Interior of the darkened carriage seven, long rows of empty cracked leather seats receding into blackness, one failing ceiling tube flickering intermittently, dust and damp, torn advertising panels, deep shadow",
+      "motion": "The single ceiling tube flickers and buzzes, stuttering light down the length of the empty carriage. Dust drifts. The carriage sways gently. Slow push down the aisle.",
+      "sfx": "Fluorescent tube buzzing and stuttering, empty metal carriage creaking, distant muffled rain" },
+
+    { "id": "07_drawing", "seconds": 2,
+      "prompt": "Extreme close-up of a child's crayon drawing left on a cracked leather seat, showing a stick figure holding hands with a tall thin figure wearing a cap, waxy bright colours against the dim interior, edges curled with damp",
+      "motion": "The flickering light passes across the drawing, revealing then hiding it. The curled paper edge lifts very slightly in a draught.",
+      "sfx": "Soft paper rustle in a draught, distant fluorescent buzz" },
+
+    { "id": "08_tally", "seconds": 2,
+      "prompt": "Close-up of hundreds of scratched tally marks gouged into the painted metal wall of the carriage beside a window, obsessive rows upon rows filling the whole panel, paint flaking, raking side light",
+      "motion": "Camera drifts slowly sideways along the wall, revealing more and more tally marks running on past the edge of frame. The light flickers across them.",
+      "sfx": "Metallic scrape, low carriage rumble, unsettling sustained tone" },
+
+    { "id": "09_footprints", "seconds": 3,
+      "prompt": "Low angle along the carriage floor showing a trail of small wet footprints on dusty metal walking away from camera, the prints stopping abruptly at a blank riveted end wall with no door",
+      "motion": "Camera tracks low and slow along the wet footprints toward the blank wall. The last print glistens. The trail simply ends. The light flickers out and comes back.",
+      "sfx": "Water dripping onto metal, hollow empty carriage reverb, low ominous drone" },
+
+    { "id": "10_deduce", "seconds": 4,
+      "prompt": "Tight close-up on {VESK}'s cracked amber lens filling the frame, the child's crayon drawing reflected curved across its glass, iris mechanism visibly contracting, water beaded on the brass around it",
+      "motion": "The lens iris contracts sharply, glass rings rotating as it focuses. The reflection of the drawing sharpens. A bead of water runs down the brass.",
+      "line": { "who": "VESK", "text": "Somebody has been riding. Somebody small." } },
+
+    { "id": "11_board_flicker", "seconds": 4,
+      "prompt": "Close-up of an antique split-flap destination board above the carriage door, flaps clattering over and settling on the words HALSEY DEEP, a corroded brass plate beneath it reading LINE CLOSED 1987, dim green backlight",
+      "motion": "The split-flap board clatters rapidly through destinations and settles hard on HALSEY DEEP. The green backlight surges brighter, then dims. Dust shakes loose.",
+      "line": { "who": "DISPATCH", "text": "Halsey Deep shut down in eighty-seven, Inspector. There is no track past the junction." },
+      "sfx": "Rapid mechanical split-flap board clattering, settling with a clack, electrical hum surge" },
+
+    { "id": "12_jolt", "seconds": 2,
+      "prompt": "Wide interior of carriage seven at the instant the train lurches violently into motion, every light blowing out in a shower of sparks, seats and hanging straps thrown sideways, {VESK} losing his footing",
+      "motion": "The whole frame jolts hard sideways. Lights explode in sparks one after another down the carriage. Vesk is thrown off balance, coat flying. Violent camera shake.",
+      "sfx": "Sudden violent metallic lurch, electrical bang and sparks, glass shattering, train accelerating hard" },
+
+    { "id": "13_thrown", "seconds": 2,
+      "prompt": "Dynamic low angle of {VESK} slamming shoulder-first into a chrome grab pole in the pitch-dark carriage, only lit by strobing sparks from a blown ceiling fitting, coat flaring, hand clamping onto the pole",
+      "motion": "Vesk slams into the pole and grips it hard, body swinging with the train's acceleration. Sparks strobe across him. Fast handheld camera.",
+      "sfx": "Heavy metal impact, electrical sparking and crackle, roaring train motion" },
+
+    { "id": "14_run", "seconds": 2,
+      "prompt": "Fast tracking shot from behind {VESK} sprinting down the centre aisle of a long dark carriage, coat streaming behind him, the overhead lights blowing out one by one in sequence behind him, darkness chasing him forward",
+      "motion": "Camera races behind Vesk as he sprints. Lights burst and die in rapid sequence behind him, the dark closing in fast. His coat streams. Extreme motion blur.",
+      "sfx": "Running metal footsteps, rapid electrical pops receding, thundering train, rushing air" },
+
+    { "id": "15_something", "seconds": 2,
+      "prompt": "Point of view down the length of a black carriage where a very tall thin silhouette stands motionless at the far end, backlit by one dying green lamp, only its outline and a faint green pilot light visible, mist between",
+      "motion": "The tall silhouette does not move at all while everything around it shakes violently. The dying green lamp behind it pulses. Mist drifts across.",
+      "sfx": "Sustained dissonant string sting, deep sub bass hit, train roar" },
+
+    { "id": "16_halt", "seconds": 3,
+      "prompt": "Close-up of {VESK} skidding to a stop in the darkness, cracked amber lens flaring wide and bright, rain water still running off his coat, brass face lit only by his own lens glow",
+      "motion": "Vesk skids to a halt, body rocking forward then settling. His lens flares suddenly bright, iris snapping wide open. Everything else black.",
+      "line": { "who": "VESK", "text": "Then who has been driving this train?" } },
+
+    { "id": "17_station", "seconds": 5,
+      "prompt": "The doors of carriage seven opening onto an enormous abandoned tiled underground station, cracked white tile and rusted iron pillars, forty years of dust, one single working lamp far down the platform, absolute stillness",
+      "motion": "The doors slide open with a long hiss revealing the vast dead station. Dust hangs completely still in the air, disturbed only slightly by the opening doors. Slow push forward.",
+      "sfx": "Long pneumatic door hiss, vast empty underground reverb, single dripping water echo, total silence beneath" },
+
+    { "id": "18_reveal", "seconds": 4,
+      "prompt": "Reveal shot of {KEEPER} standing patiently at the very edge of the abandoned platform, brass ticket-punch raised and ready in its right hand, green pilot flame flickering behind its glass dome head, thick dust on its shoulders, waiting",
+      "motion": "The Keeper's glass dome head turns slowly toward camera, green pilot flame guttering. It raises the ticket punch slightly and clicks it twice in readiness. Dust falls from its shoulders.",
+      "line": { "who": "KEEPER", "text": "Tickets, please. Tickets, please." },
+      "sfx": "Two crisp brass ticket punch clicks, faint gas flame hiss, ancient servo whirr, cavernous reverb" },
+
+    { "id": "19_wide", "seconds": 5,
+      "prompt": "Very wide two-shot of the colossal empty station, tiny {KEEPER} standing at the platform edge under its single lamp and {VESK} in the open carriage doorway far to the right, immense dark vaulted space above them both, dust in the lamp beam",
+      "motion": "Almost no movement. Dust turns slowly in the single lamp beam. The Keeper's head tilts up hopefully toward the empty stairwell. Very slow camera drift back.",
+      "line": { "who": "KEEPER", "text": "The nine forty is always busy. Always. They will be along any moment now." } },
+
+    { "id": "20_ticket", "seconds": 4,
+      "prompt": "Close two-shot as {VESK} holds out a small paper ticket between his heavy mechanical fingers toward {KEEPER}, the Keeper's green pilot flame brightening, warm lamp light on both of them, dust suspended between",
+      "motion": "Vesk extends his hand and offers the ticket. The Keeper's green flame brightens noticeably. Its punch hand lifts and reaches toward the ticket. Both hold very still.",
+      "line": { "who": "VESK", "text": "One passenger. Carriage seven." } },
+
+    { "id": "21_punch", "seconds": 3,
+      "prompt": "Extreme close-up macro of a brass ticket-punch closing through a small paper ticket, a neat crescent of paper falling away, dust motes lit gold around it, worn brass and green verdigris",
+      "motion": "The punch closes decisively through the paper with a crisp mechanical action. A tiny crescent of paper falls away and drifts down through the golden light.",
+      "sfx": "One crisp decisive brass ticket punch, paper tearing cleanly, warm resonant metal ring, deep quiet" },
+
+    { "id": "22_final", "seconds": 5,
+      "prompt": "Final wide shot of {VESK} and {KEEPER} sitting side by side on an old wooden bench on the abandoned platform beneath the single working lamp, the empty train waiting with its doors open, vast darkness all around, small warm island of light",
+      "motion": "Both sit completely still. Dust turns in the lamp beam. Very slow crane up and back, the two figures becoming small in the enormous dark station. The train waits.",
+      "line": { "who": "KEEPER", "text": "Thank you, sir. Mind the step." } }
+  ]
+}

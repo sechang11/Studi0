@@ -1,0 +1,69 @@
+{
+  "variable": "shot.cam.height",
+  "claim": "Camera height is where the lens physically lives, authored separately from whether it tilts. Dropping to knee or ground makes the world tower and the figure heroic even with a level lens; lifting to overhead or aerial turns a person into a marker on a map.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "ground",
+      "clause": "ground level, camera on the ground",
+      "control": false,
+      "sample": "/samples/vars/shot_cam_height/ground.webp"
+    },
+    {
+      "value": "ankle",
+      "clause": "ankle height camera, very low viewpoint",
+      "control": false,
+      "sample": "/samples/vars/shot_cam_height/ankle.webp"
+    },
+    {
+      "value": "knee",
+      "clause": "knee height camera, low viewpoint",
+      "control": false,
+      "sample": "/samples/vars/shot_cam_height/knee.webp"
+    },
+    {
+      "value": "waist",
+      "clause": "waist height camera, slightly low viewpoint",
+      "control": false,
+      "sample": "/samples/vars/shot_cam_height/waist.webp"
+    },
+    {
+      "value": "chest",
+      "clause": "chest height camera",
+      "control": false,
+      "sample": "/samples/vars/shot_cam_height/chest.webp"
+    },
+    {
+      "value": "eye",
+      "clause": "eye level, straight-on",
+      "control": false,
+      "sample": "/samples/vars/shot_cam_height/eye.webp"
+    },
+    {
+      "value": "high",
+      "clause": "high viewpoint, elevated camera",
+      "control": false,
+      "sample": "/samples/vars/shot_cam_height/high.webp"
+    },
+    {
+      "value": "overhead",
+      "clause": "overhead view, directly above",
+      "control": false,
+      "sample": "/samples/vars/shot_cam_height/overhead.webp"
+    },
+    {
+      "value": "aerial",
+      "clause": "aerial view, far above, distant ground",
+      "control": false,
+      "sample": "/samples/vars/shot_cam_height/aerial.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "shot.cam.height",
+      "issue": "\"ankle height camera\", \"knee height camera\", \"waist height camera\" and \"chest height camera\" are invented phrases with no danbooru training behind them; the only signal Animagine reads in those clauses is \"low viewpoint\" ≈ \"from below\". ground/ankle/knee/waist therefore collapse toward one low-angle panel and chest/eye toward the baseline — nine options for roughly four pictures. The card also overlaps shot.cam.angle wholesale: height.high/overhead/aerial and angle.high/birds_eye/top_down all resolve through the same \"from above\" token, so the claim that height is authored independently of tilt is not expressible in this model.",
+      "fix": "Cut to values the vocabulary supports — ground / low / eye / high / overhead — using real tags (\"from below\", \"eye level\", \"from above\", \"directly from above\"). Then either merge this card into shot.cam.angle or state in the claim that in the still pass height and angle share one control, and let the card demonstrate only the extremes."
+    }
+  ]
+}

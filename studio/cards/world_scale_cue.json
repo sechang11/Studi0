@@ -1,0 +1,51 @@
+{
+  "variable": "world.scale_cue",
+  "claim": "Anime sells size by putting a known object beside an unknown one, never by focal length. Reach for it the moment the frame has to feel vast or the subject has to feel small inside it.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "none",
+      "clause": "",
+      "control": true,
+      "sample": "/samples/vars/world_scale_cue/none.webp"
+    },
+    {
+      "value": "human_figure",
+      "clause": "tiny distant figure, person in the distance for scale",
+      "control": false,
+      "sample": "/samples/vars/world_scale_cue/human_figure.webp"
+    },
+    {
+      "value": "vehicle",
+      "clause": "parked car in frame, bus in the background",
+      "control": false,
+      "sample": "/samples/vars/world_scale_cue/vehicle.webp"
+    },
+    {
+      "value": "building",
+      "clause": "tall building alongside, skyscraper in background",
+      "control": false,
+      "sample": "/samples/vars/world_scale_cue/building.webp"
+    },
+    {
+      "value": "horizon",
+      "clause": "distant horizon line, vast open expanse",
+      "control": false,
+      "sample": "/samples/vars/world_scale_cue/horizon.webp"
+    },
+    {
+      "value": "giant_object",
+      "clause": "colossal structure looming, giant object in background, towering scale",
+      "control": false,
+      "sample": "/samples/vars/world_scale_cue/giant_object.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "world.scale_cue",
+      "issue": "human_figure (\"tiny distant figure, person in the distance for scale\") cannot do anything here: the subject sentence already contains \"crowd\", so distant human figures are in every single panel including the control. \"for scale\" is meta-instruction prose that renders nothing, and adding a person also contradicts \"solo\".",
+      "fix": "Either mark human_figure unrenderable against a crowd subject, or replace it with a cue the subject does not already supply — e.g. \"lone figure on empty pitch, vast empty space\" — and cut \"for scale\" from the tag list. Same trim for the others: keep \"parked car\", \"skyscraper in background\", \"distant horizon\", \"colossal structure\" and drop the explanatory tail."
+    }
+  ]
+}

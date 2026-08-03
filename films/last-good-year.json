@@ -1,0 +1,138 @@
+{
+  "title": "THE LAST GOOD YEAR",
+  "subtitle": "a story about one small thing",
+  "ar": "16:9",
+  "fps": 24,
+  "seconds": 4,
+  "transition": 0.4,
+
+  "style": "stylized painterly animated film still, warm hand-painted JRPG concept art, soft golden hour light and deep blue dusk shadows, saturated storybook palette, visible brush texture, gentle bloom, clean readable shapes, wide cinematic composition, subtle film grain",
+
+  "characters": {
+    "MERO": "MERO, a small girl of about eleven in a long dark navy travelling coat several sizes too big, a bright red knitted scarf wound twice around her neck with the tail hanging to her knees, short dark hair, heavy boots, always seen from behind or in silhouette so her face is never shown",
+    "WATCH": "a heavy brass pocket watch with two dials on one face, the upper dial bright and the lower dial tarnished black, a cracked crystal, worn engraving, hanging on a short chain"
+  },
+
+  "voices": {
+    "MERO":  { "exaggeration": 0.55, "cfg_weight": 0.4, "temperature": 0.85,
+               "pitch": 1.22, "rate": 0.98 },
+    "WATCH": { "exaggeration": 0.25, "cfg_weight": 0.3, "temperature": 0.6,
+               "pitch": 0.68, "rate": 0.86,
+               "filter": "lowpass=f=3400,aecho=0.8:0.7:90:0.3",
+               "radio": true }
+  },
+
+  "music": [
+    { "at": 0, "prefix": "cue1_summer",
+      "bpm": 84, "key": "F major", "seconds": 34, "level": 0.30,
+      "tags": "warm nostalgic JRPG town theme, gentle acoustic guitar arpeggio, soft flute melody, light pizzicato strings, glockenspiel, summer afternoon, hopeful and simple, instrumental, no drums" },
+
+    { "at": 32, "prefix": "cue2_unravel",
+      "bpm": 104, "key": "F minor", "seconds": 30, "level": 0.32,
+      "tags": "anxious unravelling underscore, ticking clock percussion, tremolo strings rising, prepared piano, dissonant music box turning slower and slower, time running out, cinematic tension, instrumental" },
+
+    { "at": 60, "prefix": "cue3_bittersweet",
+      "bpm": 68, "key": "F major", "seconds": 26, "level": 0.36,
+      "tags": "bittersweet emotional resolution, solo felt piano with warm string swell, distant choir pad, single glockenspiel motif returning, hopeful after loss, tender, cinematic finale, instrumental, no drums" }
+  ],
+
+  "shots": [
+    { "id": "01_summer", "seconds": 4,
+      "prompt": "Wide symmetrical shot of a small sunlit town square in high summer, a dry stone fountain at its centre, red tiled roofs and painted shutters, market awnings, washing lines strung between buildings, deep green hills beyond, brilliant blue sky with high white cloud, warm afternoon light",
+      "motion": "Awnings and washing stir gently in a warm breeze. Cloud shadows drift slowly across the square. Locked-off camera, no move at all. Peaceful and ordinary.",
+      "sfx": "A quiet summer town square, distant children playing, birds, cloth awnings flapping softly, warm still afternoon air" },
+
+    { "id": "02_ash", "seconds": 4,
+      "prompt": "The exact same town square from the exact same camera position but ruined and grey, the fountain shattered, roofs collapsed, every building burnt to a shell, deep ash drifted over the cobbles, a colourless sky the texture of old paper, no living thing anywhere",
+      "motion": "Fine ash falls steadily and drifts across the cobbles. A scrap of burnt awning shifts in the wind. Absolutely identical locked-off framing to the summer shot. Nothing else moves.",
+      "sfx": "Cold dead wind through a burnt ruin, fine ash hissing over stone, a loose sheet of metal ticking, total absence of life" },
+
+    { "id": "03_watch", "seconds": 3,
+      "prompt": "Extreme close-up of {WATCH} lying open in a child's cupped palms, the upper dial bright and ticking and the lower tarnished dial frozen, cracked crystal catching warm sunlight, dust motes around it",
+      "motion": "The upper hand ticks steadily forward. The lower blackened hand twitches once, then holds. Light shifts across the cracked crystal. The hands holding it tremble very slightly.",
+      "sfx": "A pocket watch ticking crisply, tiny clockwork mechanism, a second slower tick underneath it slightly out of step" },
+
+    { "id": "04_mero", "seconds": 4,
+      "prompt": "Medium shot from behind {MERO} standing alone in the middle of the sunlit summer square, red scarf tail lifting in the breeze, holding the open brass watch out in front of her, the fountain and bright rooftops ahead",
+      "motion": "Her red scarf lifts and ripples in the warm breeze. Her shoulders rise and fall once. She turns the watch slightly to catch the light. She does not turn around.",
+      "line": { "who": "MERO", "text": "It says two times. Today, and something else." },
+      "sfx": "Warm breeze, knitted scarf and heavy coat shifting, a distant market bell" },
+
+    { "id": "05_reply", "seconds": 4,
+      "prompt": "Macro close-up of the tarnished lower dial of the brass watch filling the frame, its blackened hand pointing at a mark scratched deep into the metal, verdigris in the engraving, warm light raking across the worn brass",
+      "motion": "The blackened hand shivers and advances one mark with a heavy click. Light crawls slowly across the engraving. Dust settles on the crystal.",
+      "line": { "who": "WATCH", "text": "One year. That is all that is left of this place." },
+      "sfx": "A single heavy clockwork click, low ominous brass resonance, ticking continuing underneath" },
+
+    { "id": "06_run", "seconds": 3,
+      "prompt": "Dynamic wide tracking shot of {MERO} running full tilt down a narrow sunlit alley of the town, red scarf streaming out straight behind her, whitewashed walls and flower boxes flashing past, bright square visible at the far end",
+      "motion": "She sprints away from camera down the alley, scarf streaming. The camera tracks fast behind her. Light and shadow strobe across the walls as she passes windows.",
+      "sfx": "Fast footsteps of boots on cobbles, echoing narrow alley, breathing, cloth snapping in the wind" },
+
+    { "id": "07_warn", "seconds": 4,
+      "prompt": "Wide shot from behind {MERO} standing small in a crowded sunlit market street, arms spread, facing a crowd of adult townspeople who are turned away from her or looking past her, produce stalls and bright awnings all around, warm light",
+      "motion": "The crowd moves around and past her, none of them stopping. She lowers her arms slowly. Awnings and hanging goods sway. She stays exactly where she is as the crowd flows by.",
+      "line": { "who": "MERO", "text": "Please. Please, it burns. All of it burns." },
+      "sfx": "A busy market crowd talking over each other, footsteps, stall canvas, a girl's voice lost in it" },
+
+    { "id": "08_montage", "seconds": 3,
+      "prompt": "Wide shot of the town square at golden dusk with a great pile of buckets, sandbags and coiled hoses stacked around the dry fountain, {MERO} small beside it winding a hose, long shadows stretching across the cobbles",
+      "motion": "She winds the hose slowly, shoulders heavy. Long shadows creep visibly across the cobbles as the sun drops. Dust turns gold in the low light.",
+      "sfx": "Rope and canvas being handled, buckets knocking together, evening birds, tired quiet effort" },
+
+    { "id": "09_fail", "seconds": 3,
+      "prompt": "Close-up of the brass watch held low at {MERO}'s side in cold blue dusk light, the tarnished lower hand having advanced much further around its dial, the bright upper dial unchanged, her red scarf out of focus behind it",
+      "motion": "The blackened hand jumps forward two marks in quick succession. The watch tilts as her hand drops slightly. Cold blue light replaces the gold.",
+      "line": { "who": "WATCH", "text": "The buckets do not matter. It has already decided." },
+      "sfx": "Two heavy clockwork clicks in quick succession, deep dread swell, evening wind rising" },
+
+    { "id": "10_ash_walk", "seconds": 4,
+      "prompt": "Wide shot from behind {MERO} standing in the ruined ash-grey version of the market street, the burnt stalls and collapsed walls around her, her red scarf the only colour in the entire frame, ash falling",
+      "motion": "Ash falls around her and settles on her shoulders. Her red scarf stirs. She takes two slow steps forward into the ruin. Everything else is dead still.",
+      "sfx": "Dead wind through burnt timber, ash falling, hollow ruined street reverb, isolated footsteps" },
+
+    { "id": "11_shelter", "seconds": 4,
+      "prompt": "Interior of a makeshift shelter in the ruins lit by one small fire, a dozen exhausted survivors wrapped in blankets sitting against a leaning stone wall, ash sifting through gaps in the broken roof above, warm firelight against grey",
+      "motion": "The small fire flickers and throws moving light across the survivors. Ash sifts down through the roof gaps. One person shifts a blanket. Slow, quiet, exhausted.",
+      "sfx": "A small fire crackling in a cold ruin, blankets shifting, quiet exhausted breathing, wind outside" },
+
+    { "id": "12_wall", "seconds": 4,
+      "prompt": "Low angle inside the shelter looking up at the leaning stone wall the survivors are sheltering behind, and the thing propping it up, a thick living tree trunk wedged hard against the stone, its bark scorched but its roots deep in the cobbles",
+      "motion": "The wall groans and shifts a fraction against the trunk. Ash falls from the joint between stone and bark. Firelight moves across the scorched trunk.",
+      "line": { "who": "WATCH", "text": "That wall should have fallen. Something is holding it." },
+      "sfx": "Stone grinding under load, timber creaking and taking the strain, ash falling, low sustained tension" },
+
+    { "id": "13_realise", "seconds": 4,
+      "prompt": "Close-up from behind and to the side of {MERO} standing in the ruin looking up at the scorched tree trunk, her red scarf bright against the grey, ash on her shoulders and in her hair, firelight on the bark in front of her",
+      "motion": "Her head tilts slowly up the length of the trunk. Her shoulders lift as she takes a breath and holds it. Ash drifts past her face. She stays turned away from camera.",
+      "line": { "who": "MERO", "text": "It was never the buckets." },
+      "sfx": "A held breath, ash falling softly, distant fire, a single high sustained note of realisation" },
+
+    { "id": "14_plant", "seconds": 4,
+      "prompt": "Low angle close-up of two small hands pressing a thin bare sapling upright into a hole between the cobblestones of the sunlit summer square, warm afternoon light, the dry stone fountain out of focus behind, loose earth around the roots",
+      "motion": "Her hands firm the loose earth around the sapling and press it down twice. The thin sapling stands and holds. Warm light moves across her hands. Dust drifts.",
+      "sfx": "Hands working loose earth, small trowel scraping between cobbles, warm summer birds, gentle and ordinary" },
+
+    { "id": "15_water", "seconds": 3,
+      "prompt": "Wide shot from behind {MERO} kneeling beside a thin newly planted sapling in the middle of the sunlit summer square, tipping a battered tin watering can over its roots, the whole bright town around her, warm low light",
+      "motion": "Water pours from the can and darkens the earth around the roots. The thin sapling trembles under the water. Her scarf tail rests on the cobbles beside her.",
+      "sfx": "Water pouring from a tin can onto dry earth, soaking in, a quiet summer square, one distant bell" },
+
+    { "id": "16_years", "seconds": 4,
+      "prompt": "Wide symmetrical shot of the same sunlit town square across changing seasons, the sapling now a slender young tree beside the fountain, its leaves turning from green to gold, shutters and awnings the same, the light lower and warmer",
+      "motion": "Light and shadow sweep across the square as if many days pass in seconds, the young tree's leaves shifting from green to gold and back, clouds racing overhead. The tree grows visibly taller.",
+      "sfx": "Time passing, wind rising and falling in leaves, distant seasons of town life layered and blurring together" },
+
+    { "id": "17_watch_stop", "seconds": 4,
+      "prompt": "Extreme macro close-up of the brass watch's tarnished lower dial, the blackened hand stopped hard at the final mark, a hairline crack running across the tarnish, warm light on the worn brass, dust suspended",
+      "motion": "The blackened hand strains against the final mark and stops dead. The tarnish crackles very faintly. The bright upper hand keeps ticking calmly on past it.",
+      "line": { "who": "WATCH", "text": "I have counted this place ten thousand times. This is new." },
+      "sfx": "A clockwork hand straining and stopping dead, faint metal crack, the other dial ticking calmly onward" },
+
+    { "id": "18_final", "seconds": 5,
+      "prompt": "Final wide symmetrical shot from the exact same camera position as the very first shot, the town square ruined and ash-grey again, but a large living tree now standing where the sapling was, holding up a leaning stone wall, and beneath its branches a crowd of survivors sitting together with small fires and blankets",
+      "motion": "Ash falls, but the tree's leaves move in the wind and the people beneath it shift and settle together. One person stands and looks up into the branches. Very slow push in. Identical framing to the first two shots.",
+      "line": { "who": "MERO", "text": "One small thing. That was all I had." },
+      "sfx": "Wind moving through living leaves over a ruined square, quiet voices of people together, small fires, warmth inside cold" }
+  ]
+}

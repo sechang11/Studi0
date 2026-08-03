@@ -1,0 +1,44 @@
+{
+  "variable": "shot.lens.flare",
+  "claim": "Flare is the mood signature authors reach for constantly, and under floodlights it is nearly free. Starburst says hard and clean, warm_bloom says nostalgic, veiling says the light is in your eyes and you cannot see properly.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "none",
+      "clause": "no lens flare, clean image",
+      "control": true,
+      "sample": "/samples/vars/shot_lens_flare/none.webp"
+    },
+    {
+      "value": "subtle",
+      "clause": "subtle lens flare, small flare",
+      "control": false,
+      "sample": "/samples/vars/shot_lens_flare/subtle.webp"
+    },
+    {
+      "value": "anamorphic_streak",
+      "clause": "anamorphic lens flare, horizontal blue streak",
+      "control": false,
+      "sample": "/samples/vars/shot_lens_flare/anamorphic_streak.webp"
+    },
+    {
+      "value": "warm_bloom",
+      "clause": "warm bloom, glowing haze, soft glow",
+      "control": false,
+      "sample": "/samples/vars/shot_lens_flare/warm_bloom.webp"
+    },
+    {
+      "value": "starburst",
+      "clause": "starburst, sun star, pointed light rays",
+      "control": false,
+      "sample": "/samples/vars/shot_lens_flare/starburst.webp"
+    },
+    {
+      "value": "veiling",
+      "clause": "veiling glare, washed out haze, lifted blacks",
+      "control": false,
+      "sample": "/samples/vars/shot_lens_flare/veiling.webp"
+    }
+  ]
+}

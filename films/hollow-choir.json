@@ -1,0 +1,172 @@
+{
+  "title": "THE HOLLOW CHOIR",
+  "subtitle": "a dark fantasy short",
+  "ar": "16:9",
+  "fps": 24,
+  "seconds": 4,
+  "transition": 0.35,
+
+  "style": "stylized 3D animated film still, gothic dark fantasy, dramatic chiaroscuro candlelight, deep crushed blacks, ember-orange and cold moonlit blue palette, volumetric god rays through drifting ash and dust, ornate carved stone, weathered blackened steel, dripping wax, painterly surface detail, subtle film grain, anamorphic highlights, cinematic composition, epic scale",
+
+  "characters": {
+    "CRUSADER": "THE CRUSADER, a tall armoured figure in battered dark steel plate, a smooth featureless great helm with one narrow horizontal eye slit glowing faint ember gold, heavy tattered crimson surcoat, the left pauldron sheared clean away, gauntlets wrapped in knotted prayer ribbons, a long plain greatsword",
+    "CHOIRMASTER": "THE CHOIRMASTER, a gaunt towering figure assembled from pipe-organ parts and bound hymn books, tarnished brass pipes for ribs and spine, spidery thin arms, a conductor's baton of blackened bone, loose hymnal pages fluttering where a face should be, ragged grey felt vestments stiff with candle wax"
+  },
+
+  "voices": {
+    "CRUSADER": {
+      "exaggeration": 0.25, "cfg_weight": 0.3, "temperature": 0.6,
+      "pitch": 0.76, "rate": 0.88,
+      "filter": "aecho=0.7:0.65:180:0.22,lowpass=f=7000"
+    },
+    "CHOIRMASTER": {
+      "exaggeration": 0.65, "cfg_weight": 0.35, "temperature": 0.92,
+      "pitch": 1.12, "rate": 0.84,
+      "filter": "aecho=0.85:0.9:320:0.4,highpass=f=180"
+    },
+    "CHOIR": {
+      "exaggeration": 0.25, "cfg_weight": 0.25, "temperature": 0.55,
+      "pitch": 0.94, "rate": 0.72,
+      "filter": "aecho=0.9:0.95:520:0.6,lowpass=f=3200,volume=0.85",
+      "radio": true
+    }
+  },
+
+  "music": [
+    { "at": 0, "prefix": "cue1_dread",
+      "bpm": 52, "key": "D minor", "seconds": 44, "level": 0.28,
+      "tags": "vast sacred dread, low sustained pipe organ pedal note, distant wordless male choir humming one held chord, bowed double bass, single far-off tolling bell, cavernous reverb, patient and immense, dark fantasy score, instrumental, no drums, no percussion" },
+
+    { "at": 42, "prefix": "cue2_wake",
+      "bpm": 132, "key": "D minor", "seconds": 26, "level": 0.32,
+      "tags": "furious orchestral assault, hammered staccato low strings ostinato, full pipe organ fortissimo, thundering timpani and taiko, brass clusters rising, panicked choir shouting, apocalyptic, dark fantasy battle music, cinematic, instrumental" },
+
+    { "at": 63, "prefix": "cue3_hymn",
+      "bpm": 58, "key": "D major", "seconds": 24, "level": 0.36,
+      "tags": "triumphant sacred hymn resolving from minor to major, huge cathedral pipe organ, soaring boys choir in unison, warm strings swelling, one radiant struck bell ringing out, overwhelming relief and dawn, cinematic finale, instrumental" }
+  ],
+
+  "shots": [
+    { "id": "01_match", "seconds": 3,
+      "prompt": "Extreme close-up in total blackness of an armoured gauntlet wrapped in knotted prayer ribbons striking a single match, the tiny flame the only light in the frame, faint suggestion of vast curved bronze shapes hanging in the dark far above, everything else crushed black",
+      "motion": "The match head flares suddenly bright, then settles to a steady small flame. Smoke curls up. The gauntlet holds absolutely still. The light barely reaches the shapes above.",
+      "sfx": "A single match striking and catching alight, tiny flame crackle, immense empty stone room reverb, distant low bronze resonance" },
+
+    { "id": "02_bells", "seconds": 3,
+      "prompt": "Low angle looking straight up into an enormous cathedral bell vault revealed by one small flame far below, hundreds of ancient bronze bells of every size hanging on rotted ropes at every height, thick with dust and cobweb, receding up into blackness",
+      "motion": "The small flame's light swells slowly upward, revealing rank upon rank of hanging bells rising into the dark. Dust drifts down through the light. The bells hang dead still, not one of them moving.",
+      "sfx": "Vast cathedral air, faint rope creak high above, hundreds of dormant bells resonating very faintly, deep sub bass drone" },
+
+    { "id": "03_city", "seconds": 5,
+      "prompt": "Immense wide establishing shot of a dead gothic city buried under grey ash at the foot of a colossal black cathedral, no sun in a starless sky, every window in the city dark, banks of ash drifted against the buildings like snow, the cathedral's spires lost in low cloud",
+      "motion": "Ash falls steadily across the whole frame. Faint dry lightning pulses somewhere behind the cloud, silhouetting the spires for an instant. Very slow, patient push in toward the cathedral doors. Nothing living moves.",
+      "sfx": "Cold wind across a dead stone city, fine ash hissing over stone, distant dry thunder, deep hollow emptiness" },
+
+    { "id": "04_crusader", "seconds": 4,
+      "prompt": "Low hero shot from behind and below of {CRUSADER} standing alone at the foot of the cathedral's black steps, tattered crimson surcoat hanging heavy with ash, greatsword point resting on the stone, the enormous doors towering above",
+      "motion": "The crimson surcoat stirs slowly in the wind. Ash settles on the pauldrons. The ember glow in the helm slit brightens faintly as the head lifts to take in the doors. Almost no other movement.",
+      "line": { "who": "CRUSADER", "text": "Forty winters. And no dawn." },
+      "sfx": "Wind pulling at heavy cloth, ash ticking against steel plate, a single armoured shift of weight" },
+
+    { "id": "05_doors", "seconds": 3,
+      "prompt": "Tight close-up on the seam of two colossal iron cathedral doors, a thin blade of warm candlelight leaking out through the gap, centuries of wax runs frozen down the metal, carved saints worn faceless by ash",
+      "motion": "The blade of warm light in the door seam flickers as something passes in front of it far inside. Ash blows across the iron. The doors do not move.",
+      "sfx": "Muffled distant choral singing bleeding through heavy iron, wind, faint wax crackle, low ominous swell" },
+
+    { "id": "06_descend", "seconds": 4,
+      "prompt": "Wide shot of {CRUSADER} descending an enormous spiral stone stair lit by thousands of guttering candles set into every niche, the stair curving down into warm darkness far below, walls slick with wax, the figure small against the scale",
+      "motion": "The Crusader descends steadily, step by step, one hand trailing the wall. Candle flames bend and gutter as she passes. Wax drips. The camera drifts slowly down alongside her.",
+      "sfx": "Slow heavy armoured footsteps echoing down a stone spiral, thousands of candle flames fluttering, wax dripping, singing growing louder below" },
+
+    { "id": "07_whisper", "seconds": 3,
+      "prompt": "Extreme close-up of the narrow eye slit of {CRUSADER}'s great helm filling the frame, ember gold light burning steady behind the slit, warm candlelight raking across the scarred blackened steel, the reflection of hundreds of tiny flames curved across the metal",
+      "motion": "The ember light behind the eye slit pulses once, slowly, as if listening. Reflected candle flames drift across the curve of the steel. Utterly still otherwise.",
+      "line": { "who": "CHOIR", "text": "Sleep. Sleep. Sleep." },
+      "sfx": "Hundreds of ruined voices whispering in unison far off, vast reverb, unsettling sustained high string" },
+
+    { "id": "08_nave", "seconds": 5,
+      "prompt": "Colossal wide shot of a cathedral nave filled end to end with hundreds of robed figures standing in perfect ranks facing away from camera, all mouths open in song, hanging candle wheels above them, ash drifted along the aisles, impossible vaulted ceiling lost in dark",
+      "motion": "The ranked figures sway very slightly in unison as they hold the note. Candle wheels swing gently above. Ash drifts through the shafts of light. Slow majestic push up the centre aisle. Nobody turns around.",
+      "sfx": "Hundreds of ragged human voices holding one enormous sustained chord, cavernous cathedral reverb, candle wheels creaking" },
+
+    { "id": "09_singers", "seconds": 3,
+      "prompt": "Close-up along a row of the choir revealing they are ordinary townspeople, faces grey and hollowed, eyes closed, throats visibly ruined and swollen, mouths held open in song, dust settled thick on their shoulders and eyelashes, decades of wax down their robes",
+      "motion": "The row of singers holds the note, chests barely moving, dust shivering loose from their shoulders with the vibration. One singer's cracked lips tremble. None of them open their eyes. Camera tracks slowly sideways along the row.",
+      "sfx": "Close ragged strained human breathing and singing, rasping ruined throats, dust, deep unease" },
+
+    { "id": "10_choirmaster", "seconds": 4,
+      "prompt": "Dramatic reveal shot of {CHOIRMASTER} standing on a high stone pulpit above the choir, baton raised mid-beat, brass pipes catching the candlelight, loose hymnal pages fluttering where its face should be, the ranked choir stretching away below it",
+      "motion": "The Choirmaster's baton sweeps down and across in a slow deliberate conducting beat. The loose hymn pages of its face flutter and turn. Its brass ribs flex faintly. It tilts its head down toward camera without stopping the beat.",
+      "line": { "who": "CHOIRMASTER", "text": "You are late. We have held this note since your mother was a girl." },
+      "sfx": "Wooden baton cutting the air, brass pipes creaking, dry paper pages fluttering, organ pedal note beneath" },
+
+    { "id": "11_draw", "seconds": 2,
+      "prompt": "Tight low angle of {CRUSADER} drawing the long plain greatsword clear of its scabbard, warm candlelight running the whole length of the blade, crimson surcoat swinging, the blurred ranks of the choir behind her",
+      "motion": "The blade pulls free fast and comes up level. The surcoat swings hard with the movement. Candlelight sweeps down the steel. Sharp, decisive, one single motion.",
+      "line": { "who": "CRUSADER", "text": "Then stop." },
+      "sfx": "Long steel blade drawn ringing from a scabbard, heavy cloth swing, sudden silence" },
+
+    { "id": "12_warning", "seconds": 4,
+      "prompt": "Close-up of {CHOIRMASTER} leaning down from the pulpit toward camera, hymnal pages parting to suggest something like an expression, baton lowered for the first time, candlelight from below throwing hard shadows up its brass frame",
+      "motion": "The Choirmaster leans slowly down and in. Its pages part and settle. The baton lowers all the way. Behind it, the enormous held note wavers for the first time as the choir falters.",
+      "line": { "who": "CHOIRMASTER", "text": "Child. Stop the singing, and the thing beneath us wakes." },
+      "sfx": "Brass frame groaning as it leans, pages settling, the great choral chord wavering and losing its centre" },
+
+    { "id": "13_beneath", "seconds": 3,
+      "prompt": "Overhead shot looking straight down through a vast iron floor grate set into the cathedral flagstones, far below it an immense scaled black mass filling the entire space, dull ember light pulsing slowly somewhere deep within it, chains as thick as trees crossing the shaft",
+      "motion": "The ember light deep below pulses slowly, twice, brighter the second time. The enormous chains shift and grind a fraction. Heat haze rises through the grate.",
+      "sfx": "Colossal slow breathing far below stone, tree-thick chains grinding under strain, deep sub bass heartbeat, rising dread" },
+
+    { "id": "14_falter", "seconds": 2,
+      "prompt": "Wide shot of the choir breaking rank for the first time in forty years, ranked figures staggering and clutching their throats as the held note collapses, candle wheels swinging violently overhead, ash shaken up off the floor in clouds",
+      "motion": "The ranks buckle and stagger. Candle wheels swing hard and start blowing out in sequence. Ash billows up off the flagstones. Fast, chaotic, violent camera shake.",
+      "sfx": "An enormous sustained chord collapsing into coughing and cries, candles blowing out, ash, panic, rising roar" },
+
+    { "id": "15_crack", "seconds": 2,
+      "prompt": "Low angle macro of cathedral flagstones splitting apart in a jagged line, blinding ember light and heat blasting up through the widening crack, dust and grit thrown upward, carved stone shattering",
+      "motion": "The flagstones split apart fast, the crack racing toward camera. Ember light blasts upward. Stone chips and dust are thrown violently up into the air. Hard camera shake.",
+      "sfx": "Stone flagstones splitting and shattering, deep seismic crack, roaring furnace blast of heat, debris" },
+
+    { "id": "16_eye", "seconds": 3,
+      "prompt": "Enormous single reptilian eye opening slowly beneath the broken cathedral floor, taller than the shattered flagstones around it, molten ember iris with a slit black pupil, ancient scaled lid peeling back, tiny silhouetted choir figures at its edge for scale",
+      "motion": "The colossal lid peels slowly back and the molten iris rotates to focus upward. The slit pupil narrows. Everything else in frame trembles. Slow, enormous, unstoppable.",
+      "sfx": "Vast wet lid opening, deep grinding earth, colossal exhalation of heat, terrifying low brass sting" },
+
+    { "id": "17_choice", "seconds": 4,
+      "prompt": "Low angle of {CRUSADER} standing in the ember glare of the broken floor, head tilted all the way back to look up at the hundreds of bells hanging in the vault far above, greatsword hanging loose and forgotten in one hand, embers streaming up past her",
+      "motion": "Embers stream upward past her. Her head stays tilted back toward the bells. Slowly, deliberately, she lets the greatsword drop from her hand. It falls out of frame. The ember glow in her helm slit steadies and brightens.",
+      "line": { "who": "CRUSADER", "text": "There is another way to hold a note." },
+      "sfx": "Embers and hot updraft, a heavy greatsword clattering down onto stone and settling, breath, resolve" },
+
+    { "id": "18_climb", "seconds": 3,
+      "prompt": "Dynamic wide shot of {CRUSADER} climbing hand over hand up a single rotted bell rope through the enormous dark vault, ember light from the broken floor far below throwing her shadow huge across the stonework, hundreds of bells hanging around her",
+      "motion": "She hauls herself up the rope hand over hand, the rope swinging and shedding dust with each pull. Her huge shadow sweeps across the vault stone behind her. Embers rise past her from below.",
+      "sfx": "Rotted rope creaking under heavy weight, armoured effort, dust falling, bells resonating faintly all around" },
+
+    { "id": "19_rope", "seconds": 2,
+      "prompt": "Extreme close-up of an armoured gauntlet wrapped in prayer ribbons seizing the iron clapper ring of the largest bell, verdigris and dust on ancient bronze, ember light glinting off the curve of the bell",
+      "motion": "The gauntlet clamps hard onto the clapper ring, ribbons snapping taut. Dust bursts off the bronze. The bell shifts a fraction with a deep groan.",
+      "sfx": "Iron gripped hard, ancient bronze groaning as it shifts, dust burst, held breath, silence opening up" },
+
+    { "id": "20_bell", "seconds": 3,
+      "prompt": "Enormous dramatic shot from inside the bell vault as the largest bell is struck, a shockwave of white-gold light bursting outward from the bronze in a perfect expanding ring, {CRUSADER} silhouetted small against it, every other bell around beginning to ring",
+      "motion": "The clapper slams into the bronze and a ring of white-gold light bursts outward and expands fast past camera. Every bell in the vault is knocked into ringing. Dust is blown outward in a wave. Overwhelming.",
+      "sfx": "One colossal cathedral bell struck at full force, immense bronze fundamental ringing out, hundreds of bells answering, glorious overwhelming resonance" },
+
+    { "id": "21_shock", "seconds": 3,
+      "prompt": "Wide shot down the cathedral nave as the ring of golden light sweeps through it, the ranked choir figures lit up gold and lifting their heads, ash blasted away from the flagstones, the broken floor's ember glare shrinking and dimming",
+      "motion": "The ring of golden light sweeps fast down the nave and past camera. The choir figures lift their heads and open their eyes as it passes over them. Ash is blown clear off the floor. The ember light in the crack dims and closes down.",
+      "sfx": "Enormous bell resonance rolling down a stone nave, ash blasted away, hundreds of voices gasping in relief, ember roar receding" },
+
+    { "id": "22_dawn", "seconds": 5,
+      "prompt": "Breathtaking shot of the cathedral's great rose window as the first shaft of true sunrise in forty years breaks through it, coloured light pouring down through drifting dust onto the flagstones below, {CHOIRMASTER} standing in the beam with its pages lifted toward the light",
+      "motion": "The shaft of sunrise strengthens and slowly widens, colours from the rose window crawling down across the stone floor. Dust turns golden in the beam. The Choirmaster lifts its fluttering pages up into the light, baton forgotten at its side.",
+      "line": { "who": "CHOIRMASTER", "text": "Oh. Oh, that is the note. That was always the note." },
+      "sfx": "Vast cathedral settling into silence, one last bell decaying to nothing, distant morning birds, warm still air" },
+
+    { "id": "23_rest", "seconds": 5,
+      "prompt": "Final enormous wide shot of the cathedral nave flooded with warm dawn light, hundreds of former choir members sitting down on the flagstones and steps in exhaustion and relief, {CRUSADER} sitting among them with her back against a pillar and her helm beside her on the stone, dust turning gold in the light",
+      "motion": "The seated figures settle, shoulders dropping, some lowering their heads. Dust turns slowly in the enormous shafts of dawn light. Very slow crane up and back, the whole nave and everyone in it becoming small and warm and quiet.",
+      "sfx": "Hundreds of people breathing out and sitting down on stone, cloth settling, a vast room finally at rest, warm morning air, distant birds" }
+  ]
+}

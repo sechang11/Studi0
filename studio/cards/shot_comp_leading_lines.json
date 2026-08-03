@@ -1,0 +1,63 @@
+{
+  "variable": "shot.comp.leading_lines",
+  "claim": "Leading lines tell the eye where to go, and anime backgrounds lean on them harder than live action ever does. Converging_rails and one_point pull attention down a corridor to the subject; radial detonates outward from him.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "none",
+      "clause": "no leading lines, flat arrangement",
+      "control": true,
+      "sample": "/samples/vars/shot_comp_leading_lines/none.webp"
+    },
+    {
+      "value": "one_point",
+      "clause": "one-point perspective, lines converging on a single vanishing point",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_leading_lines/one_point.webp"
+    },
+    {
+      "value": "diagonal",
+      "clause": "strong diagonal lines, diagonal leading lines",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_leading_lines/diagonal.webp"
+    },
+    {
+      "value": "radial",
+      "clause": "radial lines, lines radiating from the center",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_leading_lines/radial.webp"
+    },
+    {
+      "value": "vertical",
+      "clause": "strong vertical lines, tall parallel lines",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_leading_lines/vertical.webp"
+    },
+    {
+      "value": "horizontal",
+      "clause": "strong horizontal lines, stacked bands",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_leading_lines/horizontal.webp"
+    },
+    {
+      "value": "spiral",
+      "clause": "spiral composition, curving sweeping lines",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_leading_lines/spiral.webp"
+    },
+    {
+      "value": "converging_rails",
+      "clause": "converging parallel lines, receding rails, strong perspective lines",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_leading_lines/converging_rails.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "shot.comp.leading_lines",
+      "issue": "one_point (\"one-point perspective, lines converging on a single vanishing point\") and converging_rails (\"converging parallel lines, receding rails, strong perspective lines\") are the same instruction — one card, two identical panels. one_point is additionally a near-verbatim duplicate of shot.comp.perspective.one_point (\"one-point perspective, single vanishing point\") in another card, and radial duplicates comp.balance.radial.",
+      "fix": "Decide once whether perspective construction belongs to leading_lines or to comp.perspective and delete it from the other. Keep converging_rails only if it names a real line source in the scene (\"receding rows of stadium seats\"), otherwise drop it. Drop radial from one of the two cards that carry it."
+    }
+  ]
+}

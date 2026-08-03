@@ -1,0 +1,44 @@
+{
+  "variable": "block.exit",
+  "claim": "How a character leaves, which decides whether the shot ends on a person or on the space they vacated. A director reaches for left_behind when the departure is the other character's scene, not the leaver's.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "none",
+      "clause": "",
+      "control": true,
+      "sample": "/samples/vars/block_exit/none.webp"
+    },
+    {
+      "value": "walks_out_l",
+      "clause": "walking, leaving frame at the left edge, facing left, cropped",
+      "control": false,
+      "sample": "/samples/vars/block_exit/walks_out_l.webp"
+    },
+    {
+      "value": "walks_out_r",
+      "clause": "walking, leaving frame at the right edge, facing right, cropped",
+      "control": false,
+      "sample": "/samples/vars/block_exit/walks_out_r.webp"
+    },
+    {
+      "value": "exits_bg",
+      "clause": "walking away, receding into the background, small distant figure",
+      "control": false,
+      "sample": "/samples/vars/block_exit/exits_bg.webp"
+    },
+    {
+      "value": "drops_out",
+      "clause": "dropping below the frame, crouching out of view, only head at bottom edge",
+      "control": false,
+      "sample": "/samples/vars/block_exit/drops_out.webp"
+    },
+    {
+      "value": "left_behind",
+      "clause": "2boys, one walking away into the distance, one standing still watching",
+      "control": false,
+      "sample": "/samples/vars/block_exit/left_behind.webp"
+    }
+  ]
+}

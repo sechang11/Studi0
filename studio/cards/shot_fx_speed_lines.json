@@ -1,0 +1,56 @@
+{
+  "variable": "shot.fx.speed_lines",
+  "claim": "Drawn motion overlays are native anime language with no photographic equivalent, and they carry force that actual movement cannot. Radial says the camera is being rushed; impact says something just landed; motion_trail says he is already gone.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "none",
+      "clause": "no speed lines, clean background",
+      "control": true,
+      "sample": "/samples/vars/shot_fx_speed_lines/none.webp"
+    },
+    {
+      "value": "radial",
+      "clause": "radial speed lines, emphasis lines radiating from the center",
+      "control": false,
+      "sample": "/samples/vars/shot_fx_speed_lines/radial.webp"
+    },
+    {
+      "value": "horizontal",
+      "clause": "horizontal speed lines, sideways motion lines",
+      "control": false,
+      "sample": "/samples/vars/shot_fx_speed_lines/horizontal.webp"
+    },
+    {
+      "value": "vertical",
+      "clause": "vertical speed lines, downward motion lines",
+      "control": false,
+      "sample": "/samples/vars/shot_fx_speed_lines/vertical.webp"
+    },
+    {
+      "value": "impact",
+      "clause": "impact lines, emphasis lines, burst lines",
+      "control": false,
+      "sample": "/samples/vars/shot_fx_speed_lines/impact.webp"
+    },
+    {
+      "value": "motion_trail",
+      "clause": "motion trail, afterimage, trailing streaks",
+      "control": false,
+      "sample": "/samples/vars/shot_fx_speed_lines/motion_trail.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "shot.fx.speed_lines",
+      "issue": "The \"none\" clause is \"no speed lines, clean background\". Negation does nothing in an SDXL positive prompt - the tokens \"speed lines\" are present and can pull lines into the baseline panel - and \"clean background\" fights the fixed subject sentence by stripping \"soccer stadium, floodlights, crowd\" toward a simple background. The baseline panel will not match the other panels' subject.",
+      "fix": "Empty clause, like smear_style/none and aura/none already do. The baseline is the subject sentence alone; anything you type there is contamination."
+    },
+    {
+      "variable": "shot.fx.speed_lines",
+      "issue": "radial (\"radial speed lines, emphasis lines radiating from the center\") and impact (\"impact lines, emphasis lines, burst lines\") both resolve to the single danbooru feature \"emphasis lines\" radiating from centre. Same picture twice. The trailing \"radiating from the center\" is also prose rather than a tag.",
+      "fix": "Keep radial as \"speed lines, emphasis lines\" and either drop impact or re-aim it at the thing that distinguishes it - the point of convergence on the subject: \"impact frame, emphasis lines converging on the character, motion lines\". If that still converges, drop it."
+    }
+  ]
+}

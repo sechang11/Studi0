@@ -1,0 +1,51 @@
+{
+  "variable": "story.pov",
+  "claim": "POV decides whose experience the camera, sound and grade are aligned to. Objective watches a character while first_person makes the audience wear him — that is the difference between sympathy and complicity, and it is a choice you make once per scene, not per shot.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "objective",
+      "clause": "detached observation, neutral level vantage, uninvolved",
+      "control": false,
+      "sample": "/samples/vars/story_pov/objective.webp"
+    },
+    {
+      "value": "subjective",
+      "clause": "subjective, character-aligned vantage, shallow focus on him, close emotional proximity",
+      "control": false,
+      "sample": "/samples/vars/story_pov/subjective.webp"
+    },
+    {
+      "value": "first_person",
+      "clause": "pov, first-person view, viewer's own hands in frame",
+      "control": false,
+      "sample": "/samples/vars/story_pov/first_person.webp"
+    },
+    {
+      "value": "omniscient",
+      "clause": "distant elevated vantage, all-seeing, detached overview",
+      "control": false,
+      "sample": "/samples/vars/story_pov/omniscient.webp"
+    },
+    {
+      "value": "unreliable",
+      "clause": "unreliable, warped perspective, doubled image, distorted",
+      "control": false,
+      "sample": "/samples/vars/story_pov/unreliable.webp"
+    },
+    {
+      "value": "shared",
+      "clause": "shared vantage, over-the-shoulder of another figure, two viewpoints",
+      "control": false,
+      "sample": "/samples/vars/story_pov/shared.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "story.pov",
+      "issue": "Four of six clauses are prose abstractions with no danbooru equivalent — \"detached observation\", \"uninvolved\", \"character-aligned vantage\", \"close emotional proximity\", \"all-seeing\", \"two viewpoints\" render nothing. objective and subjective will differ only by \"shallow focus\", and objective vs omniscient only by \"elevated\". Separately, first_person (\"viewer's own hands in frame\") and shared (\"over-the-shoulder of another figure\") both require a second body in frame and so fight \"solo, 1boy\" in the subject sentence.",
+      "fix": "Use the actual camera tags Animagine knows: objective -> \"straight-on, eye level, medium shot\"; subjective -> \"depth of field, blurry background, close-up\"; omniscient -> \"from above, wide shot, distant view\"; unreliable -> \"dutch angle, double exposure, distorted perspective\"; first_person -> \"pov, pov hands\"; shared -> \"over the shoulder, from behind, foreground silhouette\" and accept that the last two contradict solo (or mark those two options unrenderable under this subject)."
+    }
+  ]
+}

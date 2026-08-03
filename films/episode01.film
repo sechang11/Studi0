@@ -1,0 +1,498 @@
+// THE DERBY - Episode 1: "The Last Minute of the Year"
+// Edit this file, then:  python3 scripts/screenplay.py films/episode01.film --timeline
+// Shot types: EST MASTER SPEAK REACT PILLOW INSERT BUILD SAKUGA SILENT
+// Cameras:    static push pull pan_l pan_r tilt_u tilt_d handheld
+
+TITLE: THE DERBY EP1
+CANVAS: 1920x1080
+FPS: 24
+CHECKPOINT: animagine-xl-4.0.safetensors
+
+CHARACTER VIRO
+  tags:  1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, teal soccer jersey, orange trim, number 7
+  voice: higgs_v3 voices_examples/higgs_audio/vex.wav
+  sheet: sheet_anime_viro.png
+
+CHARACTER RASK
+  tags:  1boy, solo, dark red hair, undercut, yellow eyes, scar on eyebrow, black soccer jersey, silver trim, number 9
+  voice: higgs_v3 voices_examples/male/male_01.wav
+  sheet: sheet_anime_rask.png
+
+CHARACTER MANAGER
+  voice: indextts2 voices_examples/male/male_01.wav
+
+MUSIC ep_cold @0 95s level:0.8
+  sparse melancholy piano, single sustained cello, empty stadium, defeat, restrained, instrumental
+
+MUSIC ep_act1 @120 240s level:0.7
+  quiet tense strings, low pulse, anticipation before a match, restrained orchestral, instrumental
+
+MUSIC ep_low @700 150s level:0.75
+  desolate solo piano, distant strings, loss, very sparse, instrumental
+
+MUSIC ep_climax @950 180s level:1.0
+  soaring orchestral build, taiko drums, brass, choir, triumphant desperate, huge, instrumental
+
+
+SCENE 00_cold | COLD | wear:0
+
+  EST static
+    empty stadium stand, confetti falling, night, wide shot, melancholy, night stadium, empty stands, co
+
+  INSERT static
+    referee whistle, close-up, blowing, night stadium, empty stands, confetti, rain, cold lighting
+
+  REACT VIRO static
+    sweaty, damp hair, flushed, kneeling on grass, head down, defeated, wide shot, small in frame, night
+
+  INSERT static
+    black soccer boots walking past, low angle, ground level, not stopping, night stadium, empty stands,
+
+  INSERT static
+    hand-painted number 7 sign left on an empty seat, close-up, night stadium, empty stands, confetti, r
+
+  VIRO: ...Again.
+
+  PILLOW static
+    confetti settling on wet grass, close-up, night, still, night stadium, empty stands, confetti, rain,
+
+
+SCENE 01_title | TITLE | wear:0
+
+  EST static
+    empty soccer stadium at dawn, mist, golden light, wide shot, scenery, empty stadium at dawn, mist, g
+
+  PILLOW static
+    goal net at dawn, dew, close-up, still, peaceful, empty stadium at dawn, mist, golden light
+
+
+SCENE 02_tunnel | TUNNEL | wear:0
+
+  EST static
+    stadium tunnel interior, concrete walls, harsh lighting, empty, wide shot, stadium tunnel, concrete,
+
+  INSERT static
+    hands taping a wrist, close-up, macro, careful, stadium tunnel, concrete, harsh overhead light
+
+  REACT VIRO static
+    sweaty, damp hair, flushed, sitting alone, taping wrist, quiet, close-up, thoughtful, stadium tunnel
+
+  PILLOW static
+    crowd noise outside, closed door, light under it, close-up, stadium tunnel, concrete, harsh overhead
+
+  VIRO: Same tunnel. Same smell of wet concrete. Nine times now.
+
+  VIRO: The first year I thought I was unlucky.
+
+  REACT VIRO static
+    sweaty, damp hair, flushed, staring at the floor, still, close-up, stadium tunnel, concrete, harsh o
+
+  VIRO: By the fourth I stopped saying that out loud.
+
+  INSERT static
+    boots being laced tight, very tight, close-up, macro, hands shaking, stadium tunnel, concrete, harsh
+
+  VIRO: My hands did not used to do that.
+
+
+SCENE 03_locker | LOCKER | wear:0
+
+  EST static
+    soccer locker room interior, benches, hanging jerseys, wide shot, locker room interior, benches, jer
+
+  MANAGER: Nine years. Nine years we have come here and gone home quiet.
+
+  REACT VIRO static
+    sweaty, damp hair, flushed, listening, jaw tight, close-up, not looking up, locker room interior, be
+
+  VIRO: I know what the record is.
+
+  MANAGER: Then stop trying to beat him. Beat the team.
+
+  REACT VIRO static
+    sweaty, damp hair, flushed, close-up, eyes down, the words landing badly, silent, locker room interi
+
+  VIRO: He does not understand. It was never about the team.
+
+  MANAGER: You have got one game left in this shirt. One.
+
+  REACT VIRO static
+    sweaty, damp hair, flushed, close-up, listening, jaw working, locker room interior, benches, jerseys
+
+  MANAGER: And I have watched you play that man nine times.
+
+  MANAGER: Nine times I have watched a brilliant footballer become a small one.
+
+  REACT VIRO static
+    sweaty, damp hair, flushed, close-up, stung, eyes down, locker room interior, benches, jerseys hangi
+
+  VIRO: You think I do not know that?
+
+  MANAGER: I think you know it. I do not think you believe it.
+
+  REACT VIRO static
+    sweaty, damp hair, flushed, close-up, silent, jaw tight, locker room interior, benches, jerseys hang
+
+  VIRO: He has never even spoken to me. Nine years.
+
+  VIRO: Not a word. Not once.
+
+  MANAGER: Because you are not his problem, son. He is yours.
+
+  REACT VIRO static
+    sweaty, damp hair, flushed, close-up, that landing hard, blinking, locker room interior, benches, je
+
+  VIRO: I would give the whole career back for one of these.
+
+  VIRO: Every goal. Every cap. All of it, for ninety minutes.
+
+
+SCENE 04_rask | RASK | wear:0
+
+  EST static
+    dim stadium tunnel, single overhead light, empty, wide shot, opposite tunnel, dim concrete, single l
+
+  REACT RASK static
+    sweaty, damp hair, flushed, alone, taping own ankle, calm, no expression, close-up, opposite tunnel,
+
+  RASK: He will come at me early. He always does.
+
+  REACT RASK static
+    sweaty, damp hair, flushed, looking at nothing, bored expression, close-up, cold, opposite tunnel, d
+
+  RASK: Do not double up on him.
+
+  REACT RASK static
+    sweaty, damp hair, flushed, taping ankle, not looking up, close-up, opposite tunnel, dim concrete, s
+
+  RASK: He wants the contact. Give him nothing to push against.
+
+  RASK: He beats himself. He always has.
+
+  REACT RASK static
+    sweaty, damp hair, flushed, close-up, flat, entirely without malice, opposite tunnel, dim concrete, 
+
+
+SCENE 05_walkout | WALKOUT | wear:0
+
+  EST static
+    tunnel mouth, blinding floodlights beyond, silhouettes, wide shot, tunnel mouth, floodlights blazing
+
+  MASTER static
+    two teams walking out onto pitch, wide shot, floodlights, crowd, tunnel mouth, floodlights blazing b
+
+  INSERT static
+    boy in front row holding hand-painted number 7 sign, close-up, hopeful, tunnel mouth, floodlights bl
+
+  REACT VIRO static
+    sweaty, damp hair, flushed, seeing the boy, small flicker of a smile, close-up, tunnel mouth, floodl
+
+  PILLOW static
+    floodlight tower warming up against black sky, low angle, tunnel mouth, floodlights blazing beyond, 
+
+
+SCENE 06_kickoff | KICKOFF | wear:0
+
+  MASTER static
+    kick off, two teams on pitch, wide shot, night stadium, floodlights, night pitch, floodlights, packe
+
+  BUILD VIRO static
+    sweaty, damp hair, flushed, running with soccer ball, driving forward, determined, from side, night 
+
+  INSERT static
+    soccer ball taken away, boot intercepting, close-up, low angle, night pitch, floodlights, packed sta
+
+  REACT RASK static
+    sweaty, damp hair, flushed, unbothered, already turning away, close-up, night pitch, floodlights, pa
+
+  REACT VIRO static
+    sweaty, damp hair, flushed, frustrated, hands on hips, wide shot, small in frame, night pitch, flood
+
+  VIRO: There. Straight at him. Like always.
+
+  REACT VIRO static
+    sweaty, damp hair, flushed, close-up, breathing hard already, night pitch, floodlights, packed stadi
+
+  VIRO: Eight minutes gone and I have not looked up once.
+
+
+SCENE 07_goal | GOAL | wear:0
+
+  MASTER static
+    soccer attack developing, players in penalty area, wide shot, night pitch, floodlights, penalty area
+
+  INSERT static
+    soccer ball crossing the goal line, net, close-up, undramatic, night pitch, floodlights, penalty are
+
+  REACT RASK static
+    sweaty, damp hair, flushed, scoring, no celebration, walking back, close-up, flat expression, night 
+
+  REACT VIRO static
+    sweaty, damp hair, flushed, standing still, distant, small in frame, wide shot, stunned, night pitch
+
+  PILLOW static
+    scoreboard glow reflected in a puddle on the grass, close-up, night pitch, floodlights, penalty area
+
+  VIRO: Of course.
+
+  REACT VIRO static
+    sweaty, damp hair, flushed, close-up, hollow, eyes wide, night pitch, floodlights, penalty area
+
+  VIRO: He did not even look pleased.
+
+  VIRO: That is the part nobody understands. It costs him nothing.
+
+  REACT RASK static
+    sweaty, damp hair, flushed, walking back to halfway, expressionless, wide shot, night pitch, floodli
+
+
+SCENE 08_futile | FUTILE | wear:0
+
+  BUILD VIRO static
+    sweaty, dirt on uniform, messy hair, breathing hard, attacking, running with soccer ball, from side,
+
+  INSERT static
+    tackled, ball lost, boots and grass, close-up, low angle, night pitch, floodlights, midfield
+
+  BUILD VIRO static
+    sweaty, dirt on uniform, messy hair, breathing hard, attacking again, sprinting, gritted teeth, from
+
+  INSERT static
+    blocked, body between him and ball, close-up, night pitch, floodlights, midfield
+
+  REACT VIRO static
+    sweaty, dirt on uniform, messy hair, breathing hard, hands on knees, breathing hard, close-up, exhau
+
+  VIRO: Nine years. And he has not even looked at me.
+
+  VIRO: Again.
+
+  BUILD VIRO static
+    sweaty, dirt on uniform, messy hair, breathing hard, attacking a third time, ragged, desperate, from
+
+  INSERT static
+    dispossessed again, ball rolling clear, close-up, ground level, night pitch, floodlights, midfield
+
+  VIRO: Again.
+
+  REACT VIRO static
+    sweaty, dirt on uniform, messy hair, breathing hard, close-up, chest heaving, hair stuck to face, ni
+
+  VIRO: My legs have gone. Sixty minutes and my legs have gone.
+
+  VIRO: He has not broken stride once.
+
+
+SCENE 09_card | CARD | wear:0
+
+  BUILD VIRO static
+    sweaty, dirt on uniform, messy hair, breathing hard, rash sliding tackle, reckless, low angle, groun
+
+  INSERT static
+    yellow card raised against black sky, close-up, low angle, night pitch, floodlights, midfield
+
+  REACT VIRO static
+    sweaty, dirt on uniform, messy hair, breathing hard, on the ground, looking up, realising, close-up,
+
+  RASK: You are playing me. Play the game.
+
+  REACT VIRO static
+    sweaty, dirt on uniform, messy hair, breathing hard, looking up at him, confused, hurt, close-up, fr
+
+  REACT RASK static
+    sweaty, dirt on uniform, messy hair, breathing hard, already walking away, back to viewer, wide shot
+
+  VIRO: Even now. Even now he is trying to help me.
+
+  VIRO: Say something. Nine years and you have never said one word to me.
+
+  REACT RASK static
+    sweaty, dirt on uniform, messy hair, breathing hard, stopping, turning back, close-up, considering h
+
+  RASK: What would you like me to say?
+
+  VIRO: Anything. Tell me I am not good enough. Tell me something.
+
+  REACT RASK static
+    sweaty, dirt on uniform, messy hair, breathing hard, close-up, looking at him properly for the first
+
+  RASK: You are the best player on this pitch.
+
+  REACT VIRO static
+    sweaty, dirt on uniform, messy hair, breathing hard, close-up, completely thrown, mouth slightly ope
+
+  RASK: You have been the best player on this pitch for nine years.
+
+  RASK: And you have spent all nine of them watching me instead of playing.
+
+  REACT VIRO static
+    sweaty, dirt on uniform, messy hair, breathing hard, close-up, devastated, the truth arriving, night
+
+
+SCENE 10_low | LOW | wear:0
+
+  REACT VIRO static
+    torn uniform, dirt and grass stains, exhausted, dishevelled, standing alone, edge of box, exhausted,
+
+  PILLOW static
+    empty seat in the front row, hand-painted sign gone, close-up, night pitch, edge of penalty box, cro
+
+  REACT VIRO static
+    torn uniform, dirt and grass stains, exhausted, dishevelled, seeing the empty seat, face falling, cl
+
+  SILENT VIRO static
+    torn uniform, dirt and grass stains, exhausted, dishevelled, standing completely still, crowd blurre
+
+  PILLOW static
+    stadium clock reading 88:00, glowing, close-up, dark, night pitch, edge of penalty box, crowd blurre
+
+  VIRO: He is right.
+
+  REACT VIRO static
+    torn uniform, dirt and grass stains, exhausted, dishevelled, close-up, empty, staring at nothing, ni
+
+  VIRO: Nine years of my life, and he is right.
+
+  VIRO: The boy has gone home. He did not even wait for the end.
+
+  REACT VIRO static
+    torn uniform, dirt and grass stains, exhausted, dishevelled, close-up, looking at the empty seat, br
+
+  VIRO: I do not blame him. I would not have waited either.
+
+
+SCENE 11_decide | DECIDE | wear:0
+
+  INSERT static
+    soccer ball rolling past his feet untouched, close-up, low angle, night pitch, floodlights
+
+  REACT VIRO static
+    torn uniform, dirt and grass stains, exhausted, dishevelled, letting it go, something settling in hi
+
+  VIRO: Beat the team.
+
+  REACT VIRO static
+    torn uniform, dirt and grass stains, exhausted, dishevelled, lifting his head, eyes changed, close-u
+
+  VIRO: So stop.
+
+  REACT VIRO static
+    torn uniform, dirt and grass stains, exhausted, dishevelled, close-up, breathing slowing, something 
+
+  VIRO: Stop wanting to beat him.
+
+  VIRO: Just play. One more time. Just play.
+
+
+SCENE 12_lastmin | LASTMIN | wear:0
+
+  MASTER static
+    quick passing move, several players, wide shot, night pitch, night pitch, floodlights, fast play
+
+  BUILD VIRO static
+    torn uniform, dirt and grass stains, exhausted, dishevelled, one touch pass, head up, calm, from sid
+
+  REACT RASK static
+    torn uniform, dirt and grass stains, exhausted, dishevelled, reading him, finding nothing, slight fr
+
+  BUILD VIRO static
+    torn uniform, dirt and grass stains, exhausted, dishevelled, moving into space, running, controlled,
+
+  INSERT static
+    teammate boots passing the ball, close-up, low angle, quick, night pitch, floodlights, fast play
+
+  VIRO: Head up. Where is everyone.
+
+  REACT VIRO static
+    torn uniform, dirt and grass stains, exhausted, dishevelled, close-up, calm, eyes scanning, night pi
+
+  VIRO: There. And there. They have been there the whole time.
+
+  REACT RASK static
+    torn uniform, dirt and grass stains, exhausted, dishevelled, close-up, frowning slightly, losing him
+
+  VIRO: He cannot read me because I am not looking at him.
+
+
+SCENE 13_sakuga | SAKUGA | wear:0
+
+  SAKUGA VIRO static
+    torn bloodied uniform, cut on face, utterly exhausted, trembling, sprinting at full speed, motion li
+
+  SAKUGA static
+    soccer ball struck hard, deforming, impact, speed lines, close-up, night pitch, floodlights, penalty
+
+  SAKUGA RASK static
+    torn bloodied uniform, cut on face, utterly exhausted, trembling, turning to chase, desperate, dynam
+
+  SAKUGA static
+    turf tearing up, boots, ground level, explosive, close-up, night pitch, floodlights, penalty area, e
+
+  SAKUGA VIRO static
+    torn bloodied uniform, cut on face, utterly exhausted, trembling, breaking past the last defender, f
+
+
+SCENE 14_silence | SILENCE | wear:0
+
+  SILENT VIRO static
+    torn bloodied uniform, cut on face, utterly exhausted, trembling, alone with the soccer ball, comple
+
+  INSERT static
+    leg drawing back to strike, extreme low angle, tense, close-up, night pitch, penalty area, everythin
+
+
+SCENE 15_goal | GOAL | wear:0
+
+  INSERT static
+    boot striking soccer ball, moment of contact, white flash, close-up, night pitch, goal, explosive
+
+  INSERT static
+    soccer ball in the goal net, mesh bulging, from behind goal, close-up, night pitch, goal, explosive
+
+  REACT static
+    boy in the front row standing alone, arms raised, close-up, crowd seated, night pitch, goal, explosi
+
+  REACT RASK static
+    torn bloodied uniform, cut on face, utterly exhausted, trembling, watching, something finally showin
+
+  REACT VIRO static
+    torn bloodied uniform, cut on face, utterly exhausted, trembling, on his knees, exhausted, not celeb
+
+
+SCENE 16_tag | TAG | wear:0
+
+  EST static
+    stadium after full time, players walking off, wide shot, night, night pitch, after full time, emptyi
+
+  RASK: You still have not beaten me.
+
+  VIRO: I know. But you did not beat me either.
+
+  REACT RASK static
+    torn bloodied uniform, cut on face, utterly exhausted, trembling, half smiling, offering a handshake
+
+  RASK: ...Next year, then.
+
+  REACT VIRO static
+    torn bloodied uniform, cut on face, utterly exhausted, trembling, saying nothing, close-up, knowing 
+
+  PILLOW static
+    hand-painted number 7 sign left on an empty seat, wide shot, night, night pitch, after full time, em
+
+  PILLOW static
+    empty stadium, floodlights going out one by one, wide shot, night pitch, after full time, emptying s
+
+  VIRO: Nine years.
+
+  RASK: Nine years.
+
+  REACT VIRO static
+    torn bloodied uniform, cut on face, utterly exhausted, trembling, close-up, exhausted, almost smilin
+
+  VIRO: You could have told me that in the first one.
+
+  RASK: You would not have heard it in the first one.
+
+  REACT VIRO static
+    torn bloodied uniform, cut on face, utterly exhausted, trembling, close-up, conceding that, nodding 
+

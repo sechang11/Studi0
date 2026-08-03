@@ -1,0 +1,57 @@
+{
+  "variable": "shot.cam.angle",
+  "claim": "Angle is the classic dominance lever: the tilt of the lens relative to the subject. Low makes a figure monumental, high makes them small and observed, and dutch says the world itself is off its axis.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "level",
+      "clause": "straight-on, eye level, level horizon",
+      "control": false,
+      "sample": "/samples/vars/shot_cam_angle/level.webp"
+    },
+    {
+      "value": "low",
+      "clause": "from below, low angle",
+      "control": false,
+      "sample": "/samples/vars/shot_cam_angle/low.webp"
+    },
+    {
+      "value": "high",
+      "clause": "from above, high angle",
+      "control": false,
+      "sample": "/samples/vars/shot_cam_angle/high.webp"
+    },
+    {
+      "value": "birds_eye",
+      "clause": "bird's-eye view, from far above",
+      "control": false,
+      "sample": "/samples/vars/shot_cam_angle/birds_eye.webp"
+    },
+    {
+      "value": "worms_eye",
+      "clause": "worm's-eye view, extreme low angle, from below",
+      "control": false,
+      "sample": "/samples/vars/shot_cam_angle/worms_eye.webp"
+    },
+    {
+      "value": "top_down",
+      "clause": "top-down view, from directly above",
+      "control": false,
+      "sample": "/samples/vars/shot_cam_angle/top_down.webp"
+    },
+    {
+      "value": "dutch",
+      "clause": "dutch angle, tilted horizon",
+      "control": false,
+      "sample": "/samples/vars/shot_cam_angle/dutch.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "shot.cam.angle",
+      "issue": "birds_eye (\"bird's-eye view, from far above\") and top_down (\"top-down view, from directly above\") are the same instruction in two phrasings and will render as one picture; both also duplicate cam.height.overhead/aerial. worms_eye (\"worm's-eye view, extreme low angle, from below\") differs from low (\"from below, low angle\") only by intensifiers the model largely ignores.",
+      "fix": "Keep level / low / high / dutch as the load-bearing four plus one overhead extreme, and delete the twin. Assign overhead ownership to exactly one card (angle or height, not both)."
+    }
+  ]
+}

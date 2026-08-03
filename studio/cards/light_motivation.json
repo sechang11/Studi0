@@ -1,0 +1,99 @@
+{
+  "variable": "light.motivation",
+  "claim": "Names the in-world source the light is pretending to come from, which decides colour temperature, shadow direction and hardness in one word. A director sets this first: sun and neon give you two completely different films of the same scene, and 'unmotivated' is the honest label for the flat generator default nobody chose.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "sun",
+      "clause": "sunlight, daylight, hard sunlit shadows",
+      "control": false,
+      "sample": "/samples/vars/light_motivation/sun.webp"
+    },
+    {
+      "value": "moon",
+      "clause": "moonlight, night, pale blue illumination",
+      "control": false,
+      "sample": "/samples/vars/light_motivation/moon.webp"
+    },
+    {
+      "value": "sky_ambient",
+      "clause": "overcast ambient light, diffused skylight, shadowless",
+      "control": false,
+      "sample": "/samples/vars/light_motivation/sky_ambient.webp"
+    },
+    {
+      "value": "practical",
+      "clause": "lit by a visible lamp in frame, warm point light source, glowing fixture",
+      "control": false,
+      "sample": "/samples/vars/light_motivation/practical.webp"
+    },
+    {
+      "value": "firelight",
+      "clause": "firelight, orange flame glow, warm flickering light",
+      "control": false,
+      "sample": "/samples/vars/light_motivation/firelight.webp"
+    },
+    {
+      "value": "screen_glow",
+      "clause": "screen light, pale blue glow on face, monitor lit",
+      "control": false,
+      "sample": "/samples/vars/light_motivation/screen_glow.webp"
+    },
+    {
+      "value": "neon",
+      "clause": "neon lights, neon glow, magenta and cyan light spill",
+      "control": false,
+      "sample": "/samples/vars/light_motivation/neon.webp"
+    },
+    {
+      "value": "fluorescent",
+      "clause": "fluorescent lighting, cold white overhead tubes, faint green cast",
+      "control": false,
+      "sample": "/samples/vars/light_motivation/fluorescent.webp"
+    },
+    {
+      "value": "streetlamp",
+      "clause": "streetlamp glow, sodium orange pool of light from above",
+      "control": false,
+      "sample": "/samples/vars/light_motivation/streetlamp.webp"
+    },
+    {
+      "value": "headlights",
+      "clause": "car headlights, harsh white beam from the front, headlight glare",
+      "control": false,
+      "sample": "/samples/vars/light_motivation/headlights.webp"
+    },
+    {
+      "value": "magic",
+      "clause": "magical glow, unnatural glowing light source, arcane light",
+      "control": false,
+      "sample": "/samples/vars/light_motivation/magic.webp"
+    },
+    {
+      "value": "bioluminescence",
+      "clause": "bioluminescent glow, soft teal organic light, glowing in the dark",
+      "control": false,
+      "sample": "/samples/vars/light_motivation/bioluminescence.webp"
+    },
+    {
+      "value": "unmotivated",
+      "clause": "flat even lighting, no visible light source, sourceless illumination",
+      "control": false,
+      "sample": "/samples/vars/light_motivation/unmotivated.webp"
+    },
+    {
+      "value": "mixed",
+      "clause": "mixed lighting, two light sources, warm and cool light clashing",
+      "control": false,
+      "sample": "/samples/vars/light_motivation/mixed.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "light.motivation",
+      "issue": "sky_ambient (\"overcast ambient light, diffused skylight, shadowless\") and unmotivated (\"flat even lighting, no visible light source, sourceless illumination\") describe the same frame — flat, shadowless, no directional cue — and will render as the same panel. Both also collide with light.quality.overcast_flat, light.ratio.flat_1_1 and light.key_dir.ambient_none, so four cards would ship the same image.",
+      "fix": "Give sky_ambient the thing that actually distinguishes open shade — colour and sky direction: \"overcast sky, cool blue-grey daylight, soft shadowless light from above\". Make unmotivated the empty-clause baseline panel, since that is literally what it is: the generator default nobody chose. Then delete ambient_none from light.key_dir (see separate note) and let light.quality own overcast_flat."
+    }
+  ]
+}

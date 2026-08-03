@@ -1,0 +1,15 @@
+{
+  "variable": "shot.cam.move_anchor",
+  "claim": "Anchor is the point a move converges on: a push into the centre of the frame and a push into a character's eye are two different shots with the same verb. Set it to face when the move is about a person and to horizon when it is about the world.",
+  "not_visual": "An anchor only exists while the camera is moving - it names the fixed point of a transform. Without a move there is nothing for it to anchor, and any still version would just be duplicating shot.comp.thirds_bias.",
+  "options": [
+    "center",
+    "face",
+    "subject",
+    "thirds_l",
+    "thirds_r",
+    "horizon",
+    "custom_xy"
+  ],
+  "panels": []
+}

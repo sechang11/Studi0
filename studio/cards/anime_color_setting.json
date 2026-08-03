@@ -1,0 +1,99 @@
+{
+  "variable": "anime.color.setting",
+  "claim": "Anime approves a separate character colour set per lighting condition before any grade touches the frame, and this picks which set is in force. It is why a character under moonlight is repainted rather than just dimmed, and why memory scenes can go sepia without the grade fighting the art.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "normal",
+      "clause": "",
+      "control": true,
+      "sample": "/samples/vars/anime_color_setting/normal.webp"
+    },
+    {
+      "value": "night",
+      "clause": "night, dark blue color palette",
+      "control": false,
+      "sample": "/samples/vars/anime_color_setting/night.webp"
+    },
+    {
+      "value": "dusk",
+      "clause": "evening, sunset colors, orange and purple light",
+      "control": false,
+      "sample": "/samples/vars/anime_color_setting/dusk.webp"
+    },
+    {
+      "value": "dawn",
+      "clause": "dawn, sunrise light, pale pink glow",
+      "control": false,
+      "sample": "/samples/vars/anime_color_setting/dawn.webp"
+    },
+    {
+      "value": "interior_warm",
+      "clause": "warm indoor lighting, tungsten glow",
+      "control": false,
+      "sample": "/samples/vars/anime_color_setting/interior_warm.webp"
+    },
+    {
+      "value": "fluorescent",
+      "clause": "fluorescent lighting, green tinted white light",
+      "control": false,
+      "sample": "/samples/vars/anime_color_setting/fluorescent.webp"
+    },
+    {
+      "value": "backlit",
+      "clause": "backlighting, strong rim light, dark front",
+      "control": false,
+      "sample": "/samples/vars/anime_color_setting/backlit.webp"
+    },
+    {
+      "value": "moonlight",
+      "clause": "moonlight, cool blue light",
+      "control": false,
+      "sample": "/samples/vars/anime_color_setting/moonlight.webp"
+    },
+    {
+      "value": "firelight",
+      "clause": "firelight, warm orange glow",
+      "control": false,
+      "sample": "/samples/vars/anime_color_setting/firelight.webp"
+    },
+    {
+      "value": "underwater",
+      "clause": "underwater lighting, blue green caustics",
+      "control": false,
+      "sample": "/samples/vars/anime_color_setting/underwater.webp"
+    },
+    {
+      "value": "storm",
+      "clause": "storm light, desaturated grey, lightning glow",
+      "control": false,
+      "sample": "/samples/vars/anime_color_setting/storm.webp"
+    },
+    {
+      "value": "monochrome_memory",
+      "clause": "monochrome, greyscale",
+      "control": false,
+      "sample": "/samples/vars/anime_color_setting/monochrome_memory.webp"
+    },
+    {
+      "value": "sepia_memory",
+      "clause": "sepia, faded brown tones",
+      "control": false,
+      "sample": "/samples/vars/anime_color_setting/sepia_memory.webp"
+    },
+    {
+      "value": "flashbulb",
+      "clause": "camera flash, blown out white light, harsh flash",
+      "control": false,
+      "sample": "/samples/vars/anime_color_setting/flashbulb.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "anime.color.setting",
+      "issue": "underwater (\"underwater lighting, blue green caustics\") fights the fixed subject sentence - \"underwater\" is a strong scene tag and will flood the soccer stadium rather than relight it, so the panel stops being the same subject. backlit (\"backlighting, strong rim light, dark front\") is also the same render as anime.fx.silhouette_mode/rim_only.",
+      "fix": "Drop underwater from this card - a lighting-condition card built on a stadium subject cannot demonstrate a submerged colour script. Keep backlit here and remove rim_only from silhouette_mode, so backlighting is taught once."
+    }
+  ]
+}

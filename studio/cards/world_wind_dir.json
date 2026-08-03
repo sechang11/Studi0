@@ -1,0 +1,50 @@
+{
+  "variable": "world.wind_dir",
+  "claim": "Fixes which way the air travels so hair, cloth and particles agree from shot to shot instead of contradicting each other across a cut. Swirling and updraft are also character beats — one traps a figure, the other lifts them.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "none",
+      "clause": "",
+      "control": true,
+      "sample": "/samples/vars/world_wind_dir/none.webp"
+    },
+    {
+      "value": "l_to_r",
+      "clause": "wind blowing to the right, hair swept right, cloth trailing right",
+      "control": false,
+      "sample": "/samples/vars/world_wind_dir/l_to_r.webp"
+    },
+    {
+      "value": "r_to_l",
+      "clause": "wind blowing to the left, hair swept left, cloth trailing left",
+      "control": false,
+      "sample": "/samples/vars/world_wind_dir/r_to_l.webp"
+    },
+    {
+      "value": "toward_camera",
+      "clause": "wind blowing toward viewer, hair blown back, cloth pressed against body",
+      "control": false,
+      "sample": "/samples/vars/world_wind_dir/toward_camera.webp"
+    },
+    {
+      "value": "away",
+      "clause": "wind blowing away from viewer, hair blown forward, cloth billowing away",
+      "control": false,
+      "sample": "/samples/vars/world_wind_dir/away.webp"
+    },
+    {
+      "value": "swirling",
+      "clause": "swirling wind, vortex, debris circling, hair whirling",
+      "control": false,
+      "sample": "/samples/vars/world_wind_dir/swirling.webp"
+    },
+    {
+      "value": "updraft",
+      "clause": "updraft, wind from below, hair blown upward, clothes lifting",
+      "control": false,
+      "sample": "/samples/vars/world_wind_dir/updraft.webp"
+    }
+  ]
+}

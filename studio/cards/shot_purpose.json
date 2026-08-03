@@ -1,0 +1,75 @@
+{
+  "variable": "shot.purpose",
+  "claim": "Purpose is the preset a director sets before touching anything else: it decides how big the subject sits in the frame and what the frame is actually about. Reach for it when you want the shot to do a job - plant the location, land a face, hold a beat - instead of hand-dialling size, lens and duration one at a time.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "establish",
+      "clause": "wide shot, scenery, full body, distant subject",
+      "control": false,
+      "sample": "/samples/vars/shot_purpose/establish.webp"
+    },
+    {
+      "value": "reveal",
+      "clause": "backlighting, emerging from shadow, dramatic entrance",
+      "control": false,
+      "sample": "/samples/vars/shot_purpose/reveal.webp"
+    },
+    {
+      "value": "react",
+      "clause": "close-up, wide-eyed, surprised",
+      "control": false,
+      "sample": "/samples/vars/shot_purpose/react.webp"
+    },
+    {
+      "value": "action",
+      "clause": "dynamic pose, motion blur, running",
+      "control": false,
+      "sample": "/samples/vars/shot_purpose/action.webp"
+    },
+    {
+      "value": "dialogue",
+      "clause": "upper body, open mouth, talking",
+      "control": false,
+      "sample": "/samples/vars/shot_purpose/dialogue.webp"
+    },
+    {
+      "value": "transition",
+      "clause": "blurry, motion blur, out of focus",
+      "control": false,
+      "sample": "/samples/vars/shot_purpose/transition.webp"
+    },
+    {
+      "value": "detail",
+      "clause": "extreme close-up, cropped, object focus",
+      "control": false,
+      "sample": "/samples/vars/shot_purpose/detail.webp"
+    },
+    {
+      "value": "beat",
+      "clause": "medium shot, standing, expressionless",
+      "control": false,
+      "sample": "/samples/vars/shot_purpose/beat.webp"
+    },
+    {
+      "value": "mood",
+      "clause": "atmospheric, ambient light, looking away",
+      "control": false,
+      "sample": "/samples/vars/shot_purpose/mood.webp"
+    },
+    {
+      "value": "insert",
+      "clause": "close-up, soccer ball, object focus",
+      "control": false,
+      "sample": "/samples/vars/shot_purpose/insert.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "shot.purpose",
+      "issue": "detail (\"extreme close-up, cropped, object focus\") and insert (\"close-up, soccer ball, object focus\") share the same tag core, and in a soccer scene the detail panel will almost certainly land on the ball too — two options, one picture. reveal (\"emerging from shadow, dramatic entrance\") and mood (\"atmospheric, ambient light\") are description rather than danbooru tags: none of those four phrases are trained, so those panels rest entirely on \"backlighting\" and \"looking away\".",
+      "fix": "Anchor detail on something else the subject sentence already contains — \"extreme close-up, jersey number, fabric texture\" — and let insert own the ball. Rewrite reveal as \"backlighting, silhouette, rim lighting\" and mood as \"dark, dramatic shadow, looking away\", which are all trained tags."
+    }
+  ]
+}

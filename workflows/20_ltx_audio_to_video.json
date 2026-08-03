@@ -1,0 +1,232 @@
+{
+  "_comment": "AUDIO-DRIVEN VIDEO. You supply a still and a real audio track; LTX-2.3 generates video that matches the audio - mouth movement to speech, motion to music. This is the one capability nothing else local has. Note the direction of travel: workflows 11/17 GENERATE audio alongside video, this one is DRIVEN BY audio you already have.",
+  "_notes": [
+    "THE MECHANISM, which is worth understanding because it is reusable: the real audio is encoded to an audio latent (node 25), then SetLatentNoiseMask (27) pins it with an ALL-ZERO mask from SolidMask (26). A zero noise mask means 'add no noise here, do not denoise this' - so the audio half of the joint latent is frozen at your track while the video half is generated freely. The model can only satisfy the objective by making video that fits the audio. Set SolidMask value to 1.0 instead and the audio is treated as noise to be regenerated, and you are back to plain I2V.",
+    "FRAME MATH IS NOT OPTIONAL: frames = fps * audio_duration + 1. Here 24 * 4.0 + 1 = 97. Mismatch this and the audio and video latents have different temporal lengths and LTXVConcatAVLatent fails. If you change the trim duration (node 24) you MUST change node 30's length to match.",
+    "Your clip must be at least as long as the trim duration. claude_ia2v_speech.mp3 is 4.64 s and we trim to 4.0 s.",
+    "The still is a first-frame GUIDE, not a locked frame: LTXVImgToVideoInplace at strength 0.7 in stage 1 (node 31), then 1.0 in stage 2 (node 42). Lower stage-1 strength to ~0.5 for more motion freedom, raise toward 1.0 to hold the composition tighter at the cost of movement.",
+    "Same two-stage structure as workflow 17: sample at 640x352, upsample the latent 2x, re-denoise at partial strength (sigmas starting at 0.85). Stage 2 uses LTXVCropGuides (node 44) to strip the guide conditioning before refining - that is the one structural difference from 17.",
+    "Front-facing subject with a visible mouth works far better than a profile or a downward gaze. Do not expect broadcast lip-sync: this is motion correlated with audio, not a dedicated viseme model.",
+    "For music instead of speech, swap node 23's file. Motion follows rhythm and intensity rather than mouth shapes."
+  ],
+  "1": {
+    "class_type": "CheckpointLoaderSimple",
+    "inputs": { "ckpt_name": "ltx-2.3-22b-dev-fp8.safetensors" }
+  },
+  "2": {
+    "class_type": "LTXAVTextEncoderLoader",
+    "inputs": {
+      "text_encoder": "gemma_3_12B_it_fp4_mixed.safetensors",
+      "ckpt_name": "ltx-2.3-22b-dev-fp8.safetensors",
+      "device": "default"
+    }
+  },
+  "3": {
+    "class_type": "LTXVAudioVAELoader",
+    "inputs": { "ckpt_name": "ltx-2.3-22b-dev-fp8.safetensors" }
+  },
+  "5": {
+    "class_type": "LoraLoaderModelOnly",
+    "inputs": {
+      "model": ["1", 0],
+      "lora_name": "ltx_2.3_22b_distilled_1.1_lora_dynamic_fro09_avg_rank_111_bf16.safetensors",
+      "strength_model": 0.5
+    }
+  },
+  "10": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "clip": ["2", 0],
+      "text": "A woman in her fifties with short grey hair speaks directly to camera in a documentary interview, mouth moving naturally with her words, small head movements and blinks, eyebrows shifting with emphasis. Static locked-off camera, plain grey studio backdrop, soft frontal key light. Natural skin texture, neutral colour grade, 85mm lens."
+    }
+  },
+  "11": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "clip": ["2", 0],
+      "text": "pc game, console game, video game, cartoon, childish, ugly, blurry, static, frozen, still image, distorted mouth, extra teeth, watermark, text"
+    }
+  },
+  "12": {
+    "class_type": "LTXVConditioning",
+    "inputs": { "positive": ["10", 0], "negative": ["11", 0], "frame_rate": 24.0 }
+  },
+  "20": {
+    "class_type": "LoadImage",
+    "inputs": { "image": "claude_ia2v_face.png" }
+  },
+  "21": {
+    "class_type": "ResizeImagesByLongerEdge",
+    "inputs": { "images": ["20", 0], "longer_edge": 1280 }
+  },
+  "22": {
+    "class_type": "LTXVPreprocess",
+    "inputs": { "image": ["21", 0], "img_compression": 18 }
+  },
+  "23": {
+    "class_type": "LoadAudio",
+    "inputs": { "audio": "claude_ia2v_speech.mp3" }
+  },
+  "24": {
+    "class_type": "TrimAudioDuration",
+    "inputs": { "audio": ["23", 0], "start_index": 0.0, "duration": 4.0 }
+  },
+  "25": {
+    "class_type": "LTXVAudioVAEEncode",
+    "inputs": { "audio": ["24", 0], "audio_vae": ["3", 0] }
+  },
+  "26": {
+    "class_type": "SolidMask",
+    "inputs": { "value": 0.0, "width": 1024, "height": 1024 }
+  },
+  "27": {
+    "class_type": "SetLatentNoiseMask",
+    "inputs": { "samples": ["25", 0], "mask": ["26", 0] }
+  },
+  "30": {
+    "class_type": "EmptyLTXVLatentVideo",
+    "inputs": { "width": 640, "height": 352, "length": 97, "batch_size": 1 }
+  },
+  "31": {
+    "class_type": "LTXVImgToVideoInplace",
+    "inputs": {
+      "vae": ["1", 2],
+      "image": ["22", 0],
+      "latent": ["30", 0],
+      "strength": 0.7,
+      "bypass": false
+    }
+  },
+  "32": {
+    "class_type": "LTXVConcatAVLatent",
+    "inputs": { "video_latent": ["31", 0], "audio_latent": ["27", 0] }
+  },
+  "33": {
+    "class_type": "ManualSigmas",
+    "inputs": { "sigmas": "1.0, 0.99375, 0.9875, 0.98125, 0.975, 0.909375, 0.725, 0.421875, 0.0" }
+  },
+  "34": {
+    "class_type": "CFGGuider",
+    "inputs": {
+      "model": ["5", 0],
+      "positive": ["12", 0],
+      "negative": ["12", 1],
+      "cfg": 1.0
+    }
+  },
+  "35": {
+    "class_type": "RandomNoise",
+    "inputs": { "noise_seed": 4242 }
+  },
+  "36": {
+    "class_type": "KSamplerSelect",
+    "inputs": { "sampler_name": "euler" }
+  },
+  "37": {
+    "class_type": "SamplerCustomAdvanced",
+    "inputs": {
+      "noise": ["35", 0],
+      "guider": ["34", 0],
+      "sampler": ["36", 0],
+      "sigmas": ["33", 0],
+      "latent_image": ["32", 0]
+    }
+  },
+  "38": {
+    "class_type": "LTXVSeparateAVLatent",
+    "inputs": { "av_latent": ["37", 0] }
+  },
+  "40": {
+    "class_type": "LatentUpscaleModelLoader",
+    "inputs": { "model_name": "ltx-2.3-spatial-upscaler-x2-1.1.safetensors" }
+  },
+  "41": {
+    "class_type": "LTXVLatentUpsampler",
+    "inputs": {
+      "samples": ["38", 0],
+      "upscale_model": ["40", 0],
+      "vae": ["1", 2]
+    }
+  },
+  "42": {
+    "class_type": "LTXVImgToVideoInplace",
+    "inputs": {
+      "vae": ["1", 2],
+      "image": ["22", 0],
+      "latent": ["41", 0],
+      "strength": 1.0,
+      "bypass": false
+    }
+  },
+  "43": {
+    "class_type": "LTXVConcatAVLatent",
+    "inputs": { "video_latent": ["42", 0], "audio_latent": ["38", 1] }
+  },
+  "44": {
+    "class_type": "LTXVCropGuides",
+    "inputs": {
+      "positive": ["12", 0],
+      "negative": ["12", 1],
+      "latent": ["38", 0]
+    }
+  },
+  "45": {
+    "class_type": "CFGGuider",
+    "inputs": {
+      "model": ["5", 0],
+      "positive": ["44", 0],
+      "negative": ["44", 1],
+      "cfg": 1.0
+    }
+  },
+  "46": {
+    "class_type": "ManualSigmas",
+    "inputs": { "sigmas": "0.85, 0.7250, 0.4219, 0.0" }
+  },
+  "47": {
+    "class_type": "RandomNoise",
+    "inputs": { "noise_seed": 4243 }
+  },
+  "48": {
+    "class_type": "SamplerCustomAdvanced",
+    "inputs": {
+      "noise": ["47", 0],
+      "guider": ["45", 0],
+      "sampler": ["36", 0],
+      "sigmas": ["46", 0],
+      "latent_image": ["43", 0]
+    }
+  },
+  "49": {
+    "class_type": "LTXVSeparateAVLatent",
+    "inputs": { "av_latent": ["48", 0] }
+  },
+  "50": {
+    "class_type": "VAEDecodeTiled",
+    "inputs": {
+      "samples": ["49", 0],
+      "vae": ["1", 2],
+      "tile_size": 768,
+      "overlap": 64,
+      "temporal_size": 4096,
+      "temporal_overlap": 4
+    }
+  },
+  "51": {
+    "class_type": "LTXVAudioVAEDecode",
+    "inputs": { "samples": ["49", 1], "audio_vae": ["3", 0] }
+  },
+  "52": {
+    "class_type": "CreateVideo",
+    "inputs": { "images": ["50", 0], "audio": ["51", 0], "fps": 24.0 }
+  },
+  "53": {
+    "class_type": "SaveVideo",
+    "inputs": {
+      "video": ["52", 0],
+      "filename_prefix": "claude-generated/18-audio-to-video/ltx_ia2v_speech",
+      "format": "auto",
+      "codec": "auto"
+    }
+  }
+}

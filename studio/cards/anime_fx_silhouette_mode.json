@@ -1,0 +1,45 @@
+{
+  "variable": "anime.fx.silhouette_mode",
+  "claim": "Reduces the character to a flat shape, which is stock anime grammar for a reveal, a threat, or a moment where identity is being withheld. Rim-only is the cheat that keeps them readable; full silhouette throws away the design entirely and dares the audience to recognise the outline. strobe_silhouette is a timing pattern and renders as the baseline.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "none",
+      "clause": "",
+      "control": true,
+      "sample": "/samples/vars/anime_fx_silhouette_mode/none.webp"
+    },
+    {
+      "value": "full_silhouette",
+      "clause": "silhouette, solid black figure, featureless",
+      "control": false,
+      "sample": "/samples/vars/anime_fx_silhouette_mode/full_silhouette.webp"
+    },
+    {
+      "value": "color_silhouette",
+      "clause": "colored silhouette, flat single color figure",
+      "control": false,
+      "sample": "/samples/vars/anime_fx_silhouette_mode/color_silhouette.webp"
+    },
+    {
+      "value": "strobe_silhouette",
+      "clause": "",
+      "control": true,
+      "sample": "/samples/vars/anime_fx_silhouette_mode/strobe_silhouette.webp"
+    },
+    {
+      "value": "rim_only",
+      "clause": "backlighting, dark figure with bright rim outline",
+      "control": false,
+      "sample": "/samples/vars/anime_fx_silhouette_mode/rim_only.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "anime.fx.silhouette_mode",
+      "issue": "\"none\" and \"strobe_silhouette\" both have empty clauses, so those two panels are the identical baseline image. Separately, rim_only (\"backlighting, dark figure with bright rim outline\") is the same render as anime.color.setting/backlit (\"backlighting, strong rim light, dark front\"), and full_silhouette (\"silhouette, solid black figure, featureless\") is the same render as shot.fx.impact_frame/silhouette_pop.",
+      "fix": "Mark strobe_silhouette renderable:false per-option so it is not shown as a panel. Then decide which card owns backlighting and which owns silhouette - drop rim_only here (it is a lighting state) and drop silhouette_pop from impact_frame (or restrict it to \"silhouette, high contrast, one frame flash\"), so the two cards stop teaching the same picture."
+    }
+  ]
+}

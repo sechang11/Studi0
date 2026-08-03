@@ -1,0 +1,44 @@
+{
+  "variable": "light.quality",
+  "claim": "The hardness of the shadow edge, which is the emotional temperature of a location before any colour is applied. Hard light is cruel and specific, very soft is tender and forgiving, and specular_wet is the only one that changes the skin itself rather than the shadows.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "hard",
+      "clause": "hard light, sharp shadow edges, high contrast shadows",
+      "control": false,
+      "sample": "/samples/vars/light_quality/hard.webp"
+    },
+    {
+      "value": "medium",
+      "clause": "medium light, moderately defined shadow edges",
+      "control": false,
+      "sample": "/samples/vars/light_quality/medium.webp"
+    },
+    {
+      "value": "soft",
+      "clause": "soft lighting, soft shadow edges, gentle falloff",
+      "control": false,
+      "sample": "/samples/vars/light_quality/soft.webp"
+    },
+    {
+      "value": "very_soft",
+      "clause": "very soft diffused light, edgeless shadows, wrapping light",
+      "control": false,
+      "sample": "/samples/vars/light_quality/very_soft.webp"
+    },
+    {
+      "value": "overcast_flat",
+      "clause": "overcast flat lighting, shadowless, dull even illumination",
+      "control": false,
+      "sample": "/samples/vars/light_quality/overcast_flat.webp"
+    },
+    {
+      "value": "specular_wet",
+      "clause": "specular highlights, wet glossy skin, sharp bright speculars",
+      "control": false,
+      "sample": "/samples/vars/light_quality/specular_wet.webp"
+    }
+  ]
+}

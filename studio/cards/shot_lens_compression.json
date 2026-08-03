@@ -1,0 +1,39 @@
+{
+  "variable": "shot.lens.compression",
+  "claim": "Compression is how flat the background stacks behind the subject, addressable on its own when focal length alone is not selling it. Expanded pushes the stadium away and isolates the figure; hyper_compressed glues the crowd to his back so he cannot escape it.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "expanded",
+      "clause": "wide angle distortion, exaggerated depth, receding background",
+      "control": false,
+      "sample": "/samples/vars/shot_lens_compression/expanded.webp"
+    },
+    {
+      "value": "natural",
+      "clause": "natural perspective, neutral depth",
+      "control": false,
+      "sample": "/samples/vars/shot_lens_compression/natural.webp"
+    },
+    {
+      "value": "compressed",
+      "clause": "telephoto compression, flattened background",
+      "control": false,
+      "sample": "/samples/vars/shot_lens_compression/compressed.webp"
+    },
+    {
+      "value": "hyper_compressed",
+      "clause": "extreme telephoto compression, flat stacked background, long lens look",
+      "control": false,
+      "sample": "/samples/vars/shot_lens_compression/hyper_compressed.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "shot.lens.compression",
+      "issue": "The whole card re-renders shot.lens.look. expanded (\"wide angle distortion, exaggerated depth\") ≈ look.ultra_wide/wide (\"ultra wide angle, exaggerated perspective\"); compressed (\"telephoto compression, flattened background\") ≈ look.tele (\"telephoto lens, compressed perspective\"); hyper_compressed ≈ look.super_tele. Internally, compressed and hyper_compressed differ only by intensifiers — Animagine has one tele look, not a gradable compression axis — so those two are one panel. natural is the baseline.",
+      "fix": "Mark renderable:false with skip_reason \"no vocabulary separable from focal length in the still pass; the axis is already shown by shot.lens.look\", or reduce to two panels (natural, compressed) and rewrite the claim so it does not promise a control the model cannot separate from lens.look."
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "variable": "movie.aspect",
+  "claim": "The shape of the frame, which every composition default is derived from — where the horizon can sit, how much lookroom exists, whether a standing figure fills the frame or floats in it. 2.39:1 strands a lone figure in negative space; 9:16 crops the world away until the character is the entire image.",
+  "not_visual": "Genuinely visible in a still, but not reachable from tags. Frame shape comes from the latent dimensions, and Animagine will not reshape the canvas because the prompt says '2.39:1' — the nearest tag, letterboxed, belongs to shot.frame.letterbox and only fakes the two widest values. Showing this honestly needs one render per ratio at its native resolution, which changes the latent and therefore breaks the identical-seed rule this method depends on.",
+  "options": [
+    "16:9",
+    "1.85:1",
+    "2:1",
+    "2.39:1",
+    "4:3",
+    "1:1",
+    "9:16"
+  ],
+  "panels": []
+}

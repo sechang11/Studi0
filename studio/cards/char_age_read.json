@@ -1,0 +1,63 @@
+{
+  "variable": "char.age_read",
+  "claim": "Sets how old the face and proportions read, independent of any stated backstory age. It is the one character axis that silently re-rolls every generation if left unstated, so a director locks it to keep the same boy from ageing four years between shots.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "child",
+      "clause": "child, aged down, round face, baby fat",
+      "control": false,
+      "sample": "/samples/vars/char_age_read/child.webp"
+    },
+    {
+      "value": "preteen",
+      "clause": "child, gangly limbs, narrow shoulders",
+      "control": false,
+      "sample": "/samples/vars/char_age_read/preteen.webp"
+    },
+    {
+      "value": "teen",
+      "clause": "teenage, youthful face, soft jawline",
+      "control": false,
+      "sample": "/samples/vars/char_age_read/teen.webp"
+    },
+    {
+      "value": "young_adult",
+      "clause": "young adult, lean face, defined jawline",
+      "control": false,
+      "sample": "/samples/vars/char_age_read/young_adult.webp"
+    },
+    {
+      "value": "adult",
+      "clause": "adult, mature male, squared jaw",
+      "control": false,
+      "sample": "/samples/vars/char_age_read/adult.webp"
+    },
+    {
+      "value": "middle_aged",
+      "clause": "mature male, aged up, stubble, faint wrinkles",
+      "control": false,
+      "sample": "/samples/vars/char_age_read/middle_aged.webp"
+    },
+    {
+      "value": "elderly",
+      "clause": "old man, wrinkles, sunken cheeks, aged up",
+      "control": false,
+      "sample": "/samples/vars/char_age_read/elderly.webp"
+    },
+    {
+      "value": "ageless",
+      "clause": "ambiguous age, unlined face, smooth features",
+      "control": false,
+      "sample": "/samples/vars/char_age_read/ageless.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "char.age_read",
+      "issue": "The preteen clause leads with \"child\", the same anchor tag as the child option (\"child, aged down, round face, baby fat\" vs \"child, gangly limbs, narrow shoulders\"). Both panels will read as a small child with a minor proportion tweak, so the card teaches nothing about the gap between six and eleven. \"gangly limbs\" is also weak against a dominant \"child\".",
+      "fix": "Anchor preteen somewhere else and let child own \"child\": preteen \"aged down, young boy, lanky limbs, narrow shoulders, flat youthful face\". If Animagine still collapses them, that is a finding worth recording after the render — but do not ship two clauses sharing the age anchor."
+    }
+  ]
+}

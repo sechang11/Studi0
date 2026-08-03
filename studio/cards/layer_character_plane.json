@@ -1,0 +1,39 @@
+{
+  "variable": "layer.character_plane",
+  "claim": "Says which depth plane the subject stands on, which decides how large they read, what is allowed to occlude them, and whether defocus lands on them or behind them. Push a character to bg and they become a detail inside a place; pull them to fg and the place becomes their backdrop.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "fg",
+      "clause": "subject close to camera, foreground plane, background far behind",
+      "control": false,
+      "sample": "/samples/vars/layer_character_plane/fg.webp"
+    },
+    {
+      "value": "mid",
+      "clause": "subject at middle distance, midground plane, background behind subject",
+      "control": false,
+      "sample": "/samples/vars/layer_character_plane/mid.webp"
+    },
+    {
+      "value": "bg",
+      "clause": "distant subject, small figure in the distance, far background plane",
+      "control": false,
+      "sample": "/samples/vars/layer_character_plane/bg.webp"
+    },
+    {
+      "value": "between_fg_mid",
+      "clause": "subject just ahead of midground, near foreground plane, slight foreground overlap",
+      "control": false,
+      "sample": "/samples/vars/layer_character_plane/between_fg_mid.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "layer.character_plane",
+      "issue": "\"between_fg_mid\" is written as descriptive prose fragments with no tag the model knows — \"subject just ahead of midground\", \"near foreground plane\", \"slight foreground overlap\" — and semantically it sits inside the gap between fg and mid, so it will land on top of one of them. The fg/mid/bg clauses are also non-tag phrasings (\"subject at middle distance\", \"midground plane\") that rely on the text encoder parsing English relations.",
+      "fix": "Rewrite on tags the model responds to: fg = \"close-up, subject near camera, blurry background, depth of field\"; mid = \"cowboy shot, subject at middle distance, background in focus\"; bg = \"wide shot, tiny figure, distant subject\". Drop between_fg_mid or give it a concrete occlusion cue (\"partially occluded by foreground object\") so it has something of its own to render."
+    }
+  ]
+}

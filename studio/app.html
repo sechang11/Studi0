@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>studio</title>
+<style>
+  :root{
+    --bg:#0f1115; --panel:#161a21; --panel2:#1c2129; --line:#272d38;
+    --ink:#e6e9ef; --dim:#8b94a3; --accent:#6ea8fe; --ok:#4ec9a0; --warn:#e0b252; --todo:#e07a5f;
+  }
+  @media (prefers-color-scheme:light){
+    :root{--bg:#f6f7f9;--panel:#fff;--panel2:#f0f2f5;--line:#dde1e8;--ink:#141821;--dim:#5d6470;}
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font:14px/1.5 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  header{display:flex;align-items:baseline;gap:16px;padding:14px 18px;
+         border-bottom:1px solid var(--line);background:var(--panel)}
+  header h1{margin:0;font-size:16px;letter-spacing:.06em;text-transform:uppercase}
+  header .sub{color:var(--dim);font-size:12px}
+  nav{margin-left:auto;display:flex;gap:4px}
+  nav button{background:none;border:1px solid transparent;color:var(--dim);
+             padding:6px 12px;border-radius:6px;cursor:pointer;font:inherit}
+  nav button.on{background:var(--panel2);border-color:var(--line);color:var(--ink)}
+  main{display:grid;grid-template-columns:180px minmax(0,1fr) 360px;gap:1px;
+       background:var(--line);height:calc(100vh - 53px)}
+  /* below ~1000px the three columns crush the middle one to nothing and the page
+     scrolls sideways, so stack instead of squeezing */
+  @media (max-width:1000px){
+    main{grid-template-columns:1fr;height:auto;min-height:calc(100vh - 53px)}
+    .col{max-height:none}
+    #groups{display:flex;flex-wrap:wrap;gap:6px}
+    .grp{width:auto;flex:0 0 auto}
+    .grp .n{float:none;margin-left:6px}
+  }
+  .col{background:var(--bg);overflow:auto;padding:14px;min-width:0}
+  .grp{display:block;width:100%;text-align:left;background:none;border:0;color:var(--dim);
+       padding:7px 10px;border-radius:6px;cursor:pointer;font:inherit;text-transform:capitalize}
+  .grp.on{background:var(--panel2);color:var(--ink)}
+  .grp .n{float:right;opacity:.55;font-variant-numeric:tabular-nums}
+  .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:11px 13px;
+        cursor:pointer;transition:border-color .12s}
+  .card:hover{border-color:var(--accent)}
+  .card.on{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+  .card h3{margin:0 0 7px;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+  .card p{margin:7px 0 0;color:var(--dim);font-size:12px}
+  .thumb{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:5px;
+         background:var(--panel2);border:1px solid var(--line)}
+  .thumb.none{display:flex;align-items:center;justify-content:center;text-align:center;
+              color:var(--dim);font-size:11px;padding:0 12px;line-height:1.35}
+  .cards{grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
+  .badge{float:right;font-size:10px;padding:1px 6px;border-radius:99px;
+         border:1px solid currentColor;opacity:.85}
+  .ready{color:var(--ok)} .partial{color:var(--warn)} .roadmap{color:var(--todo)}
+  .fields{margin-top:8px;border-top:1px dashed var(--line);padding-top:7px;
+          font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;color:var(--dim)}
+  .fields div{display:flex;justify-content:space-between;gap:10px}
+  .fields b{font-weight:500;color:var(--ink);opacity:.8}
+  h2{margin:0 0 10px;font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:var(--dim)}
+  #picked{list-style:none;margin:0 0 12px;padding:0}
+  #picked li{display:flex;justify-content:space-between;gap:8px;background:var(--panel);
+             border:1px solid var(--line);border-radius:6px;padding:6px 10px;margin-bottom:6px;
+             font-family:ui-monospace,monospace;font-size:12px}
+  #picked button{background:none;border:0;color:var(--todo);cursor:pointer;font:inherit}
+  pre{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px;
+      overflow:auto;font-size:12px;white-space:pre-wrap;margin:0}
+  .row{display:flex;gap:8px;margin-bottom:10px}
+  input,select{background:var(--panel);border:1px solid var(--line);color:var(--ink);
+               border-radius:6px;padding:7px 9px;font:inherit;flex:1;min-width:0}
+  .btn{background:var(--accent);border:0;color:#08111f;border-radius:6px;padding:7px 13px;
+       cursor:pointer;font:inherit;font-weight:600}
+  .btn.ghost{background:var(--panel2);color:var(--ink);border:1px solid var(--line);font-weight:400}
+  table{width:100%;border-collapse:collapse;font-size:12px}
+  th,td{text-align:left;padding:6px 9px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--dim);font-weight:500;position:sticky;top:0;background:var(--bg)}
+  td code{font-family:ui-monospace,monospace}
+  .hide{display:none}
+  .empty{color:var(--dim);padding:20px 0}
+  .vcard{background:var(--panel);border:1px solid var(--line);border-radius:10px;
+         padding:16px 18px;margin-bottom:16px;max-width:1400px}
+  .vcard h3{margin:0 0 6px;font-size:15px;font-family:ui-monospace,monospace;color:var(--accent)}
+  .vcard .claim{margin:0 0 8px;font-size:13px}
+  .vcard .verdict{margin:0 0 10px;font-size:12px;color:var(--warn)}
+  .vcard .lookat{margin:10px 0 4px;font-size:12px;color:var(--dim);
+                 border-left:2px solid var(--line);padding-left:10px}
+  .vcard .method{margin:0;font-size:11px;color:var(--dim);opacity:.7;
+                 font-family:ui-monospace,monospace}
+  .strip{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px}
+  .strip figure{margin:0}
+  .strip img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:5px;
+             border:1px solid var(--line);display:block}
+  .strip figcaption{font-size:11px;color:var(--dim);padding-top:3px;text-align:center}
+</style>
+</head>
+<body>
+<header>
+  <h1>studio</h1>
+  <span class="sub" id="stat">loading…</span>
+  <nav>
+    <button id="tabBuild" class="on">Build a scene</button>
+    <button id="tabCards">What options look like</button>
+    <button id="tabVars">All variables</button>
+  </nav>
+</header>
+
+<main id="build">
+  <div class="col" id="groups"></div>
+  <div class="col"><div class="cards" id="cards"></div></div>
+  <div class="col">
+    <h2>Scene</h2>
+    <div class="row">
+      <input id="sceneId" placeholder="scene id, e.g. the_goal" value="new_scene">
+    </div>
+    <ul id="picked"></ul>
+    <h2>.movie</h2>
+    <pre id="out"></pre>
+    <div class="row" style="margin-top:10px">
+      <button class="btn" id="copy">Copy</button>
+      <button class="btn ghost" id="clear">Clear</button>
+    </div>
+  </div>
+</main>
+
+<main id="cards2" class="hide" style="grid-template-columns:1fr">
+  <div class="col" id="cardlist"></div>
+</main>
+
+<main id="vars" class="hide" style="grid-template-columns:1fr">
+  <div class="col">
+    <div class="row">
+      <input id="q" placeholder="filter 461 variables — try weather, layer, emotion, music…">
+      <select id="st">
+        <option value="">all statuses</option>
+        <option value="ready">renders today</option>
+        <option value="partial">partial</option>
+        <option value="roadmap">roadmap</option>
+      </select>
+    </div>
+    <table><thead><tr><th>variable</th><th>level</th><th>type</th><th>default</th><th>status</th><th>what it does</th></tr></thead>
+      <tbody id="vbody"></tbody></table>
+  </div>
+</main>
+
+<script>
+const $ = s => document.querySelector(s);
+let LIB = {}, VARS = [], group = null, picked = {};
+
+const SKIP = new Set(['id','desc','status','note']);
+
+function statusClass(s){ return s === 'ready' ? 'ready' : s === 'roadmap' ? 'roadmap' : 'partial'; }
+
+async function boot(){
+  LIB  = await (await fetch('/api/library')).json();
+  VARS = await (await fetch('/api/variables')).json();
+  const n = Object.values(LIB).reduce((a,v) => a + v.length, 0);
+  $('#stat').textContent = `${n} presets in ${Object.keys(LIB).length} groups · ${VARS.length} variables`;
+  drawGroups();
+  group = Object.keys(LIB)[0];
+  drawCards();
+  drawVars();
+}
+
+function drawGroups(){
+  $('#groups').innerHTML = '';
+  for (const g of Object.keys(LIB)){
+    const b = document.createElement('button');
+    b.className = 'grp' + (g === group ? ' on' : '');
+    b.innerHTML = `${g}<span class="n">${LIB[g].length}</span>`;
+    b.onclick = () => { group = g; drawGroups(); drawCards(); };
+    $('#groups').appendChild(b);
+  }
+}
+
+function drawCards(){
+  const wrap = $('#cards');
+  wrap.innerHTML = '';
+  const items = LIB[group] || [];
+  if (!items.length){ wrap.innerHTML = '<p class="empty">nothing in this group yet</p>'; return; }
+  for (const it of items){
+    const el = document.createElement('div');
+    el.className = 'card' + (picked[group] === it.id ? ' on' : '');
+    const fields = Object.entries(it).filter(([k]) => !SKIP.has(k));
+    // Only `ready` presets have a sample. A picture on a half-finished preset would
+    // imply it is fully honoured, which is worse than plainly showing it is not.
+    const media = it.sample
+      ? (it.sample.endsWith('.mp4')
+          ? `<video class="thumb" src="${it.sample}" muted loop playsinline
+                    onmouseenter="this.play()" onmouseleave="this.pause();this.currentTime=0"></video>`
+          : `<img class="thumb" src="${it.sample}" alt="${it.id}">`)
+      : `<div class="thumb none">${it.status === 'partial' ? 'unfinished — see roadmap/FINISH-PARTIAL.md' : 'no sample'}</div>`;
+    el.innerHTML =
+      `<span class="badge ${statusClass(it.status)}">${it.status || '?'}</span>` +
+      `<h3>${it.id}</h3>` + media + `<p>${it.desc || ''}</p>` +
+      (fields.length ? `<div class="fields">${fields.map(([k,v]) =>
+        `<div><b>${k}</b><span>${String(v).slice(0,42)}</span></div>`).join('')}</div>` : '');
+    el.onclick = () => {
+      if (picked[group] === it.id) delete picked[group]; else picked[group] = it.id;
+      drawCards(); drawScene();
+    };
+    wrap.appendChild(el);
+  }
+}
+
+// group folder -> the variable you write in a .movie file
+const KEY = { shots:'shot', cameras:'camera', transitions:'transition', looks:'look',
+              lighting:'lighting', layers:'layers', weather:'weather', emotions:'emotion',
+              soundscapes:'sound', pacing:'pace', places:'place', characters:'characters',
+              cues:'cue' };
+
+function drawScene(){
+  const ul = $('#picked'); ul.innerHTML = '';
+  const keys = Object.keys(picked);
+  if (!keys.length) ul.innerHTML = '<li style="border:0;background:none;color:var(--dim)">nothing picked yet</li>';
+  for (const g of keys){
+    const li = document.createElement('li');
+    li.innerHTML = `<span>${KEY[g] || g}: <b>${picked[g]}</b></span>`;
+    const x = document.createElement('button');
+    x.textContent = '×';
+    x.onclick = () => { delete picked[g]; drawCards(); drawScene(); };
+    li.appendChild(x);
+    ul.appendChild(li);
+  }
+  const id = ($('#sceneId').value || 'new_scene').trim().replace(/\s+/g,'_');
+  const lines = [`  SCENE ${id}`];
+  for (const g of keys) if (g !== 'shots') lines.push(`    ${KEY[g] || g}: ${picked[g]}`);
+  if (picked.shots) lines.push(`    shot: ${picked.shots}`);
+  $('#out').textContent = lines.join('\n');
+}
+
+$('#sceneId').addEventListener('input', drawScene);
+$('#copy').onclick = () => navigator.clipboard.writeText($('#out').textContent);
+$('#clear').onclick = () => { picked = {}; drawCards(); drawScene(); };
+
+function drawVars(){
+  const q  = $('#q').value.toLowerCase();
+  const st = $('#st').value;
+  const rows = VARS.filter(v =>
+      (!st || v.status === st) &&
+      (!q || (v.name + ' ' + (v.why||'') + ' ' + (v.type||'')).toLowerCase().includes(q)));
+  $('#vbody').innerHTML = rows.slice(0, 500).map(v =>
+    `<tr><td><code>${v.name}</code></td><td>${v.level}</td><td>${v.type}</td>` +
+    `<td><code>${v.default}</code></td>` +
+    `<td class="${statusClass(v.status)}">${v.status}</td>` +
+    `<td>${v.why || ''}${v.fallback ? ` <em>falls back to ${v.fallback}</em>` : ''}</td></tr>`).join('')
+    || '<tr><td colspan="6" class="empty">no matches</td></tr>';
+}
+$('#q').addEventListener('input', drawVars);
+$('#st').addEventListener('change', drawVars);
+
+let CARDS = [];
+async function drawCardTab(){
+  if (!CARDS.length) CARDS = await (await fetch('/api/cards')).json();
+  $('#cardlist').innerHTML = CARDS.map(c => `
+    <section class="vcard">
+      <h3>${c.variable}</h3>
+      <p class="claim">${c.claim}</p>
+      ${c.verdict ? `<p class="verdict"><b>Verdict:</b> ${c.verdict}</p>` : ''}
+      <div class="strip">${c.panels.map(p => `
+        <figure><img src="${p.sample}" loading="lazy" alt="${p.value}">
+          <figcaption><code>${p.value}</code></figcaption></figure>`).join('')}</div>
+      <p class="lookat"><b>What to notice:</b> ${c.look_at}</p>
+      <p class="method">${c.method} · ${c.model}</p>
+    </section>`).join('')
+    || '<p class="empty">no cards yet — run studio/make_cards.py</p>';
+}
+
+function show(which){
+  for (const [tab, pane] of [['tabBuild','build'],['tabCards','cards2'],['tabVars','vars']]){
+    const on = tab === which;
+    $('#'+pane).classList.toggle('hide', !on);
+    $('#'+tab).classList.toggle('on', on);
+  }
+  if (which === 'tabCards') drawCardTab();
+}
+$('#tabBuild').onclick = () => show('tabBuild');
+$('#tabCards').onclick = () => show('tabCards');
+$('#tabVars').onclick  = () => show('tabVars');
+
+boot();
+drawScene();
+</script>
+</body>
+</html>

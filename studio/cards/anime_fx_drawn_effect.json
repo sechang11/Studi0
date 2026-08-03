@@ -1,0 +1,74 @@
+{
+  "variable": "anime.fx.drawn_effect",
+  "claim": "Effects animation is its own craft and looks nothing like photographic fire or water, so this names the drawn element directly. Cel fire and crystal water are the ones that instantly say 'this was animated by hand'; geometric debris is the modern action-show signature.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "none",
+      "clause": "",
+      "control": true,
+      "sample": "/samples/vars/anime_fx_drawn_effect/none.webp"
+    },
+    {
+      "value": "cel_fire",
+      "clause": "cel animated fire, stylized flames, hard edged fire shapes",
+      "control": false,
+      "sample": "/samples/vars/anime_fx_drawn_effect/cel_fire.webp"
+    },
+    {
+      "value": "ink_smoke",
+      "clause": "ink smoke, brushy black smoke plume",
+      "control": false,
+      "sample": "/samples/vars/anime_fx_drawn_effect/ink_smoke.webp"
+    },
+    {
+      "value": "crystal_water",
+      "clause": "crystalline water splash, angular stylized water",
+      "control": false,
+      "sample": "/samples/vars/anime_fx_drawn_effect/crystal_water.webp"
+    },
+    {
+      "value": "geometric_debris",
+      "clause": "geometric debris, angular rubble shards",
+      "control": false,
+      "sample": "/samples/vars/anime_fx_drawn_effect/geometric_debris.webp"
+    },
+    {
+      "value": "stylised_lightning",
+      "clause": "stylized lightning, jagged electric bolts",
+      "control": false,
+      "sample": "/samples/vars/anime_fx_drawn_effect/stylised_lightning.webp"
+    },
+    {
+      "value": "sparks",
+      "clause": "sparks, flying embers",
+      "control": false,
+      "sample": "/samples/vars/anime_fx_drawn_effect/sparks.webp"
+    },
+    {
+      "value": "wind_lines",
+      "clause": "drawn wind lines, air current streaks",
+      "control": false,
+      "sample": "/samples/vars/anime_fx_drawn_effect/wind_lines.webp"
+    },
+    {
+      "value": "petals",
+      "clause": "falling petals, drifting blossoms",
+      "control": false,
+      "sample": "/samples/vars/anime_fx_drawn_effect/petals.webp"
+    },
+    {
+      "value": "glass_shatter",
+      "clause": "shattering glass, flying glass shards",
+      "control": false,
+      "sample": "/samples/vars/anime_fx_drawn_effect/glass_shatter.webp"
+    },
+    {
+      "value": "energy_beam",
+      "clause": "energy beam, glowing blast of light",
+      "control": false,
+      "sample": "/samples/vars/anime_fx_drawn_effect/energy_beam.webp"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "variable": "time.fit_mode",
+  "claim": "Decides what gives when your authored shot durations don't add up to the scene length the structure asked for: free lets the scene run long, fit_to_budget and stretch_to_budget rescale every shot to hit the number, trim_tail amputates the end, and drop_lowest_priority sacrifices whole filler shots to protect the hero ones. A director reaches for it when a locked runtime — an OP, a music video, a broadcast slot — has to be hit without hand-retiming forty shots.",
+  "not_visual": "Pure duration arithmetic across a timeline. It changes how long shots play and which shots survive to the cut, never what is inside any single frame. All five options would render a byte-identical still.",
+  "options": [
+    "free",
+    "fit_to_budget",
+    "stretch_to_budget",
+    "trim_tail",
+    "drop_lowest_priority"
+  ],
+  "panels": []
+}

@@ -1,0 +1,81 @@
+{
+  "variable": "char.gesture",
+  "claim": "Directs the hands, which is where performance lives and where generation quietly fails when nobody says what the arms are doing. A director reaches for it because crossed arms and an outstretched hand rewrite the meaning of an identical face.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "none",
+      "clause": "",
+      "control": true,
+      "sample": "/samples/vars/char_gesture/none.webp"
+    },
+    {
+      "value": "pointing",
+      "clause": "pointing, index finger extended, arm raised",
+      "control": false,
+      "sample": "/samples/vars/char_gesture/pointing.webp"
+    },
+    {
+      "value": "reaching",
+      "clause": "reaching out, outstretched hand, arm extended",
+      "control": false,
+      "sample": "/samples/vars/char_gesture/reaching.webp"
+    },
+    {
+      "value": "covering_face",
+      "clause": "covering face, hand over face",
+      "control": false,
+      "sample": "/samples/vars/char_gesture/covering_face.webp"
+    },
+    {
+      "value": "clenched_fists",
+      "clause": "clenched fists, tight fists at sides",
+      "control": false,
+      "sample": "/samples/vars/char_gesture/clenched_fists.webp"
+    },
+    {
+      "value": "hands_in_pockets",
+      "clause": "hands in pockets",
+      "control": false,
+      "sample": "/samples/vars/char_gesture/hands_in_pockets.webp"
+    },
+    {
+      "value": "arms_crossed",
+      "clause": "crossed arms, arms folded over chest",
+      "control": false,
+      "sample": "/samples/vars/char_gesture/arms_crossed.webp"
+    },
+    {
+      "value": "waving",
+      "clause": "waving, raised hand, open palm",
+      "control": false,
+      "sample": "/samples/vars/char_gesture/waving.webp"
+    },
+    {
+      "value": "bowing",
+      "clause": "bowing, bent at the waist, head lowered",
+      "control": false,
+      "sample": "/samples/vars/char_gesture/bowing.webp"
+    },
+    {
+      "value": "shielding",
+      "clause": "arm raised in front of face, shielding, blocking",
+      "control": false,
+      "sample": "/samples/vars/char_gesture/shielding.webp"
+    },
+    {
+      "value": "holding_out",
+      "clause": "arm held out, open palm offered, presenting",
+      "control": false,
+      "sample": "/samples/vars/char_gesture/holding_out.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "char.gesture",
+      "issue": "reaching (\"reaching out, outstretched hand, arm extended\") and holding_out (\"arm held out, open palm offered, presenting\") both resolve to one arm extended forward with an open hand. Nothing in either clause tells the model which is which, so the two panels will be the same gesture at a different random angle.",
+      "fix": "Separate them by intent and hand shape: reaching \"reaching toward the viewer, outstretched arm, grasping fingers, straining\"; holding_out \"holding out an object, cupped hands at chest height, offering\". If holding_out is meant to be empty-handed presentation, say so with \"open palm turned upward, presenting, elbow bent\" so at least the elbow differs."
+    }
+  ]
+}

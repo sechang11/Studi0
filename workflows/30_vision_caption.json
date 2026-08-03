@@ -1,0 +1,46 @@
+{
+  "_comment": "IMAGE -> TEXT. The reverse direction, and the one nobody demonstrates. Qwen2.5-VL-7B looks at a picture and describes it, entirely locally. Point it at your own renders and it tells you what you actually made rather than what you asked for - which is how you find out a prompt is not landing.",
+  "_notes": [
+    "Same `TextGenerate` node as workflows 15/16, but with the optional `image` input wired. That one link changes it from a text model into a vision model. It also accepts `video` (an IMAGE batch, internally subsampled to 1 fps) and `audio`, so the same node captions a clip or transcribes a track.",
+    "USE GEMMA, NOT QWEN-VL — this cost a debugging round. The obvious choice, `qwen_2.5_vl_7b_fp8_scaled` with type `qwen_image`, CRASHES on this build: `AttributeError: 'Qwen25_7BVLI_Config' object has no attribute 'stop_tokens'` from comfy/text_encoders/llama.py:883. That is an upstream ComfyUI defect, not a config error on your side — every other encoder config in llama.py defines `stop_tokens` and the Qwen2.5-VL one does not, so generation cannot terminate. It is a one-line fix upstream; until it lands, Qwen2.5-VL is usable for conditioning but NOT for TextGenerate.",
+    "What works: `gemma_3_12B_it_fp4_mixed` with type **`ltxv`**. That type looks wrong for a captioning job and is correct - it is the loader path LTX-2.3 uses for its Gemma text encoder, and Gemma 3 is natively multimodal. 7.5 s per caption.",
+    "THREE USES worth knowing, in order of value: (1) reverse-engineer a look you like from a reference image into a prompt you can reuse; (2) QA your own output at scale - caption 50 renders and grep for the thing that was supposed to be in them; (3) build training captions for a LoRA dataset, which is otherwise the most tedious part of training.",
+    "For use (1) ask for a PROMPT, not a description. The instruction below does that deliberately - a description says 'a woman is smiling', a prompt says what a generator needs.",
+    "sampling_mode sub-inputs are dotted keys. See workflow 15's notes.",
+    "Output is a STRING; PreviewAny shows it in the UI and it also lands in /history, which is how scripts/idea.py reads text back."
+  ],
+  "1": {
+    "class_type": "CLIPLoader",
+    "inputs": {
+      "clip_name": "gemma_3_12B_it_fp4_mixed.safetensors",
+      "type": "ltxv",
+      "device": "default"
+    }
+  },
+  "2": {
+    "class_type": "LoadImage",
+    "inputs": { "image": "claude_outpaint_src.png" }
+  },
+  "3": {
+    "class_type": "TextGenerate",
+    "inputs": {
+      "clip": ["1", 0],
+      "image": ["2", 0],
+      "prompt": "Look at this image and write the text-to-image prompt that would recreate it. One dense paragraph, 60-90 words, no preamble and no commentary. Name the subject and pose first, then the setting, then the lighting with direction and quality, then the lens and camera angle, then the colour palette, then the medium and finish. Describe only what you can actually see. Do not use the words beautiful, stunning or masterpiece.",
+      "max_length": 400,
+      "sampling_mode": "on",
+      "sampling_mode.temperature": 0.6,
+      "sampling_mode.top_k": 64,
+      "sampling_mode.top_p": 0.95,
+      "sampling_mode.min_p": 0.05,
+      "sampling_mode.repetition_penalty": 1.05,
+      "sampling_mode.seed": 11,
+      "thinking": false,
+      "use_default_template": true
+    }
+  },
+  "4": {
+    "class_type": "PreviewAny",
+    "inputs": { "source": ["3", 0] }
+  }
+}

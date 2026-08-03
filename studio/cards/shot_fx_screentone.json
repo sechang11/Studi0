@@ -1,0 +1,56 @@
+{
+  "variable": "shot.fx.screentone",
+  "claim": "Manga screentone as a mood device is a different look entirely from film grain - it says the frame has stopped being a photograph and become a printed page. Flash_lines is a shock beat; mood_tone drops a flat tonal veil over a face that is thinking something bad.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "none",
+      "clause": "no screentone, flat color",
+      "control": true,
+      "sample": "/samples/vars/shot_fx_screentone/none.webp"
+    },
+    {
+      "value": "dots",
+      "clause": "screentone, halftone dots, benday dots",
+      "control": false,
+      "sample": "/samples/vars/shot_fx_screentone/dots.webp"
+    },
+    {
+      "value": "hatch",
+      "clause": "crosshatching, hatching, ink shading",
+      "control": false,
+      "sample": "/samples/vars/shot_fx_screentone/hatch.webp"
+    },
+    {
+      "value": "gradient",
+      "clause": "gradient screentone, halftone gradient",
+      "control": false,
+      "sample": "/samples/vars/shot_fx_screentone/gradient.webp"
+    },
+    {
+      "value": "flash_lines",
+      "clause": "flash lines, manga flash background, radiating ink lines",
+      "control": false,
+      "sample": "/samples/vars/shot_fx_screentone/flash_lines.webp"
+    },
+    {
+      "value": "mood_tone",
+      "clause": "tonal overlay, monochrome shading, screentone wash",
+      "control": false,
+      "sample": "/samples/vars/shot_fx_screentone/mood_tone.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "shot.fx.screentone",
+      "issue": "The \"none\" clause \"no screentone, flat color\" is a negation plus a tag that belongs to a different variable - \"flat color\" is exactly anime.draw.shading_steps/flat_0's clause, so the screentone baseline arrives with the shading changed and is no longer comparable to the other five panels.",
+      "fix": "Empty clause."
+    },
+    {
+      "variable": "shot.fx.screentone",
+      "issue": "mood_tone's clause is \"tonal overlay, monochrome shading, screentone wash\". \"monochrome\" is a very strong danbooru tag and will greyscale the entire frame, which is anime.color.setting/monochrome_memory, not a tonal veil. The only tag the model actually recognises in the clause is screentone, so what survives is either a greyscale image or a duplicate of the \"dots\" panel.",
+      "fix": "Drop \"monochrome\" - try \"screentone, halftone overlay, shaded face\" if the intent is a veil over a thinking face, or cut the option, since dots/gradient/mood_tone are three names for one recognised feature."
+    }
+  ]
+}

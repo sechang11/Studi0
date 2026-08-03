@@ -1,0 +1,50 @@
+{
+  "variable": "block.group_shape",
+  "claim": "The geometry three or more bodies are arranged into. Without a stated shape a group prompt collapses into tag soup and overlapping limbs; line reads as ceremony, wedge as aggression, isolated_one as exclusion.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "line",
+      "clause": "multiple boys, standing in a row, straight line, evenly spaced",
+      "control": false,
+      "sample": "/samples/vars/block_group_shape/line.webp"
+    },
+    {
+      "value": "wedge",
+      "clause": "multiple boys, v formation, one in front, others flanking behind",
+      "control": false,
+      "sample": "/samples/vars/block_group_shape/wedge.webp"
+    },
+    {
+      "value": "cluster",
+      "clause": "multiple boys, huddled together, tight group, bunched",
+      "control": false,
+      "sample": "/samples/vars/block_group_shape/cluster.webp"
+    },
+    {
+      "value": "circle",
+      "clause": "multiple boys, standing in a circle, ring formation",
+      "control": false,
+      "sample": "/samples/vars/block_group_shape/circle.webp"
+    },
+    {
+      "value": "scattered",
+      "clause": "multiple boys, scattered, spread apart, irregular spacing",
+      "control": false,
+      "sample": "/samples/vars/block_group_shape/scattered.webp"
+    },
+    {
+      "value": "tiered",
+      "clause": "multiple boys, front row kneeling, back row standing, tiered rows",
+      "control": false,
+      "sample": "/samples/vars/block_group_shape/tiered.webp"
+    },
+    {
+      "value": "isolated_one",
+      "clause": "multiple boys, one boy apart from the group, isolated figure, group behind",
+      "control": false,
+      "sample": "/samples/vars/block_group_shape/isolated_one.webp"
+    }
+  ]
+}

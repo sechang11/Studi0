@@ -1,0 +1,50 @@
+{
+  "variable": "world.precip_render",
+  "claim": "Splits whether it is raining from how the rain is actually drawn — the same downpour can be an invisible tag, photographic streaks, or hand-drawn white diagonals. This is where the anime look in a wet scene is won or lost.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "none",
+      "clause": "",
+      "control": true,
+      "sample": "/samples/vars/world_precip_render/none.webp"
+    },
+    {
+      "value": "tag_only",
+      "clause": "rain",
+      "control": false,
+      "sample": "/samples/vars/world_precip_render/tag_only.webp"
+    },
+    {
+      "value": "streaks",
+      "clause": "rain streaks, motion blurred rain, streaking raindrops",
+      "control": false,
+      "sample": "/samples/vars/world_precip_render/streaks.webp"
+    },
+    {
+      "value": "droplets_on_lens",
+      "clause": "water droplets on lens, wet camera lens, raindrops on glass",
+      "control": false,
+      "sample": "/samples/vars/world_precip_render/droplets_on_lens.webp"
+    },
+    {
+      "value": "splashes",
+      "clause": "water splash, splashing, impact ripples, spray",
+      "control": false,
+      "sample": "/samples/vars/world_precip_render/splashes.webp"
+    },
+    {
+      "value": "drawn_lines",
+      "clause": "drawn rain lines, diagonal white lines, stylized rain",
+      "control": false,
+      "sample": "/samples/vars/world_precip_render/drawn_lines.webp"
+    },
+    {
+      "value": "sheet_rain",
+      "clause": "sheets of rain, curtain of rain, wall of water",
+      "control": false,
+      "sample": "/samples/vars/world_precip_render/sheet_rain.webp"
+    }
+  ]
+}

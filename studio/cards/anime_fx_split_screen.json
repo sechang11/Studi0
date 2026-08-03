@@ -1,0 +1,69 @@
+{
+  "variable": "anime.fx.split_screen",
+  "claim": "Divides the frame so three reactions can land at once, which is something frame-in-frame cannot do. Diagonal shards are the shock version, manga panels are the stylised one, and inset PiP is how you keep a face on screen while showing what it is looking at.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "none",
+      "clause": "",
+      "control": true,
+      "sample": "/samples/vars/anime_fx_split_screen/none.webp"
+    },
+    {
+      "value": "two_v",
+      "clause": "split screen, two vertical panels",
+      "control": false,
+      "sample": "/samples/vars/anime_fx_split_screen/two_v.webp"
+    },
+    {
+      "value": "two_h",
+      "clause": "split screen, two horizontal panels",
+      "control": false,
+      "sample": "/samples/vars/anime_fx_split_screen/two_h.webp"
+    },
+    {
+      "value": "three_v",
+      "clause": "split screen, three vertical panels",
+      "control": false,
+      "sample": "/samples/vars/anime_fx_split_screen/three_v.webp"
+    },
+    {
+      "value": "grid_4",
+      "clause": "four panel grid, 2x2 panels",
+      "control": false,
+      "sample": "/samples/vars/anime_fx_split_screen/grid_4.webp"
+    },
+    {
+      "value": "diagonal_shards",
+      "clause": "diagonal shard panels, shattered split screen",
+      "control": false,
+      "sample": "/samples/vars/anime_fx_split_screen/diagonal_shards.webp"
+    },
+    {
+      "value": "inset_pip",
+      "clause": "inset panel, small picture in picture corner panel",
+      "control": false,
+      "sample": "/samples/vars/anime_fx_split_screen/inset_pip.webp"
+    },
+    {
+      "value": "manga_panels",
+      "clause": "manga panels, comic page layout, panel gutters",
+      "control": false,
+      "sample": "/samples/vars/anime_fx_split_screen/manga_panels.webp"
+    },
+    {
+      "value": "radial_wedges",
+      "clause": "radial wedge panels, pie sliced split screen",
+      "control": false,
+      "sample": "/samples/vars/anime_fx_split_screen/radial_wedges.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "anime.fx.split_screen",
+      "issue": "two_v / two_h / three_v / grid_4 depend on the model counting panels, which it does not do reliably from phrases like \"three vertical panels\" - \"split screen\" is barely a tag. two_v and three_v in particular will be indistinguishable.",
+      "fix": "Use the danbooru tags that actually encode panel layout: two_v/two_h -> \"2koma\", grid_4 -> \"4koma\", manga_panels -> \"comic, panel layout\", inset_pip -> \"inset\". Drop three_v, which has no tag and no reliable count."
+    }
+  ]
+}

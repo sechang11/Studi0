@@ -1,0 +1,39 @@
+{
+  "variable": "anime.draw.shadow_edge",
+  "claim": "Cel shadows are hard by construction, so softening the edge is always a deliberate period or mood decision rather than a default. Hard reads modern and graphic; airbrush drags the whole frame back to 1985.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "hard",
+      "clause": "hard shadow edges, crisp cel shadows",
+      "control": false,
+      "sample": "/samples/vars/anime_draw_shadow_edge/hard.webp"
+    },
+    {
+      "value": "slightly_soft",
+      "clause": "slightly softened shadow edges",
+      "control": false,
+      "sample": "/samples/vars/anime_draw_shadow_edge/slightly_soft.webp"
+    },
+    {
+      "value": "soft",
+      "clause": "soft shadows, blurred shadow edges",
+      "control": false,
+      "sample": "/samples/vars/anime_draw_shadow_edge/soft.webp"
+    },
+    {
+      "value": "airbrush",
+      "clause": "airbrush shading, smoothly blended shadows",
+      "control": false,
+      "sample": "/samples/vars/anime_draw_shadow_edge/airbrush.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "anime.draw.shadow_edge",
+      "issue": "slightly_soft's clause is \"slightly softened shadow edges\" - prose, no tag, and a degree the model cannot hit. It will land on either the hard or the soft panel. soft (\"soft shadows, blurred shadow edges\") and airbrush (\"airbrush shading, smoothly blended shadows\") are also close enough to risk collapsing.",
+      "fix": "Drop slightly_soft. Keep hard / soft / airbrush, and lean airbrush on its period identity where the model actually has signal: \"airbrush, 1980s (style) shading\"."
+    }
+  ]
+}

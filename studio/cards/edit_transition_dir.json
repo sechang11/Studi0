@@ -1,0 +1,16 @@
+{
+  "variable": "edit.transition_dir",
+  "claim": "Gives a direction to the transitions that are meaningless without one — a wipe, an iris and a whip pan all have to travel somewhere, and left versus right decides whether the cut agrees with the character's screen direction or fights it. Set it wrong and a chase reverses itself at every boundary.",
+  "not_visual": "This is a modifier on a moving mask, not on the image: it changes where a wipe edge or iris boundary is travelling, and a still frame has no travel. It is also doubly dependent — direction only means anything once the parent transition is a wipe, iris or whip pan, and those are themselves unrenderable here, so a panel grid would be a modifier on nothing. The mask itself is a compositing overlay applied after generation and has no danbooru tag that would put it in the frame.",
+  "options": [
+    "auto",
+    "left",
+    "right",
+    "up",
+    "down",
+    "in",
+    "out",
+    "radial"
+  ],
+  "panels": []
+}

@@ -1,0 +1,68 @@
+{
+  "variable": "light.shadow_gobo",
+  "claim": "The pattern cut into the light before it lands, which is the highest value per token lighting device available in tag space. Blinds across a face say interrogation, dappled foliage says summer afternoon, and none of it costs you a new location.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "none",
+      "clause": "unbroken clean shadows, no patterned shadow",
+      "control": true,
+      "sample": "/samples/vars/light_shadow_gobo/none.webp"
+    },
+    {
+      "value": "blinds",
+      "clause": "window blind shadows, venetian blind stripes across the face",
+      "control": false,
+      "sample": "/samples/vars/light_shadow_gobo/blinds.webp"
+    },
+    {
+      "value": "foliage",
+      "clause": "dappled shadows, leaf shadows, dappled light",
+      "control": false,
+      "sample": "/samples/vars/light_shadow_gobo/foliage.webp"
+    },
+    {
+      "value": "branches",
+      "clause": "branch shadows, bare tree branch pattern cast across the frame",
+      "control": false,
+      "sample": "/samples/vars/light_shadow_gobo/branches.webp"
+    },
+    {
+      "value": "grate",
+      "clause": "grate shadow, metal grid shadow pattern",
+      "control": false,
+      "sample": "/samples/vars/light_shadow_gobo/grate.webp"
+    },
+    {
+      "value": "curtain",
+      "clause": "curtain shadow, soft draped fabric shadow",
+      "control": false,
+      "sample": "/samples/vars/light_shadow_gobo/curtain.webp"
+    },
+    {
+      "value": "crowd",
+      "clause": "shadows of a crowd, overlapping human silhouette shadows",
+      "control": false,
+      "sample": "/samples/vars/light_shadow_gobo/crowd.webp"
+    },
+    {
+      "value": "rain_streaks",
+      "clause": "rain streak shadows, running water shadow pattern on skin",
+      "control": false,
+      "sample": "/samples/vars/light_shadow_gobo/rain_streaks.webp"
+    },
+    {
+      "value": "water_caustics",
+      "clause": "water caustics, rippling light patterns",
+      "control": false,
+      "sample": "/samples/vars/light_shadow_gobo/water_caustics.webp"
+    },
+    {
+      "value": "window_cross",
+      "clause": "window frame shadow, cross-shaped pane shadow",
+      "control": false,
+      "sample": "/samples/vars/light_shadow_gobo/window_cross.webp"
+    }
+  ]
+}

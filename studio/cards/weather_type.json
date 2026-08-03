@@ -1,0 +1,49 @@
+{
+  "variable": "weather.type",
+  "claim": "Precipitation and atmosphere. Renders as prompt tags today - intensity and wind are not yet honoured, so this card shows the type only.",
+  "look_at": "rain, snow and fog are strong. dust and heat haze are subtle and easily lost behind floodlights. clear is the control panel.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "clear",
+      "clause": "clear sky, dry",
+      "sample": "/samples/vars/weather_type/clear.webp"
+    },
+    {
+      "value": "overcast",
+      "clause": "overcast, grey sky, flat light",
+      "sample": "/samples/vars/weather_type/overcast.webp"
+    },
+    {
+      "value": "rain",
+      "clause": "heavy rain, wet ground, reflections",
+      "sample": "/samples/vars/weather_type/rain.webp"
+    },
+    {
+      "value": "storm",
+      "clause": "storm, torrential rain, lightning",
+      "sample": "/samples/vars/weather_type/storm.webp"
+    },
+    {
+      "value": "snow",
+      "clause": "falling snow, cold",
+      "sample": "/samples/vars/weather_type/snow.webp"
+    },
+    {
+      "value": "fog",
+      "clause": "thick fog, low visibility",
+      "sample": "/samples/vars/weather_type/fog.webp"
+    },
+    {
+      "value": "dust",
+      "clause": "dust in the air, dry wind, particles",
+      "sample": "/samples/vars/weather_type/dust.webp"
+    },
+    {
+      "value": "heat",
+      "clause": "heat haze, shimmering air",
+      "sample": "/samples/vars/weather_type/heat.webp"
+    }
+  ]
+}

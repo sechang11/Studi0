@@ -1,0 +1,12 @@
+{
+  "variable": "render.watermark",
+  "claim": "Marks a cut as provisional so a work-in-progress is never mistaken for the finished film once it leaves your hands. draft for internal circulation, version_slate when notes need to cite a specific build, custom for client or festival marking, none only when you genuinely mean final.",
+  "not_visual": "The mark is burned on by ffmpeg after generation and never by the diffusion model. Prompting 'watermark', 'artist name' or 'english text' would only demonstrate SDXL's garbled-lettering failure mode, which is the precise opposite of the clean legible overlay the option delivers - the card would teach the author to distrust a feature that works fine. Show it instead as an ffmpeg overlay applied over one identical render, four times.",
+  "options": [
+    "none",
+    "draft",
+    "version_slate",
+    "custom"
+  ],
+  "panels": []
+}

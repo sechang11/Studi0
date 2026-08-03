@@ -1,0 +1,111 @@
+{
+  "variable": "story.genre",
+  "claim": "Genre is the preset bundle — it seeds pace, lens, grade, music and sound across the whole film in one word. A director sets it so horror and sports stop needing forty hand-written tags to tell apart, and so every later variable has a sensible default to depart from.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "slice_of_life",
+      "clause": "soft natural lighting, calm everyday atmosphere, gentle colors",
+      "control": false,
+      "sample": "/samples/vars/story_genre/slice_of_life.webp"
+    },
+    {
+      "value": "drama",
+      "clause": "dramatic lighting, serious expression, muted palette, restrained",
+      "control": false,
+      "sample": "/samples/vars/story_genre/drama.webp"
+    },
+    {
+      "value": "romance",
+      "clause": "romantic atmosphere, warm soft light, pink tones, soft focus",
+      "control": false,
+      "sample": "/samples/vars/story_genre/romance.webp"
+    },
+    {
+      "value": "comedy",
+      "clause": "comedic, bright flat lighting, exaggerated expression",
+      "control": false,
+      "sample": "/samples/vars/story_genre/comedy.webp"
+    },
+    {
+      "value": "action",
+      "clause": "action, dynamic angle, motion blur, high contrast",
+      "control": false,
+      "sample": "/samples/vars/story_genre/action.webp"
+    },
+    {
+      "value": "thriller",
+      "clause": "suspense, low-key lighting, hard shadows, cold palette",
+      "control": false,
+      "sample": "/samples/vars/story_genre/thriller.webp"
+    },
+    {
+      "value": "horror",
+      "clause": "horror, deep shadows, desaturated, sickly light",
+      "control": false,
+      "sample": "/samples/vars/story_genre/horror.webp"
+    },
+    {
+      "value": "mystery",
+      "clause": "mystery, noir lighting, haze, muted colors",
+      "control": false,
+      "sample": "/samples/vars/story_genre/mystery.webp"
+    },
+    {
+      "value": "fantasy",
+      "clause": "fantasy, magical glow, ethereal light, floating light motes",
+      "control": false,
+      "sample": "/samples/vars/story_genre/fantasy.webp"
+    },
+    {
+      "value": "sci_fi",
+      "clause": "science fiction, holographic glow, neon accents, cyan light",
+      "control": false,
+      "sample": "/samples/vars/story_genre/sci_fi.webp"
+    },
+    {
+      "value": "mecha",
+      "clause": "mecha, mechanical parts, metallic sheen, industrial lighting",
+      "control": false,
+      "sample": "/samples/vars/story_genre/mecha.webp"
+    },
+    {
+      "value": "sports",
+      "clause": "sports, sweat, intense determination, dynamic energy",
+      "control": false,
+      "sample": "/samples/vars/story_genre/sports.webp"
+    },
+    {
+      "value": "isekai",
+      "clause": "isekai, otherworldly light, magic circle, fantasy sky",
+      "control": false,
+      "sample": "/samples/vars/story_genre/isekai.webp"
+    },
+    {
+      "value": "historical",
+      "clause": "historical, period atmosphere, aged colors, warm lantern light",
+      "control": false,
+      "sample": "/samples/vars/story_genre/historical.webp"
+    },
+    {
+      "value": "supernatural",
+      "clause": "supernatural, ghostly mist, eerie glow, pale aura",
+      "control": false,
+      "sample": "/samples/vars/story_genre/supernatural.webp"
+    },
+    {
+      "value": "documentary",
+      "clause": "documentary, candid, naturalistic flat lighting, observational",
+      "control": false,
+      "sample": "/samples/vars/story_genre/documentary.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "story.genre",
+      "issue": "documentary (\"documentary, candid, naturalistic flat lighting, observational\") and slice_of_life (\"soft natural lighting, calm everyday atmosphere, gentle colors\") both reduce to naturally lit boy, and \"observational\" / \"calm everyday atmosphere\" render nothing. Separately, sports (\"sports, sweat, intense determination, dynamic energy\") restates the subject sentence — the subject is already a jerseyed striker in a floodlit stadium — so that panel will be near-indistinguishable from the no-clause control.",
+      "fix": "Give documentary a visible camera signature (\"handheld framing, off-center composition, flat available light\") and slice_of_life a light signature (\"soft diffused light, pastel palette\"). For sports, either drop the option as untestable against a soccer subject or cut it to the part the subject does not already supply: \"sweat, motion blur, low angle\"."
+    }
+  ]
+}

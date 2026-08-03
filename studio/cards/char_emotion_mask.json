@@ -1,0 +1,57 @@
+{
+  "variable": "char.emotion_mask",
+  "claim": "Says the character is hiding what he feels, which is a different drawing from simply feeling it. A director uses it whenever the audience must see the effort of concealment — the smile that does not reach the eyes is the whole scene.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "none",
+      "clause": "",
+      "control": true,
+      "sample": "/samples/vars/char_emotion_mask/none.webp"
+    },
+    {
+      "value": "suppressed",
+      "clause": "suppressed expression, tight lips, tense jaw",
+      "control": false,
+      "sample": "/samples/vars/char_emotion_mask/suppressed.webp"
+    },
+    {
+      "value": "forced_smile",
+      "clause": "forced smile, strained smile, unsmiling eyes",
+      "control": false,
+      "sample": "/samples/vars/char_emotion_mask/forced_smile.webp"
+    },
+    {
+      "value": "fake_calm",
+      "clause": "expressionless, flat smile, tense shoulders",
+      "control": false,
+      "sample": "/samples/vars/char_emotion_mask/fake_calm.webp"
+    },
+    {
+      "value": "breaking",
+      "clause": "trembling lips, wavering expression, crumpling face",
+      "control": false,
+      "sample": "/samples/vars/char_emotion_mask/breaking.webp"
+    },
+    {
+      "value": "deadpan",
+      "clause": "deadpan, expressionless, half-closed eyes",
+      "control": false,
+      "sample": "/samples/vars/char_emotion_mask/deadpan.webp"
+    },
+    {
+      "value": "performative",
+      "clause": "exaggerated smile, theatrical expression, showy pose",
+      "control": false,
+      "sample": "/samples/vars/char_emotion_mask/performative.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "char.emotion_mask",
+      "issue": "fake_calm (\"expressionless, flat smile, tense shoulders\") and deadpan (\"deadpan, expressionless, half-closed eyes\") share the dominant tag \"expressionless\" and will land close together. fake_calm is also internally contradictory — \"expressionless\" and \"flat smile\" ask for two different mouths, and the model will pick one.",
+      "fix": "Give fake_calm a mask that reads as effort rather than absence: \"calm expression, closed mouth, tense shoulders, sweatdrop\" (sweatdrop is a strong danbooru tag and is exactly anime's notation for composure under strain). Keep \"expressionless\" exclusive to deadpan."
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "variable": "world.celestial",
+  "claim": "Puts an actual sun, moon or comet in the frame, which anchors light direction and time of day and usually takes over the composition it lands in. Twin_moons is the cheapest sentence in the system for saying this is not Earth.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "none",
+      "clause": "",
+      "control": true,
+      "sample": "/samples/vars/world_celestial/none.webp"
+    },
+    {
+      "value": "sun_visible",
+      "clause": "sun in frame, visible sun, sun disc",
+      "control": false,
+      "sample": "/samples/vars/world_celestial/sun_visible.webp"
+    },
+    {
+      "value": "moon_full",
+      "clause": "full moon, large moon in the sky",
+      "control": false,
+      "sample": "/samples/vars/world_celestial/moon_full.webp"
+    },
+    {
+      "value": "moon_crescent",
+      "clause": "crescent moon, thin moon in the sky",
+      "control": false,
+      "sample": "/samples/vars/world_celestial/moon_crescent.webp"
+    },
+    {
+      "value": "stars",
+      "clause": "stars, starry sky, visible constellations",
+      "control": false,
+      "sample": "/samples/vars/world_celestial/stars.webp"
+    },
+    {
+      "value": "comet",
+      "clause": "comet, comet streaking across the sky, long tail",
+      "control": false,
+      "sample": "/samples/vars/world_celestial/comet.webp"
+    },
+    {
+      "value": "eclipse",
+      "clause": "solar eclipse, black disc with corona, ring of light",
+      "control": false,
+      "sample": "/samples/vars/world_celestial/eclipse.webp"
+    },
+    {
+      "value": "twin_moons",
+      "clause": "two moons in the sky, twin moons",
+      "control": false,
+      "sample": "/samples/vars/world_celestial/twin_moons.webp"
+    }
+  ]
+}

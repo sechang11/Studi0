@@ -1,0 +1,16 @@
+{
+  "variable": "shot.frame.aspect_override",
+  "claim": "Aspect override lets one shot break ratio without restructuring the chapter around it - a sudden 2.39 insert or a 9:16 phone screen inside a 16:9 film. Reach for it when the shape of the frame is itself the point.",
+  "not_visual": "Aspect is the latent canvas geometry, set outside the prompt entirely. There is no tag for it, and changing the render dimensions means the fixed seed no longer holds the composition, which breaks the identical-seed method the card depends on.",
+  "options": [
+    "inherit",
+    "16:9",
+    "1.85:1",
+    "2:1",
+    "2.39:1",
+    "4:3",
+    "1:1",
+    "9:16"
+  ],
+  "panels": []
+}

@@ -1,0 +1,57 @@
+{
+  "variable": "grade.curve",
+  "claim": "Controls how tone is distributed rather than what colour it is: where black sits, how hard the midtones climb, whether highlights clip. Crushed makes a frame airless and expensive, lifted_matte makes it feel like recovered footage, and linear is the flat ungraded read that tells the audience nothing has been decided yet.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "linear",
+      "clause": "flat contrast, even tonal range, even tones",
+      "control": false,
+      "sample": "/samples/vars/grade_curve/linear.webp"
+    },
+    {
+      "value": "film_s",
+      "clause": "cinematic contrast, deep blacks, bright highlights",
+      "control": false,
+      "sample": "/samples/vars/grade_curve/film_s.webp"
+    },
+    {
+      "value": "soft_s",
+      "clause": "gentle contrast, soft shadows, muted highlights",
+      "control": false,
+      "sample": "/samples/vars/grade_curve/soft_s.webp"
+    },
+    {
+      "value": "strong_s",
+      "clause": "high contrast, crushed blacks, blown highlights",
+      "control": false,
+      "sample": "/samples/vars/grade_curve/strong_s.webp"
+    },
+    {
+      "value": "lifted_matte",
+      "clause": "matte finish, lifted blacks, faded shadows, low contrast",
+      "control": false,
+      "sample": "/samples/vars/grade_curve/lifted_matte.webp"
+    },
+    {
+      "value": "crushed",
+      "clause": "crushed blacks, pure black shadows, very high contrast",
+      "control": false,
+      "sample": "/samples/vars/grade_curve/crushed.webp"
+    },
+    {
+      "value": "inverted",
+      "clause": "inverted colors, negative image, color inversion",
+      "control": false,
+      "sample": "/samples/vars/grade_curve/inverted.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "grade.curve",
+      "issue": "strong_s (\"high contrast, crushed blacks, blown highlights\") and crushed (\"crushed blacks, pure black shadows, very high contrast\") share both load-bearing tags — crushed blacks plus very high contrast. The two panels will be the same image with a different label, which is exactly the case where a card teaches nothing.",
+      "fix": "Let crushed own the black point alone (\"crushed blacks, pure black shadows\") and rewrite strong_s around the S-curve's highlight end (\"high contrast, blown highlights, bright specular highlights\"), so one panel is about shadows and the other about highlights."
+    }
+  ]
+}

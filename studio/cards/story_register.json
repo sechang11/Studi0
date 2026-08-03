@@ -1,0 +1,63 @@
+{
+  "variable": "story.register",
+  "claim": "Register is the volume knob on style, not on feeling — how big performance, camera and drawing are permitted to get, separate from what they express. Naturalistic and melodrama can carry the identical emotion and look nothing alike, which is why grief in a clinical register is devastating and grief in comedic_broad is a joke.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "naturalistic",
+      "clause": "understated performance, realistic proportions, natural light, restrained",
+      "control": false,
+      "sample": "/samples/vars/story_register/naturalistic.webp"
+    },
+    {
+      "value": "heightened",
+      "clause": "heightened drama, intense expression, bold cinematic lighting",
+      "control": false,
+      "sample": "/samples/vars/story_register/heightened.webp"
+    },
+    {
+      "value": "stylised",
+      "clause": "stylized, graphic flat shapes, bold limited palette, poster-like",
+      "control": false,
+      "sample": "/samples/vars/story_register/stylised.webp"
+    },
+    {
+      "value": "melodrama",
+      "clause": "melodramatic, tears, theatrical lighting, overwhelming emotion",
+      "control": false,
+      "sample": "/samples/vars/story_register/melodrama.webp"
+    },
+    {
+      "value": "comedic_broad",
+      "clause": "broad comedy, cartoonish exaggeration, bold thick outlines, silly",
+      "control": false,
+      "sample": "/samples/vars/story_register/comedic_broad.webp"
+    },
+    {
+      "value": "poetic",
+      "clause": "poetic, lyrical, soft diffuse haze, dreamlike restraint",
+      "control": false,
+      "sample": "/samples/vars/story_register/poetic.webp"
+    },
+    {
+      "value": "clinical",
+      "clause": "clinical, flat even lighting, sterile, detached, neutral color",
+      "control": false,
+      "sample": "/samples/vars/story_register/clinical.webp"
+    },
+    {
+      "value": "mythic",
+      "clause": "mythic, monumental scale, heroic light, epic grandeur",
+      "control": false,
+      "sample": "/samples/vars/story_register/mythic.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "story.register",
+      "issue": "naturalistic (\"understated performance, realistic proportions, natural light, restrained\") and clinical (\"clinical, flat even lighting, sterile, detached, neutral color\") both resolve to flat even light on a neutral face and are likely to be the same panel. \"understated performance\", \"restrained\" and \"detached\" are performance notes with no visual referent, and \"realistic proportions\" pushes away from the anime model's base style — that is a style change smuggled into a register option.",
+      "fix": "Separate them on something visible: naturalistic -> \"soft natural light, relaxed pose, subtle expression\"; clinical -> \"flat frontal lighting, centered symmetrical composition, desaturated neutral color\". Cut \"realistic proportions\" — it fights Animagine's whole drawing style rather than expressing register."
+    }
+  ]
+}

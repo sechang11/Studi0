@@ -1,0 +1,57 @@
+{
+  "variable": "anime.draw.eye_render",
+  "claim": "House style for eye construction, set once above the whole cast because it is the single strongest signal of what kind of show this is. Big round eyes promise comedy and warmth; seinen_sharp promises somebody is going to get hurt.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "moe_round",
+      "clause": "large round eyes, moe style eyes",
+      "control": false,
+      "sample": "/samples/vars/anime_draw_eye_render/moe_round.webp"
+    },
+    {
+      "value": "shoujo_large",
+      "clause": "very large eyes, shoujo style eyes, sparkling irises",
+      "control": false,
+      "sample": "/samples/vars/anime_draw_eye_render/shoujo_large.webp"
+    },
+    {
+      "value": "shounen_bold",
+      "clause": "bold angular eyes, thick eye outlines, shounen style",
+      "control": false,
+      "sample": "/samples/vars/anime_draw_eye_render/shounen_bold.webp"
+    },
+    {
+      "value": "seinen_sharp",
+      "clause": "narrow sharp eyes, realistically proportioned eyes, seinen style",
+      "control": false,
+      "sample": "/samples/vars/anime_draw_eye_render/seinen_sharp.webp"
+    },
+    {
+      "value": "ova_90s",
+      "clause": "90s ova style eyes, small angular eyes, detailed iris",
+      "control": false,
+      "sample": "/samples/vars/anime_draw_eye_render/ova_90s.webp"
+    },
+    {
+      "value": "minimal_dot",
+      "clause": "dot eyes, solid circle eyes, simplified eyes",
+      "control": false,
+      "sample": "/samples/vars/anime_draw_eye_render/minimal_dot.webp"
+    },
+    {
+      "value": "realistic",
+      "clause": "realistic eyes, detailed iris, photorealistic eye",
+      "control": false,
+      "sample": "/samples/vars/anime_draw_eye_render/realistic.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "anime.draw.eye_render",
+      "issue": "minimal_dot (\"dot eyes, solid circle eyes, simplified eyes\") is the same clause as anime.fx.face_fault/dot_eyes (\"dot eyes, solid circle eyes\") - identical panels in two cards, and they mean different things (house style vs one-beat comedy face). realistic (\"realistic eyes, detailed iris, photorealistic eye\") is also risky: \"photorealistic\" on Animagine tends to drag the entire render off anime, so that panel will read as a style change rather than an eye change and will fight the subject.",
+      "fix": "Let eye_render keep minimal_dot and delete dot_eyes from face_fault (face_fault still has swirl_eyes for the comedy register). Change realistic to \"realistic eyes, detailed iris, semi-realistic\" and drop \"photorealistic\"."
+    }
+  ]
+}

@@ -1,0 +1,90 @@
+{
+  "_comment": "FLUX.2 dev fp8 + Turbo LoRA - the second aesthetic. Currently leads the open-weight field on photorealism and prompt adherence. Deliberately a text-to-image graph with the SAME structure as 01_qwen_t2i_turbo so the two can be A/B'd on identical prompts.",
+  "_notes": [
+    "VRAM WARNING, read before running anything else alongside this: 33 GB of DiT plus a 16.8 GB text encoder against 32 GB of VRAM. FLUX.2 CANNOT co-reside with Qwen-Image. Batch by model - render all your FLUX shots, then all your Qwen shots. Interleaving costs a full model offload per image and will make a 6 s render take minutes.",
+    "The text encoder is Mistral-3-Small, loaded with CLIPLoader type `flux2`. It is an LLM, not a CLIP - so FLUX.2 rewards natural, complete sentences and follows long instructions well. This is the opposite of SDXL-era keyword-soup prompting, and it is where FLUX.2's prompt-adherence advantage comes from.",
+    "FLUX.2 uses a GUIDER, not the usual positive/negative pair - there is no negative prompt at all. `FluxGuidance` (node 7) sets distilled guidance; 4.0 is the template value. Raise toward 5-6 for tighter prompt adherence at the cost of naturalness. There is nowhere to put a negative, so state what you DO want.",
+    "`Flux2Scheduler` needs the SAME width/height as `EmptyFlux2LatentImage` - it computes a resolution-dependent sigma schedule. Mismatch them and you get soft or noisy output with no error.",
+    "steps: 8 with the Turbo LoRA (node 3), 20 without it. Unlike Qwen's Lightning LoRA this one is not strictly 1.0-or-nothing - 0.8 is a usable middle if you want a little more fidelity for a couple more steps.",
+    "Compare against `01_qwen_t2i_turbo` on the same prompt. Rule of thumb from the model landscape: Qwen wins on in-image text, FLUX.2 wins on photorealism and on following a complicated instruction exactly."
+  ],
+  "1": {
+    "class_type": "UNETLoader",
+    "inputs": {
+      "unet_name": "flux2_dev_fp8mixed.safetensors",
+      "weight_dtype": "default"
+    }
+  },
+  "2": {
+    "class_type": "CLIPLoader",
+    "inputs": {
+      "clip_name": "mistral_3_small_flux2_fp8.safetensors",
+      "type": "flux2",
+      "device": "default"
+    }
+  },
+  "3": {
+    "class_type": "LoraLoaderModelOnly",
+    "inputs": {
+      "model": ["1", 0],
+      "lora_name": "Flux2TurboComfyv2.safetensors",
+      "strength_model": 1.0
+    }
+  },
+  "4": {
+    "class_type": "VAELoader",
+    "inputs": { "vae_name": "flux2-vae.safetensors" }
+  },
+  "6": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "clip": ["2", 0],
+      "text": "A close-up photograph of an elderly beekeeper's hands holding a honeycomb frame heavy with bees, taken on an overcast morning in an apiary. Her fingers are bare and weathered, with propolis staining the nail beds and a faint white scar across one knuckle. The bees are in sharp focus on the near comb and blur into motion on the edges of the frame. Soft directionless daylight, no sun. Shot on medium format at f4, natural colour, fine grain, no vignette."
+    }
+  },
+  "7": {
+    "class_type": "FluxGuidance",
+    "inputs": { "conditioning": ["6", 0], "guidance": 4.0 }
+  },
+  "8": {
+    "class_type": "BasicGuider",
+    "inputs": { "model": ["3", 0], "conditioning": ["7", 0] }
+  },
+  "9": {
+    "class_type": "Flux2Scheduler",
+    "inputs": { "steps": 8, "width": 1024, "height": 1024 }
+  },
+  "10": {
+    "class_type": "KSamplerSelect",
+    "inputs": { "sampler_name": "euler" }
+  },
+  "11": {
+    "class_type": "RandomNoise",
+    "inputs": { "noise_seed": 5150 }
+  },
+  "12": {
+    "class_type": "EmptyFlux2LatentImage",
+    "inputs": { "width": 1024, "height": 1024, "batch_size": 1 }
+  },
+  "13": {
+    "class_type": "SamplerCustomAdvanced",
+    "inputs": {
+      "noise": ["11", 0],
+      "guider": ["8", 0],
+      "sampler": ["10", 0],
+      "sigmas": ["9", 0],
+      "latent_image": ["12", 0]
+    }
+  },
+  "14": {
+    "class_type": "VAEDecode",
+    "inputs": { "samples": ["13", 0], "vae": ["4", 0] }
+  },
+  "15": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": ["14", 0],
+      "filename_prefix": "claude-generated/22-flux2/flux2_beekeeper"
+    }
+  }
+}

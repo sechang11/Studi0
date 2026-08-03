@@ -1,0 +1,75 @@
+{
+  "variable": "world.sky_state",
+  "claim": "Treats the sky as a designed graphic element rather than a byproduct of the weather setting. It is the largest single block of colour in most exteriors, so red_sky or sunset_gradient effectively picks the palette for the whole frame.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "auto",
+      "clause": "",
+      "control": true,
+      "sample": "/samples/vars/world_sky_state/auto.webp"
+    },
+    {
+      "value": "clear_blue",
+      "clause": "clear blue sky, cloudless sky",
+      "control": false,
+      "sample": "/samples/vars/world_sky_state/clear_blue.webp"
+    },
+    {
+      "value": "cirrus",
+      "clause": "wispy clouds, thin high clouds, streaked sky",
+      "control": false,
+      "sample": "/samples/vars/world_sky_state/cirrus.webp"
+    },
+    {
+      "value": "cumulus",
+      "clause": "cumulus clouds, large fluffy clouds, towering white clouds",
+      "control": false,
+      "sample": "/samples/vars/world_sky_state/cumulus.webp"
+    },
+    {
+      "value": "storm",
+      "clause": "storm clouds, dark heavy sky, thunderhead",
+      "control": false,
+      "sample": "/samples/vars/world_sky_state/storm.webp"
+    },
+    {
+      "value": "sunset_gradient",
+      "clause": "gradient sky, orange to purple sky, sunset sky",
+      "control": false,
+      "sample": "/samples/vars/world_sky_state/sunset_gradient.webp"
+    },
+    {
+      "value": "starfield",
+      "clause": "starry sky, milky way, countless stars",
+      "control": false,
+      "sample": "/samples/vars/world_sky_state/starfield.webp"
+    },
+    {
+      "value": "moonlit",
+      "clause": "moonlit sky, pale silver clouds, dim night sky",
+      "control": false,
+      "sample": "/samples/vars/world_sky_state/moonlit.webp"
+    },
+    {
+      "value": "red_sky",
+      "clause": "red sky, crimson clouds",
+      "control": false,
+      "sample": "/samples/vars/world_sky_state/red_sky.webp"
+    },
+    {
+      "value": "no_sky",
+      "clause": "no sky visible, roof overhead, sky blocked from view",
+      "control": true,
+      "sample": "/samples/vars/world_sky_state/no_sky.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "world.sky_state",
+      "issue": "The no_sky clause is almost entirely negation: \"no sky visible, ... sky blocked from view\". SDXL has no negation operator in the positive prompt, so those tokens push sky into the frame rather than out of it, and \"sky blocked from view\" is prose.",
+      "fix": "State the occluder positively and let it do the work: \"stadium roof, ceiling, girders overhead, covered stand\". Anything you actually want absent belongs in the negative prompt, not the clause."
+    }
+  ]
+}

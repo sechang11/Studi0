@@ -1,0 +1,51 @@
+{
+  "variable": "world.wind_speed",
+  "claim": "How hard the air is moving, driving hair, cloth, foliage and particles from a single word. It is the cheapest way to make a still read as a moment rather than a pose, and gale is a performance note as much as a weather one.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "still",
+      "clause": "no wind, hair hanging straight, motionless air",
+      "control": true,
+      "sample": "/samples/vars/world_wind_speed/still.webp"
+    },
+    {
+      "value": "breeze",
+      "clause": "light breeze, hair slightly blowing, gentle sway",
+      "control": false,
+      "sample": "/samples/vars/world_wind_speed/breeze.webp"
+    },
+    {
+      "value": "steady",
+      "clause": "wind, floating hair, fluttering clothes",
+      "control": false,
+      "sample": "/samples/vars/world_wind_speed/steady.webp"
+    },
+    {
+      "value": "gusty",
+      "clause": "gust of wind, hair suddenly blown, leaves lifted",
+      "control": false,
+      "sample": "/samples/vars/world_wind_speed/gusty.webp"
+    },
+    {
+      "value": "strong",
+      "clause": "strong wind, hair streaming sideways, clothes pressed flat",
+      "control": false,
+      "sample": "/samples/vars/world_wind_speed/strong.webp"
+    },
+    {
+      "value": "gale",
+      "clause": "gale, violent wind, hair whipping, leaning into the wind",
+      "control": false,
+      "sample": "/samples/vars/world_wind_speed/gale.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "world.wind_speed",
+      "issue": "still opens on \"no wind\", a negation, in a card where every other option is asking for hair and cloth motion. The still panel is the baseline the whole card is read against, so it is the one that most needs to be reliable.",
+      "fix": "\"hair hanging straight down, motionless air, clothes hanging loose\" — describe the calm state, never name the thing you want absent."
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "variable": "anime.draw.cel_artifacts",
+  "claim": "The photographic damage that makes cel-era anime look old, added deliberately rather than inherited from a real camera. Halation and grain sell the age; the jitter and weave options sell it even harder but only once the clip moves.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "film_grain",
+      "clause": "film grain, grainy texture",
+      "control": false,
+      "sample": "/samples/vars/anime_draw_cel_artifacts/film_grain.webp"
+    },
+    {
+      "value": "registration_jitter",
+      "clause": "",
+      "control": true,
+      "sample": "/samples/vars/anime_draw_cel_artifacts/registration_jitter.webp"
+    },
+    {
+      "value": "dust_scratches",
+      "clause": "dust and scratches, damaged film, scratched print",
+      "control": false,
+      "sample": "/samples/vars/anime_draw_cel_artifacts/dust_scratches.webp"
+    },
+    {
+      "value": "halation",
+      "clause": "halation, glowing highlight bloom, light bleed",
+      "control": false,
+      "sample": "/samples/vars/anime_draw_cel_artifacts/halation.webp"
+    },
+    {
+      "value": "telecine_wobble",
+      "clause": "",
+      "control": true,
+      "sample": "/samples/vars/anime_draw_cel_artifacts/telecine_wobble.webp"
+    },
+    {
+      "value": "paper_texture",
+      "clause": "paper texture, traditional media, textured overlay",
+      "control": false,
+      "sample": "/samples/vars/anime_draw_cel_artifacts/paper_texture.webp"
+    },
+    {
+      "value": "gate_weave",
+      "clause": "",
+      "control": true,
+      "sample": "/samples/vars/anime_draw_cel_artifacts/gate_weave.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "anime.draw.cel_artifacts",
+      "issue": "registration_jitter, telecine_wobble and gate_weave all carry empty clauses inside a renderable:true card, so they produce three byte-identical baseline panels sitting next to each other in the same card. The claim admits they only exist in motion, which is the right diagnosis but the wrong outcome.",
+      "fix": "Give those three options an explicit per-option renderable:false (or move them into a separate motion-only variable marked renderable:false) so the card does not ship three duplicate stills. Keep film_grain, dust_scratches, halation and paper_texture, which do render. Also add a \"none\" baseline - as written every panel carries damage and there is nothing to compare against."
+    }
+  ]
+}

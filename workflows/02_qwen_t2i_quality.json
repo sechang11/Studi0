@@ -1,0 +1,39 @@
+{
+  "_comment": "Qwen-Image 2512 full quality. No Lightning LoRA: 20 steps, CFG 2.5. ~3-4x slower than 01 but better prompt adherence, text rendering and micro-detail.",
+  "1": {
+    "class_type": "UNETLoader",
+    "inputs": { "unet_name": "qwen_image_2512_fp8_e4m3fn.safetensors", "weight_dtype": "default" }
+  },
+  "2": {
+    "class_type": "CLIPLoader",
+    "inputs": { "clip_name": "qwen_2.5_vl_7b_fp8_scaled.safetensors", "type": "qwen_image", "device": "default" }
+  },
+  "3": { "class_type": "VAELoader", "inputs": { "vae_name": "qwen_image_vae.safetensors" } },
+  "5": { "class_type": "ModelSamplingAuraFlow", "inputs": { "model": ["1", 0], "shift": 3.1 } },
+  "6": { "class_type": "CFGNorm", "inputs": { "model": ["5", 0], "strength": 1.0 } },
+  "10": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "clip": ["2", 0],
+      "text": "A vintage enamel shop sign hanging above a rain-slick cobblestone street, the sign reads \"NORTHWIND SUPPLY CO.\" in cream serif lettering on deep green, chipped paint, brass rivets, warm window light behind, shallow depth of field, 85mm, photographic"
+    }
+  },
+  "11": {
+    "class_type": "CLIPTextEncode",
+    "inputs": { "clip": ["2", 0], "text": "blurry, low quality, watermark, deformed text, misspelled, jpeg artifacts" }
+  },
+  "12": { "class_type": "EmptySD3LatentImage", "inputs": { "width": 1328, "height": 1328, "batch_size": 1 } },
+  "13": {
+    "class_type": "KSampler",
+    "inputs": {
+      "model": ["6", 0], "seed": 7, "steps": 20, "cfg": 2.5,
+      "sampler_name": "euler", "scheduler": "simple",
+      "positive": ["10", 0], "negative": ["11", 0], "latent_image": ["12", 0], "denoise": 1.0
+    }
+  },
+  "14": { "class_type": "VAEDecode", "inputs": { "samples": ["13", 0], "vae": ["3", 0] } },
+  "15": {
+    "class_type": "SaveImage",
+    "inputs": { "images": ["14", 0], "filename_prefix": "claude-generated/qwen_quality" }
+  }
+}

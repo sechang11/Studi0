@@ -1,0 +1,74 @@
+{
+  "variable": "world.ground_state",
+  "claim": "What the floor is doing, which in a night scene doubles your lighting for free because wet_reflective hands back a second image. It is also the fastest way to say a storm already happened without showing the storm.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "dry",
+      "clause": "dry ground, dusty surface",
+      "control": false,
+      "sample": "/samples/vars/world_ground_state/dry.webp"
+    },
+    {
+      "value": "damp",
+      "clause": "damp ground, slightly wet surface, darkened patches",
+      "control": false,
+      "sample": "/samples/vars/world_ground_state/damp.webp"
+    },
+    {
+      "value": "wet_reflective",
+      "clause": "wet ground, reflective floor, reflection on ground",
+      "control": false,
+      "sample": "/samples/vars/world_ground_state/wet_reflective.webp"
+    },
+    {
+      "value": "puddled",
+      "clause": "puddle, standing water, reflection in puddle",
+      "control": false,
+      "sample": "/samples/vars/world_ground_state/puddled.webp"
+    },
+    {
+      "value": "muddy",
+      "clause": "mud, muddy ground, churned earth, footprints in mud",
+      "control": false,
+      "sample": "/samples/vars/world_ground_state/muddy.webp"
+    },
+    {
+      "value": "snow",
+      "clause": "snow on ground, snow covered ground, footprints in snow",
+      "control": false,
+      "sample": "/samples/vars/world_ground_state/snow.webp"
+    },
+    {
+      "value": "ice",
+      "clause": "ice, frozen ground, icy surface",
+      "control": false,
+      "sample": "/samples/vars/world_ground_state/ice.webp"
+    },
+    {
+      "value": "sand",
+      "clause": "sand, sandy ground, sand ripples",
+      "control": false,
+      "sample": "/samples/vars/world_ground_state/sand.webp"
+    },
+    {
+      "value": "grass",
+      "clause": "grass, grassy field, turf",
+      "control": false,
+      "sample": "/samples/vars/world_ground_state/grass.webp"
+    },
+    {
+      "value": "tatami",
+      "clause": "tatami, tatami mat, straw mat floor",
+      "control": false,
+      "sample": "/samples/vars/world_ground_state/tatami.webp"
+    },
+    {
+      "value": "tile",
+      "clause": "tile floor, tiled ground, grout lines",
+      "control": false,
+      "sample": "/samples/vars/world_ground_state/tile.webp"
+    }
+  ]
+}

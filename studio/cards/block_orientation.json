@@ -1,0 +1,44 @@
+{
+  "variable": "block.orientation",
+  "claim": "Which way two bodies face each other, a separate axis from where they stand. Facing is confrontation, side_by_side is alliance, back_to_back is either total trust or a conversation that has already failed.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "facing",
+      "clause": "2boys, facing each other, eye contact",
+      "control": false,
+      "sample": "/samples/vars/block_orientation/facing.webp"
+    },
+    {
+      "value": "angled",
+      "clause": "2boys, angled toward each other, three-quarter view",
+      "control": false,
+      "sample": "/samples/vars/block_orientation/angled.webp"
+    },
+    {
+      "value": "side_by_side",
+      "clause": "2boys, side-by-side, shoulder to shoulder, facing same direction",
+      "control": false,
+      "sample": "/samples/vars/block_orientation/side_by_side.webp"
+    },
+    {
+      "value": "back_to_back",
+      "clause": "2boys, back-to-back",
+      "control": false,
+      "sample": "/samples/vars/block_orientation/back_to_back.webp"
+    },
+    {
+      "value": "one_turned_away",
+      "clause": "2boys, one facing viewer, one turned away, facing away",
+      "control": false,
+      "sample": "/samples/vars/block_orientation/one_turned_away.webp"
+    },
+    {
+      "value": "over_shoulder",
+      "clause": "2boys, over the shoulder, back to viewer, other boy facing viewer",
+      "control": false,
+      "sample": "/samples/vars/block_orientation/over_shoulder.webp"
+    }
+  ]
+}

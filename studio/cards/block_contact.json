@@ -1,0 +1,62 @@
+{
+  "variable": "block.contact",
+  "claim": "Whether and how bodies actually touch. Contact is the loudest single statement a frame can make about a relationship, and the generator will never volunteer it — a hand on a shoulder has to be asked for by name.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "none",
+      "clause": "2boys, not touching, gap between them",
+      "control": true,
+      "sample": "/samples/vars/block_contact/none.webp"
+    },
+    {
+      "value": "near_touch",
+      "clause": "2boys, hands almost touching, not quite touching",
+      "control": false,
+      "sample": "/samples/vars/block_contact/near_touch.webp"
+    },
+    {
+      "value": "hand_touch",
+      "clause": "2boys, hand on shoulder, touching",
+      "control": false,
+      "sample": "/samples/vars/block_contact/hand_touch.webp"
+    },
+    {
+      "value": "hand_hold",
+      "clause": "2boys, holding hands, interlocked fingers",
+      "control": false,
+      "sample": "/samples/vars/block_contact/hand_hold.webp"
+    },
+    {
+      "value": "embrace",
+      "clause": "2boys, hug, arms around each other",
+      "control": false,
+      "sample": "/samples/vars/block_contact/embrace.webp"
+    },
+    {
+      "value": "grab",
+      "clause": "2boys, grabbing collar, clenched fist on shirt",
+      "control": false,
+      "sample": "/samples/vars/block_contact/grab.webp"
+    },
+    {
+      "value": "strike",
+      "clause": "2boys, punching, fist to face, impact",
+      "control": false,
+      "sample": "/samples/vars/block_contact/strike.webp"
+    },
+    {
+      "value": "carry",
+      "clause": "2boys, carrying, piggyback, lifted off the ground",
+      "control": false,
+      "sample": "/samples/vars/block_contact/carry.webp"
+    },
+    {
+      "value": "lean_on",
+      "clause": "2boys, leaning on shoulder, resting head on shoulder",
+      "control": false,
+      "sample": "/samples/vars/block_contact/lean_on.webp"
+    }
+  ]
+}

@@ -1,0 +1,1189 @@
+{
+  "title": "CHRONO TRIGGER",
+  "subtitle": "the story",
+  "ar": "16:9",
+  "fps": 24,
+  "seconds": 4,
+  "style_lora": "qwen_image_2512_storybook_anime_lora.safetensors",
+  "style_strength": 0.75,
+  "style": {
+    "default": "storybook anime illustration, classic 16-bit JRPG cover art, cel shaded characters with clean bold outlines, hand painted background, crisp readable shapes, epic widescreen composition, warm light, saturated colour",
+    "warm": "storybook anime illustration, classic 16-bit JRPG cover art, cel shaded characters with clean bold outlines, hand painted background, crisp readable shapes, epic widescreen composition, golden hour light, vivid saturated colour, dramatic sky",
+    "cold": "storybook anime illustration, classic 16-bit JRPG cover art, cel shaded characters with clean bold outlines, hand painted background, crisp readable shapes, epic widescreen composition, flat grey overcast light, desaturated muted palette, low contrast, no sunlight, no blue sky, no golden light, no vegetation",
+    "dark": "storybook anime illustration, classic 16-bit JRPG cover art, cel shaded characters with clean bold outlines, hand painted background, crisp readable shapes, epic widescreen composition, low key lighting, deep shadow, restrained palette, dramatic chiaroscuro, no blue sky"
+  },
+  "characters": {
+    "CRONO": "a slim 16-year-old boy, wild spiky crimson red hair standing straight up in long points, a sleeveless dark navy blue wrap tunic worn open over a plain white shirt with sleeves rolled to the elbow, a wide bright orange cloth sash knotted at his waist, loose dark navy trousers, boyish round face",
+    "MARLE": "a 16-year-old girl with long bright golden yellow hair, deep saturated blonde not white or platinum, gathered high on the back of her head in one long ponytail, a white knee-length tunic dress with a bright orange hood and orange trim, a small wooden hand crossbow, a single teardrop-shaped blue gem pendant hanging at her own throat",
+    "LUCCA": "a 15-year-old girl with a short reddish brown bob, a wide-brimmed soft brown cap pulled low, large round wire-rimmed spectacles, a plain green long-sleeved tunic over a short skirt, a broad brown leather tool belt with a small brass revolver holstered at her hip",
+    "FROG": "a tall upright anthropomorphic green frog standing on two legs like a man, broad shouldered, wearing a brown hooded cloak and a long brown cape, a brown leather breastplate and boots, carrying a broadsword with an ornate golden crossguard hilt",
+    "ROBO": "a large heavy humanoid robot with a rounded barrel-shaped cream-white torso and dull blue-steel limbs, a single wide horizontal amber light bar glowing across the front of its smooth faceless head, no eyes and no mouth, oversized three-fingered claw hands, dented scratched plating",
+    "AYLA": "a young woman, athletic and strong but unmistakably female with a clearly feminine face and figure, long wild sun-bleached blonde hair, a brief tan hide wrap top and skirt, bone and tooth necklaces, barefoot, wide fierce grin",
+    "MAGUS": "a tall gaunt adult man with a hard angular face, sharp jaw and narrow eyes glowing red, straight waist-length pale blue-white hair, chalk-pale skin, a floor-length black cloak whose collar rises in two stiff points higher than the top of his head, a long curved black scythe",
+    "LAVOS": "an immense armoured creature like a barnacle or limpet shell, a low domed shell of overlapping grey-brown plates bristling with long dark spines, a single glowing red core at the centre of the shell, many long segmented clawed legs splayed beneath it, no face, no eyes, utterly alien",
+    "EPOCH": "a small sleek two-seater time machine shaped like a wingless red and silver dart, a rounded transparent bubble canopy over the cockpit, swept-back stubby fins, three glowing blue energy rings set into its hull, no wheels, no propellers, not a car and not a humanoid robot"
+  },
+  "voices": {
+    "NARRATOR": {
+      "exaggeration": 0.35,
+      "cfg_weight": 0.35,
+      "temperature": 0.65,
+      "pitch": 0.88,
+      "rate": 0.85
+    }
+  },
+  "music": [
+    {
+      "at_shot": "010_kingdom",
+      "prefix": "m01_theme",
+      "bpm": 76,
+      "key": "A major",
+      "seconds": 11.7,
+      "level": 1.0,
+      "tags": "wistful nostalgic adventure prologue, lilting 6/8, warm string section with solo alto flute, soft acoustic guitar, glockenspiel accents, bittersweet and hopeful, orchestral, instrumental, no drums"
+    },
+    {
+      "at_shot": "020_era1000",
+      "prefix": "m02_fair",
+      "bpm": 118,
+      "key": "C major",
+      "seconds": 59.2,
+      "level": 1.0,
+      "tags": "bouncy cheerful medieval festival tune, pizzicato strings, tin whistle and hurdy-gurdy melody, tambourine and hand drum, glockenspiel, bright major key, playful village celebration, instrumental"
+    },
+    {
+      "at_shot": "120_era600",
+      "prefix": "m03_medieval",
+      "bpm": 88,
+      "key": "D minor",
+      "seconds": 69.8,
+      "level": 1.0,
+      "tags": "solemn medieval fantasy theme, harpsichord ostinato, recorder and shawm melody, martial snare drum roll, low viol drone, dorian modal harmony, old stone and lost history, instrumental"
+    },
+    {
+      "at_shot": "230_arrest",
+      "prefix": "m04_trial",
+      "bpm": 116,
+      "key": "A minor",
+      "seconds": 36.4,
+      "level": 1.0,
+      "tags": "tense pursuit and courtroom music, driving harpsichord ostinato, urgent pizzicato strings, ticking clock percussion, chromatic rising tension, sparse timpani, no snare drum, cinematic, instrumental"
+    },
+    {
+      "at_shot": "290_era2300",
+      "prefix": "m05_ruin",
+      "bpm": 54,
+      "key": "F minor",
+      "seconds": 56.7,
+      "level": 1.0,
+      "tags": "bleak industrial post apocalyptic ambience, sparse cold analogue synthesizer pad, slow detuned bell tolling, distant metallic clangs and machine hum, hollow cavernous reverb, unresolved and hopeless, dark ambient, instrumental, no drums"
+    },
+    {
+      "at_shot": "380_resolve",
+      "prefix": "m06_resolve",
+      "bpm": 92,
+      "key": "C minor",
+      "seconds": 13.8,
+      "level": 1.0,
+      "tags": "short determined swell, building string ostinato, noble solo french horn entering, soft timpani heartbeat, quiet defiance turning to purpose, orchestral, cinematic, instrumental"
+    },
+    {
+      "at_shot": "400_endoftime",
+      "prefix": "m07_endoftime",
+      "bpm": 68,
+      "key": "E minor",
+      "seconds": 61.5,
+      "level": 0.9,
+      "tags": "sparse mysterious limbo theme, celesta and music box, walking upright acoustic bass, brushed cymbal, distant clock ticking, curious and weightless, jazzy nocturne, instrumental"
+    },
+    {
+      "at_shot": "470_frog",
+      "prefix": "m08_knight",
+      "bpm": 96,
+      "key": "G minor",
+      "seconds": 33.8,
+      "level": 1.0,
+      "tags": "noble knightly march, bold brass fanfare, distant muffled snare, sparse, heroic string melody with a sorrowful undercurrent, church organ pedal, chivalry and old grief, orchestral, instrumental"
+    },
+    {
+      "at_shot": "520_keep",
+      "prefix": "m09_magus",
+      "bpm": 132,
+      "key": "D minor",
+      "seconds": 39.0,
+      "level": 1.0,
+      "tags": "gothic baroque sorcerer battle, thundering pipe organ toccata, rapid harpsichord runs, driving chromatic minor ostinato in low strings, staccato choir stabs, tritone menace, timpani, no metallic percussion, instrumental"
+    },
+    {
+      "at_shot": "570_prehistoric",
+      "prefix": "m10_primal",
+      "bpm": 108,
+      "key": "E minor",
+      "seconds": 25.2,
+      "level": 1.0,
+      "tags": "primal tribal theme, huge log drums and taiko, shakers and bone rattles, low bone flute melody, unison chanting voices, pentatonic, raw and driving, prehistoric, instrumental"
+    },
+    {
+      "at_shot": "610_skychange",
+      "prefix": "m11_arrival",
+      "bpm": 60,
+      "key": "C minor",
+      "seconds": 23.6,
+      "level": 1.0,
+      "tags": "cosmic dread and awe, rising dissonant string cluster, immense low brass swell, deep sub bass, tam tam and thunder sheet, terrifying inevitability, orchestral, cinematic, instrumental"
+    },
+    {
+      "at_shot": "650_era12000",
+      "prefix": "m12_zeal",
+      "bpm": 66,
+      "key": "B minor",
+      "seconds": 59.0,
+      "level": 1.0,
+      "tags": "ethereal floating kingdom theme, wordless female choir, celesta and harp arpeggios, shimmering high strings, glass harmonica, cold beautiful grandeur with something wrong beneath, orchestral, instrumental, no drums"
+    },
+    {
+      "at_shot": "700_descent",
+      "prefix": "m13_palace",
+      "bpm": 58,
+      "key": "F minor",
+      "seconds": 18.8,
+      "level": 1.0,
+      "tags": "sinister sacred descent, deep male choir chanting, church organ pedal note, slow tolling low bell, tremolo cellos, submerged reverb, beautiful and doomed, orchestral, instrumental",
+      "until_shot": "740_death"
+    },
+    {
+      "at_shot": "780_empty_seat",
+      "prefix": "m14_grief",
+      "bpm": 54,
+      "key": "E minor",
+      "seconds": 35.3,
+      "level": 1.0,
+      "tags": "grief and quiet resolve, solo felt piano, warm sustained string pad, distant music box, single cello line, aching then steadying, sparse and intimate, instrumental, no drums"
+    },
+    {
+      "at_shot": "800_deathpeak",
+      "prefix": "m15_revive",
+      "bpm": 72,
+      "key": "C major",
+      "seconds": 35.3,
+      "level": 1.0,
+      "tags": "struggle resolving into transcendence, low struggling strings building, wordless choir rising and opening into major, harp glissando, timpani, warm brass arrival, miraculous, orchestral, instrumental"
+    },
+    {
+      "at_shot": "834_black_omen",
+      "prefix": "m16_lavos",
+      "bpm": 138,
+      "key": "D minor",
+      "seconds": 52.1,
+      "level": 1.0,
+      "tags": "chaotic alien final battle, atonal brass clusters, relentless polyrhythmic metallic percussion, bowed metal and prepared piano, industrial machine hits, sub bass pulses, granular string screams, no organ, overwhelming and inhuman, orchestral industrial, instrumental"
+    },
+    {
+      "at_shot": "885_future_lives",
+      "prefix": "m17_finale",
+      "bpm": 80,
+      "key": "C major",
+      "seconds": 40.0,
+      "level": 1.1,
+      "tags": "triumphant bittersweet orchestral finale, soaring string melody, glockenspiel and harp, warm brass resolution, solo flute reprise, full orchestra swelling, nostalgic and emotional, sweeping, instrumental"
+    }
+  ],
+  "shots": [
+    {
+      "id": "640_burrow",
+      "prompt": "Dramatic cross-section style shot deep underground showing {LAVOS} embedded in vast rock strata far beneath the surface, its spined shell dormant and enormous, a dim red core pulsing, roots of energy threading up through the stone",
+      "motion": "The red core pulses slowly, twice. Threads of energy creep further up through the rock strata. Dust and small stones fall through the dark. Vast and patient.",
+      "say": "Something is asleep under the world. It has been there a very long time.",
+      "look": "dark",
+      "style_strength": 0.65
+    },
+    {
+      "id": "010_kingdom",
+      "prompt": "Sweeping wide establishing shot at sunrise over a green medieval kingdom, a white stone castle with blue conical roofs on a forested hill, a small town of red roofs below, a wide river, banners, high golden clouds",
+      "motion": "Slow majestic push forward over the treetops toward the castle. Banners ripple. Clouds drift. Birds cross the frame. Morning mist lifts off the river.",
+      "titles": [
+        {
+          "text": "CHRONO TRIGGER",
+          "at": 1.2,
+          "hold": 3.4,
+          "scale": 0.062,
+          "y": 0.42
+        },
+        {
+          "text": "the story",
+          "at": 1.9,
+          "hold": 2.8,
+          "scale": 0.026,
+          "y": 0.56
+        }
+      ],
+      "say": "In the year one thousand, the kingdom of Guardia turns a thousand years old.",
+      "sfx": "Gentle morning wind over a forested valley, distant birdsong, faint cathedral bells far away",
+      "in": "cut",
+      "look": "warm"
+    },
+    {
+      "id": "020_era1000",
+      "prompt": "Wide shot of a bustling medieval fairground on a green hillside, colourful striped tents and bunting, crowds in bright peasant clothes, game stalls, a tall bell tower, clear blue sky with white clouds",
+      "motion": "Bunting and pennants flap. The crowd moves through the lanes between the tents. A flock of birds lifts off the bell tower. Gentle drifting camera push in.",
+      "titles": [
+        {
+          "text": "1000 A.D.",
+          "at": 0.6,
+          "hold": 2.4,
+          "scale": 0.034,
+          "y": 0.82
+        }
+      ],
+      "say": "Every soul in the kingdom is at the fair today.",
+      "sfx": "A busy medieval fair, canvas awnings snapping and wooden stalls knocking, distant hand bell, canvas flapping, wooden game stalls",
+      "in": "dissolve",
+      "look": "warm"
+    },
+    {
+      "id": "030_crono",
+      "prompt": "Low dynamic shot of {CRONO} running through a crowded fairground lane between striped tents, seen from behind and slightly to the side, crowds parting, bunting overhead, bright midday light",
+      "motion": "He runs away from camera down the lane, coat and sash flying. The camera tracks fast behind him. Crowds turn as he passes. Bunting whips overhead.",
+      "say": "A boy named Crono is late for it."
+    },
+    {
+      "id": "040_collide",
+      "prompt": "Medium two-shot in a sunlit fairground lane as {CRONO} and {MARLE} collide and she falls, her blue teardrop pendant swinging bright at her throat, scattered flowers on the ground, crowds blurred behind",
+      "motion": "The two collide and she stumbles back. The pendant swings and catches the light. Petals scatter and drift. He reaches out a hand toward her.",
+      "say": "He collides with a girl in a white hood. She calls herself Marle, and asks to see the fair with him.",
+      "sfx": "A soft collision, a startled gasp, small items scattering on the ground, crowd noise around"
+    },
+    {
+      "id": "050_fairmontage",
+      "prompt": "Bright montage-style wide shot of a medieval fair at midday, a bell-ringing strength game, a sweet stall with coloured candy, children with balloons, a small stage with a dancer, warm sunlight and colour everywhere",
+      "motion": "The bell game hammer swings and the bell rings. Balloons bob and tug. The dancer turns on the little stage. Everything is busy and moving.",
+      "sfx": "A carnival bell struck, children laughing, a small drum and pipe tune, a low warm indistinct hubbub",
+      "seconds": 5.5,
+      "look": "warm"
+    },
+    {
+      "id": "060_telepod",
+      "prompt": "Wide shot of a fairground pavilion at dusk containing two large brass and copper teleport pads wired to a humming generator, {LUCCA} standing on a small platform beside them with a lever, a curious crowd watching",
+      "motion": "Arcs of electricity crackle between the two pads. The generator's flywheel spins. Lucca pulls the lever and the pads flare with light. The crowd leans back.",
+      "say": "At the far end of the fairground, his friend Lucca unveils a machine that moves matter through space.",
+      "sfx": "A heavy electrical generator humming and building, crackling arcs, a lever thrown, a sharp intake of breath from a crowd, feet shifting on grass",
+      "in": "dissolve"
+    },
+    {
+      "id": "070_teleport",
+      "prompt": "Dramatic shot of {CRONO} standing on a glowing brass teleport pad, wreathed in blue-white electrical light, his silhouette dissolving into streaks of energy, the second pad glowing across the pavilion",
+      "motion": "Light climbs his body in bands and he dissolves into streaking energy, reappearing an instant later on the far pad. Sparks fly outward. Fast and bright.",
+      "sfx": "A rising electrical whine, a sharp discharge crack, energy rushing, feet shifting on grass, a hand-clap or two",
+      "seconds": 2.0
+    },
+    {
+      "id": "080_pendant",
+      "prompt": "Extreme close-up macro of a single teardrop-shaped blue gem pendant on a fine chain at a girl's throat, the pendant filling the centre of frame and blazing with blue-white light far brighter than anything else in shot, hard rays escaping between the fingers of a hand half closed around it. Her face is out of frame above; only her throat, collarbone and the white and orange collar of her tunic are visible, blown out by the light. Everything else in frame is dark",
+      "motion": "The pendant blazes brighter and brighter, throwing hard moving shadows. Her hand closes around it and light escapes between her fingers. The air ripples.",
+      "say": "Marle volunteers next. But her pendant answers the machine, and something tears open.",
+      "sfx": "A pure rising tone building to a scream of energy, glass resonance, air pressure warping",
+      "quality": true,
+      "seed": 41776
+    },
+    {
+      "id": "090_gate",
+      "prompt": "Wide shot of a huge swirling blue-white vortex torn open in the air above a fairground teleport pad, spirals of light and debris orbiting it, {MARLE} being pulled off her feet toward its centre, the crowd fleeing",
+      "motion": "The vortex spirals violently and drags her off her feet toward its centre. Loose debris and papers spiral inward. Her hand reaches back. She is pulled in and it collapses.",
+      "sfx": "A tearing roar of space, rushing wind sucked inward, debris, a cut-off cry, sudden silence",
+      "seconds": 5.5
+    },
+    {
+      "id": "100_dropped",
+      "prompt": "Extreme close-up of the blue teardrop pendant lying alone on the wooden boards of a teleport pad, dark and dull now, a gauntlet-free young hand entering frame to pick it up, scattered debris around it",
+      "motion": "The pendant lies still. A hand comes down slowly, hesitates, then closes around it and lifts it out of frame. Dust settles on the boards.",
+      "say": "She is gone. All that is left is the pendant, and a door hanging in the air.",
+      "sfx": "Absolute quiet after chaos, distant frightened voices, a small metal chain lifted"
+    },
+    {
+      "id": "110_step_through",
+      "prompt": "Heroic shot from behind {CRONO} standing at the edge of a reopened swirling blue vortex in a dark fairground pavilion, his silhouette rimmed in blue light, hand tight around a pendant, about to step forward",
+      "motion": "The vortex churns and pulses, light washing over him. His shoulders set. He steps forward into it and the light swallows him whole.",
+      "sfx": "A deep resonant portal hum, energy churning, one decisive footstep, a whoosh of transit",
+      "seconds": 3.0
+    },
+    {
+      "id": "120_era600",
+      "prompt": "Wide establishing shot of a misty ancient forest at dawn in a medieval age, enormous mossy trees, shafts of pale light, a distant grey stone castle with pointed towers on a ridge beyond, cold blue green palette",
+      "motion": "Mist rolls slowly between the huge trunks. Light shafts shift as the canopy moves. Slow reveal push forward toward the distant castle.",
+      "titles": [
+        {
+          "text": "600 A.D.",
+          "at": 0.6,
+          "hold": 2.4,
+          "scale": 0.034,
+          "y": 0.82
+        }
+      ],
+      "say": "Crono follows her through, and arrives four hundred years earlier.",
+      "sfx": "A bright bell-like chime and a rush of air pulled inward, then A cold damp forest at dawn, dripping leaves, distant crows, wind high in the canopy",
+      "in": "flash"
+    },
+    {
+      "id": "130_war",
+      "prompt": "Dramatic wide shot of a medieval battlefield ridge at grey dusk, broken siege engines and scattered shields, a distant walled castle with smoke rising, ranks of armoured soldiers small on the plain, heavy clouds",
+      "motion": "Smoke drifts across the ridge. Banners strain in the wind. Distant ranks of soldiers move slowly across the plain. Ash and embers blow past camera.",
+      "say": "In this age, a long war with the Mystics is going badly. And the queen has vanished.",
+      "sfx": "A distant battlefield, low horns, wind across a ruined field, creaking timber, muffled shouting",
+      "in": "dissolve",
+      "look": "cold",
+      "style_strength": 0.5,
+      "seed": 47445
+    },
+    {
+      "id": "140_throne",
+      "prompt": "Symmetrical wide shot of an empty medieval throne room, an ornate carved throne standing vacant under a tall stained glass window, long red carpet, worried courtiers and guards standing along the walls in the gloom",
+      "motion": "Coloured light from the window creeps slowly across the carpet. The courtiers shift and murmur uneasily. Dust turns in the light. The throne stays empty.",
+      "say": "Marle looks exactly like Queen Leene, her ancestor. So nobody keeps hunting for the real one.",
+      "sfx": "A large stone hall, armour and heavy cloth shifting on stone, armour shifting, a heavy door far off",
+      "in": "dissolve"
+    },
+    {
+      "id": "150_fading",
+      "prompt": "Close shot of {MARLE} in a dark stone corridor, framed from the waist up. Her right shoulder, right arm and the right half of her chest have already come apart into a drifting cloud of small pale blue-white motes of light rising upward, the edge where solid body becomes motes soft and ragged. Through the gap where her arm was, the stone wall and a burning torch are clearly visible behind her. Her remaining hand is stretched toward camera, fingertips already fraying into light. Terrified wide eyes, mouth open",
+      "motion": "Her outline breaks apart into drifting motes that rise and vanish. Torchlight shines through her body. Her reaching hand thins away to nothing.",
+      "say": "Then Marle simply fades out of existence. If the queen dies, Marle is never born.",
+      "sfx": "A hollow ringing tone, energy dissipating, a voice fading out mid-word, a held breath",
+      "in": "dissolve",
+      "quality": true,
+      "seed": 41679
+    },
+    {
+      "id": "160_cathedral",
+      "prompt": "Wide low angle of an isolated grey stone cathedral standing in a misty forest clearing, far too clean and well kept, tall narrow stained glass windows glowing faint green, no people anywhere, heavy overcast sky",
+      "motion": "Mist drifts across the clearing floor. The green window light pulses very slightly, as if breathing. A single crow lifts off the roofline. Slow ominous push in.",
+      "say": "They trace the abduction to a cathedral in the forest, quiet and far too well kept.",
+      "sfx": "An unnaturally quiet forest clearing, a single crow call, faint organ note from inside",
+      "in": "dissolve",
+      "look": "dark",
+      "style_strength": 0.65
+    },
+    {
+      "id": "170_nuns",
+      "prompt": "Interior of a dim cathedral nave with rows of hooded figures in nuns' habits standing between the pews, their hoods empty of faces, glowing green eyes and clawed hands showing at the cuffs, candles guttering",
+      "motion": "The hooded figures all turn toward camera together in one movement. Green eyes kindle inside the hoods. Clawed hands slide out of the sleeves. Candles gutter low.",
+      "say": "Inside, the congregation are not nuns at all.",
+      "sfx": "An organ note bending sour, cloth rustling in unison, hissing breath, claws on stone",
+      "look": "dark",
+      "style_strength": 0.65
+    },
+    {
+      "id": "180_fight",
+      "prompt": "Dynamic action shot inside a cathedral as {CRONO} swings his katana through a lunging clawed Mystic monster, {LUCCA} firing her brass gun from behind an overturned pew, muzzle flash and sword arc lighting the nave",
+      "motion": "The katana sweeps through in a bright arc. The monster is thrown backward. Lucca's gun flashes and recoils. Pews splinter. Fast, kinetic, hard camera shake.",
+      "sfx": "Steel swung hard, a monster shrieking, a brass pistol shot echoing in stone, splintering wood",
+      "seconds": 2.5
+    },
+    {
+      "id": "190_yakra",
+      "prompt": "Dramatic reveal shot in a hidden chamber behind a cathedral altar, a large grotesque orange Mystic creature with a huge fanged grin and clawed limbs looming over a bound medieval queen in a green gown, torchlight",
+      "motion": "The creature rears up and spreads its clawed limbs wide, grinning. The bound queen struggles. Torch flames bend away from the movement. Menacing and huge.",
+      "say": "Behind the altar they find the queen, and the Mystic that has been holding her."
+    },
+    {
+      "id": "200_rescued",
+      "prompt": "Warm shot in a torchlit stone chamber of a medieval queen in a green gown being helped to her feet by {CRONO} and {LUCCA}, ropes cut away on the floor, relief on every face, warm firelight",
+      "motion": "The queen rises unsteadily and steadies herself on his arm. Cut ropes fall away. Torchlight warms the whole frame. Shoulders drop as the tension goes out of the room.",
+      "say": "The queen is freed. Marle returns to the world as though she had never left it.",
+      "sfx": "Ropes falling, relieved breathing, warm crackling torches",
+      "in": "dissolve"
+    },
+    {
+      "id": "210_return",
+      "prompt": "Wide shot of a swirling blue time vortex hanging in a medieval forest clearing at dusk with three small silhouetted figures walking into it together, long shadows, cold blue light washing the trees",
+      "motion": "The vortex churns. The three figures walk steadily into it, one after another, and the light takes them. Leaves are pulled inward and spiral after them.",
+      "sfx": "A resonant portal hum, footsteps on leaves, a rush of transit, wind pulled inward",
+      "in": "dissolve",
+      "seconds": 3.5
+    },
+    {
+      "id": "220_princess",
+      "prompt": "Formal medieval castle hall shot of {MARLE} standing in a shaft of window light while kneeling guards and courtiers bow low around her, a royal crest banner behind, her hood down, everyone else lowered",
+      "motion": "The guards and courtiers drop to one knee in a wave around her. Her hood falls back. Dust turns in the window light. She stands very still, caught.",
+      "say": "Back home, Marle is recognised. She is Princess Nadia, and she has been missing all day.",
+      "sfx": "A bright bell-like chime and a rush of air pulled inward, then Armour kneeling in unison on stone, a formal announcement echoing, a large hall's reverb",
+      "in": "flash"
+    },
+    {
+      "id": "230_arrest",
+      "prompt": "Tense shot in a torchlit castle hall of {CRONO} held by two armoured guards who each grip one of his arms and pull them back, a katana lying on the flagstones in the foreground out of his reach, and a thin elderly sneering chancellor in ornate robes pointing at him",
+      "motion": "The guards take his arms and haul him back. His sword is kicked away across the flagstones. The chancellor's pointing arm holds steady. Struggle and restraint.",
+      "say": "Crono is arrested for her kidnapping.",
+      "sfx": "Armoured hands seizing cloth, a sword clattering on stone, a sharp accusing voice, struggle",
+      "seed": 43425
+    },
+    {
+      "id": "240_trial",
+      "prompt": "Wide symmetrical courtroom shot in a medieval castle hall, {CRONO} standing alone in a small dock in the centre, a raised bench of robed judges above him, packed galleries of watching nobles, harsh shafts of window light",
+      "motion": "Dust turns in the shafts of light. The galleries murmur and lean forward. A judge's gavel rises and falls. The boy in the dock does not move.",
+      "say": "The trial is a formality. The chancellor has already decided the verdict.",
+      "sfx": "A murmuring crowded hall, a wooden gavel struck three times, echoing stone, tense silence",
+      "in": "dissolve"
+    },
+    {
+      "id": "250_dungeon",
+      "prompt": "Bleak shot of {CRONO} sitting against the wall of a cramped stone dungeon cell, straw on the floor, a heavy iron-barred door, one narrow high window throwing a single pale bar of light across the dark",
+      "motion": "The pale bar of light creeps slowly across the floor and up the wall as hours pass. Dust drifts through it. He does not move. Water drips somewhere.",
+      "say": "He is sentenced to execution, and thrown into the castle's lowest cells.",
+      "sfx": "A cold stone dungeon, dripping water, distant iron doors, chains",
+      "in": "dissolve",
+      "look": "cold",
+      "style_strength": 0.5,
+      "seed": 47534
+    },
+    {
+      "id": "260_rescue",
+      "prompt": "Dynamic shot in a stone dungeon corridor of a heavy iron cell door lying flat on the floor blown off its hinges, its empty smoking stone doorway behind it, {LUCCA} standing in the empty doorway with a small brass revolver raised, corridor torchlight behind her, smoke and sparks",
+      "motion": "The door blows inward off its hinges in a burst of sparks and smoke. Lucca steps through the gap, gun up, coat swirling in the blast. Confident and fast.",
+      "say": "Three days later, Lucca comes for him with a gun and no patience.",
+      "sfx": "A sharp explosive blast, iron hinges tearing, debris, boots stepping through smoke",
+      "seed": 42552
+    },
+    {
+      "id": "270_escape",
+      "prompt": "Fast action shot of {CRONO} and {LUCCA} running up a spiral stone castle stairway with armoured guards pursuing below, torches streaking past, his katana drawn, extreme motion blur on the walls",
+      "motion": "The two race up the spiral stair, torches streaking past in the blur. Guards surge up behind them. The camera whips upward with them. Chaotic and urgent.",
+      "sfx": "Pounding footsteps on stone stairs, armour clattering and boots pounding stone, armour clattering, a chase in full flight",
+      "seconds": 2.5
+    },
+    {
+      "id": "280_cornered",
+      "prompt": "Dramatic wide shot on a high castle battlement at night, {CRONO} and {LUCCA} cornered against the parapet by a line of levelled guard spears, and beside them a swirling blue time vortex tearing itself open in the air",
+      "motion": "The spears level and advance. The blue vortex tears wider beside them, light spilling across the stone. The two glance at each other and leap sideways into it.",
+      "say": "Cornered at the top of the keep, they run into another door in the air, and take it.",
+      "sfx": "Spears levelled in unison, shouted commands, a portal tearing open, a rush of transit"
+    },
+    {
+      "id": "290_era2300",
+      "prompt": "Wide establishing shot of a dead city, every building a roofless grey concrete shell snapped off partway up, an elevated roadway collapsed into the street below, the ground bare cracked concrete and drifted grey dust to the horizon, two rusted geodesic domes in the middle distance. The sky is one flat unbroken sheet of pale ash grey, no sun, no cloud edges, no blue. Everything grey, brown and rust. Nothing is growing anywhere, no grass, no trees, no plants, no green, no sun, no blue sky",
+      "motion": "Fine grey dust blows steadily across the cracked concrete. A sheet of loose metal flexes somewhere high up. The dead sky barely moves. Slow, cold, revealing push in.",
+      "titles": [
+        {
+          "text": "2300 A.D.",
+          "at": 0.6,
+          "hold": 2.4,
+          "scale": 0.034,
+          "y": 0.82
+        }
+      ],
+      "say": "It puts them thirteen hundred years forward, into a world that has already ended.",
+      "sfx": "A bright bell-like chime and a rush of air pulled inward, then Cold dead wind through a ruined city, grit hissing over concrete, distant metal groaning, no life",
+      "in": "flash",
+      "look": "cold",
+      "style_strength": 0.5,
+      "quality": true,
+      "seed": 41000
+    },
+    {
+      "id": "300_deadsky",
+      "prompt": "Extreme close-up looking straight up past the snapped-off edge of one concrete skyscraper. The sky fills four fifths of the frame as one flat unbroken sheet of pale ash grey, faintly grainy, no sun, no cloud edges, no blue anywhere. Along the bottom edge only, twisted rebar and hanging shattered glass silhouetted almost black, no grass, no trees, no plants, no green, no sun, no blue sky",
+      "motion": "The flat sky shifts almost imperceptibly. Loose glass fragments fall glittering from a high floor. Dust drifts upward. Nothing lives in the frame.",
+      "say": "Nobody here remembers what a sky looked like.",
+      "sfx": "High wind through hollow towers, falling glass, vast emptiness",
+      "look": "cold",
+      "style_strength": 0.5,
+      "quality": true,
+      "seed": 41097
+    },
+    {
+      "id": "310_domes",
+      "prompt": "Wide shot of two rusted geodesic survival domes squatting on a grey wasteland under a dead sky, dim orange light leaking from a few panels, cables and pipes half buried in dust, wreckage scattered around",
+      "motion": "Dust blows past the domes in steady sheets. The dim orange light inside flickers unsteadily. A loose cable sways. Slow drift toward the nearest hatch.",
+      "say": "What is left of humanity is sealed in the domes, waiting out a famine with no end.",
+      "look": "cold",
+      "style_strength": 0.5,
+      "seed": 47000
+    },
+    {
+      "id": "320_survivors",
+      "prompt": "Interior shot of a dim crowded survival dome, gaunt hollow-eyed survivors sitting against curved metal walls under failing strip lights, empty ration containers stacked, children among them, grey and hopeless",
+      "motion": "The strip lights flicker and buzz. A survivor shifts a blanket. One child lifts their head slowly toward camera. Everything is slow and worn out.",
+      "sfx": "A failing fluorescent buzz, hollow metal dome, a failing fan, loose panel ticking, exhausted quiet, no conversation",
+      "seconds": 4.5,
+      "look": "cold",
+      "style_strength": 0.5
+    },
+    {
+      "id": "330_dome_interior",
+      "prompt": "Wide interior of an abandoned technological dome facility, dead computer banks under a cracked transparent ceiling, thick dust over everything, one console still lit with a dim green glow far down the room",
+      "motion": "Dust hangs and turns in the pale light from the cracked ceiling. The one live console's green glow pulses slowly. A panel sparks once, far off.",
+      "say": "In one dome they find a record that has been running for three centuries.",
+      "sfx": "A dead facility, one console humming, dripping water, dust, a distant electrical fault ticking",
+      "in": "dissolve",
+      "look": "cold",
+      "style_strength": 0.5,
+      "seed": 47089
+    },
+    {
+      "id": "340_recording",
+      "prompt": "Three young silhouettes in the lower third of frame standing before a large glowing monitor screen that fills the frame above them in a dark ruined facility, the screen showing a modern city skyline with an immense spined mass erupting from the ground, static bands crawling across the display, cables everywhere",
+      "motion": "Static bands crawl up the screen and it resolves into an image. The harsh light shifts across the watching faces. Nobody moves at all.",
+      "say": "It shows a single date. Nineteen ninety nine.",
+      "sfx": "An old monitor whining, tape static, a recording crackling into life, held breath",
+      "look": "cold",
+      "style_strength": 0.5,
+      "seed": 43134
+    },
+    {
+      "id": "350_eruption",
+      "prompt": "Apocalyptic wide shot of a modern city skyline at the moment {LAVOS} breaches the earth, the spined shell occupying only the lower third of the frame height in the middle distance, a vast ring shockwave of fire racing outward across the city flattening towers as it goes, black smoke climbing, red and black sky. Wide establishing scale, the city large and the creature distant",
+      "motion": "The ground bursts upward and the immense spined shell breaches through it. A shockwave ring races outward, flattening buildings as it goes. Fire climbs the sky.",
+      "say": "Something erupts from beneath the crust.",
+      "sfx": "A colossal seismic eruption, earth tearing apart, a titanic shockwave, buildings collapsing, roaring fire",
+      "seed": 43231
+    },
+    {
+      "id": "360_burning",
+      "prompt": "Devastating high aerial shot of a continent burning from above, beams of red energy lancing down from a central spined mass into distant cities, firestorms spreading across the landmass, black smoke to the horizon",
+      "motion": "Beams of red energy lance down one after another and firestorms bloom where they land, spreading outward. Smoke boils upward across the whole frame.",
+      "say": "It burns the surface of the world in a single day. They call it Lavos.",
+      "from_prev": true,
+      "in": "cut"
+    },
+    {
+      "id": "370_watching",
+      "prompt": "Close three-shot of {CRONO}, {MARLE} and {LUCCA} lit only by a monitor screen in a dark ruined facility, their faces stricken and still, the screen's cold light picking out shock in every expression",
+      "motion": "The monitor's light flickers across their faces as the recording plays on. Marle's hand rises slowly to her mouth. None of them look away.",
+      "say": "It is not a war, and not a weapon. It has been under their feet the whole time, feeding.",
+      "sfx": "A monitor humming in a dead room, faint recorded destruction",
+      "look": "cold",
+      "style_strength": 0.5
+    },
+    {
+      "id": "380_resolve",
+      "prompt": "Tight close-up of {MARLE}'s face turning from a large dark glowing monitor screen to face camera, filling the left two thirds of frame, jaw set, cold blue screen light on one side of her face. Behind her two heavily defocused blurred figures. Shallow depth of field, no keyboard, no beige computer",
+      "motion": "She turns from the screen to face front, chin lifting. Her pendant catches the light and glints. Behind her the other two turn to look at her.",
+      "say": "Marle says what nobody in this century will. This can be stopped.",
+      "sfx": "A quiet room, one decisive breath, a chair pushed back",
+      "quality": true,
+      "seed": 41970
+    },
+    {
+      "id": "390_leaving",
+      "prompt": "Wide silhouette shot of three small figures walking out of a dome hatch into a grey ruined wasteland under a dead sky, long shadows behind them, the vast broken city ahead, dust blowing",
+      "motion": "The three walk out through the hatch and away from camera into the waste. Dust blows across their path. They do not stop or look back.",
+      "sfx": "A heavy hatch opening, boots on grit, dead wind, footsteps receding",
+      "seconds": 3.0,
+      "look": "cold",
+      "style_strength": 0.5,
+      "seed": 47178
+    },
+    {
+      "id": "400_endoftime",
+      "prompt": "Surreal wide shot of a small stone island floating in an infinite starry void, a single old iron lamppost glowing warm on it, a wooden bucket beside it, three or four glowing portals hanging in the dark around it",
+      "motion": "The portals rotate slowly in the void around the island. The lamp's warm light flickers. Stars drift past below the stone. Utterly silent and strange.",
+      "say": "The gates lead them somewhere outside every era, where an old man waits beside a lamp.",
+      "sfx": "An impossible quiet, a faint hum of many portals, a lamp's gentle flame, deep space stillness",
+      "in": "fade",
+      "in_dur": 1.6
+    },
+    {
+      "id": "410_gaspar",
+      "prompt": "Warm medium shot of a small bearded old man in a pointed hat and long robes sitting on a stone step beneath a glowing lamppost in a starry void, hands folded on a staff, kindly and very tired",
+      "motion": "He shifts on the step and turns his head toward camera. His beard and robe stir in a wind that should not exist. The lamplight flickers across him.",
+      "say": "He is Gaspar. The gates exist because of Lavos's own power. That power can be turned against it.",
+      "sfx": "An old man settling on stone, a staff tapping once, a warm lamp hissing, endless quiet around"
+    },
+    {
+      "id": "415_gatekey",
+      "prompt": "Close-up of a small ornate brass and crystal key held up in a young hand against a starry void, a glowing blue portal reflected curved across its crystal, warm lamplight from one side",
+      "motion": "The key turns slowly in the hand, the reflected portal sliding across its crystal. It pulses faint blue in time with the portal behind. Stars drift past.",
+      "say": "A key of their own opens the gates now. Every age is one door away.",
+      "sfx": "A small crystal mechanism chiming, a portal humming, a key turning in impossible air",
+      "in": "soft"
+    },
+    {
+      "id": "420_factory",
+      "prompt": "Wide shot of a vast derelict robotic factory interior in the ruined future, dead assembly lines and conveyor belts, sparking severed cables overhead, a large deactivated humanoid robot slumped against a pillar in the foreground",
+      "motion": "Severed cables spit sparks in the dark above. A conveyor belt jerks a few centimetres and stops. Dust falls through the sparks. The slumped robot does not move.",
+      "say": "In the ruins of a factory they repair a machine that has been shut down for centuries.",
+      "in": "flash"
+    },
+    {
+      "id": "430_robo",
+      "prompt": "Close-up of {ROBO} powering up in a dark derelict factory, its amber optic band kindling from dark to bright, dust falling from its shoulders, indicator lights running across its chest plating",
+      "motion": "The amber optic band brightens from nothing to full. Indicator lights run across its chest in sequence. It lifts its head slowly and dust cascades from its shoulders.",
+      "say": "It calls itself Robo.",
+      "sfx": "Servos waking up, a power core spooling to life, relays clicking in sequence, dust falling"
+    },
+    {
+      "id": "440_robo_torn",
+      "prompt": "{ROBO} knocked down onto one knee in a dark factory, its left arm torn off at the shoulder and lying on the floor in the foreground, sparks and torn cabling spraying from the empty socket, its amber light bar dim and flickering. Four identical undamaged robots standing over it. Cold blue work lights",
+      "motion": "The four attackers strike from all sides in a burst of sparks. Robo is knocked sideways and an arm tears free. Its optic band flickers hard. Violent and brief.",
+      "say": "Its own kind tear it apart for helping them. It stays with them anyway.",
+      "sfx": "Metal striking metal hard, servos shrieking, electrical shorting, plating tearing, machinery violence",
+      "seed": 42261
+    },
+    {
+      "id": "450_planting",
+      "prompt": "Wide melancholy shot of {ROBO} alone on a vast barren hillside planting a single sapling into dry earth, a long line of newly planted saplings running away behind it to the horizon, pale overcast sky",
+      "motion": "Robo firms the earth around the sapling with both claw hands and straightens up slowly. Wind moves across the bare hillside. The line of saplings recedes into haze.",
+      "say": "It stays behind to replant a desert. Alone. It takes four hundred years.",
+      "sfx": "Claw hands working dry soil, a lonely wind over bare hills, machine servos, patient repetition",
+      "in": "dissolve"
+    },
+    {
+      "id": "460_forest",
+      "prompt": "Beautiful wide shot of a deep mature green forest in warm afternoon light, enormous old trees in cathedral-like rows, shafts of gold light through the canopy, wildflowers and ferns below, birds in the air",
+      "motion": "Light shafts move through the canopy as branches sway. Birds cross between the trunks. Pollen and leaves drift golden through the light. Slow, warm reveal.",
+      "say": "Four centuries later, the forest is still there.",
+      "sfx": "A bright bell-like chime and a rush of air pulled inward, then A living forest in summer, birdsong, wind in a full canopy, insects, warmth and life",
+      "in": "flash",
+      "look": "warm"
+    },
+    {
+      "id": "465_lucca",
+      "prompt": "Painful memory shot in a cluttered workshop of a small girl straining at the levers of a large seized machine, and a woman on the floor with her legs pinned beneath the machine's iron gear housing, sparks and steam bursting from a valve, warm lamplight and long shadows",
+      "motion": "The girl hauls at the levers with her whole body. Steam bursts from a valve. Sparks fall. The machine does not move. Desperate repeated effort.",
+      "say": "Lucca builds machines because one of them took her mother's legs while she watched.",
+      "sfx": "A seized machine straining, steam venting hard, a child's panicked effort, gears refusing to turn",
+      "in": "dissolve",
+      "seed": 43522
+    },
+    {
+      "id": "470_frog",
+      "prompt": "Heroic low angle of {FROG} standing on a mossy stone bridge in a medieval forest, cloak and cape lifting in the wind, one webbed hand resting on the golden hilt of his broadsword, mist behind him",
+      "motion": "His cloak and cape lift and settle in the wind. His hand tightens on the sword hilt. He turns his head toward camera with slow deliberate dignity. Mist rolls behind.",
+      "say": "In six hundred, a knight who is no longer a man joins them.",
+      "sfx": "A bright bell-like chime and a rush of air pulled inward, then A heavy cloak in wind, a leather grip tightening on a hilt, a forest stream below, noble stillness",
+      "in": "flash"
+    },
+    {
+      "id": "480_cyrus",
+      "prompt": "Tragic flashback-style shot on a rain-lashed cliff at night, a fallen armoured knight lying broken on wet stone, a tall black-cloaked sorcerer silhouetted against lightning above him, a small figure kneeling at the knight's side",
+      "motion": "Rain hammers down. Lightning flares and freezes the black-cloaked figure in silhouette. The kneeling figure sags forward over the fallen knight. Wind tears at the cloaks.",
+      "say": "He was Glenn. A sorcerer named Magus killed his friend Cyrus and cursed him into this shape.",
+      "in": "dissolve",
+      "look": "dark",
+      "style_strength": 0.65
+    },
+    {
+      "id": "490_broken_sword",
+      "prompt": "Extreme close-up of one broadsword lying on a stone altar, snapped clean through the middle of the blade, the two halves lying a hand's width apart with the break faces toward camera, small metal chips scattered between them. Only one hilt in frame, ornate golden crossguard, candlelight, deep shadow",
+      "motion": "Candlelight moves slowly across the broken faces of the blade. Dust settles into the fracture. A faint blue glow pulses once deep inside the metal and fades.",
+      "say": "The sword that failed them is broken in two.",
+      "in": "cut",
+      "seed": 42649
+    },
+    {
+      "id": "500_reforge",
+      "prompt": "Dramatic shot of a legendary sword being reforged on a glowing anvil in a mountain smithy, white hot metal and cascading orange sparks, a hammer mid-swing, a bearded smith's face lit from below by the forge",
+      "motion": "The hammer comes down and a burst of orange sparks fountains up across the frame. The white hot blade flares. Bellows breathe and the forge surges brighter.",
+      "say": "They gather what it needs across three ages and put it back together.",
+      "sfx": "A forge hammer striking hot metal, bellows breathing, roaring coals, sparks, quenching steam",
+      "in": "dissolve"
+    },
+    {
+      "id": "510_masamune",
+      "prompt": "Heroic close-up of {FROG} raising the reforged legendary sword overhead in a shaft of light, the blue-white blade blazing with restored energy, his cloak thrown back, mist and light around him",
+      "motion": "He raises the blade overhead and it ignites with blue-white light, throwing hard moving shadows. His cloak sweeps back. Light climbs the blade to the tip.",
+      "say": "Frog takes up the blade he could not carry before.",
+      "sfx": "A blade ringing pure and clear, energy igniting, cloth sweeping"
+    },
+    {
+      "id": "520_keep",
+      "prompt": "Ominous wide shot of a single fused black basalt fortress tower on a jagged rock under a violent purple storm sky, three jagged spires at its summit, no windows anywhere on it, forked lightning striking the spires, a narrow causeway leading to a single black gate, bare blasted ground. Not a school, not a cathedral, no many-windowed wings",
+      "motion": "Forked lightning strikes the towers repeatedly, lighting the whole fortress. Storm clouds boil overhead. The causeway banners shred in the wind. Slow menacing push in.",
+      "say": "Then they go to the Keep, where Magus is finishing something.",
+      "sfx": "A violent electrical storm, thunder cracking on stone, howling wind",
+      "in": "cut",
+      "look": "dark",
+      "style_strength": 0.65,
+      "seed": 43328
+    },
+    {
+      "id": "525_generals",
+      "prompt": "Ominous group shot in a dark fortress hall of three grotesque Mystic commanders, a fat green sorcerer with a staff, a slender masked magician in pink, and a lean armoured swordsman with a scarred face, torchlight from below",
+      "motion": "The three shift and posture, the fat one laughing silently, the masked one tilting its head, the swordsman turning a blade over in his hand. Torch shadows dance up the walls.",
+      "say": "Three of his generals hold the fortress. They have never lost a field."
+    },
+    {
+      "id": "530_ritual",
+      "prompt": "Dramatic wide shot inside a vast dark ritual hall, {MAGUS} standing at the centre of an enormous glowing magic circle carved into the floor, arcs of red and violet energy climbing the pillars around him, hooded acolytes kneeling",
+      "motion": "Energy arcs climb the pillars and converge overhead. The magic circle brightens in pulses. His cloak billows upward in the rising power. The acolytes bow lower.",
+      "say": "He has spent his whole life building a spell to call Lavos up out of the earth and kill it.",
+      "in": "dissolve",
+      "look": "dark",
+      "style_strength": 0.65
+    },
+    {
+      "id": "540_magus_fight",
+      "prompt": "Explosive action shot of {CRONO} mid-leap with katana raised against {MAGUS} who is unleashing a wave of dark violet energy from his scythe, shockwaves distorting the air between them, debris flying, hall lit red",
+      "motion": "The sorcerer's scythe sweeps and a wall of violet energy blasts outward. Crono leaps through it, katana raised, and strikes down. Debris and shockwaves fill the frame.",
+      "say": "They win.",
+      "sfx": "Dark magic detonating, steel meeting force, stone shattering, roaring energy, a battle at full pitch",
+      "look": "dark",
+      "style_strength": 0.65
+    },
+    {
+      "id": "550_spell_runs",
+      "prompt": "Wide shot of a ruined ritual hall where the great magic circle on the floor is completing itself alone, light racing along its carved lines, {MAGUS} on his knees looking up in dawning horror, dust and rubble falling",
+      "motion": "Light races along the carved lines of the circle, completing the pattern without anyone casting it. The kneeling sorcerer's head lifts in horror. The ceiling begins to fall.",
+      "say": "But the broken spell tears open anyway. And it does not open a door to Lavos.",
+      "look": "dark",
+      "style_strength": 0.65
+    },
+    {
+      "id": "560_bigate",
+      "prompt": "Overwhelming wide shot of an enormous blue white rift tearing open across an entire collapsing ritual hall, pulling rubble stone and figures upward into its spiral, blinding light at its centre, everything disintegrating",
+      "motion": "The rift tears wider across the whole hall, dragging rubble and figures upward into its spiral. Stone disintegrates as it is pulled in. Blinding light floods the frame.",
+      "say": "It opens a hole sixty five million years wide.",
+      "sfx": "Space tearing on an enormous scale, a howling vortex, stone disintegrating, an overwhelming roar",
+      "look": "dark",
+      "style_strength": 0.65
+    },
+    {
+      "id": "570_prehistoric",
+      "prompt": "Lush wide establishing shot of a prehistoric world, vast green jungle valley with enormous ferns and volcanic peaks smoking on the horizon, herds of long necked dinosaurs crossing a river, brilliant blue sky",
+      "motion": "The dinosaur herd wades slowly across the river, sending up spray. Volcanic smoke drifts from the peaks. Huge fern fronds sway. Pterosaurs cross the sky.",
+      "titles": [
+        {
+          "text": "65,000,000 B.C.",
+          "at": 0.6,
+          "hold": 2.6,
+          "scale": 0.034,
+          "y": 0.82
+        }
+      ],
+      "say": "They fall into the age of the dinosaurs.",
+      "sfx": "A bright bell-like chime and a rush of air pulled inward, then A prehistoric jungle valley, distant dinosaur calls, a wide river, insects, heavy humid air",
+      "in": "flash"
+    },
+    {
+      "id": "580_ayla",
+      "prompt": "Low angle hero shot from below of {AYLA} standing on a rock outcrop against the open sky, one fist raised above her head. Her tribe of small fur-clad figures gathered on the ground far below her at the bottom of frame. Two smoking volcanic peaks on the horizon behind. Late afternoon sun raking across her from the left",
+      "motion": "Her hair and furs blow hard in the updraft. She raises her fist higher and the tribe below roars. She grins fiercely. Strong confident movement.",
+      "say": "Here they meet Ayla, who leads her people and fears nothing at all.",
+      "quality": true,
+      "seed": 41194
+    },
+    {
+      "id": "590_reptites",
+      "prompt": "Tense wide shot of a prehistoric battle line at dusk, ranks of tall intelligent armoured reptilian warriors with spears advancing across a plain toward a smaller group of fur-clad humans, dust and red sky",
+      "motion": "The reptile ranks advance in step, spears levelling as one. Dust rises around them. The smaller human group braces. The whole frame moves toward confrontation.",
+      "say": "The Reptites are smarter, better armed, and they are winning."
+    },
+    {
+      "id": "600_tyrano",
+      "prompt": "Action shot inside a vast fortress hall built from dinosaur bone and stone, lit by torches. {CRONO} on the left and {AYLA} on the right stand back to back at the centre of frame, both facing outward away from each other, each striking at a different reptilian warrior, Crono's katana swinging out to the left and Ayla's fist driving out to the right. Four armoured reptilian warriors closing in from both edges of frame. Huge dinosaur skulls forming the arches overhead, dust and torch smoke, low angle",
+      "motion": "The two fight back to back, striking outward. A reptilian warrior is thrown into a bone pillar. Torch smoke swirls. Fast, brutal, hand-held camera energy.",
+      "sfx": "Close brutal combat, bone and stone impacts, reptilian shrieks, torches roaring, a fortress fight",
+      "seconds": 3.0,
+      "seed": 41873
+    },
+    {
+      "id": "610_skychange",
+      "prompt": "Ominous wide shot of a prehistoric night valley where the entire sky has turned deep red, silhouetted dinosaurs looking upward, a single point of brilliant white light growing brighter high above, jungle in shadow",
+      "motion": "The point of light high above grows steadily brighter and larger. Every dinosaur in frame lifts its head toward it. The red sky pulses. Absolute dread.",
+      "say": "Then the sky changes.",
+      "sfx": "A prehistoric night falling silent, animals going quiet all at once, a rising distant scream from the sky",
+      "in": "cut"
+    },
+    {
+      "id": "620_falling",
+      "prompt": "Spectacular wide shot of {LAVOS} falling from space as an enormous burning spined mass wrapped in fire, trailing a vast incandescent tail across the whole night sky, prehistoric jungle silhouetted below",
+      "motion": "The immense burning mass tears down across the sky, its tail of fire filling the frame. The jungle below is lit brighter and brighter as it comes. Terrifyingly fast.",
+      "say": "Lavos arrives. Not born here, not native. It falls from between the stars.",
+      "sfx": "A colossal object entering atmosphere, a screaming roar building, air igniting"
+    },
+    {
+      "id": "630_impact",
+      "prompt": "Cataclysmic wide shot of an enormous impact crater blasted into a prehistoric landscape, a shockwave of fire and debris racing outward flattening jungle for miles, the sky black with ash, everything burning",
+      "motion": "The shockwave races outward from the crater, flattening jungle as it goes and throwing debris across the frame. Fire climbs. Ash blots out the sky.",
+      "say": "It lands, it burrows, and the winter it starts ends the Reptites for good.",
+      "sfx": "A planet-scale impact, a shockwave flattening forest, roaring firestorm, debris rain",
+      "from_prev": true,
+      "in": "cut"
+    },
+    {
+      "id": "650_era12000",
+      "prompt": "Breathtaking wide establishing shot of a frozen world of blue-white glaciers and snowfields under a pale washed-out sky, and filling the upper half of the frame an enormous continent floating in the air, green terraces and white and gold spires clearly visible along its edge, waterfalls trailing from its rocky underside into cloud. No moon, no ice in the sky",
+      "motion": "Snow blows in sheets across the glacier below. The floating continent drifts slowly, waterfalls trailing from its underside into the clouds. Awe-inspiring slow reveal.",
+      "titles": [
+        {
+          "text": "12,000 B.C.",
+          "at": 0.6,
+          "hold": 2.6,
+          "scale": 0.034,
+          "y": 0.82
+        }
+      ],
+      "say": "Sixty five million years later, in a world of ice, they find a kingdom in the sky.",
+      "sfx": "A bright bell-like chime and a rush of air pulled inward, then A vast frozen wasteland, howling glacial wind, ice groaning, and far above a strange ethereal hum",
+      "in": "flash",
+      "look": "cold",
+      "style_strength": 0.5,
+      "seed": 42455
+    },
+    {
+      "id": "655_ice_village",
+      "prompt": "Bleak wide shot of a tiny primitive village of hide tents huddled on a frozen wasteland, thin smoke from small fires, ragged fur-clad people. Directly above them, filling the upper third of frame, the vast rocky underside of a floating continent with green terraces and white and gold spires along its rim, glowing warm, waterfalls trailing into cloud. No moon in frame",
+      "motion": "Snow blows across the huddled tents. Thin smoke bends in the wind. A ragged figure looks up toward the glowing continent overhead. It drifts on, indifferent.",
+      "say": "Below the floating kingdom, the people it left behind freeze on the ice.",
+      "sfx": "A freezing wasteland village, wind through hide tents, a small struggling fire, and a faint hum far above",
+      "in": "dissolve",
+      "look": "cold",
+      "style_strength": 0.5,
+      "seed": 42358
+    },
+    {
+      "id": "660_zeal",
+      "prompt": "Magnificent wide shot of a floating magical kingdom of white and gold spires and domes on a green terraced continent in the sky, elegant bridges between islands, robed figures walking, warm light and drifting cloud",
+      "motion": "Clouds drift slowly between the floating islands. Robed figures cross the elegant bridges. Banners and light catch on the spires. Serene, wealthy, beautiful.",
+      "say": "Zeal floats above the frozen earth, and its people have never known cold or hunger.",
+      "sfx": "A serene sky kingdom, soft ethereal chorus, wind between towers, water in fountains, unearthly calm",
+      "in": "dissolve"
+    },
+    {
+      "id": "670_machine",
+      "prompt": "Ominous interior shot of a vast palace chamber containing an enormous dark crystalline machine suspended in a ring of gold, red energy coiling up into it from below through the floor, robed scholars watching from galleries",
+      "motion": "Red energy coils up through the floor into the crystal and it pulses brighter with each surge. The gold ring rotates slowly. The watching scholars shift uneasily.",
+      "say": "Their power comes from a machine that drinks straight from the thing sleeping below.",
+      "in": "cut"
+    },
+    {
+      "id": "665_gurus",
+      "prompt": "Formal shot of three robed elder scholars standing together in a bright palace hall of white and gold, one holding a hammer, one a star chart, one an hourglass, tall arched windows behind them full of cloud",
+      "motion": "The three turn slightly toward camera. Robes stir. The hourglass sand runs. Cloud moves past the tall windows behind them. Dignified and doomed.",
+      "say": "Three scholars warn the queen what the machine is drinking from. She throws them through time. One is the old man with the lamp.",
+      "sfx": "A bright echoing palace hall, robes moving, sand running in glass, a heavy door, quiet dread",
+      "in": "cut"
+    },
+    {
+      "id": "680_queen",
+      "prompt": "Imposing shot of a tall regal queen in an ornate blue and gold gown standing before a glowing crystalline machine, arms spread, her eyes burning with red light, her shadow thrown huge on the wall behind her",
+      "motion": "She spreads her arms wider and the red light in her eyes intensifies. Her shadow swells on the wall behind. Her gown and hair lift in the machine's updraft.",
+      "say": "Queen Zeal will not stop. The more it gives her, the less of her is left.",
+      "sfx": "A commanding voice echoing in a great chamber, machine power surging, cloth in an updraft"
+    },
+    {
+      "id": "690_schala",
+      "prompt": "Sorrowful medium shot of a young woman with long dark blue hair in a pale robe standing alone in an arched palace corridor, one hand pressed to a glowing pendant at her chest, looking back over her shoulder in fear",
+      "motion": "Her hand tightens on the pendant and it glows brighter. She glances back over her shoulder, then down. Her hair and robe stir. Small and afraid in a huge corridor.",
+      "say": "Only her daughter Schala understands what it feeds on.",
+      "sfx": "A vast empty palace corridor, a small pendant chiming faintly, a frightened breath, distant machinery",
+      "in": "cut"
+    },
+    {
+      "id": "695_janus",
+      "prompt": "Quiet significant shot of a small pale boy with long blue white hair standing alone in a grand palace corridor holding a cat, his expression closed and cold, an ornate arched window of cloud behind him",
+      "motion": "The boy strokes the cat once, slowly, and lifts his head to stare directly at camera. His hair stirs. He does not blink. Unsettling stillness.",
+      "say": "And Schala has a younger brother. A quiet boy named Janus, who grows up to be Magus.",
+      "sfx": "An empty palace corridor, a cat's small sound, a child's quiet breath",
+      "in": "soft"
+    },
+    {
+      "id": "700_descent",
+      "prompt": "Awe-inspiring wide shot of an immense underwater palace stairway descending into blue green depths, colossal carved pillars and arches lit by shafts of filtered light, tiny figures descending, shoals of fish above",
+      "motion": "The tiny figures descend the enormous stairway. Shafts of filtered light sway across the pillars. Shoals of fish drift overhead. Bubbles rise. Vast and beautiful and wrong.",
+      "say": "They follow the queen down into the Ocean Palace, to the machine itself.",
+      "sfx": "A submerged palace, muffled water pressure, distant whale-like groans, filtered echoes",
+      "in": "dissolve",
+      "look": "dark",
+      "style_strength": 0.65
+    },
+    {
+      "id": "710_full_power",
+      "prompt": "Overwhelming shot of the great crystalline machine at maximum power in an underwater palace chamber, blinding red energy flooding upward through it, the whole chamber shaking, figures shielding their eyes, cracks racing across the walls",
+      "motion": "Red energy floods upward through the crystal and the chamber shakes violently. Cracks race across the walls and ceiling. Figures stagger and shield their eyes. Blinding.",
+      "say": "She wakes it deliberately.",
+      "sfx": "A machine screaming past its limits, stone cracking, energy flooding, alarms of collapse, chaos",
+      "look": "dark",
+      "style_strength": 0.65
+    },
+    {
+      "id": "720_rising",
+      "prompt": "Terrifying wide shot of {LAVOS} forcing up through the shattered marble floor of an undersea palace chamber, its spined shell filling the frame edge to edge, the red core blazing at the centre of the shell. In the lower third, seven human figures thrown backwards across the broken floor, each no taller than one of the creature's claws. Water pouring in through cracks in the ceiling, blue-green light from above, no eye, no eyelid, no pupil",
+      "motion": "The immense shell forces up through the shattering floor, filling the frame as it rises. Its red core blazes. The tiny figures are thrown backward. Overwhelming scale.",
+      "say": "Lavos answers.",
+      "sfx": "A colossal creature rising through stone, a planet-shaking roar, floor shattering",
+      "look": "dark",
+      "style_strength": 0.65,
+      "quality": true,
+      "seed": 41582
+    },
+    {
+      "id": "730_crono_steps",
+      "prompt": "Heroic tragic shot of {CRONO} stepping forward alone with katana raised toward an immense blazing creature, his back to his friends who are sprawled behind him, his silhouette small against overwhelming red light",
+      "motion": "He steps forward once, then again, katana lifting. The red light grows and floods around him. His friends reach out from behind. He does not look back.",
+      "say": "Crono puts himself between it and his friends.",
+      "sfx": "One footstep on shaking stone, a blade raised, a monstrous power gathering, a friend's cry cut short"
+    },
+    {
+      "id": "740_death",
+      "prompt": "Devastating abstract shot of an overwhelming white flash consuming an entire palace chamber, a small silhouetted figure with a raised sword dissolving at the centre of it, everything else blasted to pure white light",
+      "motion": "The white light expands violently outward from the centre until it consumes the entire frame, the small silhouette dissolving away inside it. Total obliteration.",
+      "sfx": "An annihilating discharge of energy, everything cut to a high ringing tone, then near silence",
+      "seconds": 3.5,
+      "from_prev": true,
+      "in": "cut",
+      "look": "dark",
+      "style_strength": 0.65
+    },
+    {
+      "id": "750_zeal_falls",
+      "prompt": "Catastrophic wide shot of an enormous floating continent broken into three tumbling fragments falling out of the sky, white and gold spires snapped off and falling separately, trailing debris and dust through cloud, a flat frozen grey sea far below rising in enormous waves to meet them. Everything is breaking",
+      "motion": "The continent cracks apart and its pieces fall through the clouds, spires toppling and trailing debris. Enormous waves rise to meet them. Total, unstoppable collapse.",
+      "say": "Zeal falls out of the sky. The boy Janus is thrown twelve thousand years forward, alone.",
+      "sfx": "A continent breaking apart, colossal masonry falling, immense ocean impacts, wind, catastrophe",
+      "in": "fade",
+      "in_dur": 1.4,
+      "look": "dark",
+      "style_strength": 0.65,
+      "quality": true,
+      "seed": 42746
+    },
+    {
+      "id": "725_schala",
+      "prompt": "Heartbreaking shot of a young woman with long dark blue hair engulfed in blinding red light from frame left, one hand reaching out, masonry falling through frame around her, her robe and hair torn sideways by the blast, a broken pendant spinning away from her in the foreground, everything shattering",
+      "motion": "She reaches out and the red light floods over her as the masonry comes down. Her pendant is torn away and spins off. The light swallows her completely.",
+      "say": "Schala is lost with the palace. They never find her.",
+      "sfx": "Masonry collapsing into water, masonry cracking hard, water surging, energy roaring, something precious lost",
+      "in": "dissolve",
+      "look": "dark",
+      "style_strength": 0.65,
+      "seed": 42843
+    },
+    {
+      "id": "780_empty_seat",
+      "prompt": "Quiet melancholy interior of a small time machine cockpit in flight at night, {MARLE} {LUCCA} {FROG} and {ROBO} in their seats and one seat conspicuously empty, a katana laid carefully across the empty seat. Starlight and streaking blue light rushing past the bubble canopy",
+      "motion": "Streaks of light rush past the canopy. The crew sit quietly, none of them speaking. The katana on the empty seat shifts slightly with the motion. Nobody looks at it.",
+      "say": "They keep going without him. For a while.",
+      "in": "dissolve",
+      "seed": 43037
+    },
+    {
+      "id": "760_washed_up",
+      "prompt": "Bleak wide shot of survivors in torn robes huddled on a grey frozen shoreline among floating wreckage of white and gold masonry, snow falling steadily, a colourless sea behind them, nothing left standing",
+      "motion": "Snow falls steadily on the huddled survivors. Wreckage rocks in the cold surf. One figure stands slowly and looks out to sea. Grey, quiet, utterly defeated.",
+      "say": "The survivors wash up in a world with nothing left to give them.",
+      "sfx": "A freezing shoreline, cold surf on ice, snow, wreckage knocking together",
+      "in": "dissolve",
+      "look": "cold",
+      "style_strength": 0.5,
+      "seed": 47356
+    },
+    {
+      "id": "775_epoch_wings",
+      "prompt": "{EPOCH} smashing out through the black steel side plating of an enormous flying warship, torn metal and debris spraying outward, two long curved wings of blue-white energy unfolding from its hull. Storm clouds and open sky beyond and below the warship, which is airborne thousands of feet up with no sea and no horizon touching it, motion blur trailing behind",
+      "motion": "The machine smashes out through the hull in a burst of debris and its energy wings snap open. It rolls once and accelerates away. Debris tumbles behind it.",
+      "say": "They steal back their time machine, the Epoch, and it comes out of the wreck with wings.",
+      "sfx": "An explosive breakout, hull tearing, engines igniting, wings unfolding with a resonant hum, triumph",
+      "quality": true,
+      "seed": 41291
+    },
+    {
+      "id": "790_egg",
+      "prompt": "Intimate close-up of a small bearded old man in a pointed hat placing a small ornate golden egg into {MARLE}'s cupped hands beneath a glowing lamppost in a starry void, the egg faintly luminous, warm lamplight on both their hands",
+      "motion": "He places the egg carefully into her hands and closes her fingers around it. It glows faintly brighter at her touch. He nods once, slowly. Lamplight flickers.",
+      "say": "Gaspar gives them an egg, and tells them time will allow exactly one exchange.",
+      "sfx": "A small object placed into hands, a faint magical chime, an old man's quiet words, a lamp hissing",
+      "in": "dissolve",
+      "seed": 42940
+    },
+    {
+      "id": "805_eggname",
+      "prompt": "Intimate macro close-up of a small ornate golden egg resting in cupped hands in warm lamplight, fine engraved patterns across its shell glowing faintly from within, deep starry darkness behind",
+      "motion": "The engraved patterns brighten and travel slowly across the shell from within. The hands shift very slightly. The glow pulses like something breathing inside it.",
+      "say": "The old man calls it a Chrono Trigger. One chance for time to answer differently.",
+      "sfx": "A faint magical resonance building inside a small object, a warm lamp, a held breath, wonder",
+      "in": "dissolve"
+    },
+    {
+      "id": "800_deathpeak",
+      "prompt": "Brutal wide shot of a colossal black mountain rising out of the ruined future wasteland into a screaming grey storm, tiny roped figures climbing a knife-edge ridge on its flank, wind driving snow and ash sideways",
+      "motion": "Wind drives snow and ash hard across the frame. The tiny roped figures fight upward along the ridge, bent double against it. The storm swallows the summit above.",
+      "say": "They carry it up Death Peak, in the dead future, to the one place the trade can be made.",
+      "sfx": "A bright bell-like chime and a rush of air pulled inward, then A screaming mountain storm, wind tearing at cloth, ice cracking, laboured climbing, brutal cold",
+      "in": "flash",
+      "look": "cold",
+      "style_strength": 0.5,
+      "seed": 47267
+    },
+    {
+      "id": "810_summit",
+      "prompt": "Transcendent wide shot on a black mountain summit where a column of warm golden light descends from a break in the storm clouds onto a small circle of standing figures, snow whirling upward around the light",
+      "motion": "The column of golden light strengthens and widens. Snow whirls upward around it instead of falling. The standing figures lift their heads into it. The storm parts further.",
+      "say": "At the summit they give time a copy of him, and take him back.",
+      "sfx": "A storm parting, rising, wind reversing, something impossible happening",
+      "in": "dissolve"
+    },
+    {
+      "id": "820_revived",
+      "prompt": "Close shot of {CRONO} standing upright in a column of warm golden light on a snowy mountain summit, eyes open, snow whirling gold around him. {MARLE} has thrown her arms around him from his left and {LUCCA} grips his right arm. Only those three figures in frame. Storm clouds breaking open overhead, warm backlight",
+      "motion": "His eyes open and he takes a breath. His friends rush in and seize him, nearly knocking him over. Golden snow whirls around the group. Relief and motion everywhere.",
+      "say": "It works.",
+      "sfx": "A sharp indrawn breath, cries of relief, people colliding in an embrace, wind",
+      "quality": true,
+      "seed": 41485
+    },
+    {
+      "id": "830_party",
+      "prompt": "Epic hero line-up on a windy ridge at golden hour, seven figures standing shoulder to shoulder facing camera, full length, evenly spaced across the frame. From left to right: {CRONO}. Then {MARLE}. Then {LUCCA}. Then {FROG}. Then {ROBO}. Then {AYLA}. Then {MAGUS}. Low sun behind the line raking across them, long shadows toward camera, tall dry grass",
+      "motion": "Cloaks capes and hair blow in the wind along the whole line. The robot's optic band brightens. Each of them shifts weight and settles. Golden light rakes across them.",
+      "say": "Seven now, out of five ages, the sorcerer included. He wants Lavos dead more than any of them.",
+      "sfx": "Wind across a high ridge, cloaks snapping, armour and servos settling",
+      "in": "dissolve",
+      "quality": true,
+      "seed": 41388
+    },
+    {
+      "id": "832_split",
+      "prompt": "Montage-style split composition showing four separate vignettes in one frame, a knight sheathing a sword in a medieval hall, a robot planting a tree, a warrior woman embracing her tribe, an inventor girl closing a workshop door, each in different warm light",
+      "motion": "Each vignette moves independently, the sword sliding home, the sapling firming, the embrace tightening, the door closing. All four settle at once.",
+      "say": "Before the end, they scatter back across the ages to finish what each of them left undone.",
+      "in": "dissolve"
+    },
+    {
+      "id": "834_black_omen",
+      "prompt": "Terrifying wide shot of an enormous ornate black and gold floating fortress shaped like a vast winged eye hanging motionless in the sky above a peaceful green medieval landscape, casting a huge shadow over the fields below",
+      "motion": "The colossal fortress hangs utterly motionless while clouds move past it. Its shadow creeps across the green fields below. Ornate rings on its hull turn slowly.",
+      "say": "In every age now, one thing hangs in the sky. Queen Zeal's risen palace, waiting in all of them.",
+      "sfx": "A bright bell-like chime and a rush of air pulled inward, then An impossibly vast structure hanging in air, wind",
+      "in": "flash"
+    },
+    {
+      "id": "836_queen_last",
+      "prompt": "Climactic shot inside an ornate black and gold throne chamber of a tall queen in a blue and gold gown floating above the floor wreathed in red energy, eyes blazing white, seven small figures braced against the storm of power below her",
+      "motion": "She rises higher, energy spiralling around her, hair and gown streaming upward. The seven figures below brace and raise their weapons. The chamber shakes violently.",
+      "say": "They climb it, and end her.",
+      "sfx": "A storm of dark energy, a queen's voice distorted and vast, stone shaking, a final confrontation"
+    },
+    {
+      "id": "840_assault",
+      "prompt": "Spectacular action shot of a sleek red winged time machine flying at full speed directly toward the immense spined shell of {LAVOS} against a storming red sky, energy trails behind it, the shell filling the horizon",
+      "motion": "The machine streaks toward the immense shell, energy trailing behind it. The shell grows enormous in frame as they close. Lightning cracks across the red sky.",
+      "say": "They fly the Epoch straight into the shell of the thing that ate their world.",
+      "sfx": "A machine screaming at full thrust, wind tearing past, a titanic creature groaning ahead"
+    },
+    {
+      "id": "850_inside",
+      "prompt": "Alien interior of an enormous living organism, a vast ribbed tunnel of red flesh and dark chitin receding into the distance in one-point perspective, walls of overlapping plates and pulsing glowing veins on both sides, a narrow pale bone causeway running away from camera down the centre with three tiny figures walking along it. No creature, no head, no face, no mouth, no eyes anywhere in frame",
+      "motion": "The veins of light pulse slowly through the ribbed walls in waves. The whole chamber breathes in and out. The tiny figures advance along the causeway. Alive and wrong.",
+      "say": "Inside, it is not a monster. It is a system, and it is not from here.",
+      "sfx": "The inside of something enormous and alive, slow wet breathing, energy pulsing through tissue",
+      "in": "cut",
+      "from_prev": true,
+      "look": "dark",
+      "style_strength": 0.65,
+      "seed": 42067
+    },
+    {
+      "id": "860_harvest",
+      "prompt": "Cosmic wide shot of many dead grey husk planets hanging in deep space, each one scarred by an identical crater, a spined shape drifting away from the nearest one toward a distant living blue world",
+      "motion": "The camera drifts slowly past the row of scarred dead planets. The spined shape moves steadily away toward the distant blue world. Stars turn slowly. Cold and endless.",
+      "say": "It lands on worlds, and grows inside them, and harvests them. It has done this many times.",
+      "in": "dissolve",
+      "look": "dark",
+      "style_strength": 0.65
+    },
+    {
+      "id": "875_spawn",
+      "prompt": "Disturbing cosmic shot of countless small spined creatures identical to a colossal parent shape streaming outward from a cracked shell into space toward distant star systems, each trailing a thin line of red light",
+      "motion": "The small spined shapes stream steadily outward from the cracked shell, spreading apart as they go toward distant stars. The parent shell breaks further behind them.",
+      "say": "Once it has finished a world, it seeds the stars with copies of itself. That was next.",
+      "sfx": "Cold space, a shell cracking apart, many small things moving outward",
+      "in": "cut",
+      "look": "dark",
+      "style_strength": 0.65
+    },
+    {
+      "id": "870_final_battle",
+      "prompt": "Climactic action shot inside a vast organic chamber, {CRONO} {FROG} and {ROBO} in the foreground striking together at a blazing red core, sword arc and energy blast and claw converging on it, four more figures as silhouettes behind them, shockwaves distorting the air outward, blinding light from the cracking core",
+      "motion": "All seven strike at once and their attacks converge on the blazing core. Shockwaves distort the air outward. The core cracks and floods light through the chamber.",
+      "say": "They break it anyway.",
+      "sfx": "A final battle at full intensity, energy detonations, steel and gunfire, a monstrous shell cracking apart",
+      "look": "dark",
+      "style_strength": 0.65,
+      "seed": 42164
+    },
+    {
+      "id": "880_no_1999",
+      "prompt": "Peaceful wide shot of a modern late twentieth century city skyline at midday under an ordinary blue sky with white clouds, traffic on the roads, people on the pavements, absolutely nothing happening, calm and mundane",
+      "motion": "Traffic flows steadily along the roads. People cross the pavements. Clouds drift gently. A flock of pigeons lifts from a rooftop. Utterly, wonderfully ordinary.",
+      "say": "The day of Lavos comes. And nothing happens.",
+      "sfx": "A bright bell-like chime and a rush of air pulled inward, then An ordinary city afternoon, traffic, distant voices, pigeons, birdsong, beautifully uneventful",
+      "in": "flash"
+    },
+    {
+      "id": "885_future_lives",
+      "prompt": "Hopeful wide shot of the once ruined future city now under a real blue sky with clouds, green vines and young trees reclaiming the broken concrete, people walking outside the domes without masks, sunlight everywhere",
+      "motion": "Clouds move across a real blue sky. Vines and young trees stir in a living wind. People walk in the open, unhurried. Light floods the reclaimed street.",
+      "say": "Three centuries later, the domes open, and the people inside walk out under a sky.",
+      "sfx": "A living city morning, birds, wind in young leaves, distant voices outdoors",
+      "in": "dissolve",
+      "look": "cold",
+      "style_strength": 0.5
+    },
+    {
+      "id": "890_fair_again",
+      "prompt": "Joyful wide shot of a medieval fairground at golden hour, striped tents and bunting, crowds laughing, coloured balloons rising into a warm evening sky, and in the centre background a white stone castle with blue conical roofs glowing on its green hill. No windmill",
+      "motion": "Balloons rise steadily into the golden sky. Bunting and pennants ripple. The crowd moves happily through the lanes. Warm light floods everything.",
+      "say": "The fair is still on. The bells are still ringing.",
+      "sfx": "A joyful evening fair, a low warm indistinct hubbub, cups knocking, hand bells, music and pipes, warm and alive",
+      "in": "dissolve",
+      "look": "warm",
+      "seed": 43619
+    },
+    {
+      "id": "900_never_know",
+      "parent": null,
+      "prompt": "Warm crowd-level shot at a medieval fair of ordinary townspeople laughing and eating and playing games in golden evening light, children running with ribbons, nobody looking at camera, entirely unaware and happy",
+      "motion": "The crowd moves and laughs around camera. Children run past trailing ribbons. Someone lifts a child onto their shoulders. Golden light and constant gentle motion.",
+      "say": "The world they saved will never know it needed saving.",
+      "in": "soft",
+      "look": "warm"
+    },
+    {
+      "id": "905_frog",
+      "prompt": "Quiet dignified shot of {FROG} standing alone on a misty medieval cliff at dawn with his golden hilted sword planted before him, looking out over a green valley, cloak moving gently, first light on his face",
+      "motion": "His cloak lifts and settles in the dawn wind. He rests both hands on the sword hilt and lowers his head, then raises it into the light. Mist rolls below.",
+      "say": "The knight never asks to be made a man again. He has work, and the shape suits it.",
+      "sfx": "A misty cliff at dawn, gentle wind, a cloak moving, a distant valley waking",
+      "in": "dissolve"
+    },
+    {
+      "id": "910_two_shot",
+      "prompt": "Tender two-shot of {CRONO} and {MARLE} standing together at the edge of a medieval fairground at dusk, both looking upward, coloured paper lanterns rising past them into a deep blue sky, warm light on their faces",
+      "motion": "Lanterns rise slowly past them into the darkening sky. Her hair and his sash move in the warm breeze. She turns her head slightly toward him. Both keep looking up.",
+      "say": "Neither of them says anything about it. They don't have to.",
+      "sfx": "A quiet fairground edge at dusk, paper lanterns rustling upward, gentle warmth",
+      "in": "dissolve",
+      "look": "warm"
+    },
+    {
+      "id": "915_mother",
+      "prompt": "Tender warm shot at a medieval fair at night of a kind middle aged woman in an apron laughing and holding a cat, coloured lanterns glowing above and behind her, a small tent and warm firelight, festival crowd blurred beyond",
+      "motion": "She laughs and shifts the cat in her arms. Lantern light sways across her face. The cat's tail flicks. The blurred festival moves warmly behind her.",
+      "say": "His mother is waiting at the fair, holding the cat, asking where on earth he has been.",
+      "sfx": "A warm festival at night, cloth and a small animal shifting, a cup set down, a cat, lanterns rustling, music and crowd",
+      "in": "soft",
+      "look": "warm"
+    },
+    {
+      "id": "920_lanterns",
+      "prompt": "Breathtaking very wide final shot of a medieval kingdom at night, hundreds of glowing paper lanterns drifting up over the town and the white castle into a deep starry sky, the river reflecting all of them, two tiny silhouettes on a hill in the foreground",
+      "motion": "Hundreds of lanterns drift steadily upward across the whole frame and their reflections move on the river. The two tiny silhouettes stay still. Very slow crane up and back.",
+      "titles": [
+        {
+          "text": "CHRONO TRIGGER",
+          "at": 3.2,
+          "hold": 3.6,
+          "scale": 0.05,
+          "y": 0.44
+        }
+      ],
+      "say": "And time, for once, lets them keep it.",
+      "sfx": "A warm night over a kingdom, lanterns rustling, a river",
+      "in": "fade",
+      "in_dur": 1.6,
+      "look": "warm"
+    }
+  ],
+  "tail": 1.15,
+  "default_transition": "cut"
+}

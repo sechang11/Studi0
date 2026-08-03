@@ -1,0 +1,69 @@
+{
+  "variable": "shot.comp.eyeline",
+  "claim": "Where a character looks carries the emotional read and is what stitches a reverse-shot pair together. Into_lens breaks the fourth wall and confronts the audience; off_left throws attention at something we have not been shown yet; closed shuts us out entirely.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "into_lens",
+      "clause": "looking at viewer, eye contact",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_eyeline/into_lens.webp"
+    },
+    {
+      "value": "left",
+      "clause": "looking to the side, eyes turned left",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_eyeline/left.webp"
+    },
+    {
+      "value": "right",
+      "clause": "looking to the side, eyes turned right",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_eyeline/right.webp"
+    },
+    {
+      "value": "up",
+      "clause": "looking up",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_eyeline/up.webp"
+    },
+    {
+      "value": "down",
+      "clause": "looking down",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_eyeline/down.webp"
+    },
+    {
+      "value": "off_left",
+      "clause": "looking off-screen to the left, looking away, gaze past frame edge",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_eyeline/off_left.webp"
+    },
+    {
+      "value": "off_right",
+      "clause": "looking off-screen to the right, looking away, gaze past frame edge",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_eyeline/off_right.webp"
+    },
+    {
+      "value": "closed",
+      "clause": "closed eyes",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_eyeline/closed.webp"
+    },
+    {
+      "value": "at_object",
+      "clause": "looking at object, gaze fixed on prop",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_eyeline/at_object.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "shot.comp.eyeline",
+      "issue": "left (\"looking to the side, eyes turned left\") and right differ only by a word the model has no tag for, and off_left/off_right stack \"looking away\" on top of that same non-tag. All four carry one instruction — \"looking to the side / looking away\" — so four options produce one or two pictures. at_object (\"looking at object, gaze fixed on prop\") points at a prop the fixed subject sentence does not contain, so the model must invent one and the panel changes more than the option.",
+      "fix": "Reduce to the trained set: into_lens \"looking at viewer, eye contact\", to_side \"looking to the side\", away \"looking away\", up \"looking up\", down \"looking down\", closed \"closed eyes\". If L/R values must survive the enum, say in the claim that the still pass cannot fix the side. Point at_object at an object the scene already owns: \"looking at soccer ball\"."
+    }
+  ]
+}

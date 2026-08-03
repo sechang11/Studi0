@@ -1,0 +1,51 @@
+{
+  "variable": "anime.draw.shading_steps",
+  "claim": "How many hard shadow bands a drawing carries, which is the structural difference between anime and photography. flat_0 reads graphic and cheap, cel_2 is the industry default, painterly abandons cel logic entirely.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "flat_0",
+      "clause": "flat color, no shading",
+      "control": false,
+      "sample": "/samples/vars/anime_draw_shading_steps/flat_0.webp"
+    },
+    {
+      "value": "cel_1",
+      "clause": "cel shading, single shadow tone",
+      "control": false,
+      "sample": "/samples/vars/anime_draw_shading_steps/cel_1.webp"
+    },
+    {
+      "value": "cel_2",
+      "clause": "cel shading, two tone shadows",
+      "control": false,
+      "sample": "/samples/vars/anime_draw_shading_steps/cel_2.webp"
+    },
+    {
+      "value": "cel_3",
+      "clause": "cel shading, three tone shading, layered shadows",
+      "control": false,
+      "sample": "/samples/vars/anime_draw_shading_steps/cel_3.webp"
+    },
+    {
+      "value": "soft_gradient",
+      "clause": "gradient shading, soft blended shadows",
+      "control": false,
+      "sample": "/samples/vars/anime_draw_shading_steps/soft_gradient.webp"
+    },
+    {
+      "value": "painterly",
+      "clause": "painterly shading, visible brushstrokes",
+      "control": false,
+      "sample": "/samples/vars/anime_draw_shading_steps/painterly.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "anime.draw.shading_steps",
+      "issue": "cel_1, cel_2 and cel_3 differ only by a shadow-band count (\"single shadow tone\" / \"two tone shadows\" / \"three tone shading\"). Animagine cannot count shadow bands; all three will land on ordinary two-tone cel shading. Three of six panels identical.",
+      "fix": "Describe the visual consequence instead of the count, or collapse the middle: cel_1 -> \"cel shading, single hard shadow, high contrast shading\", cel_2 -> \"cel shading\" (declared default), cel_3 -> \"layered shadows, detailed shading, dark rim shadow\". If they still converge, drop cel_3."
+    }
+  ]
+}

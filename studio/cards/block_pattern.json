@@ -1,0 +1,81 @@
+{
+  "variable": "block.pattern",
+  "claim": "States how bodies travel relative to each other — the difference between two people converging on a confrontation and two people drifting past without ever meeting. A director reaches for it to give a scene geometry that means something before anyone speaks.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "static",
+      "clause": "2boys, standing, facing viewer",
+      "control": true,
+      "sample": "/samples/vars/block_pattern/static.webp"
+    },
+    {
+      "value": "approach",
+      "clause": "2boys, walking toward each other, facing each other",
+      "control": false,
+      "sample": "/samples/vars/block_pattern/approach.webp"
+    },
+    {
+      "value": "retreat",
+      "clause": "2boys, walking away, backs turned, from behind",
+      "control": false,
+      "sample": "/samples/vars/block_pattern/retreat.webp"
+    },
+    {
+      "value": "circle",
+      "clause": "2boys, circling each other, facing each other, wide stance",
+      "control": false,
+      "sample": "/samples/vars/block_pattern/circle.webp"
+    },
+    {
+      "value": "side_by_side",
+      "clause": "2boys, side-by-side, walking, same direction",
+      "control": false,
+      "sample": "/samples/vars/block_pattern/side_by_side.webp"
+    },
+    {
+      "value": "face_off",
+      "clause": "2boys, facing each other, standoff, confrontation",
+      "control": false,
+      "sample": "/samples/vars/block_pattern/face_off.webp"
+    },
+    {
+      "value": "pass_by",
+      "clause": "2boys, passing each other, opposite directions, walking",
+      "control": false,
+      "sample": "/samples/vars/block_pattern/pass_by.webp"
+    },
+    {
+      "value": "cross",
+      "clause": "2boys, crossing paths, walking, different directions",
+      "control": false,
+      "sample": "/samples/vars/block_pattern/cross.webp"
+    },
+    {
+      "value": "gather",
+      "clause": "multiple boys, converging, gathering into a huddle",
+      "control": false,
+      "sample": "/samples/vars/block_pattern/gather.webp"
+    },
+    {
+      "value": "scatter",
+      "clause": "multiple boys, scattering, running in different directions",
+      "control": false,
+      "sample": "/samples/vars/block_pattern/scatter.webp"
+    },
+    {
+      "value": "follow",
+      "clause": "2boys, single file, one following behind the other, walking",
+      "control": false,
+      "sample": "/samples/vars/block_pattern/follow.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "block.pattern",
+      "issue": "Most of the options are trajectories, and a still only shows the instantaneous arrangement. approach / face_off / circle all reduce to \"two boys facing each other\"; pass_by / cross both reduce to \"two boys walking in different directions\"; retreat / follow both come back as two backs walking away. That is the same argument the card set already accepts for layer.fg.motion and block.entrance's reveal_by_pan — applied inconsistently here.",
+      "fix": "Either mark the variable renderable:false with a motion skip_reason, or keep only the values with a distinct frozen geometry (static, face_off, side_by_side, follow, gather, scatter) and demote approach/retreat/circle/pass_by/cross to a clip demo with a note in the claim."
+    }
+  ]
+}

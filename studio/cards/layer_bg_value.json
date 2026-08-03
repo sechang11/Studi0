@@ -1,0 +1,45 @@
+{
+  "variable": "layer.bg.value",
+  "claim": "Controls whether the background plane sits darker, level with, or brighter than the subject — the tonal separation that makes a figure pop or dissolve at a glance. Directors pull it darker to lift a character off a busy scene, and go to silhouette when they want shape instead of face.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "darker",
+      "clause": "dark background, dimly lit background, background in shadow",
+      "control": false,
+      "sample": "/samples/vars/layer_bg_value/darker.webp"
+    },
+    {
+      "value": "matched",
+      "clause": "even lighting, background and subject same brightness",
+      "control": false,
+      "sample": "/samples/vars/layer_bg_value/matched.webp"
+    },
+    {
+      "value": "lighter",
+      "clause": "bright background, brightly lit background, high key background",
+      "control": false,
+      "sample": "/samples/vars/layer_bg_value/lighter.webp"
+    },
+    {
+      "value": "washed",
+      "clause": "washed out background, faded background, low contrast background, hazy",
+      "control": false,
+      "sample": "/samples/vars/layer_bg_value/washed.webp"
+    },
+    {
+      "value": "silhouette",
+      "clause": "silhouetted background, flat dark background shapes, backlit background",
+      "control": false,
+      "sample": "/samples/vars/layer_bg_value/silhouette.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "layer.bg.value",
+      "issue": "The `matched` clause contains a prose fragment rather than tags: \"background and subject same brightness\". Animagine will not parse a comparative relation between two nouns; it will pick up the words `background`, `subject` and `brightness` separately.",
+      "fix": "Use \"even lighting, flat lighting, no lighting contrast\" — three tags that say the same thing in vocabulary the model has."
+    }
+  ]
+}

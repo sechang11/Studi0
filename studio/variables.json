@@ -1,0 +1,4151 @@
+[
+ {
+  "name": "movie.title",
+  "level": "movie",
+  "type": "string",
+  "default": "Untitled",
+  "why": "Names the film for slates, filenames and the optional title card.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "movie.logline",
+  "level": "movie",
+  "type": "string",
+  "default": "\"\"",
+  "why": "One sentence the resolver falls back on when a scene gives no description.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "movie.fps",
+  "level": "movie",
+  "type": "enum: 8 | 12 | 16 | 24 | 25 | 30 | 60",
+  "default": "24",
+  "why": "Fixes the frame clock every duration, ease and fx interval is quantised against.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "movie.canvas",
+  "level": "movie",
+  "type": "enum: 768x432 | 832x480 | 1024x576 | 1280x720 | 1920x1080",
+  "default": "1280x720",
+  "why": "Delivery resolution, separate from aspect and from the oversized render frame.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "movie.aspect",
+  "level": "movie",
+  "type": "enum: 16:9 | 1.85:1 | 2:1 | 2.39:1 | 4:3 | 1:1 | 9:16",
+  "default": "16:9",
+  "why": "Framing decision independent of pixel canvas that drives every composition default.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "movie.checkpoint",
+  "level": "any",
+  "type": "string (model id)",
+  "default": "anime_sdxl_base",
+  "why": "The image model is the true source of house style and must be overridable per chapter.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "movie.lora_stack",
+  "level": "any",
+  "type": "list of [lora_id, weight]",
+  "default": "[]",
+  "why": "Style and character LoRAs reach looks the base checkpoint cannot.",
+  "status": "partial",
+  "fallback": "Missing LoRAs are skipped with a warning; tags carry the style instead."
+ },
+ {
+  "name": "movie.seed_root",
+  "level": "movie",
+  "type": "number",
+  "default": "auto (hash of movie.title)",
+  "why": "One root seed makes a whole film reproducible and derives every per-shot seed.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "movie.negative",
+  "level": "any",
+  "type": "list of tags",
+  "default": "[worst quality, low quality, bad anatomy, extra digits, watermark, text]",
+  "why": "A global negative floor so no author has to remember the boilerplate.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "movie.tag_style",
+  "level": "movie",
+  "type": "enum: danbooru | natural | hybrid",
+  "default": "danbooru",
+  "why": "Decides whether resolved variables emit tags or prose, changing every prompt builder.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "movie.prompt_budget",
+  "level": "movie",
+  "type": "number (tokens)",
+  "default": "75",
+  "why": "Caps prompt length so late variables cannot silently push out character tags.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "movie.prompt_priority",
+  "level": "any",
+  "type": "enum: character_first | world_first | style_first | balanced",
+  "default": "character_first",
+  "why": "Decides what survives truncation when the prompt budget is hit.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "movie.runtime_target_s",
+  "level": "movie",
+  "type": "number (seconds)",
+  "default": "auto (sum of chapters)",
+  "why": "Lets the resolver warn or auto-trim when the cut overruns intended length.",
+  "status": "partial",
+  "fallback": "Advisory lint only; never trims automatically."
+ },
+ {
+  "name": "movie.language",
+  "level": "movie",
+  "type": "enum: en | ja | zh | ko | es | fr | de | other",
+  "default": "en",
+  "why": "Sets TTS voice pools, caption font and on-screen signage language at once.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "movie.rating",
+  "level": "movie",
+  "type": "enum: g | pg | pg13 | r",
+  "default": "pg13",
+  "why": "Auto-populates the negative prompt and gates violence, gore and nudity tags.",
+  "status": "partial",
+  "fallback": "Negative-prompt additions only; no post-render classifier."
+ },
+ {
+  "name": "movie.lint",
+  "level": "movie",
+  "type": "bool",
+  "default": "true",
+  "why": "Author-time warnings for crossed axis lines, impossible lens pairs and audio overruns.",
+  "status": "partial",
+  "fallback": "Only checks needing no image analysis run; the rest are skipped silently."
+ },
+ {
+  "name": "movie.credits",
+  "level": "movie",
+  "type": "list of [role, name]",
+  "default": "[]",
+  "why": "Credit text is structural furniture the end chapter should build itself.",
+  "status": "partial",
+  "fallback": "Rendered through the burnt-in caption engine over black; no scrolling crawl."
+ },
+ {
+  "name": "story.type",
+  "level": "movie",
+  "type": "enum: short | episode | feature | music_video | trailer | pv | loop | anthology",
+  "default": "short",
+  "why": "Sets structural expectations, default scene lengths and whether an ending is required.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "story.structure",
+  "level": "movie",
+  "type": "enum: kishotenketsu | three_act | four_act | vignette | loop | anthology | freeform",
+  "default": "kishotenketsu",
+  "why": "Gives chapters default dramatic roles so pacing and music arcs can be derived.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "story.chapter_role",
+  "level": "chapter",
+  "type": "enum: cold_open | ki | sho | ten | ketsu | act1 | act2 | act3 | interlude | epilogue | credits",
+  "default": "auto (from position in structure)",
+  "why": "One word tells pacing, music and grade what this chapter is for.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "story.genre",
+  "level": "movie",
+  "type": "enum: slice_of_life | drama | romance | comedy | action | thriller | horror | mystery | fantasy | sci_fi | mecha | sports | isekai | historical | supernatural | documentary",
+  "default": "slice_of_life",
+  "why": "Seeds defaults for pace, lens, grade, music and sound across the film.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "story.tone",
+  "level": "any",
+  "type": "enum: earnest | wistful | melancholy | tender | tense | dread | playful | comedic | absurd | cold | bittersweet | triumphant | eerie | serene | savage",
+  "default": "earnest",
+  "why": "The single tonality word every department reads when nothing more specific is set.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "story.register",
+  "level": "any",
+  "type": "enum: naturalistic | heightened | stylised | melodrama | comedic_broad | poetic | clinical | mythic",
+  "default": "naturalistic",
+  "why": "How big performance, camera and music may be, separate from what they express.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "story.tonality_curve",
+  "level": "chapter",
+  "type": "enum: flat | rising | falling | arc | inverted_arc | bittersweet | whiplash | spiral",
+  "default": "arc",
+  "why": "States how tone moves across a chapter so grade, music and pace can interpolate.",
+  "status": "partial",
+  "fallback": "Interpolates story.tension and audio.music.intensity per scene; no narrative reasoning."
+ },
+ {
+  "name": "story.mood",
+  "level": "any",
+  "type": "enum: neutral | warm | hopeful | lonely | anxious | grieving | angry | euphoric | numb | nostalgic | ominous | intimate | chaotic",
+  "default": "neutral",
+  "why": "Scene-level emotional colour biasing tags, grade, music and lighting together.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "story.mood_intensity",
+  "level": "any",
+  "type": "number 0.0-1.0",
+  "default": "0.5",
+  "why": "Separates faint unease from panic without changing the mood word.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "story.tension",
+  "level": "scene",
+  "type": "number 0.0-1.0",
+  "default": "0.4",
+  "why": "One dial cut rate, music intensity, shake and contrast can all key off.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "story.beat",
+  "level": "scene",
+  "type": "enum: setup | inciting | rising | complication | turn | climax | falling | resolution | button | breather",
+  "default": "rising",
+  "why": "Dramatic function of the scene, driving shot-size and pacing defaults.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "story.scene_goal",
+  "level": "scene",
+  "type": "string",
+  "default": "\"\"",
+  "why": "One line of intent the prompt builder mines when a shot has no description.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "story.pov",
+  "level": "scene",
+  "type": "enum: objective | subjective | first_person | omniscient | unreliable | shared",
+  "default": "objective",
+  "why": "Decides whose experience the camera, sound and grade are aligned to.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "story.pov_char",
+  "level": "scene",
+  "type": "string (char.id)",
+  "default": "auto (first character present)",
+  "why": "Names whose eyeline, hearing perspective and emotional grade the scene follows.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "story.reality_layer",
+  "level": "scene",
+  "type": "enum: real | dream | memory | flashback | hallucination | imagined | story_within | digital | afterlife",
+  "default": "real",
+  "why": "Non-real layers need a consistent visual and audio treatment applied automatically.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "story.time_position",
+  "level": "scene",
+  "type": "enum: linear | earlier | later | parallel | timeless | recurring",
+  "default": "linear",
+  "why": "Tells the viewer-facing devices (cards, grade shifts, reprise) when we are.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "story.narrator",
+  "level": "any",
+  "type": "enum: none | char_vo | omniscient_vo | text_card | diary | letter",
+  "default": "none",
+  "why": "Declares that voice-over exists so the mix reserves headroom for it.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "story.motif",
+  "level": "any",
+  "type": "list of named motif ids",
+  "default": "[]",
+  "why": "Ties a recurring image, colour and musical phrase together under one name.",
+  "status": "partial",
+  "fallback": "Injects the motif's tags and biases audio.music.motif; no automatic recall logic."
+ },
+ {
+  "name": "story.theme_tags",
+  "level": "movie",
+  "type": "list of tags",
+  "default": "[]",
+  "why": "Thematic words that quietly bias imagery when a shot is under-specified.",
+  "status": "partial",
+  "fallback": "Appended at low weight to the prompt tail; may be truncated by the budget."
+ },
+ {
+  "name": "story.title_card",
+  "level": "any",
+  "type": "enum: none | main_title | chapter_title | location_card | time_card | end_card",
+  "default": "none",
+  "why": "Cards are structural furniture and should not require a hand-built shot.",
+  "status": "partial",
+  "fallback": "Burnt-in text frame over black or the shot; no animated typography."
+ },
+ {
+  "name": "story.content_flags",
+  "level": "any",
+  "type": "list of enum: violence | blood | death | injury | flashing_lights | body_horror | drowning | sexual_content | substance_use",
+  "default": "[]",
+  "why": "Drives content warnings and softens flash and strobe fx automatically.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "time.shot_s",
+  "level": "shot",
+  "type": "number (seconds)",
+  "default": "auto (from shot.purpose, else 5)",
+  "why": "Clip length; every camera ease, fx keyframe and audio cue depends on it.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "time.scene_s",
+  "level": "scene",
+  "type": "number (seconds)",
+  "default": "auto (sum of shots, else 30)",
+  "why": "The scene-length control, usable as a budget shots are fitted into.",
+  "status": "partial",
+  "fallback": "When shots overrun, the resolver warns and trims the last shot rather than re-editing."
+ },
+ {
+  "name": "time.chapter_s",
+  "level": "chapter",
+  "type": "number (seconds)",
+  "default": "auto (sum of scenes)",
+  "why": "Chapter budget so a film can be shaped to a runtime from the top down.",
+  "status": "partial",
+  "fallback": "Advisory; overruns warn only."
+ },
+ {
+  "name": "time.fit_mode",
+  "level": "scene",
+  "type": "enum: free | fit_to_budget | stretch_to_budget | trim_tail | drop_lowest_priority",
+  "default": "free",
+  "why": "Says what happens when authored shots do not add up to the declared scene length.",
+  "status": "partial",
+  "fallback": "Only free and trim_tail are implemented; others warn and behave as free."
+ },
+ {
+  "name": "time.pace",
+  "level": "any",
+  "type": "enum: languid | slow | steady | brisk | fast | frantic",
+  "default": "steady",
+  "why": "One inheritable word setting default shot lengths and cut rate for a sequence.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "time.cut_rate",
+  "level": "scene",
+  "type": "number (shots per minute)",
+  "default": "auto (from time.pace)",
+  "why": "Numeric handle on editing density when the pace word is too coarse.",
+  "status": "partial",
+  "fallback": "Picks default shot durations at author time; no automatic re-cutting."
+ },
+ {
+  "name": "time.rhythm",
+  "level": "scene",
+  "type": "enum: even | accelerating | decelerating | syncopated | stuttered | long_short | breathing",
+  "default": "even",
+  "why": "Shot-length pattern is what makes an edit feel composed rather than uniform.",
+  "status": "partial",
+  "fallback": "Applied as a multiplier curve over default shot durations."
+ },
+ {
+  "name": "time.min_shot_s",
+  "level": "movie",
+  "type": "number (seconds)",
+  "default": "0.5",
+  "why": "Floor that stops generated pacing producing unreadable flash cuts.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "time.max_shot_s",
+  "level": "movie",
+  "type": "number (seconds)",
+  "default": "12",
+  "why": "Ceiling keeping a single LTX chain from drifting beyond usable coherence.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "time.hold_in_s",
+  "level": "shot",
+  "type": "number (seconds)",
+  "default": "0.2",
+  "why": "A held beat before motion starts makes a cut land instead of lurching.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "time.hold_out_s",
+  "level": "shot",
+  "type": "number (seconds)",
+  "default": "0.2",
+  "why": "Settling before the cut makes the outgoing frame feel composed.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "time.clip_chain",
+  "level": "shot",
+  "type": "number (count of ~5s LTX clips)",
+  "default": "auto (ceil(time.shot_s / 5))",
+  "why": "Makes the renderer's chaining explicit so long shots are authored knowingly.",
+  "status": "partial",
+  "fallback": "Chained clips joined with a short crossfade; drift accumulates past ~3 links."
+ },
+ {
+  "name": "time.chain_overlap_frames",
+  "level": "any",
+  "type": "number (frames)",
+  "default": "4",
+  "why": "Overlap between chained clips is the main lever on how visible a join is.",
+  "status": "partial",
+  "fallback": "Implemented as a crossfade of that length; no latent-space continuity."
+ },
+ {
+  "name": "time.speed",
+  "level": "shot",
+  "type": "number (playback rate, 0.1-4.0)",
+  "default": "1.0",
+  "why": "Straight retime of the rendered clip, the cheapest slow-motion available.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "time.speed_ramp",
+  "level": "shot",
+  "type": "enum: none | ramp_down | ramp_up | freeze_then_go | slowmo_hit | stutter | ramp_in_out",
+  "default": "none",
+  "why": "Time manipulation is core anime action grammar and needs a first-class name.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "time.freeze_at_pct",
+  "level": "shot",
+  "type": "number (0-100)",
+  "default": "50",
+  "why": "Where a freeze lands is the whole joke or the whole impact.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "time.freeze_hold_s",
+  "level": "shot",
+  "type": "number (seconds)",
+  "default": "0.4",
+  "why": "How long a freeze holds separates a stutter from a title beat.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "time.beat_grid",
+  "level": "scene",
+  "type": "enum: free | music_beat | music_bar | music_phrase | metronome",
+  "default": "free",
+  "why": "Lets cuts snap to the generated music instead of floating against it.",
+  "status": "roadmap",
+  "fallback": "Cuts stay on authored times; the resolver reports nearest musical grid offsets."
+ },
+ {
+  "name": "time.sync_to_music",
+  "level": "shot",
+  "type": "bool",
+  "default": "false",
+  "why": "Marks the individual shots that must land on a musical hit.",
+  "status": "roadmap",
+  "fallback": "Ignored; shot uses its authored duration."
+ },
+ {
+  "name": "time.pre_roll_s",
+  "level": "scene",
+  "type": "number (seconds)",
+  "default": "0",
+  "why": "Silent lead-in before the first shot for breathing room after a transition.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "time.post_roll_s",
+  "level": "scene",
+  "type": "number (seconds)",
+  "default": "0",
+  "why": "Tail after the last shot so a scene can end on held air.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "shot.purpose",
+  "level": "shot",
+  "type": "enum: establish | reveal | react | action | dialogue | transition | detail | beat | mood | insert",
+  "default": "beat",
+  "why": "One word from which size, move, lens, duration and audio defaults derive.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "shot.size",
+  "level": "shot",
+  "type": "enum: extreme_close_up | close_up | medium_close_up | medium | medium_wide | wide | extreme_wide | insert | macro | establishing",
+  "default": "medium",
+  "why": "The most-used image decision; without it every keyframe is a random crop.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "shot.framing_type",
+  "level": "shot",
+  "type": "enum: single | two_shot | three_shot | group | over_shoulder | pov | reaction | insert_object | empty_frame | crowd",
+  "default": "single",
+  "why": "How many bodies are in frame and from whose vantage, changing the whole tag stack.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "shot.subject",
+  "level": "shot",
+  "type": "list of char.id or object id",
+  "default": "auto (characters present, in order)",
+  "why": "Names who the shot is about so face refs and focus target the right body.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "shot.action",
+  "level": "shot",
+  "type": "string (short description)",
+  "default": "\"\"",
+  "why": "Free-text beat description filling any gap the structured variables leave.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "shot.tags",
+  "level": "any",
+  "type": "list of tags (appends down the hierarchy)",
+  "default": "[]",
+  "why": "The escape hatch that keeps the format from blocking a prompt the model can do.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "shot.negative_add",
+  "level": "any",
+  "type": "list of tags",
+  "default": "[]",
+  "why": "Scoped negatives so one artefact dies without touching the global list.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "shot.seed",
+  "level": "shot",
+  "type": "number",
+  "default": "auto (seed_root + shot index)",
+  "why": "Deterministic per-shot noise and the handle for re-rolling exactly one frame.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "shot.cfg",
+  "level": "any",
+  "type": "number (1.0-12.0)",
+  "default": "6.0",
+  "why": "Prompt adherence versus image quality, the main generation trade-off.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "shot.steps",
+  "level": "any",
+  "type": "number",
+  "default": "28",
+  "why": "Quality/time trade so hero shots can cost more than filler.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "shot.keyframe_mode",
+  "level": "shot",
+  "type": "enum: start_only | start_end | start_mid_end",
+  "default": "start_only",
+  "why": "Controls whether the shot is single-image i2v or interpolation between authored frames.",
+  "status": "partial",
+  "fallback": "Collapses to start_only plus a post camera move when end-frame conditioning is unavailable."
+ },
+ {
+  "name": "shot.motion_strength",
+  "level": "shot",
+  "type": "number 0.0-1.0",
+  "default": "0.4",
+  "why": "How much the video model may move the frame, the main coherence dial.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "shot.motion_prompt",
+  "level": "shot",
+  "type": "string",
+  "default": "auto (from action, camera and weather)",
+  "why": "The text the i2v pass sees, a different sentence from the keyframe prompt.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "shot.still",
+  "level": "shot",
+  "type": "bool",
+  "default": "false",
+  "why": "A held drawing with no video pass is legitimate anime and saves render time.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "shot.hero",
+  "level": "shot",
+  "type": "bool",
+  "default": "false",
+  "why": "Marks shots worth extra steps, upscaling and retries without setting each by hand.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "shot.retries",
+  "level": "any",
+  "type": "number",
+  "default": "1",
+  "why": "How many times a failed or rejected generation is re-rolled before giving up.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "shot.priority",
+  "level": "shot",
+  "type": "enum: filler | normal | important | critical",
+  "default": "normal",
+  "why": "Tells budget allocators and trimmers which shots to sacrifice first.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "shot.match_prev",
+  "level": "shot",
+  "type": "enum: none | match_frame | match_action | match_graphic | match_eyeline | match_light",
+  "default": "none",
+  "why": "Asks for a cut landing on the previous composition instead of hand-copying values.",
+  "status": "partial",
+  "fallback": "Copies the previous shot's framing variables at author time; no image-space alignment."
+ },
+ {
+  "name": "shot.reference",
+  "level": "any",
+  "type": "string (image id or path)",
+  "default": "none",
+  "why": "A reference image is often faster and more reliable than any number of tags.",
+  "status": "partial",
+  "fallback": "Face references work via IPAdapter; background and lighting references warn and are ignored."
+ },
+ {
+  "name": "shot.reference_weight",
+  "level": "any",
+  "type": "number 0.0-1.0",
+  "default": "0.6",
+  "why": "How hard the reference pulls against the prompt, per shot.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "shot.facing",
+  "level": "shot",
+  "type": "enum: to_camera | three_quarter_left | three_quarter_right | profile_left | profile_right | back_three_quarter | back",
+  "default": "three_quarter_left",
+  "why": "Body orientation is a separate axis from camera angle and the main read on a character.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "shot.cam.height",
+  "level": "shot",
+  "type": "enum: ground | ankle | knee | waist | chest | eye | high | overhead | aerial",
+  "default": "eye",
+  "why": "Camera height reads as power and scale, authored independently of tilt.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "shot.cam.angle",
+  "level": "shot",
+  "type": "enum: level | low | high | birds_eye | worms_eye | top_down | dutch",
+  "default": "level",
+  "why": "Tilt relative to the subject is the classic dominance lever.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "shot.cam.dutch_deg",
+  "level": "shot",
+  "type": "number (degrees, -45..45)",
+  "default": "0",
+  "why": "Continuous amount for the dutch angle instead of a binary on/off.",
+  "status": "partial",
+  "fallback": "Rounded into a dutch-angle keyframe tag; no post rotation pass."
+ },
+ {
+  "name": "shot.cam.move",
+  "level": "shot",
+  "type": "enum: static | push | pull | pan_l | pan_r | tilt_u | tilt_d | handheld | zoom_in | zoom_out | dolly_l | dolly_r | crane_up | crane_down | orbit_l | orbit_r | whip_pan | roll | rack_zoom | follow",
+  "default": "static",
+  "why": "The core motion verb, extending eight native moves to what directors ask for.",
+  "status": "partial",
+  "fallback": "First eight render natively; dolly maps to pan, crane to tilt+push, orbit to pan+push, roll and rack_zoom to push with a warning."
+ },
+ {
+  "name": "shot.cam.move_speed",
+  "level": "shot",
+  "type": "enum: still | crawl | slow | medium | fast | whip",
+  "default": "slow",
+  "why": "Separates how fast from what direction so one move serves whisper and chase.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "shot.cam.move_amount",
+  "level": "shot",
+  "type": "number (percent of frame travelled)",
+  "default": "8",
+  "why": "Speed alone cannot distinguish a 3% breathing push from a 40% lunge.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "shot.cam.move_ease",
+  "level": "shot",
+  "type": "enum: linear | ease_in | ease_out | ease_in_out | snap | overshoot | settle",
+  "default": "ease_in_out",
+  "why": "Linear moves are the tell of machine-made footage; easing feels operated.",
+  "status": "partial",
+  "fallback": "Built from zoompan/crop expressions; snap and overshoot degrade to ease_in_out."
+ },
+ {
+  "name": "shot.cam.move_start_pct",
+  "level": "shot",
+  "type": "number (0-100 of duration)",
+  "default": "0",
+  "why": "Lets a move begin after a held beat instead of always on the cut.",
+  "status": "partial",
+  "fallback": "Quantised to a hold-then-move two-segment filter chain."
+ },
+ {
+  "name": "shot.cam.move_end_pct",
+  "level": "shot",
+  "type": "number (0-100 of duration)",
+  "default": "100",
+  "why": "Lets a move settle before the cut.",
+  "status": "partial",
+  "fallback": "Quantised to a move-then-hold two-segment filter chain."
+ },
+ {
+  "name": "shot.cam.move_anchor",
+  "level": "shot",
+  "type": "enum: center | face | subject | thirds_l | thirds_r | horizon | custom_xy",
+  "default": "center",
+  "why": "A push to frame centre and a push to a character's eye are different shots.",
+  "status": "partial",
+  "fallback": "face/subject resolve to a fixed x/y offset chosen at author time, not tracked."
+ },
+ {
+  "name": "shot.cam.rig",
+  "level": "any",
+  "type": "enum: locked | tripod | handheld_light | handheld_heavy | shoulder | steadicam | gimbal | drone | crane | dolly_track",
+  "default": "locked",
+  "why": "Baseline motion texture for a sequence so every shot needn't set shake.",
+  "status": "partial",
+  "fallback": "Maps to handheld amplitude/frequency presets; drone and crane borrow push/tilt."
+ },
+ {
+  "name": "shot.cam.shake_amp",
+  "level": "shot",
+  "type": "number 0.0-1.0",
+  "default": "0",
+  "why": "Explicit instability for impacts and panic without changing the move type.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "shot.cam.shake_freq",
+  "level": "shot",
+  "type": "enum: slow_drift | breath | walk | run | impact | rumble",
+  "default": "breath",
+  "why": "Amplitude without frequency gives every shake the same character.",
+  "status": "partial",
+  "fallback": "Mapped onto shake fx presets; uncommon frequencies snap to the nearest."
+ },
+ {
+  "name": "shot.cam.zoom_kind",
+  "level": "shot",
+  "type": "enum: optical_feel | digital_crop",
+  "default": "digital_crop",
+  "why": "Documents that post zooms crop resolution, which is why overscan matters.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "shot.cam.subject_distance_m",
+  "level": "shot",
+  "type": "number (metres)",
+  "default": "3",
+  "why": "Ties focal length and shot size together so the pair stays coherent.",
+  "status": "partial",
+  "fallback": "Advisory only; used to lint lens against size, never sent to the renderer."
+ },
+ {
+  "name": "shot.cam.shutter_angle",
+  "level": "any",
+  "type": "enum: 45 | 90 | 180 | 270 | 360",
+  "default": "180",
+  "why": "How crisp or smeared motion reads, the difference between a war film and a dream.",
+  "status": "roadmap",
+  "fallback": "Buckets into smear fx amount; 45 renders as none, 360 as heavy."
+ },
+ {
+  "name": "shot.cam.motion_blur",
+  "level": "shot",
+  "type": "number 0.0-1.0",
+  "default": "0.3",
+  "why": "Direct override when shutter angle is too indirect for the author.",
+  "status": "roadmap",
+  "fallback": "Drives smear fx strength only; LTX supplies whatever native blur it produces."
+ },
+ {
+  "name": "shot.cam.rolling_shutter",
+  "level": "any",
+  "type": "number 0.0-1.0",
+  "default": "0",
+  "why": "Skew on fast pans is a specific found-footage signature some films want.",
+  "status": "roadmap",
+  "fallback": "Ignored."
+ },
+ {
+  "name": "shot.lens.look",
+  "level": "any",
+  "type": "enum: ultra_wide | wide | normal | portrait | tele | super_tele | fisheye | anamorphic | macro",
+  "default": "normal",
+  "why": "Lets an author state the feel without knowing millimetres; this maps to tags.",
+  "status": "partial",
+  "fallback": "Prompt-tag approximation on the keyframe; no lens simulation."
+ },
+ {
+  "name": "shot.lens.focal_mm",
+  "level": "shot",
+  "type": "number (mm, 35mm-equivalent)",
+  "default": "auto (from shot.lens.look, else 50)",
+  "why": "A number authors think in, from which compression and dof defaults derive.",
+  "status": "partial",
+  "fallback": "Bucketed into wide/tele/fisheye tags; no true optical geometry."
+ },
+ {
+  "name": "shot.lens.compression",
+  "level": "shot",
+  "type": "enum: expanded | natural | compressed | hyper_compressed",
+  "default": "natural",
+  "why": "How flat the background stacks when focal length alone doesn't sell it.",
+  "status": "partial",
+  "fallback": "Expressed as background-scale and perspective tags only."
+ },
+ {
+  "name": "shot.lens.distortion",
+  "level": "any",
+  "type": "enum: none | mild_barrel | strong_barrel | fisheye | pincushion",
+  "default": "none",
+  "why": "Wide-angle bulge is a deliberate anime device for panic and comedy.",
+  "status": "roadmap",
+  "fallback": "Baked as a fisheye/distortion tag; no post-warp pass."
+ },
+ {
+  "name": "shot.lens.flare",
+  "level": "shot",
+  "type": "enum: none | subtle | anamorphic_streak | warm_bloom | starburst | veiling",
+  "default": "none",
+  "why": "Flare is a mood signature authors reach for constantly.",
+  "status": "partial",
+  "fallback": "A lens-flare tag plus the glow fx; not a positioned, moving flare."
+ },
+ {
+  "name": "shot.lens.bokeh_shape",
+  "level": "any",
+  "type": "enum: circular | hexagonal | oval_anamorphic | swirly | cats_eye | bloom_blobs",
+  "default": "circular",
+  "why": "Out-of-focus highlight shape is much of a night film's identity.",
+  "status": "roadmap",
+  "fallback": "Generic bokeh tag; shape ignored."
+ },
+ {
+  "name": "shot.lens.filtration",
+  "level": "any",
+  "type": "enum: none | light_diffusion | pro_mist | heavy_diffusion | glimmer | smoke_glass",
+  "default": "none",
+  "why": "Diffusion is the cheapest way to unify a look across shots and should inherit.",
+  "status": "partial",
+  "fallback": "Approximated by glow fx strength plus soft-light tags."
+ },
+ {
+  "name": "shot.lens.vignette",
+  "level": "any",
+  "type": "number 0.0-1.0",
+  "default": "0.10",
+  "why": "Corner falloff quietly focuses attention and is expected in cinematic grades.",
+  "status": "roadmap",
+  "fallback": "Global gamma pull plus a vignetting tag; no radial mask."
+ },
+ {
+  "name": "shot.lens.breathing",
+  "level": "shot",
+  "type": "number 0.0-1.0",
+  "default": "0",
+  "why": "Focus pulls that change framing are a realism cue for handheld passages.",
+  "status": "roadmap",
+  "fallback": "Ignored; framing stays locked."
+ },
+ {
+  "name": "shot.focus.dof",
+  "level": "shot",
+  "type": "enum: deep | medium | shallow | very_shallow | split_diopter",
+  "default": "medium",
+  "why": "How much of the world is sharp is the fastest character/background separation.",
+  "status": "partial",
+  "fallback": "Prompt tags only; no aperture simulation."
+ },
+ {
+  "name": "shot.focus.point",
+  "level": "shot",
+  "type": "enum: eyes | face | subject | hands | prop | foreground | midground | background | hyperfocal",
+  "default": "face",
+  "why": "Names what must be sharp so generator and blur pass agree on the subject.",
+  "status": "partial",
+  "fallback": "Tags plus which layer receives blur; not a measured focal plane."
+ },
+ {
+  "name": "shot.focus.behavior",
+  "level": "shot",
+  "type": "enum: locked | rack_to_bg | rack_to_fg | follow_subject | soft_throughout | snap_focus",
+  "default": "locked",
+  "why": "A rack focus is a dramatic beat that currently cannot be authored at all.",
+  "status": "roadmap",
+  "fallback": "Two keyframes joined by a short dissolve, or a single end-focus frame with a warning."
+ },
+ {
+  "name": "shot.focus.rack_at_pct",
+  "level": "shot",
+  "type": "number (0-100)",
+  "default": "50",
+  "why": "A rack that lands on a line of dialogue needs its timing authored.",
+  "status": "roadmap",
+  "fallback": "Ignored; the substitute dissolve is centred."
+ },
+ {
+  "name": "shot.focus.bg_blur",
+  "level": "shot",
+  "type": "number 0.0-1.0",
+  "default": "0.25",
+  "why": "Continuous background separation that survives even without true dof.",
+  "status": "partial",
+  "fallback": "Keyframe tag strength; not a post blur on the moving clip."
+ },
+ {
+  "name": "shot.focus.fg_blur",
+  "level": "shot",
+  "type": "number 0.0-1.0",
+  "default": "0",
+  "why": "Soft foreground occluders are the cheapest depth cue in the language.",
+  "status": "partial",
+  "fallback": "Keyframe tag only; true plane blur needs the layer compositor."
+ },
+ {
+  "name": "shot.focus.softness",
+  "level": "any",
+  "type": "number 0.0-1.0",
+  "default": "0",
+  "why": "Global softness for flashbacks and dreams, independent of depth.",
+  "status": "partial",
+  "fallback": "Approximated with glow fx; no separable diffusion filter."
+ },
+ {
+  "name": "shot.comp.eyeline",
+  "level": "shot",
+  "type": "enum: into_lens | left | right | up | down | off_left | off_right | closed | at_object",
+  "default": "off_left",
+  "why": "Where a character looks carries the emotional read and stitches reverses together.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "shot.comp.screen_direction",
+  "level": "scene",
+  "type": "enum: l_to_r | r_to_l | to_camera | away_from_camera | static",
+  "default": "static",
+  "why": "Keeps travel and chase geometry consistent instead of flipping randomly.",
+  "status": "partial",
+  "fallback": "Drives tags and mirror-flip of the keyframe; not geometrically enforced."
+ },
+ {
+  "name": "shot.comp.axis_line",
+  "level": "scene",
+  "type": "string (named axis id)",
+  "default": "auto",
+  "why": "Declares the 180-degree line so reverses can be checked rather than eyeballed.",
+  "status": "roadmap",
+  "fallback": "Author-time lint warning only; render unchanged."
+ },
+ {
+  "name": "shot.comp.balance",
+  "level": "shot",
+  "type": "enum: symmetrical | asym_left | asym_right | weighted_bottom | weighted_top | diagonal | radial | chaotic",
+  "default": "asym_left",
+  "why": "Visual weight distribution is what an author means when a frame feels wrong.",
+  "status": "partial",
+  "fallback": "Composition tags only; unverified."
+ },
+ {
+  "name": "shot.comp.negative_space",
+  "level": "shot",
+  "type": "number 0.0-1.0",
+  "default": "0.3",
+  "why": "Emptiness is the loudest tool for loneliness and dread and needs a dial.",
+  "status": "partial",
+  "fallback": "Biases shot.size and subject-scale tags."
+ },
+ {
+  "name": "shot.comp.subject_scale",
+  "level": "shot",
+  "type": "number 0.0-1.0 (fraction of frame height)",
+  "default": "0.5",
+  "why": "Continuous control between the coarse steps of shot.size.",
+  "status": "partial",
+  "fallback": "Rounded to the nearest shot.size tag."
+ },
+ {
+  "name": "shot.comp.thirds_bias",
+  "level": "shot",
+  "type": "enum: center | left_third | right_third | golden_l | golden_r | symmetrical | edge_left | edge_right",
+  "default": "center",
+  "why": "Where the subject sits laterally is the composition choice authors most want.",
+  "status": "partial",
+  "fallback": "Tag plus horizontal crop offset inside the overscan margin."
+ },
+ {
+  "name": "shot.comp.headroom",
+  "level": "shot",
+  "type": "enum: tight | normal | loose | cropped_top",
+  "default": "normal",
+  "why": "The most common framing error and the most common deliberate tension device.",
+  "status": "partial",
+  "fallback": "Tags plus a small post crop nudge; not measured against the generated head."
+ },
+ {
+  "name": "shot.comp.lookroom",
+  "level": "shot",
+  "type": "enum: auto | left | right | center | none",
+  "default": "auto",
+  "why": "Space in front of a looking character makes a frame balanced or trapped.",
+  "status": "partial",
+  "fallback": "Auto derives from eyeline and applies a crop offset; tags carry the rest."
+ },
+ {
+  "name": "shot.comp.horizon",
+  "level": "shot",
+  "type": "enum: none | low | lower_third | center | upper_third | high",
+  "default": "lower_third",
+  "why": "Horizon placement sets whether a character dominates sky or is crushed by ground.",
+  "status": "partial",
+  "fallback": "Prompt tag plus vertical crop bias; unverified."
+ },
+ {
+  "name": "shot.comp.leading_lines",
+  "level": "shot",
+  "type": "enum: none | one_point | diagonal | radial | vertical | horizontal | spiral | converging_rails",
+  "default": "none",
+  "why": "Directed lines tell the eye where to go and anime backgrounds lean on them.",
+  "status": "partial",
+  "fallback": "Perspective and vanishing-point tags on the keyframe."
+ },
+ {
+  "name": "shot.comp.perspective",
+  "level": "shot",
+  "type": "enum: flat | one_point | two_point | three_point | isometric | fisheye | overhead_map",
+  "default": "two_point",
+  "why": "Perspective construction is an explicit background-art decision in anime.",
+  "status": "partial",
+  "fallback": "Perspective tags on the keyframe."
+ },
+ {
+  "name": "shot.comp.frame_in_frame",
+  "level": "shot",
+  "type": "enum: none | doorway | window | mirror | foliage | crowd | curtain | tunnel | fence",
+  "default": "none",
+  "why": "Framing a character inside an in-world aperture compactly states confinement.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "shot.comp.depth_stack",
+  "level": "shot",
+  "type": "enum: flat | two_plane | three_plane | deep_stack",
+  "default": "two_plane",
+  "why": "How many depth planes the frame is built from; the contract with layer variables.",
+  "status": "partial",
+  "fallback": "Foreground-occluder tags; true separated planes need the layer renderer."
+ },
+ {
+  "name": "shot.frame.aspect_override",
+  "level": "shot",
+  "type": "enum: inherit | 16:9 | 1.85:1 | 2:1 | 2.39:1 | 4:3 | 1:1 | 9:16",
+  "default": "inherit",
+  "why": "A single shot in a different ratio shouldn't restructure the chapter.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "shot.frame.letterbox",
+  "level": "any",
+  "type": "enum: none | bars_2_39 | bars_2_1 | pillars_4_3 | dynamic_widen",
+  "default": "none",
+  "why": "Aspect change as a dramatic device needs to be authorable mid-film.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "shot.frame.caption_safe",
+  "level": "movie",
+  "type": "enum: bottom_10 | bottom_15 | bottom_20 | top | none",
+  "default": "bottom_15",
+  "why": "Reserves the zone burnt-in captions occupy so compositions survive delivery.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "shot.fx",
+  "level": "shot",
+  "type": "list of enum: punch | shake | aberr | glow | flash | hot | ramp | smear | whiteout",
+  "default": "[]",
+  "why": "Direct access to the native fx set, appended down the hierarchy.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "shot.fx_intensity",
+  "level": "shot",
+  "type": "number 0.0-1.0",
+  "default": "0.5",
+  "why": "One strength dial so the same fx list can whisper or scream.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "shot.fx_at_pct",
+  "level": "shot",
+  "type": "list of numbers (0-100)",
+  "default": "[0]",
+  "why": "Where in the shot each effect fires, the whole timing of an impact.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "shot.fx.impact_frame",
+  "level": "shot",
+  "type": "enum: none | white_flash | black_flash | negative | sketch_frame | silhouette_pop",
+  "default": "none",
+  "why": "The one-frame graphic hit is a defining anime action beat already supported.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "shot.fx.speed_lines",
+  "level": "shot",
+  "type": "enum: none | radial | horizontal | vertical | impact | motion_trail",
+  "default": "none",
+  "why": "Graphic motion overlays are native anime language with no photographic equivalent.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "shot.fx.bg_treatment",
+  "level": "shot",
+  "type": "enum: matched | watercolor | photobash | abstract_color | radial_burst | pattern | void_black | white_void | emotional_wash",
+  "default": "matched",
+  "why": "Dropping the real background for an emotional field is standard anime grammar.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "shot.fx.emote_symbols",
+  "level": "shot",
+  "type": "list of enum: sweatdrop | vein_pop | blush_lines | shock_lines | sparkles | teardrop | steam | question_mark | chibi_pop",
+  "default": "[]",
+  "why": "Anime's symbolic emotion vocabulary is a real expressive channel, not decoration.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "shot.fx.screentone",
+  "level": "shot",
+  "type": "enum: none | dots | hatch | gradient | flash_lines | mood_tone",
+  "default": "none",
+  "why": "Manga screentone as a mood device is a distinct look from film grain.",
+  "status": "partial",
+  "fallback": "Requested as a keyframe tag; no composited tone plate."
+ },
+ {
+  "name": "edit.transition_in",
+  "level": "shot",
+  "type": "enum: cut | dissolve | fade_black | fade_white | flash | whip_pan | wipe | iris | smash | match_cut",
+  "default": "cut",
+  "why": "How this shot arrives, authored on the shot that owns the change.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "edit.transition_out",
+  "level": "shot",
+  "type": "enum: cut | dissolve | fade_black | fade_white | flash | whip_pan | wipe | iris | smash | hold",
+  "default": "cut",
+  "why": "How this shot leaves, so a scene's last shot can fade without a phantom shot.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "edit.transition_s",
+  "level": "any",
+  "type": "number (seconds)",
+  "default": "0.5",
+  "why": "Transition length is the difference between a blink and a chapter break.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "edit.transition_dir",
+  "level": "shot",
+  "type": "enum: auto | left | right | up | down | in | out | radial",
+  "default": "auto",
+  "why": "Wipes, irises and whip pans are meaningless without a direction.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "edit.scene_transition",
+  "level": "scene",
+  "type": "enum: cut | dissolve | fade_black | fade_white | iris | wipe | match_cut | smash | time_card",
+  "default": "fade_black",
+  "why": "Scene boundaries deserve a stronger default than shot boundaries.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "edit.chapter_transition",
+  "level": "chapter",
+  "type": "enum: cut | fade_black | fade_white | title_card | iris | long_dissolve",
+  "default": "fade_black",
+  "why": "Chapter breaks are structural punctuation the audience must feel.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "edit.cut_on_action",
+  "level": "shot",
+  "type": "bool",
+  "default": "true",
+  "why": "Cutting mid-movement hides the join between two independently generated clips.",
+  "status": "partial",
+  "fallback": "Applied as a small trim of head/tail frames; no motion analysis."
+ },
+ {
+  "name": "edit.match_cut_target",
+  "level": "shot",
+  "type": "string (shot id) or none",
+  "default": "none",
+  "why": "A match cut needs to name the shape it is matching, not just request one.",
+  "status": "partial",
+  "fallback": "Copies the target's composition variables into this shot; no image-space matching."
+ },
+ {
+  "name": "edit.audio_lead_s",
+  "level": "shot",
+  "type": "number (seconds, negative = J-cut)",
+  "default": "0",
+  "why": "Letting sound arrive before picture is the standard way to bind two shots.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "edit.montage",
+  "level": "scene",
+  "type": "enum: none | time_passing | training | travel | memory | investigation | ruin",
+  "default": "none",
+  "why": "Montage is a scene shape with its own pacing and music rules.",
+  "status": "partial",
+  "fallback": "Sets pace, transitions and music defaults; shots still authored individually."
+ },
+ {
+  "name": "edit.insert_flash_frames",
+  "level": "shot",
+  "type": "number (count)",
+  "default": "0",
+  "why": "Subliminal single-frame inserts are a horror and memory device already renderable.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "edit.repeat",
+  "level": "shot",
+  "type": "number (count)",
+  "default": "1",
+  "why": "Repeating a cut is how a loop, a stutter or an obsession is edited.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "layer.count",
+  "level": "shot",
+  "type": "number (1-5)",
+  "default": "2",
+  "why": "Declares how many depth planes exist, the root of the whole layers feature.",
+  "status": "partial",
+  "fallback": "Above 1 the planes are described in the prompt but rendered into one flat keyframe."
+ },
+ {
+  "name": "layer.mode",
+  "level": "any",
+  "type": "enum: baked | tag_hinted | masked | generated_separate",
+  "default": "tag_hinted",
+  "why": "Says whether layers are only described or actually rendered and composited apart.",
+  "status": "roadmap",
+  "fallback": "tag_hinted works today; masked and generated_separate degrade to it with a warning."
+ },
+ {
+  "name": "layer.bg.content",
+  "level": "scene",
+  "type": "string (description or tags)",
+  "default": "auto (from world.place and world.biome)",
+  "why": "The background is most of the frame and should be authored once per scene.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "layer.bg.render",
+  "level": "any",
+  "type": "enum: sketch | simple | detailed | ultra_detailed | painted_bg | photobash",
+  "default": "detailed",
+  "why": "Background finish level is a deliberate contrast tool against character line quality.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "layer.bg.blur",
+  "level": "shot",
+  "type": "number 0.0-1.0",
+  "default": "auto (from shot.focus.bg_blur)",
+  "why": "Per-plane blur is what actually separates a character from the world.",
+  "status": "partial",
+  "fallback": "Falls through to focus.bg_blur tags on the flat keyframe."
+ },
+ {
+  "name": "layer.bg.value",
+  "level": "shot",
+  "type": "enum: darker | matched | lighter | washed | silhouette",
+  "default": "matched",
+  "why": "Tonal separation between planes is how a frame reads at a glance.",
+  "status": "partial",
+  "fallback": "Applied as a global grade bias when no plane separation exists."
+ },
+ {
+  "name": "layer.bg.motion",
+  "level": "shot",
+  "type": "enum: static | drift | parallax_slow | parallax_fast | scroll_l | scroll_r",
+  "default": "static",
+  "why": "A moving background plane is the signature of the anime pan.",
+  "status": "roadmap",
+  "fallback": "Renders as a single-plane push or pan on the flat keyframe."
+ },
+ {
+  "name": "layer.mid.content",
+  "level": "scene",
+  "type": "string (description or tags)",
+  "default": "auto (from world dressing)",
+  "why": "The midground is where the set lives and where characters stand.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "layer.mid.occupancy",
+  "level": "shot",
+  "type": "number 0.0-1.0",
+  "default": "0.4",
+  "why": "How much midground clutter sits between camera and background.",
+  "status": "partial",
+  "fallback": "Density tags only."
+ },
+ {
+  "name": "layer.fg.content",
+  "level": "shot",
+  "type": "enum or string: none | foliage | railing | crowd | glass | curtain | doorframe | rain | dust | shoulder | hand | custom",
+  "default": "none",
+  "why": "A foreground occluder is the cheapest way to make a flat generation feel deep.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "layer.fg.coverage",
+  "level": "shot",
+  "type": "number 0.0-1.0",
+  "default": "0.2",
+  "why": "How much of the frame the occluder eats, from a hint to a near-total block.",
+  "status": "partial",
+  "fallback": "Expressed as tag emphasis; not measured."
+ },
+ {
+  "name": "layer.fg.blur",
+  "level": "shot",
+  "type": "number 0.0-1.0",
+  "default": "0.6",
+  "why": "Foreground elements read as foreground mainly because they are soft.",
+  "status": "partial",
+  "fallback": "Keyframe tag only until the compositor exists."
+ },
+ {
+  "name": "layer.fg.motion",
+  "level": "shot",
+  "type": "enum: static | sway | pass_through | drift | parallax",
+  "default": "static",
+  "why": "Something crossing the lens is the strongest depth cue in a moving clip.",
+  "status": "partial",
+  "fallback": "Requested of LTX via the motion prompt; unreliable and unenforced."
+ },
+ {
+  "name": "layer.parallax_strength",
+  "level": "shot",
+  "type": "number 0.0-1.0",
+  "default": "0",
+  "why": "How far the planes separate during a move, the whole point of 2.5D.",
+  "status": "roadmap",
+  "fallback": "Ignored; the move applies uniformly to the flat frame."
+ },
+ {
+  "name": "layer.character_plane",
+  "level": "shot",
+  "type": "enum: fg | mid | bg | between_fg_mid",
+  "default": "mid",
+  "why": "Says which plane the subject occupies so blur and parallax treat them correctly.",
+  "status": "partial",
+  "fallback": "Used only to decide which blur values apply to the subject tags."
+ },
+ {
+  "name": "layer.sky_plane",
+  "level": "shot",
+  "type": "bool",
+  "default": "auto (true when sky visible)",
+  "why": "Sky as its own plane lets clouds move while the ground stays locked.",
+  "status": "roadmap",
+  "fallback": "Sky renders inside the background plate."
+ },
+ {
+  "name": "layer.depth_map",
+  "level": "shot",
+  "type": "string (path) or auto",
+  "default": "none",
+  "why": "An explicit depth pass is the prerequisite for real per-plane blur and parallax.",
+  "status": "roadmap",
+  "fallback": "Not generated; all depth effects fall back to tags."
+ },
+ {
+  "name": "world.place",
+  "level": "scene",
+  "type": "string (description or tags)",
+  "default": "\"\"",
+  "why": "Where we are is the first thing a background prompt needs.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "world.place_id",
+  "level": "scene",
+  "type": "string (location id)",
+  "default": "auto (hash of world.place)",
+  "why": "A named location lets every scene there share plates, light and ambience.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "world.interior_exterior",
+  "level": "scene",
+  "type": "enum: interior | exterior | threshold | vehicle | underground | underwater | aerial | void",
+  "default": "exterior",
+  "why": "Interior or exterior decides light motivation, reverb and weather visibility at once.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "world.biome",
+  "level": "scene",
+  "type": "enum: urban | suburb | rural | school | coastal | mountain | forest | desert | snowfield | industrial | transit | domestic | fantasy_realm | space | ruins",
+  "default": "urban",
+  "why": "Coarse world class from which dressing, ambience and practicals are seeded.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "world.era",
+  "level": "movie",
+  "type": "enum: ancient | feudal | victorian | early_20c | showa | modern | near_future | far_future | post_apocalyptic | timeless",
+  "default": "modern",
+  "why": "Period drives architecture, wardrobe, props and signage without per-shot tagging.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "world.tech_level",
+  "level": "any",
+  "type": "enum: pre_industrial | industrial | electric | digital | networked | cyber | spacefaring | magitech",
+  "default": "digital",
+  "why": "Separates technology from period so a fantasy world can carry modern devices.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "world.season",
+  "level": "any",
+  "type": "enum: spring | early_summer | summer | late_summer | autumn | winter | rainy_season | dry_season",
+  "default": "spring",
+  "why": "Season sets foliage, wardrobe, light angle and ambience in one word.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "world.time_of_day",
+  "level": "scene",
+  "type": "enum: pre_dawn | dawn | morning | midday | afternoon | golden_hour | dusk | blue_hour | night | deep_night",
+  "default": "afternoon",
+  "why": "Time of day is the single strongest driver of colour temperature and mood.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "world.clock_time",
+  "level": "scene",
+  "type": "string (HH:MM) or none",
+  "default": "none",
+  "why": "An exact hour lets sun angle and on-screen clocks agree across a scene.",
+  "status": "partial",
+  "fallback": "Bucketed into world.time_of_day; no real sun solver."
+ },
+ {
+  "name": "world.weather",
+  "level": "scene",
+  "type": "enum: clear | fair | overcast | rain | drizzle | downpour | thunderstorm | snow | blizzard | fog | mist | wind | heat_haze | sandstorm | ash | aurora",
+  "default": "clear",
+  "why": "The weather variable the author asked for, seeding light, particles and ambience.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "world.weather_intensity",
+  "level": "scene",
+  "type": "number 0.0-1.0",
+  "default": "0.5",
+  "why": "Drizzle and downpour are the same word at different strengths.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "world.precip_render",
+  "level": "shot",
+  "type": "enum: none | tag_only | streaks | droplets_on_lens | splashes | drawn_lines | sheet_rain",
+  "default": "tag_only",
+  "why": "How precipitation is actually drawn is a look decision separate from whether it falls.",
+  "status": "partial",
+  "fallback": "Keyframe tags plus optional overlay noise; no simulated particle pass."
+ },
+ {
+  "name": "world.cloud_cover",
+  "level": "scene",
+  "type": "number 0.0-1.0",
+  "default": "auto (from world.weather)",
+  "why": "Cloud cover decides shadow hardness even when weather is otherwise clear.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "world.fog_density",
+  "level": "scene",
+  "type": "number 0.0-1.0",
+  "default": "0",
+  "why": "Atmospheric depth is the cheapest way to separate planes in a painting.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "world.wind_speed",
+  "level": "scene",
+  "type": "enum: still | breeze | steady | gusty | strong | gale",
+  "default": "breeze",
+  "why": "Wind drives hair, cloth, foliage and particle motion prompts together.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "world.wind_dir",
+  "level": "scene",
+  "type": "enum: none | l_to_r | r_to_l | toward_camera | away | swirling | updraft",
+  "default": "none",
+  "why": "Wind without a direction makes every sway contradict the next shot.",
+  "status": "partial",
+  "fallback": "Fed to the motion prompt and hair/cloth tags; not physically enforced."
+ },
+ {
+  "name": "world.ground_state",
+  "level": "scene",
+  "type": "enum: dry | damp | wet_reflective | puddled | muddy | snow | ice | sand | grass | tatami | tile",
+  "default": "dry",
+  "why": "Wet ground doubles the light in a night scene and must be stated, not implied.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "world.air_particles",
+  "level": "scene",
+  "type": "list of enum: none | dust | pollen | petals | ash | embers | snow | leaves | bubbles | fireflies | steam | spores",
+  "default": "[]",
+  "why": "Drifting particles are the standard anime way to fill dead air in a frame.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "world.crowd_density",
+  "level": "scene",
+  "type": "enum: empty | sparse | moderate | busy | packed",
+  "default": "sparse",
+  "why": "How populated a place is changes composition, ambience and generation difficulty.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "world.traffic",
+  "level": "scene",
+  "type": "enum: none | occasional | steady | congested | rush",
+  "default": "none",
+  "why": "Vehicle presence drives background motion, ambience and passing-light cues.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "world.set_dressing",
+  "level": "scene",
+  "type": "list of tags",
+  "default": "[]",
+  "why": "Named props and furniture keep a location recognisable across shots.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "world.signage_language",
+  "level": "any",
+  "type": "enum: inherit | ja | en | none | invented | blurred",
+  "default": "inherit",
+  "why": "On-screen text is a constant generation artefact and needs an explicit policy.",
+  "status": "partial",
+  "fallback": "Non-inherit values become prompt and negative tags; legibility is not guaranteed."
+ },
+ {
+  "name": "world.scale_cue",
+  "level": "shot",
+  "type": "enum: none | human_figure | vehicle | building | horizon | giant_object",
+  "default": "none",
+  "why": "Anime sells scale by putting a known object in frame, not by focal length.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "world.sky_state",
+  "level": "shot",
+  "type": "enum: auto | clear_blue | cirrus | cumulus | storm | sunset_gradient | starfield | moonlit | red_sky | no_sky",
+  "default": "auto",
+  "why": "The sky is a designed graphic element in anime, not a byproduct of weather.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "world.celestial",
+  "level": "scene",
+  "type": "enum: none | sun_visible | moon_full | moon_crescent | stars | comet | eclipse | twin_moons",
+  "default": "none",
+  "why": "A visible sun or moon anchors direction, time and often the whole composition.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "world.ambient_life",
+  "level": "scene",
+  "type": "list of enum: none | cicadas | birds | crickets | frogs | wind_chimes | distant_traffic | school_noise | machinery | waves | river",
+  "default": "auto (from biome and season)",
+  "why": "Living background sound is what makes a location feel inhabited between lines.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "world.smell_note",
+  "level": "scene",
+  "type": "string",
+  "default": "\"\"",
+  "why": "A sensory note the prompt builder can mine for haze, steam and colour cues.",
+  "status": "partial",
+  "fallback": "Mined for tags only; contributes nothing when the prompt budget is tight."
+ },
+ {
+  "name": "char.present",
+  "level": "scene",
+  "type": "list of char.id",
+  "default": "[]",
+  "why": "Declares who exists in the scene so shots can default their subjects.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "char.id",
+  "level": "any",
+  "type": "string",
+  "default": "auto (slug of char.name)",
+  "why": "A stable handle every shot, line and face reference points at.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "char.name",
+  "level": "any",
+  "type": "string",
+  "default": "\"Character\"",
+  "why": "Display name for captions, credits and speaker labels.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "char.role",
+  "level": "any",
+  "type": "enum: lead | deuteragonist | support | antagonist | foil | mentor | extra | crowd | narrator",
+  "default": "support",
+  "why": "Role decides prompt priority, face-weight budget and how often the character anchors a shot.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "char.design_tags",
+  "level": "any",
+  "type": "list of tags",
+  "default": "[]",
+  "why": "The canonical appearance tag bundle re-injected into every prompt.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "char.face_sheet",
+  "level": "any",
+  "type": "string (image set id)",
+  "default": "none",
+  "why": "The IPAdapter sheet is the only real mechanism for face consistency today.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "char.face_weight",
+  "level": "any",
+  "type": "number 0.0-1.0",
+  "default": "0.65",
+  "why": "How hard the face reference pulls against expression and angle.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "char.face_weight_by_size",
+  "level": "any",
+  "type": "list of [shot.size, weight]",
+  "default": "auto (lower on wide shots)",
+  "why": "A face lock that helps a close-up wrecks a wide, so it must vary by shot size.",
+  "status": "partial",
+  "fallback": "Applied as a fixed lookup table; no detection of actual face size in frame."
+ },
+ {
+  "name": "char.age_read",
+  "level": "any",
+  "type": "enum: child | preteen | teen | young_adult | adult | middle_aged | elderly | ageless",
+  "default": "teen",
+  "why": "Apparent age is a tag-level decision that must never drift between shots.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "char.build",
+  "level": "any",
+  "type": "enum: petite | slim | average | athletic | stocky | heavy | tall_lean | muscular",
+  "default": "average",
+  "why": "Body type is part of a silhouette and is otherwise re-rolled every generation.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "char.height_cm",
+  "level": "any",
+  "type": "number",
+  "default": "165",
+  "why": "Relative height drives two-shot framing and eyeline geometry.",
+  "status": "partial",
+  "fallback": "Used at author time to bias framing tags; not measured in the render."
+ },
+ {
+  "name": "char.hair",
+  "level": "any",
+  "type": "string (colour, length, style tags)",
+  "default": "\"\"",
+  "why": "Hair is the primary recognition cue in anime and must be locked explicitly.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "char.eyes",
+  "level": "any",
+  "type": "string (colour and shape tags)",
+  "default": "\"\"",
+  "why": "Eye colour and shape carry identity even when the face style changes.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "char.skin",
+  "level": "any",
+  "type": "string (tone tag)",
+  "default": "\"\"",
+  "why": "Skin tone drifts between generations unless it is restated each prompt.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "char.distinguishing",
+  "level": "any",
+  "type": "list of tags",
+  "default": "[]",
+  "why": "Scars, moles, glasses and ahoge are the details that survive stylisation.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "char.lora",
+  "level": "any",
+  "type": "string (lora id) or none",
+  "default": "none",
+  "why": "A trained character LoRA outperforms any tag bundle when one exists.",
+  "status": "partial",
+  "fallback": "Skipped with a warning if absent; design tags and the face sheet carry identity."
+ },
+ {
+  "name": "char.wear.outfit",
+  "level": "any",
+  "type": "string (outfit id or tags)",
+  "default": "\"\"",
+  "why": "The wardrobe variable, inheritable so a chapter can change clothes once.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "char.wear.layer",
+  "level": "any",
+  "type": "list of enum: none | coat | jacket | scarf | hood | apron | armour | cloak | bag | umbrella",
+  "default": "[]",
+  "why": "Outer layers change silhouette and are added or removed as dramatic action.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "char.wear.state",
+  "level": "shot",
+  "type": "enum: neat | casual | rumpled | soaked | dusty | bloodied | torn | burnt | half_dressed | formal",
+  "default": "neat",
+  "why": "Costume condition is how a story's damage stays visible on screen.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "char.wear.accessories",
+  "level": "any",
+  "type": "list of tags",
+  "default": "[]",
+  "why": "Small repeated objects are identity anchors and often motif carriers.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "char.wear.colors",
+  "level": "any",
+  "type": "list of colours",
+  "default": "auto (from anime.color.script)",
+  "why": "Costume colour must be locked or a character reads differently every scene.",
+  "status": "partial",
+  "fallback": "Injected as colour tags; grade extremes can still shift them."
+ },
+ {
+  "name": "char.props_held",
+  "level": "shot",
+  "type": "list of tags",
+  "default": "[]",
+  "why": "What is in a character's hands drives both framing and hand-drawing failures.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "char.emotion",
+  "level": "shot",
+  "type": "enum: neutral | happy | sad | angry | afraid | surprised | disgusted | contempt | tender | embarrassed | determined | exhausted | numb | anxious | relieved | joyful | grieving",
+  "default": "neutral",
+  "why": "The per-character emotion the author asked for, driving face, voice and pose together.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "char.emotion_intensity",
+  "level": "shot",
+  "type": "number 0.0-1.0",
+  "default": "0.5",
+  "why": "Anger at 0.2 and 0.9 are different performances, not different emotions.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "char.emotion_secondary",
+  "level": "shot",
+  "type": "enum: none | plus any char.emotion value",
+  "default": "none",
+  "why": "Real performance is usually two feelings at once and the mix is the acting.",
+  "status": "partial",
+  "fallback": "Blended as a lower-weight expression tag and a softer TTS emotion vector."
+ },
+ {
+  "name": "char.emotion_mask",
+  "level": "shot",
+  "type": "enum: none | suppressed | forced_smile | fake_calm | breaking | deadpan | performative",
+  "default": "none",
+  "why": "A character hiding a feeling is a distinct expression from having it.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "char.expression",
+  "level": "shot",
+  "type": "string (explicit face tags)",
+  "default": "auto (from char.emotion)",
+  "why": "Direct override for when the derived expression is not the drawing wanted.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "char.brow",
+  "level": "shot",
+  "type": "enum: neutral | raised | furrowed | one_raised | flat | pleading | angry_v",
+  "default": "auto (from emotion)",
+  "why": "Brows carry more of an anime face's read than the mouth does.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "char.mouth",
+  "level": "shot",
+  "type": "enum: closed | slight_open | open | wide_open | smile | smirk | frown | grimace | gritted | trembling | wavy",
+  "default": "auto (from emotion)",
+  "why": "Mouth shape must be separable from dialogue so silent reactions can be authored.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "char.blush",
+  "level": "shot",
+  "type": "number 0.0-1.0",
+  "default": "0",
+  "why": "Blush is a first-class emotional signal in anime, not an incidental detail.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "char.tears",
+  "level": "shot",
+  "type": "enum: none | welling | single | streaming | wiped | dried_tracks | comedic_fountain",
+  "default": "none",
+  "why": "Crying has discrete drawn stages that a generic emotion word cannot select.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "char.gaze_target",
+  "level": "shot",
+  "type": "string (char.id, object id, camera, away)",
+  "default": "auto (from shot.comp.eyeline)",
+  "why": "Naming who is looked at keeps eyelines consistent across a reverse.",
+  "status": "partial",
+  "fallback": "Resolved into eyeline direction tags at author time; not geometrically verified."
+ },
+ {
+  "name": "char.posture",
+  "level": "shot",
+  "type": "enum: standing | slouched | upright | leaning | sitting | seiza | crouched | kneeling | lying | curled | floating | falling",
+  "default": "standing",
+  "why": "Posture states character before the face is even visible.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "char.gesture",
+  "level": "shot",
+  "type": "string or enum: none | pointing | reaching | covering_face | clenched_fists | hands_in_pockets | arms_crossed | waving | bowing | shielding | holding_out",
+  "default": "none",
+  "why": "Hands are where performance lives and where generation fails without direction.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "char.energy",
+  "level": "shot",
+  "type": "number 0.0-1.0",
+  "default": "0.5",
+  "why": "One dial for how much a body is doing, feeding motion strength and voice pace.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "char.movement",
+  "level": "shot",
+  "type": "enum: still | idle | walking | running | sprinting | turning | rising | sitting_down | falling | fighting | dancing | flying",
+  "default": "still",
+  "why": "What the body does is the core of the i2v motion prompt.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "char.condition",
+  "level": "any",
+  "type": "enum: healthy | tired | injured | bleeding | ill | soaked | freezing | overheated | drunk | possessed",
+  "default": "healthy",
+  "why": "Physical state must persist across shots or continuity collapses.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "char.arc_stage",
+  "level": "chapter",
+  "type": "enum: introduced | stable | pressured | breaking | changed | resolved | absent",
+  "default": "stable",
+  "why": "Where a character sits in their arc biases wardrobe, grade and performance defaults.",
+  "status": "partial",
+  "fallback": "Advisory bias on expression and colour defaults; no narrative enforcement."
+ },
+ {
+  "name": "char.relationship",
+  "level": "scene",
+  "type": "list of [char.id, char.id, relation]",
+  "default": "[]",
+  "why": "Blocking distance, eyelines and voice register all follow from who these people are to each other.",
+  "status": "partial",
+  "fallback": "Used to pick blocking and framing defaults at author time only."
+ },
+ {
+  "name": "block.pattern",
+  "level": "scene",
+  "type": "enum: static | approach | retreat | circle | side_by_side | face_off | pass_by | cross | gather | scatter | follow",
+  "default": "static",
+  "why": "The blocking variable, describing how bodies move relative to each other.",
+  "status": "partial",
+  "fallback": "Drives per-shot framing and motion-prompt defaults; no staging simulation."
+ },
+ {
+  "name": "block.positions",
+  "level": "shot",
+  "type": "list of [char.id, screen_position]",
+  "default": "auto (from framing and order)",
+  "why": "Who stands where in frame is what makes reverses and group shots readable.",
+  "status": "partial",
+  "fallback": "Becomes left/right/centre composition tags; exact placement is unverified."
+ },
+ {
+  "name": "block.distance",
+  "level": "shot",
+  "type": "enum: intimate | personal | social | public | distant",
+  "default": "social",
+  "why": "Proxemics is the fastest read on a relationship and needs its own word.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "block.orientation",
+  "level": "shot",
+  "type": "enum: facing | angled | side_by_side | back_to_back | one_turned_away | over_shoulder",
+  "default": "angled",
+  "why": "How two bodies face each other is a separate axis from where they stand.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "block.contact",
+  "level": "shot",
+  "type": "enum: none | near_touch | hand_touch | hand_hold | embrace | grab | strike | carry | lean_on",
+  "default": "none",
+  "why": "Physical contact is the hardest thing to generate and must be explicitly asked for.",
+  "status": "partial",
+  "fallback": "Contact tags plus a lower motion strength; anatomy failures are common and retried."
+ },
+ {
+  "name": "block.entrance",
+  "level": "shot",
+  "type": "enum: none | walks_in_l | walks_in_r | enters_bg | rises_into | reveal_by_pan | already_present",
+  "default": "already_present",
+  "why": "How a character arrives in frame is a directing choice, not an accident of generation.",
+  "status": "partial",
+  "fallback": "Requested via the motion prompt or staged as a camera move; not guaranteed."
+ },
+ {
+  "name": "block.exit",
+  "level": "shot",
+  "type": "enum: none | walks_out_l | walks_out_r | exits_bg | drops_out | left_behind",
+  "default": "none",
+  "why": "Exits punctuate scenes and decide whether the next shot needs the character at all.",
+  "status": "partial",
+  "fallback": "Motion-prompt hint plus cut timing; not guaranteed."
+ },
+ {
+  "name": "block.group_shape",
+  "level": "shot",
+  "type": "enum: line | wedge | cluster | circle | scattered | tiered | isolated_one",
+  "default": "cluster",
+  "why": "Group compositions fail without a stated shape and become tag soup.",
+  "status": "partial",
+  "fallback": "Composition tags only; crowd arrangement is whatever the model produces."
+ },
+ {
+  "name": "light.motivation",
+  "level": "scene",
+  "type": "enum: sun | moon | sky_ambient | practical | firelight | screen_glow | neon | fluorescent | streetlamp | headlights | magic | bioluminescence | unmotivated | mixed",
+  "default": "auto (from world.time_of_day and world.interior_exterior)",
+  "why": "One scene-level answer to where light comes from, seeding direction, colour and quality.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "light.key_dir",
+  "level": "shot",
+  "type": "enum: front | front_l | front_r | side_l | side_r | back_l | back_r | back | top | bottom | ambient_none",
+  "default": "front_l",
+  "why": "Key direction is the primary shape of a face and must be shot-addressable.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "light.key_elev",
+  "level": "shot",
+  "type": "enum: below | eye | above | steep_above | overhead",
+  "default": "above",
+  "why": "Underlighting versus toplighting reads as horror versus grace.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "light.quality",
+  "level": "scene",
+  "type": "enum: hard | medium | soft | very_soft | overcast_flat | specular_wet",
+  "default": "auto (hard for sun, very_soft for overcast)",
+  "why": "Shadow edge hardness sets the emotional temperature of a whole location.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "light.ratio",
+  "level": "scene",
+  "type": "enum: flat_1_1 | low_2_1 | normal_4_1 | dramatic_8_1 | chiaroscuro_16_1 | silhouette",
+  "default": "low_2_1",
+  "why": "Key-to-fill ratio is the numeric handle on drama.",
+  "status": "partial",
+  "fallback": "Tag stack plus a curves/eq contrast bump; not a measured ratio."
+ },
+ {
+  "name": "light.fill",
+  "level": "scene",
+  "type": "enum: none | bounce | soft_fill | negative_fill | ambient_sky",
+  "default": "bounce",
+  "why": "Explicit fill separates a moody frame from a muddy one.",
+  "status": "partial",
+  "fallback": "Tags plus shadow lift in the grade."
+ },
+ {
+  "name": "light.rim",
+  "level": "shot",
+  "type": "enum: none | subtle | strong | halo | kiss | double_rim",
+  "default": "subtle",
+  "why": "Rim light is the defining separation device of anime and should be on by default.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "light.rim_color",
+  "level": "shot",
+  "type": "string (hex or named colour)",
+  "default": "warm_white",
+  "why": "A coloured rim ties a character to the location's neon, fire or moonlight.",
+  "status": "partial",
+  "fallback": "Named colours become tags; arbitrary hex snaps to the nearest name."
+ },
+ {
+  "name": "light.practicals",
+  "level": "scene",
+  "type": "list of enum: neon_sign | desk_lamp | ceiling_fluoro | candle | fireplace | monitor | phone_screen | streetlight | lantern | headlights | moon_window | stage_light | vending_machine",
+  "default": "auto (from world.time_of_day and world.biome)",
+  "why": "In-frame sources declared once keep every shot agreeing where glow comes from.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "light.shadow_gobo",
+  "level": "scene",
+  "type": "enum: none | blinds | foliage | branches | grate | curtain | crowd | rain_streaks | water_caustics | window_cross",
+  "default": "none",
+  "why": "Patterned shadow is the highest-value-per-token lighting device in tag space.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "light.shadow_density",
+  "level": "scene",
+  "type": "number 0.0-1.0",
+  "default": "0.5",
+  "why": "How black the blacks go, separate from overall contrast.",
+  "status": "partial",
+  "fallback": "Curves shadow crush plus tags."
+ },
+ {
+  "name": "light.temp_k",
+  "level": "scene",
+  "type": "number (Kelvin, 1500-12000)",
+  "default": "auto (from light.motivation and world.time_of_day)",
+  "why": "Colour temperature is the most reliable time-of-day and interior signal.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "light.contrast_scheme",
+  "level": "scene",
+  "type": "enum: neutral | warm_key_cool_fill | cool_key_warm_rim | teal_orange | magenta_cyan | sodium_night | monochrome_wash | candle_vs_moon",
+  "default": "neutral",
+  "why": "Colour contrast between key and fill gives depth without extra lights.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "light.exposure_ev",
+  "level": "shot",
+  "type": "number (stops, -3..+3)",
+  "default": "0",
+  "why": "Per-shot exposure trim keeps a sequence matched when the generator drifts.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "light.animate",
+  "level": "shot",
+  "type": "enum: none | flicker | pulse | strobe | passing_lights | lightning | breathing_glow | candle | tv_wash",
+  "default": "none",
+  "why": "Living light stops a still-derived clip feeling like a moving photograph.",
+  "status": "partial",
+  "fallback": "Built from flash/hot/ramp fx; complex patterns degrade to a slow pulse."
+ },
+ {
+  "name": "light.animate_rate",
+  "level": "shot",
+  "type": "number (Hz)",
+  "default": "2",
+  "why": "A candle flicker and a police strobe are the same effect at different rates.",
+  "status": "partial",
+  "fallback": "Quantised to available fx keyframe intervals."
+ },
+ {
+  "name": "light.bloom",
+  "level": "shot",
+  "type": "number 0.0-1.0",
+  "default": "0.15",
+  "why": "Highlight blooming makes anime highlights luminous rather than clipped.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "light.god_rays",
+  "level": "shot",
+  "type": "enum: none | subtle | strong | dusty | underwater",
+  "default": "none",
+  "why": "Visible light shafts are a stock anime beat deserving a first-class name.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "light.eye_light",
+  "level": "shot",
+  "type": "enum: none | subtle | strong | anime_sparkle | dead_flat",
+  "default": "subtle",
+  "why": "Catchlights separate a living character from a doll, and killing them reads as death or menace.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "light.eye_shadow_bar",
+  "level": "shot",
+  "type": "enum: none | half | full | glint_only",
+  "default": "none",
+  "why": "The shadow bar across the eyes is anime's standard dread and villainy device.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "light.ambient_level",
+  "level": "scene",
+  "type": "number 0.0-1.0",
+  "default": "0.5",
+  "why": "Overall base illumination, the difference between night and unreadable night.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "light.haze",
+  "level": "scene",
+  "type": "number 0.0-1.0",
+  "default": "0",
+  "why": "Atmospheric haze is what makes shafts, depth and distance visible at all.",
+  "status": "partial",
+  "fallback": "Tags plus a lifted-black grade; no volumetric pass."
+ },
+ {
+  "name": "light.continuity_lock",
+  "level": "scene",
+  "type": "bool",
+  "default": "true",
+  "why": "Light must not re-roll between cuts in one location or the scene stops cohering.",
+  "status": "partial",
+  "fallback": "Re-injects the scene's light tags every shot; drift is still possible."
+ },
+ {
+  "name": "grade.preset",
+  "level": "any",
+  "type": "enum: neutral | warm_film | cool_film | teal_orange | bleach_bypass | sepia | monochrome | high_key | low_key | faded_memory | night_blue | sodium_street | pastel_soft | vivid_pop | horror_green",
+  "default": "neutral",
+  "why": "The look variable, one word that sets an entire eq/curves stack.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "grade.contrast",
+  "level": "any",
+  "type": "number 0.5-2.0",
+  "default": "1.0",
+  "why": "Direct contrast trim on top of the preset, the most-used grade adjustment.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "grade.saturation",
+  "level": "any",
+  "type": "number 0.0-2.0",
+  "default": "1.0",
+  "why": "Desaturation is the fastest signal for memory, illness and drained hope.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "grade.lift",
+  "level": "any",
+  "type": "number -0.2..0.2",
+  "default": "0",
+  "why": "Lifting blacks is the whole difference between digital video and film.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "grade.gamma",
+  "level": "any",
+  "type": "number 0.5-2.0",
+  "default": "1.0",
+  "why": "Midtone weight, where a face's brightness actually lives.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "grade.gain",
+  "level": "any",
+  "type": "number 0.5-2.0",
+  "default": "1.0",
+  "why": "Highlight scaling so a bright sky can be tamed without crushing the face.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "grade.temp_shift",
+  "level": "any",
+  "type": "number -100..100",
+  "default": "0",
+  "why": "Warm/cool trim per shot keeps cuts matched when generations drift.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "grade.tint_shift",
+  "level": "any",
+  "type": "number -100..100",
+  "default": "0",
+  "why": "Green/magenta trim is what fixes fluorescent and neon scenes.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "grade.shadow_hue",
+  "level": "any",
+  "type": "string (hex or named colour)",
+  "default": "none",
+  "why": "Tinted shadows are the core of a designed anime palette.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "grade.highlight_hue",
+  "level": "any",
+  "type": "string (hex or named colour)",
+  "default": "none",
+  "why": "Tinted highlights carry time of day more convincingly than midtones.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "grade.black_point",
+  "level": "any",
+  "type": "number 0.0-0.2",
+  "default": "0",
+  "why": "Where black actually starts, which decides how deep a night reads.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "grade.white_point",
+  "level": "any",
+  "type": "number 0.8-1.2",
+  "default": "1.0",
+  "why": "Ceiling control that stops whiteouts clipping into mush.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "grade.curve",
+  "level": "any",
+  "type": "enum: linear | film_s | soft_s | strong_s | lifted_matte | crushed | inverted",
+  "default": "soft_s",
+  "why": "The tone curve shape is the personality of a grade, above any single slider.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "grade.halation",
+  "level": "any",
+  "type": "number 0.0-1.0",
+  "default": "0.1",
+  "why": "Red bleed around highlights is the signature of film-printed anime.",
+  "status": "partial",
+  "fallback": "Approximated with a warm glow pass; not wavelength-selective."
+ },
+ {
+  "name": "grade.grain",
+  "level": "any",
+  "type": "number 0.0-1.0",
+  "default": "0.08",
+  "why": "A little grain unifies generated frames and hides model artefacts.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "grade.grain_size",
+  "level": "any",
+  "type": "enum: fine | normal | coarse | clumpy",
+  "default": "normal",
+  "why": "Grain size dates a film as sharply as any drawing decision.",
+  "status": "partial",
+  "fallback": "Mapped onto available noise filter parameters; coarse and clumpy are approximate."
+ },
+ {
+  "name": "grade.sharpen",
+  "level": "any",
+  "type": "number 0.0-1.0",
+  "default": "0.1",
+  "why": "Video passes soften lines and a small sharpen restores anime's edge.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "grade.lut_id",
+  "level": "any",
+  "type": "string (lut id) or none",
+  "default": "none",
+  "why": "A single LUT is the most reliable way to match an external reference look.",
+  "status": "partial",
+  "fallback": "Applied as a final ffmpeg lut3d when present; otherwise ignored with a warning."
+ },
+ {
+  "name": "grade.match_ref",
+  "level": "shot",
+  "type": "string (shot id or image) or none",
+  "default": "none",
+  "why": "Matching one shot's grade to another is the routine fix for a mismatched cut.",
+  "status": "roadmap",
+  "fallback": "Copies the reference's grade values verbatim; no histogram matching."
+ },
+ {
+  "name": "grade.animate",
+  "level": "shot",
+  "type": "enum: none | to_warm | to_cool | to_desat | to_dark | to_bright | to_preset",
+  "default": "none",
+  "why": "A grade that moves during a shot is how a mood turns without a cut.",
+  "status": "partial",
+  "fallback": "Two-segment filter chain with a linear blend; no keyframed curves."
+ },
+ {
+  "name": "grade.animate_at_pct",
+  "level": "shot",
+  "type": "number (0-100)",
+  "default": "50",
+  "why": "When the grade turns is the timing of the emotional beat.",
+  "status": "partial",
+  "fallback": "Quantised to the two-segment split point."
+ },
+ {
+  "name": "grade.scope",
+  "level": "any",
+  "type": "enum: full_frame | exclude_characters | shadows_only | highlights_only | hue_range",
+  "default": "full_frame",
+  "why": "Grading everything equally is what destroys locked character colours.",
+  "status": "roadmap",
+  "fallback": "Only full_frame runs; others warn and apply full_frame with reduced strength."
+ },
+ {
+  "name": "anime.anim.on_n",
+  "level": "any",
+  "type": "enum: 1 | 2 | 3 | 4 | mixed",
+  "default": "auto (3; 2 when shot.purpose=action; 1 when anime.anim.sakuga_level=showcase)",
+  "why": "Drawings-per-second stepping is the loudest tell that a clip is anime, and it is orthogonal to movie.fps.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "anime.anim.step_scope",
+  "level": "any",
+  "type": "enum: whole_frame | content_only | character_only | fx_only | none",
+  "default": "content_only",
+  "why": "Anime steps the drawings but never the camera, so whole-frame stepping judders the pan.",
+  "status": "partial",
+  "fallback": "content_only decimates the clip before the ffmpeg move; character_only and fx_only need plane separation and degrade to content_only with a warning."
+ },
+ {
+  "name": "anime.anim.sakuga_level",
+  "level": "any",
+  "type": "enum: held | limited | standard | full | showcase",
+  "default": "standard",
+  "why": "One word allocating frame rate, motion strength, clip links, steps and retries to the cuts that deserve them.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "anime.anim.motion_budget",
+  "level": "chapter",
+  "type": "number 0.0-1.0 (fraction of shots allowed full or showcase)",
+  "default": "0.15",
+  "why": "Anime is scheduled art, and capping fully animated cuts keeps the money on screen where it matters.",
+  "status": "partial",
+  "fallback": "Advisory allocator that warns and demotes the lowest-priority sakuga shots; never re-renders."
+ },
+ {
+  "name": "anime.anim.hold_style",
+  "level": "shot",
+  "type": "enum: none | held_cel | held_pan | held_partial | held_fx | pose_hold | stills_montage",
+  "default": "none",
+  "why": "The held cel is the backbone of limited animation and deserves a name rather than being the absence of a video pass.",
+  "status": "partial",
+  "fallback": "held_cel, held_pan, pose_hold and stills_montage render from one keyframe with an ffmpeg move; held_partial and held_fx use a very low motion_strength i2v pass."
+ },
+ {
+  "name": "anime.anim.partial",
+  "level": "shot",
+  "type": "list of enum: blink | mouth | eyes | hair_sway | cloth_sway | breath | flame | water | steam | smoke | leaves | rain | crowd_idle | hands",
+  "default": "[]",
+  "why": "Animating one isolated element over a held drawing is what limited animation actually is.",
+  "status": "roadmap",
+  "fallback": "Named elements are pushed into shot.motion_prompt with motion_strength clamped low; nothing guarantees only that element moves."
+ },
+ {
+  "name": "anime.anim.cycle",
+  "level": "shot",
+  "type": "enum: none | walk | run | breathing | idle_sway | blink_loop | flag | water_loop | fire_loop | crowd_loop | sparkle_loop",
+  "default": "none",
+  "why": "Repeating cycles are how anime buys screen time, and a looped short clip is far cheaper than a long generation.",
+  "status": "partial",
+  "fallback": "One LTX clip looped with a ping-pong tail; non-symmetric cycles pop at the seam."
+ },
+ {
+  "name": "anime.anim.cycle_loops",
+  "level": "shot",
+  "type": "number (count)",
+  "default": "auto (enough to fill time.shot_s)",
+  "why": "How many repeats decides whether a cycle reads as walking or as a stuck GIF.",
+  "status": "partial",
+  "fallback": "Applied at edit time only; seam continuity is whatever the crossfade gives."
+ },
+ {
+  "name": "anime.anim.pose_hold_frames",
+  "level": "shot",
+  "type": "number (frames)",
+  "default": "auto (6 at 24fps)",
+  "why": "Anime action lands by snapping to a pose and holding it; without the hold the motion reads as mush.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "anime.anim.exaggeration",
+  "level": "any",
+  "type": "number 0.0-1.0",
+  "default": "0.2",
+  "why": "Squash, stretch, anticipation and overshoot are drawn-animation physics no camera or lens variable can express.",
+  "status": "partial",
+  "fallback": "Fed to the motion prompt and camera ease overshoot; no control over the video model's deformation."
+ },
+ {
+  "name": "anime.anim.smear_style",
+  "level": "shot",
+  "type": "enum: none | multiples | stretch | streak | ghost_trail | brush_smear | dissolve_limb",
+  "default": "none",
+  "why": "A drawn smear is a distortion drawing, a different thing from the post-process smear fx.",
+  "status": "roadmap",
+  "fallback": "Motion-distortion tags on the mid keyframe when keyframe_mode allows one, plus the smear fx at the same percentage."
+ },
+ {
+  "name": "anime.anim.smear_frames",
+  "level": "shot",
+  "type": "number (count, 1-3)",
+  "default": "2",
+  "why": "A smear lives one to three frames; longer and it becomes a blur.",
+  "status": "roadmap",
+  "fallback": "Ignored; the substitute smear fx uses its own duration."
+ },
+ {
+  "name": "anime.anim.bank_id",
+  "level": "shot",
+  "type": "string (bank sequence id)",
+  "default": "none",
+  "why": "Transformations, henshin and attack cut-ins are reused stock cuts, and anime reuses them on purpose.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "anime.anim.bank_reuse",
+  "level": "shot",
+  "type": "enum: rerender | reuse_exact | reuse_regrade | reuse_reframe",
+  "default": "reuse_exact",
+  "why": "Whether a bank cut is the same footage or re-dressed is a look and a cost decision at once.",
+  "status": "partial",
+  "fallback": "reuse_exact and reuse_regrade replay the cached clip through the current grade; reuse_reframe re-crops it."
+ },
+ {
+  "name": "anime.anim.cg_mix",
+  "level": "any",
+  "type": "enum: none | props_3d | vehicles_3d | crowd_3d | environment_3d | camera_3d | full_3dcg",
+  "default": "none",
+  "why": "Modern anime mixes cel-shaded 3D with 2D characters, and the mix must be declarable before it can be matched.",
+  "status": "roadmap",
+  "fallback": "Requested as tags such as cel-shaded mecha; no 3D pass and no camera solve."
+ },
+ {
+  "name": "anime.draw.era",
+  "level": "any",
+  "type": "enum: cel_70s | cel_80s | ova_90s | early_digital_00s | modern_digital | modern_web | film_stock_retro",
+  "default": "modern_digital",
+  "why": "Production era bundles line, colour, artefacts and finish into the word authors think in.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "anime.draw.line_weight",
+  "level": "any",
+  "type": "enum: hairline | thin | normal | thick | variable | brush | rough_genga",
+  "default": "normal",
+  "why": "Line weight is the character-art equivalent of lens choice and is read first.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "anime.draw.line_color",
+  "level": "any",
+  "type": "enum: black | dark_neutral | color_trace | per_region_trace | none",
+  "default": "black",
+  "why": "Coloured trace lines are a finishing decision that softens an entire film's character art.",
+  "status": "partial",
+  "fallback": "Requested as a tag; compliance is inconsistent and there is no line pass to enforce it."
+ },
+ {
+  "name": "anime.draw.shading_steps",
+  "level": "any",
+  "type": "enum: flat_0 | cel_1 | cel_2 | cel_3 | soft_gradient | painterly",
+  "default": "cel_2",
+  "why": "How many hard shadow steps a drawing carries is the structural difference between anime and photography.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "anime.draw.shadow_edge",
+  "level": "any",
+  "type": "enum: hard | slightly_soft | soft | airbrush",
+  "default": "hard",
+  "why": "Cel shadow edges are hard by construction, so softening them is an explicit period decision.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "anime.draw.shadow_hue",
+  "level": "any",
+  "type": "enum: darker_same_hue | blue_shift | purple_shift | complementary | warm_shift | grey_multiply",
+  "default": "blue_shift",
+  "why": "Anime shadow colour is chosen by a colour designer, and the hue shift is half a film's identity.",
+  "status": "partial",
+  "fallback": "Tag plus a colorbalance shadow bias; not a per-region shadow colour."
+ },
+ {
+  "name": "anime.draw.hair_highlight",
+  "level": "any",
+  "type": "enum: none | soft | angel_ring | segmented | glossy | multi_band",
+  "default": "segmented",
+  "why": "The hair highlight band is a recognisable convention that dates a film to a decade.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "anime.draw.eye_render",
+  "level": "any",
+  "type": "enum: moe_round | shoujo_large | shounen_bold | seinen_sharp | ova_90s | minimal_dot | realistic",
+  "default": "moe_round",
+  "why": "Eye construction is house style, set once above the character list.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "anime.draw.detail_density",
+  "level": "any",
+  "type": "enum: minimal | tv_standard | ova | film | ultra",
+  "default": "tv_standard",
+  "why": "Line count per drawing is a production tier that should inherit down a sequence.",
+  "status": "partial",
+  "fallback": "Maps to detail tags plus a shot.steps multiplier; not a measured line count."
+ },
+ {
+  "name": "anime.draw.cel_artifacts",
+  "level": "any",
+  "type": "list of enum: film_grain | registration_jitter | dust_scratches | halation | telecine_wobble | paper_texture | gate_weave",
+  "default": "auto (from anime.draw.era)",
+  "why": "Cel-era anime looks old because of how it was photographed, and these artefacts carry it.",
+  "status": "partial",
+  "fallback": "Grain, dust and halation from ffmpeg noise and glow; jitter and gate weave from sub-pixel crop offsets; paper texture ignored."
+ },
+ {
+  "name": "anime.bg.style",
+  "level": "any",
+  "type": "enum: cel_flat | poster_color | watercolor | gouache | acrylic_matte | airbrush_soft | digital_painted | photoreal_painted | photobash | line_and_wash | ukiyo_e | graphic_flat",
+  "default": "digital_painted",
+  "why": "Background medium is a separate axis from finish level and is what makes a film look painted.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "anime.bg.line",
+  "level": "any",
+  "type": "enum: none | soft_line | full_line | ink_line",
+  "default": "none",
+  "why": "Whether the background carries line art signals which anime tradition a film belongs to.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "anime.bg.style_contrast",
+  "level": "any",
+  "type": "number 0.0-1.0",
+  "default": "0.4",
+  "why": "The gap between character and background rendering is the defining anime image decision.",
+  "status": "partial",
+  "fallback": "Biases the relative weight of character and background style tags in one prompt; no separate passes."
+ },
+ {
+  "name": "anime.bg.hue_relation",
+  "level": "scene",
+  "type": "enum: matched | cooler | warmer | desaturated | higher_key | lower_key | complementary",
+  "default": "matched",
+  "why": "Hue separation keeps a character readable against a busy painting, distinct from value separation.",
+  "status": "partial",
+  "fallback": "Grade bias plus background colour tags; not a per-plane colour operation."
+ },
+ {
+  "name": "anime.bg.char_integration",
+  "level": "any",
+  "type": "enum: none | line_match | color_bleed | shared_grain | ao_contact | full_comp",
+  "default": "line_match",
+  "why": "Characters looking pasted onto the background is generated anime's most common failure.",
+  "status": "partial",
+  "fallback": "Contact-shadow and colour-bleed tags plus a shared grain pass; no true compositing stage."
+ },
+ {
+  "name": "anime.bg.artwork_extent",
+  "level": "shot",
+  "type": "enum: frame | 1_5x | 2x | 3x | panorama",
+  "default": "frame",
+  "why": "An anime pan is performed across one oversized painting, so the art must be wider than the frame.",
+  "status": "partial",
+  "fallback": "Renders at the largest available overscan; longer pans crop harder and lose resolution."
+ },
+ {
+  "name": "anime.bg.plate_id",
+  "level": "scene",
+  "type": "string (plate id) or auto",
+  "default": "auto (one plate per world location)",
+  "why": "Every cut in a location should sit on the same painting.",
+  "status": "partial",
+  "fallback": "Locks the background seed and prompt across the scene's shots; not a literally reused plate."
+ },
+ {
+  "name": "anime.color.script",
+  "level": "movie",
+  "type": "list of [chapter_or_scene_id, key_color, accent_color, note]",
+  "default": "auto (from story.mood and story.tonality_curve per chapter)",
+  "why": "The colour script is the anime colour designer's actual deliverable, not a per-shot grade preset.",
+  "status": "partial",
+  "fallback": "Resolves into per-scene key and accent values plus grade hints; no rendered colour board."
+ },
+ {
+  "name": "anime.color.key",
+  "level": "any",
+  "type": "string (hex or named colour)",
+  "default": "auto (from anime.color.script, else story.mood)",
+  "why": "One dominant colour per scene makes a film feel designed instead of generated.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "anime.color.accent",
+  "level": "any",
+  "type": "string (hex or named colour)",
+  "default": "auto (harmony partner of anime.color.key)",
+  "why": "The single colour allowed to break the scheme is where the audience's eye goes.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "anime.color.harmony",
+  "level": "any",
+  "type": "enum: free | analogous | complementary | split_complementary | triad | monochrome | duotone | warm_cool_split",
+  "default": "analogous",
+  "why": "Stating the palette rule lets accent, background and rim colours be derived rather than guessed.",
+  "status": "partial",
+  "fallback": "Derives hues at author time and appends palette tags; the model can still wander."
+ },
+ {
+  "name": "anime.color.count",
+  "level": "any",
+  "type": "number (palette size limit, 0 = unlimited)",
+  "default": "0",
+  "why": "Limited palettes were a cel-era constraint authors now choose for a flat designed look.",
+  "status": "roadmap",
+  "fallback": "Ignored at generation; optionally applied as a posterise pass at the grade stage."
+ },
+ {
+  "name": "anime.color.setting",
+  "level": "scene",
+  "type": "enum: normal | night | dusk | dawn | interior_warm | fluorescent | backlit | moonlight | firelight | underwater | storm | monochrome_memory | sepia_memory | flashbulb",
+  "default": "auto (from world.time_of_day and light.motivation)",
+  "why": "Anime approves a separate character colour set per lighting condition, before any grade.",
+  "status": "partial",
+  "fallback": "Character colour tags plus a matching grade layer; no genuine second colour model per character."
+ },
+ {
+  "name": "anime.color.character_lock",
+  "level": "any",
+  "type": "bool",
+  "default": "true",
+  "why": "A character's approved colours must survive the scene grade or recognition breaks.",
+  "status": "partial",
+  "fallback": "Re-injects colour tags every shot and excludes them from grade extremes; drift is still possible."
+ },
+ {
+  "name": "anime.color.forbidden",
+  "level": "any",
+  "type": "list of colours",
+  "default": "[]",
+  "why": "Withholding one colour until it matters is the oldest device in a colour script.",
+  "status": "partial",
+  "fallback": "Negative-prompt colour tags plus targeted desaturation of that hue in the grade."
+ },
+ {
+  "name": "anime.color.motif_map",
+  "level": "movie",
+  "type": "list of [motif_id, colour]",
+  "default": "[]",
+  "why": "Binding each motif to one colour makes a visual callback land without dialogue.",
+  "status": "partial",
+  "fallback": "Injects the colour into the motif's tag bundle when present; no automatic recall."
+ },
+ {
+  "name": "anime.fx.onomatopoeia",
+  "level": "shot",
+  "type": "list of strings (on-screen sound words)",
+  "default": "[]",
+  "why": "Drawn sound text on screen is native anime grammar with no live-action equivalent.",
+  "status": "partial",
+  "fallback": "Rendered with the burnt-in caption engine; needs a CJK font and cannot produce hand-drawn lettering."
+ },
+ {
+  "name": "anime.fx.onomatopoeia_style",
+  "level": "any",
+  "type": "enum: katakana_brush | kanji_heavy | latin_comic | hand_scrawl | glitch | none",
+  "default": "katakana_brush",
+  "why": "Lettering style is the whole tone, separating a horror rumble from a comedy thud.",
+  "status": "partial",
+  "fallback": "Font, weight and case substitution only; brush and scrawl degrade to a bold display face."
+ },
+ {
+  "name": "anime.fx.onomatopoeia_pos",
+  "level": "shot",
+  "type": "enum: auto | tl | tr | bl | br | center | over_subject | diagonal",
+  "default": "auto",
+  "why": "Where the sound word sits decides whether it reads as impact or as a caption.",
+  "status": "partial",
+  "fallback": "Corners and centre place exactly; over_subject resolves to a static offset, not a tracked position."
+ },
+ {
+  "name": "anime.fx.technique_card",
+  "level": "shot",
+  "type": "string (technique or attack name)",
+  "default": "\"\"",
+  "why": "Naming the attack on screen is a genre staple currently faked through captions.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "anime.fx.split_screen",
+  "level": "shot",
+  "type": "enum: none | two_v | two_h | three_v | grid_4 | diagonal_shards | inset_pip | manga_panels | radial_wedges",
+  "default": "none",
+  "why": "Multi-panel frames hold three reactions at once, which frame-in-frame cannot express.",
+  "status": "partial",
+  "fallback": "Rectangular splits composite natively; shards, wedges and manga panels degrade to the nearest rectangular layout."
+ },
+ {
+  "name": "anime.fx.deform_mode",
+  "level": "shot",
+  "type": "enum: none | sd_chibi | head_pop | noodle_limbs | rubber_hose | mini_inset",
+  "default": "none",
+  "why": "Super-deformed comedy mode is an alternate character design, not an effect.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "anime.fx.deform_scope",
+  "level": "shot",
+  "type": "enum: whole_shot | inset | punch_in_beat",
+  "default": "whole_shot",
+  "why": "A chibi cutaway and a chibi shot are different jokes with different timing.",
+  "status": "partial",
+  "fallback": "whole_shot and inset render; punch_in_beat becomes a short inserted shot at the chosen percentage."
+ },
+ {
+  "name": "anime.fx.face_fault",
+  "level": "shot",
+  "type": "enum: none | jaw_drop | swirl_eyes | dot_eyes | shadowed_eyes | nosebleed | half_face_shock | crying_river | ghost_leaving",
+  "default": "none",
+  "why": "A comedy face fault redraws the face itself, a different channel from sticker-like emote symbols.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "anime.fx.drawn_effect",
+  "level": "shot",
+  "type": "enum: none | cel_fire | ink_smoke | crystal_water | geometric_debris | stylised_lightning | sparks | wind_lines | petals | glass_shatter | energy_beam",
+  "default": "none",
+  "why": "Effects animation is its own craft and looks nothing like photographic fire or water.",
+  "status": "partial",
+  "fallback": "Style tags plus the nearest native fx; the effect cannot animate independently of the frame."
+ },
+ {
+  "name": "anime.fx.aura",
+  "level": "shot",
+  "type": "enum: none | glow | flame | electric | dark_miasma | sparkle | pressure_ripple",
+  "default": "none",
+  "why": "A character-attached aura is a persistent drawn element held across a shot.",
+  "status": "partial",
+  "fallback": "Aura tags plus glow fx held for the shot duration; not tracked to the body."
+ },
+ {
+  "name": "anime.fx.silhouette_mode",
+  "level": "shot",
+  "type": "enum: none | full_silhouette | color_silhouette | strobe_silhouette | rim_only",
+  "default": "none",
+  "why": "Reducing a character to a flat shape is stock anime grammar for reveals and dread.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "anime.perf.mouth_chart",
+  "level": "any",
+  "type": "enum: closed_only | 2_pos | 3_pos_ja | 5_vowel_ja | 8_phoneme | full_viseme",
+  "default": "3_pos_ja",
+  "why": "Anime mouths run on a handful of positions, and the count separates anime from a Western cartoon.",
+  "status": "partial",
+  "fallback": "Drives mouth tags and flap timing on still and partial paths; no viseme-accurate mouth replacement."
+ },
+ {
+  "name": "anime.perf.mouth_flap_rate",
+  "level": "any",
+  "type": "number (Hz)",
+  "default": "auto (from dialogue syllable rate, else 5)",
+  "why": "Flap rate makes mouth movement read as speech even when it is not phoneme-accurate.",
+  "status": "partial",
+  "fallback": "Applied only where a mouth-only animation path exists; otherwise ignored with a warning."
+ },
+ {
+  "name": "anime.perf.mouth_sync_style",
+  "level": "any",
+  "type": "enum: prescored_tight | postscored_loose | flap_only | closed_narration",
+  "default": "postscored_loose",
+  "why": "Japanese anime records after animation, so loose sync is correct rather than a defect.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "anime.perf.blink_rate",
+  "level": "any",
+  "type": "number (blinks per minute)",
+  "default": "auto (12, rising with story.tension)",
+  "why": "Blinks are the cheapest sign of life in a held drawing and anime times them deliberately.",
+  "status": "partial",
+  "fallback": "Splices a two-frame closed-eye keyframe on still and held shots; only a motion hint on i2v shots."
+ },
+ {
+  "name": "anime.perf.blink_pattern",
+  "level": "shot",
+  "type": "enum: single | double | slow_close | held_shut | none",
+  "default": "single",
+  "why": "A double blink is surprise and a slow close is resignation; rate alone cannot say which.",
+  "status": "partial",
+  "fallback": "Only single and held_shut are spliceable; the rest degrade to single with a warning."
+ },
+ {
+  "name": "anime.perf.head_tilt",
+  "level": "shot",
+  "type": "number (degrees, -30..30)",
+  "default": "0",
+  "why": "The head tilt is anime's smallest and most-used performance beat.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "anime.perf.pose_library",
+  "level": "shot",
+  "type": "string (pose id) or none",
+  "default": "none",
+  "why": "Named stock poses give repeatable staging without describing anatomy every time.",
+  "status": "partial",
+  "fallback": "Expands to a pose tag bundle; no skeleton conditioning until a pose adapter exists."
+ },
+ {
+  "name": "anime.format.sequence_role",
+  "level": "chapter",
+  "type": "enum: none | avant | op | a_part | eyecatch | b_part | c_part | ed | next_preview | post_credit",
+  "default": "auto (none for short; avant/a_part/b_part/ed for episode)",
+  "why": "Broadcast furniture is a different axis from dramatic role and drives different music and caption rules.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "anime.format.op_style",
+  "level": "chapter",
+  "type": "enum: none | montage | character_intro | abstract_graphic | dance | still_frames | action_showcase | typography",
+  "default": "montage",
+  "why": "An opening is its own short film with its own grammar.",
+  "status": "partial",
+  "fallback": "Sets pace, cut rate, transition and music defaults; shots are still authored by hand."
+ },
+ {
+  "name": "anime.format.ed_style",
+  "level": "chapter",
+  "type": "enum: none | still_pan | single_take_walk | illustration_gallery | epilogue_scene | dance | credits_over_black",
+  "default": "illustration_gallery",
+  "why": "The ending is usually the cheapest and most stylised part of an anime.",
+  "status": "partial",
+  "fallback": "Sets shot.still, pace and transition defaults plus a credits overlay; no automatic gallery layout."
+ },
+ {
+  "name": "anime.format.eyecatch",
+  "level": "chapter",
+  "type": "enum: none | single | pair",
+  "default": "none",
+  "why": "The eyecatch is the act break of an anime episode and its absence is felt.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "anime.format.eyecatch_style",
+  "level": "chapter",
+  "type": "enum: logo_card | character_pose | prop_still | chibi_gag | title_typography | silhouette_card",
+  "default": "logo_card",
+  "why": "The eyecatch is a tiny authored image that tells the audience what kind of show this is.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "anime.format.next_preview",
+  "level": "chapter",
+  "type": "enum: none | clips_vo | still_vo | tease_only | gag",
+  "default": "none",
+  "why": "The next-episode preview is a fixed anime form with its own voice and pacing rules.",
+  "status": "partial",
+  "fallback": "Assembles from marked shots with a VO track; no automatic clip selection."
+ },
+ {
+  "name": "anime.format.episode_no",
+  "level": "movie",
+  "type": "number or none",
+  "default": "none",
+  "why": "Episode numbering drives titles, previews and file naming for a series.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "anime.format.broadcast_safe",
+  "level": "movie",
+  "type": "bool",
+  "default": "true",
+  "why": "Strobe and flash limits exist because broadcast anime injured viewers once.",
+  "status": "partial",
+  "fallback": "Caps flash frequency and fx intensity at author time; no photosensitivity analysis."
+ },
+ {
+  "name": "audio.music.cue",
+  "level": "any",
+  "type": "string (cue id) or none",
+  "default": "none",
+  "why": "The music variable, naming which cue plays so it can start, stop and recur.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "audio.music.prompt",
+  "level": "any",
+  "type": "string (ACE-Step text prompt)",
+  "default": "auto (from genre, mood, tone and intensity)",
+  "why": "The generator takes text, so the resolved prompt must be an authorable field.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "audio.music.genre",
+  "level": "any",
+  "type": "enum: none | orchestral | piano_solo | strings | ambient | synth | city_pop | jazz | rock | metal | electronic | lofi | choral | folk | traditional_ja | chiptune | drone",
+  "default": "piano_solo",
+  "why": "Genre is the fastest handle on a score and seeds instrumentation and tempo.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "audio.music.instrumentation",
+  "level": "any",
+  "type": "list of tags",
+  "default": "[]",
+  "why": "Naming the instruments is what stops every generated cue sounding the same.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "audio.music.tempo_bpm",
+  "level": "any",
+  "type": "number or auto",
+  "default": "auto (from time.pace and story.tension)",
+  "why": "Tempo is the link between music and cut rate and must be statable.",
+  "status": "partial",
+  "fallback": "Passed as a prompt hint; the generator does not guarantee the tempo."
+ },
+ {
+  "name": "audio.music.key",
+  "level": "any",
+  "type": "enum: auto | c | d | e | f | g | a | b (with sharps/flats)",
+  "default": "auto",
+  "why": "A stated key lets reprises and stingers actually match the main theme.",
+  "status": "roadmap",
+  "fallback": "Prompt hint only; no key extraction or enforcement."
+ },
+ {
+  "name": "audio.music.mode",
+  "level": "any",
+  "type": "enum: major | minor | modal | atonal | pentatonic | whole_tone",
+  "default": "auto (minor when story.tone is dark)",
+  "why": "Mode carries emotional valence more reliably than any adjective in the prompt.",
+  "status": "partial",
+  "fallback": "Prompt hint only."
+ },
+ {
+  "name": "audio.music.intensity",
+  "level": "any",
+  "type": "number 0.0-1.0",
+  "default": "auto (from story.tension)",
+  "why": "One dial for how loud and busy the score is, independent of what it plays.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "audio.music.role",
+  "level": "any",
+  "type": "enum: none | score | source | diegetic | anthem | theme | underscore | sting | silence_bed",
+  "default": "score",
+  "why": "Whether music exists in the world changes mixing, filtering and perspective.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "audio.music.motif",
+  "level": "any",
+  "type": "string (motif id) or none",
+  "default": "none",
+  "why": "A named musical theme is how a film's emotional callbacks are built.",
+  "status": "partial",
+  "fallback": "Re-uses the motif's cached cue or its prompt seed; no melodic continuity guarantee."
+ },
+ {
+  "name": "audio.music.reprise_of",
+  "level": "scene",
+  "type": "string (cue id) or none",
+  "default": "none",
+  "why": "A reprise must point at the earlier cue rather than be re-described from scratch.",
+  "status": "partial",
+  "fallback": "Re-renders from the original prompt with the same seed; not the same recording."
+ },
+ {
+  "name": "audio.music.start_at_pct",
+  "level": "scene",
+  "type": "number (0-100 of scene)",
+  "default": "0",
+  "why": "Where music enters within a scene is a directing choice, not a technical one.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "audio.music.length_s",
+  "level": "scene",
+  "type": "number (seconds)",
+  "default": "auto (scene length plus tails)",
+  "why": "Generated cues need a target length or they must be crudely cut.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "audio.music.transition",
+  "level": "any",
+  "type": "enum: cut | crossfade | fade_in | fade_out | hard_stop | stinger | build | drop | tempo_shift | key_change | reprise | bridge | overlap_hold | silence_into",
+  "default": "crossfade",
+  "why": "The music-transition variable the author asked for, naming how one cue becomes the next.",
+  "status": "partial",
+  "fallback": "cut, crossfade, fades, hard_stop and overlap_hold render exactly; build, drop, tempo_shift and key_change become two cues joined by a crossfade with a warning."
+ },
+ {
+  "name": "audio.music.transition_s",
+  "level": "any",
+  "type": "number (seconds)",
+  "default": "1.5",
+  "why": "Music transition length is the difference between a stumble and a turn.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "audio.music.transition_at",
+  "level": "any",
+  "type": "enum: on_cut | on_scene_start | on_scene_end | at_pct | on_beat | on_line_end",
+  "default": "on_scene_start",
+  "why": "Where the change lands is what makes it feel scored rather than accidental.",
+  "status": "partial",
+  "fallback": "on_beat resolves to the nearest authored time; no beat detection."
+ },
+ {
+  "name": "audio.music.build_s",
+  "level": "scene",
+  "type": "number (seconds)",
+  "default": "0",
+  "why": "A build before a climax is a scored event with its own duration.",
+  "status": "roadmap",
+  "fallback": "Approximated by a rising gain ramp on the outgoing cue."
+ },
+ {
+  "name": "audio.music.stinger",
+  "level": "shot",
+  "type": "enum: none | hit | riser | reverse_swell | dread_low | comedy_slide | choir_hit | taiko_hit",
+  "default": "none",
+  "why": "A single musical hit on a cut is the most-used scoring device in anime.",
+  "status": "partial",
+  "fallback": "Generated as a short Stable Audio one-shot and mixed at the cut; not key-matched to the score."
+ },
+ {
+  "name": "audio.music.loop",
+  "level": "any",
+  "type": "bool",
+  "default": "false",
+  "why": "Looping a short cue is how a long scene gets scored cheaply.",
+  "status": "partial",
+  "fallback": "Looped with a crossfade; seams are audible on non-symmetric cues."
+ },
+ {
+  "name": "audio.music.duck_db",
+  "level": "any",
+  "type": "number (dB)",
+  "default": "-6",
+  "why": "How far music drops under dialogue is the most consequential mix number.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "audio.music.seed",
+  "level": "any",
+  "type": "number",
+  "default": "auto (from seed_root and cue id)",
+  "why": "Reproducible music matters as much as reproducible images.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "audio.sfx.list",
+  "level": "shot",
+  "type": "list of [sfx_id, at_pct, gain_db]",
+  "default": "[]",
+  "why": "The sound-effects variable, placing named one-shots inside a shot.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "audio.sfx.prompt",
+  "level": "shot",
+  "type": "string (Stable Audio prompt)",
+  "default": "auto (from shot.action and world)",
+  "why": "Generated SFX need text, so the derived prompt must be overridable.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "audio.sfx.category",
+  "level": "shot",
+  "type": "enum: none | foley | impact | whoosh | ui | nature | mechanical | magic | vocal_nonverbal | destruction | vehicle",
+  "default": "none",
+  "why": "Category selects generation settings, EQ and default level in one word.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "audio.sfx.auto_foley",
+  "level": "any",
+  "type": "bool",
+  "default": "true",
+  "why": "Footsteps and cloth should appear from blocking rather than be authored per shot.",
+  "status": "partial",
+  "fallback": "Generates from movement and ground_state at a fixed level; no timing to the picture."
+ },
+ {
+  "name": "audio.sfx.impact_sync",
+  "level": "shot",
+  "type": "bool",
+  "default": "true",
+  "why": "An impact effect must land on the same frame as the impact flash.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "audio.sfx.transition_whoosh",
+  "level": "shot",
+  "type": "enum: none | auto | soft | hard | reverse | doppler",
+  "default": "auto",
+  "why": "Whip pans and smash cuts are half sound, and the sound is what sells them.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "audio.sfx.tail_s",
+  "level": "shot",
+  "type": "number (seconds)",
+  "default": "0.5",
+  "why": "Sound that continues past the cut is what binds two shots together.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "audio.sfx.pan",
+  "level": "shot",
+  "type": "number -1.0..1.0",
+  "default": "0",
+  "why": "Placing a sound off-centre is free depth and follows screen direction.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "audio.sfx.gain_db",
+  "level": "any",
+  "type": "number (dB)",
+  "default": "-12",
+  "why": "A default effects level so nothing needs mixing to be audible.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "audio.sfx.reverb_send",
+  "level": "any",
+  "type": "number 0.0-1.0",
+  "default": "auto (from world.interior_exterior)",
+  "why": "Effects must sit in the same room as the dialogue or the scene splits apart.",
+  "status": "partial",
+  "fallback": "Fixed room presets per space type; no impulse-response matching."
+ },
+ {
+  "name": "audio.amb.bed",
+  "level": "scene",
+  "type": "string (prompt) or auto",
+  "default": "auto (from world.biome, weather and time_of_day)",
+  "why": "The continuous ambience bed is what makes cuts inside one location feel continuous.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "audio.amb.layers",
+  "level": "scene",
+  "type": "list of tags",
+  "default": "auto (from world.ambient_life)",
+  "why": "Ambience is built from stacked layers, not a single generated file.",
+  "status": "partial",
+  "fallback": "Rendered as a small number of looped generated beds mixed together."
+ },
+ {
+  "name": "audio.amb.level_db",
+  "level": "scene",
+  "type": "number (dB)",
+  "default": "-24",
+  "why": "Ambience level is the floor everything else is judged against.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "audio.amb.continuity",
+  "level": "scene",
+  "type": "enum: continuous | per_shot | crossfade | reset_on_cut",
+  "default": "continuous",
+  "why": "Ambience that restarts every cut is the loudest sign of machine assembly.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "audio.amb.room_tone",
+  "level": "scene",
+  "type": "enum: none | small_room | large_room | hall | corridor | classroom | street | forest | cave | vehicle | underwater",
+  "default": "auto (from world)",
+  "why": "Room tone is what makes silence sound like a place rather than a missing file.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "audio.amb.weather_sound",
+  "level": "scene",
+  "type": "enum: auto | none | rain_light | rain_heavy | thunder | wind | snow_muffle | storm",
+  "default": "auto",
+  "why": "Weather is heard more than seen and should follow the weather variable automatically.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "audio.mix.target_lufs",
+  "level": "movie",
+  "type": "number (LUFS)",
+  "default": "-16",
+  "why": "One loudness target so the whole film normalises consistently.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "audio.mix.true_peak_db",
+  "level": "movie",
+  "type": "number (dBTP)",
+  "default": "-1.5",
+  "why": "Peak ceiling that keeps the master from clipping on delivery.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "audio.mix.dialogue_db",
+  "level": "any",
+  "type": "number (dB)",
+  "default": "-6",
+  "why": "Dialogue is the anchor every other element is set relative to.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "audio.mix.music_db",
+  "level": "any",
+  "type": "number (dB)",
+  "default": "-14",
+  "why": "A stated music level stops every scene needing a manual balance.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "audio.mix.duck_mode",
+  "level": "any",
+  "type": "enum: none | static | sidechain | manual_curve",
+  "default": "sidechain",
+  "why": "How music gets out of the way of dialogue is a policy, not a per-cue fix.",
+  "status": "partial",
+  "fallback": "Static gain reduction over dialogue regions when sidechain analysis is unavailable."
+ },
+ {
+  "name": "audio.mix.dynamics",
+  "level": "movie",
+  "type": "enum: wide | cinematic | broadcast | compressed | loud",
+  "default": "cinematic",
+  "why": "Dynamic range policy decides whether quiet scenes stay quiet.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "audio.mix.stereo_width",
+  "level": "any",
+  "type": "number 0.0-1.5",
+  "default": "1.0",
+  "why": "Width is a mood tool: narrow for claustrophobia, wide for scale.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "audio.mix.perspective",
+  "level": "shot",
+  "type": "enum: objective | subject_pov | distant | muffled | underwater | tinnitus | inside_head",
+  "default": "objective",
+  "why": "Sound perspective is how a subjective POV is actually communicated.",
+  "status": "partial",
+  "fallback": "Built from lowpass, reverb and level presets; no true binaural modelling."
+ },
+ {
+  "name": "audio.mix.silence",
+  "level": "any",
+  "type": "enum: none | soft | full | absolute | pre_impact | after_shock",
+  "default": "none",
+  "why": "The silence variable, a deliberate dropout that is one of the strongest audio devices.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "audio.mix.silence_s",
+  "level": "shot",
+  "type": "number (seconds)",
+  "default": "0.6",
+  "why": "How long the silence holds is the whole effect.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "audio.mix.fade_in_s",
+  "level": "chapter",
+  "type": "number (seconds)",
+  "default": "0.5",
+  "why": "Audio needs its own fade separate from picture at structural boundaries.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "audio.mix.fade_out_s",
+  "level": "chapter",
+  "type": "number (seconds)",
+  "default": "1.0",
+  "why": "An audio tail after picture ends is how a chapter releases.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "audio.vo.mode",
+  "level": "any",
+  "type": "enum: none | narration | inner_monologue | letter | phone | radio | announcement | memory_echo",
+  "default": "none",
+  "why": "Voice-over is processed and mixed differently from in-scene dialogue.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "audio.vo.char",
+  "level": "any",
+  "type": "string (char.id) or none",
+  "default": "auto (story.pov_char)",
+  "why": "Whose inner voice we hear must be explicit or the POV blurs.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "audio.vo.processing",
+  "level": "any",
+  "type": "enum: dry | close_intimate | reverb_wash | telephone | radio | distant | doubled | whisper_layer",
+  "default": "close_intimate",
+  "why": "Processing is what tells the audience a voice is interior rather than spoken.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "dialogue.lines",
+  "level": "shot",
+  "type": "list of line objects",
+  "default": "[]",
+  "why": "The dialogue variable, holding what is actually said in this shot.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "dialogue.line.speaker",
+  "level": "shot",
+  "type": "string (char.id)",
+  "default": "auto (shot.subject first)",
+  "why": "Every line needs an owner so voice, emotion and mouth follow the right body.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "dialogue.line.text",
+  "level": "shot",
+  "type": "string",
+  "default": "\"\"",
+  "why": "The spoken text itself, feeding TTS, captions and flap timing.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "dialogue.line.delivery",
+  "level": "shot",
+  "type": "enum: neutral | soft | warm | flat | clipped | urgent | shouted | whispered | trembling | laughing | crying | breathless | sarcastic | tender | cold",
+  "default": "neutral",
+  "why": "How a line is said is the acting, and it is separable from the emotion word.",
+  "status": "partial",
+  "fallback": "Mapped to emotion vectors on engines that support them; others get rate and pitch changes only."
+ },
+ {
+  "name": "dialogue.line.emotion",
+  "level": "shot",
+  "type": "enum: inherit | plus any char.emotion value",
+  "default": "inherit",
+  "why": "A line can carry a different feeling from the face, and that gap is the drama.",
+  "status": "partial",
+  "fallback": "Only engines with emotion vectors honour this; others fall back to delivery presets."
+ },
+ {
+  "name": "dialogue.line.emotion_strength",
+  "level": "shot",
+  "type": "number 0.0-1.0",
+  "default": "0.5",
+  "why": "Emotion vectors need a magnitude or every line is maximally acted.",
+  "status": "partial",
+  "fallback": "Clamped to whatever range the selected engine exposes."
+ },
+ {
+  "name": "dialogue.line.volume",
+  "level": "shot",
+  "type": "enum: whisper | quiet | normal | raised | shout | scream",
+  "default": "normal",
+  "why": "Volume changes both the performance and the mix, so it must be one field.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "dialogue.line.rate",
+  "level": "shot",
+  "type": "number 0.5-2.0",
+  "default": "1.0",
+  "why": "Speaking rate is character, and it also decides whether the line fits the shot.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "dialogue.line.pitch_shift",
+  "level": "shot",
+  "type": "number (semitones, -6..6)",
+  "default": "0",
+  "why": "Small pitch moves cover age, stress and non-human characters cheaply.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "dialogue.line.at_pct",
+  "level": "shot",
+  "type": "number (0-100)",
+  "default": "auto (sequential)",
+  "why": "Where a line starts inside the shot is timing, and timing is comedy and tension.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "dialogue.line.pause_before_s",
+  "level": "shot",
+  "type": "number (seconds)",
+  "default": "0.2",
+  "why": "The beat before a line is often the performance.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "dialogue.line.pause_after_s",
+  "level": "shot",
+  "type": "number (seconds)",
+  "default": "0.3",
+  "why": "Trailing air decides whether a line lands or is stepped on.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "dialogue.line.overlap",
+  "level": "shot",
+  "type": "bool",
+  "default": "false",
+  "why": "Overlapping speech is how arguments and crowds sound real.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "dialogue.line.offscreen",
+  "level": "shot",
+  "type": "enum: on_screen | off_screen | back_to_camera | behind_door | over_phone",
+  "default": "on_screen",
+  "why": "Off-screen lines need different mixing and no mouth animation at all.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "dialogue.line.processing",
+  "level": "shot",
+  "type": "enum: none | phone | radio | pa | tv | muffled | reverb | underwater | distorted",
+  "default": "none",
+  "why": "Source colouring on a line is often the entire storytelling point.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "dialogue.line.language",
+  "level": "shot",
+  "type": "enum: inherit | en | ja | zh | ko | es | fr | de | other",
+  "default": "inherit",
+  "why": "A single foreign line is common and needs its own voice and caption handling.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "dialogue.line.subtitle",
+  "level": "shot",
+  "type": "string or auto",
+  "default": "auto (from text)",
+  "why": "Subtitle text often differs from spoken text, especially across languages.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "dialogue.turn_gap_s",
+  "level": "scene",
+  "type": "number (seconds)",
+  "default": "0.35",
+  "why": "The gap between speakers is the rhythm of a conversation.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "dialogue.style",
+  "level": "any",
+  "type": "enum: naturalistic | formal | archaic | slangy | terse | florid | childlike | military | keigo | rough",
+  "default": "naturalistic",
+  "why": "Speech register belongs above the line so a whole character or scene inherits it.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "dialogue.lipsync",
+  "level": "any",
+  "type": "enum: none | flap | loose | tight | closed",
+  "default": "loose",
+  "why": "The lipsync variable, stating how hard mouth movement must match audio.",
+  "status": "partial",
+  "fallback": "loose and flap drive mouth tags and timed mouth keyframes; tight warns and behaves as loose."
+ },
+ {
+  "name": "dialogue.voice.engine",
+  "level": "any",
+  "type": "enum: auto | engine_a | engine_b | engine_emotion | engine_ja",
+  "default": "auto",
+  "why": "Engines differ in language and emotion support, so the choice must be authorable.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "dialogue.voice.id",
+  "level": "any",
+  "type": "string (voice id)",
+  "default": "auto (from char.role, age_read and language)",
+  "why": "A stable voice per character is as important as a stable face.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "dialogue.voice.timbre",
+  "level": "any",
+  "type": "enum: bright | warm | dark | breathy | nasal | rough | clear | childlike | aged",
+  "default": "clear",
+  "why": "Timbre is casting, and casting is not something to leave to a default seed.",
+  "status": "partial",
+  "fallback": "Selects the nearest available voice in the pool; no timbre synthesis."
+ },
+ {
+  "name": "dialogue.voice.accent",
+  "level": "any",
+  "type": "string or none",
+  "default": "none",
+  "why": "Accent and dialect are character facts that must persist across every scene.",
+  "status": "partial",
+  "fallback": "Prompt or voice-pool selection only; unavailable accents warn and use the base voice."
+ },
+ {
+  "name": "caption.mode",
+  "level": "any",
+  "type": "enum: none | dialogue | full | forced_only | signs_only | karaoke",
+  "default": "none",
+  "why": "The captions variable, deciding what text is burnt into the picture.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "caption.language",
+  "level": "any",
+  "type": "enum: inherit | en | ja | zh | ko | es | fr | de",
+  "default": "inherit",
+  "why": "Caption language is separate from spoken language for subtitled films.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "caption.font",
+  "level": "movie",
+  "type": "string (font id)",
+  "default": "auto (from caption.language)",
+  "why": "Font choice is both legibility and tone, and CJK needs a specific face.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "caption.size_pct",
+  "level": "movie",
+  "type": "number (percent of frame height)",
+  "default": "4.5",
+  "why": "Caption size must scale with canvas rather than be a fixed pixel value.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "caption.position",
+  "level": "any",
+  "type": "enum: bottom | top | bottom_left | bottom_right | center | under_speaker",
+  "default": "bottom",
+  "why": "Captions sometimes have to move to avoid the composition.",
+  "status": "partial",
+  "fallback": "Fixed positions place exactly; under_speaker uses a static offset from framing, not tracking."
+ },
+ {
+  "name": "caption.style",
+  "level": "movie",
+  "type": "enum: plain_white | outlined | boxed | drop_shadow | anime_yellow | soft_grey",
+  "default": "outlined",
+  "why": "Caption styling is what keeps text readable over a bright anime frame.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "caption.max_chars",
+  "level": "movie",
+  "type": "number (per line)",
+  "default": "42",
+  "why": "Line length is the main readability control for burnt-in text.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "caption.max_lines",
+  "level": "movie",
+  "type": "number",
+  "default": "2",
+  "why": "More than two lines covers the picture and stops being a caption.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "caption.reading_speed",
+  "level": "movie",
+  "type": "number (chars per second)",
+  "default": "17",
+  "why": "Minimum on-screen time so captions can actually be read.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "caption.speaker_labels",
+  "level": "any",
+  "type": "bool",
+  "default": "false",
+  "why": "Off-screen and crowded scenes need attribution the audience can follow.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "caption.sfx_captions",
+  "level": "any",
+  "type": "bool",
+  "default": "false",
+  "why": "Accessibility captions for sound are a distinct output from dialogue subtitles.",
+  "status": "partial",
+  "fallback": "Emitted from named SFX ids only; generated effects have no descriptions."
+ },
+ {
+  "name": "caption.offset_s",
+  "level": "any",
+  "type": "number (seconds)",
+  "default": "0",
+  "why": "Global timing trim when TTS and caption timings drift apart.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "caption.signs_policy",
+  "level": "any",
+  "type": "enum: none | translate_important | translate_all | overlay_note",
+  "default": "none",
+  "why": "On-screen signage in another language needs a stated handling policy.",
+  "status": "partial",
+  "fallback": "Renders as an extra caption line; no positioned sign replacement."
+ },
+ {
+  "name": "render.sampler",
+  "level": "any",
+  "type": "string (sampler name)",
+  "default": "dpmpp_2m",
+  "why": "Sampler choice changes line quality noticeably on anime checkpoints.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "render.scheduler",
+  "level": "any",
+  "type": "string (scheduler name)",
+  "default": "karras",
+  "why": "Scheduler pairs with sampler and belongs beside it as an inheritable default.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "render.overscan_pct",
+  "level": "any",
+  "type": "number (percent)",
+  "default": "15",
+  "why": "Extra rendered margin is what makes post pans, crops and shakes possible without softening.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "render.upscale",
+  "level": "any",
+  "type": "enum: none | 1_5x | 2x | 4x",
+  "default": "none",
+  "why": "Hero shots deserve resolution that filler shots would waste.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "render.face_detailer",
+  "level": "any",
+  "type": "bool",
+  "default": "true",
+  "why": "Faces at small scale are where anime generation fails most visibly.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "render.i2v_steps",
+  "level": "any",
+  "type": "number",
+  "default": "30",
+  "why": "The video pass has its own quality/time trade separate from the keyframe.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "render.i2v_cfg",
+  "level": "any",
+  "type": "number",
+  "default": "3.5",
+  "why": "Motion adherence versus stability is a distinct dial from image CFG.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "render.frame_interp",
+  "level": "any",
+  "type": "enum: none | to_movie_fps | double | smooth",
+  "default": "to_movie_fps",
+  "why": "Interpolation is how a low-fps generation reaches delivery fps, and it fights anime stepping.",
+  "status": "partial",
+  "fallback": "Applied after stepping so held drawings survive; smooth mode can reintroduce video feel."
+ },
+ {
+  "name": "render.color_space",
+  "level": "movie",
+  "type": "enum: srgb | rec709 | rec2020",
+  "default": "rec709",
+  "why": "A stated colour space keeps grades consistent between preview and delivery.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "render.codec",
+  "level": "movie",
+  "type": "enum: h264 | h265 | prores | vp9 | av1",
+  "default": "h264",
+  "why": "Delivery codec decides compatibility and how much the grade survives.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "render.bitrate",
+  "level": "movie",
+  "type": "string (e.g. 12M) or auto",
+  "default": "auto",
+  "why": "Flat anime colour banding is a bitrate problem before it is an art problem.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "render.proxy_mode",
+  "level": "movie",
+  "type": "bool",
+  "default": "false",
+  "why": "Fast low-resolution passes are how an author iterates on structure before committing.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "render.cache_policy",
+  "level": "any",
+  "type": "enum: reuse | reuse_unless_changed | force | never",
+  "default": "reuse_unless_changed",
+  "why": "Re-rendering unchanged shots is the single largest waste in an iterative film.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "render.order",
+  "level": "movie",
+  "type": "enum: sequential | hero_first | cheap_first | dependency",
+  "default": "dependency",
+  "why": "Render order decides how soon an author sees the shots that matter.",
+  "status": "partial",
+  "fallback": "sequential and hero_first are implemented; others fall back to sequential."
+ },
+ {
+  "name": "render.on_fail",
+  "level": "any",
+  "type": "enum: warn_continue | retry | placeholder | halt",
+  "default": "retry",
+  "why": "A failed shot in a long render must not silently produce a broken film.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "render.placeholder",
+  "level": "any",
+  "type": "enum: black | slate | last_good | keyframe_still",
+  "default": "keyframe_still",
+  "why": "What stands in for a failed shot decides whether a rough cut is still watchable.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "render.version_tag",
+  "level": "movie",
+  "type": "string",
+  "default": "auto (timestamp)",
+  "why": "Versioned outputs are how an author compares two cuts instead of overwriting one.",
+  "status": "ready",
+  "fallback": ""
+ },
+ {
+  "name": "render.watermark",
+  "level": "movie",
+  "type": "enum: none | draft | version_slate | custom",
+  "default": "none",
+  "why": "Draft marking prevents a work-in-progress cut being mistaken for the final film.",
+  "status": "ready",
+  "fallback": ""
+ }
+]

@@ -1,0 +1,69 @@
+{
+  "variable": "shot.fx.emote_symbols",
+  "claim": "Anime's symbolic emotion vocabulary is a genuine expressive channel, not decoration - a sweatdrop does work that no facial expression can do as fast. Reach for them when a beat needs to be legible in four frames, and be aware they instantly set a comic register.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "sweatdrop",
+      "clause": "sweatdrop",
+      "control": false,
+      "sample": "/samples/vars/shot_fx_emote_symbols/sweatdrop.webp"
+    },
+    {
+      "value": "vein_pop",
+      "clause": "anger vein, popped vein",
+      "control": false,
+      "sample": "/samples/vars/shot_fx_emote_symbols/vein_pop.webp"
+    },
+    {
+      "value": "blush_lines",
+      "clause": "blush lines, blush stickers",
+      "control": false,
+      "sample": "/samples/vars/shot_fx_emote_symbols/blush_lines.webp"
+    },
+    {
+      "value": "shock_lines",
+      "clause": "shock lines, emphasis lines on face, shaded face",
+      "control": false,
+      "sample": "/samples/vars/shot_fx_emote_symbols/shock_lines.webp"
+    },
+    {
+      "value": "sparkles",
+      "clause": "sparkle, sparkles around head",
+      "control": false,
+      "sample": "/samples/vars/shot_fx_emote_symbols/sparkles.webp"
+    },
+    {
+      "value": "teardrop",
+      "clause": "teardrop, single tear",
+      "control": false,
+      "sample": "/samples/vars/shot_fx_emote_symbols/teardrop.webp"
+    },
+    {
+      "value": "steam",
+      "clause": "steam, steam from head",
+      "control": false,
+      "sample": "/samples/vars/shot_fx_emote_symbols/steam.webp"
+    },
+    {
+      "value": "question_mark",
+      "clause": "question mark, ?",
+      "control": false,
+      "sample": "/samples/vars/shot_fx_emote_symbols/question_mark.webp"
+    },
+    {
+      "value": "chibi_pop",
+      "clause": "chibi, super deformed, chibi inset",
+      "control": false,
+      "sample": "/samples/vars/shot_fx_emote_symbols/chibi_pop.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "shot.fx.emote_symbols",
+      "issue": "chibi_pop (\"chibi, super deformed, chibi inset\") is not an emote symbol - it is anime.fx.deform_mode/sd_chibi plus mini_inset, and it will redraw the whole character while every other option in this card is a small addition, so the panel is not comparable to its neighbours. shock_lines (\"shock lines, emphasis lines on face, shaded face\") smuggles in \"shaded face\", which is the strongest tag in the clause and is exactly anime.fx.face_fault/shadowed_eyes - that panel will teach the face fault, not the shock lines.",
+      "fix": "Delete chibi_pop; deform_mode owns it. shock_lines -> \"shock lines, emphasis lines\" with \"shaded face\" removed. Also add a \"none\" option with an empty clause - the card currently has no baseline to compare the symbols against."
+    }
+  ]
+}

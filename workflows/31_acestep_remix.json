@@ -1,0 +1,59 @@
+{
+  "_comment": "MUSIC -> MUSIC. Take an existing track and restyle, extend or vary it. This is audio img2img: encode the real audio to a latent, then partially denoise it with new tags. ACE-Step 1.5 CANNOT do this at any setting - music-to-music exists only in ACE-Step 1, which is why the 7.2 GB v1 checkpoint is worth having alongside the newer one.",
+  "_notes": [
+    "`denoise` is the whole control and it behaves exactly like img2img strength. 0.2 = a gentle re-voicing that keeps the melody and structure. 0.3-0.4 = same bones, different arrangement. 0.6+ = you have thrown the original away, so use workflow 06 instead and save the encode.",
+    "The source track's LENGTH sets the output length - there is no EmptyLatent here, the latent comes from VAEEncodeAudio. To EXTEND a track rather than restyle it, pad the input with silence first and let the model fill it.",
+    "This is the ACE-Step **1** stack and it is a different architecture from 1.5: a single `CheckpointLoaderSimple` (MODEL+CLIP+VAE in one file) and `TextEncodeAceStepAudio` with a `lyrics_strength` float. The 1.5 graph in workflow 06 uses `DualCLIPLoader` and `TextEncodeAceStepAudio1.5` with bpm/keyscale/timesignature. Do not mix the two - the encoders are not interchangeable.",
+    "Note what 1.5 gained and 1 lacks: no bpm, no keyscale, no timesignature conditioning here. You steer entirely through tags. Keep tags close to the source's real tempo and key or the partial denoise fights the audio it is given.",
+    "`negative` is wired to the same encode as `positive`, exactly as in workflow 06 - ACE has no separate negative path. Not a bug.",
+    "Best use in a film pipeline: generate a main theme once with workflow 06, then remix it at denoise 0.25-0.35 with different tags for each act. You get variations that are recognisably the same theme, which is what scoring actually requires and what generating three separate cues does not give you."
+  ],
+  "1": {
+    "class_type": "CheckpointLoaderSimple",
+    "inputs": { "ckpt_name": "ace_step_v1_3.5b.safetensors" }
+  },
+  "2": {
+    "class_type": "LoadAudio",
+    "inputs": { "audio": "claude_remix_source.mp3" }
+  },
+  "3": {
+    "class_type": "VAEEncodeAudio",
+    "inputs": { "audio": ["2", 0], "vae": ["1", 2] }
+  },
+  "4": {
+    "class_type": "TextEncodeAceStepAudio",
+    "inputs": {
+      "clip": ["1", 1],
+      "tags": "solo piano, sparse and intimate, close-miked upright, felt hammers, slow rubato, minor key, single sustained cello underneath, no drums, no percussion, no synth, room tone",
+      "lyrics": "",
+      "lyrics_strength": 1.0
+    }
+  },
+  "5": {
+    "class_type": "KSampler",
+    "inputs": {
+      "model": ["1", 0],
+      "seed": 606,
+      "steps": 50,
+      "cfg": 5.0,
+      "sampler_name": "euler",
+      "scheduler": "simple",
+      "positive": ["4", 0],
+      "negative": ["4", 0],
+      "latent_image": ["3", 0],
+      "denoise": 0.32
+    }
+  },
+  "6": {
+    "class_type": "VAEDecodeAudio",
+    "inputs": { "samples": ["5", 0], "vae": ["1", 2] }
+  },
+  "7": {
+    "class_type": "SaveAudioMP3",
+    "inputs": {
+      "audio": ["6", 0],
+      "filename_prefix": "claude-generated/25-music-remix/remix_piano",
+      "quality": "320k"
+    }
+  }
+}

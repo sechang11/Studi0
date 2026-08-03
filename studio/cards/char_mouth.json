@@ -1,0 +1,74 @@
+{
+  "variable": "char.mouth",
+  "claim": "Selects the mouth shape independently of dialogue, so a silent reaction can be authored precisely. A director uses it for the difference between a smirk and a grimace when everything else about the face stays put.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "closed",
+      "clause": "closed mouth",
+      "control": false,
+      "sample": "/samples/vars/char_mouth/closed.webp"
+    },
+    {
+      "value": "slight_open",
+      "clause": "parted lips, slightly open mouth",
+      "control": false,
+      "sample": "/samples/vars/char_mouth/slight_open.webp"
+    },
+    {
+      "value": "open",
+      "clause": "open mouth",
+      "control": false,
+      "sample": "/samples/vars/char_mouth/open.webp"
+    },
+    {
+      "value": "wide_open",
+      "clause": "wide open mouth, mouth agape, teeth visible",
+      "control": false,
+      "sample": "/samples/vars/char_mouth/wide_open.webp"
+    },
+    {
+      "value": "smile",
+      "clause": "smile, upturned mouth",
+      "control": false,
+      "sample": "/samples/vars/char_mouth/smile.webp"
+    },
+    {
+      "value": "smirk",
+      "clause": "smirk, one-sided smile",
+      "control": false,
+      "sample": "/samples/vars/char_mouth/smirk.webp"
+    },
+    {
+      "value": "frown",
+      "clause": "frown, downturned mouth",
+      "control": false,
+      "sample": "/samples/vars/char_mouth/frown.webp"
+    },
+    {
+      "value": "grimace",
+      "clause": "grimace, bared teeth, strained mouth",
+      "control": false,
+      "sample": "/samples/vars/char_mouth/grimace.webp"
+    },
+    {
+      "value": "gritted",
+      "clause": "gritted teeth, clenched teeth",
+      "control": false,
+      "sample": "/samples/vars/char_mouth/gritted.webp"
+    },
+    {
+      "value": "trembling",
+      "clause": "trembling lips, quivering mouth",
+      "control": false,
+      "sample": "/samples/vars/char_mouth/trembling.webp"
+    },
+    {
+      "value": "wavy",
+      "clause": "wavy mouth, squiggle mouth",
+      "control": false,
+      "sample": "/samples/vars/char_mouth/wavy.webp"
+    }
+  ]
+}

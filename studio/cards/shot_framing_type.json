@@ -1,0 +1,75 @@
+{
+  "variable": "shot.framing_type",
+  "claim": "Framing type declares how many bodies are in frame and whose vantage we borrow, which rewrites the entire tag stack underneath it. It is the difference between a portrait, a conversation and a shot where the character is not the subject at all.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "single",
+      "clause": "solo focus, one person in frame",
+      "control": false,
+      "sample": "/samples/vars/shot_framing_type/single.webp"
+    },
+    {
+      "value": "two_shot",
+      "clause": "2boys, multiple boys",
+      "control": false,
+      "sample": "/samples/vars/shot_framing_type/two_shot.webp"
+    },
+    {
+      "value": "three_shot",
+      "clause": "3boys, multiple boys",
+      "control": false,
+      "sample": "/samples/vars/shot_framing_type/three_shot.webp"
+    },
+    {
+      "value": "group",
+      "clause": "multiple boys, 6+boys, team lineup",
+      "control": false,
+      "sample": "/samples/vars/shot_framing_type/group.webp"
+    },
+    {
+      "value": "over_shoulder",
+      "clause": "over the shoulder, 2boys, blurry foreground shoulder",
+      "control": false,
+      "sample": "/samples/vars/shot_framing_type/over_shoulder.webp"
+    },
+    {
+      "value": "pov",
+      "clause": "pov, first-person view, pov hands",
+      "control": false,
+      "sample": "/samples/vars/shot_framing_type/pov.webp"
+    },
+    {
+      "value": "reaction",
+      "clause": "upper body, wide-eyed, open mouth",
+      "control": false,
+      "sample": "/samples/vars/shot_framing_type/reaction.webp"
+    },
+    {
+      "value": "insert_object",
+      "clause": "no humans, object focus, close-up",
+      "control": true,
+      "sample": "/samples/vars/shot_framing_type/insert_object.webp"
+    },
+    {
+      "value": "empty_frame",
+      "clause": "no humans, empty, scenery only",
+      "control": true,
+      "sample": "/samples/vars/shot_framing_type/empty_frame.webp"
+    },
+    {
+      "value": "crowd",
+      "clause": "crowd focus, many people, spectators fill frame",
+      "control": false,
+      "sample": "/samples/vars/shot_framing_type/crowd.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "shot.framing_type",
+      "issue": "Six of ten options directly contradict the fixed subject sentence, which hard-pins \"1boy, solo\". two_shot/three_shot/group/over_shoulder push 2boys / 3boys / multiple boys / 6+boys against \"solo\"; insert_object and empty_frame push \"no humans\" against \"1boy, solo, male focus\". Animagine weights the subject tags first, so those panels come back as the same lone boy (or with mangled duplicate anatomy) and the card teaches nothing about the value it exists to show. single (\"solo focus, one person in frame\") also just restates \"solo\", and crowd restates the \"crowd\" tag already in the subject. \"one person in frame\" and \"spectators fill frame\" are prose, not tags.",
+      "fix": "This variable rewrites the subject's character count, which the identical-subject-sentence method forbids. Either mark renderable:false with that as the skip_reason, or declare an explicit documented subject exception for this card only (drop \"solo\" and the count tag from the fixed sentence) rather than shipping clauses that silently lose to the subject. If it stays, give single an empty clause (it is the baseline) and rewrite crowd so it adds foreground crowd occlusion rather than restating \"crowd\"."
+    }
+  ]
+}

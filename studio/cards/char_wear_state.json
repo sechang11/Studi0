@@ -1,0 +1,75 @@
+{
+  "variable": "char.wear.state",
+  "claim": "Costume condition — how much the story has already cost him. It is the main way damage stays visible on screen after the scene that caused it, so a director escalates neat to rumpled to bloodied across an arc instead of re-describing the outfit.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "neat",
+      "clause": "clean clothes, crisp fabric, tidy",
+      "control": false,
+      "sample": "/samples/vars/char_wear_state/neat.webp"
+    },
+    {
+      "value": "casual",
+      "clause": "untucked shirt, loose fit, relaxed clothing",
+      "control": false,
+      "sample": "/samples/vars/char_wear_state/casual.webp"
+    },
+    {
+      "value": "rumpled",
+      "clause": "wrinkled clothes, disheveled clothing, untucked",
+      "control": false,
+      "sample": "/samples/vars/char_wear_state/rumpled.webp"
+    },
+    {
+      "value": "soaked",
+      "clause": "wet clothes, soaked, dripping, clinging fabric",
+      "control": false,
+      "sample": "/samples/vars/char_wear_state/soaked.webp"
+    },
+    {
+      "value": "dusty",
+      "clause": "dirty clothes, dust covered, grass stains",
+      "control": false,
+      "sample": "/samples/vars/char_wear_state/dusty.webp"
+    },
+    {
+      "value": "bloodied",
+      "clause": "bloody clothes, blood stains on fabric",
+      "control": false,
+      "sample": "/samples/vars/char_wear_state/bloodied.webp"
+    },
+    {
+      "value": "torn",
+      "clause": "torn clothes, ripped fabric, frayed edges",
+      "control": false,
+      "sample": "/samples/vars/char_wear_state/torn.webp"
+    },
+    {
+      "value": "burnt",
+      "clause": "burnt clothes, scorch marks, singed edges",
+      "control": false,
+      "sample": "/samples/vars/char_wear_state/burnt.webp"
+    },
+    {
+      "value": "half_dressed",
+      "clause": "partially undressed, open clothes, garment off one shoulder",
+      "control": false,
+      "sample": "/samples/vars/char_wear_state/half_dressed.webp"
+    },
+    {
+      "value": "formal",
+      "clause": "formal wear, pressed and tucked, necktie",
+      "control": false,
+      "sample": "/samples/vars/char_wear_state/formal.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "char.wear.state",
+      "issue": "casual (\"untucked shirt, loose fit, relaxed clothing\") and rumpled (\"wrinkled clothes, disheveled clothing, untucked\") share \"untucked\" and both read as a loosely worn jersey. On a jersey — which is untucked by default and has no crisp tailoring to lose — these two panels are very likely the same image.",
+      "fix": "Drop \"untucked\" from casual and make it about fit, not disorder: \"sleeves pushed up, loose fit, collar askew\". Keep the damage words exclusive to rumpled: \"wrinkled clothes, disheveled, twisted collar, creased fabric\"."
+    }
+  ]
+}

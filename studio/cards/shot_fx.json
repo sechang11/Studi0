@@ -1,0 +1,69 @@
+{
+  "variable": "shot.fx",
+  "claim": "Direct access to the native post-fx set, appended as it travels down the hierarchy so a scene-level glow and a shot-level flash both survive. Six of the nine have a real single-frame look; punch, shake and ramp are timing operations and get no clause.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "punch",
+      "clause": "",
+      "control": true,
+      "sample": "/samples/vars/shot_fx/punch.webp"
+    },
+    {
+      "value": "shake",
+      "clause": "",
+      "control": true,
+      "sample": "/samples/vars/shot_fx/shake.webp"
+    },
+    {
+      "value": "aberr",
+      "clause": "chromatic aberration, color fringing",
+      "control": false,
+      "sample": "/samples/vars/shot_fx/aberr.webp"
+    },
+    {
+      "value": "glow",
+      "clause": "glowing, bloom, soft glow",
+      "control": false,
+      "sample": "/samples/vars/shot_fx/glow.webp"
+    },
+    {
+      "value": "flash",
+      "clause": "bright white flash, blinding light",
+      "control": false,
+      "sample": "/samples/vars/shot_fx/flash.webp"
+    },
+    {
+      "value": "hot",
+      "clause": "overexposed, blown highlights, clipped whites",
+      "control": false,
+      "sample": "/samples/vars/shot_fx/hot.webp"
+    },
+    {
+      "value": "ramp",
+      "clause": "",
+      "control": true,
+      "sample": "/samples/vars/shot_fx/ramp.webp"
+    },
+    {
+      "value": "smear",
+      "clause": "motion blur, smeared motion",
+      "control": false,
+      "sample": "/samples/vars/shot_fx/smear.webp"
+    },
+    {
+      "value": "whiteout",
+      "clause": "whiteout, white screen, blinding white",
+      "control": false,
+      "sample": "/samples/vars/shot_fx/whiteout.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "shot.fx",
+      "issue": "The card is renderable:true but punch, shake and ramp carry empty clauses. Three of the nine panels will therefore be the unmodified baseline and identical to each other, with no machine-readable reason attached — everywhere else in this set \"cannot be shown\" is expressed as renderable:false + skip_reason. Separately, flash (\"bright white flash, blinding light\") and whiteout (\"whiteout, white screen, blinding white\") are the same instruction, and hot (\"overexposed, blown highlights, clipped whites\") sits on the same blow-out axis: three options, probably one or two pictures.",
+      "fix": "Add a per-option renderable:false + skip_reason for punch/shake/ramp (\"timing operation, no single-frame state\") so the schema is honest at option level, and either merge flash into whiteout or scope hot to a partial blow-out (\"overexposed, blown highlights\" with the frame still legible) versus whiteout as the fully white frame."
+    }
+  ]
+}

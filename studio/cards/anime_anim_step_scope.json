@@ -1,0 +1,13 @@
+{
+  "variable": "anime.anim.step_scope",
+  "claim": "Decides which parts of the frame get held on the step and which keep running smoothly, because real anime steps the drawings but pans the camera on every frame. Set it wrong and a beautiful pan judders like a broken projector.",
+  "not_visual": "This is a timing mask over a moving image; in one frame the stepped and unstepped elements are indistinguishable.",
+  "options": [
+    "whole_frame",
+    "content_only",
+    "character_only",
+    "fx_only",
+    "none"
+  ],
+  "panels": []
+}

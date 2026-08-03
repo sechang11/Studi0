@@ -1,0 +1,48 @@
+{
+  "_comment": "ACE-Step v1 3.5B - the FULL music model, as opposed to the v1.5 turbo used by workflow 06. Turbo is built for speed at cfg 1.0 and ~20 steps; this is the quality option. CheckpointLoaderSimple bundles model + clip + vae, so the graph is much simpler than the 1.5 one.",
+  "_notes": [
+    "Real classifier-free guidance here: cfg 1.0 disables guidance entirely, which means the tags barely steer the render. Use cfg 4-7.",
+    "Instrumental only - leave lyrics empty. Do not paste lyrics you do not own.",
+    "Cost scales with steps; audio latents are small so even 100 steps is seconds, not minutes."
+  ],
+  "1": {
+    "class_type": "CheckpointLoaderSimple",
+    "inputs": { "ckpt_name": "ace_step_v1_3.5b.safetensors" }
+  },
+  "10": {
+    "class_type": "TextEncodeAceStepAudio",
+    "inputs": { "clip": ["1", 1], "tags": "placeholder", "lyrics": "", "lyrics_strength": 1.0 }
+  },
+  "11": {
+    "class_type": "TextEncodeAceStepAudio",
+    "inputs": {
+      "clip": ["1", 1],
+      "tags": "low quality, muffled, distorted, clipping, out of tune, amateur, noise",
+      "lyrics": "", "lyrics_strength": 1.0
+    }
+  },
+  "12": {
+    "class_type": "EmptyAceStepLatentAudio",
+    "inputs": { "seconds": 60.0, "batch_size": 1 }
+  },
+  "13": {
+    "class_type": "KSampler",
+    "inputs": {
+      "model": ["1", 0],
+      "seed": 77,
+      "steps": 60,
+      "cfg": 5.0,
+      "sampler_name": "dpmpp_2m",
+      "scheduler": "normal",
+      "positive": ["10", 0],
+      "negative": ["11", 0],
+      "latent_image": ["12", 0],
+      "denoise": 1.0
+    }
+  },
+  "14": { "class_type": "VAEDecodeAudio", "inputs": { "samples": ["13", 0], "vae": ["1", 2] } },
+  "15": {
+    "class_type": "SaveAudioMP3",
+    "inputs": { "audio": ["14", 0], "filename_prefix": "claude-generated/score_full", "quality": "320k" }
+  }
+}

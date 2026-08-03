@@ -1,0 +1,104 @@
+{
+  "variable": "world.weather",
+  "claim": "Seeds light, particles and ambience in one move, and decides whether the sky is helping the frame or fighting it. Fog and downpour also swallow a weak background, which is why directors reach for them when a shot is in trouble.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "clear",
+      "clause": "clear sky, cloudless, bright sunlight",
+      "control": false,
+      "sample": "/samples/vars/world_weather/clear.webp"
+    },
+    {
+      "value": "fair",
+      "clause": "fair weather, scattered clouds, mild light",
+      "control": false,
+      "sample": "/samples/vars/world_weather/fair.webp"
+    },
+    {
+      "value": "overcast",
+      "clause": "overcast, grey sky, flat diffused light",
+      "control": false,
+      "sample": "/samples/vars/world_weather/overcast.webp"
+    },
+    {
+      "value": "rain",
+      "clause": "rain, raining, wet",
+      "control": false,
+      "sample": "/samples/vars/world_weather/rain.webp"
+    },
+    {
+      "value": "drizzle",
+      "clause": "drizzle, light rain, fine rain",
+      "control": false,
+      "sample": "/samples/vars/world_weather/drizzle.webp"
+    },
+    {
+      "value": "downpour",
+      "clause": "heavy rain, downpour, torrential, soaked",
+      "control": false,
+      "sample": "/samples/vars/world_weather/downpour.webp"
+    },
+    {
+      "value": "thunderstorm",
+      "clause": "thunderstorm, lightning, storm clouds, rain",
+      "control": false,
+      "sample": "/samples/vars/world_weather/thunderstorm.webp"
+    },
+    {
+      "value": "snow",
+      "clause": "snowing, falling snow, snow",
+      "control": false,
+      "sample": "/samples/vars/world_weather/snow.webp"
+    },
+    {
+      "value": "blizzard",
+      "clause": "blizzard, whiteout, driving snow, heavy snowfall",
+      "control": false,
+      "sample": "/samples/vars/world_weather/blizzard.webp"
+    },
+    {
+      "value": "fog",
+      "clause": "fog, thick fog, low visibility",
+      "control": false,
+      "sample": "/samples/vars/world_weather/fog.webp"
+    },
+    {
+      "value": "mist",
+      "clause": "mist, thin haze, hazy air",
+      "control": false,
+      "sample": "/samples/vars/world_weather/mist.webp"
+    },
+    {
+      "value": "wind",
+      "clause": "windy, blowing wind, debris in the air",
+      "control": false,
+      "sample": "/samples/vars/world_weather/wind.webp"
+    },
+    {
+      "value": "heat_haze",
+      "clause": "heat haze, shimmering air, summer heat",
+      "control": false,
+      "sample": "/samples/vars/world_weather/heat_haze.webp"
+    },
+    {
+      "value": "sandstorm",
+      "clause": "sandstorm, blowing sand, dust storm, orange haze",
+      "control": false,
+      "sample": "/samples/vars/world_weather/sandstorm.webp"
+    },
+    {
+      "value": "ash",
+      "clause": "falling ash, ashfall, grey flakes in the air",
+      "control": false,
+      "sample": "/samples/vars/world_weather/ash.webp"
+    },
+    {
+      "value": "aurora",
+      "clause": "aurora, northern lights, green ribbons in the sky",
+      "control": false,
+      "sample": "/samples/vars/world_weather/aurora.webp"
+    }
+  ]
+}

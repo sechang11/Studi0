@@ -1,0 +1,81 @@
+{
+  "_comment": "BiRefNet background removal: no prompt, no clicks. It finds the salient foreground and returns a clean alpha matte. Faster and cleaner-edged than SAM for the common case of 'cut the subject off the background'. Use SAM (13) instead when you need to choose WHICH object. Saves an RGBA cutout, the matte, and a magenta-backed proof render.",
+  "_notes": [
+    "MASK CONVENTION: RemoveBackground returns a FOREGROUND mask (white = subject). JoinImageWithAlpha internally does alpha = 1.0 - mask, so InvertMask (node 4) is required in between. Feed the foreground mask straight into the join and you save the background instead. ImageCompositeMasked does NOT invert - it takes the foreground mask directly, which is why node 9 uses node 3 and not node 4.",
+    "BiRefNet works internally around 1024px. Feeding it a 4K image does not buy sharper edges - matte at 1-2K, then upscale the RGBA result with workflow 09.",
+    "Output is a real RGBA PNG, so it drops straight into a compositor, into Qwen-Image-Edit, or into a product-ad graph.",
+    "EmptyImage width/height in node 8 must match the input image. 1104x1472 matches claude_seg_portrait.png.",
+    "BiRefNet has no notion of 'which' object - on a two-subject frame it returns both. That is the tradeoff versus SAM."
+  ],
+  "1": {
+    "class_type": "LoadImage",
+    "inputs": { "image": "claude_seg_portrait.png" }
+  },
+  "2": {
+    "class_type": "LoadBackgroundRemovalModel",
+    "inputs": { "bg_removal_name": "birefnet.safetensors" }
+  },
+  "3": {
+    "class_type": "RemoveBackground",
+    "inputs": {
+      "bg_removal_model": ["2", 0],
+      "image": ["1", 0]
+    }
+  },
+  "4": {
+    "class_type": "InvertMask",
+    "inputs": { "mask": ["3", 0] }
+  },
+  "5": {
+    "class_type": "JoinImageWithAlpha",
+    "inputs": {
+      "image": ["1", 0],
+      "alpha": ["4", 0]
+    }
+  },
+  "6": {
+    "class_type": "MaskToImage",
+    "inputs": { "mask": ["3", 0] }
+  },
+  "8": {
+    "class_type": "EmptyImage",
+    "inputs": {
+      "width": 1104,
+      "height": 1472,
+      "batch_size": 1,
+      "color": 16711935
+    }
+  },
+  "9": {
+    "class_type": "ImageCompositeMasked",
+    "inputs": {
+      "destination": ["8", 0],
+      "source": ["1", 0],
+      "x": 0,
+      "y": 0,
+      "resize_source": false,
+      "mask": ["3", 0]
+    }
+  },
+  "10": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": ["5", 0],
+      "filename_prefix": "claude-generated/12-segmentation-matting/birefnet_cutout_rgba"
+    }
+  },
+  "11": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": ["6", 0],
+      "filename_prefix": "claude-generated/12-segmentation-matting/birefnet_matte"
+    }
+  },
+  "12": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": ["9", 0],
+      "filename_prefix": "claude-generated/12-segmentation-matting/birefnet_proof_on_magenta"
+    }
+  }
+}

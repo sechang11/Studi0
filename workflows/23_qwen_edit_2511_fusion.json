@@ -1,0 +1,127 @@
+{
+  "_comment": "Two-image fusion with Qwen-Image-Edit 2511. Takes two SEPARATE portraits and composes both people into one photograph. This is 2511's headline improvement over 2509: 2509 blends distinct faces together in multi-person work, 2511 is supposed to keep them apart. This workflow is the test.",
+  "_notes": [
+    "TextEncodeQwenImageEditPlus accepts image1 / image2 / image3. Refer to them in the prompt as 'image 1', 'image 2' literally - that phrasing is what the model was trained on, and vaguer wording ('the man', 'the other photo') degrades the association noticeably.",
+    "Both encoders - positive AND negative - need every reference image wired in. Wire image2 into the positive only and the negative pulls against a reference the positive is using, which shows up as the second subject degrading.",
+    "FluxKontextMultiReferenceLatentMethod 'index_timestep_zero' matters MORE with multiple references than with one: it is what keeps each reference indexed to its own slot. Without it the two faces bleed together, which is exactly the 2509 failure this model is meant to fix.",
+    "Each reference image gets its own FluxKontextImageScale (nodes 8 and 9). Do not share one scaler between them - they may have different aspect ratios.",
+    "The latent being denoised comes from image1 (node 14), so image1 sets the output composition and aspect ratio. Make image1 the one whose framing you want to keep; image2 is the thing being brought in.",
+    "Faces are the hard case. If identities still blend, the first thing to try is making the prompt more explicit about separation ('two distinct people, standing apart, both faces fully visible'), not raising cfg - cfg must stay 1.0 with the Lightning LoRA.",
+    "steps=4 / cfg=1.0 for the Lightning LoRA; 40 / 3.0 without it."
+  ],
+  "1": {
+    "class_type": "UNETLoader",
+    "inputs": {
+      "unet_name": "qwen_image_edit_2511_fp8mixed.safetensors",
+      "weight_dtype": "default"
+    }
+  },
+  "2": {
+    "class_type": "CLIPLoader",
+    "inputs": {
+      "clip_name": "qwen_2.5_vl_7b_fp8_scaled.safetensors",
+      "type": "qwen_image",
+      "device": "default"
+    }
+  },
+  "3": {
+    "class_type": "VAELoader",
+    "inputs": { "vae_name": "qwen_image_vae.safetensors" }
+  },
+  "4": {
+    "class_type": "LoraLoaderModelOnly",
+    "inputs": {
+      "model": ["1", 0],
+      "lora_name": "Qwen-Image-Edit-2511-Lightning-4steps-V1.0-bf16.safetensors",
+      "strength_model": 1.0
+    }
+  },
+  "5": {
+    "class_type": "ModelSamplingAuraFlow",
+    "inputs": { "model": ["4", 0], "shift": 3.1 }
+  },
+  "6": {
+    "class_type": "CFGNorm",
+    "inputs": { "model": ["5", 0], "strength": 1.0 }
+  },
+  "7": {
+    "class_type": "LoadImage",
+    "inputs": { "image": "claude_seg_portrait.png" }
+  },
+  "8": {
+    "class_type": "FluxKontextImageScale",
+    "inputs": { "image": ["7", 0] }
+  },
+  "18": {
+    "class_type": "LoadImage",
+    "inputs": { "image": "claude_ia2v_face.png" }
+  },
+  "9": {
+    "class_type": "FluxKontextImageScale",
+    "inputs": { "image": ["18", 0] }
+  },
+  "10": {
+    "class_type": "TextEncodeQwenImageEditPlus",
+    "inputs": {
+      "clip": ["2", 0],
+      "vae": ["3", 0],
+      "image1": ["8", 0],
+      "image2": ["9", 0],
+      "prompt": "Place the woman from image 2 into the workshop from image 1, standing beside the older man. Two distinct people, standing apart, both faces fully visible and turned toward the camera. Keep the man from image 1 exactly as he is. Keep the woman's face from image 2 exactly as it is - her short grey hair and her features unchanged. Same dusty workshop light falling from the window on both of them, same warm muted colour grade, documentary photograph."
+    }
+  },
+  "11": {
+    "class_type": "FluxKontextMultiReferenceLatentMethod",
+    "inputs": {
+      "conditioning": ["10", 0],
+      "reference_latents_method": "index_timestep_zero"
+    }
+  },
+  "12": {
+    "class_type": "TextEncodeQwenImageEditPlus",
+    "inputs": {
+      "clip": ["2", 0],
+      "vae": ["3", 0],
+      "image1": ["8", 0],
+      "image2": ["9", 0],
+      "prompt": "blended faces, merged features, one person, duplicate of the same face, distorted face, extra limbs, watermark, text"
+    }
+  },
+  "13": {
+    "class_type": "FluxKontextMultiReferenceLatentMethod",
+    "inputs": {
+      "conditioning": ["12", 0],
+      "reference_latents_method": "index_timestep_zero"
+    }
+  },
+  "14": {
+    "class_type": "VAEEncode",
+    "inputs": { "pixels": ["8", 0], "vae": ["3", 0] }
+  },
+  "15": {
+    "class_type": "KSampler",
+    "inputs": {
+      "model": ["6", 0],
+      "seed": 2511,
+      "steps": 4,
+      "cfg": 1.0,
+      "sampler_name": "euler",
+      "scheduler": "simple",
+      "positive": ["11", 0],
+      "negative": ["13", 0],
+      "latent_image": ["14", 0],
+      "denoise": 1.0
+    }
+  },
+  "16": {
+    "class_type": "VAEDecode",
+    "inputs": { "samples": ["15", 0], "vae": ["3", 0] }
+  },
+  "17": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": ["16", 0],
+      "filename_prefix": "claude-generated/20-qwen-edit-2511/edit2511_two_people"
+    }
+  }
+}

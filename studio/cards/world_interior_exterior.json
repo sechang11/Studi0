@@ -1,0 +1,63 @@
+{
+  "variable": "world.interior_exterior",
+  "claim": "Declares what kind of container the shot sits inside, which settles in one word where light comes from, whether weather is visible at all, and how sound behaves. A director sets this before anything else because interior, underwater and void are three different physics, not three set dressings.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "interior",
+      "clause": "indoors, ceiling, interior, artificial lighting",
+      "control": false,
+      "sample": "/samples/vars/world_interior_exterior/interior.webp"
+    },
+    {
+      "value": "exterior",
+      "clause": "outdoors, open sky, natural light",
+      "control": false,
+      "sample": "/samples/vars/world_interior_exterior/exterior.webp"
+    },
+    {
+      "value": "threshold",
+      "clause": "doorway, standing in doorway, entrance, light from outside",
+      "control": false,
+      "sample": "/samples/vars/world_interior_exterior/threshold.webp"
+    },
+    {
+      "value": "vehicle",
+      "clause": "vehicle interior, car interior, seat, window",
+      "control": false,
+      "sample": "/samples/vars/world_interior_exterior/vehicle.webp"
+    },
+    {
+      "value": "underground",
+      "clause": "underground, tunnel, concrete walls, dim lighting",
+      "control": false,
+      "sample": "/samples/vars/world_interior_exterior/underground.webp"
+    },
+    {
+      "value": "underwater",
+      "clause": "underwater, submerged, air bubbles, light rays from above",
+      "control": false,
+      "sample": "/samples/vars/world_interior_exterior/underwater.webp"
+    },
+    {
+      "value": "aerial",
+      "clause": "midair, high altitude, clouds below, aerial view",
+      "control": false,
+      "sample": "/samples/vars/world_interior_exterior/aerial.webp"
+    },
+    {
+      "value": "void",
+      "clause": "void background, black background, simple background",
+      "control": false,
+      "sample": "/samples/vars/world_interior_exterior/void.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "world.interior_exterior",
+      "issue": "The aerial clause smuggles a camera control: \"aerial view\" is a danbooru framing tag meaning the camera looks down from above, so this panel changes the shot angle as well as the container. It will read as evidence about a shot-angle variable, not about interior_exterior.",
+      "fix": "\"midair, high altitude, clouds below, falling\" — keep the figure's position in the world, drop the camera instruction."
+    }
+  ]
+}

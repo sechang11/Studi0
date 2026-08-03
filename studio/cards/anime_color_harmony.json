@@ -1,0 +1,63 @@
+{
+  "variable": "anime.color.harmony",
+  "claim": "States the palette rule so accent, rim and background colours can be derived instead of guessed shot by shot. Analogous holds a scene together; triad and duotone are the ones that make a frame look designed rather than merely coloured.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "free",
+      "clause": "",
+      "control": true,
+      "sample": "/samples/vars/anime_color_harmony/free.webp"
+    },
+    {
+      "value": "analogous",
+      "clause": "analogous color scheme, neighbouring hues",
+      "control": false,
+      "sample": "/samples/vars/anime_color_harmony/analogous.webp"
+    },
+    {
+      "value": "complementary",
+      "clause": "complementary color scheme, two opposing hues",
+      "control": false,
+      "sample": "/samples/vars/anime_color_harmony/complementary.webp"
+    },
+    {
+      "value": "split_complementary",
+      "clause": "split complementary color scheme",
+      "control": false,
+      "sample": "/samples/vars/anime_color_harmony/split_complementary.webp"
+    },
+    {
+      "value": "triad",
+      "clause": "triadic color scheme, three hue palette",
+      "control": false,
+      "sample": "/samples/vars/anime_color_harmony/triad.webp"
+    },
+    {
+      "value": "monochrome",
+      "clause": "monochromatic color scheme, single hue palette",
+      "control": false,
+      "sample": "/samples/vars/anime_color_harmony/monochrome.webp"
+    },
+    {
+      "value": "duotone",
+      "clause": "duotone, two color palette",
+      "control": false,
+      "sample": "/samples/vars/anime_color_harmony/duotone.webp"
+    },
+    {
+      "value": "warm_cool_split",
+      "clause": "warm and cool split palette, warm key cool shadow",
+      "control": false,
+      "sample": "/samples/vars/anime_color_harmony/warm_cool_split.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "anime.color.harmony",
+      "issue": "complementary (\"complementary color scheme, two opposing hues\") and split_complementary (\"split complementary color scheme\") will render identically - the model has no representation of the split variant, and the clause is a colour-theory term rather than anything visual. triad is nearly as weak.",
+      "fix": "Drop split_complementary. Keep the harmonies with real visual signatures (monochrome, duotone, warm_cool_split, complementary, analogous) and, if triad survives, name the hues: \"triadic colors, red green blue palette\"."
+    }
+  ]
+}

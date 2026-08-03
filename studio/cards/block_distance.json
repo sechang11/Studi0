@@ -1,0 +1,38 @@
+{
+  "variable": "block.distance",
+  "claim": "Proxemics: how much air sits between two people, which an audience reads as intimacy or threat long before dialogue lands. Intimate crowds the frame and forces a reaction; distant makes the gap itself the subject of the shot.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "intimate",
+      "clause": "2boys, faces almost touching, nose to nose",
+      "control": false,
+      "sample": "/samples/vars/block_distance/intimate.webp"
+    },
+    {
+      "value": "personal",
+      "clause": "2boys, arm's length apart, close together",
+      "control": false,
+      "sample": "/samples/vars/block_distance/personal.webp"
+    },
+    {
+      "value": "social",
+      "clause": "2boys, a few steps apart, standing apart",
+      "control": false,
+      "sample": "/samples/vars/block_distance/social.webp"
+    },
+    {
+      "value": "public",
+      "clause": "2boys, far apart, wide gap between them",
+      "control": false,
+      "sample": "/samples/vars/block_distance/public.webp"
+    },
+    {
+      "value": "distant",
+      "clause": "2boys, very far apart, one tiny in the distance",
+      "control": false,
+      "sample": "/samples/vars/block_distance/distant.webp"
+    }
+  ]
+}

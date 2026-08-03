@@ -1,0 +1,57 @@
+{
+  "variable": "anime.anim.cg_mix",
+  "claim": "Declares which elements are cel-shaded 3D instead of drawn, from a single prop up to a fully CG shot. Modern anime mixes constantly, and stating the mix is the only way the 2D and 3D halves can be made to match instead of fighting. camera_3d is a motion option and renders as the baseline.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "none",
+      "clause": "",
+      "control": true,
+      "sample": "/samples/vars/anime_anim_cg_mix/none.webp"
+    },
+    {
+      "value": "props_3d",
+      "clause": "cg prop, 3d model object, cel shaded",
+      "control": false,
+      "sample": "/samples/vars/anime_anim_cg_mix/props_3d.webp"
+    },
+    {
+      "value": "vehicles_3d",
+      "clause": "cg vehicle, 3d model car, cel shaded",
+      "control": false,
+      "sample": "/samples/vars/anime_anim_cg_mix/vehicles_3d.webp"
+    },
+    {
+      "value": "crowd_3d",
+      "clause": "cg crowd, 3d model background characters, cel shaded",
+      "control": false,
+      "sample": "/samples/vars/anime_anim_cg_mix/crowd_3d.webp"
+    },
+    {
+      "value": "environment_3d",
+      "clause": "cg environment, 3d model background, cel shaded",
+      "control": false,
+      "sample": "/samples/vars/anime_anim_cg_mix/environment_3d.webp"
+    },
+    {
+      "value": "camera_3d",
+      "clause": "",
+      "control": true,
+      "sample": "/samples/vars/anime_anim_cg_mix/camera_3d.webp"
+    },
+    {
+      "value": "full_3dcg",
+      "clause": "3dcg, cel shaded 3d, full cg render",
+      "control": false,
+      "sample": "/samples/vars/anime_anim_cg_mix/full_3dcg.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "anime.anim.cg_mix",
+      "issue": "\"none\" and \"camera_3d\" both have empty clauses - two identical baseline panels in one card. Beyond that, SDXL cannot scope a render style to one named object: \"cg prop, 3d model object, cel shaded\", \"cg vehicle...\", \"cg crowd...\", \"cg environment...\" will each push the whole frame toward 3DCG, so the four scoped options plus full_3dcg largely converge. \"cel shaded\" also does no work here - it is what an anime checkpoint already draws.",
+      "fix": "Mark camera_3d renderable:false per-option. For the rest, hang the 3d tag on the element and drop the dead \"cel shaded\" token - e.g. crowd_3d \"3d, cg crowd, mmd background characters\", environment_3d \"3d background, cg scenery\" - and expect props_3d/vehicles_3d to bleed globally. vehicles_3d additionally has no referent in the subject sentence (there is no vehicle in a soccer stadium), so it will either force an incongruous car onto the pitch or be ignored; consider dropping it."
+    }
+  ]
+}

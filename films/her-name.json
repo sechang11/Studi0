@@ -1,0 +1,368 @@
+{
+  "title": "HER NAME",
+  "subtitle": "a dark fantasy",
+  "ar": "16:9",
+  "fps": 24,
+  "seconds": 3,
+  "transition": 0.28,
+  "step_print": 12,
+
+  "_structure_note": "Extended to ~3 minutes. The 72-second version failed emotionally because it was one note: grim throughout. An audience cannot feel a loss it was never given anything to lose. So Act 1 is now entirely WARM - we meet Mira, we watch her braid a crimson cord onto Kael's wrist, we hear her voice. Everything after that is the audience watching Kael pay away things they personally witnessed. The final payment (c02_mira_face) is deliberately the same image as the first payment (06_memory) shot closer and destroyed completely. The cord is planted in a03_cord and paid off in c05_cord_final: at the end Kael is holding the only surviving trace of her sister and does not know what it is. The viewer remembers. She does not. That gap is the whole point of the film.",
+
+  "_style_note": "2D anime needs the negative as much as the prompt. `neg_all` repeats '3d render, photorealistic, cgi' on every shot because Qwen otherwise drifts back to a 3D render within a few shots. step_print 12 gives the finished cut 12 distinct frames per second - hand-drawn animation is shot 'on twos', and that stepped cadence is a large part of why anime does not read as live action.",
+  "style": "2D anime key visual, dark fantasy, crisp black ink linework, flat cel shading with hard-edged shadows, hand-painted matte background art, dramatic lighting, heavy atmosphere, film grain, anime film still, Berserk and Vinland Saga influence",
+
+  "neg_all": "3d render, photorealistic, photograph, cgi, octane render, unreal engine, western cartoon, disney, pixar, chibi, blurry, low quality, watermark, signature, text",
+
+  "characters": {
+    "KAEL": "KAEL, a gaunt young swordswoman with long ash-white hair, hollow silver eyes, a thin scar across her left cheek, black lacquered plate armour bound with crimson cord, a tattered dark red half-cloak",
+    "YOUNGKAEL": "a girl of about fourteen with short dark brown hair and warm brown eyes, no scars, a patched linen tunic and rough woollen leggings, a braided crimson cord around her left wrist",
+    "MIRA": "MIRA, a warm-eyed young woman with long dark hair loosely tied, sun-freckled cheeks, a simple homespun linen dress, gentle and quick to laugh",
+    "TAM": "TAM, a small boy of about six with messy dark hair, gap-toothed grin, oversized hand-me-down tunic",
+    "SWORD": "an enormous slab-like black sword wrapped in heavy rusted iron chains, a single crimson rune burning dimly in its flat",
+    "BEAST": "a colossal horror of blackened bone and coiling shadow, a vast cracked elk skull for a head with a crown of broken antlers, empty sockets lit with pale green witchfire, ribs hanging with rags of darkness"
+  },
+
+  "voices": {
+    "KAEL":  { "exaggeration": 0.35, "cfg_weight": 0.3,  "temperature": 0.7, "pitch": 1.06, "rate": 0.9 },
+    "MIRA":  { "exaggeration": 0.75, "cfg_weight": 0.45, "temperature": 0.8, "pitch": 1.12, "rate": 0.96 },
+    "VOICE": { "exaggeration": 0.55, "cfg_weight": 0.3,  "temperature": 0.8, "pitch": 0.60, "rate": 0.82,
+               "filter": "aecho=0.85:0.9:55|130:0.45|0.25,lowpass=f=3200,tremolo=f=5.5:d=0.12,volume=1.25",
+               "radio": true }
+  },
+
+  "music": [
+    { "at": 0,   "prefix": "cue1_warm", "bpm": 68, "key": "A major", "seconds": 42,
+      "tags": "warm pastoral folk melody, solo wooden flute, soft plucked harp, gentle strings, sunlit and safe, nostalgic and tender, village harvest, japanese animation score, instrumental, no drums" },
+    { "at": 36,  "prefix": "cue2_attack", "bpm": 148, "key": "C minor", "seconds": 32,
+      "tags": "terrifying attack cue, shrieking dissonant strings, panicked low brass clusters, thundering irregular taiko, screaming choir, chaos and horror, anime disaster sequence, instrumental" },
+    { "at": 66,  "prefix": "cue3_descent", "bpm": 56, "key": "D minor", "seconds": 44,
+      "tags": "cold hollow descent underscore, low male choir drone, single struck taiko, bowed metal, breathy shakuhachi, sub bass swell, funereal and vast, slowly hardening, japanese animation score, instrumental" },
+    { "at": 108, "prefix": "cue4_battle", "bpm": 152, "key": "E minor", "seconds": 36,
+      "tags": "brutal orchestral battle cue, thundering taiko ensemble, snarling low brass, frantic tremolo strings ostinato, screaming choir, anvil hits, relentless and savage, anime battle climax, instrumental" },
+    { "at": 142, "prefix": "cue5_elegy", "bpm": 46, "key": "F minor", "seconds": 42,
+      "tags": "devastating elegy, solo erhu, sparse felt piano, distant wordless female voice, cold strings, grief and emptiness, achingly slow, a single warm folk melody fragment returning broken, japanese animation ending theme, instrumental, no drums" }
+  ],
+
+  "shots": [
+
+    { "id": "a01_harvest", "seconds": 5, "quality": true, "seed": 5001,
+      "neg": "ash, ruins, fire, burned, dark, grim, night, desaturated, armour, sword",
+      "prompt": "Wide establishing shot of a small thriving mountain village in warm late-afternoon harvest light, golden wheat stooks stacked in the fields, bright cloth banners strung between timber houses, woodsmoke rising gently, a wooden shrine gate intact and painted red, distant figures working the fields, lush green pines, luminous warm hand-painted anime background, peaceful and safe",
+      "motion": "Warm sunlight shifts across the wheat as clouds pass. Banners stir in the breeze. Woodsmoke drifts upward. Distant figures move slowly in the fields. Gentle slow push in.",
+      "sfx": "Warm summer afternoon, gentle breeze through wheat, distant cheerful voices and laughter, chickens, woodsmoke crackle, birdsong, safe and idyllic" },
+
+    { "id": "a02_sisters", "seconds": 4, "quality": true, "seed": 5002,
+      "neg": "ash, ruins, armour, sword, scar, white hair, grim, dark, night",
+      "prompt": "Warm intimate two-shot on a sunlit wooden doorstep: {MIRA} sitting behind {YOUNGKAEL} and carefully braiding her short dark hair, both laughing, dust motes glowing in the low golden light, a basket of apples beside them, honeyed rim light through the doorway, tender domestic anime scene",
+      "motion": "Mira's hands work steadily through the younger girl's hair. Both are laughing, shoulders shaking. Dust motes drift through the golden light. Young Kael tips her head back to look up at her sister.",
+      "sfx": "Two young women laughing warmly, hair being brushed, wooden step creak, distant village sounds, drowsy summer afternoon" },
+
+    { "id": "a03_cord", "seconds": 3, "quality": true, "seed": 5003,
+      "neg": "armour, gauntlet, blood, ash, chain, sword, dark, grim",
+      "prompt": "Extreme close-up of {MIRA}'s hands finishing a knot in a braided crimson cord tied around the thin wrist of a young girl, both hands warm and sunlit, the deep red cord bright against pale skin, blurred golden wheat behind, unbearably gentle, the single clearest image in the film",
+      "motion": "Mira's fingers pull the braided knot snug and pat the girl's wrist twice, gently. The crimson cord catches the light. The girl's fingers curl slightly. Warm bokeh shifts behind.",
+      "sfx": "Soft cord tightening, a quiet affectionate hum, cloth rustle, warm still air" },
+
+    { "id": "a04_apple", "seconds": 3,
+      "prompt": "Warm medium close-up of {YOUNGKAEL} biting into a red apple and laughing with her mouth full while {MIRA} laughs at her and reaches to wipe her chin, both sunlit and golden, wildflowers behind them, radiant summer afternoon anime scene",
+      "motion": "The girl bites the apple and laughs with her mouth full. Mira laughs and reaches to wipe her chin with a thumb. Both sway with laughter. Wildflowers nod behind them.",
+      "sfx": "Crisp apple bite, delighted spluttering laughter, warm affectionate voices, meadow insects" },
+
+    { "id": "a05_tam", "seconds": 3,
+      "prompt": "Bright wide shot of {TAM} running gleefully through a village yard scattering a flock of chickens, arms flung wide, mouth open in a shriek of laughter, straw and feathers flying up in the golden light, washing on a line, warm and chaotic and full of life",
+      "motion": "The small boy charges through the yard, chickens scattering and flapping upward, straw and feathers bursting into the air. Washing flaps on the line. He shrieks with laughter.",
+      "sfx": "Small boy shrieking with laughter, chickens squawking and flapping, running footsteps in straw, cheerful chaos" },
+
+    { "id": "a06_dusk", "seconds": 4,
+      "prompt": "Warm wide shot at dusk of {MIRA}, {YOUNGKAEL} and {TAM} silhouetted together in a lit doorway of a timber house, orange lamplight spilling out onto the ground, deep blue evening sky above the pines, one star out, smoke curling from the roof, profound sense of home",
+      "motion": "The three figures stand together in the doorway, the small boy leaning against Mira. Lamplight flickers warmly. Smoke curls from the roof. The blue of the sky deepens. Almost no movement.",
+      "sfx": "Quiet evening, crickets beginning, low contented family voices indoors, fire crackling softly, distant owl" },
+
+    { "id": "a07_greenlight", "seconds": 3, "quality": true, "seed": 5007,
+      "neg": "warm, golden, cheerful, safe, daylight, laughing",
+      "prompt": "Night. Ominous wide shot of the sleeping village in deep blue darkness with a sickly pale green light rising behind the mountain ridge, silhouetting the pines, the green glow pulsing faintly and staining the low cloud, every window dark, absolute stillness, creeping dread, hand-painted anime background",
+      "motion": "The pale green glow behind the ridge swells slowly brighter and pulses. Cloud drifts across it. Nothing in the village moves. The trees are utterly still.",
+      "sfx": "Dead silence, crickets abruptly stopping, a low inhuman sub-bass hum rising, faint distant bone-grinding, dread" },
+
+    { "id": "a08_screams", "seconds": 2, "quality": true, "seed": 5008,
+      "neg": "calm, peaceful, static, daylight, empty street, portrait",
+      "prompt": "Violent chaotic low angle in a burning village street at night, villagers fleeing past camera in blurred silhouette, a house collapsing in a burst of sparks behind them, dropped lanterns, one overturned cart on fire, harsh orange light and black smoke, extreme motion blur and speed lines, anime disaster frame",
+      "motion": "Silhouetted figures rush past camera in violent motion blur. A house collapses behind them in an explosion of sparks. Smoke boils. Fire surges. Frantic handheld camera shake.",
+      "sfx": "Screaming and panic, roaring fire, collapsing timber, running footsteps, crashing debris, chaos" },
+
+    { "id": "a09_beast_first", "seconds": 3, "quality": true, "seed": 5009,
+      "neg": "small, cute, daylight, clear, fully visible, human sized",
+      "prompt": "Terrifying wide shot of the burning village from a low angle with the immense antlered silhouette of {BEAST} standing behind the flames, mostly hidden by smoke and glare, only the vast crown of broken antlers and two points of pale green witchfire clearly visible, dwarfing the rooftops, first glimpse of something impossible",
+      "motion": "Smoke rolls across the enormous silhouette, revealing and hiding the antlers. The two green points of witchfire drift slowly as the head turns. Fire surges upward in front of it.",
+      "sfx": "Vast grinding bone movement, deep inhuman bellow beneath the fire, roaring flames, distant screaming, sub bass" },
+
+    { "id": "a10_cellar", "seconds": 3, "quality": true, "seed": 5010,
+      "neg": "calm, smiling, laughing, daylight, safe, static",
+      "prompt": "Urgent close two-shot lit by firelight from off-frame: {MIRA} gripping {YOUNGKAEL} by both shoulders and shoving her down toward an open root-cellar hatch in the floor, Mira's face desperate and fierce, the girl's face streaked with soot and terror, orange light flickering violently across both",
+      "motion": "Mira shoves the girl downward hard, both struggling. Firelight flickers violently across their faces. Mira's mouth moves urgently. The girl resists, reaching back up.",
+      "line": { "who": "MIRA", "text": "Down. Get down and do not make a sound. Do you hear me? Not one sound." },
+      "sfx": "Frantic struggle, wooden hatch banging, roaring fire close by, panicked breathing, distant screams" },
+
+    { "id": "a11_door", "seconds": 3, "quality": true, "seed": 5011,
+      "neg": "calm, smiling, safe, daylight, static, portrait",
+      "prompt": "Low angle from inside a dark root cellar looking up at {MIRA} on the outside pressing the wooden hatch closed with both hands and her whole body weight, her face turned away toward something off-frame, harsh orange firelight behind her, her expression already resigned rather than afraid",
+      "motion": "Mira presses the hatch down and holds it. She turns her head sharply to look at something off-frame behind her. Firelight flares. Her expression changes from fear to a terrible calm. She does not look back down.",
+      "sfx": "Heavy wooden hatch closing, timber straining, muffled roaring fire, one sharp indrawn breath" },
+
+    { "id": "a12_slats", "seconds": 4, "quality": true, "seed": 5012,
+      "neg": "clear view, bright, calm, smiling, full frame face",
+      "prompt": "Claustrophobic point of view from inside a pitch-dark cellar looking up through narrow gaps between wooden hatch slats, thin bars of orange firelight cutting across a fragment of {MIRA}'s face visible above, most of the frame black, then the shape above pulled violently sideways out of view leaving only empty flickering light in the gaps",
+      "motion": "The fragment of face visible between the slats is suddenly wrenched violently sideways out of frame. The gaps are left showing only empty flickering orange light and drifting smoke. Nothing returns.",
+      "sfx": "Sudden violent drag and impact, a cut-off cry, then only fire, then a terrible absence of sound" },
+
+    { "id": "a13_silence", "seconds": 4,
+      "prompt": "Extreme close-up in near total darkness of {YOUNGKAEL}'s face pressed against cellar earth, only one wide brown eye and a sliver of soot-streaked cheek lit by a single thin bar of orange light, both hands clamped hard over her own mouth, absolutely silent, tears cutting through the soot",
+      "motion": "The single visible eye stares upward, unblinking, streaming. Her hands stay clamped over her mouth. Her whole body trembles minutely. She makes no sound at all. The bar of light dims.",
+      "sfx": "Muffled trembling breath held behind hands, earth shifting faintly, fire receding far above, encroaching silence, heartbeat" },
+
+    { "id": "a14_dawn", "seconds": 4, "quality": true, "seed": 5014,
+      "neg": "fire, night, warm, green, colourful, laughing, safe",
+      "prompt": "Wide shot from ground level of {YOUNGKAEL} pushing the cellar hatch up and rising waist-deep out of the ground into a colourless dawn of falling grey ash, everything around her burned to black stumps and smoking rubble, the red shrine gate collapsed, no colour anywhere except the crimson cord on her wrist, devastating emptiness",
+      "motion": "The hatch lifts and she rises slowly out of the ground, ash falling on her head and shoulders. She turns her head very slowly to take in the destruction. Ash drifts. Nothing else moves anywhere.",
+      "sfx": "Wooden hatch scraping open, ash falling, dead wind through ruins, one small broken exhale, absolute desolation" },
+
+    { "id": "a15_bodies", "seconds": 4,
+      "prompt": "Restrained wide shot down a ruined village street under heavy ashfall, several ash-covered shapes lying still under grey drifts, deliberately indistinct and half buried, a child's wooden toy in the foreground, the collapsed shrine gate beyond, no blood visible, grief conveyed by stillness alone, muted hand-painted anime background",
+      "motion": "Ash falls steadily and continues to settle over the shapes, softening them further. A scrap of cloth lifts and falls in the wind. Nothing else moves. Camera drifts forward very slowly.",
+      "sfx": "Cold empty wind, ash settling, a single loose board knocking somewhere, hollow silence, distant crow" },
+
+    { "id": "a16_cord_ash", "seconds": 3,
+      "prompt": "Extreme close-up of the braided crimson cord on a thin wrist, now dulled and greyed with settled ash, the small hand below it clenched into a shaking fist, ash falling past, the last spot of colour in a colourless world",
+      "motion": "Ash settles onto the cord and the clenched fist. The fist tightens further, knuckles whitening, trembling. A single fleck of ash lands and stays.",
+      "sfx": "Ash falling softly, cloth creaking under tension, one ragged breath, wind" },
+
+    { "id": "a17_wander", "seconds": 5, "quality": true, "seed": 5017,
+      "neg": "armour, plate armour, sword, white hair, scar, adult warrior, crowd, village intact",
+      "prompt": "Extreme wide shot from far behind of {YOUNGKAEL} walking away alone down an empty mountain road out of a burned valley, a tiny figure with a bundle on her back, ash-grey landscape stretching in every direction, dead pines, colourless sky, the ruined village small and smoking behind her, overwhelming solitude and the beginning of a very long road",
+      "motion": "The small figure walks steadily away from camera down the empty road, growing smaller. Ash and grey dust blow across the road behind her, slowly erasing her footprints. The camera holds, then cranes slowly up as she shrinks.",
+      "sfx": "Lone footsteps on gravel road, cold empty wind, ash blowing, one distant crow, total absence of human sound" },
+
+    { "id": "01_village", "seconds": 6,
+      "prompt": "Wide establishing shot of a burned village under heavy grey ashfall at dusk, collapsed timber frames still smouldering, a broken shrine gate, and one small distant black-armoured silhouette standing motionless in the middle of the ruined road, hand-painted anime background, desolate scale",
+      "motion": "Ash falls steadily in thick drifts through frame. Embers rise from the smouldering timbers. The distant figure does not move at all. Very slow push in. Held anime shot, atmospheric particles only.",
+      "sfx": "Desolate cold wind through burned ruins, soft crackling embers, distant timber creaking and collapsing, ash falling, hollow emptiness" },
+
+    { "id": "02_kael_face", "seconds": 3,
+      "prompt": "Tight close-up of {KAEL}'s face in three-quarter profile, hollow silver eyes reflecting distant fire, grey ash settled on her cheekbone and lashes, thin scar on her left cheek, ash-white hair stirring, jaw set, utterly exhausted expression",
+      "motion": "Her hair stirs slowly in the wind. Ash settles on her lashes and she blinks once, very slowly. Firelight flickers across her eyes. Nothing else moves.",
+      "sfx": "Low wind, quiet slow breathing, distant fire crackle" },
+
+    { "id": "b01_shrine", "seconds": 4, "quality": true, "seed": 6001,
+      "neg": "bright, warm, cheerful, clean, modern, people, crowd",
+      "prompt": "Moody interior of a collapsed moss-grown barrow shrine, shafts of grey light falling through a broken roof onto {SWORD} standing point-down in cracked stone at the centre, thick chains pooled around it, rotted offerings and bone fragments scattered, the crimson rune faintly pulsing in the dark, oppressive and sacred and wrong",
+      "motion": "Dust and ash drift down through the shafts of grey light. The crimson rune pulses very faintly, once, twice, as if noticing. Chains shift slightly with a creak of their own accord.",
+      "sfx": "Dripping water in stone, deep hollow reverb, chain shifting by itself, low malevolent hum, dust falling" },
+
+    { "id": "03_hilt", "seconds": 2,
+      "prompt": "Extreme close-up of an armoured gauntlet closing tightly around the chain-wrapped grip of {SWORD}, rusted iron links pressing into the leather, the crimson rune in the blade beginning to glow brighter, ash on the metal",
+      "motion": "The gauntleted fingers close and tighten around the grip one by one. The chains creak and shift. The crimson rune pulses brighter. Ash falls past.",
+      "sfx": "Leather and steel gauntlet creaking, heavy iron chain links shifting and grinding, low ominous magical hum rising" },
+
+    { "id": "04_rune", "seconds": 4, "quality": true, "seed": 4104,
+      "neg": "human face, person, character, eyes of a person, portrait, figure",
+      "prompt": "Extreme macro close-up filling the entire frame of a single crimson rune carved deep into black pitted metal, the rune flaring awake from within with molten red light, hairline cracks spreading and glowing, rusted chain links crossing the frame edges, no people visible anywhere, occult and malevolent",
+      "motion": "The rune flares awake from dim to blinding molten crimson, cracks spreading outward and lighting up one by one. Light pulses like a heartbeat. Chains shift.",
+      "line": { "who": "VOICE", "text": "I can give you the strength to find it. But I eat what you love." } },
+
+    { "id": "05_take_it", "seconds": 3,
+      "prompt": "Low angle close-up of {KAEL} looking down at the sword, half her face in deep shadow and half lit crimson from the rune below, hair falling forward, expression flat and utterly without hope, ash drifting between camera and her face",
+      "motion": "She looks down slowly. The crimson light rises across her face from below. Her hair falls forward. She closes her eyes for one beat, then opens them.",
+      "line": { "who": "KAEL", "text": "Then eat. There is nothing left up here worth keeping." } },
+
+    { "id": "06_memory", "seconds": 3,
+      "prompt": "A soft overexposed memory image, washed out and bleached almost white, edges dissolving into pale nothing: a gentle young woman with warm eyes and dark hair laughing in bright summer sunlight, wildflowers behind her, hand half-raised as if waving, the whole image already crumbling and blowing away into white ash at its edges, high-key, achingly warm, fading",
+      "motion": "The whole warm image slowly dissolves and blows away into white ash from its edges inward, the woman's smile disappearing last. Light overexposes and washes everything out.",
+      "sfx": "Faint warm laughter dissolving into reverb, high shimmering chime, soft white noise wash, receding into silence" },
+
+    { "id": "07_eyes_empty", "seconds": 2,
+      "prompt": "Extreme close-up on {KAEL}'s silver eyes filling the frame, and in the middle of the shot something behind them simply goes out, the light in her irises dying to flat dull grey, one tear track cutting clean through the ash on her cheek",
+      "motion": "The light in her irises dims and goes out completely. Her pupils contract. A single tear cuts a clean track down through the ash on her cheek.",
+      "sfx": "Sudden hollow silence, a single low struck bell, faint heartbeat, one breath catching" },
+
+    { "id": "b02_first_kill", "seconds": 2, "quality": true, "seed": 6002,
+      "neg": "calm, static, standing still, portrait, peaceful",
+      "prompt": "Brutal anime action frame in a rain-lashed pine forest at night: a lesser hunched bone-and-shadow horror coming apart mid-air as a huge black blade sweeps through it, black ichor spraying in an arc, radial speed lines, a black-armoured figure following through the swing in silhouette, harsh cold moonlight",
+      "motion": "The blade sweeps through and the creature comes apart mid-air, ichor spraying in an arc. The armoured figure follows through the swing. Speed lines pulse. Rain lashes sideways.",
+      "sfx": "Heavy blade cleaving, ichor spatter, creature shriek cut short, driving rain, taiko hit" },
+
+    { "id": "b03_mother_song", "seconds": 2,
+      "prompt": "A bleached overexposed memory fragment already dissolving: a woman's hands working a spindle by firelight in a warm dim room, worn wedding band, the whole image washed out to near white and disintegrating into pale ash from the edges, unbearably ordinary and domestic, vanishing",
+      "motion": "The hands keep working the spindle as the entire image bleaches out and disintegrates into white ash from the edges inward, until nothing is left.",
+      "sfx": "A woman humming a simple folk tune, cut off abruptly mid-phrase, white noise wash, high mournful tone" },
+
+    { "id": "b04_second_kill", "seconds": 2, "quality": true, "seed": 6004,
+      "neg": "calm, static, clean, uninjured, portrait, gentle",
+      "prompt": "Savage anime action frame on a rocky mountainside at dawn: {KAEL} driving the black blade downward two-handed into something already broken beneath her, her hair whipping, black ichor sprayed across her breastplate and cheek, teeth bared, no mercy in her face at all, harsh grey light, dynamic diagonal composition",
+      "motion": "She drives the blade downward with her whole weight, hair whipping forward with the motion. Ichor sprays. Her teeth stay bared. She does not stop at one strike.",
+      "sfx": "Heavy repeated blade impacts, wet ichor, guttural effort, wind on stone, grinding bone" },
+
+    { "id": "b05_harvest_burns", "seconds": 2,
+      "prompt": "A bleached overexposed memory of golden wheat stooks in warm afternoon sun with bright cloth banners strung above them, the entire image washing out to blinding white and crumbling away into pale ash from every edge, warmth being erased, high-key, dissolving",
+      "motion": "The warm golden field bleaches to white and crumbles away into pale ash from every edge inward until the frame is empty white, then grey.",
+      "sfx": "Warm breeze and distant laughter fading out under a rising white noise wash, single receding chime" },
+
+    { "id": "b06_hair_white", "seconds": 3, "quality": true, "seed": 6006,
+      "neg": "smiling, warm, bright, colourful, cheerful",
+      "prompt": "Close-up of a still black pool in a dead forest reflecting {KAEL}'s face looking down into it, and in the reflection her dark hair is visibly draining of colour from the roots outward to bone white, strand by strand, her expression not reacting at all, ash floating on the water surface",
+      "motion": "In the reflection the colour drains out of her hair from the roots outward, strand by strand, until it is bone white. Her reflected expression does not change at all. Ash floats and turns slowly on the water.",
+      "sfx": "Still water, a single drip, low unsettling drone, absence of breath, cold wind" },
+
+    { "id": "b07_tam_laugh", "seconds": 2,
+      "prompt": "A bleached overexposed memory fragment: a small gap-toothed boy mid-laugh with his head thrown back and arms flung wide, chickens and feathers frozen in the air around him, the entire image washed to near white and tearing apart into pale ash, joy being deleted",
+      "motion": "The laughing boy and the feathers around him bleach out and tear apart into pale white ash, the laugh disappearing last, until the frame is empty.",
+      "sfx": "A small boy's shriek of laughter cut off mid-sound, white noise, one high broken violin note, silence" },
+
+    { "id": "b08_colder", "seconds": 3,
+      "prompt": "Tight close-up of {KAEL}'s face now fully changed, bone-white hair, the thin scar fresh across her left cheek, silver eyes flat and entirely empty of anything, ash on her lashes, no expression whatsoever, cold grey light, a face with nothing behind it",
+      "motion": "She stares straight ahead at nothing. Her hair moves in the wind. She blinks once, mechanically. There is no expression at all. Ash settles.",
+      "sfx": "Cold wind, slow shallow breathing, distant hollow tone, nothing else" },
+
+    { "id": "b09_feared", "seconds": 3,
+      "prompt": "Wide shot on a muddy road at grey dusk of a small group of ragged travellers pressing themselves back against a cart to let {KAEL} pass, their faces turned away or covered, a mother pulling a child behind her skirts, Kael walking straight through the middle of them without looking at anyone, the enormous chained sword over her shoulder",
+      "motion": "Kael walks straight through the middle of the group without turning her head. The travellers press back and turn away as she passes. A mother pulls a child behind her. Nobody speaks. Rain begins.",
+      "sfx": "Footsteps in mud, frightened murmuring and hushing, cart creaking, light rain beginning, a child whimpering" },
+
+    { "id": "b10_campfire", "seconds": 4,
+      "prompt": "Quiet wide shot at night of {KAEL} sitting alone by a dead cold campfire in a bare rocky hollow, the enormous chained sword laid across her knees, staring into the dead ashes rather than at anything, no bedroll and no food, one hand resting on the blade, cold blue moonlight, the loneliest image in the film",
+      "motion": "She sits without moving at all, staring into the dead fire. Her hand rests on the blade. A faint wind stirs her white hair. She does not shiver, or eat, or sleep. The stars turn very slightly.",
+      "sfx": "Cold night wind over stone, dead ashes shifting faintly, distant night bird, no fire sound at all, hollow loneliness" },
+
+    { "id": "08_chains", "seconds": 2, "quality": true, "seed": 8108,
+      "neg": "calm, static, intact chains, sheathed, still, portrait",
+      "prompt": "Explosive anime impact frame: rusted iron chains bursting apart into flying shattered links in every direction, a huge black blade tearing free upward in a column of crimson light, radiating white speed lines filling the frame, shockwave ring of displaced ash, extreme dynamic diagonal composition, brilliant blown-out highlights",
+      "motion": "The chains detonate outward, links flying in all directions. The blade tears free upward through the frame in a burst of crimson light. Speed lines radiate. Ash blasts outward in a ring.",
+      "sfx": "Violent chain shattering and metal fragments, deep magical detonation, rushing shockwave, crimson energy surge, taiko hit" },
+
+    { "id": "09_charge", "seconds": 2, "quality": true, "seed": 9109,
+      "neg": "standing still, calm, portrait, facing camera, centred, static",
+      "prompt": "Extreme dynamic low tracking shot from the side of {KAEL} sprinting at full speed through a dead black forest, body pitched far forward, the enormous black sword trailing behind her and throwing up a spray of ash, dead trees streaking past in heavy motion blur, dramatic horizontal speed lines across the whole frame",
+      "motion": "She sprints flat out, legs and cloak blurring, sword trailing and throwing ash. Dead trees streak past in violent motion blur. Camera races alongside her. Speed lines everywhere.",
+      "sfx": "Fast heavy running footsteps on ash, blade dragging and throwing debris, rushing wind, driving taiko rhythm, ragged breathing" },
+
+    { "id": "10_beast", "seconds": 4, "quality": true, "seed": 1010,
+      "neg": "small creature, cute, animal, deer, friendly, bright, human sized",
+      "prompt": "Terrifying low angle looking steeply up at {BEAST} rising to its colossal full height above the treeline, the vast cracked elk skull tilting down toward camera, broken antlers filling the sky, pale green witchfire blazing in the empty eye sockets, shadow pouring off its ribs like smoke, the tiny black-armoured figure of a swordswoman at the very bottom of frame for scale, overwhelming dread",
+      "motion": "The colossal skull head tilts down toward camera with a grinding groan. Green witchfire flares in the sockets. Shadow pours off its ribs and coils. Antlers scrape the sky. Camera tilts further up.",
+      "sfx": "Enormous grinding bone movement, deep inhuman roar, low sub bass dread, coiling shadow whisper, choir sting" },
+
+    { "id": "11_clash", "seconds": 2, "quality": true, "seed": 1111,
+      "neg": "calm, static, separate, distant, portrait, gentle",
+      "prompt": "Blinding anime impact frame at the instant black blade meets bone claw, a brilliant white star of light exploding from the point of contact, radial speed lines consuming the entire frame, silhouetted figures barely visible inside the blast, sparks and shattered bone fragments flying, extreme high contrast, almost entirely white and black",
+      "motion": "A white star of light explodes from the contact point and floods the frame. Shattered bone and sparks blast outward. Radial speed lines pulse. Violent camera shake.",
+      "sfx": "Colossal metal on bone impact, ringing blade, shattering bone, deep concussive boom, brass stab" },
+
+    { "id": "12_thrown", "seconds": 2, "quality": true, "seed": 1212,
+      "neg": "standing, upright, calm, uninjured, portrait, centred",
+      "prompt": "Dynamic wide shot of {KAEL} hurled backwards through the air, body limp and twisting, ploughing into a deep bank of grey ash and throwing up a huge plume, the black sword torn from her grip and spinning away separately, dead trees splintering behind her, dust and ash exploding outward",
+      "motion": "She is hurled backwards, tumbling limply, and slams into the ash throwing up a huge plume. The sword spins away separately. Ash and debris explode outward.",
+      "sfx": "Heavy body impact into ash, ploughing debris, tumbling sword clatter, splintering wood, winded gasp" },
+
+    { "id": "13_blood", "seconds": 2,
+      "prompt": "Extreme close-up on grey ash on the ground with vivid crimson blood soaking into it in spreading blooms, and a trembling armoured hand crawling into frame to close on the chain-wrapped grip of {SWORD} lying nearby, ash-white hair spilling across the ground at frame edge",
+      "motion": "Blood spreads slowly into the pale ash in dark blooms. The trembling hand crawls forward through the ash and closes on the grip. Fingers tighten.",
+      "sfx": "Wet blood dripping into ash, trembling laboured breathing, hand dragging through grit, chain shifting" },
+
+    { "id": "c01_losing", "seconds": 3, "quality": true, "seed": 7001,
+      "neg": "winning, standing tall, triumphant, calm, uninjured",
+      "prompt": "Desperate low angle of {KAEL} driven down onto one knee in the ash with the black blade held up crosswise above her in both shaking arms, an enormous skeletal bone claw pressing down onto it from above and grinding her steadily lower, her arms buckling, blood running from her mouth, green witchfire glare from above, overwhelming force",
+      "motion": "The vast claw grinds down onto the blade and her arms buckle further, knee sinking into the ash. Blood runs from her mouth. She is being crushed. Green light pulses above.",
+      "sfx": "Grinding bone against steel, straining metal, choked effort, deep pressing sub bass, ash compacting" },
+
+    { "id": "14_more", "seconds": 3,
+      "prompt": "Close-up of the crimson rune in {SWORD} pulsing brighter where the blade is pressed down into bloodied ash, the light beating slowly like something patient and alive, ash settling on the black metal, a lock of ash-white hair across the frame edge",
+      "motion": "The rune pulses slowly brighter and dimmer like a heartbeat, quickening. Ash settles on the black metal. The light spills across the bloodied ash.",
+      "line": { "who": "VOICE", "text": "There is one thing left. You have kept it back from me all this time." } },
+
+    { "id": "15_all_of_it", "seconds": 3,
+      "prompt": "Brutal low close-up of {KAEL}'s face pressed sideways into the grey ash, blood running from her hairline across the bridge of her nose, teeth bared, one dull silver eye open and fixed with absolute murderous resolve",
+      "motion": "Her one open eye fixes and hardens. Her teeth bare further. Blood runs down across her nose. Her fingers dig into the ash. She begins to push up.",
+      "line": { "who": "KAEL", "text": "Then take her too. Take her and let me finish this." } },
+
+    { "id": "c02_mira_face", "seconds": 5, "quality": true, "seed": 7002,
+      "neg": "armour, sword, ash, grim, dark, crimson, scar, warrior, night",
+      "prompt": "The same warm bleached memory image returning but far closer and larger than before, filling the whole frame: {MIRA}'s laughing face in golden summer light, every freckle and eyelash clear, her eyes crinkled with affection, and this time the image is not softly dissolving but violently burning away from the centre outward into blinding white, her face going last, unbearable",
+      "motion": "Her laughing face holds for a moment, clear and warm and close. Then it burns away violently from the centre outward into blinding white, the edges curling like paper, her eyes disappearing last of all. The frame goes pure white, then grey, then nothing.",
+      "sfx": "Warm laughter swelling then torn apart, roaring white burn, a single sustained high violin, then absolute silence" },
+
+    { "id": "c02b_taken", "seconds": 3, "quality": true, "seed": 7003,
+      "neg": "screaming, shouting, angry, triumphant, action, dynamic, speed lines",
+      "prompt": "Very tight quiet close-up of {KAEL}'s face in the instant something is taken out of her, everything going still, a flicker of some enormous grief crossing her features and finding nothing to attach itself to, her eyes losing focus completely, then perfectly blank, blood and ash on her skin, absolutely silent, the worst moment in the film and the smallest",
+      "motion": "Her expression flickers once with an enormous unplaceable grief, searching for what it belongs to. It finds nothing. Her eyes lose focus and go completely blank. Her face settles into nothing at all.",
+      "sfx": "Total silence, one soft catch of breath, a single struck bell very far away, no music" },
+
+    { "id": "16_memory2", "seconds": 2, "quality": true, "seed": 1616,
+      "neg": "armour, sword, weapon, dark, crimson, warrior, adult hands only",
+      "prompt": "A bleached overexposed memory fragment already tearing apart: a very small child's hand slipping out of a larger hand in warm golden light, both dissolving into white ash mid-motion, blurred pale wildflowers behind, edges of the whole image burning away white, unbearably tender and disintegrating",
+      "motion": "The small hand slips free and both hands dissolve into white ash mid-motion. The whole image burns away white from the edges inward until nothing remains.",
+      "sfx": "Distant child's laugh cutting off abruptly, white noise swell, high mournful string, silence" },
+
+    { "id": "c03_recognise", "seconds": 2,
+      "prompt": "Extreme close-up of the frayed and filthy braided crimson cord still tied around {KAEL}'s wrist above her gauntlet, blood and ash worked deep into the braid, her fingers tightening on the sword grip beside it, the cord the only red in frame that is not blood",
+      "motion": "Her fingers tighten on the grip. The frayed crimson cord shifts against her wrist. Ash and a fleck of blood fall past. The cord holds.",
+      "sfx": "Leather creak, chain shift, one deep steadying breath, low heartbeat" },
+
+    { "id": "17_rises", "seconds": 2, "quality": true, "seed": 1717,
+      "neg": "lying down, kneeling, calm, dim, portrait, static",
+      "prompt": "Heroic low angle of {KAEL} risen to full height with the enormous black sword raised overhead in both hands and now blazing with crimson fire along its whole length, hair and tattered cloak whipping violently upward, ash blasting away from her in a ring, eyes blank and burning white, backlit silhouette, immense dynamic power",
+      "motion": "She rises and hauls the blazing sword up overhead. Crimson fire runs along the blade. Her hair and cloak whip violently upward. Ash blasts away from her feet in an expanding ring.",
+      "sfx": "Roaring magical ignition, rushing crimson fire, blasting ash, rising choir and brass, guttural scream" },
+
+    { "id": "c04_scream", "seconds": 2, "quality": true, "seed": 7004,
+      "neg": "calm, closed mouth, quiet, static, portrait, gentle",
+      "prompt": "Extreme close-up of {KAEL} screaming with her whole body, mouth wide open, tendons standing out in her neck, eyes blazing blank white with crimson light, blood and ash on her face, hair blasted straight back, radial speed lines, the most human sound in the film coming out of something that has stopped being human",
+      "motion": "She screams, mouth wide, tendons standing out, hair blasted straight back by the force of it. Blank white light floods her eyes. Speed lines radiate outward violently.",
+      "sfx": "Raw tearing scream, roaring magical fire, full orchestral and choral peak, distortion" },
+
+    { "id": "18_strike", "seconds": 2, "quality": true, "seed": 1818,
+      "neg": "figures visible, detailed characters, calm, dim, static",
+      "prompt": "Extreme wide anime finishing frame, almost entirely abstract: one enormous blade-thin diagonal slash of blinding white and crimson light cutting clean across the whole composition from corner to corner, the colossal antlered silhouette splitting apart along the cut, everything else pure black, minimal and graphic, single decisive stroke",
+      "motion": "The blade of light cuts across the frame in one instant sweep and the colossal silhouette splits apart along the cut, halves sliding away from each other. Light floods, then collapses.",
+      "sfx": "Single enormous decisive blade strike, air splitting, deep resonant boom, ringing aftertone, choir cutting out" },
+
+    { "id": "19_dissolve", "seconds": 5,
+      "prompt": "Wide shot of {BEAST} coming apart in total silence, the colossal skull and antlers crumbling into drifting black ash and pale green sparks that rise upward instead of falling, the empty sockets going dark, a small black-armoured figure standing motionless below with sword lowered",
+      "motion": "The vast skull and antlers crumble slowly into drifting black ash and rising green sparks. The witchfire in the sockets fades and goes out. Everything rises upward. The small figure below does not move.",
+      "sfx": "Vast crumbling bone, rising ember shimmer, magic dissipating, wind returning, deep silence beneath" },
+
+    { "id": "20_alone", "seconds": 4,
+      "prompt": "Wide shot of {KAEL} standing completely alone in a vast field of grey ash under a colourless sky, the black sword point-down in the ground beside her, her shoulders rising and falling, the ruined forest reduced to bare stumps around her, immense emptiness",
+      "motion": "Her shoulders rise and fall slowly with heavy breathing. Ash falls. The sword stands point-down beside her. She does not otherwise move. Very slow gentle drift back.",
+      "sfx": "Cold wind across open ash, exhausted heavy breathing, faint distant embers, vast emptiness" },
+
+    { "id": "21_confusion", "seconds": 4,
+      "prompt": "Tight close-up of {KAEL}'s face as the resolve drains out of it and is replaced by a slow dawning bewilderment, her dull silver eyes searching, brow drawing together, mouth slightly open, ash on her lashes, blood drying on her temple, utterly lost",
+      "motion": "The hardness leaves her face. Her eyes search left and right, unfocused. Her brow draws together. Her mouth opens slightly. She blinks slowly, confused.",
+      "line": { "who": "VOICE", "text": "It is finished. The bargain is kept. I always keep a bargain." } },
+
+    { "id": "22_her_name", "seconds": 4,
+      "prompt": "Extreme close-up of {KAEL}'s face, silver eyes wide and searching for something that is not there any more, one tear cutting a clean track down through the ash and dried blood on her cheek, lips parting to speak, ash falling slowly past, devastating quiet grief",
+      "motion": "Her eyes search desperately for something no longer there. Her lips part to speak. A single tear cuts a clean track down through the ash. Ash falls slowly past. She holds absolutely still.",
+      "line": { "who": "KAEL", "text": "Wait. Who was it? Who was I doing this for?" } },
+
+    { "id": "c05_no_answer", "seconds": 4,
+      "prompt": "Close-up of the crimson rune in {SWORD} now completely dark and cold, the metal dull and pitted, no light in it at all, ash beginning to settle on the blade, the chains hanging slack and dead, an absolute and final silence made visible",
+      "motion": "Nothing happens. Ash settles slowly onto the dead black metal. The rune does not light. The chains hang slack. The stillness holds far longer than is comfortable.",
+      "sfx": "Ash settling on metal, one distant hollow wind gust, no music, profound and total silence" },
+
+    { "id": "c06_stops", "seconds": 4,
+      "prompt": "Wide shot from behind of {KAEL} some distance out into the endless grey ashfall, stopped dead mid-stride, the enormous sword dragging in the ash behind her, her head tilted slightly down as though she has noticed something on her own body, tiny against an empty white-grey void",
+      "motion": "She has stopped walking. She stands motionless for a long moment. Then her head tilts slowly downward to look at her own left wrist. Ash falls heavily around her.",
+      "sfx": "Dragging footsteps stopping abruptly, heavy ash falling, wind, one slow breath" },
+
+    { "id": "c07_cord_final", "seconds": 6,
+      "prompt": "Extreme close-up of {KAEL}'s bare left wrist held up in front of her, the frayed filthy braided crimson cord still knotted around it, blood and ash worked into the braid, her other hand reaching to touch it with complete blank incomprehension, ash falling past, the last surviving trace of something she no longer has any word for",
+      "motion": "Her fingers touch the frayed cord and turn it slowly around her wrist, examining it without any recognition at all. She almost pulls at the knot. Then she stops, and closes her whole hand around it instead, and holds it. Ash falls.",
+      "sfx": "Cloth and braid creaking softly under fingers, ash falling, one long unsteady breath, a single fragment of the warm folk melody on solo erhu, unbearably distant" },
+
+    { "id": "23_walk_away", "seconds": 6,
+      "prompt": "Final extreme wide shot from behind of {KAEL} walking slowly away from camera into endless grey ashfall, the enormous black sword dragging behind her and cutting a single long furrow in the ash, her figure shrinking, no horizon and no landmark anywhere, only white-grey emptiness ahead, nothing at all behind her",
+      "motion": "She walks slowly away from camera into the ashfall, the sword dragging and cutting a single long furrow behind her. Ash falls heavily. Her figure grows smaller and dimmer until nearly lost. Slow crane up.",
+      "sfx": "Slow heavy dragging footsteps, blade scraping through ash, endless cold wind, mournful distant tone, fading to nothing" }
+  ]
+}

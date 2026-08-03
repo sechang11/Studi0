@@ -1,0 +1,68 @@
+{
+  "variable": "char.wear.layer",
+  "claim": "Adds or strips outer garments over the base costume, which is the cheapest way to change a silhouette mid-story. A director reaches for it as staged action: the coat comes off before the fight, the hood goes up when he stops wanting to be seen.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "none",
+      "clause": "",
+      "control": true,
+      "sample": "/samples/vars/char_wear_layer/none.webp"
+    },
+    {
+      "value": "coat",
+      "clause": "long coat, open coat",
+      "control": false,
+      "sample": "/samples/vars/char_wear_layer/coat.webp"
+    },
+    {
+      "value": "jacket",
+      "clause": "track jacket, open jacket",
+      "control": false,
+      "sample": "/samples/vars/char_wear_layer/jacket.webp"
+    },
+    {
+      "value": "scarf",
+      "clause": "scarf, knit scarf around neck",
+      "control": false,
+      "sample": "/samples/vars/char_wear_layer/scarf.webp"
+    },
+    {
+      "value": "hood",
+      "clause": "hood up, hood over head",
+      "control": false,
+      "sample": "/samples/vars/char_wear_layer/hood.webp"
+    },
+    {
+      "value": "apron",
+      "clause": "apron, waist apron",
+      "control": false,
+      "sample": "/samples/vars/char_wear_layer/apron.webp"
+    },
+    {
+      "value": "armour",
+      "clause": "armor, pauldrons, breastplate",
+      "control": false,
+      "sample": "/samples/vars/char_wear_layer/armour.webp"
+    },
+    {
+      "value": "cloak",
+      "clause": "cloak, draped cloak, clasp at neck",
+      "control": false,
+      "sample": "/samples/vars/char_wear_layer/cloak.webp"
+    },
+    {
+      "value": "bag",
+      "clause": "shoulder bag, strap across chest",
+      "control": false,
+      "sample": "/samples/vars/char_wear_layer/bag.webp"
+    },
+    {
+      "value": "umbrella",
+      "clause": "holding umbrella, open umbrella",
+      "control": false,
+      "sample": "/samples/vars/char_wear_layer/umbrella.webp"
+    }
+  ]
+}

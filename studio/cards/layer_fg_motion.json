@@ -1,0 +1,13 @@
+{
+  "variable": "layer.fg.motion",
+  "claim": "Says how the foreground occluder behaves across the clip — held still, swaying, drifting, parallaxing, or passing clean through the lens. Something crossing in front of camera is the single strongest depth cue available in a generated shot.",
+  "not_visual": "Same problem one plane forward: this is behaviour over time, not content. A still cannot separate a held branch from a swaying one, and pass_through is defined entirely by the element entering and leaving frame. The only thing a clause could render is smeared motion blur, which is a different variable. Belongs in a clip demo.",
+  "options": [
+    "static",
+    "sway",
+    "pass_through",
+    "drift",
+    "parallax"
+  ],
+  "panels": []
+}

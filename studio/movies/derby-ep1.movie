@@ -1,0 +1,81 @@
+// THE DERBY - Episode 1.  Edit anything below; recompile with:
+//   python3 studio/compile.py studio/movies/derby-ep1.movie --timeline
+// Every variable and its default:  python3 studio/compile.py --vars
+//
+// Music is NOT placed by hand. Give a chapter or scene a `cue:` and the compiler
+// measures the real timeline and works out where it starts and how long it runs.
+
+MOVIE derby-ep1
+  // Distinct from the delivered "THE DERBY EP1". short.py derives its whole output
+  // directory from the title, so reusing one overwrites that film's master.
+  title: DERBY STUDIO TEST
+  logline: A playmaker who has never beaten his rival learns he was never really playing.
+  canvas: 1920x1080
+  fps: 24
+  checkpoint: animagine-xl-4.0.safetensors
+  face_weight: 0.6
+  seed_root: derby-s1
+  tags: modern sports anime, cel shading, cinematic
+
+CHAPTER cold_open
+  look: night
+  mood: melancholy, defeat
+  place: empty night stadium, confetti
+  pace: slow
+  cue: melancholy_piano
+
+  SCENE last_year
+    transition: fade_black
+    characters: VIRO
+    type: quiet
+    camera: pull
+    shot: establish
+    VIRO: ...Again.
+    shot: pillow
+
+CHAPTER act_one
+  look: cold
+  place: stadium tunnel, concrete, harsh light
+  pace: normal
+  wear: 0
+  cue: tense_strings
+
+  SCENE tunnel
+    transition: dissolve
+    characters: VIRO
+    camera: push
+    shot: establish
+    VIRO: Same tunnel. Same smell of wet concrete. Nine times now.
+
+  SCENE locker
+    transition: cut
+    place: locker room, benches, hanging jerseys
+    characters: VIRO, MANAGER
+    type: dialogue
+    MANAGER: Nine years. Nine years we have come here and gone home quiet.
+    VIRO: I know what the record is.
+    MANAGER: Then stop trying to beat him. Beat the team.
+
+CHAPTER climax
+  look: day_for_night
+  place: night pitch, floodlights
+  pace: fast
+  wear: 4
+  cue: triumphant_build
+
+  // Silence immediately before an impact makes the impact twice as loud.
+  // `silence: true` cuts the score dead here and restarts it on the next scene.
+  SCENE silence_before
+    transition: smash
+    silence: true
+    characters: VIRO
+    camera: static
+    shot: hold_silent
+
+  SCENE the_goal
+    transition: flash
+    characters: VIRO, MANAGER
+    camera: push
+    shot: sakuga
+    shot: insert
+    VIRO: Not this year.

@@ -1,0 +1,75 @@
+{
+  "variable": "story.beat",
+  "claim": "Beat names the scene's job in the plot, and shot size plus intensity fall out of it — a climax automatically gets tighter and louder than a breather without anyone setting either by hand. Directors reach for it to keep a sequence from running at one flat energy for four minutes.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "setup",
+      "clause": "calm, neutral stance, low stakes, unhurried",
+      "control": false,
+      "sample": "/samples/vars/story_beat/setup.webp"
+    },
+    {
+      "value": "inciting",
+      "clause": "sudden alert, startled wide eyes, something noticed off-screen",
+      "control": false,
+      "sample": "/samples/vars/story_beat/inciting.webp"
+    },
+    {
+      "value": "rising",
+      "clause": "building intensity, determined expression, forward momentum",
+      "control": false,
+      "sample": "/samples/vars/story_beat/rising.webp"
+    },
+    {
+      "value": "complication",
+      "clause": "frustrated expression, thwarted, mounting pressure",
+      "control": false,
+      "sample": "/samples/vars/story_beat/complication.webp"
+    },
+    {
+      "value": "turn",
+      "clause": "shock of realization, wide eyes, sharp lighting shift",
+      "control": false,
+      "sample": "/samples/vars/story_beat/turn.webp"
+    },
+    {
+      "value": "climax",
+      "clause": "peak intensity, extreme expression, maximum energy, blazing light",
+      "control": false,
+      "sample": "/samples/vars/story_beat/climax.webp"
+    },
+    {
+      "value": "falling",
+      "clause": "aftermath, exhausted, spent, dimming light",
+      "control": false,
+      "sample": "/samples/vars/story_beat/falling.webp"
+    },
+    {
+      "value": "resolution",
+      "clause": "settled calm expression, released tension, soft warm light",
+      "control": false,
+      "sample": "/samples/vars/story_beat/resolution.webp"
+    },
+    {
+      "value": "button",
+      "clause": "wry closing smirk, small final beat, quiet punctuation",
+      "control": false,
+      "sample": "/samples/vars/story_beat/button.webp"
+    },
+    {
+      "value": "breather",
+      "clause": "relaxed idle moment, low energy, easy breath",
+      "control": false,
+      "sample": "/samples/vars/story_beat/breather.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "story.beat",
+      "issue": "Two pairs collapse. inciting (\"sudden alert, startled wide eyes\") and turn (\"shock of realization, wide eyes\") both reduce to a wide-eyed surprised face. setup (\"calm, neutral stance, low stakes, unhurried\") and breather (\"relaxed idle moment, low energy, easy breath\") both reduce to a relaxed neutral boy. \"low stakes\", \"unhurried\", \"easy breath\", \"forward momentum\" and \"something noticed off-screen\" are directorial prose that draws nothing.",
+      "fix": "Give each beat one concrete, distinct facial/body tag: inciting -> \"surprised, looking to the side, parted lips\"; turn -> \"wide eyes, backlit, sharp shadow across face\"; setup -> \"neutral expression, standing, hands at sides\"; breather -> \"tired smile, hands on knees, catching breath\". If two beats cannot be separated on one face, drop one from the renderable set rather than shipping twin panels."
+    }
+  ]
+}

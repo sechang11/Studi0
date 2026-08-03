@@ -1,0 +1,63 @@
+{
+  "variable": "anime.fx.onomatopoeia_pos",
+  "claim": "Where the sound word sits, which decides whether it reads as an impact landing on the subject or as a caption sitting politely in a corner. Every clause here has to carry a 'sound effects' anchor, because a position with nothing to position is not a picture.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "auto",
+      "clause": "sound effects",
+      "control": false,
+      "sample": "/samples/vars/anime_fx_onomatopoeia_pos/auto.webp"
+    },
+    {
+      "value": "tl",
+      "clause": "sound effects, top left corner text",
+      "control": false,
+      "sample": "/samples/vars/anime_fx_onomatopoeia_pos/tl.webp"
+    },
+    {
+      "value": "tr",
+      "clause": "sound effects, top right corner text",
+      "control": false,
+      "sample": "/samples/vars/anime_fx_onomatopoeia_pos/tr.webp"
+    },
+    {
+      "value": "bl",
+      "clause": "sound effects, bottom left corner text",
+      "control": false,
+      "sample": "/samples/vars/anime_fx_onomatopoeia_pos/bl.webp"
+    },
+    {
+      "value": "br",
+      "clause": "sound effects, bottom right corner text",
+      "control": false,
+      "sample": "/samples/vars/anime_fx_onomatopoeia_pos/br.webp"
+    },
+    {
+      "value": "center",
+      "clause": "sound effects, centered text",
+      "control": false,
+      "sample": "/samples/vars/anime_fx_onomatopoeia_pos/center.webp"
+    },
+    {
+      "value": "over_subject",
+      "clause": "sound effects, text overlapping the character",
+      "control": false,
+      "sample": "/samples/vars/anime_fx_onomatopoeia_pos/over_subject.webp"
+    },
+    {
+      "value": "diagonal",
+      "clause": "sound effects, diagonal tilted lettering across the frame",
+      "control": false,
+      "sample": "/samples/vars/anime_fx_onomatopoeia_pos/diagonal.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "anime.fx.onomatopoeia_pos",
+      "issue": "SDXL has no spatial conditioning from text, and \"top left corner text\" / \"bottom right corner text\" / \"centered text\" are not danbooru tags. tl, tr, bl, br and center will each drop garbled lettering wherever the sampler feels like it, so the five panels differ randomly rather than by option - the card teaches nothing and, worse, teaches something false if one panel happens to land in its corner.",
+      "fix": "Keep only the options that are about relationship rather than coordinates - auto (\"sound effects\"), over_subject (\"sound effects, text over the character\") and diagonal (\"sound effects, diagonal text\") - and mark tl/tr/bl/br/center non-renderable, or set the whole variable renderable:false with skip_reason \"quadrant placement is a layout parameter the sampler does not accept\"."
+    }
+  ]
+}

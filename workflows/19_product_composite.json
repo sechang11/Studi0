@@ -1,0 +1,124 @@
+{
+  "_comment": "Product ad in one pass: BiRefNet mattes the product off its original background, Qwen-Image generates a fresh backdrop from a prompt, and ImageCompositeMasked drops the product onto it. This is the 'product placement' / 'product scene relight' use-case family done entirely on installed weights. Swap the prompt in node 12 for a new set - same product, unlimited campaigns.",
+  "_notes": [
+    "Why matte-and-composite instead of just asking Qwen-Image-Edit to change the background: compositing keeps the product pixel-identical. For anything real - a client's actual watch, a real package - the product must not be redrawn. Use workflow 03 (Qwen-Image-Edit) when you WANT the subject reinterpreted.",
+    "ImageCompositeMasked takes the FOREGROUND mask directly (node 3), unlike JoinImageWithAlpha which inverts. See workflow 14's notes on the mask convention.",
+    "The backdrop (node 18) must match the product image's dimensions or the composite is cropped, because resize_source=false. claude_seg_product.png is 1328x1328, so the latent is 1328x1328. If you change the product, change both.",
+    "resize_source=true would scale the product to fill the backdrop, which distorts it. Keep it false and match dimensions instead.",
+    "Compositing does NOT relight the product - the subject still carries its original lighting. Ask for a backdrop whose light direction matches (here: dark, low-key, top-left key) or the fake reads instantly. That single sentence is most of the craft in this workflow.",
+    "For a soft contact shadow, run the result back through workflow 03 with a prompt like 'add a soft contact shadow beneath the watch' at low denoise. Compositing alone leaves the subject floating.",
+    "shift=3.1 and steps=4 / cfg=1.0 are the Lightning-LoRA settings; see workflow 16's notes."
+  ],
+  "1": {
+    "class_type": "LoadImage",
+    "inputs": { "image": "claude_seg_product.png" }
+  },
+  "2": {
+    "class_type": "LoadBackgroundRemovalModel",
+    "inputs": { "bg_removal_name": "birefnet.safetensors" }
+  },
+  "3": {
+    "class_type": "RemoveBackground",
+    "inputs": {
+      "bg_removal_model": ["2", 0],
+      "image": ["1", 0]
+    }
+  },
+  "10": {
+    "class_type": "UNETLoader",
+    "inputs": {
+      "unet_name": "qwen_image_2512_fp8_e4m3fn.safetensors",
+      "weight_dtype": "default"
+    }
+  },
+  "11": {
+    "class_type": "CLIPLoader",
+    "inputs": {
+      "clip_name": "qwen_2.5_vl_7b_fp8_scaled.safetensors",
+      "type": "qwen_image",
+      "device": "default"
+    }
+  },
+  "12": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "clip": ["11", 0],
+      "text": "An empty luxury product stage: a slab of wet black volcanic rock on a polished obsidian surface, thin film of water pooling around it, deep charcoal seamless background falling off to black. A single hard key light from the upper left raking across the stone, cold specular highlights on the water, faint cyan rim light at the edges. No product, no object on the stone, empty scene. Studio product photography, macro lens, low key, deep blacks."
+    }
+  },
+  "13": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "clip": ["11", 0],
+      "text": "watch, jewellery, product, bright, washed out, flat lighting, clutter, text, watermark, people"
+    }
+  },
+  "14": {
+    "class_type": "VAELoader",
+    "inputs": { "vae_name": "qwen_image_vae.safetensors" }
+  },
+  "15": {
+    "class_type": "LoraLoaderModelOnly",
+    "inputs": {
+      "model": ["10", 0],
+      "lora_name": "Qwen-Image-2512-Lightning-4steps-V1.0-fp32.safetensors",
+      "strength_model": 1.0
+    }
+  },
+  "16": {
+    "class_type": "ModelSamplingAuraFlow",
+    "inputs": { "model": ["15", 0], "shift": 3.1 }
+  },
+  "17": {
+    "class_type": "CFGNorm",
+    "inputs": { "model": ["16", 0], "strength": 1.0 }
+  },
+  "18": {
+    "class_type": "EmptySD3LatentImage",
+    "inputs": { "width": 1328, "height": 1328, "batch_size": 1 }
+  },
+  "19": {
+    "class_type": "KSampler",
+    "inputs": {
+      "model": ["17", 0],
+      "seed": 314,
+      "steps": 4,
+      "cfg": 1.0,
+      "sampler_name": "euler",
+      "scheduler": "simple",
+      "positive": ["12", 0],
+      "negative": ["13", 0],
+      "latent_image": ["18", 0],
+      "denoise": 1.0
+    }
+  },
+  "20": {
+    "class_type": "VAEDecode",
+    "inputs": { "samples": ["19", 0], "vae": ["14", 0] }
+  },
+  "21": {
+    "class_type": "ImageCompositeMasked",
+    "inputs": {
+      "destination": ["20", 0],
+      "source": ["1", 0],
+      "x": 0,
+      "y": 0,
+      "resize_source": false,
+      "mask": ["3", 0]
+    }
+  },
+  "22": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": ["20", 0],
+      "filename_prefix": "claude-generated/15-product-composite/backdrop_only"
+    }
+  },
+  "23": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": ["21", 0],
+      "filename_prefix": "claude-generated/15-product-composite/product_composite"
+    }
+  }
+}

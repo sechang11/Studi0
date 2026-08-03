@@ -1,0 +1,104 @@
+{
+  "_comment": "OUTPAINTING - extend an image beyond its original frame. FLUX.1 Fill with the OneReward transformer. Takes a 1024x1024 square and grows it into a 2048x1024 cinematic wide, inventing the new left and right thirds so they match the original's light, lens and grain.",
+  "_notes": [
+    "`ImagePadForOutpaint` outputs BOTH the padded image and the mask of the new area, in one node. You do not paint a mask - the padding amounts define it. left/top/right/bottom are pixels of new canvas.",
+    "`feathering` (40 here) softens the seam between original and invented pixels. Too low and you get a visible vertical join; too high and the model starts repainting parts of your original. 24-48 is the usable band.",
+    "There is NO negative prompt. `ConditioningZeroOut` (node 8) manufactures an empty negative from the positive - that is the Flux convention, and cfg stays at 1.0 because guidance is carried by `FluxGuidance` instead. Setting cfg above 1.0 here produces burnt, oversaturated output.",
+    "`FluxGuidance` at **30** looks absurd next to the 4.0 used for FLUX.2 text-to-image, and it is correct - the Fill model is trained at that range. Do not normalise it to match your other Flux graphs.",
+    "`DifferentialDiffusion` (node 4) is what makes the feathered mask work as a soft gradient rather than a hard binary. Without it the feathering is ignored and you get a hard seam.",
+    "`noise_mask: false` on InpaintModelConditioning for OUTPAINTING - you want the model to see the whole canvas. Set it `true` for object REMOVAL, where you want the masked region genuinely resampled (see workflow 29).",
+    "Prompt for the SCENE, not for the edit. 'Remove the frame edge' means nothing; describe what should exist in the widened frame. Keeping it short and consistent with the original's content works better than a long re-description.",
+    "This is the OneReward fp8 transformer, deliberately chosen over plain `flux1-fill-dev`: half the size (11 GB vs 22 GB), newer method, and better at removal. Same graph serves both jobs."
+  ],
+  "1": {
+    "class_type": "UNETLoader",
+    "inputs": {
+      "unet_name": "flux.1-fill-dev-OneReward-transformer_fp8.safetensors",
+      "weight_dtype": "default"
+    }
+  },
+  "2": {
+    "class_type": "DualCLIPLoader",
+    "inputs": {
+      "clip_name1": "clip_l.safetensors",
+      "clip_name2": "t5xxl_fp16.safetensors",
+      "type": "flux",
+      "device": "default"
+    }
+  },
+  "3": {
+    "class_type": "VAELoader",
+    "inputs": { "vae_name": "ae.safetensors" }
+  },
+  "4": {
+    "class_type": "DifferentialDiffusion",
+    "inputs": { "model": ["1", 0] }
+  },
+  "5": {
+    "class_type": "LoadImage",
+    "inputs": { "image": "claude_outpaint_src.png" }
+  },
+  "6": {
+    "class_type": "ImagePadForOutpaint",
+    "inputs": {
+      "image": ["5", 0],
+      "left": 512,
+      "top": 0,
+      "right": 512,
+      "bottom": 0,
+      "feathering": 40
+    }
+  },
+  "7": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "clip": ["2", 0],
+      "text": "An apiary on an overcast morning. More wooden beehive boxes stacked on rough grass, a weathered fence line and pale flat sky continuing to both sides. Soft directionless daylight, muted natural colour, medium format film grain."
+    }
+  },
+  "8": {
+    "class_type": "ConditioningZeroOut",
+    "inputs": { "conditioning": ["7", 0] }
+  },
+  "9": {
+    "class_type": "FluxGuidance",
+    "inputs": { "conditioning": ["7", 0], "guidance": 30.0 }
+  },
+  "10": {
+    "class_type": "InpaintModelConditioning",
+    "inputs": {
+      "positive": ["9", 0],
+      "negative": ["8", 0],
+      "vae": ["3", 0],
+      "pixels": ["6", 0],
+      "mask": ["6", 1],
+      "noise_mask": false
+    }
+  },
+  "11": {
+    "class_type": "KSampler",
+    "inputs": {
+      "model": ["4", 0],
+      "seed": 8080,
+      "steps": 20,
+      "cfg": 1.0,
+      "sampler_name": "euler",
+      "scheduler": "normal",
+      "positive": ["10", 0],
+      "negative": ["10", 1],
+      "latent_image": ["10", 2],
+      "denoise": 1.0
+    }
+  },
+  "12": {
+    "class_type": "VAEDecode",
+    "inputs": { "samples": ["11", 0], "vae": ["3", 0] }
+  },
+  "13": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": ["12", 0],
+      "filename_prefix": "claude-generated/24-outpaint-removal/outpaint_wide"
+    }
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "variable": "anime.fx.deform_mode",
+  "claim": "Swaps the character for a comedy design rather than applying an effect to them, which is why it belongs in its own variable. Chibi is the reset-the-stakes joke; noodle limbs and head pop are the ones that keep a character recognisable while breaking their anatomy.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "none",
+      "clause": "",
+      "control": true,
+      "sample": "/samples/vars/anime_fx_deform_mode/none.webp"
+    },
+    {
+      "value": "sd_chibi",
+      "clause": "chibi, super deformed",
+      "control": false,
+      "sample": "/samples/vars/anime_fx_deform_mode/sd_chibi.webp"
+    },
+    {
+      "value": "head_pop",
+      "clause": "oversized head, exaggerated head to body proportions",
+      "control": false,
+      "sample": "/samples/vars/anime_fx_deform_mode/head_pop.webp"
+    },
+    {
+      "value": "noodle_limbs",
+      "clause": "noodle limbs, boneless rubbery arms",
+      "control": false,
+      "sample": "/samples/vars/anime_fx_deform_mode/noodle_limbs.webp"
+    },
+    {
+      "value": "rubber_hose",
+      "clause": "rubber hose limbs, 1930s cartoon style",
+      "control": false,
+      "sample": "/samples/vars/anime_fx_deform_mode/rubber_hose.webp"
+    },
+    {
+      "value": "mini_inset",
+      "clause": "chibi inset panel, small super deformed figure in a corner box",
+      "control": false,
+      "sample": "/samples/vars/anime_fx_deform_mode/mini_inset.webp"
+    }
+  ]
+}

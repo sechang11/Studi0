@@ -1,0 +1,15 @@
+{
+  "variable": "char.arc_stage",
+  "claim": "Marks where the character sits in their own transformation, and biases wardrobe, grade and performance defaults downstream rather than drawing anything itself. A director sets it so a 'breaking' character automatically arrives rumpled, underlit and unguarded without hand-setting three variables per shot.",
+  "not_visual": "Arc stage is a bias that resolves into other variables — char.wear.state, char.condition, char.emotion_mask, grade.preset — and has no tag of its own. Any clause written for it would just be one of those other variables in disguise, which is exactly the smuggling the method forbids. The 'absent' value additionally means the character is not in the shot, which the fixed subject sentence cannot express.",
+  "options": [
+    "introduced",
+    "stable",
+    "pressured",
+    "breaking",
+    "changed",
+    "resolved",
+    "absent"
+  ],
+  "panels": []
+}

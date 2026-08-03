@@ -1,0 +1,45 @@
+{
+  "variable": "light.eye_light",
+  "claim": "The catchlight, which is the smallest mark on the frame and the one that decides whether a character is alive. Killing it reads instantly as death, possession or menace, and anime_sparkle pushes the other way into open adoration.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "none",
+      "clause": "no catchlight, matte unreflective eyes",
+      "control": true,
+      "sample": "/samples/vars/light_eye_light/none.webp"
+    },
+    {
+      "value": "subtle",
+      "clause": "small catchlight, single highlight in each eye",
+      "control": false,
+      "sample": "/samples/vars/light_eye_light/subtle.webp"
+    },
+    {
+      "value": "strong",
+      "clause": "bright large catchlights, glossy reflective eyes",
+      "control": false,
+      "sample": "/samples/vars/light_eye_light/strong.webp"
+    },
+    {
+      "value": "anime_sparkle",
+      "clause": "sparkling eyes, glittering highlights in the eyes",
+      "control": false,
+      "sample": "/samples/vars/light_eye_light/anime_sparkle.webp"
+    },
+    {
+      "value": "dead_flat",
+      "clause": "dead eyes, empty eyes, no highlights in the eyes",
+      "control": false,
+      "sample": "/samples/vars/light_eye_light/dead_flat.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "light.eye_light",
+      "issue": "none (\"no catchlight, matte unreflective eyes\") and dead_flat (\"dead eyes, empty eyes, no highlights in the eyes\") are the same instruction written twice — remove the highlight from the eyes. Two of the five panels are asking for one thing.",
+      "fix": "Make none an empty clause (the baseline catchlight Animagine gives you unasked, which is the useful comparison), and let dead_flat keep the removal using the real tags: \"empty eyes, dead eyes, no light in the eyes\" with \"catchlight\" pushed to the negative prompt."
+    }
+  ]
+}

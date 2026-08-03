@@ -1,0 +1,57 @@
+{
+  "variable": "anime.anim.smear_style",
+  "claim": "Chooses the distortion drawing used to bridge two poses too far apart to tween: duplicated limbs, taffy stretch, or a single brushed streak. It is a drawn frame, not a post blur, and it is the difference between animation that punches and animation that slides.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "none",
+      "clause": "",
+      "control": true,
+      "sample": "/samples/vars/anime_anim_smear_style/none.webp"
+    },
+    {
+      "value": "multiples",
+      "clause": "afterimage, multiple limbs, duplicated arms",
+      "control": false,
+      "sample": "/samples/vars/anime_anim_smear_style/multiples.webp"
+    },
+    {
+      "value": "stretch",
+      "clause": "stretched limbs, elongated arm, exaggerated distortion",
+      "control": false,
+      "sample": "/samples/vars/anime_anim_smear_style/stretch.webp"
+    },
+    {
+      "value": "streak",
+      "clause": "smear frame, streaked motion blur, motion lines",
+      "control": false,
+      "sample": "/samples/vars/anime_anim_smear_style/streak.webp"
+    },
+    {
+      "value": "ghost_trail",
+      "clause": "afterimage, translucent trailing duplicate, motion trail",
+      "control": false,
+      "sample": "/samples/vars/anime_anim_smear_style/ghost_trail.webp"
+    },
+    {
+      "value": "brush_smear",
+      "clause": "brushstroke smear, rough drawn blur, sketchy motion",
+      "control": false,
+      "sample": "/samples/vars/anime_anim_smear_style/brush_smear.webp"
+    },
+    {
+      "value": "dissolve_limb",
+      "clause": "dissolving arm, limb blurred away, motion blur",
+      "control": false,
+      "sample": "/samples/vars/anime_anim_smear_style/dissolve_limb.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "anime.anim.smear_style",
+      "issue": "multiples (\"afterimage, multiple limbs, duplicated arms\") and ghost_trail (\"afterimage, translucent trailing duplicate, motion trail\") both lead on \"afterimage\", which is the one danbooru tag doing all the work in each; they will produce the same drawing. streak (\"smear frame, streaked motion blur, motion lines\") and dissolve_limb (\"dissolving arm, limb blurred away, motion blur\") likewise both reduce to \"motion blur\".",
+      "fix": "Give afterimage to ghost_trail only and rewrite multiples without it - \"multiple arms, extra arms, duplicated limbs\". For the blur pair, keep streak as \"smear frame, motion lines\" and drop dissolve_limb, or rewrite it as \"blurry arm, motion blur, disappearing hand\"; expect them to stay close."
+    }
+  ]
+}

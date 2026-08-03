@@ -1,0 +1,63 @@
+{
+  "variable": "shot.comp.thirds_bias",
+  "claim": "Lateral placement is the composition choice authors want most often and can least easily describe. Centre is confrontational and static, a third is conversational and open, and edge is a frame that is already halfway to losing him.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "center",
+      "clause": "centered composition, subject in the middle",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_thirds_bias/center.webp"
+    },
+    {
+      "value": "left_third",
+      "clause": "rule of thirds, subject on the left third",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_thirds_bias/left_third.webp"
+    },
+    {
+      "value": "right_third",
+      "clause": "rule of thirds, subject on the right third",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_thirds_bias/right_third.webp"
+    },
+    {
+      "value": "golden_l",
+      "clause": "golden ratio composition, subject left of center",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_thirds_bias/golden_l.webp"
+    },
+    {
+      "value": "golden_r",
+      "clause": "golden ratio composition, subject right of center",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_thirds_bias/golden_r.webp"
+    },
+    {
+      "value": "symmetrical",
+      "clause": "perfectly symmetrical, dead center, mirrored",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_thirds_bias/symmetrical.webp"
+    },
+    {
+      "value": "edge_left",
+      "clause": "subject at the left edge, cropped at frame left",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_thirds_bias/edge_left.webp"
+    },
+    {
+      "value": "edge_right",
+      "clause": "subject at the right edge, cropped at frame right",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_thirds_bias/edge_right.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "shot.comp.thirds_bias",
+      "issue": "Eight options, at most three distinguishable pictures. golden_l (\"subject left of center\") is the same instruction as left_third (\"subject on the left third\") — Animagine does not resolve golden ratio versus rule of thirds. symmetrical (\"perfectly symmetrical, dead center, mirrored\") is the same as center and also duplicates shot.comp.balance.symmetrical in another card. edge_left/edge_right hit the same left/right gap as facing and eyeline.",
+      "fix": "Cut to center / off_center / edge (keeping L/R only if you accept the mirror flip and say so), delete golden_l and golden_r, and let shot.comp.balance own symmetry so the two cards do not ship the same panel."
+    }
+  ]
+}

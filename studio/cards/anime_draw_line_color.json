@@ -1,0 +1,56 @@
+{
+  "variable": "anime.draw.line_color",
+  "claim": "Whether the outline stays black or is traced in colour, which softens an entire film's character art without touching a single fill. Per-region trace is the expensive option houses use to make skin stop looking outlined in marker.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "black",
+      "clause": "black lineart, black outlines",
+      "control": false,
+      "sample": "/samples/vars/anime_draw_line_color/black.webp"
+    },
+    {
+      "value": "dark_neutral",
+      "clause": "dark grey lineart, softened outlines",
+      "control": false,
+      "sample": "/samples/vars/anime_draw_line_color/dark_neutral.webp"
+    },
+    {
+      "value": "colored_trace_placeholder",
+      "clause": "",
+      "control": true,
+      "sample": "/samples/vars/anime_draw_line_color/colored_trace_placeholder.webp"
+    },
+    {
+      "value": "color_trace",
+      "clause": "colored lineart, colored outlines",
+      "control": false,
+      "sample": "/samples/vars/anime_draw_line_color/color_trace.webp"
+    },
+    {
+      "value": "per_region_trace",
+      "clause": "colored inner lines, per region colored lineart",
+      "control": false,
+      "sample": "/samples/vars/anime_draw_line_color/per_region_trace.webp"
+    },
+    {
+      "value": "none",
+      "clause": "lineless, no outlines, painted edges",
+      "control": true,
+      "sample": "/samples/vars/anime_draw_line_color/none.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "anime.draw.line_color",
+      "issue": "\"colored_trace_placeholder\" is a leftover scaffold value, not a real option, and it carries an empty clause - so its panel is the untouched baseline, which is also what \"black\" (\"black lineart, black outlines\", already the model default) produces. Two of six panels are the same image and one of them is named placeholder.",
+      "fix": "Delete colored_trace_placeholder from the enum. Give black an empty clause and treat it as the declared baseline, since black lineart is what the model does unprompted."
+    },
+    {
+      "variable": "anime.draw.line_color",
+      "issue": "color_trace (\"colored lineart, colored outlines\") and per_region_trace (\"colored inner lines, per region colored lineart\") will render the same way. \"colored inner lines\" is a real danbooru tag but it fires the same feature as \"colored lineart\"; \"per region colored lineart\" is invented phrasing the model cannot scope to skin vs hair vs cloth.",
+      "fix": "Either drop per_region_trace, or differentiate it by naming the region the trace applies to in tag form - e.g. \"colored inner lines, brown skin outlines, colored lineart on skin\" - and accept it may still converge."
+    }
+  ]
+}

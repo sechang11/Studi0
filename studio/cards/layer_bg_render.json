@@ -1,0 +1,51 @@
+{
+  "variable": "layer.bg.render",
+  "claim": "Sets how finished the background painting is, which is the contrast lever against character line quality — a sketch background throws every eye onto the face, an ultra_detailed one makes the character a visitor in someone else's world. Reach for it when a frame reads as either empty or too busy to parse.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "sketch",
+      "clause": "sketch background, rough lineart background, unfinished background",
+      "control": false,
+      "sample": "/samples/vars/layer_bg_render/sketch.webp"
+    },
+    {
+      "value": "simple",
+      "clause": "simple background, plain background, minimal background detail",
+      "control": false,
+      "sample": "/samples/vars/layer_bg_render/simple.webp"
+    },
+    {
+      "value": "detailed",
+      "clause": "detailed background, scenery",
+      "control": false,
+      "sample": "/samples/vars/layer_bg_render/detailed.webp"
+    },
+    {
+      "value": "ultra_detailed",
+      "clause": "extremely detailed background, intricate scenery, amazing background",
+      "control": false,
+      "sample": "/samples/vars/layer_bg_render/ultra_detailed.webp"
+    },
+    {
+      "value": "painted_bg",
+      "clause": "painted background, painterly scenery, visible brushstrokes",
+      "control": false,
+      "sample": "/samples/vars/layer_bg_render/painted_bg.webp"
+    },
+    {
+      "value": "photobash",
+      "clause": "photorealistic background, photographic scenery, realistic background texture",
+      "control": false,
+      "sample": "/samples/vars/layer_bg_render/photobash.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "layer.bg.render",
+      "issue": "The photobash clause (\"photorealistic background, photographic scenery, realistic background texture\") smuggles in a global style. In Animagine, `photorealistic` and `realistic` are not plane-scoped — they drag the character off the anime model too, so the panel demonstrates a whole-image style shift rather than a background treatment, which is the \"do not smuggle in extra style\" rule.",
+      "fix": "Trim to \"photorealistic background, realistic scenery\" and note in the claim that this value is the one option that bleeds onto the character in SDXL — or reproduce it honestly with a composited photographic plate rather than a clause."
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "variable": "shot.comp.depth_stack",
+  "claim": "Depth stack states how many distinct planes the frame is built from, and it is the contract the layer variables read. Flat is a poster, three_plane is a shot you can move a camera through, deep_stack is what makes a generated image stop looking like a painting of a place.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "flat",
+      "clause": "flat composition, single plane, no depth",
+      "control": true,
+      "sample": "/samples/vars/shot_comp_depth_stack/flat.webp"
+    },
+    {
+      "value": "two_plane",
+      "clause": "two depth planes, subject against background",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_depth_stack/two_plane.webp"
+    },
+    {
+      "value": "three_plane",
+      "clause": "foreground, midground and background, three depth planes",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_depth_stack/three_plane.webp"
+    },
+    {
+      "value": "deep_stack",
+      "clause": "many overlapping depth layers, deep receding planes",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_depth_stack/deep_stack.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "shot.comp.depth_stack",
+      "issue": "\"two depth planes\", \"three depth planes\", \"foreground, midground and background\", \"many overlapping depth layers\" is meta-language about the composition rather than content the model can draw; Animagine cannot count planes. two_plane, three_plane and deep_stack will land on the same picture, and only flat is likely to separate.",
+      "fix": "State the planes as objects: two_plane \"subject against blurred background\"; three_plane \"blurry foreground silhouette, blurred crowd behind\"; deep_stack \"layered crowd, receding rows of seats, distant floodlights\". That is still only about depth, but it is content the model can stack."
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "_comment": "Qwen-Image 2512 + Lightning 4-step + a STYLE LoRA stacked on top. Node 7 is the style LoRA - patch 7.inputs.lora_name and 7.inputs.strength_model to sweep looks. Chain order is UNET -> lightning(4) -> style(7) -> ModelSamplingAuraFlow(5), so the speed LoRA stays closest to the base weights.",
+  "_notes": [
+    "strength_model on node 7 is the dial that matters: 1.0 fully commits to the style and can flatten dark scenes, 0.6-0.8 keeps the style while letting palette and drama through.",
+    "Still 4 steps at cfg 1.0 - stacking a style LoRA does not change the Lightning schedule."
+  ],
+  "1": {
+    "class_type": "UNETLoader",
+    "inputs": { "unet_name": "qwen_image_2512_fp8_e4m3fn.safetensors", "weight_dtype": "default" }
+  },
+  "2": {
+    "class_type": "CLIPLoader",
+    "inputs": { "clip_name": "qwen_2.5_vl_7b_fp8_scaled.safetensors", "type": "qwen_image", "device": "default" }
+  },
+  "3": {
+    "class_type": "VAELoader",
+    "inputs": { "vae_name": "qwen_image_vae.safetensors" }
+  },
+  "4": {
+    "class_type": "LoraLoaderModelOnly",
+    "inputs": {
+      "model": ["1", 0],
+      "lora_name": "Qwen-Image-2512-Lightning-4steps-V1.0-fp32.safetensors",
+      "strength_model": 1.0
+    }
+  },
+  "7": {
+    "class_type": "LoraLoaderModelOnly",
+    "inputs": {
+      "model": ["4", 0],
+      "lora_name": "qwen_image_2512_storybook_anime_lora.safetensors",
+      "strength_model": 0.8
+    }
+  },
+  "5": {
+    "class_type": "ModelSamplingAuraFlow",
+    "inputs": { "model": ["7", 0], "shift": 3.1 }
+  },
+  "6": {
+    "class_type": "CFGNorm",
+    "inputs": { "model": ["5", 0], "strength": 1.0 }
+  },
+  "10": {
+    "class_type": "CLIPTextEncode",
+    "inputs": { "clip": ["2", 0], "text": "placeholder positive" }
+  },
+  "11": {
+    "class_type": "CLIPTextEncode",
+    "inputs": { "clip": ["2", 0], "text": "blurry, low quality, watermark, text, jpeg artifacts, oversaturated" }
+  },
+  "12": {
+    "class_type": "EmptySD3LatentImage",
+    "inputs": { "width": 1664, "height": 928, "batch_size": 1 }
+  },
+  "13": {
+    "class_type": "KSampler",
+    "inputs": {
+      "model": ["6", 0],
+      "seed": 42,
+      "steps": 4,
+      "cfg": 1.0,
+      "sampler_name": "euler",
+      "scheduler": "simple",
+      "positive": ["10", 0],
+      "negative": ["11", 0],
+      "latent_image": ["12", 0],
+      "denoise": 1.0
+    }
+  },
+  "14": {
+    "class_type": "VAEDecode",
+    "inputs": { "samples": ["13", 0], "vae": ["3", 0] }
+  },
+  "15": {
+    "class_type": "SaveImage",
+    "inputs": { "images": ["14", 0], "filename_prefix": "claude-generated/style-test/styled" }
+  }
+}

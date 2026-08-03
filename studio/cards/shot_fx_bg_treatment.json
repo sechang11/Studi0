@@ -1,0 +1,74 @@
+{
+  "variable": "shot.fx.bg_treatment",
+  "claim": "Dropping the real background for an emotional field is standard anime grammar, not a shortcut - the world stops existing because the character has stopped noticing it. Void_black isolates and threatens, emotional_wash floods the frame with a single feeling, radial_burst detonates.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "matched",
+      "clause": "detailed background, consistent with the scene",
+      "control": false,
+      "sample": "/samples/vars/shot_fx_bg_treatment/matched.webp"
+    },
+    {
+      "value": "watercolor",
+      "clause": "watercolor background, watercolor (medium), painted wash",
+      "control": false,
+      "sample": "/samples/vars/shot_fx_bg_treatment/watercolor.webp"
+    },
+    {
+      "value": "photobash",
+      "clause": "photorealistic background, photographic backdrop",
+      "control": false,
+      "sample": "/samples/vars/shot_fx_bg_treatment/photobash.webp"
+    },
+    {
+      "value": "abstract_color",
+      "clause": "abstract background, flat color field",
+      "control": false,
+      "sample": "/samples/vars/shot_fx_bg_treatment/abstract_color.webp"
+    },
+    {
+      "value": "radial_burst",
+      "clause": "sunburst background, radial burst background, emphasis lines",
+      "control": false,
+      "sample": "/samples/vars/shot_fx_bg_treatment/radial_burst.webp"
+    },
+    {
+      "value": "pattern",
+      "clause": "patterned background, polka dot background, repeating motif",
+      "control": false,
+      "sample": "/samples/vars/shot_fx_bg_treatment/pattern.webp"
+    },
+    {
+      "value": "void_black",
+      "clause": "black background, void, empty darkness",
+      "control": false,
+      "sample": "/samples/vars/shot_fx_bg_treatment/void_black.webp"
+    },
+    {
+      "value": "white_void",
+      "clause": "white background, simple background, empty void",
+      "control": false,
+      "sample": "/samples/vars/shot_fx_bg_treatment/white_void.webp"
+    },
+    {
+      "value": "emotional_wash",
+      "clause": "gradient background, monochrome color wash",
+      "control": false,
+      "sample": "/samples/vars/shot_fx_bg_treatment/emotional_wash.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "shot.fx.bg_treatment",
+      "issue": "The \"matched\" clause \"detailed background, consistent with the scene\" is prose - \"consistent with the scene\" is an instruction to a human, not a tag - and \"detailed background\" is a quality push that makes the baseline panel busier than every other card's baseline.",
+      "fix": "Empty clause, matching how anime.bg.hue_relation/matched and anime.color.harmony/free are already handled."
+    },
+    {
+      "variable": "shot.fx.bg_treatment",
+      "issue": "Three options are already owned by other cards and will render the same: watercolor here vs anime.bg.style/watercolor, photobash here vs anime.bg.style/photobash, radial_burst here (\"sunburst background, radial burst background, emphasis lines\") vs shot.fx.screentone/flash_lines and shot.fx.speed_lines/radial.",
+      "fix": "Decide the boundary: bg_treatment should own \"replace the world with an emotional field\" (void_black, white_void, abstract_color, emotional_wash, pattern) and hand the painting-medium options (watercolor, photobash) to anime.bg.style and the radiating-line options to speed_lines/screentone."
+    }
+  ]
+}

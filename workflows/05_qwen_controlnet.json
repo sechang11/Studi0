@@ -1,0 +1,56 @@
+{
+  "_comment": "Qwen-Image 2512 + InstantX ControlNet Union, driven by a Canny edge map. Swap node 20 (Canny) for a depth or pose map once you install Depth Anything 3 / SDPose - the Union controlnet accepts all of them. Node 21 strength 0.6-0.9 is the useful range; 1.0 tends to over-constrain.",
+
+  "1": { "class_type": "UNETLoader", "inputs": { "unet_name": "qwen_image_2512_fp8_e4m3fn.safetensors", "weight_dtype": "default" } },
+  "2": { "class_type": "CLIPLoader", "inputs": { "clip_name": "qwen_2.5_vl_7b_fp8_scaled.safetensors", "type": "qwen_image", "device": "default" } },
+  "3": { "class_type": "VAELoader", "inputs": { "vae_name": "qwen_image_vae.safetensors" } },
+  "4": {
+    "class_type": "LoraLoaderModelOnly",
+    "inputs": { "model": ["1", 0], "lora_name": "Qwen-Image-2512-Lightning-4steps-V1.0-fp32.safetensors", "strength_model": 1.0 }
+  },
+  "5": { "class_type": "ModelSamplingAuraFlow", "inputs": { "model": ["4", 0], "shift": 3.1 } },
+  "6": { "class_type": "CFGNorm", "inputs": { "model": ["5", 0], "strength": 1.0 } },
+
+  "19": { "class_type": "LoadImage", "inputs": { "image": "claude_start_frame.png", "upload": "image" } },
+  "20": { "class_type": "Canny", "inputs": { "image": ["19", 0], "low_threshold": 0.2, "high_threshold": 0.5 } },
+
+  "10": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "clip": ["2", 0],
+      "text": "A brutalist concrete observation tower on a rocky headland, hard midday sun, dry scrubland, clear pale sky, architectural photography, large format, muted earth tones"
+    }
+  },
+  "11": { "class_type": "CLIPTextEncode", "inputs": { "clip": ["2", 0], "text": "blurry, low quality, watermark, text" } },
+
+  "21": {
+    "class_type": "ControlNetLoader",
+    "inputs": { "control_net_name": "Qwen-Image-InstantX-ControlNet-Union.safetensors" }
+  },
+  "22": {
+    "class_type": "ControlNetApplyAdvanced",
+    "inputs": {
+      "positive": ["10", 0],
+      "negative": ["11", 0],
+      "control_net": ["21", 0],
+      "image": ["20", 0],
+      "strength": 0.8,
+      "start_percent": 0.0,
+      "end_percent": 0.9,
+      "vae": ["3", 0]
+    }
+  },
+
+  "12": { "class_type": "EmptySD3LatentImage", "inputs": { "width": 1664, "height": 928, "batch_size": 1 } },
+  "13": {
+    "class_type": "KSampler",
+    "inputs": {
+      "model": ["6", 0], "seed": 555, "steps": 4, "cfg": 1.0,
+      "sampler_name": "euler", "scheduler": "simple",
+      "positive": ["22", 0], "negative": ["22", 1], "latent_image": ["12", 0], "denoise": 1.0
+    }
+  },
+  "14": { "class_type": "VAEDecode", "inputs": { "samples": ["13", 0], "vae": ["3", 0] } },
+  "15": { "class_type": "SaveImage", "inputs": { "images": ["14", 0], "filename_prefix": "claude-generated/qwen_controlnet" } },
+  "16": { "class_type": "SaveImage", "inputs": { "images": ["20", 0], "filename_prefix": "claude-generated/qwen_controlnet_edgemap" } }
+}

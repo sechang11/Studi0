@@ -1,0 +1,54 @@
+{
+  "variable": "char.emotion",
+  "claim": "The performance. Drives face, eyes, mouth and posture tags together, and on TTS engines that accept an emotion vector it will drive the voice too.",
+  "look_at": "anger, joy, fear and exhaustion read instantly. cold and resolve are quiet by design and are easy to mistake for neutral - which is the point of them, but it means they need a held shot to land.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "neutral",
+      "clause": "neutral expression, calm",
+      "sample": "/samples/vars/char_emotion/neutral.webp"
+    },
+    {
+      "value": "determined",
+      "clause": "determined expression, furrowed brow, sharp eyes",
+      "sample": "/samples/vars/char_emotion/determined.webp"
+    },
+    {
+      "value": "angry",
+      "clause": "angry expression, glaring, gritted teeth",
+      "sample": "/samples/vars/char_emotion/angry.webp"
+    },
+    {
+      "value": "exhausted",
+      "clause": "exhausted, half-closed eyes, panting, sweat",
+      "sample": "/samples/vars/char_emotion/exhausted.webp"
+    },
+    {
+      "value": "grief",
+      "clause": "crying, grieving, tears, downcast eyes",
+      "sample": "/samples/vars/char_emotion/grief.webp"
+    },
+    {
+      "value": "joy",
+      "clause": "smiling, happy, bright eyes",
+      "sample": "/samples/vars/char_emotion/joy.webp"
+    },
+    {
+      "value": "fear",
+      "clause": "afraid, wide eyes, shrunken pupils, shocked",
+      "sample": "/samples/vars/char_emotion/fear.webp"
+    },
+    {
+      "value": "cold",
+      "clause": "expressionless, blank, flat eyes, looking away",
+      "sample": "/samples/vars/char_emotion/cold.webp"
+    },
+    {
+      "value": "resolve",
+      "clause": "calm resolve, quiet certainty, steady gaze",
+      "sample": "/samples/vars/char_emotion/resolve.webp"
+    }
+  ]
+}

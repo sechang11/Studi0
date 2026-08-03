@@ -1,0 +1,136 @@
+{
+  "_comment": "OBJECT REMOVAL, fully automatic. Name the thing you want gone in plain English (node 5), SAM 3.1 finds it, GrowMask pads the selection, and FLUX.1 Fill + the OneReward removal LoRA reconstructs what was behind it. No mask painting anywhere in this graph.",
+  "_notes": [
+    "This is workflows 13 and 28 fused: SAM's text-prompted segmentation supplies the mask that FLUX Fill consumes. That chain is the whole point - every other removal tool makes you paint.",
+    "`noise_mask: true` here, unlike outpainting (workflow 28, false). For removal you WANT the masked region genuinely resampled from noise rather than nudged, otherwise a ghost of the original object survives as a smudge.",
+    "GROW THE MASK. SAM returns a tight silhouette, and a tight mask leaves the object's contact shadow, reflection and colour-bleed behind - which reads worse than leaving the object in. `GrowMask` at 24 px plus `blur_radius` handles ordinary cases; go to 40+ for anything glossy or strongly shadowed. This is the single most common reason a removal looks bad.",
+    "`removal_timestep_alpha-2-1740.safetensors` (node 4) is a small LoRA specifically trained for removal - it biases the model toward reconstructing plausible BACKGROUND rather than inventing a replacement object. Without it, FLUX Fill will cheerfully paint a different watch where the old one was.",
+    "MEASURED RESULT: THIS FAILED on the shipped example, twice, and the failure is worth more than a success would be. Asked to remove a wristwatch from a product shot, it produced a woven rope ring, then a carved stone ring - both times a NEW object occupying the watch's silhouette. The mask was verified correct (a clean solid blob over the watch), and both prompt conventions were tried: describing the empty surface, and the template's instruction form ('Remove the wristwatch.'). Neither helped.",
+    "WHY it fails here, and when to expect it: the mask is ~35% of the frame, dead centre, on a plinth-like slab. Everything about that composition says 'an object belongs here', so the model fills the hole with an object whose silhouette matches. Removal works well on a SMALL object inside a CONTEXTFUL scene, where surrounding pixels tell the model what the background should be. It works badly on the subject of a product shot, because there is no background to infer - the object IS the picture. For that case, re-generate the plate empty rather than removing.",
+    "Prompt convention, for the record: the OneReward template uses an instruction ('Remove the girl's hat'), not a description of the desired background. Use the instruction form. It was not sufficient here, but it is the correct convention.",
+    "FluxGuidance 30 and cfg 1.0, same as workflow 28 - the Fill model's trained range.",
+    "Verify with the saved mask output (node 12). If the removal looks wrong, look at the mask before touching anything else - it is nearly always the mask."
+  ],
+  "1": {
+    "class_type": "LoadImage",
+    "inputs": { "image": "claude_seg_product.png" }
+  },
+  "2": {
+    "class_type": "CheckpointLoaderSimple",
+    "inputs": { "ckpt_name": "sam3.1_multiplex_fp16.safetensors" }
+  },
+  "5": {
+    "class_type": "CLIPTextEncode",
+    "inputs": { "clip": ["2", 1], "text": "the wristwatch" }
+  },
+  "6": {
+    "class_type": "SAM3_Detect",
+    "inputs": {
+      "model": ["2", 0],
+      "image": ["1", 0],
+      "threshold": 0.5,
+      "refine_iterations": 2,
+      "individual_masks": false,
+      "conditioning": ["5", 0]
+    }
+  },
+  "7": {
+    "class_type": "GrowMask",
+    "inputs": { "mask": ["6", 0], "expand": 24, "tapered_corners": true }
+  },
+  "3": {
+    "class_type": "UNETLoader",
+    "inputs": {
+      "unet_name": "flux.1-fill-dev-OneReward-transformer_fp8.safetensors",
+      "weight_dtype": "default"
+    }
+  },
+  "4": {
+    "class_type": "LoraLoaderModelOnly",
+    "inputs": {
+      "model": ["3", 0],
+      "lora_name": "removal_timestep_alpha-2-1740.safetensors",
+      "strength_model": 1.0
+    }
+  },
+  "8": {
+    "class_type": "DifferentialDiffusion",
+    "inputs": { "model": ["4", 0] }
+  },
+  "9": {
+    "class_type": "DualCLIPLoader",
+    "inputs": {
+      "clip_name1": "clip_l.safetensors",
+      "clip_name2": "t5xxl_fp16.safetensors",
+      "type": "flux",
+      "device": "default"
+    }
+  },
+  "10": {
+    "class_type": "VAELoader",
+    "inputs": { "vae_name": "ae.safetensors" }
+  },
+  "11": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "clip": ["9", 0],
+      "text": "An empty wet black slate slab on a dark surface, scattered water droplets across the stone, soft studio light, nothing resting on it."
+    }
+  },
+  "13": {
+    "class_type": "ConditioningZeroOut",
+    "inputs": { "conditioning": ["11", 0] }
+  },
+  "14": {
+    "class_type": "FluxGuidance",
+    "inputs": { "conditioning": ["11", 0], "guidance": 30.0 }
+  },
+  "15": {
+    "class_type": "InpaintModelConditioning",
+    "inputs": {
+      "positive": ["14", 0],
+      "negative": ["13", 0],
+      "vae": ["10", 0],
+      "pixels": ["1", 0],
+      "mask": ["7", 0],
+      "noise_mask": true
+    }
+  },
+  "16": {
+    "class_type": "KSampler",
+    "inputs": {
+      "model": ["8", 0],
+      "seed": 4242,
+      "steps": 20,
+      "cfg": 1.0,
+      "sampler_name": "euler",
+      "scheduler": "normal",
+      "positive": ["15", 0],
+      "negative": ["15", 1],
+      "latent_image": ["15", 2],
+      "denoise": 1.0
+    }
+  },
+  "17": {
+    "class_type": "VAEDecode",
+    "inputs": { "samples": ["16", 0], "vae": ["10", 0] }
+  },
+  "12": {
+    "class_type": "MaskToImage",
+    "inputs": { "mask": ["7", 0] }
+  },
+  "18": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": ["17", 0],
+      "filename_prefix": "claude-generated/24-outpaint-removal/removed_object"
+    }
+  },
+  "19": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": ["12", 0],
+      "filename_prefix": "claude-generated/24-outpaint-removal/removal_mask"
+    }
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "variable": "grade.scope",
+  "claim": "Decides which pixels the grade is allowed to touch. Grading full_frame is exactly what drags a locked character colour off-model; exclude_characters lets the world go cold while the cast stays on their approved palette, and shadows_only or highlights_only let you tint the darkness without bleaching skin. Note the carrier tint is held constant across these panels so only the masked region varies.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "full_frame",
+      "clause": "desaturated blue tint, entire image tinted, uniform color cast",
+      "control": false,
+      "sample": "/samples/vars/grade_scope/full_frame.webp"
+    },
+    {
+      "value": "exclude_characters",
+      "clause": "spot color, desaturated blue background, character in natural color",
+      "control": false,
+      "sample": "/samples/vars/grade_scope/exclude_characters.webp"
+    },
+    {
+      "value": "shadows_only",
+      "clause": "blue tinted shadows, cool shadow tint, neutral highlights",
+      "control": false,
+      "sample": "/samples/vars/grade_scope/shadows_only.webp"
+    },
+    {
+      "value": "highlights_only",
+      "clause": "blue tinted highlights, cool highlight tint, neutral shadows",
+      "control": false,
+      "sample": "/samples/vars/grade_scope/highlights_only.webp"
+    },
+    {
+      "value": "hue_range",
+      "clause": "selective color, red hues shifted, remaining colors desaturated",
+      "control": false,
+      "sample": "/samples/vars/grade_scope/hue_range.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "grade.scope",
+      "issue": "shadows_only and highlights_only are written in invented vocabulary (\"blue tinted shadows\", \"cool highlight tint\", \"neutral highlights\") that has no danbooru anchor. SDXL has no tonal-mask concept, so both will read as a globally blue frame — i.e. indistinguishable from each other and from full_frame, making three of five panels the same. This is the same class of failure the render.watermark card correctly refuses: a post-generation mask being faked with tags.",
+      "fix": "Keep the three values the model can actually express — full_frame, exclude_characters (\"spot color\" is a real, reliable tag) and hue_range (\"selective color\" likewise) — and demonstrate shadows_only/highlights_only as ffmpeg-masked grades over one identical render, exactly as the watermark card proposes."
+    }
+  ]
+}

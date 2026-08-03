@@ -1,0 +1,51 @@
+{
+  "variable": "shot.fx.impact_frame",
+  "claim": "The one-frame graphic hit is a defining anime action beat - a single drawing that violates the film's own rendering rules for a sixteenth of a second. Sketch_frame exposes the raw genga underneath; negative and silhouette_pop reduce the character to pure shape at the moment of contact.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "none",
+      "clause": "normal rendering, no impact effect",
+      "control": true,
+      "sample": "/samples/vars/shot_fx_impact_frame/none.webp"
+    },
+    {
+      "value": "white_flash",
+      "clause": "white flash frame, blown out white, high contrast",
+      "control": false,
+      "sample": "/samples/vars/shot_fx_impact_frame/white_flash.webp"
+    },
+    {
+      "value": "black_flash",
+      "clause": "black flash frame, blacked out, high contrast",
+      "control": false,
+      "sample": "/samples/vars/shot_fx_impact_frame/black_flash.webp"
+    },
+    {
+      "value": "negative",
+      "clause": "inverted colors, negative image, color inversion",
+      "control": false,
+      "sample": "/samples/vars/shot_fx_impact_frame/negative.webp"
+    },
+    {
+      "value": "sketch_frame",
+      "clause": "rough sketch, genga, pencil lines, unfinished drawing",
+      "control": false,
+      "sample": "/samples/vars/shot_fx_impact_frame/sketch_frame.webp"
+    },
+    {
+      "value": "silhouette_pop",
+      "clause": "silhouette, solid black figure, flat color background",
+      "control": false,
+      "sample": "/samples/vars/shot_fx_impact_frame/silhouette_pop.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "shot.fx.impact_frame",
+      "issue": "The \"none\" clause \"normal rendering, no impact effect\" is prose plus a negation. \"normal rendering\" is not a tag and the negation is ignored, so the baseline panel is being perturbed for no reason.",
+      "fix": "Empty clause."
+    }
+  ]
+}

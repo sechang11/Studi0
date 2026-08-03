@@ -1,0 +1,51 @@
+{
+  "variable": "light.rim",
+  "claim": "The edge highlight that peels a character off the background, and the most identifiably anime lighting device there is. Subtle just separates, halo turns the character into an event, and none is a deliberate choice to let them sink into the world.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "none",
+      "clause": "no rim light, edges blending into the background",
+      "control": true,
+      "sample": "/samples/vars/light_rim/none.webp"
+    },
+    {
+      "value": "subtle",
+      "clause": "subtle rim light, faint edge highlight",
+      "control": false,
+      "sample": "/samples/vars/light_rim/subtle.webp"
+    },
+    {
+      "value": "strong",
+      "clause": "strong rim light, bright hard outline on hair and shoulders",
+      "control": false,
+      "sample": "/samples/vars/light_rim/strong.webp"
+    },
+    {
+      "value": "halo",
+      "clause": "halo backlight, glowing full outline, hair haloed with light",
+      "control": false,
+      "sample": "/samples/vars/light_rim/halo.webp"
+    },
+    {
+      "value": "kiss",
+      "clause": "a single small rim highlight, light just kissing one shoulder edge",
+      "control": false,
+      "sample": "/samples/vars/light_rim/kiss.webp"
+    },
+    {
+      "value": "double_rim",
+      "clause": "double rim light, bright edges on both sides, two opposing kickers",
+      "control": false,
+      "sample": "/samples/vars/light_rim/double_rim.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "light.rim",
+      "issue": "kiss is written as prose — \"a single small rim highlight, light just kissing one shoulder edge\" opens with an article and a relative clause, which is exactly the phrasing that turns Animagine to mush. It also asks for the same thing as subtle (\"subtle rim light, faint edge highlight\") plus a shoulder restriction the model has no reliable handle for.",
+      "fix": "Tag it: \"faint rim light on one shoulder, asymmetric edge highlight\". Be ready to merge kiss into subtle if the renders match — a one-shoulder restriction is a very thin axis to spend a panel on."
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "variable": "world.era",
+  "claim": "Period drives architecture, wardrobe, props and signage together so no shot has to hand-tag its own century. Reach for it when the furniture of the world must stay consistent — showa and near_future dress the identical street into two unrelated films.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "ancient",
+      "clause": "ancient, stone columns, clay amphora, torch sconces",
+      "control": false,
+      "sample": "/samples/vars/world_era/ancient.webp"
+    },
+    {
+      "value": "feudal",
+      "clause": "feudal japan, wooden architecture, paper lantern, tiled roof",
+      "control": false,
+      "sample": "/samples/vars/world_era/feudal.webp"
+    },
+    {
+      "value": "victorian",
+      "clause": "victorian, gas lamp, brickwork, wrought iron",
+      "control": false,
+      "sample": "/samples/vars/world_era/victorian.webp"
+    },
+    {
+      "value": "early_20c",
+      "clause": "1920s, art deco, vintage automobile, telegraph pole",
+      "control": false,
+      "sample": "/samples/vars/world_era/early_20c.webp"
+    },
+    {
+      "value": "showa",
+      "clause": "showa era, retro japan, wooden shopfront, old vending machine",
+      "control": false,
+      "sample": "/samples/vars/world_era/showa.webp"
+    },
+    {
+      "value": "modern",
+      "clause": "modern, contemporary, glass and steel, present day",
+      "control": false,
+      "sample": "/samples/vars/world_era/modern.webp"
+    },
+    {
+      "value": "near_future",
+      "clause": "near future, sleek architecture, holographic sign, drone",
+      "control": false,
+      "sample": "/samples/vars/world_era/near_future.webp"
+    },
+    {
+      "value": "far_future",
+      "clause": "far future, megastructure, chrome spires, alien architecture",
+      "control": false,
+      "sample": "/samples/vars/world_era/far_future.webp"
+    },
+    {
+      "value": "post_apocalyptic",
+      "clause": "post-apocalyptic, ruined city, rusted debris, overgrown wreckage",
+      "control": false,
+      "sample": "/samples/vars/world_era/post_apocalyptic.webp"
+    },
+    {
+      "value": "timeless",
+      "clause": "featureless architecture, no signage, plain stone",
+      "control": false,
+      "sample": "/samples/vars/world_era/timeless.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "world.era",
+      "issue": "timeless ends on \"no signage\", the same negation problem, and the option is otherwise carried entirely by \"featureless architecture\" and \"plain stone\".",
+      "fix": "\"plain stone architecture, unadorned walls, blank facades\" — three positives, no negation."
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "variable": "layer.mode",
+  "claim": "Decides whether the depth planes are only described inside one prompt or actually rendered and composited as separate images. A director reaches for generated_separate when a foreground element has to move independently of the character, and stays on tag_hinted when they just want a flat generation to imply depth for free.",
+  "not_visual": "This is a pipeline/compositing setting, not image content. It governs how the frame is produced (one bake, tag hints, mask-driven, or separate generations composited), not what appears in it — all four options can legitimately produce the identical still, so the panels would be indistinguishable and the card would teach nothing. Demonstrate it with a layer-breakdown diagram or a moving clip, not a still.",
+  "options": [
+    "baked",
+    "tag_hinted",
+    "masked",
+    "generated_separate"
+  ],
+  "panels": []
+}

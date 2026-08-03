@@ -1,0 +1,63 @@
+{
+  "variable": "world.season",
+  "claim": "One word that moves foliage, wardrobe, sun angle and ambience at the same time. Directors set it because the same scene played in late_summer and in winter are two different stories about the same people.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "spring",
+      "clause": "cherry blossoms, falling petals, fresh buds",
+      "control": false,
+      "sample": "/samples/vars/world_season/spring.webp"
+    },
+    {
+      "value": "early_summer",
+      "clause": "fresh green leaves, verdant foliage, clear warm light",
+      "control": false,
+      "sample": "/samples/vars/world_season/early_summer.webp"
+    },
+    {
+      "value": "summer",
+      "clause": "midsummer, cicada, lush green, harsh sunlight",
+      "control": false,
+      "sample": "/samples/vars/world_season/summer.webp"
+    },
+    {
+      "value": "late_summer",
+      "clause": "late summer, dry grass, cicada shell, hazy heat",
+      "control": false,
+      "sample": "/samples/vars/world_season/late_summer.webp"
+    },
+    {
+      "value": "autumn",
+      "clause": "autumn leaves, maple leaf, orange foliage, falling leaves",
+      "control": false,
+      "sample": "/samples/vars/world_season/autumn.webp"
+    },
+    {
+      "value": "winter",
+      "clause": "winter, bare trees, snow, cold breath",
+      "control": false,
+      "sample": "/samples/vars/world_season/winter.webp"
+    },
+    {
+      "value": "rainy_season",
+      "clause": "rainy season, hydrangea, wet air, grey drizzle",
+      "control": false,
+      "sample": "/samples/vars/world_season/rainy_season.webp"
+    },
+    {
+      "value": "dry_season",
+      "clause": "dry season, cracked earth, brown grass, dust",
+      "control": false,
+      "sample": "/samples/vars/world_season/dry_season.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "world.season",
+      "issue": "The card leans on foliage, but the fixed subject is a floodlit stadium with essentially no plant life beyond pitch grass. spring, autumn and winter will survive on petals/leaves/snow; early_summer (\"fresh green leaves, verdant foliage\"), late_summer (\"dry grass, cicada shell, hazy heat\") and dry_season (\"cracked earth, brown grass, dust\") have nothing to attach to and are likely to collapse into each other and into summer.",
+      "fix": "For the three foliage-dependent options, add one cue that survives a stadium without stealing another variable — e.g. late_summer -> \"heat haze, dry brown grass, harsh white light\"; dry_season -> \"dust in the air, cracked bare ground\"; early_summer -> \"bright fresh green turf, clear light\". If they still cannot separate, say so on the card rather than shipping three identical panels."
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+# Style range sweep — same subject, twelve different media.
+# Format: label :: prompt
+#
+# The subject clause is IDENTICAL in every line. Only the medium changes.
+# That is the point: it isolates what "style" words actually do, and it is why
+# this sheet is useful to browse when you are deciding how a project should look.
+#
+# Run:
+#   python3 scripts/sweep.py workflows/01_qwen_t2i_turbo.json 10.inputs.text \
+#       --from-file sweeps/styles.txt --prefix claude-generated/16-style-range/style
+#
+# Reuse: swap the subject clause in all twelve lines for your own project. Keep the
+# medium clauses verbatim — they are the tested part.
+
+35mm-documentary :: A grey heron standing motionless in shallow water among dead reeds, head lowered, one leg raised. Overcast morning light. Shot on 35mm colour negative film, documentary wildlife photography, natural light only, visible film grain, muted greens and cold greys, shallow depth of field, 200mm telephoto.
+
+gouache-on-card :: A grey heron standing motionless in shallow water among dead reeds, head lowered, one leg raised. Matte gouache painting on grey card, visible brush texture, flat value blocking, hard readable shapes, limited palette of slate blue, bone white and dull ochre, no photographic depth of field.
+
+ukiyo-e-woodblock :: A grey heron standing motionless in shallow water among dead reeds, head lowered, one leg raised. Japanese ukiyo-e woodblock print, flat colour areas, strong black keyline, visible woodgrain texture, stylised water pattern, indigo and pale cream, paper texture, no gradients.
+
+screenprint-poster :: A grey heron standing motionless in shallow water among dead reeds, head lowered, one leg raised. 1950s three-colour screenprint travel poster, hard flat shapes, deliberate off-register edges, coarse halftone dots, mustard, teal and warm black on cream paper.
+
+architectural-pencil :: A grey heron standing motionless in shallow water among dead reeds, head lowered, one leg raised. Graphite pencil drawing on rough paper, precise hatching and crosshatching, constructed with visible guide lines, monochrome, white paper showing through, architectural draughtsman precision.
+
+oil-impasto :: A grey heron standing motionless in shallow water among dead reeds, head lowered, one leg raised. Thick oil paint on canvas, heavy impasto, palette knife strokes standing off the surface, broken colour, raking light catching the ridges of paint, deep umber ground.
+
+cel-animation :: A grey heron standing motionless in shallow water among dead reeds, head lowered, one leg raised. Hand-painted cel animation background, clean ink line, flat airbrushed colour fields, soft painted water, 1990s feature animation style, warm daylight palette.
+
+technical-blueprint :: A grey heron standing motionless in shallow water among dead reeds, head lowered, one leg raised. White line technical blueprint on cyanotype blue paper, orthographic construction lines, dimension arrows and annotation callouts, engineering drawing precision, monochrome blue.
+
+stained-glass :: A grey heron standing motionless in shallow water among dead reeds, head lowered, one leg raised. Leaded stained glass window, heavy black lead lines dividing flat coloured glass, backlit so the colours glow, cobalt and amber and bottle green, visible glass texture and bubbles.
+
+risograph-duotone :: A grey heron standing motionless in shallow water among dead reeds, head lowered, one leg raised. Two-colour risograph print, fluorescent pink and deep teal ink only, visible ink texture and misregistration, coarse grain, flat paper stock, high contrast.
+
+bronze-sculpture :: A grey heron standing motionless in shallow water among dead reeds, head lowered, one leg raised. Cast bronze sculpture photographed in a museum, dark green and brown patina, polished highlights on the raised surfaces, hard directional gallery spotlight, neutral grey background, macro lens.
+
+infrared-photograph :: A grey heron standing motionless in shallow water among dead reeds, head lowered, one leg raised. Colour infrared photograph, foliage rendered bright white and pale pink, water rendered near black, sky deep and dark, false-colour palette, high contrast, medium format.

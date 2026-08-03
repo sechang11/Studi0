@@ -1,0 +1,95 @@
+{
+  "title": "LAST LIGHT",
+  "subtitle": "a short animated film",
+  "ar": "16:9",
+  "fps": 24,
+  "seconds": 4,
+  "transition": 0.5,
+
+  "style": "stylized 3D animated film still, Pixar-quality character animation, soft warm global illumination, shallow depth of field, appealing rounded shapes, rich but muted colour palette of teal shadows and amber light, cinematic composition, highly detailed",
+
+  "characters": {
+    "PIP": "PIP, a small round white maintenance robot the size of a football, one large expressive amber lens for an eye, two short articulated arms, rubber treads instead of legs, scuffed white enamel with a single faded orange stripe around its middle",
+    "ARCH": "ARCH, a huge old ceiling-mounted overseer unit, a rectangular brass-and-glass housing on a long armature, one wide horizontal pale-blue scanning light across its face, cables and dust hanging from it"
+  },
+
+  "voices": {
+    "PIP":  { "exaggeration": 0.8,  "cfg_weight": 0.4, "temperature": 0.8, "pitch": 1.30, "rate": 0.94 },
+    "ARCH": { "exaggeration": 0.25, "cfg_weight": 0.3, "temperature": 0.6, "pitch": 0.72, "rate": 0.90 }
+  },
+
+  "shots": [
+    {
+      "id": "01_world",
+      "prompt": "Wide establishing shot inside an enormous abandoned automated greenhouse, rows of dead brown planters stretching into the distance under a vast cracked glass roof, dust hanging in cold shafts of light, everything overgrown with grey lichen, one small patch of green in the far distance",
+      "motion": "Very slow push in down the central aisle. Dust drifts through the light shafts, a loose panel creaks somewhere above."
+    },
+    {
+      "id": "02_pip",
+      "prompt": "Medium shot of {PIP} rolling along a cracked concrete aisle between dead planters, carrying a small watering can in one arm, its amber eye lit warmly against the cold grey space",
+      "motion": "Pip rolls steadily toward camera, treads turning, the watering can swaying slightly. Its eye brightens as it moves into a shaft of light."
+    },
+    {
+      "id": "03_flower",
+      "prompt": "Close-up of a single small yellow sunflower in a clay pot, drooping badly, several petals already brown and curling, dry cracked soil, cold blue light falling on it from above, everything around it dead",
+      "motion": "The flower sags slowly, one brown petal detaches and falls. Dust drifts past. The light on it flickers and dims slightly."
+    },
+    {
+      "id": "04_pip_reacts",
+      "prompt": "Close-up of {PIP} looking up at something above frame, its single amber eye wide and worried, reflection of a failing lamp array visible curved across the glass of its lens, small arms held close to its body",
+      "motion": "Pip's eye iris contracts then widens, the reflection in its lens flickers. It tilts its whole body back to look further up.",
+      "line": { "who": "PIP", "text": "The lamp. The lamp went out. She needs the light!" }
+    },
+    {
+      "id": "05_arch",
+      "prompt": "Low angle looking up at {ARCH} suspended high in the greenhouse rafters, its pale blue scan light sweeping slowly down toward the camera, vast dark ironwork and cracked glass behind it",
+      "motion": "Arch's armature rotates slowly with a heavy mechanical groan, its blue scan light sweeping down across the frame toward camera.",
+      "line": { "who": "ARCH", "text": "Lamp array nine is offline. A technician has been notified. You will wait, Pip." }
+    },
+    {
+      "id": "06_argue",
+      "prompt": "Two shot from the side, tiny {PIP} on the floor in the foreground looking up, enormous {ARCH} looming above and behind in soft focus, dramatic scale difference, cold blue light from above against warm amber from Pip's eye",
+      "motion": "Pip rocks forward on its treads, arms lifting in protest. Arch's light holds steady and cold. Dust settles between them.",
+      "line": { "who": "PIP", "text": "Nobody has come in eleven years. She will be dead by morning!" }
+    },
+    {
+      "id": "07_refusal",
+      "prompt": "Extreme close-up of {ARCH}'s pale blue horizontal scan light, dust and scratches visible on the old glass housing, the light dimming slightly as if tired",
+      "motion": "The blue light pulses slowly, dims, then steadies. A faint electrical flicker crosses the glass.",
+      "line": { "who": "ARCH", "text": "Protocol is all I have left. I am sorry. I cannot help you." }
+    },
+    {
+      "id": "08_climb",
+      "prompt": "Dramatic wide shot of {PIP} climbing a rusted maintenance ladder up the inside of the greenhouse wall, tiny against the enormous height, the dead flower far below, cold light streaming through the cracked glass roof above",
+      "motion": "Pip hauls itself up rung by rung, small arms straining, body swinging slightly. The camera cranes upward alongside it."
+    },
+    {
+      "id": "09_sacrifice",
+      "prompt": "Close-up of {PIP} at the top of the ladder, having opened a hatch in its own chest to reveal a glowing amber power cell, reaching to connect it to a dark lamp fitting, its eye dimming to almost nothing as it does",
+      "motion": "Pip pulls the glowing cell free, its own eye fading toward dark. The lamp above sparks, then floods warm gold light across everything. Pip goes still.",
+      "line": { "who": "PIP", "text": "It is alright. She only needs a little. Just a little light." }
+    },
+    {
+      "id": "10_arch_moved",
+      "prompt": "Medium shot of {ARCH} in the rafters, its cold blue scan light slowly warming to gold as it turns to look down, cables shifting, the whole greenhouse now lit warm below it",
+      "motion": "Arch's armature turns slowly downward, its light shifting from cold blue to warm gold. Dust swirls in the new warm light.",
+      "line": { "who": "ARCH", "text": "Rerouting main power. All of it. Hold on, little one." }
+    },
+    {
+      "id": "11_revive",
+      "prompt": "Close-up of {PIP} lying still on the walkway as a surge of golden light washes over it from above, its amber eye flickering weakly and then relighting fully bright, small arms twitching back to life",
+      "motion": "Golden light floods across Pip. Its eye flickers, catches, then glows fully. Its arms twitch and it rocks upright.",
+      "line": { "who": "ARCH", "text": "Protocol was never all I had. Look, Pip. Look at her." }
+    },
+    {
+      "id": "12_bloom",
+      "prompt": "Close-up of the small sunflower now standing tall and vivid yellow in warm golden light, petals fully open and healthy, tiny green shoots visible pushing up through the soil around its base, the dead greenhouse warm and bright behind it",
+      "motion": "The flower lifts and opens, petals unfurling toward the light, turning slowly to follow it. Green shoots push up through the soil. Dust glitters gold."
+    },
+    {
+      "id": "13_final",
+      "prompt": "Wide final shot of the enormous greenhouse now flooded with warm golden light, {PIP} small and bright on the walkway looking down at the single sunflower, {ARCH} glowing gold above, green shoots appearing in planters stretching away into the distance",
+      "motion": "Slow crane up and back, revealing more and more green appearing along the rows into the far distance. Warm dust drifts through the light."
+    }
+  ]
+}

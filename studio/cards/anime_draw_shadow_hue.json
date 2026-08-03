@@ -1,0 +1,51 @@
+{
+  "variable": "anime.draw.shadow_hue",
+  "claim": "The colour a shadow shifts toward, chosen by a colour designer and worth roughly half a film's identity. Blue shift is the modern default and reads clean; warm shift reads nostalgic; grey multiply reads cheap and flat.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "darker_same_hue",
+      "clause": "shadows in a darker shade of the base color, monochromatic shading",
+      "control": false,
+      "sample": "/samples/vars/anime_draw_shadow_hue/darker_same_hue.webp"
+    },
+    {
+      "value": "blue_shift",
+      "clause": "blue shadows, cool toned shading",
+      "control": false,
+      "sample": "/samples/vars/anime_draw_shadow_hue/blue_shift.webp"
+    },
+    {
+      "value": "purple_shift",
+      "clause": "purple shadows, violet toned shading",
+      "control": false,
+      "sample": "/samples/vars/anime_draw_shadow_hue/purple_shift.webp"
+    },
+    {
+      "value": "complementary",
+      "clause": "complementary color shadows, contrasting hue shading",
+      "control": false,
+      "sample": "/samples/vars/anime_draw_shadow_hue/complementary.webp"
+    },
+    {
+      "value": "warm_shift",
+      "clause": "warm shadows, red toned shading",
+      "control": false,
+      "sample": "/samples/vars/anime_draw_shadow_hue/warm_shift.webp"
+    },
+    {
+      "value": "grey_multiply",
+      "clause": "grey shadows, desaturated shading",
+      "control": false,
+      "sample": "/samples/vars/anime_draw_shadow_hue/grey_multiply.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "anime.draw.shadow_hue",
+      "issue": "darker_same_hue's clause \"shadows in a darker shade of the base color, monochromatic shading\" is a sentence, not tags, and \"monochromatic\" risks pulling the whole frame toward greyscale - the opposite of what the option means. complementary (\"complementary color shadows, contrasting hue shading\") is not a tag either and against this subject (dark red hair, black jersey) will most likely just produce the same cool shadows as blue_shift.",
+      "fix": "darker_same_hue -> empty clause and declare it the baseline (darker-same-hue is what the model does by default). complementary -> name the actual hue the subject implies, e.g. \"green shadows, teal toned shading\", or drop it."
+    }
+  ]
+}

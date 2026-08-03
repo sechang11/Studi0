@@ -1,0 +1,105 @@
+{
+  "variable": "story.tone",
+  "claim": "Tone is the single tonality word every department reads when nothing more specific is set, and it lands mostly on the face and the colour temperature. You reach for it when the scene content is neutral but the feeling must not be — the same boy on the same pitch is a different film at earnest versus savage.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "earnest",
+      "clause": "earnest expression, direct clear gaze, even warm light",
+      "control": false,
+      "sample": "/samples/vars/story_tone/earnest.webp"
+    },
+    {
+      "value": "wistful",
+      "clause": "wistful, distant gaze, soft hazy light, faded warmth",
+      "control": false,
+      "sample": "/samples/vars/story_tone/wistful.webp"
+    },
+    {
+      "value": "melancholy",
+      "clause": "melancholy, downcast eyes, muted blue palette",
+      "control": false,
+      "sample": "/samples/vars/story_tone/melancholy.webp"
+    },
+    {
+      "value": "tender",
+      "clause": "tender expression, gentle half-smile, soft warm glow",
+      "control": false,
+      "sample": "/samples/vars/story_tone/tender.webp"
+    },
+    {
+      "value": "tense",
+      "clause": "tense, clenched jaw, hard-edged shadows, cold contrast",
+      "control": false,
+      "sample": "/samples/vars/story_tone/tense.webp"
+    },
+    {
+      "value": "dread",
+      "clause": "dread, wide fearful eyes, creeping shadow, desaturated cold",
+      "control": false,
+      "sample": "/samples/vars/story_tone/dread.webp"
+    },
+    {
+      "value": "playful",
+      "clause": "playful, grin, bright cheerful light, light-hearted",
+      "control": false,
+      "sample": "/samples/vars/story_tone/playful.webp"
+    },
+    {
+      "value": "comedic",
+      "clause": "comedic, exaggerated open-mouth expression, bright flat light",
+      "control": false,
+      "sample": "/samples/vars/story_tone/comedic.webp"
+    },
+    {
+      "value": "absurd",
+      "clause": "absurd, surreal, nonsensical, deadpan bizarre",
+      "control": false,
+      "sample": "/samples/vars/story_tone/absurd.webp"
+    },
+    {
+      "value": "cold",
+      "clause": "cold expression, flat stare, cool desaturated palette, distant",
+      "control": false,
+      "sample": "/samples/vars/story_tone/cold.webp"
+    },
+    {
+      "value": "bittersweet",
+      "clause": "bittersweet, sad smile, wet eyes, warm light cool shadow",
+      "control": false,
+      "sample": "/samples/vars/story_tone/bittersweet.webp"
+    },
+    {
+      "value": "triumphant",
+      "clause": "triumphant, exultant expression, radiant backlight, blazing",
+      "control": false,
+      "sample": "/samples/vars/story_tone/triumphant.webp"
+    },
+    {
+      "value": "eerie",
+      "clause": "eerie, unsettling stillness, pale sickly glow, blank stare",
+      "control": false,
+      "sample": "/samples/vars/story_tone/eerie.webp"
+    },
+    {
+      "value": "serene",
+      "clause": "serene, calm expression, soft diffuse light, tranquil",
+      "control": false,
+      "sample": "/samples/vars/story_tone/serene.webp"
+    },
+    {
+      "value": "savage",
+      "clause": "savage, feral grin, bared teeth, harsh raking light",
+      "control": false,
+      "sample": "/samples/vars/story_tone/savage.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "story.tone",
+      "issue": "absurd (\"absurd, surreal, nonsensical, deadpan bizarre\") is three non-tags plus \"surreal\". Only \"surreal\" carries weight, so the panel will land close to the neutral control and teach nothing about the option.",
+      "fix": "Anchor it in something drawable that is not subject-restating: \"surreal, deadpan expression, incongruous object, dreamlike composition\"."
+    }
+  ]
+}

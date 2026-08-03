@@ -1,0 +1,93 @@
+{
+  "_comment": "SAM 3.1 multiplex: TEXT-PROMPTED segmentation. Put the thing you want cut out into node 3 ('the wristwatch', 'her jacket', 'the left hand') and SAM finds it. Saves an RGBA cutout, the raw mask, and a magenta-backed proof render so you can SEE that the alpha is right. This node is what unlocks compositing, targeted inpaint masking and character replacement.",
+  "_notes": [
+    "MASK CONVENTION - the one thing that bites everyone: SAM3_Detect returns a FOREGROUND mask (white = the object it found). But JoinImageWithAlpha internally does alpha = 1.0 - mask, because ComfyUI masks are normally inpaint 'holes'. So you MUST put InvertMask between them (node 5) or you will save the background and throw away your subject. The RGB channels are untouched either way, so an image viewer that ignores alpha shows the full original and everything looks fine - check the magenta proof render instead.",
+    "individual_masks=false returns ONE union mask of every match. Set true to get a mask batch, one per detected object, for per-object compositing.",
+    "threshold is the detection confidence floor. Drop to ~0.25 for small or partly occluded objects, raise to 0.7 to reject lookalikes.",
+    "refine_iterations runs extra SAM decoder passes for tighter edges. 2 is a good default, 0 is fastest, 4+ rarely pays.",
+    "sam3.1_multiplex_fp16.safetensors must be visible to CheckpointLoaderSimple. It ships in models/detection/, so there is a symlink into models/checkpoints/. The CLIP that comes out of the loader is SAM's own text tower - do not substitute a Qwen or Gemma encoder.",
+    "EmptyImage width/height in node 8 must match your input image or the composite will be cropped. 1328x1328 matches claude_seg_product.png."
+  ],
+  "1": {
+    "class_type": "LoadImage",
+    "inputs": { "image": "claude_seg_product.png" }
+  },
+  "2": {
+    "class_type": "CheckpointLoaderSimple",
+    "inputs": { "ckpt_name": "sam3.1_multiplex_fp16.safetensors" }
+  },
+  "3": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "clip": ["2", 1],
+      "text": "the wristwatch"
+    }
+  },
+  "4": {
+    "class_type": "SAM3_Detect",
+    "inputs": {
+      "model": ["2", 0],
+      "image": ["1", 0],
+      "threshold": 0.5,
+      "refine_iterations": 2,
+      "individual_masks": false,
+      "conditioning": ["3", 0]
+    }
+  },
+  "5": {
+    "class_type": "InvertMask",
+    "inputs": { "mask": ["4", 0] }
+  },
+  "6": {
+    "class_type": "JoinImageWithAlpha",
+    "inputs": {
+      "image": ["1", 0],
+      "alpha": ["5", 0]
+    }
+  },
+  "7": {
+    "class_type": "MaskToImage",
+    "inputs": { "mask": ["4", 0] }
+  },
+  "8": {
+    "class_type": "EmptyImage",
+    "inputs": {
+      "width": 1328,
+      "height": 1328,
+      "batch_size": 1,
+      "color": 16711935
+    }
+  },
+  "9": {
+    "class_type": "ImageCompositeMasked",
+    "inputs": {
+      "destination": ["8", 0],
+      "source": ["1", 0],
+      "x": 0,
+      "y": 0,
+      "resize_source": false,
+      "mask": ["4", 0]
+    }
+  },
+  "10": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": ["6", 0],
+      "filename_prefix": "claude-generated/12-segmentation-matting/sam3_cutout_rgba"
+    }
+  },
+  "11": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": ["7", 0],
+      "filename_prefix": "claude-generated/12-segmentation-matting/sam3_mask"
+    }
+  },
+  "12": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": ["9", 0],
+      "filename_prefix": "claude-generated/12-segmentation-matting/sam3_proof_on_magenta"
+    }
+  }
+}

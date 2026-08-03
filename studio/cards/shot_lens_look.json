@@ -1,0 +1,69 @@
+{
+  "variable": "shot.lens.look",
+  "claim": "Lens look lets an author state the feel without knowing millimetres, and it changes the geometry of the subject rather than just the crop. Wide bends and separates, tele flattens and stacks the crowd right onto the shoulders, macro abandons the person for a texture.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "ultra_wide",
+      "clause": "ultra wide angle, exaggerated perspective, stretched edges",
+      "control": false,
+      "sample": "/samples/vars/shot_lens_look/ultra_wide.webp"
+    },
+    {
+      "value": "wide",
+      "clause": "wide angle lens, strong perspective",
+      "control": false,
+      "sample": "/samples/vars/shot_lens_look/wide.webp"
+    },
+    {
+      "value": "normal",
+      "clause": "natural perspective, undistorted",
+      "control": false,
+      "sample": "/samples/vars/shot_lens_look/normal.webp"
+    },
+    {
+      "value": "portrait",
+      "clause": "portrait lens, 85mm, mild compression",
+      "control": false,
+      "sample": "/samples/vars/shot_lens_look/portrait.webp"
+    },
+    {
+      "value": "tele",
+      "clause": "telephoto lens, compressed perspective",
+      "control": false,
+      "sample": "/samples/vars/shot_lens_look/tele.webp"
+    },
+    {
+      "value": "super_tele",
+      "clause": "super telephoto, extreme compression, long lens",
+      "control": false,
+      "sample": "/samples/vars/shot_lens_look/super_tele.webp"
+    },
+    {
+      "value": "fisheye",
+      "clause": "fisheye lens, fisheye, barrel distortion",
+      "control": false,
+      "sample": "/samples/vars/shot_lens_look/fisheye.webp"
+    },
+    {
+      "value": "anamorphic",
+      "clause": "anamorphic lens, anamorphic widescreen",
+      "control": false,
+      "sample": "/samples/vars/shot_lens_look/anamorphic.webp"
+    },
+    {
+      "value": "macro",
+      "clause": "macro lens, extreme close-up, macro photography",
+      "control": false,
+      "sample": "/samples/vars/shot_lens_look/macro.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "shot.lens.look",
+      "issue": "portrait (\"portrait lens, 85mm, mild compression\"), tele and super_tele all resolve to the single telephoto look the model knows — millimetre numbers are inert tokens in Animagine — so three options land on one panel. macro smuggles two other variables: \"extreme close-up\" is framing already owned by shot.purpose.detail, and \"macro photography\" pulls the render toward photoreal and off the anime style the whole system depends on. anamorphic's \"anamorphic widescreen\" tends to draw letterbox bars, which is shot.frame.letterbox's job.",
+      "fix": "Collapse portrait/tele/super_tele into one \"telephoto compression\" option. Rewrite macro as \"macro, extreme close-up detail\" without the word photography. Drop \"widescreen\" from anamorphic and let it ride on \"anamorphic lens\" alone (or express it via the flare/bokeh cards, which already carry the anamorphic look)."
+    }
+  ]
+}

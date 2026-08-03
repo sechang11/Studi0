@@ -1,0 +1,12 @@
+{
+  "variable": "render.order",
+  "claim": "Decides which shots exist first while a long render is still grinding. hero_first puts the shots that decide the film in front of you in minutes instead of an hour; cheap_first gets you a complete rough cut fastest; dependency respects what feeds what; sequential is for when you want to watch the film assemble in order.",
+  "not_visual": "Pure scheduling. It changes when each shot lands on disk and never what any shot looks like. Every panel would be the identical frame. If an author wants to see this variable at work the artefact is a render-queue timeline, not an image.",
+  "options": [
+    "sequential",
+    "hero_first",
+    "cheap_first",
+    "dependency"
+  ],
+  "panels": []
+}

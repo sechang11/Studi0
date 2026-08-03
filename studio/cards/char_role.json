@@ -1,0 +1,17 @@
+{
+  "variable": "char.role",
+  "claim": "Declares what the character is for in the story so the pipeline can spend on them — prompt priority, face-weight budget, how often they anchor a shot. A director sets it once per character to stop an extra eating the token budget that belongs to the lead.",
+  "not_visual": "Role is a budget and priority setting, not a look. With the subject sentence and seed held fixed, a lead and an extra are the same drawing; the only way to make the panels differ is to smuggle in shot size, framing or wardrobe, which belong to other variables. Nothing here changes pixels on its own.",
+  "options": [
+    "lead",
+    "deuteragonist",
+    "support",
+    "antagonist",
+    "foil",
+    "mentor",
+    "extra",
+    "crowd",
+    "narrator"
+  ],
+  "panels": []
+}

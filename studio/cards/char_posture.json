@@ -1,0 +1,80 @@
+{
+  "variable": "char.posture",
+  "claim": "How the body is held, which states character before the face is even visible — slouched and upright are two different people at the same height. A director sets it as the base pose every gesture and camera choice then builds on.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "standing",
+      "clause": "standing",
+      "control": false,
+      "sample": "/samples/vars/char_posture/standing.webp"
+    },
+    {
+      "value": "slouched",
+      "clause": "slouching, hunched shoulders, head down",
+      "control": false,
+      "sample": "/samples/vars/char_posture/slouched.webp"
+    },
+    {
+      "value": "upright",
+      "clause": "standing straight, shoulders back, chest out",
+      "control": false,
+      "sample": "/samples/vars/char_posture/upright.webp"
+    },
+    {
+      "value": "leaning",
+      "clause": "leaning to one side, weight on one leg",
+      "control": false,
+      "sample": "/samples/vars/char_posture/leaning.webp"
+    },
+    {
+      "value": "sitting",
+      "clause": "sitting, seated",
+      "control": false,
+      "sample": "/samples/vars/char_posture/sitting.webp"
+    },
+    {
+      "value": "seiza",
+      "clause": "seiza, kneeling on heels",
+      "control": false,
+      "sample": "/samples/vars/char_posture/seiza.webp"
+    },
+    {
+      "value": "crouched",
+      "clause": "crouching, squatting, low stance",
+      "control": false,
+      "sample": "/samples/vars/char_posture/crouched.webp"
+    },
+    {
+      "value": "kneeling",
+      "clause": "kneeling, on one knee",
+      "control": false,
+      "sample": "/samples/vars/char_posture/kneeling.webp"
+    },
+    {
+      "value": "lying",
+      "clause": "lying down, on back, sprawled on the ground",
+      "control": false,
+      "sample": "/samples/vars/char_posture/lying.webp"
+    },
+    {
+      "value": "curled",
+      "clause": "fetal position, curled up, knees to chest",
+      "control": false,
+      "sample": "/samples/vars/char_posture/curled.webp"
+    },
+    {
+      "value": "floating",
+      "clause": "floating, levitating, feet off the ground",
+      "control": false,
+      "sample": "/samples/vars/char_posture/floating.webp"
+    },
+    {
+      "value": "falling",
+      "clause": "falling backwards, off balance, body tilted",
+      "control": false,
+      "sample": "/samples/vars/char_posture/falling.webp"
+    }
+  ]
+}

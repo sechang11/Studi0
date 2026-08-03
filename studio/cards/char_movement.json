@@ -1,0 +1,87 @@
+{
+  "variable": "char.movement",
+  "claim": "States what the body is doing, and it is the spine of the i2v motion prompt as well as the pose in the still. A director sets it because walking, running and sprinting are three different stories about how urgent this is.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "still",
+      "clause": "standing still, motionless, static pose",
+      "control": false,
+      "sample": "/samples/vars/char_movement/still.webp"
+    },
+    {
+      "value": "idle",
+      "clause": "relaxed stance, shifting weight, idle pose",
+      "control": false,
+      "sample": "/samples/vars/char_movement/idle.webp"
+    },
+    {
+      "value": "walking",
+      "clause": "walking, mid-stride, one foot forward",
+      "control": false,
+      "sample": "/samples/vars/char_movement/walking.webp"
+    },
+    {
+      "value": "running",
+      "clause": "running, mid-run, arms pumping",
+      "control": false,
+      "sample": "/samples/vars/char_movement/running.webp"
+    },
+    {
+      "value": "sprinting",
+      "clause": "sprinting, full sprint, deep forward lean, legs extended",
+      "control": false,
+      "sample": "/samples/vars/char_movement/sprinting.webp"
+    },
+    {
+      "value": "turning",
+      "clause": "turning around, twisting torso, mid-turn",
+      "control": false,
+      "sample": "/samples/vars/char_movement/turning.webp"
+    },
+    {
+      "value": "rising",
+      "clause": "standing up, rising from a crouch, pushing off the ground",
+      "control": false,
+      "sample": "/samples/vars/char_movement/rising.webp"
+    },
+    {
+      "value": "sitting_down",
+      "clause": "sitting down, lowering into a seat, bending knees",
+      "control": false,
+      "sample": "/samples/vars/char_movement/sitting_down.webp"
+    },
+    {
+      "value": "falling",
+      "clause": "falling, mid-air, arms out, off balance",
+      "control": false,
+      "sample": "/samples/vars/char_movement/falling.webp"
+    },
+    {
+      "value": "fighting",
+      "clause": "fighting, punching, combat stance",
+      "control": false,
+      "sample": "/samples/vars/char_movement/fighting.webp"
+    },
+    {
+      "value": "dancing",
+      "clause": "dancing, dance pose, arms raised",
+      "control": false,
+      "sample": "/samples/vars/char_movement/dancing.webp"
+    },
+    {
+      "value": "flying",
+      "clause": "flying, airborne, soaring, arms out",
+      "control": false,
+      "sample": "/samples/vars/char_movement/flying.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "char.movement",
+      "issue": "still (\"standing still, motionless, static pose\") and idle (\"relaxed stance, shifting weight, idle pose\") cannot differ in a single frame — \"shifting weight\" is a description of motion over time, and both resolve to a boy standing. The card is correctly renderable overall, but these two panels will be the same image.",
+      "fix": "Either merge them for the still card and note that the still/idle distinction exists only in the LTX motion prompt, or make idle a genuinely different held pose — \"contrapposto, weight on one leg, hands loose at sides\" — and accept it now overlaps char.posture.leaning."
+    }
+  ]
+}

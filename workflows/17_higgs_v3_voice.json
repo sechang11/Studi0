@@ -1,0 +1,40 @@
+{
+  "_comment": "Higgs Audio V3 via TTS-Audio-Suite. The house voice engine: it produced the most natural, character-ful reads of every engine tested. Cast a character by pointing node 30's narrator_voice at a reference clip - never by pitch-shifting one voice, which is what made the first films sound like a single actor on a varispeed tape.",
+  "_notes": [
+    "Higgs V3 works where Higgs V2 does not - use the V3 node.",
+    "No emotion control here; that is IndexTTS-2 (workflow 16). Use this for narration and most dialogue, and 16 for lines that need a directed performance.",
+    "Do NOT cast the Clint_Eastwood / David_Attenborough / Morgan_Freeman / Sophie_Anderson clips that ship with the pack - clones of real identifiable people.",
+    "A new reference voice needs a companion .reference.txt (transcribe it with the suite's Granite ASR) and a ComfyUI restart before it appears."
+  ],
+  "10": {
+    "class_type": "HiggsAudioV3EngineNode",
+    "inputs": {
+      "model": "higgs-audio-v3-tts-4b",
+      "device": "auto",
+      "dtype": "auto",
+      "attention": "auto",
+      "temperature": 1.0,
+      "top_p": 0.95,
+      "top_k": 50,
+      "max_new_tokens": 2048
+    }
+  },
+  "30": {
+    "class_type": "UnifiedTTSTextNode",
+    "inputs": {
+      "TTS_engine": ["10", 0],
+      "text": "placeholder line",
+      "narrator_voice": "voices_examples/male/male_01.wav",
+      "seed": 1,
+      "enable_chunking": false,
+      "max_chars_per_chunk": 400,
+      "chunk_combination_method": "auto",
+      "silence_between_chunks_ms": 100,
+      "enable_audio_cache": false
+    }
+  },
+  "40": {
+    "class_type": "SaveAudioMP3",
+    "inputs": { "audio": ["30", 0], "filename_prefix": "claude-generated/voice", "quality": "320k" }
+  }
+}

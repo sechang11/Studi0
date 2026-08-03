@@ -1,0 +1,51 @@
+{
+  "variable": "shot.comp.horizon",
+  "claim": "Horizon placement decides whether a character dominates the sky or is crushed under the weight of the ground. Low horizon makes him a monument against open air; high horizon buries him in the pitch.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "none",
+      "clause": "no horizon visible, no sky in frame",
+      "control": true,
+      "sample": "/samples/vars/shot_comp_horizon/none.webp"
+    },
+    {
+      "value": "low",
+      "clause": "very low horizon line, sky fills most of the frame",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_horizon/low.webp"
+    },
+    {
+      "value": "lower_third",
+      "clause": "horizon on the lower third, sky above",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_horizon/lower_third.webp"
+    },
+    {
+      "value": "center",
+      "clause": "horizon line through the center of the frame",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_horizon/center.webp"
+    },
+    {
+      "value": "upper_third",
+      "clause": "horizon on the upper third, ground fills the lower frame",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_horizon/upper_third.webp"
+    },
+    {
+      "value": "high",
+      "clause": "very high horizon line, ground fills most of the frame",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_horizon/high.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "shot.comp.horizon",
+      "issue": "low (\"very low horizon line, sky fills most of the frame\") and lower_third (\"horizon on the lower third, sky above\") are the same instruction, as are high and upper_third — six options for about four pictures. And the fixed subject sentence puts the camera inside a floodlit stadium bowl surrounded by crowd, where the model rarely draws a horizon at all, so several panels risk silently becoming the none panel.",
+      "fix": "Collapse to none / low / center / high. Note in the claim that the stadium location suppresses this variable, since that constraint is a property of the fixed subject sentence and worth stating before anyone reads the panels."
+    }
+  ]
+}

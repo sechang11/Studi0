@@ -1,0 +1,45 @@
+{
+  "variable": "world.crowd_density",
+  "claim": "How populated the place is, which changes composition, ambience and how hard the frame is to generate cleanly. Empty and packed are both dramatic choices, not opposites of each other — one isolates the subject, the other buries him.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "empty",
+      "clause": "deserted, empty seats, abandoned, no spectators",
+      "control": false,
+      "sample": "/samples/vars/world_crowd_density/empty.webp"
+    },
+    {
+      "value": "sparse",
+      "clause": "few people, scattered figures, sparse background crowd",
+      "control": false,
+      "sample": "/samples/vars/world_crowd_density/sparse.webp"
+    },
+    {
+      "value": "moderate",
+      "clause": "several people in background, moderate crowd",
+      "control": false,
+      "sample": "/samples/vars/world_crowd_density/moderate.webp"
+    },
+    {
+      "value": "busy",
+      "clause": "many people, busy background, filled seats",
+      "control": false,
+      "sample": "/samples/vars/world_crowd_density/busy.webp"
+    },
+    {
+      "value": "packed",
+      "clause": "dense crowd, packed stands, sea of people, crowded",
+      "control": false,
+      "sample": "/samples/vars/world_crowd_density/packed.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "world.crowd_density",
+      "issue": "The fixed subject sentence ends in \"crowd\", which is the exact axis this card tests. Every panel therefore ships a hard-coded crowd token that the option clause has to fight, and \"empty\"/\"sparse\" fight it with a negation (\"no spectators\") — CLIP has no negation, so that phrase reliably summons spectators. empty, sparse and moderate are likely to land in the same place.",
+      "fix": "Drop all negations and go positive: empty -> \"empty stands, vacant seats, deserted bleachers\"; sparse -> \"scattered spectators, half-empty stands, gaps in the seating\". This is also the one card where the subject sentence itself needs an exception — render this set with \"crowd\" removed from the subject, otherwise the card is measuring token tug-of-war, not the variable."
+    }
+  ]
+}

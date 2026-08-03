@@ -1,0 +1,68 @@
+{
+  "variable": "char.condition",
+  "claim": "The character's physical state — tired, bleeding, freezing — which has to persist across shots or continuity collapses the moment he heals between cuts. A director sets it once at the scene level so every generation of that character carries the same damage.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "healthy",
+      "clause": "healthy, clear skin, bright eyes",
+      "control": false,
+      "sample": "/samples/vars/char_condition/healthy.webp"
+    },
+    {
+      "value": "tired",
+      "clause": "tired, eye bags, half-closed eyes, exhausted",
+      "control": false,
+      "sample": "/samples/vars/char_condition/tired.webp"
+    },
+    {
+      "value": "injured",
+      "clause": "injured, bandaged arm, bruised cheek, scrapes",
+      "control": false,
+      "sample": "/samples/vars/char_condition/injured.webp"
+    },
+    {
+      "value": "bleeding",
+      "clause": "bleeding, blood on face, cut on cheek",
+      "control": false,
+      "sample": "/samples/vars/char_condition/bleeding.webp"
+    },
+    {
+      "value": "ill",
+      "clause": "sick, pale skin, feverish blush, sweat on forehead",
+      "control": false,
+      "sample": "/samples/vars/char_condition/ill.webp"
+    },
+    {
+      "value": "soaked",
+      "clause": "soaking wet, wet hair, dripping water",
+      "control": false,
+      "sample": "/samples/vars/char_condition/soaked.webp"
+    },
+    {
+      "value": "freezing",
+      "clause": "shivering, visible breath, red nose, cold",
+      "control": false,
+      "sample": "/samples/vars/char_condition/freezing.webp"
+    },
+    {
+      "value": "overheated",
+      "clause": "heavy sweat, flushed face, sweat drops, panting",
+      "control": false,
+      "sample": "/samples/vars/char_condition/overheated.webp"
+    },
+    {
+      "value": "drunk",
+      "clause": "drunk, flushed cheeks, unfocused eyes, swaying",
+      "control": false,
+      "sample": "/samples/vars/char_condition/drunk.webp"
+    },
+    {
+      "value": "possessed",
+      "clause": "possessed, glowing eyes, vacant stare, shadowed face",
+      "control": false,
+      "sample": "/samples/vars/char_condition/possessed.webp"
+    }
+  ]
+}

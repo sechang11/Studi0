@@ -1,0 +1,11 @@
+{
+  "variable": "movie.tag_style",
+  "claim": "Decides whether every resolved variable emits danbooru tags or English prose, rewriting the output of every prompt builder in the film. danbooru is the only mode SDXL parses reliably — natural exists for models and captioners that want sentences, and choosing it turns a working prompt into mush.",
+  "not_visual": "This variable rewrites the subject sentence itself — the one thing the method holds fixed — so there is no clause position for it to occupy. Its three values are prompt formats, not image content, and the only observable difference (prose returning abstract colour shapes) is precisely the failure mode this card format exists to avoid.",
+  "options": [
+    "danbooru",
+    "natural",
+    "hybrid"
+  ],
+  "panels": []
+}

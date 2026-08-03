@@ -1,0 +1,143 @@
+{
+  "title": "PUDDLE",
+  "subtitle": "a short film",
+  "ar": "16:9",
+  "fps": 24,
+  "seconds": 3,
+  "transition": 0.3,
+
+  "_style_note": "The Pixar look is high-key and warm, which is the opposite of the noir in carriage-seven.json. The load-bearing words are: appealing character design, oversized expressive eyes, subsurface scattering, soft ambient occlusion, bright saturated palette, feature animation quality. Drop 'oversized expressive eyes' and it stops reading as Pixar and starts reading as generic CGI.",
+  "style": "Pixar-style 3D animated feature film still, appealing stylized character design, oversized expressive glossy eyes, soft rounded silhouettes, fluffy subsurface-scattered down, warm high-key golden hour lighting, bright saturated cheerful colour palette, soft ambient occlusion, shallow depth of field, immaculate feature animation render, whimsical and charming",
+
+  "characters": {
+    "DUCKLING": "a very small round fluffy duckling, pale butter-yellow down sticking up in tufts on its head, enormous glossy black eyes with bright catchlights, tiny soft orange beak, oversized orange feet, extremely expressive and appealing",
+    "MOTHER": "a calm elegant mother mallard duck with iridescent green head and neat brown body, serene half-lidded eyes, gliding smoothly"
+  },
+
+  "music": [
+    { "at": 0,  "prefix": "cue1_pastoral", "bpm": 76, "key": "G major", "seconds": 22,
+      "tags": "warm pastoral orchestral opening, gentle solo oboe melody, soft strings, harp arpeggios, sunny and idyllic, storybook, cinematic feature animation score, instrumental, no drums" },
+    { "at": 19, "prefix": "cue2_comedy", "bpm": 128, "key": "F major", "seconds": 30,
+      "tags": "playful comedic orchestral scherzo, bouncing pizzicato strings, bumbling bassoon, cheeky clarinet, woodblock and pizzicato accents, light and mischievous, cartoon slapstick chase, feature animation score, instrumental" },
+    { "at": 46, "prefix": "cue3_triumph", "bpm": 84, "key": "D major", "seconds": 28,
+      "tags": "soaring triumphant orchestral resolution, full warm strings, heroic french horns, sparkling celesta and harp, joyful and emotional, uplifting swell, feature animation finale, cinematic, instrumental" }
+  ],
+
+  "shots": [
+    { "id": "01_pond", "seconds": 4,
+      "prompt": "Wide establishing shot of a small idyllic pond at golden hour, tall green reeds and cattails, round lily pads dotted with dew, warm low sunlight raking across the still water in glittering highlights, soft bokeh of wildflowers in the foreground",
+      "motion": "Water surface shimmers gently, reeds sway in a light breeze, dandelion seeds drift lazily through the golden light. Slow gentle push in.",
+      "sfx": "Peaceful summer pond ambience, gentle water lapping, distant birdsong, soft breeze through reeds, insects humming" },
+
+    { "id": "02_family", "seconds": 3,
+      "prompt": "Medium wide shot of {MOTHER} gliding serenely across the sunlit pond with four small ducklings paddling in a neat line behind her, each leaving a tidy V-shaped wake on the golden water",
+      "motion": "The mother and her four ducklings glide smoothly right to left across frame, their wakes spreading and interlacing behind them. Water sparkles.",
+      "sfx": "Gentle water paddling and small splashes, contented soft duck murmurs, calm pond ambience" },
+
+    { "id": "03_left_behind", "seconds": 3,
+      "prompt": "Reveal shot of {DUCKLING} standing all alone on the muddy bank in the foreground, absurdly small and fluffy, the family already far out on the bright water behind him in soft focus",
+      "motion": "The tiny duckling shuffles forward to the very edge of the mud, then stops dead. His head turns to follow the family receding into the distance. Down tufts quiver.",
+      "sfx": "Tiny high-pitched anxious duckling peep, small feet squelching in soft mud, pond ambience" },
+
+    { "id": "04_worry", "seconds": 2,
+      "prompt": "Tight close-up of {DUCKLING}'s face filling frame, enormous glossy black eyes wide with worry and shining with warm reflected light, tiny beak pressed shut, one tuft of down bobbing on top of his head",
+      "motion": "His huge eyes dart from side to side then blink once slowly. The tuft of down on his head bobs. His beak quivers very slightly.",
+      "sfx": "Single small worried duckling peep, tiny nervous swallow, quiet pond ambience" },
+
+    { "id": "05_reflection", "seconds": 2,
+      "prompt": "Point of view looking straight down into the water at {DUCKLING}'s own wobbling reflection staring back up, the surface rippling and distorting his enormous eyes, dark green depths visible below the reflection",
+      "motion": "The reflection warps and wobbles as ripples cross it, briefly stretching his eyes into something alarming, then settling. A dark shape passes far below.",
+      "sfx": "Water ripple and gulp, low unsettling watery burble, tiny gasp" },
+
+    { "id": "06_backs_up", "seconds": 2,
+      "prompt": "Low angle close-up of {DUCKLING}'s oversized orange feet taking one decisive step backwards away from the water's edge, toes splayed and gripping the wet mud, tiny claw marks left behind",
+      "motion": "The oversized orange feet step backward once, quickly, toes gripping. Mud squeezes up between them. A little water sloshes at the frame edge.",
+      "sfx": "Quick squelching backward step in mud, small determined peep, water lapping" },
+
+    { "id": "07_walk_around", "seconds": 3, "quality": true, "seed": 7701,
+      "neg": "facing camera, front view, standing still, portrait, centred, symmetrical",
+      "prompt": "Strict side-on profile view, camera at ground level, subject seen entirely from the side walking left to right across frame: {DUCKLING} mid-stride with one oversized orange foot lifted high and forward, body leaning into the walk, chest puffed, tiny wings held stiffly back like a marching soldier, comically stern profile, towering reeds behind, muddy bank",
+      "motion": "The duckling marches purposefully left to right, feet slapping the mud, chest thrust out, wings held back stiffly. Camera tracks alongside him. Reeds sway past.",
+      "sfx": "Comically brisk squelching footsteps, small huffing breaths, bouncing woodblock accents" },
+
+    { "id": "08_pond_huge", "seconds": 2, "quality": true, "seed": 8802,
+      "neg": "close-up, character portrait, large animal, detailed face, eyes, medium shot",
+      "prompt": "Extreme high-altitude aerial landscape photograph looking almost straight down on an enormous lake at golden hour, the entire vast body of water filling the frame and stretching to distant treelines, a long curving shoreline, and one single almost imperceptible speck of yellow the size of a grain of rice on the shore at the very bottom of frame, overwhelming sense of scale, tiny subject lost in a huge landscape",
+      "motion": "Camera pulls up and back rapidly to reveal the true colossal scale of the lake, the tiny yellow speck of the duckling shrinking to almost nothing.",
+      "sfx": "Comedic orchestral deflation, single sad trombone slide, wind across open water" },
+
+    { "id": "09_deflated", "seconds": 2,
+      "prompt": "Close-up of {DUCKLING} stopped dead, utterly deflated, shoulders slumped, cheeks puffed out in a huge frustrated sigh, enormous eyes half-lidded and unimpressed, one tuft of down flopping over",
+      "motion": "He stops, slumps, and blows out a huge sigh that puffs his cheeks and makes the tuft of down flop forward over one eye. He blinks flatly.",
+      "sfx": "Long comic deflating duckling sigh, small disappointed peep, tiny plop" },
+
+    { "id": "10_leaf_raft", "seconds": 3,
+      "prompt": "Medium shot of {DUCKLING} proudly shoving a big round lily pad out onto the water with both tiny wings and stepping aboard it with immense dignity, chest out, beak raised confidently",
+      "motion": "He shoves the lily pad out with both wings, hops aboard, and strikes a proud pose with his beak raised and chest puffed. The lily pad wobbles under him.",
+      "sfx": "Wet leaf sliding onto water, small hop and splash, triumphant tiny peep, hopeful harp glissando" },
+
+    { "id": "11_sinks", "seconds": 2,
+      "prompt": "Same framing as {DUCKLING} stands submerged up to his neck in the water where the lily pad has sunk completely beneath him, only his soggy head and enormous unimpressed eyes above the surface, the pad visible sinking below",
+      "motion": "The lily pad sinks straight down and the duckling goes with it until only his head is above water. He does not move at all. Ripples spread outward.",
+      "sfx": "Sudden gulping sink, water displacement, one flat comedic bassoon note, bubbles" },
+
+    { "id": "12_soaked", "seconds": 2,
+      "prompt": "Extreme close-up of {DUCKLING}'s soaking wet face, down plastered flat to his head in a comical swirl, one single fat water droplet hanging from the tip of his beak, enormous eyes blinking slowly and flatly at camera",
+      "motion": "He blinks slowly and flatly at camera. The fat droplet hanging from his beak swells, then falls. His flattened head-tuft slowly peels sideways.",
+      "sfx": "Single water droplet plink, wet feather squelch, small indignant peep" },
+
+    { "id": "13_polevault", "seconds": 3, "quality": true, "seed": 1399,
+      "neg": "two ducklings, three ducklings, multiple birds, duplicate character, twins, pair, group, crowd, facing camera, standing upright, calm, smiling, straight vertical reed",
+      "prompt": "One single solitary duckling alone in frame, no other animals anywhere. Dramatic low side-on angle. The duckling is leaning far back at a steep angle, gripping the tip of one tall green reed in both wings and hauling it downward and backward with his whole body weight so that the reed bends into a taut curved bow above him. His oversized orange feet skid and dig deep into the wet mud, leaving furrows. His face is scrunched up with straining effort, eyes squeezed almost shut, cheeks squashed. {DUCKLING}. Dynamic diagonal composition, muddy bank, reeds behind",
+      "motion": "He hauls back on the reed with everything he has, feet skidding and digging into the mud, the reed bending further and further into a deep bow. He trembles with effort.",
+      "sfx": "Creaking bending reed under increasing tension, straining effortful duckling grunts, rising orchestral anticipation" },
+
+    { "id": "14_flying", "seconds": 2, "quality": true, "seed": 1404,
+      "neg": "standing, ground, touching water, feet on surface, floating on water, portrait",
+      "prompt": "Wide low angle shot looking upward into open sky, subject airborne high above the water with clear empty air on all sides of him and the pond surface far below at the very bottom of frame: {DUCKLING} flung through the golden sky in a high arc, body tilted forward in flight, tiny wings flung wide, legs trailing behind, mouth open in a triumphant yell, backlit by low sun with rim light along his down, motion blur streaks, sparkling water far beneath",
+      "motion": "He sails in a beautiful arc through the golden light, wings spread wide, beaming with joy. Water sparkles below. Slow motion.",
+      "sfx": "Whooshing air, soaring triumphant orchestral swell, joyful duckling whoop" },
+
+    { "id": "15_realises", "seconds": 2, "quality": true, "seed": 1505,
+      "neg": "smiling, happy, grinning, cheerful, calm, closed mouth, standing, ground",
+      "prompt": "Comedic close-up of a terrified airborne duckling against open sky, mouth stretched wide open in a horrified scream, pupils shrunk to tiny dots inside enormous whites of the eyes, eyebrows shot up, both wings flung straight up in panic, body upside down and tumbling: {DUCKLING} at the apex of a fall with a snapped broken reed tumbling past him and water visible far below, exaggerated cartoon terror expression, chaotic diagonal composition",
+      "motion": "He hangs at the apex. His triumphant expression collapses into round-eyed horror as he looks down. The snapped reed tumbles away beneath him. He begins to drop.",
+      "sfx": "Sharp reed snap, comedic record scratch stop, single high suspenseful violin, air rushing" },
+
+    { "id": "16_splash", "seconds": 2,
+      "prompt": "Dramatic shot of a huge white splash crown erupting on the golden pond surface, two tiny orange feet just disappearing into the middle of it, water droplets frozen glittering in the low sunlight",
+      "motion": "An enormous splash crown erupts upward, droplets flying everywhere in the golden light, the two tiny feet vanishing into it. Water surges outward.",
+      "sfx": "Big dramatic water splash, heavy plunge underwater, surging water, bubbles" },
+
+    { "id": "17_underwater", "seconds": 3, "quality": true, "seed": 1707,
+      "neg": "smiling, happy, calm, open eyes, serene, above water, floating peacefully",
+      "prompt": "Fully submerged underwater shot, subject deep below the surface with the bright surface visible far above him: {DUCKLING} sinking downward through green sunlit water, both eyes screwed tightly shut in fear, beak clamped shut, both tiny wings flailing frantically in a blur, legs kicking wildly, a long dense trail of silver bubbles streaming upward from him, wet down flattened, godrays lancing down from the distant surface",
+      "motion": "He sinks slowly, flailing frantically with both wings, eyes squeezed shut. Silver bubbles stream upward past him. Sunbeams shift and dance through the green water.",
+      "sfx": "Muffled underwater ambience, frantic bubbling, distant muted water rumble, heartbeat" },
+
+    { "id": "18_stops", "seconds": 2,
+      "prompt": "Underwater close-up of {DUCKLING} having gone completely still, wings spread calmly, one enormous eye cautiously opening, and his whole body clearly drifting gently upward toward the bright surface above",
+      "motion": "He stops flailing and goes still. One huge eye opens cautiously, then the other. He drifts steadily upward. Bubbles slow and stop.",
+      "sfx": "Bubbles ceasing, soft rising underwater tone, single hopeful harp note, muffled calm" },
+
+    { "id": "19_pops_up", "seconds": 3,
+      "prompt": "Close-up of {DUCKLING} popping up through the golden surface like a cork, water sheeting off his head, enormous eyes wide with astonishment, bobbing buoyantly, sunlit droplets flying",
+      "motion": "He bursts up through the surface, water sheeting off him and droplets flying in the golden light. He bobs up and down buoyantly, eyes wide with astonishment.",
+      "sfx": "Water burst and gasp, buoyant bobbing splashes, delighted surprised peep, sparkling chimes" },
+
+    { "id": "20_delight", "seconds": 3,
+      "prompt": "Tight close-up of {DUCKLING}'s face as pure dawning delight spreads across it, enormous glossy eyes shining and crinkling with joy, beak opening into a tiny grin, golden light on wet down, tiny wings paddling experimentally below",
+      "motion": "Wonder spreads slowly across his face into an enormous delighted grin, eyes shining and crinkling. Below the surface his feet paddle experimentally, then faster. He rises slightly.",
+      "sfx": "Small paddling splashes underwater, joyful rising duckling peeps, warm swelling strings" },
+
+    { "id": "21_powers_across", "seconds": 4,
+      "prompt": "Wide dynamic shot of {DUCKLING} powering confidently across the sparkling golden pond leaving a bold V-shaped wake far bigger than himself, with {MOTHER} and four siblings turning in surprise to look at him from the distance",
+      "motion": "He surges across the water leaving a bold spreading wake, beak forward and confident. In the distance the mother and four siblings turn to watch him come. Water glitters.",
+      "sfx": "Confident rhythmic paddling and water rush, spreading wake, excited duck calls, triumphant brass" },
+
+    { "id": "22_family_final", "seconds": 5,
+      "prompt": "Final wide golden hour shot of all five ducklings gliding in a neat line behind {MOTHER}, with {DUCKLING} proudly at the very front of the line just behind her, interlacing wakes spreading across the whole glittering pond, reeds and warm bokeh framing",
+      "motion": "The family glides serenely away from camera into the golden light, wakes interlacing and spreading. The tiny duckling at the front bobs happily. Slow crane up and back. Dandelion seeds drift through frame.",
+      "sfx": "Contented family duck murmurs, gentle synchronised paddling, warm pond ambience, distant birdsong, peaceful evening" }
+  ]
+}

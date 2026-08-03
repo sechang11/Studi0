@@ -1,0 +1,98 @@
+{
+  "variable": "world.biome",
+  "claim": "The coarse class of place from which dressing, ambience and practical lights are all seeded. It is the difference between a story that happens in a city and one that happens in a school, decided before a single prop is named.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "urban",
+      "clause": "cityscape, city street, buildings, asphalt",
+      "control": false,
+      "sample": "/samples/vars/world_biome/urban.webp"
+    },
+    {
+      "value": "suburb",
+      "clause": "suburban, residential district, houses, low fence",
+      "control": false,
+      "sample": "/samples/vars/world_biome/suburb.webp"
+    },
+    {
+      "value": "rural",
+      "clause": "countryside, rice paddy, farmland, dirt road",
+      "control": false,
+      "sample": "/samples/vars/world_biome/rural.webp"
+    },
+    {
+      "value": "school",
+      "clause": "school, school building, schoolyard",
+      "control": false,
+      "sample": "/samples/vars/world_biome/school.webp"
+    },
+    {
+      "value": "coastal",
+      "clause": "beach, ocean, shoreline, waves",
+      "control": false,
+      "sample": "/samples/vars/world_biome/coastal.webp"
+    },
+    {
+      "value": "mountain",
+      "clause": "mountain, cliff, alpine slope, rocky ridge",
+      "control": false,
+      "sample": "/samples/vars/world_biome/mountain.webp"
+    },
+    {
+      "value": "forest",
+      "clause": "forest, trees, tree trunks, undergrowth",
+      "control": false,
+      "sample": "/samples/vars/world_biome/forest.webp"
+    },
+    {
+      "value": "desert",
+      "clause": "desert, sand dunes, arid, barren",
+      "control": false,
+      "sample": "/samples/vars/world_biome/desert.webp"
+    },
+    {
+      "value": "snowfield",
+      "clause": "snowfield, snow covered ground, tundra, white expanse",
+      "control": false,
+      "sample": "/samples/vars/world_biome/snowfield.webp"
+    },
+    {
+      "value": "industrial",
+      "clause": "factory, industrial, pipes, warehouse",
+      "control": false,
+      "sample": "/samples/vars/world_biome/industrial.webp"
+    },
+    {
+      "value": "transit",
+      "clause": "train station, platform, railway, subway",
+      "control": false,
+      "sample": "/samples/vars/world_biome/transit.webp"
+    },
+    {
+      "value": "domestic",
+      "clause": "home interior, living room, furniture, curtains",
+      "control": false,
+      "sample": "/samples/vars/world_biome/domestic.webp"
+    },
+    {
+      "value": "fantasy_realm",
+      "clause": "fantasy, castle, floating islands, mythical landscape",
+      "control": false,
+      "sample": "/samples/vars/world_biome/fantasy_realm.webp"
+    },
+    {
+      "value": "space",
+      "clause": "outer space, stars, planet, spacecraft",
+      "control": false,
+      "sample": "/samples/vars/world_biome/space.webp"
+    },
+    {
+      "value": "ruins",
+      "clause": "ruins, crumbling stone, broken walls, overgrown rubble",
+      "control": false,
+      "sample": "/samples/vars/world_biome/ruins.webp"
+    }
+  ]
+}

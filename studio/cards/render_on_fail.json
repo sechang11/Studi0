@@ -1,0 +1,12 @@
+{
+  "variable": "render.on_fail",
+  "claim": "Says whether a broken shot stops the film or quietly becomes part of it. retry absorbs transient VRAM and network flakes; halt is for a final where a silent hole is unacceptable; warn_continue and placeholder are for overnight drafts, where waking to a watchable cut with gaps beats waking to a render that died at shot four.",
+  "not_visual": "A failure-handling policy that only manifests when generation actually fails. On a successful render all four values produce the same frame; the difference lives in the log and in whether the finished film has a hole in it. It cannot be provoked by a prompt clause, and staging a fake failure would be demonstrating the placeholder variable instead of this one.",
+  "options": [
+    "warn_continue",
+    "retry",
+    "placeholder",
+    "halt"
+  ],
+  "panels": []
+}

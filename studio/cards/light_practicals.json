@@ -1,0 +1,93 @@
+{
+  "variable": "light.practicals",
+  "claim": "The light sources actually visible in the frame, declared once so every shot agrees where the glow is coming from. Practicals are how a night scene gets a reason to exist, and swapping a candle for a monitor changes the century of the scene without touching anything else.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "neon_sign",
+      "clause": "neon sign, glowing neon tubing, coloured sign glow",
+      "control": false,
+      "sample": "/samples/vars/light_practicals/neon_sign.webp"
+    },
+    {
+      "value": "desk_lamp",
+      "clause": "desk lamp, warm lamp glow, small pool of light",
+      "control": false,
+      "sample": "/samples/vars/light_practicals/desk_lamp.webp"
+    },
+    {
+      "value": "ceiling_fluoro",
+      "clause": "ceiling fluorescent tubes, cold overhead strip lighting",
+      "control": false,
+      "sample": "/samples/vars/light_practicals/ceiling_fluoro.webp"
+    },
+    {
+      "value": "candle",
+      "clause": "candle, candlelight, small warm flame",
+      "control": false,
+      "sample": "/samples/vars/light_practicals/candle.webp"
+    },
+    {
+      "value": "fireplace",
+      "clause": "fireplace, burning fire, orange firelight",
+      "control": false,
+      "sample": "/samples/vars/light_practicals/fireplace.webp"
+    },
+    {
+      "value": "monitor",
+      "clause": "computer monitor, glowing screen, blue screen glow",
+      "control": false,
+      "sample": "/samples/vars/light_practicals/monitor.webp"
+    },
+    {
+      "value": "phone_screen",
+      "clause": "phone screen, glowing cellphone, face lit from below by a phone",
+      "control": false,
+      "sample": "/samples/vars/light_practicals/phone_screen.webp"
+    },
+    {
+      "value": "streetlight",
+      "clause": "streetlight, glowing street lamp, cone of light",
+      "control": false,
+      "sample": "/samples/vars/light_practicals/streetlight.webp"
+    },
+    {
+      "value": "lantern",
+      "clause": "lantern, glowing paper lantern, warm hanging light",
+      "control": false,
+      "sample": "/samples/vars/light_practicals/lantern.webp"
+    },
+    {
+      "value": "headlights",
+      "clause": "car headlights, glaring headlight beams",
+      "control": false,
+      "sample": "/samples/vars/light_practicals/headlights.webp"
+    },
+    {
+      "value": "moon_window",
+      "clause": "moonlight through a window, pale window light, moonlit interior",
+      "control": false,
+      "sample": "/samples/vars/light_practicals/moon_window.webp"
+    },
+    {
+      "value": "stage_light",
+      "clause": "stage lights, spotlight beam, lighting rig",
+      "control": false,
+      "sample": "/samples/vars/light_practicals/stage_light.webp"
+    },
+    {
+      "value": "vending_machine",
+      "clause": "vending machine, glowing vending machine, bright box of light",
+      "control": false,
+      "sample": "/samples/vars/light_practicals/vending_machine.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "light.practicals",
+      "issue": "The clauses fight the fixed subject sentence, which already contains \"soccer stadium, floodlights, crowd\" — i.e. an exterior that already names its own practical. candle, fireplace, desk_lamp, monitor, phone_screen, moon_window, vending_machine and ceiling_fluoro all require an interior or a street, so those panels will document the tag losing a fight with the stadium rather than showing the practical. At the other end, stage_light and streetlight are so close to floodlights that they may read as no-ops. There is also no \"none\" baseline in this enum, unlike every comparable card.",
+      "fix": "Run this card (and the window-dependent options of light.shadow_gobo: blinds, curtain, window_cross) on a second fixed subject sentence with a neutral interior — same boy, same seed, \"indoors, dark room, night\" instead of the stadium — and say so in the card. Also add a \"none\" value with an empty clause so the baseline is on the sheet."
+    }
+  ]
+}

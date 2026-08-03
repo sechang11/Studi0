@@ -1,0 +1,69 @@
+{
+  "variable": "shot.comp.frame_in_frame",
+  "claim": "Putting a character inside an in-world aperture states confinement, surveillance or distance in one move and without a line of dialogue. Doorway and fence say we are watching him from outside something; mirror says we are seeing a version of him rather than him.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "none",
+      "clause": "unobstructed view, open frame",
+      "control": true,
+      "sample": "/samples/vars/shot_comp_frame_in_frame/none.webp"
+    },
+    {
+      "value": "doorway",
+      "clause": "framed by a doorway, seen through a door",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_frame_in_frame/doorway.webp"
+    },
+    {
+      "value": "window",
+      "clause": "seen through a window, window frame in the foreground",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_frame_in_frame/window.webp"
+    },
+    {
+      "value": "mirror",
+      "clause": "reflection in a mirror, seen in a mirror, mirror frame",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_frame_in_frame/mirror.webp"
+    },
+    {
+      "value": "foliage",
+      "clause": "framed by leaves, foliage in the foreground, branches at the edges",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_frame_in_frame/foliage.webp"
+    },
+    {
+      "value": "crowd",
+      "clause": "framed by silhouetted heads, blurry people in the foreground",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_frame_in_frame/crowd.webp"
+    },
+    {
+      "value": "curtain",
+      "clause": "framed by curtains, curtain in the foreground",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_frame_in_frame/curtain.webp"
+    },
+    {
+      "value": "tunnel",
+      "clause": "seen through a tunnel mouth, dark tunnel edges",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_frame_in_frame/tunnel.webp"
+    },
+    {
+      "value": "fence",
+      "clause": "seen through a chain-link fence, fence in the foreground",
+      "control": false,
+      "sample": "/samples/vars/shot_comp_frame_in_frame/fence.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "shot.comp.frame_in_frame",
+      "issue": "doorway, window, mirror, foliage and curtain are objects a floodlit soccer stadium does not contain. Animagine will honour the aperture by relocating the scene, so those panels change the location as well as the framing device — the option clause ends up rewriting the subject even though it never restates it in text.",
+      "fix": "Prefer apertures the location can supply: \"seen through a chain-link fence\", \"seen through the tunnel mouth, dark edges\", \"framed by goal netting\", \"framed by silhouetted heads in the foreground\". Drop curtain, foliage and mirror, or move this card to a scene that contains them."
+    }
+  ]
+}

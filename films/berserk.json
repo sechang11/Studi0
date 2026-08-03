@@ -1,0 +1,1861 @@
+{
+  "title": "BERSERK THE GOLDEN AGE",
+  "subtitle": "a narrated summary of season one",
+  "ar": "16:9",
+  "fps": 24,
+  "seconds": 6,
+  "tail": 1.1,
+  "default_transition": "cut",
+  "style_lora": "qwen_image_2512_storybook_anime_lora.safetensors",
+  "style_strength": 0.0,
+  "id_lora": "ltx-2.3-id-lora-talkvid-3k.safetensors",
+  "id_strength": 0.6,
+  "sheets": {
+    "GUTS": "sheet_guts.png",
+    "GRIFFITH": "sheet_griffith.png",
+    "CASCA": "sheet_casca.png",
+    "JUDEAU": "sheet_judeau.png",
+    "ZODD": "sheet_zodd.png"
+  },
+  "style": {
+    "default": "dark gritty seinen anime illustration, heavy ink shadow, high contrast, muted desaturated palette, painterly, grim medieval, epic widescreen composition",
+    "cold": "dark gritty seinen anime illustration, heavy ink shadow, high contrast, muted desaturated palette, painterly, grim medieval, epic widescreen composition, flat grey overcast light, desaturated to near monochrome, no warm light",
+    "fire": "dark gritty seinen anime illustration, heavy ink shadow, high contrast, muted desaturated palette, painterly, grim medieval, epic widescreen composition, firelight from below, deep orange and black, heavy chiaroscuro",
+    "dawn": "dark gritty seinen anime illustration, heavy ink shadow, high contrast, muted desaturated palette, painterly, grim medieval, epic widescreen composition, pale cold dawn light, thin mist, restrained colour",
+    "eclipse": "dark gritty seinen anime illustration, heavy ink shadow, high contrast, muted desaturated palette, painterly, grim medieval, epic widescreen composition, crushed blacks and blood red, a black sun, hellish, near abstract"
+  },
+  "characters": {
+    "GUTS": "the young black-haired swordsman from the reference image",
+    "GRIFFITH": "the white-haired young commander in white armour from the reference image",
+    "CASCA": "the short-haired woman soldier with deep brown skin from the reference image",
+    "JUDEAU": "the friendly light-haired man with throwing knives from the reference image",
+    "ZODD": "the enormous red-brown horned beast from the reference image"
+  },
+  "voices": {
+    "NARRATOR": {
+      "engine": "higgs_v3",
+      "voice": "voices_examples/higgs_audio/chadwick.wav"
+    },
+    "GUTS": {
+      "engine": "higgs_v3",
+      "voice": "voices_examples/male/male_01.wav"
+    },
+    "GRIFFITH": {
+      "engine": "higgs_v3",
+      "voice": "voices_examples/male/male_02.wav"
+    },
+    "CASCA": {
+      "engine": "higgs_v3",
+      "voice": "voices_examples/female/female_01.wav"
+    },
+    "JUDEAU": {
+      "engine": "higgs_v3",
+      "voice": "voices_examples/male/male_03_carter.wav"
+    },
+    "ZODD": {
+      "engine": "indextts2",
+      "voice": "voices_examples/higgs_audio/vex.wav",
+      "emotion": {
+        "Angry": 0.5,
+        "Disgusted": 0.3
+      },
+      "emotion_alpha": 1.0,
+      "filter": "lowpass=f=3400,aecho=0.8:0.85:55:0.3"
+    }
+  },
+  "music": [
+    {
+      "at_shot": "010_field",
+      "prefix": "m01_dead",
+      "bpm": 52,
+      "key": "D minor",
+      "seconds": 23.7,
+      "level": 1.0,
+      "tags": "bleak solo cello over a low drone, sparse funeral bell, cold and vast, dark orchestral, instrumental, no drums"
+    },
+    {
+      "at_shot": "030_child",
+      "prefix": "m02_child",
+      "bpm": 60,
+      "key": "D minor",
+      "seconds": 40.4,
+      "level": 1.0,
+      "tags": "grim medieval underscore, low viol drone, hand drum heartbeat, distant male voices humming one note, hopeless, instrumental"
+    },
+    {
+      "at_shot": "060_siege",
+      "prefix": "m03_siege",
+      "bpm": 140,
+      "key": "D minor",
+      "seconds": 69.6,
+      "level": 1.0,
+      "tags": "savage battle music, hammered timpani and taiko, low brass clusters, war drums, snarling strings, relentless, orchestral, instrumental"
+    },
+    {
+      "at_shot": "110_griffith_intro",
+      "prefix": "m04_hawk",
+      "bpm": 84,
+      "key": "D minor",
+      "seconds": 72.7,
+      "level": 1.0,
+      "tags": "noble ascendant theme, solo horn over warm strings, martial snare in the distance, proud and slightly cold, orchestral, instrumental"
+    },
+    {
+      "at_shot": "200_hawks_ride",
+      "prefix": "m05_ride",
+      "bpm": 112,
+      "key": "D minor",
+      "seconds": 43.5,
+      "level": 1.0,
+      "tags": "heroic mounted march, driving strings ostinato, bold brass, snare and timpani, banners and open country, orchestral, instrumental"
+    },
+    {
+      "at_shot": "240_battles",
+      "prefix": "m06_war",
+      "bpm": 138,
+      "key": "D minor",
+      "seconds": 51.6,
+      "level": 1.0,
+      "tags": "brutal orchestral war music, pounding percussion, brass stabs, choir shouting one syllable, chaotic, instrumental"
+    },
+    {
+      "at_shot": "252_bridge",
+      "prefix": "m20_bridge",
+      "bpm": 132,
+      "key": "D minor",
+      "seconds": 52.6,
+      "level": 1.0,
+      "tags": "relentless last-stand battle music, driving low string ostinato, war drums, brass held long, exhausted and unbroken, orchestral, instrumental"
+    },
+    {
+      "at_shot": "260_campfire",
+      "prefix": "m07_fire",
+      "bpm": 66,
+      "key": "D minor",
+      "seconds": 61.6,
+      "level": 1.0,
+      "tags": "intimate nocturne, solo classical guitar and warm low strings, a single wooden flute, firelit and quiet, instrumental, no drums"
+    },
+    {
+      "at_shot": "296_river",
+      "prefix": "m22_river",
+      "bpm": 64,
+      "key": "A minor",
+      "seconds": 28.4,
+      "level": 1.0,
+      "tags": "urgent then tender, tremolo strings resolving to solo cello and harp, water, care rather than romance, orchestral, instrumental, no drums"
+    },
+    {
+      "at_shot": "300_casca_story",
+      "prefix": "m08_casca",
+      "bpm": 60,
+      "key": "D minor",
+      "seconds": 32.8,
+      "level": 1.0,
+      "tags": "tender melancholy theme, solo violin over sustained strings, harp, rain, bittersweet devotion, instrumental, no drums"
+    },
+    {
+      "at_shot": "332_doldrey",
+      "prefix": "m21_doldrey",
+      "bpm": 126,
+      "key": "C minor",
+      "seconds": 120.0,
+      "level": 1.0,
+      "tags": "grand assault on a fortress, full orchestra, hammered timpani, soaring heroic brass over driving strings, choir on one syllable, triumphant and enormous, instrumental"
+    },
+    {
+      "at_shot": "340_rise",
+      "prefix": "m09_rise",
+      "bpm": 96,
+      "key": "D minor",
+      "seconds": 70.9,
+      "level": 1.0,
+      "tags": "triumphant royal fanfare turning slightly sour, full brass, bells, choir, grandeur with something wrong underneath, orchestral, instrumental"
+    },
+    {
+      "at_shot": "400_zodd_reveal",
+      "prefix": "m10_zodd",
+      "bpm": 54,
+      "key": "D minor",
+      "seconds": 79.0,
+      "level": 1.0,
+      "tags": "monstrous dread, sub bass pulses, bowed metal, low male choir, irregular percussion, inhuman, dark orchestral, instrumental"
+    },
+    {
+      "at_shot": "442_skull",
+      "prefix": "m23_skull",
+      "bpm": 48,
+      "key": "F minor",
+      "seconds": 29.1,
+      "level": 1.0,
+      "tags": "ancient warning, hollow low brass, bowed metal, a slow tolling bell, sub bass, something older than the story, dark orchestral, instrumental"
+    },
+    {
+      "at_shot": "500_overheard",
+      "prefix": "m11_pivot",
+      "bpm": 52,
+      "key": "D minor",
+      "seconds": 73.0,
+      "level": 1.0,
+      "tags": "quiet devastating string adagio, solo cello line, sparse piano, the sound of understanding something too late, instrumental, no drums"
+    },
+    {
+      "at_shot": "550_duel2",
+      "prefix": "m12_duel",
+      "bpm": 120,
+      "key": "D minor",
+      "seconds": 66.0,
+      "level": 1.0,
+      "tags": "single combat in snow, taut string ostinato, muffled timpani, one high sustained violin, cold and precise, orchestral, instrumental"
+    },
+    {
+      "at_shot": "580_griffith_alone",
+      "prefix": "m13_loss",
+      "bpm": 50,
+      "key": "D minor",
+      "seconds": 57.2,
+      "level": 1.0,
+      "tags": "desolate solo piano with distant strings, snow, a dream ending, sparse and cold, instrumental, no drums"
+    },
+    {
+      "at_shot": "620_year",
+      "prefix": "m14_tower",
+      "bpm": 44,
+      "key": "D minor",
+      "seconds": 61.6,
+      "level": 1.0,
+      "tags": "oppressive dread, sustained low strings, dripping water percussion, a distant choir in pain, airless, dark ambient orchestral, instrumental"
+    },
+    {
+      "at_shot": "660_griffith_ruined",
+      "prefix": "m15_ruin",
+      "bpm": 40,
+      "key": "D minor",
+      "seconds": 74.2,
+      "level": 1.0,
+      "tags": "almost nothing, one sustained cello note, a music box slowing to a stop, unbearable restraint, instrumental, no drums"
+    },
+    {
+      "at_shot": "700_eclipse",
+      "prefix": "m16_eclipse",
+      "bpm": 60,
+      "key": "D minor",
+      "seconds": 39.8,
+      "level": 1.0,
+      "tags": "apocalyptic sacred horror, enormous latin-less choir, pipe organ clusters, bells rung wrong, sub bass, ecstatic and vile, orchestral, instrumental"
+    },
+    {
+      "at_shot": "730_answer",
+      "prefix": "m17_price",
+      "bpm": 68,
+      "key": "D minor",
+      "seconds": 104.4,
+      "level": 1.0,
+      "tags": "a chorus resolving from dissonance into a terrible major chord, brass and full choir, triumphant and obscene, orchestral, instrumental"
+    },
+    {
+      "at_shot": "800_after",
+      "prefix": "m18_after",
+      "bpm": 50,
+      "key": "D minor",
+      "seconds": 39.5,
+      "level": 1.0,
+      "tags": "grief laid completely bare, solo violin unaccompanied then warm strings entering, dawn, exhausted, instrumental, no drums"
+    },
+    {
+      "at_shot": "812_rickert",
+      "prefix": "m24_rickert",
+      "bpm": 56,
+      "key": "C major",
+      "seconds": 24.4,
+      "level": 1.0,
+      "tags": "quiet unbearable hope, solo flute over sustained strings, a boy waiting, warm and wrong, orchestral, instrumental, no drums"
+    },
+    {
+      "at_shot": "820_guts_stands",
+      "prefix": "m19_rise",
+      "bpm": 88,
+      "key": "D minor",
+      "seconds": 31.8,
+      "level": 1.0,
+      "tags": "grim resolve building, low strings ostinato, a single defiant horn, drums entering late, standing up again, orchestral, instrumental"
+    }
+  ],
+  "shots": [
+    {
+      "id": "010_field",
+      "look": "cold",
+      "prompt": "Extreme wide shot of a medieval battlefield at first light, hundreds of dead men and horses in churned mud, broken spears standing like reeds, smoke lying flat across the ground, one small armoured figure standing alone at the centre of it",
+      "motion": "Smoke drifts across the mud. Crows lift off the bodies. The lone figure does not move. Very slow push in.",
+      "say": "A man is found standing in a field of the dead. He is not the victor. He is only the one still standing.",
+      "sfx": "A cold dawn wind over a battlefield, crows, distant timber settling, no voices",
+      "titles": [
+        {
+          "text": "BERSERK",
+          "at": 1.4,
+          "hold": 3.6,
+          "scale": 0.062,
+          "y": 0.42
+        },
+        {
+          "text": "the golden age",
+          "at": 2.1,
+          "hold": 3.0,
+          "scale": 0.026,
+          "y": 0.56
+        }
+      ]
+    },
+    {
+      "id": "020_guts_face",
+      "in": "cut",
+      "look": "cold",
+      "ref": [
+        "GUTS"
+      ],
+      "prompt": "Extreme close-up of the face of {GUTS}, spattered with mud and blood, breathing hard, eyes flat and empty, a small scar across the bridge of his nose",
+      "motion": "His chest rises and falls hard. Blood runs from his hairline past one eye. He blinks once, slowly. Nothing behind the eyes.",
+      "say": "His name is Guts. He was born on a battlefield and raised by the man who found him there.",
+      "sfx": "Heavy ragged breathing, blood dripping onto steel, wind"
+    },
+    {
+      "id": "030_child",
+      "in": "dissolve",
+      "look": "fire",
+      "prompt": "Wide shot of a mercenary camp at night seen from a child's low vantage, rough men drinking around fires, tents and stacked weapons, a very small boy of about nine holding a sword far too big for him at the edge of the firelight",
+      "motion": "The men laugh and drink around the fires. The small boy stands at the edge, both hands on the huge hilt. Firelight moves across him. He does not join them.",
+      "say": "He was given a sword before he was given a reason. By nine he had killed a man. By eleven he was alone.",
+      "sfx": "A rowdy mercenary camp at night, fires crackling, tankards, coarse laughter kept low and indistinct"
+    },
+    {
+      "id": "040_sell",
+      "in": "cut",
+      "look": "fire",
+      "prompt": "Harsh shot inside a dim tent of a hard-faced mercenary captain taking coins from another man's hand, a small boy visible out of focus behind them sitting on a cot, one lamp, deep shadow",
+      "motion": "Coins pass from hand to hand and are closed in a fist. The lamp flame gutters. Neither man looks toward the boy behind them.",
+      "say": "The man who raised him sold him for three silver coins, and later tried to kill him. Guts killed him instead, and walked out of the only life he had.",
+      "sfx": "Coins counted into a palm, a lamp guttering, canvas shifting, low murmur"
+    },
+    {
+      "id": "042_boy_walks",
+      "in": "cut",
+      "look": "cold",
+      "seconds": 8.0,
+      "prompt": "Wide bleak shot of a very small boy walking away alone down a muddy track at dusk, a sword far too big for him dragging behind him in the mud, the mercenary camp small and lit in the distance behind",
+      "motion": "He walks away from camera down the track, the oversized sword dragging a furrow in the mud behind him. He does not look back at the camp. Rain starts.",
+      "sfx": "Rain starting on mud, a heavy blade dragging, small footsteps, a camp receding"
+    },
+    {
+      "id": "050_merc_years",
+      "in": "dissolve",
+      "look": "cold",
+      "ref": [
+        "GUTS"
+      ],
+      "prompt": "Montage-style wide shot of a lone swordsman crossing a bleak landscape of burnt farms and gallows under a grey sky, carrying an enormous sword across his back, small in a wide frame",
+      "motion": "He walks steadily away from camera across the frame. Wind pulls at his cloak. Rain begins. He does not slow.",
+      "say": "For years he sold the only thing he had. He fought for whoever paid, and he did not lose.",
+      "sfx": "Wind across open country, rain beginning, footsteps in mud, a distant rope creaking"
+    },
+    {
+      "id": "060_siege",
+      "in": "dissolve",
+      "look": "fire",
+      "seconds": 6,
+      "prompt": "Epic wide shot of a medieval siege at dusk, a stone fortress wall with ladders against it, hundreds of soldiers surging forward with torches and spears, arrows in the air, smoke and fire",
+      "motion": "The mass of soldiers surges up the ladders. Arrows arc overhead. Fire climbs the wall. Chaotic, huge, kinetic.",
+      "say": "At the siege of a fortress whose name no one remembers, a giant held the breach.",
+      "sfx": "A full medieval siege, hundreds of men shouting, ladders slamming stone, arrows, fire roaring"
+    },
+    {
+      "id": "070_bazuso",
+      "in": "cut",
+      "look": "fire",
+      "seconds": 5,
+      "prompt": "Low angle of an enormous armoured knight standing in a breached gateway, a head and shoulders taller than the men around him, full plate and a huge double-headed axe, dead soldiers heaped at his feet, torchlight",
+      "motion": "The giant knight lifts the axe onto his shoulder and roars. The men in front of him back away. Torch smoke rolls past.",
+      "say": "He had killed everyone sent at him. The men had stopped being sent.",
+      "sfx": "A huge man roaring inside a stone gateway, armour, frightened soldiers backing off, fire"
+    },
+    {
+      "id": "080_charge",
+      "in": "cut",
+      "look": "fire",
+      "ref": [
+        "GUTS"
+      ],
+      "chain": 4,
+      "seconds": 30,
+      "prompt": "Dynamic low shot of {GUTS} walking out of the ranks alone toward the breach, the enormous sword dragging point-down behind him and throwing sparks off the flagstones, soldiers parting on both sides, firelight",
+      "motion": "He walks forward alone, the huge blade dragging and sparking on the stone behind him. The ranks part. He does not stop or look up.",
+      "motion2": "He breaks into a run and swings the great sword up in both hands as the giant's axe comes down; the two weapons meet and the shock throws sparks and dust outward",
+      "motion3": "The giant's return blow catches him and hurls him bodily through a burning market stall; he rolls through the wreckage, comes up on one knee, and spits blood",
+      "motion4": "He drives up from underneath, both hands on the hilt, and the enormous blade goes through the giant's guard; the huge armoured body folds and comes down",
+      "say": "One mercenary walked out of the line.",
+      "sfx": "A colossal sword dragging on stone throwing sparks, then two heavy blades meeting with a shattering clang, timber breaking, a huge body falling"
+    },
+    {
+      "id": "090_aftermath",
+      "in": "dissolve",
+      "look": "fire",
+      "ref": [
+        "GUTS"
+      ],
+      "seconds": 6,
+      "prompt": "Wide shot of {GUTS} standing over the enormous armoured corpse in the ruined gateway, sword resting on the stone, hundreds of soldiers staring at him in complete silence, firelight and drifting ash",
+      "motion": "Ash drifts down through the firelight. The soldiers stare without a sound. He stands still, breathing hard, and does not acknowledge any of them.",
+      "say": "The army had a story to tell for the rest of their lives. Guts collected his pay.",
+      "sfx": "Sudden silence after a battle, fire crackling, ash falling, one man's heavy breathing"
+    },
+    {
+      "id": "092_fortress_burns",
+      "in": "cut",
+      "look": "fire",
+      "seconds": 8.0,
+      "prompt": "Wide shot of the breached fortress burning at night, hundreds of soldiers standing motionless in the courtyard staring in one direction, fire and ash filling the air above them",
+      "motion": "Fire climbs the fortress wall. Ash falls steadily across the frame. The hundreds of standing soldiers do not move or speak. Slow drift across them.",
+      "sfx": "A fortress burning, timber collapsing, hundreds of men saying nothing at all"
+    },
+    {
+      "id": "100_griffith_watch",
+      "in": "cut",
+      "look": "fire",
+      "ref": [
+        "GRIFFITH"
+      ],
+      "seconds": 5,
+      "prompt": "Striking shot of {GRIFFITH} on horseback on a rise above the burning fortress, white armour catching the firelight, perfectly still, watching, a banner of mercenaries behind him in silhouette",
+      "motion": "His cloak lifts in the heat rising off the fortress. His horse shifts under him. He watches without moving. Firelight plays across the white armour.",
+      "say": "Someone else had been watching too.",
+      "sfx": "Wind over a hill, horses shifting and snorting, distant fire, banners in wind"
+    },
+    {
+      "id": "110_griffith_intro",
+      "in": "dissolve",
+      "look": "dawn",
+      "ref": [
+        "GRIFFITH"
+      ],
+      "prompt": "Medium shot of {GRIFFITH} in white armour standing in a mercenary camp at dusk, calm and composed, men working behind him, a hawk banner on a pole",
+      "motion": "He turns his head toward camera. The banner snaps in the wind behind him. His expression does not change. Utterly composed.",
+      "say": "Griffith. Commander of a mercenary band called the Band of the Hawk, and the most dangerous man Guts would ever meet.",
+      "sfx": "A busy camp at dusk, banners in wind, horses, armour, low voices"
+    },
+    {
+      "id": "120_duel1_setup",
+      "in": "dissolve",
+      "look": "dawn",
+      "ref": [
+        "GUTS",
+        "GRIFFITH"
+      ],
+      "seconds": 6,
+      "prompt": "Wide two-shot at dusk on open ground outside a camp, {GUTS} on the left with the enormous sword raised and {GRIFFITH} on the right with a slender longsword held low, mercenaries watching in a loose ring around them",
+      "motion": "Both men settle into stance. The watching ring goes quiet. Wind moves the grass between them. Neither moves first.",
+      "say": "Griffith wanted him. Guts told him what he could do with the offer.",
+      "sfx": "Wind across open ground, a ring of men falling quiet, leather and steel settling"
+    },
+    {
+      "id": "130_duel1",
+      "in": "cut",
+      "look": "dawn",
+      "ref": [
+        "GUTS",
+        "GRIFFITH"
+      ],
+      "chain": 3,
+      "seconds": 22,
+      "prompt": "Dynamic action shot of {GUTS} swinging the enormous sword down at {GRIFFITH}, who is already moving inside the arc, the huge blade passing through empty air, dust kicked up between them, dusk light",
+      "motion": "Guts brings the huge blade down hard. Griffith slips inside the arc before it lands. The sword hits earth and throws up dust.",
+      "motion2": "Guts recovers and swings again wider; Griffith turns the blow aside with the flat of his slender sword and lets the weight carry Guts past him",
+      "motion3": "Griffith steps in behind the swing, hooks a foot and puts Guts face down in the dirt with the point of the longsword at the back of his neck",
+      "sfx": "Heavy blade cutting air and striking earth, fast light footwork, a body hitting the ground hard, a sword point ringing"
+    },
+    {
+      "id": "135_guts_eye",
+      "in": "cut",
+      "look": "dawn",
+      "ref": [
+        "GUTS"
+      ],
+      "seconds": 2.5,
+      "prompt": "Extreme close-up of one eye of {GUTS} filling the frame, pupil wide, dirt and sweat on the skin around it, the reflection of a white-armoured figure curved across the wet surface of the eye",
+      "motion": "The pupil contracts sharply as it focuses. The reflection sharpens. A bead of sweat runs past. Nothing else moves in frame.",
+      "sfx": "A held breath, a heartbeat, dust settling, absolute focus"
+    },
+    {
+      "id": "140_duel1_end",
+      "in": "cut",
+      "look": "dawn",
+      "ref": [
+        "GUTS",
+        "GRIFFITH"
+      ],
+      "prompt": "Close two-shot of {GUTS} face down in the dirt with {GRIFFITH} standing over him, sword point at his neck, Griffith's expression calm rather than triumphant, dust settling around them",
+      "motion": "Dust settles. Guts' hand closes uselessly in the dirt. Griffith looks down at him without any satisfaction at all.",
+      "say": "From now on, you belong to me.",
+      "who": "GRIFFITH",
+      "sfx": "Dust settling, one man breathing hard into the dirt, a blade held perfectly still"
+    },
+    {
+      "id": "142_dirt_hold",
+      "in": "cut",
+      "look": "dawn",
+      "ref": [
+        "GUTS"
+      ],
+      "seconds": 7.0,
+      "prompt": "Low wide shot of an open training ground at dusk, {GUTS} face down in the churned dirt in the middle of the frame, the ring of watching mercenaries already breaking up and walking away from him",
+      "motion": "The watching men turn and drift away out of frame one by one. Dust settles slowly. He stays exactly where he is. Very slow push in.",
+      "sfx": "Boots walking away on dirt, a crowd dispersing, wind, one man breathing into the ground"
+    },
+    {
+      "id": "150_guts_owned",
+      "in": "cut",
+      "look": "dawn",
+      "ref": [
+        "GUTS"
+      ],
+      "prompt": "Close-up of the face of {GUTS} in the dirt, cheek against the ground, teeth bared in fury and humiliation, eyes burning",
+      "motion": "His jaw works. He drags in a breath through his teeth. His eyes stay locked forward, furious, refusing to look up.",
+      "say": "He had been sold once before. He knew exactly what the words meant.",
+      "sfx": "Ragged furious breathing against dirt, distant camp noise"
+    },
+    {
+      "id": "155_apart",
+      "in": "cut",
+      "look": "fire",
+      "ref": [
+        "GUTS"
+      ],
+      "seconds": 8.0,
+      "prompt": "Wide night shot of a mercenary camp from outside its ring of firelight, dozens of men gathered around the fires, and one figure sitting alone on a supply crate well beyond the light with his back to all of them",
+      "motion": "The men around the fires laugh and move. The lone figure at the edge does not turn. Firelight flickers across the ground between them. Slow drift.",
+      "sfx": "A camp at night heard from outside it, muffled laughter, fire, wind, distance"
+    },
+    {
+      "id": "200_hawks_ride",
+      "in": "dissolve",
+      "look": "dawn",
+      "seconds": 7,
+      "prompt": "Magnificent wide shot of a mercenary company riding in column across open country at dawn, a hawk banner at the head, five hundred riders and wagons stretching back, mist lying in the low ground",
+      "motion": "The column rides steadily across frame. The banner leads. Mist parts around the horses. Long, sweeping, majestic camera move alongside them.",
+      "say": "The Band of the Hawk. Five hundred men who had chosen one man's dream over their own.",
+      "sfx": "A large mounted column on the move, hundreds of hooves, wagon wheels, harness, banners"
+    },
+    {
+      "id": "210_judeau",
+      "in": "dissolve",
+      "ref": [
+        "JUDEAU"
+      ],
+      "prompt": "Warm medium shot of {JUDEAU} sitting on a supply wagon cleaning a throwing knife, half smiling, other soldiers around him at rest, afternoon light",
+      "motion": "He turns the knife over, tests the edge with his thumb, and glances up with an easy half smile. The wagon rocks under him.",
+      "say": "Judeau, who could put a knife through a coin at forty paces, and who noticed everything about everyone.",
+      "sfx": "A wagon on the move, a whetstone on a blade, relaxed camp sounds"
+    },
+    {
+      "id": "220_casca_intro",
+      "in": "cut",
+      "ref": [
+        "CASCA"
+      ],
+      "prompt": "Medium shot of {CASCA} in the saddle in half armour, reining her horse around to face camera, hard and unimpressed, the column moving behind her",
+      "motion": "She turns the horse sharply and levels a flat unfriendly stare at camera. Her cloak swings. The horse tosses its head.",
+      "say": "Casca. The only woman in the company, and the only one who had earned her place twice over to keep it.",
+      "sfx": "A horse reined around hard, harness, hooves on packed earth"
+    },
+    {
+      "id": "230_casca_hates",
+      "in": "cut",
+      "ref": [
+        "CASCA",
+        "GUTS"
+      ],
+      "prompt": "Tense two-shot in camp of {CASCA} squared up close to {GUTS}, jabbing a finger at his chest, furious, other soldiers watching from a distance, evening light",
+      "motion": "She jabs a finger hard into his chest plate and holds it there, saying something short. He looks down at her without moving at all.",
+      "say": "You are a mad dog he picked up. That is all you will ever be.",
+      "who": "CASCA",
+      "sfx": "Two people squared up close, armour, a sharp jab against a breastplate, camp noise beyond"
+    },
+    {
+      "id": "232_guts_after",
+      "in": "cut",
+      "look": "fire",
+      "ref": [
+        "GUTS"
+      ],
+      "seconds": 8.0,
+      "prompt": "Night shot of {GUTS} alone sharpening the enormous sword on a whetstone by a dying fire, the camp asleep behind him, his face lowered and unreadable",
+      "motion": "The whetstone runs the length of the blade, again, and again. Sparks come off the edge. The fire behind him burns lower. He does not look up.",
+      "sfx": "A whetstone on a huge blade, repeated and unhurried, a dying fire, a sleeping camp"
+    },
+    {
+      "id": "240_battles",
+      "in": "dissolve",
+      "look": "cold",
+      "chain": 3,
+      "seconds": 24,
+      "prompt": "Epic wide battle shot of the Band of the Hawk charging into an enemy line on open ground, the hawk banner at the centre, horses and infantry colliding, spears breaking, dust and blood spray in silhouette",
+      "motion": "The two lines collide in the centre of frame. Spears break. Horses go down. Dust boils up and swallows the middle distance. Violent and huge.",
+      "motion2": "The Hawk line breaks through and turns; the enemy formation buckles inward and begins to come apart",
+      "motion3": "Riders pour through the gap into the enemy rear as the banner is carried forward over the wreck of the line",
+      "say": "For three years they won. Not because they were stronger, but because Griffith saw the shape of a battle the way other men see a room.",
+      "sfx": "Two armies colliding, hundreds of men and horses, spears splintering, a war horn, chaos"
+    },
+    {
+      "id": "250_guts_fights",
+      "in": "cut",
+      "look": "cold",
+      "ref": [
+        "GUTS"
+      ],
+      "chain": 3,
+      "seconds": 22,
+      "prompt": "Brutal action shot of {GUTS} mid-swing in a press of enemy soldiers, the enormous sword clearing an arc around him, men thrown back, seen slightly in silhouette against dust and low sun",
+      "motion": "The huge blade comes round in a full arc and clears the space around him. Men are thrown back out of frame. He is already turning into the next swing.",
+      "motion2": "He drives forward through the gap he has made, shoulder down, and cuts a second arc that empties the ground ahead of him",
+      "motion3": "A spear takes him across the ribs; he tears it out of the man's hands, breaks it, and keeps going",
+      "say": "And because Guts, put at the point of any attack, went through it.",
+      "sfx": "A huge blade clearing an arc, bodies thrown, a spear shaft snapping, close brutal combat"
+    },
+    {
+      "id": "252_bridge",
+      "in": "dissolve",
+      "look": "fire",
+      "ref": [
+        "GUTS"
+      ],
+      "chain": 4,
+      "seconds": 32,
+      "prompt": "Wide shot of a narrow stone bridge over a gorge at dusk, {GUTS} standing alone at the near end with the enormous sword, and a hundred armoured soldiers packed on the far side coming toward him",
+      "motion": "The mass of soldiers starts across the bridge. He sets his feet and lifts the huge blade. Nobody behind him. Wind through the gorge.",
+      "motion2": "The first rank reaches him and he clears the width of the bridge in one arc; bodies go over the parapet into the gorge",
+      "motion3": "They come again in a press and he gives ground a single step at a time, the sword never stopping, dead piling at his feet",
+      "motion4": "He is bleeding from a dozen places and still standing when the far end of the bridge finally empties",
+      "say": "At a bridge whose name nobody bothered to write down, Guts held a hundred men on his own until they stopped coming.",
+      "sfx": "A narrow stone bridge, a hundred armoured men advancing, a huge blade clearing an arc repeatedly, bodies falling into a gorge"
+    },
+    {
+      "id": "254_griffith_sees",
+      "in": "cut",
+      "look": "fire",
+      "ref": [
+        "GRIFFITH"
+      ],
+      "prompt": "Close shot of {GRIFFITH} on horseback at the far ridge lowering a spyglass, his face unreadable, the smoke of the bridge fight behind him",
+      "motion": "He lowers the spyglass slowly and does not hand it to anyone. His horse shifts. Something crosses his face and is put away.",
+      "say": "I have never seen anyone fight like that. I want him.",
+      "sfx": "Wind on a ridge, a horse, leather, distant fighting ending",
+      "who": "GRIFFITH"
+    },
+    {
+      "id": "256_bridge_after",
+      "in": "cut",
+      "look": "cold",
+      "seconds": 9.0,
+      "prompt": "Bleak wide shot at dawn of a narrow stone bridge over a gorge, the whole span heaped with dead men, mist rising out of the gorge below, a single figure sitting on the parapet at the far end",
+      "motion": "Mist rises steadily out of the gorge and drifts across the bridge. A cloak stirs on one of the bodies. The seated figure does not move. Slow crane up.",
+      "sfx": "A gorge at dawn, wind, water far below, crows beginning, no voices"
+    },
+    {
+      "id": "260_campfire",
+      "in": "dissolve",
+      "look": "fire",
+      "ref": [
+        "GRIFFITH",
+        "GUTS"
+      ],
+      "seconds": 7,
+      "prompt": "Intimate two-shot at a campfire at night, {GRIFFITH} sitting with his arms on his knees and {GUTS} across the fire from him, firelight on both faces, the camp asleep in the darkness beyond",
+      "motion": "The fire moves between them. Griffith turns a stick in the embers. Guts watches him. Neither of them is in any hurry.",
+      "say": "They talked at night, when the camp was asleep. It became the only hour of the day either of them told the truth in.",
+      "sfx": "A small fire at night, embers shifting, a sleeping camp, insects, quiet"
+    },
+    {
+      "id": "270_dream",
+      "in": "cut",
+      "look": "fire",
+      "ref": [
+        "GRIFFITH"
+      ],
+      "prompt": "Close-up of {GRIFFITH} lit from below by the campfire, looking into the flames rather than at his companion, calm and absolutely certain",
+      "motion": "Firelight moves across his face. He does not look up. His expression is completely untroubled by the size of what he is saying.",
+      "say": "I want a kingdom of my own. Not given to me. Taken, and held, and mine.",
+      "who": "GRIFFITH",
+      "sfx": "A fire close by, one voice speaking quietly, a sleeping camp beyond"
+    },
+    {
+      "id": "275_griffith_eye",
+      "in": "cut",
+      "look": "fire",
+      "ref": [
+        "GRIFFITH"
+      ],
+      "seconds": 2.5,
+      "prompt": "Extreme close-up of the eyes of {GRIFFITH} lit from below by firelight, pale and calm and entirely certain, no warmth in them at all",
+      "motion": "The firelight moves across his eyes. He blinks once, slowly. The pupils stay fixed on something far outside the frame.",
+      "sfx": "A fire close by, one slow breath, night insects"
+    },
+    {
+      "id": "280_guts_listens",
+      "in": "cut",
+      "look": "fire",
+      "ref": [
+        "GUTS"
+      ],
+      "prompt": "Close-up of {GUTS} across the fire, listening, firelight on one side of his face, an expression he does not have a name for",
+      "motion": "He watches the other man steadily. Something moves behind his eyes and he looks away into the dark, then back.",
+      "say": "Guts had never wanted anything. It had never occurred to him that a man was allowed to.",
+      "sfx": "A fire, one man shifting his weight, night insects"
+    },
+    {
+      "id": "285_fire_burns_down",
+      "in": "cut",
+      "look": "fire",
+      "seconds": 9.0,
+      "prompt": "Intimate two-shot of a campfire burned down to embers between two seated figures, both quiet, the night enormous and black beyond the small ring of light",
+      "motion": "The embers settle and collapse inward. A last flame gutters out. Neither figure moves. Smoke rises straight up. Very slow push in on the embers.",
+      "sfx": "Embers settling, one log collapsing, a sleeping camp, insects, deep night"
+    },
+    {
+      "id": "290_price",
+      "in": "dissolve",
+      "look": "fire",
+      "seconds": 6,
+      "prompt": "Wide shot of the campfire from outside the circle of light, the two small figures facing each other across it, the enormous dark of the camp and the hills all around them",
+      "motion": "The fire burns low between the two seated figures. The dark presses in around the small ring of light. Very slow drift backward.",
+      "say": "He also said what such a kingdom would cost. Guts heard it as loyalty. It was a warning.",
+      "sfx": "A fire heard from a distance, wide open night, wind, a horse somewhere"
+    },
+    {
+      "id": "292_pippin",
+      "in": "dissolve",
+      "look": "fire",
+      "prompt": "Warm shot in camp of an enormous quiet bald soldier sitting on an anvil eating, dwarfing the men around him, and a boy of about fourteen working a bellows beside him, firelight",
+      "motion": "The huge man eats without hurrying. The boy pumps the bellows and grins up at him. The forge glows and throws light across both.",
+      "say": "Pippin, who never raised his voice and could lift a horse. Rickert, who was fourteen and kept the horses.",
+      "sfx": "A camp forge, bellows, a big man eating, a boy laughing, iron"
+    },
+    {
+      "id": "294_corkus",
+      "in": "cut",
+      "look": "fire",
+      "prompt": "Shot of a lean sneering soldier holding court over a dice game in camp, a cup in one hand, other men laughing at whatever he is saying, lamplight",
+      "motion": "He throws the dice, spreads his hands at the result and says something that makes the others laugh. He is performing and knows it.",
+      "say": "Corkus, who resented Guts from the first day and was not entirely wrong to.",
+      "sfx": "Dice on wood, men laughing, cups, a boastful voice pitched to carry"
+    },
+    {
+      "id": "296_river",
+      "in": "dissolve",
+      "look": "cold",
+      "ref": [
+        "GUTS",
+        "CASCA"
+      ],
+      "seconds": 7,
+      "prompt": "Dramatic shot of a fast river in spate at night, {GUTS} waist deep in it with {CASCA} unconscious over his shoulder, fighting the current toward a rock shelf",
+      "motion": "He forces one step at a time against the current with her weight over his shoulder. Water breaks over both of them. He does not let go.",
+      "say": "Casca took a fever in the field and went into a river. Guts went in after her, which surprised everyone including him.",
+      "sfx": "A river in spate at night, water breaking over a man, laboured effort, stones underfoot"
+    },
+    {
+      "id": "298_riverbank",
+      "in": "cut",
+      "look": "dawn",
+      "ref": [
+        "CASCA",
+        "GUTS"
+      ],
+      "seconds": 7,
+      "prompt": "Intimate shot on a rock shelf by the river at dawn, {CASCA} wrapped in a wet cloak awake and shivering, {GUTS} sitting a careful distance away, mist on the water",
+      "motion": "She surfaces from the fever and looks at him. He looks at the river. Mist moves. Neither of them says the obvious thing.",
+      "say": "I have been afraid every single day since I was fourteen. He is the only place I put it down.",
+      "who": "CASCA",
+      "sfx": "A river at dawn, mist, someone shivering, birds beginning, quiet"
+    },
+    {
+      "id": "299_river_after",
+      "in": "cut",
+      "look": "dawn",
+      "seconds": 7.0,
+      "prompt": "Wide shot of a fast river at dawn, mist over the water, the rock shelf at the near bank empty now, first light on the far trees",
+      "motion": "Mist moves downstream over the water. The current keeps running. Light strengthens on the far bank. Nothing else is in the frame.",
+      "sfx": "A river at dawn, mist, birds beginning, water over stones"
+    },
+    {
+      "id": "300_casca_story",
+      "in": "dissolve",
+      "look": "cold",
+      "seconds": 7,
+      "prompt": "Flashback-style shot in cold blue light of a young girl in a torn dress on the ground in a forest and a white-armoured youth on horseback above her, holding a sword down to her hilt-first",
+      "motion": "The mounted figure leans down and offers the sword hilt-first. The girl on the ground stares up at it. Rain drips through the branches.",
+      "say": "Casca had been a farm girl sold to a nobleman. Griffith put a sword in her hands instead and told her to decide her own life. She had followed him ever since.",
+      "sfx": "Rain in a forest, a horse breathing, a sword offered, cold quiet"
+    },
+    {
+      "id": "310_cliff",
+      "in": "cut",
+      "look": "cold",
+      "ref": [
+        "GUTS",
+        "CASCA"
+      ],
+      "seconds": 5,
+      "prompt": "Dramatic wide shot of {GUTS} and {CASCA} falling down a steep wet rock face together in the rain, both grabbing at nothing, a river far below",
+      "motion": "The two figures slide and tumble down the wet rock, grabbing at each other and at the stone. Rain hammers. They vanish into the dark below.",
+      "sfx": "Two bodies sliding down wet rock, hammering rain, scree falling, a river below"
+    },
+    {
+      "id": "320_cave",
+      "in": "dissolve",
+      "look": "fire",
+      "ref": [
+        "CASCA",
+        "GUTS"
+      ],
+      "seconds": 7,
+      "prompt": "Intimate shot in a small cave lit by a tiny fire, {CASCA} shivering wrapped in a wet cloak and {GUTS} sitting apart from her against the rock, rain sheeting past the entrance",
+      "motion": "The little fire struggles. She shivers hard and pulls the cloak tighter. He watches the rain rather than her. Neither speaks for a long moment.",
+      "say": "They spent that night not killing each other, which was new for both of them.",
+      "sfx": "Rain outside a cave mouth, a small struggling fire, someone shivering, dripping water"
+    },
+    {
+      "id": "330_casca_truth",
+      "in": "cut",
+      "look": "fire",
+      "ref": [
+        "CASCA"
+      ],
+      "prompt": "Close-up of {CASCA} in firelight, wet hair against her face, looking at something out of frame, her hard expression open for once",
+      "motion": "She looks up, and for the first time her face is not armoured. Firelight catches the water on her skin. She almost smiles, and doesn't.",
+      "say": "He gave me a sword instead of a life I did not choose. You would not understand that.",
+      "who": "CASCA",
+      "sfx": "A small fire, rain outside, a quiet voice, cloth shifting"
+    },
+    {
+      "id": "332_doldrey",
+      "in": "dissolve",
+      "look": "dawn",
+      "seconds": 7,
+      "prompt": "Epic establishing wide shot of an enormous hill fortress at dawn, tiered stone walls and towers above a plain, thousands of defenders on the battlements, siege lines far below",
+      "motion": "Banners lift on every tower. The camera pushes slowly in on the immense walls. Dust rises from the siege lines below. Utterly forbidding.",
+      "say": "Doldrey. A fortress that had held for a hundred years against armies ten times the size of theirs.",
+      "sfx": "A vast fortress at dawn, banners, thousands of men on walls, a war horn far off"
+    },
+    {
+      "id": "334_plan",
+      "in": "cut",
+      "look": "fire",
+      "ref": [
+        "GRIFFITH",
+        "CASCA"
+      ],
+      "seconds": 6,
+      "prompt": "Shot of {GRIFFITH} in a command tent with a map spread on a table, pointing at one place on it, officers around him including {CASCA} and {GUTS}, lamplight",
+      "motion": "He sets one finger on the map and holds it there. The officers lean in. Casca looks up at him sharply. Nobody argues.",
+      "say": "Griffith split his own outnumbered force in half, which every officer present told him was suicide.",
+      "sfx": "A command tent, a map, low urgent voices, lamplight, armour"
+    },
+    {
+      "id": "336_casca_charge",
+      "in": "cut",
+      "look": "dawn",
+      "ref": [
+        "CASCA"
+      ],
+      "chain": 3,
+      "seconds": 24,
+      "prompt": "Dynamic wide shot of {CASCA} leading a cavalry wing at full gallop across the plain toward the fortress gate, sabre out, riders in a wedge behind her, dust and dawn light",
+      "motion": "She rides at the head of the wedge, sabre up. The riders behind her hold formation. Dust boils up behind them. Full speed.",
+      "motion2": "The wedge hits the defending line and splits it; horses and men go down on both sides as she cuts through and keeps going",
+      "motion3": "Her horse is killed under her; she rolls clear, comes up with the sabre and fights on foot in the press",
+      "say": "Casca took the field.",
+      "sfx": "A cavalry charge at full gallop, hundreds of hooves, two lines colliding, horses screaming, a woman shouting orders"
+    },
+    {
+      "id": "338_adon",
+      "in": "cut",
+      "look": "dawn",
+      "ref": [
+        "CASCA"
+      ],
+      "chain": 3,
+      "seconds": 22,
+      "prompt": "Tense duel shot of {CASCA} on foot facing a large ornately armoured enemy commander with an elaborate helmet, both mid-fight, dust and bodies around them",
+      "motion": "The big commander swings heavily and she turns it aside, circling. He talks while he fights. She does not answer.",
+      "motion2": "He beats her back with sheer weight, and she lets him, giving ground and reading him",
+      "motion3": "She steps inside the next swing and puts the sabre through the gap in his ornate armour; he goes down mid-sentence",
+      "say": "Their commander made a long speech about her being a woman. She let him finish it.",
+      "sfx": "A duel on foot in a battlefield press, heavy blade on light blade, a boastful voice, a final wet stroke"
+    },
+    {
+      "id": "339_field_after",
+      "in": "cut",
+      "look": "cold",
+      "seconds": 9.0,
+      "prompt": "Wide bleak shot of the Doldrey battlefield after the charge, dead men and horses across churned ground, banners fallen, dust hanging, the fortress smoking on the ridge above",
+      "motion": "Dust hangs in the air and settles slowly. A loose horse walks across the middle distance. A fallen banner lifts once in the wind. Nothing else moves.",
+      "sfx": "A battlefield after the fighting stops, wind, a loose horse, distant fire, no voices"
+    },
+    {
+      "id": "340_guts_wall",
+      "in": "cut",
+      "look": "dawn",
+      "ref": [
+        "GUTS"
+      ],
+      "chain": 3,
+      "seconds": 24,
+      "prompt": "Vertiginous shot of {GUTS} climbing the sheer outer wall of the fortress alone with the enormous sword on his back, hand over hand up wet stone, the drop enormous below him",
+      "motion": "He hauls himself up the sheer face hand over hand. Stones come loose and fall away below. The huge sword shifts on his back.",
+      "motion2": "He reaches the battlement, comes over it into a knot of defenders and clears the walkway in two arcs",
+      "motion3": "He fights along the wall to the gatehouse, throws the winch bar over and the great gate begins to grind open below",
+      "say": "Guts went up the wall.",
+      "sfx": "Hands on wet stone, stones falling a long way, then close fighting on a battlement, a huge gate winch grinding"
+    },
+    {
+      "id": "342_gate",
+      "in": "cut",
+      "look": "dawn",
+      "chain": 3,
+      "seconds": 26,
+      "prompt": "Spectacular wide shot from inside the fortress as the enormous gates grind open and the Hawk cavalry pours through into the courtyard, banner at the front, defenders scattering",
+      "motion": "The gates grind wide and the cavalry floods through the gap. The banner comes through first. Defenders break and run. Overwhelming momentum.",
+      "motion2": "The charge spreads through the courtyard and up the tiers; the defence comes apart in front of it",
+      "motion3": "The hawk banner is carried up onto the highest tower and run up the pole as the fortress falls",
+      "say": "Doldrey fell in a single morning.",
+      "sfx": "Enormous gates grinding open, a cavalry charge into a stone courtyard, a rout, a banner raised, cheering"
+    },
+    {
+      "id": "344_cheer",
+      "in": "dissolve",
+      "look": "dawn",
+      "ref": [
+        "GRIFFITH"
+      ],
+      "seconds": 6,
+      "prompt": "Triumphant wide shot of thousands of soldiers filling the fortress courtyard with weapons raised, {GRIFFITH} on the steps above them in white armour, morning light, banners everywhere",
+      "motion": "The whole courtyard raises weapons and roars. He stands above them, still, and lets it come. Banners snap overhead.",
+      "say": "The kingdom had a hero. The nobility had a problem.",
+      "sfx": "Thousands of soldiers cheering in a stone courtyard, weapons on shields, banners, bells"
+    },
+    {
+      "id": "346_griffith_above",
+      "in": "cut",
+      "look": "dawn",
+      "ref": [
+        "GRIFFITH"
+      ],
+      "seconds": 8.0,
+      "prompt": "Shot from behind {GRIFFITH} on the fortress steps looking down at thousands of cheering soldiers, his back to camera, the roar of the courtyard in front of him and his face not visible at all",
+      "motion": "The crowd below roars and raises weapons. His shoulders do not move. Banners snap overhead. Slow push in on his back.",
+      "sfx": "An enormous crowd cheering, heard from above and slightly apart, banners, bells"
+    },
+    {
+      "id": "340_rise",
+      "in": "dissolve",
+      "look": "dawn",
+      "seconds": 7,
+      "prompt": "Grand wide shot of a royal capital at dawn, white towers and banners above a walled city, a mercenary column riding in through the main gate with crowds along the walls",
+      "motion": "The column rides in under the gate. Crowds wave from the walls. Banners lift. Bells begin. Bright and triumphant.",
+      "say": "Three years of victories bought Griffith what no mercenary had ever been given. A title, a command, and a place at court.",
+      "sfx": "A city gate at dawn, cheering crowds, bells, a mounted column entering, banners"
+    },
+    {
+      "id": "350_court",
+      "in": "dissolve",
+      "ref": [
+        "GRIFFITH"
+      ],
+      "seconds": 6,
+      "prompt": "Wide shot of a candlelit throne room, {GRIFFITH} kneeling before a seated king on a dais, courtiers and nobles in rich clothes watching from both sides, cold formal light",
+      "motion": "Griffith kneels and lowers his head. The nobles watch him with open hostility. Candle flames stand still in the airless hall.",
+      "say": "The nobility understood immediately what he was. A commoner with an army who had been let inside the walls.",
+      "sfx": "A large formal hall, courtly murmuring, armour kneeling on marble, candles"
+    },
+    {
+      "id": "352_charlotte",
+      "in": "dissolve",
+      "ref": [
+        "GRIFFITH"
+      ],
+      "seconds": 6,
+      "prompt": "Delicate shot in a palace garden of a young princess in pale blue speaking with {GRIFFITH}, both formal and careful, courtiers watching from a distance",
+      "motion": "She says something and looks down. He answers without moving closer. A servant watches from the colonnade. Everything is observed.",
+      "say": "The king's daughter found him fascinating. Griffith let her, because a throne can be reached by more than one road.",
+      "sfx": "A formal garden, fountain, distant courtly voices, careful footsteps on gravel"
+    },
+    {
+      "id": "354_nobles",
+      "in": "cut",
+      "seconds": 6,
+      "prompt": "Conspiratorial shot in a dim panelled room of three richly dressed nobles leaning together over wine, one of them older and calm, candlelight from below",
+      "motion": "The three lean in together. The calm older one speaks and the other two go still. Candlelight throws their shadows up the panelling.",
+      "say": "The court could not beat him in the field, so they went looking for a way to do it indoors.",
+      "sfx": "A small panelled room, wine poured, low conspiratorial voices, a fire"
+    },
+    {
+      "id": "356_assassins",
+      "in": "cut",
+      "look": "fire",
+      "ref": [
+        "GRIFFITH",
+        "GUTS"
+      ],
+      "chain": 3,
+      "seconds": 20,
+      "prompt": "Violent night shot of four hooded assassins with long knives coming over a balcony rail into a lamplit bedchamber, {GRIFFITH} already turning from a desk",
+      "motion": "The hooded figures come over the rail fast and low. Griffith turns from the desk. The lamp goes over. Immediate violence.",
+      "motion2": "{GUTS} comes through the door into the middle of it and the enormous sword takes two of them off their feet",
+      "motion3": "The last one goes through the window; Guts stands in the wreckage of the room breathing hard, Griffith untouched behind him",
+      "sfx": "Glass and a lamp going over, fast knife work, a huge blade in a small room, a body through a window, sudden quiet"
+    },
+    {
+      "id": "358_after_assassins",
+      "in": "cut",
+      "look": "fire",
+      "ref": [
+        "GUTS",
+        "GRIFFITH"
+      ],
+      "prompt": "Two-shot in the wrecked bedchamber, {GUTS} breathing hard among the dead and {GRIFFITH} calmly righting the fallen lamp, blood on the floor between them",
+      "motion": "Griffith picks the lamp up, sets it straight and adjusts the wick. Guts stares at him. The room steadies into lamplight again.",
+      "say": "This is what I meant. You are the only one I do not have to explain myself to.",
+      "who": "GRIFFITH",
+      "sfx": "A lamp righted and trimmed, blood dripping, one man breathing hard, calm quiet"
+    },
+    {
+      "id": "359_wrecked_room",
+      "in": "cut",
+      "look": "fire",
+      "seconds": 7.0,
+      "prompt": "Still wide shot of a wrecked lamplit bedchamber, an overturned chair, blood across the floorboards, the balcony doors open onto the night, nobody in frame",
+      "motion": "The open balcony doors move slightly in a draught. The lamp flame leans and recovers. Blood runs slowly along a floorboard seam. Nothing else.",
+      "sfx": "An empty room after violence, a lamp, a draught, blood dripping, night outside"
+    },
+    {
+      "id": "400_zodd_reveal",
+      "in": "dissolve",
+      "look": "cold",
+      "ref": [
+        "ZODD"
+      ],
+      "seconds": 6,
+      "prompt": "Terrifying low angle of {ZODD} standing in a ruined stone hall, horns almost touching the broken ceiling, dead soldiers strewn around its feet, moonlight through the shattered roof",
+      "motion": "The beast turns its head slowly toward camera and its eyes catch the moonlight. It rolls its shoulders. Dust falls from the broken roof above.",
+      "say": "Then they met something that should not have existed.",
+      "sfx": "Something enormous moving in a stone hall, claws on flagstone, a deep inhuman breath, falling dust"
+    },
+    {
+      "id": "410_zodd_fight",
+      "in": "cut",
+      "look": "cold",
+      "ref": [
+        "GUTS",
+        "ZODD"
+      ],
+      "chain": 5,
+      "seconds": 40,
+      "prompt": "Explosive action shot of {ZODD} smashing through a stone pillar to reach {GUTS}, the huge beast mid-lunge, Guts bringing the enormous sword across to meet it, debris exploding outward",
+      "motion": "The beast smashes through the pillar and lunges. Guts brings the great sword across into it. The impact throws both of them and a wall of debris outward.",
+      "motion2": "Guts is hurled the length of the hall into a wall; he comes up out of the rubble and charges straight back at it",
+      "motion3": "{GRIFFITH} comes in from the beast's flank, fast and precise, and opens a line across its ribs, and the two men fight it together",
+      "motion4": "The beast catches Guts and drives him down through a stone table, then turns on Griffith as Guts drags himself up on the sword",
+      "sfx": "A stone pillar exploding, an enormous beast roaring, huge blades on hide, a body driven through stone, sustained violence",
+      "motion5": "The beast breaks off, hurls Guts aside and leaps for the broken roof; Guts lands hard and drags himself up on the sword"
+    },
+    {
+      "id": "420_zodd_stops",
+      "in": "cut",
+      "look": "cold",
+      "ref": [
+        "ZODD"
+      ],
+      "prompt": "Tense close shot of {ZODD} halted mid-motion, its burning eyes fixed not on the swordsman but on something off frame, an expression almost like recognition on the bestial face",
+      "motion": "The beast freezes completely. Its eyes track past the man in front of it to something off frame. Its lips draw back from its teeth. It stops fighting.",
+      "say": "It stopped. Not because it was losing.",
+      "sfx": "Sudden stillness after violence, a huge creature breathing, dust settling"
+    },
+    {
+      "id": "430_behelit",
+      "in": "cut",
+      "look": "cold",
+      "prompt": "Extreme macro close-up of a small egg-shaped red stone hanging at a throat, its surface marked with what look like a pair of eyes and a mouth, faintly wet, catching moonlight",
+      "motion": "The marks on the stone's surface shift very slightly, as if settling into a face. A drop of moisture runs down it. It seems to breathe.",
+      "say": "Because of something Griffith wore at his throat, and had worn since he was a boy.",
+      "sfx": "A tiny wet sound like something turning over, a faint held tone, unnatural quiet"
+    },
+    {
+      "id": "432_behelit_hold",
+      "in": "cut",
+      "look": "cold",
+      "seconds": 6.0,
+      "prompt": "Extreme macro of the small red egg-shaped stone lying in an open palm, its marked surface catching moonlight, held completely steady",
+      "motion": "The marks on the stone shift by the smallest degree, settling further into a face. Moonlight moves across it. The hand beneath does not move.",
+      "sfx": "One faint wet sound, a held tone, absolute quiet"
+    },
+    {
+      "id": "440_zodd_warning",
+      "in": "cut",
+      "look": "cold",
+      "ref": [
+        "ZODD"
+      ],
+      "prompt": "Ominous shot of {ZODD} on the broken wall above, half turned away to leave, looking back down over its shoulder at the men below, moonlight along its horns",
+      "motion": "It hauls itself onto the broken wall, then stops and looks back down over its shoulder. Its wings or arms flex. It says something and does not wait for an answer.",
+      "say": "When his dream collapses, and it will, you will see something you cannot fight. Run then. If you are still alive.",
+      "who": "ZODD",
+      "sfx": "Something huge climbing broken stone, a low inhuman voice, wind through a ruined roof"
+    },
+    {
+      "id": "442_skull",
+      "in": "dissolve",
+      "look": "cold",
+      "seconds": 6,
+      "prompt": "Eerie shot on a moonlit road of a skeletal armoured rider on a black horse, its helm a bare skull, a great sword across its back, blocking the way, mist to the knees",
+      "motion": "The horse steps once and stops. The skull helm turns toward camera. Mist curls around the hooves. It is entirely unhurried.",
+      "say": "Something else on that road had been trying to stop this for four hundred years.",
+      "sfx": "A horse on a moonlit road, armour that sounds hollow, mist, a voice like stone"
+    },
+    {
+      "id": "444_skull_warn",
+      "in": "cut",
+      "look": "cold",
+      "prompt": "Close shot of the skeletal helm, empty sockets lit faintly from within, the moon behind it, mist drifting across the frame",
+      "motion": "The empty sockets kindle very faintly. The helm tilts. It speaks briefly and turns the horse away without waiting.",
+      "say": "Every thousand years the world lets one man buy what he wants. The price is always the same, and it is always paid by other people.",
+      "who": "ZODD",
+      "sfx": "A hollow resonant voice, harness, hooves turning away on a road, mist"
+    },
+    {
+      "id": "446_empty_road",
+      "in": "cut",
+      "look": "cold",
+      "seconds": 7.0,
+      "prompt": "Wide shot of an empty moonlit road through open country, mist to the knees, the rider gone, only hoofprints in the mud leading away out of frame",
+      "motion": "Mist drifts across the road. The hoofprints slowly fill with water. Cloud crosses the moon and the light drops. Nothing comes.",
+      "sfx": "An empty road at night, wind, water settling into mud, no hooves"
+    },
+    {
+      "id": "500_overheard",
+      "in": "dissolve",
+      "look": "fire",
+      "ref": [
+        "GUTS"
+      ],
+      "prompt": "Quiet shot in a stone corridor at night, {GUTS} stopped just outside a lit doorway with his hand on the frame, listening, his face lit down one side by the light from inside",
+      "motion": "He stops with one hand on the door frame. Light from the room falls across half his face. He does not go in. He listens.",
+      "say": "He was not meant to hear it.",
+      "sfx": "A stone corridor at night, muffled voices through a door, a hand on wood, held breath"
+    },
+    {
+      "id": "505_hand_on_frame",
+      "in": "cut",
+      "look": "fire",
+      "ref": [
+        "GUTS"
+      ],
+      "seconds": 2.5,
+      "prompt": "Extreme close-up macro of a scarred hand gripping a stone door frame, knuckles white with pressure, warm lamplight from inside falling across the fingers",
+      "motion": "The fingers tighten on the stone by degrees until the knuckles blanch. Dust falls from under them. Slow push in.",
+      "sfx": "Fingers tightening on stone, grit falling, muffled voices beyond a door"
+    },
+    {
+      "id": "510_griffith_friend",
+      "in": "cut",
+      "look": "fire",
+      "ref": [
+        "GRIFFITH"
+      ],
+      "prompt": "Warm interior shot of {GRIFFITH} in a lamplit room, half turned away, speaking to someone off frame, relaxed and honest in a way he is never seen to be in public",
+      "motion": "He turns a cup slowly in his hands as he speaks, looking into it rather than at whoever he is answering. Lamplight moves across him.",
+      "say": "A friend is not someone who follows me. A friend is someone who stands beside me because he is going somewhere of his own.",
+      "who": "GRIFFITH",
+      "sfx": "A quiet lamplit room, a cup turned on a table, one voice speaking evenly"
+    },
+    {
+      "id": "520_guts_realises",
+      "in": "cut",
+      "look": "fire",
+      "ref": [
+        "GUTS"
+      ],
+      "prompt": "Extreme close-up of the face of {GUTS} in the dark corridor, the sentence landing, his expression changing from confusion to something like grief",
+      "motion": "His eyes move as the words land. His jaw tightens. He closes his eyes for a moment and something goes out of his face.",
+      "say": "Guts had spent three years being the best sword another man owned. He had never once been Griffith's friend.",
+      "sfx": "A held breath released, muffled voices beyond a door, a corridor's stone quiet"
+    },
+    {
+      "id": "522_corridor_hold",
+      "in": "cut",
+      "look": "fire",
+      "ref": [
+        "GUTS"
+      ],
+      "seconds": 9.0,
+      "prompt": "Shot down a dark stone corridor, {GUTS} standing motionless halfway along it, the lit doorway behind him and the dark ahead, his face turned away from both",
+      "motion": "The light from the doorway flickers as someone moves inside the room. He stays where he is. Dust drifts through the light. Slow pull back down the corridor.",
+      "sfx": "A stone corridor, muffled voices through a door, one person not moving, distant camp"
+    },
+    {
+      "id": "530_decision",
+      "in": "dissolve",
+      "look": "dawn",
+      "ref": [
+        "GUTS"
+      ],
+      "seconds": 7,
+      "prompt": "Wide shot of {GUTS} sitting alone on a battlement at dawn with the enormous sword across his knees, the sleeping camp and the plain far below, cold pale light",
+      "motion": "He sits without moving as the light comes up. Mist lifts off the plain below. His hands rest on the blade. He has already decided.",
+      "say": "So he decided to go and find out what he wanted, so that one day he could come back and stand beside him instead of behind him.",
+      "sfx": "A cold dawn on stone battlements, wind, a sleeping camp far below, birds beginning"
+    },
+    {
+      "id": "540_tell_casca",
+      "in": "cut",
+      "look": "dawn",
+      "ref": [
+        "CASCA",
+        "GUTS"
+      ],
+      "prompt": "Two-shot at dawn of {CASCA} standing in front of {GUTS} on the battlement stair, blocking his way, furious and frightened at once",
+      "motion": "She steps into his path and stays there. Her hands are shaking. He waits for her to move, and she does not.",
+      "say": "If you go, you will break him. You are the only thing he has that he did not plan for.",
+      "who": "CASCA",
+      "sfx": "Wind on a stone stair, two people close and not touching, armour, a shaken voice"
+    },
+    {
+      "id": "542_judeau_knows",
+      "in": "cut",
+      "look": "fire",
+      "ref": [
+        "JUDEAU",
+        "GUTS"
+      ],
+      "prompt": "Quiet two-shot at a camp table of {JUDEAU} across from {GUTS}, Judeau turning a knife over and not looking up, both of them aware of what is being said",
+      "motion": "Judeau turns the knife over and over without looking up. He says something short and finally does look up, with a sad half smile.",
+      "say": "She will never say it to you, so I will. She is in love with him and she is in love with you and it is going to tear her in half.",
+      "who": "JUDEAU",
+      "sfx": "A camp table at night, a knife turned on wood, low voices, a fire outside"
+    },
+    {
+      "id": "544_judeau_alone",
+      "in": "cut",
+      "look": "fire",
+      "ref": [
+        "JUDEAU"
+      ],
+      "seconds": 8.0,
+      "prompt": "Quiet shot of {JUDEAU} alone at the camp table after the other chair has emptied, turning a small knife over and over in his fingers, one lamp, the tent dark around him",
+      "motion": "He turns the knife over, and over, and over. The lamp flame steadies. He does not look up at anything. Very slow push in.",
+      "sfx": "A knife turned repeatedly on wood, a lamp, an empty tent, night outside"
+    },
+    {
+      "id": "550_duel2",
+      "in": "dissolve",
+      "look": "dawn",
+      "ref": [
+        "GUTS",
+        "GRIFFITH"
+      ],
+      "chain": 5,
+      "seconds": 38,
+      "prompt": "Wide two-shot at dawn in a snowy courtyard, {GRIFFITH} with his slender sword drawn and {GUTS} with the enormous blade lowered, snow falling between them, the Hawks watching from the walls in silhouette",
+      "motion": "Snow falls between them. Both settle. The watching figures on the walls do not move. Then Griffith attacks first, fast and precise.",
+      "motion2": "Griffith's blade comes in three times in a heartbeat and Guts turns each one aside with the flat of the huge sword, giving ground and watching",
+      "motion3": "Guts steps in instead of back, takes the fourth strike on his shoulder plate and brings the great sword round in one enormous rising arc",
+      "motion4": "The slender sword shatters at the guard and spins away into the snow; the fragments fall; Griffith stands empty-handed and still",
+      "say": "Griffith wagered his command on the duel, and lost it.",
+      "sfx": "Snow-muffled courtyard, a fast light blade striking a heavy one three times, a huge rising swing, steel shattering, fragments in snow",
+      "motion5": "Guts lowers the great sword and stands in the falling snow; neither of them moves, and the watching walls stay silent"
+    },
+    {
+      "id": "560_broken_sword",
+      "in": "cut",
+      "look": "dawn",
+      "seconds": 4,
+      "prompt": "Macro close-up of the broken half of a slender longsword lying in fresh snow, the break bright and new, snowflakes settling on the steel",
+      "motion": "Snow drifts down continuously and settles on the broken steel, flake by flake. The bright break slowly dulls under the accumulation. Slow steady push in.",
+      "sfx": "Snow falling on steel, absolute muffled quiet, one distant footstep"
+    },
+    {
+      "id": "570_guts_leaves",
+      "in": "dissolve",
+      "look": "dawn",
+      "ref": [
+        "GUTS"
+      ],
+      "seconds": 8,
+      "prompt": "Wide shot from behind of {GUTS} walking away down a snowy road with the enormous sword on his back, and far behind him {GRIFFITH} standing alone in the courtyard gate watching him go",
+      "motion": "Guts walks steadily away down the road, snow falling thickly between camera and the distant figure in the gateway. His cloak moves. Slow continuous crane back.",
+      "say": "He did not look back. He thought he had years.",
+      "sfx": "Boots in fresh snow receding, wind, a gate creaking somewhere behind, emptiness"
+    },
+    {
+      "id": "572_empty_road",
+      "in": "cut",
+      "look": "dawn",
+      "seconds": 11.0,
+      "prompt": "Very wide shot of an empty snowy road running away to the horizon, the walking figure now tiny and almost lost in the falling snow, the fortress gate small and dark at the near edge of frame",
+      "motion": "Snow falls thickly across the whole frame. The tiny figure grows smaller and is gradually lost in it. The gate stays dark and open. Very slow crane up.",
+      "sfx": "Heavy snow, wind across open country, one set of footsteps too far away to hear clearly"
+    },
+    {
+      "id": "580_griffith_alone",
+      "in": "cut",
+      "look": "dawn",
+      "ref": [
+        "GRIFFITH"
+      ],
+      "prompt": "Devastating close-up of {GRIFFITH} alone in the snowy gateway, empty hands at his sides, his composure gone for the first time, snow on his white armour",
+      "motion": "His hand closes slowly on nothing. Snow settles on his shoulders. His face finally breaks, and there is no one there to see it.",
+      "say": "Griffith had never lost anything before. He did not know how to do it.",
+      "sfx": "Snow falling, one person breathing unevenly, a vast quiet courtyard"
+    },
+    {
+      "id": "585_snow_hand",
+      "in": "soft",
+      "look": "dawn",
+      "ref": [
+        "GRIFFITH"
+      ],
+      "seconds": 3.0,
+      "prompt": "Extreme close-up of an open gloved hand held out palm up in falling snow, flakes landing on the leather and not melting, the hand completely still",
+      "motion": "Snowflakes land on the open palm one after another and do not melt. The hand does not close. Snow keeps falling through the frame.",
+      "sfx": "Snow falling on leather, a vast quiet courtyard, wind"
+    },
+    {
+      "id": "586_gate_hold",
+      "in": "cut",
+      "look": "dawn",
+      "ref": [
+        "GRIFFITH"
+      ],
+      "seconds": 12.0,
+      "prompt": "Wide shot of the fortress gateway from inside the courtyard, {GRIFFITH} small and alone in the open gate with his back to camera, snow filling the air between",
+      "motion": "Snow falls between camera and the small white figure in the gate. He does not turn and does not move. The snow slowly begins to settle on his shoulders. Extremely slow push in.",
+      "sfx": "Snow falling in a stone courtyard, wind through an open gate, nothing else at all"
+    },
+    {
+      "id": "582_charlotte_night",
+      "in": "dissolve",
+      "look": "fire",
+      "seconds": 6,
+      "prompt": "Restrained shot of a palace corridor at night, a door standing half open with warm light behind it, a white cloak discarded across a chair, no figures in frame",
+      "motion": "The warm light in the doorway flickers as something moves inside the room. Dust drifts through the light. The discarded cloak stirs faintly in a draught. Slow push toward the door.",
+      "say": "That night Griffith did something reckless with the king's daughter, and by morning the whole court knew.",
+      "sfx": "A quiet palace corridor at night, a distant door, fabric settling, stillness"
+    },
+    {
+      "id": "584_king",
+      "in": "cut",
+      "seconds": 5,
+      "prompt": "Shot of an aging king on a throne gripping the arms of it, face dark with fury, courtiers pressed back against the walls of the hall",
+      "motion": "His hands tighten and slacken on the throne arms. The candle flames lean and recover. Courtiers shift uneasily along the walls. Slow push in on the throne.",
+      "say": "The king had loved him like a son, right up until the moment he had a reason not to.",
+      "sfx": "A great hall gone silent, one quiet furious voice, hands on wood, candles"
+    },
+    {
+      "id": "586b_throne_empty",
+      "in": "cut",
+      "look": "fire",
+      "seconds": 7.0,
+      "prompt": "Formal wide shot of the throne room emptied of people, the throne itself vacant, candles guttering in a long row, one overturned goblet on the marble",
+      "motion": "The candle flames lean together in a draught. The goblet rocks once and settles. Light moves across the empty throne. Nobody enters.",
+      "sfx": "A great hall emptied out, candles, a draught, marble, a distant door closing"
+    },
+    {
+      "id": "600_reckless",
+      "in": "dissolve",
+      "look": "fire",
+      "ref": [
+        "GRIFFITH"
+      ],
+      "seconds": 6,
+      "prompt": "Cold shot of a candlelit war room, {GRIFFITH} alone over a map table at night, dozens of guttering candles, his shadow thrown huge across the wall behind him",
+      "motion": "He moves a marker on the map, then stops with his hand on it. The candles gutter. His shadow shifts across the wall. He does not sleep.",
+      "say": "What he did next, he did quickly, and for reasons he would never explain to anyone.",
+      "sfx": "A quiet war room at night, many candles, parchment, a marker set down on wood"
+    },
+    {
+      "id": "610_arrest",
+      "in": "cut",
+      "ref": [
+        "GRIFFITH"
+      ],
+      "seconds": 5,
+      "prompt": "Violent shot of royal guards in ornate armour seizing {GRIFFITH} in a palace corridor, four men holding him, his sword already on the floor, a triumphant noble watching from the end of the hall",
+      "motion": "The guards take him from both sides and force him down. His sword rings on the marble. The noble at the end of the hall does not move closer.",
+      "say": "The court had been waiting a long time for a reason. He handed them one.",
+      "sfx": "Armoured men seizing someone, a sword hitting marble, a struggle in a stone hall, a door slamming"
+    },
+    {
+      "id": "620_year",
+      "in": "fade",
+      "in_dur": 1.8,
+      "look": "cold",
+      "seconds": 8,
+      "prompt": "Bleak wide shot of an iron door at the bottom of a stone shaft, one shaft of light from far above, the floor wet, chains on the walls, no figure visible",
+      "motion": "Water falls continuously through the shaft of light. The shaft creeps steadily across the wet floor as the sun moves. Chains sway very slightly. Slow descending camera move down the shaft.",
+      "say": "They kept him for a year. What they did to him in that year was designed so that he could never be a threat again.",
+      "sfx": "A deep stone shaft, water dripping, chains shifting, a door far above, terrible patience"
+    },
+    {
+      "id": "622_cell_hold",
+      "in": "cut",
+      "look": "cold",
+      "seconds": 12.0,
+      "prompt": "Bleak static wide of the bottom of a stone shaft, one narrow blade of light from far above lying across a wet floor, chains against the wall, no figure visible anywhere in frame",
+      "motion": "The blade of light creeps slowly across the wet floor and up the wall as hours pass. Water falls through it at intervals. Nothing else happens for a long time.",
+      "sfx": "A deep stone shaft, water dripping at long intervals, chains shifting once, terrible patience"
+    },
+    {
+      "id": "630_hawks_hunted",
+      "in": "dissolve",
+      "look": "cold",
+      "seconds": 7,
+      "prompt": "Wide shot of a ragged mercenary band camped in winter forest, far fewer than before, wounded men, no banner flying, snow on the tents",
+      "motion": "Snow sifts down through the bare branches onto the ragged camp. A wounded man is helped past. There is no banner anywhere in frame.",
+      "say": "The Hawks were declared traitors and hunted through two winters. Casca held them together because there was no one else left to do it.",
+      "sfx": "A cold thin camp in winter forest, snow, wounded men, no music, no cheer"
+    },
+    {
+      "id": "640_guts_returns",
+      "in": "cut",
+      "look": "cold",
+      "ref": [
+        "GUTS"
+      ],
+      "seconds": 6,
+      "prompt": "Striking shot of {GUTS} walking into the ragged winter camp, bigger than when he left, a new scar, the enormous sword on his back, the ragged soldiers turning to look at him",
+      "motion": "He walks in through the trees and stops. The ragged men turn one by one. Snow falls between them. Nobody speaks.",
+      "say": "A year. I came back with an answer and there is no one left to give it to.",
+      "sfx": "Boots in snow entering a camp, men getting to their feet, snow, silence",
+      "who": "GUTS"
+    },
+    {
+      "id": "650_rescue",
+      "in": "dissolve",
+      "look": "fire",
+      "ref": [
+        "GUTS",
+        "CASCA"
+      ],
+      "chain": 3,
+      "seconds": 22,
+      "prompt": "Action shot of {GUTS} and {CASCA} fighting through a torchlit dungeon corridor, guards falling back before them, the enormous sword filling the corridor, torch smoke",
+      "motion": "The huge blade clears the corridor ahead of them. Guards break and run. The two of them push forward through the smoke without stopping.",
+      "motion2": "They reach a barred iron door; Guts sets the great sword against it and tears it out of the stone wall in a burst of dust",
+      "motion3": "They come through into the dark beyond and slow to a walk, torchlight swinging wildly across the walls as the torch lowers, smoke rolling past them, both still breathing hard. Slow continuous push forward into the dark.",
+      "say": "They went into the tower after him.",
+      "sfx": "Fighting in a narrow stone corridor, guards routed, an iron door torn from stone, then abrupt silence"
+    },
+    {
+      "id": "660_griffith_ruined",
+      "in": "cut",
+      "look": "cold",
+      "seconds": 8,
+      "prompt": "Devastating shot in near darkness of a thin ruined figure in a torn shift huddled on the floor of a cell, an iron mask covering the face, limbs wasted, unable to rise, one shaft of light",
+      "motion": "Dust turns slowly in the single shaft of light. The shaft creeps across the wet stone as the sun moves. The thin shoulders rise and fall shallowly but continuously. A slow steady drip falls through the light. Very slow push in throughout.",
+      "say": "A year had taken his voice, his hands and his legs. The man who had wanted a kingdom could not stand, and could not speak, and could not be looked at.",
+      "sfx": "A cell in near silence, one shallow breath, chains, water, the worst quiet in the film"
+    },
+    {
+      "id": "662_doorway",
+      "in": "cut",
+      "look": "cold",
+      "ref": [
+        "GUTS"
+      ],
+      "seconds": 11.0,
+      "prompt": "Devastating shot from inside a cell looking at the open doorway, {GUTS} standing in it without coming any further in, the huge sword hanging forgotten from one hand, his face unreadable in the dark",
+      "motion": "He stands in the doorway and does not come in. The torchlight behind him wavers. The sword hangs from his hand. He does not move at all for a long moment. Very slow push in on him.",
+      "sfx": "A cell in near total silence, one torch guttering far behind, water, a held breath"
+    },
+    {
+      "id": "670_carry",
+      "in": "cut",
+      "look": "fire",
+      "ref": [
+        "GUTS",
+        "CASCA"
+      ],
+      "seconds": 6,
+      "prompt": "Wrenching shot of {GUTS} carrying the ruined thin figure out of the tower in his arms down a spiral stair, the body far too light, {CASCA} ahead of them with a torch, tears on her face",
+      "motion": "He carries the light body down the stair. Casca goes ahead with the torch and keeps looking back. The torchlight shakes.",
+      "sfx": "Slow heavy footsteps on a spiral stair, a torch, someone crying without sound, cloth"
+    },
+    {
+      "id": "672_stair_empty",
+      "in": "cut",
+      "look": "fire",
+      "seconds": 7.0,
+      "prompt": "Shot up an empty spiral stone stair, a dropped torch still burning on the steps, guttering, nobody on the stair at all",
+      "motion": "The dropped torch burns down where it lies, throwing moving light up the curve of the stair. Smoke rises. The stair stays empty.",
+      "sfx": "An empty stone stair, a torch burning on the ground, distant footsteps receding"
+    },
+    {
+      "id": "680_cart",
+      "in": "dissolve",
+      "look": "cold",
+      "seconds": 7,
+      "prompt": "Bleak wide shot of a small cart on a moorland road at dusk, the ragged remnant of the band walking alongside it, the hooded ruined figure sitting in the cart, grey sky",
+      "motion": "The cart rocks along the rough road. The walking figures keep pace. The hooded figure in the cart does not move with the motion, only sways.",
+      "say": "They ran for weeks. He never spoke. Casca fed him and did not let anyone else near him.",
+      "sfx": "A cart on a rough moor road, wheels, walking men, wind, low grey emptiness"
+    },
+    {
+      "id": "682_almost",
+      "in": "dissolve",
+      "look": "fire",
+      "ref": [
+        "CASCA",
+        "GUTS"
+      ],
+      "seconds": 7,
+      "prompt": "Tender restrained two-shot at a night camp of {CASCA} asleep against {GUTS}'s shoulder by a low fire, his arm awkwardly still so as not to wake her",
+      "motion": "The low fire breathes and shifts, throwing moving light across both of them. Her hair lifts slightly with each breath she takes. Smoke curls up. Slow drift in.",
+      "say": "Somewhere in those weeks, without either of them deciding to, they became the thing that kept the other one upright.",
+      "sfx": "A low fire at night, two people breathing, a cart settling, wind"
+    },
+    {
+      "id": "684_watching",
+      "in": "cut",
+      "look": "fire",
+      "seconds": 7,
+      "prompt": "Chilling shot from inside the cart of the hooded ruined figure sitting motionless, and past it in the firelight the two figures asleep together, the hood turned exactly toward them",
+      "motion": "Firelight flickers across the hood, and the thin hand tightens on the blanket by degrees. Smoke drifts between the cart and the fire. Slow push toward the hood.",
+      "say": "From the cart, the ruined thing that had been Griffith watched them, and understood that he had lost even this.",
+      "sfx": "A cart at night, a blanket gripped, a fire beyond, breathing that is not quite steady"
+    },
+    {
+      "id": "686_cart_night",
+      "in": "cut",
+      "look": "fire",
+      "seconds": 9.0,
+      "prompt": "Wide night shot of a small cart on open moorland with a low fire beside it, the hooded figure motionless in the cart, two sleeping shapes by the fire, enormous darkness around all of it",
+      "motion": "The fire burns low. The hooded figure in the cart stays exactly as it is. Wind moves across the moor grass. The dark presses in. Very slow drift back.",
+      "sfx": "A moor at night, a low fire, wind in grass, a cart settling, no voices"
+    },
+    {
+      "id": "690_behelit_again",
+      "in": "cut",
+      "look": "eclipse",
+      "seconds": 5,
+      "prompt": "Macro close-up of the small red egg-shaped stone lying in a thin ruined hand in the bottom of a cart, its marked surface beginning to weep, the eyes on it opening",
+      "motion": "The marks on the stone rearrange themselves into a face and the eyes open. Fluid runs from them. The hand holding it does not move.",
+      "say": "Then the stone at his throat opened its eyes.",
+      "sfx": "A wet unnatural sound, a rising impossible tone, everything else falling away"
+    },
+    {
+      "id": "700_eclipse",
+      "in": "fade",
+      "in_dur": 1.8,
+      "look": "eclipse",
+      "seconds": 8,
+      "prompt": "Apocalyptic wide shot of a moorland turned to a plain of red flesh and standing stones under a black sun in a red sky, thousands of grotesque silhouetted shapes crowding the horizon, the small band tiny at the centre",
+      "motion": "The black sun hangs motionless. The horizon crawls with shapes. The ground itself breathes. The tiny figures at the centre turn slowly, surrounded.",
+      "say": "The world came apart, and something on the other side of it had been waiting for this exact moment for a very long time.",
+      "sfx": "Reality tearing, a vast inhuman chorus, wind that is not wind, a heartbeat under everything"
+    },
+    {
+      "id": "702_horizon",
+      "in": "cut",
+      "look": "eclipse",
+      "seconds": 10.0,
+      "prompt": "Apocalyptic wide of the red plain under the black sun, the horizon crawling with countless silhouetted shapes, the small band tiny and surrounded at the centre of an enormous frame",
+      "motion": "The horizon crawls continuously with shapes. The black sun does not move. The ground itself rises and falls slowly as if breathing. The tiny figures turn.",
+      "sfx": "A vast inhuman chorus held on one note, wind that is not wind, a heartbeat under everything"
+    },
+    {
+      "id": "710_godhand",
+      "in": "cut",
+      "look": "eclipse",
+      "seconds": 6,
+      "prompt": "Terrifying shot of four colossal inhuman figures seated in the air above the red plain, monstrous and serene, hugely out of scale, backlit by the black sun",
+      "motion": "The four vast shapes settle in the air without moving their limbs. The black sun burns behind them. Everything below them is small.",
+      "say": "They offered him what he had always wanted. They named the price.",
+      "sfx": "Four vast presences, a deep chorus of inhuman voices, pressure, dread beyond fear"
+    },
+    {
+      "id": "720_choice",
+      "in": "cut",
+      "look": "eclipse",
+      "seconds": 7,
+      "prompt": "Close shot of the ruined hooded figure kneeling on the red ground, head lifting for the first time, the black sun above, his ragged band silhouetted behind him unaware",
+      "motion": "For the first time the ruined figure lifts its head. Behind it the silhouetted band stand facing outward, watching the horizon, backs turned to him.",
+      "say": "Everyone he had. Everyone who had followed him. That was the price, and he had one moment to answer.",
+      "sfx": "A vast waiting silence, a chorus holding one note, a single breath drawn"
+    },
+    {
+      "id": "730_answer",
+      "in": "dissolve",
+      "look": "eclipse",
+      "seconds": 5,
+      "prompt": "Abstract shot of the black sun filling almost the whole frame, a single small kneeling silhouette at the bottom edge, red light bleeding around the black disc",
+      "motion": "The black disc burns. Red light bleeds around its edge and slowly floods the frame. The small silhouette below does not move.",
+      "say": "He said yes.",
+      "sfx": "One enormous tolling note, a chorus resolving into something triumphant and wrong"
+    },
+    {
+      "id": "732_black_sun",
+      "in": "cut",
+      "look": "eclipse",
+      "seconds": 10.0,
+      "prompt": "Near abstract shot of the black sun filling almost the entire frame, red light bleeding around its edge, everything else in silhouette",
+      "motion": "The black disc burns without moving. Red light bleeds slowly wider around its rim and floods the frame by degrees. Nothing else exists.",
+      "sfx": "One enormous tolling note decaying very slowly, a chorus far beneath it"
+    },
+    {
+      "id": "740_slaughter",
+      "in": "cut",
+      "look": "eclipse",
+      "seconds": 7,
+      "prompt": "Chaotic near-abstract shot of silhouetted human figures fighting a tide of grotesque shapes on a red plain, seen from far off and half lost in the dark, no detail, only the shape of an ending",
+      "motion": "The small silhouettes are surrounded and go down one by one, seen from too far away to make out. The tide closes over where they were.",
+      "say": "What the demons did to the Band of the Hawk took a long time, and this account will not describe it.",
+      "sfx": "A distant overwhelming massacre kept far off and indistinct, a chorus rising over it"
+    },
+    {
+      "id": "745_casca_face",
+      "in": "cut",
+      "look": "eclipse",
+      "ref": [
+        "CASCA"
+      ],
+      "seconds": 3.0,
+      "prompt": "Extreme close-up of the face of {CASCA} in red darkness, mouth open in a scream that makes no sound, eyes fixed on something out of frame, lit from one side",
+      "motion": "Her scream makes no sound. The red light on her face pulses. Her eyes do not move from what she is looking at. Everything else is dark.",
+      "sfx": "A scream with no sound reaching it, a chorus swelling over everything, muffled chaos"
+    },
+    {
+      "id": "750_judeau",
+      "in": "cut",
+      "look": "eclipse",
+      "ref": [
+        "JUDEAU"
+      ],
+      "prompt": "Close shot in red darkness of {JUDEAU} on the ground, propped on one arm, mortally hurt, still trying to say something to someone off frame, almost calm",
+      "motion": "He gets up onto one elbow, tries to speak, and cannot. He makes himself smile instead, at whoever is off frame, and then his arm gives out.",
+      "say": "Judeau, who noticed everything, spent the last of it trying to tell Casca something kind.",
+      "sfx": "Close laboured breathing, a hand slipping on wet ground, chaos far behind"
+    },
+    {
+      "id": "752_pippin_dies",
+      "in": "cut",
+      "look": "eclipse",
+      "seconds": 5,
+      "prompt": "Silhouette shot in red darkness of an enormous soldier holding a stone doorway shut against a mass of shapes with his own body, arms braced wide, others escaping behind him",
+      "motion": "He braces across the doorway with both arms and takes the whole weight of what is on the other side. Behind him figures run. He holds.",
+      "say": "Pippin held a doorway with his body so the others could get through it, and never said a word about it.",
+      "sfx": "An enormous man braced against a door, something vast pressing on the other side, stone cracking"
+    },
+    {
+      "id": "754_corkus",
+      "in": "cut",
+      "look": "eclipse",
+      "prompt": "Shot in red darkness of the lean sneering soldier on his knees in the open, all his bravado gone, staring up at something enormous off frame",
+      "motion": "He is on his knees with his sword forgotten in the dirt beside him, looking up. Everything he used to say is gone out of his face.",
+      "say": "Corkus, who had never believed in any of it, died still explaining that none of this was possible.",
+      "sfx": "A man on his knees talking too fast, something enormous approaching, chaos beyond"
+    },
+    {
+      "id": "756_field_far",
+      "in": "cut",
+      "look": "eclipse",
+      "seconds": 8.0,
+      "prompt": "Very wide shot of the red plain seen from a great distance, the shapes and the small figures reduced almost to texture, the black sun above, no detail visible at all",
+      "motion": "The distant mass moves continuously across the plain. The black sun hangs still. Everything is too far away to make out. Slow drift.",
+      "sfx": "An overwhelming sound kept very far off and indistinct, wind, a chorus"
+    },
+    {
+      "id": "760_guts_arm",
+      "in": "cut",
+      "look": "eclipse",
+      "ref": [
+        "GUTS"
+      ],
+      "seconds": 5,
+      "prompt": "Brutal near-silhouette of {GUTS} pinned under a mass of grotesque shapes, one arm trapped and being torn, his own sword driven into the ground beside him, red light",
+      "motion": "The shapes swarm over the trapped arm. He wrenches his body around and gets a hand on the sword hilt. Everything is red and moving.",
+      "say": "Guts tore his own arm free of the thing that had it, and did not stop.",
+      "sfx": "A body being crushed and fighting, a scream of rage rather than pain, wet chaos"
+    },
+    {
+      "id": "770_guts_watches",
+      "in": "cut",
+      "look": "eclipse",
+      "ref": [
+        "GUTS"
+      ],
+      "prompt": "Devastating extreme close-up of the face of {GUTS} held down against the red ground, one eye ruined and blind, the other forced open, screaming at something he cannot reach",
+      "motion": "He is held down and his head forced round. One eye is gone. The other is wide open. He is screaming without any sound coming out.",
+      "say": "They held him where he could see, and made him watch, and that was the point.",
+      "sfx": "A throat screaming itself raw with no sound, a chorus swelling over it, everything muffling"
+    },
+    {
+      "id": "780_brand",
+      "in": "cut",
+      "look": "eclipse",
+      "seconds": 5,
+      "prompt": "Macro close-up of a mark being burned into skin at the base of a neck, a small brand shaped like a wound, blood running from it, red light",
+      "motion": "The mark sears into the skin and blood runs from it immediately. Steam rises. The skin around it shudders.",
+      "say": "They marked him before they let him live. A brand that bleeds, so that everything on the other side would always know where to find him.",
+      "sfx": "Skin searing, a wet hiss, breath forced out through teeth"
+    },
+    {
+      "id": "782_blood_hold",
+      "in": "cut",
+      "look": "eclipse",
+      "seconds": 6.0,
+      "prompt": "Extreme macro of blood running steadily from a fresh brand at the base of a neck, tracking down the skin, red light",
+      "motion": "Blood runs steadily from the mark and tracks down the skin drop after drop. Steam rises off it. The skin shudders once. Nothing else.",
+      "sfx": "Blood running, breath forced through teeth, a chorus receding into distance"
+    },
+    {
+      "id": "790_griffith_reborn",
+      "in": "dissolve",
+      "look": "eclipse",
+      "seconds": 7,
+      "prompt": "Awful beautiful shot of a figure descending through red light in the shape of a young man with white wings and long white hair, no longer human, serene and remote, the red plain far below",
+      "motion": "The winged figure descends slowly through the red light without effort, hair and wings moving. Its face is calm and knows exactly what it has done.",
+      "say": "And what came down out of that light wearing his friend's face did not look at him at all.",
+      "sfx": "Enormous wings in still air, a chorus of adoration, a single held terrible note"
+    },
+    {
+      "id": "792_light_hold",
+      "in": "cut",
+      "look": "eclipse",
+      "seconds": 9.0,
+      "prompt": "Abstract shot of red light with a single winged silhouette descending slowly through the centre of it, everything else formless",
+      "motion": "The winged shape descends slowly and steadily through the light without any effort at all. The light pulses around it. It does not look down.",
+      "sfx": "Enormous wings in still air, a chorus of adoration, one terrible held note"
+    },
+    {
+      "id": "800_after",
+      "in": "fade",
+      "in_dur": 1.8,
+      "look": "cold",
+      "seconds": 8,
+      "prompt": "Bleak dawn wide shot of an ordinary empty moor, the standing stones gone, no red plain, ordinary grey mist and wet grass, one small figure kneeling in the middle of nothing",
+      "motion": "Mist moves across ordinary wet grass. The kneeling figure is the only thing in frame. Birds begin somewhere. The world is completely normal again.",
+      "say": "In the morning it was an empty field again. Two of them were alive.",
+      "sfx": "An ordinary damp moor at dawn, birds beginning, wind in grass, unbearable normality"
+    },
+    {
+      "id": "802_moor_hold",
+      "in": "cut",
+      "look": "cold",
+      "seconds": 12.0,
+      "prompt": "Very wide static shot of an ordinary empty moor at dawn, wet grass, low mist, grey sky, one small kneeling figure almost lost in the middle distance",
+      "motion": "Mist drifts slowly across ordinary wet grass. Birds cross the frame. The small kneeling figure does not move. The world is completely, unbearably normal.",
+      "sfx": "An ordinary damp moor at dawn, birdsong, wind in grass, nothing wrong with any of it"
+    },
+    {
+      "id": "810_casca_after",
+      "in": "cut",
+      "look": "cold",
+      "ref": [
+        "CASCA"
+      ],
+      "seconds": 6,
+      "prompt": "Quiet devastating shot of {CASCA} sitting in the wet grass in a torn cloak, staring at nothing, present and entirely absent at once",
+      "motion": "She sits without moving. Her eyes track something that is not there. Her hands are open in her lap. She does not respond to anything.",
+      "say": "Casca had gone somewhere inside herself that Guts could not follow, and she did not come back.",
+      "sfx": "Wind in wet grass, no voices, one person breathing shallowly, terrible quiet"
+    },
+    {
+      "id": "811_casca_hands",
+      "in": "cut",
+      "look": "cold",
+      "ref": [
+        "CASCA"
+      ],
+      "seconds": 8.0,
+      "prompt": "Extreme close-up of a woman's open hands lying loose and palm up in her lap on wet grass, dirt under the nails, completely still",
+      "motion": "The hands lie open and do not close. A blade of grass moves against one finger. Light shifts across them as cloud passes. They never move.",
+      "sfx": "Wind in wet grass, shallow breathing, no words at all"
+    },
+    {
+      "id": "812_rickert",
+      "in": "dissolve",
+      "look": "dawn",
+      "seconds": 7,
+      "prompt": "Quiet shot of a boy of about fourteen alone on a hillside above an empty valley at dawn, holding a horse's bridle, waiting for a company that is not coming",
+      "motion": "He stands holding the bridle and watching the empty valley road. The horse shifts behind him. The road stays empty. He keeps waiting.",
+      "say": "Rickert had been sent away with the wounded a week earlier. He was the only Hawk who was not there, and he waited on that hill for three days.",
+      "sfx": "A hillside at dawn, a horse shifting, wind in grass, an empty road, birds"
+    },
+    {
+      "id": "814_road_empty",
+      "in": "cut",
+      "look": "dawn",
+      "seconds": 9.0,
+      "prompt": "Wide shot from a hillside of an empty valley road at dawn, mist in the low ground, the road running away to nothing, no one on it",
+      "motion": "Mist moves along the empty road. Light strengthens. A bird crosses. The road stays completely empty all the way to the horizon.",
+      "sfx": "A hillside at dawn, wind in grass, a horse shifting behind camera, an empty road"
+    },
+    {
+      "id": "820_guts_stands",
+      "in": "dissolve",
+      "look": "dawn",
+      "ref": [
+        "GUTS"
+      ],
+      "seconds": 7,
+      "prompt": "Powerful shot of {GUTS} getting to his feet on the empty moor, one arm ending in a crude iron prosthetic, one eye covered, the enormous sword used as a crutch, dawn behind him",
+      "motion": "He plants the huge sword and hauls himself upright on it. The iron hand flexes. He straightens all the way up. Dawn light comes across the moor.",
+      "say": "He had lost an eye, an arm, and everyone. He got up anyway. That is the whole of him, in one movement.",
+      "sfx": "A great sword driven into wet earth, iron and leather, a body forcing itself upright, wind"
+    },
+    {
+      "id": "825_iron_hand",
+      "in": "cut",
+      "look": "dawn",
+      "ref": [
+        "GUTS"
+      ],
+      "seconds": 3.0,
+      "prompt": "Extreme close-up macro of a crude iron prosthetic hand closing into a fist, rivets and worn leather straps at the wrist, cold dawn light raking across the metal",
+      "motion": "The iron fingers close one by one into a fist with a mechanical grind. The leather straps pull tight. Steam rises off the metal in the cold.",
+      "sfx": "Iron fingers closing with a grind, leather creaking, cold wind"
+    },
+    {
+      "id": "827_back",
+      "in": "cut",
+      "look": "dawn",
+      "ref": [
+        "GUTS"
+      ],
+      "seconds": 9.0,
+      "prompt": "Wide shot from behind {GUTS} standing on the empty moor at dawn, the enormous sword across his back, facing away toward the horizon, everything else empty",
+      "motion": "His cloak moves in the wind. He stands facing the horizon and does not turn. Dawn light strengthens across the moor behind him. Slow crane up and back.",
+      "sfx": "Wind across an open moor, a heavy sword shifting on a back, one bird, dawn"
+    },
+    {
+      "id": "830_black_swordsman",
+      "in": "dissolve",
+      "look": "dawn",
+      "ref": [
+        "GUTS"
+      ],
+      "seconds": 9,
+      "prompt": "Iconic final wide shot of {GUTS} walking away down an empty road at dawn in black, the enormous sword across his back, the brand at his neck, a vast empty landscape ahead, no one with him",
+      "motion": "He walks away from camera down the road. The huge sword rides on his back. The road ahead is empty to the horizon. Very slow crane up and back.",
+      "say": "He went looking for the thing that had worn his friend's face. He is still looking.",
+      "sfx": "Boots on an empty road, a great sword shifting on a back, wind over open country, one distant bird",
+      "titles": [
+        {
+          "text": "BERSERK",
+          "at": 4.0,
+          "hold": 3.6,
+          "scale": 0.05,
+          "y": 0.44
+        }
+      ]
+    }
+  ],
+  "engine": "higgs_v3"
+}

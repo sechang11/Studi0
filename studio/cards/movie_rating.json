@@ -1,0 +1,32 @@
+{
+  "variable": "movie.rating",
+  "claim": "A permission gate rather than a look: it auto-populates the negative prompt and decides which violence, gore and nudity tags are allowed to pass. These panels show the ceiling of each level — g is the bare subject sentence with nothing gated added, and r is where visible blood becomes legal.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "g",
+      "clause": "",
+      "control": true,
+      "sample": "/samples/vars/movie_rating/g.webp"
+    },
+    {
+      "value": "pg",
+      "clause": "sweat, dirty face",
+      "control": false,
+      "sample": "/samples/vars/movie_rating/pg.webp"
+    },
+    {
+      "value": "pg13",
+      "clause": "bruise, torn clothes, scar",
+      "control": false,
+      "sample": "/samples/vars/movie_rating/pg13.webp"
+    },
+    {
+      "value": "r",
+      "clause": "blood, blood on face, injury, bleeding",
+      "control": false,
+      "sample": "/samples/vars/movie_rating/r.webp"
+    }
+  ]
+}

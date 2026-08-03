@@ -1,0 +1,12 @@
+{
+  "variable": "render.cache_policy",
+  "claim": "Governs how much of the last render you pay for a second time. reuse_unless_changed is the working default; force when you suspect a stale cache is lying to you; never for a clean final; reuse when you have only touched the edit and want every shot left exactly as it was.",
+  "not_visual": "Has no visual signature by design - a correct cache produces output identical to a fresh render, and that identity is the whole point of the feature. The only things that change are wall-clock time and whether a stale asset slips through. All four panels would be the same image, so there is nothing for a card to show.",
+  "options": [
+    "reuse",
+    "reuse_unless_changed",
+    "force",
+    "never"
+  ],
+  "panels": []
+}

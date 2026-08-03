@@ -1,0 +1,87 @@
+{
+  "variable": "anime.bg.style",
+  "claim": "The medium the background painting is made in, which is a separate axis from how finished it is and is what actually makes a film look painted rather than rendered. Watercolour reads gentle and hand-made; photobash reads modern, cheap and slightly uncanny against 2D characters.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "cel_flat",
+      "clause": "flat cel background, flat color scenery",
+      "control": false,
+      "sample": "/samples/vars/anime_bg_style/cel_flat.webp"
+    },
+    {
+      "value": "poster_color",
+      "clause": "poster color background, opaque flat painted scenery",
+      "control": false,
+      "sample": "/samples/vars/anime_bg_style/poster_color.webp"
+    },
+    {
+      "value": "watercolor",
+      "clause": "watercolor (medium) background, watercolor wash scenery",
+      "control": false,
+      "sample": "/samples/vars/anime_bg_style/watercolor.webp"
+    },
+    {
+      "value": "gouache",
+      "clause": "gouache (medium) background, opaque matte painted scenery",
+      "control": false,
+      "sample": "/samples/vars/anime_bg_style/gouache.webp"
+    },
+    {
+      "value": "acrylic_matte",
+      "clause": "acrylic paint (medium) background, matte painted scenery",
+      "control": false,
+      "sample": "/samples/vars/anime_bg_style/acrylic_matte.webp"
+    },
+    {
+      "value": "airbrush_soft",
+      "clause": "airbrushed background, soft gradient scenery",
+      "control": false,
+      "sample": "/samples/vars/anime_bg_style/airbrush_soft.webp"
+    },
+    {
+      "value": "digital_painted",
+      "clause": "digital painted background, detailed painted scenery",
+      "control": false,
+      "sample": "/samples/vars/anime_bg_style/digital_painted.webp"
+    },
+    {
+      "value": "photoreal_painted",
+      "clause": "photorealistic painted background, hyperdetailed scenery",
+      "control": false,
+      "sample": "/samples/vars/anime_bg_style/photoreal_painted.webp"
+    },
+    {
+      "value": "photobash",
+      "clause": "photobashed background, photographic texture scenery",
+      "control": false,
+      "sample": "/samples/vars/anime_bg_style/photobash.webp"
+    },
+    {
+      "value": "line_and_wash",
+      "clause": "line and wash background, ink lines with watercolor scenery",
+      "control": false,
+      "sample": "/samples/vars/anime_bg_style/line_and_wash.webp"
+    },
+    {
+      "value": "ukiyo_e",
+      "clause": "ukiyo-e background, woodblock print scenery",
+      "control": false,
+      "sample": "/samples/vars/anime_bg_style/ukiyo_e.webp"
+    },
+    {
+      "value": "graphic_flat",
+      "clause": "graphic flat background, minimalist vector scenery, flat color shapes",
+      "control": false,
+      "sample": "/samples/vars/anime_bg_style/graphic_flat.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "anime.bg.style",
+      "issue": "poster_color (\"opaque flat painted scenery\"), gouache (\"opaque matte painted scenery\") and acrylic_matte (\"matte painted scenery\") differ only by a medium name the model has weak signal for plus the same two adjectives; they will render as one picture three times. digital_painted vs photoreal_painted vs photobash sit similarly close at the other end. Twelve options is also well past what this axis can actually resolve.",
+      "fix": "Collapse to the mediums Animagine genuinely distinguishes: cel_flat, watercolor, gouache (keep one of the opaque-paint three), airbrush_soft, digital_painted, photobash, ukiyo_e, graphic_flat. Use the bare danbooru medium tag as the anchor - \"gouache (medium)\", \"watercolor (medium)\" - and drop the descriptive tails."
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "variable": "movie.language",
+  "claim": "Sets the TTS voice pool, the caption font and the language of any text drawn inside the frame, all from one word. It is the difference between a stadium whose banners read as a Japanese broadcast and one that reads as a European league tie.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "en",
+      "clause": "english text, banner, sign",
+      "control": false,
+      "sample": "/samples/vars/movie_language/en.webp"
+    },
+    {
+      "value": "ja",
+      "clause": "japanese text, banner, sign",
+      "control": false,
+      "sample": "/samples/vars/movie_language/ja.webp"
+    },
+    {
+      "value": "zh",
+      "clause": "chinese text, banner, sign",
+      "control": false,
+      "sample": "/samples/vars/movie_language/zh.webp"
+    },
+    {
+      "value": "ko",
+      "clause": "korean text, banner, sign",
+      "control": false,
+      "sample": "/samples/vars/movie_language/ko.webp"
+    },
+    {
+      "value": "es",
+      "clause": "spanish text, banner, sign",
+      "control": false,
+      "sample": "/samples/vars/movie_language/es.webp"
+    },
+    {
+      "value": "fr",
+      "clause": "french text, banner, sign",
+      "control": false,
+      "sample": "/samples/vars/movie_language/fr.webp"
+    },
+    {
+      "value": "de",
+      "clause": "german text, banner, sign",
+      "control": false,
+      "sample": "/samples/vars/movie_language/de.webp"
+    },
+    {
+      "value": "other",
+      "clause": "",
+      "control": true,
+      "sample": "/samples/vars/movie_language/other.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "movie.language",
+      "issue": "Four of the eight options collapse. \"spanish text\", \"french text\", \"german text\" are not danbooru tags at all — the trained tags are english/japanese/korean/chinese/russian text — so es, fr, de and en will all render the same Latin-script gibberish on a banner. Worse, this card contradicts render.watermark, whose skip_reason argues that prompting \"english text\" only demonstrates SDXL's garbled-lettering failure mode. Both cards cannot be right. Separately, \"other\" carries an empty clause on a renderable:true card with no note explaining why.",
+      "fix": "Keep only the script-distinct values that have real tags (en, ja, zh, ko) and mark es/fr/de as sharing the Latin-script panel, or mark the whole variable renderable:false reusing the watermark argument and demo the caption font via an ffmpeg overlay. Add a sentence to the claim explaining that \"other\" is an author passthrough with no canonical panel, the way layer.fg.content does for `custom`."
+    }
+  ]
+}

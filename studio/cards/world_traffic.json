@@ -1,0 +1,38 @@
+{
+  "variable": "world.traffic",
+  "claim": "Declares vehicle presence, which buys background motion, ambience and passing headlights in one setting. In a night exterior it doubles as a free lighting rig you never have to place.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "none",
+      "clause": "",
+      "control": true,
+      "sample": "/samples/vars/world_traffic/none.webp"
+    },
+    {
+      "value": "occasional",
+      "clause": "a single car in the distance, one passing vehicle",
+      "control": false,
+      "sample": "/samples/vars/world_traffic/occasional.webp"
+    },
+    {
+      "value": "steady",
+      "clause": "cars on the road, moving traffic, several vehicles",
+      "control": false,
+      "sample": "/samples/vars/world_traffic/steady.webp"
+    },
+    {
+      "value": "congested",
+      "clause": "traffic jam, line of cars, bumper to bumper",
+      "control": false,
+      "sample": "/samples/vars/world_traffic/congested.webp"
+    },
+    {
+      "value": "rush",
+      "clause": "heavy traffic, many cars, headlight streaks, crowded road",
+      "control": false,
+      "sample": "/samples/vars/world_traffic/rush.webp"
+    }
+  ]
+}

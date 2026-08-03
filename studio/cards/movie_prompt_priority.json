@@ -1,0 +1,12 @@
+{
+  "variable": "movie.prompt_priority",
+  "claim": "The triage order when a prompt runs past its token budget — whatever ranks last is what gets dropped. character_first protects the face and wardrobe and will sacrifice the location; style_first defends the look and will happily let a character's hair colour fall off the end.",
+  "not_visual": "Only observable when the prompt overflows its token budget and something is discarded. It is an ordering rule applied to the whole prompt rather than content that can be added to it, so on a short card prompt nothing is ever truncated and all four panels render identically. Demonstrating it needs deliberately overlong prompts and a diff of what survived, which is a different experiment.",
+  "options": [
+    "character_first",
+    "world_first",
+    "style_first",
+    "balanced"
+  ],
+  "panels": []
+}

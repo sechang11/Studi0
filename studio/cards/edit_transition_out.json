@@ -1,0 +1,18 @@
+{
+  "variable": "edit.transition_out",
+  "claim": "Controls how this shot leaves, which is what lets a scene's final shot fade on its own instead of requiring a phantom shot after it just to hold the black. The option that justifies its separate existence is hold: a shot that refuses to end is a different beat from one that cuts, and only an outgoing field can say so.",
+  "not_visual": "Departure is defined purely by what the shot does after its last authored frame, and a still is that frame with nothing following it — hold and cut produce literally the same image, which is the proof that the axis is temporal. The visually-distinct options (fade_black, fade_white, flash, dissolve, whip_pan) would only render as darkness, blowout, blend or blur, none of which an author would read as 'this is how the shot exits'; they would read as grade and lens choices already covered by other namespaces.",
+  "options": [
+    "cut",
+    "dissolve",
+    "fade_black",
+    "fade_white",
+    "flash",
+    "whip_pan",
+    "wipe",
+    "iris",
+    "smash",
+    "hold"
+  ],
+  "panels": []
+}

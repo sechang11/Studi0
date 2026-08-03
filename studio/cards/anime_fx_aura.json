@@ -1,0 +1,57 @@
+{
+  "variable": "anime.fx.aura",
+  "claim": "A drawn element attached to the character and held across the whole shot, which is how anime states power, menace or infatuation without a line of dialogue. Dark miasma and pressure ripple are threat; sparkle is the joke version of the same grammar.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "none",
+      "clause": "",
+      "control": true,
+      "sample": "/samples/vars/anime_fx_aura/none.webp"
+    },
+    {
+      "value": "glow",
+      "clause": "glowing aura, soft light aura",
+      "control": false,
+      "sample": "/samples/vars/anime_fx_aura/glow.webp"
+    },
+    {
+      "value": "flame",
+      "clause": "flaming aura, fire aura",
+      "control": false,
+      "sample": "/samples/vars/anime_fx_aura/flame.webp"
+    },
+    {
+      "value": "electric",
+      "clause": "electric aura, crackling lightning aura",
+      "control": false,
+      "sample": "/samples/vars/anime_fx_aura/electric.webp"
+    },
+    {
+      "value": "dark_miasma",
+      "clause": "dark aura, black miasma, ominous smoke",
+      "control": false,
+      "sample": "/samples/vars/anime_fx_aura/dark_miasma.webp"
+    },
+    {
+      "value": "sparkle",
+      "clause": "sparkle aura, sparkles",
+      "control": false,
+      "sample": "/samples/vars/anime_fx_aura/sparkle.webp"
+    },
+    {
+      "value": "pressure_ripple",
+      "clause": "pressure ripple aura, shockwave rings, air distortion",
+      "control": false,
+      "sample": "/samples/vars/anime_fx_aura/pressure_ripple.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "anime.fx.aura",
+      "issue": "sparkle (\"sparkle aura, sparkles\") is the same render as shot.fx.emote_symbols/sparkles (\"sparkle, sparkles around head\") - the \"sparkle\" tag dominates both and puts sparkles around the character either way.",
+      "fix": "Keep sparkles as the emote symbol (short comic beat) and either drop aura/sparkle or make it a held field rather than a garnish: \"sparkle background, glowing aura, sparkles\"."
+    }
+  ]
+}

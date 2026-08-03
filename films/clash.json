@@ -1,0 +1,283 @@
+{
+  "title": "THE CLASH",
+  "hook": "the swordsman|vs the beast",
+  "fps": 24,
+  "engine": "higgs_v3",
+  "style_lora": "qwen_image_2512_storybook_anime_lora.safetensors",
+  "style_strength": 0.0,
+  "style": "dark gritty seinen anime illustration, heavy ink shadow, extreme high contrast, saturated rim light, dramatic low angle, painterly, cinematic",
+  "sheets": {
+    "GUTS": "sheet_guts.png",
+    "ZODD": "sheet_zodd.png"
+  },
+  "characters": {
+    "GUTS": "the black-haired swordsman with the enormous slab sword from the reference image",
+    "ZODD": "the enormous red-brown horned beast from the reference image"
+  },
+  "voices": {
+    "GUTS": {
+      "engine": "higgs_v3",
+      "voice": "voices_examples/male/male_01.wav"
+    },
+    "ZODD": {
+      "engine": "indextts2",
+      "voice": "voices_examples/higgs_audio/vex.wav",
+      "emotion": {
+        "Angry": 0.4,
+        "Happy": 0.3
+      },
+      "filter": "lowpass=f=3400,aecho=0.8:0.85:55:0.3"
+    }
+  },
+  "music": [
+    {
+      "at": 0,
+      "prefix": "clash_theme",
+      "bpm": 150,
+      "key": "D minor",
+      "seconds": 60,
+      "level": 1.0,
+      "tags": "relentless orchestral battle, thundering taiko and timpani, distorted brass stabs, driving low strings ostinato, choir shouting one syllable, industrial metal hits, overwhelming, instrumental"
+    }
+  ],
+  "beats": [
+    {
+      "id": "010_ridge",
+      "template": "hook",
+      "ref": [
+        "GUTS"
+      ],
+      "clip_secs": 5,
+      "prompt": "Epic low angle of {GUTS} standing alone on a wind-scoured ridge at blood-red dusk, enormous sword planted in the rock beside him, storm clouds boiling behind, rim lit in red",
+      "motion": "Wind tears at his cloak and hair. Storm clouds boil and move fast behind him. Embers blow past. He does not move."
+    },
+    {
+      "id": "020_beast",
+      "template": "reveal",
+      "ref": [
+        "ZODD"
+      ],
+      "clip_secs": 4,
+      "prompt": "Terrifying low angle of {ZODD} rising to full height on the ridge opposite, horns against the storm sky, muscles flexing, eyes burning white-hot",
+      "motion": "It rises to full height and rolls its shoulders. Its eyes flare brighter. Dust blasts outward from its feet."
+    },
+    {
+      "id": "030_taunt_z",
+      "template": "taunt",
+      "ref": [
+        "ZODD"
+      ],
+      "clip_secs": 4,
+      "prompt": "Extreme close-up of the bestial face of {ZODD}, fangs bared in something like a grin, one burning eye filling half the frame",
+      "motion": "The eye narrows and the grin widens. Steam rises from its nostrils. Firelight moves across the fangs.",
+      "line": {
+        "who": "ZODD",
+        "text": "Little man. You brought a sword to this."
+      }
+    },
+    {
+      "id": "040_taunt_g",
+      "template": "taunt",
+      "ref": [
+        "GUTS"
+      ],
+      "clip_secs": 4,
+      "prompt": "Extreme close-up of the face of {GUTS}, jaw set, one eye lit red by the storm light, blood already on his cheek",
+      "motion": "His jaw tightens. Blood runs slowly down his cheek. His eye does not blink or move.",
+      "line": {
+        "who": "GUTS",
+        "text": "I brought worse than that."
+      }
+    },
+    {
+      "id": "050_charge_g",
+      "template": "charge",
+      "ref": [
+        "GUTS"
+      ],
+      "clip_secs": 4,
+      "prompt": "Dynamic low tracking shot of {GUTS} sprinting flat out across broken rock, enormous sword dragging behind him throwing a wall of sparks, red storm light",
+      "motion": "He sprints toward camera, blade dragging and throwing a continuous wall of sparks. The camera races backward ahead of him."
+    },
+    {
+      "id": "060_clash1",
+      "template": "clash",
+      "ref": [
+        "GUTS",
+        "ZODD"
+      ],
+      "clip_secs": 4,
+      "prompt": "Explosive impact shot of an enormous sword meeting a monstrous clawed arm, shockwave ring blasting outward, rock shattering beneath, white-hot sparks",
+      "motion": "The blade and the claw meet and a shockwave ring blasts outward. Rock shatters under them. Sparks fill the frame."
+    },
+    {
+      "id": "070_impact_z",
+      "template": "impact",
+      "ref": [
+        "ZODD"
+      ],
+      "clip_secs": 4,
+      "prompt": "Brutal shot of {ZODD} taking a full sword blow across the chest, body twisting with the force, blood and sparks spraying, low angle",
+      "motion": "The blow lands and its whole body twists with the force. Blood and sparks spray outward. It staggers a full step back."
+    },
+    {
+      "id": "080_taunt_z2",
+      "template": "taunt",
+      "ref": [
+        "ZODD"
+      ],
+      "clip_secs": 4,
+      "prompt": "Close shot of {ZODD} looking down at the wound across its chest, then up at camera, entirely unbothered, storm behind",
+      "motion": "It looks down at the wound, then slowly back up at camera. The wound is already closing. It laughs silently.",
+      "line": {
+        "who": "ZODD",
+        "text": "Good. Now it is a fight."
+      }
+    },
+    {
+      "id": "090_clash2",
+      "template": "clash",
+      "intensity": 1.2,
+      "ref": [
+        "GUTS",
+        "ZODD"
+      ],
+      "clip_secs": 4,
+      "prompt": "Chaotic mid-air clash between a huge armoured swordsman and an enormous horned beast, both weightless at the top of an exchange, debris suspended around them",
+      "motion": "Both are momentarily weightless mid-exchange, debris hanging in the air around them, then everything drops at once."
+    },
+    {
+      "id": "100_impact_g",
+      "template": "impact",
+      "ref": [
+        "GUTS"
+      ],
+      "clip_secs": 4,
+      "prompt": "Devastating shot of {GUTS} taking a clawed backhand and being hurled sideways through a standing rock formation, stone exploding around him",
+      "motion": "The backhand connects and hurls him sideways through the rock. Stone explodes outward. He is thrown out of frame."
+    },
+    {
+      "id": "110_down",
+      "template": "taunt",
+      "ref": [
+        "GUTS"
+      ],
+      "clip_secs": 4,
+      "prompt": "Low shot of {GUTS} face down in shattered rock and dust, one hand already closing on the hilt of the great sword beside him",
+      "motion": "Dust settles over him. His hand closes slowly on the hilt. His shoulders begin to push up.",
+      "line": {
+        "who": "GUTS",
+        "text": "That all?"
+      }
+    },
+    {
+      "id": "120_rise",
+      "template": "reveal",
+      "ref": [
+        "GUTS"
+      ],
+      "clip_secs": 4,
+      "prompt": "Powerful low angle of {GUTS} hauling himself upright out of the rubble, blood streaming, eyes burning, sword coming up, red light building behind him",
+      "motion": "He hauls himself upright out of the rubble. Blood streams. Red light builds behind him and floods the frame."
+    },
+    {
+      "id": "130_charge_z",
+      "template": "charge",
+      "intensity": 1.15,
+      "ref": [
+        "ZODD"
+      ],
+      "clip_secs": 4,
+      "prompt": "Terrifying shot of {ZODD} charging on all fours across the ridge toward camera, horns lowered, rock cratering under each stride",
+      "motion": "It charges on all fours straight at camera, rock cratering under each stride, closing fast and filling the frame."
+    },
+    {
+      "id": "140_clash3",
+      "template": "clash",
+      "intensity": 1.25,
+      "ref": [
+        "GUTS",
+        "ZODD"
+      ],
+      "clip_secs": 4,
+      "prompt": "Enormous collision of sword and horn, blinding white impact flash at the centre, both figures silhouetted, the entire ridge cracking",
+      "motion": "Sword and horn collide in a blinding white flash. Both are silhouetted. Cracks race outward across the ridge."
+    },
+    {
+      "id": "150_lock",
+      "template": "taunt",
+      "ref": [
+        "GUTS",
+        "ZODD"
+      ],
+      "clip_secs": 4,
+      "prompt": "Tight two-shot of {GUTS} and {ZODD} locked chest to chest, blade against claw, both straining, faces inches apart, sparks between them",
+      "motion": "Both strain against each other, shaking with the effort. Sparks pour from where blade meets claw. Neither gives.",
+      "line": {
+        "who": "ZODD",
+        "text": "Why do you not run?"
+      }
+    },
+    {
+      "id": "160_answer",
+      "template": "taunt",
+      "ref": [
+        "GUTS"
+      ],
+      "clip_secs": 4,
+      "prompt": "Extreme close-up of the face of {GUTS} in the lock, teeth bared, eye blazing, blood running freely",
+      "motion": "His teeth bare further. The eye blazes. Blood runs freely down his face. He pushes forward against the lock.",
+      "line": {
+        "who": "GUTS",
+        "text": "Because there is nowhere left to run to."
+      }
+    },
+    {
+      "id": "170_break",
+      "template": "impact",
+      "intensity": 1.2,
+      "ref": [
+        "GUTS",
+        "ZODD"
+      ],
+      "clip_secs": 4,
+      "prompt": "Explosive shot of the lock breaking, {GUTS} driving forward and up, the beast's guard thrown wide open, debris blasting outward",
+      "motion": "The lock breaks. He drives forward and up. The beast's guard is thrown wide open. Debris blasts outward."
+    },
+    {
+      "id": "180_finish",
+      "template": "finisher",
+      "ref": [
+        "GUTS",
+        "ZODD"
+      ],
+      "clip_secs": 5,
+      "prompt": "Climactic shot of the enormous sword coming down through the frame in a blazing arc onto the beast, white-gold light exploding from the point of contact",
+      "motion": "The great sword comes down through the frame in a blazing arc. White-gold light explodes outward from the contact and floods everything."
+    },
+    {
+      "id": "190_after",
+      "template": "aftermath",
+      "ref": [
+        "GUTS"
+      ],
+      "clip_secs": 5,
+      "prompt": "Wide shot of {GUTS} standing alone on the cracked ridge at last light, sword point down in the rock, the enormous body behind him, ash falling",
+      "motion": "Ash falls steadily. His cloak moves in the wind. He does not turn to look back at the body. Slow crane up."
+    },
+    {
+      "id": "200_last",
+      "template": "taunt",
+      "ref": [
+        "GUTS"
+      ],
+      "clip_secs": 4,
+      "prompt": "Final extreme close-up of the face of {GUTS} at last light, blood drying, breathing hard, the faintest edge of something like satisfaction",
+      "motion": "He breathes hard. Blood dries on his skin. His eye shifts fractionally toward camera and holds.",
+      "line": {
+        "who": "GUTS",
+        "text": "Next."
+      }
+    }
+  ]
+}

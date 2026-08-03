@@ -1,0 +1,17 @@
+{
+  "variable": "story.content_flags",
+  "claim": "Content flags are a declaration, not a look: they drive audience warnings, auto-populate the negative prompt and soften flash and strobe fx automatically. You set them because the scene already contains the thing — the flag never puts it there.",
+  "not_visual": "Setting a flag gates and warns rather than generating; it subtracts from the prompt more often than it adds. flashing_lights is temporal by definition, sexual_content is something we will not render at all, and blood or injury appear in a frame only because the shot's own content put them there — which is a different variable's job.",
+  "options": [
+    "violence",
+    "blood",
+    "death",
+    "injury",
+    "flashing_lights",
+    "body_horror",
+    "drowning",
+    "sexual_content",
+    "substance_use"
+  ],
+  "panels": []
+}

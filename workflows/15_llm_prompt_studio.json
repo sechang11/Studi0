@@ -1,0 +1,40 @@
+{
+  "_comment": "Local LLM prompt writer. Qwen3.5-2B runs entirely on the 5090 through the TextGenerate node - no API, no key, no rate limit. Feed it a one-line idea and it returns a full, detailed image prompt. This is the cheapest quality win available to you: Qwen-Image rewards long specific prompts, and writing those by hand is the actual bottleneck in image generation.",
+  "_notes": [
+    "The text encoders in models/text_encoders/ are real instruct LLMs, not just embedders. CLIPLoader + TextGenerate turns any of them into a local chat model. qwen3.5_2b_bf16 (4.5 GB) is the fast one; gemma_3_12B_it_fp4_mixed (9.4 GB) is smarter but slower and is also LTX-2.3's text encoder.",
+    "CLIPLoader type must be 'stable_diffusion' here. That looks wrong but it is what the built-in llm_* templates use - the type only selects the tokeniser wrapper, and the generic path is the one that exposes .generate().",
+    "sampling_mode is a COMFY_DYNAMICCOMBO_V3, and the API format for those is not obvious: set sampling_mode to the string 'on', then pass the six sub-inputs as DOTTED sibling keys - 'sampling_mode.temperature', 'sampling_mode.top_k', 'sampling_mode.top_p', 'sampling_mode.min_p', 'sampling_mode.repetition_penalty', 'sampling_mode.seed'. Plain 'temperature' is rejected with 'Required input is missing: sampling_mode.temperature'. Set sampling_mode to 'off' for greedy decoding and omit all six.",
+    "thinking=true makes the model reason before answering if it supports it. It burns tokens against max_length, so raise max_length if you enable it.",
+    "TextGenerate also has optional image / video / audio inputs, so the same node captions a still, describes a clip, or transcribes audio depending on what you wire in. Use a vision-capable encoder (qwen_2.5_vl_7b) for those.",
+    "Output is a STRING. PreviewAny shows it in the UI and it also lands in /history, which is how scripts/promptgen.py reads it back."
+  ],
+  "1": {
+    "class_type": "CLIPLoader",
+    "inputs": {
+      "clip_name": "qwen3.5_2b_bf16.safetensors",
+      "type": "stable_diffusion",
+      "device": "default"
+    }
+  },
+  "2": {
+    "class_type": "TextGenerate",
+    "inputs": {
+      "clip": ["1", 0],
+      "prompt": "You are a prompt engineer for the Qwen-Image diffusion model. Rewrite the idea below as ONE dense English paragraph, 60-90 words, no line breaks, no preamble, no bullet points, no commentary. Name the subject first, then pose and expression, then setting, then lighting with direction and quality, then lens and camera angle, then the colour palette, then the medium and finish. Be concrete and physical. Never use the words beautiful, stunning, masterpiece, detailed, 4k, or 8k.\n\nIDEA: a fox librarian closing up for the night",
+      "max_length": 400,
+      "sampling_mode": "on",
+      "sampling_mode.temperature": 0.85,
+      "sampling_mode.top_k": 64,
+      "sampling_mode.top_p": 0.95,
+      "sampling_mode.min_p": 0.05,
+      "sampling_mode.repetition_penalty": 1.05,
+      "sampling_mode.seed": 20260729,
+      "thinking": false,
+      "use_default_template": true
+    }
+  },
+  "3": {
+    "class_type": "PreviewAny",
+    "inputs": { "source": ["2", 0] }
+  }
+}

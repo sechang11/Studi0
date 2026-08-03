@@ -1,0 +1,69 @@
+{
+  "variable": "shot.focus.point",
+  "claim": "Focus point names what must be sharp so the generator and the blur pass agree on what the shot is about. Setting it to hands or prop is how you make a shot about an object while a person is still standing in it.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "eyes",
+      "clause": "focus on eyes, sharp eyes",
+      "control": false,
+      "sample": "/samples/vars/shot_focus_point/eyes.webp"
+    },
+    {
+      "value": "face",
+      "clause": "focus on face, sharp face, soft background",
+      "control": false,
+      "sample": "/samples/vars/shot_focus_point/face.webp"
+    },
+    {
+      "value": "subject",
+      "clause": "subject in focus, blurry background",
+      "control": false,
+      "sample": "/samples/vars/shot_focus_point/subject.webp"
+    },
+    {
+      "value": "hands",
+      "clause": "focus on hands, sharp hands, hand in foreground",
+      "control": false,
+      "sample": "/samples/vars/shot_focus_point/hands.webp"
+    },
+    {
+      "value": "prop",
+      "clause": "focus on object, sharp prop, blurry person",
+      "control": false,
+      "sample": "/samples/vars/shot_focus_point/prop.webp"
+    },
+    {
+      "value": "foreground",
+      "clause": "foreground in focus, blurry midground, blurry background",
+      "control": false,
+      "sample": "/samples/vars/shot_focus_point/foreground.webp"
+    },
+    {
+      "value": "midground",
+      "clause": "midground in focus, blurry foreground, blurry background",
+      "control": false,
+      "sample": "/samples/vars/shot_focus_point/midground.webp"
+    },
+    {
+      "value": "background",
+      "clause": "background in focus, out of focus subject, blurry foreground",
+      "control": false,
+      "sample": "/samples/vars/shot_focus_point/background.webp"
+    },
+    {
+      "value": "hyperfocal",
+      "clause": "hyperfocal, everything sharp, deep focus",
+      "control": false,
+      "sample": "/samples/vars/shot_focus_point/hyperfocal.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "shot.focus.point",
+      "issue": "hyperfocal (\"hyperfocal, everything sharp, deep focus\") is the same instruction as shot.focus.dof.deep (\"deep focus, everything in focus, sharp background\") — two cards, one panel. subject (\"subject in focus, blurry background\") likewise duplicates dof.shallow (\"depth of field, blurry background, bokeh\"). Within the card, eyes / face / subject will not separate because the fixed subject sentence frames a whole figure in a stadium, not a close-up. prop asks for a \"sharp prop\" when the subject sentence contains no prop, so the model invents one and the panel changes more than the option.",
+      "fix": "Delete hyperfocal (owned by dof) and merge eyes into face, or state in the claim that this card only reads at close-up scale. Name a scene-native object in prop: \"focus on soccer ball, blurry person\", and use that same object anywhere else a prop is needed."
+    }
+  ]
+}

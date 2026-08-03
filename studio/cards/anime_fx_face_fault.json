@@ -1,0 +1,62 @@
+{
+  "variable": "anime.fx.face_fault",
+  "claim": "Redraws the face itself into a comedy or shock mask, which is a different channel from sticking a sweatdrop next to it. It is the loudest tonal switch in the anime toolkit: one shadowed-eyes frame turns a friendly scene sinister.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "none",
+      "clause": "",
+      "control": true,
+      "sample": "/samples/vars/anime_fx_face_fault/none.webp"
+    },
+    {
+      "value": "jaw_drop",
+      "clause": "jaw drop, wide open mouth, shocked expression",
+      "control": false,
+      "sample": "/samples/vars/anime_fx_face_fault/jaw_drop.webp"
+    },
+    {
+      "value": "swirl_eyes",
+      "clause": "@_@, swirl eyes, dizzy",
+      "control": false,
+      "sample": "/samples/vars/anime_fx_face_fault/swirl_eyes.webp"
+    },
+    {
+      "value": "dot_eyes",
+      "clause": "dot eyes, solid circle eyes",
+      "control": false,
+      "sample": "/samples/vars/anime_fx_face_fault/dot_eyes.webp"
+    },
+    {
+      "value": "shadowed_eyes",
+      "clause": "shaded face, shadowed eyes",
+      "control": false,
+      "sample": "/samples/vars/anime_fx_face_fault/shadowed_eyes.webp"
+    },
+    {
+      "value": "nosebleed",
+      "clause": "nosebleed, comedic nosebleed",
+      "control": false,
+      "sample": "/samples/vars/anime_fx_face_fault/nosebleed.webp"
+    },
+    {
+      "value": "half_face_shock",
+      "clause": "half shaded face, shocked expression, comedic horror face",
+      "control": false,
+      "sample": "/samples/vars/anime_fx_face_fault/half_face_shock.webp"
+    },
+    {
+      "value": "crying_river",
+      "clause": "streaming tears, comedic tear fountain, crying",
+      "control": false,
+      "sample": "/samples/vars/anime_fx_face_fault/crying_river.webp"
+    },
+    {
+      "value": "ghost_leaving",
+      "clause": "soul leaving body, small ghost floating above, comedic",
+      "control": false,
+      "sample": "/samples/vars/anime_fx_face_fault/ghost_leaving.webp"
+    }
+  ]
+}

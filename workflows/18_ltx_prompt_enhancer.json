@@ -1,0 +1,64 @@
+{
+  "_comment": "LTX-2.3's own prompt enhancer. Gemma-3-12B is already loaded as LTX's text encoder, so the abliterated LoRA turns that SAME resident model into a chat LLM that rewrites your one-liner into the dense shot description LTX actually wants. TextGenerateLTX2Prompt has LTX's house style baked into its system prompt - camera move, subject motion, ambience, lighting - which is exactly the structure a video model needs and an image-prompt LLM does not produce.",
+  "_notes": [
+    "This is what models/loras/gemma-3-12b-it-abliterated_lora_rank64_bf16.safetensors is for. It is NOT an image LoRA and does nothing to the picture - it is applied to the TEXT ENCODER so the encoder will write prompts instead of refusing or moralising about them. Abliteration removes refusal directions; it does not make the video model do anything new.",
+    "LoraLoader needs BOTH a model and a clip. The MODEL output (node 4[0]) is discarded here - only the CLIP output (node 4[1]) is used. That is why node 3 exists: it supplies a MODEL just to satisfy the input.",
+    "strength_clip=1.0 is the one that matters. strength_model=1.0 is inert in this graph.",
+    "Zero extra VRAM cost when chained onto an LTX render: Gemma-3-12B is already resident as the text encoder. Standalone, expect ~9.4 GB and a slower first run while it loads.",
+    "TextGenerateLTX2Prompt vs TextGenerate (workflow 15): same node family, different built-in system prompt. Use THIS one for video and workflow 15's for stills. Do not cross them - an image prompt fed to LTX produces a static shot, because it never mentions motion.",
+    "sampling_mode sub-inputs must be dotted keys ('sampling_mode.temperature'). See workflow 15's notes.",
+    "max_length 2048 matches the official template. These descriptions run long on purpose - LTX does not degrade on long prompts the way SDXL-era models did.",
+    "To chain: take the STRING from node 5 and link it into node 10's `text` in workflow 17, exactly the way workflow 16 links its LLM into CLIPTextEncode."
+  ],
+  "1": {
+    "class_type": "CheckpointLoaderSimple",
+    "inputs": { "ckpt_name": "ltx-2.3-22b-dev-fp8.safetensors" }
+  },
+  "2": {
+    "class_type": "LTXAVTextEncoderLoader",
+    "inputs": {
+      "text_encoder": "gemma_3_12B_it_fp4_mixed.safetensors",
+      "ckpt_name": "ltx-2.3-22b-dev-fp8.safetensors",
+      "device": "default"
+    }
+  },
+  "3": {
+    "class_type": "LoraLoaderModelOnly",
+    "inputs": {
+      "model": ["1", 0],
+      "lora_name": "ltx_2.3_22b_distilled_1.1_lora_dynamic_fro09_avg_rank_111_bf16.safetensors",
+      "strength_model": 0.5
+    }
+  },
+  "4": {
+    "class_type": "LoraLoader",
+    "inputs": {
+      "model": ["3", 0],
+      "clip": ["2", 0],
+      "lora_name": "gemma-3-12b-it-abliterated_lora_rank64_bf16.safetensors",
+      "strength_model": 1.0,
+      "strength_clip": 1.0
+    }
+  },
+  "5": {
+    "class_type": "TextGenerateLTX2Prompt",
+    "inputs": {
+      "clip": ["4", 1],
+      "prompt": "a brass diving helmet on wet stone at the tide line",
+      "max_length": 2048,
+      "sampling_mode": "on",
+      "sampling_mode.temperature": 0.7,
+      "sampling_mode.top_k": 64,
+      "sampling_mode.top_p": 0.95,
+      "sampling_mode.min_p": 0.05,
+      "sampling_mode.repetition_penalty": 1.05,
+      "sampling_mode.seed": 1234,
+      "thinking": false,
+      "use_default_template": true
+    }
+  },
+  "6": {
+    "class_type": "PreviewAny",
+    "inputs": { "source": ["5", 0] }
+  }
+}

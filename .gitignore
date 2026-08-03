@@ -1,0 +1,33 @@
+# Rendered media and machine-local state. The studio's SOURCE is text: .movie files,
+# preset JSON, variables.json, cards, scripts. Anything a render produces can be
+# regenerated from those and does not belong in history.
+
+# ---- renders and intermediates ----
+_work/
+*.mp4
+*.mkv
+*.webm
+*.wav
+*.mp3
+*.srt
+
+# ---- model weights, never ----
+*.safetensors
+*.ckpt
+*.pt
+*.pth
+*.bin
+*.onnx
+
+# ---- logs and scratch ----
+*.log
+studio/samples/_scratch/
+__pycache__/
+*.pyc
+
+# ---- full-size stills live in ComfyUI's output, not here ----
+# The 640x360 card panels ARE kept: they are the evidence for what each variable
+# does, and at WebP q82 the whole set is ~31 MB. Their 1.3 GB originals stay in
+# ~/ComfyUI/output/claude-generated/studio_cards/.
+*.png
+!studio/samples/**/*.png

@@ -1,0 +1,268 @@
+{
+  "title": "DERBY STUDIO TEST",
+  "fps": 24,
+  "canvas": [
+    1920,
+    1080
+  ],
+  "engine": "higgs_v3",
+  "keyframe_engine": "anime",
+  "anime_ckpt": "animagine-xl-4.0.safetensors",
+  "ipadapter_weight": 0.6,
+  "style": "modern sports anime, cel shading, cinematic",
+  "anime_sheets": {
+    "VIRO": "sheet_anime_viro.png"
+  },
+  "sheets": {
+    "VIRO": "sheet_anime_viro.png"
+  },
+  "characters": {
+    "VIRO": "VIRO",
+    "MANAGER": "MANAGER"
+  },
+  "voices": {
+    "VIRO": {
+      "engine": "higgs_v3",
+      "voice": "voices_examples/higgs_audio/vex.wav"
+    },
+    "MANAGER": {
+      "engine": "indextts2",
+      "voice": "voices_examples/male/male_01.wav"
+    }
+  },
+  "music": [
+    {
+      "prefix": "melancholy_piano_00",
+      "tags": "sparse melancholy piano, single sustained cello, restrained, instrumental",
+      "seconds": 16,
+      "at": 0.0,
+      "level": 0.8,
+      "bpm": 72,
+      "key": "D minor"
+    },
+    {
+      "prefix": "tense_strings_01",
+      "tags": "quiet tense strings, low pulse, anticipation, restrained orchestral, instrumental",
+      "seconds": 19,
+      "at": 14.04,
+      "level": 0.7,
+      "bpm": 88,
+      "key": "A minor"
+    },
+    {
+      "prefix": "triumphant_build_02",
+      "tags": "soaring orchestral build, taiko drums, brass, choir, triumphant desperate, huge, instrumental",
+      "seconds": 7,
+      "at": 34.88,
+      "level": 1.0,
+      "bpm": 140,
+      "key": "D minor"
+    }
+  ],
+  "beats": [
+    {
+      "id": "cold_open_last_year_00",
+      "template": "establish",
+      "clip_secs": 6,
+      "intensity": 0.741,
+      "camera": "pull",
+      "transition": "fade_black",
+      "grade": "eq=brightness=-0.15:contrast=1.20:saturation=0.72,colorbalance=bs=0.05:rs=-0.03,eq=gamma=0.92",
+      "seed": 1449292605,
+      "tags": "modern sports anime, cel shading, cinematic, night, dark, moonlight, melancholy, defeat, empty night stadium, confetti, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "modern sports anime, cel shading, cinematic, night, dark, moonlight, melancholy, defeat, empty night stadium, confetti, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "Slow deliberate movement only."
+    },
+    {
+      "id": "cold_open_last_year_01",
+      "template": "speak",
+      "clip_secs": 6,
+      "intensity": 0.741,
+      "camera": "pull",
+      "transition": "fade_black",
+      "grade": "eq=brightness=-0.15:contrast=1.20:saturation=0.72,colorbalance=bs=0.05:rs=-0.03,eq=gamma=0.92",
+      "seed": 194196221,
+      "ref": [
+        "VIRO"
+      ],
+      "tags": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, teal soccer jersey, orange trim, number 7, male focus, mature male, masculine, clean uniform, neat hair, modern sports anime, cel shading, cinematic, night, dark, moonlight, melancholy, defeat, empty night stadium, confetti, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, teal soccer jersey, orange trim, number 7, male focus, mature male, masculine, clean uniform, neat hair, modern sports anime, cel shading, cinematic, night, dark, moonlight, melancholy, defeat, empty night stadium, confetti, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "Slow deliberate movement only.",
+      "line": {
+        "who": "VIRO",
+        "text": "...Again."
+      }
+    },
+    {
+      "id": "cold_open_last_year_02",
+      "template": "pillow",
+      "clip_secs": 6,
+      "intensity": 0.741,
+      "camera": "pull",
+      "transition": "fade_black",
+      "grade": "eq=brightness=-0.15:contrast=1.20:saturation=0.72,colorbalance=bs=0.05:rs=-0.03,eq=gamma=0.92",
+      "seed": 2697577307,
+      "tags": "modern sports anime, cel shading, cinematic, night, dark, moonlight, melancholy, defeat, empty night stadium, confetti, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "modern sports anime, cel shading, cinematic, night, dark, moonlight, melancholy, defeat, empty night stadium, confetti, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "Slow deliberate movement only."
+    },
+    {
+      "id": "act_one_tunnel_00",
+      "template": "establish",
+      "clip_secs": 6,
+      "intensity": 1.0,
+      "camera": "push",
+      "transition": "dissolve",
+      "grade": "eq=contrast=1.10:saturation=0.72,colorbalance=bs=0.10:rs=-0.05",
+      "seed": 4260998038,
+      "tags": "modern sports anime, cel shading, cinematic, overcast, cold lighting, desaturated, stadium tunnel, concrete, harsh light, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "modern sports anime, cel shading, cinematic, overcast, cold lighting, desaturated, stadium tunnel, concrete, harsh light, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "Slow deliberate movement only."
+    },
+    {
+      "id": "act_one_tunnel_01",
+      "template": "speak",
+      "clip_secs": 6,
+      "intensity": 1.0,
+      "camera": "push",
+      "transition": "dissolve",
+      "grade": "eq=contrast=1.10:saturation=0.72,colorbalance=bs=0.10:rs=-0.05",
+      "seed": 3931239257,
+      "ref": [
+        "VIRO"
+      ],
+      "tags": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, teal soccer jersey, orange trim, number 7, male focus, mature male, masculine, clean uniform, neat hair, modern sports anime, cel shading, cinematic, overcast, cold lighting, desaturated, stadium tunnel, concrete, harsh light, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, teal soccer jersey, orange trim, number 7, male focus, mature male, masculine, clean uniform, neat hair, modern sports anime, cel shading, cinematic, overcast, cold lighting, desaturated, stadium tunnel, concrete, harsh light, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "Slow deliberate movement only.",
+      "line": {
+        "who": "VIRO",
+        "text": "Same tunnel. Same smell of wet concrete. Nine times now."
+      }
+    },
+    {
+      "id": "act_one_locker_00",
+      "template": "speak",
+      "clip_secs": 6,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "cut",
+      "grade": "eq=contrast=1.10:saturation=0.72,colorbalance=bs=0.10:rs=-0.05",
+      "seed": 1031760500,
+      "ref": [
+        "MANAGER"
+      ],
+      "tags": "1man, solo, grey hair, short beard, lined face, dark tracksuit, team crest, male focus, mature male, masculine, clean uniform, neat hair, modern sports anime, cel shading, cinematic, overcast, cold lighting, desaturated, locker room, benches, hanging jerseys, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "1man, solo, grey hair, short beard, lined face, dark tracksuit, team crest, male focus, mature male, masculine, clean uniform, neat hair, modern sports anime, cel shading, cinematic, overcast, cold lighting, desaturated, locker room, benches, hanging jerseys, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "Slow deliberate movement only.",
+      "line": {
+        "who": "MANAGER",
+        "text": "Nine years. Nine years we have come here and gone home quiet."
+      }
+    },
+    {
+      "id": "act_one_locker_01",
+      "template": "speak",
+      "clip_secs": 6,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "cut",
+      "grade": "eq=contrast=1.10:saturation=0.72,colorbalance=bs=0.10:rs=-0.05",
+      "seed": 1766881339,
+      "ref": [
+        "VIRO"
+      ],
+      "tags": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, teal soccer jersey, orange trim, number 7, male focus, mature male, masculine, clean uniform, neat hair, modern sports anime, cel shading, cinematic, overcast, cold lighting, desaturated, locker room, benches, hanging jerseys, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, teal soccer jersey, orange trim, number 7, male focus, mature male, masculine, clean uniform, neat hair, modern sports anime, cel shading, cinematic, overcast, cold lighting, desaturated, locker room, benches, hanging jerseys, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "Slow deliberate movement only.",
+      "line": {
+        "who": "VIRO",
+        "text": "I know what the record is."
+      }
+    },
+    {
+      "id": "act_one_locker_02",
+      "template": "speak",
+      "clip_secs": 6,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "cut",
+      "grade": "eq=contrast=1.10:saturation=0.72,colorbalance=bs=0.10:rs=-0.05",
+      "seed": 4276572515,
+      "ref": [
+        "MANAGER"
+      ],
+      "tags": "1man, solo, grey hair, short beard, lined face, dark tracksuit, team crest, male focus, mature male, masculine, clean uniform, neat hair, modern sports anime, cel shading, cinematic, overcast, cold lighting, desaturated, locker room, benches, hanging jerseys, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "1man, solo, grey hair, short beard, lined face, dark tracksuit, team crest, male focus, mature male, masculine, clean uniform, neat hair, modern sports anime, cel shading, cinematic, overcast, cold lighting, desaturated, locker room, benches, hanging jerseys, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "Slow deliberate movement only.",
+      "line": {
+        "who": "MANAGER",
+        "text": "Then stop trying to beat him. Beat the team."
+      }
+    },
+    {
+      "id": "climax_silence_before_00",
+      "template": "hold_silent",
+      "clip_secs": 6,
+      "intensity": 1.429,
+      "camera": "static",
+      "transition": "smash",
+      "grade": "eq=brightness=-0.15:contrast=1.20:saturation=0.72,colorbalance=bs=0.05:rs=-0.03,eq=gamma=0.92",
+      "seed": 570568726,
+      "ref": [
+        "VIRO"
+      ],
+      "tags": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, teal soccer jersey, orange trim, number 7, male focus, mature male, masculine, torn bloodied uniform, cut on face, utterly exhausted, trembling, modern sports anime, cel shading, cinematic, night, floodlights, night pitch, floodlights, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, teal soccer jersey, orange trim, number 7, male focus, mature male, masculine, torn bloodied uniform, cut on face, utterly exhausted, trembling, modern sports anime, cel shading, cinematic, night, floodlights, night pitch, floodlights, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "Slow deliberate movement only."
+    },
+    {
+      "id": "climax_the_goal_00",
+      "template": "sakuga",
+      "clip_secs": 6,
+      "intensity": 1.429,
+      "camera": "push",
+      "transition": "flash",
+      "grade": "eq=brightness=-0.15:contrast=1.20:saturation=0.72,colorbalance=bs=0.05:rs=-0.03,eq=gamma=0.92",
+      "seed": 1910426724,
+      "ref": [
+        "VIRO"
+      ],
+      "tags": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, teal soccer jersey, orange trim, number 7, male focus, mature male, masculine, torn bloodied uniform, cut on face, utterly exhausted, trembling, modern sports anime, cel shading, cinematic, night, floodlights, night pitch, floodlights, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, teal soccer jersey, orange trim, number 7, male focus, mature male, masculine, torn bloodied uniform, cut on face, utterly exhausted, trembling, modern sports anime, cel shading, cinematic, night, floodlights, night pitch, floodlights, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "Slow deliberate movement only."
+    },
+    {
+      "id": "climax_the_goal_01",
+      "template": "insert",
+      "clip_secs": 6,
+      "intensity": 1.429,
+      "camera": "push",
+      "transition": "flash",
+      "grade": "eq=brightness=-0.15:contrast=1.20:saturation=0.72,colorbalance=bs=0.05:rs=-0.03,eq=gamma=0.92",
+      "seed": 870881764,
+      "tags": "modern sports anime, cel shading, cinematic, night, floodlights, night pitch, floodlights, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "modern sports anime, cel shading, cinematic, night, floodlights, night pitch, floodlights, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "Slow deliberate movement only."
+    },
+    {
+      "id": "climax_the_goal_02",
+      "template": "speak",
+      "clip_secs": 6,
+      "intensity": 1.429,
+      "camera": "push",
+      "transition": "flash",
+      "grade": "eq=brightness=-0.15:contrast=1.20:saturation=0.72,colorbalance=bs=0.05:rs=-0.03,eq=gamma=0.92",
+      "seed": 12053412,
+      "ref": [
+        "VIRO"
+      ],
+      "tags": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, teal soccer jersey, orange trim, number 7, male focus, mature male, masculine, torn bloodied uniform, cut on face, utterly exhausted, trembling, modern sports anime, cel shading, cinematic, night, floodlights, night pitch, floodlights, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, teal soccer jersey, orange trim, number 7, male focus, mature male, masculine, torn bloodied uniform, cut on face, utterly exhausted, trembling, modern sports anime, cel shading, cinematic, night, floodlights, night pitch, floodlights, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "Slow deliberate movement only.",
+      "line": {
+        "who": "VIRO",
+        "text": "Not this year."
+      }
+    }
+  ]
+}

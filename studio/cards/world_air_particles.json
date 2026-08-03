@@ -1,0 +1,80 @@
+{
+  "variable": "world.air_particles",
+  "claim": "Drifting matter in the air — the standard anime device for filling dead space and giving a still something that can move once it hits i2v. Petals and embers are mood statements as much as physics: one says tenderness, the other says something is burning.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "none",
+      "clause": "",
+      "control": true,
+      "sample": "/samples/vars/world_air_particles/none.webp"
+    },
+    {
+      "value": "dust",
+      "clause": "dust particles, floating dust, motes in the air",
+      "control": false,
+      "sample": "/samples/vars/world_air_particles/dust.webp"
+    },
+    {
+      "value": "pollen",
+      "clause": "pollen, floating pollen, yellow specks in the air",
+      "control": false,
+      "sample": "/samples/vars/world_air_particles/pollen.webp"
+    },
+    {
+      "value": "petals",
+      "clause": "falling petals, cherry blossom petals, petals in the air",
+      "control": false,
+      "sample": "/samples/vars/world_air_particles/petals.webp"
+    },
+    {
+      "value": "ash",
+      "clause": "falling ash, ash particles, grey flakes drifting",
+      "control": false,
+      "sample": "/samples/vars/world_air_particles/ash.webp"
+    },
+    {
+      "value": "embers",
+      "clause": "embers, floating embers, glowing sparks in the air",
+      "control": false,
+      "sample": "/samples/vars/world_air_particles/embers.webp"
+    },
+    {
+      "value": "snow",
+      "clause": "falling snow, snowflakes in the air",
+      "control": false,
+      "sample": "/samples/vars/world_air_particles/snow.webp"
+    },
+    {
+      "value": "leaves",
+      "clause": "falling leaves, leaves in the wind, drifting foliage",
+      "control": false,
+      "sample": "/samples/vars/world_air_particles/leaves.webp"
+    },
+    {
+      "value": "bubbles",
+      "clause": "bubbles, floating bubbles, air bubbles",
+      "control": false,
+      "sample": "/samples/vars/world_air_particles/bubbles.webp"
+    },
+    {
+      "value": "fireflies",
+      "clause": "fireflies, glowing insects, points of light in the air",
+      "control": false,
+      "sample": "/samples/vars/world_air_particles/fireflies.webp"
+    },
+    {
+      "value": "steam",
+      "clause": "steam, rising steam, vapour in the air",
+      "control": false,
+      "sample": "/samples/vars/world_air_particles/steam.webp"
+    },
+    {
+      "value": "spores",
+      "clause": "spores, floating spores, glowing motes drifting",
+      "control": false,
+      "sample": "/samples/vars/world_air_particles/spores.webp"
+    }
+  ]
+}

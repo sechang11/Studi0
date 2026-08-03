@@ -1,0 +1,128 @@
+{
+  "_comment": "Every control map this box can produce, from one input image, in one graph: Depth Anything 3 depth (raw + colourised), MoGe-2 surface normals, and SDPose whole-body pose. These are the inputs that drive controlled composition for both stills (Qwen ControlNet) and video (LTX IC-LoRA). Until now the weights were installed and nothing referenced them.",
+  "_notes": [
+    "Feed the raw `depth` output into a ControlNet or LTX IC-LoRA. The `depth_colored` output is a turbo-colormap VISUALISATION for humans - never feed that to a model, it will read the false colours as content.",
+    "DYNAMIC COMBOS BITE TWICE HERE. `DA3Inference.mode` = 'mono' takes no sub-inputs, so a bare string is fine. But `DA3Render.output` = 'depth' DOES take sub-inputs - `output.normalization` and `output.apply_sky_clip` - as dotted keys. Omit them and you get the worst possible failure mode: ComfyUI validates the two DA3 outputs as invalid, **silently drops them, and still reports the prompt as `success`**. You get a green run with two of four images and no error unless you read the server log. Always count your outputs.",
+    "normalization: `v2_style` (mean/std, perceptually balanced) is the right default for feeding a ControlNet. `min_max` stretches to full range for maximum contrast - better for the human-readable colourised version, worse as control input because it exaggerates near-field depth. `raw` preserves metric units and is only meaningful on the Metric model.",
+    "resolution 504 is DA3's native working size. `upper_bound_resize` fits the long edge (safer, keeps the whole frame); `lower_bound_resize` fits the short edge and crops - use it when the subject is centred and you want maximum detail on it.",
+    "MoGe-2 gives NORMALS, which DA3 does not. Normals encode surface orientation rather than distance, so they hold small surface relief - fabric folds, panel lines, carved detail - that depth flattens. `normal_opengl` is the ComfyUI/Blender convention; `normal_directx` flips green for engines that expect it. Getting this backwards inverts your lighting.",
+    "Both DA3 and MoGe load through their own loaders but share one model dropdown, so it is easy to pick the wrong file. LoadDA3Model wants `depth_anything_3_mono_large`; LoadMoGeModel wants `moge_2_vitl_normal_fp16`.",
+    "SDPose needs a MODEL and a VAE - it is a diffusion-based pose estimator, not a classifier, which is why it is a checkpoint rather than a small detector. It handles ONE person by default; multi-person needs `RTDETR_detect` to supply per-person bboxes, and that detector's weights are not installed.",
+    "draw_feet defaults false and is worth turning on for full-body shots - foot orientation is most of what sells a standing pose.",
+    "All three maps also work on a video frame batch, which is exactly what the LTX IC-LoRA wants for camera control."
+  ],
+  "1": {
+    "class_type": "LoadImage",
+    "inputs": { "image": "claude_seg_portrait.png" }
+  },
+  "10": {
+    "class_type": "LoadDA3Model",
+    "inputs": {
+      "model_name": "depth_anything_3_mono_large.safetensors",
+      "weight_dtype": "default"
+    }
+  },
+  "11": {
+    "class_type": "DA3Inference",
+    "inputs": {
+      "da3_model": ["10", 0],
+      "image": ["1", 0],
+      "resolution": 504,
+      "resize_method": "upper_bound_resize",
+      "mode": "mono"
+    }
+  },
+  "12": {
+    "class_type": "DA3Render",
+    "inputs": {
+      "da3_geometry": ["11", 0],
+      "output": "depth",
+      "output.normalization": "v2_style",
+      "output.apply_sky_clip": false
+    }
+  },
+  "13": {
+    "class_type": "DA3Render",
+    "inputs": {
+      "da3_geometry": ["11", 0],
+      "output": "depth_colored",
+      "output.normalization": "min_max",
+      "output.apply_sky_clip": false
+    }
+  },
+  "20": {
+    "class_type": "LoadMoGeModel",
+    "inputs": { "model_name": "moge_2_vitl_normal_fp16.safetensors" }
+  },
+  "21": {
+    "class_type": "MoGeInference",
+    "inputs": {
+      "moge_model": ["20", 0],
+      "image": ["1", 0],
+      "resolution_level": 9,
+      "fov_x_degrees": 0.0,
+      "batch_size": 4,
+      "force_projection": true,
+      "apply_mask": true
+    }
+  },
+  "22": {
+    "class_type": "MoGeRender",
+    "inputs": { "moge_geometry": ["21", 0], "output": "normal_opengl" }
+  },
+  "30": {
+    "class_type": "CheckpointLoaderSimple",
+    "inputs": { "ckpt_name": "sdpose_wholebody_fp16.safetensors" }
+  },
+  "31": {
+    "class_type": "SDPoseKeypointExtractor",
+    "inputs": {
+      "model": ["30", 0],
+      "vae": ["30", 2],
+      "image": ["1", 0],
+      "batch_size": 16
+    }
+  },
+  "32": {
+    "class_type": "SDPoseDrawKeypoints",
+    "inputs": {
+      "keypoints": ["31", 0],
+      "draw_body": true,
+      "draw_hands": true,
+      "draw_face": true,
+      "draw_feet": true,
+      "stick_width": 4,
+      "face_point_size": 3,
+      "score_threshold": 0.3,
+      "draw_head": true
+    }
+  },
+  "40": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": ["12", 0],
+      "filename_prefix": "claude-generated/23-control-maps/depth_raw"
+    }
+  },
+  "41": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": ["13", 0],
+      "filename_prefix": "claude-generated/23-control-maps/depth_colored"
+    }
+  },
+  "42": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": ["22", 0],
+      "filename_prefix": "claude-generated/23-control-maps/normals_moge"
+    }
+  },
+  "43": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": ["32", 0],
+      "filename_prefix": "claude-generated/23-control-maps/pose_sdpose"
+    }
+  }
+}

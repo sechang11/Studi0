@@ -1,0 +1,39 @@
+{
+  "variable": "anime.bg.line",
+  "claim": "Whether the background carries outlines at all, which quietly declares which anime tradition the film belongs to. Lineless painted backgrounds read filmic and expensive; full ink lines read graphic and manga-adjacent, and glue the background to the character art.",
+  "method": "identical subject sentence and seed in every panel; only the option clause changes. panels marked control render the untouched subject, because SDXL cannot express absence.",
+  "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
+  "panels": [
+    {
+      "value": "none",
+      "clause": "lineless background, painted scenery without outlines",
+      "control": true,
+      "sample": "/samples/vars/anime_bg_line/none.webp"
+    },
+    {
+      "value": "soft_line",
+      "clause": "faint background lineart, soft outlined scenery",
+      "control": false,
+      "sample": "/samples/vars/anime_bg_line/soft_line.webp"
+    },
+    {
+      "value": "full_line",
+      "clause": "fully outlined background, background lineart",
+      "control": false,
+      "sample": "/samples/vars/anime_bg_line/full_line.webp"
+    },
+    {
+      "value": "ink_line",
+      "clause": "bold ink outlined background, heavy ink scenery",
+      "control": false,
+      "sample": "/samples/vars/anime_bg_line/ink_line.webp"
+    }
+  ],
+  "review": [
+    {
+      "variable": "anime.bg.line",
+      "issue": "The \"none\" clause \"lineless background, painted scenery without outlines\" ends in a prose negation. The positive tag \"lineless\" is doing all the work and is not the danbooru spelling.",
+      "fix": "\"no lineart, painted background\" - drop the trailing clause."
+    }
+  ]
+}

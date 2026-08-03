@@ -1,0 +1,531 @@
+{
+  "title": "THE DERBY",
+  "hook": "he has never|been beaten",
+  "hud": {
+    "before": "RASK  1 - 0  VIRO",
+    "after": "RASK  1 - 1  VIRO",
+    "goal_at": 60.2
+  },
+  "fps": 24,
+  "engine": "higgs_v3",
+  "style_lora": "qwen_image_2512_storybook_anime_lora.safetensors",
+  "style_strength": 1.0,
+  "style": "modern sports anime, bold cel shading, heavy black ink outlines, extreme high contrast, stadium floodlight rim light, saturated teal and orange, speed lines, dramatic perspective, cinematic",
+  "sheets": {
+    "RASK": "sheet_rask.png",
+    "VIRO": "sheet_viro.png"
+  },
+  "anime_sheets": {
+    "RASK": "sheet_anime_rask.png",
+    "VIRO": "sheet_anime_viro.png"
+  },
+  "keyframe_engine": "anime",
+  "anime_ckpt": "animagine-xl-4.0.safetensors",
+  "ipadapter_weight": 0.6,
+  "designs": {
+    "RASK": "a tall broad-shouldered young male footballer, short dark red hair shaved at the sides, pale amber eyes, hard unsmiling face, small scar through one eyebrow, black and silver football kit with the number 9",
+    "VIRO": "a lean agile young male footballer, long dark curls tied back, deep brown eyes, easy confident half-smile, single gold ear stud, teal and orange football kit with the number 7"
+  },
+  "characters": {
+    "RASK": "the tall red-haired striker in the black and silver number 9 kit from the reference image",
+    "VIRO": "the curly-haired playmaker in the teal and orange number 7 kit from the reference image"
+  },
+  "voices": {
+    "RASK": {
+      "engine": "higgs_v3",
+      "voice": "voices_examples/male/male_01.wav"
+    },
+    "VIRO": {
+      "engine": "higgs_v3",
+      "voice": "voices_examples/higgs_audio/vex.wav"
+    }
+  },
+  "music": [
+    {
+      "at": 0,
+      "prefix": "derby_theme",
+      "bpm": 174,
+      "key": "F minor",
+      "seconds": 70,
+      "level": 1.0,
+      "tags": "aggressive hybrid trap orchestral, hard 808 slides, distorted brass stabs, driving string ostinato, stadium crowd roar texture, chanting choir, huge drop, instrumental"
+    }
+  ],
+  "beats": [
+    {
+      "id": "010_stadium",
+      "template": "hook",
+      "intensity": 0.8,
+      "block": "setup",
+      "clip_secs": 4,
+      "prompt": "Vast night stadium from pitch level, hundred thousand phone lights in the stands, floodlights blazing through drifting haze, a single figure walking out of the tunnel into the light, enormous scale",
+      "motion": "Light haze drifts through the floodlight beams. The crowd lights ripple across the stands in a slow wave. The figure walks steadily out of the tunnel toward camera.",
+      "caption": "FINAL. 89th minute.",
+      "tags": "no humans, scoreboard, stadium jumbotron, glowing numbers, score 1-0, 89:00 on clock, wide shot, night, soccer stadium, floodlights, crowd, night, masterpiece, best quality, very aesthetic, absurdres"
+    },
+    {
+      "id": "020_rask",
+      "template": "taunt",
+      "intensity": 0.7,
+      "block": "setup",
+      "ref": [
+        "RASK"
+      ],
+      "clip_secs": 4,
+      "prompt": "Low hero angle of {RASK} standing on the halfway line, black and silver kit number 9, shoulders squared, steam rising off him, floodlights flaring behind his head",
+      "motion": "Steam rises off his shoulders. Sweat runs down his face. He rolls his neck once and sets his jaw. The floodlight flares behind him.",
+      "line": {
+        "who": "RASK",
+        "text": "You have never beaten me."
+      },
+      "caption": "RASK has never lost this fixture.",
+      "tags": "1boy, solo, dark red hair, undercut, yellow eyes, scar on eyebrow, black soccer jersey, dark uniform, silver trim, number 9, male focus, mature male, masculine, standing, arms crossed, confident smirk, looking at viewer, from below, close-up, soccer stadium, floodlights, crowd, night, masterpiece, best quality, very aesthetic, absurdres"
+    },
+    {
+      "id": "030_viro",
+      "template": "taunt",
+      "intensity": 0.7,
+      "block": "setup",
+      "ref": [
+        "VIRO"
+      ],
+      "clip_secs": 4,
+      "prompt": "Low hero angle of {VIRO} bouncing on his toes at the centre circle, teal and orange kit number 7, grinning, ball spinning on the grass at his feet",
+      "motion": "He bounces on his toes and grins wider. The ball spins on the grass. Water beads fly off his hair as he shakes his head.",
+      "line": {
+        "who": "VIRO",
+        "text": "You have never had to."
+      },
+      "caption": "VIRO has never won it.",
+      "tags": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, teal soccer jersey, orange trim, teal shirt, number 7, male focus, mature male, masculine, standing, clenched fist, frustrated, gritted teeth, looking away, close-up, from side, soccer stadium, floodlights, crowd, night, masterpiece, best quality, very aesthetic, absurdres"
+    },
+    {
+      "id": "040_walkup",
+      "template": "charge",
+      "intensity": 0.6,
+      "block": "setup",
+      "clip_secs": 4,
+      "prompt": "Two players walking toward each other down the centre line from opposite ends, backlit by opposing floodlight banks, long shadows converging, dust drifting",
+      "motion": "Both walk toward each other from opposite ends of frame, shadows converging on the centre line. Dust drifts through the beams. The camera pushes in low and fast between them.",
+      "caption": "One minute left. RASK leads 1-0.",
+      "tags": "no humans, scoreboard, stadium jumbotron, score 1-0, 89:00, close-up, glowing numbers, soccer stadium, floodlights, crowd, night, masterpiece, best quality, very aesthetic, absurdres"
+    },
+    {
+      "id": "050_crowd",
+      "template": "taunt",
+      "intensity": 0.8,
+      "block": "setup",
+      "clip_secs": 4,
+      "prompt": "Roaring crowd wall packed to the roof, faces lit teal and orange, scarves raised, flares smoking in the upper tier",
+      "motion": "The whole stand rises at once. Scarves whip overhead. Orange flare smoke rolls across the upper tier and lights the faces from below.",
+      "caption": "Ninety thousand people. One goal in it.",
+      "tags": "crowd, many people, cheering, standing, arms raised, scarves, wide shot, spectators, soccer stadium, floodlights, crowd, night, masterpiece, best quality, very aesthetic, absurdres"
+    },
+    {
+      "id": "060_flashfwd",
+      "template": "clash",
+      "intensity": 0.65,
+      "block": "setup",
+      "ref": [
+        "VIRO"
+      ],
+      "clip_secs": 4,
+      "prompt": "Blurred impressionistic collision of two players mid-air over the pitch, turf exploding outward, motion streaked, faces indistinct, pure kinetic abstraction",
+      "motion": "Two blurred figures collide mid-air and turf explodes outward in a ring. Everything streaks. The frame is pure motion.",
+      "caption": "It will be decided in sixty seconds.",
+      "tags": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, teal soccer jersey, orange trim, teal shirt, number 7, male focus, mature male, masculine, close-up, determined expression, eyes narrowed, sweat, looking forward, dramatic lighting, soccer stadium, floodlights, crowd, night, masterpiece, best quality, very aesthetic, absurdres"
+    },
+    {
+      "id": "070_whistle",
+      "template": "impact",
+      "intensity": 0.75,
+      "block": "setup",
+      "clip_secs": 4,
+      "prompt": "Extreme macro of a referee whistle at the instant of the blast, spray atomising off the metal, everything behind thrown out of focus",
+      "motion": "The whistle blasts and a burst of spray atomises off the metal. The background snaps out of focus. The sound hits like a starting gun.",
+      "caption": "Restart.",
+      "tags": "no humans, soccer ball on centre spot, green grass, close-up, referee whistle, low angle, soccer stadium, floodlights, crowd, night, masterpiece, best quality, very aesthetic, absurdres"
+    },
+    {
+      "id": "080_ignite",
+      "template": "reveal",
+      "intensity": 0.8,
+      "block": "setup",
+      "ref": [
+        "RASK"
+      ],
+      "clip_secs": 4,
+      "prompt": "Full body shot of {RASK} exploding into his first stride, turf tearing up in a spray behind his boot, aura of white-hot light building around him",
+      "motion": "Turf tears up behind his boot in a spray. White-hot light builds around him and floods outward. He explodes forward out of frame.",
+      "caption": "RASK only has to run out the clock.",
+      "tags": "1boy, solo, dark red hair, undercut, yellow eyes, scar on eyebrow, black soccer jersey, dark uniform, silver trim, number 9, male focus, mature male, masculine, shielding soccer ball, arms spread wide, back to viewer, protecting ball, wide stance, soccer stadium, floodlights, crowd, night, masterpiece, best quality, very aesthetic, absurdres"
+    },
+    {
+      "id": "090_drive",
+      "template": "charge",
+      "intensity": 1.0,
+      "block": "burst1",
+      "ref": [
+        "VIRO"
+      ],
+      "clip_secs": 4,
+      "prompt": "Low tracking shot racing alongside {VIRO} at full sprint with the ball, dry turf spraying up in his wake, defenders smearing past out of focus",
+      "motion": "He sprints flat out with the ball, turf spraying behind him. Defenders smear past out of focus. The camera races alongside and cannot quite keep up.",
+      "caption": "So VIRO stops waiting to be passed to.",
+      "tags": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, teal soccer jersey, orange trim, teal shirt, number 7, male focus, mature male, masculine, running with soccer ball, dribbling forward, determined, full body, from side, speed lines, soccer stadium, floodlights, crowd, night, masterpiece, best quality, very aesthetic, absurdres"
+    },
+    {
+      "id": "100_clash1",
+      "template": "clash",
+      "intensity": 1.0,
+      "block": "burst1",
+      "ref": [
+        "RASK"
+      ],
+      "clip_secs": 4,
+      "prompt": "Violent shoulder-to-shoulder collision between two players at full speed, turf blasting outward in a ring, both bodies deforming with the force, low angle",
+      "motion": "The two collide shoulder to shoulder at full speed. Turf blasts outward in a ring. Both bodies twist with the force and keep driving.",
+      "caption": "RASK puts him straight back down.",
+      "tags": "1boy, solo, dark red hair, undercut, yellow eyes, scar on eyebrow, black soccer jersey, dark uniform, silver trim, number 9, male focus, mature male, masculine, shoulder barge, pushing opponent away, aggressive, from below, action pose, full body, soccer stadium, floodlights, crowd, night, masterpiece, best quality, very aesthetic, absurdres"
+    },
+    {
+      "id": "110_nutmeg",
+      "template": "clash",
+      "intensity": 1.1,
+      "block": "burst1",
+      "ref": [
+        "VIRO"
+      ],
+      "clip_secs": 4,
+      "prompt": "Ground-level macro of a soccer ball threaded between two boots on dry grass, loose turf spraying off it, studs skidding past on either side",
+      "motion": "The ball threads between two boots, loose turf spraying off it. Studs skid past on either side and tear up the grass.",
+      "caption": "Ball gone.",
+      "tags": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, teal soccer jersey, orange trim, teal shirt, number 7, male focus, mature male, masculine, on the ground, fallen, reaching out, soccer ball rolling away, low angle, ground level, soccer stadium, floodlights, crowd, night, masterpiece, best quality, very aesthetic, absurdres"
+    },
+    {
+      "id": "120_recover",
+      "template": "clash",
+      "intensity": 1.0,
+      "block": "burst1",
+      "ref": [
+        "RASK"
+      ],
+      "clip_secs": 4,
+      "prompt": "Explosive shot of {RASK} pivoting and tearing back into the chase, one hand down in the turf, spray flying, rage on his face",
+      "motion": "He plants one hand in the turf, pivots hard and tears back into the chase. Spray flies. His face contorts with effort.",
+      "caption": "RASK recovers. He always recovers.",
+      "tags": "1boy, solo, dark red hair, undercut, yellow eyes, scar on eyebrow, black soccer jersey, dark uniform, silver trim, number 9, male focus, mature male, masculine, sprinting, running back, chasing, urgent, from behind, full body, motion lines, soccer stadium, floodlights, crowd, night, masterpiece, best quality, very aesthetic, absurdres"
+    },
+    {
+      "id": "130_bench",
+      "template": "taunt",
+      "intensity": 0.8,
+      "block": "breathe",
+      "clip_secs": 4,
+      "prompt": "Close shot of a stadium crowd frozen mid-roar, one child in the front row with both hands pressed to the glass",
+      "motion": "The crowd roars. The child presses both hands to the glass and does not blink. The noise shakes the barrier between them.",
+      "caption": "The kid in the front row has never seen VIRO win.",
+      "tags": "child, boy, crowd, front row, hands on barrier, watching, close-up, spectator, soccer stadium, floodlights, crowd, night, masterpiece, best quality, very aesthetic, absurdres"
+    },
+    {
+      "id": "140_scramble",
+      "template": "clash",
+      "intensity": 1.2,
+      "block": "breathe",
+      "clip_secs": 4,
+      "prompt": "Chaotic goalmouth scramble, four sets of legs and a ball, churned turf everywhere, shot from inside the six-yard box at ground level",
+      "motion": "Legs and studs thrash through the mud around the ball. Turf sprays in every direction. The ball squirts loose and out of frame.",
+      "caption": "Fifty seconds.",
+      "tags": "no humans, scoreboard clock, 00:50, glowing numbers, close-up, dark, soccer stadium, floodlights, crowd, night, masterpiece, best quality, very aesthetic, absurdres"
+    },
+    {
+      "id": "150_eyes_v",
+      "template": "taunt",
+      "intensity": 1.0,
+      "block": "breathe",
+      "ref": [
+        "VIRO"
+      ],
+      "clip_secs": 4,
+      "prompt": "Extreme close-up of the eyes of {VIRO}, sweat on his lashes, pupils locked on something off frame, absolute focus",
+      "motion": "Sweat runs off his lashes. His pupils narrow and lock. Nothing else on his face moves.",
+      "line": {
+        "who": "VIRO",
+        "text": "Now watch."
+      },
+      "caption": "So VIRO stops chasing the ball.",
+      "tags": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, teal soccer jersey, orange trim, teal shirt, number 7, male focus, mature male, masculine, standing still, stopped, breathing hard, eyes wide, realisation, close-up, from front, soccer stadium, floodlights, crowd, night, masterpiece, best quality, very aesthetic, absurdres"
+    },
+    {
+      "id": "160_clash2",
+      "template": "clash",
+      "intensity": 1.0,
+      "block": "assault",
+      "ref": [
+        "VIRO"
+      ],
+      "clip_secs": 4,
+      "prompt": "Two players airborne in a full aerial duel above a floodlit box, both twisting for the ball, floodlight flare streaking past them",
+      "motion": "Both leave the ground together and twist for the ball in mid-air, light streaking past horizontally. They hang, then drop hard.",
+      "caption": "And starts chasing RASK.",
+      "tags": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, teal soccer jersey, orange trim, teal shirt, number 7, male focus, mature male, masculine, running toward viewer, sprinting, intense stare, foreshortening, from below, speed lines, soccer stadium, floodlights, crowd, night, masterpiece, best quality, very aesthetic, absurdres"
+    },
+    {
+      "id": "170_header",
+      "template": "impact",
+      "intensity": 1.0,
+      "block": "assault",
+      "clip_secs": 4,
+      "prompt": "Devastating slow-motion header, ball deforming against a forehead, water blasting off in a corona, neck muscles corded",
+      "motion": "The ball deforms against his forehead and sweat blasts off in a corona. His neck muscles cord. The ball rockets away.",
+      "caption": "Forty seconds.",
+      "tags": "no humans, scoreboard clock, 00:40, glowing numbers, close-up, dark, soccer stadium, floodlights, crowd, night, masterpiece, best quality, very aesthetic, absurdres"
+    },
+    {
+      "id": "180_clash3",
+      "template": "clash",
+      "intensity": 1.1,
+      "block": "assault",
+      "ref": [
+        "VIRO"
+      ],
+      "clip_secs": 4,
+      "prompt": "Two players sliding through dry turf in a full-blooded tackle, twin walls of grass thrown up on either side, low ground-level angle",
+      "motion": "Both slide through the turf and throw twin walls of grass. The ball pops vertically out of the collision.",
+      "caption": "Every tackle now is a foul waiting to be given.",
+      "tags": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, teal soccer jersey, orange trim, teal shirt, number 7, male focus, mature male, masculine, sliding tackle, stretched out, leg extended, low angle, ground level, turf spray, soccer stadium, floodlights, crowd, night, masterpiece, best quality, very aesthetic, absurdres"
+    },
+    {
+      "id": "190_run",
+      "template": "charge",
+      "intensity": 1.1,
+      "block": "assault",
+      "ref": [
+        "VIRO"
+      ],
+      "clip_secs": 4,
+      "prompt": "Accelerating tracking shot behind {VIRO} weaving through a collapsing defensive line, bodies flashing past on both sides, the goal growing ahead",
+      "motion": "He weaves through the collapsing line, bodies flashing past on both sides. The goal grows fast ahead. The camera accelerates behind him.",
+      "caption": "VIRO goes again.",
+      "tags": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, teal soccer jersey, orange trim, teal shirt, number 7, male focus, mature male, masculine, dribbling soccer ball, turning, weaving, dynamic pose, full body, from side, soccer stadium, floodlights, crowd, night, masterpiece, best quality, very aesthetic, absurdres"
+    },
+    {
+      "id": "200_clash4",
+      "template": "clash",
+      "intensity": 1.0,
+      "block": "assault",
+      "ref": [
+        "VIRO"
+      ],
+      "clip_secs": 4,
+      "prompt": "Brutal mid-air collision of two players over the penalty spot, both fully extended, shockwave ring of turf blasting outward beneath them",
+      "motion": "Both fully extend and collide over the penalty spot. A shockwave of turf blasts outward beneath them. Everything freezes, then drops.",
+      "caption": "And again.",
+      "tags": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, teal soccer jersey, orange trim, teal shirt, number 7, male focus, mature male, masculine, shooting, kicking soccer ball, follow through, full body, from side, action pose, soccer stadium, floodlights, crowd, night, masterpiece, best quality, very aesthetic, absurdres"
+    },
+    {
+      "id": "210_save",
+      "template": "impact",
+      "intensity": 1.1,
+      "block": "assault",
+      "clip_secs": 4,
+      "prompt": "Goalkeeper fully extended in mid-air, fingertips on the ball, floodlights behind turning the air into a curtain of white sparks",
+      "motion": "The keeper extends fully and gets fingertips to the ball. The air behind turns to a curtain of white sparks in the floodlights. The ball spins away.",
+      "caption": "The keeper keeps it out.",
+      "tags": "goalkeeper, diving, mid-air, gloves on soccer ball, goal net, from side, save, soccer stadium, floodlights, crowd, night, masterpiece, best quality, very aesthetic, absurdres"
+    },
+    {
+      "id": "220_clash5",
+      "template": "clash",
+      "intensity": 1.1,
+      "block": "assault",
+      "clip_secs": 4,
+      "prompt": "Two players locked shoulder to shoulder driving through the turf, neither giving ground, turf fanning out behind them both",
+      "motion": "Both drive forward locked together, neither giving ground, turf fanning out behind them. Their boots tear parallel furrows in the turf.",
+      "caption": "Thirty seconds.",
+      "tags": "no humans, scoreboard clock, 00:30, glowing numbers, close-up, dark, soccer stadium, floodlights, crowd, night, masterpiece, best quality, very aesthetic, absurdres"
+    },
+    {
+      "id": "230_clash6",
+      "template": "clash",
+      "intensity": 1.0,
+      "block": "assault",
+      "ref": [
+        "VIRO"
+      ],
+      "clip_secs": 4,
+      "prompt": "A soccer ball struck at full power from close range, the leather visibly compressing, air distortion ring around it, boot buried in it",
+      "motion": "The ball compresses against the boot and a ring of distorted air blasts outward. It leaves the frame faster than the eye can follow.",
+      "caption": "VIRO shoots from anywhere now.",
+      "tags": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, teal soccer jersey, orange trim, teal shirt, number 7, male focus, mature male, masculine, long range shot, kicking, leaning back, full body, from side, powerful, soccer stadium, floodlights, crowd, night, masterpiece, best quality, very aesthetic, absurdres"
+    },
+    {
+      "id": "240_counter",
+      "template": "charge",
+      "intensity": 1.0,
+      "block": "assault",
+      "ref": [
+        "RASK"
+      ],
+      "clip_secs": 4,
+      "prompt": "Accelerating tracking shot of {RASK} breaking upfield with the ball, the whole opposition turning behind him, stadium light streaking",
+      "motion": "He breaks upfield with the ball and the whole opposition turns behind him. Stadium light streaks past. Each stride covers more ground than the last.",
+      "caption": "RASK breaks. One pass and it is over.",
+      "tags": "1boy, solo, dark red hair, undercut, yellow eyes, scar on eyebrow, black soccer jersey, dark uniform, silver trim, number 9, male focus, mature male, masculine, running with soccer ball, breaking away, counter attack, from behind, wide shot, soccer stadium, floodlights, crowd, night, masterpiece, best quality, very aesthetic, absurdres"
+    },
+    {
+      "id": "250_bar",
+      "template": "clash",
+      "intensity": 1.1,
+      "block": "assault",
+      "clip_secs": 4,
+      "prompt": "Crossbar shuddering violently after a strike, dust shaking loose off it, the whole goal frame ringing",
+      "motion": "The bar shudders violently and dust shakes loose off it. The whole frame of the goal rings and keeps vibrating.",
+      "caption": "Off the bar.",
+      "tags": "no humans, soccer ball hitting crossbar, goal frame, close-up, impact, low angle, soccer stadium, floodlights, crowd, night, masterpiece, best quality, very aesthetic, absurdres"
+    },
+    {
+      "id": "260_down",
+      "template": "impact",
+      "intensity": 1.0,
+      "block": "assault",
+      "ref": [
+        "VIRO"
+      ],
+      "clip_secs": 4,
+      "prompt": "Player hitting the turf hard and sliding through the grass, sheet of loose turf thrown up over him, ground-level angle",
+      "motion": "He hits the turf hard and slides, throwing a sheet of loose turf over himself. He skids to a stop face down.",
+      "caption": "VIRO goes down. He does not stay down.",
+      "tags": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, teal soccer jersey, orange trim, teal shirt, number 7, male focus, mature male, masculine, on hands and knees, getting up, exhausted, determined, low angle, ground level, soccer stadium, floodlights, crowd, night, masterpiece, best quality, very aesthetic, absurdres"
+    },
+    {
+      "id": "270_breath_r",
+      "template": "taunt",
+      "intensity": 0.6,
+      "block": "breathe",
+      "ref": [
+        "RASK"
+      ],
+      "clip_secs": 4,
+      "prompt": "Close shot of {RASK} bent double with hands on his knees, chest heaving, sweat dripping off his face onto the grass",
+      "motion": "He is bent double, chest heaving. Sweat drips off his face onto the grass. He lifts his head slowly.",
+      "line": {
+        "who": "RASK",
+        "text": "Is that all you have?"
+      },
+      "caption": "Twenty seconds.",
+      "tags": "1boy, solo, dark red hair, undercut, yellow eyes, scar on eyebrow, black soccer jersey, dark uniform, silver trim, number 9, male focus, mature male, masculine, bent over, hands on knees, exhausted, sweat dripping, close-up, from side, soccer stadium, floodlights, crowd, night, masterpiece, best quality, very aesthetic, absurdres"
+    },
+    {
+      "id": "280_breath_v",
+      "template": "taunt",
+      "intensity": 0.7,
+      "block": "breathe",
+      "ref": [
+        "VIRO"
+      ],
+      "clip_secs": 4,
+      "prompt": "Close shot of {VIRO} straightening up, shirt clinging with sweat, smiling with his chest still heaving, floodlight behind him",
+      "motion": "He straightens up, chest heaving. The smile arrives slowly. The floodlight burns behind his head.",
+      "line": {
+        "who": "VIRO",
+        "text": "I have the last minute."
+      },
+      "caption": "Ten.",
+      "tags": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, teal soccer jersey, orange trim, teal shirt, number 7, male focus, mature male, masculine, standing up straight, wiping face, exhausted, small smile, close-up, backlighting, soccer stadium, floodlights, crowd, night, masterpiece, best quality, very aesthetic, absurdres"
+    },
+    {
+      "id": "290_lastrun",
+      "template": "charge",
+      "intensity": 1.3,
+      "block": "final",
+      "ref": [
+        "VIRO"
+      ],
+      "clip_secs": 4,
+      "prompt": "Furious final sprint of {VIRO} down the touchline, the entire stadium blurred into streaks of light behind him",
+      "motion": "He sprints down the touchline and the entire stadium blurs into streaks of light behind him. Floodlights tear past in streaks.",
+      "caption": "VIRO takes it himself. Nobody else touches it.",
+      "tags": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, teal soccer jersey, orange trim, teal shirt, number 7, male focus, mature male, masculine, running with soccer ball, sprinting alone, full body, from side, tracking, speed lines, soccer stadium, floodlights, crowd, night, masterpiece, best quality, very aesthetic, absurdres"
+    },
+    {
+      "id": "300_clash7",
+      "template": "clash",
+      "intensity": 1.2,
+      "block": "final",
+      "ref": [
+        "RASK"
+      ],
+      "clip_secs": 4,
+      "prompt": "Two players colliding at the corner of the box at full pace, turf exploding upward between them, both refusing to fall",
+      "motion": "They collide at full pace and turf explodes upward between them. Both stagger and neither goes down.",
+      "caption": "Last man.",
+      "tags": "1boy, solo, dark red hair, undercut, yellow eyes, scar on eyebrow, black soccer jersey, dark uniform, silver trim, number 9, male focus, mature male, masculine, defensive stance, arms out, blocking, wide stance, from front, full body, last defender, soccer stadium, floodlights, crowd, night, masterpiece, best quality, very aesthetic, absurdres"
+    },
+    {
+      "id": "310_clash8",
+      "template": "clash",
+      "intensity": 1.2,
+      "block": "final",
+      "clip_secs": 4,
+      "prompt": "A soccer ball ripping through a wall of loose turf at knee height, carving a visible channel through it, motion-blurred",
+      "motion": "The ball rips through loose turf at knee height and carves a visible channel through it. Everything blurs behind it.",
+      "caption": "The ball comes loose.",
+      "tags": "no humans, soccer ball loose on grass, close-up, low angle, motion, soccer stadium, floodlights, crowd, night, masterpiece, best quality, very aesthetic, absurdres"
+    },
+    {
+      "id": "320_windup",
+      "template": "charge",
+      "intensity": 1.2,
+      "block": "final",
+      "ref": [
+        "VIRO"
+      ],
+      "clip_secs": 4,
+      "prompt": "Extreme low angle of a leg drawing back for the strike, every muscle taut, the goal and keeper tiny in the deep background, grass suspended mid-air",
+      "motion": "The leg draws back and every muscle goes taut. Loose grass hangs in the air. The whole frame compresses toward the strike.",
+      "caption": "Five.",
+      "tags": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, teal soccer jersey, orange trim, teal shirt, number 7, male focus, mature male, masculine, winding up to shoot, leg back, tense, full body, from side, about to kick, soccer stadium, floodlights, crowd, night, masterpiece, best quality, very aesthetic, absurdres"
+    },
+    {
+      "id": "330_clash9",
+      "template": "clash",
+      "intensity": 1.1,
+      "block": "final",
+      "ref": [
+        "VIRO"
+      ],
+      "clip_secs": 4,
+      "prompt": "The instant of contact between boot and ball, blinding white flash at the point of impact, everything else silhouetted black",
+      "motion": "Boot meets ball and a blinding white flash erupts at the point of contact. Everything else goes to black silhouette.",
+      "caption": "Now.",
+      "tags": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, teal soccer jersey, orange trim, teal shirt, number 7, male focus, mature male, masculine, kicking soccer ball, moment of impact, close-up, foot and ball, white flash, impact, soccer stadium, floodlights, crowd, night, masterpiece, best quality, very aesthetic, absurdres"
+    },
+    {
+      "id": "340_goal",
+      "template": "finisher",
+      "intensity": 1.3,
+      "block": "resolve",
+      "clip_secs": 4,
+      "prompt": "Wide view from behind a soccer goal at the instant the ball hits the back of the net, the white mesh bulging outward, goalkeeper sprawled on the grass, packed stadium crowd erupting behind, floodlights",
+      "motion": "The ball punches into the back of the net and the mesh bulges outward. The keeper lands sprawling on the grass. The crowd behind erupts to its feet.",
+      "caption": "1-1.",
+      "tags": "no humans, soccer ball in goal net, mesh bulging, scoreboard 1-1 in background, from behind goal, soccer stadium, floodlights, crowd, night, masterpiece, best quality, very aesthetic, absurdres"
+    },
+    {
+      "id": "350_after",
+      "template": "aftermath",
+      "intensity": 0.6,
+      "block": "resolve",
+      "ref": [
+        "RASK",
+        "VIRO"
+      ],
+      "clip_secs": 4,
+      "prompt": "Wide final shot of two exhausted players on the grass at the final whistle, one on his knees, one standing with a hand out to him, empty stadium light, floodlights dimming",
+      "motion": "The stadium noise falls away. One kneels, the other stands over him and puts out a hand. Neither says anything. Slow crane up and away.",
+      "caption": "He still has not beaten him. He has not lost to him either.",
+      "tags": "dark red hair, undercut, yellow eyes, scar on eyebrow, black soccer jersey, dark uniform, silver trim, number 9, long dark brown curly hair, ponytail, brown eyes, gold ear stud, teal soccer jersey, orange trim, teal shirt, number 7, male focus, mature male, masculine, 2boys, one kneeling, one standing offering hand, handshake, wide shot, empty stadium, aftermath, soccer stadium, floodlights, crowd, night, masterpiece, best quality, very aesthetic, absurdres"
+    }
+  ]
+}
