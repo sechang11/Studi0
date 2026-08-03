@@ -113,7 +113,19 @@ def main():
             print("  ... %.0f min" % el, flush=True)
             last = el
 
-    out = [f for f in os.listdir(os.path.join(COMFY, "models", "loras"))
+    # SaveLoRA's `prefix` is relative to ComfyUI's OUTPUT directory, not models/. So a
+    # freshly trained LoRA lands somewhere LoraLoader cannot see it, and the training
+    # looks like it silently produced nothing. Move it where loaders actually look.
+    src_dir = os.path.join(COMFY, "output", "loras")
+    dst_dir = os.path.join(COMFY, "models", "loras")
+    if os.path.isdir(src_dir):
+        for f in sorted(os.listdir(src_dir)):
+            if f.startswith("character_%s" % name.lower()) and f.endswith(".safetensors"):
+                s, d = os.path.join(src_dir, f), os.path.join(dst_dir, f)
+                if not os.path.exists(d):
+                    subprocess.run(["mv", s, d])
+                    print("  moved %s -> models/loras/" % f)
+    out = [f for f in os.listdir(dst_dir)
            if f.startswith("character_%s" % name.lower())]
     if out:
         card = json.load(open(card_p, encoding="utf-8"))

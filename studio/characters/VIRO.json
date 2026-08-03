@@ -14,5 +14,10 @@
   "sheet": "sheet_anime_viro.png",
   "voice": "higgs_v3 voices_examples/higgs_audio/vex.wav",
   "note": "THE GARMENT LIVES IN wear_tags, NOT IN tags. Verified 2026-08-03: with the jersey described as pristine in `tags` and the damage appended afterwards as 'torn bloodied uniform', wear:4 rendered a completely clean uniform - the model resolves the contradiction in favour of the earlier, more specific description. Damage has to modify the garment noun itself. `tags` therefore carries only what never changes: face, hair, build. | `prose` is the VISUAL description used by the qwen engine; `desc` is narrative and tells an image model nothing it can draw.",
-  "prose": "a young man with long dark brown curly hair tied in a ponytail, brown eyes, a small gold ear stud"
+  "prose": "a young man with long dark brown curly hair tied in a ponytail, brown eyes, a small gold ear stud",
+  "lora": "character_viro_00001_.safetensors",
+  "lora_steps": 1000,
+  "lora_rank": 16,
+  "lora_dataset": "16 images",
+  "lora_trained_at": "2026-08-03"
 }
