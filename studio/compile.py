@@ -69,8 +69,11 @@ VARS = collections.OrderedDict([
     ("fps",         ("movie",   24,          "LOCKED at movie level: concat -c copy breaks on mixed fps")),
     ("canvas",      ("movie",   "1920x1080", "LOCKED at movie level, same reason")),
     ("checkpoint",  ("movie",   "animagine-xl-4.0.safetensors", "anime SDXL model (engine: anime only)")),
-    ("engine",      ("movie",   "anime",     "anime = danbooru tags + IPAdapter faces. "
-                                             "qwen = prose prompts, photoreal or illustrated")),
+    ("style",       ("movie",   "",          "studio/styles/*.json - HOW it is drawn. "
+                                             "Sets the engine unless you override it")),
+    ("engine",      ("movie",   "",          "anime = danbooru tags + IPAdapter faces. "
+                                             "qwen = prose prompts, photoreal or "
+                                             "illustrated. Normally comes from the style")),
     ("face_weight", ("movie",   0.6,         "IPAdapter strength. per-scene changes make faces drift")),
     ("seed_root",   ("movie",   None,        "stable seed base. defaults to hash(title)")),
     ("logline",     ("movie",   "",          "one sentence. if you can't write it, the film has no spine")),
@@ -307,11 +310,35 @@ def compile_movie(path):
     cuelib = liblist("cues")
     # Which image family renders the keyframes. Movie-level, because the two want
     # opposite prompt formats and mixing them mid-film would change every face anyway.
-    engine = str(movie["vars"].get("engine", "anime")).strip().lower()
+    # STYLE COMES FIRST, and it chooses the engine.
+    #
+    # An image is always in some style, and that choice decides which model can render it
+    # at all - the two families here want opposite prompt formats and asking the anime
+    # checkpoint for photorealism is a contradiction it cannot resolve. So `style` is
+    # authored and `engine` is derived from it, rather than the author having to know
+    # which model does what.
+    #
+    # An explicit engine still wins, because a style card can be wrong and an author who
+    # has looked at the output should be able to override it. When they disagree, say so
+    # rather than silently picking one.
+    style_id = str(movie["vars"].get("style", "")).strip()
+    style = lib("styles", style_id) if style_id else {}
+    engine = str(movie["vars"].get("engine", "")).strip().lower()
+    if style and not engine:
+        engine = str(style.get("engine", "anime")).lower()
+        if engine == "either":
+            engine = "anime"
+    elif style and engine and style.get("engine") not in (engine, "either"):
+        warns.append(f"style '{style_id}' wants engine '{style.get('engine')}' but the "
+                     f"film sets engine '{engine}'. Using '{engine}' as authored - drop "
+                     f"the engine line to follow the style.")
+    engine = engine or "anime"
     if engine not in ("anime", "qwen"):
         raise SystemExit(f"unknown engine {engine!r}\n"
                          f"  anime  danbooru tags + IPAdapter faces (animagine-xl-4.0)\n"
                          f"  qwen   prose prompts, photoreal or illustrated (Qwen-Image 2512)")
+    if style and style.get("strength") == "weak":
+        warns.append(f"style '{style_id}' is marked weak: {style.get('note','')[:150]}")
     if engine != "anime":
         warns.append("engine 'qwen': character faces are held by reference SHEETS through "
                      "Qwen-Edit rather than IPAdapter, which is a weaker lock - expect more "
@@ -461,6 +488,10 @@ def compile_movie(path):
                 # have to differ. The character's human-readable `desc` is used here
                 # rather than its danbooru tags, for the same reason.
                 if engine == "anime":
+                    # the style's marks sit with the other tags; on this path tags ARE
+                    # the prompt
+                    if style.get("tags"):
+                        d["tags"] = d["tags"] + ", " + style["tags"]
                     d["prompt"] = d["tags"]
                 else:
                     # `prose` on a character is a VISUAL description; `desc` is the
@@ -480,10 +511,15 @@ def compile_movie(path):
                     # The film's house style is appended LAST and only if it does not
                     # contradict the engine - "cel shading" on a photoreal render is the
                     # author asking for two different pictures at once.
-                    style = v["tags"]
-                    if style and not any(w in style.lower() for w in
-                                         ("anime", "cel shad", "manga", "danbooru")):
-                        parts.append(style)
+                    # NOTE the name: `house_tags`, not `style`. `style` is the style CARD
+                    # resolved once for the whole film, and rebinding it here would
+                    # clobber it for every later beat.
+                    house_tags = v["tags"]
+                    if house_tags and not any(w in house_tags.lower() for w in
+                                              ("anime", "cel shad", "manga", "danbooru")):
+                        parts.append(house_tags)
+                    if style.get("prose"):
+                        parts.append(style["prose"])
                     d["prompt"] = ". ".join(x.strip(" .,") for x in parts if x.strip(" .,")) + "."
                 d["motion"] = "Slow deliberate movement only."
                 if b.get("text"):
