@@ -1,0 +1,59 @@
+{
+  "id": "sfx",
+  "name": "Sound effect",
+  "icon": "🔊",
+  "desc": "One sound, dry, to sit under picture.",
+  "output": "audio",
+  "workflow": "10_stableaudio_sfx.json",
+  "cost": "1.7-3.0s",
+  "nodes": {
+    "text": "3.inputs.text",
+    "negative": "4.inputs.text",
+    "seconds": "5.inputs.seconds",
+    "seed": "6.inputs.seed",
+    "steps": "6.inputs.steps",
+    "cfg": "6.inputs.cfg",
+    "prefix": "8.inputs.filename_prefix"
+  },
+  "defaults": {
+    "steps": 100,
+    "cfg": 7
+  },
+  "fields": [
+    {
+      "key": "preset",
+      "label": "Start from a preset",
+      "type": "library",
+      "library": "sfx",
+      "optional": true,
+      "spreads": {
+        "text": "prompt",
+        "seconds": "seconds",
+        "negative": "negative"
+      }
+    },
+    {
+      "key": "text",
+      "label": "The sound",
+      "type": "textarea",
+      "required": true,
+      "default": "a single heavy low thud with a short tail, dry, no reverb",
+      "hint": "ONE sound per generation - the model cannot layer. Describe it physically: what hits what, how hard, how long it rings."
+    },
+    {
+      "key": "negative",
+      "label": "Negative",
+      "type": "text",
+      "default": "music, speech, tonal, melodic"
+    },
+    {
+      "key": "seconds",
+      "label": "Seconds",
+      "type": "number",
+      "default": 3,
+      "hint": "Lands about 30ms short of what you ask for."
+    }
+  ],
+  "post": "normalise to -20 LUFS / -3 dBTP - at cfg 7 the raw output clips",
+  "note": "100 steps and cfg 7 are measured settings, not defaults. It was previously run at 8 steps / cfg 1 / lcm and the results were unusable."
+}

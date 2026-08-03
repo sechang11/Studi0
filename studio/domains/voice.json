@@ -1,0 +1,71 @@
+{
+  "id": "voice",
+  "name": "Voice",
+  "icon": "🎙",
+  "desc": "Speak a line in a chosen voice. The one place a character's emotion reaches the performance rather than just the face.",
+  "output": "audio",
+  "workflow": "17_higgs_v3_voice.json",
+  "alt_workflow": {
+    "engine": "indextts2",
+    "workflow": "16_indextts2_voice.json"
+  },
+  "cost": "~3s per line",
+  "nodes": {
+    "text": "30.inputs.text",
+    "voice": "30.inputs.narrator_voice",
+    "seed": "30.inputs.seed",
+    "prefix": "40.inputs.filename_prefix"
+  },
+  "fields": [
+    {
+      "key": "text",
+      "label": "The line",
+      "type": "textarea",
+      "required": true,
+      "default": "Nine years. Nine years we have come here and gone home quiet.",
+      "hint": "Punctuation drives delivery more than any setting here. A full stop is a beat; a comma is not."
+    },
+    {
+      "key": "voice",
+      "label": "Voice",
+      "type": "library",
+      "library": "voices",
+      "value_field": "file",
+      "hint": "Cast by pointing at a distinct reference voice, never by pitch-shifting one pack - past about ±10% rubberband wrecks formants, which is why five characters once sounded like one actor on a varispeed tape."
+    },
+    {
+      "key": "emotion",
+      "label": "Emotion",
+      "type": "library",
+      "library": "emotions",
+      "optional": true,
+      "hint": "Only the indextts2 engine accepts an emotion vector. On higgs_v3 this is recorded but does nothing - the engine selector below decides."
+    },
+    {
+      "key": "engine",
+      "label": "Engine",
+      "type": "enum",
+      "values": [
+        "higgs_v3",
+        "indextts2"
+      ],
+      "default": "higgs_v3",
+      "hint": "higgs_v3 is the house engine. indextts2 is the only one with the 8-dimension emotion vector (Happy/Angry/Sad/Surprised/Afraid/Disgusted/Calm/Melancholic)."
+    }
+  ],
+  "emotion_nodes": {
+    "prefix": "20.inputs.",
+    "dims": [
+      "Happy",
+      "Angry",
+      "Sad",
+      "Surprised",
+      "Afraid",
+      "Disgusted",
+      "Calm",
+      "Melancholic"
+    ]
+  },
+  "post": "normalise to -18 LUFS / -3 dBTP with a compressor first; raw output varies by about 4 LU between packs",
+  "note": "Four packs are clones of real people and are marked blocked in the library. Do not cast them."
+}

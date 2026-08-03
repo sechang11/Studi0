@@ -1,0 +1,14 @@
+{
+  "id": "prop_container",
+  "desc": "A barrel, crate or chest as greybox set dressing. Closed chunky volumes - the best case this path has.",
+  "status": "partial",
+  "path": "hunyuan3d",
+  "source_prompt": "a single wooden barrel standing upright, curved staves, three iron hoops, flat round lid, the whole barrel inside the frame with margin on all sides, three-quarter view from slightly above, flat mid-grey seamless background, even frontal light, no cast shadow, no floor line, no other objects",
+  "steps": 30,
+  "cfg": 5.0,
+  "dials": { "latent_resolution": 4096, "octree_resolution": 256, "threshold": 0.6, "algorithm": "surface net" },
+  "output": "untextured GLB mesh, POSITION attribute only, ~525k tris, ~8.5 MB, 19.5 s",
+  "usable_for": "greybox set dressing, distant prop, blockout, sculpt base",
+  "not_usable_for": "direct game import - needs retopology, UV unwrap and texture bake",
+  "note": "Template dials unchanged because a closed convex-ish volume is exactly what surface net handles well - no thin parts to lose. The iron hoops come back as raised bands in the same continuous surface, not as separate parts, and there is no colour to distinguish wood from iron. Decimate to 5-10% in Blender before use; that step is not on this box."
+}

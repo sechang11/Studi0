@@ -1,0 +1,10 @@
+{
+  "id": "breath",
+  "desc": "Exhaustion, panic, recovery. The most human sound in a mix.",
+  "status": "ready",
+  "prompt": "one person breathing hard through the mouth after running, ragged inhale and exhale, air over teeth and lips, close microphone, dry, no words",
+  "negative": "music, speech, words, singing, moaning, reverb, footsteps",
+  "seconds": 4,
+  "steps": 100, "cfg": 7, "sampler": "dpmpp_3m_sde",
+  "note": "Keep 'voice' OUT of the negative - it strips the vocal-tract character and you get wind through a tube. 'speech, words' are enough to stop it forming language. 'air over teeth and lips' is what separates a breath from a whoosh; drop that phrase and the two prompts converge."
+}

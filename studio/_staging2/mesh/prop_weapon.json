@@ -1,0 +1,14 @@
+{
+  "id": "prop_weapon",
+  "desc": "One melee weapon as a blockout mesh. Silhouette and proportion only - the edge comes back rounded, never sharp.",
+  "status": "partial",
+  "path": "hunyuan3d",
+  "source_prompt": "a single straight-bladed longsword standing vertically with the blade tip up, straight crossguard, round pommel, wrapped grip, the whole weapon inside the frame with clear margin on all four sides, three-quarter view, flat mid-grey seamless background, even frontal light, no cast shadow, no hand, no scabbard, no second object",
+  "steps": 30,
+  "cfg": 5.0,
+  "dials": { "latent_resolution": 4096, "octree_resolution": 256, "threshold": 0.45, "algorithm": "surface net" },
+  "output": "untextured GLB mesh, POSITION attribute only, ~525k tris, ~8.5 MB, 19.5 s",
+  "usable_for": "blockout, silhouette reference, proportion check, sculpt base",
+  "not_usable_for": "direct game import - needs retopology, UV unwrap and texture bake. Not a sharp-edged asset: surface net rounds every bevel.",
+  "note": "A blade is a thin part and thin parts are this path's classic failure - at the template threshold 0.6 a blade erodes to nothing or breaks into islands. 0.45 here follows the workflow's own documented fix for thin parts; it has not been rendered per-preset on this box. Blade will still come out with a rounded edge - no iso-surface extraction gives you a sharp one."
+}

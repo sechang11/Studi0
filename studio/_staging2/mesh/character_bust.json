@@ -1,0 +1,14 @@
+{
+  "id": "character_bust",
+  "desc": "A head-and-shoulders bust as a sculpt base. A bust and not a full figure, deliberately.",
+  "status": "partial",
+  "path": "hunyuan3d",
+  "source_prompt": "a single head-and-shoulders bust of an adult figure, closed mouth, eyes open looking straight ahead, hair close to the skull, shoulders cut off cleanly at the collarbone, the whole bust inside the frame with margin on all sides, three-quarter view, flat mid-grey seamless background, even frontal light, no cast shadow, no clothing detail, no jewellery, no hat",
+  "steps": 30,
+  "cfg": 5.0,
+  "dials": { "latent_resolution": 4096, "octree_resolution": 256, "threshold": 0.6, "algorithm": "surface net" },
+  "output": "untextured GLB mesh, POSITION attribute only, ~525k tris, ~8.5 MB, 19.5 s",
+  "usable_for": "sculpt base, retopology starting point, proportion and likeness reference",
+  "not_usable_for": "direct game import, and no rigging or animation - nothing on this box rigs a mesh. Needs retopology, UVs and texture bake.",
+  "note": "Cropped at the collarbone on purpose: full figures put fingers and thin limbs in front of the body, and single-view reconstruction collapses both. Eyes return as smooth bulges with no iris and no eyelash - there is not one byte of colour in the output, so anything that reads as an eye in the source image reads as a lump here. Hair is specified close to the skull because loose strands become a webbed shell."
+}

@@ -1,0 +1,14 @@
+{
+  "id": "print_figurine",
+  "desc": "A chunky figurine shaped for 3D printing. The one downstream use this path serves almost directly.",
+  "status": "partial",
+  "path": "hunyuan3d",
+  "source_prompt": "a single chunky stylised animal figurine standing on a round flat base, thick legs, limbs tucked close to the body, rounded solid forms, no thin protrusions, the whole figurine inside the frame with margin on all sides, three-quarter view, flat mid-grey seamless background, even frontal light, no cast shadow, no other objects",
+  "steps": 30,
+  "cfg": 5.0,
+  "dials": { "latent_resolution": 4096, "octree_resolution": 256, "threshold": 0.6, "algorithm": "surface net" },
+  "output": "untextured GLB mesh, POSITION attribute only, ~525k tris, ~8.5 MB, 19.5 s",
+  "usable_for": "3D-print base, sculpt base, blockout",
+  "not_usable_for": "direct game import. No colour, so no multi-material or AMS printing - it prints in one filament.",
+  "note": "Printing is the one use where the missing attributes cost nothing: a slicer wants closed geometry and ignores UVs, normals and colour entirely, and 525k triangles is untroubling for a slicer. Surface net extracts a closed iso-surface so the result is usually watertight, which is the property printing actually needs. Verify manifold in the slicer anyway - usually is not always. Nothing here hollows the model, adds supports, or sets a scale; the GLB carries no units."
+}

@@ -74,6 +74,26 @@ def safe_name(s):
     return "".join(c for c in str(s) if c.isalnum() or c in "-_")[:64]
 
 
+def domains():
+    """The non-film makers: voice, music, sfx, image, mesh.
+
+    Each is a descriptor naming its workflow, its node mapping and its fields. The page
+    is generic - adding a sixth is a JSON file, not a feature.
+    """
+    d = f"{HERE}/domains"
+    if not os.path.isdir(d):
+        return []
+    out = []
+    for fn in sorted(os.listdir(d)):
+        if not fn.endswith(".json"):
+            continue
+        try:
+            out.append(json.load(open(f"{d}/{fn}", encoding="utf-8")))
+        except Exception as e:
+            out.append({"id": fn[:-5], "name": fn[:-5], "desc": f"UNREADABLE: {e}"})
+    return out
+
+
 def gallery():
     """Every generation, newest first, with the full recipe that produced it.
 
@@ -193,6 +213,13 @@ class H(http.server.SimpleHTTPRequestHandler):
             if not os.path.exists(p):
                 return self._send(b"gallery.html is missing", 500, "text/plain")
             return self._send(open(p, "rb").read(), 200, "text/html; charset=utf-8")
+        if path in ("/make", "/make.html"):
+            p = f"{HERE}/make.html"
+            if not os.path.exists(p):
+                return self._send(b"make.html is missing", 500, "text/plain")
+            return self._send(open(p, "rb").read(), 200, "text/html; charset=utf-8")
+        if path == "/api/domains":
+            return self._send(domains())
         if path == "/api/render/status":
             q = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query)
             return self._render_status(q.get("name", [""])[0])
@@ -260,6 +287,42 @@ class H(http.server.SimpleHTTPRequestHandler):
         return self._send({"ok": True, "name": name, "log": log,
                            "compile": out.strip()[-1200:], "warnings": warns})
 
+    def _make(self, data):
+        """Run one domain generation and return the artifact.
+
+        These are SECONDS, not minutes - 3s for a voice line, 7.6s for a music cue, 4.5s
+        for a still - so unlike a film render this is answered inline rather than polled.
+        Values are passed as argv, never interpolated into a shell string.
+        """
+        dom = safe_name(data.get("domain", ""))
+        if not dom or not os.path.exists(f"{HERE}/domains/{dom}.json"):
+            return self._send({"error": f"unknown domain: {dom}"}, 404)
+        cmd = [sys.executable, f"{HERE}/_tools/domain_gen.py", dom]
+        for k, v in (data.get("set") or {}).items():
+            k = "".join(c for c in str(k) if c.isalnum() or c == "_")[:40]
+            if k and v not in (None, ""):
+                cmd += ["--set", f"{k}={v}"]
+        try:
+            r = subprocess.run(cmd, capture_output=True, text=True, cwd=ROOT, timeout=420)
+        except subprocess.TimeoutExpired:
+            return self._send({"error": "generation timed out"}, 504)
+        out = (r.stdout or "") + (r.stderr or "")
+        # the runner appends to the manifest; the newest record for this domain is ours
+        rec = None
+        mp = f"{HERE}/gallery/manifest.jsonl"
+        if os.path.exists(mp):
+            for line in open(mp, encoding="utf-8"):
+                try:
+                    j = json.loads(line)
+                except Exception:
+                    continue
+                if j.get("domain") == dom:
+                    rec = j
+        if rec and "1 generated" in out:
+            return self._send({"ok": True, "record": rec})
+        return self._send({"error": "generation failed",
+                           "detail": out.strip()[-1500:]}, 500)
+
     def _render_status(self, name):
         name = safe_name(name)
         log = f"/tmp/render-{name}.log"
@@ -292,7 +355,7 @@ class H(http.server.SimpleHTTPRequestHandler):
 
     def do_POST(self):
         p = urllib.parse.urlparse(self.path).path
-        if p not in ("/api/save", "/api/render"):
+        if p not in ("/api/save", "/api/render", "/api/make"):
             return self._send({"error": "not found"}, 404)
         n = int(self.headers.get("Content-Length", 0))
         try:
@@ -304,6 +367,8 @@ class H(http.server.SimpleHTTPRequestHandler):
                 return self._render_start(data)
             except subprocess.TimeoutExpired:
                 return self._send({"error": "compile timed out"}, 504)
+        if p == "/api/make":
+            return self._make(data)
         name = "".join(c for c in str(data.get("name", "")) if c.isalnum() or c in "-_")
         if not name:
             return self._send({"error": "name required"}, 400)

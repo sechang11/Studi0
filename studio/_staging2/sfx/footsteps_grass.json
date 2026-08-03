@@ -1,0 +1,10 @@
+{
+  "id": "footsteps_grass",
+  "desc": "A person walking outdoors on grass or soft ground.",
+  "status": "partial",
+  "prompt": "a single person walking at a steady pace on dry grass and soft soil, boot soles compressing grass stems, small dry crunch and soil scuff on each step, close microphone, outdoors, no reverb",
+  "negative": "music, speech, rhythm, drums, reverb, wind, birds",
+  "seconds": 6,
+  "steps": 100, "cfg": 7, "sampler": "dpmpp_3m_sde",
+  "note": "PARTIAL: Stable Audio 3 has no hit-point conditioning, so nothing here spots to picture - the steps will not land on your actor's footfalls and the step rate is not controllable. Usable as-is only when feet are off-camera. When feet are in frame, cut ONE step out of this bed and place each footfall by hand. 'wind, birds' sit in the negative because outdoor prompts pull ambience in, and once it is in the same bed you cannot separate it."
+}

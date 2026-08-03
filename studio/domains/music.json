@@ -1,0 +1,70 @@
+{
+  "id": "music",
+  "name": "Music",
+  "icon": "🎵",
+  "desc": "Generate a score cue. Fast enough to try five and keep one.",
+  "output": "audio",
+  "workflow": "06_acestep_music.json",
+  "cost": "~7.6s per 60s of audio",
+  "nodes": {
+    "tags": "10.inputs.tags",
+    "lyrics": "10.inputs.lyrics",
+    "bpm": "10.inputs.bpm",
+    "key": "10.inputs.keyscale",
+    "duration": "10.inputs.duration",
+    "seconds": "11.inputs.seconds",
+    "seed": "10.inputs.seed",
+    "seed2": "12.inputs.seed",
+    "steps": "12.inputs.steps",
+    "cfg": "12.inputs.cfg",
+    "prefix": "14.inputs.filename_prefix"
+  },
+  "defaults": {
+    "steps": 20,
+    "cfg": 1.0
+  },
+  "fields": [
+    {
+      "key": "cue",
+      "label": "Start from a cue",
+      "type": "library",
+      "library": "cues",
+      "optional": true,
+      "spreads": {
+        "tags": "tags",
+        "bpm": "bpm",
+        "key": "key"
+      },
+      "hint": "Picking one fills the three fields below; change any of them afterwards."
+    },
+    {
+      "key": "tags",
+      "label": "Instrumentation and mood",
+      "type": "textarea",
+      "required": true,
+      "default": "sparse melancholy piano, single sustained cello, restrained, instrumental",
+      "hint": "Name instruments and playing style, not feelings. Always end 'instrumental' unless you want singing."
+    },
+    {
+      "key": "bpm",
+      "label": "BPM",
+      "type": "number",
+      "default": 90,
+      "hint": "0 means unmetered - do not try to cut to it."
+    },
+    {
+      "key": "key",
+      "label": "Key",
+      "type": "text",
+      "default": "D minor"
+    },
+    {
+      "key": "seconds",
+      "label": "Seconds",
+      "type": "number",
+      "default": 30,
+      "hint": "Generate LONGER than the picture needs and trim in. ACE-Step has no hit-point conditioning and cannot spot to a cut."
+    }
+  ],
+  "note": "cfg 1.0 is CORRECT here and not a mistake - ACE-Step 1.5 turbo is a distilled model. A listening test preferred it over the larger v1 3.5B."
+}

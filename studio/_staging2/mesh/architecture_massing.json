@@ -1,0 +1,14 @@
+{
+  "id": "architecture_massing",
+  "desc": "A small building as a massing study. Big volumes survive; openings do not become holes.",
+  "status": "partial",
+  "path": "hunyuan3d",
+  "source_prompt": "a single detached two-storey house, pitched roof, one rectangular chimney, four windows, one front door, flat plain walls, the whole building inside the frame with margin on all sides, three-quarter corner view, flat mid-grey seamless background, even frontal light, no cast shadow, no garden, no fence, no trees, no cars, no sky",
+  "steps": 30,
+  "cfg": 5.0,
+  "dials": { "latent_resolution": 4096, "octree_resolution": 256, "threshold": 0.6, "algorithm": "surface net" },
+  "output": "untextured GLB mesh, POSITION attribute only, ~525k tris, ~8.5 MB, 19.5 s",
+  "usable_for": "massing study, scale and proportion check, distant background building, blockout",
+  "not_usable_for": "any use needing an interior, real window and door openings, or straight true edges. Not a game asset - needs retopology, UVs and texture bake.",
+  "note": "Windows and doors come back as shallow recesses in a continuous surface, not as cut apertures - the model reconstructs an outer shell and there is no interior behind it. Do not plan to walk a camera inside. Surface net also rounds every corner slightly, so a building that must read as crisp architecture will need its edges rebuilt by hand. Massing and silhouette are what you actually get."
+}

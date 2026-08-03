@@ -1,0 +1,14 @@
+{
+  "id": "prop_furniture",
+  "desc": "A chair or table blockout. Legs and slats are the weak point - narrow gaps web over into solid panels.",
+  "status": "partial",
+  "path": "hunyuan3d",
+  "source_prompt": "a single wooden armchair, four straight legs, padded seat cushion, high back with vertical slats, two flat armrests, the whole chair inside the frame with margin on all sides, three-quarter view, flat mid-grey seamless background, even frontal light, no cast shadow, no room, no rug, no other furniture",
+  "steps": 30,
+  "cfg": 5.0,
+  "dials": { "latent_resolution": 4096, "octree_resolution": 256, "threshold": 0.5, "algorithm": "surface net" },
+  "output": "untextured GLB mesh, POSITION attribute only, ~525k tris, ~8.5 MB, 19.5 s",
+  "usable_for": "blockout, proportion and scale check, silhouette reference",
+  "not_usable_for": "direct game import - needs retopology, UV unwrap and texture bake. Not usable where the gaps between slats or legs must be real holes.",
+  "note": "Expect the negative space to fail before the positive space does: at octree 256 the gaps between slats and between legs frequently web over into a solid panel, because the voxel grid cannot resolve a gap thinner than one cell. Raising octree_resolution to 384 is the documented fix and costs a lot of memory; neither value has been rendered per-preset on this box. threshold 0.5 is a compromise for the thin legs."
+}

@@ -1,0 +1,14 @@
+{
+  "id": "statue_figure",
+  "desc": "A carved stone statue. The one subject where having no texture and no vertex colour hurts least.",
+  "status": "partial",
+  "path": "hunyuan3d",
+  "source_prompt": "a single carved stone statue of a standing robed figure on a square plinth, arms held close to the body, deep drapery folds, head facing forward, the whole statue and plinth inside the frame with margin on all sides, three-quarter view, flat mid-grey seamless background, even frontal light, no cast shadow, no gallery, no other statues",
+  "steps": 30,
+  "cfg": 5.0,
+  "dials": { "latent_resolution": 4096, "octree_resolution": 256, "threshold": 0.6, "algorithm": "surface net" },
+  "output": "untextured GLB mesh, POSITION attribute only, ~525k tris, ~8.5 MB, 19.5 s",
+  "usable_for": "set dressing once a stone material is assigned, blockout, sculpt base, 3D-print base",
+  "not_usable_for": "direct game import - still needs retopology and UVs if it must carry a detailed material",
+  "note": "The honest sweet spot of this whole library. Every other preset ships a mesh that looks wrong until it is textured; a statue assigned one flat grey stone material in Blender reads as finished, because real carved stone is a single uniform material with no pattern. Arms are specified close to the body on purpose - outstretched thin limbs are lost by the iso-surface. Drapery folds survive because they are volume, not texture."
+}

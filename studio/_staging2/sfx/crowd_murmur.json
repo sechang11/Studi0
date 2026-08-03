@@ -1,0 +1,10 @@
+{
+  "id": "crowd_murmur",
+  "desc": "A restaurant, a lobby, a waiting room - people present but not the subject.",
+  "status": "partial",
+  "prompt": "twenty people talking quietly at once in a small room, overlapping low conversation, no single voice louder than the others, cutlery and chairs occasionally, close",
+  "negative": "music, singing, shouting, laughter, announcer, reverb",
+  "seconds": 10,
+  "steps": 100, "cfg": 7, "sampler": "dpmpp_3m_sde",
+  "note": "PARTIAL: you cannot ask for unintelligible. 'Indistinct' is a quality, not a thing, and it does not land - word-like fragments do surface and an audience will latch onto them under dialogue. Fix it deterministically instead of re-rolling seeds: low-pass around 2 kHz with AudioEqualizer3Band and it stops reading as language. Never leave this bed full-range under a scene that has lines."
+}

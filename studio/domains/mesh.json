@@ -1,0 +1,57 @@
+{
+  "id": "mesh",
+  "name": "3D asset",
+  "icon": "🧊",
+  "desc": "Turn one image into 3D geometry. Read the limits before planning around it.",
+  "output": "mesh",
+  "workflow": "24_hunyuan3d_mesh.json",
+  "alt_workflow": {
+    "engine": "triposplat",
+    "workflow": "25_triposplat.json"
+  },
+  "cost": "~19.5s",
+  "nodes": {
+    "image": "2.inputs.image",
+    "seed": "7.inputs.seed",
+    "steps": "7.inputs.steps",
+    "cfg": "7.inputs.cfg",
+    "prefix": "10.inputs.filename_prefix"
+  },
+  "defaults": {
+    "steps": 30,
+    "cfg": 5.0
+  },
+  "fields": [
+    {
+      "key": "preset",
+      "label": "Start from a preset",
+      "type": "library",
+      "library": "mesh",
+      "optional": true,
+      "spreads": {
+        "source_prompt": "source_prompt"
+      }
+    },
+    {
+      "key": "source_prompt",
+      "label": "The object",
+      "type": "textarea",
+      "required": true,
+      "default": "a single leather football boot, centred, plain grey background, even lighting, whole object visible",
+      "hint": "ONE object, centred, plain background, evenly lit, nothing cropped. A cinematic shot makes a terrible source - this is a product photo, not a film frame."
+    },
+    {
+      "key": "engine",
+      "label": "Method",
+      "type": "enum",
+      "values": [
+        "hunyuan3d",
+        "triposplat"
+      ],
+      "default": "hunyuan3d",
+      "hint": "hunyuan3d gives a mesh; triposplat gives a gaussian splat plus a 360 turntable video."
+    }
+  ],
+  "warning": "GEOMETRY ONLY. Hunyuan3D 2.1 outputs a POSITION attribute and nothing else - no UVs, no texture, no vertex colour, no normals, about 525k triangles. TripoSplat outputs a splat with no faces at all. Neither is a game-ready asset: both need retopology and texturing before they are usable in an engine. They are good for blockouts, silhouette reference and 3D-print bases.",
+  "note": "The image is generated first and fed in, so a mesh is really an image recipe plus 3D settings."
+}

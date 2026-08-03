@@ -1,0 +1,14 @@
+{
+  "id": "rock_formation",
+  "desc": "A boulder or cliff chunk. Geometrically the safest subject on this path - no thin parts and no back that anyone can check.",
+  "status": "partial",
+  "path": "hunyuan3d",
+  "source_prompt": "a single grey granite boulder, angular fractured faces, chipped edges, broad flat base, the whole boulder inside the frame with margin on all sides, three-quarter view, flat mid-grey seamless background, even frontal light, no cast shadow, no ground plane, no grass, no moss, no other rocks",
+  "steps": 30,
+  "cfg": 5.0,
+  "dials": { "latent_resolution": 4096, "octree_resolution": 256, "threshold": 0.6, "algorithm": "surface net" },
+  "output": "untextured GLB mesh, POSITION attribute only, ~525k tris, ~8.5 MB, 19.5 s",
+  "usable_for": "terrain scatter base, sculpt base, blockout, 3D-print base, distant prop",
+  "not_usable_for": "direct game import - needs retopology, UV unwrap and texture bake",
+  "note": "Best-case subject for single-view 3D and worth knowing why: there are no thin parts for the iso-surface to lose, no interior, and the invented back of a rock is indistinguishable from a real one, so the model's main weakness costs nothing. Also the one preset that survives aggressive decimation - at 5 percent it still reads as the same rock. A rock still needs a UV unwrap before it can take a material that is not flat grey."
+}

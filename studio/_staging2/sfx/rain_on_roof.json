@@ -1,0 +1,10 @@
+{
+  "id": "rain_on_roof",
+  "desc": "Rain heard from inside - shed, car, attic, shelter.",
+  "status": "ready",
+  "prompt": "heavy rain falling on a corrugated metal roof, thousands of individual drops striking sheet metal, continuous, close underneath, water running off an edge",
+  "negative": "music, speech, thunder, wind, tonal",
+  "seconds": 12,
+  "steps": 100, "cfg": 7, "sampler": "dpmpp_3m_sde",
+  "note": "Name the SURFACE or you get generic hiss - the surface is the whole sound. Metal, canvas, leaves, car roof and window glass are five different beds, so re-run with the noun swapped rather than trying to EQ one into another. Keep thunder out of this bed and run thunder_distant separately; it cannot layer, and mixed in you lose the ability to time the strike."
+}

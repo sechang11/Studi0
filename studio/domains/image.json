@@ -1,0 +1,73 @@
+{
+  "id": "image",
+  "name": "Image",
+  "icon": "🖼",
+  "desc": "A single still, using the same look, lighting, weather and emotion libraries the films use.",
+  "output": "image",
+  "workflow": "13_qwen_t2i_styled.json",
+  "alt_workflow": {
+    "engine": "anime",
+    "workflow": "22_anime_kf_ipadapter.json"
+  },
+  "cost": "~4.5s",
+  "nodes": {
+    "text": "10.inputs.text",
+    "negative": "11.inputs.text",
+    "width": "12.inputs.width",
+    "height": "12.inputs.height",
+    "seed": "13.inputs.seed",
+    "steps": "13.inputs.steps",
+    "cfg": "13.inputs.cfg",
+    "prefix": "15.inputs.filename_prefix"
+  },
+  "defaults": {
+    "steps": 20,
+    "cfg": 2.5,
+    "width": 1664,
+    "height": 928
+  },
+  "fields": [
+    {
+      "key": "subject",
+      "label": "Subject",
+      "type": "textarea",
+      "required": true,
+      "default": "a lone figure standing at the edge of an empty stadium",
+      "hint": "Name things. A quality like 'dramatic' does roughly nothing; 'floodlights behind, long shadow across wet grass' does the work."
+    },
+    {
+      "key": "look",
+      "label": "Look",
+      "type": "library",
+      "library": "looks",
+      "optional": true,
+      "hint": "Applied as a colour grade after generation, so it is exact - the one reliable way to get the colour you asked for."
+    },
+    {
+      "key": "lighting",
+      "label": "Lighting",
+      "type": "library",
+      "library": "lighting",
+      "optional": true
+    },
+    {
+      "key": "weather",
+      "label": "Weather",
+      "type": "library",
+      "library": "weather",
+      "optional": true
+    },
+    {
+      "key": "engine",
+      "label": "Engine",
+      "type": "enum",
+      "values": [
+        "qwen",
+        "anime"
+      ],
+      "default": "qwen",
+      "hint": "qwen wants prose and does photoreal or illustrated; anime wants danbooru tags. Feeding one the other's format returns abstract colour shapes."
+    }
+  ],
+  "note": "Past about 2 MP this model duplicates composition - two horizons, repeated subjects. Generate at 1-2 MP and upscale 4x instead."
+}

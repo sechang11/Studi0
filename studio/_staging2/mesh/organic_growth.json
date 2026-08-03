@@ -1,0 +1,14 @@
+{
+  "id": "organic_growth",
+  "desc": "A tree stump, coral or fungus - irregular organic volume. Where dense triangles finally earn their cost.",
+  "status": "partial",
+  "path": "hunyuan3d",
+  "source_prompt": "a single tree stump with thick exposed roots, splintered broken top, deep bark ridges, the whole stump inside the frame with margin on all sides, three-quarter view, flat mid-grey seamless background, even frontal light, no cast shadow, no soil, no leaves, no undergrowth, no other plants",
+  "steps": 30,
+  "cfg": 5.0,
+  "dials": { "latent_resolution": 4096, "octree_resolution": 256, "threshold": 0.55, "algorithm": "surface net" },
+  "output": "untextured GLB mesh, POSITION attribute only, ~525k tris, ~8.5 MB, 19.5 s",
+  "usable_for": "sculpt base, set dressing blockout, terrain feature, 3D-print base",
+  "not_usable_for": "direct game import - needs retopology, UV unwrap and texture bake",
+  "note": "The one preset where the 525k triangle count is a feature rather than a burden: bark ridges and root knuckles are real displacement in the surface, so they survive as geometry instead of needing a normal map. Decimate gently here - below about 20 percent the ridges flatten and the stump becomes a smooth lump. threshold 0.55 leans slightly open to keep the splintered top from filling in; not rendered per-preset on this box."
+}

@@ -1,0 +1,10 @@
+{
+  "id": "fire_crackle",
+  "desc": "Hearth, campfire, burning building. Warmth or threat depending on level.",
+  "status": "ready",
+  "prompt": "a wood fire burning close, dry logs popping and cracking irregularly, a low roar of flame underneath, embers ticking, close microphone, no wind",
+  "negative": "music, speech, tonal, wind, rain, crowd",
+  "seconds": 12,
+  "steps": 100, "cfg": 7, "sampler": "dpmpp_3m_sde",
+  "note": "Irregular by nature, so it loops without an audible seam - one 12 s render covers a whole scene. The low roar underneath is what makes it read as a LARGE fire; a hearth is this same prompt with 'a low roar of flame underneath' deleted. That is the cheapest scale control in the library."
+}

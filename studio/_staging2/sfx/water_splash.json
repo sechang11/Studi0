@@ -1,0 +1,10 @@
+{
+  "id": "water_splash",
+  "desc": "Something entering water - a body, an object, a fall.",
+  "status": "ready",
+  "prompt": "a heavy object dropped into deep still water once, a hollow low splash, water displaced and closing back over, droplets falling after, close microphone, outdoors",
+  "negative": "music, speech, tonal, rain, waves, reverb",
+  "seconds": 3,
+  "steps": 100, "cfg": 7, "sampler": "dpmpp_3m_sde",
+  "note": "'rain, waves' are in the negative or the model gives you a body of water instead of one event - it hears 'water' and renders an ambience. 'deep' and 'still' are doing real work: shallow water is a bright slap with no hollow, and you cannot EQ one into the other."
+}
