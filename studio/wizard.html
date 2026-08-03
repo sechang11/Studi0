@@ -127,7 +127,8 @@
       <h3>Save &amp; render</h3>
       <div class="row">
         <input id="fname" value="my-scene" style="flex:1">
-        <button class="btn" id="save">Save</button>
+        <button class="btn ghost" id="save">Save</button>
+        <button class="btn" id="render">Save &amp; render →</button>
       </div>
       <div id="saved" class="hint"></div>
       <code class="cmd" id="cmd"></code>
@@ -496,21 +497,77 @@ function wire(){
 
   document.getElementById("prev").onclick=()=>{if(step>0){step--;render();}};
   document.getElementById("next").onclick=()=>{if(step<STEPS.length-1){step++;render();}};
-  document.getElementById("save").onclick=save;
+  document.getElementById("save").onclick=()=>save(false);
+  const rb=document.getElementById("render"); if(rb) rb.onclick=renderNow;
 }
 
-async function save(){
-  const name=document.getElementById("fname").value||"my-scene";
-  const raw=document.getElementById("f-raw");
-  const text=raw?raw.value:movieText();
+function sceneName(){ return document.getElementById("fname").value||"my-scene"; }
+function sceneText(){ const r=document.getElementById("f-raw"); return r?r.value:movieText(); }
+
+async function save(quiet){
   const el=document.getElementById("saved");
   try{
     const r=await fetch("/api/save",{method:"POST",headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({name,text})});
+      body:JSON.stringify({name:sceneName(),text:sceneText()})});
     const j=await r.json();
-    el.innerHTML = j.ok ? `<span class="ok">saved → ${esc(j.path)}</span>`
-                        : `<span class="warn">${esc(j.error||"failed")}</span>`;
-  }catch(e){ el.innerHTML=`<span class="warn">${esc(e.message)}</span>`; }
+    if(!quiet) el.innerHTML = j.ok ? `<span class="ok">saved → ${esc(j.path)}</span>`
+                                   : `<span class="warn">${esc(j.error||"failed")}</span>`;
+    return j.ok;
+  }catch(e){ el.innerHTML=`<span class="warn">${esc(e.message)}</span>`; return false; }
+}
+
+// Save, compile and render, without the author ever opening a terminal. Compile errors
+// come back immediately and are the ones worth showing - unknown character, unknown cue,
+// a movie-level variable set on a scene. The render is minutes long, so it is polled.
+let POLL=null;
+async function renderNow(){
+  const el=document.getElementById("saved"), btn=document.getElementById("render");
+  if(POLL){ clearInterval(POLL); POLL=null; }
+  btn.disabled=true; btn.textContent="Compiling…";
+  el.innerHTML=`<span class="hint">saving…</span>`;
+  if(!await save(true)){ btn.disabled=false; btn.textContent="Save & render →"; return; }
+  let j;
+  try{
+    j = await (await fetch("/api/render",{method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({name:sceneName()})})).json();
+  }catch(e){ j={error:e.message}; }
+  if(j.error){
+    btn.disabled=false; btn.textContent="Save & render →";
+    el.innerHTML=`<div class="warn"><b>${esc(j.error)}</b></div>`+
+      (j.detail?`<pre style="margin-top:6px">${esc(j.detail)}</pre>`:"");
+    return;
+  }
+  if((j.warnings||[]).length)
+    el.innerHTML=`<div class="hint">compiled with ${j.warnings.length} warning(s):</div>`+
+      `<pre style="margin-top:6px">${esc(j.warnings.join("\n"))}</pre>`;
+  else el.innerHTML=`<span class="ok">compiled cleanly</span>`;
+  btn.textContent="Rendering…";
+  POLL=setInterval(()=>poll(sceneName()), 4000);
+  poll(sceneName());
+}
+
+async function poll(name){
+  let s; try{ s=await (await fetch("/api/render/status?name="+encodeURIComponent(name))).json(); }
+  catch(e){ return; }
+  const el=document.getElementById("saved"), btn=document.getElementById("render");
+  const bar = s.total ? ` ${s.done}/${s.total}` : "";
+  if(s.state==="running"){
+    el.innerHTML=`<div class="hint"><b>${esc(s.stage||"working")}</b>${bar}
+      — this takes a few minutes; you can leave the page open</div>
+      <pre style="margin-top:6px;max-height:150px;overflow:auto">${esc(s.tail||"")}</pre>`;
+  }else if(s.state==="done"){
+    clearInterval(POLL); POLL=null;
+    btn.disabled=false; btn.textContent="Save & render →";
+    el.innerHTML=`<div class="ok"><b>done</b></div>
+      <video src="${esc(s.play)}" controls style="width:100%;margin-top:8px;border-radius:8px"></video>
+      <div class="hint" style="margin-top:5px">${esc(s.final)}</div>`;
+  }else if(s.state==="failed"){
+    clearInterval(POLL); POLL=null;
+    btn.disabled=false; btn.textContent="Save & render →";
+    el.innerHTML=`<div class="warn"><b>render failed</b></div>
+      <pre style="margin-top:6px">${esc(s.tail||"")}</pre>`;
+  }
 }
 
 (async function(){

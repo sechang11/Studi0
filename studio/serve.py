@@ -15,7 +15,7 @@ Endpoints:
     /api/movies       .movie files found in studio/movies
     /api/save         POST {name, text} -> writes studio/movies/<name>.movie
 """
-import http.server, json, os, socket, socketserver, urllib.parse
+import http.server, json, os, re, socket, socketserver, subprocess, sys, urllib.parse
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 PORT = int(os.environ.get("STUDIO_PORT", "8777"))
@@ -61,6 +61,17 @@ def library():
         if items:
             out[g] = items
     return out
+
+
+ROOT = os.path.dirname(HERE)
+COMFY_OUT = os.path.expanduser(
+    os.environ.get("COMFY_ROOT", "~/ComfyUI")) + "/output/claude-generated/12-shorts"
+
+
+def safe_name(s):
+    """Names come off the network and are used to build paths and a shell command, so
+    strip everything that is not plainly a filename. No dots, so `..` cannot form."""
+    return "".join(c for c in str(s) if c.isalnum() or c in "-_")[:64]
 
 
 def gallery():
@@ -182,6 +193,24 @@ class H(http.server.SimpleHTTPRequestHandler):
             if not os.path.exists(p):
                 return self._send(b"gallery.html is missing", 500, "text/plain")
             return self._send(open(p, "rb").read(), 200, "text/html; charset=utf-8")
+        if path == "/api/render/status":
+            q = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query)
+            return self._render_status(q.get("name", [""])[0])
+        if path.startswith("/render/") and path.endswith(".mp4"):
+            # The finished film lives under ComfyUI's output tree, keyed by the film's
+            # TITLE slug rather than the .movie name, so resolve it through the film json.
+            name = safe_name(path[len("/render/"):-4])
+            fj = f"{HERE}/movies/{name}.json"
+            if not os.path.exists(fj):
+                return self._send({"error": "unknown render"}, 404)
+            try:
+                slug = json.load(open(fj, encoding="utf-8"))["title"].lower().replace(" ", "-")
+            except Exception:
+                return self._send({"error": "unreadable film"}, 500)
+            fp = f"{COMFY_OUT}/{slug}/{slug}.mp4"
+            if not os.path.isfile(fp):
+                return self._send({"error": "not rendered yet"}, 404)
+            return self._send(open(fp, "rb").read(), 200, "video/mp4")
         if path == "/api/gallery":
             return self._send(gallery())
         if path == "/api/templates":
@@ -196,14 +225,85 @@ class H(http.server.SimpleHTTPRequestHandler):
             return self._send(movies())
         return self._send({"error": "not found"}, 404)
 
+    def _render_start(self, data):
+        """Compile a .movie and launch the render, so a beginner never has to open a
+        terminal to see their own scene.
+
+        compile runs SYNCHRONOUSLY - it takes about a tenth of a second and its errors
+        are the ones an author can actually act on (unknown character, unknown cue, a
+        movie-level variable set on a scene). Those come straight back to the page.
+        The render itself is minutes long, so it is detached and polled.
+        """
+        name = safe_name(data.get("name", ""))
+        if not name:
+            return self._send({"error": "name required"}, 400)
+        movie = f"{HERE}/movies/{name}.movie"
+        if not os.path.exists(movie):
+            return self._send({"error": f"no such scene: {name}.movie"}, 404)
+
+        r = subprocess.run([sys.executable, f"{HERE}/compile.py", movie],
+                           capture_output=True, text=True, cwd=ROOT, timeout=120)
+        out = (r.stdout or "") + (r.stderr or "")
+        if r.returncode != 0:
+            return self._send({"error": "compile failed", "detail": out.strip()[-1200:]}, 400)
+
+        film = f"{HERE}/movies/{name}.json"
+        if not os.path.exists(film):
+            return self._send({"error": "compile produced no film", "detail": out[-600:]}, 500)
+
+        log = f"/tmp/render-{name}.log"
+        # setsid so it survives this request, and its own log so status can be polled
+        subprocess.Popen(
+            f"setsid nohup {sys.executable} {ROOT}/scripts/short.py {film} > {log} 2>&1 < /dev/null &",
+            shell=True, cwd=ROOT)
+        warns = [l.strip(" !") for l in out.splitlines() if l.strip().startswith("!")]
+        return self._send({"ok": True, "name": name, "log": log,
+                           "compile": out.strip()[-1200:], "warnings": warns})
+
+    def _render_status(self, name):
+        name = safe_name(name)
+        log = f"/tmp/render-{name}.log"
+        if not os.path.exists(log):
+            return self._send({"state": "none"})
+        txt = open(log, encoding="utf-8", errors="replace").read()
+        stage, done, total = "starting", 0, 0
+        for line in txt.splitlines():
+            s = line.strip()
+            if s.startswith("=== "):
+                stage = s.strip("= ").split(":")[0].lower()
+            m = re.search(r"\((\d+)/(\d+)\)", s)
+            if m:
+                done, total = int(m.group(1)), int(m.group(2))
+            m = re.search(r"clips (\d+)/(\d+)", s)
+            if m:
+                done, total = int(m.group(1)), int(m.group(2))
+        final = None
+        for line in txt.splitlines():
+            if line.strip().startswith(">>>"):
+                final = line.strip()[3:].strip()
+        state = "done" if final else ("failed" if "Traceback" in txt else "running")
+        return self._send({
+            "state": state, "stage": stage, "done": done, "total": total,
+            "final": final,
+            # the video is under ComfyUI's output, not ours, so expose a play URL
+            "play": f"/render/{name}.mp4" if final else None,
+            "tail": "\n".join(txt.splitlines()[-24:]),
+        })
+
     def do_POST(self):
-        if urllib.parse.urlparse(self.path).path != "/api/save":
+        p = urllib.parse.urlparse(self.path).path
+        if p not in ("/api/save", "/api/render"):
             return self._send({"error": "not found"}, 404)
         n = int(self.headers.get("Content-Length", 0))
         try:
             data = json.loads(self.rfile.read(n) or b"{}")
         except Exception as e:
             return self._send({"error": f"bad json: {e}"}, 400)
+        if p == "/api/render":
+            try:
+                return self._render_start(data)
+            except subprocess.TimeoutExpired:
+                return self._send({"error": "compile timed out"}, 504)
         name = "".join(c for c in str(data.get("name", "")) if c.isalnum() or c in "-_")
         if not name:
             return self._send({"error": "name required"}, 400)
