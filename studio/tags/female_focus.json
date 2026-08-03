@@ -6,8 +6,17 @@
   "does": "In a mixed-gender frame it decides who the picture is about, which is real work no other tag does. On a lone-female shot it mostly duplicates what 1girl already did, because the checkpoint's prior leans female without being asked. So it is least useful exactly when it is most tempting to add, and most useful in the two-character shots this model is worst at.",
   "reach_for_it": "mixed-gender shots where the woman is the subject - skip it on a solo female close-up",
   "strength": "moderate",
-  "pairs_with": ["1girl", "solo"],
-  "fights_with": ["male focus", "1boy"],
+  "pairs_with": [
+    "1girl",
+    "solo"
+  ],
+  "fights_with": [
+    "male focus",
+    "1boy"
+  ],
   "negative_instead": false,
-  "used_in": "unused - the current character library is male-only"
+  "used_in": "unused - the current character library is male-only",
+  "example": "/samples/tags/female_focus.webp",
+  "example_base": "1boy, solo, male focus, short dark hair, plain jacket, standing, city street, daytime",
+  "read_it_as": "Compare the SHADING, colour and line - not the pose or framing. Adding any clause re-rolls the model's conditioning, so composition moves between the two panels even at a fixed seed. An img2img pass from one fixed base image would isolate the tag properly; that is not built yet."
 }

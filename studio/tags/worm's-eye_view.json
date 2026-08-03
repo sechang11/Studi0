@@ -6,8 +6,17 @@
   "does": "On this box, close to nothing. In BOTH sweeps that carry it - shot_angle worms_eye and shot_cam_angle worms_eye - the panel came back as an ordinary near-eye-level shot with a mildly curved horizon, not an extreme low angle. The intensifier words (\"extreme\", \"worm's-eye\", \"ground level\") are not doing work; the only token in those clauses the model reads is \"from below\", and it reads it weakly when buried among synonyms.",
   "reach_for_it": "don't. Write \"from below\" for the low angle, then earn the extremity with content the model can draw: put something towering in the frame, or add \"looking up\" and a sky.",
   "strength": "weak",
-  "pairs_with": ["from below"],
-  "fights_with": ["from above", "bird's-eye view", "eye level"],
+  "pairs_with": [
+    "from below"
+  ],
+  "fights_with": [
+    "from above",
+    "bird's-eye view",
+    "eye level"
+  ],
   "negative_instead": false,
-  "used_in": "shot.cam.angle worms_eye and shot_angle worms_eye - where the project's own card review already states it differs from low only by intensifiers the model ignores"
+  "used_in": "shot.cam.angle worms_eye and shot_angle worms_eye - where the project's own card review already states it differs from low only by intensifiers the model ignores",
+  "example": "/samples/tags/worm's-eye_view.webp",
+  "example_base": "1boy, solo, male focus, short dark hair, plain jacket, standing, city street, daytime",
+  "read_it_as": "Compare the SHADING, colour and line - not the pose or framing. Adding any clause re-rolls the model's conditioning, so composition moves between the two panels even at a fixed seed. An img2img pass from one fixed base image would isolate the tag properly; that is not built yet."
 }

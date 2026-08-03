@@ -6,8 +6,21 @@
   "does": "Really works, and it is the tag that does the actual work every time somebody means shallow depth of field. Across the shot_focus_dof sweep the far plane went from fully drawn crowd detail (deep) to a soft wash (shallow) to dissolved bokeh circles (very_shallow), with the figure staying sharp throughout. Second, quieter consequence: it HIDES the model's background failures. Duplicated limbs, garbled crowd faces and impossible architecture in the far plane stop mattering once they are a blur, which makes this the cheapest quality win available on a busy scene.",
   "reach_for_it": "any close-up or dialogue shot, and any shot with a crowd or complicated architecture behind the subject. Pair it with \"depth of field\" and \"bokeh\" - the trio is what the sweep actually tested.",
   "strength": "strong",
-  "pairs_with": ["depth of field", "bokeh", "close-up", "upper body"],
-  "fights_with": ["deep focus", "everything in focus", "scenery", "wide shot"],
+  "pairs_with": [
+    "depth of field",
+    "bokeh",
+    "close-up",
+    "upper body"
+  ],
+  "fights_with": [
+    "deep focus",
+    "everything in focus",
+    "scenery",
+    "wide shot"
+  ],
   "negative_instead": false,
-  "used_in": "shot.focus.dof shallow and very_shallow, shot.focus.point subject/face/prop; the shot.lens.bokeh_shape review prescribes adding it to every panel of that card because without it there is no bokeh to shape"
+  "used_in": "shot.focus.dof shallow and very_shallow, shot.focus.point subject/face/prop; the shot.lens.bokeh_shape review prescribes adding it to every panel of that card because without it there is no bokeh to shape",
+  "example": "/samples/tags/blurry_background.webp",
+  "example_base": "1boy, solo, male focus, short dark hair, plain jacket, standing, city street, daytime",
+  "read_it_as": "Compare the SHADING, colour and line - not the pose or framing. Adding any clause re-rolls the model's conditioning, so composition moves between the two panels even at a fixed seed. An img2img pass from one fixed base image would isolate the tag properly; that is not built yet."
 }

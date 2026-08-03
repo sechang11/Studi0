@@ -6,8 +6,19 @@
   "does": "In the positive prompt, very little. It is production jargon rather than trained booru vocabulary, so the checkpoint has no consistent picture attached to the words and you get an ordinary frame with the tokens wasted. The effect it names is real and worth having - this project just produces it at the right layer, as post rather than generation: shot.fx flash and whiteout in short.py's fx_chain, applied after the render, exact every time. effects.json is blunt that this compositing tier is where the reference short's apparent violence actually comes from. The craft note is simpler still: cut away at contact. Wind-up, WHITE FRAME, then the net already bulging - the audience supplies a hit bigger than anything that could be rendered, and it costs one frame.",
   "reach_for_it": "never as a prompt tag - author it as shot.fx.impact_frame or shot.fx flash/whiteout, and buy it with the quietest shot in the scene immediately before",
   "strength": "weak",
-  "pairs_with": ["speed lines", "motion lines", "dynamic angle"],
-  "fights_with": ["scenery", "detailed background", "motion blur"],
+  "pairs_with": [
+    "speed lines",
+    "motion lines",
+    "dynamic angle"
+  ],
+  "fights_with": [
+    "scenery",
+    "detailed background",
+    "motion blur"
+  ],
   "negative_instead": false,
-  "used_in": "2 uses in her-name.json, against 14 of speed lines - the library already prefers the tag that works. Exposed as shot.fx.impact_frame with white_flash, black_flash, negative, sketch_frame and silhouette_pop; the deterministic equivalents that render today are flash and whiteout in short.py fx_chain. craft/ANIME_EPISODE.md documents the cut-away technique"
+  "used_in": "2 uses in her-name.json, against 14 of speed lines - the library already prefers the tag that works. Exposed as shot.fx.impact_frame with white_flash, black_flash, negative, sketch_frame and silhouette_pop; the deterministic equivalents that render today are flash and whiteout in short.py fx_chain. craft/ANIME_EPISODE.md documents the cut-away technique",
+  "example": "/samples/tags/impact_frame.webp",
+  "example_base": "1boy, solo, male focus, short dark hair, plain jacket, standing, city street, daytime",
+  "read_it_as": "Compare the SHADING, colour and line - not the pose or framing. Adding any clause re-rolls the model's conditioning, so composition moves between the two panels even at a fixed seed. An img2img pass from one fixed base image would isolate the tag properly; that is not built yet."
 }

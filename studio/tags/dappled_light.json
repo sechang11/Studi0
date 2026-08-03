@@ -20,5 +20,8 @@
     "indoors"
   ],
   "negative_instead": false,
-  "used_in": "the foliage option of studio/cards/light_shadow_gobo.json ('dappled shadows, leaf shadows, dappled light')"
+  "used_in": "the foliage option of studio/cards/light_shadow_gobo.json ('dappled shadows, leaf shadows, dappled light')",
+  "example": "/samples/tags/dappled_light.webp",
+  "example_base": "1boy, solo, male focus, short dark hair, plain jacket, standing, city street, daytime",
+  "read_it_as": "Compare the SHADING, colour and line - not the pose or framing. Adding any clause re-rolls the model's conditioning, so composition moves between the two panels even at a fixed seed. An img2img pass from one fixed base image would isolate the tag properly; that is not built yet."
 }

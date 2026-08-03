@@ -6,8 +6,21 @@
   "does": "Adds graphic streaks behind or around the moving element, and reads instantly as animation rather than photography. Two things to know. It competes with your background: the lines want to eat the location, and on a busy frame the model tends to trade one for the other. And it is not where this project's motion actually comes from - the apparent violence in the reference short is post compositing in short.py's fx_chain (smear, shake, ramp, whiteout), which is exact, repeatable and free, while this tag is a request the sampler may decline. Do not reach for 'motion blur' to do this job: it was tried in the positive here and hazed the entire frame, blowing out four otherwise-good keyframes, and it now lives permanently in the negative.",
   "reach_for_it": "a single sakuga beat where the drawing itself should show speed - one or two per film, not on every action shot",
   "strength": "moderate",
-  "pairs_with": ["speed lines", "dynamic angle", "full body", "action pose"],
-  "fights_with": ["motion blur", "scenery", "detailed background", "still"],
+  "pairs_with": [
+    "speed lines",
+    "dynamic angle",
+    "full body",
+    "action pose"
+  ],
+  "fights_with": [
+    "motion blur",
+    "scenery",
+    "detailed background",
+    "still"
+  ],
   "negative_instead": false,
-  "used_in": "the leaping mid-air volley in derby.json and derby-ep1.json - the one shot in the film that asks for it, marked sakuga in the .movie source"
+  "used_in": "the leaping mid-air volley in derby.json and derby-ep1.json - the one shot in the film that asks for it, marked sakuga in the .movie source",
+  "example": "/samples/tags/motion_lines.webp",
+  "example_base": "1boy, solo, male focus, short dark hair, plain jacket, standing, city street, daytime",
+  "read_it_as": "Compare the SHADING, colour and line - not the pose or framing. Adding any clause re-rolls the model's conditioning, so composition moves between the two panels even at a fixed seed. An img2img pass from one fixed base image would isolate the tag properly; that is not built yet."
 }

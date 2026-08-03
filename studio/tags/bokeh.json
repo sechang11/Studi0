@@ -19,5 +19,8 @@
     "sharp background"
   ],
   "negative_instead": false,
-  "used_in": "studio/cards/shot_lens_bokeh_shape.json (six shapes, three separable at most); the shallow options of shot_focus_dof.json and shot_focus.json"
+  "used_in": "studio/cards/shot_lens_bokeh_shape.json (six shapes, three separable at most); the shallow options of shot_focus_dof.json and shot_focus.json",
+  "example": "/samples/tags/bokeh.webp",
+  "example_base": "1boy, solo, male focus, short dark hair, plain jacket, standing, city street, daytime",
+  "read_it_as": "Compare the SHADING, colour and line - not the pose or framing. Adding any clause re-rolls the model's conditioning, so composition moves between the two panels even at a fixed seed. An img2img pass from one fixed base image would isolate the tag properly; that is not built yet."
 }

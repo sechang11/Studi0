@@ -16,5 +16,8 @@
     "clear air"
   ],
   "negative_instead": false,
-  "used_in": "only as filler inside the strong option of studio/cards/light_god_rays.json ('god rays, bold volumetric light beams, sunbeam'), where the two neighbouring tags carry the panel"
+  "used_in": "only as filler inside the strong option of studio/cards/light_god_rays.json ('god rays, bold volumetric light beams, sunbeam'), where the two neighbouring tags carry the panel",
+  "example": "/samples/tags/volumetric_lighting.webp",
+  "example_base": "1boy, solo, male focus, short dark hair, plain jacket, standing, city street, daytime",
+  "read_it_as": "Compare the SHADING, colour and line - not the pose or framing. Adding any clause re-rolls the model's conditioning, so composition moves between the two panels even at a fixed seed. An img2img pass from one fixed base image would isolate the tag properly; that is not built yet."
 }

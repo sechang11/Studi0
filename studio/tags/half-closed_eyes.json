@@ -6,8 +6,21 @@
   "does": "Lowers the eyelids and softens the stare. The catch is that this tag is genuinely ambiguous in the training data: the same lidded eye serves exhaustion, contempt, smugness and seduction, and on this checkpoint it drifts toward the sultry reading unless something else pins it down. Give it a companion or you will get a come-hither look on a beat about a man who cannot stand up - panting and sweat for exhaustion, a smirk for smugness, looking down for resignation. Seven of this project's twenty-seven emotion presets share this one tag, which is the ambiguity made visible.",
   "reach_for_it": "exhaustion, resignation, contempt and smugness - never on its own",
   "strength": "moderate",
-  "pairs_with": ["panting", "sweat", "smirk", "looking down"],
-  "fights_with": ["wide-eyed", "sharp eyes", "glaring", "dilated pupils"],
+  "pairs_with": [
+    "panting",
+    "sweat",
+    "smirk",
+    "looking down"
+  ],
+  "fights_with": [
+    "wide-eyed",
+    "sharp eyes",
+    "glaring",
+    "dilated pupils"
+  ],
   "negative_instead": false,
-  "used_in": "the eyes field of emotions/exhausted, contempt, doubt, longing, resignation, smug and tender - seven presets, four different meanings"
+  "used_in": "the eyes field of emotions/exhausted, contempt, doubt, longing, resignation, smug and tender - seven presets, four different meanings",
+  "example": "/samples/tags/half-closed_eyes.webp",
+  "example_base": "1boy, solo, male focus, short dark hair, plain jacket, standing, city street, daytime",
+  "read_it_as": "Compare the SHADING, colour and line - not the pose or framing. Adding any clause re-rolls the model's conditioning, so composition moves between the two panels even at a fixed seed. An img2img pass from one fixed base image would isolate the tag properly; that is not built yet."
 }

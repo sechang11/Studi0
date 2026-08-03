@@ -6,8 +6,21 @@
   "does": "On this model it mostly buys FRAMING, not geometry. The shot_lens_look wide and ultra_wide panels are simply wider shots - more stadium, smaller figure - which is what \"wide shot\" already gives you, with very little of the edge stretch or the looming near-object the term promises. The project's own review of the neighbouring card is blunter still: millimetre numbers are inert tokens here and the compression axis is not separable from lens look at all.",
   "reach_for_it": "when you want more environment in frame and are happy for that to be the whole effect. If you actually need visible lens geometry, use fisheye, which really does bend the picture.",
   "strength": "moderate",
-  "pairs_with": ["wide shot", "scenery", "from below", "exaggerated perspective"],
-  "fights_with": ["telephoto lens", "close-up", "portrait", "compressed perspective"],
+  "pairs_with": [
+    "wide shot",
+    "scenery",
+    "from below",
+    "exaggerated perspective"
+  ],
+  "fights_with": [
+    "telephoto lens",
+    "close-up",
+    "portrait",
+    "compressed perspective"
+  ],
   "negative_instead": false,
-  "used_in": "shot.lens.look wide and ultra_wide; shot.lens.compression expanded, a card whose own review recommends marking it unrenderable because it duplicates lens look"
+  "used_in": "shot.lens.look wide and ultra_wide; shot.lens.compression expanded, a card whose own review recommends marking it unrenderable because it duplicates lens look",
+  "example": "/samples/tags/wide_angle.webp",
+  "example_base": "1boy, solo, male focus, short dark hair, plain jacket, standing, city street, daytime",
+  "read_it_as": "Compare the SHADING, colour and line - not the pose or framing. Adding any clause re-rolls the model's conditioning, so composition moves between the two panels even at a fixed seed. An img2img pass from one fixed base image would isolate the tag properly; that is not built yet."
 }

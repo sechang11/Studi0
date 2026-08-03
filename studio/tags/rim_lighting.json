@@ -19,5 +19,8 @@
     "flat even lighting"
   ],
   "negative_instead": false,
-  "used_in": "studio/lighting/rim.json (key 'rim lighting, backlit', rim 0.9) and studio/lighting/backlit.json (rim 0.85); studio/cards/light_rim.json sweeps six grades"
+  "used_in": "studio/lighting/rim.json (key 'rim lighting, backlit', rim 0.9) and studio/lighting/backlit.json (rim 0.85); studio/cards/light_rim.json sweeps six grades",
+  "example": "/samples/tags/rim_lighting.webp",
+  "example_base": "1boy, solo, male focus, short dark hair, plain jacket, standing, city street, daytime",
+  "read_it_as": "Compare the SHADING, colour and line - not the pose or framing. Adding any clause re-rolls the model's conditioning, so composition moves between the two panels even at a fixed seed. An img2img pass from one fixed base image would isolate the tag properly; that is not built yet."
 }

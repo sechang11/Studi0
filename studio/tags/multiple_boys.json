@@ -6,8 +6,19 @@
   "does": "Puts two or more males in frame but leaves the number to the model, which usually settles on three or more and degrades as it climbs. Critically, it REVOKES solo: leaving solo in the prompt beside it is a flat contradiction and the model resolves it by merging bodies - shared limbs, two heads on one torso, faces that land as neither character. Prefer an exact count whenever you have one; 2boys is a sharper instruction than this.",
   "reach_for_it": "background groupings where the exact head count genuinely does not matter - and almost never for a staged two-hander",
   "strength": "moderate",
-  "pairs_with": ["2boys", "male focus", "crowd"],
-  "fights_with": ["solo", "1boy", "no humans"],
+  "pairs_with": [
+    "2boys",
+    "male focus",
+    "crowd"
+  ],
+  "fights_with": [
+    "solo",
+    "1boy",
+    "no humans"
+  ],
   "negative_instead": false,
-  "used_in": "zero uses across the nine authored films - the library avoids it. studio/roadmap/blocking.md warns at 3 or more characters, calling it where the model reliably falls apart"
+  "used_in": "zero uses across the nine authored films - the library avoids it. studio/roadmap/blocking.md warns at 3 or more characters, calling it where the model reliably falls apart",
+  "example": "/samples/tags/multiple_boys.webp",
+  "example_base": "1boy, solo, male focus, short dark hair, plain jacket, standing, city street, daytime",
+  "read_it_as": "Compare the SHADING, colour and line - not the pose or framing. Adding any clause re-rolls the model's conditioning, so composition moves between the two panels even at a fixed seed. An img2img pass from one fixed base image would isolate the tag properly; that is not built yet."
 }

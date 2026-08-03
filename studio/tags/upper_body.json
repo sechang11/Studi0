@@ -6,8 +6,22 @@
   "does": "Sets the standard dialogue and reaction distance. Close enough that mouth, brows and eye tags are drawn at real size and actually land, wide enough that a gesture still reads. In the shot_purpose sweep the dialogue panel (\"upper body, open mouth, talking\") came back as a clean chest-up framing, clearly separated from both the wides and the close-ups. Same crop family as full body and close-up - only one of them wins per prompt.",
   "reach_for_it": "the default for anyone talking or reacting. Reach for it before close-up, which is stronger than most beats need.",
   "strength": "strong",
-  "pairs_with": ["open mouth", "talking", "looking at viewer", "blurry background", "wide-eyed"],
-  "fights_with": ["full body", "wide shot", "extreme close-up", "scenery"],
+  "pairs_with": [
+    "open mouth",
+    "talking",
+    "looking at viewer",
+    "blurry background",
+    "wide-eyed"
+  ],
+  "fights_with": [
+    "full body",
+    "wide shot",
+    "extreme close-up",
+    "scenery"
+  ],
   "negative_instead": false,
-  "used_in": "the dialogue clause of shot.purpose (\"upper body, open mouth, talking\") and the reaction clause of shot.framing_type (\"upper body, wide-eyed, open mouth\")"
+  "used_in": "the dialogue clause of shot.purpose (\"upper body, open mouth, talking\") and the reaction clause of shot.framing_type (\"upper body, wide-eyed, open mouth\")",
+  "example": "/samples/tags/upper_body.webp",
+  "example_base": "1boy, solo, male focus, short dark hair, plain jacket, standing, city street, daytime",
+  "read_it_as": "Compare the SHADING, colour and line - not the pose or framing. Adding any clause re-rolls the model's conditioning, so composition moves between the two panels even at a fixed seed. An img2img pass from one fixed base image would isolate the tag properly; that is not built yet."
 }

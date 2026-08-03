@@ -74,6 +74,47 @@ def safe_name(s):
     return "".join(c for c in str(s) if c.isalnum() or c in "-_")[:64]
 
 
+def verify_queue():
+    """Cards that have panels but no human verdict, plus the ones already done.
+
+    This is the project's largest honest gap: 1026 rendered comparison panels that
+    nobody has looked at. Both predictions ever checked against pixels turned out WRONG
+    (extreme_close was predicted to fail and is the best panel in the set; extreme_wide
+    was predicted to work and loses the figure entirely), so the claims cannot be trusted
+    until someone looks. Predicting is worse than useless here.
+
+    Unverified first, since that is the work. Cards with no panels are excluded - there
+    is nothing to look at.
+    """
+    d = f"{HERE}/cards"
+    if not os.path.isdir(d):
+        return {"todo": [], "done": [], "total": 0}
+    todo, done = [], []
+    for fn in sorted(os.listdir(d)):
+        if not fn.endswith(".json"):
+            continue
+        try:
+            c = json.load(open(f"{d}/{fn}", encoding="utf-8"))
+        except Exception:
+            continue
+        if c.get("not_visual") or not (c.get("panels") or c.get("sheet")):
+            continue
+        item = {
+            "slug": fn[:-5],
+            "variable": c.get("variable", fn[:-5]),
+            "claim": c.get("claim", ""),
+            "sheet": c.get("sheet"),
+            "panels": [{"value": p.get("value"), "sample": p.get("sample"),
+                        "control": bool(p.get("control"))}
+                       for p in (c.get("panels") or [])],
+            "verdict": c.get("verdict"),
+            "look_at": c.get("look_at"),
+            "review": c.get("review") or [],
+        }
+        (done if c.get("verdict") else todo).append(item)
+    return {"todo": todo, "done": done, "total": len(todo) + len(done)}
+
+
 def domains():
     """The non-film makers: voice, music, sfx, image, mesh.
 
@@ -218,6 +259,13 @@ class H(http.server.SimpleHTTPRequestHandler):
             if not os.path.exists(p):
                 return self._send(b"make.html is missing", 500, "text/plain")
             return self._send(open(p, "rb").read(), 200, "text/html; charset=utf-8")
+        if path in ("/verify", "/verify.html"):
+            p = f"{HERE}/verify.html"
+            if not os.path.exists(p):
+                return self._send(b"verify.html is missing", 500, "text/plain")
+            return self._send(open(p, "rb").read(), 200, "text/html; charset=utf-8")
+        if path == "/api/verify/queue":
+            return self._send(verify_queue())
         if path in ("/tags", "/tags.html"):
             p = f"{HERE}/tags.html"
             if not os.path.exists(p):
@@ -340,6 +388,93 @@ class H(http.server.SimpleHTTPRequestHandler):
         return self._send({"error": "generation failed",
                            "detail": out.strip()[-1500:]}, 500)
 
+    def _verify(self, data):
+        """Record a HUMAN verdict on a card, straight into the card's own JSON.
+
+        Written back to studio/cards/<slug>.json rather than to a side file, so the
+        verdict travels with the claim it judges and shows up in a git diff. `verified_by`
+        marks it as observed rather than predicted - that distinction is the entire point,
+        since every predicted verdict in this project that was later checked was wrong.
+        """
+        slug = safe_name(data.get("slug", ""))
+        p = f"{HERE}/cards/{slug}.json"
+        if not slug or not os.path.exists(p):
+            return self._send({"error": f"unknown card: {slug}"}, 404)
+        verdict = str(data.get("verdict", "")).strip()[:40]
+        if verdict not in ("works", "mixed", "fails", ""):
+            return self._send({"error": "verdict must be works, mixed, fails or empty"}, 400)
+        try:
+            c = json.load(open(p, encoding="utf-8"))
+        except Exception as e:
+            return self._send({"error": f"unreadable card: {e}"}, 500)
+        if verdict:
+            c["verdict"] = verdict
+            c["verified_by"] = "human"
+            c["verified_at"] = __import__("time").strftime("%Y-%m-%dT%H:%M:%S")
+        else:                       # clearing a verdict re-opens the card
+            for k in ("verdict", "verified_by", "verified_at"):
+                c.pop(k, None)
+        look = str(data.get("look_at", "")).strip()[:600]
+        if look:
+            c["look_at"] = look
+        broken = [str(x)[:60] for x in (data.get("broken_options") or [])][:40]
+        if broken:
+            c["broken_options"] = broken
+        elif "broken_options" in c and data.get("broken_options") is not None:
+            c.pop("broken_options")
+        with open(p, "w", encoding="utf-8") as f:
+            json.dump(c, f, indent=2, ensure_ascii=False)
+            f.write("\n")
+        return self._send({"ok": True, "slug": slug, "verdict": c.get("verdict")})
+
+    def _reroll(self, data):
+        """Re-render a tag's with/without pair on a different seed.
+
+        An example only earns its place if it DEMONSTRATES the tag. Sometimes the base
+        image happens to hide the effect - the jacket is already flat, the background
+        already blurred - and no amount of rewording fixes that. The fix is a different
+        roll of the same comparison, not a different definition.
+
+        Takes about 6s (two 3s renders), so it is answered inline.
+        """
+        tag = safe_name(data.get("tag", ""))
+        if not tag or not os.path.exists(f"{HERE}/tags/{tag}.json"):
+            return self._send({"error": f"unknown tag: {tag}"}, 404)
+        try:
+            seed = int(data.get("seed") or 0)
+        except (TypeError, ValueError):
+            seed = 0
+        if not seed:
+            # deterministic per-attempt, so a reroll is reproducible rather than random
+            prev = json.load(open(f"{HERE}/tags/{tag}.json", encoding="utf-8")) \
+                       .get("example_seed", 4242)
+            seed = int(prev) + 1111
+        # "slop" and "doesn't show the tag" are different failures. The first says the
+        # comparison worked but the picture is not worth showing; recording it means a tag
+        # that keeps producing weak images can be found later and given a better base,
+        # rather than being rerolled forever.
+        reason = str(data.get("reason", ""))[:20]
+        if reason == "slop":
+            try:
+                tp = f"{HERE}/tags/{tag}.json"
+                t = json.load(open(tp, encoding="utf-8"))
+                t["slop_rerolls"] = int(t.get("slop_rerolls", 0)) + 1
+                with open(tp, "w", encoding="utf-8") as f:
+                    json.dump(t, f, indent=2, ensure_ascii=False)
+                    f.write("\n")
+            except Exception:
+                pass
+        cmd = [sys.executable, f"{HERE}/_tools/tag_examples.py", tag, "--seed", str(seed)]
+        try:
+            r = subprocess.run(cmd, capture_output=True, text=True, cwd=ROOT, timeout=300)
+        except subprocess.TimeoutExpired:
+            return self._send({"error": "reroll timed out"}, 504)
+        out = (r.stdout or "") + (r.stderr or "")
+        if "1 rendered" not in out:
+            return self._send({"error": "reroll failed", "detail": out.strip()[-1200:]}, 500)
+        return self._send({"ok": True, "tag": tag, "seed": seed,
+                           "example": f"/samples/tags/{tag}.webp"})
+
     def _workflow(self, data):
         """The exact ComfyUI graph this would submit, without submitting it.
 
@@ -400,7 +535,8 @@ class H(http.server.SimpleHTTPRequestHandler):
 
     def do_POST(self):
         p = urllib.parse.urlparse(self.path).path
-        if p not in ("/api/save", "/api/render", "/api/make", "/api/workflow"):
+        if p not in ("/api/save", "/api/render", "/api/make", "/api/workflow",
+                     "/api/verify", "/api/tag/reroll"):
             return self._send({"error": "not found"}, 404)
         n = int(self.headers.get("Content-Length", 0))
         try:
@@ -416,6 +552,10 @@ class H(http.server.SimpleHTTPRequestHandler):
             return self._make(data)
         if p == "/api/workflow":
             return self._workflow(data)
+        if p == "/api/verify":
+            return self._verify(data)
+        if p == "/api/tag/reroll":
+            return self._reroll(data)
         name = "".join(c for c in str(data.get("name", "")) if c.isalnum() or c in "-_")
         if not name:
             return self._send({"error": "name required"}, 400)

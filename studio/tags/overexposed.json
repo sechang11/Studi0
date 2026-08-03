@@ -19,5 +19,8 @@
     "high contrast"
   ],
   "negative_instead": true,
-  "used_in": "the standing negative in craft/ANIME_MODELS.md; the hot option of studio/cards/shot_fx.json carries it as a positive clause; studio/looks/heat_haze.json delivers the look via grade instead"
+  "used_in": "the standing negative in craft/ANIME_MODELS.md; the hot option of studio/cards/shot_fx.json carries it as a positive clause; studio/looks/heat_haze.json delivers the look via grade instead",
+  "example": "/samples/tags/overexposed.webp",
+  "example_base": "1boy, solo, male focus, short dark hair, plain jacket, standing, city street, daytime",
+  "read_it_as": "Compare the SHADING, colour and line - not the pose or framing. Adding any clause re-rolls the model's conditioning, so composition moves between the two panels even at a fixed seed. An img2img pass from one fixed base image would isolate the tag properly; that is not built yet."
 }

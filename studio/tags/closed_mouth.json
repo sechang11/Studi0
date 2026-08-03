@@ -6,8 +6,21 @@
   "does": "Shuts the jaw and takes teeth out of the face, which quietly raises the composure of the whole frame - a closed mouth is most of what makes a character read as controlled rather than reacting. It is also a reliability tag, and this is the part worth internalising: leave the mouth unspecified and the model picks, and it picks a slight smile far more often than a serious scene wants. That is the mechanism behind this project's measured failure where a scene set to melancholy and defeat rendered the character smiling. Naming the mouth shut is the cheap fix that the abstract mood word could not buy.",
   "reach_for_it": "every held, controlled or silent beat - and as the default on any face you have not deliberately opened",
   "strength": "strong",
-  "pairs_with": ["neutral expression", "furrowed brow", "steady gaze", "looking at viewer"],
-  "fights_with": ["open mouth", "shouting", "open smile", "parted lips"],
+  "pairs_with": [
+    "neutral expression",
+    "furrowed brow",
+    "steady gaze",
+    "looking at viewer"
+  ],
+  "fights_with": [
+    "open mouth",
+    "shouting",
+    "open smile",
+    "parted lips"
+  ],
   "negative_instead": false,
-  "used_in": "the mouth field of ten emotion presets - neutral, cold, determined, focus, pride, resolve, shame, smug, suspicion and tender - plus her-name.json and puddle.json, and every non-shouting character beat in derby-ep1"
+  "used_in": "the mouth field of ten emotion presets - neutral, cold, determined, focus, pride, resolve, shame, smug, suspicion and tender - plus her-name.json and puddle.json, and every non-shouting character beat in derby-ep1",
+  "example": "/samples/tags/closed_mouth.webp",
+  "example_base": "1boy, solo, male focus, short dark hair, plain jacket, standing, city street, daytime",
+  "read_it_as": "Compare the SHADING, colour and line - not the pose or framing. Adding any clause re-rolls the model's conditioning, so composition moves between the two panels even at a fixed seed. An img2img pass from one fixed base image would isolate the tag properly; that is not built yet."
 }

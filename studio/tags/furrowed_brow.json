@@ -6,8 +6,22 @@
   "does": "Creases the forehead and tilts the inner eyebrow down, which hardens an otherwise neutral face more efficiently than any other single tag. It is the difference between a character who is looking and a character who is deciding. The limit is physical: the brow is a few dozen pixels outside close framing, so on a medium or wide shot this costs you a tag slot and changes nothing you can see. Face tags and shot size are one decision, not two.",
   "reach_for_it": "close-ups of anger, effort or concentration - and only close-ups",
   "strength": "moderate",
-  "pairs_with": ["close-up", "sharp eyes", "glaring", "clenched teeth", "closed mouth"],
-  "fights_with": ["relaxed brow", "raised eyebrows", "wide shot", "smile"],
+  "pairs_with": [
+    "close-up",
+    "sharp eyes",
+    "glaring",
+    "clenched teeth",
+    "closed mouth"
+  ],
+  "fights_with": [
+    "relaxed brow",
+    "raised eyebrows",
+    "wide shot",
+    "smile"
+  ],
   "negative_instead": false,
-  "used_in": "the eyes field of emotions/angry and determined, the face field of focus and panic; visible in every compiled 'determined expression, serious, sharp eyes, furrowed brow' beat of derby-ep1.json"
+  "used_in": "the eyes field of emotions/angry and determined, the face field of focus and panic; visible in every compiled 'determined expression, serious, sharp eyes, furrowed brow' beat of derby-ep1.json",
+  "example": "/samples/tags/furrowed_brow.webp",
+  "example_base": "1boy, solo, male focus, short dark hair, plain jacket, standing, city street, daytime",
+  "read_it_as": "Compare the SHADING, colour and line - not the pose or framing. Adding any clause re-rolls the model's conditioning, so composition moves between the two panels even at a fixed seed. An img2img pass from one fixed base image would isolate the tag properly; that is not built yet."
 }

@@ -6,8 +6,21 @@
   "does": "Genuinely bends the picture, and it is the strongest geometry tag in this whole set. Three separate cards carry a fisheye option and all three panels show the same unmistakable effect: the horizon and the stadium bowl curve right around the subject and the middle of the frame pushes toward you. The cost is coherence - distortion drags anatomy and architecture with it, and in the same sweep the neighbouring strong_barrel panel is a mangled structure floating in a warped sky. Use it for a beat, not for a sequence.",
   "reach_for_it": "panic, a blow to the head, comedy, a character overwhelmed by a space. Anything where the world itself should feel wrong rather than merely tilted.",
   "strength": "strong",
-  "pairs_with": ["wide angle", "barrel distortion", "dynamic angle", "from below"],
-  "fights_with": ["telephoto lens", "natural perspective", "rectilinear", "portrait"],
+  "pairs_with": [
+    "wide angle",
+    "barrel distortion",
+    "dynamic angle",
+    "from below"
+  ],
+  "fights_with": [
+    "telephoto lens",
+    "natural perspective",
+    "rectilinear",
+    "portrait"
+  ],
   "negative_instead": false,
-  "used_in": "three cards carry it - shot.lens.look, shot.lens.distortion and shot.comp.perspective - which the project's review flags as one effect with three owners; shot.lens.distortion is the recommended single owner"
+  "used_in": "three cards carry it - shot.lens.look, shot.lens.distortion and shot.comp.perspective - which the project's review flags as one effect with three owners; shot.lens.distortion is the recommended single owner",
+  "example": "/samples/tags/fisheye.webp",
+  "example_base": "1boy, solo, male focus, short dark hair, plain jacket, standing, city street, daytime",
+  "read_it_as": "Compare the SHADING, colour and line - not the pose or framing. Adding any clause re-rolls the model's conditioning, so composition moves between the two panels even at a fixed seed. An img2img pass from one fixed base image would isolate the tag properly; that is not built yet."
 }

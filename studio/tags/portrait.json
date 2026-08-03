@@ -6,8 +6,21 @@
   "does": "Pulls the camera to the face. The evidence is accidental but clean: shot.lens.look's portrait option was authored as a LENS (\"portrait lens, 85mm, mild compression\") and the panel came back as a tight head-and-shoulders close-up - the model read the crop word and ignored the millimetres entirely. The word is overloaded three ways in this project (crop tag, \"portrait lens\", portrait aspect in make_sheets.py) and only the crop meaning ever reaches the picture.",
   "reach_for_it": "rarely - close-up says the same thing and is the better-represented tag. Use portrait when you specifically want the still, posed, straight-at-camera register rather than a dramatic close-up.",
   "strength": "moderate",
-  "pairs_with": ["close-up", "looking at viewer", "blurry background", "solo"],
-  "fights_with": ["full body", "wide shot", "extreme close-up", "telephoto lens"],
+  "pairs_with": [
+    "close-up",
+    "looking at viewer",
+    "blurry background",
+    "solo"
+  ],
+  "fights_with": [
+    "full body",
+    "wide shot",
+    "extreme close-up",
+    "telephoto lens"
+  ],
   "negative_instead": false,
-  "used_in": "the portrait option of shot.lens.look, where the project's own review notes that millimetre numbers are inert tokens in Animagine"
+  "used_in": "the portrait option of shot.lens.look, where the project's own review notes that millimetre numbers are inert tokens in Animagine",
+  "example": "/samples/tags/portrait.webp",
+  "example_base": "1boy, solo, male focus, short dark hair, plain jacket, standing, city street, daytime",
+  "read_it_as": "Compare the SHADING, colour and line - not the pose or framing. Adding any clause re-rolls the model's conditioning, so composition moves between the two panels even at a fixed seed. An img2img pass from one fixed base image would isolate the tag properly; that is not built yet."
 }

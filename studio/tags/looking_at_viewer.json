@@ -6,8 +6,21 @@
   "does": "Turns the head and eyes toward the lens and holds the gaze there. It is one of the most heavily labelled attributes in the entire danbooru vocabulary and correspondingly obedient - it lands when subtler face tags do not. Dramatically it converts an observed moment into a confronted one: the same face that reads as private in three-quarter reads as a challenge once it looks down the barrel. Use it on purpose, not as filler.",
   "reach_for_it": "reaction shots, direct address, and any beat where a character is squaring up to whoever is on the other side of the lens",
   "strength": "strong",
-  "pairs_with": ["close-up", "solo", "closed mouth", "portrait"],
-  "fights_with": ["looking away", "from behind", "downcast eyes", "profile"],
+  "pairs_with": [
+    "close-up",
+    "solo",
+    "closed mouth",
+    "portrait"
+  ],
+  "fights_with": [
+    "looking away",
+    "from behind",
+    "downcast eyes",
+    "profile"
+  ],
   "negative_instead": false,
-  "used_in": "the eyes field of emotions/neutral.json, smug, suspicion and tender, which compile.py expands into the beat tags - that is how it reaches the prompt. Visible in the compiled locker-room beats of derby-ep1.json"
+  "used_in": "the eyes field of emotions/neutral.json, smug, suspicion and tender, which compile.py expands into the beat tags - that is how it reaches the prompt. Visible in the compiled locker-room beats of derby-ep1.json",
+  "example": "/samples/tags/looking_at_viewer.webp",
+  "example_base": "1boy, solo, male focus, short dark hair, plain jacket, standing, city street, daytime",
+  "read_it_as": "Compare the SHADING, colour and line - not the pose or framing. Adding any clause re-rolls the model's conditioning, so composition moves between the two panels even at a fixed seed. An img2img pass from one fixed base image would isolate the tag properly; that is not built yet."
 }

@@ -6,8 +6,21 @@
   "does": "Enlarges the visible iris and raises the upper lid, and drags the rest of the face toward alarm with it. It works precisely because it names a drawn FEATURE instead of a feeling: this project measured that the word 'shocked' on its own is routinely ignored, while wide-eyed plus parted lips plus sweat renders shock every time. That is the general lesson for this whole family - stack physical tags, never ask for the emotion by name. Its reach is bounded by shot size: outside a medium close-up the eyes are too few pixels for it to register at all.",
   "reach_for_it": "reaction close-ups, always as part of a stack of physical tags and never as the only carrier of an emotion",
   "strength": "moderate",
-  "pairs_with": ["constricted pupils", "parted lips", "sweat", "close-up"],
-  "fights_with": ["half-closed eyes", "narrowed eyes", "expressionless", "wide shot"],
+  "pairs_with": [
+    "constricted pupils",
+    "parted lips",
+    "sweat",
+    "close-up"
+  ],
+  "fights_with": [
+    "half-closed eyes",
+    "narrowed eyes",
+    "expressionless",
+    "wide shot"
+  ],
   "negative_instead": false,
-  "used_in": "prompts/anime_reaction_close.json, which carries a rendered sample; the eyes field of emotions/awe, panic, rage and shock. It appears nowhere in the film JSONs directly - it reaches the prompt through the emotion preset, expanded by compile.py"
+  "used_in": "prompts/anime_reaction_close.json, which carries a rendered sample; the eyes field of emotions/awe, panic, rage and shock. It appears nowhere in the film JSONs directly - it reaches the prompt through the emotion preset, expanded by compile.py",
+  "example": "/samples/tags/wide-eyed.webp",
+  "example_base": "1boy, solo, male focus, short dark hair, plain jacket, standing, city street, daytime",
+  "read_it_as": "Compare the SHADING, colour and line - not the pose or framing. Adding any clause re-rolls the model's conditioning, so composition moves between the two panels even at a fixed seed. An img2img pass from one fixed base image would isolate the tag properly; that is not built yet."
 }

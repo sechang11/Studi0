@@ -6,8 +6,18 @@
   "does": "Appears to work, but only because it agrees with what the model was going to do anyway. In the thirds_bias sweep the center panel is indistinguishable from the seven panels that asked for something else, and SDXL centres a solo subject by default at every shot size. So the tag has no measurable effect of its own; it just fails to disagree. It also duplicates shot.comp.balance symmetrical, so the two cards ship the same picture.",
   "reach_for_it": "as documentation, when you want the record to say this frame is meant to be formal and head-on. Not as a lever - it costs prompt tokens against a 75-token budget and buys nothing the default was not already giving you.",
   "strength": "weak",
-  "pairs_with": ["solo", "symmetrical", "looking at viewer"],
-  "fights_with": ["dutch angle", "rule of thirds"],
+  "pairs_with": [
+    "solo",
+    "symmetrical",
+    "looking at viewer"
+  ],
+  "fights_with": [
+    "dutch angle",
+    "rule of thirds"
+  ],
   "negative_instead": false,
-  "used_in": "the center option of shot.comp.thirds_bias (\"centered composition, subject in the middle\") and, in another phrasing, shot.comp.balance symmetrical"
+  "used_in": "the center option of shot.comp.thirds_bias (\"centered composition, subject in the middle\") and, in another phrasing, shot.comp.balance symmetrical",
+  "example": "/samples/tags/centered_composition.webp",
+  "example_base": "1boy, solo, male focus, short dark hair, plain jacket, standing, city street, daytime",
+  "read_it_as": "Compare the SHADING, colour and line - not the pose or framing. Adding any clause re-rolls the model's conditioning, so composition moves between the two panels even at a fixed seed. An img2img pass from one fixed base image would isolate the tag properly; that is not built yet."
 }

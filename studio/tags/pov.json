@@ -6,8 +6,19 @@
   "does": "On its own, nothing useful here. The shot_framing_type pov panel - clause \"pov, first-person view, pov hands\" - came back as an ordinary third-person medium shot of the boy. No hands, no first-person geometry, nothing. \"first-person view\" is prose the model has never seen, and \"pov hands\" needs a hand it can attach to something. This is another counting-and-framing instruction rather than a description: it makes a claim about where the viewer's body is, and if the rest of the prompt does not agree, the claim is dropped.",
   "reach_for_it": "if you must have it, build it from nouns instead: \"looking at viewer, eye contact\" plus a real foreground object the hands can hold - \"hand in foreground, holding a phone\". The bare tag will not do it.",
   "strength": "weak",
-  "pairs_with": ["looking at viewer", "eye contact", "hand in foreground"],
-  "fights_with": ["over the shoulder", "from behind", "solo"],
+  "pairs_with": [
+    "looking at viewer",
+    "eye contact",
+    "hand in foreground"
+  ],
+  "fights_with": [
+    "over the shoulder",
+    "from behind",
+    "solo"
+  ],
   "negative_instead": false,
-  "used_in": "shot.framing_type pov. Do not confuse it with story.pov, which is a story-level variable naming whose experience the scene follows and never reaches the prompt at all."
+  "used_in": "shot.framing_type pov. Do not confuse it with story.pov, which is a story-level variable naming whose experience the scene follows and never reaches the prompt at all.",
+  "example": "/samples/tags/pov.webp",
+  "example_base": "1boy, solo, male focus, short dark hair, plain jacket, standing, city street, daytime",
+  "read_it_as": "Compare the SHADING, colour and line - not the pose or framing. Adding any clause re-rolls the model's conditioning, so composition moves between the two panels even at a fixed seed. An img2img pass from one fixed base image would isolate the tag properly; that is not built yet."
 }

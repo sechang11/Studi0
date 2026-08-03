@@ -6,8 +6,22 @@
   "does": "Goes much further than \"from above\" - it is a SHOT SIZE change disguised as an angle. In the shot_cam_angle sweep the birds_eye panel pulled all the way out to the entire pitch with the character reduced to a speck, and shot.comp.perspective's overhead_map option did the same thing. Your character's face, costume and expression are gone. Know that before you reach for it. It is also inconsistent about height: the shot_angle sheet's birds_eye is an ordinary steep high angle over the shoulder, the shot_cam_angle one is a full aerial. Do not expect the same distance twice.",
   "reach_for_it": "when the geography IS the shot - a stadium, a battlefield, a city, a body alone in a large space. Never when you need a face.",
   "strength": "moderate",
-  "pairs_with": ["from above", "scenery", "no humans", "wide shot", "from directly above"],
-  "fights_with": ["close-up", "portrait", "from below", "upper body"],
+  "pairs_with": [
+    "from above",
+    "scenery",
+    "no humans",
+    "wide shot",
+    "from directly above"
+  ],
+  "fights_with": [
+    "close-up",
+    "portrait",
+    "from below",
+    "upper body"
+  ],
   "negative_instead": false,
-  "used_in": "shot.cam.angle birds_eye and the older shot_angle card; it overlaps shot.cam.height overhead/aerial and shot.comp.perspective overhead_map, which the project's own review flags as one instruction with three owners"
+  "used_in": "shot.cam.angle birds_eye and the older shot_angle card; it overlaps shot.cam.height overhead/aerial and shot.comp.perspective overhead_map, which the project's own review flags as one instruction with three owners",
+  "example": "/samples/tags/bird's-eye_view.webp",
+  "example_base": "1boy, solo, male focus, short dark hair, plain jacket, standing, city street, daytime",
+  "read_it_as": "Compare the SHADING, colour and line - not the pose or framing. Adding any clause re-rolls the model's conditioning, so composition moves between the two panels even at a fixed seed. An img2img pass from one fixed base image would isolate the tag properly; that is not built yet."
 }

@@ -6,8 +6,21 @@
   "does": "Replaces a neutral mouth with a hard grimace line and visible teeth, reading as a character pushing through something or holding something back. Get the form right, because this is a live trap in the current library: 'clenched teeth' is the danbooru tag, but this project writes 'gritted teeth' in emotions/angry.json and in three places across derby.json and episode01.json. Gritted is the natural English phrase and the weaker prompt - the booru spelling is what the checkpoint was trained on. Its aggressive cousin is 'bared teeth', which shows the gums and reads as a snarl.",
   "reach_for_it": "effort, pain and suppressed rage - the strain register, where a shouting mouth would overplay it",
   "strength": "moderate",
-  "pairs_with": ["furrowed brow", "close-up", "sweat", "glaring"],
-  "fights_with": ["closed mouth", "smile", "expressionless", "parted lips"],
+  "pairs_with": [
+    "furrowed brow",
+    "close-up",
+    "sweat",
+    "glaring"
+  ],
+  "fights_with": [
+    "closed mouth",
+    "smile",
+    "expressionless",
+    "parted lips"
+  ],
   "negative_instead": false,
-  "used_in": "zero correct uses in the films - emotions/angry.json and three film beats all write 'gritted teeth' instead. defiance and rage reach for 'bared teeth'. Worth fixing at the preset, since every film inherits it"
+  "used_in": "zero correct uses in the films - emotions/angry.json and three film beats all write 'gritted teeth' instead. defiance and rage reach for 'bared teeth'. Worth fixing at the preset, since every film inherits it",
+  "example": "/samples/tags/clenched_teeth.webp",
+  "example_base": "1boy, solo, male focus, short dark hair, plain jacket, standing, city street, daytime",
+  "read_it_as": "Compare the SHADING, colour and line - not the pose or framing. Adding any clause re-rolls the model's conditioning, so composition moves between the two panels even at a fixed seed. An img2img pass from one fixed base image would isolate the tag properly; that is not built yet."
 }

@@ -6,8 +6,21 @@
   "does": "Tips the whole picture, content and all. In both sweeps that carry it the dutch panel is unmistakable - horizon on a clear diagonal, the figure leaning against it, the stadium roof cutting the corner. It is one of the few composition tags on this model that changes the GEOMETRY of the frame rather than just its contents, which is exactly why it works: it is not asking the model to arrange anything, only to tilt.",
   "reach_for_it": "unease - a world off its axis, the moment before something goes wrong, a character whose grip is slipping. Also action, where the tilt reads as speed. One or two per film; it stops meaning anything if every shot is canted.",
   "strength": "strong",
-  "pairs_with": ["tilted horizon", "dynamic angle", "from below", "speed lines"],
-  "fights_with": ["centered composition", "symmetrical", "level horizon", "eye level"],
+  "pairs_with": [
+    "tilted horizon",
+    "dynamic angle",
+    "from below",
+    "speed lines"
+  ],
+  "fights_with": [
+    "centered composition",
+    "symmetrical",
+    "level horizon",
+    "eye level"
+  ],
   "negative_instead": false,
-  "used_in": "shot.cam.angle dutch (\"dutch angle, tilted horizon\") and the older shot_angle card"
+  "used_in": "shot.cam.angle dutch (\"dutch angle, tilted horizon\") and the older shot_angle card",
+  "example": "/samples/tags/dutch_angle.webp",
+  "example_base": "1boy, solo, male focus, short dark hair, plain jacket, standing, city street, daytime",
+  "read_it_as": "Compare the SHADING, colour and line - not the pose or framing. Adding any clause re-rolls the model's conditioning, so composition moves between the two panels even at a fixed seed. An img2img pass from one fixed base image would isolate the tag properly; that is not built yet."
 }

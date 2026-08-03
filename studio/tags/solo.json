@@ -6,8 +6,20 @@
   "does": "Suppresses spare limbs, second faces and the stray bodies SDXL likes to grow at the frame edge. It is the cheapest anti-clutter insurance on this model. What it does NOT do is empty the background: 'night stadium, crowd' plus solo still gives you packed stands, because a crowd is scenery rather than a character. The inverse is grammar too - when you want one character, solo in the positive plus 'multiple boys, multiple views' in the negative is stronger than either half alone.",
   "reach_for_it": "on every single-character shot, immediately after the count tag - it costs one tag slot and prevents the ugliest failure mode",
   "strength": "strong",
-  "pairs_with": ["1boy", "1girl", "male focus", "upper body"],
-  "fights_with": ["2boys", "multiple boys", "crowd"],
+  "pairs_with": [
+    "1boy",
+    "1girl",
+    "male focus",
+    "upper body"
+  ],
+  "fights_with": [
+    "2boys",
+    "multiple boys",
+    "crowd"
+  ],
   "negative_instead": false,
-  "used_in": "the second tag of all three character cards (RASK, VIRO, MANAGER) and of every character beat in derby-ep1; 'multiple views' already sits in the project's standing negative for the same reason"
+  "used_in": "the second tag of all three character cards (RASK, VIRO, MANAGER) and of every character beat in derby-ep1; 'multiple views' already sits in the project's standing negative for the same reason",
+  "example": "/samples/tags/solo.webp",
+  "example_base": "1boy, solo, male focus, short dark hair, plain jacket, standing, city street, daytime",
+  "read_it_as": "Compare the SHADING, colour and line - not the pose or framing. Adding any clause re-rolls the model's conditioning, so composition moves between the two panels even at a fixed seed. An img2img pass from one fixed base image would isolate the tag properly; that is not built yet."
 }

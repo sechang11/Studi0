@@ -6,8 +6,18 @@
   "does": "Names the CAUSE, and this model only draws RESULTS. It is not a trained danbooru tag, and it was never actually tested on this box: the shot.focus.dof sweep's shallow panel that produced the real, visible background melt used \"depth of field, blurry background, bokeh\" - not this phrase. So the honest position is that the effect belongs to those three tags and this one is unverified and probably inert, the same way \"85mm\" and \"portrait lens\" turned out to be inert in shot.lens.look.",
   "reach_for_it": "in notes to humans. In a prompt, write \"depth of field, blurry background, bokeh\" instead and get the measured version.",
   "strength": "weak",
-  "pairs_with": ["blurry background", "bokeh", "depth of field"],
-  "fights_with": ["deep focus", "everything in focus"],
+  "pairs_with": [
+    "blurry background",
+    "bokeh",
+    "depth of field"
+  ],
+  "fights_with": [
+    "deep focus",
+    "everything in focus"
+  ],
   "negative_instead": false,
-  "used_in": "one shot prompt in films/the-last-signal.json. It appears nowhere in the variable system, which reaches for the tag trio instead."
+  "used_in": "one shot prompt in films/the-last-signal.json. It appears nowhere in the variable system, which reaches for the tag trio instead.",
+  "example": "/samples/tags/shallow_focus.webp",
+  "example_base": "1boy, solo, male focus, short dark hair, plain jacket, standing, city street, daytime",
+  "read_it_as": "Compare the SHADING, colour and line - not the pose or framing. Adding any clause re-rolls the model's conditioning, so composition moves between the two panels even at a fixed seed. An img2img pass from one fixed base image would isolate the tag properly; that is not built yet."
 }

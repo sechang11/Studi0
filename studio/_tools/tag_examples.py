@@ -41,12 +41,26 @@ CKPT = "animagine-xl-4.0.safetensors"
 SEED = 4242
 STEPS, CFG = 28, 5.0
 
-# A deliberately PLAIN base. It has a person, a garment, a background and a light source,
-# so most tags have something to act on - but it names no style, no lens and no mood, so
-# whatever changes between the two panels came from the tag under test.
-BASE = ("1boy, solo, male focus, short dark hair, plain jacket, standing, "
-        "city street, daytime")
-NEG = "lowres, worst quality, bad anatomy, bad hands, watermark, text"
+# THE BASE HAS TO DO TWO THINGS AT ONCE, and the first version only did one.
+#
+# Isolation wants a plain base: no style, lens or mood words, so whatever changes between
+# the two panels is attributable to the tag under test.
+#
+# But a plain prompt makes a plain picture, and a glossary full of mediocre images is not
+# worth looking at. The first version was "1boy, solo, short dark hair, plain jacket,
+# standing, city street, daytime" - correctly neutral and completely lifeless. Worse, it
+# omitted the four quality tokens, which this project measured as LOAD-BEARING ("without
+# them output is markedly softer and flatter"), so every pair was rendering below the
+# standard of every other image in the project.
+#
+# The fix is composition, not style. Give it a real subject, a real light source and a
+# real depth cue - things a photographer would arrange - while still naming no rendering
+# style, no lens and no mood. Those remain the tag's job.
+QUALITY = "masterpiece, best quality, very aesthetic, absurdres"
+BASE = ("1boy, solo, male focus, short black hair, dark jacket, standing on a rooftop, "
+        "city skyline behind, late afternoon sun, looking away, " + QUALITY)
+NEG = ("lowres, worst quality, bad anatomy, bad hands, extra digits, watermark, text, "
+       "jpeg artifacts, blurry")
 
 
 def sh(*a):
@@ -79,7 +93,16 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("only", nargs="?")
     ap.add_argument("--force", action="store_true")
+    ap.add_argument("--seed", type=int,
+                    help="reroll this pair on a different seed. A pair only earns its "
+                         "place if it DEMONSTRATES the tag; when the base image happens "
+                         "to hide the effect, changing the seed is the fix, not editing "
+                         "the definition.")
     a = ap.parse_args()
+    global SEED
+    if a.seed:
+        SEED = a.seed
+        a.force = True          # rerolling means replacing what is there
     if not os.path.isdir(TAGS):
         raise SystemExit(f"no glossary at {TAGS}")
     os.makedirs(OUT, exist_ok=True)
@@ -137,6 +160,7 @@ def main():
         # stamp the path onto the card so the page needs no naming convention
         t["example"] = f"/samples/tags/{name}.webp"
         t["example_base"] = BASE
+        t["example_seed"] = SEED
         # Say what the pair does NOT prove. Same seed, same sampler, one clause added -
         # and the composition still moves, because adding any clause re-rolls SDXL's
         # conditioning. So the pair is honest about STYLE and not about framing. This is

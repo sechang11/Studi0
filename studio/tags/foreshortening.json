@@ -6,8 +6,22 @@
   "does": "Pushes part of the body toward the lens and enlarges it, which is what makes an action drawing read as coming AT the audience rather than happening beside them. In the shot.comp.screen_direction sweep the to_camera panel (\"running toward viewer, approaching camera, foreshortening\") has the near arm and shoulder swung out at the viewer, while the l_to_r and r_to_l panels beside it are flat side-on shots that are identical to each other. The caveat is that it needs an action pointed at the camera to bite - on a standing figure there is nothing to foreshorten and the tag has no work to do.",
   "reach_for_it": "a charge, a punch, a reach, a sprint straight down the lens. Always with the motion named as well - \"running toward viewer\" or \"outstretched hand\" - never on its own.",
   "strength": "moderate",
-  "pairs_with": ["running toward viewer", "dynamic angle", "from below", "outstretched hand", "speed lines"],
-  "fights_with": ["from behind", "telephoto lens", "compressed perspective", "profile"],
+  "pairs_with": [
+    "running toward viewer",
+    "dynamic angle",
+    "from below",
+    "outstretched hand",
+    "speed lines"
+  ],
+  "fights_with": [
+    "from behind",
+    "telephoto lens",
+    "compressed perspective",
+    "profile"
+  ],
   "negative_instead": false,
-  "used_in": "shot.comp.screen_direction to_camera; the sprint tag block of films/derby.json and its generator films/build_derby.py (\"running toward viewer, sprinting, intense stare, foreshortening, from below, speed lines\")"
+  "used_in": "shot.comp.screen_direction to_camera; the sprint tag block of films/derby.json and its generator films/build_derby.py (\"running toward viewer, sprinting, intense stare, foreshortening, from below, speed lines\")",
+  "example": "/samples/tags/foreshortening.webp",
+  "example_base": "1boy, solo, male focus, short dark hair, plain jacket, standing, city street, daytime",
+  "read_it_as": "Compare the SHADING, colour and line - not the pose or framing. Adding any clause re-rolls the model's conditioning, so composition moves between the two panels even at a fixed seed. An img2img pass from one fixed base image would isolate the tag properly; that is not built yet."
 }

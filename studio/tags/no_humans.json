@@ -6,8 +6,20 @@
   "does": "Clears every figure out of frame and hands the composition to the location or the object instead. This is the one phrase beginning with 'no' that behaves the way you would hope on this model, and only because it is vocabulary the checkpoint was trained on rather than the word 'no' doing logical work. SDXL has no negation in a positive prompt: this project measured a 'none' option whose clause read 'no lens flare' ADDING lens flare, because the model sees the tokens and not the negation. no humans is the exception, not a licence to write no fog or no crowd.",
   "reach_for_it": "establishers, pillow shots and inserts - anywhere a person in frame would be a mistake. Never as a way to remove one specific unwanted thing",
   "strength": "strong",
-  "pairs_with": ["scenery", "object focus", "wide shot"],
-  "fights_with": ["1boy", "1girl", "solo", "2boys"],
+  "pairs_with": [
+    "scenery",
+    "object focus",
+    "wide shot"
+  ],
+  "fights_with": [
+    "1boy",
+    "1girl",
+    "solo",
+    "2boys"
+  ],
   "negative_instead": false,
-  "used_in": "10 uses across derby.json and carriage-seven.json; the tunnel establisher and the ball-in-the-net insert of derby-ep1; both empty-frame shots of my-scene.movie; and prompts/anime_establish.json and anime_empty_frame.json, which both carry rendered samples"
+  "used_in": "10 uses across derby.json and carriage-seven.json; the tunnel establisher and the ball-in-the-net insert of derby-ep1; both empty-frame shots of my-scene.movie; and prompts/anime_establish.json and anime_empty_frame.json, which both carry rendered samples",
+  "example": "/samples/tags/no_humans.webp",
+  "example_base": "1boy, solo, male focus, short dark hair, plain jacket, standing, city street, daytime",
+  "read_it_as": "Compare the SHADING, colour and line - not the pose or framing. Adding any clause re-rolls the model's conditioning, so composition moves between the two panels even at a fixed seed. An img2img pass from one fixed base image would isolate the tag properly; that is not built yet."
 }
