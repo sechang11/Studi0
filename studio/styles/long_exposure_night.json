@@ -1,0 +1,28 @@
+{
+  "id": "long_exposure_night",
+  "name": "Long exposure night",
+  "family": "photoreal",
+  "engine": "qwen",
+  "means": "One frame integrated over many seconds: moving lights drawn as continuous ribbons, water and cloud smeared to smooth milk, static architecture pin sharp, every light source blown out into flare.",
+  "tags": "",
+  "prose": "a long exposure night photograph, thirty seconds on a tripod, car headlights and tail lights drawn as continuous unbroken ribbons of white and red, water smoothed to milk, static architecture perfectly sharp, streetlights blown out into starburst flare",
+  "negative_add": "handheld, blurred subject, daylight, flat lighting, illustration, anime",
+  "suits_looks": [
+    "night",
+    "moonlit",
+    "sodium",
+    "neon",
+    "noir"
+  ],
+  "strength": "moderate",
+  "works_for": "video: it cannot survive, and not because of a model weakness. A long exposure IS a single frame integrated over time, so animating it is a contradiction - LTX will slide the light trails around as though they were solid objects. If a shot needs this look, hold on the still. Reasoned from what the style is, not measured.",
+  "status": "ready",
+  "note": "Read the two halves separately, because only one of them belongs here. The LIGHT TRAILS are real nouns and land on qwen - PROMPTING.md lists `long exposure` among the photographic vocabulary that works. The DARKNESS does not come from this card at all: studio/looks/night.json holds the measurement, `night, dark background` moved mean luma 170 to 161, i.e. nothing. Author the trails as a style and get the dark from the night or moonlit GRADE, which is deterministic and exact. This is the single most common place in the set where a style gets mistaken for a look. Unavailable on the anime checkpoint - and note motion blur lives in that model's negative, not its positive. | Downgraded to untested: NOTHING in this library was rendered when it was authored, so every strength and engine call is a considered prediction. This project's own standard - written on the Illustrious checkpoint card - is that a recommendation is not a measurement.",
+  "examples": {
+    "anime": "/samples/styles/long_exposure_night__anime.webp",
+    "qwen": "/samples/styles/long_exposure_night__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Genuine light trails from traffic. Unambiguous.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

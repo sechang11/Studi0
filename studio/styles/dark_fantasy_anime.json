@@ -1,0 +1,28 @@
+{
+  "id": "dark_fantasy_anime",
+  "name": "Dark fantasy anime",
+  "family": "anime",
+  "engine": "anime",
+  "means": "Large solid black shadow masses eating most of the figure, a hard-edged rim light picking out only one edge, a desaturated palette of grey, blood red and cold steel, ornate armour and architectural detail, and a heavy line carrying visible spot-blacks.",
+  "tags": "high contrast, harsh shadow, rim lighting, chiaroscuro, desaturated, muted colors, ornate armor, detailed background, thick lineart, seinen style",
+  "prose": "a grim fantasy anime frame: the figure mostly buried in solid black shadow with one hard rim of light along its edge, desaturated steel and blood palette, ornate armour detail",
+  "negative_add": "pastel colors, soft lighting, chibi, bright, cheerful, photorealistic",
+  "suits_looks": [
+    "noir",
+    "night",
+    "moonlit",
+    "firelight",
+    "storm"
+  ],
+  "strength": "moderate",
+  "works_for": "video - good on the shadow, bad on the ornament. The big black masses are stable and hold across frames; armour filigree is fine detail and will crawl. INFERRED. Frame closer so the ornament becomes fewer and larger marks.",
+  "status": "ready",
+  "note": "READ THIS BEFORE USING IT, because this is the card where the style-versus-look confusion does the most damage. DARKNESS IS NOT A STYLE HERE, and that is measured: 'night, dark background' in the prompt moved mean luma 170 -> 161, i.e. nothing at all, which is the whole reason looks/night exists as an ffmpeg grade instead. So do not write dark, dark atmosphere or gloomy and expect them to land - pair this card with looks/night or looks/noir, which apply after generation and are exact every time. What this card actually contributes is the SHADOW SHAPE and the palette: chiaroscuro, harsh shadow and rim lighting are tags the library already holds and they change where the black GOES, not how bright the frame is. One stacking warning inherited from looks/night's own note - its grade already pulls saturation down to leave headroom, because grades stack multiplicatively with hot, glow and aberration and once turned a third of a film magenta. Since this card also asks the model for a desaturated drawing, check a frame before committing the film; you can end up with a grey mud that no grade can recover. | Downgraded to untested: NOTHING in this library was rendered when it was authored, so every strength and engine call is a considered prediction. This project's own standard - written on the Illustrious checkpoint card - is that a recommendation is not a measurement.",
+  "examples": {
+    "anime": "/samples/styles/dark_fantasy_anime__anime.webp",
+    "qwen": "/samples/styles/dark_fantasy_anime__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Desaturated to near-black, heavy shadow, a single red accent.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

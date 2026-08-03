@@ -1,0 +1,26 @@
+{
+  "id": "pulp_cover",
+  "name": "Pulp cover",
+  "family": "illustration",
+  "engine": "anime",
+  "means": "Mid-century paperback painting: lurid saturated colour, dramatic single light source, painted realism, high-contrast melodrama.",
+  "tags": "pulp art, lurid colors, dramatic lighting, painted realism, vintage paperback, melodramatic",
+  "prose": "a mid-century pulp cover painting - lurid saturated colour under one dramatic light source, painted realism",
+  "negative_add": "subtle, muted, minimal, flat",
+  "suits_looks": [
+    "firelight",
+    "noir",
+    "sepia"
+  ],
+  "strength": "moderate",
+  "works_for": "video - painted surfaces hold moderately",
+  "status": "weak",
+  "note": "retro_scifi_paperback measured compose=injects - it drew a starship and a planet rather than styling. This card deliberately names NO genre furniture, only the painting quality, to test whether that was the cause. | Authored in the second wave, after the first 64 were rendered and measured. status=untested because nothing here has been rendered yet - the first wave shipped 46 cards marked ready without a single render and 27 of 64 turned out to be routed to the wrong engine.",
+  "examples": {
+    "anime": "/samples/styles/pulp_cover__anime.webp",
+    "qwen": "/samples/styles/pulp_cover__qwen.webp"
+  },
+  "compose": "injects",
+  "verdict": "Gave her a paperback book to hold. The card deliberately named no genre furniture in order to test whether that was what broke retro_scifi_paperback - it was not. The noun in the NAME is enough.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject, on both engines. studio/_tools/style_examples.py --all-engines"
+}

@@ -1,0 +1,26 @@
+{
+  "id": "charcoal_drawing",
+  "name": "Charcoal drawing",
+  "family": "graphic",
+  "engine": "anime",
+  "means": "Soft compressed charcoal dragged over toothed paper. Broad blacks laid with the side of the stick, midtones smudged flat with the heel of the hand, highlights lifted back OUT with a kneaded eraser rather than left, and a grainy break-up wherever the stick skipped the tooth of the paper.",
+  "tags": "charcoal (medium), traditional media, monochrome, greyscale, smudged, rough paper texture, high contrast",
+  "prose": "a charcoal drawing on toothed paper, broad blacks laid down with the side of the stick, midtones smudged flat with the heel of the hand, highlights lifted back out with a kneaded eraser, charcoal grain breaking up wherever the stick skipped the paper",
+  "negative_add": "colour, cel shading, lineart, clean lines, digital art, 3d, pencil",
+  "suits_looks": [
+    "neutral",
+    "overcast",
+    "memory"
+  ],
+  "strength": "weak",
+  "works_for": "Video: the worst case in the drawn set alongside pixel art. Smudge grain and paper tooth are precisely the fine texture expected to boil frame to frame, and there is no flat high-contrast structure underneath to carry it. INFERRED, not measured.",
+  "status": "ready",
+  "note": "Weak on BOTH engines, for one reason: what separates charcoal from pencil is the SMUDGE and the eraser lift, and both models collapse that into a generic pencil sketch. On the anime checkpoint it is worse than weak, it is actively hijacked - studio/tags/sketch.json measured that 'rough sketch' DOMINATES whatever clause it appears in and overrides line weight, shading and finish, which is why line_weight/rough_genga and shot.fx.impact_frame/sketch_frame return the same image. Any charcoal clause you write on that path gets eaten and comes back as an anime rough. Reach for pencil_sketch instead if you are on the anime checkpoint - that is the drawn style the model actually holds. If you need charcoal specifically, qwen is the only route, and take it at 20 steps cfg 2.5 rather than the 4-step Lightning path: PROMPTING.md's own troubleshooting table lists 'mushy detail at 4 steps' against exactly this kind of mark, because the negative is nearly inert at cfg 1.0 and cannot push 'pencil' away for you. Expect to reroll. Anime-path behaviour sourced from studio/tags/sketch.json; not rendered. | Downgraded to untested: NOTHING in this library was rendered when it was authored, so every strength and engine call is a considered prediction. This project's own standard - written on the Illustrious checkpoint card - is that a recommendation is not a measurement.",
+  "examples": {
+    "anime": "/samples/styles/charcoal_drawing__anime.webp",
+    "qwen": "/samples/styles/charcoal_drawing__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Smudged black and white with paper tooth.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

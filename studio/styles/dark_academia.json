@@ -1,0 +1,27 @@
+{
+  "id": "dark_academia",
+  "name": "Dark academia",
+  "family": "world",
+  "engine": "anime",
+  "means": "Old-university melancholy: oak and leather, dust in low window light, tweed and wool, brown-green palette, autumn perpetually.",
+  "tags": "dark academia, library, old books, warm lamplight, tweed, autumn, dust motes",
+  "prose": "an old-university world of oak and leather in low dusty window light, brown and forest-green palette, wool and tweed",
+  "negative_add": "bright, modern, saturated, plastic",
+  "suits_looks": [
+    "sepia",
+    "golden",
+    "memory",
+    "firelight"
+  ],
+  "strength": "moderate",
+  "works_for": "video - static and warm, one of the safer sets for i2v",
+  "status": "ready",
+  "note": "PREDICTED NOUN RISK: 'library' and 'old books' may be drawn as a location, overriding the place layer the way ghibli_pastoral did. If it replaces rather than styles, mark compose=replaces rather than deleting it. | Authored in the second wave, after the first 64 were rendered and measured. status=untested because nothing here has been rendered yet - the first wave shipped 46 cards marked ready without a single render and 27 of 64 turned out to be routed to the wrong engine.",
+  "examples": {
+    "anime": "/samples/styles/dark_academia__anime.webp",
+    "qwen": "/samples/styles/dark_academia__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Warm oak and lamplight, brown-green palette. It did add a lantern, but as scenery rather than in her hands.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject, on both engines. studio/_tools/style_examples.py --all-engines"
+}

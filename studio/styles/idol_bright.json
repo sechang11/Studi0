@@ -1,0 +1,27 @@
+{
+  "id": "idol_bright",
+  "name": "Idol bright",
+  "family": "anime",
+  "engine": "anime",
+  "means": "Maximum-saturation stage drawing: glossy digital colour with soft gradients, blown highlights and bloom around every light source, coloured stage beams cutting visibly through the air, lens flare, and glitter and confetti drawn as literal objects in the frame.",
+  "tags": "modern anime screencap, glossy digital coloring, soft gradients, vibrant colors, stage lights, bloom, lens flare, sparkle, confetti, volumetric lighting",
+  "prose": "a bright idol-performance anime frame: glossy saturated colour, coloured stage beams cutting through haze, blown highlights and heavy bloom, glitter hanging in the air",
+  "negative_add": "muted colors, desaturated, monochrome, film grain, harsh shadow, gritty",
+  "suits_looks": [
+    "neon",
+    "blockbuster",
+    "dream",
+    "golden"
+  ],
+  "strength": "moderate",
+  "works_for": "video - mixed, and front-loaded with hazard. Bloom and beams are large and smooth and hold well; glitter, confetti and lens flare are small bright specks that pop and swim frame to frame. INFERRED - though confetti is already an established motion element in movies/derby-qwen.json, so this is one of the few claims here that could be checked against footage that exists rather than swept from scratch.",
+  "status": "ready",
+  "note": "Mostly a LIGHTING decision wearing a style's clothes. Bloom, lens flare, rim lighting and volumetric lighting are all existing tags in this library and they are what carries the look, alongside the measured clause from cards/anime_draw_era.json panel modern_web - 'modern anime screencap, glossy digital coloring, soft gradients'. The real trap is downstream. This style already delivers the frame at the top of its saturation and brightness range, and looks/night's note records that grades stack MULTIPLICATIVELY with hot, glow and aberration, and that the stack once turned a third of a film magenta. So pick a low-intervention look here or none at all: putting looks/neon on top of a frame that is already blown is how you lose the highlights permanently, and no later grade recovers clipped white. If the frame needs more punch, take it out of the drawing with stage lights and beams, which the model renders as OBJECTS, rather than out of the grade. | Downgraded to untested: NOTHING in this library was rendered when it was authored, so every strength and engine call is a considered prediction. This project's own standard - written on the Illustrious checkpoint card - is that a recommendation is not a measurement.",
+  "examples": {
+    "anime": "/samples/styles/idol_bright__anime.webp",
+    "qwen": "/samples/styles/idol_bright__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Sparkle, bloom, saturated rainbow light.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

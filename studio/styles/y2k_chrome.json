@@ -1,0 +1,25 @@
+{
+  "id": "y2k_chrome",
+  "name": "Y2K chrome",
+  "family": "world",
+  "engine": "anime",
+  "means": "Turn-of-millennium digital optimism: liquid chrome, iridescent gradients, lens flare, translucent plastic, blue-white highlights.",
+  "tags": "y2k aesthetic, chrome, iridescent, holographic, lens flare, translucent, gradient",
+  "prose": "a year-2000 digital aesthetic of liquid chrome and iridescent gradients, translucent plastic, blue-white lens flare",
+  "negative_add": "matte, rustic, muted, natural",
+  "suits_looks": [
+    "cold",
+    "neon"
+  ],
+  "strength": "moderate",
+  "works_for": "video - specular chrome shifts unpredictably between frames",
+  "status": "ready",
+  "note": "Reflective surfaces are the least temporally stable thing in the library. Expect this to look better as a still than as a clip. | Authored in the second wave, after the first 64 were rendered and measured. status=untested because nothing here has been rendered yet - the first wave shipped 46 cards marked ready without a single render and 27 of 64 turned out to be routed to the wrong engine.",
+  "examples": {
+    "anime": "/samples/styles/y2k_chrome__anime.webp",
+    "qwen": "/samples/styles/y2k_chrome__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Iridescent holographic coat and blue-white flare. The chrome landed on the GARMENT, which keeps it composable.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject, on both engines. studio/_tools/style_examples.py --all-engines"
+}

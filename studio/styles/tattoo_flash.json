@@ -1,0 +1,25 @@
+{
+  "id": "tattoo_flash",
+  "name": "Tattoo flash",
+  "family": "illustration",
+  "engine": "anime",
+  "means": "Traditional tattoo sheet: heavy black outline, limited red-green-yellow palette, bold simplified iconography, flat cream ground.",
+  "tags": "traditional tattoo flash, heavy black outline, limited palette, bold simple shapes, flat",
+  "prose": "a traditional tattoo flash treatment - heavy black outline, limited red green and yellow palette, bold simplified forms on cream",
+  "negative_add": "detailed, realistic, gradient, photographic",
+  "suits_looks": [
+    "neutral",
+    "sepia"
+  ],
+  "strength": "moderate",
+  "works_for": "video - flat and bold, stable",
+  "status": "unavailable",
+  "note": "PREDICTED NOUN RISK: may draw tattoos ON the subject rather than rendering the image AS flash. That is the chalkboard failure pattern and this card is a good test of it. | Authored in the second wave, after the first 64 were rendered and measured. status=untested because nothing here has been rendered yet - the first wave shipped 46 cards marked ready without a single render and 27 of 64 turned out to be routed to the wrong engine.",
+  "examples": {
+    "anime": "/samples/styles/tattoo_flash__anime.webp",
+    "qwen": "/samples/styles/tattoo_flash__qwen.webp"
+  },
+  "compose": "injects",
+  "verdict": "Drew tattoo motifs ON her - symbols across the coat on the illustration engine, full face tattoos on qwen. The card predicted exactly this.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject, on both engines. studio/_tools/style_examples.py --all-engines"
+}

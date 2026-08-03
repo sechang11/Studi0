@@ -1,0 +1,27 @@
+{
+  "id": "macro_photography",
+  "name": "Macro photography",
+  "family": "photoreal",
+  "engine": "qwen",
+  "means": "Extreme magnification: the subject fills the frame, the plane of sharp focus is a few millimetres deep, everything in front of and behind it dissolves to smooth colour, and surface micro-texture the eye never sees becomes the subject.",
+  "tags": "",
+  "prose": "a macro photograph at life-size magnification, the subject filling the frame, a plane of sharp focus only millimetres deep with everything in front and behind dissolved to smooth colour, visible surface micro-texture and dust, soft diffused ring light, dark uncluttered surround",
+  "negative_add": "wide shot, deep focus, everything in focus, sharp background, scenery, illustration, anime",
+  "suits_looks": [
+    "neutral",
+    "cold",
+    "underwater",
+    "dream"
+  ],
+  "strength": "strong",
+  "works_for": "video poorly. At this magnification a millimetre of drift is half the frame and LTX has nothing stable to hold onto, so the subject swims. Inferred.",
+  "status": "weak",
+  "note": "Strong because it is the depth-of-field lever - which studio/tags/depth_of_field.json rates the most reliable lens control in the project - pushed to its end stop. It inherits that card's grammar warning: declaring a dissolved background and then asking for background detail or scenery anywhere in the same prompt cancels both and you get an ordinary photograph. Give it a real noun to magnify - a housefly's eye, a rusted bolt thread, frost along a leaf edge - because at this magnification the whole picture IS the surface, and a vague subject leaves the model nothing to texture. Unavailable on the anime checkpoint: `object focus, close-up` there gives a drawn close-up, not magnification. | Downgraded to untested: NOTHING in this library was rendered when it was authored, so every strength and engine call is a considered prediction. This project's own standard - written on the Illustrious checkpoint card - is that a recommendation is not a measurement.",
+  "examples": {
+    "anime": "/samples/styles/macro_photography__anime.webp",
+    "qwen": "/samples/styles/macro_photography__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Tightened the crop but produced no macro optics - no extreme shallow plane, no change in subject scale. The frame is a portrait, not a macro.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

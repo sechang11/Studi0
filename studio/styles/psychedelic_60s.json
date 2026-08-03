@@ -1,0 +1,24 @@
+{
+  "id": "psychedelic_60s",
+  "name": "Psychedelic poster",
+  "family": "movement",
+  "engine": "anime",
+  "means": "1960s concert poster: writhing organic line, vibrating complementary colour, no negative space, flat.",
+  "tags": "psychedelic, 1960s poster, swirling patterns, vibrant complementary colors, organic line, flat",
+  "prose": "a 1960s psychedelic poster treatment - writhing organic linework, vibrating complementary colour, no empty space",
+  "negative_add": "muted, realistic, minimal, sparse",
+  "suits_looks": [
+    "neon"
+  ],
+  "strength": "moderate",
+  "works_for": "video - dense pattern is a boiling risk but the flatness helps",
+  "status": "ready",
+  "note": "The vibrating colour pairs are the mechanism. If the model produces merely 'colourful' rather than optically vibrating, that is a partial and should be recorded as weak. | Authored in the second wave, after the first 64 were rendered and measured. status=untested because nothing here has been rendered yet - the first wave shipped 46 cards marked ready without a single render and 27 of 64 turned out to be routed to the wrong engine.",
+  "examples": {
+    "anime": "/samples/styles/psychedelic_60s__anime.webp",
+    "qwen": "/samples/styles/psychedelic_60s__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Writhing organic colour in vibrating complementaries. Strong.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject, on both engines. studio/_tools/style_examples.py --all-engines"
+}

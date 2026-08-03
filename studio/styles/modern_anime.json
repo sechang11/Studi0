@@ -1,0 +1,27 @@
+{
+  "id": "modern_anime",
+  "name": "Modern TV anime",
+  "family": "anime",
+  "engine": "anime",
+  "means": "Crisp even lineart, two-tone cel shadow with a hard terminator, clean digital colour carrying no paint texture at all, and a softly painted background sitting behind flat characters. The default idiom of a contemporary TV episode.",
+  "tags": "modern anime style, clean digital coloring, crisp lineart, cel shading, two tone shadows",
+  "prose": "a frame from a contemporary Japanese television animation: flat cel-shaded characters with clean even outlines over a softly painted background",
+  "negative_add": "photorealistic, 3d, realistic, western comic, retro artstyle",
+  "suits_looks": [
+    "neutral",
+    "blockbuster",
+    "golden",
+    "overcast"
+  ],
+  "strength": "strong",
+  "works_for": "video too - the safest bet in the set. Flat colour with hard shadow edges gives LTX large stable areas and almost nothing high-frequency to reinvent between frames. INFERRED from the shape of the style rather than measured on a sweep, but it is also the idiom every finished film in movies/ already uses, so it is the best-evidenced guess here.",
+  "status": "ready",
+  "note": "This is roughly what animagine-xl-4.0 renders when you leave the style slot empty, so its real job is less to add a look than to STOP a drifting one - it pins the era so a stray retro or painterly clause elsewhere in the prompt cannot quietly date the film. The clause is lifted from cards/anime_draw_era.json panel modern_digital, which is measured. Do not also set a decade tag; era and this card fight over the same feature. And if the result looks flat and lifeless, that is a LOOK problem rather than a style problem - reach for looks/blockbuster or looks/golden, which are ffmpeg grades applied after generation and exact every time, not for more mood words in the prompt. | Downgraded to untested: NOTHING in this library was rendered when it was authored, so every strength and engine call is a considered prediction. This project's own standard - written on the Illustrious checkpoint card - is that a recommendation is not a measurement.",
+  "examples": {
+    "anime": "/samples/styles/modern_anime__anime.webp",
+    "qwen": "/samples/styles/modern_anime__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Clean digital line, cool flat grade. Separates from cel_anime_90s in exactly the intended direction.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

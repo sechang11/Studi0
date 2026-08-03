@@ -1,0 +1,26 @@
+{
+  "id": "noir_comic",
+  "name": "Noir comic",
+  "family": "graphic",
+  "engine": "qwen",
+  "means": "Comic art reduced to pure black and white with no midtones at all: figures and sets described by solid spot blacks against bare white paper, edges cut by hard shadow shapes rather than modelled, rain and highlights drawn as white strokes laid over the black.",
+  "tags": "",
+  "prose": "a hard-boiled black and white crime comic panel, drawn in solid spot blacks and bare white paper with no grey midtones anywhere, the figure cut out of shadow by a single hard light source, venetian blind slats and falling rain rendered as white ink strokes across the black, extreme chiaroscuro, loose brush ink line",
+  "negative_add": "colour, grey midtones, soft gradient, anime, cel shading, 3d, photorealistic",
+  "suits_looks": [
+    "noir",
+    "bleach_bypass",
+    "storm"
+  ],
+  "strength": "strong",
+  "works_for": "Among the best video survivors in this set. INFERRED from the flat/high-contrast rule, not measured: there is almost no fine texture for LTX-2.3 to boil and the large black shapes are stable. Expect the white rain strokes to be the first thing that swims.",
+  "status": "ready",
+  "note": "This is the card most easily confused with studio/looks/noir.json, and the difference is the reason both exist. The LOOK is an ffmpeg grade - hue=s=0, measured SATAVG exactly 0.000 - applied after generation; it desaturates whatever was rendered and hands you a grey photograph. This STYLE changes what the model draws: no greys exist in the first place because the artist never mixed any. Stacking both is fine and mildly helpful, since the grade kills any stray colour pixel that survived. NOT AVAILABLE on animagine - western comic is standing-negative here (studio/tags/western_comic.json). The anime-side substitute is 'manga, monochrome, greyscale, high contrast, heavy shadow, screentone', which gives a manga noir: real, good, and a different idiom - and studio/tags/monochrome.json warns that monochrome silently overrides every colour tag in the prompt. On the qwen path remember negative_add only bites at 20 steps and cfg 2.5-4.0; PROMPTING.md records the negative is close to ignored at cfg 1.0 with the Lightning LoRA.",
+  "examples": {
+    "anime": "/samples/styles/noir_comic__anime.webp",
+    "qwen": "/samples/styles/noir_comic__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "On qwen this is a genuine high-contrast B&W ink comic - one of the better surprises. On the illustration engine it did nothing, which is why it was nearly marked unavailable.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

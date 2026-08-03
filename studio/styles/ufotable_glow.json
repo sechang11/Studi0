@@ -1,0 +1,26 @@
+{
+  "id": "ufotable_glow",
+  "name": "Ufotable glow",
+  "family": "anime",
+  "engine": "anime",
+  "means": "Compositing-heavy modern anime: layered bloom, particle light, deep gradient skies, digital effects over painted backgrounds.",
+  "tags": "ufotable style, glowing effects, particle effects, bloom, gradient sky, digital compositing",
+  "prose": "a modern anime look with heavy compositing - layered bloom and particle light over painted backgrounds, deep gradient sky",
+  "negative_add": "flat, retro, matte, muted",
+  "suits_looks": [
+    "neon",
+    "firelight",
+    "cold"
+  ],
+  "strength": "moderate",
+  "works_for": "video - bloom holds; particles will not",
+  "status": "ready",
+  "note": "Separates from modern_anime (measured ready) by the COMPOSITING, not the drawing. If both land the same, this one is redundant. | Authored in the second wave, after the first 64 were rendered and measured. status=untested because nothing here has been rendered yet - the first wave shipped 46 cards marked ready without a single render and 27 of 64 turned out to be routed to the wrong engine.",
+  "examples": {
+    "anime": "/samples/styles/ufotable_glow__anime.webp",
+    "qwen": "/samples/styles/ufotable_glow__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Layered bloom and particle light over a painted background. Separates from modern_anime on compositing, as intended.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject, on both engines. studio/_tools/style_examples.py --all-engines"
+}

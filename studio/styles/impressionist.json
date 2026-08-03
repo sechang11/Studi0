@@ -1,0 +1,27 @@
+{
+  "id": "impressionist",
+  "name": "Impressionist",
+  "family": "painterly",
+  "engine": "anime",
+  "means": "Broken colour. The picture is built from thousands of separate unblended dabs that only mix in the viewer's eye, there is no black anywhere because shadows are painted as the complement of the light, every edge is soft, and the subject is secondary to the light falling across it.",
+  "tags": "painterly, visible brushstrokes, soft lighting, dappled light, bokeh, pastel colors",
+  "prose": "an impressionist oil sketch painted outdoors, the whole surface built from separate unblended dabs of pure colour that mix only at a distance, shadows painted in complementary blue and violet with no black anywhere, every edge soft, the light more important than the subject",
+  "negative_add": "cel shading, lineart, flat colour, sharp focus, photorealistic, 3d, black shadows",
+  "suits_looks": [
+    "golden",
+    "dawn",
+    "sunset",
+    "dream"
+  ],
+  "strength": "moderate",
+  "works_for": "Video: worst in this set alongside pixel_art and charcoal_drawing. Thousands of independent high-frequency dabs are precisely the structure expected to boil frame to frame, and there is no flat mass underneath to anchor them. INFERRED, but of all the inferences here this is the one I would bet hardest on.",
+  "status": "ready",
+  "note": "Moderate rather than strong because only half of it lands, and it is worth knowing which half. The PALETTE and the LIGHT fire reliably on qwen - warm high-key plein-air daylight, coloured shadows, no black. The defining mark does NOT: separate visible dabs at a readable scale is exactly what a diffusion model resolves into generic soft-focus blur. PROMPTING.md's own troubleshooting table lists 'mushy detail at 4 steps - go to 20 steps, cfg 2.5', and this style is the case that row was written for; do not run it on the Lightning path. Even at 20 steps expect soft digital painting more often than discrete strokes. It also destroys faces, so keep it off character close-ups and put it on landscape, water, crowd and foliage where the dab logic has something to describe. Near-useless on the anime checkpoint - the tags line above buys you a soft painterly background, and studio/tags/painterly.json warns that the moment painterly lands, cel shading stops being the thing you are looking at. Finally: impressionist is not a colour grade. If the warm high-key daylight is all you wanted, looks/golden and looks/dawn get you there deterministically after the render for no tokens and no reroll risk. Not rendered here. | Downgraded to untested: NOTHING in this library was rendered when it was authored, so every strength and engine call is a considered prediction. This project's own standard - written on the Illustrious checkpoint card - is that a recommendation is not a measurement.",
+  "examples": {
+    "anime": "/samples/styles/impressionist__anime.webp",
+    "qwen": "/samples/styles/impressionist__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Broken colour, soft bokeh light. Works here; was a plain photograph on qwen.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

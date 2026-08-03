@@ -1,0 +1,26 @@
+{
+  "id": "pre_raphaelite",
+  "name": "Pre-Raphaelite",
+  "family": "movement",
+  "engine": "anime",
+  "means": "Jewel-toned romantic realism: intense local colour, botanical precision, flowing hair and drapery, even unshadowed light.",
+  "tags": "pre-raphaelite, jewel tones, detailed botanicals, flowing hair, romantic, even lighting",
+  "prose": "a Pre-Raphaelite painting - intense jewel-toned local colour, botanical precision, flowing hair and drapery, even light",
+  "negative_add": "flat, minimal, modern, harsh lighting",
+  "suits_looks": [
+    "golden",
+    "memory",
+    "warm"
+  ],
+  "strength": "strong",
+  "works_for": "video - static and evenly lit, a safe i2v candidate",
+  "status": "ready",
+  "note": "The even, near-shadowless light is the strongest single signal and it is what separates this from baroque_painting, which measured ready on chiaroscuro. | Authored in the second wave, after the first 64 were rendered and measured. status=untested because nothing here has been rendered yet - the first wave shipped 46 cards marked ready without a single render and 27 of 64 turned out to be routed to the wrong engine.",
+  "examples": {
+    "anime": "/samples/styles/pre_raphaelite__anime.webp",
+    "qwen": "/samples/styles/pre_raphaelite__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Jewel-toned local colour, flowing hair, even shadowless light. Among the most attractive results in the wave.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject, on both engines. studio/_tools/style_examples.py --all-engines"
+}

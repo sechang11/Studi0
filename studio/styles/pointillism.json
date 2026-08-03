@@ -1,0 +1,25 @@
+{
+  "id": "pointillism",
+  "name": "Pointillism",
+  "family": "movement",
+  "engine": "anime",
+  "means": "Colour mixed in the eye: the whole image built from discrete dots of pure hue, no blending, luminous.",
+  "tags": "pointillism, dots of pure color, optical mixing, luminous, no blending",
+  "prose": "a pointillist painting built entirely from discrete dots of pure colour, mixing optically, luminous",
+  "negative_add": "smooth, blended, photographic, flat",
+  "suits_looks": [
+    "golden",
+    "warm"
+  ],
+  "strength": "moderate",
+  "works_for": "video - not viable, a dot field is the worst case for temporal stability",
+  "status": "weak",
+  "note": "manga_screentone proved this engine CAN produce a dot field, which is the reason to expect pointillism to work where comic_halftone did not. | Authored in the second wave, after the first 64 were rendered and measured. status=untested because nothing here has been rendered yet - the first wave shipped 46 cards marked ready without a single render and 27 of 64 turned out to be routed to the wrong engine.",
+  "examples": {
+    "anime": "/samples/styles/pointillism__anime.webp",
+    "qwen": "/samples/styles/pointillism__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Discrete dots are present but read as falling snow rather than as optical mixing. Partial.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject, on both engines. studio/_tools/style_examples.py --all-engines"
+}

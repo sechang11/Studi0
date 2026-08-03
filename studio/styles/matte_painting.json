@@ -1,0 +1,28 @@
+{
+  "id": "matte_painting",
+  "name": "Matte painting",
+  "family": "photoreal",
+  "engine": "qwen",
+  "means": "A painted environment built to pass as a photographed one. Three or four distinct planes of depth, each paler and bluer than the one in front, a hard dark foreground silhouette framing the shot, atmospheric haze doing the separating, and any figure small enough to read only as scale.",
+  "tags": "scenery, no humans, wide shot, extremely detailed background, volumetric lighting, atmospheric perspective",
+  "prose": "a photorealistic matte painting of the environment, four distinct planes of depth each paler and bluer than the one in front, a hard dark foreground silhouette framing the shot, atmospheric haze between the ranges, one dramatic light source, and any figure small enough to read only as scale",
+  "negative_add": "anime, cel shading, lineart, flat colour, cartoon, large figure in foreground",
+  "suits_looks": [
+    "blockbuster",
+    "cold",
+    "storm",
+    "sunset",
+    "golden"
+  ],
+  "strength": "strong",
+  "works_for": "Video: the best bet in this set, and for reasons that are documented rather than guessed. A matte painting is the classic slow-push shot, and craft/CINEMATOGRAPHY.md's prescription for anything LTX cannot animate is exactly 'a still with a slow push'. A landscape also has no face for the model to re-invent, which sidesteps the micro-face failure catalogued there. Still a reasoned bet from documented LTX failure modes rather than a measured style-survival test.",
+  "status": "unavailable",
+  "note": "The evidence here is unusually good and it is not mine. craft/CINEMATOGRAPHY.md section 4 reports that across 109 CHRONO shots the storybook style LoRA at 0.9 DROPPED OUT on landscapes, architecture and crowds, and that the final shot 920_lanterns came back as a photoreal matte painting with no cel shading anywhere in it - i.e. qwen's pull toward photoreal matte painting on wide environments is strong enough to beat a style LoRA that was fighting it. Using this style is pushing with the grain. Flatly unavailable on the anime checkpoint, and not marginally: studio/tags/photorealistic.json rates 'photorealistic' as NEGATIVE-ONLY on that model, says it returns waxy semi-real faces and lost line in the positive, and it sits in the project's standing negative for that reason. Use the anime path for anime scenery, never for this. Keep figures small or absent - the moment a large character face enters the frame the model starts rendering a character illustration instead of an environment. | Downgraded to untested: NOTHING in this library was rendered when it was authored, so every strength and engine call is a considered prediction. This project's own standard - written on the Illustrious checkpoint card - is that a recommendation is not a measurement.",
+  "examples": {
+    "anime": "/samples/styles/matte_painting__anime.webp",
+    "qwen": "/samples/styles/matte_painting__qwen.webp"
+  },
+  "compose": "inert",
+  "verdict": "Came back broken: horizontal banding and a doubled figure. This is the above-2MP composition-duplication failure the qwen checkpoint card documents, triggered by the style's own wide-vista prose.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

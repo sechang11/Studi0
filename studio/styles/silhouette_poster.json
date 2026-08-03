@@ -1,0 +1,27 @@
+{
+  "id": "silhouette_poster",
+  "name": "Silhouette poster",
+  "family": "graphic",
+  "engine": "anime",
+  "means": "The subject reduced to one solid unbroken shape - black, or a single flat colour - read against one flat bright field. All the information lives in the contour; there is no interior detail at all.",
+  "tags": "silhouette, backlighting, high contrast, simple background, flat color, no facial features",
+  "prose": "a poster composed as pure silhouette, the figure a single solid black shape with no interior detail whatsoever, set against one flat luminous field of colour, the whole image readable as exactly two tones, the contour doing all the work",
+  "negative_add": "facial detail, detailed clothing, texture, gradient background, front lighting",
+  "suits_looks": [
+    "sunset",
+    "moonlit",
+    "golden",
+    "dawn"
+  ],
+  "strength": "strong",
+  "works_for": "Holds structurally - large flat shapes are the safest thing to hand LTX-2.3. INFERRED, not measured, with one specific warning: i2v models tend to invent detail inside large empty regions as they animate, so watch for a face fading up inside the black. If that happens it is the style failing, not the motion.",
+  "status": "ready",
+  "note": "Read studio/tags/silhouette.json before using this; the measured finding there is load-bearing. 'silhouette' is danbooru GRAMMAR, in the same class as 1boy and solo, and it overrides your subject block: leave hair colour, eye colour and scar tags in the prompt and you get a half-lit figure that is neither silhouette nor character. STRIP THE IDENTITY TAGS. The same card records the payoff, which is bigger than an aesthetic choice - the model reproduces a silhouette far more reliably than it reproduces a face, so budgeting a share of shots as silhouettes is a character-consistency dodge. One of the few styles in this set that genuinely works on both engines.",
+  "examples": {
+    "anime": "/samples/styles/silhouette_poster__anime.webp",
+    "qwen": "/samples/styles/silhouette_poster__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Figure reduced to solid black against a lit ground. Strong and unambiguous.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

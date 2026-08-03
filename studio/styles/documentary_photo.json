@@ -1,0 +1,28 @@
+{
+  "id": "documentary_photo",
+  "name": "Documentary photo",
+  "family": "photoreal",
+  "engine": "qwen",
+  "means": "A photograph taken of something that was happening anyway: available light with no fill, framing that is slightly off, subject caught mid-gesture, and a background nobody tidied.",
+  "tags": "",
+  "prose": "a documentary photograph, available light only with no fill, handheld 35mm lens, slightly off-centre framing, unposed subject caught mid-gesture and not looking at the camera, cluttered real background, mixed colour temperature between cold window light and warm overhead bulbs",
+  "negative_add": "studio lighting, posed, retouched, symmetrical composition, stock photo, illustration, anime",
+  "suits_looks": [
+    "overcast",
+    "fluorescent",
+    "neutral",
+    "faded_film",
+    "hospital"
+  ],
+  "strength": "moderate",
+  "works_for": "video reasonably well - it is already a handheld idiom, so LTX drift reads as camera operation rather than as failure. Inferred from the idiom, not measured.",
+  "status": "ready",
+  "note": "Fails by being too good. Qwen's default is a well-lit, well-composed, retouched photograph and the word 'documentary' does not undo that - you have to spend words on the specific imperfections: no fill, mixed colour temperature, background clutter, subject not looking at the camera. It overlaps war_photography heavily and the honest separation between them is the grade more than the prompt. No anime form: the entire premise is that a camera made it, and on Animagine that premise is in the standing negative. | Downgraded to untested: NOTHING in this library was rendered when it was authored, so every strength and engine call is a considered prediction. This project's own standard - written on the Illustrious checkpoint card - is that a recommendation is not a measurement.",
+  "examples": {
+    "anime": "/samples/styles/documentary_photo__anime.webp",
+    "qwen": "/samples/styles/documentary_photo__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Available light, candid stance, unposed.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

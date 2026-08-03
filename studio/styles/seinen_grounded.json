@@ -1,0 +1,28 @@
+{
+  "id": "seinen_grounded",
+  "name": "Seinen grounded",
+  "family": "anime",
+  "engine": "anime",
+  "means": "Adult-proportioned faces with narrow sharp eyes, restrained line weight, shadow used sparingly and placed where a real light would actually put it, a desaturated palette, and backgrounds carrying genuine architectural and material detail instead of a cel wash.",
+  "tags": "seinen style, narrow sharp eyes, realistically proportioned eyes, clean lineart, muted colors, desaturated, detailed background, realistic shadows",
+  "prose": "an adult drama anime frame: naturalistic facial proportions, narrow eyes, restrained linework, muted desaturated palette, a detailed and believably lit interior",
+  "negative_add": "very large eyes, chibi, pastel colors, sparkle, thick lineart",
+  "suits_looks": [
+    "cold",
+    "overcast",
+    "fluorescent",
+    "noir",
+    "hospital"
+  ],
+  "strength": "moderate",
+  "works_for": "video - mixed. The restrained flat shading holds; the detailed background does not, because architectural fine detail is precisely what an i2v pass reinvents. INFERRED. If the shot has to move, push the background into shallower depth of field on the keyframe so there is less fine detail left to drift.",
+  "status": "ready",
+  "note": "The one card in this set with a genuine engine choice, and the choice costs something real. On the ANIME checkpoint the eye clause is measured - cards/anime_draw_eye_render.json ships seinen_sharp as 'narrow sharp eyes, realistically proportioned eyes, seinen style', and that card reads seinen_sharp as promising somebody is going to get hurt. On QWEN you get more convincing grounding and far better materials, because prose is its native dialect - but you lose the cast. The IPAdapter character sheets in this project are anime sheets, and variables.json is explicit that the sheet is the only real face-consistency mechanism available today, so a qwen keyframe breaks continuity with every other shot in the film. Practical split: qwen for establishing plates with no faces in them, anime for anything a cast member walks into. Do not confuse the desaturation here with a grade - this card puts fewer saturated PIGMENTS in the drawing, whereas looks/cold pulls saturation out of the finished frame; using both is fine and is usually what you want. | Downgraded to untested: NOTHING in this library was rendered when it was authored, so every strength and engine call is a considered prediction. This project's own standard - written on the Illustrious checkpoint card - is that a recommendation is not a measurement.",
+  "examples": {
+    "anime": "/samples/styles/seinen_grounded__anime.webp",
+    "qwen": "/samples/styles/seinen_grounded__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Muted palette, restrained line, adult proportion. Subtle by design at 20.6 from control, but doing the intended thing.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

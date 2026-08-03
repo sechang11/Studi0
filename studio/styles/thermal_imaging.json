@@ -1,0 +1,25 @@
+{
+  "id": "thermal_imaging",
+  "name": "Thermal",
+  "family": "photo",
+  "engine": "qwen",
+  "means": "Heat as image: black-body colour ramp from blue to white, no texture at all, glowing bodies against a cold ground.",
+  "tags": "",
+  "prose": "a thermal image - a blue-to-white heat colour ramp, no surface texture, warm bodies glowing against a cold ground",
+  "negative_add": "natural color, texture, detail, daylight",
+  "suits_looks": [
+    "cold",
+    "neon"
+  ],
+  "strength": "strong",
+  "works_for": "video - a global false-colour mapping, very stable",
+  "status": "unavailable",
+  "note": "Extremely distinctive and unlikely to be confused with anything. The risk is the opposite of the usual one - it may be SO strong that it erases the character and the setting together. | Authored in the second wave, after the first 64 were rendered and measured. status=untested because nothing here has been rendered yet - the first wave shipped 46 cards marked ready without a single render and 27 of 64 turned out to be routed to the wrong engine.",
+  "examples": {
+    "anime": "/samples/styles/thermal_imaging__anime.webp",
+    "qwen": "/samples/styles/thermal_imaging__qwen.webp"
+  },
+  "compose": "injects",
+  "verdict": "Recoloured her coat and scarf into a rainbow gradient and left the street a normal photograph. It painted the ramp onto an object instead of remapping the image.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject, on both engines. studio/_tools/style_examples.py --all-engines"
+}

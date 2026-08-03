@@ -1,0 +1,25 @@
+{
+  "id": "graffiti",
+  "name": "Graffiti",
+  "family": "illustration",
+  "engine": "anime",
+  "means": "Aerosol on concrete: overspray haze, hard stencil edge against soft spray, saturated fill with black outline, layered over texture.",
+  "tags": "graffiti, spray paint, aerosol texture, bold outline, saturated fill, concrete texture, street art",
+  "prose": "an aerosol street-art treatment - overspray haze and hard stencil edges, saturated fill with black outline over concrete texture",
+  "negative_add": "clean, smooth, delicate, painterly",
+  "suits_looks": [
+    "neon",
+    "sodium"
+  ],
+  "strength": "moderate",
+  "works_for": "video - texture-heavy, expect crawl",
+  "status": "unavailable",
+  "note": "PREDICTED NOUN RISK: high. 'graffiti' will likely be drawn as graffiti on a wall BEHIND the subject rather than as the rendering idiom - the exact chalkboard failure. Authored anyway because the measurement is the point. | Authored in the second wave, after the first 64 were rendered and measured. status=untested because nothing here has been rendered yet - the first wave shipped 46 cards marked ready without a single render and 27 of 64 turned out to be routed to the wrong engine.",
+  "examples": {
+    "anime": "/samples/styles/graffiti__anime.webp",
+    "qwen": "/samples/styles/graffiti__qwen.webp"
+  },
+  "compose": "injects",
+  "verdict": "Put a spray can in her hand. The card rated this the highest noun risk in the batch and it was right.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject, on both engines. studio/_tools/style_examples.py --all-engines"
+}

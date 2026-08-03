@@ -1,0 +1,27 @@
+{
+  "id": "dieselpunk",
+  "name": "Dieselpunk",
+  "family": "world",
+  "engine": "anime",
+  "means": "Interwar heavy industry: riveted steel, olive drab and oxide red, smoke and searchlights, weight over elegance.",
+  "tags": "dieselpunk, 1940s, industrial, riveted metal, smoke, searchlight, olive drab",
+  "prose": "an interwar heavy-industrial world of riveted steel and olive drab, smoke haze, hard searchlight beams",
+  "negative_add": "clean, futuristic, pastel, neon",
+  "suits_looks": [
+    "cold",
+    "noir",
+    "sodium",
+    "overcast"
+  ],
+  "strength": "moderate",
+  "works_for": "video - large forms hold; smoke is the usual i2v boiling risk",
+  "status": "ready",
+  "note": "Sits between steampunk and retro-futurism. If it collapses toward steampunk on render, the separator to push is the palette - olive/oxide against steampunk's brass - rather than the era word. | Authored in the second wave, after the first 64 were rendered and measured. status=untested because nothing here has been rendered yet - the first wave shipped 46 cards marked ready without a single render and 27 of 64 turned out to be routed to the wrong engine.",
+  "examples": {
+    "anime": "/samples/styles/dieselpunk__anime.webp",
+    "qwen": "/samples/styles/dieselpunk__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Olive drab, smoke haze, heavy muted industry. Real but restrained; it reads as a grade more than a world.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject, on both engines. studio/_tools/style_examples.py --all-engines"
+}

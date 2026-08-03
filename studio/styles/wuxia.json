@@ -1,0 +1,26 @@
+{
+  "id": "wuxia",
+  "name": "Wuxia",
+  "family": "world",
+  "engine": "anime",
+  "means": "Chinese martial-fantasy: flowing silk in motion, ink-wash mountains and mist, jade and vermilion, weightless verticality.",
+  "tags": "wuxia, chinese clothes, flowing silk, misty mountains, jade, vermilion, ethereal",
+  "prose": "a Chinese martial-fantasy world of flowing silk and ink-wash mountains in mist, jade green and vermilion",
+  "negative_add": "western, modern, gritty, urban",
+  "suits_looks": [
+    "memory",
+    "warm",
+    "overcast"
+  ],
+  "strength": "strong",
+  "works_for": "video - flowing fabric is a strong motion subject and i2v handles cloth better than faces",
+  "status": "ready",
+  "note": "Related to ink_wash, which measured as the second-strongest card in the library. If this one underperforms, the fix is to borrow ink_wash's background treatment rather than to strengthen the wuxia tag. | Authored in the second wave, after the first 64 were rendered and measured. status=untested because nothing here has been rendered yet - the first wave shipped 46 cards marked ready without a single render and 27 of 64 turned out to be routed to the wrong engine.",
+  "examples": {
+    "anime": "/samples/styles/wuxia__anime.webp",
+    "qwen": "/samples/styles/wuxia__qwen.webp"
+  },
+  "compose": "replaces",
+  "verdict": "Flowing silk, jade, Chinese architecture. Strong, and it replaces the setting.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject, on both engines. studio/_tools/style_examples.py --all-engines"
+}

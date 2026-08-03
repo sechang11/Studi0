@@ -1,0 +1,26 @@
+{
+  "id": "sakuga_impact",
+  "name": "Sakuga impact",
+  "family": "anime",
+  "engine": "anime",
+  "means": "Nominally the showcase action idiom: smeared in-between drawings, extreme foreshortening, debris and ink effects, a rough uncleaned line at the peak of a movement. As a SINGLE FRAME it barely exists, because almost everything the word names happens between frames rather than inside one.",
+  "tags": "dynamic angle, foreshortening, radial speed lines, motion lines, rough sketch, unfinished lineart, genga, debris",
+  "prose": "a single showcase action drawing: extreme foreshortening toward the viewer, rough uncleaned linework, debris and drawn motion streaks filling the frame",
+  "negative_add": "static, scenery, detailed background, motion blur",
+  "suits_looks": [
+    "bleach_bypass",
+    "blockbuster",
+    "storm"
+  ],
+  "strength": "weak",
+  "works_for": "video - this style is ABOUT motion and is still the wrong tool for it here. LTX does image-to-video from one keyframe, so a smear drawing as the keyframe just hands it a distorted subject to hold for the whole clip, which is not the same thing as movement. prompts/ltx_motion.json lists nine motion shapes that reliably fail and several of them - sequential beats, motion contradicting the keyframe - are exactly what an impact cut is made of.",
+  "status": "weak",
+  "note": "Marked weak deliberately, and on record rather than on taste. cards/anime_anim_sakuga_level.json is declared not_visual: it allocates frame rate, motion strength and retries, and states plainly that a single frame from a held cut and from a showcase cut are the SAME DRAWING. tags/impact_frame.json is equally blunt - impact frame is production jargon rather than trained booru vocabulary, so the checkpoint has no consistent picture attached to the words and you get an ordinary frame with the tokens wasted. What does render out of the tag list above is speed lines (the most-used effect tag in this library, 14 uses) and dynamic angle. What actually delivers the hit is elsewhere: shot.fx flash and whiteout in short.py fx_chain, applied after the render, exact every time - effects.json is blunt that this compositing tier is where the reference short's apparent violence really comes from. And the craft answer is cheaper than all of it: CUT AWAY at contact. Wind-up, white frame, then the net already bulging. Reach for shot.fx.speed_lines and shot.fx flash instead of this card, and buy the hit with the quietest shot in the scene immediately before it.",
+  "examples": {
+    "anime": "/samples/styles/sakuga_impact__anime.webp",
+    "qwen": "/samples/styles/sakuga_impact__qwen.webp"
+  },
+  "compose": "injects",
+  "verdict": "Changed her POSE - arm thrown at camera, scarf streaming. Motion is a shot property; this card silently rewrites blocking.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

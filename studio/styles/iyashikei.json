@@ -1,0 +1,26 @@
+{
+  "id": "iyashikei",
+  "name": "Iyashikei",
+  "family": "anime",
+  "engine": "anime",
+  "means": "Healing-genre calm: no conflict in the frame, wide quiet composition, soft natural light, muted green and cream, gentle.",
+  "tags": "iyashikei, calm, peaceful, soft natural light, muted green, wide quiet composition, gentle",
+  "prose": "a calm healing-genre anime look - quiet wide composition, soft natural light, muted greens and cream, nothing tense",
+  "negative_add": "dramatic, dark, high contrast, action",
+  "suits_looks": [
+    "warm",
+    "overcast",
+    "memory"
+  ],
+  "strength": "weak",
+  "works_for": "video - calm and static, very stable",
+  "status": "ready",
+  "note": "Honest expectation: WEAK. 'Peaceful' is a quality, not a thing, and this project has repeatedly measured that qualities do not render. The palette clause is the only part likely to land. | Authored in the second wave, after the first 64 were rendered and measured. status=untested because nothing here has been rendered yet - the first wave shipped 46 cards marked ready without a single render and 27 of 64 turned out to be routed to the wrong engine.",
+  "examples": {
+    "anime": "/samples/styles/iyashikei__anime.webp",
+    "qwen": "/samples/styles/iyashikei__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Quiet wide composition, soft muted greens, nothing tense. Marked weak before rendering on the grounds that 'peaceful' is a quality - the palette clause carried it further than expected. Prediction corrected.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject, on both engines. studio/_tools/style_examples.py --all-engines"
+}

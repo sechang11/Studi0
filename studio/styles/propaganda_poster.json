@@ -1,0 +1,25 @@
+{
+  "id": "propaganda_poster",
+  "name": "Propaganda poster",
+  "family": "illustration",
+  "engine": "anime",
+  "means": "Mid-century state graphics: limited flat palette, heroic upward-looking figure, hard diagonal, simplified monumental forms.",
+  "tags": "propaganda poster, limited palette, heroic figure, low angle, bold flat shapes, monumental",
+  "prose": "a mid-century propaganda poster - limited flat palette, heroic upward-looking figure, hard diagonal composition",
+  "negative_add": "delicate, realistic, subtle, detailed",
+  "suits_looks": [
+    "bleach",
+    "sepia"
+  ],
+  "strength": "moderate",
+  "works_for": "video - flat colour holds",
+  "status": "weak",
+  "note": "TEXT IS IN THE NEGATIVE for the reason screenprint_poster failed: both models hallucinate garbled lettering when a card implies typography. | Authored in the second wave, after the first 64 were rendered and measured. status=untested because nothing here has been rendered yet - the first wave shipped 46 cards marked ready without a single render and 27 of 64 turned out to be routed to the wrong engine.",
+  "examples": {
+    "anime": "/samples/styles/propaganda_poster__anime.webp",
+    "qwen": "/samples/styles/propaganda_poster__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Red and black with a hard diagonal, but mostly ordinary anime underneath. The text negative did at least prevent the garbled lettering that killed screenprint_poster.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject, on both engines. studio/_tools/style_examples.py --all-engines"
+}

@@ -1,0 +1,25 @@
+{
+  "id": "flat_vector",
+  "name": "Flat vector",
+  "family": "graphic",
+  "engine": "anime",
+  "means": "Illustration built from closed geometric shapes each filled with one solid colour - no gradient, no texture, no visible brush or pencil - where every contour is simply the place one flat shape stops and the next begins.",
+  "tags": "flat color, no shading, thick outlines, simple background, limited palette, high contrast",
+  "prose": "a flat vector illustration built from clean geometric shapes, each shape filled with a single solid colour, no gradients and no texture anywhere in the image, crisp hard edges throughout, a limited palette of five or six colours, generous flat background",
+  "negative_add": "gradient, texture, film grain, photorealistic, 3d, soft shading, painterly",
+  "suits_looks": [
+    "neutral",
+    "bleach"
+  ],
+  "strength": "strong",
+  "works_for": "The strongest video survivor here. INFERRED, not measured: large flat fields with hard edges give LTX-2.3 nothing fine to boil. The failure to watch for is the opposite of boiling - edges softening and gradients creeping in as the clip runs, which reads as the style quietly decaying rather than as noise.",
+  "status": "ready",
+  "note": "SPELLING IS MEASURED, not pedantry: studio/tags/flat_colour.json records that the trained danbooru token is the American 'flat color' and that the British spelling lands weaker, so write flat color in the anime prompt even though the rest of this library says colour. On animagine this gives flat ANIME rather than vector - the keyline and face proportions stay anime and you have only removed the shading; actual vector geometry is the qwen path. Grading fights this style: the point is a small deliberate palette, and a strong look re-introduces exactly the tonal variation you spent tokens removing. Stay on neutral or something mild.",
+  "examples": {
+    "anime": "/samples/styles/flat_vector__anime.webp",
+    "qwen": "/samples/styles/flat_vector__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Hard-edged shapes and clean fills. Works here; on qwen it barely moved.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

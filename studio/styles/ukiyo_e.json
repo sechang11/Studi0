@@ -1,0 +1,27 @@
+{
+  "id": "ukiyo_e",
+  "name": "Ukiyo-e woodblock",
+  "family": "graphic",
+  "engine": "anime",
+  "means": "Edo woodblock print. One even-weight black keyblock outline with flat unmodulated colour registered inside it, no cast shadows and no modelling anywhere, a hand-wiped bokashi gradient across the top of the sky, a short indigo-and-beni-red-and-ochre palette, cloud and mist bands used as flat compositional shapes, and woodgrain and paper fibre showing in the flats.",
+  "tags": "ukiyo-e, traditional media, japanese art, flat colour, thick outlines, limited palette, no shading, woodgrain",
+  "prose": "an Edo period ukiyo-e woodblock print, one even-weight black keyblock outline with flat unmodulated colour registered inside it, no cast shadows and no modelling anywhere, a hand-wiped indigo gradient across the top of the sky, cloud bands used as flat shapes, woodgrain and paper fibre visible in the flats",
+  "negative_add": "photorealistic, 3d, cel shading, gradient shading, cast shadow, soft lighting, western",
+  "suits_looks": [
+    "faded_film",
+    "sepia",
+    "neutral",
+    "overcast"
+  ],
+  "strength": "moderate",
+  "works_for": "Video: structurally the best bet in the painted set. Flat unmodulated colour, one hard outline weight, no gradients - the exact shape expected to survive the LTX pass. The woodgrain will not, and losing it costs you little. INFERRED from the flat-holds prior, not measured.",
+  "status": "ready",
+  "note": "'ukiyo-e' is a real danbooru tag and the anime checkpoint sits on top of a genuine Japanese-print prior, so this is one of the few in this set honestly available on both engines. The catch is the same as art_nouveau and baroque_painting and it is bigger here than anywhere: this style DRAGS CONTENT. Ask for ukiyo-e and you get kimono, Edo streets, wave curls and Mount Fuji whether or not you asked, because in the training data the idiom and its subject matter are the same pictures. craft/CINEMATOGRAPHY.md already caught the same class of thing biting a film - 750_zeal_falls came back with decorative Hokusai wave curls under a catastrophe. If you need a modern subject in this idiom, over-specify the subject nouns and budget for rerolls. Second: the flatness IS the style, so do not follow it with a look that adds contrast - looks/noir at 1.32 and looks/night at 1.20 will crush the flat areas into each other and you will lose the registration that makes it read as a print. Not rendered on this box. | Downgraded to untested: NOTHING in this library was rendered when it was authored, so every strength and engine call is a considered prediction. This project's own standard - written on the Illustrious checkpoint card - is that a recommendation is not a measurement.",
+  "examples": {
+    "anime": "/samples/styles/ukiyo_e__anime.webp",
+    "qwen": "/samples/styles/ukiyo_e__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Woodblock line, flat inked colour, period signage. Strong.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

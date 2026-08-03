@@ -1,0 +1,26 @@
+{
+  "id": "webtoon_flat",
+  "name": "Webtoon flat colour",
+  "family": "illustration",
+  "engine": "anime",
+  "means": "Digital-native comic colour: thin even lineart, often coloured rather than black, large flat fills with a single soft airbrushed gradient on skin and hair in place of a cel step, a saturated candy palette, and almost no true black anywhere in the image.",
+  "tags": "flat color, thin lineart, colored lineart, soft gradient shading, vibrant colors, simple background",
+  "prose": "a digital webcomic illustration: clean thin outlines, large flat areas of saturated colour, one soft airbrushed gradient on the skin, no heavy black keyline",
+  "negative_add": "thick lineart, monochrome, film grain, photorealistic, harsh shadow",
+  "suits_looks": [
+    "neutral",
+    "dream",
+    "neon"
+  ],
+  "strength": "moderate",
+  "works_for": "video too - very good, and along with chibi one of the two safest cards in the set. Large flat saturated regions and broad soft gradients are the easiest thing an i2v pass has to hold, and there is essentially no fine texture to boil. INFERRED, but structurally about as favourable as this pipeline gets.",
+  "status": "ready",
+  "note": "The WORD does not work; the marks do. webtoon appears nowhere in this project's tag library and is not a trained danbooru tag, so writing it is the storybook_anime mistake again - tags/storybook_anime.json is the reference case for phrasing the corpus does not contain and parses as a vague wish. Everything in the tag list above is built from parts the model actually holds. flat color in particular must be the AMERICAN spelling: tags/flat_colour.json is explicit that the British form is a different token sequence and lands weaker. One thing this card cannot give you is the FORMAT. A webtoon is a tall vertical scroll, and that is a canvas decision rather than a style one - movies here are authored at [1920, 1080] and animagine's native size is [1344, 768]. You can have the colour idiom; you cannot have the strip, and no amount of prompting will produce it. Qwen handles this style comfortably from prose and is the better engine when the shot has no cast member in it, since flat digital illustration is well inside its range and it does not need danbooru grammar to get there. | Downgraded to untested: NOTHING in this library was rendered when it was authored, so every strength and engine call is a considered prediction. This project's own standard - written on the Illustrious checkpoint card - is that a recommendation is not a measurement.",
+  "examples": {
+    "anime": "/samples/styles/webtoon_flat__anime.webp",
+    "qwen": "/samples/styles/webtoon_flat__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Bold flat colour and heavy saturation, no rendering.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

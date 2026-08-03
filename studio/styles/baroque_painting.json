@@ -1,0 +1,27 @@
+{
+  "id": "baroque_painting",
+  "name": "Baroque painting",
+  "family": "painterly",
+  "engine": "anime",
+  "means": "Seventeenth-century oil drama. One raking light source from outside the frame, two thirds of the canvas surrendered to deep transparent brown shadow, flesh and heavy diagonal drapery pulled into the light and everything else given up, an ochre-crimson-umber palette, and a warm varnish over all of it.",
+  "tags": "chiaroscuro, harsh shadow, dramatic lighting, rim lighting, dark background, oil painting (medium), gold trim",
+  "prose": "a baroque oil painting, one raking light source from outside the frame with two thirds of the canvas surrendered to deep transparent brown shadow, flesh and heavy diagonal drapery pulled into the light, ochre and crimson and umber under a warm varnish",
+  "negative_add": "anime, cel shading, flat colour, lineart, 3d, modern clothing, bright even lighting",
+  "suits_looks": [
+    "firelight",
+    "golden",
+    "memory",
+    "noir"
+  ],
+  "strength": "moderate",
+  "works_for": "Video: better than most of the painted set. Large simple masses and extreme contrast is the shape expected to hold, and most of the frame is near-black, which is very little for LTX to get wrong. The varnish and canvas texture will not survive. INFERRED, not measured.",
+  "status": "ready",
+  "note": "The useful honest half of this card is what you can salvage on the anime path. The PAINT does not transfer - animagine will not give you transparent brown shadow or oil surface. The LIGHT does: chiaroscuro, harsh shadow and rim lighting all exist as real tags in studio/tags/ and the checkpoint holds them, so an anime frame lit like a Caravaggio is genuinely available even though a baroque painting is not. If the lighting is what you were after, use those three tags and skip this card entirely. Second warning: like art_nouveau and ukiyo_e, this style drags PERIOD CONTENT with it - expect drapery, candles and a subject who looks like they live in the 1600s. Do not put it on a modern scene expecting only the lighting; that is what the lighting tags are for. Anime-path lighting tags sourced from studio/tags/; the qwen half is reasoned, not rendered. | Downgraded to untested: NOTHING in this library was rendered when it was authored, so every strength and engine call is a considered prediction. This project's own standard - written on the Illustrious checkpoint card - is that a recommendation is not a measurement.",
+  "examples": {
+    "anime": "/samples/styles/baroque_painting__anime.webp",
+    "qwen": "/samples/styles/baroque_painting__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Chiaroscuro - single warm source, deep falloff. Strong.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

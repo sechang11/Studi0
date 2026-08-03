@@ -1,0 +1,26 @@
+{
+  "id": "double_exposure",
+  "name": "Double exposure",
+  "family": "photo",
+  "engine": "qwen",
+  "means": "Two frames on one negative: a silhouette filled with a second scene, blended luminance, ghosted overlap.",
+  "tags": "",
+  "prose": "a double exposure - a portrait silhouette filled with a second overlapping scene, blended by luminance, ghosted",
+  "negative_add": "single image, opaque, flat",
+  "suits_looks": [
+    "bleach",
+    "noir",
+    "memory"
+  ],
+  "strength": "moderate",
+  "works_for": "video - not viable, the two layers will drift independently",
+  "status": "weak",
+  "note": "One of the few compositional styles in the library. If it merely produces a faint overlay rather than a genuine silhouette fill, record that as weak. | Authored in the second wave, after the first 64 were rendered and measured. status=untested because nothing here has been rendered yet - the first wave shipped 46 cards marked ready without a single render and 27 of 64 turned out to be routed to the wrong engine.",
+  "examples": {
+    "anime": "/samples/styles/double_exposure__anime.webp",
+    "qwen": "/samples/styles/double_exposure__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "A faint ghosted overlap rather than a silhouette filled with a second scene. Partial.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject, on both engines. studio/_tools/style_examples.py --all-engines"
+}

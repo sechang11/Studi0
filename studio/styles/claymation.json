@@ -1,0 +1,26 @@
+{
+  "id": "claymation",
+  "name": "Claymation",
+  "family": "3d",
+  "engine": "qwen",
+  "means": "Plasticine figures photographed on a miniature set: matte surfaces with no specular sheen, thumbprint dents and tool marks pressed into the clay, faint seams where parts were joined, slightly lumpy asymmetric forms, and the shallow depth of field a macro lens gives a small subject.",
+  "tags": "",
+  "prose": "a stop-motion plasticine claymation still, characters modelled in matte modelling clay with visible thumbprints, tool marks and joining seams, slightly lumpy asymmetric forms, photographed on a small handbuilt set under soft studio lighting, shallow macro depth of field, dust and stray fibres on the surfaces",
+  "negative_add": "anime, cel shading, 2d, flat colour, glossy, cgi, smooth plastic surface",
+  "suits_looks": [
+    "golden",
+    "overcast",
+    "faded_film"
+  ],
+  "strength": "moderate",
+  "works_for": "The TEXTURE survives and the MOTION betrays it - understand this before using it. LTX-2.3 produces smooth continuous interpolation, and the appeal of stop motion is the opposite: stepped, held frames at twelve or eight a second with a little jitter. A perfectly smooth claymation clip reads as CGI imitating clay. INFERRED, not measured. The fix is not a prompt - decimate the finished clip to 12fps and hold each frame, in the deterministic tier.",
+  "status": "ready",
+  "note": "Best of the three craft styles in this set on this box, because plasticine animation is well represented in base training data. FINGERPRINTS are the load-bearing noun: without them clay renders as smooth coloured plastic and the entire tell is gone. NOT AVAILABLE on animagine - the standing negative there contains '3d' precisely because that checkpoint drifts glossy (studio/tags/3d_render.json), and asking it for a physically modelled object is asking it to fight its own house style; you get an anime character with a clay aesthetic, not a clay character. No style LoRA exists here to help either: LORAS.md counts zero general style LoRAs, so this is base-model knowledge only and will not be repeatable shot to shot the way a LoRA would make it.",
+  "examples": {
+    "anime": "/samples/styles/claymation__anime.webp",
+    "qwen": "/samples/styles/claymation__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Real modelled-clay surface and thumbprint form. Works on qwen; inert on the illustration engine.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

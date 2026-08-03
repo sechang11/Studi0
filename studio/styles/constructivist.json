@@ -1,0 +1,25 @@
+{
+  "id": "constructivist",
+  "name": "Constructivist",
+  "family": "movement",
+  "engine": "anime",
+  "means": "Soviet agitprop graphics: red-black-cream, hard diagonal composition, photomontage angles, heroic low viewpoint.",
+  "tags": "constructivism, soviet poster, red and black, diagonal composition, propaganda art, bold",
+  "prose": "a constructivist composition in red, black and cream, hard diagonals, heroic low viewpoint",
+  "negative_add": "soft, pastel, symmetrical, delicate",
+  "suits_looks": [
+    "bleach",
+    "sepia"
+  ],
+  "strength": "moderate",
+  "works_for": "video - flat colour holds",
+  "status": "weak",
+  "note": "PREDICTED TEXT RISK: agitprop implies lettering and both models hallucinate garbled text - screenprint_poster failed exactly this way, producing nonsense letterforms. Text is pushed to the negative here. | Authored in the second wave, after the first 64 were rendered and measured. status=untested because nothing here has been rendered yet - the first wave shipped 46 cards marked ready without a single render and 27 of 64 turned out to be routed to the wrong engine.",
+  "examples": {
+    "anime": "/samples/styles/constructivist__anime.webp",
+    "qwen": "/samples/styles/constructivist__qwen.webp"
+  },
+  "compose": "inert",
+  "verdict": "Muted, with a diagonal scarf and nothing else. No red-black agitprop palette, no heroic angle. Nothing on qwen either.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject, on both engines. studio/_tools/style_examples.py --all-engines"
+}

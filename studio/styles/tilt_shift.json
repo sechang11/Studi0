@@ -1,0 +1,25 @@
+{
+  "id": "tilt_shift",
+  "name": "Tilt-shift",
+  "family": "photo",
+  "engine": "qwen",
+  "means": "Miniature-faking optics: a narrow band of focus with strong blur above and below, exaggerated saturation, high viewpoint.",
+  "tags": "",
+  "prose": "a tilt-shift photograph - a narrow band of sharp focus with heavy blur above and below, saturated colour, high viewpoint",
+  "negative_add": "everything in focus, flat lighting, low angle",
+  "suits_looks": [
+    "neutral",
+    "golden"
+  ],
+  "strength": "moderate",
+  "works_for": "video - the blur gradient is fixed and holds well",
+  "status": "weak",
+  "note": "PREDICTED RISK: drone_aerial measured compose=injects because it failed to move the camera - viewpoint is a shot property, not a style. Tilt-shift also implies a high viewpoint and may fail the same way, landing only the blur. | Authored in the second wave, after the first 64 were rendered and measured. status=untested because nothing here has been rendered yet - the first wave shipped 46 cards marked ready without a single render and 27 of 64 turned out to be routed to the wrong engine.",
+  "examples": {
+    "anime": "/samples/styles/tilt_shift__anime.webp",
+    "qwen": "/samples/styles/tilt_shift__qwen.webp"
+  },
+  "compose": "inert",
+  "verdict": "Produced blur bands top and bottom but also broke the framing, squeezing the subject into a letterboxed strip. The viewpoint never moved - the same failure as drone_aerial, because viewpoint is a shot property.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject, on both engines. studio/_tools/style_examples.py --all-engines"
+}

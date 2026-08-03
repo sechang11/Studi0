@@ -1,0 +1,27 @@
+{
+  "id": "cel_anime_90s",
+  "name": "90s cel anime",
+  "family": "retro",
+  "engine": "anime",
+  "means": "Physical ink-and-paint cels shot on film: a slightly heavy and uneven line, a limited palette sitting duller and warmer than digital, hard flat shadow shapes, and the grain and halation of a film print laid over all of it.",
+  "tags": "retro artstyle, 1990s (style), ova screencap, cel animation, film grain",
+  "prose": "a 1990s hand-painted animation cel photographed on film, flat opaque paint with hard shadow edges and visible grain",
+  "negative_add": "3d, modern anime style, clean digital coloring, glossy, crisp lineart",
+  "suits_looks": [
+    "faded_film",
+    "sepia",
+    "memory",
+    "sodium"
+  ],
+  "strength": "moderate",
+  "works_for": "video - the flat paint holds, the grain does not. cards/anime_draw_cel_artifacts.json already concedes that its jitter, weave and wobble options only exist in motion, and fine grain is exactly the high-frequency texture an i2v pass re-guesses every frame. INFERRED, not measured on an LTX sweep. If a clip boils, drop film grain from the prompt and add grain in the grade instead, where it is deterministic.",
+  "status": "ready",
+  "note": "The DECADE tag carries this, not the word retro. cards/anime_draw_era.json reviewed exactly this question and concluded to keep the decade tags doing the work; its cel_70s and film_stock_retro panels both carried the tail 'retro artstyle, faded colors' and landed in the same place, i.e. stopped being distinguishable. So if this film also uses ova_80s, strip that shared tail from one of the two. Note the division of labour with looks, which is easy to get wrong here: 1990s (style) changes the PAINT the model applies; looks/faded_film changes the colour of whatever came out, afterwards, deterministically. Ageing a film usually wants both - but asking for it twice in the prompt does not stack, it just spends tag slots. | Downgraded to untested: NOTHING in this library was rendered when it was authored, so every strength and engine call is a considered prediction. This project's own standard - written on the Illustrious checkpoint card - is that a recommendation is not a measurement.",
+  "examples": {
+    "anime": "/samples/styles/cel_anime_90s__anime.webp",
+    "qwen": "/samples/styles/cel_anime_90s__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Heavier uneven line, duller warm palette, hard flat shadow. Reads unmistakably as a 90s OVA cel beside the control.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

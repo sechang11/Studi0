@@ -1,0 +1,28 @@
+{
+  "id": "war_photography",
+  "name": "War photography",
+  "family": "photoreal",
+  "engine": "qwen",
+  "means": "Reportage made under conditions nobody controlled: available light, dust and smoke hanging in the air, colour drained toward grey, handheld with movement smeared, and framing interrupted by whatever was in the way.",
+  "tags": "",
+  "prose": "a photojournalist's photograph, available light only, dust and smoke hanging in the air and scattering the light, desaturated near-grey palette at high contrast, handheld 35mm lens, foreground obstruction partly blocking the frame, subject caught mid-movement and slightly smeared",
+  "negative_add": "studio lighting, posed, saturated colour, clean composition, hdr, illustration, anime",
+  "suits_looks": [
+    "bleach",
+    "bleach_bypass",
+    "overcast",
+    "storm",
+    "sodium"
+  ],
+  "strength": "moderate",
+  "works_for": "video reasonably. Handheld is an idiom LTX drift can hide inside, and smoke and dust are soft moving volume, which is the kind of thing i2v animates plausibly. Inferred.",
+  "status": "ready",
+  "note": "What this card delivers is the photographic IDIOM - available light, airborne dust, desaturation, obstruction, smeared movement - not depicted violence, which the model will sanitise or decline and which is not what makes these pictures read as what they are anyway. Keep the subject matter to what you actually want on screen and let the style carry the rest. It overlaps documentary_photo closely and the honest separation is the grade rather than the prompt: bleach and bleach_bypass in studio/looks/ are what push plain reportage toward this. Unavailable on the anime checkpoint. | Downgraded to untested: NOTHING in this library was rendered when it was authored, so every strength and engine call is a considered prediction. This project's own standard - written on the Illustrious checkpoint card - is that a recommendation is not a measurement.",
+  "examples": {
+    "anime": "/samples/styles/war_photography__anime.webp",
+    "qwen": "/samples/styles/war_photography__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Desaturated, grainy, handheld feel.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

@@ -1,0 +1,27 @@
+{
+  "id": "security_camera",
+  "name": "Security camera",
+  "family": "photoreal",
+  "engine": "qwen",
+  "means": "Surveillance footage: a wide lens mounted high in a corner looking down, barrel distortion, blown highlights and crushed blacks from no exposure control, near-monochrome colour, and a burnt-in timestamp.",
+  "tags": "",
+  "prose": "a still from a fixed surveillance camera mounted high in a corner, wide-angle lens with barrel distortion looking down across the room, harsh overhead lighting with blown highlights and crushed black shadows, desaturated near-monochrome, burnt-in white timestamp text reading \"2026-01-14 03:42:17\" in the upper corner",
+  "negative_add": "shallow depth of field, cinematic lighting, colour grading, professional photography, illustration, anime",
+  "suits_looks": [
+    "fluorescent",
+    "night",
+    "hospital",
+    "cold"
+  ],
+  "strength": "weak",
+  "works_for": "video in one respect only: a locked-off camera is the friendliest possible case for LTX, since nothing needs to move but the subject. The degradation is the problem - any compression blocking baked into the keyframe gets smoothed or smeared. Degrade the finished clip, not the keyframe. Inferred.",
+  "status": "ready",
+  "note": "Weak because the defining marks are DEGRADATIONS, and a generator asked for a bad image makes a clean image of a bad thing. Low resolution, compression blocking and interlacing are per-pixel damage - the same class of thing studio/tags/film_grain.json measured as undeliverable from a prompt. The build that actually works: take the camera POSITION, the distortion and the lighting from this prompt at full quality, then downscale, re-encode at a punishing bitrate and re-upscale in post. The one part qwen does better than expected is the timestamp, because it renders literal quoted text well - so give it the exact string you want. Unavailable on the anime checkpoint. | Downgraded to untested: NOTHING in this library was rendered when it was authored, so every strength and engine call is a considered prediction. This project's own standard - written on the Illustrious checkpoint card - is that a recommendation is not a measurement.",
+  "examples": {
+    "anime": "/samples/styles/security_camera__anime.webp",
+    "qwen": "/samples/styles/security_camera__qwen.webp"
+  },
+  "compose": "replaces",
+  "verdict": "Fisheye, timestamp burn-in, monochrome cast - convincing, but it also drew the camera itself into frame.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

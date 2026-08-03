@@ -1,0 +1,26 @@
+{
+  "id": "ink_wash",
+  "name": "Ink wash",
+  "family": "painterly",
+  "engine": "anime",
+  "means": "Brush and diluted black ink on absorbent paper. A handful of decisive loaded strokes, each running from dense black to dry grey in a single pull, wide areas of untouched paper carrying the composition as negative space, and no outline separate from the fill because the stroke is both at once.",
+  "tags": "ink wash painting, traditional media, monochrome, greyscale, minimalist, negative space, brush stroke",
+  "prose": "a sumi-e ink wash on absorbent paper, a few loaded brushstrokes each running from dense black to dry grey in one pull, wide areas of bare paper left as negative space, no separate outline anywhere, the brush doing the drawing and the shading at once",
+  "negative_add": "colour, cel shading, lineart, clean lines, digital art, 3d, dense detail",
+  "suits_looks": [
+    "neutral",
+    "memory",
+    "faded_film"
+  ],
+  "strength": "moderate",
+  "works_for": "Video: split. The bold black strokes are exactly the flat high-contrast structure expected to hold, but the dry-brush greys are the fine texture expected to boil. There is a second-order risk too - LTX-2.3 is handed a frame that is largely EMPTY paper, and craft/CINEMATOGRAPHY.md documents that it has nothing to fill an empty region with. INFERRED from that documented failure shape, not measured on this style.",
+  "status": "ready",
+  "note": "Genuinely available on both engines - 'ink wash painting' is a real danbooru tag with a real Japanese-brush prior behind it on the anime checkpoint, which is rare in this set. Two things follow from it being near-monochrome. First, it recruits the monochrome tag, which studio/tags/monochrome.json rates STRONG and says will greyscale the entire frame and silently override every colour tag in the prompt - here that is a feature, but it means you cannot have a partly-coloured ink wash on the anime path. Second, do not spend a look slot on looks/noir afterwards: noir's hue=s=0 measured SATAVG at exactly 0.000, and there is nothing left in an ink wash for it to remove. If you want ink-wash marks WITH colour, that is a different and harder ask and this card will not give it to you. Anime-path tag behaviour sourced from studio/tags/monochrome.json; the style itself is not rendered here. | Downgraded to untested: NOTHING in this library was rendered when it was authored, so every strength and engine call is a considered prediction. This project's own standard - written on the Illustrious checkpoint card - is that a recommendation is not a measurement.",
+  "examples": {
+    "anime": "/samples/styles/ink_wash__anime.webp",
+    "qwen": "/samples/styles/ink_wash__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Sumi-e: bare paper, wet bleed, a red seal. Among the strongest in the library, 89.4 from control.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

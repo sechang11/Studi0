@@ -1,0 +1,27 @@
+{
+  "id": "shojo_soft",
+  "name": "Shojo soft",
+  "family": "anime",
+  "engine": "anime",
+  "means": "Very large eyes with sparkling irises and stacked catchlights, thin delicate lineart, a pale high-key palette with almost no black in it, soft diffused shading, and decorative sparkle and flower screentone floating in the frame rather than existing in the world.",
+  "tags": "shoujo style eyes, very large eyes, sparkling irises, thin lineart, pastel colors, soft lighting, sparkle, flower background",
+  "prose": "a girls' manga animation frame: enormous glittering eyes, delicate thin outlines, pale pastel palette, soft diffused light, decorative sparkles floating over the image",
+  "negative_add": "thick lineart, high contrast, harsh shadow, seinen style, monochrome",
+  "suits_looks": [
+    "dawn",
+    "dream",
+    "memory",
+    "golden"
+  ],
+  "strength": "moderate",
+  "works_for": "video - the faces and the flat pastel fills hold, the sparkle field does not. Scattered small bright specks are close to the worst case for image-to-video and will pop and swim between frames. INFERRED. Keep sparkles out of the keyframe if the shot has to move and let the drawing carry it.",
+  "status": "ready",
+  "note": "The eye construction is the load-bearing half and it is measured: cards/anime_draw_eye_render.json ships shoujo_large as 'very large eyes, shoujo style eyes, sparkling irises', and that card claims eye render is the single strongest signal of what kind of show this is. The line half is weaker than it looks - cards/anime_draw_line_weight.json measured that 'extremely thin lineart, hairline outlines' and 'thin lineart, delicate outlines' render IDENTICALLY, because the model holds one thin-lineart feature with no degree control, so you get thin or not-thin and no delicacy dial. Related and useful: cards/anime_draw_hair_highlight.json reads angel_ring as the 90s shoujo highlight specifically, so add it if you want the decade as well as the genre. Finally, if the frame comes out too warm or too cool that is looks/dawn or looks/dream doing colour after the render, not something to ask the prompt for. | Downgraded to untested: NOTHING in this library was rendered when it was authored, so every strength and engine call is a considered prediction. This project's own standard - written on the Illustrious checkpoint card - is that a recommendation is not a measurement.",
+  "examples": {
+    "anime": "/samples/styles/shojo_soft__anime.webp",
+    "qwen": "/samples/styles/shojo_soft__qwen.webp"
+  },
+  "compose": "replaces",
+  "verdict": "Sparkle, pastel, glazed eyes - and it replaced the street with a field of flowers. Very strong at 81.4, but it overwrites any place you choose.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

@@ -1,0 +1,28 @@
+{
+  "id": "wildlife_photo",
+  "name": "Wildlife photo",
+  "family": "photoreal",
+  "engine": "qwen",
+  "means": "A long telephoto pinned on an animal: compressed perspective flattening the distance, the animal sharp against a background reduced to smooth bands of colour, natural light, and the lens down at the animal's own eye level.",
+  "tags": "",
+  "prose": "a wildlife photograph on a 500mm telephoto lens, the animal sharp and filling the frame, compressed perspective flattening the background into smooth bands of colour, low camera at the animal's own eye level, natural early-morning light raking from the side, a catchlight in the eye",
+  "negative_add": "wide angle, zoo enclosure, fence, human, cartoon, cgi, illustration, anime",
+  "suits_looks": [
+    "golden",
+    "dawn",
+    "overcast",
+    "heat_haze",
+    "storm"
+  ],
+  "strength": "moderate",
+  "works_for": "video poorly. Fur is fine texture and it boils, and animal motion is where i2v most reliably invents an extra limb. Inferred.",
+  "status": "unavailable",
+  "note": "Reliable for common large animals and unreliable the moment you name an uncommon species or ask for more than one - anatomy and count are both weak here. Two things rescue it: eye level, which is the entire difference between a wildlife photograph and a snapshot of an animal, and the telephoto compression, which erases the background without you having to describe it. Do not attempt this on the anime checkpoint at all: danbooru anime models are trained overwhelmingly on human characters and animals are their weakest subject in any idiom - if you need an animal on the anime path, expect to fix it by hand or reach for qwen. | Downgraded to untested: NOTHING in this library was rendered when it was authored, so every strength and engine call is a considered prediction. This project's own standard - written on the Illustrious checkpoint card - is that a recommendation is not a measurement.",
+  "examples": {
+    "anime": "/samples/styles/wildlife_photo__anime.webp",
+    "qwen": "/samples/styles/wildlife_photo__qwen.webp"
+  },
+  "compose": "injects",
+  "verdict": "Rendered a FOX beside her. The noun in the name became an animal in the scene. Use a long lens plus documentary_photo instead.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

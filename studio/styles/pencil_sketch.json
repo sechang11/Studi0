@@ -1,0 +1,26 @@
+{
+  "id": "pencil_sketch",
+  "name": "Pencil sketch",
+  "family": "graphic",
+  "engine": "anime",
+  "means": "Graphite on paper before any cleanup. Several searching strokes per contour with the construction lines left in, tone built from loose hatching rather than filled areas, no colour, and nothing resolved to a single committed edge.",
+  "tags": "sketch, rough sketch, monochrome, greyscale, traditional media, graphite (medium), unfinished lineart, construction lines",
+  "prose": "a graphite pencil sketch on white paper, several searching strokes per contour with the construction lines still visible, tone built from loose diagonal hatching rather than filled areas, unfinished and entirely uncoloured",
+  "negative_add": "colour, cel shading, flat colour, clean lineart, digital art, 3d, finished rendering",
+  "suits_looks": [
+    "neutral",
+    "memory",
+    "sepia"
+  ],
+  "strength": "strong",
+  "works_for": "Video: mixed, and worth testing before trusting. Monochrome and high contrast is the shape expected to hold, but hatching is fine line detail and line detail is exactly what LTX resamples - the specific risk is the hatch pattern crawling like static across the clip rather than the image falling apart. INFERRED from the flat-holds prior, not measured on this style.",
+  "status": "ready",
+  "note": "The strongest style in this whole set on the anime path, and the danger is that it is too strong. studio/tags/sketch.json records that 'rough sketch' overrides everything around it - it is the documented reason line_weight/rough_genga and shot.fx.impact_frame/sketch_frame return the same image. So it will eat any other style clause you put beside it, and it fights the quality tokens 'masterpiece, best quality, very aesthetic, absurdres' that craft/ANIME_MODELS.md says are load-bearing on this checkpoint. Use it as the entire style or not at all; do not try to blend it with anything. That same dominance makes it the right choice for one-frame intrusions - an impact frame, a genga flash, a title card. On qwen it is much better behaved and easy to scope, but correspondingly less characterful; if you want the violence of the mark, use the anime path. Anime-path behaviour sourced from studio/tags/sketch.json; the qwen half is reasoned, not rendered. | Downgraded to untested: NOTHING in this library was rendered when it was authored, so every strength and engine call is a considered prediction. This project's own standard - written on the Illustrious checkpoint card - is that a recommendation is not a measurement.",
+  "examples": {
+    "anime": "/samples/styles/pencil_sketch__anime.webp",
+    "qwen": "/samples/styles/pencil_sketch__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Graphite hatch, unfinished edges, white ground.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

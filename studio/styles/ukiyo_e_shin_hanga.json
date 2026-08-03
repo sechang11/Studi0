@@ -1,0 +1,26 @@
+{
+  "id": "ukiyo_e_shin_hanga",
+  "name": "Shin-hanga",
+  "family": "tradition",
+  "engine": "anime",
+  "means": "Early-20th-century woodblock revival: ukiyo-e technique with Western light and atmosphere, soft gradient skies, quiet realism.",
+  "tags": "shin hanga, woodblock print, atmospheric, soft gradient sky, japanese print, realistic light",
+  "prose": "a shin-hanga woodblock print - traditional Japanese printing with Western atmospheric light, soft gradient sky, quiet realism",
+  "negative_add": "flat, graphic, harsh, modern",
+  "suits_looks": [
+    "memory",
+    "overcast",
+    "warm"
+  ],
+  "strength": "moderate",
+  "works_for": "video - flat print surfaces hold",
+  "status": "weak",
+  "note": "The atmospheric gradient sky is what separates this from ukiyo_e (measured ready). If they collapse, keep ukiyo_e. | Authored in the second wave, after the first 64 were rendered and measured. status=untested because nothing here has been rendered yet - the first wave shipped 46 cards marked ready without a single render and 27 of 64 turned out to be routed to the wrong engine.",
+  "examples": {
+    "anime": "/samples/styles/ukiyo_e_shin_hanga__anime.webp",
+    "qwen": "/samples/styles/ukiyo_e_shin_hanga__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Warm atmospheric light over what is otherwise ordinary anime - the woodblock surface never appeared. ukiyo_e already covers this and does it properly.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject, on both engines. studio/_tools/style_examples.py --all-engines"
+}

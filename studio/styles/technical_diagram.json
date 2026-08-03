@@ -1,0 +1,24 @@
+{
+  "id": "technical_diagram",
+  "name": "Technical diagram",
+  "family": "graphic",
+  "engine": "qwen",
+  "means": "An instructional line drawing: isometric or exploded-view construction, uniform thin black line on plain white, parts pulled apart along dashed alignment axes, numbered callout leaders running out to a key. No light source, no shading, no ground plane.",
+  "tags": "",
+  "prose": "a technical instruction-manual diagram, thin uniform black line on plain white, the object drawn in exploded isometric view with components separated along dashed alignment axes, numbered callout leaders running out to short labels, diagonally hatched cutaway sections, no shading and no shadow anywhere",
+  "negative_add": "photorealistic, shading, colour, texture, background, 3d render",
+  "suits_looks": [
+    "neutral"
+  ],
+  "strength": "weak",
+  "works_for": "No. Same reason as blueprint and worse - the entire image is thin line and small type, both of which crawl under i2v. INFERRED, not measured.",
+  "status": "unavailable",
+  "note": "Marked WEAK deliberately, and not because the picture comes out ugly. It comes out convincing: qwen renders the idiom well - clean isometric line, dashed axes, leaders in roughly the right places. What it cannot do is make the diagram MEAN anything. The exploded parts do not fit back together, the callout numbers point at nothing in particular, and the labels are letterform soup unless you dictate every string. A diagram that is wrong is worse than no diagram, so treat this as set dressing the audience glances at, never a prop they are meant to read. If you need a readable diagram, render flat_vector artwork and composite real text in post - that is the deterministic tier this project already prefers (see the tier definitions in studio/effects.json). NOT AVAILABLE on animagine in any form.",
+  "examples": {
+    "anime": "/samples/styles/technical_diagram__anime.webp",
+    "qwen": "/samples/styles/technical_diagram__qwen.webp"
+  },
+  "compose": "injects",
+  "verdict": "Drew a floating exploded-view diagram beside an untouched photo.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

@@ -1,0 +1,15 @@
+{
+  "id": "qwen_image_2512",
+  "name": "Qwen-Image 2512",
+  "file": "qwen_image_2512_fp8_e4m3fn.safetensors",
+  "desc": "The non-anime path. Photoreal and general illustration, driven by prose rather than tags.",
+  "status": "ready",
+  "family": "general",
+  "engine": "qwen",
+  "prompt_style": "natural language prose, a sentence describing the scene",
+  "quality_tags": "",
+  "steps": 20, "cfg": 2.5, "sampler": "euler", "scheduler": "normal",
+  "size": [1664, 928],
+  "workflow": "13_qwen_t2i_styled.json",
+  "note": "Authored because 52 of the 64 style cards route here and the checkpoints library described only the two anime SDXLs - a styles consumer resolving engine->checkpoint would have found nothing. Two measured facts that change how you use it: with the 4-step Lightning LoRA it runs at cfg 1.0 in ~4.5s, and AT THAT SETTING THE NEGATIVE PROMPT IS NEARLY IGNORED - inherent to CFG-distilled models. Negatives only bite if you drop the LoRA and run 20 steps at cfg 2.5-4.0. Also: past about 2 MP it duplicates composition (two horizons, repeated subjects), so generate at 1-2 MP and upscale 4x."
+}

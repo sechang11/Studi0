@@ -1,0 +1,27 @@
+{
+  "id": "gothic_illustration",
+  "name": "Gothic illustration",
+  "family": "illustration",
+  "engine": "anime",
+  "means": "Pen-and-ink book illustration in the Dore and Beardsley line. Heavy solid black masses played against bare white paper, all tone built from dense crosshatch and stipple rather than from grey, ornate stone architecture crowding the frame, and linework that gets finer as it gets darker.",
+  "tags": "monochrome, greyscale, high contrast, lineart, dramatic shadow, gothic architecture, intricate detail",
+  "prose": "a pen and ink book illustration, heavy solid black masses set against bare white paper, every tone built from dense crosshatching and stipple, ornate stone architecture crowding the frame, the linework getting finer as it gets darker",
+  "negative_add": "colour, photorealistic, 3d, cel shading, soft shading, smooth gradient, gothic lolita",
+  "suits_looks": [
+    "noir",
+    "cold",
+    "moonlit",
+    "night"
+  ],
+  "strength": "moderate",
+  "works_for": "Video: split down the middle. The heavy black masses are exactly the flat high-contrast structure expected to hold; the crosshatch is fine high-frequency line and is the part expected to crawl. INFERRED, not measured.",
+  "status": "ready",
+  "note": "The reason this is qwen-only is a vocabulary collision worth knowing. On the anime checkpoint the token 'gothic' does not mean this at all - in the danbooru vocabulary that model is trained on, gothic is a CLOTHING tag (gothic lolita), so asking that path for a gothic style dresses your character in a frilled black dress and changes nothing whatsoever about the rendering. That is a content tag wearing a style tag's clothes, and it is the single most misleading word in this set. It is in negative_add above for the same reason. Second, do not confuse this with the darkness: gothic here is the INK, not the grade. If what you actually want is a dark frame, that is looks/noir or looks/night - a deterministic ffmpeg grade applied after generation, exact every time and free. Prompting for darkness is documented not to work: looks/night.json records that 'night, dark background' moved measured mean luma 170 to 161, i.e. nothing. Not rendered; the gothic-lolita collision is from the danbooru vocabulary rather than a render on this box, but it is not a close call. | Downgraded to untested: NOTHING in this library was rendered when it was authored, so every strength and engine call is a considered prediction. This project's own standard - written on the Illustrious checkpoint card - is that a recommendation is not a measurement.",
+  "examples": {
+    "anime": "/samples/styles/gothic_illustration__anime.webp",
+    "qwen": "/samples/styles/gothic_illustration__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "High-contrast B&W, tall architecture, ornamental.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

@@ -1,0 +1,27 @@
+{
+  "id": "storybook_illustration",
+  "name": "Storybook illustration",
+  "family": "illustration",
+  "engine": "anime",
+  "means": "A children's picture-book plate. Thick soft outlines around simplified rounded shapes, flat warm colour in a deliberately short palette, a hand-made paper or gouache texture sitting under the paint, and the whole scene readable in one glance from across a room.",
+  "tags": "watercolor (medium), pastel colors, thick lineart, flat colour, soft lighting, traditional media",
+  "prose": "a children's picture book plate, thick soft outlines around simplified rounded shapes, flat warm colour in a tightly limited palette, a hand-made paper texture under the paint, the whole scene readable at one glance",
+  "negative_add": "photorealistic, 3d, gritty, harsh contrast, fine detail, dark",
+  "suits_looks": [
+    "golden",
+    "dawn",
+    "memory",
+    "dream"
+  ],
+  "strength": "moderate",
+  "works_for": "Video: the best-precedented style here. Flat, thick-outlined and high-contrast is the shape expected to survive LTX, and the whole of CHRONO was rendered in this idiom and cut as video, so there is real footage in this style on this box. That is precedent, not a controlled test - nobody has A/B'd style survival through the LTX pass.",
+  "status": "ready",
+  "note": "Two separate things to know, and they pull in opposite directions. (a) The PHRASE is a wish. studio/tags/storybook_anime.json rates 'storybook anime' WEAK, notes it is not a danbooru tag and not a phrase the corpus contains, and calls it a wish rather than a tag - so build the look from marks the model actually holds, which is what the tags line above does. (b) On qwen there is a real asset behind it: qwen_image_2512_storybook_anime_lora.safetensors, and craft/CINEMATOGRAPHY.md section 4 has 109 shots of evidence on it at style_strength 0.9. It HOLDS on one to three large stylised character faces in saturated light. It DROPS OUT on landscapes, architecture, crowds of small figures and realistic adult faces. And it hijacks the palette hard - it carries a blue-sky-with-white-clouds prior and a golden-hour prior, and it overrode the prompt on ten catalogued shots that explicitly asked for grey. Recommended there: global 0.75, and 0.50-0.55 for dark material. The negative cannot rescue you, because at cfg 1.0 with the Lightning LoRA the negative is inert. So if you need the grey sky, do not fight the render for it - take the colour out afterwards with looks/overcast or looks/cold. That split is the whole reason the looks library exists as deterministic ffmpeg: a style changes what the model draws, a look changes the colour of what came out, and this is the style where confusing the two has already cost a film ten shots. | Downgraded to untested: NOTHING in this library was rendered when it was authored, so every strength and engine call is a considered prediction. This project's own standard - written on the Illustrious checkpoint card - is that a recommendation is not a measurement.",
+  "examples": {
+    "anime": "/samples/styles/storybook_illustration__anime.webp",
+    "qwen": "/samples/styles/storybook_illustration__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Soft pastel wash and open line. Reads as a children's book plate.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

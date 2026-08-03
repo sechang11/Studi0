@@ -1,0 +1,27 @@
+{
+  "id": "pixel_art",
+  "name": "Pixel art",
+  "family": "retro",
+  "engine": "anime",
+  "means": "An image built on one explicit low-resolution grid. Every mark aligned to the same square pixel, hard aliased stair-stepped edges with no anti-aliasing anywhere, a hand-picked palette of a few dozen colours, checkerboard dithering standing in for every gradient, and a dark outline around each sprite.",
+  "tags": "pixel art, retro, limited palette, dithering, aliased edges, sprite, flat colour",
+  "prose": "16-bit era pixel art, every mark aligned to one explicit low-resolution grid of square pixels, hard aliased stair-stepped edges with no anti-aliasing anywhere, a hand-picked palette of about thirty colours, checkerboard dithering standing in for every gradient, a dark outline around each sprite",
+  "negative_add": "anti-aliasing, smooth gradient, blur, photorealistic, 3d, painterly, fine detail",
+  "suits_looks": [
+    "neon",
+    "fluorescent",
+    "sodium",
+    "neutral"
+  ],
+  "works_for": "Video: the worst in this set, and this one is barely an inference. LTX-2.3 resamples every frame, a pixel grid is the highest-frequency structure you can hand it, and there is nothing telling it to preserve the alignment - expect the grid to shimmer apart within a second. If you want pixel-art video, generate and run the LTX pass first and apply the quantise pass PER FRAME afterwards, the same way looks/ grades are applied after.",
+  "strength": "weak",
+  "status": "ready",
+  "note": "Obedience is high and fidelity is nil, which is a combination worth naming. 'pixel art' is a well-populated danbooru tag and the anime checkpoint fires on it every time - but what comes back is pixel-art-FLAVOURED illustration: the pixels are different sizes in different parts of the frame, the edges are anti-aliased, and at the checkpoint's native 1344x768 the grid dissolves completely. Qwen is no better. This is a RESOLUTION problem, not a prompt problem, and no adjective fixes it - which is exactly why it is marked weak rather than moderate: a style that looks available and produces mush is worse than one marked unavailable. The real answer is the one this project already uses for colour: do it deterministically afterwards. Prompt only for what generation can give you - flat, front-on, simple readable silhouette, dark outline, short palette - then nearest-neighbour down and back up and quantise the palette in ffmpeg. Something on the order of scale=iw/6:ih/6:flags=neighbor,scale=iw*6:ih*6:flags=neighbor plus a palettegen/paletteuse pair. UNTESTED - nobody has run that on this box; it is the standard nearest-neighbour pair and it belongs in looks/ or a new post-process library if it works. That is the piece of work this card is really asking for. | Downgraded to untested: NOTHING in this library was rendered when it was authored, so every strength and engine call is a considered prediction. This project's own standard - written on the Illustrious checkpoint card - is that a recommendation is not a measurement.",
+  "examples": {
+    "anime": "/samples/styles/pixel_art__anime.webp",
+    "qwen": "/samples/styles/pixel_art__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Convincing pixel grid and clamped palette. The authoring agent concluded neither engine could produce a pixel grid and that the card needed a post-process instead - that was wrong, animagine does it directly.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

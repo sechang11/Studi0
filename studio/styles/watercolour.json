@@ -1,0 +1,27 @@
+{
+  "id": "watercolour",
+  "name": "Watercolour",
+  "family": "painterly",
+  "engine": "anime",
+  "means": "Transparent pigment floated on wet paper. Washes pool and bloom into each other, dry into hard-edged tidemarks, granulate in the tooth of the paper, and every highlight is bare paper rather than white paint. Colour stains rather than covers.",
+  "tags": "watercolor (medium), traditional media, wet-on-wet, bleeding colours, pale palette, soft edges, paper texture",
+  "prose": "a watercolour on cold-pressed paper, transparent washes pooling and blooming into one another with hard tidemarks where they dried, pigment granulating in the tooth of the paper, the white of the paper left bare to carry the highlights",
+  "negative_add": "cel shading, flat colour, opaque paint, heavy black outlines, digital art, 3d",
+  "suits_looks": [
+    "memory",
+    "dream",
+    "dawn",
+    "faded_film"
+  ],
+  "strength": "moderate",
+  "works_for": "stills on both engines. Video: middling. Wash boundaries are mid-frequency and should survive the LTX pass better than grain, but the paper tooth and the granulation will not. INFERRED from the flat-holds/texture-boils prior, not measured here.",
+  "status": "ready",
+  "note": "One of the few in the painted set genuinely available on both engines. On the anime path the spelling and the suffix both matter: the trained tag is 'watercolor (medium)' - American spelling plus the danbooru disambiguator that separates the paint from the colour of water - and that is exactly what studio/cards/anime_bg_style.json already uses. Write the American form in the prompt even though the UI says colour. Two traps. First, do NOT reach for 'white background' to get the bare paper: that string sits in this project's standing negative (craft/ANIME_MODELS.md), and putting it in the positive fights the render. Second, this style lives in pale high-key values, so it is the one most easily destroyed by the grade that follows it - looks/noir at contrast 1.32 and looks/night at 1.20 will crush the washes into mud. Pair it with the gentle looks listed above. Anime-path behaviour is sourced from studio/tags/watercolour.json, which rates it moderate; the qwen half is reasoned, not rendered. | Downgraded to untested: NOTHING in this library was rendered when it was authored, so every strength and engine call is a considered prediction. This project's own standard - written on the Illustrious checkpoint card - is that a recommendation is not a measurement.",
+  "examples": {
+    "anime": "/samples/styles/watercolour__anime.webp",
+    "qwen": "/samples/styles/watercolour__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Paper bleed and pigment pooling. Strongest measured result in the set, 92.1 from control. This card was authored engine=qwen, where it produced a plain photograph and did nothing.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

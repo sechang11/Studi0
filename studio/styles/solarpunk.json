@@ -1,0 +1,26 @@
+{
+  "id": "solarpunk",
+  "name": "Solarpunk",
+  "family": "world",
+  "engine": "anime",
+  "means": "Optimistic ecological futurism: white structure overrun with green, glass and water, high clean daylight, plants integrated into architecture rather than decorating it.",
+  "tags": "solarpunk, lush greenery, white architecture, sunlight, plants, glass, utopian",
+  "prose": "a bright ecological future of white architecture overgrown with greenery, glass and water, clean high daylight",
+  "negative_add": "dystopian, ruins, smog, dark, industrial decay",
+  "suits_looks": [
+    "golden",
+    "neutral",
+    "warm"
+  ],
+  "strength": "strong",
+  "works_for": "video - foliage is dense fine detail and is a known i2v boiling case",
+  "status": "ready",
+  "note": "The strongest signal is the LIGHT - high, clean, unclouded - not the word solarpunk. Predicted to compose safely because it changes palette and architecture without demanding a specific prop. | Authored in the second wave, after the first 64 were rendered and measured. status=untested because nothing here has been rendered yet - the first wave shipped 46 cards marked ready without a single render and 27 of 64 turned out to be routed to the wrong engine.",
+  "examples": {
+    "anime": "/samples/styles/solarpunk__anime.webp",
+    "qwen": "/samples/styles/solarpunk__qwen.webp"
+  },
+  "compose": "replaces",
+  "verdict": "Greenery, planters and bright clean daylight took over the street. Strong, but it rebuilds the setting - do not stack on a place card.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject, on both engines. studio/_tools/style_examples.py --all-engines"
+}

@@ -1,0 +1,28 @@
+{
+  "id": "architectural_photo",
+  "name": "Architectural photo",
+  "family": "photoreal",
+  "engine": "qwen",
+  "means": "A building photographed as geometry: verticals corrected so nothing converges, everything sharp front to back, raking light describing the relief of the facade, and the frame cleared of people.",
+  "tags": "",
+  "prose": "an architectural photograph on a tilt-shift lens with verticals perfectly corrected and no converging lines, deep focus with everything sharp from foreground to sky, low raking sunlight describing the relief of the facade, clean uncluttered frame with no people, symmetrical composition, clear graduated sky",
+  "negative_add": "converging verticals, tilted horizon, shallow depth of field, bokeh, people, clutter, illustration, anime",
+  "suits_looks": [
+    "overcast",
+    "neutral",
+    "cold",
+    "golden",
+    "blockbuster"
+  ],
+  "strength": "strong",
+  "works_for": "video with the best survival odds in this set - static geometry, hard edges, no anatomy and no fine texture, which is every property that holds through i2v. Inferred, but this is the safe bet if a shot in this idiom has to move.",
+  "status": "ready",
+  "note": "Strong because a building has no anatomy to get wrong and the whole style is geometry nouns. Two cautions. Corrected verticals is the one term you must say explicitly - the default is a wide lens tipped up with everything converging. And deep focus here is a hard commitment: it collides with the grammar documented in studio/tags/depth_of_field.json, so do not put bokeh or shallow focus anywhere in the same prompt or you will get neither. The anime checkpoint draws excellent architecture from `scenery, no humans` - but that is anime background art, a different medium from this card, not a cheaper version of it. | Downgraded to untested: NOTHING in this library was rendered when it was authored, so every strength and engine call is a considered prediction. This project's own standard - written on the Illustrious checkpoint card - is that a recommendation is not a measurement.",
+  "examples": {
+    "anime": "/samples/styles/architectural_photo__anime.webp",
+    "qwen": "/samples/styles/architectural_photo__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Corrected verticals, building given equal weight to the figure.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

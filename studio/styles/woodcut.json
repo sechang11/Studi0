@@ -1,0 +1,26 @@
+{
+  "id": "woodcut",
+  "name": "Woodcut",
+  "family": "illustration",
+  "engine": "anime",
+  "means": "Carved relief print: stark black on cream, gouged parallel line, no grey except through hatch density, visible tool marks.",
+  "tags": "woodcut, relief print, black and white, carved lines, hatching, high contrast, cream paper",
+  "prose": "a woodcut relief print - stark black ink on cream paper, gouged parallel linework, tone only through hatch density",
+  "negative_add": "smooth, grayscale gradient, painterly, color",
+  "suits_looks": [
+    "bleach",
+    "sepia",
+    "noir"
+  ],
+  "strength": "strong",
+  "works_for": "video - two-tone flat, very stable",
+  "status": "ready",
+  "note": "Neighbour of ukiyo_e (measured ready) but Western and monochrome. The mechanism is the same one that made ukiyo_e work: a carved line the corpus knows well. | Authored in the second wave, after the first 64 were rendered and measured. status=untested because nothing here has been rendered yet - the first wave shipped 46 cards marked ready without a single render and 27 of 64 turned out to be routed to the wrong engine.",
+  "examples": {
+    "anime": "/samples/styles/woodcut__anime.webp",
+    "qwen": "/samples/styles/woodcut__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Cream ground, gouged parallel line, tone only through hatch density. Clean.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject, on both engines. studio/_tools/style_examples.py --all-engines"
+}

@@ -1,0 +1,25 @@
+{
+  "id": "cubism",
+  "name": "Cubism",
+  "family": "movement",
+  "engine": "anime",
+  "means": "Simultaneous viewpoints: the subject fractured into planes and reassembled, muted ochre and grey, shallow space.",
+  "tags": "cubism, fractured planes, multiple perspectives, geometric abstraction, muted ochre",
+  "prose": "a cubist treatment - the subject fractured into simultaneous planes and reassembled, muted ochre and grey, shallow space",
+  "negative_add": "realistic, single perspective, smooth, photographic",
+  "suits_looks": [
+    "sepia",
+    "bleach"
+  ],
+  "strength": "weak",
+  "works_for": "video - not viable, the fracture pattern will reshuffle every frame",
+  "status": "ready",
+  "note": "Both models resist abstracting faces. Predicted to produce a lightly angular portrait rather than genuine cubism. low_poly_3d measured ready and is the working neighbour if this fails. | Authored in the second wave, after the first 64 were rendered and measured. status=untested because nothing here has been rendered yet - the first wave shipped 46 cards marked ready without a single render and 27 of 64 turned out to be routed to the wrong engine.",
+  "examples": {
+    "anime": "/samples/styles/cubism__anime.webp",
+    "qwen": "/samples/styles/cubism__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "The BACKGROUND fractured into genuine faceted planes while the face stayed intact. Marked weak before rendering; that was too pessimistic and is corrected here.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject, on both engines. studio/_tools/style_examples.py --all-engines"
+}

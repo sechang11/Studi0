@@ -1,0 +1,26 @@
+{
+  "id": "josei_muted",
+  "name": "Josei muted",
+  "family": "anime",
+  "engine": "anime",
+  "means": "Adult women's manga: restrained realistic proportion, muted desaturated palette, fine line, understated expression.",
+  "tags": "josei, realistic proportions, muted palette, fine lineart, understated, adult",
+  "prose": "an adult women's-manga look - realistic restrained proportion, muted desaturated palette, fine line, understated expression",
+  "negative_add": "exaggerated, saturated, cute, chibi",
+  "suits_looks": [
+    "neutral",
+    "overcast",
+    "memory"
+  ],
+  "strength": "moderate",
+  "works_for": "video - stable",
+  "status": "ready",
+  "note": "Close to seinen_grounded (measured ready, though subtle at 20.6 from control). If these two match, keep one. | Authored in the second wave, after the first 64 were rendered and measured. status=untested because nothing here has been rendered yet - the first wave shipped 46 cards marked ready without a single render and 27 of 64 turned out to be routed to the wrong engine.",
+  "examples": {
+    "anime": "/samples/styles/josei_muted__anime.webp",
+    "qwen": "/samples/styles/josei_muted__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Restrained proportion, muted palette, understated. Close to seinen_grounded but darker and cooler; both survive.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject, on both engines. studio/_tools/style_examples.py --all-engines"
+}

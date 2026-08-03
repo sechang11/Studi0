@@ -1,0 +1,27 @@
+{
+  "id": "gouache",
+  "name": "Gouache",
+  "family": "painterly",
+  "engine": "anime",
+  "means": "Opaque water paint. The whole point is that it covers: a matte chalky surface with no gloss at all, shapes blocked in flat with one visible brush edge each, and pale tones painted ON TOP of dark ones rather than left as bare paper. Watercolour's opposite on the one axis that defines both.",
+  "tags": "gouache (medium), traditional media, opaque paint, matte texture, flat colour, poster paint",
+  "prose": "a gouache painting, opaque matte colour blocked in flat with a single visible brush edge to each shape, chalky and entirely without gloss, pale tones laid over dark ones rather than left as bare paper",
+  "negative_add": "watercolour, transparent wash, glossy, wet-on-wet, digital art, cel shading, 3d",
+  "suits_looks": [
+    "overcast",
+    "neutral",
+    "memory",
+    "faded_film"
+  ],
+  "strength": "weak",
+  "works_for": "Video: on paper the best of the painted set, because flat matte blocking is much closer to flat colour than to texture, and flat is what is expected to hold. INFERRED - and it is a bet on a style that does not reliably render in the first place.",
+  "status": "ready",
+  "note": "Weak on BOTH engines, and the failure is specific: what separates gouache from watercolour is OPACITY, and neither model holds that distinction. Ask for gouache and you get watercolour, or generic digital painting. On the anime path it is worse - 'gouache (medium)' exists in the danbooru schema but with almost no mass behind it, and an untrained tag is a no-op, the same failure studio/tags/storybook_anime.json documents for a phrase the corpus does not contain. What partially rescues it on qwen is naming the absences: matte, chalky, no gloss, no bare paper showing, opaque. If what you want is the flat blocked look on the anime checkpoint, stop asking for gouache and use flat colour - studio/tags/flat_colour.json is a real trained tag rated moderate, and the form 'flat color, no shading' is already in use in studio/cards/. Reach for watercolour when you want traditional media on the anime path, and for this card only on qwen and only when the matte finish is the actual point. Not rendered; assessment reasoned from the untrained-phrase argument in studio/tags/storybook_anime.json. | Downgraded to untested: NOTHING in this library was rendered when it was authored, so every strength and engine call is a considered prediction. This project's own standard - written on the Illustrious checkpoint card - is that a recommendation is not a measurement.",
+  "examples": {
+    "anime": "/samples/styles/gouache__anime.webp",
+    "qwen": "/samples/styles/gouache__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Flat opaque paint, limited palette, poster-like. The authoring agent called this the weakest card in its batch and asked for it to be rendered first - right to flag it, and the answer is that it works, but only on this engine.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

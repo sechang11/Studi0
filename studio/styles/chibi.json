@@ -1,0 +1,26 @@
+{
+  "id": "chibi",
+  "name": "Chibi",
+  "family": "anime",
+  "engine": "anime",
+  "means": "A different body plan rather than a filter: a two-to-three-head-tall figure with an oversized round head, stub limbs and features reduced to a few marks, drawn with thick outlines and flat unshaded fills.",
+  "tags": "chibi, super deformed, thick lineart, flat color, simple background",
+  "prose": "a super-deformed comedy version of the character, two heads tall, huge round head, tiny stub limbs, thick outlines, flat unshaded colour",
+  "negative_add": "realistic proportions, tall, detailed face, photorealistic, cinematic",
+  "suits_looks": [
+    "neutral",
+    "golden",
+    "dream"
+  ],
+  "strength": "strong",
+  "works_for": "video too - structurally one of the two safest cards here. Big flat regions, heavy outlines, nothing fine enough to boil. INFERRED rather than swept, but it is the easiest case an i2v model can be handed.",
+  "status": "ready",
+  "note": "The strongest and the most destructive card in the set. cards/anime_fx_deform_mode.json makes the point directly: chibi does not decorate a character, it REPLACES the character design, so everything written about build, height, posture and costume detail is overridden because chibi brings its own body plan with it. The emote_symbols card review flags chibi_pop as misfiled for exactly the same reason - it redraws the whole character while every other option on that card is a small addition. So decide SCOPE before you decide style: a chibi inset in the corner of a serious frame and a whole chibi shot are different jokes with different timing, and anime.fx.deform_scope is where that decision belongs. One spelling note that is load-bearing in the fills: the trained danbooru token is the American 'flat color'. tags/flat_colour.json is explicit that the British spelling is a different token sequence and lands weaker, so write the American form in the prompt even though the glossary and the UI say colour. | Downgraded to untested: NOTHING in this library was rendered when it was authored, so every strength and engine call is a considered prediction. This project's own standard - written on the Illustrious checkpoint card - is that a recommendation is not a measurement.",
+  "examples": {
+    "anime": "/samples/styles/chibi__anime.webp",
+    "qwen": "/samples/styles/chibi__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Head-to-body proportion collapses to roughly 1:2. Note it also forces a wider framing - a chibi cannot be a mid-shot.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

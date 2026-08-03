@@ -1,0 +1,25 @@
+{
+  "id": "screenprint_poster",
+  "name": "Screenprint poster",
+  "family": "graphic",
+  "engine": "qwen",
+  "means": "Silkscreen gig-poster printing: three or four flat opaque inks, each a hard-edged shape with no gradient inside it, a black key layer carrying the drawing over the top, halftone dots used only where a shadow needs a half tone, and uneven coverage where the squeegee pulled the screen thin.",
+  "tags": "",
+  "prose": "a screenprinted gig poster in four flat opaque inks, every shape hard-edged with no gradients, a heavy black key layer sitting over the colour blocks, coarse halftone dots used only inside the shadow areas, slightly uneven ink coverage where the screen pulled thin, thick condensed sans display lettering across the lower third",
+  "negative_add": "photorealistic, gradient, soft shading, 3d, airbrush, muted palette",
+  "suits_looks": [
+    "neutral",
+    "faded_film"
+  ],
+  "strength": "moderate",
+  "works_for": "Mostly holds - the ink layers are flat and high contrast, the surviving class. The halftone patches inside the shadows are the part that will boil. INFERRED, not measured.",
+  "status": "unavailable",
+  "note": "Closest relative in this set is flat_vector, and the whole difference is print mechanics: flat vector is clean digital fills, this is ink physically pushed through a mesh, so ask for the uneven coverage and the black key layer by name or you have written flat_vector the long way round. The anime checkpoint can approximate the SHAPE of this with 'flat color, thick outlines, limited palette, high contrast' and it looks decent, but you get a flat anime poster rather than a print - no key layer, no ink texture - which is why the tags field is empty. Lettering is a qwen-only capability here and needs the 20-step path per PROMPTING.md, since letterforms are the first casualty of the 4-step Lightning LoRA.",
+  "examples": {
+    "anime": "/samples/styles/screenprint_poster__anime.webp",
+    "qwen": "/samples/styles/screenprint_poster__qwen.webp"
+  },
+  "compose": "injects",
+  "verdict": "Produced garbled poster lettering over a photo. Neither engine screenprints, and both hallucinate text.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

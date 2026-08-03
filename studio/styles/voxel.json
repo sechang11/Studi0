@@ -1,0 +1,25 @@
+{
+  "id": "voxel",
+  "name": "Voxel",
+  "family": "3d",
+  "engine": "anime",
+  "means": "Everything built from uniform cubes: blocky volumetric forms, hard cube faces, simple flat shading, visible grid.",
+  "tags": "voxel art, cubes, blocky, isometric, flat shading, minecraft style, grid",
+  "prose": "a voxel construction - the whole scene built from uniform cubes with hard faces and simple flat shading",
+  "negative_add": "smooth, curved, organic, detailed, realistic",
+  "suits_looks": [
+    "neutral",
+    "cold"
+  ],
+  "strength": "moderate",
+  "works_for": "video - hard-edged blocks are stable",
+  "status": "ready",
+  "note": "eight_bit measured ready on qwen and pixel_art measured ready on the illustration engine, so quantised forms clearly work on this box. Voxel is the 3D case of the same thing. | Authored in the second wave, after the first 64 were rendered and measured. status=untested because nothing here has been rendered yet - the first wave shipped 46 cards marked ready without a single render and 27 of 64 turned out to be routed to the wrong engine.",
+  "examples": {
+    "anime": "/samples/styles/voxel__anime.webp",
+    "qwen": "/samples/styles/voxel__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "A full cube-built construction on the illustration engine. Guessed onto qwen, where it produced only a small pixelated patch on one cheek - re-routed on the evidence.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject, on both engines. studio/_tools/style_examples.py --all-engines"
+}

@@ -1,0 +1,26 @@
+{
+  "id": "mexican_muralism",
+  "name": "Mexican muralism",
+  "family": "tradition",
+  "engine": "anime",
+  "means": "Public mural painting: monumental simplified figures, earth reds and ochres, strong outline, compressed heroic space.",
+  "tags": "mural painting, monumental figures, earth tones, bold outline, rivera style, heroic",
+  "prose": "a mural painting - monumental simplified figures in earth reds and ochres, strong outline, compressed heroic space",
+  "negative_add": "delicate, pastel, small scale, photographic",
+  "suits_looks": [
+    "warm",
+    "sepia",
+    "golden"
+  ],
+  "strength": "moderate",
+  "works_for": "video - flat mural surfaces are stable",
+  "status": "weak",
+  "note": "The monumental figure scale is the mechanism. Related to propaganda_poster but painted rather than printed, and warmer. | Authored in the second wave, after the first 64 were rendered and measured. status=untested because nothing here has been rendered yet - the first wave shipped 46 cards marked ready without a single render and 27 of 64 turned out to be routed to the wrong engine.",
+  "examples": {
+    "anime": "/samples/styles/mexican_muralism__anime.webp",
+    "qwen": "/samples/styles/mexican_muralism__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Some flat mural-like panelling in the background, but the monumental figure scale never arrived.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject, on both engines. studio/_tools/style_examples.py --all-engines"
+}

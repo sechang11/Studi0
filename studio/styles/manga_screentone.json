@@ -1,0 +1,24 @@
+{
+  "id": "manga_screentone",
+  "name": "Manga screentone",
+  "family": "graphic",
+  "engine": "anime",
+  "means": "The printed page: no colour at all, black ink linework, and every mid-tone built from benday halftone dots rather than from grey paint. Panel borders and gutters tend to arrive with it whether you asked for them or not.",
+  "tags": "manga, monochrome, greyscale, screentone, halftone dots, benday dots, lineart",
+  "prose": "a black-and-white printed manga page: ink linework with all shading rendered as halftone dot screentone",
+  "negative_add": "color, colored, cel shading, 3d, photorealistic",
+  "suits_looks": [
+    "neutral"
+  ],
+  "strength": "strong",
+  "works_for": "video - the WORST case in this set. Halftone dots are a dense field of tiny maximum-contrast marks, which is precisely what an i2v pass cannot keep registered; expect the tone to crawl and shimmer across the whole frame even on a still subject. INFERRED rather than swept, but the failure mode is structural, not a matter of settings. Treat this as a stills and held-frame style.",
+  "status": "ready",
+  "note": "This is a decision about what KIND of image this is, not a flavour laid on top of one. tags/manga.json records that manga is a page-format attribute on the danbooru corpus, so it drags panelling and monochrome in with it and will SILENTLY KILL every colour tag in the prompt. cards/shot_fx_screentone.json supplies the measured dot clause, 'screentone, halftone dots, benday dots', and its review adds the warning that monochrome greyscales the ENTIRE frame - which is the intent here and is a bug everywhere else. Note what that does to LOOKS, since this is the card where the two libraries collide hardest: a look is an ffmpeg grade applied after generation, and grading an image with no colour in it can only tint it. suits_looks is one entry long for that reason, not by oversight; if you want a sepia page, looks/sepia will give you one, but nothing else in the grade library has anything to act on. Do not stack this with manga_inked - they are two names for one page and the dots dominate. | Downgraded to untested: NOTHING in this library was rendered when it was authored, so every strength and engine call is a considered prediction. This project's own standard - written on the Illustrious checkpoint card - is that a recommendation is not a measurement.",
+  "examples": {
+    "anime": "/samples/styles/manga_screentone__anime.webp",
+    "qwen": "/samples/styles/manga_screentone__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "B&W with visible dot tone and grainier texture. Genuinely separate from manga_inked.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

@@ -1,0 +1,26 @@
+{
+  "id": "unreal_render",
+  "name": "Real-time engine render",
+  "family": "3d",
+  "engine": "qwen",
+  "means": "Game-engine realism: physically-based materials, ray-traced reflection, volumetric light shafts, slightly too-clean surfaces.",
+  "tags": "unreal engine render, physically based rendering, ray tracing, volumetric lighting, hyperreal, clean",
+  "prose": "a real-time engine render - physically based materials, ray-traced reflection, volumetric light shafts, surfaces slightly too clean",
+  "negative_add": "hand drawn, painterly, sketchy, flat",
+  "suits_looks": [
+    "cold",
+    "neon",
+    "firelight"
+  ],
+  "strength": "moderate",
+  "works_for": "video - volumetrics hold, reflections do not",
+  "status": "weak",
+  "note": "'Unreal engine' is one of the highest-mass quality tokens in the whole SD corpus, which is why it is in the tags. Its risk is that it acts as a generic quality booster rather than a style. | Authored in the second wave, after the first 64 were rendered and measured. status=untested because nothing here has been rendered yet - the first wave shipped 46 cards marked ready without a single render and 27 of 64 turned out to be routed to the wrong engine.",
+  "examples": {
+    "anime": "/samples/styles/unreal_render__anime.webp",
+    "qwen": "/samples/styles/unreal_render__qwen.webp"
+  },
+  "compose": "inert",
+  "verdict": "An ordinary photograph on qwen and ordinary clean anime on the illustration engine. The 'unreal engine' token acted as a generic quality booster rather than a style, which is precisely the risk the card flagged.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject, on both engines. studio/_tools/style_examples.py --all-engines"
+}

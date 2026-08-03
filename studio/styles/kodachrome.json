@@ -1,0 +1,26 @@
+{
+  "id": "kodachrome",
+  "name": "Kodachrome",
+  "family": "photo",
+  "engine": "qwen",
+  "means": "Mid-century colour reversal film: deep saturated reds, controlled contrast, fine grain, warm midtones that never go garish.",
+  "tags": "",
+  "prose": "a Kodachrome photograph - deep saturated reds with controlled contrast, fine grain, warm midtones",
+  "negative_add": "washed out, flat, digital, oversaturated",
+  "suits_looks": [
+    "golden",
+    "warm",
+    "memory"
+  ],
+  "strength": "moderate",
+  "works_for": "video - a stable global look",
+  "status": "ready",
+  "note": "Overlaps film_35mm (measured ready but subtle). The separator is the specific red response. If they match, this is redundant. | Authored in the second wave, after the first 64 were rendered and measured. status=untested because nothing here has been rendered yet - the first wave shipped 46 cards marked ready without a single render and 27 of 64 turned out to be routed to the wrong engine.",
+  "examples": {
+    "anime": "/samples/styles/kodachrome__anime.webp",
+    "qwen": "/samples/styles/kodachrome__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Warm midtones and deep controlled reds. Distinct enough from film_35mm to keep.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject, on both engines. studio/_tools/style_examples.py --all-engines"
+}

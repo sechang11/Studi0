@@ -1,0 +1,26 @@
+{
+  "id": "giallo",
+  "name": "Giallo",
+  "family": "world",
+  "engine": "anime",
+  "means": "Italian thriller colour: unmotivated saturated gels, red and cold blue in the same frame, hard black shadow, theatrical.",
+  "tags": "giallo, saturated red lighting, blue shadow, high contrast, theatrical, 1970s thriller",
+  "prose": "an Italian-thriller look with unmotivated saturated gels, red and cold blue in one frame, hard black shadow",
+  "negative_add": "natural lighting, muted, documentary",
+  "suits_looks": [
+    "noir",
+    "neon",
+    "firelight"
+  ],
+  "strength": "moderate",
+  "works_for": "video - flat gel colour holds well",
+  "status": "ready",
+  "note": "The defining move is that the coloured light has NO source in frame. If the model insists on inventing a lamp to justify it, that is the failure to record. | Authored in the second wave, after the first 64 were rendered and measured. status=untested because nothing here has been rendered yet - the first wave shipped 46 cards marked ready without a single render and 27 of 64 turned out to be routed to the wrong engine.",
+  "examples": {
+    "anime": "/samples/styles/giallo__anime.webp",
+    "qwen": "/samples/styles/giallo__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Saturated red and cold blue gels with hard black shadow - but ONLY on the illustration engine. On qwen it produced an ordinary photograph with no gels at all, so this was re-routed.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject, on both engines. studio/_tools/style_examples.py --all-engines"
+}

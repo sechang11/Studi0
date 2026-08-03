@@ -1,0 +1,27 @@
+{
+  "id": "polaroid",
+  "name": "Polaroid",
+  "family": "photoreal",
+  "engine": "qwen",
+  "means": "Instant integral film: a soft low-contrast dye image with a cyan-green cast in the shadows, hard on-camera flash falling off to black behind the subject, and the white plastic frame with its fat bottom edge.",
+  "tags": "",
+  "prose": "an instant photograph on integral film, white plastic frame with a thick lower border, soft low-contrast dye colours, cyan-green shadows, direct on-camera flash with hard falloff into darkness behind the subject, slight vignette, softly focused",
+  "negative_add": "sharp, high contrast, digital, professional lighting, illustration, anime",
+  "suits_looks": [
+    "faded_film",
+    "memory",
+    "dream",
+    "fluorescent"
+  ],
+  "strength": "moderate",
+  "works_for": "video badly. The frame is a static graphic element and LTX treats it as scene content, so expect the border to drift and breathe. If the shot must move, generate the picture without the frame and composite a real frame over the finished clip. Inferred.",
+  "status": "ready",
+  "note": "Two failure modes. The border: the model renders it about half the time and gets the proportions wrong when it does, so the reliable route is to render the image alone and composite a real polaroid frame in post. And ambiguity: ask for a polaroid and you may get the photograph itself OR a photograph of a polaroid lying on a table - say which one you mean. The dye cast and the flash falloff are the parts that genuinely land, and they are what make it read as instant rather than merely old. No anime form worth having: Animagine will happily draw a character holding an instant photo, but that is a drawing of a polaroid, not this style. | Downgraded to untested: NOTHING in this library was rendered when it was authored, so every strength and engine call is a considered prediction. This project's own standard - written on the Illustrious checkpoint card - is that a recommendation is not a measurement.",
+  "examples": {
+    "anime": "/samples/styles/polaroid__anime.webp",
+    "qwen": "/samples/styles/polaroid__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Real instant-film border and shifted colour. Among the strongest photographic results at 63.9.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

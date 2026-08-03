@@ -1,0 +1,27 @@
+{
+  "id": "concept_art",
+  "name": "Concept art",
+  "family": "illustration",
+  "engine": "anime",
+  "means": "Not a medium - a production idiom, and it has to be written as one. In practice: broad soft-edged value blocks laid in with a big brush over a neutral grey ground, one clear light direction, a tightly limited palette, and hard rendering only at the focal point with everything else surrendered to suggestion.",
+  "tags": "painterly, visible brushstrokes, extremely detailed background, dramatic lighting, limited palette, scenery",
+  "prose": "a production concept painting, broad soft-edged value blocks laid in with a big brush over a neutral grey ground, one clear light direction, a tightly limited palette, detail rendered only where the eye should land and the rest left as suggestion",
+  "negative_add": "cel shading, lineart, flat colour, anime, photograph, cluttered detail",
+  "suits_looks": [
+    "neutral",
+    "cold",
+    "overcast",
+    "blockbuster"
+  ],
+  "strength": "moderate",
+  "works_for": "Video: middling. Soft value blocks have no fine grain to boil, so it should not fall apart, but it also has no hard structure for LTX to hold onto and is likely to drift toward mush over a long clip. INFERRED, not measured.",
+  "status": "ready",
+  "note": "Read this before using it, because the phrase is a trap. 'Concept art' is a job description, not a set of marks, and asking for it by name is the same shape of mistake studio/tags/storybook_anime.json documents - a phrase the model parses loosely as a vibe. What the bare phrase reliably fires on qwen is generic ArtStation digital painting: glossy, blue-and-orange, over-rendered, and identical every time. That is high obedience aimed at the wrong target, which is why this sits at moderate rather than strong. The version worth having is the marks in 'means' above. Also settle which SENSE you mean: if you want a character sheet - orthographic front, side and back with callouts - that is not this card, and the anime path's standing negative already contains 'multiple views' specifically to stop it happening by accident (craft/ANIME_MODELS.md); studio has a turnaround workflow for that instead. Unavailable in any useful form on the anime checkpoint - the tags line above buys you a detailed painted anime background, which is a different thing. Not rendered; assessment reasoned from the invented-phrase argument in studio/tags/storybook_anime.json. | Downgraded to untested: NOTHING in this library was rendered when it was authored, so every strength and engine call is a considered prediction. This project's own standard - written on the Illustrious checkpoint card - is that a recommendation is not a measurement.",
+  "examples": {
+    "anime": "/samples/styles/concept_art__anime.webp",
+    "qwen": "/samples/styles/concept_art__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Painted, moody, loose edges. Works here; was a plain photograph on qwen.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

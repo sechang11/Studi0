@@ -1,0 +1,27 @@
+{
+  "id": "oil_painting",
+  "name": "Oil painting",
+  "family": "painterly",
+  "engine": "anime",
+  "means": "Pigment in oil, laid on thick enough to hold the mark that made it. Impasto ridges standing proud of the surface and catching the light, transitions blended wet-into-wet instead of terminating on a hard edge, canvas weave showing through the thin passages, and a varnished depth in the darks.",
+  "tags": "oil painting (medium), traditional media, painterly, visible brushstrokes, blended shading, canvas texture",
+  "prose": "an oil painting on canvas, thick loaded brushstrokes standing proud of the surface with impasto ridges catching the light, colour blended wet into wet with no hard shadow edge anywhere, the weave of the canvas showing through the thinner passages, deep varnished darks",
+  "negative_add": "cel shading, flat colour, lineart, anime, digital art, smooth airbrush",
+  "suits_looks": [
+    "golden",
+    "firelight",
+    "memory",
+    "faded_film"
+  ],
+  "strength": "moderate",
+  "works_for": "stills yes. Video: expect it to struggle - impasto is fine high-frequency surface texture, and the working assumption on this box is that fine texture boils between LTX frames while flat high-contrast art holds. INFERRED, not measured: no oil-painted keyframe has been pushed through LTX-2.3 here. Render one clip before committing an act to it.",
+  "status": "ready",
+  "note": "Do not run this on the anime checkpoint. 'oil painting (medium)' is a genuine danbooru medium tag, but animagine's training is cel, and asking it for impasto returns cel shading with a slight blur - the tags line above is the nearest anime-path approximation, not this style. If you are locked to the anime path, use the painterly tag instead: studio/tags/painterly.json rates the tested clause 'painterly shading, visible brushstrokes' as moderate and says it genuinely moves the picture. Paint is a noun problem like everything else here - 'oil painting' alone gets you a smooth digital painting, and it is 'thick loaded brushstrokes, impasto ridges, canvas weave' that puts material on the surface. Not to be confused with a look: looks/ is a deterministic ffmpeg grade applied after generation, and no grade can add brush texture, so this has to happen at generation or not at all. Engine call reasoned from studio/tags/painterly.json and craft/ANIME_MODELS.md; not rendered. | Downgraded to untested: NOTHING in this library was rendered when it was authored, so every strength and engine call is a considered prediction. This project's own standard - written on the Illustrious checkpoint card - is that a recommendation is not a measurement.",
+  "examples": {
+    "anime": "/samples/styles/oil_painting__anime.webp",
+    "qwen": "/samples/styles/oil_painting__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Visible brush loading and warm impasto light.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

@@ -1,0 +1,27 @@
+{
+  "id": "editorial_fashion",
+  "name": "Editorial fashion",
+  "family": "photoreal",
+  "engine": "qwen",
+  "means": "The garment is the subject and the person is the armature: one decisive light raking across fabric, a held stylised pose, a clean or deliberately stark setting, and empty frame left where the magazine's type would go.",
+  "tags": "",
+  "prose": "an editorial fashion photograph, a single hard studio light raking across the garment to reveal its fabric and cut, the model in a held stylised pose, clean seamless backdrop, medium format sharpness across the garment, generous empty space in the upper frame, restrained colour palette",
+  "negative_add": "snapshot, casual, cluttered background, soft flattering light, illustration, anime",
+  "suits_looks": [
+    "neutral",
+    "cold",
+    "blockbuster",
+    "bleach"
+  ],
+  "strength": "moderate",
+  "works_for": "video moderately. Held poses and a plain backdrop are friendly to i2v; fabric is not, and drape and weave crawl between frames. Inferred.",
+  "status": "weak",
+  "note": "This card is mostly a GARMENT problem, and that is where it fails. 'Editorial', 'high fashion' and 'stylish' are quality words, and this box renders nouns - the project already learned that the hard way, which is why the character cards keep clothing in explicit wear tags rather than trusting an adjective. Name the garment: a black wool double-breasted coat with exaggerated shoulders, a floor-length pleated silk skirt. Then name the light. Keep the negative space in the prompt for a second reason too - qwen renders literal quoted text well, so if you actually want a cover line, that is where it goes. Unavailable on the anime checkpoint in this idiom. | Downgraded to untested: NOTHING in this library was rendered when it was authored, so every strength and engine call is a considered prediction. This project's own standard - written on the Illustrious checkpoint card - is that a recommendation is not a measurement.",
+  "examples": {
+    "anime": "/samples/styles/editorial_fashion__anime.webp",
+    "qwen": "/samples/styles/editorial_fashion__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Slightly more posed and styled than the control, but the difference is small enough to be seed noise. Use studio_portrait unless you specifically need the styling.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

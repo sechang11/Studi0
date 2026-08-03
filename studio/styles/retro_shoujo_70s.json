@@ -1,0 +1,26 @@
+{
+  "id": "retro_shoujo_70s",
+  "name": "70s shoujo",
+  "family": "anime",
+  "engine": "anime",
+  "means": "Classic girls-comic: enormous starred eyes, fine feathered line, screentone flowers, vertical elongation, sepia-rose palette.",
+  "tags": "1970s shoujo, huge sparkling eyes, delicate lineart, screentone, elongated figure, rose and sepia",
+  "prose": "a 1970s girls-comic look - very large starred eyes, fine feathered line, screentone, elongated figure, rose and sepia",
+  "negative_add": "modern, realistic proportions, digital, harsh",
+  "suits_looks": [
+    "sepia",
+    "memory",
+    "faded_film"
+  ],
+  "strength": "strong",
+  "works_for": "video - flat with fine line; line will flicker",
+  "status": "ready",
+  "note": "Distinct from shojo_soft (measured compose=replaces, it built a flower field). This is a PERIOD card - the elongation and eye size are the mechanism, and it may avoid the setting-override. | Authored in the second wave, after the first 64 were rendered and measured. status=untested because nothing here has been rendered yet - the first wave shipped 46 cards marked ready without a single render and 27 of 64 turned out to be routed to the wrong engine.",
+  "examples": {
+    "anime": "/samples/styles/retro_shoujo_70s__anime.webp",
+    "qwen": "/samples/styles/retro_shoujo_70s__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Enormous starred eyes, fine feathered line, sepia-rose, elongated figure. Strong, and unlike shojo_soft it did NOT replace the setting.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject, on both engines. studio/_tools/style_examples.py --all-engines"
+}

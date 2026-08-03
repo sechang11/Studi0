@@ -1,0 +1,24 @@
+{
+  "id": "eight_bit",
+  "name": "8-bit",
+  "family": "retro",
+  "engine": "qwen",
+  "means": "Sprite-era pixel art: a coarse visible grid where every pixel is a deliberately placed square, a palette of a dozen or so colours, no anti-aliasing anywhere, gradients faked with ordered dithering, and each form outlined in a darker shade of its own fill.",
+  "tags": "",
+  "prose": "8-bit pixel art sprite work, a coarse visible grid of large square pixels with hard aliased edges and no smoothing anywhere, a strict twelve-colour palette, shading done with ordered checkerboard dithering rather than blending, each form outlined in a darker tone of its own colour, flat black background",
+  "negative_add": "smooth, anti-aliased, photorealistic, 3d render, gradient, fine detail",
+  "suits_looks": [
+    "neutral"
+  ],
+  "strength": "weak",
+  "works_for": "No, and not for the usual reason. Even if LTX-2.3 held the texture, i2v produces smooth sub-pixel motion, and sub-pixel motion is a contradiction in a style whose entire premise is that the pixel is the smallest unit. You get a pixel-art image being smoothly warped, which is exactly what it is. INFERRED, not measured.",
+  "status": "ready",
+  "note": "WEAK ON BOTH ENGINES - the clearest mark-it-unavailable case in this set. Diffusion at 1344x768 cannot hold a pixel grid: what comes back is pixel-art-FLAVOURED, with inconsistent cell sizes, anti-aliased edges inside cells, and three hundred colours where you asked for twelve. It reads as a photograph of pixel art rather than as pixel art. REACH FOR THIS INSTEAD: render whatever you actually want at normal resolution using flat_vector, then do the pixelation in the deterministic tier where it is exact - nearest-neighbour downscale to sprite resolution, palette quantise, nearest-neighbour scale back up. A handful of ffmpeg arguments, CORRECT by construction rather than approximately obeyed, which is the same case studio/looks/ makes for grading. animagine knows the danbooru tag 'pixel art' and returns the same mush, so the anime path is no rescue and the tags field is left empty.",
+  "examples": {
+    "anime": "/samples/styles/eight_bit__anime.webp",
+    "qwen": "/samples/styles/eight_bit__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Genuine chunky pixel quantisation. Works on qwen; inert on the illustration engine.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

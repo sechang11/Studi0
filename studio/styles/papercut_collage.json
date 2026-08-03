@@ -1,0 +1,26 @@
+{
+  "id": "papercut_collage",
+  "name": "Papercut collage",
+  "family": "graphic",
+  "engine": "qwen",
+  "means": "An image built from layers of cut paper stacked in shallow depth: each element a flat opaque shape with a torn or scissor-cut edge, a soft drop shadow falling between each layer and the one behind, the white fibrous core showing along the tears, and depth read entirely from stacking order.",
+  "tags": "",
+  "prose": "a layered papercut collage, every element a flat piece of coloured paper cut or torn to shape and stacked in shallow layers, soft drop shadows falling between each layer and the one behind it, white fibrous paper core visible along the torn edges, matte uncoated paper texture, depth built only from overlapping planes",
+  "negative_add": "photorealistic, gradient, 3d render, smooth shading, anime",
+  "suits_looks": [
+    "neutral",
+    "golden",
+    "overcast"
+  ],
+  "strength": "moderate",
+  "works_for": "Better than the other craft styles. The layers are flat hard-edged planes, the surviving class. INFERRED, not measured, with one specific risk: LTX-2.3 reads the drop shadows as genuine depth cues and will parallax the layers, which flatters this style if the movement is gentle and shreds it if it is not. Keep camera moves small.",
+  "status": "unavailable",
+  "note": "The most reliable of the three craft styles here, because paper-cut and paper-diorama imagery is common in base training data and its mechanics are large enough to render at this resolution. The TORN EDGE is the load-bearing detail - a clean scissor cut alone reads as flat_vector with shadows, whereas the white fibrous core at a tear is unmistakably paper. The drop shadow between layers is the second essential: without it the layers merge and you are back to flat illustration. NOT AVAILABLE on animagine, which has no idiom for a physically constructed image. Not reachable as a look either - no grade adds a torn edge.",
+  "examples": {
+    "anime": "/samples/styles/papercut_collage__anime.webp",
+    "qwen": "/samples/styles/papercut_collage__qwen.webp"
+  },
+  "compose": "injects",
+  "verdict": "Drew torn-paper layers as a FRAME around an unmodified photograph.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

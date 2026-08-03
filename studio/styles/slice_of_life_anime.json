@@ -1,0 +1,28 @@
+{
+  "id": "slice_of_life_anime",
+  "name": "Slice of life anime",
+  "family": "anime",
+  "engine": "anime",
+  "means": "Intended to mean modern TV drawing held at low contrast: soft diffused light with almost no hard shadow, a warm slightly desaturated palette, thin even line, and ordinary domestic detail rendered carefully. As a style INSTRUCTION most of that does not survive contact with the model.",
+  "tags": "soft diffused light, pastel palette, clean lineart, muted colors, dappled light, detailed background",
+  "prose": "an everyday-life anime frame in soft diffused daylight: low contrast, warm muted palette, careful ordinary domestic detail",
+  "negative_add": "high contrast, harsh shadow, dynamic angle, speed lines, dramatic lighting",
+  "suits_looks": [
+    "golden",
+    "dawn",
+    "overcast",
+    "memory",
+    "neutral"
+  ],
+  "strength": "weak",
+  "works_for": "video too - good, almost by default. Low contrast, soft light and little fine texture is the easiest case for i2v, and the style asks for small quiet motion anyway, which is the motion LTX is best at. INFERRED, but the reasoning is the same one that makes the other flat styles safe.",
+  "status": "ready",
+  "note": "Marked WEAK on measured grounds rather than on taste. cards/story_genre.json reviewed its own slice_of_life option - 'soft natural lighting, calm everyday atmosphere, gentle colors' - and found it reduced to a naturally lit boy, indistinguishable from its documentary option, with observational and calm everyday atmosphere rendering NOTHING. The prescribed fix was a light signature instead of a mood word, which is what the tag list above is. Even so, be honest about what is happening: what makes a frame read as slice of life is the SUBJECT and the PLACE - a kitchen, a train platform, a classroom at four in the afternoon - plus the light. It is not a drawing idiom, and there is no danbooru feature for it. Reach for modern_anime to decide the drawing, pick the location out of places/, and set the warmth with looks/golden or looks/overcast after the render. If you write this card expecting it to carry a film on its own you will get an ordinary anime frame with six tag slots spent.",
+  "examples": {
+    "anime": "/samples/styles/slice_of_life_anime__anime.webp",
+    "qwen": "/samples/styles/slice_of_life_anime__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Soft pastel daylight, gentle line.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

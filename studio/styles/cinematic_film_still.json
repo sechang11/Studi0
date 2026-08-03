@@ -1,0 +1,28 @@
+{
+  "id": "cinematic_film_still",
+  "name": "Cinematic film still",
+  "family": "photoreal",
+  "engine": "qwen",
+  "means": "A frame lifted out of a motion picture: wide anamorphic framing, one motivated key with everything else falling away to shadow, shallow focus, and set-dressed depth behind the subject. Not a portrait - a moment inside a scene.",
+  "tags": "",
+  "prose": "a still frame from a feature film, anamorphic 2.39:1 framing, one motivated practical light source with deep falloff into shadow, shallow focus on the subject, set-dressed background receding into darkness, 40mm anamorphic lens with horizontal flare",
+  "negative_add": "illustration, anime, cgi render, flat even lighting, stock photo, centred snapshot",
+  "suits_looks": [
+    "blockbuster",
+    "bleach_bypass",
+    "noir",
+    "sodium",
+    "storm"
+  ],
+  "strength": "moderate",
+  "works_for": "video - the best-matched card in the set, since a film still is already a frame of a film and composition is what LTX preserves best. Flare and any fine grain will still crawl between frames. Inferred, not measured.",
+  "status": "ready",
+  "note": "This card exists to stop you writing the word 'cinematic'. studio/tags/cinematic.json measured that word as close to inert: it names a quality and this box renders nouns. Everything in prose above is the concrete substitute - aspect ratio, one light source, falloff, lens. And be clear that half of what people mean by cinematic is not the style at all, it is the GRADE: blockbuster and bleach_bypass in studio/looks/ do that part deterministically after generation, every time. Reach for the look first and this style second. On the anime checkpoint the honest answer is not this card - it is camera and lighting tags plus a look. | Downgraded to untested: NOTHING in this library was rendered when it was authored, so every strength and engine call is a considered prediction. This project's own standard - written on the Illustrious checkpoint card - is that a recommendation is not a measurement.",
+  "examples": {
+    "anime": "/samples/styles/cinematic_film_still__anime.webp",
+    "qwen": "/samples/styles/cinematic_film_still__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Anamorphic-ish framing and graded contrast.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

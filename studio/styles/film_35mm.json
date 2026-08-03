@@ -1,0 +1,28 @@
+{
+  "id": "film_35mm",
+  "name": "35mm film photo",
+  "family": "photoreal",
+  "engine": "qwen",
+  "means": "Colour negative film: highlights that roll off instead of clipping, halation blooming out of bright edges, slightly crossed colour in the shadows, and grain through the midtones.",
+  "tags": "",
+  "prose": "a 35mm colour negative film photograph, highlights rolling off softly instead of clipping, halation blooming around bright edges, slightly green-shifted shadows against warm midtones, modest contrast, muted natural palette",
+  "negative_add": "digital clarity, hdr, oversharpened, clipped highlights, illustration, anime",
+  "suits_looks": [
+    "faded_film",
+    "memory",
+    "sepia",
+    "golden",
+    "dawn"
+  ],
+  "strength": "moderate",
+  "works_for": "video only halfway. The colour behaviour survives; the grain does not - fine per-pixel texture baked into a keyframe boils through i2v. If you want grain on a clip, add it to the FINISHED video with an ffmpeg noise filter, where it is temporally random the way real grain is instead of a smeared still. Reasoned from the measured grain result, not measured on video.",
+  "status": "ready",
+  "note": "Half of this style is not deliverable from a prompt at all. studio/tags/film_grain.json is the best-measured failure in the project: four grain settings came back as four unrelated portraits with no visible grain difference, because grain is a per-pixel property and a diffusion sampler has no handle on it - which is exactly why studio/looks/faded_film.json deliberately leaves grain out of its tags rather than promise a texture it cannot deliver. What DOES land on qwen is the colour crossover and the highlight roll-off. Take those from the prompt, take the grain from ffmpeg, take the fade from the faded_film look. Unavailable on the anime checkpoint. | Downgraded to untested: NOTHING in this library was rendered when it was authored, so every strength and engine call is a considered prediction. This project's own standard - written on the Illustrious checkpoint card - is that a recommendation is not a measurement.",
+  "examples": {
+    "anime": "/samples/styles/film_35mm__anime.webp",
+    "qwen": "/samples/styles/film_35mm__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Warmer, softer, slight halation. Subtle but present.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

@@ -1,0 +1,28 @@
+{
+  "id": "drone_aerial",
+  "name": "Drone aerial",
+  "family": "photoreal",
+  "engine": "qwen",
+  "means": "The view from a hundred metres up: an oblique or straight-down look across terrain, figures reduced to marks, long raking shadows doing all the modelling, and haze thinning the far distance.",
+  "tags": "scenery, no humans, bird's-eye view, from above, wide shot, long shadows, distant landscape, atmospheric perspective, highly detailed background",
+  "prose": "an aerial photograph taken from a drone about a hundred metres up, oblique view down across the landscape, long raking shadows from a low sun, figures and vehicles reduced to small marks, atmospheric haze softening the far distance, deep focus with everything sharp",
+  "negative_add": "close-up, portrait, eye level, shallow depth of field",
+  "suits_looks": [
+    "overcast",
+    "golden",
+    "dawn",
+    "heat_haze",
+    "storm"
+  ],
+  "strength": "moderate",
+  "works_for": "video better than anything else in this set - no anatomy, high altitude, slow parallax, which is exactly the flat static content LTX holds. Inferred, but the reasoning is strong enough to bet on.",
+  "status": "weak",
+  "note": "Be honest about what this is: a CAMERA POSITION, not a rendering idiom, and it overlaps studio/tags/bird's-eye_view.json and shot.cam.height=aerial in VARIABLES.md. That is exactly why it is the one card here marked `either` - the aerial-ness lives in the camera, not the medium, so Animagine draws a perfectly good aerial anime landscape from the tags above. The genuinely weak part on both engines is true nadir: ask for straight down and both drift back to a 30-45 degree oblique. Write `looking straight down, no horizon visible` and then check the render rather than trusting it. | Downgraded to untested: NOTHING in this library was rendered when it was authored, so every strength and engine call is a considered prediction. This project's own standard - written on the Illustrious checkpoint card - is that a recommendation is not a measurement.",
+  "examples": {
+    "anime": "/samples/styles/drone_aerial__anime.webp",
+    "qwen": "/samples/styles/drone_aerial__qwen.webp"
+  },
+  "compose": "injects",
+  "verdict": "Did NOT move the camera up. Still eye level, just a longer street. An aerial is a camera position - a shot property, not a style.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

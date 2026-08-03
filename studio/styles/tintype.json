@@ -1,0 +1,27 @@
+{
+  "id": "tintype",
+  "name": "Tintype",
+  "family": "photoreal",
+  "engine": "qwen",
+  "means": "A wet-plate collodion positive on blackened metal: silver-grey tonality with a faint metallic cast, highlights blown to bare plate, a heavy vignette to black corners, a razor-thin large-format focal plane, and chemical staining round the plate edge.",
+  "tags": "",
+  "prose": "a wet plate collodion tintype on blackened metal, silver-grey tonality with a faint brown metallic cast, highlights blown out to bare plate with no detail, heavy vignette falling to black at the corners, extremely shallow large format focal plane with swirling out-of-focus edges, chemical staining and uneven pour marks along the plate border, stiff frontal unsmiling pose",
+  "negative_add": "colour photograph, digital, sharp corners, modern clothing, smiling, illustration, anime",
+  "suits_looks": [
+    "sepia",
+    "faded_film",
+    "memory",
+    "noir"
+  ],
+  "strength": "moderate",
+  "works_for": "video: no. The whole identity is plate chemistry - edge staining, pour marks, swirl - and that is fixed per-pixel texture, which boils. Hold on the still. Inferred.",
+  "status": "ready",
+  "note": "Fails soft: ask for a tintype and you usually get a generic sepia old photograph, because that is the far larger training cluster. Three marks separate them - pour marks and staining at the plate border, highlights blown to bare metal with no detail in them, and swirling edge bokeh from an uncorrected large-format lens. Name all three or you have made an expensive sepia. Which is the split worth stating plainly: studio/looks/sepia.json gives you the old-photograph COLOUR deterministically, after generation, every time. Only reach for this style when you need the plate physics that a grade has no way to invent. Unavailable on the anime checkpoint. | Downgraded to untested: NOTHING in this library was rendered when it was authored, so every strength and engine call is a considered prediction. This project's own standard - written on the Illustrious checkpoint card - is that a recommendation is not a measurement.",
+  "examples": {
+    "anime": "/samples/styles/tintype__anime.webp",
+    "qwen": "/samples/styles/tintype__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Aged plate, vignette, silver tone.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

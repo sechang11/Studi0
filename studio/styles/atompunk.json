@@ -1,0 +1,26 @@
+{
+  "id": "atompunk",
+  "name": "Atompunk / Raygun Gothic",
+  "family": "world",
+  "engine": "anime",
+  "means": "1950s space-age optimism: chrome fins, atomic starbursts, turquoise and coral, googie curves, everything streamlined whether or not it moves.",
+  "tags": "retro futurism, 1950s, chrome, atomic age, googie, turquoise, starburst",
+  "prose": "a 1950s space-age world of chrome fins and atomic starburst motifs, turquoise and coral, streamlined googie curves",
+  "negative_add": "gritty, realistic, muted, modern",
+  "suits_looks": [
+    "faded_film",
+    "warm",
+    "golden"
+  ],
+  "strength": "moderate",
+  "works_for": "video - flat chrome and flat colour hold well",
+  "status": "weak",
+  "note": "Raygun gothic is the more precise term but atompunk has more corpus mass. Watch for the noun trap: if 'raygun' or 'rocket' creeps into the prose the model will draw one. | Authored in the second wave, after the first 64 were rendered and measured. status=untested because nothing here has been rendered yet - the first wave shipped 46 cards marked ready without a single render and 27 of 64 turned out to be routed to the wrong engine.",
+  "examples": {
+    "anime": "/samples/styles/atompunk__anime.webp",
+    "qwen": "/samples/styles/atompunk__qwen.webp"
+  },
+  "compose": "inert",
+  "verdict": "Came back as generic neon city, indistinguishable from cyberpunk_neon; nothing at all on qwen. The turquoise landed, the 1950s did not. Raygun-gothic needs its object vocabulary, which is exactly what this library cannot safely use.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject, on both engines. studio/_tools/style_examples.py --all-engines"
+}

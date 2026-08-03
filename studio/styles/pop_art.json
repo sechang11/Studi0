@@ -1,0 +1,25 @@
+{
+  "id": "pop_art",
+  "name": "Pop art",
+  "family": "movement",
+  "engine": "anime",
+  "means": "Commercial print language as fine art: flat primary colour, heavy black outline, benday dots, repeated panel logic.",
+  "tags": "pop art, flat bold colors, thick black outline, halftone dots, high saturation, graphic",
+  "prose": "a pop art treatment - flat primary colour, heavy black outline, benday dot shading, poster-flat space",
+  "negative_add": "subtle, muted, realistic, soft shading",
+  "suits_looks": [
+    "neon",
+    "neutral"
+  ],
+  "strength": "moderate",
+  "works_for": "video - flat colour holds well",
+  "status": "ready",
+  "note": "comic_halftone measured INERT - the dot screen never appeared on either engine. This card leans on flat colour and black outline instead, and the dots are a bonus rather than the mechanism. | Authored in the second wave, after the first 64 were rendered and measured. status=untested because nothing here has been rendered yet - the first wave shipped 46 cards marked ready without a single render and 27 of 64 turned out to be routed to the wrong engine.",
+  "examples": {
+    "anime": "/samples/styles/pop_art__anime.webp",
+    "qwen": "/samples/styles/pop_art__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Flat primaries and hard graphic shapes. Works where comic_halftone failed, because it leans on flat colour rather than on a dot screen neither engine can produce.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject, on both engines. studio/_tools/style_examples.py --all-engines"
+}

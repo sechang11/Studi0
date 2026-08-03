@@ -1,0 +1,27 @@
+{
+  "id": "ghibli_pastoral",
+  "name": "Pastoral painted anime",
+  "family": "painterly",
+  "engine": "anime",
+  "means": "Hand-painted opaque backgrounds - gouache and watercolour rather than digital fills - carrying most of the frame: tall summer cumulus, deep green landscape, warm soft light, and simply drawn characters with thin line and minimal shadow standing in front of all that detail.",
+  "tags": "watercolor (medium) background, gouache (medium), watercolor wash scenery, lush scenery, cumulus clouds, soft lighting, thin lineart, scenery focus",
+  "prose": "a hand-painted pastoral animation background in gouache and watercolour: a green valley under tall summer cumulus, warm soft light, simply drawn figures small in the frame",
+  "negative_add": "3d, photorealistic, clean digital coloring, high contrast, neon, monochrome",
+  "suits_looks": [
+    "golden",
+    "dawn",
+    "overcast",
+    "memory"
+  ],
+  "strength": "moderate",
+  "works_for": "video - poor to middling, and the weakest painterly case in the set. Visible brush and paper texture is exactly what boils: it gets re-guessed every frame and the whole background crawls even when nothing is meant to move. INFERRED. If the shot must move, keep the move tiny and let the clouds be the only animated element - cards/layer_bg_motion.json is the right layer for that, not this card.",
+  "status": "ready",
+  "note": "DO NOT NAME THE STUDIO. Naming a living studio is the storybook_anime failure exactly - tags/storybook_anime.json documents an invented phrase the corpus does not contain, which the model parses loosely as anime plus a vague warmth, and its own prescription is to build the look out of tags the model actually holds. What works instead is measured: cards/anime_bg_style.json ships watercolor as 'watercolor (medium) background, watercolor wash scenery' and gouache as 'gouache (medium) background, opaque matte painted scenery', and its claim is that the background MEDIUM is the thing that makes a film look painted rather than rendered. Note the (medium) suffix - it is danbooru grammar and it matters. On qwen this style is genuinely better, because prose is the right dialect for a painted landscape and Qwen holds paint texture more convincingly; but qwen cannot use the anime character sheets, so run qwen for the plate and anime for anyone standing in it. Marked moderate rather than strong because the characters are the weak half: the model will happily paint the landscape and then put a modern TV-anime character in front of it. | Downgraded to untested: NOTHING in this library was rendered when it was authored, so every strength and engine call is a considered prediction. This project's own standard - written on the Illustrious checkpoint card - is that a recommendation is not a measurement.",
+  "examples": {
+    "anime": "/samples/styles/ghibli_pastoral__anime.webp",
+    "qwen": "/samples/styles/ghibli_pastoral__qwen.webp"
+  },
+  "compose": "replaces",
+  "verdict": "Painted skies and warm village architecture, but it REPLACED the city street with a village lane. Do not stack on a place card.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

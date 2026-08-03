@@ -1,0 +1,27 @@
+{
+  "id": "shonen_action",
+  "name": "Shonen action",
+  "family": "anime",
+  "engine": "anime",
+  "means": "A heavy black keyline around every figure, bold angular eyes with thick lids, hard high-contrast shadow, aggressive foreshortening toward the viewer, and drawn ink effects - speed lines, motion lines - doing the work a camera would do in live action.",
+  "tags": "shounen style, thick lineart, bold heavy outlines, bold angular eyes, high contrast, dynamic angle, foreshortening, radial speed lines",
+  "prose": "a boys' action-manga animation frame: heavy black outlines, hard high-contrast shadow, extreme foreshortening, drawn speed lines filling the background",
+  "negative_add": "thin lineart, soft lighting, pastel colors, photorealistic, motion blur",
+  "suits_looks": [
+    "blockbuster",
+    "storm",
+    "firelight",
+    "bleach_bypass"
+  ],
+  "strength": "moderate",
+  "works_for": "video - good on the drawing, bad on the effects. Thick outlines and flat fills hold; radial speed lines are a dense field of thin converging strokes and will churn. INFERRED. The project already has a better answer anyway: author the hit as shot.fx flash or whiteout in short.py fx_chain, which is post and exact every frame.",
+  "status": "ready",
+  "note": "This is a BUNDLE rather than a single feature, which is why it is moderate and not strong - each part lands but nothing fires on the word shounen alone. Two of the parts are measured. cards/anime_draw_line_weight.json found that thick versus normal is a real switch, its clause being 'thick lineart, bold heavy outlines', while the thin end has no gradation at all (extremely thin and thin render identically). cards/anime_draw_eye_render.json carries shounen_bold as 'bold angular eyes, thick eye outlines, shounen style'. The speed lines are the most-used effect tag in this library at 14 uses, but tags/speed_lines.json is emphatic that they DELETE the background they sit in front of - correct at the peak of an impact, destructive on a shot that still has to read as a location. Note also that motion blur belongs in the negative on this checkpoint, never in the positive. | Downgraded to untested: NOTHING in this library was rendered when it was authored, so every strength and engine call is a considered prediction. This project's own standard - written on the Illustrious checkpoint card - is that a recommendation is not a measurement.",
+  "examples": {
+    "anime": "/samples/styles/shonen_action__anime.webp",
+    "qwen": "/samples/styles/shonen_action__qwen.webp"
+  },
+  "compose": "replaces",
+  "verdict": "Hard black line and speed fragments; it shattered the background into abstract shards. Style and setting cannot both survive this one.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

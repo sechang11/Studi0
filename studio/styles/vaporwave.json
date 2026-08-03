@@ -1,0 +1,26 @@
+{
+  "id": "vaporwave",
+  "name": "Vaporwave",
+  "family": "retro",
+  "engine": "anime",
+  "means": "An 80s-mall pastiche assembled from props rather than drawn in a technique: a marble bust, a lone palm, a wireframe grid horizon, chrome lettering, katakana - all rendered flatly with hard gradient bands in magenta and cyan.",
+  "tags": "1980s anime style, retro anime, gradient background, palm tree, grid, checkered floor, chrome, katakana, neon lights, flat color",
+  "prose": "an 80s vaporwave composition, a white marble classical bust and a single potted palm standing on a chequerboard floor, a magenta wireframe grid running back to a cyan horizon with a low banded sun, chrome-effect lettering, flat saturated magenta and cyan in hard gradient bands, deliberately cheap early-computer-graphics finish",
+  "negative_add": "photorealistic, natural colour, muted palette, film grain",
+  "suits_looks": [
+    "neon",
+    "dream",
+    "sunset"
+  ],
+  "strength": "moderate",
+  "works_for": "Holds better than most - flat bands and hard shapes. INFERRED, not measured. The grid horizon is a good motion subject; the chrome lettering is not, it will crawl.",
+  "status": "ready",
+  "note": "Be honest about what this is: roughly a third rendering idiom and two thirds shopping list. The magenta-and-cyan half of vaporwave is a COLOUR GRADE and belongs in studio/looks/, not in the prompt - the house rule is that the model renders nouns, not adjectives, and 'vaporwave colours' is an adjective. The props ARE nouns and do land: bust, palm, grid, chequerboard, katakana. So author the props here and put studio/looks/neon.json on top. Read that look's caution first: it is the only grade in the set that RAISES saturation (1.18 plus vibrance 0.25), it stacks multiplicatively with the fx layer, and an over-strong grade once turned a third of a film magenta - which for this particular style is a failure that disguises itself as enthusiasm. Works on animagine, which is genuinely good at 80s anime and better than qwen at the retro-cel version of this.",
+  "examples": {
+    "anime": "/samples/styles/vaporwave__anime.webp",
+    "qwen": "/samples/styles/vaporwave__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Cyan and magenta, hard neon, flattened depth.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

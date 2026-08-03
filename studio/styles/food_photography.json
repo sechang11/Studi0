@@ -1,0 +1,27 @@
+{
+  "id": "food_photography",
+  "name": "Food photography",
+  "family": "photoreal",
+  "engine": "qwen",
+  "means": "Food lit to be eaten with the eyes: soft light from behind and to the side so steam and translucency read, a shallow plane holding one bite sharp, and a surface dressed with the props and crumbs that say a kitchen was here.",
+  "tags": "",
+  "prose": "a food photograph, soft diffused window light from behind and slightly to the side, steam rising and catching the backlight, three-quarter view from about forty-five degrees, shallow focus holding the front edge of the dish sharp, linen and worn wood surface, scattered crumbs and a smear of sauce, condensation beading on the glass",
+  "negative_add": "flat frontal flash, plastic looking, oversaturated, cgi, illustration, anime",
+  "suits_looks": [
+    "golden",
+    "neutral",
+    "overcast",
+    "firelight"
+  ],
+  "strength": "strong",
+  "works_for": "video middlingly. Steam and condensation animate plausibly and are most of the reason to move at all; the food itself morphs, because geometry with no skeleton is exactly what i2v drifts on. Inferred.",
+  "status": "unavailable",
+  "note": "Backlight is the whole trick and the most common thing left out - light from behind is what makes steam visible and sauce translucent, and frontal flash kills both. The second lesson is the project's own rule: steam, condensation and crumbs are NOUNS and they land, while 'delicious', 'appetising' and 'fresh' are qualities and do nothing at all. It fails by being too clean, since qwen's default is glossy stock food - if you want a real meal, ask for the chipped plate and the uneven portion by name. Unavailable on the anime checkpoint in this idiom, though drawn anime food is a genuine strength there and is a different thing worth having. | Downgraded to untested: NOTHING in this library was rendered when it was authored, so every strength and engine call is a considered prediction. This project's own standard - written on the Illustrious checkpoint card - is that a recommendation is not a measurement.",
+  "examples": {
+    "anime": "/samples/styles/food_photography__anime.webp",
+    "qwen": "/samples/styles/food_photography__qwen.webp"
+  },
+  "compose": "injects",
+  "verdict": "Put a plate of food on a table in front of her. Same failure as wildlife_photo.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

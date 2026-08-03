@@ -1,0 +1,26 @@
+{
+  "id": "gongbi",
+  "name": "Gongbi",
+  "family": "tradition",
+  "engine": "anime",
+  "means": "Chinese court painting: fine even outline, layered translucent mineral colour, flat gold-silk ground, meticulous stillness.",
+  "tags": "gongbi, chinese painting, fine outline, mineral pigments, silk ground, meticulous, flat",
+  "prose": "a gongbi painting - fine even outline with layered translucent mineral colour on a flat silk ground, meticulous",
+  "negative_add": "loose, expressive, impasto, western",
+  "suits_looks": [
+    "golden",
+    "warm",
+    "memory"
+  ],
+  "strength": "moderate",
+  "works_for": "video - flat and still",
+  "status": "weak",
+  "note": "The counterpart to ink_wash (which measured among the strongest cards): gongbi is the meticulous coloured tradition where ink_wash is the spontaneous monochrome one. | Authored in the second wave, after the first 64 were rendered and measured. status=untested because nothing here has been rendered yet - the first wave shipped 46 cards marked ready without a single render and 27 of 64 turned out to be routed to the wrong engine.",
+  "examples": {
+    "anime": "/samples/styles/gongbi__anime.webp",
+    "qwen": "/samples/styles/gongbi__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Dark and atmospheric rather than meticulous - none of the fine even outline or flat silk ground that defines gongbi. ink_wash remains the working card in this family.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject, on both engines. studio/_tools/style_examples.py --all-engines"
+}

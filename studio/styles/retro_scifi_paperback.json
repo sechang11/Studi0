@@ -1,0 +1,26 @@
+{
+  "id": "retro_scifi_paperback",
+  "name": "Retro sci-fi paperback",
+  "family": "retro",
+  "engine": "qwen",
+  "means": "A 1970s paperback cover painted in gouache and airbrush: smooth sprayed gradients meeting hard mask edges, chrome and enamel highlights blown to pure white, a matte-painted planet or structure sitting in flat deep space, and fine overspray speckle across the open areas.",
+  "tags": "",
+  "prose": "a 1970s science fiction paperback cover painted in gouache and airbrush, a chrome starship above an ochre planet, smooth sprayed colour gradients meeting hard mask edges where shapes overlap, enamel highlights blown to pure white, fine airbrush overspray speckle across the sky, flat deep black space with small stars, muted ochre teal and rust palette",
+  "negative_add": "photorealistic, 3d render, digital art, anime, cel shading, lens flare",
+  "suits_looks": [
+    "faded_film",
+    "sepia",
+    "golden"
+  ],
+  "strength": "moderate",
+  "works_for": "Partial. The large sprayed gradients hold; the overspray speckle and the star field are fine texture and will boil. INFERRED, not measured. Losing the speckle costs you the painted tell and the clip starts reading as a smooth 3D render - which is the drift this style is most prone to even in stills.",
+  "status": "unavailable",
+  "note": "The single most useful word here is AIRBRUSH, because it is the one that separates this from generic digital sci-fi art: it buys the sprayed gradient and the hard masked edge together. Without it you get modern concept art wearing retro colours. Drift toward 3d is the standing failure, which is why 3d render is in negative_add - and note that on the qwen path a negative only bites at 20 steps and cfg 2.5-4.0, since PROMPTING.md records it is close to ignored at cfg 1.0 with the Lightning LoRA. NOT AVAILABLE on animagine in any honest form: that checkpoint's whole competence is the flat cel keyline and airbrush modelling is its opposite. 'retro anime' there gives you 1980s CEL animation, which is a real and good style, but a different one - do not let the shared word retro fool you.",
+  "examples": {
+    "anime": "/samples/styles/retro_scifi_paperback__anime.webp",
+    "qwen": "/samples/styles/retro_scifi_paperback__qwen.webp"
+  },
+  "compose": "injects",
+  "verdict": "Added a starship and a gas giant behind a normal photo. Renders the genre's furniture, not its printing.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

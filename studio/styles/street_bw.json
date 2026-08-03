@@ -1,0 +1,25 @@
+{
+  "id": "street_bw",
+  "name": "Black-and-white street",
+  "family": "photo",
+  "engine": "qwen",
+  "means": "Documentary monochrome: available light, deep blacks, grain, decisive-moment framing, high contrast without gloss.",
+  "tags": "",
+  "prose": "a black-and-white street photograph - available light, deep blacks, visible grain, unposed decisive framing",
+  "negative_add": "color, studio lighting, posed, clean",
+  "suits_looks": [
+    "noir",
+    "bleach"
+  ],
+  "strength": "strong",
+  "works_for": "video - monochrome is stable",
+  "status": "ready",
+  "note": "Distinct from noir_comic (measured ready on qwen but drawn, not photographic) and from war_photography (which carries conflict connotations this does not). | Authored in the second wave, after the first 64 were rendered and measured. status=untested because nothing here has been rendered yet - the first wave shipped 46 cards marked ready without a single render and 27 of 64 turned out to be routed to the wrong engine.",
+  "examples": {
+    "anime": "/samples/styles/street_bw__anime.webp",
+    "qwen": "/samples/styles/street_bw__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Available-light monochrome with deep blacks and grain.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject, on both engines. studio/_tools/style_examples.py --all-engines"
+}

@@ -1,0 +1,26 @@
+{
+  "id": "cassette_futurism",
+  "name": "Cassette futurism",
+  "family": "world",
+  "engine": "anime",
+  "means": "The future as imagined in 1979: beige and grey plastic, CRT phosphor glow, chunky physical switches, monochrome text displays, visible screws.",
+  "tags": "retro technology, crt monitor, beige plastic, 1980s computer, phosphor glow",
+  "prose": "a lived-in analogue future of beige plastic and CRT phosphor glow, chunky switches and monochrome displays, visible wear",
+  "negative_add": "sleek, glass, holographic, modern minimalism",
+  "suits_looks": [
+    "cold",
+    "sodium",
+    "faded_film"
+  ],
+  "strength": "moderate",
+  "works_for": "video - CRT scanline flicker is a per-frame texture and will crawl",
+  "status": "weak",
+  "note": "PREDICTED NOUN RISK: 'CRT monitor' is an object and may be drawn as a prop rather than as an environment treatment. The measured comparison is chalkboard, which did exactly that. If it injects, the fix is to strip the device nouns and keep only 'beige plastic, phosphor green glow'. | Authored in the second wave, after the first 64 were rendered and measured. status=untested because nothing here has been rendered yet - the first wave shipped 46 cards marked ready without a single render and 27 of 64 turned out to be routed to the wrong engine.",
+  "examples": {
+    "anime": "/samples/styles/cassette_futurism__anime.webp",
+    "qwen": "/samples/styles/cassette_futurism__qwen.webp"
+  },
+  "compose": "injects",
+  "verdict": "Drew CRT monitors as props standing around her. The card's own note predicted this: 'CRT monitor is an object and may be drawn as a prop rather than as an environment treatment.' Confirmed.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject, on both engines. studio/_tools/style_examples.py --all-engines"
+}

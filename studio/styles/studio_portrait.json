@@ -1,0 +1,27 @@
+{
+  "id": "studio_portrait",
+  "name": "Studio portrait",
+  "family": "photoreal",
+  "engine": "qwen",
+  "means": "A person lit deliberately against a controlled background: a key light with a defined shadow edge, fill setting the ratio, a rim separating hair from the backdrop, and a seamless ground with nothing else in it.",
+  "tags": "",
+  "prose": "a studio portrait, large softbox key at 45 degrees camera left, subtle fill holding a 3:1 lighting ratio, hair light separating the subject from a plain grey seamless backdrop, 85mm lens at f/2.8, sharp eyes, smooth even skin",
+  "negative_add": "cluttered background, harsh on-camera flash, illustration, anime, cgi",
+  "suits_looks": [
+    "neutral",
+    "cold",
+    "fluorescent",
+    "noir"
+  ],
+  "strength": "strong",
+  "works_for": "video only in part. The backdrop and the lighting hold because they are flat and static; the face does not, and a close portrait crop is where i2v boiling is most visible. Inferred.",
+  "status": "ready",
+  "note": "The most reliable card in this set, because it is nothing but nouns: modifier, angle, ratio, backdrop, focal length. PROMPTING.md records that focal length and lighting are the two highest-leverage words in a qwen prompt, and this style is made entirely of those two. It fails only when you name a mood instead of a light - 'dramatic portrait' does nothing, 'single hard key, no fill, background falling to black' does the whole job. The anime checkpoint has its own clean-portrait idiom (solo, upper body, simple background, soft lighting), but that is an anime portrait: a different medium, not this style. | Downgraded to untested: NOTHING in this library was rendered when it was authored, so every strength and engine call is a considered prediction. This project's own standard - written on the Illustrious checkpoint card - is that a recommendation is not a measurement.",
+  "examples": {
+    "anime": "/samples/styles/studio_portrait__anime.webp",
+    "qwen": "/samples/styles/studio_portrait__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Controlled key, clean falloff, dropped background.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

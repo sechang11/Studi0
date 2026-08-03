@@ -1,0 +1,25 @@
+{
+  "id": "american_comic",
+  "name": "American comic",
+  "family": "illustration",
+  "engine": "anime",
+  "means": "Superhero-era print: heavy varied ink weight, muscular exaggerated anatomy, saturated primaries, dramatic low angle.",
+  "tags": "american comic book, bold inking, dynamic pose, saturated primary colors, dramatic angle",
+  "prose": "an American comic-book treatment - heavy varied ink weight, saturated primaries, dramatic low camera angle",
+  "negative_add": "soft, pastel, delicate, realistic, muted",
+  "suits_looks": [
+    "neon",
+    "warm"
+  ],
+  "strength": "moderate",
+  "works_for": "video - flat colour holds, ink weight may flicker",
+  "status": "ready",
+  "note": "PREDICTED POSE RISK: 'dynamic pose' may rewrite blocking the way sakuga_impact did, which measured compose=injects for changing the figure's pose. Watch for it. | Authored in the second wave, after the first 64 were rendered and measured. status=untested because nothing here has been rendered yet - the first wave shipped 46 cards marked ready without a single render and 27 of 64 turned out to be routed to the wrong engine.",
+  "examples": {
+    "anime": "/samples/styles/american_comic__anime.webp",
+    "qwen": "/samples/styles/american_comic__qwen.webp"
+  },
+  "compose": "injects",
+  "verdict": "Heavy varied ink and saturated primaries - but it rewrote her pose into a dynamic action stance, as the card's note predicted. Same failure class as sakuga_impact.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject, on both engines. studio/_tools/style_examples.py --all-engines"
+}

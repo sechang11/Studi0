@@ -1,0 +1,27 @@
+{
+  "id": "photorealistic",
+  "name": "Photorealistic",
+  "family": "photoreal",
+  "engine": "qwen",
+  "means": "A photograph rather than a drawing - continuous tone with no keyline anywhere, skin carrying pore texture and blood colour under it, and real lens behaviour: a focal plane that actually falls off, corner falloff, catchlights.",
+  "tags": "",
+  "prose": "a photograph, natural skin with visible pore texture and fine stray hair, catchlights in the eyes, 50mm lens at f/2.0, shallow focal plane falling off behind the subject, soft directional daylight, continuous tone with no outlines",
+  "negative_add": "anime, cel shading, flat colour, thick outlines, illustration, painting, 3d render, cgi, plastic skin, airbrushed",
+  "suits_looks": [
+    "neutral",
+    "overcast",
+    "cold",
+    "golden"
+  ],
+  "strength": "strong",
+  "works_for": "stills reliably. Through the LTX pass faces and hands are the first things to boil, and the closer the crop the worse it gets. Inferred from how i2v behaves here generally, not measured on this style - and note CAPABILITIES.md records Wan as the more faithful i2v when you have an exact keyframe worth keeping.",
+  "status": "ready",
+  "note": "Do not run this on the anime checkpoint. `photorealistic` is a STANDING NEGATIVE in this project - studio/tags/photorealistic.json records that in the positive on Animagine it returns waxy semi-real faces and lost line, the worst of both worlds. It needs qwen. On qwen the negative above is close to inert at cfg 1.0 with the Lightning LoRA; if a render drifts illustrative, drop the LoRA and run 20 steps at cfg 2.5-4.0 so the negative actually bites. This is a STYLE, not a look: it changes what the model draws. What colour the result ends up is still the grade's job. | Downgraded to untested: NOTHING in this library was rendered when it was authored, so every strength and engine call is a considered prediction. This project's own standard - written on the Illustrious checkpoint card - is that a recommendation is not a measurement.",
+  "examples": {
+    "anime": "/samples/styles/photorealistic__anime.webp",
+    "qwen": "/samples/styles/photorealistic__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Skin texture and real lens falloff. Sits close to the control at 21.0 because qwen's baseline IS photographic - that is agreement, not failure.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

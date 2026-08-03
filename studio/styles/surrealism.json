@@ -1,0 +1,26 @@
+{
+  "id": "surrealism",
+  "name": "Surrealism",
+  "family": "movement",
+  "engine": "anime",
+  "means": "Dream logic rendered precisely: impossible juxtaposition painted with academic realism, deep empty perspective, hard shadow.",
+  "tags": "surrealism, dreamlike, impossible, empty landscape, hard shadow, precise rendering",
+  "prose": "a surrealist image - impossible juxtaposition rendered with precise academic realism, deep empty perspective and hard shadow",
+  "negative_add": "mundane, literal, cluttered, casual",
+  "suits_looks": [
+    "memory",
+    "golden",
+    "bleach"
+  ],
+  "strength": "weak",
+  "works_for": "video - the impossible element is exactly what i2v normalises away",
+  "status": "weak",
+  "note": "Honest expectation: WEAK. Surrealism is a semantic property, not a rendering one, and the effect tiers in this project put semantics at the bottom. Included to be measured, not because it is likely to land. | Authored in the second wave, after the first 64 were rendered and measured. status=untested because nothing here has been rendered yet - the first wave shipped 46 cards marked ready without a single render and 27 of 64 turned out to be routed to the wrong engine.",
+  "examples": {
+    "anime": "/samples/styles/surrealism__anime.webp",
+    "qwen": "/samples/styles/surrealism__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Atmospheric dark frame with a red ribbon motif - moody, but no impossible juxtaposition. As predicted: surrealism is a semantic property and semantics sit at the bottom of this project's effect tiers.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject, on both engines. studio/_tools/style_examples.py --all-engines"
+}

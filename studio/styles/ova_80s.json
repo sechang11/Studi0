@@ -1,0 +1,27 @@
+{
+  "id": "ova_80s",
+  "name": "80s OVA",
+  "family": "retro",
+  "engine": "anime",
+  "means": "The direct-to-video look: airbrushed gradient shading on skin and metal in place of flat cel steps, a denser and more saturated palette than TV work, high detail density, and a soft glow blooming around highlights.",
+  "tags": "1980s (style), cel animation, airbrush shading, retro artstyle, detailed, halation",
+  "prose": "a 1980s direct-to-video animation cel: airbrushed gradient shading, dense saturated paint, soft bloom around the highlights",
+  "negative_add": "modern anime style, clean digital coloring, flat color, 3d, crisp lineart",
+  "suits_looks": [
+    "sodium",
+    "neon",
+    "firelight",
+    "faded_film"
+  ],
+  "strength": "moderate",
+  "works_for": "video - middling. The airbrush gradients are smooth and large, which helps, but 80s OVA earns its look from fine mechanical and highlight detail, and that is the part that crawls. INFERRED. Prefer it on held or slow cuts.",
+  "status": "ready",
+  "note": "The airbrush is the whole tell and it is the one term here doing measurable work - the clause comes from cards/anime_draw_era.json panel cel_80s. Airbrush shading directly contradicts anime.draw.shading_steps, whose flat_0 is 'flat color, no shading' and whose cel_2 is the industry default, so do not set a cel step count alongside this card; pick one shading logic and commit. Sits one decade away from cel_anime_90s and will collide with it if both keep the retro artstyle tail - the era card raises this against itself in its own review, which is the best evidence in the library that the collision is real rather than theoretical. | Downgraded to untested: NOTHING in this library was rendered when it was authored, so every strength and engine call is a considered prediction. This project's own standard - written on the Illustrious checkpoint card - is that a recommendation is not a measurement.",
+  "examples": {
+    "anime": "/samples/styles/ova_80s__anime.webp",
+    "qwen": "/samples/styles/ova_80s__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "80s hair mass and cel paint - clearly separate from cel_anime_90s despite both carrying the retro tail two agents warned would collide. Keep both.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

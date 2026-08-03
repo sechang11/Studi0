@@ -1,0 +1,25 @@
+{
+  "id": "ligne_claire",
+  "name": "Ligne claire",
+  "family": "illustration",
+  "engine": "anime",
+  "means": "Uniform-weight ink line, flat unmodulated colour, no hatching and no cast shadow, every object equally in focus.",
+  "tags": "ligne claire, clean uniform lineart, flat colors, no shading, european comic, clear",
+  "prose": "a ligne claire treatment - uniform-weight ink outline, flat unmodulated colour, no hatching or cast shadow",
+  "negative_add": "sketchy, painterly, heavy shading, gradient, textured",
+  "suits_looks": [
+    "neutral",
+    "warm"
+  ],
+  "strength": "strong",
+  "works_for": "video - the flattest idioms hold best; this should be among the top performers",
+  "status": "ready",
+  "note": "The Moebius/Herge tradition. Distinct from flat_vector (which measured ready) because ligne claire keeps a drawn outline where vector has none. | Authored in the second wave, after the first 64 were rendered and measured. status=untested because nothing here has been rendered yet - the first wave shipped 46 cards marked ready without a single render and 27 of 64 turned out to be routed to the wrong engine.",
+  "examples": {
+    "anime": "/samples/styles/ligne_claire__anime.webp",
+    "qwen": "/samples/styles/ligne_claire__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Uniform-weight outline, flat unmodulated colour, no cast shadow. Exactly the Moebius/Herge idiom and one of the cleanest cards in the library.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject, on both engines. studio/_tools/style_examples.py --all-engines"
+}

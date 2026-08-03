@@ -1,0 +1,26 @@
+{
+  "id": "daguerreotype",
+  "name": "Daguerreotype",
+  "family": "photo",
+  "engine": "qwen",
+  "means": "Earliest photography: mirror-silver surface, extremely shallow depth, slight solarisation at the edges, rigid formal stillness.",
+  "tags": "",
+  "prose": "a daguerreotype - mirrored silver plate with extremely shallow depth of field, edge solarisation, rigid formal stillness",
+  "negative_add": "modern, color, casual, sharp",
+  "suits_looks": [
+    "sepia",
+    "bleach",
+    "memory"
+  ],
+  "strength": "moderate",
+  "works_for": "video - the stillness is the point and motion destroys it",
+  "status": "weak",
+  "note": "Neighbour of tintype (measured ready). The separator is the mirror-silver surface and the solarised edge; if they collapse, keep tintype. | Authored in the second wave, after the first 64 were rendered and measured. status=untested because nothing here has been rendered yet - the first wave shipped 46 cards marked ready without a single render and 27 of 64 turned out to be routed to the wrong engine.",
+  "examples": {
+    "anime": "/samples/styles/daguerreotype__anime.webp",
+    "qwen": "/samples/styles/daguerreotype__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Barely separable from the control - no mirror-silver surface, no edge solarisation. tintype already covers this ground and does it properly.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject, on both engines. studio/_tools/style_examples.py --all-engines"
+}

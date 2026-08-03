@@ -1,0 +1,25 @@
+{
+  "id": "blueprint",
+  "name": "Blueprint",
+  "family": "graphic",
+  "engine": "qwen",
+  "means": "A cyanotype engineering drawing: pale white line on a saturated Prussian blue ground, uniform line weight throughout, orthographic projection with no perspective and no shading at all, dimension lines with arrowheads, hatched section fills, a ruled title block in the corner.",
+  "tags": "",
+  "prose": "an architectural blueprint on deep Prussian blue cyanotype paper, the drawing rendered entirely in thin uniform white lines with no shading and no perspective, orthographic elevation, dimension lines with arrowheads and diagonally hatched section fills, a ruled title block in the lower right corner reading \"PLATE 04\" in condensed white sans lettering, faint paper fold creases across the sheet",
+  "negative_add": "photorealistic, colour, shading, perspective, 3d render, painterly",
+  "suits_looks": [
+    "cold",
+    "neutral"
+  ],
+  "strength": "moderate",
+  "works_for": "Bad in video. INFERRED, not measured, but with high confidence for a specific reason: the style is made of thin lines and lettering, and thin lines and lettering are what i2v crawls first. Expect the annotations to dissolve into pseudo-writing within a second. Use this as a held card, not as a moving shot.",
+  "status": "ready",
+  "note": "The lettering is where this style earns or fails, and qwen is the only engine here that can letter at all - PROMPTING.md calls text the headline feature and says to put the literal string in quotes, which the prose field does. Use the 20-step path: the same doc records that letterforms are the FIRST thing to degrade on the 4-step Lightning LoRA. NOT AVAILABLE on animagine, and the failure is worth naming because it looks like success at a glance - danbooru treats blueprint as an OBJECT, so an anime prompt puts a rolled blueprint IN the scene rather than drawing the scene as one. That is inference from how the vocabulary behaves (the grammar-versus-description distinction is set out in studio/tags/silhouette.json), not something rendered here. Not reachable as a look either: no grade in studio/looks/ turns a rendered image into line art, blue tint notwithstanding.",
+  "examples": {
+    "anime": "/samples/styles/blueprint__anime.webp",
+    "qwen": "/samples/styles/blueprint__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Cyanotype ground, drafting linework, plate lettering. Works on qwen; inert on the illustration engine.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

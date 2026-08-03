@@ -1,0 +1,26 @@
+{
+  "id": "arcane_magitech",
+  "name": "Arcane magitech",
+  "family": "world",
+  "engine": "anime",
+  "means": "Magic rendered as engineering: glowing rune-etched metal, suspended crystal, teal and gold energy in physical housings.",
+  "tags": "magitech, glowing runes, arcane technology, crystal, teal glow, ornate metal",
+  "prose": "a world where magic is engineered - rune-etched metal glowing teal and gold, suspended crystal in ornate housings",
+  "negative_add": "mundane, plain, modern, realistic",
+  "suits_looks": [
+    "neon",
+    "firelight",
+    "cold"
+  ],
+  "strength": "moderate",
+  "works_for": "video - emissive glow holds; the rune detail itself will crawl",
+  "status": "ready",
+  "note": "Named for the Arcane series look, which is where most of the corpus mass sits, but the card describes the idiom so it does not depend on the model knowing the show. | Authored in the second wave, after the first 64 were rendered and measured. status=untested because nothing here has been rendered yet - the first wave shipped 46 cards marked ready without a single render and 27 of 64 turned out to be routed to the wrong engine.",
+  "examples": {
+    "anime": "/samples/styles/arcane_magitech__anime.webp",
+    "qwen": "/samples/styles/arcane_magitech__qwen.webp"
+  },
+  "compose": "injects",
+  "verdict": "Teal rune-glow and crystal - the idiom lands, but it also spawned floating crystals as props. Usable if you want them; disruptive if you do not.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject, on both engines. studio/_tools/style_examples.py --all-engines"
+}

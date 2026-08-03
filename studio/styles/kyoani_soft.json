@@ -1,0 +1,26 @@
+{
+  "id": "kyoani_soft",
+  "name": "KyoAni soft",
+  "family": "anime",
+  "engine": "anime",
+  "means": "Naturalistic slice-of-life anime: delicate line, soft ambient occlusion, real lens bokeh in a drawn image, gentle warm palette.",
+  "tags": "kyoto animation style, soft shading, delicate lineart, bokeh, warm natural light, detailed background",
+  "prose": "a naturalistic slice-of-life anime look - delicate line, soft shading, drawn bokeh, gentle warm daylight",
+  "negative_add": "harsh, flat, high contrast, retro",
+  "suits_looks": [
+    "warm",
+    "golden",
+    "memory"
+  ],
+  "strength": "moderate",
+  "works_for": "video - soft light is stable",
+  "status": "ready",
+  "note": "Very close to slice_of_life_anime (measured ready). Kept separate because the drawn-bokeh background treatment is genuinely distinct; drop it if the renders match. | Authored in the second wave, after the first 64 were rendered and measured. status=untested because nothing here has been rendered yet - the first wave shipped 46 cards marked ready without a single render and 27 of 64 turned out to be routed to the wrong engine.",
+  "examples": {
+    "anime": "/samples/styles/kyoani_soft__anime.webp",
+    "qwen": "/samples/styles/kyoani_soft__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Delicate line with genuine drawn bokeh and warm ambient light. Holds apart from slice_of_life_anime.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject, on both engines. studio/_tools/style_examples.py --all-engines"
+}

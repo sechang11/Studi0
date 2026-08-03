@@ -1,0 +1,26 @@
+{
+  "id": "cyberpunk_neon",
+  "name": "Cyberpunk neon",
+  "family": "photoreal",
+  "engine": "qwen",
+  "means": "Not really a drawing technique - a lighting and colour regime. The frame is low-key and near-black in the shadows, every light is a coloured source visible in shot, wet surfaces double each source as a vertical specular streak, and the palette collapses to two or three hues with almost nothing between them.",
+  "tags": "neon lights, night, city street, glowing sign, wet pavement, reflection, rim lighting, backlighting, high contrast, cyberpunk",
+  "prose": "a rain-soaked night street lit entirely by neon signage, every light source visible in frame as a saturated coloured tube, wet asphalt doubling each sign as a vertical specular streak, deep near-black shadows with no fill light at all, the palette reduced to magenta, cyan and sodium orange, heavy atmospheric haze catching the light",
+  "negative_add": "daylight, flat even lighting, pastel, washed out, overcast",
+  "suits_looks": [
+    "neon",
+    "night",
+    "sodium"
+  ],
+  "strength": "moderate",
+  "works_for": "Good - arguably better in motion than as a still. Wet reflections and drifting haze give LTX-2.3 real motion to work with, and the large dark fields are stable. INFERRED, not measured.",
+  "status": "ready",
+  "note": "COLLISION, read before use: studio/looks/neon.json already carries these tags almost verbatim - 'neon lights, night, city street, cyberpunk, glowing sign, wet pavement, reflection'. Apply that look and you have already asked for most of this style; doing both spends the tokens twice. What genuinely belongs to a style rather than a grade is the LIGHTING DISCIPLINE - every source in shot, no fill, wet specular doubling - so author that and let the look do the colour. The second half of the warning is the project's oldest measured fact: darkness comes from the grade, not the prompt. 'night, dark background' moved mean luma 170 to 161, i.e. nothing (studio/looks/night.json). Do not expect this style to darken the frame; that is the grade's job. Works on both engines - animagine does the anime-cyberpunk version well and needs the look for its darkness even more than qwen does.",
+  "examples": {
+    "anime": "/samples/styles/cyberpunk_neon__anime.webp",
+    "qwen": "/samples/styles/cyberpunk_neon__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Wet street, saturated neon signage. Low distance on the illustration engine at 17.3, but correct here.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

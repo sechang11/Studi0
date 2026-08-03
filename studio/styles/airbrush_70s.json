@@ -1,0 +1,26 @@
+{
+  "id": "airbrush_70s",
+  "name": "70s airbrush",
+  "family": "illustration",
+  "engine": "anime",
+  "means": "Van-art and record-sleeve airbrush: smooth impossible gradients, glowing chrome, sunset spectrum, soft-edged everything.",
+  "tags": "airbrush, 1970s, smooth gradient, chrome, sunset colors, soft edges, glossy",
+  "prose": "a 1970s airbrush illustration - smooth impossible gradients, glowing chrome, sunset spectrum, every edge soft",
+  "negative_add": "hard edges, sketchy, matte, textured",
+  "suits_looks": [
+    "golden",
+    "neon",
+    "warm"
+  ],
+  "strength": "moderate",
+  "works_for": "video - smooth gradients are stable; chrome is not",
+  "status": "weak",
+  "note": "Shares the chrome problem with y2k_chrome. Where they differ is edge quality - airbrush has none, y2k has hard speculars. | Authored in the second wave, after the first 64 were rendered and measured. status=untested because nothing here has been rendered yet - the first wave shipped 46 cards marked ready without a single render and 27 of 64 turned out to be routed to the wrong engine.",
+  "examples": {
+    "anime": "/samples/styles/airbrush_70s__anime.webp",
+    "qwen": "/samples/styles/airbrush_70s__qwen.webp"
+  },
+  "compose": "injects",
+  "verdict": "Put an actual airbrush tool in her hand. Textbook object-in-hands failure.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject, on both engines. studio/_tools/style_examples.py --all-engines"
+}

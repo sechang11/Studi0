@@ -1,0 +1,28 @@
+{
+  "id": "mecha_anime",
+  "name": "Mecha anime",
+  "family": "anime",
+  "engine": "anime",
+  "means": "Hard-surface machine drawing: panel-lined armour plating, hard specular hits on painted metal, a thick confident mechanical line, industrial key light coming from below or hard from the side, and figures cel-shaded with more shadow steps than the humans around them.",
+  "tags": "mecha, mechanical parts, metallic sheen, industrial lighting, panel lining, thick lineart, cel shading, detailed",
+  "prose": "a mecha anime frame: a panel-lined armoured machine under hard industrial light, crisp mechanical linework, hard specular highlights on painted metal",
+  "negative_add": "organic, soft lighting, pastel colors, chibi, photorealistic",
+  "suits_looks": [
+    "cold",
+    "sodium",
+    "fluorescent",
+    "storm",
+    "neon"
+  ],
+  "strength": "moderate",
+  "works_for": "video - poor, and poor in a way that reads as broken rather than as texture. Panel lines and speculars are dense fine detail on a RIGID object, and rigid machine geometry is where i2v drift is most visible: a boiling face reads as expression, a boiling robot reads as a mistake. INFERRED. Keep clips short - compile.py already clamps past LTX's roughly 10s drift ceiling, and this style will show drift well before it gets there.",
+  "status": "weak",
+  "note": "Be clear what this card is: mecha is mostly a SUBJECT, not a rendering idiom. The measured clause comes from cards/story_genre.json panel mecha - 'mecha, mechanical parts, metallic sheen, industrial lighting' - and story_genre describes itself as a preset bundle that seeds pace, lens, grade, music and sound, i.e. a world setting. It changes what is IN the frame far more than how the frame is drawn, so pair it with a real drawing card (modern_anime for TV clean, ova_80s for airbrushed metal, which is the historically correct one) rather than running it alone and wondering why the line looks like nothing in particular. variables.json is also honest that this project reaches for mecha as tags such as cel-shaded mecha with NO 3D pass and no camera solve behind it, so do not expect consistent machine design shot to shot: the IPAdapter sheets hold faces, and there is no equivalent mechanism holding a robot's silhouette. If a specific machine has to recur, that is a LoRA problem, not a style problem. | Downgraded to untested: NOTHING in this library was rendered when it was authored, so every strength and engine call is a considered prediction. This project's own standard - written on the Illustrious checkpoint card - is that a recommendation is not a measurement.",
+  "examples": {
+    "anime": "/samples/styles/mecha_anime__anime.webp",
+    "qwen": "/samples/styles/mecha_anime__qwen.webp"
+  },
+  "compose": "injects",
+  "verdict": "Rendered a giant robot into the frame. That is a subject, not a style - the mech belongs in the shot description.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "manga_inked",
+  "name": "Manga inked",
+  "family": "graphic",
+  "engine": "anime",
+  "means": "The same printed page as screentone but shaded with the PEN instead of with dots: black ink linework, crosshatching and parallel hatching building the greys, large solid spot-blacks, and bare white paper left doing the highlights.",
+  "tags": "monochrome, greyscale, lineart, thick lineart, crosshatching, hatching, ink shading, high contrast",
+  "prose": "a black-and-white ink drawing in manga idiom: bold brush linework, crosshatched shading, heavy solid blacks against bare white paper",
+  "negative_add": "color, colored, screentone, halftone, cel shading, 3d",
+  "suits_looks": [
+    "neutral"
+  ],
+  "strength": "moderate",
+  "works_for": "video - bad, for the same reason as screentone but slightly less so. Hatching is coarser than halftone and survives marginally better, and the large spot-blacks are stable; the hatched mid-tones are not. INFERRED. Still a stills style.",
+  "status": "ready",
+  "note": "The honest risk is that this card collapses into manga_screentone. Both live in the same corpus neighbourhood and the model holds one strong printed-page feature; the separation rests entirely on 'crosshatching, hatching, ink shading' - which IS a measured clause, from cards/shot_fx_screentone.json panel hatch - plus putting screentone and halftone into the negative. If the two come back looking the same in a fixed-seed side-by-side, that is the expected failure and the fix is to keep whichever one you actually use and reach for shot.fx.screentone when a specific shot wants dots. Note that this card deliberately OMITS the tag manga itself: per tags/manga.json that token brings panel borders and gutters along with it, and here we want the ink language without the page furniture. Note also that monochrome is doing heavy lifting and is a very strong tag - the screentone card review flags that it greyscales the entire frame, which is the intent here but means this style will override any colour decision made anywhere else in the prompt. | Downgraded to untested: NOTHING in this library was rendered when it was authored, so every strength and engine call is a considered prediction. This project's own standard - written on the Illustrious checkpoint card - is that a recommendation is not a measurement.",
+  "examples": {
+    "anime": "/samples/styles/manga_inked__anime.webp",
+    "qwen": "/samples/styles/manga_inked__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Black and white, clean ink, no tone. Stayed distinct from manga_screentone - the authoring agent predicted these two would collapse together and they did not.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

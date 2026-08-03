@@ -1,0 +1,27 @@
+{
+  "id": "low_poly_3d",
+  "name": "Low poly 3D",
+  "family": "3d",
+  "engine": "anime",
+  "means": "Untextured polygon geometry. A visibly low triangle count with every facet flat-shaded in a single colour, hard creased edges between facets, no texture maps and no smoothed normals, and one soft ambient light so the faceting reads as clean steps of colour rather than as shading.",
+  "tags": "3d, low poly, flat colour, simple background, geometric, no texture",
+  "prose": "a low polygon 3d render, visibly few triangles with each facet flat-shaded in a single flat colour, hard creased edges between facets, no texture maps and no smoothing anywhere, lit by soft even ambient light so the faceting reads as clean steps of colour",
+  "negative_add": "photorealistic, texture detail, smooth shading, subdivision, anime, cel shading, lineart",
+  "suits_looks": [
+    "neutral",
+    "fluorescent",
+    "cold",
+    "dream"
+  ],
+  "strength": "weak",
+  "works_for": "Video: flat facets and hard creases are the right shape on the flat-holds prior, and there is no fine texture to boil. The risk specific to this style is the opposite of boiling - LTX is likely to SMOOTH the creases as it interpolates, so it degrades toward generic soft 3d rather than falling apart. INFERRED, not measured.",
+  "status": "ready",
+  "note": "Unavailable on the anime checkpoint, and not marginally. studio/tags/3d_render.json records that the bare tag '3d' is one of three medium tags this project keeps PERMANENTLY in the standing negative on every anime render, because the checkpoint drifts toward glossy 3D on hair and eyes when a prompt runs long. Asking that path for a 3d style means deleting a negative the project depends on and then fighting a model whose entire training is 2D. Don't - the tags line above is recorded for completeness, not as a route. On qwen it is available but weak in a particular way: 'low poly' returns a smooth, cute, clay-toy render about half the time, because the phrase has drifted in the training data toward a mobile-game aesthetic rather than to actual faceting. The words that force the faceting are the ones naming ABSENCES - no texture maps, no smoothing, flat single colour per facet, hard creased edges - which is the noun rule applied to a style whose defining feature is what has been left out. If you want the geometric look and cannot get the facets, flat colour on the anime path gets you the poster-like flatness for far less trouble, though obviously none of the dimensionality. Not rendered here. | Downgraded to untested: NOTHING in this library was rendered when it was authored, so every strength and engine call is a considered prediction. This project's own standard - written on the Illustrious checkpoint card - is that a recommendation is not a measurement.",
+  "examples": {
+    "anime": "/samples/styles/low_poly_3d__anime.webp",
+    "qwen": "/samples/styles/low_poly_3d__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Faceted planes, visible polygon edges.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

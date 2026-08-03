@@ -1,0 +1,26 @@
+{
+  "id": "brutalist",
+  "name": "Brutalist",
+  "family": "movement",
+  "engine": "qwen",
+  "means": "Raw concrete as aesthetic: massive unadorned forms, board-marked surfaces, grey monochrome, hard overhead light, oppressive scale.",
+  "tags": "brutalist architecture, raw concrete, massive forms, monochrome grey, harsh light",
+  "prose": "a brutalist treatment - raw board-marked concrete in massive unadorned forms, grey monochrome, hard overhead light",
+  "negative_add": "ornate, warm, wooden, decorative, soft",
+  "suits_looks": [
+    "cold",
+    "overcast",
+    "bleach"
+  ],
+  "strength": "strong",
+  "works_for": "video - large static forms are the most stable case there is",
+  "status": "ready",
+  "note": "PREDICTED RISK: this is really an ARCHITECTURE card and may override the place layer entirely, like ghibli_pastoral. Expect compose=replaces. | Authored in the second wave, after the first 64 were rendered and measured. status=untested because nothing here has been rendered yet - the first wave shipped 46 cards marked ready without a single render and 27 of 64 turned out to be routed to the wrong engine.",
+  "examples": {
+    "anime": "/samples/styles/brutalist__anime.webp",
+    "qwen": "/samples/styles/brutalist__qwen.webp"
+  },
+  "compose": "replaces",
+  "verdict": "Massive raw concrete under flat grey light. As the card predicted, it is an architecture card and it rebuilds the location.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject, on both engines. studio/_tools/style_examples.py --all-engines"
+}

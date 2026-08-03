@@ -1,0 +1,26 @@
+{
+  "id": "stop_motion_felt",
+  "name": "Stop motion felt",
+  "family": "3d",
+  "engine": "anime",
+  "means": "Needle-felted wool puppets on a miniature set: every surface a dense mat of short fibres with a soft lit halo at the contours, visible hand stitching and seams, armature wire faintly shaping the limbs under the fabric, and props made of felt too so nothing in frame is hard-surfaced.",
+  "tags": "",
+  "prose": "a stop-motion still of needle-felted wool puppets, every surface a dense mat of short fibres with a soft lit halo along the contours, visible hand stitching and seams, armature wire faintly shaping the limbs beneath the felt, a miniature set built entirely from felt and card, soft warm studio lighting, shallow macro depth of field",
+  "negative_add": "anime, cel shading, 2d, cgi, smooth surface, photorealistic human skin",
+  "suits_looks": [
+    "golden",
+    "overcast",
+    "memory"
+  ],
+  "strength": "weak",
+  "works_for": "No - the worst survivor in this set. The fibre halo is the finest texture of any style here and it is exactly what boils, and it carries claymation's smooth-motion contradiction on top of that. INFERRED, not measured, but both failure modes point the same way. Use it for held frames only.",
+  "status": "unavailable",
+  "note": "WEAK, and honestly weaker than claymation for a simple reason: felt is a fibre texture at a scale near the model's resolution limit, so it half-lands as fuzzy cloth rather than as felt. Faces are where it collapses - felted features are crude by nature and the model keeps dragging them back toward rendered human features, producing an uncanny middle. Keep to simple stylised characters and wide framing. STITCHING is the noun that buys the most, because it is large enough to survive at this resolution. NOT AVAILABLE on animagine, same reason as claymation. If what you actually want is handmade and warm rather than felt specifically, papercut_collage is far more reliable on this box - reach for that instead.",
+  "examples": {
+    "anime": "/samples/styles/stop_motion_felt__anime.webp",
+    "qwen": "/samples/styles/stop_motion_felt__qwen.webp"
+  },
+  "compose": "inert",
+  "verdict": "No felt fibre, no armature, no stop-motion staging on either engine. Ordinary anime.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

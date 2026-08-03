@@ -1,0 +1,26 @@
+{
+  "id": "chalkboard",
+  "name": "Chalkboard",
+  "family": "illustration",
+  "engine": "qwen",
+  "means": "Drawing in chalk on dark slate: a broken dusty line that skips where the board is uneven, no solid fills anywhere, tone built only from loose hatching, smeared ghosts of earlier drawings the eraser did not lift, and chalk dust caught in the surface grain.",
+  "tags": "",
+  "prose": "a drawing made in white and pale yellow chalk on a dark green slate blackboard, the line broken and dusty where the chalk skipped across the board grain, no solid fills anywhere and tone built only from loose hatching, smeared eraser ghosts of earlier drawings behind, chalk dust gathered along the lower edge, hand-lettered chalk capitals",
+  "negative_add": "photorealistic, colour, solid fill, digital art, smooth line, 3d",
+  "suits_looks": [
+    "neutral",
+    "cold",
+    "memory"
+  ],
+  "strength": "moderate",
+  "works_for": "Poor. Chalk dust and a broken skipping line are fine texture - the boiling class - and the line itself will crawl frame to frame. INFERRED, not measured. If you need chalk in motion the honest route is a real draw-on animation, not i2v from a keyframe.",
+  "status": "unavailable",
+  "note": "The failure that matters here is blueprint's, and it is worth stating twice because both look like success: on the anime checkpoint 'chalkboard' is an OBJECT - danbooru has it as classroom furniture - so you get a scene containing a blackboard rather than a scene drawn in chalk. That is inference from how the vocabulary behaves (the grammar-versus-description distinction is set out in studio/tags/silhouette.json), not from a render made here, but it is why the tags field is empty. On qwen the phrasing that works is 'a drawing made in chalk ON a blackboard', which forces the medium rather than the prop. Do NOT try to reach this with a look: a dark desaturated grade over a normal illustration gives you a dim picture, not chalk, because the chalk lives in the LINE - broken, dusty, never solid - and no ffmpeg operation puts it there. The dark ground is the one part a grade could contribute and it is the least important part.",
+  "examples": {
+    "anime": "/samples/styles/chalkboard__anime.webp",
+    "qwen": "/samples/styles/chalkboard__qwen.webp"
+  },
+  "compose": "injects",
+  "verdict": "Drew a chalkboard on the wall next to her and left her photographic. Textbook noun-as-prop.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

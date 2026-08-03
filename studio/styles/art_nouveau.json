@@ -1,0 +1,27 @@
+{
+  "id": "art_nouveau",
+  "name": "Art nouveau",
+  "family": "graphic",
+  "engine": "anime",
+  "means": "Decorative panel design. Long whiplash contours drawn in an even-weight outline, flat unshaded colour inside them, an ornamental border or arch that is part of the picture rather than around it, a flat gilded disc behind the head, stylised organic motifs filling every gap, and a muted tertiary palette with gold.",
+  "tags": "art nouveau, ornate border, flowing curved lines, flat colour, decorative pattern, muted palette, gold trim, circle",
+  "prose": "an art nouveau decorative panel, long whiplash contours drawn in an even-weight outline with flat unshaded colour inside them, an ornamental arched border of stylised lilies and ivy forming part of the composition, a flat gilded disc behind the head, muted olive and rose and gold",
+  "negative_add": "photorealistic, 3d, cel shading, harsh shadow, cluttered background, modern clothing",
+  "suits_looks": [
+    "golden",
+    "sepia",
+    "memory",
+    "neutral"
+  ],
+  "strength": "moderate",
+  "works_for": "Video: flat colour and even outline is the shape expected to hold, but this style has a risk specific to it - the BORDER. craft/CINEMATOGRAPHY.md documents on shot 832_split that LTX has no concept of a panel edge, bled motion across the divisions and warped the gutters. An ornamental frame is the same structure and should be expected to crawl. INFERRED from that documented failure, not measured on this style.",
+  "status": "ready",
+  "note": "'art nouveau' is a real danbooru tag with enough mass to fire on the anime checkpoint, and qwen has a strong Mucha prior, so this is honestly available on both. The border and the halo disc are load-bearing NOUNS: without them 'art nouveau' degrades on both engines to a pretty woman with flowers in her hair - you get the movement's subject matter instead of its rendering, and the curves and the flat fill both go. That is this card's version of the standing rule about nouns. Second warning, and it applies to art_nouveau, baroque_painting and ukiyo_e alike: this style DRAGS CONTENT with it. Expect long hair, robes, lilies and a figure in profile whether you asked or not, because in the training data the style and the subject matter are the same images. If your subject is a man in a jacket on a rooftop, over-specify the subject nouns and expect a fight. Not rendered here; the tag-mass claim is from the danbooru vocabulary, not measured on this box. | Downgraded to untested: NOTHING in this library was rendered when it was authored, so every strength and engine call is a considered prediction. This project's own standard - written on the Illustrious checkpoint card - is that a recommendation is not a measurement.",
+  "examples": {
+    "anime": "/samples/styles/art_nouveau__anime.webp",
+    "qwen": "/samples/styles/art_nouveau__qwen.webp"
+  },
+  "compose": "replaces",
+  "verdict": "Mucha ornament, gold line, flat decorative ground - it replaced the street with an ornamental arch. Beautiful, but it is a frame, not a lens.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

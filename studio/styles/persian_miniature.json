@@ -1,0 +1,25 @@
+{
+  "id": "persian_miniature",
+  "name": "Persian miniature",
+  "family": "tradition",
+  "engine": "anime",
+  "means": "Flat jewel-toned space with no perspective, gold ground, intricate pattern everywhere, figures in stacked registers.",
+  "tags": "persian miniature, flat perspective, jewel tones, gold ground, intricate patterns, ornate",
+  "prose": "a Persian miniature - flat jewel-toned space without perspective, gold ground, intricate pattern across every surface",
+  "negative_add": "realistic perspective, photographic, muted, sparse",
+  "suits_looks": [
+    "golden",
+    "warm"
+  ],
+  "strength": "moderate",
+  "works_for": "video - dense pattern will crawl",
+  "status": "weak",
+  "note": "Shares the no-perspective flatness with illuminated_manuscript. Both are predicted to risk becoming an ornamental frame the way art_nouveau did. | Authored in the second wave, after the first 64 were rendered and measured. status=untested because nothing here has been rendered yet - the first wave shipped 46 cards marked ready without a single render and 27 of 64 turned out to be routed to the wrong engine.",
+  "examples": {
+    "anime": "/samples/styles/persian_miniature__anime.webp",
+    "qwen": "/samples/styles/persian_miniature__qwen.webp"
+  },
+  "compose": "injects",
+  "verdict": "Put a golden tray in her hands. The flat jewel-toned space and gold did partly arrive, but the object-in-hands failure dominates.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject, on both engines. studio/_tools/style_examples.py --all-engines"
+}

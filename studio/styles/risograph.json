@@ -1,0 +1,25 @@
+{
+  "id": "risograph",
+  "name": "Risograph print",
+  "family": "graphic",
+  "engine": "anime",
+  "means": "Duplicator printing in two or three spot inks: each ink laid as its own flat coarse-grained layer, the layers misaligned by a hair, ink sitting ON the stock so highlights are bare paper, and the inks multiplying to a darker third colour wherever they overlap. Soy-ink colours are fluorescent and the coverage is patchy.",
+  "tags": "",
+  "prose": "a risograph print in two spot inks, fluorescent pink and teal, each ink laid down as a separate flat layer with visible coarse grain, the two layers misregistered by a hair so every edge doubles, the inks overprinting to a dark third colour where they cross, highlights left as bare uncoated paper, patchy uneven ink coverage and roller streaks",
+  "negative_add": "photorealistic, smooth gradient, full colour, 3d, airbrush",
+  "suits_looks": [
+    "faded_film",
+    "bleach"
+  ],
+  "strength": "weak",
+  "works_for": "No. Grain plus misregistration is precisely the texture class that boils, and the doubled edges will strobe. INFERRED, not measured.",
+  "status": "unavailable",
+  "note": "WEAK, and the reason is inventory rather than prompting skill. LORAS.md records that this box holds zero general style LoRAs - two anime ones on the qwen base and nothing else - so risograph rests entirely on whatever the base model absorbed from the word, and what comes back is usually a vague pink-and-blue duotone with none of the print mechanics: no overprint multiply, no bare-paper highlights, no misregistration. REACH FOR THIS INSTEAD: render the art as flat_vector or screenprint_poster with a deliberately tiny palette, then build the riso qualities in the deterministic tier - a duotone grade in studio/looks/ plus a channel offset gives you misregistration exactly and repeatably. That is the same argument studio/looks/night.json makes about darkness, applied unchanged: prompting for riso asks the model for adjectives, offsetting a channel asks ffmpeg for a fact. NOT AVAILABLE on animagine.",
+  "examples": {
+    "anime": "/samples/styles/risograph__anime.webp",
+    "qwen": "/samples/styles/risograph__qwen.webp"
+  },
+  "compose": "inert",
+  "verdict": "On qwen it drew a riso-coloured rectangle over the photo; on the illustration engine, nothing. Misregistration and spot ink are print artifacts neither model has.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+}

@@ -1,0 +1,25 @@
+{
+  "id": "cyanotype",
+  "name": "Cyanotype",
+  "family": "photo",
+  "engine": "qwen",
+  "means": "Sun-printed blue: monochrome Prussian blue on textured paper, soft edges, contact-print flatness.",
+  "tags": "",
+  "prose": "a cyanotype print - monochrome Prussian blue on textured paper, soft edges, flat contact-print tonality",
+  "negative_add": "color, sharp, digital, high contrast",
+  "suits_looks": [
+    "cold",
+    "faded_film"
+  ],
+  "strength": "strong",
+  "works_for": "video - single-hue monochrome is maximally stable",
+  "status": "ready",
+  "note": "blueprint measured ready on qwen and shares the blue-monochrome mechanism, which is the evidence this will land. The separator is that cyanotype is photographic and blueprint is drafted. | Authored in the second wave, after the first 64 were rendered and measured. status=untested because nothing here has been rendered yet - the first wave shipped 46 cards marked ready without a single render and 27 of 64 turned out to be routed to the wrong engine.",
+  "examples": {
+    "anime": "/samples/styles/cyanotype__anime.webp",
+    "qwen": "/samples/styles/cyanotype__qwen.webp"
+  },
+  "compose": "safe",
+  "verdict": "Prussian-blue monochrome with a visible paper edge. Strong, and it validates the mechanism blueprint uses.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject, on both engines. studio/_tools/style_examples.py --all-engines"
+}
