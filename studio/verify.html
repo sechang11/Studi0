@@ -62,6 +62,7 @@
   <h1>verify</h1><span class="sub" id="stat">loading…</span>
   <button class="tab on" id="tabCards">Capability cards</button>
   <button class="tab" id="tabTags">Tag examples</button>
+  <button class="tab" id="tabDone">Already answered</button>
   <div class="right">
     <a href="/tags">tags</a><a href="/gallery">gallery</a><a href="/">library</a>
   </div>
@@ -73,7 +74,7 @@
 let MODE="cards", CARDS={todo:[],done:[]}, TAGS=[], i=0, broke=new Set();
 const $=id=>document.getElementById(id);
 const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const queue=()=>MODE==="cards"?CARDS.todo:TAGS;
+const queue=()=>MODE==="cards"?CARDS.todo:MODE==="done"?CARDS.done:TAGS;
 
 function bar(){
   const q=queue(), tot=MODE==="cards"?CARDS.total:TAGS.length+TAGSDONE;
@@ -90,11 +91,13 @@ function draw(){
   bar();
   if(i>=q.length){
     $("wrap").innerHTML=`<div class="done"><h2 style="color:var(--ok)">nothing left here</h2>
-      <p>${MODE==="cards"?"Every card with panels has a verdict.":"Every tag example has been judged."}</p></div>`;
+      <p>${MODE==="cards"?"Every card with panels has a verdict."
+          :MODE==="done"?"Nothing has been answered yet."
+          :"Every tag example has been judged."}</p></div>`;
     return;
   }
   broke=new Set();
-  MODE==="cards"?drawCard(q[i]):drawTag(q[i]);
+  (MODE==="tags") ? drawTag(q[i]) : drawCard(q[i]);
 }
 
 function drawCard(c){
@@ -115,9 +118,51 @@ function drawCard(c){
       about whether the pictures are <em>different from each other</em> — that is what
       tells us the setting does anything at all. If you also happen to know whether it
       looks right, there is a second question. <b>"Not sure" is a real answer</b> and more
-      useful than a guess: a wrong verdict is worse than none.</div>
+      useful than a guess.
+      <br><br>
+      <b>Nothing here is permanent.</b> A verdict is stored as data with who set it and
+      when, it shows in a git diff, and it can be changed by answering again. It is a
+      note for the next person, not a ruling.</div>
+
+    <details class="rev" style="margin:0 0 16px">
+      <summary>What actually goes wrong with these — all of it has happened here</summary>
+      <table style="width:100%;border-collapse:collapse;font-size:12.5px;margin-top:8px">
+        <tr><td style="padding:5px 8px;border-bottom:1px solid var(--line);width:34%">
+          <b>A "none" option shows the effect anyway</b></td>
+          <td style="padding:5px 8px;border-bottom:1px solid var(--line)">SDXL cannot
+          negate. A clause reading "no lens flare" <b>adds</b> lens flare — the model reads
+          the tokens, not the word "no". 77 panels were affected and rebuilt as blank
+          controls.</td></tr>
+        <tr><td style="padding:5px 8px;border-bottom:1px solid var(--line)">
+          <b>Two options are the same instruction</b></td>
+          <td style="padding:5px 8px;border-bottom:1px solid var(--line)">birds_eye and
+          top_down say the same thing. So do circular and oval anamorphic. They will
+          render as one picture twice.</td></tr>
+        <tr><td style="padding:5px 8px;border-bottom:1px solid var(--line)">
+          <b>The option fights the subject</b></td>
+          <td style="padding:5px 8px;border-bottom:1px solid var(--line)">Options asking
+          for "3boys" were stacked on a fixed subject reading "1boy, solo". The model
+          resolves that contradiction at random.</td></tr>
+        <tr><td style="padding:5px 8px;border-bottom:1px solid var(--line)">
+          <b>Everything moved, not just the setting</b></td>
+          <td style="padding:5px 8px;border-bottom:1px solid var(--line)">Changing any
+          clause re-rolls the whole image even at a fixed seed, so panels can differ in
+          ways nothing to do with the variable. This is the most common one.</td></tr>
+        <tr><td style="padding:5px 8px"><b>The wording was jargon</b></td>
+          <td style="padding:5px 8px">Some options were written in camera-department
+          language instead of the tag vocabulary this model reads, so it ignored
+          them.</td></tr>
+      </table>
+      <p style="margin:10px 0 0">You are not grading art. You are spotting mechanical
+      failures, and they look like <b>"these two are the same picture"</b> or
+      <b>"nothing changed"</b>.</p>
+    </details>
 
     <h2>${esc(c.variable)}</h2>
+    ${c.verdict?`<div style="margin:0 0 10px"><span class="hint">you answered</span>
+      <b style="color:var(--accent)">${esc(c.verdict)}</b>
+      <span class="hint">— answering again replaces it</span></div>`:""}
+    <div class="hint" style="margin-bottom:3px">what this setting is supposed to do</div>
     <p class="claim">${esc(c.claim)}</p>
 
     ${c.sheet?`<img class="sheet" src="${esc(c.sheet)}" alt="">`
@@ -241,10 +286,12 @@ function setMode(m){
   MODE=m; i=0;
   $("tabCards").classList.toggle("on",m==="cards");
   $("tabTags").classList.toggle("on",m==="tags");
+  $("tabDone").classList.toggle("on",m==="done");
   draw();
 }
 $("tabCards").onclick=()=>setMode("cards");
 $("tabTags").onclick=()=>setMode("tags");
+$("tabDone").onclick=()=>setMode("done");
 
 (async function(){
   const [c,t]=await Promise.all([
