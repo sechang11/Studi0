@@ -207,12 +207,19 @@ def main():
                              ", ".join(x["key"] for x in dom["fields"]
                                        if x.get("type") == "library"))
         lib = load_lib(f["library"])
-        # never demonstrate something the library itself says not to use
-        vals_list = [k for k, c in sorted(lib.items())
-                     if c.get("status") not in ("blocked",)]
-        skipped = len(lib) - len(vals_list)
-        if skipped:
-            print("  (%d entries skipped: status blocked)" % skipped)
+        # Never demonstrate something the library itself says not to use.
+        #   blocked      a clone of a real person; the craft notes forbid casting it
+        #   unsupported  the file exists but the ComfyUI node rejects the path, so
+        #                picking it fails MID-RUN rather than at pick time
+        #   roadmap      not implemented
+        SKIP = ("blocked", "unsupported", "roadmap")
+        vals_list = [k for k, c in sorted(lib.items()) if c.get("status") not in SKIP]
+        by = {}
+        for k, c in lib.items():
+            if c.get("status") in SKIP:
+                by[c["status"]] = by.get(c["status"], 0) + 1
+        if by:
+            print("  (skipped %s)" % ", ".join("%d %s" % (n, s) for s, n in sorted(by.items())))
         for val in vals_list:
             vals = resolve(dom, dict(sets, **{a.vary: val}))
             vals["_vary"] = a.vary
