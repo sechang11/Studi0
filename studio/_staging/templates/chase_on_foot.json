@@ -1,0 +1,33 @@
+{
+  "id": "chase_on_foot",
+  "name": "Chase on foot",
+  "desc": "Running, and the reason for running is behind you.",
+  "genre": ["action", "thriller"],
+  "beats": 5,
+  "runtime_s": 9.6,
+  "sets": {
+    "look": "cold",
+    "pace": "fast",
+    "cue": "driving_pulse",
+    "emotion": "fear",
+    "camera": "handheld",
+    "wear": 3,
+    "place": "narrow back alley at night, wet asphalt, neon signs, fire escapes",
+    "transition": "whip_pan"
+  },
+  "shots": [
+    {"template": "establish",
+     "desc": "narrow back alley at night, wet asphalt reflecting neon signs, fire escapes, steam rising from a grate, wide shot, no humans"},
+    {"template": "build", "camera": "handheld",
+     "desc": "vaulting a low wall mid-stride, body horizontal, one hand planted on the top, torn dirt-stained coat, motion lines, side view, full body"},
+    {"template": "sakuga", "camera": "handheld",
+     "desc": "sprinting straight toward the camera, arms pumping, coat flying open, torn clothes, speed lines, motion blur, dynamic angle, full body"},
+    {"template": "react", "camera": "handheld",
+     "desc": "looking back over the shoulder while running, wide eyes, open mouth, sweat on face, dishevelled hair, close-up"},
+    {"template": "insert",
+     "desc": "torn fabric snagged on a chain-link fence, wire still rattling, neon glare, close-up, no humans"}
+  ],
+  "why": "The pursuer is never shown, and that is the design rather than a shortcut. No video model here holds a persistent 3D space, so two characters cut together in one geography will not match; a chase built on the runner alone sidesteps the problem and is scarier for it. The establish shot does the work of saying the alley is narrow so the later close shots read as trapped. The glance-back is the load-bearing shot - it is the only one that proves someone is chasing - and the snagged fabric at the end says a near-miss happened without animating one. handheld throughout is deliberate but should be the only unsteady thing in the film; used everywhere it stops reading as panic and starts reading as a broken render.",
+  "status": "partial",
+  "note": "The five shots, the cold grade, driving_pulse and the fear face tags all render today. `transition: whip_pan` is inert - short.py hard-cuts every join. fear's voice_style needs an emotion-vector TTS engine. One deliberate substitution to flag: `frantic` is the pace this scene wants dramatically, but compile.py's PACE table only contains slow/normal/fast and silently resolves anything else to 1.0, so frantic would render at normal speed while looking set. `fast` is used instead because it actually scales."
+}

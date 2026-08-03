@@ -1,0 +1,13 @@
+{
+  "id": "downpour",
+  "desc": "weather preset: downpour",
+  "status": "partial",
+  "note": "no consumer today: studio/WIRE-PLAN.md records weather as having no landing point in short.py, so tags, intensity, wind, precip, atmos, visibility and ground all reach nothing. Tags are danbooru terms describing the visible consequence on hair, cloth, skin and ground rather than naming the condition, so they are correct the day a consumer lands. ground uses the census world.ground_state enum (VARIABLES.md:128); the existing nine presets use 'wet' and 'flooded', which are not members of it, a mismatch WIRE-PLAN.md already flags. Sits above the existing rain preset (intensity 0.6) on the same axis.",
+  "tags": "torrential rain, rain falling in sheets, hair plastered flat to the skull, soaked clothes clinging to the body, water streaming off the chin and fingertips, rain bouncing up off the pavement, deep puddles",
+  "intensity": 0.9,
+  "wind": 0.35,
+  "precip": "rain",
+  "atmos": "mist",
+  "visibility": 0.45,
+  "ground": "puddled"
+}

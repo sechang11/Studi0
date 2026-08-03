@@ -1,0 +1,13 @@
+{
+  "id": "sandstorm",
+  "desc": "weather preset: sandstorm",
+  "status": "partial",
+  "note": "no consumer today: studio/WIRE-PLAN.md records weather as having no landing point in short.py, so tags, intensity, wind, precip, atmos, visibility and ground all reach nothing. Tags are danbooru terms describing the visible consequence on hair, cloth, skin and ground rather than naming the condition, so they are correct the day a consumer lands. ground uses the census world.ground_state enum (VARIABLES.md:128); the existing nine presets use 'wet' and 'flooded', which are not members of it, a mismatch WIRE-PLAN.md already flags. Far heavier than the existing dust preset (intensity 0.5, visibility 0.6), which is drifting particulate rather than a wall of it.",
+  "tags": "sand streaming past horizontally, orange brown air, scarf wrapped across the face, eyes narrowed to slits, hair whipped sideways, dim orange disc of sun, sand piled against everything, distance erased",
+  "intensity": 0.9,
+  "wind": 0.95,
+  "precip": "none",
+  "atmos": "dust",
+  "visibility": 0.2,
+  "ground": "sand"
+}

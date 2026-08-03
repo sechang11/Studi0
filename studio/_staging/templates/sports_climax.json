@@ -1,0 +1,31 @@
+{
+  "id": "sports_climax",
+  "name": "Sports climax",
+  "desc": "The last minute. Everything is decided.",
+  "genre": ["action", "sport"],
+  "beats": 4,
+  "runtime_s": 8.7,
+  "sets": {
+    "look": "day_for_night",
+    "pace": "fast",
+    "cue": "triumphant_build",
+    "emotion": "determined",
+    "camera": "push",
+    "wear": 4,
+    "place": "night pitch, floodlights, packed stands",
+    "transition": "flash"
+  },
+  "shots": [
+    {"template": "hold_silent", "camera": "static",
+     "desc": "standing over the ball, one boot resting on it, head lowered, eyes downcast, jaw set, torn dirt-stained jersey, sweat-soaked hair, medium shot, floodlights behind"},
+    {"template": "build", "camera": "push",
+     "desc": "running start toward the ball, planting foot, body coiled, arms out for balance, torn jersey, motion lines, full body, low angle"},
+    {"template": "sakuga", "camera": "push",
+     "desc": "leaping mid-air volley, boot striking the ball, torn jersey, hair whipping, speed lines, motion blur, dynamic angle, full body"},
+    {"template": "insert",
+     "desc": "the ball hitting the back of the net, net stretching and rippling, floodlight glare, close-up, no humans"}
+  ],
+  "why": "The structure is silence, wind-up, impact, proof. hold_silent buys the stillness that makes the sakuga land - the loudest moment in a short is the one with a quiet shot in front of it, which is why this template spends over a third of its runtime on a man doing nothing. The insert exists because the net, not the striker, is what tells the audience it went in; cutting to a face there would ask the model to act, and it cannot. day_for_night carries the darkness in the ffmpeg grade rather than the prompt, so the floodlit night is actually dark instead of merely described as dark, and wear 4 keeps the damage of the preceding ninety minutes visible on the body.",
+  "status": "partial",
+  "note": "Picture, shot timing, the day_for_night grade and the cue all land today. Two parts do not: `transition: flash` is decorative - short.py hard-cuts every join regardless - and the `determined` emotion contributes its face/eyes/mouth/body tags but its voice_style only applies on TTS engines that accept an emotion vector. Every shot desc reinforces the torn jersey rather than staying silent on it, because wear 4 loses to any earlier, more specific garment tag."
+}

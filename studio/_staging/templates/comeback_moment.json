@@ -1,0 +1,33 @@
+{
+  "id": "comeback_moment",
+  "name": "Comeback moment",
+  "desc": "Beaten, on the ground, and getting up anyway.",
+  "genre": ["sport", "drama"],
+  "beats": 5,
+  "runtime_s": 12.1,
+  "sets": {
+    "look": "golden",
+    "pace": "normal",
+    "cue": "triumphant_build",
+    "emotion": "resolve",
+    "camera": "push",
+    "wear": 4,
+    "place": "floodlit stadium turf at dusk, churned mud, packed stands",
+    "transition": "smash"
+  },
+  "shots": [
+    {"template": "insert",
+     "desc": "a scoreboard showing the losing score, floodlight glare on the panel, close-up, no humans"},
+    {"template": "react", "camera": "static",
+     "desc": "face down in churned mud, cheek against the turf, eyes half open, blood at the lip, torn muddied jersey, close-up"},
+    {"template": "build", "camera": "push",
+     "desc": "pushing up onto one knee, palms flat in the mud, arms trembling, head starting to rise, torn bloodied jersey, low angle, full body"},
+    {"template": "react", "camera": "push",
+     "desc": "head lifted, eyes wide open, jaw clenched, mud and blood streaking the face, close-up"},
+    {"template": "sakuga", "camera": "push",
+     "desc": "driving forward into a sprint, mud spraying from boots, arms pumping, torn jersey, speed lines, dynamic angle, full body"}
+  ],
+  "why": "A comeback only works if the audience is shown the deficit first, so the template opens on a scoreboard rather than a face - an object states the stakes in 1.8 seconds and cannot act badly. The rise is then broken into three deliberate stages, ground to knee to sprint, because the whole emotional content of this beat is that it is difficult, and a single shot of someone standing up renders as someone standing up. The two reacts bracket the effort: the first is the lowest the character goes, the second is the decision, and putting them either side of the build is what makes the push camera feel like it is pulling the character upright. wear 4 is doing heavy lifting here and every desc reinforces the damage rather than staying neutral about the kit.",
+  "status": "partial",
+  "note": "The five shots, the golden grade, triumphant_build and the resolve face tags render today. `transition: smash` is inert - short.py hard-cuts. resolve's voice_style needs an emotion-vector TTS engine. One authoring warning: triumphant_build's own card says one per film, so if this template is used in the same film as sports_climax, change one of the two cues or the first occurrence stops meaning anything. Every shot desc names the jersey in its damaged state on purpose - wear 4 is overridden by any earlier, more specific garment tag, which is how a torn bloodied uniform previously rendered clean."
+}

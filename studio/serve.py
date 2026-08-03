@@ -63,6 +63,40 @@ def library():
     return out
 
 
+def templates():
+    """Clickable scene templates - a bundle that sets many variables at once AND brings
+    its own shots, so you start from something that works instead of a blank page.
+
+    Each is shown with a rendered example and its full settings visible, the way a model
+    page shows the prompt that made the picture. The settings are not hidden behind the
+    thumbnail: seeing exactly which knobs produced it is the point, because that is what
+    lets you change one of them on purpose.
+
+    A template is expanded by the WIZARD into ordinary .movie text. Nothing downstream
+    knows templates exist, so a film stays a readable text file you can hand-edit.
+    """
+    d = f"{HERE}/templates"
+    if not os.path.isdir(d):
+        return []
+    out = []
+    for fn in sorted(os.listdir(d)):
+        if not fn.endswith(".json"):
+            continue
+        try:
+            t = json.load(open(f"{d}/{fn}", encoding="utf-8"))
+        except Exception as e:
+            out.append({"id": fn[:-5], "name": fn[:-5],
+                        "desc": f"UNREADABLE: {e}", "status": "error"})
+            continue
+        for ext in (".webp", ".jpg", ".png", ".mp4"):
+            p = f"{HERE}/samples/templates/{t.get('id', fn[:-5])}{ext}"
+            if os.path.exists(p):
+                t["sample"] = f"/samples/templates/{t.get('id', fn[:-5])}{ext}"
+                break
+        out.append(t)
+    return out
+
+
 def cards():
     d = f"{HERE}/cards"
     if not os.path.isdir(d):
@@ -118,6 +152,8 @@ class H(http.server.SimpleHTTPRequestHandler):
             if not os.path.exists(p):
                 return self._send({"tiers": {}, "vars": {}})
             return self._send(json.load(open(p, encoding="utf-8")))
+        if path == "/api/templates":
+            return self._send(templates())
         if path == "/api/library":
             return self._send(library())
         if path == "/api/cards":

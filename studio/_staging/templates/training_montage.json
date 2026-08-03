@@ -1,0 +1,33 @@
+{
+  "id": "training_montage",
+  "name": "Training montage",
+  "desc": "The work nobody sees. Effort accumulating into capability.",
+  "genre": ["sport", "drama"],
+  "beats": 5,
+  "runtime_s": 10.3,
+  "sets": {
+    "look": "golden",
+    "pace": "fast",
+    "cue": "driving_pulse",
+    "emotion": "exhausted",
+    "camera": "static",
+    "wear": 2,
+    "place": "empty training ground at dawn, chalk lines, low mist",
+    "transition": "dissolve"
+  },
+  "shots": [
+    {"template": "establish",
+     "desc": "empty training ground at dawn, chalk lines on wet grass, goalposts, low mist, long shadows, wide shot, no humans"},
+    {"template": "insert",
+     "desc": "muddy football boots on a wooden bench, laces trailing, scuffed leather, close-up, no humans"},
+    {"template": "build", "camera": "push",
+     "desc": "sprinting up stadium steps, legs driving, sweat flying, damp hair, dirt-marked kit, motion blur, full body, low angle"},
+    {"template": "react", "camera": "static",
+     "desc": "doubled over, hands on knees, chest heaving, mouth open gasping, sweat dripping from chin, flushed face, damp hair, medium shot"},
+    {"template": "pillow",
+     "desc": "sun clearing the empty stands, long shadows striping the pitch, wide shot, no humans"}
+  ],
+  "why": "A montage is a claim about time passing, and time passing is exactly what the peopleless templates were built to say. Three of these five shots have nobody in them - empty ground, boots, sun over stands - which is what turns four disconnected clips into a morning. It also costs less: establish, insert and pillow skip the IPAdapter identity pass entirely, so the montage renders faster than a template with the same shot count and a face in every frame. The two shots that do carry a person are the work itself and the price of it, in that order, and exhausted supplies the open mouth and flushed face that make the price legible without the prompt ever using the word tired.",
+  "status": "partial",
+  "note": "Renders today: the five shots, the golden grade, driving_pulse under it, and the exhausted face tags. `transition: dissolve` does nothing - short.py hard-cuts, and a montage is the one place you would most want the dissolve, so this is a real loss rather than a cosmetic one. exhausted's voice_style is inert unless the TTS engine accepts an emotion vector. Note this template has no dialogue at all, so that limitation costs nothing here."
+}

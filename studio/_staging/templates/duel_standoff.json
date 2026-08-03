@@ -1,0 +1,33 @@
+{
+  "id": "duel_standoff",
+  "name": "Duel standoff",
+  "desc": "Two people, one decision, and the long moment before it.",
+  "genre": ["action", "drama"],
+  "beats": 5,
+  "runtime_s": 16.1,
+  "sets": {
+    "look": "bleach",
+    "pace": "normal",
+    "cue": "tense_strings",
+    "emotion": "cold",
+    "camera": "push",
+    "wear": 2,
+    "place": "dusty open ground at noon, chain-link fence, bleached concrete",
+    "transition": "smash"
+  },
+  "shots": [
+    {"template": "master", "camera": "static",
+     "desc": "two figures facing each other across the empty ground, equal distance apart, long shadows between them, wide shot, full body"},
+    {"template": "insert",
+     "desc": "dust drifting low across sunlit ground, a dry leaf turning over, close-up, no humans"},
+    {"template": "react", "camera": "push",
+     "desc": "narrowed eyes fixed forward, jaw set, unblinking stare, sweat at the temple, dirt-marked collar, close-up"},
+    {"template": "react", "camera": "push",
+     "desc": "the opposing figure facing back, chin lowered, eyes locked forward, mouth a flat line, damp hair, close-up"},
+    {"template": "hold_silent", "camera": "static",
+     "desc": "both figures motionless, hands loose at their sides, wind moving hair and fabric, wide shot, full body"}
+  ],
+  "why": "This is the one template built on withholding rather than showing, and the master shot up front is what licenses that. Once the audience has seen where both people stand, the two reverse close-ups read as a confrontation instead of two unrelated portraits - coverage here is faked by scale contrast, because nothing in this pipeline maintains a real 3D space between shots. The paired reacts are ordinary shot-reverse-shot grammar and they are the cheapest way to generate tension from two clips that never have to match. It ends on the longest held shot in the library rather than on the strike, because a standoff that resolves is a fight; a standoff that does not is a standoff.",
+  "status": "partial",
+  "note": "The five shots, the bleach grade, tense_strings and the cold face tags render today. `transition: smash` is inert - short.py hard-cuts. cold's voice_style needs an emotion-vector TTS engine. Pace is deliberately `normal`, not `slow`: source clips render at 145 frames / 24 fps = 6.04 s, and hold_silent is 5.5 s at normal but 7.4 s at slow, which would overrun the clip and be silently truncated back to 6.04 s. This is the longest template of the five for that reason - the length is in the held shot, not in the pace multiplier."
+}

@@ -1,0 +1,13 @@
+{
+  "id": "hail",
+  "desc": "weather preset: hail",
+  "status": "partial",
+  "note": "no consumer today: studio/WIRE-PLAN.md records weather as having no landing point in short.py, so tags, intensity, wind, precip, atmos, visibility and ground all reach nothing. Tags are danbooru terms describing the visible consequence on hair, cloth, skin and ground rather than naming the condition, so they are correct the day a consumer lands. ground uses the census world.ground_state enum (VARIABLES.md:128); the existing nine presets use 'wet' and 'flooded', which are not members of it, a mismatch WIRE-PLAN.md already flags. precip 'hail' is a new member: the existing nine presets only use none, rain and snow, so any future consumer switching on precip must learn it.",
+  "tags": "hailstones falling, white ice pellets bouncing off the ground, arms raised over the head, flinching and turning away, ice scattered across the pavement, sharp bright specks in the air",
+  "intensity": 0.7,
+  "wind": 0.4,
+  "precip": "hail",
+  "atmos": "haze",
+  "visibility": 0.6,
+  "ground": "ice"
+}

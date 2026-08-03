@@ -1,0 +1,13 @@
+{
+  "id": "sleet",
+  "desc": "weather preset: sleet",
+  "status": "partial",
+  "note": "no consumer today: studio/WIRE-PLAN.md records weather as having no landing point in short.py, so tags, intensity, wind, precip, atmos, visibility and ground all reach nothing. Tags are danbooru terms describing the visible consequence on hair, cloth, skin and ground rather than naming the condition, so they are correct the day a consumer lands. ground uses the census world.ground_state enum (VARIABLES.md:128); the existing nine presets use 'wet' and 'flooded', which are not members of it, a mismatch WIRE-PLAN.md already flags. precip 'sleet' is a new member alongside hail: the existing nine presets only use none, rain and snow.",
+  "tags": "half melted snow falling, wet slush underfoot, soaked dark patches on the shoulders, damp hair stuck to the face, grey air, hunched shoulders, hands pulled into sleeves",
+  "intensity": 0.6,
+  "wind": 0.5,
+  "precip": "sleet",
+  "atmos": "mist",
+  "visibility": 0.55,
+  "ground": "wet_reflective"
+}

@@ -142,10 +142,12 @@ const S = {
   checkpoint:"animagine-xl-4.0.safetensors", style:"modern sports anime, cel shading, cinematic",
   seed_root:"", look:"neutral", pace:"normal", cue:"", place:"", time:"",
   mood:"", camera:"static", cast:[], beats:[], scene:"my_scene", chapter:"act_one",
+  emotion:"", wear:"", transition:"", template:"",
 };
-let LIB={}, EFF={tiers:{},vars:{}}, CARDS=[], step=0;
+let LIB={}, EFF={tiers:{},vars:{}}, CARDS=[], TPLS=[], step=0;
 
 const STEPS = [
+  {id:"start",  name:"Start"},
   {id:"format", name:"Format"},
   {id:"look",   name:"Look & pace"},
   {id:"world",  name:"Place & time"},
@@ -193,6 +195,47 @@ function render(){
 
   const p = document.getElementById("panel");
   const s = STEPS[step].id;
+
+  if(s==="start"){
+    const genres = [...new Set(TPLS.flatMap(t=>t.genre||[]))].sort();
+    p.innerHTML = `
+      <h2>Start from a template</h2>
+      <p class="lede">A template sets every variable at once and brings its own shots, so
+      you begin from something that already works. Every setting it applies is listed on
+      the card — nothing is hidden behind the picture, because seeing which knob produced
+      what is the whole point.</p>
+      <div class="why">Pick one and the next five steps are pre-filled. Change anything
+      you like afterwards — a template is a starting position, not a lock.
+      <b>Or skip this step entirely</b> and build from scratch.</div>
+      ${genres.length?`<div class="row" style="margin-bottom:14px">
+        <button class="btn ghost" data-genre="">all</button>
+        ${genres.map(g=>`<button class="btn ghost" data-genre="${esc(g)}">${esc(g)}</button>`).join("")}
+      </div>`:""}
+      ${TPLS.length ? `<div class="opts" id="tplgrid">${TPLS.map(t=>{
+        const img = t.sample
+          ? (t.sample.endsWith(".mp4")
+              ? `<video src="${esc(t.sample)}" muted loop playsinline onmouseover="this.play()" onmouseout="this.pause()"></video>`
+              : `<img loading="lazy" src="${esc(t.sample)}" alt="">`)
+          : `<div class="noimg">no example rendered yet</div>`;
+        const sets = Object.entries(t.sets||{});
+        return `<button class="opt" data-tpl="${esc(t.id)}" data-genres="${esc((t.genre||[]).join(" "))}"
+                  style="grid-column:span 1">
+          ${img}
+          <div class="body">
+            <div class="name">${esc(t.name||t.id)}</div>
+            <div class="desc">${esc(t.desc||"")}</div>
+            <div class="fields" style="margin-top:8px">
+              ${sets.slice(0,7).map(([k,v])=>
+                `<div><b>${esc(k)}</b><span>${esc(v)}</span></div>`).join("")}
+              ${sets.length>7?`<div><b>+${sets.length-7} more</b><span></span></div>`:""}
+              <div><b>shots</b><span>${(t.shots||[]).length}</span></div>
+            </div>
+          </div></button>`;}).join("")}</div>`
+        : `<p class="hint">No templates in <code>studio/templates/</code> yet.</p>`}
+      <div class="nav" style="border:0;padding-top:14px">
+        <button class="btn ghost" id="scratch">Skip — build from scratch →</button>
+      </div>`;
+  }
 
   if(s==="format") p.innerHTML = `
     <h2>Format</h2>
@@ -363,7 +406,10 @@ function movieText(){
   if(S.mood) L.push(`  mood: ${S.mood}`);
   L.push("");
   L.push(`  SCENE ${S.scene}`);
+  if(S.transition) L.push(`    transition: ${S.transition}`);
   if(S.cast.length) L.push(`    characters: ${S.cast.join(", ")}`);
+  if(S.emotion) L.push(`    emotion: ${S.emotion}`);
+  if(S.wear!=="" && S.wear!=null) L.push(`    wear: ${S.wear}`);
   if(S.camera) L.push(`    camera: ${S.camera}`);
   for(const b of S.beats){
     if(b.who) L.push(`    ${b.who}: ${b.text}`);
@@ -384,8 +430,38 @@ function tally(){
     }).join("");
 }
 
+function applyTemplate(id){
+  const t = TPLS.find(x=>x.id===id);
+  if(!t) return;
+  // A template is a STARTING POSITION, not a lock. It writes into the same state the
+  // manual steps write into, so every value stays editable afterwards and the .movie it
+  // produces is ordinary text with nothing template-shaped left in it.
+  const map = {look:"look", pace:"pace", cue:"cue", place:"place", time:"time",
+               mood:"mood", camera:"camera", emotion:"emotion"};
+  for(const [k,v] of Object.entries(t.sets||{})){
+    if(map[k]) S[map[k]] = v;
+    else if(k==="wear") S.wear = v;
+    else if(k==="transition") S.transition = v;
+  }
+  S.beats = (t.shots||[]).map(sh=>({shot:sh.template, camera:sh.camera||"", desc:sh.desc||""}));
+  S.scene = id;
+  S.template = id;
+  if(t.name) S.title = t.name.toUpperCase();
+  step = 1;                    // straight into Format with everything pre-filled
+  render();
+}
+
 function wire(){
   document.querySelectorAll("[data-step]").forEach(b=>b.onclick=()=>{step=+b.dataset.step;render();});
+  document.querySelectorAll("[data-tpl]").forEach(b=>b.onclick=()=>applyTemplate(b.dataset.tpl));
+  const scratch=document.getElementById("scratch");
+  if(scratch) scratch.onclick=()=>{step=1;render();};
+  document.querySelectorAll("[data-genre]").forEach(b=>b.onclick=()=>{
+    const g=b.dataset.genre;
+    document.querySelectorAll("#tplgrid [data-tpl]").forEach(c=>{
+      c.style.display = (!g || (c.dataset.genres||"").split(" ").includes(g)) ? "" : "none";
+    });
+  });
   document.querySelectorAll("[data-pick]").forEach(b=>b.onclick=()=>{
     const k=b.dataset.pick; S[k] = (S[k]===b.dataset.val)?"":b.dataset.val; render();});
   document.querySelectorAll("[data-cast]").forEach(b=>b.onclick=()=>{
@@ -431,15 +507,16 @@ async function save(){
 }
 
 (async function(){
-  const [lib,eff,cards] = await Promise.all([
+  const [lib,eff,cards,tpls] = await Promise.all([
     fetch("/api/library").then(r=>r.json()).catch(()=>({})),
     fetch("/api/effects").then(r=>r.json()).catch(()=>({tiers:{},vars:{}})),
     fetch("/api/cards").then(r=>r.json()).catch(()=>([])),
+    fetch("/api/templates").then(r=>r.json()).catch(()=>([])),
   ]);
-  LIB=lib; EFF=eff; CARDS=cards;
+  LIB=lib; EFF=eff; CARDS=cards; TPLS=tpls;
   const n=Object.values(lib).reduce((a,v)=>a+v.length,0);
   document.getElementById("stat").textContent =
-    `${n} presets · ${cards.length} capability cards · every choice labelled by where it takes effect`;
+    `${TPLS.length} templates · ${n} presets · ${cards.length} capability cards · every choice labelled by where it takes effect`;
   render();
 })();
 </script>
