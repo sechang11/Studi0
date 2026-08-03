@@ -66,6 +66,24 @@ in five states) rather than a fixed garment plus a damage suffix. Result: exhaus
 and dishevelled hair now land; "torn" and "bloodied" still don't reliably. **Partial, and I
 am not claiming more.**
 
+**`emotion` now works, and it is the clearest demonstration of the whole principle.**
+`studio/emotions/` already held nine presets built from *physical* descriptors — grief is
+`face: crying, grieving / eyes: tears, downcast eyes / mouth: trembling / body: hunched` —
+and nothing read them. `compile.py` now expands the emotion into those parts and places
+them immediately after character identity, before the garment.
+
+The same beat that previously rendered the character **smiling** on the line "...Again."
+now renders him with downcast eyes, tears on the cheeks and a downturned mouth. A second
+scene set `emotion: determined` renders sharp eyes and a furrowed brow. Both match their
+preset unmistakably.
+
+`mood: melancholy, defeat` → a smile. `emotion: grief` → grief. Never write the feeling;
+write the face.
+
+Order turned out to be load-bearing: identity → face → garment-in-its-damaged-state →
+world. Earlier and more specific wins when tags conflict, which is the same mechanism that
+made `wear` fail.
+
 ### 3. The capability cards mostly cannot support their own claims
 
 206 cards, 1026 panels, and not one had ever been looked at. I built one contact sheet per
@@ -140,7 +158,8 @@ coloured shapes.
 
 | | |
 |---|---|
-| `mood`, `emotion` | still prompt-only and still ignored. Emotion should be carried by physical tags (wide-eyed, parted lips, sweat), not abstract words — see `studio/prompts/anime_reaction_close.json`. |
+| `mood` | still a free-text tag and still largely ignored. Use `emotion:` instead — it is the same intent expressed as physical tags, and it works. |
+| `emotion` → TTS | the face lands; `voice_style` and `voice_rate` are still not routed to the TTS engines. compile.py warns per beat rather than failing silently. |
 | `wear` | partial, see above |
 | `transition` | **compiles but does nothing.** short.py is all hard cuts by design; the 12 transition presets change nothing. epic.py does honour them. |
 | 131 prompt-driven cards | still unverified against their own claims. The contact sheets exist now, so this is a matter of looking, not of tooling. |

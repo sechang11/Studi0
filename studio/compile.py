@@ -74,6 +74,7 @@ VARS = collections.OrderedDict([
     ("logline",     ("movie",   "",          "one sentence. if you can't write it, the film has no spine")),
     ("look",        ("any",     "neutral",   "studio/looks/*.json - prompt tags AND colour grade")),
     ("mood",        ("any",     "",          "free tags folded into every prompt at this level")),
+    ("emotion",     ("any",     "",          "studio/emotions/*.json - PHYSICAL face tags, not a feeling word")),
     ("tags",        ("any",     "",          "APPENDED down the tree, never replaced")),
     ("negative",    ("any",     "bad hands, extra digits, watermark, text", "appended")),
     ("place",       ("any",     "",          "studio/places/*.json id, or free text")),
@@ -300,8 +301,30 @@ def compile_movie(path):
                 if who:
                     d["ref"] = [who]
                     wear_tags = card.get("wear_tags") or WEAR
-                    bits = [card.get("tags", ""), MALE,
-                            wear_tags[min(wear, len(wear_tags) - 1)]]
+                    # ORDER IS THE WHOLE TRICK. Earlier, more specific tags win when they
+                    # conflict, so: identity, then the FACE, then the garment in its
+                    # damaged state, then the world.
+                    #
+                    # An emotion is expanded into its physical parts - "wide-eyed,
+                    # parted lips, sweat" - never the feeling word. Verified: `mood:
+                    # melancholy, defeat` rendered the character smiling, while the same
+                    # emotion written as face tags lands reliably. The model renders
+                    # nouns, not adjectives.
+                    bits = [card.get("tags", ""), MALE]
+                    emo = str(v.get("emotion", "")).strip()
+                    if emo:
+                        e = lib("emotions", emo)
+                        bits += [e.get("face", ""), e.get("eyes", ""), e.get("mouth", "")]
+                        if wear == 0:
+                            # at wear 0 nothing else is describing the body, so the
+                            # emotion's posture is free to. above 0 the damage state
+                            # owns it and two posture claims would fight.
+                            bits.append(e.get("body", ""))
+                        if e.get("status") == "partial" and e.get("voice_style"):
+                            warns.append(
+                                f"{bid}: emotion '{emo}' renders as face tags, but its "
+                                f"voice_style '{e['voice_style']}' is not routed to TTS yet")
+                    bits.append(wear_tags[min(wear, len(wear_tags) - 1)])
                 else:
                     bits = []
                 bits += [v["tags"], look["tags"], v["mood"], v["place"], v["time"], Q]
