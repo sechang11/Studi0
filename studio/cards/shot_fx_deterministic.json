@@ -1,0 +1,67 @@
+{
+  "variable": "shot.fx",
+  "claim": "The compositing effects short.py applies to each cut. These are exact ffmpeg operations, not requests to a model - what you see here is precisely what the renderer produces.",
+  "method": "ONE base keyframe, each panel is that image with exactly one filter from short.py fx_chain() applied. Content provably identical; only the effect differs.",
+  "verdict": "works - all eight are exact and repeatable",
+  "look_at": "Compare each against the `none` control. glow and hot are the two that compound dangerously with the day-for-night grade; a first version of that grade stacked with these turned a third of a film solid magenta.",
+  "deterministic": true,
+  "panels": [
+    {
+      "value": "none",
+      "clause": "",
+      "control": true,
+      "sample": "/samples/vars/shot_fx_deterministic/none.webp",
+      "note": "The untouched frame. Every other panel is this picture plus one filter."
+    },
+    {
+      "value": "glow",
+      "clause": "glow",
+      "control": false,
+      "sample": "/samples/vars/shot_fx_deterministic/glow.webp",
+      "note": "Split, blur sigma 18, screen-blend back at 0.38. Where the reference short's apparent energy actually comes from."
+    },
+    {
+      "value": "flash",
+      "clause": "flash",
+      "control": false,
+      "sample": "/samples/vars/shot_fx_deterministic/flash.webp",
+      "note": "A brightness ramp that decays over the first eighth of a second."
+    },
+    {
+      "value": "aberr",
+      "clause": "aberr",
+      "control": false,
+      "sample": "/samples/vars/shot_fx_deterministic/aberr.webp",
+      "note": "Red and blue channels shifted 4px apart. Impact, damage, wrongness."
+    },
+    {
+      "value": "shake",
+      "clause": "shake",
+      "control": false,
+      "sample": "/samples/vars/shot_fx_deterministic/shake.webp",
+      "note": "Crop oscillating on sin(t*90). Reads as violence, not unease."
+    },
+    {
+      "value": "smear",
+      "clause": "smear",
+      "control": false,
+      "sample": "/samples/vars/shot_fx_deterministic/smear.webp",
+      "note": "Directional blur through the moment of contact - the anime smear frame."
+    },
+    {
+      "value": "hot",
+      "clause": "hot",
+      "control": false,
+      "sample": "/samples/vars/shot_fx_deterministic/hot.webp",
+      "note": "Contrast 1.10, saturation 1.18, vibrance 0.22. Use sparingly: it compounds with the grade."
+    },
+    {
+      "value": "whiteout",
+      "clause": "whiteout",
+      "control": false,
+      "sample": "/samples/vars/shot_fx_deterministic/whiteout.webp",
+      "note": "Blows to white and desaturates. Cut away AT contact and let the audience supply the hit."
+    }
+  ],
+  "sheet": "/samples/sheets/shot_fx_deterministic.jpg"
+}

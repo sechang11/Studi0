@@ -1,0 +1,53 @@
+{
+  "variable": "look",
+  "claim": "The colour grade half of `look`. Each preset carries both prompt tags and an ffmpeg grade; the tags are a suggestion the model often ignores, the grade is exact. Until 2026-08-03 short.py read neither and applied one hardcoded night chain to every film, which is why look appeared to do nothing.",
+  "method": "ONE base keyframe with each preset's grade string applied directly, exactly as short.py make_cut() now does.",
+  "verdict": "works - measured: switching a scene from the night grade to the cold grade moved its mean luma from 81.5 to 115.5 in a real render",
+  "look_at": "These are the ONLY part of `look` you can rely on. Judge the grade here, and treat the tag half as a bonus. day_for_night and night share a grade on purpose.",
+  "deterministic": true,
+  "panels": [
+    {
+      "value": "bleach",
+      "clause": "eq=contrast=1.35:saturation=0.45",
+      "sample": "/samples/vars/look_deterministic/bleach.webp",
+      "note": "  |  tags also added to the prompt: high contrast, harsh light"
+    },
+    {
+      "value": "cold",
+      "clause": "eq=contrast=1.10:saturation=0.72,colorbalance=bs=0.10:rs=-0.05",
+      "sample": "/samples/vars/look_deterministic/cold.webp",
+      "note": "  |  tags also added to the prompt: overcast, cold lighting, desaturated"
+    },
+    {
+      "value": "day_for_night",
+      "clause": "eq=brightness=-0.15:contrast=1.20:saturation=0.72,colorbalance=bs=0.05:rs=-0.03,eq=gamma=0.92",
+      "sample": "/samples/vars/look_deterministic/day_for_night.webp",
+      "note": "  |  tags also added to the prompt: night, floodlights"
+    },
+    {
+      "value": "golden",
+      "clause": "eq=contrast=1.08:saturation=1.22,colorbalance=rs=0.08:bs=-0.06",
+      "sample": "/samples/vars/look_deterministic/golden.webp",
+      "note": "  |  tags also added to the prompt: golden hour, warm sunlight, long shadows"
+    },
+    {
+      "value": "memory",
+      "clause": "eq=contrast=0.92:saturation=0.60:brightness=0.06,gblur=sigma=1.4",
+      "sample": "/samples/vars/look_deterministic/memory.webp",
+      "note": "  |  tags also added to the prompt: soft focus, hazy, faded colours"
+    },
+    {
+      "value": "neutral",
+      "clause": "eq=contrast=1.06:saturation=1.12",
+      "sample": "/samples/vars/look_deterministic/neutral.webp",
+      "note": "  |  tags also added to the prompt: (none)"
+    },
+    {
+      "value": "night",
+      "clause": "eq=brightness=-0.15:contrast=1.20:saturation=0.72,colorbalance=bs=0.05:rs=-0.03,eq=gamma=0.92",
+      "sample": "/samples/vars/look_deterministic/night.webp",
+      "note": "  |  tags also added to the prompt: night, dark, moonlight"
+    }
+  ],
+  "sheet": "/samples/sheets/look_deterministic.jpg"
+}
