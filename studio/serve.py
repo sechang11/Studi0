@@ -74,6 +74,38 @@ def safe_name(s):
     return "".join(c for c in str(s) if c.isalnum() or c in "-_")[:64]
 
 
+def cast():
+    """Characters, each with whatever identity assets actually exist for them.
+
+    The card on disk is the source of truth for tags, voice and sheet; the turnaround
+    views are discovered from samples/cast/<id>/ rather than recorded, so the page cannot
+    claim views that were deleted. Same reason the LoRA is reported from the card only
+    after training wrote it there.
+    """
+    d = f"{HERE}/characters"
+    if not os.path.isdir(d):
+        return []
+    out = []
+    for fn in sorted(os.listdir(d)):
+        if not fn.endswith(".json"):
+            continue
+        try:
+            c = json.load(open(f"{d}/{fn}", encoding="utf-8"))
+        except Exception as e:
+            out.append({"id": fn[:-5], "name": fn[:-5], "desc": f"UNREADABLE: {e}"})
+            continue
+        vd = f"{HERE}/samples/cast/{c.get('id', fn[:-5])}"
+        views = []
+        if os.path.isdir(vd):
+            for v in sorted(os.listdir(vd)):
+                if v.endswith(".png"):
+                    views.append({"name": v[:-4].split("_", 1)[-1],
+                                  "file": f"/samples/cast/{c.get('id', fn[:-5])}/{v}"})
+        c["views"] = views
+        out.append(c)
+    return out
+
+
 def verify_queue():
     """Cards that have panels but no human verdict, plus the ones already done.
 
@@ -262,6 +294,13 @@ class H(http.server.SimpleHTTPRequestHandler):
             if not os.path.exists(p):
                 return self._send(b"make.html is missing", 500, "text/plain")
             return self._send(open(p, "rb").read(), 200, "text/html; charset=utf-8")
+        if path in ("/cast", "/cast.html"):
+            p = f"{HERE}/cast.html"
+            if not os.path.exists(p):
+                return self._send(b"cast.html is missing", 500, "text/plain")
+            return self._send(open(p, "rb").read(), 200, "text/html; charset=utf-8")
+        if path == "/api/cast":
+            return self._send(cast())
         if path in ("/verify", "/verify.html"):
             p = f"{HERE}/verify.html"
             if not os.path.exists(p):

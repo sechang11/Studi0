@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>studio · cast</title>
+<style>
+  :root{--bg:#0f1115;--panel:#161a21;--panel2:#1c2129;--line:#272d38;--ink:#e6e9ef;
+        --dim:#8b94a3;--accent:#6ea8fe;--ok:#4ec9a0;--warn:#e0b252;--bad:#e07a5f}
+  @media (prefers-color-scheme:light){
+    :root{--bg:#f6f7f9;--panel:#fff;--panel2:#f0f2f5;--line:#dde1e8;--ink:#141821;--dim:#5d6470}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font:14px/1.55 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  header{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:12px 18px;
+         border-bottom:1px solid var(--line);background:var(--panel);position:sticky;top:0;z-index:9}
+  header h1{margin:0;font-size:15px;letter-spacing:.07em;text-transform:uppercase}
+  header .sub{color:var(--dim);font-size:12px}
+  header .right{margin-left:auto;display:flex;gap:8px}
+  header a{color:var(--dim);font-size:12px;text-decoration:none;border:1px solid var(--line);
+           padding:5px 10px;border-radius:6px}
+  header a:hover{color:var(--ink);border-color:var(--accent)}
+  .wrap{max-width:1500px;margin:0 auto;padding:18px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+  .c{background:var(--panel);border:1px solid var(--line);border-radius:11px;overflow:hidden;
+     cursor:pointer}
+  .c:hover{border-color:var(--accent)}
+  .c .por{width:100%;aspect-ratio:1;object-fit:cover;display:block;background:var(--panel2);
+          border-bottom:1px solid var(--line)}
+  .c .noimg{width:100%;aspect-ratio:1;display:flex;align-items:center;justify-content:center;
+            background:var(--panel2);color:var(--dim);font-size:12px;text-align:center;padding:0 16px;
+            border-bottom:1px solid var(--line)}
+  .c .b{padding:12px 14px}
+  .c h3{margin:0;font-size:16px}
+  .c .id{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--dim)}
+  .c p{margin:7px 0 0;color:var(--dim);font-size:12.5px}
+  .pills{margin-top:9px}
+  .pill{display:inline-block;font-size:10px;letter-spacing:.05em;text-transform:uppercase;
+        border:1px solid currentColor;border-radius:99px;padding:1px 8px;margin:0 4px 4px 0}
+  .p-ok{color:var(--ok)} .p-no{color:var(--bad)} .p-part{color:var(--warn)}
+  h2{margin:0 0 4px;font-size:19px}
+  .lede{margin:0 0 18px;color:var(--dim);max-width:78ch}
+  dialog{border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--ink);
+         max-width:min(1250px,95vw);padding:0}
+  dialog::backdrop{background:#000b}
+  .dh{display:flex;align-items:baseline;gap:12px;padding:14px 18px;border-bottom:1px solid var(--line)}
+  .dh h3{margin:0;font-size:17px}
+  .dh button.x{margin-left:auto;background:none;border:0;color:var(--dim);font-size:22px;cursor:pointer}
+  .db{padding:18px}
+  .views{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-bottom:16px}
+  .views figure{margin:0}
+  .views img{width:100%;border-radius:7px;border:1px solid var(--line);display:block}
+  .views figcaption{font-size:10.5px;color:var(--dim);text-align:center;padding-top:3px;
+                    font-family:ui-monospace,Menlo,monospace}
+  table{width:100%;border-collapse:collapse;font-size:12.5px;margin-bottom:14px}
+  td{padding:5px 7px;border-bottom:1px solid var(--line);vertical-align:top}
+  td:first-child{color:var(--dim);width:24%;font-family:ui-monospace,Menlo,monospace}
+  .steps{display:grid;gap:10px;margin-top:6px}
+  .step{background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:12px 14px}
+  .step b{display:block;margin-bottom:3px}
+  .step .cmd{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;background:var(--bg);
+             border:1px solid var(--line);border-radius:6px;padding:7px 9px;margin-top:7px;
+             overflow-x:auto;white-space:pre}
+  .hint{color:var(--dim);font-size:12px}
+  .warn{border-left:3px solid var(--warn);padding:10px 13px;background:var(--panel);
+        border-radius:0 8px 8px 0;font-size:13px;margin-bottom:16px}
+</style>
+</head>
+<body>
+<header>
+  <h1>cast</h1><span class="sub" id="stat">loading…</span>
+  <div class="right">
+    <a href="/wizard">direct a scene</a><a href="/make">make</a>
+    <a href="/tags">tags</a><a href="/verify">verify</a><a href="/">library</a>
+  </div>
+</header>
+<div class="wrap">
+  <h2>The people in your films</h2>
+  <p class="lede">A character is a reusable identity, not a description you retype. Each
+  one carries the tags that name them, a damage ladder, a voice, a reference sheet, and —
+  once trained — a LoRA that makes them <em>the same person</em> rather than someone who
+  matches the description.</p>
+  <div class="grid" id="grid"></div>
+</div>
+
+<dialog id="dlg"><div class="dh"><h3 id="dname"></h3><span class="id" id="did"></span>
+  <button class="x" id="dx">×</button></div>
+<div class="db" id="dbody"></div></dialog>
+
+<script>
+let CAST=[];
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function pill(ok,label,cls){ return `<span class="pill ${ok?(cls||"p-ok"):"p-no"}">${esc(label)}</span>`; }
+
+function draw(){
+  $("stat").textContent=`${CAST.length} characters`;
+  $("grid").innerHTML=CAST.map(c=>{
+    const por=c.views&&c.views.length?c.views[0]:null;
+    return `<div class="c" data-id="${esc(c.id)}">
+      ${por?`<img class="por" loading="lazy" src="${esc(por.file)}" alt="">`
+           :`<div class="noimg">no turnaround yet</div>`}
+      <div class="b">
+        <h3>${esc(c.name||c.id)}</h3>
+        <div class="id">${esc(c.id)}</div>
+        <p>${esc(c.desc||"")}</p>
+        <div class="pills">
+          ${pill(!!c.sheet,"sheet")}
+          ${pill(!!c.voice,"voice")}
+          ${pill((c.views||[]).length>0,(c.views||[]).length+" views")}
+          ${pill(!!c.lora,c.lora?"LoRA trained":"no LoRA")}
+        </div>
+      </div></div>`;}).join("")
+    || `<p class="hint">No characters in <code>studio/characters/</code> yet.</p>`;
+  document.querySelectorAll("[data-id]").forEach(el=>el.onclick=()=>open_(el.dataset.id));
+}
+
+function open_(id){
+  const c=CAST.find(x=>x.id===id);
+  $("dname").textContent=c.name||c.id;
+  $("did").textContent=c.id;
+  const rows={};
+  if(c.tags) rows["identity tags"]=c.tags;
+  if(c.prose) rows["prose (qwen path)"]=c.prose;
+  if(c.sheet) rows["reference sheet"]=c.sheet;
+  if(c.voice) rows["voice"]=c.voice;
+  if(c.lora) rows["LoRA"]=c.lora+(c.lora_steps?` · ${c.lora_steps} steps · rank ${c.lora_rank}`:"");
+  if(c.lora_dataset) rows["trained on"]=c.lora_dataset;
+
+  $("dbody").innerHTML=`
+    ${(c.views||[]).length?`<div class="views">${c.views.map(v=>`
+      <figure><img loading="lazy" src="${esc(v.file)}" alt=""><figcaption>${esc(v.name)}</figcaption></figure>`
+      ).join("")}</div>`:`<div class="warn">No turnaround yet — this character is still
+      just a description. Step 2 below is what makes them a person the model can
+      reproduce.</div>`}
+
+    <table>${Object.entries(rows).map(([k,v])=>
+      `<tr><td>${esc(k)}</td><td>${esc(v)}</td></tr>`).join("")}</table>
+
+    ${(c.wear_tags||[]).length?`<div class="hint" style="margin-bottom:5px">damage ladder —
+      appended as the film progresses, and it never decreases</div>
+      <table>${c.wear_tags.map((w,i)=>
+        `<tr><td>wear ${i}</td><td>${esc(w)}</td></tr>`).join("")}</table>`:""}
+
+    <h3 style="font-size:15px;margin:18px 0 2px">Making them consistent</h3>
+    <p class="hint" style="margin:0 0 8px">Three stages. Each one makes the identity hold
+      harder than the last, and each is run from a terminal on the box.</p>
+    <div class="steps">
+      <div class="step">
+        <b>1 · A reference sheet ${c.sheet?"✓":""}</b>
+        <span class="hint">One portrait. IPAdapter refines a face from it — but a weight
+        sweep on this box found the character was <em>already recognisable at zero</em>,
+        so a single sheet carries less than you would think.</span>
+        <div class="cmd">python3 scripts/make_sheets.py</div>
+      </div>
+      <div class="step">
+        <b>2 · A turnaround ${(c.views||[]).length?"✓ "+c.views.length+" views":""}</b>
+        <span class="hint">16 views of the same person — angles then expressions, framing
+        held constant. This is both a far stronger reference and the training set.</span>
+        <div class="cmd">python3 studio/_tools/turnaround.py ${esc(c.id)}</div>
+      </div>
+      <div class="step">
+        <b>3 · A trained LoRA ${c.lora?"✓":""}</b>
+        <span class="hint">The character stops being a prompt and becomes a model. Minutes,
+        not seconds. Afterwards generate the same prompt with and without it at one seed
+        and <em>look</em> — overfitting reproduces the training images, undertraining
+        changes nothing, and neither shows up in a loss number.</span>
+        <div class="cmd">python3 studio/_tools/train_character.py ${esc(c.id)}</div>
+      </div>
+    </div>`;
+  $("dlg").showModal();
+}
+
+(async function(){
+  try{ CAST=await fetch("/api/cast").then(r=>r.json()); }catch(e){ CAST=[]; }
+  $("dx").onclick=()=>$("dlg").close();
+  $("dlg").onclick=e=>{ if(e.target===$("dlg")) $("dlg").close(); };
+  draw();
+})();
+</script>
+</body>
+</html>
