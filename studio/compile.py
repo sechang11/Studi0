@@ -190,8 +190,24 @@ def parse(path):
             #
             # screenplay.py has always had this as the line under a shot; the .movie
             # format simply lost it. Same field, same purpose.
+            # `shot: TEMPLATE [@camera] | what is happening`
+            #
+            # The optional @camera is a PER-SHOT move, overriding the scene's. Without it
+            # every beat in a scene inherited one camera, so a scene could not open on a
+            # static wide and then push on the reaction - which is most of what shot-level
+            # direction IS. 19 of the 20 authored templates specify per-shot cameras and
+            # every one of them was being silently discarded: noir_interrogation asks for
+            # push / static / push / static and compiled to four statics, losing the only
+            # movement the scene was built around.
+            #
+            # short.py has always honoured beat["camera"] (it strips the template's move
+            # fx and substitutes this one). The gap was only that nothing could express it.
             tmpl, _, desc = v.partition("|")
-            cur_sc["beats"].append({"shot": tmpl.strip(), "desc": desc.strip()})
+            tmpl, cam_ = tmpl.strip(), ""
+            if "@" in tmpl:
+                tmpl, _, cam_ = tmpl.partition("@")
+                tmpl, cam_ = tmpl.strip(), cam_.strip()
+            cur_sc["beats"].append({"shot": tmpl, "desc": desc.strip(), "camera": cam_})
             continue
         # ENFORCE the movie-level locks this file documents. They were described as
         # "LOCKED, compile error if set at chapter/scene" from the beginning and were
@@ -286,10 +302,21 @@ def compile_movie(path):
             for i, b in enumerate(sc["beats"]):
                 bid = f"{ch['id']}_{sc['id']}_{i:02d}"
                 tmpl = b.get("shot", "speak" if b.get("text") else "insert")
+                # A per-shot @camera beats the scene's. Validated here rather than passed
+                # through, so a typo or a roadmap move fails at compile time instead of
+                # quietly rendering static.
+                bcam = cam
+                if b.get("camera"):
+                    bcam = lib("cameras", b["camera"])
+                    if bcam.get("status") == "roadmap":
+                        warns.append(f"{bid}: camera '{bcam['id']}' is not implemented yet "
+                                     f"-> falling back to the scene's '{cam['id']}'. "
+                                     f"see studio/{bcam.get('roadmap','roadmap/')}")
+                        bcam = cam
                 d = collections.OrderedDict(
                     id=bid, template=tmpl,
                     clip_secs=6, intensity=round(1.0 / scale, 3),
-                    camera=cam["id"] if cam.get("status") == "ready" else "static",
+                    camera=bcam["id"] if bcam.get("status") == "ready" else "static",
                     transition=tr["id"] if tr.get("status") == "ready" else "cut",
                     grade=look["grade"],
                     seed=stable_seed(root, ch["id"], sc["id"], i))

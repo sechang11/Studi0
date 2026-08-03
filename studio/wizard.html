@@ -416,7 +416,11 @@ function movieText(){
   if(S.camera) L.push(`    camera: ${S.camera}`);
   for(const b of S.beats){
     if(b.who) L.push(`    ${b.who}: ${b.text}`);
-    else L.push(`    shot: ${b.shot}${b.desc ? " | " + b.desc : ""}`);
+    // The per-shot camera MUST be emitted. It was being stored on the beat and then
+    // dropped here, so every shot silently inherited the scene's camera and 19 of the 20
+    // templates lost the shot-level direction they were built around.
+    else L.push(`    shot: ${b.shot}${b.camera && b.camera!==S.camera ? " @"+b.camera : ""}`
+                + `${b.desc ? " | " + b.desc : ""}`);
   }
   if(!S.beats.length) L.push(`    shot: establish`);
   return L.join("\n");
