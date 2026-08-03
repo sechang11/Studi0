@@ -1,0 +1,80 @@
+{
+  "title": "WIZARD ROUNDTRIP",
+  "fps": 24,
+  "canvas": [
+    1920,
+    1080
+  ],
+  "engine": "higgs_v3",
+  "keyframe_engine": "anime",
+  "anime_ckpt": "animagine-xl-4.0.safetensors",
+  "ipadapter_weight": 0.6,
+  "style": "modern sports anime, cel shading",
+  "anime_sheets": {
+    "VIRO": "sheet_anime_viro.png"
+  },
+  "sheets": {
+    "VIRO": "sheet_anime_viro.png"
+  },
+  "characters": {
+    "VIRO": "VIRO"
+  },
+  "voices": {
+    "VIRO": {
+      "engine": "higgs_v3",
+      "voice": "voices_examples/higgs_audio/vex.wav"
+    }
+  },
+  "music": [],
+  "beats": [
+    {
+      "id": "one_test_00",
+      "template": "sakuga",
+      "clip_secs": 6,
+      "intensity": 1.0,
+      "camera": "push",
+      "transition": "cut",
+      "grade": "eq=brightness=-0.15:contrast=1.20:saturation=0.72,colorbalance=bs=0.05:rs=-0.03,eq=gamma=0.92",
+      "seed": 2103821642,
+      "ref": [
+        "VIRO"
+      ],
+      "tags": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, male focus, mature male, masculine, calm resolve, quiet certainty, steady gaze, closed mouth, upright, still, clean teal soccer jersey, orange trim, number 7, neat hair, leaping mid-air volley, boot striking the ball, motion lines, full body, modern sports anime, cel shading, night, dark, moonlight, empty night stadium, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, male focus, mature male, masculine, calm resolve, quiet certainty, steady gaze, closed mouth, upright, still, clean teal soccer jersey, orange trim, number 7, neat hair, leaping mid-air volley, boot striking the ball, motion lines, full body, modern sports anime, cel shading, night, dark, moonlight, empty night stadium, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "Slow deliberate movement only."
+    },
+    {
+      "id": "one_test_01",
+      "template": "insert",
+      "clip_secs": 6,
+      "intensity": 1.0,
+      "camera": "push",
+      "transition": "cut",
+      "grade": "eq=brightness=-0.15:contrast=1.20:saturation=0.72,colorbalance=bs=0.05:rs=-0.03,eq=gamma=0.92",
+      "seed": 3638558731,
+      "tags": "the ball hitting the back of the net, close-up, no humans, modern sports anime, cel shading, night, dark, moonlight, empty night stadium, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "the ball hitting the back of the net, close-up, no humans, modern sports anime, cel shading, night, dark, moonlight, empty night stadium, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "Slow deliberate movement only."
+    },
+    {
+      "id": "one_test_02",
+      "template": "speak",
+      "clip_secs": 6,
+      "intensity": 1.0,
+      "camera": "push",
+      "transition": "cut",
+      "grade": "eq=brightness=-0.15:contrast=1.20:saturation=0.72,colorbalance=bs=0.05:rs=-0.03,eq=gamma=0.92",
+      "seed": 2000159173,
+      "ref": [
+        "VIRO"
+      ],
+      "tags": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, male focus, mature male, masculine, calm resolve, quiet certainty, steady gaze, closed mouth, upright, still, clean teal soccer jersey, orange trim, number 7, neat hair, close-up, modern sports anime, cel shading, night, dark, moonlight, empty night stadium, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, male focus, mature male, masculine, calm resolve, quiet certainty, steady gaze, closed mouth, upright, still, clean teal soccer jersey, orange trim, number 7, neat hair, close-up, modern sports anime, cel shading, night, dark, moonlight, empty night stadium, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "Slow deliberate movement only.",
+      "line": {
+        "who": "VIRO",
+        "text": "Not this year."
+      }
+    }
+  ]
+}

@@ -281,20 +281,38 @@ function render(){
       matching close-up of the same room and have the room agree. Coverage is faked by scale
       contrast, and the cutaway must be of a <em>thing</em>.</div>
       <ul class="beats" id="beatlist">${S.beats.map((b,i)=>
-        `<li><div class="g"><div class="k">${esc(b.who?b.who+":":b.shot)}</div>
-         <div class="t">${esc(b.who?b.text:(b.camera||""))}</div></div>
+        `<li><div class="g"><div class="k">${esc(b.who?b.who+":":b.shot)}${
+           !b.who&&b.camera?' <span style="opacity:.6">'+esc(b.camera)+'</span>':""}</div>
+         <div class="t">${b.who?esc(b.text)
+           :(b.desc?esc(b.desc)
+                   :'<span style="color:var(--none)">no description — will render a portrait</span>')}</div></div>
          <button data-del="${i}">remove</button></li>`).join("")||
          '<li><div class="g"><div class="t" style="color:var(--dim)">no shots yet</div></div></li>'}</ul>
 
+      <div class="why"><b>Say what is happening.</b> The description is the single most
+      important thing on a shot line. Without it a beat's whole prompt is the character
+      plus the place, and the model renders the only thing it can — that character,
+      posed, standing still. Every shot of the first film built here came back a portrait,
+      including the climax. <b>Name actions and objects, not feelings:</b>
+      "leaping mid-air volley, boot striking the ball, motion lines" renders;
+      "triumphant, heroic" does not.</div>
+
       <div class="field"><label>Add a shot ${tierBadge("camera")}</label>
-        <div class="row">
+        <div class="row" style="margin-bottom:8px">
           <select id="s-kind" style="flex:1">${shots.map(x=>
             `<option value="${esc(x.id)}">${esc(x.id)} — ${esc((x.desc||"").slice(0,44))}</option>`).join("")}</select>
           <select id="s-cam" style="flex:1">${cams.map(x=>
             `<option value="${esc(x.id)}" ${x.status!=="ready"?"disabled":""}>${esc(x.id)}${
               x.status!=="ready"?" (not implemented)":""}</option>`).join("")}</select>
+        </div>
+        <div class="row">
+          <input id="s-desc" style="flex:1"
+            placeholder="what is happening — e.g. leaping mid-air volley, boot striking the ball, motion lines, full body">
           <button class="btn" id="addShot">Add shot</button>
-        </div></div>
+        </div>
+        <div class="hint">Leave blank and the shot falls back to a bare framing hint.
+        establish / insert / pillow are deliberately peopleless — describe a <em>thing</em>.</div>
+      </div>
 
       <div class="field"><label>Add a line of dialogue</label>
         <div class="row">
@@ -349,7 +367,7 @@ function movieText(){
   if(S.camera) L.push(`    camera: ${S.camera}`);
   for(const b of S.beats){
     if(b.who) L.push(`    ${b.who}: ${b.text}`);
-    else L.push(`    shot: ${b.shot}`);
+    else L.push(`    shot: ${b.shot}${b.desc ? " | " + b.desc : ""}`);
   }
   if(!S.beats.length) L.push(`    shot: establish`);
   return L.join("\n");
@@ -384,8 +402,10 @@ function wire(){
   const fp=document.getElementById("f-fps"); if(fp) fp.onchange=()=>{S.fps=fp.value;render();};
 
   const add=document.getElementById("addShot");
-  if(add) add.onclick=()=>{S.beats.push({shot:document.getElementById("s-kind").value,
-     camera:document.getElementById("s-cam").value}); render();};
+  if(add) add.onclick=()=>{const dsc=document.getElementById("s-desc");
+     S.beats.push({shot:document.getElementById("s-kind").value,
+     camera:document.getElementById("s-cam").value,
+     desc:(dsc&&dsc.value.trim())||""}); if(dsc) dsc.value=""; render();};
   const addl=document.getElementById("addLine");
   if(addl) addl.onclick=()=>{const t=document.getElementById("s-text");
      if(t.value.trim() && S.cast.length){S.beats.push({who:document.getElementById("s-who").value,
