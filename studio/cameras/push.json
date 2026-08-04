@@ -2,5 +2,7 @@
   "id": "push",
   "desc": "Slow in. Growing interest, intimacy, dawning realisation.",
   "status": "ready",
-  "verdict": "RENDERED 2026-08-04. Post tier. A 10% zoom in over the clip: content diverges, left half -8px and right half +36px, telephone box -52px and taxi +42px. It works, but the zoom is NOT centred - by the end there is a ~14px net drift down and to the right, an artifact of zoompan's integer x/y expressions. MAD vs static 18.33, the smallest of any working move in the library, so a 10% push is the subtlest thing on offer here and may not read at all on a short cut. Asked of the video model: essentially nothing, activity 1.34 against a 1.02 static floor."
+  "verdict": "RENDERED 2026-08-04. Post tier. A 10% zoom in over the clip: content diverges, left half -8px and right half +36px, telephone box -52px and taxi +42px. It works, but the zoom is NOT centred - by the end there is a ~14px net drift down and to the right, an artifact of zoompan's integer x/y expressions. MAD vs static 18.33, the smallest of any working move in the library, so a 10% push is the subtlest thing on offer here and may not read at all on a short cut. Asked of the video model: essentially nothing, activity 1.34 against a 1.02 static floor.",
+  "renders": "post",
+  "filter": "zoompan=z='1+0.10*on/N':d=1:x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)'"
 }

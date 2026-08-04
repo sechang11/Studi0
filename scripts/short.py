@@ -47,7 +47,7 @@ STRUCTURE OF A BEAT
 a 2-frame flash derived from the outgoing frame. `line` becomes both a spoken line and a
 burnt-in caption.
 """
-import argparse, collections, json, math, os, random, shutil, subprocess, sys
+import argparse, collections, json, math, os, random, re, shutil, subprocess, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
@@ -73,12 +73,71 @@ TARGET_LUFS = -9.5        # the reference short measures -9.43 LUFS. Feed-loud, 
 
 
 # ─────────────────────────────────────────────────────────── effects
+
+# EVERY NAME fx_chain() CAN ACTUALLY RENDER. This table exists because fx_chain is a run
+# of `if "name" in fx` tests with no else and no validation, which means an unrecognised
+# name produces an EMPTY filter chain and the clip passes through untouched - identical,
+# byte for byte, to static. Three consequences, all of them measured rather than guessed:
+#
+#   * studio/cameras/{static,dolly_zoom,orbit,rack_focus}.mp4 all share MD5
+#     85540954967b671562c3efa5f4c28cec. The three roadmap moves are not weak. They ARE the
+#     static file.
+#   * so is a typo. `pan_left`, `dolly-zoom` and `Push` are indistinguishable from a
+#     working move, silently, and this is the wider blast radius: the roadmap moves are at
+#     least written down somewhere.
+#   * compile.py does validate (lib() raises on an unknown card) but a hand-authored
+#     films/*.json never goes through compile.py. It reaches this function directly, and
+#     the wizard's scene-level grid offers all three roadmap moves as clickable choices.
+#
+# A silent no-op is the worst outcome available. It costs a full generation and looks like
+# a rendering choice. So: anything not in one of these two sets is reported, loudly, once.
+FX_CAMERAS = {"static", "push", "punch", "pull", "pan_l", "pan_r", "tilt_u", "tilt_d",
+              "handheld"}
+FX_EFFECTS = {"shake", "aberr", "glow", "flash", "ramp", "smear", "whiteout", "hot"}
+# Named cameras that exist as cards and render nothing here. Reported differently from a
+# typo because the author did not make a mistake - the app offered them the move.
+FX_CAMERAS_UNBUILT = {
+    "dolly_zoom": "needs a depth map. On a flat plate a dolly-in and a zoom-in are the "
+                  "SAME transform and cancel exactly to the identity - the whole effect "
+                  "is the near/far parallax differential, which a flat image does not "
+                  "have. No zoompan can fake it.",
+    "orbit":      "not achievable after the fact at all. Depth parallax gives a lateral "
+                  "slide, not an arc, and cannot reveal a surface the plate never saw; "
+                  "the mesh route needs a headless rasterizer this box does not have.",
+    "rack_focus": "needs a depth ordering. The filter chain is known (fixed-sigma gblur "
+                  "plus a depth-derived time-ramped mask through maskedmerge) and the "
+                  "depth pass to feed it does not exist yet.",
+}
+_FX_SAID = set()
+
+
+def _fx_unknown(name):
+    """Say it once, name it exactly, and say what you got instead."""
+    if name in _FX_SAID:
+        return
+    _FX_SAID.add(name)
+    if name in FX_CAMERAS_UNBUILT:
+        print(f"  !! camera '{name}' RENDERS NOTHING - this clip is byte-identical to "
+              f"static. {FX_CAMERAS_UNBUILT[name]} See studio/cameras/{name}.json.",
+              file=sys.stderr)
+    else:
+        print(f"  !! '{name}' is not a camera or an effect this renderer knows, so it "
+              f"does nothing and the clip is byte-identical to static. "
+              f"cameras: {', '.join(sorted(FX_CAMERAS))}. "
+              f"effects: {', '.join(sorted(FX_EFFECTS))}.", file=sys.stderr)
+
+
 def fx_chain(fx, w, h, fps, seed=0, length=2.0):
     """Filter fragments that make a static-ish generated clip read as violent motion.
 
     Deliberately cheap and per-cut. The reference gets its energy here, not from the model.
     """
     out = []
+    # Validate FIRST, so the warning is emitted even when the rest of the chain is empty -
+    # which is exactly the case that used to be invisible.
+    for name in fx:
+        if name not in FX_CAMERAS and name not in FX_EFFECTS:
+            _fx_unknown(name)
     # ── camera moves ──────────────────────────────────────────────────────────
     # `punch` used to be the ONLY move, hardcoded to drift one direction, and four of the
     # seven episode templates used it - so almost every shot in the episode panned left in
@@ -259,6 +318,43 @@ def make_impact(src_cut, dst, frames=2):
 
 
 # ─────────────────────────────────────────────────────────── generation
+_WORD = re.compile(r"[a-z0-9]+")
+
+
+def _negative(shipped, positive):
+    """Drop from the negative any clause the positive prompt is asking for.
+
+    THE DEFECT THIS FIXES, and it was a blocker for a whole class of character.
+    workflows/22_anime_kf_ipadapter.json ships a negative that opens
+    "1girl, girl, female, feminine, breasts". That is a sensible default for a film about
+    two teenage boys and it is fatal for anyone else: NIKA's card carries "1girl, solo" in
+    `tags` and "female focus, teenage girl" in `base_tags`, so the renderer was asking for
+    a girl in the positive and forbidding one in the negative, on the same beat, at the
+    same weight. Her sheet, turnaround, LoRA and every sweep in this project were rendered
+    by hand with that negative replaced; nothing an author could write on a card or a film
+    could reach it, because short.py never wrote node 6 at all.
+
+    THE RULE, deliberately narrow: a clause is removed only when every word in it also
+    appears in the positive. Nothing is added, nothing is invented, and the shipped text
+    stays the single source of truth. For a male character the positive contains none of
+    those words and the negative comes back byte-identical - verified against VIRO.
+
+    This is not the whole fix. PIP also wants "adult, mature male, muscular" pushed INTO
+    the negative, which no card can express and this function will not invent. That needs
+    a `negative_add` field on the character card and a compose layer to assemble it.
+    """
+    if not positive:
+        return shipped
+    have = set(_WORD.findall(positive.lower()))
+    keep = []
+    for clause in shipped.split(","):
+        words = _WORD.findall(clause.lower())
+        if words and all(w in have for w in words):
+            continue
+        keep.append(clause.strip())
+    return ", ".join(k for k in keep if k)
+
+
 def anime_keyframe(film, b, out, seed):
     """Keyframe via an anime-native SDXL checkpoint + IPAdapter, driven by danbooru tags.
 
@@ -287,12 +383,23 @@ def anime_keyframe(film, b, out, seed):
     # valid regardless of node order. IPAdapter still runs alongside: they are refining
     # the same thing from different directions, and the sheet costs nothing when a LoRA
     # is present.
+    #
+    # STRENGTH IS PER CHARACTER, and this used to be a single film-wide default of 0.85
+    # that nothing in the authoring layer could set. That is not a cosmetic gap: 0.85 was
+    # MEASURED on this box to collapse NIKA's "sunlit field" into a dark grey void, because
+    # a character LoRA drags its own training backdrop's value and hue along with the face,
+    # and 0.5 was measured to keep the face and give the scene back. Her card records
+    # lora_strength_measured 0.5 and had no way to reach the renderer.
+    #
+    # Order of precedence: the character's own measured strength, then a film-wide
+    # override, then 0.85. A character with no measured strength renders exactly as before.
     loras = film.get("character_loras") or {}
+    lora_w = film.get("character_lora_weights") or {}
     if refs and loras.get(refs[0]):
+        strength = lora_w.get(refs[0], film.get("character_lora_weight", 0.85))
         wf["90"] = {"class_type": "LoraLoaderModelOnly",
                     "inputs": {"model": ["1", 0], "lora_name": loras[refs[0]],
-                               "strength_model": float(film.get("character_lora_weight",
-                                                                0.85))}}
+                               "strength_model": float(strength)}}
         for nid, node in list(wf.items()):
             if nid in ("1", "90") or not isinstance(node, dict):
                 continue
@@ -305,6 +412,7 @@ def anime_keyframe(film, b, out, seed):
     else:
         set_path(wf, "4.inputs.weight", 0.0)
     set_path(wf, "5.inputs.text", b["tags"])
+    set_path(wf, "6.inputs.text", _negative(wf["6"]["inputs"]["text"], b["tags"]))
     set_path(wf, "8.inputs.seed", int(b.get("seed", seed)))
     set_path(wf, "7.inputs.width", 1344)
     set_path(wf, "7.inputs.height", 768)
@@ -392,6 +500,41 @@ def keyframes(film, out, seed0):
         run(HOST, wf, quiet=True)
 
 
+# ─────────────────────────────────────────────────────────── motion
+#
+# THE ONE STRING THE VIDEO MODEL READS. It goes into node 10 of
+# workflows/12_ltx23_i2v_audio.json and it is the only major variable in this project that
+# reaches the generator as free text with nothing else alongside it.
+#
+# For the life of the project every beat of every film carried the same eleven words,
+# because studio/compile.py assigned them as a constant. Measured against an empty-prompt
+# control at 0.614, that constant came back 0.520 - one of the three STILLEST cells in an
+# 81-clip sweep. So the video pass, which costs roughly 8x the keyframe, has been spent
+# asking the model to hold still on every shot ever rendered here.
+#
+# An empty string is therefore strictly better than the constant, and that is what a film
+# carrying the constant now gets - said out loud, with the fix, once.
+DEAD_MOTION = "slow deliberate movement only."
+
+
+def motion_of(b):
+    """The video prompt for one beat, with the two failure modes named rather than run."""
+    m = str(b.get("motion") or "").strip()
+    if not m:
+        print(f"  !! {b['id']} has no motion at all, so the video model is being asked "
+              f"for nothing. Recompile the film from its .movie with studio/compile.py, "
+              f"which now resolves one per beat.", file=sys.stderr)
+        return ""
+    if m.rstrip(".").lower() == DEAD_MOTION.rstrip("."):
+        print(f"  !! {b['id']} carries the retired constant {m!r}. It measured 0.520 "
+              f"against an empty-prompt control of 0.614 - it asks for LESS than saying "
+              f"nothing - so it is being sent as an empty string instead. Recompile from "
+              f"the .movie to get a real per-beat motion, or write one onto the beat.",
+              file=sys.stderr)
+        return ""
+    return m
+
+
 def clips(film, out, seed0):
     """One generated clip per beat. Deliberately few - the edit multiplies them."""
     rel = out.split("output/")[1]
@@ -408,7 +551,12 @@ def clips(film, out, seed0):
         length = max(9, int(math.ceil(secs * FPS / 8)) * 8 + 1)
         wf = load_wf("12_ltx23_i2v_audio.json")
         set_path(wf, "8.inputs.image", staged)
-        set_path(wf, "10.inputs.text", expand(b["motion"], film.get("characters", {})))
+        # expand() is kept on the way out for the hand-authored films/*.json that write
+        # {HERO} into their motion string. Compiled films no longer contain braces -
+        # compose.resolve_motion() fills the pronoun, because naming the mover in full
+        # measured as ADDED off-brief drift and film["characters"] maps a name to itself.
+        set_path(wf, "10.inputs.text",
+                 expand(motion_of(b), film.get("characters", {})))
         set_path(wf, "20.inputs.width", VID[0])
         set_path(wf, "20.inputs.height", VID[1])
         set_path(wf, "20.inputs.length", length)

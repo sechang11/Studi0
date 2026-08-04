@@ -1,0 +1,15 @@
+{
+  "id": "cam_lock",
+  "name": "Camera locked off",
+  "family": "camera",
+  "text": "The camera is locked off on a tripod and does not move.",
+  "desc": "Denies the model a camera move without denying it motion. Use under a subject performance that must stay in one framing.",
+  "shots": [
+    "speak",
+    "react",
+    "insert"
+  ],
+  "needs": null,
+  "grammar": "[MOVER] [ACTION VERB] [PATH/SPATIAL RELATION]",
+  "status": "untested"
+}

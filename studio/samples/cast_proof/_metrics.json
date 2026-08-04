@@ -1,0 +1,433 @@
+{
+ "method": "see cast_proof.py module docstring",
+ "places": [
+  "laundromat",
+  "snowfield",
+  "library_reading_room",
+  "subway_platform",
+  "market_street"
+ ],
+ "styles": [
+  "cel_anime_90s",
+  "ink_wash",
+  "retro_shoujo_70s"
+ ],
+ "style_place": "library_reading_room",
+ "seed0": 7700,
+ "ip_weight": 0.6,
+ "characters": {
+  "NIKA": {
+   "lora": "character_nika_00001_.safetensors",
+   "strength": 0.5,
+   "sheet": "sheet_anime_nika.png",
+   "head_box": [
+    0.5,
+    0.235,
+    0.32
+   ],
+   "arms": {
+    "A_lora": {
+     "n": 5,
+     "within_struct": 105.8,
+     "within_hue": 17.6,
+     "to_sheet_struct": 108.1,
+     "to_sheet_hue": 34.9
+    },
+    "B_control": {
+     "n": 5,
+     "within_struct": 113.2,
+     "within_hue": 34.3,
+     "to_sheet_struct": 106.1,
+     "to_sheet_hue": 44.2
+    },
+    "B0_words": {
+     "n": 5,
+     "within_struct": 110.2,
+     "within_hue": 73.0,
+     "to_sheet_struct": 112.5,
+     "to_sheet_hue": 54.7
+    },
+    "F_lora": {
+     "n": 5,
+     "within_struct": 95.8,
+     "within_hue": 7.8,
+     "to_sheet_struct": 101.3,
+     "to_sheet_hue": 30.7
+    },
+    "F_control": {
+     "n": 5,
+     "within_struct": 105.6,
+     "within_hue": 26.8,
+     "to_sheet_struct": 103.7,
+     "to_sheet_hue": 35.9
+    },
+    "F_words": {
+     "n": 5,
+     "within_struct": 106.6,
+     "within_hue": 37.8,
+     "to_sheet_struct": 107.8,
+     "to_sheet_hue": 58.2
+    },
+    "D_qwen_sheet": {
+     "n": 5,
+     "within_struct": 106.7,
+     "within_hue": 52.9
+    }
+   },
+   "sheet_box": [
+    0.5,
+    0.3,
+    0.46
+   ],
+   "styles": {
+    "C_style_lora": {
+     "cel_anime_90s": {
+      "struct_vs_unstyled": 83.4,
+      "hue_vs_unstyled": 10.2
+     },
+     "ink_wash": {
+      "struct_vs_unstyled": 126.8,
+      "hue_vs_unstyled": 48.3
+     },
+     "retro_shoujo_70s": {
+      "struct_vs_unstyled": 44.0,
+      "hue_vs_unstyled": 5.6
+     }
+    },
+    "C_style_nolora": {
+     "cel_anime_90s": {
+      "struct_vs_unstyled": 96.5,
+      "hue_vs_unstyled": 17.6
+     },
+     "ink_wash": {
+      "struct_vs_unstyled": 88.8,
+      "hue_vs_unstyled": 16.9
+     },
+     "retro_shoujo_70s": {
+      "struct_vs_unstyled": 84.1,
+      "hue_vs_unstyled": 9.8
+     }
+    },
+    "C_style_words": {
+     "cel_anime_90s": {
+      "struct_vs_unstyled": 96.2,
+      "hue_vs_unstyled": 65.2
+     },
+     "ink_wash": {
+      "struct_vs_unstyled": 78.6,
+      "hue_vs_unstyled": 15.6
+     },
+     "retro_shoujo_70s": {
+      "struct_vs_unstyled": 97.0,
+      "hue_vs_unstyled": 23.5
+     }
+    },
+    "C_style_loraonly": {
+     "cel_anime_90s": {
+      "struct_vs_unstyled": 92.9,
+      "hue_vs_unstyled": 47.4
+     },
+     "ink_wash": {
+      "struct_vs_unstyled": 84.6,
+      "hue_vs_unstyled": 22.6
+     },
+     "retro_shoujo_70s": {
+      "struct_vs_unstyled": 109.4,
+      "hue_vs_unstyled": 89.7
+     }
+    }
+   }
+  },
+  "PIP": {
+   "lora": "character_pip_00001_.safetensors",
+   "strength": 0.5,
+   "sheet": "sheet_anime_pip.png",
+   "head_box": [
+    0.5,
+    0.235,
+    0.32
+   ],
+   "arms": {
+    "A_lora": {
+     "n": 5,
+     "within_struct": 98.1,
+     "within_hue": 21.0,
+     "to_sheet_struct": 99.3,
+     "to_sheet_hue": 30.1
+    },
+    "B_control": {
+     "n": 5,
+     "within_struct": 95.7,
+     "within_hue": 30.7,
+     "to_sheet_struct": 100.7,
+     "to_sheet_hue": 54.3
+    },
+    "B0_words": {
+     "n": 5,
+     "within_struct": 111.5,
+     "within_hue": 34.7,
+     "to_sheet_struct": 104.3,
+     "to_sheet_hue": 37.6
+    },
+    "F_lora": {
+     "n": 5,
+     "within_struct": 109.7,
+     "within_hue": 16.2,
+     "to_sheet_struct": 104.4,
+     "to_sheet_hue": 36.1
+    },
+    "F_control": {
+     "n": 5,
+     "within_struct": 106.8,
+     "within_hue": 19.7,
+     "to_sheet_struct": 102.6,
+     "to_sheet_hue": 52.0
+    },
+    "F_words": {
+     "n": 5,
+     "within_struct": 107.0,
+     "within_hue": 27.4,
+     "to_sheet_struct": 107.5,
+     "to_sheet_hue": 32.2
+    },
+    "D_qwen_sheet": {
+     "n": 5,
+     "within_struct": 108.1,
+     "within_hue": 23.1
+    }
+   },
+   "sheet_box": [
+    0.53,
+    0.31,
+    0.46
+   ],
+   "styles": {
+    "C_style_lora": {
+     "cel_anime_90s": {
+      "struct_vs_unstyled": 70.9,
+      "hue_vs_unstyled": 1.2
+     },
+     "ink_wash": {
+      "struct_vs_unstyled": 51.9,
+      "hue_vs_unstyled": 4.9
+     },
+     "retro_shoujo_70s": {
+      "struct_vs_unstyled": 57.4,
+      "hue_vs_unstyled": 3.8
+     }
+    },
+    "C_style_nolora": {
+     "cel_anime_90s": {
+      "struct_vs_unstyled": 103.5,
+      "hue_vs_unstyled": 2.7
+     },
+     "ink_wash": {
+      "struct_vs_unstyled": 97.1,
+      "hue_vs_unstyled": 28.7
+     },
+     "retro_shoujo_70s": {
+      "struct_vs_unstyled": 101.0,
+      "hue_vs_unstyled": 2.1
+     }
+    },
+    "C_style_words": {
+     "cel_anime_90s": {
+      "struct_vs_unstyled": 46.1,
+      "hue_vs_unstyled": 15.8
+     },
+     "ink_wash": {
+      "struct_vs_unstyled": 92.9,
+      "hue_vs_unstyled": 23.9
+     },
+     "retro_shoujo_70s": {
+      "struct_vs_unstyled": 49.1,
+      "hue_vs_unstyled": 13.1
+     }
+    },
+    "C_style_loraonly": {
+     "cel_anime_90s": {
+      "struct_vs_unstyled": 136.1,
+      "hue_vs_unstyled": 12.0
+     },
+     "ink_wash": {
+      "struct_vs_unstyled": 101.0,
+      "hue_vs_unstyled": 39.2
+     },
+     "retro_shoujo_70s": {
+      "struct_vs_unstyled": 99.6,
+      "hue_vs_unstyled": 22.5
+     }
+    }
+   }
+  },
+  "VIRO": {
+   "lora": "character_viro_00001_.safetensors",
+   "strength": 0.85,
+   "sheet": "sheet_anime_viro.png",
+   "head_box": [
+    0.5,
+    0.235,
+    0.32
+   ],
+   "arms": {
+    "A_lora": {
+     "n": 5,
+     "within_struct": 96.3,
+     "within_hue": 22.2,
+     "to_sheet_struct": 109.0,
+     "to_sheet_hue": 17.6
+    },
+    "B_control": {
+     "n": 5,
+     "within_struct": 107.5,
+     "within_hue": 14.6,
+     "to_sheet_struct": 112.1,
+     "to_sheet_hue": 13.8
+    },
+    "B0_words": {
+     "n": 5,
+     "within_struct": 114.8,
+     "within_hue": 57.5,
+     "to_sheet_struct": 108.4,
+     "to_sheet_hue": 51.7
+    },
+    "F_lora": {
+     "n": 5,
+     "within_struct": 99.8,
+     "within_hue": 11.1,
+     "to_sheet_struct": 119.1,
+     "to_sheet_hue": 12.0
+    },
+    "F_control": {
+     "n": 5,
+     "within_struct": 99.6,
+     "within_hue": 6.9,
+     "to_sheet_struct": 117.1,
+     "to_sheet_hue": 21.6
+    },
+    "F_words": {
+     "n": 5,
+     "within_struct": 103.2,
+     "within_hue": 32.1,
+     "to_sheet_struct": 114.6,
+     "to_sheet_hue": 31.9
+    },
+    "D_qwen_sheet": {
+     "n": 5,
+     "within_struct": 107.8,
+     "within_hue": 32.0
+    },
+    "D_qwen_photo": {
+     "n": 5,
+     "within_struct": 100.4,
+     "within_hue": 57.7
+    }
+   },
+   "sheet_box": [
+    0.44,
+    0.36,
+    0.58
+   ],
+   "styles": {
+    "C_style_lora": {
+     "cel_anime_90s": {
+      "struct_vs_unstyled": 43.5,
+      "hue_vs_unstyled": 6.1
+     },
+     "ink_wash": {
+      "struct_vs_unstyled": 59.1,
+      "hue_vs_unstyled": 10.5
+     },
+     "retro_shoujo_70s": {
+      "struct_vs_unstyled": 53.3,
+      "hue_vs_unstyled": 2.0
+     }
+    },
+    "C_style_nolora": {
+     "cel_anime_90s": {
+      "struct_vs_unstyled": 84.4,
+      "hue_vs_unstyled": 11.9
+     },
+     "ink_wash": {
+      "struct_vs_unstyled": 67.9,
+      "hue_vs_unstyled": 8.4
+     },
+     "retro_shoujo_70s": {
+      "struct_vs_unstyled": 84.1,
+      "hue_vs_unstyled": 5.1
+     }
+    },
+    "C_style_words": {
+     "cel_anime_90s": {
+      "struct_vs_unstyled": 95.0,
+      "hue_vs_unstyled": 22.0
+     },
+     "ink_wash": {
+      "struct_vs_unstyled": 107.0,
+      "hue_vs_unstyled": 65.7
+     },
+     "retro_shoujo_70s": {
+      "struct_vs_unstyled": 93.6,
+      "hue_vs_unstyled": 36.6
+     }
+    },
+    "C_style_loraonly": {
+     "cel_anime_90s": {
+      "struct_vs_unstyled": 90.8,
+      "hue_vs_unstyled": 16.5
+     },
+     "ink_wash": {
+      "struct_vs_unstyled": 94.9,
+      "hue_vs_unstyled": 47.1
+     },
+     "retro_shoujo_70s": {
+      "struct_vs_unstyled": 101.6,
+      "hue_vs_unstyled": 33.4
+     }
+    }
+   }
+  }
+ },
+ "different_people_baseline": {
+  "struct": 100.3,
+  "hue": 61.5,
+  "n_pairs": 15,
+  "means": "arm A cells of DIFFERENT characters at the SAME place and seed. This is the ceiling: what the numbers look like when it is definitely not the same person."
+ },
+ "head_box_fractions": {
+  "anime": [
+   0.5,
+   0.235,
+   0.32
+  ],
+  "qwen": [
+   0.5,
+   0.235,
+   0.3
+  ],
+  "sheets": {
+   "sheet_anime_viro.png": [
+    0.44,
+    0.36,
+    0.58
+   ],
+   "sheet_anime_nika.png": [
+    0.5,
+    0.3,
+    0.46
+   ],
+   "sheet_anime_pip.png": [
+    0.53,
+    0.31,
+    0.46
+   ],
+   "sheet_photo_viro.png": [
+    0.55,
+    0.3,
+    0.48
+   ]
+  }
+ },
+ "overridden_cells": [],
+ "excluded_cells": []
+}

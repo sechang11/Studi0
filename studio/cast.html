@@ -12,58 +12,179 @@
   *{box-sizing:border-box}
   body{margin:0;background:var(--bg);color:var(--ink);
        font:14px/1.55 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-  header{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:12px 18px;
+  header{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;padding:13px 18px;
          border-bottom:1px solid var(--line);background:var(--panel);position:sticky;top:0;z-index:9}
   header h1{margin:0;font-size:15px;letter-spacing:.07em;text-transform:uppercase}
   header .sub{color:var(--dim);font-size:12px}
-  header .right{margin-left:auto;display:flex;gap:8px}
+  header .right{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
   header a{color:var(--dim);font-size:12px;text-decoration:none;border:1px solid var(--line);
            padding:5px 10px;border-radius:6px}
   header a:hover{color:var(--ink);border-color:var(--accent)}
-  .wrap{max-width:1500px;margin:0 auto;padding:18px}
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
-  .c{background:var(--panel);border:1px solid var(--line);border-radius:11px;overflow:hidden;
-     cursor:pointer}
-  .c:hover{border-color:var(--accent)}
-  .c .por{width:100%;aspect-ratio:1;object-fit:cover;display:block;background:var(--panel2);
-          border-bottom:1px solid var(--line)}
-  .c .noimg{width:100%;aspect-ratio:1;display:flex;align-items:center;justify-content:center;
-            background:var(--panel2);color:var(--dim);font-size:12px;text-align:center;padding:0 16px;
-            border-bottom:1px solid var(--line)}
-  .c .b{padding:12px 14px}
-  .c h3{margin:0;font-size:16px}
-  .c .id{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--dim)}
-  .c p{margin:7px 0 0;color:var(--dim);font-size:12.5px}
-  .pills{margin-top:9px}
+  .bar{display:flex;gap:8px;flex-wrap:wrap;padding:12px 18px;border-bottom:1px solid var(--line);
+       background:var(--panel);position:sticky;top:52px;z-index:8}
+  input[type=search],select{background:var(--panel2);border:1px solid var(--line);color:var(--ink);
+       border-radius:7px;padding:7px 10px;font:inherit}
+  button{background:var(--panel2);border:1px solid var(--line);color:var(--ink);border-radius:7px;
+       padding:7px 11px;font:inherit;cursor:pointer}
+  button:hover{border-color:var(--accent)}
+
+  .key{padding:14px 18px 0;color:var(--dim);font-size:12.5px;max-width:110ch}
+  .key b{color:var(--ink)}
+  .key .row{display:flex;flex-wrap:wrap;gap:6px 16px;margin:7px 0}
+  .key .row span{white-space:nowrap}
+
+  .grid{padding:18px;display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(310px,1fr))}
+  .s{background:var(--panel);border:1px solid var(--line);border-radius:11px;overflow:hidden;
+     cursor:pointer;display:flex;flex-direction:column}
+  .s:hover{border-color:var(--accent)}
+  .s .por{width:100%;aspect-ratio:1/1;object-fit:cover;object-position:50% 22%;display:block;
+          background:var(--panel2)}
+  .s .noimg{aspect-ratio:1/1;display:flex;flex-direction:column;gap:5px;align-items:center;
+            justify-content:center;color:var(--dim);font-size:12px;background:var(--panel2);
+            text-align:center;padding:0 18px}
+  .s .noimg b{color:var(--bad);font-size:11px;letter-spacing:.06em;text-transform:uppercase}
+  .s .b{padding:12px 14px;flex:1}
+  .s h3{margin:0;font-size:15px}
+  .s .id{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--dim)}
+  .s .kd{float:right;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);
+         border:1px solid var(--line);border-radius:99px;padding:1px 8px}
+  .s p{margin:8px 0 0;font-size:12.5px;color:var(--dim)}
+  .c-strong{border-color:color-mix(in srgb,var(--ok) 45%,var(--line))}
+  .c-sheet {border-color:color-mix(in srgb,var(--accent) 40%,var(--line))}
+  .c-thin  {border-color:color-mix(in srgb,var(--warn) 40%,var(--line))}
+  .c-none  {border-color:color-mix(in srgb,var(--bad) 45%,var(--line))}
+  .c-broken{border-color:var(--bad)}
+
+  /* THE HEADLINE, and the reason this page was rebuilt. What holds a character's face is
+     not a property of the character - it is a property of the character AND the engine,
+     and the two answers are different. So both are always on the card, side by side,
+     rather than one badge you have to interpret. */
+  .eng2{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line);
+        border-bottom:1px solid var(--line)}
+  .eng2 .e{padding:7px 12px;font-size:11px;line-height:1.4;border-right:1px solid var(--line)}
+  .eng2 .e:last-child{border-right:0}
+  .eng2 .e b{display:block;font-size:10px;letter-spacing:.08em;text-transform:uppercase;
+             font-family:ui-monospace,Menlo,monospace}
+  .eng2 .e span{color:var(--ink);opacity:.92}
+  .h-strong{background:color-mix(in srgb,var(--ok) 16%,transparent)} .h-strong b{color:var(--ok)}
+  .h-sheet {background:color-mix(in srgb,var(--accent) 15%,transparent)} .h-sheet b{color:var(--accent)}
+  .h-thin  {background:color-mix(in srgb,var(--warn) 15%,transparent)} .h-thin b{color:var(--warn)}
+  .h-none  {background:color-mix(in srgb,var(--bad) 18%,transparent)} .h-none b{color:var(--bad)}
+  .h-broken{background:color-mix(in srgb,var(--bad) 28%,transparent)} .h-broken b{color:var(--bad)}
+
+  .vocab{margin-top:10px;display:flex;flex-wrap:wrap;gap:4px}
+  .t{font-family:ui-monospace,Menlo,monospace;font-size:11px;border:1px solid var(--line);
+     border-radius:5px;padding:1px 6px;background:var(--panel2);color:var(--ink)}
+  .t.count{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 45%,var(--line))}
+  .t.base{color:var(--ok);border-color:color-mix(in srgb,var(--ok) 40%,var(--line))}
+  .t.fb{color:var(--bad);border-color:color-mix(in srgb,var(--bad) 45%,var(--line));
+        border-style:dashed}
+  .t.more{color:var(--dim);border-style:dashed}
+
   .pill{display:inline-block;font-size:10px;letter-spacing:.05em;text-transform:uppercase;
-        border:1px solid currentColor;border-radius:99px;padding:1px 8px;margin:0 4px 4px 0}
+        border:1px solid currentColor;border-radius:99px;padding:1px 8px;margin:0 4px 4px 0;
+        color:var(--dim)}
+  .pills{margin-top:9px}
   .p-ok{color:var(--ok)} .p-no{color:var(--bad)} .p-part{color:var(--warn)}
-  h2{margin:0 0 4px;font-size:19px}
-  .lede{margin:0 0 18px;color:var(--dim);max-width:78ch}
+
+  .flag{font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;padding:5px 14px;
+        border-top:1px solid var(--line);font-family:ui-monospace,Menlo,monospace}
+  .f-bad{background:color-mix(in srgb,var(--bad) 26%,transparent);color:var(--bad)}
+  .f-warn{background:color-mix(in srgb,var(--warn) 16%,transparent);color:var(--warn)}
+  .f-dim{background:var(--panel2);color:var(--dim)}
+  .f-ok{background:color-mix(in srgb,var(--ok) 14%,transparent);color:var(--ok)}
+
+  .act{display:flex;gap:8px;padding:9px 12px;border-top:1px solid var(--line);align-items:center}
+  .act a{font-size:11.5px;text-decoration:none;color:var(--accent);border:1px solid var(--line);
+         border-radius:6px;padding:4px 9px}
+  .act a:hover{border-color:var(--accent)}
+  .act .sp{margin-left:auto;color:var(--dim);font-size:11px}
+
   dialog{border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--ink);
-         max-width:min(1250px,95vw);padding:0}
+         width:min(1180px,95vw);max-height:92vh;padding:0}
   dialog::backdrop{background:#000b}
-  .dh{display:flex;align-items:baseline;gap:12px;padding:14px 18px;border-bottom:1px solid var(--line)}
+  .dh{display:flex;align-items:baseline;gap:12px;padding:14px 18px;border-bottom:1px solid var(--line);
+      position:sticky;top:0;background:var(--panel);z-index:2}
   .dh h3{margin:0;font-size:17px}
+  .dh .id{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--dim)}
   .dh button.x{margin-left:auto;background:none;border:0;color:var(--dim);font-size:22px;cursor:pointer}
   .db{padding:18px}
-  .views{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-bottom:16px}
-  .views figure{margin:0}
-  .views img{width:100%;border-radius:7px;border:1px solid var(--line);display:block}
-  .views figcaption{font-size:10.5px;color:var(--dim);text-align:center;padding-top:3px;
-                    font-family:ui-monospace,Menlo,monospace}
-  table{width:100%;border-collapse:collapse;font-size:12.5px;margin-bottom:14px}
+  .lbl{color:var(--dim);font-size:11px;letter-spacing:.06em;text-transform:uppercase;margin-top:18px}
+  .db p{margin:5px 0 0;font-size:13px}
+  .verdict{margin-top:6px;padding:10px 12px;border-left:2px solid var(--accent);background:var(--panel2);
+           border-radius:0 7px 7px 0;font-size:13px}
+  .warnbox{margin-top:6px;padding:10px 12px;border-left:2px solid var(--warn);background:var(--panel2);
+           border-radius:0 7px 7px 0;font-size:13px}
+  .badbox{margin-top:6px;padding:10px 12px;border-left:2px solid var(--bad);background:var(--panel2);
+          border-radius:0 7px 7px 0;font-size:13px}
+  .okbox{margin-top:6px;padding:10px 12px;border-left:2px solid var(--ok);background:var(--panel2);
+         border-radius:0 7px 7px 0;font-size:13px}
+  code,.mono{font-family:ui-monospace,Menlo,monospace;font-size:12px}
+  .contrib{margin-top:6px;padding:9px 11px;background:var(--panel2);border:1px solid var(--line);
+           border-radius:8px;font-family:ui-monospace,Menlo,monospace;font-size:12px;
+           white-space:pre-wrap;word-break:break-word}
+  .none{color:var(--dim);font-style:italic}
+  table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:8px}
   td{padding:5px 7px;border-bottom:1px solid var(--line);vertical-align:top}
   td:first-child{color:var(--dim);width:24%;font-family:ui-monospace,Menlo,monospace}
-  .steps{display:grid;gap:10px;margin-top:6px}
+  tr.off td{opacity:.55}
+  .empty{padding:40px 18px;color:var(--dim)}
+  .foot{padding:6px 18px 44px;color:var(--dim);font-size:12px;max-width:110ch}
+
+  /* A reference sheet is 1024px square and would otherwise fill the whole modal and push
+     everything that matters below the fold. Contained, not cropped - the point of a sheet
+     is that you can see all of it. */
+  .hero{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;
+        align-items:start}
+  .hero figure{margin:0}
+  .hero img{width:auto;max-width:100%;max-height:300px;border-radius:8px;
+            border:1px solid var(--line);display:block;background:var(--panel2)}
+  .hero figcaption{font-size:11px;color:var(--dim);padding-top:4px}
+  .hero figcaption b{color:var(--ink);font-family:ui-monospace,Menlo,monospace}
+
+  .views{display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:8px;margin-top:8px}
+  .views figure{margin:0}
+  .views img{width:100%;border-radius:7px;border:1px solid var(--line);display:block;
+             background:var(--panel2)}
+  .views figcaption{font-size:10.5px;color:var(--dim);text-align:center;padding-top:3px;
+                    font-family:ui-monospace,Menlo,monospace}
+  .demos{display:grid;gap:12px;margin-top:8px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+  .demos figure{margin:0}
+  /* Demo renders are a mix of wide contact sheets and single portraits, so an uncapped
+     height lets one portrait set the row and leaves the sheets tiny beside it. */
+  .demos img{width:auto;max-width:100%;max-height:330px;border-radius:8px;
+             border:1px solid var(--line);display:block;background:var(--panel2)}
+  .demos figcaption{font-size:11px;color:var(--dim);padding-top:4px}
+  .demos figcaption b{color:var(--ink);font-family:ui-monospace,Menlo,monospace}
+
+  /* The two engines, opened out. Same split as the card, more words. */
+  /* align-items:start, not stretch: the two engines rarely have the same amount to say
+     and a stretched panel leaves a 400px empty box beside the one with the conflicts. */
+  .pans2{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:12px;
+         margin-top:8px;align-items:start}
+  .pan{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--panel2)}
+  .pan .hd{padding:9px 13px;font-size:11px;letter-spacing:.06em;text-transform:uppercase;
+           font-family:ui-monospace,Menlo,monospace}
+  .pan .bd{padding:11px 13px;font-size:12.5px}
+  .pan .bd p{margin:0 0 7px;font-size:12.5px}
+  .pan .bd p:last-child{margin-bottom:0}
+  .cf{margin-top:7px;padding:8px 10px;border-radius:7px;font-size:12px;background:var(--panel)}
+  .cf b{display:block;font-size:10px;letter-spacing:.06em;text-transform:uppercase}
+  .cf-error{border-left:2px solid var(--bad)} .cf-error b{color:var(--bad)}
+  .cf-warning{border-left:2px solid var(--warn)} .cf-warning b{color:var(--warn)}
+  .cf-note{border-left:2px solid var(--dim)} .cf-note b{color:var(--dim)}
+  .cf .fix{color:var(--dim);display:block;margin-top:3px}
+
+  .steps{display:grid;gap:10px;margin-top:8px}
   .step{background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:12px 14px}
+  .step.done{opacity:.62}
   .step b{display:block;margin-bottom:3px}
   .step .cmd{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;background:var(--bg);
              border:1px solid var(--line);border-radius:6px;padding:7px 9px;margin-top:7px;
              overflow-x:auto;white-space:pre}
   .hint{color:var(--dim);font-size:12px}
-  .warn{border-left:3px solid var(--warn);padding:10px 13px;background:var(--panel);
-        border-radius:0 8px 8px 0;font-size:13px;margin-bottom:16px}
+  .go{display:inline-block;margin-top:14px;text-decoration:none;color:#0f1115;
+      background:var(--accent);border-radius:7px;padding:8px 14px;font-size:13px}
 </style>
 </head>
 <body>
@@ -71,109 +192,491 @@
   <h1>cast</h1><span class="sub" id="stat">loading…</span>
   <div class="right">
     <a href="/wizard">direct a scene</a><a href="/make">make</a>
-    <a href="/styles">styles</a><a href="/places">Places</a><a href="/loras">loras</a><a href="/tags">tags</a><a href="/verify">verify</a><a href="/">library</a>
+    <a href="/styles">styles</a><a href="/places">Places</a><a href="/loras">loras</a>
+    <a href="/tags">tags</a><a href="/verify">verify</a><a href="/gallery">gallery</a>
+    <a href="/">library</a>
   </div>
 </header>
-<div class="wrap">
-  <h2>The people in your films</h2>
-  <p class="lede">A character is a reusable identity, not a description you retype. Each
-  one carries the tags that name them, a damage ladder, a voice, a reference sheet, and —
-  once trained — a LoRA that makes them <em>the same person</em> rather than someone who
-  matches the description.</p>
-  <div class="grid" id="grid"></div>
+
+<div class="bar">
+  <input type="search" id="q" placeholder="search a name, a tag, a voice, a garment…"
+         style="flex:1;min-width:220px">
+  <select id="hold">
+    <option value="">held by anything</option>
+    <option value="strong">trained weights — the strongest lock</option>
+    <option value="sheet">a reference sheet only</option>
+    <option value="none">nothing at all, on some engine</option>
+  </select>
+  <select id="asset">
+    <option value="">any state</option>
+    <option value="nosheet">no reference sheet on disk</option>
+    <option value="noviews">no turnaround</option>
+    <option value="trainable">a dataset ready to train</option>
+    <option value="brokenlora">names a LoRA that is not on disk</option>
+    <option value="nowear">no wear_tags of their own</option>
+  </select>
+  <select id="vf">
+    <option value="">any voice</option>
+    <option value="blocked">cast with a BLOCKED voice</option>
+    <option value="unresolved">voice matches no card</option>
+    <option value="novoice">no voice</option>
+  </select>
+  <select id="sort">
+    <option value="ready">most complete first</option>
+    <option value="name">by name</option>
+  </select>
 </div>
 
-<dialog id="dlg"><div class="dh"><h3 id="dname"></h3><span class="id" id="did"></span>
-  <button class="x" id="dx">×</button></div>
-<div class="db" id="dbody"></div></dialog>
+<div class="key">
+  A character is a reusable identity, not a description you retype. <b>What holds their face is
+  not a property of the character — it is a property of the character and the engine</b>, and the
+  two answers are different. That is the single most confusing thing in this system, so every card
+  states both.
+  <div class="row">
+    <span style="color:var(--accent)"><b>anime</b> animagine — IPAdapter from the sheet, plus a
+      trained LoRA if one exists</span>
+    <span style="color:var(--ok)"><b>qwen</b> Qwen-Image — the sheet through Qwen-Image-Edit, and
+      nothing else</span>
+  </div>
+  A trained character LoRA is a delta on animagine's weights. On the qwen engine every one of its
+  keys is rejected: the file is passed through, quietly never read, and you get a different person
+  each shot with no warning anywhere. So a character with no LoRA says so plainly here rather than
+  looking the same as one with.
+</div>
+
+<div class="grid" id="grid"></div>
+<div class="empty" id="empty" style="display:none"></div>
+<div class="foot" id="foot"></div>
+
+<dialog id="dlg">
+  <div class="dh"><h3 id="dname"></h3><span class="id" id="did"></span>
+    <button class="x" id="dx" title="close">&times;</button></div>
+  <div class="db" id="dbody"></div>
+</dialog>
 
 <script>
-let CAST=[];
+let CAST=[], BYID={};
 const $=id=>document.getElementById(id);
 const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const bytes=n=>{if(n==null)return"";const u=["B","KiB","MiB","GiB"];let i=0,v=n;
+  while(v>=1024&&i<u.length-1){v/=1024;i++;}return (i?v.toFixed(1):v)+" "+u[i];};
 
-function pill(ok,label,cls){ return `<span class="pill ${ok?(cls||"p-ok"):"p-no"}">${esc(label)}</span>`; }
+// ---------------------------------------------------------------------------
+// WHAT HOLDS THE FACE. The API reports facts - does the sheet exist, is the LoRA on disk,
+// what did compose.resolve() say on each engine. The words for those facts live here, the
+// same way /loras keeps its base-model prose in the page.
+//
+// lora_active comes from the resolver and is true whenever the card NAMES weights and the
+// engine is anime; the resolver never checks that the file is there. lora_exists is the
+// filesystem answer. Both are needed - a card naming a deleted .safetensors used to look
+// exactly like a trained character on this page.
+// ---------------------------------------------------------------------------
+function hold(c,eng){
+  const id=(c.identity||{})[eng]||{};
+  const sheet=c.sheet_exists===true, named=!!c.sheet;
+  const wants=!!id.lora_active || (eng==="anime"&&!!c.lora), onDisk=c.lora_exists;
+  if(eng==="anime"){
+    if(wants&&onDisk===false) return {k:"broken",lab:"weights missing",
+      say:"The card names trained weights and the file is not in models/loras. The render loads "+
+          "nothing, falls back to the base model, and says so nowhere."};
+    if(wants&&sheet) return {k:"strong",lab:"trained LoRA + sheet",
+      say:"Trained weights on top of animagine, plus IPAdapter from the reference sheet. This is "+
+          "the strongest identity lock in the project - the character stops being a prompt and "+
+          "becomes a model."};
+    if(wants) return {k:"strong",lab:"trained LoRA, no sheet",
+      say:"Trained weights on top of animagine. There is no sheet, so IPAdapter sits at weight "+
+          "0.0 and the weights are doing all of the work alone."};
+    if(sheet) return {k:"sheet",lab:"IPAdapter from the sheet",
+      say:"One reference sheet through IPAdapter. It refines a face rather than fixing it, and a "+
+          "weight sweep on this box found the character already recognisable at zero - so a "+
+          "single sheet carries less than you would think."};
+    if(named) return {k:"broken",lab:"sheet named, not rendered",
+      say:"The card names a reference sheet that is not in ComfyUI/input. IPAdapter drops to "+
+          "weight 0.0 on every shot and nothing warns you."};
+    return {k:"none",lab:"nothing",
+      say:"No weights and no sheet. IPAdapter is at weight 0.0 and the face is redrawn from the "+
+          "tags every shot, so they will not be the same person twice."};
+  }
+  if(sheet) return {k:"thin",lab:"sheet through Qwen-Edit",
+    say:"The reference sheet goes through Qwen-Image-Edit. MEASURED: prose alone gave four "+
+        "different men across four places; the sheet gave one recognisable man across all four. "+
+        "It also imports the sheet's STYLE as forcefully as its identity - an illustrated sheet "+
+        "produced a comic in every cell despite the prompt asking for a photograph."};
+  if(named) return {k:"broken",lab:"sheet named, not rendered",
+    say:"The card names a reference sheet that is not in ComfyUI/input, so the qwen edit path has "+
+        "no reference to load and this is the prose-only case."};
+  return {k:"none",lab:"prose only",
+    say:"Nothing but the prose description. MEASURED: that produced four different men across "+
+        "four places. Qwen cannot be steered off photography by prompt at any cfg either."};
+}
+const RANK={strong:4,sheet:3,thin:2,none:1,broken:0};
+function worst(c){
+  const a=hold(c,"anime"), q=hold(c,"qwen");
+  return RANK[a.k]<=RANK[q.k]?a.k:q.k;
+}
+function score(c){
+  return (c.lora_exists===true?8:0)+(c.sheet_exists===true?4:0)+((c.views||[]).length?2:0)+
+         ((c.wear_tags||[]).length?1:0);
+}
+
+// A count tag is the first thing in the string and the model reads it as "how many people".
+// 1man is not one, which is why it is called out rather than drawn like any other tag.
+const COUNT=/^(1boy|1girl|1other|2boys|2girls|solo|multiple)\b/i;
+function chips(str,cls,limit){
+  const t=String(str||"").split(",").map(s=>s.trim()).filter(Boolean);
+  const shown=limit?t.slice(0,limit):t;
+  return shown.map((x,i)=>`<span class="t ${i===0&&COUNT.test(x)?"count":(cls||"")}">${esc(x)}</span>`)
+    .join("")+(limit&&t.length>limit?`<span class="t more">+${t.length-limit} more</span>`:"");
+}
+
+function flags(c){
+  const f=[];
+  if(c.unreadable) f.push(["bad","this card is not valid JSON"]);
+  if(c.sheet&&c.sheet_exists===false)
+    f.push(["bad","sheet named on the card is not on disk — "+c.sheet]);
+  if(!c.sheet&&!c.unreadable) f.push(["bad","no reference sheet at all"]);
+  if(c.lora&&c.lora_exists===false)
+    f.push(["bad","LoRA named on the card is not in models/loras — "+c.lora]);
+  if((c.voice_card||{}).status==="blocked")
+    f.push(["bad","cast with a BLOCKED voice — a clone of a real person"]);
+  if(c.voice&&!c.voice_card) f.push(["warn","voice string matches no card in studio/voices"]);
+  if(!c.voice&&!c.unreadable) f.push(["warn","no voice — a character who speaks fails the compile"]);
+  if(!(c.wear_tags||[]).length&&!c.unreadable)
+    f.push(["warn","no wear_tags — a clean uniform at every damage level"]);
+  if(!c.base_tags&&c.base_tags_fallback)
+    f.push(["warn","no base_tags — every anime prompt gets " + c.base_tags_fallback]);
+  const cf=[].concat(...["anime","qwen"].map(e=>((c.identity||{})[e]||{}).conflicts||[]));
+  if(cf.some(x=>x.code==="count_tag_wrong"))
+    f.push(["warn","tags open with 1man, which is not a count tag"]);
+  if(c.lora_exists===true&&c.sheet_exists===true&&(c.views||[]).length&&(c.wear_tags||[]).length)
+    f.push(["ok","complete — sheet, turnaround, trained weights, own clothes"]);
+  return f;
+}
 
 function draw(){
-  $("stat").textContent=`${CAST.length} characters`;
-  $("grid").innerHTML=CAST.map(c=>{
-    const por=c.views&&c.views.length?c.views[0]:null;
-    return `<div class="c" data-id="${esc(c.id)}">
-      ${por?`<img class="por" loading="lazy" src="${esc(por.file)}" alt="">`
-           :`<div class="noimg">no turnaround yet</div>`}
-      <div class="b">
-        <h3>${esc(c.name||c.id)}</h3>
-        <div class="id">${esc(c.id)}</div>
-        <p>${esc(c.desc||"")}</p>
-        <div class="pills">
-          ${pill(!!c.sheet,"sheet")}
-          ${pill(!!c.voice,"voice")}
-          ${pill((c.views||[]).length>0,(c.views||[]).length+" views")}
-          ${pill(!!c.lora,c.lora?"LoRA trained":"no LoRA")}
-        </div>
-      </div></div>`;}).join("")
-    || `<p class="hint">No characters in <code>studio/characters/</code> yet.</p>`;
-  document.querySelectorAll("[data-id]").forEach(el=>el.onclick=()=>open_(el.dataset.id));
+  const q=$("q").value.trim().toLowerCase(), hf=$("hold").value, af=$("asset").value,
+        vf=$("vf").value, sf=$("sort").value;
+  const v=CAST.filter(c=>{
+    const a=hold(c,"anime").k, w=hold(c,"qwen").k;
+    if(hf==="strong"&&a!=="strong") return false;
+    if(hf==="sheet"&&!(a==="sheet"||w==="thin")) return false;
+    if(hf==="none"&&!(a==="none"||w==="none")) return false;
+    if(af==="nosheet"&&c.sheet_exists===true) return false;
+    if(af==="noviews"&&(c.views||[]).length) return false;
+    if(af==="trainable"&&!((c.dataset||{}).pairs>=8)) return false;
+    if(af==="brokenlora"&&!(c.lora&&c.lora_exists===false)) return false;
+    if(af==="nowear"&&(c.wear_tags||[]).length) return false;
+    if(vf==="blocked"&&(c.voice_card||{}).status!=="blocked") return false;
+    if(vf==="unresolved"&&!(c.voice&&!c.voice_card)) return false;
+    if(vf==="novoice"&&c.voice) return false;
+    if(!q) return true;
+    return [c.id,c.name,c.desc,c.tags,c.base_tags,c.prose,c.voice,c.lora,c.sheet,c.note,
+            (c.wear_tags||[]).join(" "),(c.voice_card||{}).name]
+      .join(" ").toLowerCase().includes(q);
+  });
+  v.sort(sf==="name"
+    ? (a,b)=>String(a.name||a.id).localeCompare(String(b.name||b.id))
+    : (a,b)=>score(b)-score(a)||String(a.name||a.id).localeCompare(String(b.name||b.id)));
+
+  const nosheet=CAST.filter(c=>c.sheet_exists!==true).length;
+  const trained=CAST.filter(c=>c.lora_exists===true).length;
+  $("stat").textContent=`${v.length} of ${CAST.length} characters · ${trained} with trained `+
+    `weights · ${nosheet} with no reference sheet on disk`;
+
+  $("empty").style.display=v.length?"none":"block";
+  $("empty").textContent=CAST.length?"Nothing matches those filters."
+    :"No characters in studio/characters/ yet. A character is one JSON file: an id, the tags that "+
+     "never change about them, a wear_tags ladder, a voice and a reference sheet.";
+  $("grid").innerHTML=v.map(card).join("");
+  $("grid").querySelectorAll("[data-id]").forEach(el=>el.onclick=e=>{
+    if(e.target.closest("a")) return;
+    open_(el.dataset.id);
+  });
+}
+
+function card(c){
+  const a=hold(c,"anime"), w=hold(c,"qwen");
+  const por=(c.views||[])[0];
+  const img=por?`<img class="por" loading="lazy" src="${esc(por.file)}" alt="">`
+    :c.sheet_url?`<img class="por" loading="lazy" src="${esc(c.sheet_url)}" alt="">`
+    :`<div class="noimg"><b>${c.sheet?"sheet not rendered":"no reference at all"}</b>
+       <span>${c.sheet?"the card names "+esc(c.sheet)+" and it is not in ComfyUI/input"
+                     :"nothing is holding this face on either engine"}</span></div>`;
+  const ds=c.dataset||{}, views=(c.views||[]).length;
+  return `<div class="s c-${worst(c)}" data-id="${esc(c.id)}">
+    ${img}
+    <div class="eng2">
+      <div class="e h-${a.k}"><b>anime</b><span>${esc(a.lab)}</span></div>
+      <div class="e h-${w.k}"><b>qwen</b><span>${esc(w.lab)}</span></div>
+    </div>
+    <div class="b">
+      <h3>${esc(c.name||c.id)}${c.status?`<span class="kd">${esc(c.status)}</span>`:""}</h3>
+      <div class="id">${esc(c.id)}</div>
+      <p>${esc(c.desc||"")}</p>
+      <div class="vocab">${chips(c.tags,"",8)}</div>
+      <div class="pills">
+        <span class="pill ${views?"p-ok":"p-no"}">${views||"no"} turnaround view${views===1?"":"s"}</span>
+        <span class="pill ${(c.wear_tags||[]).length?"p-ok":"p-part"}">${
+          (c.wear_tags||[]).length?(c.wear_tags.length+" wear levels"):"uniform fallback"}</span>
+        ${ds.pairs?`<span class="pill p-ok">${ds.pairs} training pairs</span>`:""}
+        ${(c.demos||[]).length?`<span class="pill">${c.demos.length} demo renders</span>`:""}
+        <span class="pill ${(c.voice_card||{}).status==="blocked"?"p-no"
+          :c.voice_card?"p-ok":"p-part"}">${
+          esc((c.voice_card||{}).id||(c.voice?"voice unmatched":"no voice"))}</span>
+      </div>
+    </div>
+    ${flags(c).map(([k,t])=>`<div class="flag f-${k}">${esc(t)}</div>`).join("")}
+    <div class="act">
+      <a href="/wizard" title="open the wizard, then pick ${esc(c.id)} on its cast step">direct a scene &rarr;</a>
+      <span class="sp">${(c.demos||[]).length||views?"evidence inside":"nothing rendered yet"}</span>
+    </div></div>`;
+}
+
+function panel(c,eng,name){
+  const h=hold(c,eng), id=(c.identity||{})[eng]||{};
+  const cf=(id.conflicts||[]);
+  return `<div class="pan">
+    <div class="hd h-${h.k}">${esc(name)} &nbsp;·&nbsp; ${esc(h.lab)}</div>
+    <div class="bd">
+      <p>${esc(h.say)}</p>
+      ${id.lora_reason?`<p class="hint">resolver — ${esc(id.lora_reason)}</p>`:""}
+      ${id.error?`<p class="hint">the resolver failed on this character: ${esc(id.error)}</p>`:""}
+      ${cf.map(x=>`<div class="cf cf-${esc(x.severity)}"><b>${esc(x.severity)} · ${esc(x.code)}</b>
+        ${esc(x.message)}${x.fix?`<span class="fix">fix — ${esc(x.fix)}</span>`:""}</div>`).join("")}
+      ${id.prompt?`<div class="lbl" style="margin-top:12px">the prompt this engine will send</div>
+        <div class="contrib">${esc(id.prompt)}</div>`:""}
+    </div></div>`;
 }
 
 function open_(id){
-  const c=CAST.find(x=>x.id===id);
+  const c=BYID[id]; if(!c) return;
   $("dname").textContent=c.name||c.id;
-  $("did").textContent=c.id;
+  $("did").textContent=c.id+(c.status?" · "+c.status:"")+(c.todo?" · todo: "+c.todo:"");
+  const ds=c.dataset||{}, lc=c.lora_card||null, vc=c.voice_card||null;
   const rows={};
-  if(c.tags) rows["identity tags"]=c.tags;
-  if(c.prose) rows["prose (qwen path)"]=c.prose;
-  if(c.sheet) rows["reference sheet"]=c.sheet;
+  if(c.tags) rows["tags"]=c.tags;
+  if(c.base_tags) rows["base_tags"]=c.base_tags;
+  if(c.prose) rows["prose"]=c.prose;
+  if(c.sheet) rows["sheet"]=c.sheet+(c.sheet_exists===true?"":"   — NOT ON DISK");
   if(c.voice) rows["voice"]=c.voice;
-  if(c.lora) rows["LoRA"]=c.lora+(c.lora_steps?` · ${c.lora_steps} steps · rank ${c.lora_rank}`:"");
-  if(c.lora_dataset) rows["trained on"]=c.lora_dataset;
+  if(c.lora) rows["lora"]=c.lora+(c.lora_exists===false?"   — NOT ON DISK"
+    :c.lora_size?"   · "+bytes(c.lora_size):"");
+  if(c.lora_steps) rows["training"]=`${c.lora_steps} steps · rank ${c.lora_rank} · ${
+    c.lora_dataset||"?"}${c.lora_trained_at?" · "+c.lora_trained_at:""}`;
+  rows["dataset"]=ds.exists?`${ds.pairs} complete png+txt pairs · ${ds.images} images, ${
+    ds.captions} captions · ${ds.dir}`:`nothing at ${ds.dir||"ComfyUI/input/<id>_train"}`;
+
+  const tool=c.sheet_tool;
+  // The two sheet tools that exist render on DIFFERENT engines, and a sheet imports its
+  // style as forcefully as its identity - so which one you run is a decision about the
+  // film, not a detail. Print both, labelled, rather than picking one silently.
+  const tools=(c.sheet_tools&&c.sheet_tools.length?c.sheet_tools:(tool?[tool]:[]));
+  const toolLabel=t=>t.indexOf("qwen")>=0?"   # qwen — a photograph"
+                    :t.indexOf("anime")>=0?"   # animagine — an illustration":"";
+  const steps=[
+    {done:c.sheet_exists===true,
+     t:"1 · a reference sheet",
+     h:"One portrait, in ComfyUI/input, because ComfyUI's LoadImage reads nowhere else. It is "+
+       "what IPAdapter refines from on the anime path and the only thing holding the face on "+
+       "qwen. A sheet imports its style as forcefully as its identity, so render it in the style "+
+       "the film is going to be — which is why there is one tool per engine below.",
+     cmd:tools.length?tools.map(t=>`python3 ${t} ${c.id}${toolLabel(t)}`).join("\n"):null,
+     warn:tool?null:"THERE IS NO TOOL FOR THIS YET. scripts/make_sheets.py — which this page, "+
+       "compose.py and compile.py have all printed as the fix — takes a FILM as a required "+
+       "positional and reads its designs block, so it exits on argparse for a bare character "+
+       "card. Until a sheet tool lands, render the sheet by hand and drop it in ComfyUI/input."},
+    {done:(c.views||[]).length>0,
+     t:`2 · a turnaround${(c.views||[]).length?" — "+c.views.length+" views":""}`,
+     h:"16 views of the same person, angles then expressions, framing held constant. A qwen job "+
+       "even for an anime character — Qwen-Image-Edit 2511 plus the multiple-angles LoRA, about "+
+       "4.5 seconds a view. It is both a far stronger reference and the training set.",
+     cmd:`python3 studio/_tools/turnaround.py ${c.id}`},
+    {done:c.lora_exists===true,
+     t:`3 · trained weights${ds.pairs?" — "+ds.pairs+" pairs ready":""}`,
+     h:"Animagine only, and about ten minutes for 1000 steps at rank 16. The character stops "+
+       "being a prompt and becomes a model. Trained weights do not attach to qwen, ever.",
+     cmd:`python3 studio/_tools/train_character.py ${c.id}`,
+     warn:(ds.pairs&&ds.pairs<8)?`Only ${ds.pairs} complete pairs in the dataset. The tool warns `+
+       `below 8 — run the turnaround first.`:null},
+    {done:(c.demos||[]).length>0,
+     t:"4 · look at it",
+     h:"The control is the whole measurement. Same character, same places, weights on and "+
+       "weights dropped, then open both and compare the faces. Overfitting reproduces the "+
+       "training set, undertraining changes nothing, and neither shows up in a loss number.",
+     cmd:`python3 studio/_tools/character_demo.py ${c.id}\npython3 studio/_tools/character_demo.py ${c.id} --no-lora`},
+  ];
 
   $("dbody").innerHTML=`
-    ${(c.views||[]).length?`<div class="views">${c.views.map(v=>`
-      <figure><img loading="lazy" src="${esc(v.file)}" alt=""><figcaption>${esc(v.name)}</figcaption></figure>`
-      ).join("")}</div>`:`<div class="warn">No turnaround yet — this character is still
-      just a description. Step 2 below is what makes them a person the model can
-      reproduce.</div>`}
+    <div class="hero">
+      ${c.sheet_url?`<figure><img src="${esc(c.sheet_url)}" alt="">
+        <figcaption><b>${esc(c.sheet)}</b><br>the reference sheet, mirrored from
+        ${esc(c.sheet_dir||"ComfyUI/input")}</figcaption></figure>`
+       :c.sheet?`<figure><div class="badbox" style="margin:0">This card names
+          <span class="mono">${esc(c.sheet)}</span> and it is not in
+          <span class="mono">${esc(c.sheet_dir||"ComfyUI/input")}</span>. Nothing is holding this
+          face on either engine.</div></figure>`
+       :`<figure><div class="badbox" style="margin:0">No reference sheet on this card at all.
+          IPAdapter falls to weight 0.0 on every anime shot and the qwen path has nothing to
+          load.</div></figure>`}
+      ${(c.views||[])[0]?`<figure><img src="${esc(c.views[0].file)}" alt="">
+        <figcaption><b>${esc(c.views[0].name)}</b><br>first of ${c.views.length} turnaround
+        views</figcaption></figure>`:""}
+    </div>
 
+    <div class="lbl">what is holding this face</div>
+    <div class="pans2">
+      ${panel(c,"anime","anime · animagine")}
+      ${panel(c,"qwen","qwen · Qwen-Image")}
+    </div>
+
+    <div class="lbl">identity vocabulary — this is what you edit when a face drifts</div>
+    <p class="hint">The model renders nouns, not adjectives. Identity survives on concrete things
+      — two-tone hair, a gold ear stud, number 7 — not on "handsome" or "kind". Tag order is
+      load-bearing on the anime path: identity, then face, then the garment in its state, then the
+      world. Earlier and more specific wins.</p>
+    ${c.tags?`<div class="lbl" style="margin-top:12px">tags — slot 1, anime</div>
+      <div class="vocab" style="margin-top:6px">${chips(c.tags)}</div>`
+     :`<div class="badbox">No tags. On the anime engine this character has no identity at all.</div>`}
+    ${c.base_tags?`<div class="lbl" style="margin-top:12px">base_tags — slot 2, anime</div>
+      <div class="vocab" style="margin-top:6px">${chips(c.base_tags,"base")}</div>`
+     :c.base_tags_fallback?`<div class="lbl" style="margin-top:12px">base_tags — slot 2, anime,
+        NOT ON THIS CARD</div>
+      <div class="vocab" style="margin-top:6px">${chips(c.base_tags_fallback,"fb")}</div>
+      <div class="warnbox">This card sets no <span class="mono">base_tags</span>, so the resolver
+        appends its own default — <span class="mono">${esc(c.base_tags_fallback)}</span> — to
+        every anime prompt of this character, in slot 2. That is the earliest and most specific
+        position after the identity tags, which is the position that already won the
+        pristine-jersey argument. On anyone who is not an adult man it is actively wrong.</div>`:""}
+    ${c.prose?`<div class="lbl" style="margin-top:12px">prose — slot 1, qwen</div>
+      <div class="contrib">${esc(c.prose)}</div>`
+     :`<div class="warnbox">No <span class="mono">prose</span>. On the qwen engine the resolver
+       falls back to the danbooru tag string, which feeds comma-separated tags to a model that
+       reads sentences.</div>`}
+
+    ${(c.wear_tags||[]).length?`
+      <div class="lbl">wear — the damage ladder</div>
+      <p class="hint">Appended as the film progresses and never allowed to decrease, so a torn
+        shirt cannot un-tear itself. The garment noun lives in every rung in its damaged state: a
+        jersey described as pristine in <span class="mono">tags</span> and torn only in the ladder
+        renders pristine, because earlier and more specific wins.</p>
+      <table>${c.wear_tags.map((w,i)=>
+        `<tr><td>wear ${i}</td><td>${esc(w)}</td></tr>`).join("")}</table>`
+     :`<div class="lbl">wear — the damage ladder</div>
+      <div class="warnbox"><b>This character has no clothes of their own.</b> Every damage level
+        falls back to the project's generic ladder below, which is a sports vocabulary — so
+        whatever they are actually wearing, they render in a
+        <span class="mono">clean uniform</span> at wear 0 and a
+        <span class="mono">torn bloodied uniform</span> at wear 4.</div>
+      ${(c.wear_fallback||[]).length?`<table>${c.wear_fallback.map((w,i)=>
+        `<tr class="off"><td>wear ${i}</td><td>${esc(w)}</td></tr>`).join("")}</table>`:""}`}
+
+    ${(c.views||[]).length?`<div class="lbl">turnaround — ${c.views.length} views</div>
+      <div class="views">${c.views.map(v=>`<figure><img loading="lazy" src="${esc(v.file)}" alt="">
+        <figcaption>${esc(v.name)}</figcaption></figure>`).join("")}</div>`
+     :`<div class="lbl">turnaround</div>
+      <p class="none">None. Without one there is no training set, and the reference is a single
+        frontal frame.</p>`}
+
+    ${(c.demos||[]).length?`<div class="lbl">rendered evidence</div>
+      <p class="hint">Everything under <span class="mono">studio/samples/</span> that names this
+        character. A <span class="mono">nolora</span> grid beside its ordinary twin is the
+        control: same character, same places, the weights dropped.</p>
+      <div class="demos">${c.demos.map(d=>`<figure>
+        <a href="${esc(d.file)}" target="_blank"><img loading="lazy" src="${esc(d.file)}" alt=""></a>
+        <figcaption><b>${esc(d.name)}</b><br>${esc(d.where)}</figcaption></figure>`).join("")}</div>`
+     :`<div class="lbl">rendered evidence</div>
+      <p class="none">Nothing has been rendered with this character yet, so every claim on this
+        card is a prediction.</p>`}
+
+    <div class="lbl">voice</div>
+    ${vc?`${vc.status==="blocked"?`<div class="badbox"><b>THIS VOICE IS BLOCKED.</b>
+        ${esc(vc.name)} is a clone of a real, identifiable person. It must not be cast — recast
+        this character before anything is rendered or spoken.</div>`
+      :`<div class="okbox"><b>${esc(vc.name)}</b> · engine
+        <span class="mono">${esc(vc.engine||"")}</span> ·
+        <span class="mono">${esc(vc.file||"")}</span></div>`}
+      <table>
+        <tr><td>sounds like</td><td>${esc(vc.sounds_like||"")}</td></tr>
+        <tr><td>casts well as</td><td>${esc(vc.casts_well_as||"")}</td></tr>
+        <tr><td>avoid for</td><td>${esc(vc.avoid_for||"")}</td></tr>
+        ${vc.note?`<tr><td>note</td><td>${esc(vc.note)}</td></tr>`:""}
+      </table>`
+     :c.voice?`<div class="warnbox">The card carries
+       <span class="mono">${esc(c.voice)}</span> and nothing in
+       <span class="mono">studio/voices/</span> matches it, so none of the casting guidance for
+       that voice is visible here and the compile may not find it either.</div>`
+     :`<div class="warnbox">No voice. compile.py hard-fails a film in which this character
+       speaks.</div>`}
+
+    <div class="lbl">trained weights</div>
+    ${c.lora?(c.lora_exists===false
+      ?`<div class="badbox"><b>THE FILE IS NOT ON DISK.</b> This card names
+        <span class="mono">${esc(c.lora)}</span> and it is not in
+        <span class="mono">${esc(c.lora_dir||"models/loras")}</span>. The resolver still reports
+        the LoRA as active on the anime engine, because it only checks that the card names
+        one.</div>`
+      :`<div class="okbox"><span class="mono">${esc(c.lora)}</span>${
+        c.lora_size?" · "+esc(bytes(c.lora_size)):""} is in
+        <span class="mono">${esc(c.lora_dir||"models/loras")}</span>.</div>`)
+     :`<p class="none">None. This character's face is held by the reference sheet alone — the
+       weaker mechanism on anime, and the only one on qwen.</p>`}
+    ${lc?`<table>
+      <tr><td>lora card</td><td><span class="mono">${esc(lc.id)}</span> — ${esc(lc.name||"")}</td></tr>
+      <tr><td>base model</td><td><span class="mono">${esc(lc.base_model||"")}</span> — attaches to
+        the <b>${esc(lc.engine||"")}</b> engine only</td></tr>
+      <tr><td>trigger</td><td><span class="mono">${esc(lc.trigger||"")}</span></td></tr>
+      <tr><td>strength</td><td>${esc(String(lc.strength))}${
+        Array.isArray(lc.strength_range)?" · useful "+esc(String(lc.strength_range[0]))+"–"+
+        esc(String(lc.strength_range[1])):""}</td></tr>
+      ${lc.verdict?`<tr><td>what was seen</td><td>${esc(lc.verdict)}</td></tr>`:""}
+      ${lc.note?`<tr><td>note</td><td>${esc(lc.note)}</td></tr>`:""}
+      </table>`
+     :c.lora?`<div class="warnbox">No card in <span class="mono">studio/loras/</span> describes
+       this file, so it does not appear on the LoRA page and its trigger word and useful strength
+       range are recorded nowhere.</div>`:""}
+
+    <div class="lbl">the card on disk</div>
     <table>${Object.entries(rows).map(([k,v])=>
       `<tr><td>${esc(k)}</td><td>${esc(v)}</td></tr>`).join("")}</table>
+    ${c.note?`<div class="lbl">what this card knows about itself</div>
+      <p style="color:var(--dim)">${esc(c.note)}</p>`:""}
 
-    ${(c.wear_tags||[]).length?`<div class="hint" style="margin-bottom:5px">damage ladder —
-      appended as the film progresses, and it never decreases</div>
-      <table>${c.wear_tags.map((w,i)=>
-        `<tr><td>wear ${i}</td><td>${esc(w)}</td></tr>`).join("")}</table>`:""}
+    <div class="lbl">making them consistent</div>
+    <p class="hint">Four stages. Each one holds the identity harder than the last, and each is run
+      from a terminal on the box.</p>
+    <div class="steps">${steps.map(s=>`<div class="step${s.done?" done":""}">
+      <b>${esc(s.t)}${s.done?" ✓":""}</b><span class="hint">${esc(s.h)}</span>
+      ${s.warn&&!s.done?`<div class="badbox">${esc(s.warn)}</div>`:""}
+      ${s.cmd?`<div class="cmd">${esc(s.cmd)}</div>`:""}</div>`).join("")}</div>
 
-    <h3 style="font-size:15px;margin:18px 0 2px">Making them consistent</h3>
-    <p class="hint" style="margin:0 0 8px">Three stages. Each one makes the identity hold
-      harder than the last, and each is run from a terminal on the box.</p>
-    <div class="steps">
-      <div class="step">
-        <b>1 · A reference sheet ${c.sheet?"✓":""}</b>
-        <span class="hint">One portrait. IPAdapter refines a face from it — but a weight
-        sweep on this box found the character was <em>already recognisable at zero</em>,
-        so a single sheet carries less than you would think.</span>
-        <div class="cmd">python3 scripts/make_sheets.py</div>
-      </div>
-      <div class="step">
-        <b>2 · A turnaround ${(c.views||[]).length?"✓ "+c.views.length+" views":""}</b>
-        <span class="hint">16 views of the same person — angles then expressions, framing
-        held constant. This is both a far stronger reference and the training set.</span>
-        <div class="cmd">python3 studio/_tools/turnaround.py ${esc(c.id)}</div>
-      </div>
-      <div class="step">
-        <b>3 · A trained LoRA ${c.lora?"✓":""}</b>
-        <span class="hint">The character stops being a prompt and becomes a model. Minutes,
-        not seconds. Afterwards generate the same prompt with and without it at one seed
-        and <em>look</em> — overfitting reproduces the training images, undertraining
-        changes nothing, and neither shows up in a loss number.</span>
-        <div class="cmd">python3 studio/_tools/train_character.py ${esc(c.id)}</div>
-      </div>
-    </div>`;
+    <a class="go" href="/wizard">take ${esc(c.name||c.id)} into a scene &rarr;</a>
+    <p class="hint">The wizard does not read a character out of the URL, so it opens on its own
+      cast step — pick <span class="mono">${esc(c.id)}</span> there.</p>`;
   $("dlg").showModal();
+  $("dlg").scrollTop=0;
 }
 
 (async function(){
   try{ CAST=await fetch("/api/cast").then(r=>r.json()); }catch(e){ CAST=[]; }
+  if(!Array.isArray(CAST)) CAST=[];
+  CAST.forEach(c=>{ if(c&&c.id) BYID[c.id]=c; });
+  const noresolver=CAST.filter(c=>!c.identity).length;
+  const first=CAST[0]||{};
+  $("foot").innerHTML=
+    `Cards are read from <span class="mono">studio/characters/</span> and every claim on them is
+     re-checked on each request: the sheet against
+     <span class="mono">${esc(first.sheet_dir||"ComfyUI/input")}</span>, the weights against
+     <span class="mono">${esc(first.lora_dir||"models/loras")}</span>, the dataset against
+     <span class="mono">ComfyUI/input/&lt;id&gt;_train</span>, and the voice against
+     <span class="mono">studio/voices/</span>. What holds the face on each engine comes from
+     <span class="mono">compose.resolve()</span> — the same call the renderer makes — so this page
+     and the wizard cannot disagree about the same character. Reference sheets live in ComfyUI's
+     input directory, which this app does not serve, so the one file each card names is mirrored
+     into <span class="mono">studio/samples/_refsheets/</span> rather than the static handler
+     being widened into an arbitrary-path file server.`+
+    (noresolver?`<br><br><b>The resolver did not load</b>, so the engine panels on ${noresolver}
+     card(s) are missing. studio/compose.py must import and define resolve().`:"");
+  ["q","hold","asset","vf","sort"].forEach(id=>{ $(id).oninput=draw; $(id).onchange=draw; });
   $("dx").onclick=()=>$("dlg").close();
   $("dlg").onclick=e=>{ if(e.target===$("dlg")) $("dlg").close(); };
   draw();

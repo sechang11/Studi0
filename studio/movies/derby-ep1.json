@@ -11,10 +11,12 @@
   "ipadapter_weight": 0.6,
   "style": "modern sports anime, cel shading, cinematic",
   "anime_sheets": {
-    "VIRO": "sheet_anime_viro.png"
+    "VIRO": "sheet_anime_viro.png",
+    "MANAGER": "sheet_anime_manager.png"
   },
   "sheets": {
-    "VIRO": "sheet_anime_viro.png"
+    "VIRO": "sheet_anime_viro.png",
+    "MANAGER": "sheet_anime_manager.png"
   },
   "characters": {
     "VIRO": "VIRO",
@@ -23,13 +25,14 @@
   "character_loras": {
     "VIRO": "character_viro_00001_.safetensors"
   },
+  "character_lora_weights": {},
   "voices": {
     "VIRO": {
       "engine": "higgs_v3",
       "voice": "voices_examples/higgs_audio/vex.wav"
     },
     "MANAGER": {
-      "engine": "indextts2",
+      "engine": "higgs_v3",
       "voice": "voices_examples/male/male_01.wav"
     }
   },
@@ -74,7 +77,8 @@
       "seed": 4094071958,
       "tags": "empty floodlit stand, confetti falling, nobody left in the seats, wide shot, empty night stadium, confetti on wet grass, night, dark, moonlight, modern sports anime, cel shading, cinematic, masterpiece, best quality, very aesthetic, absurdres",
       "prompt": "empty floodlit stand, confetti falling, nobody left in the seats, wide shot, empty night stadium, confetti on wet grass, night, dark, moonlight, modern sports anime, cel shading, cinematic, masterpiece, best quality, very aesthetic, absurdres",
-      "motion": "Slow deliberate movement only."
+      "motion": "Confetti falls through the frame.",
+      "motion_src": "desc:derived from the shot line: 'confetti falling'"
     },
     {
       "id": "cold_open_last_year_01",
@@ -90,7 +94,8 @@
       ],
       "tags": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, male focus, mature male, masculine, crying, grieving, tears, downcast eyes, trembling, hunched, clean teal soccer jersey, orange trim, number 7, neat hair, close-up, empty night stadium, confetti on wet grass, night, dark, moonlight, modern sports anime, cel shading, cinematic, masterpiece, best quality, very aesthetic, absurdres",
       "prompt": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, male focus, mature male, masculine, crying, grieving, tears, downcast eyes, trembling, hunched, clean teal soccer jersey, orange trim, number 7, neat hair, close-up, empty night stadium, confetti on wet grass, night, dark, moonlight, modern sports anime, cel shading, cinematic, masterpiece, best quality, very aesthetic, absurdres",
-      "motion": "Slow deliberate movement only.",
+      "motion": "He holds absolutely still. Nothing in the frame moves.",
+      "motion_src": "hold:hold_all",
       "line": {
         "who": "VIRO",
         "text": "...Again."
@@ -107,7 +112,8 @@
       "seed": 1698447036,
       "tags": "a number 7 sign lying face down on a wet empty seat, close-up, empty night stadium, confetti on wet grass, night, dark, moonlight, modern sports anime, cel shading, cinematic, masterpiece, best quality, very aesthetic, absurdres",
       "prompt": "a number 7 sign lying face down on a wet empty seat, close-up, empty night stadium, confetti on wet grass, night, dark, moonlight, modern sports anime, cel shading, cinematic, masterpiece, best quality, very aesthetic, absurdres",
-      "motion": "Slow deliberate movement only."
+      "motion": "Nobody moves.",
+      "motion_src": "hold:hold_nobody"
     },
     {
       "id": "act_one_tunnel_00",
@@ -120,7 +126,8 @@
       "seed": 686797650,
       "tags": "long empty concrete tunnel receding to a bright doorway, no humans, stadium tunnel, wet concrete, harsh strip light, overcast, cold lighting, desaturated, modern sports anime, cel shading, cinematic, masterpiece, best quality, very aesthetic, absurdres",
       "prompt": "long empty concrete tunnel receding to a bright doorway, no humans, stadium tunnel, wet concrete, harsh strip light, overcast, cold lighting, desaturated, modern sports anime, cel shading, cinematic, masterpiece, best quality, very aesthetic, absurdres",
-      "motion": "Slow deliberate movement only."
+      "motion": "Nobody moves.",
+      "motion_src": "hold:hold_nobody"
     },
     {
       "id": "act_one_tunnel_01",
@@ -136,7 +143,8 @@
       ],
       "tags": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, male focus, mature male, masculine, determined expression, serious, sharp eyes, furrowed brow, closed mouth, squared shoulders, clean teal soccer jersey, orange trim, number 7, neat hair, close-up, stadium tunnel, wet concrete, harsh strip light, overcast, cold lighting, desaturated, modern sports anime, cel shading, cinematic, masterpiece, best quality, very aesthetic, absurdres",
       "prompt": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, male focus, mature male, masculine, determined expression, serious, sharp eyes, furrowed brow, closed mouth, squared shoulders, clean teal soccer jersey, orange trim, number 7, neat hair, close-up, stadium tunnel, wet concrete, harsh strip light, overcast, cold lighting, desaturated, modern sports anime, cel shading, cinematic, masterpiece, best quality, very aesthetic, absurdres",
-      "motion": "Slow deliberate movement only.",
+      "motion": "He holds absolutely still. Nothing in the frame moves.",
+      "motion_src": "hold:hold_all",
       "line": {
         "who": "VIRO",
         "text": "Same tunnel. Same smell of wet concrete. Nine times now."
@@ -154,9 +162,10 @@
       "ref": [
         "MANAGER"
       ],
-      "tags": "1man, solo, grey hair, short beard, lined face, dark tracksuit, team crest, male focus, mature male, masculine, neutral expression, looking at viewer, closed mouth, relaxed posture, clean uniform, neat hair, close-up, locker room, benches, hanging jerseys, overcast, cold lighting, desaturated, modern sports anime, cel shading, cinematic, masterpiece, best quality, very aesthetic, absurdres",
-      "prompt": "1man, solo, grey hair, short beard, lined face, dark tracksuit, team crest, male focus, mature male, masculine, neutral expression, looking at viewer, closed mouth, relaxed posture, clean uniform, neat hair, close-up, locker room, benches, hanging jerseys, overcast, cold lighting, desaturated, modern sports anime, cel shading, cinematic, masterpiece, best quality, very aesthetic, absurdres",
-      "motion": "Slow deliberate movement only.",
+      "tags": "1boy, solo, old man, grey hair, short beard, lined face, wrinkles, male focus, mature male, stout, neutral expression, looking at viewer, closed mouth, relaxed posture, clean dark tracksuit, zipped to the collar, team crest, whistle on a lanyard, neat, close-up, locker room, benches, hanging jerseys, overcast, cold lighting, desaturated, modern sports anime, cel shading, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "1boy, solo, old man, grey hair, short beard, lined face, wrinkles, male focus, mature male, stout, neutral expression, looking at viewer, closed mouth, relaxed posture, clean dark tracksuit, zipped to the collar, team crest, whistle on a lanyard, neat, close-up, locker room, benches, hanging jerseys, overcast, cold lighting, desaturated, modern sports anime, cel shading, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "He holds absolutely still. Nothing in the frame moves.",
+      "motion_src": "hold:hold_all",
       "line": {
         "who": "MANAGER",
         "text": "Nine years. Nine years we have come here and gone home quiet."
@@ -176,7 +185,8 @@
       ],
       "tags": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, male focus, mature male, masculine, neutral expression, looking at viewer, closed mouth, relaxed posture, clean teal soccer jersey, orange trim, number 7, neat hair, close-up, locker room, benches, hanging jerseys, overcast, cold lighting, desaturated, modern sports anime, cel shading, cinematic, masterpiece, best quality, very aesthetic, absurdres",
       "prompt": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, male focus, mature male, masculine, neutral expression, looking at viewer, closed mouth, relaxed posture, clean teal soccer jersey, orange trim, number 7, neat hair, close-up, locker room, benches, hanging jerseys, overcast, cold lighting, desaturated, modern sports anime, cel shading, cinematic, masterpiece, best quality, very aesthetic, absurdres",
-      "motion": "Slow deliberate movement only.",
+      "motion": "He holds absolutely still. Nothing in the frame moves.",
+      "motion_src": "hold:hold_all",
       "line": {
         "who": "VIRO",
         "text": "I know what the record is."
@@ -194,9 +204,10 @@
       "ref": [
         "MANAGER"
       ],
-      "tags": "1man, solo, grey hair, short beard, lined face, dark tracksuit, team crest, male focus, mature male, masculine, neutral expression, looking at viewer, closed mouth, relaxed posture, clean uniform, neat hair, close-up, locker room, benches, hanging jerseys, overcast, cold lighting, desaturated, modern sports anime, cel shading, cinematic, masterpiece, best quality, very aesthetic, absurdres",
-      "prompt": "1man, solo, grey hair, short beard, lined face, dark tracksuit, team crest, male focus, mature male, masculine, neutral expression, looking at viewer, closed mouth, relaxed posture, clean uniform, neat hair, close-up, locker room, benches, hanging jerseys, overcast, cold lighting, desaturated, modern sports anime, cel shading, cinematic, masterpiece, best quality, very aesthetic, absurdres",
-      "motion": "Slow deliberate movement only.",
+      "tags": "1boy, solo, old man, grey hair, short beard, lined face, wrinkles, male focus, mature male, stout, neutral expression, looking at viewer, closed mouth, relaxed posture, clean dark tracksuit, zipped to the collar, team crest, whistle on a lanyard, neat, close-up, locker room, benches, hanging jerseys, overcast, cold lighting, desaturated, modern sports anime, cel shading, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "1boy, solo, old man, grey hair, short beard, lined face, wrinkles, male focus, mature male, stout, neutral expression, looking at viewer, closed mouth, relaxed posture, clean dark tracksuit, zipped to the collar, team crest, whistle on a lanyard, neat, close-up, locker room, benches, hanging jerseys, overcast, cold lighting, desaturated, modern sports anime, cel shading, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "He holds absolutely still. Nothing in the frame moves.",
+      "motion_src": "hold:hold_all",
       "line": {
         "who": "MANAGER",
         "text": "Then stop trying to beat him. Beat the team."
@@ -208,7 +219,7 @@
       "clip_secs": 6.0,
       "intensity": 1.429,
       "camera": "static",
-      "transition": "smash",
+      "transition": "cut",
       "grade": "eq=brightness=-0.15:contrast=1.20:saturation=0.72,colorbalance=bs=0.05:rs=-0.03,eq=gamma=0.92",
       "seed": 2881569967,
       "ref": [
@@ -216,7 +227,8 @@
       ],
       "tags": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, male focus, mature male, masculine, calm resolve, quiet certainty, steady gaze, closed mouth, torn bloodied teal soccer jersey, orange trim, number 7, cut on cheek, bloodied lip, mud, trembling, utterly exhausted, standing over the ball, one boot resting on it, head down, medium shot, night pitch, floodlights, packed stands, night, modern sports anime, cel shading, cinematic, masterpiece, best quality, very aesthetic, absurdres",
       "prompt": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, male focus, mature male, masculine, calm resolve, quiet certainty, steady gaze, closed mouth, torn bloodied teal soccer jersey, orange trim, number 7, cut on cheek, bloodied lip, mud, trembling, utterly exhausted, standing over the ball, one boot resting on it, head down, medium shot, night pitch, floodlights, packed stands, night, modern sports anime, cel shading, cinematic, masterpiece, best quality, very aesthetic, absurdres",
-      "motion": "Slow deliberate movement only."
+      "motion": "He holds absolutely still. Nothing in the frame moves.",
+      "motion_src": "hold:hold_all"
     },
     {
       "id": "climax_the_goal_00",
@@ -232,7 +244,8 @@
       ],
       "tags": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, male focus, mature male, masculine, determined expression, serious, sharp eyes, furrowed brow, closed mouth, torn bloodied teal soccer jersey, orange trim, number 7, cut on cheek, bloodied lip, mud, trembling, utterly exhausted, leaping mid-air volley, body twisted, boot striking the ball, motion lines, dynamic angle, full body, night pitch, floodlights, packed stands, night, modern sports anime, cel shading, cinematic, masterpiece, best quality, very aesthetic, absurdres",
       "prompt": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, male focus, mature male, masculine, determined expression, serious, sharp eyes, furrowed brow, closed mouth, torn bloodied teal soccer jersey, orange trim, number 7, cut on cheek, bloodied lip, mud, trembling, utterly exhausted, leaping mid-air volley, body twisted, boot striking the ball, motion lines, dynamic angle, full body, night pitch, floodlights, packed stands, night, modern sports anime, cel shading, cinematic, masterpiece, best quality, very aesthetic, absurdres",
-      "motion": "Slow deliberate movement only."
+      "motion": "He leaps forward through the frame.",
+      "motion_src": "desc:derived from the shot line: 'leaping mid-air volley'"
     },
     {
       "id": "climax_the_goal_01",
@@ -245,7 +258,8 @@
       "seed": 917277296,
       "tags": "the ball hitting the back of the net, net stretching, close-up, no humans, night pitch, floodlights, packed stands, night, modern sports anime, cel shading, cinematic, masterpiece, best quality, very aesthetic, absurdres",
       "prompt": "the ball hitting the back of the net, net stretching, close-up, no humans, night pitch, floodlights, packed stands, night, modern sports anime, cel shading, cinematic, masterpiece, best quality, very aesthetic, absurdres",
-      "motion": "Slow deliberate movement only."
+      "motion": "The ball hits the back of the net.",
+      "motion_src": "desc:derived from the shot line: 'the ball hitting the back of the net'"
     },
     {
       "id": "climax_the_goal_02",
@@ -261,7 +275,8 @@
       ],
       "tags": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, male focus, mature male, masculine, determined expression, serious, sharp eyes, furrowed brow, closed mouth, torn bloodied teal soccer jersey, orange trim, number 7, cut on cheek, bloodied lip, mud, trembling, utterly exhausted, close-up, night pitch, floodlights, packed stands, night, modern sports anime, cel shading, cinematic, masterpiece, best quality, very aesthetic, absurdres",
       "prompt": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, male focus, mature male, masculine, determined expression, serious, sharp eyes, furrowed brow, closed mouth, torn bloodied teal soccer jersey, orange trim, number 7, cut on cheek, bloodied lip, mud, trembling, utterly exhausted, close-up, night pitch, floodlights, packed stands, night, modern sports anime, cel shading, cinematic, masterpiece, best quality, very aesthetic, absurdres",
-      "motion": "Slow deliberate movement only.",
+      "motion": "He holds absolutely still. Nothing in the frame moves.",
+      "motion_src": "hold:hold_all",
       "line": {
         "who": "VIRO",
         "text": "Not this year."

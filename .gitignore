@@ -36,3 +36,14 @@ __pycache__/
 # every image and the thing worth reviewing in a diff - but the images themselves are
 # regenerable from it and would grow without bound.
 studio/samples/gallery/
+
+# The cast proof run, same policy applied to the same kind of thing. 146 individual arm
+# cells at full size are 194 MB and are regenerable from studio/_tools/cast_proof.py; the
+# CONTACT SHEETS sitting beside them are 11 MB of jpg, are what a person actually reads,
+# and stay tracked - as do _metrics.json and _card_patches.json, which are the findings.
+studio/samples/cast_proof/*/
+
+# A mirror of the reference sheets, which live in ComfyUI/input and are not served from
+# there. serve.py:_mirror_sheet re-copies any missing file on the next request, so this is
+# a cache, not a source, and it duplicates bytes that already exist on the box.
+studio/samples/_refsheets/

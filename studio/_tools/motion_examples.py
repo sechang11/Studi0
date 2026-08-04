@@ -856,27 +856,652 @@ def stage_publish():
 
 
 # ═══════════════════════════════════════════════════════════════════ main
+# ═══════════════════════════════════════════════════════════════════════════════
+# THE MOTIONS LIBRARY
+# ═══════════════════════════════════════════════════════════════════════════════
+# `motion` is the only string short.py hands the video model (short.py:411), and
+# compile.py:603 gave EVERY BEAT OF EVERY FILM the constant "Slow deliberate movement
+# only." - which motion_probe.py measured at 0.520 against an empty control's 0.614, one of
+# the three stillest cells in an 81-clip sweep. Every film this project has shipped has
+# been asking the video model to hold still. This library is the fix, and it is built on
+# the grammar that sweep established rather than on taste.
+#
+# THE GRAMMAR - motion_probe.py, 27 cells x 3 seeds, all 81 watched
+# -----------------------------------------------------------------
+#     [MOVER] [ACTION VERB] [PATH / SPATIAL RELATION]      one mover, no adverbs
+#
+#   * A manner does nothing. All five adjective cells produced no named action on any
+#     seed. They are not harmless either - they produce undirected drift.
+#   * A bare intransitive does nothing. "The curtain lifts." failed 0/3. The prepositional
+#     phrase is what fires it. EVERY card here carries a path.
+#   * A mover that changes STATE IN PLACE does nothing ("The lamp flickers.").
+#   * Texture-scale motion does nothing ("Rain runs down the window.").
+#   * Two movers in one string destroys the composition. ONE MOVER PER CARD.
+#
+# THE HAZARD THAT DECIDES HOW THESE ARE JUDGED
+# ---------------------------------------------
+# analyze_shots.motion() IS BLIND TO SUBJECT-SCALE ACTION. In the probe, "She raises her
+# right hand to her face" landed the action 9 times out of 9 and measured 0.437-0.863 - at
+# or BELOW the empty control. A forearm is a fraction of a percent of 1280x704 and a mean
+# over all pixels cannot see it. So a card is NEVER marked weak on the number alone: the
+# number classifies frame-scale events, and the subject-cropped detail strip decides
+# everything a person does. Both are recorded on every card.
+#
+# THE BAND IS SEED-DEPENDENT AND MUST BE MEASURED, NOT ASSUMED. In the probe the
+# do-nothing band sat at 0.34-0.61 on seeds 8801/8802 and at 0.68-0.99 on seed 4200 - the
+# same empty string, nearly double the number. So this stage renders its OWN empty and
+# production-constant controls at its OWN seeds, and the band is derived from them.
+#
+# METHOD: ONE keyframe for every card - the probe's, reused verbatim so these 33 cards land
+# on the same scale as those 81 clips - ONE workflow (12, short.py's shipping config), ONE
+# length (97 frames), and THREE seeds. The third seed is not decoration: the probe found
+# cards that fire 3/3 and cards that eat the shot 3/3, and a single-seed pass cannot tell
+# "reliable" from "lucky". Durability is written onto every card.
+
+LIB_REL = "claude-generated/motion-lib/cards"
+LIB_LAB = f"{COMFY}/output/{LIB_REL}"
+LIB_OUT = f"{SAMP}/motion_lib"
+LIB_DIR = f"{ROOT}/motions"
+LIB_KF = "mlib_kf.png"                 # staged ONCE; every cell loads this literal file
+LIB_SEEDS = [7701, 7702, 7703]         # fresh - independent of the probe's 4200/8801/8802
+FONT = "/usr/share/fonts/liberation-sans-fonts/LiberationSans-Regular.ttf"
+
+# w:h:x:y around the subject in the 1280x704 keyframe - head, both arms, both hands, the
+# steaming cup. A raised hand is well under 1% of the frame; judged at strip scale it is
+# invisible, which is exactly how a working performance beat gets thrown away.
+LIB_DETAIL = "440:520:400:184"
+
+# ── the cards ────────────────────────────────────────────────────────────────
+# (id, family, name, text, purpose, shots, needs)
+# `needs` is the precondition the card cannot supply for itself. A subject card on a beat
+# with no person in frame has no mover, and the grammar collapses to a bare verb.
+MOTION_CARDS = [
+    # ── SUBJECT ── a person is the mover. The probe's best family for reliability, and the
+    # one the motion metric cannot see. Judged on the detail strip.
+    ("walk_in", "subject", "Walks toward camera",
+     "She walks forward toward the camera.",
+     "Closing the distance. Confrontation, arrival, a decision already taken. The single "
+     "most reliable motion in the library and the largest displacement one mover can make.",
+     ["build", "master", "sakuga"], "a person in frame"),
+    ("walk_away", "subject", "Walks away into depth",
+     "She walks away from the camera into the depth of the frame.",
+     "Departure, retreat, the end of a scene. Reads as an exit without needing a cut.",
+     ["establish", "master", "hold_silent"], "a person in frame, and depth behind them"),
+    ("walk_out", "subject", "Walks out of frame",
+     "She walks out of frame to the left.",
+     "Clears the frame and leaves the place behind - the shot outlives the character in it.",
+     ["build", "master"], "a person in frame"),
+    ("lean_in", "subject", "Leans toward camera",
+     "She leans forward toward the camera.",
+     "Intimacy or threat without a camera move. Pressure applied across the lens.",
+     ["react", "speak"], "a person in frame"),
+    ("step_back", "subject", "Steps backward",
+     "She steps backward away from the camera.",
+     "Recoil. The physical form of being told something you did not want to hear.",
+     ["react", "build"], "a person in frame"),
+    ("hand_to_face", "subject", "Hand rises to face",
+     "She raises her right hand to her face.",
+     "The classic reaction gesture - grief, exhaustion, realisation. Landed 9/9 in the "
+     "probe across three seeds and three grammatical forms.",
+     ["react", "speak", "insert"], "a person in frame with a visible hand"),
+    ("hand_reach", "subject", "Reaches toward camera",
+     "She reaches her right hand forward toward the camera.",
+     "Appeal, accusation, or a grab. Breaks the fourth wall by pushing through it.",
+     ["insert", "sakuga", "react"], "a person in frame with a visible hand"),
+    ("cup_lift", "subject", "Lifts an object to the mouth",
+     "She lifts the cup from the table to her mouth.",
+     "Business - the small practical action that makes a held shot feel inhabited rather "
+     "than paused.",
+     ["insert", "pillow", "speak"], "a person and a cup on a surface in frame"),
+    ("head_turn", "subject", "Turns head off-screen",
+     "She turns her head to look off-screen left.",
+     "Directs the audience at something outside the frame; sets up the next cut.",
+     ["build", "react"], "a person in frame"),
+    ("turn_away", "subject", "Turns body away",
+     "She turns her body away from the camera.",
+     "Refusal, shame, the end of a conversation. Deliberately gives up the face.",
+     ["hold_silent", "master"], "a person facing camera"),
+    ("hair_lifts", "subject", "Hair lifts and settles",
+     "Her hair lifts and falls back against her shoulder.",
+     "Life in an otherwise held shot. Motion that costs nothing dramatically.",
+     ["pillow", "react", "hold_silent"], "a person with loose hair in frame"),
+    ("breath", "subject", "Shoulders rise with breath",
+     "Her shoulders rise and fall with her breath.",
+     "The smallest human motion there is. For a held close shot that must not look frozen.",
+     ["hold_silent", "react", "speak"], "a person, shoulders visible"),
+
+    # ── SUBJECT + HOLD CLAUSE ── the probe's best-controlled cell. An action alone induces
+    # off-brief drift; the hold clause suppresses it. Note it fights workflow 12's own
+    # negative, which contains "static, frozen" and which short.py never overrides.
+    ("hand_to_face_only", "subject", "Hand to face, nothing else",
+     "She raises her right hand to her face. Nothing else in the frame moves.",
+     "The gesture with the rest of the frame pinned. Use when the composition matters as "
+     "much as the performance.",
+     ["react", "speak"], "a person in frame with a visible hand"),
+    ("walk_in_only", "subject", "Walks toward camera, nothing else",
+     "She walks forward toward the camera. Nothing else in the frame moves.",
+     "The strongest mover with the hold clause attached - approach without the background "
+     "coming with it.",
+     ["build", "master"], "a person in frame"),
+
+    # ── WORLD ── the environment is the mover. This family IS visible to the metric,
+    # because a frame-crossing mover is a frame-scale event. Several of these movers are
+    # deliberately ABSENT from the test keyframe: the probe proved with confetti that LTX
+    # will introduce one, and that is worth knowing per card rather than in general.
+    ("confetti", "world", "Confetti falls",
+     "Confetti falls through the frame.",
+     "Celebration, collapse, aftermath. Proof the model will invent a mover that is not "
+     "in the keyframe at all.",
+     ["sakuga", "establish", "master"], None),
+    ("steam", "world", "Steam crosses the lens",
+     "Steam drifts left across the lens.",
+     "Atmosphere in the foreground. Puts something between the audience and the subject.",
+     ["pillow", "insert", "hold_silent"], "a hot surface or vessel in frame"),
+    ("curtain", "world", "Curtain sweeps behind",
+     "The curtain lifts behind her.",
+     "A reveal or a concealment behind the subject. The card that proves the grammar: the "
+     "same verb without the spatial phrase failed 0/3.",
+     ["establish", "master", "sakuga"], "a curtain or hanging fabric in frame"),
+    ("smoke", "world", "Smoke rolls across",
+     "Smoke rolls across the frame from the left.",
+     "Threat arriving from off-screen. Fills the frame without moving the camera.",
+     ["establish", "master", "sakuga"], None),
+    ("dust", "world", "Dust drifts through light",
+     "Dust drifts down through the light.",
+     "Stillness with air in it. The pillow shot that is not dead.",
+     ["pillow", "hold_silent", "insert"], "a visible light source or shaft"),
+    ("snow", "world", "Snow falls",
+     "Snow falls through the frame.",
+     "Cold, time passing, quiet. A world mover that asks nothing of the performer.",
+     ["establish", "pillow", "master"], "an exterior or a window"),
+    ("papers", "world", "Papers blow across the floor",
+     "Loose papers blow across the floor.",
+     "Disturbance at ground level - the aftermath of an exit or an impact.",
+     ["sakuga", "insert", "build"], "a floor visible in frame"),
+    ("leaves", "world", "Leaves blow across frame",
+     "Dry leaves blow across the frame.",
+     "Season and wind. Motion in an empty exterior with nobody to carry it.",
+     ["establish", "pillow"], "an exterior"),
+    ("birds", "world", "Birds cross the frame",
+     "A flock of birds crosses the frame.",
+     "Scale and sky. Puts something living in a wide that has no actor.",
+     ["establish", "master", "pillow"], "sky or an exterior"),
+    ("rain_sweep", "world", "Rain sweeps across frame",
+     "Rain sweeps across the frame.",
+     "Weather as a frame-scale event. The frame-crossing form of the texture-scale ask "
+     "the probe measured as inert.",
+     ["establish", "master"], "an exterior or a window"),
+    ("door", "world", "Door swings open",
+     "The door swings open behind her.",
+     "An entrance prepared. The world acting on the scene from off-screen.",
+     ["build", "establish"], "a door in or implied by the frame"),
+
+    # ── CAMERA ── the probe found camera language in the motion string is obeyed, and a
+    # 1.40x dolly-in is a real move. THIS FAMILY CAN FIGHT THE POST-TIER CAMERA LAYER:
+    # effects.json puts `camera` in tier post (a zoompan/crop on the finished clip). A
+    # motion card that moves the camera and a camera card that crops it will compound.
+    # Every card here says so.
+    ("cam_push", "camera", "Camera pushes in",
+     "The camera pushes in toward her.",
+     "Growing attention. The generated form of a push - real parallax, unlike the "
+     "post-tier crop, because the model re-renders the geometry.",
+     ["react", "build", "speak"], "a subject to push toward"),
+    ("cam_pull", "camera", "Camera pulls back",
+     "The camera pulls back away from her.",
+     "Abandonment, scale, the reveal of context around a figure.",
+     ["establish", "hold_silent"], "a subject to pull away from"),
+    ("cam_track_l", "camera", "Camera tracks left",
+     "The camera tracks left across the frame.",
+     "Lateral travel through a space. Geography rather than emphasis.",
+     ["master", "establish"], None),
+    ("cam_rise", "camera", "Camera rises",
+     "The camera rises above her.",
+     "Withdrawal upward - the end-of-scene lift.",
+     ["establish", "master"], "a subject to rise above"),
+    ("cam_lock", "camera", "Camera locked off",
+     "The camera is locked off on a tripod and does not move.",
+     "Denies the model a camera move without denying it motion. Use under a subject "
+     "performance that must stay in one framing.",
+     ["speak", "react", "insert"], None),
+
+    # ── STILLNESS ── a real, measured capability, not the absence of a card. The probe's
+    # three holding cells were the quietest measured and held face, gaze and framing for
+    # all 97 frames. This is what compile.py should have been emitting instead of a
+    # constant that scored BELOW an empty string.
+    ("hold_all", "stillness", "Everything holds",
+     "She holds absolutely still. Nothing in the frame moves.",
+     "The held shot before an impact. Stillness as a deliberate choice with a measured "
+     "floor, not a hope.",
+     ["hold_silent", "speak", "react"], "a person in frame"),
+    ("hold_figure", "stillness", "The figure holds",
+     "The figure stays completely still.",
+     "Pins the performer and leaves the world free to move around them.",
+     ["speak", "react", "insert"], "a person in frame"),
+    ("hold_nobody", "stillness", "Nobody moves",
+     "Nobody moves.",
+     "The shortest hold in the library. For a pillow or an insert with no performer to name.",
+     ["hold_silent", "pillow"], None),
+]
+
+# Controls. NOT cards - they are never written to studio/motions/ and never offered. They
+# exist so the do-nothing band is measured at THESE seeds rather than carried over.
+LIB_CONTROLS = [
+    ("_ctl_empty", "control", "Empty control",
+     "", "the do-nothing floor - no text at all", [], None),
+    ("_ctl_production", "control", "Production constant",
+     "Slow deliberate movement only.",
+     "compile.py:603 - what every beat of every film has asked for until now", [], None),
+]
+
+
+def lib_rows():
+    return MOTION_CARDS + LIB_CONTROLS
+
+
+# ── stage: write the card files ──────────────────────────────────────────────
+def stage_lib_cards(force=False):
+    """Author studio/motions/*.json. Status starts `untested` and STAYS untested until
+    lib-verdict has a measured number and a looked-at strip for it. A card that ships with
+    a status it did not earn is the defect this whole wave exists to remove."""
+    need(LIB_DIR)
+    for cid, fam, name, text, purpose, shots, needs in MOTION_CARDS:
+        p = f"{LIB_DIR}/{cid}.json"
+        old = json.load(open(p, encoding="utf-8")) if os.path.exists(p) else {}
+        c = {
+            "id": cid,
+            "name": name,
+            "family": fam,
+            "text": text,
+            "desc": purpose,
+            "shots": shots,
+            "needs": needs,
+            "grammar": "[MOVER] [ACTION VERB] [PATH/SPATIAL RELATION]",
+            "status": old.get("status", "untested") if not force else "untested",
+        }
+        if old.get("verdict") and not force:
+            c["verdict"] = old["verdict"]
+        if old.get("measured") and not force:
+            c["measured"] = old["measured"]
+        with open(p, "w", encoding="utf-8") as f:
+            json.dump(c, f, indent=2, ensure_ascii=False)
+            f.write("\n")
+    print(f"  wrote {len(MOTION_CARDS)} cards -> {LIB_DIR}")
+
+
+# ── stage: stage the ONE shared keyframe ─────────────────────────────────────
+def stage_lib_keyframe(force=False):
+    """Reuse motion_probe's keyframe verbatim.
+
+    It was authored to contain every noun a motion sweep names - woman, curtain,
+    rain-streaked window, steaming cup, stone pillar, iron fence, deep perspective - and
+    reusing it puts these 33 cards on the SAME scale as the 81 clips already measured
+    there. Rendering a fresh one would throw that comparability away for nothing."""
+    need(LIB_LAB, LIB_OUT)
+    src = f"{SAMP}/motion_probe/_keyframe.png"
+    if not os.path.exists(src):
+        raise SystemExit(f"missing shared keyframe {src} - run motion_probe.py keyframe")
+    shutil.copy(src, f"{COMFY}/input/{LIB_KF}")
+    shutil.copy(src, f"{LIB_OUT}/_keyframe.png")
+    print(f"  staged {COMFY}/input/{LIB_KF}")
+
+
+# ── stage: render ────────────────────────────────────────────────────────────
+def stage_lib_render(seeds=None, force=False, only=None):
+    """Submit the whole matrix contiguously, then poll.
+
+    NEVER block on a single job: a CAST workflow shares this GPU and the LTXAV checkpoint
+    stages 23.8GB on a 32GB card, so an interleaved job means a full evict and reload.
+    Submitting the batch contiguously keeps it resident."""
+    import motion_probe as MP
+    _crun, sp = _comfy()
+    need(LIB_LAB, LIB_OUT)
+    seeds = seeds or LIB_SEEDS
+    if not os.path.exists(f"{COMFY}/input/{LIB_KF}"):
+        raise SystemExit("run lib-keyframe first - nothing staged")
+    rows = [r for r in lib_rows() if (not only or only in r[0])]
+    jobs, meta = [], {}
+    for seed in seeds:
+        for cid, fam, name, text, purpose, shots, needs in rows:
+            tag = f"{cid}_s{seed}"
+            if os.path.exists(f"{LIB_LAB}/{tag}_00001_.mp4") and not force:
+                print(f"  = {tag} exists")
+                continue
+            wf = load_wf("12_ltx23_i2v_audio.json")
+            sp(wf, "8.inputs.image", LIB_KF)
+            sp(wf, "10.inputs.text", text)
+            sp(wf, "20.inputs.width", W)
+            sp(wf, "20.inputs.height", H)
+            sp(wf, "20.inputs.length", FRAMES)
+            sp(wf, "21.inputs.frames_number", FRAMES)
+            sp(wf, "32.inputs.noise_seed", seed)
+            sp(wf, "43.inputs.filename_prefix", f"{LIB_REL}/{tag}")
+            # node 9 img_compression and node 11 negative are LEFT AS THE FILE HAS THEM.
+            # short.py sets neither; changing them here would measure a different app.
+            pid = submit(wf)
+            jobs.append(pid)
+            meta[pid] = dict(id=tag, card=cid, family=fam, seed=seed, text=text,
+                             name=name)
+            print(f"  > {tag} -> {pid}", flush=True)
+    recs = MP.wait_all(jobs, "clips", timeout=14400) if jobs else {}
+    man = f"{LIB_OUT}/manifest.json"
+    prev = json.load(open(man)) if os.path.exists(man) else []
+    for pid in jobs:
+        m = dict(meta[pid])
+        rec = recs.get(pid, {})
+        m["secs"] = MP.job_secs(rec)
+        m["error"] = MP.job_error(rec)
+        f = f"{LIB_LAB}/{m['id']}_00001_.mp4"
+        m["file"] = MP.job_file(rec) or (f if os.path.exists(f) else None)
+        prev = [r for r in prev if r["id"] != m["id"]]
+        prev.append(m)
+    # rows already on disk and skipped this run still need manifest entries
+    for seed in seeds:
+        for cid, fam, name, text, purpose, shots, needs in rows:
+            tag = f"{cid}_s{seed}"
+            f = f"{LIB_LAB}/{tag}_00001_.mp4"
+            if os.path.exists(f) and not any(r["id"] == tag for r in prev):
+                prev.append(dict(id=tag, card=cid, family=fam, seed=seed, text=text,
+                                 name=name, secs=None, error=None, file=f))
+    json.dump(prev, open(man, "w"), indent=1)
+    ok = sum(1 for r in prev if r.get("file"))
+    print(f"wrote {man} ({len(prev)} rows, {ok} with output)")
+
+
+# ── stage: measure ───────────────────────────────────────────────────────────
+def stage_lib_measure():
+    """THE HEADLINE NUMBER IS analyze_shots.motion(), IMPORTED, NOT REIMPLEMENTED.
+
+    That module carries the fix for the YDIF scientific-notation regex bug (8.87784e-05
+    parsed as 8.87784, a ~1300x overstatement). Any motion figure in this repo not
+    produced by that function is suspect."""
+    import motion_probe as MP
+    from analyze_shots import motion as ydif_motion, frozen_seconds
+    MP.selftest()
+    man = json.load(open(f"{LIB_OUT}/manifest.json"))
+    tmp = "/tmp/mlib"
+    need(tmp)
+    res = []
+    for m in sorted(man, key=lambda r: (r["card"], r["seed"])):
+        f = m.get("file")
+        if not f or not os.path.exists(f):
+            print(f"skip {m['id']}: no file")
+            continue
+        r = dict(m)
+        mo, ch = ydif_motion(f)
+        r["motion"] = round(mo, 4)
+        r["churn"] = round(ch, 4)
+        r["frozen"] = round(frozen_seconds(f), 2)
+        r["frames"] = MP.nframes(f)
+        r["regions"] = {k: MP._region_ydif(f, c) for k, c in MP.REGIONS.items()}
+        r.update(MP.displacement(f, tmp))
+        r.update(MP.framing_drift(f, tmp))
+        res.append(r)
+        print(f"{r['id']:28s} motion {r['motion']:7.3f}  churn {r['churn']:6.3f}  "
+              f"creep {r.get('creep', 0):.2f}  "
+              f"L/C/R {r['regions']['left']:6.2f}/{r['regions']['centre']:6.2f}/"
+              f"{r['regions']['right']:6.2f}", flush=True)
+    json.dump(res, open(f"{LIB_OUT}/results.json", "w"), indent=1)
+    print(f"wrote {LIB_OUT}/results.json ({len(res)} clips)")
+
+
+def lib_band():
+    """The do-nothing band, MEASURED at this run's seeds from this run's own controls.
+
+    Returns (lo, hi, ceiling). `ceiling` is the number a card must beat to count as a
+    frame-scale event: the highest control observed, with margin. The probe's band moved
+    from 0.34-0.61 to 0.68-0.99 between seeds on the identical empty string, so a
+    hardcoded threshold would be wrong roughly half the time."""
+    res = json.load(open(f"{LIB_OUT}/results.json"))
+    ctl = [r["motion"] for r in res if r["card"].startswith("_ctl")]
+    if not ctl:
+        raise SystemExit("no controls measured - the band cannot be derived")
+    lo, hi = min(ctl), max(ctl)
+    return lo, hi, round(hi * 1.6, 3)
+
+
+# ── stage: strips ────────────────────────────────────────────────────────────
+def _lib_strip(m, dst, cols, crop=None, kf=None, head_extra=""):
+    """keyframe | N frames evenly spaced, LABELLED with the card id, the text and the
+    number. The label is the whole point - a strip you cannot identify at a glance does
+    not get looked at properly, and this project has already ranked a clip best while the
+    subject had turned away with her eyes shut."""
+    import motion_probe as MP
+    tmp = "/tmp/mlib_strip"
+    need(tmp, os.path.dirname(dst))
+    n = m["frames"]
+    idxs = [round(i * (n - 1) / (cols - 1)) for i in range(cols)]
+    parts, labels = ([kf], ["KEYFRAME"]) if kf else ([], [])
+    for i, ix in enumerate(idxs):
+        p = MP._frame_png(m["file"], ix, f"{tmp}/{m['id']}_{i}.png")
+        if crop:
+            c = f"{tmp}/{m['id']}_{i}c.png"
+            sh("ffmpeg", "-y", "-hide_banner", "-v", "error", "-i", p,
+               "-vf", f"crop={crop}", "-pix_fmt", "rgb24", c)
+            p = c
+        parts.append(p)
+        labels.append(f"f{ix}")
+    wide = 340 if not crop else 430
+    fc = []
+    for i, lab in enumerate(labels):
+        fc.append(f"[{i}]scale={wide}:-1,pad=iw+4:ih+30:2:2:0x101010,"
+                  f"drawtext=fontfile={FONT}:text='{MP._esc(lab)}':x=6:y=h-24:"
+                  f"fontsize=17:fontcolor=0xC0C0C0[v{i}]")
+    fc.append("".join(f"[v{i}]" for i in range(len(parts))) +
+              f"hstack=inputs={len(parts)}[row]")
+    head = (f"{m['card']}  [{m['family']}]  seed {m['seed']}   motion {m['motion']:.3f}   "
+            f"creep {m.get('creep', 0):.2f}{head_extra}")
+    body = f"TEXT: {m['text'] or '(empty string)'}"
+    fc.append(f"[row]pad=iw:ih+80:0:80:0x000000,"
+              f"drawtext=fontfile={FONT}:text='{MP._esc(head)}':x=10:y=10:"
+              f"fontsize=28:fontcolor=white,"
+              f"drawtext=fontfile={FONT}:text='{MP._esc(body)}':x=10:y=46:"
+              f"fontsize=24:fontcolor=0x7FD4FF[out]")
+    args = ["ffmpeg", "-y", "-hide_banner", "-v", "error"]
+    for p in parts:
+        args += ["-i", p]
+    args += ["-filter_complex", ";".join(fc), "-map", "[out]", "-frames:v", "1", dst]
+    sh(*args)
+
+
+def stage_lib_strips(only=None):
+    """TWO strips per clip, and the second is not optional.
+
+    wide/   the whole frame - catches frame-scale events and composition loss
+    detail/ cropped to the subject and scaled UP - the ONLY way to judge a hand, a head or
+            a breath. The metric cannot see them and neither can a wide strip."""
+    rows = json.load(open(f"{LIB_OUT}/results.json"))
+    kf = f"{LIB_OUT}/_keyframe.png"
+    for m in rows:
+        if only and only not in m["id"]:
+            continue
+        _lib_strip(m, f"{LIB_OUT}/wide/{m['id']}.png", 8, kf=kf)
+        _lib_strip(m, f"{LIB_OUT}/detail/{m['id']}.png", 6, crop=LIB_DETAIL)
+        print(f"strip {m['id']}")
+
+
+def stage_lib_sheet(name="sheet", cards=None, cols=4, crop=True, seed=None):
+    """One contact sheet, several cards as rows, for judging a GROUP side by side.
+
+    Looking at flat cells one at a time invites skimming; next to five that did nothing, a
+    cell that actually did something cannot hide."""
+    import motion_probe as MP
+    rows = json.load(open(f"{LIB_OUT}/results.json"))
+    seed = seed or LIB_SEEDS[0]
+    rows = [r for r in rows if r["seed"] == seed]
+    if cards:
+        want = [c.strip() for c in cards.split(",")]
+        rows = [r for r in rows if r["card"] in want]
+        rows.sort(key=lambda r: want.index(r["card"]))
+    tmp = "/tmp/mlib_sheet"
+    need(tmp, LIB_OUT)
+    band = []
+    for m in rows:
+        n = m["frames"]
+        idxs = [round(i * (n - 1) / (cols - 1)) for i in range(cols)]
+        parts = []
+        for i, ix in enumerate(idxs):
+            p = MP._frame_png(m["file"], ix, f"{tmp}/{m['id']}_{i}.png")
+            if crop:
+                c = f"{tmp}/{m['id']}_{i}c.png"
+                sh("ffmpeg", "-y", "-hide_banner", "-v", "error", "-i", p,
+                   "-vf", f"crop={LIB_DETAIL}", "-pix_fmt", "rgb24", c)
+                p = c
+            parts.append(p)
+        fc = [f"[{i}]scale=330:-1,pad=iw+3:ih+3:1:1:0x101010[v{i}]"
+              for i in range(len(parts))]
+        fc.append("".join(f"[v{i}]" for i in range(len(parts))) +
+                  f"hstack=inputs={len(parts)}[h]")
+        lab = (f"{m['card']}  [{m['family']}]  motion {m['motion']:.3f}  |  "
+               f"{m['text'] or '(empty)'}")
+        fc.append(f"[h]pad=iw:ih+38:0:38:0x000000,"
+                  f"drawtext=fontfile={FONT}:text='{MP._esc(lab)}':x=8:y=8:"
+                  f"fontsize=24:fontcolor=0x7FD4FF[out]")
+        args = ["ffmpeg", "-y", "-hide_banner", "-v", "error"]
+        for p in parts:
+            args += ["-i", p]
+        rowpng = f"{tmp}/row_{m['id']}.png"
+        args += ["-filter_complex", ";".join(fc), "-map", "[out]", "-frames:v", "1", rowpng]
+        sh(*args)
+        band.append(rowpng)
+    args = ["ffmpeg", "-y", "-hide_banner", "-v", "error"]
+    for p in band:
+        args += ["-i", p]
+    args += ["-filter_complex", f"vstack=inputs={len(band)}", "-frames:v", "1",
+             f"{LIB_OUT}/{name}.png"]
+    sh(*args)
+    print(f"wrote {LIB_OUT}/{name}.png ({len(band)} rows)")
+
+
+def stage_lib_report():
+    """Per-card summary across seeds, plus the measured band, ranked. This is the sheet I
+    read before deciding which strips to look at hardest - it does NOT decide status."""
+    res = json.load(open(f"{LIB_OUT}/results.json"))
+    lo, hi, ceil = lib_band()
+    by = {}
+    for r in res:
+        by.setdefault(r["card"], []).append(r)
+    out = {}
+    print(f"\nDO-NOTHING BAND, measured at seeds {LIB_SEEDS} from this run's own "
+          f"controls: {lo:.3f} - {hi:.3f}   frame-scale ceiling {ceil:.3f}\n")
+    print(f"{'card':22s} {'family':10s} {'motion (per seed)':30s} {'mean':>7s} "
+          f"{'creep':>6s}  verdict-hint")
+    rank = sorted(by.items(), key=lambda kv: -sum(x["motion"] for x in kv[1]) / len(kv[1]))
+    for cid, rs in rank:
+        rs.sort(key=lambda x: x["seed"])
+        ms = [x["motion"] for x in rs]
+        mean = sum(ms) / len(ms)
+        cr = sum(x.get("creep", 1.0) for x in rs) / len(rs)
+        hint = ("FRAME-SCALE EVENT" if mean >= ceil else
+                "in the do-nothing band - LOOK at detail/" if mean <= hi else
+                "between band and ceiling - LOOK")
+        per = " ".join(f"{x:6.3f}" for x in ms)
+        out[cid] = dict(motions=ms, mean=round(mean, 3), creep=round(cr, 3), hint=hint,
+                        family=rs[0]["family"], text=rs[0]["text"])
+        print(f"{cid:22s} {rs[0]['family']:10s} {per:30s} {mean:7.3f} {cr:6.2f}  {hint}")
+    out["_band"] = dict(lo=lo, hi=hi, ceiling=ceil, seeds=LIB_SEEDS)
+    json.dump(out, open(f"{LIB_OUT}/summary.json", "w"), indent=1)
+    print(f"\nwrote {LIB_OUT}/summary.json")
+
+
+def stage_lib_verdict():
+    """Merge the measured numbers onto the cards.
+
+    The VERDICT PROSE and the STATUS are authored by hand in LIB_VERDICTS after looking at
+    the strips - this stage only attaches them together with the numbers they were written
+    against, so a card can never carry a verdict without the measurement behind it. A card
+    with no hand-written verdict stays `untested`; it does not get a default."""
+    summ = json.load(open(f"{LIB_OUT}/summary.json"))
+    band = summ.get("_band", {})
+    n_ok = n_untested = 0
+    for cid, fam, name, text, purpose, shots, needs in MOTION_CARDS:
+        p = f"{LIB_DIR}/{cid}.json"
+        c = json.load(open(p, encoding="utf-8"))
+        s = summ.get(cid)
+        if s:
+            c["measured"] = {
+                "motion_per_seed": s["motions"],
+                "motion_mean": s["mean"],
+                "creep_mean": s["creep"],
+                "seeds": LIB_SEEDS,
+                "band_lo": band.get("lo"),
+                "band_hi": band.get("hi"),
+                "frame_scale_ceiling": band.get("ceiling"),
+                "keyframe": "studio/samples/motion_lib/_keyframe.png",
+                "frames": FRAMES,
+                "workflow": "12_ltx23_i2v_audio.json",
+            }
+        v = LIB_VERDICTS.get(cid)
+        if v:
+            c["status"], c["verdict"] = v[0], v[1]
+            n_ok += 1
+        else:
+            c["status"] = "untested"
+            n_untested += 1
+        with open(p, "w", encoding="utf-8") as f:
+            json.dump(c, f, indent=2, ensure_ascii=False)
+            f.write("\n")
+    print(f"  {n_ok} cards carry a measured verdict, {n_untested} still untested")
+
+
+# Filled in after the strips are looked at. (status, verdict-prose)
+LIB_VERDICTS = {}
+
+
 STAGES = {
     "keyframes": stage_keyframes, "base": stage_base, "cam-prompt": stage_cam_prompt,
     "motion": stage_motion, "post": stage_post, "measure": stage_measure,
     "strips": stage_strips, "publish": stage_publish,
+    # ── the MOTIONS library. Separate stage names, separate output tree, separate
+    # keyframe: nothing here touches the camera/transition sample pipeline above.
+    "lib-cards": stage_lib_cards, "lib-keyframe": stage_lib_keyframe,
+    "lib-render": stage_lib_render, "lib-measure": stage_lib_measure,
+    "lib-strips": stage_lib_strips, "lib-report": stage_lib_report,
+    "lib-verdict": stage_lib_verdict,
 }
 ORDER = ["keyframes", "base", "cam-prompt", "motion", "post", "measure", "strips",
          "publish"]
+LIB_ORDER = ["lib-cards", "lib-keyframe", "lib-render", "lib-measure", "lib-strips",
+             "lib-report", "lib-verdict"]
 
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("stage", nargs="+", choices=ORDER + ["all", "selftest"])
+    ap.add_argument("stage", nargs="+",
+                    choices=ORDER + LIB_ORDER + ["all", "lib-all", "selftest"])
     ap.add_argument("--force", action="store_true")
+    ap.add_argument("--only", default=None, help="substring filter on card id")
+    ap.add_argument("--seeds", default=None, help="comma-separated seeds for lib-render")
     a = ap.parse_args()
     if "selftest" in a.stage:
         selftest()
         print("selftest OK")
         return
     todo = ORDER if "all" in a.stage else a.stage
+    if "lib-all" in todo:
+        todo = [s for s in todo if s != "lib-all"] + LIB_ORDER
     gpu = ("base", "cam-prompt", "motion")
+
+    # The library stages take their own arguments and never queue into PENDING - they
+    # submit and poll their own contiguous batch, so they must not go through drain().
+    if any(s in LIB_ORDER for s in todo):
+        seeds = ([int(x) for x in a.seeds.split(",")] if a.seeds else None)
+        for s in todo:
+            if s not in LIB_ORDER:
+                continue
+            print(f"\n### {s}", flush=True)
+            if s == "lib-render":
+                stage_lib_render(seeds=seeds, force=a.force, only=a.only)
+            elif s == "lib-strips":
+                stage_lib_strips(only=a.only)
+            elif s == "lib-cards":
+                stage_lib_cards(force=a.force)
+            elif s == "lib-keyframe":
+                stage_lib_keyframe(force=a.force)
+            else:
+                STAGES[s]()
+        if not any(s in ORDER for s in todo):
+            return
 
     def drain():
         if PENDING:

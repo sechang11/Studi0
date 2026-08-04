@@ -1,0 +1,21 @@
+{
+  "id": "character-pip",
+  "name": "Pip (character)",
+  "file": "character_pip_00001_.safetensors",
+  "base_model": "animagine",
+  "engine": "anime",
+  "kind": "character",
+  "strength": 0.5,
+  "strength_range": [
+    0.4,
+    0.85
+  ],
+  "trigger": "pip",
+  "means": "Makes the same nine-year-old boy appear across shots on the anime engine - ginger mop with a white crown tuft, freckles, gap teeth, yellow raincoat and a green toy dinosaur - instead of a fresh child who merely matches the description.",
+  "status": "ready",
+  "verdict": "MEASURED FROM PIXELS. studio/samples/cast/pip_sweep.jpg is two scenes by three strengths, one seed per row. WHAT IT ADDS, and this is the interesting one: THE HELD PROP. Without the LoRA the toy is unreliable - the control renders a shapeless green blob on the neon street and a BLUE DOLPHIN in the field. At 0.5 and 0.85 it is an unmistakable green spiky dinosaur in both scenes. The LoRA learned the prop as part of the character, which answers an open question in this project about whether a second object in frame survives a turnaround. It does, and training reinforces it. The face, freckles and raincoat silhouette also lock. Neither undertrained nor overfit. WHAT IT COSTS: the background, but far less than NIKA's costs hers, and the difference is the finding. At 0.85 his neon street washes to hazy beige with the crowd reduced to outlines and his sunlit field pales to a flat gradient - degraded but still the scene. NIKA's field at the same strength collapses to a dark grey void. A CHARACTER LoRA DRAGS ITS OWN TRAINING BACKGROUND'S VALUE AND HUE, so the damage depends on how far the target scene sits from it: PIP trained on a light warm grey and merely pales a bright scene; NIKA trained on a dark blue-grey and destroys one. That explains why the project's existing note recorded the cost without explaining why it varies. 0.5 for scene work; 0.85 only if the prop matters more than the setting.",
+  "note": "THE FIRST CHILD CHARACTER LoRA. Trained 2026-08-04, 1000 steps, rank 16, 16 images, from ~/ComfyUI/input/pip_train. MEASURED WALL CLOCK 1276 s (21.3 min). | IT LEARNED AN ARTEFACT AS AN IDENTITY FEATURE. His sheet rendered stray white/silver tufts at the crown; the qwen turnaround amplified them into all 16 views - the 'back' view reads almost entirely white - so the LoRA encodes white-over-orange hair, plainly visible at 0.85. His card asks only for 'orange hair, messy hair'. THIS IS THE SECOND OCCURRENCE IN THIS PROJECT: character-viro's verdict describes pale blond over the crown as an identity feature while VIRO's card asks for 'long dark brown curly hair'. The chain is sheet -> turnaround -> LoRA, and each stage treats the previous one as ground truth, so a one-off highlight becomes permanent. LOOK AT THE SHEET BEFORE TURNING IT AROUND. | WHAT IT COULD NOT LEARN: the odd wellington boots, one red and one green, named in every rung of his wear ladder. His sheet is framed upper-body so the boots were never in it, the turnaround gave him plain brown boots, and the sweep gives red+green once, both-green twice and yellow+green twice. A DETAIL BELOW THE FRAME OF THE REFERENCE SHEET CANNOT BE TRAINED IN, at any strength. | base_model is animagine because workflows/33 hard-codes it. 102,459,244 bytes, same as VIRO's and NIKA's. Not independently key-checked. | MODEL-ONLY; load with LoraLoaderModelOnly. Dead on qwen per compose.py:1801-1818. | trigger 'pip' from the 16 caption files in pip_train, all beginning 'pip, '. | THE MALE CONSTANT: base_tags carries 'child focus, young boy, small' so compose.py:1482 does not append 'mature male, masculine' to a nine-year-old. Half the fix only - the render negative is not reachable from a card; see character-nika's note.",
+  "example": "/samples/cast/pip_sweep.jpg",
+  "example_kind": "strength sweep, two scenes",
+  "example_note": "Left column is the control at strength 0. The OFF cell is the evidence - compare the toy in particular, which is a dolphin in the control."
+}

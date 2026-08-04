@@ -2,11 +2,18 @@
   "id": "MANAGER",
   "name": "The Manager",
   "desc": "Old enough to have watched all nine defeats from the touchline.",
-  "status": "partial",
-  "tags": "1man, solo, grey hair, short beard, lined face, dark tracksuit, team crest",
-  "sheet": "",
-  "voice": "indextts2 voices_examples/male/male_01.wav",
-  "note": "NO REFERENCE SHEET. IPAdapter falls to weight 0.0 on every shot of him, so his face will drift between shots. compile.py warns about this. Generate one with scripts/make_sheets.py to fix. | `prose` is the VISUAL description used by the qwen engine; `desc` is narrative and tells an image model nothing it can draw.",
-  "todo": "sheet",
+  "status": "ready",
+  "tags": "1boy, solo, old man, grey hair, short beard, lined face, wrinkles",
+  "base_tags": "male focus, mature male, stout",
+  "wear_tags": [
+    "clean dark tracksuit, zipped to the collar, team crest, whistle on a lanyard, neat",
+    "dark tracksuit, half-zipped, team crest, whistle on a lanyard, rain on the shoulders, damp hair",
+    "dark tracksuit, half-zipped, rain-soaked, team crest, whistle on a lanyard, mud at the hem, breathing hard",
+    "dark tracksuit, collar torn, whistle lanyard snapped, team crest, soaked through, exhausted",
+    "dark tracksuit torn at the collar, whistle gone, team crest hanging loose, soaked and mud-streaked, trembling, utterly exhausted"
+  ],
+  "sheet": "sheet_anime_manager.png",
+  "voice": "higgs_v3 voices_examples/male/male_01.wav",
+  "note": "MEASURED ON THE NEW SHEET: THE TRACKSUIT LADDER WORKS. Rung 0 asks for a clean dark tracksuit zipped to the collar, a team crest and a whistle on a lanyard, and the sheet rendered all four - dark track jacket with white sleeve stripes, zipped, a shield crest on the chest and a whistle hanging from a lanyard. That is the direct confirmation that the wear_tags repair fixed the real defect: he is no longer wearing a 'clean uniform'. | TWO THINGS DRIFTED. He rendered ROUND GLASSES that appear nowhere on this card, which means they will drift in and out shot to shot; either add them to `tags` deliberately or expect inconsistency. And 'stout' in base_tags did NOT land - he rendered gaunt and thin. A build word in base_tags is weaker than the face and garment tags that surround it. | HE HAS NO TURNAROUND AND NO LoRA. Only the sheet was rendered, which is enough to lift IPAdapter off 0.0; NIKA and PIP were the two training targets. | REPAIRED. Four defects were fixed here, one more than was reported. (1) `tags` opened with '1man', which is not a danbooru count tag; compose.py:1169-1176 warns on it by name. Now '1boy, solo'. (2) No wear_tags at all, so compose.py:1680 fell through to the WEAR constant and a manager in a tracksuit was dressed in a 'clean uniform' at every damage level. He now has a tracksuit ladder: zipped, half-zipped and rain-soaked, collar torn and the whistle lanyard snapped. (3) sheet was empty, so short.py:305-306 set IPAdapter weight to 0.0 on every shot of him and his face drifted between shots. He now has one. (4) NOT PREVIOUSLY REPORTED: the garment was in `tags` - 'dark tracksuit, team crest' sat in slot 1, the position reserved for what never changes. A garment in `tags` cannot be damaged, because the ladder in wear_tags then argues with an undamaged copy of the same garment in an earlier and more specific position. That is the pristine-jersey failure exactly. The tracksuit has been moved into the ladder and out of `tags`. | ALSO CHANGED: the voice engine. This card read 'indextts2 voices_examples/male/male_01.wav', but every voice card in studio/voices/ carries engine higgs_v3 and none carries indextts2, while compile.py:724-726 takes the engine from the string with no validation against the voice card at all. The engine has been normalised to higgs_v3 to match male_01.json. This was NOT verified by listening. | `prose` is the VISUAL description used by the qwen engine; `desc` is narrative and tells an image model nothing it can draw.",
   "prose": "an older man with grey hair and a short beard, a lined weathered face"
 }

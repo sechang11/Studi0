@@ -2,5 +2,7 @@
   "id": "handheld",
   "desc": "Unease. Very subtle or it reads as a mistake.",
   "status": "ready",
-  "verdict": "RENDERED 2026-08-04. Post tier, real but very small. The crop oscillates +/-2px out of 1280, which is 0.16% of frame width: the landmark tracker cannot resolve it (+0px on both landmarks) and it is invisible in a frame strip. It IS doing something - frame-to-frame difference 0.82 against exactly 0.00 for static, MAD vs static 7.68, native peak-to-peak excursion 4x4px. The card warns it must be subtle or it reads as a mistake; as shipped it is subtle enough that it may read as nothing at all. Asked of the video model: no visible wobble, activity 1.28 vs a 1.02 floor."
+  "verdict": "RENDERED 2026-08-04. Post tier, real but very small. The crop oscillates +/-2px out of 1280, which is 0.16% of frame width: the landmark tracker cannot resolve it (+0px on both landmarks) and it is invisible in a frame strip. It IS doing something - frame-to-frame difference 0.82 against exactly 0.00 for static, MAD vs static 7.68, native peak-to-peak excursion 4x4px. The card warns it must be subtle or it reads as a mistake; as shipped it is subtle enough that it may read as nothing at all. Asked of the video model: no visible wobble, activity 1.28 vs a 1.02 floor.",
+  "renders": "post",
+  "filter": "crop=w-6:h-6 oscillating +/-2px on sin(3.1t)/cos(2.3t),scale back"
 }

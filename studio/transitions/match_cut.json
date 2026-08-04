@@ -4,6 +4,13 @@
   "status": "needs_authoring",
   "frames": 0,
   "filter": null,
-  "note": "Cannot be automated - the two shots must be COMPOSED to rhyme. Set it and the compiler reminds you to check the pair.",
-  "verdict": "RENDERED 2026-08-04 between two real clips. THE PICTURE IS IDENTICAL TO A HARD CUT - MAD against cut exactly 0.00. Correct and expected: this card is an authoring instruction, not an operation, and the sample can only ever show a hard cut. The rhyme has to be composed into the two shots."
+  "note": "Cannot be automated - the two shots must be COMPOSED to rhyme. Set it and the compiler reminds you to check the pair. (That reminder did not exist until 2026-08-04: compile.py warned only on status 'roadmap', so a needs_authoring card fell through in silence and the beat's transition was quietly rewritten to 'cut'. It now warns on needs_authoring too.)",
+  "verdict": "RENDERED 2026-08-04 between two real clips. THE PICTURE IS IDENTICAL TO A HARD CUT - MAD against cut exactly 0.00. Correct and expected: this card is an authoring instruction, not an operation, and the sample can only ever show a hard cut. The rhyme has to be composed into the two shots.",
+  "picture": "identical_to_cut",
+  "renders_in": "nothing",
+  "tier": {
+    "picture": "none",
+    "audio": "none"
+  },
+  "picture_note": "Identical to a hard cut, and correct: this card is an AUTHORING INSTRUCTION, not an operation. The sample can only ever show a hard cut. The rhyme has to be composed into the two shots."
 }

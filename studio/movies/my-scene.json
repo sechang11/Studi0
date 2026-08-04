@@ -14,6 +14,7 @@
   "sheets": {},
   "characters": {},
   "character_loras": {},
+  "character_lora_weights": {},
   "voices": {},
   "music": [
     {
@@ -33,12 +34,13 @@
       "clip_secs": 6.0,
       "intensity": 1.429,
       "camera": "static",
-      "transition": "smash",
+      "transition": "cut",
       "grade": "eq=contrast=1.35:saturation=0.45",
       "seed": 951433512,
       "tags": "a narrow kitchen at night, a table pushed against a wall, one chair overturned, fluorescent light overhead, no humans, wide shot, narrow kitchen, night, fluorescent light, cluttered counter, closed window, indoors, high contrast, harsh light, modern sports anime, cel shading, cinematic, masterpiece, best quality, very aesthetic, absurdres",
       "prompt": "a narrow kitchen at night, a table pushed against a wall, one chair overturned, fluorescent light overhead, no humans, wide shot, narrow kitchen, night, fluorescent light, cluttered counter, closed window, indoors, high contrast, harsh light, modern sports anime, cel shading, cinematic, masterpiece, best quality, very aesthetic, absurdres",
-      "motion": "Slow deliberate movement only."
+      "motion": "Nobody moves.",
+      "motion_src": "hold:hold_nobody"
     },
     {
       "id": "act_one_argument_small_room_01",
@@ -46,12 +48,13 @@
       "clip_secs": 6.0,
       "intensity": 1.429,
       "camera": "handheld",
-      "transition": "smash",
+      "transition": "cut",
       "grade": "eq=contrast=1.35:saturation=0.45",
       "seed": 3505062040,
       "tags": "shouting, mouth wide open, leaning forward over a table, one arm braced on the tabletop, upper body, medium shot, narrow kitchen, night, fluorescent light, cluttered counter, closed window, indoors, high contrast, harsh light, modern sports anime, cel shading, cinematic, masterpiece, best quality, very aesthetic, absurdres",
       "prompt": "shouting, mouth wide open, leaning forward over a table, one arm braced on the tabletop, upper body, medium shot, narrow kitchen, night, fluorescent light, cluttered counter, closed window, indoors, high contrast, harsh light, modern sports anime, cel shading, cinematic, masterpiece, best quality, very aesthetic, absurdres",
-      "motion": "Slow deliberate movement only."
+      "motion": "The figure leans forward over a table. Nothing else in the frame moves.",
+      "motion_src": "desc:derived from the shot line: 'leaning forward over a table'"
     },
     {
       "id": "act_one_argument_small_room_02",
@@ -59,12 +62,13 @@
       "clip_secs": 6.0,
       "intensity": 1.429,
       "camera": "static",
-      "transition": "smash",
+      "transition": "cut",
       "grade": "eq=contrast=1.35:saturation=0.45",
       "seed": 2327508209,
       "tags": "flinching, jaw set, staring back without blinking, close-up, narrow kitchen, night, fluorescent light, cluttered counter, closed window, indoors, high contrast, harsh light, modern sports anime, cel shading, cinematic, masterpiece, best quality, very aesthetic, absurdres",
       "prompt": "flinching, jaw set, staring back without blinking, close-up, narrow kitchen, night, fluorescent light, cluttered counter, closed window, indoors, high contrast, harsh light, modern sports anime, cel shading, cinematic, masterpiece, best quality, very aesthetic, absurdres",
-      "motion": "Slow deliberate movement only."
+      "motion": "The figure stays completely still.",
+      "motion_src": "hold:hold_figure"
     },
     {
       "id": "act_one_argument_small_room_03",
@@ -72,12 +76,13 @@
       "clip_secs": 6.0,
       "intensity": 1.429,
       "camera": "static",
-      "transition": "smash",
+      "transition": "cut",
       "grade": "eq=contrast=1.35:saturation=0.45",
       "seed": 1116116702,
       "tags": "a mug knocked on its side, spilled tea spreading across a table edge, close-up, no humans, narrow kitchen, night, fluorescent light, cluttered counter, closed window, indoors, high contrast, harsh light, modern sports anime, cel shading, cinematic, masterpiece, best quality, very aesthetic, absurdres",
       "prompt": "a mug knocked on its side, spilled tea spreading across a table edge, close-up, no humans, narrow kitchen, night, fluorescent light, cluttered counter, closed window, indoors, high contrast, harsh light, modern sports anime, cel shading, cinematic, masterpiece, best quality, very aesthetic, absurdres",
-      "motion": "Slow deliberate movement only."
+      "motion": "Spilled tea spreads across a table edge.",
+      "motion_src": "desc:derived from the shot line: 'spilled tea spreading across a table edge'"
     },
     {
       "id": "act_one_argument_small_room_04",
@@ -85,12 +90,13 @@
       "clip_secs": 6.0,
       "intensity": 1.429,
       "camera": "handheld",
-      "transition": "smash",
+      "transition": "cut",
       "grade": "eq=contrast=1.35:saturation=0.45",
       "seed": 2537350466,
       "tags": "speaking quietly, mouth barely open, eyes down, turned half away, close-up, narrow kitchen, night, fluorescent light, cluttered counter, closed window, indoors, high contrast, harsh light, modern sports anime, cel shading, cinematic, masterpiece, best quality, very aesthetic, absurdres",
       "prompt": "speaking quietly, mouth barely open, eyes down, turned half away, close-up, narrow kitchen, night, fluorescent light, cluttered counter, closed window, indoors, high contrast, harsh light, modern sports anime, cel shading, cinematic, masterpiece, best quality, very aesthetic, absurdres",
-      "motion": "Slow deliberate movement only."
+      "motion": "The figure stays completely still.",
+      "motion_src": "hold:hold_figure"
     }
   ]
 }

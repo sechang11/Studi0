@@ -2,5 +2,7 @@
   "id": "tilt_u",
   "desc": "Up. Power, scale, awe.",
   "status": "ready",
-  "verdict": "RENDERED 2026-08-04. Post tier. Content moves DOWN 56px, which is exactly the filter travel (816-704)/2 = 56px; the horizon drops 21px. MAD vs tilt_d 26.39, vs static 30.64. Note a tilt shifts only 56px against a pan's 100px, because the vertical crop margin is smaller - tilts are inherently about half as strong as pans at the same 1.16x upscale. Asked of the video model, tilt_u is the ONE roadmap-style move the prompt route gets right: LTX cranes up the clock tower convincingly (activity 7.45), though it leaves the original framing behind."
+  "verdict": "RENDERED 2026-08-04. Post tier. Content moves DOWN 56px, which is exactly the filter travel (816-704)/2 = 56px; the horizon drops 21px. MAD vs tilt_d 26.39, vs static 30.64. Note a tilt shifts only 56px against a pan's 100px, because the vertical crop margin is smaller - tilts are inherently about half as strong as pans at the same 1.16x upscale. Asked of the video model, tilt_u is the ONE roadmap-style move the prompt route gets right: LTX cranes up the clock tower convincingly (activity 7.45), though it leaves the original framing behind.",
+  "renders": "post",
+  "filter": "scale=1.16x,crop=w:h travelling -y over the clip"
 }

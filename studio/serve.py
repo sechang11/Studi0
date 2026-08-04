@@ -256,7 +256,14 @@ def _demos(cid, sheet_base):
 # card. Rather than print a command that fails, the page is told which sheet-making tool
 # is ACTUALLY on disk, checked per request so a tool appearing while the page is open is
 # picked up on refresh.
-SHEET_TOOLS = ("studio/_tools/make_character_sheet.py",
+#
+# TWO tools landed, one per engine, and neither under the name this probe was written
+# against - so the page went on printing "THERE IS NO TOOL FOR THIS YET" while both sat in
+# _tools. They are listed anime-first because five of the six cards in the library are
+# anime cards, and a sheet imports its style, so an anime character wants an anime sheet.
+SHEET_TOOLS = ("studio/_tools/make_anime_sheet.py",     # animagine, IPAdapter at 0.0
+               "studio/_tools/qwen_sheet.py",           # qwen, photographic
+               "studio/_tools/make_character_sheet.py",
                "studio/_tools/make_sheet.py",
                "scripts/make_character_sheet.py")
 
@@ -266,6 +273,13 @@ def _sheet_tool():
         if os.path.isfile(f"{ROOT}/{rel}"):
             return rel
     return None
+
+
+def _sheet_tools():
+    """Every sheet tool on disk, not just the first. The two that exist render on
+    DIFFERENT engines and produce visibly different sheets, so a character card whose
+    engine is qwen must not be told to run the animagine one."""
+    return [rel for rel in SHEET_TOOLS if os.path.isfile(f"{ROOT}/{rel}")]
 
 
 def _composer():
@@ -343,6 +357,7 @@ def cast():
         on_disk = None
     composer = _composer()
     sheet_tool = _sheet_tool()
+    sheet_tools = _sheet_tools()
     libs = None
     if composer is not None:
         try:
@@ -366,7 +381,13 @@ def cast():
         vd = f"{HERE}/samples/cast/{cid}"
         views = []
         if os.path.isdir(vd):
-            names = [v for v in os.listdir(vd) if v.lower().endswith(CAST_IMG_EXT)]
+            # A leading underscore marks a file that is deliberately NOT a
+            # turnaround view. samples/cast/VIRO/_sheet_photo.png is a photographic
+            # REFERENCE SHEET written here by another tool; without this filter it
+            # was served as a 17th view, so the page claimed 17 turnaround views
+            # where 16 were rendered and put a photograph in the turnaround grid.
+            names = [v for v in os.listdir(vd)
+                     if v.lower().endswith(CAST_IMG_EXT) and not v.startswith("_")]
             # numeric prefixes first and in order, so views[0] stays 00_front and the
             # wizard's thumbnail does not become whatever sorted last into the folder.
             names.sort(key=lambda v: (0 if v[:1].isdigit() else 1, v))
@@ -379,6 +400,7 @@ def cast():
         c["sheet_url"], c["sheet_exists"] = _mirror_sheet(sheet)
         c["sheet_dir"] = CAST_INPUT
         c["sheet_tool"] = sheet_tool
+        c["sheet_tools"] = sheet_tools
         c["dataset"] = _dataset(cid)
 
         lf = str(c.get("lora") or "")

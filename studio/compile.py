@@ -28,6 +28,10 @@ without touching code:
 
     transitions/   cut, dissolve, fade_black, flash, whip_pan, iris, smash, l_cut ...
     cameras/       static, push, pull, pan_l, pan_r, tilt_u, tilt_d, handheld ...
+    motions/       what the VIDEO model is asked for. hold_all, walk_in, hand_to_face_only,
+                   confetti, cam_push ... This is the only major variable in the project
+                   that had no library at all until now, and it is the one the video pass
+                   actually reads - the string that decides whether the film moves.
     looks/         neutral, night, golden, cold, memory, bleach ...
     shots/         establish, master, speak, react, pillow, insert, build, sakuga ...
     cues/          music and sfx presets
@@ -124,6 +128,12 @@ VARS = collections.OrderedDict([
                                              "its numbers are not wired")),
     ("time",        ("any",     "",          "night / dawn / day / dusk")),
     ("camera",      ("any",     "static",    "studio/cameras/*.json - default move for shots here")),
+    # THE ONE STRING THE VIDEO MODEL READS, and until this wave it was a constant.
+    # Every beat of every film carried "Slow deliberate movement only." - measured at
+    # 0.520 against an empty-prompt control of 0.614, i.e. stiller than saying nothing.
+    # Per-shot: `shot: sakuga @confetti_fall | ...`, exactly like @camera and @Ns.
+    ("motion",      ("any",     "",          "studio/motions/*.json id, or a sentence. "
+                                             "Blank derives one from the shot line")),
     ("fx",          ("any",     "",          "punch shake aberr glow flash hot ramp smear whiteout")),
     ("transition",  ("scene",   "cut",       "studio/transitions/*.json - how we ENTER this scene")),
     ("audio_lead",  ("any",     0,           "seconds to shift dialogue against picture. NEGATIVE = hear it early")),
@@ -163,6 +173,38 @@ def liblist(kind):
         if fn.endswith(".json"):
             out[fn[:-5]] = json.load(open(f"{d}/{fn}", encoding="utf-8"))
     return out
+
+
+def cam_renders(cam):
+    """Can the renderer actually produce this move?
+
+    Keyed off the card's own `renders` field rather than off `status`, because status is a
+    UI word and this is a fact about scripts/short.py fx_chain(). The two came apart badly:
+    dolly_zoom, orbit and rack_focus were status 'roadmap', which the per-shot dropdown
+    disabled and the scene-level grid offered as a normal clickable choice - and the
+    picker attached studio/samples/cameras/<id>.mp4 as a hover-playing thumbnail, which
+    for those three IS static.mp4 byte for byte. A real video of nothing happening under
+    the name of a camera move.
+
+    `status` falls back for any card written before the field existed.
+    """
+    r = str(cam.get("renders") or "").strip()
+    return r == "post" if r else cam.get("status") == "ready"
+
+
+def cam_dead_warning(where, cam, fallback):
+    """One line, naming the move, what you get instead, and why it cannot be built."""
+    why = _one(cam.get("why_not") or cam.get("desc") or "")
+    needs = _one(cam.get("needs") or "")
+    doc = f" see studio/{cam['roadmap']}." if cam.get("roadmap") else ""
+    return (f"{where}: camera '{cam['id']}' RENDERS NOTHING - fx_chain() has no branch for "
+            f"it, so the clip would be byte-identical to static. Falling back to "
+            f"'{fallback}'. {why}"
+            + (f" TO BUILD IT: {needs}" if needs else "") + doc)
+
+
+def _one(s):
+    return " ".join(str(s or "").split())
 
 
 def clamp_secs(secs, bid, warns):
@@ -283,7 +325,17 @@ def parse(path):
             # how long the CLIP is generated for, which is the thing that decides how much
             # room the edit has to cut inside. It was hardcoded at 6s for every shot in
             # every film.
-            tmpl, cam_, secs_ = tmpl.strip(), "", None
+            #
+            # `shot: TEMPLATE [@camera] [@motion] [@Ns] | what is happening`
+            #
+            # A third kind of @-token: a MOTION card, which is the string the video model
+            # reads. It shares the grammar with @camera rather than getting a syntax of
+            # its own because they are the same kind of decision - how this shot moves -
+            # made at two different tiers, and an author should not have to remember which
+            # tier a name belongs to. Which library a token comes from is decided by
+            # LOOKING, not by position: @push is a camera because studio/cameras/push.json
+            # exists, @confetti_fall is a motion because studio/motions/ has it.
+            tmpl, cam_, mot_, secs_ = tmpl.strip(), "", "", None
             while "@" in tmpl:
                 tmpl, _, tok = tmpl.rpartition("@")
                 tmpl, tok = tmpl.strip(), tok.strip()
@@ -291,8 +343,22 @@ def parse(path):
                 if m:
                     secs_ = float(m.group(1))
                 elif tok:
-                    cam_ = tok
-            b = {"shot": tmpl, "desc": desc.strip(), "camera": cam_}
+                    is_cam = os.path.exists(f"{HERE}/cameras/{tok}.json")
+                    is_mot = os.path.exists(f"{HERE}/motions/{tok}.json")
+                    if is_cam and is_mot:
+                        raise SystemExit(
+                            f"@{tok} is ambiguous - there is both a camera and a motion "
+                            f"called {tok!r}.\n"
+                            f"  rename one of studio/cameras/{tok}.json or "
+                            f"studio/motions/{tok}.json.")
+                    if is_mot:
+                        mot_ = tok
+                    else:
+                        # Unknown names still land here, so lib("cameras", ...) below
+                        # keeps raising the error that prints what IS available - with the
+                        # motions list added, because a typo could have been either.
+                        cam_ = tok
+            b = {"shot": tmpl, "desc": desc.strip(), "camera": cam_, "motion": mot_}
             if secs_:
                 b["clip_secs"] = secs_
             cur_sc["beats"].append(b)
@@ -451,6 +517,11 @@ def compile_movie(path):
     # derby-ep1 already emits 10 warnings and 8 of them are the same per-beat notice.
     compose_warns = collections.OrderedDict()
     said = set(engine_said)
+    # Where each beat's motion came from. Printed at the end because the interesting
+    # number is the RATIO - a film that derived two motions out of twenty has nineteen
+    # shot lines describing a composition rather than an action, and that is a fact about
+    # the writing, not about the compiler.
+    motion_src_counts = collections.Counter()
     beats = []
     used = []                 # character ids actually referenced, in first-seen order
     spoke = set()             # character ids that have a spoken line
@@ -465,10 +536,46 @@ def compile_movie(path):
             if tr.get("status") == "roadmap":
                 warns.append(f"{sc['id']}: transition '{tr['id']}' is not implemented yet "
                              f"-> falling back to 'cut'. see studio/{tr['roadmap']}")
+            elif tr.get("status") == "needs_authoring":
+                # THE CARD PROMISED THIS AND IT DID NOT EXIST. match_cut.json says "Set it
+                # and the compiler reminds you to check the pair" - and the only status
+                # this loop ever tested was "roadmap", so a needs_authoring card fell
+                # straight through in silence and the beat's transition was quietly
+                # rewritten to "cut" a few lines below. A card that describes a warning
+                # nothing emits is the same failure as a knob that does nothing.
+                warns.append(
+                    f"{sc['id']}: transition '{tr['id']}' is an AUTHORING instruction, not "
+                    f"an operation - nothing in the renderer can produce it. "
+                    f"{tr.get('note') or ''} Check that the last shot of the previous "
+                    f"scene and the first shot of this one actually rhyme; if they do not, "
+                    f"this is a plain cut.")
+            # Picture-identical to a cut and CORRECT that way: the whole content of these
+            # cards is audio. Said once per scene so the compile log stops reading as if
+            # something were broken. See studio/transitions/j_cut.json.
+            if tr.get("picture") == "identical_to_cut" and tr.get("audio_lead"):
+                warns.append(
+                    f"fyi: {sc['id']}: transition '{tr['id']}' does nothing to the "
+                    f"picture, which is correct - it is an audio edit, and it lands as a "
+                    f"{tr['audio_lead']}s lead on this scene's first spoken line.")
+            if tr.get("audio_drop") and not tr.get("audio_lead"):
+                # smash declares audio_drop: 0.4 and NOTHING reads it - not compile.py,
+                # not short.py, not epic.py. The card's own description says the contrast
+                # is the whole effect, so the whole effect is missing.
+                warns.append(
+                    f"{sc['id']}: transition '{tr['id']}' declares audio_drop "
+                    f"{tr['audio_drop']} and no renderer reads it, so the score does not "
+                    f"dip across this boundary and the transition compiles to a plain "
+                    f"cut. Put `silence: true` on the quiet side if you want the contrast "
+                    f"today.")
             cam = lib("cameras", v["camera"])
-            if cam.get("status") == "roadmap":
-                warns.append(f"{sc['id']}: camera '{cam['id']}' is not implemented yet "
-                             f"-> falling back to 'static'. see studio/{cam['roadmap']}")
+            if not cam_renders(cam):
+                warns.append(cam_dead_warning(sc["id"], cam, "static"))
+                # DOWNGRADE HERE, not at the point of use. Leaving the dead card bound
+                # made two downstream messages lie: a per-shot fallback announced it was
+                # falling back TO dolly_zoom, and compose.py told the author their hold was
+                # correct "because the camera move dolly_zoom does the moving" - a
+                # sentence about a move that renders nothing at all.
+                cam = lib("cameras", "static")
             if str(v.get("lipsync")).lower() in ("true", "yes", "1"):
                 warns.append(f"{sc['id']}: lipsync is not implemented yet. "
                              f"see studio/roadmap/lipsync.md")
@@ -499,11 +606,16 @@ def compile_movie(path):
                 # quietly rendering static.
                 bcam = cam
                 if b.get("camera"):
+                    if not os.path.exists(f"{HERE}/cameras/{b['camera']}.json"):
+                        # @-tokens can be either library, so an unknown one has to print
+                        # both lists or the author is sent to fix the wrong file.
+                        raise SystemExit(
+                            f"{bid}: @{b['camera']} is neither a camera nor a motion.\n"
+                            f"  cameras: {', '.join(sorted(x[:-5] for x in os.listdir(f'{HERE}/cameras')))}\n"
+                            f"  motions: {', '.join(sorted(x[:-5] for x in os.listdir(f'{HERE}/motions'))) if os.path.isdir(f'{HERE}/motions') else '(none authored)'}")
                     bcam = lib("cameras", b["camera"])
-                    if bcam.get("status") == "roadmap":
-                        warns.append(f"{bid}: camera '{bcam['id']}' is not implemented yet "
-                                     f"-> falling back to the scene's '{cam['id']}'. "
-                                     f"see studio/{bcam.get('roadmap','roadmap/')}")
+                    if not cam_renders(bcam):
+                        warns.append(cam_dead_warning(bid, bcam, cam["id"]))
                         bcam = cam
                 d = collections.OrderedDict(
                     id=bid, template=tmpl,
@@ -513,7 +625,7 @@ def compile_movie(path):
                     clip_secs=clamp_secs(b.get("clip_secs") or v.get("clip_secs") or 6,
                                          bid, warns),
                     intensity=round(1.0 / scale, 3),
-                    camera=bcam["id"] if bcam.get("status") == "ready" else "static",
+                    camera=bcam["id"] if cam_renders(bcam) else "static",
                     transition=tr["id"] if tr.get("status") == "ready" else "cut",
                     grade=look["grade"],
                     seed=stable_seed(root, ch["id"], sc["id"], i))
@@ -578,6 +690,11 @@ def compile_movie(path):
                     "weather": v.get("weather"),
                     "desc": (b.get("desc") or "").strip(),
                     "template": tmpl, "camera": bcam.get("id"),
+                    # A per-shot @motion beats the scene's, exactly as @camera does.
+                    # The scene/chapter/movie value may be a card id OR a sentence; the
+                    # per-shot @-token can only be a card id, because @-tokens cannot
+                    # contain spaces.
+                    "motion": (b.get("motion") or v.get("motion") or "").strip(),
                     "tags": v["tags"], "negative": v.get("negative"),
                     # a film always ends in clips, and the temporal-stability check is
                     # worth roughly 8x what it costs to run: a keyframe measured 4.1s a
@@ -600,7 +717,26 @@ def compile_movie(path):
                     warns.append(
                         f"{bid}: emotion '{emo}' renders as face tags, but its "
                         f"voice_style '{e['voice_style']}' is not routed to TTS yet")
-                d["motion"] = "Slow deliberate movement only."
+                # ---- what the VIDEO model is asked for ---------------------------
+                # This line used to read:
+                #
+                #     d["motion"] = "Slow deliberate movement only."
+                #
+                # It was the ONLY assignment to `motion` in the compiler, so every beat of
+                # every film ever produced here carried those five words. They measured
+                # 0.520 against an empty-prompt control of 0.614 - one of the three
+                # stillest cells in an 81-clip sweep. The app's stated purpose is precise
+                # video generation and its video prompt was a constant that asked for
+                # nothing, in a project where the video pass costs about 8x the keyframe.
+                #
+                # It now comes from compose.resolve(), which means the wizard's preview
+                # and the thumbnail renderer answer the same question the same way. See
+                # compose.resolve_motion() for the ladder and the measurements behind it.
+                d["motion"] = comp["motion"]
+                d["motion_src"] = (f"{comp['motion_source']}:{comp['motion_id']}"
+                                   if comp["motion_id"] else
+                                   f"{comp['motion_source']}:{comp['motion_reason']}")
+                motion_src_counts[comp["motion_source"]] += 1
                 if b.get("text"):
                     d["line"] = {"who": who, "text": b["text"]}
                     # Audio/picture offset. An explicit `audio_lead` always wins; the
@@ -621,8 +757,15 @@ def compile_movie(path):
                         lead = float(v.get("audio_lead", 0) or 0)
                     except (TypeError, ValueError):
                         lead = 0.0
-                    if not lead and tr["id"] in ("l_cut", "j_cut") and not spoken_in_scene:
-                        lead = -0.6
+                    # Read off the CARD rather than off a hardcoded pair of names, so the
+                    # -0.6 lives in one place - studio/transitions/*.json - and a new
+                    # audio-edit transition is a file rather than a code change, which is
+                    # what this library promises everywhere else.
+                    if not lead and not spoken_in_scene:
+                        try:
+                            lead = float(tr.get("audio_lead") or 0)
+                        except (TypeError, ValueError):
+                            lead = 0.0
                     if lead:
                         d["audio_lead"] = round(lead, 3)
                     spoken_in_scene = True
@@ -721,12 +864,22 @@ def compile_movie(path):
         # trained LoRA is a change to the weights, and it holds in scenes the sheet
         # never covered.
         character_loras={c: cast[c]["lora"] for c in used if cast[c].get("lora")},
+        # AND THE STRENGTH TO LOAD EACH AT, which until now no authored film could set.
+        # short.py defaulted every character LoRA to 0.85; 0.85 was measured on this box to
+        # collapse NIKA's sunlit field into a dark grey void, and 0.5 to keep both her face
+        # and the scene. The number lives on the card as `lora_strength_measured` because
+        # it is a property of the trained weights - of how far the training backdrop sits
+        # from the target scene - not of the film. Absent, short.py keeps 0.85.
+        character_lora_weights={c: float(cast[c]["lora_strength_measured"])
+                                for c in used
+                                if cast[c].get("lora")
+                                and cast[c].get("lora_strength_measured") is not None},
         voices={c: {"engine": cast[c]["voice"].split()[0],
                     "voice": cast[c]["voice"].split()[-1]}
                 for c in used if cast[c].get("voice")},
         music=cues_out,
         beats=beats)
-    return film, chapters, warns
+    return film, chapters, warns, motion_src_counts
 
 
 def main():
@@ -742,7 +895,7 @@ def main():
         return
     if not a.path:
         ap.error("give a .movie file, or --vars")
-    film, chapters, warns = compile_movie(a.path)
+    film, chapters, warns, motion_src = compile_movie(a.path)
     out = os.path.splitext(a.path)[0] + ".json"
     json.dump(film, open(out, "w", encoding="utf-8"), indent=2, ensure_ascii=False)
     for w in warns:
@@ -750,6 +903,14 @@ def main():
     print(f"compiled {a.path} -> {out}")
     print(f"  {len(chapters)} chapters, "
           f"{sum(len(c['scenes']) for c in chapters)} scenes, {len(film['beats'])} beats")
+    # The video prompt, said out loud once per compile. It is the most expensive stage of
+    # the render and it was a constant for the life of the project largely because nothing
+    # ever printed it.
+    if motion_src:
+        WHERE = {"card": "from a motion card", "text": "written on the beat",
+                 "desc": "derived from the shot line", "hold": "holding still"}
+        print("  motion:  " + ",  ".join(
+            f"{n} {WHERE.get(k, k)}" for k, n in motion_src.most_common()))
     if a.timeline:
         print(f"\n{'chapter':16}{'scene':18}{'beats':>6}  look / transition")
         for c in chapters:

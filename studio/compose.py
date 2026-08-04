@@ -111,7 +111,7 @@ NO_PERSON = {"pillow", "insert", "establish"}
 ENGINES = ("anime", "qwen")
 
 GROUPS = ("styles", "places", "characters", "looks", "lighting", "weather",
-          "emotions", "tags", "checkpoints", "loras")
+          "emotions", "tags", "checkpoints", "loras", "motions", "cameras")
 
 _LIB_CACHE = {}
 
@@ -318,6 +318,654 @@ LORA_BASE_MEANS = {
 # Values of `kind` that belong in the style slot. Anything else on the right base still
 # loads - it is only a warning - because a LoRA does not know what it was filed under.
 LORA_STYLE_KINDS = {"style"}
+
+
+# ===========================================================================
+# MOTION - the one string the VIDEO model reads
+# ===========================================================================
+#
+# Every film this project ever produced sent LTX the same eleven words, on every beat of
+# every scene: "Slow deliberate movement only." That string was measured at 0.383 and
+# 0.425 across two fresh seeds, which is INSIDE the do-nothing band - indistinguishable
+# from an empty prompt. Worse than an empty prompt, in fact: against an empty control
+# measured at 0.614 it came back 0.520, one of the three stillest cells in an 81-clip
+# sweep. For the life of this project the video model has been asked, on every shot, to
+# hold still, by a string whose words say the opposite.
+#
+# THE GOVERNING RULE, measured twice now: THE MODEL RENDERS NOUNS, NOT ADJECTIVES.
+# Qualities do nothing; things land. All five adjective-style cells in the sweep were
+# inert - and not harmlessly inert, they produced undirected drift. A motion vocabulary
+# built on adverbs would fail exactly the way the constant did.
+#
+# THE GRAMMAR THAT WORKS:      [MOVER] [ACTION VERB] [PATH / SPATIAL RELATION]
+#
+# with three constraints, each of them a measurement rather than a preference:
+#
+#   ONE MOVER.  Two movers in one string destroyed the composition.
+#   THE MOVER MUST BE ABLE TO TRAVEL.  A lamp that flickers is a state change in place
+#       and did nothing (0/3); rain running down a window is texture scale and did
+#       nothing, but moved the person instead.
+#   THE PATH IS DOING MOST OF THE WORK.  "The curtain lifts." failed 0/3.
+#       "The curtain lifts behind her." swept the curtain across the entire frame. Same
+#       mover, same verb; the prepositional phrase is the whole difference. The camera
+#       obeys the same rule - "pushes slowly forward down the street" sat at the floor
+#       and "pushes in past the pillar" is a real 1.40x dolly-in.
+#
+# AND ONE HAZARD THAT COST A WHOLE SWEEP TO FIND: analyze_shots.motion() is BLIND to
+# subject-scale action. "She raises her right hand to her face" landed 9 times out of 9
+# and every one of those nine clips measured at or below the empty control. Ranking motion
+# by that number would throw away every performance beat in the library.
+
+# Manner adverbs. Measured inert as whole prompts, and they add nothing inside a derived
+# sentence either, so they are stripped out of an author's own words rather than carried
+# through. NOT the same thing as a direction word - see MOTION_PATH_LEAD.
+MOTION_ADVERBS = {
+    "slowly", "quickly", "gently", "softly", "smoothly", "dramatically", "subtly",
+    "suddenly", "violently", "carefully", "quietly", "loudly", "barely", "slightly",
+    "steadily", "rapidly", "deliberately", "calmly", "furiously", "wildly", "lazily",
+}
+
+# Words that may legitimately open a path. Prepositions and DIRECTION words - which name
+# where a thing goes, not the manner in which it goes there. Determiners are here too
+# because for a transitive verb the direct object is the spatial target: "the boot strikes
+# THE BALL" anchors the action exactly as well as a prepositional phrase does.
+MOTION_PREPS = {
+    # prepositions
+    "through", "across", "toward", "towards", "into", "onto", "down", "up", "over",
+    "under", "past", "behind", "between", "along", "around", "against", "off", "out",
+    "from", "in", "on", "at", "to", "beneath", "beside", "before", "after", "outside",
+    "inside", "within", "beyond", "below", "above",
+    # direction, not manner
+    "forward", "forwards", "backward", "backwards", "back", "left", "right", "upward",
+    "upwards", "downward", "downwards", "away", "apart", "together", "aside", "ahead",
+    "sideways", "inward", "outward", "closer",
+}
+# Determiners are added for the DERIVATION only, where the test is "does the text after
+# the verb look like a complement". A direct object is a spatial target: "the boot strikes
+# THE BALL" anchors the action as well as a prepositional phrase does. They are NOT part
+# of the has-a-path test on free text, where "The door swings." would otherwise pass on
+# its own leading article - a bug this table had for exactly one test run.
+MOTION_PATH_LEAD = MOTION_PREPS | {
+    "the", "a", "an", "his", "her", "their", "its", "one", "two", "three", "both",
+    "another", "that", "this", "these", "those",
+}
+
+# participle found in a shot description -> (finite verb, default path, mover kind)
+#
+# An ALLOWLIST, deliberately. The safe direction to be wrong in is "derived nothing",
+# because the fallback is a measured hold - whereas a wrong derivation spends a whole
+# clip. A participle that is really a static posture ("lying", "standing", "resting",
+# "hanging", "braced", "twisted") is simply absent from this table and therefore never
+# fires, which is why they do not need to be listed as exclusions.
+#
+# A default path of None means the verb is TRANSITIVE and the clause must supply its own
+# object. Without one the sentence is a bare intransitive - the shape that measured 0/3.
+MOTION_VERBS = {
+    # -- a thing in the world travels ------------------------------------------
+    "falling":     ("falls",     "through the frame",         "element"),
+    "dropping":    ("drops",     "through the frame",         "element"),
+    "tumbling":    ("tumbles",   "through the frame",         "element"),
+    "scattering":  ("scatters",  "across the frame",          "element"),
+    "rising":      ("rises",     "through the frame",         "element"),
+    "lifting":     ("lifts",     "across the frame",          "element"),
+    "drifting":    ("drifts",    "across the frame",          "element"),
+    "floating":    ("floats",    "across the frame",          "element"),
+    "blowing":     ("blows",     "across the frame",          "element"),
+    "streaming":   ("streams",   "across the frame",          "element"),
+    "pouring":     ("pours",     "down through the frame",    "element"),
+    "spilling":    ("spills",    "across the frame",          "element"),
+    "spreading":   ("spreads",   "across the frame",          "element"),
+    "sliding":     ("slides",    "across the frame",          "element"),
+    "rolling":     ("rolls",     "across the frame",          "element"),
+    "swinging":    ("swings",    "through the frame",         "element"),
+    "swaying":     ("sways",     "across the frame",          "element"),
+    "flying":      ("flies",     "across the frame",          "element"),
+    "crossing":    ("crosses",   None,                        "element"),
+    "passing":     ("passes",    "through the frame",         "element"),
+    "opening":     ("opens",     "toward the camera",         "element"),
+    "closing":     ("closes",    "toward the camera",         "element"),
+    "collapsing":  ("collapses", "into the frame",            "element"),
+    "bursting":    ("bursts",    "into the frame",            "element"),
+    "stretching":  ("stretches", "toward the camera",         "element"),
+    "landing":     ("lands",     "in the frame",              "element"),
+    # -- transitive impacts: the object IS the spatial target -------------------
+    "striking":    ("strikes",   None,                        "element"),
+    "hitting":     ("hits",      None,                        "element"),
+    "slamming":    ("slams",     None,                        "element"),
+    "crashing":    ("crashes",   "into the frame",            "element"),
+    # -- the person moves -------------------------------------------------------
+    "walking":     ("walks",     "forward toward the camera", "subject"),
+    "striding":    ("strides",   "forward toward the camera", "subject"),
+    "stepping":    ("steps",     "forward toward the camera", "subject"),
+    "running":     ("runs",      "forward toward the camera", "subject"),
+    "sprinting":   ("sprints",   "forward toward the camera", "subject"),
+    "charging":    ("charges",   "forward toward the camera", "subject"),
+    "approaching": ("walks",     "forward toward the camera", "subject"),
+    "leaping":     ("leaps",     "forward through the frame", "subject"),
+    "jumping":     ("jumps",     "forward through the frame", "subject"),
+    "diving":      ("dives",     "forward through the frame", "subject"),
+    "climbing":    ("climbs",    "up through the frame",      "subject"),
+    "leaning":     ("leans",     "forward toward the camera", "subject"),
+    "reaching":    ("reaches",   "toward the camera",         "subject"),
+    "staggering":  ("staggers",  "forward toward the camera", "subject"),
+    "stumbling":   ("stumbles",  "forward toward the camera", "subject"),
+    "kicking":     ("kicks",     None,                        "subject"),
+    "throwing":    ("throws",    None,                        "subject"),
+    "pushing":     ("pushes",    None,                        "subject"),
+    "pulling":     ("pulls",     None,                        "subject"),
+}
+
+# Verbs that LOOK like motion and are measured not to be. Kept as an explicit table rather
+# than left out, so the resolver can say WHY it skipped a clause the author will swear
+# describes movement.
+MOTION_VERBS_REJECTED = {
+    "flickering": "a state change in place. 'The lamp flickers.' did nothing on any seed, "
+                  "and the prior wave's lights_switch scored below its own control.",
+    "flashing":   "a state change in place - same shape as 'the lamp flickers', which "
+                  "measured nothing.",
+    "glowing":    "a state change in place, and it names a quality rather than a movement.",
+    "blinking":   "a state change in place.",
+    "shimmering": "a state change in place, at texture scale.",
+    "sparkling":  "a state change in place, at texture scale.",
+    "glinting":   "a state change in place, at texture scale.",
+    "burning":    "a state change in place at texture scale unless something is also "
+                  "travelling.",
+    "spinning":   "rotation in place. Nothing crosses the frame, so there is nothing for "
+                  "the model to move.",
+    "trembling":  "sub-pixel scale.",
+    "shaking":    "sub-pixel scale, and studio/cameras/handheld already does this "
+                  "deterministically at the post tier.",
+    "breathing":  "sub-pixel scale.",
+    "turning":    "measured to work 3/3 AND to lose the face 3/3 - it always overshoots "
+                  "into a full body turn away from camera. Never derived automatically; "
+                  "name the look_away card if you want it.",
+}
+
+# Movers that are texture rather than objects. "Rain runs down the window." did nothing on
+# any seed and moved the PERSON instead, unbidden - which is the worst outcome available,
+# because it spends the clip on a change nobody asked for.
+MOTION_MOVERS_REJECTED = {
+    "rain": "texture scale", "raindrops": "texture scale", "rainwater": "texture scale",
+    "drizzle": "texture scale", "condensation": "texture scale",
+    "droplets": "texture scale", "dust": "texture scale", "grain": "texture scale",
+    "noise": "texture scale", "static": "texture scale",
+}
+
+# Shot templates whose whole point is that nothing happens. A pillow shot marks time
+# passing and an insert is a detail the audience must notice - holding is the correct
+# answer for both, so falling back to hold on one of these is not a gap and is not
+# reported as one.
+MOTION_STILL_TEMPLATES = {"pillow", "insert", "hold_silent"}
+
+# Templates that exist to move. The hold clause is NOT appended on these: telling the
+# model "nothing else in the frame moves" on the sakuga beat would suppress the one shot
+# an episode is built around.
+MOTION_BUSY_TEMPLATES = {"sakuga", "clash", "build", "combo", "impact", "burst"}
+
+# Words that end a shot description rather than describing the action. Stripped off a
+# derived path so a beat does not ask LTX to move something "close-up".
+MOTION_SHOT_WORDS = {
+    "close-up", "closeup", "close", "wide", "medium", "long", "full", "upper", "lower",
+    "shot", "body", "angle", "view", "frame", "lines", "focus",
+}
+
+MOTION_HOLD_CLAUSE = "Nothing else in the frame moves."
+
+
+def _pronouns(character):
+    """he / his / him / himself, she / her / her / herself, they / their / them.
+
+    Read off the card's own danbooru tags, because that is the field that already decides
+    what gets drawn - a card whose tags say 1girl and whose prose says "man" draws a girl.
+    Unknown falls to the plural, which is grammatical for anyone and names nothing wrong.
+    """
+    if character is None:
+        # Nobody is DECLARED, but the shot may still draw a person - a scene that forgot
+        # its `characters:` line still renders whatever its description says, and half the
+        # wizard's output is written that way. "The figure" is the library's own neutral
+        # (studio/motions/hold_figure.json) and it was one of the three measured holding
+        # cells, so it is a noun the model has already been shown to handle.
+        return {"S": "The figure", "s": "the figure", "p": "their", "o": "them",
+                "r": "themselves"}
+    tags = " ".join(str((character or {}).get(k, "")) for k in ("tags", "base_tags")).lower()
+    if re.search(r"\b1girl\b|\bgirl\b|\bwoman\b|\bfemale\b", tags):
+        return {"S": "She", "s": "she", "p": "her", "o": "her", "r": "herself"}
+    if re.search(r"\b1boy\b|\bboy\b|\bman\b|\bmale\b", tags):
+        return {"S": "He", "s": "he", "p": "his", "o": "him", "r": "himself"}
+    return {"S": "They", "s": "they", "p": "their", "o": "them", "r": "themselves"}
+
+
+# The motion cards in studio/motions/ are written in the third person feminine, because
+# that is how the probe cells that measured them were written. Every character card in
+# this studio is currently 1boy, so shipping the card text verbatim would ask LTX for a
+# woman in a shot the keyframe drew as a man - a contradiction the video model resolves by
+# changing somebody's face.
+#
+# So the pronouns are rewritten to the character in the shot. This changes NO part of the
+# grammar the sweep measured - same mover, same verb, same path - which is the only reason
+# it is safe to do to a measured string.
+_MOTION_PRON_SRC = {
+    "she": "S", "he": "S", "they": "S",
+    "him": "o", "them": "o",
+    "hers": "p", "theirs": "p",
+    "herself": "r", "himself": "r", "themselves": "r",
+}
+# her / his / their are the ambiguous ones - possessive determiner or object pronoun. The
+# discriminator is what FOLLOWS: "to her face" is a determiner because a noun comes next,
+# "toward her." is an object because the sentence ends. That rule is correct on every
+# string in the library today and it is the rule English actually uses.
+_MOTION_PRON_AMBIG = {"her", "his", "their"}
+
+
+def _motion_regender(text, pron):
+    parts = re.split(r"([A-Za-z]+)", str(text or ""))
+    out = []
+    for i, tok in enumerate(parts):
+        low = tok.lower()
+        slot = _MOTION_PRON_SRC.get(low)
+        if slot is None and low in _MOTION_PRON_AMBIG:
+            nxt = "".join(parts[i + 1:i + 3]).strip()
+            slot = "p" if nxt[:1].isalpha() else "o"
+        if slot is None:
+            out.append(tok)
+            continue
+        rep = pron.get(slot, tok)
+        out.append(rep[:1].upper() + rep[1:] if tok[:1].isupper() else rep)
+    return "".join(out)
+
+
+def _live_camera(card):
+    """The camera id ONLY IF the renderer can actually produce it, else 'static'.
+
+    dolly_zoom, orbit and rack_focus have cards, appear in pickers and render an EMPTY
+    ffmpeg chain - the output is byte-identical to static, MD5 and all. Reasoning about
+    motion against the name rather than against what renders produced a message telling
+    an author their beat was correctly holding still "because the camera move dolly_zoom
+    does the moving". It does not do anything.
+    """
+    r = str((card or {}).get("renders") or "").strip()
+    ok = (r == "post") if r else ((card or {}).get("status") == "ready")
+    return str((card or {}).get("id") or "static") if ok else "static"
+
+
+def _motion_text(card):
+    """`prompt` or `text` - two schemas, one field. Whichever the card carries."""
+    return str((card or {}).get("prompt") or (card or {}).get("text") or "")
+
+
+def _motion_mover(card):
+    """`mover` or `family`, normalised to what the resolver reasons about.
+
+    A card says WHAT MOVES, and that single fact decides three things: whether the card
+    needs a person in the shot, whether it fights the post-tier camera, and whether the
+    hold clause makes sense. `stillness` and `world` are the other schema's spellings of
+    `none` and `element`.
+    """
+    m = str((card or {}).get("mover") or (card or {}).get("family") or "").strip().lower()
+    return {"stillness": "none", "world": "element", "": "none"}.get(m, m)
+
+
+def _motion_fill(text, pron, anchor=""):
+    out = str(text or "")
+    for k, v in (pron or {}).items():
+        out = out.replace("{%s}" % k, v)
+    return _motion_regender(out.replace("{A}", anchor), pron)
+
+
+def _motion_clean_path(words):
+    """Trim an author's trailing shot-size words and manner adverbs off a path."""
+    ws = [w for w in words if w.strip(".,;").lower() not in MOTION_ADVERBS]
+    while ws and ws[-1].strip(".,;").lower() in MOTION_SHOT_WORDS:
+        ws.pop()
+    return " ".join(ws[:7]).strip(" .,;")
+
+
+def derive_motion(desc, pron=None, allow_subject=True):
+    """Build a motion string out of what the shot description already says is happening.
+
+    The description is the richest source of a mover and an action anywhere in the data -
+    the author has usually already written one. `a mug knocked on its side, spilled tea
+    spreading across a table edge` contains, in the author's own words, exactly the shape
+    the sweep measured: a mover, an action verb and a spatial relation.
+
+    Returns (sentence, mover_kind, why) or (None, None, why-it-found-nothing).
+
+    ONE mover only, and the first clause that yields one wins. Two movers in one string
+    destroyed the composition in the sweep, and the first clause is where an author puts
+    the thing the shot is about.
+    """
+    pron = pron or {"S": "They", "s": "they", "p": "their", "o": "them"}
+    skipped = []
+    for clause in [c.strip() for c in re.split(r"[,;]", str(desc or "")) if c.strip()]:
+        words = clause.split()
+        for i, raw in enumerate(words):
+            w = raw.strip(".,;:").lower()
+            if w in MOTION_VERBS_REJECTED:
+                skipped.append("%r (%s)" % (w, MOTION_VERBS_REJECTED[w]))
+                break
+            spec = MOTION_VERBS.get(w)
+            if not spec:
+                continue
+            verb, default_path, kind = spec
+            mover_words = [x for x in words[:i]
+                           if x.strip(".,;:").lower() not in MOTION_ADVERBS]
+            # Manner adverbs come out of the PATH before it is tested, not just out of the
+            # final string. "walking slowly forward toward the door" otherwise failed the
+            # path test on its leading 'slowly' and fell back to a generic default,
+            # throwing away the door - the author's own spatial anchor, which is the part
+            # the sweep measured as doing the work.
+            rest = [x for x in words[i + 1:]
+                    if x.strip(".,;:").lower() not in MOTION_ADVERBS]
+
+            # -- the mover -------------------------------------------------
+            if mover_words:
+                # An English noun phrase carries its head at the END, so when an author
+                # writes something long the last few words are the part that matters.
+                # Naming a mover in full ("The woman in the dark green coat...") measured
+                # as ADDED off-brief drift, so this is a cap, not a convenience.
+                mover_words = mover_words[-4:]
+                head = mover_words[-1].strip(".,;:").lower()
+                if head in MOTION_MOVERS_REJECTED:
+                    skipped.append("%r (%s - measured to do nothing, and to move the "
+                                   "person instead)" % (head, MOTION_MOVERS_REJECTED[head]))
+                    break
+                mover = " ".join(mover_words).strip(" .,;")
+                mover = mover[:1].upper() + mover[1:]
+            elif kind == "subject":
+                # A dangling participle - "leaping mid-air volley" - hangs off whoever the
+                # shot is of.
+                if not allow_subject:
+                    skipped.append("%r describes a person acting and this shot has no "
+                                   "character in it" % w)
+                    break
+                mover = pron["S"]
+            else:
+                # "falling" with nothing in front of it: no mover, and guessing one is how
+                # you spend a clip on the wrong thing.
+                continue
+
+            # -- the path --------------------------------------------------
+            path = ""
+            if rest and rest[0].strip(".,;:").lower() in MOTION_PATH_LEAD:
+                path = _motion_clean_path(rest)
+            if not path:
+                if default_path is None:
+                    # transitive verb, no object in the text -> a bare intransitive,
+                    # which is the shape that measured 0/3. Try the next clause.
+                    skipped.append("%r needs something to act ON and the line does not "
+                                   "say what" % w)
+                    break
+                path = default_path
+            if not path:
+                break
+
+            return ("%s %s %s." % (mover, verb, path), kind,
+                    "derived from the shot line: %r" % clause)
+    why = "the shot line names no mover doing anything that travels"
+    if skipped:
+        why += " (skipped " + "; ".join(skipped[:2]) + ")"
+    return (None, None, why)
+
+
+def _motion_anchor(desc, place_card, place_text, character, pron):
+    """A noun for a camera-mover card to travel PAST.
+
+    "The camera pushes in past the pillar." is a real dolly-in; "The camera pushes in."
+    is the bare intransitive that measured at the floor. The anchor is load-bearing, so a
+    camera motion card without one is refused rather than shipped weak.
+    """
+    if character:
+        return pron["o"]
+    for clause in [c.strip() for c in re.split(r"[,;]", str(desc or "")) if c.strip()]:
+        ws = [w for w in clause.split() if w.strip(".,;:").lower() not in MOTION_ADVERBS]
+        while ws and ws[-1].strip(".,;:").lower() in MOTION_SHOT_WORDS:
+            ws.pop()
+        if len(ws) >= 1 and not any(w.strip(".,;:").lower() in MOTION_VERBS
+                                    for w in ws):
+            phrase = " ".join(ws[-3:]).strip(" .,;")
+            if phrase:
+                return phrase if phrase.split()[0].lower() in (
+                    "the", "a", "an", "his", "her", "their", "its") else "the " + phrase
+    for src in (place_card.get("name") if place_card else None, place_text):
+        if src:
+            ws = str(src).split(",")[0].split()
+            if ws:
+                return "the " + " ".join(ws[-2:])
+    return ""
+
+
+def resolve_motion(libs, sel, character=None, template="", camera_card=None,
+                   place_card=None, place_text="", desc=""):
+    """THE one string the video model reads, and where it came from.
+
+    Called by compile.py for every beat and by the wizard through resolve(), so the
+    preview and the render cannot disagree about it - which is exactly the failure mode
+    that let a constant sit in the compiler for the life of the project without anyone
+    seeing it in the app.
+
+    The ladder, in order:
+        1. an explicit motion CARD the author named
+        2. free text the author wrote
+        3. DERIVED from the shot description
+        4. the measured hold
+
+    There is no fifth rung and none of them is the old constant.
+    """
+    libs = libs or load_libs()
+    conflicts = []
+    pron = _pronouns(character)
+    motions = libs.get("motions") or {}
+    want = str(sel.get("motion") or "").strip()
+    card = motions.get(want) if want else None
+    # A DECLARED character is what lets a card name a person - a card's text is written
+    # around a specific someone and putting it on a shot that has nobody makes the video
+    # model invent one.
+    subject_ok = bool(character)
+    # But a shot can DRAW a person without declaring one: `characters:` is optional and
+    # the wizard writes scenes without it. Deriving an action from a description that says
+    # "leaning forward over a table" is reading the author's own words, not inventing a
+    # performer - so derivation gets the looser test, and only on templates that are not
+    # explicitly shots with nobody in them.
+    person_in_frame = subject_ok or template not in NO_PERSON
+
+    src, mover, reason, hold_clause, mid = "", "none", "", False, ""
+
+    # ---- 1/2: the author said something ------------------------------------
+    if want and card:
+        mid, mover = card.get("id", want), _motion_mover(card)
+        hold_clause = bool(card.get("hold"))
+        text = _motion_text(card)
+        # A card that names a person - "The camera pushes in toward her." - is describing
+        # a shot that has one. On a pillow or an insert there is nobody for the camera to
+        # push toward, and the model will invent one rather than refuse.
+        names_person = bool(re.search(
+            r"\b(she|he|they|her|his|him|them|hers|theirs|the figure|the woman|the man)\b",
+            text, re.I))
+        if (mover == "subject" or names_person) and not person_in_frame:
+            conflicts.append(_conflict(
+                "warning", ["motion", "character"],
+                "the motion '%s' is written around a person (%r) and there is nobody in "
+                "this shot%s, so it cannot be asked for - the video model would put one "
+                "there." % (want, _one_line(text),
+                            " (the %s template is a shot with nobody in it)" % template
+                            if template in NO_PERSON else ""),
+                "put a character in the shot, or pick a motion whose mover is an element: "
+                "%s." % (", ".join(sorted(
+                    i for i, c in motions.items()
+                    if _motion_mover(c) == "element" and not re.search(
+                        r"\b(she|he|her|his|him|they|them)\b", _motion_text(c), re.I)
+                )[:6]) or "none authored"),
+                "motion_needs_person"))
+            card, want = None, ""
+        elif card.get("needs_anchor"):
+            anchor = _motion_anchor(desc, place_card, place_text, character, pron)
+            if not anchor:
+                conflicts.append(_conflict(
+                    "warning", ["motion"],
+                    "the motion '%s' moves the CAMERA and a camera move needs something "
+                    "to travel past - measured, an anchored 'pushes in past the pillar' "
+                    "is a real 1.40x dolly-in and an unanchored 'pushes slowly forward' "
+                    "does nothing at all. This beat names no thing to go past." % want,
+                    "write a shot description naming something in the foreground, or set "
+                    "a place card.", "motion_needs_anchor"))
+                card, want = None, ""
+            else:
+                src, reason = "card", "the '%s' card" % mid
+                text = _motion_fill(text, pron, anchor)
+        if card:
+            if not src:
+                if mover == "none" and not person_in_frame and card.get("prompt_no_subject"):
+                    text = card["prompt_no_subject"]
+                src, reason = "card", "the '%s' card" % mid
+                text = _motion_fill(text, pron)
+            st = str(card.get("status") or "ready")
+            if st in ("weak", "partial"):
+                conflicts.append(_conflict(
+                    "note", ["motion"],
+                    "the motion '%s' is marked %s: %s" % (
+                        mid, st, _one_line(card.get("verdict") or card.get("desc"))[:200]),
+                    "look at studio/motions/%s.json before you spend a render on it." % mid,
+                    "motion_not_ready"))
+            elif st == "untested":
+                # Not a warning. The library was authored on a measured grammar and these
+                # cards obey it - what has not happened is a render of THIS card. Saying
+                # so is the point of the status; shouting about it would train people to
+                # ignore the line.
+                conflicts.append(_conflict(
+                    "note", ["motion"],
+                    "the motion '%s' is authored on the measured grammar but this exact "
+                    "card has not been rendered and looked at yet." % mid,
+                    "it will very probably work - the grammar is what was measured, not "
+                    "the individual card. Watch the strip before you build a scene on it.",
+                    "motion_untested"))
+            elif st not in ("ready",):
+                conflicts.append(_conflict(
+                    "warning", ["motion"],
+                    "the motion '%s' has status %r, so nothing has confirmed it does what "
+                    "the card says." % (mid, st),
+                    "pick a card marked ready, or render it and write the verdict.",
+                    "motion_not_ready"))
+    elif want and (" " in want or "." in want):
+        # Free text. Legitimate - the library cannot hold every action a film needs - but
+        # it is unchecked, and the two ways it goes wrong are both measurable from here.
+        src, mid, mover = "text", "", "unknown"
+        text = _motion_fill(want, pron)
+        reason = "free text on the beat"
+        low = " " + re.sub(r"[^a-z ]", " ", want.lower()) + " "
+        advs = sorted({a for a in MOTION_ADVERBS if " %s " % a in low})
+        if advs:
+            conflicts.append(_conflict(
+                "warning", ["motion"],
+                "this motion is written as a QUALITY (%s) and the video model renders "
+                "nouns, not adjectives - all five adverb-style prompts in an 81-clip "
+                "sweep were inert, and not harmlessly: they produce undirected drift."
+                % ", ".join("'%s'" % a for a in advs),
+                "write it as [MOVER] [ACTION VERB] [PATH]: 'She walks forward toward the "
+                "camera.', not 'moves slowly'.", "motion_is_an_adverb"))
+        elif not any(w.strip(".,;:").lower() in MOTION_PREPS
+                     for w in want.split()):
+            conflicts.append(_conflict(
+                "note", ["motion"],
+                "this motion names no path. Measured: 'The curtain lifts.' did nothing on "
+                "any seed and 'The curtain lifts behind her.' swept the curtain across the "
+                "whole frame - same mover, same verb.",
+                "add where it goes: behind her, across the frame, toward the camera.",
+                "motion_has_no_path"))
+    elif want:
+        conflicts.append(_conflict(
+            "error", ["motion"],
+            "there is no motion called %r." % want,
+            "pick one of: %s" % (", ".join(sorted(motions)) or "(none authored)"),
+            "motion_unknown"))
+        want = ""
+
+    # ---- 3: derive it from what the shot says is happening ------------------
+    if not src:
+        text, kind, why = derive_motion(desc, pron, allow_subject=person_in_frame)
+        if text:
+            src, mover, reason = "desc", kind, why
+            hold_clause = True
+        else:
+            derive_why = why
+
+    # ---- 4: the measured hold ----------------------------------------------
+    #
+    # The floor is a HOLD, never a constant that claims to ask for movement. The three
+    # holding cells were the quietest in the sweep (0.515-0.592 against an empty control
+    # of 0.614) and they kept face, gaze and framing for all 97 frames - so this rung is
+    # a real capability being used on purpose, not an absence of one. The retired
+    # "Slow deliberate movement only." measured 0.520: it held just as still while its
+    # words said the opposite, which is why nobody noticed for the life of the project.
+    if not src:
+        prefer = (["hold", "hold_all", "hold_figure", "hold_nobody"] if subject_ok
+                  else ["hold_figure", "hold_nobody", "hold", "hold_all"]
+                  if person_in_frame
+                  else ["hold_nobody", "hold_figure", "hold", "hold_all"])
+        hold = next((motions[i] for i in prefer if i in motions), {})
+        text = ((hold.get("prompt_no_subject") if not subject_ok else "") or
+                _motion_text(hold) or "Nothing in the frame moves.")
+        text = _motion_fill(text, pron)
+        src, mover, mid = "hold", "none", hold.get("id", "hold")
+        reason = derive_why
+        cam_id = _live_camera(camera_card)
+        if template in MOTION_STILL_TEMPLATES:
+            pass                       # a pillow shot holding still IS the template
+        elif cam_id != "static":
+            # Not a gap. The post-tier move supplies the movement and the model is being
+            # asked to hold the picture underneath it, which is the correct division.
+            conflicts.append(_conflict(
+                "note", ["motion", "camera"],
+                "no motion was named or derivable here, so the video model is asked to "
+                "hold - which is right on this beat, because the camera move '%s' is an "
+                "ffmpeg operation applied afterwards and it does the moving." % cam_id,
+                "nothing to do.", "motion_hold_under_camera"))
+        else:
+            # Offer the cards that FIT this beat - a card that needs a person is no use
+            # on a shot with nobody in it, and the library is large enough that an
+            # alphabetical slice is not advice.
+            fits = sorted(
+                i for i, c in motions.items()
+                if _motion_mover(c) not in ("none",)
+                and (subject_ok or not re.search(
+                    r"\b(she|he|her|his|him|they|them|figure)\b", _motion_text(c), re.I))
+                and (not c.get("shots") or template in (c.get("shots") or [])))
+            if not fits:
+                fits = sorted(i for i, c in motions.items()
+                              if _motion_mover(c) == "element")
+            conflicts.append(_conflict(
+                "warning", ["motion"],
+                "nothing moves in this shot: %s, so the video model is asked to hold "
+                "still and every frame of this beat will be the keyframe." % reason,
+                "name one with @motion on the shot line (%s), or write the action into "
+                "the description - a mover, a verb and a path, e.g. 'confetti falling "
+                "through the frame'." % (", ".join(fits[:6]) or "none authored"),
+                "motion_absent"))
+
+    # ---- the hold clause ---------------------------------------------------
+    # Measured on the hand raise: adding "Nothing else in the frame moves." to an action
+    # gave the best-CONTROLLED cell in the sweep - the action still lands and the drift it
+    # otherwise induces is suppressed. Applied where there is a face worth protecting, and
+    # never on the templates that exist to move.
+    if hold_clause and MOTION_HOLD_CLAUSE not in text:
+        if person_in_frame and template not in MOTION_BUSY_TEMPLATES:
+            text = text.rstrip() + " " + MOTION_HOLD_CLAUSE
+
+    # ---- the two moves fighting --------------------------------------------
+    cam_id = _live_camera(camera_card)
+    if mover == "camera" and cam_id != "static":
+        conflicts.append(_conflict(
+            "warning", ["motion", "camera"],
+            "this beat moves the frame TWICE: the motion asks the video model for a "
+            "camera move and the camera '%s' applies another one on top of it in ffmpeg "
+            "afterwards. They do not compose - one is generated and inexact, the other is "
+            "a crop and exact." % cam_id,
+            "set the beat's camera to static and let the model do it, or drop the camera "
+            "motion and keep the post move, which is the exact one.",
+            "motion_vs_camera"))
+
+    return {"motion": _one_line(text), "id": mid, "source": src, "mover": mover,
+            "reason": _one_line(reason), "card": card if src == "card" else None,
+            "conflicts": conflicts}
 
 
 # ---------------------------------------------------------------------------
@@ -1738,6 +2386,25 @@ def resolve(libs, sel):
     _check_shot(engine, character, ctx["emotion"], wear, ctx["desc"], template, conflicts)
     _check_tokens(anime_slots if engine == "anime" else qwen_slots, libs, conflicts)
 
+    # ---- motion ------------------------------------------------------------
+    # The prompt assembled above is read by the IMAGE model and produces one keyframe.
+    # This is the separate string the VIDEO model reads, and it decides whether the film
+    # moves. It is resolved HERE rather than in compile.py for the same reason the prompt
+    # is: the wizard and the thumbnail renderer call resolve(), the compiler calls
+    # resolve(), and a second implementation would drift the moment either side changed.
+    # A constant sat in compile.py for the life of the project precisely because the app
+    # had no way to show what the video model was being asked for.
+    #
+    # `desc` deliberately uses the AUTHOR's description, not ctx["desc"] - ctx substitutes
+    # "close-up" or "scenery, no humans" when the shot line is empty, and deriving motion
+    # from a placeholder the author never wrote would be inventing an action.
+    camera_card = _card(libs, "cameras", camera) if camera else None
+    motion = resolve_motion(libs, sel, character=character, template=template,
+                            camera_card=camera_card, place_card=place_card,
+                            place_text=place_text,
+                            desc=str(sel.get("desc") or "").strip())
+    conflicts.extend(motion["conflicts"])
+
     if place_emptied:
         conflicts.append(_conflict(
             "note", ["place", "character"],
@@ -1962,12 +2629,30 @@ def resolve(libs, sel):
         layers.append({"layer": "weather", "id": weather.get("id", weather_id),
                        "name": weather.get("id", weather_id),
                        "contributed": _contrib("weather", True, "nothing")})
+    # Motion is a layer like any other and it is the LAST one, because it is the only one
+    # that acts after the picture exists. `contributed` carries the string itself rather
+    # than a summary of it: this is the whole text the video model gets, it is one
+    # sentence long, and the reason it was invisible for so long is that nothing ever
+    # showed it to anybody.
+    layers.append({
+        "layer": "motion", "id": motion["id"],
+        "name": motion["id"] or ("written on the beat" if motion["source"] == "text"
+                                 else "derived"),
+        "contributed": "%s  (%s)" % (motion["motion"], motion["reason"])})
 
     return {
         "engine": engine,
         "engine_reason": eng["reason"],
         "prompt": tag_string if engine == "anime" else prose_string,
         "negative": negative,
+        # THE STRING THE VIDEO MODEL READS. Separate from `prompt`, which is read by the
+        # image model and describes a still. short.py clips() puts this, and only this,
+        # into node 10 of workflows/12_ltx23_i2v_audio.json.
+        "motion": motion["motion"],
+        "motion_id": motion["id"],
+        "motion_source": motion["source"],
+        "motion_mover": motion["mover"],
+        "motion_reason": motion["reason"],
         "layers": layers,
         "conflicts": _sort_conflicts(conflicts),
         "lora": lora,

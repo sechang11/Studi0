@@ -1,5 +1,7 @@
 {
-  "_doc": "Where each authoring variable ACTUALLY takes effect. This is the difference between a wizard and a wish list: two knobs that look identical in a form can be a deterministic ffmpeg operation and a suggestion to a diffusion model. Every entry cites the code that consumes it, and anything with no consumer is marked tier 'none' rather than being quietly listed as if it worked. Verified against short.py / compile.py / scene_templates.py on 2026-08-03.",
+  "_doc": "Where each authoring variable ACTUALLY takes effect. This is the difference between a wizard and a wish list: two knobs that look identical in a form can be a deterministic ffmpeg operation and a suggestion to a diffusion model. Every entry cites the code that consumes it, and anything with no consumer is marked tier 'none' rather than being quietly listed as if it worked. Verified against short.py / compile.py / scene_templates.py on 2026-08-03, re-verified and corrected 2026-08-04.",
+
+  "_2026_08_04": "THREE ENTRIES IN THIS FILE WERE WRONG, and each was wrong in the direction that hides a defect. (1) `motion` was not in the registry at all - the single string the VIDEO model reads, the most expensive stage of the render, and the only major variable with no card library. It was a constant in compile.py for the life of the project. (2) `camera` listed dolly_zoom / orbit / rack_focus under values_none with a note saying compile.py falls back to static - true for a compiled film, false for a hand-authored films/*.json, which reaches short.py directly where an unimplemented move and a TYPO are both silently nothing. (3) `transition` was blanket tier 'none' with the note 'short.py ignores it... epic.py DOES honour transitions'. Both halves are wrong: j_cut and l_cut ARE wired end to end on the audio side, and epic.py honours its own hardcoded five-name table off a different key, never opening studio/transitions/*.json.",
 
   "tiers": {
     "post": {
@@ -29,12 +31,23 @@
   },
 
   "vars": {
+    "motion": {
+      "tier": "prompt",
+      "where": "compile.py -> beat.motion -> short.py clips() node 10 of workflows/12_ltx23_i2v_audio.json. Resolved by compose.resolve_motion(), so the wizard preview and the compiler cannot disagree.",
+      "values_ok": ["studio/motions/*.json id", "a sentence", "(blank - derived from the shot line)"],
+      "note": "THE ONE STRING THE VIDEO MODEL READS, and the only major variable that had no card library until 2026-08-04. Until then compile.py assigned every beat of every film the constant 'Slow deliberate movement only.' - measured 0.520 against an empty-prompt control of 0.614, i.e. it asked for LESS than saying nothing. The video pass costs roughly 8x the keyframe and it was being spent on a request for stillness that read as a request for movement. THE GRAMMAR THAT WORKS, measured over 81 clips at 3 seeds: [MOVER] [ACTION VERB] [PATH/SPATIAL RELATION], one mover, no adverbs, and the mover must be able to TRAVEL. All five adjective-style prompts were inert and not harmlessly - they produce undirected drift. 'The curtain lifts.' did nothing 0/3; 'The curtain lifts behind her.' swept the curtain across the whole frame. Camera language obeys the same rule and DOES belong in this string.",
+      "hazard": "analyze_shots.motion() is BLIND to subject-scale action. 'She raises her right hand to her face' landed 9/9 across three seeds and three grammatical forms and every one of those clips measured at or below the empty control. Ranking motion cards by that number would discard every performance beat in the library. It is a frame-scale event detector only.",
+      "fallback": "A measured HOLD, never the retired constant. The three holding cells were the quietest in the sweep (0.515-0.592) and kept face, gaze and framing for all 97 frames. short.py sends an empty string, loudly, for any film still carrying the constant."
+    },
+
     "camera": {
       "tier": "post",
       "where": "short.py fx_chain() via cut(); beat.camera overrides the template's move",
       "values_ok": ["static", "push", "pull", "pan_l", "pan_r", "tilt_u", "tilt_d", "handheld"],
       "values_none": ["dolly_zoom", "orbit", "rack_focus"],
-      "note": "The camera move is NOT asked of the video model - it is a zoompan/crop applied to the generated clip. That is why it is exact. The three roadmap values need a depth map that does not exist yet; compile.py warns and falls back to static."
+      "note": "The camera move is NOT asked of the video model - it is a zoompan/crop applied to the generated clip. That is why it is exact. Three implementation shapes and no others: a zoompan scale ramp (push/pull), a 1.16x upscale with a travelling crop (pan/tilt), and a small oscillating crop (handheld). `punch` is an alias for push, kept because four episode templates use it.",
+      "the_three_dead_ones": "dolly_zoom, orbit and rack_focus are not weak - they ARE the static file. studio/samples/cameras/{static,dolly_zoom,orbit,rack_focus}.mp4 all share MD5 85540954967b671562c3efa5f4c28cec. As of 2026-08-04 their status is 'unavailable' and they carry renders:'none', why_not and needs, so a picker can disable them and say why. orbit is withdrawn (a post-hoc arc needs a rasterizer this box does not have); dolly_zoom and rack_focus are buildable and need a per-beat depth pass that does not exist.",
+      "the_wider_bug": "A MISSPELLED camera behaved identically to the three dead ones. fx_chain() is a chain of `if name in fx` string tests with no else and no validation, so 'pan_left', 'dolly-zoom' and 'Push' all emitted an empty chain and passed the clip through untouched. compile.py validated (lib() raises on an unknown card) but a hand-authored films/*.json never goes through compile.py. Fixed 2026-08-04: short.py carries FX_CAMERAS / FX_EFFECTS and reports anything outside them, once, naming what it got instead."
     },
     "fx": {
       "tier": "post",
@@ -84,7 +97,19 @@
     "type": {"tier": "none", "where": "parsed, never read", "note": "dialogue/action/montage/quiet/reveal is recorded and dropped."},
     "logline": {"tier": "none", "where": "parsed, never read", "note": "Author's note only. Still worth writing - if you cannot, the film has no spine."},
     "negative": {"tier": "none", "where": "parsed, never read by short.py", "note": "short.py's anime path has its own fixed negative."},
-    "transition": {"tier": "none", "where": "compile.py emits beat.transition; short.py ignores it", "note": "This format is ALL hard cuts by design. The 12 transition presets compile but change nothing. epic.py DOES honour transitions."},
+    "transition": {
+      "tier": "split",
+      "tier_picture": "none",
+      "tier_audio": "post",
+      "where": "PICTURE: compile.py emits beat.transition and short.py never reads it - it concats micro-shots and has no xfade join path. AUDIO: compile.py reads the card's own audio_lead onto the scene's first spoken beat and short.py cut() shifts the voice cue by it.",
+      "note": "A single tier was the wrong shape for this variable and it hid two opposite facts. The old entry said blanket 'none', which made j_cut and l_cut read as broken when they are fully wired, and it said 'epic.py DOES honour transitions', which is misleading: epic.py:629 has its own hardcoded five-name table (cut/soft/dissolve/fade/flash) keyed off shot['in'] while compile.py writes beat['transition'] - different key, different vocabulary - and epic.py never opens studio/transitions/*.json.",
+      "picture_identical_to_cut": ["cut", "j_cut", "l_cut", "match_cut", "smash"],
+      "and_that_is_correct_for": ["j_cut", "l_cut", "match_cut"],
+      "j_cut_l_cut": "WIRED AND WORKING, on the audio side, which is their entire content. Picture-identical to a cut is what they should be. Two real gaps remain and are recorded on the cards: the two names are SWAPPED relative to standard film usage (both cards admit it and nobody has fixed it because renaming breaks every .movie that names one), and nothing tests the audio - the published samples are silent video.",
+      "match_cut": "An authoring instruction, not an operation, and correctly status needs_authoring. Its card promised 'the compiler reminds you to check the pair' and that reminder did not exist: compile.py warned only on status 'roadmap'. It warns on needs_authoring too as of 2026-08-04.",
+      "smash": "THE ONLY GENUINELY BROKEN ONE OF THE FIVE. It declares audio_drop 0.4 and nothing anywhere reads it - not compile.py, not short.py, not epic.py. It appears only in the card, in the generated samples/video.json, and in _tools/video_index.py where it is printed into a panel. Its own description says the contrast is the whole effect, so the whole effect is missing from every film. status is now 'partial' and the compiler says so per scene. Workaround that IS wired: silence:true on the quiet side.",
+      "six_with_no_consumer": "dissolve, fade_black, fade_white, flash, iris, whip_pan and wipe_l carry real, rendered, verified xfade filters that NO FILM RENDERER READS. Their sample clips are correct because the sample generator applies card['filter'] directly. Proven filters, zero films that can use them. Out of scope for the 2026-08-04 wave and flagged on each card as renders_in:'sample' so they stop implying otherwise. Closing it means short.py grows an xfade join path."
+    },
     "lipsync": {"tier": "none", "where": "roadmap/lipsync.md", "note": "compile.py warns."},
     "blocking": {"tier": "none", "where": "roadmap/blocking.md", "note": "The 180-degree rule via facing tags. Would address the 23%-of-shots multi-character anatomy failure."}
   }
