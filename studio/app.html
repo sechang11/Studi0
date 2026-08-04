@@ -188,7 +188,8 @@ function card(href,title,n,desc,led){
   // The remaining card groups all arrive from one endpoint.
   try{
     const lib=await J("/api/library");
-    const DESC={looks:"Colour grades applied after generation, not prompted.",
+    const DESC={motions:"What actually moves in the shot. The one string the video model reads.",
+                looks:"Colour grades applied after generation, not prompted.",
                 cameras:"How the camera moves. Only provable on a clip.",
                 transitions:"How one shot becomes the next.",
                 lighting:"Where the light comes from.",
@@ -196,7 +197,7 @@ function card(href,title,n,desc,led){
                 emotions:"What the face is doing.",
                 shots:"Pacing patterns for a sequence.",
                 layers:"Depth and how the planes stack."};
-    const ORDER=["looks","cameras","transitions","lighting","weather","emotions","shots","layers"];
+    const ORDER=["motions","looks","cameras","transitions","lighting","weather","emotions","shots","layers"];
     for(const k of ORDER){
       if(!Array.isArray(lib[k])) continue;
       out.push(card("/tags#"+k, k[0].toUpperCase()+k.slice(1), lib[k].length,

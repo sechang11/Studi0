@@ -41,7 +41,7 @@ MIME = {".webp": "image/webp", ".png": "image/png", ".jpg": "image/jpeg",
         ".svg": "image/svg+xml"}
 
 # folders that hold pickable presets, in the order the UI should show them
-GROUPS = ["shots", "cameras", "transitions", "looks", "lighting", "layers",
+GROUPS = ["shots", "cameras", "transitions", "motions", "looks", "lighting", "layers",
           "weather", "emotions", "soundscapes", "pacing", "places", "characters", "cues",
           "prompts", "checkpoints", "voices", "sfx", "mesh"]
 
