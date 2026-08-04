@@ -1,0 +1,54 @@
+{
+  "id": "anime_idiom_modern_tv_halftime",
+  "name": "Modern TV, half-time",
+  "desc": "Two down with forty-five left. Nobody has said anything yet.",
+  "genre": [
+    "sport",
+    "drama"
+  ],
+  "beats": 5,
+  "runtime_s": 15,
+  "sets": {
+    "style": "modern_anime",
+    "place": "locker_room",
+    "look": "blockbuster",
+    "cue": "silence",
+    "emotion": "exhausted",
+    "camera": "static",
+    "pace": "normal",
+    "wear": 2,
+    "transition": "cut",
+    "time": "day",
+    "mood": "contemporary"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "static",
+      "desc": "a locker room, rows of dented metal lockers facing a low wooden bench, tiled wall, wet tiled floor, floor drain, coat hooks, a sports bag open on the bench, a towel over a locker door, steam drifting in through the open doorway to the showers, fluorescent ceiling light, wide shot, no humans"
+    },
+    {
+      "template": "master",
+      "camera": "static",
+      "desc": "sitting on the low bench with head down and forearms on the knees, kit soaked through, hair flat with sweat, breathing hard, clean crisp lineart and flat two tone cel shadow, full body, wide shot"
+    },
+    {
+      "template": "insert",
+      "camera": "static",
+      "desc": "a taped boot and a half drunk bottle standing on the wet tiles beside the floor drain, close-up, no humans"
+    },
+    {
+      "template": "speak",
+      "camera": "static",
+      "desc": "one person standing in front of the lockers mid-sentence, mouth open, one hand out flat, still catching breath, upper body, medium shot"
+    },
+    {
+      "template": "react",
+      "camera": "push",
+      "desc": "a head coming up off the forearms, half-closed eyes opening, jaw set, sweat along the hairline, close-up"
+    }
+  ],
+  "why": "modern_anime is the card that looks pointless and is not. It is roughly what the checkpoint draws when the style slot is left empty - which is to say it is what all twenty of the existing templates get by accident - so its real job is not to add a look but to STOP a drifting one, pinning the era so that a stray retro or painterly clause somewhere else in a film cannot quietly date it. Putting it on the front door as a named choice is the point: the default becomes a decision. The scene is chosen to sit beside the two sports templates already in the gallery without repeating either, because neither of them is set in the room where the actual work happens. There is no coach and no speech about character - the talking beat is somebody who has not got their breath back yet, which is why speak is placed under emotion:exhausted, whose mouth tag is open mouth and panting. wear is 2, which is the level that adds sweat, dirt and messy hair, and this is the one template in the set where the project fallback wear vocabulary is a sports vocabulary and therefore exactly right rather than a hazard.",
+  "note": "NOT RENDERED. No frame from this card has been generated - the GPU was held for another job while it was authored, so every claim below is read off the style, place and look cards rather than off pixels. modern_anime measured ready and strong, and the style library rates it the safest card in the set for video: flat colour with hard shadow edges gives an i2v pass large stable areas and nothing high-frequency to reinvent. transition is intent only - short.py hard-cuts every join. One deliberate departure from an allowlist: the locker room card endorses fluorescent, neutral and cold, and this template uses blockbuster. The reason comes from the style card itself, which says that if the result looks flat and lifeless that is a LOOK problem and to reach for blockbuster or golden rather than for more mood words. Expect the room and the drawing to land. cue:silence is a real choice and not a placeholder - the cue library records it as the most under-used cue it holds, and a dressing room with no score is louder than one with strings. RUNTIME, checked by compiling this card rather than by trusting the field: runtime_s here follows the gallery convention - the shot cards' approx_seconds summed and scaled by pace - and that is an INTENT number. It is not what compiles. compile.py gives every beat a flat clip_secs of 6 unless a per-shot @Ns overrides it, and a template cannot express one because the wizard emits only template, camera and desc. pace does not scale duration either, despite compile.py's own variable description saying it scales shot lengths: it sets intensity = 1/scale, a motion figure, so pace:normal renders as intensity 1.0 and identical shot lengths. This card therefore compiles to 5 beats x 6s = 30s, not 15s. Verified with compile.py --timeline; the discrepancy is in the field, not in this card.",
+  "status": "untested"
+}

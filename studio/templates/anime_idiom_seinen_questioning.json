@@ -1,0 +1,55 @@
+{
+  "id": "anime_idiom_seinen_questioning",
+  "name": "Seinen questioning",
+  "desc": "A witness who is telling the truth and cannot prove it. The room does not help.",
+  "genre": [
+    "drama",
+    "mystery",
+    "thriller"
+  ],
+  "beats": 5,
+  "runtime_s": 18,
+  "sets": {
+    "style": "seinen_grounded",
+    "place": "interrogation_room",
+    "look": "fluorescent",
+    "cue": "industrial_cold",
+    "emotion": "doubt",
+    "camera": "static",
+    "pace": "normal",
+    "wear": 0,
+    "transition": "cut",
+    "time": "day",
+    "mood": "adult drama"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "static",
+      "desc": "a bare interrogation room, steel table bolted to the floor between two metal chairs, one way mirror set into a painted breeze block wall, single lamp hanging low over the tabletop, wall clock, camera high in the corner, closed steel door, manila folder squared on the table, wide shot, no humans"
+    },
+    {
+      "template": "master",
+      "camera": "static",
+      "desc": "seated at the steel table, both hands flat on the tabletop, coat still on, adult proportions, narrow eyes, restrained linework, muted desaturated palette, three-quarters to camera, medium shot"
+    },
+    {
+      "template": "insert",
+      "camera": "static",
+      "desc": "a photograph pushed across the steel tabletop from the far side, one finger still on its corner, the manila folder open beside it, close-up, no humans"
+    },
+    {
+      "template": "react",
+      "camera": "push",
+      "desc": "looking down at the photograph, narrowed eyes, unfocused, lip pressed, a hand rising toward the chin and stopping halfway, close-up"
+    },
+    {
+      "template": "hold_silent",
+      "camera": "static",
+      "desc": "sitting back from the table, hands withdrawn into the lap, shoulders drawn in, gaze fixed at a point past the mirror, saying nothing, medium shot"
+    }
+  ],
+  "why": "The gallery already has an interrogation and it is a noir one: bleach grade, a refusal, a cigarette burning down. This is the same room used for the opposite scene. Nobody here is being hard - a person is being shown something and is failing to be believed, and seinen_grounded is the only card in the library that draws that: adult facial proportions, narrow eyes, restrained line weight, shadow placed where a real light would put it, and a background carrying genuine architectural detail instead of a cel wash. The dramaturgy is built around one object. The photograph arrives on beat three, and beats four and five are only the reaction to it, so the scene has a spine that is not dialogue. There is no speak shot on purpose: emotion:doubt renders lip biting and a closed mouth, and closed-mouth emotions sit earlier in the prompt than the shot desc and would shut the mouth of anybody talking. The final hold_silent is the answer. wear stays at 0 because the fallback wear vocabulary in this project is a sports one - sweat, dirt, torn kit - and none of it belongs on a witness in a coat.",
+  "note": "NOT RENDERED. No frame from this card has been generated - the GPU was held for another job while it was authored, so every claim below is read off the style, place and look cards rather than off pixels. seinen_grounded measured ready but SUBTLE - 20.6 from the no-style control, the quietest number of any style used in this set. It is doing the intended thing and it is doing it faintly; if the frame reads as ordinary modern anime, that is the expected failure and the fix is the place card and the grade, not more style words. transition is intent only - short.py hard-cuts every join. The style card offers a real engine choice here and this template declines it: qwen would give more convincing materials and better grounding, but the IPAdapter sheets in this project are anime sheets and a qwen keyframe breaks face continuity with every other shot. Left on anime deliberately. Video caveat from the card: the detailed background is exactly what an i2v pass reinvents, so if these shots have to move, throw the back wall out of focus on the keyframe. RUNTIME, checked by compiling this card rather than by trusting the field: runtime_s here follows the gallery convention - the shot cards' approx_seconds summed and scaled by pace - and that is an INTENT number. It is not what compiles. compile.py gives every beat a flat clip_secs of 6 unless a per-shot @Ns overrides it, and a template cannot express one because the wizard emits only template, camera and desc. pace does not scale duration either, despite compile.py's own variable description saying it scales shot lengths: it sets intensity = 1/scale, a motion figure, so pace:normal renders as intensity 1.0 and identical shot lengths. This card therefore compiles to 5 beats x 6s = 30s, not 18s. Verified with compile.py --timeline; the discrepancy is in the field, not in this card.",
+  "status": "untested"
+}

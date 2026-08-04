@@ -1,0 +1,54 @@
+{
+  "id": "photographic_long_drive_night",
+  "name": "The long drive",
+  "desc": "A road with nobody on it, and every light that passes drawn as a line.",
+  "genre": [
+    "road movie",
+    "drama"
+  ],
+  "beats": 5,
+  "runtime_s": 22,
+  "sets": {
+    "style": "long_exposure_night",
+    "look": "sodium",
+    "place": "empty_motorway",
+    "pace": "slow",
+    "cue": "desolate",
+    "emotion": "resignation",
+    "camera": "static",
+    "wear": 0,
+    "transition": "dissolve",
+    "time": "night",
+    "weather": "clear"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "static",
+      "desc": "a wide empty motorway at night running to a flat horizon, white lane markings between crash barriers, an overhead gantry sign, a receding line of sodium lamps, headlights and tail lights drawn as continuous unbroken ribbons of white and red down the carriageway, wide shot, no humans"
+    },
+    {
+      "template": "pillow",
+      "camera": "static",
+      "desc": "an overhead gantry sign lit from beneath by sodium lamps, moths turning in the light, crash barrier running away below it, dark sky above, no humans"
+    },
+    {
+      "template": "master",
+      "camera": "static",
+      "desc": "one figure standing on the hard shoulder beside a crash barrier, small in frame, unbroken ribbons of light running past behind, full body, wide shot"
+    },
+    {
+      "template": "react",
+      "camera": "static",
+      "desc": "lit only by the sodium lamp directly overhead, eyes on the road, not moving, close-up"
+    },
+    {
+      "template": "pillow",
+      "camera": "static",
+      "desc": "a marker post and a strip of white line on the hard shoulder, road studs receding into the dark, no humans"
+    }
+  ],
+  "why": "The place card records the hard problem honestly: the model fills a motorway with traffic by default and asking for no cars does nothing at all. This template does not fight that, it uses it. A thirty-second exposure turns every car into a ribbon and no car into a car, so the road comes out full of traffic and empty of anybody - which is the exact feeling the scene wants and which no amount of negative prompting was going to produce. Everything else follows from the style card's blunt warning that a long exposure is a single frame integrated over time and therefore cannot survive being animated: every camera is static, there is no move anywhere in the template, and the two peopleless pillows are there so that most of the runtime is a frame that is not asking the video stage to do anything. The figure appears once, standing still, small, on the hard shoulder. Slow pace is safe here for the same reason - it is architecture and road furniture holding, not a person walking.",
+  "note": "Not rendered. No frame from this template has been generated - the GPU was held for a video job - so everything below is read off the style, place and look cards rather than seen. Expected to land: the light trails. The style card is explicit that they are real nouns with corpus mass and they were seen to render unambiguously. What this card does NOT supply is the darkness - the project's oldest measurement is that night, dark background moved mean luma 170 to 161, i.e. nothing. The dark comes entirely from the sodium ffmpeg grade, which is deterministic. Expected NOT to work: this template as video. The style cannot survive motion by construction, and LTX will slide the light trails around as though they were solid objects. Render the keyframes and hold on them; if a clip is unavoidable, keep it to the shortest length the clamp allows. Applies to every card in this set and to none of the existing twenty: these templates use place CARDS rather than free text, so the place's own prose is appended to the prompt on top of whatever the shot desc says, and where a desc also names the setting the nouns arrive twice. That is reinforcement rather than contradiction, and it is deliberate on the shots whose place card warns that a particular noun must be named explicitly or the location renders wrong. But if a prompt reads long, the shot desc is the half to trim - never the card. Standing gaps that apply to every card in the gallery: transitions are intent only, because short.py hard-cuts every join regardless of what is set here; every emotion card is status:partial upstream, so the face, eyes, mouth and body tags render and voice_style does not, because no TTS engine on this box takes an emotion vector; and a style's negative_add never reaches the picture, because the renderer has no negative input wired - so this style will come out slightly less clean than its library sample, which had one. On the pace, which is slow here and is not safe everywhere: pace does not shorten the generated clip - clip_secs is flat at 6.0 on every beat and no template can set it - it only decides how much of that clip the edit shows, and slow shows more of it. The late-clip failure measured on this engine was a SUBJECT walking out of frame, while the same sweep found large static forms holding rock-steady for the full eight seconds with no morphing at all. This template is built out of locked-off cameras and mostly empty frames, which is the case that held. sets.mood is deliberately absent. It is a legal key, but mood is a quality rather than a thing and the model renders nouns, not adjectives - the words would be spent for nothing. Everything this template wants from mood is carried instead by the cue, the look grade and the objects in the shots.",
+  "status": "untested"
+}

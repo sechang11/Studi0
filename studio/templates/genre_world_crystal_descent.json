@@ -1,0 +1,54 @@
+{
+  "id": "genre_world_crystal_descent",
+  "name": "The descent into the crystal",
+  "desc": "The light down here has no source, and the geometry has stopped agreeing with itself.",
+  "genre": [
+    "horror",
+    "mystery",
+    "fantasy"
+  ],
+  "beats": 5,
+  "runtime_s": 17.7,
+  "sets": {
+    "style": "eldritch",
+    "place": "crystal_cavern",
+    "look": "cold",
+    "cue": "unease",
+    "emotion": "doubt",
+    "camera": "pull",
+    "pace": "normal",
+    "wear": 2,
+    "transition": "dissolve",
+    "lighting": "underlight"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "pull",
+      "desc": "a cavern grown through with giant translucent crystal columns taller than a person, faceted clusters breaking out of the wet rock walls, a still pool reflecting the columns, light refracting through the facets, stalactites, wide shot, no humans"
+    },
+    {
+      "template": "master",
+      "camera": "static",
+      "desc": "standing small at the edge of the still pool between crystal columns, lit from below by the water, wide shot, full body"
+    },
+    {
+      "template": "insert",
+      "camera": "static",
+      "desc": "one crystal facet with a reflection in it that faces the wrong way, wet mineral crust around the edge, extreme close-up, no humans"
+    },
+    {
+      "template": "react",
+      "camera": "push",
+      "desc": "face lit from underneath, eyes moving without the head moving, mouth slightly open, close-up"
+    },
+    {
+      "template": "hold_silent",
+      "camera": "pull",
+      "desc": "one figure motionless among crystal columns that lean in directions which do not agree with each other, still pool, wide shot, full body"
+    }
+  ],
+  "why": "Cosmic horror fails the moment it draws the monster, and the eldritch card is built around exactly that discipline - it names no creature at all, only light falling from the wrong direction and geometry that does not resolve. Its verdict is the good surprise of the second wave: the model honoured the wrongness without inventing a thing to be afraid of. This template protects that by never asking for one either. The scare is a single insert - a reflection facing the wrong way - and it is 1.8 seconds long, the shortest beat available, because a wrong detail that is held becomes a wrong detail the audience can talk themselves out of. crystal_cavern is the correct room for this because its own note warns there is no sky in here and the light must have a named source or the frame goes flat grey; the pool is named in two shots and lighting: underlight puts it under the face. The camera pulls on the first and last beats and on nothing in between, so the scene opens by retreating and closes by retreating, and the figure gets smaller twice without a word about scale.",
+  "note": "Expected to land: the sickly cast and wrong-direction light, the crystal columns at person height. Uncertain, and the reason this is the riskiest card in the set: crystal_cavern.json records that crystals render as ice and render small like gravel, and eldritch is measured at strength moderate, so the two failure modes stack. The columns are written as taller than a person in shot one for that reason. The wrong-way reflection in shot 3 is the beat most likely not to land at all - the model normalises impossible geometry back toward sense, which the style card says outright about video. lighting is prompt words only, numbers unwired. transition is intent only - short.py ignores transitions and hard-cuts every join, so do not build a beat around it. Nothing in this card has been rendered - the GPU was committed to another job while it was written - so status is untested rather than partial. What IS checked: every id here exists in its library, and the style/place/look stack was resolved through POST /api/compose, which returned the intended engine and no error-severity conflict.",
+  "status": "untested"
+}

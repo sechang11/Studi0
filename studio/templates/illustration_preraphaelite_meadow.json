@@ -1,0 +1,55 @@
+{
+  "id": "illustration_preraphaelite_meadow",
+  "name": "Pre-Raphaelite meadow",
+  "desc": "Grass to the waist, jewel colour, and two people who have not said the thing yet.",
+  "genre": [
+    "romance",
+    "myth",
+    "drama"
+  ],
+  "beats": 5,
+  "runtime_s": 21,
+  "sets": {
+    "style": "pre_raphaelite",
+    "place": "meadow_in_summer",
+    "look": "golden",
+    "pace": "slow",
+    "cue": "hopeful_rising",
+    "emotion": "tender",
+    "camera": "push",
+    "wear": 0,
+    "transition": "dissolve",
+    "lighting": "natural",
+    "time": "day"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "push",
+      "desc": "tall summer grass with seed heads and scattered white and yellow wildflowers, butterflies over the grass, a dirt track running through it, a distant treeline, cumulus clouds in a blue sky, wide shot, no humans"
+    },
+    {
+      "template": "master",
+      "camera": "static",
+      "desc": "two figures standing close together in grass up to the waist, long flowing hair, jewel toned clothing, even shadowless light on both of them, the treeline far behind, full body, wide shot"
+    },
+    {
+      "template": "react",
+      "camera": "push",
+      "desc": "a face with a gentle smile and a soft half-lidded gaze, head tilted, detailed botanicals and grass seed heads across the foreground, close-up"
+    },
+    {
+      "template": "insert",
+      "camera": "static",
+      "desc": "a hand-width of wildflowers and grass seed heads bent over in the sun, a butterfly settled on one stem, close-up, no humans"
+    },
+    {
+      "template": "pillow",
+      "camera": "static",
+      "desc": "tall grass moving in a slow wind, wildflowers among the seed heads, the dirt track disappearing toward the treeline, no humans"
+    }
+  ],
+  "why": "Pre-Raphaelite is strength:strong, its verdict calls it among the most attractive results in the wave, and it is a safe i2v candidate because it is static and evenly lit. It is also the only genuinely warm style in this batch, and the library it is joining is heavily weighted toward grief, dread and refusal - fourteen of the first twenty templates tag drama - so this card deliberately has nothing wrong in it. Two people in a summer meadow, before anything. meadow_in_summer supplies eleven nouns including wildflowers, seed heads, butterflies and a dirt track, which is exactly what the style means by detailed botanicals; the place is doing the work the style would otherwise have to invent. look:golden is endorsed by both cards and at saturation 1.22 it is the correct grade for jewel-toned local colour - memory, the other endorsed option, would have drained the one quality the card is named for. emotion:tender - gentle smile, soft gaze, head tilt, reaching toward a face - is the whole scene rather than a decoration on it. Five beats, slow, and no incident at all.",
+  "note": "Nothing rendered. The style card specifies even shadowless light and look:golden writes long shadows into the tags, so those two pull against each other; golden was kept because saturation matters more here than shadow direction, but if the result comes back contrasty rather than luminous, that is why. Two people in frame is the structural weak point: this pipeline cannot cast anybody from a template - characters is not an accepted sets key and is silently dropped - so the second figure is only a description and the two of them will not be consistent between shots. Build the scene with a cast character in the wizard afterwards if consistency matters. transition:dissolve is advisory; short.py hard-cuts. lighting:natural is prompt words only, and there is no weather card at all: meadow_in_summer already puts cumulus clouds in a blue sky into its tags, so weather:clear contradicts the place and fires weather_vs_place in compose. The place card owns the sky here. emotion:tender is status:partial upstream and it is doing real work here rather than decorating, so if the faces come back blank this template loses most of its point.",
+  "status": "untested"
+}

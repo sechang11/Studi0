@@ -1898,6 +1898,18 @@ function applyTemplate(id){
     else if(k==="wear") S.wear = v;
     else if(k==="transition") S.transition = v;
   }
+  // S.style is the free HOUSE-TAGS string, appended verbatim to every prompt in the film,
+  // and its default is "modern sports anime, cel shading, cinematic". It is NOT the style
+  // layer - S.style_card is - but it reaches the same prompt, and it used to survive a
+  // template pick untouched. Choosing watercolour from the gallery therefore produced
+  // "...wet-on-wet, bleeding colours, soft edges, paper texture, modern sports anime,
+  // cel shading, cinematic" - the house default landing AFTER the style card's own tags
+  // and contradicting them. That is the very fault the styled templates were written to
+  // cure, reappearing one layer down.
+  // A template that names a style CARD is stating the idiom, so the house tags have
+  // nothing left to say and are cleared. A template that names no style card keeps them -
+  // the original 20 rely on that default and are unaffected.
+  if((t.sets||{}).style) S.style = "";
   S.beats = (t.shots||[]).map(sh=>({shot:sh.template, camera:sh.camera||"", desc:sh.desc||""}));
   S.scene = id;
   S.template = id;

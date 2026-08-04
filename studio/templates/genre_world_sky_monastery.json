@@ -1,0 +1,54 @@
+{
+  "id": "genre_world_sky_monastery",
+  "name": "The monastery above the clouds",
+  "desc": "A challenge carried up a stair that ends in open air, and answered without anyone raising a voice.",
+  "genre": [
+    "fantasy",
+    "drama",
+    "action"
+  ],
+  "beats": 5,
+  "runtime_s": 19.1,
+  "sets": {
+    "style": "wuxia",
+    "place": "palace_in_the_sky",
+    "look": "memory",
+    "cue": "tense_strings",
+    "emotion": "resolve",
+    "camera": "static",
+    "pace": "normal",
+    "wear": 0,
+    "transition": "dissolve",
+    "time": "dawn"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "pull",
+      "desc": "a white marble palace standing above a sea of cloud, colonnaded terraces and gold domes, cloud tops below the parapet, open sky on every side, birds passing at eye level, extreme wide shot, no humans"
+    },
+    {
+      "template": "master",
+      "camera": "static",
+      "desc": "standing at the head of a wide stone stair that ends in open air, long silk sleeves and robe lifting in the wind, small in frame against open sky, wide shot, full body"
+    },
+    {
+      "template": "speak",
+      "camera": "static",
+      "desc": "facing across the marble terrace, chin level, hands folded into the sleeves, silk hanging still, jade and vermilion, medium shot"
+    },
+    {
+      "template": "react",
+      "camera": "push",
+      "desc": "eyes steady and unblinking, mouth closed, not one muscle moving, close-up"
+    },
+    {
+      "template": "hold_silent",
+      "camera": "static",
+      "desc": "two figures standing apart on the marble terrace, neither moving, cloud tops drifting past below the parapet, wide shot, full body"
+    }
+  ],
+  "why": "Wuxia is compose:replaces, and this template uses that on purpose rather than working around it: the style rebuilds the setting into silk, jade and ink-wash mountain, and palace_in_the_sky is the one place card in the library whose own nouns already agree with that - marble, colonnade, cloud, altitude - so the rebuild lands on top of the location instead of deleting it. The place card is blunt about what actually creates the height: cloud tops BELOW the parapet, open sky at the edges of frame, birds at eye level, and a stair that ends in nothing. All four are written into the shot descs, because the words majestic and heavenly are measured to do nothing at all. The scene is a confrontation in which nobody attacks. camera:static holds four of five beats so the one push, on the react, is the only movement in the piece and therefore carries the refusal. hold_silent closes it at 5.5s with both figures still in frame and still not moving, which is the wuxia grammar: the fight is decided before it starts, and the template stops on the moment before rather than on the moment of.",
+  "note": "Expected to land: silk and the jade/vermilion palette, the cloud-top altitude, the static-then-push pressure. Deliberate override: wuxia rebuilds the setting, and it is paired here with an 8-noun place card because a place is measured to win over a replaces style at 6 or more concrete nouns - but that behaviour has only been measured on four of the sixteen replaces styles, and wuxia is not one of them, so expect the marble to be recoloured toward Chinese architecture rather than preserved. pace is normal, not slow, and that is not a style choice: compile.py hands every beat clip_secs 6, and slow scales hold_silent from 5.5s to 7.4s, which short.py then silently truncates. KNOWN RISK: wuxia contributes the words misty mountains, and this place has no ground at all. palace_in_the_sky.json warns that named on its own it becomes a castle on a hill, so a mountain arriving from the style layer is the specific way this card can fail. The three nouns its own note says buy the altitude - cloud tops BELOW the parapet, open sky filling the frame edges, birds at eye level - are therefore written into the shot descs rather than trusted to the place tags, and a stair ending in open air is named twice. If a mountainside still appears, that is the beat to rewrite. No weather layer is set, and that is deliberate: /api/compose flags weather_vs_place whenever a place card already carries its own weather, and it does here. The atmosphere is written into the place card and the shot descs as nouns instead, which is where it lands. (palace_in_the_sky already carries cloud.) transition is intent only - short.py ignores transitions and hard-cuts every join, so do not build a beat around it. Nothing in this card has been rendered - the GPU was committed to another job while it was written - so status is untested rather than partial. What IS checked: every id here exists in its library, and the style/place/look stack was resolved through POST /api/compose, which returned the intended engine and no error-severity conflict.",
+  "status": "untested"
+}

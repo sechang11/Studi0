@@ -1,0 +1,48 @@
+{
+  "id": "anime_idiom_iyashikei_afternoon",
+  "name": "Iyashikei afternoon",
+  "desc": "A room with nothing wrong in it. That is the whole scene and it is deliberate.",
+  "genre": [
+    "slice of life"
+  ],
+  "beats": 4,
+  "runtime_s": 22,
+  "sets": {
+    "style": "iyashikei",
+    "place": "ryokan_tatami_room",
+    "look": "golden",
+    "cue": "silence",
+    "emotion": "neutral",
+    "camera": "static",
+    "pace": "slow",
+    "wear": 0,
+    "transition": "dissolve",
+    "time": "day",
+    "mood": "healing"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "pan_r",
+      "desc": "a ryokan room floored with tatami mats with visible seams, shoji screen doors filtering daylight along one wall, a low wooden table with flat zabuton cushions set around it, a hanging scroll in the tokonoma alcove, an ikebana arrangement, wooden ceiling beams, a sliding paper door standing open onto the engawa veranda with a garden beyond, muted greens and cream, wide quiet composition, no humans"
+    },
+    {
+      "template": "master",
+      "camera": "static",
+      "desc": "kneeling at the low table with both hands around a cup, facing the open paper door and the garden, back three-quarters to camera, soft natural light from the shoji, full body, wide shot"
+    },
+    {
+      "template": "pillow",
+      "camera": "static",
+      "desc": "the shadow of the shoji lattice lying across the tatami and moving a few centimetres, the ikebana arrangement at the edge of frame, no humans"
+    },
+    {
+      "template": "hold_silent",
+      "camera": "static",
+      "desc": "still kneeling at the table, head turned toward the garden, shoulders low, hands resting, doing nothing and not waiting for anything, wide shot"
+    }
+  ],
+  "why": "The healing genre is the hardest thing in this brief to make, because it is defined by the absence of the two things a template usually supplies - a conflict and a turn - and this project has measured repeatedly that qualities do not render while things do. So peaceful is never asked for anywhere in this card. What is asked for is a list of objects and one physical event: the lattice shadow has moved a few centimetres, which is the only thing that happens and is also a clock, and it is placed on beat three so the two long human shots sit either side of it. The tatami room is chosen because its twelve nouns are almost all low, flat and horizontal, which builds the wide quiet composition the style wants out of furniture instead of out of an adjective. cue:silence is not laziness - scoring this would import a shape the scene does not have, and the cue library flags silence as the most under-used thing it holds. emotion:neutral and wear:0 keep the person unremarkable, which is the genre. There is no speak shot and no insert; nothing here needs pointing at.",
+  "note": "NOT RENDERED. No frame from this card has been generated - the GPU was held for another job while it was authored, so every claim below is read off the style, place and look cards rather than off pixels. iyashikei is the interesting one in this set. It was authored WEAK on the honest grounds that peaceful is a quality rather than a thing, and then it was rendered and the prediction was corrected on the card - the muted green and cream palette clause carried it further than expected and the quiet wide composition landed. It is still the lowest-confidence style used here, and compose says so on every shot - warning style_strength_weak, meaning you will pay a full generation for a small change. transition is intent only - short.py hard-cuts every join. If the frame comes back as an ordinary anime interior, that is the expected failure and the answer is the place card and the light, not more calm words. Expect to land: the tatami room nouns, the golden grade, the composition. Uncertain: whether anything separates this from a plain modern_anime frame of the same room, which is the test this template exists to run. RUNTIME, checked by compiling this card rather than by trusting the field: runtime_s here follows the gallery convention - the shot cards' approx_seconds summed and scaled by pace - and that is an INTENT number. It is not what compiles. compile.py gives every beat a flat clip_secs of 6 unless a per-shot @Ns overrides it, and a template cannot express one because the wizard emits only template, camera and desc. pace does not scale duration either, despite compile.py's own variable description saying it scales shot lengths: it sets intensity = 1/scale, a motion figure, so pace:slow renders as intensity 0.741 and identical shot lengths. This card therefore compiles to 4 beats x 6s = 24s, not 22s. Verified with compile.py --timeline; the discrepancy is in the field, not in this card.",
+  "status": "untested"
+}

@@ -1,0 +1,54 @@
+{
+  "id": "photographic_dawn_goodbye",
+  "name": "Goodbye on the bridge",
+  "desc": "They walked to the middle because past that point one of them has to turn round.",
+  "genre": [
+    "romance",
+    "drama"
+  ],
+  "beats": 5,
+  "runtime_s": 17,
+  "sets": {
+    "style": "film_35mm",
+    "look": "memory",
+    "place": "bridge_over_river",
+    "pace": "normal",
+    "cue": "quiet_dawn",
+    "emotion": "longing",
+    "camera": "static",
+    "wear": 0,
+    "transition": "dissolve",
+    "time": "dawn",
+    "weather": "mist"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "static",
+      "desc": "a broad stone bridge at first light, iron railings and a line of lamp posts running the length of the parapet still lit, mist lying on the water below, the far bank of the city just becoming visible, wide shot, no humans"
+    },
+    {
+      "template": "master",
+      "camera": "pull",
+      "desc": "two figures standing a step apart at the middle of the span, lamp posts receding away behind each of them in opposite directions, full body, wide shot"
+    },
+    {
+      "template": "speak",
+      "camera": "static",
+      "desc": "speaking with both hands on the cold iron railing, looking out at the water rather than at the other person, medium shot, mist behind"
+    },
+    {
+      "template": "react",
+      "camera": "push",
+      "desc": "listening, eyes on the speaker, mouth closed, first light on one side of the face, close-up"
+    },
+    {
+      "template": "pillow",
+      "camera": "tilt_d",
+      "desc": "mist moving on the surface of the river below the parapet, the shadow of the bridge lying across it, no humans"
+    }
+  ],
+  "why": "The blocking is the entire script. Two people stand at the middle of a span with the lamp posts receding behind each of them in opposite directions, and the pull on that master widens the gap the camera has already established - the camera library records pull as isolation, abandonment, endings, and it is the only move in the template. Neither of them faces the other in the shot where the talking happens; the speaker looks at the water, which is what people do when the thing being said is not really a question. The style is the gentlest in the qwen set and that is the point: 35mm colour negative gives warmer midtones, softer roll-off and slight halation, and nothing else, so the scene is allowed to be a scene rather than a demonstration of a process. The memory grade at 0.60 saturation does the rest, and puts the whole thing at one remove without a single word of prompt claiming it is a flashback.",
+  "note": "Not rendered. No frame from this template has been generated - the GPU was held for a video job - so everything below is read off the style, place and look cards rather than seen. Half of this style is undeliverable from a prompt and the card is honest about it: grain is a per-pixel property and a diffusion sampler has no handle on it - four grain settings once came back as four unrelated portraits with no visible difference. What lands is the colour crossover and the highlight roll-off. Take grain from an ffmpeg noise filter on the finished video instead. This is also the one style in the set whose video split has been MEASURED and came out exactly as the card predicted: over eight seconds the colour and light survive intact while the grain visibly dissolves into smear, detail 0.855 at 8s against 0.913 at 4s. pace:normal is set for that reason - it keeps each cut at its natural length rather than stretching it, so the edit never reaches into the part of the clip where the grain has gone. Note that pace does not shorten the generated clip itself: clip_secs is flat at 6.0 and no template can set it. Uncertain: bridge type is a coin flip unless stated, so the shots say stone - a steel truss or a suspension span gives a completely different silhouette and would change the scene. Engine note: on qwen a face is held by a reference SHEET through Qwen-Edit rather than by IPAdapter, which is a weaker lock than the illustration path - expect visible drift between shots of the same person. Keep that in mind before casting one character across all of these beats. Applies to every card in this set and to none of the existing twenty: these templates use place CARDS rather than free text, so the place's own prose is appended to the prompt on top of whatever the shot desc says, and where a desc also names the setting the nouns arrive twice. That is reinforcement rather than contradiction, and it is deliberate on the shots whose place card warns that a particular noun must be named explicitly or the location renders wrong. But if a prompt reads long, the shot desc is the half to trim - never the card. Standing gaps that apply to every card in the gallery: transitions are intent only, because short.py hard-cuts every join regardless of what is set here; every emotion card is status:partial upstream, so the face, eyes, mouth and body tags render and voice_style does not, because no TTS engine on this box takes an emotion vector; and a style's negative_add never reaches the picture, because the renderer has no negative input wired - so this style will come out slightly less clean than its library sample, which had one.",
+  "status": "untested"
+}

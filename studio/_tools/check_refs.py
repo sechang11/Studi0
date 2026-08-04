@@ -38,6 +38,33 @@ REFS = [
     # the id until this rule existed - the exact shape of mistake this file was
     # written to catch.
     ("styles",     "lora",          "loras"),
+    # A template sets the whole layer stack, so every layer it names is a reference.
+    ("templates",  "cue",           "cues"),
+    ("templates",  "emotion",       "emotions"),
+    ("templates",  "camera",        "cameras"),
+    ("templates",  "transition",    "transitions"),
+    ("templates",  "lighting",      "lighting"),
+    ("templates",  "weather",       "weather"),
+    ("templates",  "style_lora",    "loras"),
+    ("templates",  "character",     "characters"),
+]
+
+# Templates are the one group whose references do NOT live at the card root. The wizard
+# reads them out of a `sets` object and the per-shot ids out of `shots[]`, but this file
+# read d.get(field) at the root - so the two template rules above it declared matched
+# nothing and every template reference was invisible.
+#
+# This was not theoretical. 62 template cards carrying 1077 checkable ids were authored in
+# one pass and the count printed at the bottom of this report did not move off 636. A
+# checker that silently validates zero of the group it claims to cover is worse than no
+# checker, because the green line is read as proof.
+NESTED = {"templates": "sets"}
+
+# (group, list field, id field on each item, group the id must exist in)
+# A template beat names a shot template and may name its own camera.
+ITEM_REFS = [
+    ("templates", "shots", "template", "shots"),
+    ("templates", "shots", "camera",   "cameras"),
 ]
 
 # An id has no spaces or commas. Used to tell a mistyped id apart from free text in the
@@ -70,7 +97,8 @@ def main():
             except Exception as e:
                 dangling["%s (unparseable)" % group].append("%s: %s" % (os.path.basename(p), e))
                 continue
-            v = d.get(field)
+            box = d.get(NESTED[group]) if group in NESTED else None
+            v = (box if isinstance(box, dict) else d).get(field)
             if not v:
                 continue
             for one in (v if isinstance(v, list) else [v]):
@@ -80,6 +108,29 @@ def main():
                 if one not in have:
                     dangling["%s.%s -> %s" % (group, field, target)].append(
                         "%s references %r" % (d.get("id", os.path.basename(p)), one))
+
+    # Per-shot ids: shots[].template and shots[].camera.
+    for group, listfield, itemfield, target in ITEM_REFS:
+        src_dir = os.path.join(STUDIO, group)
+        have = ids(target)
+        if not os.path.isdir(src_dir) or have is None:
+            skipped += 1
+            continue
+        for p in sorted(glob.glob(os.path.join(src_dir, "*.json"))):
+            try:
+                d = json.load(open(p, encoding="utf-8"))
+            except Exception:
+                continue          # already reported by the loop above
+            for i, item in enumerate(d.get(listfield) or []):
+                if not isinstance(item, dict):
+                    continue
+                one = item.get(itemfield)
+                if not isinstance(one, str) or not one.strip():
+                    continue
+                checked += 1
+                if one not in have:
+                    dangling["%s.%s[].%s -> %s" % (group, listfield, itemfield, target)].append(
+                        "%s beat %d references %r" % (d.get("id", os.path.basename(p)), i, one))
 
     for k, v in sorted(dangling.items()):
         print("%s  (%d)" % (k, len(v)))
@@ -107,6 +158,28 @@ def main():
         print("movies.style  (%d to eyeball)" % len(hints))
         for h in hints:
             print("    %s" % h)
+
+    # `place` on a template is an id OR free text - compose.py implements both - so an
+    # unresolved value cannot simply be an error. But a value SHAPED like an id that does
+    # not resolve is a typo, and it reaches the prompt as a literal token like "locker_rom".
+    # Same treatment as movies.style: report it to be eyeballed, do not fail on it.
+    tdir, places = os.path.join(STUDIO, "templates"), ids("places")
+    if os.path.isdir(tdir) and places:
+        loose = []
+        for p in sorted(glob.glob(os.path.join(tdir, "*.json"))):
+            try:
+                d = json.load(open(p, encoding="utf-8"))
+            except Exception:
+                continue
+            v = str((d.get("sets") or {}).get("place", "")).strip()
+            if v and looks_like_id(v) and v not in places:
+                loose.append("%s sets place: %r which looks like a card id but does not "
+                             "resolve - free text is fine here, a typo is not"
+                             % (os.path.basename(p), v))
+        if loose:
+            print("templates.place  (%d to eyeball)" % len(loose))
+            for h in loose:
+                print("    %s" % h)
 
     total = sum(len(v) for v in dangling.values())
     print("\n%d references checked, %d dangling, %d rules skipped (group absent)"

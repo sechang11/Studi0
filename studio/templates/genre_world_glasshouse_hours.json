@@ -1,0 +1,53 @@
+{
+  "id": "genre_world_glasshouse_hours",
+  "name": "Hours in the glasshouse",
+  "desc": "Nothing is decided. Someone waters the tomatoes and the afternoon goes.",
+  "genre": [
+    "slice of life",
+    "drama"
+  ],
+  "beats": 5,
+  "runtime_s": 20.5,
+  "sets": {
+    "style": "cottagecore",
+    "place": "greenhouse",
+    "look": "golden",
+    "cue": "warm_memory",
+    "emotion": "tender",
+    "camera": "static",
+    "pace": "slow",
+    "wear": 0,
+    "transition": "dissolve",
+    "time": "day"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "pan_r",
+      "desc": "the inside of a glasshouse, white iron glazing bars carrying panes overhead, a potting bench crowded with terracotta pots and seed trays, tomato vines climbing strings, condensation beading on the glass, gravel floor, bags of compost, wide shot, no humans"
+    },
+    {
+      "template": "master",
+      "camera": "static",
+      "desc": "standing at the potting bench in linen with the sleeves pushed up, both hands in a seed tray, warm diffuse light coming down through the glass, wide shot, full body"
+    },
+    {
+      "template": "insert",
+      "camera": "static",
+      "desc": "two hands pressing compost around a seedling in a terracotta pot, dirt under the nails, close-up"
+    },
+    {
+      "template": "pillow",
+      "camera": "static",
+      "desc": "a watering can left on the gravel floor beside a coiled hose still dripping, dried flowers hung upside down on a nail above, condensation running on the glass behind, no humans"
+    },
+    {
+      "template": "react",
+      "camera": "push",
+      "desc": "face turned toward the glass, eyes lowered, the corner of the mouth just lifted, warm light across the cheek, close-up"
+    }
+  ],
+  "why": "Every template in the existing gallery is about a crisis, and a library of twenty crises is not a library. This one is deliberately a scene in which nothing is at stake, which makes the shot grammar the whole content: four of five beats are static, the single push is on the last shot, and the pillow at beat four exists for no reason except that time is passing. pace:slow is safe here specifically because there is no hold_silent in the list - at 1.35x the longest beat is the 4.2s establish stretched to 5.7s, still under the 6s clip that compile.py hands every shot, so nothing gets truncated. cottagecore is compose:replaces and its verdict says soft warm daylight and flowers replaced the street; greenhouse is the densest card in the interior family at fourteen nouns and it wants exactly that light, so the replace runs with the location rather than over it. The place card is clear that without the FRAME - white glazing bars, panes overhead - you simply get a garden, and that the humidity has to be a visible thing rather than a mood, so condensation appears in two shots and a dripping hose in a third.",
+  "note": "Expected to land: linen and dried-flower texture, warm diffuse light, the golden grade, the glasshouse frame. Deliberate override: cottagecore rebuilds the setting and shares that behaviour with ghibli_pastoral. The risk specific to this pairing is that both the style and the place want plants, so the failure mode is not replacement but over-lushness - the model building a pristine botanical palm house instead of a working greenhouse. The compost bags and the cluttered bench in shot one are the counterweight the place card prescribes. Uncertain: cottagecore is strength moderate, so it may read faintly against a place this strong. transition is intent only - short.py ignores transitions and hard-cuts every join, so do not build a beat around it. Nothing in this card has been rendered - the GPU was committed to another job while it was written - so status is untested rather than partial. What IS checked: every id here exists in its library, and the style/place/look stack was resolved through POST /api/compose, which returned the intended engine and no error-severity conflict.",
+  "status": "untested"
+}

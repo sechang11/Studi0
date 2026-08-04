@@ -1,0 +1,49 @@
+{
+  "id": "anime_idiom_shojo_daydream",
+  "name": "Shojo daydream",
+  "desc": "A letter read twice in an attic, and a room that stops being a room.",
+  "genre": [
+    "romance",
+    "fantasy"
+  ],
+  "beats": 4,
+  "runtime_s": 21,
+  "sets": {
+    "style": "shojo_soft",
+    "place": "attic_bedroom",
+    "look": "dream",
+    "cue": "romantic",
+    "emotion": "longing",
+    "camera": "push",
+    "pace": "slow",
+    "wear": 0,
+    "transition": "dissolve",
+    "time": "day",
+    "mood": "daydream"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "static",
+      "desc": "an attic bedroom under a sloping beamed ceiling, narrow bed pushed beneath the eaves, patchwork quilt, dormer window at the gable end, bare floorboards, cardboard boxes stacked where the roof meets the floor, a string of fairy lights along a beam, wide shot, no humans"
+    },
+    {
+      "template": "hold_silent",
+      "camera": "push",
+      "desc": "sitting cross-legged on the quilt holding a folded letter in both hands, dormer light across the face, shoulders forward, thin delicate lineart, pale palette, medium shot"
+    },
+    {
+      "template": "react",
+      "camera": "push",
+      "desc": "eyes lifting off the page, enormous glittering irises with stacked catchlights, faint blush, parted lips, looking into the distance past the camera, close-up"
+    },
+    {
+      "template": "pillow",
+      "camera": "static",
+      "desc": "the letter lying open on the patchwork quilt, one corner creased from being folded and refolded, soft diffused light across the paper, no humans"
+    }
+  ],
+  "why": "The card that shows what a style can do to a room without taking it away. shojo_soft is one of the strongest things in the library at 81.4 from control, and it is filed compose=replaces because when it was rendered against a thin three-tag setting it swapped a city street for a field of flowers. It is also one of only four replaces styles whose behaviour over a DENSE place card has actually been measured, and that measurement went the other way: over a real place card the room was left standing and recoloured rather than deleted. So this template gives it twelve solid attic nouns and asks for the pastel, not the disappearance. The dramaturgy is a letter read twice. Beat two is somebody holding it, beat three is the moment their eyes come off the page, and beat four is the letter alone on the quilt with a crease in it from being folded and refolded - which is the only fact in the piece and says how many times this has happened. emotion:longing is the reaction shot written as tags rather than as an adjective: wet half-closed eyes looking into the distance, leaning forward. There is no speak shot, because the letter already said it.",
+  "note": "NOT RENDERED. No frame from this card has been generated - the GPU was held for another job while it was authored, so every claim below is read off the style, place and look cards rather than off pixels. The relevant behaviour IS measured, and it corrected the style card - studio/samples/layers/sheet_C.jpg puts shojo_soft over a place card and the room survived, recoloured. compose confirms it for this pairing: note style_replaces_place_outweighed, twelve nouns against a threshold of six. Expect the attic to hold and to go pastel; expect the sparkle field to arrive whether or not the room does. transition is intent only - short.py hard-cuts every join. The style card is explicit that the sparkle field is the worst case for image-to-video - scattered small bright specks pop and swim between frames - so if these shots have to move, keep sparkles out of the keyframe and let the drawing carry it. look:dream at saturation 0.88 is chosen because shojo_soft is a chromatic style and a grade under 0.7 would drain the pastel that is the entire point; do not substitute bleach or sepia here. Also documented on the style card: the library holds one thin-lineart feature with no degree control, so delicate and thin render identically. RUNTIME, checked by compiling this card rather than by trusting the field: runtime_s here follows the gallery convention - the shot cards' approx_seconds summed and scaled by pace - and that is an INTENT number. It is not what compiles. compile.py gives every beat a flat clip_secs of 6 unless a per-shot @Ns overrides it, and a template cannot express one because the wizard emits only template, camera and desc. pace does not scale duration either, despite compile.py's own variable description saying it scales shot lengths: it sets intensity = 1/scale, a motion figure, so pace:slow renders as intensity 0.741 and identical shot lengths. This card therefore compiles to 4 beats x 6s = 24s, not 21s. Verified with compile.py --timeline; the discrepancy is in the field, not in this card.",
+  "status": "untested"
+}

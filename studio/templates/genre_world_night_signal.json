@@ -1,0 +1,56 @@
+{
+  "id": "genre_world_night_signal",
+  "name": "The night signal",
+  "desc": "Nine hours of nothing on the paper, and then four minutes that are not nothing.",
+  "genre": [
+    "thriller",
+    "mystery",
+    "sci-fi",
+    "procedural"
+  ],
+  "beats": 5,
+  "runtime_s": 17.7,
+  "sets": {
+    "style": "neo_noir",
+    "place": "observatory_dome",
+    "look": "cold",
+    "cue": "tense_strings",
+    "emotion": "focus",
+    "camera": "static",
+    "pace": "normal",
+    "wear": 1,
+    "transition": "l_cut",
+    "lighting": "practical_lamps",
+    "time": "night"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "tilt_u",
+      "desc": "the interior of an observatory dome at night, a great telescope on an equatorial mount angled up toward an open slit in the curved roof, real night sky showing through the gap, curved dome panel seams, steel gantry stairs, red work lights, wide shot, no humans"
+    },
+    {
+      "template": "master",
+      "camera": "static",
+      "desc": "seated at the control desk at the edge of the dome floor, monitors throwing coloured light up onto the face and down onto a damp concrete floor that doubles each one as a vertical streak, cables across the floor, the telescope mount behind, wide shot, full body"
+    },
+    {
+      "template": "insert",
+      "camera": "push",
+      "desc": "a paper chart roll running under a stylus, a flat trace broken by one tall spike, red work light falling across it, close-up, no humans"
+    },
+    {
+      "template": "react",
+      "camera": "push",
+      "desc": "face lit only by monitor light, eyes flicking left to right, mouth slightly open, close-up"
+    },
+    {
+      "template": "hold_silent",
+      "camera": "static",
+      "desc": "seated motionless at the control desk looking up at the open dome slit, night sky in the gap, red work lights on the curved wall, wide shot, full body"
+    }
+  ],
+  "why": "This is one of the two photographic front doors in this set: neo_noir routes to qwen, so clicking this template is how a new user discovers there is a second engine at all. The style is noir in colour - deep blacks with coloured fill rather than with black - and an observatory at night is the rare interior that motivates every part of that honestly, because the place card already carries red work lights and glowing monitors as its only named sources. observatory_dome is the card in the library the model has least of, and its note says it collapses into a planetarium unless the open slit and the mount are named, so both are in shot one and the slit returns in the closing shot. It also warns that telescope geometry falls apart in close-up, which is why the instrument is only ever framed whole and at distance and the only close work in the scene is a paper chart and a face. The structure is a procedural: watch, watch, the trace spikes, the face reads it, and then 5.5 seconds of somebody sitting completely still with the sky visible above them. The template never says what the signal was.",
+  "note": "Expected to land: engine routing to qwen off the style card - confirmed through /api/compose, which reported engine qwen and no error - plus wet-black shadow with coloured fill, and the dome interior. Uncertain: qwen is photographic and prose-driven, so these descs are read as prose rather than as danbooru tags; they are written to survive that but have not been rendered. The qwen_face_lock warning fires on every qwen combination and is irrelevant here, since templates cannot cast a character. look:cold at 0.72 was chosen over noir on purpose - noir is a true greyscale at 0.00 and /api/compose returned both grade_kills_style and mono_vs_colour against neo_noir with it. pace normal keeps hold_silent at 5.5s, under the 6s clip. KNOWN RISK, recorded because reading the composed prompt is the only way to find it: neo_noir contributes the words wet asphalt reflecting saturated signage, and there is no asphalt and no signage in an observatory. /api/compose reports no conflict for this - it does not diff prose for contradictions - and by this project's own rule those are nouns, so they land. Two counterweights are authored in rather than left to luck: the master shot names a damp concrete floor doubling each source as a vertical streak, which gives the wet reflection somewhere legitimate to go, and the monitors and red work lights give the signage a real source. If asphalt still appears in frame, change the style to cinestill_night rather than weakening the place. transition is intent only - short.py ignores transitions and hard-cuts every join, so do not build a beat around it. Nothing in this card has been rendered - the GPU was committed to another job while it was written - so status is untested rather than partial. What IS checked: every id here exists in its library, and the style/place/look stack was resolved through POST /api/compose, which returned the intended engine and no error-severity conflict.",
+  "status": "untested"
+}

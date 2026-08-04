@@ -1,0 +1,54 @@
+{
+  "id": "genre_world_airship_boarding",
+  "name": "Boarding at altitude",
+  "desc": "The mooring line goes taut, someone comes over the rail, and the ground is four thousand feet away.",
+  "genre": [
+    "adventure",
+    "action",
+    "heist"
+  ],
+  "beats": 5,
+  "runtime_s": 13.7,
+  "sets": {
+    "style": "steampunk",
+    "place": "airship_deck",
+    "look": "golden",
+    "cue": "driving_pulse",
+    "emotion": "focus",
+    "camera": "handheld",
+    "pace": "normal",
+    "wear": 1,
+    "transition": "whip_pan",
+    "time": "day"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "pan_r",
+      "desc": "the wooden deck of an airship seen wide, rigging and rope ladders climbing to the taut canvas gasbag overhead, brass railing along the edge, ship wheel, cloud tops passing below the rail, pennants snapping, extreme wide shot, no humans"
+    },
+    {
+      "template": "build",
+      "camera": "handheld",
+      "desc": "hauling hand over hand on a taut mooring line at the brass rail, boots braced against the deck boards, leather coat, goggles pushed up on the forehead, sweat, medium shot"
+    },
+    {
+      "template": "sakuga",
+      "camera": "handheld",
+      "desc": "vaulting over the brass rail onto the deck, coat and rope whipping sideways in the wind, open sky and cloud tops behind, wide shot, full body"
+    },
+    {
+      "template": "react",
+      "camera": "push",
+      "desc": "head turned sharply back toward the rail, jaw set, eyes narrowed against the wind, hair torn sideways, close-up"
+    },
+    {
+      "template": "insert",
+      "camera": "static",
+      "desc": "a brass mooring cleat with the rope parting strand by strand under load, the fitting scored bright where the line has dragged, extreme close-up, no humans"
+    }
+  ],
+  "why": "The template exists to put a brass world in front of a new user in one click, so the first shot spends its whole 4.2 seconds on material - rigging, gasbag, riveted brass - before anybody is on screen. Steampunk measured as compose:safe and strong, and its verdict is specific about why: the goggles landed on the belt as costume rather than floating in frame as a prop, so the style can be stacked over a place card without fighting it. That is what the airship deck card needs, because its own note says the location only holds if two nouns survive - the envelope visibly overhead and cloud below the rail - and both are written into shot one and shot three rather than left to the style. handheld is the scene default because this is the one template here built on physical effort; the single sakuga beat at 2.0s is the vault, and it is deliberately the shortest thing in the piece so it reads as an event rather than as choreography the model has to sustain. The closing insert is the actual drama: the rope is failing, and the scene ends on the failing rope instead of on a face, which is how you say the sequence is not over without writing a line of dialogue.",
+  "note": "Expected to land: the brass and gaslight palette, the deck geometry, wear 1 on the two person beats. Uncertain: the style card warns that fine gear detail crawls between frames, so treat this as a keyframe-first template and look at the stills before committing to clips. The gasbag overhead is the single most likely thing to be lost - airship_deck.json records that without it the deck renders as an ordinary sailing ship at sea, so if that happens the fix is in the shot desc, not in the style. time is prompt words only. No weather layer is set, and that is deliberate: /api/compose flags weather_vs_place whenever a place card already carries its own weather, and it does here. The atmosphere is written into the place card and the shot descs as nouns instead, which is where it lands. The wind is the exception worth naming - airship_deck already carries pennants snapping in the wind, so a weather:wind layer would only have spent the same words twice. transition is intent only - short.py ignores transitions and hard-cuts every join, so do not build a beat around it. Nothing in this card has been rendered - the GPU was committed to another job while it was written - so status is untested rather than partial. What IS checked: every id here exists in its library, and the style/place/look stack was resolved through POST /api/compose, which returned the intended engine and no error-severity conflict.",
+  "status": "untested"
+}

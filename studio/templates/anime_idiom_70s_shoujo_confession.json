@@ -1,0 +1,55 @@
+{
+  "id": "anime_idiom_70s_shoujo_confession",
+  "name": "70s shoujo confession",
+  "desc": "An empty classroom after everyone has gone, and a sentence that has been rehearsed for a week.",
+  "genre": [
+    "romance",
+    "drama",
+    "school"
+  ],
+  "beats": 5,
+  "runtime_s": 25,
+  "sets": {
+    "style": "retro_shoujo_70s",
+    "place": "classroom",
+    "look": "sepia",
+    "cue": "romantic",
+    "emotion": "embarrassed",
+    "camera": "push",
+    "pace": "slow",
+    "wear": 0,
+    "transition": "dissolve",
+    "time": "dusk",
+    "mood": "girls-comic"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "static",
+      "desc": "an empty classroom at dusk, rows of wooden desks with the chairs turned up onto them, chalkboard wiped, chalk tray, tall windows down one side laying long bars of low sun across the wooden floor, one school bag still on a desk, wall clock, wide shot, no humans"
+    },
+    {
+      "template": "hold_silent",
+      "camera": "push",
+      "desc": "standing in the aisle between the desks, both hands behind the back gripping each other, shoulders raised, head lowered, elongated figure, full body, medium shot"
+    },
+    {
+      "template": "speak",
+      "camera": "static",
+      "desc": "mid-sentence, chin lifting, enormous starred eyes wide and glittering, full-face blush, open mouth, one hand rising to the collar, upper body, close-up"
+    },
+    {
+      "template": "react",
+      "camera": "push",
+      "desc": "the other listening, eyes very large and still, screentone flowers behind the head, lips slightly parted, close-up"
+    },
+    {
+      "template": "pillow",
+      "camera": "static",
+      "desc": "the school bag alone on a desk by the window, low sun crossing the desk lid, chalk dust in the light, no humans"
+    }
+  ],
+  "why": "The gallery has a confession template already and it is a modern one - warm lamp, drawn curtains, a bedroom. This is the same human event drawn seventy years of style earlier, and the difference is the entire point of the card. retro_shoujo_70s measured strong and, unlike its neighbour shojo_soft, did NOT replace the setting, so the classroom survives and the drawing changes: enormous starred eyes, a fine feathered line, vertical elongation and a rose-sepia palette. That elongation is why the second beat is a full-body standing shot rather than a bust - the period draws people taller than they are and a close-up throws that away. emotion:embarrassed is doing precise work: its face tags are a full-face blush and a sweatdrop, which are the two marks the genre actually uses, and crucially its mouth tag includes open mouth, so the speak shot renders a person talking. Every closed-mouth emotion in the library would have rendered a shut mouth over the line. look:sepia is the grade the style card asks for by name, and at saturation 0.25 it is doing most of the period colour work that the prompt should not be asked to do twice.",
+  "note": "NOT RENDERED. No frame from this card has been generated - the GPU was held for another job while it was authored, so every claim below is read off the style, place and look cards rather than off pixels. retro_shoujo_70s is measured on a still and its verdict is unusually clean - the elongation and eye size both landed and the setting stayed. transition is intent only - short.py hard-cuts every join. Two things are expected to be soft. The style card records that this library holds ONE thin-lineart feature with no degree control, so feathered and delicate render identically to plain thin - you get thin or not-thin and no dial. And the style is rated as flickering on line in video, so the two long shots are held and the camera only pushes. The screentone flowers in the react desc are decoration that exists in the frame rather than in the world; if they arrive as literal flowers growing in the classroom, drop that clause and let the eyes carry it. RUNTIME, checked by compiling this card rather than by trusting the field: runtime_s here follows the gallery convention - the shot cards' approx_seconds summed and scaled by pace - and that is an INTENT number. It is not what compiles. compile.py gives every beat a flat clip_secs of 6 unless a per-shot @Ns overrides it, and a template cannot express one because the wizard emits only template, camera and desc. pace does not scale duration either, despite compile.py's own variable description saying it scales shot lengths: it sets intensity = 1/scale, a motion figure, so pace:slow renders as intensity 0.741 and identical shot lengths. This card therefore compiles to 5 beats x 6s = 30s, not 25s. Verified with compile.py --timeline; the discrepancy is in the field, not in this card.",
+  "status": "untested"
+}

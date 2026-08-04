@@ -1,0 +1,55 @@
+{
+  "id": "photographic_last_stop",
+  "name": "Last stop before the border",
+  "desc": "Two people stop for fuel at three in the morning and one of them takes a picture.",
+  "genre": [
+    "road movie",
+    "romance",
+    "drama"
+  ],
+  "beats": 5,
+  "runtime_s": 15,
+  "sets": {
+    "style": "polaroid",
+    "look": "faded_film",
+    "place": "petrol_station_night",
+    "pace": "normal",
+    "cue": "warm_memory",
+    "emotion": "tender",
+    "camera": "static",
+    "wear": 1,
+    "transition": "dissolve",
+    "time": "night",
+    "weather": "mist"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "static",
+      "desc": "a petrol station forecourt at night, fuel pumps standing at mid distance under a brightly lit canopy throwing hard light down onto wet tarmac, the shop window glowing behind them, a price sign on a pole and empty dark road running away past it, moths turning in the lights, wide shot, no humans"
+    },
+    {
+      "template": "master",
+      "camera": "static",
+      "desc": "two figures standing at the open boot of a car on the forecourt, hard direct flash falling off to solid black behind them, the dark road beyond invisible, full body, wide shot"
+    },
+    {
+      "template": "react",
+      "camera": "push",
+      "desc": "one face caught by direct on-camera flash, eyes half shut against it, canopy lights out of focus behind, close-up"
+    },
+    {
+      "template": "insert",
+      "camera": "static",
+      "desc": "an instant photograph lying face-up on the roof of a car, white plastic frame with a thick lower border catching the canopy light, the image on it still half grey and undeveloped, close-up, no humans"
+    },
+    {
+      "template": "pillow",
+      "camera": "static",
+      "desc": "moths circling a fluorescent tube under the canopy, hard light above and solid black night just past the edge of it, no humans"
+    }
+  ],
+  "why": "A petrol station at three in the morning is a lit island with nothing round it, and that is the only thing the scene needs to be about. The place card is exact about how it fails - if the surrounding dark is not named as a thing, the model lights the whole frame evenly and the isolation goes - so every shot names the dark road, the black past the canopy edge, the invisible beyond. The style and the place then agree on their own: polaroid's defining behaviour is hard on-camera flash falling off to black behind the subject, which is what a canopy already does, so the two layers reinforce instead of competing. The picture being taken is the plot. It gets its own insert, still half undeveloped, because a photograph that has not finished arriving is the most economical way to say that neither has this relationship. The place card also warns that pumps render mangled at close range, so they are kept at mid distance in the only shot that contains them.",
+  "note": "Not rendered. No frame from this template has been generated - the GPU was held for a video job - so everything below is read off the style, place and look cards rather than seen. Two known failure modes on this style, and this template is written against both. Ambiguity: ask for a polaroid and you may get the photograph itself OR a photograph of a polaroid lying on a table - so shot 4 says explicitly which one it means, and shots 1-3, 5 are ordinary photographs that happen to be lit like one. The border: the model renders it about half the time and gets the proportions wrong when it does, so if the frame on shot 4 comes out wrong, the reliable fix is to render the image alone and composite a real instant frame in post rather than to reprompt. What genuinely lands is the dye cast and the flash falloff, and those are what make it read as instant rather than merely old. Also: this style is bad in motion because the border is a static graphic element that LTX treats as scene content and lets drift. Engine note: on qwen a face is held by a reference SHEET through Qwen-Edit rather than by IPAdapter, which is a weaker lock than the illustration path - expect visible drift between shots of the same person. Keep that in mind before casting one character across all of these beats. Applies to every card in this set and to none of the existing twenty: these templates use place CARDS rather than free text, so the place's own prose is appended to the prompt on top of whatever the shot desc says, and where a desc also names the setting the nouns arrive twice. That is reinforcement rather than contradiction, and it is deliberate on the shots whose place card warns that a particular noun must be named explicitly or the location renders wrong. But if a prompt reads long, the shot desc is the half to trim - never the card. Standing gaps that apply to every card in the gallery: transitions are intent only, because short.py hard-cuts every join regardless of what is set here; every emotion card is status:partial upstream, so the face, eyes, mouth and body tags render and voice_style does not, because no TTS engine on this box takes an emotion vector; and a style's negative_add never reaches the picture, because the renderer has no negative input wired - so this style will come out slightly less clean than its library sample, which had one.",
+  "status": "untested"
+}

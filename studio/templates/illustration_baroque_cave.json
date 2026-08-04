@@ -1,0 +1,55 @@
+{
+  "id": "illustration_baroque_cave",
+  "name": "Baroque cave mouth",
+  "desc": "A fire at the entrance, and the firelight finds something carved on the rock.",
+  "genre": [
+    "adventure",
+    "myth",
+    "drama"
+  ],
+  "beats": 5,
+  "runtime_s": 21,
+  "sets": {
+    "style": "baroque_painting",
+    "place": "cave_mouth",
+    "look": "firelight",
+    "pace": "slow",
+    "cue": "tense_strings",
+    "emotion": "shock",
+    "camera": "push",
+    "wear": 2,
+    "transition": "flash",
+    "lighting": "dramatic",
+    "time": "night"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "push",
+      "desc": "a jagged stone arch at the entrance of a cave under a rock overhang, scree and boulders across the cave floor, ferns at the entrance, dripping water on the stone, a small fire burning at the mouth, dark interior beyond it, wide shot, no humans"
+    },
+    {
+      "template": "master",
+      "camera": "static",
+      "desc": "a figure crouched beside the fire at the cave mouth, lit hard from one side only, the rest of the frame falling away into near black, full body, wide shot"
+    },
+    {
+      "template": "react",
+      "camera": "push",
+      "desc": "a face turned toward the rock wall, wide eyes with constricted pupils, mouth open, one hand half raised and arms frozen mid-motion, warm light on one cheek and the other side of the face in darkness, close-up"
+    },
+    {
+      "template": "insert",
+      "camera": "static",
+      "desc": "worn carvings in a rock face picked out by firelight from below, dripping water running across the stone, deep shadow in the cut lines, close-up, no humans"
+    },
+    {
+      "template": "pillow",
+      "camera": "static",
+      "desc": "the dark interior of the cave beyond the reach of the firelight, wet rock at the edge of the light and nothing visible further in, no humans"
+    }
+  ],
+  "why": "Baroque painting is chiaroscuro - a single warm source and deep falloff - and its video prospect is better than most of the painted set for a structural reason: most of the frame is near black, which is very little for LTX to get wrong. So this template puts almost everything in the dark. A fire at a cave mouth, one figure lit from one side, and the rest of the frame falling away. cave_mouth carries nine nouns including a jagged stone arch, scree, dripping water and ferns, and baroque_painting is compose:safe, so the geography survives intact underneath the light. The dramaturgy is a discovery rather than a threat, which keeps it off the same ground as the horror templates already in the library: the fire is lit for warmth, and the firelight finds carvings on the rock that were not the reason for stopping. emotion:shock is the beat - raised eyebrows, constricted pupils, one hand half raised, arms frozen mid-motion - and it is the only fast thing in an otherwise slow piece. The last shot is the dark going further in with nothing in it, which is where the scene stops rather than where it resolves.",
+  "note": "Nothing rendered. Video on this style is INFERRED from the large-simple-masses prior rather than measured, and the varnish and canvas texture are expected not to survive - which costs little, since the reason to reach for this card is the light. The insert is the risky beat: worn carvings picked out by firelight asks for legible relief in the darkest part of the image and it may come back as texture rather than as carving. POST /api/compose reports look_names_place on the firelight look - it contains the words campfire, fire and dark background, and they are stripped so the cave survives while the fire colour and direction are kept; the fire in this scene is therefore carried by the shot descriptions, not by the look. transition:flash is advisory, so the reveal has no punctuation and must be carried by cut order alone. lighting:dramatic and time:night are prompt words only. The final beat is a pillow, a NO_PERSON template, so the character is dropped from it entirely - intended, but it does mean the scene ends with the person gone from frame rather than looking into the dark.",
+  "status": "untested"
+}

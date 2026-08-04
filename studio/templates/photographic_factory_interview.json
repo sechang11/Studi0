@@ -1,0 +1,53 @@
+{
+  "id": "photographic_factory_interview",
+  "name": "Twenty years on the line",
+  "desc": "Someone who has done the same job since before the machines were repainted, asked why they stayed.",
+  "genre": [
+    "documentary",
+    "drama"
+  ],
+  "beats": 5,
+  "runtime_s": 15,
+  "sets": {
+    "style": "documentary_photo",
+    "look": "fluorescent",
+    "place": "factory_floor",
+    "pace": "normal",
+    "cue": "industrial_cold",
+    "emotion": "neutral",
+    "camera": "handheld",
+    "wear": 1,
+    "transition": "cut",
+    "time": "day"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "pan_r",
+      "desc": "a long factory floor lined with stamping presses and a conveyor carrying pressed steel panels, a steel gantry walkway overhead, pipework and cable trays above it, painted safety markings across the concrete, high wall windows letting in cold daylight, wide shot, no humans"
+    },
+    {
+      "template": "speak",
+      "camera": "handheld",
+      "desc": "standing beside a stopped press in worn overalls with ear defenders pushed down around the neck, talking to someone just out of frame at camera left, not looking at the lens, one hand moving, medium shot, cluttered machinery behind"
+    },
+    {
+      "template": "react",
+      "camera": "handheld",
+      "desc": "listening with the head slightly turned, eyes down and off to one side, mouth closed, close-up, cold window light on one side of the face and a warm work lamp on the other"
+    },
+    {
+      "template": "insert",
+      "camera": "static",
+      "desc": "a pair of worn work gloves left on a control panel beside a row of painted buttons rubbed back to bare metal, close-up, no humans"
+    },
+    {
+      "template": "master",
+      "camera": "static",
+      "desc": "the whole line seen from the gantry walkway, one small figure at the far end walking back to the press, painted floor markings running away underneath, wide shot"
+    }
+  ],
+  "why": "The documentary interview is the plainest thing a camera does and the gallery had no way to ask for it. What makes it read is not the questions, it is that the subject is at work and the camera is in the way. The style card is blunt about how it fails: qwen's default is a well-lit, well-composed, retouched photograph, and the word documentary does not undo that - the imperfections have to be spent as words. So the shots buy them individually: not looking at the lens, off-centre, mid-gesture, cluttered background, and the mixed colour temperature of cold window light against a warm work lamp, which is the single most convincing tell in the whole idiom. The place card warns that factory is undated by default, so the shots name stamping presses and pressed steel panels, and they name the high wall windows because without them a daytime scene renders as night shift no matter what the grade says. The gloves left on the panel and the buttons rubbed back to bare metal are the twenty years; nobody has to say the number.",
+  "note": "Not rendered. No frame from this template has been generated - the GPU was held for a video job - so everything below is read off the style, place and look cards rather than seen. Expected to land: available light, candid stance and unposed framing were all seen. This is also the one template in this set where wear helps rather than hurts - the fallback wear ladder in compile.py appends the word uniform, which is wrong for a civilian cast but exactly right for a worker in overalls, so wear:1 (sweaty, damp hair, flushed) gives a mid-shift face for free. Uncertain: this style overlaps war_photography heavily and the honest separation between the two is the grade rather than the prompt, so if this comes out looking like reportage from somewhere worse, that is the known overlap and the fix is the look, not the words. Measured elsewhere and load-bearing here: on the qwen photographic path the thing that breaks in motion is the SHOT, not the texture. photorealistic and brutalist both held skin and concrete cleanly for four seconds and then lost the frame when the subject walked out of it (detail 0.964 at 4s against 0.510 at 8s). Be precise about what pace does and does not do about that, because it is easy to get wrong. pace does NOT change how much video is generated: compile.py leaves clip_secs at 6.0 on every beat, and clip_secs is not one of the sixteen keys the wizard accepts, so no template can set it. What pace changes is how much of that six seconds the EDIT shows - it writes intensity as 1/scale and scripts/scene_templates.py divides each cut length by it, so a fast beat shows roughly the first 1.3 to 2.9 seconds of the clip and a slow establish shows 5.7 of it. pace:normal and pace:fast keep the visible window inside the range that was measured to hold; pace:slow spends it. If drift still shows, lower clip_secs by hand in the .movie - do not reach for pace. Engine note: on qwen a face is held by a reference SHEET through Qwen-Edit rather than by IPAdapter, which is a weaker lock than the illustration path - expect visible drift between shots of the same person. Keep that in mind before casting one character across all of these beats. Applies to every card in this set and to none of the existing twenty: these templates use place CARDS rather than free text, so the place's own prose is appended to the prompt on top of whatever the shot desc says, and where a desc also names the setting the nouns arrive twice. That is reinforcement rather than contradiction, and it is deliberate on the shots whose place card warns that a particular noun must be named explicitly or the location renders wrong. But if a prompt reads long, the shot desc is the half to trim - never the card. Standing gaps that apply to every card in the gallery: transitions are intent only, because short.py hard-cuts every join regardless of what is set here; every emotion card is status:partial upstream, so the face, eyes, mouth and body tags render and voice_style does not, because no TTS engine on this box takes an emotion vector; and a style's negative_add never reaches the picture, because the renderer has no negative input wired - so this style will come out slightly less clean than its library sample, which had one.",
+  "status": "untested"
+}

@@ -1,0 +1,60 @@
+{
+  "id": "photographic_site_incident",
+  "name": "Something happened on site",
+  "desc": "The work stopped an hour ago and nobody has said why. A photographer got through the gate.",
+  "genre": [
+    "documentary",
+    "thriller",
+    "drama"
+  ],
+  "beats": 6,
+  "runtime_s": 13,
+  "sets": {
+    "style": "war_photography",
+    "look": "overcast",
+    "place": "construction_site",
+    "pace": "fast",
+    "cue": "unease",
+    "emotion": "shock",
+    "camera": "handheld",
+    "wear": 2,
+    "transition": "cut",
+    "time": "day",
+    "weather": "drizzle"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "handheld",
+      "desc": "a construction site yard of churned mud and puddles, a steel frame wrapped in scaffolding and orange safety netting above it, a tower crane standing over the whole site, stacked breeze blocks and a cement mixer left running, floodlights on in flat grey daylight, wide shot, no humans"
+    },
+    {
+      "template": "master",
+      "camera": "handheld",
+      "desc": "a loose line of workers in hi-vis standing well back from the frame, all facing the same direction, none of them working, plastic sheeting flapping across the foreground, full body, wide shot"
+    },
+    {
+      "template": "react",
+      "camera": "handheld",
+      "desc": "a face under a hard hat turned toward something out of frame, mouth slightly open, eyes wide and fixed, close-up, dust hanging in the air"
+    },
+    {
+      "template": "insert",
+      "camera": "static",
+      "desc": "a hard hat lying upturned in the mud beside a coil of exposed rebar, rainwater standing in the crown of it, close-up, no humans"
+    },
+    {
+      "template": "speak",
+      "camera": "handheld",
+      "desc": "a site manager in hi-vis with a radio held near the mouth and one arm out holding people back, caught mid-word and not looking at the camera, medium shot, scaffolding behind"
+    },
+    {
+      "template": "pillow",
+      "camera": "tilt_u",
+      "desc": "orange safety netting and plastic sheeting on a bare steel frame moving in the wind, the tower crane jib motionless above, flat grey sky, no humans"
+    }
+  ],
+  "why": "This is photojournalism as a shape rather than as a subject, and the shape is: the event is already over, nobody in frame will explain it, and the camera arrives late and is not welcome. The style card is explicit that what it delivers is the IDIOM - available light, airborne dust, desaturation, a foreground obstruction cutting into the frame, movement caught and smeared - and not depicted violence, which the model sanitises or declines and which was never what made these pictures read as what they are. So the template spends nothing on the incident and everything on the reaction to it: a line of people standing back, one face looking at something the audience never sees, a hat in the mud, a manager mid-word. Fast pace is doing real work here rather than setting a mood: it scales every cut to seven tenths, which is the handheld reportage rhythm, and it also means the edit only ever shows the opening seconds of each generated clip - the part of it this engine has been measured to hold cleanly. The plastic sheeting in the foreground of the master is the obstruction the style asks for, placed on purpose.",
+  "note": "Not rendered. No frame from this template has been generated - the GPU was held for a video job - so everything below is read off the style, place and look cards rather than seen. Expected to land: desaturated, grainy and handheld were all seen. Expected NOT to land, and designed around: anything violent. The card says plainly that the model will sanitise or decline it, so nothing in these shots depicts an injury and the template does not need one. The place card splits between the muddy ground-level yard and the exposed upper floors of a frame; this commits to the yard - mixer, blocks, mud, netting - and mixing in the upper-floor tags gives an incoherent middle that is neither. Uncertain: overcast at 0.68 saturation sits just under the 0.7 line, which drains a chromatic style. This one is not chromatic, so it should be safe, but the orange netting is the only colour in the frame and it is the thing most likely to go grey. Engine note: on qwen a face is held by a reference SHEET through Qwen-Edit rather than by IPAdapter, which is a weaker lock than the illustration path - expect visible drift between shots of the same person. Keep that in mind before casting one character across all of these beats. Applies to every card in this set and to none of the existing twenty: these templates use place CARDS rather than free text, so the place's own prose is appended to the prompt on top of whatever the shot desc says, and where a desc also names the setting the nouns arrive twice. That is reinforcement rather than contradiction, and it is deliberate on the shots whose place card warns that a particular noun must be named explicitly or the location renders wrong. But if a prompt reads long, the shot desc is the half to trim - never the card. Standing gaps that apply to every card in the gallery: transitions are intent only, because short.py hard-cuts every join regardless of what is set here; every emotion card is status:partial upstream, so the face, eyes, mouth and body tags render and voice_style does not, because no TTS engine on this box takes an emotion vector; and a style's negative_add never reaches the picture, because the renderer has no negative input wired - so this style will come out slightly less clean than its library sample, which had one.",
+  "status": "untested"
+}

@@ -1,0 +1,56 @@
+{
+  "id": "illustration_watercolour_morning",
+  "name": "Watercolour morning",
+  "desc": "A stone path through bamboo at first light, and one person walking away up it.",
+  "genre": [
+    "slice of life",
+    "pastoral",
+    "drama"
+  ],
+  "beats": 5,
+  "runtime_s": 21,
+  "sets": {
+    "style": "watercolour",
+    "place": "bamboo_grove",
+    "look": "dawn",
+    "pace": "slow",
+    "cue": "quiet_dawn",
+    "emotion": "longing",
+    "camera": "push",
+    "wear": 0,
+    "transition": "dissolve",
+    "lighting": "sunbeam",
+    "weather": "mist",
+    "time": "dawn"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "push",
+      "desc": "narrow stone path between dense vertical bamboo stalks packed close, thin shafts of sunlight coming down through the canopy, dry bamboo leaves scattered across the stone, low mist between the stalks, wide shot, no humans"
+    },
+    {
+      "template": "pillow",
+      "camera": "tilt_u",
+      "desc": "bamboo leaves overhead against a pale sky, stalks receding upward, green filtered light, no humans"
+    },
+    {
+      "template": "master",
+      "camera": "static",
+      "desc": "a single figure walking away up the stone path, seen from behind, small in the frame, bamboo closing in on both sides, full body, wide shot"
+    },
+    {
+      "template": "insert",
+      "camera": "static",
+      "desc": "dry bamboo leaves on wet stone, one leaf turning in a trickle of water, close-up, no humans"
+    },
+    {
+      "template": "pillow",
+      "camera": "pan_r",
+      "desc": "packed bamboo stalks passing, green filtered light moving across them, no humans"
+    }
+  ],
+  "why": "Watercolour is the strongest style card in the library - 92.1 from control - and until now there was no way to reach it from the gallery at all. The card's one recorded failure is anatomical: over an eight second clip the face softens and goes muddy. So this template never puts a face in the frame. Four of its five beats are peopleless, the fifth is a master from behind at wide, and the whole scene is built out of the things wet-on-wet paint is actually good at - a wet stone path, leaves, mist, a shaft of light through a canopy. bamboo_grove is a place CARD rather than a phrase, which matters more here than elsewhere: watercolour is compose:safe and will not fight the setting, so all nine of the card's nouns survive into the prompt and give the wash something to pool around. look:dawn is endorsed by the style card and by the place card, and at saturation 0.82 it is pale enough to read as morning without draining pigment the way memory would. The emotion is longing on a person you only ever see from behind, which is a bet that posture carries it - a stopped stride and dropped shoulders - rather than eyes. If it does not land, nothing is lost, because the scene is the grove.",
+  "note": "Nothing here has been rendered. What is measured: watercolour holds through an 8s LTX pass better than its own card predicted (detail 0.976, boil 0.137, the lowest motion in the sweep), and the dawn grade is deterministic ffmpeg and cannot fail. What is not measured: this style over this place has never been drawn. Three specific cautions. (1) lighting:sunbeam and weather:mist are status:partial - they contribute prompt words only, their numeric fields are unwired, so treat them as tags you could equally have typed into a desc. (2) transition:dissolve is advisory; short.py hard-cuts every join, which costs a slow piece like this its breathing. (3) emotion:longing contributes nothing to four of the five shots - pillow, insert and establish are NO_PERSON templates and drop the character entirely - so it is working only in the master, and there only through body tags, because the face is turned away. wear 0 is deliberate, but wear resolves as max() across movie, chapter and scene and never decreases; drop this into a film already at wear 3 and the walker is dishevelled.",
+  "status": "untested"
+}

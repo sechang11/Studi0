@@ -1,0 +1,54 @@
+{
+  "id": "genre_world_ballroom_at_four",
+  "name": "The ballroom at four in the morning",
+  "desc": "The orchestra has gone home, the floor is still lit, and somebody is dancing anyway.",
+  "genre": [
+    "drama",
+    "romance",
+    "surreal"
+  ],
+  "beats": 5,
+  "runtime_s": 20.5,
+  "sets": {
+    "style": "vaporwave",
+    "place": "grand_ballroom",
+    "look": "neon",
+    "cue": "lonely_night_city",
+    "emotion": "longing",
+    "camera": "pan_r",
+    "pace": "slow",
+    "wear": 0,
+    "transition": "dissolve",
+    "time": "night"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "pan_r",
+      "desc": "an empty grand ballroom, crystal chandeliers above a polished chequerboard floor, gilded columns and tall arched mirrors down the walls, a balcony running above, magenta and cyan light in hard flat bands, wide shot, no humans"
+    },
+    {
+      "template": "pillow",
+      "camera": "static",
+      "desc": "a white marble classical bust on a plinth beside a single potted palm, chrome lettering on the wall behind, chequerboard floor, flat saturated colour, no humans"
+    },
+    {
+      "template": "master",
+      "camera": "pan_r",
+      "desc": "one figure dancing alone in the middle of the chequerboard floor, arms out, doubled in the tall arched mirrors, chandeliers overhead, wide shot, full body"
+    },
+    {
+      "template": "insert",
+      "camera": "static",
+      "desc": "a pair of shoes left at the edge of the floor beside an overturned glass, magenta light pooling around them, close-up, no humans"
+    },
+    {
+      "template": "react",
+      "camera": "push",
+      "desc": "eyes closed, head tipped back, magenta light on one side of the face and cyan on the other, close-up"
+    }
+  ],
+  "why": "The vaporwave card is unusually honest about itself - roughly a third rendering idiom and two thirds shopping list - and it prescribes the fix: author the PROPS, because bust, palm, grid, chequerboard and katakana are nouns and land, while vaporwave colours is an adjective and does not. So the props get a beat of their own, the pillow at position two, and the rest of the scene is left to the place card. grand_ballroom supplies what vaporwave has no idea how to build: chandeliers, mirrors, gilded columns and a balcony overhead, which its note names as the four nouns that stop the room being a beige hotel function suite. The same note warns that dancers smear into faceless blobs, so there is exactly one person on the floor and no crowd anywhere. What the template is actually about is the hour: everyone has gone and the lights are still on, which is why the establish and the master both pan right, the same move twice, as if the room is still being played to. It ends on a face with its eyes shut, which is the only way this scene can end without explaining itself.",
+  "note": "Expected to land: flat magenta and cyan bands, the chequerboard and mirrors, the props in shot 2. Uncertain: the chrome lettering will crawl in video and is the first thing to cut if the clip stage looks wrong. The real caution is the grade - look:neon is the only look in the set that RAISES saturation (1.18 plus vibrance 0.25), it stacks multiplicatively with the fx layer, and an over-strong grade once turned a third of a film magenta. For this style in particular that failure disguises itself as enthusiasm, so look at the render rather than the settings. neon was still chosen over sunset because vaporwave is one of the twelve chromatic styles a grade under 0.7 would drain, and the style card names this exact pairing. transition is intent only - short.py ignores transitions and hard-cuts every join, so do not build a beat around it. Nothing in this card has been rendered - the GPU was committed to another job while it was written - so status is untested rather than partial. What IS checked: every id here exists in its library, and the style/place/look stack was resolved through POST /api/compose, which returned the intended engine and no error-severity conflict.",
+  "status": "untested"
+}

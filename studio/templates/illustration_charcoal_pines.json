@@ -1,0 +1,49 @@
+{
+  "id": "illustration_charcoal_pines",
+  "name": "Charcoal pines",
+  "desc": "Fog between the trunks, a path, and bootprints that only go one way.",
+  "genre": [
+    "mystery",
+    "drama"
+  ],
+  "beats": 4,
+  "runtime_s": 17,
+  "sets": {
+    "style": "charcoal_drawing",
+    "place": "pine_forest",
+    "look": "overcast",
+    "pace": "slow",
+    "cue": "unease",
+    "emotion": "doubt",
+    "camera": "pull",
+    "wear": 2,
+    "transition": "fade_white",
+    "lighting": "flat",
+    "time": "day"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "pull",
+      "desc": "dense pine forest with moss covered trunks receding into low fog, ferns at the base, a dirt path disappearing between the trees, pine needles on the ground, shafts of light through the canopy, wide shot, no humans"
+    },
+    {
+      "template": "insert",
+      "camera": "static",
+      "desc": "bootprints pressed into soft earth on the dirt path, all of them going the same way, pine needles and a fallen log at the edge of frame, close-up, no humans"
+    },
+    {
+      "template": "master",
+      "camera": "static",
+      "desc": "a figure standing alone on the path halfway into the fog, small in the frame, moss covered trunks on both sides, weight on the back foot, wide shot"
+    },
+    {
+      "template": "pillow",
+      "camera": "static",
+      "desc": "low fog moving between pine trunks, ferns completely still beneath it, no humans"
+    }
+  ],
+  "why": "Charcoal is marked weak and the reason is specific: what separates charcoal from pencil is the smudge and the eraser lift, and both models collapse them. So this template does not ask for a smudge to be legible - it asks for fog. pine_forest carries low fog, moss on trunks, ferns and a dirt path, and fog rendered in any monochrome drawing medium is a soft grey mass, which is the one thing charcoal is good at even while it is behaving like a pencil. Four beats and no dialogue. The order is the point: the forest, then the evidence, then the person, then the fog closing. The insert of bootprints going one way is the entire plot and it is placed second, so the audience is ahead of the figure by the time the figure arrives - which is what makes the master unsettling rather than merely wide. emotion:doubt supplies a head tilt, an unfocused downward gaze and weight on the back foot: hesitation as posture rather than as expression, which is what you want at this distance. look:overcast is endorsed by both cards and at saturation 0.68 sits safely below the threshold at which a grade stops doing anything to a monochrome style.",
+  "note": "Nothing rendered, and this card has two strikes against it rather than one. POST /api/compose returns style_strength_weak for charcoal_drawing on both engines. Separately, the style card calls it the worst case in the drawn set for video alongside pixel art: smudge grain and paper tooth are exactly the fine texture expected to boil frame to frame, and there is no flat high-contrast structure underneath to carry it. That is INFERRED, not measured. Treat this as a stills template until somebody renders a clip. If you want this scene as video, pencil_sketch is strength:strong and would take this shot list with almost no rewriting. Routine caveats: transition:fade_white is advisory since short.py hard-cuts, and lighting:flat is prompt words only. No weather card is set: pine_forest already has low fog written into its tags, so asking for weather:fog as well fires weather_vs_place in compose. The fog is carried by the place card and by three of the four shot descriptions, which between them mention it more often than a weather card would have.",
+  "status": "untested"
+}

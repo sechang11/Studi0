@@ -1,0 +1,54 @@
+{
+  "id": "anime_idiom_manga_page",
+  "name": "Manga page",
+  "desc": "A printed page rather than a screencap: ink, halftone, and somebody on a platform being watched.",
+  "genre": [
+    "mystery",
+    "thriller"
+  ],
+  "beats": 5,
+  "runtime_s": 15,
+  "sets": {
+    "style": "manga_screentone",
+    "place": "subway_platform",
+    "look": "sepia",
+    "cue": "unease",
+    "emotion": "suspicion",
+    "camera": "static",
+    "pace": "normal",
+    "wear": 0,
+    "transition": "cut",
+    "time": "night",
+    "mood": "printed page"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "static",
+      "desc": "an underground station platform, tiled wall, row of pillars, station benches, advertising posters, fluorescent strip lights, painted line at the platform edge, railway tracks in the trench, dark tunnel mouth beyond, monochrome ink linework with all shading built from halftone dots, wide shot, no humans"
+    },
+    {
+      "template": "master",
+      "camera": "static",
+      "desc": "standing at the painted platform edge line with a bag over one shoulder, weight on the back foot, black ink linework, screentone shading across the coat, bare white paper doing the highlights, full body, wide shot"
+    },
+    {
+      "template": "insert",
+      "camera": "static",
+      "desc": "the hanging platform sign seen from below, heavy solid black behind the lettering, close-up, no humans"
+    },
+    {
+      "template": "react",
+      "camera": "push",
+      "desc": "narrowed eyes with a sidelong glance back along the platform, pursed lips, head lowered, halftone dot tone across the cheek, close-up"
+    },
+    {
+      "template": "pillow",
+      "camera": "static",
+      "desc": "the dark tunnel mouth beyond the tracks, a solid black shape with the rails running into it, halftone gradient on the trench wall, no humans"
+    }
+  ],
+  "why": "Every other template in this gallery produces an animation frame. This one produces a page, and that is a decision about what KIND of image the film is rather than a flavour laid over one - which is why it earns a slot. manga_screentone measured strong and, more usefully, was measured on video and falsified its own worst-case prediction: over eight seconds the ink idiom was fully intact, detail octiles dead flat and boil at 0.214, LOWER than the no-style control. It is one of the most stable things in the library. The scene is built for black and white rather than merely tolerated by it: a platform gives long horizontal tile runs for tone, pillars for spot blacks, and one absolutely solid shape at the end of it. Beat five is the tunnel mouth as pure black, which is a mark only this style can make. emotion:suspicion supplies the narrowed eyes and the sidelong glance and closes the mouth, so there is no speak shot - a page does not need one, and the silence is the genre.",
+  "note": "NOT RENDERED. No frame from this card has been generated - the GPU was held for another job while it was authored, so every claim below is read off the style, place and look cards rather than off pixels. The style is measured on both a still and a full 8.04s clip and both held. transition is intent only - short.py hard-cuts every join. One deliberate departure from an allowlist, and the reasoning matters. suits_looks on this style is one entry long - neutral - and that is not oversight, it is because an ffmpeg grade applied to an image with no colour in it can only tint. But neutral is a saturation 1.12 grade, and a grade above 1.0 has nothing to act on in a monochrome frame, so it is a no-op. sepia at 0.25 actually does something, and the style card says so in as many words: if you want a sepia page, looks/sepia will give you one. Everything else in the grade library would be wasted here. Note the style will SILENTLY KILL any colour tag anywhere else in the film - that is the intent here and a bug everywhere else. ONE KNOWN CONFLICT, recorded rather than hidden: compose returns warning mono_vs_colour on every shot of this card, because the subway platform place card names a colour - its tag string contains yellow platform edge line - and a greyscale image cannot show it. The consequence is small (the line renders as a grey line) and the platform is the right room for this genre, so the warning is accepted; no shot desc here writes the word yellow, and if it bothers you the fix is to swap the place rather than the style. Honest caveat carried from the measurement: the tested keyframe came back mostly as ink hatching with limited literal benday dot, so a dense pure-dot field has still not been through a pass. RUNTIME, checked by compiling this card rather than by trusting the field: runtime_s here follows the gallery convention - the shot cards' approx_seconds summed and scaled by pace - and that is an INTENT number. It is not what compiles. compile.py gives every beat a flat clip_secs of 6 unless a per-shot @Ns overrides it, and a template cannot express one because the wizard emits only template, camera and desc. pace does not scale duration either, despite compile.py's own variable description saying it scales shot lengths: it sets intensity = 1/scale, a motion figure, so pace:normal renders as intensity 1.0 and identical shot lengths. This card therefore compiles to 5 beats x 6s = 30s, not 15s. Verified with compile.py --timeline; the discrepancy is in the field, not in this card.",
+  "status": "untested"
+}

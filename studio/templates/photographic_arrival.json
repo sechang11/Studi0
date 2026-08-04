@@ -1,0 +1,54 @@
+{
+  "id": "photographic_arrival",
+  "name": "Arrival, nobody waiting",
+  "desc": "A ship docks, one person walks off it with a bag, and the quay does not react.",
+  "genre": [
+    "drama",
+    "documentary"
+  ],
+  "beats": 5,
+  "runtime_s": 15,
+  "sets": {
+    "style": "photorealistic",
+    "look": "overcast",
+    "place": "harbour_docks",
+    "pace": "normal",
+    "cue": "melancholy_piano",
+    "emotion": "resignation",
+    "camera": "handheld",
+    "wear": 1,
+    "transition": "fade_black",
+    "time": "day",
+    "weather": "drizzle"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "static",
+      "desc": "a working dockside under flat grey drizzle, stacked shipping containers beneath gantry cranes, mooring ropes running from iron bollards to the rusted hull of a cargo ship in oily water, gulls along the rusted railings, wide shot, no humans"
+    },
+    {
+      "template": "master",
+      "camera": "handheld",
+      "desc": "one figure walking away from the ship's gangway along the wet concrete quayside carrying a single soft bag, containers stacked high on both sides, small in frame, full body, wide shot"
+    },
+    {
+      "template": "insert",
+      "camera": "static",
+      "desc": "a gangway rail and the ship's hull plates streaked with rust and salt, oily water moving below, close-up, no humans"
+    },
+    {
+      "template": "react",
+      "camera": "push",
+      "desc": "looking along an empty quay, drizzle on the face, eyes moving once and settling, close-up"
+    },
+    {
+      "template": "pillow",
+      "camera": "static",
+      "desc": "a gantry crane standing motionless over stacked containers, gulls turning above it, flat grey sky, no humans"
+    }
+  ],
+  "why": "Every other card in this set is a style doing something visible. This one is the opposite and the gallery needs it: the plain photograph, the front door for a user who wants the scene to look real and nothing else. photorealistic sits close to the no-style control at 21.0 precisely because qwen's baseline already IS photographic, and that is agreement rather than failure - what it adds is skin texture, real lens falloff and catchlights, and what it removes is any chance of the frame drifting illustrative. The place card describes itself as the working edge of the water where things and people arrive and leave without ceremony, and the template takes that literally: the ship is enormous, the bag is small, and nobody is on the quay. The one push in the template is on a face looking along an empty length of concrete. That is the whole story, and it is told by an absence rather than by an event, which is the only kind of story this pipeline reliably renders.",
+  "note": "Not rendered. No frame from this template has been generated - the GPU was held for a video job - so everything below is read off the style, place and look cards rather than seen. This is the template whose style has the best video measurement in the library, and the result is a warning rather than a reassurance. Skin texture, pores and facial structure held beautifully for four seconds - the predicted melting of faces and hands simply did not occur - and then the subject WALKED OUT OF FRAME, leaving an empty street by eight seconds (detail 0.964 at 4s, 0.510 at 8s). The 0.510 is measuring the subject leaving, not the texture dissolving. Keep photographic clips near four seconds - but understand that a template cannot do that for you. clip_secs is flat at 6.0 on every beat and is not one of the sixteen keys the wizard accepts, so pace cannot shorten it; pace only decides how much of the six seconds the edit shows, and pace:normal here holds the establish to 4.2 of it against 5.7 at slow. To actually shorten the generation, set clip_secs by hand in the .movie. Also on the style card: do not run photorealistic on the illustration engine under any circumstances - the word is a standing negative in this project and returns waxy semi-real faces with lost line. Setting style here routes the engine to qwen automatically, so leave sets.engine unset. Engine note: on qwen a face is held by a reference SHEET through Qwen-Edit rather than by IPAdapter, which is a weaker lock than the illustration path - expect visible drift between shots of the same person. Keep that in mind before casting one character across all of these beats. Applies to every card in this set and to none of the existing twenty: these templates use place CARDS rather than free text, so the place's own prose is appended to the prompt on top of whatever the shot desc says, and where a desc also names the setting the nouns arrive twice. That is reinforcement rather than contradiction, and it is deliberate on the shots whose place card warns that a particular noun must be named explicitly or the location renders wrong. But if a prompt reads long, the shot desc is the half to trim - never the card. Standing gaps that apply to every card in the gallery: transitions are intent only, because short.py hard-cuts every join regardless of what is set here; every emotion card is status:partial upstream, so the face, eyes, mouth and body tags render and voice_style does not, because no TTS engine on this box takes an emotion vector; and a style's negative_add never reaches the picture, because the renderer has no negative input wired - so this style will come out slightly less clean than its library sample, which had one.",
+  "status": "untested"
+}

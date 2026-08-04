@@ -1,0 +1,49 @@
+{
+  "id": "anime_idiom_90s_last_carriage",
+  "name": "90s cel, last carriage",
+  "desc": "A long ride home that has already been decided. Nobody speaks.",
+  "genre": [
+    "drama",
+    "slice of life"
+  ],
+  "beats": 4,
+  "runtime_s": 21,
+  "sets": {
+    "style": "cel_anime_90s",
+    "place": "train_carriage",
+    "look": "faded_film",
+    "cue": "melancholy_piano",
+    "emotion": "resignation",
+    "camera": "static",
+    "pace": "slow",
+    "wear": 0,
+    "transition": "dissolve",
+    "time": "dusk",
+    "mood": "hand-painted"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "pan_r",
+      "desc": "the inside of a nearly empty train carriage at dusk, rows of patterned seats under luggage racks, hanging hand straps swaying together, grab poles, sliding connecting door at the far end, blurred landscape through the windows, wide shot, no humans"
+    },
+    {
+      "template": "hold_silent",
+      "camera": "static",
+      "desc": "sitting by the window in an empty row, bag flat across the knees, both hands resting on it, head tilted down, shoulders dropped, coat still buttoned, medium shot"
+    },
+    {
+      "template": "pillow",
+      "camera": "static",
+      "desc": "the carriage window filled with blurred landscape sliding past, the reflection of the ceiling lights laid over it, evening light draining out of the fields, no humans"
+    },
+    {
+      "template": "react",
+      "camera": "push",
+      "desc": "face close to the glass, half-closed eyes, calm gaze, looking down and away, faint smile that is not happiness, close-up"
+    }
+  ],
+  "why": "This is the template that proves the era is selectable. cel_anime_90s is the single most-measured card in the style library - a rendered still and a full eight-second video sweep - and what came back was a heavier uneven line, a duller warmer palette and hard flat shadow that reads unmistakably as a 90s OVA beside the no-style control. It is also the safest video style measured, because the film grain welded itself to the picture instead of re-rolling. So this card spends that stability on a scene made of holds. The carriage is chosen because it moves without anybody moving, which gives the i2v pass motion it cannot get wrong: the landscape does the travelling. The hold_silent on beat two is the piece - a person who has finished deciding and now only has to sit still for forty minutes - and pace:slow is set to hold the MOTION down inside it, compiling to intensity 0.741, which is the only thing pace actually controls. emotion:resignation supplies a faint smile with a closed mouth, which is why there is no speak shot; the closed-mouth emotions render a shut mouth over any talking tag. The pillow shot exists so the fourth beat is a return to a face rather than a first arrival at one.",
+  "note": "NOT RENDERED. No frame from this card has been generated - the GPU was held for another job while it was authored, so every claim below is read off the style, place and look cards rather than off pixels. The style itself IS measured, on stills and on an 8.04s clip - detail octiles flat at 0.976, boil 0.173, grain intact. That measurement is the strongest evidence behind any card in this set; what is untested is this particular combination of it with the train carriage place and the faded_film grade. transition is intent only - short.py hard-cuts every join. Note the division of labour that is easy to get wrong here and is deliberate: the style changes the PAINT the model applies, looks/faded_film changes the colour of whatever came out, afterwards and deterministically. Do not also write faded or washed out into a shot desc - it does not stack, it just spends tag slots. Shares the retro artstyle tail with anime_idiom_ova_cold_open; see that card. RUNTIME, checked by compiling this card rather than by trusting the field: runtime_s here follows the gallery convention - the shot cards' approx_seconds summed and scaled by pace - and that is an INTENT number. It is not what compiles. compile.py gives every beat a flat clip_secs of 6 unless a per-shot @Ns overrides it, and a template cannot express one because the wizard emits only template, camera and desc. pace does not scale duration either, despite compile.py's own variable description saying it scales shot lengths: it sets intensity = 1/scale, a motion figure, so pace:slow renders as intensity 0.741 and identical shot lengths. This card therefore compiles to 4 beats x 6s = 24s, not 21s. Verified with compile.py --timeline; the discrepancy is in the field, not in this card.",
+  "status": "untested"
+}

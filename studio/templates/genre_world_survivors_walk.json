@@ -1,0 +1,54 @@
+{
+  "id": "genre_world_survivors_walk",
+  "name": "The survivor's walk",
+  "desc": "A nave with no roof left, grass coming up through the flagstones, and one person still walking the aisle.",
+  "genre": [
+    "drama",
+    "survival",
+    "adventure"
+  ],
+  "beats": 5,
+  "runtime_s": 20.5,
+  "sets": {
+    "style": "wasteland",
+    "place": "cathedral_nave",
+    "look": "golden",
+    "cue": "desolate",
+    "emotion": "exhausted",
+    "camera": "push",
+    "pace": "slow",
+    "wear": 4,
+    "transition": "fade_white",
+    "time": "day"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "tilt_d",
+      "desc": "the nave of a ruined cathedral, the vault broken open to the sky, ranks of shattered pews under fallen stone, grass and saplings pushing up through the worn flagstones, dust hanging in hard shafts of sun through empty window tracery, extreme wide shot, no humans"
+    },
+    {
+      "template": "master",
+      "camera": "push",
+      "desc": "walking slowly up the centre of the aisle between broken pews, torn and bloodied clothing, small in frame under the broken vault, wide shot, full body"
+    },
+    {
+      "template": "insert",
+      "camera": "static",
+      "desc": "a carved stone face fallen from the vault lying among rubble, half buried in dust, a weed growing out of the eye socket, close-up, no humans"
+    },
+    {
+      "template": "pillow",
+      "camera": "static",
+      "desc": "hard shafts of sun coming through empty stone window tracery onto a bleached flagstone floor, dust turning slowly in the light, no humans"
+    },
+    {
+      "template": "react",
+      "camera": "static",
+      "desc": "face lifted toward the broken vault, utterly exhausted, a cut across the cheekbone, dust in the hair, eyes half closed, close-up"
+    }
+  ],
+  "why": "wasteland is compose:replaces and its verdict is unambiguous - ruined overgrown structures and dust haze, convincing, but it rebuilds the location. This template hands it a location that is already meant to be ruined, so the rebuild and the place card are asking for the same picture rather than competing for it. cathedral_nave carries twelve concrete nouns, the most in the set, and its own note says the nouns that put the camera INSIDE are pews receding, columns either side and the vault above - all three are in shot one, because a cathedral asked for plainly returns the exterior facade a good share of the time. The dramaturgy is a single unbroken movement: one person walks the length of a building that has outlasted everyone, and the camera pushes with them exactly once. wear 4 is the maximum the vocabulary has - torn and bloodied, cut on the face, trembling - and it is the reason there is no dialogue beat here at all. The pillow at beat four is the pause the walk needs, and the react closes on a face looking up at a hole in a roof rather than at another person.",
+  "note": "Expected to land: dust ochre and bleached stone, hard particulate sunlight, wear 4 on the two person beats. Deliberate override: wasteland rebuilds the setting, and here that is the intent - the card is ruining a cathedral on purpose. If it goes wrong it will go wrong by ruining it too far, i.e. losing the vault and the pew ranks that identify the building; the counterweight is that both are named in shot one. pace:slow is safe because there is no hold_silent - the longest beat is the establish at 4.2s scaled to 5.7s, under the 6s clip. Uncertain: the style card warns fine rubble detail will crawl in video. A weather:dust layer was tried here and removed: cathedral_nave is an interior, so /api/compose returned weather_indoors - asking for dust either puts weather inside the room or moves the shot outside. The dust is in the shot descs as a thing in the light instead, which is where the noun rule says it belongs. transition is intent only - short.py ignores transitions and hard-cuts every join, so do not build a beat around it. Nothing in this card has been rendered - the GPU was committed to another job while it was written - so status is untested rather than partial. What IS checked: every id here exists in its library, and the style/place/look stack was resolved through POST /api/compose, which returned the intended engine and no error-severity conflict.",
+  "status": "untested"
+}

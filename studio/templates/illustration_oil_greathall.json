@@ -1,0 +1,55 @@
+{
+  "id": "illustration_oil_greathall",
+  "name": "Oils, the long table",
+  "desc": "A hall, a table, and the one cup nobody lifts.",
+  "genre": [
+    "historical",
+    "drama",
+    "thriller"
+  ],
+  "beats": 5,
+  "runtime_s": 21,
+  "sets": {
+    "style": "oil_painting",
+    "place": "castle_great_hall",
+    "look": "firelight",
+    "pace": "slow",
+    "cue": "menace",
+    "emotion": "suspicion",
+    "camera": "push",
+    "wear": 1,
+    "transition": "j_cut",
+    "lighting": "candle",
+    "time": "night"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "push",
+      "desc": "a long timber banquet table down the centre of a stone hall, wooden benches on both sides, a wide stone fireplace burning at the far end, an iron chandelier of candles overhead, tapestries on the walls, vaulted timber roof beams, rushes on the floor, wide shot, no humans"
+    },
+    {
+      "template": "master",
+      "camera": "static",
+      "desc": "figures seated along both sides of the long table, faces lit from the candles above and the fire behind, deep shadow in the roof beams, wide shot"
+    },
+    {
+      "template": "speak",
+      "camera": "static",
+      "desc": "one person at the head of the table mid-sentence, leaning forward into the candlelight, warm light on one side of the face, medium shot"
+    },
+    {
+      "template": "react",
+      "camera": "push",
+      "desc": "a face far down the table receiving it, narrowed eyes, sidelong glance, pursed lips, arms crossed, leaning back out of the light, close-up"
+    },
+    {
+      "template": "insert",
+      "camera": "static",
+      "desc": "a full cup standing untouched on the timber, candle wax running down the iron of the chandelier above it, close-up, no humans"
+    }
+  ],
+  "why": "Oil painting wants a single warm source and large dark masses, and castle_great_hall supplies both as nouns rather than as adjectives: an iron chandelier with candles, a wide stone fireplace, tapestries, a vaulted timber roof. The style verdict is visible brush loading and warm impasto light, so the scene is lit by objects in the room instead of by a described mood. Dramatically this is the beat where a feast stops being a feast. Five shots: the room empty, the room full, one person talking, one person a long way down the table not answering, and then the cup. emotion:suspicion gives narrowed eyes, a sidelong glance and crossed arms, which is a posture the model can draw, unlike the abstraction the scene is actually about. Worth knowing before you use it: POST /api/compose reports that the firelight look contains location words - campfire, fire, dark background - and that they are stripped so the great hall survives while its colour and light are kept. That is the behaviour you want, and it explains where the campfire went. j_cut is set because speech leading picture is the natural grammar for a line landing on a listener.",
+  "note": "Nothing rendered. The load-bearing risk is video and it is on the style card in plain terms: impasto is fine high-frequency surface texture, the working assumption on this box is that fine texture boils between LTX frames, and no oil-painted keyframe has ever been pushed through LTX-2.3 here. The card says render one clip before committing an act to it, and this template inherits that instruction. Stills are expected to be strong. Everything else is routine: transition:j_cut is advisory since short.py hard-cuts; lighting:candle and time:night are prompt words only with their numeric fields unwired; emotion:suspicion is status:partial upstream. One structural note - the speak template renders a mouth mid-sentence but there is no dialogue behind it, so the line is implied by the picture and by nothing else. And the master asks for several seated figures: templates cannot cast anybody, characters is not an accepted sets key, so the people will not be consistent from shot to shot.",
+  "status": "untested"
+}

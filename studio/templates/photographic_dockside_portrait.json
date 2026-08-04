@@ -1,0 +1,49 @@
+{
+  "id": "photographic_dockside_portrait",
+  "name": "Sitting for a plate",
+  "desc": "A dockworker holds still for as long as the exposure takes, which is longer than anyone stands still now.",
+  "genre": [
+    "documentary",
+    "drama"
+  ],
+  "beats": 4,
+  "runtime_s": 16,
+  "sets": {
+    "style": "tintype",
+    "look": "sepia",
+    "place": "harbour_docks",
+    "pace": "slow",
+    "cue": "silence",
+    "emotion": "neutral",
+    "camera": "static",
+    "wear": 2,
+    "transition": "dissolve",
+    "time": "day",
+    "weather": "overcast"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "static",
+      "desc": "a working dockside of stacked shipping containers under gantry cranes, thick mooring ropes running from iron bollards to the rusted hull of a cargo ship lying in oily still water, rusted railings and floodlight masts, gulls on the concrete quayside, wide shot, no humans"
+    },
+    {
+      "template": "master",
+      "camera": "static",
+      "desc": "one dockworker standing square to the camera on the concrete quayside, feet planted, arms at the sides and hands open, absolutely still, the ship's rusted hull filling the frame behind, full body, wide shot"
+    },
+    {
+      "template": "react",
+      "camera": "static",
+      "desc": "the same face frontal and unsmiling, eyes to the lens, not moving, close-up, heavy vignette falling to black at the corners, highlights blown to bare plate across the forehead, swirling out-of-focus edges"
+    },
+    {
+      "template": "insert",
+      "camera": "static",
+      "desc": "a thick mooring rope turned twice around an iron bollard on wet concrete, oily water beyond the quay edge, close-up, no humans"
+    }
+  ],
+  "why": "This is a contemporary dock photographed on a nineteenth-century process, which is a real practice and not an accident of the library: large-format portraits of people who work with their hands are made this way now, precisely because the exposure is long enough that the sitter has to decide to be photographed. The template is built entirely around that decision. Every camera is static, the pace is slow, the subject is square to the lens with feet planted and hands open, and nothing in four beats moves - because the style card is explicit that a tintype cannot survive being animated and belongs on a held still. The style also fails softly and predictably: ask for a tintype and you usually get a generic sepia old photograph, because that is the far larger training cluster. Three marks separate them - pour marks at the plate border, highlights blown to bare metal with no detail in them, and swirling edge bokeh from an uncorrected large-format lens - so the close shot names them rather than trusting the style layer alone.",
+  "note": "Not rendered. No frame from this template has been generated - the GPU was held for a video job - so everything below is read off the style, place and look cards rather than seen. Expected to land: aged plate, vignette and silver tone were seen. The style prose also forces a stiff frontal unsmiling pose, which is why emotion is neutral rather than anything expressive - a smiling or animated emotion card would be arguing with the style over the same pixels. Deliberate anachronism, stated plainly: the place card contributes container gantry cranes and stacked shipping containers, which are modern, and the plate process is not. That mismatch is the template's subject. If a genuinely period harbour is wanted instead, override place with free text naming wooden posts, small boats, nets and low sheds - the place card cannot give you that half, because its own note records that harbour docks splits two ways and this card committed to the container terminal. Also: the sepia LOOK gives the old-photograph colour deterministically every time, so only keep this style if you want the plate physics a grade cannot invent. Applies to every card in this set and to none of the existing twenty: these templates use place CARDS rather than free text, so the place's own prose is appended to the prompt on top of whatever the shot desc says, and where a desc also names the setting the nouns arrive twice. That is reinforcement rather than contradiction, and it is deliberate on the shots whose place card warns that a particular noun must be named explicitly or the location renders wrong. But if a prompt reads long, the shot desc is the half to trim - never the card. Standing gaps that apply to every card in the gallery: transitions are intent only, because short.py hard-cuts every join regardless of what is set here; every emotion card is status:partial upstream, so the face, eyes, mouth and body tags render and voice_style does not, because no TTS engine on this box takes an emotion vector; and a style's negative_add never reaches the picture, because the renderer has no negative input wired - so this style will come out slightly less clean than its library sample, which had one. On the pace, which is slow here and is not safe everywhere: pace does not shorten the generated clip - clip_secs is flat at 6.0 on every beat and no template can set it - it only decides how much of that clip the edit shows, and slow shows more of it. The late-clip failure measured on this engine was a SUBJECT walking out of frame, while the same sweep found large static forms holding rock-steady for the full eight seconds with no morphing at all. This template is built out of locked-off cameras and mostly empty frames, which is the case that held.",
+  "status": "untested"
+}

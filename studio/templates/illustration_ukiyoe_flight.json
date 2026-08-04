@@ -1,0 +1,56 @@
+{
+  "id": "illustration_ukiyoe_flight",
+  "name": "Woodblock flight",
+  "desc": "Someone runs from the castle in the rain, cut like a set of prints.",
+  "genre": [
+    "action",
+    "historical",
+    "drama"
+  ],
+  "beats": 5,
+  "runtime_s": 10,
+  "sets": {
+    "style": "ukiyo_e",
+    "place": "samurai_castle_keep",
+    "look": "neutral",
+    "pace": "fast",
+    "cue": "chase",
+    "emotion": "panic",
+    "camera": "pan_r",
+    "wear": 2,
+    "transition": "whip_pan",
+    "lighting": "flat",
+    "weather": "rain",
+    "time": "day"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "pan_r",
+      "desc": "a tiered white plaster castle keep with curved tile roofs and upturned eaves above a massive sloped stone base, moat water below, pine trees at the foot, driving rain in hard diagonal lines across the whole frame, wide shot, no humans"
+    },
+    {
+      "template": "build",
+      "camera": "handheld",
+      "desc": "running along the foot of the sloped stone base, sandals striking wet stone, robe soaked and clinging, diagonal rain lines, full body, low angle"
+    },
+    {
+      "template": "sakuga",
+      "camera": "pan_l",
+      "desc": "mid-stride leap over the corner of the moat wall, one arm thrown forward, cloth flying out behind, flat inked colour and thick outlines, diagonal rain, full body"
+    },
+    {
+      "template": "react",
+      "camera": "static",
+      "desc": "looking back over one shoulder while still moving, wide darting eyes, open mouth, wet hair flat to the head, medium shot"
+    },
+    {
+      "template": "insert",
+      "camera": "static",
+      "desc": "a straw hat lying in a puddle on wet stone, rain rings spreading across the water, close-up, no humans"
+    }
+  ],
+  "why": "Ukiyo-e is the one style in this set built for movement. Flat unmodulated colour, one hard outline weight and no gradients is the exact shape measured to survive an LTX pass, and the only thing predicted to be lost is the woodgrain, which costs nothing. So this is the fast card: pace fast at 0.7, five beats, ten seconds, and a sakuga in the middle. The subject is a flight across the ground of a castle keep in rain, which is Hiroshige rather than invention - hard diagonal rain over a flat-coloured ground is the most reproduced image in the idiom, so the model has seen a great deal of it. weather:rain contributes those words and three shot descriptions repeat them, because weather cards are prompt-only and one mention is thin. look:neutral is not laziness: ukiyo_e is one of the twelve chromatic styles the grade rules protect, so any look under 0.70 saturation would drain the flat inked colour that is the entire point, and neutral at 1.12 pushes the other way. camera:pan_r as the scene default with pan_l on the sakuga crosses the frame in opposite directions, which is the cheapest way to make a five shot chase feel like it covers ground.",
+  "note": "Nothing rendered, and ukiyo_e is INFERRED for video rather than measured - the card reasons from the flat-holds prior, not from a clip. transition:whip_pan is advisory and short.py hard-cuts every join, which costs a chase more than it costs a slow piece; the whip lives in the camera moves instead. emotion:panic is status:partial - face, eye, mouth and body tags render, voice_style needs a TTS engine that takes an emotion vector, and nobody speaks here anyway. The real uncertainty is the sakuga beat: sakuga is a 2.0 second template and at pace fast it is 1.4 seconds of the most expensive kind of drawing, and no ukiyo-e figure in motion has been rendered on this box. If the leap comes back stiff, demote it to a build and the structure survives intact. wear 2 puts sweat, dirt and messy hair on the runner, which is right for a flight, but wear never decreases across a film once set.",
+  "status": "untested"
+}

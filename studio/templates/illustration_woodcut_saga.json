@@ -1,0 +1,55 @@
+{
+  "id": "illustration_woodcut_saga",
+  "name": "Woodcut saga",
+  "desc": "The hearth, the shields, and a story told after the story is finished.",
+  "genre": [
+    "historical",
+    "myth",
+    "folk tale"
+  ],
+  "beats": 5,
+  "runtime_s": 21,
+  "sets": {
+    "style": "woodcut",
+    "place": "viking_longhouse",
+    "look": "sepia",
+    "pace": "slow",
+    "cue": "sombre_funeral",
+    "emotion": "resignation",
+    "camera": "static",
+    "wear": 3,
+    "transition": "fade_black",
+    "lighting": "underlight",
+    "time": "night"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "push",
+      "desc": "the interior of a longhouse with a long open hearth burning down the centre, smoke drifting up to the roof vent, carved timber posts, the underside of a turf roof, low benches along both walls, round shields hanging, an iron cauldron on a chain, wide shot, no humans"
+    },
+    {
+      "template": "master",
+      "camera": "static",
+      "desc": "two figures on low benches on opposite sides of the hearth, lit from below by the fire between them, heavy black shadow behind both, wide shot"
+    },
+    {
+      "template": "speak",
+      "camera": "static",
+      "desc": "an older figure speaking across the fire, face lit from beneath, wool blanket over the shoulders, medium shot"
+    },
+    {
+      "template": "react",
+      "camera": "static",
+      "desc": "the other figure not answering, half-closed eyes looking down, faint smile, shoulders dropped, head tilted down, close-up"
+    },
+    {
+      "template": "insert",
+      "camera": "static",
+      "desc": "an empty drinking horn lying on a low bench, the iron cauldron hanging still on its chain beyond it, close-up, no humans"
+    }
+  ],
+  "why": "Woodcut is one of the few cards in this library marked strength:strong and confirmed stable for video - two-tone flat with tone carried only by hatch density is exactly the structure that survives resampling. It wants a subject with heavy black masses and one hard light, and a longhouse hearth is precisely that: a single fire down the centre of a dark room, smoke going up to a roof vent, carved posts, shields on the wall. The scene is the hour after a defeat, told rather than shown. Two people, one fire, and an empty drinking horn to end on. emotion:resignation is the reason this is not a battle template - its tags are a faint smile, lowered eyelids, dropped shoulders and a head tilted down, which is what people actually look like when the loss is already old news, and it is one of eighteen emotions no template has ever reached. wear 3 puts torn and stained clothing on both of them without a word of narration. look:sepia at saturation 0.25 is safe here because woodcut draws in black and white by construction: grade_noop_on_mono only fires above 1.0, so sepia does real work - it warms the cream paper - where neutral would have done nothing at all.",
+  "note": "Nothing rendered. Woodcut itself is about as safe a bet as this library offers, so the uncertainty is in the room rather than in the medium: no viking longhouse has been drawn in woodcut here, and the risk is that carved posts and shield bosses collapse into undifferentiated black. If that happens, name the hatch in the descriptions. lighting:underlight is status:partial and contributes prompt words only, but it is the right request - a hearth lights faces from below and that is hard to get by accident. transition:fade_black is advisory; short.py hard-cuts, so a fade out of a story ending is exactly what you will not get. emotion:resignation is status:partial: face, eyes, mouth and body render, voice_style does not. wear 3 locks every later scene in the film to 3 or higher, because compile.py resolves wear as max() across movie, chapter and scene and never lets it fall.",
+  "status": "untested"
+}

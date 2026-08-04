@@ -1,0 +1,54 @@
+{
+  "id": "genre_world_sky_city_arrival",
+  "name": "Arrival at the green city",
+  "desc": "Islands hanging in open air, bridged with rope and stone, and everything on them is growing.",
+  "genre": [
+    "adventure",
+    "fantasy",
+    "travelogue"
+  ],
+  "beats": 5,
+  "runtime_s": 15.2,
+  "sets": {
+    "style": "solarpunk",
+    "place": "floating_islands",
+    "look": "golden",
+    "cue": "hopeful_rising",
+    "emotion": "awe",
+    "camera": "pull",
+    "pace": "normal",
+    "wear": 0,
+    "transition": "dissolve",
+    "time": "day"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "pull",
+      "desc": "a chain of islands hanging in open sky, their broken rock undersides trailing roots and vines, a waterfall pouring off one edge into empty air, rope and stone bridges strung between them, smaller islands receding into the haze, extreme wide shot, no humans"
+    },
+    {
+      "template": "master",
+      "camera": "pan_r",
+      "desc": "walking out onto a rope and stone bridge strung between two islands, open sky below and on both sides, small in frame, wide shot, full body"
+    },
+    {
+      "template": "pillow",
+      "camera": "static",
+      "desc": "white structure overgrown with green, glass and running water, planters spilling over a parapet, high clean sunlight straight down, no humans"
+    },
+    {
+      "template": "react",
+      "camera": "push",
+      "desc": "head tilted back, eyes wide and moving, mouth slightly open, sunlight full on the face, close-up"
+    },
+    {
+      "template": "insert",
+      "camera": "tilt_d",
+      "desc": "water pouring off the lip of an island and breaking apart into nothing before it reaches any ground, hanging roots at the torn edge, close-up, no humans"
+    }
+  ],
+  "why": "This is the travelogue the gallery has never had: a template whose job is arrival rather than conflict. solarpunk is compose:replaces and its verdict says greenery and bright clean daylight took over the street - which is a problem when you want a street and precisely the point when the thing you want is a city made of growing. The place card supplies the one thing solarpunk cannot, which is the impossibility: its note says the float is sold by the UNDERSIDE, exposed rock and hanging roots, plus water falling off an edge into nothing and visible sky beneath. Shot one and shot five carry those between them, and shot five is deliberately an insert rather than a wide, because the waterfall that ends in no ground is a detail the audience must notice and 1.8s of it is worth more than another vista. emotion:awe is described physically - head back, eyes moving, mouth open - since the word wonder renders as nothing. The pillow at beat three is where the style gets the frame to itself with nobody in it, which is the one place solarpunk can rebuild freely without fighting anything.",
+  "note": "Expected to land: the white-and-green architecture, the high clean light, the golden grade. Deliberate override: solarpunk rebuilds the setting. It is paired with a 7-noun place card here and the two agree about sky and water, so the rebuild should read as the city being green rather than as the islands being deleted - but solarpunk is one of only four replaces styles whose behaviour over a dense place card has actually been measured, and that measurement was at one seed. Uncertain: the style card flags foliage as a known i2v boiling case, so the video stage is the risk, not the still. look:golden at 1.22 keeps solarpunk above the 0.7 chromatic floor. No weather layer is set, and that is deliberate: /api/compose flags weather_vs_place whenever a place card already carries its own weather, and it does here. The atmosphere is written into the place card and the shot descs as nouns instead, which is where it lands. (floating_islands already carries cloud.) transition is intent only - short.py ignores transitions and hard-cuts every join, so do not build a beat around it. Nothing in this card has been rendered - the GPU was committed to another job while it was written - so status is untested rather than partial. What IS checked: every id here exists in its library, and the style/place/look stack was resolved through POST /api/compose, which returned the intended engine and no error-severity conflict.",
+  "status": "untested"
+}

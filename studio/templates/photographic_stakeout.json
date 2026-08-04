@@ -1,0 +1,49 @@
+{
+  "id": "photographic_stakeout",
+  "name": "Stakeout on level four",
+  "desc": "A camera nobody is watching records the meeting anyway.",
+  "genre": [
+    "thriller",
+    "crime",
+    "mystery"
+  ],
+  "beats": 4,
+  "runtime_s": 17,
+  "sets": {
+    "style": "security_camera",
+    "look": "fluorescent",
+    "place": "multi_storey_car_park",
+    "pace": "slow",
+    "cue": "unease",
+    "emotion": "suspicion",
+    "camera": "static",
+    "wear": 0,
+    "transition": "cut",
+    "time": "night"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "static",
+      "desc": "a level of a concrete multi-storey car park seen from high in a corner, painted bays between square pillars under low fluorescent tubes, a ramp curving down at the far end, oil stains on the concrete, the city showing past the open parapet, wide shot, no humans"
+    },
+    {
+      "template": "master",
+      "camera": "static",
+      "desc": "two cars parked nose to nose in adjacent bays with one figure standing between them, seen from high in the corner across the whole deck, tiny in frame, full body"
+    },
+    {
+      "template": "pillow",
+      "camera": "static",
+      "desc": "a stairwell door standing open onto the deck, oil stains on the concrete in front of it, a fluorescent tube burning above, no humans"
+    },
+    {
+      "template": "insert",
+      "camera": "static",
+      "desc": "a set of car keys left on the concrete parapet beside a folded newspaper, city lights out of focus beyond the edge, close-up, no humans"
+    }
+  ],
+  "why": "The surveillance thriller is a genre the gallery could not reach at all, and the reason is that the camera position is the genre. A fixed lens mounted high in a corner, looking down across a whole floor, is what makes the audience a watcher rather than a participant, and it is the one thing a shot template cannot express - so it has to come from the style. Every camera is static because a locked-off camera is the premise, not a preference, and because the style card notes this is the friendliest case there is for the video stage: nothing needs to move but the subject. The place is chosen for density. security_camera is a compose=replaces card, and the measured rule is that a place bringing six or more concrete nouns survives and is recoloured rather than replaced - the car park brings eleven, and its low ceiling and open parapet are the two that stop it reading as an underground garage. The keys and the newspaper on the parapet are the only evidence in the template, left where a camera can see them and the two people cannot.",
+  "note": "Not rendered. No frame from this template has been generated - the GPU was held for a video job - so everything below is read off the style, place and look cards rather than seen. This style is compose=replaces: it REBUILDS the setting as a surveillance frame - camera position, barrel distortion and lighting all arrive over whatever place is underneath. That is intended here, and multi_storey_car_park is chosen because it brings eleven concrete nouns, over the density at which a place has been measured to survive and be recoloured rather than deleted. Read the rest of this before using it, because the style is the weakest card in the set and the card says so itself. Its defining marks are DEGRADATIONS - low resolution, compression blocking, interlacing - and a generator asked for a bad image makes a clean image of a bad thing. What was actually seen: fisheye, timestamp burn-in and a monochrome cast, all convincing; it also drew the camera itself into frame, which is why the place is one that plausibly has cameras on the pillars rather than one where a camera would be absurd. The build that genuinely works is to take the position, the distortion and the lighting at full quality from here, then downscale, re-encode at a punishing bitrate and re-upscale in post. Also fixed and worth knowing: the timestamp string is baked into the style card as 2026-01-14 03:42:17, so every shot in this template will carry the same time of day in the corner. Edit the style card if the scene needs the clock to move. Applies to every card in this set and to none of the existing twenty: these templates use place CARDS rather than free text, so the place's own prose is appended to the prompt on top of whatever the shot desc says, and where a desc also names the setting the nouns arrive twice. That is reinforcement rather than contradiction, and it is deliberate on the shots whose place card warns that a particular noun must be named explicitly or the location renders wrong. But if a prompt reads long, the shot desc is the half to trim - never the card. Standing gaps that apply to every card in the gallery: transitions are intent only, because short.py hard-cuts every join regardless of what is set here; every emotion card is status:partial upstream, so the face, eyes, mouth and body tags render and voice_style does not, because no TTS engine on this box takes an emotion vector; and a style's negative_add never reaches the picture, because the renderer has no negative input wired - so this style will come out slightly less clean than its library sample, which had one. On the pace, which is slow here and is not safe everywhere: pace does not shorten the generated clip - clip_secs is flat at 6.0 on every beat and no template can set it - it only decides how much of that clip the edit shows, and slow shows more of it. The late-clip failure measured on this engine was a SUBJECT walking out of frame, while the same sweep found large static forms holding rock-steady for the full eight seconds with no morphing at all. This template is built out of locked-off cameras and mostly empty frames, which is the case that held.",
+  "status": "untested"
+}

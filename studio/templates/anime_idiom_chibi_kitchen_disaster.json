@@ -1,0 +1,54 @@
+{
+  "id": "anime_idiom_chibi_kitchen_disaster",
+  "name": "Chibi kitchen disaster",
+  "desc": "The omelette is on fire and the smoke alarm is about to have an opinion.",
+  "genre": [
+    "comedy",
+    "slice of life"
+  ],
+  "beats": 5,
+  "runtime_s": 10,
+  "sets": {
+    "style": "chibi",
+    "place": "small_apartment_kitchen",
+    "look": "golden",
+    "cue": "comedic_light",
+    "emotion": "panic",
+    "camera": "static",
+    "pace": "fast",
+    "wear": 0,
+    "transition": "whip_pan",
+    "time": "day",
+    "mood": "comedy"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "static",
+      "desc": "a cramped apartment kitchen, narrow counter running to a stainless sink under one small window, a gas stove with a kettle on the burner, a fridge covered in magnets, wall cabinets, dish rack, tiled backsplash, linoleum floor, thick outlines and flat unshaded colour, wide shot, no humans"
+    },
+    {
+      "template": "master",
+      "camera": "static",
+      "desc": "a super deformed character two heads tall standing on a stool at the stove, huge round head, tiny stub limbs, thick outlines, flat color, a pan on the burner beginning to smoke, full body, wide shot"
+    },
+    {
+      "template": "build",
+      "camera": "static",
+      "desc": "two heads tall with both stub arms windmilling, mouth wide open, heavy sweatdrops flying off the head, black smoke climbing the wall cabinets, full body, wide shot"
+    },
+    {
+      "template": "sakuga",
+      "camera": "handheld",
+      "desc": "swatting at the smoke with a tea towel held in both stub hands, feet off the ground mid-jump, huge round head tilted back, flat color, thick lineart, full body, wide shot"
+    },
+    {
+      "template": "insert",
+      "camera": "static",
+      "desc": "a blackened pan sitting on the burner with one thin ribbon of smoke leaving it, the kettle beside it entirely unbothered, close-up, no humans"
+    }
+  ],
+  "why": "The gallery has no comedy at all, and chibi is the fastest route to one because it is not a filter but a different body plan - two to three heads tall, oversized round head, stub limbs, features reduced to a few marks. The verdict on the card carries a constraint that dictates the entire shot list: chibi forces a wider framing and a chibi cannot be a mid-shot, so every human beat here is authored full body and wide, and there is no close-up anywhere in the piece. That is the style being obeyed rather than a gap. The comedy is built as escalation across three beats with a flat button on the end: smoke, flailing, jumping, and then a still pan and a kettle that does not care. The insert is the joke, and it is peopleless, so the style contributes nothing to it and it renders as a straight kitchen - which is what makes it funny beside four frames of a two-head-tall person. pace:fast is set for the motion rather than for the length: it compiles to intensity 1.429, which is the figure the clip stage reads, and it does not shorten a single shot. transition:whip_pan is the era-correct punctuation for this and is recorded even though it will not fire.",
+  "note": "NOT RENDERED. No frame from this card has been generated - the GPU was held for another job while it was authored, so every claim below is read off the style, place and look cards rather than off pixels. chibi measured ready and STRONG - head to body proportion collapsed to roughly one to two, exactly as authored. transition is intent only - short.py hard-cuts every join. Two warnings from the style card that a director needs before using this. First, chibi REPLACES the character design rather than decorating it, so everything a character card says about build, height, posture and costume detail is overridden - decide the scope before the style, because a chibi inset in the corner of a serious frame and a whole chibi scene are different jokes. Second, a spelling detail that is load-bearing in the fills: the trained token is the American flat color, and the British spelling is a different token sequence that lands weaker, which is why every shot desc here writes flat color even though the rest of the project writes colour. Structurally this is one of the two safest cards in the library for video - big flat regions, heavy outlines, nothing fine enough to boil. RUNTIME, checked by compiling this card rather than by trusting the field: runtime_s here follows the gallery convention - the shot cards' approx_seconds summed and scaled by pace - and that is an INTENT number. It is not what compiles. compile.py gives every beat a flat clip_secs of 6 unless a per-shot @Ns overrides it, and a template cannot express one because the wizard emits only template, camera and desc. pace does not scale duration either, despite compile.py's own variable description saying it scales shot lengths: it sets intensity = 1/scale, a motion figure, so pace:fast renders as intensity 1.429 and identical shot lengths. This card therefore compiles to 5 beats x 6s = 30s, not 10s. Verified with compile.py --timeline; the discrepancy is in the field, not in this card.",
+  "status": "untested"
+}

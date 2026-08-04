@@ -1,0 +1,49 @@
+{
+  "id": "anime_idiom_josei_laundromat",
+  "name": "Josei, late wash",
+  "desc": "Two people folding laundry at midnight. One of them has already decided.",
+  "genre": [
+    "drama",
+    "romance"
+  ],
+  "beats": 4,
+  "runtime_s": 16,
+  "sets": {
+    "style": "josei_muted",
+    "place": "laundromat",
+    "look": "overcast",
+    "cue": "melancholy_piano",
+    "emotion": "resignation",
+    "camera": "static",
+    "pace": "slow",
+    "wear": 0,
+    "transition": "l_cut",
+    "time": "night",
+    "mood": "adult"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "pan_r",
+      "desc": "a laundromat at night, bank of front loading washing machines facing a row of plastic chairs, stacked dryers, long folding table down the middle, wire laundry cart, detergent boxes on a shelf, notice board, flat fluorescent ceiling light, the street dark beyond the plate glass window, wide shot, no humans"
+    },
+    {
+      "template": "master",
+      "camera": "static",
+      "desc": "standing at the long folding table squaring off a folded shirt, realistic adult proportions, fine lineart, muted desaturated palette, understated expression, a second person seated in the plastic chairs behind and out of focus, full body, wide shot"
+    },
+    {
+      "template": "insert",
+      "camera": "static",
+      "desc": "a wedding ring set down on the folding table beside an open box of detergent, the laundry cart wheel in the background, close-up, no humans"
+    },
+    {
+      "template": "react",
+      "camera": "static",
+      "desc": "face lit flatly from the machine glass, half-closed eyes looking down at the folding, calm gaze, closed mouth, the faintest smile, close-up"
+    }
+  ],
+  "why": "Josei is the one anime register the gallery has no route to at all: adult women, restrained proportion, understatement, and a scene whose entire content is that nobody raises their voice. The laundromat carries it because it is a place people go at midnight when the flat has become difficult, and because its twelve nouns include a row of plastic chairs, which is where the second person sits - present, out of focus, and never given a shot of their own. That blocking is the story. The ring on beat three is the only piece of information in the template and it is delivered as an insert, which is peopleless and therefore carries no emotion or wear tags at all and renders clean. emotion:resignation is exact rather than atmospheric: a faint smile, lowered eyelids, a calm gaze, hands loose. Its mouth tag is closed, which is why there is no speak shot - and also why the scene works, because the version of this where somebody makes a speech is a different and worse template. transition:l_cut is recorded because the sound of the machines should already be running under whatever came before.",
+  "note": "NOT RENDERED. No frame from this card has been generated - the GPU was held for another job while it was authored, so every claim below is read off the style, place and look cards rather than off pixels. josei_muted is measured ready and its verdict places it close to seinen_grounded but darker and cooler; both survived as separate cards. This set uses both, so if they come back looking identical in your film, keep one and delete the other - the style library flags that exact risk on the card. transition is intent only - short.py hard-cuts every join. One deliberate departure from an allowlist: the laundromat card endorses fluorescent, neon, sodium and neutral, and this template uses overcast instead. The reason is arithmetic - neutral is a saturation 1.12 grade and would push colour back into a style whose whole proposition is a muted palette, where overcast at 0.68 pulls it out. Expect the machines and the plate glass to land; expect the understatement to be the part that is hard to see, since restraint is the least legible thing to ask a model for. RUNTIME, checked by compiling this card rather than by trusting the field: runtime_s here follows the gallery convention - the shot cards' approx_seconds summed and scaled by pace - and that is an INTENT number. It is not what compiles. compile.py gives every beat a flat clip_secs of 6 unless a per-shot @Ns overrides it, and a template cannot express one because the wizard emits only template, camera and desc. pace does not scale duration either, despite compile.py's own variable description saying it scales shot lengths: it sets intensity = 1/scale, a motion figure, so pace:slow renders as intensity 0.741 and identical shot lengths. This card therefore compiles to 4 beats x 6s = 24s, not 16s. Verified with compile.py --timeline; the discrepancy is in the field, not in this card.",
+  "status": "untested"
+}

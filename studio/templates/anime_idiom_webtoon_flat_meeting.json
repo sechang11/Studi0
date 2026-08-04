@@ -1,0 +1,49 @@
+{
+  "id": "anime_idiom_webtoon_flat_meeting",
+  "name": "Webtoon flat, arcade meeting",
+  "desc": "Waiting under a glass roof for somebody who is nine minutes late and coming.",
+  "genre": [
+    "romance",
+    "slice of life"
+  ],
+  "beats": 4,
+  "runtime_s": 14,
+  "sets": {
+    "style": "webtoon_flat",
+    "place": "shopping_arcade",
+    "look": "neutral",
+    "cue": "hopeful_rising",
+    "emotion": "joy",
+    "camera": "static",
+    "pace": "normal",
+    "wear": 0,
+    "transition": "iris",
+    "time": "day",
+    "mood": "digital comic"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "pan_r",
+      "desc": "a covered shopping arcade, glazed iron barrel roof spilling daylight onto a patterned tiled floor, shopfronts on both sides, hanging shop signs, potted plants, an upper gallery behind a wrought iron balustrade, large flat areas of saturated colour with thin clean outlines, wide shot, no humans"
+    },
+    {
+      "template": "master",
+      "camera": "static",
+      "desc": "standing beside a potted plant with hands in coat pockets, weight on one leg, checking a phone and putting it away, thin coloured lineart, large flat colour fills, one soft airbrushed gradient on the skin, no heavy black keyline, full body, wide shot"
+    },
+    {
+      "template": "react",
+      "camera": "push",
+      "desc": "head coming up and turning toward the far end of the arcade, bright eyes, open smile, flat saturated colour, close-up"
+    },
+    {
+      "template": "speak",
+      "camera": "static",
+      "desc": "two people mid-conversation under the balustrade, one still catching breath from running, both talking at once, open mouths, thin clean outlines, flat colour, no true black anywhere, medium shot"
+    }
+  ],
+  "why": "The contemporary digital-comic idiom is a genuinely different drawing from television anime and the gallery cannot reach it: thin lineart that is often coloured rather than black, large flat fills with one soft airbrushed gradient on skin instead of a cel step, a saturated candy palette and almost no true black anywhere. That last property is why the arcade is the right room for it - a glazed barrel roof floods the whole space with even daylight, so there is no dramatic shadow the style would have to refuse. The scene is small on purpose. Somebody is waiting, checks a phone, puts it away, and then the person arrives, and the last beat is two people talking over each other, which is the only shot in this whole set where nobody is withholding anything. It exists as the counterweight to fifteen templates about restraint. emotion:joy is the correct register and is also mechanically necessary: its mouth tag is an open smile, and every closed-mouth emotion would have shut the mouth on the speak beat. This is also the one template that renders the shopping arcade as itself, since anime_idiom_geometric_monologue abstracts the same place away by design.",
+  "note": "NOT RENDERED. No frame from this card has been generated - the GPU was held for another job while it was authored, so every claim below is read off the style, place and look cards rather than off pixels. webtoon_flat measured ready - bold flat colour and heavy saturation with no rendering, as authored. transition is intent only - short.py hard-cuts every join. The thing this card CANNOT give you, and the style library is blunt about it: the FORMAT. A webtoon is a tall vertical scroll and that is a canvas decision rather than a style one - films here are authored at 1920x1080 and the checkpoint is native at 1344x768. You get the colour idiom; you do not get the strip, and no amount of prompting produces one. Note also that the word webtoon appears nowhere in the tag library and is not a trained tag, so it is never written into a shot desc here - the marks are asked for instead. Structurally one of the two safest cards in the set for video: large flat saturated regions and broad soft gradients with essentially no fine texture to boil. RUNTIME, checked by compiling this card rather than by trusting the field: runtime_s here follows the gallery convention - the shot cards' approx_seconds summed and scaled by pace - and that is an INTENT number. It is not what compiles. compile.py gives every beat a flat clip_secs of 6 unless a per-shot @Ns overrides it, and a template cannot express one because the wizard emits only template, camera and desc. pace does not scale duration either, despite compile.py's own variable description saying it scales shot lengths: it sets intensity = 1/scale, a motion figure, so pace:normal renders as intensity 1.0 and identical shot lengths. This card therefore compiles to 4 beats x 6s = 24s, not 14s. Verified with compile.py --timeline; the discrepancy is in the field, not in this card.",
+  "status": "untested"
+}

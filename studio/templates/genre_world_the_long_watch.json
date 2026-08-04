@@ -1,0 +1,54 @@
+{
+  "id": "genre_world_the_long_watch",
+  "name": "The long watch",
+  "desc": "Eight hours at the window, and the thing being watched is home.",
+  "genre": [
+    "sci-fi",
+    "drama"
+  ],
+  "beats": 5,
+  "runtime_s": 20.5,
+  "sets": {
+    "style": "dieselpunk",
+    "place": "orbital_station_window",
+    "look": "cold",
+    "cue": "industrial_cold",
+    "emotion": "longing",
+    "camera": "static",
+    "pace": "slow",
+    "wear": 1,
+    "transition": "dissolve",
+    "lighting": "practical_lamps",
+    "time": "night"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "pan_r",
+      "desc": "the interior of an orbital station at a window, padded module walls, handrails, riveted steel equipment panels with indicator lights, cables and stowage bags, the curved earth showing through the glass, wide shot, no humans"
+    },
+    {
+      "template": "master",
+      "camera": "static",
+      "desc": "at the window with one hand on a handrail, olive drab and riveted steel interior all around, the curve of the earth filling the glass, wide shot, full body"
+    },
+    {
+      "template": "pillow",
+      "camera": "static",
+      "desc": "the thin blue line of atmosphere along the earth's limb against black space and stars, white cloud swirling over ocean far below, no humans"
+    },
+    {
+      "template": "react",
+      "camera": "push",
+      "desc": "face close to the glass, eyes tracking something slowly across frame, panel light on one side of the face only, close-up"
+    },
+    {
+      "template": "insert",
+      "camera": "static",
+      "desc": "a bank of riveted steel panels with indicator lamps, one amber lamp lit among dark ones, a smoked glass dial beside it, extreme close-up, no humans"
+    }
+  ],
+  "why": "Dieselpunk in orbit is the deliberate joke of this card, and it is a serviceable one: the style is interwar heavy industry - riveted steel, olive drab and oxide red, weight over elegance - and applying it to a spacecraft produces the retro-futurism that no existing template reaches, a station built by people who made battleships. Its verdict is honest that it reads as a grade more than a world, which is exactly what you want from a style sitting on a place card this specific. orbital_station_window is the one card in the library that renders as an aeroplane porthole if you let it, and its note names the three things that buy orbit: the CURVE of the earth across frame, the thin atmosphere line at the limb, and black sky with stars. Shots one, two and three carry them. The interior nouns stay in frame throughout for the second reason the card gives - without handrails and panels you get a photograph of a planet with nowhere for a person to stand. There is no dialogue and no event. The scene is one shift of a watch, and the closing insert - one amber lamp lit among dark ones - is the only thing in it that changes.",
+  "note": "Expected to land: riveted olive-drab material, the module interior, the cold grade. Uncertain: dieselpunk is strength moderate and its own note warns it may collapse toward steampunk; if that happens here the separator to push is palette, olive and oxide against brass, not the era word. The earth's curve is the likeliest picture failure and it is a place-card problem. pace:slow is safe - no hold_silent, longest beat 4.2s scaled to 5.7s, under the 6s clip. emotion:longing contributes only to shot 4, since establish, pillow and insert drop the character entirely. lighting is prompt words only. transition is intent only - short.py ignores transitions and hard-cuts every join, so do not build a beat around it. Nothing in this card has been rendered - the GPU was committed to another job while it was written - so status is untested rather than partial. What IS checked: every id here exists in its library, and the style/place/look stack was resolved through POST /api/compose, which returned the intended engine and no error-severity conflict.",
+  "status": "untested"
+}

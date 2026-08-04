@@ -1,0 +1,55 @@
+{
+  "id": "anime_idiom_ova_cold_open",
+  "name": "80s OVA cold open",
+  "desc": "A last train that is late, and something in the tunnel that is not a train.",
+  "genre": [
+    "sci-fi",
+    "thriller",
+    "action"
+  ],
+  "beats": 5,
+  "runtime_s": 15,
+  "sets": {
+    "style": "ova_80s",
+    "place": "subway_platform",
+    "look": "sodium",
+    "cue": "menace",
+    "emotion": "shock",
+    "camera": "static",
+    "pace": "normal",
+    "wear": 0,
+    "transition": "cut",
+    "time": "night",
+    "mood": "direct-to-video"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "pull",
+      "desc": "deserted underground platform late at night, tiled wall, row of pillars, empty benches, fluorescent strip lights, painted yellow line at the platform edge, dark tunnel mouth beyond the tracks, wide shot, no humans"
+    },
+    {
+      "template": "insert",
+      "camera": "static",
+      "desc": "a hanging platform sign, the last service time on it, one bulb behind the panel failing, close-up, no humans"
+    },
+    {
+      "template": "master",
+      "camera": "static",
+      "desc": "one figure standing alone at the yellow line, bag set down beside one foot, coat still, looking along the platform toward the tunnel, full body, wide shot"
+    },
+    {
+      "template": "react",
+      "camera": "push",
+      "desc": "head turning toward the tunnel mouth, wide eyes, constricted pupils, mouth open, hair lifting in the pressure wave, close-up"
+    },
+    {
+      "template": "build",
+      "camera": "handheld",
+      "desc": "the dark tunnel mouth beyond the tracks, air moving, grit lifting off the trackbed, a hard light growing inside the tunnel that is the wrong colour and the wrong height for a train, wide shot, no humans"
+    }
+  ],
+  "why": "The cold open of a direct-to-video episode: four minutes of a platform before anybody explains anything. ova_80s is the whole reason this card exists - its airbrushed gradient shading and dense saturated paint are the one anime idiom nothing else in the gallery reaches, and a sodium-lit underground station is the surface it reads best on, because airbrush wants metal and light to gradate across. The order is a withholding order. Two peopleless shots establish that the station is empty and that the last train has already gone before a person is put in danger, and the figure arrives third so the audience knows the room before it knows the character. The build shot ends on light in the tunnel and stops; naming the thing would spend the reveal a cold open exists to defer. wear is 0 because nothing has happened yet - the character is on their way home. emotion:shock is chosen over fear for one mechanical reason: its body tag is rigid and frozen mid-motion, which is what a person on a platform edge does, where fear renders recoiling and would push them backward toward the tracks.",
+  "note": "NOT RENDERED. No frame from this card has been generated - the GPU was held for another job while it was authored, so every claim below is read off the style, place and look cards rather than off pixels. ova_80s and cel_anime_90s both carry the retro artstyle tail and the style library warns in writing that the two decades collide when used together - anime_idiom_90s_last_carriage is the other one, so if a film uses both, strip the shared tail from one. transition is intent only - short.py hard-cuts every join. cue:menace carries the scene. compose returns note look_names_place on every shot: the sodium grade also carries location words (city street, street light, lamppost), and the resolver strips them so the platform survives while keeping the colour and the light. Nothing to do - but it is why sodium does not drag you up to street level. Expected to land: the airbrush gradients, the sodium grade, the place card's ten nouns. Uncertain: the ova_80s card rates itself middling for video because the fine mechanical and highlight detail that earns the look is exactly what crawls in an i2v pass - prefer held or slow cuts, which is why four of the five shots here are static or slow. RUNTIME, checked by compiling this card rather than by trusting the field: runtime_s here follows the gallery convention - the shot cards' approx_seconds summed and scaled by pace - and that is an INTENT number. It is not what compiles. compile.py gives every beat a flat clip_secs of 6 unless a per-shot @Ns overrides it, and a template cannot express one because the wizard emits only template, camera and desc. pace does not scale duration either, despite compile.py's own variable description saying it scales shot lengths: it sets intensity = 1/scale, a motion figure, so pace:normal renders as intensity 1.0 and identical shot lengths. This card therefore compiles to 5 beats x 6s = 30s, not 15s. Verified with compile.py --timeline; the discrepancy is in the field, not in this card.",
+  "status": "untested"
+}

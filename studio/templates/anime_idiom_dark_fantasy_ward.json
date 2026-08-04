@@ -1,0 +1,55 @@
+{
+  "id": "anime_idiom_dark_fantasy_ward",
+  "name": "Dark fantasy ward",
+  "desc": "The lights in the corridor have been dead for a while. Something is standing watch at the end of it, and it is on your side.",
+  "genre": [
+    "fantasy",
+    "horror",
+    "drama"
+  ],
+  "beats": 5,
+  "runtime_s": 23,
+  "sets": {
+    "style": "dark_fantasy_anime",
+    "place": "hospital_corridor",
+    "look": "night",
+    "cue": "menace",
+    "emotion": "resolve",
+    "camera": "static",
+    "pace": "slow",
+    "wear": 1,
+    "transition": "fade_black",
+    "time": "night",
+    "mood": "grim"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "push",
+      "desc": "a long hospital corridor at night, pale vinyl floor throwing reflections, handrail running the wall, banks of fluorescent ceiling panels all dead, numbered doors receding to a vanishing point, an empty gurney parked against the wall, a wheeled IV stand, a row of plastic chairs, one hard shaft of light from a wire glass window falling across the floor, wide shot, no humans"
+    },
+    {
+      "template": "pillow",
+      "camera": "static",
+      "desc": "the empty gurney against the corridor wall, the wire glass window in the door behind it, solid black beyond the glass, no humans"
+    },
+    {
+      "template": "hold_silent",
+      "camera": "static",
+      "desc": "an armoured figure standing motionless in the middle of the corridor facing away down its length, most of the body buried in solid black shadow with a single hard rim of light along one edge, desaturated steel and blood palette, full body, wide shot"
+    },
+    {
+      "template": "insert",
+      "camera": "push",
+      "desc": "a pauldron and a length of chain in close-up filling the frame, ornate worked metal, one hard rim of light along the top edge and everything below it solid black, no humans"
+    },
+    {
+      "template": "react",
+      "camera": "static",
+      "desc": "a face turned three-quarters to camera and mostly in shadow, one lit edge along the cheekbone and jaw, steady gaze, closed mouth, thick lineart with visible spot blacks, close-up"
+    }
+  ],
+  "why": "The gallery has one horror template and it is a stalker: a corridor, a door ajar, a handle turning, nothing ever seen. This is the other kind, where the thing in the corridor is already visible on beat three and is not the threat. dark_fantasy_anime supplies exactly one mechanism and this card is built on it - large solid black masses eating most of the figure with a single hard rim picking out one edge - so every human beat is composed as a silhouette with one lit contour rather than as a lit subject. The insert on beat four is placed deliberately against the style card advice, which says the ornate armour detail is fine and will crawl in video and to frame CLOSER so the ornament becomes fewer and larger marks. Filling the frame with one pauldron is that instruction taken literally, and it is also the only shot that says what the figure is. The order withholds in the standard way: the corridor first, then the object, then the figure, then the metal, then a face - which is the last thing revealed and the first thing that suggests the film is a drama.",
+  "note": "NOT RENDERED. No frame from this card has been generated - the GPU was held for another job while it was authored, so every claim below is read off the style, place and look cards rather than off pixels. This is the card in the style library that carries the loudest warning and it is worth repeating here: DARKNESS IS NOT A STYLE. The phrase night, dark background in the prompt moved measured mean luma from 170 to 161, which is nothing, and that is why looks/night exists as an ffmpeg grade instead. look:night is therefore load-bearing on this template and must not be swapped for prompt words. transition is intent only - short.py hard-cuts every join. The real risk is a stack: this style asks the model for a desaturated DRAWING and looks/night pulls saturation down again after the render, and the grade library records that grades stack multiplicatively and once turned a third of a film magenta. Check one frame before committing - grey mud is recoverable by nothing. Expect to land: the shadow shape and the rim. Uncertain: whether the corridor stays legible at all under the grade. RUNTIME, checked by compiling this card rather than by trusting the field: runtime_s here follows the gallery convention - the shot cards' approx_seconds summed and scaled by pace - and that is an INTENT number. It is not what compiles. compile.py gives every beat a flat clip_secs of 6 unless a per-shot @Ns overrides it, and a template cannot express one because the wizard emits only template, camera and desc. pace does not scale duration either, despite compile.py's own variable description saying it scales shot lengths: it sets intensity = 1/scale, a motion figure, so pace:slow renders as intensity 0.741 and identical shot lengths. This card therefore compiles to 5 beats x 6s = 30s, not 23s. Verified with compile.py --timeline; the discrepancy is in the field, not in this card.",
+  "status": "untested"
+}

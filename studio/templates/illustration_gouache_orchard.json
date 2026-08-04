@@ -1,0 +1,50 @@
+{
+  "id": "illustration_gouache_orchard",
+  "name": "Gouache orchard",
+  "desc": "The last hour of picking. The ladder stays against the tree.",
+  "genre": [
+    "pastoral",
+    "slice of life"
+  ],
+  "beats": 4,
+  "runtime_s": 13,
+  "sets": {
+    "style": "gouache",
+    "place": "orchard",
+    "look": "faded_film",
+    "pace": "normal",
+    "cue": "warm_memory",
+    "emotion": "relief",
+    "camera": "pan_l",
+    "wear": 2,
+    "transition": "wipe_l",
+    "lighting": "natural",
+    "weather": "clear",
+    "time": "day"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "pan_l",
+      "desc": "rows of apple trees in even regular spacing, fruit still on the branches, windfall fruit in mown grass between the rows, a wooden ladder leaning against one trunk, a low stone wall along the edge, dappled light, wide shot, no humans"
+    },
+    {
+      "template": "master",
+      "camera": "static",
+      "desc": "a figure halfway up the wooden ladder reaching into the branches, seen from the side, full body, the rows of trees running away behind them, wide shot"
+    },
+    {
+      "template": "insert",
+      "camera": "static",
+      "desc": "a full basket of apples set down in mown grass, one fruit bruised on top, windfall apples around it, close-up, no humans"
+    },
+    {
+      "template": "pillow",
+      "camera": "tilt_d",
+      "desc": "dappled light moving on the mown grass between two rows of trees, windfall fruit in the grass, no humans"
+    }
+  ],
+  "why": "Gouache is the weakest card in this set and the template is shaped around that. What separates gouache from watercolour is opacity, and neither model reliably holds that distinction, so the scene is chosen to make flat opaque blocking read as a decision rather than as a failure: an orchard in rows, regular spacing, a wooden ladder, windfall fruit in mown grass. Poster-flat subject matter for poster paint. Four beats and pace normal keep it short, because a weak style held for a long time is a weak style you have had to look at for a long time. The place card carries eleven nouns and gouache is compose:safe, so the orchard survives intact and does most of the work. look:faded_film is endorsed by both cards, and its contrast 0.86 and gamma 1.12 flatten the image further - one of the few cases in this batch where the grade pushes in the same direction as the style instead of fighting it. camera:pan_l as the scene default is the first lateral pan used as a scene move anywhere in the template library, and rows of trees at even spacing are exactly what a lateral pan is for.",
+  "note": "Nothing rendered, and this is the one card here where the style itself is in doubt rather than only the combination. POST /api/compose returns a warning, style_strength_weak, for gouache on both engines, with the reason recorded on the card: the opacity that defines the medium is collapsed by both models. Expect something between watercolour and a flat poster, and be pleased if it lands. If it simply reads as watercolour, the fix is not this template - it is to use the watercolour card, which is the strongest in the library. Other caveats are routine: transition:wipe_l is advisory since short.py hard-cuts; lighting:natural and weather:clear are prompt words only; emotion:relief is status:partial. wear 2 is set because this is the end of a working day, but two of the four beats are NO_PERSON templates that suppress wear tags entirely, so the sweat and dirt only show in the master.",
+  "status": "untested"
+}

@@ -1,0 +1,61 @@
+{
+  "id": "photographic_out_the_back",
+  "name": "Out the back",
+  "desc": "The argument left the bar and became something else in the alley.",
+  "genre": [
+    "crime",
+    "noir",
+    "action"
+  ],
+  "beats": 6,
+  "runtime_s": 12,
+  "sets": {
+    "style": "noir_comic",
+    "look": "bleach_bypass",
+    "place": "alley_behind_bar",
+    "pace": "fast",
+    "cue": "menace",
+    "emotion": "rage",
+    "camera": "handheld",
+    "wear": 2,
+    "transition": "smash",
+    "time": "night",
+    "lighting": "split",
+    "weather": "rain"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "static",
+      "desc": "a narrow service alley behind a bar at night, a dumpster and stacked beer crates against a graffitied brick wall, one bare lamp burning over a heavy metal fire door and wet ground beneath it, everything outside that pool of light solid black, rain falling through the lamplight, wide shot, no humans"
+    },
+    {
+      "template": "master",
+      "camera": "handheld",
+      "desc": "two figures squared up in the pool of light under the door lamp, one with a hand still on the fire door, both cut out of the surrounding black by that single source, full body, wide shot"
+    },
+    {
+      "template": "sakuga",
+      "camera": "handheld",
+      "desc": "a shoulder driving forward and a body going back into stacked crates, the crates coming apart, rain streaking white across the black, medium shot"
+    },
+    {
+      "template": "react",
+      "camera": "push",
+      "desc": "half the face in the lamplight and half in solid black, breathing hard, a cut opened over one eyebrow, close-up"
+    },
+    {
+      "template": "insert",
+      "camera": "static",
+      "desc": "a heavy metal fire door standing open onto a black interior, one bare lamp above it, wet ground and scattered cigarette ends below, close-up, no humans"
+    },
+    {
+      "template": "pillow",
+      "camera": "tilt_u",
+      "desc": "a fire escape ladder against a graffitied brick wall, rain falling past the single wall lamp, black sky above, no humans"
+    }
+  ],
+  "why": "The place card gives the instruction that builds this template: the single door lamp is the entire light source, and if it is not named explicitly the alley renders evenly lit and loses the pool-of-light framing that is the only reason to use the location. Every shot names it. That is also exactly what the style wants - noir_comic draws in solid spot blacks against bare paper with no grey midtones anywhere, and a figure cut out of shadow by one hard source is its native subject, so the style and the place are asking for the same picture rather than negotiating. Rain is set on purpose: this is the one style in the library that renders falling rain as deliberate white ink strokes laid over the black, so the weather layer buys a graphic element rather than an atmospheric one. Six beats at fast pace cuts every one of them to seven tenths of its natural length, which is what a fight is made of, and the template ends on an open fire door and an empty ladder - the two ways out that neither of them took.",
+  "note": "Not rendered. No frame from this template has been generated - the GPU was held for a video job - so everything below is read off the style, place and look cards rather than seen. Expected to land: on qwen this was a genuine high-contrast black and white ink comic and was recorded as one of the better surprises in the library. Two cautions. First, negative_add on this style only bites at 20 steps and cfg 2.5-4.0; at cfg 1.0 with the Lightning LoRA it is close to ignored, and the renderer does not wire negatives at all - so if grey midtones creep in, that is why, and the bleach_bypass grade at 0.28 saturation is the backstop. Second, the style card predicts the white rain strokes will be the first thing to swim in motion, which puts shot 3 most at risk. wear:2 is sweaty, dirt and messy hair, but the fallback wear ladder in compile.py appends the word uniform - wrong for a bar fight, so give the cast a wear_tags override or drop to wear:0. Applies to every card in this set and to none of the existing twenty: these templates use place CARDS rather than free text, so the place's own prose is appended to the prompt on top of whatever the shot desc says, and where a desc also names the setting the nouns arrive twice. That is reinforcement rather than contradiction, and it is deliberate on the shots whose place card warns that a particular noun must be named explicitly or the location renders wrong. But if a prompt reads long, the shot desc is the half to trim - never the card. Standing gaps that apply to every card in the gallery: transitions are intent only, because short.py hard-cuts every join regardless of what is set here; every emotion card is status:partial upstream, so the face, eyes, mouth and body tags render and voice_style does not, because no TTS engine on this box takes an emotion vector; and a style's negative_add never reaches the picture, because the renderer has no negative input wired - so this style will come out slightly less clean than its library sample, which had one.",
+  "status": "untested"
+}

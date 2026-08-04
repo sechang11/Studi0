@@ -1,0 +1,55 @@
+{
+  "id": "anime_idiom_ufotable_last_call",
+  "name": "Ufotable last call",
+  "desc": "The bar closed an hour ago. Somebody is still at the far end of it, and the light is going the wrong way.",
+  "genre": [
+    "fantasy",
+    "drama",
+    "horror"
+  ],
+  "beats": 5,
+  "runtime_s": 23,
+  "sets": {
+    "style": "ufotable_glow",
+    "place": "dive_bar",
+    "look": "firelight",
+    "cue": "unease",
+    "emotion": "awe",
+    "camera": "push",
+    "pace": "slow",
+    "wear": 0,
+    "transition": "dissolve",
+    "time": "night",
+    "mood": "compositing-heavy"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "pull",
+      "desc": "a dive bar after closing, long scarred wooden counter, row of empty stools, bottles ranked on mirrored back shelves, beer taps, a neon sign burning on the wall, low lamps hung over a battered pool table, torn vinyl booth seating, worn floorboards, bloom around every light source, wide shot, no humans"
+    },
+    {
+      "template": "insert",
+      "camera": "static",
+      "desc": "a single glass standing on the scarred counter, the light bending through it further than it should, a hard bright caustic thrown across the wood, close-up, no humans"
+    },
+    {
+      "template": "hold_silent",
+      "camera": "static",
+      "desc": "a seated figure at the far end of the counter with its back to camera, edge rimmed in hard light, the mirrored back bar behind showing nothing in that seat, layered bloom, particle light hanging in the air, wide shot"
+    },
+    {
+      "template": "react",
+      "camera": "push",
+      "desc": "looking down the length of the bar, head tilted up, light on the face, wide dilated sparkling eyes, parted lips, close-up"
+    },
+    {
+      "template": "pillow",
+      "camera": "static",
+      "desc": "the neon sign on the wall, motes drifting slowly through the beam beneath it, the mirrored shelves out of focus behind, no humans"
+    }
+  ],
+  "why": "ufotable_glow separates from modern_anime on COMPOSITING rather than on drawing - layered bloom, particle light, digital effects sitting over painted backgrounds - so a template built on it has to give the compositing something to composite. That is why the setting is a bar rather than anywhere prettier: a neon sign, low hung lamps, beer taps and a mirrored back shelf are five practical light sources in eleven nouns, and bloom needs sources the way a shadow needs a wall. The scene is the oldest supernatural setup there is and it is delivered entirely through what the light does. Beat two is a glass refracting more than it should. Beat three is the reveal and it is deliberately not a reveal - the figure has its back turned and the information is in the mirror, which shows an empty seat. Nothing is named and nobody screams. emotion:awe rather than fear is chosen for its tags: head tilted up with light on the face, dilated sparkling eyes, parted lips, body standing still. Fear would have rendered recoiling, and this character has not worked it out yet.",
+  "note": "NOT RENDERED. No frame from this card has been generated - the GPU was held for another job while it was authored, so every claim below is read off the style, place and look cards rather than off pixels. ufotable_glow measured ready and its verdict confirms it separates from modern_anime on the compositing as intended. transition is intent only - short.py hard-cuts every join. The known weakness is stated on the card and this template is exposed to it: bloom is large and smooth and holds, but PARTICLES do not - the motes in beats three and five are small bright specks and are the classic i2v failure, they will pop and swim between frames. If these shots have to move, cut the particle clause and keep the bloom. The mirror showing an empty seat is the most fragile thing authored anywhere in this set: reflections are not reliably obeyed on this checkpoint, so treat it as a bonus rather than as the beat, which is why the composition still reads with the mirror ignored. RUNTIME, checked by compiling this card rather than by trusting the field: runtime_s here follows the gallery convention - the shot cards' approx_seconds summed and scaled by pace - and that is an INTENT number. It is not what compiles. compile.py gives every beat a flat clip_secs of 6 unless a per-shot @Ns overrides it, and a template cannot express one because the wizard emits only template, camera and desc. pace does not scale duration either, despite compile.py's own variable description saying it scales shot lengths: it sets intensity = 1/scale, a motion figure, so pace:slow renders as intensity 0.741 and identical shot lengths. This card therefore compiles to 5 beats x 6s = 30s, not 23s. Verified with compile.py --timeline; the discrepancy is in the field, not in this card.",
+  "status": "untested"
+}

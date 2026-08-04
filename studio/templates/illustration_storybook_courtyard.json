@@ -1,0 +1,56 @@
+{
+  "id": "illustration_storybook_courtyard",
+  "name": "Storybook courtyard",
+  "desc": "A child crosses the empty castle yard at dawn to open the gate.",
+  "genre": [
+    "folk tale",
+    "fantasy",
+    "adventure"
+  ],
+  "beats": 5,
+  "runtime_s": 21,
+  "sets": {
+    "style": "storybook_illustration",
+    "place": "castle_courtyard",
+    "look": "dawn",
+    "pace": "slow",
+    "cue": "quiet_dawn",
+    "emotion": "joy",
+    "camera": "tilt_u",
+    "wear": 0,
+    "transition": "iris",
+    "lighting": "natural",
+    "weather": "mist",
+    "time": "dawn"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "tilt_u",
+      "desc": "an empty castle courtyard at first light, worn stone flagstones, curtain wall on all sides, crenellated battlements above, an arched gatehouse with an iron portcullis, banners on poles, a wooden well, a hay cart with straw on the ground, thick lineart and flat soft colour, wide shot, no humans"
+    },
+    {
+      "template": "master",
+      "camera": "static",
+      "desc": "a small figure crossing the flagstones alone, tiny against the curtain wall, the wooden well and hay cart to one side, full body, wide shot"
+    },
+    {
+      "template": "react",
+      "camera": "push",
+      "desc": "looking up at the battlements, bright eyes, open smile, thick outlines and soft pastel colour, close-up"
+    },
+    {
+      "template": "insert",
+      "camera": "static",
+      "desc": "an iron portcullis in an arched gatehouse seen from below, straw scattered across the flagstones beneath it, close-up, no humans"
+    },
+    {
+      "template": "pillow",
+      "camera": "tilt_u",
+      "desc": "banners moving on their poles above the crenellated battlements against a pale morning sky, no humans"
+    }
+  ],
+  "why": "Storybook illustration has the best precedent of anything in this batch: the whole of CHRONO was rendered in this idiom and cut as video, so there is real footage in this style on this box. It is also the most likely first click for a new user opening the gallery, which is why the subject is deliberately simple and complete - a child crosses an empty castle courtyard at dawn to open the gate. Beginning, middle, end, five shots, nothing to explain. castle_courtyard supplies ten nouns and every one of them is a thing a children's book plate would draw: flagstones, a portcullis, a wooden well, a hay cart, banners on poles. look:dawn is endorsed by the style card, and at saturation 0.82 with a slight blue and magenta balance it gives first light without the syrup golden would add to an already soft palette. The establish and the closing pillow both tilt up, which is the house move for scale, and scale is the only thing this scene is about - the yard is enormous and the person crossing it is not.",
+  "note": "Nothing rendered. The precedent is real footage in this idiom, but it is precedent and not a controlled test - nobody has A/B'd style survival through the LTX pass. transition:iris is set because an iris is the storybook grammar and this is the one place in the library where that transition is obviously right, and it is also the one thing here guaranteed not to happen: short.py hard-cuts every join and no iris will be produced. weather:mist and lighting:natural are prompt words only. emotion:joy is status:partial and contributes to exactly one of the five shots, since establish, insert and pillow are NO_PERSON templates and the master frames the figure too small for a face to read. The scale of the child against the wall is the thing most likely to go wrong: neither engine has count or scale control, and asking for a tiny figure in a wide shot often returns an adult at mid distance.",
+  "status": "untested"
+}

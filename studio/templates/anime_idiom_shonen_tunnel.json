@@ -1,0 +1,55 @@
+{
+  "id": "anime_idiom_shonen_tunnel",
+  "name": "Shonen tunnel walk",
+  "desc": "The walk up the tunnel, and then the last ten metres of it at a sprint.",
+  "genre": [
+    "shounen",
+    "action",
+    "sport"
+  ],
+  "beats": 5,
+  "runtime_s": 10,
+  "sets": {
+    "style": "shonen_action",
+    "place": "stadium_concourse",
+    "look": "blockbuster",
+    "cue": "triumphant_build",
+    "emotion": "defiance",
+    "camera": "push",
+    "pace": "fast",
+    "wear": 1,
+    "transition": "smash",
+    "time": "day",
+    "mood": "shounen"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "static",
+      "desc": "the curved concrete concourse behind a stadium stand, shuttered kiosks, turnstiles, crush barriers, wayfinding signs, strip lighting and exposed ceiling ducts, the entry tunnel mouth at the end flooded with hard daylight, wide shot, low angle, no humans"
+    },
+    {
+      "template": "build",
+      "camera": "push",
+      "desc": "walking up the tunnel toward the daylight, shoulders rolling, fists loose at the sides, heavy black keyline, hard high contrast shadow, silhouetted against the tunnel mouth, full body, low angle"
+    },
+    {
+      "template": "react",
+      "camera": "static",
+      "desc": "chin lifted, bared teeth in a grin, glaring up the tunnel, bold angular eyes with thick lids, sweat at the temple, close-up, dramatic upward angle"
+    },
+    {
+      "template": "sakuga",
+      "camera": "handheld",
+      "desc": "breaking into a full sprint at the tunnel mouth, extreme foreshortening with the leading hand thrown toward the camera, radial speed lines filling the whole frame, thick tapering lineart, full body, low angle"
+    },
+    {
+      "template": "insert",
+      "camera": "static",
+      "desc": "studs coming down hard on the concrete lip where the tunnel meets the grass, dust jumping, close-up, no humans"
+    }
+  ],
+  "why": "shonen_action measured compose=replaces for a blunt reason - it shattered the background into abstract shards, and the verdict says in plain words that the style and the setting cannot both survive it. So this template is built to need the setting for exactly one shot and then throw it away on purpose. Beat one is peopleless, static and low angle and carries all eleven concourse nouns, which is the only frame where the location has to read. From beat two the camera is inside the tunnel and the background is a bright hole, which is a composition the style cannot damage because there is almost nothing there to fragment. The speed lines are the sharpest trap on the card: the tag library records that they DELETE the background they sit in front of, correct at the peak of an impact and destructive anywhere else. They therefore appear in exactly one shot, the sakuga, and nowhere else. emotion:defiance supplies bared teeth, a grin, a lifted chin and planted feet, which is the genre written as tags. pace:fast is set for the motion and not for the length - it compiles to intensity 1.429, which is what the clip stage reads, and it leaves every shot the same duration.",
+  "note": "NOT RENDERED. No frame from this card has been generated - the GPU was held for another job while it was authored, so every claim below is read off the style, place and look cards rather than off pixels. The compose=replaces verdict was measured on a still against a THIN three-tag setting, which is why the layer resolver disagrees with it here: the concourse brings eleven concrete nouns against a threshold of six, so compose returns note style_replaces_place_outweighed and predicts the concourse survives recoloured rather than shattered. That threshold is measured for four of the sixteen replaces styles and shonen_action is not one of them, so beat one is the shot to look at first and the honest answer is that nobody knows yet. The template is built so that it does not matter - from beat two the background is a bright hole. transition is intent only - short.py hard-cuts every join. The style card also warns that motion blur belongs in the negative on this checkpoint and never in the positive, so no shot here asks for it. Radial speed lines are a dense field of thin converging strokes and will churn badly in video; the library already has a better answer, which is to author the hit as a shot fx flash in post rather than as drawn lines. Uncertain: whether the tunnel mouth survives as a shape or gets shattered along with everything else. RUNTIME, checked by compiling this card rather than by trusting the field: runtime_s here follows the gallery convention - the shot cards' approx_seconds summed and scaled by pace - and that is an INTENT number. It is not what compiles. compile.py gives every beat a flat clip_secs of 6 unless a per-shot @Ns overrides it, and a template cannot express one because the wizard emits only template, camera and desc. pace does not scale duration either, despite compile.py's own variable description saying it scales shot lengths: it sets intensity = 1/scale, a motion figure, so pace:fast renders as intensity 1.429 and identical shot lengths. This card therefore compiles to 5 beats x 6s = 30s, not 10s. Verified with compile.py --timeline; the discrepancy is in the field, not in this card.",
+  "status": "untested"
+}

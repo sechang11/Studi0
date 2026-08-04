@@ -1,0 +1,55 @@
+{
+  "id": "genre_world_tower_bargain",
+  "name": "The bargain in the tower",
+  "desc": "Somebody climbed a great many stairs to ask for something, and the price has just been named.",
+  "genre": [
+    "fantasy",
+    "drama",
+    "thriller"
+  ],
+  "beats": 5,
+  "runtime_s": 15.4,
+  "sets": {
+    "style": "grimdark",
+    "place": "wizard_tower_interior",
+    "look": "bleach",
+    "cue": "tense_strings",
+    "emotion": "doubt",
+    "camera": "static",
+    "pace": "normal",
+    "wear": 2,
+    "transition": "fade_black",
+    "lighting": "candle",
+    "time": "night"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "pan_l",
+      "desc": "the round interior of a wizard's tower, curved stone wall lined with crowded bookshelves, a spiral staircase climbing one side, a desk strewn with scrolls, a brass astrolabe and glass alembics among guttering candles, one narrow arched window, wide shot, no humans"
+    },
+    {
+      "template": "speak",
+      "camera": "static",
+      "desc": "standing at the desk in mud-caked worn armour, one hand flat on the scrolls, dirt on the sleeve, guttering candles at the edge of frame, medium shot"
+    },
+    {
+      "template": "react",
+      "camera": "push",
+      "desc": "eyes lowered and moving, jaw working once, rust and dirt across the face, candlelight from one side only, close-up"
+    },
+    {
+      "template": "insert",
+      "camera": "static",
+      "desc": "a brass astrolabe pushed aside on the desk, a torn strip of parchment weighted under its edge, candle wax run down onto the wood, close-up, no humans"
+    },
+    {
+      "template": "master",
+      "camera": "pull",
+      "desc": "two figures on opposite sides of the desk in the round room, curved stone wall and spiral stair behind them, the narrow arched window black, wide shot, full body"
+    }
+  ],
+  "why": "The second grimdark card in this set, and it is here to show the same idiom doing something completely different from the roost: that one is a vast exterior and this is a room, so a user who clicks both learns that a style is not a genre. grimdark works on material - mud and rust, nothing clean - which is why the visitor arrives at wear 2 and puts a dirty hand flat on somebody's paperwork. wizard_tower_interior is explicit that the room renders as an ordinary library unless it is visibly ROUND, so the curved wall and the spiral stair are named in the establish and again in the closing master, and it warns that sparkles and floating objects are unreliable and often ruin the composition - so there is no magic in this template at all, only objects: astrolabe, alembics, scrolls, candles. The negotiation is never spoken. speak is followed by react and then by an insert of the parchment, so what the price actually is stays on a piece of paper the audience is shown but cannot read. The closing pull is the only camera move that changes the geography, and it arrives after the decision rather than during it.",
+  "note": "Expected to land: mud and rust material, candlelight as the only source, the round room, wear 2. bleach at saturation 0.45 with contrast 1.35 is the grade that produces chiaroscuro on this engine - asking the prompt for darkness is measured not to work. Uncertain: grimdark and the place card both want brown, so the risk is a monochrome mud frame with no separation between the armour and the room; if that happens, drop to look:cold rather than weakening the style. The parchment in shot 4 is text and text is the least reliable thing this engine draws, but here that is safe by design, since the audience is not meant to read it. transition is intent only - short.py ignores transitions and hard-cuts every join, so do not build a beat around it. Nothing in this card has been rendered - the GPU was committed to another job while it was written - so status is untested rather than partial. What IS checked: every id here exists in its library, and the style/place/look stack was resolved through POST /api/compose, which returned the intended engine and no error-severity conflict.",
+  "status": "untested"
+}

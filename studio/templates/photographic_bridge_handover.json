@@ -1,0 +1,50 @@
+{
+  "id": "photographic_bridge_handover",
+  "name": "Handover on the bridge",
+  "desc": "Halfway across, where neither side is home and there is nowhere to run.",
+  "genre": [
+    "noir",
+    "crime",
+    "thriller"
+  ],
+  "beats": 4,
+  "runtime_s": 12,
+  "sets": {
+    "style": "neo_noir",
+    "look": "neon",
+    "place": "bridge_over_river",
+    "pace": "normal",
+    "cue": "tense_strings",
+    "emotion": "cold",
+    "camera": "static",
+    "wear": 0,
+    "transition": "cut",
+    "time": "night",
+    "weather": "drizzle"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "pan_r",
+      "desc": "a broad stone bridge at night, iron railings and a line of lamp posts running the length of the parapet, wet flagstones throwing the lamps back, black water moving below and the far bank of the city standing beyond, wide shot, no humans"
+    },
+    {
+      "template": "master",
+      "camera": "static",
+      "desc": "two figures stopped a car length apart on the wet flagstones of the span, one holding a flat parcel against the chest and the other with both hands open and empty at their sides, iron railings and the black moving water beyond them, full body, wide shot"
+    },
+    {
+      "template": "insert",
+      "camera": "push",
+      "desc": "a flat brown-paper parcel set down on the wet stone parapet beside an iron railing, lamp light raking across the paper, black water moving far below, close-up, no humans"
+    },
+    {
+      "template": "react",
+      "camera": "static",
+      "desc": "turning to look back down the empty span the way it came, lamp light on one side of the jaw, mouth closed, close-up"
+    }
+  ],
+  "why": "A bridge is the only location that is honest about a handover: both parties are equally exposed and each of them has exactly one direction to leave in. The place card warns that bridge type is a coin flip unless it is stated, so the shots say stone, and they name the railings and the lamp posts because without something to stand at the deck renders as a blank road with no edge. Four beats is deliberately short - this is a transaction, not a conversation, and the template gives it no room to become one. The parcel is put down on the parapet rather than passed hand to hand because insert drops the character entirely, so an insert built around hands is a shot the pipeline cannot reliably give you; an object on stone it can. The look is neon rather than the sodium or noir the place recommends, and that is a load-bearing choice: neo-noir is a chromatic style and any grade below 0.7 saturation drains it, which is precisely what noir at 0.00 would do.",
+  "note": "Not rendered. No frame from this template has been generated - the GPU was held for a video job - so everything below is read off the style, place and look cards rather than seen. Expected to land: wet asphalt, saturated signage and deep blacks are what this style was seen to do, and a lamplit wet bridge is built out of exactly those. Uncertain: neo_noir's own separator from cyberpunk_neon is that it stays non-futuristic, and nothing in the place or the shots pushes it futuristic, so the two should not collapse here - but that is inference. The drizzle weather card is prompt words only, with its numbers unwired, and compose warns that keyword-list cards read weakly on qwen because that engine wants sentences: the rain it names will land, the atmosphere it claims mostly will not. Engine note: on qwen a face is held by a reference SHEET through Qwen-Edit rather than by IPAdapter, which is a weaker lock than the illustration path - expect visible drift between shots of the same person. Keep that in mind before casting one character across all of these beats. Applies to every card in this set and to none of the existing twenty: these templates use place CARDS rather than free text, so the place's own prose is appended to the prompt on top of whatever the shot desc says, and where a desc also names the setting the nouns arrive twice. That is reinforcement rather than contradiction, and it is deliberate on the shots whose place card warns that a particular noun must be named explicitly or the location renders wrong. But if a prompt reads long, the shot desc is the half to trim - never the card. Standing gaps that apply to every card in the gallery: transitions are intent only, because short.py hard-cuts every join regardless of what is set here; every emotion card is status:partial upstream, so the face, eyes, mouth and body tags render and voice_style does not, because no TTS engine on this box takes an emotion vector; and a style's negative_add never reaches the picture, because the renderer has no negative input wired - so this style will come out slightly less clean than its library sample, which had one. Dedupe pass: this master was restaged away from the blocking it originally shared almost verbatim with photographic_dawn_goodbye, which uses the same place card. The two cards are different films - night noir handover against dawn romance - but their master shots read as one picture until this was changed. The open empty hands are the noir-specific replacement and they are a thing rather than a quality, which is the form this project has measured to actually render.",
+  "status": "untested"
+}

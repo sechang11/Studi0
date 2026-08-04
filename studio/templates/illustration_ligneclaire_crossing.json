@@ -1,0 +1,55 @@
+{
+  "id": "illustration_ligneclaire_crossing",
+  "name": "Ligne claire crossing",
+  "desc": "One traveller, one dune line, and no shadow anywhere to hide in.",
+  "genre": [
+    "adventure",
+    "fantasy"
+  ],
+  "beats": 5,
+  "runtime_s": 16,
+  "sets": {
+    "style": "ligne_claire",
+    "place": "desert_dunes",
+    "look": "golden",
+    "pace": "normal",
+    "cue": "driving_pulse",
+    "emotion": "determined",
+    "camera": "pull",
+    "wear": 3,
+    "transition": "cut",
+    "lighting": "backlit",
+    "weather": "dust",
+    "time": "day"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "pull",
+      "desc": "a sharp dune crest against an empty cloudless sky, wind ripples across the sand, long shadows lying in the troughs, distant dune ridges, uniform outline weight, flat unmodulated colour, wide shot, no humans"
+    },
+    {
+      "template": "master",
+      "camera": "static",
+      "desc": "a small figure walking along the crest of a dune seen against the sky, full body, clean uniform lineart, flat colour, empty sky filling most of the frame, wide shot"
+    },
+    {
+      "template": "insert",
+      "camera": "static",
+      "desc": "a single line of footprints in sand with blown sand drifting into them, wind ripples across the surface, close-up, no humans"
+    },
+    {
+      "template": "react",
+      "camera": "push",
+      "desc": "face wrapped against the sand with only the eyes showing, sharp eyes, furrowed brow, flat colour and no cast shadow, medium shot"
+    },
+    {
+      "template": "master",
+      "camera": "pan_r",
+      "desc": "the figure descending into the trough between two dunes, torn and stained clothing, dune ridges beyond, wide shot"
+    }
+  ],
+  "why": "Ligne claire recorded the highest boil of any style in the video sweep - 0.405 - and it still held: the even outline weight and flat fills were intact at eight seconds and the subject stayed framed throughout. The boil came from one thing, a dense background line-field reorganising frame to frame, and the card's own instruction is to prefer this style where the background can be simple. desert_dunes is the simplest place card in the library - sand, a crest, ripples, shadow in the troughs, an empty sky - so this template is built on that instruction rather than in spite of it. It is also the correct idiom: the flat, shadowless, hard-outlined desert is Moebius, and both the style and the setting come from the same tradition. Four of the five shots keep the figure small against a clean horizon, and the one closer framing writes no cast shadow into the description, because ligne claire draws none and the model needs telling. look:golden at saturation 1.22 pushes flat colour rather than draining it, and it is endorsed by both cards. wear 3 - torn, stained, exhausted - is the only thing in the piece that says how long the crossing has been going on.",
+  "note": "Nothing rendered. Two things to expect. First, the insert asks for footprints filling with blown sand, which is change over time expressed in a single still frame; it may simply return footprints. Second, weather:dust and look:golden pull against each other - dust hazes, golden hardens contrast to 1.08 - and the grade always wins, because it is deterministic ffmpeg applied after generation. If you want the haze, drop the weather card and write blowing sand into the descriptions instead. transition:cut is set and is the only transition in this batch that short.py actually produces, since short.py hard-cuts everything; every other card here is recording intent. lighting:backlit is prompt words only. emotion:determined is status:partial. Nothing has been drawn in ligne claire over a place card on this box, so the density claim is inference from the general rule, not a measurement of this pair.",
+  "status": "untested"
+}

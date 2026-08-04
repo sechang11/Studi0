@@ -1,0 +1,53 @@
+{
+  "id": "genre_world_sunken_city",
+  "name": "The sunken city",
+  "desc": "Something built these streets, and the angles it used are not the angles people use.",
+  "genre": [
+    "horror",
+    "mystery",
+    "adventure"
+  ],
+  "beats": 5,
+  "runtime_s": 20.5,
+  "sets": {
+    "style": "eldritch",
+    "place": "underwater_city",
+    "look": "cold",
+    "cue": "unease",
+    "emotion": "awe",
+    "camera": "pull",
+    "pace": "slow",
+    "wear": 1,
+    "transition": "dissolve"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "pull",
+      "desc": "a sunken city on the sea floor, stone towers and broken colonnades crusted with coral, shafts of light falling from the surface far above, sand banked over the streets, schools of fish drifting between the buildings, extreme wide shot, no humans"
+    },
+    {
+      "template": "master",
+      "camera": "pan_r",
+      "desc": "a small figure swimming down a drowned street between coral-crusted colonnades, drifting silt caught in a lamp beam, swaying kelp, wide shot, full body"
+    },
+    {
+      "template": "pillow",
+      "camera": "tilt_u",
+      "desc": "a broad stone stair rising out of the silt at an angle that does not meet any floor, coral along its edge, the light falling on it from the wrong side, no humans"
+    },
+    {
+      "template": "insert",
+      "camera": "static",
+      "desc": "a carved doorway in the drowned stone whose corners do not meet each other, kelp swaying across the opening, silt turning in the light, extreme close-up, no humans"
+    },
+    {
+      "template": "react",
+      "camera": "push",
+      "desc": "a face behind the glass of a diving helmet, lit from below by a lamp, eyes wide and fixed on something off frame, close-up"
+    }
+  ],
+  "why": "A drowned city is the oldest cosmic-horror setting there is, and eldritch is the only style in this wave that can be pointed at one without contradicting it - because it names no location whatsoever. Its whole card is light and geometry: a sickly green-violet cast, geometry that does not resolve, light falling from the wrong direction. That leaves underwater_city free to build the place, which matters, because its note is clear that without water-borne nouns you simply have a city and that coral on the stonework is the strongest single cue. Coral is therefore in three shots, and silt, kelp, fish and the light shafts from above carry the rest. The two styles meet in the middle beats rather than at the establish: the stair that meets no floor and the doorway whose corners do not join are the style speaking, and they are placed at pillow and insert, the two shots that drop the character entirely, so the wrongness is a property of the architecture and not of anybody looking at it. The scene ends on the only human beat in it, a face inside glass, still looking. Nothing is ever shown to be living down here, which is the discipline the eldritch card was written to enforce.",
+  "note": "Expected to land: coral and silt, the light shafts, the cold grade. Uncertain: eldritch is strength moderate, and its own card warns that impossible geometry is normalised back toward sense - so the stair in shot 3 and the doorway in shot 4 are the two beats most likely to come back merely ordinary. Authoring record for the next person: this place was first paired with cyberpunk_neon and that was WRONG and is worth remembering. /api/compose reported no conflict at all, but reading the composed prose showed the style contributing a rain-soaked night street and wet asphalt into a sea-floor prompt. The resolver does not diff prose for contradictions, and by this project's own rule those are nouns, so they would have landed. Read the composed prompt, not just the conflict list. pace:slow is safe here - no hold_silent, longest beat 4.2s scaled to 5.7s, under the 6s clip. The diving helmet is a costume the template cannot enforce, since sets cannot cast a character. transition is intent only - short.py ignores transitions and hard-cuts every join, so do not build a beat around it. Nothing in this card has been rendered - the GPU was committed to another job while it was written - so status is untested rather than partial. What IS checked: every id here exists in its library, and the style/place/look stack was resolved through POST /api/compose, which returned the intended engine and no error-severity conflict.",
+  "status": "untested"
+}

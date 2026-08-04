@@ -1,0 +1,54 @@
+{
+  "id": "illustration_linocut_moor",
+  "name": "Linocut moor",
+  "desc": "People walk out across the heather to bury someone and the weather is the only answer.",
+  "genre": [
+    "drama",
+    "folk tale"
+  ],
+  "beats": 5,
+  "runtime_s": 21,
+  "sets": {
+    "style": "linocut",
+    "place": "moorland",
+    "look": "bleach",
+    "pace": "slow",
+    "cue": "sombre_funeral",
+    "emotion": "grief",
+    "camera": "tilt_d",
+    "wear": 1,
+    "transition": "l_cut",
+    "lighting": "flat",
+    "time": "day"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "tilt_d",
+      "desc": "grey overcast sky coming down onto open moorland, heather and rough grass tussocks, peat bog pools, a dry stone wall running across the slope, gorse, rolling low hills with no trees, distant rain, wide shot, no humans"
+    },
+    {
+      "template": "master",
+      "camera": "pull",
+      "desc": "a line of figures walking away across the heather in single file, small in the frame, the dry stone wall behind them, bold simplified shapes, wide shot"
+    },
+    {
+      "template": "react",
+      "camera": "static",
+      "desc": "one face turned into the wind, downcast eyes, trembling mouth, hair pulled sideways, hunched shoulders, close-up"
+    },
+    {
+      "template": "insert",
+      "camera": "static",
+      "desc": "boots at the edge of a peat bog pool, dark water and heather stems, close-up, no humans"
+    },
+    {
+      "template": "pillow",
+      "camera": "pan_l",
+      "desc": "rain coming across the low hills toward the dry stone wall, gorse bending, no humans"
+    }
+  ],
+  "why": "Linocut and woodcut did not collapse into each other when they were rendered side by side - linocut came back bolder, flatter and carrying spot colour, and the verdict says explicitly to keep both - so they get different work. This one takes the wide outdoor subject: a burial party crossing a moor. Bold simplified shapes are what a moor is anyway at any distance, and the place card supplies ten nouns of it - heather, tussocks, peat pools, a dry stone wall, gorse, distant rain. look:bleach is endorsed by both cards and is the right choice for a print style for a specific reason: at contrast 1.35 and saturation 0.45 it drives the image toward two tones without going fully monochrome, which leaves the spot colour that distinguishes linocut from woodcut still on the paper. camera:tilt_d as the scene default is the first downward tilt used as a scene move in the library and it earns the place - the establish starts on a grey sky and comes down onto the heather, which is the shape of the whole scene. The people are small in every shot but one.",
+  "note": "Nothing rendered. Linocut is measured flat and stable for video, so the exposure here is the subject rather than the medium: a line of small figures at distance is the hardest thing for either engine to keep coherent, and the master may return one figure or five rather than the several the description asks for. Templates cannot cast anybody and this pipeline has no count control. If it comes back wrong, reduce it to a single walker and the scene still works. transition:l_cut is advisory and cannot be produced at all today - short.py hard-cuts every join and there is no audio lead to carry over. lighting:flat is prompt words only. There is deliberately no weather card: moorland already carries a grey overcast sky and distant rain in its tags, and asking for weather:wind over the top of that fires weather_vs_place in compose - two different weathers in one prompt. The wind is written into the react and the closing pillow instead, where it is doing something visible rather than sitting in a tag. emotion:grief is status:partial, and its tags - crying, tears, downcast eyes, hunched - are strong enough that at the wide framings used here they will mostly not read, which is the intended trade: the close-up is the only place grief is asked to do anything.",
+  "status": "untested"
+}

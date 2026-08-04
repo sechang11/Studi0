@@ -1,0 +1,56 @@
+{
+  "id": "illustration_gothic_ruin",
+  "name": "Gothic ruin by moonlight",
+  "desc": "Toppled columns under a broken roof, and one person keeping a vigil nobody asked for.",
+  "genre": [
+    "horror",
+    "fantasy",
+    "drama"
+  ],
+  "beats": 5,
+  "runtime_s": 21,
+  "sets": {
+    "style": "gothic_illustration",
+    "place": "ruined_temple",
+    "look": "moonlit",
+    "pace": "slow",
+    "cue": "desolate",
+    "emotion": "despair",
+    "camera": "pull",
+    "wear": 1,
+    "transition": "fade_black",
+    "lighting": "moonlight",
+    "weather": "mist",
+    "time": "night"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "pull",
+      "desc": "a ruined stone temple by moonlight, toppled columns, cracked steps, carved reliefs worn smooth, tree roots splitting the stonework, a collapsed roof open to the sky, heavy black shadow between the standing columns, high contrast lineart, wide shot, no humans"
+    },
+    {
+      "template": "master",
+      "camera": "static",
+      "desc": "a figure kneeling among fallen blocks, small beneath the standing columns, the broken roof open above them, low angle, wide shot"
+    },
+    {
+      "template": "react",
+      "camera": "push",
+      "desc": "head down with hair across the face, empty eyes staring at nothing, parted lips, dramatic shadow and intricate crosshatch across the face, close-up"
+    },
+    {
+      "template": "insert",
+      "camera": "static",
+      "desc": "a fallen column capital lying in long grass, moss and lichen across the carved stone, close-up, no humans"
+    },
+    {
+      "template": "pillow",
+      "camera": "tilt_u",
+      "desc": "the collapsed roof open to a night sky, the tops of standing columns against the moon, no humans"
+    }
+  ],
+  "why": "Gothic illustration is high-contrast black and white with tall architecture and ornament, and it needs a building. ruined_temple is the only place card in this territory that is architecture rather than landscape - toppled columns, cracked steps, carved reliefs, a collapsed roof open to the sky - and its tags contain no colour words at all, which keeps a monochrome style clear of the mono_vs_colour rule entirely. look:moonlit is endorsed by the style card and is the right grade rather than merely a permitted one: at brightness -0.10, contrast 1.18 and saturation 0.50 it deepens the black masses the style is built from without touching colour there is none of. The scene is a vigil that nobody asked for. emotion:despair is the strongest thing in the emotion library - kneeling, arms limp, head down, empty eyes, hair over the face - and it is used in only two of the five shots, with three peopleless beats around it so the architecture does the rest of the work. The establish pulls back rather than pushing in, because the point is how much ruin there is, not what is inside it.",
+  "note": "Nothing rendered. The style card splits its own video prediction down the middle and that split is what to watch: the heavy black masses are the flat high-contrast structure expected to hold, while the crosshatch is fine high-frequency line and is expected to crawl. INFERRED, not measured. The react carries the most risk for a second reason - a face rendered largely in crosshatch at close framing may come back as texture rather than as a face; drop it to a medium if it does. transition:fade_black is advisory; short.py hard-cuts. weather:mist and lighting:moonlight are prompt words only, and moonlight duplicates what the look already does deterministically, so it is there for the prompt rather than for the picture. emotion:despair is status:partial. One note on the genre tag: this is filed under horror but it is a static, quiet card containing no threat, and it will not do the work of horror_approach.",
+  "status": "untested"
+}

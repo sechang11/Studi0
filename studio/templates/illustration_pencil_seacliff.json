@@ -1,0 +1,56 @@
+{
+  "id": "illustration_pencil_seacliff",
+  "name": "Pencil sketch, sea cliff",
+  "desc": "Somebody sits on the edge and draws the sea, and the drawing is what you are looking at.",
+  "genre": [
+    "slice of life",
+    "pastoral",
+    "drama"
+  ],
+  "beats": 5,
+  "runtime_s": 21,
+  "sets": {
+    "style": "pencil_sketch",
+    "place": "sea_cliff",
+    "look": "memory",
+    "pace": "slow",
+    "cue": "melancholy_piano",
+    "emotion": "focus",
+    "camera": "static",
+    "wear": 0,
+    "transition": "dissolve",
+    "lighting": "natural",
+    "weather": "wind",
+    "time": "day"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "push",
+      "desc": "a grass clifftop edge above a sheer rock face, ocean far below, waves breaking on rocks, sea spray rising, seabirds, a hard horizon line, wind bent grass, wide shot, no humans"
+    },
+    {
+      "template": "master",
+      "camera": "static",
+      "desc": "a figure sitting on the clifftop grass with a sketchbook open on their knees, seen from the side, leaning forward, full body, the horizon line behind them, wide shot"
+    },
+    {
+      "template": "insert",
+      "camera": "push",
+      "desc": "an unfinished graphite drawing of a horizon and a rock face on an open sketchbook page, construction lines still showing, unfinished edges, a pencil laid in the gutter of the book, close-up, no humans"
+    },
+    {
+      "template": "react",
+      "camera": "static",
+      "desc": "eyes narrowed and moving from the page up to the horizon, pressed lips, hair pulled sideways by the wind, medium shot"
+    },
+    {
+      "template": "pillow",
+      "camera": "tilt_d",
+      "desc": "wind bent grass at the cliff edge, sea spray rising from below the lip, no humans"
+    }
+  ],
+  "why": "Pencil sketch is strength:strong and one of the cleanest cards in the library - graphite hatch, unfinished edges, a white ground - and it is the only style in this batch where the medium can also be the subject. So the scene is somebody drawing. A clifftop, a sketchbook, and an insert of the page itself, which is the one shot in these fifteen templates where the style and the depicted object are the same thing. That is a cheap trick and it works: an unfinished graphite drawing rendered in a graphite drawing style cannot come out in the wrong medium. sea_cliff was chosen over the obvious woodland alternative for two reasons. Its ten nouns contain no colour words at all, which keeps a monochrome style clear of the mono_vs_colour rule entirely. And wind bent grass, a horizon and a sheer rock face are line rather than tone, which is what a pencil has. emotion:focus - narrowed eyes, pressed lips, steady hands, leaning forward - is the posture of drawing rather than a mood about it. look:memory is endorsed and at saturation 0.60 does real work on a monochrome image.",
+  "note": "Nothing rendered. The known risk is video and it is precise: monochrome and high contrast is the shape expected to hold, but hatching is fine line detail and line detail is what LTX resamples, so the failure mode to watch for is the hatch pattern crawling like static across the clip rather than the image falling apart. INFERRED on this style, not measured. The insert is the beat most likely to disappoint, because it asks the model to draw a drawing, and legible marks on a small page are hard - if it returns a blank page, name the subject of the sketch more heavily in the description. transition:dissolve is advisory. weather:wind and lighting:natural are prompt words only. And look:memory carries gblur=sigma=1.4, which will soften graphite hatch: if the drawing comes back mushy, sepia is also endorsed on this card and has no blur.",
+  "status": "untested"
+}

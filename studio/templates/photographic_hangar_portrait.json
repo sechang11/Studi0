@@ -1,0 +1,53 @@
+{
+  "id": "photographic_hangar_portrait",
+  "name": "Portrait before launch",
+  "desc": "The machine is enormous and the picture is of a face. That is the whole idea.",
+  "genre": [
+    "sci-fi",
+    "drama"
+  ],
+  "beats": 5,
+  "runtime_s": 15,
+  "sets": {
+    "style": "studio_portrait",
+    "look": "cold",
+    "place": "mecha_hangar",
+    "pace": "normal",
+    "cue": "silence",
+    "emotion": "resolve",
+    "camera": "static",
+    "wear": 1,
+    "transition": "fade_black",
+    "time": "day"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "tilt_u",
+      "desc": "an enormous hangar holding a towering humanoid machine upright in a service cradle, gantry catwalks and an overhead crane ringing it, cable bundles and hydraulic hoses running down to the deck, floodlights burning on the girders, yellow hazard striping across the floor and tool carts small at its feet, wide shot, no humans"
+    },
+    {
+      "template": "insert",
+      "camera": "static",
+      "desc": "a tool cart on hazard-striped deck plating beside a coiled hydraulic hose, the machine's foot rising out of frame behind it, close-up, no humans"
+    },
+    {
+      "template": "master",
+      "camera": "static",
+      "desc": "one figure in a flight suit standing on the hazard striping at the foot of the service cradle, catwalks and cable bundles above, tiny against the machine, full body, wide shot"
+    },
+    {
+      "template": "react",
+      "camera": "push",
+      "desc": "the same face against a plain grey seamless backdrop with nothing else in frame, a hair light separating the head from the ground, eyes level and steady, close-up"
+    },
+    {
+      "template": "pillow",
+      "camera": "static",
+      "desc": "the empty service cradle with its cable bundles hanging slack, floodlights still burning on the girders above, no humans"
+    }
+  ],
+  "why": "The verdict on this style is three words long and it decides the entire template: controlled key, clean falloff, DROPPED BACKGROUND. Its prose asks for a plain grey seamless, so any close shot will lose the hangar no matter what the place card says - and rather than fight that, this card is built out of it. The machine exists in the three shots with nobody in them, and the moment the camera comes in on the face the world falls away to a backdrop, which is exactly how an athlete or a soldier is photographed before something they might not come back from. That is not a workaround, it is the oldest portrait grammar there is. The place card warns that scale collapses without a reference at human height, so the establish names catwalks, the cradle and tool carts on the floor - asking for colossal does nothing, asking for the gantry does. The last beat is the cradle empty. Nothing in the template says whether that is a launch or a loss.",
+  "note": "Not rendered. No frame from this template has been generated - the GPU was held for a video job - so everything below is read off the style, place and look cards rather than seen. Expected to land: this is described on its own card as the most reliable style in the set, because it is nothing but nouns - modifier, angle, ratio, backdrop, focal length - and focal length and lighting are the two highest-leverage words in a qwen prompt. Expected to fight the place, by design: the seamless backdrop will win on the react beat and probably on any other close shot added to this template. If the hangar must be visible behind a face, this is the wrong style and photorealistic is the right one. Uncertain: the style also asks for smooth even skin, which pulls against wear:1 (sweaty, damp hair, flushed) - if the pilot comes out too clean, that is the two layers disagreeing and wear should go to 2 rather than the style being changed. Measured elsewhere and load-bearing here: on the qwen photographic path the thing that breaks in motion is the SHOT, not the texture. photorealistic and brutalist both held skin and concrete cleanly for four seconds and then lost the frame when the subject walked out of it (detail 0.964 at 4s against 0.510 at 8s). Be precise about what pace does and does not do about that, because it is easy to get wrong. pace does NOT change how much video is generated: compile.py leaves clip_secs at 6.0 on every beat, and clip_secs is not one of the sixteen keys the wizard accepts, so no template can set it. What pace changes is how much of that six seconds the EDIT shows - it writes intensity as 1/scale and scripts/scene_templates.py divides each cut length by it, so a fast beat shows roughly the first 1.3 to 2.9 seconds of the clip and a slow establish shows 5.7 of it. pace:normal and pace:fast keep the visible window inside the range that was measured to hold; pace:slow spends it. If drift still shows, lower clip_secs by hand in the .movie - do not reach for pace. Applies to every card in this set and to none of the existing twenty: these templates use place CARDS rather than free text, so the place's own prose is appended to the prompt on top of whatever the shot desc says, and where a desc also names the setting the nouns arrive twice. That is reinforcement rather than contradiction, and it is deliberate on the shots whose place card warns that a particular noun must be named explicitly or the location renders wrong. But if a prompt reads long, the shot desc is the half to trim - never the card. Standing gaps that apply to every card in the gallery: transitions are intent only, because short.py hard-cuts every join regardless of what is set here; every emotion card is status:partial upstream, so the face, eyes, mouth and body tags render and voice_style does not, because no TTS engine on this box takes an emotion vector; and a style's negative_add never reaches the picture, because the renderer has no negative input wired - so this style will come out slightly less clean than its library sample, which had one.",
+  "status": "untested"
+}

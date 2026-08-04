@@ -1,0 +1,55 @@
+{
+  "id": "genre_world_cellar_giallo",
+  "name": "Something in the cellar",
+  "desc": "Red light with nothing making it, and a rack of bottles between the stairs and the door.",
+  "genre": [
+    "horror",
+    "thriller",
+    "mystery"
+  ],
+  "beats": 5,
+  "runtime_s": 13.7,
+  "sets": {
+    "style": "giallo",
+    "place": "wine_cellar",
+    "look": "firelight",
+    "cue": "menace",
+    "emotion": "panic",
+    "camera": "handheld",
+    "pace": "normal",
+    "wear": 2,
+    "transition": "smash",
+    "lighting": "underlight",
+    "time": "night"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "tilt_d",
+      "desc": "a vaulted brick cellar lined with wooden racks of dusty bottles, oak barrels against the stone wall, narrow stone steps at the far end, a single bulb hanging, hard black shadow between the racks, wide shot, no humans"
+    },
+    {
+      "template": "build",
+      "camera": "handheld",
+      "desc": "backing away down the row between bottle racks, one hand out behind, saturated red light across the face and cold blue on the brick wall behind, medium shot"
+    },
+    {
+      "template": "insert",
+      "camera": "static",
+      "desc": "a gloved hand closing around the neck of a dusty bottle in the rack, red light on the glass, cobwebs, extreme close-up"
+    },
+    {
+      "template": "sakuga",
+      "camera": "handheld",
+      "desc": "a rack of bottles going over, glass bursting across the flagstones, saturated red and cold blue in the same frame, wide shot"
+    },
+    {
+      "template": "react",
+      "camera": "push",
+      "desc": "wide eyes and open mouth in hard red light with the background in cold blue, hair fallen across the face, close-up"
+    }
+  ],
+  "why": "Giallo is a colour grammar before it is a genre, and the defining move the style card names is that the coloured light has NO source in frame. That is also the hardest thing to hold, because the model wants to invent a lamp to justify it - so this template gives it one honest source to be going on with, the single hanging bulb the place card prescribes, and then asks for red and cold blue in the same frame on three separate beats where no bulb could produce both. wine_cellar is the right room because its own note says lose the VAULT and it becomes a modern wine shop, and because a cellar is where this genre historically happens. The structure is deliberately the fastest in this set: establish, build, insert, sakuga, react, with handheld as the scene default and the 2.0s sakuga carrying the only violence, which is done to property rather than to a person. Nothing is shown attacking anybody. The gloved hand in the insert is the entire threat and it is on screen for 1.8 seconds. pace stays normal rather than fast because at 0.7x the whole scene collapses to under ten seconds and the establish stops being readable.",
+  "note": "Expected to land: saturated red and cold blue gels with hard black shadow, the brick vault, wear 2. This style is anime-engine ONLY on the evidence - its verdict records that on qwen it produced an ordinary photograph with no gels at all and was re-routed, so do not override engine on this card. Uncertain: the failure to watch for is the model inventing a light source to motivate the gels, which the style card names as the thing to record if it happens. look:firelight at saturation 1.10 was chosen over noir - noir is a true greyscale at 0.00 and fires mono_vs_colour against this style, which was confirmed through /api/compose. transition is intent only - short.py ignores transitions and hard-cuts every join, so do not build a beat around it. Nothing in this card has been rendered - the GPU was committed to another job while it was written - so status is untested rather than partial. What IS checked: every id here exists in its library, and the style/place/look stack was resolved through POST /api/compose, which returned the intended engine and no error-severity conflict.",
+  "status": "untested"
+}

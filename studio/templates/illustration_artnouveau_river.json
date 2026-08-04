@@ -1,0 +1,51 @@
+{
+  "id": "illustration_artnouveau_river",
+  "name": "Art nouveau riverbank",
+  "desc": "A figure at the water under a willow, composed as a decorative panel.",
+  "genre": [
+    "romance",
+    "folk tale",
+    "drama"
+  ],
+  "beats": 4,
+  "runtime_s": 16,
+  "sets": {
+    "style": "art_nouveau",
+    "place": "riverbank",
+    "look": "golden",
+    "pace": "slow",
+    "cue": "romantic",
+    "emotion": "pride",
+    "camera": "static",
+    "wear": 0,
+    "transition": "dissolve",
+    "lighting": "natural",
+    "weather": "petals",
+    "time": "day"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "static",
+      "desc": "an overhanging willow above a river, reeds along a grassy bank, pebble shore, shallow water running over stones, ripples and current, the far bank beyond, flowing curved lines, wide shot, no humans"
+    },
+    {
+      "template": "master",
+      "camera": "static",
+      "desc": "a standing figure at the water edge beneath the willow, long flowing hair, robe falling in long curved lines, full body, centred in the frame, decorative pattern and gold trim around the edges of the composition"
+    },
+    {
+      "template": "insert",
+      "camera": "static",
+      "desc": "petals and reflected light on the surface of shallow water running over pale stones, reeds at the edge of frame, close-up, no humans"
+    },
+    {
+      "template": "react",
+      "camera": "push",
+      "desc": "face in three-quarter profile with a lifted chin and a clear gaze, hair curving across the frame in flowing lines, flat decorative ground behind, medium shot"
+    }
+  ],
+  "why": "Art nouveau is the one compose:replaces style in this set and its verdict is unusually blunt: it replaced a street with an ornamental arch, and it is a frame rather than a lens. So this template does not fight that - it gives the style the subject the idiom was invented for. A single standing figure at the water under a willow, composed as a decorative panel. Mucha drew this exact picture repeatedly. POST /api/compose reports that riverbank brings eleven concrete nouns and that a place that specific has been measured to win, so the location is expected to survive and be recoloured rather than replaced, which is the measured behaviour of replaces styles over dense place cards. emotion:pride is chosen deliberately over the obvious romantic options - lifted chin, shoulders back, standing straight, hands at sides - because a decorative panel is a portrait first and needs a composed pose rather than a reaction. weather:petals supplies the botanical motif the style will reach for anyway. Every camera is static, because an ornamental composition is symmetrical and any move breaks the symmetry it is built on.",
+  "note": "Nothing rendered, and this card carries the most honest uncertainty in the batch. The measured rule that a dense place card beats a replaces style is confirmed for only four of the sixteen replaces styles at a single seed, and art_nouveau is explicitly named as one of the two - with illuminated_manuscript - where it remains unproven, because it draws a literal frame rather than merely restyling the ground. So expect an ornamental border, and accept that the riverbank may end up as decorative ground inside it rather than as a place. That is the intended look here; it would be the wrong choice in a template where the location had to stay legible. Video is a second and separate risk: craft/CINEMATOGRAPHY.md records LTX bleeding motion across panel divisions and warping the gutters on shot 832_split, and an ornamental frame is the same structure, so the border should be expected to crawl. transition:dissolve is advisory; weather:petals and lighting:natural are prompt words only.",
+  "status": "untested"
+}

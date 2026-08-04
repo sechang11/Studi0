@@ -1,0 +1,54 @@
+{
+  "id": "anime_idiom_kyoani_afternoon",
+  "name": "KyoAni afternoon",
+  "desc": "The day before the show, and the canvas is still wrong.",
+  "genre": [
+    "slice of life",
+    "drama"
+  ],
+  "beats": 5,
+  "runtime_s": 21,
+  "sets": {
+    "style": "kyoani_soft",
+    "place": "artists_studio",
+    "look": "golden",
+    "cue": "warm_memory",
+    "emotion": "focus",
+    "camera": "static",
+    "pace": "slow",
+    "wear": 0,
+    "transition": "dissolve",
+    "time": "day",
+    "mood": "naturalistic"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "pan_l",
+      "desc": "an artist studio in late afternoon, easel with a canvas standing in the light of a tall north facing window, canvases stacked leaning against the wall, jars of brushes and a paint crusted palette on a bench, squeezed paint tubes, plaster casts on a shelf, spattered drop cloth on the floorboards, wooden stool, wide shot, shallow depth of field on the far wall, no humans"
+    },
+    {
+      "template": "master",
+      "camera": "static",
+      "desc": "sitting on the wooden stool in front of the easel, brush held still and not touching the canvas, delicate lineart, soft shading, warm window light from the side, background falling out of focus behind, full body, medium shot"
+    },
+    {
+      "template": "insert",
+      "camera": "static",
+      "desc": "a jar of water clouding grey as a brush is lowered into it, squeezed paint tubes and a crusted palette on the bench beside it, close-up, no humans"
+    },
+    {
+      "template": "react",
+      "camera": "push",
+      "desc": "narrowed eyes fixed on the canvas, furrowed brow, a bead of sweat at the temple, closed mouth, warm light along one cheek, close-up"
+    },
+    {
+      "template": "pillow",
+      "camera": "static",
+      "desc": "dust hanging in the window light over the spattered drop cloth, the leaning stack of canvases in soft focus behind, no humans"
+    }
+  ],
+  "why": "The gallery covers quiet domesticity once, in a kitchen at dawn, and treats it as the absence of event. This is the version where the quiet is pressure. Somebody has a deadline and the painting is not working, and every beat is a small physical action standing in for a decision: the brush that stops short of the canvas, the water going grey, the eyes that do not move. kyoani_soft is chosen over slice_of_life_anime for a documented reason - the slice-of-life card marks itself weak and says in writing that what makes a frame read as everyday is the SUBJECT and the PLACE and the light, not a style instruction, and recommends going to the drawing card instead. kyoani_soft is that drawing card, and the thing it adds that nothing else does is drawn bokeh: real lens defocus rendered into an illustration. So three of the five shots explicitly author depth of field, because a style whose distinguishing feature is background separation should be asked for background separation. emotion:focus supplies the furrowed brow and the bead of sweat, which is concentration written as marks rather than as a mood word.",
+  "note": "NOT RENDERED. No frame from this card has been generated - the GPU was held for another job while it was authored, so every claim below is read off the style, place and look cards rather than off pixels. kyoani_soft is measured ready and its verdict confirms the drawn bokeh landed and that it holds apart from slice_of_life_anime. transition is intent only - short.py hard-cuts every join. The one real uncertainty is the style card's own warning that it sits very close to slice_of_life_anime and should be dropped if the renders match - this template is the test of that, so look at the establish frame beside a no-style control before building a film on it. cue:warm_memory is a live risk worth stating: the cue library notes it reads as THEN rather than NOW and will quietly turn this scene into a flashback. That is useful if the film wants one and wrong if it does not - swap to silence if the afternoon is meant to be the present. RUNTIME, checked by compiling this card rather than by trusting the field: runtime_s here follows the gallery convention - the shot cards' approx_seconds summed and scaled by pace - and that is an INTENT number. It is not what compiles. compile.py gives every beat a flat clip_secs of 6 unless a per-shot @Ns overrides it, and a template cannot express one because the wizard emits only template, camera and desc. pace does not scale duration either, despite compile.py's own variable description saying it scales shot lengths: it sets intensity = 1/scale, a motion figure, so pace:slow renders as intensity 0.741 and identical shot lengths. This card therefore compiles to 5 beats x 6s = 30s, not 21s. Verified with compile.py --timeline; the discrepancy is in the field, not in this card.",
+  "status": "untested"
+}

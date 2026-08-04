@@ -1,0 +1,54 @@
+{
+  "id": "photographic_concrete_monument",
+  "name": "The plant from outside the fence",
+  "desc": "A building big enough to be weather, photographed by someone who is not allowed in.",
+  "genre": [
+    "documentary",
+    "thriller"
+  ],
+  "beats": 5,
+  "runtime_s": 21,
+  "sets": {
+    "style": "brutalist",
+    "look": "bleach",
+    "place": "power_station",
+    "pace": "slow",
+    "cue": "industrial_cold",
+    "emotion": "awe",
+    "camera": "static",
+    "wear": 0,
+    "transition": "dissolve",
+    "time": "day",
+    "weather": "overcast"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "tilt_u",
+      "desc": "a power station seen from outside its perimeter fence, massive board-marked concrete cooling towers and a tall chimney trailing steam, transformer yards and high voltage pylons marching away beneath flat grey light, wide shot, no humans"
+    },
+    {
+      "template": "pillow",
+      "camera": "static",
+      "desc": "a chain link perimeter fence in the foreground with warning signs wired to it, concrete blockwork and steel pipework standing beyond, flat overcast light, no humans"
+    },
+    {
+      "template": "master",
+      "camera": "static",
+      "desc": "one small figure standing still at the fence line with the concrete mass filling the frame above and behind, tiny against it, full body, wide shot"
+    },
+    {
+      "template": "insert",
+      "camera": "static",
+      "desc": "a rusted padlock and chain through a gate in the perimeter fence, concrete and pipework out of focus beyond, close-up, no humans"
+    },
+    {
+      "template": "pillow",
+      "camera": "tilt_u",
+      "desc": "the lip of a cooling tower against a blank white sky, steam lifting off it, board-marked concrete curving away below, no humans"
+    }
+  ],
+  "why": "Infrastructure photographed as a monument is a real and very old genre, and it needs exactly one thing the gallery could not previously ask for: a building treated as the subject rather than the backdrop. brutalist is the card for it, and it is the only style in the set whose video behaviour has been measured as unreservedly good - large static concrete forms held rock-steady in position and texture for eight full seconds with no morphing at all. That measurement is why this is the one template here that can afford slow pace: nothing in it walks. Four of the five beats have no person in them, and the one that does puts the figure small, still, and on the wrong side of a fence, so the scale reads and the video stage is never asked to animate a body. The place card splits hard between the exterior silhouette and the turbine hall, so this template commits entirely to the exterior - towers, chimney, pylons, fence - and the padlock insert is the whole plot: the photographer is outside, and stays outside.",
+  "note": "Not rendered. No frame from this template has been generated - the GPU was held for a video job - so everything below is read off the style, place and look cards rather than seen. Expected to land: massive raw concrete under flat grey light, seen and confirmed. This style is compose=replaces and rebuilds the location, which here is a merge rather than a fight - a power station already IS raw concrete under hard overhead light, so the style and the place are asking for the same picture. power_station is also chosen because it names no colours anywhere in its eleven tags, which keeps a monochrome-by-construction style clear of the monochrome-versus-colour conflict that fires on, for instance, construction_site's orange netting. bleach at 0.45 saturation is the right partner for the same reason: a grade above 1.0 would do nothing at all on a grey style. Steam is the tag that decides running versus derelict, so it is named twice - drop it and this becomes a ruin. Applies to every card in this set and to none of the existing twenty: these templates use place CARDS rather than free text, so the place's own prose is appended to the prompt on top of whatever the shot desc says, and where a desc also names the setting the nouns arrive twice. That is reinforcement rather than contradiction, and it is deliberate on the shots whose place card warns that a particular noun must be named explicitly or the location renders wrong. But if a prompt reads long, the shot desc is the half to trim - never the card. Standing gaps that apply to every card in the gallery: transitions are intent only, because short.py hard-cuts every join regardless of what is set here; every emotion card is status:partial upstream, so the face, eyes, mouth and body tags render and voice_style does not, because no TTS engine on this box takes an emotion vector; and a style's negative_add never reaches the picture, because the renderer has no negative input wired - so this style will come out slightly less clean than its library sample, which had one. On the pace, which is slow here and is not safe everywhere: pace does not shorten the generated clip - clip_secs is flat at 6.0 on every beat and no template can set it - it only decides how much of that clip the edit shows, and slow shows more of it. The late-clip failure measured on this engine was a SUBJECT walking out of frame, while the same sweep found large static forms holding rock-steady for the full eight seconds with no morphing at all. This template is built out of locked-off cameras and mostly empty frames, which is the case that held. sets.mood is deliberately absent. It is a legal key, but mood is a quality rather than a thing and the model renders nouns, not adjectives - the words would be spent for nothing. Everything this template wants from mood is carried instead by the cue, the look grade and the objects in the shots.",
+  "status": "untested"
+}

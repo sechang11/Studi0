@@ -1,0 +1,54 @@
+{
+  "id": "anime_idiom_geometric_monologue",
+  "name": "Geometric monologue",
+  "desc": "An argument staged against nothing at all. The room leaves before they do.",
+  "genre": [
+    "drama",
+    "mystery"
+  ],
+  "beats": 5,
+  "runtime_s": 15,
+  "sets": {
+    "style": "monogatari_geometric",
+    "place": "shopping_arcade",
+    "look": "neutral",
+    "cue": "tense_strings",
+    "emotion": "defiance",
+    "camera": "static",
+    "pace": "normal",
+    "wear": 0,
+    "transition": "cut",
+    "time": "day",
+    "mood": "graphic"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "static",
+      "desc": "a covered shopping arcade running between two rows of shopfronts, glazed iron roof framework overhead, patterned tiled floor, hanging shop signs, potted plants, an upper gallery behind a wrought iron balustrade, stark composition with a great deal of empty floor, wide shot, no humans"
+    },
+    {
+      "template": "speak",
+      "camera": "static",
+      "desc": "mid-sentence with the head tilted, chin raised, sharp eyes glaring at the other, bared teeth in a grin, standing dead centre with a flat colour field where the background should be, extreme negative space, upper body"
+    },
+    {
+      "template": "react",
+      "camera": "static",
+      "desc": "the listener pushed hard to one edge of the frame, half-closed eyes, the rest of the picture a single flat field of colour, minimal, medium shot"
+    },
+    {
+      "template": "insert",
+      "camera": "static",
+      "desc": "one hanging shop sign isolated dead centre against a flat colour field, geometric, no other detail, close-up, no humans"
+    },
+    {
+      "template": "speak",
+      "camera": "push",
+      "desc": "the reply, chin lifted, planted feet, facing forward, stark geometry behind and no depth in the frame at all, upper body"
+    }
+  ],
+  "why": "This card DELETES its setting and that is the design rather than the fault. monogatari_geometric measured compose=replaces because it does what it says: flat colour fields stand in for backgrounds, geometry replaces architecture, and negative space does the composition. So the template is written for a scene that gains from having nowhere to be - two people saying things at each other where the location is irrelevant and the staging is the argument. The blocking is graphic rather than dramatic: beat two puts the speaker dead centre, beat three shoves the listener to the very edge of frame, and beat five brings the reply back to centre, so the frame itself is who currently has the floor. The arcade is a scaffold, not a location - it is there so beat one has real furniture to be abstracted out of, and its glazed roof framework and iron balustrade are the most geometric nouns available anywhere in the place library, which gives the style something congenial to convert. emotion:defiance is chosen partly for the grin and the lifted chin and partly on a mechanic: its mouth tag is a grin with bared teeth rather than a closed mouth, and this is the only template here with two speak shots.",
+  "note": "NOT RENDERED. No frame from this card has been generated - the GPU was held for another job while it was authored, so every claim below is read off the style, place and look cards rather than off pixels. There is a live disagreement here and a director should know about it. The style card says this card DELETES the setting by design and its rendered verdict agrees - it replaced the background with flat colour fields. The layer resolver disagrees: it returns note style_replaces_place_outweighed because the arcade brings ten concrete nouns against a threshold of six, and predicts the location survives and is recoloured. That prediction is measured for four of the sixteen replaces styles and this is NOT one of them, so it is inference. This template is composed to work either way - if the arcade survives it reads as stark staging, if it is deleted it reads as the idiom - but beat one is the frame to look at first, and if you want the arcade rendered as itself, use anime_idiom_webtoon_flat_meeting, which is the same place under a style that keeps it. transition is intent only - short.py hard-cuts every join. A look trap avoided deliberately and worth recording: the style card endorses noir, and noir is the single most dangerous grade in the library. It is a true greyscale at saturation exactly 0.00 and carries monochrome and greyscale as tags, and this style names red and white in its own tag string, so the two fire a monochrome versus colour conflict against each other. look:neutral is used instead. The style is rated maximally stable for video because completely flat backgrounds have nothing to reinvent - the one part of this set most likely to survive a clip pass intact. RUNTIME, checked by compiling this card rather than by trusting the field: runtime_s here follows the gallery convention - the shot cards' approx_seconds summed and scaled by pace - and that is an INTENT number. It is not what compiles. compile.py gives every beat a flat clip_secs of 6 unless a per-shot @Ns overrides it, and a template cannot express one because the wizard emits only template, camera and desc. pace does not scale duration either, despite compile.py's own variable description saying it scales shot lengths: it sets intensity = 1/scale, a motion figure, so pace:normal renders as intensity 1.0 and identical shot lengths. This card therefore compiles to 5 beats x 6s = 30s, not 15s. Verified with compile.py --timeline; the discrepancy is in the field, not in this card.",
+  "status": "untested"
+}

@@ -1,0 +1,55 @@
+{
+  "id": "genre_world_the_marked_page",
+  "name": "The marked page",
+  "desc": "Six hours of shelving, and then a page somebody else already underlined.",
+  "genre": [
+    "mystery",
+    "thriller",
+    "drama"
+  ],
+  "beats": 5,
+  "runtime_s": 17.7,
+  "sets": {
+    "style": "dark_academia",
+    "place": "library_reading_room",
+    "look": "sepia",
+    "cue": "tense_strings",
+    "emotion": "suspicion",
+    "camera": "push",
+    "pace": "normal",
+    "wear": 0,
+    "transition": "iris",
+    "lighting": "practical_lamps",
+    "time": "night"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "pan_l",
+      "desc": "a library reading room after hours, bookcases climbing the walls, long wooden reading tables under green-shaded desk lamps, a rolling ladder set against the shelves, card catalogue drawers, dust hanging in the beams from the tall arched windows, wide shot, no humans"
+    },
+    {
+      "template": "master",
+      "camera": "static",
+      "desc": "seated alone at the end of a long reading table under one lit green-shaded lamp, tweed sleeves, stacks of books at the elbow, the rest of the room dark, wide shot, full body"
+    },
+    {
+      "template": "insert",
+      "camera": "push",
+      "desc": "an open page with a single line underlined in old brown ink and a second hand's note written in the margin beside it, close-up, no humans"
+    },
+    {
+      "template": "react",
+      "camera": "push",
+      "desc": "eyes fixed down on the page, not blinking, head very slightly tilted, lamplight coming from below, close-up"
+    },
+    {
+      "template": "hold_silent",
+      "camera": "static",
+      "desc": "seated motionless at the reading table with the book still open, looking off toward the dark stacks, one lamp lit, wide shot, full body"
+    }
+  ],
+  "why": "The gap this fills is gothic academia, and the scene chosen for it is the smallest possible one: a person reads a book and the book has been read before. dark_academia measured compose:safe, but its card carries a specific warning - the words library and old books may be drawn as a location and override the place layer - so the template answers that by putting the style on the place it would have built anyway. If it overrides here it costs nothing, which is the cheapest way to use a style with a known noun risk. library_reading_room is explicit that the TABLE and the lamps are what make this a reading room rather than a bookshop aisle, and that book spines dissolve past mid-ground, so the one thing that has to read - the underlined line and the marginal note - is given its own insert at close range rather than being asked for in a wide. The push repeats on three consecutive beats so the scene keeps closing in on a page it has already shown, and then hold_silent takes it back out to a wide and stops. The template never says what the note said. That is the withholding the piece is for.",
+  "note": "Expected to land: oak, leather and lamplight, dust in the beams, the sepia grade, the reading-room furniture. Uncertain: dark_academia's verdict records that it added a lantern as scenery, so expect one or two unrequested period objects; they read as set dressing rather than as props in hand, which is why the card is still compose:safe. The beat most likely to fail is the insert - handwriting and underlining are text, and text is the least reliable thing either engine draws, so treat legible marginalia as a bonus and not as the plot. sepia at saturation 0.25 is a hard grade; it suits this style but will flatten any colour you add later. transition is intent only - short.py ignores transitions and hard-cuts every join, so do not build a beat around it. Nothing in this card has been rendered - the GPU was committed to another job while it was written - so status is untested rather than partial. What IS checked: every id here exists in its library, and the style/place/look stack was resolved through POST /api/compose, which returned the intended engine and no error-severity conflict.",
+  "status": "untested"
+}

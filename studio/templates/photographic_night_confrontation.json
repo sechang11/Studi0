@@ -1,0 +1,54 @@
+{
+  "id": "photographic_night_confrontation",
+  "name": "Night street confrontation",
+  "desc": "Two people meet one turn off the main road, and only one of them planned it.",
+  "genre": [
+    "thriller",
+    "crime",
+    "drama"
+  ],
+  "beats": 5,
+  "runtime_s": 15,
+  "sets": {
+    "style": "cinestill_night",
+    "look": "neon",
+    "place": "neon_backstreet",
+    "pace": "normal",
+    "cue": "menace",
+    "emotion": "suspicion",
+    "camera": "static",
+    "wear": 0,
+    "transition": "cut",
+    "time": "night"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "push",
+      "desc": "a narrow back street at night, neon signs crowding both walls, a vending machine glowing beside stacked crates, steam rising from a vent, tangled cables overhead, wet asphalt throwing every sign back as a coloured streak, wide shot, no humans"
+    },
+    {
+      "template": "master",
+      "camera": "static",
+      "desc": "two figures facing each other across the width of the alley, one standing between the other and the mouth of the street, both small in frame under the signs, full body, wide shot"
+    },
+    {
+      "template": "speak",
+      "camera": "push",
+      "desc": "speaking with both hands open and empty at chest height, a neon sign burning directly behind the head, medium shot, wet asphalt reflecting under the feet"
+    },
+    {
+      "template": "react",
+      "camera": "static",
+      "desc": "not answering, jaw set, eyes tracking sideways to the mouth of the alley and back, close-up, red sign light bleeding across one cheek"
+    },
+    {
+      "template": "insert",
+      "camera": "static",
+      "desc": "a vending machine humming on a wet kerb, one can already fallen in the tray, coins scattered on the ground beside it, close-up, no humans"
+    }
+  ],
+  "why": "This is the first card in the gallery that reaches the photographic engine, and it opens it with the one qwen style that has actually been rendered in motion and held: cinestill_night kept every bloomed point light in position, colour and shape across a full eight seconds. That measurement decides the whole design. The style needs light sources in frame to halate, so the place is chosen for its density of them - neon_backstreet ships eleven concrete nouns and most of them glow. The blocking is the drama and it is one fact: the second figure is standing between the first and the way out, which is why nobody has to say the word threat. The camera stays static except for two pushes, on the establish and on the line, so the only movement in the scene arrives with the speaking. The insert closes on a vending machine rather than a face because a can already in the tray says somebody has been waiting here a while, and that is the piece of story the dialogue is not allowed to carry.",
+  "note": "Not rendered. No frame from this template has been generated - the GPU was held for a video job - so everything below is read off the style, place and look cards rather than seen. Expected to land: the red halation around every sign and the vending machine is this library's best-evidenced style claim - CONFIRMED by a render, not predicted. The neon look and this style were checked together by compose and endorsed. Uncertain: the look card also names a location (city street, wet pavement) and compose strips those words so the place survives, which is correct here but means the look is contributing colour only. The place card warns that a heavy night grade flattens the signs into orange mush - the neon grade raises saturation instead, which is why it is used rather than look:night. Engine note: on qwen a face is held by a reference SHEET through Qwen-Edit rather than by IPAdapter, which is a weaker lock than the illustration path - expect visible drift between shots of the same person. Keep that in mind before casting one character across all of these beats. Applies to every card in this set and to none of the existing twenty: these templates use place CARDS rather than free text, so the place's own prose is appended to the prompt on top of whatever the shot desc says, and where a desc also names the setting the nouns arrive twice. That is reinforcement rather than contradiction, and it is deliberate on the shots whose place card warns that a particular noun must be named explicitly or the location renders wrong. But if a prompt reads long, the shot desc is the half to trim - never the card. Standing gaps that apply to every card in the gallery: transitions are intent only, because short.py hard-cuts every join regardless of what is set here; every emotion card is status:partial upstream, so the face, eyes, mouth and body tags render and voice_style does not, because no TTS engine on this box takes an emotion vector; and a style's negative_add never reaches the picture, because the renderer has no negative input wired - so this style will come out slightly less clean than its library sample, which had one. sets.mood is deliberately absent. It is a legal key, but mood is a quality rather than a thing and the model renders nouns, not adjectives - the words would be spent for nothing. Everything this template wants from mood is carried instead by the cue, the look grade and the objects in the shots.",
+  "status": "untested"
+}

@@ -1,0 +1,55 @@
+{
+  "id": "genre_world_ice_court",
+  "name": "The court of ice",
+  "desc": "A verdict handed down in a hall built from frozen water, where breath is the only thing moving.",
+  "genre": [
+    "fantasy",
+    "drama",
+    "thriller"
+  ],
+  "beats": 5,
+  "runtime_s": 15.4,
+  "sets": {
+    "style": "y2k_chrome",
+    "place": "ice_palace",
+    "look": "cold",
+    "cue": "industrial_cold",
+    "emotion": "contempt",
+    "camera": "push",
+    "pace": "normal",
+    "wear": 0,
+    "transition": "fade_white",
+    "lighting": "rim",
+    "time": "night"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "pan_l",
+      "desc": "a hall carved from clear ice, translucent ice columns and icicle-fringed arches, every surface furred with frost, polished ice floor, a chandelier of icicles overhead, wide shot, no humans"
+    },
+    {
+      "template": "speak",
+      "camera": "static",
+      "desc": "standing on the polished ice floor in an iridescent holographic coat, chin raised, breath fogging in the air, blue-white highlight along one shoulder, medium shot"
+    },
+    {
+      "template": "react",
+      "camera": "push",
+      "desc": "eyes half lidded, mouth flat, breath fog crossing the face, blue-white light on one cheek, close-up"
+    },
+    {
+      "template": "insert",
+      "camera": "static",
+      "desc": "a hairline crack running out across the polished ice floor from a single point, frost blooming along its length, extreme close-up, no humans"
+    },
+    {
+      "template": "master",
+      "camera": "pull",
+      "desc": "one figure alone in the centre of the ice hall, translucent columns receding on both sides, snow drifted in through the open doorway behind, wide shot, full body"
+    }
+  ],
+  "why": "y2k_chrome is in this set for one measured reason: its verdict says the chrome landed on the GARMENT rather than on the room, which is what keeps it composable and is also exactly the drama here. The coat is the power in the scene and the hall is what the power costs. ice_palace is the hardest place card in the fantastical family - its note says it comes back as white marble almost every time - so all three transparency nouns it prescribes are written into shot one, and the cold grade is left to do the temperature rather than the prompt, which is the standing rule. The template is built backwards from its insert. A verdict is delivered, and the thing that answers it is not a person but a crack opening in the floor, so the beat order runs speak, react, then the crack, then a pull that leaves one figure alone in a very large room. emotion is contempt rather than cold, because the physical tags differ where it matters - half lidded eyes and a flat mouth read as a judgement passed, where cold reads only as absence. The scene closes on a pull, which is the cheapest and most reliable way this engine expresses consequence.",
+  "note": "Expected to land: iridescent chrome on the coat, breath fog, the cold grade. Uncertain: y2k_chrome's own card warns that reflective surfaces are the least temporally stable thing in the library and that this will look better as a still than as a clip, so render keyframes and judge them before spending on video. The ice reading as marble is the likely picture failure and it is a place-card problem, not a style problem. look:cold at saturation 0.72 was chosen over sepia or bleach on purpose - y2k_chrome is one of the twelve chromatic styles that a grade below 0.7 drains, and cold is the only look that both cards endorse and that stays above the line. transition is intent only - short.py ignores transitions and hard-cuts every join, so do not build a beat around it. Nothing in this card has been rendered - the GPU was committed to another job while it was written - so status is untested rather than partial. What IS checked: every id here exists in its library, and the style/place/look stack was resolved through POST /api/compose, which returned the intended engine and no error-severity conflict.",
+  "status": "untested"
+}

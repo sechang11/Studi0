@@ -1,0 +1,59 @@
+{
+  "id": "photographic_market_candid",
+  "name": "Market, no permission asked",
+  "desc": "A stranger with a camera, a crowd that has not noticed, and one moment worth the whole roll.",
+  "genre": [
+    "documentary",
+    "slice of life"
+  ],
+  "beats": 6,
+  "runtime_s": 12,
+  "sets": {
+    "style": "street_bw",
+    "look": "bleach",
+    "place": "market_street",
+    "pace": "fast",
+    "cue": "driving_pulse",
+    "emotion": "focus",
+    "camera": "handheld",
+    "wear": 0,
+    "transition": "cut",
+    "time": "day",
+    "lighting": "natural"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "pan_l",
+      "desc": "a busy market street of awninged stalls and crates of produce over worn cobbles, hanging signs and strings of bunting overhead, shoppers moving between the stands, wide shot"
+    },
+    {
+      "template": "master",
+      "camera": "handheld",
+      "desc": "one figure standing still with a small rangefinder camera held at chest height in the middle of a moving crowd, everyone else passing around and blurred, full body, wide shot"
+    },
+    {
+      "template": "insert",
+      "camera": "static",
+      "desc": "a wooden handcart tipped against a stall leg, a single crate of onions spilled on the cobbles beside it, close-up, no humans"
+    },
+    {
+      "template": "react",
+      "camera": "push",
+      "desc": "the camera lifted to one eye and the other eye still open, both hands on the body of it, close-up, thin crowd well behind and out of focus"
+    },
+    {
+      "template": "insert",
+      "camera": "static",
+      "desc": "a set of brass scales on a stall counter beside stacked produce boxes, the shadow of a striped awning falling across the pan, close-up, no humans"
+    },
+    {
+      "template": "pillow",
+      "camera": "tilt_u",
+      "desc": "strings of bunting and hanging lanterns crossing above the stalls against a bright blank sky, no humans"
+    }
+  ],
+  "why": "Street photography is a rhythm before it is a subject, so this template is built out of cut length rather than out of story. Six beats at fast pace is the decisive-moment idiom stated as cut length: every beat is scaled to roughly seven tenths, so no shot is allowed to settle. That also means the edit shows only the first second or two of each generated clip, which is where this engine has been measured to be at its steadiest. The two inserts are the whole argument: a photographer walking a market is not photographing the market, they are photographing the four objects in it that happen to be arranged, and the template says so by giving objects a third of its runtime. The place card carries a warning that decides the react shot - crowds eat detail fast, and a readable face needs the crowd thinned, so that beat pushes in and puts the crowd out of focus and well back. The look is bleach rather than the noir the style recommends, deliberately: street_bw is monochrome by construction and a grade above 1.0 saturation does nothing on it, while noir at exactly 0.00 would also fire a monochrome-versus-colour conflict against a place made of striped awnings and produce.",
+  "note": "Not rendered. No frame from this template has been generated - the GPU was held for a video job - so everything below is read off the style, place and look cards rather than seen. Expected to land: available-light monochrome with deep blacks and grain was seen, and monochrome is the most stable thing this pipeline does in motion. Uncertain, and stated on the place card: market street is enormously place-specific and the word alone will not choose for you - a European covered market and a Southeast Asian night market both answer to it. The shots name cobbles, striped awnings and bunting to push it one way; change those four nouns and the continent changes with them. Text risk: no shot in this template asks for a written price board or a shop sign, because both engines hallucinate lettering and a market is the easiest place in the library to accidentally ask for a hundred words of it. Applies to every card in this set and to none of the existing twenty: these templates use place CARDS rather than free text, so the place's own prose is appended to the prompt on top of whatever the shot desc says, and where a desc also names the setting the nouns arrive twice. That is reinforcement rather than contradiction, and it is deliberate on the shots whose place card warns that a particular noun must be named explicitly or the location renders wrong. But if a prompt reads long, the shot desc is the half to trim - never the card. Standing gaps that apply to every card in the gallery: transitions are intent only, because short.py hard-cuts every join regardless of what is set here; every emotion card is status:partial upstream, so the face, eyes, mouth and body tags render and voice_style does not, because no TTS engine on this box takes an emotion vector; and a style's negative_add never reaches the picture, because the renderer has no negative input wired - so this style will come out slightly less clean than its library sample, which had one. sets.mood is deliberately absent. It is a legal key, but mood is a quality rather than a thing and the model renders nouns, not adjectives - the words would be spent for nothing. Everything this template wants from mood is carried instead by the cue, the look grade and the objects in the shots.",
+  "status": "untested"
+}

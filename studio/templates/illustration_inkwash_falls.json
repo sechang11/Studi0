@@ -1,0 +1,50 @@
+{
+  "id": "illustration_inkwash_falls",
+  "name": "Sumi-e waterfall",
+  "desc": "White water on black rock, and a walker who stops and does not start again for a while.",
+  "genre": [
+    "drama",
+    "myth",
+    "pastoral"
+  ],
+  "beats": 4,
+  "runtime_s": 19,
+  "sets": {
+    "style": "ink_wash",
+    "place": "waterfall",
+    "look": "memory",
+    "pace": "slow",
+    "cue": "silence",
+    "emotion": "awe",
+    "camera": "tilt_u",
+    "wear": 1,
+    "transition": "dissolve",
+    "lighting": "natural",
+    "time": "day"
+  },
+  "shots": [
+    {
+      "template": "establish",
+      "camera": "tilt_u",
+      "desc": "white water falling down a wet black rock face, plunge pool below, mist and spray, moss on the rocks, boulders at the base, large areas of bare paper at the edges of the frame, wide shot, no humans"
+    },
+    {
+      "template": "hold_silent",
+      "camera": "static",
+      "desc": "a small figure standing at the edge of the plunge pool with their back to camera, dwarfed by the fall behind them, wide shot"
+    },
+    {
+      "template": "react",
+      "camera": "push",
+      "desc": "head tilted back looking up, wide eyes, parted lips, spray on the face, medium shot"
+    },
+    {
+      "template": "insert",
+      "camera": "static",
+      "desc": "spray beading on wet black rock, ferns growing out of the cliff face, close-up, no humans"
+    }
+  ],
+  "why": "Ink wash is the second strongest card in the library at 89.4 from control, and it is the safest thing here for video: over eight seconds it recorded boil 0.071, the joint lowest measured, and the specific fear that LTX would invent detail to fill the bare paper was tested and refuted - the paper stayed clean for the whole clip. So this template is built to be mostly paper. The establish is a vertical fall with large empty margins, the insert is one wet rock, and the middle of the piece is a hold_silent at 5.5 seconds, the longest shot template there is, holding a person who is small in the frame with their back turned. That is the sumi-e composition: the subject is the negative space and the figure is there for scale. look:memory is endorsed on the style card and drops saturation to 0.60, which on a monochrome style costs nothing - the grade_noop_on_mono rule only bites above 1.0, so neutral at 1.12 would have been the wrong pick despite also being endorsed. waterfall is a place card rather than a phrase, so its nine nouns - plunge pool, spray, wet black rock, moss, ferns, boulders - are all in the prompt to be brushed.",
+  "note": "Nothing rendered. Two soft spots. First, look:memory carries gblur=sigma=1.4, and a blur on a style whose entire value is a crisp brush edge is a real cost. It is the price of the endorsement; faded_film, also endorsed and also below the mono threshold at saturation 0.62, has no blur and is the swap if the wash comes out mushy. Second, the react at beat three puts a face into ink wash and no ink-wash face has been rendered on this box - it is framed as a medium rather than a close-up for exactly that reason. cue:silence generates nothing, which is correct for this scene but means there is no audio bed at all. lighting:natural is status:partial, prompt words only. No weather card is set on purpose: the waterfall place card already writes mist and spray into the prompt, and adding weather:mist on top of it fires weather_vs_place in compose - the place card carries the weather here and does it better than the weather library would. transition:dissolve is advisory - short.py hard-cuts. One thing worth recording: POST /api/compose reports no mono_vs_colour here even though the place card says black rock and white water, and that is luck rather than design - a place naming a chromatic colour would have fired it against this style.",
+  "status": "untested"
+}
