@@ -2062,6 +2062,14 @@ function composeBody(){
     lighting:  S.lighting || null,
     weather:   S.weather || null,
     engine:    S.engine_pick || null,
+    // The user's OWN LoRA pick, and the strength they dialled. Without these the
+    // resolver only ever sees the style card's recommendation, so choosing a LoRA
+    // in the wizard changed the picture and nothing else - no conflict check, no
+    // base-model gate, no honest reason line. "none" is a real sentinel meaning
+    // explicitly off, distinct from null meaning "you decide".
+    style_lora:          (S.style_lora==="none") ? "none" : (S.style_lora || null),
+    style_lora_strength: (S.style_strength===""||S.style_strength==null)
+                           ? null : Number(S.style_strength),
   };
 }
 function scheduleCompose(force){
