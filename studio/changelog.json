@@ -1,10 +1,10 @@
 {
  "generated_from": "git log",
- "count": 70,
+ "count": 71,
  "days": [
   [
    "2026-08-04",
-   24
+   25
   ],
   [
    "2026-08-03",
@@ -28,8 +28,29 @@
  ],
  "entries": [
   {
-   "hash": "4d63ead",
-   "full": "4d63ead43b19becfbe7879bdea05c9c1a081eba7",
+   "hash": "97fee25",
+   "full": "97fee25a1959c68d800825c692b2bdfa13eab777",
+   "date": "2026-08-04",
+   "time": "19:58",
+   "author": "sechang11",
+   "subject": "The photoreal face is the same pixel problem, and the sheet is teaching it",
+   "body": "Four arms at one seed on the qwen edit path. The current three-quarter-body framing gives\na small soft face - the ugly one. CLOSE FRAMING ALONE fixes it: real skin texture,\ncatchlight in both eyes, individual hair strands, on the same 7.5 second path with\nnothing else changed.\n\nDropping the Lightning LoRA and running 20 steps at cfg 2.5 is marginally cleaner and\ntakes 55.8 seconds. Seven times the cost for a difference you have to hunt for. Not worth\nit.\n\nThe fourth arm rendered the same close prompt with NO reference sheet and produced a good\nface belonging to a different woman - which is the sheet doing exactly the job it exists\nfor, and worth having on the record next to the others.\n\nThe consequence lands on the sheet itself. sheet_photo_terra.png is a three-quarter-body\nimage, so everything conditioned on it inherits a small face. A photographic reference\nsheet should be a CLOSE PORTRAIT: the sheet teaches the face, and a sheet whose face is\nninety pixels teaches a ninety-pixel face.",
+   "paragraphs": [
+    "Four arms at one seed on the qwen edit path. The current three-quarter-body framing gives\na small soft face - the ugly one. CLOSE FRAMING ALONE fixes it: real skin texture,\ncatchlight in both eyes, individual hair strands, on the same 7.5 second path with\nnothing else changed.",
+    "Dropping the Lightning LoRA and running 20 steps at cfg 2.5 is marginally cleaner and\ntakes 55.8 seconds. Seven times the cost for a difference you have to hunt for. Not worth\nit.",
+    "The fourth arm rendered the same close prompt with NO reference sheet and produced a good\nface belonging to a different woman - which is the sheet doing exactly the job it exists\nfor, and worth having on the record next to the others.",
+    "The consequence lands on the sheet itself. sheet_photo_terra.png is a three-quarter-body\nimage, so everything conditioned on it inherits a small face. A photographic reference\nsheet should be a CLOSE PORTRAIT: the sheet teaches the face, and a sheet whose face is\nninety pixels teaches a ninety-pixel face."
+   ],
+   "areas": [
+    "Cast"
+   ],
+   "files": 2,
+   "added": 2,
+   "removed": 1
+  },
+  {
+   "hash": "ffa0c32",
+   "full": "ffa0c32c62b2efe287fcca1fcad37887b094ef6c",
    "date": "2026-08-04",
    "time": "19:30",
    "author": "sechang11",
@@ -46,9 +67,9 @@
     "Tooling",
     "Cast"
    ],
-   "files": 3,
-   "added": 215,
-   "removed": 1
+   "files": 4,
+   "added": 245,
+   "removed": 8
   },
   {
    "hash": "314cc9d",
