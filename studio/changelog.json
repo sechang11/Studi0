@@ -1,10 +1,10 @@
 {
  "generated_from": "git log",
- "count": 63,
+ "count": 64,
  "days": [
   [
    "2026-08-04",
-   17
+   18
   ],
   [
    "2026-08-03",
@@ -28,8 +28,31 @@
  ],
  "entries": [
   {
-   "hash": "c5d0d75",
-   "full": "c5d0d75933580667c61b891e208fe979a57fbdde",
+   "hash": "d8438be",
+   "full": "d8438becb21266351ded4928110aff1d1d106b2d",
+   "date": "2026-08-04",
+   "time": "14:33",
+   "author": "sechang11",
+   "subject": "A photographic sheet is a casting decision, not a transcription",
+   "body": "TERRA's first photographic sheet was cosplay: a green wig, a craft-felt cape,\nupholstery-print fabric, shiny vinyl boots, flat frontal light against a grey wall.\nTechnically it matched her card exactly, which was the problem. qwen_sheet.py transcribed\nher anime vocabulary straight into a photo prompt - gold dress, red cape, red boots - and\nQwen rendered precisely that.\n\nNobody films a drawing. They build it out of real material and light it. So the fix is\nnouns, not adjectives, which is this project's rule applied one layer further out:\n\n  MATERIAL  raw silk, wool, worn leather - not gold and red. Material is the single\n            biggest tell between a costume and a wardrobe, and it is a noun, so it lands.\n  LIGHT     a window camera-left with deep falloff, not flat frontal. Flat light is what\n            makes a costume look like a costume.\n  LENS      85mm at f/2, for the compression an audience reads as film.\n  POSE      weight on one hip, three-quarter turn. Symmetry with limp arms is a passport.\n  HAIR      named as dyed with visible roots. The words green hair on a photoreal model\n            return a wig.\n\nstudio/_tools/photo_sheet_probe.py renders four treatments at one seed and keeps the\nliteral transcription as cell 1 so the comparison stays honest. Evidence at\nstudio/samples/cast/terra_photo_probe.jpg. Cell 2 is now her sheet; cell 4 is kept\nseparately as a face reference, being the better face but showing no costume.\n\nCharacter cards may now carry photo_prose, and qwen_sheet.py prefers it. A card without\none still builds a sheet and now says plainly what it will get and how to fix it, rather\nthan shipping a wig and calling it a reference.",
+   "paragraphs": [
+    "TERRA's first photographic sheet was cosplay: a green wig, a craft-felt cape,\nupholstery-print fabric, shiny vinyl boots, flat frontal light against a grey wall.\nTechnically it matched her card exactly, which was the problem. qwen_sheet.py transcribed\nher anime vocabulary straight into a photo prompt - gold dress, red cape, red boots - and\nQwen rendered precisely that.",
+    "Nobody films a drawing. They build it out of real material and light it. So the fix is\nnouns, not adjectives, which is this project's rule applied one layer further out:",
+    "MATERIAL  raw silk, wool, worn leather - not gold and red. Material is the single\n            biggest tell between a costume and a wardrobe, and it is a noun, so it lands.\n  LIGHT     a window camera-left with deep falloff, not flat frontal. Flat light is what\n            makes a costume look like a costume.\n  LENS      85mm at f/2, for the compression an audience reads as film.\n  POSE      weight on one hip, three-quarter turn. Symmetry with limp arms is a passport.\n  HAIR      named as dyed with visible roots. The words green hair on a photoreal model\n            return a wig.",
+    "studio/_tools/photo_sheet_probe.py renders four treatments at one seed and keeps the\nliteral transcription as cell 1 so the comparison stays honest. Evidence at\nstudio/samples/cast/terra_photo_probe.jpg. Cell 2 is now her sheet; cell 4 is kept\nseparately as a face reference, being the better face but showing no costume.",
+    "Character cards may now carry photo_prose, and qwen_sheet.py prefers it. A card without\none still builds a sheet and now says plainly what it will get and how to fix it, rather\nthan shipping a wig and calling it a reference."
+   ],
+   "areas": [
+    "Tooling",
+    "Cast"
+   ],
+   "files": 5,
+   "added": 161,
+   "removed": 2
+  },
+  {
+   "hash": "f3ee9cc",
+   "full": "f3ee9ccda2c126678b09532d9b76a8088c98a70a",
    "date": "2026-08-04",
    "time": "14:20",
    "author": "sechang11",
@@ -45,9 +68,9 @@
    "areas": [
     "Cast"
    ],
-   "files": 4,
-   "added": 6,
-   "removed": 2
+   "files": 5,
+   "added": 59,
+   "removed": 9
   },
   {
    "hash": "9d7422d",

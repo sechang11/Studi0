@@ -90,9 +90,29 @@ def load_card(cid):
 def describe(card):
     """The subject clause. `prose` is the qwen field; danbooru tags mean nothing to a
     photographic model, so falling back to `tags` is a last resort and says so out loud."""
+    # `photo_prose` is the CASTING AND WARDROBE translation and it is preferred over
+    # `prose` whenever a card has one. They are not the same job. `prose` describes the
+    # character as drawn; a photographic sheet has to describe what a costume department
+    # would actually BUILD and how it would be LIT, or Qwen returns cosplay - which is
+    # exactly what TERRA's first sheet was: a green wig, a craft-felt cape, upholstery
+    # print and shiny vinyl boots, flat-lit against a grey wall. See her
+    # sheet_photo_verdict, and studio/samples/cast/terra_photo_probe.jpg for the four-way
+    # comparison that fixed it. What changed was nouns: material, light, lens, pose, and
+    # naming the hair as dyed-with-roots rather than by colour, because "green hair" on a
+    # photoreal model returns a wig.
+    photo = (card.get("photo_prose") or "").strip()
+    if photo:
+        return photo, None
+
     prose = (card.get("prose") or "").strip()
     if prose:
-        return prose, None
+        return prose, ("%s has no `photo_prose`, so this sheet was built from the drawn "
+                       "description. Expect a costume photographed rather than a character "
+                       "cast: literal colour words return craft materials and flat light. "
+                       "Write a photo_prose naming MATERIAL, LIGHT, LENS and POSE - see "
+                       "TERRA.json for a worked example, and run "
+                       "studio/_tools/photo_sheet_probe.py to compare treatments."
+                       % card.get("id", "this character"))
     tags = (card.get("tags") or "").strip()
     if tags:
         return tags, ("%s has no `prose`, so this sheet was built from danbooru `tags`. "
