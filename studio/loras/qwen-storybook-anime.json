@@ -1,0 +1,15 @@
+{
+  "id": "qwen-storybook-anime",
+  "name": "Storybook Anime (Qwen-Image 2512)",
+  "file": "qwen_image_2512_storybook_anime_lora.safetensors",
+  "base_model": "qwen",
+  "engine": "qwen",
+  "kind": "style",
+  "strength": 0.8,
+  "strength_range": [0.0, 1.0],
+  "trigger": "storybook anime illustration",
+  "means": "A painted storybook-anime look for Qwen, trained on 70 storybook illustrations. Same job as illustration-qwen-image, softer and more childrens-book in intent.",
+  "status": "untested",
+  "verdict": "",
+  "note": "base_model READ FROM THE HEADER, and THIS IS THE ONLY FILE IN THE ENTIRE SET THAT NAMES ITS EXACT BASE REVISION: base_model = 'Qwen/Qwen-Image-2512'. Everything else here states a family at best and nine files state nothing at all. | TRIGGER READ DIRECTLY FROM THE FILE: trigger_phrase = 'storybook anime illustration'. That single key disproves the claim in the repo's own LORAS.md that a trigger word cannot be read off a safetensors header - studio/_tools/lora_scan.py re-checks it on every run and will fail this card if the two ever disagree. | THE STANDING BUG THIS CARD EXISTS TO EXPOSE. This file is wired LIVE in workflows/13_qwen_t2i_styled.json node 7 at strength_model 0.8, and scripts/short.py overrides that slot only when a film sets style_lora, which no film does. So every qwen keyframe rendered through the no-reference branch carries this style delta - and carries it UNTRIGGERED, because its trigger phrase appears in no film prompt anywhere in the project. scripts/make_sheets.py builds every qwen reference sheet through workflow 13 as well, so the delta is baked into the sheets too, which then condition the edit path. It is also present in workflows/14_qwen_edit_ref.json node 7 but at strength 0.0, i.e. inert there. | status is untested and it matters more here than on any other card: whatever every qwen keyframe in this project looks like, 0.8 of this is in it, and nobody has ever rendered a controlled with/without pair to find out what it is contributing. Render that pair BOTH with and without the trigger phrase - an untriggered style LoRA at 0.8 is not the same experiment as a triggered one. | strength_range starts at 0.0 because 0.0 is a real and probably correct choice for this slot until the pair has been looked at. | No alpha tensors, so ComfyUI applies scale 1.0."
+}

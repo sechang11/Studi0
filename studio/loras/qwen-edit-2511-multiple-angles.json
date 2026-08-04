@@ -1,0 +1,15 @@
+{
+  "id": "qwen-edit-2511-multiple-angles",
+  "name": "Multiple Angles (Qwen-Image-Edit 2511)",
+  "file": "qwen-image-edit-2511-multiple-angles-lora.safetensors",
+  "base_model": "qwen_edit",
+  "engine": "qwen",
+  "kind": "edit",
+  "strength": 0.85,
+  "strength_range": [0.6, 1.0],
+  "trigger": "",
+  "means": "Re-poses the person already in a picture to another camera angle, instead of generating a new person who matches their description. One portrait becomes a turnaround sheet.",
+  "status": "ready",
+  "verdict": "MEASURED by looking at studio/samples/cast/VIRO/ - 16 views produced by workflows/32_qwen_turnaround.json at strength 0.85. Front, true left profile and back-of-head are unmistakably the same person: same pale-blond-over-brown hair with the ponytail in the same place, same jaw, same teal top with orange trim, consistent flat cream background. These are real re-poses, not new people matching a description, and the back view is a genuine back of a head rather than a three-quarter cheat. WHAT DRIFTS IS COSTUME DETAIL, NOT IDENTITY: the front view has a v-neck with an orange cross emblem, the side view a collared polo with an orange shoulder stripe, the back view a brown belt. That matters downstream - anything trained on this set learns the drifting garment as optional, which is exactly what studio/samples/cast/viro_anime_demo.jpg shows happening.",
+  "note": "base_model NOT STATED IN THE FILE. Its PEFT blob explicitly carries transformer.base_model_name_or_path = null. Qwen-Image-Edit 2511 is INFERRED from the filename and from the workflow that runs it against qwen_image_edit_2511_fp8mixed. The header cannot distinguish 2509 from 2511 for any file in this set. | THE 'INSTALLED BUT UNUSED' FRAMING IS STALE - it is wired at strength_model 0.85 in workflows/32_qwen_turnaround.json node 40, genuinely in the chain (node 5's model input is ['40',0]), driven by studio/_tools/turnaround.py, and it has produced the 16 png+txt pairs above plus a mirror at ~/ComfyUI/input/viro_train/. Six docs still call it untested: scripts/_write_caps.py:111,113, QUICKSTART.md:100, AI-CONTENT-MAP.md:229, FILM-CRAFT-AUDIT.md:263,356, STATE.md:825. | trigger is UNKNOWN from the file, but empty is the right value to send: the workflow prompts plain English ('side view of the same person, facing left') with no special token and it works. | THE GAP WORTH KNOWING ABOUT: those 16 views never reach a keyframe. short.py:333 spends image1/image2/image3 on three DIFFERENT characters, never on three views of one, so the strongest available identity lock on qwen is sitting unused. Fixing it needs no new workflow node - a short.py change and a per-character view list. | strength_range: 0.85 is measured, the rest is a guess."
+}

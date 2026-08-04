@@ -1,0 +1,15 @@
+{
+  "id": "illustration-qwen-image",
+  "name": "Illustration 1.0 (Qwen-Image)",
+  "file": "illustration-1.0-qwen-image.safetensors",
+  "base_model": "qwen",
+  "engine": "qwen",
+  "kind": "style",
+  "strength": 1.0,
+  "strength_range": [0.6, 1.5],
+  "trigger": "",
+  "means": "Takes Qwen off photography. The same prose at the same seed comes back painted instead of photographed. This is the only mechanism on this box that does that - no prompt can.",
+  "status": "ready",
+  "verdict": "MEASURED. At strength 1.0 the same watercolour prose at the same seed produced genuine painted illustration where the identical run without it produced a photograph. At 1.5 it is a full watercolour and ink drawing. The control that makes this worth something: Qwen CANNOT be steered off photography by prompt at any cfg - 20 steps, cfg 4.0, Lightning LoRA off, 'painting, illustration' in the negative, and it still returned a photograph. The LoRA does what the prompt cannot, and that finding is what the whole style-LoRA layer is built on.",
+  "note": "base_model READ FROM THE HEADER: ss_base_model_version = 'qwen_image'. Read the qualifier: the header names the FAMILY, not the revision - it does not say 2512. The revision question is settled by pixels instead, since the measurement above was made on qwen_image_2512_fp8. | THE FILENAME AND THE TRAINING IDENTITY DISAGREE. Internal `name` and `ss_output_name` are both 'qwen_anime_style_v1'; trained 59,000 steps / 317 epochs on ai-toolkit 0.7.29, at the unusual rank 42. The measured behaviour matches the FILENAME (illustration, watercolour), not the internal name (anime). Do not rename the file to agree with its own metadata. | trigger is genuinely empty rather than merely unknown: there is no trigger_phrase key AND it renders the effect without one, which is the pair of facts that distinguishes 'none' from 'unknown'. Contrast qwen-storybook-anime, whose trigger is in the file, and qwen-modern-anime, whose trigger is unknown. | No alpha tensors, so ComfyUI applies scale 1.0. | strength_range: 0.6 is below anything measured and is a guess at where the effect starts; 1.0 and 1.5 are both measured. Above 1.5 is untried."
+}

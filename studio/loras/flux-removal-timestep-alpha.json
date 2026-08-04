@@ -1,0 +1,15 @@
+{
+  "id": "flux-removal-timestep-alpha",
+  "name": "Object Removal (FLUX.1 Fill)",
+  "file": "removal_timestep_alpha-2-1740.safetensors",
+  "base_model": "flux",
+  "engine": null,
+  "kind": "edit",
+  "strength": 1.0,
+  "strength_range": [0.5, 1.0],
+  "trigger": "",
+  "means": "Inpaints a masked object out of a picture and fills what was behind it.",
+  "status": "untested",
+  "verdict": "",
+  "note": "engine null - see flux2-turbo. No film engine reaches FLUX. | metadata is PRESENT but contains only format = 'pt'. No base. base_model INFERRED from geometry: transformer.transformer_blocks.0..18 (19 double) plus transformer.single_transformer_blocks.0..37 (38 single) at width 3072, which is the exact FLUX.1 layout. THE HEADER CANNOT SEPARATE FLUX.1 dev FROM Fill FROM Kontext - all three share that geometry - so the operative base comes from usage instead: workflows/29_flux_object_removal.json pairs it with flux.1-fill-dev-OneReward-transformer_fp8, and Fill is the inpainting variant, so Fill is what it is for. purpose (object removal) is inferred from the filename and that workflow. | Mixed suffix conventions inside one file: the single blocks use `lora.down/up.weight`, the double blocks use `lora_A/B.weight`. Both are handled by ComfyUI, unlike the flux2-turbo case where the PREFIX differs and the mapping is in doubt. | No alpha tensors, so scale 1.0. strength_range below 1.0 is a guess - for an inpainting LoRA a partial strength usually means a half-erased object, so 1.0 is probably the only useful value."
+}

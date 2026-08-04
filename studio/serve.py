@@ -12,6 +12,7 @@ Endpoints:
     /api/library      every preset folder, expanded
     /api/variables    the 461-variable census
     /api/cards        capability cards - what each option value looks like
+    /api/loras        the LoRA library, each card checked against models/loras
     /api/movies       .movie files found in studio/movies
     /api/save         POST {name, text} -> writes studio/movies/<name>.movie
 """
@@ -282,6 +283,60 @@ def styles():
     return {"styles": out, "families": fams, "count": len(out), "control": control}
 
 
+LORA_FILES = os.path.expanduser(
+    os.environ.get("COMFY_ROOT", "~/ComfyUI")) + "/models/loras"
+
+
+def loras():
+    """The LoRA library, with every card CHECKED AGAINST THE FILES ON DISK.
+
+    A LoRA is a delta on specific weights, so a card is only useful if the .safetensors it
+    names is actually there - and a library that lists a file nobody can load is worse than
+    no library, because it looks authoritative. Hence `installed` on every card, recomputed
+    from the directory on every request rather than recorded in the JSON.
+
+    `installed` is None, not False, when the loras directory cannot be read at all: not
+    knowing is a different claim from knowing it is absent, and the page says so differently.
+
+    `uncarded` is the other half of the same honesty - safetensors sitting in models/loras
+    that no card describes. Those are the ones nobody can find.
+    """
+    d = f"{HERE}/loras"
+    try:
+        on_disk = {f: os.path.getsize(f"{LORA_FILES}/{f}")
+                   for f in os.listdir(LORA_FILES) if f.endswith(".safetensors")}
+    except OSError:
+        on_disk = None
+    out = []
+    if os.path.isdir(d):
+        for fn in sorted(os.listdir(d)):
+            if not fn.endswith(".json"):
+                continue
+            try:
+                c = json.load(open(f"{d}/{fn}", encoding="utf-8"))
+                if not isinstance(c, dict):
+                    raise ValueError("not a JSON object")
+            except Exception as e:
+                c = {"id": fn[:-5], "name": fn[:-5], "status": "unavailable",
+                     "means": f"UNREADABLE CARD: {e}"}
+            if not c.get("id"):
+                c["id"] = fn[:-5]
+            f = c.get("file") or ""
+            if on_disk is None:
+                c["installed"], c["file_size"] = None, None
+            else:
+                c["installed"] = bool(f) and f in on_disk
+                c["file_size"] = on_disk.get(f)
+            out.append(c)
+    carded = {c.get("file") for c in out}
+    return {"loras": out,
+            "kinds": sorted({c.get("kind") for c in out if c.get("kind")}),
+            "bases": sorted({c.get("base_model") for c in out if c.get("base_model")}),
+            "count": len(out),
+            "uncarded": sorted(f for f in (on_disk or {}) if f not in carded),
+            "lora_dir": LORA_FILES}
+
+
 def cards():
     d = f"{HERE}/cards"
     if not os.path.isdir(d):
@@ -436,6 +491,13 @@ class H(http.server.SimpleHTTPRequestHandler):
             return self._send(open(p, "rb").read(), 200, "text/html; charset=utf-8")
         if path == "/api/styles":
             return self._send(styles())
+        if path in ("/loras", "/loras.html"):
+            p = f"{HERE}/loras.html"
+            if not os.path.exists(p):
+                return self._send(b"loras.html is missing", 500, "text/plain")
+            return self._send(open(p, "rb").read(), 200, "text/html; charset=utf-8")
+        if path == "/api/loras":
+            return self._send(loras())
         if path == "/api/domains":
             return self._send(domains())
         if path == "/api/render/status":
@@ -726,7 +788,15 @@ class H(http.server.SimpleHTTPRequestHandler):
                 "hint": "studio/compose.py must define resolve()"}, 503)
         req = {}
         for k in ("style", "place", "character", "look", "wear",
-                  "lighting", "weather", "engine"):
+                  "lighting", "weather", "engine",
+                  # The style-LoRA layer. resolve() has accepted these two since
+                  # compose.py grew resolve_style_lora(), and compile.py already
+                  # passes them, but they were missing here - so a style LoRA the
+                  # wizard posted was dropped before the resolver saw it and every
+                  # base-model mismatch came back as "this style is words only",
+                  # with no conflict at all. That is the one check this layer
+                  # exists to perform.
+                  "style_lora", "style_lora_strength"):
             v = data.get(k)
             req[k] = (v.strip() or None) if isinstance(v, str) else v
         try:

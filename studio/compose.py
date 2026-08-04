@@ -42,6 +42,10 @@ the cards carry the measurements:
     style.compose     safe / replaces / injects / inert - assigned per card from pixels
     style.status      ready / weak / unavailable
     style.engine      which model can render this idiom at all
+    style.lora        an optional style LoRA this card recommends, honoured when the
+                      author has not picked one - see resolve_style_lora()
+    lora.base_model   the weights a LoRA is a delta ON. The one field in any library here
+                      that decides whether a file is handed to the renderer at all
     look.grade        an ffmpeg filter string; the saturation number is parsed out of it
     place.family      interior / urban / nature / ... (the interior test)
     place.time_of_day an authored allowlist of times this location can read as
@@ -107,7 +111,7 @@ NO_PERSON = {"pillow", "insert", "establish"}
 ENGINES = ("anime", "qwen")
 
 GROUPS = ("styles", "places", "characters", "looks", "lighting", "weather",
-          "emotions", "tags", "checkpoints")
+          "emotions", "tags", "checkpoints", "loras")
 
 _LIB_CACHE = {}
 
@@ -268,6 +272,52 @@ _COLOUR_RE = re.compile(
 # because warning that the mandatory quality tokens disagree with the style the author
 # picked is noise they can do nothing about.
 _UNCHECKED_LAYERS = {"quality"}
+
+# A LoRA's base_model -> which of THIS PROJECT's two keyframe engines it can attach to,
+# or None for "neither, it belongs to some other model on the box".
+#
+# THE ONE TABLE IN THIS FILE THAT DECIDES WHETHER A FILE IS LOADED AT ALL. A LoRA is a
+# delta on specific weights: an animagine-trained one does nothing on qwen and a
+# qwen-trained one does nothing on animagine. That was proved from pixels here (qwen rows
+# with the animagine character LoRA force-loaded are identical to rows with it dropped)
+# and again from the ComfyUI log, where the same file reports "1168 patches attached" on
+# SDXL and rejects every one of its keys immediately after a QwenImage load.
+#
+# It is derived from `base_model` rather than read off the card's own `engine` field
+# because base_model is the physically load-bearing one - engine is a convenience copy
+# and a copy can be wrong. Where the two disagree the card is reported, not obeyed.
+#
+# qwen_edit is deliberately NOT "qwen". Qwen-Image-Edit-2511 and Qwen-Image-2512 are
+# different checkpoints; workflows/13 (no reference) runs 2512 and workflows/14 (with a
+# reference sheet) runs Edit-2511, and node 7 of both is this slot. Nobody on this box has
+# rendered an edit-trained style LoRA on the t2i model or the reverse, so it routes to
+# neither rather than being guessed into one.
+LORA_ENGINE = {
+    "animagine":   "anime",
+    "illustrious": "anime",
+    "sdxl":        "anime",
+    "qwen":        "qwen",
+    "qwen_edit":   None,
+    "ltx":         None,
+    "wan":         None,
+    "flux":        None,
+    "other":       None,
+}
+
+# What a base_model that routes nowhere is actually FOR, so the error can name it instead
+# of saying "not supported". Keyed by the same strings as LORA_ENGINE.
+LORA_BASE_MEANS = {
+    "qwen_edit": "Qwen-Image-Edit, which is a different checkpoint from the Qwen-Image "
+                 "2512 this slot patches",
+    "ltx":       "LTX-2.3, which is the video model",
+    "wan":       "Wan, which is a video model",
+    "flux":      "FLUX, which nothing in this studio's keyframe path loads",
+    "other":     "a model this studio does not draw keyframes with",
+}
+
+# Values of `kind` that belong in the style slot. Anything else on the right base still
+# loads - it is only a warning - because a LoRA does not know what it was filed under.
+LORA_STYLE_KINDS = {"style"}
 
 
 # ---------------------------------------------------------------------------
@@ -476,6 +526,379 @@ def resolve_engine(libs, style_id="", engine_hint=""):
 
     return {"engine": engine, "style": style, "style_id": style_id if style else "",
             "reason": _one_line(reason), "conflicts": conflicts}
+
+
+# Ways to say "no style LoRA on this one" when the style card recommends one. Without a
+# sentinel a recommendation could only be refused by editing the style card, which is a
+# change to every film that uses it.
+_LORA_OFF = {"none", "off", "no", "false", "-", "0"}
+
+
+def resolve_style_lora(libs, engine, style, lora_id="", strength=None, character=None):
+    """Which STYLE LoRA is loaded on top of the picture, at what strength, and why not.
+
+    This is the one layer in this studio that is not words. Every other layer adds text
+    and the model decides what to do with it; a LoRA is arithmetic on the weights, and it
+    is the only thing measured here that made qwen stop being photographic - the same
+    watercolour prose at the same seed came back a photograph with no LoRA and a genuine
+    painted illustration with illustration-1.0-qwen-image at 1.0. That is why the slot
+    exists at all.
+
+    It is also the layer with the sharpest failure mode. A LoRA is a delta on SPECIFIC
+    weights: put an animagine-trained one on qwen and it does not error, it does not warn,
+    it simply attaches to nothing. So `base_model` on the card decides whether the file is
+    handed to the renderer at all, and a mismatch is an error rather than a note.
+
+    Arguments:
+        engine      "anime" | "qwen", already derived by resolve_engine()
+        style       the resolved style CARD (not its id), or None
+        lora_id     a studio/loras/*.json id, or a bare .safetensors filename, or one of
+                    none/off/no/false/-/0 to refuse a style card's recommendation
+        strength    explicit strength, or None to take the recommended one
+        character   the resolved character card, for the reference-path note only
+
+    Returns {"id", "file", "strength", "active", "reason", "source", "card", "conflicts"}.
+    `file` is None whenever nothing should be loaded and `strength` is 0.0 to match, so a
+    caller can wire both straight into a workflow without re-deciding anything. Never
+    raises - a caller that wants a typo to be fatal tests the code on the conflict.
+    """
+    conflicts = []
+    libs = libs or load_libs()
+    shelf = libs.get("loras") or {}
+    style = style or {}
+
+    want = str(lora_id or "").strip()
+    rec = str(style.get("lora") or "").strip()
+    explicit = bool(want)
+    source = "you chose it by hand"
+
+    def _out(file=None, ident="", card=None, s=0.0, active=False, reason=""):
+        # file None and strength 0.0 move together, always. A caller that wires both into
+        # a workflow without reading `active` must get a slot that is off - that is the
+        # whole point of returning a resolved answer rather than a recommendation.
+        return {"id": ident, "file": file if active else None,
+                "strength": round(float(s or 0.0), 3) if active else 0.0,
+                "active": bool(active), "reason": _one_line(reason), "source": source,
+                "card": card, "conflicts": conflicts}
+
+    # ---- which one, if any -------------------------------------------------
+    if want.lower() in _LORA_OFF:
+        return _out(reason=(
+            "no style LoRA - %s recommends %s and you turned it off by hand."
+            % (_name(style), rec)) if rec else
+            "no style LoRA - you turned it off by hand.")
+    if not want and rec:
+        want, explicit = rec, False
+        source = "the %s style card asks for it" % _name(style)
+    if not want:
+        return _out(reason="no style LoRA - this style is words only.")
+
+    # An id, or the .safetensors filename off the card - films on this box were writing
+    # the filename into their own JSON long before there was a library to name.
+    card = shelf.get(want) or _card(libs, "loras", want)
+    if card is None:
+        card = next((c for c in shelf.values()
+                     if str(c.get("file") or "") == want), None)
+    ident = str((card or {}).get("id") or want)
+    file = str((card or {}).get("file") or (want if card is None else "")) or None
+
+    # ---- how hard ----------------------------------------------------------
+    # Explicit beats the style card's recommendation beats the LoRA card's own default.
+    # A style card's lora_strength is only honoured when its lora is the one in use -
+    # otherwise picking a different LoRA would silently inherit a number tuned for a file
+    # that is not loaded.
+    s, s_from = None, ""
+    if strength is not None and str(strength).strip() != "":
+        try:
+            s, s_from = float(strength), "you set it"
+        except (TypeError, ValueError):
+            conflicts.append(_conflict(
+                "warning", ["style_lora"],
+                "the style LoRA strength %r is not a number, so the recommended strength "
+                "is used instead." % strength,
+                "write a number, like 0.8.",
+                "style_lora_strength_bad"))
+    if s is None and not explicit and style.get("lora_strength") is not None:
+        try:
+            s, s_from = float(style["lora_strength"]), "%s recommends it" % _name(style)
+        except (TypeError, ValueError):
+            pass
+    if s is None and card and card.get("strength") is not None:
+        try:
+            s, s_from = float(card["strength"]), "its own card recommends it"
+        except (TypeError, ValueError):
+            pass
+    if s is None:
+        s, s_from = 1.0, "nothing recommended a strength, so it runs at full"
+
+    # ---- a strength that cannot load ---------------------------------------
+    # This function promises above that `file` is None whenever nothing should be loaded
+    # and that `strength` is 0.0 to match. Strength 0 broke that promise: it returned the
+    # filename, active=True, and a reason reading "is loaded on top of the qwen model at
+    # 0.0 - a change to the weights". That is false. ComfyUI's LoraLoader short-circuits
+    # at 0 and hands the model straight back untouched, so a style LoRA at 0.0 is not a
+    # faint style LoRA, it is no style LoRA at all. Telling the author their weights
+    # changed when they did not is the one lie this layer must not tell, because the whole
+    # reason the slot exists is that a LoRA failing to apply is otherwise invisible.
+    #
+    # It hid especially well on qwen-storybook-anime, the only card whose strength_range
+    # starts at 0.0 - so even the out-of-range note could not fire, and a film compiled
+    # with that LoRA at 0 printed nothing at all to say it would do nothing.
+    #
+    # Note what is NOT refused here: a NEGATIVE strength stays active. Inverting a LoRA is
+    # a real technique, the strength_range note already flags it as out of range, and
+    # nobody on this box has rendered one to say what it does.
+    if s != s or s in (float("inf"), float("-inf")):
+        _bad = _name(card) if card else want
+        conflicts.append(_conflict(
+            "error", ["style_lora"],
+            "the style LoRA strength resolved to %s, which is not a number a sampler can "
+            "use, so %s is not loaded." % (s, _bad),
+            "write an ordinary number, like 1.0.",
+            "style_lora_strength_bad"))
+        return _out(file=None, ident=ident, s=0.0, active=False, reason=(
+            "%s is not loaded - the strength resolved to %s, which is not usable."
+            % (_bad, s)))
+    if s == 0:
+        _bad = _name(card) if card else want
+        conflicts.append(_conflict(
+            "warning", ["style_lora"],
+            "%s is named but its strength is 0 (%s), and a LoRA at 0 is not applied at "
+            "all - the renderer hands the model back untouched. The picture will be "
+            "exactly what it would have been with no style LoRA named." % (_bad, s_from),
+            "raise the strength, or write style_lora: none so the film says plainly that "
+            "there is no style LoRA.",
+            "style_lora_strength_zero"))
+        return _out(file=None, ident=ident, s=0.0, active=False, reason=(
+            "%s is not loaded - its strength is 0 (%s), and a LoRA at 0 changes nothing."
+            % (_bad, s_from)))
+
+    # ---- no card at all ----------------------------------------------------
+    if card is None:
+        if want.lower().endswith(".safetensors"):
+            # Passed through rather than refused: this is how every film on this box
+            # already names a style LoRA, and refusing it would break them. But the whole
+            # value of this layer is the base check, and there is nothing here to check.
+            conflicts.append(_conflict(
+                "warning", ["style_lora"],
+                "%s is a weights file with no card in studio/loras/, so nothing here "
+                "knows which model it was trained on - and a LoRA on the wrong base does "
+                "not fail, it just quietly attaches to nothing." % want,
+                "write studio/loras/<id>.json for it carrying base_model, then name the "
+                "card instead of the file.",
+                "style_lora_uncarded"))
+            return _out(file=want, ident=ident, s=s, active=True, reason=(
+                "%s is loaded at %s (%s), unchecked - it has no card, so whether it "
+                "matches the %s engine is unknown." % (want, s, s_from, engine)))
+        have = ", ".join(sorted(shelf))
+        conflicts.append(_conflict(
+            "error", ["style_lora"],
+            "there is no style LoRA called %r." % want,
+            "pick one of: %s" % (have or "(nothing is authored in studio/loras/ yet)"),
+            "style_lora_unknown"))
+        return _out(ident=ident, s=s, reason=(
+            "no style LoRA - there is no card called %r, so nothing is loaded." % want))
+
+    nm = _name(card, ident)
+
+    if not file:
+        conflicts.append(_conflict(
+            "error", ["style_lora"],
+            "the card for %s does not name a weights file, so there is nothing to load."
+            % nm,
+            "add a file field to studio/loras/%s.json carrying the exact .safetensors "
+            "name as it appears in ComfyUI's models/loras directory." % ident,
+            "style_lora_no_file"))
+        return _out(file=None, ident=ident, card=card, s=s, reason=(
+            "%s is not loaded - its card does not name a weights file." % nm))
+
+    # ---- the base model, which is the whole point --------------------------
+    base = str(card.get("base_model") or "").strip().lower()
+    routes = LORA_ENGINE.get(base, "?")
+    if not base:
+        conflicts.append(_conflict(
+            "error", ["style_lora", "engine"],
+            "the card for %s does not say which model it was trained on, and a LoRA on "
+            "the wrong one does not fail - it attaches to nothing and you pay for it in "
+            "render time and get the picture you would have got anyway." % nm,
+            "add base_model to studio/loras/%s.json - one of: %s."
+            % (ident, ", ".join(sorted(LORA_ENGINE))),
+            "style_lora_no_base"))
+        return _out(file=None, ident=ident, card=card, s=s, reason=(
+            "%s is not loaded - its card does not say which model it was trained on."
+            % nm))
+    if routes == "?":
+        conflicts.append(_conflict(
+            "error", ["style_lora", "engine"],
+            "the card for %s says it was trained on %r, which is not a base model this "
+            "studio knows how to route." % (nm, base),
+            "base_model on studio/loras/%s.json must be one of: %s."
+            % (ident, ", ".join(sorted(LORA_ENGINE))),
+            "style_lora_base_unknown"))
+        return _out(file=None, ident=ident, card=card, s=s, reason=(
+            "%s is not loaded - %r is not a base model this studio can route." % (nm, base)))
+    if routes is None:
+        fix = ("pick a LoRA whose card says base_model %s, or drop the style LoRA."
+               % ("animagine, illustrious or sdxl" if engine == "anime" else "qwen"))
+        if base == "qwen_edit":
+            # Worth spelling out, because this is the one "wrong base" that is only half
+            # wrong: a beat WITH a reference sheet renders through workflows/14, which is
+            # Qwen-Image-Edit-2511, and node 7 there is this same slot. The same file
+            # would be on the right base in the shots with a face in them and the wrong
+            # one in the shots without, and nobody has rendered either.
+            fix += (" It would be on the right base only in the shots that have a "
+                    "reference sheet, which is half a film, so it is refused rather than "
+                    "half-applied.")
+        conflicts.append(_conflict(
+            "error", ["style_lora", "engine"],
+            "%s is trained on %s, so it cannot attach to the %s engine at all. It would "
+            "load without an error and change nothing in the picture."
+            % (nm, LORA_BASE_MEANS.get(base, base), engine),
+            fix, "style_lora_wrong_base"))
+        return _out(file=None, ident=ident, card=card, s=s, reason=(
+            "%s is not loaded - it is trained on %s and this is the %s engine."
+            % (nm, base, engine)))
+    if routes != engine:
+        conflicts.append(_conflict(
+            "error", ["style_lora", "engine"],
+            "%s is trained on %s, which is the %s engine's model, and the trained weights "
+            "cannot attach to the %s engine - they are a modification of specific weights "
+            "that are not there. Nothing warns you at render time: the file is passed "
+            "through and quietly never read." % (nm, base, routes, engine),
+            "switch the engine to %s, or pick a style LoRA whose card says base_model %s."
+            % (routes, "qwen" if engine == "qwen" else "animagine, illustrious or sdxl"),
+            "style_lora_wrong_base"))
+        return _out(file=None, ident=ident, card=card, s=s, reason=(
+            "%s is not loaded - it is trained on %s, which is the %s engine's model, and "
+            "this is the %s engine." % (nm, base, routes, engine)))
+
+    # base_model and the card's own convenience copy of the engine disagree. Reported
+    # rather than obeyed, because base_model is the one the loader actually cares about.
+    ceng = str(card.get("engine") or "").strip().lower()
+    if ceng and ceng != routes:
+        conflicts.append(_conflict(
+            "warning", ["style_lora"],
+            "the card for %s says engine %r but base_model %r, which routes to %r. The "
+            "base model is the one that decides, so it is being treated as %s."
+            % (nm, ceng, base, routes, routes),
+            "fix whichever field is wrong on studio/loras/%s.json." % ident,
+            "style_lora_card_disagrees"))
+
+    # ---- things that are true even on the right base ------------------------
+    if str(card.get("status") or "").strip().lower() == "unavailable":
+        conflicts.append(_conflict(
+            "error", ["style_lora"],
+            "%s is marked unavailable: %s" % (nm, _one_line(card.get("verdict") or
+                                                            card.get("note") or
+                                                            "the card does not say why")),
+            "pick another style LoRA, or drop it and let the style's words do the work.",
+            "style_lora_unavailable"))
+        return _out(file=None, ident=ident, card=card, s=s, reason=(
+            "%s is not loaded - its card marks it unavailable." % nm))
+
+    kind = str(card.get("kind") or "").strip().lower()
+    if kind and kind not in LORA_STYLE_KINDS:
+        conflicts.append(_conflict(
+            "warning", ["style_lora"],
+            "%s is a %s LoRA, not a style one, and this is the style slot. It is on the "
+            "right base so it will load and it will change the picture - just not in the "
+            "way the slot is named." % (nm, kind),
+            "that is fine if you meant it. If you did not, pick a card whose kind is "
+            "style.",
+            "style_lora_wrong_kind"))
+
+    st = str(card.get("status") or "").strip().lower()
+    if st in ("untested", "weak"):
+        conflicts.append(_conflict(
+            "note", ["style_lora"],
+            "%s is marked %s: %s" % (nm, st, _one_line(
+                card.get("verdict") or card.get("note") or
+                ("nobody has rendered it here yet" if st == "untested" else
+                 "it was rendered and barely moved the picture"))[:220]),
+            "render one keyframe with it and look, before committing a film to it.",
+            "style_lora_%s" % st))
+
+    # A trigger word is not optional decoration: a LoRA trained with one and rendered
+    # without it is the leading explanation for a file that "does nothing", and nothing in
+    # this studio puts a trigger into a prompt - the style's own words are all that reach
+    # the model. "unknown" is the library's honest sentinel for "the file does not say and
+    # nobody has found it", which is a different thing from "there is none" and gets its
+    # own sentence rather than being printed as if it were the word to type.
+    trig = str(card.get("trigger") or "").strip()
+    if trig.lower() in ("unknown", "?"):
+        conflicts.append(_conflict(
+            "note", ["style_lora", "style"],
+            "nobody knows whether %s has a trigger word - its card says unknown. If it "
+            "was trained with one, no prompt here will ever contain it, and the LoRA will "
+            "look weaker than it is." % nm,
+            "if it under-performs, that is the first thing to suspect, not the strength.",
+            "style_lora_trigger_unknown"))
+    elif trig and trig.lower() not in ("none", "-", "n/a"):
+        conflicts.append(_conflict(
+            "note", ["style_lora", "style"],
+            "%s was trained with the trigger phrase %r, and nothing in this studio puts a "
+            "trigger into the prompt - the style's own words are all that reach it."
+            % (nm, trig),
+            "put %r into the style's prose, or into the film's tags, if the LoRA looks "
+            "weaker than it should." % trig,
+            "style_lora_trigger"))
+
+    # ---- the two engines, and what each of them does with the slot ----------
+    if engine == "anime":
+        # workflows/22_anime_kf_ipadapter.json has eleven nodes and not one LoraLoader:
+        # short.py SYNTHESISES node "90" for the trained character LoRA and nothing else.
+        # So an anime-base style LoRA resolves clean and is then never loaded, which is
+        # exactly the silent nothing this resolver exists to end.
+        conflicts.append(_conflict(
+            "warning", ["style_lora", "engine"],
+            "%s is on the right base for the anime engine, but the anime keyframe path "
+            "has no style-LoRA slot wired - workflows/22 loads a trained character LoRA "
+            "and nothing else - so this file would be resolved and then never loaded."
+            % nm,
+            "nothing to do at your end. The qwen path is the one with the slot; on anime, "
+            "the style's danbooru tags are what you have.",
+            "style_lora_anime_unwired"))
+        return _out(file=None, ident=ident, card=card, s=s, reason=(
+            "%s is not loaded - the anime keyframe path has no style-LoRA slot." % nm))
+
+    if character and character.get("sheet"):
+        # short.py picks the workflow per beat: a beat with a reference goes to
+        # workflows/14 (Qwen-Image-Edit-2511) and one without goes to workflows/13
+        # (Qwen-Image 2512). Node 7 of both is this slot, so the same file lands on two
+        # different checkpoints depending on whether anyone is in the shot.
+        conflicts.append(_conflict(
+            "note", ["style_lora", "character"],
+            "shots with %s in them are rendered through the reference workflow, which "
+            "runs Qwen-Image-EDIT rather than the text-to-image model %s was trained "
+            "against. It is the same architecture and it will load, but nobody here has "
+            "rendered it - expect the style to read differently in the shots with a face "
+            "in them." % (_name(character, "your character"), nm),
+            "render one keyframe with the character and one without, at the same seed, "
+            "and look at them side by side before committing a film.",
+            "style_lora_on_edit_model"))
+
+    # Last, and only here: a strength that is out of range only means anything on the one
+    # path where the strength is going to be used. Said any earlier it fires alongside
+    # "this is not loaded at all", which is advice about a number nothing will read.
+    rng = card.get("strength_range")
+    if isinstance(rng, (list, tuple)) and len(rng) == 2:
+        try:
+            lo, hi = float(rng[0]), float(rng[1])
+        except (TypeError, ValueError):
+            lo = hi = None
+        if lo is not None and not (lo <= s <= hi):
+            conflicts.append(_conflict(
+                "note", ["style_lora"],
+                "%s is being run at %g and its card says it is only useful between %g "
+                "and %g." % (nm, s, lo, hi),
+                "move it back inside that range, or edit the range on "
+                "studio/loras/%s.json if you have looked at a render outside it." % ident,
+                "style_lora_strength_range"))
+
+    return _out(file=file, ident=ident, card=card, s=s, active=True, reason=(
+        "%s is loaded on top of the qwen model at %s (%s) - a change to the weights, not "
+        "words in the prompt, which is the only thing measured here that moves this "
+        "engine off photography." % (nm, s, s_from)))
 
 
 # ---------------------------------------------------------------------------
@@ -1145,6 +1568,9 @@ def resolve(libs, sel):
     `sel` is the layer selection. Every key is optional and None means "not chosen":
 
         style       studio/styles/*.json id            chooses the engine
+        style_lora  studio/loras/*.json id             a weights patch under the style.
+                    Blank takes the style card's own recommendation; "none" refuses it.
+        style_lora_strength   how hard, 0-1.5. Blank takes the recommended one.
         place       studio/places/*.json id, OR free text
         character   studio/characters/*.json id
         look        studio/looks/*.json id             prompt words AND an ffmpeg grade
@@ -1391,6 +1817,21 @@ def resolve(libs, sel):
                        "checkpoint, which holds their face far better than a reference "
                        "sheet does." % _name(character))
 
+    # ---- the STYLE LoRA ----------------------------------------------------
+    # Sits directly under the style, because it is the same decision made in weights
+    # instead of words - and because the style card is where the recommendation comes
+    # from when the author has not picked one. Its conflicts join the same list; nothing
+    # about it is a separate channel.
+    # `style_strength` is accepted as a second spelling of style_lora_strength because it
+    # is the name the film JSON and scripts/short.py already use, and the name the wizard
+    # holds in its own state. One concept, two established spellings, and rejecting one of
+    # them would only mean a caller silently losing the strength they set.
+    slora = resolve_style_lora(
+        libs, engine, style, sel.get("style_lora"),
+        sel.get("style_lora_strength") if sel.get("style_lora_strength") not in (None, "")
+        else sel.get("style_strength"), character)
+    conflicts.extend(slora["conflicts"])
+
     # ---- the negative ------------------------------------------------------
     # Order: the film's own negative, then the style's additions. The workflow file has
     # its own baseline negative in node 6 which is not visible from here.
@@ -1459,6 +1900,18 @@ def resolve(libs, sel):
                        if _known else
                        ("nothing - there is no style card called %r, so this render is "
                         "the no-style control by accident rather than by choice" % _sid)})
+    if slora["id"] or slora["file"]:
+        # Directly under the style, because that is where it belongs in the reading order
+        # and, half the time, where it came from. `contributed` says the strength, since
+        # for this layer the strength IS the contribution - the same file at 0.0 and at
+        # 1.5 are two different pictures.
+        layers.append({
+            "layer": "style_lora", "id": slora["id"],
+            "name": _name(slora["card"], slora["id"]),
+            "contributed": (
+                "%s at strength %g (%s) - a change to the model's weights, not words in "
+                "the prompt" % (slora["file"], slora["strength"], slora["source"])
+                if slora["active"] else "nothing - " + slora["reason"])})
     if place_card or place_text:
         pnote = ""
         if place_emptied:
@@ -1520,13 +1973,24 @@ def resolve(libs, sel):
         "lora": lora,
         "lora_active": lora_active,
         "lora_reason": _one_line(lora_reason),
+        # The style LoRA, in the same shape as the character one above: the FILE the
+        # renderer should load, the strength it should load it at, whether it is in play,
+        # and one sentence saying why. `style_lora` is None and `style_lora_strength` is
+        # 0.0 whenever nothing should be loaded, so a caller can wire both into a workflow
+        # without re-deciding anything - which is the whole reason node 7 was allowed to
+        # sit at 0.8 unnoticed for the life of this project.
+        "style_lora": slora["file"],
+        "style_lora_id": slora["id"],
+        "style_lora_strength": slora["strength"],
+        "style_lora_active": slora["active"],
+        "style_lora_reason": slora["reason"],
         # ---- beyond the API contract, for compile.py ----
         "tags": tag_string,
         "prose": prose_string,
         "grade": look.get("grade", "") if look else "",
         "cards": {"style": style, "place": place_card, "character": character,
                   "look": look or None, "emotion": emotion, "lighting": lighting,
-                  "weather": weather},
+                  "weather": weather, "style_lora": slora["card"]},
     }
 
 
@@ -1576,15 +2040,64 @@ DEMOS = [
 ]
 
 
+def _lora_demos(libs):
+    """Style-LoRA demos built from whatever is actually in studio/loras/.
+
+    Written this way rather than as fixed ids because the library is authored separately
+    from this resolver: with nothing on the shelf these produce no lines at all, and the
+    moment cards exist they exercise the matching case and every mismatching one without
+    anyone remembering to come back and edit a list. One demo per DISTINCT base_model,
+    because base_model is the field the routing turns on.
+    """
+    shelf = libs.get("loras") or {}
+    if not shelf:
+        return []
+    first = {}
+    for ident, c in sorted(shelf.items()):
+        first.setdefault(str(c.get("base_model") or "").strip().lower() or "(blank)",
+                         ident)
+    out = []
+    q = first.get("qwen")
+    if q:
+        out.append(("a qwen style LoRA on the qwen engine - the case the slot is for",
+                    {"style": "cinematic_film_still", "place": "petrol_station_night",
+                     "style_lora": q}))
+        out.append(("the same qwen LoRA forced onto the anime engine",
+                    {"style": "watercolour", "place": "pine_forest", "style_lora": q}))
+        out.append(("a qwen style LoRA in a shot with a character who has a sheet",
+                    {"style": "cinematic_film_still", "place": "petrol_station_night",
+                     "character": "VIRO", "style_lora": q}))
+        out.append(("a qwen style LoRA run outside the strength its card allows",
+                    {"style": "cinematic_film_still", "place": "dive_bar",
+                     "style_lora": q, "style_lora_strength": 3.0}))
+    for base, ident in sorted(first.items()):
+        if base == "qwen":
+            continue
+        engine = "anime" if LORA_ENGINE.get(base) == "anime" else "qwen"
+        style = "watercolour" if engine == "anime" else "cinematic_film_still"
+        out.append(("%s %s LoRA in the style slot, on the %s engine"
+                    % ("an" if base[0] in "aeiou" else "a", base, engine),
+                    {"style": style, "place": "dive_bar", "style_lora": ident}))
+    out.append(("a weights file named directly, with no card behind it",
+                {"style": "cinematic_film_still", "place": "dive_bar",
+                 "style_lora": "some_unlisted_thing.safetensors"}))
+    out.append(("a style LoRA id that does not exist",
+                {"style": "cinematic_film_still", "place": "dive_bar",
+                 "style_lora": "no_such_lora"}))
+    return out
+
+
 def _demo():
     libs = load_libs()
-    for title, sel in DEMOS:
+    for title, sel in DEMOS + _lora_demos(libs):
         r = resolve(libs, sel)
         print("=" * 78)
         print(title.upper())
         print("  sel        ", json.dumps(sel))
         print("  engine     ", r["engine"], "-", r["engine_reason"])
         print("  lora       ", r["lora"], "active=%s" % r["lora_active"], "-", r["lora_reason"])
+        print("  style lora ", r["style_lora"], "@%s" % r["style_lora_strength"],
+              "active=%s" % r["style_lora_active"], "-", r["style_lora_reason"])
         print("  prompt     ", r["prompt"][:400])
         if r["negative"]:
             print("  negative   ", r["negative"])
@@ -1603,8 +2116,9 @@ def main():
     ap.add_argument("--demo", action="store_true", help="run over real combinations")
     ap.add_argument("--json", action="store_true", help="print the raw response")
     for k in ("style", "place", "character", "look", "wear", "lighting", "weather",
-              "engine", "emotion", "desc", "template", "camera", "tags", "mood", "time"):
-        ap.add_argument("--" + k, default=None)
+              "engine", "emotion", "desc", "template", "camera", "tags", "mood", "time",
+              "style_lora", "style_lora_strength"):
+        ap.add_argument("--" + k.replace("_", "-"), dest=k, default=None)
     a = ap.parse_args()
     if a.demo:
         return _demo()
@@ -1617,6 +2131,9 @@ def main():
         return
     print("engine      %s - %s" % (r["engine"], r["engine_reason"]))
     print("lora        %s (active=%s) - %s" % (r["lora"], r["lora_active"], r["lora_reason"]))
+    print("style lora  %s @%s (active=%s) - %s"
+          % (r["style_lora"], r["style_lora_strength"], r["style_lora_active"],
+             r["style_lora_reason"]))
     print("prompt      %s" % r["prompt"])
     print("negative    %s" % r["negative"])
     for L in r["layers"]:

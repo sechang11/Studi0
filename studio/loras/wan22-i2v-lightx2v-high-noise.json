@@ -1,0 +1,15 @@
+{
+  "id": "wan22-i2v-lightx2v-high-noise",
+  "name": "Wan 2.2 I2V LightX2V 4-step (high noise)",
+  "file": "wan2.2_i2v_lightx2v_4steps_lora_v1_high_noise.safetensors",
+  "base_model": "wan",
+  "engine": "video",
+  "kind": "speedup",
+  "strength": 1.0,
+  "strength_range": [1.0, 1.0],
+  "trigger": "",
+  "means": "4-step distillation for the HIGH-NOISE expert of Wan 2.2 image-to-video 14B. Wan 2.2 splits denoising across two expert models and each needs its own accelerator - this is half of a matched pair.",
+  "status": "untested",
+  "verdict": "",
+  "note": "MUST BE USED WITH ITS PARTNER, wan22-i2v-lightx2v-low-noise. Loading one without the other gives you a 4-step schedule on one half of the denoise and a full schedule on the other. workflows/04_wan22_i2v_turbo.json wires both, at 1.0, on nodes 5 and 6. | metadata ABSENT on both files. base_model INFERRED FROM THE FILENAME, and this is weak provenance twice over: the 40-block/5120-width geometry distinguishes neither Wan 2.1 from Wan 2.2 nor the high-noise expert from the low-noise one. Both experts are 1200 tensors, 400 modules, rank 64, alpha 8, structurally identical. The two files ARE different weights - hashed, high is d176c808..., low is 024f21de... - so this is not a duplicated download, but NOTHING inside either file says which expert it is. If the two filenames were swapped, each accelerator would be applied to the wrong expert and no tool here could tell you. That failure would show up as bad video, not as an error. | Both bases ARE installed: wan2.2_i2v_high_noise_14B_fp8_scaled and wan2.2_i2v_low_noise_14B_fp8_scaled. | purpose (speedup) is inferred from the filename. Alpha 8 over rank 64 = scale 0.125."
+}

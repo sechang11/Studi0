@@ -315,9 +315,40 @@ def anime_keyframe(film, b, out, seed):
     return wf
 
 
+def style_lora_slot(wf, film):
+    """Node 7 of BOTH qwen keyframe workflows is the style-LoRA slot. Set it, always.
+
+    Always, including to nothing, because the alternative is what this project shipped
+    with for its whole life: workflows/13 hard-loaded qwen_image_2512_storybook_anime_lora
+    at 0.8, this function only ran when a film set style_lora, and no compiled film could
+    set it - so every qwen keyframe carried a style LoRA nobody chose, underneath whatever
+    style the author did choose. Leaving the else branch out is what made that invisible.
+
+    The workflow file now ships at 0.0 as well, so the two agree, but the explicit write
+    is the one that cannot be undone by someone editing the JSON.
+
+    ComfyUI's LoraLoader returns the model untouched when strength is 0 and never opens
+    the file (comfy nodes.py, LoraLoader.load_lora), so leaving a name in the slot at 0.0
+    costs nothing and documents what the slot is for.
+
+    Which LoRA, and whether it is allowed on this engine at all, is decided in
+    studio/compose.py resolve_style_lora() and arrives here already resolved: a LoRA
+    trained on the wrong base model never reaches this function.
+    """
+    lora = film.get("style_lora")
+    if not lora:
+        set_path(wf, "7.inputs.strength_model", 0.0)
+        return
+    strength = float(film.get("style_strength", 0.0))
+    set_path(wf, "7.inputs.lora_name", lora)
+    set_path(wf, "7.inputs.strength_model", strength)
+    if not strength:
+        print(f"  ! style_lora {lora} is set but style_strength is 0 - it will do nothing",
+              flush=True)
+
+
 def keyframes(film, out, seed0):
     chars, style = film.get("characters", {}), film.get("style", "")
-    lora = film.get("style_lora")
     print(f"\n=== KEYFRAMES: {len(film['beats'])} ===")
     for i, b in enumerate(film["beats"]):
         if os.path.exists(f"{out}/keyframes/{b['id']}_00001_.png"):
@@ -341,10 +372,7 @@ def keyframes(film, out, seed0):
             for n in range(len(refs[:3]) + 1, 4):
                 for enc in ("10", "11"):
                     wf[enc]["inputs"].pop(f"image{n}", None)
-            if lora:
-                set_path(wf, "7.inputs.lora_name", lora)
-                set_path(wf, "7.inputs.strength_model",
-                         float(film.get("style_strength", 0.0)))
+            style_lora_slot(wf, film)
             set_path(wf, "10.inputs.prompt", f"{expand(b['prompt'], chars)}, {style}")
             set_path(wf, "20.inputs.width", KF[0])
             set_path(wf, "20.inputs.height", KF[1])
@@ -353,10 +381,7 @@ def keyframes(film, out, seed0):
                      f"{out.split('output/')[1]}/keyframes/{b['id']}")
         else:
             wf = load_wf("13_qwen_t2i_styled.json")
-            if lora:
-                set_path(wf, "7.inputs.lora_name", lora)
-                set_path(wf, "7.inputs.strength_model",
-                         float(film.get("style_strength", 0.0)))
+            style_lora_slot(wf, film)
             set_path(wf, "10.inputs.text", f"{expand(b['prompt'], chars)}, {style}")
             set_path(wf, "12.inputs.width", KF[0])
             set_path(wf, "12.inputs.height", KF[1])

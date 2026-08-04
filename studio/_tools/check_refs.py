@@ -33,6 +33,11 @@ REFS = [
     ("templates",  "style",         "styles"),
     ("characters", "default_wear",  "wear"),
     ("places",     "suits_looks",   "looks"),
+    # A style card may now recommend a style LoRA by card id. Three cards do
+    # (stop_motion_felt, pointillism, comic_halftone), and nothing cross-checked
+    # the id until this rule existed - the exact shape of mistake this file was
+    # written to catch.
+    ("styles",     "lora",          "loras"),
 ]
 
 # An id has no spaces or commas. Used to tell a mistyped id apart from free text in the

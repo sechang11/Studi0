@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>studio · loras</title>
+<style>
+  :root{--bg:#0f1115;--panel:#161a21;--panel2:#1c2129;--line:#272d38;--ink:#e6e9ef;
+        --dim:#8b94a3;--accent:#6ea8fe;--ok:#4ec9a0;--warn:#e0b252;--bad:#e07a5f}
+  @media (prefers-color-scheme:light){
+    :root{--bg:#f6f7f9;--panel:#fff;--panel2:#f0f2f5;--line:#dde1e8;--ink:#141821;--dim:#5d6470}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font:14px/1.55 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  header{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;padding:13px 18px;
+         border-bottom:1px solid var(--line);background:var(--panel);position:sticky;top:0;z-index:9}
+  header h1{margin:0;font-size:15px;letter-spacing:.07em;text-transform:uppercase}
+  header .sub{color:var(--dim);font-size:12px}
+  header .right{margin-left:auto;display:flex;gap:8px}
+  header a{color:var(--dim);font-size:12px;text-decoration:none;border:1px solid var(--line);
+           padding:5px 10px;border-radius:6px}
+  header a:hover{color:var(--ink);border-color:var(--accent)}
+  .bar{display:flex;gap:8px;flex-wrap:wrap;padding:12px 18px;border-bottom:1px solid var(--line);
+       background:var(--panel);position:sticky;top:52px;z-index:8}
+  input[type=search],select{background:var(--panel2);border:1px solid var(--line);color:var(--ink);
+       border-radius:7px;padding:7px 10px;font:inherit}
+  button{background:var(--panel2);border:1px solid var(--line);color:var(--ink);border-radius:7px;
+       padding:7px 11px;font:inherit;cursor:pointer}
+  button:hover{border-color:var(--accent)}
+
+  .key{padding:14px 18px 0;color:var(--dim);font-size:12.5px;max-width:110ch}
+  .key b{color:var(--ink)}
+  .key .row{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:7px}
+  .key .row span{white-space:nowrap}
+
+  /* Kind sections. A LoRA has no picture to look at, so the grid is grouped and the
+     engine strip does the work the thumbnail does on /styles. */
+  .sec{padding:18px 18px 0}
+  .sec h2{margin:0;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+  .sec h2 span{color:var(--ink);text-transform:none;letter-spacing:0;font-weight:400;
+               font-size:12.5px;margin-left:10px}
+  .grid{padding:10px 18px 18px;display:grid;gap:14px;
+        grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+  .s{background:var(--panel);border:1px solid var(--line);border-radius:11px;overflow:hidden;
+     cursor:pointer;display:flex;flex-direction:column}
+  .s:hover{border-color:var(--accent)}
+  .s .b{padding:12px 14px}
+  .s h3{margin:0;font-size:15px}
+  .s .id{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--dim);
+         word-break:break-all}
+  .s .kd{float:right;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);
+         border:1px solid var(--line);border-radius:99px;padding:1px 8px}
+  .s p{margin:8px 0 0;font-size:12.5px;color:var(--dim)}
+
+  /* ENGINE COMPATIBILITY IS THE HEADLINE. Wrong base is the failure that produces mush
+     silently, so it is a full-width bar at the top of the card, not a badge you hunt for. */
+  .eng{padding:8px 14px;font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;
+       font-family:ui-monospace,Menlo,monospace;border-bottom:1px solid var(--line);
+       display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+  .eng small{font-size:10px;letter-spacing:0;text-transform:none;opacity:.85}
+  .e-anime{background:color-mix(in srgb,var(--accent) 18%,transparent);color:var(--accent)}
+  .e-qwen {background:color-mix(in srgb,var(--ok) 18%,transparent);color:var(--ok)}
+  .e-video{background:color-mix(in srgb,var(--warn) 16%,transparent);color:var(--warn)}
+  .e-none {background:var(--panel2);color:var(--dim)}
+  .c-anime{border-color:color-mix(in srgb,var(--accent) 45%,var(--line))}
+  .c-qwen {border-color:color-mix(in srgb,var(--ok) 45%,var(--line))}
+  .c-video{border-color:color-mix(in srgb,var(--warn) 40%,var(--line))}
+  .c-none {opacity:.72}
+  /* untested must not read as ready: a dashed edge, visible from across the grid. */
+  .st-untested{border-style:dashed}
+  .st-unavailable{border-color:var(--bad)}
+  .missing{border-color:var(--bad)!important;opacity:1}
+
+  .trg{margin:10px 0 0;padding:7px 10px;border-radius:7px;background:var(--panel2);
+       border:1px solid var(--line);font-size:12px}
+  .trg b{font-family:ui-monospace,Menlo,monospace;color:var(--ok);font-size:12.5px}
+  .trg.unknown{border-style:dashed}
+  .trg.unknown b,.trg.none b{color:var(--dim);font-weight:400;font-style:italic}
+
+  .flag{font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;padding:5px 14px;
+        border-top:1px solid var(--line);font-family:ui-monospace,Menlo,monospace}
+  .f-untested{background:var(--panel2);color:var(--dim)}
+  .f-weak{background:var(--panel2);color:var(--warn)}
+  .f-unavailable{background:color-mix(in srgb,var(--bad) 26%,transparent);color:var(--bad)}
+  .f-missing{background:color-mix(in srgb,var(--bad) 30%,transparent);color:var(--bad)}
+  .f-lock{background:color-mix(in srgb,var(--warn) 16%,transparent);color:var(--warn)}
+  .f-ready{background:color-mix(in srgb,var(--ok) 14%,transparent);color:var(--ok)}
+
+  .pill{display:inline-block;font-size:10px;letter-spacing:.05em;text-transform:uppercase;
+        border:1px solid currentColor;border-radius:99px;padding:1px 8px;margin:0 4px 4px 0;
+        color:var(--dim)}
+  .pills{margin-top:9px}
+
+  dialog{border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--ink);
+         max-width:min(900px,95vw);max-height:92vh;padding:0}
+  dialog::backdrop{background:#000b}
+  .dh{display:flex;align-items:baseline;gap:12px;padding:14px 18px;border-bottom:1px solid var(--line);
+      position:sticky;top:0;background:var(--panel);z-index:2}
+  .dh h3{margin:0;font-size:17px}
+  .dh .id{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--dim)}
+  .dh button.x{margin-left:auto;background:none;border:0;color:var(--dim);font-size:22px;cursor:pointer}
+  .db{padding:18px}
+  .lbl{color:var(--dim);font-size:11px;letter-spacing:.06em;text-transform:uppercase;margin-top:16px}
+  .db p{margin:5px 0 0;font-size:13px}
+  .verdict{margin-top:6px;padding:10px 12px;border-left:2px solid var(--accent);background:var(--panel2);
+           border-radius:0 7px 7px 0;font-size:13px}
+  .warnbox{margin-top:6px;padding:10px 12px;border-left:2px solid var(--warn);background:var(--panel2);
+           border-radius:0 7px 7px 0;font-size:13px}
+  .badbox{margin-top:6px;padding:10px 12px;border-left:2px solid var(--bad);background:var(--panel2);
+          border-radius:0 7px 7px 0;font-size:13px}
+  .okbox{margin-top:6px;padding:10px 12px;border-left:2px solid var(--ok);background:var(--panel2);
+         border-radius:0 7px 7px 0;font-size:13px}
+  code,.mono{font-family:ui-monospace,Menlo,monospace;font-size:12px}
+  .contrib{margin-top:6px;padding:9px 11px;background:var(--panel2);border:1px solid var(--line);
+           border-radius:8px;font-family:ui-monospace,Menlo,monospace;font-size:12px;
+           white-space:pre-wrap;word-break:break-all}
+  .none{color:var(--dim);font-style:italic}
+  table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:8px}
+  td{padding:5px 7px;border-bottom:1px solid var(--line);vertical-align:top}
+  td:first-child{color:var(--dim);width:26%;font-family:ui-monospace,Menlo,monospace}
+  .empty{padding:40px 18px;color:var(--dim)}
+  .foot{padding:6px 18px 40px;color:var(--dim);font-size:12px;max-width:110ch}
+  .foot .contrib{white-space:normal}
+</style>
+</head>
+<body>
+<header>
+  <h1>loras</h1><span class="sub" id="stat">loading…</span>
+  <div class="right">
+    <a href="/wizard">direct a scene</a><a href="/cast">cast</a>
+    <a href="/make">make</a><a href="/styles">styles</a><a href="/tags">tags</a>
+    <a href="/verify">verify</a><a href="/gallery">gallery</a><a href="/">library</a>
+  </div>
+</header>
+
+<div class="bar">
+  <input type="search" id="q" placeholder="search a lora, what it does, or its trigger word…"
+         style="flex:1;min-width:220px">
+  <select id="kind"><option value="">every kind</option></select>
+  <select id="base"><option value="">every base model</option></select>
+  <select id="eng">
+    <option value="">any engine</option>
+    <option value="anime">anime — animagine / SDXL</option>
+    <option value="qwen">qwen — Qwen-Image</option>
+    <option value="video">video — LTX / Wan</option>
+    <option value="none">neither image engine</option>
+  </select>
+  <select id="st">
+    <option value="">any status</option>
+    <option value="ready">ready</option>
+    <option value="weak">weak</option>
+    <option value="untested">untested</option>
+    <option value="unavailable">unavailable</option>
+  </select>
+  <select id="inst">
+    <option value="">on disk or not</option>
+    <option value="yes">file is on disk</option>
+    <option value="no">file is MISSING</option>
+  </select>
+  <select id="trg">
+    <option value="">any trigger</option>
+    <option value="yes">has a trigger word</option>
+    <option value="unknown">trigger unknown</option>
+  </select>
+</div>
+
+<div class="key">
+  A LoRA is a delta on <b>specific weights</b>, so the base model is the load-bearing field on
+  every card here. Put an animagine LoRA on Qwen and every key is rejected — you pay for the load,
+  see no error, and get the base model back. Put one trained on a different <b>revision</b> of the
+  right architecture and it attaches cleanly and can still do nothing. That is why the engine bar
+  is the first thing on each card.
+  <div class="row">
+    <span style="color:var(--accent)"><b>anime</b> animagine-xl-4.0, the illustration engine</span>
+    <span style="color:var(--ok)"><b>qwen</b> Qwen-Image, the photographic engine</span>
+    <span style="color:var(--warn)"><b>video</b> LTX / Wan — not an image LoRA</span>
+    <span><b>neither</b> nothing in the studio keyframe path loads it</span>
+  </div>
+</div>
+
+<div id="secs"></div>
+<div class="empty" id="empty" style="display:none"></div>
+<div class="foot" id="foot"></div>
+
+<dialog id="dlg">
+  <div class="dh"><h3 id="dname"></h3><span class="id" id="did"></span>
+    <button class="x" id="dx" title="close">&times;</button></div>
+  <div class="db" id="dbody"></div>
+</dialog>
+
+<script>
+let ALL=[], BYID={}, META={};
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+// base_model -> which of THIS project's engines the file can attach to, in plain words.
+// This is the whole point of the page: the mapping is not guessable from the filename and
+// getting it wrong is silent.
+const BASE={
+  animagine:{eng:"anime", head:"ANIME ENGINE ONLY",
+    sub:"animagine-xl-4.0",
+    long:"A delta on animagine-xl-4.0's SDXL UNet. It attaches on the anime keyframe path "+
+         "(workflow 22) and nowhere else. Loaded against Qwen, every one of its keys is "+
+         "rejected — the ComfyUI log fills with 'lora key not loaded' and you silently get the "+
+         "base model back."},
+  illustrious:{eng:"anime", sub:"Illustrious-XL-v2.0",
+    head:"ANIME ENGINE ONLY",
+    long:"Trained on Illustrious-XL-v2.0. Same SDXL architecture as animagine so it loads on the "+
+         "anime path, but a different checkpoint — expect it to be weaker on animagine than on "+
+         "the model it was trained against."},
+  sdxl:{eng:"anime", sub:"SDXL", head:"ANIME ENGINE ONLY",
+    long:"Generic SDXL. Both of this project's SDXL checkpoints (animagine-xl-4.0 and "+
+         "Illustrious-XL-v2.0) will load it. It cannot attach to Qwen, LTX or Wan."},
+  qwen:{eng:"qwen", sub:"Qwen-Image (text to image)", head:"QWEN ENGINE",
+    long:"A delta on the Qwen-Image DiT. It attaches on the qwen keyframe path (workflow 13). "+
+         "Revision matters and is not visible: a LoRA trained on original Qwen-Image loads "+
+         "cleanly and silently on 2512 and can still do nothing at all."},
+  qwen_edit:{eng:"qwen", sub:"Qwen-Image-Edit", head:"QWEN EDIT ONLY",
+    long:"Qwen-Image-Edit is a different checkpoint from Qwen-Image 2512. This attaches on the "+
+         "edit workflows (14 reference, 22/23 edit, 32 turnaround), NOT on the plain qwen "+
+         "text-to-image keyframe. 2509 and 2511 are themselves different bases."},
+  ltx:{eng:"video", sub:"LTX-2.3", head:"VIDEO ONLY",
+    long:"An LTX-2.3 video LoRA. There is no image keyframe path that loads it."},
+  wan:{eng:"video", sub:"Wan", head:"VIDEO ONLY",
+    long:"A Wan video LoRA. There is no image keyframe path that loads it."},
+  flux:{eng:"none", sub:"FLUX", head:"NEITHER IMAGE ENGINE",
+    long:"FLUX. The studio's keyframes are rendered on animagine or Qwen — neither will load "+
+         "this. Only the standalone FLUX workflows reach it."},
+  other:{eng:"none", sub:"not a diffusion model", head:"NEITHER IMAGE ENGINE",
+    long:"Not a keyframe LoRA. Read the note on the card for what it actually patches."}
+};
+const UNKNOWN_BASE={eng:"none", head:"BASE MODEL UNRECORDED", sub:"",
+  long:"This card does not say what it was trained on. Until it does, treat it as unusable: "+
+       "loading a LoRA on the wrong base is silent, and you would not know it failed."};
+
+const KIND={
+  character:{one:"character",
+    long:"Holds a specific person's identity. This is the strongest identity mechanism the "+
+         "project has measured, and it is locked to the checkpoint it was trained on."},
+  style:{one:"style",
+    long:"Changes how the image is rendered. On Qwen this is the only thing that works — the "+
+         "prompt alone cannot steer Qwen off photography at any cfg, and a style LoRA can."},
+  speedup:{one:"speedup",
+    long:"A step-distillation accelerator. It does not change what is in the picture, it changes "+
+         "how many steps you need. Runs alongside the other LoRAs in the chain."},
+  edit:{one:"edit",
+    long:"Operates on an image you already have — relight it, remove something, turn the subject. "+
+         "It belongs on an edit workflow, not on a text-to-image keyframe."},
+  utility:{one:"utility",
+    long:"Patches something other than the image model, usually the text encoder. Read the note."}
+};
+const KIND_ORDER=["character","style","edit","speedup","utility"];
+
+const STATUS={
+  ready:{flag:"ready — rendered and looked at",
+    long:"Someone rendered this and looked at the pixels. The verdict below is what was seen."},
+  weak:{flag:"weak — rendered, but it barely moved the image",
+    long:"This was rendered and the effect was small enough to argue with. Read the verdict "+
+         "before you budget a generation on it."},
+  untested:{flag:"untested — nobody has rendered this",
+    long:"NOBODY HAS RUN THIS. Everything on this card comes from the file header, the tensor "+
+         "key names or the filename. It has produced no pixels here, so it may do nothing, or "+
+         "something other than its name suggests."},
+  unavailable:{flag:"unavailable — this cannot be used here",
+    long:"The base model it needs is not installed, or it is known not to work. The verdict says "+
+         "which."}
+};
+
+const eng_of=c=>((BASE[c.base_model]||UNKNOWN_BASE).eng)||"none";
+const base_of=c=>BASE[c.base_model]||UNKNOWN_BASE;
+
+// "" means the file genuinely has no trigger. A missing field, or the literal word unknown,
+// means nobody knows - which is NOT the same thing and must not be shown as "none".
+function trigger_state(c){
+  if(!("trigger" in c)||c.trigger===null) return "unknown";
+  const t=String(c.trigger).trim();
+  if(!t) return "none";
+  if(/^(unknown|\?|tbd)$/i.test(t)) return "unknown";
+  return "has";
+}
+
+// JSON 1.0 arrives as JS 1, and a strength printed as "1" next to one printed as "0.85"
+// reads like a different kind of number. Keep a decimal place on whole values.
+const num=v=>typeof v==="number"?(Number.isInteger(v)?v.toFixed(1):String(v)):String(v);
+
+function bytes(n){
+  if(n==null) return "";
+  const u=["B","KiB","MiB","GiB"]; let i=0, v=n;
+  while(v>=1024&&i<u.length-1){v/=1024;i++;}
+  return (i?v.toFixed(1):v)+" "+u[i];
+}
+
+function draw(){
+  const q=$("q").value.trim().toLowerCase(), kd=$("kind").value, bs=$("base").value,
+        en=$("eng").value, st=$("st").value, inst=$("inst").value, tg=$("trg").value;
+  const v=ALL.filter(c=>
+    (!kd||c.kind===kd) &&
+    (!bs||c.base_model===bs) &&
+    (!en||eng_of(c)===en) &&
+    (!st||c.status===st) &&
+    (!inst||(inst==="yes"?c.installed===true:c.installed!==true)) &&
+    (!tg||(tg==="yes"?trigger_state(c)==="has":trigger_state(c)==="unknown")) &&
+    (!q||[c.id,c.name,c.file,c.means,c.verdict,c.note,c.trigger,c.base_model,c.kind]
+          .join(" ").toLowerCase().includes(q)));
+
+  const gone=ALL.filter(c=>c.installed!==true).length;
+  $("stat").textContent=`${v.length} of ${ALL.length} loras`+
+    (gone?` · ${gone} pointing at a file that is not on disk`:"");
+
+  $("empty").style.display=v.length?"none":"block";
+  $("empty").textContent=ALL.length?"Nothing matches those filters."
+    :"No LoRA cards found in studio/loras/. Every .safetensors on the box is listed at the "+
+     "bottom of this page — none of them has a card yet.";
+
+  const order=[...KIND_ORDER,...[...new Set(v.map(c=>c.kind))].filter(k=>k&&!KIND_ORDER.includes(k)),""];
+  $("secs").innerHTML=order.map(k=>{
+    const rows=v.filter(c=>(c.kind||"")===k);
+    if(!rows.length) return "";
+    const kk=KIND[k]||{};
+    return `<div class="sec"><h2>${esc(k||"kind not recorded")} · ${rows.length}
+      <span>${esc(kk.long||"")}</span></h2></div>
+      <div class="grid">${rows.map(card).join("")}</div>`;
+  }).join("");
+
+  document.querySelectorAll("[data-id]").forEach(el=>el.onclick=()=>open_(el.dataset.id));
+}
+
+function card(c){
+  const b=base_of(c), e=eng_of(c), ts=trigger_state(c);
+  const sm=STATUS[c.status]||{};
+  const flags=[];
+  if(c.installed!==true)
+    flags.push(`<div class="flag f-missing">file not on disk — ${
+      esc(c.file||"no file named on this card")}</div>`);
+  if(c.kind==="character"&&e==="anime")
+    flags.push(`<div class="flag f-lock">animagine only — cannot attach to the qwen engine</div>`);
+  if(sm.flag) flags.push(`<div class="flag f-${esc(c.status)}">${esc(sm.flag)}</div>`);
+  const str=c.strength!=null?`<span class="pill">strength ${esc(num(c.strength))}</span>`:"";
+  const rng=Array.isArray(c.strength_range)&&c.strength_range.length===2
+    ?`<span class="pill">useful ${esc(num(c.strength_range[0]))}–${esc(num(c.strength_range[1]))}</span>`:"";
+  return `<div class="s c-${e} st-${esc(c.status||"")}${c.installed!==true?" missing":""}"
+       data-id="${esc(c.id)}">
+    <div class="eng e-${e}">${esc(b.head)}<small>${esc(b.sub||c.base_model||"")}</small></div>
+    <div class="b">
+      <h3>${esc(c.name||c.id)}<span class="kd">${esc(c.kind||"?")}</span></h3>
+      <div class="id">${esc(c.file||c.id)}</div>
+      <p>${esc(c.means||"")}</p>
+      <div class="trg ${ts==="has"?"":ts}">${
+        ts==="has"?`trigger <b>${esc(c.trigger)}</b> — the prompt must contain it`
+        :ts==="none"?`trigger <b>none</b> — it applies on load`
+        :`trigger <b>unknown</b> — not recorded, and absence is not proof there is none`}</div>
+      <div class="pills">${str}${rng}</div>
+    </div>
+    ${flags.join("")}</div>`;
+}
+
+function open_(id){
+  const c=BYID[id]; if(!c) return;
+  const b=base_of(c), e=eng_of(c), ts=trigger_state(c), sm=STATUS[c.status]||{},
+        kk=KIND[c.kind]||{};
+  $("dname").textContent=c.name||c.id;
+  $("did").textContent=(c.id||"")+" · "+(c.kind||"")+" · "+(c.base_model||"base unrecorded");
+  $("dbody").innerHTML=`
+    <div class="eng e-${e}" style="border:1px solid var(--line);border-radius:9px">
+      ${esc(b.head)}<small>${esc(b.sub||c.base_model||"")}</small></div>
+    <div class="${e==="none"?"warnbox":"verdict"}">${esc(b.long)}</div>
+
+    ${c.installed!==true?`<div class="badbox"><b>THE FILE IS NOT ON DISK.</b><br>
+      This card names <span class="mono">${esc(c.file||"(no file field)")}</span>, and that name is
+      not in <span class="mono">${esc(META.lora_dir||"models/loras")}</span>. Nothing here can be
+      loaded until the file is put back or the card is corrected.</div>`
+    :`<div class="okbox">The file is on disk
+      <span class="mono">${esc(c.file)}</span>${
+      c.file_size?" · "+esc(bytes(c.file_size)):""}.</div>`}
+
+    ${c.kind==="character"&&e==="anime"?`<div class="warnbox">
+      <b>Animagine only.</b> This is a character LoRA trained on animagine-xl-4.0. It cannot
+      attach to the qwen engine — on a Qwen render every key is rejected and you get the base
+      model with no warning. Identity on the qwen path is held by a reference sheet through
+      Qwen-Image-Edit instead, which the resolver already reports as a weaker lock.</div>`:""}
+
+    ${sm.flag?`<div class="${c.status==="unavailable"?"badbox"
+       :c.status==="ready"?"okbox":"warnbox"}"><b>${esc(sm.flag)}</b><br>${esc(sm.long)}</div>`:""}
+
+    <div class="lbl">what it does</div>
+    <p>${esc(c.means||"")||'<span class="none">not recorded</span>'}</p>
+
+    <div class="lbl">what was actually seen</div>
+    ${c.verdict?`<div class="verdict">${esc(c.verdict)}</div>`
+               :`<p class="none">Never rendered here. Nothing on this card comes from pixels.</p>`}
+
+    <div class="lbl">trigger word</div>
+    ${ts==="has"?`<div class="okbox">The prompt must contain
+        <span class="mono"><b>${esc(c.trigger)}</b></span>. Without it the LoRA still loads and
+        still costs you a generation, and the effect it was trained for does not appear — which
+        looks exactly like a broken LoRA.</div>`
+     :ts==="none"?`<p>None. It applies as soon as it is loaded.</p>`
+     :`<div class="warnbox">Unknown. No trigger phrase is recorded and none could be read off the
+        file. That is not the same as "there is none" — if this one appears to do nothing, a
+        missing trigger word is the first thing to suspect.</div>`}
+
+    <div class="lbl">how to load it</div>
+    <table>
+      <tr><td>kind</td><td>${esc(c.kind||"")}${kk.long?" — "+esc(kk.long):""}</td></tr>
+      <tr><td>engine</td><td>${esc(c.engine||e)}</td></tr>
+      <tr><td>base_model</td><td><span class="mono">${esc(c.base_model||"")}</span></td></tr>
+      <tr><td>strength</td><td>${c.strength!=null?esc(num(c.strength))
+        :'<span class="none">not recorded</span>'}${
+        Array.isArray(c.strength_range)&&c.strength_range.length===2
+          ? ` · useful between ${esc(num(c.strength_range[0]))} and ${esc(num(c.strength_range[1]))}`:""}</td></tr>
+      <tr><td>status</td><td>${esc(c.status||"")}</td></tr>
+      <tr><td>file</td><td><span class="mono">${esc(c.file||"")}</span></td></tr>
+    </table>
+
+    ${c.note?`<div class="lbl">where these facts came from</div>
+       <p style="color:var(--dim)">${esc(c.note)}</p>`:""}`;
+  $("dlg").showModal();
+  $("dlg").scrollTop=0;
+}
+
+(async function(){
+  let d={};
+  try{ d=await fetch("/api/loras").then(r=>r.json()); }catch(e){ d={}; }
+  META=d; ALL=d.loras||[];
+  ALL.sort((a,b)=>(a.base_model||"").localeCompare(b.base_model||"")
+                 ||(a.name||a.id||"").localeCompare(b.name||b.id||""));
+  ALL.forEach(c=>BYID[c.id]=c);
+  const kinds=(d.kinds&&d.kinds.length?d.kinds:[...new Set(ALL.map(c=>c.kind).filter(Boolean))]);
+  const bases=(d.bases&&d.bases.length?d.bases:[...new Set(ALL.map(c=>c.base_model).filter(Boolean))]);
+  $("kind").innerHTML='<option value="">every kind</option>'+
+    kinds.map(k=>`<option>${esc(k)}</option>`).join("");
+  $("base").innerHTML='<option value="">every base model</option>'+
+    bases.map(k=>`<option>${esc(k)}</option>`).join("");
+  const un=d.uncarded||[];
+  $("foot").innerHTML=(d.lora_dir?`Files are checked against <span class="mono">${
+      esc(d.lora_dir)}</span> on every request, so a card that names a deleted file says so.`:"")+
+    (un.length?`<div class="lbl">on disk with no card — ${un.length}</div>
+       <div class="contrib">${un.map(esc).join("<br>")}</div>`:"");
+  ["q","kind","base","eng","st","inst","trg"].forEach(id=>{
+    $(id).oninput=draw; $(id).onchange=draw; });
+  $("dx").onclick=()=>$("dlg").close();
+  $("dlg").onclick=e=>{ if(e.target===$("dlg")) $("dlg").close(); };
+  draw();
+})();
+</script>
+</body>
+</html>

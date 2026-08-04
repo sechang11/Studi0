@@ -1,0 +1,15 @@
+{
+  "id": "qwen-2512-lightning-4step",
+  "name": "Qwen-Image 2512 Lightning 4-step",
+  "file": "Qwen-Image-2512-Lightning-4steps-V1.0-fp32.safetensors",
+  "base_model": "qwen",
+  "engine": "qwen",
+  "kind": "speedup",
+  "strength": 1.0,
+  "strength_range": [1.0, 1.0],
+  "trigger": "",
+  "means": "Renders in 4 steps at cfg 1.0 instead of 20 steps at cfg 2.5-4.0. About 4.5 seconds a frame on this card.",
+  "status": "untested",
+  "verdict": "",
+  "note": "metadata ABSENT - no __metadata__ key at all. base_model is INFERRED three ways that agree: tensor geometry (bare transformer_blocks.0..59, the Qwen-Image layout), the filename, and the fact that five studio workflows (01, 05, 13, 16, 19) wire it against qwen_image_2512_fp8. purpose is inferred from the filename; no file in this whole set states its own purpose in metadata. | THE COST IS ALREADY DOCUMENTED EVEN THOUGH THIS CARD IS UNTESTED, and a consumer needs it: at cfg 1.0 with this LoRA THE NEGATIVE PROMPT IS NEARLY IGNORED. That is inherent to CFG-distilled models, is recorded in studio/checkpoints/qwen_image_2512.json, and interacts with a live bug - scripts/short.py passes no negative input on either keyframe workflow anyway, so a style's negative_add is assembled and then discarded. If a negative has to bite, drop this LoRA and run 20 steps at cfg 2.5-4.0. | status=untested is not pedantry here. This LoRA is unquestionably in the live path and unquestionably produces images - every qwen frame in the project came through it. What has NEVER been rendered is the thing a status is supposed to record: a matched pair at the same seed, 4 steps with it against 20 steps without, looked at side by side to see what the speed costs. Until someone does that, 'ready' would be a claim about quality that nobody has checked. | strength_range is [1.0, 1.0] because a step-distillation LoRA is not a dial - it retrains the sampler's step schedule, and a partial application gives you neither schedule. | Alpha 8 over rank 64 = effective scale 0.125. Do not read that as weak; the factor is applied during training too."
+}

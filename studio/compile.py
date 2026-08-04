@@ -33,6 +33,8 @@ without touching code:
     cues/          music and sfx presets
     characters/    one card per character: tags, sheet, voice, wear vocabulary
     places/        one card per location, so "rooftop" and "roof" cannot drift apart
+    loras/         one card per trained weights file, carrying the base model it is a
+                   delta on - the field that decides whether it can be loaded at all
 
 Adding a transition means adding a file. No code change.
 
@@ -88,6 +90,20 @@ VARS = collections.OrderedDict([
     ("engine",      ("movie",   "",          "anime = danbooru tags + IPAdapter faces. "
                                              "qwen = prose prompts, photoreal or "
                                              "illustrated. Normally comes from the style")),
+    # The style LoRA. Movie level for the same reason `engine` is: short.py reads it off
+    # the film once and patches node 7 of the qwen keyframe workflow with it, so it is one
+    # slot for the whole film rather than a per-scene knob. Blank takes whatever the style
+    # card recommends; "none" refuses that recommendation without editing the card.
+    #
+    # It is the only variable in this table that changes the WEIGHTS rather than the
+    # words, and it is the only thing measured on this box that moved the qwen engine off
+    # photography at all - see studio/compose.py resolve_style_lora().
+    ("style_lora",  ("movie",   "",          "studio/loras/*.json id - a weights patch "
+                                             "stacked under the style on the qwen "
+                                             "keyframe. Normally comes from the style "
+                                             "card; write 'none' to refuse it")),
+    ("style_lora_strength", ("movie", "",    "how hard the style LoRA is applied, "
+                                             "0-1.5. Blank takes the recommended one")),
     ("face_weight", ("movie",   0.6,         "IPAdapter strength. per-scene changes make faces drift")),
     ("seed_root",   ("movie",   None,        "stable seed base. defaults to hash(title)")),
     ("logline",     ("movie",   "",          "one sentence. if you can't write it, the film has no spine")),
@@ -397,6 +413,39 @@ def compile_movie(path):
     # this function (compose.py does the assembling now), and this project has already
     # been bitten by that collision once.
     engine = eng["engine"]
+
+    # ---- the style LoRA ---------------------------------------------------------
+    # Resolved ONCE here, not per beat, because it is a movie-level slot: short.py patches
+    # node 7 of the keyframe workflow with it and every beat gets the same one. The per-
+    # beat resolve() below is still handed the same selection so the wizard and this
+    # compiler cannot disagree about it - its conflicts are seeded into `said` so the
+    # movie-level copy is the one that prints, exactly as the engine conflicts are.
+    #
+    # WHY THIS EXISTS AT ALL: node 7 of workflows/13_qwen_t2i_styled.json hard-loaded
+    # qwen_image_2512_storybook_anime_lora at 0.8 on every render, and short.py only
+    # overrode it when a film set style_lora, which no compiled film could - there was no
+    # variable to set. Every qwen keyframe this project produced carried a style LoRA
+    # nobody authored. The workflow default is now 0.0 and this is where the choice is
+    # made instead.
+    style_lora_id = str(movie["vars"].get("style_lora", "") or "").strip()
+    slora = compose.resolve_style_lora(libs, engine, eng["style"], style_lora_id,
+                                       movie["vars"].get("style_lora_strength"))
+    for c in slora["conflicts"]:
+        # Same rule as the style and engine ids above: compose.py reports a name that does
+        # not exist as a conflict because it also answers web requests, and in a .movie
+        # file a typo must not compile. lib() is not reused here because studio/loras/ may
+        # not exist yet, and os.listdir on a missing directory would print a traceback
+        # instead of the list of what IS available.
+        if c["code"] == "style_lora_unknown":
+            have = ", ".join(sorted(libs.get("loras") or {}))
+            raise SystemExit(
+                f"unknown style_lora {style_lora_id!r}\n"
+                f"  available: {have or '(nothing is authored in studio/loras/ yet)'}\n"
+                f"  (add one by creating {HERE}/loras/{style_lora_id}.json)")
+        _p = {"error": "BROKEN: ", "warning": "", "note": "fyi: "}.get(c["severity"], "")
+        warns.append(_p + c["message"] + (f"  FIX: {c['fix']}" if c.get("fix") else ""))
+        engine_said.add(c["message"])
+
     # Conflicts the resolver finds per beat, collected by MESSAGE so a rule that is true
     # of the whole film is said once rather than once for each of its 12 shots. Measured:
     # derby-ep1 already emits 10 warnings and 8 of them are the same per-beat notice.
@@ -517,6 +566,12 @@ def compile_movie(path):
 
                 comp = compose.resolve(libs, {
                     "style": style_id, "engine": engine,
+                    # Passed through even though the film-level answer is already in hand,
+                    # because this is the call the wizard makes: if the compiler resolved
+                    # the style LoRA and the resolver did not see it, the preview and the
+                    # render would disagree about the one layer that changes the weights.
+                    "style_lora": style_lora_id,
+                    "style_lora_strength": movie["vars"].get("style_lora_strength"),
                     "place": v["place"], "time": v["time"], "mood": v["mood"],
                     "character": who, "emotion": emo, "wear": wear,
                     "look": v["look"], "lighting": v.get("lighting"),
@@ -647,6 +702,15 @@ def compile_movie(path):
         anime_ckpt=movie["vars"].get("checkpoint", "animagine-xl-4.0.safetensors"),
         ipadapter_weight=float(movie["vars"].get("face_weight", 0.6)),
         style=movie["vars"].get("tags", ""),
+        # The style LoRA, and ONLY when it is actually going to be loaded. short.py reads
+        # these two keys and patches node 7 of the qwen keyframe workflow with them; a
+        # film that names one that cannot attach - wrong base, no card, anime engine -
+        # emits nothing here, so the slot stays at the workflow's 0.0 rather than loading
+        # a file that would do nothing but cost time. The compile still warns, loudly.
+        # These are the key names films/*.json and scripts/epic.py, make_sheets.py and
+        # style_ab.py already use, which is why `style_strength` is not `style_lora_...`.
+        **({"style_lora": slora["file"], "style_strength": slora["strength"]}
+           if slora["active"] else {}),
         # The four registries short.py reads off the film. Their absence is exactly
         # what made every earlier .movie file uncompilable into a render.
         anime_sheets=sheets,

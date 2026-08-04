@@ -1,0 +1,129 @@
+{
+  "seed": 5150,
+  "size": 1024,
+  "subject": "a young woman in a wool coat and red scarf standing on a city street, buildings receding behind her, overcast daylight, facing the camera",
+  "negative_base": "lowres, worst quality, bad anatomy, bad hands, watermark, text, signature",
+  "workflow": "13_qwen_t2i_styled.json",
+  "slot": "node 7",
+  "seeds_used": [
+    5150,
+    7,
+    99999,
+    314159
+  ],
+  "variants": [
+    {
+      "key": "a_control",
+      "label": "A  no LoRA (control)",
+      "lora": null,
+      "strength": 0.0,
+      "trigger": ""
+    },
+    {
+      "key": "b_illus10",
+      "label": "B  illustration @ 1.0",
+      "lora": "illustration-1.0-qwen-image.safetensors",
+      "strength": 1.0,
+      "trigger": ""
+    },
+    {
+      "key": "c_illus15",
+      "label": "C  illustration @ 1.5",
+      "lora": "illustration-1.0-qwen-image.safetensors",
+      "strength": 1.5,
+      "trigger": ""
+    },
+    {
+      "key": "d_modern10",
+      "label": "D  modern_anime @ 1.0",
+      "lora": "qwen_image_modern_anime_lora.safetensors",
+      "strength": 1.0,
+      "trigger": ""
+    },
+    {
+      "key": "e_modern15",
+      "label": "E  modern_anime @ 1.5",
+      "lora": "qwen_image_modern_anime_lora.safetensors",
+      "strength": 1.5,
+      "trigger": ""
+    },
+    {
+      "key": "f_story10",
+      "label": "F  storybook @ 1.0",
+      "lora": "qwen_image_2512_storybook_anime_lora.safetensors",
+      "strength": 1.0,
+      "trigger": ""
+    },
+    {
+      "key": "g_story10t",
+      "label": "G  storybook @ 1.0 + TRIGGER",
+      "lora": "qwen_image_2512_storybook_anime_lora.safetensors",
+      "strength": 1.0,
+      "trigger": "storybook anime illustration"
+    },
+    {
+      "key": "h_illus06",
+      "label": "H  illustration @ 0.6",
+      "lora": "illustration-1.0-qwen-image.safetensors",
+      "strength": 0.6,
+      "trigger": ""
+    },
+    {
+      "key": "i_illus08",
+      "label": "I  illustration @ 0.8",
+      "lora": "illustration-1.0-qwen-image.safetensors",
+      "strength": 0.8,
+      "trigger": ""
+    },
+    {
+      "key": "j_illus12",
+      "label": "J  illustration @ 1.2",
+      "lora": "illustration-1.0-qwen-image.safetensors",
+      "strength": 1.2,
+      "trigger": ""
+    }
+  ],
+  "rows": [
+    "_plain",
+    "risograph",
+    "stop_motion_felt",
+    "screenprint_poster",
+    "comic_halftone",
+    "thermal_imaging",
+    "papercut_collage",
+    "chalkboard",
+    "technical_diagram",
+    "scratchboard",
+    "pointillism",
+    "claymation",
+    "eight_bit",
+    "blueprint",
+    "noir_comic"
+  ],
+  "results": {
+    "stop_motion_felt": "RESCUED at illustration 1.0. Needle-felted puppet with hand stitching and macro depth of field; control is a photograph. 4 seeds, 5 strengths.",
+    "pointillism": "RESCUED at illustration 1.2. Genuine optical mixing on the figure; the background never becomes divisionist. 4 seeds.",
+    "comic_halftone": "PARTIAL at illustration 1.0. Real ink comic and sometimes a tonal flesh screen; the Ben-Day screen as a colour mechanism does not arrive, and at 1.5 the dots become polka dots on the coat.",
+    "risograph": "NOT RESCUED. No misregistration, overprint or bare paper at any setting; the spot ink colours arrive as paint.",
+    "screenprint_poster": "NOT RESCUED. Garbled lettering at all seven settings.",
+    "thermal_imaging": "NOT RESCUED. The ramp stays painted on the garment, or is deleted entirely. False colour is a global remap - a look, not a style.",
+    "papercut_collage": "NOT RESCUED. The torn-paper frame survives six of seven.",
+    "chalkboard": "NOT RESCUED. The board stays a prop in all seven.",
+    "technical_diagram": "NOT RESCUED. The diagram stays an overlay in all seven.",
+    "scratchboard": "NOT RESCUED. Never inverts to white line on black.",
+    "claymation": "CONTROL, damaged. illustration 1.5 removes the clay; modern_anime pushes it back to photography.",
+    "noir_comic": "CONTROL, damaged. illustration reintroduces colour, which is the one thing this style is defined by not having.",
+    "eight_bit": "CONTROL, improved by storybook 1.0 - a more coherent pixel grid and a drawn background instead of a photographic one.",
+    "blueprint": "CONTROL, mixed. illustration 1.5 turns the whole frame into a drafting sheet but keeps a coloured coat, which a cyanotype cannot have.",
+    "_plain": "CONTROL ROW. illustration 1.0 is still a photograph; 1.5 is not."
+  },
+  "findings": [
+    "THE ILLUSTRATION LoRA DOES NOT PAINT EVERYTHING, WHICH IS WHY A RESCUE MEANS SOMETHING. On the _plain row - the bare subject with no style card at all - illustration at 1.0 returns a PHOTOGRAPH. It only takes over the whole image unprompted at 1.5. So the felt puppet and the pointillist figure are the LoRA and the style prose acting together, not the LoRA imposing a house look.",
+    "THE STORYBOOK LoRA'S TRIGGER PHRASE IS EVERYTHING, AND THAT SETTLES THE STANDING BUG. qwen_image_2512_storybook_anime at 1.0 with no trigger leaves a photograph (mean |delta| 18.1/255 against the control - a different photograph, same idiom). The same LoRA at the same strength with 'storybook anime illustration' appended returns a complete flat-colour anime illustration (41.7/255). Every qwen keyframe this project made before the slot was fixed carried this LoRA at 0.8 UNTRIGGERED - so it was shifting composition without ever contributing its idiom.",
+    "qwen_image_modern_anime IS NOT A NO-OP, IT IS A NON-STYLE. Its card says it 'did nothing' at 1.0. Measured here it moves the pixels a lot - mean |delta| 15.9/255 on the plain row, 36% of pixels past 16/255 - but every single one of the 15 rows comes back photographic at 1.0 AND at 1.5. It changes the picture and never changes the medium. MAP 1 found no trigger phrase in the file, so the trigger half of the question is still open; the strength half is now closed - 1.5 does not help.",
+    "EVERY LoRA COMPRESSES THE DIFFERENCES BETWEEN STYLES. Mean pairwise pixel distance across four different styles at the same setting: 45.4 with no LoRA, 40.7 at illustration 1.5, 35.7 at illustration 1.0, and 32-33 for all three of modern_anime and storybook. A style LoRA buys a missing medium at the price of the styles it flattens together.",
+    "IT DAMAGES STYLES THAT ALREADY WORKED - the control rows are the bill. noir_comic is a clean high-contrast B&W ink comic without a LoRA; at illustration 1.0 colour leaks back into the coat and at 1.5 the whole frame returns to tan and brown, which is the one thing that style is defined by not having. claymation loses its thumbprint clay surface at illustration 1.5 and is pushed back toward PHOTOGRAPHY by modern_anime at 1.0 and 1.5. eight_bit is the exception in the other direction: storybook at 1.0 gives it a more coherent pixel grid and a flat drawn background instead of a bokeh photograph. Do not set a style LoRA globally.",
+    "THE FAILURE MODE SURVIVES THE LoRA BECAUSE IT IS SEMANTIC, NOT STYLISTIC. Every style whose failure was 'the medium got drawn as an object in the scene' - chalkboard, technical_diagram, papercut_collage, thermal_imaging, risograph, screenprint_poster - kept that failure under all six LoRA settings. illustration at 1.5 sometimes DELETES the object (the riso rectangle, the torn-paper frame) but replaces it with its own idiom rather than with the style. The two rescues, felt and pointillism, are both styles whose failure was 'the surface never arrived' - and a surface is what a LoRA changes."
+  ],
+  "blocker": "stop_motion_felt, pointillism and comic_halftone all carry engine=anime on their style card. Every style LoRA installed on this box is qwen-based, so compose.resolve_style_lora() correctly refuses the recommendation these cards now make until their engine field is changed to qwen. The engine field was outside this task's ownership and was NOT changed."
+}

@@ -1,0 +1,15 @@
+{
+  "id": "qwen-edit-2511-lightning-4step",
+  "name": "Qwen-Image-Edit 2511 Lightning 4-step",
+  "file": "Qwen-Image-Edit-2511-Lightning-4steps-V1.0-bf16.safetensors",
+  "base_model": "qwen_edit",
+  "engine": "qwen",
+  "kind": "speedup",
+  "strength": 1.0,
+  "strength_range": [1.0, 1.0],
+  "trigger": "",
+  "means": "The same 4-step-at-cfg-1.0 trick for the Qwen-Image-Edit 2511 checkpoint - the model behind every reference-conditioned keyframe and every turnaround view.",
+  "status": "untested",
+  "verdict": "",
+  "note": "metadata ABSENT. base_model is INFERRED FROM THE FILENAME ONLY, and this is the weakest provenance on any card in this library - read the next sentence before trusting it. This file and Qwen-Image-Edit-2509-Lightning-4steps are architecturally IDENTICAL in the header: 849,608,296 bytes each, 2160 tensors, 720 modules, rank 64, alpha 8, bare transformer_blocks.0..59. Nothing inside either file distinguishes 2509 from 2511. They were hashed and they are genuinely different weights (this one 22226e8d..., the 2509 one 2a32ce93...), so they are not a duplicated download - but IF THE TWO FILENAMES HAD EVER BEEN SWAPPED, no tool in this project could detect it. Only a render could. | Wired at strength 1.0 in workflows 14, 22, 23 and 32, i.e. it is in the chain for the reference-keyframe path and the turnaround path both. | Same negative-prompt caveat as the t2i Lightning: at cfg 1.0 the negative is nearly ignored. | status untested for the same reason as its t2i sibling - it demonstrably produces images (the 16 views in studio/samples/cast/VIRO/ came through it) but no 4-step-against-20-step pair has ever been rendered and looked at, so nothing is known about what the speed costs. | Alpha 8 over rank 64 = scale 0.125."
+}

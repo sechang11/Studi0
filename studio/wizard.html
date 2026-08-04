@@ -14,12 +14,16 @@
        the same layer wherever it appears. */
     --L-style:#a78bfa; --L-place:#34d399; --L-character:#60a5fa;
     --L-wear:#f59e0b; --L-lighting:#facc15; --L-weather:#22d3ee; --L-look:#f472b6;
+    /* the style LoRA is the same layer as style, reached by a different mechanism,
+       so it takes the style hue one step cooler rather than a hue of its own. */
+    --L-style_lora:#c4b5fd;
     --sev-error:#ef4444; --sev-warning:#e0b252; --sev-note:#8b94a3;
   }
   @media (prefers-color-scheme:light){
     :root{--bg:#f6f7f9;--panel:#fff;--panel2:#f0f2f5;--line:#dde1e8;--ink:#141821;--dim:#5d6470;
           --L-style:#7c3aed; --L-place:#059669; --L-character:#2563eb;
           --L-wear:#b45309; --L-lighting:#a16207; --L-weather:#0891b2; --L-look:#db2777;
+          --L-style_lora:#8b5cf6;
           --sev-error:#dc2626; --sev-warning:#b45309;}
   }
   *{box-sizing:border-box}
@@ -235,6 +239,36 @@
 
   .sideline{display:flex;gap:7px;align-items:baseline;margin-bottom:5px;font-size:12px}
   .sidedot{width:8px;height:8px;border-radius:99px;background:var(--lc);flex:0 0 8px}
+
+  /* ── style LoRA slot + identity mechanism ─────────────────────────────────
+     A LoRA is not prompt text, so it deliberately does NOT get the .contrib
+     treatment the prompt layers get. It gets a weights strip instead. */
+  .mech{margin-top:9px;border:1px solid var(--line);border-left:3px solid var(--mc,var(--line));
+        border-radius:0 8px 8px 0;background:var(--bg);padding:9px 11px}
+  .mech .mh{font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--dim);
+        font-weight:700;margin-bottom:4px}
+  .mech .mv{font-size:13px}
+  .mech .mv b{color:var(--mc,var(--ink))}
+  .mech .mw{color:var(--dim);font-size:12.5px;margin-top:4px}
+  .mech.strong{--mc:var(--post)} .mech.weak{--mc:var(--sev-warning)}
+  .mech.dead{--mc:var(--sev-error)} .mech.flat{--mc:var(--dim)}
+
+  .slrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:9px}
+  .slrow input[type=range]{flex:1;min-width:150px;padding:0;background:none;border:0}
+  .slrow .sv{font-family:ui-monospace,Menlo,monospace;font-size:13px;min-width:44px;text-align:right}
+  .slrow .rec{font-size:11.5px;color:var(--dim)}
+  .trig{margin-top:8px;font-size:12.5px}
+  .trig code{background:var(--panel2);border:1px solid var(--line);border-radius:5px;padding:1px 6px;
+        font-family:ui-monospace,Menlo,monospace}
+  .lorarow{display:flex;gap:11px;align-items:flex-start;background:var(--panel);
+        border:1px solid var(--line);border-radius:8px;padding:9px 11px;margin-bottom:7px;
+        cursor:pointer;text-align:left;color:inherit;font:inherit;width:100%}
+  .lorarow:hover{border-color:var(--accent)}
+  .lorarow.on{border-color:var(--L-style_lora);box-shadow:inset 0 0 0 1px var(--L-style_lora)}
+  .lorarow.bad{opacity:.55}
+  .lorarow .g{flex:1;min-width:0}
+  .lorarow .fn{font-family:ui-monospace,Menlo,monospace;font-size:12.5px;word-break:break-all}
+  .lorarow .sb{color:var(--dim);font-size:12px;margin-top:3px}
 </style>
 </head>
 <body>
@@ -242,7 +276,7 @@
   <h1>Direct a scene</h1>
   <span class="sub" id="stat">loading…</span>
   <span style="margin-left:auto;display:flex;gap:8px">
-    <a href="/styles">styles</a>
+    <a href="/styles">styles</a><a href="/loras">loras</a>
     <a href="/cast">cast</a>
     <a href="/make">make</a>
     <a href="/tags">tags</a>
@@ -302,6 +336,15 @@ const S = {
   // different things, one word - binding them to one key would silently push a
   // card id into every prompt as literal text.
   style_card:"", engine_pick:"", lighting:"", weather:"",
+  // ── the style LoRA slot ──────────────────────────────────────────────────
+  // Three distinct values, because "nothing chosen" and "the author chose no
+  // LoRA" are different statements and the whole point of this slot is that the
+  // second one can be said out loud:
+  //   ""      – unset. Whatever the style card recommends applies; if it
+  //             recommends nothing, the renderer's own default stands.
+  //   "none"  – the author looked and decided this film runs with no style LoRA.
+  //   <file>  – that .safetensors, at S.style_strength.
+  style_lora:"", style_strength:"",
 };
 let LIB={}, EFF={tiers:{},vars:{}}, CARDS=[], TPLS=[], step=0;
 let CASTVIEWS={};                       // id -> first sample view, from /api/cast
@@ -327,6 +370,14 @@ const esc = s => String(s==null?"":s).replace(/[&<>"]/g, c => (
 const LAYERS = [
   {key:"style",     depth:0, name:"Style",
    role:"the outermost layer — it decides which model renders at all"},
+  // Not a peer of place: it is the SAME layer as style, reached through the
+  // weights instead of through the prompt. It is drawn indented under style and
+  // never gets a .contrib block, because a LoRA contributes no prompt text.
+  // noclear: the generic "clear" means "set this layer to empty", but empty here
+  // means "follow the style's recommendation", which is not what a clear button
+  // looks like it does. This band supplies its own reset instead.
+  {key:"style_lora", depth:1, name:"Style LoRA", nocontrib:true, noclear:true,
+   role:"the style applied to the model's weights instead of its prompt — the one thing that does what a style prompt cannot"},
   {key:"place",     depth:1, name:"Place",     role:"the setting the shot happens in"},
   {key:"character", depth:2, name:"Character", role:"who is in it"},
   {key:"wear",      depth:3, name:"Wear",      role:"how battered they are — damage never decreases"},
@@ -365,11 +416,135 @@ let CDATA=null, CERR="", CDETAIL="", CTIMER=null, CSEQ=0, CLAST="", CBUSY=false;
 /* ══ STYLES ════════════════════════════════════════════════════════════════ */
 let STYLES=[], STYLE_CONTROL=null, STYLES_SRC="", STYLES_ERR="";
 
+/* ══ LoRAs ═════════════════════════════════════════════════════════════════
+   /api/loras is being written by someone else while this page is being
+   written, so this reader is deliberately tolerant about FIELD NAMES and
+   strict about MEANING. It normalises whatever arrives into the six things
+   this slot actually needs — file, base, purpose, trigger, strength, note —
+   and if the route is not there it says so instead of pretending the library
+   is empty. Same posture as loadStyles() above. */
+let LORAS=[], LORAS_SRC="", LORAS_ERR="", LORAS_RAWKEYS=[], LORAS_UNCARDED=[];
+
+const pickf = (o, keys) => {
+  for(const k of keys){
+    const v = o[k];
+    if(v!=null && v!=="" && !(Array.isArray(v) && !v.length)) return v;
+  }
+  return null;
+};
+const flat = v => Array.isArray(v) ? v.filter(x=>x!=null).join(", ") : (v==null?"":String(v));
+
+// Map anything that names a base model onto the two engines this wizard knows.
+// The rule this whole project is built on is that a LoRA is a delta on ONE set
+// of weights: an animagine-trained LoRA does nothing on qwen and vice versa.
+// So an unrecognised base is reported as unknown, never guessed into "either".
+function engineOfBase(s){
+  const b = String(s||"").toLowerCase();
+  if(!b) return "";
+  if(/animagine|illustrious|sdxl|sd_xl|sd-xl|xl-4|stable.?diffusion.?xl/.test(b)) return "anime";
+  if(/qwen/.test(b)) return "qwen";
+  return "";
+}
+function normLora(raw){
+  const o = (raw && typeof raw==="object") ? raw : {file:String(raw||"")};
+  const file = String(pickf(o,["file","filename","lora_name","lora","path","id","name"])||"");
+  const id   = String(pickf(o,["id","file","filename","lora_name","name"])||file);
+  const base = flat(pickf(o,["base","base_model","base_model_version","basemodel",
+                             "checkpoint","model","arch","architecture"]));
+  const declared = String(flat(pickf(o,["engine","engines","for_engine","engine_compat"]))||"")
+                     .toLowerCase().trim();
+  // A card that names its engine outright wins; otherwise infer from the base,
+  // then from the filename, and if neither says anything, say nothing.
+  let engine = ["anime","qwen","either"].includes(declared) ? declared
+             : (engineOfBase(base) || engineOfBase(file));
+  const purpose = String(flat(pickf(o,["kind","purpose","type","class","role","category"]))||"")
+                    .toLowerCase().trim();
+  // THREE trigger states, not two. The live library writes the literal string
+  // "unknown" to mean "nobody has established whether this needs one", and ""
+  // to mean "the card asserts it needs none". Treating "unknown" as a trigger
+  // word would send this page hunting the assembled prompt for the word
+  // "unknown" and reporting a missing trigger that does not exist.
+  const rawTrig = flat(pickf(o,["trigger","trigger_word","trigger_phrase","triggers",
+                                "token","activation","activation_text"]));
+  const hasTrigKey = Object.keys(o).some(k=>/trigger|token|activation/i.test(k));
+  const tl = String(rawTrig||"").trim().toLowerCase();
+  const trigState = (!hasTrigKey || tl==="unknown" || tl==="?" || tl==="unclear") ? "unknown"
+                  : (tl==="" || tl==="none" || tl==="n/a") ? "none" : "known";
+  let strength = pickf(o,["strength","recommended_strength","default_strength",
+                          "strength_default","weight","strength_model"]);
+  strength = (strength==null || isNaN(parseFloat(strength))) ? null : parseFloat(strength);
+  const rng = Array.isArray(o.strength_range) && o.strength_range.length===2
+            ? o.strength_range.map(Number).filter(n=>!isNaN(n)) : [];
+  return {
+    file, id, base, engine, purpose,
+    trigger: trigState==="known" ? String(rawTrig) : "",
+    trig_state: trigState,
+    strength,
+    range: rng.length===2 ? rng : null,
+    status: String(flat(pickf(o,["status","state"]))||""),
+    // means is the one-line "what it is". note/verdict are the evidence behind
+    // it and are long, so they are kept apart rather than collapsed into one.
+    means:   flat(pickf(o,["means","desc","description","summary"])),
+    note:    flat(pickf(o,["note"])),
+    verdict: flat(pickf(o,["verdict"])),
+    installed: o.installed !== false,
+    // reverse recommendation: a LoRA card that names the styles it is for
+    for_styles: (Array.isArray(o.suits_styles) ? o.suits_styles
+               : Array.isArray(o.styles) ? o.styles
+               : Array.isArray(o.for_styles) ? o.for_styles : []).map(String),
+    raw: o,
+  };
+}
+async function loadLoras(){
+  LORAS=[]; LORAS_SRC=""; LORAS_ERR=""; LORAS_RAWKEYS=[]; LORAS_UNCARDED=[];
+  let arr=null;
+  try{
+    const r = await fetch("/api/loras");
+    if(r.status===404){ LORAS_ERR="the server has no /api/loras route yet"; }
+    else{
+      let j=null; try{ j=await r.json(); }catch(e){ j=null; }
+      if(j===null) LORAS_ERR="the /api/loras reply was not JSON";
+      else if(Array.isArray(j)) { arr=j; LORAS_SRC="/api/loras"; }
+      else if(Array.isArray(j.loras)) { arr=j.loras; LORAS_SRC="/api/loras"; }
+      else if(Array.isArray(j.items)) { arr=j.items; LORAS_SRC="/api/loras"; }
+      else LORAS_ERR=(j&&j.error) || "the /api/loras reply had no loras array";
+      // Files on disk with no card. Worth naming: an uncarded file is exactly
+      // the one this page can say nothing about, so it must not be offered.
+      if(j && Array.isArray(j.uncarded)) LORAS_UNCARDED=j.uncarded.map(String);
+    }
+  }catch(e){ LORAS_ERR=(e&&e.message)||"could not reach /api/loras"; }
+  // Fallback, exactly as loadStyles() does: if the cards were added to
+  // serve.py's GROUPS instead of getting their own route, they arrive on
+  // /api/library and are just as usable.
+  if(!arr && Array.isArray(LIB.loras) && LIB.loras.length){
+    arr = LIB.loras; LORAS_SRC="/api/library"; LORAS_ERR="";
+  }
+  if(!arr) return;
+  for(const it of arr) if(it && typeof it==="object")
+    for(const k of Object.keys(it)) if(!LORAS_RAWKEYS.includes(k)) LORAS_RAWKEYS.push(k);
+  LORAS = arr.map(normLora).filter(l=>l.file);
+}
+const loraByFile = f => f ? LORAS.find(l=>l.file===f || l.id===f) : null;
+
+// Compatible means: this LoRA's weights are the weights the resolved engine
+// will actually load. Unknown base is NOT compatible — it is unknown, and this
+// page does not guess about base locks.
+function loraCompatible(l, eng){
+  if(!l.engine) return null;                     // unknown
+  if(l.engine==="either") return true;
+  return l.engine===eng;
+}
+// Is this a STYLE lora at all? A speedup or a character LoRA in the style slot
+// is a different mistake and should not be silently offered as one.
+const isStyleLora = l => !l.purpose || l.purpose==="style";
+
 const OPEN = {};        // which layer's picker drawer is expanded
 // Filter state lives here rather than in the DOM: a compose result repaints the
 // whole panel, and a search box that forgets what you typed every time the
 // resolver answers is worse than no search box.
-const FILT = {sq:"", fam:"", eng:"", comp:"", stat:"", q:{}};
+const FILT = {sq:"", fam:"", eng:"", comp:"", stat:"", q:{},
+  // LoRA drawer: default to style LoRAs the resolved engine can actually load.
+  loraStyleOnly:true, loraAll:false};
 
 function tierBadge(v){
   const e = EFF.vars[v]; if(!e) return "";
@@ -444,7 +619,87 @@ function layerValue(k){
   if(k==="place")     return S.place.trim();
   if(k==="wear")      return (S.wear===""||S.wear==null) ? "" : String(S.wear);
   if(k==="style")     return S.style_card;
+  if(k==="style_lora"){
+    if(S.style_lora==="none") return "none";
+    if(S.style_lora) return S.style_lora;
+    const r = recommendedLora();
+    return r ? r.lora.file : "";     // showing the recommendation IS the value
+  }
   return S[k]||"";
+}
+
+/* ══ STYLE-LoRA RECOMMENDATION ═════════════════════════════════════════════
+   Two directions, because nobody has settled which way the cards will point.
+   Forward: the style card names a LoRA. Reverse: the LoRA card names the
+   styles it is for. Whichever is present is reported WITH its direction, so
+   the "why" the user is shown is the actual provenance and not a guess. */
+function recommendedLora(){
+  // THE RESOLVER OWNS THIS when it is answering. compose.resolve_style_lora()
+  // already applies the style card's recommendation, gates it on base_model and
+  // explains itself, and compile.py calls the same function - so taking its
+  // answer is the only way this page and the render can agree. The card-reading
+  // below is the offline fallback, on the same terms as everything else here.
+  if(CSTATE==="ok" && CDATA && CDATA.style_lora_active && CDATA.style_lora){
+    const l = loraByFile(CDATA.style_lora) || loraByFile(CDATA.style_lora_id)
+            || normLora({file:CDATA.style_lora, id:CDATA.style_lora_id});
+    return {lora:l, resolved:true, reason:CDATA.style_lora_reason||"",
+            why:esc(CDATA.style_lora_reason||"the resolver applied it"),
+            strength:(CDATA.style_lora_strength!=null && !isNaN(CDATA.style_lora_strength))
+                     ? Number(CDATA.style_lora_strength) : null};
+  }
+  // The resolver answered and said no LoRA applies. That is an answer, not a gap.
+  if(CSTATE==="ok" && CDATA && CDATA.style_lora_active===false) return null;
+  const c = styleById(S.style_card);
+  if(c){
+    const named = pickf(c, ["style_lora","lora","recommended_lora","loras","lora_name"]);
+    const first = Array.isArray(named) ? named[0] : named;
+    if(first){
+      const f = (typeof first==="object") ? (first.file||first.id||first.lora) : String(first);
+      const l = loraByFile(f);
+      if(l) return {lora:l, why:`the style card <code>${esc(c.id)}</code> names it`,
+                    strength: (typeof first==="object" && first.strength!=null)
+                              ? parseFloat(first.strength) : null};
+      return {lora:normLora({file:String(f)}), missing:true,
+              why:`the style card <code>${esc(c.id)}</code> names it`, strength:null};
+    }
+    const back = LORAS.find(l=>l.for_styles.includes(c.id));
+    if(back) return {lora:back, why:`the LoRA card lists <code>${esc(c.id)}</code> in the styles it is for`,
+                     strength:null};
+  }
+  return null;
+}
+// What will actually be loaded, and where that came from. One function, so the
+// band, the strip, the sidebar and the .movie can never disagree with each other.
+function effectiveLora(){
+  const rec = recommendedLora();
+  if(S.style_lora==="none")
+    return {mode:"none", lora:null, strength:0, rec,
+            why:"you chose no style LoRA for this film."};
+  if(S.style_lora){
+    const l = loraByFile(S.style_lora) || normLora({file:S.style_lora});
+    const st = S.style_strength!=="" ? parseFloat(S.style_strength)
+             : (l.strength!=null ? l.strength : 1.0);
+    return {mode:"picked", lora:l, strength:st, rec,
+            why:"you picked this one by hand" +
+                (rec && rec.lora.file!==l.file ? ", overriding what the style card recommends" : "")};
+  }
+  if(rec){
+    const st = S.style_strength!=="" ? parseFloat(S.style_strength)
+             : (rec.strength!=null ? rec.strength
+             : (rec.lora.strength!=null ? rec.lora.strength : 1.0));
+    return {mode:"recommended", lora:rec.lora, strength:st, rec, why:rec.why};
+  }
+  return {mode:"unset", lora:null, strength:null, rec:null, why:""};
+}
+// A .safetensors filename is 40-50 characters and would blow out a 96px strip
+// cell. Shortened for the strip and the sidebar ONLY - every place the exact
+// file matters (the band, the .movie) prints it in full.
+function layerDisplay(k, v){
+  if(k!=="style_lora") return v;
+  if(v==="none") return "none";
+  const e = effectiveLora();
+  const short = String(v).replace(/\.safetensors$/,"");
+  return (e.mode==="recommended" ? "↳ " : "") + short;
 }
 function layerThumb(k){
   const v = layerValue(k); if(!v) return null;
@@ -458,13 +713,16 @@ function stripHTML(){
   const cells = [];
   LAYERS.forEach((L,i)=>{
     if(L.post) cells.push(`<div class="cut">applied after<br>generation</div>`);
+    // "+" not "›": the LoRA is not the next layer along, it is the same layer
+    // as style arriving by a second route.
+    else if(L.key==="style_lora") cells.push(`<div class="arrow">+</div>`);
     else if(i) cells.push(`<div class="arrow">›</div>`);
     const v = layerValue(L.key), th = layerThumb(L.key);
     cells.push(`<div class="sl${v?"":" empty"}" style="--lc:${lcol(L.key)}">
       <div class="lab">${esc(L.name)}</div>
       ${th?`<img class="th" loading="lazy" src="${esc(th.src)}" alt="">`
           :`<div class="th"></div>`}
-      <div class="val">${v?esc(v):"—"}</div></div>`);
+      <div class="val">${v?esc(layerDisplay(L.key,v)):"—"}</div></div>`);
   });
   return `<div class="strip">${cells.join("")}</div>`;
 }
@@ -808,13 +1066,258 @@ function band(L, selHTML, drawerHTML){
       <div class="n">${idx}</div>
       <div class="ttl"><div class="nm">${esc(L.name)}</div><div class="role">${esc(L.role)}</div></div>
       <div class="act">
-        ${v?`<button class="btn ghost sm" data-lclear="${esc(L.key)}">clear</button>`:""}
+        ${v&&!L.noclear?`<button class="btn ghost sm" data-lclear="${esc(L.key)}">clear</button>`:""}
         <button class="btn ghost sm" data-lopen="${esc(L.key)}">${OPEN[L.key]?"close":(v?"change":"choose")}</button>
       </div>
     </div>
     ${selHTML}
-    ${L.post?"":contribHTML(L.key)}
+    ${(L.post||L.nocontrib)?"":contribHTML(L.key)}
     ${drawerHTML||""}</div>`;
+}
+
+/* ══ STYLE LoRA BAND ═══════════════════════════════════════════════════════
+   Everything above this band is a REQUEST written in words, which the model is
+   free to ignore. This one is not - it is arithmetic added to the weights. The
+   band therefore explains itself in exactly those terms, and it says out loud
+   whether the slot is authored or merely inherited, because an unauthored LoRA
+   that nobody chose is the failure mode this slot exists to end. */
+function loraStatusLine(l, eng){
+  const compat = loraCompatible(l, eng);
+  if(compat===true)  return {cls:"strong", txt:`compatible with the <b>${esc(eng)}</b> engine`};
+  if(compat===false) return {cls:"dead",
+    txt:`<b>NOT compatible with the ${esc(eng)} engine.</b> This LoRA is a delta on
+         ${esc(l.base||"another base model")}'s weights. Loaded against ${esc(eng)} it
+         attaches to nothing and changes nothing — the render costs the same and looks
+         identical to having no LoRA at all.`};
+  return {cls:"flat",
+    txt:`base model unknown — the card does not say what weights this was trained on,
+         so nothing here can tell you whether it will attach to ${esc(eng)}.`};
+}
+
+function styleLoraBand(L){
+  const eng = shownEngine();
+  const e = effectiveLora();
+  let sel;
+
+  if(!LORAS.length){
+    // The library is not there. Say which route was tried and what it answered;
+    // do NOT present an empty picker as "there are no LoRAs".
+    sel = `<div class="pick"><div class="meta">
+      <div class="none">No LoRA library loaded. ${esc(LORAS_ERR||"/api/loras returned nothing")}.</div>
+      <div class="sub" style="margin-top:6px">The slot is still real — the qwen keyframe
+        workflow has a live LoRA node whether or not this page can see the library. Until
+        <code>/api/loras</code> answers, this page cannot tell you which file is in it, what
+        it was trained on, or whether it needs a trigger word, so it will not pretend to.
+        <button class="btn ghost sm" id="lretry" style="margin-left:6px">Check again</button></div>
+      </div></div>`;
+  } else if(e.mode==="none"){
+    sel = `<div class="pick"><div class="meta">
+      <div class="id">no style LoRA</div>
+      <div class="sub">Authored, not defaulted: this film says the style is carried by the
+        prompt alone. Written into the .movie as <code>style_lora: none</code>, which is the
+        word the compiler reads as "refuse the style card's recommendation" — different from
+        leaving the line out, which accepts it.</div>
+      </div></div>`;
+  } else if(!e.lora){
+    sel = `<div class="pick"><div class="meta">
+      <div class="none">No style LoRA. ${S.style_card
+        ? `The style card <code>${esc(S.style_card)}</code> does not recommend one`
+        : `No style is picked, so nothing can recommend one`}.</div>
+      ${CSTATE==="ok" && CDATA && CDATA.style_lora_reason
+        ? `<div class="sub" style="margin-top:6px"><b style="color:var(--ink)">the resolver
+            says</b> — ${esc(CDATA.style_lora_reason)}</div>`
+        : `<div class="sub" style="margin-top:6px">The resolver is not answering, so this is
+            read off the style card rather than resolved.</div>`}
+      <div class="sub" style="margin-top:6px">This style is carried by <b>words only</b>. On
+        qwen that is the case measured here to fail: the same watercolour prose came back a
+        photograph with no LoRA and a painted illustration with one. If that is what you want,
+        pick a LoRA below; if it is not, say <b>no style LoRA</b> so the next person knows it
+        was a decision.</div>
+      </div></div>`;
+  } else {
+    const l = e.lora;
+    const st = loraStatusLine(l, eng);
+    const applied = e.mode==="recommended"
+      ? `<b style="color:var(--L-style_lora)">applied because ${e.why}</b> — you have not
+         overridden it. Change it or switch it off below and this line goes away.`
+      : e.why;
+    const strengthNow = (e.strength==null || isNaN(e.strength)) ? 1.0 : e.strength;
+    // The slider tops out above the card's tested range on purpose - the finding
+    // this slot exists for was measured at 1.5 - but never below where you
+    // already are, or the thumb would silently clamp your own value.
+    const slMax = Math.max(1.5, strengthNow, l.range?l.range[1]:0);
+    const recTxt = l.strength!=null
+      ? `card recommends ${l.strength}${l.range?` (tested ${l.range[0]}–${l.range[1]})`:""}`
+      : `the card names no recommended strength — 1.0 is this page's fallback, not a measurement`;
+    // The trigger check. A style LoRA with a trigger phrase that appears nowhere
+    // in the prompt is a delta paid for and not asked for; that exact case is a
+    // known live bug in this repo, so it is checked here rather than described.
+    let trig = "";
+    if(l.trig_state==="known"){
+      // The text the model actually receives is the resolver's assembled prompt
+      // PLUS the house tags: short.py renders `f"{prompt}, {style}"` where style
+      // is the movie-level `tags` line. /api/compose is never sent the house
+      // tags, so checking CDATA.prompt alone would report a trigger missing that
+      // is sitting right there in the tags - and would make the fix this very
+      // block recommends appear to do nothing.
+      const hay = ((CDATA&&CDATA.prompt)||"") + " , " + (S.style||"");
+      const inPrompt = CSTATE==="ok" && CDATA &&
+        hay.toLowerCase().includes(String(l.trigger).toLowerCase());
+      const viaTags = inPrompt &&
+        !String((CDATA&&CDATA.prompt)||"").toLowerCase().includes(String(l.trigger).toLowerCase());
+      trig = `<div class="trig">trigger <code>${esc(l.trigger)}</code> — ${
+        CSTATE!=="ok"
+          ? `the resolver is not answering, so this page cannot check whether the prompt
+             contains it.`
+        : inPrompt
+          ? `<span style="color:var(--post)">present in the text the model will get${
+              viaTags?", via the house style tags":""}.</span>`
+          : `<span style="color:var(--sev-warning)">NOT in the assembled prompt, and not in
+             the house style tags either.</span> This LoRA was trained to answer to that
+             phrase. Without it you pay for the delta and ask for none of it.
+             <b>Fix</b> — put the phrase in the house style tags on the Format step; they are
+             appended to every prompt in the film.`}</div>`;
+    } else if(l.trig_state==="none"){
+      trig = `<div class="trig" style="color:var(--dim)">the card states there is no trigger
+        word — the delta applies on strength alone.</div>`;
+    } else {
+      trig = `<div class="trig" style="color:var(--dim)">trigger word <b>unknown</b>, which is
+        not the same as none. If this LoRA has one and it is missing from the prompt, the
+        strength dial will look like it is doing nothing.</div>`;
+    }
+    sel = `<div class="pick"><div class="meta">
+      <div class="id">${esc(l.file)}</div>
+      <div class="badges">
+        ${l.engine?`<span class="chip e-${esc(l.engine)}">${esc(l.engine)}</span>`
+                  :`<span class="chip" style="color:var(--dim)">engine unknown</span>`}
+        ${l.purpose?`<span class="chip" style="color:var(--dim)">${esc(l.purpose)}</span>`:""}
+        ${l.status?`<span class="chip s-${esc(l.status)}">${esc(l.status)}</span>`:""}
+        ${e.mode==="recommended"?`<span class="chip" style="color:var(--L-style_lora)">recommended</span>`:""}
+        ${e.mode==="picked"?`<span class="chip" style="color:var(--accent)">your choice</span>`:""}
+      </div>
+      <div class="sub">${applied}</div>
+      ${l.base?`<div class="sub">trained on <code>${esc(l.base)}</code></div>`:""}
+      ${l.means?`<div class="sub"><b style="color:var(--ink)">what it does</b> — ${esc(l.means)}</div>`:""}
+      ${l.verdict?`<div class="sub"><b style="color:var(--ink)">what was actually seen</b> — ${esc(l.verdict)}</div>`:""}
+      ${l.purpose && l.purpose!=="style"
+        ? `<div class="sub" style="color:var(--sev-warning)"><b>this is not a style LoRA</b> —
+            its card calls it <b>${esc(l.purpose)}</b>. In the style slot it will still load and
+            still change the image, but not in the way the slot is for.</div>`:""}
+      <div class="mech ${st.cls}"><div class="mh">base-model lock</div>
+        <div class="mv">${st.txt}</div></div>
+      ${e.rec && e.mode==="picked" && e.rec.lora.file!==l.file
+        ? `<div class="sub" style="color:var(--prompt)">the style card recommends
+            <code>${esc(e.rec.lora.file)}</code> instead; you are overriding it.</div>`:""}
+      ${e.mode==="picked" && CSTATE==="ok"
+        ? `<div class="sub" style="color:var(--dim)"><b>checked here, not by the resolver</b> —
+            <code>/api/compose</code> does not take a style_lora argument, so the base-model
+            line above is read off this LoRA's own card. <code>compile.py</code> puts the same
+            choice through <code>resolve_style_lora()</code> when you compile, and that is the
+            answer that decides the render.</div>`:""}
+      ${e.rec && e.rec.missing
+        ? `<div class="sub" style="color:var(--sev-error)">the style card names this file but
+            it is not in the LoRA library, so nothing can check it.</div>`:""}
+      <div class="slrow">
+        <label class="hint" style="margin:0">strength</label>
+        <input type="range" id="sl-strength" min="0" max="${esc(slMax)}" step="0.05"
+               value="${esc(strengthNow)}">
+        <span class="sv" id="sl-sv">${esc(strengthNow.toFixed(2))}</span>
+        <span class="rec">${esc(recTxt)}</span>
+      </div>
+      ${l.range && (strengthNow < l.range[0] || strengthNow > l.range[1])
+        ? `<div class="hint" style="margin-top:4px;color:var(--prompt)">outside the card's
+            tested range of ${esc(l.range[0])}–${esc(l.range[1])}.</div>`:""}
+      ${trig}
+      </div></div>`;
+  }
+
+  const reset = S.style_lora!=="" ? `<div class="row" style="margin-top:9px">
+      <button class="btn ghost sm" id="sl-reset">reset to unset</button>
+      <span class="hint" style="margin:0">${recommendedLora()
+        ? "goes back to following the style card's recommendation"
+        : "goes back to the unauthored state — the workflow's own default"}</span></div>` : "";
+
+  // Verified end to end on the box rather than asserted: a .movie saved from this
+  // page compiles, and the compiled film JSON carries the resolved file and
+  // strength that short.py reads.
+  const wiring = `<div class="mech flat">
+    <div class="mh">where this lands</div>
+    <div class="mv" style="font-size:12.5px;color:var(--dim)">Written into the .movie as
+      <code>style_lora</code> (and <code>style_lora_strength</code> when you move the dial).
+      <code>compile.py</code> resolves it through the same
+      <code>compose.resolve_style_lora()</code> this page reads, and writes the chosen file
+      into the film JSON; <code>short.py</code> puts it in the keyframe workflow's LoRA node.
+      <b>This is the slot that used to be filled by whatever the workflow was last saved
+      with.</b> Leaving it unset is a decision too — it takes the style card's
+      recommendation, and no recommendation means no LoRA.</div></div>`;
+
+  return band(L, sel + reset + wiring, OPEN.style_lora ? loraDrawer() : "");
+}
+
+function loraDrawer(){
+  if(!LORAS.length){
+    return `<div class="drawer"><p class="hint" style="margin:0"><b>No LoRA library.</b>
+      ${esc(LORAS_ERR||"/api/loras returned nothing")}. This page reads
+      <code>/api/loras</code>, and falls back to a <code>loras</code> group on
+      <code>/api/library</code> if the cards were added there instead.
+      <button class="btn ghost sm" id="lretry" style="margin-left:8px">Check again</button></p></div>`;
+  }
+  const eng = shownEngine();
+  const showAll = !!FILT.loraAll;
+  const styleOnly = FILT.loraStyleOnly!==false;
+  const rows = LORAS.filter(l=>{
+    if(styleOnly && !isStyleLora(l)) return false;
+    if(!showAll && loraCompatible(l,eng)===false) return false;
+    return true;
+  });
+  const hidden = LORAS.length - rows.length;
+  const cur = (S.style_lora && S.style_lora!=="none") ? S.style_lora : "";
+  return `<div class="drawer">
+    <div class="fbar">
+      <input type="search" data-q="style_lora" value="${esc(FILT.q.style_lora||"")}"
+        placeholder="search ${LORAS.length} loras — file, base, purpose">
+      <label class="hint" style="margin:0;display:flex;gap:5px;align-items:center">
+        <input type="checkbox" id="lf-style" style="width:auto" ${styleOnly?"checked":""}>
+        style LoRAs only</label>
+      <label class="hint" style="margin:0;display:flex;gap:5px;align-items:center">
+        <input type="checkbox" id="lf-all" style="width:auto" ${showAll?"checked":""}>
+        show ones this engine cannot load</label>
+    </div>
+    <div class="hint" style="margin:-4px 0 9px">Filtered to what the <b>${esc(eng)}</b> engine
+      can actually load. A LoRA is a delta on one specific set of weights — the wrong base
+      loads silently, attaches to nothing, and looks exactly like a seed you did not like.
+      ${hidden>0?`${hidden} of ${LORAS.length} hidden.`:""}${
+        LORAS_SRC?` · from <code>${esc(LORAS_SRC)}</code>`:""}${
+        LORAS_UNCARDED.length?` · ${LORAS_UNCARDED.length} file(s) on disk have no card and are
+          not offered here, because nothing is known about them.`:""}</div>
+    <div class="scroller" data-grid="style_lora">
+      <button class="lorarow${S.style_lora==="none"?" on":""}" data-lorapick="none" data-hay="none off disable">
+        <div class="g"><div class="fn">no style LoRA</div>
+        <div class="sb">Say it deliberately. Writes <code>style_lora: none</code>, which
+          refuses the style card's recommendation — not the same as leaving the line out.</div>
+        </div></button>
+      ${rows.map(l=>{
+        const compat = loraCompatible(l,eng);
+        const hay=[l.file,l.id,l.base,l.purpose,l.trigger,l.means].filter(Boolean).join(" ").toLowerCase();
+        return `<button class="lorarow${cur===l.file?" on":""}${compat===false?" bad":""}"
+          data-lorapick="${esc(l.file)}" data-hay="${esc(hay)}">
+          <div class="g">
+            <div class="fn">${esc(l.file)}</div>
+            <div class="badges">
+              ${l.engine?`<span class="chip e-${esc(l.engine)}">${esc(l.engine)}</span>`
+                        :`<span class="chip" style="color:var(--dim)">base unknown</span>`}
+              ${l.purpose?`<span class="chip" style="color:var(--dim)">${esc(l.purpose)}</span>`:""}
+              ${l.strength!=null?`<span class="chip" style="color:var(--dim)">rec ${esc(l.strength)}</span>`:""}
+              ${l.trig_state==="known"?`<span class="chip" style="color:var(--prompt)">trigger</span>`:""}
+              ${l.trig_state==="unknown"?`<span class="chip" style="color:var(--dim)">trigger ?</span>`:""}
+              ${compat===false?`<span class="chip s-unavailable">wrong base</span>`:""}
+            </div>
+            <div class="sb">${esc(l.base?("trained on "+l.base+". "):"")}${esc((l.means||"").slice(0,190))}</div>
+          </div></button>`;}).join("")}
+      ${rows.length?"":`<p class="hint">Nothing in the library is loadable on the
+        <b>${esc(eng)}</b> engine${styleOnly?" as a style LoRA":""}. That is a real answer, not
+        an empty list — tick the boxes above to see what was filtered out and why.</p>`}
+    </div></div>`;
 }
 
 function simpleBand(L, group, opts){
@@ -874,27 +1377,96 @@ function characterBand(L){
             ${c.lora?`<span class="chip s-ready">lora</span>`:""}
           </div>
           <div class="sub">${esc(c.desc||"")}</div></div>`;}).join("")}
-      ${loraHTML()}
+      ${identityHTML()}
       </div></div>`;
   }
   return band(L, sel, OPEN.character ? castDrawer() : "");
 }
 
-function loraHTML(){
-  const c = cardById("characters", S.cast[0]);
-  if(CSTATE==="ok" && CDATA){
-    if(!CDATA.lora && !c?.lora) return "";
-    const on = !!CDATA.lora_active;
-    return `<div class="sub" style="margin-top:6px">
-      <b style="color:${on?"var(--post)":"var(--sev-error)"}">trained LoRA ${on?"in play":"NOT in play"}</b>
-      ${CDATA.lora?` — <code>${esc(CDATA.lora)}</code>`:""}
-      ${CDATA.lora_reason?`<br>${esc(CDATA.lora_reason)}`:""}</div>`;
+/* ══ HOW THIS FACE IS HELD ═════════════════════════════════════════════════
+   The mechanism that holds a face is not the same on the two engines, and the
+   difference is the single most consequential thing about choosing between
+   them. It is invisible until playback if it is not said here, so it is said
+   here — at the point of choosing, before a frame is spent.
+
+     anime → IPAdapter on the reference sheet AND the trained character LoRA.
+             Two mechanisms stacked, one of them a change to the weights.
+     qwen  → the reference sheet fed to Qwen-Image-Edit as conditioning. One
+             mechanism, and a hint rather than a change to the weights.
+
+   lora_active / lora_reason come from the resolver and are printed verbatim.
+   When the resolver is down this block still renders, from the character card,
+   and labels itself as the card speaking rather than the resolver. */
+function identityHTML(){
+  const c = cardById("characters", S.cast[0]) || {};
+  if(!S.cast.length) return "";
+  const eng = shownEngine();
+  const resolved = CSTATE==="ok" && !!CDATA;
+  const hasLora = !!(resolved ? (CDATA.lora || c.lora) : c.lora);
+  const active  = resolved ? !!CDATA.lora_active : null;
+
+  let cls, head, body;
+  if(eng==="anime"){
+    cls = hasLora ? "strong" : "weak";
+    head = hasLora ? "strong — two mechanisms, one of them the weights"
+                   : "reference sheet only";
+    body = hasLora
+      ? `<b>IPAdapter</b> on ${c.sheet?`the sheet <code>${esc(c.sheet)}</code>`:"the reference sheet"}
+         <b>plus the trained character LoRA</b>, injected between the checkpoint and the
+         sampler. The LoRA is an actual change to the weights, so it holds in shots the
+         sheet never covered.`
+      : `<b>IPAdapter</b> on ${c.sheet?`the sheet <code>${esc(c.sheet)}</code>`
+         :`<span style="color:var(--sev-error)">no reference sheet at all</span>`}. No trained
+         LoRA for this character, so identity is a hint the sampler may drift off.`;
+  } else if(eng==="qwen"){
+    cls = c.sheet ? "weak" : "dead";
+    head = c.sheet ? "weaker lock — a hint, not a change to the weights"
+                   : "nothing is holding this face";
+    body = c.sheet
+      ? `The sheet <code>${esc(c.sheet)}</code> is fed to <b>Qwen-Image-Edit</b> as
+         conditioning on the keyframe. It conditions the generation; it does not alter the
+         weights, and it is a weaker lock than the anime path — expect more drift between
+         shots.`
+      : `This character has <b>no reference sheet</b>, and on qwen the sheet is the only
+         mechanism there is. The face will be whatever the prose description happens to
+         produce, and it will not agree from one shot to the next.`;
+  } else {
+    cls = "flat"; head = "engine not resolved";
+    body = `Which mechanism holds this face depends entirely on the engine, and the engine is
+      not resolved yet.`;
   }
-  if(c && c.lora) return `<div class="sub" style="margin-top:6px">
-    <b style="color:var(--ink)">this character has a trained LoRA</b> —
-    <code>${esc(c.lora)}</code>. Whether it is actually in play depends on the engine, and
-    only the resolver can say.</div>`;
-  return "";
+
+  // The one that has to be said at the point of choosing: a trained LoRA that
+  // exists and is being dropped because of the engine.
+  let drop = "";
+  const droppedByEngine = hasLora && (resolved ? active===false : eng==="qwen");
+  if(droppedByEngine){
+    drop = `<div class="mw" style="color:var(--sev-error)">
+      <b>The trained LoRA is NOT in play.</b>
+      ${resolved && CDATA.lora ? `<code>${esc(CDATA.lora)}</code> — ` : ""}${
+      resolved && CDATA.lora_reason ? esc(CDATA.lora_reason)
+      : `it was trained on the anime checkpoint, and a LoRA is a delta on those specific
+         weights — on qwen it attaches to nothing. You are paying for the training and
+         getting none of it.`}
+      <br><b>Fix</b> — pick an anime-engine style if holding this face matters more than the
+      idiom, or accept the sheet-only lock deliberately.</div>`;
+  } else if(hasLora && active===true){
+    drop = `<div class="mw" style="color:var(--post)"><b>Trained LoRA in play.</b>
+      ${CDATA.lora?`<code>${esc(CDATA.lora)}</code> — `:""}${esc(CDATA.lora_reason||"")}</div>`;
+  } else if(hasLora && !resolved){
+    drop = `<div class="mw">This character has a trained LoRA —
+      <code>${esc(c.lora)}</code>. Whether it is actually in play depends on the engine, and
+      only the resolver can say. <b>/api/compose is not answering</b>, so the line above is
+      read off the character card, not resolved.</div>`;
+  } else if(!hasLora){
+    drop = `<div class="mw">No trained LoRA exists for this character.</div>`;
+  }
+
+  return `<div class="mech ${cls}" style="margin-top:9px">
+    <div class="mh">how this face is held on ${esc(eng)}</div>
+    <div class="mv"><b>${esc(head)}</b></div>
+    <div class="mw">${body}</div>
+    ${drop}</div>`;
 }
 
 function wearBand(L){
@@ -917,7 +1489,8 @@ function wearBand(L){
 /* ══ THE LAYERS STEP ═══════════════════════════════════════════════════════ */
 function layersPanel(){
   const bands = LAYERS.map(L=>{
-    if(L.key==="style")     return styleBand(L);
+    if(L.key==="style")      return styleBand(L);
+    if(L.key==="style_lora") return styleLoraBand(L);
     if(L.key==="place")     return simpleBand(L,"places",{useExamples:true, search:true,
         empty:"No setting. The model puts the subject wherever it likes, and it will not agree between shots.",
         sub:c=>c.desc||c.tags,
@@ -944,6 +1517,12 @@ function layersPanel(){
     <p class="lede">Choose each layer and watch them combine. They are drawn nested because
     that is how they resolve: the style decides which model runs at all, the place is what
     that model draws, the character stands in it, and the modifiers act on the character.</p>
+    <div class="why"><b>One of these layers is not a request.</b> Style, place, character and
+    the modifiers are all words handed to a model that is free to ignore them — measured
+    here: prose alone could not move Qwen off photography at any cfg. <b>The style LoRA
+    is not words.</b> It is arithmetic added to the weights, and it does the one thing the
+    prompt could not. That is why it has its own slot instead of being folded into the style
+    card.</div>
     <div class="why"><b>The last layer is not like the others.</b> Everything above the dashed
     line becomes prompt text — a request, which the model may ignore. <b>Look</b> is an ffmpeg
     colour grade run over the finished frames. It is arithmetic on pixels, it always happens,
@@ -1201,6 +1780,33 @@ function movieText(){
   // here and nowhere else. `tags` below is the free house string - different var.
   if(S.style_card) L.push(`  style: ${S.style_card}`);
   if(S.engine_pick) L.push(`  engine: ${S.engine_pick}`);
+  // The style-LoRA slot. `style_lora` + `style_strength` are the two keys
+  // scripts/short.py reads off the compiled film to drive the keyframe
+  // workflow's LoRA node, so those are the names used here. "No LoRA" is
+  // written as strength 0 rather than as a filename, because a filename of
+  // "none" would be handed to the loader as a real file. Both lines are
+  // movie-level, which is where compile.py expects an unknown key to sit.
+  {
+    const e = effectiveLora();
+    // "none" is a VALUE of style_lora, not an absent line - compile.py's
+    // resolve_style_lora() treats none/off/no/false/-/0 as "refuse the style
+    // card's recommendation". Writing no line at all means the opposite: take
+    // whatever the style recommends.
+    if(e.mode==="none") L.push(`  style_lora: none`);
+    else if(e.mode==="picked" && e.lora){
+      // The card ID is the documented form ("studio/loras/*.json id"); the bare
+      // filename is accepted as a legacy fallback, so it is only used when the
+      // file is not in the library and has no card to name.
+      L.push(`  style_lora: ${e.lora.id || e.lora.file}`);
+      if(e.strength!=null && !isNaN(e.strength))
+        L.push(`  style_lora_strength: ${e.strength}`);
+    } else if(e.mode==="recommended" && S.style_strength!==""
+              && e.strength!=null && !isNaN(e.strength)){
+      // Taking the recommended LoRA but not its recommended strength: leave
+      // style_lora blank so the style card keeps choosing the file.
+      L.push(`  style_lora_strength: ${e.strength}`);
+    }
+  }
   if(S.style) L.push(`  tags: ${S.style}`);
   if(S.seed_root) L.push(`  seed_root: ${S.seed_root}`);
   L.push("");
@@ -1251,7 +1857,8 @@ function sideStack(){
     const v=layerValue(L.key);
     return `<div class="sideline"><span class="sidedot" style="--lc:${lcol(L.key)}"></span>
       <span style="color:var(--dim);min-width:74px">${esc(L.name.toLowerCase())}</span>
-      <span style="font-family:ui-monospace,Menlo,monospace">${v?esc(v):'<span style="color:var(--dim)">—</span>'}</span></div>`;
+      <span style="font-family:ui-monospace,Menlo,monospace;word-break:break-all">${
+        v?esc(layerDisplay(L.key,v)):'<span style="color:var(--dim)">—</span>'}</span></div>`;
   }).join("");
   let head, tail="";
   if(CSTATE==="ok" && CDATA){
@@ -1284,7 +1891,8 @@ function applyTemplate(id){
                mood:"mood", camera:"camera", emotion:"emotion",
                // layer-stack keys. No template sets these today; they are mapped so that
                // one which does lands in the right place instead of being dropped.
-               style:"style_card", lighting:"lighting", weather:"weather", engine:"engine_pick"};
+               style:"style_card", lighting:"lighting", weather:"weather", engine:"engine_pick",
+               style_lora:"style_lora", style_strength:"style_strength"};
   for(const [k,v] of Object.entries(t.sets||{})){
     if(map[k]) S[map[k]] = v;
     else if(k==="wear") S.wear = v;
@@ -1322,9 +1930,13 @@ function filterGrid(layer){
   const inp=document.querySelector(`[data-q="${layer}"]`);
   if(inp) FILT.q[layer]=inp.value;
   const q=(FILT.q[layer]||"").trim().toLowerCase();
-  document.querySelectorAll(`[data-grid="${layer}"] [data-lpick]`).forEach(b=>{
-    b.style.display = (!q || (b.dataset.hay||"").includes(q)) ? "" : "none";
-  });
+  // [data-lorapick] as well as [data-lpick]: the LoRA drawer is a list of rows
+  // rather than a grid of cards, so it uses its own pick attribute, but it wants
+  // the same keep-your-focus-while-typing search every other drawer has.
+  document.querySelectorAll(`[data-grid="${layer}"] [data-lpick],[data-grid="${layer}"] [data-lorapick]`)
+    .forEach(b=>{
+      b.style.display = (!q || (b.dataset.hay||"").includes(q)) ? "" : "none";
+    });
 }
 // Re-apply every live filter after a repaint, so a drawer that was filtered
 // before the resolver answered is still filtered after it.
@@ -1367,6 +1979,36 @@ function wire(){
     S.wear = b.dataset.wear===""?"":b.dataset.wear; OPEN.wear=false; render();});
   const ep=document.getElementById("engpick");
   if(ep) ep.onchange=()=>{S.engine_pick=ep.value; render();};
+  // ── style LoRA slot ──
+  document.querySelectorAll("[data-lorapick]").forEach(b=>b.onclick=()=>{
+    const v=b.dataset.lorapick;
+    setLayer("style_lora", S.style_lora===v ? "" : v);
+    OPEN.style_lora=false; render();});
+  const slr=document.getElementById("sl-reset");
+  if(slr) slr.onclick=()=>{ S.style_lora=""; S.style_strength=""; render(); };
+  const sls=document.getElementById("sl-strength");
+  if(sls){
+    // Dragging must not repaint the panel on every tick - the slider would lose
+    // the pointer mid-drag. Update the readout and the .movie live, repaint once
+    // on release, exactly the split the text fields already use.
+    sls.oninput=()=>{
+      S.style_strength=sls.value;
+      // A strength dialled while nothing is chosen has nothing to attach to, so
+      // dialling it IS the choice to take the recommendation.
+      if(S.style_lora===""){ const e=effectiveLora(); if(e.lora) S.style_lora=e.lora.file; }
+      const sv=document.getElementById("sl-sv");
+      if(sv) sv.textContent=parseFloat(sls.value).toFixed(2);
+      document.getElementById("out").textContent=movieText();
+    };
+    sls.onchange=()=>render();
+  }
+  const lfs=document.getElementById("lf-style");
+  if(lfs) lfs.onchange=()=>{FILT.loraStyleOnly=lfs.checked; render();};
+  const lfa=document.getElementById("lf-all");
+  if(lfa) lfa.onchange=()=>{FILT.loraAll=lfa.checked; render();};
+  const lr=document.getElementById("lretry");
+  if(lr) lr.onclick=async()=>{ await loadLoras(); render(); };
+
   const sq=document.getElementById("sq"); if(sq){ sq.oninput=filterStyles; }
   ["sf-fam","sf-eng","sf-comp","sf-stat"].forEach(id=>{
     const el=document.getElementById(id); if(el) el.onchange=filterStyles;});
@@ -1403,6 +2045,9 @@ function setLayer(k, v){
   if(k==="style")          S.style_card=v;
   else if(k==="character"){ if(!v) S.cast=[]; else if(!S.cast.includes(v)) S.cast.unshift(v); }
   else if(k==="wear")       S.wear=v;
+  // Picking a different LoRA drops a strength that was dialled for the previous
+  // one, so the new card's own recommendation is what shows.
+  else if(k==="style_lora"){ S.style_lora=v; S.style_strength=""; }
   else                      S[k]=v;
 }
 
@@ -1569,9 +2214,12 @@ async function loadStyles(){
     const v=(c.views||[])[0]; if(v && v.file) CASTVIEWS[c.id]=v.file;
   }
   await loadStyles();
+  // After loadStyles, because the /api/library fallback inside loadLoras reads LIB.
+  await loadLoras();
   const n=Object.values(lib).reduce((a,v)=>a+v.length,0);
   document.getElementById("stat").textContent =
-    `${TPLS.length} templates · ${n} presets · ${STYLES.length} styles · ${cards.length} capability cards · every choice labelled by where it takes effect`;
+    `${TPLS.length} templates · ${n} presets · ${STYLES.length} styles · ${
+      LORAS.length?LORAS.length+" loras":"loras unavailable"} · ${cards.length} capability cards · every choice labelled by where it takes effect`;
   render();
   doCompose(true);
 })();

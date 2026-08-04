@@ -1,0 +1,15 @@
+{
+  "id": "ltx-23-id-talkvid",
+  "name": "LTX-2.3 Identity (TalkVid 3k)",
+  "file": "ltx-2.3-id-lora-talkvid-3k.safetensors",
+  "base_model": "ltx",
+  "engine": "video",
+  "kind": "character",
+  "strength": 1.0,
+  "strength_range": [0.5, 1.0],
+  "trigger": "",
+  "means": "Holds one person's face steady across a video clip. Trained on talking-head footage, so the case it is built for is a character speaking to camera.",
+  "status": "untested",
+  "verdict": "",
+  "note": "base_model INFERRED, and note the distinction from the two LTX files that state a version: this file's __metadata__ key is PRESENT BUT EMPTY - zero keys - which is a different thing from absent and worth recording, because an empty dict means the training rig wrote metadata support and then wrote nothing into it. The inference rests on 48 transformer_blocks plus the audio_attn1 / audio_attn2 / video_to_audio_attn / audio_ff families, which match the two files that DO say 2.3.0, plus the filename. That is structural evidence, not a version read: it could be another LTX-2.x revision. | purpose is name-inferred. 'id-lora' and 'talkvid' are strong hints and nothing more; no file in this set states its purpose. | WHY IT MATTERS HERE: identity across a clip is a problem this project has not solved on the video side at all. On the anime path a character is held by a trained LoRA plus IPAdapter; on qwen by a reference sheet; on VIDEO by nothing - the keyframe is conditioned and then the video model is left to its own devices. If this works it is the missing third mechanism. | NOT WIRED into any studio workflow. trigger unknown. 1728 tensors, rank 128, no alpha so scale 1.0. Everything on this card except the geometry is a guess, which is why status is untested and strength is a convention rather than a measurement."
+}

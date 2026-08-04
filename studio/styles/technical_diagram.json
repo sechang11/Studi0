@@ -19,6 +19,6 @@
     "qwen": "/samples/styles/technical_diagram__qwen.webp"
   },
   "compose": "injects",
-  "verdict": "Drew a floating exploded-view diagram beside an untouched photo.",
+  "verdict": "Drew a floating exploded-view diagram beside an untouched photo. A STYLE LoRA WAS TRIED AND FAILED: the diagram stayed an overlay across an otherwise normal subject in all seven qwen settings. illustration at 1.0 multiplied the callout leaders and dashed alignment axes without ever making the SUBJECT the thing being diagrammed. The style asks the model to redraw the scene as a diagram; the model draws a diagram into the scene, with or without a LoRA.",
   "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
 }

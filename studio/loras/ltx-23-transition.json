@@ -1,0 +1,15 @@
+{
+  "id": "ltx-23-transition",
+  "name": "LTX-2.3 Transition",
+  "file": "ltx2.3-transition.safetensors",
+  "base_model": "ltx",
+  "engine": "video",
+  "kind": "edit",
+  "strength": 1.0,
+  "strength_range": [0.5, 1.0],
+  "trigger": "",
+  "means": "Generates the video that gets from one state to another - a morph or transition between two given frames rather than a clip from a single start frame.",
+  "status": "untested",
+  "verdict": "",
+  "note": "kind is 'edit' because the schema has no video-structural value; see ltx-23-ic-union-control for the same compromise. | base_model INFERRED. __metadata__ is PRESENT BUT EMPTY, exactly like ltx-23-id-talkvid. The evidence is 48 transformer_blocks with attn1/attn2/ff plus audio_ff, matching the two files that state model_version 2.3.0, plus the filename. Structural, not a version read. | purpose is name-inferred and nothing more. 'transition' is a guess about intent from six characters of filename. | THE REASON TO CARE: transitions in this project are currently a compile-time concept (studio/transitions/) applied between rendered clips, not something a model generates. A model that can synthesise the in-between would be a different mechanism, not a better version of the existing one - so anyone testing this should first decide which of the two they actually want. | NOT WIRED. trigger unknown. 1152 tensors, rank 32, no alpha so scale 1.0."
+}

@@ -1,0 +1,15 @@
+{
+  "id": "wan21-causvid-14b",
+  "name": "Wan 2.1 CausVid 14B T2V",
+  "file": "Wan21_CausVid_14B_T2V_lora_rank32.safetensors",
+  "base_model": "wan",
+  "engine": "video",
+  "kind": "speedup",
+  "strength": 1.0,
+  "strength_range": [1.0, 1.0],
+  "trigger": "",
+  "means": "Causal few-step distillation for Wan 2.1 text-to-video 14B.",
+  "status": "unavailable",
+  "verdict": "",
+  "note": "status is UNAVAILABLE, not untested, and the distinction is the whole point of the field: THE BASE MODEL THIS NEEDS IS NOT INSTALLED. It is a delta on Wan 2.1 T2V 14B, and the box has no plain Wan2.1 T2V checkpoint. The nearest relative present is wan2.1_vace_14B_fp16, which is Wan2.1-14B derived but is the VACE variant - trying it there is an experiment about whether the delta survives a variant change, not a use of the LoRA. This is the only file in the whole library with no matching installed base. | metadata ABSENT. base_model INFERRED from geometry: diffusion_model.blocks.0..39 with first tensor [5120], i.e. 40 blocks at width 5120, which is the 14B Wan layout. That geometry does NOT distinguish Wan 2.1 from Wan 2.2 - the filename is the only thing saying 2.1, and the same caveat applies to the two wan2.2 cards. purpose (speedup) is inferred from 'CausVid' in the filename. | Also patches text_embedding, time_embedding, time_projection, head and patch_embedding, and carries `.diff`/`.diff_b` full-diff entries alongside the usual up/down pairs. | 1459 tensors, rank 32, no alpha so scale 1.0. | NOT WIRED into any studio workflow, which follows from having no base. Either download Wan 2.1 T2V 14B or delete the file - but decide it, do not leave it as a 304 MiB question."
+}

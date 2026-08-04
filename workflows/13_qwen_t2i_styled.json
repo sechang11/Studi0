@@ -2,7 +2,9 @@
   "_comment": "Qwen-Image 2512 + Lightning 4-step + a STYLE LoRA stacked on top. Node 7 is the style LoRA - patch 7.inputs.lora_name and 7.inputs.strength_model to sweep looks. Chain order is UNET -> lightning(4) -> style(7) -> ModelSamplingAuraFlow(5), so the speed LoRA stays closest to the base weights.",
   "_notes": [
     "strength_model on node 7 is the dial that matters: 1.0 fully commits to the style and can flatten dark scenes, 0.6-0.8 keeps the style while letting palette and drama through.",
-    "Still 4 steps at cfg 1.0 - stacking a style LoRA does not change the Lightning schedule."
+    "Still 4 steps at cfg 1.0 - stacking a style LoRA does not change the Lightning schedule.",
+    "NODE 7 SHIPS AT strength_model 0.0, i.e. OFF, and that is deliberate. It used to ship at 0.8 with qwen_image_2512_storybook_anime_lora named, and scripts/short.py only overrode it when a film set style_lora - which no compiled film could, because there was no variable to set. Every qwen keyframe this project produced therefore carried a style LoRA nobody authored, on top of whatever style the author had actually chosen. ComfyUI's LoraLoader returns the model untouched when strength is 0 and never opens the file, so the name below is documentation of what the slot is for, not a load.",
+    "The choice is now made in studio/compose.py resolve_style_lora(), which refuses to hand over a LoRA whose card says it was trained on a different base model. scripts/short.py patches both lora_name and strength_model from the film."
   ],
   "1": {
     "class_type": "UNETLoader",
@@ -29,7 +31,7 @@
     "inputs": {
       "model": ["4", 0],
       "lora_name": "qwen_image_2512_storybook_anime_lora.safetensors",
-      "strength_model": 0.8
+      "strength_model": 0.0
     }
   },
   "5": {

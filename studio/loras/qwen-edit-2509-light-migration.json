@@ -1,0 +1,15 @@
+{
+  "id": "qwen-edit-2509-light-migration",
+  "name": "Light Migration (Qwen-Image-Edit 2509)",
+  "file": "Qwen-Image-Edit-2509-Light-Migration.safetensors",
+  "base_model": "qwen_edit",
+  "engine": "qwen",
+  "kind": "edit",
+  "strength": 1.0,
+  "strength_range": [0.5, 1.0],
+  "trigger": "",
+  "means": "Copies the lighting of one picture onto another. Relight's sibling: Relight takes a description of light, this takes an example of it.",
+  "status": "untested",
+  "verdict": "",
+  "note": "base_model NOT STATED. Same 5 provenance-only metadata keys as Relight, same author and rig: 'Daniel8152', repoId 'Daniel8152/light2', 'Modelscope X MuseAI', time 2025-12-07. Qwen-Image-Edit 2509 is INFERRED from the filename plus geometry. | NOT A DUPLICATE OF RELIGHT despite being byte-for-byte the same SIZE (236,117,032) with an identically shaped header. They were hashed: this one is 202d76cf..., Relight is 2a11c2b7.... Sizes match because architecture and rank match, not because the bytes do. This is the trap the scanner cannot catch for you - two files that look identical from the outside and are not. | THE INTERESTING USE FOR THIS PROJECT is shot-to-shot lighting continuity: take the lighting of an approved keyframe and migrate it onto the next one, rather than describing the same light twice in prose and hoping. That is a continuity mechanism, not a look mechanism, and no such mechanism exists in the studio today. | ZERO WIRING, no mentions anywhere in the repo. | Run on 2509, not 2511 - see qwen-edit-2509-relight. PEFT `.lora_A.default.weight` keys, supported by comfy/weight_adapter/lora.py:166. | No alpha tensors, so scale 1.0. strength_range is a guess; nothing has been rendered."
+}

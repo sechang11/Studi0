@@ -21,6 +21,6 @@
     "qwen": "/samples/styles/papercut_collage__qwen.webp"
   },
   "compose": "injects",
-  "verdict": "Drew torn-paper layers as a FRAME around an unmodified photograph.",
+  "verdict": "Drew torn-paper layers as a FRAME around an unmodified photograph. A STYLE LoRA WAS TRIED AND FAILED: the frame survived six of the seven qwen settings intact. The seventh, illustration at 1.5, did delete the frame - and replaced the entire picture with the LoRA's own inked watercolour, which contains no cut paper, no stacked layers and no drop shadows. Deleting a failure is not delivering the style.",
   "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
 }

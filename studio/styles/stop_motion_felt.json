@@ -14,13 +14,15 @@
   ],
   "strength": "weak",
   "works_for": "No - the worst survivor in this set. The fibre halo is the finest texture of any style here and it is exactly what boils, and it carries claymation's smooth-motion contradiction on top of that. INFERRED, not measured, but both failure modes point the same way. Use it for held frames only.",
-  "status": "unavailable",
+  "status": "ready",
   "note": "WEAK, and honestly weaker than claymation for a simple reason: felt is a fibre texture at a scale near the model's resolution limit, so it half-lands as fuzzy cloth rather than as felt. Faces are where it collapses - felted features are crude by nature and the model keeps dragging them back toward rendered human features, producing an uncanny middle. Keep to simple stylised characters and wide framing. STITCHING is the noun that buys the most, because it is large enough to survive at this resolution. NOT AVAILABLE on animagine, same reason as claymation. If what you actually want is handmade and warm rather than felt specifically, papercut_collage is far more reliable on this box - reach for that instead.",
   "examples": {
     "anime": "/samples/styles/stop_motion_felt__anime.webp",
     "qwen": "/samples/styles/stop_motion_felt__qwen.webp"
   },
   "compose": "inert",
-  "verdict": "No felt fibre, no armature, no stop-motion staging on either engine. Ordinary anime.",
-  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+  "verdict": "RESCUED BY A STYLE LoRA - the strongest positive result in the lora_rescue sweep. WITHOUT one, the qwen render is a photograph of an ordinary adult woman at all four seeds tried (5150, 7, 99999, 314159): no felt, no puppet, no set. WITH illustration-1.0-qwen-image in node 7 the same prose at the same seeds returns a needle-felted puppet - the face a dense mat of short fibres with a soft lit halo along the jaw, the coat coarse felted wool carrying an even run of visible hand stitches down both lapels and across the pocket flaps, the scarf a knitted miniature at puppet scale with a fringed end, the head enlarged on a small body, and the street falling away with the shallow macro depth of field of a photographed miniature. Armature wire shows as loops at the wrists and hem at seeds 7 and 314159. Present at every strength tested - 0.6, 0.8, 1.0, 1.2, 1.5 - so it is not a knife-edge. 1.0 is the cleanest; 1.5 adds unasked-for buckles, cords and a brooch and starts reading moulded rather than felted. The old finding that felt sits below the model's resolution limit was true of the base model and is not true with this LoRA. ROUTING BLOCKER: this card still says engine=anime and every style LoRA installed here is qwen-based, so the recommendation above cannot load until engine is changed to qwen. Measured with studio/_tools/lora_rescue.py; cells and contact sheets in studio/samples/lora_rescue/.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py",
+  "lora": "illustration-qwen-image",
+  "lora_strength": 1.0
 }

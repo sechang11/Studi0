@@ -1,0 +1,15 @@
+{
+  "id": "qwen-edit-2509-relight",
+  "name": "Relight (Qwen-Image-Edit 2509)",
+  "file": "Qwen-Image-Edit-2509-Relight.safetensors",
+  "base_model": "qwen_edit",
+  "engine": "qwen",
+  "kind": "edit",
+  "strength": 1.0,
+  "strength_range": [0.5, 1.0],
+  "trigger": "",
+  "means": "Changes the light on a picture that already exists - key direction, hard or soft, golden hour, rim light, colour temperature - without re-rolling the person in it.",
+  "status": "untested",
+  "verdict": "",
+  "note": "base_model NOT STATED. The 5 metadata keys are pure provenance and name no base: author 'Daniel8152', repoId 'Daniel8152/relight-1', source 'Modelscope X MuseAI', time 2025-10-09, and a modelscope url. Qwen-Image-Edit 2509 is INFERRED from the filename plus 60-block Qwen-Image geometry - the header cannot separate 2509 from 2511. | WHY IT IS WORTH TRYING, in this project's terms: the governing rule here is that the model renders NOUNS, NOT ADJECTIVES, and look/wear/mood all failed as prompt qualities and had to move to deterministic stages. Lighting is the other half of 'look' and has the same problem. This is a deterministic post-stage for it - applied to an already-locked keyframe, it changes the light without touching the identity. It is NOT an identity mechanism: it preserves a face that is already there, it does not hold one. | ZERO WIRING. `grep -rln Relight workflows/` returns nothing. The only mentions in the repo are aspirational prose at scripts/_write_caps.py:316, listed as the untested fix for the recorded failure 'Compositing cannot relight the subject'. | Wiring is one node: a LoraLoaderModelOnly between node 1 and node 5 of workflows/03_qwen_image_edit.json, which is already the 2509 graph and whose own _comment spells this out. Pair it with qwen-edit-2509-lightning-4step to run at 4 steps instead of 20. | RUN IT ON 2509, NOT 2511. This project has proved from pixels that LoRAs are base-locked; 2509 and 2511 are different bases and the 2511 checkpoint carries an extra marker tensor plus 4452 keys against 2509's 1934. | PEFT FORMAT: keys are `lora_A.default.weight`. That IS supported - comfy/weight_adapter/lora.py:166 has a branch literally named qwen_default_lora. Nobody should 'fix' it. | No alpha tensors, so scale 1.0. strength_range is a guess; nothing has been rendered."
+}

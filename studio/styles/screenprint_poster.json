@@ -20,6 +20,6 @@
     "qwen": "/samples/styles/screenprint_poster__qwen.webp"
   },
   "compose": "injects",
-  "verdict": "Produced garbled poster lettering over a photo. Neither engine screenprints, and both hallucinate text.",
+  "verdict": "Produced garbled poster lettering over a photo. Neither engine screenprints, and both hallucinate text. A STYLE LoRA WAS TRIED AND FAILED: the same six qwen settings, and garbled display lettering across the lower third survived every one of them. At illustration 1.5 the lettering band did become flat opaque red, orange and black blocks with hand-drawn letterforms - the closest anything came to screen ink - but the letters stay nonsense and the figure above them is a watercolour illustration, not four flat inks under a black key layer. No screenprint at any setting.",
   "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
 }

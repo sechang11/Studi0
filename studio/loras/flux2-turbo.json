@@ -1,0 +1,15 @@
+{
+  "id": "flux2-turbo",
+  "name": "FLUX.2 Turbo (Comfy v2)",
+  "file": "Flux2TurboComfyv2.safetensors",
+  "base_model": "flux",
+  "engine": null,
+  "kind": "speedup",
+  "strength": 1.0,
+  "strength_range": [1.0, 1.0],
+  "trigger": "",
+  "means": "Step distillation for FLUX.2 - fewer steps per image.",
+  "status": "untested",
+  "verdict": "",
+  "note": "engine is null because NO FILM ENGINE REACHES FLUX. compose.py's ENGINES are anime and qwen; workflows/26_flux2_t2i.json exists and works as a standalone graph, but scripts/short.py renders only the two. A resolver filtering by engine should therefore never offer this, which is correct and is the honest thing for the field to say. | metadata ABSENT. base_model INFERRED from geometry, and this one is decisive rather than a guess: 8 double blocks (transformer.transformer_blocks.0..7) plus 48 single blocks (diffusion_model.single_blocks.0..47), first tensor shape [256, 6144] i.e. width 6144. FLUX.1 is 19 double + 38 single at width 3072, so this is definitively NOT FLUX.1. Corroborated by workflows/26_flux2_t2i.json pairing it with flux2_dev_fp8mixed and mistral_3_small_flux2_fp8, and the base IS installed. purpose (speedup) is inferred from the filename and from the broad rank-256 structural patch - nothing in the file says so. | UNVERIFIED AND WORTH CHECKING BEFORE ANYONE TRUSTS IT: this file mixes TWO key-prefix conventions - `diffusion_model.*` for the single blocks and the modulation/embedder tensors, `transformer.*` for the double blocks. ComfyUI maps `diffusion_model.*` generically but `transformer.*` only under specific model-class branches, and whether the FLUX.2 branch covers the double-block half was not checked. It may be attaching only PARTIALLY, which would look like a weak-but-working turbo rather than an error. The check is cheap: run workflow 26 and count 'lora key not loaded' lines in ~/ComfyUI/user/comfyui_8188.log. | No alpha tensors, so scale 1.0. It also patches guidance_in, time_in, x_embedder, context_embedder and proj_out."
+}

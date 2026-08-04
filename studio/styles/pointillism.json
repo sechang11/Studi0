@@ -12,13 +12,15 @@
   ],
   "strength": "moderate",
   "works_for": "video - not viable, a dot field is the worst case for temporal stability",
-  "status": "weak",
+  "status": "ready",
   "note": "manga_screentone proved this engine CAN produce a dot field, which is the reason to expect pointillism to work where comic_halftone did not. | Authored in the second wave, after the first 64 were rendered and measured. status=untested because nothing here has been rendered yet - the first wave shipped 46 cards marked ready without a single render and 27 of 64 turned out to be routed to the wrong engine.",
   "examples": {
     "anime": "/samples/styles/pointillism__anime.webp",
     "qwen": "/samples/styles/pointillism__qwen.webp"
   },
   "compose": "safe",
-  "verdict": "Discrete dots are present but read as falling snow rather than as optical mixing. Partial.",
-  "verified_by": "Looked at, against the no-style control at the same seed with the same subject, on both engines. studio/_tools/style_examples.py --all-engines"
+  "verdict": "RESCUED BY A STYLE LoRA. Without one the dots still read as falling snow over a photograph, and at seed 314159 the control has no dots at all. With illustration-1.0-qwen-image the figure is genuinely built from discrete dots of pure colour that mix optically - the coat a dense field of blue, red, yellow, orange and green dots that resolves to dark tweed at a distance, the face pale dots with red gathered into the cheeks and nose, the scarf red and dark-red dots. Verified at four seeds (5150, 7, 99999, 314159) and monotonic in strength: 0.6 speckles a photograph, 0.8 begins building the surface, 1.0 converts coat and scarf, 1.2 converts the whole figure and starts pulling the background off photography, 1.5 leaves the background a grey wash. THE LIMIT, and it is real: the dots stop at the figure's silhouette. The ground is never divisionist, so this is a pointillist SUBJECT rather than a pointillist painting - the same bargain claymation is marked ready on. ROUTING BLOCKER: this card says engine=anime and the LoRA is qwen-based, so the recommendation cannot load until engine is changed to qwen. studio/_tools/lora_rescue.py; studio/samples/lora_rescue/.",
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject, on both engines. studio/_tools/style_examples.py --all-engines",
+  "lora": "illustration-qwen-image",
+  "lora_strength": 1.2
 }
