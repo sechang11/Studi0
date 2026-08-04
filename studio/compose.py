@@ -2353,6 +2353,7 @@ def resolve(libs, sel):
     camera = str(sel.get("camera") or "").strip()
     output = str(sel.get("output") or "video").strip().lower()
     wear = _wear_level(sel.get("wear"))
+    costume_id = str(sel.get("costume") or "").strip()
 
     for group, ident, card in (("looks", look_id, look or None),
                                ("lighting", lighting_id, lighting),
@@ -2405,7 +2406,30 @@ def resolve(libs, sel):
         character = None
 
     # ---- the text each layer contributes -----------------------------------
-    wear_tags = (character.get("wear_tags") if character else None) or WEAR
+    # WARDROBE, then damage. `wear_tags` is five DAMAGE LEVELS of one outfit - clean,
+    # dusty, torn, bandaged, ruined - which looks like a wardrobe and is not one. A card
+    # may now carry a `costumes` map of NAMED outfits, each with its own five levels,
+    # because damage is orthogonal to wardrobe: armour dents the way a dress tears. The
+    # old field still means the default costume, so every existing card and film is
+    # untouched and this is purely additive.
+    wear_tags = None
+    if character:
+        costumes = character.get("costumes") or {}
+        if costume_id and costumes:
+            c_ = costumes.get(costume_id)
+            if c_:
+                wear_tags = c_.get("wear_tags")
+            else:
+                conflicts.append(_conflict(
+                    "warning", ["character"],
+                    "%s has no costume called '%s' - wearing the default instead. "
+                    "Available: %s" % (character.get("name") or character.get("id"),
+                                       costume_id, ", ".join(sorted(costumes)) or "none"),
+                    "pick one of the names above, or leave the costume unset.",
+                    "costume_unknown"))
+        if wear_tags is None:
+            wear_tags = character.get("wear_tags")
+    wear_tags = wear_tags or WEAR
     wear_text = wear_tags[min(wear, len(wear_tags) - 1)] if character else ""
 
     look_tags = str(look.get("tags", "")) if look else ""

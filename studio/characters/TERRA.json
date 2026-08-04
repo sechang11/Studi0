@@ -1,0 +1,76 @@
+{
+  "id": "TERRA",
+  "name": "Terra",
+  "desc": "The one who does not know what she is. Half of something, and nobody will say which half. Moves like she is waiting to be told she is allowed.",
+  "status": "untested",
+  "provenance": "known_partial",
+  "provenance_note": "MEASURED before this card was written, studio/_tools/known_char_probe.py at seed 9090 on animagine-xl-4.0, evidence at studio/samples/cast/known_terra_probe.jpg. The bare name 'terra branford' returns a BLONDE IN A WHITE HOOD - not her. The danbooru form 'terra branford (final fantasy vi)' reaches the right palette and silhouette and reliably adds an orb held in both hands, which is a noun the tag genuinely carries. But the description-only control lands nearly as close, so the tag is thin and the name is doing less work than its fame suggests. She therefore gets the SAME full build as an invented character - sheet, turnaround, trained LoRA - and the name is used only to seed a better starting portrait. See craft/KNOWN_CHARACTERS.md.",
+  "source": "Final Fantasy VI (Square Enix)",
+  "source_note": "A character from a published game, so this card records where she comes from. Rendering fan work is ordinary - the danbooru corpus this checkpoint learned from is largely built on it. DISTRIBUTING a finished film built on her is a different question from making one, and it is the author's call to make deliberately rather than by accident. This is not the same as the four blocked voice packs in studio/voices/, which clone real people; those are a likeness question and stay blocked.",
+  "tags": "terra branford (final fantasy vi), 1girl, solo, long wavy green hair, very long hair, green eyes, red hair ribbon",
+  "base_tags": "female focus, young woman, slender",
+  "prose": "a young woman with waist-length wavy green hair tied back with a red ribbon, green eyes, a red half-cape over a sleeveless gold dress patterned in red and blue, and red boots",
+  "wear_tags": [
+    "red cape, sleeveless gold dress with red and blue pattern, wide red sash, red boots, clean and unmarked",
+    "red cape, gold dress, red sash, red boots, travel dust on the hem",
+    "torn red cape, gold dress scuffed at the knee, sash loose, dirt on both boots",
+    "red cape gone, gold dress torn at the shoulder, sash used as a bandage on the forearm, one boot split",
+    "no cape, gold dress in rags, bare forearms wrapped in cloth, both boots ruined, blood dried at the temple"
+  ],
+  "sheet": "sheet_anime_terra.png",
+  "voice": null,
+  "lora": "character_terra_00001_.safetensors",
+  "note": "BUILT AS A TEST OF THE KNOWN-CHARACTER PATH, 2026-08-04. The identity vocabulary is deliberately CONCRETE - green hair, red ribbon, red cape, gold dress, red boots, pointed ears - because the model renders nouns, not adjectives, and an identity resting on 'ethereal' or 'haunted' does not survive a single re-render. The danbooru tag leads the tag string because tag order is load-bearing on the anime path: earlier and more specific wins. The orb the tag likes to add is deliberately NOT in the wear vocabulary - it is a prop, and a prop welded to a character turns up in every shot whether the scene wants it or not, which is the same failure the styles library recorded when a style named after an object put that object in the subject's hands. | REMOVED 'pointed ears' after looking at the first sheet: it produced full elf ears, which is not her design - she reads human in FF6 and the Esper form is a separate thing. A wrong noun is worse here than a missing one because the LoRA would train it in permanently, and every later render would carry ears the card never wanted. Caught at the sheet stage, which is the cheap place to catch it.",
+  "status_note": "untested means nothing here has been rendered yet. Sheet, turnaround, LoRA and every verdict field are still to come.",
+  "lora_trained_at": "2026-08-04T09:38:07",
+  "lora_dataset": "16 images",
+  "lora_steps": 1000,
+  "lora_rank": 16,
+  "costumes": {
+    "default": {
+      "name": "Traveller",
+      "desc": "What she is wearing when the story finds her. Not chosen, just what she had on.",
+      "wear_tags": [
+        "red cape, sleeveless gold dress with red and blue pattern, wide red sash, red boots, clean and unmarked",
+        "red cape, gold dress, red sash, red boots, travel dust on the hem",
+        "torn red cape, gold dress scuffed at the knee, sash loose, dirt on both boots",
+        "red cape gone, gold dress torn at the shoulder, sash used as a bandage on the forearm, one boot split",
+        "no cape, gold dress in rags, bare forearms wrapped in cloth, both boots ruined, blood dried at the temple"
+      ]
+    },
+    "armour": {
+      "name": "Imperial plate",
+      "desc": "Issued, not fitted. The army she was pointed at things by, before she stopped being pointed.",
+      "wear_tags": [
+        "polished steel breastplate over a red tabard, steel pauldrons, mail sleeves, gauntlets, steel greaves over red boots, spotless",
+        "steel breastplate over a red tabard, pauldrons, mail sleeves, gauntlets, greaves, dust in every joint",
+        "steel breastplate scratched across the front, one pauldron dented, mail torn at the left sleeve, gauntlets scuffed",
+        "breastplate buckled at the ribs, one pauldron gone, mail hanging open, one gauntlet missing, dried blood on the other",
+        "breastplate discarded, torn red tabard over mail, both pauldrons gone, bare left arm bound in cloth, one greave dragging"
+      ]
+    },
+    "court": {
+      "name": "Court dress",
+      "desc": "For the room where the decision is made about her, in front of her, without her.",
+      "wear_tags": [
+        "floor length deep green gown, gold embroidery at the hem, long white gloves, thin gold circlet, pressed and immaculate",
+        "green gown, gold embroidery, white gloves creased at the wrist, circlet slightly askew",
+        "green gown with a torn hem, one glove off and held in the hand, circlet gone",
+        "green gown torn to the knee, both gloves gone, embroidery pulled loose in threads",
+        "green gown in rags below the waist, bare arms, one sleeve torn away entirely"
+      ]
+    },
+    "field": {
+      "name": "Field coat",
+      "desc": "Bought in a border town with money that was not hers. The first thing she picked herself.",
+      "wear_tags": [
+        "heavy brown travelling coat over the gold dress, leather satchel across the body, worn boots, dry and clean",
+        "brown coat, satchel, boots, mud to the ankle and rain on the shoulders",
+        "brown coat torn at the pocket, satchel strap knotted where it broke, boots caked",
+        "coat missing a sleeve, satchel gone, gold dress showing through the tear, boots split",
+        "no coat, gold dress in rags, satchel strap used as a belt, both boots ruined"
+      ]
+    }
+  },
+  "costume_note": "FOUR COSTUMES, each with the SAME FIVE DAMAGE LEVELS, because damage is orthogonal to wardrobe - armour dents the way a dress tears, and folding the two together would lose the ladder that already works. `wear_tags` is unchanged and still means the default costume, so every existing card and film is untouched. Every level names objects and their state rather than a mood, because the model renders nouns: 'battle-worn' renders as nothing, 'one pauldron dented, dried blood on the gauntlet' renders."
+}
