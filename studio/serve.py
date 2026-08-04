@@ -922,6 +922,20 @@ class H(http.server.SimpleHTTPRequestHandler):
             return self._page("places.html")
         if path == "/api/places":
             return self._send(places())
+        if path in ("/changelog", "/changelog.html"):
+            p = f"{HERE}/changelog.html"
+            if not os.path.exists(p):
+                return self._send(b"changelog.html is missing", 500, "text/plain")
+            return self._send(open(p, "rb").read(), 200, "text/html; charset=utf-8")
+        if path == "/api/changelog":
+            # Built by studio/_tools/changelog.py from git log. Regenerate after committing;
+            # a stale file is better than a 500, so a missing one is reported as such.
+            p = f"{HERE}/changelog.json"
+            if not os.path.exists(p):
+                return self._send({"error": "changelog.json not built",
+                                   "hint": "python3 studio/_tools/changelog.py"}, 503)
+            with open(p, encoding="utf-8") as f:
+                return self._send(json.load(f))
         if path in ("/loras", "/loras.html"):
             return self._page("loras.html")
         if path == "/api/loras":

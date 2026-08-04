@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>studio · changelog</title>
+<style>
+  :root{--bg:#0f1115;--panel:#161a21;--panel2:#1c2129;--line:#272d38;--ink:#e6e9ef;
+        --dim:#8b94a3;--accent:#6ea8fe;--ok:#4ec9a0;--warn:#e0b252;--bad:#e07a5f}
+  @media (prefers-color-scheme:light){
+    :root{--bg:#f6f7f9;--panel:#fff;--panel2:#f0f2f5;--line:#dde1e8;--ink:#141821;--dim:#5d6470}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font:14px/1.6 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  a{color:inherit}
+  header{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;padding:13px 18px;
+         border-bottom:1px solid var(--line);background:var(--panel);position:sticky;top:0;z-index:9}
+  header h1{margin:0;font-size:15px;letter-spacing:.07em;text-transform:uppercase}
+  header .sub{color:var(--dim);font-size:12px}
+  header .right{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+  header .right a{color:var(--dim);font-size:12px;text-decoration:none;border:1px solid var(--line);
+           padding:5px 10px;border-radius:6px}
+  header .right a:hover{color:var(--ink);border-color:var(--accent)}
+  .bar{display:flex;gap:7px;flex-wrap:wrap;align-items:center;padding:11px 18px;
+       border-bottom:1px solid var(--line);background:var(--panel);position:sticky;top:52px;z-index:8}
+  button{background:var(--panel2);border:1px solid var(--line);color:var(--ink);border-radius:99px;
+       padding:5px 12px;font:12.5px/1.4 inherit;cursor:pointer}
+  button:hover{border-color:var(--accent)}
+  button.on{border-color:var(--accent);color:var(--accent)}
+  .count{margin-left:auto;color:var(--dim);font-size:12px}
+
+  main{max-width:900px;margin:0 auto;padding:0 18px 70px}
+  .lede{color:var(--dim);font-size:13px;margin:18px 0 4px;max-width:80ch}
+
+  .day{display:flex;align-items:baseline;gap:10px;margin:30px 0 12px}
+  .day h2{margin:0;font-size:13px;letter-spacing:.09em;text-transform:uppercase;color:var(--dim)}
+  .day span{color:var(--dim);font-size:11.5px;font-family:ui-monospace,Menlo,monospace}
+  .day .rule{flex:1;height:1px;background:var(--line)}
+
+  .e{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:15px 17px;
+     margin-bottom:11px}
+  .e h3{margin:0 0 8px;font-size:16.5px;line-height:1.35;letter-spacing:-.005em}
+  .meta{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+  .tag{font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;border:1px solid var(--line);
+       border-radius:99px;padding:2px 9px;color:var(--dim)}
+  .tag.a-Cast{color:#4ec9a0;border-color:#4ec9a055}
+  .tag.a-Styles{color:#8b5cf6;border-color:#8b5cf655}
+  .tag.a-Motion{color:#e0b252;border-color:#e0b25255}
+  .tag.a-Pipeline{color:#e07a5f;border-color:#e07a5f55}
+  .tag.a-Wizard,.tag.a-App{color:var(--accent);border-color:#6ea8fe55}
+  .sha{margin-left:auto;font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--dim)}
+  .stat{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--dim)}
+  .stat i{font-style:normal;color:var(--ok)}
+  .stat u{text-decoration:none;color:var(--bad)}
+
+  /* The bodies are the interesting half - they record what was measured and where a claim
+     turned out to be wrong - so the first paragraph is always open and the rest is one
+     click away rather than hidden behind a diff. */
+  .body p{margin:0 0 10px;color:var(--dim);font-size:13.5px}
+  .body p:last-child{margin-bottom:0}
+  .more{margin-top:2px}
+  .more summary{cursor:pointer;color:var(--accent);font-size:12.5px;list-style:none}
+  .more summary::-webkit-details-marker{display:none}
+  .more summary:before{content:"Show the rest ▾";}
+  .more[open] summary:before{content:"Less ▴";}
+  .more[open] summary{margin-bottom:9px}
+  .empty{padding:40px 0;color:var(--dim)}
+</style>
+</head>
+<body>
+<header>
+  <h1>studio</h1><span class="sub">changelog &mdash; generated from git, not written by hand</span>
+  <span class="right">
+    <a href="/">Home</a><a href="/wizard">Direct a scene</a><a href="/styles">Styles</a>
+    <a href="/places">Places</a><a href="/cast">Cast</a><a href="/video">Video</a>
+    <a href="/gallery">Gallery</a>
+  </span>
+</header>
+
+<div class="bar" id="bar"><span class="count" id="count"></span></div>
+
+<main>
+  <p class="lede" id="lede"></p>
+  <div id="list"></div>
+  <div class="empty" id="empty" hidden>Nothing in that area yet.</div>
+</main>
+
+<script>
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+let DOC=null, AREA="";
+
+function entryHTML(e){
+  const tags=(e.areas||[]).map(a=>`<span class="tag a-${esc(a)}">${esc(a)}</span>`).join("");
+  const paras=e.paragraphs||[];
+  const first=paras.length?`<p>${esc(paras[0])}</p>`:"";
+  const rest=paras.length>1
+    ? `<details class="more"><summary></summary>${paras.slice(1).map(p=>`<p>${esc(p)}</p>`).join("")}</details>`
+    : "";
+  return `<article class="e">
+    <div class="meta">${tags}<span class="sha">${esc(e.hash)}</span></div>
+    <h3>${esc(e.subject)}</h3>
+    <div class="body">${first}${rest}</div>
+    <div class="stat" style="margin-top:10px">${e.files} file${e.files===1?"":"s"}
+      &middot; <i>+${e.added}</i> <u>-${e.removed}</u> &middot; ${esc(e.time)}</div>
+  </article>`;
+}
+
+function draw(){
+  const rows=(DOC.entries||[]).filter(e=>!AREA || (e.areas||[]).includes(AREA));
+  const days=[];
+  let cur=null;
+  for(const e of rows){
+    if(!cur || cur.date!==e.date){ cur={date:e.date, items:[]}; days.push(cur); }
+    cur.items.push(e);
+  }
+  document.getElementById("list").innerHTML = days.map(d=>
+    `<div class="day"><h2>${esc(d.date)}</h2><span>${d.items.length} change${d.items.length===1?"":"s"}</span><span class="rule"></span></div>`
+    + d.items.map(entryHTML).join("")).join("");
+  document.getElementById("empty").hidden = rows.length>0;
+  document.getElementById("count").textContent =
+    `${rows.length} of ${DOC.count} changes` + (AREA?` in ${AREA}`:"");
+}
+
+(async function(){
+  try{
+    const r=await fetch("/api/changelog"); if(!r.ok) throw new Error("HTTP "+r.status);
+    DOC=await r.json();
+  }catch(err){
+    document.getElementById("list").innerHTML=
+      `<div class="empty">Could not load the changelog &mdash; ${esc(err.message)}.
+       Run <code>python3 studio/_tools/changelog.py</code> to build it.</div>`;
+    return;
+  }
+  document.getElementById("lede").textContent = DOC.note || "";
+  const bar=document.getElementById("bar");
+  const mk=(label,val)=>{
+    const b=document.createElement("button");
+    b.textContent=label; if(val===AREA) b.className="on";
+    b.onclick=()=>{ AREA=val;
+      [...bar.querySelectorAll("button")].forEach(x=>x.classList.remove("on"));
+      b.classList.add("on"); draw(); };
+    return b;
+  };
+  bar.prepend(...[mk("everything",""), ...(DOC.areas||[]).map(a=>mk(a,a))]);
+  draw();
+})();
+</script>
+</body>
+</html>
