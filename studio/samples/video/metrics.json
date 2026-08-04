@@ -1,0 +1,459 @@
+{
+  "_isolation": {
+    "seed": 7204,
+    "video_seed": 8801,
+    "size": [
+      1280,
+      704
+    ],
+    "frames": 193,
+    "fps": 24,
+    "motion_prompt": "She breathes and shifts her weight slightly. Her hair and the end of her scarf move in a light breeze. The camera does not move.",
+    "subject_tags": "1girl, solo, upper body, long dark hair, red scarf, wool coat, standing, looking at viewer, city street, brick wall, buildings, overcast",
+    "subject_prose": "a young woman in a wool coat and red scarf standing on a city street in front of a brick wall, buildings receding behind her, overcast daylight, facing the camera",
+    "workflow": "12_ltx23_i2v_audio.json",
+    "left_at_shipping_defaults": {
+      "node11_video_negative": "static, frozen, blurry, distorted, morphing, warping, ugly, low quality, watermark, text overlay",
+      "node9_img_compression": 18,
+      "node23_strength": 1.0,
+      "node5_distill_lora": 0.5,
+      "node31_cfg": 1.0
+    },
+    "measured_utc": "2026-08-04T04:37:29+00:00"
+  },
+  "flat_vector": {
+    "frames": 193,
+    "full": {
+      "motion": 2.772,
+      "churn": 0.068,
+      "boil": 0.302,
+      "detail": 0.866
+    },
+    "first_4s": {
+      "motion": 2.707,
+      "churn": 0.071,
+      "boil": 0.276,
+      "detail": 0.915
+    },
+    "hi_amp_frame0": 25.42,
+    "hi_amp_end": 22.02,
+    "detail_octiles": [
+      0.977,
+      0.957,
+      0.942,
+      0.924,
+      0.904,
+      0.886,
+      0.882,
+      0.867
+    ],
+    "kf_hi_amp": 25.44,
+    "kf_retention": 0.999
+  },
+  "_control__anime": {
+    "frames": 193,
+    "full": {
+      "motion": 0.423,
+      "churn": 1.082,
+      "boil": 0.091,
+      "detail": 1.007
+    },
+    "first_4s": {
+      "motion": 0.427,
+      "churn": 1.105,
+      "boil": 0.093,
+      "detail": 1.069
+    },
+    "hi_amp_frame0": 5.9,
+    "hi_amp_end": 5.94,
+    "detail_octiles": [
+      1.008,
+      1.019,
+      1.047,
+      1.066,
+      1.06,
+      1.019,
+      1.015,
+      1.007
+    ],
+    "kf_hi_amp": 5.89,
+    "kf_retention": 1.003
+  },
+  "cel_anime_90s": {
+    "frames": 193,
+    "full": {
+      "motion": 0.772,
+      "churn": 0.56,
+      "boil": 0.173,
+      "detail": 0.976
+    },
+    "first_4s": {
+      "motion": 0.596,
+      "churn": 0.553,
+      "boil": 0.127,
+      "detail": 1.0
+    },
+    "hi_amp_frame0": 9.49,
+    "hi_amp_end": 9.26,
+    "detail_octiles": [
+      1.008,
+      1.009,
+      1.008,
+      1.004,
+      0.991,
+      0.978,
+      0.977,
+      0.976
+    ],
+    "kf_hi_amp": 9.23,
+    "kf_retention": 1.027
+  },
+  "ink_wash": {
+    "frames": 193,
+    "full": {
+      "motion": 0.364,
+      "churn": 0.446,
+      "boil": 0.071,
+      "detail": 0.944
+    },
+    "first_4s": {
+      "motion": 0.293,
+      "churn": 0.533,
+      "boil": 0.055,
+      "detail": 0.987
+    },
+    "hi_amp_frame0": 10.15,
+    "hi_amp_end": 9.58,
+    "detail_octiles": [
+      1.012,
+      1.021,
+      1.01,
+      0.994,
+      0.97,
+      0.965,
+      0.955,
+      0.944
+    ],
+    "kf_hi_amp": 9.96,
+    "kf_retention": 1.019
+  },
+  "ligne_claire": {
+    "frames": 193,
+    "full": {
+      "motion": 2.444,
+      "churn": 0.87,
+      "boil": 0.405,
+      "detail": 0.859
+    },
+    "first_4s": {
+      "motion": 2.476,
+      "churn": 0.878,
+      "boil": 0.407,
+      "detail": 0.913
+    },
+    "hi_amp_frame0": 14.59,
+    "hi_amp_end": 12.54,
+    "detail_octiles": [
+      0.976,
+      0.955,
+      0.917,
+      0.902,
+      0.905,
+      0.87,
+      0.863,
+      0.859
+    ],
+    "kf_hi_amp": 14.46,
+    "kf_retention": 1.009
+  },
+  "manga_screentone": {
+    "frames": 193,
+    "full": {
+      "motion": 1.504,
+      "churn": 0.271,
+      "boil": 0.214,
+      "detail": 0.977
+    },
+    "first_4s": {
+      "motion": 1.77,
+      "churn": 0.219,
+      "boil": 0.236,
+      "detail": 0.973
+    },
+    "hi_amp_frame0": 21.22,
+    "hi_amp_end": 20.73,
+    "detail_octiles": [
+      0.993,
+      0.985,
+      0.977,
+      0.973,
+      0.973,
+      0.976,
+      0.974,
+      0.977
+    ],
+    "kf_hi_amp": 21.27,
+    "kf_retention": 0.998
+  },
+  "pixel_art": {
+    "frames": 193,
+    "full": {
+      "motion": 1.347,
+      "churn": 0.604,
+      "boil": 0.157,
+      "detail": 0.97
+    },
+    "first_4s": {
+      "motion": 1.431,
+      "churn": 0.792,
+      "boil": 0.138,
+      "detail": 0.949
+    },
+    "hi_amp_frame0": 19.84,
+    "hi_amp_end": 19.25,
+    "detail_octiles": [
+      1.001,
+      0.984,
+      0.915,
+      0.941,
+      0.955,
+      0.963,
+      0.969,
+      0.97
+    ],
+    "kf_hi_amp": 19.74,
+    "kf_retention": 1.005
+  },
+  "pointillism": {
+    "frames": 193,
+    "full": {
+      "motion": 0.527,
+      "churn": 0.832,
+      "boil": 0.147,
+      "detail": 1.011
+    },
+    "first_4s": {
+      "motion": 0.534,
+      "churn": 0.839,
+      "boil": 0.146,
+      "detail": 1.007
+    },
+    "hi_amp_frame0": 5.83,
+    "hi_amp_end": 5.89,
+    "detail_octiles": [
+      1.005,
+      1.012,
+      1.027,
+      1.013,
+      1.001,
+      0.999,
+      1.005,
+      1.011
+    ],
+    "kf_hi_amp": 5.76,
+    "kf_retention": 1.012
+  },
+  "silhouette_poster": {
+    "frames": 193,
+    "full": {
+      "motion": 0.415,
+      "churn": 0.865,
+      "boil": 0.071,
+      "detail": 1.001
+    },
+    "first_4s": {
+      "motion": 0.393,
+      "churn": 0.837,
+      "boil": 0.069,
+      "detail": 1.028
+    },
+    "hi_amp_frame0": 8.69,
+    "hi_amp_end": 8.71,
+    "detail_octiles": [
+      1.001,
+      1.009,
+      1.001,
+      1.022,
+      1.007,
+      1.005,
+      0.994,
+      1.001
+    ],
+    "kf_hi_amp": 8.58,
+    "kf_retention": 1.013
+  },
+  "watercolour": {
+    "frames": 193,
+    "full": {
+      "motion": 0.345,
+      "churn": 0.521,
+      "boil": 0.137,
+      "detail": 0.976
+    },
+    "first_4s": {
+      "motion": 0.338,
+      "churn": 0.559,
+      "boil": 0.131,
+      "detail": 1.004
+    },
+    "hi_amp_frame0": 4.75,
+    "hi_amp_end": 4.64,
+    "detail_octiles": [
+      1.014,
+      1.037,
+      1.041,
+      1.014,
+      0.984,
+      0.977,
+      0.988,
+      0.977
+    ],
+    "kf_hi_amp": 4.66,
+    "kf_retention": 1.019
+  },
+  "_control__qwen": {
+    "frames": 193,
+    "full": {
+      "motion": 0.753,
+      "churn": 0.722,
+      "boil": 0.228,
+      "detail": 0.87
+    },
+    "first_4s": {
+      "motion": 0.626,
+      "churn": 0.217,
+      "boil": 0.203,
+      "detail": 0.948
+    },
+    "hi_amp_frame0": 5.87,
+    "hi_amp_end": 5.11,
+    "detail_octiles": [
+      0.998,
+      0.989,
+      0.977,
+      0.954,
+      0.928,
+      0.909,
+      0.888,
+      0.87
+    ],
+    "kf_hi_amp": 5.9,
+    "kf_retention": 0.995
+  },
+  "brutalist": {
+    "frames": 193,
+    "full": {
+      "motion": 1.871,
+      "churn": 1.073,
+      "boil": 0.308,
+      "detail": 0.442
+    },
+    "first_4s": {
+      "motion": 0.526,
+      "churn": 0.331,
+      "boil": 0.17,
+      "detail": 0.934
+    },
+    "hi_amp_frame0": 6.51,
+    "hi_amp_end": 2.88,
+    "detail_octiles": [
+      1.0,
+      1.002,
+      0.997,
+      0.952,
+      0.892,
+      0.801,
+      0.66,
+      0.446
+    ],
+    "kf_hi_amp": 6.51,
+    "kf_retention": 1.001
+  },
+  "cinestill_night": {
+    "frames": 193,
+    "full": {
+      "motion": 0.595,
+      "churn": 0.608,
+      "boil": 0.195,
+      "detail": 0.954
+    },
+    "first_4s": {
+      "motion": 0.362,
+      "churn": 0.234,
+      "boil": 0.131,
+      "detail": 0.965
+    },
+    "hi_amp_frame0": 4.39,
+    "hi_amp_end": 4.19,
+    "detail_octiles": [
+      1.003,
+      0.994,
+      0.983,
+      0.97,
+      0.966,
+      0.952,
+      0.936,
+      0.954
+    ],
+    "kf_hi_amp": 4.43,
+    "kf_retention": 0.99
+  },
+  "film_35mm": {
+    "frames": 193,
+    "full": {
+      "motion": 1.204,
+      "churn": 0.959,
+      "boil": 0.322,
+      "detail": 0.855
+    },
+    "first_4s": {
+      "motion": 0.685,
+      "churn": 0.424,
+      "boil": 0.249,
+      "detail": 0.913
+    },
+    "hi_amp_frame0": 4.59,
+    "hi_amp_end": 3.92,
+    "detail_octiles": [
+      1.004,
+      0.972,
+      0.948,
+      0.925,
+      0.931,
+      0.934,
+      0.915,
+      0.858
+    ],
+    "kf_hi_amp": 4.65,
+    "kf_retention": 0.987
+  },
+  "photorealistic": {
+    "frames": 193,
+    "full": {
+      "motion": 2.41,
+      "churn": 1.432,
+      "boil": 0.349,
+      "detail": 0.51
+    },
+    "first_4s": {
+      "motion": 0.461,
+      "churn": 0.94,
+      "boil": 0.163,
+      "detail": 0.964
+    },
+    "hi_amp_frame0": 3.94,
+    "hi_amp_end": 2.01,
+    "detail_octiles": [
+      1.004,
+      1.006,
+      1.009,
+      0.971,
+      0.97,
+      0.941,
+      0.894,
+      0.517
+    ],
+    "kf_hi_amp": 3.92,
+    "kf_retention": 1.005
+  }
+}

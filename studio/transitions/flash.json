@@ -3,5 +3,6 @@
   "desc": "One-frame white. Impact, or a shock reveal.",
   "status": "ready",
   "frames": 2,
-  "filter": "xfade=transition=fadewhite:duration={d}"
+  "filter": "xfade=transition=fadewhite:duration={d}",
+  "verdict": "RENDERED 2026-08-04 between two real clips. Confirmed to hit full white, luma max exactly 255.0 - but only for its 2 frames, and a 16-point sample of the luma curve steps straight over it and misreports the card as a hard cut. Any tool measuring this card must sample every frame. Mechanically it is the same xfade=fadewhite as fade_white at 2 frames instead of 24; MAD vs fade_white 21.50, vs cut 41.03."
 }

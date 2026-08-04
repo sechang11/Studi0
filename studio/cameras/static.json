@@ -1,5 +1,6 @@
 {
   "id": "static",
   "desc": "No move. The default, and correct more often than people expect.",
-  "status": "ready"
+  "status": "ready",
+  "verdict": "RENDERED 2026-08-04. Post tier (ffmpeg). fx_chain() emits no filter for static, so the clip passes through untouched: frame-to-frame difference is EXACTLY 0.00 and both tracked landmarks move +0px. Correct, and it is the reference every other move is read against. Asked of the video model instead, from the same keyframe and seed, it is also the best-behaved prompt in the set - activity 1.02 against an empty-prompt floor of 1.01, i.e. it really does hold still. Samples: static.mp4 (post, over a real LTX clip) and static_prompted.mp4."
 }

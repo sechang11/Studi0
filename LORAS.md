@@ -59,7 +59,7 @@ Worth knowing because they behave differently and want different strengths.
 
 | Kind | What it does | Typical strength | Notes |
 |---|---|---|---|
-| **Accelerator / distill** | Fewer sampling steps | **1.0, exactly** | Not a taste dial. Pairs with a mandatory `steps`/`cfg` change. |
+| **Accelerator / distill** | Fewer sampling steps | **whatever its graph was built for** | Not a taste dial. Pairs with a mandatory `steps`/`cfg` change. This used to read "1.0, exactly"; that was wrong for LTX-2.3. Rendering settled it — at 1.0 the distill grows orange particle blobs absent from both the keyframe and the 0.5 render, and fine detail drops. ComfyUI's own bundled templates wire it at 0.5, and so does every LTX workflow here. See `studio/loras/ltx-23-distilled.json`. |
 | **Style** | A specific look — an illustrator, a film stock, a medium | 0.6–1.0 | The most common kind. Stack 2–3 at reduced strength. |
 | **Character / identity** | A consistent person or creature | 0.7–1.0 | Needs a trigger word. The reason to train your own. |
 | **Concept** | An object, outfit, mechanism, architecture | 0.6–1.0 | Also trigger-word driven. |

@@ -1,5 +1,6 @@
 {
   "id": "pan_r",
   "desc": "Lateral reveal rightward.",
-  "status": "ready"
+  "status": "ready",
+  "verdict": "RENDERED 2026-08-04. Post tier. Exact mirror of pan_l: content moves LEFT by 100px, the taxi tracks -96px. (The telephone-box tracker blows out here because the box leaves frame and the tracker latches onto a neon reflection - the taxi is the reliable landmark for this direction.) MAD vs pan_l 35.43, vs static 32.90. Same 1.16x upscale cost and no parallax. Asked of the video model, LTX pans right correctly but swings much further than asked and loses the framing entirely by the second half (activity 12.65)."
 }

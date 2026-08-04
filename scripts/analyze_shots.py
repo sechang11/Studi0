@@ -52,7 +52,12 @@ def motion(path):
         ["ffmpeg", "-hide_banner", "-i", path, "-vf",
          "scale=320:-2,signalstats,metadata=print:key=lavfi.signalstats.YDIF",
          "-f", "null", "-"], capture_output=True, text=True)
-    vals = [float(m) for m in re.findall(r"YDIF=([\d.]+)", r.stderr or "")]
+    # NOTE: signalstats prints small values in scientific notation
+    # (YDIF=8.87784e-05). [\d.]+ matched that as "8.87784", so a FROZEN clip
+    # measured ~1.31 instead of ~0.001 - a 1300x overstatement, verified on a
+    # still encoded to h264. That defeated this script's whole purpose: the DEAD
+    # score is secs*(1/motion), so a dead shot scored LOW and never surfaced.
+    vals = [float(m) for m in re.findall(r"YDIF=([-+0-9.eE]+)", r.stderr or "")]
     if not vals:
         return 0.0, 0.0
     mean = sum(vals) / len(vals)

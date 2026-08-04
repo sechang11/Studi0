@@ -15,6 +15,13 @@ Endpoints:
     /api/loras        the LoRA library, each card checked against models/loras
     /api/movies       .movie files found in studio/movies
     /api/save         POST {name, text} -> writes studio/movies/<name>.movie
+    /video            every rendered clip, grouped by what it demonstrates
+    /api/video        the clip index - studio/samples/video.json, built by
+                      studio/_tools/video_index.py
+
+Samples are served through _send_file, which honours Range. Video needs that: without it
+`preload="metadata"` pulls whole mp4s and no clip can be seeked. The page routes go through
+_page, which injects the /video nav link rather than editing ten hand-written HTML files.
 """
 import http.server, importlib, inspect, json, os, re, socket, socketserver, subprocess, \
        sys, traceback, urllib.parse
@@ -76,6 +83,236 @@ def safe_name(s):
     return "".join(c for c in str(s) if c.isalnum() or c in "-_")[:64]
 
 
+# ---------------------------------------------------------------------------
+# the cast payload
+#
+# A character card is a set of CLAIMS - it names a sheet, a LoRA, a voice. Every one of
+# those claims is checked against the filesystem here rather than trusted, because the
+# cast page used to render a green tick for a string being non-empty and a card naming a
+# deleted .safetensors looked exactly like a trained one.
+# ---------------------------------------------------------------------------
+
+# Reference sheets live in ComfyUI/input and nowhere else, because ComfyUI's LoadImage
+# reads only from there. The static handler below serves paths under studio/ only. Rather
+# than widen it into an arbitrary-path file server, the one file a card actually names is
+# mirrored into samples/sheets/ - see _mirror_sheet.
+CAST_INPUT = os.path.expanduser(
+    os.environ.get("COMFY_ROOT", "~/ComfyUI")) + "/input"
+# Its own directory, NOT samples/sheets - that name is already taken by the capability-card
+# contact sheets and a mirror dropped in there would be indistinguishable from them.
+CAST_SHEETS = f"{HERE}/samples/_refsheets"
+CAST_IMG_EXT = (".png", ".webp", ".jpg", ".jpeg")
+# A sheet name off a card is used to build a path. Bare filenames only.
+_BARE_FILE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]*$")
+
+
+def _mirror_sheet(name):
+    """Copy a reference sheet into samples/ so the app can show it. -> (url, on_disk).
+
+    Re-copied whenever size or mtime move, so a sheet being rendered by another process
+    while this page is open appears on the next refresh instead of going stale.
+    """
+    if not name:
+        return None, False
+    base = str(name)
+    if os.path.basename(base) != base or not _BARE_FILE.match(base) \
+            or not base.lower().endswith(CAST_IMG_EXT):
+        return None, False
+    src = f"{CAST_INPUT}/{base}"
+    try:
+        st = os.stat(src)
+    except OSError:
+        return None, False                      # named on the card, absent from disk
+    dst = f"{CAST_SHEETS}/{base}"
+    try:
+        d = os.stat(dst)
+        stale = d.st_size != st.st_size or d.st_mtime < st.st_mtime
+    except OSError:
+        stale = True
+    if stale:
+        try:
+            os.makedirs(CAST_SHEETS, exist_ok=True)
+            with open(src, "rb") as a, open(dst + ".part", "wb") as b:
+                b.write(a.read())
+            os.replace(dst + ".part", dst)
+            os.utime(dst, (st.st_atime, st.st_mtime))
+        except OSError:
+            return None, True                   # it exists, we just cannot show it
+    return f"/samples/_refsheets/{base}", True
+
+
+def _dataset(cid):
+    """The training set for a character, counted rather than assumed.
+
+    turnaround.py writes ComfyUI/input/<id>_train/ as png+txt pairs and train_character.py
+    reads exactly that path. A png with no caption is not a usable example, so `pairs` -
+    not the file count - is the number that decides whether training can run.
+    """
+    d = f"{CAST_INPUT}/{str(cid).lower()}_train"
+    if not os.path.isdir(d):
+        return {"dir": d, "exists": False, "images": 0, "captions": 0, "pairs": 0}
+    imgs, caps = set(), set()
+    try:
+        for f in os.listdir(d):
+            stem, ext = os.path.splitext(f)
+            ext = ext.lower()
+            if ext in CAST_IMG_EXT:
+                imgs.add(stem)
+            elif ext == ".txt":
+                caps.add(stem)
+    except OSError:
+        pass
+    return {"dir": d, "exists": True, "images": len(imgs), "captions": len(caps),
+            "pairs": len(imgs & caps)}
+
+
+def _cards_in(group):
+    """Every json card in studio/<group>/, keyed by id. Unreadable ones are skipped."""
+    d = f"{HERE}/{group}"
+    out = {}
+    if not os.path.isdir(d):
+        return out
+    for fn in sorted(os.listdir(d)):
+        if not fn.endswith(".json"):
+            continue
+        try:
+            c = json.load(open(f"{d}/{fn}", encoding="utf-8"))
+        except Exception:
+            continue
+        if isinstance(c, dict):
+            out[str(c.get("id") or fn[:-5])] = c
+    return out
+
+
+def _resolve_voice(raw, voices):
+    """A character's `voice` is the string "<engine> <path/to.wav>" - compile.py splits it
+    on whitespace and uses [0] and [-1]. Resolve it back to the voice card, because the
+    single hard rule in this project is about voices: four packs in the library are clones
+    of real, identifiable people, they are marked status blocked, and a cast page that
+    prints the raw string cannot tell you that the character you are about to shoot is
+    cast with one of them.
+    """
+    if not raw:
+        return None
+    parts = str(raw).split()
+    if not parts:
+        return None
+    engine, wav = parts[0], parts[-1]
+    base = os.path.basename(wav).lower()
+    exact = [v for v in voices.values()
+             if v.get("engine") == engine and str(v.get("file", "")) == wav]
+    if exact:
+        return exact[0]
+    byfile = [v for v in voices.values()
+              if os.path.basename(str(v.get("file", ""))).lower() == base]
+    return byfile[0] if byfile else None
+
+
+_TOKEN = "[^a-z0-9]"
+
+
+def _demos(cid, sheet_base):
+    """Rendered evidence for one character, discovered rather than listed.
+
+    Everything under samples/ whose filename or containing directory names this character,
+    minus the turnaround directory itself. That is how the with-LoRA / without-LoRA control
+    pair gets onto the page: those are .jpg files one level above samples/cast/<ID>/ and
+    the old view glob could not see them.
+    """
+    low = str(cid).lower()
+    pat = re.compile("(^|%s)%s(%s|$)" % (_TOKEN, re.escape(low), _TOKEN))
+    hits, seen = [], set()
+    for root in ("cast", "qwen_character", "loras", "characters"):
+        base = f"{HERE}/samples/{root}"
+        if not os.path.isdir(base):
+            continue
+        for dirpath, dirnames, files in os.walk(base):
+            rel_dir = os.path.relpath(dirpath, base).replace("\\", "/")
+            if rel_dir == ".":
+                rel_dir = ""
+            # the turnaround views are reported separately, and the mirror is not evidence
+            dirnames[:] = [x for x in dirnames if x.lower() != low]
+            for f in sorted(files):
+                if not f.lower().endswith(CAST_IMG_EXT):
+                    continue
+                if sheet_base and f == sheet_base:
+                    continue
+                where = (rel_dir + "/" + f).lower()
+                if not pat.search(where):
+                    continue
+                url = "/samples/%s/%s" % (root, (rel_dir + "/" + f).lstrip("/"))
+                if url in seen:
+                    continue
+                seen.add(url)
+                hits.append({"name": os.path.splitext(f)[0],
+                             "file": url,
+                             "where": "samples/%s%s" % (root, "/" + rel_dir if rel_dir else "")})
+    return hits[:24]
+
+
+# The instruction three places in this app print for a missing sheet - "run
+# scripts/make_sheets.py" - cannot be followed: that script takes a FILM as a required
+# positional and reads its `designs` block, so it exits on argparse for a bare character
+# card. Rather than print a command that fails, the page is told which sheet-making tool
+# is ACTUALLY on disk, checked per request so a tool appearing while the page is open is
+# picked up on refresh.
+SHEET_TOOLS = ("studio/_tools/make_character_sheet.py",
+               "studio/_tools/make_sheet.py",
+               "scripts/make_character_sheet.py")
+
+
+def _sheet_tool():
+    for rel in SHEET_TOOLS:
+        if os.path.isfile(f"{ROOT}/{rel}"):
+            return rel
+    return None
+
+
+def _composer():
+    """The resolver, or None. Reloaded per request for the same reason the library is read
+    per request: this page's whole job is to agree with what a render would actually do."""
+    if HERE not in sys.path:
+        sys.path.insert(0, HERE)
+    try:
+        import compose as composer
+        if getattr(composer, "__file__", "").startswith(HERE):
+            composer = importlib.reload(composer)
+        if not callable(getattr(composer, "resolve", None)):
+            return None
+        return composer
+    except Exception:
+        return None
+
+
+def _identity(composer, libs, cid):
+    """What is actually holding this character's face, ON EACH ENGINE, from the resolver.
+
+    This is the one fact the page exists to state and it differs per engine: a trained
+    character LoRA is a delta on animagine's weights, so it is live on the anime path and
+    silently discarded on the qwen path. Asking compose.resolve() rather than re-deciding
+    here is deliberate - a second implementation would drift from what gets rendered, and
+    the wizard and the cast page disagreeing about the same character is exactly the bug
+    this replaces.
+    """
+    out = {}
+    for eng in ("anime", "qwen"):
+        try:
+            r = composer.resolve(libs, {"character": cid, "engine": eng})
+        except Exception as e:
+            out[eng] = {"error": f"{type(e).__name__}: {e}"}
+            continue
+        out[eng] = {
+            "engine": r.get("engine"),
+            "prompt": r.get("prompt"),
+            "lora": r.get("lora"),
+            "lora_active": bool(r.get("lora_active")),
+            "lora_reason": r.get("lora_reason"),
+            "conflicts": [x for x in (r.get("conflicts") or [])
+                          if "character" in (x.get("layers") or [])],
+        }
+    return out
+
+
 def cast():
     """Characters, each with whatever identity assets actually exist for them.
 
@@ -83,27 +320,87 @@ def cast():
     views are discovered from samples/cast/<id>/ rather than recorded, so the page cannot
     claim views that were deleted. Same reason the LoRA is reported from the card only
     after training wrote it there.
+
+    Everything the card CLAIMS is then checked: the sheet against ComfyUI/input, the LoRA
+    against models/loras, the dataset against ComfyUI/input/<id>_train, the voice against
+    studio/voices/. And compose.resolve() is called once per engine so the page reports
+    the same identity mechanism the renderer will use rather than a second guess at it.
+
+    THE SHAPE IS APPEND-ONLY. wizard.html reads this endpoint as a bare array and takes
+    views[0].file as a character's thumbnail, so `views` stays turnaround-only and stays
+    numerically ordered; the demo grids arrive on a separate `demos` key.
     """
     d = f"{HERE}/characters"
     if not os.path.isdir(d):
         return []
+    voices = _cards_in("voices")
+    lora_cards = _cards_in("loras")
+    by_file = {str(v.get("file")): v for v in lora_cards.values() if v.get("file")}
+    try:
+        on_disk = {f: os.path.getsize(f"{LORA_FILES}/{f}")
+                   for f in os.listdir(LORA_FILES) if f.endswith(".safetensors")}
+    except OSError:
+        on_disk = None
+    composer = _composer()
+    sheet_tool = _sheet_tool()
+    libs = None
+    if composer is not None:
+        try:
+            libs = composer.load_libs()
+        except Exception:
+            libs = None
     out = []
     for fn in sorted(os.listdir(d)):
         if not fn.endswith(".json"):
             continue
         try:
             c = json.load(open(f"{d}/{fn}", encoding="utf-8"))
+            if not isinstance(c, dict):
+                raise ValueError("not a JSON object")
         except Exception as e:
-            out.append({"id": fn[:-5], "name": fn[:-5], "desc": f"UNREADABLE: {e}"})
+            out.append({"id": fn[:-5], "name": fn[:-5], "desc": f"UNREADABLE: {e}",
+                        "unreadable": True, "views": [], "demos": []})
             continue
-        vd = f"{HERE}/samples/cast/{c.get('id', fn[:-5])}"
+        cid = str(c.get("id") or fn[:-5])
+        c["id"] = cid
+        vd = f"{HERE}/samples/cast/{cid}"
         views = []
         if os.path.isdir(vd):
-            for v in sorted(os.listdir(vd)):
-                if v.endswith(".png"):
-                    views.append({"name": v[:-4].split("_", 1)[-1],
-                                  "file": f"/samples/cast/{c.get('id', fn[:-5])}/{v}"})
+            names = [v for v in os.listdir(vd) if v.lower().endswith(CAST_IMG_EXT)]
+            # numeric prefixes first and in order, so views[0] stays 00_front and the
+            # wizard's thumbnail does not become whatever sorted last into the folder.
+            names.sort(key=lambda v: (0 if v[:1].isdigit() else 1, v))
+            for v in names:
+                views.append({"name": os.path.splitext(v)[0].split("_", 1)[-1],
+                              "file": f"/samples/cast/{cid}/{v}"})
         c["views"] = views
+
+        sheet = str(c.get("sheet") or "")
+        c["sheet_url"], c["sheet_exists"] = _mirror_sheet(sheet)
+        c["sheet_dir"] = CAST_INPUT
+        c["sheet_tool"] = sheet_tool
+        c["dataset"] = _dataset(cid)
+
+        lf = str(c.get("lora") or "")
+        c["lora_exists"] = None if on_disk is None else (bool(lf) and lf in on_disk)
+        c["lora_size"] = (on_disk or {}).get(lf)
+        c["lora_dir"] = LORA_FILES
+        c["lora_card"] = by_file.get(lf)
+
+        vc = _resolve_voice(c.get("voice"), voices)
+        c["voice_card"] = vc
+        c["voice_status"] = (vc.get("status") or "unknown") if vc else (
+            "unresolved" if c.get("voice") else "none")
+
+        c["demos"] = _demos(cid, os.path.basename(sheet) if sheet else "")
+        c["identity"] = _identity(composer, libs, cid) if composer else None
+        # What the resolver will substitute when the card is silent. Shown greyed, so a
+        # character with no wear_tags reads as "dressed in a uniform at every damage
+        # level" instead of as an empty space where the ladder should be.
+        c["wear_fallback"] = list(getattr(composer, "WEAR", []) or []) \
+            if (composer and not c.get("wear_tags")) else []
+        c["base_tags_fallback"] = (getattr(composer, "MALE", "") or "") \
+            if (composer and not c.get("base_tags")) else ""
         out.append(c)
     return out
 
@@ -415,7 +712,96 @@ def movies():
             for f in sorted(os.listdir(d)) if f.endswith(".movie")]
 
 
+def nav_video(html):
+    """Put a `video` link in the header nav of a page that has one, without editing it.
+
+    /video is a page like /styles or /gallery and belongs in the same nav, but the nav
+    lives inside ten hand-written HTML files owned by other work. Injecting here means the
+    route is the only thing that changed: no page file is touched, and a page that later
+    grows its own /video link is left exactly as it is.
+
+    Conservative on purpose - it inserts before the first nav anchor it recognises and
+    otherwise returns the document byte-for-byte unchanged, because a nav link is not worth
+    the risk of corrupting a page.
+    """
+    if 'href="/video"' in html:
+        return html
+    for anchor in ('<a href="/gallery"', '<a href="/">'):
+        i = html.find(anchor)
+        if i < 0:
+            continue
+        # Match the case of the neighbour so `Gallery` does not sit next to `video`.
+        m = re.search(r">\s*([A-Za-z])", html[i:i + 200])
+        word = "Video" if (m and m.group(1).isupper()) else "video"
+        return html[:i] + '<a href="/video">%s</a>' % word + html[i:]
+    return html
+
+
 class H(http.server.SimpleHTTPRequestHandler):
+    def _page(self, name):
+        """Serve one of the hand-written pages, with the video link injected into its nav."""
+        p = f"{HERE}/{name}"
+        if not os.path.exists(p):
+            return self._send(f"{name} is missing".encode(), 500, "text/plain")
+        with open(p, encoding="utf-8") as f:
+            html = f.read()
+        return self._send(nav_video(html).encode("utf-8"), 200,
+                          "text/html; charset=utf-8")
+
+    def _send_file(self, fp, ctype):
+        """Send a file, honouring a Range request.
+
+        Video needs this. `_send` answers every request with the whole file and no
+        Accept-Ranges, so a browser cannot seek a clip without downloading all of it, and
+        `preload="metadata"` - which asks for a few KB of header - pulls the entire mp4
+        instead. Across a page of 165 clips that is the difference between a few hundred KB
+        and about a gigabyte.
+        """
+        size = os.path.getsize(fp)
+        rng = self.headers.get("Range", "")
+        m = re.match(r"bytes=(\d*)-(\d*)$", rng.strip()) if rng else None
+        start, end = 0, size - 1
+        partial = False
+        if m and (m.group(1) or m.group(2)):
+            if m.group(1):
+                start = int(m.group(1))
+                if m.group(2):
+                    end = min(int(m.group(2)), size - 1)
+            else:                                   # bytes=-N -> the last N bytes
+                start = max(size - int(m.group(2)), 0)
+            if start >= size or start > end:
+                self.send_response(416)
+                self.send_header("Content-Range", "bytes */%d" % size)
+                self.send_header("Content-Length", "0")
+                self.end_headers()
+                return
+            partial = True
+        length = end - start + 1
+        self.send_response(206 if partial else 200)
+        self.send_header("Content-Type", ctype)
+        self.send_header("Accept-Ranges", "bytes")
+        self.send_header("Content-Length", str(length))
+        if partial:
+            self.send_header("Content-Range", "bytes %d-%d/%d" % (start, end, size))
+        # Samples are immutable render output keyed by filename, so unlike the JSON
+        # routes they are worth caching - the page reloads a lot while you compare clips.
+        self.send_header("Cache-Control", "public, max-age=3600")
+        self.end_headers()
+        if getattr(self, "_head_only", False):
+            return
+        with open(fp, "rb") as f:
+            f.seek(start)
+            left = length
+            while left > 0:
+                chunk = f.read(min(262144, left))
+                if not chunk:
+                    break
+                try:
+                    self.wfile.write(chunk)
+                except (BrokenPipeError, ConnectionResetError):
+                    return          # the browser stopped the clip; not an error
+                left -= len(chunk)
+
     def _send(self, obj, code=200, ctype="application/json"):
         body = obj if isinstance(obj, bytes) else json.dumps(obj).encode("utf-8")
         self.send_response(code)
@@ -446,56 +832,54 @@ class H(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
         path = urllib.parse.urlparse(self.path).path
         if path in ("/", "/index.html"):
-            p = f"{HERE}/app.html"
-            if not os.path.exists(p):
-                return self._send(b"app.html is missing", 500, "text/plain")
-            return self._send(open(p, "rb").read(), 200, "text/html; charset=utf-8")
+            return self._page("app.html")
         if path.startswith("/samples/"):
             rel = os.path.normpath(path[1:]).replace("\\", "/")
             fp = os.path.join(HERE, rel)
             if not os.path.abspath(fp).startswith(HERE) or not os.path.isfile(fp):
                 return self._send({"error": "no sample"}, 404)
             ct = MIME.get(os.path.splitext(fp)[1].lower(), "application/octet-stream")
-            return self._send(open(fp, "rb").read(), 200, ct)
-        if path in ("/wizard", "/wizard.html"):
-            p = f"{HERE}/wizard.html"
+            return self._send_file(fp, ct)
+        if path in ("/video", "/video.html"):
+            return self._page("video.html")
+        if path == "/api/video":
+            # Built by studio/_tools/video_index.py, which reads every sample directory and
+            # every metric file and resolves each clip's recipe out of the tool that
+            # rendered it. Read from disk per request like every other route here, so
+            # re-running the tool shows up on a refresh.
+            p = f"{HERE}/samples/video.json"
             if not os.path.exists(p):
-                return self._send(b"wizard.html is missing", 500, "text/plain")
-            return self._send(open(p, "rb").read(), 200, "text/html; charset=utf-8")
+                return self._send(
+                    {"error": "studio/samples/video.json has not been built",
+                     "fix": "python3 studio/_tools/video_index.py all",
+                     "groups": [], "clips": 0}, 404)
+            try:
+                with open(p, encoding="utf-8") as f:
+                    return self._send(json.load(f))
+            except Exception as e:                                  # noqa: BLE001
+                return self._send({"error": "video.json is unreadable: %r" % (e,),
+                                   "groups": [], "clips": 0}, 500)
+        if path in ("/wizard", "/wizard.html"):
+            return self._page("wizard.html")
         if path == "/api/effects":
             p = f"{HERE}/effects.json"
             if not os.path.exists(p):
                 return self._send({"tiers": {}, "vars": {}})
             return self._send(json.load(open(p, encoding="utf-8")))
         if path in ("/gallery", "/gallery.html"):
-            p = f"{HERE}/gallery.html"
-            if not os.path.exists(p):
-                return self._send(b"gallery.html is missing", 500, "text/plain")
-            return self._send(open(p, "rb").read(), 200, "text/html; charset=utf-8")
+            return self._page("gallery.html")
         if path in ("/make", "/make.html"):
-            p = f"{HERE}/make.html"
-            if not os.path.exists(p):
-                return self._send(b"make.html is missing", 500, "text/plain")
-            return self._send(open(p, "rb").read(), 200, "text/html; charset=utf-8")
+            return self._page("make.html")
         if path in ("/cast", "/cast.html"):
-            p = f"{HERE}/cast.html"
-            if not os.path.exists(p):
-                return self._send(b"cast.html is missing", 500, "text/plain")
-            return self._send(open(p, "rb").read(), 200, "text/html; charset=utf-8")
+            return self._page("cast.html")
         if path == "/api/cast":
             return self._send(cast())
         if path in ("/verify", "/verify.html"):
-            p = f"{HERE}/verify.html"
-            if not os.path.exists(p):
-                return self._send(b"verify.html is missing", 500, "text/plain")
-            return self._send(open(p, "rb").read(), 200, "text/html; charset=utf-8")
+            return self._page("verify.html")
         if path == "/api/verify/queue":
             return self._send(verify_queue())
         if path in ("/tags", "/tags.html"):
-            p = f"{HERE}/tags.html"
-            if not os.path.exists(p):
-                return self._send(b"tags.html is missing", 500, "text/plain")
-            return self._send(open(p, "rb").read(), 200, "text/html; charset=utf-8")
+            return self._page("tags.html")
         if path == "/api/tags":
             d = f"{HERE}/tags"
             if not os.path.isdir(d):
@@ -509,24 +893,15 @@ class H(http.server.SimpleHTTPRequestHandler):
                         pass
             return self._send(out)
         if path in ("/styles", "/styles.html"):
-            p = f"{HERE}/styles.html"
-            if not os.path.exists(p):
-                return self._send(b"styles.html is missing", 500, "text/plain")
-            return self._send(open(p, "rb").read(), 200, "text/html; charset=utf-8")
+            return self._page("styles.html")
         if path == "/api/styles":
             return self._send(styles())
         if path in ("/places", "/places.html"):
-            p = f"{HERE}/places.html"
-            if not os.path.exists(p):
-                return self._send(b"places.html is missing", 500, "text/plain")
-            return self._send(open(p, "rb").read(), 200, "text/html; charset=utf-8")
+            return self._page("places.html")
         if path == "/api/places":
             return self._send(places())
         if path in ("/loras", "/loras.html"):
-            p = f"{HERE}/loras.html"
-            if not os.path.exists(p):
-                return self._send(b"loras.html is missing", 500, "text/plain")
-            return self._send(open(p, "rb").read(), 200, "text/html; charset=utf-8")
+            return self._page("loras.html")
         if path == "/api/loras":
             return self._send(loras())
         if path == "/api/domains":

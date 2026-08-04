@@ -2,5 +2,6 @@
   "id": "orbit",
   "desc": "Arc around the subject. Needs true 3D or multi-view generation.",
   "status": "roadmap",
-  "roadmap": "roadmap/camera-orbit.md"
+  "roadmap": "roadmap/camera-orbit.md",
+  "verdict": "RENDERED 2026-08-04. THIS MOVE DOES NOTHING at the post tier: no branch in fx_chain(), MAD against static exactly 0.00, identical to dolly_zoom and rack_focus. Asked of the video model, however, LTX produces the most convincing camera move in the whole sweep - it genuinely swings round and views a building corner from below, with real parallax (activity 13.42). It is also uncontrollable: it does not orbit a chosen subject, it leaves. The clock tower and the entire street composition are gone by the second half. The roadmap note says orbit needs true 3D or multi-view generation; the measured position is that LTX will move the camera in 3D on request but not around anything in particular. See orbit_prompted.mp4."
 }

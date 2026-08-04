@@ -3,5 +3,6 @@
   "desc": "Passage of time. Expensive - use rarely or it stops meaning anything.",
   "status": "ready",
   "frames": 18,
-  "filter": "xfade=transition=fade:duration={d}"
+  "filter": "xfade=transition=fade:duration={d}",
+  "verdict": "RENDERED 2026-08-04 between two real clips. A true cross-fade: both scenes are visibly superimposed for the full 18 frames and the luma ramps 60 -> 74 -> 99 -> 124 -> 149 -> 169 without ever leaving the range spanned by the two sources (min 58.7, max 169.5). MAD vs cut 21.40. Nearest neighbour is iris at 7.53."
 }

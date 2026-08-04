@@ -3,5 +3,6 @@
   "desc": "Fast blur wipe. Comic timing, or a hard location change.",
   "status": "ready",
   "frames": 8,
-  "filter": "xfade=transition=hlslice:duration={d}"
+  "filter": "xfade=transition=hlslice:duration={d}",
+  "verdict": "RENDERED 2026-08-04 between two real clips, AND THE DESCRIPTION DOES NOT MATCH THE FILTER. The card says 'fast blur wipe'; the filter is xfade=hlslice, which produces a hard-edged sliced band wipe with no blur of any kind - visible in the strip as interleaved bands of the two shots. It is the fastest wipe here at 8 frames. Its nearest neighbour is wipe_l at MAD 5.31, the closest non-identical pair in the library: the two differ mainly in duration (8 vs 12 frames), not in character. If a blur is wanted it has to come from somewhere other than this filter."
 }

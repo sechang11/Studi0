@@ -8,7 +8,7 @@
   "prose": "",
   "negative_add": "",
   "strength": "n/a",
-  "works_for": "n/a - this is a reference frame, not a style. MEASURED baseline for the video pass, from the same 8.04s LTX i2v render every style in the sweep got: the anime control holds fine detail flat across 8s (detail 1.007, boil 0.091, motion 0.423) while the qwen control decays steadily (detail 0.870, boil 0.228, motion 0.753). Read every style's video numbers against ITS OWN engine's control - the engine gap is larger than most style effects.",
+  "works_for": "n/a - this is a reference frame, not a style. MEASURED baseline for the video pass, from the same 8.04s LTX i2v render every style in the sweep got: the anime control holds fine detail flat across 8s (detail 1.007, boil 0.091, motion 0.423) while the qwen control decays steadily (detail 0.870, boil 0.228, motion 0.753). Read every style's video numbers against ITS OWN engine's control - the engine gap is larger than most style effects. CORRECTION: 'holds fine detail flat' is true of the anime control's TEXTURE and false of its SUBJECT - her face is hidden and her eyes closed for the last third. Read the strips.",
   "status": "ready",
   "note": "Rendered by the same tool, same seed, same subject as all 64 styles. If a style example is indistinguishable from this one, the style did nothing and its card is wrong.",
   "examples": {
@@ -18,7 +18,7 @@
   "video_verdict": {
     "holds": "n/a",
     "failure": "n/a - baseline",
-    "saw": "The two control clips are the cleanest result in the sweep and they disagree with each other. Same subject, same seed, same motion prompt, same 8 seconds; the only difference is which engine drew the keyframe. The anime control's fine detail is FLAT across the whole clip (octiles 1.01 1.02 1.05 1.07 1.06 1.02 1.01 1.01) - it ends with as much fine structure as it started with. The qwen control decays monotonically from the first octile to the last (1.00 0.99 0.98 0.95 0.93 0.91 0.89 0.87), and by 8s the skin has gone slightly waxy and the background softer. Both keep the subject and both keep the shot; the qwen one pushes in slowly. This pair is the reference: any style claim about video survival has to beat its own engine's control, not the other engine's.",
+    "saw": "The two control clips are the cleanest result in the sweep and they disagree with each other. Same subject, same seed, same motion prompt, same 8 seconds; the only difference is which engine drew the keyframe. The anime control's fine detail is FLAT across the whole clip (octiles 1.01 1.02 1.05 1.07 1.06 1.02 1.01 1.01) - it ends with as much fine structure as it started with. The qwen control decays monotonically from the first octile to the last (1.00 0.99 0.98 0.95 0.93 0.91 0.89 0.87), and by 8s the skin has gone slightly waxy and the background softer. CORRECTED ON REVIEW, BY OPENING BOTH DETAIL STRIPS: they do NOT both keep the subject, and the metric ranks them BACKWARDS relative to what a viewer sees. The anime control's subject is specified 'looking at viewer'; by f110 her hair has fallen across her face and at f137/f165/f192 her eyes are CLOSED and the face is largely hidden. It still scores the best detail in the sweep (1.007) precisely BECAUSE flying hair is high-band amplitude. The qwen control, scored 0.870 and written up above as the decaying case, keeps face, gaze, identity and expression open and stable for the full 8s while pushing in slowly. So `detail` can stay HIGH while the subject is destroyed - not only fall for composition reasons. Any style verdict resting on this pair must be read from the strips, not the number. This pair is the reference: any style claim about video survival has to beat its own engine's control, not the other engine's.",
     "per_engine": {
       "anime": {
         "motion": 0.423,
@@ -64,7 +64,7 @@
       }
     },
     "measured_on": "One 193-frame (8.04s) LTX-2.3 image-to-video clip, workflow 12_ltx23_i2v_audio.json at its shipping settings, from a keyframe rendered on this style's own engine at 1280x704. Held constant across every style in the sweep: subject, keyframe seed 7204, video seed 8801, motion prompt, clip length. MEASURED BY RENDERING AND LOOKING, NOT PREDICTED.",
-    "caveats": "boil is NOT a style-stability number in this sweep - it tracks how much the clip moved, and the identical motion prompt produced motion from 0.345 to 2.772 across styles. detail is the load-bearing number, and it too drops when the COMPOSITION changes rather than the texture. Read both against the strips. n=1 clip, one subject, one seed.",
+    "caveats": "boil is NOT a style-stability number in this sweep - it tracks how much the clip moved, and the identical motion prompt produced motion from 0.345 to 2.772 across styles. detail is the load-bearing number, and it too drops when the COMPOSITION changes rather than the texture. Read both against the strips. n=1 clip, one subject, one seed. AND: a high detail score does NOT mean the subject survived - the anime control is the proof. See the corrected `saw`.",
     "measured": "2026-08-04",
     "tool": "studio/_tools/video_examples.py"
   }

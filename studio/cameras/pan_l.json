@@ -1,5 +1,6 @@
 {
   "id": "pan_l",
   "desc": "Lateral reveal leftward, or following action.",
-  "status": "ready"
+  "status": "ready",
+  "verdict": "RENDERED 2026-08-04. Post tier, and it does exactly what the filter says. Content moves RIGHT by 100px at 1280 wide - the filter upscales 1.16x and travels from centre to edge, (1484-1280)/2 = 102px, so the measurement matches the geometry. Confirmed three independent ways: filter algebra, FFT phase correlation, and tracking the red telephone box (+99px) and the yellow taxi (+100px). Mean absolute pixel difference vs pan_r is 35.43 and vs static 31.83, so the pair is unambiguously distinguishable. Costs 14% of linear resolution to the upscale and produces no parallax. Asked of the video model instead, LTX does pan left, but overshoots into a completely different composition and adds a large uncommanded tilt (activity 12.35 vs 1.02 for static)."
 }

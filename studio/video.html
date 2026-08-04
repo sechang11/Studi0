@@ -1,0 +1,476 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>studio · video</title>
+<style>
+  :root{--bg:#0f1115;--panel:#161a21;--panel2:#1c2129;--line:#272d38;--ink:#e6e9ef;
+        --dim:#8b94a3;--accent:#6ea8fe;--ok:#4ec9a0;--warn:#e0b252;--bad:#e07a5f}
+  @media (prefers-color-scheme:light){
+    :root{--bg:#f6f7f9;--panel:#fff;--panel2:#f0f2f5;--line:#dde1e8;--ink:#141821;--dim:#5d6470}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font:14px/1.55 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  header{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;padding:13px 18px;
+         border-bottom:1px solid var(--line);background:var(--panel);position:sticky;top:0;z-index:9}
+  header h1{margin:0;font-size:15px;letter-spacing:.07em;text-transform:uppercase}
+  header .sub{color:var(--dim);font-size:12px}
+  header .right{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+  header a{color:var(--dim);font-size:12px;text-decoration:none;border:1px solid var(--line);
+           padding:5px 10px;border-radius:6px}
+  header a:hover{color:var(--ink);border-color:var(--accent)}
+  header a.on{color:var(--ink);border-color:var(--accent)}
+  .bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding:12px 18px;
+       border-bottom:1px solid var(--line);
+       background:var(--panel);position:sticky;top:52px;z-index:8}
+  input[type=search],select{background:var(--panel2);border:1px solid var(--line);color:var(--ink);
+       border-radius:7px;padding:7px 10px;font:inherit}
+  button{background:var(--panel2);border:1px solid var(--line);color:var(--ink);border-radius:7px;
+       padding:7px 11px;font:inherit;cursor:pointer}
+  button:hover{border-color:var(--accent)}
+  button.act{border-color:var(--accent);color:var(--ink)}
+  label.ck{display:flex;align-items:center;gap:6px;color:var(--dim);font-size:12.5px;
+           white-space:nowrap;cursor:pointer}
+
+  .key{padding:14px 18px 0;color:var(--dim);font-size:12.5px;max-width:110ch}
+  .key b{color:var(--ink)}
+  .key .row{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:7px}
+  .key .row span{white-space:nowrap}
+
+  .gh{padding:26px 18px 0;max-width:110ch}
+  .gh h2{margin:0;font-size:15px;letter-spacing:.07em;text-transform:uppercase}
+  .gh p{margin:7px 0 0;color:var(--dim);font-size:12.5px}
+  .gh .pairs{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+  .gh .pairs button{font-size:12px;padding:5px 10px}
+
+  .grid{padding:14px 18px 0;display:grid;gap:14px;
+        grid-template-columns:repeat(auto-fill,minmax(268px,1fr))}
+  .s{background:var(--panel);border:1px solid var(--line);border-radius:11px;overflow:hidden;
+     cursor:pointer;display:flex;flex-direction:column}
+  .s:hover{border-color:var(--accent)}
+  .s.picked{border-color:var(--ok)}
+  .s .b{padding:12px 14px}
+  .s h3{margin:0;font-size:15px;word-break:break-word}
+  .s .id{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--dim)}
+  /* Badges sit on their own row rather than floating out of the title. Floated, a
+     two-badge card with a long name wraps one badge onto a second line and the grid stops
+     lining up. */
+  .s .fam{display:inline-block;font-size:10px;letter-spacing:.06em;text-transform:uppercase;
+          color:var(--dim);border:1px solid var(--line);border-radius:99px;padding:1px 8px;
+          margin:0 4px 0 0}
+  .s .tags{margin-top:7px}
+  .s p{margin:8px 0 0;font-size:12.5px;color:var(--dim)}
+  /* margin-top:auto pins the strip to the bottom of a stretched grid cell, so the strips
+     line up across a row instead of floating wherever the card's text happens to end. */
+  .flag{font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;padding:5px 14px;
+        border-top:1px solid var(--line);font-family:ui-monospace,Menlo,monospace;
+        margin-top:auto}
+  .f-noop{background:color-mix(in srgb,var(--bad) 26%,transparent);color:var(--bad)}
+  .f-pair{background:var(--panel2);color:var(--dim)}
+
+  /* The card never carries a <video>. 165 of them with preload=metadata is 165 requests
+     before you have asked for anything. The card shows the poster frame ffmpeg pulled at
+     frame 0; a <video preload="metadata"> is created only when you press play or open
+     the card, and it is destroyed again when the dialog closes. */
+  .vw{position:relative;aspect-ratio:16/9;background:#000;display:block;overflow:hidden}
+  .vw img{width:100%;height:100%;object-fit:cover;display:block}
+  .vw video{width:100%;height:100%;object-fit:contain;background:#000;display:block}
+  .vw .pb{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+          width:46px;height:46px;border-radius:99px;border:1px solid #fff6;
+          background:#0009;color:#fff;font-size:16px;line-height:1;padding:0;
+          display:flex;align-items:center;justify-content:center;backdrop-filter:blur(2px)}
+  .vw .pb:hover{background:#000c;border-color:#fff}
+  .vw .n{position:absolute;left:0;bottom:0;background:#000a;color:#fff;font-size:10.5px;
+         font-family:ui-monospace,Menlo,monospace;padding:2px 7px;border-radius:0 6px 0 0}
+  .num{color:var(--accent);font-family:ui-monospace,Menlo,monospace}
+  .pills{margin-top:9px;font-size:12px;color:var(--dim)}
+
+  dialog{border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--ink);
+         max-width:min(1600px,96vw);max-height:92vh;padding:0;width:min(1600px,96vw);
+         overflow:auto;overflow-x:hidden}
+  dialog::backdrop{background:#000b}
+  .dh{display:flex;align-items:baseline;gap:12px;padding:14px 18px;border-bottom:1px solid var(--line);
+      position:sticky;top:0;background:var(--panel);z-index:2;flex-wrap:wrap}
+  .dh h3{margin:0;font-size:17px}
+  .dh .id{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--dim)}
+  .dh .ctl{display:flex;gap:6px;margin-left:auto;align-items:center}
+  .dh .ctl button{font-size:12px;padding:5px 9px}
+  .dh button.x{background:none;border:0;color:var(--dim);font-size:22px;cursor:pointer;padding:0 4px}
+  .db{padding:18px}
+  .lbl{color:var(--dim);font-size:11px;letter-spacing:.06em;text-transform:uppercase;margin-top:16px}
+  .db p{margin:5px 0 0;font-size:13px}
+  .verdict{margin-top:6px;padding:10px 12px;border-left:2px solid var(--accent);background:var(--panel2);
+           border-radius:0 7px 7px 0;font-size:13px}
+  .warnbox{margin-top:6px;padding:10px 12px;border-left:2px solid var(--warn);background:var(--panel2);
+           border-radius:0 7px 7px 0;font-size:13px}
+  .badbox{margin-top:6px;padding:10px 12px;border-left:2px solid var(--bad);background:var(--panel2);
+          border-radius:0 7px 7px 0;font-size:13px}
+  code,.mono{font-family:ui-monospace,Menlo,monospace;font-size:12px}
+  .none{color:var(--dim);font-style:italic}
+  table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:8px}
+  td{padding:5px 7px;border-bottom:1px solid var(--line);vertical-align:top;
+     word-break:break-word;overflow-wrap:anywhere}
+  td:first-child{color:var(--dim);width:34%;font-family:ui-monospace,Menlo,monospace}
+  .dh .ctl{flex-wrap:wrap}
+  @media (max-width:560px){
+    .dh .ctl{margin-left:0;width:100%}
+    .db{padding:12px}
+    header .right{gap:5px}
+  }
+  .empty{padding:40px 18px;color:var(--dim)}
+
+  /* side-by-side: the whole point of the camera library is pan_l next to pan_r. */
+  /* min(320px,100%) rather than a bare 320px: on a narrow screen a fixed track minimum is
+     wider than the column it sits in and the whole dialog overflows the viewport. */
+  .side{display:grid;gap:12px;
+        grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr))}
+  .side.n1{grid-template-columns:minmax(min(320px,100%),900px)}
+  .side figure{margin:0;background:var(--panel2);border:1px solid var(--line);
+               border-radius:9px;overflow:hidden;display:flex;flex-direction:column}
+  .side figcaption{padding:8px 11px;font-size:12px}
+  .side figcaption b{font-family:ui-monospace,Menlo,monospace;font-size:11.5px}
+  .side .mt td{font-size:12px;padding:3px 6px}
+  .side details{border-top:1px solid var(--line);padding:8px 11px}
+  .side details summary{cursor:pointer;color:var(--dim);font-size:11px;letter-spacing:.06em;
+                        text-transform:uppercase}
+  .side .note{padding:0 11px 8px;color:var(--dim);font-size:11.5px}
+  .strip{width:100%;border-radius:8px;border:1px solid var(--line);display:block;
+         background:var(--panel2);margin-top:8px}
+  .hint{color:var(--dim);font-size:11px}
+  .spark{vertical-align:middle}
+  .tray{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-left:auto}
+  .chip{font-size:11px;border:1px solid var(--line);border-radius:99px;padding:2px 6px 2px 9px;
+        color:var(--dim);display:inline-flex;align-items:center;gap:5px}
+  .chip b{color:var(--ink);font-weight:500}
+  .chip button{background:none;border:0;color:var(--dim);cursor:pointer;padding:0 2px;font-size:13px}
+  .assets{padding:10px 18px 0}
+</style>
+</head>
+<body>
+<header>
+  <h1>video</h1><span class="sub" id="stat">loading…</span>
+  <div class="right">
+    <a href="/wizard">direct a scene</a><a href="/cast">cast</a>
+    <a href="/make">make</a><a href="/styles">styles</a><a href="/loras">loras</a>
+    <a href="/tags">tags</a><a href="/verify">verify</a><a href="/gallery">gallery</a>
+    <a href="/video" class="on">video</a><a href="/">library</a>
+  </div>
+</header>
+
+<div class="bar">
+  <input type="search" id="q" placeholder="search a clip, a prompt, a filter, a verdict…"
+         style="flex:1;min-width:220px">
+  <select id="grp"><option value="">every group</option></select>
+  <select id="sort">
+    <option value="m-">by the measure, biggest first</option>
+    <option value="m+">by the measure, smallest first</option>
+    <option value="n">by name</option>
+  </select>
+  <label class="ck"><input type="checkbox" id="paired"> only side-by-side cards</label>
+  <label class="ck"><input type="checkbox" id="snd"> audio on</label>
+  <span class="tray" id="tray"></span>
+</div>
+
+<div class="key" id="key"></div>
+<div id="groups"></div>
+<div class="empty" id="empty" style="display:none"></div>
+
+<dialog id="dlg">
+  <div class="dh"><h3 id="dname"></h3><span class="id" id="did"></span>
+    <span class="ctl" id="dctl"></span>
+    <button class="x" id="dx" title="close">&times;</button></div>
+  <div class="db" id="dbody"></div>
+</dialog>
+
+<script>
+let DOC={groups:[]}, BYID={}, PICK=[];
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const num=v=>{const f=parseFloat(v);return isFinite(f)?f:null;};
+
+const KEY=`Every clip on this page was <b>rendered and measured</b>, and every recipe shown is read
+  out of the tool that produced the clip rather than retyped, so a recipe cannot drift from what
+  actually ran. Cards carry a poster frame only — a <b>&lt;video&gt;</b> is created when you press
+  play and destroyed when you close the card, because a page that starts 165 clips at once is
+  unusable. Audio is <b>muted by default</b>: LTX generates an audio track in the same pass as the
+  picture on every clip it makes, and nobody on this project has ever listened to any of it.`;
+
+// ── one <video>, made on demand ──────────────────────────────────────────────
+function mkvid(src,poster){
+  const v=document.createElement("video");
+  v.src=src; if(poster) v.poster=poster;
+  v.preload="metadata";           // never "auto": metadata is a few KB, auto is the file
+  v.controls=true; v.loop=true; v.playsInline=true;
+  v.muted=!$("snd").checked;
+  return v;
+}
+function vids(root){ return [...root.querySelectorAll("video")]; }
+function syncbar(root){
+  return `<button data-sy="play">play all</button><button data-sy="pause">pause</button>
+          <button data-sy="rewind">restart together</button>`;
+}
+function wiresync(host,root){
+  host.querySelectorAll("[data-sy]").forEach(b=>b.onclick=()=>{
+    const vv=vids(root);
+    if(b.dataset.sy==="play")   vv.forEach(v=>v.play().catch(()=>{}));
+    if(b.dataset.sy==="pause")  vv.forEach(v=>v.pause());
+    if(b.dataset.sy==="rewind"){vv.forEach(v=>{v.currentTime=0;v.play().catch(()=>{});});}
+  });
+}
+
+// ── the decay curve as 60px of SVG. detail_octiles is the one number in this project
+//    that shows you WHEN a style let go, and a column of eight decimals hides that. ──
+function spark(a,lo,hi,big){
+  const v=(a||[]).filter(x=>typeof x==="number");
+  if(v.length<2) return "";
+  lo=Math.min(lo===undefined?0.4:lo,...v); hi=Math.max(hi===undefined?1.1:hi,...v);
+  const W=big?260:72,H=big?54:18,sc=x=>H-1-(x-lo)/(hi-lo||1)*(H-2);
+  const pts=v.map((x,i)=>`${(i/(v.length-1)*(W-2)+1).toFixed(1)},${sc(x).toFixed(1)}`).join(" ");
+  const one=(lo<=1&&hi>=1)?`<line x1="0" y1="${sc(1).toFixed(1)}" x2="${W}" y2="${sc(1).toFixed(1)}"
+       stroke="currentColor" stroke-width="1" opacity=".25" stroke-dasharray="2 2"/>`:"";
+  return `<svg class="spark" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}"
+      style="color:var(--dim)" aria-hidden="true">${one}
+      <polyline points="${pts}" fill="none" stroke="var(--accent)" stroke-width="1.5"/></svg>`;
+}
+
+function mrow(m){
+  return (m||[]).filter(x=>x&&x.v!==null&&x.v!==undefined&&x.v!=="")
+    .map(x=>`<tr><td title="${esc(x.hint||"")}">${esc(x.k)}${x.hint?" *":""}</td>
+      <td><span class="num">${esc(x.v)}</span>${
+        x.hint?`<br><span class="hint">${esc(x.hint)}</span>`:""}</td></tr>`).join("");
+}
+function rrow(r){
+  return (r||[]).filter(x=>x&&x.v!==null&&x.v!==undefined&&x.v!=="")
+    .map(x=>`<tr><td>${esc(x.k)}</td><td class="mono">${esc(x.v)}</td></tr>`).join("");
+}
+
+// A figure = one clip, side by side with its siblings. The recipe sits in a <details> so
+// eight clips fit on screen, but it is on the same card as the picture it produced.
+function fig(c,i){
+  return `<figure>
+    <div class="vw" data-src="${esc(c.src)}" data-poster="${esc(c.poster||"")}">
+      ${c.poster?`<img loading="lazy" src="${esc(c.poster)}" alt="">`:`<div class="vw"></div>`}
+      <button class="pb" title="play">&#9654;</button>
+      <span class="n">${esc(c.label||"")}</span></div>
+    <figcaption><b>${esc(c.label||"")}</b>
+      ${c.note?`<div class="hint" style="margin-top:4px">${esc(c.note)}</div>`:""}
+      ${mrow(c.metrics)?`<table class="mt">${mrow(c.metrics)}</table>`:""}</figcaption>
+    ${rrow(c.recipe)?`<details><summary>the exact recipe</summary>
+       <table>${rrow(c.recipe)}</table>
+       <div class="hint" style="margin-top:6px">Every value above is read from the tool that
+         rendered this clip, not restated here.</div></details>`:""}
+    <div class="note">${esc((c.bytes/1048576).toFixed(1))} MB ·
+      <a href="${esc(c.src)}" style="color:var(--dim)">open the file</a></div>
+  </figure>`;
+}
+
+// Play is per-clip and explicit. Nothing on this page ever starts on its own.
+function wireplay(root){
+  root.querySelectorAll(".vw .pb").forEach(b=>{
+    b.onclick=ev=>{
+      ev.stopPropagation();
+      const w=b.parentElement;
+      const v=mkvid(w.dataset.src,w.dataset.poster);
+      w.innerHTML=""; w.appendChild(v); v.play().catch(()=>{});
+    };
+  });
+}
+
+// A comparison you found is worth being able to send to someone. The dialog writes itself
+// into the URL hash, and the page opens whatever the hash names on load.
+function sethash(h){ try{ history.replaceState(null,"",h?"#"+h:location.pathname); }catch(e){} }
+
+function open_(id){
+  const e=BYID[id]; if(!e) return;
+  sethash("open="+encodeURIComponent(id));
+  const cl=e.clips||[];
+  $("dname").textContent=e.title||id;
+  $("did").textContent=id+(e.sub?" · "+e.sub:"");
+  $("dctl").innerHTML=cl.length>1?syncbar():"";
+  $("dbody").innerHTML=`
+    <div class="side ${cl.length===1?"n1":""}">${cl.map(fig).join("")}</div>
+    ${e.verdict?`<div class="lbl">what was actually seen</div>
+       <div class="verdict">${esc(e.verdict)}</div>`:""}
+    ${e.holds?`<div class="lbl">holds through i2v</div><p>${esc(e.holds)}${
+       e.failure?` — <span style="color:var(--dim)">${esc(e.failure)}</span>`:""}</p>`:""}
+    ${e.octiles&&e.octiles.filter(x=>typeof x==="number").length>1?`
+       <div class="lbl">fine detail across the clip, in eighths</div>
+       <p>${spark(e.octiles,undefined,undefined,true)}</p>
+       <p class="mono">${e.octiles.map(x=>x==null?"–":x).join("   ")}</p>
+       <p class="hint">Each figure is that eighth's fine-detail amplitude over the first
+         eighth's. The dashed line is 1.0 — no loss. A cliff at the end is usually the shot
+         changing, not the style dissolving.</p>`:""}
+    ${e.luma&&e.luma.length?`<div class="lbl">luma across the transition</div>
+       <p>${spark(e.luma,0,255,true)}</p><p class="mono">${e.luma.join("   ")}</p>
+       <p class="hint">Sampled on EVERY frame, not on a fixed number of points:
+         <b>flash</b> is two frames at 24fps, and a curve sampled at 16 points steps
+         straight over it and reports it as luma-identical to a hard cut.</p>`:""}
+    ${(e.strips||[]).length?`<div class="lbl">frame strips</div>${
+       e.strips.map(s=>`<img class="strip" loading="lazy" src="${esc(s.src)}" alt="${esc(s.label)}">
+         <div class="hint">${esc(s.label)}</div>`).join("")}`:""}
+    ${e.still?`<div class="lbl">the keyframe that went in</div>
+       <img class="strip" loading="lazy" src="${esc(e.still)}" alt="keyframe">`:""}`;
+  wireplay($("dbody")); wiresync($("dctl"),$("dbody"));
+  $("dlg").showModal(); $("dlg").scrollTop=0;
+}
+
+// The compare view: N entries, first clip of each, side by side with one transport.
+function compare(ids,why){
+  const es=ids.map(i=>BYID[i]).filter(Boolean);
+  if(es.length<2){ return; }
+  sethash("cmp="+es.map(e=>encodeURIComponent(e.id)).join(","));
+  const cl=es.map(e=>Object.assign({},(e.clips||[])[0]||{},
+                                   {label:e.title+" · "+(((e.clips||[])[0]||{}).label||"")}));
+  $("dname").textContent="side by side";
+  $("did").textContent=es.map(e=>e.id).join("   vs   ");
+  $("dctl").innerHTML=syncbar();
+  $("dbody").innerHTML=`
+    ${why?`<div class="verdict" style="margin-top:0">${esc(why)}</div>`:""}
+    <div class="side" style="margin-top:12px">${cl.filter(c=>c.src).map(fig).join("")}</div>
+    <p class="hint" style="margin-top:14px">Press <b>restart together</b> to line them up.
+      These are separate &lt;video&gt; elements, not a synchronised player — after a seek they
+      will drift apart, so restart rather than scrub when the comparison matters.</p>`;
+  wireplay($("dbody")); wiresync($("dctl"),$("dbody"));
+  $("dlg").showModal(); $("dlg").scrollTop=0;
+}
+
+function card(e){
+  const c0=(e.clips||[])[0]||{}, h=e.headline||{};
+  const multi=(e.clips||[]).length>1;
+  const noop=(e.badges||[]).includes("no-op in post");
+  return `<div class="s ${PICK.includes(e.id)?"picked":""}" data-open="${esc(e.id)}">
+    <div class="vw" data-src="${esc(c0.src||"")}" data-poster="${esc(c0.poster||"")}">
+      ${c0.poster?`<img loading="lazy" src="${esc(c0.poster)}" alt="${esc(e.title)}">`:""}
+      ${c0.src?`<button class="pb" title="play just this one">&#9654;</button>`:""}
+      ${multi?`<span class="n">${esc((e.clips||[]).length)} clips · side by side</span>`:""}
+    </div>
+    <div class="b">
+      <h3>${esc(e.title)}</h3>
+      <div class="id">${esc(e.id)}</div>
+      ${(e.badges||[]).filter(Boolean).length?`<div class="tags">${
+        (e.badges||[]).filter(Boolean).slice(0,3)
+          .map(b=>`<span class="fam">${esc(b)}</span>`).join("")}</div>`:""}
+      <p>${esc((e.sub||"").slice(0,150))}</p>
+      ${h.v!==undefined&&h.v!==null?`<div class="pills">${esc(h.k)}
+        <span class="num">${esc(h.v)}</span> ${spark(e.octiles)}</div>`:""}
+    </div>
+    ${noop?`<div class="flag f-noop">does nothing — byte-identical to static</div>`
+      :multi?`<div class="flag f-pair">open to play them side by side</div>`:""}
+  </div>`;
+}
+
+function draw(){
+  const q=$("q").value.trim().toLowerCase(), gsel=$("grp").value,
+        sort=$("sort").value, onlyPaired=$("paired").checked;
+  let shown=0, total=0;
+  const html=DOC.groups.filter(g=>!gsel||g.id===gsel).map(g=>{
+    let es=(g.entries||[]).filter(e=>
+      (!onlyPaired||(e.clips||[]).length>1) &&
+      (!q||(e.search||"").toLowerCase().includes(q)||e.id.toLowerCase().includes(q)));
+    total+=(g.entries||[]).length; shown+=es.length;
+    if(!es.length) return "";
+    es=es.slice().sort((a,b)=>{
+      if(sort==="n") return a.title.localeCompare(b.title);
+      const x=num((a.headline||{}).v), y=num((b.headline||{}).v);
+      if(x===null&&y===null) return a.title.localeCompare(b.title);
+      if(x===null) return 1; if(y===null) return -1;
+      return sort==="m-"?y-x:x-y;
+    });
+    const pairs=(g.pairs||[]).filter(p=>BYID[p[0]]&&BYID[p[1]]);
+    return `<div class="gh">
+        <h2>${esc(g.title)}</h2>
+        <p>${esc(g.blurb||"")}</p>
+        ${g.error?`<div class="badbox">this group failed to build: ${esc(g.error)}</div>`:""}
+        ${pairs.length?`<div class="pairs">${pairs.map((p,i)=>
+          `<button data-pair="${esc(g.id)}:${i}">${esc(BYID[p[0]].title)} vs ${
+            esc(BYID[p[1]].title)}</button>`).join("")}
+          <span class="hint" style="align-self:center">— prepared comparisons</span></div>`:""}
+      </div>
+      ${(g.assets||[]).length?`<div class="assets">${g.assets.map(a=>
+        `<details><summary style="cursor:pointer;color:var(--dim);font-size:12px">${
+          esc(a.label)}</summary><img class="strip" loading="lazy" src="${esc(a.src)}"
+          alt="${esc(a.label)}"></details>`).join("")}</div>`:""}
+      <div class="grid">${es.map(card).join("")}</div>`;
+  }).join("");
+  $("groups").innerHTML=html;
+  $("stat").textContent=`${shown} of ${total} entries · ${DOC.clips||0} clips rendered`;
+  $("empty").style.display=shown?"none":"block";
+  $("empty").textContent="Nothing matches that.";
+  document.querySelectorAll("[data-open]").forEach(el=>el.onclick=ev=>{
+    if(ev.target.closest(".pb")) return;
+    open_(el.dataset.open);
+  });
+  document.querySelectorAll("[data-pair]").forEach(b=>b.onclick=()=>{
+    const [gid,i]=b.dataset.pair.split(":");
+    const g=DOC.groups.find(x=>x.id===gid), p=g.pairs[+i];
+    compare([p[0],p[1]],p[2]);
+  });
+  wireplay($("groups"));
+  tray();
+}
+
+// The tray lets you build a comparison the prepared pairs did not anticipate.
+function tray(){
+  $("tray").innerHTML=PICK.length
+    ? PICK.map(id=>`<span class="chip"><b>${esc((BYID[id]||{}).title||id)}</b>
+        <button data-drop="${esc(id)}" title="remove">&times;</button></span>`).join("")
+      +`<button class="act" id="cmpgo">compare these ${PICK.length}</button>
+        <button id="cmpclr">clear</button>`
+    : `<span class="hint">shift-click a card to add it here and compare anything with
+        anything</span>`;
+  const go=$("cmpgo"); if(go) go.onclick=()=>compare(PICK.slice(),"");
+  const cl=$("cmpclr"); if(cl) cl.onclick=()=>{PICK=[];draw();};
+  document.querySelectorAll("[data-drop]").forEach(b=>b.onclick=()=>{
+    PICK=PICK.filter(x=>x!==b.dataset.drop); draw();
+  });
+}
+
+document.addEventListener("click",ev=>{
+  const s=ev.target.closest("[data-open]");
+  if(!s||!ev.shiftKey) return;
+  ev.preventDefault(); ev.stopPropagation();
+  const id=s.dataset.open;
+  PICK=PICK.includes(id)?PICK.filter(x=>x!==id):PICK.concat([id]).slice(-6);
+  draw();
+},true);
+
+(async function(){
+  $("key").innerHTML=KEY;
+  try{ DOC=await fetch("/api/video").then(r=>r.json()); }
+  catch(e){ $("stat").textContent="could not load /api/video"; return; }
+  if(DOC.error){ $("groups").innerHTML=`<div class="empty"><b>/api/video failed</b><br>
+     <span class="mono">${esc(DOC.error)}</span></div>`; return; }
+  (DOC.groups||[]).forEach(g=>(g.entries||[]).forEach(e=>BYID[e.id]=e));
+  $("grp").innerHTML='<option value="">every group</option>'+
+    (DOC.groups||[]).map(g=>`<option value="${esc(g.id)}">${esc(g.title)}</option>`).join("");
+  if((DOC.missing||[]).length)
+    $("key").innerHTML=KEY+`<div class="badbox" style="margin-top:10px">
+      <b>${DOC.missing.length} file(s) in the index are not on disk.</b>
+      <span class="mono">${esc(DOC.missing.slice(0,6).join(", "))}</span></div>`;
+  ["q","grp","sort","paired"].forEach(id=>{$(id).oninput=draw;$(id).onchange=draw;});
+  $("snd").onchange=()=>document.querySelectorAll("video")
+    .forEach(v=>v.muted=!$("snd").checked);
+  $("dx").onclick=()=>$("dlg").close();
+  $("dlg").onclick=ev=>{ if(ev.target===$("dlg")) $("dlg").close(); };
+  // Tearing the <video> elements down on close is what keeps this page cheap: otherwise
+  // every card you have opened keeps buffering in the background for the whole session.
+  $("dlg").addEventListener("close",()=>{
+    vids($("dbody")).forEach(v=>{v.pause();v.removeAttribute("src");v.load();});
+    $("dbody").innerHTML=""; $("dctl").innerHTML=""; sethash("");
+  });
+  const h=new URLSearchParams(location.hash.slice(1));
+  if(h.get("g")) $("grp").value=h.get("g");
+  if(h.get("q")) $("q").value=h.get("q");
+  draw();
+  if(h.get("open")) open_(h.get("open"));
+  else if(h.get("cmp")){
+    const ids=h.get("cmp").split(",").map(decodeURIComponent);
+    const g=(DOC.groups||[]).find(x=>(x.pairs||[]).some(p=>p[0]===ids[0]&&p[1]===ids[1]));
+    const p=g&&g.pairs.find(p=>p[0]===ids[0]&&p[1]===ids[1]);
+    compare(ids,p?p[2]:"");
+  }
+})();
+</script>
+</body>
+</html>

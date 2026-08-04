@@ -3,5 +3,6 @@
   "desc": "Act break. A full stop, not a comma.",
   "status": "ready",
   "frames": 24,
-  "filter": "xfade=transition=fadeblack:duration={d}"
+  "filter": "xfade=transition=fadeblack:duration={d}",
+  "verdict": "RENDERED 2026-08-04 between two real clips. Reaches TRUE BLACK - luma touches exactly 0.0 at the midpoint, curve 60 -> 18 -> 0 -> 28 -> 77 -> 169 over 24 frames. Unmistakable against every other card in the set; MAD vs cut 19.01, vs fade_white 51.29."
 }
