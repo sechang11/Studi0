@@ -1,10 +1,10 @@
 {
  "generated_from": "git log",
- "count": 69,
+ "count": 70,
  "days": [
   [
    "2026-08-04",
-   23
+   24
   ],
   [
    "2026-08-03",
@@ -28,8 +28,31 @@
  ],
  "entries": [
   {
-   "hash": "38b374b",
-   "full": "38b374bfb89cc5eec60f48448b558f633c1d9013",
+   "hash": "4d63ead",
+   "full": "4d63ead43b19becfbe7879bdea05c9c1a081eba7",
+   "date": "2026-08-04",
+   "time": "19:30",
+   "author": "sechang11",
+   "subject": "An ugly face is a pixel problem, not a weights problem",
+   "body": "Five arms at one seed, every cell cropped to the same head region at the same display\nsize so the comparison is about the face rather than about who stood closest to camera.\n\nFull body gives a small soft face with indistinct features - the ugly result. Upper body,\nsame seed and same LoRA, gives a crisp face with clean eyes and lineart. Raising the\nresolution on the same full-body composition recovers much of the difference. Raising the\nLoRA from 0.5 to 0.85 changes the face barely at all.\n\nThe arithmetic: at 832x1216 in a full-body frame the head is about an eighth of the\nheight, so the face is roughly 90 pixels, and SDXL samples in an 8x-downsampled latent -\nthat face was decided by about an 11x11 patch. No LoRA can add detail the sampler never\nhad room to draw. Terra's own frame_verdict already put the honest cut-off at 5_wide and\nmost recent sheets were rendered fuller than that.\n\nSo the fix order is frame closer, raise resolution, add a face-detail pass - and only\nthen consider weights.\n\nThe fourth arm attempted that detail pass and MY COMPOSITE BROKE IT: the re-rendered crop\ncame back fine and the feathered paste-back washed it out. That cell is my bug, not a\nnegative result, and it is stated as such rather than left looking like evidence against\nthe technique. The primitives for a proper one are on this box - SDPoseFaceBBoxes,\nCropByBBoxes and VAEEncodeForInpaint.",
+   "paragraphs": [
+    "Five arms at one seed, every cell cropped to the same head region at the same display\nsize so the comparison is about the face rather than about who stood closest to camera.",
+    "Full body gives a small soft face with indistinct features - the ugly result. Upper body,\nsame seed and same LoRA, gives a crisp face with clean eyes and lineart. Raising the\nresolution on the same full-body composition recovers much of the difference. Raising the\nLoRA from 0.5 to 0.85 changes the face barely at all.",
+    "The arithmetic: at 832x1216 in a full-body frame the head is about an eighth of the\nheight, so the face is roughly 90 pixels, and SDXL samples in an 8x-downsampled latent -\nthat face was decided by about an 11x11 patch. No LoRA can add detail the sampler never\nhad room to draw. Terra's own frame_verdict already put the honest cut-off at 5_wide and\nmost recent sheets were rendered fuller than that.",
+    "So the fix order is frame closer, raise resolution, add a face-detail pass - and only\nthen consider weights.",
+    "The fourth arm attempted that detail pass and MY COMPOSITE BROKE IT: the re-rendered crop\ncame back fine and the feathered paste-back washed it out. That cell is my bug, not a\nnegative result, and it is stated as such rather than left looking like evidence against\nthe technique. The primitives for a proper one are on this box - SDPoseFaceBBoxes,\nCropByBBoxes and VAEEncodeForInpaint."
+   ],
+   "areas": [
+    "Tooling",
+    "Cast"
+   ],
+   "files": 3,
+   "added": 215,
+   "removed": 1
+  },
+  {
+   "hash": "314cc9d",
+   "full": "314cc9de21c3a7addf986c29f47c65f5728a21a4",
    "date": "2026-08-04",
    "time": "18:25",
    "author": "sechang11",
@@ -45,9 +68,9 @@
     "Tooling",
     "Cast"
    ],
-   "files": 4,
-   "added": 207,
-   "removed": 1
+   "files": 5,
+   "added": 257,
+   "removed": 8
   },
   {
    "hash": "cae9c8b",
