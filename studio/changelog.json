@@ -1,10 +1,10 @@
 {
  "generated_from": "git log",
- "count": 61,
+ "count": 63,
  "days": [
   [
    "2026-08-04",
-   15
+   17
   ],
   [
    "2026-08-03",
@@ -28,8 +28,54 @@
  ],
  "entries": [
   {
-   "hash": "63439f2",
-   "full": "63439f2f755345a85385f44b2d8de1afaf0188f2",
+   "hash": "c5d0d75",
+   "full": "c5d0d75933580667c61b891e208fe979a57fbdde",
+   "date": "2026-08-04",
+   "time": "14:20",
+   "author": "sechang11",
+   "subject": "TERRA is a real cast member, and training a character teaches it its clothes",
+   "body": "The LoRA beat the tag decisively. Two places the training set never contained, four\ncolumns, one seed. The danbooru tag with no LoRA puts her tiny and dark in the far\ndistance with the face unreadable. At 0.5 she is properly framed and holds green hair,\nred ribbon, red cape, gold dress and red boots across both places.\n\nThe column that decides it: with the danbooru name STRIPPED OUT of the prompt entirely,\nshe still comes back as Terra. The weights carry her, not the tag. She is a cast member\nrather than a prompt trick and can be put in any scene like VIRO or NIKA.\n\n0.85 collapsed snow_road's forest to a flat beige void, which confirms the NIKA finding\non a second character. The measured-safe strength generalises.\n\nA NEW LIMIT, and it applies to every LoRA-backed character here. The wardrobe map works\nat the prompt layer - court dress lands cleanly, green gown and circlet - but imperial\nplate and field coat only partly land: a pauldron and a gauntlet appear and the gold dress\npersists underneath. The LoRA was trained on sixteen views of ONE outfit, so the outfit is\nencoded as part of the identity and a costume change fights the weights that make her her.\nThat is a property of how characters are trained, not a flaw in the costumes map.\n\nTwo styles hijack the composition rather than the medium: ukiyo_e put her inside an\nornamental arch and gothic_illustration shrank her to a kneeling figure across a wide\nhall - the same frame-building behaviour the styles library recorded for art_nouveau and\nilluminated_manuscript.",
+   "paragraphs": [
+    "The LoRA beat the tag decisively. Two places the training set never contained, four\ncolumns, one seed. The danbooru tag with no LoRA puts her tiny and dark in the far\ndistance with the face unreadable. At 0.5 she is properly framed and holds green hair,\nred ribbon, red cape, gold dress and red boots across both places.",
+    "The column that decides it: with the danbooru name STRIPPED OUT of the prompt entirely,\nshe still comes back as Terra. The weights carry her, not the tag. She is a cast member\nrather than a prompt trick and can be put in any scene like VIRO or NIKA.",
+    "0.85 collapsed snow_road's forest to a flat beige void, which confirms the NIKA finding\non a second character. The measured-safe strength generalises.",
+    "A NEW LIMIT, and it applies to every LoRA-backed character here. The wardrobe map works\nat the prompt layer - court dress lands cleanly, green gown and circlet - but imperial\nplate and field coat only partly land: a pauldron and a gauntlet appear and the gold dress\npersists underneath. The LoRA was trained on sixteen views of ONE outfit, so the outfit is\nencoded as part of the identity and a costume change fights the weights that make her her.\nThat is a property of how characters are trained, not a flaw in the costumes map.",
+    "Two styles hijack the composition rather than the medium: ukiyo_e put her inside an\nornamental arch and gothic_illustration shrank her to a kneeling figure across a wide\nhall - the same frame-building behaviour the styles library recorded for art_nouveau and\nilluminated_manuscript."
+   ],
+   "areas": [
+    "Cast"
+   ],
+   "files": 4,
+   "added": 6,
+   "removed": 2
+  },
+  {
+   "hash": "9d7422d",
+   "full": "9d7422d86127b91f96d88484728de9bcf30dacce",
+   "date": "2026-08-04",
+   "time": "10:02",
+   "author": "sechang11",
+   "subject": "Characters get a wardrobe, and TERRA is built",
+   "body": "TERRA is the first cast member with provenance=known_partial - the danbooru tag reaches\nher palette and silhouette but the description-only control lands nearly as close, so she\ngot the same full build as an invented character. Sheet, 16-view turnaround, LoRA trained\nin 10.5 minutes and landed in models/loras rather than the SaveLoRA output trap.\n\nOne thing caught at the sheet stage, which is the cheap place to catch it: the tag\n\"pointed ears\" gave her full elf ears, which is not her design. A wrong noun trained into\na LoRA is permanent and would ride along in every later render, so the tag came out and\nthe sheet was re-rendered before anything downstream saw it.\n\nWARDROBE. wear_tags looked like a wardrobe and was not - it is five DAMAGE LEVELS of one\noutfit, so a character had exactly one costume for their whole existence and \"the same\nperson, in armour\" had nowhere to live. Cards may now carry a `costumes` map of NAMED\noutfits, each with its own five levels, because damage is orthogonal to wardrobe: armour\ndents the way a dress tears. wear_tags still means the default costume, so every existing\ncard and film is untouched.\n\ncompose.py resolves a `costume` selection, falls back to the default with a named warning\nwhen the costume does not exist, and keeps the damage ladder intact inside each one -\nverified: armour at 0/2/4 gives polished plate, then a dented pauldron and torn mail, then\nthe breastplate discarded and the left arm bound.\n\nTERRA ships with four: traveller, imperial plate, court dress, field coat.",
+   "paragraphs": [
+    "TERRA is the first cast member with provenance=known_partial - the danbooru tag reaches\nher palette and silhouette but the description-only control lands nearly as close, so she\ngot the same full build as an invented character. Sheet, 16-view turnaround, LoRA trained\nin 10.5 minutes and landed in models/loras rather than the SaveLoRA output trap.",
+    "One thing caught at the sheet stage, which is the cheap place to catch it: the tag\n\"pointed ears\" gave her full elf ears, which is not her design. A wrong noun trained into\na LoRA is permanent and would ride along in every later render, so the tag came out and\nthe sheet was re-rendered before anything downstream saw it.",
+    "WARDROBE. wear_tags looked like a wardrobe and was not - it is five DAMAGE LEVELS of one\noutfit, so a character had exactly one costume for their whole existence and \"the same\nperson, in armour\" had nowhere to live. Cards may now carry a `costumes` map of NAMED\noutfits, each with its own five levels, because damage is orthogonal to wardrobe: armour\ndents the way a dress tears. wear_tags still means the default costume, so every existing\ncard and film is untouched.",
+    "compose.py resolves a `costume` selection, falls back to the default with a named warning\nwhen the costume does not exist, and keeps the damage ladder intact inside each one -\nverified: armour at 0/2/4 gives polished plate, then a dented pauldron and torn mail, then\nthe breastplate discarded and the left arm bound.",
+    "TERRA ships with four: traveller, imperial plate, court dress, field coat."
+   ],
+   "areas": [
+    "Tooling",
+    "Cast",
+    "Pipeline"
+   ],
+   "files": 36,
+   "added": 350,
+   "removed": 1
+  },
+  {
+   "hash": "5afd88f",
+   "full": "5afd88f9491e9f6af974ee2e62d9c2df3b771285",
    "date": "2026-08-04",
    "time": "09:20",
    "author": "sechang11",
@@ -47,9 +93,9 @@
     "Tooling",
     "Cast"
    ],
-   "files": 9,
-   "added": 216,
-   "removed": 6
+   "files": 10,
+   "added": 247,
+   "removed": 13
   },
   {
    "hash": "642757b",
