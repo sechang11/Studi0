@@ -5,359 +5,250 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>studio</title>
 <style>
-  :root{
-    --bg:#0f1115; --panel:#161a21; --panel2:#1c2129; --line:#272d38;
-    --ink:#e6e9ef; --dim:#8b94a3; --accent:#6ea8fe; --ok:#4ec9a0; --warn:#e0b252; --todo:#e07a5f;
-  }
+  :root{--bg:#0f1115;--panel:#161a21;--panel2:#1c2129;--line:#272d38;--ink:#e6e9ef;
+        --dim:#8b94a3;--accent:#6ea8fe;--ok:#4ec9a0;--warn:#e0b252;--bad:#e07a5f}
   @media (prefers-color-scheme:light){
-    :root{--bg:#f6f7f9;--panel:#fff;--panel2:#f0f2f5;--line:#dde1e8;--ink:#141821;--dim:#5d6470;}
-  }
+    :root{--bg:#f6f7f9;--panel:#fff;--panel2:#f0f2f5;--line:#dde1e8;--ink:#141821;--dim:#5d6470}}
   *{box-sizing:border-box}
   body{margin:0;background:var(--bg);color:var(--ink);
-       font:14px/1.5 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-  header{display:flex;align-items:baseline;gap:16px;padding:14px 18px;
-         border-bottom:1px solid var(--line);background:var(--panel)}
-  header h1{margin:0;font-size:16px;letter-spacing:.06em;text-transform:uppercase}
+       font:14px/1.55 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  a{color:inherit;text-decoration:none}
+  header{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;padding:13px 18px;
+         border-bottom:1px solid var(--line);background:var(--panel);position:sticky;top:0;z-index:9}
+  header h1{margin:0;font-size:15px;letter-spacing:.07em;text-transform:uppercase}
   header .sub{color:var(--dim);font-size:12px}
-  nav{margin-left:auto;display:flex;gap:4px}
-  nav button{background:none;border:1px solid transparent;color:var(--dim);
-             padding:6px 12px;border-radius:6px;cursor:pointer;font:inherit}
-  nav button.on{background:var(--panel2);border-color:var(--line);color:var(--ink)}
-  nav a.cta{background:var(--accent);color:#08111f;font-weight:600;padding:6px 12px;
-            border-radius:6px;text-decoration:none;font-size:13px}
-  nav a.lnk{color:var(--dim);padding:6px 12px;border:1px solid var(--line);
-            border-radius:6px;text-decoration:none;font-size:13px}
-  nav a.lnk:hover{color:var(--ink);border-color:var(--accent)}
-  main{display:grid;grid-template-columns:180px minmax(0,1fr) 360px;gap:1px;
-       background:var(--line);height:calc(100vh - 53px)}
-  /* below ~1000px the three columns crush the middle one to nothing and the page
-     scrolls sideways, so stack instead of squeezing */
-  @media (max-width:1000px){
-    main{grid-template-columns:1fr;height:auto;min-height:calc(100vh - 53px)}
-    .col{max-height:none}
-    #groups{display:flex;flex-wrap:wrap;gap:6px}
-    .grp{width:auto;flex:0 0 auto}
-    .grp .n{float:none;margin-left:6px}
-  }
-  .col{background:var(--bg);overflow:auto;padding:14px;min-width:0}
-  .grp{display:block;width:100%;text-align:left;background:none;border:0;color:var(--dim);
-       padding:7px 10px;border-radius:6px;cursor:pointer;font:inherit;text-transform:capitalize}
-  .grp.on{background:var(--panel2);color:var(--ink)}
-  .grp .n{float:right;opacity:.55;font-variant-numeric:tabular-nums}
-  .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
-  .card{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:11px 13px;
-        cursor:pointer;transition:border-color .12s}
+  header .right{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+  header .right a{color:var(--dim);font-size:12px;border:1px solid var(--line);
+           padding:5px 10px;border-radius:6px}
+  header .right a:hover{color:var(--ink);border-color:var(--accent)}
+
+  main{max-width:1180px;margin:0 auto;padding:0 18px 60px}
+  h2.sec{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);
+         margin:34px 0 12px;font-weight:600}
+
+  /* ── the front door ─────────────────────────────────────────────── */
+  .hero{margin-top:24px;background:var(--panel);border:1px solid var(--line);border-radius:14px;
+        padding:26px 28px;display:flex;gap:28px;align-items:center;flex-wrap:wrap}
+  .hero .l{flex:1 1 340px;min-width:0}
+  .hero h2{margin:0 0 8px;font-size:26px;letter-spacing:-.01em}
+  .hero p{margin:0;color:var(--dim);font-size:14px;max-width:62ch}
+  .go{display:inline-block;margin-top:18px;background:var(--accent);color:#08101f;
+      border-radius:9px;padding:11px 20px;font-weight:600;font-size:14.5px}
+  .go:hover{filter:brightness(1.08)}
+  .go.alt{background:var(--panel2);color:var(--ink);border:1px solid var(--line);margin-left:9px;font-weight:500}
+  .go.alt:hover{border-color:var(--accent);filter:none}
+
+  /* The layer stack, drawn. Choosing a scene here means stacking layers, and the order
+     is load-bearing - style picks the engine, so it sits outermost. Showing it beats
+     explaining it twice on two other pages. */
+  .stack{flex:0 0 300px;display:flex;flex-direction:column;gap:5px}
+  .lay{border:1px solid var(--line);border-left-width:4px;border-radius:8px;
+       padding:7px 11px;background:var(--panel2);font-size:12.5px;display:flex;gap:9px;align-items:baseline}
+  .lay b{font-size:12.5px}
+  .lay span{color:var(--dim);font-size:11.5px}
+  .lay.s1{border-left-color:#8b5cf6}.lay.s2{border-left-color:#6ea8fe}
+  .lay.s3{border-left-color:#4ec9a0}.lay.s4{border-left-color:#e0b252}
+  .lay.s5{border-left-color:#e07a5f}
+  .stack .ind1{margin-left:14px}.stack .ind2{margin-left:28px}
+
+  /* ── library cards ──────────────────────────────────────────────── */
+  .grid{display:grid;gap:13px;grid-template-columns:repeat(auto-fill,minmax(232px,1fr))}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:15px 16px;
+        display:flex;flex-direction:column;gap:3px}
   .card:hover{border-color:var(--accent)}
-  .card.on{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
-  .card h3{margin:0 0 7px;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
-  .card p{margin:7px 0 0;color:var(--dim);font-size:12px}
-  .thumb{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:5px;
-         background:var(--panel2);border:1px solid var(--line)}
-  .thumb.none{display:flex;align-items:center;justify-content:center;text-align:center;
-              color:var(--dim);font-size:11px;padding:0 12px;line-height:1.35}
-  .cards{grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
-  .badge{float:right;font-size:10px;padding:1px 6px;border-radius:99px;
-         border:1px solid currentColor;opacity:.85}
-  .ready{color:var(--ok)} .partial{color:var(--warn)} .roadmap{color:var(--todo)}
-  .fields{margin-top:8px;border-top:1px dashed var(--line);padding-top:7px;
-          font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;color:var(--dim)}
-  .fields div{display:flex;justify-content:space-between;gap:10px}
-  .fields b{font-weight:500;color:var(--ink);opacity:.8}
-  h2{margin:0 0 10px;font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:var(--dim)}
-  #picked{list-style:none;margin:0 0 12px;padding:0}
-  #picked li{display:flex;justify-content:space-between;gap:8px;background:var(--panel);
-             border:1px solid var(--line);border-radius:6px;padding:6px 10px;margin-bottom:6px;
-             font-family:ui-monospace,monospace;font-size:12px}
-  #picked button{background:none;border:0;color:var(--todo);cursor:pointer;font:inherit}
-  pre{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px;
-      overflow:auto;font-size:12px;white-space:pre-wrap;margin:0}
-  .row{display:flex;gap:8px;margin-bottom:10px}
-  input,select{background:var(--panel);border:1px solid var(--line);color:var(--ink);
-               border-radius:6px;padding:7px 9px;font:inherit;flex:1;min-width:0}
-  .btn{background:var(--accent);border:0;color:#08111f;border-radius:6px;padding:7px 13px;
-       cursor:pointer;font:inherit;font-weight:600}
-  .btn.ghost{background:var(--panel2);color:var(--ink);border:1px solid var(--line);font-weight:400}
-  table{width:100%;border-collapse:collapse;font-size:12px}
-  th,td{text-align:left;padding:6px 9px;border-bottom:1px solid var(--line);vertical-align:top}
-  th{color:var(--dim);font-weight:500;position:sticky;top:0;background:var(--bg)}
-  td code{font-family:ui-monospace,monospace}
-  .hide{display:none}
-  .empty{color:var(--dim);padding:20px 0}
-  .vcard{background:var(--panel);border:1px solid var(--line);border-radius:10px;
-         padding:16px 18px;margin-bottom:16px;max-width:1400px}
-  .vcard h3{margin:0 0 6px;font-size:15px;font-family:ui-monospace,monospace;color:var(--accent)}
-  .vcard .claim{margin:0 0 8px;font-size:13px}
-  .vcard .verdict{margin:0 0 10px;font-size:12px;color:var(--warn)}
-  .vcard .lookat{margin:10px 0 4px;font-size:12px;color:var(--dim);
-                 border-left:2px solid var(--line);padding-left:10px}
-  .vcard .method{margin:0;font-size:11px;color:var(--dim);opacity:.7;
-                 font-family:ui-monospace,monospace}
-  .strip{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px}
-  .strip figure{margin:0}
-  .strip img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:5px;
-             border:1px solid var(--line);display:block}
-  .strip figcaption{font-size:11px;color:var(--dim);padding-top:3px;text-align:center}
-  .sheet{width:100%;border-radius:7px;border:1px solid var(--line);display:block}
-  .rev{margin-top:9px;font-size:12px;color:var(--dim)}
-  .rev summary{cursor:pointer;color:var(--warn)}
-  .vcard .strip figcaption em{color:var(--accent);font-style:normal}
+  .card .top{display:flex;align-items:baseline;gap:8px}
+  .card h3{margin:0;font-size:15.5px}
+  .card .n{margin-left:auto;font-family:ui-monospace,Menlo,monospace;font-size:17px;color:var(--accent)}
+  .card p{margin:3px 0 0;color:var(--dim);font-size:12.5px;min-height:34px}
+
+  /* The honesty ledger. Every library in this project distinguishes what has been
+     rendered and looked at from what is still someone's opinion, and that distinction
+     is the most important thing about it - so it is on the front page, not buried. */
+  .led{display:flex;height:5px;border-radius:99px;overflow:hidden;margin-top:10px;background:var(--panel2)}
+  .led i{display:block}
+  .led .r{background:var(--ok)}.led .w{background:var(--warn)}
+  .led .u{background:var(--bad)}.led .t{background:var(--line)}
+  .ledk{display:flex;gap:9px;flex-wrap:wrap;margin-top:6px;font-size:10.5px;color:var(--dim);
+        font-family:ui-monospace,Menlo,monospace}
+
+  .strip{display:grid;gap:8px;grid-template-columns:repeat(auto-fill,minmax(112px,1fr))}
+  .strip a{border-radius:9px;overflow:hidden;border:1px solid var(--line);background:var(--panel2);display:block}
+  .strip a:hover{border-color:var(--accent)}
+  .strip img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block}
+  .note{color:var(--dim);font-size:12.5px;max-width:86ch;margin:10px 0 0}
+  .err{color:var(--warn);font-size:12px}
 </style>
 </head>
 <body>
 <header>
   <h1>studio</h1>
-  <span class="sub" id="stat">loading…</span>
-  <nav>
-    <a class="cta" href="/wizard">★ Direct a scene</a>
-    <a class="lnk" href="/cast">Cast</a>
-    <a class="lnk" href="/make">Make</a>
-    <a class="lnk" href="/styles">Styles</a><a class="lnk" href="/loras">LoRAs</a>
-    <a class="lnk" href="/tags">Tag meanings</a>
-    <a class="lnk" href="/verify">Verify</a>
-    <a class="lnk" href="/gallery">Gallery</a>
-    <button id="tabBuild" class="on">Pick presets</button>
-    <button id="tabCards">What options look like</button>
-    <button id="tabVars">All variables</button>
-  </nav>
+  <span class="sub" id="sub">a film studio, one variable at a time</span>
+  <span class="right">
+    <a href="/wizard">Direct a scene</a>
+    <a href="/styles">Styles</a>
+    <a href="/loras">LoRAs</a>
+    <a href="/cast">Cast</a>
+    <a href="/video">Video</a>
+    <a href="/gallery">Gallery</a>
+    <a href="/verify">Verify</a>
+  </span>
 </header>
 
-<!-- A first-time visitor lands here and has no idea which of three tabs is the start.
-     Say it plainly, once, and let them dismiss it. -->
-<div id="hello" style="padding:12px 18px;border-bottom:1px solid var(--line);
-     background:var(--panel2);font-size:13px;display:flex;gap:14px;align-items:center;
-     flex-wrap:wrap">
-  <b>New here?</b>
-  <span style="color:var(--dim)">
-    <a href="/wizard" style="color:var(--accent)">Direct a scene</a> walks you through it
-    step by step and renders the result — start there.
-    This page is the reference: every option, and what each one actually looks like.
-  </span>
-  <button id="hellox" style="margin-left:auto;background:none;border:1px solid var(--line);
-    color:var(--dim);border-radius:6px;padding:4px 10px;cursor:pointer;font:inherit">
-    got it</button>
-</div>
-<script>
-  (function(){
-    var h=document.getElementById('hello');
-    if(localStorage.getItem('studio_hello')==='1') h.style.display='none';
-    document.getElementById('hellox').onclick=function(){
-      h.style.display='none'; localStorage.setItem('studio_hello','1'); };
-  })();
-</script>
-
-<main id="build">
-  <div class="col" id="groups"></div>
-  <div class="col"><div class="cards" id="cards"></div></div>
-  <div class="col">
-    <h2>Scene</h2>
-    <div class="row">
-      <input id="sceneId" placeholder="scene id, e.g. the_goal" value="new_scene">
+<main>
+  <section class="hero">
+    <div class="l">
+      <h2>Craft a scene</h2>
+      <p>Every shot is a stack of layers. You choose each one; the app works out which
+         model can render that combination, assembles the prompt in the order the model
+         actually reads, and tells you before you spend GPU time when two of your choices
+         are going to fight each other.</p>
+      <a class="go" href="/wizard">Direct a scene &rarr;</a>
+      <a class="go alt" href="/make">Make something else</a>
     </div>
-    <ul id="picked"></ul>
-    <h2>.movie</h2>
-    <pre id="out"></pre>
-    <div class="row" style="margin-top:10px">
-      <button class="btn" id="copy">Copy</button>
-      <button class="btn ghost" id="clear">Clear</button>
+    <div class="stack" aria-label="the layer stack, outermost first">
+      <div class="lay s1"><b>Style</b><span>picks the engine</span></div>
+      <div class="lay s2 ind1"><b>Place</b><span>the setting</span></div>
+      <div class="lay s3 ind2"><b>Character</b><span>who is in it</span></div>
+      <div class="lay s4 ind2"><b>Wear · Light · Weather</b><span>modifiers</span></div>
+      <div class="lay s5 ind1"><b>Look</b><span>graded after, not prompted</span></div>
     </div>
-  </div>
-</main>
+  </section>
 
-<main id="cards2" class="hide" style="grid-template-columns:1fr">
-  <div class="col" id="cardlist"></div>
-</main>
+  <h2 class="sec">The vocabulary you craft from</h2>
+  <div class="grid" id="libs"></div>
+  <p class="note" id="ledgernote"></p>
 
-<main id="vars" class="hide" style="grid-template-columns:1fr">
-  <div class="col">
-    <div class="row">
-      <input id="q" placeholder="filter 461 variables — try weather, layer, emotion, music…">
-      <select id="st">
-        <option value="">all statuses</option>
-        <option value="ready">renders today</option>
-        <option value="partial">partial</option>
-        <option value="roadmap">roadmap</option>
-      </select>
-    </div>
-    <table><thead><tr><th>variable</th><th>level</th><th>type</th><th>default</th><th>status</th><th>what it does</th></tr></thead>
-      <tbody id="vbody"></tbody></table>
-  </div>
+  <h2 class="sec">Review what came out</h2>
+  <div class="grid" id="review"></div>
+
+  <h2 class="sec">Latest generations</h2>
+  <div class="strip" id="recent"></div>
 </main>
 
 <script>
-const $ = s => document.querySelector(s);
-let LIB = {}, VARS = [], group = null, picked = {};
+const J = async u => { const r = await fetch(u); if(!r.ok) throw new Error(u+" "+r.status); return r.json(); };
+const esc = s => String(s==null?"":s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
-const SKIP = new Set(['id','desc','status','note']);
-
-function statusClass(s){ return s === 'ready' ? 'ready' : s === 'roadmap' ? 'roadmap' : 'partial'; }
-
-async function boot(){
-  LIB  = await (await fetch('/api/library')).json();
-  VARS = await (await fetch('/api/variables')).json();
-  const n = Object.values(LIB).reduce((a,v) => a + v.length, 0);
-  $('#stat').textContent = `${n} presets in ${Object.keys(LIB).length} groups · ${VARS.length} variables`;
-  drawGroups();
-  group = Object.keys(LIB)[0];
-  drawCards();
-  drawVars();
-}
-
-function drawGroups(){
-  $('#groups').innerHTML = '';
-  for (const g of Object.keys(LIB)){
-    const b = document.createElement('button');
-    b.className = 'grp' + (g === group ? ' on' : '');
-    b.innerHTML = `${g}<span class="n">${LIB[g].length}</span>`;
-    b.onclick = () => { group = g; drawGroups(); drawCards(); };
-    $('#groups').appendChild(b);
+// A library's ledger is the count of cards by status. "ready" means somebody rendered it
+// and looked; "untested" means nobody has. Keeping them visibly separate is the whole
+// point - this project has twice shipped cards marked ready that had never been rendered.
+function ledger(items){
+  const c={ready:0,weak:0,unavailable:0,untested:0,other:0};
+  for(const it of items||[]){
+    const s=(it&&it.status)||"untested";
+    if(s in c) c[s]++; else if(s==="partial") c.weak++; else c.other++;
   }
+  return c;
+}
+function ledgerHTML(c){
+  const tot=Object.values(c).reduce((a,b)=>a+b,0)||1;
+  const seg=(k,cls)=> c[k] ? `<i class="${cls}" style="width:${(c[k]/tot*100).toFixed(1)}%"></i>` : "";
+  const key=[];
+  if(c.ready)       key.push(`${c.ready} measured`);
+  if(c.weak)        key.push(`${c.weak} weak`);
+  if(c.unavailable) key.push(`${c.unavailable} unavailable`);
+  if(c.untested+c.other) key.push(`${c.untested+c.other} untested`);
+  return `<div class="led">${seg("ready","r")}${seg("weak","w")}${seg("unavailable","u")}
+          <i class="t" style="width:${((c.untested+c.other)/tot*100).toFixed(1)}%"></i></div>
+          <div class="ledk">${key.map(esc).join(" · ")}</div>`;
+}
+function card(href,title,n,desc,led){
+  return `<a class="card" href="${href}"><div class="top"><h3>${esc(title)}</h3>
+          <span class="n">${n==null?"":n}</span></div><p>${esc(desc)}</p>${led||""}</a>`;
 }
 
-function drawCards(){
-  const wrap = $('#cards');
-  wrap.innerHTML = '';
-  const items = LIB[group] || [];
-  if (!items.length){ wrap.innerHTML = '<p class="empty">nothing in this group yet</p>'; return; }
-  for (const it of items){
-    const el = document.createElement('div');
-    el.className = 'card' + (picked[group] === it.id ? ' on' : '');
-    const fields = Object.entries(it).filter(([k]) => !SKIP.has(k));
-    // Only `ready` presets have a sample. A picture on a half-finished preset would
-    // imply it is fully honoured, which is worse than plainly showing it is not.
-    const media = it.sample
-      ? (it.sample.endsWith('.mp4')
-          ? `<video class="thumb" src="${it.sample}" muted loop playsinline
-                    onmouseenter="this.play()" onmouseleave="this.pause();this.currentTime=0"></video>`
-          : `<img class="thumb" src="${it.sample}" alt="${it.id}">`)
-      : `<div class="thumb none">${it.status === 'partial' ? 'unfinished — see roadmap/FINISH-PARTIAL.md' : 'no sample'}</div>`;
-    el.innerHTML =
-      `<span class="badge ${statusClass(it.status)}">${it.status || '?'}</span>` +
-      `<h3>${it.id}</h3>` + media + `<p>${it.desc || ''}</p>` +
-      (fields.length ? `<div class="fields">${fields.map(([k,v]) =>
-        `<div><b>${k}</b><span>${String(v).slice(0,42)}</span></div>`).join('')}</div>` : '');
-    el.onclick = () => {
-      if (picked[group] === it.id) delete picked[group]; else picked[group] = it.id;
-      drawCards(); drawScene();
-    };
-    wrap.appendChild(el);
-  }
-}
+(async function(){
+  const libs=document.getElementById("libs");
+  const out=[];
 
-// group folder -> the variable you write in a .movie file
-const KEY = { shots:'shot', cameras:'camera', transitions:'transition', looks:'look',
-              lighting:'lighting', layers:'layers', weather:'weather', emotions:'emotion',
-              soundscapes:'sound', pacing:'pace', places:'place', characters:'characters',
-              cues:'cue' };
+  // Styles first: it is the outermost layer and the one that decides the engine.
+  try{
+    const d=await J("/api/styles");
+    const ss=(d.styles||[]).filter(s=>s.id!=="_control");
+    const byEng=ss.reduce((a,s)=>(a[s.engine]=(a[s.engine]||0)+1,a),{});
+    out.push(card("/styles","Styles",ss.length,
+      `How it is drawn. ${byEng.anime||0} on the illustration engine, ${byEng.qwen||0} photographic.`,
+      ledgerHTML(ledger(ss))));
+  }catch(e){ out.push(card("/styles","Styles",null,"library unavailable","")); }
 
-function drawScene(){
-  const ul = $('#picked'); ul.innerHTML = '';
-  const keys = Object.keys(picked);
-  if (!keys.length) ul.innerHTML = '<li style="border:0;background:none;color:var(--dim)">nothing picked yet</li>';
-  for (const g of keys){
-    const li = document.createElement('li');
-    li.innerHTML = `<span>${KEY[g] || g}: <b>${picked[g]}</b></span>`;
-    const x = document.createElement('button');
-    x.textContent = '×';
-    x.onclick = () => { delete picked[g]; drawCards(); drawScene(); };
-    li.appendChild(x);
-    ul.appendChild(li);
-  }
-  const id = ($('#sceneId').value || 'new_scene').trim().replace(/\s+/g,'_');
-  const lines = [`  SCENE ${id}`];
-  for (const g of keys) if (g !== 'shots') lines.push(`    ${KEY[g] || g}: ${picked[g]}`);
-  if (picked.shots) lines.push(`    shot: ${picked.shots}`);
-  $('#out').textContent = lines.join('\n');
-}
+  try{
+    const d=await J("/api/loras");
+    const ls=d.loras||[];
+    out.push(card("/loras","LoRAs",ls.length,
+      "Trained weights. Base-model locked - the library says which engine each can attach to.",
+      ledgerHTML(ledger(ls))));
+  }catch(e){ /* page may predate the route */ }
 
-$('#sceneId').addEventListener('input', drawScene);
-$('#copy').onclick = () => navigator.clipboard.writeText($('#out').textContent);
-$('#clear').onclick = () => { picked = {}; drawCards(); drawScene(); };
+  try{
+    const cs=await J("/api/cast");
+    out.push(card("/cast","Cast",cs.length,
+      "Characters you can re-use across scenes, with their reference sheets and trained weights.",""));
+  }catch(e){}
 
-function drawVars(){
-  const q  = $('#q').value.toLowerCase();
-  const st = $('#st').value;
-  const rows = VARS.filter(v =>
-      (!st || v.status === st) &&
-      (!q || (v.name + ' ' + (v.why||'') + ' ' + (v.type||'')).toLowerCase().includes(q)));
-  $('#vbody').innerHTML = rows.slice(0, 500).map(v =>
-    `<tr><td><code>${v.name}</code></td><td>${v.level}</td><td>${v.type}</td>` +
-    `<td><code>${v.default}</code></td>` +
-    `<td class="${statusClass(v.status)}">${v.status}</td>` +
-    `<td>${v.why || ''}${v.fallback ? ` <em>falls back to ${v.fallback}</em>` : ''}</td></tr>`).join('')
-    || '<tr><td colspan="6" class="empty">no matches</td></tr>';
-}
-$('#q').addEventListener('input', drawVars);
-$('#st').addEventListener('change', drawVars);
-
-let CARDS = [];
-async function drawCardTab(){
-  if (!CARDS.length) CARDS = await (await fetch('/api/cards')).json();
-  // Only 11 of 209 cards carry look_at and only 3 carry a verdict, because those are
-  // written from LOOKING at the panels and that pass has barely been done. This used to
-  // print `${c.look_at}` unconditionally, so 198 cards displayed
-  // "What to notice: undefined" - which reads as a broken app rather than as an honest
-  // gap. Absent fields are now absent, and the gap is stated once where it is true.
-  //
-  // 72 cards are `not_visual`: the variable is real but a still cannot show it (a camera
-  // MOVE, a scheduling priority, a relationship to a different shot). Those say why
-  // instead of showing an empty strip.
-  //
-  // 137 now have a contact `sheet` - one labelled grid instead of eight loose images -
-  // which is both faster to load and far easier to compare across.
-  $('#cardlist').innerHTML = CARDS.map(c => {
-    const panels = c.panels || [];
-    let body;
-    if (c.not_visual) {
-      body = `<p class="lookat"><b>Nothing to show, and that is the honest answer:</b>
-              ${c.not_visual}</p>
-              ${(c.options||[]).length
-                ? `<p class="method">values: ${(c.options||[]).map(o=>
-                    typeof o==='string'?o:o.value).join(' · ')}</p>` : ''}`;
-    } else if (c.sheet) {
-      body = `<img class="sheet" src="${c.sheet}" loading="lazy"
-                   alt="${c.variable} options">`;
-    } else if (panels.length) {
-      body = `<div class="strip">${panels.map(p => `
-        <figure><img src="${p.sample}" loading="lazy" alt="${p.value}">
-          <figcaption><code>${p.value}</code>${p.control?' <em>control</em>':''}</figcaption>
-        </figure>`).join('')}</div>`;
-    } else {
-      body = `<p class="method">no panels rendered yet</p>`;
+  // The remaining card groups all arrive from one endpoint.
+  try{
+    const lib=await J("/api/library");
+    const DESC={looks:"Colour grades applied after generation, not prompted.",
+                cameras:"How the camera moves. Only provable on a clip.",
+                transitions:"How one shot becomes the next.",
+                lighting:"Where the light comes from.",
+                weather:"What the air is doing.",
+                emotions:"What the face is doing.",
+                shots:"Pacing patterns for a sequence.",
+                layers:"Depth and how the planes stack."};
+    const ORDER=["looks","cameras","transitions","lighting","weather","emotions","shots","layers"];
+    for(const k of ORDER){
+      if(!Array.isArray(lib[k])) continue;
+      out.push(card("/tags#"+k, k[0].toUpperCase()+k.slice(1), lib[k].length,
+        DESC[k]||"", ledgerHTML(ledger(lib[k]))));
     }
-    const rev = (c.review||[]).length
-      ? `<details class="rev"><summary>${c.review.length} reviewer note(s)</summary>
-         ${c.review.map(r=>`<p class="method"><b>${r.issue||''}</b><br>${r.fix||''}</p>`).join('')}
-         </details>` : '';
-    return `
-    <section class="vcard">
-      <h3>${c.variable}</h3>
-      <p class="claim">${c.claim||''}</p>
-      ${c.verdict ? `<p class="verdict"><b>Verdict:</b> ${c.verdict}</p>` : ''}
-      ${body}
-      ${c.look_at ? `<p class="lookat"><b>What to notice:</b> ${c.look_at}</p>`
-                  : (c.not_visual ? '' :
-                     `<p class="lookat">No verdict yet — these panels have been rendered
-                      but not yet looked at, so treat the claim above as untested.</p>`)}
-      ${rev}
-      ${c.method ? `<p class="method">${c.method}${c.model?' · '+c.model:''}</p>` : ''}
-    </section>`;}).join('')
-    || '<p class="empty">no cards yet — run studio/gen_cards.py</p>';
-}
+  }catch(e){}
 
-function show(which){
-  for (const [tab, pane] of [['tabBuild','build'],['tabCards','cards2'],['tabVars','vars']]){
-    const on = tab === which;
-    $('#'+pane).classList.toggle('hide', !on);
-    $('#'+tab).classList.toggle('on', on);
+  libs.innerHTML = out.join("");
+
+  document.getElementById("ledgernote").textContent =
+    "The bar under each library is its honesty ledger: green has been rendered and looked at, "
+    + "amber is weak, red does not work and the card says why, grey has never been rendered. "
+    + "Nothing is called ready on the strength of an opinion.";
+
+  // Review
+  const rev=[];
+  try{
+    const g=await J("/api/gallery");
+    rev.push(card("/gallery","Gallery",g.length,
+      "Every generation, each one carrying the exact recipe that produced it.",""));
+  }catch(e){}
+  try{
+    const v=await J("/api/verify/queue");
+    const n=(v&&(v.count||(v.items&&v.items.length)))||null;
+    rev.push(card("/verify","Verify",n,"Judge whether a sample really shows what its card claims.",""));
+  }catch(e){ rev.push(card("/verify","Verify",null,"Judge whether a sample really shows what its card claims.","")); }
+  try{
+    const vd=await J("/api/video");
+    const n=(vd.clips&&vd.clips.length)||vd.count||null;
+    rev.push(card("/video","Video",n,"Clips, and what survives the motion pass.",""));
+  }catch(e){}
+  try{
+    const d=await J("/api/domains");
+    rev.push(card("/make","Make",d.length,"The non-film makers: image, voice, music, game assets, mesh.",""));
+  }catch(e){}
+  document.getElementById("review").innerHTML=rev.join("");
+
+  // A glance at the most recent work, so the front page is never empty of pictures.
+  try{
+    const g=await J("/api/gallery");
+    // Gallery records carry `file`, a path relative to the samples root - not thumb/
+    // image/path, which is what a first guess assumed and why this strip rendered empty.
+    const imgs=g.filter(x=>x.file).slice(-24).reverse();
+    document.getElementById("recent").innerHTML = imgs.map(x=>{
+      const f=String(x.file);
+      const src = f.startsWith("/") ? f : "/samples/gallery/"+f;
+      return `<a href="/gallery" title="${esc(x.id)}"><img loading="lazy" src="${esc(src)}" alt=""></a>`;
+    }).join("") || '<span class="err">no generations yet</span>';
+  }catch(e){
+    document.getElementById("recent").innerHTML='<span class="err">gallery unavailable</span>';
   }
-  if (which === 'tabCards') drawCardTab();
-}
-$('#tabBuild').onclick = () => show('tabBuild');
-$('#tabCards').onclick = () => show('tabCards');
-$('#tabVars').onclick  = () => show('tabVars');
-
-boot();
-drawScene();
+})();
 </script>
 </body>
 </html>

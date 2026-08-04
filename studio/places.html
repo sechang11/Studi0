@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>studio · places</title>
+<style>
+  :root{--bg:#0f1115;--panel:#161a21;--panel2:#1c2129;--line:#272d38;--ink:#e6e9ef;
+        --dim:#8b94a3;--accent:#6ea8fe;--ok:#4ec9a0;--warn:#e0b252;--bad:#e07a5f}
+  @media (prefers-color-scheme:light){
+    :root{--bg:#f6f7f9;--panel:#fff;--panel2:#f0f2f5;--line:#dde1e8;--ink:#141821;--dim:#5d6470}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font:14px/1.55 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  header{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;padding:13px 18px;
+         border-bottom:1px solid var(--line);background:var(--panel);position:sticky;top:0;z-index:9}
+  header h1{margin:0;font-size:15px;letter-spacing:.07em;text-transform:uppercase}
+  header .sub{color:var(--dim);font-size:12px}
+  header .right{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+  header a{color:var(--dim);font-size:12px;text-decoration:none;border:1px solid var(--line);
+           padding:5px 10px;border-radius:6px}
+  header a:hover{color:var(--ink);border-color:var(--accent)}
+  .bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding:12px 18px;
+       border-bottom:1px solid var(--line);background:var(--panel);position:sticky;top:52px;z-index:8}
+  input[type=search],select{background:var(--panel2);border:1px solid var(--line);color:var(--ink);
+       border-radius:7px;padding:7px 10px;font:inherit}
+  button{background:var(--panel2);border:1px solid var(--line);color:var(--ink);border-radius:7px;
+       padding:7px 11px;font:inherit;cursor:pointer}
+  button:hover{border-color:var(--accent)}
+  button.on{border-color:var(--accent);color:var(--ink)}
+  .count{margin-left:auto;color:var(--dim);font-size:12px}
+
+  .key{padding:14px 18px 0;color:var(--dim);font-size:12.5px;max-width:104ch}
+  .key b{color:var(--ink)}
+
+  .grid{padding:18px;display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(258px,1fr))}
+  .p{background:var(--panel);border:1px solid var(--line);border-radius:11px;overflow:hidden;
+     cursor:pointer;display:flex;flex-direction:column}
+  .p:hover{border-color:var(--accent)}
+  /* Both engines side by side on the card face. A place carries danbooru tags AND prose
+     precisely because the two engines want opposite formats, so the pair IS the card -
+     seeing only one of them tells you half of what the place is. */
+  .pair{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line)}
+  .pair figure{margin:0;position:relative;background:var(--panel2)}
+  .pair img{width:100%;aspect-ratio:16/10;object-fit:cover;display:block}
+  .pair figcaption{position:absolute;left:0;bottom:0;font:10px/1 ui-monospace,Menlo,monospace;
+     letter-spacing:.06em;text-transform:uppercase;padding:3px 6px;background:#000a;color:#fff}
+  .pair .miss{aspect-ratio:16/10;display:flex;align-items:center;justify-content:center;
+     color:var(--dim);font-size:11px}
+  .p .b{padding:12px 14px}
+  .p h3{margin:0;font-size:15px}
+  .p .id{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--dim)}
+  .p .fam{float:right;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);
+          border:1px solid var(--line);border-radius:99px;padding:1px 8px}
+  .p p{margin:8px 0 0;font-size:12.5px;color:var(--dim)}
+  .dens{margin-top:9px;font:10.5px/1 ui-monospace,Menlo,monospace;color:var(--dim)}
+  .dens i{display:inline-block;height:4px;border-radius:99px;background:var(--ok);vertical-align:middle;
+          margin-right:7px}
+  .dens.thin i{background:var(--warn)}
+
+  dialog{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:14px;
+         max-width:1000px;width:94vw;padding:0}
+  dialog::backdrop{background:#000b}
+  .dh{display:flex;align-items:baseline;gap:12px;padding:15px 18px;border-bottom:1px solid var(--line)}
+  .dh h2{margin:0;font-size:19px}
+  .dh .x{margin-left:auto}
+  .db{padding:16px 18px 22px}
+  .shots{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .shots figure{margin:0}
+  .shots img{width:100%;border-radius:9px;border:1px solid var(--line);display:block}
+  .shots figcaption{color:var(--dim);font-size:11.5px;margin-top:6px}
+  .fld{margin-top:16px}
+  .fld h4{margin:0 0 5px;font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--dim)}
+  .fld pre{margin:0;white-space:pre-wrap;word-break:break-word;background:var(--panel2);
+     border:1px solid var(--line);border-radius:8px;padding:10px 12px;font:12px/1.5 ui-monospace,Menlo,monospace}
+  .empty{padding:40px 18px;color:var(--dim)}
+</style>
+</head>
+<body>
+<header>
+  <h1>studio</h1><span class="sub">places &mdash; where a scene happens</span>
+  <span class="right">
+    <a href="/">Home</a><a href="/wizard">Direct a scene</a><a href="/styles">Styles</a>
+    <a href="/loras">LoRAs</a><a href="/cast">Cast</a><a href="/gallery">Gallery</a>
+  </span>
+</header>
+
+<div class="bar">
+  <input type="search" id="q" placeholder="search places, tags, prose…" style="min-width:240px">
+  <select id="fam"><option value="">every kind</option></select>
+  <button data-eng="" class="on">both engines</button>
+  <button data-eng="anime">illustration</button>
+  <button data-eng="qwen">photographic</button>
+  <span class="count" id="count"></span>
+</div>
+
+<div class="key">
+  A <b>place</b> is the setting layer. Each card carries two prompts &mdash; danbooru
+  <b>tags</b> for the illustration engine and <b>prose</b> for the photographic one &mdash;
+  because the two models want opposite formats and feeding one the other's returns colour
+  soup. Both renders are shown side by side so a location can be chosen by looking.
+  <b>Density</b> counts the concrete nouns in the tags: a dense place survives a style that
+  would otherwise rebuild the background, and a thin one does not.
+</div>
+
+<div class="grid" id="grid"></div>
+<div class="empty" id="empty" hidden>Nothing matches.</div>
+
+<dialog id="dlg"><div class="dh"><h2 id="dt"></h2><span class="id" id="di"></span>
+  <button class="x" onclick="dlg.close()">Close</button></div>
+  <div class="db" id="dbody"></div></dialog>
+
+<script>
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+let ALL=[], ENG="";
+
+// Concrete nouns in the tag list. This is the measured predictor of whether a place
+// survives a compose=replaces style: a locker_room card with eleven nouns held its ground
+// against four styles that flattened a three-tag free-text scene entirely.
+const density = p => String(p.tags||"").split(",").map(s=>s.trim()).filter(Boolean).length;
+
+function shot(p,eng){
+  const src=(p.examples&&p.examples[eng]) || null;
+  const label = eng==="anime" ? "illustration" : "photographic";
+  return src ? `<figure><img loading="lazy" src="${esc(src)}" alt=""><figcaption>${label}</figcaption></figure>`
+             : `<figure><div class="miss">no ${label} render</div></figure>`;
+}
+function card(p){
+  const d=density(p), thin=d<6;
+  const panes = ENG ? shot(p,ENG) : shot(p,"anime")+shot(p,"qwen");
+  return `<div class="p" data-id="${esc(p.id)}">
+    <div class="pair" style="${ENG?'grid-template-columns:1fr':''}">${panes}</div>
+    <div class="b"><span class="fam">${esc(p.family||p.kind||"place")}</span>
+      <h3>${esc(p.name||p.id)}</h3><div class="id">${esc(p.id)}</div>
+      <p>${esc((p.desc||p.means||p.prose||"").slice(0,120))}</p>
+      <div class="dens ${thin?"thin":""}"><i style="width:${Math.min(d*7,84)}px"></i>${d} nouns${thin?" · thin, a strong style will overwrite this":""}</div>
+    </div></div>`;
+}
+function draw(){
+  const q=document.getElementById("q").value.trim().toLowerCase();
+  const fam=document.getElementById("fam").value;
+  const rows=ALL.filter(p=>{
+    if(fam && (p.family||p.kind)!==fam) return false;
+    if(ENG && !(p.examples&&p.examples[ENG])) return false;
+    if(!q) return true;
+    return [p.id,p.name,p.tags,p.prose,p.desc,p.family].join(" ").toLowerCase().includes(q);
+  });
+  document.getElementById("grid").innerHTML=rows.map(card).join("");
+  document.getElementById("empty").hidden=rows.length>0;
+  document.getElementById("count").textContent=`${rows.length} of ${ALL.length} places`;
+}
+function open_(id){
+  const p=ALL.find(x=>x.id===id); if(!p) return;
+  document.getElementById("dt").textContent=p.name||p.id;
+  document.getElementById("di").textContent=p.id;
+  const f=(t,v)=> v ? `<div class="fld"><h4>${t}</h4><pre>${esc(v)}</pre></div>` : "";
+  document.getElementById("dbody").innerHTML=
+    `<div class="shots">${shot(p,"anime")}${shot(p,"qwen")}</div>`
+    + `<p style="color:var(--dim);font-size:12.5px;margin-top:14px">Same seed, same settings,
+        no people &mdash; a place card is about the place, so a figure would make every
+        comparison half about the figure.</p>`
+    + f("Tags — illustration engine", p.tags)
+    + f("Prose — photographic engine", p.prose)
+    + f("Description", p.desc||p.means)
+    + f("Suits looks", (p.suits_looks||[]).join(", "))
+    + f("Note", p.note);
+  document.getElementById("dlg").showModal();
+}
+document.getElementById("grid").addEventListener("click",e=>{
+  const c=e.target.closest(".p"); if(c) open_(c.dataset.id);
+});
+document.getElementById("q").addEventListener("input",draw);
+document.getElementById("fam").addEventListener("change",draw);
+document.querySelectorAll("[data-eng]").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll("[data-eng]").forEach(x=>x.classList.remove("on"));
+  b.classList.add("on"); ENG=b.dataset.eng; draw();
+}));
+
+(async function(){
+  try{
+    const r=await fetch("/api/places"); if(!r.ok) throw new Error("HTTP "+r.status);
+    const d=await r.json();
+    ALL=(d.places||d||[]).filter(p=>p&&p.id);
+  }catch(e){
+    document.getElementById("grid").innerHTML=
+      `<div class="empty">Could not load /api/places &mdash; ${esc(e.message)}</div>`;
+    return;
+  }
+  const fams=[...new Set(ALL.map(p=>p.family||p.kind).filter(Boolean))].sort();
+  document.getElementById("fam").innerHTML=
+    '<option value="">every kind</option>'+fams.map(f=>`<option>${esc(f)}</option>`).join("");
+  draw();
+})();
+</script>
+</body>
+</html>

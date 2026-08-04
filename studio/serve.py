@@ -234,6 +234,30 @@ def templates():
 SAMPLE_URL = re.compile(r"^/samples/styles/[A-Za-z0-9._-]+$")
 
 
+
+def places():
+    """Every place card, with whatever renders exist stamped on it.
+
+    Places carry BOTH a danbooru `tags` string and a `prose` string because the two image
+    engines want opposite prompt formats, and place_examples.py renders each location on
+    both. The page shows the pair side by side, so the API hands back the card unchanged
+    and lets the page decide - the examples dict is already written onto the card by the
+    renderer, keyed by engine.
+    """
+    d = f"{HERE}/places"
+    out = []
+    if os.path.isdir(d):
+        for fn_ in sorted(os.listdir(d)):
+            if not fn_.endswith(".json"):
+                continue
+            try:
+                with open(os.path.join(d, fn_), encoding="utf-8") as f:
+                    out.append(json.load(f))
+            except Exception:
+                pass
+    fams = sorted({p.get("family") or p.get("kind") for p in out if p.get("family") or p.get("kind")})
+    return {"places": out, "families": fams, "count": len(out)}
+
 def styles():
     """The style library, with each card's per-engine example CHECKED AGAINST DISK.
 
@@ -491,6 +515,13 @@ class H(http.server.SimpleHTTPRequestHandler):
             return self._send(open(p, "rb").read(), 200, "text/html; charset=utf-8")
         if path == "/api/styles":
             return self._send(styles())
+        if path in ("/places", "/places.html"):
+            p = f"{HERE}/places.html"
+            if not os.path.exists(p):
+                return self._send(b"places.html is missing", 500, "text/plain")
+            return self._send(open(p, "rb").read(), 200, "text/html; charset=utf-8")
+        if path == "/api/places":
+            return self._send(places())
         if path in ("/loras", "/loras.html"):
             p = f"{HERE}/loras.html"
             if not os.path.exists(p):
