@@ -1,10 +1,10 @@
 {
  "generated_from": "git log",
- "count": 60,
+ "count": 61,
  "days": [
   [
    "2026-08-04",
-   14
+   15
   ],
   [
    "2026-08-03",
@@ -28,8 +28,32 @@
  ],
  "entries": [
   {
-   "hash": "2719dcd",
-   "full": "2719dcd5dfa3320e1b42a813a1b259dda112dc42",
+   "hash": "63439f2",
+   "full": "63439f2f755345a85385f44b2d8de1afaf0188f2",
+   "date": "2026-08-04",
+   "time": "09:20",
+   "author": "sechang11",
+   "subject": "Can we cast a character the model already knows? A probe, and Terra as the worked example",
+   "body": "Every cast member so far was invented here, so each costs a sheet, a turnaround and a LoRA\n- about twenty minutes of GPU. A character out of an existing game is a different problem,\nbecause animagine is trained on the danbooru corpus where well-known characters are tagged\nby name. If the tag has mass she comes back from the tag alone, with no build at all, and\nmore consistently than a trained LoRA because she is in the base weights rather than\npatched on top.\n\nSo the first question is never how do we build her. It is does the checkpoint already have\nher. studio/_tools/known_char_probe.py answers that in four cells at one seed: the danbooru\nform, the bare name, name plus description, and THE DESCRIPTION ALONE WITH NO NAME. That\nlast cell is the one a careless test omits. If the control looks like the named cells then\nthe name did nothing and the adjectives are carrying it - the governing rule applied to\ncharacter names. A name only counts as known if it beats its own description.\n\nTerra Branford, measured on animagine at seed 9090: the bare name returns a BLONDE IN A\nWHITE HOOD, not her. The danbooru form gets the green-blonde hair, red cape and an orb -\nthe orb is a noun the tag really does carry. But the description-only control lands nearly\nas close, so the tag is thin. Verdict: partially known, not reliably known. She cannot be\ncast from a name; the build is the same as any original character, and the name is worth\nusing to seed a better reference sheet.\n\nCharacter cards now carry provenance - original, known_strong, known_partial or\nknown_absent - so the probe is never run twice and nobody assumes a famous name will just\nwork. All six existing cards are stamped original.\n\ncraft/KNOWN_CHARACTERS.md records the method, the Terra result, and the one thing worth\nknowing before publishing rather than before rendering.",
+   "paragraphs": [
+    "Every cast member so far was invented here, so each costs a sheet, a turnaround and a LoRA\n- about twenty minutes of GPU. A character out of an existing game is a different problem,\nbecause animagine is trained on the danbooru corpus where well-known characters are tagged\nby name. If the tag has mass she comes back from the tag alone, with no build at all, and\nmore consistently than a trained LoRA because she is in the base weights rather than\npatched on top.",
+    "So the first question is never how do we build her. It is does the checkpoint already have\nher. studio/_tools/known_char_probe.py answers that in four cells at one seed: the danbooru\nform, the bare name, name plus description, and THE DESCRIPTION ALONE WITH NO NAME. That\nlast cell is the one a careless test omits. If the control looks like the named cells then\nthe name did nothing and the adjectives are carrying it - the governing rule applied to\ncharacter names. A name only counts as known if it beats its own description.",
+    "Terra Branford, measured on animagine at seed 9090: the bare name returns a BLONDE IN A\nWHITE HOOD, not her. The danbooru form gets the green-blonde hair, red cape and an orb -\nthe orb is a noun the tag really does carry. But the description-only control lands nearly\nas close, so the tag is thin. Verdict: partially known, not reliably known. She cannot be\ncast from a name; the build is the same as any original character, and the name is worth\nusing to seed a better reference sheet.",
+    "Character cards now carry provenance - original, known_strong, known_partial or\nknown_absent - so the probe is never run twice and nobody assumes a famous name will just\nwork. All six existing cards are stamped original.",
+    "craft/KNOWN_CHARACTERS.md records the method, the Terra result, and the one thing worth\nknowing before publishing rather than before rendering."
+   ],
+   "areas": [
+    "Docs",
+    "Tooling",
+    "Cast"
+   ],
+   "files": 9,
+   "added": 216,
+   "removed": 6
+  },
+  {
+   "hash": "642757b",
+   "full": "642757b1c71c32d2886739a14507d3f929076ff1",
    "date": "2026-08-04",
    "time": "08:42",
    "author": "sechang11",
@@ -44,9 +68,9 @@
    "areas": [
     "Pipeline"
    ],
-   "files": 4,
-   "added": 957,
-   "removed": 928
+   "files": 5,
+   "added": 1012,
+   "removed": 933
   },
   {
    "hash": "c38e8e5",
