@@ -1,10 +1,10 @@
 {
  "generated_from": "git log",
- "count": 67,
+ "count": 69,
  "days": [
   [
    "2026-08-04",
-   21
+   23
   ],
   [
    "2026-08-03",
@@ -28,8 +28,51 @@
  ],
  "entries": [
   {
-   "hash": "ed610d1",
-   "full": "ed610d13b3fca8728122e099491759380e3a319f",
+   "hash": "38b374b",
+   "full": "38b374bfb89cc5eec60f48448b558f633c1d9013",
+   "date": "2026-08-04",
+   "time": "18:25",
+   "author": "sechang11",
+   "subject": "Realism is a ladder, and its two halves take different routes",
+   "body": "REAL LIFE is fixed. The qwen edit path through a PHOTOGRAPHIC reference sheet gives real\nwool and raw silk, a real stone hall with a real shaft of light, and hair that reads as\nhair rather than a wig. The earlier cosplay result is gone.\n\nBut the ladder collapsed in the middle. Rungs 1 through 4 came back nearly identical: the\nQwen-Edit reference sheet pins the MEDIUM as hard as it pins the identity, so asking that\npath for a 3D animated feature or an oil portrait returns the same photograph. It is the\nsame suppression IPAdapter does on the anime path, showing up in a new place - and it\nmeans the qwen edit route cannot produce semi-real at all.\n\nSEMI-REAL WORKS ON THE ILLUSTRATION ENGINE instead: the danbooru name plus the trained\nLoRA at 0.5 plus a painterly or CG style, with IPAdapter at 0.0. Oil, concept art,\npre-raphaelite and cgi all land as visibly different media and all four hold her headpiece,\nhair, bodice, sarong and boots. That is the route for anything between a photograph and a\ncel, and it is the opposite engine from where anyone would look for it.\n\nstudio/_tools/realism_ladder.py renders the whole spectrum for any character so the rung\ncan be pointed at rather than argued about.",
+   "paragraphs": [
+    "REAL LIFE is fixed. The qwen edit path through a PHOTOGRAPHIC reference sheet gives real\nwool and raw silk, a real stone hall with a real shaft of light, and hair that reads as\nhair rather than a wig. The earlier cosplay result is gone.",
+    "But the ladder collapsed in the middle. Rungs 1 through 4 came back nearly identical: the\nQwen-Edit reference sheet pins the MEDIUM as hard as it pins the identity, so asking that\npath for a 3D animated feature or an oil portrait returns the same photograph. It is the\nsame suppression IPAdapter does on the anime path, showing up in a new place - and it\nmeans the qwen edit route cannot produce semi-real at all.",
+    "SEMI-REAL WORKS ON THE ILLUSTRATION ENGINE instead: the danbooru name plus the trained\nLoRA at 0.5 plus a painterly or CG style, with IPAdapter at 0.0. Oil, concept art,\npre-raphaelite and cgi all land as visibly different media and all four hold her headpiece,\nhair, bodice, sarong and boots. That is the route for anything between a photograph and a\ncel, and it is the opposite engine from where anyone would look for it.",
+    "studio/_tools/realism_ladder.py renders the whole spectrum for any character so the rung\ncan be pointed at rather than argued about."
+   ],
+   "areas": [
+    "Tooling",
+    "Cast"
+   ],
+   "files": 4,
+   "added": 207,
+   "removed": 1
+  },
+  {
+   "hash": "cae9c8b",
+   "full": "cae9c8bbd1b3e6905832b10941c242ad4fd39de2",
+   "date": "2026-08-04",
+   "time": "18:21",
+   "author": "sechang11",
+   "subject": "The name is load-bearing after all - correcting this card's own claim",
+   "body": "This card said the trained LoRA carries Terra with the danbooru name stripped from the\nprompt, and therefore that she is a cast member rather than a prompt trick. That was\nwrong. It was read off a small column in terra_lora_check.jpg and it was too generous.\n\nThe user spotted the real pattern unprompted, on the full-body sheets where it is\nunmissable. In costume_ab.jpg rows 1 and 2 are her and rows 3 and 4 are not, and the\nvariable between those pairs is THE NAME, not the LoRA version: v1 and v2 both hold with\nfull tags, and both fail without the name. costume_recaptioned.jpg says the same thing\nwith two rows instead of four.\n\nWhat is actually true is that the tag and the weights are COMPLEMENTARY, and the tag is\nload-bearing. Without the name she becomes a generic green-haired woman in a long gown -\nthe headpiece, the asymmetric fringed sarong and the bodice all go. The LoRA refines and\nstabilises what the name summons rather than replacing it.\n\nSo provenance known_partial is sharper than it looked: partial is not a half-measure to\nbe trained away, it is a permanent dependency on the tag. Keep the danbooru name in every\nprompt for her.",
+   "paragraphs": [
+    "This card said the trained LoRA carries Terra with the danbooru name stripped from the\nprompt, and therefore that she is a cast member rather than a prompt trick. That was\nwrong. It was read off a small column in terra_lora_check.jpg and it was too generous.",
+    "The user spotted the real pattern unprompted, on the full-body sheets where it is\nunmissable. In costume_ab.jpg rows 1 and 2 are her and rows 3 and 4 are not, and the\nvariable between those pairs is THE NAME, not the LoRA version: v1 and v2 both hold with\nfull tags, and both fail without the name. costume_recaptioned.jpg says the same thing\nwith two rows instead of four.",
+    "What is actually true is that the tag and the weights are COMPLEMENTARY, and the tag is\nload-bearing. Without the name she becomes a generic green-haired woman in a long gown -\nthe headpiece, the asymmetric fringed sarong and the bodice all go. The LoRA refines and\nstabilises what the name summons rather than replacing it.",
+    "So provenance known_partial is sharper than it looked: partial is not a half-measure to\nbe trained away, it is a permanent dependency on the tag. Keep the danbooru name in every\nprompt for her."
+   ],
+   "areas": [
+    "Cast"
+   ],
+   "files": 1,
+   "added": 2,
+   "removed": 1
+  },
+  {
+   "hash": "acbbe9e",
+   "full": "acbbe9e3443d78a712218b488119cfe2f5dd0b91",
    "date": "2026-08-04",
    "time": "17:40",
    "author": "sechang11",
@@ -44,9 +87,9 @@
    "areas": [
     "Cast"
    ],
-   "files": 4,
-   "added": 8,
-   "removed": 4
+   "files": 5,
+   "added": 36,
+   "removed": 11
   },
   {
    "hash": "5605f86",
