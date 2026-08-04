@@ -295,26 +295,37 @@ def variables():
     return json.load(open(p, encoding="utf-8")) if os.path.exists(p) else []
 
 
+# Parameter names that mean "the layer selection", for _call_resolve below.
+SELECTION_ARGS = ("sel", "selection", "req", "request", "body", "spec", "picks", "layers")
+
+
 def _call_resolve(fn, req):
     """Call compose.resolve() however it ended up being written.
 
     This endpoint and studio/compose.py were built in parallel against a written contract.
-    The contract fixes the request KEYS and the response SHAPE, which are what the page and
-    the wizard depend on; it does not fix whether the function takes eight keyword arguments
-    or one dict, which nothing depends on. So adapt to whichever it is instead of failing
-    over a detail neither side cares about.
+    The contract fixes the request KEYS and the response SHAPE, which are what this page and
+    the wizard depend on; it does not fix the argument style, which nothing depends on. As
+    shipped it is resolve(libs, sel) - a library handle the module loads for itself when it
+    is not given one, then the selection - so that is what the last branch handles.
     """
     try:
         params = inspect.signature(fn).parameters
     except (TypeError, ValueError):
-        return fn(**req)
+        return fn(req)
     if any(p.kind == p.VAR_KEYWORD for p in params.values()):
-        return fn(**req)
+        return fn(**req)                                    # resolve(**kw)
     named = [n for n, p in params.items()
              if p.kind in (p.POSITIONAL_OR_KEYWORD, p.KEYWORD_ONLY)]
-    if len(named) == 1 and named[0] not in req:
-        return fn(req)                      # resolve(request_dict)
-    return fn(**{k: v for k, v in req.items() if k in named})
+    if set(named) & set(req):                               # resolve(style=..., place=...)
+        return fn(**{k: v for k, v in req.items() if k in named})
+    if len(named) == 1:                                     # resolve(sel)
+        return fn(req)
+    # resolve(libs, sel). Pass the selection by name so its position does not matter, and
+    # leave every other argument to its own default handling.
+    for n in named:
+        if n.lower() in SELECTION_ARGS:
+            return fn(**{n: req, **{o: None for o in named if o != n}})
+    return fn(*([None] * (len(named) - 1)), req)            # last argument wins
 
 
 def movies():
@@ -333,7 +344,25 @@ class H(http.server.SimpleHTTPRequestHandler):
         self.send_header("Content-Length", str(len(body)))
         self.send_header("Cache-Control", "no-store")
         self.end_headers()
-        self.wfile.write(body)
+        # A HEAD reply carries the headers and no body, so the same route table can
+        # answer both without every branch having to know which it is serving.
+        if not getattr(self, "_head_only", False):
+            self.wfile.write(body)
+
+    def do_HEAD(self):
+        """Answer HEAD off the same routes as GET.
+
+        Without this the class inherits SimpleHTTPRequestHandler's do_HEAD, which
+        resolves against the process working directory instead of the route table -
+        so every route in the app answered `404 File not found` to HEAD while GET
+        returned 200. Browsers fetch with GET so nothing visibly broke, but any
+        health check, uptime monitor or link checker saw the whole app as missing.
+        """
+        self._head_only = True
+        try:
+            self.do_GET()
+        finally:
+            self._head_only = False
 
     def do_GET(self):
         path = urllib.parse.urlparse(self.path).path
@@ -711,6 +740,12 @@ class H(http.server.SimpleHTTPRequestHandler):
             return self._send({
                 "error": "the compositor returned something unexpected",
                 "detail": f"resolve() returned {type(out).__name__}, expected a dict"}, 500)
+        # resolve() hands back the full text of every card it touched so the COMPILER can
+        # use them in-process. Over HTTP that is dead weight: measured at 6604 bytes of a
+        # 12781-byte reply, 52% of the payload, on a request the wizard fires every 180ms
+        # while you type. Nothing in either page reads it, and the same data is already on
+        # /api/library. compose.py's own docstring asks serve.py to drop it.
+        out = {k: v for k, v in out.items() if k != "cards"}
         return self._send(out)
 
     def do_POST(self):

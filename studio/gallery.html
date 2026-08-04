@@ -34,7 +34,11 @@
   .it{background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden;
       cursor:pointer;display:flex;flex-direction:column}
   .it:hover{border-color:var(--accent)}
-  .it img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;background:var(--panel2)}
+  .it img,.it video{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;background:var(--panel2)}
+  .it .aud{width:100%;aspect-ratio:16/9;display:flex;flex-direction:column;align-items:center;
+    justify-content:center;gap:8px;background:var(--panel2);padding:10px}
+  .it .aud .ico{font-size:26px;color:var(--dim);line-height:1}
+  .it .aud audio{width:100%;max-width:100%;height:32px}
   .it .b{padding:9px 11px}
   .it .v{font-family:ui-monospace,Menlo,monospace;font-size:13px;color:var(--accent)}
   .it .t{color:var(--dim);font-size:12px;margin-top:2px}
@@ -124,6 +128,21 @@ function apply(){
   draw();
 }
 
+// The grid used to put every record's `file` in an <img> whatever it was, so the 48
+// voice and sfx records - all real .mp3 files that exist on disk - rendered as 48 broken
+// images. An audio artifact gets a labelled tile with a real player instead; video gets
+// a <video>. The element was the bug, never the path.
+function mediaFor(r){
+  const f = String(r.file || "");
+  if(/\.(mp3|wav|flac|ogg|m4a)$/i.test(f))
+    return `<div class="aud"><span class="ico">&#9835;</span>
+      <audio controls preload="none" src="${esc(f)}"></audio></div>`;
+  if(/\.(mp4|webm|mov)$/i.test(f))
+    return `<video muted loop playsinline preload="metadata" src="${esc(f)}"
+      onmouseover="this.play()" onmouseout="this.pause()"></video>`;
+  return `<img loading="lazy" src="${esc(f)}" alt="">`;
+}
+
 function draw(){
   $("stat").textContent = `${VIEW.length} of ${ALL.length} generations`;
   $("empty").style.display = VIEW.length ? "none" : "block";
@@ -132,7 +151,7 @@ function draw(){
     : "No generations yet. Run:  python3 studio/_tools/gallery_gen.py --vary all --loop";
   $("grid").innerHTML = VIEW.slice(0,400).map((r,i)=>`
     <div class="it" data-i="${ALL.indexOf(r)}">
-      <img loading="lazy" src="${esc(r.file)}" alt="">
+      ${mediaFor(r)}
       <div class="b">
         <div class="v">${esc(r.demonstrates.value)}</div>
         <div class="t">${esc(r.demonstrates.variable)} · ${esc(r.template_name||r.template)}</div>

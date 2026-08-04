@@ -41,27 +41,41 @@ NOTHING SILENTLY DOES NOTHING
 Any variable the renderer cannot honour yet still compiles - it warns once, falls back to a
 named alternative, and points at studio/roadmap/ where the path to implementing it is
 written down. A knob that quietly has no effect is worse than no knob.
+
+THE PROMPT IS NOT BUILT HERE
+
+studio/compose.py takes the resolved layer selection for one shot and returns the assembled
+prompt, plus a list of what those layers are going to do to each other. This file calls it;
+so does the wizard, through POST /api/compose. That is the point - if the two built their
+prompts separately the preview would eventually start lying about what the film will be,
+and the only symptom would be a render that does not match what you were shown.
+
+Everything about ORDER lives there too, with the measurements that established it.
 """
 import argparse, collections, hashlib, json, os, re, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 sys.path.insert(0, os.path.join(ROOT, "scripts"))
+# APPEND, not insert: scripts/ has to keep priority so scene_templates resolves there.
+if HERE not in sys.path:
+    sys.path.append(HERE)
 
 from scene_templates import expand as expand_template   # noqa: E402
+import compose                                          # noqa: E402
 
-Q = "masterpiece, best quality, very aesthetic, absurdres"
-MALE = "male focus, mature male, masculine"
-
-# Damage continuity. Appended to a character's tags and never allowed to decrease,
-# so a torn shirt cannot un-tear itself in the next scene. A character card may
-# override this with its own `wear_tags` list - a soldier and a child should not
-# share one damage vocabulary.
-WEAR = ["clean uniform, neat hair",
-        "sweaty, damp hair, flushed",
-        "sweaty, dirt on uniform, messy hair, breathing hard",
-        "torn uniform, dirt and grass stains, exhausted, dishevelled",
-        "torn bloodied uniform, cut on face, utterly exhausted, trembling"]
+# WHERE A PROMPT IS ACTUALLY BUILT: studio/compose.py, not here.
+#
+# This file used to assemble the prompt inline, and studio/serve.py's wizard had no way to
+# show the author what their layer selection was going to produce without reimplementing
+# the same concatenation - which is a copy that starts drifting the first time either side
+# is touched, and drifts invisibly, because the only symptom is a preview that lies.
+#
+# So the ordering rules, the engine derivation, the conflict checks and the quality tokens
+# all live in compose.py now, and both the wizard and this compiler call the same
+# resolve(). What is left here is the .movie format: parsing, inheritance, seeds, timing,
+# the score and the beat record.
+Q, MALE, WEAR, NO_PERSON = compose.Q, compose.MALE, compose.WEAR, compose.NO_PERSON
 
 # name -> (level it may be set at, default, what it does)
 VARS = collections.OrderedDict([
@@ -83,6 +97,15 @@ VARS = collections.OrderedDict([
     ("tags",        ("any",     "",          "APPENDED down the tree, never replaced")),
     ("negative",    ("any",     "bad hands, extra digits, watermark, text", "appended")),
     ("place",       ("any",     "",          "studio/places/*.json id, or free text")),
+    # studio/lighting/ and studio/weather/ have been authored since this table was written
+    # - 18 and 19 cards - and until now there was no variable to select one with, so
+    # `lighting: neon` in a .movie file was stored and then read by nothing at all.
+    # The PROMPT half of each card lands. Their numeric fields (ratio, temp, wind,
+    # visibility) still reach no renderer, and compose.py says so on every use.
+    ("lighting",    ("any",     "",          "studio/lighting/*.json - key light, as "
+                                             "prompt words. its numbers are not wired")),
+    ("weather",     ("any",     "",          "studio/weather/*.json - as prompt words. "
+                                             "its numbers are not wired")),
     ("time",        ("any",     "",          "night / dawn / day / dusk")),
     ("camera",      ("any",     "static",    "studio/cameras/*.json - default move for shots here")),
     ("fx",          ("any",     "",          "punch shake aberr glow flash hot ramp smear whiteout")),
@@ -292,14 +315,20 @@ def resolve(movie, ch, sc):
     return out
 
 
-# Templates whose whole point is that there is no face in frame. Giving these a
-# character reference wastes an IPAdapter pass and, worse, invites the model to put
-# a person in a shot that was supposed to be a detail or an empty room.
+# NO_PERSON is imported from compose.py at the top of this file. It holds the templates
+# whose whole point is that there is no face in frame - giving those a character reference
+# wastes an IPAdapter pass and, worse, invites the model to put a person in a shot that was
+# supposed to be a detail or an empty room.
 #
 # "Coverage is faked by scale contrast, not by matching" - no video model here has a
 # persistent 3D space, so the cutaway MUST be of a thing whose surroundings are out
 # of frame. See craft/CINEMATOGRAPHY.md.
-NO_PERSON = {"pillow", "insert", "establish"}
+
+# Conflicts the resolver reports that THIS file already reports better. A missing sheet is
+# a fact about a character across the whole film, and compile.py says it once per
+# character at the end; the resolver can only see one shot at a time and would say it
+# once per beat.
+COMPOSE_CODES_SAID_ELSEWHERE = {"sheet_missing"}
 
 
 def compile_movie(path):
@@ -321,28 +350,58 @@ def compile_movie(path):
     # An explicit engine still wins, because a style card can be wrong and an author who
     # has looked at the output should be able to override it. When they disagree, say so
     # rather than silently picking one.
+    #
+    # The derivation itself now lives in compose.py so the wizard and this compiler cannot
+    # disagree about which model a style routes to. The warnings it returns are word for
+    # word the ones this file used to emit, in the same order, because they are already
+    # scraped out of stdout by studio/serve.py and shown in the UI.
+    libs = compose.load_libs(HERE)
     style_id = str(movie["vars"].get("style", "")).strip()
-    style = lib("styles", style_id) if style_id else {}
-    engine = str(movie["vars"].get("engine", "")).strip().lower()
-    if style and not engine:
-        engine = str(style.get("engine", "anime")).lower()
-        if engine == "either":
-            engine = "anime"
-    elif style and engine and style.get("engine") not in (engine, "either"):
-        warns.append(f"style '{style_id}' wants engine '{style.get('engine')}' but the "
-                     f"film sets engine '{engine}'. Using '{engine}' as authored - drop "
-                     f"the engine line to follow the style.")
-    engine = engine or "anime"
-    if engine not in ("anime", "qwen"):
-        raise SystemExit(f"unknown engine {engine!r}\n"
-                         f"  anime  danbooru tags + IPAdapter faces (animagine-xl-4.0)\n"
-                         f"  qwen   prose prompts, photoreal or illustrated (Qwen-Image 2512)")
-    if style and style.get("strength") == "weak":
-        warns.append(f"style '{style_id}' is marked weak: {style.get('note','')[:150]}")
-    if engine != "anime":
-        warns.append("engine 'qwen': character faces are held by reference SHEETS through "
-                     "Qwen-Edit rather than IPAdapter, which is a weaker lock - expect more "
-                     "drift between shots than the anime path gives you")
+    eng = compose.resolve_engine(libs, style_id,
+                                 str(movie["vars"].get("engine", "")).strip().lower())
+    engine_said = set()       # raw messages, so the per-beat dedupe still matches
+    for c in eng["conflicts"]:
+        # compose.py never raises - it is called from a web request too, where dying is
+        # not an option. A typo in a .movie file IS fatal here, so the two codes that mean
+        # "you named something that does not exist" are turned back into exits. lib() is
+        # reused for the style one purely because it is the single place that prints the
+        # list of what IS available.
+        if c["code"] == "style_unknown":
+            lib("styles", style_id)
+        if c["code"] == "engine_unknown":
+            # Name the value that is ACTUALLY wrong. The film's own engine var is None
+            # whenever the bad value came off the style card instead, and printing that
+            # told the author to go fix a line they never wrote while nothing anywhere
+            # named the card that really carries it.
+            authored = str(movie["vars"].get("engine", "")).strip()
+            if authored:
+                where = f"the film sets engine: {authored!r}"
+            else:
+                where = (f"studio/styles/{style_id}.json carries "
+                         f"engine: {eng['style'].get('engine')!r}"
+                         if eng.get("style") else "no engine was set")
+            raise SystemExit(
+                f"unknown engine - {where}\n"
+                f"  anime  danbooru tags + IPAdapter faces (animagine-xl-4.0)\n"
+                f"  qwen   prose prompts, photoreal or illustrated (Qwen-Image 2512)")
+        # Same shape as the per-beat conflicts below. These used to append the bare
+        # message, which dropped the fix sentence AND, because `said` is seeded from
+        # this list, suppressed the per-beat copy that would have carried it - so the
+        # qwen face-lock warning printed with no advice while every other line had some.
+        _p = {"error": "BROKEN: ", "warning": "", "note": "fyi: "}.get(c["severity"], "")
+        warns.append(_p + c["message"] + (f"  FIX: {c['fix']}" if c.get("fix") else ""))
+        engine_said.add(c["message"])
+    # Deliberately NOT binding a local called `style` here. eng["style"] is the style
+    # CARD, and film["style"] a few hundred lines down is the movie's free house TAG
+    # string - two different things one letter apart. The card is not needed again in
+    # this function (compose.py does the assembling now), and this project has already
+    # been bitten by that collision once.
+    engine = eng["engine"]
+    # Conflicts the resolver finds per beat, collected by MESSAGE so a rule that is true
+    # of the whole film is said once rather than once for each of its 12 shots. Measured:
+    # derby-ep1 already emits 10 warnings and 8 of them are the same per-beat notice.
+    compose_warns = collections.OrderedDict()
+    said = set(engine_said)
     beats = []
     used = []                 # character ids actually referenced, in first-seen order
     spoke = set()             # character ids that have a spoken line
@@ -428,99 +487,64 @@ def compile_movie(path):
                 elif declared and tmpl not in NO_PERSON:
                     who = declared[0]
 
-                card = cast.get(who or "", {})
-                emo_card = {}          # the qwen prose path reads this too
-                wear_tags = card.get("wear_tags") or WEAR
                 if who:
                     d["ref"] = [who]
-                    wear_tags = card.get("wear_tags") or WEAR
-                    # ORDER IS THE WHOLE TRICK. Earlier, more specific tags win when they
-                    # conflict, so: identity, then the FACE, then the garment in its
-                    # damaged state, then the world.
-                    #
-                    # An emotion is expanded into its physical parts - "wide-eyed,
-                    # parted lips, sweat" - never the feeling word. Verified: `mood:
-                    # melancholy, defeat` rendered the character smiling, while the same
-                    # emotion written as face tags lands reliably. The model renders
-                    # nouns, not adjectives.
-                    bits = [card.get("tags", ""), MALE]
-                    emo = str(v.get("emotion", "")).strip()
-                    if emo:
-                        e = emo_card = lib("emotions", emo)
-                        bits += [e.get("face", ""), e.get("eyes", ""), e.get("mouth", "")]
-                        if wear == 0:
-                            # at wear 0 nothing else is describing the body, so the
-                            # emotion's posture is free to. above 0 the damage state
-                            # owns it and two posture claims would fight.
-                            bits.append(e.get("body", ""))
-                        if e.get("status") == "partial" and e.get("voice_style"):
-                            warns.append(
-                                f"{bid}: emotion '{emo}' renders as face tags, but its "
-                                f"voice_style '{e['voice_style']}' is not routed to TTS yet")
-                    bits.append(wear_tags[min(wear, len(wear_tags) - 1)])
-                else:
-                    bits = []
-                # WHAT IS HAPPENING. Placed exactly where screenplay.py places it: after
-                # identity and garment-state, before the world. Until this existed a
-                # beat's whole prompt was identity + wear + look + place, and an anime
-                # checkpoint handed nothing but a character description renders the only
-                # thing it can - that character, posed, standing still. Every shot of the
-                # first film compiled from this format came back a portrait, including
-                # the sakuga beat meant to be the money shot.
+
+                # ---- the prompt --------------------------------------------------
+                # ONE call, and it is the same call the wizard makes. Everything about
+                # WHICH LAYER GOES WHERE - identity before the face before the garment
+                # before the world, place before look, quality tokens last, prose flow on
+                # the qwen path - lives in compose.py and is documented there with what
+                # was measured to establish it.
                 #
-                # A shot with no description gets a framing hint rather than nothing, so
-                # the model is at least told how close to stand.
-                desc = (b.get("desc") or "").strip()
-                if not desc:
-                    desc = "close-up" if who else "scenery, no humans"
-                bits.append(desc)
-                bits += [v["tags"], look["tags"], v["mood"], v["place"], v["time"], Q]
-                d["tags"] = ", ".join(x for x in bits if x)
-                # TWO PROMPTS, because the two model families want OPPOSITE formats and
-                # feeding one the other's is how you get abstract colour shapes.
-                #
+                # TWO PROMPTS come back, because the two model families want OPPOSITE
+                # formats and feeding one the other's is how you get abstract colour
+                # shapes:
                 #   tags   danbooru, comma separated, for the anime SDXL path
-                #   prompt prose, for the Qwen path (13_qwen_t2i_styled / 14_qwen_edit_ref)
-                #
-                # These used to be the same string, which was harmless only because
-                # keyframe_engine was hardcoded to "anime" and the Qwen branch was
-                # unreachable from an authored film. Now that a film can choose, they
-                # have to differ. The character's human-readable `desc` is used here
-                # rather than its danbooru tags, for the same reason.
-                if engine == "anime":
-                    # the style's marks sit with the other tags; on this path tags ARE
-                    # the prompt
-                    if style.get("tags"):
-                        d["tags"] = d["tags"] + ", " + style["tags"]
-                    d["prompt"] = d["tags"]
-                else:
-                    # `prose` on a character is a VISUAL description; `desc` is the
-                    # narrative one ("Has never beaten his rival"), which tells an image
-                    # model nothing it can draw. Fall back to the danbooru tags rather
-                    # than to desc - tags at least name things that exist in frame.
-                    who_prose = (card.get("prose") or card.get("tags", "")) if who else ""
-                    emo_prose = ""
-                    if who and emo_card:
-                        emo_prose = ", ".join(x for x in (emo_card.get("face", ""),
-                                                          emo_card.get("eyes", ""),
-                                                          emo_card.get("mouth", "")) if x)
-                    wear_prose = wear_tags[min(wear, len(wear_tags) - 1)] if who else ""
-                    parts = [desc, who_prose, emo_prose, wear_prose,
-                             v["place"], v["time"], v["mood"],
-                             look.get("prose") or look.get("tags", "")]
-                    # The film's house style is appended LAST and only if it does not
-                    # contradict the engine - "cel shading" on a photoreal render is the
-                    # author asking for two different pictures at once.
-                    # NOTE the name: `house_tags`, not `style`. `style` is the style CARD
-                    # resolved once for the whole film, and rebinding it here would
-                    # clobber it for every later beat.
-                    house_tags = v["tags"]
-                    if house_tags and not any(w in house_tags.lower() for w in
-                                              ("anime", "cel shad", "manga", "danbooru")):
-                        parts.append(house_tags)
-                    if style.get("prose"):
-                        parts.append(style["prose"])
-                    d["prompt"] = ". ".join(x.strip(" .,") for x in parts if x.strip(" .,")) + "."
+                #   prompt whichever of the two this film's engine actually reads
+                emo = str(v.get("emotion", "")).strip()
+                # compose.py returns unknown ids as a conflict rather than dying, because
+                # it also answers web requests. In a .movie file a typo must not compile.
+                if emo and emo not in libs["emotions"]:
+                    lib("emotions", emo)
+                for key in ("lighting", "weather"):
+                    want = str(v.get(key) or "").strip()
+                    if want and want not in libs[key]:
+                        raise SystemExit(
+                            f"{bid}: unknown {key} {want!r}\n"
+                            f"  available: {', '.join(sorted(libs[key])) or '(none)'}\n"
+                            f"  (add one by creating {HERE}/{key}/{want}.json)")
+
+                comp = compose.resolve(libs, {
+                    "style": style_id, "engine": engine,
+                    "place": v["place"], "time": v["time"], "mood": v["mood"],
+                    "character": who, "emotion": emo, "wear": wear,
+                    "look": v["look"], "lighting": v.get("lighting"),
+                    "weather": v.get("weather"),
+                    "desc": (b.get("desc") or "").strip(),
+                    "template": tmpl, "camera": bcam.get("id"),
+                    "tags": v["tags"], "negative": v.get("negative"),
+                    # a film always ends in clips, and the temporal-stability check is
+                    # worth roughly 8x what it costs to run: a keyframe measured 4.1s a
+                    # beat and the clip that follows it measured 32.1s.
+                    "output": "video"})
+                d["tags"] = comp["tags"]
+                d["prompt"] = comp["prompt"]
+                for c in comp["conflicts"]:
+                    if c["code"] in COMPOSE_CODES_SAID_ELSEWHERE:
+                        continue
+                    if c["message"] in said:
+                        continue
+                    compose_warns[c["message"]] = c
+
+                # The emotion cards carry a voice_style that TTS does not read yet. This
+                # one stays here rather than moving into the resolver because it names the
+                # BEAT, and a warning that can point at one shot should.
+                e = comp["cards"]["emotion"] or {}
+                if who and e.get("status") == "partial" and e.get("voice_style"):
+                    warns.append(
+                        f"{bid}: emotion '{emo}' renders as face tags, but its "
+                        f"voice_style '{e['voice_style']}' is not routed to TTS yet")
                 d["motion"] = "Slow deliberate movement only."
                 if b.get("text"):
                     d["line"] = {"who": who, "text": b["text"]}
@@ -597,6 +621,22 @@ def compile_movie(path):
         if c in spoke and not cast[c].get("voice"):
             raise SystemExit(f"character '{c}' speaks but has no voice in "
                              f"{HERE}/characters/{c}.json")
+
+    # ---- what the layers do to each other ---------------------------------------
+    # Last, and deduplicated, because these are properties of the SELECTION rather than
+    # of one shot: a style that rebuilds the background does it in all twelve beats, and
+    # twelve identical lines would bury the nine warnings above them. Severity is carried
+    # in the text rather than in a separate channel because there is only one channel -
+    # studio/serve.py scrapes these lines out of stdout by their "!" prefix.
+    #
+    # NOTHING HERE FAILS THE COMPILE, even at severity "error". A film that renders badly
+    # is still a film the author may want to look at, and the alternative - refusing to
+    # compile something that compiled yesterday - breaks every existing .movie the first
+    # time a new rule is added. The wizard, which can offer a fix before anything is
+    # spent, is where an error should stop you.
+    for msg, c in compose_warns.items():
+        prefix = {"error": "BROKEN: ", "warning": "", "note": "fyi: "}.get(c["severity"], "")
+        warns.append(prefix + msg + (f"  FIX: {c['fix']}" if c["fix"] else ""))
 
     cw, ch_ = str(movie["vars"].get("canvas", "1920x1080")).lower().split("x")
     sheets = {c: cast[c]["sheet"] for c in used if cast[c].get("sheet")}

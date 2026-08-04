@@ -9,9 +9,18 @@
     --bg:#0f1115; --panel:#161a21; --panel2:#1c2129; --line:#272d38;
     --ink:#e6e9ef; --dim:#8b94a3; --accent:#6ea8fe;
     --post:#4ec9a0; --graph:#6ea8fe; --prompt:#e0b252; --none:#e07a5f;
+    /* one hue per layer. used for the band spine, the stack strip and the
+       attribution highlight in the assembled prompt, so a colour always means
+       the same layer wherever it appears. */
+    --L-style:#a78bfa; --L-place:#34d399; --L-character:#60a5fa;
+    --L-wear:#f59e0b; --L-lighting:#facc15; --L-weather:#22d3ee; --L-look:#f472b6;
+    --sev-error:#ef4444; --sev-warning:#e0b252; --sev-note:#8b94a3;
   }
   @media (prefers-color-scheme:light){
-    :root{--bg:#f6f7f9;--panel:#fff;--panel2:#f0f2f5;--line:#dde1e8;--ink:#141821;--dim:#5d6470}
+    :root{--bg:#f6f7f9;--panel:#fff;--panel2:#f0f2f5;--line:#dde1e8;--ink:#141821;--dim:#5d6470;
+          --L-style:#7c3aed; --L-place:#059669; --L-character:#2563eb;
+          --L-wear:#b45309; --L-lighting:#a16207; --L-weather:#0891b2; --L-look:#db2777;
+          --sev-error:#dc2626; --sev-warning:#b45309;}
   }
   *{box-sizing:border-box}
   body{margin:0;background:var(--bg);color:var(--ink);
@@ -84,6 +93,7 @@
   .btn{background:var(--accent);border:0;color:#08111f;border-radius:7px;padding:8px 15px;
        cursor:pointer;font:inherit;font-weight:600}
   .btn.ghost{background:var(--panel2);color:var(--ink);border:1px solid var(--line);font-weight:400}
+  .btn.sm{padding:4px 10px;font-size:12px}
   .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
   .nav{display:flex;gap:8px;margin-top:24px;padding-top:16px;border-top:1px solid var(--line)}
 
@@ -96,6 +106,135 @@
       overflow-x:auto;white-space:pre;margin-top:5px}
   .warn{color:var(--none);font-size:12px}
   .ok{color:var(--post);font-size:12px}
+
+  /* ── the layer stack ───────────────────────────────────────────────────────
+     The whole point of this step is that the layers are seen ACCUMULATING and
+     that a conflict between two of them is visible before a single frame is
+     rendered. So: a strip that shows the run of layers at a glance, then one
+     inset band per layer with an elbow connector, so containment is literal. */
+  .strip{display:flex;align-items:stretch;gap:0;flex-wrap:wrap;margin:0 0 18px}
+  .strip .sl{display:flex;flex-direction:column;gap:4px;align-items:center;width:96px;
+       padding:8px 4px;border:1px solid var(--line);border-top:3px solid var(--lc,var(--line));
+       border-radius:9px;background:var(--panel);position:relative}
+  .strip .sl.empty{background:none;border-style:dashed;opacity:.65}
+  .strip .arrow{display:flex;align-items:center;color:var(--dim);padding:0 5px;font-size:15px}
+  .strip .sl .th{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:5px;
+       background:var(--panel2);display:block}
+  .strip .sl .lab{font-size:9.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--lc,var(--dim));
+       font-weight:700}
+  .strip .sl .val{font-family:ui-monospace,Menlo,monospace;font-size:10.5px;color:var(--ink);
+       text-align:center;word-break:break-word;line-height:1.3}
+  .strip .sl.empty .val{color:var(--dim)}
+  .strip .cut{display:flex;align-items:center;color:var(--dim);font-size:10px;padding:0 8px;
+       letter-spacing:.06em;text-transform:uppercase;text-align:center;max-width:96px;line-height:1.3}
+
+  .stack{margin:0 0 8px}
+  .band{position:relative;background:var(--panel);border:1px solid var(--line);
+        border-left:3px solid var(--lc,var(--line));border-radius:10px;padding:12px 14px;margin-bottom:11px}
+  .band.d1{margin-left:26px} .band.d2{margin-left:52px} .band.d3{margin-left:78px}
+  .band.ind::before{content:"";position:absolute;left:-16px;top:-12px;height:34px;width:15px;
+        border-left:1px solid var(--line);border-bottom:1px solid var(--line);
+        border-bottom-left-radius:9px;pointer-events:none}
+  .band.flag-error{border-color:var(--sev-error);box-shadow:inset 0 0 0 1px var(--sev-error)}
+  .band.flag-warning{border-color:var(--sev-warning)}
+  .bh{display:flex;align-items:flex-start;gap:11px}
+  .bh .n{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--lc,var(--dim));
+        border:1px solid currentColor;border-radius:99px;width:20px;height:20px;flex:0 0 20px;
+        display:flex;align-items:center;justify-content:center;font-weight:700;margin-top:2px}
+  .bh .ttl{flex:1;min-width:0}
+  .bh .nm{font-size:12px;letter-spacing:.09em;text-transform:uppercase;font-weight:700;
+        color:var(--lc,var(--ink))}
+  .bh .role{color:var(--dim);font-size:12px;margin-top:1px}
+  .bh .act{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+
+  .pick{display:flex;gap:11px;align-items:flex-start;margin-top:10px;padding:9px;
+        background:var(--panel2);border:1px solid var(--line);border-radius:8px}
+  .pick .th{width:132px;flex:0 0 132px;aspect-ratio:16/9;object-fit:cover;border-radius:6px;
+        background:var(--bg);display:block}
+  .pick .thbox{display:flex;gap:6px;flex:0 0 auto}
+  .pick .thwrap{display:flex;flex-direction:column;gap:3px;align-items:center}
+  .pick .thwrap .cap{font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim)}
+  .pick .meta{flex:1;min-width:0}
+  .pick .id{font-family:ui-monospace,Menlo,monospace;font-size:13.5px;font-weight:600}
+  .pick .sub{color:var(--dim);font-size:12px;margin-top:3px}
+  .pick .none{color:var(--dim);font-size:12.5px;font-style:italic}
+
+  .contrib{margin-top:9px;font-family:ui-monospace,Menlo,monospace;font-size:11.5px;
+        line-height:1.5;color:var(--ink);background:var(--bg);border:1px solid var(--line);
+        border-left:2px solid var(--lc,var(--line));border-radius:0 6px 6px 0;padding:7px 9px;
+        word-break:break-word}
+  .contrib .k{color:var(--dim);font-size:10px;letter-spacing:.07em;text-transform:uppercase;
+        display:block;margin-bottom:3px;font-family:inherit}
+  .contrib.silent{color:var(--dim);font-style:italic;font-family:inherit}
+
+  .drawer{margin-top:11px;border:1px solid var(--line);border-radius:9px;background:var(--bg);padding:11px}
+  .drawer .fbar{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+  .drawer .fbar input[type=search]{flex:1;min-width:150px}
+  .drawer .fbar select{width:auto;min-width:112px}
+  .scroller{max-height:460px;overflow-y:auto;padding-right:4px}
+
+  .chip{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;letter-spacing:.05em;
+        text-transform:uppercase;padding:2px 8px;border-radius:99px;border:1px solid currentColor;
+        font-weight:700}
+  .c-safe{color:var(--post)} .c-replaces{color:var(--prompt)}
+  .c-injects{color:var(--sev-error)} .c-inert{color:var(--dim)}
+  .s-ready{color:var(--post)} .s-weak{color:var(--prompt)} .s-unavailable{color:var(--sev-error)}
+  .s-partial{color:var(--prompt)}
+  .e-anime{color:#c084fc} .e-qwen{color:#38bdf8} .e-either{color:var(--dim)}
+  .badges{display:flex;gap:5px;flex-wrap:wrap;margin-top:5px}
+
+  .engbar{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border-radius:10px;
+        border:1px solid var(--line);background:var(--panel);margin:0 0 14px}
+  .engbar .big{font-size:15px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+  .engbar .why2{color:var(--dim);font-size:12.5px;margin-top:2px;max-width:78ch}
+  .engbar.anime{border-left:4px solid #c084fc} .engbar.qwen{border-left:4px solid #38bdf8}
+  .engbar.unknown{border-left:4px solid var(--dim)}
+
+  .conflicts{margin:0 0 16px}
+  .cf{border:1px solid var(--line);border-left:4px solid var(--sv);border-radius:9px;
+        background:var(--panel);padding:10px 13px;margin-bottom:8px}
+  .cf.error{--sv:var(--sev-error)} .cf.warning{--sv:var(--sev-warning)} .cf.note{--sv:var(--sev-note)}
+  .cf .sev{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:800;color:var(--sv)}
+  .cf .lchips{display:inline-flex;gap:5px;margin-left:8px;flex-wrap:wrap;vertical-align:middle}
+  .cf .lchip{font-size:10px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;
+        padding:1px 7px;border-radius:99px;border:1px solid var(--lc);color:var(--lc)}
+  .cf .msg{margin-top:5px;font-size:13.5px}
+  .cf .fix{margin-top:5px;font-size:12.5px;color:var(--dim)}
+  .cf .fix b{color:var(--ink)}
+  .cf.error .msg{font-weight:600}
+  .allclear{color:var(--post);font-size:12.5px;border:1px dashed var(--post);border-radius:8px;
+        padding:8px 12px;margin:0 0 16px}
+
+  .degraded{border:1px solid var(--sev-warning);border-left:4px solid var(--sev-warning);
+        border-radius:9px;background:var(--panel);padding:11px 14px;margin:0 0 16px}
+  .degraded b{color:var(--sev-warning)}
+  .degraded ul{margin:6px 0 0 18px;padding:0;color:var(--dim);font-size:12.5px}
+
+  .promptbox{border:1px solid var(--line);border-radius:9px;background:var(--panel);padding:12px 14px}
+  .attr{font-family:ui-monospace,Menlo,monospace;font-size:12.5px;line-height:1.85;
+        word-break:break-word;white-space:pre-wrap}
+  .attr span[data-l]{border-bottom:2px solid var(--lc);padding:1px 2px;border-radius:2px}
+  .legend{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:9px}
+  .legend .lg{font-size:10px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;
+        color:var(--lc);border-bottom:2px solid var(--lc);padding-bottom:1px}
+  .unattr{color:var(--dim)}
+
+  .split{display:flex;align-items:center;gap:12px;margin:20px 0 14px;color:var(--dim);font-size:11px;
+        letter-spacing:.07em;text-transform:uppercase}
+  .split::before,.split::after{content:"";flex:1;border-top:1px dashed var(--line)}
+  .split span{text-align:center}
+
+  .wearpick{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}
+  .wearpick button{background:var(--panel2);border:1px solid var(--line);color:var(--ink);
+        border-radius:8px;padding:6px 10px;cursor:pointer;font:inherit;font-size:12px;text-align:left;
+        max-width:230px}
+  .wearpick button.on{border-color:var(--L-wear);box-shadow:inset 0 0 0 1px var(--L-wear)}
+  .wearpick button .lv{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--L-wear);
+        font-weight:700}
+  .wearpick button .tx{display:block;color:var(--dim);font-size:11px;margin-top:2px}
+
+  .sideline{display:flex;gap:7px;align-items:baseline;margin-bottom:5px;font-size:12px}
+  .sidedot{width:8px;height:8px;border-radius:99px;background:var(--lc);flex:0 0 8px}
 </style>
 </head>
 <body>
@@ -103,6 +242,7 @@
   <h1>Direct a scene</h1>
   <span class="sub" id="stat">loading…</span>
   <span style="margin-left:auto;display:flex;gap:8px">
+    <a href="/styles">styles</a>
     <a href="/cast">cast</a>
     <a href="/make">make</a>
     <a href="/tags">tags</a>
@@ -123,6 +263,10 @@
   </div>
 
   <div class="side">
+    <div class="sec">
+      <h3>Layer stack</h3>
+      <div id="stackside" class="hint"></div>
+    </div>
     <div class="sec">
       <h3>Your .movie</h3>
       <pre id="out">…</pre>
@@ -151,12 +295,21 @@ const S = {
   seed_root:"", look:"neutral", pace:"normal", cue:"", place:"", time:"",
   mood:"", camera:"static", cast:[], beats:[], scene:"my_scene", chapter:"act_one",
   emotion:"", wear:"", transition:"", template:"",
+  // ── layer stack ──────────────────────────────────────────────────────────
+  // style_card is a studio/styles/ CARD ID and is deliberately NOT `style`.
+  // `S.style` above is the free house-tag string that compile.py reads from the
+  // .movie `tags:` line. The .movie `style:` variable means the card. Two
+  // different things, one word - binding them to one key would silently push a
+  // card id into every prompt as literal text.
+  style_card:"", engine_pick:"", lighting:"", weather:"",
 };
 let LIB={}, EFF={tiers:{},vars:{}}, CARDS=[], TPLS=[], step=0;
+let CASTVIEWS={};                       // id -> first sample view, from /api/cast
 
 const STEPS = [
   {id:"start",  name:"Start"},
   {id:"format", name:"Format"},
+  {id:"layers", name:"Layer stack"},
   {id:"look",   name:"Look & pace"},
   {id:"world",  name:"Place & time"},
   {id:"cast",   name:"Cast"},
@@ -166,6 +319,57 @@ const STEPS = [
 
 const esc = s => String(s==null?"":s).replace(/[&<>"]/g, c => (
   {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+/* ══ LAYER MODEL ═══════════════════════════════════════════════════════════
+   Order and nesting are the conceptual containment the user asked to see:
+   style wraps place wraps character wraps the modifiers; look sits outside the
+   prompt entirely because it is an ffmpeg grade run after generation. */
+const LAYERS = [
+  {key:"style",     depth:0, name:"Style",
+   role:"the outermost layer — it decides which model renders at all"},
+  {key:"place",     depth:1, name:"Place",     role:"the setting the shot happens in"},
+  {key:"character", depth:2, name:"Character", role:"who is in it"},
+  {key:"wear",      depth:3, name:"Wear",      role:"how battered they are — damage never decreases"},
+  {key:"lighting",  depth:3, name:"Lighting",  role:"where the light comes from"},
+  {key:"weather",   depth:3, name:"Weather",   role:"what the air and the ground are doing"},
+  {key:"look",      depth:0, name:"Look",      post:true,
+   role:"an ffmpeg colour grade run on the finished frames — this is NOT prompt text"},
+];
+const LKEYS = LAYERS.map(l=>l.key);
+const lcol = k => "var(--L-"+k+")";
+
+// What the `compose` field on a style card means. This is the field glossary,
+// printed beside the card's own value - it is not a resolution of the stack.
+const COMPOSE_MEANS = {
+  safe:     "Re-renders the same scene in a new idiom. Stacks cleanly with every other layer.",
+  replaces: "Re-renders the scene AND overrides the setting. It will fight a place card.",
+  injects:  "The noun in this style's name gets drawn as an object in frame, usually into the subject's hands.",
+  inert:    "Measured as indistinguishable from no style at all.",
+};
+const STATUS_MEANS = {
+  ready:       "rendered, looked at, and it worked",
+  weak:        "rendered, and it barely changed the image",
+  unavailable: "rendered, and the engine could not do it at all",
+  partial:     "authored, but nothing in the render pipeline consumes it yet",
+};
+const WEAR_GENERIC = ["clean","sweaty","dirty and breathing hard","torn and exhausted","bloodied and spent"];
+
+/* ══ COMPOSE ENDPOINT STATE ════════════════════════════════════════════════
+   The server owns resolution. This page never re-derives it: if /api/compose
+   is not answering, the live half goes dark and says so rather than guessing,
+   because a second implementation of the resolver is exactly how the two would
+   drift apart. */
+let CSTATE="unknown";   // unknown | ok | down | error
+let CDATA=null, CERR="", CDETAIL="", CTIMER=null, CSEQ=0, CLAST="", CBUSY=false;
+
+/* ══ STYLES ════════════════════════════════════════════════════════════════ */
+let STYLES=[], STYLE_CONTROL=null, STYLES_SRC="", STYLES_ERR="";
+
+const OPEN = {};        // which layer's picker drawer is expanded
+// Filter state lives here rather than in the DOM: a compose result repaints the
+// whole panel, and a search box that forgets what you typed every time the
+// resolver answers is worse than no search box.
+const FILT = {sq:"", fam:"", eng:"", comp:"", stat:"", q:{}};
 
 function tierBadge(v){
   const e = EFF.vars[v]; if(!e) return "";
@@ -197,7 +401,588 @@ function grid(group, key){
   return `<div class="opts">${items.map(i=>optCard(i, S[key]===i.id, key)).join("")}</div>`;
 }
 
+/* ── engine resolution, for PICTURE SELECTION ONLY ────────────────────────
+   Which thumbnail to show is a display question, so it is answered locally.
+   Which engine the film actually renders on is a resolution question and is
+   only ever taken from /api/compose. shownEngine() is never presented to the
+   user as the answer - engineBar() labels the source explicitly. */
+function shownEngine(){
+  if(CSTATE==="ok" && CDATA && CDATA.engine) return CDATA.engine;
+  if(S.engine_pick) return S.engine_pick;
+  const c = styleById(S.style_card);
+  if(c && c.engine) return c.engine==="either" ? "anime" : c.engine;
+  return "anime";
+}
+const optionList = (pairs, cur) => pairs.map(([v,t])=>
+  `<option value="${esc(v)}"${cur===v?" selected":""}>${esc(t)}</option>`).join("");
+
+function styleById(id){ return id ? STYLES.find(s=>s.id===id) : null; }
+function cardById(group,id){ return id ? (LIB[group]||[]).find(x=>x.id===id) : null; }
+
+// Prefer the engine-suffixed example over the plain <id>.webp: measured on the
+// box, 19 of 131 plain copies are the OTHER engine's render, so the bare file
+// is not a safe stand-in for "what this card does".
+function exampleFor(card, prefer){
+  if(!card) return null;
+  const ex = card.examples||{};
+  const routed = card.engine==="either" ? "anime" : (card.engine||"");
+  for(const e of [prefer, routed, "anime", "qwen"]){
+    if(e && ex[e]) return {src:ex[e], engine:e, exact:true};
+  }
+  if(card.sample) return {src:card.sample, engine:null, exact:false};
+  return null;
+}
+function thumbTag(ex, cls){
+  if(!ex) return `<div class="${cls}" style="display:flex;align-items:center;justify-content:center;
+      color:var(--dim);font-size:10px;text-align:center;padding:0 6px">no example rendered</div>`;
+  return `<img loading="lazy" class="${cls}" src="${esc(ex.src)}" alt="">`;
+}
+
+/* ══ THE STACK STRIP ═══════════════════════════════════════════════════════ */
+function layerValue(k){
+  if(k==="character") return S.cast[0]||"";
+  if(k==="place")     return S.place.trim();
+  if(k==="wear")      return (S.wear===""||S.wear==null) ? "" : String(S.wear);
+  if(k==="style")     return S.style_card;
+  return S[k]||"";
+}
+function layerThumb(k){
+  const v = layerValue(k); if(!v) return null;
+  if(k==="style")     return exampleFor(styleById(v), shownEngine());
+  if(k==="place")     return exampleFor(cardById("places",v), shownEngine());
+  if(k==="look")      { const c=cardById("looks",v); return c&&c.sample?{src:c.sample}:null; }
+  if(k==="character") { const u=CASTVIEWS[v]; return u?{src:u}:null; }
+  return null;
+}
+function stripHTML(){
+  const cells = [];
+  LAYERS.forEach((L,i)=>{
+    if(L.post) cells.push(`<div class="cut">applied after<br>generation</div>`);
+    else if(i) cells.push(`<div class="arrow">›</div>`);
+    const v = layerValue(L.key), th = layerThumb(L.key);
+    cells.push(`<div class="sl${v?"":" empty"}" style="--lc:${lcol(L.key)}">
+      <div class="lab">${esc(L.name)}</div>
+      ${th?`<img class="th" loading="lazy" src="${esc(th.src)}" alt="">`
+          :`<div class="th"></div>`}
+      <div class="val">${v?esc(v):"—"}</div></div>`);
+  });
+  return `<div class="strip">${cells.join("")}</div>`;
+}
+
+/* ══ ENGINE BAR ════════════════════════════════════════════════════════════ */
+function engineBar(){
+  if(CSTATE==="ok" && CDATA){
+    const e = CDATA.engine||"?";
+    return `<div class="engbar ${esc(e)}">
+      <div><div class="big">renders on ${esc(e)}</div>
+      <div class="why2">${esc(CDATA.engine_reason||"no reason given")}</div></div></div>`;
+  }
+  const c = styleById(S.style_card);
+  let why;
+  if(S.engine_pick) why = `You set engine to ${S.engine_pick} by hand on this step.`;
+  else if(c) why = `Read off the style card ${c.id}, whose engine field is "${c.engine}". This is the card speaking, not the resolver — /api/compose is not answering, so nothing has checked it against the rest of the stack.`;
+  else why = `Nothing is resolved. Pick a style and the engine follows it; with no style the compiler defaults to anime.`;
+  return `<div class="engbar unknown">
+    <div><div class="big" style="color:var(--dim)">engine ${esc(shownEngine())} (unresolved)</div>
+    <div class="why2">${esc(why)}</div></div></div>`;
+}
+
+/* ══ CONFLICTS ═════════════════════════════════════════════════════════════ */
+const SEV_ORDER = {error:0, warning:1, note:2};
+const SEV_WORD  = {error:"this will break", warning:"these will fight", note:"worth knowing"};
+function conflictHTML(){
+  if(CSTATE!=="ok" || !CDATA) return "";
+  const list = (CDATA.conflicts||[]).slice()
+    .sort((a,b)=>(SEV_ORDER[a.severity]??3)-(SEV_ORDER[b.severity]??3));
+  if(!list.length) return `<div class="allclear">The resolver found no conflicts in this stack.</div>`;
+  return `<div class="conflicts">${list.map(c=>{
+    const sev = SEV_ORDER[c.severity]!=null ? c.severity : "note";
+    const chips = (c.layers||[]).map(l=>
+      `<span class="lchip" style="--lc:${LKEYS.includes(l)?lcol(l):"var(--dim)"}">${esc(l)}</span>`).join("");
+    return `<div class="cf ${esc(sev)}">
+      <div><span class="sev">${esc(SEV_WORD[sev]||sev)}</span>
+        <span class="lchips">${chips}</span></div>
+      <div class="msg">${esc(c.message||"")}</div>
+      ${c.fix?`<div class="fix"><b>Fix</b> — ${esc(c.fix)}</div>`:""}</div>`;
+  }).join("")}</div>`;
+}
+function flagFor(key){
+  if(CSTATE!=="ok" || !CDATA) return "";
+  let worst = "";
+  for(const c of (CDATA.conflicts||[])){
+    if(!(c.layers||[]).includes(key)) continue;
+    if(c.severity==="error") return " flag-error";
+    if(c.severity==="warning") worst = " flag-warning";
+  }
+  return worst;
+}
+
+/* ══ DEGRADED NOTICE ═══════════════════════════════════════════════════════ */
+function degradedHTML(){
+  if(CSTATE==="ok") return "";
+  const reason = CSTATE==="down"
+    ? `<b>The live layer preview is off.</b> ${esc(CERR||"/api/compose did not answer")}.`
+    : CSTATE==="error"
+      ? `<b>The resolver answered with an error.</b> ${esc(CERR)}${CDETAIL?" — "+esc(CDETAIL):""}`
+      : `<b>Checking the resolver…</b>`;
+  return `<div class="degraded">${reason}
+    <div class="hint" style="margin-top:6px">You can still build the stack and save the
+    .movie — the compiler resolves all of this again at compile time. What you do not get
+    until <code>/api/compose</code> is up:</div>
+    <ul>
+      <li>the engine this stack actually renders on, and why</li>
+      <li>the assembled prompt with each layer's contribution attributed to it</li>
+      <li>every cross-layer conflict — a style that overrides your place, a qwen style that
+          drops a character's trained LoRA, a grade that greys out a style built on colour</li>
+    </ul>
+    <div class="row" style="margin-top:9px">
+      <button class="btn ghost sm" id="cretry">Check again</button>
+      <span class="hint" style="margin:0">This page will not guess at any of it.</span>
+    </div></div>`;
+}
+
+/* ══ ATTRIBUTED PROMPT ═════════════════════════════════════════════════════
+   The text shown IS the server's prompt string, walked left to right and tinted
+   where a layer's contributed text is found in it. Anything that does not line
+   up stays uncoloured and is reported below, rather than being faked. */
+// The resolver lists layers in ITS order (style first, because style decides the
+// engine). The prompt is assembled in a different order - identity first, style
+// last - so a left-to-right walk that assumed the two agreed attributed almost
+// nothing. Locate each contribution independently, then sort by where it landed.
+// A layer's `contributed` is not always verbatim prompt text. `look` reports its
+// tags AND its ffmpeg grade in one string ("...blind shadow + the colour grade
+// hue=s=0,..."), because a look genuinely does both halves. So: try the exact
+// string, then fall back to the longest leading run of it that IS in the prompt.
+function locate(prompt, c){
+  let i=prompt.indexOf(c);
+  if(i>=0) return {i, len:c.length};
+  let s=c;
+  while(s.length>12){
+    const cut=Math.max(s.lastIndexOf(", "), s.lastIndexOf(" + "));
+    if(cut<=0) break;
+    s=s.slice(0,cut);
+    i=prompt.indexOf(s);
+    if(i>=0) return {i, len:s.length, partial:true};
+  }
+  return null;
+}
+function attribute(prompt, layers){
+  const found=[], missed=[];
+  for(const L of (layers||[])){
+    const c=(L.contributed||"").trim();
+    if(!c) continue;
+    const hit=locate(prompt, c);
+    if(!hit){ missed.push(L); continue; }
+    found.push({start:hit.i, end:hit.i+hit.len, layer:L.layer, L});
+  }
+  // earliest first; on a tie prefer the longer span
+  found.sort((a,b)=> a.start-b.start || b.end-a.end);
+  const out=[]; let cur=0;
+  for(const s of found){
+    if(s.start < cur){ missed.push(s.L); continue; }   // overlaps an earlier layer
+    if(s.start > cur) out.push({t:prompt.slice(cur,s.start), l:null});
+    out.push({t:prompt.slice(s.start,s.end), l:s.layer});
+    cur=s.end;
+  }
+  if(cur<prompt.length) out.push({t:prompt.slice(cur), l:null});
+  return {runs:out, missed};
+}
+function promptHTML(){
+  if(CSTATE!=="ok" || !CDATA) return "";
+  const layers=(CDATA.layers||[]).filter(l=>(l.contributed||"").trim());
+  const prompt=CDATA.prompt||"";
+  const {runs, missed} = attribute(prompt, layers);
+  const legend = layers.map(l=>
+    `<span class="lg" style="--lc:${LKEYS.includes(l.layer)?lcol(l.layer):"var(--dim)"}">${esc(l.layer)}${
+      l.id?" · "+esc(l.id):""}</span>`).join("");
+  const body = runs.map(r=> r.l
+    ? `<span data-l="${esc(r.l)}" style="--lc:${LKEYS.includes(r.l)?lcol(r.l):"var(--dim)"}">${esc(r.t)}</span>`
+    : `<span class="unattr">${esc(r.t)}</span>`).join("");
+  return `<h2 style="margin-top:26px">Assembled prompt</h2>
+    <p class="lede">Exactly what the resolver will hand the model, coloured by which layer
+    put each part there. Grey text belongs to no layer — it is the compiler's own
+    scaffolding.</p>
+    <div class="promptbox">
+      <div class="legend">${legend||'<span class="hint">no layer contributed anything</span>'}</div>
+      <div class="attr">${body||'<span class="unattr">(empty)</span>'}</div>
+      ${missed.length?`<div class="hint" style="margin-top:9px">These layers reported a
+        contribution that could not be located in the assembled prompt, so they are listed
+        rather than highlighted: ${missed.map(m=>esc(m.layer)).join(", ")}.</div>`:""}
+      ${CDATA.negative?`<div style="margin-top:12px;border-top:1px solid var(--line);padding-top:10px">
+        <div class="hint" style="margin:0 0 5px">negative</div>
+        <div class="attr unattr">${esc(CDATA.negative)}</div></div>`:""}
+    </div>`;
+}
+
+/* ══ PICKER DRAWERS ════════════════════════════════════════════════════════ */
+function styleDrawer(){
+  if(!STYLES.length){
+    return `<div class="drawer"><p class="hint" style="margin:0"><b>No style cards loaded.</b>
+      ${esc(STYLES_ERR||"/api/styles returned nothing")}. There are 130 cards in
+      <code>studio/styles/</code>; they reach this page through <code>/api/styles</code>.
+      <button class="btn ghost sm" id="sretry" style="margin-left:8px">Check again</button></p></div>`;
+  }
+  const fams=[...new Set(STYLES.map(s=>s.family).filter(Boolean))].sort();
+  const eng = shownEngine();
+  return `<div class="drawer">
+    <div class="fbar">
+      <input type="search" id="sq" value="${esc(FILT.sq)}"
+        placeholder="search ${STYLES.length} styles — name, family, what it means">
+      <select id="sf-fam">${optionList([["","every family"]].concat(fams.map(f=>[f,f])), FILT.fam)}</select>
+      <select id="sf-eng">${optionList([["","either engine"],["anime","anime engine"],
+        ["qwen","qwen engine"]], FILT.eng)}</select>
+      <select id="sf-comp">${optionList([["","any composition"],["safe","safe — stacks"],
+        ["replaces","replaces the setting"],["injects","injects a prop"],
+        ["inert","inert"]], FILT.comp)}</select>
+      <select id="sf-stat">${optionList([["","any status"],["ready","ready only"],["weak","weak"],
+        ["unavailable","unavailable"]], FILT.stat)}</select>
+    </div>
+    <div class="hint" style="margin:-4px 0 9px">Thumbnails are the card's own
+      <code>examples</code> render on the engine it routes to${STYLES_SRC?` · loaded from <code>${esc(STYLES_SRC)}</code>`:""}.</div>
+    <div class="scroller"><div class="opts" id="sgrid">${STYLES.map(c=>{
+      const ex=exampleFor(c,eng);
+      const sel=S.style_card===c.id;
+      const hay=[c.id,c.name,c.family,c.means,c.works_for].join(" ").toLowerCase();
+      return `<button class="opt${sel?" on":""}" data-lpick="style" data-val="${esc(c.id)}"
+        data-fam="${esc(c.family||"")}" data-eng="${esc(c.engine||"")}"
+        data-comp="${esc(c.compose||"")}" data-stat="${esc(c.status||"")}"
+        data-hay="${esc(hay)}">
+        ${thumbTag(ex,"")}
+        <div class="body">
+          <div class="name">${esc(c.id)}</div>
+          <div class="badges">
+            ${c.compose?`<span class="chip c-${esc(c.compose)}">${esc(c.compose)}</span>`:""}
+            ${c.status?`<span class="chip s-${esc(c.status)}">${esc(c.status)}</span>`:""}
+            ${c.engine?`<span class="chip e-${esc(c.engine)}">${esc(c.engine)}</span>`:""}
+          </div>
+          <div class="desc">${esc((c.means||"").slice(0,150))}</div>
+        </div></button>`;}).join("")}</div></div></div>`;
+}
+
+function simpleDrawer(layer, group, opts){
+  const items = LIB[group]||[];
+  if(!items.length) return `<div class="drawer"><p class="hint" style="margin:0">nothing in
+    <code>studio/${esc(group)}/</code> yet</p></div>`;
+  const eng = shownEngine();
+  const cur = layerValue(layer);
+  return `<div class="drawer">
+    ${opts.search?`<div class="fbar"><input type="search" data-q="${esc(layer)}"
+      value="${esc(FILT.q[layer]||"")}"
+      placeholder="search ${items.length} ${esc(group)}"></div>`:""}
+    ${opts.note?`<div class="hint" style="margin:-2px 0 9px">${opts.note}</div>`:""}
+    <div class="scroller"><div class="opts" data-grid="${esc(layer)}">${items.map(c=>{
+      const ex = opts.useExamples ? exampleFor(c,eng) : (c.sample?{src:c.sample}:null);
+      const sub = opts.sub ? opts.sub(c) : (c.desc||"");
+      const hay=[c.id,c.name,c.desc,c.tags,c.key,c.family].filter(Boolean).join(" ").toLowerCase();
+      return `<button class="opt${cur===c.id?" on":""}" data-lpick="${esc(layer)}"
+        data-val="${esc(c.id)}" data-hay="${esc(hay)}">
+        ${thumbTag(ex,"")}
+        <div class="body"><div class="name">${esc(c.name||c.id)}</div>
+        <div class="badges">
+          <span class="chip" style="color:var(--dim)">${esc(c.id)}</span>
+          ${c.status&&c.status!=="ready"?`<span class="chip s-${esc(c.status)}">${esc(c.status)}</span>`:""}
+        </div>
+        <div class="desc">${esc(String(sub).slice(0,170))}</div></div></button>`;}).join("")}</div></div></div>`;
+}
+
+function castDrawer(){
+  const cast = LIB.characters||[];
+  if(!cast.length) return `<div class="drawer"><p class="hint" style="margin:0">no character cards
+    in <code>studio/characters/</code> yet</p></div>`;
+  return `<div class="drawer">
+    <div class="hint" style="margin:-2px 0 9px">Pick everyone in the scene. The first one
+      picked is the subject the layer stack resolves against — the others still get their
+      tags and their voice.</div>
+    <div class="opts">${cast.map(c=>{
+      const sel=S.cast.includes(c.id), first=S.cast[0]===c.id, u=CASTVIEWS[c.id];
+      return `<button class="opt${sel?" on":""}" data-cast="${esc(c.id)}">
+        ${u?`<img loading="lazy" src="${esc(u)}" alt="">`
+           :`<div class="noimg">${c.sheet?esc(c.sheet):"no reference sheet"}</div>`}
+        <div class="body"><div class="name">${esc(c.id)}${first?' <span class="chip" style="color:var(--L-character)">subject</span>':""}</div>
+        <div class="badges">
+          ${c.sheet?"":'<span class="chip s-unavailable">no sheet</span>'}
+          ${c.lora?'<span class="chip s-ready">trained lora</span>':""}
+        </div>
+        <div class="desc">${esc(c.desc||"")}</div></div></button>`;}).join("")}</div></div>`;
+}
+
+function wearDrawer(){
+  const c = cardById("characters", S.cast[0]);
+  const ladder = (c && c.wear_tags && c.wear_tags.length) ? c.wear_tags : null;
+  return `<div class="drawer">
+    <div class="hint" style="margin:-2px 0 9px">${ladder
+      ? `The exact string appended for <b>${esc(c.id)}</b>, from that card's own
+         <code>wear_tags</code>. Damage modifies the garment noun itself.`
+      : `No character picked, or the picked character has no <code>wear_tags</code>, so the
+         compiler's generic damage ladder applies and everyone arrives dressed in a
+         "clean uniform".`}</div>
+    <div class="wearpick">
+      <button data-wear="" class="${S.wear===""?"on":""}"><span class="lv">unset</span>
+        <span class="tx">no wear line is written at all</span></button>
+      ${[0,1,2,3,4].map(i=>`<button data-wear="${i}" class="${String(S.wear)===String(i)?"on":""}">
+        <span class="lv">wear ${i}</span>
+        <span class="tx">${esc(ladder?ladder[i]:WEAR_GENERIC[i])}</span></button>`).join("")}
+    </div></div>`;
+}
+
+/* ══ BANDS ═════════════════════════════════════════════════════════════════ */
+function contribHTML(key){
+  if(CSTATE!=="ok" || !CDATA)
+    return `<div class="contrib silent" id="contrib-${esc(key)}">contribution unknown — the
+      resolver is not answering</div>`;
+  const L=(CDATA.layers||[]).find(x=>x.layer===key ||
+        (key==="character" && x.layer==="cast"));
+  const txt=(L&&L.contributed||"").trim();
+  if(!txt) return `<div class="contrib silent" id="contrib-${esc(key)}">adds nothing to the prompt</div>`;
+  return `<div class="contrib" id="contrib-${esc(key)}" style="--lc:${lcol(key)}">
+    <span class="k">adds to the prompt</span>${esc(txt)}</div>`;
+}
+
+function styleSelected(c){
+  const a=exampleFor(c,"anime"), q=exampleFor(c,"qwen");
+  const showBoth = a && q && a.src!==q.src;
+  const one = exampleFor(c, shownEngine());
+  const thumbs = showBoth
+    ? `<div class="thwrap">${thumbTag(a,"th")}<span class="cap">anime</span></div>
+       <div class="thwrap">${thumbTag(q,"th")}<span class="cap">qwen</span></div>`
+    : `<div class="thwrap">${thumbTag(one,"th")}<span class="cap">${
+         esc((one||{}).engine||"sample")}</span></div>`;
+  const unavailable = c.status==="unavailable" ? `<div class="cf error" style="margin-top:10px">
+      <div><span class="sev">this style does not work</span></div>
+      <div class="msg">${esc(c.id)} was rendered on this engine and it could not be done.
+        Choosing it costs a full generation and gives back something that is not this style.</div>
+      <div class="fix"><b>Fix</b> — pick a different card, or read the verdict above and use
+        whatever it points at instead.</div></div>` : "";
+  const weak = c.status==="weak" ? `<div class="cf warning" style="margin-top:10px">
+      <div><span class="sev">this style barely does anything</span></div>
+      <div class="msg">${esc(c.id)} was rendered and the difference from no style at all was
+        small — on some cards small enough to be seed noise.</div>
+      <div class="fix"><b>Fix</b> — keep it if you want the nudge, but do not expect the frame
+        to look like the name.</div></div>` : "";
+  return `<div class="pick">
+    <div class="thbox">${thumbs}</div>
+    <div class="meta">
+      <div class="id">${esc(c.id)}${c.name&&c.name!==c.id
+        ? ` <span style="color:var(--dim);font-weight:400">${esc(c.name)}</span>`:""}</div>
+      <div class="badges">
+        ${c.compose?`<span class="chip c-${esc(c.compose)}">${esc(c.compose)}</span>`:""}
+        ${c.status?`<span class="chip s-${esc(c.status)}">${esc(c.status)}</span>`:""}
+        ${c.engine?`<span class="chip e-${esc(c.engine)}">engine ${esc(c.engine)}</span>`:""}
+        ${c.family?`<span class="chip" style="color:var(--dim)">${esc(c.family)}</span>`:""}
+      </div>
+      <div class="sub">${esc(c.means||"")}</div>
+      ${c.compose&&COMPOSE_MEANS[c.compose]
+        ? `<div class="sub"><b style="color:var(--ink)">compose: ${esc(c.compose)}</b> — ${
+            esc(COMPOSE_MEANS[c.compose])}</div>`:""}
+      ${c.status&&STATUS_MEANS[c.status]
+        ? `<div class="sub"><b style="color:var(--ink)">status: ${esc(c.status)}</b> — ${
+            esc(STATUS_MEANS[c.status])}</div>`:""}
+      ${c.verdict
+        ? `<div class="sub"><b style="color:var(--ink)">what it actually did</b> — ${esc(c.verdict)}</div>`:""}
+    </div></div>${unavailable}${weak}`;
+}
+
+function styleBand(L){
+  const c = styleById(S.style_card);
+  const sel = c ? styleSelected(c)
+    : `<div class="pick"><div class="meta"><div class="none">No style chosen. The film renders
+       on the anime engine and in whatever the house tags describe.</div></div></div>`;
+  const engSel = `<div class="row" style="margin-top:10px">
+      <label class="hint" style="margin:0">engine</label>
+      <select id="engpick" style="width:auto">
+        <option value="" ${S.engine_pick?"":"selected"}>follow the style</option>
+        <option value="anime" ${S.engine_pick==="anime"?"selected":""}>force anime</option>
+        <option value="qwen"  ${S.engine_pick==="qwen"?"selected":""}>force qwen</option>
+      </select>
+      <span class="hint" style="margin:0">Forcing an engine the style was not authored for is
+        the commonest way to get abstract colour shapes back.</span></div>`;
+  return band(L, sel + engSel, OPEN.style ? styleDrawer() : "");
+}
+
+function band(L, selHTML, drawerHTML){
+  const cls = `band${L.depth?" d"+L.depth+" ind":""}${flagFor(L.key)}`;
+  const v = layerValue(L.key);
+  const idx = LAYERS.indexOf(L)+1;
+  return `<div class="${cls}" style="--lc:${lcol(L.key)}">
+    <div class="bh">
+      <div class="n">${idx}</div>
+      <div class="ttl"><div class="nm">${esc(L.name)}</div><div class="role">${esc(L.role)}</div></div>
+      <div class="act">
+        ${v?`<button class="btn ghost sm" data-lclear="${esc(L.key)}">clear</button>`:""}
+        <button class="btn ghost sm" data-lopen="${esc(L.key)}">${OPEN[L.key]?"close":(v?"change":"choose")}</button>
+      </div>
+    </div>
+    ${selHTML}
+    ${L.post?"":contribHTML(L.key)}
+    ${drawerHTML||""}</div>`;
+}
+
+function simpleBand(L, group, opts){
+  const cur = layerValue(L.key);
+  const c = cardById(group, cur);
+  let sel;
+  if(!cur){
+    sel = `<div class="pick"><div class="meta"><div class="none">${esc(opts.empty)}</div></div></div>`;
+  } else if(!c){
+    // free text - legal for `place`, which compile.py documents as "a card id, or free text"
+    sel = `<div class="pick"><div class="meta">
+      <div class="id">${esc(cur)}</div>
+      <div class="sub">Free text, not a card in <code>studio/${esc(group)}/</code>. It goes into
+        the prompt exactly as written — nothing looks it up, so nothing can check it.</div>
+      </div></div>`;
+  } else {
+    const ex = opts.useExamples ? exampleFor(c, shownEngine()) : (c.sample?{src:c.sample}:null);
+    sel = `<div class="pick">
+      <div class="thbox"><div class="thwrap">${thumbTag(ex,"th")}${
+        ex&&ex.engine?`<span class="cap">${esc(ex.engine)}</span>`:""}</div></div>
+      <div class="meta">
+        <div class="id">${esc(c.id)}${c.name&&c.name!==c.id?` <span style="color:var(--dim);font-weight:400">${esc(c.name)}</span>`:""}</div>
+        <div class="badges">
+          ${c.status&&c.status!=="ready"?`<span class="chip s-${esc(c.status)}">${esc(c.status)}</span>`:""}
+          ${c.family?`<span class="chip" style="color:var(--dim)">${esc(c.family)}</span>`:""}
+          ${c.scale?`<span class="chip" style="color:var(--dim)">${esc(c.scale)}</span>`:""}
+        </div>
+        <div class="sub">${esc(opts.sub?opts.sub(c):(c.desc||""))}</div>
+        ${c.status==="partial"?`<div class="sub"><b style="color:var(--prompt)">not wired</b> —
+          this library has no consumer in the render pipeline yet. The choice is written into
+          the .movie and is correct the day a consumer lands, but it changes nothing today.</div>`:""}
+        ${opts.caveat && CSTATE!=="ok"
+          ? `<div class="sub"><b style="color:var(--prompt)">check this</b> — ${opts.caveat}</div>`:""}
+      </div></div>`;
+  }
+  return band(L, sel, OPEN[L.key] ? simpleDrawer(L.key, group, opts) : "");
+}
+
+function characterBand(L){
+  const ids = S.cast;
+  let sel;
+  if(!ids.length){
+    sel = `<div class="pick"><div class="meta"><div class="none">Nobody in the scene. Shots
+      render as scenery, and every character-shaped layer below is inert.</div></div></div>`;
+  } else {
+    sel = `<div class="pick"><div class="thbox">${ids.slice(0,3).map(id=>{
+        const u=CASTVIEWS[id];
+        return `<div class="thwrap">${u?`<img class="th" loading="lazy" src="${esc(u)}" alt="">`
+          :`<div class="th" style="display:flex;align-items:center;justify-content:center;color:var(--dim);font-size:10px">no sheet</div>`}
+          <span class="cap">${esc(id)}</span></div>`;}).join("")}</div>
+      <div class="meta">${ids.map((id,i)=>{
+        const c=cardById("characters",id)||{};
+        return `<div style="margin-bottom:6px">
+          <div class="id">${esc(id)}${i===0?' <span class="chip" style="color:var(--L-character)">subject</span>':""}</div>
+          <div class="badges">
+            ${c.sheet?`<span class="chip s-ready">sheet</span>`:`<span class="chip s-unavailable">no sheet</span>`}
+            ${c.lora?`<span class="chip s-ready">lora</span>`:""}
+          </div>
+          <div class="sub">${esc(c.desc||"")}</div></div>`;}).join("")}
+      ${loraHTML()}
+      </div></div>`;
+  }
+  return band(L, sel, OPEN.character ? castDrawer() : "");
+}
+
+function loraHTML(){
+  const c = cardById("characters", S.cast[0]);
+  if(CSTATE==="ok" && CDATA){
+    if(!CDATA.lora && !c?.lora) return "";
+    const on = !!CDATA.lora_active;
+    return `<div class="sub" style="margin-top:6px">
+      <b style="color:${on?"var(--post)":"var(--sev-error)"}">trained LoRA ${on?"in play":"NOT in play"}</b>
+      ${CDATA.lora?` — <code>${esc(CDATA.lora)}</code>`:""}
+      ${CDATA.lora_reason?`<br>${esc(CDATA.lora_reason)}`:""}</div>`;
+  }
+  if(c && c.lora) return `<div class="sub" style="margin-top:6px">
+    <b style="color:var(--ink)">this character has a trained LoRA</b> —
+    <code>${esc(c.lora)}</code>. Whether it is actually in play depends on the engine, and
+    only the resolver can say.</div>`;
+  return "";
+}
+
+function wearBand(L){
+  const v = layerValue(L.key);
+  const c = cardById("characters", S.cast[0]);
+  const ladder = (c && c.wear_tags && c.wear_tags.length) ? c.wear_tags : null;
+  const sel = v===""
+    ? `<div class="pick"><div class="meta"><div class="none">No wear set — nothing is written,
+        and the compiler's level 0 applies.</div></div></div>`
+    : `<div class="pick"><div class="meta">
+        <div class="id">wear ${esc(v)}</div>
+        <div class="sub">${esc(ladder?ladder[+v]:WEAR_GENERIC[+v])}</div>
+        ${ladder?`<div class="sub" style="color:var(--dim)">from ${esc(c.id)}'s own wear_tags</div>`
+                :`<div class="sub" style="color:var(--prompt)">the picked character has no
+                   wear_tags, so the compiler's generic ladder dresses them in a uniform</div>`}
+      </div></div>`;
+  return band(L, sel, OPEN.wear ? wearDrawer() : "");
+}
+
+/* ══ THE LAYERS STEP ═══════════════════════════════════════════════════════ */
+function layersPanel(){
+  const bands = LAYERS.map(L=>{
+    if(L.key==="style")     return styleBand(L);
+    if(L.key==="place")     return simpleBand(L,"places",{useExamples:true, search:true,
+        empty:"No setting. The model puts the subject wherever it likes, and it will not agree between shots.",
+        sub:c=>c.desc||c.tags,
+        note:"64 settings, each authored with both a danbooru tag string and a prose sentence."});
+    if(L.key==="character") return characterBand(L);
+    if(L.key==="wear")      return wearBand(L);
+    if(L.key==="lighting")  return simpleBand(L,"lighting",{search:true,
+        empty:"No lighting layer.", sub:c=>c.key||c.desc,
+        note:"The visible consequence is authored as tags on each card."});
+    if(L.key==="weather")   return simpleBand(L,"weather",{search:true,
+        empty:"No weather layer.", sub:c=>c.tags||c.desc,
+        note:"Authored as what the weather does to hair, cloth, skin and ground."});
+    if(L.key==="look")      return simpleBand(L,"looks",{search:true,
+        empty:"No grade. neutral is the default and is a real, mild grade.",
+        sub:c=>c.tags||c.note, note:"Only 7 of 25 looks have a rendered sample."});
+    return "";
+  });
+  const splitAt = LAYERS.findIndex(l=>l.post);
+  const prompted = bands.slice(0,splitAt).join("");
+  const post = bands.slice(splitAt).join("");
+
+  return `
+    <h2>Layer stack</h2>
+    <p class="lede">Choose each layer and watch them combine. They are drawn nested because
+    that is how they resolve: the style decides which model runs at all, the place is what
+    that model draws, the character stands in it, and the modifiers act on the character.</p>
+    <div class="why"><b>The last layer is not like the others.</b> Everything above the dashed
+    line becomes prompt text — a request, which the model may ignore. <b>Look</b> is an ffmpeg
+    colour grade run over the finished frames. It is arithmetic on pixels, it always happens,
+    and it always wins. That is why it sits outside the stack.
+    <br><br>These are the same values as the Look, Place and Cast steps — pick here or there,
+    it is one scene either way.</div>
+    ${stripHTML()}
+    ${engineBar()}
+    ${degradedHTML()}
+    ${conflictHTML()}
+    <div class="stack">${prompted}</div>
+    <div class="split"><span>everything above becomes the prompt</span>
+      <span>everything below runs after generation</span></div>
+    <div class="stack">${post}</div>
+    ${promptHTML()}`;
+}
+
+/* ══ RENDER ════════════════════════════════════════════════════════════════ */
+// The panel is rebuilt wholesale on every change, so a text field the user is in
+// would lose focus and caret whenever the resolver answers. Note where they are,
+// put them back afterwards.
+function focusMark(){
+  const a=document.activeElement;
+  if(!a || !/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)) return null;
+  const sel = a.id ? "#"+a.id : (a.dataset && a.dataset.q ? `[data-q="${a.dataset.q}"]` : "");
+  if(!sel) return null;
+  let pos=null; try{ pos=a.selectionStart; }catch(e){}
+  return {sel, pos};
+}
+function focusRestore(m){
+  if(!m) return;
+  const el=document.querySelector(m.sel);
+  if(!el || el===document.activeElement) return;
+  try{ el.focus({preventScroll:true}); }catch(e){ el.focus(); }
+  if(m.pos!=null){ try{ el.selectionStart=el.selectionEnd=m.pos; }catch(e){} }
+}
+
 function render(){
+  const fm = focusMark();
   document.getElementById("steps").innerHTML = STEPS.map((s,i)=>
     `<button class="${i===step?"on":(i<step?"done":"")}" data-step="${i}">${i+1}. ${s.name}</button>`).join("");
 
@@ -267,7 +1052,11 @@ function render(){
       <div class="hint">LTX is a 24fps model. Wan is 16. Mixing engines in one film is a trap.</div></div>
     <div class="field"><label>House style tags</label>
       <textarea id="f-style">${esc(S.style)}</textarea>
-      <div class="hint">Appended to every prompt in the film.</div></div>`;
+      <div class="hint">Appended to every prompt in the film. This is free text and it is
+      <b>not</b> the style layer — the style card lives on the next step and is a different
+      thing with the same name.</div></div>`;
+
+  if(s==="layers") p.innerHTML = layersPanel();
 
   if(s==="look") p.innerHTML = `
     <h2>Look &amp; pace</h2>
@@ -290,7 +1079,9 @@ function render(){
     <div class="field"><label>Place ${tierBadge("place")}</label>
       <input id="f-place" value="${esc(S.place)}" placeholder="locker room, benches, hanging jerseys">
       <div class="hint"><b>Name things, not qualities.</b> "locker room, benches, fluorescent light"
-      lands reliably. "oppressive, tense atmosphere" does not.</div></div>
+      lands reliably. "oppressive, tense atmosphere" does not.
+      <br>Picking a place card on the Layer stack step fills this with that card's id — either
+      a card id or free text is valid here.</div></div>
     <div class="field"><label>Time ${tierBadge("time")}</label>
       <input id="f-time" value="${esc(S.time)}" placeholder="night">
       <div class="hint">Weak on its own — "night" moved measured brightness by about 5%.
@@ -391,7 +1182,11 @@ function render(){
       document.getElementById("fname").value||"my-scene"}.movie --timeline\npython3 scripts/short.py studio/movies/${
       document.getElementById("fname").value||"my-scene"}.json`;
   tally();
+  sideStack();
   wire();
+  reapplyFilters();
+  focusRestore(fm);
+  scheduleCompose(false);
 }
 
 function movieText(){
@@ -402,6 +1197,10 @@ function movieText(){
   L.push(`  canvas: ${S.canvas}`);
   L.push(`  fps: ${S.fps}`);
   L.push(`  checkpoint: ${S.checkpoint}`);
+  // `style` is a card id and is movie-level in compile.py's VARS, so it belongs
+  // here and nowhere else. `tags` below is the free house string - different var.
+  if(S.style_card) L.push(`  style: ${S.style_card}`);
+  if(S.engine_pick) L.push(`  engine: ${S.engine_pick}`);
   if(S.style) L.push(`  tags: ${S.style}`);
   if(S.seed_root) L.push(`  seed_root: ${S.seed_root}`);
   L.push("");
@@ -412,6 +1211,8 @@ function movieText(){
   if(S.place) L.push(`  place: ${S.place}`);
   if(S.time) L.push(`  time: ${S.time}`);
   if(S.mood) L.push(`  mood: ${S.mood}`);
+  if(S.lighting) L.push(`  lighting: ${S.lighting}`);
+  if(S.weather) L.push(`  weather: ${S.weather}`);
   L.push("");
   L.push(`  SCENE ${S.scene}`);
   if(S.transition) L.push(`    transition: ${S.transition}`);
@@ -442,6 +1243,37 @@ function tally(){
     }).join("");
 }
 
+/* The stack summary is in the sidebar so a conflict is visible from every step,
+   not only from the step that created it. */
+function sideStack(){
+  const el=document.getElementById("stackside"); if(!el) return;
+  const rows = LAYERS.map(L=>{
+    const v=layerValue(L.key);
+    return `<div class="sideline"><span class="sidedot" style="--lc:${lcol(L.key)}"></span>
+      <span style="color:var(--dim);min-width:74px">${esc(L.name.toLowerCase())}</span>
+      <span style="font-family:ui-monospace,Menlo,monospace">${v?esc(v):'<span style="color:var(--dim)">—</span>'}</span></div>`;
+  }).join("");
+  let head, tail="";
+  if(CSTATE==="ok" && CDATA){
+    const cs=CDATA.conflicts||[];
+    const n=s=>cs.filter(c=>c.severity===s).length;
+    const e=n("error"), w=n("warning"), t=n("note");
+    head = `<div style="margin-bottom:8px"><b>${esc(CDATA.engine||"?")}</b>
+      <span style="color:var(--dim)"> engine</span></div>`;
+    tail = `<div style="margin-top:9px">${
+      e?`<div style="color:var(--sev-error)"><b>${e}</b> that will break the shot</div>`:""}${
+      w?`<div style="color:var(--sev-warning)"><b>${w}</b> that will fight</div>`:""}${
+      t?`<div style="color:var(--dim)"><b>${t}</b> worth knowing</div>`:""}${
+      (!e&&!w&&!t)?`<div style="color:var(--post)">no conflicts</div>`:""}
+      <button class="btn ghost sm" data-goto="layers" style="margin-top:7px">open the stack</button></div>`;
+  } else {
+    head = `<div style="margin-bottom:8px;color:var(--dim)">resolver ${
+      CSTATE==="down"?"not answering":CSTATE==="error"?"errored":"…"}</div>`;
+    tail = `<div style="margin-top:9px"><button class="btn ghost sm" data-goto="layers">open the stack</button></div>`;
+  }
+  el.innerHTML = head + rows + tail;
+}
+
 function applyTemplate(id){
   const t = TPLS.find(x=>x.id===id);
   if(!t) return;
@@ -449,7 +1281,10 @@ function applyTemplate(id){
   // manual steps write into, so every value stays editable afterwards and the .movie it
   // produces is ordinary text with nothing template-shaped left in it.
   const map = {look:"look", pace:"pace", cue:"cue", place:"place", time:"time",
-               mood:"mood", camera:"camera", emotion:"emotion"};
+               mood:"mood", camera:"camera", emotion:"emotion",
+               // layer-stack keys. No template sets these today; they are mapped so that
+               // one which does lands in the right place instead of being dropped.
+               style:"style_card", lighting:"lighting", weather:"weather", engine:"engine_pick"};
   for(const [k,v] of Object.entries(t.sets||{})){
     if(map[k]) S[map[k]] = v;
     else if(k==="wear") S.wear = v;
@@ -463,8 +1298,45 @@ function applyTemplate(id){
   render();
 }
 
+/* ══ FILTERING (done in the DOM, not by re-rendering, so the search box keeps
+      focus while you type) ══════════════════════════════════════════════════ */
+const val = id => { const e=document.getElementById(id); return e ? e.value : ""; };
+function filterStyles(){
+  const sq=document.getElementById("sq");
+  if(sq) FILT.sq=sq.value;
+  FILT.fam=val("sf-fam"); FILT.eng=val("sf-eng");
+  FILT.comp=val("sf-comp"); FILT.stat=val("sf-stat");
+  const q=FILT.sq.trim().toLowerCase();
+  let n=0;
+  document.querySelectorAll("#sgrid [data-lpick]").forEach(b=>{
+    const ok = (!q        || (b.dataset.hay||"").includes(q))
+            && (!FILT.fam || b.dataset.fam===FILT.fam)
+            && (!FILT.eng || b.dataset.eng===FILT.eng || b.dataset.eng==="either")
+            && (!FILT.comp|| b.dataset.comp===FILT.comp)
+            && (!FILT.stat|| b.dataset.stat===FILT.stat);
+    b.style.display = ok ? "" : "none"; if(ok) n++;
+  });
+  const c=document.getElementById("scount"); if(c) c.textContent=n;
+}
+function filterGrid(layer){
+  const inp=document.querySelector(`[data-q="${layer}"]`);
+  if(inp) FILT.q[layer]=inp.value;
+  const q=(FILT.q[layer]||"").trim().toLowerCase();
+  document.querySelectorAll(`[data-grid="${layer}"] [data-lpick]`).forEach(b=>{
+    b.style.display = (!q || (b.dataset.hay||"").includes(q)) ? "" : "none";
+  });
+}
+// Re-apply every live filter after a repaint, so a drawer that was filtered
+// before the resolver answered is still filtered after it.
+function reapplyFilters(){
+  if(document.getElementById("sgrid")) filterStyles();
+  document.querySelectorAll("[data-grid]").forEach(g=>filterGrid(g.dataset.grid));
+}
+
 function wire(){
   document.querySelectorAll("[data-step]").forEach(b=>b.onclick=()=>{step=+b.dataset.step;render();});
+  document.querySelectorAll("[data-goto]").forEach(b=>b.onclick=()=>{
+    const i=STEPS.findIndex(x=>x.id===b.dataset.goto); if(i>=0){step=i;render();}});
   document.querySelectorAll("[data-tpl]").forEach(b=>b.onclick=()=>applyTemplate(b.dataset.tpl));
   const scratch=document.getElementById("scratch");
   if(scratch) scratch.onclick=()=>{step=1;render();};
@@ -482,8 +1354,30 @@ function wire(){
   document.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{
     S.beats.splice(+b.dataset.del,1); render();});
 
+  // ── layer stack ──
+  document.querySelectorAll("[data-lopen]").forEach(b=>b.onclick=()=>{
+    const k=b.dataset.lopen; OPEN[k]=!OPEN[k]; render();});
+  document.querySelectorAll("[data-lclear]").forEach(b=>b.onclick=()=>{
+    setLayer(b.dataset.lclear, ""); render();});
+  document.querySelectorAll("[data-lpick]").forEach(b=>b.onclick=()=>{
+    const k=b.dataset.lpick, v=b.dataset.val;
+    setLayer(k, layerValue(k)===v ? "" : v);
+    OPEN[k]=false; render();});
+  document.querySelectorAll("[data-wear]").forEach(b=>b.onclick=()=>{
+    S.wear = b.dataset.wear===""?"":b.dataset.wear; OPEN.wear=false; render();});
+  const ep=document.getElementById("engpick");
+  if(ep) ep.onchange=()=>{S.engine_pick=ep.value; render();};
+  const sq=document.getElementById("sq"); if(sq){ sq.oninput=filterStyles; }
+  ["sf-fam","sf-eng","sf-comp","sf-stat"].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.onchange=filterStyles;});
+  document.querySelectorAll("[data-q]").forEach(el=>el.oninput=()=>filterGrid(el.dataset.q));
+  const cr=document.getElementById("cretry");
+  if(cr) cr.onclick=()=>{CSTATE="unknown"; CLAST=""; paintCompose(); doCompose(true);};
+  const sr=document.getElementById("sretry");
+  if(sr) sr.onclick=async()=>{ await loadStyles(); render(); };
+
   const bind=(id,key)=>{const el=document.getElementById(id); if(el) el.oninput=()=>{S[key]=el.value;
-    document.getElementById("out").textContent=movieText();};};
+    document.getElementById("out").textContent=movieText(); scheduleCompose(false);};};
   bind("f-title","title"); bind("f-style","style"); bind("f-place","place");
   bind("f-time","time"); bind("f-mood","mood");
   const cv=document.getElementById("f-canvas"); if(cv) cv.onchange=()=>{S.canvas=cv.value;render();};
@@ -503,6 +1397,72 @@ function wire(){
   document.getElementById("next").onclick=()=>{if(step<STEPS.length-1){step++;render();}};
   document.getElementById("save").onclick=()=>save(false);
   const rb=document.getElementById("render"); if(rb) rb.onclick=renderNow;
+}
+
+function setLayer(k, v){
+  if(k==="style")          S.style_card=v;
+  else if(k==="character"){ if(!v) S.cast=[]; else if(!S.cast.includes(v)) S.cast.unshift(v); }
+  else if(k==="wear")       S.wear=v;
+  else                      S[k]=v;
+}
+
+/* ══ /api/compose ══════════════════════════════════════════════════════════ */
+function composeBody(){
+  return {
+    style:     S.style_card || null,
+    place:     S.place.trim() || null,
+    character: S.cast[0] || null,
+    look:      S.look || null,
+    wear:      (S.wear===""||S.wear==null) ? null : String(S.wear),
+    lighting:  S.lighting || null,
+    weather:   S.weather || null,
+    engine:    S.engine_pick || null,
+  };
+}
+function scheduleCompose(force){
+  if(CSTATE==="down" && !force) return;      // do not hammer a route that is not there
+  clearTimeout(CTIMER);
+  CTIMER=setTimeout(()=>doCompose(force), 180);
+}
+async function doCompose(force){
+  const key=JSON.stringify(composeBody());
+  // Settled means: this exact body has already been asked about and an answer
+  // (or a failure) came back. Re-asking would be a fetch loop, because painting
+  // an answer re-renders and re-rendering schedules another compose.
+  if(!force && key===CLAST && CSTATE!=="unknown") return;
+  if(CBUSY) return;
+  CLAST=key; CBUSY=true;
+  const my=++CSEQ;                            // last request in wins; no out-of-order paint
+  let state, data=null, err="", detail="";
+  try{
+    const r=await fetch("/api/compose",{method:"POST",
+      headers:{"Content-Type":"application/json"}, body:key});
+    if(r.status===404){ state="down"; err="the server has no /api/compose route yet"; }
+    else{
+      let j=null;
+      try{ j=await r.json(); }
+      catch(e){ j=null; }
+      if(j===null){ state="error"; err="the resolver replied with something that is not JSON"; }
+      else if(!r.ok || j.error){
+        state="error"; err=j.error||("HTTP "+r.status); detail=j.detail||"";
+      } else { state="ok"; data=j; }
+    }
+  }catch(e){
+    state="down"; err=(e&&e.message)||"the request did not complete";
+  }finally{
+    CBUSY=false;
+  }
+  if(my!==CSEQ) return;                       // a newer stack has superseded this answer
+  CSTATE=state; CERR=err; CDETAIL=detail;
+  if(data) CDATA=data;
+  paintCompose();
+}
+// A compose result changes the engine badge, every band's contribution, the
+// conflict panel and the prompt, so on the layers step the cheapest correct
+// thing is a re-render. Elsewhere only the sidebar needs touching.
+function paintCompose(){
+  if(STEPS[step].id==="layers") render();
+  else sideStack();
 }
 
 function sceneName(){ return document.getElementById("fname").value||"my-scene"; }
@@ -574,18 +1534,46 @@ async function poll(name){
   }
 }
 
+async function loadStyles(){
+  STYLES=[]; STYLE_CONTROL=null; STYLES_SRC=""; STYLES_ERR="";
+  try{
+    const r=await fetch("/api/styles");
+    if(r.status===404){ STYLES_ERR="the server has no /api/styles route yet"; }
+    else{
+      const j=await r.json();
+      if(j && Array.isArray(j.styles)){
+        STYLES=j.styles.filter(s=>s && s.id && s.id!=="_control");
+        STYLE_CONTROL=j.control||null; STYLES_SRC="/api/styles";
+      } else STYLES_ERR=(j&&j.error) || "the /api/styles reply had no styles array";
+    }
+  }catch(e){ STYLES_ERR=(e&&e.message)||"could not reach /api/styles"; }
+  // Fallback: if the styles folder has been added to serve.py's GROUPS instead,
+  // the cards arrive on /api/library and are just as usable for the picker.
+  if(!STYLES.length && Array.isArray(LIB.styles) && LIB.styles.length){
+    STYLES=LIB.styles.filter(s=>s && s.id && s.id!=="_control");
+    STYLE_CONTROL=LIB.styles.find(s=>s.id==="_control")||null;
+    STYLES_SRC="/api/library"; STYLES_ERR="";
+  }
+}
+
 (async function(){
-  const [lib,eff,cards,tpls] = await Promise.all([
+  const [lib,eff,cards,tpls,cast] = await Promise.all([
     fetch("/api/library").then(r=>r.json()).catch(()=>({})),
     fetch("/api/effects").then(r=>r.json()).catch(()=>({tiers:{},vars:{}})),
     fetch("/api/cards").then(r=>r.json()).catch(()=>([])),
     fetch("/api/templates").then(r=>r.json()).catch(()=>([])),
+    fetch("/api/cast").then(r=>r.json()).catch(()=>([])),
   ]);
   LIB=lib; EFF=eff; CARDS=cards; TPLS=tpls;
+  for(const c of (cast||[])){
+    const v=(c.views||[])[0]; if(v && v.file) CASTVIEWS[c.id]=v.file;
+  }
+  await loadStyles();
   const n=Object.values(lib).reduce((a,v)=>a+v.length,0);
   document.getElementById("stat").textContent =
-    `${TPLS.length} templates · ${n} presets · ${cards.length} capability cards · every choice labelled by where it takes effect`;
+    `${TPLS.length} templates · ${n} presets · ${STYLES.length} styles · ${cards.length} capability cards · every choice labelled by where it takes effect`;
   render();
+  doCompose(true);
 })();
 </script>
 </body>
