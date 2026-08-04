@@ -3,13 +3,13 @@
   "name": "Lifts an object to the mouth",
   "family": "subject",
   "text": "She lifts the cup from the table to her mouth.",
-  "desc": "Business - the small practical action that makes a held shot feel inhabited rather than paused.",
+  "desc": "Business - the small practical action that makes a held shot feel inhabited rather than paused. Needs the cup WITHIN REACH, not merely in shot: staged across a room it becomes the subject walking out of frame.",
   "shots": [
     "insert",
     "pillow",
     "speak"
   ],
-  "needs": "a person and a cup on a surface in frame",
+  "needs": "a person with a cup on a surface WITHIN ARM'S REACH of them",
   "grammar": "[MOVER] [ACTION VERB] [PATH/SPATIAL RELATION]",
   "status": "ready",
   "measured": {
@@ -18,19 +18,89 @@
       0.7985,
       0.8156
     ],
-    "motion_mean": 0.809,
     "creep_mean": 1.0,
     "seeds": [
       7701,
       7702,
       7703
     ],
-    "band_lo": 0.4058,
-    "band_hi": 0.7444,
-    "frame_scale_ceiling": 1.191,
     "keyframe": "studio/samples/motion_lib/_keyframe.png",
     "frames": 97,
-    "workflow": "12_ltx23_i2v_audio.json"
+    "workflow": "12_ltx23_i2v_audio.json",
+    "per_staging": {
+      "far": {
+        "motion_per_seed": [
+          0.6248,
+          1.5823,
+          0.5198
+        ],
+        "motion_mean": 0.909,
+        "creep_mean": 1.017,
+        "band_lo": 0.4754,
+        "band_hi": 0.762,
+        "frame_scale_ceiling": 1.219,
+        "vs_band": "between",
+        "x_control": 1.593,
+        "keyframe": "studio/samples/motion_staging/keyframes/far.png",
+        "subject_scale": 0.0019
+      },
+      "mid": {
+        "motion_per_seed": [
+          1.4019,
+          0.9429,
+          1.1879
+        ],
+        "motion_mean": 1.1776,
+        "creep_mean": 1.058,
+        "band_lo": 0.3112,
+        "band_hi": 0.7339,
+        "frame_scale_ceiling": 1.174,
+        "vs_band": "frame-scale",
+        "x_control": 2.158,
+        "keyframe": "studio/samples/motion_staging/keyframes/mid.png",
+        "subject_scale": 0.0433
+      },
+      "close": {
+        "motion_per_seed": [
+          1.1136,
+          1.1591,
+          1.1604
+        ],
+        "motion_mean": 1.1444,
+        "creep_mean": 1.025,
+        "band_lo": 0.4644,
+        "band_hi": 1.9982,
+        "frame_scale_ceiling": 3.197,
+        "vs_band": "in-band",
+        "x_control": 1.105,
+        "keyframe": "studio/samples/motion_staging/keyframes/close.png",
+        "subject_scale": 0.0792
+      },
+      "anchor": {
+        "motion_per_seed": [
+          0.8142,
+          0.7985,
+          0.8156
+        ],
+        "motion_mean": 0.8094,
+        "creep_mean": 1.0,
+        "band_lo": 0.4058,
+        "band_hi": 0.7444,
+        "frame_scale_ceiling": 1.191,
+        "vs_band": "between",
+        "x_control": 1.31,
+        "keyframe": "studio/samples/motion_lib/_keyframe.png",
+        "subject_scale": 0.038
+      }
+    },
+    "staging_note": "subject_scale is the fraction of the frame the subject's coat occupies in that staging's keyframe - the run's measure of how close the subject is staged.",
+    "motion_mean_anchor_only": 0.809,
+    "band_lo_anchor_only": 0.4058,
+    "band_hi_anchor_only": 0.7444,
+    "frame_scale_ceiling_anchor_only": 1.191
   },
-  "verdict": "RENDERED 2026-08-04, 3 seeds, watched at subject crop. THE CLEAREST PROOF IN THE LIBRARY THAT THE METRIC IS BLIND. Motion 0.814/0.798/0.816 - barely above the empty control - while the strips show a full four-stage action on all three seeds: she looks down, reaches, closes her hand on the cup, lifts it and drinks. Face held and framing intact 3/3. Ranked by the number this would have been discarded; it is one of the best cards here. Band 0.406-0.744 (empty control 0.628); frame-scale ceiling 1.191. "
+  "verdict": "RE-MEASURED ACROSS FOUR STAGINGS 2026-08-04, 3 seeds each, watched at 7702. THE PRECONDITION IS NOT `a cup in frame`, IT IS `a cup WITHIN REACH`. At `close` and `anchor`, where the cup is on the table at her hand, the four-stage action lands in full - look down, reach, lift, drink - at 1.144 and 0.809. At `far` and `mid` the cup is a table's length or a hall's length away and the card collapses into her walking out of frame entirely by f48: 0.909 and 1.178, numbers that look respectable and describe an exit, not a drink. The card's own `needs` line should be read as a reach test, not a visibility test.",
+  "number_is_staging_dependent": true,
+  "staging_robustness": "conditional",
+  "staging_robustness_evidence": "four stagings (subject 0.19%-7.92% of frame), three seeds of numbers, strips watched at seed 7702: samples/motion_staging/percard/cup_lift.png"
 }

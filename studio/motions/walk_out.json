@@ -3,7 +3,7 @@
   "name": "Walks out of frame",
   "family": "subject",
   "text": "She walks out of frame to the left.",
-  "desc": "Clears the frame and leaves the place behind - the shot outlives the character in it.",
+  "desc": "Departure, and the one subject card that survives any staging - the subject is gone from frame by f72-f96 whether they start as a distant figure or fill the lens, because leaving the frame is a path that exists at every shot size. Reach for it when the staging is not known in advance.",
   "shots": [
     "build",
     "master"
@@ -17,19 +17,89 @@
       1.0929,
       1.3746
     ],
-    "motion_mean": 1.226,
     "creep_mean": 1.0,
     "seeds": [
       7701,
       7702,
       7703
     ],
-    "band_lo": 0.4058,
-    "band_hi": 0.7444,
-    "frame_scale_ceiling": 1.191,
     "keyframe": "studio/samples/motion_lib/_keyframe.png",
     "frames": 97,
-    "workflow": "12_ltx23_i2v_audio.json"
+    "workflow": "12_ltx23_i2v_audio.json",
+    "per_staging": {
+      "far": {
+        "motion_per_seed": [
+          1.2513,
+          0.9798,
+          1.9531
+        ],
+        "motion_mean": 1.3947,
+        "creep_mean": 1.067,
+        "band_lo": 0.4754,
+        "band_hi": 0.762,
+        "frame_scale_ceiling": 1.219,
+        "vs_band": "frame-scale",
+        "x_control": 2.444,
+        "keyframe": "studio/samples/motion_staging/keyframes/far.png",
+        "subject_scale": 0.0019
+      },
+      "mid": {
+        "motion_per_seed": [
+          0.9525,
+          1.2858,
+          1.5609
+        ],
+        "motion_mean": 1.2664,
+        "creep_mean": 1.025,
+        "band_lo": 0.3112,
+        "band_hi": 0.7339,
+        "frame_scale_ceiling": 1.174,
+        "vs_band": "frame-scale",
+        "x_control": 2.32,
+        "keyframe": "studio/samples/motion_staging/keyframes/mid.png",
+        "subject_scale": 0.0433
+      },
+      "close": {
+        "motion_per_seed": [
+          2.144,
+          1.9021,
+          2.0626
+        ],
+        "motion_mean": 2.0362,
+        "creep_mean": 1.0,
+        "band_lo": 0.4644,
+        "band_hi": 1.9982,
+        "frame_scale_ceiling": 3.197,
+        "vs_band": "between",
+        "x_control": 1.967,
+        "keyframe": "studio/samples/motion_staging/keyframes/close.png",
+        "subject_scale": 0.0792
+      },
+      "anchor": {
+        "motion_per_seed": [
+          1.209,
+          1.0929,
+          1.3746
+        ],
+        "motion_mean": 1.2255,
+        "creep_mean": 1.0,
+        "band_lo": 0.4058,
+        "band_hi": 0.7444,
+        "frame_scale_ceiling": 1.191,
+        "vs_band": "frame-scale",
+        "x_control": 1.984,
+        "keyframe": "studio/samples/motion_lib/_keyframe.png",
+        "subject_scale": 0.038
+      }
+    },
+    "staging_note": "subject_scale is the fraction of the frame the subject's coat occupies in that staging's keyframe - the run's measure of how close the subject is staged.",
+    "motion_mean_anchor_only": 1.226,
+    "band_lo_anchor_only": 0.4058,
+    "band_hi_anchor_only": 0.7444,
+    "frame_scale_ceiling_anchor_only": 1.191
   },
-  "verdict": "RENDERED 2026-08-04, 3 seeds. Motion 1.209/1.093/1.375. She DOES clear the frame - by f96 on 7701 the room is empty, which is exactly the dramatic effect the card is for. But she exits to the RIGHT while the card says left, so the direction in the text is not obeyed. Use it to empty a frame, not to control which way. Band 0.406-0.744 (empty control 0.628); frame-scale ceiling 1.191. "
+  "verdict": "RE-MEASURED ACROSS FOUR STAGINGS 2026-08-04, 3 seeds each, watched at 7702. THE MOST STAGING-ROBUST SUBJECT CARD IN THE LIBRARY. She is gone from the frame by f84 at `far`, f72 at `mid`, f72 at `close` and f96 at `anchor` - the ask lands at every subject scale from a figure 0.2% of the frame to one filling it, because leaving the frame is the one path that is available at any staging. Numbers 1.395 / 1.266 / 2.036 / 1.226; they say nothing the strips do not say better. If a beat needs a subject exit and the staging is not known in advance, this is the card.",
+  "number_is_staging_dependent": true,
+  "staging_robustness": "all-stagings",
+  "staging_robustness_evidence": "four stagings (subject 0.19%-7.92% of frame), three seeds of numbers, strips watched at seed 7702: samples/motion_staging/percard/walk_out.png"
 }

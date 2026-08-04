@@ -18,6 +18,15 @@ Endpoints:
     /video            every rendered clip, grouped by what it demonstrates
     /api/video        the clip index - studio/samples/video.json, built by
                       studio/_tools/video_index.py
+    /character        the cast, each with a state per dossier section
+    /character/<ID>   one character's dossier - who she is, what holds her face on each
+                      engine, how she looks, wears, is drawn, moves and sounds, and what
+                      is still unknown
+    /api/character[/<ID>]   the payload behind those, assembled by
+                      studio/_tools/dossier.py from what is on disk
+    /character/<ID>/clip/<clip>.mp4   one motion clip, resolved through that character's
+                      manifest and streamed with Range - the mp4s live in ComfyUI's output
+                      tree, outside anything the static handler will open
 
 Samples are served through _send_file, which honours Range. Video needs that: without it
 `preload="metadata"` pulls whole mp4s and no clip can be seeked. The page routes go through
@@ -759,16 +768,54 @@ def nav_video(html):
     return html
 
 
+def nav_dossier(html):
+    """Put a `dossier` link in the nav, the same way and for the same reason as nav_video.
+
+    /character/<id> is a page like /styles or /cast and belongs in the same nav, and the
+    nav lives in ten hand-written files owned by other work. Injected rather than edited.
+    """
+    if 'href="/character' in html:
+        return html
+    for anchor in ('<a href="/cast"', '<a href="/gallery"', '<a href="/">'):
+        i = html.find(anchor)
+        if i < 0:
+            continue
+        m = re.search(r">\s*([A-Za-z])", html[i:i + 200])
+        word = "Dossier" if (m and m.group(1).isupper()) else "dossier"
+        return html[:i] + '<a href="/character">%s</a>' % word + html[i:]
+    return html
+
+
+# The cast page's per-character action row, and the dossier link that belongs beside its
+# "direct a scene" link. Matched against the exact anchor cast.html writes, inside a JS
+# template literal, so `${esc(c.id)}` resolves in the page's own scope. If cast.html ever
+# rewrites that line the match simply fails and the page is served untouched - the same
+# contract nav_video works under, because a cross-page link is not worth the risk of
+# corrupting somebody else's file.
+CAST_ACT = '<a href="/wizard" title="open the wizard, then pick ${esc(c.id)} on its cast step">'
+CAST_DOSSIER = ('<a href="/character/${esc(c.id)}" title="everything measured about '
+                '${esc(c.id)}">dossier &rarr;</a>')
+
+
+def cast_dossier_link(html):
+    if "/character/" in html or CAST_ACT not in html:
+        return html
+    return html.replace(CAST_ACT, CAST_DOSSIER + CAST_ACT, 1)
+
+
 class H(http.server.SimpleHTTPRequestHandler):
     def _page(self, name):
-        """Serve one of the hand-written pages, with the video link injected into its nav."""
+        """Serve one of the hand-written pages, with the video and dossier links injected
+        into its nav, and the per-character dossier link into the cast page's card."""
         p = f"{HERE}/{name}"
         if not os.path.exists(p):
             return self._send(f"{name} is missing".encode(), 500, "text/plain")
         with open(p, encoding="utf-8") as f:
             html = f.read()
-        return self._send(nav_video(html).encode("utf-8"), 200,
-                          "text/html; charset=utf-8")
+        html = nav_dossier(nav_video(html))
+        if name == "cast.html":
+            html = cast_dossier_link(html)
+        return self._send(html.encode("utf-8"), 200, "text/html; charset=utf-8")
 
     def _send_file(self, fp, ctype):
         """Send a file, honouring a Range request.
@@ -896,6 +943,24 @@ class H(http.server.SimpleHTTPRequestHandler):
             return self._page("cast.html")
         if path == "/api/cast":
             return self._send(cast())
+        # ---- the character dossier ------------------------------------------------
+        # /character            the cast, each with a state per dossier section
+        # /character/<ID>       one character's dossier
+        # /api/character[/<ID>] the payload behind either
+        # /character/<ID>/clip/<clip>.mp4   one motion clip, streamed with Range
+        #
+        # The page is a single file for every character, so the id lives in the path and
+        # the page reads it back out of location.pathname - no template rendering, and a
+        # dossier URL is shareable and bookmarkable.
+        if path == "/character" or path.startswith("/character/"):
+            m = re.match(r"^/character/([A-Za-z0-9_-]{1,64})/clip/"
+                         r"([A-Za-z0-9_-]{1,64})\.mp4$", path)
+            if m:
+                return self._clip(m.group(1), m.group(2))
+            return self._page("character.html")
+        if path == "/api/character" or path.startswith("/api/character/"):
+            cid = path[len("/api/character/"):] if len(path) > len("/api/character") else ""
+            return self._dossier(cid)
         if path in ("/verify", "/verify.html"):
             return self._page("verify.html")
         if path == "/api/verify/queue":
@@ -973,6 +1038,56 @@ class H(http.server.SimpleHTTPRequestHandler):
         if path == "/api/movies":
             return self._send(movies())
         return self._send({"error": "not found"}, 404)
+
+    # ---- the character dossier ------------------------------------------------
+    def _dossier(self, cid):
+        """/api/character/<id>, or the index when no id is given.
+
+        Assembled by studio/_tools/dossier.py, imported per request for the same reason
+        the library is read per request: a render that lands while the page is open should
+        show up on a refresh, not on a restart. An import failure is reported as itself
+        rather than as an empty dossier, because a page full of 'nothing rendered yet'
+        that is really a broken import is exactly the kind of silent wrong answer this
+        project keeps finding.
+        """
+        d = f"{HERE}/_tools"
+        if d not in sys.path:
+            sys.path.insert(0, d)
+        try:
+            import dossier
+            if getattr(dossier, "__file__", "").startswith(d):
+                dossier = importlib.reload(dossier)
+        except Exception as e:                                      # noqa: BLE001
+            return self._send({"error": "studio/_tools/dossier.py did not import",
+                               "detail": "%s: %s" % (type(e).__name__, e),
+                               "trace": traceback.format_exc()[-1500:]}, 500)
+        cid = safe_name(cid)
+        try:
+            payload = dossier.index() if not cid else dossier.build(cid)
+        except Exception as e:                                      # noqa: BLE001
+            return self._send({"error": "dossier failed to assemble %s" % (cid or "index"),
+                               "detail": "%s: %s" % (type(e).__name__, e),
+                               "trace": traceback.format_exc()[-1500:]}, 500)
+        if payload.get("error"):
+            return self._send(payload, 404)
+        return self._send(payload)
+
+    def _clip(self, cid, clip_id):
+        """One motion clip. The mp4s live in ComfyUI's output tree, which the static
+        handler will not open and should not be widened to - so the path is resolved
+        THROUGH THE MANIFEST for this character and never built from the id. An id that
+        the manifest does not vouch for is a 404, not a file read."""
+        d = f"{HERE}/_tools"
+        if d not in sys.path:
+            sys.path.insert(0, d)
+        try:
+            import dossier
+        except Exception:                                           # noqa: BLE001
+            return self._send({"error": "dossier.py did not import"}, 500)
+        fp = dossier.clip_path(safe_name(cid), safe_name(clip_id))
+        if not fp:
+            return self._send({"error": "no such clip"}, 404)
+        return self._send_file(fp, "video/mp4")
 
     def _render_start(self, data):
         """Compile a .movie and launch the render, so a beginner never has to open a

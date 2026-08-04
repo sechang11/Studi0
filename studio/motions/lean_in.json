@@ -3,12 +3,12 @@
   "name": "Leans toward camera",
   "family": "subject",
   "text": "She leans forward toward the camera.",
-  "desc": "Intimacy or threat without a camera move. Pressure applied across the lens.",
+  "desc": "Pressure, intimacy, a confidence. Reads as a lean only on a close shot; staged wide it becomes an approach that does not stop, and can end the shot on a fragment of a face.",
   "shots": [
     "react",
     "speak"
   ],
-  "needs": "a person in frame",
+  "needs": "a person staged close, with the shot already on them",
   "grammar": "[MOVER] [ACTION VERB] [PATH/SPATIAL RELATION]",
   "status": "weak",
   "measured": {
@@ -17,19 +17,89 @@
       2.5912,
       1.646
     ],
-    "motion_mean": 2.046,
     "creep_mean": 1.1,
     "seeds": [
       7701,
       7702,
       7703
     ],
-    "band_lo": 0.4058,
-    "band_hi": 0.7444,
-    "frame_scale_ceiling": 1.191,
     "keyframe": "studio/samples/motion_lib/_keyframe.png",
     "frames": 97,
-    "workflow": "12_ltx23_i2v_audio.json"
+    "workflow": "12_ltx23_i2v_audio.json",
+    "per_staging": {
+      "far": {
+        "motion_per_seed": [
+          1.4104,
+          1.4865,
+          2.2265
+        ],
+        "motion_mean": 1.7078,
+        "creep_mean": 1.125,
+        "band_lo": 0.4754,
+        "band_hi": 0.762,
+        "frame_scale_ceiling": 1.219,
+        "vs_band": "frame-scale",
+        "x_control": 2.993,
+        "keyframe": "studio/samples/motion_staging/keyframes/far.png",
+        "subject_scale": 0.0019
+      },
+      "mid": {
+        "motion_per_seed": [
+          2.2031,
+          1.9676,
+          1.2446
+        ],
+        "motion_mean": 1.8051,
+        "creep_mean": 1.1,
+        "band_lo": 0.3112,
+        "band_hi": 0.7339,
+        "frame_scale_ceiling": 1.174,
+        "vs_band": "frame-scale",
+        "x_control": 3.307,
+        "keyframe": "studio/samples/motion_staging/keyframes/mid.png",
+        "subject_scale": 0.0433
+      },
+      "close": {
+        "motion_per_seed": [
+          1.7012,
+          1.7252,
+          1.4198
+        ],
+        "motion_mean": 1.6154,
+        "creep_mean": 1.05,
+        "band_lo": 0.4644,
+        "band_hi": 1.9982,
+        "frame_scale_ceiling": 3.197,
+        "vs_band": "in-band",
+        "x_control": 1.56,
+        "keyframe": "studio/samples/motion_staging/keyframes/close.png",
+        "subject_scale": 0.0792
+      },
+      "anchor": {
+        "motion_per_seed": [
+          1.9014,
+          2.5912,
+          1.646
+        ],
+        "motion_mean": 2.0462,
+        "creep_mean": 1.1,
+        "band_lo": 0.4058,
+        "band_hi": 0.7444,
+        "frame_scale_ceiling": 1.191,
+        "vs_band": "frame-scale",
+        "x_control": 3.312,
+        "keyframe": "studio/samples/motion_lib/_keyframe.png",
+        "subject_scale": 0.038
+      }
+    },
+    "staging_note": "subject_scale is the fraction of the frame the subject's coat occupies in that staging's keyframe - the run's measure of how close the subject is staged.",
+    "motion_mean_anchor_only": 2.046,
+    "band_lo_anchor_only": 0.4058,
+    "band_hi_anchor_only": 0.7444,
+    "frame_scale_ceiling_anchor_only": 1.191
   },
-  "verdict": "RENDERED 2026-08-04, 3 seeds. Motion 1.901/2.591/1.646, above the ceiling 3/3, creep 1.18/1.02/1.10. Something moves toward the lens every time, but what the strips show is the whole figure APPROACHING, not the torso leaning - it renders as a small walk_in. On brief in direction, wrong in action. If you want the approach, walk_in does it better and more legibly. Band 0.406-0.744 (empty control 0.628); frame-scale ceiling 1.191. "
+  "verdict": "RE-MEASURED ACROSS FOUR STAGINGS 2026-08-04, 3 seeds each, watched at 7702. Same split as [[hand_reach]] and for the same reason. At `close` (1.725) she genuinely leans forward over the table; at `anchor` (2.591) it reads as a lean too. At `far` (1.486) and `mid` (1.968) it is not a lean, it is an approach that does not stop - the `far` cell ends on her mouth alone, subject destroyed. Above the frame-scale ceiling at three stagings, and at two of those the shot is unusable.",
+  "number_is_staging_dependent": true,
+  "staging_robustness": "conditional",
+  "staging_robustness_evidence": "four stagings (subject 0.19%-7.92% of frame), three seeds of numbers, strips watched at seed 7702: samples/motion_staging/percard/lean_in.png"
 }

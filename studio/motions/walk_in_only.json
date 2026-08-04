@@ -3,12 +3,12 @@
   "name": "Walks toward camera, nothing else",
   "family": "subject",
   "text": "She walks forward toward the camera. Nothing else in the frame moves.",
-  "desc": "The strongest mover with the hold clause attached - approach without the background coming with it.",
+  "desc": "walk_in with the rest of the frame held. Same precondition and same failure: it needs distance to close, and returns its biggest numbers on the stagings where it does not move her at all.",
   "shots": [
     "build",
     "master"
   ],
-  "needs": "a person in frame",
+  "needs": "a person in frame with open ground between them and the lens",
   "grammar": "[MOVER] [ACTION VERB] [PATH/SPATIAL RELATION]",
   "status": "ready",
   "measured": {
@@ -17,19 +17,89 @@
       2.4756,
       3.3485
     ],
-    "motion_mean": 2.643,
     "creep_mean": 1.058,
     "seeds": [
       7701,
       7702,
       7703
     ],
-    "band_lo": 0.4058,
-    "band_hi": 0.7444,
-    "frame_scale_ceiling": 1.191,
     "keyframe": "studio/samples/motion_lib/_keyframe.png",
     "frames": 97,
-    "workflow": "12_ltx23_i2v_audio.json"
+    "workflow": "12_ltx23_i2v_audio.json",
+    "per_staging": {
+      "far": {
+        "motion_per_seed": [
+          1.2644,
+          0.8225,
+          1.2034
+        ],
+        "motion_mean": 1.0968,
+        "creep_mean": 1.067,
+        "band_lo": 0.4754,
+        "band_hi": 0.762,
+        "frame_scale_ceiling": 1.219,
+        "vs_band": "between",
+        "x_control": 1.922,
+        "keyframe": "studio/samples/motion_staging/keyframes/far.png",
+        "subject_scale": 0.0019
+      },
+      "mid": {
+        "motion_per_seed": [
+          0.9349,
+          1.1509,
+          1.7544
+        ],
+        "motion_mean": 1.2801,
+        "creep_mean": 1.067,
+        "band_lo": 0.3112,
+        "band_hi": 0.7339,
+        "frame_scale_ceiling": 1.174,
+        "vs_band": "frame-scale",
+        "x_control": 2.345,
+        "keyframe": "studio/samples/motion_staging/keyframes/mid.png",
+        "subject_scale": 0.0433
+      },
+      "close": {
+        "motion_per_seed": [
+          2.4616,
+          2.9429,
+          3.114
+        ],
+        "motion_mean": 2.8395,
+        "creep_mean": 1.158,
+        "band_lo": 0.4644,
+        "band_hi": 1.9982,
+        "frame_scale_ceiling": 3.197,
+        "vs_band": "between",
+        "x_control": 2.743,
+        "keyframe": "studio/samples/motion_staging/keyframes/close.png",
+        "subject_scale": 0.0792
+      },
+      "anchor": {
+        "motion_per_seed": [
+          2.1053,
+          2.4756,
+          3.3485
+        ],
+        "motion_mean": 2.6431,
+        "creep_mean": 1.058,
+        "band_lo": 0.4058,
+        "band_hi": 0.7444,
+        "frame_scale_ceiling": 1.191,
+        "vs_band": "frame-scale",
+        "x_control": 4.278,
+        "keyframe": "studio/samples/motion_lib/_keyframe.png",
+        "subject_scale": 0.038
+      }
+    },
+    "staging_note": "subject_scale is the fraction of the frame the subject's coat occupies in that staging's keyframe - the run's measure of how close the subject is staged.",
+    "motion_mean_anchor_only": 2.643,
+    "band_lo_anchor_only": 0.4058,
+    "band_hi_anchor_only": 0.7444,
+    "frame_scale_ceiling_anchor_only": 1.191
   },
-  "verdict": "RENDERED 2026-08-04, 3 seeds. Motion 2.105/2.476/3.349, mean 2.643 - above the ceiling 3/3, but consistently BELOW plain walk_in on every seed. That is the hold clause doing its job: the same approach with less off-brief motion around it. Use this when the background must stay put and walk_in when it need not. Band 0.406-0.744 (empty control 0.628); frame-scale ceiling 1.191. "
+  "verdict": "RE-MEASURED ACROSS FOUR STAGINGS 2026-08-04, 3 seeds each, watched at 7702. far 0.823 / mid 1.151 / close 2.943 / anchor 2.476 on that seed, and it behaves exactly as [[walk_in]] does: full traverse and exit at `far`, no approach at all at `mid`, and at `close` she rises and drifts right without ever coming toward the lens. The `Nothing else in the frame moves` clause does not change where the card works, only how much of the rest of the frame joins in. Same rule: it needs distance to close.",
+  "number_is_staging_dependent": true,
+  "staging_robustness": "conditional",
+  "staging_robustness_evidence": "four stagings (subject 0.19%-7.92% of frame), three seeds of numbers, strips watched at seed 7702: samples/motion_staging/percard/walk_in_only.png"
 }

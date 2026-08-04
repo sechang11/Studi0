@@ -1,0 +1,592 @@
+{
+  "_": "TERRA ACROSS THE STYLE LIBRARY. Per-style verdicts, set BY LOOKING at every cell, not inferred from any card. Two halves per style because a beautiful render of somebody else is a failure for a dossier: did the STYLE land, and is it still TERRA.",
+  "tool": "studio/_tools/terra_styles.py",
+  "held_constant": {
+    "character": "TERRA",
+    "place": "castle_courtyard",
+    "costume": "default",
+    "wear": 0,
+    "framing": "pinned - 'cowboy shot' first in the tag string",
+    "anime": "IPAdapter 0.0, LoRA character_terra_00001_v3 at 0.5, danbooru name stripped",
+    "qwen": "Qwen-Image-Edit 2511 reference route, sheet_photo_terra.png, style clause first, no character LoRA (base-model locked)",
+    "seeds": [
+      3311,
+      7788
+    ]
+  },
+  "key": {
+    "style": "strong / partial / none - did the idiom actually arrive",
+    "id_3311": "yes / drift / no - is it still Terra at the dossier seed",
+    "id_7788": "yes / drift / no - and at the confirmation seed",
+    "drift": "recognisably her, but something on her card changed - hair pushed to blonde, the face aged, or the figure pushed so far back the face is no longer legible"
+  },
+  "verified_by": "Every cell opened and looked at. A pixel proxy for the hair failure was written, validated against fourteen cells already judged by eye, got four of them wrong, and was deleted - see build_heads().",
+  "anime": {
+    "american_comic": {
+      "style": "strong",
+      "id_3311": "yes",
+      "id_7788": "yes",
+      "saw": "Bold ink and saturated primaries. ONLY landed because neg_for_style dropped 'western comic' from the standing medium guard - the shipped negative would have condemned it."
+    },
+    "arcane_magitech": {
+      "style": "partial",
+      "id_3311": "yes",
+      "id_7788": "no",
+      "saw": "Glowing blue crystal at the ear and in the background; an accent, not a world. Red hair at 7788."
+    },
+    "art_deco": {
+      "style": "strong",
+      "id_3311": "yes",
+      "id_7788": "yes",
+      "saw": "Gold sunburst halo, symmetry, geometric ornament. Identity untouched at both seeds."
+    },
+    "art_nouveau": {
+      "style": "strong",
+      "id_3311": "yes",
+      "id_7788": "yes",
+      "saw": "Mucha panel with an ornamental border - and she still FILLS it. The only frame-building style that did not shrink her at either seed."
+    },
+    "baroque_painting": {
+      "style": "strong",
+      "id_3311": "no",
+      "id_7788": "no",
+      "saw": "Chiaroscuro and gold brocade, genuinely beautiful. HAIR RED at both seeds."
+    },
+    "bauhaus": {
+      "style": "partial",
+      "id_3311": "yes",
+      "id_7788": "yes",
+      "saw": "Primary red/blue/white blocking on the garment and a flat arch. No real geometric discipline."
+    },
+    "byzantine_icon": {
+      "style": "partial",
+      "id_3311": "yes",
+      "id_7788": "yes",
+      "saw": "Gold-leaf ground arrived; the hieratic figure and egg-tempera face did not."
+    },
+    "cel_anime_90s": {
+      "style": "strong",
+      "id_3311": "yes",
+      "id_7788": "yes",
+      "saw": "Heavier uneven line, duller warm palette, hard flat shadow, a period face. Full costume fidelity at both seeds."
+    },
+    "charcoal_drawing": {
+      "style": "strong",
+      "id_3311": "yes",
+      "id_7788": "yes",
+      "saw": "Smudged greyscale with paper tooth. sat15.9. Costume simplifies to a long gown."
+    },
+    "chibi": {
+      "style": "strong",
+      "id_3311": "drift",
+      "id_7788": "yes",
+      "saw": "Two heads tall, huge eyes, thick outline. Identity survives only as signature nouns - chibi erases facial structure by construction, so this is a loss by design rather than a failure."
+    },
+    "concept_art": {
+      "style": "strong",
+      "id_3311": "no",
+      "id_7788": "no",
+      "saw": "Painted, moody, loose. HAIR RED at both seeds."
+    },
+    "cottagecore": {
+      "style": "none",
+      "id_3311": "drift",
+      "id_7788": "no",
+      "saw": "d18.3 and essentially the control with a cream dress. Hair pushed toward blonde. The library records it REPLACING the setting with flowers on a generic subject; it did nothing here."
+    },
+    "cubism": {
+      "style": "none",
+      "id_3311": "yes",
+      "id_7788": "yes",
+      "saw": "No faceting anywhere at either seed. DISAGREES WITH THE LIBRARY VERDICT, which records the background fracturing into genuine cubist planes on a generic subject."
+    },
+    "dark_academia": {
+      "style": "strong",
+      "id_3311": "no",
+      "id_7788": "no",
+      "saw": "Candlelit oak and moody warm brown. HAIR RED at both seeds."
+    },
+    "dark_fantasy_anime": {
+      "style": "strong",
+      "id_3311": "yes",
+      "id_7788": "no",
+      "saw": "Near-monochrome greys, ornate filigree costume, dramatic vault. d32.6. Her wardrobe is replaced wholesale by the idiom."
+    },
+    "dieselpunk": {
+      "style": "strong",
+      "id_3311": "yes",
+      "id_7788": "no",
+      "saw": "Olive-ochre industry, riveted hatch, smokestacks. Red hair at 7788."
+    },
+    "eldritch": {
+      "style": "partial",
+      "id_3311": "yes",
+      "id_7788": "no",
+      "saw": "d17.2 - very little eldritch quality reached the frame."
+    },
+    "expressionism": {
+      "style": "strong",
+      "id_3311": "no",
+      "id_7788": "no",
+      "saw": "Distorted dark architecture, harsh reds, sat46.2. HAIR RED at both seeds."
+    },
+    "flat_vector": {
+      "style": "strong",
+      "id_3311": "yes",
+      "id_7788": "no",
+      "saw": "Flat unmodulated shapes, flat27.6. Red hair at 7788."
+    },
+    "ghibli_pastoral": {
+      "style": "strong",
+      "id_3311": "yes",
+      "id_7788": "no",
+      "saw": "Soft painted sky and blue cone-roofed towers; it rebuilds the place. Full identity at 3311, red at 7788."
+    },
+    "giallo": {
+      "style": "strong",
+      "id_3311": "yes",
+      "id_7788": "no",
+      "saw": "Lurid magenta and blue gels. Red hair at 7788."
+    },
+    "golden_age_illustration": {
+      "style": "strong",
+      "id_3311": "yes",
+      "id_7788": "yes",
+      "saw": "sat48.2, the warmest illustration in the set, and every costume noun present - gold corset, red cape, red-and-blue sash, ribbon. Holds at both seeds."
+    },
+    "gothic_illustration": {
+      "style": "strong",
+      "id_3311": "drift",
+      "id_7788": "no",
+      "saw": "High-contrast B&W and tall architecture land hard, but this is the ONE style where the pinned shot size was partly overpowered even at 3311 - she is a mid-figure in a vast hall. At 7788 she is tiny and her hair is white."
+    },
+    "gouache": {
+      "style": "strong",
+      "id_3311": "yes",
+      "id_7788": "no",
+      "saw": "Flat opaque paint, poster-like. Green at 3311, RED at 7788 - one of the three styles that flipped and the reason the second seed was worth spending."
+    },
+    "grimdark": {
+      "style": "strong",
+      "id_3311": "yes",
+      "id_7788": "no",
+      "saw": "d35.6, the largest change from control in the whole sweep. Mud, rust, near-black. Green at 3311, RED at 7788."
+    },
+    "idol_bright": {
+      "style": "strong",
+      "id_3311": "yes",
+      "id_7788": "yes",
+      "saw": "Sparkle bokeh, confetti, stage flare. Identity completely untouched at both seeds."
+    },
+    "illuminated_manuscript": {
+      "style": "strong",
+      "id_3311": "yes",
+      "id_7788": "no",
+      "saw": "Gold ground and jewel colour, sat43.4. Green at 3311; at 7788 it built a gold border and shrank her, and the hair went red with it."
+    },
+    "impressionist": {
+      "style": "partial",
+      "id_3311": "drift",
+      "id_7788": "no",
+      "saw": "Broken colour and soft light, but the hair drifts to pale blonde and the dress to white."
+    },
+    "ink_wash": {
+      "style": "strong",
+      "id_3311": "no",
+      "id_7788": "no",
+      "saw": "Sumi-e with real wet black bleed on bare paper. HAIR RED at both seeds."
+    },
+    "iyashikei": {
+      "style": "partial",
+      "id_3311": "yes",
+      "id_7788": "no",
+      "saw": "d10.7, the smallest change in the sweep. Slightly softer and calmer than control and little else."
+    },
+    "josei_muted": {
+      "style": "strong",
+      "id_3311": "drift",
+      "id_7788": "no",
+      "saw": "Desaturated, grounded, and it AGES her - the face is harder and older than her card."
+    },
+    "kyoani_soft": {
+      "style": "strong",
+      "id_3311": "yes",
+      "id_7788": "yes",
+      "saw": "Soft blue night, gentle gradients, bokeh. Identity intact at both seeds."
+    },
+    "ligne_claire": {
+      "style": "strong",
+      "id_3311": "yes",
+      "id_7788": "no",
+      "saw": "Uniform line weight and flat colour, edge30.5. Red hair at 7788."
+    },
+    "linocut": {
+      "style": "partial",
+      "id_3311": "yes",
+      "id_7788": "no",
+      "saw": "A carved block pattern reached the dress; no gouge marks, no relief-print character. Compare ukiyo_e, which is also a print idiom and lands completely."
+    },
+    "low_poly_3d": {
+      "style": "partial",
+      "id_3311": "no",
+      "id_7788": "no",
+      "saw": "The ARCHITECTURE faceted (flat34.7, the flattest cell in the sweep); she stayed smooth anime. HAIR RED at both seeds."
+    },
+    "manga_inked": {
+      "style": "strong",
+      "id_3311": "yes",
+      "id_7788": "yes",
+      "saw": "sat13.2 and edge33.5 - the most extreme line-to-colour ratio on the anime path. Stays clearly separate from manga_screentone."
+    },
+    "manga_screentone": {
+      "style": "strong",
+      "id_3311": "yes",
+      "id_7788": "yes",
+      "saw": "Visible dot tone on dress and hair. Genuinely distinct from manga_inked, as the library predicted."
+    },
+    "modern_anime": {
+      "style": "strong",
+      "id_3311": "yes",
+      "id_7788": "yes",
+      "saw": "Clean digital line and a cool grade. The gold dress goes white, which is a costume loss rather than an identity one."
+    },
+    "monogatari_geometric": {
+      "style": "strong",
+      "id_3311": "yes",
+      "id_7788": "no",
+      "saw": "Flat graphic colour blocking, flat30.2. Red hair at 7788."
+    },
+    "oil_painting": {
+      "style": "strong",
+      "id_3311": "yes",
+      "id_7788": "yes",
+      "saw": "Visible brush loading and warm impasto, full costume fidelity, both seeds."
+    },
+    "ova_80s": {
+      "style": "strong",
+      "id_3311": "yes",
+      "id_7788": "yes",
+      "saw": "Airbrushed 80s OVA shading and a period face. The most characterful cell in the sweep and identity is perfect at both seeds."
+    },
+    "pencil_sketch": {
+      "style": "strong",
+      "id_3311": "yes",
+      "id_7788": "yes",
+      "saw": "Graphite hatch on white ground, unfinished edges. Holds at both seeds."
+    },
+    "pixel_art": {
+      "style": "strong",
+      "id_3311": "yes",
+      "id_7788": "drift",
+      "saw": "A genuine hard-aliased pixel grid, and she is STILL recognisable through it. At 7788 the figure pulls back and the read weakens."
+    },
+    "pop_art": {
+      "style": "strong",
+      "id_3311": "yes",
+      "id_7788": "yes",
+      "saw": "sat49.3. Flat saturated primaries and bold blocking; her green hair reads as a deliberate palette choice."
+    },
+    "pre_raphaelite": {
+      "style": "partial",
+      "id_3311": "yes",
+      "id_7788": "no",
+      "saw": "d17.5 - richer fabric and a warmer palette, but close to the control."
+    },
+    "psychedelic_60s": {
+      "style": "strong",
+      "id_3311": "yes",
+      "id_7788": "yes",
+      "saw": "sat51.1, the most saturated anime cell. Concentric swirls and a rainbow arch; the costume becomes a psychedelic print, which is the idiom dragging its own subject matter."
+    },
+    "retro_shoujo_70s": {
+      "style": "strong",
+      "id_3311": "yes",
+      "id_7788": "yes",
+      "saw": "edge34.2, the finest hatching in the sweep, big sparkling eyes, elaborate curls. Full costume fidelity at both seeds."
+    },
+    "seinen_grounded": {
+      "style": "strong",
+      "id_3311": "drift",
+      "id_7788": "yes",
+      "saw": "sat20.2 and a harder, more realistic face - grounded in exactly the way the card promises, at the cost of softening who she is."
+    },
+    "shojo_soft": {
+      "style": "strong",
+      "id_3311": "yes",
+      "id_7788": "no",
+      "saw": "Pastel, flowers, sparkle; it replaces the courtyard with a vignette. Red hair at 7788."
+    },
+    "shonen_action": {
+      "style": "strong",
+      "id_3311": "yes",
+      "id_7788": "yes",
+      "saw": "Heavier line, bolder shapes, ornate gold bodice. Holds at both seeds."
+    },
+    "silhouette_poster": {
+      "style": "none",
+      "id_3311": "yes",
+      "id_7788": "no",
+      "saw": "d18.9 and no silhouette anywhere - the figure is fully rendered. The card's central premise did not arrive."
+    },
+    "slice_of_life_anime": {
+      "style": "partial",
+      "id_3311": "yes",
+      "id_7788": "no",
+      "saw": "Warm, gentle, everyday - a grade more than an idiom."
+    },
+    "solarpunk": {
+      "style": "strong",
+      "id_3311": "no",
+      "id_7788": "no",
+      "saw": "Greenery and bright clean daylight overtake the courtyard. HAIR RED at both seeds."
+    },
+    "steampunk": {
+      "style": "strong",
+      "id_3311": "no",
+      "id_7788": "no",
+      "saw": "Brass, oxidised copper, gears worn as costume rather than floating props. HAIR RED at both seeds."
+    },
+    "storybook_illustration": {
+      "style": "partial",
+      "id_3311": "yes",
+      "id_7788": "no",
+      "saw": "Soft pastel wash and open line; mild. Red hair at 7788."
+    },
+    "trigger_kinetic": {
+      "style": "strong",
+      "id_3311": "no",
+      "id_7788": "no",
+      "saw": "sat42.5, angular kinetic architecture in complementary red and green. HAIR RED at both seeds - and red is the exact complement the palette clause is reaching for."
+    },
+    "ufotable_glow": {
+      "style": "strong",
+      "id_3311": "no",
+      "id_7788": "no",
+      "saw": "Bloom and rim light. HAIR RED at both seeds."
+    },
+    "ukiyo_e": {
+      "style": "strong",
+      "id_3311": "yes",
+      "id_7788": "no",
+      "saw": "Flat keyblock colour, indigo/beni/ochre, and the noun-drag its own card warns about - the gold dress becomes a kimono with an obi. At 7788 it also built a print border, pushed her deep into the frame and turned her hair red: the clearest single demonstration in the sweep that composition and identity fail together."
+    },
+    "vaporwave": {
+      "style": "strong",
+      "id_3311": "yes",
+      "id_7788": "yes",
+      "saw": "Teal and magenta, checkerboard floor, palms, 80s cel. Holds at both seeds."
+    },
+    "voxel": {
+      "style": "strong",
+      "id_3311": "yes",
+      "id_7788": "no",
+      "saw": "Isometric cube world and a voxelised dress. Red hair at 7788."
+    },
+    "wasteland": {
+      "style": "strong",
+      "id_3311": "no",
+      "id_7788": "no",
+      "saw": "Ruined overgrown structures and dust. HAIR RED at both seeds."
+    },
+    "watercolour": {
+      "style": "strong",
+      "id_3311": "yes",
+      "id_7788": "yes",
+      "saw": "Washes, tidemarks, bare-paper highlights, granulation - and full costume fidelity at both seeds. The ONLY painterly style that survived both; baroque_painting, ink_wash, gouache and impressionist all failed at one seed or both."
+    },
+    "webtoon_flat": {
+      "style": "strong",
+      "id_3311": "yes",
+      "id_7788": "no",
+      "saw": "Flat colour and simplified shading. Red hair at 7788."
+    },
+    "woodcut": {
+      "style": "partial",
+      "id_3311": "yes",
+      "id_7788": "no",
+      "saw": "Some carved line quality; not a relief print. Same shortfall as linocut."
+    },
+    "wuxia": {
+      "style": "strong",
+      "id_3311": "yes",
+      "id_7788": "yes",
+      "saw": "Flowing silk, jade frog-clasps, a Chinese collar. Re-costumes her without losing her, at both seeds."
+    },
+    "y2k_chrome": {
+      "style": "strong",
+      "id_3311": "yes",
+      "id_7788": "yes",
+      "saw": "Iridescent holographic dress and blue-white flare. The chrome lands on the GARMENT, which is what keeps it composable."
+    }
+  },
+  "qwen": {
+    "architectural_photo": {
+      "style": "partial",
+      "id_3311": "yes",
+      "id_7788": "yes",
+      "saw": "Corrected verticals, deep focus, low raking sun. Its negative_add asks for 'people, clutter', which qwen ignores at cfg 1.0 - so a style that forbids people rendered a person anyway."
+    },
+    "blueprint": {
+      "style": "strong",
+      "id_3311": "yes",
+      "id_7788": "yes",
+      "saw": "The whole SET becomes a Prussian-blue line drawing with 'PLATE 04' lettering; she stays a full-colour photograph inside it. flat35.4. Striking, and not what the card describes."
+    },
+    "brutalist": {
+      "style": "partial",
+      "id_3311": "yes",
+      "id_7788": "yes",
+      "saw": "The set goes raw grey concrete; she stays in colour. Same set-only conversion as blueprint."
+    },
+    "cinematic_film_still": {
+      "style": "strong",
+      "id_3311": "yes",
+      "id_7788": "yes",
+      "saw": "Shallower depth, dark backdrop, directional key, filmic contrast."
+    },
+    "cinestill_night": {
+      "style": "strong",
+      "id_3311": "yes",
+      "id_7788": "yes",
+      "saw": "sat68.5. Tungsten and cyan with halation - the cinestill signature, unmistakable."
+    },
+    "claymation": {
+      "style": "partial",
+      "id_3311": "yes",
+      "id_7788": "yes",
+      "saw": "The SET becomes a miniature clay model - chunky well, modelled banners, clay sheen - and her face stays human. The reference pins the face, so the clay cannot reach her."
+    },
+    "cross_processed": {
+      "style": "strong",
+      "id_3311": "yes",
+      "id_7788": "yes",
+      "saw": "sat59.9. Blown yellow-green crossover with crushed magenta shadows."
+    },
+    "cyanotype": {
+      "style": "strong",
+      "id_3311": "yes",
+      "id_7788": "yes",
+      "saw": "Prussian blue monochrome on paper white."
+    },
+    "cyberpunk_neon": {
+      "style": "strong",
+      "id_3311": "yes",
+      "id_7788": "yes",
+      "saw": "sat72.4. Magenta and cyan signage, wet reflective ground, fog. Note it puts neon signs in a medieval courtyard - a real anachronism to budget for."
+    },
+    "documentary_photo": {
+      "style": "partial",
+      "id_3311": "yes",
+      "id_7788": "yes",
+      "saw": "d17.7 - flat available light and an unposed feel. Appropriately invisible."
+    },
+    "eight_bit": {
+      "style": "strong",
+      "id_3311": "yes",
+      "id_7788": "yes",
+      "saw": "THE EXCEPTION THAT DEFINES THE RULE on this path: it converted HER as well as the set, because pixelation is a resampling that changes how she is drawn without changing her proportions. More 16-bit than 8-bit - far more than the twelve colours the card asks for."
+    },
+    "film_35mm": {
+      "style": "partial",
+      "id_3311": "yes",
+      "id_7788": "yes",
+      "saw": "d15.1, the subtlest cell on this path. Warm, halated, softly rolled highlights."
+    },
+    "infrared_photo": {
+      "style": "strong",
+      "id_3311": "yes",
+      "id_7788": "yes",
+      "saw": "White foliage, black sky, luminous skin. The most transformative photo cell that still keeps her completely."
+    },
+    "kodachrome": {
+      "style": "strong",
+      "id_3311": "yes",
+      "id_7788": "yes",
+      "saw": "sat53.5. Warm saturated reds and blues in the specific Kodachrome register."
+    },
+    "long_exposure_night": {
+      "style": "strong",
+      "id_3311": "yes",
+      "id_7788": "yes",
+      "saw": "Light trails across the cobbles and star-burst lamps with her held sharp."
+    },
+    "neo_noir": {
+      "style": "strong",
+      "id_3311": "yes",
+      "id_7788": "yes",
+      "saw": "sat75.6, the most saturated cell in the entire sweep. Blue and magenta neon on wet stone. Collapses toward cyberpunk_neon on this subject - pick one."
+    },
+    "noir_comic": {
+      "style": "strong",
+      "id_3311": "yes",
+      "id_7788": "yes",
+      "saw": "d36.9, the largest change from control on this path. Full ink conversion including HER - spot blacks, rain hatch, stipple on the cape. The ink lands; the card's 'no colour, no grey midtones' does not."
+    },
+    "photorealistic": {
+      "style": "partial",
+      "id_3311": "yes",
+      "id_7788": "yes",
+      "saw": "d14.6, the smallest delta on this path, which is correct - the control is already a photograph."
+    },
+    "pixar_3d": {
+      "style": "none",
+      "id_3311": "yes",
+      "id_7788": "yes",
+      "saw": "The SET renders as clean CG; she stays a photoreal human. This style needs to re-proportion the PERSON and the reference will not allow it. The library records it landing on a generic subject, so this is a character-specific failure, not a card error."
+    },
+    "pointillism": {
+      "style": "strong",
+      "id_3311": "yes",
+      "id_7788": "yes",
+      "saw": "Dots across the whole frame including her garment; her face stays smooth."
+    },
+    "polaroid": {
+      "style": "strong",
+      "id_3311": "yes",
+      "id_7788": "yes",
+      "saw": "A real instant-film border with the thick bottom tab, plus the cyan-green shift. The style's own NOUN became the frame, which here is the correct behaviour rather than an injection failure."
+    },
+    "security_camera": {
+      "style": "strong",
+      "id_3311": "drift",
+      "id_7788": "drift",
+      "saw": "Burned-in timestamp, fisheye barrel distortion, high corner mount, crushed blacks. Identity is only 'drift' because the style's whole point is putting her far away - that is the card working, not failing."
+    },
+    "stop_motion_felt": {
+      "style": "partial",
+      "id_3311": "yes",
+      "id_7788": "yes",
+      "saw": "A soft fibre halo on the contours and nothing else - no stitching, no armature, no felt nap. Closest of any qwen card to the library's 'inert'."
+    },
+    "street_bw": {
+      "style": "strong",
+      "id_3311": "yes",
+      "id_7788": "yes",
+      "saw": "sat3.0 - by a wide margin the least saturated cell in the whole sweep, on either engine. Unambiguous monochrome."
+    },
+    "studio_portrait": {
+      "style": "partial",
+      "id_3311": "yes",
+      "id_7788": "yes",
+      "saw": "d16.5. A studio portrait in a courtyard is a contradiction and the reference route resolved it toward the courtyard."
+    },
+    "tintype": {
+      "style": "partial",
+      "id_3311": "yes",
+      "id_7788": "yes",
+      "saw": "Plate vignette and chemical edge artefacts arrived; the monochrome did not - the tabard stays yellow."
+    },
+    "war_photography": {
+      "style": "partial",
+      "id_3311": "yes",
+      "id_7788": "yes",
+      "saw": "sat24.2, smoke, grit, an out-of-focus foreground mask."
+    },
+    "western_frontier": {
+      "style": "partial",
+      "id_3311": "yes",
+      "id_7788": "yes",
+      "saw": "Reads as a hot low-sun GRADE rather than a world - no frontier props at all."
+    }
+  }
+}

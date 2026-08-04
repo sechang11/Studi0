@@ -1,10 +1,10 @@
 {
  "generated_from": "git log",
- "count": 64,
+ "count": 65,
  "days": [
   [
    "2026-08-04",
-   18
+   19
   ],
   [
    "2026-08-03",
@@ -28,8 +28,40 @@
  ],
  "entries": [
   {
-   "hash": "d8438be",
-   "full": "d8438becb21266351ded4928110aff1d1d106b2d",
+   "hash": "fb92c99",
+   "full": "fb92c99f57c2a7c9f118e638c2f56ffbcb0acaff",
+   "date": "2026-08-04",
+   "time": "17:34",
+   "author": "sechang11",
+   "subject": "TERRA is the reference character, and a costume is text before it is weights",
+   "body": "Six agents built the full dossier for one cast member and every one of them was\ntold not to edit her card, so every one of them ended by saying the card now\ndisagrees with the evidence. This wave verifies their claims against the pixels,\nanswers the headline question, adds two measurements nobody ran, and closes the\ndisagreements.\n\nVERIFIED ON THE BOX, NOT TAKEN ON TRUST. Six contact sheets opened across five\nagents. The setting result is the clean win: v1 at 0.85 replaces a snow forest\nwith a featureless taupe void, v3 holds a real forest at the same seed and the\nsame strength - the \"0.85 destroys the setting\" finding was never about strength,\nit was the uncaptioned taupe turnaround backdrop absorbed into the trigger. The\nnamed-view octants produce a textbook V curve and the handedness collapse is real:\nprofile_l and profile_r both face screen-left. higgs_v3 really has no dynamics -\nfour registers, four identical waveforms. Eleven styles really do repaint her hair\nred, and the same cells are the ones where the style made her small.\n\nTHE HEADLINE ANSWER IS A QUALIFIED YES, AND THE QUALIFIER IS THE INTERESTING PART.\nThe retrain fixed the court dress decisively and replicably: v1 with the danbooru\nname in the prompt produces the canonical polka-dot bodice in every court cell at\nboth seeds, v3 produces a real green gown with gold embroidery and white gloves.\nIt did not fix imperial plate and it never could have fixed the field coat,\nbecause those two were never weights problems.\n\nTWO WRITING RULES, MEASURED RATHER THAN INFERRED. Two agents independently\ndiagnosed the field coat from the two rungs that already worked and neither tested\nthe fix. studio/_tools/field_fix.py renders the same five rungs with the shipped\ntext and with the gold dress taken out of levels 0 and 3, four arms, two seeds:\n\n  1. NEVER NAME THE GARMENT A COSTUME EXISTS TO REPLACE. Level 0 read \"heavy brown\n     travelling coat OVER THE GOLD DRESS\". The model renders nouns, so it rendered\n     the gold dress and dropped the coat. Removing four words puts the coat on her\n     in four arms out of four.\n\nstudio/_tools/damage_nouns.py then tested the same suspicion on the rungs the\narmour collapses at, which are written the same way:\n\n  2. WRITE DAMAGE AS A DAMAGED THING, NOT AS A MISSING THING. \"one pauldron gone\",\n     \"breastplate discarded\" and \"satchel gone\" give the sampler nothing to draw,\n     so it falls back on whatever the trigger and the tag already know - which is\n     the default costume. The same state written as objects that are present\n     brought real metal, a gauntlet and greaves back at plate rung 3 in both seeds\n     and put the torn coat back on at field rung 3. Honest limit: plate rung 4 only\n     recovers its tabard.\n\nBoth rules are on the card as costume_text_rule and both are expected to hold for\nevery character in this project. dossier.py already had a text-only check that\npredicts exactly these failures without booking a GPU; it now fires on one rung\ninstead of three, and the one left is the terminal rung, where naming the default\ncostume underneath is deliberate.\n\nTHE CARD NOW SAYS WHAT THE RENDERS SHOW. costume_verdict no longer blames the\nweights alone and keeps a paragraph saying what it used to say. costume_note no\nlonger claims damage is orthogonal to wardrobe - it is orthogonal for cloth and\ndestructive for structure. style_verdict carries the 250-cell sweep instead of a\nfive-style probe. status_note no longer says nothing has been rendered. New\nview_verdict, frame_verdict, emotion_verdict, place_verdict and motion_verdict\nmove five sweeps' conclusions off tool-local prose and onto the card. Two\ndisagreements are left open on purpose and written up as identity_note: the\nheadpiece is a horned gold ornament and not the red ribbon the tags claim, and the\nbodice colour flips seed to seed. Fixing either means a new sheet and a retrain,\nnot a tag edit.\n\nlora_scan.py stops calling every trained character LoRA an orphan. A file has two\npossible owners - the pickable library and a character card's lora key - and the\nscanner only knew about one, so it has reported PROBLEMS FOUND since the first\ncharacter was trained. That is a boy-who-cried-wolf failure: a real orphan now\narrives in a list already known to be wrong and gets skipped. It separates the two,\nstill fails on a character card pointing at a missing file, and the negative\ncontrol was run.\n\nSizes: the character sweeps get the policy gallery/ and cast_proof/ already have.\nContact sheets, measurements.json and verdicts.json stay tracked because they are\nwhat a claim rests on; the full-size cells behind them are regenerable from the\ntool named in each sweep's docstring, and 600 MB per character would put this\nrepository past what a git host will take.",
+   "paragraphs": [
+    "Six agents built the full dossier for one cast member and every one of them was\ntold not to edit her card, so every one of them ended by saying the card now\ndisagrees with the evidence. This wave verifies their claims against the pixels,\nanswers the headline question, adds two measurements nobody ran, and closes the\ndisagreements.",
+    "VERIFIED ON THE BOX, NOT TAKEN ON TRUST. Six contact sheets opened across five\nagents. The setting result is the clean win: v1 at 0.85 replaces a snow forest\nwith a featureless taupe void, v3 holds a real forest at the same seed and the\nsame strength - the \"0.85 destroys the setting\" finding was never about strength,\nit was the uncaptioned taupe turnaround backdrop absorbed into the trigger. The\nnamed-view octants produce a textbook V curve and the handedness collapse is real:\nprofile_l and profile_r both face screen-left. higgs_v3 really has no dynamics -\nfour registers, four identical waveforms. Eleven styles really do repaint her hair\nred, and the same cells are the ones where the style made her small.",
+    "THE HEADLINE ANSWER IS A QUALIFIED YES, AND THE QUALIFIER IS THE INTERESTING PART.\nThe retrain fixed the court dress decisively and replicably: v1 with the danbooru\nname in the prompt produces the canonical polka-dot bodice in every court cell at\nboth seeds, v3 produces a real green gown with gold embroidery and white gloves.\nIt did not fix imperial plate and it never could have fixed the field coat,\nbecause those two were never weights problems.",
+    "TWO WRITING RULES, MEASURED RATHER THAN INFERRED. Two agents independently\ndiagnosed the field coat from the two rungs that already worked and neither tested\nthe fix. studio/_tools/field_fix.py renders the same five rungs with the shipped\ntext and with the gold dress taken out of levels 0 and 3, four arms, two seeds:",
+    "1. NEVER NAME THE GARMENT A COSTUME EXISTS TO REPLACE. Level 0 read \"heavy brown\n     travelling coat OVER THE GOLD DRESS\". The model renders nouns, so it rendered\n     the gold dress and dropped the coat. Removing four words puts the coat on her\n     in four arms out of four.",
+    "studio/_tools/damage_nouns.py then tested the same suspicion on the rungs the\narmour collapses at, which are written the same way:",
+    "2. WRITE DAMAGE AS A DAMAGED THING, NOT AS A MISSING THING. \"one pauldron gone\",\n     \"breastplate discarded\" and \"satchel gone\" give the sampler nothing to draw,\n     so it falls back on whatever the trigger and the tag already know - which is\n     the default costume. The same state written as objects that are present\n     brought real metal, a gauntlet and greaves back at plate rung 3 in both seeds\n     and put the torn coat back on at field rung 3. Honest limit: plate rung 4 only\n     recovers its tabard.",
+    "Both rules are on the card as costume_text_rule and both are expected to hold for\nevery character in this project. dossier.py already had a text-only check that\npredicts exactly these failures without booking a GPU; it now fires on one rung\ninstead of three, and the one left is the terminal rung, where naming the default\ncostume underneath is deliberate.",
+    "THE CARD NOW SAYS WHAT THE RENDERS SHOW. costume_verdict no longer blames the\nweights alone and keeps a paragraph saying what it used to say. costume_note no\nlonger claims damage is orthogonal to wardrobe - it is orthogonal for cloth and\ndestructive for structure. style_verdict carries the 250-cell sweep instead of a\nfive-style probe. status_note no longer says nothing has been rendered. New\nview_verdict, frame_verdict, emotion_verdict, place_verdict and motion_verdict\nmove five sweeps' conclusions off tool-local prose and onto the card. Two\ndisagreements are left open on purpose and written up as identity_note: the\nheadpiece is a horned gold ornament and not the red ribbon the tags claim, and the\nbodice colour flips seed to seed. Fixing either means a new sheet and a retrain,\nnot a tag edit.",
+    "lora_scan.py stops calling every trained character LoRA an orphan. A file has two\npossible owners - the pickable library and a character card's lora key - and the\nscanner only knew about one, so it has reported PROBLEMS FOUND since the first\ncharacter was trained. That is a boy-who-cried-wolf failure: a real orphan now\narrives in a list already known to be wrong and gets skipped. It separates the two,\nstill fails on a character card pointing at a missing file, and the negative\ncontrol was run.",
+    "Sizes: the character sweeps get the policy gallery/ and cast_proof/ already have.\nContact sheets, measurements.json and verdicts.json stay tracked because they are\nwhat a claim rests on; the full-size cells behind them are regenerable from the\ntool named in each sweep's docstring, and 600 MB per character would put this\nrepository past what a git host will take."
+   ],
+   "areas": [
+    "Docs",
+    "Tooling",
+    "App",
+    "Cast",
+    "Motion"
+   ],
+   "files": 509,
+   "added": 25663,
+   "removed": 205
+  },
+  {
+   "hash": "e80e9c8",
+   "full": "e80e9c82e8c346a3ac8dac1bccad469b7f6c6b40",
    "date": "2026-08-04",
    "time": "14:33",
    "author": "sechang11",
@@ -46,9 +78,9 @@
     "Tooling",
     "Cast"
    ],
-   "files": 5,
-   "added": 161,
-   "removed": 2
+   "files": 6,
+   "added": 191,
+   "removed": 9
   },
   {
    "hash": "f3ee9cc",

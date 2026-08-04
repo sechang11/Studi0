@@ -1,0 +1,91 @@
+ANCHOR CHECK - does this tool reproduce the numbers already on the cards?
+  If these disagree, the measurement changed and nothing below is a comparison.
+  breath               card ['0.417', '0.588', '0.445']  remeasured ['0.417', '0.588', '0.445']  maxdiff 0.0000
+  cup_lift             card ['0.814', '0.798', '0.816']  remeasured ['0.814', '0.798', '0.816']  maxdiff 0.0000
+  hair_lifts           card ['0.535', '1.020', '0.681']  remeasured ['0.535', '1.020', '0.681']  maxdiff 0.0000
+  hand_reach           card ['1.876', '2.231', '0.713']  remeasured ['1.876', '2.231', '0.713']  maxdiff 0.0000
+  hand_to_face         card ['0.571', '0.725', '0.561']  remeasured ['0.571', '0.725', '0.561']  maxdiff 0.0000
+  hand_to_face_only    card ['0.455', '0.716', '0.520']  remeasured ['0.455', '0.716', '0.520']  maxdiff 0.0000
+  head_turn            card ['0.443', '0.750', '0.583']  remeasured ['0.443', '0.750', '0.583']  maxdiff 0.0000
+  lean_in              card ['1.901', '2.591', '1.646']  remeasured ['1.901', '2.591', '1.646']  maxdiff 0.0000
+  step_back            card ['0.753', '2.156', '1.317']  remeasured ['0.753', '2.156', '1.317']  maxdiff 0.0000
+  turn_away            card ['0.643', '0.785', '0.577']  remeasured ['0.643', '0.785', '0.577']  maxdiff 0.0000
+  walk_away            card ['1.280', '1.123', '0.595']  remeasured ['1.280', '1.123', '0.595']  maxdiff 0.0000
+  walk_in              card ['2.274', '3.166', '4.133']  remeasured ['2.274', '3.166', '4.133']  maxdiff 0.0000
+  walk_in_only         card ['2.105', '2.476', '3.349']  remeasured ['2.105', '2.476', '3.349']  maxdiff 0.0000
+  walk_out             card ['1.209', '1.093', '1.375']  remeasured ['1.209', '1.093', '1.375']  maxdiff 0.0000
+  worst disagreement 0.0000  OK - same statistic, same clips
+
+DO-NOTHING BAND, derived per staging from that staging's OWN controls, seeds [7701, 7702, 7703]
+  staging    lo      hi      mean    ceiling(hi*1.6)
+  far         0.475   0.762   0.571   1.219
+  mid         0.311   0.734   0.546   1.174
+  close       0.464   1.998   1.035   3.197
+  anchor      0.406   0.744   0.618   1.191
+
+PER-CARD MOTION MEAN BY STAGING   (ratio = mean / that staging's control mean)
+  card                               far               mid             close            anchor
+  hand_reach              1.834    3.21x    1.869    3.42x    1.132    1.09x    1.607    2.60x
+  lean_in                 1.708    2.99x    1.805    3.31x    1.615    1.56x    2.046    3.31x
+  walk_in                 1.115    1.95x    1.500    2.75x    3.592    3.47x    3.191    5.17x
+  walk_in_only            1.097    1.92x    1.280    2.35x    2.840    2.74x    2.643    4.28x
+  walk_out                1.395    2.44x    1.266    2.32x    2.036    1.97x    1.226    1.98x
+  cup_lift                0.909    1.59x    1.178    2.16x    1.144    1.11x    0.809    1.31x
+  step_back               0.648    1.14x    0.905    1.66x    2.882    2.78x    1.409    2.28x
+  walk_away               0.647    1.13x    0.812    1.49x    2.604    2.52x    1.000    1.62x
+  head_turn               0.570    1.00x    0.709    1.30x    0.857    0.83x    0.592    0.96x
+  turn_away               0.583    1.02x    0.682    1.25x    2.759    2.67x    0.668    1.08x
+  _ctl_production         0.539    0.95x    0.583    1.07x    0.597    0.58x    0.608    0.98x
+  _ctl_empty              0.602    1.05x    0.508    0.93x    1.474    1.42x    0.628    1.02x
+  hair_lifts              0.573    1.00x    0.461    0.84x    1.916    1.85x    0.745    1.21x
+  hand_to_face            0.571    1.00x    0.389    0.71x    1.077    1.04x    0.619    1.00x
+  hand_to_face_only       0.625    1.10x    0.385    0.71x    1.058    1.02x    0.564    0.91x
+  breath                  0.475    0.83x    0.333    0.61x    0.619    0.60x    0.484    0.78x
+
+TRANSFER TESTS across 14 cards present in every staging
+  RAW    does the card's motion number survive a change of staging?
+  RATIO  does motion / that staging's control mean survive?
+  RANK   does the ORDER of the cards survive?
+
+  NOTE ON THE TWO SPEARMAN COLUMNS: they are identical and MUST be. Dividing every
+  card in a staging by that staging's control mean is one positive constant per
+  staging, which cannot reorder anything, so rank correlation is blind to it. The
+  column is printed anyway because seeing the two agree exactly is the check that
+  the normalisation was applied per staging and not globally. What actually
+  separates RAW from RATIO is the two max|diff| columns, which are on magnitudes.
+
+  pair                    raw spearman  ratio spearman  raw max |diff|  ratio max |diff|
+  far vs mid                     0.916           0.916           0.385             0.793
+  far vs close                   0.464           0.464           2.477             2.120
+  far vs anchor                  0.851           0.851           2.076             3.211
+  mid vs close                   0.481           0.481           2.092             2.330
+  mid vs anchor                  0.908           0.908           1.691             2.418
+  close vs anchor                0.741           0.741           2.091             1.752
+
+  mean rank correlation, raw 0.727   ratio 0.727
+
+BAND VERDICT PER CARD PER STAGING - what a user would be told at each staging
+  (in band = indistinguishable from asking for nothing; above ceiling = frame-scale)
+  breath               far:BELOW  mid:IN-BAND  close:IN-BAND  anchor:IN-BAND            <-- DISAGREES
+  cup_lift             far:MID  mid:FRAME-SCALE  close:IN-BAND  anchor:MID              <-- DISAGREES
+  hair_lifts           far:IN-BAND  mid:IN-BAND  close:IN-BAND  anchor:MID              <-- DISAGREES
+  hand_reach           far:FRAME-SCALE  mid:FRAME-SCALE  close:IN-BAND  anchor:FRAME-SCALE <-- DISAGREES
+  hand_to_face         far:IN-BAND  mid:IN-BAND  close:IN-BAND  anchor:IN-BAND          consistent
+  hand_to_face_only    far:IN-BAND  mid:IN-BAND  close:IN-BAND  anchor:IN-BAND          consistent
+  head_turn            far:IN-BAND  mid:IN-BAND  close:IN-BAND  anchor:IN-BAND          consistent
+  lean_in              far:FRAME-SCALE  mid:FRAME-SCALE  close:IN-BAND  anchor:FRAME-SCALE <-- DISAGREES
+  step_back            far:IN-BAND  mid:MID  close:MID  anchor:FRAME-SCALE              <-- DISAGREES
+  turn_away            far:IN-BAND  mid:IN-BAND  close:MID  anchor:IN-BAND              <-- DISAGREES
+  walk_away            far:IN-BAND  mid:MID  close:MID  anchor:MID                      <-- DISAGREES
+  walk_in              far:MID  mid:FRAME-SCALE  close:FRAME-SCALE  anchor:FRAME-SCALE  <-- DISAGREES
+  walk_in_only         far:MID  mid:FRAME-SCALE  close:MID  anchor:FRAME-SCALE          <-- DISAGREES
+  walk_out             far:FRAME-SCALE  mid:FRAME-SCALE  close:MID  anchor:FRAME-SCALE  <-- DISAGREES
+
+VERDICT
+  cards that change band verdict between stagings: 11/14  ['breath', 'cup_lift', 'hair_lifts', 'hand_reach', 'lean_in', 'step_back', 'turn_away', 'walk_away', 'walk_in', 'walk_in_only', 'walk_out']
+  widest band 1.534; largest between-staging swing in a card mean 2.477
+  largest swing after control-normalising 3.211 - normalising does NOT shrink the spread
+  mean rank correlation raw 0.727, control-normalised 0.727 (identical by construction - see note above)
+  -> TRANSFER = RANK
+  no number travels. The ORDER of the cards does. Cards may say bigger or smaller than another card; they may not quote a figure.
+

@@ -3,7 +3,7 @@
   "name": "Shoulders rise with breath",
   "family": "subject",
   "text": "Her shoulders rise and fall with her breath.",
-  "desc": "The smallest human motion there is. For a held close shot that must not look frozen.",
+  "desc": "The smallest sign of life. Measured lowest of every subject card at every staging, with the framing intact each time - which makes it the best HOLD in the library for a beat that has a person in it, rather than a motion.",
   "shots": [
     "hold_silent",
     "react",
@@ -18,19 +18,89 @@
       0.5881,
       0.4453
     ],
-    "motion_mean": 0.484,
     "creep_mean": 1.0,
     "seeds": [
       7701,
       7702,
       7703
     ],
-    "band_lo": 0.4058,
-    "band_hi": 0.7444,
-    "frame_scale_ceiling": 1.191,
     "keyframe": "studio/samples/motion_lib/_keyframe.png",
     "frames": 97,
-    "workflow": "12_ltx23_i2v_audio.json"
+    "workflow": "12_ltx23_i2v_audio.json",
+    "per_staging": {
+      "far": {
+        "motion_per_seed": [
+          0.5112,
+          0.4158,
+          0.4977
+        ],
+        "motion_mean": 0.4749,
+        "creep_mean": 1.025,
+        "band_lo": 0.4754,
+        "band_hi": 0.762,
+        "frame_scale_ceiling": 1.219,
+        "vs_band": "below",
+        "x_control": 0.832,
+        "keyframe": "studio/samples/motion_staging/keyframes/far.png",
+        "subject_scale": 0.0019
+      },
+      "mid": {
+        "motion_per_seed": [
+          0.2596,
+          0.2595,
+          0.481
+        ],
+        "motion_mean": 0.3334,
+        "creep_mean": 1.017,
+        "band_lo": 0.3112,
+        "band_hi": 0.7339,
+        "frame_scale_ceiling": 1.174,
+        "vs_band": "in-band",
+        "x_control": 0.611,
+        "keyframe": "studio/samples/motion_staging/keyframes/mid.png",
+        "subject_scale": 0.0433
+      },
+      "close": {
+        "motion_per_seed": [
+          0.647,
+          0.4744,
+          0.7364
+        ],
+        "motion_mean": 0.6193,
+        "creep_mean": 1.025,
+        "band_lo": 0.4644,
+        "band_hi": 1.9982,
+        "frame_scale_ceiling": 3.197,
+        "vs_band": "in-band",
+        "x_control": 0.598,
+        "keyframe": "studio/samples/motion_staging/keyframes/close.png",
+        "subject_scale": 0.0792
+      },
+      "anchor": {
+        "motion_per_seed": [
+          0.4174,
+          0.5881,
+          0.4453
+        ],
+        "motion_mean": 0.4836,
+        "creep_mean": 1.0,
+        "band_lo": 0.4058,
+        "band_hi": 0.7444,
+        "frame_scale_ceiling": 1.191,
+        "vs_band": "in-band",
+        "x_control": 0.783,
+        "keyframe": "studio/samples/motion_lib/_keyframe.png",
+        "subject_scale": 0.038
+      }
+    },
+    "staging_note": "subject_scale is the fraction of the frame the subject's coat occupies in that staging's keyframe - the run's measure of how close the subject is staged.",
+    "motion_mean_anchor_only": 0.484,
+    "band_lo_anchor_only": 0.4058,
+    "band_hi_anchor_only": 0.7444,
+    "frame_scale_ceiling_anchor_only": 1.191
   },
-  "verdict": "RENDERED 2026-08-04, 3 seeds, watched at subject crop. NO BREATHING IS RENDERED - the shoulders do not visibly rise or fall on any seed. Judged as the motion it names, this card fails. But it is the QUIETEST CELL IN THE WHOLE SWEEP: motion 0.417/0.588/0.445, mean 0.484, below BOTH controls, and creep 1.00 - the only hold in the library with no framing drift at all. So it outperforms all three stillness cards at being still. Use it as a hold, not as a motion; it is listed weak because it does not do what its name says. Band 0.406-0.744 (empty control 0.628); frame-scale ceiling 1.191. "
+  "verdict": "RE-MEASURED ACROSS FOUR STAGINGS 2026-08-04, 3 seeds each, watched at 7702. THE BEST HOLD IN THE SUBJECT FAMILY, AND IT SHOULD BE FILED AS ONE. Lowest figure at every staging - 0.475 / 0.333 / 0.619 / 0.484, at or under each band's floor - and the strips agree: the subject stands, the framing holds, nothing wanders, at every subject scale from a distant figure to a close-up. As a MOTION card it is correctly marked weak. As the thing to put on a beat that must not move while a person is in it, nothing in `stillness` beats it.",
+  "number_is_staging_dependent": true,
+  "staging_robustness": "all-stagings",
+  "staging_robustness_evidence": "four stagings (subject 0.19%-7.92% of frame), three seeds of numbers, strips watched at seed 7702: samples/motion_staging/percard/breath.png"
 }

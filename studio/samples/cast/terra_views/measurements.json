@@ -1,0 +1,192 @@
+{
+  "_sheets": {
+    "sheet_elevation.jpg": "elevation/ - 5 camera heights x 3 yaws at waist-up, plus the 5 heights at full figure.",
+    "sheet_emotions_s4242.jpg / sheet_emotions_s7411.jpg": "emotions/ - all 27 emotion cards as authored, one sheet per seed. Read the two side by side: an expression that is different between them is not directable.",
+    "sheet_frames.jpg": "frames/ - the shot-size ladder, 6 sizes x 3 seeds, on the PRODUCTION path (animagine + her character LoRA at 0.5). Rows are sizes, columns are seeds, so identity drift reads left-to-right.",
+    "sheet_octants.jpg": "octants/ - 8 NAMED views at full figure. The turnaround an animator would work from.",
+    "sheet_yaw.jpg": "yaw/ - 24 camera angles 15 degrees apart, Qwen-Image-Edit from the reference sheet, one uniform prompt with only the number changing. Compare against sheet_yawprobe.jpg before reading it.",
+    "sheet_yaw_rotate_failed.jpg": "yaw_rotate_failed/ - KEPT DELIBERATELY. The first yaw sweep, phrased 'rotate the camera N degrees clockwise'. Nine of its 24 cells are the whole picture rolled onto its side and several draw her twice.",
+    "sheet_yawprobe.jpg": "yawprobe/ - the same three angles asked for in four different English phrasings. This is the control that says what the number in the yaw sweep is actually doing."
+  },
+  "_what": "cosine similarity of CLIP-ViT-H-14 image embeddings. WHOLE FRAME, not a face ID score - read the note in the tool docstring before quoting any of these.",
+  "elevation_vs_eye_front": {
+    "fullbody_bird_front": 0.7045,
+    "fullbody_eye_front": 0.8899,
+    "fullbody_high_front": 0.9153,
+    "fullbody_low_front": 0.8843,
+    "fullbody_worm_front": 0.8996,
+    "waistup_bird_3q": 0.6983,
+    "waistup_bird_back": 0.811,
+    "waistup_bird_front": 0.8478,
+    "waistup_eye_3q": 0.8608,
+    "waistup_eye_back": 0.8787,
+    "waistup_eye_front": 1.0,
+    "waistup_high_3q": 0.8712,
+    "waistup_high_back": 0.8455,
+    "waistup_high_front": 0.924,
+    "waistup_low_3q": 0.9244,
+    "waistup_low_back": 0.8815,
+    "waistup_low_front": 0.9565,
+    "waistup_worm_3q": 0.8859,
+    "waistup_worm_back": 0.8828,
+    "waistup_worm_front": 0.9422
+  },
+  "emotion_cross_seed": {
+    "angry": 0.9424,
+    "awe": 0.9061,
+    "cold": 0.922,
+    "contempt": 0.9367,
+    "defiance": 0.9231,
+    "despair": 0.8895,
+    "determined": 0.9011,
+    "doubt": 0.9335,
+    "embarrassed": 0.9029,
+    "exhausted": 0.9332,
+    "fear": 0.9228,
+    "focus": 0.9447,
+    "grief": 0.8693,
+    "joy": 0.9136,
+    "longing": 0.9089,
+    "neutral": 0.9107,
+    "panic": 0.9282,
+    "pride": 0.9339,
+    "rage": 0.9116,
+    "relief": 0.8745,
+    "resignation": 0.9249,
+    "resolve": 0.9283,
+    "shame": 0.857,
+    "shock": 0.9476,
+    "smug": 0.9638,
+    "suspicion": 0.9155,
+    "tender": 0.9532
+  },
+  "emotion_vs_neutral": {
+    "angry": 0.8612,
+    "awe": 0.8615,
+    "cold": 0.9416,
+    "contempt": 0.8861,
+    "defiance": 0.9136,
+    "despair": 0.8438,
+    "determined": 0.9483,
+    "doubt": 0.9136,
+    "embarrassed": 0.9075,
+    "exhausted": 0.8932,
+    "fear": 0.8961,
+    "focus": 0.9194,
+    "grief": 0.84,
+    "joy": 0.9585,
+    "longing": 0.9088,
+    "neutral": 1.0,
+    "panic": 0.8992,
+    "pride": 0.9109,
+    "rage": 0.7994,
+    "relief": 0.8431,
+    "resignation": 0.9167,
+    "resolve": 0.9471,
+    "shame": 0.8675,
+    "shock": 0.9065,
+    "smug": 0.9157,
+    "suspicion": 0.9223,
+    "tender": 0.9375
+  },
+  "frames_cross_seed": {
+    "1_extreme_close": {
+      "mean": 0.9029,
+      "min": 0.8948,
+      "pairs": [
+        0.9099,
+        0.8948,
+        0.9039
+      ]
+    },
+    "2_close": {
+      "mean": 0.9026,
+      "min": 0.8743,
+      "pairs": [
+        0.8924,
+        0.9411,
+        0.8743
+      ]
+    },
+    "3_medium_close": {
+      "mean": 0.9098,
+      "min": 0.8949,
+      "pairs": [
+        0.9095,
+        0.9251,
+        0.8949
+      ]
+    },
+    "4_medium": {
+      "mean": 0.938,
+      "min": 0.9367,
+      "pairs": [
+        0.9371,
+        0.9403,
+        0.9367
+      ]
+    },
+    "5_wide": {
+      "mean": 0.8908,
+      "min": 0.8723,
+      "pairs": [
+        0.8723,
+        0.9203,
+        0.8798
+      ]
+    },
+    "6_full": {
+      "mean": 0.8274,
+      "min": 0.8096,
+      "pairs": [
+        0.8135,
+        0.8096,
+        0.859
+      ]
+    }
+  },
+  "frames_vs_medium_close": {
+    "1_extreme_close": 0.9358,
+    "2_close": 0.9568,
+    "3_medium_close": 1.0,
+    "4_medium": 0.9047,
+    "5_wide": 0.8552,
+    "6_full": 0.6811
+  },
+  "octant_vs_front": {
+    "back": 0.8356,
+    "back_3q_l": 0.8759,
+    "back_3q_r": 0.8614,
+    "front": 1.0,
+    "front_3q_l": 0.9298,
+    "front_3q_r": 0.948,
+    "profile_l": 0.9109,
+    "profile_r": 0.9267
+  },
+  "yaw_vs_front": {
+    "000": 1.0,
+    "015": 0.9721,
+    "030": 0.9384,
+    "045": 0.9699,
+    "060": 0.9671,
+    "075": 0.9591,
+    "090": 0.9536,
+    "105": 0.9798,
+    "120": 0.9608,
+    "135": 0.9453,
+    "150": 0.9742,
+    "165": 0.9575,
+    "180": 0.9472,
+    "195": 0.9545,
+    "210": 0.9662,
+    "225": 0.9312,
+    "240": 0.9494,
+    "255": 0.9648,
+    "270": 0.9441,
+    "285": 0.9587,
+    "300": 0.9621,
+    "315": 0.9587,
+    "330": 0.9571,
+    "345": 0.9394
+  }
+}

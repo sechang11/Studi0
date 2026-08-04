@@ -17,19 +17,89 @@
       0.7847,
       0.5768
     ],
-    "motion_mean": 0.668,
     "creep_mean": 1.0,
     "seeds": [
       7701,
       7702,
       7703
     ],
-    "band_lo": 0.4058,
-    "band_hi": 0.7444,
-    "frame_scale_ceiling": 1.191,
     "keyframe": "studio/samples/motion_lib/_keyframe.png",
     "frames": 97,
-    "workflow": "12_ltx23_i2v_audio.json"
+    "workflow": "12_ltx23_i2v_audio.json",
+    "per_staging": {
+      "far": {
+        "motion_per_seed": [
+          0.5528,
+          0.5326,
+          0.662
+        ],
+        "motion_mean": 0.5825,
+        "creep_mean": 1.008,
+        "band_lo": 0.4754,
+        "band_hi": 0.762,
+        "frame_scale_ceiling": 1.219,
+        "vs_band": "in-band",
+        "x_control": 1.021,
+        "keyframe": "studio/samples/motion_staging/keyframes/far.png",
+        "subject_scale": 0.0019
+      },
+      "mid": {
+        "motion_per_seed": [
+          0.5433,
+          0.5223,
+          0.9817
+        ],
+        "motion_mean": 0.6824,
+        "creep_mean": 1.033,
+        "band_lo": 0.3112,
+        "band_hi": 0.7339,
+        "frame_scale_ceiling": 1.174,
+        "vs_band": "in-band",
+        "x_control": 1.25,
+        "keyframe": "studio/samples/motion_staging/keyframes/mid.png",
+        "subject_scale": 0.0433
+      },
+      "close": {
+        "motion_per_seed": [
+          2.6058,
+          2.2221,
+          3.4494
+        ],
+        "motion_mean": 2.7591,
+        "creep_mean": 1.092,
+        "band_lo": 0.4644,
+        "band_hi": 1.9982,
+        "frame_scale_ceiling": 3.197,
+        "vs_band": "between",
+        "x_control": 2.665,
+        "keyframe": "studio/samples/motion_staging/keyframes/close.png",
+        "subject_scale": 0.0792
+      },
+      "anchor": {
+        "motion_per_seed": [
+          0.6426,
+          0.7847,
+          0.5768
+        ],
+        "motion_mean": 0.668,
+        "creep_mean": 1.0,
+        "band_lo": 0.4058,
+        "band_hi": 0.7444,
+        "frame_scale_ceiling": 1.191,
+        "vs_band": "in-band",
+        "x_control": 1.081,
+        "keyframe": "studio/samples/motion_lib/_keyframe.png",
+        "subject_scale": 0.038
+      }
+    },
+    "staging_note": "subject_scale is the fraction of the frame the subject's coat occupies in that staging's keyframe - the run's measure of how close the subject is staged.",
+    "motion_mean_anchor_only": 0.668,
+    "band_lo_anchor_only": 0.4058,
+    "band_hi_anchor_only": 0.7444,
+    "frame_scale_ceiling_anchor_only": 1.191
   },
-  "verdict": "RENDERED 2026-08-04, 3 seeds, watched. Motion 0.643/0.785/0.577 - AT the empty control, invisible to the metric. She rotates to put her back to the lens by f58 and stays there 3/3, staying in frame with the composition intact. This is also the honest home for what head_turn does by accident: if you want the face given up, ask for it here rather than hoping head_turn overshoots. Band 0.406-0.744 (empty control 0.628); frame-scale ceiling 1.191. "
+  "verdict": "RE-MEASURED ACROSS FOUR STAGINGS 2026-08-04, 3 seeds each, watched at 7702. THE CLEANEST DEMONSTRATION IN THE RUN THAT THE NUMBER TRACKS SUBJECT SIZE AND NOT PERFORMANCE: she completes the same turn, back to the lens, in ALL FOUR stagings - and measures 0.583 / 0.682 / 2.759 / 0.668, a 4.7x spread for an identical action. The only thing that changed was how many pixels she covers while doing it. Reliable across staging; its figure is meaningless across staging.",
+  "number_is_staging_dependent": true,
+  "staging_robustness": "all-stagings",
+  "staging_robustness_evidence": "four stagings (subject 0.19%-7.92% of frame), three seeds of numbers, strips watched at seed 7702: samples/motion_staging/percard/turn_away.png"
 }

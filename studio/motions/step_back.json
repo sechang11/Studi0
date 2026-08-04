@@ -3,7 +3,7 @@
   "name": "Steps backward",
   "family": "subject",
   "text": "She steps backward away from the camera.",
-  "desc": "Recoil. The physical form of being told something you did not want to hear.",
+  "desc": "ASKS FOR A STEP BACKWARD AND DOES NOT PRODUCE ONE. Measured against four stagings it rendered as walking forward, walking out to the side, or leaving frame - never as retreat. Use walk_out for an exit and say exit.",
   "shots": [
     "react",
     "build"
@@ -17,19 +17,89 @@
       2.1564,
       1.3167
     ],
-    "motion_mean": 1.409,
     "creep_mean": 1.0,
     "seeds": [
       7701,
       7702,
       7703
     ],
-    "band_lo": 0.4058,
-    "band_hi": 0.7444,
-    "frame_scale_ceiling": 1.191,
     "keyframe": "studio/samples/motion_lib/_keyframe.png",
     "frames": 97,
-    "workflow": "12_ltx23_i2v_audio.json"
+    "workflow": "12_ltx23_i2v_audio.json",
+    "per_staging": {
+      "far": {
+        "motion_per_seed": [
+          0.5263,
+          0.8693,
+          0.5492
+        ],
+        "motion_mean": 0.6483,
+        "creep_mean": 1.033,
+        "band_lo": 0.4754,
+        "band_hi": 0.762,
+        "frame_scale_ceiling": 1.219,
+        "vs_band": "in-band",
+        "x_control": 1.136,
+        "keyframe": "studio/samples/motion_staging/keyframes/far.png",
+        "subject_scale": 0.0019
+      },
+      "mid": {
+        "motion_per_seed": [
+          0.5783,
+          1.2952,
+          0.8415
+        ],
+        "motion_mean": 0.905,
+        "creep_mean": 1.025,
+        "band_lo": 0.3112,
+        "band_hi": 0.7339,
+        "frame_scale_ceiling": 1.174,
+        "vs_band": "between",
+        "x_control": 1.658,
+        "keyframe": "studio/samples/motion_staging/keyframes/mid.png",
+        "subject_scale": 0.0433
+      },
+      "close": {
+        "motion_per_seed": [
+          3.0458,
+          2.0091,
+          3.5921
+        ],
+        "motion_mean": 2.8823,
+        "creep_mean": 1.075,
+        "band_lo": 0.4644,
+        "band_hi": 1.9982,
+        "frame_scale_ceiling": 3.197,
+        "vs_band": "between",
+        "x_control": 2.784,
+        "keyframe": "studio/samples/motion_staging/keyframes/close.png",
+        "subject_scale": 0.0792
+      },
+      "anchor": {
+        "motion_per_seed": [
+          0.7528,
+          2.1564,
+          1.3167
+        ],
+        "motion_mean": 1.4086,
+        "creep_mean": 1.0,
+        "band_lo": 0.4058,
+        "band_hi": 0.7444,
+        "frame_scale_ceiling": 1.191,
+        "vs_band": "frame-scale",
+        "x_control": 2.28,
+        "keyframe": "studio/samples/motion_lib/_keyframe.png",
+        "subject_scale": 0.038
+      }
+    },
+    "staging_note": "subject_scale is the fraction of the frame the subject's coat occupies in that staging's keyframe - the run's measure of how close the subject is staged.",
+    "motion_mean_anchor_only": 1.409,
+    "band_lo_anchor_only": 0.4058,
+    "band_hi_anchor_only": 0.7444,
+    "frame_scale_ceiling_anchor_only": 1.191
   },
-  "verdict": "RENDERED 2026-08-04, 3 seeds. Motion 0.753/2.156/1.317 - inside the do-nothing band on 7701, above the ceiling on 7702, between on 7703. The widest seed spread of any subject card. Recoil is not reliably rendered; at 7701 she drifts sideways rather than backward. Band 0.406-0.744 (empty control 0.628); frame-scale ceiling 1.191. "
+  "verdict": "RE-MEASURED ACROSS FOUR STAGINGS 2026-08-04, 3 seeds each, watched at 7702. IT DOES NOT DO WHAT IT SAYS AT ANY STAGING, and that failure is the one thing in this run that IS a property of the card. She goes forward at `far`, forward and out right at `mid`, out of frame at `close`, out of frame at `anchor`. Nothing in the four cells is a step backward. Its numbers - 0.648 / 0.905 / 2.882 / 1.409 - are measuring exits. Use [[walk_out]] if an exit is what is wanted and say so.",
+  "number_is_staging_dependent": true,
+  "staging_robustness": "fails",
+  "staging_robustness_evidence": "four stagings (subject 0.19%-7.92% of frame), three seeds of numbers, strips watched at seed 7702: samples/motion_staging/percard/step_back.png"
 }

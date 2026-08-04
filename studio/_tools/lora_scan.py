@@ -71,6 +71,16 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 STUDIO = os.path.dirname(HERE)
 
 DEFAULT_CARDS = os.path.join(STUDIO, "loras")
+# A LoRA file has TWO possible owners and this scanner only ever knew about one.
+# studio/loras/*.json is the pickable library. studio/characters/*.json ALSO names a file,
+# in its `lora` key, and compose.py resolves it there - a trained character LoRA is
+# deliberately not in the pickable library, because a character is chosen by casting her,
+# not by ticking a LoRA. Scanning only the library therefore reports every trained
+# character as "installed and unreachable by the resolver", which is the exact opposite of
+# true, and the report has said PROBLEMS FOUND on that basis since the first character was
+# trained. Worse, it is a boy-who-cried-wolf failure: a REAL orphan now arrives in a list
+# that is already known to be wrong and gets skipped.
+DEFAULT_CHARS = os.path.join(STUDIO, "characters")
 DEFAULT_LORAS = os.environ.get(
     "COMFY_LORAS", os.path.expanduser("~/ComfyUI/models/loras"))
 
@@ -424,6 +434,8 @@ def check_card(card, facts):
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--cards", default=DEFAULT_CARDS)
+    ap.add_argument("--characters", default=DEFAULT_CHARS,
+                    help="character cards, which own their trained LoRAs by `lora` key")
     ap.add_argument("--loras", default=DEFAULT_LORAS)
     ap.add_argument("--json", action="store_true", help="machine-readable, no prose")
     a = ap.parse_args(argv)
@@ -445,7 +457,37 @@ def main(argv=None):
                 unreadable.append((fn, str(exc)))
                 on_disk[fn] = None
 
-    orphan_files = [f for f in on_disk if f not in by_file]
+    # Files claimed by a character card: reachable, just not through the pickable library.
+    char_owner = {}
+    if os.path.isdir(a.characters):
+        for fn in sorted(os.listdir(a.characters)):
+            if not fn.endswith(".json"):
+                continue
+            try:
+                cc = json.load(open(os.path.join(a.characters, fn), encoding="utf-8"))
+            except Exception:                                      # noqa: BLE001
+                continue
+            for key in ("lora", "lora_previous_file"):
+                v = cc.get(key)
+                if isinstance(v, str) and v.endswith(".safetensors"):
+                    char_owner.setdefault(v, []).append(cc.get("id") or fn[:-5])
+    # A superseded LoRA is kept ON PURPOSE so a claim can be re-measured instead of taken
+    # on trust (see TERRA.lora_previous). It is neither an orphan nor a live card, so it
+    # gets its own line rather than a warning: the same trained stem as a file the cast
+    # DOES point at, with a version suffix.
+    def _stem(f):
+        # character_terra_00001_v3.safetensors and character_terra_00001_.safetensors are
+        # the same trained character at two revisions. train_character.py names revisions
+        # with a _vN suffix on the SaveLoRA stem, so strip it and compare the stem.
+        return re.sub(r"_v\d+$", "", f.rsplit(".safetensors", 1)[0]).rstrip("_")
+    stems = {_stem(f) for f in char_owner}
+    def superseded(f):
+        return _stem(f) in stems
+
+    char_files = [f for f in on_disk
+                  if f not in by_file and (f in char_owner or superseded(f))]
+    orphan_files = [f for f in on_disk if f not in by_file and f not in char_files]
+    missing_char = sorted({f for f in char_owner if f not in on_disk})
     missing_files = sorted({c.get("file") for c in cards.values()
                             if c.get("file") not in on_disk})
     dupes = {f: ids for f, ids in by_file.items() if len(ids) > 1}
@@ -461,11 +503,14 @@ def main(argv=None):
     if a.json:
         json.dump({"cards": len(cards), "files": len(on_disk),
                    "orphan_files": sorted(orphan_files), "missing_files": missing_files,
+                   "character_owned": sorted(char_files),
+                   "character_missing": missing_char,
                    "duplicate_file_refs": dupes, "unreadable": unreadable,
                    "broken_cards": broken, "problems": problems, "status": rollup,
                    "facts": on_disk}, sys.stdout, indent=2, sort_keys=True)
         print()
-        return 0 if not (orphan_files or missing_files or problems or broken) else 1
+        return 0 if not (orphan_files or missing_files or missing_char
+                         or problems or broken) else 1
 
     print("LoRA LIBRARY SCAN")
     print("  cards  %s" % a.cards)
@@ -507,8 +552,16 @@ def main(argv=None):
              for f in sorted(orphan_files)],
             "none - every .safetensors on disk has a card")
 
+    section("OWNED BY A CHARACTER CARD  (not in the pickable library, and should not be)",
+            ["%s   <- %s" % (f, ", ".join(char_owner.get(f) or ["superseded, kept for "
+                                                               "re-measurement"]))
+             for f in sorted(char_files)],
+            "none")
+
     section("CARD WITH NO FILE  (offers a choice that will fail inside ComfyUI)",
-            missing_files, "none - every card points at a file that exists")
+            missing_files + ["%s <- character %s" % (f, ", ".join(char_owner[f]))
+                             for f in missing_char],
+            "none - every card points at a file that exists")
 
     section("TWO CARDS, ONE FILE",
             ["%s <- %s" % (f, ", ".join(ids)) for f, ids in sorted(dupes.items())],
@@ -529,7 +582,8 @@ def main(argv=None):
     print("  saying what was seen; the check above fails the build if one does not.")
     print()
 
-    bad = bool(orphan_files or missing_files or problems or broken or unreadable or dupes)
+    bad = bool(orphan_files or missing_files or missing_char or problems or broken
+               or unreadable or dupes)
     print("RESULT: %s" % ("PROBLEMS FOUND" if bad else "clean"))
     return 1 if bad else 0
 

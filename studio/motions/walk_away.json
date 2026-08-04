@@ -3,7 +3,7 @@
   "name": "Walks away into depth",
   "family": "subject",
   "text": "She walks away from the camera into the depth of the frame.",
-  "desc": "Departure, retreat, the end of a scene. Reads as an exit without needing a cut.",
+  "desc": "Departure into depth. UNRELIABLE - across four stagings only one gave the receding walk the card names; another walked the subject toward the lens instead. Prefer walk_out when the beat needs the subject gone.",
   "shots": [
     "establish",
     "master",
@@ -18,19 +18,89 @@
       1.1232,
       0.5952
     ],
-    "motion_mean": 1.0,
     "creep_mean": 1.0,
     "seeds": [
       7701,
       7702,
       7703
     ],
-    "band_lo": 0.4058,
-    "band_hi": 0.7444,
-    "frame_scale_ceiling": 1.191,
     "keyframe": "studio/samples/motion_lib/_keyframe.png",
     "frames": 97,
-    "workflow": "12_ltx23_i2v_audio.json"
+    "workflow": "12_ltx23_i2v_audio.json",
+    "per_staging": {
+      "far": {
+        "motion_per_seed": [
+          0.5811,
+          0.7626,
+          0.5965
+        ],
+        "motion_mean": 0.6467,
+        "creep_mean": 1.058,
+        "band_lo": 0.4754,
+        "band_hi": 0.762,
+        "frame_scale_ceiling": 1.219,
+        "vs_band": "in-band",
+        "x_control": 1.133,
+        "keyframe": "studio/samples/motion_staging/keyframes/far.png",
+        "subject_scale": 0.0019
+      },
+      "mid": {
+        "motion_per_seed": [
+          0.6116,
+          0.661,
+          1.164
+        ],
+        "motion_mean": 0.8122,
+        "creep_mean": 1.042,
+        "band_lo": 0.3112,
+        "band_hi": 0.7339,
+        "frame_scale_ceiling": 1.174,
+        "vs_band": "between",
+        "x_control": 1.488,
+        "keyframe": "studio/samples/motion_staging/keyframes/mid.png",
+        "subject_scale": 0.0433
+      },
+      "close": {
+        "motion_per_seed": [
+          2.3451,
+          2.0734,
+          3.3928
+        ],
+        "motion_mean": 2.6038,
+        "creep_mean": 1.017,
+        "band_lo": 0.4644,
+        "band_hi": 1.9982,
+        "frame_scale_ceiling": 3.197,
+        "vs_band": "between",
+        "x_control": 2.515,
+        "keyframe": "studio/samples/motion_staging/keyframes/close.png",
+        "subject_scale": 0.0792
+      },
+      "anchor": {
+        "motion_per_seed": [
+          1.2805,
+          1.1232,
+          0.5952
+        ],
+        "motion_mean": 0.9996,
+        "creep_mean": 1.0,
+        "band_lo": 0.4058,
+        "band_hi": 0.7444,
+        "frame_scale_ceiling": 1.191,
+        "vs_band": "between",
+        "x_control": 1.618,
+        "keyframe": "studio/samples/motion_lib/_keyframe.png",
+        "subject_scale": 0.038
+      }
+    },
+    "staging_note": "subject_scale is the fraction of the frame the subject's coat occupies in that staging's keyframe - the run's measure of how close the subject is staged.",
+    "motion_mean_anchor_only": 1.0,
+    "band_lo_anchor_only": 0.4058,
+    "band_hi_anchor_only": 0.7444,
+    "frame_scale_ceiling_anchor_only": 1.191
   },
-  "verdict": "RENDERED 2026-08-04, 3 seeds. Motion 1.280/1.123/0.595 - the last seed is inside the do-nothing band. On 7701 she does leave, but by exiting frame left rather than receding into the depth behind her, so the intended shrinking-into-distance read is not what you get. Recession into depth is the weakest path in the library; lateral exit is what the model actually renders. Band 0.406-0.744 (empty control 0.628); frame-scale ceiling 1.191. "
+  "verdict": "RE-MEASURED ACROSS FOUR STAGINGS 2026-08-04, 3 seeds each, watched at 7702. UNRELIABLE IN BOTH DIRECTIONS. At `far` (0.647) she walks TOWARD the camera - the exact opposite of the ask. At `mid` (0.812) she turns her back and recedes, which is right. At `close` (2.604) she turns and exits. At `anchor` (1.000) she mostly stands. One cell in four does what the card says, and it is not the cell with the biggest number.",
+  "number_is_staging_dependent": true,
+  "staging_robustness": "unreliable",
+  "staging_robustness_evidence": "four stagings (subject 0.19%-7.92% of frame), three seeds of numbers, strips watched at seed 7702: samples/motion_staging/percard/walk_away.png"
 }

@@ -47,3 +47,30 @@ studio/samples/cast_proof/*/
 # there. serve.py:_mirror_sheet re-copies any missing file on the next request, so this is
 # a cache, not a source, and it duplicates bytes that already exist on the box.
 studio/samples/_refsheets/
+
+# The character sweeps. SAME POLICY AS gallery/ AND cast_proof/ ABOVE, applied to the
+# thing that has grown fastest: one reference character now has ~600 renders behind her
+# and every future cast member inherits the same template. What a person reads is the
+# CONTACT SHEET, the measurements.json and the verdicts.json, and those stay tracked -
+# they are the evidence a claim rests on and the thing worth reviewing in a diff. The
+# individual full-size cells behind them are regenerable by re-running the tool that made
+# them, which is named in each sweep's docstring, and 600 MB of PNG per character would
+# put this repository past what a git host will take.
+# KEPT ON PURPOSE, against this rule: samples/cast/<ID>/ (the turnaround IS the training
+# set and the reference asset), terra_styles/cells/ (250 small webp, and the dossier page
+# renders every one of them), terra_motion/strips|faces (the frame strips ARE the evidence
+# for every motion verdict, since nothing was watched as video).
+studio/samples/cast/*_views/yaw/
+studio/samples/cast/*_views/yaw_rotate_failed/
+studio/samples/cast/*_views/yawprobe/
+studio/samples/cast/*_views/elevation/
+studio/samples/cast/*_views/frames/
+studio/samples/cast/*_views/emotions/
+studio/samples/cast/*_views/_embed/
+studio/samples/cast/*_motion/_frames/
+studio/samples/cast/*_motion/keyframes/
+studio/samples/motion_staging/detail/
+studio/samples/motion_staging/strips/
+studio/samples/motion_staging/percard/
+studio/samples/motion_staging/grids/
+studio/samples/motion_staging/keyframes/

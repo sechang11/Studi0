@@ -1,0 +1,969 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>studio · dossier</title>
+<style>
+  :root{--bg:#0f1115;--panel:#161a21;--panel2:#1c2129;--line:#272d38;--ink:#e6e9ef;
+        --dim:#8b94a3;--accent:#6ea8fe;--ok:#4ec9a0;--warn:#e0b252;--bad:#e07a5f}
+  @media (prefers-color-scheme:light){
+    :root{--bg:#f6f7f9;--panel:#fff;--panel2:#f0f2f5;--line:#dde1e8;--ink:#141821;--dim:#5d6470}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font:14px/1.55 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  header{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;padding:13px 18px;
+         border-bottom:1px solid var(--line);background:var(--panel);position:sticky;top:0;z-index:9}
+  header h1{margin:0;font-size:15px;letter-spacing:.07em;text-transform:uppercase}
+  header .sub{color:var(--dim);font-size:12px}
+  header .right{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+  header a{color:var(--dim);font-size:12px;text-decoration:none;border:1px solid var(--line);
+           padding:5px 10px;border-radius:6px}
+  header a:hover{color:var(--ink);border-color:var(--accent)}
+  .bar{display:flex;gap:8px;flex-wrap:wrap;padding:10px 18px;border-bottom:1px solid var(--line);
+       background:var(--panel);position:sticky;top:52px;z-index:8;align-items:center}
+  .bar a.jump{color:var(--dim);font-size:11.5px;text-decoration:none;border:1px solid var(--line);
+       padding:4px 9px;border-radius:6px;white-space:nowrap}
+  .bar a.jump:hover{border-color:var(--accent);color:var(--ink)}
+  .bar a.jump b{font-weight:600}
+  .bar a.j-measured b{color:var(--ok)} .bar a.j-partial b{color:var(--warn)}
+  .bar a.j-missing b{color:var(--bad)}
+  input[type=search],select{background:var(--panel2);border:1px solid var(--line);color:var(--ink);
+       border-radius:7px;padding:6px 9px;font:inherit;font-size:12.5px}
+  button{background:var(--panel2);border:1px solid var(--line);color:var(--ink);border-radius:7px;
+       padding:6px 10px;font:inherit;font-size:12.5px;cursor:pointer}
+  button:hover{border-color:var(--accent)}
+  button.on{border-color:var(--accent);color:var(--accent)}
+
+  .wrap{padding:0 18px 80px;max-width:1500px}
+  section{padding-top:26px;scroll-margin-top:104px}
+  h2{font-size:13px;letter-spacing:.09em;text-transform:uppercase;margin:0;
+     border-bottom:1px solid var(--line);padding-bottom:8px;display:flex;gap:10px;
+     align-items:baseline;flex-wrap:wrap}
+  h2 .asks{text-transform:none;letter-spacing:0;font-size:12.5px;color:var(--dim);font-weight:400}
+  h2 .st{margin-left:auto;font-size:10px;font-family:ui-monospace,Menlo,monospace;
+         border:1px solid currentColor;border-radius:99px;padding:1px 9px}
+  .s-measured{color:var(--ok)} .s-partial{color:var(--warn)} .s-missing{color:var(--bad)}
+  h3{font-size:12.5px;margin:20px 0 0;color:var(--dim);letter-spacing:.05em;text-transform:uppercase}
+  p{margin:6px 0 0;font-size:13px}
+  .hint{color:var(--dim);font-size:12.5px;max-width:104ch}
+  .none{color:var(--dim);font-style:italic}
+  code,.mono{font-family:ui-monospace,Menlo,monospace;font-size:12px}
+
+  /* The verdict fields on a character card are several hundred words each and they are
+     quoted verbatim, because paraphrasing a measurement is how a measurement becomes a
+     rumour. Capped at a readable measure rather than run across a 1400px window. */
+  .verdict,.okbox,.warnbox,.badbox{max-width:112ch}
+  .verdict{margin-top:8px;padding:10px 12px;border-left:2px solid var(--accent);
+           background:var(--panel2);border-radius:0 7px 7px 0;font-size:13px}
+  .okbox{margin-top:8px;padding:10px 12px;border-left:2px solid var(--ok);background:var(--panel2);
+         border-radius:0 7px 7px 0;font-size:13px}
+  .warnbox{margin-top:8px;padding:10px 12px;border-left:2px solid var(--warn);
+           background:var(--panel2);border-radius:0 7px 7px 0;font-size:13px}
+  .badbox{margin-top:8px;padding:10px 12px;border-left:2px solid var(--bad);background:var(--panel2);
+          border-radius:0 7px 7px 0;font-size:13px}
+  .contrib{margin-top:6px;padding:9px 11px;background:var(--panel2);border:1px solid var(--line);
+           border-radius:8px;font-family:ui-monospace,Menlo,monospace;font-size:12px;
+           white-space:pre-wrap;word-break:break-word}
+
+  table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:8px}
+  td,th{padding:5px 7px;border-bottom:1px solid var(--line);vertical-align:top;text-align:left}
+  th{color:var(--dim);font-weight:500;font-size:11px;letter-spacing:.05em;text-transform:uppercase}
+  td.k{color:var(--dim);width:22%;font-family:ui-monospace,Menlo,monospace}
+  .num{font-family:ui-monospace,Menlo,monospace;text-align:right}
+
+  /* EVERY PICTURE CARRIES ITS PATH. This project's rule is that an artifact carries its
+     recipe; on a page that shows 400 renders the cheapest form of that is the file it came
+     from, printed under it, so any claim can be checked on the box. */
+  figure{margin:0}
+  figure img{width:100%;border-radius:8px;border:1px solid var(--line);display:block;
+             background:var(--panel2)}
+  figcaption{font-size:11px;color:var(--dim);padding-top:4px}
+  figcaption b{color:var(--ink);font-family:ui-monospace,Menlo,monospace;font-size:11px}
+  figcaption .p{display:block;font-family:ui-monospace,Menlo,monospace;font-size:10px;
+                opacity:.62;word-break:break-all;margin-top:2px}
+  figcaption .sc{color:var(--accent);font-family:ui-monospace,Menlo,monospace}
+  .gal{display:grid;gap:10px;margin-top:8px;align-items:start;
+       grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+  /* A reference sheet and a full-frame render are 1024px square and will happily fill the
+     viewport, pushing the words that explain them below the fold - and the words are the
+     point. Capped and left-aligned rather than cropped, because a sheet you cannot see all
+     of is not a sheet. Click through for the full size. */
+  .gal.wide{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+  .gal.wide img{width:auto;max-width:100%;max-height:330px}
+  .sheetfig{margin-top:8px}
+  .sheetfig img{width:auto;max-width:100%;max-height:420px}
+
+  details{margin-top:8px;border:1px solid var(--line);border-radius:9px;background:var(--panel)}
+  details>summary{cursor:pointer;padding:8px 12px;font-size:12.5px;color:var(--dim);
+                  list-style:none}
+  details>summary::-webkit-details-marker{display:none}
+  details>summary:before{content:"▸ ";color:var(--accent)}
+  details[open]>summary:before{content:"▾ "}
+  details>summary:hover{color:var(--ink)}
+  details .in{padding:2px 12px 12px}
+
+  .pans2{display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:12px;
+         margin-top:8px;align-items:start}
+  .pan{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--panel2)}
+  .pan .hd{padding:9px 13px;font-size:11px;letter-spacing:.06em;text-transform:uppercase;
+           font-family:ui-monospace,Menlo,monospace}
+  .pan .bd{padding:11px 13px;font-size:12.5px}
+  .pan .bd p{font-size:12.5px}
+  .h-strong{background:color-mix(in srgb,var(--ok) 16%,transparent)} .h-strong{color:var(--ok)}
+  .h-thin{background:color-mix(in srgb,var(--accent) 15%,transparent);color:var(--accent)}
+  .h-none{background:color-mix(in srgb,var(--bad) 18%,transparent);color:var(--bad)}
+
+  /* a finding somebody established BY LOOKING. Marked, because the difference between a
+     number and a person opening the image is the whole discipline here. */
+  .fnd{margin-top:10px;border:1px solid var(--line);border-radius:10px;background:var(--panel);
+       overflow:hidden}
+  .fnd .cl{padding:10px 13px;font-size:13px;border-left:3px solid var(--dim)}
+  .fnd.k-good .cl{border-left-color:var(--ok)}
+  .fnd.k-bad .cl{border-left-color:var(--bad)}
+  .fnd.k-warn .cl{border-left-color:var(--warn)}
+  .fnd.k-note .cl{border-left-color:var(--accent)}
+  .fnd .cl b{display:block;margin-bottom:4px}
+  .fnd .cl .saw{color:var(--dim);font-size:12.5px}
+  .fnd .ev{display:flex;gap:8px;padding:0 13px 11px;flex-wrap:wrap}
+  .fnd .ev a{font-size:10.5px;font-family:ui-monospace,Menlo,monospace;color:var(--accent);
+             text-decoration:none;border:1px solid var(--line);border-radius:6px;padding:3px 8px}
+  .fnd .ev a:hover{border-color:var(--accent)}
+  .fnd .ev .lab{font-size:10.5px;color:var(--dim);align-self:center;letter-spacing:.05em;
+                text-transform:uppercase}
+
+  .chips{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+  .t{font-family:ui-monospace,Menlo,monospace;font-size:11px;border:1px solid var(--line);
+     border-radius:5px;padding:1px 6px;background:var(--panel2)}
+  .t.count{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 45%,var(--line))}
+  .t.base{color:var(--ok);border-color:color-mix(in srgb,var(--ok) 40%,var(--line))}
+  .t.risk{color:var(--bad);border-color:color-mix(in srgb,var(--bad) 45%,var(--line))}
+
+  .pill{display:inline-block;font-size:10px;letter-spacing:.05em;text-transform:uppercase;
+        border:1px solid currentColor;border-radius:99px;padding:1px 8px;margin:0 4px 4px 0;
+        color:var(--dim)}
+  .p-ok{color:var(--ok)} .p-no{color:var(--bad)} .p-part{color:var(--warn)}
+  .p-eng{color:var(--accent)}
+
+  /* the costume ladder: five rungs, and a rung whose text names another costume's garment
+     is stained, because that is the difference between a costume that lands and one that
+     does not. */
+  .cos{border:1px solid var(--line);border-radius:10px;background:var(--panel);
+       overflow:hidden;margin-top:10px}
+  .cos .hd{padding:9px 13px;border-bottom:1px solid var(--line);display:flex;gap:10px;
+           align-items:baseline;flex-wrap:wrap}
+  .cos .hd b{font-size:13.5px}
+  .cos .hd .id{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--dim)}
+  .cos .hd .d{color:var(--dim);font-size:12px}
+  .rung{display:flex;gap:10px;padding:6px 13px;font-size:12.5px;border-top:1px solid var(--line)}
+  .rung .lv{font-family:ui-monospace,Menlo,monospace;color:var(--dim);white-space:nowrap}
+  .rung.bad{background:color-mix(in srgb,var(--bad) 12%,transparent)}
+  .rung.warn{background:color-mix(in srgb,var(--warn) 10%,transparent)}
+  .rung .why{display:block;font-size:11.5px;color:var(--bad);margin-top:2px}
+  .rung.warn .why{color:var(--warn)}
+
+  /* the style sweep: one row per style, both seeds side by side */
+  .sty{display:grid;grid-template-columns:110px 110px 1fr;gap:10px;padding:10px 0;
+       border-bottom:1px solid var(--line);align-items:start}
+  .sty img{width:100%;border-radius:7px;border:1px solid var(--line);display:block;
+           background:var(--panel2)}
+  .sty .meta h4{margin:0;font-size:13.5px}
+  .sty .meta .id{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--dim)}
+  .sty .meta .saw{font-size:12.5px;color:var(--dim);margin-top:4px}
+  .sty .badges{margin-top:5px}
+  .b{display:inline-block;font-size:10px;letter-spacing:.05em;text-transform:uppercase;
+     border-radius:99px;padding:1px 8px;margin:0 4px 4px 0;border:1px solid currentColor}
+  .b-strong{color:var(--ok)} .b-partial{color:var(--warn)} .b-none{color:var(--bad)}
+  .b-yes{color:var(--ok)} .b-drift{color:var(--warn)} .b-no{color:var(--bad)}
+  .b-short{color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,transparent)}
+  .b-cond{color:var(--warn)}
+  .b-fam{color:var(--dim)}
+
+  .clip{border:1px solid var(--line);border-radius:11px;background:var(--panel);
+        margin-top:12px;overflow:hidden}
+  .clip .hd{padding:10px 13px;border-bottom:1px solid var(--line)}
+  .clip .hd b{font-size:13.5px}
+  .clip .hd .id{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--dim)}
+  .clip .bd{display:grid;grid-template-columns:minmax(260px,340px) 1fr;gap:12px;padding:12px 13px}
+  .clip video{width:100%;border-radius:8px;border:1px solid var(--line);background:#000;display:block}
+  @media(max-width:800px){.clip .bd{grid-template-columns:1fr}
+                          .sty{grid-template-columns:90px 90px 1fr}}
+
+  audio{width:100%;height:32px;margin-top:4px}
+  .voi{border:1px solid var(--line);border-radius:9px;background:var(--panel);padding:9px 11px}
+  .voi.win{border-color:var(--ok)}
+  .voi h4{margin:0;font-size:13px}
+  .voi .id{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--dim)}
+  .voi .n{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--dim);margin-top:4px;
+          overflow-wrap:anywhere}
+  .clip table{max-width:560px}
+
+  .idx{display:grid;gap:12px;padding:18px 0;
+       grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
+  .idx a{text-decoration:none;color:inherit;border:1px solid var(--line);border-radius:11px;
+         background:var(--panel);overflow:hidden;display:block}
+  .idx a:hover{border-color:var(--accent)}
+  .idx img{width:100%;aspect-ratio:1/1;object-fit:cover;object-position:50% 22%;display:block;
+           background:var(--panel2)}
+  .idx .noimg{aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;
+              color:var(--dim);font-size:12px;background:var(--panel2)}
+  .idx .b2{padding:11px 13px}
+  .idx h3{margin:0;font-size:15px;color:var(--ink);text-transform:none;letter-spacing:0}
+  .idx .st{display:grid;grid-template-columns:repeat(8,1fr);gap:3px;margin-top:9px}
+  .idx .st i{height:5px;border-radius:2px;background:var(--line);display:block}
+  .idx .st i.measured{background:var(--ok)} .idx .st i.partial{background:var(--warn)}
+  .idx .st i.missing{background:color-mix(in srgb,var(--bad) 45%,var(--line))}
+
+  .gap{border:1px solid var(--line);border-radius:9px;background:var(--panel);padding:9px 12px;
+       margin-top:8px;font-size:12.5px;display:flex;gap:10px;align-items:flex-start}
+  .gap .kind{font-size:10px;letter-spacing:.06em;text-transform:uppercase;
+             font-family:ui-monospace,Menlo,monospace;white-space:nowrap;padding-top:2px}
+  .g-bug .kind{color:var(--bad)} .g-absent .kind{color:var(--bad)}
+  .g-partial .kind{color:var(--warn)} .g-caveat .kind{color:var(--dim)}
+  .g-optional .kind{color:var(--dim)}
+  .gap .cmd{display:block;margin-top:5px;font-family:ui-monospace,Menlo,monospace;font-size:11.5px;
+            background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:6px 8px;
+            overflow-x:auto;white-space:pre}
+  .foot{padding:26px 0 60px;color:var(--dim);font-size:12px;max-width:110ch}
+  .err{padding:40px 18px;color:var(--bad)}
+</style>
+</head>
+<body>
+<header>
+  <h1>dossier</h1><span class="sub" id="stat">loading…</span>
+  <div class="right">
+    <a href="/cast">cast</a><a href="/wizard">direct a scene</a><a href="/styles">styles</a>
+    <a href="/places">places</a><a href="/loras">loras</a><a href="/video">video</a>
+    <a href="/gallery">gallery</a><a href="/">library</a>
+  </div>
+</header>
+<div class="bar" id="bar"></div>
+<div class="wrap" id="page"></div>
+
+<script>
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const bytes=n=>{if(n==null)return"";const u=["B","KiB","MiB","GiB"];let i=0,v=n;
+  while(v>=1024&&i<u.length-1){v/=1024;i++;}return (i?v.toFixed(1):v)+" "+u[i];};
+const n2=v=>v==null?"":(typeof v==="number"?v.toFixed(v>=100?0:3).replace(/\.?0+$/,""):String(v));
+
+// ---------------------------------------------------------------------------
+// THE PROSE LIVES HERE, the facts come from /api/character/<id>.
+//
+// Same split the other pages in this app use: serve.py and dossier.py report what is on
+// disk, and the words that explain what a fact MEANS to somebody about to write this
+// character into a scene are in the page. The single most confusing thing in this system
+// is that the two engines hold a face by completely different mechanisms, so that
+// explanation is not a footnote here - it is a section.
+// ---------------------------------------------------------------------------
+const ENGINE={
+  anime:{name:"anime · animagine-xl-4.0", cls:"h-strong",
+    what:"The ILLUSTRATION engine, and it reads danbooru TAGS. Watercolour, ukiyo-e, oil "+
+         "paint and woodcut all come out of it despite the name.",
+    holds:"IPADAPTER FROM THE REFERENCE SHEET, PLUS A TRAINED CHARACTER LoRA. The LoRA is a "+
+          "delta on this checkpoint's weights and it is the strongest identity lock in the "+
+          "project - with one, the character stops being a prompt and becomes a model. "+
+          "Set IPAdapter to 0.0 and let the LoRA carry her alone when you want a STYLE to "+
+          "land: a reference sheet suppresses style on this path, and four styles once came "+
+          "back as one render repeated."},
+  qwen:{name:"qwen · Qwen-Image 2512", cls:"h-thin",
+    what:"The PHOTOGRAPHIC engine, and it reads PROSE. It cannot be talked out of "+
+         "photography by any prompt at any cfg, and at cfg 1.0 with the Lightning LoRA it "+
+         "ignores the negative entirely - measured byte-identical output with and without.",
+    holds:"THE REFERENCE SHEET THROUGH QWEN-IMAGE-EDIT, AND NOTHING ELSE. A character LoRA "+
+          "is base-model locked: on this engine every one of its keys is rejected, the file "+
+          "is passed through and quietly never read, and nothing warns you. Pixel "+
+          "conditioning is also why this path does not suffer the identity collapse the "+
+          "anime path has when a style fights for the frame."}
+};
+
+const SECHELP={
+  who:"The concrete nouns that carry her. The model renders NOUNS, NOT ADJECTIVES - "+
+      "identity survives on two-tone hair, a gold ear stud, a number 7, and dies on "+
+      "'haunted' or 'ethereal'. Tag order is load-bearing on the anime path: identity, "+
+      "then face, then the garment in its state, then the world. Earlier and more specific "+
+      "wins.",
+  holds:"What fixes this face is not a property of the character. It is a property of the "+
+        "character AND THE ENGINE, and the two answers are different mechanisms with "+
+        "different failure modes. This is the most confusing thing in the system.",
+  looks:"Angles, camera heights, shot sizes and expressions - each one rendered rather than "+
+        "assumed, because the useful part of a dossier is knowing where a character stops "+
+        "working before a director has written the shot.",
+  wears:"Every costume against every rung of the damage ladder. A costume is text, and text "+
+        "that names the garment it is supposed to replace renders that garment instead.",
+  drawn:"Every style card in the library, rendered on her, at two seeds, opened and looked "+
+        "at. A style verdict measured on a generic subject does not transfer to a cast "+
+        "member.",
+  motion:"The character LoRA is NOT in the video graph at all. What holds her through an "+
+         "LTX pass is the keyframe, so identity is budgeted by whether the action turns her "+
+         "away rather than by seconds.",
+  sound:"A voice is cast, not picked: the character's own line through every candidate at "+
+        "one seed on one engine, then the measured ceiling on every direction knob.",
+  unknown:"This project's whole discipline is the separation of what was measured from what "+
+          "was assumed. A dossier that hides its gaps is worse than one that admits them."
+};
+
+const COUNT=/^(1boy|1girl|1other|2boys|2girls|solo|multiple)\b/i;
+function chips(str,cls,risky){
+  return String(str||"").split(",").map(s=>s.trim()).filter(Boolean).map((x,i)=>{
+    let k=cls||"";
+    if(i===0&&COUNT.test(x)) k="count";
+    if(risky&&risky.some(r=>x.toLowerCase().includes(r))) k="risk";
+    return `<span class="t ${k}" ${k==="risk"?'title="a later render contradicts this tag - see what is unknown"':""}>${esc(x)}</span>`;
+  }).join("");
+}
+
+function fig(e,extra){
+  if(!e) return "";
+  const sc=e.score!=null?` <span class="sc">${n2(e.score)}</span>`:"";
+  return `<figure><a href="${esc(e.url)}" target="_blank" rel="noopener">
+    <img loading="lazy" src="${esc(e.url)}" alt="${esc(e.label||"")}"></a>
+    <figcaption><b>${esc(e.label||"")}</b>${sc}${e.seed?" · seed "+esc(e.seed):""}
+      ${e.caption?"<br>"+esc(e.caption):""}${extra||""}
+      <span class="p">${esc(e.path||"")}</span></figcaption></figure>`;
+}
+function gal(list,cls){
+  const v=(list||[]).filter(Boolean);
+  if(!v.length) return "";
+  return `<div class="gal ${cls||""}">${v.map(e=>fig(e)).join("")}</div>`;
+}
+function sheet(e,why){
+  if(!e) return "";
+  return `<div class="sheetfig">${fig(e,why?"<br>"+esc(why):"")}</div>`;
+}
+function findings(list){
+  if(!(list||[]).length) return "";
+  return `<h3>what was seen, looking at the renders</h3>
+    <p class="hint">Each of these was established by a person opening the image named
+      beside it. They are transcribed into <span class="mono">studio/_tools/dossier.py</span>
+      because the sweeps that produced them wrote numbers to disk and their verdicts only to
+      prose — moving them onto the card or into a verdicts.json beside their renders is
+      listed under what is unknown.</p>
+    ${list.map(f=>`<div class="fnd k-${esc(f.kind)}">
+      <div class="cl"><b>${esc(f.claim)}</b><span class="saw">${esc(f.saw)}</span></div>
+      <div class="ev"><span class="lab">evidence</span>${
+        f.evidence.map(e=>`<a href="${esc(e.url)}" target="_blank" rel="noopener">${
+          esc(e.path.replace(/^.*samples\/cast\//,""))}</a>`).join("")}
+        ${f.tool?`<span class="lab">· ${esc(f.tool)}</span>`:""}</div></div>`).join("")}`;
+}
+function prose(label,txt){
+  return txt?`<h3>${esc(label)}</h3><div class="verdict">${esc(txt)}</div>`:"";
+}
+
+// ---------------------------------------------------------------------------
+// sections
+// ---------------------------------------------------------------------------
+function secWho(d,s){
+  const c=d.card||{};
+  const risky=[];   // tags a later render contradicted, so the chip can say so
+  (d.sections.unknown.contested||[]).forEach(x=>{
+    const m=/tags - '(.+?)'/.exec(x.field||""); if(m) risky.push(m[1].toLowerCase());
+  });
+  const sh=[];
+  if(s.sheet_anime) sh.push(sheetPanel(s.sheet_anime,"anime · animagine",
+    "The sheet IPAdapter refines from on the illustration path, and the source every "+
+    "turnaround view and the whole training set was cut from."));
+  if(s.sheet_photo) sh.push(sheetPanel(s.sheet_photo,"qwen · Qwen-Image-Edit",
+    "The only thing holding this face on the photographic path. A photographic sheet is a "+
+    "CASTING DECISION, not a transcription of the anime tags — name material, light, lens "+
+    "and pose, or you get cosplay."));
+  return `
+    <p class="hint">${esc(SECHELP.who)}</p>
+    ${sh.length?`<div class="gal wide">${sh.join("")}</div>`:
+      `<div class="badbox">No reference sheet on either engine. Nothing is holding this face.</div>`}
+    <h3>identity vocabulary — this is what you edit when a face drifts</h3>
+    ${s.tags?`<p class="hint" style="margin-top:8px">tags — slot 1, anime</p>
+      <div class="chips">${chips(s.tags,"",risky)}</div>`
+     :`<div class="badbox">No tags. On the anime engine this character has no identity.</div>`}
+    ${s.base_tags?`<p class="hint" style="margin-top:10px">base_tags — slot 2, anime</p>
+      <div class="chips">${chips(s.base_tags,"base")}</div>`:""}
+    ${s.prose?`<p class="hint" style="margin-top:10px">prose — slot 1, qwen</p>
+      <div class="contrib">${esc(s.prose)}</div>`
+     :`<div class="warnbox">No prose. On qwen the resolver falls back to the danbooru tag
+        string, which feeds comma-separated tags to a model that reads sentences.</div>`}
+    ${s.photo_prose?`<p class="hint" style="margin-top:10px">photo_prose — what the
+        photographic sheet was actually built from</p>
+      <div class="contrib">${esc(s.photo_prose)}</div>`:""}
+    ${s.source?`<h3>where she comes from</h3>
+      <div class="warnbox"><b>${esc(s.source)}</b><br>${esc(s.source_note||"")}</div>`:""}
+    ${prose("provenance — "+(s.provenance||"unrecorded"),s.provenance_note)}
+    ${prose("what this card knows about itself",s.note)}
+    ${prose("the photographic sheet, and why it was replaced",s.sheet_photo_verdict)}
+    ${(s.known_probe||s.photo_probe||s.face_reference)?`<h3>the probes that came before the
+      sheets</h3>${gal([s.known_probe,s.photo_probe,s.face_reference],"wide")}`:""}
+    ${findings(s.findings)}`;
+}
+function sheetPanel(sh,who,why){
+  if(!sh) return "";
+  if(!sh.url) return `<div class="badbox"><b>${esc(who)}</b><br>The card names
+    <span class="mono">${esc(sh.name)}</span> and it is
+    ${sh.exists?"on disk but not mirrored into studio/samples yet":"NOT in "+esc(sh.input_path)}.</div>`;
+  return `<figure><a href="${esc(sh.url)}" target="_blank" rel="noopener">
+    <img loading="lazy" src="${esc(sh.url)}" alt=""></a>
+    <figcaption><b>${esc(who)}</b> — ${esc(sh.name)}<br>${esc(why)}
+    <span class="p">${esc(sh.input_path)}</span></figcaption></figure>`;
+}
+
+function secHolds(d,s){
+  const r=s.resolver||{};
+  const lo=s.lora||{}, ds=s.dataset||{};
+  function pan(eng){
+    const E=ENGINE[eng], id=r[eng]||{};
+    const on=eng==="anime"&&lo.exists;
+    return `<div class="pan">
+      <div class="hd ${E.cls}">${esc(E.name)}</div>
+      <div class="bd">
+        <p class="hint">${esc(E.what)}</p>
+        <p style="margin-top:8px">${esc(E.holds)}</p>
+        <table>
+          <tr><td class="k">reference sheet</td><td>${
+            eng==="anime"
+              ? (s.sheet_anime&&s.sheet_anime.exists
+                 ? esc(s.sheet_anime.name)+" — through IPAdapter"
+                 : '<span class="none">none on disk</span>')
+              : (s.sheet_photo&&s.sheet_photo.exists
+                 ? esc(s.sheet_photo.name)+" — through Qwen-Image-Edit"
+                 : (s.sheet_anime&&s.sheet_anime.exists
+                    ? esc(s.sheet_anime.name)+" — the ANIME sheet, which will import its "+
+                      "illustration style along with the face"
+                    : '<span class="none">none on disk</span>'))}</td></tr>
+          <tr><td class="k">character LoRA</td><td>${
+            eng==="qwen"
+              ? '<span class="p-no">does not apply — silently discarded on this engine</span>'
+              : (lo.name
+                 ? (on?`<span class="mono">${esc(lo.name)}</span> · ${bytes(lo.bytes)}`
+                     :`<span class="mono">${esc(lo.name)}</span> — <b class="s-missing">NOT ON DISK</b>`)
+                 : '<span class="none">none — the sheet is doing all of the work</span>')}</td></tr>
+          ${eng==="anime"&&s.lora_strength_measured!=null?`<tr><td class="k">strength</td>
+            <td><b>${esc(s.lora_strength_measured)}</b> measured. 0.85 is now available as a
+            harder identity lock and costs style strength — see below.</td></tr>`:""}
+          ${id.lora_reason?`<tr><td class="k">resolver</td><td>${esc(id.lora_reason)}</td></tr>`:""}
+          ${id.error?`<tr><td class="k">resolver</td><td class="s-missing">${esc(id.error)}</td></tr>`:""}
+        </table>
+        ${(id.conflicts||[]).map(x=>`<div class="${
+          x.severity==="error"?"badbox":x.severity==="warning"?"warnbox":"verdict"}">
+          <b>${esc(x.severity)} · ${esc(x.code||"")}</b><br>${esc(x.message||"")}${
+          x.fix?`<br><span class="hint">fix — ${esc(x.fix)}</span>`:""}</div>`).join("")}
+        ${id.prompt?`<h3>the prompt this engine will send</h3>
+          <div class="contrib">${esc(id.prompt)}</div>`:""}
+      </div></div>`;
+  }
+  return `
+    <p class="hint">${esc(SECHELP.holds)}</p>
+    <div class="pans2">${pan("anime")}${pan("qwen")}</div>
+    <h3>how the weights were made</h3>
+    <table>
+      <tr><td class="k">dataset</td><td>${ds.exists
+        ? `${ds.pairs} complete png+txt pairs · ${ds.images} images, ${ds.captions} captions
+           <span class="p mono">${esc(ds.dir)}</span>`
+        : `<span class="none">nothing at ${esc(ds.dir||"")}</span>`}</td></tr>
+      ${s.lora_dataset?`<tr><td class="k">trained on</td><td>${esc(s.lora_dataset)}</td></tr>`:""}
+      ${s.lora_steps?`<tr><td class="k">training</td><td>${esc(s.lora_steps)} steps · rank
+        ${esc(s.lora_rank)}${s.lora_trained_at?" · "+esc(s.lora_trained_at):""}</td></tr>`:""}
+      ${(s.lora_previous||[]).length?`<tr><td class="k">kept for re-measurement</td><td>${
+        s.lora_previous.map(p=>`<span class="mono">${esc(p.name)}</span>${
+          p.exists?"":" — gone"}`).join("<br>")}</td></tr>`:""}
+    </table>
+    ${prose("what captioning changed",s.lora_training_note)}
+    ${prose("what the weights were measured to do",s.lora_verdict)}
+    ${prose("the setting collapse, and what it really was",s.lora_setting_verdict)}
+    ${s.lora_check?`<h3>the control — same seed, weights on and weights dropped</h3>
+      ${sheet(s.lora_check)}`:""}
+    ${(s.costume_fix||[]).length?`<details><summary>the retraining grids — ${
+      s.costume_fix.length} sheets</summary><div class="in">${gal(s.costume_fix,"wide")}</div></details>`:""}
+    ${findings(s.findings)}`;
+}
+
+function secLooks(d,s){
+  if(s.state==="missing"&&!(s.turnaround||[]).length)
+    return `<p class="hint">${esc(SECHELP.looks)}</p>
+      <div class="badbox">Nothing rendered. Run the views tool for this character.</div>`;
+  const em=s.emotions||{};
+  const names=Object.keys(em.vs_neutral||{}).sort((a,b)=>
+    (em.cross_seed[b]||0)-(em.cross_seed[a]||0));
+  const byName={};
+  (em.cells||[]).forEach(c=>{(byName[c.label]=byName[c.label]||[]).push(c);});
+  return `
+    <p class="hint">${esc(SECHELP.looks)}</p>
+    ${s.metric_note?`<div class="warnbox"><b>Read the numbers on this page as a ranking, not
+      a verdict.</b><br>${esc(s.metric_note)} There is no face recogniser on this box, so a
+      cell can score low because the character is SMALL rather than because she is
+      unrecognisable. Every call below was made by opening the image.</div>`:""}
+
+    ${(s.turnaround||[]).map(turnSet).join("")}
+
+    ${(s.grids||[]).map(g=>`
+      <h3>${esc(g.title)}</h3>
+      <p class="hint">${esc(g.why)}</p>
+      ${sheet(g.sheet)}
+      ${g.cells.length?`<details><summary>every cell — ${g.cells.length} renders${
+        Object.keys(g.numbers||{}).length?", with its similarity to the reference cell":""
+        }</summary><div class="in">${gal(g.cells)}</div></details>`:""}`).join("")}
+
+    ${names.length?`<h3>expressions — ${names.length} emotion cards, two seeds</h3>
+      <p class="hint">Rendered on the PRODUCTION path exactly as the emotion cards are
+        authored. <b>vs neutral</b> is how far the card moved her; <b>cross-seed</b> is
+        whether it moved her the same way twice, which is what makes an expression
+        DIRECTABLE rather than a coin toss.</p>
+      ${gal(em.sheets,"wide")}
+      <table><tr><th>emotion</th><th>vs neutral</th><th>cross-seed</th><th></th></tr>
+      ${names.map(k=>{
+        const cs=em.cross_seed[k], vn=em.vs_neutral[k];
+        const flag=cs<0.89?`<span class="pill p-no">unstable across seeds</span>`
+                  :vn<0.82?`<span class="pill p-no">rebuilds the face</span>`
+                  :cs>0.945?`<span class="pill p-ok">most repeatable</span>`:"";
+        return `<tr><td>${esc(k)}</td><td class="num">${n2(vn)}</td>
+          <td class="num">${n2(cs)}</td><td>${flag}</td></tr>`;}).join("")}
+      </table>
+      <details><summary>every expression cell — ${(em.cells||[]).length} renders</summary>
+        <div class="in">${gal(em.cells)}</div></details>`:""}
+    ${findings(s.findings)}`;
+}
+
+// The sixteen training captions in a turnaround set differ by two or three words and then
+// repeat the same twenty. Printed in full under every tile that is a wall of noise, and the
+// SHARED tail is the interesting half anyway - it is the list of things the trigger will
+// NOT absorb. So it is factored out and stated once.
+function turnSet(t){
+  const caps=t.views.map(v=>String(v.caption||"").split(",").map(x=>x.trim()));
+  let tail=[];
+  if(caps.length>1&&caps.every(c=>c.length)){
+    outer: for(let n=1;n<=caps[0].length;n++){
+      const cand=caps[0].slice(caps[0].length-n);
+      for(const c of caps) {
+        const mine=c.slice(c.length-n);
+        if(mine.length!==n||mine.join("|")!==cand.join("|")) break outer;
+      }
+      tail=cand;
+    }
+  }
+  const views=t.views.map((v,i)=>{
+    const uniq=caps[i].slice(0,caps[i].length-tail.length).join(", ");
+    return Object.assign({},v,{caption:uniq?"caption: "+uniq+(tail.length?", …":""):""});
+  });
+  return `<h3>turnaround — ${esc(t.name)} · ${t.views.length} views</h3>
+    <p class="hint">Rendered by Qwen-Image-Edit from the reference sheet, then captioned and
+      trained on. A caption is a SUBTRACTION: whatever it NAMES stays separable and can be
+      changed later, whatever it omits is welded onto the trigger. That is why these name the
+      garments and the backdrop and never name hair, eyes or face.
+      <span class="mono">${esc(t.dir)}</span></p>
+    ${tail.length?`<p class="hint">Every caption in this set ends
+      <span class="mono">${esc(tail.join(", "))}</span> — only the words below each tile
+      differ.</p>`:""}
+    ${gal(views)}`;
+}
+
+function secWears(d,s){
+  const cos=s.costumes||{}, keys=Object.keys(cos);
+  const conf={};
+  (s.text_conflicts||[]).forEach(x=>{
+    conf[x.costume+"|"+x.level]=x;});
+  return `
+    <p class="hint">${esc(SECHELP.wears)}</p>
+    ${(s.text_conflicts||[]).filter(x=>!x.terminal).length?`<div class="badbox">
+      <b>A COSTUME NAMES A GARMENT THAT IS NOT ITS OWN.</b> ${
+      (s.text_conflicts||[]).filter(x=>!x.terminal).map(x=>
+        `<span class="mono">${esc(x.costume)}</span> level ${x.level} says
+         "${esc(x.garment)}", which belongs to <span class="mono">${esc(x.belongs_to)}</span>`)
+        .join("; ")}. The model renders nouns, so what arrives is the named garment and this
+      costume is dropped — measured, and it is a text edit, not a training problem. The last
+      rung of a ladder is exempt: there the costume is meant to be destroyed.</div>`:""}
+    ${keys.length?keys.map(k=>{
+      const c=cos[k];
+      return `<div class="cos"><div class="hd">
+        <b>${esc(c.name||k)}</b><span class="id">${esc(k)}</span>
+        <span class="d">${esc(c.desc||"")}</span></div>
+        ${(c.wear_tags||[]).map((w,i)=>{
+          const x=conf[k+"|"+i];
+          const cls=x?(x.terminal?"warn":"bad"):"";
+          return `<div class="rung ${cls}"><span class="lv">wear ${i}</span>
+            <span>${esc(w)}${x?`<span class="why">names "${esc(x.garment)}", which belongs to
+              ${esc(x.belongs_to)}${x.terminal
+                ? " — expected at the last rung, where this costume is gone"
+                : " — this rung renders that garment instead"}</span>`:""}</span></div>`;
+        }).join("")}</div>`;}).join("")
+     :`<div class="warnbox">No costumes map. Every damage level falls back to the project's
+        generic ladder, which is a sports vocabulary.</div>`}
+
+    ${(s.grids||[]).length?`<h3>the costume × damage matrix, rendered</h3>
+      <p class="hint">Rows are the costumes, columns the five damage levels. The four arms
+        are the two LoRA versions crossed with the danbooru name kept or stripped, at two
+        seeds — which is what separates a training problem from a prompt problem.</p>
+      ${gal(s.grids,"wide")}`:""}
+    ${(s.text_probes||[]).length?`<h3>the two writing rules, tested rather than inferred</h3>
+      <p class="hint">The text check above predicts a failure from wording alone. These are
+        the renders that confirm it. <b>Never name the garment a costume exists to
+        replace</b> — taking four words out of the field coat's level 0 puts the coat on
+        her in four arms out of four. <b>Write damage as a damaged thing, not a missing
+        thing</b> — &ldquo;one pauldron gone&rdquo; gives the sampler nothing to draw and it
+        falls back on the default costume, while the same state written as objects brings
+        real metal back.</p>
+      ${gal(s.text_probes,"wide")}`:""}
+    ${(s.places||[]).length?`<h3>across the place library</h3>
+      <p class="hint">One seed per place, so this is a screening pass and not a verdict on
+        any single place — a one-seed sweep manufactures a false identity failure about one
+        time in six, and the recheck below is the proof.</p>
+      ${gal(s.places,"wide")}`:""}
+    ${prose("what the card says about the ladder",s.costume_note)}
+    ${prose("the two writing rules, on the card",s.costume_text_rule)}
+    ${prose("costume_verdict, on the card",s.costume_verdict)}
+    ${prose("lora_costume_verdict, on the card",s.lora_costume_verdict)}
+    ${findings(s.findings)}`;
+}
+
+let STY={eng:"anime",only:"",q:""};
+function secDrawn(d,s){
+  if(s.state==="missing")
+    return `<p class="hint">${esc(SECHELP.drawn)}</p>
+      <div class="badbox">No style sweep on disk for this character.</div>`;
+  const hc=s.held_constant||{};
+  return `
+    <p class="hint">${esc(SECHELP.drawn)}</p>
+    <div class="verdict"><b>held constant across every cell</b><br>${
+      Object.keys(hc).map(k=>`<span class="mono">${esc(k)}</span> ${esc(hc[k])}`).join(" · ")}
+      ${s.verified_by?"<br><br>"+esc(s.verified_by):""}</div>
+    ${(s.control||[]).length?`<h3>the control — same seed, same subject, no style</h3>
+      ${gal(s.control,"wide")}`:""}
+    <div class="bar" style="position:static;padding:10px 0;border:0" id="stybar"></div>
+    <div id="stylist"></div>
+    ${(s.sheets||[]).length?`<details><summary>the contact sheets — ${s.sheets.length}
+      </summary><div class="in">${gal(s.sheets,"wide")}</div></details>`:""}
+    ${prose("style_verdict, on the card",s.card_verdict)}
+    ${findings(s.findings)}`;
+}
+function drawStyles(){
+  const s=DOS.sections.drawn, rows=(s.styles||{})[STY.eng]||[];
+  const q=STY.q.toLowerCase();
+  const v=rows.filter(r=>
+    (STY.only!=="short"||r.shortlist) &&
+    (STY.only!=="cond"||r.conditional) &&
+    (STY.only!=="fail"||r.id_3311!=="yes"||r.id_7788!=="yes") &&
+    (STY.only!=="hijack"||r.compose==="replaces"||r.compose==="injects") &&
+    (!q||[r.id,r.name,r.family,r.saw,r.lib_verdict].join(" ").toLowerCase().includes(q)));
+  const nShort=rows.filter(r=>r.shortlist).length, nCond=rows.filter(r=>r.conditional).length;
+  $("stybar").innerHTML=`
+    <button id="e_anime" class="${STY.eng==="anime"?"on":""}">anime — the illustration engine</button>
+    <button id="e_qwen" class="${STY.eng==="qwen"?"on":""}">qwen — the photographic engine</button>
+    <select id="only">
+      <option value="">every style rendered (${rows.length})</option>
+      <option value="short">the shortlist — style landed AND she held at both seeds (${nShort})</option>
+      <option value="cond">conditional — held at one seed only (${nCond})</option>
+      <option value="fail">she did not hold</option>
+      <option value="hijack">hijackers — replaces the setting or injects a prop</option>
+    </select>
+    <input type="search" id="sq" placeholder="a style, a family, or how it failed…"
+      style="flex:1;min-width:200px">
+    <span class="hint">${v.length} of ${rows.length}</span>`;
+  $("stylist").innerHTML=v.length?v.map(styRow).join("")
+    :`<p class="none">Nothing matches.</p>`;
+  $("e_anime").onclick=()=>{STY.eng="anime";drawStyles();};
+  $("e_qwen").onclick=()=>{STY.eng="qwen";drawStyles();};
+  $("only").value=STY.only; $("only").onchange=e=>{STY.only=e.target.value;drawStyles();};
+  const sq=$("sq"); sq.value=STY.q;
+  sq.oninput=e=>{STY.q=e.target.value;drawStyles();
+    const el=document.getElementById("sq"); el.focus(); el.setSelectionRange(el.value.length,el.value.length);};
+}
+function styRow(r){
+  const c1=r.cell, c2=r.cell_7788;
+  const b=[];
+  if(r.shortlist) b.push(`<span class="b b-short">shortlist</span>`);
+  if(r.conditional) b.push(`<span class="b b-cond">one seed only</span>`);
+  if(r.style) b.push(`<span class="b b-${esc(r.style)}">style ${esc(r.style)}</span>`);
+  b.push(`<span class="b b-${r.id_3311==="yes"?"yes":r.id_3311==="drift"?"drift":"no"}">
+    still her @3311: ${esc(r.id_3311||"?")}</span>`);
+  b.push(`<span class="b b-${r.id_7788==="yes"?"yes":r.id_7788==="drift"?"drift":"no"}">
+    @7788: ${esc(r.id_7788||"?")}</span>`);
+  if(r.compose==="replaces") b.push(`<span class="b b-partial">replaces the setting</span>`);
+  if(r.compose==="injects") b.push(`<span class="b b-none">injects a prop</span>`);
+  if(r.family) b.push(`<span class="b b-fam">${esc(r.family)}</span>`);
+  return `<div class="sty">
+    <div>${c1?`<a href="${esc(c1.url)}" target="_blank" rel="noopener">
+      <img loading="lazy" src="${esc(c1.url)}" alt=""></a>
+      <figcaption style="text-align:center">seed ${esc(r.seed||"")}</figcaption>`:""}</div>
+    <div>${c2?`<a href="${esc(c2.url)}" target="_blank" rel="noopener">
+      <img loading="lazy" src="${esc(c2.url)}" alt=""></a>
+      <figcaption style="text-align:center">seed 7788</figcaption>`:""}</div>
+    <div class="meta">
+      <h4>${esc(r.name)}</h4><div class="id">${esc(r.id)}</div>
+      <div class="badges">${b.join("")}</div>
+      <div class="saw">${esc(r.saw||"")}</div>
+      ${r.lib_verdict?`<div class="saw" style="opacity:.75">the style card's own verdict, on a
+        generic subject: ${esc(r.lib_verdict)}</div>`:""}
+      ${r.prompt?`<details><summary>the recipe that made these</summary><div class="in">
+        <div class="contrib">${esc(r.prompt)}</div>
+        ${r.negative?`<p class="hint" style="margin-top:6px">negative</p>
+          <div class="contrib">${esc(r.negative)}</div>`:""}
+        ${Object.keys(r.metrics||{}).length?`<table><tr><th></th>${
+          Object.keys(r.metrics).map(k=>`<th>${esc(k)}</th>`).join("")}</tr>
+          <tr><td class="k">seed ${esc(r.seed||"")}</td>${
+            Object.keys(r.metrics).map(k=>`<td class="num">${n2(r.metrics[k])}</td>`).join("")}</tr>
+          ${Object.keys(r.metrics_7788||{}).length?`<tr><td class="k">seed 7788</td>${
+            Object.keys(r.metrics).map(k=>`<td class="num">${n2(r.metrics_7788[k])}</td>`).join("")}</tr>`:""}
+          </table>`:""}
+      </div></details>`:""}
+    </div></div>`;
+}
+
+function secMotion(d,s){
+  if(!(s.clips||[]).length)
+    return `<p class="hint">${esc(SECHELP.motion)}</p>
+      <div class="badbox">No clips on disk for this character.</div>`;
+  return `
+    <p class="hint">${esc(SECHELP.motion)}</p>
+    <div class="warnbox"><b>Nothing here was watched as video before it was written down.</b>
+      Every verdict below comes from nine sampled frames per clip, read as a strip. The
+      players are embedded so that can be fixed by anyone with speakers — a flicker or a
+      one-frame face swap between samples is exactly what the strips cannot show.</div>
+    ${s.clips.map(clipCard).join("")}
+    ${findings(s.findings)}`;
+}
+function clipCard(c){
+  const m=c.metrics||{};
+  return `<div class="clip">
+    <div class="hd"><b>${esc(c.motion||c.id)}</b> <span class="id">${esc(c.id)}</span>
+      <div class="hint">${esc(c.text||"")} — staged in
+        <span class="mono">${esc(c.place||"")}</span>, ${esc(c.seconds)}s at
+        ${esc(c.frames)} frames${c.lora!=null?", character LoRA "+esc(c.lora)+" on the KEYFRAME only":""}</div>
+      ${c.want?`<div class="hint" style="opacity:.8">what the motion card promises: ${esc(c.want)}</div>`:""}
+    </div>
+    <div class="bd">
+      <div>${c.clip_url?`<video controls preload="metadata" src="${esc(c.clip_url)}"></video>
+        <figcaption><span class="p">${esc(c.clip_path||"")}</span></figcaption>`
+        :`<div class="badbox">The mp4 is not on disk.</div>`}
+        ${c.keyframe?fig(c.keyframe):""}</div>
+      <div>
+        ${c.strip?fig(c.strip):""}
+        ${c.faces?fig(c.faces):""}
+        <table><tr><th>t</th><th>drift (structure)</th><th>drift (hue)</th><th>hair %</th></tr>
+        ${(c.samples||[]).map(x=>`<tr><td class="num">${esc(x.t)}s</td>
+          <td class="num">${n2(x.drift_struct)}</td><td class="num">${n2(x.drift_hue)}</td>
+          <td class="num">${n2(x.green_pct)}</td></tr>`).join("")}</table>
+        <p class="hint">${Object.keys(m).map(k=>k+" "+n2(m[k])).join(" · ")}</p>
+      </div>
+    </div></div>`;
+}
+
+function secSound(d,s){
+  if(!s.voice)
+    return `<p class="hint">${esc(SECHELP.sound)}</p>
+      <div class="badbox">No voice. compile.py hard-fails a film in which this character
+        speaks.</div>`;
+  const vc=s.voice_card||{}, win=(s.audition_meta||{}).candidates?
+    String(s.voice).split("/").pop().replace(/\.wav$/,""):"";
+  const players=(list,title,why)=>list&&list.length?`
+    <h3>${esc(title)}</h3>${why?`<p class="hint">${esc(why)}</p>`:""}
+    <div class="gal wide">${list.map(a=>`<div class="voi ${a.id===win?"win":""}">
+      <h4>${esc(a.id)}${a.id===win?" — cast":""}</h4>
+      ${a.text?`<div class="id">${esc(a.text)}</div>`:""}
+      <audio controls preload="none" src="${esc(a.url)}"></audio>
+      <div class="n">${Object.keys(a.n||{}).map(k=>k.replace(/_dbfs|_hz/,"")+" "+n2(a.n[k])).join(" · ")}</div>
+      <div class="n" style="opacity:.6">${esc(a.path)}</div>
+    </div>`).join("")}</div>`:"";
+  const lines=s.lines_meta||{};
+  return `
+    <p class="hint">${esc(SECHELP.sound)}</p>
+    ${s.blocked?`<div class="badbox"><b>THIS VOICE IS BLOCKED.</b> ${esc(vc.name||"")} is a
+       clone of a real, identifiable person. Recast before anything is rendered.</div>`
+     :`<div class="okbox"><b>${esc(vc.name||s.voice)}</b> · engine
+       <span class="mono">${esc(String(s.voice).split(" ")[0])}</span> ·
+       <span class="mono">${esc(String(s.voice).split(" ").pop())}</span>
+       ${vc.sounds_like?"<br>"+esc(vc.sounds_like):""}</div>`}
+    ${vc.casts_well_as||vc.avoid_for?`<table>
+      ${vc.casts_well_as?`<tr><td class="k">casts well as</td><td>${esc(vc.casts_well_as)}</td></tr>`:""}
+      ${vc.avoid_for?`<tr><td class="k">avoid for</td><td>${esc(vc.avoid_for)}</td></tr>`:""}
+      </table>`:""}
+
+    ${Object.keys(lines).length?`<h3>her registers, rendered — and the direction that got each</h3>
+      <p class="hint">${esc(lines.note||"")}</p>
+      <table><tr><th>register</th><th>line</th><th>direction</th><th>rms</th><th>pitch</th></tr>
+      ${["dialogue","whisper","shout","strain"].filter(k=>lines[k]).map(k=>{
+        const L=lines[k];
+        return `<tr><td>${esc(k)}</td><td>${esc(L.text||"")}</td>
+          <td class="mono">${Object.keys(L.emotion||{}).length
+            ? Object.entries(L.emotion).map(([a,b])=>a+" "+b).join(", ")
+            : "vector all zero — the text does it"}</td>
+          <td class="num">${n2(L.rms_dbfs)}</td><td class="num">${n2(L.pitch_median_hz)}</td></tr>`;
+      }).join("")}</table>`:""}
+    ${players(s.lines,"play them","The four registers above, as rendered.")}
+    ${players(s.audition,"the audition — every castable voice, her own line, one seed, one engine",
+      "A cast decision with no losing candidates in it is not reusable by the next character.")}
+    ${players(s.emotion_sweep,"the direction sweep — where each knob stops working",
+      "One voice, one line, one seed, one dimension moving. This is the audio equivalent of "+
+      "lora_strength_measured, and unlike the image side it is PER DIMENSION.")}
+    ${players(s.lines_higgs,"the same four lines on the house engine, for comparison")}
+    ${players(s.lines_unbounded,"kept as evidence: the first pass, past the ceiling")}
+    ${players(s.emotion_probe,"the probe that showed the engine half works at all")}
+    ${(s.sheets||[]).length?`<details><summary>waveform and spectrogram sheets — ${
+      s.sheets.length}</summary><div class="in">${gal(s.sheets,"wide")}</div></details>`:""}
+
+    ${prose("why this voice and not the others",s.verdict)}
+    ${prose("why this engine",s.engine_verdict)}
+    ${prose("how far each direction knob can be pushed",s.direction)}
+    ${prose("what she cannot do",s.range_note)}
+    ${prose("what was verified and what was not",s.note)}
+    ${prose("a finding about the voice library, not about her",s.library_verdict)}
+    ${prose("is the emotion library wired to TTS?",s.emotion_routing)}
+
+    ${(s.spec||[]).length?`<h3>what a complete audio section contains</h3>
+      <p class="hint">${esc(s.spec_intro||"")}</p>
+      <p class="hint"><b>Checked against the card just now: ${
+        s.spec.filter(f=>f.present).length} of ${s.spec.length} fields are set</b> — each row
+        below is the card key the spec names, tested for a non-empty value. If that disagrees
+        with the count in the paragraph above, the paragraph is the older claim.</p>
+      <table><tr><th></th><th>field</th><th>state</th><th>what it is for</th></tr>
+      ${s.spec.map(f=>`<tr><td class="num">${f.n}</td>
+        <td class="mono">${esc(f.field)}</td>
+        <td>${f.present?'<span class="pill p-ok">present</span>'
+          :f.required?'<span class="pill p-no">MISSING</span>'
+          :'<span class="pill p-part">unset</span>'}</td>
+        <td class="hint">${esc(f.asks)}</td></tr>`).join("")}</table>
+      ${s.spec_why?`<div class="warnbox">${esc(s.spec_why)}</div>`:""}
+      ${s.verification_standard?`<div class="verdict"><b>the verification standard</b><br>${
+        esc(s.verification_standard)}</div>`:""}`:""}
+    ${findings(s.findings)}`;
+}
+
+function secUnknown(d,s){
+  const g=s.gaps||[], order=["bug","absent","partial","optional","caveat"];
+  const LAB={bug:"a bug, found by rendering",absent:"not built yet",
+             partial:"half built",optional:"never set on any card in the project",
+             caveat:"the method's own limit"};
+  return `
+    <p class="hint">${esc(SECHELP.unknown)}</p>
+    ${(s.contested||[]).length?`<h3>where the card and a later render disagree</h3>
+      <p class="hint">These are not resolved. The character card is owned by other work, and
+        overwriting it from here would be exactly the silent drift this section exists to
+        prevent — so both are printed, with the render that contradicts the card.</p>
+      ${s.contested.map(c=>`<div class="fnd k-bad">
+        <div class="cl"><b>${esc(c.field)} says: ${esc(c.says)}</b>
+          <span class="saw">${esc(c.but)}${c.agrees_with?" ("+esc(c.agrees_with)+")":""}</span></div>
+        <div class="ev"><span class="lab">the render that disagrees</span>${
+          c.evidence.map(e=>`<a href="${esc(e.url)}" target="_blank" rel="noopener">${
+            esc(e.path.replace(/^.*samples\/cast\//,""))}</a>`).join("")}</div></div>`).join("")}`:""}
+    ${order.map(k=>{
+      const v=g.filter(x=>x.kind===k);
+      if(!v.length) return "";
+      return `<h3>${esc(LAB[k])} — ${v.length}</h3>
+        ${v.map(x=>`<div class="gap g-${esc(k)}"><span class="kind">${esc(x.section)}</span>
+          <span>${esc(x.what)}
+            ${x.blocked?`<span style="display:block;color:var(--bad);margin-top:4px">${
+              esc(x.blocked)}</span>`:""}
+            ${x.how?`<span class="cmd">${esc(x.how)}</span>`:""}</span>
+          </div>`).join("")}`;}).join("")}`;
+}
+
+const RENDER={who:secWho,holds:secHolds,looks:secLooks,wears:secWears,drawn:secDrawn,
+              motion:secMotion,sound:secSound,unknown:secUnknown};
+
+// ---------------------------------------------------------------------------
+let DOS=null;
+function drawDossier(d){
+  DOS=d;
+  $("stat").textContent=`${d.name} · ${d.id}${d.status?" · "+d.status:""}`;
+  $("bar").innerHTML=`<select id="pick"></select>`+
+    d.spec.map(s=>`<a class="jump j-${esc(s.state)}" href="#${esc(s.id)}">
+      <b>·</b> ${esc(s.title)}</a>`).join("");
+  $("page").innerHTML=`
+    <section id="top" style="padding-top:18px">
+      <div class="pans2" style="grid-template-columns:minmax(200px,260px) 1fr">
+        <div>${((d.sections.looks.turnaround||[])[0]||{}).views
+          ? fig((d.sections.looks.turnaround[0].views||[])[0])
+          : (d.sections.who.sheet_anime&&d.sections.who.sheet_anime.url
+             ? `<figure><img src="${esc(d.sections.who.sheet_anime.url)}" alt=""></figure>`:"")}</div>
+        <div>
+          <h2 style="border:0;font-size:22px;letter-spacing:0;text-transform:none">${esc(d.name)}
+            <span class="mono" style="color:var(--dim);font-size:13px">${esc(d.id)}</span></h2>
+          <p>${esc(d.desc||"")}</p>
+          <p class="hint" style="margin-top:10px">Everything on this page was read off the box
+            when you loaded it — the card at <span class="mono">${esc(d.card_path)}</span>, the
+            renders under <span class="mono">studio/samples/cast/</span>, and
+            <span class="mono">compose.resolve()</span>, which is the same call the renderer
+            makes. Every picture prints the file it came from.</p>
+          <table>${d.spec.map(s=>`<tr><td class="k">${esc(s.title)}</td>
+            <td><span class="pill ${s.state==="measured"?"p-ok":s.state==="partial"?"p-part":"p-no"}">${
+              esc(s.state)}</span> ${esc(s.asks)}
+            ${s.state!=="measured"&&s.blocked
+              ?`<span class="s-missing" style="display:block;font-size:12px">${esc(s.blocked)}</span>`
+              :s.state!=="measured"&&(s.cmd||s.note)
+              ?`<span class="cmd" style="display:block">${esc(s.cmd||s.note)}</span>`:""}
+            </td></tr>`).join("")}</table>
+        </div>
+      </div>
+    </section>
+    ${d.spec.map(s=>`<section id="${esc(s.id)}">
+      <h2>${esc(s.title)}<span class="asks">${esc(s.asks)}</span>
+        <span class="st s-${esc(s.state)}">${esc(s.state)}</span></h2>
+      ${RENDER[s.id](d,d.sections[s.id])}
+    </section>`).join("")}
+    <div class="foot">
+      Assembled by <span class="mono">studio/_tools/dossier.py</span> and served from
+      <span class="mono">/api/character/${esc(d.id)}</span>. Nothing here is cached: the card,
+      the sample directories, the LoRA in <span class="mono">models/loras</span> and the
+      reference sheets in ComfyUI's input are re-read on every request, so a render that lands
+      while this page is open appears on a refresh. A claim whose evidence file has been
+      deleted is dropped rather than shown, which is why a section can get shorter.
+      <br><br>This page is the template. Any other cast member opens at the same eight
+      sections with the same states and the command that fills each one — run
+      <span class="mono">python3 studio/_tools/dossier.py --index</span> for that grid in a
+      terminal.
+    </div>`;
+  fillPicker();
+  if(d.sections.drawn.state!=="missing") drawStyles();
+  if(location.hash) {const el=document.querySelector(location.hash); if(el) el.scrollIntoView();}
+}
+
+function drawIndex(ix){
+  $("stat").textContent=`${ix.characters.length} cast members · eight sections each`;
+  $("bar").innerHTML=`<span class="hint">A dossier answers, for one character, everything a
+    director asks before writing her into a scene. Terra is the worked example; everyone else
+    opens at the same eight sections with the gaps named.</span>`;
+  $("page").innerHTML=`<div class="idx">${ix.characters.map(c=>`
+    <a href="/character/${esc(c.id)}">
+      ${c.portrait?`<img loading="lazy" src="${esc(c.portrait)}" alt="">`
+       :`<div class="noimg">no turnaround rendered</div>`}
+      <div class="b2"><h3>${esc(c.name)}</h3>
+        <div class="mono" style="color:var(--dim);font-size:11px">${esc(c.id)}${
+          c.status?" · "+esc(c.status):""}</div>
+        <p class="hint">${esc(c.desc||"")}</p>
+        <div class="st">${ix.spec.map(s=>
+          `<i class="${esc(c.states[s.id]||"missing")}" title="${esc(s.title)}: ${
+            esc(c.states[s.id]||"missing")}"></i>`).join("")}</div>
+        <p class="hint" style="margin-top:6px">${c.measured} of ${ix.spec.length} sections
+          measured</p>
+      </div></a>`).join("")}</div>
+    <div class="foot">The eight bars under each name are the sections of a complete dossier,
+      in order: ${ix.spec.map(s=>esc(s.title)).join(", ")}. Green is measured, amber is
+      partly built, red is nothing on disk.</div>`;
+}
+
+function fillPicker(){
+  fetch("/api/character").then(r=>r.json()).then(ix=>{
+    const p=$("pick"); if(!p) return;
+    p.innerHTML=ix.characters.map(c=>`<option value="${esc(c.id)}"${
+      DOS&&c.id===DOS.id?" selected":""}>${esc(c.name)} — ${c.measured}/8 measured</option>`)
+      .join("")+`<option value="">— all cast members —</option>`;
+    p.onchange=()=>{location.href="/character"+(p.value?"/"+p.value:"");};
+  }).catch(()=>{});
+}
+
+(async function(){
+  const m=/^\/character\/([A-Za-z0-9_-]+)/.exec(location.pathname);
+  const url=m?"/api/character/"+m[1]:"/api/character";
+  let d;
+  try{ const r=await fetch(url); d=await r.json();
+       if(!r.ok) throw new Error(d.error||("HTTP "+r.status)); }
+  catch(e){
+    $("stat").textContent="failed";
+    $("page").innerHTML=`<div class="err"><b>${esc(e.message||e)}</b>
+      <p class="hint">The dossier is assembled by
+      <span class="mono">studio/_tools/dossier.py</span> and served from
+      <span class="mono">${esc(url)}</span>. Try
+      <span class="mono">python3 studio/_tools/dossier.py ${esc(m?m[1]:"--index")}</span> on the
+      box to see the same failure with a traceback.</p></div>`;
+    return;
+  }
+  if(d.characters) drawIndex(d); else drawDossier(d);
+})();
+</script>
+</body>
+</html>
