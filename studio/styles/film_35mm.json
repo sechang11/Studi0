@@ -15,7 +15,7 @@
     "dawn"
   ],
   "strength": "moderate",
-  "works_for": "video only halfway. The colour behaviour survives; the grain does not - fine per-pixel texture baked into a keyframe boils through i2v. If you want grain on a clip, add it to the FINISHED video with an ffmpeg noise filter, where it is temporally random the way real grain is instead of a smeared still. Reasoned from the measured grain result, not measured on video.",
+  "works_for": "video only halfway - CONFIRMED by render, and this card's split prediction was exactly right. Over 8.04s the colour and light behaviour survive intact while the grain dissolves: detail octiles decay monotonically (1.00 -> 0.855), and by frame 192 the grain is visibly replaced by smear. At 4s it is still largely there (detail 0.913), so short shots keep more of it. The existing advice stands and is now measured: if you want grain on a clip, add it to the FINISHED video with an ffmpeg noise filter rather than baking it into the keyframe.",
   "status": "ready",
   "note": "Half of this style is not deliverable from a prompt at all. studio/tags/film_grain.json is the best-measured failure in the project: four grain settings came back as four unrelated portraits with no visible grain difference, because grain is a per-pixel property and a diffusion sampler has no handle on it - which is exactly why studio/looks/faded_film.json deliberately leaves grain out of its tags rather than promise a texture it cannot deliver. What DOES land on qwen is the colour crossover and the highlight roll-off. Take those from the prompt, take the grain from ffmpeg, take the fade from the faded_film look. Unavailable on the anime checkpoint. | Downgraded to untested: NOTHING in this library was rendered when it was authored, so every strength and engine call is a considered prediction. This project's own standard - written on the Illustrious checkpoint card - is that a recommendation is not a measurement.",
   "examples": {
@@ -24,5 +24,33 @@
   },
   "compose": "safe",
   "verdict": "Warmer, softer, slight halation. Subtle but present.",
-  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py",
+  "video_verdict": {
+    "holds": "partly",
+    "failure": "grain dissolves, colour survives - the split is real",
+    "saw": "The only card in the sweep whose split prediction is confirmed exactly as written. The warm/cool colour behaviour and the golden rim light hold completely for 8 seconds. The grain does not: it is clearly present in skin and background at frame 0, visibly reduced by frame 110, and by frame 192 replaced by smear. The octiles decay monotonically (1.00 0.97 0.95 0.93 0.93 0.93 0.92 0.86), detail 0.855 at 8s against 0.913 at 4s. There is also a push-in that contributes to the fall, but the visual reading is unambiguous - the grain is genuinely gone at the end while the colour is not.",
+    "motion": 1.204,
+    "churn": 0.959,
+    "boil": 0.322,
+    "detail_8s": 0.855,
+    "detail_4s": 0.913,
+    "detail_octiles": [
+      1.004,
+      0.972,
+      0.948,
+      0.925,
+      0.931,
+      0.934,
+      0.915,
+      0.858
+    ],
+    "kf_retention": 0.987,
+    "clip": "/samples/video/film_35mm.mp4",
+    "strip": "/samples/video/film_35mm_strip.png",
+    "detail_strip": "/samples/video/film_35mm_detail.png",
+    "measured_on": "One 193-frame (8.04s) LTX-2.3 image-to-video clip, workflow 12_ltx23_i2v_audio.json at its shipping settings, from a keyframe rendered on this style's own engine at 1280x704. Held constant across every style in the sweep: subject, keyframe seed 7204, video seed 8801, motion prompt, clip length. MEASURED BY RENDERING AND LOOKING, NOT PREDICTED.",
+    "caveats": "boil is NOT a style-stability number in this sweep - it tracks how much the clip moved, and the identical motion prompt produced motion from 0.345 to 2.772 across styles. detail is the load-bearing number, and it too drops when the COMPOSITION changes rather than the texture. Read both against the strips. n=1 clip, one subject, one seed.",
+    "measured": "2026-08-04",
+    "tool": "studio/_tools/video_examples.py"
+  }
 }

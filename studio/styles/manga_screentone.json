@@ -11,7 +11,7 @@
     "neutral"
   ],
   "strength": "strong",
-  "works_for": "video - the WORST case in this set. Halftone dots are a dense field of tiny maximum-contrast marks, which is precisely what an i2v pass cannot keep registered; expect the tone to crawl and shimmer across the whole frame even on a still subject. INFERRED rather than swept, but the failure mode is structural, not a matter of settings. Treat this as a stills and held-frame style.",
+  "works_for": "video - MEASURED, and the previous 'WORST case in this set' prediction is FALSIFIED. Over 8.04s the monochrome ink idiom is fully intact: detail octiles dead flat (0.99 -> 0.977), boil 0.214, which is LOWER than the no-style qwen control (0.228) and far below the 0.385 an ffmpeg crop-pan scores on a still from resampling alone. The tone does not crawl and the framing does not drift. This is a video-capable style, not a stills-and-held-frames style. One caveat: the keyframe rendered mostly as ink hatching with limited literal benday dot, so a dense pure-dot field has still not been through the pass.",
   "status": "ready",
   "note": "This is a decision about what KIND of image this is, not a flavour laid on top of one. tags/manga.json records that manga is a page-format attribute on the danbooru corpus, so it drags panelling and monochrome in with it and will SILENTLY KILL every colour tag in the prompt. cards/shot_fx_screentone.json supplies the measured dot clause, 'screentone, halftone dots, benday dots', and its review adds the warning that monochrome greyscales the ENTIRE frame - which is the intent here and is a bug everywhere else. Note what that does to LOOKS, since this is the card where the two libraries collide hardest: a look is an ffmpeg grade applied after generation, and grading an image with no colour in it can only tint it. suits_looks is one entry long for that reason, not by oversight; if you want a sepia page, looks/sepia will give you one, but nothing else in the grade library has anything to act on. Do not stack this with manga_inked - they are two names for one page and the dots dominate. | Downgraded to untested: NOTHING in this library was rendered when it was authored, so every strength and engine call is a considered prediction. This project's own standard - written on the Illustrious checkpoint card - is that a recommendation is not a measurement.",
   "examples": {
@@ -20,5 +20,33 @@
   },
   "compose": "safe",
   "verdict": "B&W with visible dot tone and grainier texture. Genuinely separate from manga_inked.",
-  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py",
+  "video_verdict": {
+    "holds": "yes",
+    "failure": "none - the card's worst-case prediction is falsified",
+    "saw": "The headline result of the sweep. This card called itself the WORST case in the library and predicted the tone would crawl and shimmer across the whole frame; it is instead one of the most stable clips measured. Detail octiles are dead flat (0.99 0.98 0.98 0.97 0.97 0.98 0.97 0.98), boil 0.214 - below the no-style qwen control's 0.228 and far below the 0.385 that a plain ffmpeg crop-pan over a still scores from resampling alone. At native resolution the hatching stays hatching, the blacks stay solid, the halftone gradients persist, and the framing does not budge for 8 seconds. Honest caveat: the keyframe delivered mostly ink hatching with only limited literal benday dot, so the harshest form of the prediction was not maximally tested.",
+    "motion": 1.504,
+    "churn": 0.271,
+    "boil": 0.214,
+    "detail_8s": 0.977,
+    "detail_4s": 0.973,
+    "detail_octiles": [
+      0.993,
+      0.985,
+      0.977,
+      0.973,
+      0.973,
+      0.976,
+      0.974,
+      0.977
+    ],
+    "kf_retention": 0.998,
+    "clip": "/samples/video/manga_screentone.mp4",
+    "strip": "/samples/video/manga_screentone_strip.png",
+    "detail_strip": "/samples/video/manga_screentone_detail.png",
+    "measured_on": "One 193-frame (8.04s) LTX-2.3 image-to-video clip, workflow 12_ltx23_i2v_audio.json at its shipping settings, from a keyframe rendered on this style's own engine at 1280x704. Held constant across every style in the sweep: subject, keyframe seed 7204, video seed 8801, motion prompt, clip length. MEASURED BY RENDERING AND LOOKING, NOT PREDICTED.",
+    "caveats": "boil is NOT a style-stability number in this sweep - it tracks how much the clip moved, and the identical motion prompt produced motion from 0.345 to 2.772 across styles. detail is the load-bearing number, and it too drops when the COMPOSITION changes rather than the texture. Read both against the strips. n=1 clip, one subject, one seed.",
+    "measured": "2026-08-04",
+    "tool": "studio/_tools/video_examples.py"
+  }
 }

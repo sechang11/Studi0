@@ -14,7 +14,7 @@
     "dawn"
   ],
   "strength": "strong",
-  "works_for": "Holds structurally - large flat shapes are the safest thing to hand LTX-2.3. INFERRED, not measured, with one specific warning: i2v models tend to invent detail inside large empty regions as they animate, so watch for a face fading up inside the black. If that happens it is the style failing, not the motion.",
+  "works_for": "video - CONFIRMED, the joint most stable style measured (boil 0.071, detail 1.001, octiles flat across 8.04s). The predicted failure was specifically looked for and did not occur: no detail faded up inside the black masses over 8 seconds. Caveat on the test, not the style - the keyframe rendered as a heavy-black high-contrast illustration with a rendered face rather than a true two-tone silhouette, so a genuinely large empty black region has still not been put through the pass.",
   "status": "ready",
   "note": "Read studio/tags/silhouette.json before using this; the measured finding there is load-bearing. 'silhouette' is danbooru GRAMMAR, in the same class as 1boy and solo, and it overrides your subject block: leave hair colour, eye colour and scar tags in the prompt and you get a half-lit figure that is neither silhouette nor character. STRIP THE IDENTITY TAGS. The same card records the payoff, which is bigger than an aesthetic choice - the model reproduces a silhouette far more reliably than it reproduces a face, so budgeting a share of shots as silhouettes is a character-consistency dodge. One of the few styles in this set that genuinely works on both engines.",
   "examples": {
@@ -23,5 +23,33 @@
   },
   "compose": "safe",
   "verdict": "Figure reduced to solid black against a lit ground. Strong and unambiguous.",
-  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py",
+  "video_verdict": {
+    "holds": "yes",
+    "failure": "none observed",
+    "saw": "Joint most stable clip in the sweep: boil 0.071, detail 1.001, octiles flat from end to end, motion 0.415. The heavy black masses hold their shape, the warm limited palette never shifts, and hair drift is the only movement. The card's one specific warning - that i2v invents detail inside large empty regions, so watch for a face fading up inside the black - did NOT happen; the blacks stay solid and empty for 8 seconds. One honest caveat on the test rather than the style: the keyframe this style produced on our subject is a high-contrast heavy-black illustration with a fully rendered face, not a true two-tone silhouette, so the largest empty-region case was only partly exercised.",
+    "motion": 0.415,
+    "churn": 0.865,
+    "boil": 0.071,
+    "detail_8s": 1.001,
+    "detail_4s": 1.028,
+    "detail_octiles": [
+      1.001,
+      1.009,
+      1.001,
+      1.022,
+      1.007,
+      1.005,
+      0.994,
+      1.001
+    ],
+    "kf_retention": 1.013,
+    "clip": "/samples/video/silhouette_poster.mp4",
+    "strip": "/samples/video/silhouette_poster_strip.png",
+    "detail_strip": "/samples/video/silhouette_poster_detail.png",
+    "measured_on": "One 193-frame (8.04s) LTX-2.3 image-to-video clip, workflow 12_ltx23_i2v_audio.json at its shipping settings, from a keyframe rendered on this style's own engine at 1280x704. Held constant across every style in the sweep: subject, keyframe seed 7204, video seed 8801, motion prompt, clip length. MEASURED BY RENDERING AND LOOKING, NOT PREDICTED.",
+    "caveats": "boil is NOT a style-stability number in this sweep - it tracks how much the clip moved, and the identical motion prompt produced motion from 0.345 to 2.772 across styles. detail is the load-bearing number, and it too drops when the COMPOSITION changes rather than the texture. Read both against the strips. n=1 clip, one subject, one seed.",
+    "measured": "2026-08-04",
+    "tool": "studio/_tools/video_examples.py"
+  }
 }

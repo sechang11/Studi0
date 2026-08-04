@@ -12,7 +12,7 @@
     "bleach"
   ],
   "strength": "strong",
-  "works_for": "The strongest video survivor here. INFERRED, not measured: large flat fields with hard edges give LTX-2.3 nothing fine to boil. The failure to watch for is the opposite of boiling - edges softening and gradients creeping in as the clip runs, which reads as the style quietly decaying rather than as noise.",
+  "works_for": "video - CONFIRMED by render, and it is the strongest kind of confirmation because the failure the card predicted was looked for and is absent. Over 8.04s the flat fills, hard contours and limited palette are indistinguishable at frame 192 from frame 0; no edge softening, no gradient creep. The real risk with this style in motion is elsewhere: it produced the most movement of any style in the sweep (motion 2.772 from a prompt asking for almost none), the background geometry rearranges continuously, and the camera pushed in despite being told not to. Use it for shots where the subject carries the frame, not where background continuity has to read.",
   "status": "ready",
   "note": "SPELLING IS MEASURED, not pedantry: studio/tags/flat_colour.json records that the trained danbooru token is the American 'flat color' and that the British spelling lands weaker, so write flat color in the anime prompt even though the rest of this library says colour. On animagine this gives flat ANIME rather than vector - the keyline and face proportions stay anime and you have only removed the shading; actual vector geometry is the qwen path. Grading fights this style: the point is a small deliberate palette, and a strong look re-introduces exactly the tonal variation you spent tokens removing. Stay on neutral or something mild.",
   "examples": {
@@ -21,5 +21,33 @@
   },
   "compose": "safe",
   "verdict": "Hard-edged shapes and clean fills. Works here; on qwen it barely moved.",
-  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py",
+  "video_verdict": {
+    "holds": "yes",
+    "failure": "content drift - background architecture rearranges, unrequested push-in",
+    "saw": "The idiom is untouched at 8 seconds. Solid fills stay solid, the heavy black contours stay hard, the five-colour red/grey/white palette never widens. The card's named failure - edges softening and gradients creeping in - did not happen at all; at native resolution frame 192 is as crisp as frame 0. What does fail is everything except the style: the buildings continuously rearrange themselves, doors and windows slide and change shape, and the camera pushes in although the prompt pinned it. This was the highest-motion clip in the whole sweep (2.772), which is where its boil 0.302 and detail 0.866 come from - not from the style decaying.",
+    "motion": 2.772,
+    "churn": 0.068,
+    "boil": 0.302,
+    "detail_8s": 0.866,
+    "detail_4s": 0.915,
+    "detail_octiles": [
+      0.977,
+      0.957,
+      0.942,
+      0.924,
+      0.904,
+      0.886,
+      0.882,
+      0.867
+    ],
+    "kf_retention": 0.999,
+    "clip": "/samples/video/flat_vector.mp4",
+    "strip": "/samples/video/flat_vector_strip.png",
+    "detail_strip": "/samples/video/flat_vector_detail.png",
+    "measured_on": "One 193-frame (8.04s) LTX-2.3 image-to-video clip, workflow 12_ltx23_i2v_audio.json at its shipping settings, from a keyframe rendered on this style's own engine at 1280x704. Held constant across every style in the sweep: subject, keyframe seed 7204, video seed 8801, motion prompt, clip length. MEASURED BY RENDERING AND LOOKING, NOT PREDICTED.",
+    "caveats": "boil is NOT a style-stability number in this sweep - it tracks how much the clip moved, and the identical motion prompt produced motion from 0.345 to 2.772 across styles. detail is the load-bearing number, and it too drops when the COMPOSITION changes rather than the texture. Read both against the strips. n=1 clip, one subject, one seed.",
+    "measured": "2026-08-04",
+    "tool": "studio/_tools/video_examples.py"
+  }
 }

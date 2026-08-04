@@ -14,7 +14,7 @@
     "golden"
   ],
   "strength": "strong",
-  "works_for": "stills reliably. Through the LTX pass faces and hands are the first things to boil, and the closer the crop the worse it gets. Inferred from how i2v behaves here generally, not measured on this style - and note CAPABILITIES.md records Wan as the more faithful i2v when you have an exact keyframe worth keeping.",
+  "works_for": "stills reliably. Video - MEASURED, and the result is the opposite of the old prediction. Faces and hands did NOT boil: skin texture and facial structure hold cleanly through ~5.7s. What fails is the SHOT - at 8.04s the subject walked out of frame entirely and the clip ends on an empty street (detail octiles 1.00 ... 0.89 0.52, a cliff in the final eighth). At 4s the same clip is clean (detail 0.964). Keep photographic shots to about 4 seconds; the ceiling here is composition stability, not texture. Also note the untested CAPABILITIES.md claim that Wan is the more faithful i2v remains unmeasured.",
   "status": "ready",
   "note": "Do not run this on the anime checkpoint. `photorealistic` is a STANDING NEGATIVE in this project - studio/tags/photorealistic.json records that in the positive on Animagine it returns waxy semi-real faces and lost line, the worst of both worlds. It needs qwen. On qwen the negative above is close to inert at cfg 1.0 with the Lightning LoRA; if a render drifts illustrative, drop the LoRA and run 20 steps at cfg 2.5-4.0 so the negative actually bites. This is a STYLE, not a look: it changes what the model draws. What colour the result ends up is still the grade's job. | Downgraded to untested: NOTHING in this library was rendered when it was authored, so every strength and engine call is a considered prediction. This project's own standard - written on the Illustrious checkpoint card - is that a recommendation is not a measurement.",
   "examples": {
@@ -23,5 +23,33 @@
   },
   "compose": "safe",
   "verdict": "Skin texture and real lens falloff. Sits close to the control at 21.0 because qwen's baseline IS photographic - that is agreement, not failure.",
-  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py",
+  "video_verdict": {
+    "holds": "yes",
+    "failure": "THE SHOT fails, not the style - the subject walks out of frame by 8s",
+    "saw": "The most important clip in the sweep, and its failure has nothing to do with style. Skin texture, pores and facial structure hold beautifully through frame 137 - the predicted melting of faces and hands simply does not occur. Then the subject WALKS OUT OF FRAME. By frame 192 she is an out-of-focus red blur exiting stage left and the shot is an empty street. The octiles are flat and then cliff (1.00 1.01 1.01 0.97 0.97 0.94 0.89 0.52); detail is 0.510 at 8s but 0.964 at 4s. The 0.510 is measuring 'the subject left', not 'the texture dissolved'. At 4 seconds this clip is completely usable.",
+    "motion": 2.41,
+    "churn": 1.432,
+    "boil": 0.349,
+    "detail_8s": 0.51,
+    "detail_4s": 0.964,
+    "detail_octiles": [
+      1.004,
+      1.006,
+      1.009,
+      0.971,
+      0.97,
+      0.941,
+      0.894,
+      0.517
+    ],
+    "kf_retention": 1.005,
+    "clip": "/samples/video/photorealistic.mp4",
+    "strip": "/samples/video/photorealistic_strip.png",
+    "detail_strip": "/samples/video/photorealistic_detail.png",
+    "measured_on": "One 193-frame (8.04s) LTX-2.3 image-to-video clip, workflow 12_ltx23_i2v_audio.json at its shipping settings, from a keyframe rendered on this style's own engine at 1280x704. Held constant across every style in the sweep: subject, keyframe seed 7204, video seed 8801, motion prompt, clip length. MEASURED BY RENDERING AND LOOKING, NOT PREDICTED.",
+    "caveats": "boil is NOT a style-stability number in this sweep - it tracks how much the clip moved, and the identical motion prompt produced motion from 0.345 to 2.772 across styles. detail is the load-bearing number, and it too drops when the COMPOSITION changes rather than the texture. Read both against the strips. n=1 clip, one subject, one seed.",
+    "measured": "2026-08-04",
+    "tool": "studio/_tools/video_examples.py"
+  }
 }

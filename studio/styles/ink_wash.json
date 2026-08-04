@@ -13,7 +13,7 @@
     "faded_film"
   ],
   "strength": "moderate",
-  "works_for": "Video: split. The bold black strokes are exactly the flat high-contrast structure expected to hold, but the dry-brush greys are the fine texture expected to boil. There is a second-order risk too - LTX-2.3 is handed a frame that is largely EMPTY paper, and craft/CINEMATOGRAPHY.md documents that it has nothing to fill an empty region with. INFERRED from that documented failure shape, not measured on this style.",
+  "works_for": "video - CONFIRMED to hold, and BOTH halves of the predicted split were wrong in the style's favour. Over 8.04s the bold black strokes and the dry-brush greys both survive: boil 0.071 (joint lowest measured, at the noise floor), detail 0.944. The documented second-order risk is also refuted - LTX was handed a frame that is largely empty white paper and did not invent anything to fill it; the paper stays clean for the full clip. One of the safest styles in the library for video.",
   "status": "ready",
   "note": "Genuinely available on both engines - 'ink wash painting' is a real danbooru tag with a real Japanese-brush prior behind it on the anime checkpoint, which is rare in this set. Two things follow from it being near-monochrome. First, it recruits the monochrome tag, which studio/tags/monochrome.json rates STRONG and says will greyscale the entire frame and silently override every colour tag in the prompt - here that is a feature, but it means you cannot have a partly-coloured ink wash on the anime path. Second, do not spend a look slot on looks/noir afterwards: noir's hue=s=0 measured SATAVG at exactly 0.000, and there is nothing left in an ink wash for it to remove. If you want ink-wash marks WITH colour, that is a different and harder ask and this card will not give it to you. Anime-path tag behaviour sourced from studio/tags/monochrome.json; the style itself is not rendered here. | Downgraded to untested: NOTHING in this library was rendered when it was authored, so every strength and engine call is a considered prediction. This project's own standard - written on the Illustrious checkpoint card - is that a recommendation is not a measurement.",
   "examples": {
@@ -22,5 +22,33 @@
   },
   "compose": "safe",
   "verdict": "Sumi-e: bare paper, wet bleed, a red seal. Among the strongest in the library, 89.4 from control.",
-  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py",
+  "video_verdict": {
+    "holds": "yes",
+    "failure": "none - both halves of the predicted split held",
+    "saw": "Joint lowest boil in the sweep (0.071, tied with silhouette_poster) at the second-lowest motion (0.364), detail 0.944. The card predicted a split - bold strokes hold, dry-brush greys boil - and neither half of that happened: the black strokes hold AND the dry-brush grey wash holds. The card's second-order risk is also refuted, and this is the more useful result: LTX was handed a frame that is largely empty white paper and it did NOT fill it in. The paper stays clean and empty for 8 seconds. The predicted diagnostic signature (high boil with detail near 1.0) never appeared; boil sat at the floor instead.",
+    "motion": 0.364,
+    "churn": 0.446,
+    "boil": 0.071,
+    "detail_8s": 0.944,
+    "detail_4s": 0.987,
+    "detail_octiles": [
+      1.012,
+      1.021,
+      1.01,
+      0.994,
+      0.97,
+      0.965,
+      0.955,
+      0.944
+    ],
+    "kf_retention": 1.019,
+    "clip": "/samples/video/ink_wash.mp4",
+    "strip": "/samples/video/ink_wash_strip.png",
+    "detail_strip": "/samples/video/ink_wash_detail.png",
+    "measured_on": "One 193-frame (8.04s) LTX-2.3 image-to-video clip, workflow 12_ltx23_i2v_audio.json at its shipping settings, from a keyframe rendered on this style's own engine at 1280x704. Held constant across every style in the sweep: subject, keyframe seed 7204, video seed 8801, motion prompt, clip length. MEASURED BY RENDERING AND LOOKING, NOT PREDICTED.",
+    "caveats": "boil is NOT a style-stability number in this sweep - it tracks how much the clip moved, and the identical motion prompt produced motion from 0.345 to 2.772 across styles. detail is the load-bearing number, and it too drops when the COMPOSITION changes rather than the texture. Read both against the strips. n=1 clip, one subject, one seed.",
+    "measured": "2026-08-04",
+    "tool": "studio/_tools/video_examples.py"
+  }
 }

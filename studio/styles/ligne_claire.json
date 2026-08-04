@@ -12,7 +12,7 @@
     "golden"
   ],
   "strength": "strong",
-  "works_for": "video - the flattest idioms hold best; this should be among the top performers",
+  "works_for": "video - CONFIRMED to hold, and it is the clearest demonstration in the sweep that boil does not measure style survival. The even outline weight and flat fills are intact at 8.04s and the subject stays framed throughout. But it recorded the highest boil of any style measured (0.405) purely because its dense background line-field reorganises frame to frame; detail 0.859. Prefer it where the background can be simple - a busy ligne-claire street will visibly rebuild itself behind a static subject over 8 seconds.",
   "status": "ready",
   "note": "The Moebius/Herge tradition. Distinct from flat_vector (which measured ready) because ligne claire keeps a drawn outline where vector has none. | Authored in the second wave, after the first 64 were rendered and measured. status=untested because nothing here has been rendered yet - the first wave shipped 46 cards marked ready without a single render and 27 of 64 turned out to be routed to the wrong engine.",
   "examples": {
@@ -21,5 +21,33 @@
   },
   "compose": "safe",
   "verdict": "Uniform-weight outline, flat unmodulated colour, no cast shadow. Exactly the Moebius/Herge idiom and one of the cleanest cards in the library.",
-  "verified_by": "Looked at, against the no-style control at the same seed with the same subject, on both engines. studio/_tools/style_examples.py --all-engines"
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject, on both engines. studio/_tools/style_examples.py --all-engines",
+  "video_verdict": {
+    "holds": "yes",
+    "failure": "background line-field reorganises; highest boil in the sweep but not from the idiom",
+    "saw": "The line idiom holds perfectly - even outline weight, flat fills, no shading creeping in, and the face stays cleanly drawn for the full 8 seconds. It also scored the HIGHEST boil in the entire sweep (0.405), and looking at the strip tells you why the number is misleading: this style fills the background with a dense field of thin coloured architectural lines, and that field continuously reorganises. It is content churn in a high-frequency image, not the style failing. The subject and framing stay put the whole time - unlike the photographic clips at comparable motion, this one never loses its shot.",
+    "motion": 2.444,
+    "churn": 0.87,
+    "boil": 0.405,
+    "detail_8s": 0.859,
+    "detail_4s": 0.913,
+    "detail_octiles": [
+      0.976,
+      0.955,
+      0.917,
+      0.902,
+      0.905,
+      0.87,
+      0.863,
+      0.859
+    ],
+    "kf_retention": 1.009,
+    "clip": "/samples/video/ligne_claire.mp4",
+    "strip": "/samples/video/ligne_claire_strip.png",
+    "detail_strip": "/samples/video/ligne_claire_detail.png",
+    "measured_on": "One 193-frame (8.04s) LTX-2.3 image-to-video clip, workflow 12_ltx23_i2v_audio.json at its shipping settings, from a keyframe rendered on this style's own engine at 1280x704. Held constant across every style in the sweep: subject, keyframe seed 7204, video seed 8801, motion prompt, clip length. MEASURED BY RENDERING AND LOOKING, NOT PREDICTED.",
+    "caveats": "boil is NOT a style-stability number in this sweep - it tracks how much the clip moved, and the identical motion prompt produced motion from 0.345 to 2.772 across styles. detail is the load-bearing number, and it too drops when the COMPOSITION changes rather than the texture. Read both against the strips. n=1 clip, one subject, one seed.",
+    "measured": "2026-08-04",
+    "tool": "studio/_tools/video_examples.py"
+  }
 }

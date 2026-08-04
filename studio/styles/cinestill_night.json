@@ -13,7 +13,7 @@
     "noir"
   ],
   "strength": "strong",
-  "works_for": "video - halation is a per-light bloom and should hold",
+  "works_for": "video - CONFIRMED by render. Halation is a per-light bloom and it holds exactly as predicted: over 8.04s the bloomed point lights keep position, colour and bloom shape without smearing or multiplying, and the teal/red split holds (detail 0.954, boil 0.195). Notably it held while film_35mm's grain did not, in the same sweep - which is the cleanest evidence in the set that the fragile thing is FINE TEXTURE, not photographic realism. Caveat: the keyframe rendered as cool daylight rather than night, so halation was tested on a daylight frame.",
   "status": "ready",
   "note": "The red halo around point lights is unmistakable and very likely to land - it is a strong visual token with real corpus mass. Best paired with a night place. | Authored in the second wave, after the first 64 were rendered and measured. status=untested because nothing here has been rendered yet - the first wave shipped 46 cards marked ready without a single render and 27 of 64 turned out to be routed to the wrong engine.",
   "examples": {
@@ -22,5 +22,33 @@
   },
   "compose": "safe",
   "verdict": "Genuine red halation blooming around every light source. One of the strongest photographic cards in the library - pair it with a night place.",
-  "verified_by": "Looked at, against the no-style control at the same seed with the same subject, on both engines. studio/_tools/style_examples.py --all-engines"
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject, on both engines. studio/_tools/style_examples.py --all-engines",
+  "video_verdict": {
+    "holds": "yes",
+    "failure": "none",
+    "saw": "The halation claim is confirmed by looking at it. The red and orange bloomed point lights in the background bokeh keep their position, their colour and their bloom shape for the full 8 seconds - they never smear, migrate or multiply. The teal/red colour split holds and the face holds well through a mild push-in. detail 0.954, boil 0.195, motion 0.595. Caveat on the still rather than the clip: this keyframe is not very night-time, so what was actually tested is halation on a cool daylight frame.",
+    "motion": 0.595,
+    "churn": 0.608,
+    "boil": 0.195,
+    "detail_8s": 0.954,
+    "detail_4s": 0.965,
+    "detail_octiles": [
+      1.003,
+      0.994,
+      0.983,
+      0.97,
+      0.966,
+      0.952,
+      0.936,
+      0.954
+    ],
+    "kf_retention": 0.99,
+    "clip": "/samples/video/cinestill_night.mp4",
+    "strip": "/samples/video/cinestill_night_strip.png",
+    "detail_strip": "/samples/video/cinestill_night_detail.png",
+    "measured_on": "One 193-frame (8.04s) LTX-2.3 image-to-video clip, workflow 12_ltx23_i2v_audio.json at its shipping settings, from a keyframe rendered on this style's own engine at 1280x704. Held constant across every style in the sweep: subject, keyframe seed 7204, video seed 8801, motion prompt, clip length. MEASURED BY RENDERING AND LOOKING, NOT PREDICTED.",
+    "caveats": "boil is NOT a style-stability number in this sweep - it tracks how much the clip moved, and the identical motion prompt produced motion from 0.345 to 2.772 across styles. detail is the load-bearing number, and it too drops when the COMPOSITION changes rather than the texture. Read both against the strips. n=1 clip, one subject, one seed.",
+    "measured": "2026-08-04",
+    "tool": "studio/_tools/video_examples.py"
+  }
 }

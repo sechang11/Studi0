@@ -2,7 +2,7 @@
   "id": "comic_halftone",
   "name": "Comic book halftone",
   "family": "graphic",
-  "engine": "anime",
+  "engine": "qwen",
   "means": "Four-colour newsprint comic art: heavy black ink outline and solid spot blacks carrying the drawing, colour laid in as visible Ben-Day dot screens rather than solid fills, and the plates slightly out of register so a thin cyan or magenta fringe shows along the black line.",
   "tags": "",
   "prose": "a 1970s four-colour comic book page printed on newsprint, heavy black ink outlines and solid spot blacks, colour applied as coarse visible Ben-Day halftone dots rather than flat fills, the colour plates slightly misregistered so thin cyan and magenta fringes show against the black line, limited flat primary palette, absorbent paper stock",
@@ -15,7 +15,7 @@
   "strength": "moderate",
   "works_for": "Stills yes, video poorly. INFERRED from the flat-survives/texture-boils rule, not measured here: the dot screen is pixel-scale texture, which is the class LTX-2.3 boils, so a halftone keyframe tends to animate into a crawling moire. If you need it moving, hold the still and move the frame in post rather than letting i2v interpolate the dots.",
   "status": "weak",
-  "note": "Dot SCALE is the whole failure mode. Ask for coarse visible Ben-Day dots by name or the model renders a fine grey screen that disappears entirely at 1344x768, leaving a flat comic with no print idiom at all. NOT AVAILABLE on animagine: 'western comic' sits in this project's standing negative precisely because it returns anime eyes on comic anatomy (studio/tags/western_comic.json), so the tags field is deliberately empty rather than tempting. The anime checkpoint does have a native halftone idiom, but it is the Japanese one - 'manga, screentone, halftone, monochrome' gives screentone, a different style, and studio/tags/monochrome.json measured that monochrome greyscales the entire frame, so that route is black and white only. Do not mistake this for a look: the misregistration fringe has to be DRAWN, and no ffmpeg grade in studio/looks/ can add ink that was never printed.",
+  "note": "Dot SCALE is the whole failure mode. Ask for coarse visible Ben-Day dots by name or the model renders a fine grey screen that disappears entirely at 1344x768, leaving a flat comic with no print idiom at all. NOT AVAILABLE on animagine: 'western comic' sits in this project's standing negative precisely because it returns anime eyes on comic anatomy (studio/tags/western_comic.json), so the tags field is deliberately empty rather than tempting. The anime checkpoint does have a native halftone idiom, but it is the Japanese one - 'manga, screentone, halftone, monochrome' gives screentone, a different style, and studio/tags/monochrome.json measured that monochrome greyscales the entire frame, so that route is black and white only. Do not mistake this for a look: the misregistration fringe has to be DRAWN, and no ffmpeg grade in studio/looks/ can add ink that was never printed. | ENGINE CORRECTED anime -> qwen: Only partly rescued, and the LoRA that does it is qwen-based, so the engine follows it. Left status=weak: manga_screentone produces a real dot screen unaided and remains the better card.",
   "examples": {
     "anime": "/samples/styles/comic_halftone__anime.webp",
     "qwen": "/samples/styles/comic_halftone__qwen.webp"

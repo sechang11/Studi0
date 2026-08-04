@@ -13,7 +13,7 @@
     "bleach"
   ],
   "strength": "strong",
-  "works_for": "video - large static forms are the most stable case there is",
+  "works_for": "video - the architecture claim is CONFIRMED and the shot-level claim is not. Over 8.04s large static forms (concrete, brick) hold rock-steady in position and texture with no morphing. But this rendered photographically, and it took the same failure as photorealistic: the subject walked past camera and by 8s the frame is out-of-focus motion (detail 0.442, the largest fall measured; octiles ramp down from the 4s mark). At 4s the clip is clean (detail 0.934). Stable for architecture; keep the shot to ~4s if a person is in it.",
   "status": "ready",
   "note": "PREDICTED RISK: this is really an ARCHITECTURE card and may override the place layer entirely, like ghibli_pastoral. Expect compose=replaces. | Authored in the second wave, after the first 64 were rendered and measured. status=untested because nothing here has been rendered yet - the first wave shipped 46 cards marked ready without a single render and 27 of 64 turned out to be routed to the wrong engine.",
   "examples": {
@@ -22,5 +22,33 @@
   },
   "compose": "replaces",
   "verdict": "Massive raw concrete under flat grey light. As the card predicted, it is an architecture card and it rebuilds the location.",
-  "verified_by": "Looked at, against the no-style control at the same seed with the same subject, on both engines. studio/_tools/style_examples.py --all-engines"
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject, on both engines. studio/_tools/style_examples.py --all-engines",
+  "video_verdict": {
+    "holds": "partly",
+    "failure": "architecture holds rock-steady; the subject walks past camera and the shot dies",
+    "saw": "Two results in one clip. The card's actual claim - large static forms are the most stable case there is - is confirmed without reservation: the concrete slab and brick wall hold rock-steady in position and texture through frame 165, with no morphing or creep. But the same failure as photorealistic then destroys the shot: the subject walks toward and past camera, and by frame 192 the frame is out-of-focus motion. The octiles ramp down from the fourth eighth (1.00 1.00 1.00 0.95 0.89 0.80 0.66 0.45) to detail 0.442, the largest fall in the sweep, while detail at 4s is a healthy 0.934.",
+    "motion": 1.871,
+    "churn": 1.073,
+    "boil": 0.308,
+    "detail_8s": 0.442,
+    "detail_4s": 0.934,
+    "detail_octiles": [
+      1.0,
+      1.002,
+      0.997,
+      0.952,
+      0.892,
+      0.801,
+      0.66,
+      0.446
+    ],
+    "kf_retention": 1.001,
+    "clip": "/samples/video/brutalist.mp4",
+    "strip": "/samples/video/brutalist_strip.png",
+    "detail_strip": "/samples/video/brutalist_detail.png",
+    "measured_on": "One 193-frame (8.04s) LTX-2.3 image-to-video clip, workflow 12_ltx23_i2v_audio.json at its shipping settings, from a keyframe rendered on this style's own engine at 1280x704. Held constant across every style in the sweep: subject, keyframe seed 7204, video seed 8801, motion prompt, clip length. MEASURED BY RENDERING AND LOOKING, NOT PREDICTED.",
+    "caveats": "boil is NOT a style-stability number in this sweep - it tracks how much the clip moved, and the identical motion prompt produced motion from 0.345 to 2.772 across styles. detail is the load-bearing number, and it too drops when the COMPOSITION changes rather than the texture. Read both against the strips. n=1 clip, one subject, one seed.",
+    "measured": "2026-08-04",
+    "tool": "studio/_tools/video_examples.py"
+  }
 }

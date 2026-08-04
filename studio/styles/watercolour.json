@@ -14,7 +14,7 @@
     "faded_film"
   ],
   "strength": "moderate",
-  "works_for": "stills on both engines. Video: middling. Wash boundaries are mid-frequency and should survive the LTX pass better than grain, but the paper tooth and the granulation will not. INFERRED from the flat-holds/texture-boils prior, not measured here.",
+  "works_for": "video - CONFIRMED, and it held BETTER than the card predicted. Over 8.04s the wash boundaries survive as expected and so does the granulation the card expected to lose: detail 0.976, boil 0.137, octiles flat, at the lowest motion measured in the sweep (0.345). Not middling - solid. The soft failure is anatomical rather than material: the face softens and goes slightly muddy mid-clip, so avoid tight facial close-ups over long shots.",
   "status": "ready",
   "note": "One of the few in the painted set genuinely available on both engines. On the anime path the spelling and the suffix both matter: the trained tag is 'watercolor (medium)' - American spelling plus the danbooru disambiguator that separates the paint from the colour of water - and that is exactly what studio/cards/anime_bg_style.json already uses. Write the American form in the prompt even though the UI says colour. Two traps. First, do NOT reach for 'white background' to get the bare paper: that string sits in this project's standing negative (craft/ANIME_MODELS.md), and putting it in the positive fights the render. Second, this style lives in pale high-key values, so it is the one most easily destroyed by the grade that follows it - looks/noir at contrast 1.32 and looks/night at 1.20 will crush the washes into mud. Pair it with the gentle looks listed above. Anime-path behaviour is sourced from studio/tags/watercolour.json, which rates it moderate; the qwen half is reasoned, not rendered. | Downgraded to untested: NOTHING in this library was rendered when it was authored, so every strength and engine call is a considered prediction. This project's own standard - written on the Illustrious checkpoint card - is that a recommendation is not a measurement.",
   "examples": {
@@ -23,5 +23,33 @@
   },
   "compose": "safe",
   "verdict": "Paper bleed and pigment pooling. Strongest measured result in the set, 92.1 from control. This card was authored engine=qwen, where it produced a plain photograph and did nothing.",
-  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py",
+  "video_verdict": {
+    "holds": "yes",
+    "failure": "none - granulation outlasted its prediction",
+    "saw": "Lowest motion in the sweep (0.345) and correspondingly quiet: boil 0.137, detail 0.976, octiles flat. The card predicted middling behaviour, with wash boundaries surviving but paper tooth and granulation not. The granulation is the interesting part and it is clearly still present in the red scarf at frame 192 - it did not smooth away. Wash boundaries hold as predicted. The one thing that does soften is the face: eyes close, features go a little muddy around the middle of the clip, but that is anatomy, not the medium.",
+    "motion": 0.345,
+    "churn": 0.521,
+    "boil": 0.137,
+    "detail_8s": 0.976,
+    "detail_4s": 1.004,
+    "detail_octiles": [
+      1.014,
+      1.037,
+      1.041,
+      1.014,
+      0.984,
+      0.977,
+      0.988,
+      0.977
+    ],
+    "kf_retention": 1.019,
+    "clip": "/samples/video/watercolour.mp4",
+    "strip": "/samples/video/watercolour_strip.png",
+    "detail_strip": "/samples/video/watercolour_detail.png",
+    "measured_on": "One 193-frame (8.04s) LTX-2.3 image-to-video clip, workflow 12_ltx23_i2v_audio.json at its shipping settings, from a keyframe rendered on this style's own engine at 1280x704. Held constant across every style in the sweep: subject, keyframe seed 7204, video seed 8801, motion prompt, clip length. MEASURED BY RENDERING AND LOOKING, NOT PREDICTED.",
+    "caveats": "boil is NOT a style-stability number in this sweep - it tracks how much the clip moved, and the identical motion prompt produced motion from 0.345 to 2.772 across styles. detail is the load-bearing number, and it too drops when the COMPOSITION changes rather than the texture. Read both against the strips. n=1 clip, one subject, one seed.",
+    "measured": "2026-08-04",
+    "tool": "studio/_tools/video_examples.py"
+  }
 }

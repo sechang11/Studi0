@@ -13,7 +13,7 @@
     "sodium",
     "neutral"
   ],
-  "works_for": "Video: the worst in this set, and this one is barely an inference. LTX-2.3 resamples every frame, a pixel grid is the highest-frequency structure you can hand it, and there is nothing telling it to preserve the alignment - expect the grid to shimmer apart within a second. If you want pixel-art video, generate and run the LTX pass first and apply the quantise pass PER FRAME afterwards, the same way looks/ grades are applied after.",
+  "works_for": "video - SPLIT, and the old 'shimmers apart within a second' prediction is wrong by about an order of magnitude. Over 8.04s the pixel-art LOOK survives clearly at viewing scale (detail 0.970, boil 0.157, third lowest in the sweep) - chunky quantised blocks, aliased stair-stepping and the limited palette all hold. What degrades is grid COHERENCE at native resolution: block sizes drift apart, edges leave alignment, and the face develops finer stepping than the background. Usable for video if the grid is not the point; if it is, the existing advice still applies - run the LTX pass first and quantise per frame afterwards, the way looks/ grades are applied after.",
   "strength": "weak",
   "status": "ready",
   "note": "Obedience is high and fidelity is nil, which is a combination worth naming. 'pixel art' is a well-populated danbooru tag and the anime checkpoint fires on it every time - but what comes back is pixel-art-FLAVOURED illustration: the pixels are different sizes in different parts of the frame, the edges are anti-aliased, and at the checkpoint's native 1344x768 the grid dissolves completely. Qwen is no better. This is a RESOLUTION problem, not a prompt problem, and no adjective fixes it - which is exactly why it is marked weak rather than moderate: a style that looks available and produces mush is worse than one marked unavailable. The real answer is the one this project already uses for colour: do it deterministically afterwards. Prompt only for what generation can give you - flat, front-on, simple readable silhouette, dark outline, short palette - then nearest-neighbour down and back up and quantise the palette in ffmpeg. Something on the order of scale=iw/6:ih/6:flags=neighbor,scale=iw*6:ih*6:flags=neighbor plus a palettegen/paletteuse pair. UNTESTED - nobody has run that on this box; it is the standard nearest-neighbour pair and it belongs in looks/ or a new post-process library if it works. That is the piece of work this card is really asking for. | Downgraded to untested: NOTHING in this library was rendered when it was authored, so every strength and engine call is a considered prediction. This project's own standard - written on the Illustrious checkpoint card - is that a recommendation is not a measurement.",
@@ -23,5 +23,33 @@
   },
   "compose": "safe",
   "verdict": "Convincing pixel grid and clamped palette. The authoring agent concluded neither engine could produce a pixel grid and that the card needed a post-process instead - that was wrong, animagine does it directly.",
-  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py",
+  "video_verdict": {
+    "holds": "partly",
+    "failure": "the LOOK survives; the GRID loses coherence - far slower than predicted",
+    "saw": "The card predicted the grid would shimmer apart within a second. At whole-frame scale the clip is unmistakably still pixel art at 8 seconds - chunky quantised blocks, hard aliased stair-stepping, the limited teal/red palette all intact, detail 0.970 and boil 0.157 (third lowest in the sweep). But at native resolution the finer claim is right: the blocks stop sharing one grid. Block sizes vary across the frame, edges drift off alignment, and by the middle of the clip the face carries visibly finer stepping than the background. So the mechanism the card identified is real and the timescale is wrong by roughly an order of magnitude - it stays pixel art, it stops being one grid.",
+    "motion": 1.347,
+    "churn": 0.604,
+    "boil": 0.157,
+    "detail_8s": 0.97,
+    "detail_4s": 0.949,
+    "detail_octiles": [
+      1.001,
+      0.984,
+      0.915,
+      0.941,
+      0.955,
+      0.963,
+      0.969,
+      0.97
+    ],
+    "kf_retention": 1.005,
+    "clip": "/samples/video/pixel_art.mp4",
+    "strip": "/samples/video/pixel_art_strip.png",
+    "detail_strip": "/samples/video/pixel_art_detail.png",
+    "measured_on": "One 193-frame (8.04s) LTX-2.3 image-to-video clip, workflow 12_ltx23_i2v_audio.json at its shipping settings, from a keyframe rendered on this style's own engine at 1280x704. Held constant across every style in the sweep: subject, keyframe seed 7204, video seed 8801, motion prompt, clip length. MEASURED BY RENDERING AND LOOKING, NOT PREDICTED.",
+    "caveats": "boil is NOT a style-stability number in this sweep - it tracks how much the clip moved, and the identical motion prompt produced motion from 0.345 to 2.772 across styles. detail is the load-bearing number, and it too drops when the COMPOSITION changes rather than the texture. Read both against the strips. n=1 clip, one subject, one seed.",
+    "measured": "2026-08-04",
+    "tool": "studio/_tools/video_examples.py"
+  }
 }

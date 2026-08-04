@@ -14,7 +14,7 @@
     "sodium"
   ],
   "strength": "moderate",
-  "works_for": "video - the flat paint holds, the grain does not. cards/anime_draw_cel_artifacts.json already concedes that its jitter, weave and wobble options only exist in motion, and fine grain is exactly the high-frequency texture an i2v pass re-guesses every frame. INFERRED, not measured on an LTX sweep. If a clip boils, drop film grain from the prompt and add grain in the grade instead, where it is deterministic.",
+  "works_for": "video - CONFIRMED to hold, and the card's split prediction was WRONG in the style's favour. Both the flat cel paint AND the baked film grain survive 8.04s: detail octiles flat (1.01 -> 0.976), boil 0.173. The grain does not re-roll and does not smooth away - it stays welded to the picture. The old advice to strip grain from the prompt and add it in the grade instead is not needed for temporal reasons; keep it if you want it in the frame. Comfortably usable at 8 seconds.",
   "status": "ready",
   "note": "The DECADE tag carries this, not the word retro. cards/anime_draw_era.json reviewed exactly this question and concluded to keep the decade tags doing the work; its cel_70s and film_stock_retro panels both carried the tail 'retro artstyle, faded colors' and landed in the same place, i.e. stopped being distinguishable. So if this film also uses ova_80s, strip that shared tail from one of the two. Note the division of labour with looks, which is easy to get wrong here: 1990s (style) changes the PAINT the model applies; looks/faded_film changes the colour of whatever came out, afterwards, deterministically. Ageing a film usually wants both - but asking for it twice in the prompt does not stack, it just spends tag slots. | Downgraded to untested: NOTHING in this library was rendered when it was authored, so every strength and engine call is a considered prediction. This project's own standard - written on the Illustrious checkpoint card - is that a recommendation is not a measurement.",
   "examples": {
@@ -23,5 +23,33 @@
   },
   "compose": "safe",
   "verdict": "Heavier uneven line, duller warm palette, hard flat shadow. Reads unmistakably as a 90s OVA cel beside the control.",
-  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py",
+  "video_verdict": {
+    "holds": "yes",
+    "failure": "none - including the grain the card expected to lose",
+    "saw": "Both halves of this style survive, which contradicts the card's split. The flat cel paint, hard shadow shapes and cyan/green retro palette hold exactly as predicted. But the baked analogue grain and video noise - the part the card said would boil away - is still plainly there in the background at frame 192, and the detail octiles are essentially flat (1.01 1.01 1.01 1.00 0.99 0.98 0.98 0.98, ending 0.976). boil 0.173 at motion 0.772. The grain reads as welded to the picture, not re-rolled each frame. This is the house idiom of the project and it came through the pass intact.",
+    "motion": 0.772,
+    "churn": 0.56,
+    "boil": 0.173,
+    "detail_8s": 0.976,
+    "detail_4s": 1.0,
+    "detail_octiles": [
+      1.008,
+      1.009,
+      1.008,
+      1.004,
+      0.991,
+      0.978,
+      0.977,
+      0.976
+    ],
+    "kf_retention": 1.027,
+    "clip": "/samples/video/cel_anime_90s.mp4",
+    "strip": "/samples/video/cel_anime_90s_strip.png",
+    "detail_strip": "/samples/video/cel_anime_90s_detail.png",
+    "measured_on": "One 193-frame (8.04s) LTX-2.3 image-to-video clip, workflow 12_ltx23_i2v_audio.json at its shipping settings, from a keyframe rendered on this style's own engine at 1280x704. Held constant across every style in the sweep: subject, keyframe seed 7204, video seed 8801, motion prompt, clip length. MEASURED BY RENDERING AND LOOKING, NOT PREDICTED.",
+    "caveats": "boil is NOT a style-stability number in this sweep - it tracks how much the clip moved, and the identical motion prompt produced motion from 0.345 to 2.772 across styles. detail is the load-bearing number, and it too drops when the COMPOSITION changes rather than the texture. Read both against the strips. n=1 clip, one subject, one seed.",
+    "measured": "2026-08-04",
+    "tool": "studio/_tools/video_examples.py"
+  }
 }

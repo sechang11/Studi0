@@ -2,7 +2,7 @@
   "id": "stop_motion_felt",
   "name": "Stop motion felt",
   "family": "3d",
-  "engine": "anime",
+  "engine": "qwen",
   "means": "Needle-felted wool puppets on a miniature set: every surface a dense mat of short fibres with a soft lit halo at the contours, visible hand stitching and seams, armature wire faintly shaping the limbs under the fabric, and props made of felt too so nothing in frame is hard-surfaced.",
   "tags": "",
   "prose": "a stop-motion still of needle-felted wool puppets, every surface a dense mat of short fibres with a soft lit halo along the contours, visible hand stitching and seams, armature wire faintly shaping the limbs beneath the felt, a miniature set built entirely from felt and card, soft warm studio lighting, shallow macro depth of field",
@@ -15,7 +15,7 @@
   "strength": "weak",
   "works_for": "No - the worst survivor in this set. The fibre halo is the finest texture of any style here and it is exactly what boils, and it carries claymation's smooth-motion contradiction on top of that. INFERRED, not measured, but both failure modes point the same way. Use it for held frames only.",
   "status": "ready",
-  "note": "WEAK, and honestly weaker than claymation for a simple reason: felt is a fibre texture at a scale near the model's resolution limit, so it half-lands as fuzzy cloth rather than as felt. Faces are where it collapses - felted features are crude by nature and the model keeps dragging them back toward rendered human features, producing an uncanny middle. Keep to simple stylised characters and wide framing. STITCHING is the noun that buys the most, because it is large enough to survive at this resolution. NOT AVAILABLE on animagine, same reason as claymation. If what you actually want is handmade and warm rather than felt specifically, papercut_collage is far more reliable on this box - reach for that instead.",
+  "note": "WEAK, and honestly weaker than claymation for a simple reason: felt is a fibre texture at a scale near the model's resolution limit, so it half-lands as fuzzy cloth rather than as felt. Faces are where it collapses - felted features are crude by nature and the model keeps dragging them back toward rendered human features, producing an uncanny middle. Keep to simple stylised characters and wide framing. STITCHING is the noun that buys the most, because it is large enough to survive at this resolution. NOT AVAILABLE on animagine, same reason as claymation. If what you actually want is handmade and warm rather than felt specifically, papercut_collage is far more reliable on this box - reach for that instead. | ENGINE CORRECTED anime -> qwen: Rescued by illustration-1.0-qwen-image on the QWEN engine - a needle-felted puppet with visible hand stitching down the lapels, matted fibre hair and macro depth of field. The card previously said engine=anime, which is where the style was originally measured as inert; the rescue only exists on qwen, so the engine follows the evidence.",
   "examples": {
     "anime": "/samples/styles/stop_motion_felt__anime.webp",
     "qwen": "/samples/styles/stop_motion_felt__qwen.webp"
