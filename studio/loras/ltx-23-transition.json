@@ -6,10 +6,13 @@
   "engine": "video",
   "kind": "edit",
   "strength": 1.0,
-  "strength_range": [0.5, 1.0],
+  "strength_range": [
+    0.5,
+    1.0
+  ],
   "trigger": "",
   "means": "Generates the video that gets from one state to another - a morph or transition between two given frames rather than a clip from a single start frame.",
-  "status": "untested",
-  "verdict": "",
+  "status": "ready",
+  "verdict": "THE MECHANISM WORKS AND IS NEW CAPABILITY FOR THIS PROJECT; THE LORA ITSELF IS UNPROVEN. Built a first-last-frame graph (two LTXVAddGuide nodes at frame_idx 0 and -1, strength 0.7) transcribed from ComfyUI's video_ltx2_3_flf2v.json, and ran two REAL consecutive cuts from films/clash.json: 010_ridge -> 020_beast, and 150_lock -> 160_answer. THE FLF2V MECHANISM LANDS: final-frame SSIM against the END keyframe is 0.807-0.848, while the two endpoints score only 0.058-0.169 against each other. The clip genuinely travels from one composed frame to the other, inventing the in-between - on trB it interpolates a wide two-shot into a close-up of a face. This is a GENERATED transition, categorically different from the xfade in studio/transitions/. THE LORA'S OWN CONTRIBUTION IS NOT ESTABLISHED on two samples: end-frame SSIM went 0.819 -> 0.848 with it on trA but 0.843 -> 0.807 on trB. What it does change, visibly, is the CHARACTER of the transition: with the LoRA the subject morphs in place (the man becomes the beast standing where he stood), without it the model invents a camera move to get between the shots. Both are usable; they are different edits. NOTE FOR WHOEVER WIRES THIS: LTX-2.3 is an audio-video model and the sampler MUST be fed LTXVConcatAVLatent. A video-only latent fails with 'cannot reshape tensor of 0 elements'. LTXVCropGuides must run AFTER LTXVSeparateAVLatent, on the video latent. Evidence: studio/samples/video_engines/, strips trA__*/trB__*.",
   "note": "kind is 'edit' because the schema has no video-structural value; see ltx-23-ic-union-control for the same compromise. | base_model INFERRED. __metadata__ is PRESENT BUT EMPTY, exactly like ltx-23-id-talkvid. The evidence is 48 transformer_blocks with attn1/attn2/ff plus audio_ff, matching the two files that state model_version 2.3.0, plus the filename. Structural, not a version read. | purpose is name-inferred and nothing more. 'transition' is a guess about intent from six characters of filename. | THE REASON TO CARE: transitions in this project are currently a compile-time concept (studio/transitions/) applied between rendered clips, not something a model generates. A model that can synthesise the in-between would be a different mechanism, not a better version of the existing one - so anyone testing this should first decide which of the two they actually want. | NOT WIRED. trigger unknown. 1152 tensors, rank 32, no alpha so scale 1.0."
 }

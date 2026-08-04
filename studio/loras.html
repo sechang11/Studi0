@@ -121,6 +121,16 @@
   .empty{padding:40px 18px;color:var(--dim)}
   .foot{padding:6px 18px 40px;color:var(--dim);font-size:12px;max-width:110ch}
   .foot .contrib{white-space:normal}
+
+  /* A LoRA's example is a STRENGTH LADDER, never a single frame. The leftmost cell is the
+     control at strength 0, because a LoRA is a delta on the base weights - an image of the
+     result on its own cannot tell you what the LoRA did. Wide and short so it reads as a
+     sequence rather than as a picture. */
+  .ladder{margin:10px 0 0;border:1px solid var(--line);border-radius:8px;overflow:hidden;
+          background:var(--panel2)}
+  .ladder img{width:100%;display:block}
+  .ladder figcaption{font:11px/1.4 ui-sans-serif,system-ui;color:var(--dim);padding:6px 9px;
+          border-top:1px solid var(--line)}
 </style>
 </head>
 <body>
@@ -345,6 +355,8 @@ function card(c){
       <h3>${esc(c.name||c.id)}<span class="kd">${esc(c.kind||"?")}</span></h3>
       <div class="id">${esc(c.file||c.id)}</div>
       <p>${esc(c.means||"")}</p>
+      ${c.example?`<figure class="ladder"><img loading="lazy" src="${esc(c.example)}" alt="">
+        <figcaption>strength ladder &mdash; leftmost cell is OFF</figcaption></figure>`:""}
       <div class="trg ${ts==="has"?"":ts}">${
         ts==="has"?`trigger <b>${esc(c.trigger)}</b> — the prompt must contain it`
         :ts==="none"?`trigger <b>none</b> — it applies on load`
@@ -361,6 +373,10 @@ function open_(id){
   $("dname").textContent=c.name||c.id;
   $("did").textContent=(c.id||"")+" · "+(c.kind||"")+" · "+(c.base_model||"base unrecorded");
   $("dbody").innerHTML=`
+    ${c.example?`<figure class="ladder" style="margin-bottom:14px">
+      <img src="${esc(c.example)}" alt="">
+      <figcaption>${esc(c.example_note||"Strength ladder. The leftmost cell is the control.")}</figcaption>
+     </figure>`:""}
     <div class="eng e-${e}" style="border:1px solid var(--line);border-radius:9px">
       ${esc(b.head)}<small>${esc(b.sub||c.base_model||"")}</small></div>
     <div class="${e==="none"?"warnbox":"verdict"}">${esc(b.long)}</div>
