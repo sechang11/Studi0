@@ -1,10 +1,10 @@
 {
  "generated_from": "git log",
- "count": 66,
+ "count": 67,
  "days": [
   [
    "2026-08-04",
-   20
+   21
   ],
   [
    "2026-08-03",
@@ -28,8 +28,29 @@
  ],
  "entries": [
   {
-   "hash": "1177024",
-   "full": "11770242d3d2cfbff063bd20bbc549afd20312b3",
+   "hash": "ed610d1",
+   "full": "ed610d13b3fca8728122e099491759380e3a319f",
+   "date": "2026-08-04",
+   "time": "17:40",
+   "author": "sechang11",
+   "subject": "The 0.85 setting collapse was never about strength",
+   "body": "This project reported twice, as measured, that a character LoRA at 0.85 destroys the\nsetting - NIKA's sunlit field became a grey void, and TERRA's snow forest collapsed to\nflat beige. Both observations were real. The explanation was wrong.\n\nIt was the UNCAPTIONED TAUPE BACKDROP of the turnaround being absorbed into the trigger.\nAt high strength the LoRA was reproducing its own training background over whatever place\nwas asked for. Evidence at studio/samples/cast/terra_costume_fix/setting_grid.jpg: the\nuncaptioned v1 at 0.85 gives a featureless taupe void for snow_road and reduces a meadow\nto an arch-shaped window cut into a wall, while the captioned v3 holds a real forest with\ndepth and a real meadow AT THE SAME 0.85 AND THE SAME SEED.\n\nSo 0.85 is not inherently unsafe and 0.5 was a workaround for a dataset defect rather\nthan a law. The default stays 0.5, because that is the strength the rest of this\ncharacter's evidence was measured at and nothing has shown 0.85 to be BETTER - only that\nit is no longer destructive. Overclaiming in the other direction would repeat the mistake.\n\nRecorded on every LoRA-backed character, not just Terra, because any future character\ntrained from an uncaptioned single-backdrop turnaround inherits the same defect.",
+   "paragraphs": [
+    "This project reported twice, as measured, that a character LoRA at 0.85 destroys the\nsetting - NIKA's sunlit field became a grey void, and TERRA's snow forest collapsed to\nflat beige. Both observations were real. The explanation was wrong.",
+    "It was the UNCAPTIONED TAUPE BACKDROP of the turnaround being absorbed into the trigger.\nAt high strength the LoRA was reproducing its own training background over whatever place\nwas asked for. Evidence at studio/samples/cast/terra_costume_fix/setting_grid.jpg: the\nuncaptioned v1 at 0.85 gives a featureless taupe void for snow_road and reduces a meadow\nto an arch-shaped window cut into a wall, while the captioned v3 holds a real forest with\ndepth and a real meadow AT THE SAME 0.85 AND THE SAME SEED.",
+    "So 0.85 is not inherently unsafe and 0.5 was a workaround for a dataset defect rather\nthan a law. The default stays 0.5, because that is the strength the rest of this\ncharacter's evidence was measured at and nothing has shown 0.85 to be BETTER - only that\nit is no longer destructive. Overclaiming in the other direction would repeat the mistake.",
+    "Recorded on every LoRA-backed character, not just Terra, because any future character\ntrained from an uncaptioned single-backdrop turnaround inherits the same defect."
+   ],
+   "areas": [
+    "Cast"
+   ],
+   "files": 4,
+   "added": 8,
+   "removed": 4
+  },
+  {
+   "hash": "5605f86",
+   "full": "5605f8602c9d339d8db8f2f3e4430fae17332790",
    "date": "2026-08-04",
    "time": "17:36",
    "author": "sechang11",
@@ -42,9 +63,9 @@
    "areas": [
     "Cast"
    ],
-   "files": 1,
-   "added": 1,
-   "removed": 1
+   "files": 2,
+   "added": 27,
+   "removed": 8
   },
   {
    "hash": "12c0a03",
