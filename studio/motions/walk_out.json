@@ -10,5 +10,26 @@
   ],
   "needs": "a person in frame",
   "grammar": "[MOVER] [ACTION VERB] [PATH/SPATIAL RELATION]",
-  "status": "untested"
+  "status": "weak",
+  "measured": {
+    "motion_per_seed": [
+      1.209,
+      1.0929,
+      1.3746
+    ],
+    "motion_mean": 1.226,
+    "creep_mean": 1.0,
+    "seeds": [
+      7701,
+      7702,
+      7703
+    ],
+    "band_lo": 0.4058,
+    "band_hi": 0.7444,
+    "frame_scale_ceiling": 1.191,
+    "keyframe": "studio/samples/motion_lib/_keyframe.png",
+    "frames": 97,
+    "workflow": "12_ltx23_i2v_audio.json"
+  },
+  "verdict": "RENDERED 2026-08-04, 3 seeds. Motion 1.209/1.093/1.375. She DOES clear the frame - by f96 on 7701 the room is empty, which is exactly the dramatic effect the card is for. But she exits to the RIGHT while the card says left, so the direction in the text is not obeyed. Use it to empty a frame, not to control which way. Band 0.406-0.744 (empty control 0.628); frame-scale ceiling 1.191. "
 }

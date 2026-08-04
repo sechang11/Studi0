@@ -11,5 +11,26 @@
   ],
   "needs": "a floor visible in frame",
   "grammar": "[MOVER] [ACTION VERB] [PATH/SPATIAL RELATION]",
-  "status": "untested"
+  "status": "ready",
+  "measured": {
+    "motion_per_seed": [
+      2.8177,
+      2.3933,
+      4.1819
+    ],
+    "motion_mean": 3.131,
+    "creep_mean": 1.0,
+    "seeds": [
+      7701,
+      7702,
+      7703
+    ],
+    "band_lo": 0.4058,
+    "band_hi": 0.7444,
+    "frame_scale_ceiling": 1.191,
+    "keyframe": "studio/samples/motion_lib/_keyframe.png",
+    "frames": 97,
+    "workflow": "12_ltx23_i2v_audio.json"
+  },
+  "verdict": "RENDERED 2026-08-04, 3 seeds. Motion 2.818/2.393/4.182, mean 3.131 - above the ceiling 3/3, the most reliable world mover after confetti, and also absent from the keyframe. OFF BRIEF IN ONE RESPECT: the card says across the floor and the sheets fly at head height, tumbling through the middle of the frame. Read it as airborne paper, not as debris on the ground. Subject intact. Band 0.406-0.744 (empty control 0.628); frame-scale ceiling 1.191. "
 }

@@ -10,5 +10,26 @@
   ],
   "needs": "a subject to pull away from",
   "grammar": "[MOVER] [ACTION VERB] [PATH/SPATIAL RELATION]",
-  "status": "untested"
+  "status": "unavailable",
+  "measured": {
+    "motion_per_seed": [
+      0.7821,
+      1.7022,
+      1.4365
+    ],
+    "motion_mean": 1.307,
+    "creep_mean": 1.017,
+    "seeds": [
+      7701,
+      7702,
+      7703
+    ],
+    "band_lo": 0.4058,
+    "band_hi": 0.7444,
+    "frame_scale_ceiling": 1.191,
+    "keyframe": "studio/samples/motion_lib/_keyframe.png",
+    "frames": 97,
+    "workflow": "12_ltx23_i2v_audio.json"
+  },
+  "verdict": "RENDERED 2026-08-04, 3 seeds. Motion 0.782/1.702/1.437, but creep 1.00/1.05/1.00 - A PULL-BACK MUST GIVE A CREEP BELOW 1.00 AND NONE OF THE THREE DOES. On 7702 it measurably pushed IN, the opposite of the card. Whatever motion the number is seeing, it is not the camera retreating. LTX would not pull back on any seed. Band 0.406-0.744 (empty control 0.628); frame-scale ceiling 1.191. "
 }

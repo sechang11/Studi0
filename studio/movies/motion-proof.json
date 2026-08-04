@@ -1,0 +1,255 @@
+{
+  "title": "MOTION PROOF",
+  "fps": 24,
+  "canvas": [
+    1920,
+    1080
+  ],
+  "engine": "higgs_v3",
+  "keyframe_engine": "anime",
+  "anime_ckpt": "animagine-xl-4.0.safetensors",
+  "ipadapter_weight": 0.6,
+  "style": "cinematic",
+  "anime_sheets": {
+    "NIKA": "sheet_anime_nika.png",
+    "VIRO": "sheet_anime_viro.png"
+  },
+  "sheets": {
+    "NIKA": "sheet_anime_nika.png",
+    "VIRO": "sheet_anime_viro.png"
+  },
+  "characters": {
+    "NIKA": "NIKA",
+    "VIRO": "VIRO"
+  },
+  "character_loras": {
+    "NIKA": "character_nika_00001_.safetensors",
+    "VIRO": "character_viro_00001_.safetensors"
+  },
+  "character_lora_weights": {
+    "NIKA": 0.5
+  },
+  "voices": {
+    "NIKA": {
+      "engine": "higgs_v3",
+      "voice": "voices_examples/female/female_03_alice.wav"
+    },
+    "VIRO": {
+      "engine": "higgs_v3",
+      "voice": "voices_examples/higgs_audio/vex.wav"
+    }
+  },
+  "music": [
+    {
+      "prefix": "melancholy_piano_00",
+      "tags": "sparse melancholy piano, single sustained cello, restrained, instrumental",
+      "seconds": 35,
+      "at": 0.0,
+      "level": 0.8,
+      "bpm": 72,
+      "key": "D minor"
+    }
+  ],
+  "beats": [
+    {
+      "id": "after_the_party_the_room_00",
+      "template": "establish",
+      "clip_secs": 4.0,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "fade_black",
+      "grade": "eq=brightness=-0.15:contrast=1.20:saturation=0.72,colorbalance=bs=0.05:rs=-0.03,eq=gamma=0.92",
+      "seed": 1885985087,
+      "tags": "an empty classroom at night, desks pushed out of line, paper streamers hanging off a light fitting, no humans, wide shot, classroom, rows of wooden school desks, chairs, chalkboard, chalk tray, teacher's desk, tall windows with curtains, sunlight falling across the desks, wall clock, bulletin board, wooden floor, night, dark, moonlight, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "an empty classroom at night, desks pushed out of line, paper streamers hanging off a light fitting, no humans, wide shot, classroom, rows of wooden school desks, chairs, chalkboard, chalk tray, teacher's desk, tall windows with curtains, sunlight falling across the desks, wall clock, bulletin board, wooden floor, night, dark, moonlight, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "Confetti falls through the frame.",
+      "motion_src": "card:confetti"
+    },
+    {
+      "id": "after_the_party_the_papers_00",
+      "template": "insert",
+      "clip_secs": 4.0,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "cut",
+      "grade": "eq=brightness=-0.15:contrast=1.20:saturation=0.72,colorbalance=bs=0.05:rs=-0.03,eq=gamma=0.92",
+      "seed": 3258088996,
+      "tags": "loose exam papers scattered over a wooden floor, no humans, close-up, bare wooden floorboards of a dark classroom, loose sheets of exam paper lying scattered across the boards, one metal chair leg, night, dark, moonlight, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "loose exam papers scattered over a wooden floor, no humans, close-up, bare wooden floorboards of a dark classroom, loose sheets of exam paper lying scattered across the boards, one metal chair leg, night, dark, moonlight, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "Loose papers blow across the floor.",
+      "motion_src": "card:papers"
+    },
+    {
+      "id": "after_the_party_she_comes_back_00",
+      "template": "build",
+      "clip_secs": 4.0,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "dissolve",
+      "grade": "eq=brightness=-0.15:contrast=1.20:saturation=0.72,colorbalance=bs=0.05:rs=-0.03,eq=gamma=0.92",
+      "seed": 2281223623,
+      "ref": [
+        "NIKA"
+      ],
+      "tags": "1girl, solo, silver hair, very long hair, single braid, sidecut, heterochromia, green eyes, orange eyes, scar on face, black nails, female focus, teenage girl, slender, relaxed brow, faint blush, looking into the distance, half-closed eyes, wet eyes, parted lips, slight frown, outstretched hand, reaching forward, leaning forward, clean grey school blazer, loose red necktie, red enamel star pin on the collar, neat braid, coming up the aisle between the desks, hands at her sides, full body, classroom, rows of wooden school desks, chairs, chalkboard, chalk tray, teacher's desk, tall windows with curtains, sunlight falling across the desks, wall clock, bulletin board, wooden floor, night, dark, moonlight, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "1girl, solo, silver hair, very long hair, single braid, sidecut, heterochromia, green eyes, orange eyes, scar on face, black nails, female focus, teenage girl, slender, relaxed brow, faint blush, looking into the distance, half-closed eyes, wet eyes, parted lips, slight frown, outstretched hand, reaching forward, leaning forward, clean grey school blazer, loose red necktie, red enamel star pin on the collar, neat braid, coming up the aisle between the desks, hands at her sides, full body, classroom, rows of wooden school desks, chairs, chalkboard, chalk tray, teacher's desk, tall windows with curtains, sunlight falling across the desks, wall clock, bulletin board, wooden floor, night, dark, moonlight, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "She walks forward toward the camera. Nothing else in the frame moves.",
+      "motion_src": "card:walk_in_only"
+    },
+    {
+      "id": "after_the_party_she_comes_back_01",
+      "template": "speak",
+      "clip_secs": 4.0,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "dissolve",
+      "grade": "eq=brightness=-0.15:contrast=1.20:saturation=0.72,colorbalance=bs=0.05:rs=-0.03,eq=gamma=0.92",
+      "seed": 2613648999,
+      "ref": [
+        "NIKA"
+      ],
+      "tags": "1girl, solo, silver hair, very long hair, single braid, sidecut, heterochromia, green eyes, orange eyes, scar on face, black nails, female focus, teenage girl, slender, relaxed brow, faint blush, looking into the distance, half-closed eyes, wet eyes, parted lips, slight frown, outstretched hand, reaching forward, leaning forward, clean grey school blazer, loose red necktie, red enamel star pin on the collar, neat braid, close-up, classroom, rows of wooden school desks, chairs, chalkboard, chalk tray, teacher's desk, tall windows with curtains, sunlight falling across the desks, wall clock, bulletin board, wooden floor, night, dark, moonlight, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "1girl, solo, silver hair, very long hair, single braid, sidecut, heterochromia, green eyes, orange eyes, scar on face, black nails, female focus, teenage girl, slender, relaxed brow, faint blush, looking into the distance, half-closed eyes, wet eyes, parted lips, slight frown, outstretched hand, reaching forward, leaning forward, clean grey school blazer, loose red necktie, red enamel star pin on the collar, neat braid, close-up, classroom, rows of wooden school desks, chairs, chalkboard, chalk tray, teacher's desk, tall windows with curtains, sunlight falling across the desks, wall clock, bulletin board, wooden floor, night, dark, moonlight, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "She raises her right hand to her face. Nothing else in the frame moves.",
+      "motion_src": "card:hand_to_face_only"
+    },
+    {
+      "id": "after_the_party_she_comes_back_02",
+      "template": "speak",
+      "clip_secs": 4.0,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "dissolve",
+      "grade": "eq=brightness=-0.15:contrast=1.20:saturation=0.72,colorbalance=bs=0.05:rs=-0.03,eq=gamma=0.92",
+      "seed": 3117112492,
+      "ref": [
+        "NIKA"
+      ],
+      "tags": "1girl, solo, silver hair, very long hair, single braid, sidecut, heterochromia, green eyes, orange eyes, scar on face, black nails, female focus, teenage girl, slender, relaxed brow, faint blush, looking into the distance, half-closed eyes, wet eyes, parted lips, slight frown, outstretched hand, reaching forward, leaning forward, clean grey school blazer, loose red necktie, red enamel star pin on the collar, neat braid, close-up, classroom, rows of wooden school desks, chairs, chalkboard, chalk tray, teacher's desk, tall windows with curtains, sunlight falling across the desks, wall clock, bulletin board, wooden floor, night, dark, moonlight, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "1girl, solo, silver hair, very long hair, single braid, sidecut, heterochromia, green eyes, orange eyes, scar on face, black nails, female focus, teenage girl, slender, relaxed brow, faint blush, looking into the distance, half-closed eyes, wet eyes, parted lips, slight frown, outstretched hand, reaching forward, leaning forward, clean grey school blazer, loose red necktie, red enamel star pin on the collar, neat braid, close-up, classroom, rows of wooden school desks, chairs, chalkboard, chalk tray, teacher's desk, tall windows with curtains, sunlight falling across the desks, wall clock, bulletin board, wooden floor, night, dark, moonlight, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "She holds absolutely still. Nothing in the frame moves.",
+      "motion_src": "hold:hold_all",
+      "line": {
+        "who": "NIKA",
+        "text": "I left it here. That is all I came back for."
+      }
+    },
+    {
+      "id": "after_the_party_she_comes_back_03",
+      "template": "master",
+      "clip_secs": 4.0,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "dissolve",
+      "grade": "eq=brightness=-0.15:contrast=1.20:saturation=0.72,colorbalance=bs=0.05:rs=-0.03,eq=gamma=0.92",
+      "seed": 2941066821,
+      "ref": [
+        "NIKA"
+      ],
+      "tags": "1girl, solo, silver hair, very long hair, single braid, sidecut, heterochromia, green eyes, orange eyes, scar on face, black nails, female focus, teenage girl, slender, relaxed brow, faint blush, looking into the distance, half-closed eyes, wet eyes, parted lips, slight frown, outstretched hand, reaching forward, leaning forward, clean grey school blazer, loose red necktie, red enamel star pin on the collar, neat braid, standing beside the window, medium shot, classroom, rows of wooden school desks, chairs, chalkboard, chalk tray, teacher's desk, tall windows with curtains, sunlight falling across the desks, wall clock, bulletin board, wooden floor, night, dark, moonlight, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "1girl, solo, silver hair, very long hair, single braid, sidecut, heterochromia, green eyes, orange eyes, scar on face, black nails, female focus, teenage girl, slender, relaxed brow, faint blush, looking into the distance, half-closed eyes, wet eyes, parted lips, slight frown, outstretched hand, reaching forward, leaning forward, clean grey school blazer, loose red necktie, red enamel star pin on the collar, neat braid, standing beside the window, medium shot, classroom, rows of wooden school desks, chairs, chalkboard, chalk tray, teacher's desk, tall windows with curtains, sunlight falling across the desks, wall clock, bulletin board, wooden floor, night, dark, moonlight, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "She turns her body away from the camera.",
+      "motion_src": "card:turn_away"
+    },
+    {
+      "id": "after_the_party_the_window_00",
+      "template": "react",
+      "clip_secs": 4.0,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "cut",
+      "grade": "eq=brightness=-0.15:contrast=1.20:saturation=0.72,colorbalance=bs=0.05:rs=-0.03,eq=gamma=0.92",
+      "seed": 3322913279,
+      "ref": [
+        "NIKA"
+      ],
+      "tags": "1girl, solo, silver hair, very long hair, single braid, sidecut, heterochromia, green eyes, orange eyes, scar on face, black nails, female focus, teenage girl, slender, sweatdrop, head tilt, looking down, looking to the side, half-closed eyes, unfocused, lip biting, closed mouth, hand on own chin, shoulders drawn in, weight on back foot, clean grey school blazer, loose red necktie, red enamel star pin on the collar, neat braid, reaching one hand toward the window sill, close-up, classroom, rows of wooden school desks, chairs, chalkboard, chalk tray, teacher's desk, tall windows with curtains, sunlight falling across the desks, wall clock, bulletin board, wooden floor, night, dark, moonlight, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "1girl, solo, silver hair, very long hair, single braid, sidecut, heterochromia, green eyes, orange eyes, scar on face, black nails, female focus, teenage girl, slender, sweatdrop, head tilt, looking down, looking to the side, half-closed eyes, unfocused, lip biting, closed mouth, hand on own chin, shoulders drawn in, weight on back foot, clean grey school blazer, loose red necktie, red enamel star pin on the collar, neat braid, reaching one hand toward the window sill, close-up, classroom, rows of wooden school desks, chairs, chalkboard, chalk tray, teacher's desk, tall windows with curtains, sunlight falling across the desks, wall clock, bulletin board, wooden floor, night, dark, moonlight, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "She reaches one hand toward the window sill. Nothing else in the frame moves.",
+      "motion_src": "desc:derived from the shot line: 'reaching one hand toward the window sill'"
+    },
+    {
+      "id": "after_the_party_he_was_still_there_00",
+      "template": "build",
+      "clip_secs": 4.0,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "cut",
+      "grade": "eq=brightness=-0.15:contrast=1.20:saturation=0.72,colorbalance=bs=0.05:rs=-0.03,eq=gamma=0.92",
+      "seed": 1413524639,
+      "ref": [
+        "VIRO"
+      ],
+      "tags": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, male focus, mature male, masculine, faint smile, lowered eyelids, head tilted down, half-closed eyes, looking down, calm gaze, closed mouth, slight smile, shoulders dropped, hands in pockets, standing loose, head tilted down, clean teal soccer jersey, orange trim, number 7, neat hair, a paper streamer falling from the light fitting past his shoulder, medium shot, classroom, rows of wooden school desks, chairs, chalkboard, chalk tray, teacher's desk, tall windows with curtains, sunlight falling across the desks, wall clock, bulletin board, wooden floor, night, dark, moonlight, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, male focus, mature male, masculine, faint smile, lowered eyelids, head tilted down, half-closed eyes, looking down, calm gaze, closed mouth, slight smile, shoulders dropped, hands in pockets, standing loose, head tilted down, clean teal soccer jersey, orange trim, number 7, neat hair, a paper streamer falling from the light fitting past his shoulder, medium shot, classroom, rows of wooden school desks, chairs, chalkboard, chalk tray, teacher's desk, tall windows with curtains, sunlight falling across the desks, wall clock, bulletin board, wooden floor, night, dark, moonlight, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "A paper streamer falls from the light fitting past his shoulder.",
+      "motion_src": "desc:derived from the shot line: 'a paper streamer falling from the light fitting past his shoulder'"
+    },
+    {
+      "id": "after_the_party_he_was_still_there_01",
+      "template": "master",
+      "clip_secs": 4.0,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "cut",
+      "grade": "eq=brightness=-0.15:contrast=1.20:saturation=0.72,colorbalance=bs=0.05:rs=-0.03,eq=gamma=0.92",
+      "seed": 3258916988,
+      "ref": [
+        "VIRO"
+      ],
+      "tags": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, male focus, mature male, masculine, faint smile, lowered eyelids, head tilted down, half-closed eyes, looking down, calm gaze, closed mouth, slight smile, shoulders dropped, hands in pockets, standing loose, head tilted down, clean teal soccer jersey, orange trim, number 7, neat hair, walking up the aisle toward the camera, full body, classroom, rows of wooden school desks, chairs, chalkboard, chalk tray, teacher's desk, tall windows with curtains, sunlight falling across the desks, wall clock, bulletin board, wooden floor, night, dark, moonlight, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, male focus, mature male, masculine, faint smile, lowered eyelids, head tilted down, half-closed eyes, looking down, calm gaze, closed mouth, slight smile, shoulders dropped, hands in pockets, standing loose, head tilted down, clean teal soccer jersey, orange trim, number 7, neat hair, walking up the aisle toward the camera, full body, classroom, rows of wooden school desks, chairs, chalkboard, chalk tray, teacher's desk, tall windows with curtains, sunlight falling across the desks, wall clock, bulletin board, wooden floor, night, dark, moonlight, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "He walks forward toward the camera.",
+      "motion_src": "card:walk_in"
+    },
+    {
+      "id": "after_the_party_he_was_still_there_02",
+      "template": "speak",
+      "clip_secs": 4.0,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "cut",
+      "grade": "eq=brightness=-0.15:contrast=1.20:saturation=0.72,colorbalance=bs=0.05:rs=-0.03,eq=gamma=0.92",
+      "seed": 686115112,
+      "ref": [
+        "VIRO"
+      ],
+      "tags": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, male focus, mature male, masculine, faint smile, lowered eyelids, head tilted down, half-closed eyes, looking down, calm gaze, closed mouth, slight smile, shoulders dropped, hands in pockets, standing loose, head tilted down, clean teal soccer jersey, orange trim, number 7, neat hair, close-up, classroom, rows of wooden school desks, chairs, chalkboard, chalk tray, teacher's desk, tall windows with curtains, sunlight falling across the desks, wall clock, bulletin board, wooden floor, night, dark, moonlight, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, male focus, mature male, masculine, faint smile, lowered eyelids, head tilted down, half-closed eyes, looking down, calm gaze, closed mouth, slight smile, shoulders dropped, hands in pockets, standing loose, head tilted down, clean teal soccer jersey, orange trim, number 7, neat hair, close-up, classroom, rows of wooden school desks, chairs, chalkboard, chalk tray, teacher's desk, tall windows with curtains, sunlight falling across the desks, wall clock, bulletin board, wooden floor, night, dark, moonlight, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "He holds absolutely still. Nothing in the frame moves.",
+      "motion_src": "hold:hold_all",
+      "line": {
+        "who": "VIRO",
+        "text": "You are the only one who came back."
+      }
+    },
+    {
+      "id": "after_the_party_the_chair_00",
+      "template": "insert",
+      "clip_secs": 4.0,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "cut",
+      "grade": "eq=brightness=-0.15:contrast=1.20:saturation=0.72,colorbalance=bs=0.05:rs=-0.03,eq=gamma=0.92",
+      "seed": 847634185,
+      "tags": "an overturned wooden chair lying on a wooden floor, no humans, close-up, bare wooden floorboards of a dark classroom, a wooden chair lying on its side on the boards, night, dark, moonlight, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "an overturned wooden chair lying on a wooden floor, no humans, close-up, bare wooden floorboards of a dark classroom, a wooden chair lying on its side on the boards, night, dark, moonlight, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "The fallen chair slides across the floor toward the camera.",
+      "motion_src": "text:free text on the beat"
+    },
+    {
+      "id": "after_the_party_last_look_00",
+      "template": "pillow",
+      "clip_secs": 4.0,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "dissolve",
+      "grade": "eq=brightness=-0.15:contrast=1.20:saturation=0.72,colorbalance=bs=0.05:rs=-0.03,eq=gamma=0.92",
+      "seed": 749969343,
+      "tags": "a red enamel star pin lying alone on a wooden desk lid, no humans, close-up, the scratched wooden lid of a single school desk seen from directly above at night, night, dark, moonlight, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "a red enamel star pin lying alone on a wooden desk lid, no humans, close-up, the scratched wooden lid of a single school desk seen from directly above at night, night, dark, moonlight, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "Nothing in the frame moves.",
+      "motion_src": "hold:hold_frame"
+    }
+  ]
+}

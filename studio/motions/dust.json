@@ -11,5 +11,26 @@
   ],
   "needs": "a visible light source or shaft",
   "grammar": "[MOVER] [ACTION VERB] [PATH/SPATIAL RELATION]",
-  "status": "untested"
+  "status": "unavailable",
+  "measured": {
+    "motion_per_seed": [
+      0.7048,
+      0.7606,
+      0.5464
+    ],
+    "motion_mean": 0.671,
+    "creep_mean": 1.025,
+    "seeds": [
+      7701,
+      7702,
+      7703
+    ],
+    "band_lo": 0.4058,
+    "band_hi": 0.7444,
+    "frame_scale_ceiling": 1.191,
+    "keyframe": "studio/samples/motion_lib/_keyframe.png",
+    "frames": 97,
+    "workflow": "12_ltx23_i2v_audio.json"
+  },
+  "verdict": "RENDERED 2026-08-04, 3 seeds. Motion 0.705/0.761/0.546, mean 0.671 - in the band 3/3. No dust, no drift, nothing through the light. Same class as snow and rain: a fine particulate mover the model will not render. Band 0.406-0.744 (empty control 0.628); frame-scale ceiling 1.191. "
 }

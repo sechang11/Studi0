@@ -1412,10 +1412,30 @@ def stage_lib_verdict():
     with no hand-written verdict stays `untested`; it does not get a default."""
     summ = json.load(open(f"{LIB_OUT}/summary.json"))
     band = summ.get("_band", {})
-    n_ok = n_untested = 0
+    n_ok = n_untested = n_kept = 0
     for cid, fam, name, text, purpose, shots, needs in MOTION_CARDS:
         p = f"{LIB_DIR}/{cid}.json"
-        c = json.load(open(p, encoding="utf-8"))
+        # ANOTHER AGENT IS AUTHORING IN THIS DIRECTORY CONCURRENTLY. Observed 2026-08-04:
+        # hold_frame.json and a rewritten hold_nobody.json appeared at 05:21:53 carrying a
+        # verdict from a different experiment (a tunnel keyframe, n=1), and hand_to_face
+        # .json had been removed. So this stage must not assume it is the only writer:
+        # a missing card is rebuilt rather than crashed on, and a verdict this run did not
+        # write is PRESERVED rather than overwritten.
+        if not os.path.exists(p):
+            print(f"  ! {cid}.json missing - rebuilding (another writer removed it)")
+            c = {"id": cid, "name": name, "family": fam, "text": text, "desc": purpose,
+                 "shots": shots, "needs": needs,
+                 "grammar": "[MOVER] [ACTION VERB] [PATH/SPATIAL RELATION]"}
+        else:
+            c = json.load(open(p, encoding="utf-8"))
+        prior = c.get("verdict")
+        if prior and not prior.startswith("RENDERED 2026-08-04"):
+            c["verdict_prior"] = prior
+            c["verdict_prior_note"] = (
+                "Written by another agent working in studio/motions/ at the same time as "
+                "this measured pass. Kept rather than overwritten - it is evidence from a "
+                "different keyframe and it does not contradict the measurement below.")
+            n_kept += 1
         s = summ.get(cid)
         if s:
             c["measured"] = {
@@ -1440,11 +1460,267 @@ def stage_lib_verdict():
         with open(p, "w", encoding="utf-8") as f:
             json.dump(c, f, indent=2, ensure_ascii=False)
             f.write("\n")
-    print(f"  {n_ok} cards carry a measured verdict, {n_untested} still untested")
+    print(f"  {n_ok} cards carry a measured verdict, {n_untested} still untested, "
+          f"{n_kept} foreign verdicts preserved as verdict_prior")
 
 
-# Filled in after the strips are looked at. (status, verdict-prose)
-LIB_VERDICTS = {}
+def stage_lib_publish():
+    """Web-playable sample per card, at the PRIMARY seed.
+
+    Unlike the camera library - where samples/cameras/dolly_zoom.mp4 is byte-identical to
+    static.mp4, so the picker hover-plays a real clip of nothing happening under the name
+    of a move - a motion sample IS that card's own output. Publishing one for a weak card
+    is therefore honest: it shows exactly what the card does, which for a weak card is the
+    point. The status on the card carries the warning, not the absence of a sample."""
+    res = json.load(open(f"{LIB_OUT}/results.json"))
+    seed = LIB_SEEDS[0]
+    n = 0
+    for r in res:
+        if r["seed"] != seed or r["card"].startswith("_ctl"):
+            continue
+        dst = f"{LIB_OUT}/{r['card']}.mp4"
+        sh("ffmpeg", "-y", "-hide_banner", "-v", "error", "-i", r["file"],
+           "-an", "-vf", "scale=640:-2", *X264, dst)
+        n += 1
+    kf = f"{LIB_OUT}/_keyframe.png"
+    if os.path.exists(kf):
+        sh("ffmpeg", "-y", "-v", "error", "-i", kf, "-vf", "scale=640:-2", "-q:v", "4",
+           f"{LIB_OUT}/_keyframe.jpg")
+    print(f"  published {n} card samples -> {LIB_OUT}")
+
+
+# ── the measured verdicts ────────────────────────────────────────────────────
+# (status, verdict-prose). WRITTEN BY HAND AFTER LOOKING AT THE STRIPS, not generated from
+# the number - because analyze_shots.motion() cannot see a hand, and this project has
+# already once ranked a clip best while the subject had turned away with her eyes shut.
+#
+#   ready        does what the card says, on the primary seed and on replication
+#   weak         fires, but unreliably across seeds or at a cost to the shot
+#   unavailable  sits in the measured do-nothing band and produced no named action
+#
+# RENDERED AND WATCHED 2026-08-04. 35 cells x 3 seeds = 105 clips, 38 min wall clock, zero
+# render errors. Band measured from this run's own controls: 0.406-0.744, empty control
+# mean 0.628, frame-scale ceiling 1.191. Keyframe: motion_probe's, reused verbatim.
+_B = "Band 0.406-0.744 (empty control 0.628); frame-scale ceiling 1.191. "
+
+LIB_VERDICTS = {
+    # ── READY ────────────────────────────────────────────────────────────────
+    "walk_in": ("ready",
+        "RENDERED 2026-08-04, 3 seeds, watched. Motion 2.274/3.166/4.133, mean 3.191 - "
+        "above the frame-scale ceiling on all three seeds, one of only two subject cards "
+        "that clears it. She walks steadily toward the lens from f0 to f96, growing from a "
+        "full-length figure to a medium shot, and the face stays legible the whole way. "
+        "The best card in the library: the largest displacement one mover can make, on "
+        "brief 3/3, subject intact 3/3. " + _B),
+    "walk_in_only": ("ready",
+        "RENDERED 2026-08-04, 3 seeds. Motion 2.105/2.476/3.349, mean 2.643 - above the "
+        "ceiling 3/3, but consistently BELOW plain walk_in on every seed. That is the hold "
+        "clause doing its job: the same approach with less off-brief motion around it. Use "
+        "this when the background must stay put and walk_in when it need not. " + _B),
+    "cup_lift": ("ready",
+        "RENDERED 2026-08-04, 3 seeds, watched at subject crop. THE CLEAREST PROOF IN THE "
+        "LIBRARY THAT THE METRIC IS BLIND. Motion 0.814/0.798/0.816 - barely above the "
+        "empty control - while the strips show a full four-stage action on all three "
+        "seeds: she looks down, reaches, closes her hand on the cup, lifts it and drinks. "
+        "Face held and framing intact 3/3. Ranked by the number this would have been "
+        "discarded; it is one of the best cards here. " + _B),
+    "turn_away": ("ready",
+        "RENDERED 2026-08-04, 3 seeds, watched. Motion 0.643/0.785/0.577 - AT the empty "
+        "control, invisible to the metric. She rotates to put her back to the lens by f58 "
+        "and stays there 3/3, staying in frame with the composition intact. This is also "
+        "the honest home for what head_turn does by accident: if you want the face given "
+        "up, ask for it here rather than hoping head_turn overshoots. " + _B),
+    "hand_to_face": ("ready",
+        "RENDERED 2026-08-04, 3 seeds, watched at subject crop. Motion 0.571/0.725/0.561 - "
+        "at or BELOW the empty control on every seed, and the gesture lands 3/3 anyway. "
+        "Reproduces motion_probe's 9/9 result on a fourth independent seed set. The hand "
+        "reaches the face by f38-f77 and the face survives on 7701 and 7703. WARNING: on "
+        "7702 she completes the gesture and then turns away by f96, so the shot does not "
+        "end on her face 1/3. " + _B),
+    "hand_to_face_only": ("ready",
+        "RENDERED 2026-08-04, 3 seeds, watched at subject crop. Motion 0.455/0.716/0.520, "
+        "below plain hand_to_face on 2 of 3 seeds - the hold clause measurably quietens "
+        "the frame. It also SUSTAINS the gesture: on 7703 the hand stays at the face from "
+        "f58 through f96 where the plain card had already lowered it. WARNING: the hold "
+        "clause does NOT rescue the 7702 turn-away - that failure is identical with and "
+        "without it, so the clause controls the background, not the performer. " + _B),
+    "confetti": ("ready",
+        "RENDERED 2026-08-04, 3 seeds. Motion 4.484/3.749/10.150, mean 6.127 - the highest "
+        "in the library and far above the ceiling 3/3. Confetti is ABSENT from the "
+        "keyframe and the model invents it anyway, falling through frame from f27 and "
+        "clearing by f96, with the subject still readable. WARNING: seed 7703 measured "
+        "10.15, roughly double the other two - at that density it will bury the frame. "
+        "The card fires reliably; how much of it you get does not. " + _B),
+    "papers": ("ready",
+        "RENDERED 2026-08-04, 3 seeds. Motion 2.818/2.393/4.182, mean 3.131 - above the "
+        "ceiling 3/3, the most reliable world mover after confetti, and also absent from "
+        "the keyframe. OFF BRIEF IN ONE RESPECT: the card says across the floor and the "
+        "sheets fly at head height, tumbling through the middle of the frame. Read it as "
+        "airborne paper, not as debris on the ground. Subject intact. " + _B),
+
+    # ── WEAK ─────────────────────────────────────────────────────────────────
+    "cam_push": ("weak",
+        "RENDERED 2026-08-04, 3 seeds, watched. Motion 3.017/5.592/4.389 - it moves, 3/3. "
+        "BUT THE SUBJECT SURVIVES ONLY 1/3: on 7701 it settles into a clean medium-close "
+        "on her face; on 7702 the frame is a blur past her by f96; on 7703 she is gone "
+        "entirely and the clip ends on an empty table. It also pushes far LESS than "
+        "motion_probe's scene-anchored version - creep 1.05/1.05/1.10 here against "
+        "1.40/1.45/1.07 for 'pushes in past the pillar'. Naming a concrete landmark in the "
+        "path beats naming the subject. Use on short beats. NOTE: this asks the video "
+        "model to move the camera while effects.json's `camera` variable crops the "
+        "finished clip - the two layers compound. " + _B),
+    "cam_rise": ("weak",
+        "RENDERED 2026-08-04, 3 seeds. Motion 2.065/2.104/2.395 - consistently above the "
+        "ceiling, so something happens on every seed. WHAT happens is not verified as a "
+        "rise: on 7701 the strip shows no vertical travel, and the only seed with a "
+        "vertical displacement signature (7703, dy 285/288) has a correlation peak of "
+        "0.022, far too low to read a direction from. Fires, direction unproven. " + _B),
+    "cam_lock": ("weak",
+        "RENDERED 2026-08-04, 3 seeds. Motion 0.695/0.860/0.595 against an empty control "
+        "of 0.628, creep 1.02/1.00/1.00, and the highest frame-to-frame correlation of any "
+        "camera card. It genuinely holds the camera - and so does an empty string. The "
+        "card is honest but it buys nothing over emitting nothing; keep it only as an "
+        "explicit way to say 'no camera move' in an authored film. " + _B),
+    "hand_reach": ("weak",
+        "RENDERED 2026-08-04, 3 seeds. Motion 1.876/2.231/0.713 - above the ceiling on two "
+        "seeds and INSIDE the do-nothing band on the third. Where it fires it fires well: "
+        "on 7701 the palm comes up toward the lens by f82 and the framing tightens with "
+        "it (creep 1.23). Fires 2/3, so do not rely on it for a beat that must land. "
+        + _B),
+    "lean_in": ("weak",
+        "RENDERED 2026-08-04, 3 seeds. Motion 1.901/2.591/1.646, above the ceiling 3/3, "
+        "creep 1.18/1.02/1.10. Something moves toward the lens every time, but what the "
+        "strips show is the whole figure APPROACHING, not the torso leaning - it renders "
+        "as a small walk_in. On brief in direction, wrong in action. If you want the "
+        "approach, walk_in does it better and more legibly. " + _B),
+    "step_back": ("weak",
+        "RENDERED 2026-08-04, 3 seeds. Motion 0.753/2.156/1.317 - inside the do-nothing "
+        "band on 7701, above the ceiling on 7702, between on 7703. The widest seed spread "
+        "of any subject card. Recoil is not reliably rendered; at 7701 she drifts sideways "
+        "rather than backward. " + _B),
+    "walk_out": ("weak",
+        "RENDERED 2026-08-04, 3 seeds. Motion 1.209/1.093/1.375. She DOES clear the frame "
+        "- by f96 on 7701 the room is empty, which is exactly the dramatic effect the card "
+        "is for. But she exits to the RIGHT while the card says left, so the direction in "
+        "the text is not obeyed. Use it to empty a frame, not to control which way. " + _B),
+    "walk_away": ("weak",
+        "RENDERED 2026-08-04, 3 seeds. Motion 1.280/1.123/0.595 - the last seed is inside "
+        "the do-nothing band. On 7701 she does leave, but by exiting frame left rather "
+        "than receding into the depth behind her, so the intended shrinking-into-distance "
+        "read is not what you get. Recession into depth is the weakest path in the "
+        "library; lateral exit is what the model actually renders. " + _B),
+    "head_turn": ("weak",
+        "RENDERED 2026-08-04, 3 seeds, watched at subject crop. Motion 0.443/0.750/0.583 - "
+        "at or below the empty control, and the turn happens anyway 3/3. IT OVERSHOOTS: "
+        "the card asks for the head and the model turns the whole body. Only 7701 holds a "
+        "usable profile; 7702 and 7703 carry on into a full turn and the face is gone by "
+        "f96. Face survives 1/3. Reproduces motion_probe's finding on a fourth seed set. "
+        "If you want the face given up, use turn_away, which asks for it honestly. " + _B),
+    "hair_lifts": ("weak",
+        "RENDERED 2026-08-04, 3 seeds, watched at subject crop. Motion 0.535/1.020/0.681. "
+        "THE MOST DESTRUCTIVE CARD IN THE LIBRARY - subject survives 1/3. The hair does "
+        "move on all three seeds, but on 7702 it lifts into a blonde-grey explosion and "
+        "the face changes identity outright, and on 7703 she turns her back by f58. Only "
+        "7701 keeps a usable shot. Hair is texture attached to the performer, and asking "
+        "for it destabilises the performer. Avoid on any beat where the face matters. "
+        + _B),
+    "breath": ("weak",
+        "RENDERED 2026-08-04, 3 seeds, watched at subject crop. NO BREATHING IS RENDERED - "
+        "the shoulders do not visibly rise or fall on any seed. Judged as the motion it "
+        "names, this card fails. But it is the QUIETEST CELL IN THE WHOLE SWEEP: motion "
+        "0.417/0.588/0.445, mean 0.484, below BOTH controls, and creep 1.00 - the only "
+        "hold in the library with no framing drift at all. So it outperforms all three "
+        "stillness cards at being still. Use it as a hold, not as a motion; it is listed "
+        "weak because it does not do what its name says. " + _B),
+    "hold_all": ("weak",
+        "RENDERED 2026-08-04, 3 seeds. Motion 0.728/0.736/0.530, mean 0.665, against an "
+        "empty control of 0.628 - statistically the same thing. The shot IS held: face, "
+        "gaze and framing survive 97 frames 3/3. But an empty string held it just as well "
+        "AND drifted less (creep 1.03 here against 1.00 empty). Asking for stillness in "
+        "words costs framing stability rather than buying it - this text fights workflow "
+        "12's own negative, which already contains `static, frozen`. " + _B),
+    "hold_figure": ("weak",
+        "RENDERED 2026-08-04, 3 seeds. Motion 0.700/0.690/0.501, mean 0.630 against the "
+        "empty control's 0.628 - indistinguishable to three decimal places. Creep 1.03 "
+        "against empty's 1.00. Same verdict as hold_all: it holds, and so does nothing. "
+        + _B),
+    "hold_nobody": ("weak",
+        "RENDERED 2026-08-04, 3 seeds. Motion 0.778/0.916/0.447, mean 0.713 - the HIGHEST "
+        "of the three stillness cards and above the empty control, which is the wrong "
+        "direction for a hold. Creep 1.03. The shortest hold text is also the least "
+        "effective one. " + _B),
+    "smoke": ("weak",
+        "RENDERED 2026-08-04, 3 seeds. Motion 2.327/1.535/3.407, above the ceiling 3/3, "
+        "and smoke genuinely rolls in from frame left. TWO COSTS, both visible on 7701: it "
+        "HALLUCINATED A SECOND PERSON - the head and shoulders of a man in a coat enter "
+        "the foreground at f41 and then leave - and by f55 the smoke has obscured the "
+        "subject. Fires reliably, damages the composition. " + _B),
+    "leaves": ("weak",
+        "RENDERED 2026-08-04, 3 seeds. Motion 0.904/0.913/2.647 - two seeds barely above "
+        "the band, one well above the ceiling. On 7701 a handful of small leaves drift "
+        "through from f41; it is a long way from the frame-crossing gust the card implies. "
+        "Tested on an INTERIOR keyframe, which is unfair to it - retest on an exterior "
+        "before writing it off. " + _B),
+    "steam": ("weak",
+        "RENDERED 2026-08-04, 3 seeds. Motion 0.675/0.718/2.564 - INSIDE the do-nothing "
+        "band on two of three seeds. Only 7703 produced a real drift across the lens. The "
+        "keyframe already contains a steaming cup, so this is the easiest possible ask and "
+        "it still landed 1/3. motion_probe measured this same string firing 3/3 at its "
+        "seeds, so the card is seed-fragile rather than dead - which is exactly what a "
+        "single-seed pass would have hidden. " + _B),
+    "door": ("weak",
+        "RENDERED 2026-08-04, 3 seeds. Motion 1.151/1.444/0.899 - straddling the ceiling. "
+        "On 7701 a bright opening does appear at frame right by f82 and she turns toward "
+        "it, so something door-like happens; on 7703 it sits in the band. There is no door "
+        "in the keyframe, and unlike confetti the model does not reliably invent one. "
+        + _B),
+
+    # ── UNAVAILABLE ──────────────────────────────────────────────────────────
+    "curtain": ("unavailable",
+        "RENDERED 2026-08-04, 3 seeds, watched. Motion 0.906/0.799/0.742, mean 0.816 - "
+        "essentially the control. THE CURTAIN DOES NOT LIFT on any seed. This card was "
+        "written specifically to close motion_probe's open A/B, and IT FAILS TO REPLICATE "
+        "THAT PROBE'S CLAIM: the probe reported that adding the spatial phrase `behind "
+        "her` swept the curtain across the frame, but the probe never ran that phrase as a "
+        "sole cell - it inferred the effect from a two-sentence cell that also contained "
+        "the hand action. Run clean, the anchor buys nothing. The consistent explanation "
+        "is the mover, not the grammar: a curtain hangs from a rail and cannot travel, and "
+        "every mover that worked here was free to cross the frame. " + _B),
+    "cam_pull": ("unavailable",
+        "RENDERED 2026-08-04, 3 seeds. Motion 0.782/1.702/1.437, but creep 1.00/1.05/1.00 "
+        "- A PULL-BACK MUST GIVE A CREEP BELOW 1.00 AND NONE OF THE THREE DOES. On 7702 it "
+        "measurably pushed IN, the opposite of the card. Whatever motion the number is "
+        "seeing, it is not the camera retreating. LTX would not pull back on any seed. "
+        + _B),
+    "cam_track_l": ("unavailable",
+        "RENDERED 2026-08-04, 3 seeds, watched. Motion 2.236/6.552/1.438 - the number says "
+        "a lot happened and none of it was a track. On 7701 the SUBJECT walks out and the "
+        "clip ends on an empty room; on 7702 creep is 1.45, i.e. a hard push IN; on 7703 "
+        "creep 1.00 and nothing moves. Three seeds, three different wrong answers. "
+        "Reproduces motion_probe's finding that track language renders as a push. " + _B),
+    "snow": ("unavailable",
+        "RENDERED 2026-08-04, 3 seeds. Motion 0.795/0.728/0.610, mean 0.711 - inside the "
+        "do-nothing band on every seed. NO SNOW APPEARS. The only thing that moves is the "
+        "usual slow framing creep. Caveat: tested on an interior keyframe where snow is "
+        "scene-implausible - but confetti is equally implausible indoors and scored 6.127, "
+        "so the model's willingness to invent a mover is not the limit here. Retest on an "
+        "exterior before reinstating. " + _B),
+    "rain_sweep": ("unavailable",
+        "RENDERED 2026-08-04, 3 seeds. Motion 0.801/0.701/0.574, mean 0.692 - in the band "
+        "3/3, nothing visible. This was the frame-scale rewrite of motion_probe's "
+        "texture-scale failure `Rain runs down the window.`, and promoting rain from "
+        "texture to a frame-crossing sweep did NOT rescue it. Fine-grained precipitation "
+        "appears to be beyond this model at 1280x704 regardless of phrasing. " + _B),
+    "dust": ("unavailable",
+        "RENDERED 2026-08-04, 3 seeds. Motion 0.705/0.761/0.546, mean 0.671 - in the band "
+        "3/3. No dust, no drift, nothing through the light. Same class as snow and rain: "
+        "a fine particulate mover the model will not render. " + _B),
+    "birds": ("unavailable",
+        "RENDERED 2026-08-04, 3 seeds. Motion 0.609/0.668/0.465, mean 0.580 - BELOW the "
+        "empty control on every seed, the second-quietest card in the library. No birds. "
+        "Small distant movers do not land, and asking for them makes the frame quieter "
+        "than asking for nothing. " + _B),
+}
 
 
 STAGES = {
@@ -1456,12 +1732,12 @@ STAGES = {
     "lib-cards": stage_lib_cards, "lib-keyframe": stage_lib_keyframe,
     "lib-render": stage_lib_render, "lib-measure": stage_lib_measure,
     "lib-strips": stage_lib_strips, "lib-report": stage_lib_report,
-    "lib-verdict": stage_lib_verdict,
+    "lib-verdict": stage_lib_verdict, "lib-publish": stage_lib_publish,
 }
 ORDER = ["keyframes", "base", "cam-prompt", "motion", "post", "measure", "strips",
          "publish"]
 LIB_ORDER = ["lib-cards", "lib-keyframe", "lib-render", "lib-measure", "lib-strips",
-             "lib-report", "lib-verdict"]
+             "lib-report", "lib-verdict", "lib-publish"]
 
 
 def main():

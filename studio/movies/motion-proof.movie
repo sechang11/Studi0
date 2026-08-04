@@ -1,0 +1,117 @@
+// MOTION PROOF - a film authored to exercise studio/motions/ end to end.
+//
+//   python3 studio/compile.py studio/movies/motion-proof.movie --timeline
+//   python3 scripts/short.py studio/movies/motion-proof.json
+//
+// EVERY BEAT ASKS THE VIDEO MODEL FOR A DIFFERENT, SPECIFIC THING. Until this wave
+// compile.py assigned the string "Slow deliberate movement only." to all 29 beats of all
+// three films in the studio, so the point of this one is that no two beats carry the same
+// motion and each of the four rungs of compose.resolve_motion() is walked on purpose:
+//
+//   rung 1  an explicit @card on the shot line ... the_room_00 she_comes_back_00/01/03
+//                                                  he_was_still_there_01 the_papers_00
+//   rung 2  free text written on the scene ....... the_chair_00
+//   rung 3  derived from the shot line ........... the_window_00 he_was_still_there_00
+//   rung 4  the measured hold .................... last_look_00 and the two spoken beats
+//
+// Only cards marked `ready` in studio/motions/ are named. Two characters on purpose:
+// NIKA is 1girl, which is the gender the whole card library is written in, and VIRO is
+// 1boy, which is the case compose._motion_regender() exists for - the same card text must
+// come out saying "He" on his beats and "She" on hers.
+//
+// clip_secs is 4 at movie level, i.e. 97 frames, which is the exact clip length every
+// number in studio/samples/motion_lib was measured at.
+//
+// WHY THREE SCENES CARRY A FREE-TEXT `place` INSTEAD OF THE CARD: the first keyframe pass
+// used studio/places/classroom.json throughout, and on the three shots with nobody in them
+// the card's fifteen tags ("rows of wooden school desks, chairs, chalkboard, ... sunlight
+// falling across the desks") drowned the author's own shot line - the papers, the
+// overturned chair and the star pin were all absent from the picture, and a motion that
+// moves an object cannot be judged on a frame that does not contain the object. The wide
+// establish keeps the card, because there the card IS the subject.
+
+MOVIE motion_proof
+  title: MOTION PROOF
+  logline: She comes back for what she left in the room, and the room has already moved on without her.
+  canvas: 1920x1080
+  fps: 24
+  style: cel_anime_90s
+  checkpoint: animagine-xl-4.0.safetensors
+  face_weight: 0.6
+  seed_root: motion-proof-1
+  clip_secs: 4
+  tags: cinematic
+
+CHAPTER after_the_party
+  look: night
+  place: classroom
+  pace: normal
+  cue: melancholy_piano
+
+  // ---- rung 1: a READY element card on a shot with nobody in it ----------------
+  // confetti names no person, which is what lets it sit on establish - a NO_PERSON
+  // template refuses a card written around a someone.
+  SCENE the_room
+    transition: fade_black
+    camera: static
+    shot: establish @confetti | an empty classroom at night, desks pushed out of line, paper streamers hanging off a light fitting, no humans, wide shot
+
+  // ---- rung 1: the second READY element card, on a frame that has the element ---
+  SCENE the_papers
+    transition: cut
+    place: bare wooden floorboards of a dark classroom, loose sheets of exam paper lying scattered across the boards, one metal chair leg
+    camera: static
+    shot: insert @papers | loose exam papers scattered over a wooden floor, no humans, close-up
+
+  // ---- rung 1 again: READY subject cards, feminine, on a declared character -----
+  SCENE she_comes_back
+    transition: dissolve
+    characters: NIKA
+    emotion: longing
+    camera: static
+    shot: build @walk_in_only | coming up the aisle between the desks, hands at her sides, full body
+    shot: speak @hand_to_face_only | close-up
+    NIKA: I left it here. That is all I came back for.
+    shot: master @turn_away | standing beside the window, medium shot
+
+  // ---- rung 3: derived from the author's own words, feminine subject -----------
+  // Nothing is named with @motion here. The shot line says "reaching one hand toward the
+  // window sill", which is a mover, an action verb and a path, so the resolver builds the
+  // sentence out of the author's words rather than a card.
+  SCENE the_window
+    transition: cut
+    characters: NIKA
+    emotion: doubt
+    camera: static
+    shot: react | reaching one hand toward the window sill, close-up
+
+  // ---- rung 3 with an ELEMENT mover, and the pronoun test ----------------------
+  // VIRO is 1boy. The whole motion library is written "She"; every card and every
+  // derivation on his beats must come out masculine.
+  SCENE he_was_still_there
+    transition: cut
+    characters: VIRO
+    emotion: resignation
+    camera: static
+    shot: build | a paper streamer falling from the light fitting past his shoulder, medium shot
+    shot: master @walk_in | walking up the aisle toward the camera, full body
+    VIRO: You are the only one who came back.
+
+  // ---- rung 2: free text, written on the scene rather than picked from a card ---
+  SCENE the_chair
+    transition: cut
+    place: bare wooden floorboards of a dark classroom, a wooden chair lying on its side on the boards
+    motion: The fallen chair slides across the floor toward the camera.
+    camera: static
+    shot: insert | an overturned wooden chair lying on a wooden floor, no humans, close-up
+
+  // ---- rung 4: the measured hold -----------------------------------------------
+  // A pillow shot with no mover in it. The correct answer is to hold, and the point of
+  // this beat is that the film says so out loud instead of shipping a constant that
+  // claimed to ask for movement.
+  SCENE last_look
+    transition: dissolve
+    silence: true
+    place: the scratched wooden lid of a single school desk seen from directly above at night
+    camera: static
+    shot: pillow | a red enamel star pin lying alone on a wooden desk lid, no humans, close-up

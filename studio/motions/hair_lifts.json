@@ -11,5 +11,26 @@
   ],
   "needs": "a person with loose hair in frame",
   "grammar": "[MOVER] [ACTION VERB] [PATH/SPATIAL RELATION]",
-  "status": "untested"
+  "status": "weak",
+  "measured": {
+    "motion_per_seed": [
+      0.5353,
+      1.0197,
+      0.6809
+    ],
+    "motion_mean": 0.745,
+    "creep_mean": 1.0,
+    "seeds": [
+      7701,
+      7702,
+      7703
+    ],
+    "band_lo": 0.4058,
+    "band_hi": 0.7444,
+    "frame_scale_ceiling": 1.191,
+    "keyframe": "studio/samples/motion_lib/_keyframe.png",
+    "frames": 97,
+    "workflow": "12_ltx23_i2v_audio.json"
+  },
+  "verdict": "RENDERED 2026-08-04, 3 seeds, watched at subject crop. Motion 0.535/1.020/0.681. THE MOST DESTRUCTIVE CARD IN THE LIBRARY - subject survives 1/3. The hair does move on all three seeds, but on 7702 it lifts into a blonde-grey explosion and the face changes identity outright, and on 7703 she turns her back by f58. Only 7701 keeps a usable shot. Hair is texture attached to the performer, and asking for it destabilises the performer. Avoid on any beat where the face matters. Band 0.406-0.744 (empty control 0.628); frame-scale ceiling 1.191. "
 }

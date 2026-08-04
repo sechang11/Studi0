@@ -515,23 +515,31 @@ def keyframes(film, out, seed0):
 # An empty string is therefore strictly better than the constant, and that is what a film
 # carrying the constant now gets - said out loud, with the fix, once.
 DEAD_MOTION = "slow deliberate movement only."
+# What a legacy film gets instead. NOT an empty string: over the 3-beat proof
+# render the empty prompt drifted 18.60 first-to-last, the worst of the three,
+# and the strip shows the shot dissolving. This sentence is the one carried by
+# the three holding cells the 81-clip sweep measured as its quietest, and it
+# names no person - "Nobody moves." drew one into an empty corridor.
+LEGACY_HOLD = "Nothing in the frame moves."
 
 
 def motion_of(b):
     """The video prompt for one beat, with the two failure modes named rather than run."""
     m = str(b.get("motion") or "").strip()
     if not m:
-        print(f"  !! {b['id']} has no motion at all, so the video model is being asked "
-              f"for nothing. Recompile the film from its .movie with studio/compile.py, "
-              f"which now resolves one per beat.", file=sys.stderr)
-        return ""
+        print(f"  !! {b['id']} has no motion at all. Sending the measured hold instead of "
+              f"nothing - an EMPTY prompt is not neutral, it is unsupervised, and it "
+              f"measured the worst first-to-last drift of any beat in the proof render "
+              f"(18.60). Recompile from the .movie with studio/compile.py, which resolves "
+              f"a real motion per beat.", file=sys.stderr)
+        return LEGACY_HOLD
     if m.rstrip(".").lower() == DEAD_MOTION.rstrip("."):
-        print(f"  !! {b['id']} carries the retired constant {m!r}. It measured 0.520 "
+        print(f"  !! {b['id']} carries the retired constant {m!r}, which measured 0.520 "
               f"against an empty-prompt control of 0.614 - it asks for LESS than saying "
-              f"nothing - so it is being sent as an empty string instead. Recompile from "
-              f"the .movie to get a real per-beat motion, or write one onto the beat.",
-              file=sys.stderr)
-        return ""
+              f"nothing. Sending {LEGACY_HOLD!r} instead, which is the best-evidenced "
+              f"string available and is what that constant was reaching for. Recompile "
+              f"from the .movie to get a real per-beat motion.", file=sys.stderr)
+        return LEGACY_HOLD
     return m
 
 

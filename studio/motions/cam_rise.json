@@ -10,5 +10,26 @@
   ],
   "needs": "a subject to rise above",
   "grammar": "[MOVER] [ACTION VERB] [PATH/SPATIAL RELATION]",
-  "status": "untested"
+  "status": "weak",
+  "measured": {
+    "motion_per_seed": [
+      2.0652,
+      2.1037,
+      2.3951
+    ],
+    "motion_mean": 2.188,
+    "creep_mean": 1.042,
+    "seeds": [
+      7701,
+      7702,
+      7703
+    ],
+    "band_lo": 0.4058,
+    "band_hi": 0.7444,
+    "frame_scale_ceiling": 1.191,
+    "keyframe": "studio/samples/motion_lib/_keyframe.png",
+    "frames": 97,
+    "workflow": "12_ltx23_i2v_audio.json"
+  },
+  "verdict": "RENDERED 2026-08-04, 3 seeds. Motion 2.065/2.104/2.395 - consistently above the ceiling, so something happens on every seed. WHAT happens is not verified as a rise: on 7701 the strip shows no vertical travel, and the only seed with a vertical displacement signature (7703, dy 285/288) has a correlation peak of 0.022, far too low to read a direction from. Fires, direction unproven. Band 0.406-0.744 (empty control 0.628); frame-scale ceiling 1.191. "
 }

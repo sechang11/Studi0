@@ -11,5 +11,26 @@
   ],
   "needs": null,
   "grammar": "[MOVER] [ACTION VERB] [PATH/SPATIAL RELATION]",
-  "status": "untested"
+  "status": "weak",
+  "measured": {
+    "motion_per_seed": [
+      2.3274,
+      1.5352,
+      3.4071
+    ],
+    "motion_mean": 2.423,
+    "creep_mean": 1.0,
+    "seeds": [
+      7701,
+      7702,
+      7703
+    ],
+    "band_lo": 0.4058,
+    "band_hi": 0.7444,
+    "frame_scale_ceiling": 1.191,
+    "keyframe": "studio/samples/motion_lib/_keyframe.png",
+    "frames": 97,
+    "workflow": "12_ltx23_i2v_audio.json"
+  },
+  "verdict": "RENDERED 2026-08-04, 3 seeds. Motion 2.327/1.535/3.407, above the ceiling 3/3, and smoke genuinely rolls in from frame left. TWO COSTS, both visible on 7701: it HALLUCINATED A SECOND PERSON - the head and shoulders of a man in a coat enter the foreground at f41 and then leave - and by f55 the smoke has obscured the subject. Fires reliably, damages the composition. Band 0.406-0.744 (empty control 0.628); frame-scale ceiling 1.191. "
 }

@@ -10,5 +10,26 @@
   ],
   "needs": "a door in or implied by the frame",
   "grammar": "[MOVER] [ACTION VERB] [PATH/SPATIAL RELATION]",
-  "status": "untested"
+  "status": "weak",
+  "measured": {
+    "motion_per_seed": [
+      1.1512,
+      1.4441,
+      0.8995
+    ],
+    "motion_mean": 1.165,
+    "creep_mean": 1.008,
+    "seeds": [
+      7701,
+      7702,
+      7703
+    ],
+    "band_lo": 0.4058,
+    "band_hi": 0.7444,
+    "frame_scale_ceiling": 1.191,
+    "keyframe": "studio/samples/motion_lib/_keyframe.png",
+    "frames": 97,
+    "workflow": "12_ltx23_i2v_audio.json"
+  },
+  "verdict": "RENDERED 2026-08-04, 3 seeds. Motion 1.151/1.444/0.899 - straddling the ceiling. On 7701 a bright opening does appear at frame right by f82 and she turns toward it, so something door-like happens; on 7703 it sits in the band. There is no door in the keyframe, and unlike confetti the model does not reliably invent one. Band 0.406-0.744 (empty control 0.628); frame-scale ceiling 1.191. "
 }

@@ -509,6 +509,12 @@ MOTION_SHOT_WORDS = {
     "shot", "body", "angle", "view", "frame", "lines", "focus",
 }
 
+# The subset of the above that are NOUNS, and so can legitimately be the object of a
+# determiner or a preposition inside a path - "through the frame", "across the body".
+# The rest ("wide", "full", "close") are size modifiers and are never a path's head, so
+# they come off even when they trail a possessive. See _motion_clean_path.
+MOTION_SHOT_NOUNS = {"shot", "body", "angle", "view", "frame", "lines", "focus"}
+
 MOTION_HOLD_CLAUSE = "Nothing else in the frame moves."
 
 
@@ -613,9 +619,22 @@ def _motion_fill(text, pron, anchor=""):
 
 
 def _motion_clean_path(words):
-    """Trim an author's trailing shot-size words and manner adverbs off a path."""
+    """Trim an author's trailing shot-size words and manner adverbs off a path.
+
+    NEVER eat the OBJECT of a determiner or a preposition. "frame" is in
+    MOTION_SHOT_WORDS so that "wide shot" and "full body" come off the end of a path -
+    but "through the frame" is this module's OWN most common default path, and popping
+    its head left the sentence "Confetti falls through the." That exact string was
+    reachable from the fix message compile.py prints ("write the action into the
+    description ... e.g. 'confetti falling through the frame'"), so following the app's
+    own advice produced a truncated prompt for the video model. A shot-size word sitting
+    behind "the" or "across" is the thing the phrase is about, not a trailing label.
+    """
     ws = [w for w in words if w.strip(".,;").lower() not in MOTION_ADVERBS]
     while ws and ws[-1].strip(".,;").lower() in MOTION_SHOT_WORDS:
+        if (len(ws) >= 2 and ws[-1].strip(".,;").lower() in MOTION_SHOT_NOUNS
+                and ws[-2].strip(".,;").lower() in MOTION_PATH_LEAD):
+            break
         ws.pop()
     return " ".join(ws[:7]).strip(" .,;")
 
@@ -647,6 +666,7 @@ def derive_motion(desc, pron=None, allow_subject=True):
             if not spec:
                 continue
             verb, default_path, kind = spec
+            plural = False
             mover_words = [x for x in words[:i]
                            if x.strip(".,;:").lower() not in MOTION_ADVERBS]
             # Manner adverbs come out of the PATH before it is tested, not just out of the
@@ -671,6 +691,7 @@ def derive_motion(desc, pron=None, allow_subject=True):
                     break
                 mover = " ".join(mover_words).strip(" .,;")
                 mover = mover[:1].upper() + mover[1:]
+                plural = _motion_is_plural(head)
             elif kind == "subject":
                 # A dangling participle - "leaping mid-air volley" - hangs off whoever the
                 # shot is of.
@@ -679,6 +700,7 @@ def derive_motion(desc, pron=None, allow_subject=True):
                                    "character in it" % w)
                     break
                 mover = pron["S"]
+                plural = (mover == "They")
             else:
                 # "falling" with nothing in front of it: no mover, and guessing one is how
                 # you spend a clip on the wrong thing.
@@ -699,12 +721,50 @@ def derive_motion(desc, pron=None, allow_subject=True):
             if not path:
                 break
 
+            if plural:
+                verb = _motion_base_verb(verb)
             return ("%s %s %s." % (mover, verb, path), kind,
                     "derived from the shot line: %r" % clause)
     why = "the shot line names no mover doing anything that travels"
     if skipped:
         why += " (skipped " + "; ".join(skipped[:2]) + ")"
     return (None, None, why)
+
+
+# A plural mover takes the BASE verb, not the third-person singular one that
+# MOTION_VERBS stores. Without this, "loose papers blowing across the floor"
+# derived "Loose papers blows across the floor." - subject-verb disagreement sent
+# to the video model. For a project whose governing rule is that the EXACT grammar
+# of the motion string is what was measured, shipping broken agreement is a defect
+# in the one string the model reads.
+#
+# Words that end in s and are NOT plural. The suffix rule below catches -ss/-us/-is
+# (glass, bus, debris); these are the ones it would get wrong.
+MOTION_SINGULAR_S = {"news", "lens", "series", "species", "haze", "confetti"}
+
+
+def _motion_is_plural(head):
+    """Is this noun-phrase head plural? Conservative: singular unless clearly not."""
+    h = (head or "").strip(".,;:").lower()
+    if not h or h in MOTION_SINGULAR_S:
+        return False
+    if not h.endswith("s"):
+        return False
+    # -ss (glass, grass), -us (bus), -is (debris) are singular nouns that end in s.
+    return not h.endswith(("ss", "us", "is"))
+
+
+def _motion_base_verb(verb):
+    """Third-person singular -> base form. 'blows'->'blow', 'flies'->'fly',
+    'crosses'->'cross', 'rushes'->'rush', 'goes'->'go'."""
+    v = verb
+    if v.endswith("ies") and len(v) > 4:
+        return v[:-3] + "y"
+    if v.endswith(("ches", "shes", "sses", "xes", "zes", "oes")):
+        return v[:-2]
+    if v.endswith("s"):
+        return v[:-1]
+    return v
 
 
 def _motion_anchor(desc, place_card, place_text, character, pron):
@@ -752,6 +812,9 @@ def resolve_motion(libs, sel, character=None, template="", camera_card=None,
     There is no fifth rung and none of them is the old constant.
     """
     libs = libs or load_libs()
+    # resolve() does `dict(sel or {})`; this entry point did not, so a caller passing
+    # None crashed on .get instead of falling to the measured hold.
+    sel = sel or {}
     conflicts = []
     pron = _pronouns(character)
     motions = libs.get("motions") or {}
@@ -820,11 +883,22 @@ def resolve_motion(libs, sel, character=None, template="", camera_card=None,
                 text = _motion_fill(text, pron)
             st = str(card.get("status") or "ready")
             if st in ("weak", "partial"):
+                # A card can carry a SECOND verdict from a different keyframe, and it can
+                # be the more important one. hold_nobody's own `verdict` is a stillness
+                # measurement; its `verdict_prior` records that the string DREW A PERSON
+                # into a shot authored "no humans". Quoting only the first buried the
+                # finding the author most needs.
+                said = _one_line(card.get("verdict") or card.get("desc"))[:200]
+                prior = _one_line(card.get("verdict_prior") or "")[:200]
+                if prior:
+                    said += "  ALSO, on another keyframe: " + prior
+                fix = "look at studio/motions/%s.json before you spend a render on it." % mid
+                if card.get("instead"):
+                    fix = "use %s" % _one_line(card["instead"])[:180]
                 conflicts.append(_conflict(
                     "note", ["motion"],
-                    "the motion '%s' is marked %s: %s" % (
-                        mid, st, _one_line(card.get("verdict") or card.get("desc"))[:200]),
-                    "look at studio/motions/%s.json before you spend a render on it." % mid,
+                    "the motion '%s' is marked %s: %s" % (mid, st, said),
+                    fix,
                     "motion_not_ready"))
             elif st == "untested":
                 # Not a warning. The library was authored on a measured grammar and these
@@ -897,10 +971,16 @@ def resolve_motion(libs, sel, character=None, template="", camera_card=None,
     # "Slow deliberate movement only." measured 0.520: it held just as still while its
     # words said the opposite, which is why nobody noticed for the life of the project.
     if not src:
-        prefer = (["hold", "hold_all", "hold_figure", "hold_nobody"] if subject_ok
-                  else ["hold_figure", "hold_nobody", "hold", "hold_all"]
+        # WHICH hold, and it is not a cosmetic choice. 'Nobody moves.' was rendered over a
+        # keyframe the author wrote as "long empty concrete tunnel ... no humans" and by
+        # frame 24 a figure had walked into frame and was walking away down the corridor.
+        # The model renders NOUNS - 'Nobody' is a person-shaped one, and a negation is not
+        # a way to ask for absence. So a shot with nobody in it gets hold_frame, which
+        # names no occupant at all. hold_nobody is never chosen automatically.
+        prefer = (["hold", "hold_all", "hold_figure", "hold_frame"] if subject_ok
+                  else ["hold_figure", "hold_frame", "hold", "hold_all"]
                   if person_in_frame
-                  else ["hold_nobody", "hold_figure", "hold", "hold_all"])
+                  else ["hold_frame", "hold", "hold_all"])
         hold = next((motions[i] for i in prefer if i in motions), {})
         text = ((hold.get("prompt_no_subject") if not subject_ok else "") or
                 _motion_text(hold) or "Nothing in the frame moves.")

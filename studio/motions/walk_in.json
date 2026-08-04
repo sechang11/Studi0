@@ -11,5 +11,26 @@
   ],
   "needs": "a person in frame",
   "grammar": "[MOVER] [ACTION VERB] [PATH/SPATIAL RELATION]",
-  "status": "untested"
+  "status": "ready",
+  "measured": {
+    "motion_per_seed": [
+      2.2742,
+      3.1662,
+      4.1332
+    ],
+    "motion_mean": 3.191,
+    "creep_mean": 1.042,
+    "seeds": [
+      7701,
+      7702,
+      7703
+    ],
+    "band_lo": 0.4058,
+    "band_hi": 0.7444,
+    "frame_scale_ceiling": 1.191,
+    "keyframe": "studio/samples/motion_lib/_keyframe.png",
+    "frames": 97,
+    "workflow": "12_ltx23_i2v_audio.json"
+  },
+  "verdict": "RENDERED 2026-08-04, 3 seeds, watched. Motion 2.274/3.166/4.133, mean 3.191 - above the frame-scale ceiling on all three seeds, one of only two subject cards that clears it. She walks steadily toward the lens from f0 to f96, growing from a full-length figure to a medium shot, and the face stays legible the whole way. The best card in the library: the largest displacement one mover can make, on brief 3/3, subject intact 3/3. Band 0.406-0.744 (empty control 0.628); frame-scale ceiling 1.191. "
 }

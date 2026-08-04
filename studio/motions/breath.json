@@ -11,5 +11,26 @@
   ],
   "needs": "a person, shoulders visible",
   "grammar": "[MOVER] [ACTION VERB] [PATH/SPATIAL RELATION]",
-  "status": "untested"
+  "status": "weak",
+  "measured": {
+    "motion_per_seed": [
+      0.4174,
+      0.5881,
+      0.4453
+    ],
+    "motion_mean": 0.484,
+    "creep_mean": 1.0,
+    "seeds": [
+      7701,
+      7702,
+      7703
+    ],
+    "band_lo": 0.4058,
+    "band_hi": 0.7444,
+    "frame_scale_ceiling": 1.191,
+    "keyframe": "studio/samples/motion_lib/_keyframe.png",
+    "frames": 97,
+    "workflow": "12_ltx23_i2v_audio.json"
+  },
+  "verdict": "RENDERED 2026-08-04, 3 seeds, watched at subject crop. NO BREATHING IS RENDERED - the shoulders do not visibly rise or fall on any seed. Judged as the motion it names, this card fails. But it is the QUIETEST CELL IN THE WHOLE SWEEP: motion 0.417/0.588/0.445, mean 0.484, below BOTH controls, and creep 1.00 - the only hold in the library with no framing drift at all. So it outperforms all three stillness cards at being still. Use it as a hold, not as a motion; it is listed weak because it does not do what its name says. Band 0.406-0.744 (empty control 0.628); frame-scale ceiling 1.191. "
 }

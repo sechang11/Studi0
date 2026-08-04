@@ -11,5 +11,26 @@
   ],
   "needs": "a person and a cup on a surface in frame",
   "grammar": "[MOVER] [ACTION VERB] [PATH/SPATIAL RELATION]",
-  "status": "untested"
+  "status": "ready",
+  "measured": {
+    "motion_per_seed": [
+      0.8142,
+      0.7985,
+      0.8156
+    ],
+    "motion_mean": 0.809,
+    "creep_mean": 1.0,
+    "seeds": [
+      7701,
+      7702,
+      7703
+    ],
+    "band_lo": 0.4058,
+    "band_hi": 0.7444,
+    "frame_scale_ceiling": 1.191,
+    "keyframe": "studio/samples/motion_lib/_keyframe.png",
+    "frames": 97,
+    "workflow": "12_ltx23_i2v_audio.json"
+  },
+  "verdict": "RENDERED 2026-08-04, 3 seeds, watched at subject crop. THE CLEAREST PROOF IN THE LIBRARY THAT THE METRIC IS BLIND. Motion 0.814/0.798/0.816 - barely above the empty control - while the strips show a full four-stage action on all three seeds: she looks down, reaches, closes her hand on the cup, lifts it and drinks. Face held and framing intact 3/3. Ranked by the number this would have been discarded; it is one of the best cards here. Band 0.406-0.744 (empty control 0.628); frame-scale ceiling 1.191. "
 }

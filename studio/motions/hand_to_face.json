@@ -1,0 +1,36 @@
+{
+  "id": "hand_to_face",
+  "name": "Hand rises to face",
+  "family": "subject",
+  "text": "She raises her right hand to her face.",
+  "desc": "The classic reaction gesture - grief, exhaustion, realisation. Landed 9/9 in the probe across three seeds and three grammatical forms.",
+  "shots": [
+    "react",
+    "speak",
+    "insert"
+  ],
+  "needs": "a person in frame with a visible hand",
+  "grammar": "[MOVER] [ACTION VERB] [PATH/SPATIAL RELATION]",
+  "measured": {
+    "motion_per_seed": [
+      0.5709,
+      0.725,
+      0.5615
+    ],
+    "motion_mean": 0.619,
+    "creep_mean": 1.0,
+    "seeds": [
+      7701,
+      7702,
+      7703
+    ],
+    "band_lo": 0.4058,
+    "band_hi": 0.7444,
+    "frame_scale_ceiling": 1.191,
+    "keyframe": "studio/samples/motion_lib/_keyframe.png",
+    "frames": 97,
+    "workflow": "12_ltx23_i2v_audio.json"
+  },
+  "status": "ready",
+  "verdict": "RENDERED 2026-08-04, 3 seeds, watched at subject crop. Motion 0.571/0.725/0.561 - at or BELOW the empty control on every seed, and the gesture lands 3/3 anyway. Reproduces motion_probe's 9/9 result on a fourth independent seed set. The hand reaches the face by f38-f77 and the face survives on 7701 and 7703. WARNING: on 7702 she completes the gesture and then turns away by f96, so the shot does not end on her face 1/3. Band 0.406-0.744 (empty control 0.628); frame-scale ceiling 1.191. "
+}

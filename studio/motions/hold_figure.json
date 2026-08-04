@@ -11,5 +11,26 @@
   ],
   "needs": "a person in frame",
   "grammar": "[MOVER] [ACTION VERB] [PATH/SPATIAL RELATION]",
-  "status": "untested"
+  "status": "weak",
+  "measured": {
+    "motion_per_seed": [
+      0.6996,
+      0.6901,
+      0.5006
+    ],
+    "motion_mean": 0.63,
+    "creep_mean": 1.033,
+    "seeds": [
+      7701,
+      7702,
+      7703
+    ],
+    "band_lo": 0.4058,
+    "band_hi": 0.7444,
+    "frame_scale_ceiling": 1.191,
+    "keyframe": "studio/samples/motion_lib/_keyframe.png",
+    "frames": 97,
+    "workflow": "12_ltx23_i2v_audio.json"
+  },
+  "verdict": "RENDERED 2026-08-04, 3 seeds. Motion 0.700/0.690/0.501, mean 0.630 against the empty control's 0.628 - indistinguishable to three decimal places. Creep 1.03 against empty's 1.00. Same verdict as hold_all: it holds, and so does nothing. Band 0.406-0.744 (empty control 0.628); frame-scale ceiling 1.191. "
 }

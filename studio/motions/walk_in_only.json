@@ -10,5 +10,26 @@
   ],
   "needs": "a person in frame",
   "grammar": "[MOVER] [ACTION VERB] [PATH/SPATIAL RELATION]",
-  "status": "untested"
+  "status": "ready",
+  "measured": {
+    "motion_per_seed": [
+      2.1053,
+      2.4756,
+      3.3485
+    ],
+    "motion_mean": 2.643,
+    "creep_mean": 1.058,
+    "seeds": [
+      7701,
+      7702,
+      7703
+    ],
+    "band_lo": 0.4058,
+    "band_hi": 0.7444,
+    "frame_scale_ceiling": 1.191,
+    "keyframe": "studio/samples/motion_lib/_keyframe.png",
+    "frames": 97,
+    "workflow": "12_ltx23_i2v_audio.json"
+  },
+  "verdict": "RENDERED 2026-08-04, 3 seeds. Motion 2.105/2.476/3.349, mean 2.643 - above the ceiling 3/3, but consistently BELOW plain walk_in on every seed. That is the hold clause doing its job: the same approach with less off-brief motion around it. Use this when the background must stay put and walk_in when it need not. Band 0.406-0.744 (empty control 0.628); frame-scale ceiling 1.191. "
 }

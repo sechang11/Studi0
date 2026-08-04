@@ -11,5 +11,26 @@
   ],
   "needs": "a person in frame with a visible hand",
   "grammar": "[MOVER] [ACTION VERB] [PATH/SPATIAL RELATION]",
-  "status": "untested"
+  "status": "weak",
+  "measured": {
+    "motion_per_seed": [
+      1.8764,
+      2.2312,
+      0.7125
+    ],
+    "motion_mean": 1.607,
+    "creep_mean": 1.075,
+    "seeds": [
+      7701,
+      7702,
+      7703
+    ],
+    "band_lo": 0.4058,
+    "band_hi": 0.7444,
+    "frame_scale_ceiling": 1.191,
+    "keyframe": "studio/samples/motion_lib/_keyframe.png",
+    "frames": 97,
+    "workflow": "12_ltx23_i2v_audio.json"
+  },
+  "verdict": "RENDERED 2026-08-04, 3 seeds. Motion 1.876/2.231/0.713 - above the ceiling on two seeds and INSIDE the do-nothing band on the third. Where it fires it fires well: on 7701 the palm comes up toward the lens by f82 and the framing tightens with it (creep 1.23). Fires 2/3, so do not rely on it for a beat that must land. Band 0.406-0.744 (empty control 0.628); frame-scale ceiling 1.191. "
 }

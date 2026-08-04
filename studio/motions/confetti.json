@@ -11,5 +11,26 @@
   ],
   "needs": null,
   "grammar": "[MOVER] [ACTION VERB] [PATH/SPATIAL RELATION]",
-  "status": "untested"
+  "status": "ready",
+  "measured": {
+    "motion_per_seed": [
+      4.4836,
+      3.7491,
+      10.1497
+    ],
+    "motion_mean": 6.127,
+    "creep_mean": 1.0,
+    "seeds": [
+      7701,
+      7702,
+      7703
+    ],
+    "band_lo": 0.4058,
+    "band_hi": 0.7444,
+    "frame_scale_ceiling": 1.191,
+    "keyframe": "studio/samples/motion_lib/_keyframe.png",
+    "frames": 97,
+    "workflow": "12_ltx23_i2v_audio.json"
+  },
+  "verdict": "RENDERED 2026-08-04, 3 seeds. Motion 4.484/3.749/10.150, mean 6.127 - the highest in the library and far above the ceiling 3/3. Confetti is ABSENT from the keyframe and the model invents it anyway, falling through frame from f27 and clearing by f96, with the subject still readable. WARNING: seed 7703 measured 10.15, roughly double the other two - at that density it will bury the frame. The card fires reliably; how much of it you get does not. Band 0.406-0.744 (empty control 0.628); frame-scale ceiling 1.191. "
 }

@@ -11,5 +11,26 @@
   ],
   "needs": "a person in frame, and depth behind them",
   "grammar": "[MOVER] [ACTION VERB] [PATH/SPATIAL RELATION]",
-  "status": "untested"
+  "status": "weak",
+  "measured": {
+    "motion_per_seed": [
+      1.2805,
+      1.1232,
+      0.5952
+    ],
+    "motion_mean": 1.0,
+    "creep_mean": 1.0,
+    "seeds": [
+      7701,
+      7702,
+      7703
+    ],
+    "band_lo": 0.4058,
+    "band_hi": 0.7444,
+    "frame_scale_ceiling": 1.191,
+    "keyframe": "studio/samples/motion_lib/_keyframe.png",
+    "frames": 97,
+    "workflow": "12_ltx23_i2v_audio.json"
+  },
+  "verdict": "RENDERED 2026-08-04, 3 seeds. Motion 1.280/1.123/0.595 - the last seed is inside the do-nothing band. On 7701 she does leave, but by exiting frame left rather than receding into the depth behind her, so the intended shrinking-into-distance read is not what you get. Recession into depth is the weakest path in the library; lateral exit is what the model actually renders. Band 0.406-0.744 (empty control 0.628); frame-scale ceiling 1.191. "
 }

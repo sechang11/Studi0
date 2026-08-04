@@ -11,5 +11,26 @@
   ],
   "needs": "a curtain or hanging fabric in frame",
   "grammar": "[MOVER] [ACTION VERB] [PATH/SPATIAL RELATION]",
-  "status": "untested"
+  "status": "unavailable",
+  "measured": {
+    "motion_per_seed": [
+      0.9059,
+      0.7988,
+      0.7421
+    ],
+    "motion_mean": 0.816,
+    "creep_mean": 1.033,
+    "seeds": [
+      7701,
+      7702,
+      7703
+    ],
+    "band_lo": 0.4058,
+    "band_hi": 0.7444,
+    "frame_scale_ceiling": 1.191,
+    "keyframe": "studio/samples/motion_lib/_keyframe.png",
+    "frames": 97,
+    "workflow": "12_ltx23_i2v_audio.json"
+  },
+  "verdict": "RENDERED 2026-08-04, 3 seeds, watched. Motion 0.906/0.799/0.742, mean 0.816 - essentially the control. THE CURTAIN DOES NOT LIFT on any seed. This card was written specifically to close motion_probe's open A/B, and IT FAILS TO REPLICATE THAT PROBE'S CLAIM: the probe reported that adding the spatial phrase `behind her` swept the curtain across the frame, but the probe never ran that phrase as a sole cell - it inferred the effect from a two-sentence cell that also contained the hand action. Run clean, the anchor buys nothing. The consistent explanation is the mover, not the grammar: a curtain hangs from a rail and cannot travel, and every mover that worked here was free to cross the frame. Band 0.406-0.744 (empty control 0.628); frame-scale ceiling 1.191. "
 }

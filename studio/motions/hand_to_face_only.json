@@ -10,5 +10,26 @@
   ],
   "needs": "a person in frame with a visible hand",
   "grammar": "[MOVER] [ACTION VERB] [PATH/SPATIAL RELATION]",
-  "status": "untested"
+  "status": "ready",
+  "measured": {
+    "motion_per_seed": [
+      0.4549,
+      0.7156,
+      0.5202
+    ],
+    "motion_mean": 0.564,
+    "creep_mean": 1.0,
+    "seeds": [
+      7701,
+      7702,
+      7703
+    ],
+    "band_lo": 0.4058,
+    "band_hi": 0.7444,
+    "frame_scale_ceiling": 1.191,
+    "keyframe": "studio/samples/motion_lib/_keyframe.png",
+    "frames": 97,
+    "workflow": "12_ltx23_i2v_audio.json"
+  },
+  "verdict": "RENDERED 2026-08-04, 3 seeds, watched at subject crop. Motion 0.455/0.716/0.520, below plain hand_to_face on 2 of 3 seeds - the hold clause measurably quietens the frame. It also SUSTAINS the gesture: on 7703 the hand stays at the face from f58 through f96 where the plain card had already lowered it. WARNING: the hold clause does NOT rescue the 7702 turn-away - that failure is identical with and without it, so the clause controls the background, not the performer. Band 0.406-0.744 (empty control 0.628); frame-scale ceiling 1.191. "
 }

@@ -11,5 +11,26 @@
   ],
   "needs": null,
   "grammar": "[MOVER] [ACTION VERB] [PATH/SPATIAL RELATION]",
-  "status": "untested"
+  "status": "weak",
+  "measured": {
+    "motion_per_seed": [
+      0.695,
+      0.8599,
+      0.5952
+    ],
+    "motion_mean": 0.717,
+    "creep_mean": 1.008,
+    "seeds": [
+      7701,
+      7702,
+      7703
+    ],
+    "band_lo": 0.4058,
+    "band_hi": 0.7444,
+    "frame_scale_ceiling": 1.191,
+    "keyframe": "studio/samples/motion_lib/_keyframe.png",
+    "frames": 97,
+    "workflow": "12_ltx23_i2v_audio.json"
+  },
+  "verdict": "RENDERED 2026-08-04, 3 seeds. Motion 0.695/0.860/0.595 against an empty control of 0.628, creep 1.02/1.00/1.00, and the highest frame-to-frame correlation of any camera card. It genuinely holds the camera - and so does an empty string. The card is honest but it buys nothing over emitting nothing; keep it only as an explicit way to say 'no camera move' in an authored film. Band 0.406-0.744 (empty control 0.628); frame-scale ceiling 1.191. "
 }

@@ -10,5 +10,26 @@
   ],
   "needs": "a person in frame",
   "grammar": "[MOVER] [ACTION VERB] [PATH/SPATIAL RELATION]",
-  "status": "untested"
+  "status": "weak",
+  "measured": {
+    "motion_per_seed": [
+      0.4427,
+      0.7496,
+      0.5834
+    ],
+    "motion_mean": 0.592,
+    "creep_mean": 1.0,
+    "seeds": [
+      7701,
+      7702,
+      7703
+    ],
+    "band_lo": 0.4058,
+    "band_hi": 0.7444,
+    "frame_scale_ceiling": 1.191,
+    "keyframe": "studio/samples/motion_lib/_keyframe.png",
+    "frames": 97,
+    "workflow": "12_ltx23_i2v_audio.json"
+  },
+  "verdict": "RENDERED 2026-08-04, 3 seeds, watched at subject crop. Motion 0.443/0.750/0.583 - at or below the empty control, and the turn happens anyway 3/3. IT OVERSHOOTS: the card asks for the head and the model turns the whole body. Only 7701 holds a usable profile; 7702 and 7703 carry on into a full turn and the face is gone by f96. Face survives 1/3. Reproduces motion_probe's finding on a fourth seed set. If you want the face given up, use turn_away, which asks for it honestly. Band 0.406-0.744 (empty control 0.628); frame-scale ceiling 1.191. "
 }

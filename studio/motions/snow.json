@@ -11,5 +11,26 @@
   ],
   "needs": "an exterior or a window",
   "grammar": "[MOVER] [ACTION VERB] [PATH/SPATIAL RELATION]",
-  "status": "untested"
+  "status": "unavailable",
+  "measured": {
+    "motion_per_seed": [
+      0.7952,
+      0.7276,
+      0.6095
+    ],
+    "motion_mean": 0.711,
+    "creep_mean": 1.033,
+    "seeds": [
+      7701,
+      7702,
+      7703
+    ],
+    "band_lo": 0.4058,
+    "band_hi": 0.7444,
+    "frame_scale_ceiling": 1.191,
+    "keyframe": "studio/samples/motion_lib/_keyframe.png",
+    "frames": 97,
+    "workflow": "12_ltx23_i2v_audio.json"
+  },
+  "verdict": "RENDERED 2026-08-04, 3 seeds. Motion 0.795/0.728/0.610, mean 0.711 - inside the do-nothing band on every seed. NO SNOW APPEARS. The only thing that moves is the usual slow framing creep. Caveat: tested on an interior keyframe where snow is scene-implausible - but confetti is equally implausible indoors and scored 6.127, so the model's willingness to invent a mover is not the limit here. Retest on an exterior before reinstating. Band 0.406-0.744 (empty control 0.628); frame-scale ceiling 1.191. "
 }

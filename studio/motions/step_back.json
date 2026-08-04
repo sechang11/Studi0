@@ -10,5 +10,26 @@
   ],
   "needs": "a person in frame",
   "grammar": "[MOVER] [ACTION VERB] [PATH/SPATIAL RELATION]",
-  "status": "untested"
+  "status": "weak",
+  "measured": {
+    "motion_per_seed": [
+      0.7528,
+      2.1564,
+      1.3167
+    ],
+    "motion_mean": 1.409,
+    "creep_mean": 1.0,
+    "seeds": [
+      7701,
+      7702,
+      7703
+    ],
+    "band_lo": 0.4058,
+    "band_hi": 0.7444,
+    "frame_scale_ceiling": 1.191,
+    "keyframe": "studio/samples/motion_lib/_keyframe.png",
+    "frames": 97,
+    "workflow": "12_ltx23_i2v_audio.json"
+  },
+  "verdict": "RENDERED 2026-08-04, 3 seeds. Motion 0.753/2.156/1.317 - inside the do-nothing band on 7701, above the ceiling on 7702, between on 7703. The widest seed spread of any subject card. Recoil is not reliably rendered; at 7701 she drifts sideways rather than backward. Band 0.406-0.744 (empty control 0.628); frame-scale ceiling 1.191. "
 }
