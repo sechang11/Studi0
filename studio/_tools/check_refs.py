@@ -21,14 +21,24 @@ STUDIO = os.path.dirname(HERE)
 
 # (group holding the reference, field on the card, group the id must exist in)
 # A field may hold a bare id or a list of ids; both are handled.
+#
+# NOTE `movies.style` is deliberately absent. It is DUAL-PURPOSE and both meanings are
+# valid: if the value resolves to a card in styles/ the compiler uses that card (and takes
+# the engine from it); if it does not, the value is legacy free-text house-style tags and
+# is appended to the prompt on the anime path. derby-ep1 relies on the second meaning and
+# renders correctly. A checker that demanded an id here would flag working films.
 REFS = [
     ("styles",     "suits_looks",   "looks"),
     ("templates",  "look",          "looks"),
     ("templates",  "style",         "styles"),
-    ("movies",     "style",         "styles"),
     ("characters", "default_wear",  "wear"),
     ("places",     "suits_looks",   "looks"),
 ]
+
+# An id has no spaces or commas. Used to tell a mistyped id apart from free text in the
+# dual-purpose fields, so those can be reported as a hint rather than as an error.
+def looks_like_id(s):
+    return " " not in s and "," not in s
 
 
 def ids(group):
@@ -72,6 +82,26 @@ def main():
             print("    %s" % line)
         if len(v) > 12:
             print("    ... and %d more" % (len(v) - 12))
+
+    # movies.style is dual-purpose, so it is not an error - but a value that LOOKS like an
+    # id and does not resolve is almost certainly a typo, and that is worth saying.
+    hints = []
+    mdir, styles = os.path.join(STUDIO, "movies"), ids("styles")
+    if os.path.isdir(mdir) and styles:
+        for p in sorted(glob.glob(os.path.join(mdir, "*.json"))):
+            try:
+                d = json.load(open(p, encoding="utf-8"))
+            except Exception:
+                continue
+            v = str((d.get("vars") or d).get("style", "")).strip()
+            if v and looks_like_id(v) and v not in styles:
+                hints.append("%s sets style: %r which looks like a card id but does not "
+                             "resolve - free text is fine here, a typo is not"
+                             % (os.path.basename(p), v))
+    if hints:
+        print("movies.style  (%d to eyeball)" % len(hints))
+        for h in hints:
+            print("    %s" % h)
 
     total = sum(len(v) for v in dangling.values())
     print("\n%d references checked, %d dangling, %d rules skipped (group absent)"
