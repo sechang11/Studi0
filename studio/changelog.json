@@ -1,10 +1,10 @@
 {
  "generated_from": "git log",
- "count": 58,
+ "count": 60,
  "days": [
   [
    "2026-08-04",
-   12
+   14
   ],
   [
    "2026-08-03",
@@ -28,8 +28,58 @@
  ],
  "entries": [
   {
-   "hash": "2f271d7",
-   "full": "2f271d7c7659cac6f1a8cdc10b2c57fa28fbe30d",
+   "hash": "2719dcd",
+   "full": "2719dcd5dfa3320e1b42a813a1b259dda112dc42",
+   "date": "2026-08-04",
+   "time": "08:42",
+   "author": "sechang11",
+   "subject": "The reference sheet now follows the engine, which is the whole non-anime cast fix",
+   "body": "Measured this session: the qwen edit path fed a character's ANIME sheet returned flat cel\nillustration in 4 of 4 places, even with \"waist-up photograph\" in the prompt. Fed a\nPHOTOGRAPHIC sheet of the same character - same prompt, same seeds, same graph apart from\nwhich png node 8 loads - it returned a photograph in 4 of 4, with the laundromat,\nsnowfield, library and market street all intact and one recognisable person throughout.\nA reference sheet imports its style as forcefully as its identity.\n\nThe two photographic sheets that proved it were written onto the cards and wired to\nnothing, so no film could reach them. compile.py now picks sheet_photo when the film\nrenders on qwen and falls back to the anime sheet otherwise. Verified: a qwen film with\nNIKA emits sheet_photo_nika.png, an anime film emits the anime sheets unchanged.\n\nAnd nothing silently does nothing - a qwen film whose character has only an anime sheet\nnow warns, names the consequence, and gives the command that fixes it. Verified firing on\nderby-qwen for VIRO.\n\nThe only compiled-film change is character_lora_weights gaining VIRO 0.5, which is the\nmotion arm's measured strength reaching the renderer rather than the old 0.85 default -\nthe strength that turned NIKA's sunlit field into a grey void.",
+   "paragraphs": [
+    "Measured this session: the qwen edit path fed a character's ANIME sheet returned flat cel\nillustration in 4 of 4 places, even with \"waist-up photograph\" in the prompt. Fed a\nPHOTOGRAPHIC sheet of the same character - same prompt, same seeds, same graph apart from\nwhich png node 8 loads - it returned a photograph in 4 of 4, with the laundromat,\nsnowfield, library and market street all intact and one recognisable person throughout.\nA reference sheet imports its style as forcefully as its identity.",
+    "The two photographic sheets that proved it were written onto the cards and wired to\nnothing, so no film could reach them. compile.py now picks sheet_photo when the film\nrenders on qwen and falls back to the anime sheet otherwise. Verified: a qwen film with\nNIKA emits sheet_photo_nika.png, an anime film emits the anime sheets unchanged.",
+    "And nothing silently does nothing - a qwen film whose character has only an anime sheet\nnow warns, names the consequence, and gives the command that fixes it. Verified firing on\nderby-qwen for VIRO.",
+    "The only compiled-film change is character_lora_weights gaining VIRO 0.5, which is the\nmotion arm's measured strength reaching the renderer rather than the old 0.85 default -\nthe strength that turned NIKA's sunlit field into a grey void."
+   ],
+   "areas": [
+    "Pipeline"
+   ],
+   "files": 4,
+   "added": 957,
+   "removed": 928
+  },
+  {
+   "hash": "c38e8e5",
+   "full": "c38e8e5a07235b2418942f6fd5af51e899c425c5",
+   "date": "2026-08-04",
+   "time": "08:35",
+   "author": "sechang11",
+   "subject": "Cast: a face that survives eight seconds of motion, and a sheet that survives the medium",
+   "body": "Two questions a user would actually ask, both answered by rendering and looking:\ncan I trust a character in a moving shot, and can I put one in a non-anime style.\n\nMOVING SHOTS - YES, AND THE CLOCK IS NOT WHAT COSTS YOU.\nstudio/_tools/cast_motion.py, 12 clips of VIRO across six places the training set\nnever held, one video seed throughout, plus a LoRA-dropped control and 8s\nre-renders. Within a clip he holds for the full eight seconds tested: at f192 of\nc1_walk_in_long the number 7, both gold ear studs, the two-tone hair and the amber\neyes are unchanged from the keyframe, and the drift curve is non-monotonic\n(0/43/52/14/43/54/23/55/20) - hair breathing, not a face going. What ends a face is\nthe ACTION completing, at a fraction of the clip rather than a wall-clock second,\nso doubling the clip roughly doubles the face time.\n\nThe structural fact that frames all of it: the character LoRA is NOT in the video\ngraph. short.py splices node 90 into the anime keyframe workflow only. Between\nclips identity is the LoRA's job; within a clip it is entirely LTX's, and no card\nfield can help. Confirmed from source, not inferred - the control drifts no more\nthan the LoRA arm does, so the LoRA makes him a specific person and is not what\nmakes him stable.\n\nVIRO's card gained lora_strength_measured 0.5, from the downward sweep his LoRA\ncard asked for and never got, and which compile.py already knows how to deliver.\n\nNON-ANIME - YES FOR PHOTOGRAPHY, PARTLY FOR PAINT.\nstudio/_tools/cast_style.py, 82 cells. A reference sheet imports its style as\nforcefully as its identity, and swapping the sheet is a complete fix: the anime\nsheet returned cel illustration in 8 of 8 cells with \"waist-up photograph\" in the\nprompt, and a photographic sheet returned a photograph in 8 of 8, same prompt, same\nseeds, same graph apart from which PNG node 8 loads, with every scene intact. The\ncost is fine markers only - NIKA's heterochromia reads in 2 of 4 photographic cells\nagainst 4 of 4 on the anime path, while her scar and all of PIP's markers carry.\n\nAlso established, and it applies to every qwen graph on this box: THE NEGATIVE\nPROMPT ON A 4-STEP QWEN WORKFLOW IS INERT. The Lightning LoRA forces cfg 1.0, so\nthere is no classifier-free guidance and the negative is never subtracted. Verified\nagain during review by differencing the two arms: 8 of 8 pairs byte-identical,\nbounding box of the difference empty. Do not author one and do not blame one.\n\nTHREE CORRECTIONS MADE DURING REVIEW, all from re-reading the renders:\n\n- NIKA's card claimed watercolour, ink_wash and oil_painting all land at IPAdapter\n  0.0. Only ink_wash does. Its saturation collapses to 7.9 in the library against a\n  control of 36.7; watercolour, oil_painting and oil_painterly all sit AT OR ABOVE\n  their own control in both places, and looked at they are cel with different\n  lighting. The IPAdapter-0.0 conclusion stands; the count of styles does not.\n  The card also attributed market_street's hue run to the library. Both fixed.\n\n- VIRO's card cited a white patch on his forehead as evidence for 0.50 over 0.85.\n  It is not evidence: the same patch is plainly present in the strength 0.00\n  control and in three 0.50 cells of between.png. It is a pipeline-wide artefact at\n  every weight including zero. The 0.50 choice stands on the scene evidence, which\n  read at full resolution is worse than recorded - at 0.85 all five subway posters\n  collapse into the same flat teal panel carrying his own jersey number.\n\n- VIRO's card said the 8s head turn loses the face by f168. At f168 it is a clean\n  profile with the eye open and the gold ear stud legible. Frontal or three-quarter\n  ends at f144 (75%); a usable profile runs to f168 (87%); the face is gone at f192.\n\nSTILL OPEN, AND NAMED SO NOBODY REDISCOVERS IT: sheet_photo is on the cards but\nunwired - compile.py and short.py have no field for it, so nothing in the app picks\nthese sheets up yet. The motion library's measured bands did not transfer to new\nkeyframes and should not be quoted at a user until re-measured. And no photographic\nkeyframe has been pushed through the LTX pass.",
+   "paragraphs": [
+    "Two questions a user would actually ask, both answered by rendering and looking:\ncan I trust a character in a moving shot, and can I put one in a non-anime style.",
+    "MOVING SHOTS - YES, AND THE CLOCK IS NOT WHAT COSTS YOU.\nstudio/_tools/cast_motion.py, 12 clips of VIRO across six places the training set\nnever held, one video seed throughout, plus a LoRA-dropped control and 8s\nre-renders. Within a clip he holds for the full eight seconds tested: at f192 of\nc1_walk_in_long the number 7, both gold ear studs, the two-tone hair and the amber\neyes are unchanged from the keyframe, and the drift curve is non-monotonic\n(0/43/52/14/43/54/23/55/20) - hair breathing, not a face going. What ends a face is\nthe ACTION completing, at a fraction of the clip rather than a wall-clock second,\nso doubling the clip roughly doubles the face time.",
+    "The structural fact that frames all of it: the character LoRA is NOT in the video\ngraph. short.py splices node 90 into the anime keyframe workflow only. Between\nclips identity is the LoRA's job; within a clip it is entirely LTX's, and no card\nfield can help. Confirmed from source, not inferred - the control drifts no more\nthan the LoRA arm does, so the LoRA makes him a specific person and is not what\nmakes him stable.",
+    "VIRO's card gained lora_strength_measured 0.5, from the downward sweep his LoRA\ncard asked for and never got, and which compile.py already knows how to deliver.",
+    "NON-ANIME - YES FOR PHOTOGRAPHY, PARTLY FOR PAINT.\nstudio/_tools/cast_style.py, 82 cells. A reference sheet imports its style as\nforcefully as its identity, and swapping the sheet is a complete fix: the anime\nsheet returned cel illustration in 8 of 8 cells with \"waist-up photograph\" in the\nprompt, and a photographic sheet returned a photograph in 8 of 8, same prompt, same\nseeds, same graph apart from which PNG node 8 loads, with every scene intact. The\ncost is fine markers only - NIKA's heterochromia reads in 2 of 4 photographic cells\nagainst 4 of 4 on the anime path, while her scar and all of PIP's markers carry.",
+    "Also established, and it applies to every qwen graph on this box: THE NEGATIVE\nPROMPT ON A 4-STEP QWEN WORKFLOW IS INERT. The Lightning LoRA forces cfg 1.0, so\nthere is no classifier-free guidance and the negative is never subtracted. Verified\nagain during review by differencing the two arms: 8 of 8 pairs byte-identical,\nbounding box of the difference empty. Do not author one and do not blame one.",
+    "THREE CORRECTIONS MADE DURING REVIEW, all from re-reading the renders:",
+    "- NIKA's card claimed watercolour, ink_wash and oil_painting all land at IPAdapter\n  0.0. Only ink_wash does. Its saturation collapses to 7.9 in the library against a\n  control of 36.7; watercolour, oil_painting and oil_painterly all sit AT OR ABOVE\n  their own control in both places, and looked at they are cel with different\n  lighting. The IPAdapter-0.0 conclusion stands; the count of styles does not.\n  The card also attributed market_street's hue run to the library. Both fixed.",
+    "- VIRO's card cited a white patch on his forehead as evidence for 0.50 over 0.85.\n  It is not evidence: the same patch is plainly present in the strength 0.00\n  control and in three 0.50 cells of between.png. It is a pipeline-wide artefact at\n  every weight including zero. The 0.50 choice stands on the scene evidence, which\n  read at full resolution is worse than recorded - at 0.85 all five subway posters\n  collapse into the same flat teal panel carrying his own jersey number.",
+    "- VIRO's card said the 8s head turn loses the face by f168. At f168 it is a clean\n  profile with the eye open and the gold ear stud legible. Frontal or three-quarter\n  ends at f144 (75%); a usable profile runs to f168 (87%); the face is gone at f192.",
+    "STILL OPEN, AND NAMED SO NOBODY REDISCOVERS IT: sheet_photo is on the cards but\nunwired - compile.py and short.py have no field for it, so nothing in the app picks\nthese sheets up yet. The motion library's measured bands did not transfer to new\nkeyframes and should not be quoted at a user until re-measured. And no photographic\nkeyframe has been pushed through the LTX pass."
+   ],
+   "areas": [
+    "Tooling",
+    "Cast"
+   ],
+   "files": 244,
+   "added": 2982,
+   "removed": 3
+  },
+  {
+   "hash": "e16afaa",
+   "full": "e16afaac01228a0fc7ab0ac023fddac017938450",
    "date": "2026-08-04",
    "time": "07:48",
    "author": "sechang11",
@@ -49,7 +99,7 @@
     "Wizard"
    ],
    "files": 14,
-   "added": 1724,
+   "added": 1749,
    "removed": 10
   },
   {

@@ -837,7 +837,31 @@ def compile_movie(path):
         warns.append(prefix + msg + (f"  FIX: {c['fix']}" if c["fix"] else ""))
 
     cw, ch_ = str(movie["vars"].get("canvas", "1920x1080")).lower().split("x")
-    sheets = {c: cast[c]["sheet"] for c in used if cast[c].get("sheet")}
+    # A REFERENCE SHEET IMPORTS ITS STYLE AS FORCEFULLY AS ITS IDENTITY. Measured: the
+    # qwen edit path fed the ANIME sheet returned flat cel illustration in 4 of 4 places
+    # even with "waist-up photograph" in the prompt; fed a PHOTOGRAPHIC sheet of the same
+    # character, same prompt and same seeds, it returned a photograph in 4 of 4 with the
+    # place intact. The only difference was which png node 8 loads. So the sheet has to
+    # follow the engine, and picking it by engine is the whole fix.
+    def _sheet_for(c):
+        card = cast[c]
+        if engine == "qwen" and card.get("sheet_photo"):
+            return card["sheet_photo"]
+        return card.get("sheet")
+
+    sheets = {c: _sheet_for(c) for c in used if _sheet_for(c)}
+    # Nothing silently does nothing: a photographic film running off an anime sheet still
+    # renders, it just renders illustration, and that is invisible until playback.
+    if engine == "qwen":
+        for c in used:
+            if cast[c].get("sheet") and not cast[c].get("sheet_photo"):
+                warns.append(
+                    f"character '{c}' has only an ANIME reference sheet and this film "
+                    f"renders on the qwen engine. A sheet imports its style as hard as its "
+                    f"identity, so every shot of them will come back as illustration no "
+                    f"matter what the prompt asks for - measured at 4 of 4 places.  "
+                    f"FIX: build a photographic sheet with "
+                    f"python3 studio/_tools/qwen_sheet.py {c}  and it will be used here.")
     film = collections.OrderedDict(
         title=movie["vars"].get("title", movie["id"]),
         fps=int(movie["vars"].get("fps", 24)), canvas=[int(cw), int(ch_)],
