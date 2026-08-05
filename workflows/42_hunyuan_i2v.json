@@ -1,0 +1,56 @@
+{
+  "_comment": "HunyuanVideo 1.5 720p IMAGE-to-video, plus the 1080p SR distill as an optional second stage. This is the direct rival to 12_ltx23_i2v_audio.json - the keyframe locks the character design and the model animates it. Transcribed from the ComfyUI shipped template video_hunyuan_video_1.5_720p_i2v.json, in which the ENTIRE SR block and both EasyCache nodes ship BYPASSED (mode 4).",
+  "_notes": [
+    "BASE-ONLY: delete nodes 60-76. Their only inputs from the base graph are node 35 (sampler latent), 10/11 (text), 8 (image), 9 (clip vision) and 3 (vae); nothing in 1-42 reads back from them. studio/_tools/video_engine_ab.py does this with its --sr flag.",
+    "NO AUDIO. This is the one hard capability regression against LTX: 12_ltx23_i2v_audio.json generates a synchronised audio track in the same pass (LTXVEmptyLatentAudio + LTXVAudioVAEDecode). HunyuanVideo 1.5 is video-only, so any pipeline that moves to it must source audio separately.",
+    "THE KEYFRAME GOES IN TWICE, and both matter. Node 20 start_image is the latent conditioning; node 9 CLIPVisionEncode via sigclip is a SEPARATE semantic conditioning path. Dropping the clip_vision_output leaves the graph runnable but weakens subject adherence - it is not optional in practice.",
+    "There is no strength knob. LTXVImgToVideoInplace exposes strength (1.0 = hold the keyframe exactly, 0.6-0.8 = let the model reinterpret); HunyuanVideo15ImageToVideo has no equivalent. Keyframe adherence is take-it-or-leave-it.",
+    "length must be 4n+1; 97 = 4.04s at 24fps, matching the LTX motion library exactly.",
+    "shift 7 is BOTH the Tencent table value for 720p_i2v AND the shipped template value - unlike t2v, where the two disagree. See 41_hunyuan_t2v.json notes.",
+    "NOT A BUG, COPIED DELIBERATELY: node 34 BasicScheduler reads the RAW model (2), not the shifted model (30). The shipped template wires it this way.",
+    "cfg 6 = two model evaluations per step, and the negative prompt on node 11 is LIVE (unlike qwen, and unlike cfg-distilled LTX). The template ships it empty.",
+    "SR block cost: it re-samples at 1920x1080 through a second 16 GB model. Expect the SR stage to dominate wall-clock and to force a full unload/reload of the base model on a 32 GB card."
+  ],
+
+  "1": { "class_type": "DualCLIPLoader", "inputs": { "clip_name1": "qwen_2.5_vl_7b_fp8_scaled.safetensors", "clip_name2": "byt5_small_glyphxl_fp16.safetensors", "type": "hunyuan_video_15", "device": "default" } },
+  "2": { "class_type": "UNETLoader", "inputs": { "unet_name": "hunyuanvideo1.5_720p_i2v_fp16.safetensors", "weight_dtype": "default" } },
+  "3": { "class_type": "VAELoader", "inputs": { "vae_name": "hunyuanvideo15_vae_fp16.safetensors" } },
+  "4": { "class_type": "CLIPVisionLoader", "inputs": { "clip_name": "sigclip_vision_patch14_384.safetensors" } },
+
+  "8": { "class_type": "LoadImage", "inputs": { "image": "hunyuan_start.png", "upload": "image" } },
+  "9": { "class_type": "CLIPVisionEncode", "inputs": { "clip_vision": ["4", 0], "image": ["8", 0], "crop": "center" } },
+
+  "10": { "class_type": "CLIPTextEncode", "inputs": { "clip": ["1", 0], "text": "A scene with gentle natural motion." } },
+  "11": { "class_type": "CLIPTextEncode", "inputs": { "clip": ["1", 0], "text": "" } },
+
+  "20": { "class_type": "HunyuanVideo15ImageToVideo", "inputs": { "positive": ["10", 0], "negative": ["11", 0], "vae": ["3", 0], "width": 1280, "height": 704, "length": 97, "batch_size": 1, "start_image": ["8", 0], "clip_vision_output": ["9", 0] } },
+
+  "30": { "class_type": "ModelSamplingSD3", "inputs": { "model": ["2", 0], "shift": 7.0 } },
+  "31": { "class_type": "CFGGuider", "inputs": { "model": ["30", 0], "positive": ["20", 0], "negative": ["20", 1], "cfg": 6.0 } },
+  "32": { "class_type": "RandomNoise", "inputs": { "noise_seed": 7701 } },
+  "33": { "class_type": "KSamplerSelect", "inputs": { "sampler_name": "euler" } },
+  "34": { "class_type": "BasicScheduler", "inputs": { "model": ["2", 0], "scheduler": "simple", "steps": 20, "denoise": 1.0 } },
+  "35": { "class_type": "SamplerCustomAdvanced", "inputs": { "noise": ["32", 0], "guider": ["31", 0], "sampler": ["33", 0], "sigmas": ["34", 0], "latent_image": ["20", 2] } },
+
+  "40": { "class_type": "VAEDecode", "inputs": { "samples": ["35", 0], "vae": ["3", 0] } },
+  "41": { "class_type": "CreateVideo", "inputs": { "images": ["40", 0], "fps": 24.0 } },
+  "42": { "class_type": "SaveVideo", "inputs": { "video": ["41", 0], "filename_prefix": "claude-generated/hunyuan_i2v", "format": "auto", "codec": "h264" } },
+
+  "60": { "class_type": "UNETLoader", "inputs": { "unet_name": "hunyuanvideo1.5_1080p_sr_distilled_fp16.safetensors", "weight_dtype": "default" } },
+  "61": { "class_type": "LatentUpscaleModelLoader", "inputs": { "model_name": "hunyuanvideo15_latent_upsampler_1080p.safetensors" } },
+  "62": { "class_type": "HunyuanVideo15LatentUpscaleWithModel", "inputs": { "model": ["61", 0], "samples": ["35", 0], "upscale_method": "bilinear", "width": 1920, "height": 1080, "crop": "disabled" } },
+  "63": { "class_type": "HunyuanVideo15SuperResolution", "inputs": { "positive": ["10", 0], "negative": ["11", 0], "latent": ["62", 0], "noise_augmentation": 0.7, "vae": ["3", 0], "start_image": ["8", 0], "clip_vision_output": ["9", 0] } },
+  "64": { "class_type": "ModelSamplingSD3", "inputs": { "model": ["60", 0], "shift": 2.0 } },
+  "65": { "class_type": "BasicScheduler", "inputs": { "model": ["60", 0], "scheduler": "simple", "steps": 8, "denoise": 1.0 } },
+  "66": { "class_type": "SplitSigmas", "inputs": { "sigmas": ["65", 0], "step": 4 } },
+  "67": { "class_type": "CFGGuider", "inputs": { "model": ["64", 0], "positive": ["63", 0], "negative": ["63", 1], "cfg": 1.0 } },
+  "68": { "class_type": "CFGGuider", "inputs": { "model": ["60", 0], "positive": ["10", 0], "negative": ["11", 0], "cfg": 1.0 } },
+  "69": { "class_type": "RandomNoise", "inputs": { "noise_seed": 889 } },
+  "70": { "class_type": "KSamplerSelect", "inputs": { "sampler_name": "euler" } },
+  "71": { "class_type": "SamplerCustomAdvanced", "inputs": { "noise": ["69", 0], "guider": ["67", 0], "sampler": ["70", 0], "sigmas": ["66", 0], "latent_image": ["63", 2] } },
+  "72": { "class_type": "DisableNoise", "inputs": {} },
+  "73": { "class_type": "SamplerCustomAdvanced", "inputs": { "noise": ["72", 0], "guider": ["68", 0], "sampler": ["70", 0], "sigmas": ["66", 1], "latent_image": ["71", 0] } },
+  "74": { "class_type": "VAEDecodeTiled", "inputs": { "samples": ["73", 0], "vae": ["3", 0], "tile_size": 512, "overlap": 64, "temporal_size": 64, "temporal_overlap": 4096 } },
+  "75": { "class_type": "CreateVideo", "inputs": { "images": ["74", 0], "fps": 24.0 } },
+  "76": { "class_type": "SaveVideo", "inputs": { "video": ["75", 0], "filename_prefix": "claude-generated/hunyuan_i2v_sr", "format": "auto", "codec": "h264" } }
+}

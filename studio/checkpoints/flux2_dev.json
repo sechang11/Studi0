@@ -1,0 +1,120 @@
+{
+  "id": "flux2_dev",
+  "name": "FLUX.2 dev (fp8mixed)",
+  "file": "flux2_dev_fp8mixed.safetensors",
+  "desc": "The third engine. Photoreal and general work driven by full natural sentences. Its edge is not prettiness - it is LITERALISM: it does what the sentence says about layout, camera, count and colour. Installed since July, unreachable from the app until now.",
+  "status": "ready",
+  "family": "general",
+  "engine": "flux2",
+  "dialect": "mistral3",
+  "prompt_style": "complete natural sentences, or the official FLUX.2 JSON prompt object. Not tags.",
+  "quality_tags": "",
+  "negative_prompt": false,
+  "steps": 8,
+  "steps_quality": 20,
+  "cfg": 4.0,
+  "sampler": "euler",
+  "scheduler": "flux2",
+  "size": [1216, 832],
+  "workflow": "40_flux2_t2i.json",
+  "components": {
+    "transformer": "diffusion_models/flux2_dev_fp8mixed.safetensors",
+    "text_encoder": "text_encoders/mistral_3_small_flux2_fp8.safetensors  (CLIPLoader type=flux2)",
+    "vae": "vae/flux2-vae.safetensors",
+    "turbo_lora": "loras/Flux2TurboComfyv2.safetensors  (optional speed path)"
+  },
+  "note": "THE cfg 4.0 ABOVE IS NOT A cfg. There is no KSampler in this graph. It is the FluxGuidance value on node 7 of 40_flux2_t2i.json and it behaves nothing like SDXL cfg: swept 2.0 / 2.5 / 4.0 / 6.0 / 8.0 at one seed it never rerolled the composition and never burned out - it moved contrast and adherence smoothly, and 8.0 is still a usable frame where SDXL at cfg 8 would be fried. There is also NO NEGATIVE PROMPT and none can be added: BasicGuider takes a single conditioning. Write negation as a positive fact. steps 8 is the Turbo path that 40_flux2_t2i.json ships wired; steps_quality 20 is the same graph with the Turbo LoRA bypassed. They are two different pictures at one seed, not two qualities of one picture - see turbo below before assuming 20 is simply better.",
+  "turbo": {
+    "lora": "Flux2TurboComfyv2.safetensors",
+    "use": "speed path, not the default",
+    "steps_with": 8,
+    "steps_without": 20,
+    "measured": "1024 square, seed 5150, one prompt: Turbo 8 steps 9.0 s, no Turbo 20 steps 19.7 s, no Turbo 28 steps 24.1 s. 2.2x, not the 6x the folklore implies.",
+    "verdict": "IT IS NOT THE SAME PICTURE. At a fixed seed Turbo composes a DIFFERENT FRAME, so it cannot be used to preview a no-Turbo render, only to explore. What it actually costs, rendered four subjects side by side at one seed (samples/flux2/turbo): MECHANISM, and only mechanism. On a watch movement the 20-step path drew real gear teeth, jewel screws, a click and ratchet and a blued spring; the Turbo path drew plausible-at-a-glance gears with mushy teeth. In-image text survived Turbo perfectly. A crowd scene survived. And on a face Turbo was arguably BETTER - grittier, more of the pores and fine lines the prompt asked for, where the 20-step render smoothed her toward a stock portrait.",
+    "rule": "Turbo for faces, crowds, text, layout tests and contact sheets. Drop it for anything with visible machinery, type-as-object or fine repeating structure. Below 6 steps Turbo goes soft; 4 steps is not shippable.",
+    "counterpoint": "This contradicts the survey claim that FLUX.2 dev without Turbo takes 20+ minutes per image. On this box it takes 20 seconds. Whatever that reviewer measured, it was not this configuration."
+  },
+  "measured": {
+    "when": "2026-08-05",
+    "box": "RTX 5090 32 GB, ComfyUI 0.28.0, torch 2.13.0+cu130, main.py --reserve-vram 1.5",
+    "fits": "YES. No OOM at any size tried. ComfyUI logs 'Model Flux2 prepared for dynamic VRAM loading. 33813MB Staged.' and streams it - a 33.8 GB transformer plus an 8.3 GB text encoder running on a 32 GB card. Peak nvidia-smi during a render: 28.3 GB.",
+    "seconds_1024_turbo8_same_prompt": 9.0,
+    "seconds_1024_turbo8_new_prompt": 13.5,
+    "seconds_1024_noturbo20": 19.7,
+    "seconds_1024_noturbo28": 24.1,
+    "prompt_change_cost": "~4.5 s. Re-encoding a NEW prompt through Mistral-3 costs about what four sampler steps cost, and it is not cached. A sweep that varies only the seed is materially cheaper per image than a sweep that varies the prompt - the opposite of the SDXL habit.",
+    "timing_resolution": "+/-1.5 s. comfy.py polls the queue on a 1.5 s tick, so the wall clocks in the ledger are quantised. Differences under 2 s mean nothing.",
+    "size_ladder_turbo8": {
+      "768x768": 10.7,
+      "1024x1024": 9.0,
+      "1216x832": 7.6,
+      "1536x1024": 12.0,
+      "1536x1536": 19.7,
+      "2048x1152": 19.6
+    },
+    "composition_holds_to": "2.4 MP. One prompt, one seed, six sizes: 1536x1536 and 2048x1152 both came back single-subject and coherent. Qwen-Image duplicates composition past about 2 MP. FLUX.2 did not, at either size.",
+    "hex_colour_accuracy": "Asked for a background of exactly #12303F and a circle of exactly #E8B04B. Got #102643 and #EEB650, sampled off the PNG. Within about 4% per channel. No other engine on this box takes a hex code at all.",
+    "face_pixels": "PARTIAL RESULT, READ THE CAVEAT. Rendered the same full-body prompt and seed at 832x1216, 1024x1536, 1152x1728 and 1280x1920 (samples/flux2/face). The face resolves properly from 1152x1728 up and reproduces the project's known ~90 px mush at 832x1216. BUT FLUX.2 REFRAMED at each size rather than holding the shot, so this is not a controlled pixels-per-face measurement and must not be quoted as one. What it does establish: rendering bigger is cheap here (1280x1920 cost about the same as 1536x1536, roughly 20 s) and nothing broke at any of those sizes.",
+    "contamination_note": "Three numbers in the ledger are NOT FLUX.2 measurements: settings/noturbo_s20_g6.0 at 168.8 s, and the ab cells hands_tool__qwen at 839.6 s and the ab batch total. Another agent's HunyuanVideo jobs took the queue at ~13 minutes each and evicted the model. Cold reload after a foreign model family costs 60-150 s. Everything else in the table is warm and contiguous. This is also why flux2_probe.py grew a --batch flag."
+  },
+  "vs_qwen": {
+    "how": "Six prompts plus one anime prompt, identical text, identical seed 5150, identical frame size, each engine at its own recommended settings (FLUX.2 Turbo 8 steps guidance 4.0; Qwen-Image 2512 20 steps cfg 2.5 with its template negative). Pairs are in samples/flux2/ab/ and tiled in _sheet_ab.jpg.",
+    "flux2_wins": {
+      "instruction_follow": "DECISIVE. 'Shot straight down from above. Exactly three green apples in a row on the left half. A single white enamel jug on the right half. A wooden spoon between them running top edge to bottom edge. Nothing else on the table.' FLUX.2 got all five. Qwen ignored the camera angle entirely and shot it from three-quarters. If the shot description is load-bearing, this is the engine.",
+      "multi_subject": "Three people, three costumes, three actions, three positions. Both engines attributed correctly, but FLUX.2 spaced them evenly across the frame as asked while Qwen clustered them centre-right and overlapped two of them. Composition instructions land on FLUX.2 and drift on Qwen.",
+      "structured_json": "BFL's JSON prompt object, fed verbatim, honoured subject placement, action, lens and composition. Qwen has no equivalent input.",
+      "hex_colour": "Only engine here that takes one.",
+      "anime": "Both produced genuine cel-shaded anime - see the correction below - but FLUX.2's line art and character proportions read more authentically animated."
+    },
+    "qwen_wins": {
+      "portrait_skin": "CLEARLY, AND IT IS THE SAME LITERALISM BACKWARDS. The prompt said 'broken capillaries across the cheeks'. FLUX.2 drew literal red vein lines across the face and disfigured her. Qwen produced a believable weathered fisherman. FLUX.2 renders the noun you wrote; if the noun is a medical term you get a diagram.",
+      "hands": "Split, not a FLUX win. FLUX.2 nailed a fly-tying close-up - ten distinct fingers, correct joints, the scraped knuckle that was asked for. On dough-kneading at the same seed it produced a tangle with extra digits; Qwen's was clean. Hands are good on FLUX.2, not reliable.",
+      "illustration": "Watercolour is Qwen's, and not close. Qwen gave pigment pooling, wash bleed, drips down the paper and real cold-press texture. FLUX.2 gave a clean digital rendering of a fox that happens to be pale. Anything hand-media stays off FLUX.2."
+    },
+    "ties": {
+      "in_image_text": "THIS OVERTURNS A STANDING PROJECT ASSUMPTION. 'Qwen owns text, FLUX.2 is weaker' is what 22-flux2/README.md and the capability card say. Rendered head to head, both wrote NORTHWIND SUPPLY CO. / EST 1904 letter-perfect. FLUX.2 also rendered two handwritten index cards - 'TUESDAY: FEED THE CHICKENS' and 'BUY NAILS' - correctly first try, and text survived the Turbo LoRA intact. Qwen was marginally more faithful to the exact string (it omitted the full stop after EST, as written; FLUX.2 added one). Treat text as a tie and route on the rest of the shot."
+    },
+    "correction": "The project rule 'Qwen cannot be steered off photography by prompt at any cfg' did NOT hold in this test. At 20 steps and cfg 2.5, given a prompt whose medium is stated as NOUNS - 'cel-shaded anime illustration', 'hand-painted 1990s animation background', 'flat colour fills', 'clean black line art' - Qwen returned a genuine anime frame. The earlier finding was measured at cfg 1.0 with the Lightning LoRA. Worth a proper re-test before the rule is quoted again."
+  },
+  "director_verdict": "Route to FLUX.2 when the SHOT DESCRIPTION is the work: a specified camera angle, a specified layout, a stated count of things, several people who must each do a different thing, a named hex colour, or type that has to be readable. Route to Qwen when the SURFACE is the work: skin, weather, hand-media, anything where you want the model to interpolate a plausible photograph rather than execute your sentence. Keep Animagine for danbooru-tag anime and for anything a LoRA has to attach to - no LoRA on this box fits FLUX.2 except the Turbo distill. The one-line rule: FLUX.2 obeys, Qwen imagines.",
+  "strong": [
+    "Camera, layout and count instructions - the strongest on this box by a distance",
+    "Multi-subject attribution AND multi-subject spacing",
+    "In-image text, including handwriting (tied with Qwen, better than believed)",
+    "Structured JSON prompts, schema honoured",
+    "Named hex colours, within ~4% per channel",
+    "Mechanism and fine repeating structure at 20 steps without Turbo",
+    "Coherent to 2.4 MP where Qwen duplicates past 2 MP",
+    "Competent cel-shaded anime without a LoRA"
+  ],
+  "weak": [
+    "Literalism cuts both ways: a technical noun gets drawn as a diagram ('broken capillaries' became red lines on a face).",
+    "Hands are good but not reliable - one clean render and one tangle in the same session.",
+    "Watercolour and hand-media are clean and digital. Qwen and Animagine both beat it.",
+    "The Turbo path degrades mechanism specifically.",
+    "No negative prompt at all, so every SDXL-era suppression habit has to be rewritten.",
+    "No LoRA on this box attaches to it except the Turbo distill. It is a standalone aesthetic, not a base to build on.",
+    "Cannot co-reside with Qwen-Image or HunyuanVideo. On a shared box an interleaved foreign job costs a 60-150 s reload. Batch by model, and use flux2_probe.py --batch."
+  ],
+  "prompting": {
+    "do": [
+      "Write complete sentences. Subject, then what it is doing, then the setting, then the light, then the lens and aperture, then the finish.",
+      "State negation positively: 'a plain white wall behind her', 'both hands empty', 'nothing else on the table'.",
+      "Say the camera angle out loud. 'Shot straight down from above' is honoured here and ignored by Qwen.",
+      "Give counts as digits-in-words: 'exactly three green apples in a row'.",
+      "Quote text and say 'reads exactly'. It lands, with or without Turbo.",
+      "Give hex codes when colour matters.",
+      "For multi-character shots, give each person a position in the frame and an action in the same clause.",
+      "The JSON prompt object is a first-class input, not a trick."
+    ],
+    "dont": [
+      "Danbooru tags. This is not a CLIP.",
+      "'masterpiece, best quality, absurdres'. quality_tags is empty on purpose, exactly as on the Qwen card.",
+      "Clinical or technical nouns for skin and body unless you want them drawn literally.",
+      "Adjective moods. The FLUX.2 JSON schema has a 'mood' field and it is the same trap as everywhere else on this box - the model renders nouns, not adjectives. Keep every JSON value a noun phrase.",
+      "Anything in a negative field. There is no negative field."
+    ]
+  },
+  "samples": "studio/samples/flux2/ - settings/ (13-cell step and guidance sweep), size/ (6-size resolution ladder), spread/ (12 subjects), turbo/ (4 subjects x Turbo on/off), face/ (one full-body prompt at four frame sizes), ab/ (7 prompts x 2 engines at matched seed and size). Tiled for looking at as _sheet_*.jpg in the same folder. Every render is a row in _measured.json.",
+  "tool": "studio/_tools/flux2_probe.py --mode settings|size|spread|turbo|face|ab|one  [--batch when the box is busy]"
+}

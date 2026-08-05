@@ -1,0 +1,93 @@
+{
+  "_comment": "FLUX.2 dev text-to-image, the engine graph. Written to be driven by studio/_tools/flux2_probe.py and by compose.py once flux2 is a routable engine. Supersedes 26_flux2_t2i.json as the app-facing graph; 26 is left untouched as the original capability demo.",
+  "_dialect": "MISTRAL-3 VLM. The text encoder is Mistral-3-Small loaded through CLIPLoader type=flux2 - an LLM, not a CLIP. Write complete natural sentences. Danbooru tags degrade it. There is NO negative prompt anywhere in this graph and none can be added: BasicGuider takes a single conditioning. State negation as a positive fact ('a plain white wall behind her', 'both hands empty') instead.",
+  "_turbo": "The Turbo distill LoRA (node 3) is an OPTIONAL SPEED PATH, not a required part of the graph. TURBO ON: guider model = [\"3\", 0], Flux2Scheduler steps 8. TURBO OFF: guider model = [\"1\", 0], steps 20-28; node 3 then has no consumer and ComfyUI never executes it. flux2_probe.py --no-turbo does exactly this rewire.",
+  "_measured": [
+    "MEASURED ON THIS BOX 2026-08-05, RTX 5090 32 GB, comfy 0.28.0, --reserve-vram 1.5.",
+    "It fits. 34 GB transformer + 16.8 GB text encoder against 32 GB VRAM does NOT OOM - comfy streams the DiT and offloads the encoder. See studio/checkpoints/flux2_dev.json for the full timing table.",
+    "Turbo @8 steps 1024x1024: ~24 s warm. Turbo @6: ~20 s, still clean. Turbo @4: soft, do not ship.",
+    "No Turbo @20 steps 1024x1024: ~150 s. No Turbo @28: ~205 s. The quality difference is small; the Turbo LoRA is the default for a reason.",
+    "FIRST call after another model family held VRAM costs +60-90 s of load. Batch all FLUX.2 work together.",
+    "Guidance 4.0 is the template value and holds up. 2.5 goes soft and loses small prompt detail; 6.0 tightens adherence and starts to plasticise skin. Sweep lives in studio/samples/flux2/."
+  ],
+  "_sizes": "Flux2Scheduler width/height MUST match EmptyFlux2LatentImage - it computes a resolution-dependent sigma schedule and a mismatch degrades output silently with no error. flux2_probe.py sets both from one --size flag. Verified working: 1024x1024, 1216x832, 832x1216, 1536x1024.",
+  "1": {
+    "class_type": "UNETLoader",
+    "inputs": {
+      "unet_name": "flux2_dev_fp8mixed.safetensors",
+      "weight_dtype": "default"
+    }
+  },
+  "2": {
+    "class_type": "CLIPLoader",
+    "inputs": {
+      "clip_name": "mistral_3_small_flux2_fp8.safetensors",
+      "type": "flux2",
+      "device": "default"
+    }
+  },
+  "3": {
+    "class_type": "LoraLoaderModelOnly",
+    "inputs": {
+      "model": ["1", 0],
+      "lora_name": "Flux2TurboComfyv2.safetensors",
+      "strength_model": 1.0
+    }
+  },
+  "4": {
+    "class_type": "VAELoader",
+    "inputs": { "vae_name": "flux2-vae.safetensors" }
+  },
+  "6": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "clip": ["2", 0],
+      "text": "A weathered wooden signpost at a crossroads in high moorland at dusk, three painted arms pointing in different directions, the paint cracked and lifting. Low cloud sits on the hills behind it. Wet heather in the foreground, standing water in the ruts of the track. Overcast blue hour, no sun, natural colour, fine grain."
+    }
+  },
+  "7": {
+    "class_type": "FluxGuidance",
+    "inputs": { "conditioning": ["6", 0], "guidance": 4.0 }
+  },
+  "8": {
+    "class_type": "BasicGuider",
+    "inputs": { "model": ["3", 0], "conditioning": ["7", 0] }
+  },
+  "9": {
+    "class_type": "Flux2Scheduler",
+    "inputs": { "steps": 8, "width": 1024, "height": 1024 }
+  },
+  "10": {
+    "class_type": "KSamplerSelect",
+    "inputs": { "sampler_name": "euler" }
+  },
+  "11": {
+    "class_type": "RandomNoise",
+    "inputs": { "noise_seed": 5150 }
+  },
+  "12": {
+    "class_type": "EmptyFlux2LatentImage",
+    "inputs": { "width": 1024, "height": 1024, "batch_size": 1 }
+  },
+  "13": {
+    "class_type": "SamplerCustomAdvanced",
+    "inputs": {
+      "noise": ["11", 0],
+      "guider": ["8", 0],
+      "sampler": ["10", 0],
+      "sigmas": ["9", 0],
+      "latent_image": ["12", 0]
+    }
+  },
+  "14": {
+    "class_type": "VAEDecode",
+    "inputs": { "samples": ["13", 0], "vae": ["4", 0] }
+  },
+  "15": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": ["14", 0],
+      "filename_prefix": "claude-generated/40-flux2/flux2"
+    }
+  }
+}

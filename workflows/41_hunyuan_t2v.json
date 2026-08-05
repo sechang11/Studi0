@@ -1,0 +1,51 @@
+{
+  "_comment": "HunyuanVideo 1.5 720p TEXT-to-video, plus the 1080p SR distill as an optional second stage. Transcribed from the ComfyUI shipped template video_hunyuan_video_1.5_720p_t2v.json, in which the ENTIRE SR block and both EasyCache nodes ship BYPASSED (mode 4) - so the settings in the base block below are the tested default path and the SR block is opt-in.",
+  "_notes": [
+    "BASE-ONLY: delete nodes 60-76. They are a self-contained block whose only input is node 35 (the base sampler latent); nothing in 1-42 reads from them. studio/_tools/video_engine_ab.py does exactly this with its --sr flag.",
+    "length must be 4n+1. 97 = 4.04s at 24fps, which is also what the LTX 8n+1 length 97 gives, so the two engines are directly comparable at 97.",
+    "width/height step 16. Native is 1280x720; 1280x704 matches short.py VID and the LTX motion library exactly.",
+    "SHIFT DISCREPANCY, recorded not resolved: the Tencent table (reproduced in the template as a MarkdownNote) says 720p_t2v wants shift 9, but the shipped template wires ModelSamplingSD3 shift 7. This file follows the SHIPPED TEMPLATE (7) because that is the configuration ComfyUI tests. Node 30 is the knob.",
+    "The template also states 50 steps is the Hunyuan-team setting and 20 is the ComfyUI speed compromise. Node 34 is the knob.",
+    "NOT A BUG, COPIED DELIBERATELY: node 34 BasicScheduler reads the RAW model (2), not the shifted model (30), so ModelSamplingSD3 changes the denoiser but NOT the sigma schedule. The shipped template wires it this way. Rewiring 34 to read 30 changes output; do it as an experiment, not as a cleanup.",
+    "cfg 6 means a real negative branch and TWO model evaluations per step. Unlike LTX (cfg-distilled at 1.0) the negative prompt on node 11 is live. The template ships it EMPTY.",
+    "EasyCache (template nodes 105/116, threshold 0.2/0.15/0.95) is the speed lever and is omitted here. Add it between 2 and 30/34 if wall-clock matters more than quality."
+  ],
+
+  "1": { "class_type": "DualCLIPLoader", "inputs": { "clip_name1": "qwen_2.5_vl_7b_fp8_scaled.safetensors", "clip_name2": "byt5_small_glyphxl_fp16.safetensors", "type": "hunyuan_video_15", "device": "default" } },
+  "2": { "class_type": "UNETLoader", "inputs": { "unet_name": "hunyuanvideo1.5_720p_t2v_fp16.safetensors", "weight_dtype": "default" } },
+  "3": { "class_type": "VAELoader", "inputs": { "vae_name": "hunyuanvideo15_vae_fp16.safetensors" } },
+
+  "10": { "class_type": "CLIPTextEncode", "inputs": { "clip": ["1", 0], "text": "A quiet city street at dusk, neon light shivering in the wet road." } },
+  "11": { "class_type": "CLIPTextEncode", "inputs": { "clip": ["1", 0], "text": "" } },
+
+  "20": { "class_type": "EmptyHunyuanVideo15Latent", "inputs": { "width": 1280, "height": 704, "length": 97, "batch_size": 1 } },
+
+  "30": { "class_type": "ModelSamplingSD3", "inputs": { "model": ["2", 0], "shift": 7.0 } },
+  "31": { "class_type": "CFGGuider", "inputs": { "model": ["30", 0], "positive": ["10", 0], "negative": ["11", 0], "cfg": 6.0 } },
+  "32": { "class_type": "RandomNoise", "inputs": { "noise_seed": 7701 } },
+  "33": { "class_type": "KSamplerSelect", "inputs": { "sampler_name": "euler" } },
+  "34": { "class_type": "BasicScheduler", "inputs": { "model": ["2", 0], "scheduler": "simple", "steps": 20, "denoise": 1.0 } },
+  "35": { "class_type": "SamplerCustomAdvanced", "inputs": { "noise": ["32", 0], "guider": ["31", 0], "sampler": ["33", 0], "sigmas": ["34", 0], "latent_image": ["20", 0] } },
+
+  "40": { "class_type": "VAEDecode", "inputs": { "samples": ["35", 0], "vae": ["3", 0] } },
+  "41": { "class_type": "CreateVideo", "inputs": { "images": ["40", 0], "fps": 24.0 } },
+  "42": { "class_type": "SaveVideo", "inputs": { "video": ["41", 0], "filename_prefix": "claude-generated/hunyuan_t2v", "format": "auto", "codec": "h264" } },
+
+  "60": { "class_type": "UNETLoader", "inputs": { "unet_name": "hunyuanvideo1.5_1080p_sr_distilled_fp16.safetensors", "weight_dtype": "default" } },
+  "61": { "class_type": "LatentUpscaleModelLoader", "inputs": { "model_name": "hunyuanvideo15_latent_upsampler_1080p.safetensors" } },
+  "62": { "class_type": "HunyuanVideo15LatentUpscaleWithModel", "inputs": { "model": ["61", 0], "samples": ["35", 0], "upscale_method": "bilinear", "width": 1920, "height": 1080, "crop": "disabled" } },
+  "63": { "class_type": "HunyuanVideo15SuperResolution", "inputs": { "positive": ["10", 0], "negative": ["11", 0], "latent": ["62", 0], "noise_augmentation": 0.7 } },
+  "64": { "class_type": "ModelSamplingSD3", "inputs": { "model": ["60", 0], "shift": 2.0 } },
+  "65": { "class_type": "BasicScheduler", "inputs": { "model": ["60", 0], "scheduler": "simple", "steps": 8, "denoise": 1.0 } },
+  "66": { "class_type": "SplitSigmas", "inputs": { "sigmas": ["65", 0], "step": 4 } },
+  "67": { "class_type": "CFGGuider", "inputs": { "model": ["64", 0], "positive": ["63", 0], "negative": ["63", 1], "cfg": 1.0 } },
+  "68": { "class_type": "CFGGuider", "inputs": { "model": ["60", 0], "positive": ["10", 0], "negative": ["11", 0], "cfg": 1.0 } },
+  "69": { "class_type": "RandomNoise", "inputs": { "noise_seed": 889 } },
+  "70": { "class_type": "KSamplerSelect", "inputs": { "sampler_name": "euler" } },
+  "71": { "class_type": "SamplerCustomAdvanced", "inputs": { "noise": ["69", 0], "guider": ["67", 0], "sampler": ["70", 0], "sigmas": ["66", 0], "latent_image": ["63", 2] } },
+  "72": { "class_type": "DisableNoise", "inputs": {} },
+  "73": { "class_type": "SamplerCustomAdvanced", "inputs": { "noise": ["72", 0], "guider": ["68", 0], "sampler": ["70", 0], "sigmas": ["66", 1], "latent_image": ["71", 0] } },
+  "74": { "class_type": "VAEDecodeTiled", "inputs": { "samples": ["73", 0], "vae": ["3", 0], "tile_size": 512, "overlap": 64, "temporal_size": 64, "temporal_overlap": 4096 } },
+  "75": { "class_type": "CreateVideo", "inputs": { "images": ["74", 0], "fps": 24.0 } },
+  "76": { "class_type": "SaveVideo", "inputs": { "video": ["75", 0], "filename_prefix": "claude-generated/hunyuan_t2v_sr", "format": "auto", "codec": "h264" } }
+}
