@@ -1,10 +1,10 @@
 {
  "generated_from": "git log",
- "count": 75,
+ "count": 78,
  "days": [
   [
    "2026-08-05",
-   3
+   6
   ],
   [
    "2026-08-04",
@@ -32,8 +32,79 @@
  ],
  "entries": [
   {
-   "hash": "9e206cc",
-   "full": "9e206cc4979433cf07ac737bec7c5077449cd2df",
+   "hash": "d0099b1",
+   "full": "d0099b1a4aafe629621d3781a7e1a62926a5b7b2",
+   "date": "2026-08-05",
+   "time": "14:34",
+   "author": "sechang11",
+   "subject": "A third engine that obeys, a video engine that is worth 29x on two shots only",
+   "body": "Five agents ran this wave. I verified their work on the box rather than from their\nreports, because agents here have reported success for work that was never run. Every\nclaim below rests on something I opened myself.\n\nWHAT IS REAL. workflows/40, 41 and 42 parse, and every .safetensors they name resolves\nto a real file under ComfyUI/models. The 58 FLUX.2 cells, the 111 replicated cells, the\n27-card LoRA library and the 12 model_intake sheets all exist at plausible sizes. I read\nsix contact sheets spanning four agents - flux2/_sheet_turbo.jpg, hunyuan/compare/\nsr_stage_isolated.png, model_intake/cross_flux2.jpg, the risograph strength ladder,\nreplicated/_compare/pair_shonen-hero-fullbody.jpg and replicated/_sheets/base_01.jpg -\nand every one shows what its report says it shows. I recomputed the replicated ledger\nfrom its own rows and got the reported medians back exactly: sdxl 4.5s, zimage 4.5s,\nflux2 21.0s, qwen 78.1s, 83.5 minutes of GPU for 114 renders. The server restarted clean\nand all 23 routes answer 200 with a real body.\n\nFLUX.2 IS USABLE AND IT IS BETTER AT ONE THING NOTHING ELSE HERE CAN DO. In\n_sheet_turbo.jpg the undistilled arm draws a watch movement with gear teeth, a click, a\nratchet and a blued spring where Turbo draws mush - so Turbo costs mechanism and only\nmechanism. NORTHWIND SUPPLY CO. / EST 1904 is letter-perfect in both arms, which kills\nthe standing belief that Qwen owns text. cross_flux2.jpg is the wider proof: one subject,\none seed, and FLUX.2 returns a genuine plasticine puppet, real Ben-Day dots, flat-shaded\nPS1 triangles, pooled watercolour and a woodcut. It is not routable yet - compose.py\nstill reads ENGINES = (\"anime\", \"qwen\") and does not know the string flux2, so the card,\nthe workflow and the probe tool are the whole of the access path.\n\nTHE VIDEO LAYER SHOULD NOT MOVE. sr_stage_isolated.png is the controlled test - the same\nHunyuan clip with and without the SR stage - and the 1920 output has a smeared face, lost\neyes and a distorted mouth against a sharp 1280 control. Both graphs wire that block LIVE\nand node 76 writes an _sr file on every run, so the broken stage is paid for whether or\nnot anyone wanted it. Their notes warned only that it was slow. Both now carry the\nmeasured verdict.\n\nDEFECT FIXED: lora_scan.py was silently not checking five of its own cards.\ninfer_family() tested for \"input_blocks.\" with a dot, which is the ldm spelling only. The\nkohya spelling has underscores and the diffusers spelling has different block names\nentirely, and a family it cannot name scores \"unknown\" - where ALLOWED_BASE permits every\nbase, so a skipped check is indistinguishable from a passed one. All three spellings are\nrecognised now, the five SDXL style LoRAs classify as sd-unet, and the scan is still\nclean at 27 cards.\n\ncheck_refs.py: 1925 references, 0 dangling. lora_scan.py: RESULT clean.\n\nThe five downloaded files are 356 MB, not the 18.4 GB the survey proposed. Each has a\ndistinct sha256 matching its card, each card names base sdxl, the two licences are\nopenrail++ and creativeml-openrail-m, and nothing installed clones a likeness. One of the\nthree earned its place; the intake gate that rejected the rest is worth more than the\ndownloads.\n\nThe full-size replication cells are ignored rather than committed, under the rule already\nwritten in .gitignore for gallery/, cast_proof/ and the character sweeps: .git is 2.0 GB\nand 238 MB of regenerable cells does not belong in it. The contact sheets, the A/B\ncomparisons, the ledgers and the per-cell recipe sidecars are all tracked, which is what\na person actually reads and what a diff can review.",
+   "paragraphs": [
+    "Five agents ran this wave. I verified their work on the box rather than from their\nreports, because agents here have reported success for work that was never run. Every\nclaim below rests on something I opened myself.",
+    "WHAT IS REAL. workflows/40, 41 and 42 parse, and every .safetensors they name resolves\nto a real file under ComfyUI/models. The 58 FLUX.2 cells, the 111 replicated cells, the\n27-card LoRA library and the 12 model_intake sheets all exist at plausible sizes. I read\nsix contact sheets spanning four agents - flux2/_sheet_turbo.jpg, hunyuan/compare/\nsr_stage_isolated.png, model_intake/cross_flux2.jpg, the risograph strength ladder,\nreplicated/_compare/pair_shonen-hero-fullbody.jpg and replicated/_sheets/base_01.jpg -\nand every one shows what its report says it shows. I recomputed the replicated ledger\nfrom its own rows and got the reported medians back exactly: sdxl 4.5s, zimage 4.5s,\nflux2 21.0s, qwen 78.1s, 83.5 minutes of GPU for 114 renders. The server restarted clean\nand all 23 routes answer 200 with a real body.",
+    "FLUX.2 IS USABLE AND IT IS BETTER AT ONE THING NOTHING ELSE HERE CAN DO. In\n_sheet_turbo.jpg the undistilled arm draws a watch movement with gear teeth, a click, a\nratchet and a blued spring where Turbo draws mush - so Turbo costs mechanism and only\nmechanism. NORTHWIND SUPPLY CO. / EST 1904 is letter-perfect in both arms, which kills\nthe standing belief that Qwen owns text. cross_flux2.jpg is the wider proof: one subject,\none seed, and FLUX.2 returns a genuine plasticine puppet, real Ben-Day dots, flat-shaded\nPS1 triangles, pooled watercolour and a woodcut. It is not routable yet - compose.py\nstill reads ENGINES = (\"anime\", \"qwen\") and does not know the string flux2, so the card,\nthe workflow and the probe tool are the whole of the access path.",
+    "THE VIDEO LAYER SHOULD NOT MOVE. sr_stage_isolated.png is the controlled test - the same\nHunyuan clip with and without the SR stage - and the 1920 output has a smeared face, lost\neyes and a distorted mouth against a sharp 1280 control. Both graphs wire that block LIVE\nand node 76 writes an _sr file on every run, so the broken stage is paid for whether or\nnot anyone wanted it. Their notes warned only that it was slow. Both now carry the\nmeasured verdict.",
+    "DEFECT FIXED: lora_scan.py was silently not checking five of its own cards.\ninfer_family() tested for \"input_blocks.\" with a dot, which is the ldm spelling only. The\nkohya spelling has underscores and the diffusers spelling has different block names\nentirely, and a family it cannot name scores \"unknown\" - where ALLOWED_BASE permits every\nbase, so a skipped check is indistinguishable from a passed one. All three spellings are\nrecognised now, the five SDXL style LoRAs classify as sd-unet, and the scan is still\nclean at 27 cards.",
+    "check_refs.py: 1925 references, 0 dangling. lora_scan.py: RESULT clean.",
+    "The five downloaded files are 356 MB, not the 18.4 GB the survey proposed. Each has a\ndistinct sha256 matching its card, each card names base sdxl, the two licences are\nopenrail++ and creativeml-openrail-m, and nothing installed clones a likeness. One of the\nthree earned its place; the intake gate that rejected the rest is worth more than the\ndownloads.",
+    "The full-size replication cells are ignored rather than committed, under the rule already\nwritten in .gitignore for gallery/, cast_proof/ and the character sweeps: .git is 2.0 GB\nand 238 MB of regenerable cells does not belong in it. The contact sheets, the A/B\ncomparisons, the ledgers and the per-cell recipe sidecars are all tracked, which is what\na person actually reads and what a diff can review."
+   ],
+   "areas": [
+    "Tooling",
+    "LoRAs",
+    "Pipeline"
+   ],
+   "files": 190,
+   "added": 8560,
+   "removed": 4
+  },
+  {
+   "hash": "35d79a2",
+   "full": "35d79a258744721b3b3330d942cf1f7b1d27d0d3",
+   "date": "2026-08-05",
+   "time": "12:12",
+   "author": "sechang11",
+   "subject": "Qualify the claim that Qwen cannot be steered off photography",
+   "body": "This project has repeated, many times, that Qwen cannot be steered off photography by\nprompt at any cfg. The measurement behind it stands, but it was narrower than the way it\nhas been quoted, and the FLUX.2 A/B exposed the gap.\n\nThe original test bolted a STYLE CLAUSE ONTO A PHOTOGRAPHIC PORTRAIT - a woman on a city\nstreet, plus watercolour - and 20 steps at cfg 4.0 with the Lightning LoRA disabled still\nreturned a photograph. In the A/B, an ILLUSTRATION-NATIVE prompt - a sleeping fox curled\nin autumn leaves, asked for as a watercolour - came back as a real watercolour with paper\nbleed and drips, arguably better than FLUX.2's version of the same prompt.\n\nSo the honest rule is that Qwen resists having a style bolted onto a photographic SUBJECT,\nand does not resist a prompt that is illustration from the first word. The failure is the\nsubject's photographic prior fighting a late style clause, not a hard ceiling on the\nmodel.\n\nConsequence: the styles library routing was decided on portrait-subject tests and stays\ncorrect for that case, but a landscape or animal subject may not need the illustration\nengine at all. Where the boundary sits is untested and the card says so.",
+   "paragraphs": [
+    "This project has repeated, many times, that Qwen cannot be steered off photography by\nprompt at any cfg. The measurement behind it stands, but it was narrower than the way it\nhas been quoted, and the FLUX.2 A/B exposed the gap.",
+    "The original test bolted a STYLE CLAUSE ONTO A PHOTOGRAPHIC PORTRAIT - a woman on a city\nstreet, plus watercolour - and 20 steps at cfg 4.0 with the Lightning LoRA disabled still\nreturned a photograph. In the A/B, an ILLUSTRATION-NATIVE prompt - a sleeping fox curled\nin autumn leaves, asked for as a watercolour - came back as a real watercolour with paper\nbleed and drips, arguably better than FLUX.2's version of the same prompt.",
+    "So the honest rule is that Qwen resists having a style bolted onto a photographic SUBJECT,\nand does not resist a prompt that is illustration from the first word. The failure is the\nsubject's photographic prior fighting a late style clause, not a hard ceiling on the\nmodel.",
+    "Consequence: the styles library routing was decided on portrait-subject tests and stays\ncorrect for that case, but a landscape or animal subject may not need the illustration\nengine at all. Where the boundary sits is untested and the card says so."
+   ],
+   "areas": [
+    "Libraries"
+   ],
+   "files": 1,
+   "added": 10,
+   "removed": 3
+  },
+  {
+   "hash": "1a8feac",
+   "full": "1a8feac514a68b31f23e7e3d648c378b133d51fb",
+   "date": "2026-08-05",
+   "time": "12:10",
+   "author": "sechang11",
+   "subject": "FLUX.2 and HunyuanVideo become reachable, and the guidance dial is not a cfg",
+   "body": "Three state-of-the-art models were installed on this box and the studio could not touch\nany of them: FLUX.2 dev at 34 GB with its own VAE and Mistral text encoder, and\nHunyuanVideo 1.5 as text-to-video, image-to-video and a 1080p upscaler. Workflows\n40_flux2_t2i, 41_hunyuan_t2v and 42_hunyuan_i2v now drive them.\n\nThe most useful thing measured is a correction to an assumption anyone would carry in\nfrom SDXL. There is no KSampler in the FLUX.2 graph and the number that looks like a cfg\nis FluxGuidance on node 7. Swept at 2.0, 2.5, 4.0, 6.0 and 8.0 on one seed it never\nrerolled the composition and never burned out - it moves contrast and adherence. Treating\nit as cfg and staying timid around 2.5 would have left the model underused.\n\nIts prompt dialect is also its own: complete natural sentences or the official JSON prompt\nobject, not danbooru tags and not the terse prose Qwen prefers. That is now on the\ncheckpoint card rather than learned twice.\n\nCommitted mid-flight because the previous session exited before the replication phase ran.\nNothing here is claimed as compared against Qwen yet beyond the A/B sheet in\nsamples/flux2/ab - the ranked verdict comes when the workflow resumes.",
+   "paragraphs": [
+    "Three state-of-the-art models were installed on this box and the studio could not touch\nany of them: FLUX.2 dev at 34 GB with its own VAE and Mistral text encoder, and\nHunyuanVideo 1.5 as text-to-video, image-to-video and a 1080p upscaler. Workflows\n40_flux2_t2i, 41_hunyuan_t2v and 42_hunyuan_i2v now drive them.",
+    "The most useful thing measured is a correction to an assumption anyone would carry in\nfrom SDXL. There is no KSampler in the FLUX.2 graph and the number that looks like a cfg\nis FluxGuidance on node 7. Swept at 2.0, 2.5, 4.0, 6.0 and 8.0 on one seed it never\nrerolled the composition and never burned out - it moves contrast and adherence. Treating\nit as cfg and staying timid around 2.5 would have left the model underused.",
+    "Its prompt dialect is also its own: complete natural sentences or the official JSON prompt\nobject, not danbooru tags and not the terse prose Qwen prefers. That is now on the\ncheckpoint card rather than learned twice.",
+    "Committed mid-flight because the previous session exited before the replication phase ran.\nNothing here is claimed as compared against Qwen yet beyond the A/B sheet in\nsamples/flux2/ab - the ranked verdict comes when the workflow resumes."
+   ],
+   "areas": [
+    "Docs",
+    "Tooling",
+    "Pipeline"
+   ],
+   "files": 87,
+   "added": 3467,
+   "removed": 0
+  },
+  {
+   "hash": "8d116d6",
+   "full": "8d116d6f5b703501b8c63f7dc77228a5f9a4d6c2",
    "date": "2026-08-05",
    "time": "11:20",
    "author": "sechang11",
@@ -54,9 +125,9 @@
     "LoRAs",
     "Wizard"
    ],
-   "files": 18,
-   "added": 1323,
-   "removed": 14
+   "files": 19,
+   "added": 1370,
+   "removed": 16
   },
   {
    "hash": "15221ec",
