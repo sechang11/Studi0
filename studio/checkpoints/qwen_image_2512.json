@@ -8,8 +8,15 @@
   "engine": "qwen",
   "prompt_style": "natural language prose, a sentence describing the scene",
   "quality_tags": "",
-  "steps": 20, "cfg": 2.5, "sampler": "euler", "scheduler": "normal",
-  "size": [1664, 928],
+  "steps": 20,
+  "cfg": 2.5,
+  "sampler": "euler",
+  "scheduler": "normal",
+  "size": [
+    1664,
+    928
+  ],
   "workflow": "13_qwen_t2i_styled.json",
-  "note": "Authored because 52 of the 64 style cards route here and the checkpoints library described only the two anime SDXLs - a styles consumer resolving engine->checkpoint would have found nothing. Two measured facts that change how you use it: with the 4-step Lightning LoRA it runs at cfg 1.0 in ~4.5s, and AT THAT SETTING THE NEGATIVE PROMPT IS NEARLY IGNORED - inherent to CFG-distilled models. Negatives only bite if you drop the LoRA and run 20 steps at cfg 2.5-4.0. Also: past about 2 MP it duplicates composition (two horizons, repeated subjects), so generate at 1-2 MP and upscale 4x."
+  "note": "Authored because 52 of the 64 style cards route here and the checkpoints library described only the two anime SDXLs - a styles consumer resolving engine->checkpoint would have found nothing. Two measured facts that change how you use it: with the 4-step Lightning LoRA it runs at cfg 1.0 in ~4.5s, and AT THAT SETTING THE NEGATIVE PROMPT IS NEARLY IGNORED - inherent to CFG-distilled models. Negatives only bite if you drop the LoRA and run 20 steps at cfg 2.5-4.0. Also: past about 2 MP it duplicates composition (two horizons, repeated subjects), so generate at 1-2 MP and upscale 4x.",
+  "photography_claim_qualified": "QUALIFIED 2026-08-05 by the FLUX.2 A/B, studio/samples/flux2/_sheet_ab.jpg. This project has repeated that 'Qwen cannot be steered off photography by prompt at any cfg'. The original measurement stands but it was NARROWER than the way it has been quoted: it was a STYLE CLAUSE APPENDED TO A PHOTOGRAPHIC PORTRAIT - a woman on a city street, plus 'watercolour' - and 20 steps at cfg 4.0 with the Lightning LoRA off still returned a photograph. In the A/B, an ILLUSTRATION-NATIVE prompt (a sleeping fox curled in autumn leaves, asked for as a watercolour) came back as a genuine watercolour with paper bleed and drips, arguably better than FLUX.2's version of the same prompt. SO THE HONEST RULE IS: Qwen resists having a style bolted onto a photographic subject, and does NOT resist a prompt that is illustration from the first word. The failure is about the subject's photographic prior fighting a late style clause, not about a hard ceiling on the model. The style-library routing decisions were all made on portrait-subject tests and remain correct for that case; a landscape or animal subject may not need the illustration engine at all. UNTESTED: where exactly the boundary sits."
 }
