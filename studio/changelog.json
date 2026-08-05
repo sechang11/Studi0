@@ -1,10 +1,10 @@
 {
  "generated_from": "git log",
- "count": 71,
+ "count": 72,
  "days": [
   [
    "2026-08-04",
-   25
+   26
   ],
   [
    "2026-08-03",
@@ -28,8 +28,29 @@
  ],
  "entries": [
   {
-   "hash": "97fee25",
-   "full": "97fee25a1959c68d800825c692b2bdfa13eab777",
+   "hash": "5ded6e7",
+   "full": "5ded6e797d476c58acd7c50367c316c0ecee64b3",
+   "date": "2026-08-04",
+   "time": "20:02",
+   "author": "sechang11",
+   "subject": "A photographic reference sheet should be a real character sheet",
+   "body": "Three sheets, one seed, one prompt. The body sheet carries the costume correctly - ochre\nrobe, carmine cape, brown belt - and gives a small soft face, because the qwen edit path\nreprojects the sheet and inherits whatever resolution the face had in it. A close portrait\nsheet fixes the face and LOSES THE COSTUME: the ochre robe comes back red and the belt\ndisappears, because the wardrobe was never in the sheet to carry.\n\nThe composite - close portrait hstacked with the body image - keeps the costume AND\nimproves the face. Qwen-Edit conditions on the whole image and takes whatever is legible\nin it rather than choosing between them, which is exactly what a physical character sheet\nhas always been for.\n\nThis settles where the photoreal face actually comes from. The character LoRA is\nanimagine-locked and does nothing on qwen, so every photoreal render of her is this one\nimage being reprojected into a new scene. No LoRA can improve it because weights are not\nin that path at all. Fix the sheet and everything downstream improves.\n\nThe first attempt at building the composite failed silently - a bad crop meant the body\npanel was never written and the sheet stayed the close portrait, so the cell labelled\nCOMPOSITE in the first comparison was a duplicate of the close one. Rebuilt, dimensions\nchecked, and re-rendered before anything was concluded.",
+   "paragraphs": [
+    "Three sheets, one seed, one prompt. The body sheet carries the costume correctly - ochre\nrobe, carmine cape, brown belt - and gives a small soft face, because the qwen edit path\nreprojects the sheet and inherits whatever resolution the face had in it. A close portrait\nsheet fixes the face and LOSES THE COSTUME: the ochre robe comes back red and the belt\ndisappears, because the wardrobe was never in the sheet to carry.",
+    "The composite - close portrait hstacked with the body image - keeps the costume AND\nimproves the face. Qwen-Edit conditions on the whole image and takes whatever is legible\nin it rather than choosing between them, which is exactly what a physical character sheet\nhas always been for.",
+    "This settles where the photoreal face actually comes from. The character LoRA is\nanimagine-locked and does nothing on qwen, so every photoreal render of her is this one\nimage being reprojected into a new scene. No LoRA can improve it because weights are not\nin that path at all. Fix the sheet and everything downstream improves.",
+    "The first attempt at building the composite failed silently - a bad crop meant the body\npanel was never written and the sheet stayed the close portrait, so the cell labelled\nCOMPOSITE in the first comparison was a duplicate of the close one. Rebuilt, dimensions\nchecked, and re-rendered before anything was concluded."
+   ],
+   "areas": [
+    "Cast"
+   ],
+   "files": 4,
+   "added": 3,
+   "removed": 1
+  },
+  {
+   "hash": "024c2d2",
+   "full": "024c2d211a3aad5a4e84ae7a6e66438ad2ac20b1",
    "date": "2026-08-04",
    "time": "19:58",
    "author": "sechang11",
@@ -44,9 +65,9 @@
    "areas": [
     "Cast"
    ],
-   "files": 2,
-   "added": 2,
-   "removed": 1
+   "files": 3,
+   "added": 30,
+   "removed": 8
   },
   {
    "hash": "ffa0c32",
