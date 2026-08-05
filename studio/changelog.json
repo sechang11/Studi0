@@ -1,10 +1,10 @@
 {
  "generated_from": "git log",
- "count": 78,
+ "count": 80,
  "days": [
   [
    "2026-08-05",
-   6
+   8
   ],
   [
    "2026-08-04",
@@ -31,6 +31,45 @@
   "Wizard"
  ],
  "entries": [
+  {
+   "hash": "f7a20a4",
+   "full": "f7a20a451084e377be9011a0d4fc07cb89b1b587",
+   "date": "2026-08-05",
+   "time": "14:39",
+   "author": "sechang11",
+   "subject": "FLUX.2 becomes reachable: a checkpoint card and a workflow were not enough",
+   "body": "The previous commit gave FLUX.2 a working graph, a detailed checkpoint card and a probe\ntool, and it was still unusable from the app - compose.py read ENGINES = (anime, qwen) and\nthe string flux2 appeared nowhere in it, so nothing could route a shot there. Adding an\nengine means teaching the resolver about it. That is now written above the tuple so the\nnext one is cheaper.\n\nThe dialect split is the interesting part, and it is not one model per dialect. animagine\nwants danbooru TAGS; Qwen-Image and FLUX.2 both want PROSE and now share the prose slots,\nbecause the slot order and the layer attribution are the same job even though FLUX.2 asks\nfor fuller sentences.\n\nWhat had to be scoped rather than shared: the Lightning-distilled cfg 1.0 warnings belong\nto the qwen path alone. FLUX.2 has no KSampler and no cfg at all - its dial is\nFluxGuidance, swept 2.0 to 8.0 without ever rerolling the composition - so firing qwen's\nnegative-is-ignored note at it would tell an author something false. Verified: with a\nstyle carrying a negative, qwen reports qwen_negative_ignored and flux2 does not, while\nnegative_unwired correctly fires for both because short.py still passes no negative on any\nworkflow.\n\nAll four films compile byte-identically. An unknown engine still errors and falls back to\nanime, and its help text now names all three.",
+   "paragraphs": [
+    "The previous commit gave FLUX.2 a working graph, a detailed checkpoint card and a probe\ntool, and it was still unusable from the app - compose.py read ENGINES = (anime, qwen) and\nthe string flux2 appeared nowhere in it, so nothing could route a shot there. Adding an\nengine means teaching the resolver about it. That is now written above the tuple so the\nnext one is cheaper.",
+    "The dialect split is the interesting part, and it is not one model per dialect. animagine\nwants danbooru TAGS; Qwen-Image and FLUX.2 both want PROSE and now share the prose slots,\nbecause the slot order and the layer attribution are the same job even though FLUX.2 asks\nfor fuller sentences.",
+    "What had to be scoped rather than shared: the Lightning-distilled cfg 1.0 warnings belong\nto the qwen path alone. FLUX.2 has no KSampler and no cfg at all - its dial is\nFluxGuidance, swept 2.0 to 8.0 without ever rerolling the composition - so firing qwen's\nnegative-is-ignored note at it would tell an author something false. Verified: with a\nstyle carrying a negative, qwen reports qwen_negative_ignored and flux2 does not, while\nnegative_unwired correctly fires for both because short.py still passes no negative on any\nworkflow.",
+    "All four films compile byte-identically. An unknown engine still errors and falls back to\nanime, and its help text now names all three."
+   ],
+   "areas": [
+    "Pipeline"
+   ],
+   "files": 1,
+   "added": 16,
+   "removed": 2
+  },
+  {
+   "hash": "0dadd93",
+   "full": "0dadd933683b50350e2501df5c10fc84f5fe3e23",
+   "date": "2026-08-05",
+   "time": "14:34",
+   "author": "sechang11",
+   "subject": "Regenerate the changelog so this wave appears in it",
+   "body": "studio/changelog.json is built from git log by studio/_tools/changelog.py and has to be\nregenerated after the commit it is meant to describe, so it always trails by one. 78\nentries across 3 days and 13 areas.",
+   "paragraphs": [
+    "studio/changelog.json is built from git log by studio/_tools/changelog.py and has to be\nregenerated after the commit it is meant to describe, so it always trails by one. 78\nentries across 3 days and 13 areas."
+   ],
+   "areas": [
+    "Libraries"
+   ],
+   "files": 1,
+   "added": 78,
+   "removed": 7
+  },
   {
    "hash": "d0099b1",
    "full": "d0099b1a4aafe629621d3781a7e1a62926a5b7b2",

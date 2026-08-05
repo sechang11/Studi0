@@ -108,7 +108,15 @@ WEAR = ["clean uniform, neat hair",
 # Templates whose whole point is that there is no face in frame.
 NO_PERSON = {"pillow", "insert", "establish"}
 
-ENGINES = ("anime", "qwen")
+# Adding an engine means teaching this file about it - the checkpoint card, the workflow
+# and a probe tool are not enough, which is why FLUX.2 sat unreachable with all three.
+ENGINES = ("anime", "qwen", "flux2")
+
+# The dialect split is what actually matters, and it is not one-model-per-dialect.
+# animagine wants danbooru TAGS. Qwen-Image and FLUX.2 both want PROSE, so they share the
+# prose slots - FLUX.2 asks for complete sentences where Qwen tolerates terser ones, but
+# the slot ORDER and the layer attribution are the same job.
+PROSE_ENGINES = ("qwen", "flux2")
 
 GROUPS = ("styles", "places", "characters", "looks", "lighting", "weather",
           "emotions", "tags", "checkpoints", "loras", "motions", "cameras")
@@ -1227,7 +1235,9 @@ def resolve_engine(libs, style_id="", engine_hint=""):
             "error", ["engine"],
             "there is no engine called %r." % engine,
             "anime = danbooru tags plus IPAdapter faces (animagine-xl-4.0); "
-            "qwen = prose prompts, photographic (Qwen-Image 2512).",
+            "qwen = prose prompts, photographic (Qwen-Image 2512); "
+            "flux2 = complete sentences, strongest at typography and at physical "
+            "media like clay, halftone and woodcut (FLUX.2 dev).",
             "engine_unknown"))
         engine = "anime"
         reason = "unknown engine, falling back to anime"
@@ -2538,6 +2548,10 @@ def resolve(libs, sel):
     # C6 - four libraries speak only danbooru. On the qwen path their comma lists are fed
     # to a language model that wants sentences: the nouns still land, the qualities do
     # not, and the context budget is spent either way.
+    # These notes are about the QWEN path specifically - the Lightning distill at cfg 1.0
+    # and its inert negative. FLUX.2 shares the prose dialect but has no KSampler and no
+    # cfg at all (its dial is FluxGuidance, swept 2.0-8.0 without rerolling composition),
+    # so firing qwen's cfg warnings at it would be telling the author something false.
     if engine == "qwen":
         tagonly = [n for n, c in (("look", look if look_id else None),
                                   ("weather", weather), ("lighting", lighting),
