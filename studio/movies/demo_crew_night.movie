@@ -1,0 +1,186 @@
+// DEMO 5 of 5 - MATCH NIGHT.  The same cast library as demo_cast.movie, written the other
+// way round: the FILM fits the WARDROBE instead of the wardrobe fighting the film.
+//
+//   python3 studio/compile.py studio/movies/demo_crew_night.movie --timeline
+//   python3 scripts/short.py studio/movies/demo_crew_night.json
+//
+// THE FINDING THIS FILM EXISTS BECAUSE OF
+//
+// demo_cast.movie was authored first, as a harbour story: a skipper, a wreck, a chart, a
+// dive bar. It was rendered and looked at, and NIKA arrived in the dive bar in a grey
+// school blazer with a red necktie, VIRO leaned on the bar in a teal football jersey with
+// the number 7 on it, and the room filled up with a dartboard and a pool table. Nobody
+// asked for any of that.
+//
+// It is not the sheet and it is not drift. Every character card carries `wear_tags`, a
+// five-rung damage ladder from clean to bloodied, and rung 0 is a COSTUME:
+//
+//     NIKA     clean grey school blazer, loose red necktie, red enamel star pin
+//     VIRO     clean teal soccer jersey, orange trim, number 7
+//     RASK     clean black soccer jersey, silver trim, number 9
+//     MANAGER  clean dark tracksuit, team crest, whistle on a lanyard
+//     PIP      clean yellow raincoat, one toggle missing, mismatched rubber boots
+//     BRACK    clean canvas apron, brass buckle, rolled shirtsleeves
+//
+// compose.py folds that string into EVERY beat, ahead of the shot line, and the model
+// resolves a contradiction in favour of the earlier and more specific description - which
+// is a rule VIRO's own card records having established the hard way. So "coat wet through"
+// at the end of a shot line loses to "clean grey school blazer" near the front of it.
+//
+// AND THERE IS NO VARIABLE TO CHANGE IT. compose.resolve() accepts a `costume` selection
+// and TERRA has a `costumes` map, but compile.py's VARS table has no `costume` entry and
+// its resolve() call does not pass one, so a .movie file cannot dress anybody. `wear` is
+// the damage rung, not the outfit: wear:4 gives you the same school blazer, torn.
+//
+// So this cast is a FOOTBALL DERBY CAST - a number 7, a number 9, a manager with a
+// whistle, a schoolgirl supporter, a small boy in a raincoat and a yard foreman in an
+// apron - and the honest way to demo it is to write the film they are already dressed for.
+// That is the whole difference between this file and demo_cast.movie, and the pair of them
+// is the A/B: same six cards, same engine, one film written against the wardrobe and one
+// written with it.
+//
+// SIX CAST MEMBERS, which is every card in studio/characters/ except TERRA, who is a
+// different project's character and has her own dossier page.
+//
+// ALL NINE NON-SPOKEN BEATS DERIVE their motion from the shot line, and all five spoken
+// beats carry a motion at scene level - three of them a READY card whose own `shots` field
+// lists `speak`. Zero unnamed holds across fourteen beats.
+//
+// look: fluorescent / sodium / neon, and no `night`. studio/looks/night.json grades
+// brightness=-0.15 with contrast=1.20, which on this box does not darken but CLIPS: input
+// luma 48 renders 0, 64 renders 1. A sodium-lit street at night has to be graded sodium.
+
+MOVIE demo_crew_night
+  title: DEMO CREW NIGHT
+  logline: The town loses nine-one for the tenth year running, and everybody has to walk home through it anyway.
+  canvas: 1920x1080
+  fps: 24
+  engine: anime
+  style: seinen_grounded
+  checkpoint: animagine-xl-4.0.safetensors
+  face_weight: 0.6
+  seed_root: demo-crew-night-1
+  clip_secs: 5
+  tags: cinematic
+
+// ---------------------------------------------------------------------------
+CHAPTER before_the_match
+  look: fluorescent
+  place: locker_room
+  pace: normal
+  cue: tense_strings
+
+  SCENE the_boots
+    transition: fade_black
+    place: a bare concrete locker room floor filling the frame, a pair of studded football boots on it, no room visible
+    camera: static
+    shot: insert | mud dropping off a football boot onto concrete, studs, no humans, close-up
+
+  SCENE the_manager
+    transition: cut
+    characters: MANAGER
+    emotion: focus
+    camera: static
+    shot: master | walking down the row of lockers, whistle swinging, full body
+
+  SCENE viro_dresses
+    transition: cut
+    characters: VIRO
+    emotion: determined
+    camera: static
+    shot: master | pulling a teal jersey down over his head, bench and lockers behind, full body
+
+  SCENE viro_says_it
+    transition: cut
+    characters: VIRO
+    emotion: doubt
+    motion: hand_to_face
+    mood: seated on a wooden bench under a strip light, elbows on knees, boots unlaced, medium shot
+    VIRO: Nine years. I have counted every one of them.
+
+// ---------------------------------------------------------------------------
+CHAPTER the_tunnel
+  look: sodium
+  place: stadium_concourse
+  pace: fast
+  cue: driving_pulse
+
+  SCENE rask_arrives
+    transition: dissolve
+    characters: RASK
+    emotion: smug
+    camera: static
+    shot: build | striding up the concourse toward the camera, crowd noise, full body
+
+  SCENE rask_says_it
+    transition: cut
+    characters: RASK
+    emotion: smug
+    motion: He steps forward into the light under the stand.
+    mood: standing in a floodlit gap in the concrete, hands loose at his sides, medium shot
+    RASK: You have counted them. I have never had to.
+
+  SCENE the_stand
+    transition: cut
+    silence: true
+    camera: static
+    shot: establish | paper streamers falling through a floodlit stand, empty seats, no humans, wide shot
+
+// ---------------------------------------------------------------------------
+CHAPTER the_long_way_home
+  look: neon
+  place: market_street
+  pace: slow
+  cue: melancholy_piano
+
+  SCENE nika_walks
+    transition: dissolve
+    characters: NIKA
+    emotion: resignation
+    camera: static
+    shot: master | walking down a wet market street, floodlights behind her, full body
+
+  SCENE nika_says_it
+    transition: cut
+    characters: NIKA
+    emotion: tender
+    motion: hand_to_face_only
+    mood: standing under a shuttered stall awning, rain coming off the canvas edge, medium shot
+    NIKA: It is one match. You will still be you on Monday.
+
+  SCENE the_kid
+    transition: cut
+    characters: PIP
+    emotion: joy
+    camera: static
+    shot: build | running past a row of shuttered stalls, arms out, full body
+
+  SCENE pip_says_it
+    transition: cut
+    characters: PIP
+    emotion: joy
+    motion: cup_lift
+    mood: a paper cup of soup held in both hands at chest height, hood up, steam, close-up
+    PIP: Can we come again next week? I liked the noise.
+
+  SCENE brack_locks_up
+    transition: cut
+    characters: BRACK
+    emotion: exhausted
+    camera: static
+    shot: master | pulling a shutter down over a stall front, full body
+
+  SCENE brack_says_it
+    transition: cut
+    characters: BRACK
+    emotion: exhausted
+    motion: He turns a key over in one hand toward the lock.
+    mood: standing in front of a closed shutter with a ring of keys, sodium light overhead, medium close-up
+    BRACK: Same again next year, then.
+
+  SCENE the_last_streamer
+    transition: fade_black
+    silence: true
+    place: wet black tarmac filling the frame, kerb stones, neon reflected in the water, no buildings visible
+    camera: static
+    shot: insert | one paper streamer sliding across wet tarmac, no humans, close-up

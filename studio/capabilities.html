@@ -1,0 +1,566 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>studio · capabilities</title>
+<style>
+  :root{--bg:#0f1115;--panel:#161a21;--panel2:#1c2129;--line:#272d38;--ink:#e6e9ef;
+        --dim:#8b94a3;--accent:#6ea8fe;--ok:#4ec9a0;--warn:#e0b252;--bad:#e07a5f}
+  @media (prefers-color-scheme:light){
+    :root{--bg:#f6f7f9;--panel:#fff;--panel2:#f0f2f5;--line:#dde1e8;--ink:#141821;--dim:#5d6470}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font:14px/1.55 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  header{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;padding:13px 18px;
+         border-bottom:1px solid var(--line);background:var(--panel);position:sticky;top:0;z-index:9}
+  header h1{margin:0;font-size:15px;letter-spacing:.07em;text-transform:uppercase}
+  header .sub{color:var(--dim);font-size:12px}
+  header .right{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+  header a{color:var(--dim);font-size:12px;text-decoration:none;border:1px solid var(--line);
+           padding:5px 10px;border-radius:6px}
+  header a:hover{color:var(--ink);border-color:var(--accent)}
+  .bar{display:flex;gap:8px;flex-wrap:wrap;padding:12px 18px;border-bottom:1px solid var(--line);
+       background:var(--panel);position:sticky;top:52px;z-index:8}
+  input[type=search],select{background:var(--panel2);border:1px solid var(--line);color:var(--ink);
+       border-radius:7px;padding:7px 10px;font:inherit}
+  button{background:var(--panel2);border:1px solid var(--line);color:var(--ink);border-radius:7px;
+       padding:7px 11px;font:inherit;cursor:pointer}
+  button:hover{border-color:var(--accent)}
+
+  .key{padding:16px 18px 0;color:var(--dim);font-size:12.5px;max-width:110ch}
+  .key b{color:var(--ink)}
+  .key .row{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:8px}
+  .key .row span{white-space:nowrap}
+
+  /* The exposure ledger. Which of these the app can actually reach is the single most
+     useful number on the page, so it is a bar at the top rather than a count you have
+     to assemble by reading 34 badges. */
+  /* margin, not just max-width: with no horizontal margin the bar ran edge to edge at
+     narrow widths while the paragraph above it stayed inset, and read as a stray rule. */
+  .led{display:flex;height:6px;border-radius:99px;overflow:hidden;margin:11px 18px 0;
+       background:var(--panel2);max-width:110ch}
+  .led i{display:block}
+  .led .a{background:var(--ok)}.led .s{background:var(--accent)}
+  .led .j{background:var(--warn)}.led .n{background:var(--bad)}
+
+  /* ---- the gap panel. Task-critical: what ComfyUI can do here that the app cannot. --- */
+  .gap{margin:18px;border:1px solid var(--line);border-radius:12px;background:var(--panel);
+       overflow:hidden}
+  .gap>h2{margin:0;padding:13px 18px;font-size:13px;letter-spacing:.07em;text-transform:uppercase;
+          border-bottom:1px solid var(--line);background:var(--panel2)}
+  .gap>h2 span{text-transform:none;letter-spacing:0;color:var(--dim);font-weight:400;
+               margin-left:10px;font-size:12.5px}
+  .gapg{display:grid;gap:1px;background:var(--line);grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+  .gapc{background:var(--panel);padding:15px 18px}
+  .gapc h3{margin:0 0 2px;font-size:14px}
+  .gapc h3 b{font-family:ui-monospace,Menlo,monospace;font-size:18px;margin-right:7px}
+  .g-ready h3 b{color:var(--warn)} .g-plan h3 b{color:var(--dim)} .g-mirror h3 b{color:var(--bad)}
+  .gapc p{margin:6px 0 0;font-size:12.5px;color:var(--dim)}
+  .chips{margin-top:10px;display:flex;flex-wrap:wrap;gap:6px}
+  .chip{font-size:11.5px;border:1px solid var(--line);border-radius:99px;padding:3px 10px;
+        cursor:pointer;background:var(--panel2);color:var(--ink);font-family:inherit}
+  .chip:hover{border-color:var(--accent)}
+  .chip.dead{cursor:default;color:var(--dim);font-family:ui-monospace,Menlo,monospace;
+             font-size:11px}
+
+  /* ---- group sections ------------------------------------------------------------- */
+  .sec{padding:22px 18px 0}
+  .sec h2{margin:0;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+  .sec h2 b{color:var(--accent);font-family:ui-monospace,Menlo,monospace;margin-right:8px}
+  .sec p{margin:5px 0 0;font-size:13px;color:var(--dim);max-width:100ch}
+  /* stretch, not start: the flags are the row a reader scans across, so every card in a
+     row has to end at the same y. */
+  .grid{padding:12px 18px 4px;display:grid;gap:14px;
+        grid-template-columns:repeat(auto-fill,minmax(330px,1fr))}
+
+  .c{background:var(--panel);border:1px solid var(--line);border-radius:11px;overflow:hidden;
+     cursor:pointer;display:flex;flex-direction:column;text-align:left;padding:0;font:inherit;
+     color:var(--ink);width:100%}
+  .c:hover{border-color:var(--accent)}
+  /* ONE media band height for all 34 cards, and media CONTAINED inside it, never cropped.
+     Contained because these samples are evidence: one is a 2560x720 crop comparison whose
+     whole point is the pixels, another is a portrait whose whole point is the text at the
+     top and bottom of the frame - cover would cut the argument out of both.
+     Absolutely positioned on purpose: a flex child with height:100% has min-height:auto,
+     so a tall image overrides aspect-ratio and the band grows. That is what happened on
+     the first pass - the portrait sample made its card 240px taller than its neighbours. */
+  .c .m{aspect-ratio:16/10;background:var(--panel2);border-bottom:1px solid var(--line);
+        position:relative;overflow:hidden}
+  .c .m>img,.c .m>video{position:absolute;inset:0;width:100%;height:100%;
+        object-fit:contain;display:block}
+  .c .m.aud{display:flex;flex-direction:column;align-items:center;justify-content:center;
+            gap:11px;padding:0 16px}
+  .c .m.aud .wave{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--dim);
+                  letter-spacing:.06em;text-transform:uppercase}
+  .c .m.aud audio{width:100%;max-width:290px}
+  .c .m.non{display:flex;align-items:center;justify-content:center;text-align:center;
+            color:var(--dim);font-size:12px;padding:20px;
+            background:repeating-linear-gradient(135deg,transparent,transparent 9px,
+              color-mix(in srgb,var(--line) 60%,transparent) 9px,
+              color-mix(in srgb,var(--line) 60%,transparent) 10px)}
+  .c .dur{position:absolute;right:7px;bottom:7px;background:#000a;color:#fff;font-size:10.5px;
+          font-family:ui-monospace,Menlo,monospace;padding:1px 6px;border-radius:5px}
+  .c .b{padding:12px 14px;flex:1}
+  .c .n{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--dim)}
+  .c h3{margin:2px 0 0;font-size:15px;line-height:1.35}
+  .c .one{margin:7px 0 0;font-size:13px}
+  .c .why{margin:9px 0 0;font-size:12.5px;color:var(--dim);border-left:2px solid var(--line);
+          padding-left:9px}
+  .c .wf{margin:10px 0 0;font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--dim);
+         word-break:break-all}
+  .c .flag{font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;padding:5px 14px;
+           border-top:1px solid var(--line);font-family:ui-monospace,Menlo,monospace}
+  .f-app{background:color-mix(in srgb,var(--ok) 15%,transparent);color:var(--ok)}
+  .f-script-only{background:color-mix(in srgb,var(--accent) 15%,transparent);color:var(--accent)}
+  .f-adjacent{background:color-mix(in srgb,var(--warn) 15%,transparent);color:var(--warn)}
+  .f-none{background:color-mix(in srgb,var(--bad) 18%,transparent);color:var(--bad)}
+  .f-stale{background:color-mix(in srgb,var(--warn) 16%,transparent);color:var(--warn)}
+  .f-notbuilt{background:var(--panel2);color:var(--dim)}
+  /* a plan must never look like a result, from across the grid */
+  .c.planned{border-style:dashed;opacity:.82}
+  .c.planned:hover{opacity:1}
+
+  dialog{border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--ink);
+         max-width:min(1100px,95vw);max-height:92vh;padding:0}
+  dialog::backdrop{background:#000b}
+  .dh{display:flex;align-items:baseline;gap:12px;padding:14px 18px;border-bottom:1px solid var(--line);
+      position:sticky;top:0;background:var(--panel);z-index:2}
+  .dh h3{margin:0;font-size:17px}
+  .dh .id{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--dim)}
+  .dh button.x{margin-left:auto;background:none;border:0;color:var(--dim);font-size:22px;cursor:pointer}
+  .db{padding:18px}
+  .db figure{margin:0 0 4px}
+  .db figure img,.db figure video{width:100%;max-height:52vh;object-fit:contain;border-radius:8px;
+       border:1px solid var(--line);display:block;background:var(--panel2)}
+  .db figure audio{width:100%;margin-top:4px}
+  .db figcaption{font-size:12px;color:var(--dim);padding-top:6px}
+  .db figcaption b{color:var(--ink)}
+  .lbl{color:var(--dim);font-size:11px;letter-spacing:.06em;text-transform:uppercase;margin-top:18px}
+  .db p{margin:5px 0 0;font-size:13px}
+  .verdict{margin-top:6px;padding:10px 12px;border-left:2px solid var(--accent);background:var(--panel2);
+           border-radius:0 7px 7px 0;font-size:13px}
+  .warnbox{margin-top:6px;padding:10px 12px;border-left:2px solid var(--warn);background:var(--panel2);
+           border-radius:0 7px 7px 0;font-size:13px}
+  .badbox{margin-top:6px;padding:10px 12px;border-left:2px solid var(--bad);background:var(--panel2);
+          border-radius:0 7px 7px 0;font-size:13px}
+  .okbox{margin-top:6px;padding:10px 12px;border-left:2px solid var(--ok);background:var(--panel2);
+         border-radius:0 7px 7px 0;font-size:13px}
+  code,.mono{font-family:ui-monospace,Menlo,monospace;font-size:12px}
+  pre.txt{margin-top:6px;padding:11px 13px;background:var(--panel2);border:1px solid var(--line);
+          border-radius:8px;font-family:ui-monospace,Menlo,monospace;font-size:11.5px;
+          white-space:pre-wrap;word-break:break-word;max-height:340px;overflow:auto}
+  .none{color:var(--dim);font-style:italic}
+  table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:8px}
+  td{padding:5px 7px;border-bottom:1px solid var(--line);vertical-align:top}
+  td:first-child{color:var(--dim);width:23%;font-family:ui-monospace,Menlo,monospace}
+  ul.pts{margin:6px 0 0;padding-left:18px;font-size:13px}
+  ul.pts li{margin:3px 0}
+  ul.pts.bad li::marker{color:var(--bad)}
+  ul.pts.good li::marker{color:var(--ok)}
+  .two{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+  .empty{padding:40px 18px;color:var(--dim)}
+  .foot{padding:26px 18px 44px;color:var(--dim);font-size:12px;max-width:110ch}
+  .foot code{color:var(--ink)}
+</style>
+</head>
+<body>
+<header>
+  <h1>capabilities</h1><span class="sub" id="stat">loading…</span>
+  <div class="right">
+    <a href="/wizard">direct a scene</a><a href="/styles">styles</a><a href="/loras">loras</a>
+    <a href="/cast">cast</a><a href="/character">dossier</a><a href="/video">video</a>
+    <a href="/make">make</a><a href="/gallery">gallery</a><a href="/changelog">Changelog</a>
+    <a href="/">library</a>
+  </div>
+</header>
+
+<div class="bar">
+  <input type="search" id="q" placeholder="search a capability, a model, a workflow file…"
+         style="flex:1;min-width:220px">
+  <select id="grp"><option value="">every group</option></select>
+  <select id="exp">
+    <option value="">reachable from anywhere</option>
+    <option value="app">in the app</option>
+    <option value="script-only">script only</option>
+    <option value="none">ComfyUI only — the gap</option>
+    <option value="adjacent">adjacent</option>
+  </select>
+  <select id="st">
+    <option value="">rendered and planned</option>
+    <option value="rendered">rendered — there is something to look at</option>
+    <option value="planned">planned — installed, never run</option>
+  </select>
+  <button id="reset">clear</button>
+</div>
+
+<div class="key" id="key"></div>
+<div class="led" id="led"></div>
+<div class="key" id="ledk" style="padding-top:6px"></div>
+
+<div class="gap" id="gap" style="display:none">
+  <h2>The gap<span>what this box can do that the app cannot reach</span></h2>
+  <div class="gapg" id="gapg"></div>
+</div>
+
+<div id="secs"></div>
+<div class="empty" id="empty" style="display:none"></div>
+
+<div class="foot" id="foot"></div>
+
+<dialog id="dlg">
+  <div class="dh"><h3 id="dname"></h3><span class="id" id="did"></span>
+    <button class="x" id="dx" title="close">&times;</button></div>
+  <div class="db" id="dbody"></div>
+</dialog>
+
+<script>
+let D={}, ALL=[], BYID={}, GROUPS=[];
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+// What each exposure value means for somebody deciding whether to use this today. The
+// catalogue computes the value by scanning the app's render path for workflow filenames;
+// these are the plain-English readings of it.
+const EXPOSURE={
+  "app":{flag:"in the app — the studio reaches this today",
+    short:"in the app",
+    long:"A page or the renderer drives this workflow, so you can use it without leaving "+
+         "the studio."},
+  "script-only":{flag:"script only — a script here drives it, no page does",
+    short:"script only",
+    long:"A script in this repo runs this workflow, but nothing in the app does. You get "+
+         "it from a terminal, not from a page - which means it exists and nobody who has "+
+         "not read the scripts knows it."},
+  "adjacent":{flag:"adjacent — the app solves the same problem another way",
+    short:"adjacent",
+    long:"NOT the same capability. The app attacks the same problem from a different "+
+         "direction, and is counted as adjacent rather than exposed so this page does not "+
+         "imply the declared route has been tested."},
+  "none":{flag:"ComfyUI only — nothing in this repo runs it",
+    short:"ComfyUI only",
+    long:"The workflow file exists and no code in this repo loads it. To use this today "+
+         "you open the JSON in ComfyUI yourself. This is the gap: the capability is real, "+
+         "rendered and paid for, and it is invisible from the app."}
+};
+
+// `dur` is only true inside a card. The duration badge is absolutely positioned against
+// the card's media band; in the dialog there is no positioned ancestor and it would float
+// off into a corner of the modal.
+function media(rec,dur){
+  if(!rec) return "";
+  const u=esc(rec.url);
+  if(rec.kind==="image")
+    return `<img loading="lazy" src="${u}" alt="">`;
+  if(rec.kind==="video")
+    return `<video preload="metadata" controls playsinline ${
+      rec.poster?`poster="${esc(rec.poster)}"`:""} src="${u}"></video>`+
+      (dur&&rec.duration?`<span class="dur">${rec.duration}s</span>`:"");
+  if(rec.kind==="audio")
+    // preload="metadata", not "none": with none the player reads 0:00 / 0:00 until you
+    // press play, which looks like a broken file rather than an unplayed one. Metadata is
+    // a few KB of header and the range handler in serve.py answers it without sending
+    // the track.
+    return `<span class="wave">${esc((rec.file||"").split(".").pop())} · ${
+              rec.duration||"?"}s</span>
+            <audio preload="metadata" controls src="${u}"></audio>`;
+  return `<a href="${u}">${esc(rec.file||"file")}</a>`;
+}
+
+// A capability with no workflow file is not "ComfyUI only", it is NOT BUILT. Saying
+// "nothing in this repo runs it" about a graph that does not exist is the kind of
+// almost-true label this project keeps having to unpick. `notBuilt` is deliberately
+// false when the archive card is out of date - 27-lora-training declares itself
+// unexplored and the correction says the workflow, the tools and 22 LoRAs all exist.
+function notBuilt(c){
+  return c.verdict==="planned" && !(c.workflows||[]).length && !c.declaration_stale;
+}
+
+function card(c){
+  const ex=EXPOSURE[c.exposure]||EXPOSURE.none, p=c.published;
+  const planned=c.verdict==="planned", nb=notBuilt(c);
+  const m=p?`<div class="m${p.kind==="audio"?" aud":""}">${media(p,true)}</div>`
+          :`<div class="m non">${esc(c.no_sample||"nothing rendered yet")}</div>`;
+  const wf=(c.workflows||[]).map(w=>w.file);
+  return `<button class="c ${planned?"planned":""}" data-id="${esc(c.id)}">
+    ${m}
+    <div class="b">
+      <div class="n">${esc(c.number)} · ${esc((c.group||"").toUpperCase())}</div>
+      <h3>${esc(c.name)}</h3>
+      <p class="one">${esc(c.one_line||c.what_it_does||"")}</p>
+      <p class="why">${esc(c.why_you_want_it||"")}</p>
+      <div class="wf">${wf.length?esc(wf.join(" · "))
+        :'<span class="none">no workflow file yet</span>'}</div>
+    </div>
+    ${c.declaration_stale?`<div class="flag f-stale">the archive card is out of date</div>`:""}
+    ${nb?`<div class="flag f-notbuilt">not built yet — the weights are installed</div>`:""}
+    ${(!nb||c.exposure==="adjacent")
+      ?`<div class="flag f-${esc(c.exposure)}">${esc(ex.flag)}</div>`:""}
+  </button>`;
+}
+
+function draw(){
+  const q=$("q").value.trim().toLowerCase(), g=$("grp").value,
+        e=$("exp").value, st=$("st").value;
+  const v=ALL.filter(c=>
+    (!g||c.group===g) &&
+    (!e||c.exposure===e) &&
+    (!st||(st==="planned"?c.verdict==="planned":c.verdict!=="planned")) &&
+    (!q||[c.id,c.name,c.one_line,c.why_you_want_it,c.what_it_does,c.why_it_matters,c.model,
+          (c.workflows||[]).map(w=>w.file).join(" "),(c.strong||[]).join(" "),
+          (c.weak||[]).join(" "),(c.limits||[]).join(" ")]
+          .join(" ").toLowerCase().includes(q)));
+  $("stat").textContent=`${v.length} of ${ALL.length} capabilities`;
+  const on=new Set(v.map(c=>c.id));
+  let html="", step=0;
+  for(const grp of GROUPS){
+    const items=v.filter(c=>c.group===grp.id);
+    if(!items.length) continue;
+    // The badge is the group's position in the curriculum, not its id - printing the id
+    // beside the name rendered "IMAGE Image · 5", which said the same word twice and
+    // told the reader nothing about where they were in the sequence.
+    step++;
+    html+=`<div class="sec"><h2><b>${step}</b>${esc(grp.name)} · ${items.length}</h2>
+           <p>${esc(grp.blurb)}</p></div>
+           <div class="grid">${items.map(card).join("")}</div>`;
+  }
+  const orphans=v.filter(c=>!c.group);
+  if(orphans.length)
+    html+=`<div class="sec"><h2><b>!</b>not placed in the curriculum · ${orphans.length}</h2>
+      <p>The archive catalogues these and studio/_tools/capability_publish.py has not
+         assigned them a group. They are shown rather than dropped.</p></div>
+      <div class="grid">${orphans.map(card).join("")}</div>`;
+  $("secs").innerHTML=html;
+  $("empty").style.display=v.length?"none":"block";
+  $("empty").textContent="Nothing matches those filters.";
+  document.querySelectorAll(".c[data-id]").forEach(el=>{
+    el.onclick=ev=>{
+      // The card is a button so it is keyboard reachable, but the sample inside it is a
+      // real player - clicking play must not also open the dialog.
+      if(ev.target.closest("video,audio")) return;
+      open_(el.dataset.id);
+    };
+  });
+  return on;
+}
+
+function row(k,v){ return v?`<tr><td>${esc(k)}</td><td>${v}</td></tr>`:""; }
+function pts(title,arr,cls){
+  if(!(arr||[]).length) return "";
+  return `<div class="lbl">${esc(title)}</div><ul class="pts ${cls||""}">${
+    arr.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`;
+}
+
+function open_(id){
+  const c=BYID[id]; if(!c) return;
+  const ex=EXPOSURE[c.exposure]||EXPOSURE.none, p=c.published, nb=notBuilt(c);
+  const wf=(c.workflows||[]).map(w=>
+    `<div><span class="mono">${esc(w.file)}</span>${w.exists?"":" — <b>MISSING</b>"}<br>
+     <span style="color:var(--dim);font-size:12px">${
+       (w.used_by||[]).length?`run by ${w.used_by.length} script${w.used_by.length>1?"s":""}: `+
+         esc(w.used_by.slice(0,4).join(", "))+((w.used_by||[]).length>4?" …":"")
+       :"nothing in this repo loads it"}</span></div>`).join("<br>");
+
+  const samp=p?`<figure>${p.kind==="audio"
+      ?`<audio preload="metadata" controls src="${esc(p.url)}"></audio>`
+      :media(p)}
+    <figcaption><b>why this file</b> — ${esc(p.why||"")}</figcaption></figure>`
+    :`<div class="warnbox">${esc(c.no_sample||"Nothing rendered for this capability.")}</div>`;
+
+  const comps=(c.companions||[]).map(k=>`<figure>${k.kind==="audio"
+      ?`<audio preload="metadata" controls src="${esc(k.url)}"></audio>`
+      :media(k)}
+    <figcaption>${esc(k.caption||"")}</figcaption></figure>`).join("");
+
+  const tc=c.text_companion;
+
+  $("dname").textContent=c.name;
+  $("did").textContent=`${c.id} · ${c.group||"unplaced"} · ${c.status}`;
+  $("dbody").innerHTML=`
+    <p style="font-size:15px;margin:0 0 14px">${esc(c.one_line||"")}</p>
+    ${samp}
+    ${comps?`<div class="lbl">and beside it</div><div class="two">${comps}</div>`:""}
+    ${tc?`<div class="lbl">${esc(tc.file)}</div><p>${esc(tc.caption)}</p>
+          <pre class="txt">${esc(tc.text)}</pre>`:""}
+
+    <div class="lbl">why you would want it</div>
+    <div class="verdict">${esc(c.why_you_want_it||"")}</div>
+
+    <div class="lbl">what it does</div>
+    <p>${esc(c.what_it_does||"")}</p>
+
+    ${c.why_it_matters?`<div class="lbl">what to look at</div>
+      <p style="color:var(--dim)">${esc(c.why_it_matters)}</p>`:""}
+
+    ${c.declaration_stale?`<div class="lbl">the archive card is out of date</div>
+      <div class="warnbox"><b>Do not trust the folder's own declaration here.</b><br>
+        ${esc(c.declaration_stale)}</div>`:""}
+
+    ${nb?`<div class="lbl">can you use it today — no, it was never built</div>
+      <div class="warnbox">There is no workflow file, so there is nothing to run and
+        nothing to look at. The weights are installed and the archive card lists what
+        building it would take — that list is at the bottom of this card.</div>`
+    :`<div class="lbl">can you reach it from the app — ${esc(ex.short)}</div>
+      <div class="${c.exposure==="none"?"badbox":c.exposure==="app"?"okbox":"warnbox"}">
+        ${esc(ex.long)}${c.app_page?`<br><br><b>${esc(c.app_page.page)}</b> — ${
+          esc(c.app_page.note||"")}`:""}</div>`}
+
+    <div class="lbl">the recipe</div>
+    <table>
+      ${row("workflow",wf||`<span class="none">not built yet${c.declaration_stale
+        ?" — according to the archive card, which is out of date. Read the correction above."
+        :""}</span>`)}
+      ${row("model",esc(c.model||""))}
+      ${row("released",esc(c.released||""))}
+      ${row("cost",esc(c.cost||""))}
+      ${row("VRAM",esc(c.vram||""))}
+      ${row("state",esc(c.status+" · "+c.verdict))}
+      ${row("archive folder",`<span class="mono">${esc(c.id)}/</span>${
+        c.measured?` — ${c.measured.files} files, ${esc(c.measured.size_h)}, rendered ${
+          esc(c.measured.oldest)}${c.measured.oldest!==c.measured.newest
+            ?" to "+esc(c.measured.newest):""}`:""}`)}
+    </table>
+
+    ${pts("what it is good at",c.strong,"good")}
+    ${pts("what it is bad at",c.weak,"bad")}
+    ${pts("limits worth knowing before you spend GPU time",c.limits)}
+    ${pts("alternatives on this box",c.alternatives)}
+    ${pts("what building this next would take",c.next_steps)}`;
+  $("dlg").showModal();
+  $("dbody").scrollTop=0;
+  if(history.replaceState) history.replaceState(null,"","#"+id);
+}
+
+function gapPanel(){
+  const ready=(D.ready_and_invisible||[]).map(id=>BYID[id]).filter(Boolean);
+  const planned=ALL.filter(c=>c.verdict==="planned");
+  const never=planned.filter(notBuilt);
+  const orphanWf=(D.workflows_with_no_capability_folder||[]);
+  const mirror=orphanWf.filter(w=>w.tier==="app"||w.tier==="script");
+  const unused=orphanWf.filter(w=>w.tier==="unused");
+  const chips=cs=>cs.map(c=>`<button class="chip" data-open="${esc(c.id)}">${
+    esc(c.number)} ${esc(c.name.split(" — ")[0].split(" - ")[0])}</button>`).join("");
+
+  $("gapg").innerHTML=`
+    <div class="gapc g-ready">
+      <h3><b>${ready.length}</b>rendered, working, and invisible</h3>
+      <p>Verified against pixels, with a runnable workflow file on disk today — and no page
+         and no script in this repo reaches any of them. Every one of these is a build the
+         app could have tomorrow without a single new download. This is the shortest path
+         from here to more studio.</p>
+      <div class="chips">${chips(ready)}</div>
+    </div>
+    <div class="gapc g-plan">
+      <h3><b>${planned.length}</b>never rendered — nothing to look at</h3>
+      <p>${never.length} of these were never built: the weights are on the box, the
+         workflow does not exist, and several are declared zero-download jobs. Open any of
+         them for the steps its own card says it needs, and treat every claim in it as
+         untested — that is exactly what it is.
+         ${planned.length-never.length?`The other ${planned.length-never.length} declare
+           themselves planned and are <b>not</b>: their cards are out of date, and the
+           correction is on each one.`:""}</p>
+      <div class="chips">${chips(planned)}</div>
+    </div>
+    <div class="gapc g-mirror">
+      <h3><b>${mirror.length}</b>the mirror gap — the app's own engine is undocumented</h3>
+      <p>Everything numbered in the archive is the photographic engine. The app's
+         ILLUSTRATION engine has no capability folder at all, so the archive documents the
+         half of the studio the app uses least. These workflows are real capabilities with
+         no folder, no card and no sample:</p>
+      <div class="chips">${mirror.map(w=>
+        `<span class="chip dead" title="${esc(w.note||"")}">${esc(w.file)} — ${
+          w.used_by.length} caller${w.used_by.length===1?"":"s"}</span>`).join("")}</div>
+      <p style="margin-top:11px">And ${unused.length} workflow files are referenced by
+         nothing at all — dead weight or unexploited, depending on intent:</p>
+      <div class="chips">${unused.map(w=>
+        `<span class="chip dead" title="${esc(w.note||"")}">${esc(w.file)}</span>`).join("")}</div>
+    </div>`;
+  $("gap").style.display="";
+  document.querySelectorAll("[data-open]").forEach(el=>el.onclick=()=>open_(el.dataset.open));
+}
+
+(async function(){
+  try{
+    const r=await fetch("/api/capabilities"); D=await r.json();
+    if(!r.ok) throw new Error(D.error||("HTTP "+r.status));
+  }catch(e){
+    $("key").innerHTML=`<b style="color:var(--warn)">${esc(e.message||e)}</b><br>
+      Build it with <code class="mono">python3 studio/_tools/capability_scan.py</code>
+      then <code class="mono">python3 studio/_tools/capability_publish.py</code>.`;
+    $("stat").textContent="unavailable"; return;
+  }
+  ALL=D.capabilities||[]; GROUPS=D.groups||[];
+  ALL.forEach(c=>BYID[c.id]=c);
+  const t=D.totals||{};
+
+  $("key").innerHTML=
+    `<b>${ALL.length} things this box can generate</b>, catalogued out of
+     ${t.archive_folders||"?"} folders under
+     <span class="mono">~/ComfyUI/output/claude-generated</span> and grouped here from
+     simplest to most advanced. Every sample below was chosen by looking at it — pixels for
+     the stills, frame strips for the clips — and the audio picks say so when they were not
+     listened to. Model names, timings, VRAM figures and workflow files come from the
+     archive catalogue; the plain sentence and the reason to want it are written here.
+     <div class="row">
+       <span style="color:var(--ok)"><b>${t.exposed_in_app||0}</b> reachable in the app</span>
+       <span style="color:var(--accent)"><b>${t.script_only||0}</b> script only</span>
+       <span style="color:var(--warn)"><b>${t.adjacent||0}</b> adjacent</span>
+       <span style="color:var(--bad)"><b>${t.not_exposed||0}</b> ComfyUI only</span>
+       <span><b>${t.planned_only||0}</b> never rendered</span>
+       <span><b>${t.declarations_stale||0}</b> archive cards out of date</span>
+     </div>`;
+
+  const n=ALL.length||1, cnt=k=>ALL.filter(c=>c.exposure===k).length;
+  const w=k=>`width:${(cnt(k)/n*100).toFixed(1)}%`;
+  $("led").innerHTML=`<i class="a" style="${w("app")}"></i><i class="s" style="${
+    w("script-only")}"></i><i class="j" style="${w("adjacent")}"></i><i class="n" style="${
+    w("none")}"></i>`;
+  $("ledk").innerHTML=`Green is what the studio app can actually do. Everything to the
+    right of it is real, paid-for capability sitting on this box that the app cannot reach —
+    which is the point of the panel below.`;
+
+  $("grp").innerHTML='<option value="">every group</option>'+
+    GROUPS.map(g=>`<option value="${esc(g.id)}">${esc(g.name)}</option>`).join("");
+  ["q","grp","exp","st"].forEach(id=>{$(id).oninput=draw; $(id).onchange=draw;});
+  $("reset").onclick=()=>{$("q").value="";$("grp").value="";$("exp").value="";$("st").value="";draw();};
+  $("dx").onclick=()=>$("dlg").close();
+  $("dlg").onclick=e=>{ if(e.target===$("dlg")) $("dlg").close(); };
+  // Pausing every player on close matters here: several samples are 30-60 s of audio and
+  // a modal that closes while still playing is a page that will not shut up.
+  $("dlg").onclose=()=>{
+    $("dbody").querySelectorAll("video,audio").forEach(m=>m.pause());
+    if(history.replaceState) history.replaceState(null,"",location.pathname);
+  };
+
+  gapPanel();
+  draw();
+
+  const pub=D.published||{};
+  $("foot").innerHTML=`
+    ${pub.error?`<div class="warnbox" style="margin-bottom:12px"><b>${esc(pub.error)}</b><br>
+       Fix: <code class="mono">${esc(pub.fix||"")}</code></div>`:""}
+    ${(D.untaught||[]).length?`<div class="warnbox" style="margin-bottom:12px">
+       ${D.untaught.length} capabilities are in the catalogue but not placed in the
+       curriculum: <span class="mono">${esc(D.untaught.join(", "))}</span></div>`:""}
+    The samples on this page are <b>copies</b>, under
+    <span class="mono">studio/samples/capabilities/</span> — ${pub.files||0} files published
+    ${pub.generated?"on "+esc(pub.generated):""}. The archive itself is not in git and gets
+    cleaned, so a page pointed straight at it would eventually show empty boxes. Stills are
+    re-encoded to webp, clips are copied untouched with a poster frame pulled off them.
+    <br><br>
+    Rebuild after new renders land:
+    <code class="mono">python3 studio/_tools/capability_scan.py</code> catalogues the
+    archive, then <code class="mono">python3 studio/_tools/capability_publish.py</code>
+    republishes the samples and the curriculum.
+    ${(D.production_folders||[]).length?`<br><br>The archive also holds
+      ${D.production_folders.length} production folders — studio library generation, probes,
+      sweeps and finished films. Those are output, not capabilities, and are deliberately
+      not listed here.`:""}`;
+
+  // A gap chip and a shared link both want to land on one capability.
+  const h=decodeURIComponent(location.hash.slice(1));
+  if(h && BYID[h]) open_(h);
+})();
+</script>
+</body>
+</html>

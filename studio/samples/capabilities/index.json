@@ -1,0 +1,691 @@
+{
+ "generated": "2026-08-05 02:02",
+ "generator": "studio/_tools/capability_publish.py",
+ "archive": "/home/k4shix/ComfyUI/output/claude-generated",
+ "note": "The teaching layer over studio/capabilities.json. Group, order, the plain sentence and the reason to want it are authored here; every fact about models, cost, workflows and exposure comes from the catalogue. Samples are copies, so this page does not depend on ComfyUI's output tree.",
+ "groups": [
+  {
+   "id": "image",
+   "name": "Image",
+   "blurb": "Make a picture out of nothing but words. Everything else on this page is built on top of this one."
+  },
+  {
+   "id": "editing",
+   "name": "Editing",
+   "blurb": "Change a picture that already exists. The hard part is never the change - it is leaving the rest of the frame alone."
+  },
+  {
+   "id": "control",
+   "name": "Control",
+   "blurb": "Stop rolling dice. Extract a structural signal from something real and make the model obey it."
+  },
+  {
+   "id": "video",
+   "name": "Video",
+   "blurb": "Make it move. Three video models with genuinely different strengths, plus what you do to a clip after it exists."
+  },
+  {
+   "id": "audio",
+   "name": "Audio",
+   "blurb": "Sound is half of a film, and by far the cheapest half here - a full 60-second cue costs less GPU time than one still."
+  },
+  {
+   "id": "3d",
+   "name": "3D",
+   "blurb": "The newest modality on the box and the smallest: both models together are under 10 GB."
+  },
+  {
+   "id": "training",
+   "name": "Training",
+   "blurb": "Teach the models something they do not already know - and understand the dial before you turn it."
+  },
+  {
+   "id": "utility",
+   "name": "Utility",
+   "blurb": "The unglamorous stages that decide whether what you generated is deliverable."
+  },
+  {
+   "id": "assembly",
+   "name": "Assembly",
+   "blurb": "Every capability above, in one artefact."
+  }
+ ],
+ "entries": {
+  "01-text-to-image": {
+   "group": "image",
+   "order": 10,
+   "one_line": "Type a description, get a picture - 1664x928 in four and a half seconds.",
+   "why": "The floor everything else stands on. It is also the only local model that renders readable text inside the image, so signs, posters, packaging and UI mockups come out legible instead of as glyph soup.",
+   "id": "01-text-to-image",
+   "sample": {
+    "kind": "image",
+    "source": "/home/k4shix/ComfyUI/output/claude-generated/01-text-to-image/typography_00001_.png",
+    "bytes_source": 2326791,
+    "file": "sample.webp",
+    "bytes": 274602,
+    "why": "Three separate lines of text render legibly - THE LAST SIGNAL / LIVE AT THE HARBOUR HALL / NOVEMBER 14. That is the one thing other open models still fail, and eight of this folder's files are near-identical lighthouse variants from a resolution sweep.",
+    "url": "/samples/capabilities/01-text-to-image/sample.webp"
+   }
+  },
+  "02-image-editing": {
+   "group": "editing",
+   "order": 10,
+   "one_line": "Change one thing in a picture you already have, with a plain-English instruction.",
+   "why": "Composition, camera angle and the structure of the subject all survive, which is what makes it an edit rather than a re-roll. You can relight or re-season a shot whose framing you already like.",
+   "id": "02-image-editing",
+   "sample": {
+    "kind": "image",
+    "source": "/home/k4shix/ComfyUI/output/claude-generated/02-image-editing/relight_goldenhour_00001_.png",
+    "bytes_source": 1126973,
+    "file": "sample.webp",
+    "bytes": 108638,
+    "why": "Storm to golden hour with the rock silhouette, tower position and framing untouched - reads correctly on its own, without needing the before shot beside it. object_removal_00001_.png is the more astonishing file (the lighthouse is gone entirely, bare stack and intact sky) and is the direct counterexample to folder 24.",
+    "url": "/samples/capabilities/02-image-editing/sample.webp"
+   },
+   "companions": [
+    {
+     "kind": "image",
+     "source": "/home/k4shix/ComfyUI/output/claude-generated/02-image-editing/object_removal_00001_.png",
+     "bytes_source": 1240204,
+     "file": "companion1.webp",
+     "bytes": 112944,
+     "caption": "The same picture with the lighthouse removed entirely - bare stack, intact sky. This is the direct counterexample to the removal failure in Outpainting & object removal: it works here because the scene has context to borrow from.",
+     "url": "/samples/capabilities/02-image-editing/companion1.webp"
+    }
+   ]
+  },
+  "03-controlnet": {
+   "group": "control",
+   "order": 30,
+   "one_line": "Keep the structure of one image and generate a completely different subject inside it.",
+   "why": "This is the difference between a filter and structural control - you keep the composition you already framed and change material, era and subject. Control strength decides how literal it is, and on the one sample here it was clearly set loose.",
+   "id": "03-controlnet",
+   "sample": {
+    "kind": "image",
+    "source": "/home/k4shix/ComfyUI/output/claude-generated/03-controlnet/qwen_controlnet_00001_.png",
+    "bytes_source": 2538562,
+    "file": "sample.webp",
+    "bytes": 343750,
+    "why": "The only output in the folder. NOTE: checked against the edge map and the declaration overstates it - the concrete bunker on a dry grassy dune does NOT match the jagged sea rock and slender lighthouse 'to the pixel'. Composition rhymes; structure does not. Control strength was evidently loose.",
+    "url": "/samples/capabilities/03-controlnet/sample.webp"
+   },
+   "companions": [
+    {
+     "kind": "image",
+     "source": "/home/k4shix/ComfyUI/output/claude-generated/03-controlnet/qwen_controlnet_edgemap_00001_.png",
+     "bytes_source": 46349,
+     "file": "companion1.webp",
+     "bytes": 81746,
+     "caption": "THE CONTROL INPUT - an edge map extracted from a lighthouse photograph. Put it beside the output and judge for yourself: the archive claims they match to the pixel, and they do not. Composition rhymes, structure does not.",
+     "url": "/samples/capabilities/03-controlnet/companion1.webp"
+    }
+   ]
+  },
+  "04-upscaling": {
+   "group": "utility",
+   "order": 10,
+   "one_line": "Four times the pixels in four and a half seconds, on two gigabytes of VRAM.",
+   "why": "The image models start duplicating composition past about 2 MP, so you never chase resolution in the sampler - you generate at 1-2 MP and upscale after. That is the whole delivery workflow. Judge any upscaler on a 1:1 crop; a fit-to-screen view of 24.7 megapixels proves nothing.",
+   "id": "04-upscaling",
+   "sample": {
+    "kind": "image",
+    "source": "/home/k4shix/ComfyUI/output/claude-generated/04-upscaling/crop_comparison_1to1.png",
+    "bytes_source": 1085691,
+    "file": "sample.webp",
+    "bytes": 94630,
+    "why": "The only honest file here. A fit-to-screen view of a 24.7 MP upscale proves nothing; this is the same region at 1:1, naive 4x left and RealESRGAN right. Verified by looking: the lantern glazing bars, gallery railing and rain streaks resolve on the right and are mush on the left.",
+    "url": "/samples/capabilities/04-upscaling/sample.webp"
+   }
+  },
+  "05-image-to-video": {
+   "group": "video",
+   "order": 20,
+   "one_line": "Animate a still you already like, without the model redrawing it.",
+   "why": "When a keyframe's art direction is already right, this preserves it where the faster model reinterprets it. It also leads the open models on photoreal humans, which is why it stays in the kit at eight times the cost.",
+   "id": "05-image-to-video",
+   "sample": {
+    "kind": "video",
+    "source": "/home/k4shix/ComfyUI/output/claude-generated/05-image-to-video/wan22_i2v_00002_.mp4",
+    "bytes_source": 778245,
+    "duration": 5.1,
+    "file": "sample.mp4",
+    "bytes": 778245,
+    "why": "The 720p/81f point of the benchmark - the delivery resolution. Frame strip confirms waves breaking and the beacon sweeping with the keyframe's art direction intact.",
+    "url": "/samples/capabilities/05-image-to-video/sample.mp4",
+    "poster": "/samples/capabilities/05-image-to-video/sample_poster.webp"
+   }
+  },
+  "06-text-to-video-with-audio": {
+   "group": "video",
+   "order": 10,
+   "one_line": "Type a description, get a video with a synced soundtrack generated in the same pass.",
+   "why": "Nothing else local makes picture and sound together, and it is roughly eight times faster than the alternative with a cost curve that is almost flat in clip length. Treat the audio as a reality bed to layer designed sound over - it does not know what any named object sounds like.",
+   "id": "06-text-to-video-with-audio",
+   "sample": {
+    "kind": "video",
+    "source": "/home/k4shix/ComfyUI/output/claude-generated/06-text-to-video-with-audio/train_00001_.mp4",
+    "bytes_source": 1226090,
+    "duration": 4.0,
+    "file": "sample.mp4",
+    "bytes": 1226090,
+    "why": "OVERRIDES the declaration's pick of ltx23_av_00002_.mp4, which is a near-black rainy roof and unreadable as a gallery tile. The train is 1280x704 with real motion blur on the passing wagons and a generated audio track - it shows the capability and survives being looked at.",
+    "url": "/samples/capabilities/06-text-to-video-with-audio/sample.mp4",
+    "poster": "/samples/capabilities/06-text-to-video-with-audio/sample_poster.webp"
+   }
+  },
+  "07-frame-interpolation": {
+   "group": "video",
+   "order": 30,
+   "one_line": "Invent a new frame between every pair of existing ones - 16 fps becomes 32.",
+   "why": "Seven and a half seconds and a tenth of a gigabyte of VRAM removes the stutter that gives generated footage away. It is not frame duplication: every inserted frame is generated content showing the subject part-way between its neighbours.",
+   "id": "07-frame-interpolation",
+   "sample": {
+    "kind": "video",
+    "source": "/home/k4shix/ComfyUI/output/claude-generated/07-frame-interpolation/interp32_00001_.mp4",
+    "bytes_source": 1416733,
+    "duration": 5.0,
+    "file": "sample.mp4",
+    "bytes": 1416733,
+    "why": "The only clip. Probed: 161 frames over 5.03 s, i.e. 32 fps from an 81-frame source.",
+    "url": "/samples/capabilities/07-frame-interpolation/sample.mp4",
+    "poster": "/samples/capabilities/07-frame-interpolation/sample_poster.webp"
+   }
+  },
+  "08-music": {
+   "group": "audio",
+   "order": 20,
+   "one_line": "Sixty seconds of scored music from genre, instrument, mood and tempo tags.",
+   "why": "A full cue in well under ten seconds means you score a scene to picture instead of hunting a library for something that nearly fits. Prompt with tags, not prose, and leave the lyrics empty for an instrumental.",
+   "id": "08-music",
+   "sample": {
+    "kind": "audio",
+    "source": "/home/k4shix/ComfyUI/output/claude-generated/08-music/epic_battle_00001.mp3",
+    "bytes_source": 1203385,
+    "duration": 30.0,
+    "file": "sample.mp3",
+    "bytes": 1203385,
+    "why": "One of six 60 s cues. NOT AUDITIONED - audio cannot be judged by looking, and this pick is by filename only. Flagged rather than dressed up.",
+    "url": "/samples/capabilities/08-music/sample.mp3"
+   }
+  },
+  "09-sound-effects": {
+   "group": "audio",
+   "order": 10,
+   "one_line": "Render a named sound or an ambience bed - a sword clash, wind through dry grass.",
+   "why": "Name the sound, not the scene: 'wind through dry grass, distant surf, occasional gust' beats 'a lonely coastal morning' every time. This is the designed layer you put over the video model's built-in audio.",
+   "id": "09-sound-effects",
+   "sample": {
+    "kind": "audio",
+    "source": "/home/k4shix/ComfyUI/output/claude-generated/09-sound-effects/sword_clash_00001.mp3",
+    "bytes_source": 163206,
+    "duration": 5.0,
+    "file": "sample.mp3",
+    "bytes": 163206,
+    "why": "NOT AUDITIONED - same caveat as 08. Picked as the clearest single-event sound in the set; the ambience beds (fire_large, crowd_hubbub, wind_desolate) are longer.",
+    "url": "/samples/capabilities/09-sound-effects/sample.mp3"
+   }
+  },
+  "10-voice": {
+   "group": "audio",
+   "order": 30,
+   "one_line": "Narration and character dialogue generated on the box - no API, no key.",
+   "why": "Dialogue is what turns a sequence of clips into a scene. The archive card is out of date here in a way that matters: it describes one voice pack pitch-shifted per character, but seventeen named voices from a newer engine now sit in that folder and the renderer already routes to them.",
+   "id": "10-voice",
+   "sample": {
+    "kind": "audio",
+    "source": "/home/k4shix/ComfyUI/output/claude-generated/10-voice/hv3_samuel_00001.mp3",
+    "bytes_source": 121793,
+    "duration": 6.0,
+    "file": "sample.mp3",
+    "bytes": 121793,
+    "why": "NOT AUDITIONED. Picked from the hv3_* set on purpose: the declaration says characters are pitch-shifted from one Chatterbox voice pack, but seventeen named Higgs v3 voices now sit in this folder and short.py routes to 17_higgs_v3_voice.json. The stale part of the declaration is the interesting part.",
+    "url": "/samples/capabilities/10-voice/sample.mp3"
+   }
+  },
+  "11-short-film": {
+   "group": "assembly",
+   "order": 10,
+   "one_line": "Ten finished shorts - keyframes, clips, dialogue, score, ambience, burnt-in captions and a cut - assembled from one JSON spec.",
+   "why": "This is what all of it is for. Fifty-six seconds and thirteen shots for about six minutes of GPU time. Every capability above is a component of this one.",
+   "id": "11-short-film",
+   "sample": {
+    "kind": "video",
+    "source": "/home/k4shix/ComfyUI/output/claude-generated/11-short-film/last-light/LAST-LIGHT_final.mp4",
+    "bytes_source": 13173015,
+    "duration": 56.0,
+    "file": "sample.mp4",
+    "bytes": 13173015,
+    "why": "The finished 56 s film with captions, dialogue and score - the assembled artefact rather than a keyframe or a clip out of it.",
+    "url": "/samples/capabilities/11-short-film/sample.mp4",
+    "poster": "/samples/capabilities/11-short-film/sample_poster.webp"
+   }
+  },
+  "12-segmentation-matting": {
+   "group": "control",
+   "order": 20,
+   "one_line": "Cut a named object out of a picture by typing its name, or matte a portrait with no prompt at all.",
+   "why": "No clicking, no box drawing, no mask painting. This is the mask supply for compositing, removal and inpainting. Always check an alpha channel over magenta: an inverted matte looks completely normal in any viewer that ignores alpha, and you will have kept the background and thrown away your subject.",
+   "id": "12-segmentation-matting",
+   "sample": {
+    "kind": "image",
+    "source": "/home/k4shix/ComfyUI/output/claude-generated/12-segmentation-matting/sam3_proof_on_magenta_00001_.png",
+    "bytes_source": 1136567,
+    "file": "sample.webp",
+    "bytes": 164602,
+    "why": "The stronger of the two claims: the prompt was the words 'the wristwatch' and SAM 3.1 returned the mask with no clicking or box drawing. Magenta compositing is the only way to see an alpha channel is right way round - the plain RGBA cutout looks normal even when inverted.",
+    "url": "/samples/capabilities/12-segmentation-matting/sample.webp"
+   },
+   "companions": [
+    {
+     "kind": "image",
+     "source": "/home/k4shix/ComfyUI/output/claude-generated/12-segmentation-matting/birefnet_proof_on_magenta_00001_.png",
+     "bytes_source": 608161,
+     "file": "companion1.webp",
+     "bytes": 66724,
+     "caption": "The other model, with no prompt at all - BiRefNet mattes a portrait automatically. Same magenta proof, because that is the only way to see an alpha channel is the right way round.",
+     "url": "/samples/capabilities/12-segmentation-matting/companion1.webp"
+    }
+   ]
+  },
+  "13-llm-prompt-studio": {
+   "group": "image",
+   "order": 40,
+   "one_line": "Eight words in; a local LLM writes the full art-directed prompt and the image renders in the same graph.",
+   "why": "It automates the part of the job most people are worst at, in six seconds end to end with no copy-paste and no API key. Each image is saved with the exact prompt beside it, so a good accident stays reproducible.",
+   "id": "13-llm-prompt-studio",
+   "sample": {
+    "kind": "image",
+    "source": "/home/k4shix/ComfyUI/output/claude-generated/13-llm-prompt-studio/llm_to_image_00001_.png",
+    "bytes_source": 2486987,
+    "file": "sample.webp",
+    "bytes": 305754,
+    "why": "The diver and the corroded bell. Best-looking image in the folder by a clear margin. idea_00003 is the instructive one - the astronaut eats noodles through a sealed visor, because neither the LLM nor the image model reasons about physical plausibility.",
+    "url": "/samples/capabilities/13-llm-prompt-studio/sample.webp"
+   },
+   "companions": [
+    {
+     "kind": "image",
+     "source": "/home/k4shix/ComfyUI/output/claude-generated/13-llm-prompt-studio/idea_00003_.png",
+     "bytes_source": 2527527,
+     "file": "companion1.webp",
+     "bytes": 304744,
+     "caption": "The instructive failure: the astronaut is eating noodles through a sealed visor. Neither the LLM nor the image model reasons about physical plausibility, so an automated prompt still needs a human reading it.",
+     "url": "/samples/capabilities/13-llm-prompt-studio/companion1.webp"
+    }
+   ]
+  },
+  "14-ltx-two-stage-upscale": {
+   "group": "video",
+   "order": 40,
+   "one_line": "Run the video model the way it was designed: sample at half resolution, upscale the latent, then re-denoise from part-way.",
+   "why": "Four and a half extra seconds buys a refine pass at 1280x704 with stereo audio in the same generation. Clear on detailed subjects and not on soft foggy material, which is worth knowing before you spend it.",
+   "id": "14-ltx-two-stage-upscale",
+   "sample": {
+    "kind": "video",
+    "source": "/home/k4shix/ComfyUI/output/claude-generated/14-ltx-two-stage-upscale/ltx23_2stage_00001_.mp4",
+    "bytes_source": 843240,
+    "duration": 4.0,
+    "file": "sample.mp4",
+    "bytes": 843240,
+    "why": "The only clip. Compare against 06's ltx23_av_00002 at the same resolution to see what the extra 4.5 s of refine pass buys.",
+    "url": "/samples/capabilities/14-ltx-two-stage-upscale/sample.mp4",
+    "poster": "/samples/capabilities/14-ltx-two-stage-upscale/sample_poster.webp"
+   }
+  },
+  "15-product-composite": {
+   "group": "editing",
+   "order": 40,
+   "one_line": "Generate a new scene around a real product without ever regenerating the product.",
+   "why": "Every pixel of the object stays byte-identical, which is the whole difference between usable and unusable when it carries a logo or a serial number. Match the key light direction in the backdrop prompt - compositing does not relight the subject, and there is no contact shadow yet.",
+   "id": "15-product-composite",
+   "sample": {
+    "kind": "image",
+    "source": "/home/k4shix/ComfyUI/output/claude-generated/15-product-composite/product_composite_00001_.png",
+    "bytes_source": 2560559,
+    "file": "sample.webp",
+    "bytes": 272796,
+    "why": "Verified by looking: the watch is byte-identical to the source and the backdrop key light does match its direction - and the declared flaw is real, there is no contact shadow and the bracelet floats out over the water.",
+    "url": "/samples/capabilities/15-product-composite/sample.webp"
+   }
+  },
+  "16-style-range": {
+   "group": "image",
+   "order": 20,
+   "one_line": "The same subject rendered twelve different ways by changing one clause of the prompt - no LoRAs, no extra weights.",
+   "why": "This is the free baseline any style LoRA has to beat, so run it before you download or train anything. Two of the twelve failed the same way, which is the most useful thing in the set: a medium that is also a plausible object gets drawn as the object.",
+   "id": "16-style-range",
+   "sample": {
+    "kind": "image",
+    "source": "/home/k4shix/ComfyUI/output/claude-generated/16-style-range/style_03_ukiyo-e-woodblock_00001_.png",
+    "bytes_source": 3026491,
+    "file": "sample.webp",
+    "bytes": 492478,
+    "why": "The cleanest win of the twelve - keyline, flat colour, paper grain, and the heron redrawn rather than photographed. Two failures worth keeping: style_09 stained-glass put a photoreal heron IN FRONT of a stained glass window, and style_11 bronze-sculpture is a desaturated photograph of a live bird, not a bronze. Both are the same trap - a medium that is also a plausible object gets drawn as the object.",
+    "url": "/samples/capabilities/16-style-range/sample.webp"
+   },
+   "companions": [
+    {
+     "kind": "image",
+     "source": "/home/k4shix/ComfyUI/output/claude-generated/16-style-range/style_09_stained-glass_00001_.png",
+     "bytes_source": 2669746,
+     "file": "companion1.webp",
+     "bytes": 410662,
+     "caption": "The documented failure - a photoreal heron IN FRONT OF a stained glass window instead of rendered AS stained glass. Any medium that is also a plausible object in a scene can be misread this way.",
+     "url": "/samples/capabilities/16-style-range/companion1.webp"
+    },
+    {
+     "kind": "image",
+     "source": "/home/k4shix/ComfyUI/output/claude-generated/16-style-range/style_11_bronze-sculpture_00001_.png",
+     "bytes_source": 2172960,
+     "file": "companion2.webp",
+     "bytes": 221062,
+     "caption": "A second failure the archive does not declare, found by looking: a desaturated photograph of a live heron, not a bronze. Same trap, which strengthens rather than weakens the folder's own lesson.",
+     "url": "/samples/capabilities/16-style-range/companion2.webp"
+    }
+   ]
+  },
+  "17-lora-mechanics": {
+   "group": "training",
+   "order": 10,
+   "one_line": "The same prompt and seed across a ladder of LoRA strengths, so you can see what the number actually does.",
+   "why": "Read this before you train anything or reach for a bigger strength value. Above about 1.1 a LoRA is not adding more style, it is fighting the base model: crushed sky, oversharpened edges, streaky rain. The studio's LoRA page applies the same lesson across 22 LoRAs.",
+   "id": "17-lora-mechanics",
+   "sample": {
+    "kind": "image",
+    "source": "/home/k4shix/ComfyUI/output/claude-generated/17-lora-mechanics/strength_04_1-0_00001_.png",
+    "bytes_source": 2307003,
+    "file": "sample.webp",
+    "bytes": 253870,
+    "why": "The design point. The sweep is the actual lesson: 0.0 is soft grainy 4-step mush, 1.0 is correct, 1.3 is crushed sky and streaky oversharpened rain. Verified by looking - 1.3 is damage, not more style.",
+    "url": "/samples/capabilities/17-lora-mechanics/sample.webp"
+   },
+   "companions": [
+    {
+     "kind": "image",
+     "source": "/home/k4shix/ComfyUI/output/claude-generated/17-lora-mechanics/strength_01_0-0_00001_.png",
+     "bytes_source": 2228922,
+     "file": "companion1.webp",
+     "bytes": 254622,
+     "caption": "Strength 0.0 - the same seed with the accelerator LoRA off. Soft, grainy and flat, because four steps without it is not enough. A LoRA is a delta on the base model, so this control is what the value is measured against.",
+     "url": "/samples/capabilities/17-lora-mechanics/companion1.webp"
+    },
+    {
+     "kind": "image",
+     "source": "/home/k4shix/ComfyUI/output/claude-generated/17-lora-mechanics/strength_05_1-3_00001_.png",
+     "bytes_source": 2223195,
+     "file": "companion2.webp",
+     "bytes": 254530,
+     "caption": "Strength 1.3. This is not more style, it is damage: crushed sky, oversharpened edges, streaky rain. Above roughly 1.1 the LoRA fights the base model.",
+     "url": "/samples/capabilities/17-lora-mechanics/companion2.webp"
+    }
+   ]
+  },
+  "18-audio-to-video": {
+   "group": "video",
+   "order": 45,
+   "one_line": "Feed in a still portrait and a narration track; out comes video whose mouth matches the audio.",
+   "why": "Mind the direction - everything else here generates audio, this one is DRIVEN by audio you already have. It is the only local route to lip-synced dialogue coverage, and the mechanism is one float: the audio latent is pinned so the model can only satisfy its objective by moving the face.",
+   "id": "18-audio-to-video",
+   "sample": {
+    "kind": "video",
+    "source": "/home/k4shix/ComfyUI/output/claude-generated/18-audio-to-video/ltx_ia2v_speech_00001_.mp4",
+    "bytes_source": 629430,
+    "duration": 4.0,
+    "file": "sample.mp4",
+    "bytes": 629430,
+    "why": "Frame strip confirms five clearly different mouth shapes across the clip while the face holds identity. This is the only local path that is DRIVEN BY audio you already have, rather than generating audio alongside picture.",
+    "url": "/samples/capabilities/18-audio-to-video/sample.mp4",
+    "poster": "/samples/capabilities/18-audio-to-video/sample_poster.webp"
+   }
+  },
+  "19-llm-lyrics-song": {
+   "group": "audio",
+   "order": 50,
+   "one_line": "One line of intent becomes structured lyrics and then a sung, scored song.",
+   "why": "Twelve seconds from a sentence to sixty seconds of music with vocals. The verse and chorus tags are load-bearing rather than decorative - the composer arranges to them, and without them you get a shapeless wash with no lift.",
+   "id": "19-llm-lyrics-song",
+   "sample": {
+    "kind": "audio",
+    "source": "/home/k4shix/ComfyUI/output/claude-generated/19-llm-lyrics-song/llm_song_00001.mp3",
+    "bytes_source": 2404627,
+    "duration": 60.0,
+    "file": "sample.mp3",
+    "bytes": 2404627,
+    "why": "NOT AUDITIONED. The only artefact; the declaration is candid that diction is unverified.",
+    "url": "/samples/capabilities/19-llm-lyrics-song/sample.mp3"
+   }
+  },
+  "20-qwen-edit-2511": {
+   "group": "editing",
+   "order": 20,
+   "one_line": "Put two separately generated people into one photograph with both faces staying themselves.",
+   "why": "A casting tool, not a collage tool - it reconciles the light across both subjects instead of leaving each with its original key. The previous model averages two faces into one and takes six times as long at the single-edit job.",
+   "id": "20-qwen-edit-2511",
+   "sample": {
+    "kind": "image",
+    "source": "/home/k4shix/ComfyUI/output/claude-generated/20-qwen-edit-2511/edit2511_two_people_00001_.png",
+    "bytes_source": 1284078,
+    "file": "sample.webp",
+    "bytes": 109130,
+    "why": "Verified by looking: the boatbuilder from 01's portrait and the woman from 18's driver portrait, generated hours apart in unrelated sessions, are in one photograph with both faces distinct and the workshop window light falling across both. This is the casting tool, and it is the thing 2509 cannot do.",
+    "url": "/samples/capabilities/20-qwen-edit-2511/sample.webp"
+   }
+  },
+  "21-3d-generation": {
+   "group": "3d",
+   "order": 10,
+   "one_line": "One flat picture in; a real polygon mesh and a Gaussian splat out, about twenty seconds each.",
+   "why": "The cheapest new modality on the box. It is geometry only - no UVs, no texture - and the side the model never saw is invented, so it is excellent for renders and turntables and not a game asset without Blender work.",
+   "id": "21-3d-generation",
+   "sample": {
+    "kind": "video",
+    "source": "/home/k4shix/ComfyUI/output/claude-generated/21-3d-generation/triposplat_orbit_00001_.mp4",
+    "bytes_source": 773404,
+    "duration": 3.6,
+    "file": "sample.mp4",
+    "bytes": 773404,
+    "why": "A still proves nothing about 3D. Frame strip verified across the full 360: the back of the brass clockwork owl - which the model never saw and had to invent - holds feather detail and stays coherent all the way round.",
+    "url": "/samples/capabilities/21-3d-generation/sample.mp4",
+    "poster": "/samples/capabilities/21-3d-generation/sample_poster.webp"
+   },
+   "companions": [
+    {
+     "kind": "image",
+     "source": "/home/k4shix/ComfyUI/output/claude-generated/21-3d-generation/source_owl_00001_.png",
+     "bytes_source": 1317204,
+     "file": "companion1.webp",
+     "bytes": 115622,
+     "caption": "The single flat image both the mesh and the splat were built from. The model never saw the back of this owl and had to invent it.",
+     "url": "/samples/capabilities/21-3d-generation/companion1.webp"
+    }
+   ]
+  },
+  "22-flux2": {
+   "group": "image",
+   "order": 30,
+   "one_line": "A second image model with a different aesthetic, currently the strongest open model on photorealism.",
+   "why": "When the first model's picture is competent but flat, this is the other opinion. Its text encoder is an actual LLM, so it pays off for complete sentences about physical detail rather than keyword lists.",
+   "id": "22-flux2",
+   "sample": {
+    "kind": "image",
+    "source": "/home/k4shix/ComfyUI/output/claude-generated/22-flux2/flux2_beekeeper_00001_.png",
+    "bytes_source": 1882030,
+    "file": "sample.webp",
+    "bytes": 249844,
+    "why": "The only output, and it earns the photorealism claim: propolis staining in the nail beds, bees sharp on the near comb and blurring at the frame edge.",
+    "url": "/samples/capabilities/22-flux2/sample.webp"
+   }
+  },
+  "23-control-maps": {
+   "group": "control",
+   "order": 10,
+   "one_line": "Extract depth, normals and a full-body pose from any picture in a second and a half.",
+   "why": "These are not pictures, they are the signals that let you dictate composition, staging and camera movement in the NEXT generation. Everything else in this group starts here, and so does the unbuilt camera control.",
+   "id": "23-control-maps",
+   "sample": {
+    "kind": "image",
+    "source": "/home/k4shix/ComfyUI/output/claude-generated/23-control-maps/normals_moge_00001_.png",
+    "bytes_source": 1426316,
+    "file": "sample.webp",
+    "bytes": 125990,
+    "why": "Chosen over depth because it makes the declaration's own point visible - depth flattens the jacket into one distance, normals hold the fabric folds, the hull curve and the individual pots on the shelves. Verified side by side.",
+    "url": "/samples/capabilities/23-control-maps/sample.webp"
+   },
+   "companions": [
+    {
+     "kind": "image",
+     "source": "/home/k4shix/ComfyUI/output/claude-generated/23-control-maps/depth_colored_00001_.png",
+     "bytes_source": 604769,
+     "file": "companion1.webp",
+     "bytes": 52802,
+     "caption": "Depth on the same frame, for contrast with the normals. Depth flattens the jacket into one distance; normals hold the fabric folds, the hull curve and the individual pots on the shelves. That is why you want both.",
+     "url": "/samples/capabilities/23-control-maps/companion1.webp"
+    }
+   ]
+  },
+  "24-outpaint-removal": {
+   "group": "editing",
+   "order": 30,
+   "one_line": "Extend a picture past its own edges, or try to delete something out of it.",
+   "why": "Outpainting works and leaves no seam. Removal is kept here because it failed, and the pair tells you the rule: removal works on a small object in a scene with context to borrow from, and not on the subject of a product shot.",
+   "id": "24-outpaint-removal",
+   "sample": {
+    "kind": "image",
+    "source": "/home/k4shix/ComfyUI/output/claude-generated/24-outpaint-removal/outpaint_wide_00001_.png",
+    "bytes_source": 3335076,
+    "file": "sample.webp",
+    "bytes": 390420,
+    "why": "The success, not the failure. 1024 square becomes 2048x1024 with the beekeeper's torso invented on one side and a whole apiary on the other, and there is no seam. The two removal files are kept as a documented failure - they put a rope ring and then a stone ring where the watch had been.",
+    "url": "/samples/capabilities/24-outpaint-removal/sample.webp"
+   },
+   "companions": [
+    {
+     "kind": "image",
+     "source": "/home/k4shix/ComfyUI/output/claude-generated/24-outpaint-removal/removed_object_v2_00001_.png",
+     "bytes_source": 2126569,
+     "file": "companion1.webp",
+     "bytes": 176062,
+     "caption": "The failure, kept on purpose. Asked to remove the watch, it produced a stone ring where the watch had been - a rope ring on the first attempt. The mask was verified correct and both prompt conventions were tried.",
+     "url": "/samples/capabilities/24-outpaint-removal/companion1.webp"
+    }
+   ]
+  },
+  "25-music-remix": {
+   "group": "audio",
+   "order": 40,
+   "one_line": "Feed music in and get the same music back in a different instrumentation.",
+   "why": "This is what makes scoring a film practical. Generate a theme once, remix it lightly per act, and the variations are recognisably the same theme - which three separately generated cues never are.",
+   "id": "25-music-remix",
+   "sample": {
+    "kind": "audio",
+    "source": "/home/k4shix/ComfyUI/output/claude-generated/25-music-remix/remix_piano_00001.mp3",
+    "bytes_source": 1199695,
+    "duration": 29.9,
+    "file": "sample.mp3",
+    "bytes": 1199695,
+    "why": "NOT AUDITIONED. source_original.mp3 sits beside it; the pair is the demo, since the claim is that the remix keeps the original's bones.",
+    "url": "/samples/capabilities/25-music-remix/sample.mp3"
+   },
+   "companions": [
+    {
+     "kind": "audio",
+     "source": "/home/k4shix/ComfyUI/output/claude-generated/25-music-remix/source_original.mp3",
+     "bytes_source": 1203384,
+     "duration": 30.0,
+     "file": "companion1.mp3",
+     "bytes": 1203384,
+     "caption": "The source track. Play it, then the remix: same length, same bones, different instrument. NOT AUDITIONED - neither file has been listened to.",
+     "url": "/samples/capabilities/25-music-remix/companion1.mp3"
+    }
+   ]
+  },
+  "26-vision-caption": {
+   "group": "utility",
+   "order": 20,
+   "one_line": "A vision model looks at a picture and writes the prompt that would recreate it.",
+   "why": "The pipeline run backwards: reverse-engineer a look from a reference, QA your own renders at scale, or caption a LoRA training set - the most tedious part of training, automated. It reads brightness more reliably than quality of light, so check what it claims about the lighting before you trust it.",
+   "id": "26-vision-caption",
+   "sample": {
+    "kind": "image",
+    "source": "/home/k4shix/ComfyUI/output/claude-generated/26-vision-caption/source_image.png",
+    "bytes_source": 1882030,
+    "file": "sample.webp",
+    "bytes": 249844,
+    "why": "The image the model was shown; caption.txt holds what it wrote. Worth reading together - it recovered the weathered hands and shallow depth of field, then called deliberately flat overcast light 'a bright, sunny day'.",
+    "url": "/samples/capabilities/26-vision-caption/sample.webp"
+   },
+   "text_companion": {
+    "file": "caption.txt",
+    "caption": "What the vision model wrote when shown the image. It recovered the weathered hands, the honeycomb, the shallow depth of field and the warm palette - then called the light 'a bright, sunny day' when the image is deliberately flat overcast.",
+    "text": "MODEL: Gemma-3-12B via CLIPLoader type ltxv\nINPUT: source_image.png (FLUX.2, folder 22)\nCOST: 7.5 s\n\nPROMPT GIVEN TO THE MODEL:\nLook at this image and write the text-to-image prompt that would recreate it.\n\nWHAT IT WROTE:\nA beekeeper with weathered hands gently holds a frame of honeycomb teeming with bees, positioned close to the camera. The scene is set outdoors on a bright, sunny day with soft, diffused light illuminating the subject from above. A shallow depth of field is achieved using a 50mm lens and a low-angle perspective, capturing the details of the frame and bees. The colour palette is warm and earthy, dominated by yellows, browns, and creams, with muted tones throughout. This is a photograph, likely taken with a digital camera, displaying a natural and slightly grainy finish."
+   }
+  },
+  "27-lora-training": {
+   "group": "training",
+   "order": 20,
+   "one_line": "Train your own LoRA inside ComfyUI itself - no Kohya, no second Python environment.",
+   "why": "The only technique that gives you BOTH a consistent character and a range of performance. The archive card calls this the largest untouched capability here and is now simply wrong: the workflow exists, the tools exist, 22 LoRAs sit in the library and the reference character carries a trained one.",
+   "id": "27-lora-training",
+   "no_sample": "Nothing has been rendered for this. The folder holds a capability card and a plan, and that is the honest state."
+  },
+  "28-vace-video-editing": {
+   "group": "video",
+   "order": 51,
+   "one_line": "Restyle, inpaint or extend footage that already exists. Not built.",
+   "why": "The only real answer on this box to shot-to-shot look matching, which the film-craft audit names as a structural gap. Expect it to be slow at 53.8 GB with heavy offload, and measure that honestly before building on it.",
+   "id": "28-vace-video-editing",
+   "no_sample": "Nothing has been rendered for this. The folder holds a capability card and a plan, and that is the honest state."
+  },
+  "29-hunyuanvideo": {
+   "group": "video",
+   "order": 52,
+   "one_line": "A third video model specialising in believable motion - cloth, smoke, fluid, object interactions. Not built.",
+   "why": "Complementary rather than competing: one model owns audio and speed, one owns photoreal humans, this one owns physics. All seven files are installed, including the encoder without which the 46.5 GB of weights are dead.",
+   "id": "29-hunyuanvideo",
+   "no_sample": "Nothing has been rendered for this. The folder holds a capability card and a plan, and that is the honest state."
+  },
+  "30-camera-control": {
+   "group": "control",
+   "order": 50,
+   "one_line": "Drive the video model's camera with a depth pass pulled off a real clip. Not built.",
+   "why": "It turns 'slow push in' from a hopeful prompt phrase into an actual trajectory. Every weight is already installed - this is plumbing, not shopping - and it is exactly what the studio's own camera library still cannot prove.",
+   "id": "30-camera-control",
+   "no_sample": "Nothing has been rendered for this. The folder holds a capability card and a plan, and that is the honest state."
+  },
+  "31-character-identity": {
+   "group": "video",
+   "order": 53,
+   "one_line": "Lock one character's face across every shot using an identity LoRA. Not built.",
+   "why": "Identity drift is the single thing separating an AI short from a real one - an audience forgives soft motion, not a face that is 90% the same. Be clear-eyed: this LoRA was trained on talking video, so it is identity lock for dialogue coverage, not for arbitrary wide shots. The app already attacks the same problem from the other side, with trained character LoRAs on the cast page.",
+   "id": "31-character-identity",
+   "no_sample": "Nothing has been rendered for this. The folder holds a capability card and a plan, and that is the honest state."
+  },
+  "32-seedvr2-upscale": {
+   "group": "utility",
+   "order": 50,
+   "one_line": "A diffusion upscaler that invents plausible detail rather than sharpening what is there. Not built.",
+   "why": "On faces and text - exactly where the GAN upscaler is weakest - that difference is decisive. The demo writes itself: a 1:1 crop A/B against the existing upscaler on the same source region.",
+   "id": "32-seedvr2-upscale",
+   "no_sample": "Nothing has been rendered for this. The folder holds a capability card and a plan, and that is the honest state."
+  },
+  "33-zimage-turbo": {
+   "group": "image",
+   "order": 50,
+   "one_line": "A one-second-per-image model, installed and never run.",
+   "why": "At one second you browse ideas instead of committing to them - a 40-image concept sheet in under a minute. That is a different way of working, not a speedup, and nothing here has measured whether it holds up.",
+   "id": "33-zimage-turbo",
+   "no_sample": "Nothing has been rendered for this. The folder holds a capability card and a plan, and that is the honest state."
+  },
+  "34-flf2v-transitions": {
+   "group": "video",
+   "order": 50,
+   "one_line": "Give the model a first frame AND a last frame and it generates the motion between them. Not built.",
+   "why": "The missing tool for deliberate transitions and cutting on action, and it needs zero downloads. Chain several and you have a long take.",
+   "id": "34-flf2v-transitions",
+   "no_sample": "Nothing has been rendered for this. The folder holds a capability card and a plan, and that is the honest state."
+  }
+ },
+ "published_files": 38,
+ "missing_files": 0,
+ "log": []
+}

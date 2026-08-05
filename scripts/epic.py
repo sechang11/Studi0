@@ -48,6 +48,32 @@ import urllib.request
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 COMFY = os.environ.get("COMFY_ROOT", os.path.expanduser("~/ComfyUI"))
+
+# Refuse to run if COMFY is not a real ComfyUI install. Every ComfyUI path in this repo is
+# built by interpolating COMFY, and a wrong root fails SILENTLY: os.path.exists() returns
+# False and glob() returns [] against a directory that is simply not there, so renders
+# "succeed" while the tool reports its own output missing and its LoRAs gone. That is
+# strictly worse than not starting. This is not hypothetical - any module that imported
+# analyze_shots before epic used to inherit COMFY_ROOT="Z:/ComfyUI" (the Windows SMB path),
+# which on Linux is a relative path existing nowhere; it cost terra_wardrobe.py a full
+# 40-render pass. See the note in analyze_shots.py.
+#
+# The sentinel is models/ rather than models/loras: every ComfyUI install has models/,
+# whereas a valid install that has never had a LoRA added would trip a models/loras check
+# even though epic.py itself only ever writes to input/, output/ and temp/. models/ catches
+# the real failure (root does not exist at all) with no false positives.
+#
+# This is checked even when COMFY_ROOT was set explicitly - an explicit but wrong value is
+# exactly the failure being caught. Driving a genuine remote install still works: the check
+# passes as long as that root is actually reachable at this path.
+if not os.path.isdir(os.path.join(COMFY, "models")):
+    _src = "COMFY_ROOT" if os.environ.get("COMFY_ROOT") else "the ~/ComfyUI default"
+    raise SystemExit(f"""epic.py: COMFY_ROOT={COMFY!r} is not a ComfyUI install (no models/ directory).
+  value came from: {_src}
+  Refusing to import, because every path here derives from this root, and a bad root
+  fails silently rather than loudly - empty globs, renders that report their own
+  output missing.
+  Fix: export COMFY_ROOT=/path/to/ComfyUI, or unset it to use ~/ComfyUI.""")
 sys.path.insert(0, HERE)
 from comfy import run, set_path  # noqa: E402
 

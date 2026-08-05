@@ -1,0 +1,168 @@
+// DEMO 2 of 5 - THE CREW.  Five of the seven cast cards, five different voices, one boat.
+//
+//   python3 studio/compile.py studio/movies/demo_cast.movie --timeline
+//   python3 scripts/short.py studio/movies/demo_cast.json
+//
+// WHAT THIS ONE IS FOR
+//
+// studio/characters/ holds seven cards and no film has ever put more than two of them on
+// screen. This one uses five - BRACK, PIP, NIKA, VIRO, RASK - so the demo shows the thing
+// the cast library is actually for: reuse. Each carries their own face (an anime reference
+// sheet through IPAdapter), three of them carry a trained character LoRA that compile.py
+// loads at the strength measured on their card, and all five speak in a different voice.
+//
+// THE DIALOGUE PROBLEM, AND WHAT THIS FILM DOES ABOUT IT
+//
+// In the .movie format a line of dialogue is its OWN beat - `BRACK: Tide turns at four.`
+// parses to {who, text} and there is no way to hang a shot description on it. So a spoken
+// beat reaches compose.derive_motion() with an empty desc, derives nothing, and falls to
+// the measured hold. That is most of why the earlier films hold: derby-ep1 holds 9 of 12
+// and four of those nine are lines of dialogue.
+//
+// Two things are done here instead of shrugging at it:
+//
+//   1. EVERY SPOKEN BEAT GETS A SCENE-LEVEL `motion`, and four of the five name a READY
+//      card from studio/motions/ rather than free text - cup_lift, hand_to_face,
+//      hand_to_face_only. All three list `speak` in their own `shots` field, i.e. the
+//      library was authored for exactly this beat and nothing had ever used it there.
+//   2. EVERY SPOKEN BEAT GETS A `mood`. A descless beat's whole prompt is identity + look
+//      + place, and an anime checkpoint handed only a character description renders the
+//      only thing it can - a posed portrait. `mood` is the one variable that can put
+//      words into a beat that cannot carry a shot line, so it carries the staging here.
+//
+// Consequence: the dialogue scenes are their OWN scenes, containing nothing but the line.
+// A scene-level motion is rung 2 of the ladder and beats rung 3, so if the line shared a
+// scene with an action shot it would overwrite that shot's derived motion. Split, both
+// beats get the right one.
+//
+// cup_lift IS STAGED, NOT JUST NAMED. Its card measured across four stagings: with the cup
+// on the table at her hand the four-stage action lands in full; a table's length away the
+// card collapses into the subject walking out of frame at 0.909 while still reporting a
+// respectable number. So BRACK's mood line puts the enamel mug IN HIS HAND, not on the bar.
+//
+// ACTION SHOTS. The nine non-spoken beats all derive, each opening with mover-verb-path in
+// the first comma-clause: walking down the quay, running along the edge, stepping through
+// a low doorway, throwing a folded chart onto the table, coins scattering across a table.
+//
+// engine: anime, because every one of these five has an ANIME reference sheet and only
+// NIKA and PIP have a photographic one. A sheet imports its style as hard as its identity,
+// so a qwen film off anime sheets returns illustration no matter what the prompt asks for.
+
+MOVIE demo_cast
+  title: DEMO CAST
+  logline: Five people who have all lied to each other agree to sail out on the same tide.
+  canvas: 1920x1080
+  fps: 24
+  engine: anime
+  style: cel_anime_90s
+  checkpoint: animagine-xl-4.0.safetensors
+  face_weight: 0.6
+  seed_root: demo-cast-1
+  clip_secs: 5
+  tags: cinematic
+
+// ---------------------------------------------------------------------------
+CHAPTER on_the_quay
+  look: overcast
+  place: harbour_docks
+  pace: normal
+  cue: unease
+
+  SCENE the_ropes
+    transition: fade_black
+    camera: static
+    shot: establish | rain-wet mooring ropes swinging against a stone bollard, fishing boats behind, wet granite, no humans, wide shot
+
+  SCENE the_skipper
+    transition: cut
+    characters: BRACK
+    emotion: resignation
+    camera: static
+    shot: master | walking down the quay toward the camera, oilskin coat open, wet stone underfoot, full body
+    shot: react | leaning forward over a wet iron rail, dark water below, close-up
+
+  SCENE brack_says_it
+    transition: cut
+    characters: BRACK
+    emotion: resignation
+    motion: cup_lift
+    mood: an enamel mug held in one hand at chest height, steam, wheelhouse window behind, medium close-up
+    BRACK: Tide turns at four. After that the channel is shut until Thursday.
+
+  SCENE the_kid
+    transition: cut
+    characters: PIP
+    emotion: joy
+    camera: static
+    shot: build | running along the edge of the quay, arms out, coiled rope underfoot, full body
+
+  SCENE pip_says_it
+    transition: cut
+    characters: PIP
+    emotion: joy
+    motion: hand_to_face
+    mood: a folded paper chart clutched against his chest, grinning, harbour wall behind, medium shot
+    PIP: I found it. It was under the ice locker the whole time.
+
+// ---------------------------------------------------------------------------
+CHAPTER below_the_waterline
+  look: firelight
+  place: dive_bar
+  pace: normal
+  cue: tense_strings
+
+  SCENE she_comes_in
+    transition: dissolve
+    characters: NIKA
+    emotion: resolve
+    camera: static
+    shot: master | stepping through a low doorway into lamplight, coat wet through, full body
+
+  SCENE nika_says_it
+    transition: cut
+    characters: NIKA
+    emotion: angry
+    motion: hand_to_face_only
+    mood: standing over a lamplit table, both hands flat on the wood, lamp low in frame, medium shot
+    NIKA: You told us the wreck was picked clean. You told all of us that.
+
+  SCENE the_watcher
+    transition: cut
+    characters: VIRO
+    emotion: doubt
+    camera: static
+    shot: react | leaning back against the bar, brass rail, bottles out of focus behind, medium shot
+
+  SCENE viro_says_it
+    transition: cut
+    characters: VIRO
+    emotion: doubt
+    motion: He leans back against the bar away from the lamp.
+    mood: half his face out of the lamplight, glass turning in his fingers, close-up
+    VIRO: I said it was picked clean. I never said who by.
+
+  SCENE the_chart
+    transition: cut
+    characters: RASK
+    emotion: resolve
+    camera: static
+    shot: master | throwing a folded chart onto the table, lamp swinging above, medium shot
+
+  SCENE rask_says_it
+    transition: cut
+    characters: RASK
+    emotion: resolve
+    motion: He pushes a folded chart across the table toward the lamp.
+    mood: leaning into the lamplight over an open sea chart, jaw set, medium close-up
+    RASK: Then we go tonight, or we do not go at all.
+
+  // A CLOSE PLACE AS FREE TEXT, not the chapter dive_bar card. Rendered and looked at on
+  // the landscape demo: a place CARD is a location, an `insert` is a surface, and the
+  // card scenery nouns beat the two words at the end of the shot line that ask for a
+  // close-up. compose.py calls it place_vs_shot and warns that the earlier layer wins.
+  SCENE the_coins
+    transition: cut
+    silence: true
+    place: a wet dark table top filling the frame, lamplight across the grain, no room visible
+    camera: static
+    shot: insert | copper coins scattering across a wet table top, no humans, close-up

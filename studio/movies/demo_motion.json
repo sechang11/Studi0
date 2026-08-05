@@ -1,0 +1,317 @@
+{
+  "title": "DEMO MOTION",
+  "fps": 24,
+  "canvas": [
+    1920,
+    1080
+  ],
+  "engine": "higgs_v3",
+  "keyframe_engine": "anime",
+  "anime_ckpt": "animagine-xl-4.0.safetensors",
+  "ipadapter_weight": 0.6,
+  "style": "cinematic",
+  "anime_sheets": {
+    "NIKA": "sheet_anime_nika.png",
+    "VIRO": "sheet_anime_viro.png"
+  },
+  "sheets": {
+    "NIKA": "sheet_anime_nika.png",
+    "VIRO": "sheet_anime_viro.png"
+  },
+  "characters": {
+    "NIKA": "NIKA",
+    "VIRO": "VIRO"
+  },
+  "character_loras": {
+    "NIKA": "character_nika_00001_.safetensors",
+    "VIRO": "character_viro_00001_.safetensors"
+  },
+  "character_lora_weights": {
+    "NIKA": 0.5,
+    "VIRO": 0.5
+  },
+  "voices": {
+    "NIKA": {
+      "engine": "higgs_v3",
+      "voice": "voices_examples/female/female_03_alice.wav"
+    },
+    "VIRO": {
+      "engine": "higgs_v3",
+      "voice": "voices_examples/higgs_audio/vex.wav"
+    }
+  },
+  "music": [
+    {
+      "prefix": "unease_00",
+      "tags": "low drone, dissonant sustained strings, sparse metallic hits, unsettling, instrumental",
+      "seconds": 19,
+      "at": 0.0,
+      "level": 0.65,
+      "bpm": 140,
+      "key": "C minor"
+    },
+    {
+      "prefix": "melancholy_piano_01",
+      "tags": "sparse melancholy piano, single sustained cello, restrained, instrumental",
+      "seconds": 26,
+      "at": 17.3,
+      "level": 0.8,
+      "bpm": 72,
+      "key": "D minor"
+    }
+  ],
+  "beats": [
+    {
+      "id": "the_platform_empty_platform_00",
+      "template": "establish",
+      "clip_secs": 5.0,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "fade_black",
+      "grade": "eq=brightness=-0.10:contrast=1.18:saturation=0.50,colorbalance=bs=0.10:bm=0.06:rm=-0.05,eq=gamma=0.96",
+      "seed": 4119763688,
+      "tags": "an empty underground platform at night, tiled walls, one lit sign, wet concrete, no humans, wide shot, underground station platform, tiled wall, yellow platform edge line, fluorescent strip lights, station benches, advertising posters, row of pillars, railway tracks in the trench, dark tunnel mouth, hanging platform sign, moonlight, night, full moon, pale light, silhouette, dark, 1980s (style), cel animation, airbrush shading, retro artstyle, detailed, halation, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "an empty underground platform at night, tiled walls, one lit sign, wet concrete, no humans, wide shot, underground station platform, tiled wall, yellow platform edge line, fluorescent strip lights, station benches, advertising posters, row of pillars, railway tracks in the trench, dark tunnel mouth, hanging platform sign, moonlight, night, full moon, pale light, silhouette, dark, 1980s (style), cel animation, airbrush shading, retro artstyle, detailed, halation, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "Nothing in the frame moves.",
+      "motion_src": "card:hold_frame"
+    },
+    {
+      "id": "the_platform_the_ticket_00",
+      "template": "insert",
+      "clip_secs": 5.0,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "cut",
+      "grade": "eq=brightness=-0.10:contrast=1.18:saturation=0.50,colorbalance=bs=0.10:bm=0.06:rm=-0.05,eq=gamma=0.96",
+      "seed": 2462168596,
+      "tags": "a paper ticket dropping through the gap onto the tracks, no humans, close-up, the edge of a station platform, yellow line, a dark track bed below, litter, moonlight, night, full moon, pale light, silhouette, dark, 1980s (style), cel animation, airbrush shading, retro artstyle, detailed, halation, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "a paper ticket dropping through the gap onto the tracks, no humans, close-up, the edge of a station platform, yellow line, a dark track bed below, litter, moonlight, night, full moon, pale light, silhouette, dark, 1980s (style), cel animation, airbrush shading, retro artstyle, detailed, halation, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "A paper ticket drops through the gap onto the tracks.",
+      "motion_src": "desc:derived from the shot line: 'a paper ticket dropping through the gap onto the tracks'"
+    },
+    {
+      "id": "the_platform_she_arrives_00",
+      "template": "build",
+      "clip_secs": 5.0,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "dissolve",
+      "grade": "eq=brightness=-0.10:contrast=1.18:saturation=0.50,colorbalance=bs=0.10:bm=0.06:rm=-0.05,eq=gamma=0.96",
+      "seed": 3104544735,
+      "ref": [
+        "NIKA"
+      ],
+      "tags": "1girl, solo, silver hair, very long hair, single braid, sidecut, heterochromia, green eyes, orange eyes, scar on face, black nails, female focus, teenage girl, slender, calm resolve, quiet certainty, steady gaze, closed mouth, upright, still, clean grey school blazer, loose red necktie, red enamel star pin on the collar, neat braid, coming up the platform toward the camera, canvas bag over one shoulder, full body, underground station platform, tiled wall, yellow platform edge line, fluorescent strip lights, station benches, advertising posters, row of pillars, railway tracks in the trench, dark tunnel mouth, hanging platform sign, moonlight, night, full moon, pale light, silhouette, dark, 1980s (style), cel animation, airbrush shading, retro artstyle, detailed, halation, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "1girl, solo, silver hair, very long hair, single braid, sidecut, heterochromia, green eyes, orange eyes, scar on face, black nails, female focus, teenage girl, slender, calm resolve, quiet certainty, steady gaze, closed mouth, upright, still, clean grey school blazer, loose red necktie, red enamel star pin on the collar, neat braid, coming up the platform toward the camera, canvas bag over one shoulder, full body, underground station platform, tiled wall, yellow platform edge line, fluorescent strip lights, station benches, advertising posters, row of pillars, railway tracks in the trench, dark tunnel mouth, hanging platform sign, moonlight, night, full moon, pale light, silhouette, dark, 1980s (style), cel animation, airbrush shading, retro artstyle, detailed, halation, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "She walks forward toward the camera.",
+      "motion_src": "card:walk_in"
+    },
+    {
+      "id": "the_platform_she_waits_00",
+      "template": "speak",
+      "clip_secs": 5.0,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "cut",
+      "grade": "eq=brightness=-0.10:contrast=1.18:saturation=0.50,colorbalance=bs=0.10:bm=0.06:rm=-0.05,eq=gamma=0.96",
+      "seed": 4122252969,
+      "ref": [
+        "NIKA"
+      ],
+      "tags": "1girl, solo, silver hair, very long hair, single braid, sidecut, heterochromia, green eyes, orange eyes, scar on face, black nails, female focus, teenage girl, slender, relaxed brow, faint blush, looking into the distance, half-closed eyes, wet eyes, parted lips, slight frown, outstretched hand, reaching forward, leaning forward, clean grey school blazer, loose red necktie, red enamel star pin on the collar, neat braid, seated on a platform bench with a mug in both hands at chest height, close-up, underground station platform, tiled wall, yellow platform edge line, fluorescent strip lights, station benches, advertising posters, row of pillars, railway tracks in the trench, dark tunnel mouth, hanging platform sign, moonlight, night, full moon, pale light, silhouette, dark, 1980s (style), cel animation, airbrush shading, retro artstyle, detailed, halation, cinematic, an enamel mug held in both hands at chest height, steam, tiled wall behind, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "1girl, solo, silver hair, very long hair, single braid, sidecut, heterochromia, green eyes, orange eyes, scar on face, black nails, female focus, teenage girl, slender, relaxed brow, faint blush, looking into the distance, half-closed eyes, wet eyes, parted lips, slight frown, outstretched hand, reaching forward, leaning forward, clean grey school blazer, loose red necktie, red enamel star pin on the collar, neat braid, seated on a platform bench with a mug in both hands at chest height, close-up, underground station platform, tiled wall, yellow platform edge line, fluorescent strip lights, station benches, advertising posters, row of pillars, railway tracks in the trench, dark tunnel mouth, hanging platform sign, moonlight, night, full moon, pale light, silhouette, dark, 1980s (style), cel animation, airbrush shading, retro artstyle, detailed, halation, cinematic, an enamel mug held in both hands at chest height, steam, tiled wall behind, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "She lifts the cup from the table to her mouth.",
+      "motion_src": "card:cup_lift"
+    },
+    {
+      "id": "the_platform_she_waits_01",
+      "template": "speak",
+      "clip_secs": 5.0,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "cut",
+      "grade": "eq=brightness=-0.10:contrast=1.18:saturation=0.50,colorbalance=bs=0.10:bm=0.06:rm=-0.05,eq=gamma=0.96",
+      "seed": 1740302623,
+      "ref": [
+        "NIKA"
+      ],
+      "tags": "1girl, solo, silver hair, very long hair, single braid, sidecut, heterochromia, green eyes, orange eyes, scar on face, black nails, female focus, teenage girl, slender, relaxed brow, faint blush, looking into the distance, half-closed eyes, wet eyes, parted lips, slight frown, outstretched hand, reaching forward, leaning forward, clean grey school blazer, loose red necktie, red enamel star pin on the collar, neat braid, close-up, underground station platform, tiled wall, yellow platform edge line, fluorescent strip lights, station benches, advertising posters, row of pillars, railway tracks in the trench, dark tunnel mouth, hanging platform sign, moonlight, night, full moon, pale light, silhouette, dark, 1980s (style), cel animation, airbrush shading, retro artstyle, detailed, halation, cinematic, an enamel mug held in both hands at chest height, steam, tiled wall behind, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "1girl, solo, silver hair, very long hair, single braid, sidecut, heterochromia, green eyes, orange eyes, scar on face, black nails, female focus, teenage girl, slender, relaxed brow, faint blush, looking into the distance, half-closed eyes, wet eyes, parted lips, slight frown, outstretched hand, reaching forward, leaning forward, clean grey school blazer, loose red necktie, red enamel star pin on the collar, neat braid, close-up, underground station platform, tiled wall, yellow platform edge line, fluorescent strip lights, station benches, advertising posters, row of pillars, railway tracks in the trench, dark tunnel mouth, hanging platform sign, moonlight, night, full moon, pale light, silhouette, dark, 1980s (style), cel animation, airbrush shading, retro artstyle, detailed, halation, cinematic, an enamel mug held in both hands at chest height, steam, tiled wall behind, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "She raises her right hand to her face.",
+      "motion_src": "card:hand_to_face",
+      "line": {
+        "who": "NIKA",
+        "text": "The four twenty is the last one. After that it is the morning."
+      }
+    },
+    {
+      "id": "the_platform_the_papers_00",
+      "template": "insert",
+      "clip_secs": 5.0,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "cut",
+      "grade": "eq=brightness=-0.10:contrast=1.18:saturation=0.50,colorbalance=bs=0.10:bm=0.06:rm=-0.05,eq=gamma=0.96",
+      "seed": 587699931,
+      "tags": "loose newspaper lying across a wet concrete floor, no humans, close-up, wet concrete platform floor, yellow safety line, loose sheets of newspaper lying on the concrete, moonlight, night, full moon, pale light, silhouette, dark, 1980s (style), cel animation, airbrush shading, retro artstyle, detailed, halation, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "loose newspaper lying across a wet concrete floor, no humans, close-up, wet concrete platform floor, yellow safety line, loose sheets of newspaper lying on the concrete, moonlight, night, full moon, pale light, silhouette, dark, 1980s (style), cel animation, airbrush shading, retro artstyle, detailed, halation, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "Loose papers blow across the floor.",
+      "motion_src": "card:papers"
+    },
+    {
+      "id": "the_carriage_he_boards_00",
+      "template": "master",
+      "clip_secs": 5.0,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "dissolve",
+      "grade": "eq=brightness=-0.08:contrast=1.12:saturation=0.65,colorbalance=rm=0.14:gm=0.05:bm=-0.14:bs=0.04,eq=gamma=0.97",
+      "seed": 778504930,
+      "ref": [
+        "VIRO"
+      ],
+      "tags": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, male focus, mature male, masculine, sweatdrop, head tilt, looking down, looking to the side, half-closed eyes, unfocused, lip biting, closed mouth, hand on own chin, shoulders drawn in, weight on back foot, clean teal soccer jersey, orange trim, number 7, neat hair, walking up the aisle of a lit carriage toward the camera, full body, train carriage interior, rows of seats, overhead luggage rack, hanging hand straps, carriage windows, blurred landscape through the window, sliding connecting door, floor grab poles, ceiling lights, patterned seat fabric, night, orange glow, dark, 1980s (style), cel animation, airbrush shading, retro artstyle, detailed, halation, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, male focus, mature male, masculine, sweatdrop, head tilt, looking down, looking to the side, half-closed eyes, unfocused, lip biting, closed mouth, hand on own chin, shoulders drawn in, weight on back foot, clean teal soccer jersey, orange trim, number 7, neat hair, walking up the aisle of a lit carriage toward the camera, full body, train carriage interior, rows of seats, overhead luggage rack, hanging hand straps, carriage windows, blurred landscape through the window, sliding connecting door, floor grab poles, ceiling lights, patterned seat fabric, night, orange glow, dark, 1980s (style), cel animation, airbrush shading, retro artstyle, detailed, halation, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "He walks forward toward the camera. Nothing else in the frame moves.",
+      "motion_src": "card:walk_in_only"
+    },
+    {
+      "id": "the_carriage_the_window_00",
+      "template": "react",
+      "clip_secs": 5.0,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "cut",
+      "grade": "eq=brightness=-0.08:contrast=1.12:saturation=0.65,colorbalance=rm=0.14:gm=0.05:bm=-0.14:bs=0.04,eq=gamma=0.97",
+      "seed": 1892715100,
+      "ref": [
+        "NIKA"
+      ],
+      "tags": "1girl, solo, silver hair, very long hair, single braid, sidecut, heterochromia, green eyes, orange eyes, scar on face, black nails, female focus, teenage girl, slender, relaxed brow, faint blush, looking into the distance, half-closed eyes, wet eyes, parted lips, slight frown, outstretched hand, reaching forward, leaning forward, clean grey school blazer, loose red necktie, red enamel star pin on the collar, neat braid, reaching one hand toward the carriage window, close-up, train carriage interior, rows of seats, overhead luggage rack, hanging hand straps, carriage windows, blurred landscape through the window, sliding connecting door, floor grab poles, ceiling lights, patterned seat fabric, night, orange glow, dark, 1980s (style), cel animation, airbrush shading, retro artstyle, detailed, halation, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "1girl, solo, silver hair, very long hair, single braid, sidecut, heterochromia, green eyes, orange eyes, scar on face, black nails, female focus, teenage girl, slender, relaxed brow, faint blush, looking into the distance, half-closed eyes, wet eyes, parted lips, slight frown, outstretched hand, reaching forward, leaning forward, clean grey school blazer, loose red necktie, red enamel star pin on the collar, neat braid, reaching one hand toward the carriage window, close-up, train carriage interior, rows of seats, overhead luggage rack, hanging hand straps, carriage windows, blurred landscape through the window, sliding connecting door, floor grab poles, ceiling lights, patterned seat fabric, night, orange glow, dark, 1980s (style), cel animation, airbrush shading, retro artstyle, detailed, halation, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "She reaches one hand toward the carriage window. Nothing else in the frame moves.",
+      "motion_src": "desc:derived from the shot line: 'reaching one hand toward the carriage window'"
+    },
+    {
+      "id": "the_carriage_he_cannot_say_it_00",
+      "template": "react",
+      "clip_secs": 5.0,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "cut",
+      "grade": "eq=brightness=-0.08:contrast=1.12:saturation=0.65,colorbalance=rm=0.14:gm=0.05:bm=-0.14:bs=0.04,eq=gamma=0.97",
+      "seed": 4194888545,
+      "ref": [
+        "VIRO"
+      ],
+      "tags": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, male focus, mature male, masculine, faint smile, lowered eyelids, head tilted down, half-closed eyes, looking down, calm gaze, closed mouth, slight smile, shoulders dropped, hands in pockets, standing loose, head tilted down, clean teal soccer jersey, orange trim, number 7, neat hair, seated by the window with one hand rising toward his face, close-up, train carriage interior, rows of seats, overhead luggage rack, hanging hand straps, carriage windows, blurred landscape through the window, sliding connecting door, floor grab poles, ceiling lights, patterned seat fabric, night, orange glow, dark, 1980s (style), cel animation, airbrush shading, retro artstyle, detailed, halation, cinematic, half his face in sodium light from the window, medium close-up, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, male focus, mature male, masculine, faint smile, lowered eyelids, head tilted down, half-closed eyes, looking down, calm gaze, closed mouth, slight smile, shoulders dropped, hands in pockets, standing loose, head tilted down, clean teal soccer jersey, orange trim, number 7, neat hair, seated by the window with one hand rising toward his face, close-up, train carriage interior, rows of seats, overhead luggage rack, hanging hand straps, carriage windows, blurred landscape through the window, sliding connecting door, floor grab poles, ceiling lights, patterned seat fabric, night, orange glow, dark, 1980s (style), cel animation, airbrush shading, retro artstyle, detailed, halation, cinematic, half his face in sodium light from the window, medium close-up, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "He raises his right hand to his face. Nothing else in the frame moves.",
+      "motion_src": "card:hand_to_face_only"
+    },
+    {
+      "id": "the_carriage_he_cannot_say_it_01",
+      "template": "speak",
+      "clip_secs": 5.0,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "cut",
+      "grade": "eq=brightness=-0.08:contrast=1.12:saturation=0.65,colorbalance=rm=0.14:gm=0.05:bm=-0.14:bs=0.04,eq=gamma=0.97",
+      "seed": 2948053279,
+      "ref": [
+        "VIRO"
+      ],
+      "tags": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, male focus, mature male, masculine, faint smile, lowered eyelids, head tilted down, half-closed eyes, looking down, calm gaze, closed mouth, slight smile, shoulders dropped, hands in pockets, standing loose, head tilted down, clean teal soccer jersey, orange trim, number 7, neat hair, close-up, train carriage interior, rows of seats, overhead luggage rack, hanging hand straps, carriage windows, blurred landscape through the window, sliding connecting door, floor grab poles, ceiling lights, patterned seat fabric, night, orange glow, dark, 1980s (style), cel animation, airbrush shading, retro artstyle, detailed, halation, cinematic, half his face in sodium light from the window, medium close-up, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, male focus, mature male, masculine, faint smile, lowered eyelids, head tilted down, half-closed eyes, looking down, calm gaze, closed mouth, slight smile, shoulders dropped, hands in pockets, standing loose, head tilted down, clean teal soccer jersey, orange trim, number 7, neat hair, close-up, train carriage interior, rows of seats, overhead luggage rack, hanging hand straps, carriage windows, blurred landscape through the window, sliding connecting door, floor grab poles, ceiling lights, patterned seat fabric, night, orange glow, dark, 1980s (style), cel animation, airbrush shading, retro artstyle, detailed, halation, cinematic, half his face in sodium light from the window, medium close-up, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "He leans back against the seat away from the window.",
+      "motion_src": "text:free text on the beat",
+      "line": {
+        "who": "VIRO",
+        "text": "You should get on. I am not going to ask you to."
+      }
+    },
+    {
+      "id": "the_carriage_she_answers_00",
+      "template": "speak",
+      "clip_secs": 5.0,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "cut",
+      "grade": "eq=brightness=-0.08:contrast=1.12:saturation=0.65,colorbalance=rm=0.14:gm=0.05:bm=-0.14:bs=0.04,eq=gamma=0.97",
+      "seed": 1690328885,
+      "ref": [
+        "NIKA"
+      ],
+      "tags": "1girl, solo, silver hair, very long hair, single braid, sidecut, heterochromia, green eyes, orange eyes, scar on face, black nails, female focus, teenage girl, slender, angry expression, glaring, furrowed brow, gritted teeth, tense, clenched fists, clean grey school blazer, loose red necktie, red enamel star pin on the collar, neat braid, standing in the carriage doorway, close-up, train carriage interior, rows of seats, overhead luggage rack, hanging hand straps, carriage windows, blurred landscape through the window, sliding connecting door, floor grab poles, ceiling lights, patterned seat fabric, night, orange glow, dark, 1980s (style), cel animation, airbrush shading, retro artstyle, detailed, halation, cinematic, standing in the carriage doorway, one hand on the frame, medium shot, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "1girl, solo, silver hair, very long hair, single braid, sidecut, heterochromia, green eyes, orange eyes, scar on face, black nails, female focus, teenage girl, slender, angry expression, glaring, furrowed brow, gritted teeth, tense, clenched fists, clean grey school blazer, loose red necktie, red enamel star pin on the collar, neat braid, standing in the carriage doorway, close-up, train carriage interior, rows of seats, overhead luggage rack, hanging hand straps, carriage windows, blurred landscape through the window, sliding connecting door, floor grab poles, ceiling lights, patterned seat fabric, night, orange glow, dark, 1980s (style), cel animation, airbrush shading, retro artstyle, detailed, halation, cinematic, standing in the carriage doorway, one hand on the frame, medium shot, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "She raises her right hand to her face.",
+      "motion_src": "card:hand_to_face"
+    },
+    {
+      "id": "the_carriage_she_answers_01",
+      "template": "speak",
+      "clip_secs": 5.0,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "cut",
+      "grade": "eq=brightness=-0.08:contrast=1.12:saturation=0.65,colorbalance=rm=0.14:gm=0.05:bm=-0.14:bs=0.04,eq=gamma=0.97",
+      "seed": 3574781526,
+      "ref": [
+        "NIKA"
+      ],
+      "tags": "1girl, solo, silver hair, very long hair, single braid, sidecut, heterochromia, green eyes, orange eyes, scar on face, black nails, female focus, teenage girl, slender, angry expression, glaring, furrowed brow, gritted teeth, tense, clenched fists, clean grey school blazer, loose red necktie, red enamel star pin on the collar, neat braid, close-up, train carriage interior, rows of seats, overhead luggage rack, hanging hand straps, carriage windows, blurred landscape through the window, sliding connecting door, floor grab poles, ceiling lights, patterned seat fabric, night, orange glow, dark, 1980s (style), cel animation, airbrush shading, retro artstyle, detailed, halation, cinematic, standing in the carriage doorway, one hand on the frame, medium shot, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "1girl, solo, silver hair, very long hair, single braid, sidecut, heterochromia, green eyes, orange eyes, scar on face, black nails, female focus, teenage girl, slender, angry expression, glaring, furrowed brow, gritted teeth, tense, clenched fists, clean grey school blazer, loose red necktie, red enamel star pin on the collar, neat braid, close-up, train carriage interior, rows of seats, overhead luggage rack, hanging hand straps, carriage windows, blurred landscape through the window, sliding connecting door, floor grab poles, ceiling lights, patterned seat fabric, night, orange glow, dark, 1980s (style), cel animation, airbrush shading, retro artstyle, detailed, halation, cinematic, standing in the carriage doorway, one hand on the frame, medium shot, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "She takes one step back from the carriage door into the dark.",
+      "motion_src": "text:free text on the beat",
+      "line": {
+        "who": "NIKA",
+        "text": "You never ask. That has always been the whole of it."
+      }
+    },
+    {
+      "id": "the_carriage_the_steam_00",
+      "template": "insert",
+      "clip_secs": 5.0,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "cut",
+      "grade": "eq=brightness=-0.08:contrast=1.12:saturation=0.65,colorbalance=rm=0.14:gm=0.05:bm=-0.14:bs=0.04,eq=gamma=0.97",
+      "seed": 4239859836,
+      "tags": "steam pouring from under a stopped locomotive, no humans, close-up, the underside of a stopped locomotive on a wet platform, iron wheels, gravel, night, orange glow, dark, 1980s (style), cel animation, airbrush shading, retro artstyle, detailed, halation, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "steam pouring from under a stopped locomotive, no humans, close-up, the underside of a stopped locomotive on a wet platform, iron wheels, gravel, night, orange glow, dark, 1980s (style), cel animation, airbrush shading, retro artstyle, detailed, halation, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "Steam pours from under a stopped locomotive.",
+      "motion_src": "desc:derived from the shot line: 'steam pouring from under a stopped locomotive'"
+    },
+    {
+      "id": "the_carriage_she_turns_00",
+      "template": "master",
+      "clip_secs": 5.0,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "cut",
+      "grade": "eq=brightness=-0.08:contrast=1.12:saturation=0.65,colorbalance=rm=0.14:gm=0.05:bm=-0.14:bs=0.04,eq=gamma=0.97",
+      "seed": 2591963244,
+      "ref": [
+        "NIKA"
+      ],
+      "tags": "1girl, solo, silver hair, very long hair, single braid, sidecut, heterochromia, green eyes, orange eyes, scar on face, black nails, female focus, teenage girl, slender, faint smile, lowered eyelids, head tilted down, half-closed eyes, looking down, calm gaze, closed mouth, slight smile, shoulders dropped, hands in pockets, standing loose, head tilted down, clean grey school blazer, loose red necktie, red enamel star pin on the collar, neat braid, standing in the open carriage door, medium shot, train carriage interior, rows of seats, overhead luggage rack, hanging hand straps, carriage windows, blurred landscape through the window, sliding connecting door, floor grab poles, ceiling lights, patterned seat fabric, night, orange glow, dark, 1980s (style), cel animation, airbrush shading, retro artstyle, detailed, halation, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "1girl, solo, silver hair, very long hair, single braid, sidecut, heterochromia, green eyes, orange eyes, scar on face, black nails, female focus, teenage girl, slender, faint smile, lowered eyelids, head tilted down, half-closed eyes, looking down, calm gaze, closed mouth, slight smile, shoulders dropped, hands in pockets, standing loose, head tilted down, clean grey school blazer, loose red necktie, red enamel star pin on the collar, neat braid, standing in the open carriage door, medium shot, train carriage interior, rows of seats, overhead luggage rack, hanging hand straps, carriage windows, blurred landscape through the window, sliding connecting door, floor grab poles, ceiling lights, patterned seat fabric, night, orange glow, dark, 1980s (style), cel animation, airbrush shading, retro artstyle, detailed, halation, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "She turns her body away from the camera.",
+      "motion_src": "card:turn_away"
+    },
+    {
+      "id": "the_carriage_the_carriage_leaves_00",
+      "template": "establish",
+      "clip_secs": 5.0,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "fade_black",
+      "grade": "eq=brightness=-0.08:contrast=1.12:saturation=0.65,colorbalance=rm=0.14:gm=0.05:bm=-0.14:bs=0.04,eq=gamma=0.97",
+      "seed": 3378141022,
+      "tags": "an empty lit train carriage seen from a dark platform, doors open, no humans, wide shot, train carriage interior, rows of seats, overhead luggage rack, hanging hand straps, carriage windows, blurred landscape through the window, sliding connecting door, floor grab poles, ceiling lights, patterned seat fabric, night, orange glow, dark, 1980s (style), cel animation, airbrush shading, retro artstyle, detailed, halation, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "an empty lit train carriage seen from a dark platform, doors open, no humans, wide shot, train carriage interior, rows of seats, overhead luggage rack, hanging hand straps, carriage windows, blurred landscape through the window, sliding connecting door, floor grab poles, ceiling lights, patterned seat fabric, night, orange glow, dark, 1980s (style), cel animation, airbrush shading, retro artstyle, detailed, halation, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "Confetti falls through the frame.",
+      "motion_src": "card:confetti"
+    }
+  ]
+}

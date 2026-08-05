@@ -13,10 +13,28 @@
       "note": "  |  tags also added to the prompt: high contrast, harsh light"
     },
     {
+      "value": "bleach_bypass",
+      "clause": "eq=contrast=1.30:saturation=0.28:gamma=0.95,unsharp=5:5:0.6",
+      "sample": "/samples/vars/look_deterministic/bleach_bypass.webp",
+      "note": "  |  tags also added to the prompt: harsh lighting, washed out, high contrast, pale, grim"
+    },
+    {
+      "value": "blockbuster",
+      "clause": "eq=contrast=1.16:saturation=0.95,colorbalance=rs=-0.05:bs=0.09:rh=0.09:bh=-0.08,eq=gamma=0.97",
+      "sample": "/samples/vars/look_deterministic/blockbuster.webp",
+      "note": "  |  tags also added to the prompt: cinematic lighting, backlighting, dramatic shadow, lens flare, orange sky"
+    },
+    {
       "value": "cold",
       "clause": "eq=contrast=1.10:saturation=0.72,colorbalance=bs=0.10:rs=-0.05",
       "sample": "/samples/vars/look_deterministic/cold.webp",
       "note": "  |  tags also added to the prompt: overcast, cold lighting, desaturated"
+    },
+    {
+      "value": "dawn",
+      "clause": "eq=contrast=0.98:saturation=0.82:brightness=0.04,colorbalance=bm=0.07:rs=-0.04:rh=0.04,eq=gamma=1.05",
+      "sample": "/samples/vars/look_deterministic/dawn.webp",
+      "note": "  |  tags also added to the prompt: dawn, early morning, pale blue sky, morning mist, soft light"
     },
     {
       "value": "day_for_night",
@@ -25,16 +43,64 @@
       "note": "  |  tags also added to the prompt: night, floodlights"
     },
     {
+      "value": "dream",
+      "clause": "eq=contrast=0.88:saturation=0.88:brightness=0.06:gamma=1.10,colorbalance=rh=0.06:bh=0.05,unsharp=7:7:-1.0",
+      "sample": "/samples/vars/look_deterministic/dream.webp",
+      "note": "  |  tags also added to the prompt: soft focus, dreamy, glowing, pastel colors, hazy, bloom"
+    },
+    {
+      "value": "faded_film",
+      "clause": "eq=contrast=0.86:saturation=0.62:brightness=0.05:gamma=1.12,colorbalance=rs=0.05:bs=0.04:gh=-0.03",
+      "sample": "/samples/vars/look_deterministic/faded_film.webp",
+      "note": "  |  tags also added to the prompt: faded colours, old film, vintage, washed out, retro"
+    },
+    {
+      "value": "firelight",
+      "clause": "eq=brightness=-0.02:contrast=1.14:saturation=1.10,colorbalance=rm=0.12:gm=0.03:bm=-0.10:rh=0.08:bh=-0.06,eq=gamma=0.98",
+      "sample": "/samples/vars/look_deterministic/firelight.webp",
+      "note": "  |  tags also added to the prompt: campfire, fire, warm lighting, orange glow, dark background, firelight on face"
+    },
+    {
+      "value": "fluorescent",
+      "clause": "eq=contrast=1.06:saturation=0.80,colorbalance=gm=0.10:rm=-0.04:bm=0.02:gh=0.06,eq=gamma=1.03",
+      "sample": "/samples/vars/look_deterministic/fluorescent.webp",
+      "note": "  |  tags also added to the prompt: fluorescent lighting, ceiling light, indoors, harsh lighting, pale skin, office"
+    },
+    {
       "value": "golden",
       "clause": "eq=contrast=1.08:saturation=1.22,colorbalance=rs=0.08:bs=-0.06",
       "sample": "/samples/vars/look_deterministic/golden.webp",
       "note": "  |  tags also added to the prompt: golden hour, warm sunlight, long shadows"
     },
     {
+      "value": "heat_haze",
+      "clause": "eq=brightness=0.06:contrast=1.04:saturation=0.90,colorbalance=rh=0.08:gh=0.04:bh=-0.05:bs=0.03,eq=gamma=1.04",
+      "sample": "/samples/vars/look_deterministic/heat_haze.webp",
+      "note": "  |  tags also added to the prompt: summer, harsh sunlight, heat haze, hazy, sun glare, bright"
+    },
+    {
+      "value": "hospital",
+      "clause": "eq=brightness=0.07:contrast=0.96:saturation=0.72:gamma=1.06,colorbalance=bh=0.05:gh=0.03:rs=-0.03",
+      "sample": "/samples/vars/look_deterministic/hospital.webp",
+      "note": "  |  tags also added to the prompt: hospital, white room, sterile, clean, bright lighting, indoors"
+    },
+    {
       "value": "memory",
       "clause": "eq=contrast=0.92:saturation=0.60:brightness=0.06,gblur=sigma=1.4",
       "sample": "/samples/vars/look_deterministic/memory.webp",
       "note": "  |  tags also added to the prompt: soft focus, hazy, faded colours"
+    },
+    {
+      "value": "moonlit",
+      "clause": "eq=brightness=-0.10:contrast=1.18:saturation=0.50,colorbalance=bs=0.10:bm=0.06:rm=-0.05,eq=gamma=0.96",
+      "sample": "/samples/vars/look_deterministic/moonlit.webp",
+      "note": "  |  tags also added to the prompt: moonlight, night, full moon, pale light, silhouette, dark"
+    },
+    {
+      "value": "neon",
+      "clause": "eq=brightness=-0.08:contrast=1.22:saturation=1.18,colorbalance=bs=0.12:rs=-0.04:rh=0.06:bh=0.04,vibrance=intensity=0.25,eq=gamma=0.96",
+      "sample": "/samples/vars/look_deterministic/neon.webp",
+      "note": "  |  tags also added to the prompt: neon lights, night, city street, cyberpunk, glowing sign, wet pavement, reflection"
     },
     {
       "value": "neutral",
@@ -47,7 +113,48 @@
       "clause": "eq=brightness=-0.15:contrast=1.20:saturation=0.72,colorbalance=bs=0.05:rs=-0.03,eq=gamma=0.92",
       "sample": "/samples/vars/look_deterministic/night.webp",
       "note": "  |  tags also added to the prompt: night, dark, moonlight"
+    },
+    {
+      "value": "noir",
+      "clause": "hue=s=0,eq=contrast=1.32:gamma=0.92,unsharp=5:5:0.5",
+      "sample": "/samples/vars/look_deterministic/noir.webp",
+      "note": "  |  tags also added to the prompt: monochrome, greyscale, high contrast, dramatic shadow, film noir, venetian blind shadow"
+    },
+    {
+      "value": "overcast",
+      "clause": "eq=contrast=0.90:saturation=0.68:gamma=1.06,colorbalance=bs=0.04:rm=-0.02",
+      "sample": "/samples/vars/look_deterministic/overcast.webp",
+      "note": "  |  tags also added to the prompt: overcast, cloudy sky, diffused lighting, no shadows, grey sky"
+    },
+    {
+      "value": "sepia",
+      "clause": "hue=s=0.25,colorbalance=rm=0.14:gm=0.05:bm=-0.12:rh=0.10:bh=-0.08,eq=contrast=1.05:gamma=1.03",
+      "sample": "/samples/vars/look_deterministic/sepia.webp",
+      "note": "  |  tags also added to the prompt: sepia, old photo, faded, vintage, dusty, brown"
+    },
+    {
+      "value": "sodium",
+      "clause": "eq=brightness=-0.08:contrast=1.12:saturation=0.65,colorbalance=rm=0.14:gm=0.05:bm=-0.14:bs=0.04,eq=gamma=0.97",
+      "sample": "/samples/vars/look_deterministic/sodium.webp",
+      "note": "  |  tags also added to the prompt: night, street light, lamppost, orange glow, city street, dark"
+    },
+    {
+      "value": "storm",
+      "clause": "eq=brightness=-0.06:contrast=1.15:saturation=0.55,colorbalance=bs=0.08:bm=0.04:rm=-0.04,eq=gamma=0.98",
+      "sample": "/samples/vars/look_deterministic/storm.webp",
+      "note": "  |  tags also added to the prompt: storm, dark clouds, rain, grey sky, wind, overcast"
+    },
+    {
+      "value": "sunset",
+      "clause": "eq=contrast=1.10:saturation=1.15,colorbalance=rh=0.12:gh=0.03:bh=-0.10:bs=0.04,eq=gamma=0.98",
+      "sample": "/samples/vars/look_deterministic/sunset.webp",
+      "note": "  |  tags also added to the prompt: sunset, orange sky, evening, backlighting, long shadows, warm light"
+    },
+    {
+      "value": "underwater",
+      "clause": "eq=contrast=0.94:saturation=0.85:brightness=-0.04,colorbalance=bm=0.14:gm=0.08:rm=-0.12:rh=-0.06,eq=gamma=1.02",
+      "sample": "/samples/vars/look_deterministic/underwater.webp",
+      "note": "  |  tags also added to the prompt: underwater, submerged, bubbles, light rays, water, blue"
     }
-  ],
-  "sheet": "/samples/sheets/look_deterministic.jpg"
+  ]
 }

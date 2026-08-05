@@ -1,0 +1,323 @@
+{
+  "title": "DEMO CAST",
+  "fps": 24,
+  "canvas": [
+    1920,
+    1080
+  ],
+  "engine": "higgs_v3",
+  "keyframe_engine": "anime",
+  "anime_ckpt": "animagine-xl-4.0.safetensors",
+  "ipadapter_weight": 0.6,
+  "style": "cinematic",
+  "anime_sheets": {
+    "BRACK": "sheet_anime_brack.png",
+    "PIP": "sheet_anime_pip.png",
+    "NIKA": "sheet_anime_nika.png",
+    "VIRO": "sheet_anime_viro.png",
+    "RASK": "sheet_anime_rask.png"
+  },
+  "sheets": {
+    "BRACK": "sheet_anime_brack.png",
+    "PIP": "sheet_anime_pip.png",
+    "NIKA": "sheet_anime_nika.png",
+    "VIRO": "sheet_anime_viro.png",
+    "RASK": "sheet_anime_rask.png"
+  },
+  "characters": {
+    "BRACK": "BRACK",
+    "PIP": "PIP",
+    "NIKA": "NIKA",
+    "VIRO": "VIRO",
+    "RASK": "RASK"
+  },
+  "character_loras": {
+    "PIP": "character_pip_00001_.safetensors",
+    "NIKA": "character_nika_00001_.safetensors",
+    "VIRO": "character_viro_00001_.safetensors"
+  },
+  "character_lora_weights": {
+    "PIP": 0.5,
+    "NIKA": 0.5,
+    "VIRO": 0.5
+  },
+  "voices": {
+    "BRACK": {
+      "engine": "higgs_v3",
+      "voice": "voices_examples/male/male_02.wav"
+    },
+    "PIP": {
+      "engine": "higgs_v3",
+      "voice": "voices_examples/higgs_audio/belinda.wav"
+    },
+    "NIKA": {
+      "engine": "higgs_v3",
+      "voice": "voices_examples/female/female_03_alice.wav"
+    },
+    "VIRO": {
+      "engine": "higgs_v3",
+      "voice": "voices_examples/higgs_audio/vex.wav"
+    },
+    "RASK": {
+      "engine": "higgs_v3",
+      "voice": "voices_examples/male/male_01.wav"
+    }
+  },
+  "music": [
+    {
+      "prefix": "unease_00",
+      "tags": "low drone, dissonant sustained strings, sparse metallic hits, unsettling, instrumental",
+      "seconds": 22,
+      "at": 0.0,
+      "level": 0.65,
+      "bpm": 140,
+      "key": "C minor"
+    },
+    {
+      "prefix": "tense_strings_01",
+      "tags": "quiet tense strings, low pulse, anticipation, restrained orchestral, instrumental",
+      "seconds": 21,
+      "at": 19.9,
+      "level": 0.7,
+      "bpm": 88,
+      "key": "A minor"
+    }
+  ],
+  "beats": [
+    {
+      "id": "on_the_quay_the_ropes_00",
+      "template": "establish",
+      "clip_secs": 5.0,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "fade_black",
+      "grade": "eq=contrast=0.90:saturation=0.68:gamma=1.06,colorbalance=bs=0.04:rm=-0.02",
+      "seed": 4120802226,
+      "tags": "rain-wet mooring ropes swinging against a stone bollard, fishing boats behind, wet granite, no humans, wide shot, harbour dockside, container gantry cranes, stacked shipping containers, mooring bollards, thick mooring ropes, concrete quayside, cargo ship hull, oily water, gulls, rusted railings, floodlight masts, overcast, cloudy sky, diffused lighting, no shadows, grey sky, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "rain-wet mooring ropes swinging against a stone bollard, fishing boats behind, wet granite, no humans, wide shot, harbour dockside, container gantry cranes, stacked shipping containers, mooring bollards, thick mooring ropes, concrete quayside, cargo ship hull, oily water, gulls, rusted railings, floodlight masts, overcast, cloudy sky, diffused lighting, no shadows, grey sky, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "Rain-wet mooring ropes swing against a stone bollard.",
+      "motion_src": "desc:derived from the shot line: 'rain-wet mooring ropes swinging against a stone bollard'"
+    },
+    {
+      "id": "on_the_quay_the_skipper_00",
+      "template": "master",
+      "clip_secs": 5.0,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "cut",
+      "grade": "eq=contrast=0.90:saturation=0.68:gamma=1.06,colorbalance=bs=0.04:rm=-0.02",
+      "seed": 213831155,
+      "ref": [
+        "BRACK"
+      ],
+      "tags": "1boy, solo, old man, bald, grey hair, mustache, facial hair, crooked nose, large man, tattoo on arm, anchor tattoo, gold ring, male focus, mature male, heavyset, faint smile, lowered eyelids, head tilted down, half-closed eyes, looking down, calm gaze, closed mouth, slight smile, shoulders dropped, hands in pockets, standing loose, head tilted down, clean canvas apron, brass buckle, rolled shirtsleeves, neat, walking down the quay toward the camera, oilskin coat open, wet stone underfoot, full body, harbour dockside, container gantry cranes, stacked shipping containers, mooring bollards, thick mooring ropes, concrete quayside, cargo ship hull, oily water, gulls, rusted railings, floodlight masts, overcast, cloudy sky, diffused lighting, no shadows, grey sky, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "1boy, solo, old man, bald, grey hair, mustache, facial hair, crooked nose, large man, tattoo on arm, anchor tattoo, gold ring, male focus, mature male, heavyset, faint smile, lowered eyelids, head tilted down, half-closed eyes, looking down, calm gaze, closed mouth, slight smile, shoulders dropped, hands in pockets, standing loose, head tilted down, clean canvas apron, brass buckle, rolled shirtsleeves, neat, walking down the quay toward the camera, oilskin coat open, wet stone underfoot, full body, harbour dockside, container gantry cranes, stacked shipping containers, mooring bollards, thick mooring ropes, concrete quayside, cargo ship hull, oily water, gulls, rusted railings, floodlight masts, overcast, cloudy sky, diffused lighting, no shadows, grey sky, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "He walks down the quay toward the camera. Nothing else in the frame moves.",
+      "motion_src": "desc:derived from the shot line: 'walking down the quay toward the camera'"
+    },
+    {
+      "id": "on_the_quay_the_skipper_01",
+      "template": "react",
+      "clip_secs": 5.0,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "cut",
+      "grade": "eq=contrast=0.90:saturation=0.68:gamma=1.06,colorbalance=bs=0.04:rm=-0.02",
+      "seed": 3517700003,
+      "ref": [
+        "BRACK"
+      ],
+      "tags": "1boy, solo, old man, bald, grey hair, mustache, facial hair, crooked nose, large man, tattoo on arm, anchor tattoo, gold ring, male focus, mature male, heavyset, faint smile, lowered eyelids, head tilted down, half-closed eyes, looking down, calm gaze, closed mouth, slight smile, shoulders dropped, hands in pockets, standing loose, head tilted down, clean canvas apron, brass buckle, rolled shirtsleeves, neat, leaning forward over a wet iron rail, dark water below, close-up, harbour dockside, container gantry cranes, stacked shipping containers, mooring bollards, thick mooring ropes, concrete quayside, cargo ship hull, oily water, gulls, rusted railings, floodlight masts, overcast, cloudy sky, diffused lighting, no shadows, grey sky, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "1boy, solo, old man, bald, grey hair, mustache, facial hair, crooked nose, large man, tattoo on arm, anchor tattoo, gold ring, male focus, mature male, heavyset, faint smile, lowered eyelids, head tilted down, half-closed eyes, looking down, calm gaze, closed mouth, slight smile, shoulders dropped, hands in pockets, standing loose, head tilted down, clean canvas apron, brass buckle, rolled shirtsleeves, neat, leaning forward over a wet iron rail, dark water below, close-up, harbour dockside, container gantry cranes, stacked shipping containers, mooring bollards, thick mooring ropes, concrete quayside, cargo ship hull, oily water, gulls, rusted railings, floodlight masts, overcast, cloudy sky, diffused lighting, no shadows, grey sky, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "He leans forward over a wet iron rail. Nothing else in the frame moves.",
+      "motion_src": "desc:derived from the shot line: 'leaning forward over a wet iron rail'"
+    },
+    {
+      "id": "on_the_quay_brack_says_it_00",
+      "template": "speak",
+      "clip_secs": 5.0,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "cut",
+      "grade": "eq=contrast=0.90:saturation=0.68:gamma=1.06,colorbalance=bs=0.04:rm=-0.02",
+      "seed": 3393531863,
+      "ref": [
+        "BRACK"
+      ],
+      "tags": "1boy, solo, old man, bald, grey hair, mustache, facial hair, crooked nose, large man, tattoo on arm, anchor tattoo, gold ring, male focus, mature male, heavyset, faint smile, lowered eyelids, head tilted down, half-closed eyes, looking down, calm gaze, closed mouth, slight smile, shoulders dropped, hands in pockets, standing loose, head tilted down, clean canvas apron, brass buckle, rolled shirtsleeves, neat, close-up, harbour dockside, container gantry cranes, stacked shipping containers, mooring bollards, thick mooring ropes, concrete quayside, cargo ship hull, oily water, gulls, rusted railings, floodlight masts, overcast, cloudy sky, diffused lighting, no shadows, grey sky, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, an enamel mug held in one hand at chest height, steam, wheelhouse window behind, medium close-up, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "1boy, solo, old man, bald, grey hair, mustache, facial hair, crooked nose, large man, tattoo on arm, anchor tattoo, gold ring, male focus, mature male, heavyset, faint smile, lowered eyelids, head tilted down, half-closed eyes, looking down, calm gaze, closed mouth, slight smile, shoulders dropped, hands in pockets, standing loose, head tilted down, clean canvas apron, brass buckle, rolled shirtsleeves, neat, close-up, harbour dockside, container gantry cranes, stacked shipping containers, mooring bollards, thick mooring ropes, concrete quayside, cargo ship hull, oily water, gulls, rusted railings, floodlight masts, overcast, cloudy sky, diffused lighting, no shadows, grey sky, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, an enamel mug held in one hand at chest height, steam, wheelhouse window behind, medium close-up, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "He lifts the cup from the table to his mouth.",
+      "motion_src": "card:cup_lift",
+      "line": {
+        "who": "BRACK",
+        "text": "Tide turns at four. After that the channel is shut until Thursday."
+      }
+    },
+    {
+      "id": "on_the_quay_the_kid_00",
+      "template": "build",
+      "clip_secs": 5.0,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "cut",
+      "grade": "eq=contrast=0.90:saturation=0.68:gamma=1.06,colorbalance=bs=0.04:rm=-0.02",
+      "seed": 2950948468,
+      "ref": [
+        "PIP"
+      ],
+      "tags": "1boy, solo, male child, child, orange hair, messy hair, freckles, gap teeth, brown eyes, child focus, young boy, small, smiling, happy, bright eyes, open smile, open posture, clean yellow raincoat, one toggle missing, red rubber boot on the left foot, green rubber boot on the right foot, holding a plastic toy dinosaur, running along the edge of the quay, arms out, coiled rope underfoot, full body, harbour dockside, container gantry cranes, stacked shipping containers, mooring bollards, thick mooring ropes, concrete quayside, cargo ship hull, oily water, gulls, rusted railings, floodlight masts, overcast, cloudy sky, diffused lighting, no shadows, grey sky, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "1boy, solo, male child, child, orange hair, messy hair, freckles, gap teeth, brown eyes, child focus, young boy, small, smiling, happy, bright eyes, open smile, open posture, clean yellow raincoat, one toggle missing, red rubber boot on the left foot, green rubber boot on the right foot, holding a plastic toy dinosaur, running along the edge of the quay, arms out, coiled rope underfoot, full body, harbour dockside, container gantry cranes, stacked shipping containers, mooring bollards, thick mooring ropes, concrete quayside, cargo ship hull, oily water, gulls, rusted railings, floodlight masts, overcast, cloudy sky, diffused lighting, no shadows, grey sky, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "He runs along the edge of the quay.",
+      "motion_src": "desc:derived from the shot line: 'running along the edge of the quay'"
+    },
+    {
+      "id": "on_the_quay_pip_says_it_00",
+      "template": "speak",
+      "clip_secs": 5.0,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "cut",
+      "grade": "eq=contrast=0.90:saturation=0.68:gamma=1.06,colorbalance=bs=0.04:rm=-0.02",
+      "seed": 3457667633,
+      "ref": [
+        "PIP"
+      ],
+      "tags": "1boy, solo, male child, child, orange hair, messy hair, freckles, gap teeth, brown eyes, child focus, young boy, small, smiling, happy, bright eyes, open smile, open posture, clean yellow raincoat, one toggle missing, red rubber boot on the left foot, green rubber boot on the right foot, holding a plastic toy dinosaur, close-up, harbour dockside, container gantry cranes, stacked shipping containers, mooring bollards, thick mooring ropes, concrete quayside, cargo ship hull, oily water, gulls, rusted railings, floodlight masts, overcast, cloudy sky, diffused lighting, no shadows, grey sky, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, a folded paper chart clutched against his chest, grinning, harbour wall behind, medium shot, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "1boy, solo, male child, child, orange hair, messy hair, freckles, gap teeth, brown eyes, child focus, young boy, small, smiling, happy, bright eyes, open smile, open posture, clean yellow raincoat, one toggle missing, red rubber boot on the left foot, green rubber boot on the right foot, holding a plastic toy dinosaur, close-up, harbour dockside, container gantry cranes, stacked shipping containers, mooring bollards, thick mooring ropes, concrete quayside, cargo ship hull, oily water, gulls, rusted railings, floodlight masts, overcast, cloudy sky, diffused lighting, no shadows, grey sky, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, a folded paper chart clutched against his chest, grinning, harbour wall behind, medium shot, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "He raises his right hand to his face.",
+      "motion_src": "card:hand_to_face",
+      "line": {
+        "who": "PIP",
+        "text": "I found it. It was under the ice locker the whole time."
+      }
+    },
+    {
+      "id": "below_the_waterline_she_comes_in_00",
+      "template": "master",
+      "clip_secs": 5.0,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "dissolve",
+      "grade": "eq=brightness=-0.02:contrast=1.14:saturation=1.10,colorbalance=rm=0.12:gm=0.03:bm=-0.10:rh=0.08:bh=-0.06,eq=gamma=0.98",
+      "seed": 1329998340,
+      "ref": [
+        "NIKA"
+      ],
+      "tags": "1girl, solo, silver hair, very long hair, single braid, sidecut, heterochromia, green eyes, orange eyes, scar on face, black nails, female focus, teenage girl, slender, calm resolve, quiet certainty, steady gaze, closed mouth, upright, still, clean grey school blazer, loose red necktie, red enamel star pin on the collar, neat braid, stepping through a low doorway into lamplight, coat wet through, full body, dive bar, long scarred wooden bar counter, row of bar stools, bottles on mirrored back shelves, beer taps, neon beer sign on the wall, dartboard, torn vinyl booth seating, low hanging lamps over a pool table, sticky tabletop, worn floorboards, warm lighting, orange glow, firelight on face, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "1girl, solo, silver hair, very long hair, single braid, sidecut, heterochromia, green eyes, orange eyes, scar on face, black nails, female focus, teenage girl, slender, calm resolve, quiet certainty, steady gaze, closed mouth, upright, still, clean grey school blazer, loose red necktie, red enamel star pin on the collar, neat braid, stepping through a low doorway into lamplight, coat wet through, full body, dive bar, long scarred wooden bar counter, row of bar stools, bottles on mirrored back shelves, beer taps, neon beer sign on the wall, dartboard, torn vinyl booth seating, low hanging lamps over a pool table, sticky tabletop, worn floorboards, warm lighting, orange glow, firelight on face, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "She steps through a low doorway into lamplight. Nothing else in the frame moves.",
+      "motion_src": "desc:derived from the shot line: 'stepping through a low doorway into lamplight'"
+    },
+    {
+      "id": "below_the_waterline_nika_says_it_00",
+      "template": "speak",
+      "clip_secs": 5.0,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "cut",
+      "grade": "eq=brightness=-0.02:contrast=1.14:saturation=1.10,colorbalance=rm=0.12:gm=0.03:bm=-0.10:rh=0.08:bh=-0.06,eq=gamma=0.98",
+      "seed": 4247657030,
+      "ref": [
+        "NIKA"
+      ],
+      "tags": "1girl, solo, silver hair, very long hair, single braid, sidecut, heterochromia, green eyes, orange eyes, scar on face, black nails, female focus, teenage girl, slender, angry expression, glaring, furrowed brow, gritted teeth, tense, clenched fists, clean grey school blazer, loose red necktie, red enamel star pin on the collar, neat braid, close-up, dive bar, long scarred wooden bar counter, row of bar stools, bottles on mirrored back shelves, beer taps, neon beer sign on the wall, dartboard, torn vinyl booth seating, low hanging lamps over a pool table, sticky tabletop, worn floorboards, warm lighting, orange glow, firelight on face, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, standing over a lamplit table, both hands flat on the wood, lamp low in frame, medium shot, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "1girl, solo, silver hair, very long hair, single braid, sidecut, heterochromia, green eyes, orange eyes, scar on face, black nails, female focus, teenage girl, slender, angry expression, glaring, furrowed brow, gritted teeth, tense, clenched fists, clean grey school blazer, loose red necktie, red enamel star pin on the collar, neat braid, close-up, dive bar, long scarred wooden bar counter, row of bar stools, bottles on mirrored back shelves, beer taps, neon beer sign on the wall, dartboard, torn vinyl booth seating, low hanging lamps over a pool table, sticky tabletop, worn floorboards, warm lighting, orange glow, firelight on face, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, standing over a lamplit table, both hands flat on the wood, lamp low in frame, medium shot, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "She raises her right hand to her face. Nothing else in the frame moves.",
+      "motion_src": "card:hand_to_face_only",
+      "line": {
+        "who": "NIKA",
+        "text": "You told us the wreck was picked clean. You told all of us that."
+      }
+    },
+    {
+      "id": "below_the_waterline_the_watcher_00",
+      "template": "react",
+      "clip_secs": 5.0,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "cut",
+      "grade": "eq=brightness=-0.02:contrast=1.14:saturation=1.10,colorbalance=rm=0.12:gm=0.03:bm=-0.10:rh=0.08:bh=-0.06,eq=gamma=0.98",
+      "seed": 2301900508,
+      "ref": [
+        "VIRO"
+      ],
+      "tags": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, male focus, mature male, masculine, sweatdrop, head tilt, looking down, looking to the side, half-closed eyes, unfocused, lip biting, closed mouth, hand on own chin, shoulders drawn in, weight on back foot, clean teal soccer jersey, orange trim, number 7, neat hair, leaning back against the bar, brass rail, bottles out of focus behind, medium shot, dive bar, long scarred wooden bar counter, row of bar stools, bottles on mirrored back shelves, beer taps, neon beer sign on the wall, dartboard, torn vinyl booth seating, low hanging lamps over a pool table, sticky tabletop, worn floorboards, warm lighting, orange glow, firelight on face, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, male focus, mature male, masculine, sweatdrop, head tilt, looking down, looking to the side, half-closed eyes, unfocused, lip biting, closed mouth, hand on own chin, shoulders drawn in, weight on back foot, clean teal soccer jersey, orange trim, number 7, neat hair, leaning back against the bar, brass rail, bottles out of focus behind, medium shot, dive bar, long scarred wooden bar counter, row of bar stools, bottles on mirrored back shelves, beer taps, neon beer sign on the wall, dartboard, torn vinyl booth seating, low hanging lamps over a pool table, sticky tabletop, worn floorboards, warm lighting, orange glow, firelight on face, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "He leans back against the bar. Nothing else in the frame moves.",
+      "motion_src": "desc:derived from the shot line: 'leaning back against the bar'"
+    },
+    {
+      "id": "below_the_waterline_viro_says_it_00",
+      "template": "speak",
+      "clip_secs": 5.0,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "cut",
+      "grade": "eq=brightness=-0.02:contrast=1.14:saturation=1.10,colorbalance=rm=0.12:gm=0.03:bm=-0.10:rh=0.08:bh=-0.06,eq=gamma=0.98",
+      "seed": 1520604731,
+      "ref": [
+        "VIRO"
+      ],
+      "tags": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, male focus, mature male, masculine, sweatdrop, head tilt, looking down, looking to the side, half-closed eyes, unfocused, lip biting, closed mouth, hand on own chin, shoulders drawn in, weight on back foot, clean teal soccer jersey, orange trim, number 7, neat hair, close-up, dive bar, long scarred wooden bar counter, row of bar stools, bottles on mirrored back shelves, beer taps, neon beer sign on the wall, dartboard, torn vinyl booth seating, low hanging lamps over a pool table, sticky tabletop, worn floorboards, warm lighting, orange glow, firelight on face, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, half his face out of the lamplight, glass turning in his fingers, close-up, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, male focus, mature male, masculine, sweatdrop, head tilt, looking down, looking to the side, half-closed eyes, unfocused, lip biting, closed mouth, hand on own chin, shoulders drawn in, weight on back foot, clean teal soccer jersey, orange trim, number 7, neat hair, close-up, dive bar, long scarred wooden bar counter, row of bar stools, bottles on mirrored back shelves, beer taps, neon beer sign on the wall, dartboard, torn vinyl booth seating, low hanging lamps over a pool table, sticky tabletop, worn floorboards, warm lighting, orange glow, firelight on face, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, half his face out of the lamplight, glass turning in his fingers, close-up, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "He leans back against the bar away from the lamp.",
+      "motion_src": "text:free text on the beat",
+      "line": {
+        "who": "VIRO",
+        "text": "I said it was picked clean. I never said who by."
+      }
+    },
+    {
+      "id": "below_the_waterline_the_chart_00",
+      "template": "master",
+      "clip_secs": 5.0,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "cut",
+      "grade": "eq=brightness=-0.02:contrast=1.14:saturation=1.10,colorbalance=rm=0.12:gm=0.03:bm=-0.10:rh=0.08:bh=-0.06,eq=gamma=0.98",
+      "seed": 1764472828,
+      "ref": [
+        "RASK"
+      ],
+      "tags": "1boy, solo, dark red hair, undercut, yellow eyes, scar on eyebrow, male focus, mature male, masculine, calm resolve, quiet certainty, steady gaze, closed mouth, upright, still, clean black soccer jersey, silver trim, number 9, neat hair, throwing a folded chart onto the table, lamp swinging above, medium shot, dive bar, long scarred wooden bar counter, row of bar stools, bottles on mirrored back shelves, beer taps, neon beer sign on the wall, dartboard, torn vinyl booth seating, low hanging lamps over a pool table, sticky tabletop, worn floorboards, warm lighting, orange glow, firelight on face, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "1boy, solo, dark red hair, undercut, yellow eyes, scar on eyebrow, male focus, mature male, masculine, calm resolve, quiet certainty, steady gaze, closed mouth, upright, still, clean black soccer jersey, silver trim, number 9, neat hair, throwing a folded chart onto the table, lamp swinging above, medium shot, dive bar, long scarred wooden bar counter, row of bar stools, bottles on mirrored back shelves, beer taps, neon beer sign on the wall, dartboard, torn vinyl booth seating, low hanging lamps over a pool table, sticky tabletop, worn floorboards, warm lighting, orange glow, firelight on face, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "He throws a folded chart onto the table. Nothing else in the frame moves.",
+      "motion_src": "desc:derived from the shot line: 'throwing a folded chart onto the table'"
+    },
+    {
+      "id": "below_the_waterline_rask_says_it_00",
+      "template": "speak",
+      "clip_secs": 5.0,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "cut",
+      "grade": "eq=brightness=-0.02:contrast=1.14:saturation=1.10,colorbalance=rm=0.12:gm=0.03:bm=-0.10:rh=0.08:bh=-0.06,eq=gamma=0.98",
+      "seed": 676225586,
+      "ref": [
+        "RASK"
+      ],
+      "tags": "1boy, solo, dark red hair, undercut, yellow eyes, scar on eyebrow, male focus, mature male, masculine, calm resolve, quiet certainty, steady gaze, closed mouth, upright, still, clean black soccer jersey, silver trim, number 9, neat hair, close-up, dive bar, long scarred wooden bar counter, row of bar stools, bottles on mirrored back shelves, beer taps, neon beer sign on the wall, dartboard, torn vinyl booth seating, low hanging lamps over a pool table, sticky tabletop, worn floorboards, warm lighting, orange glow, firelight on face, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, leaning into the lamplight over an open sea chart, jaw set, medium close-up, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "1boy, solo, dark red hair, undercut, yellow eyes, scar on eyebrow, male focus, mature male, masculine, calm resolve, quiet certainty, steady gaze, closed mouth, upright, still, clean black soccer jersey, silver trim, number 9, neat hair, close-up, dive bar, long scarred wooden bar counter, row of bar stools, bottles on mirrored back shelves, beer taps, neon beer sign on the wall, dartboard, torn vinyl booth seating, low hanging lamps over a pool table, sticky tabletop, worn floorboards, warm lighting, orange glow, firelight on face, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, leaning into the lamplight over an open sea chart, jaw set, medium close-up, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "He pushes a folded chart across the table toward the lamp.",
+      "motion_src": "text:free text on the beat",
+      "line": {
+        "who": "RASK",
+        "text": "Then we go tonight, or we do not go at all."
+      }
+    },
+    {
+      "id": "below_the_waterline_the_coins_00",
+      "template": "insert",
+      "clip_secs": 5.0,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "cut",
+      "grade": "eq=brightness=-0.02:contrast=1.14:saturation=1.10,colorbalance=rm=0.12:gm=0.03:bm=-0.10:rh=0.08:bh=-0.06,eq=gamma=0.98",
+      "seed": 3557717526,
+      "tags": "copper coins scattering across a wet table top, no humans, close-up, a wet dark table top filling the frame, lamplight across the grain, no room visible, warm lighting, orange glow, firelight on face, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "copper coins scattering across a wet table top, no humans, close-up, a wet dark table top filling the frame, lamplight across the grain, no room visible, warm lighting, orange glow, firelight on face, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "Copper coins scatter across a wet table top.",
+      "motion_src": "desc:derived from the shot line: 'copper coins scattering across a wet table top'"
+    }
+  ]
+}

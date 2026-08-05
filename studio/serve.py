@@ -689,6 +689,101 @@ def loras():
             "lora_dir": LORA_FILES}
 
 
+def capabilities():
+    """What this box can generate, taught rather than listed.
+
+    Two files, deliberately kept separate:
+
+      studio/capabilities.json         written by capability_scan.py. A read-only
+        catalogue of ~/ComfyUI/output/claude-generated. Every model name, cost, VRAM
+        figure, workflow file and exposure judgement comes from there and nothing here
+        invents any of them.
+
+      studio/samples/capabilities/index.json   written by capability_publish.py. The
+        teaching layer: which group a capability belongs to, where it sits in that group
+        from simplest to most advanced, one plain sentence, why you would want it, and
+        the PUBLISHED COPIES of the samples.
+
+    The split is the point. The archive lives outside git and gets cleaned, so a page
+    built straight off the catalogue would show empty boxes the first time somebody tidies
+    the output tree. The page renders copies under /samples/capabilities/ instead, and if
+    the index has not been built this route says which command builds it rather than
+    answering 200 with cards that have no pictures.
+
+    Read from disk per request like every other route here, so re-running either tool
+    shows up on a refresh instead of on a restart.
+
+    Returns (payload, status) - the only route that needs a status the caller can vary.
+    """
+    cat_p = f"{HERE}/capabilities.json"
+    idx_p = f"{HERE}/samples/capabilities/index.json"
+    if not os.path.exists(cat_p):
+        return ({"error": "studio/capabilities.json has not been built",
+                 "fix": "python3 studio/_tools/capability_scan.py",
+                 "groups": [], "capabilities": []}, 404)
+    try:
+        with open(cat_p, encoding="utf-8") as f:
+            cat = json.load(f)
+    except Exception as e:                                          # noqa: BLE001
+        return ({"error": "capabilities.json is unreadable: %r" % (e,),
+                 "groups": [], "capabilities": []}, 500)
+
+    idx, idx_error = None, None
+    if not os.path.exists(idx_p):
+        idx_error = ("studio/samples/capabilities/index.json has not been built - the page "
+                     "has no pictures until it is")
+    else:
+        try:
+            with open(idx_p, encoding="utf-8") as f:
+                idx = json.load(f)
+        except Exception as e:                                      # noqa: BLE001
+            idx_error = "index.json is unreadable: %r" % (e,)
+
+    entries = (idx or {}).get("entries") or {}
+    groups = (idx or {}).get("groups") or []
+    rank = {g["id"]: i for i, g in enumerate(groups)}
+
+    merged, untaught = [], []
+    for c in cat.get("capabilities", []):
+        c = dict(c)
+        t = entries.get(c.get("id"))
+        if t:
+            # The curriculum owns presentation, the catalogue owns facts, and the two
+            # never write the same key - so a merge conflict is impossible by design.
+            c["group"] = t.get("group")
+            c["order"] = t.get("order")
+            c["one_line"] = t.get("one_line")
+            c["why_you_want_it"] = t.get("why")
+            c["published"] = t.get("sample")
+            c["companions"] = t.get("companions") or []
+            c["text_companion"] = t.get("text_companion")
+            c["no_sample"] = t.get("no_sample")
+        else:
+            # A capability the archive knows about that the curriculum has not placed.
+            # Reported rather than dropped: silently disappearing is how a page ends up
+            # claiming to be complete while it is not.
+            c["group"] = None
+            untaught.append(c.get("id"))
+        merged.append(c)
+    merged.sort(key=lambda c: (rank.get(c.get("group"), 99),
+                               99 if c.get("order") is None else c["order"],
+                               c.get("id") or ""))
+
+    out = dict(cat)
+    out["capabilities"] = merged
+    out["groups"] = groups
+    out["untaught"] = untaught
+    out["published"] = {
+        "generated": (idx or {}).get("generated"),
+        "files": (idx or {}).get("published_files"),
+        "missing": (idx or {}).get("missing_files"),
+        "log": (idx or {}).get("log") or [],
+        "error": idx_error,
+        "fix": "python3 studio/_tools/capability_publish.py",
+    }
+    return (out, 200)
+
+
 def cards():
     d = f"{HERE}/cards"
     if not os.path.isdir(d):
@@ -803,6 +898,71 @@ def cast_dossier_link(html):
     return html.replace(CAST_ACT, CAST_DOSSIER + CAST_ACT, 1)
 
 
+def nav_capabilities(html):
+    """Put a `capabilities` link in the header nav, the same way and for the same reason
+    as nav_video and nav_dossier.
+
+    /capabilities is the introduction to everything the box can generate and belongs in
+    the nav of every page, but the nav lives inside fourteen hand-written HTML files owned
+    by other work - and another agent is editing several of them right now. Injecting here
+    means the route is the only thing that changed: no page file is touched, and a page
+    that later grows its own link is left exactly as it is.
+
+    Anchored early in the nav on purpose. This is the page you send someone to first.
+    """
+    if 'href="/capabilities"' in html:
+        return html
+    for anchor in ('<a href="/styles"', '<a href="/loras"', '<a href="/gallery"',
+                   '<a href="/">'):
+        i = html.find(anchor)
+        if i < 0:
+            continue
+        m = re.search(r">\s*([A-Za-z])", html[i:i + 200])
+        word = "Capabilities" if (m and m.group(1).isupper()) else "capabilities"
+        return html[:i] + '<a href="/capabilities">%s</a>' % word + html[i:]
+    return html
+
+
+# The hub's hero row, and the capabilities link that belongs beside it. A nav link alone
+# is not enough for the front page: "what can this thing even do" is the first question a
+# newcomer has, and it deserves a button next to "Direct a scene" rather than one word in
+# a row of thirteen. Matched against the exact anchor app.html writes; if that file ever
+# rewrites the line the match simply fails and the page is served untouched - the same
+# contract nav_video works under.
+HUB_MAKE = '<a class="go alt" href="/make">Make something else</a>'
+HUB_CAPS = ('<a class="go alt" href="/capabilities">See everything it can generate '
+            '&rarr;</a>')
+
+
+def hub_capabilities(html):
+    # Test for the BUTTON, not for any link to the route. _page runs
+    # nav_capabilities first, so by the time this sees the hub there is already a
+    # /capabilities link in the header nav - guarding on that made this a no-op
+    # and the hero button silently never appeared.
+    if HUB_CAPS in html or HUB_MAKE not in html:
+        return html
+    return html.replace(HUB_MAKE, HUB_MAKE + "\n      " + HUB_CAPS, 1)
+
+
+def _guides():
+    """studio/_tools/guides.py, or None. Reloaded per request like the composer, so
+    editing a guide markdown file and refreshing shows the change - the same contract
+    the rest of this server works under.
+
+    Optional on purpose. If the tool is missing or broken every page still serves; the
+    only thing lost is the `how this page works` link and the /guide route."""
+    d = f"{HERE}/_tools"
+    if d not in sys.path:
+        sys.path.insert(0, d)
+    try:
+        import guides as g
+        if getattr(g, "__file__", "").startswith(d):
+            g = importlib.reload(g)
+        return g if callable(getattr(g, "payload", None)) else None
+    except Exception:
+        return None
+
+
 class H(http.server.SimpleHTTPRequestHandler):
     def _page(self, name):
         """Serve one of the hand-written pages, with the video and dossier links injected
@@ -813,8 +973,24 @@ class H(http.server.SimpleHTTPRequestHandler):
         with open(p, encoding="utf-8") as f:
             html = f.read()
         html = nav_dossier(nav_video(html))
+        # Every page gets the link except the capabilities page itself, which
+        # writes its own nav and omits itself the way styles.html omits /styles.
+        if name != "capabilities.html":
+            html = nav_capabilities(html)
         if name == "cast.html":
             html = cast_dossier_link(html)
+        if name == "app.html":
+            html = hub_capabilities(html)
+        # A `how this page works` link, injected the same way and for the same reason as
+        # nav_video and nav_dossier above: the nav lives in ten hand-written files owned
+        # by other work. guides.page_link returns the document unchanged if it does not
+        # recognise the nav, so a page rewritten later simply stops carrying the link.
+        g = _guides()
+        if g:
+            try:
+                html = g.page_link(html, name)
+            except Exception:
+                pass
         return self._send(html.encode("utf-8"), 200, "text/html; charset=utf-8")
 
     def _send_file(self, fp, ctype):
@@ -902,6 +1078,25 @@ class H(http.server.SimpleHTTPRequestHandler):
         path = urllib.parse.urlparse(self.path).path
         if path in ("/", "/index.html"):
             return self._page("app.html")
+        # The guides. /guide is the index and /guide/<slug> one guide; both serve the same
+        # shell, which reads the slug off its own path. The markdown lives in
+        # studio/guides/ and is rendered by studio/_tools/guides.py.
+        if path == "/guide" or path.startswith("/guide/"):
+            return self._page("guide.html")
+        if path == "/api/guides":
+            g = _guides()
+            if not g:
+                return self._send({"error": "studio/_tools/guides.py is unavailable",
+                                   "guides": []}, 500)
+            return self._send(g.index())
+        if path.startswith("/api/guide/"):
+            g = _guides()
+            if not g:
+                return self._send({"error": "studio/_tools/guides.py is unavailable"}, 500)
+            got = g.payload(urllib.parse.unquote(path[len("/api/guide/"):]))
+            if not got:
+                return self._send({"error": "no such guide"}, 404)
+            return self._send(got)
         if path.startswith("/samples/"):
             rel = os.path.normpath(path[1:]).replace("\\", "/")
             fp = os.path.join(HERE, rel)
@@ -988,10 +1183,10 @@ class H(http.server.SimpleHTTPRequestHandler):
         if path == "/api/places":
             return self._send(places())
         if path in ("/changelog", "/changelog.html"):
-            p = f"{HERE}/changelog.html"
-            if not os.path.exists(p):
-                return self._send(b"changelog.html is missing", 500, "text/plain")
-            return self._send(open(p, "rb").read(), 200, "text/html; charset=utf-8")
+            # Served through _page like every other page. It used to be read
+            # straight off disk, which is why it was the one page in the app with
+            # no injected nav links - no /video, no /character, no /capabilities.
+            return self._page("changelog.html")
         if path == "/api/changelog":
             # Built by studio/_tools/changelog.py from git log. Regenerate after committing;
             # a stale file is better than a 500, so a missing one is reported as such.
@@ -1005,6 +1200,14 @@ class H(http.server.SimpleHTTPRequestHandler):
             return self._page("loras.html")
         if path == "/api/loras":
             return self._send(loras())
+        if path in ("/capabilities", "/capabilities.html"):
+            return self._page("capabilities.html")
+        if path == "/api/capabilities":
+            # The only route that varies its status from the payload builder: a catalogue
+            # that has never been built is a 404 carrying the command that builds it, not
+            # an empty 200 the page would have to guess about.
+            payload, code = capabilities()
+            return self._send(payload, code)
         if path == "/api/domains":
             return self._send(domains())
         if path == "/api/render/status":

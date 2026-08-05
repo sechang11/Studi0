@@ -1,0 +1,177 @@
+// DEMO 1 of 5 - THE LONG LIGHT.  Pure landscape and mood: no cast, no dialogue, twelve
+// places, one day.
+//
+//   python3 studio/compile.py studio/movies/demo_landscape.movie --timeline
+//   python3 scripts/short.py studio/movies/demo_landscape.json
+//
+// WHAT THIS ONE IS FOR
+//
+// It is the demo for the PLACES library and the LOOK grades, and it is the control case
+// for the whole demo set: twelve beats, nobody in any of them, so nothing here depends on
+// a reference sheet, an IPAdapter pass or a character LoRA. If a beat of this film is
+// wrong, the fault is in the place card, the look grade or the shot line - there is no
+// identity layer to blame it on.
+//
+// EVERY SHOT LINE IS AN ACTION, ON PURPOSE
+//
+// The standing defect in this project is that 21 of the 29 beats across the three earlier
+// films resolve to a motion HOLD, because their shot lines describe a composition rather
+// than a thing happening, and compose.derive_motion() has nothing to read. So every line
+// below opens with [MOVER] [ACTION PARTICIPLE] [PATH] in its FIRST comma-clause, which is
+// the only clause the deriver looks at before moving on:
+//
+//     grey cloud POURING over a black sea cliff,  cold open water far below, ...
+//     ^ mover     ^ verb        ^ path            ^ everything else, for the picture only
+//
+// All twelve derive. Checked before a single frame was rendered with
+// `python3 studio/_tools/demo_films.py --check`, which compiles and prints the motion
+// source of every beat.
+//
+// PATHS ARE KEPT SHORT DELIBERATELY. compose._motion_clean_path() caps a derived path at
+// seven words and simply truncates, so "over the black ridge of a sea cliff" came back as
+// "over the black ridge of a sea." - a sentence about a sea. Every path here is five or
+// six words and ends on the noun that matters.
+//
+// EVERY MOVER IS AN ELEMENT, NEVER TEXTURE. compose.MOTION_MOVERS_REJECTED bans rain,
+// drizzle, droplets, dust and grain as movers: measured, they do nothing and move the
+// PERSON instead. So the weather in this film moves as cloud, meltwater, snow, mist,
+// spray and leaves - objects at object scale.
+//
+// WHY THERE IS NO `night` LOOK IN A FILM THAT RUNS DUSK TO DUSK
+//
+// FOUND BY RENDERING THIS FILM AND LOOKING AT IT: THE THREE INSERTS CARRY A CLOSE PLACE
+// AS FREE TEXT INSTEAD OF A PLACE CARD.
+//
+// First pass, the_bark was `place: pine_forest` with the shot line "meltwater sliding down
+// black pine bark, ... macro close-up". The keyframe came back a WIDE forest interior with
+// a waterfall in it. The place card's fifteen scenery nouns - trees, ferns, path, shafts of
+// light - are a whole landscape, and on an `insert` they beat the two words at the end of
+// the shot line that asked for a macro. compose.py reports this as place_vs_shot,
+// "your place and your shot ask for different pictures: scenery against close-up", and
+// says the earlier layer wins if you do nothing. It does.
+//
+// The nine wide beats keep their place cards, because on an establish or a pillow the card
+// IS the subject and it is doing exactly what it was authored for. Only the three inserts
+// override. That asymmetry is the actual lesson of this film: a place card is a LOCATION,
+// and an insert is not a location, it is a surface.
+//
+// studio/looks/night.json grades eq=brightness=-0.15:contrast=1.20, which is measured on
+// this box to CLIP to black rather than darken: input luma 48 goes to 0, 64 goes to 1,
+// 80 goes to 15. There is nothing left to recover. `moonlit` (-0.10 / 1.18 / gamma 0.96)
+// and `storm` (-0.06) are the dark grades that survive, so the night beats use those.
+// This is a real open defect (task #26) and this film routes around it rather than
+// shipping four black rectangles.
+
+MOVIE demo_landscape
+  title: DEMO LANDSCAPE
+  logline: One day of light crossing a country nobody is standing in.
+  canvas: 1920x1080
+  fps: 24
+  engine: qwen
+  style: cinematic_film_still
+  seed_root: demo-landscape-1
+  clip_secs: 6
+  tags: cinematic, natural light, no people
+
+// ---------------------------------------------------------------------------
+CHAPTER before_dawn
+  look: moonlit
+  pace: slow
+  cue: desolate
+
+  SCENE the_cliff
+    transition: fade_black
+    place: sea_cliff
+    camera: static
+    shot: establish | grey cloud pouring over a black sea cliff, cold open water far below, gannets on the ledges, no humans, extreme wide shot
+
+  SCENE the_field
+    transition: dissolve
+    place: snowfield
+    camera: pan_r
+    shot: pillow | loose snow blowing across an unbroken white field, low moon, long blue shadows, no humans, wide shot
+
+  SCENE the_bark
+    transition: cut
+    place: the wet black bark of one pine trunk filling the frame, green moss in the crevices, no distance visible
+    camera: static
+    shot: insert | meltwater sliding down black pine bark, moss, cold light, no humans, macro close-up
+
+// ---------------------------------------------------------------------------
+CHAPTER first_light
+  look: dawn
+  pace: slow
+  cue: quiet_dawn
+
+  SCENE the_lake
+    transition: dissolve
+    place: mountain_lake
+    camera: push
+    shot: establish | mist rising off a still black lake, dark conifers on the far shore, first light on the ridge, no humans, wide shot
+
+  SCENE the_fall
+    transition: cut
+    place: waterfall
+    camera: tilt_d
+    shot: establish | white water pouring over a granite lip, wet rock walls, deep green pool below, no humans, wide shot
+
+  SCENE the_meadow
+    transition: dissolve
+    place: meadow_in_summer
+    camera: static
+    shot: pillow | tall grass swaying across a summer meadow, seed heads catching the light, no humans, wide shot
+
+// ---------------------------------------------------------------------------
+CHAPTER full_day
+  look: golden
+  pace: normal
+  cue: hopeful_rising
+
+  SCENE the_orchard
+    transition: cut
+    place: two low apple branches close to the lens, red fruit and wet leaves, mown grass just below them, no distance visible
+    camera: static
+    shot: insert | one ripe apple dropping through the branches, wet grass below, no humans, close-up
+
+  SCENE the_dune
+    transition: whip_pan
+    place: desert_dunes
+    camera: pan_l
+    shot: establish | fine sand streaming off the crest of a dune, open sky, no humans, extreme wide shot
+
+  SCENE the_moor
+    transition: dissolve
+    place: moorland
+    camera: static
+    shot: pillow | cloud shadow sliding across open moorland, heather and bare rock, no humans, extreme wide shot
+
+// ---------------------------------------------------------------------------
+CHAPTER last_light
+  look: sunset
+  pace: slow
+  // NOT lonely_night_city, WHICH CANNOT RENDER. studio/cues/lonely_night_city.json
+  // carries key "B flat minor" and ComfyUI TextEncodeAceStepAudio1.5 accepts a fixed
+  // 34-value list that spells it "Bb minor". The graph fails validation, short.py
+  // aborts - AFTER every keyframe and every clip has been generated, which is the most
+  // expensive place in the pipeline to discover it. heroic_fanfare (B flat major) and
+  // menace (E flat minor) are broken the same way; the other 19 cues are fine.
+  cue: warm_memory
+
+  SCENE the_harbour
+    transition: dissolve
+    place: harbour_docks
+    camera: static
+    shot: establish | fishing boats rolling against a stone quay, dusk, lit windows on the harbour wall, no humans, wide shot
+
+  SCENE the_river
+    transition: cut
+    place: the surface of a slow brown river filling the whole frame, low over the water, no bank and no sky visible
+    camera: static
+    shot: insert | dry leaves floating down a slow brown river, no humans, close-up
+
+  SCENE the_horizon
+    transition: fade_black
+    silence: true
+    place: sea_cliff
+    camera: pull
+    shot: pillow | last light falling across open water, a flat horizon, one dark headland, no humans, extreme wide shot

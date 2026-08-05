@@ -37,7 +37,14 @@ import argparse, json, os, re, subprocess, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
-os.environ.setdefault("COMFY_ROOT", "Z:/ComfyUI")
+# Default to the LOCAL install, matching epic.py and short.py. This used to default to
+# "Z:/ComfyUI", which is only correct when driving the box from Windows over the SMB
+# share. epic.py:50 reads COMFY_ROOT at import time, so ANY module that imported
+# analyze_shots before epic silently got COMFY = a path that exists nowhere on Linux.
+# Nothing raised: every exists()/glob() just returned empty, so renders succeeded and
+# the tool reported its own output missing. That cost terra_wardrobe.py a 40-render
+# pass. Set COMFY_ROOT explicitly to drive a remote/Windows instance.
+os.environ.setdefault("COMFY_ROOT", os.path.expanduser("~/ComfyUI"))
 # Default to the LOCAL ComfyUI. This used to hardcode 192.168.1.46, which broke
 # when DHCP moved the box to .45, and which also sent every render request across
 # a NIC measured dropping 10% of packets. Nothing here needs the network: these

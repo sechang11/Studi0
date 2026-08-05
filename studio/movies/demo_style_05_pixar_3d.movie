@@ -1,0 +1,67 @@
+// DEMO 4 of 5, PANEL 5 OF 6 - THE STYLE RANGE REEL.
+//
+// This file is one panel of a controlled style comparison and is NOT meant to be watched
+// on its own. All 6 panels carry byte-identical content, the same seed_root and the
+// same scene ids, so compile.py hands every panel the same three seeds. The only variable
+// between them is this line:
+//
+//     style: pixar_3d        engine: qwen
+//     3D render - qwen can be moved off photography by a style
+//
+// WHY IT IS 6 FILES AND NOT ONE. `style` is a movie-level variable in compile.py
+// because it is what DERIVES THE ENGINE, and the two engines want opposite prompt formats
+// - danbooru tags for animagine, prose for Qwen-Image. A film cannot change engine
+// mid-reel without changing every face in it, so the format refuses to let style vary
+// below the movie. A style-range demo is therefore N films and a concatenation, and
+// pretending otherwise would mean shipping a knob that quietly does nothing.
+//
+// NOBODY IS IN IT, deliberately. A reference sheet imports its style as hard as its
+// identity - measured, the qwen edit path fed an anime sheet returned flat cel
+// illustration in 4 of 4 places even when the prompt asked for a photograph. A cast member
+// in a style demo would mean the sheet, not the style card, decided what you are looking
+// at.
+//
+// All three shot lines are ACTIONS - cloud shadow SLIDING across a valley, a traveller
+// WALKING along a road, leaves BLOWING across the surface - so all three derive a motion
+// and none of them falls to a hold. That is also what makes the panels comparable in
+// MOTION and not only in colour.
+//
+// Written by studio/_tools/demo_films.py --write-reel. Edit the body there, not here, or
+// the panels will drift apart and stop being a comparison.
+
+MOVIE demo_style_05
+  title: DEMO STYLE 05 PIXAR 3D
+  logline: One road, one traveller, one afternoon - rendered 3D render - qwen can be moved off photography by a style.
+  canvas: 1920x1080
+  fps: 24
+  engine: qwen
+  style: pixar_3d
+  seed_root: demo-style-reel
+  clip_secs: 6
+  tags: cinematic
+
+CHAPTER the_road
+  look: golden
+  place: a wide upland valley of terraced fields, a pale dirt road, dry stone walls, tall grass
+  pace: normal
+  cue: quiet_dawn
+
+  SCENE the_valley
+    transition: fade_black
+    camera: static
+    shot: establish | cloud shadow sliding across a wide valley of terraced fields, a pale dirt road winding through them, no humans, extreme wide shot
+
+  SCENE the_traveller
+    transition: cut
+    camera: static
+    shot: master | a lone traveller walking forward along a dirt road, tall grass on both sides, a bundle on one shoulder, full body
+
+  // The place is overridden to a CLOSE one here. A chapter-level place card describing a
+  // whole valley on an `insert` makes compose report place_vs_shot - "your place and your
+  // shot ask for different pictures: scenery against close-up" - and whichever comes
+  // earlier in the prompt wins, which is the valley, which is not what an insert is for.
+  SCENE the_leaves
+    transition: cut
+    place: a pale dirt road surface, loose grit, dry grass at the verge
+    camera: static
+    shot: insert | dry leaves blowing across the road surface, no humans, close-up

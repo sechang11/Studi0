@@ -1,0 +1,353 @@
+{
+  "title": "DEMO CREW NIGHT",
+  "fps": 24,
+  "canvas": [
+    1920,
+    1080
+  ],
+  "engine": "higgs_v3",
+  "keyframe_engine": "anime",
+  "anime_ckpt": "animagine-xl-4.0.safetensors",
+  "ipadapter_weight": 0.6,
+  "style": "cinematic",
+  "anime_sheets": {
+    "MANAGER": "sheet_anime_manager.png",
+    "VIRO": "sheet_anime_viro.png",
+    "RASK": "sheet_anime_rask.png",
+    "NIKA": "sheet_anime_nika.png",
+    "PIP": "sheet_anime_pip.png",
+    "BRACK": "sheet_anime_brack.png"
+  },
+  "sheets": {
+    "MANAGER": "sheet_anime_manager.png",
+    "VIRO": "sheet_anime_viro.png",
+    "RASK": "sheet_anime_rask.png",
+    "NIKA": "sheet_anime_nika.png",
+    "PIP": "sheet_anime_pip.png",
+    "BRACK": "sheet_anime_brack.png"
+  },
+  "characters": {
+    "MANAGER": "MANAGER",
+    "VIRO": "VIRO",
+    "RASK": "RASK",
+    "NIKA": "NIKA",
+    "PIP": "PIP",
+    "BRACK": "BRACK"
+  },
+  "character_loras": {
+    "VIRO": "character_viro_00001_.safetensors",
+    "NIKA": "character_nika_00001_.safetensors",
+    "PIP": "character_pip_00001_.safetensors"
+  },
+  "character_lora_weights": {
+    "VIRO": 0.5,
+    "NIKA": 0.5,
+    "PIP": 0.5
+  },
+  "voices": {
+    "MANAGER": {
+      "engine": "higgs_v3",
+      "voice": "voices_examples/male/male_01.wav"
+    },
+    "VIRO": {
+      "engine": "higgs_v3",
+      "voice": "voices_examples/higgs_audio/vex.wav"
+    },
+    "RASK": {
+      "engine": "higgs_v3",
+      "voice": "voices_examples/male/male_01.wav"
+    },
+    "NIKA": {
+      "engine": "higgs_v3",
+      "voice": "voices_examples/female/female_03_alice.wav"
+    },
+    "PIP": {
+      "engine": "higgs_v3",
+      "voice": "voices_examples/higgs_audio/belinda.wav"
+    },
+    "BRACK": {
+      "engine": "higgs_v3",
+      "voice": "voices_examples/male/male_02.wav"
+    }
+  },
+  "music": [
+    {
+      "prefix": "tense_strings_00",
+      "tags": "quiet tense strings, low pulse, anticipation, restrained orchestral, instrumental",
+      "seconds": 14,
+      "at": 0.0,
+      "level": 0.7,
+      "bpm": 88,
+      "key": "A minor"
+    },
+    {
+      "prefix": "driving_pulse_01",
+      "tags": "driving percussion, ostinato strings, insistent low brass, forward motion, instrumental",
+      "seconds": 6,
+      "at": 12.2,
+      "level": 0.85,
+      "bpm": 128,
+      "key": "E minor"
+    },
+    {
+      "prefix": "melancholy_piano_02",
+      "tags": "sparse melancholy piano, single sustained cello, restrained, instrumental",
+      "seconds": 29,
+      "at": 19.55,
+      "level": 0.8,
+      "bpm": 72,
+      "key": "D minor"
+    }
+  ],
+  "beats": [
+    {
+      "id": "before_the_match_the_boots_00",
+      "template": "insert",
+      "clip_secs": 5.0,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "fade_black",
+      "grade": "eq=contrast=1.06:saturation=0.80,colorbalance=gm=0.10:rm=-0.04:bm=0.02:gh=0.06,eq=gamma=1.03",
+      "seed": 599640560,
+      "tags": "mud dropping off a football boot onto concrete, studs, no humans, close-up, a bare concrete locker room floor filling the frame, a pair of studded football boots on it, no room visible, fluorescent lighting, ceiling light, harsh lighting, pale skin, seinen style, narrow sharp eyes, realistically proportioned eyes, clean lineart, muted colors, desaturated, detailed background, realistic shadows, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "mud dropping off a football boot onto concrete, studs, no humans, close-up, a bare concrete locker room floor filling the frame, a pair of studded football boots on it, no room visible, fluorescent lighting, ceiling light, harsh lighting, pale skin, seinen style, narrow sharp eyes, realistically proportioned eyes, clean lineart, muted colors, desaturated, detailed background, realistic shadows, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "Mud drops off a football boot onto concrete.",
+      "motion_src": "desc:derived from the shot line: 'mud dropping off a football boot onto concrete'"
+    },
+    {
+      "id": "before_the_match_the_manager_00",
+      "template": "master",
+      "clip_secs": 5.0,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "cut",
+      "grade": "eq=contrast=1.06:saturation=0.80,colorbalance=gm=0.10:rm=-0.04:bm=0.02:gh=0.06,eq=gamma=1.03",
+      "seed": 4035537249,
+      "ref": [
+        "MANAGER"
+      ],
+      "tags": "1boy, solo, old man, grey hair, short beard, lined face, wrinkles, male focus, mature male, stout, furrowed brow, bead of sweat, narrowed eyes, looking down, fixed stare, closed mouth, pressed lips, leaning forward, steady hands, still, shoulders forward, clean dark tracksuit, zipped to the collar, team crest, whistle on a lanyard, neat, walking down the row of lockers, whistle swinging, full body, locker room, rows of dented metal lockers, low wooden bench, tiled floor, tiled wall, coat hooks, sports bag open on the bench, towel over a locker door, floor drain, fluorescent ceiling light, steam from the shower doorway, fluorescent lighting, ceiling light, harsh lighting, pale skin, seinen style, narrow sharp eyes, realistically proportioned eyes, clean lineart, muted colors, desaturated, detailed background, realistic shadows, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "1boy, solo, old man, grey hair, short beard, lined face, wrinkles, male focus, mature male, stout, furrowed brow, bead of sweat, narrowed eyes, looking down, fixed stare, closed mouth, pressed lips, leaning forward, steady hands, still, shoulders forward, clean dark tracksuit, zipped to the collar, team crest, whistle on a lanyard, neat, walking down the row of lockers, whistle swinging, full body, locker room, rows of dented metal lockers, low wooden bench, tiled floor, tiled wall, coat hooks, sports bag open on the bench, towel over a locker door, floor drain, fluorescent ceiling light, steam from the shower doorway, fluorescent lighting, ceiling light, harsh lighting, pale skin, seinen style, narrow sharp eyes, realistically proportioned eyes, clean lineart, muted colors, desaturated, detailed background, realistic shadows, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "He walks down the row of lockers. Nothing else in the frame moves.",
+      "motion_src": "desc:derived from the shot line: 'walking down the row of lockers'"
+    },
+    {
+      "id": "before_the_match_viro_dresses_00",
+      "template": "master",
+      "clip_secs": 5.0,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "cut",
+      "grade": "eq=contrast=1.06:saturation=0.80,colorbalance=gm=0.10:rm=-0.04:bm=0.02:gh=0.06,eq=gamma=1.03",
+      "seed": 83528924,
+      "ref": [
+        "VIRO"
+      ],
+      "tags": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, male focus, mature male, masculine, determined expression, serious, sharp eyes, furrowed brow, closed mouth, squared shoulders, clean teal soccer jersey, orange trim, number 7, neat hair, pulling a teal jersey down over his head, bench and lockers behind, full body, locker room, rows of dented metal lockers, low wooden bench, tiled floor, tiled wall, coat hooks, sports bag open on the bench, towel over a locker door, floor drain, fluorescent ceiling light, steam from the shower doorway, fluorescent lighting, ceiling light, harsh lighting, pale skin, seinen style, narrow sharp eyes, realistically proportioned eyes, clean lineart, muted colors, desaturated, detailed background, realistic shadows, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, male focus, mature male, masculine, determined expression, serious, sharp eyes, furrowed brow, closed mouth, squared shoulders, clean teal soccer jersey, orange trim, number 7, neat hair, pulling a teal jersey down over his head, bench and lockers behind, full body, locker room, rows of dented metal lockers, low wooden bench, tiled floor, tiled wall, coat hooks, sports bag open on the bench, towel over a locker door, floor drain, fluorescent ceiling light, steam from the shower doorway, fluorescent lighting, ceiling light, harsh lighting, pale skin, seinen style, narrow sharp eyes, realistically proportioned eyes, clean lineart, muted colors, desaturated, detailed background, realistic shadows, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "He pulls a teal jersey down over his head. Nothing else in the frame moves.",
+      "motion_src": "desc:derived from the shot line: 'pulling a teal jersey down over his head'"
+    },
+    {
+      "id": "before_the_match_viro_says_it_00",
+      "template": "speak",
+      "clip_secs": 5.0,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "cut",
+      "grade": "eq=contrast=1.06:saturation=0.80,colorbalance=gm=0.10:rm=-0.04:bm=0.02:gh=0.06,eq=gamma=1.03",
+      "seed": 2666926775,
+      "ref": [
+        "VIRO"
+      ],
+      "tags": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, male focus, mature male, masculine, sweatdrop, head tilt, looking down, looking to the side, half-closed eyes, unfocused, lip biting, closed mouth, hand on own chin, shoulders drawn in, weight on back foot, clean teal soccer jersey, orange trim, number 7, neat hair, close-up, locker room, rows of dented metal lockers, low wooden bench, tiled floor, tiled wall, coat hooks, sports bag open on the bench, towel over a locker door, floor drain, fluorescent ceiling light, steam from the shower doorway, fluorescent lighting, ceiling light, harsh lighting, pale skin, seinen style, narrow sharp eyes, realistically proportioned eyes, clean lineart, muted colors, desaturated, detailed background, realistic shadows, cinematic, seated on a wooden bench under a strip light, elbows on knees, boots unlaced, medium shot, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud, male focus, mature male, masculine, sweatdrop, head tilt, looking down, looking to the side, half-closed eyes, unfocused, lip biting, closed mouth, hand on own chin, shoulders drawn in, weight on back foot, clean teal soccer jersey, orange trim, number 7, neat hair, close-up, locker room, rows of dented metal lockers, low wooden bench, tiled floor, tiled wall, coat hooks, sports bag open on the bench, towel over a locker door, floor drain, fluorescent ceiling light, steam from the shower doorway, fluorescent lighting, ceiling light, harsh lighting, pale skin, seinen style, narrow sharp eyes, realistically proportioned eyes, clean lineart, muted colors, desaturated, detailed background, realistic shadows, cinematic, seated on a wooden bench under a strip light, elbows on knees, boots unlaced, medium shot, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "He raises his right hand to his face.",
+      "motion_src": "card:hand_to_face",
+      "line": {
+        "who": "VIRO",
+        "text": "Nine years. I have counted every one of them."
+      }
+    },
+    {
+      "id": "the_tunnel_rask_arrives_00",
+      "template": "build",
+      "clip_secs": 5.0,
+      "intensity": 1.429,
+      "camera": "static",
+      "transition": "dissolve",
+      "grade": "eq=brightness=-0.08:contrast=1.12:saturation=0.65,colorbalance=rm=0.14:gm=0.05:bm=-0.14:bs=0.04,eq=gamma=0.97",
+      "seed": 4291247146,
+      "ref": [
+        "RASK"
+      ],
+      "tags": "1boy, solo, dark red hair, undercut, yellow eyes, scar on eyebrow, male focus, mature male, masculine, smirk, raised eyebrow, half-closed eyes, looking at viewer, lidded gaze, smirk, closed mouth, one corner of mouth raised, hand on hip, leaning back, relaxed shoulders, chin up, clean black soccer jersey, silver trim, number 9, neat hair, striding up the concourse toward the camera, crowd noise, full body, stadium concourse, curved concrete walkway, exposed ceiling ducts, shuttered kiosks, turnstiles, entry tunnel to the stands, wayfinding signs, strip lighting, crush barriers, litter on the floor, daylight from the tunnel mouth, night, orange glow, dark, seinen style, narrow sharp eyes, realistically proportioned eyes, clean lineart, muted colors, desaturated, detailed background, realistic shadows, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "1boy, solo, dark red hair, undercut, yellow eyes, scar on eyebrow, male focus, mature male, masculine, smirk, raised eyebrow, half-closed eyes, looking at viewer, lidded gaze, smirk, closed mouth, one corner of mouth raised, hand on hip, leaning back, relaxed shoulders, chin up, clean black soccer jersey, silver trim, number 9, neat hair, striding up the concourse toward the camera, crowd noise, full body, stadium concourse, curved concrete walkway, exposed ceiling ducts, shuttered kiosks, turnstiles, entry tunnel to the stands, wayfinding signs, strip lighting, crush barriers, litter on the floor, daylight from the tunnel mouth, night, orange glow, dark, seinen style, narrow sharp eyes, realistically proportioned eyes, clean lineart, muted colors, desaturated, detailed background, realistic shadows, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "He strides up the concourse toward the camera.",
+      "motion_src": "desc:derived from the shot line: 'striding up the concourse toward the camera'"
+    },
+    {
+      "id": "the_tunnel_rask_says_it_00",
+      "template": "speak",
+      "clip_secs": 5.0,
+      "intensity": 1.429,
+      "camera": "static",
+      "transition": "cut",
+      "grade": "eq=brightness=-0.08:contrast=1.12:saturation=0.65,colorbalance=rm=0.14:gm=0.05:bm=-0.14:bs=0.04,eq=gamma=0.97",
+      "seed": 2269439414,
+      "ref": [
+        "RASK"
+      ],
+      "tags": "1boy, solo, dark red hair, undercut, yellow eyes, scar on eyebrow, male focus, mature male, masculine, smirk, raised eyebrow, half-closed eyes, looking at viewer, lidded gaze, smirk, closed mouth, one corner of mouth raised, hand on hip, leaning back, relaxed shoulders, chin up, clean black soccer jersey, silver trim, number 9, neat hair, close-up, stadium concourse, curved concrete walkway, exposed ceiling ducts, shuttered kiosks, turnstiles, entry tunnel to the stands, wayfinding signs, strip lighting, crush barriers, litter on the floor, daylight from the tunnel mouth, night, orange glow, dark, seinen style, narrow sharp eyes, realistically proportioned eyes, clean lineart, muted colors, desaturated, detailed background, realistic shadows, cinematic, standing in a floodlit gap in the concrete, hands loose at his sides, medium shot, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "1boy, solo, dark red hair, undercut, yellow eyes, scar on eyebrow, male focus, mature male, masculine, smirk, raised eyebrow, half-closed eyes, looking at viewer, lidded gaze, smirk, closed mouth, one corner of mouth raised, hand on hip, leaning back, relaxed shoulders, chin up, clean black soccer jersey, silver trim, number 9, neat hair, close-up, stadium concourse, curved concrete walkway, exposed ceiling ducts, shuttered kiosks, turnstiles, entry tunnel to the stands, wayfinding signs, strip lighting, crush barriers, litter on the floor, daylight from the tunnel mouth, night, orange glow, dark, seinen style, narrow sharp eyes, realistically proportioned eyes, clean lineart, muted colors, desaturated, detailed background, realistic shadows, cinematic, standing in a floodlit gap in the concrete, hands loose at his sides, medium shot, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "He steps forward into the light under the stand.",
+      "motion_src": "text:free text on the beat",
+      "line": {
+        "who": "RASK",
+        "text": "You have counted them. I have never had to."
+      }
+    },
+    {
+      "id": "the_tunnel_the_stand_00",
+      "template": "establish",
+      "clip_secs": 5.0,
+      "intensity": 1.429,
+      "camera": "static",
+      "transition": "cut",
+      "grade": "eq=brightness=-0.08:contrast=1.12:saturation=0.65,colorbalance=rm=0.14:gm=0.05:bm=-0.14:bs=0.04,eq=gamma=0.97",
+      "seed": 3744032350,
+      "tags": "paper streamers falling through a floodlit stand, empty seats, no humans, wide shot, stadium concourse, curved concrete walkway, exposed ceiling ducts, shuttered kiosks, turnstiles, entry tunnel to the stands, wayfinding signs, strip lighting, crush barriers, litter on the floor, daylight from the tunnel mouth, night, orange glow, dark, seinen style, narrow sharp eyes, realistically proportioned eyes, clean lineart, muted colors, desaturated, detailed background, realistic shadows, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "paper streamers falling through a floodlit stand, empty seats, no humans, wide shot, stadium concourse, curved concrete walkway, exposed ceiling ducts, shuttered kiosks, turnstiles, entry tunnel to the stands, wayfinding signs, strip lighting, crush barriers, litter on the floor, daylight from the tunnel mouth, night, orange glow, dark, seinen style, narrow sharp eyes, realistically proportioned eyes, clean lineart, muted colors, desaturated, detailed background, realistic shadows, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "Paper streamers fall through a floodlit stand.",
+      "motion_src": "desc:derived from the shot line: 'paper streamers falling through a floodlit stand'"
+    },
+    {
+      "id": "the_long_way_home_nika_walks_00",
+      "template": "master",
+      "clip_secs": 5.0,
+      "intensity": 0.741,
+      "camera": "static",
+      "transition": "dissolve",
+      "grade": "eq=brightness=-0.08:contrast=1.22:saturation=1.18,colorbalance=bs=0.12:rs=-0.04:rh=0.06:bh=0.04,vibrance=intensity=0.25,eq=gamma=0.96",
+      "seed": 2172709473,
+      "ref": [
+        "NIKA"
+      ],
+      "tags": "1girl, solo, silver hair, very long hair, single braid, sidecut, heterochromia, green eyes, orange eyes, scar on face, black nails, female focus, teenage girl, slender, faint smile, lowered eyelids, head tilted down, half-closed eyes, looking down, calm gaze, closed mouth, slight smile, shoulders dropped, hands in pockets, standing loose, head tilted down, clean grey school blazer, loose red necktie, red enamel star pin on the collar, neat braid, walking down a wet market street, floodlights behind her, full body, market street, market stalls, striped awnings, crates of vegetables, hanging lanterns, shopfront signs, cobblestones, crowd of shoppers, strings of bunting, produce boxes, wooden handcart, neon lights, night, cyberpunk, glowing sign, reflection, seinen style, narrow sharp eyes, realistically proportioned eyes, clean lineart, muted colors, desaturated, detailed background, realistic shadows, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "1girl, solo, silver hair, very long hair, single braid, sidecut, heterochromia, green eyes, orange eyes, scar on face, black nails, female focus, teenage girl, slender, faint smile, lowered eyelids, head tilted down, half-closed eyes, looking down, calm gaze, closed mouth, slight smile, shoulders dropped, hands in pockets, standing loose, head tilted down, clean grey school blazer, loose red necktie, red enamel star pin on the collar, neat braid, walking down a wet market street, floodlights behind her, full body, market street, market stalls, striped awnings, crates of vegetables, hanging lanterns, shopfront signs, cobblestones, crowd of shoppers, strings of bunting, produce boxes, wooden handcart, neon lights, night, cyberpunk, glowing sign, reflection, seinen style, narrow sharp eyes, realistically proportioned eyes, clean lineart, muted colors, desaturated, detailed background, realistic shadows, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "She walks down a wet market street. Nothing else in the frame moves.",
+      "motion_src": "desc:derived from the shot line: 'walking down a wet market street'"
+    },
+    {
+      "id": "the_long_way_home_nika_says_it_00",
+      "template": "speak",
+      "clip_secs": 5.0,
+      "intensity": 0.741,
+      "camera": "static",
+      "transition": "cut",
+      "grade": "eq=brightness=-0.08:contrast=1.22:saturation=1.18,colorbalance=bs=0.12:rs=-0.04:rh=0.06:bh=0.04,vibrance=intensity=0.25,eq=gamma=0.96",
+      "seed": 2609575716,
+      "ref": [
+        "NIKA"
+      ],
+      "tags": "1girl, solo, silver hair, very long hair, single braid, sidecut, heterochromia, green eyes, orange eyes, scar on face, black nails, female focus, teenage girl, slender, gentle smile, faint blush, relaxed brow, half-closed eyes, looking at viewer, soft gaze, smile, closed mouth, head tilt, leaning close, reaching toward face, open palm, clean grey school blazer, loose red necktie, red enamel star pin on the collar, neat braid, close-up, market street, market stalls, striped awnings, crates of vegetables, hanging lanterns, shopfront signs, cobblestones, crowd of shoppers, strings of bunting, produce boxes, wooden handcart, neon lights, night, cyberpunk, glowing sign, reflection, seinen style, narrow sharp eyes, realistically proportioned eyes, clean lineart, muted colors, desaturated, detailed background, realistic shadows, cinematic, standing under a shuttered stall awning, rain coming off the canvas edge, medium shot, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "1girl, solo, silver hair, very long hair, single braid, sidecut, heterochromia, green eyes, orange eyes, scar on face, black nails, female focus, teenage girl, slender, gentle smile, faint blush, relaxed brow, half-closed eyes, looking at viewer, soft gaze, smile, closed mouth, head tilt, leaning close, reaching toward face, open palm, clean grey school blazer, loose red necktie, red enamel star pin on the collar, neat braid, close-up, market street, market stalls, striped awnings, crates of vegetables, hanging lanterns, shopfront signs, cobblestones, crowd of shoppers, strings of bunting, produce boxes, wooden handcart, neon lights, night, cyberpunk, glowing sign, reflection, seinen style, narrow sharp eyes, realistically proportioned eyes, clean lineart, muted colors, desaturated, detailed background, realistic shadows, cinematic, standing under a shuttered stall awning, rain coming off the canvas edge, medium shot, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "She raises her right hand to her face. Nothing else in the frame moves.",
+      "motion_src": "card:hand_to_face_only",
+      "line": {
+        "who": "NIKA",
+        "text": "It is one match. You will still be you on Monday."
+      }
+    },
+    {
+      "id": "the_long_way_home_the_kid_00",
+      "template": "build",
+      "clip_secs": 5.0,
+      "intensity": 0.741,
+      "camera": "static",
+      "transition": "cut",
+      "grade": "eq=brightness=-0.08:contrast=1.22:saturation=1.18,colorbalance=bs=0.12:rs=-0.04:rh=0.06:bh=0.04,vibrance=intensity=0.25,eq=gamma=0.96",
+      "seed": 736583808,
+      "ref": [
+        "PIP"
+      ],
+      "tags": "1boy, solo, male child, child, orange hair, messy hair, freckles, gap teeth, brown eyes, child focus, young boy, small, smiling, happy, bright eyes, open smile, open posture, clean yellow raincoat, one toggle missing, red rubber boot on the left foot, green rubber boot on the right foot, holding a plastic toy dinosaur, running past a row of shuttered stalls, arms out, full body, market street, market stalls, striped awnings, crates of vegetables, hanging lanterns, shopfront signs, cobblestones, crowd of shoppers, strings of bunting, produce boxes, wooden handcart, neon lights, night, cyberpunk, glowing sign, reflection, seinen style, narrow sharp eyes, realistically proportioned eyes, clean lineart, muted colors, desaturated, detailed background, realistic shadows, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "1boy, solo, male child, child, orange hair, messy hair, freckles, gap teeth, brown eyes, child focus, young boy, small, smiling, happy, bright eyes, open smile, open posture, clean yellow raincoat, one toggle missing, red rubber boot on the left foot, green rubber boot on the right foot, holding a plastic toy dinosaur, running past a row of shuttered stalls, arms out, full body, market street, market stalls, striped awnings, crates of vegetables, hanging lanterns, shopfront signs, cobblestones, crowd of shoppers, strings of bunting, produce boxes, wooden handcart, neon lights, night, cyberpunk, glowing sign, reflection, seinen style, narrow sharp eyes, realistically proportioned eyes, clean lineart, muted colors, desaturated, detailed background, realistic shadows, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "He runs past a row of shuttered stalls.",
+      "motion_src": "desc:derived from the shot line: 'running past a row of shuttered stalls'"
+    },
+    {
+      "id": "the_long_way_home_pip_says_it_00",
+      "template": "speak",
+      "clip_secs": 5.0,
+      "intensity": 0.741,
+      "camera": "static",
+      "transition": "cut",
+      "grade": "eq=brightness=-0.08:contrast=1.22:saturation=1.18,colorbalance=bs=0.12:rs=-0.04:rh=0.06:bh=0.04,vibrance=intensity=0.25,eq=gamma=0.96",
+      "seed": 3866599875,
+      "ref": [
+        "PIP"
+      ],
+      "tags": "1boy, solo, male child, child, orange hair, messy hair, freckles, gap teeth, brown eyes, child focus, young boy, small, smiling, happy, bright eyes, open smile, open posture, clean yellow raincoat, one toggle missing, red rubber boot on the left foot, green rubber boot on the right foot, holding a plastic toy dinosaur, close-up, market street, market stalls, striped awnings, crates of vegetables, hanging lanterns, shopfront signs, cobblestones, crowd of shoppers, strings of bunting, produce boxes, wooden handcart, neon lights, night, cyberpunk, glowing sign, reflection, seinen style, narrow sharp eyes, realistically proportioned eyes, clean lineart, muted colors, desaturated, detailed background, realistic shadows, cinematic, a paper cup of soup held in both hands at chest height, hood up, steam, close-up, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "1boy, solo, male child, child, orange hair, messy hair, freckles, gap teeth, brown eyes, child focus, young boy, small, smiling, happy, bright eyes, open smile, open posture, clean yellow raincoat, one toggle missing, red rubber boot on the left foot, green rubber boot on the right foot, holding a plastic toy dinosaur, close-up, market street, market stalls, striped awnings, crates of vegetables, hanging lanterns, shopfront signs, cobblestones, crowd of shoppers, strings of bunting, produce boxes, wooden handcart, neon lights, night, cyberpunk, glowing sign, reflection, seinen style, narrow sharp eyes, realistically proportioned eyes, clean lineart, muted colors, desaturated, detailed background, realistic shadows, cinematic, a paper cup of soup held in both hands at chest height, hood up, steam, close-up, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "He lifts the cup from the table to his mouth.",
+      "motion_src": "card:cup_lift",
+      "line": {
+        "who": "PIP",
+        "text": "Can we come again next week? I liked the noise."
+      }
+    },
+    {
+      "id": "the_long_way_home_brack_locks_up_00",
+      "template": "master",
+      "clip_secs": 5.0,
+      "intensity": 0.741,
+      "camera": "static",
+      "transition": "cut",
+      "grade": "eq=brightness=-0.08:contrast=1.22:saturation=1.18,colorbalance=bs=0.12:rs=-0.04:rh=0.06:bh=0.04,vibrance=intensity=0.25,eq=gamma=0.96",
+      "seed": 691978869,
+      "ref": [
+        "BRACK"
+      ],
+      "tags": "1boy, solo, old man, bald, grey hair, mustache, facial hair, crooked nose, large man, tattoo on arm, anchor tattoo, gold ring, male focus, mature male, heavyset, exhausted, tired expression, half-closed eyes, open mouth, panting, slumped, hands on knees, clean canvas apron, brass buckle, rolled shirtsleeves, neat, pulling a shutter down over a stall front, full body, market street, market stalls, striped awnings, crates of vegetables, hanging lanterns, shopfront signs, cobblestones, crowd of shoppers, strings of bunting, produce boxes, wooden handcart, neon lights, night, cyberpunk, glowing sign, reflection, seinen style, narrow sharp eyes, realistically proportioned eyes, clean lineart, muted colors, desaturated, detailed background, realistic shadows, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "1boy, solo, old man, bald, grey hair, mustache, facial hair, crooked nose, large man, tattoo on arm, anchor tattoo, gold ring, male focus, mature male, heavyset, exhausted, tired expression, half-closed eyes, open mouth, panting, slumped, hands on knees, clean canvas apron, brass buckle, rolled shirtsleeves, neat, pulling a shutter down over a stall front, full body, market street, market stalls, striped awnings, crates of vegetables, hanging lanterns, shopfront signs, cobblestones, crowd of shoppers, strings of bunting, produce boxes, wooden handcart, neon lights, night, cyberpunk, glowing sign, reflection, seinen style, narrow sharp eyes, realistically proportioned eyes, clean lineart, muted colors, desaturated, detailed background, realistic shadows, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "He pulls a shutter down over a stall front. Nothing else in the frame moves.",
+      "motion_src": "desc:derived from the shot line: 'pulling a shutter down over a stall front'"
+    },
+    {
+      "id": "the_long_way_home_brack_says_it_00",
+      "template": "speak",
+      "clip_secs": 5.0,
+      "intensity": 0.741,
+      "camera": "static",
+      "transition": "cut",
+      "grade": "eq=brightness=-0.08:contrast=1.22:saturation=1.18,colorbalance=bs=0.12:rs=-0.04:rh=0.06:bh=0.04,vibrance=intensity=0.25,eq=gamma=0.96",
+      "seed": 1622605590,
+      "ref": [
+        "BRACK"
+      ],
+      "tags": "1boy, solo, old man, bald, grey hair, mustache, facial hair, crooked nose, large man, tattoo on arm, anchor tattoo, gold ring, male focus, mature male, heavyset, exhausted, tired expression, half-closed eyes, open mouth, panting, slumped, hands on knees, clean canvas apron, brass buckle, rolled shirtsleeves, neat, close-up, market street, market stalls, striped awnings, crates of vegetables, hanging lanterns, shopfront signs, cobblestones, crowd of shoppers, strings of bunting, produce boxes, wooden handcart, neon lights, night, cyberpunk, glowing sign, reflection, seinen style, narrow sharp eyes, realistically proportioned eyes, clean lineart, muted colors, desaturated, detailed background, realistic shadows, cinematic, standing in front of a closed shutter with a ring of keys, sodium light overhead, medium close-up, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "1boy, solo, old man, bald, grey hair, mustache, facial hair, crooked nose, large man, tattoo on arm, anchor tattoo, gold ring, male focus, mature male, heavyset, exhausted, tired expression, half-closed eyes, open mouth, panting, slumped, hands on knees, clean canvas apron, brass buckle, rolled shirtsleeves, neat, close-up, market street, market stalls, striped awnings, crates of vegetables, hanging lanterns, shopfront signs, cobblestones, crowd of shoppers, strings of bunting, produce boxes, wooden handcart, neon lights, night, cyberpunk, glowing sign, reflection, seinen style, narrow sharp eyes, realistically proportioned eyes, clean lineart, muted colors, desaturated, detailed background, realistic shadows, cinematic, standing in front of a closed shutter with a ring of keys, sodium light overhead, medium close-up, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "He turns a key over in one hand toward the lock.",
+      "motion_src": "text:free text on the beat",
+      "line": {
+        "who": "BRACK",
+        "text": "Same again next year, then."
+      }
+    },
+    {
+      "id": "the_long_way_home_the_last_streamer_00",
+      "template": "insert",
+      "clip_secs": 5.0,
+      "intensity": 0.741,
+      "camera": "static",
+      "transition": "fade_black",
+      "grade": "eq=brightness=-0.08:contrast=1.22:saturation=1.18,colorbalance=bs=0.12:rs=-0.04:rh=0.06:bh=0.04,vibrance=intensity=0.25,eq=gamma=0.96",
+      "seed": 2519827758,
+      "tags": "one paper streamer sliding across wet tarmac, no humans, close-up, wet black tarmac filling the frame, kerb stones, neon reflected in the water, no buildings visible, neon lights, night, cyberpunk, glowing sign, reflection, seinen style, narrow sharp eyes, realistically proportioned eyes, clean lineart, muted colors, desaturated, detailed background, realistic shadows, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "one paper streamer sliding across wet tarmac, no humans, close-up, wet black tarmac filling the frame, kerb stones, neon reflected in the water, no buildings visible, neon lights, night, cyberpunk, glowing sign, reflection, seinen style, narrow sharp eyes, realistically proportioned eyes, clean lineart, muted colors, desaturated, detailed background, realistic shadows, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "One paper streamer slides across wet tarmac.",
+      "motion_src": "desc:derived from the shot line: 'one paper streamer sliding across wet tarmac'"
+    }
+  ]
+}

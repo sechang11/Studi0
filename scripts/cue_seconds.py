@@ -17,7 +17,7 @@ Run AFTER `--stage narrate` (shot lengths depend on measured narration) and BEFO
 import collections, json, os, sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-os.environ.setdefault("COMFY_ROOT", "Z:/ComfyUI")
+os.environ.setdefault("COMFY_ROOT", os.path.expanduser("~/ComfyUI"))
 # Default to the LOCAL ComfyUI. This used to hardcode 192.168.1.46, which broke
 # when DHCP moved the box to .45, and which also sent every render request across
 # a NIC measured dropping 10% of packets. Nothing here needs the network: these

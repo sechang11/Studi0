@@ -1,0 +1,189 @@
+// DEMO 3 of 5 - THE LAST TRAIN.  Every READY card in studio/motions/, used as filmmaking.
+//
+//   python3 studio/compile.py studio/movies/demo_motion.movie --timeline
+//   python3 scripts/short.py studio/movies/demo_motion.json
+//
+// WHAT THIS ONE IS FOR, AND HOW IT DIFFERS FROM motion-proof.movie
+//
+// motion-proof.movie walks the four RUNGS of compose.resolve_motion() - card, free text,
+// derived, hold - one beat each, to prove the resolver works. This one walks the LIBRARY.
+// studio/motions/ holds 34 cards and exactly nine are marked `ready`; all nine are here,
+// each on a shot template ITS OWN CARD names in its `shots` field, inside a piece that
+// plays as a film rather than as a test grid:
+//
+//   hold_frame        establish   the empty platform      (stillness, chosen on purpose)
+//   papers            insert      the litter on the floor (element)
+//   walk_in           build       she arrives             (subject, 1girl)
+//   cup_lift          speak       she waits               (subject, staged in reach)
+//   hand_to_face      speak       she answers him         (subject)
+//   walk_in_only      master      he boards               (subject, 1boy - REGENDER)
+//   hand_to_face_only react       he cannot say it        (subject, 1boy - REGENDER)
+//   turn_away         master      she gives up the face   (subject, and it costs the face)
+//   confetti          establish   the carriage leaves     (element the keyframe lacks)
+//
+// Four more beats DERIVE from their shot lines, so the film also shows the rung that costs
+// nothing to author: a ticket dropping through the gap, a hand reaching toward the window,
+// steam pouring from under a locomotive, a door sliding shut across the frame.
+//
+// THE REGENDER PATH IS THE POINT OF HAVING TWO CHARACTERS. Every card in the library is
+// written in the third person feminine, because that is how the probe cells that measured
+// them were written - "She walks forward toward the camera." NIKA is 1girl and takes the
+// card verbatim. VIRO is 1boy and compose._motion_regender() must rewrite the same card to
+// "He walks forward toward the camera." before it reaches LTX, because a keyframe drawn as
+// a man plus a motion string asking for a woman is a contradiction the video model
+// resolves by changing somebody's face.
+//
+// NOT ONE BEAT IN THIS FILM FALLS TO THE UNINTENDED HOLD. The one beat that does hold -
+// the opening establish - holds because hold_frame was NAMED, and hold_frame rather than
+// hold_nobody: 'Nobody moves.' was rendered over a keyframe written 'no humans' and by
+// frame 24 the model had walked a figure into shot and marched it away down the corridor.
+// The model renders nouns and 'Nobody' is a person-shaped one. hold_frame names no
+// occupant at all.
+//
+// TWO CARDS IN ONE SCENE, which nothing in this project had done. A per-shot @token beats
+// the scene's, so `motion: hand_to_face` on the scene and `@cup_lift` on the shot line
+// gives the picture beat one card and the descless dialogue beat that follows it another -
+// and that dialogue beat is the beat class that holds in every earlier film.
+//
+// cup_lift IS STAGED. Its re-measurement across four stagings found the precondition is
+// not "a cup in frame" but "a cup WITHIN REACH": at arm's length the full look-reach-lift-
+// drink lands; a table's length away the card turns into the subject walking out of frame
+// while still returning a healthy-looking number. So the mug is written into her hands.
+//
+// look: moonlit and sodium, never `night`. studio/looks/night.json grades
+// brightness=-0.15 with contrast=1.20 and that arithmetic drives everything under luma 60
+// to pure black on this box - a station platform at night would come back as a rectangle.
+
+MOVIE demo_motion
+  title: DEMO MOTION
+  logline: She is on the platform to leave and he is on the train to stay, and neither of them says so.
+  canvas: 1920x1080
+  fps: 24
+  engine: anime
+  style: ova_80s
+  checkpoint: animagine-xl-4.0.safetensors
+  face_weight: 0.6
+  seed_root: demo-motion-1
+  clip_secs: 5
+  tags: cinematic
+
+// ---------------------------------------------------------------------------
+CHAPTER the_platform
+  look: moonlit
+  place: subway_platform
+  pace: normal
+  // NOT lonely_night_city, WHICH CANNOT RENDER. studio/cues/lonely_night_city.json
+  // carries key "B flat minor" and ComfyUI TextEncodeAceStepAudio1.5 accepts a fixed
+  // 34-value list that spells it "Bb minor". The graph fails validation, short.py
+  // aborts - AFTER every keyframe and every clip has been generated, which is the most
+  // expensive place in the pipeline to discover it. heroic_fanfare (B flat major) and
+  // menace (E flat minor) are broken the same way; the other 19 cues are fine.
+  cue: unease
+
+  // hold_frame, NAMED. The correct answer for this beat is stillness and the film says so
+  // out loud rather than arriving at it by failing to derive anything.
+  SCENE empty_platform
+    transition: fade_black
+    camera: static
+    shot: establish @hold_frame | an empty underground platform at night, tiled walls, one lit sign, wet concrete, no humans, wide shot
+
+  // rung 3: nothing is named, the shot line does the work.
+  SCENE the_ticket
+    transition: cut
+    place: the edge of a station platform, yellow line, a dark track bed below, litter
+    camera: static
+    shot: insert | a paper ticket dropping through the gap onto the tracks, no humans, close-up
+
+  SCENE she_arrives
+    transition: dissolve
+    characters: NIKA
+    emotion: resolve
+    camera: static
+    shot: build @walk_in | coming up the platform toward the camera, canvas bag over one shoulder, full body
+
+  // TWO CARDS, ONE SCENE. @cup_lift on the picture beat, hand_to_face on the scene so the
+  // line of dialogue underneath it moves as well.
+  SCENE she_waits
+    transition: cut
+    characters: NIKA
+    emotion: longing
+    motion: hand_to_face
+    mood: an enamel mug held in both hands at chest height, steam, tiled wall behind
+    camera: static
+    shot: speak @cup_lift | seated on a platform bench with a mug in both hands at chest height, close-up
+    NIKA: The four twenty is the last one. After that it is the morning.
+
+  SCENE the_papers
+    transition: cut
+    place: wet concrete platform floor, yellow safety line, loose sheets of newspaper lying on the concrete
+    camera: static
+    shot: insert @papers | loose newspaper lying across a wet concrete floor, no humans, close-up
+
+// ---------------------------------------------------------------------------
+CHAPTER the_carriage
+  look: sodium
+  place: train_carriage
+  pace: normal
+  cue: melancholy_piano
+
+  // REGENDER: walk_in_only is written "She walks forward toward the camera." and VIRO is
+  // 1boy. This beat is the one that must come back masculine.
+  SCENE he_boards
+    transition: dissolve
+    characters: VIRO
+    emotion: doubt
+    camera: static
+    shot: master @walk_in_only | walking up the aisle of a lit carriage toward the camera, full body
+
+  // rung 3 again, on a person this time: the shot line names a mover, a verb and a path.
+  SCENE the_window
+    transition: cut
+    characters: NIKA
+    emotion: longing
+    camera: static
+    shot: react | reaching one hand toward the carriage window, close-up
+
+  SCENE he_cannot_say_it
+    transition: cut
+    characters: VIRO
+    emotion: resignation
+    motion: He leans back against the seat away from the window.
+    mood: half his face in sodium light from the window, medium close-up
+    camera: static
+    shot: react @hand_to_face_only | seated by the window with one hand rising toward his face, close-up
+    VIRO: You should get on. I am not going to ask you to.
+
+  SCENE she_answers
+    transition: cut
+    characters: NIKA
+    emotion: angry
+    motion: She takes one step back from the carriage door into the dark.
+    mood: standing in the carriage doorway, one hand on the frame, medium shot
+    camera: static
+    shot: speak @hand_to_face | standing in the carriage doorway, close-up
+    NIKA: You never ask. That has always been the whole of it.
+
+  SCENE the_steam
+    transition: cut
+    place: the underside of a stopped locomotive on a wet platform, iron wheels, gravel
+    camera: static
+    shot: insert | steam pouring from under a stopped locomotive, no humans, close-up
+
+  // turn_away DELIBERATELY GIVES UP THE FACE. Measured: identity holds about 8s but budget
+  // by the ACTION - on a turn the face is frontal to 5s, profile at 7s and back-of-head by
+  // 8s. clip_secs is 5 on this beat for exactly that reason.
+  SCENE she_turns
+    transition: cut
+    characters: NIKA
+    emotion: resignation
+    camera: static
+    shot: master @turn_away @5s | standing in the open carriage door, medium shot
+
+  // confetti is ABSENT from the keyframe and the model invents it - the highest-motion
+  // card in the library at mean 6.127, and the one seed in three that measured 10.15 will
+  // bury the frame. It is the last shot of the film, which is where that risk is cheapest.
+  SCENE the_carriage_leaves
+    transition: fade_black
+    silence: true
+    camera: static
+    shot: establish @confetti | an empty lit train carriage seen from a dark platform, doors open, no humans, wide shot

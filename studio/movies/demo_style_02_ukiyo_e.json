@@ -1,0 +1,74 @@
+{
+  "title": "DEMO STYLE 02 UKIYO E",
+  "fps": 24,
+  "canvas": [
+    1920,
+    1080
+  ],
+  "engine": "higgs_v3",
+  "keyframe_engine": "anime",
+  "anime_ckpt": "animagine-xl-4.0.safetensors",
+  "ipadapter_weight": 0.6,
+  "style": "cinematic",
+  "anime_sheets": {},
+  "sheets": {},
+  "characters": {},
+  "character_loras": {},
+  "character_lora_weights": {},
+  "voices": {},
+  "music": [
+    {
+      "prefix": "quiet_dawn_00",
+      "tags": "gentle sunrise ambient, soft solo piano, warm string pad, distant solo clarinet, calm, spacious, instrumental",
+      "seconds": 12,
+      "at": 0.0,
+      "level": 0.65,
+      "bpm": 64,
+      "key": "G major"
+    }
+  ],
+  "beats": [
+    {
+      "id": "the_road_the_valley_00",
+      "template": "establish",
+      "clip_secs": 6.0,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "fade_black",
+      "grade": "eq=contrast=1.08:saturation=1.22,colorbalance=rs=0.08:bs=-0.06",
+      "seed": 689244476,
+      "tags": "cloud shadow sliding across a wide valley of terraced fields, a pale dirt road winding through them, no humans, extreme wide shot, a wide upland valley of terraced fields, a pale dirt road, dry stone walls, tall grass, golden hour, warm sunlight, long shadows, ukiyo-e, traditional media, japanese art, flat colour, thick outlines, limited palette, no shading, woodgrain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "cloud shadow sliding across a wide valley of terraced fields, a pale dirt road winding through them, no humans, extreme wide shot, a wide upland valley of terraced fields, a pale dirt road, dry stone walls, tall grass, golden hour, warm sunlight, long shadows, ukiyo-e, traditional media, japanese art, flat colour, thick outlines, limited palette, no shading, woodgrain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "Cloud shadow slides across a wide valley of terraced fields.",
+      "motion_src": "desc:derived from the shot line: 'cloud shadow sliding across a wide valley of terraced fields'"
+    },
+    {
+      "id": "the_road_the_traveller_00",
+      "template": "master",
+      "clip_secs": 6.0,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "cut",
+      "grade": "eq=contrast=1.08:saturation=1.22,colorbalance=rs=0.08:bs=-0.06",
+      "seed": 2904732512,
+      "tags": "a lone traveller walking forward along a dirt road, tall grass on both sides, a bundle on one shoulder, full body, a wide upland valley of terraced fields, a pale dirt road, dry stone walls, tall grass, golden hour, warm sunlight, long shadows, ukiyo-e, traditional media, japanese art, flat colour, thick outlines, limited palette, no shading, woodgrain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "a lone traveller walking forward along a dirt road, tall grass on both sides, a bundle on one shoulder, full body, a wide upland valley of terraced fields, a pale dirt road, dry stone walls, tall grass, golden hour, warm sunlight, long shadows, ukiyo-e, traditional media, japanese art, flat colour, thick outlines, limited palette, no shading, woodgrain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "A lone traveller walks forward along a dirt road. Nothing else in the frame moves.",
+      "motion_src": "desc:derived from the shot line: 'a lone traveller walking forward along a dirt road'"
+    },
+    {
+      "id": "the_road_the_leaves_00",
+      "template": "insert",
+      "clip_secs": 6.0,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "cut",
+      "grade": "eq=contrast=1.08:saturation=1.22,colorbalance=rs=0.08:bs=-0.06",
+      "seed": 1619722784,
+      "tags": "dry leaves blowing across the road surface, no humans, close-up, a pale dirt road surface, loose grit, dry grass at the verge, golden hour, warm sunlight, long shadows, ukiyo-e, traditional media, japanese art, flat colour, thick outlines, limited palette, no shading, woodgrain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "dry leaves blowing across the road surface, no humans, close-up, a pale dirt road surface, loose grit, dry grass at the verge, golden hour, warm sunlight, long shadows, ukiyo-e, traditional media, japanese art, flat colour, thick outlines, limited palette, no shading, woodgrain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "Dry leaves blow across the road surface.",
+      "motion_src": "desc:derived from the shot line: 'dry leaves blowing across the road surface'"
+    }
+  ]
+}
