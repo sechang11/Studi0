@@ -1182,6 +1182,46 @@ class H(http.server.SimpleHTTPRequestHandler):
             return self._page("places.html")
         if path == "/api/places":
             return self._send(places())
+        if path in ("/docs", "/docs.html"):
+            p = f"{HERE}/docs.html"
+            if not os.path.exists(p):
+                return self._send(b"docs.html is missing", 500, "text/plain")
+            return self._send(open(p, "rb").read(), 200, "text/html; charset=utf-8")
+        if path == "/api/docs":
+            # Built by studio/_tools/docs.py by walking the repository. A stale index is
+            # better than a 500, so a missing one reports itself rather than crashing.
+            p = f"{HERE}/docs.json"
+            if not os.path.exists(p):
+                return self._send({"error": "docs.json not built",
+                                   "hint": "python3 studio/_tools/docs.py"}, 503)
+            with open(p, encoding="utf-8") as f:
+                return self._send(json.load(f))
+        if path.startswith("/api/doc/"):
+            # Serve one markdown file by slug. The slug is resolved against the INDEX
+            # rather than against the filesystem, so a path cannot be traversed in - only
+            # documents docs.py chose to index are reachable.
+            want = urllib.parse.unquote(path[len("/api/doc/"):])
+            idx = f"{HERE}/docs.json"
+            if not os.path.exists(idx):
+                return self._send({"error": "docs.json not built"}, 503)
+            with open(idx, encoding="utf-8") as f:
+                doc = json.load(f)
+            hit = None
+            for sec in doc.get("sections", []):
+                for d in sec.get("docs", []):
+                    if d.get("slug") == want:
+                        hit = d
+                        break
+                if hit:
+                    break
+            if not hit:
+                return self._send({"error": "no such document", "slug": want}, 404)
+            full = os.path.normpath(os.path.join(ROOT, hit["rel"]))
+            if not full.startswith(os.path.normpath(ROOT)) or not os.path.exists(full):
+                return self._send({"error": "document missing on disk",
+                                   "rel": hit["rel"]}, 410)
+            with open(full, encoding="utf-8", errors="replace") as f:
+                return self._send({"slug": want, "rel": hit["rel"], "text": f.read()})
         if path in ("/changelog", "/changelog.html"):
             # Served through _page like every other page. It used to be read
             # straight off disk, which is why it was the one page in the app with

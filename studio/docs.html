@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>studio · documentation</title>
+<style>
+  :root{--bg:#0f1115;--panel:#161a21;--panel2:#1c2129;--line:#272d38;--ink:#e6e9ef;
+        --dim:#8b94a3;--accent:#6ea8fe;--ok:#4ec9a0;--warn:#e0b252;--bad:#e07a5f}
+  @media (prefers-color-scheme:light){
+    :root{--bg:#f6f7f9;--panel:#fff;--panel2:#f0f2f5;--line:#dde1e8;--ink:#141821;--dim:#5d6470}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font:14px/1.6 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
+  header{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;padding:13px 18px;
+         border-bottom:1px solid var(--line);background:var(--panel);position:sticky;top:0;z-index:9}
+  header h1{margin:0;font-size:15px;letter-spacing:.07em;text-transform:uppercase}
+  header .sub{color:var(--dim);font-size:12px}
+  header .right{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+  header .right a{color:var(--dim);font-size:12px;border:1px solid var(--line);
+           padding:5px 10px;border-radius:6px}
+  header .right a:hover{color:var(--ink);border-color:var(--accent);text-decoration:none}
+
+  .wrap{display:grid;grid-template-columns:270px minmax(0,1fr);gap:34px;
+        max-width:1220px;margin:0 auto;padding:0 18px 80px}
+  @media (max-width:900px){.wrap{grid-template-columns:1fr}nav.rail{position:static!important}}
+  nav.rail{position:sticky;top:64px;align-self:start;max-height:calc(100vh - 90px);
+           overflow:auto;padding-top:26px}
+  nav.rail h4{margin:20px 0 7px;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+              color:var(--dim)}
+  nav.rail a{display:block;padding:4px 0;font-size:13px;color:var(--ink)}
+  nav.rail a.on{color:var(--accent)}
+  nav.rail .m{color:var(--dim);font-size:11.5px}
+
+  main{min-width:0;padding-top:26px}
+  h2.sec{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);
+         margin:38px 0 4px;font-weight:600}
+  .blurb{color:var(--dim);font-size:13px;margin:0 0 14px;max-width:78ch}
+
+  .hero{background:var(--panel);border:1px solid var(--line);border-radius:14px;
+        padding:24px 26px;margin-top:24px}
+  .hero h2{margin:0 0 10px;font-size:25px;letter-spacing:-.01em}
+  .hero p{margin:0 0 10px;color:var(--dim);max-width:78ch}
+  .hero p:last-child{margin-bottom:0}
+  .hero b{color:var(--ink)}
+
+  /* The method panel. This project's one real discipline is that a claim is only as good
+     as the render behind it, so the page says that before it says anything else. */
+  .method{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(178px,1fr));
+          margin-top:18px}
+  .step{background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:11px 13px}
+  .step b{display:block;font-size:12.5px;margin-bottom:3px}
+  .step span{color:var(--dim);font-size:12px}
+
+  .grid{display:grid;gap:11px;grid-template-columns:repeat(auto-fill,minmax(272px,1fr))}
+  .d{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:14px 15px;
+     display:flex;flex-direction:column;gap:5px;cursor:pointer}
+  .d:hover{border-color:var(--accent)}
+  .d h3{margin:0;font-size:14.5px;line-height:1.35}
+  .d p{margin:0;color:var(--dim);font-size:12.5px}
+  .d .meta{margin-top:auto;padding-top:8px;color:var(--dim);
+           font:11px ui-monospace,Menlo,monospace}
+
+  .pill{display:inline-block;border:1px solid var(--line);border-radius:99px;
+        padding:2px 9px;font-size:11px;color:var(--dim);margin-right:6px}
+
+  /* reader */
+  .doc{background:var(--panel);border:1px solid var(--line);border-radius:12px;
+       padding:26px 30px;margin-top:22px;max-width:82ch}
+  .doc h1{font-size:26px;margin:0 0 6px;letter-spacing:-.01em}
+  .doc h2{font-size:19px;margin:28px 0 8px;padding-top:14px;border-top:1px solid var(--line)}
+  .doc h3{font-size:15.5px;margin:20px 0 6px}
+  .doc h4{font-size:13.5px;margin:16px 0 5px;color:var(--dim);text-transform:uppercase;
+          letter-spacing:.06em}
+  .doc p{margin:0 0 12px}
+  .doc ul,.doc ol{margin:0 0 12px;padding-left:22px}
+  .doc li{margin:3px 0}
+  .doc code{background:var(--panel2);border:1px solid var(--line);border-radius:4px;
+            padding:1px 5px;font:12.5px ui-monospace,Menlo,monospace}
+  .doc pre{background:var(--panel2);border:1px solid var(--line);border-radius:8px;
+           padding:12px 14px;overflow-x:auto;margin:0 0 14px}
+  .doc pre code{background:none;border:none;padding:0;font-size:12.5px;line-height:1.55}
+  .doc blockquote{margin:0 0 12px;padding:2px 0 2px 14px;border-left:3px solid var(--line);
+                  color:var(--dim)}
+  .doc table{border-collapse:collapse;margin:0 0 14px;font-size:13px;display:block;
+             overflow-x:auto;max-width:100%}
+  .doc th,.doc td{border:1px solid var(--line);padding:6px 10px;text-align:left;vertical-align:top}
+  .doc th{background:var(--panel2);font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;
+          color:var(--dim)}
+  .doc hr{border:none;border-top:1px solid var(--line);margin:22px 0}
+  .back{display:inline-block;margin:20px 0 0;font-size:13px}
+  .src{color:var(--dim);font:11.5px ui-monospace,Menlo,monospace;margin-top:6px}
+  .empty{padding:40px 0;color:var(--dim)}
+</style>
+</head>
+<body>
+<header>
+  <h1>studio</h1><span class="sub">documentation</span>
+  <span class="right">
+    <a href="/">Home</a><a href="/guide">Guides</a><a href="/capabilities">Capabilities</a>
+    <a href="/changelog">Changelog</a><a href="/wizard">Direct a scene</a>
+  </span>
+</header>
+
+<div class="wrap">
+  <nav class="rail" id="rail"></nav>
+  <main id="main"></main>
+</div>
+
+<script>
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+/* A small markdown renderer. Deliberately hand-written and dependency-free: this page is
+   served from a box with no internet reachability guarantee, and a CDN script would make
+   the documentation the least reliable page in the app. It covers what these documents
+   actually use - headings, lists, tables, code, quotes, links, emphasis - and nothing more. */
+function md(src){
+  const lines = String(src).replace(/\r\n?/g,"\n").split("\n");
+  let out=[], i=0, inCode=false, codeBuf=[];
+  const inline = t => esc(t)
+    .replace(/`([^`]+)`/g,(m,c)=>`<code>${c}</code>`)
+    .replace(/\*\*([^*]+)\*\*/g,"<strong>$1</strong>")
+    .replace(/(^|[^*])\*([^*\n]+)\*/g,"$1<em>$2</em>")
+    .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g,'<a href="$2" rel="noopener">$1</a>');
+  const flushList=(tag,items)=>`<${tag}>${items.map(x=>`<li>${inline(x)}</li>`).join("")}</${tag}>`;
+  while(i<lines.length){
+    const ln=lines[i];
+    if(/^```/.test(ln)){
+      if(inCode){ out.push(`<pre><code>${esc(codeBuf.join("\n"))}</code></pre>`); codeBuf=[]; inCode=false; }
+      else inCode=true;
+      i++; continue;
+    }
+    if(inCode){ codeBuf.push(ln); i++; continue; }
+    if(/^\s*$/.test(ln)){ i++; continue; }
+    let m;
+    if((m=ln.match(/^(#{1,6})\s+(.*)$/))){
+      const lv=Math.min(m[1].length,4);
+      out.push(`<h${lv}>${inline(m[2])}</h${lv}>`); i++; continue;
+    }
+    if(/^\s*([-*_])\s*\1\s*\1[\s\-*_]*$/.test(ln)){ out.push("<hr>"); i++; continue; }
+    if(/^\s*\|/.test(ln) && /^\s*\|?[\s:|-]+\|/.test(lines[i+1]||"")){
+      const row=s=>s.trim().replace(/^\||\|$/g,"").split("|").map(c=>c.trim());
+      const head=row(ln); i+=2; const body=[];
+      while(i<lines.length && /^\s*\|/.test(lines[i])){ body.push(row(lines[i])); i++; }
+      out.push(`<table><thead><tr>${head.map(h=>`<th>${inline(h)}</th>`).join("")}</tr></thead>`
+        +`<tbody>${body.map(r=>`<tr>${r.map(c=>`<td>${inline(c)}</td>`).join("")}</tr>`).join("")}</tbody></table>`);
+      continue;
+    }
+    if(/^\s*>/.test(ln)){
+      const buf=[]; while(i<lines.length && /^\s*>/.test(lines[i])){ buf.push(lines[i].replace(/^\s*>\s?/,"")); i++; }
+      out.push(`<blockquote>${inline(buf.join(" "))}</blockquote>`); continue;
+    }
+    if(/^\s*[-*+]\s+/.test(ln)){
+      const buf=[]; while(i<lines.length && /^\s*[-*+]\s+/.test(lines[i])){ buf.push(lines[i].replace(/^\s*[-*+]\s+/,"")); i++; }
+      out.push(flushList("ul",buf)); continue;
+    }
+    if(/^\s*\d+[.)]\s+/.test(ln)){
+      const buf=[]; while(i<lines.length && /^\s*\d+[.)]\s+/.test(lines[i])){ buf.push(lines[i].replace(/^\s*\d+[.)]\s+/,"")); i++; }
+      out.push(flushList("ol",buf)); continue;
+    }
+    const buf=[];
+    while(i<lines.length && !/^\s*$/.test(lines[i]) && !/^(#{1,6}\s|```|\s*[-*+]\s|\s*\d+[.)]\s|\s*>|\s*\|)/.test(lines[i])){
+      buf.push(lines[i]); i++;
+    }
+    out.push(`<p>${inline(buf.join(" "))}</p>`);
+  }
+  if(inCode && codeBuf.length) out.push(`<pre><code>${esc(codeBuf.join("\n"))}</code></pre>`);
+  return out.join("\n");
+}
+
+let INDEX=null;
+
+function overview(){
+  const secs=INDEX.sections.filter(s=>s.docs.length);
+  document.getElementById("rail").innerHTML =
+    `<h4>On this page</h4>`
+    + secs.map(s=>`<a href="#${esc(s.id)}">${esc(s.title)} <span class="m">${s.docs.length}</span></a>`).join("")
+    + `<h4>Elsewhere</h4>
+       <a href="/guide">The 13 how-to guides</a>
+       <a href="/capabilities">Capability catalogue</a>
+       <a href="/changelog">Changelog</a>`;
+
+  const hero = `<section class="hero">
+    <h2>Documentation</h2>
+    <p>This is a film studio built as <b>one card per variable</b>. A shot is a stack of
+       layers &mdash; style, place, character, wear, lighting, weather, look &mdash; and the
+       app resolves that stack into a prompt, picks the model that can render it, and warns
+       you when two of your choices are going to fight.</p>
+    <p>Everything below was written while building it. The rule the whole project runs on is
+       that <b>a claim is only as good as the render behind it</b>, so several of these
+       documents correct earlier versions of themselves. Those corrections are left in
+       rather than tidied away &mdash; they are the most useful part.</p>
+    <div class="method">
+      <div class="step"><b>1 &middot; Probe</b><span>Ask the model what it already knows,
+        with a control cell that has no name in it.</span></div>
+      <div class="step"><b>2 &middot; Author</b><span>Write the card in concrete nouns.
+        The model renders things, not qualities.</span></div>
+      <div class="step"><b>3 &middot; Render</b><span>Hold everything still except the one
+        variable being tested.</span></div>
+      <div class="step"><b>4 &middot; Look</b><span>Open the image. Metrics have ranked a
+        clip best while the subject's eyes were shut.</span></div>
+      <div class="step"><b>5 &middot; Record</b><span>Write the verdict onto the card, including
+        when it refutes what was expected.</span></div>
+    </div>
+  </section>
+
+  <h2 class="sec">How to use this page</h2>
+  <p class="blurb">Four different needs, four different places. <b>Start here</b> if you have
+    never opened the app. <b>How to use each section</b> is one guide per page, and lives at
+    <a href="/guide">/guide</a>. <b>What was measured</b> is why the app behaves as it does &mdash;
+    read it when something surprises you. <b>What the box can do</b> is the model and workflow
+    inventory, including what is installed but not yet exposed. <b>State, health and history</b>
+    is where things actually stand, and the <a href="/changelog">changelog</a> is the
+    running record of every change with the reasoning attached.</p>`;
+
+  const body = secs.map(s=>`
+    <h2 class="sec" id="${esc(s.id)}">${esc(s.title)}</h2>
+    <p class="blurb">${esc(s.blurb)}</p>
+    <div class="grid">${s.docs.map(d=>`
+      <div class="d" data-slug="${esc(d.slug)}"${d.guide_slug?` data-guide="${esc(d.guide_slug)}"`:""}>
+        <h3>${esc(d.title)}</h3>
+        <p>${esc((d.summary||"").slice(0,150))}</p>
+        <div class="meta">${esc(d.file)} &middot; ${d.lines} lines</div>
+      </div>`).join("")}</div>`).join("");
+
+  const probs = (INDEX.problems||[]).length
+    ? `<h2 class="sec">Documents with no title</h2>
+       <p class="blurb">Indexed but missing an H1, so their name here is derived from the
+       filename rather than read from the file.</p>
+       <div class="grid">${INDEX.problems.map(p=>`<div class="d"><h3>${esc(p.rel)}</h3>
+       <p>${esc(p.why)}</p></div>`).join("")}</div>` : "";
+
+  document.getElementById("main").innerHTML = hero + body + probs
+    + `<p class="src" style="margin-top:30px">${esc(INDEX.note||"")}</p>`;
+
+  document.querySelectorAll(".d[data-slug]").forEach(el=>el.onclick=()=>{
+    const g=el.dataset.guide;
+    if(g){ location.href="/guide/"+g; return; }
+    location.hash="#doc/"+el.dataset.slug;
+  });
+}
+
+async function reader(slug){
+  const all=INDEX.sections.flatMap(s=>s.docs);
+  const d=all.find(x=>x.slug===slug);
+  if(!d){ document.getElementById("main").innerHTML=`<div class="empty">No document called ${esc(slug)}.</div>`; return; }
+  document.getElementById("rail").innerHTML=
+    `<h4>Documentation</h4><a href="#">&larr; All documents</a>
+     <h4>This document</h4><div class="m">${esc(d.file)}<br>${d.lines} lines</div>
+     <h4>Elsewhere</h4><a href="/guide">Guides</a><a href="/capabilities">Capabilities</a>
+     <a href="/changelog">Changelog</a>`;
+  document.getElementById("main").innerHTML=`<div class="doc"><p class="empty">Loading…</p></div>`;
+  let text="";
+  try{
+    const r=await fetch("/api/doc/"+encodeURIComponent(slug));
+    if(!r.ok) throw new Error("HTTP "+r.status);
+    text=(await r.json()).text||"";
+  }catch(e){
+    document.getElementById("main").innerHTML=
+      `<div class="doc"><p>Could not load this document &mdash; ${esc(e.message)}.</p>
+       <p class="src">${esc(d.rel)}</p></div>`;
+    return;
+  }
+  document.getElementById("main").innerHTML=
+    `<div class="doc">${md(text)}</div>
+     <div class="src">${esc(d.rel)} &middot; ${d.lines} lines</div>
+     <a class="back" href="#">&larr; All documents</a>`;
+  window.scrollTo(0,0);
+}
+
+function route(){
+  const h=location.hash||"";
+  if(h.startsWith("#doc/")) reader(decodeURIComponent(h.slice(5)));
+  else overview();
+}
+window.addEventListener("hashchange",route);
+
+(async function(){
+  try{
+    const r=await fetch("/api/docs"); if(!r.ok) throw new Error("HTTP "+r.status);
+    INDEX=await r.json();
+  }catch(e){
+    document.getElementById("main").innerHTML=
+      `<div class="empty">Could not load the documentation index &mdash; ${esc(e.message)}.
+       Run <code>python3 studio/_tools/docs.py</code> to build it.</div>`;
+    return;
+  }
+  route();
+})();
+</script>
+</body>
+</html>

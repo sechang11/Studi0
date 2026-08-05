@@ -1,10 +1,10 @@
 {
  "generated_from": "git log",
- "count": 73,
+ "count": 75,
  "days": [
   [
    "2026-08-05",
-   1
+   3
   ],
   [
    "2026-08-04",
@@ -31,6 +31,51 @@
   "Wizard"
  ],
  "entries": [
+  {
+   "hash": "9e206cc",
+   "full": "9e206cc4979433cf07ac737bec7c5077449cd2df",
+   "date": "2026-08-05",
+   "time": "11:20",
+   "author": "sechang11",
+   "subject": "Documentation: fifty-seven documents that were only readable over SSH",
+   "body": "The project had around thirty markdown files at the repository root plus a craft folder,\nholding almost everything ever measured here - STATE.md is over eleven hundred lines,\nSTYLE_AND_LAYERS.md over eight hundred - and not one of them was reachable from the app.\nMeanwhile thirteen how-to guides lived at /guide, a capability catalogue at /capabilities\nand a changelog at /changelog, with nothing tying the four together.\n\n/docs is that missing root. studio/_tools/docs.py walks the repository, reads each\ndocument's title and first paragraph FROM THE FILE rather than from a hand-written list -\nso the index cannot drift from what the documents actually say - and classifies each one\nby what a reader would need it for: start here, how to use each section, what was\nmeasured, what the box can do, state and history, reference.\n\nThe page opens with the method the whole project runs on, because it explains why the\ndocuments read as they do: probe, author in concrete nouns, render with one variable\nmoving, LOOK at the result, record the verdict including when it refutes what was\nexpected. Several documents correct earlier versions of themselves and those corrections\nare left in rather than tidied away.\n\nThe changelog is linked from here rather than duplicated, as asked - it remains the\nrunning record of every change with its reasoning attached.\n\nTwo details worth naming. The markdown renderer is hand-written and dependency-free\nbecause a CDN script would make the documentation the least reliable page in the app. And\n/api/doc resolves a slug against the generated index rather than against the filesystem,\nso only documents docs.py chose to index are reachable - a path-traversal attempt returns\n404, verified.\n\nThe camera-*.md stubs are filed under reference rather than capabilities: three of the\nmoves they describe are byte-identical to static, so listing them as things the box can do\nwould state something this project has measured to be false.",
+   "paragraphs": [
+    "The project had around thirty markdown files at the repository root plus a craft folder,\nholding almost everything ever measured here - STATE.md is over eleven hundred lines,\nSTYLE_AND_LAYERS.md over eight hundred - and not one of them was reachable from the app.\nMeanwhile thirteen how-to guides lived at /guide, a capability catalogue at /capabilities\nand a changelog at /changelog, with nothing tying the four together.",
+    "/docs is that missing root. studio/_tools/docs.py walks the repository, reads each\ndocument's title and first paragraph FROM THE FILE rather than from a hand-written list -\nso the index cannot drift from what the documents actually say - and classifies each one\nby what a reader would need it for: start here, how to use each section, what was\nmeasured, what the box can do, state and history, reference.",
+    "The page opens with the method the whole project runs on, because it explains why the\ndocuments read as they do: probe, author in concrete nouns, render with one variable\nmoving, LOOK at the result, record the verdict including when it refutes what was\nexpected. Several documents correct earlier versions of themselves and those corrections\nare left in rather than tidied away.",
+    "The changelog is linked from here rather than duplicated, as asked - it remains the\nrunning record of every change with its reasoning attached.",
+    "Two details worth naming. The markdown renderer is hand-written and dependency-free\nbecause a CDN script would make the documentation the least reliable page in the app. And\n/api/doc resolves a slug against the generated index rather than against the filesystem,\nso only documents docs.py chose to index are reachable - a path-traversal attempt returns\n404, verified.",
+    "The camera-*.md stubs are filed under reference rather than capabilities: three of the\nmoves they describe are byte-identical to static, so listing them as things the box can do\nwould state something this project has measured to be false."
+   ],
+   "areas": [
+    "Tooling",
+    "App",
+    "Cast",
+    "LoRAs",
+    "Wizard"
+   ],
+   "files": 18,
+   "added": 1323,
+   "removed": 14
+  },
+  {
+   "hash": "15221ec",
+   "full": "15221ec3b14bf2962692421444886b3a5bbd77e2",
+   "date": "2026-08-05",
+   "time": "07:09",
+   "author": "sechang11",
+   "subject": "Regenerate the changelog so this wave appears in it",
+   "body": "changelog.py reads git log, so it can only ever describe commits that\nalready exist. Running it before the commit would have left the app showing\n72 entries over 2 days and no sign of the five surveys. 73 entries, 3 days.",
+   "paragraphs": [
+    "changelog.py reads git log, so it can only ever describe commits that\nalready exist. Running it before the commit would have left the app showing\n72 entries over 2 days and no sign of the five surveys. 73 entries, 3 days."
+   ],
+   "areas": [
+    "Libraries"
+   ],
+   "files": 1,
+   "added": 40,
+   "removed": 1
+  },
   {
    "hash": "6d2622d",
    "full": "6d2622d1db7a0dcde48372e4ac55a229d3323434",
