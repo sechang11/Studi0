@@ -205,15 +205,36 @@ def infer_family(names, widest):
     """Architecture family from key geometry alone. Never a revision - see the docstring.
 
     Order matters. SDXL is checked before the block-index families because
-    `input_blocks.0.0` would otherwise match the bare `blocks.N` pattern that Wan uses.
+    `input_blocks.0.0` would otherwise match the bare `blocks.N` pattern that Wan uses,
+    and the diffusers spelling is checked before them too - see the comment below.
     """
     if any(n.startswith("text_encoders.") for n in names):
         return "text-encoder"
-    if any(("input_blocks." in n) or ("output_blocks." in n) or ("middle_block." in n)
+    # THREE naming conventions reach the same SD/SDXL UNet and all three have to be
+    # recognised here, because a family this function cannot name is scored "unknown" and
+    # ALLOWED_BASE["unknown"] permits every base - so a silent SKIP of the base check is
+    # indistinguishable from a PASS. The dotted test alone missed two of the three:
+    #   ldm / ComfyUI   input_blocks.4.1.proj_in
+    #   kohya           lora_unet_input_blocks_4_1_proj_in     <- underscores, no dots
+    #   diffusers       unet.down_blocks.1.attentions.0. ...   <- different block names
+    # Dropping the trailing dot covers kohya. The diffusers form needs its own test AND
+    # needs to run BEFORE the transformer-block families below, because its
+    # `transformer_blocks.0` matches the DiT double-block pattern at index 0 and fell
+    # through to "unknown" - which is how five SDXL style LoRAs on this box went
+    # unchecked without a single warning.
+    if any(("input_blocks" in n) or ("output_blocks" in n) or ("middle_block" in n)
            for n in names):
         # label_emb is the SDXL pooled/size-conditioning embedder. SD1.5 has no such key,
         # so its presence confirms SDXL from the keys and not from the filename.
         return "sdxl" if any("label_emb" in n for n in names) else "sd-unet"
+    if any(("down_blocks" in n) or ("up_blocks" in n) or ("mid_block" in n)
+           for n in names):
+        # Deliberately the conservative "sd-unet" rather than "sdxl". Cross-attention
+        # width would separate SDXL (2048) from SD1.5 (768), but an attention-only LoRA
+        # need not patch a cross-attention layer at all, so the width is not always there
+        # to read. sd-unet permits base sdxl or other, which is still enough to catch a
+        # Qwen or FLUX file filed as sdxl - the mistake this check exists for.
+        return "sd-unet"
 
     # `single_transformer_blocks` also matches the double pattern once `_` is an allowed
     # separator, so exclude it explicitly rather than relying on a lookbehind.

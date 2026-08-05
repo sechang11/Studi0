@@ -1,0 +1,31 @@
+{
+  "_comment": "Head-to-head cost for one 1280x704 x 97-frame (4.04s @24fps) i2v clip on the RTX 5090, same keyframe and same prompt. Measured 2026-08-05 by submitting each workflow directly and sampling nvidia-smi every 2s. Both runs completed with status success; the ComfyUI log contains no out-of-memory events (the only 'oom' matches in it are the words 'room' and 'broom').",
+  "_vram_note": "peak_vram_mib is whole-GPU used, not the model footprint. ComfyUI expands to fill available VRAM, so both engines peak near the 32607 MiB ceiling and the two numbers are NOT a ranking. The load-bearing fact is that HunyuanVideo 1.5 fp16 (16.6 GB UNET + 9.4 GB Qwen2.5-VL text encoder + 2.5 GB VAE) FITS on a 32 GB card at 1280x704x97 and completes without OOM or offload failure.",
+
+  "ltx": {
+    "workflow": "12_ltx23_i2v_audio.json",
+    "model": "ltx-2.3-22b-dev-fp8.safetensors + distilled 1.1 LoRA @0.5",
+    "steps": 8,
+    "schedule": "ManualSigmas, cfg-distilled",
+    "cfg": 1.0,
+    "wall_secs": 28.0,
+    "peak_vram_mib": 31831,
+    "emits_audio": true
+  },
+
+  "hunyuan": {
+    "workflow": "42_hunyuan_i2v.json",
+    "model": "hunyuanvideo1.5_720p_i2v_fp16.safetensors",
+    "steps": 20,
+    "schedule": "BasicScheduler simple, ModelSamplingSD3 shift 7.0",
+    "cfg": 6.0,
+    "wall_secs": 820.2,
+    "peak_vram_mib": 31461,
+    "emits_audio": false,
+    "_cfg_note": "cfg 6.0 means a live negative branch and TWO model evaluations per step, so 20 steps costs 40 forward passes against LTX's 8."
+  },
+
+  "ratio_hunyuan_over_ltx": 29.3,
+  "batch_cold_start_secs": 1584.7,
+  "_batch_note": "render_secs.json records 1584.7s for the first card of the batch (head_turn) against ~810s for each of the five that followed. The difference is model load; a warm queue costs ~810s per clip. The 820.2s measured here is a cold-ish load after LTX had evicted Hunyuan, and it lands on the warm number, so load is amortised inside the sample rather than added to it."
+}

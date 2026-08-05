@@ -1,0 +1,21 @@
+{
+  "id": "comic-ink-halftone-sdxl",
+  "name": "Comic Ink Halftone SDXL (key-fixed)",
+  "file": "comic-ink-halftone_cfy.safetensors",
+  "base_model": "sdxl",
+  "engine": "anime",
+  "kind": "style",
+  "strength": 1.3,
+  "strength_range": [
+    0.85,
+    1.8
+  ],
+  "trigger": "c0m1cink",
+  "means": "Flattens animagine's colour a little and roughens its ink line. It does NOT produce comic halftone. Route comic-print work to FLUX.2 instead.",
+  "status": "weak",
+  "verdict": "LOADS, MOVES THE IMAGE, DOES NOT DELIVER. Ladder at 0 / 0.85 / 1.3 / 1.8 on animagine with the trigger present, zero unloaded keys after the keyfix. The cells genuinely differ - composition shifts, colour flattens toward flat fills, the linework coarsens - so it is not inert. But at no strength is there a Ben-Day dot, newsprint paper, or colour misregistration. It is still an anime frame with heavier ink. Set beside FLUX.2's comic_halftone cell in samples/model_intake/cross_flux2.jpg - visible dot shading, newsprint tone, offset registration - the gap is not close. NOT RECOMMENDED. The style it was bought for is already served, properly, by an engine already on the disk.",
+  "note": "THE GATE THIS WAS BOUGHT AGAINST. studio/_tools/model_intake.py rendered eleven style probes on four installed engines before anything was downloaded (samples/model_intake/base_animagine-xl-4.jpg, base_Illustrious-XL-v2.jpg, cross_flux2.jpg, cross_qwen.jpg). Ten of the eleven were already covered: animagine renders pixel art, coloring-book lineart and a genuine watercolour from tags; Illustrious renders real painterly oil that animagine cannot; FLUX.2 renders claymation, woodcut, comic halftone, low-poly PS1, watercolour and photography outright; Qwen renders photography and nothing else - every probe came back a photograph, exactly as the project's standing rule says. Derived on the box by `model_intake.py keyfix comic-ink-halftone.safetensors`; tensor data copied verbatim, only header key strings changed. sha256 32d4fdce3c0570bede9f018c0f545c4f98fe3a43202ad58f19fb2889e8957b86, 93,075,944 bytes. Licence openrail++ from the parent repo. | THE USEFUL PART OF THIS REJECTION is that it separates two failure modes that look identical from the outside. Its sibling was inert for a packaging reason and works once fixed; this one was inert for the same packaging reason and STILL does not work. Without the keyfix both would have been written off as 'bad LoRAs' and one of them would have been wrong. | strength_range is the span that was actually rendered, not a recommendation - the recommendation is 0.",
+  "example": "/samples/model_intake/ladder_animagine-xl-40_comic-ink-halftone_cfy_comic_halftone.jpg",
+  "example_kind": "strength ladder 0 / 0.85 / 1.3 / 1.8",
+  "example_note": "Left cell is the control at strength 0 and the trigger phrase is in that cell too, so strength is the only variable. A LoRA is a delta on the base weights - a single with-the-LoRA image proves nothing, the OFF cell is the evidence."
+}

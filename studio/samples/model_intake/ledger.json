@@ -1,0 +1,474 @@
+[
+  {
+    "mode": "base",
+    "ckpt": "animagine-xl-4.0.safetensors",
+    "seed": 5150,
+    "size": 1024,
+    "steps": 28,
+    "cfg": 5.0,
+    "probes": [
+      "none",
+      "oil_impasto",
+      "pixel_art",
+      "coloring_book",
+      "claymation",
+      "risograph",
+      "photo",
+      "woodcut"
+    ],
+    "missing": [],
+    "sheet": "/home/k4shix/shared/comfy-studio/studio/samples/model_intake/base_animagine-xl-4.jpg"
+  },
+  {
+    "mode": "base",
+    "ckpt": "Illustrious-XL-v2.0.safetensors",
+    "seed": 5150,
+    "size": 1024,
+    "steps": 28,
+    "cfg": 5.0,
+    "probes": [
+      "none",
+      "oil_impasto",
+      "pixel_art",
+      "coloring_book",
+      "claymation",
+      "risograph",
+      "photo",
+      "woodcut"
+    ],
+    "missing": [],
+    "sheet": "/home/k4shix/shared/comfy-studio/studio/samples/model_intake/base_Illustrious-XL-v2.jpg"
+  },
+  {
+    "mode": "cross",
+    "engine": "flux2",
+    "wf": "40_flux2_t2i.json",
+    "seed": 5150,
+    "size": 1024,
+    "probes": [
+      "claymation",
+      "risograph",
+      "woodcut",
+      "photo"
+    ],
+    "sheet": "/home/k4shix/shared/comfy-studio/studio/samples/model_intake/cross_flux2.jpg"
+  },
+  {
+    "mode": "cross",
+    "engine": "qwen",
+    "wf": "02_qwen_t2i_quality.json",
+    "seed": 5150,
+    "size": 1024,
+    "probes": [
+      "claymation",
+      "risograph",
+      "woodcut",
+      "photo"
+    ],
+    "sheet": "/home/k4shix/shared/comfy-studio/studio/samples/model_intake/cross_qwen.jpg"
+  },
+  {
+    "mode": "base",
+    "ckpt": "animagine-xl-4.0.safetensors",
+    "seed": 5150,
+    "size": 1024,
+    "steps": 28,
+    "cfg": 5.0,
+    "probes": [
+      "watercolour",
+      "lowpoly_ps1"
+    ],
+    "missing": [],
+    "sheet": "/home/k4shix/shared/comfy-studio/studio/samples/model_intake/base_animagine-xl-4.jpg"
+  },
+  {
+    "mode": "cross",
+    "engine": "flux2",
+    "wf": "40_flux2_t2i.json",
+    "seed": 5150,
+    "size": 1024,
+    "probes": [
+      "watercolour",
+      "lowpoly_ps1"
+    ],
+    "sheet": "/home/k4shix/shared/comfy-studio/studio/samples/model_intake/cross_flux2.jpg"
+  },
+  {
+    "mode": "base",
+    "ckpt": "animagine-xl-4.0.safetensors",
+    "seed": 5150,
+    "size": 1024,
+    "steps": 28,
+    "cfg": 5.0,
+    "probes": [
+      "comic_halftone"
+    ],
+    "missing": [],
+    "sheet": "/home/k4shix/shared/comfy-studio/studio/samples/model_intake/base_animagine-xl-4.jpg"
+  },
+  {
+    "mode": "cross",
+    "engine": "flux2",
+    "wf": "40_flux2_t2i.json",
+    "seed": 5150,
+    "size": 1024,
+    "probes": [
+      "comic_halftone"
+    ],
+    "sheet": "/home/k4shix/shared/comfy-studio/studio/samples/model_intake/cross_flux2.jpg"
+  },
+  {
+    "mode": "base",
+    "ckpt": "animagine-xl-4.0.safetensors",
+    "seed": 5150,
+    "size": 1024,
+    "steps": 28,
+    "cfg": 5.0,
+    "probes": [
+      "comic_halftone"
+    ],
+    "missing": [],
+    "sheet": "/home/k4shix/shared/comfy-studio/studio/samples/model_intake/base_animagine-xl-4__comic_halftone.jpg"
+  },
+  {
+    "mode": "cross",
+    "engine": "flux2",
+    "wf": "40_flux2_t2i.json",
+    "seed": 5150,
+    "size": 1024,
+    "probes": [
+      "comic_halftone"
+    ],
+    "sheet": "/home/k4shix/shared/comfy-studio/studio/samples/model_intake/cross_flux2__comic_halftone.jpg"
+  },
+  {
+    "mode": "ladder",
+    "lora": "risograph-print.safetensors",
+    "ckpt": "animagine-xl-4.0.safetensors",
+    "probe": "risograph",
+    "trigger": "r1sograph",
+    "strengths": [
+      0.0,
+      0.65,
+      0.85,
+      1.0
+    ],
+    "seed": 5150,
+    "size": 1024,
+    "steps": 28,
+    "cfg": 5.0,
+    "sheet": "/home/k4shix/shared/comfy-studio/studio/samples/model_intake/ladder_risograph-print_risograph.jpg"
+  },
+  {
+    "mode": "ladder",
+    "lora": "comic-ink-halftone.safetensors",
+    "ckpt": "animagine-xl-4.0.safetensors",
+    "probe": "comic_halftone",
+    "trigger": "c0m1cink",
+    "strengths": [
+      0.0,
+      0.65,
+      0.85,
+      1.0
+    ],
+    "seed": 5150,
+    "size": 1024,
+    "steps": 28,
+    "cfg": 5.0,
+    "sheet": "/home/k4shix/shared/comfy-studio/studio/samples/model_intake/ladder_comic-ink-halftone_comic_halftone.jpg"
+  },
+  {
+    "mode": "ladder",
+    "lora": "ClayAnimationRedm.safetensors",
+    "ckpt": "animagine-xl-4.0.safetensors",
+    "probe": "claymation",
+    "trigger": "Clay Animation, Clay",
+    "strengths": [
+      0.0,
+      0.6,
+      0.9,
+      1.2
+    ],
+    "seed": 5150,
+    "size": 1024,
+    "steps": 28,
+    "cfg": 5.0,
+    "sheet": "/home/k4shix/shared/comfy-studio/studio/samples/model_intake/ladder_ClayAnimationRedm_claymation.jpg"
+  },
+  {
+    "mode": "ladder",
+    "lora": "ClayAnimationRedm.safetensors",
+    "ckpt": "animagine-xl-4.0.safetensors",
+    "probe": "claymation",
+    "trigger": "Clay Animation, Clay",
+    "strengths": [
+      0.0,
+      1.5,
+      2.0,
+      2.5
+    ],
+    "seed": 5150,
+    "size": 1024,
+    "steps": 28,
+    "cfg": 5.0,
+    "sheet": "/home/k4shix/shared/comfy-studio/studio/samples/model_intake/ladder_ClayAnimationRedm_claymation.jpg"
+  },
+  {
+    "mode": "ladder",
+    "lora": "ClayAnimationRedm.safetensors",
+    "ckpt": "Illustrious-XL-v2.0.safetensors",
+    "probe": "claymation",
+    "trigger": "Clay Animation, Clay",
+    "strengths": [
+      0.0,
+      0.9,
+      1.5,
+      2.0
+    ],
+    "seed": 5150,
+    "size": 1024,
+    "steps": 28,
+    "cfg": 5.0,
+    "sheet": "/home/k4shix/shared/comfy-studio/studio/samples/model_intake/ladder_ClayAnimationRedm_claymation.jpg"
+  },
+  {
+    "mode": "ladder",
+    "lora": "ClayAnimationRedm.safetensors",
+    "ckpt": "Illustrious-XL-v2.0.safetensors",
+    "probe": "claymation",
+    "sheet_key": "Illustrious-XL-v20",
+    "trigger": "Clay Animation, Clay",
+    "strengths": [
+      0.0,
+      0.9,
+      1.5,
+      2.0
+    ],
+    "seed": 5150,
+    "size": 1024,
+    "steps": 28,
+    "cfg": 5.0,
+    "sheet": "/home/k4shix/shared/comfy-studio/studio/samples/model_intake/ladder_Illustrious-XL-v20_ClayAnimationRedm_claymation.jpg"
+  },
+  {
+    "mode": "ladder",
+    "lora": "risograph-print_cfy.safetensors",
+    "ckpt": "animagine-xl-4.0.safetensors",
+    "probe": "risograph",
+    "sheet_key": "animagine-xl-40",
+    "trigger": "r1sograph",
+    "strengths": [
+      0.0,
+      0.65,
+      0.85,
+      1.0
+    ],
+    "seed": 5150,
+    "size": 1024,
+    "steps": 28,
+    "cfg": 5.0,
+    "sheet": "/home/k4shix/shared/comfy-studio/studio/samples/model_intake/ladder_animagine-xl-40_risograph-print_cfy_risograph.jpg"
+  },
+  {
+    "mode": "ladder",
+    "lora": "risograph-print_cfy.safetensors",
+    "ckpt": "animagine-xl-4.0.safetensors",
+    "probe": "risograph",
+    "sheet_key": "animagine-xl-40",
+    "trigger": "r1sograph",
+    "strengths": [
+      0.0,
+      1.2,
+      1.6,
+      2.0
+    ],
+    "seed": 5150,
+    "size": 1024,
+    "steps": 28,
+    "cfg": 5.0,
+    "sheet": "/home/k4shix/shared/comfy-studio/studio/samples/model_intake/ladder_animagine-xl-40_risograph-print_cfy_risograph.jpg"
+  },
+  {
+    "mode": "ladder",
+    "lora": "comic-ink-halftone_cfy.safetensors",
+    "ckpt": "animagine-xl-4.0.safetensors",
+    "probe": "comic_halftone",
+    "sheet_key": "animagine-xl-40",
+    "trigger": "c0m1cink",
+    "strengths": [
+      0.0,
+      0.85,
+      1.3,
+      1.8
+    ],
+    "seed": 5150,
+    "size": 1024,
+    "steps": 28,
+    "cfg": 5.0,
+    "sheet": "/home/k4shix/shared/comfy-studio/studio/samples/model_intake/ladder_animagine-xl-40_comic-ink-halftone_cfy_comic_halftone.jpg"
+  },
+  {
+    "mode": "ladder",
+    "lora": "risograph-print.safetensors",
+    "ckpt": "animagine-xl-4.0.safetensors",
+    "probe": "risograph",
+    "sheet_key": "animagine-xl-40",
+    "trigger": "r1sograph",
+    "strengths": [
+      0.0,
+      0.65,
+      0.85,
+      1.0
+    ],
+    "seed": 5150,
+    "size": 1024,
+    "steps": 28,
+    "cfg": 5.0,
+    "sheet": "/home/k4shix/shared/comfy-studio/studio/samples/model_intake/ladder_animagine-xl-40_risograph-print_risograph.jpg"
+  },
+  {
+    "mode": "ladder",
+    "lora": "comic-ink-halftone.safetensors",
+    "ckpt": "animagine-xl-4.0.safetensors",
+    "probe": "comic_halftone",
+    "sheet_key": "animagine-xl-40",
+    "trigger": "c0m1cink",
+    "strengths": [
+      0.0,
+      0.65,
+      0.85,
+      1.0
+    ],
+    "seed": 5150,
+    "size": 1024,
+    "steps": 28,
+    "cfg": 5.0,
+    "sheet": "/home/k4shix/shared/comfy-studio/studio/samples/model_intake/ladder_animagine-xl-40_comic-ink-halftone_comic_halftone.jpg"
+  },
+  {
+    "mode": "ladder",
+    "lora": "ClayAnimationRedm.safetensors",
+    "ckpt": "animagine-xl-4.0.safetensors",
+    "probe": "claymation",
+    "sheet_key": "animagine-xl-40",
+    "trigger": "Clay Animation, Clay",
+    "strengths": [
+      0.0,
+      0.6,
+      0.9,
+      1.2
+    ],
+    "seed": 5150,
+    "size": 1024,
+    "steps": 28,
+    "cfg": 5.0,
+    "sheet": "/home/k4shix/shared/comfy-studio/studio/samples/model_intake/ladder_animagine-xl-40_ClayAnimationRedm_claymation.jpg"
+  },
+  {
+    "mode": "ladder",
+    "lora": "risograph-print_cfy.safetensors",
+    "ckpt": "animagine-xl-4.0.safetensors",
+    "probe": "risograph",
+    "sheet_key": "animagine-xl-40",
+    "trigger": "r1sograph",
+    "strengths": [
+      0.0,
+      0.65,
+      0.85,
+      1.0
+    ],
+    "seed": 5150,
+    "size": 1024,
+    "steps": 28,
+    "cfg": 5.0,
+    "sheet": "/home/k4shix/shared/comfy-studio/studio/samples/model_intake/ladder_animagine-xl-40_risograph-print_cfy_risograph.jpg"
+  },
+  {
+    "mode": "base",
+    "ckpt": "animagine-xl-4.0.safetensors",
+    "seed": 5150,
+    "size": 1024,
+    "steps": 28,
+    "cfg": 5.0,
+    "probes": [
+      "none",
+      "oil_impasto",
+      "pixel_art",
+      "coloring_book",
+      "claymation",
+      "risograph",
+      "photo",
+      "woodcut",
+      "watercolour",
+      "lowpoly_ps1",
+      "comic_halftone"
+    ],
+    "missing": [],
+    "sheet": "/home/k4shix/shared/comfy-studio/studio/samples/model_intake/base_animagine-xl-4.jpg"
+  },
+  {
+    "mode": "base",
+    "ckpt": "Illustrious-XL-v2.0.safetensors",
+    "seed": 5150,
+    "size": 1024,
+    "steps": 28,
+    "cfg": 5.0,
+    "probes": [
+      "none",
+      "oil_impasto",
+      "pixel_art",
+      "coloring_book",
+      "claymation",
+      "risograph",
+      "photo",
+      "woodcut",
+      "watercolour",
+      "lowpoly_ps1",
+      "comic_halftone"
+    ],
+    "missing": [],
+    "sheet": "/home/k4shix/shared/comfy-studio/studio/samples/model_intake/base_Illustrious-XL-v2.jpg"
+  },
+  {
+    "mode": "cross",
+    "engine": "flux2",
+    "wf": "40_flux2_t2i.json",
+    "seed": 5150,
+    "size": 1024,
+    "probes": [
+      "claymation",
+      "comic_halftone",
+      "coloring_book",
+      "lowpoly_ps1",
+      "none",
+      "oil_impasto",
+      "photo",
+      "pixel_art",
+      "risograph",
+      "watercolour",
+      "woodcut"
+    ],
+    "sheet": "/home/k4shix/shared/comfy-studio/studio/samples/model_intake/cross_flux2__claymation_coloring_book_comic_halftone_lowpoly_ps1_none_oil_impasto_photo_pixel_art_risograph_watercolour_woodcut.jpg"
+  },
+  {
+    "mode": "cross",
+    "engine": "qwen",
+    "wf": "02_qwen_t2i_quality.json",
+    "seed": 5150,
+    "size": 1024,
+    "probes": [
+      "claymation",
+      "comic_halftone",
+      "coloring_book",
+      "lowpoly_ps1",
+      "none",
+      "oil_impasto",
+      "photo",
+      "pixel_art",
+      "risograph",
+      "watercolour",
+      "woodcut"
+    ],
+    "sheet": "/home/k4shix/shared/comfy-studio/studio/samples/model_intake/cross_qwen__claymation_coloring_book_comic_halftone_lowpoly_ps1_none_oil_impasto_photo_pixel_art_risograph_watercolour_woodcut.jpg"
+  }
+]

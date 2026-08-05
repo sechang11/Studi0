@@ -76,3 +76,20 @@ studio/samples/motion_staging/strips/
 studio/samples/motion_staging/percard/
 studio/samples/motion_staging/grids/
 studio/samples/motion_staging/keyframes/
+
+# The prompt-replication corpus. SAME POLICY AS gallery/, cast_proof/ AND the character
+# sweeps above. 111 full-size cells are 238 MB and this repository's .git is already 2.0
+# GB. What a person reads is the 19 CONTACT SHEETS in _sheets/ and the 29 side-by-side
+# A/B JPEGs in _compare/ - those stay tracked, as do _measured.json, the analysis, and the
+# per-cell recipe sidecar beside every image, which is the reproducible recipe and the
+# thing worth reviewing in a diff. The cells are regenerable by
+# `studio/_tools/replicate_prompts.py` and they remain on disk here and in
+# ~/ComfyUI/output/claude-generated/replicated/ - they are simply not carried in history.
+# _look/ is a downscaled cache of those same cells, so it goes with them.
+# NOTE, recorded rather than quietly fixed: studio/samples/flux2/ committed its 58
+# full-size cells (107 MB) in 1a8feac before this rule was written. That is not undone
+# here - rewriting history to save 107 MB is a worse trade than the inconsistency.
+studio/samples/replicated/base/*.png
+studio/samples/replicated/extra/*.png
+studio/samples/replicated/zimage/*.png
+studio/samples/replicated/_look/
