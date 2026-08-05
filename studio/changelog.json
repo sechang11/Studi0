@@ -1,7 +1,11 @@
 {
  "generated_from": "git log",
- "count": 72,
+ "count": 73,
  "days": [
+  [
+   "2026-08-05",
+   1
+  ],
   [
    "2026-08-04",
    26
@@ -27,6 +31,41 @@
   "Wizard"
  ],
  "entries": [
+  {
+   "hash": "6d2622d",
+   "full": "6d2622d1db7a0dcde48372e4ac55a229d3323434",
+   "date": "2026-08-05",
+   "time": "07:09",
+   "author": "sechang11",
+   "subject": "Five surveys land, and the app finally explains itself",
+   "body": "This wave answered four questions the user asked directly: is everything\nworking, is it beginner friendly, is there a guide for each section, and is\nthere an introduction to what ComfyUI can generate. Three are now yes.\n\nWHAT SHIPPED\n\n- studio/capabilities.json + /capabilities: the 92-folder archive under\n  claude-generated/ catalogued into 34 capabilities, each with a sample\n  chosen by looking at it. The page states the gap plainly - 8 reachable in\n  the app, 19 real and unreachable, 13 of those rendered and runnable today.\n- studio/guides/ + /guide: 13 plain-language guides, one per section plus\n  getting-started and the mental model. Injected into every page nav the\n  same additive way /video and /dossier already were.\n- TERRA rebuilt on the t2i path. The old sheet was made through the qwen\n  edit path, so it transmitted that paths poreless skin into every photoreal\n  render of her. The new face panel is born where the skin is real and the\n  body panel is generated from it, so both halves are one person.\n- Five demo films, 72 beats, 0 unnamed motion holds against 21 of 29 in the\n  three older films. The lever was authoring: derive_motion only reads the\n  first comma-clause that yields a mover.\n- 810 gallery artworks across 57 recipes, every one carrying its full recipe.\n- studio/_tools/healthcheck.py and HEALTH.md: a ranked, measured defect list.\n\nWHAT THIS COMMIT REPAIRS\n\nProbing studio/_tools/ with --help made 17 tools run their whole job.\nstyle_verdicts2.py overwrote 10 style cards, replacing measured LoRA-rescue\nverdicts with stale stubs and reverting engine routing on three of them.\nAll 10 are restored from HEAD, verified card by card: verdict text back\n(stop_motion_felt 84 chars to 1409), engine back to qwen on comic_halftone,\npointillism and stop_motion_felt, status back to ready on two. The stray\ndirectory literally named --help, holding 66 misplaced style cards, is gone.\n\nNot everything flagged as damage was damage. The deterministic look and\nshot_fx cards were reported clobbered; the diff shows they went from 7 looks\nto 25 with nothing lost. That was an upgrade and it is kept.\n\nThe restore moved the real engine split, so three numbers in the guides were\nwrong - they had been measured from the live API during the damaged window.\nstyles.md and mental-model.md now say 85 anime / 45 qwen and 94 ready /\n24 weak / 12 unavailable, re-derived from the API rather than retyped.\n\nhealthcheck.py could not see either new feature: its route list predates\nthem, so it reported clean while testing neither /capabilities nor /guide.\nIt now checks both, plus /guide/<slug> and the three new APIs.\n\nGROUND TRUTH, NOT TAKEN ON TRUST\n\nServer restarted from source. All 15 pages and all 23 real APIs answer 200\nwith sane bodies. All 13 guides answer on both /guide/<slug> and\n/api/guide/<slug>; a bad slug 404s. Every page carries exactly one guide\nlink except /changelog, which has no guide mapped. Both agents serve.py\nedits survive together and the file parses.\n\nSix pages screenshotted and looked at, plus contact sheets from three\ndifferent agents. The TERRA proof shows real skin, freckles and the wardrobe\nsurviving into a close frame. Agent 5s subject-absence claim reproduces -\nseveral storybook_attic cells are empty attics with no child in them.\n\ncheck_refs 1925 refs / 0 dangling. lora_scan clean. healthcheck 3 BROKEN,\n16 WRONG, all pre-existing and all named in HEALTH.md.\n\nSTILL BROKEN, HONESTLY\n\nfx_chain has no branch for dolly_zoom, orbit or rack_focus, so those clips\nare byte-identical to static. The night grade clips to black rather than\ndarkening - measured input luma 48 goes to 0. TERRAs tags still say red hair\nribbon while all 160 renders draw a horned ornament; fixing it needs a new\nsheet and a retrain. 17 tools still run their job when handed --help, which\nis the defect that caused the damage this commit repairs.",
+   "paragraphs": [
+    "This wave answered four questions the user asked directly: is everything\nworking, is it beginner friendly, is there a guide for each section, and is\nthere an introduction to what ComfyUI can generate. Three are now yes.",
+    "WHAT SHIPPED",
+    "- studio/capabilities.json + /capabilities: the 92-folder archive under\n  claude-generated/ catalogued into 34 capabilities, each with a sample\n  chosen by looking at it. The page states the gap plainly - 8 reachable in\n  the app, 19 real and unreachable, 13 of those rendered and runnable today.\n- studio/guides/ + /guide: 13 plain-language guides, one per section plus\n  getting-started and the mental model. Injected into every page nav the\n  same additive way /video and /dossier already were.\n- TERRA rebuilt on the t2i path. The old sheet was made through the qwen\n  edit path, so it transmitted that paths poreless skin into every photoreal\n  render of her. The new face panel is born where the skin is real and the\n  body panel is generated from it, so both halves are one person.\n- Five demo films, 72 beats, 0 unnamed motion holds against 21 of 29 in the\n  three older films. The lever was authoring: derive_motion only reads the\n  first comma-clause that yields a mover.\n- 810 gallery artworks across 57 recipes, every one carrying its full recipe.\n- studio/_tools/healthcheck.py and HEALTH.md: a ranked, measured defect list.",
+    "WHAT THIS COMMIT REPAIRS",
+    "Probing studio/_tools/ with --help made 17 tools run their whole job.\nstyle_verdicts2.py overwrote 10 style cards, replacing measured LoRA-rescue\nverdicts with stale stubs and reverting engine routing on three of them.\nAll 10 are restored from HEAD, verified card by card: verdict text back\n(stop_motion_felt 84 chars to 1409), engine back to qwen on comic_halftone,\npointillism and stop_motion_felt, status back to ready on two. The stray\ndirectory literally named --help, holding 66 misplaced style cards, is gone.",
+    "Not everything flagged as damage was damage. The deterministic look and\nshot_fx cards were reported clobbered; the diff shows they went from 7 looks\nto 25 with nothing lost. That was an upgrade and it is kept.",
+    "The restore moved the real engine split, so three numbers in the guides were\nwrong - they had been measured from the live API during the damaged window.\nstyles.md and mental-model.md now say 85 anime / 45 qwen and 94 ready /\n24 weak / 12 unavailable, re-derived from the API rather than retyped.",
+    "healthcheck.py could not see either new feature: its route list predates\nthem, so it reported clean while testing neither /capabilities nor /guide.\nIt now checks both, plus /guide/<slug> and the three new APIs.",
+    "GROUND TRUTH, NOT TAKEN ON TRUST",
+    "Server restarted from source. All 15 pages and all 23 real APIs answer 200\nwith sane bodies. All 13 guides answer on both /guide/<slug> and\n/api/guide/<slug>; a bad slug 404s. Every page carries exactly one guide\nlink except /changelog, which has no guide mapped. Both agents serve.py\nedits survive together and the file parses.",
+    "Six pages screenshotted and looked at, plus contact sheets from three\ndifferent agents. The TERRA proof shows real skin, freckles and the wardrobe\nsurviving into a close frame. Agent 5s subject-absence claim reproduces -\nseveral storybook_attic cells are empty attics with no child in them.",
+    "check_refs 1925 refs / 0 dangling. lora_scan clean. healthcheck 3 BROKEN,\n16 WRONG, all pre-existing and all named in HEALTH.md.",
+    "STILL BROKEN, HONESTLY",
+    "fx_chain has no branch for dolly_zoom, orbit or rack_focus, so those clips\nare byte-identical to static. The night grade clips to black rather than\ndarkening - measured input luma 48 goes to 0. TERRAs tags still say red hair\nribbon while all 160 renders draw a horned ornament; fixing it needs a new\nsheet and a retrain. 17 tools still run their job when handed --help, which\nis the defect that caused the damage this commit repairs."
+   ],
+   "areas": [
+    "Docs",
+    "Pipeline",
+    "Tooling",
+    "App",
+    "Cast"
+   ],
+   "files": 1181,
+   "added": 27070,
+   "removed": 163
+  },
   {
    "hash": "36b1b59",
    "full": "36b1b59dc9d2e4795f119aeb879b100a01ae6976",
