@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fill the library &middot; studio</title>
+<style>
+:root{--bg:#0e0e12;--panel:#181820;--line:#2a2a36;--ink:#e9e9f0;--dim:#8d8d9c;
+      --accent:#9fb3ff;--good:#7fd1a0;--warn:#ffc978;--bad:#ff8f8f}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.55 system-ui,-apple-system,sans-serif;
+     margin:0;padding:0 20px 60px}
+header{max-width:1000px;margin:0 auto;padding:22px 0 8px}
+nav a{color:var(--accent);text-decoration:none;margin-right:14px;font-size:14px}
+nav a:hover{text-decoration:underline}
+main{max-width:1000px;margin:0 auto}
+h1{font-size:25px;margin:16px 0 6px}
+p.lede{color:var(--dim);max-width:74ch;margin:0 0 22px}
+section{background:var(--panel);border:1px solid var(--line);border-radius:10px;
+        padding:18px 20px;margin:0 0 18px}
+h2{font-size:15px;margin:0 0 4px;color:var(--accent)}
+h2+p{color:var(--dim);font-size:13.5px;margin:0 0 14px;max-width:72ch}
+label{display:block;font-size:13px;color:var(--dim);margin:0 0 5px}
+.row{display:flex;gap:22px;flex-wrap:wrap;align-items:flex-end}
+.weights{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+input[type=range]{width:100%;accent-color:var(--accent)}
+input[type=number],input[type=text]{background:#101017;color:var(--ink);
+  border:1px solid var(--line);border-radius:6px;padding:7px 9px;font:inherit;width:100px}
+button{background:var(--accent);color:#10101a;border:0;border-radius:7px;
+  padding:10px 18px;font:600 14px/1 system-ui;cursor:pointer}
+button.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+button:disabled{opacity:.4;cursor:not-allowed}
+.mix{display:flex;height:10px;border-radius:5px;overflow:hidden;margin:14px 0 6px}
+.mix i{display:block}
+.mixkey{font-size:12px;color:var(--dim);display:flex;gap:14px;flex-wrap:wrap}
+.mixkey b{font-weight:600}
+.dot{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px}
+pre{background:#0b0b10;border:1px solid var(--line);border-radius:7px;padding:12px;
+    overflow:auto;font:12.5px/1.5 ui-monospace,monospace;color:#c8c8d6;max-height:300px;
+    margin:0}
+.stat{display:flex;gap:26px;flex-wrap:wrap;margin:0 0 12px}
+.stat div{font-size:13px;color:var(--dim)}
+.stat b{display:block;font-size:19px;color:var(--ink);font-weight:600}
+.pill{display:inline-block;font-size:12px;padding:3px 9px;border-radius:99px;
+      border:1px solid var(--line);color:var(--dim)}
+.pill.on{color:var(--good);border-color:#2f5e46}
+.note{font-size:13px;color:var(--dim);border-left:2px solid var(--line);
+      padding-left:12px;margin:14px 0 0;max-width:74ch}
+.warnbox{border-left-color:#6b5320;color:var(--warn)}
+code{background:#101017;padding:1px 5px;border-radius:4px;font-size:12.5px}
+a{color:var(--accent)}
+</style>
+</head>
+<body>
+<header>
+  <nav>
+    <a href="/">&larr; Studio</a><a href="/wizard">Direct a scene</a>
+    <a href="/gallery">Gallery</a><a href="/docs">Docs</a>
+  </nav>
+</header>
+<main>
+  <h1>Fill the library</h1>
+  <p class="lede">Generate random content on its own for a set number of hours. Nothing to
+  write &mdash; every job is drawn from the measured card libraries, so it inherits what
+  they know about what works.</p>
+
+  <section>
+    <h2>How long</h2>
+    <p>A budget is required. This cannot be started without one.</p>
+    <div class="row">
+      <div style="flex:1;min-width:260px">
+        <label>Hours: <b id="hrsLabel">2</b></label>
+        <input type="range" id="hrs" min="0.25" max="12" step="0.25" value="2">
+      </div>
+      <div><label>or exact minutes</label><input type="number" id="mins" min="1"
+           max="720" placeholder="—"></div>
+      <div><label>Seed (blank = differ each run)</label>
+           <input type="text" id="seed" placeholder="random"></div>
+    </div>
+    <p class="note warnbox"><b>Why the deadline is required.</b> An earlier generation loop
+    on this box had no stopping condition and ran for <b>17 hours 22 minutes</b>, holding
+    the GPU and starving three other jobs, with nothing on screen to show it was running.
+    The budget is enforced by the script itself, not just by this page &mdash; and it will
+    never <i>begin</i> a job it cannot finish, so a video roll in the last two minutes
+    becomes an image instead of being killed halfway.</p>
+  </section>
+
+  <section>
+    <h2>The mix</h2>
+    <p>Each weight is how many tickets that type gets in the bag. Every job draws one, so
+    these are proportions rather than counts.</p>
+    <div class="weights" id="weights"></div>
+    <div class="mix" id="mixbar"></div>
+    <div class="mixkey" id="mixkey"></div>
+    <p class="note">Video costs roughly fifteen times an image: it renders a keyframe first,
+    looks at it, and only then moves it. That is deliberate &mdash; a rejected keyframe
+    costs six seconds instead of ninety.</p>
+  </section>
+
+  <section>
+    <h2>What it draws from</h2>
+    <p>Counted from the cards on disk, not from a number typed into this page.</p>
+    <pre id="space">reading the libraries…</pre>
+    <p class="note">Only cards that were rendered and looked at are drawable. The known duds
+    are excluded by name with their reason: the <code>night</code> grade clips to black
+    rather than darkening, three camera moves are byte-identical to static, and a style card
+    measured to put a prop in the subject's hands never gets drawn.</p>
+  </section>
+
+  <section>
+    <h2>Run</h2>
+    <p>You can close this page &mdash; the run is a separate process and keeps going.</p>
+    <div class="row" style="margin-bottom:14px">
+      <button id="start">Start generating</button>
+      <button id="stop" class="ghost" disabled>Stop after current job</button>
+      <button id="dry" class="ghost">Preview 12 rolls</button>
+      <span id="pill" class="pill">not running</span>
+    </div>
+    <div class="stat" id="stat"></div>
+    <pre id="log">idle.</pre>
+    <p class="note">Near-black renders are rejected into a <code>rejected/</code> folder with
+    the reason recorded rather than deleted &mdash; a failure you can look at is worth more
+    than one you cannot. Every artifact keeps a sidecar with the exact cards and seed behind
+    it, so anything good can be made again.</p>
+  </section>
+</main>
+
+<script>
+const TYPES = [
+  ["image", "#9fb3ff", "stills"],
+  ["video", "#c9a0ff", "~15x an image"],
+  ["music", "#7fd1a0", "30-60s cues"],
+  ["voice", "#ffc978", "spoken lines"],
+  ["sfx",   "#ff9fb0", "2-4s effects"],
+];
+const DEFAULT = {image: 6, video: 2, music: 1, voice: 1, sfx: 1};
+const w = {...DEFAULT};
+
+const $ = id => document.getElementById(id);
+
+function drawWeights() {
+  $("weights").innerHTML = TYPES.map(([k, c, hint]) => `
+    <div>
+      <label><span class="dot" style="background:${c}"></span>${k}
+        &mdash; <b id="w_${k}_v">${w[k]}</b> <span style="opacity:.7">${hint}</span></label>
+      <input type="range" id="w_${k}" min="0" max="10" step="1" value="${w[k]}">
+    </div>`).join("");
+  TYPES.forEach(([k]) => $("w_" + k).oninput = e => {
+    w[k] = +e.target.value; $(`w_${k}_v`).textContent = w[k]; drawMix();
+  });
+  drawMix();
+}
+
+function drawMix() {
+  const total = Object.values(w).reduce((a, b) => a + b, 0);
+  if (!total) {
+    $("mixbar").innerHTML = "";
+    $("mixkey").innerHTML = "<span style='color:var(--bad)'>every weight is zero — " +
+      "there is nothing to draw</span>";
+    $("start").disabled = true;
+    return;
+  }
+  $("start").disabled = false;
+  $("mixbar").innerHTML = TYPES.filter(([k]) => w[k])
+    .map(([k, c]) => `<i style="background:${c};width:${w[k] / total * 100}%"></i>`).join("");
+  $("mixkey").innerHTML = TYPES.filter(([k]) => w[k]).map(([k, c]) =>
+    `<span><span class="dot" style="background:${c}"></span><b>${k}</b> ` +
+    `${Math.round(w[k] / total * 100)}%</span>`).join("");
+}
+
+function weightString() {
+  return TYPES.map(([k]) => `${k}=${w[k]}`).join(",");
+}
+
+$("hrs").oninput = e => { $("hrsLabel").textContent = e.target.value; $("mins").value = ""; };
+$("mins").oninput = () => { if ($("mins").value) $("hrsLabel").textContent = "—"; };
+
+async function post(url, body) {
+  const r = await fetch(url, {method: "POST", headers: {"Content-Type": "application/json"},
+                             body: JSON.stringify(body || {})});
+  return r.json();
+}
+
+$("start").onclick = async () => {
+  $("start").disabled = true;
+  const body = {weights: weightString()};
+  if ($("mins").value) body.minutes = +$("mins").value; else body.hours = +$("hrs").value;
+  if ($("seed").value.trim()) body.seed = $("seed").value.trim();
+  const r = await post("/api/generate/start", body);
+  if (r.error) { $("log").textContent = "could not start: " + r.error; $("start").disabled = false; }
+  poll();
+};
+
+$("stop").onclick = async () => {
+  $("stop").disabled = true;
+  await post("/api/generate/stop", {});
+  $("log").textContent += "\n\nstop requested — it will finish the job it is on and exit.";
+  poll();
+};
+
+$("dry").onclick = async () => {
+  $("dry").disabled = true;
+  $("log").textContent = "rolling twelve jobs…";
+  const r = await post("/api/generate/preview", {weights: weightString()});
+  $("log").textContent = r.text || r.error || "(nothing came back)";
+  $("dry").disabled = false;
+};
+
+function stat(label, value) {
+  return `<div><b>${value}</b>${label}</div>`;
+}
+
+async function poll() {
+  let s;
+  try { s = await (await fetch("/api/generate/status")).json(); } catch (e) { return; }
+  const on = !!s.running;
+  $("pill").textContent = on ? "running" : "not running";
+  $("pill").className = "pill" + (on ? " on" : "");
+  $("start").disabled = on || !Object.values(w).reduce((a, b) => a + b, 0);
+  $("stop").disabled = !on;
+  const k = s.kept || {}, rj = s.rejected || {}, f = s.failed || {};
+  const sum = o => Object.values(o).reduce((a, b) => a + b, 0);
+  $("stat").innerHTML = on || sum(k) ? [
+    stat("kept", sum(k)),
+    stat("rejected", sum(rj)),
+    stat("failed", sum(f)),
+    stat("minutes left", s.minutes_left == null ? "—" : s.minutes_left),
+  ].join("") : "";
+  if (s.log) $("log").textContent = s.log;
+  setTimeout(poll, on ? 4000 : 10000);
+}
+
+fetch("/api/generate/space").then(r => r.json()).then(d => {
+  $("space").textContent = d.text || d.error || "(unavailable)";
+}).catch(() => { $("space").textContent = "(unavailable)"; });
+
+drawWeights();
+poll();
+</script>
+</body>
+</html>

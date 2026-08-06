@@ -69,8 +69,12 @@ for i in range(0, len(stills), 24):
     fc = "".join("[%d:v]scale=320:320:force_original_aspect_ratio=decrease,"
                  "pad=320:320:(ow-iw)/2:(oh-ih)/2:color=0x111111[c%d];" % (k, k)
                  for k in range(n))
-    fc += "".join("[c%d]" % k for k in range(n)) + "xstack=inputs=%d:layout=%s[v]" % (
-        n, "|".join("%d_%d" % (320 * (k % 6), 320 * (k // 6)) for k in range(n)))
+    # fill= matters: a last row that does not divide by six leaves empty canvas, and
+    # xstack's default for that is BRIGHT GREEN. The first sheet came out with a quarter
+    # of it looking like a chroma-key screen.
+    fc += "".join("[c%d]" % k for k in range(n)) + \
+        "xstack=inputs=%d:fill=0x111111:layout=%s[v]" % (
+            n, "|".join("%d_%d" % (320 * (k % 6), 320 * (k // 6)) for k in range(n)))
     if n == 1:
         fc = "[0:v]scale=320:320:force_original_aspect_ratio=decrease[v]"
     cmd += ["-filter_complex", fc, "-map", "[v]", "-frames:v", "1", out]

@@ -75,6 +75,18 @@ fi
 BUDGET=$(( ${HOURS:-0} * 3600 + ${MINUTES:-0} * 60 ))
 [ "$BUDGET" -gt 0 ] || { echo "budget must be positive" >&2; exit 2; }
 
+# PREFLIGHT. Without this the loop happily spins against a dead renderer: ComfyUI was down
+# once during testing and a 4-minute run produced 300+ instant failures at ~10 per second,
+# reporting nothing more useful than "failed" on every line. Ask once, up front, and say so.
+COMFY_HOST="${COMFY_HOST:-127.0.0.1:8188}"
+if [ "$DRY" = "0" ]; then
+  if ! curl -s -o /dev/null --max-time 5 "http://$COMFY_HOST/system_stats"; then
+    echo "ComfyUI is not answering on $COMFY_HOST - nothing can be rendered." >&2
+    echo "  start it first, then run this again." >&2
+    exit 4
+  fi
+fi
+
 mkdir -p "$RUNDIR" "$OUT"
 if [ -f "$PIDFILE" ] && kill -0 "$(cat "$PIDFILE")" 2>/dev/null; then
   echo "already running as pid $(cat "$PIDFILE"). use --status or --stop." >&2
@@ -120,6 +132,28 @@ echo "  watch   : ./bin/generate.sh --status   (or tail -f $LOG)"
 [ -n "$SEED" ] && echo "  seed    : $SEED (reproducible)" || echo "  seed    : from the clock, so a re-run differs"
 echo ""
 
+# A renderer can also die MID-RUN, which the preflight cannot catch. Consecutive failures
+# back off, and a long enough streak gives up rather than burning the rest of the budget
+# discovering the same thing over and over.
+STREAK=0
+MAX_STREAK=8
+
+backoff() {
+  STREAK=$(( STREAK + 1 ))
+  if [ "$STREAK" -ge "$MAX_STREAK" ]; then
+    echo ""
+    echo "$MAX_STREAK jobs failed in a row - something is wrong with the renderer, not with"
+    echo "the rolls. Giving up rather than spending the rest of the budget finding out again."
+    echo "  last errors:"
+    tail -3 "$LOG" | sed 's/^/    /'
+    finish
+  fi
+  # 2, 4, 8 ... capped. Long enough that a restarting ComfyUI is given a chance to come back.
+  local nap=$(( 2 ** (STREAK < 5 ? STREAK : 5) ))
+  echo "  (failure $STREAK of $MAX_STREAK - waiting ${nap}s)"
+  sleep "$nap"
+}
+
 N=0
 while :; do
   [ -f "$STOPFILE" ] && { echo "STOP requested."; finish; }
@@ -147,22 +181,34 @@ while :; do
   RES="$(echo "$JOB" | python3 "$REPO/studio/_tools/render_job.py" --out "$OUT" 2>>"$LOG")"
   if [ -z "$RES" ]; then
     FAILED[$TYPE]=$(( ${FAILED[$TYPE]:-0} + 1 ))
-    echo "$(date +%H:%M:%S) $TYPE FAILED (no result)" | tee -a "$LOG"
+    printf "%s  %-6s failed    (no result)\n" "$(date +%H:%M:%S)" "$TYPE" | tee -a "$LOG"
+    backoff
     continue
   fi
   echo "$RES" >> "$LOG"
-  OKV="$(echo "$RES" | python3 -c 'import json,sys; d=json.load(sys.stdin); print("1" if d.get("ok") else "0")' 2>/dev/null)"
-  SECS="$(echo "$RES" | python3 -c 'import json,sys; print(json.load(sys.stdin).get("seconds",0))' 2>/dev/null)"
+  # ONLY THE LAST LINE IS THE RESULT. ComfyUI's run() prints its own `DONE in 3.0s -> ...`
+  # progress line to stdout first, so RES is two lines and json.load choked on the pair.
+  # That silently counted five genuine successes as failures while the artifacts sat on
+  # disk - the loop was working and only the scoreboard was wrong, which is the worst way
+  # for something to be broken.
+  VERDICT="$(echo "$RES" | tail -1)"
+  OKV="$(echo "$VERDICT" | python3 -c 'import json,sys; d=json.load(sys.stdin); print("1" if d.get("ok") else "0")' 2>/dev/null)"
+  SECS="$(echo "$VERDICT" | python3 -c 'import json,sys; print(json.load(sys.stdin).get("seconds",0))' 2>/dev/null)"
   if [ "$OKV" = "1" ]; then
+    STREAK=0
     DONE[$TYPE]=$(( ${DONE[$TYPE]:-0} + 1 ))
     printf "%s  %-6s ok        %5ss   kept %s   %dm left\n" \
       "$(date +%H:%M:%S)" "$TYPE" "$SECS" "${DONE[$TYPE]}" "$(( LEFT / 60 ))"
   elif echo "$RES" | grep -q '"why": *"[^"]'; then
+    # A rejection is the gate working, not a fault. It reached the renderer and came back.
+    STREAK=0
     REJECTED[$TYPE]=$(( ${REJECTED[$TYPE]:-0} + 1 ))
     printf "%s  %-6s rejected  %5ss   %s\n" "$(date +%H:%M:%S)" "$TYPE" "$SECS" \
       "$(echo "$RES" | python3 -c 'import json,sys; print(json.load(sys.stdin).get("why",""))')"
   else
     FAILED[$TYPE]=$(( ${FAILED[$TYPE]:-0} + 1 ))
-    printf "%s  %-6s failed\n" "$(date +%H:%M:%S)" "$TYPE"
+    printf "%s  %-6s failed    %s\n" "$(date +%H:%M:%S)" "$TYPE" \
+      "$(echo "$RES" | python3 -c 'import json,sys; print(json.load(sys.stdin).get("error",""))' 2>/dev/null | cut -c1-90)"
+    backoff
   fi
 done

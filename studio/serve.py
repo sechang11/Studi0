@@ -1015,6 +1015,23 @@ def hub_capabilities(html):
     return html.replace(HUB_MAKE, HUB_MAKE + "\n      " + HUB_CAPS, 1)
 
 
+
+def _generate_routes():
+    """Import studio/_tools/generate_routes.py on demand, the same way _guides does.
+
+    Returning None rather than raising keeps a missing or broken module from taking the
+    whole studio down - every other page still serves, and /generate reports plainly that
+    its backend is unavailable.
+    """
+    try:
+        sys.path.insert(0, os.path.join(HERE, "_tools"))
+        import generate_routes
+        importlib.reload(generate_routes)
+        return generate_routes
+    except Exception:
+        traceback.print_exc()
+        return None
+
 def _guides():
     """studio/_tools/guides.py, or None. Reloaded per request like the composer, so
     editing a guide markdown file and refreshing shows the change - the same contract
@@ -1154,6 +1171,23 @@ class H(http.server.SimpleHTTPRequestHandler):
         # studio/guides/ and is rendered by studio/_tools/guides.py.
         if path == "/guide" or path.startswith("/guide/"):
             return self._page("guide.html")
+        # /generate - start, watch and stop an unattended generation run. The routes live
+        # in studio/_tools/generate_routes.py because they own a CHILD PROCESS, which
+        # nothing else in this server does.
+        if path == "/generate":
+            return self._page("generate.html")
+        if path.startswith("/api/generate/"):
+            gr = _generate_routes()
+            if not gr:
+                return self._send({"error": "studio/_tools/generate_routes.py is "
+                                            "unavailable"}, 500)
+            leaf = path[len("/api/generate/"):]
+            if leaf == "status":
+                return self._send(gr.status())
+            if leaf == "space":
+                body, code = gr.space()
+                return self._send(body, code)
+            return self._send({"error": "unknown generate route"}, 404)
         if path == "/api/guides":
             g = _guides()
             if not g:
@@ -1734,13 +1768,29 @@ class H(http.server.SimpleHTTPRequestHandler):
     def do_POST(self):
         p = urllib.parse.urlparse(self.path).path
         if p not in ("/api/save", "/api/render", "/api/make", "/api/workflow",
-                     "/api/verify", "/api/tag/reroll", "/api/compose"):
+                     "/api/verify", "/api/tag/reroll", "/api/compose",
+                     "/api/generate/start", "/api/generate/stop",
+                     "/api/generate/preview"):
             return self._send({"error": "not found"}, 404)
         n = int(self.headers.get("Content-Length", 0))
         try:
             data = json.loads(self.rfile.read(n) or b"{}")
         except Exception as e:
             return self._send({"error": f"bad json: {e}"}, 400)
+        if p.startswith("/api/generate/"):
+            gr = _generate_routes()
+            if not gr:
+                return self._send({"error": "studio/_tools/generate_routes.py is "
+                                            "unavailable"}, 500)
+            fn = {"start": gr.start, "stop": gr.stop,
+                  "preview": gr.preview}[p[len("/api/generate/"):]]
+            try:
+                body, code = fn(data)
+            except subprocess.TimeoutExpired:
+                return self._send({"error": "the roll timed out"}, 504)
+            except Exception as e:
+                return self._send({"error": str(e)[:300]}, 500)
+            return self._send(body, code)
         if p == "/api/render":
             try:
                 return self._render_start(data)
