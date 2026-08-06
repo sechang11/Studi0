@@ -1,10 +1,14 @@
 {
  "generated_from": "git log",
- "count": 81,
+ "count": 83,
  "days": [
   [
+   "2026-08-06",
+   1
+  ],
+  [
    "2026-08-05",
-   9
+   10
   ],
   [
    "2026-08-04",
@@ -31,6 +35,52 @@
   "Wizard"
  ],
  "entries": [
+  {
+   "hash": "ad399b7",
+   "full": "ad399b7e82233cf99a0b16fe294ab5d092012601",
+   "date": "2026-08-06",
+   "time": "03:24",
+   "author": "sechang11",
+   "subject": "TERRA as a sliceable solid, and the page was a stage behind",
+   "body": "A 3D print pipeline from one generated image to a watertight STL, plus the page that\nshows it and the recipe for doing it to the next character.\n\nWHAT SHIPS. studio/samples/terra_3d/print/TERRA_150mm.stl - one closed manifold solid,\n80.85 x 54.45 x 150.00 mm, zmin exactly 0, 67.13 cm3, 3,265,786 faces, standing on a\n50 mm plinth fused into the same voxel grid rather than boolean-unioned. Verified by\nloading the written file back with trimesh independently of the tool that wrote it:\nwatertight true, 0 boundary edges, 0 non-manifold edges, one vertex-connected island,\n0 duplicate and 0 degenerate faces. TERRA_200mm_fdm.stl is the same solid scaled 4/3\nfor FDM, re-verified the same way.\n\nFIVE STAGES, EACH WITH A TOOL THAT HAS REAL ARGPARSE AND IS INERT ON --help:\nterra_3d_source.py chooses and mattes the source image, terra_mesh.py drives Hunyuan3D\nand grades 17 candidates, mesh_doctor.py diagnoses and repairs, mesh_prep.py does the\nprint preparation, model3d_index.py builds the payload for /model3d.\n\nTHE PAGE WAS OFFERING A MODEL THAT FALLS OFF THE PLATE. model3d_index.py listed only\nmesh/print/, the mesh stage export, and labelled TERRA_WINNER_150mm_resin.stl THE\nDELIVERABLE. That file is watertight but has 148 mm2 of bed contact because she stands\non two pointed boot tips - the based version had been written into print/ by a later\nstage and the page had never learned the directory existed. Its own audit panel said\nSHE NEEDS A BASE and THIS IS NOT OPTIONAL AND IT HAS NOT BEEN DONE, beside a download\nbutton for the baseless file, while the based one sat unlisted. Fixed: both stages are\nlisted, print/ is scanned first and carries the winner, the bare file is kept and\nrelabelled as what you take to re-pose or re-base her, and the audit panel now says\nwhere the based file is and that its own numbers describe the stage before the base.\n\nAT 150 mm THIS IS AN FDM PRINT AFTER ALL, which reverses the earlier call. The mesh\nstage measured 1.66% of surface under the 1.0 mm nozzle floor at 150 mm and concluded\nresin only, FDM at 200. That was measured on the untreated mesh. On the file that\nactually ships - crevice-closed at 0.35 mm and thickened - it is 0.29% under 1.0 mm\nwith the thinnest one per cent at 1.19 mm, and 0.07% under the 0.3 mm resin floor.\nThe 200 mm variant reads 0.16% and 1.59 mm. Both pass the project 5% convention with\nroom to spare.\n\nWHAT IT LOOKS LIKE, from opening the orbit strips and head sheets rather than from the\ntopology. She reads as Terra: outstretched arms, off-shoulder bodice, fringed wrap\nskirt, knee boots, hair ribbon, and a face with almond eyes, nose and mouth legible in\nthe front view. Two honest losses against the source image, both a consequence of scale\nrather than of a bad generation. The hair is reconstructed as fat fused tube-locks, not\nseparated strands - it is among the THICKEST material in the model, the opposite of what\nwas predicted. And the skirt fringe, drawn in the source as many separate hanging\nstrands, comes back as a solid hem; the fingers come back as mitten paddles. Nothing\nsub-millimetre survived, and nothing sub-millimetre could have.\n\nGEOMETRY IS NOT COMMITTED, THE RECIPE IS. studio/samples/terra_3d/ is 2.3 GB and 2.07 GB\nof it is STL, 3MF, GLB and SPZ - one STL is 163 MB by itself. The same policy this file\nalready applies to gallery/, cast_proof/, the character sweeps, replicated/ and\nflux2_gallery/ now covers 3D geometry, with the reasoning written into .gitignore: the\nmeshes are a pure function of the source image, the workflow and the recorded tool\narguments, so they are regenerable, while the measurements, the orbit strips and head\nsheets, the thin maps, the verdicts and the source images stay tracked. 60 MB lands\nhere instead of 2.3 GB.\n\nWHAT IS STILL NOT PROVEN, and it is the same gap every stage of this job has reported:\nNO SLICER HAS OPENED ANY OF THESE FILES. None is installed on the box. Watertightness\nis verified by re-reading the written file from disk and re-measuring it, which is a\nstrong check and is not the same thing as PrusaSlicer or Lychee ingesting it. There is\nalso no printer, so every feature-size floor here - 0.8 to 1.2 mm on FDM, 0.3 mm on\nresin, the 45 degree overhang rule - is general practice inherited from craft/PRINTING.md\nrather than a measurement from a machine.\n\ncheck_refs.py: 1925 references checked, 0 dangling. lora_scan.py: clean.\ndocs.json regenerated - 60 documents, 0 problems, and the two new craft documents index.",
+   "paragraphs": [
+    "A 3D print pipeline from one generated image to a watertight STL, plus the page that\nshows it and the recipe for doing it to the next character.",
+    "WHAT SHIPS. studio/samples/terra_3d/print/TERRA_150mm.stl - one closed manifold solid,\n80.85 x 54.45 x 150.00 mm, zmin exactly 0, 67.13 cm3, 3,265,786 faces, standing on a\n50 mm plinth fused into the same voxel grid rather than boolean-unioned. Verified by\nloading the written file back with trimesh independently of the tool that wrote it:\nwatertight true, 0 boundary edges, 0 non-manifold edges, one vertex-connected island,\n0 duplicate and 0 degenerate faces. TERRA_200mm_fdm.stl is the same solid scaled 4/3\nfor FDM, re-verified the same way.",
+    "FIVE STAGES, EACH WITH A TOOL THAT HAS REAL ARGPARSE AND IS INERT ON --help:\nterra_3d_source.py chooses and mattes the source image, terra_mesh.py drives Hunyuan3D\nand grades 17 candidates, mesh_doctor.py diagnoses and repairs, mesh_prep.py does the\nprint preparation, model3d_index.py builds the payload for /model3d.",
+    "THE PAGE WAS OFFERING A MODEL THAT FALLS OFF THE PLATE. model3d_index.py listed only\nmesh/print/, the mesh stage export, and labelled TERRA_WINNER_150mm_resin.stl THE\nDELIVERABLE. That file is watertight but has 148 mm2 of bed contact because she stands\non two pointed boot tips - the based version had been written into print/ by a later\nstage and the page had never learned the directory existed. Its own audit panel said\nSHE NEEDS A BASE and THIS IS NOT OPTIONAL AND IT HAS NOT BEEN DONE, beside a download\nbutton for the baseless file, while the based one sat unlisted. Fixed: both stages are\nlisted, print/ is scanned first and carries the winner, the bare file is kept and\nrelabelled as what you take to re-pose or re-base her, and the audit panel now says\nwhere the based file is and that its own numbers describe the stage before the base.",
+    "AT 150 mm THIS IS AN FDM PRINT AFTER ALL, which reverses the earlier call. The mesh\nstage measured 1.66% of surface under the 1.0 mm nozzle floor at 150 mm and concluded\nresin only, FDM at 200. That was measured on the untreated mesh. On the file that\nactually ships - crevice-closed at 0.35 mm and thickened - it is 0.29% under 1.0 mm\nwith the thinnest one per cent at 1.19 mm, and 0.07% under the 0.3 mm resin floor.\nThe 200 mm variant reads 0.16% and 1.59 mm. Both pass the project 5% convention with\nroom to spare.",
+    "WHAT IT LOOKS LIKE, from opening the orbit strips and head sheets rather than from the\ntopology. She reads as Terra: outstretched arms, off-shoulder bodice, fringed wrap\nskirt, knee boots, hair ribbon, and a face with almond eyes, nose and mouth legible in\nthe front view. Two honest losses against the source image, both a consequence of scale\nrather than of a bad generation. The hair is reconstructed as fat fused tube-locks, not\nseparated strands - it is among the THICKEST material in the model, the opposite of what\nwas predicted. And the skirt fringe, drawn in the source as many separate hanging\nstrands, comes back as a solid hem; the fingers come back as mitten paddles. Nothing\nsub-millimetre survived, and nothing sub-millimetre could have.",
+    "GEOMETRY IS NOT COMMITTED, THE RECIPE IS. studio/samples/terra_3d/ is 2.3 GB and 2.07 GB\nof it is STL, 3MF, GLB and SPZ - one STL is 163 MB by itself. The same policy this file\nalready applies to gallery/, cast_proof/, the character sweeps, replicated/ and\nflux2_gallery/ now covers 3D geometry, with the reasoning written into .gitignore: the\nmeshes are a pure function of the source image, the workflow and the recorded tool\narguments, so they are regenerable, while the measurements, the orbit strips and head\nsheets, the thin maps, the verdicts and the source images stay tracked. 60 MB lands\nhere instead of 2.3 GB.",
+    "WHAT IS STILL NOT PROVEN, and it is the same gap every stage of this job has reported:\nNO SLICER HAS OPENED ANY OF THESE FILES. None is installed on the box. Watertightness\nis verified by re-reading the written file from disk and re-measuring it, which is a\nstrong check and is not the same thing as PrusaSlicer or Lychee ingesting it. There is\nalso no printer, so every feature-size floor here - 0.8 to 1.2 mm on FDM, 0.3 mm on\nresin, the 45 degree overhang rule - is general practice inherited from craft/PRINTING.md\nrather than a measurement from a machine.",
+    "check_refs.py: 1925 references checked, 0 dangling. lora_scan.py: clean.\ndocs.json regenerated - 60 documents, 0 problems, and the two new craft documents index."
+   ],
+   "areas": [
+    "Docs",
+    "Tooling",
+    "App"
+   ],
+   "files": 115,
+   "added": 10313,
+   "removed": 4
+  },
+  {
+   "hash": "9c02e05",
+   "full": "9c02e05deffeedc9f252aaa404f30de2a75f6d97",
+   "date": "2026-08-05",
+   "time": "20:57",
+   "author": "sechang11",
+   "subject": "Regenerate the changelog so THE COAT appears in it",
+   "body": "81 entries now. changelog.py derives from git log, so it can only run after the\ncommit it is meant to describe.",
+   "paragraphs": [
+    "81 entries now. changelog.py derives from git log, so it can only run after the\ncommit it is meant to describe."
+   ],
+   "areas": [
+    "Libraries"
+   ],
+   "files": 1,
+   "added": 30,
+   "removed": 2
+  },
   {
    "hash": "6c01f64",
    "full": "6c01f648e2d69a71dc30e076c7e4939af2d9749e",
