@@ -148,3 +148,13 @@ studio/samples/**/*.obj
 studio/samples/**/*.ply
 .generate/
 studio/samples/rolled/
+
+# The photo-to-anime style sweep. SAME POLICY AS gallery/, cast_proof/, the character
+# sweeps, replicated/ and flux2_gallery/ above. 72 full-size sweep cells across four
+# styles are 85 MB and .git is already past 2 GB. What a person reads is the 10 CONTACT
+# SHEETS in sweep/sheets/, VERDICT.json and METRICS.json, and those stay tracked - as does
+# sweep/alt/, the eight alternative-route renders, which include the one that won and the
+# A-pose frame the mesh was built from, and are INPUTS to the next stage rather than
+# outputs of this one. The cells are regenerable by studio/_tools/photo_to_anime.py, whose
+# docstring names every dial, and they remain on disk on the box.
+studio/samples/photo2anime/sweep/renders/**/*.png

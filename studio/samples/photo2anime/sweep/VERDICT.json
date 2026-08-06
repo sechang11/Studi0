@@ -1,0 +1,114 @@
+{
+  "question": "Where is the IPAdapter weight band in which the face and the anime both survive?",
+  "measured_on": "2026-08-06",
+  "box": "RTX 5090 32GB, ComfyUI 0.28.0",
+  "setup": {
+    "workflow": "workflows/22_anime_kf_ipadapter.json",
+    "checkpoint": "animagine-xl-4.0.safetensors",
+    "ipadapter_preset": "PLUS FACE (portraits)",
+    "reference": "studio/samples/photo2anime/standin/set/02_front_flat.png",
+    "seed": 20260806,
+    "size": [896, 1152],
+    "steps": 28,
+    "cfg": 5.0,
+    "weights": [0.0, 0.2, 0.3, 0.4, 0.5, 0.6, 0.8, 1.0],
+    "styles": ["modern_anime", "cel_anime_90s", "kyoani_soft", "manga_screentone"],
+    "prompt_modes": {
+      "tagged": "her markers written into the danbooru tag block",
+      "neutral": "no marker word anywhere; the reference is the only possible source"
+    },
+    "cells": 72
+  },
+
+  "control_validated": {
+    "claim": "IPAdapter weight 0.0 is a true no-op",
+    "evidence": "NOREF (IPAdapterAdvanced deleted from the graph) and weight 0.00 are pixel-identical in all four styles: same SATAVG to one decimal, same JPEG size to 0.1 KB",
+    "verdict": "confirmed"
+  },
+
+  "identity": {
+    "scored_on": "the NEUTRAL sweep only; the TAGGED sweep has glasses and a mustard jacket at weight 0.00 because the tags put them there",
+    "marker_onset_weight": {
+      "cel_anime_90s":    {"hair_length": 0.30, "mustard_jacket": 0.40, "gold_round_glasses": 0.30, "cheek_mole": null, "face_structure": null},
+      "modern_anime":     {"hair_length": 0.40, "mustard_jacket": 0.40, "gold_round_glasses": 0.50, "cheek_mole": null, "face_structure": null},
+      "manga_screentone": {"hair_length": 0.30, "mustard_jacket": 1.00, "gold_round_glasses": 0.50, "cheek_mole": null, "face_structure": null},
+      "kyoani_soft":      {"hair_length": null, "mustard_jacket": 0.60, "gold_round_glasses": 0.80, "cheek_mole": null, "face_structure": null}
+    },
+    "null_means": "never appeared at any weight up to 1.00",
+    "findings": [
+      "Below 0.30 the reference contributes nothing; 0.20 is indistinguishable from no reference.",
+      "The threshold is style-dependent, 0.30 to 0.80. A style carrying its own strong light and palette resists the reference.",
+      "The mole never appears and the face is never hers. PLUS FACE from a PHOTOGRAPH transports attributes - hair mass and length, garment colour and shape, presence of eyewear - plus the reference's lighting and background. Not identity."
+    ]
+  },
+
+  "style": {
+    "compared_against": "a NOREF render of the same prompt and seed",
+    "terra_claim": "a reference through IPAdapter suppresses style",
+    "reproduces": true,
+    "but_not_as_written": "nothing ever stopped being a drawing; there is no weight at which a photograph comes back",
+    "what_actually_dies": {
+      "0.20": "the style card's LIGHT and BACKGROUND. kyoani_soft loses its warm ambient light and drawn bokeh; by 0.60 the ground is the reference's plain pale wall under the reference's flat even light.",
+      "0.60": "the card's distinguishing SURFACE. cel_anime_90s drifts from heavy uneven line and hard cel shadow into generic modern soft-gradient anime. Still anime, no longer 1990s OVA.",
+      "0.80": "COMPOSITION AND PROPS - the real ceiling. Framing zooms and tilts, a hand rises to the face unbidden, a manga poster appears in her hands (manga_screentone 0.80 and 1.00), a bandage on her head (1.00), crop drifts chest-forward in every style."
+    },
+    "monochrome_litmus": {
+      "style": "manga_screentone",
+      "neutral_satavg": {"NOREF": 1.1, "0.20": 0.8, "0.30": 0.7, "0.40": 1.1, "0.50": 10.2, "0.60": 1.8, "0.80": 8.8, "1.00": 6.5},
+      "tagged_satavg":  {"NOREF": 8.0, "0.20": 13.2, "0.30": 16.7, "0.40": 17.9, "0.50": 20.3, "0.60": 19.3, "0.80": 16.8, "1.00": 13.1},
+      "reading": "monochrome survives the reference to 0.80 and only leaks at 1.00. The colour flooding the TAGGED sweep from 0.20 is the words 'yellow jacket' beating 'monochrome', not the reference. Two suppressors were being read as one."
+    }
+  },
+
+  "band": {
+    "0.00-0.20": "reference contributes nothing; identical to no reference",
+    "0.30-0.40": "markers begin, style intact - the floor of the band",
+    "0.50": "best trade; hair, jacket and eyewear present, style still the card's own",
+    "0.60": "upper edge; the card's light and background are gone, surface still holds",
+    "0.80-1.00": "props, hand-at-face, crop drift, palette wash - do not ship",
+    "ANSWER": "0.40 to 0.60, default 0.50",
+    "CAVEAT": "at 0.50 a viewer says 'that is anime, and she has her glasses and her jacket' - not 'that is her'. If a recognisable FACE is the requirement, this band does not deliver it and no other band does either."
+  },
+
+  "routes_ranked": [
+    {
+      "rank": 1,
+      "route": "Qwen-Image-Edit 2511, redraw prompt",
+      "file": "alt/qwen_hard_lora00.png",
+      "workflow": "workflows/22_qwen_edit_2511.json",
+      "settings": {"steps": 4, "cfg": 1.0, "lightning_lora": 1.0, "shift": 3.1, "style_lora": "none - qwen_image_modern_anime_lora at 1.0 only darkens the hair, leave it off", "seconds": 5},
+      "prompt_shape": "name the medium in the FIRST sentence, then say what to keep",
+      "identity": "unmistakably her - face proportions, uneven brows, crooked nose, cheek mole, gold stud earrings, the same double-bridged round gold glasses, the same parting and hair length, the mustard corduroy jacket with topstitching, the white crew tee",
+      "style": "unmistakably drawn - uniform black outline, flat unshaded fills, no photographic texture",
+      "trap_avoided": "'a reference imports its medium' is true of a style bolted onto a photographic subject; it is not true of a prompt that is illustration from the first word. Already measured on Qwen t2i, holds on the edit path.",
+      "caveat": "reads as ligne claire / flat vector illustration, not TV-anime cel. Realistic proportions, no anime eye stylisation. 'A drawing of her', not 'an anime character'."
+    },
+    {
+      "rank": 2,
+      "route": "FLUX.2 dev, prose only",
+      "files": ["alt/flux2_flat_cel.png", "alt/flux2_retro_cel.png", "alt/flux2_soft_paint.png"],
+      "workflow": "workflows/40_flux2_t2i.json",
+      "settings": {"turbo": true, "steps": 8, "guidance": 4.0, "size": [832, 1216]},
+      "identity": "every marker right, including the corduroy wale - but the face is FLUX's reading of the sentence, narrower and longer, a different nose",
+      "note": "no IPAdapter exists on this path at all. Usable for a synthetic stand-in who IS her description, and it buys free choice of pose and scene. For a real likeness it is a police sketch."
+    },
+    {
+      "rank": 3,
+      "route": "IPAdapter PLUS FACE on animagine-xl-4.0",
+      "settings": {"weight": 0.5, "band": [0.4, 0.6], "weight_type": "linear", "start_at": 0.0, "end_at": 0.9, "embeds_scaling": "V only"},
+      "identity": "attribute-level only - hair, garment, eyewear. Never the face, never the mole.",
+      "style": "genuine full anime a viewer would not question, and free choice of style from the shipped library"
+    }
+  ],
+
+  "for_the_3d_route": {
+    "file": "alt/qwen_ideal_apose.png",
+    "source": "standin/ideal/IDEAL_apose_1152x2048.png",
+    "why_it_matters": "the edit path keeps the input pose and framing, which no text-to-image route does, so an A-pose in gives an A-pose out - arms clear, hands closed, feet planted",
+    "supports_the_thesis": "hair became one closed mass, corduroy wale and every cloth fold collapsed to clean planes, ground went flat white - the geometric simplification the mesh thesis predicts",
+    "avoids_terras_failure_by_construction": "no separated hair locks to become tubes, and the hands came through closed and correct",
+    "next": "feed it to workflows/24_hunyuan3d_mesh.json against a photo-direct control"
+  },
+
+  "operational_note": "The first run submitted cells one at a time and was starved by another session queueing LoRA training - 25 cells in 40 minutes and slowing. Submitting the whole grid as ONE BATCH and waiting on it drained the remaining 47 cells in under 9 minutes on the same contended queue. epic.wait_all says this in its docstring."
+}
