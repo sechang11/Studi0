@@ -1,0 +1,411 @@
+{
+  "subject": "STANDIN-A",
+  "synthetic": true,
+  "provenance": "Every image generated on this box from the prose in studio/_tools/standin_person.py. No photograph of any real person was used, fetched or referenced, and no celebrity or public-figure token appears in any prompt.",
+  "engine": "Qwen-Image 2512 (t2i) and Qwen-Image-Edit 2511 (reference), 4-step Lightning, cfg 1.0, style LoRA off",
+  "marks": [
+    "glasses",
+    "cheek_mole",
+    "hair",
+    "earrings",
+    "jacket"
+  ],
+  "face_prose": "a woman in her early thirties, ordinary looking rather than glamorous, an oval face with a slightly crooked nose and uneven eyebrows, warm light-olive skin with visible pores, faint under-eye shadows and a few small blemishes, no makeup, dark brown eyes, thin round gold wire-frame glasses, a small dark mole on her right cheek about an inch below the eye, dark brown hair falling just past her shoulders, parted on the left, with a grown-out fringe tucked behind one ear",
+  "wear": {
+    "A": "a mustard yellow corduroy jacket over a plain white t-shirt",
+    "B": "a grey marl ribbed wool sweater",
+    "C": "a navy and white horizontally striped long-sleeve cotton shirt"
+  },
+  "shots": [
+    {
+      "id": "01_window_3q",
+      "file": "set/01_window_3q.png",
+      "present": true,
+      "intent": "good",
+      "wear": "a mustard yellow corduroy jacket over a plain white t-shirt",
+      "seed": 7001,
+      "size": [
+        1024,
+        1280
+      ],
+      "reference_pair": [
+        "anchor_face",
+        "anchor_body"
+      ],
+      "marks_expected": [
+        "glasses",
+        "cheek_mole",
+        "hair",
+        "earrings",
+        "jacket"
+      ],
+      "prose": "a head and shoulders photograph, turned three-quarters to camera-left, soft daylight from a tall window, a plain pale grey wall behind her, neutral expression"
+    },
+    {
+      "id": "02_front_flat",
+      "file": "set/02_front_flat.png",
+      "present": true,
+      "intent": "good",
+      "wear": "a mustard yellow corduroy jacket over a plain white t-shirt",
+      "seed": 7002,
+      "size": [
+        1024,
+        1280
+      ],
+      "reference_pair": [
+        "anchor_face",
+        "anchor_body"
+      ],
+      "marks_expected": [
+        "glasses",
+        "cheek_mole",
+        "hair",
+        "earrings",
+        "jacket"
+      ],
+      "prose": "a head and shoulders photograph, straight on to the camera, flat even indoor lighting, a plain white wall behind her, neutral expression"
+    },
+    {
+      "id": "03_profile",
+      "file": "set/03_profile.png",
+      "present": true,
+      "intent": "good",
+      "wear": "a grey marl ribbed wool sweater",
+      "seed": 7003,
+      "size": [
+        1024,
+        1280
+      ],
+      "reference_pair": [
+        "anchor_face",
+        "anchor_body"
+      ],
+      "marks_expected": [
+        "glasses",
+        "cheek_mole",
+        "hair",
+        "earrings"
+      ],
+      "prose": "a head and shoulders photograph in full side profile facing camera-left, soft daylight, a plain pale wall behind her"
+    },
+    {
+      "id": "04_3q_right",
+      "file": "set/04_3q_right.png",
+      "present": true,
+      "intent": "good",
+      "wear": "a grey marl ribbed wool sweater",
+      "seed": 7004,
+      "size": [
+        1024,
+        1280
+      ],
+      "reference_pair": [
+        "anchor_face",
+        "anchor_body"
+      ],
+      "marks_expected": [
+        "glasses",
+        "cheek_mole",
+        "hair",
+        "earrings"
+      ],
+      "prose": "a head and shoulders photograph turned three-quarters to camera-right, looking at the camera, soft overcast daylight, plain background"
+    },
+    {
+      "id": "05_kitchen_busy",
+      "file": "set/05_kitchen_busy.png",
+      "present": true,
+      "intent": "dud",
+      "wear": "a mustard yellow corduroy jacket over a plain white t-shirt",
+      "seed": 7005,
+      "size": [
+        1216,
+        928
+      ],
+      "reference_pair": [
+        "anchor_face",
+        "anchor_body"
+      ],
+      "marks_expected": [
+        "glasses",
+        "cheek_mole",
+        "hair",
+        "earrings",
+        "jacket"
+      ],
+      "prose": "a candid waist-up photograph in a cluttered domestic kitchen, warm ceiling light, open shelves crowded with jars mugs and a plant behind her, she is mid-sentence looking slightly off camera"
+    },
+    {
+      "id": "06_outdoor_overcast",
+      "file": "set/06_outdoor_overcast.png",
+      "present": true,
+      "intent": "good",
+      "wear": "a mustard yellow corduroy jacket over a plain white t-shirt",
+      "seed": 7006,
+      "size": [
+        1024,
+        1280
+      ],
+      "reference_pair": [
+        "anchor_face",
+        "anchor_body"
+      ],
+      "marks_expected": [
+        "glasses",
+        "cheek_mole",
+        "hair",
+        "earrings",
+        "jacket"
+      ],
+      "prose": "a waist-up photograph outdoors on a grey overcast day, flat soft light, a blurred hedge and pavement behind her, hands in her jacket pockets"
+    },
+    {
+      "id": "07_outdoor_sun_full",
+      "file": "set/07_outdoor_sun_full.png",
+      "present": true,
+      "intent": "dud",
+      "wear": "a navy and white horizontally striped long-sleeve cotton shirt",
+      "seed": 7007,
+      "size": [
+        1024,
+        1792
+      ],
+      "reference_pair": [
+        "anchor_body",
+        "pose_plate"
+      ],
+      "marks_expected": [
+        "glasses",
+        "cheek_mole",
+        "hair",
+        "earrings"
+      ],
+      "prose": "a full length photograph outdoors in hard midday sunlight, strong shadow under the chin and nose, squinting slightly, a sunlit brick wall behind her, standing with her weight on one hip, her whole body down to her white canvas shoes in the frame and her shoes visible near the bottom edge with pavement below them"
+    },
+    {
+      "id": "08_fullbody_plain",
+      "file": "set/08_fullbody_plain.png",
+      "present": true,
+      "intent": "good",
+      "wear": "a grey marl ribbed wool sweater",
+      "seed": 7008,
+      "size": [
+        1024,
+        1792
+      ],
+      "reference_pair": [
+        "anchor_body",
+        "pose_plate"
+      ],
+      "marks_expected": [
+        "glasses",
+        "cheek_mole",
+        "hair",
+        "earrings"
+      ],
+      "prose": "a full length photograph standing against a plain pale grey wall indoors, soft even light, arms at her sides, her whole body down to her white canvas shoes in the frame, her shoes visible near the bottom edge and clear space above her head"
+    },
+    {
+      "id": "09_seated_cafe",
+      "file": "set/09_seated_cafe.png",
+      "present": true,
+      "intent": "dud",
+      "wear": "a navy and white horizontally striped long-sleeve cotton shirt",
+      "seed": 7009,
+      "size": [
+        1216,
+        928
+      ],
+      "reference_pair": [
+        "anchor_face",
+        "anchor_body"
+      ],
+      "marks_expected": [
+        "glasses",
+        "cheek_mole",
+        "hair",
+        "earrings"
+      ],
+      "prose": "a candid photograph of her seated at a small cafe table, one elbow on the table, a coffee cup in front of her, warm tungsten light from above mixed with cold daylight from a window behind, other tables out of focus behind her"
+    },
+    {
+      "id": "10_selfie_wide",
+      "file": "set/10_selfie_wide.png",
+      "present": true,
+      "intent": "dud",
+      "wear": "a mustard yellow corduroy jacket over a plain white t-shirt",
+      "seed": 7010,
+      "size": [
+        1024,
+        1280
+      ],
+      "reference_pair": [
+        "anchor_face",
+        "anchor_body"
+      ],
+      "marks_expected": [
+        "glasses",
+        "cheek_mole",
+        "hair",
+        "earrings",
+        "jacket"
+      ],
+      "prose": "a phone selfie held at arm's length, slight wide-angle lens distortion enlarging the nose, harsh overhead ceiling light, a hallway behind her, one shoulder raised toward the camera"
+    },
+    {
+      "id": "11_off_axis_dim",
+      "file": "set/11_off_axis_dim.png",
+      "present": true,
+      "intent": "dud",
+      "wear": "a grey marl ribbed wool sweater",
+      "seed": 7011,
+      "size": [
+        1024,
+        1280
+      ],
+      "reference_pair": [
+        "anchor_face",
+        "anchor_body"
+      ],
+      "marks_expected": [
+        "glasses",
+        "cheek_mole",
+        "hair",
+        "earrings"
+      ],
+      "prose": "a slightly off-axis snapshot, the horizon tilted a few degrees, her head turned away and tipped, dim evening room light, a doorway behind her, mild motion blur"
+    },
+    {
+      "id": "12_mixed_light",
+      "file": "set/12_mixed_light.png",
+      "present": true,
+      "intent": "dud",
+      "wear": "a mustard yellow corduroy jacket over a plain white t-shirt",
+      "seed": 7012,
+      "size": [
+        1024,
+        1280
+      ],
+      "reference_pair": [
+        "anchor_face",
+        "anchor_body"
+      ],
+      "marks_expected": [
+        "glasses",
+        "cheek_mole",
+        "hair",
+        "earrings",
+        "jacket"
+      ],
+      "prose": "a waist-up photograph in a living room at dusk, a warm orange table lamp lighting one side of her face and cold blue window light on the other, a sofa and bookshelf behind her"
+    },
+    {
+      "id": "13_over_shoulder",
+      "file": "set/13_over_shoulder.png",
+      "present": true,
+      "intent": "good",
+      "wear": "a navy and white horizontally striped long-sleeve cotton shirt",
+      "seed": 7013,
+      "size": [
+        1024,
+        1280
+      ],
+      "reference_pair": [
+        "anchor_face",
+        "anchor_body"
+      ],
+      "marks_expected": [
+        "glasses",
+        "cheek_mole",
+        "hair",
+        "earrings"
+      ],
+      "prose": "a photograph from behind and to the side, she has turned to look back over her right shoulder at the camera, soft daylight, a plain wall behind her"
+    },
+    {
+      "id": "14_no_glasses",
+      "file": "set/14_no_glasses.png",
+      "present": true,
+      "intent": "stress",
+      "wear": "a grey marl ribbed wool sweater",
+      "seed": 7014,
+      "size": [
+        1024,
+        1280
+      ],
+      "reference_pair": [
+        "anchor_face",
+        "anchor_body"
+      ],
+      "marks_expected": [
+        "cheek_mole",
+        "hair",
+        "earrings"
+      ],
+      "prose": "a head and shoulders photograph with her glasses removed and held in one hand, faint pressure marks on the bridge of her nose, soft window light, plain pale background"
+    },
+    {
+      "id": "15_hair_up",
+      "file": "set/15_hair_up.png",
+      "present": true,
+      "intent": "stress",
+      "wear": "a navy and white horizontally striped long-sleeve cotton shirt",
+      "seed": 7015,
+      "size": [
+        1024,
+        1280
+      ],
+      "reference_pair": [
+        "anchor_face",
+        "anchor_body"
+      ],
+      "marks_expected": [
+        "glasses",
+        "cheek_mole",
+        "earrings"
+      ],
+      "prose": "a head and shoulders photograph with her hair tied back in a low ponytail, loose strands at the temples, soft daylight, plain background"
+    },
+    {
+      "id": "16_laughing",
+      "file": "set/16_laughing.png",
+      "present": true,
+      "intent": "good",
+      "wear": "a mustard yellow corduroy jacket over a plain white t-shirt",
+      "seed": 7016,
+      "size": [
+        1024,
+        1280
+      ],
+      "reference_pair": [
+        "anchor_face",
+        "anchor_body"
+      ],
+      "marks_expected": [
+        "glasses",
+        "cheek_mole",
+        "hair",
+        "earrings",
+        "jacket"
+      ],
+      "prose": "a candid head and shoulders photograph caught mid-laugh, eyes creased shut, head tipped back slightly, soft daylight from a window, plain pale wall"
+    }
+  ],
+  "ideal": {
+    "file": "ideal/IDEAL_apose_1152x2048.png",
+    "recipe": "image1=anchor_body, image2=pose_plate, seed 9302",
+    "meets": [
+      "A-pose with background between each arm and the torso",
+      "hands closed into fists",
+      "flat shadowless light",
+      "plain uniform grey background",
+      "whole figure with margin",
+      "long edge 2048, clears the 1536 rule"
+    ]
+  },
+  "consistency": {
+    "method": "CLIP-ViT-H and DINOv3 cosine over 28 hand-boxed face crops, with a purpose-built between-person floor (6 siblings).",
+    "verdict": "THE EMBEDDING METRIC FAILED ITS OWN CONTROL AND IS NOT REPORTED AS EVIDENCE. SIB6 - a different woman wearing the same glasses, hair, skin tone and jacket - scored 0.865 on CLIP-ViT-H (above 8 of the 16 genuine frames) and 0.967 on DINOv3, the highest score in the whole matrix. Both encoders rank a stranger above the real thing, so they are measuring photographic similarity, not identity. The consistency claim rests on the MARKS instead, which are countable.",
+    "floor_beats_signal": true
+  }
+}
