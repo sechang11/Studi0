@@ -1,10 +1,10 @@
 {
  "generated_from": "git log",
- "count": 83,
+ "count": 92,
  "days": [
   [
    "2026-08-06",
-   1
+   10
   ],
   [
    "2026-08-05",
@@ -35,6 +35,201 @@
   "Wizard"
  ],
  "entries": [
+  {
+   "hash": "9b9a3a5",
+   "full": "9b9a3a55f56f061363afe78ded44ebe215dda196",
+   "date": "2026-08-06",
+   "time": "13:26",
+   "author": "sechang11",
+   "subject": "Write the photo intake checklist, and land the style sweep behind it",
+   "body": "The wave asked three questions of the same synthetic stand-in and this is the\ndocument a person actually receives: craft/PHOTO_INTAKE.md, the checklist you hand\nto someone before they send you photographs. Ten minutes, a phone, a friend to hold\nit. Every number in it was measured on a woman who does not exist.\n\nTHE NUMBERS. Four varied photographs for a printable figurine, eight for a character\nyou have to render again and again, sixteen buys reliability rather than likeness and\nnothing measurable arrives after eight. But count is the wrong axis: eight\nnear-identical frames LOST to four varied ones, and lost badly - the narrow set came\nback as a generic young anime girl with no glasses at three strengths, despite having\nmore close-up face pixels than any other arm. Vary outfit, then angle, then distance,\nthen light, in that order of measured importance.\n\nWHAT THE DOCUMENT REFUSES TO PROMISE. The mole never survives. The face on a 150 mm\nprint is more recognisably her, not recognisable as her. One photograph through a\nreference dial transfers the marks and never the person, drags its own wall and\nlighting in with it, and overwrites the wardrobe you asked for - which is exactly why\nthe checklist asks for eight photographs and not one.\n\nAlso landing here: studio/_tools/photo_to_anime.py and the evidence behind the\nreference-weight sweep - the ten contact sheets, VERDICT.json and METRICS.json. The 72\nfull-size cells are ignored under the same rule as gallery/, cast_proof/, replicated/\nand flux2_gallery/, with the rationale written into .gitignore beside the others. The\neight alternative-route renders in sweep/alt/ are KEPT: one of them is the winner of\nthe whole comparison and another is the A-pose frame the shipped mesh was built from,\nso they are inputs to the next stage rather than outputs of this one.\n\nGROUND TRUTH, re-run rather than taken on report. STANDIN_150mm.stl reloaded from\ndisk with trimesh: watertight, one component, zero non-manifold edges, 2991008 faces,\n91.35 x 78.00 x 150.00 mm, 93.82 cm3 - matching VERIFY.json exactly. Four sheets were\nopened and looked at. LIKENESS.jpg and HEAD_HAIR.jpg confirm the reversal both ways:\nthe photograph gives a smooth closed hair mass and a face that is nobody, the drawing\ngives a nose, lips and round glasses on a head fringed with separate hair-lock tubes.\n\nNo photograph of any real person was fetched, used or referenced anywhere in this\nwave, and no public figure appears in any prompt. The subject is synthetic by\nconstruction and stayed that way.",
+   "paragraphs": [
+    "The wave asked three questions of the same synthetic stand-in and this is the\ndocument a person actually receives: craft/PHOTO_INTAKE.md, the checklist you hand\nto someone before they send you photographs. Ten minutes, a phone, a friend to hold\nit. Every number in it was measured on a woman who does not exist.",
+    "THE NUMBERS. Four varied photographs for a printable figurine, eight for a character\nyou have to render again and again, sixteen buys reliability rather than likeness and\nnothing measurable arrives after eight. But count is the wrong axis: eight\nnear-identical frames LOST to four varied ones, and lost badly - the narrow set came\nback as a generic young anime girl with no glasses at three strengths, despite having\nmore close-up face pixels than any other arm. Vary outfit, then angle, then distance,\nthen light, in that order of measured importance.",
+    "WHAT THE DOCUMENT REFUSES TO PROMISE. The mole never survives. The face on a 150 mm\nprint is more recognisably her, not recognisable as her. One photograph through a\nreference dial transfers the marks and never the person, drags its own wall and\nlighting in with it, and overwrites the wardrobe you asked for - which is exactly why\nthe checklist asks for eight photographs and not one.",
+    "Also landing here: studio/_tools/photo_to_anime.py and the evidence behind the\nreference-weight sweep - the ten contact sheets, VERDICT.json and METRICS.json. The 72\nfull-size cells are ignored under the same rule as gallery/, cast_proof/, replicated/\nand flux2_gallery/, with the rationale written into .gitignore beside the others. The\neight alternative-route renders in sweep/alt/ are KEPT: one of them is the winner of\nthe whole comparison and another is the A-pose frame the shipped mesh was built from,\nso they are inputs to the next stage rather than outputs of this one.",
+    "GROUND TRUTH, re-run rather than taken on report. STANDIN_150mm.stl reloaded from\ndisk with trimesh: watertight, one component, zero non-manifold edges, 2991008 faces,\n91.35 x 78.00 x 150.00 mm, 93.82 cm3 - matching VERIFY.json exactly. Four sheets were\nopened and looked at. LIKENESS.jpg and HEAD_HAIR.jpg confirm the reversal both ways:\nthe photograph gives a smooth closed hair mass and a face that is nobody, the drawing\ngives a nose, lips and round glasses on a head fringed with separate hair-lock tubes.",
+    "No photograph of any real person was fetched, used or referenced anywhere in this\nwave, and no public figure appears in any prompt. The subject is synthetic by\nconstruction and stayed that way."
+   ],
+   "areas": [
+    "Docs",
+    "Tooling"
+   ],
+   "files": 23,
+   "added": 1375,
+   "removed": 0
+  },
+  {
+   "hash": "a1ef5ad",
+   "full": "a1ef5ad1c9850418294ab74308cb19b4fcec629f",
+   "date": "2026-08-06",
+   "time": "13:18",
+   "author": "sechang11",
+   "subject": "Refresh REPORT.json after the unit fix",
+   "body": "",
+   "paragraphs": [],
+   "areas": [
+    "Samples"
+   ],
+   "files": 1,
+   "added": 10,
+   "removed": 7
+  },
+  {
+   "hash": "4e8beea",
+   "full": "4e8beea96706cd90cf88c3289c0485a092496540",
+   "date": "2026-08-06",
+   "time": "13:18",
+   "author": "sechang11",
+   "subject": "Fix a mislabelled unit in the export verification",
+   "body": "VERIFY.json reported mesh_doctor diagnose volume as volume_cm3. That field is in\nMODEL UNITS, and after solidify the model unit is the millimetre, so 93,819.7 was\nbeing published as 93,819.7 cm3 - a thousandfold overstatement of a 93.8 cm3\nfigure. Both are now written and labelled, and bbox is labelled bbox_mm.",
+   "paragraphs": [
+    "VERIFY.json reported mesh_doctor diagnose volume as volume_cm3. That field is in\nMODEL UNITS, and after solidify the model unit is the millimetre, so 93,819.7 was\nbeing published as 93,819.7 cm3 - a thousandfold overstatement of a 93.8 cm3\nfigure. Both are now written and labelled, and bbox is labelled bbox_mm."
+   ],
+   "areas": [
+    "Tooling"
+   ],
+   "files": 5,
+   "added": 22,
+   "removed": 13
+  },
+  {
+   "hash": "02b3ef7",
+   "full": "02b3ef74a45d2071b681c41567b11111bc929533",
+   "date": "2026-08-06",
+   "time": "13:16",
+   "author": "sechang11",
+   "subject": "Test the stylisation thesis at the mesh, and find it half wrong",
+   "body": "craft/CHARACTER_TO_PRINT.md argued that anime stylisation is geometric\nsimplification - hair becomes a closed mass, cloth becomes clean planes - so\nphoto -> anime -> mesh should beat photo -> mesh. Both arms were built from the\nsame A-pose frame of the synthetic stand-in with every downstream dial identical:\nBiRefNet matte, grey plate, alpha-bbox crop, squared to 1024, single-view\nconditioning, latent 4096, seed 20260806, 30 steps, cfg 5.0, octree 512, surface\nnet, threshold 0.45.\n\nThe answer is split, and the thesis has its own mechanism backwards.\n\nTHE PHOTOGRAPH produced the closed hair mass the thesis predicted from the\ndrawing. THE DRAWING reproduced Terra's failure exactly - the hair ends came\nthrough as a row of separate curled tubes on the shoulders. Ligne-claire art\noutlines each lock and the mesher reads a closed outline as a closed volume. Fine\nstrands were never the risk; drawn contours are.\n\nBut the drawing wins the face, and that reverses the verdict. The photo mesh has\nalmost no nose, a dent for a mouth and one thick slab of glasses across the\nmidface - it is not somebody else, it is nobody. Facial relief in a photograph is\ncarried by shading, and the mesher smooths shading away as noise; the redraw\nconverts it to lines, and lines are what the mesher builds relief from. The same\nproperty that ruins the hair rescues the face.\n\nPhoto direct wins every raw topology column - half the strays, half the\nnon-manifold edges, a fifth of the sub-minimum surface. That gap then closes\nalmost completely in mesh_prep's voxel pass: both arms come out watertight, one\nbody, no blocking issues, 0.00 per cent against 0.01 per cent sub-0.8 mm surface.\nRaw Hunyuan3D topology is an argument about how much work the repair has to do,\nnot about what can be printed.\n\nSo the anime arm ships, because a mesh that is not her is the one failure repair\ncannot undo - print/STANDIN_150mm.stl, .3mf and .glb, 150 mm on a fused plinth,\neach re-verified watertight by reloading it from disk. If the face does not have\nto be hers, photo direct is the better object and should be used.\n\nCloth is the one place the thesis holds outright: corduroy is soft mush on the\nphoto arm and crisp panels, pocket flaps and cuffs on the anime arm. Hands are a\ntie, and only because the A-pose seed already had them closed.\n\nAlso paid for here: ComfyUI was restarted twice under this run by another session,\nand a restart wipes both /history and /queue, so a submitted prompt id stops\nexisting. epic.wait_all only asks /history whether a pid has finished, so it waits\nfor it forever - twelve minutes of silence indistinguishable from a slow surface\nnet extraction. The gen stage asks instead whether the pid is still running,\nqueued or in history, and resubmits after two consecutive misses. Both meshes then\nlanded in 312 s with one resubmit each.\n\nNothing outside studio/samples/photo2anime/mesh, studio/samples/photo2anime/print\nand studio/_tools/photo2anime_mesh.py is touched. mesh_doctor.py and mesh_prep.py\nare driven through their command lines and never edited.",
+   "paragraphs": [
+    "craft/CHARACTER_TO_PRINT.md argued that anime stylisation is geometric\nsimplification - hair becomes a closed mass, cloth becomes clean planes - so\nphoto -> anime -> mesh should beat photo -> mesh. Both arms were built from the\nsame A-pose frame of the synthetic stand-in with every downstream dial identical:\nBiRefNet matte, grey plate, alpha-bbox crop, squared to 1024, single-view\nconditioning, latent 4096, seed 20260806, 30 steps, cfg 5.0, octree 512, surface\nnet, threshold 0.45.",
+    "The answer is split, and the thesis has its own mechanism backwards.",
+    "THE PHOTOGRAPH produced the closed hair mass the thesis predicted from the\ndrawing. THE DRAWING reproduced Terra's failure exactly - the hair ends came\nthrough as a row of separate curled tubes on the shoulders. Ligne-claire art\noutlines each lock and the mesher reads a closed outline as a closed volume. Fine\nstrands were never the risk; drawn contours are.",
+    "But the drawing wins the face, and that reverses the verdict. The photo mesh has\nalmost no nose, a dent for a mouth and one thick slab of glasses across the\nmidface - it is not somebody else, it is nobody. Facial relief in a photograph is\ncarried by shading, and the mesher smooths shading away as noise; the redraw\nconverts it to lines, and lines are what the mesher builds relief from. The same\nproperty that ruins the hair rescues the face.",
+    "Photo direct wins every raw topology column - half the strays, half the\nnon-manifold edges, a fifth of the sub-minimum surface. That gap then closes\nalmost completely in mesh_prep's voxel pass: both arms come out watertight, one\nbody, no blocking issues, 0.00 per cent against 0.01 per cent sub-0.8 mm surface.\nRaw Hunyuan3D topology is an argument about how much work the repair has to do,\nnot about what can be printed.",
+    "So the anime arm ships, because a mesh that is not her is the one failure repair\ncannot undo - print/STANDIN_150mm.stl, .3mf and .glb, 150 mm on a fused plinth,\neach re-verified watertight by reloading it from disk. If the face does not have\nto be hers, photo direct is the better object and should be used.",
+    "Cloth is the one place the thesis holds outright: corduroy is soft mush on the\nphoto arm and crisp panels, pocket flaps and cuffs on the anime arm. Hands are a\ntie, and only because the A-pose seed already had them closed.",
+    "Also paid for here: ComfyUI was restarted twice under this run by another session,\nand a restart wipes both /history and /queue, so a submitted prompt id stops\nexisting. epic.wait_all only asks /history whether a pid has finished, so it waits\nfor it forever - twelve minutes of silence indistinguishable from a slow surface\nnet extraction. The gen stage asks instead whether the pid is still running,\nqueued or in history, and resubmits after two consecutive misses. Both meshes then\nlanded in 312 s with one resubmit each.",
+    "Nothing outside studio/samples/photo2anime/mesh, studio/samples/photo2anime/print\nand studio/_tools/photo2anime_mesh.py is touched. mesh_doctor.py and mesh_prep.py\nare driven through their command lines and never edited."
+   ],
+   "areas": [
+    "Tooling"
+   ],
+   "files": 22,
+   "added": 2441,
+   "removed": 0
+  },
+  {
+   "hash": "6a6702a",
+   "full": "6a6702aed1fd9053a7ca15274b61752f9ac99265",
+   "date": "2026-08-06",
+   "time": "12:55",
+   "author": "sechang11",
+   "subject": "Wire the generator to a page: /generate with weights, budget and live status",
+   "body": "The shell scripts now have a front end. /generate is linked from the nav on\nevery page and has three parts: a required time budget, the five type weights\nas sliders with a live proportion bar, and the drawable space read from the\ncards on disk rather than typed into the HTML. Start, stop, and a preview that\nrolls twelve jobs without rendering any of them.\n\nEvery limit the scripts enforce is enforced again in the API, so a crafted POST\nis no more dangerous than a typo at a prompt. Verified rejections: no budget,\nover the 12 hour ceiling, all weights zero, unknown type, a shell metacharacter\nin weights, and a non-numeric seed. The ceiling refuses rather than clamping -\nsilently shortening a run someone asked for is how you stop trusting the number\non the screen. Stop sets a flag instead of killing, so the render in flight\nfinishes and its artifact is kept, and the run is detached with\nstart_new_session so restarting the studio does not take it down.\n\nThree defects found by running it rather than reading it:\n\n  No preflight and no backoff. ComfyUI was down and a four minute run produced\n  over three hundred instant failures at ten per second, every line saying only\n  failed. Now both the script and the API ask system_stats before starting, and\n  mid-run failures back off 2/4/8/16s and give up after eight in a row.\n\n  The scoreboard lied. render_job.py emits two lines, because ComfyUI's run()\n  prints its own DONE progress line before the JSON, so the parse choked and\n  counted five genuine successes as failures while the artifacts sat on disk.\n  Only the last line is parsed now. The loop was fine and only the reporting\n  was wrong, which is the worst way for something to be broken.\n\n  xstack fills unused canvas with BRIGHT GREEN. A contact sheet whose last row\n  did not divide by six came out looking part chroma-key screen.\n\nVerified end to end: an eight minute run started from the page kept 29 artifacts\nacross all five types and stopped itself on its deadline. Every one of the nine\nfailures traces to ComfyUI exiting mid-run, which it did twice, both times\nimmediately after a Hunyuan3D mesh job and with a loky semaphore leak at\nshutdown. That is a pre-existing defect in the 3D pipeline, not something the\nharness triggers - and the backoff caught it exactly as intended the second\ntime. Uncontended, images render in about 8s and sound effects in 1.5s.",
+   "paragraphs": [
+    "The shell scripts now have a front end. /generate is linked from the nav on\nevery page and has three parts: a required time budget, the five type weights\nas sliders with a live proportion bar, and the drawable space read from the\ncards on disk rather than typed into the HTML. Start, stop, and a preview that\nrolls twelve jobs without rendering any of them.",
+    "Every limit the scripts enforce is enforced again in the API, so a crafted POST\nis no more dangerous than a typo at a prompt. Verified rejections: no budget,\nover the 12 hour ceiling, all weights zero, unknown type, a shell metacharacter\nin weights, and a non-numeric seed. The ceiling refuses rather than clamping -\nsilently shortening a run someone asked for is how you stop trusting the number\non the screen. Stop sets a flag instead of killing, so the render in flight\nfinishes and its artifact is kept, and the run is detached with\nstart_new_session so restarting the studio does not take it down.",
+    "Three defects found by running it rather than reading it:",
+    "No preflight and no backoff. ComfyUI was down and a four minute run produced\n  over three hundred instant failures at ten per second, every line saying only\n  failed. Now both the script and the API ask system_stats before starting, and\n  mid-run failures back off 2/4/8/16s and give up after eight in a row.",
+    "The scoreboard lied. render_job.py emits two lines, because ComfyUI's run()\n  prints its own DONE progress line before the JSON, so the parse choked and\n  counted five genuine successes as failures while the artifacts sat on disk.\n  Only the last line is parsed now. The loop was fine and only the reporting\n  was wrong, which is the worst way for something to be broken.",
+    "xstack fills unused canvas with BRIGHT GREEN. A contact sheet whose last row\n  did not divide by six came out looking part chroma-key screen.",
+    "Verified end to end: an eight minute run started from the page kept 29 artifacts\nacross all five types and stopped itself on its deadline. Every one of the nine\nfailures traces to ComfyUI exiting mid-run, which it did twice, both times\nimmediately after a Hunyuan3D mesh job and with a loky semaphore leak at\nshutdown. That is a pre-existing defect in the 3D pipeline, not something the\nharness triggers - and the backoff caught it exactly as intended the second\ntime. Uncontended, images render in about 8s and sound effects in 1.5s."
+   ],
+   "areas": [
+    "Tooling",
+    "App"
+   ],
+   "files": 10,
+   "added": 551,
+   "removed": 11
+  },
+  {
+   "hash": "55736b7",
+   "full": "55736b77098a090c0939db6d920896508d46e47a",
+   "date": "2026-08-06",
+   "time": "12:28",
+   "author": "sechang11",
+   "subject": "Measure how many photographs a character LoRA actually needs",
+   "body": "Five LoRAs on the synthetic stand-in with steps, rank, lr, seed and training\nresolution held constant, plus a zero-training IPAdapter arm, judged by looking\nat 154 renders of a fixed battery.\n\nTwo axes, not one. COUNT: 4 / 8 / 16 nested subsets. SPREAD: eight varied shots\nagainst eight near-identical front shots, same count and same steps, generated\nhere so the arms differ only in variety. A third arm, eight poor sources at the\nsame count, is what makes the 16-image arm readable at all - without it the\njump from 8 to 16 changes count and quality together.\n\nSpread wins. Four varied photographs reach the same place as sixteen; eight\nnear-identical ones never get there, at any strength, despite carrying more\nclose face pixels than any other arm.\n\nTwo battery cells failed for the no-LoRA control as well as for every arm, so\nthey were measuring the prompt rather than the datasets. Both are kept on disk\nand named in RESULTS.json rather than quietly dropped.",
+   "paragraphs": [
+    "Five LoRAs on the synthetic stand-in with steps, rank, lr, seed and training\nresolution held constant, plus a zero-training IPAdapter arm, judged by looking\nat 154 renders of a fixed battery.",
+    "Two axes, not one. COUNT: 4 / 8 / 16 nested subsets. SPREAD: eight varied shots\nagainst eight near-identical front shots, same count and same steps, generated\nhere so the arms differ only in variety. A third arm, eight poor sources at the\nsame count, is what makes the 16-image arm readable at all - without it the\njump from 8 to 16 changes count and quality together.",
+    "Spread wins. Four varied photographs reach the same place as sixteen; eight\nnear-identical ones never get there, at any strength, despite carrying more\nclose face pixels than any other arm.",
+    "Two battery cells failed for the no-LoRA control as well as for every arm, so\nthey were measuring the prompt rather than the datasets. Both are kept on disk\nand named in RESULTS.json rather than quietly dropped."
+   ],
+   "areas": [
+    "Tooling"
+   ],
+   "files": 256,
+   "added": 830,
+   "removed": 0
+  },
+  {
+   "hash": "bbf63bd",
+   "full": "bbf63bda33d29314f134e06c46b189e02177e13f",
+   "date": "2026-08-06",
+   "time": "11:07",
+   "author": "sechang11",
+   "subject": "Self-service generation: roll.py, render_job.py and a time-budgeted harness",
+   "body": "Three scripts so content can be generated without asking anyone:\n\n  bin/generate.sh   weighted mix of image/video/music/voice/sfx for N hours\n  bin/collect.sh    contact sheets and an index.html over what came out\n  studio/_tools/roll.py + render_job.py   draw a job, render it, keep the recipe\n\nThe randomiser is the libraries, not a sentence generator. 3,773,952 distinct\nimage jobs from measured-ready cards only, with every known dud excluded by\nname: the night grade that clips to black, three camera moves byte-identical\nto static, and every style card that puts a prop in the subject hands.\n\ngenerate.sh refuses to start without a time budget. An unbounded loop held\nthis GPU for 17h22m earlier and starved three jobs; that is the whole reason\nfor the mandatory deadline, the PID file, the STOP file and the refusal to\nbegin a job that cannot finish.\n\nTwo defects found by looking at the first live renders, both of which had\nreturned ok:true with healthy luma:\n\n  A style card can be a person in disguise. photorealistic emits skin, hair\n  and catchlights in the eyes, so over a scenery, no humans place it drew a\n  face across 60 percent of the frame. 16 of 92 drawable cards read this way.\n  Subject is now decided first and detected by regex, not a hardcoded list.\n\n  solo is a request, not a constraint, and framing loses to the place. A\n  close-up over a vista first split into two subjects, then on the same seed\n  lost outright to a wide landscape. Count moved to the negative; the place\n  now sets the scale. Framing also replaces the character card own token\n  instead of doubling it.\n\nAlso corrected in the render path, still wrong in the files themselves:\nworkflow 12 asks its audio latent for 25fps against 24fps video, and a LoRA\nhung off the checkpoint in workflow 22 would dangle unused because the\nsampler reads its model from the IPAdapter node.\n\nFindings written up in GENERATING.md and indexed into /docs.",
+   "paragraphs": [
+    "Three scripts so content can be generated without asking anyone:",
+    "bin/generate.sh   weighted mix of image/video/music/voice/sfx for N hours\n  bin/collect.sh    contact sheets and an index.html over what came out\n  studio/_tools/roll.py + render_job.py   draw a job, render it, keep the recipe",
+    "The randomiser is the libraries, not a sentence generator. 3,773,952 distinct\nimage jobs from measured-ready cards only, with every known dud excluded by\nname: the night grade that clips to black, three camera moves byte-identical\nto static, and every style card that puts a prop in the subject hands.",
+    "generate.sh refuses to start without a time budget. An unbounded loop held\nthis GPU for 17h22m earlier and starved three jobs; that is the whole reason\nfor the mandatory deadline, the PID file, the STOP file and the refusal to\nbegin a job that cannot finish.",
+    "Two defects found by looking at the first live renders, both of which had\nreturned ok:true with healthy luma:",
+    "A style card can be a person in disguise. photorealistic emits skin, hair\n  and catchlights in the eyes, so over a scenery, no humans place it drew a\n  face across 60 percent of the frame. 16 of 92 drawable cards read this way.\n  Subject is now decided first and detected by regex, not a hardcoded list.",
+    "solo is a request, not a constraint, and framing loses to the place. A\n  close-up over a vista first split into two subjects, then on the same seed\n  lost outright to a wide landscape. Count moved to the negative; the place\n  now sets the scale. Framing also replaces the character card own token\n  instead of doubling it.",
+    "Also corrected in the render path, still wrong in the files themselves:\nworkflow 12 asks its audio latent for 25fps against 24fps video, and a LoRA\nhung off the checkpoint in workflow 22 would dangle unused because the\nsampler reads its model from the IPAdapter node.",
+    "Findings written up in GENERATING.md and indexed into /docs."
+   ],
+   "areas": [
+    "Tooling"
+   ],
+   "files": 6,
+   "added": 1084,
+   "removed": 1
+  },
+  {
+   "hash": "4878953",
+   "full": "4878953299b1916163b07cb76a34bfbc04377145",
+   "date": "2026-08-06",
+   "time": "10:12",
+   "author": "sechang11",
+   "subject": "A synthetic stand-in, so the likeness pipeline can be measured without a real face",
+   "body": "The user wants to eventually do the character pipeline with a friend's photographs. That\nis a likeness pipeline, so the process gets built and measured on a person who does not\nexist first, and the real photos only arrive once the process is known rather than\nexperimental.\n\nstudio/_tools/standin_person.py generates one consistent synthetic person across a set\nthat behaves like photographs a friend would actually send - several angles, a few\nlighting conditions, more than one outfit, mixed framings, and some deliberate duds with\nmixed light and busy backgrounds. Plus the sculpt-ready ideal: A-pose, arms clear, flat\nlight, plain background matted to clean alpha.\n\nShe is given concrete testable markers on purpose - gold round glasses, a mole, a specific\nhair length, a mustard corduroy jacket - because identity can only be measured against\nthings, not impressions. Every downstream number in this line of work depends on the\nstand-in being one person, and across six casting seeds she is.\n\nThe agent that produced this exceeded its structured-output retry cap after 129 tool calls\nand its report was lost, but the 201 files and the manifest are intact. Committing the\nwork rather than re-running forty-eight minutes of GPU to recover a summary.",
+   "paragraphs": [
+    "The user wants to eventually do the character pipeline with a friend's photographs. That\nis a likeness pipeline, so the process gets built and measured on a person who does not\nexist first, and the real photos only arrive once the process is known rather than\nexperimental.",
+    "studio/_tools/standin_person.py generates one consistent synthetic person across a set\nthat behaves like photographs a friend would actually send - several angles, a few\nlighting conditions, more than one outfit, mixed framings, and some deliberate duds with\nmixed light and busy backgrounds. Plus the sculpt-ready ideal: A-pose, arms clear, flat\nlight, plain background matted to clean alpha.",
+    "She is given concrete testable markers on purpose - gold round glasses, a mole, a specific\nhair length, a mustard corduroy jacket - because identity can only be measured against\nthings, not impressions. Every downstream number in this line of work depends on the\nstand-in being one person, and across six casting seeds she is.",
+    "The agent that produced this exceeded its structured-output retry cap after 129 tool calls\nand its report was lost, but the 201 files and the manifest are intact. Committing the\nwork rather than re-running forty-eight minutes of GPU to recover a summary."
+   ],
+   "areas": [
+    "Tooling"
+   ],
+   "files": 46,
+   "added": 1648,
+   "removed": 0
+  },
+  {
+   "hash": "24c672b",
+   "full": "24c672b5bc597ee03509b155dfad1548dee26ea9",
+   "date": "2026-08-06",
+   "time": "03:24",
+   "author": "sechang11",
+   "subject": "Regenerate the changelog so the 3D print pipeline appears in it",
+   "body": "Generated from git history by studio/_tools/changelog.py, as always. 83 entries.",
+   "paragraphs": [
+    "Generated from git history by studio/_tools/changelog.py, as always. 83 entries."
+   ],
+   "areas": [
+    "Libraries"
+   ],
+   "files": 1,
+   "added": 52,
+   "removed": 2
+  },
   {
    "hash": "ad399b7",
    "full": "ad399b7e82233cf99a0b16fe294ab5d092012601",
