@@ -1,0 +1,27 @@
+{
+ "slug": "arcade_cabinet",
+ "lane": "typography",
+ "engine": "flux2",
+ "checkpoint": "flux2_dev_fp8mixed.safetensors",
+ "text_encoder": "mistral_3_small_flux2_fp8.safetensors (CLIPLoader type=flux2)",
+ "vae": "flux2-vae.safetensors",
+ "lora": "none",
+ "turbo": false,
+ "workflow": "workflows/40_flux2_t2i.json",
+ "prompt": "A photograph of the side art and control panel of an arcade cabinet in a dark arcade. The marquee above the screen is backlit and reads exactly ASTRO SALVAGE. A printed instruction strip on the control panel reads exactly 1 PLAYER START and exactly 2 PLAYER START beside two lit buttons, and a small warning below reads exactly INSERT COIN TO CONTINUE. The perspex is scratched and there are cigarette burns on the panel edge. Dark room lit by the screen, 35mm at f2.8, natural colour.",
+ "negative_prompt": null,
+ "seed": 20250805,
+ "steps": 20,
+ "guidance": 4.0,
+ "sampler": "euler",
+ "scheduler": "Flux2Scheduler",
+ "size": "1024x1536",
+ "strings_asked": [
+  "ASTRO SALVAGE",
+  "1 PLAYER START",
+  "2 PLAYER START",
+  "INSERT COIN TO CONTINUE"
+ ],
+ "file": "studio/samples/flux2_gallery/typography/arcade_cabinet.png",
+ "seconds": 29.2
+}

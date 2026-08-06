@@ -1,0 +1,26 @@
+{
+ "slug": "cinema_marquee",
+ "lane": "typography",
+ "engine": "flux2",
+ "checkpoint": "flux2_dev_fp8mixed.safetensors",
+ "text_encoder": "mistral_3_small_flux2_fp8.safetensors (CLIPLoader type=flux2)",
+ "vae": "flux2-vae.safetensors",
+ "lora": "none",
+ "turbo": false,
+ "workflow": "workflows/40_flux2_t2i.json",
+ "prompt": "A night photograph of a cinema marquee with plastic changeable letters on three lit tracks. The top line reads exactly THE WEATHER HOUSE. The middle line reads exactly LAST TWO NIGHTS. The bottom line reads exactly SEATS FROM SIX. One letter on the middle line is slightly crooked and one bulb in the border has failed. Wet pavement below reflecting the light, 35mm at f2.8, natural colour.",
+ "negative_prompt": null,
+ "seed": 20250805,
+ "steps": 20,
+ "guidance": 4.0,
+ "sampler": "euler",
+ "scheduler": "Flux2Scheduler",
+ "size": "1536x1024",
+ "strings_asked": [
+  "THE WEATHER HOUSE",
+  "LAST TWO NIGHTS",
+  "SEATS FROM SIX"
+ ],
+ "file": "studio/samples/flux2_gallery/typography/cinema_marquee.png",
+ "seconds": 29.2
+}

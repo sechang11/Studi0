@@ -1,0 +1,27 @@
+{
+ "slug": "seed_packets_three",
+ "lane": "typography",
+ "engine": "flux2",
+ "checkpoint": "flux2_dev_fp8mixed.safetensors",
+ "text_encoder": "mistral_3_small_flux2_fp8.safetensors (CLIPLoader type=flux2)",
+ "vae": "flux2-vae.safetensors",
+ "lora": "none",
+ "turbo": false,
+ "workflow": "workflows/40_flux2_t2i.json",
+ "prompt": "A photograph of three paper seed packets laid side by side on a potting bench, shot straight down from above. Each has a small botanical illustration and a name. The left one reads exactly SCARLET RUNNER. The middle one reads exactly WINTER SAVORY. The right one reads exactly BLACK RADISH. Along the bottom of all three runs the same small line that reads exactly SOW THINLY. Soil and a pencil lie on the bench. Flat soft daylight, 60mm at f8, natural colour.",
+ "negative_prompt": null,
+ "seed": 20250805,
+ "steps": 20,
+ "guidance": 4.0,
+ "sampler": "euler",
+ "scheduler": "Flux2Scheduler",
+ "size": "1536x1024",
+ "strings_asked": [
+  "SCARLET RUNNER",
+  "WINTER SAVORY",
+  "BLACK RADISH",
+  "SOW THINLY"
+ ],
+ "file": "studio/samples/flux2_gallery/typography/seed_packets_three.png",
+ "seconds": 29.3
+}

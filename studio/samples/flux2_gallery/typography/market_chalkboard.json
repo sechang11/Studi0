@@ -1,0 +1,26 @@
+{
+ "slug": "market_chalkboard",
+ "lane": "typography",
+ "engine": "flux2",
+ "checkpoint": "flux2_dev_fp8mixed.safetensors",
+ "text_encoder": "mistral_3_small_flux2_fp8.safetensors (CLIPLoader type=flux2)",
+ "vae": "flux2-vae.safetensors",
+ "lora": "none",
+ "turbo": false,
+ "workflow": "workflows/40_flux2_t2i.json",
+ "prompt": "A photograph of a chalkboard propped outside a greengrocer's, shot square on. Written in white chalk in a confident signwriter's hand, the top line reads exactly BRAMLEY APPLES. Below it a larger line reads exactly 2 KILO FOR 3. At the bottom a smaller line reads exactly ASK ME ABOUT THE PLUMS. There is a drawn apple in one corner and chalk dust in the tray. Flat daylight, 50mm at f4, natural colour.",
+ "negative_prompt": null,
+ "seed": 20250805,
+ "steps": 20,
+ "guidance": 4.0,
+ "sampler": "euler",
+ "scheduler": "Flux2Scheduler",
+ "size": "1152x1536",
+ "strings_asked": [
+  "BRAMLEY APPLES",
+  "2 KILO FOR 3",
+  "ASK ME ABOUT THE PLUMS"
+ ],
+ "file": "studio/samples/flux2_gallery/typography/market_chalkboard.png",
+ "seconds": 35.0
+}

@@ -1,0 +1,26 @@
+{
+ "slug": "matchbook",
+ "lane": "typography",
+ "engine": "flux2",
+ "checkpoint": "flux2_dev_fp8mixed.safetensors",
+ "text_encoder": "mistral_3_small_flux2_fp8.safetensors (CLIPLoader type=flux2)",
+ "vae": "flux2-vae.safetensors",
+ "lora": "none",
+ "turbo": false,
+ "workflow": "workflows/40_flux2_t2i.json",
+ "prompt": "A close photograph of an open matchbook lying on a dark bar top, shot straight down. The inside of the cover is printed in two colours and reads exactly THE BLUE WHISTLE on the first line and exactly OPEN TILL LATE on the second, with a small drawing of a bird. Written across it in blue ballpoint in a rushed hand is exactly ASK FOR DANNY. Three matches have been torn out. Warm low light, 100mm macro at f4, natural colour.",
+ "negative_prompt": null,
+ "seed": 20250805,
+ "steps": 20,
+ "guidance": 4.0,
+ "sampler": "euler",
+ "scheduler": "Flux2Scheduler",
+ "size": "1536x1024",
+ "strings_asked": [
+  "THE BLUE WHISTLE",
+  "OPEN TILL LATE",
+  "ASK FOR DANNY"
+ ],
+ "file": "studio/samples/flux2_gallery/typography/matchbook.png",
+ "seconds": 29.1
+}

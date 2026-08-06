@@ -1,0 +1,25 @@
+{
+ "slug": "jam_label",
+ "lane": "typography",
+ "engine": "flux2",
+ "checkpoint": "flux2_dev_fp8mixed.safetensors",
+ "text_encoder": "mistral_3_small_flux2_fp8.safetensors (CLIPLoader type=flux2)",
+ "vae": "flux2-vae.safetensors",
+ "lora": "none",
+ "turbo": false,
+ "workflow": "workflows/40_flux2_t2i.json",
+ "prompt": "A close photograph of a glass jar of dark jam with a paper label gummed to the front, shot square on. The label has a printed border of small strawberries and hand-lettered text that reads exactly GREENGAGE & VANILLA on the first line and exactly MADE 14 AUGUST on the second. A small circle of gingham cloth is tied over the lid with string. Soft window light from the right, 100mm macro at f5.6, natural colour.",
+ "negative_prompt": null,
+ "seed": 20250805,
+ "steps": 20,
+ "guidance": 4.0,
+ "sampler": "euler",
+ "scheduler": "Flux2Scheduler",
+ "size": "1024x1536",
+ "strings_asked": [
+  "GREENGAGE & VANILLA",
+  "MADE 14 AUGUST"
+ ],
+ "file": "studio/samples/flux2_gallery/typography/jam_label.png",
+ "seconds": 34.2
+}

@@ -1,0 +1,20 @@
+{
+ "slug": "stainedglass__sdxl",
+ "lane": "ab",
+ "engine": "sdxl",
+ "checkpoint": "animagine-xl-4.0.safetensors",
+ "lora": "none",
+ "workflow": "in-memory SDXL t2i (see sdxl_wf in this tool)",
+ "prompt": "A photograph of a stained glass window photographed from inside a dark building with daylight coming through it. The window shows a saint holding a fish in one hand and a staff in the other, standing under a canopy, with a band of Latin text on a scroll at his feet. Every colour is a separate piece of coloured glass held in a dark lead came whose H-section throws a thick black line around every single shape, and there are no gradients within a piece except the streaks and bubbles frozen in the glass itself. Faces, folds and shading are painted onto the glass in brown-black vitreous enamel and fired, applied as fine hatched lines and stippled shadow. Horizontal iron saddle bars cross the window in front of the glass. Some panes are cracked and mended with a lead strip. The stonework around it is in darkness. Shot from a dark interior on a 50mm at f5.6 exposed for the glass so the surrounding stone goes almost black, saturated transmitted colour.",
+ "negative_prompt": "lowres, worst quality, jpeg artifacts, watermark, signature",
+ "seed": 20250805,
+ "steps": 28,
+ "cfg": 5.5,
+ "sampler": "dpmpp_2m",
+ "scheduler": "karras",
+ "size": "1152x1536",
+ "medium": "stainedglass",
+ "medium_name": "Stained glass",
+ "file": "studio/samples/flux2_gallery/_ab/stainedglass__sdxl.png",
+ "seconds": 4.8
+}

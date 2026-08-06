@@ -1,0 +1,18 @@
+{
+ "slug": "embroidery__qwen",
+ "lane": "ab",
+ "engine": "qwen",
+ "checkpoint": "qwen_image_2512_fp8_e4m3fn.safetensors",
+ "lora": "none",
+ "workflow": "workflows/02_qwen_t2i_quality.json",
+ "prompt": "A photograph of a piece of hand embroidery still stretched in its wooden hoop, shot from directly above. The embroidery shows a large stag beetle worked life-size seen from directly above, its wing cases in shifting greens and its mandibles outlined in black. Every filled shape is made of parallel satin stitches whose direction changes shape to shape and which catch the light differently depending on which way they run. The outlines are stem stitch, a rope of small overlapping stitches. The floss has a soft sheen the linen does not. Individual threads are visible and one has frayed. The linen weave is open enough to count and it has puckered slightly under the densest stitching. A threaded needle is parked at the edge and the hoop screw is at the top. Shot straight down on a 100mm macro at f8 in soft directional light from the left so the stitch direction reads, natural colour.",
+ "negative_prompt": "blurry, low quality, watermark, deformed text, misspelled, jpeg artifacts",
+ "seed": 20250805,
+ "steps": 20,
+ "cfg": 2.5,
+ "size": "1536x1536",
+ "medium": "embroidery",
+ "medium_name": "Hand embroidery",
+ "file": "studio/samples/flux2_gallery/_ab/embroidery__qwen.png",
+ "seconds": 46.8
+}

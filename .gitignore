@@ -93,3 +93,26 @@ studio/samples/replicated/base/*.png
 studio/samples/replicated/extra/*.png
 studio/samples/replicated/zimage/*.png
 studio/samples/replicated/_look/
+
+# The FLUX.2 physical-media gallery. SAME POLICY AS gallery/, cast_proof/, the character
+# sweeps and replicated/ above, applied to the largest corpus yet: 418 full-size cells at
+# 1536px are 1.2 GB, and .git is already 2.0 GB. Every .png in here has a sibling .json
+# carrying its complete recipe - engine, checkpoint, text encoder, VAE, workflow, full
+# prompt, seed, steps, guidance, sampler, scheduler, size, LoRA - so the corpus is
+# reproducible from what stays tracked by re-running studio/_tools/flux2_gallery.py.
+# KEPT ON PURPOSE: the 41 contact sheets in _sheets/ (40 MB of jpg, and the thing a person
+# actually reads), index.html, _ledger.json, _dropped.json, and every per-cell recipe
+# sidecar - the sidecars are the diff worth reviewing. The cells remain on disk here and
+# in ~/ComfyUI/output/claude-generated/; they are simply not carried in history.
+# This includes _ab/ (three-engine comparisons), _calibrate/ (Turbo on/off pairs),
+# _dropped/ (the rejected frames), hex/ and typography/ - their FINDINGS live in the
+# sidecars, the ledger and the contact sheets, all of which stay.
+studio/samples/flux2_gallery/**/*.png
+
+# THE COAT's render intermediates. The delivered film, the master stem and every clip are
+# already covered by the *.mp4 / *.wav rules at the top of this file. What stays tracked is
+# the text and the evidence a person reads: the compiled film JSON, the scripts that made
+# it, CUT_REPORT.txt, mix_report.json, measurements.json, and the contact sheets, watch
+# sheets, frame strips and poster as jpg. Nothing below is a finding.
+studio/samples/the_film/__pycache__/
+studio/samples/the_film/*.log

@@ -1,0 +1,23 @@
+{
+ "slug": "ps1__plain20",
+ "lane": "calibrate",
+ "engine": "flux2",
+ "checkpoint": "flux2_dev_fp8mixed.safetensors",
+ "text_encoder": "mistral_3_small_flux2_fp8.safetensors (CLIPLoader type=flux2)",
+ "vae": "flux2-vae.safetensors",
+ "lora": "none",
+ "turbo": false,
+ "workflow": "workflows/40_flux2_t2i.json",
+ "prompt": "A screenshot from a 1997 PlayStation 1 game, captured from a CRT television. The screenshot shows a hotel lobby at night with a reception desk, a potted palm, and a lift with its doors open casting a rectangle of light. A player character in a blue jacket stands with their back to the camera in the middle of the floor. A small text box at the bottom of the screen reads exactly THE LIFT IS WAITING. The geometry is built from a few hundred large flat-shaded triangles with hard visible edges and no smoothing, so curved surfaces are faceted and silhouettes are polygonal. Textures are tiny low-resolution bitmaps stretched over the triangles with affine mapping, so they warp and swim across the polygon seams and the perspective is visibly wrong. There is no texture filtering, so every texel is a hard square block. Vertices jitter onto integer positions. Distant geometry is clipped away entirely into a coloured fog. Colour is dithered in a coarse checkerboard where gradients would be. The frame is 320 by 240 pixels blown up. Photographed off a curved CRT screen with visible scanlines, phosphor bloom around the bright areas and a slight barrel distortion, colour slightly bleeding sideways.",
+ "negative_prompt": null,
+ "seed": 20250805,
+ "steps": 20,
+ "guidance": 4.0,
+ "sampler": "euler",
+ "scheduler": "Flux2Scheduler",
+ "size": "1536x1152",
+ "medium": "ps1",
+ "medium_name": "PlayStation 1 real-time",
+ "file": "studio/samples/flux2_gallery/_calibrate/ps1__plain20.png",
+ "seconds": 33.0
+}

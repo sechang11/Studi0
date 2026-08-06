@@ -1,0 +1,25 @@
+{
+ "slug": "harbour_boat_name",
+ "lane": "typography",
+ "engine": "flux2",
+ "checkpoint": "flux2_dev_fp8mixed.safetensors",
+ "text_encoder": "mistral_3_small_flux2_fp8.safetensors (CLIPLoader type=flux2)",
+ "vae": "flux2-vae.safetensors",
+ "lora": "none",
+ "turbo": false,
+ "workflow": "workflows/40_flux2_t2i.json",
+ "prompt": "A close photograph of the stern of a wooden fishing boat in a harbour, shot square on. The name is signwritten in white with a red shadow on the blue transom and reads exactly GANNET, with the port of registry beneath it in smaller letters reading exactly WK 114 WICK. The paint is blistered and there is weed along the waterline. Overcast daylight, 50mm at f5.6, natural colour.",
+ "negative_prompt": null,
+ "seed": 20250805,
+ "steps": 20,
+ "guidance": 4.0,
+ "sampler": "euler",
+ "scheduler": "Flux2Scheduler",
+ "size": "1536x1024",
+ "strings_asked": [
+  "GANNET",
+  "WK 114 WICK"
+ ],
+ "file": "studio/samples/flux2_gallery/typography/harbour_boat_name.png",
+ "seconds": 29.2
+}

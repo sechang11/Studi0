@@ -1,0 +1,23 @@
+{
+ "slug": "benday__turbo8",
+ "lane": "calibrate",
+ "engine": "flux2",
+ "checkpoint": "flux2_dev_fp8mixed.safetensors",
+ "text_encoder": "mistral_3_small_flux2_fp8.safetensors (CLIPLoader type=flux2)",
+ "vae": "flux2-vae.safetensors",
+ "lora": "Flux2TurboComfyv2.safetensors @ 1.0",
+ "turbo": true,
+ "workflow": "workflows/40_flux2_t2i.json",
+ "prompt": "A photograph of a page from a cheap 1960s comic book lying flat, shot straight down from above so the page fills the frame. The page shows a single large comic panel: a woman in the foreground turns away from a man in a doorway, one hand at her mouth, tears drawn as three hard teardrop shapes. A yellow caption box in the top left corner reads exactly MEANWHILE, IN QUEENS. A speech balloon from the man reads exactly DONT GO. The colour is made entirely of coarse halftone dots in cyan, magenta and yellow, each dot individually visible and large enough to count, arranged in screens at different angles so a rosette pattern appears in the overlaps. The black key line is printed slightly out of register so a thin fringe of magenta shows along one side of every outline. The dots have gained and bled into the absorbent newsprint. The paper has yellowed to a tan and the print from the reverse side shows faintly through it. There is a crease across one corner. Shot straight down on a 60mm macro at f8 under flat even light, the paper fibre and the dot structure both resolved, natural colour.",
+ "negative_prompt": null,
+ "seed": 20250805,
+ "steps": 8,
+ "guidance": 4.0,
+ "sampler": "euler",
+ "scheduler": "Flux2Scheduler",
+ "size": "1536x1536",
+ "medium": "benday",
+ "medium_name": "Ben-Day dots",
+ "file": "studio/samples/flux2_gallery/_calibrate/benday__turbo8.png",
+ "seconds": 24.8
+}

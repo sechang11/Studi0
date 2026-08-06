@@ -1,0 +1,602 @@
+[
+ {
+  "slug": "hex_charcoal",
+  "lane": "hex",
+  "engine": "flux2",
+  "checkpoint": "flux2_dev_fp8mixed.safetensors",
+  "text_encoder": "mistral_3_small_flux2_fp8.safetensors (CLIPLoader type=flux2)",
+  "vae": "flux2-vae.safetensors",
+  "lora": "none",
+  "turbo": false,
+  "workflow": "workflows/40_flux2_t2i.json",
+  "prompt": "A flat graphic design poster, shot straight on so the whole sheet fills the frame with nothing else visible. The background is one completely flat field of the colour #22223B, edge to edge, with no gradient, no texture and no vignette anywhere in it. Centred on that field is a diamond, filling about one third of the frame height, in one completely flat field of the colour #F2E9E4. There is nothing else in the picture: no text, no border, no shadow, no highlight and no paper texture. Both colours are exact.",
+  "negative_prompt": null,
+  "seed": 20250805,
+  "steps": 20,
+  "guidance": 4.0,
+  "sampler": "euler",
+  "scheduler": "Flux2Scheduler",
+  "size": "1024x1024",
+  "asked": {
+   "background": "#22223B",
+   "shape": "#F2E9E4"
+  },
+  "shape": "a diamond",
+  "file": "studio/samples/flux2_gallery/hex/hex_charcoal.png",
+  "seconds": 20.0,
+  "got": {
+   "background": "#080B1B",
+   "shape": "#FFF4DA"
+  },
+  "error": {
+   "background": {
+    "per_channel": [
+     26,
+     23,
+     32
+    ],
+    "max_channel": 32,
+    "pct_of_255": 12.5
+   },
+   "shape": {
+    "per_channel": [
+     13,
+     11,
+     10
+    ],
+    "max_channel": 13,
+    "pct_of_255": 5.1
+   }
+  }
+ },
+ {
+  "slug": "hex_cobalt",
+  "lane": "hex",
+  "engine": "flux2",
+  "checkpoint": "flux2_dev_fp8mixed.safetensors",
+  "text_encoder": "mistral_3_small_flux2_fp8.safetensors (CLIPLoader type=flux2)",
+  "vae": "flux2-vae.safetensors",
+  "lora": "none",
+  "turbo": false,
+  "workflow": "workflows/40_flux2_t2i.json",
+  "prompt": "A flat graphic design poster, shot straight on so the whole sheet fills the frame with nothing else visible. The background is one completely flat field of the colour #26547C, edge to edge, with no gradient, no texture and no vignette anywhere in it. Centred on that field is a heart, filling about one third of the frame height, in one completely flat field of the colour #EF476F. There is nothing else in the picture: no text, no border, no shadow, no highlight and no paper texture. Both colours are exact.",
+  "negative_prompt": null,
+  "seed": 20250805,
+  "steps": 20,
+  "guidance": 4.0,
+  "sampler": "euler",
+  "scheduler": "Flux2Scheduler",
+  "size": "1024x1024",
+  "asked": {
+   "background": "#26547C",
+   "shape": "#EF476F"
+  },
+  "shape": "a heart",
+  "file": "studio/samples/flux2_gallery/hex/hex_cobalt.png",
+  "seconds": 19.9,
+  "got": {
+   "background": "#0293D6",
+   "shape": "#FF313F"
+  },
+  "error": {
+   "background": {
+    "per_channel": [
+     36,
+     63,
+     90
+    ],
+    "max_channel": 90,
+    "pct_of_255": 35.3
+   },
+   "shape": {
+    "per_channel": [
+     16,
+     22,
+     48
+    ],
+    "max_channel": 48,
+    "pct_of_255": 18.8
+   }
+  }
+ },
+ {
+  "slug": "hex_deepsea",
+  "lane": "hex",
+  "engine": "flux2",
+  "checkpoint": "flux2_dev_fp8mixed.safetensors",
+  "text_encoder": "mistral_3_small_flux2_fp8.safetensors (CLIPLoader type=flux2)",
+  "vae": "flux2-vae.safetensors",
+  "lora": "none",
+  "turbo": false,
+  "workflow": "workflows/40_flux2_t2i.json",
+  "prompt": "A flat graphic design poster, shot straight on so the whole sheet fills the frame with nothing else visible. The background is one completely flat field of the colour #12303F, edge to edge, with no gradient, no texture and no vignette anywhere in it. Centred on that field is a circle, filling about one third of the frame height, in one completely flat field of the colour #E8B04B. There is nothing else in the picture: no text, no border, no shadow, no highlight and no paper texture. Both colours are exact.",
+  "negative_prompt": null,
+  "seed": 20250805,
+  "steps": 20,
+  "guidance": 4.0,
+  "sampler": "euler",
+  "scheduler": "Flux2Scheduler",
+  "size": "1024x1024",
+  "asked": {
+   "background": "#12303F",
+   "shape": "#E8B04B"
+  },
+  "shape": "a circle",
+  "file": "studio/samples/flux2_gallery/hex/hex_deepsea.png",
+  "seconds": 20.1,
+  "got": {
+   "background": "#04162F",
+   "shape": "#FFC62C"
+  },
+  "error": {
+   "background": {
+    "per_channel": [
+     14,
+     26,
+     16
+    ],
+    "max_channel": 26,
+    "pct_of_255": 10.2
+   },
+   "shape": {
+    "per_channel": [
+     23,
+     22,
+     31
+    ],
+    "max_channel": 31,
+    "pct_of_255": 12.2
+   }
+  }
+ },
+ {
+  "slug": "hex_ink",
+  "lane": "hex",
+  "engine": "flux2",
+  "checkpoint": "flux2_dev_fp8mixed.safetensors",
+  "text_encoder": "mistral_3_small_flux2_fp8.safetensors (CLIPLoader type=flux2)",
+  "vae": "flux2-vae.safetensors",
+  "lora": "none",
+  "turbo": false,
+  "workflow": "workflows/40_flux2_t2i.json",
+  "prompt": "A flat graphic design poster, shot straight on so the whole sheet fills the frame with nothing else visible. The background is one completely flat field of the colour #151E3F, edge to edge, with no gradient, no texture and no vignette anywhere in it. Centred on that field is a crescent moon, filling about one third of the frame height, in one completely flat field of the colour #F5F5F5. There is nothing else in the picture: no text, no border, no shadow, no highlight and no paper texture. Both colours are exact.",
+  "negative_prompt": null,
+  "seed": 20250805,
+  "steps": 20,
+  "guidance": 4.0,
+  "sampler": "euler",
+  "scheduler": "Flux2Scheduler",
+  "size": "1024x1024",
+  "asked": {
+   "background": "#151E3F",
+   "shape": "#F5F5F5"
+  },
+  "shape": "a crescent moon",
+  "file": "studio/samples/flux2_gallery/hex/hex_ink.png",
+  "seconds": 19.9,
+  "got": {
+   "background": "#06102F",
+   "shape": "#FDFDFB"
+  },
+  "error": {
+   "background": {
+    "per_channel": [
+     15,
+     14,
+     16
+    ],
+    "max_channel": 16,
+    "pct_of_255": 6.3
+   },
+   "shape": {
+    "per_channel": [
+     8,
+     8,
+     6
+    ],
+    "max_channel": 8,
+    "pct_of_255": 3.1
+   }
+  }
+ },
+ {
+  "slug": "hex_moss",
+  "lane": "hex",
+  "engine": "flux2",
+  "checkpoint": "flux2_dev_fp8mixed.safetensors",
+  "text_encoder": "mistral_3_small_flux2_fp8.safetensors (CLIPLoader type=flux2)",
+  "vae": "flux2-vae.safetensors",
+  "lora": "none",
+  "turbo": false,
+  "workflow": "workflows/40_flux2_t2i.json",
+  "prompt": "A flat graphic design poster, shot straight on so the whole sheet fills the frame with nothing else visible. The background is one completely flat field of the colour #2F4B26, edge to edge, with no gradient, no texture and no vignette anywhere in it. Centred on that field is a five-pointed star, filling about one third of the frame height, in one completely flat field of the colour #F2E8CF. There is nothing else in the picture: no text, no border, no shadow, no highlight and no paper texture. Both colours are exact.",
+  "negative_prompt": null,
+  "seed": 20250805,
+  "steps": 20,
+  "guidance": 4.0,
+  "sampler": "euler",
+  "scheduler": "Flux2Scheduler",
+  "size": "1024x1024",
+  "asked": {
+   "background": "#2F4B26",
+   "shape": "#F2E8CF"
+  },
+  "shape": "a five-pointed star",
+  "file": "studio/samples/flux2_gallery/hex/hex_moss.png",
+  "seconds": 19.9,
+  "got": {
+   "background": "#046027",
+   "shape": "#FFE2C3"
+  },
+  "error": {
+   "background": {
+    "per_channel": [
+     43,
+     21,
+     1
+    ],
+    "max_channel": 43,
+    "pct_of_255": 16.9
+   },
+   "shape": {
+    "per_channel": [
+     13,
+     6,
+     12
+    ],
+    "max_channel": 13,
+    "pct_of_255": 5.1
+   }
+  }
+ },
+ {
+  "slug": "hex_olive",
+  "lane": "hex",
+  "engine": "flux2",
+  "checkpoint": "flux2_dev_fp8mixed.safetensors",
+  "text_encoder": "mistral_3_small_flux2_fp8.safetensors (CLIPLoader type=flux2)",
+  "vae": "flux2-vae.safetensors",
+  "lora": "none",
+  "turbo": false,
+  "workflow": "workflows/40_flux2_t2i.json",
+  "prompt": "A flat graphic design poster, shot straight on so the whole sheet fills the frame with nothing else visible. The background is one completely flat field of the colour #606C38, edge to edge, with no gradient, no texture and no vignette anywhere in it. Centred on that field is a semicircle, flat side down, filling about one third of the frame height, in one completely flat field of the colour #FEFAE0. There is nothing else in the picture: no text, no border, no shadow, no highlight and no paper texture. Both colours are exact.",
+  "negative_prompt": null,
+  "seed": 20250805,
+  "steps": 20,
+  "guidance": 4.0,
+  "sampler": "euler",
+  "scheduler": "Flux2Scheduler",
+  "size": "1024x1024",
+  "asked": {
+   "background": "#606C38",
+   "shape": "#FEFAE0"
+  },
+  "shape": "a semicircle, flat side down",
+  "file": "studio/samples/flux2_gallery/hex/hex_olive.png",
+  "seconds": 19.9,
+  "got": {
+   "background": "#21602D",
+   "shape": "#FFEFC4"
+  },
+  "error": {
+   "background": {
+    "per_channel": [
+     63,
+     12,
+     11
+    ],
+    "max_channel": 63,
+    "pct_of_255": 24.7
+   },
+   "shape": {
+    "per_channel": [
+     1,
+     11,
+     28
+    ],
+    "max_channel": 28,
+    "pct_of_255": 11.0
+   }
+  }
+ },
+ {
+  "slug": "hex_oxblood",
+  "lane": "hex",
+  "engine": "flux2",
+  "checkpoint": "flux2_dev_fp8mixed.safetensors",
+  "text_encoder": "mistral_3_small_flux2_fp8.safetensors (CLIPLoader type=flux2)",
+  "vae": "flux2-vae.safetensors",
+  "lora": "none",
+  "turbo": false,
+  "workflow": "workflows/40_flux2_t2i.json",
+  "prompt": "A flat graphic design poster, shot straight on so the whole sheet fills the frame with nothing else visible. The background is one completely flat field of the colour #6B2737, edge to edge, with no gradient, no texture and no vignette anywhere in it. Centred on that field is an equilateral triangle pointing up, filling about one third of the frame height, in one completely flat field of the colour #E0C9A6. There is nothing else in the picture: no text, no border, no shadow, no highlight and no paper texture. Both colours are exact.",
+  "negative_prompt": null,
+  "seed": 20250805,
+  "steps": 20,
+  "guidance": 4.0,
+  "sampler": "euler",
+  "scheduler": "Flux2Scheduler",
+  "size": "1024x1024",
+  "asked": {
+   "background": "#6B2737",
+   "shape": "#E0C9A6"
+  },
+  "shape": "an equilateral triangle pointing up",
+  "file": "studio/samples/flux2_gallery/hex/hex_oxblood.png",
+  "seconds": 20.0,
+  "got": {
+   "background": "#77262E",
+   "shape": "#EEE0BE"
+  },
+  "error": {
+   "background": {
+    "per_channel": [
+     12,
+     1,
+     9
+    ],
+    "max_channel": 12,
+    "pct_of_255": 4.7
+   },
+   "shape": {
+    "per_channel": [
+     14,
+     23,
+     24
+    ],
+    "max_channel": 24,
+    "pct_of_255": 9.4
+   }
+  }
+ },
+ {
+  "slug": "hex_pine",
+  "lane": "hex",
+  "engine": "flux2",
+  "checkpoint": "flux2_dev_fp8mixed.safetensors",
+  "text_encoder": "mistral_3_small_flux2_fp8.safetensors (CLIPLoader type=flux2)",
+  "vae": "flux2-vae.safetensors",
+  "lora": "none",
+  "turbo": false,
+  "workflow": "workflows/40_flux2_t2i.json",
+  "prompt": "A flat graphic design poster, shot straight on so the whole sheet fills the frame with nothing else visible. The background is one completely flat field of the colour #1B3022, edge to edge, with no gradient, no texture and no vignette anywhere in it. Centred on that field is a hexagon, filling about one third of the frame height, in one completely flat field of the colour #C6A15B. There is nothing else in the picture: no text, no border, no shadow, no highlight and no paper texture. Both colours are exact.",
+  "negative_prompt": null,
+  "seed": 20250805,
+  "steps": 20,
+  "guidance": 4.0,
+  "sampler": "euler",
+  "scheduler": "Flux2Scheduler",
+  "size": "1024x1024",
+  "asked": {
+   "background": "#1B3022",
+   "shape": "#C6A15B"
+  },
+  "shape": "a hexagon",
+  "file": "studio/samples/flux2_gallery/hex/hex_pine.png",
+  "seconds": 19.8,
+  "got": {
+   "background": "#004016",
+   "shape": "#EFAA60"
+  },
+  "error": {
+   "background": {
+    "per_channel": [
+     27,
+     16,
+     12
+    ],
+    "max_channel": 27,
+    "pct_of_255": 10.6
+   },
+   "shape": {
+    "per_channel": [
+     41,
+     9,
+     5
+    ],
+    "max_channel": 41,
+    "pct_of_255": 16.1
+   }
+  }
+ },
+ {
+  "slug": "hex_plum",
+  "lane": "hex",
+  "engine": "flux2",
+  "checkpoint": "flux2_dev_fp8mixed.safetensors",
+  "text_encoder": "mistral_3_small_flux2_fp8.safetensors (CLIPLoader type=flux2)",
+  "vae": "flux2-vae.safetensors",
+  "lora": "none",
+  "turbo": false,
+  "workflow": "workflows/40_flux2_t2i.json",
+  "prompt": "A flat graphic design poster, shot straight on so the whole sheet fills the frame with nothing else visible. The background is one completely flat field of the colour #4B2E39, edge to edge, with no gradient, no texture and no vignette anywhere in it. Centred on that field is a teardrop, filling about one third of the frame height, in one completely flat field of the colour #9FD8CB. There is nothing else in the picture: no text, no border, no shadow, no highlight and no paper texture. Both colours are exact.",
+  "negative_prompt": null,
+  "seed": 20250805,
+  "steps": 20,
+  "guidance": 4.0,
+  "sampler": "euler",
+  "scheduler": "Flux2Scheduler",
+  "size": "1024x1024",
+  "asked": {
+   "background": "#4B2E39",
+   "shape": "#9FD8CB"
+  },
+  "shape": "a teardrop",
+  "file": "studio/samples/flux2_gallery/hex/hex_plum.png",
+  "seconds": 19.9,
+  "got": {
+   "background": "#612233",
+   "shape": "#7BFFC1"
+  },
+  "error": {
+   "background": {
+    "per_channel": [
+     22,
+     12,
+     6
+    ],
+    "max_channel": 22,
+    "pct_of_255": 8.6
+   },
+   "shape": {
+    "per_channel": [
+     36,
+     39,
+     10
+    ],
+    "max_channel": 39,
+    "pct_of_255": 15.3
+   }
+  }
+ },
+ {
+  "slug": "hex_sand",
+  "lane": "hex",
+  "engine": "flux2",
+  "checkpoint": "flux2_dev_fp8mixed.safetensors",
+  "text_encoder": "mistral_3_small_flux2_fp8.safetensors (CLIPLoader type=flux2)",
+  "vae": "flux2-vae.safetensors",
+  "lora": "none",
+  "turbo": false,
+  "workflow": "workflows/40_flux2_t2i.json",
+  "prompt": "A flat graphic design poster, shot straight on so the whole sheet fills the frame with nothing else visible. The background is one completely flat field of the colour #D9C5A0, edge to edge, with no gradient, no texture and no vignette anywhere in it. Centred on that field is a solid black bar running horizontally, filling about one third of the frame height, in one completely flat field of the colour #2B303A. There is nothing else in the picture: no text, no border, no shadow, no highlight and no paper texture. Both colours are exact.",
+  "negative_prompt": null,
+  "seed": 20250805,
+  "steps": 20,
+  "guidance": 4.0,
+  "sampler": "euler",
+  "scheduler": "Flux2Scheduler",
+  "size": "1024x1024",
+  "asked": {
+   "background": "#D9C5A0",
+   "shape": "#2B303A"
+  },
+  "shape": "a solid black bar running horizontally",
+  "file": "studio/samples/flux2_gallery/hex/hex_sand.png",
+  "seconds": 19.9,
+  "got": {
+   "background": "#CDB18C",
+   "shape": "#000000"
+  },
+  "error": {
+   "background": {
+    "per_channel": [
+     12,
+     20,
+     20
+    ],
+    "max_channel": 20,
+    "pct_of_255": 7.8
+   },
+   "shape": {
+    "per_channel": [
+     43,
+     48,
+     58
+    ],
+    "max_channel": 58,
+    "pct_of_255": 22.7
+   }
+  }
+ },
+ {
+  "slug": "hex_slate",
+  "lane": "hex",
+  "engine": "flux2",
+  "checkpoint": "flux2_dev_fp8mixed.safetensors",
+  "text_encoder": "mistral_3_small_flux2_fp8.safetensors (CLIPLoader type=flux2)",
+  "vae": "flux2-vae.safetensors",
+  "lora": "none",
+  "turbo": false,
+  "workflow": "workflows/40_flux2_t2i.json",
+  "prompt": "A flat graphic design poster, shot straight on so the whole sheet fills the frame with nothing else visible. The background is one completely flat field of the colour #3A4750, edge to edge, with no gradient, no texture and no vignette anywhere in it. Centred on that field is a square rotated forty-five degrees, filling about one third of the frame height, in one completely flat field of the colour #F26B38. There is nothing else in the picture: no text, no border, no shadow, no highlight and no paper texture. Both colours are exact.",
+  "negative_prompt": null,
+  "seed": 20250805,
+  "steps": 20,
+  "guidance": 4.0,
+  "sampler": "euler",
+  "scheduler": "Flux2Scheduler",
+  "size": "1024x1024",
+  "asked": {
+   "background": "#3A4750",
+   "shape": "#F26B38"
+  },
+  "shape": "a square rotated forty-five degrees",
+  "file": "studio/samples/flux2_gallery/hex/hex_slate.png",
+  "seconds": 19.9,
+  "got": {
+   "background": "#16272F",
+   "shape": "#FF5F25"
+  },
+  "error": {
+   "background": {
+    "per_channel": [
+     36,
+     32,
+     33
+    ],
+    "max_channel": 36,
+    "pct_of_255": 14.1
+   },
+   "shape": {
+    "per_channel": [
+     13,
+     12,
+     19
+    ],
+    "max_channel": 19,
+    "pct_of_255": 7.5
+   }
+  }
+ },
+ {
+  "slug": "hex_terracotta",
+  "lane": "hex",
+  "engine": "flux2",
+  "checkpoint": "flux2_dev_fp8mixed.safetensors",
+  "text_encoder": "mistral_3_small_flux2_fp8.safetensors (CLIPLoader type=flux2)",
+  "vae": "flux2-vae.safetensors",
+  "lora": "none",
+  "turbo": false,
+  "workflow": "workflows/40_flux2_t2i.json",
+  "prompt": "A flat graphic design poster, shot straight on so the whole sheet fills the frame with nothing else visible. The background is one completely flat field of the colour #B85042, edge to edge, with no gradient, no texture and no vignette anywhere in it. Centred on that field is a ring, an outlined circle with nothing inside it, filling about one third of the frame height, in one completely flat field of the colour #E7E8D1. There is nothing else in the picture: no text, no border, no shadow, no highlight and no paper texture. Both colours are exact.",
+  "negative_prompt": null,
+  "seed": 20250805,
+  "steps": 20,
+  "guidance": 4.0,
+  "sampler": "euler",
+  "scheduler": "Flux2Scheduler",
+  "size": "1024x1024",
+  "asked": {
+   "background": "#B85042",
+   "shape": "#E7E8D1"
+  },
+  "shape": "a ring, an outlined circle with nothing inside it",
+  "file": "studio/samples/flux2_gallery/hex/hex_terracotta.png",
+  "seconds": 19.8,
+  "got": {
+   "background": "#B85736",
+   "shape": "#F9F2CF"
+  },
+  "error": {
+   "background": {
+    "per_channel": [
+     0,
+     7,
+     12
+    ],
+    "max_channel": 12,
+    "pct_of_255": 4.7
+   },
+   "shape": {
+    "per_channel": [
+     18,
+     10,
+     2
+    ],
+    "max_channel": 18,
+    "pct_of_255": 7.1
+   }
+  }
+ }
+]

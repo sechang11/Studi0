@@ -1,0 +1,20 @@
+{
+ "slug": "plasticine__sdxl",
+ "lane": "ab",
+ "engine": "sdxl",
+ "checkpoint": "animagine-xl-4.0.safetensors",
+ "lora": "none",
+ "workflow": "in-memory SDXL t2i (see sdxl_wf in this tool)",
+ "prompt": "A macro photograph of a handmade plasticine model standing on a tabletop set, photographed as a real object. The model shows a badger in a bus conductor's uniform and peaked cap standing on the open platform of a red double-decker bus, one paw on the pole, punching a ticket with the other. The bus is modelled too, cut off at the rear axle. The clay carries thumbprints and fingernail scrapes across every surface, a visible seam where two colours of clay were pressed together, small crumbs of clay on the table, and specks of dust and one short hair stuck to the sticky surface. The colours are the flat chalky colours of a clay block. Edges are slightly slumped under their own weight. Macro lens at f8, soft diffused tent lighting from above with one warmer lamp from the left, shallow depth of field falling off behind the model, natural colour.",
+ "negative_prompt": "lowres, worst quality, jpeg artifacts, watermark, signature",
+ "seed": 20250805,
+ "steps": 28,
+ "cfg": 5.5,
+ "sampler": "dpmpp_2m",
+ "scheduler": "karras",
+ "size": "1536x1152",
+ "medium": "plasticine",
+ "medium_name": "Plasticine",
+ "file": "studio/samples/flux2_gallery/_ab/plasticine__sdxl.png",
+ "seconds": 4.8
+}

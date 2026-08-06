@@ -1,0 +1,18 @@
+{
+ "slug": "watercolour__qwen",
+ "lane": "ab",
+ "engine": "qwen",
+ "checkpoint": "qwen_image_2512_fp8_e4m3fn.safetensors",
+ "lora": "none",
+ "workflow": "workflows/02_qwen_t2i_quality.json",
+ "prompt": "A photograph of a watercolour painting on cold-pressed rag paper, shot flat from above so the paper fills the frame. The painting shows a hare sitting in long grass, alert, its ears up, the grass around it done in wet-in-wet strokes that bleed into the background and the far field left as bare paper. The pigment has settled into the pits of the rough paper tooth and skipped the peaks, so every wash is granular rather than even. Where a wash dried undisturbed it has left a hard dark line at its own edge. Where clean water hit damp paint a pale cauliflower bloom has pushed the pigment outward in a ragged ring. Two colours have run into each other while wet and bled a soft fringe. The white of the paper is left bare for every highlight and there is no white paint anywhere. A few pencil underdrawing lines still show. The paper has cockled into low ridges where it dried. Shot straight down on a 60mm macro at f8 in soft raking daylight so the paper tooth and the cockle both read, natural colour.",
+ "negative_prompt": "blurry, low quality, watermark, deformed text, misspelled, jpeg artifacts",
+ "seed": 20250805,
+ "steps": 20,
+ "cfg": 2.5,
+ "size": "1536x1152",
+ "medium": "watercolour",
+ "medium_name": "Watercolour",
+ "file": "studio/samples/flux2_gallery/_ab/watercolour__qwen.png",
+ "seconds": 35.9
+}

@@ -1,0 +1,50 @@
+{
+ "slug": "hex_moss",
+ "lane": "hex",
+ "engine": "flux2",
+ "checkpoint": "flux2_dev_fp8mixed.safetensors",
+ "text_encoder": "mistral_3_small_flux2_fp8.safetensors (CLIPLoader type=flux2)",
+ "vae": "flux2-vae.safetensors",
+ "lora": "none",
+ "turbo": false,
+ "workflow": "workflows/40_flux2_t2i.json",
+ "prompt": "A flat graphic design poster, shot straight on so the whole sheet fills the frame with nothing else visible. The background is one completely flat field of the colour #2F4B26, edge to edge, with no gradient, no texture and no vignette anywhere in it. Centred on that field is a five-pointed star, filling about one third of the frame height, in one completely flat field of the colour #F2E8CF. There is nothing else in the picture: no text, no border, no shadow, no highlight and no paper texture. Both colours are exact.",
+ "negative_prompt": null,
+ "seed": 20250805,
+ "steps": 20,
+ "guidance": 4.0,
+ "sampler": "euler",
+ "scheduler": "Flux2Scheduler",
+ "size": "1024x1024",
+ "asked": {
+  "background": "#2F4B26",
+  "shape": "#F2E8CF"
+ },
+ "shape": "a five-pointed star",
+ "file": "studio/samples/flux2_gallery/hex/hex_moss.png",
+ "seconds": 19.9,
+ "got": {
+  "background": "#046027",
+  "shape": "#FFE2C3"
+ },
+ "error": {
+  "background": {
+   "per_channel": [
+    43,
+    21,
+    1
+   ],
+   "max_channel": 43,
+   "pct_of_255": 16.9
+  },
+  "shape": {
+   "per_channel": [
+    13,
+    6,
+    12
+   ],
+   "max_channel": 13,
+   "pct_of_255": 5.1
+  }
+ }
+}

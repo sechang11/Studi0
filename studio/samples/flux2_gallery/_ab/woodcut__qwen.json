@@ -1,0 +1,18 @@
+{
+ "slug": "woodcut__qwen",
+ "lane": "ab",
+ "engine": "qwen",
+ "checkpoint": "qwen_image_2512_fp8_e4m3fn.safetensors",
+ "lora": "none",
+ "workflow": "workflows/02_qwen_t2i_quality.json",
+ "prompt": "A photograph of a woodcut print on damp handmade paper, shot flat from directly above. The print shows a small open boat with four rowers being lifted on the face of a huge breaking wave, the foam of the crest cut as clawing fingers, a mountain small and calm in the distance. Every tone is made of carved lines and nothing else - parallel gouge cuts for the mid-tones, cross-hatching where it goes darker, and bare white paper where the block was cut away entirely. The gouge marks have the chatter and the widening taper of a hand-pushed V-tool, and the wood grain of the block itself has printed as a faint striping through the solid black areas. The ink is thick and slightly uneven with a few pale flecks where it did not take. The paper has a deckle edge and visible fibres. Shot straight down on a 60mm macro at f8, soft raking light so the paper texture and the ink relief both read, black ink on cream paper.",
+ "negative_prompt": "blurry, low quality, watermark, deformed text, misspelled, jpeg artifacts",
+ "seed": 20250805,
+ "steps": 20,
+ "cfg": 2.5,
+ "size": "1152x1536",
+ "medium": "woodcut",
+ "medium_name": "Woodcut",
+ "file": "studio/samples/flux2_gallery/_ab/woodcut__qwen.png",
+ "seconds": 31.0
+}

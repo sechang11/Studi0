@@ -1,0 +1,26 @@
+{
+ "slug": "shop_ironmonger",
+ "lane": "typography",
+ "engine": "flux2",
+ "checkpoint": "flux2_dev_fp8mixed.safetensors",
+ "text_encoder": "mistral_3_small_flux2_fp8.safetensors (CLIPLoader type=flux2)",
+ "vae": "flux2-vae.safetensors",
+ "lora": "none",
+ "turbo": false,
+ "workflow": "workflows/40_flux2_t2i.json",
+ "prompt": "A photograph of a hand-painted wooden shop fascia above an ironmonger's window on a wet street. The board is deep maroon and the lettering is cream with a fine gold shadow. The main line reads exactly HOLLIS & DAUGHTER. Beneath it a smaller line in capitals reads exactly IRONMONGERS - ESTABLISHED 1888. In the window below, a small enamel plate reads exactly KEYS CUT WHILE YOU WAIT. The paint is chipped along the bottom edge and the brickwork above is soot-blackened. Late afternoon light from the left, 50mm at f4, natural colour, fine grain.",
+ "negative_prompt": null,
+ "seed": 20250805,
+ "steps": 20,
+ "guidance": 4.0,
+ "sampler": "euler",
+ "scheduler": "Flux2Scheduler",
+ "size": "1536x1024",
+ "strings_asked": [
+  "HOLLIS & DAUGHTER",
+  "IRONMONGERS - ESTABLISHED 1888",
+  "KEYS CUT WHILE YOU WAIT"
+ ],
+ "file": "studio/samples/flux2_gallery/typography/shop_ironmonger.png",
+ "seconds": 29.1
+}

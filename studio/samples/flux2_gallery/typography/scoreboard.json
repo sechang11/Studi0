@@ -1,0 +1,28 @@
+{
+ "slug": "scoreboard",
+ "lane": "typography",
+ "engine": "flux2",
+ "checkpoint": "flux2_dev_fp8mixed.safetensors",
+ "text_encoder": "mistral_3_small_flux2_fp8.safetensors (CLIPLoader type=flux2)",
+ "vae": "flux2-vae.safetensors",
+ "lora": "none",
+ "turbo": false,
+ "workflow": "workflows/40_flux2_t2i.json",
+ "prompt": "A photograph of a hand-operated cricket scoreboard at a village ground, shot square on. White painted numbers hang on hooks. The panel labels are painted on the black board and read exactly TOTAL, exactly WICKETS, exactly LAST MAN and exactly OVERS, each with a number beside it. Along the top of the board a painted line reads exactly BRAMPTON C.C. The paint is flaking and the board is streaked with rain. Overcast daylight, 85mm at f4.",
+ "negative_prompt": null,
+ "seed": 20250805,
+ "steps": 20,
+ "guidance": 4.0,
+ "sampler": "euler",
+ "scheduler": "Flux2Scheduler",
+ "size": "1536x1024",
+ "strings_asked": [
+  "TOTAL",
+  "WICKETS",
+  "LAST MAN",
+  "OVERS",
+  "BRAMPTON C.C."
+ ],
+ "file": "studio/samples/flux2_gallery/typography/scoreboard.png",
+ "seconds": 29.3
+}

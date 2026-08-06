@@ -1,0 +1,26 @@
+{
+ "slug": "neon_typography",
+ "lane": "typography",
+ "engine": "flux2",
+ "checkpoint": "flux2_dev_fp8mixed.safetensors",
+ "text_encoder": "mistral_3_small_flux2_fp8.safetensors (CLIPLoader type=flux2)",
+ "vae": "flux2-vae.safetensors",
+ "lora": "none",
+ "turbo": false,
+ "workflow": "workflows/40_flux2_t2i.json",
+ "prompt": "A night photograph of a neon sign on a wall made entirely of type. Three lines of bent glass tube spell out, on the top line in warm white script, exactly good morning, on the middle line in larger pink capitals exactly THE NIGHT IS OVER, and on the bottom line in small blue capitals exactly PLEASE COME IN. Every letter is one continuous tube with visible electrodes and standoffs, glowing onto the brick behind. 35mm at f2.8, long exposure, natural colour.",
+ "negative_prompt": null,
+ "seed": 20250805,
+ "steps": 20,
+ "guidance": 4.0,
+ "sampler": "euler",
+ "scheduler": "Flux2Scheduler",
+ "size": "1536x1024",
+ "strings_asked": [
+  "good morning",
+  "THE NIGHT IS OVER",
+  "PLEASE COME IN"
+ ],
+ "file": "studio/samples/flux2_gallery/typography/neon_typography.png",
+ "seconds": 29.2
+}

@@ -1,0 +1,27 @@
+{
+ "slug": "gravestone",
+ "lane": "typography",
+ "engine": "flux2",
+ "checkpoint": "flux2_dev_fp8mixed.safetensors",
+ "text_encoder": "mistral_3_small_flux2_fp8.safetensors (CLIPLoader type=flux2)",
+ "vae": "flux2-vae.safetensors",
+ "lora": "none",
+ "turbo": false,
+ "workflow": "workflows/40_flux2_t2i.json",
+ "prompt": "A photograph of a weathered slate headstone in a churchyard, shot square on. The lettering is cut in a fine serif face and reads on successive lines exactly SACRED TO THE MEMORY OF, exactly ELIZABETH HARROW, exactly WHO DIED 3RD MARCH 1871, and at the foot exactly SHE KEPT THE LIGHT. Lichen has grown in the cut letters and the stone is streaked with rain. Soft overcast light raking from the left so the cut letters read, 85mm at f5.6, natural colour.",
+ "negative_prompt": null,
+ "seed": 20250805,
+ "steps": 20,
+ "guidance": 4.0,
+ "sampler": "euler",
+ "scheduler": "Flux2Scheduler",
+ "size": "1024x1536",
+ "strings_asked": [
+  "SACRED TO THE MEMORY OF",
+  "ELIZABETH HARROW",
+  "WHO DIED 3RD MARCH 1871",
+  "SHE KEPT THE LIGHT"
+ ],
+ "file": "studio/samples/flux2_gallery/typography/gravestone.png",
+ "seconds": 29.1
+}

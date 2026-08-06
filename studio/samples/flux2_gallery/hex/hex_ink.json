@@ -1,0 +1,50 @@
+{
+ "slug": "hex_ink",
+ "lane": "hex",
+ "engine": "flux2",
+ "checkpoint": "flux2_dev_fp8mixed.safetensors",
+ "text_encoder": "mistral_3_small_flux2_fp8.safetensors (CLIPLoader type=flux2)",
+ "vae": "flux2-vae.safetensors",
+ "lora": "none",
+ "turbo": false,
+ "workflow": "workflows/40_flux2_t2i.json",
+ "prompt": "A flat graphic design poster, shot straight on so the whole sheet fills the frame with nothing else visible. The background is one completely flat field of the colour #151E3F, edge to edge, with no gradient, no texture and no vignette anywhere in it. Centred on that field is a crescent moon, filling about one third of the frame height, in one completely flat field of the colour #F5F5F5. There is nothing else in the picture: no text, no border, no shadow, no highlight and no paper texture. Both colours are exact.",
+ "negative_prompt": null,
+ "seed": 20250805,
+ "steps": 20,
+ "guidance": 4.0,
+ "sampler": "euler",
+ "scheduler": "Flux2Scheduler",
+ "size": "1024x1024",
+ "asked": {
+  "background": "#151E3F",
+  "shape": "#F5F5F5"
+ },
+ "shape": "a crescent moon",
+ "file": "studio/samples/flux2_gallery/hex/hex_ink.png",
+ "seconds": 19.9,
+ "got": {
+  "background": "#06102F",
+  "shape": "#FDFDFB"
+ },
+ "error": {
+  "background": {
+   "per_channel": [
+    15,
+    14,
+    16
+   ],
+   "max_channel": 16,
+   "pct_of_255": 6.3
+  },
+  "shape": {
+   "per_channel": [
+    8,
+    8,
+    6
+   ],
+   "max_channel": 8,
+   "pct_of_255": 3.1
+  }
+ }
+}

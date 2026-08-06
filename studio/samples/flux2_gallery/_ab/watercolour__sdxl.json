@@ -1,0 +1,20 @@
+{
+ "slug": "watercolour__sdxl",
+ "lane": "ab",
+ "engine": "sdxl",
+ "checkpoint": "animagine-xl-4.0.safetensors",
+ "lora": "none",
+ "workflow": "in-memory SDXL t2i (see sdxl_wf in this tool)",
+ "prompt": "A photograph of a watercolour painting on cold-pressed rag paper, shot flat from above so the paper fills the frame. The painting shows a hare sitting in long grass, alert, its ears up, the grass around it done in wet-in-wet strokes that bleed into the background and the far field left as bare paper. The pigment has settled into the pits of the rough paper tooth and skipped the peaks, so every wash is granular rather than even. Where a wash dried undisturbed it has left a hard dark line at its own edge. Where clean water hit damp paint a pale cauliflower bloom has pushed the pigment outward in a ragged ring. Two colours have run into each other while wet and bled a soft fringe. The white of the paper is left bare for every highlight and there is no white paint anywhere. A few pencil underdrawing lines still show. The paper has cockled into low ridges where it dried. Shot straight down on a 60mm macro at f8 in soft raking daylight so the paper tooth and the cockle both read, natural colour.",
+ "negative_prompt": "lowres, worst quality, jpeg artifacts, watermark, signature",
+ "seed": 20250805,
+ "steps": 28,
+ "cfg": 5.5,
+ "sampler": "dpmpp_2m",
+ "scheduler": "karras",
+ "size": "1536x1152",
+ "medium": "watercolour",
+ "medium_name": "Watercolour",
+ "file": "studio/samples/flux2_gallery/_ab/watercolour__sdxl.png",
+ "seconds": 6.7
+}

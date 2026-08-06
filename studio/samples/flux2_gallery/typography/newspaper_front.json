@@ -1,0 +1,26 @@
+{
+ "slug": "newspaper_front",
+ "lane": "typography",
+ "engine": "flux2",
+ "checkpoint": "flux2_dev_fp8mixed.safetensors",
+ "text_encoder": "mistral_3_small_flux2_fp8.safetensors (CLIPLoader type=flux2)",
+ "vae": "flux2-vae.safetensors",
+ "lora": "none",
+ "turbo": false,
+ "workflow": "workflows/40_flux2_t2i.json",
+ "prompt": "A photograph of a newspaper lying folded on a kitchen table, shot from above so the top half of the front page fills the frame. The masthead reads exactly THE EVENING TIDE. The main headline in heavy capitals reads exactly BRIDGE OPENS AFTER NINE YEARS. A subheading beneath it reads exactly Traffic expected from Monday. A photograph sits below with a caption. The paper is creased along the fold and a coffee cup has left a ring on one corner. Flat morning light, 35mm at f5.6, natural colour.",
+ "negative_prompt": null,
+ "seed": 20250805,
+ "steps": 20,
+ "guidance": 4.0,
+ "sampler": "euler",
+ "scheduler": "Flux2Scheduler",
+ "size": "1152x1536",
+ "strings_asked": [
+  "THE EVENING TIDE",
+  "BRIDGE OPENS AFTER NINE YEARS",
+  "Traffic expected from Monday"
+ ],
+ "file": "studio/samples/flux2_gallery/typography/newspaper_front.png",
+ "seconds": 35.5
+}

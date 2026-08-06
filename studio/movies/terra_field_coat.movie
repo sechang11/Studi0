@@ -1,0 +1,271 @@
+// THE COAT - a short film for TERRA, built on the four costumes already on her card.
+//
+//   python3 studio/compile.py studio/movies/terra_field_coat.movie --timeline
+//   python3 scripts/short.py studio/movies/terra_field_coat.json
+//
+// The writing, and the reason for every choice below, is in craft/THE_FILM.md.
+// Five things to know before reading the file:
+//
+// 1. THE FOUR MOVEMENTS ARE THE FOUR COSTUMES, in the order her own card puts them in.
+//    armour (issued) -> court (decided about) -> default (running) -> field (chosen).
+//    The field coat is the only garment she ever picked herself and the film is named
+//    after it. `costume:` is set once per chapter; the damage rung moves inside it.
+//
+// 2. `costume:` IS NOT WIRED THROUGH compile.py YET, and it is the one thing that must
+//    be fixed before a single frame is rendered. compose.resolve() already takes a
+//    `costume` key and already reads TERRA's `costumes` map - studio/compose.py:2366
+//    and :2427 - and studio/_tools/turnaround.py already passes one. compile.py does
+//    not: `costume` is absent from VARS and absent from the dict at compile.py:684, so
+//    the five lines below parse, are stored, and are then read by nothing. Every beat
+//    renders in the DEFAULT traveller costume until two lines are added. It is written
+//    here in the resolver's own spelling so the fix turns the film on with no edit to
+//    this file. See THE_FILM.md, "THE ONE THING THAT IS NOT WIRED".
+//
+// 3. EVERY SHOT LINE NAMES A MOVER AND AN ACTION, in the first comma-clause, in the
+//    participle form compose.derive_motion() reads. 17 of 20 beats derive their motion
+//    from the shot line and NOT ONE beat falls to an accidental hold. The other three
+//    are named cards: the two spoken beats, which have no shot line to derive from and
+//    so get a staged performance instead, and one shot that is held ON PURPOSE.
+//
+// 4. SHOT SIZES ARE PINNED close / medium close-up / medium. The only two wides in the
+//    film have nobody in them. Her frame_verdict puts the honest cut-off at wide and
+//    her face_quality_verdict puts a full-body face at about 90 pixels.
+//
+// 5. EVERY CLOSE INSERT GETS ITS OWN SCENE AND ITS OWN FREE-TEXT PLACE. A place CARD is
+//    a location and an insert is a surface, and the card's scenery nouns beat the two
+//    words at the end of the shot line that ask for a close-up - compose.py calls this
+//    place_vs_shot. The first compile of this film raised it; these five scenes are the
+//    fix.
+
+MOVIE terra_field_coat
+  title: THE COAT
+  logline: A soldier who has only ever been dressed by other people buys a coat.
+  canvas: 1920x1080
+  fps: 24
+  engine: anime
+  style: cel_anime_90s
+  checkpoint: animagine-xl-4.0.safetensors
+  face_weight: 0.6
+  seed_root: terra-coat-1
+  clip_secs: 6
+  tags: cinematic
+
+// ===========================================================================
+// I - ISSUED.  Imperial plate. Somebody else's hands doing up somebody else's
+// armour on her. The film opens on the buckle, not on her face, and does not
+// show what she is being dressed FOR until the third shot.
+// ===========================================================================
+CHAPTER i_issued
+  look: cold
+  place: castle_courtyard
+  costume: armour
+  camera: static
+  pace: normal
+  cue: unease
+
+  SCENE dressed
+    transition: fade_black
+    characters: TERRA
+    emotion: neutral
+    wear: 0
+    shot: insert | two hands pulling a breastplate strap tight across her ribs, red tabard beneath the steel, close-up
+    shot: react @push | a steel gauntlet pushing the throat buckle closed under her jaw, medium close-up
+    shot: establish | banners lifting on their poles above the courtyard wall, an empty hay cart below, no humans, wide shot
+
+  // Two axes at once, new place and new time, so this boundary takes the 0.70s
+  // dissolve rather than a cut.
+  SCENE sent
+    transition: dissolve
+    place: snowfield
+    characters: TERRA
+    emotion: neutral
+    wear: 2
+    shot: master | walking out of frame to the left, unbroken snow to the horizon, medium shot
+
+  // The aftermath insert. Cut, never dissolve, into the consequence of the shot
+  // before it.
+  SCENE the_gauntlet
+    transition: cut
+    place: deep wind-crusted snow filling the frame, no horizon visible
+    shot: insert | a steel gauntlet dropping through the frame into deep snow, close-up, no humans
+
+// ===========================================================================
+// II - DECIDED.  Court dress. The room where it is decided what she is, in front
+// of her, without her. Nobody else is ever in shot. We never see who decides,
+// because she does not get to see it either.
+// ===========================================================================
+CHAPTER ii_decided
+  look: golden
+  place: castle_great_hall
+  costume: court
+  camera: static
+  pace: normal
+  cue: tense_strings
+
+  SCENE the_hall
+    transition: fade_black
+    camera: pull
+    shot: establish | an iron chandelier swinging above a long timber table, empty benches below, no humans, wide shot
+
+  // A DELIBERATE HOLD, and one of only two in the film. @hold_frame is the library's
+  // single status=ready stillness card. She is stood at the end of a table and nothing
+  // happens to her, because it is happening about her in a room she is not in. The
+  // score drops out under it.
+  SCENE decided
+    transition: cut
+    characters: TERRA
+    emotion: neutral
+    silence: true
+    wear: 1
+    shot: hold_silent @hold_frame @8s | she stands at the far end of the long table with her hands at her sides, medium shot
+
+  SCENE she_says_it
+    transition: cut
+    characters: TERRA
+    emotion: neutral
+    motion: hand_to_face_only
+    mood: the empty length of the table running away behind her, both hands at her waist, medium close-up
+    wear: 2
+    TERRA: Nobody will say which half.
+
+  SCENE the_glove
+    transition: cut
+    place: worn stone flagstones filling the frame, dry rushes across the grain, no room visible
+    shot: insert | a white glove dropping through the frame onto the flagstones, close-up, no humans
+
+  SCENE her_fist
+    transition: cut
+    characters: TERRA
+    emotion: neutral
+    wear: 2
+    shot: react @push | her fist closing on the edge of the table, medium close-up
+
+// ===========================================================================
+// III - THE ROAD.  Traveller, the clothes she happened to have on. The act where
+// the world moves her rather than the other way round: handheld throughout, and
+// she leaves the frame instead of entering it. This is the only costume that
+// lands at all five damage rungs with the danbooru name in the prompt, so it is
+// the one the film is allowed to ruin.
+// ===========================================================================
+CHAPTER iii_the_road
+  look: overcast
+  place: moorland
+  costume: default
+  camera: handheld
+  pace: normal
+  cue: desolate
+
+  SCENE the_road
+    transition: dissolve
+    characters: TERRA
+    emotion: neutral
+    wear: 2
+    shot: master | walking out of frame to the right, the open moor behind her, medium shot
+
+  // The sash that blows out of frame here is the bandage on her forearm in the next
+  // shot. The damage ladder is being used as continuity, not as decoration.
+  SCENE the_sash
+    transition: cut
+    place: wet heather and peat filling the frame, no horizon visible
+    shot: insert | a torn red sash blowing across the frame, close-up, no humans
+
+  SCENE the_ford
+    transition: dissolve
+    place: riverbank
+    look: storm
+    characters: TERRA
+    emotion: focus
+    wear: 3
+    shot: build | stumbling forward through shallow water over stones, medium shot
+
+  // A hard cut into the purse, because it is a reveal and a reveal is cut to. We
+  // never see whose hand held it out. The money that was not hers is one insert
+  // long and is never explained.
+  SCENE the_purse
+    transition: cut
+    place: a wet flat stone at the water edge filling the frame, no bank visible
+    look: storm
+    shot: insert | a leather purse dropping into an open hand, close-up, no humans
+
+  // The lowest rung of the ladder, and the first thing in the film she takes.
+  SCENE what_it_cost
+    transition: cut
+    place: riverbank
+    look: storm
+    characters: TERRA
+    emotion: neutral
+    wear: 4
+    shot: react | her fingers closing over a leather purse at her chest, medium close-up
+
+// ===========================================================================
+// IV - CHOSEN.  Field coat. The act opens on the object rather than on the
+// place, and the turn is an arm going into a sleeve. Everything here is static
+// except one push, and that push is the same size and the same move as the
+// buckle in shot two - opposite hands.
+// ===========================================================================
+CHAPTER iv_chosen
+  look: dawn
+  place: market_street
+  costume: field
+  camera: static
+  pace: slow
+  cue: quiet_dawn
+
+  SCENE the_rail
+    transition: fade_black
+    place: the side of a market stall filling the frame, a row of iron hooks along a rail, no street visible
+    shot: insert | a heavy brown coat swinging on a hook above the cobbles, close-up, no humans
+
+  // hand_reach is status=weak and its verdict says it lands only where the hand is
+  // already large in frame. It is staged that way on purpose: the mood line puts the
+  // sleeve at her hand and the shot at medium close-up, which is the staging the card
+  // measured at 0.904 and 2.231. This is the first time in the film she asks for
+  // anything.
+  SCENE she_asks
+    transition: cut
+    characters: TERRA
+    emotion: tender
+    motion: hand_reach
+    mood: a brown coat sleeve hanging at her hand, a stall counter beside her, medium close-up
+    wear: 1
+    TERRA: How much for the brown one.
+
+  // THE TURN. Silence under it, and the film's third and last push.
+  SCENE the_sleeve
+    transition: cut
+    characters: TERRA
+    emotion: resolve
+    silence: true
+    wear: 1
+    shot: react @push | her arm pushing through the sleeve of a brown coat, medium close-up
+
+  // The first and only shot in the film where she moves toward the camera. Her own
+  // motion_verdict measured walk_in at market_street holding her frontal and stable
+  // for the full 8.04s, which makes this the one place in the whole library where
+  // this shot is known to survive its own length. Static camera: she does the moving.
+  SCENE she_walks
+    transition: cut
+    characters: TERRA
+    emotion: determined
+    wear: 1
+    shot: master @8s | walking forward toward the camera between the stalls, medium shot
+
+  // The same moor as act three, in the coat, at golden hour. The last thing that
+  // moves in the film is the only thing she ever chose, and she is still under it.
+  //
+  // THE PLACE IS THE MOORLAND CARD'S OWN GROUND NOUNS WITH ITS SKY TAKEN OUT, and it
+  // has to be. studio/places/moorland.json ends in 'grey overcast sky, distant rain',
+  // place is assembled BEFORE look, and earlier wins - so `look: golden` on the card
+  // renders grey and the whole point of the reprise is lost. Checked in the compiled
+  // prompt, not assumed. compose.py strips 'scenery, no humans' out of a place that
+  // has a person in it, and has no equivalent for a place that names its own weather.
+  // Act three keeps the card, because there the grey sky is what we want.
+  SCENE the_moor_again
+    transition: dissolve
+    place: open moorland of heather and rough tussock grass rolling away over low hills, a broken dry stone wall crossing it, gorse
+    look: golden
+    cue: hopeful_rising
+    characters: TERRA
+    emotion: resolve
+    wear: 2
+    shot: hold_silent @8s | a heavy brown coat blowing across her legs, the open moor behind her, medium shot

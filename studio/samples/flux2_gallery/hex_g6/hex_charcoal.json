@@ -1,0 +1,50 @@
+{
+ "slug": "hex_charcoal",
+ "lane": "hex",
+ "engine": "flux2",
+ "checkpoint": "flux2_dev_fp8mixed.safetensors",
+ "text_encoder": "mistral_3_small_flux2_fp8.safetensors (CLIPLoader type=flux2)",
+ "vae": "flux2-vae.safetensors",
+ "lora": "none",
+ "turbo": false,
+ "workflow": "workflows/40_flux2_t2i.json",
+ "prompt": "A flat graphic design poster, shot straight on so the whole sheet fills the frame with nothing else visible. The background is one completely flat field of the colour #22223B, edge to edge, with no gradient, no texture and no vignette anywhere in it. Centred on that field is a diamond, filling about one third of the frame height, in one completely flat field of the colour #F2E9E4. There is nothing else in the picture: no text, no border, no shadow, no highlight and no paper texture. Both colours are exact.",
+ "negative_prompt": null,
+ "seed": 20250805,
+ "steps": 20,
+ "guidance": 6.0,
+ "sampler": "euler",
+ "scheduler": "Flux2Scheduler",
+ "size": "1024x1024",
+ "asked": {
+  "background": "#22223B",
+  "shape": "#F2E9E4"
+ },
+ "shape": "a diamond",
+ "file": "studio/samples/flux2_gallery/hex_g6/hex_charcoal.png",
+ "seconds": 23.4,
+ "got": {
+  "background": "#04071A",
+  "shape": "#FFF5DC"
+ },
+ "error": {
+  "background": {
+   "per_channel": [
+    30,
+    27,
+    33
+   ],
+   "max_channel": 33,
+   "pct_of_255": 12.9
+  },
+  "shape": {
+   "per_channel": [
+    13,
+    12,
+    8
+   ],
+   "max_channel": 13,
+   "pct_of_255": 5.1
+  }
+ }
+}

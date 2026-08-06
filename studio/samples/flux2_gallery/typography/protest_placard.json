@@ -1,0 +1,25 @@
+{
+ "slug": "protest_placard",
+ "lane": "typography",
+ "engine": "flux2",
+ "checkpoint": "flux2_dev_fp8mixed.safetensors",
+ "text_encoder": "mistral_3_small_flux2_fp8.safetensors (CLIPLoader type=flux2)",
+ "vae": "flux2-vae.safetensors",
+ "lora": "none",
+ "turbo": false,
+ "workflow": "workflows/40_flux2_t2i.json",
+ "prompt": "A photograph of a hand-painted cardboard placard held up in a crowd, shot from below. The letters are painted in thick black emulsion by hand, getting smaller as they run out of room, and read exactly THE RIVER IS NOT A DRAIN on three lines. A smaller line underneath in a different hand reads exactly WE SWIM HERE. The card is bending under its own weight and the paint has run in two places. Bright overcast daylight, 35mm at f4.",
+ "negative_prompt": null,
+ "seed": 20250805,
+ "steps": 20,
+ "guidance": 4.0,
+ "sampler": "euler",
+ "scheduler": "Flux2Scheduler",
+ "size": "1024x1536",
+ "strings_asked": [
+  "THE RIVER IS NOT A DRAIN",
+  "WE SWIM HERE"
+ ],
+ "file": "studio/samples/flux2_gallery/typography/protest_placard.png",
+ "seconds": 29.2
+}

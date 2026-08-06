@@ -1,0 +1,425 @@
+{
+  "title": "THE COAT",
+  "fps": 24,
+  "canvas": [
+    1920,
+    1080
+  ],
+  "engine": "higgs_v3",
+  "keyframe_engine": "anime",
+  "anime_ckpt": "animagine-xl-4.0.safetensors",
+  "ipadapter_weight": 0.6,
+  "style": "cinematic",
+  "anime_sheets": {
+    "TERRA": "sheet_anime_terra.png"
+  },
+  "sheets": {
+    "TERRA": "sheet_anime_terra.png"
+  },
+  "characters": {
+    "TERRA": "TERRA"
+  },
+  "character_loras": {
+    "TERRA": "character_terra_00001_v3.safetensors"
+  },
+  "character_lora_weights": {
+    "TERRA": 0.5
+  },
+  "voices": {
+    "TERRA": {
+      "engine": "indextts2",
+      "voice": "voices_examples/female/female_04_maya.wav"
+    }
+  },
+  "music": [
+    {
+      "prefix": "unease_00",
+      "tags": "low drone, dissonant sustained strings, sparse metallic hits, unsettling, instrumental",
+      "seconds": 16,
+      "at": 0.0,
+      "level": 0.65,
+      "bpm": 140,
+      "key": "C minor"
+    },
+    {
+      "prefix": "tense_strings_01",
+      "tags": "quiet tense strings, low pulse, anticipation, restrained orchestral, instrumental",
+      "seconds": 6,
+      "at": 14.0,
+      "level": 0.7,
+      "bpm": 88,
+      "key": "A minor"
+    },
+    {
+      "prefix": "tense_strings_02",
+      "tags": "quiet tense strings, low pulse, anticipation, restrained orchestral, instrumental",
+      "seconds": 10,
+      "at": 23.7,
+      "level": 0.7,
+      "bpm": 88,
+      "key": "A minor"
+    },
+    {
+      "prefix": "desolate_03",
+      "tags": "desolate solo piano, distant strings, loss, very sparse, instrumental",
+      "seconds": 15,
+      "at": 31.3,
+      "level": 0.75,
+      "bpm": 60,
+      "key": "F minor"
+    },
+    {
+      "prefix": "quiet_dawn_04",
+      "tags": "gentle sunrise ambient, soft solo piano, warm string pad, distant solo clarinet, calm, spacious, instrumental",
+      "seconds": 9,
+      "at": 44.2,
+      "level": 0.65,
+      "bpm": 64,
+      "key": "G major"
+    },
+    {
+      "prefix": "quiet_dawn_05",
+      "tags": "gentle sunrise ambient, soft solo piano, warm string pad, distant solo clarinet, calm, spacious, instrumental",
+      "seconds": 7,
+      "at": 54.46,
+      "level": 0.65,
+      "bpm": 64,
+      "key": "G major"
+    },
+    {
+      "prefix": "hopeful_rising_06",
+      "tags": "hopeful rising strings, arpeggiated piano, soft swelling brass, gentle percussion, uplifting, instrumental",
+      "seconds": 9,
+      "at": 59.31,
+      "level": 0.8,
+      "bpm": 92,
+      "key": "D major"
+    }
+  ],
+  "beats": [
+    {
+      "id": "i_issued_dressed_00",
+      "template": "insert",
+      "clip_secs": 6.0,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "fade_black",
+      "grade": "eq=contrast=1.10:saturation=0.72,colorbalance=bs=0.10:rs=-0.05",
+      "seed": 1202364422,
+      "tags": "two hands pulling a breastplate strap tight across her ribs, red tabard beneath the steel, close-up, castle courtyard, worn stone flagstones, curtain wall on all sides, crenellated battlements, arched gatehouse, iron portcullis, wooden well, hay cart, straw on the ground, banners on poles, overcast, cold lighting, desaturated, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "two hands pulling a breastplate strap tight across her ribs, red tabard beneath the steel, close-up, castle courtyard, worn stone flagstones, curtain wall on all sides, crenellated battlements, arched gatehouse, iron portcullis, wooden well, hay cart, straw on the ground, banners on poles, overcast, cold lighting, desaturated, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "Two hands pull a breastplate strap tight across her ribs.",
+      "motion_src": "desc:derived from the shot line: 'two hands pulling a breastplate strap tight across her ribs'"
+    },
+    {
+      "id": "i_issued_dressed_01",
+      "template": "react",
+      "clip_secs": 6.0,
+      "intensity": 1.0,
+      "camera": "push",
+      "transition": "fade_black",
+      "grade": "eq=contrast=1.10:saturation=0.72,colorbalance=bs=0.10:rs=-0.05",
+      "seed": 2408777491,
+      "ref": [
+        "TERRA"
+      ],
+      "tags": "terra branford (final fantasy vi), 1girl, solo, long wavy green hair, very long hair, green eyes, red hair ribbon, female focus, young woman, slender, neutral expression, looking at viewer, closed mouth, relaxed posture, red cape, sleeveless gold dress with red and blue pattern, wide red sash, red boots, clean and unmarked, a steel gauntlet pushing the throat buckle closed under her jaw, medium close-up, castle courtyard, worn stone flagstones, curtain wall on all sides, crenellated battlements, arched gatehouse, iron portcullis, wooden well, hay cart, straw on the ground, banners on poles, overcast, cold lighting, desaturated, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "terra branford (final fantasy vi), 1girl, solo, long wavy green hair, very long hair, green eyes, red hair ribbon, female focus, young woman, slender, neutral expression, looking at viewer, closed mouth, relaxed posture, red cape, sleeveless gold dress with red and blue pattern, wide red sash, red boots, clean and unmarked, a steel gauntlet pushing the throat buckle closed under her jaw, medium close-up, castle courtyard, worn stone flagstones, curtain wall on all sides, crenellated battlements, arched gatehouse, iron portcullis, wooden well, hay cart, straw on the ground, banners on poles, overcast, cold lighting, desaturated, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "A steel gauntlet pushes the throat buckle closed under her jaw. Nothing else in the frame moves.",
+      "motion_src": "desc:derived from the shot line: 'a steel gauntlet pushing the throat buckle closed under her jaw'"
+    },
+    {
+      "id": "i_issued_dressed_02",
+      "template": "establish",
+      "clip_secs": 6.0,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "fade_black",
+      "grade": "eq=contrast=1.10:saturation=0.72,colorbalance=bs=0.10:rs=-0.05",
+      "seed": 1488706549,
+      "tags": "banners lifting on their poles above the courtyard wall, an empty hay cart below, no humans, wide shot, castle courtyard, worn stone flagstones, curtain wall on all sides, crenellated battlements, arched gatehouse, iron portcullis, wooden well, hay cart, straw on the ground, banners on poles, overcast, cold lighting, desaturated, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "banners lifting on their poles above the courtyard wall, an empty hay cart below, no humans, wide shot, castle courtyard, worn stone flagstones, curtain wall on all sides, crenellated battlements, arched gatehouse, iron portcullis, wooden well, hay cart, straw on the ground, banners on poles, overcast, cold lighting, desaturated, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "Banners lift on their poles above the courtyard wall.",
+      "motion_src": "desc:derived from the shot line: 'banners lifting on their poles above the courtyard wall'"
+    },
+    {
+      "id": "i_issued_sent_00",
+      "template": "master",
+      "clip_secs": 6.0,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "dissolve",
+      "grade": "eq=contrast=1.10:saturation=0.72,colorbalance=bs=0.10:rs=-0.05",
+      "seed": 2951846502,
+      "ref": [
+        "TERRA"
+      ],
+      "tags": "terra branford (final fantasy vi), 1girl, solo, long wavy green hair, very long hair, green eyes, red hair ribbon, female focus, young woman, slender, neutral expression, looking at viewer, closed mouth, torn red cape, gold dress scuffed at the knee, sash loose, dirt on both boots, walking out of frame to the left, unbroken snow to the horizon, medium shot, snow field, unbroken snow, wind carved snow drifts, bare black trees, overcast white sky, blowing snow, animal tracks in snow, faint horizon, overcast, cold lighting, desaturated, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "terra branford (final fantasy vi), 1girl, solo, long wavy green hair, very long hair, green eyes, red hair ribbon, female focus, young woman, slender, neutral expression, looking at viewer, closed mouth, torn red cape, gold dress scuffed at the knee, sash loose, dirt on both boots, walking out of frame to the left, unbroken snow to the horizon, medium shot, snow field, unbroken snow, wind carved snow drifts, bare black trees, overcast white sky, blowing snow, animal tracks in snow, faint horizon, overcast, cold lighting, desaturated, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "She walks out of frame to the left. Nothing else in the frame moves.",
+      "motion_src": "desc:derived from the shot line: 'walking out of frame to the left'"
+    },
+    {
+      "id": "i_issued_the_gauntlet_00",
+      "template": "insert",
+      "clip_secs": 6.0,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "cut",
+      "grade": "eq=contrast=1.10:saturation=0.72,colorbalance=bs=0.10:rs=-0.05",
+      "seed": 2892869554,
+      "tags": "a steel gauntlet dropping through the frame into deep snow, close-up, no humans, deep wind-crusted snow filling the frame, no horizon visible, overcast, cold lighting, desaturated, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "a steel gauntlet dropping through the frame into deep snow, close-up, no humans, deep wind-crusted snow filling the frame, no horizon visible, overcast, cold lighting, desaturated, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "A steel gauntlet drops through the frame into deep snow.",
+      "motion_src": "desc:derived from the shot line: 'a steel gauntlet dropping through the frame into deep snow'"
+    },
+    {
+      "id": "ii_decided_the_hall_00",
+      "template": "establish",
+      "clip_secs": 6.0,
+      "intensity": 1.0,
+      "camera": "pull",
+      "transition": "fade_black",
+      "grade": "eq=contrast=1.08:saturation=1.22,colorbalance=rs=0.08:bs=-0.06",
+      "seed": 1390568026,
+      "tags": "an iron chandelier swinging above a long timber table, empty benches below, no humans, wide shot, castle great hall, long timber banquet table, wooden benches, wide stone fireplace, iron chandelier with candles, tapestries on stone walls, vaulted timber roof beams, rushes on the floor, tall arched windows, golden hour, warm sunlight, long shadows, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "an iron chandelier swinging above a long timber table, empty benches below, no humans, wide shot, castle great hall, long timber banquet table, wooden benches, wide stone fireplace, iron chandelier with candles, tapestries on stone walls, vaulted timber roof beams, rushes on the floor, tall arched windows, golden hour, warm sunlight, long shadows, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "An iron chandelier swings above a long timber table.",
+      "motion_src": "desc:derived from the shot line: 'an iron chandelier swinging above a long timber table'"
+    },
+    {
+      "id": "ii_decided_decided_00",
+      "template": "hold_silent",
+      "clip_secs": 8.0,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "cut",
+      "grade": "eq=contrast=1.08:saturation=1.22,colorbalance=rs=0.08:bs=-0.06",
+      "seed": 402893256,
+      "ref": [
+        "TERRA"
+      ],
+      "tags": "terra branford (final fantasy vi), 1girl, solo, long wavy green hair, very long hair, green eyes, red hair ribbon, female focus, young woman, slender, neutral expression, looking at viewer, closed mouth, red cape, gold dress, red sash, red boots, travel dust on the hem, she stands at the far end of the long table with her hands at her sides, medium shot, castle great hall, long timber banquet table, wooden benches, wide stone fireplace, iron chandelier with candles, tapestries on stone walls, vaulted timber roof beams, rushes on the floor, tall arched windows, golden hour, warm sunlight, long shadows, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "terra branford (final fantasy vi), 1girl, solo, long wavy green hair, very long hair, green eyes, red hair ribbon, female focus, young woman, slender, neutral expression, looking at viewer, closed mouth, red cape, gold dress, red sash, red boots, travel dust on the hem, she stands at the far end of the long table with her hands at her sides, medium shot, castle great hall, long timber banquet table, wooden benches, wide stone fireplace, iron chandelier with candles, tapestries on stone walls, vaulted timber roof beams, rushes on the floor, tall arched windows, golden hour, warm sunlight, long shadows, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "Nothing in the frame moves.",
+      "motion_src": "card:hold_frame"
+    },
+    {
+      "id": "ii_decided_she_says_it_00",
+      "template": "speak",
+      "clip_secs": 6.0,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "cut",
+      "grade": "eq=contrast=1.08:saturation=1.22,colorbalance=rs=0.08:bs=-0.06",
+      "seed": 2513932804,
+      "ref": [
+        "TERRA"
+      ],
+      "tags": "terra branford (final fantasy vi), 1girl, solo, long wavy green hair, very long hair, green eyes, red hair ribbon, female focus, young woman, slender, neutral expression, looking at viewer, closed mouth, torn red cape, gold dress scuffed at the knee, sash loose, dirt on both boots, close-up, castle great hall, long timber banquet table, wooden benches, wide stone fireplace, iron chandelier with candles, tapestries on stone walls, vaulted timber roof beams, rushes on the floor, tall arched windows, golden hour, warm sunlight, long shadows, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, the empty length of the table running away behind her, both hands at her waist, medium close-up, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "terra branford (final fantasy vi), 1girl, solo, long wavy green hair, very long hair, green eyes, red hair ribbon, female focus, young woman, slender, neutral expression, looking at viewer, closed mouth, torn red cape, gold dress scuffed at the knee, sash loose, dirt on both boots, close-up, castle great hall, long timber banquet table, wooden benches, wide stone fireplace, iron chandelier with candles, tapestries on stone walls, vaulted timber roof beams, rushes on the floor, tall arched windows, golden hour, warm sunlight, long shadows, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, the empty length of the table running away behind her, both hands at her waist, medium close-up, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "She raises her right hand to her face. Nothing else in the frame moves.",
+      "motion_src": "card:hand_to_face_only",
+      "line": {
+        "who": "TERRA",
+        "text": "Nobody will say which half."
+      }
+    },
+    {
+      "id": "ii_decided_the_glove_00",
+      "template": "insert",
+      "clip_secs": 6.0,
+      "intensity": 1.0,
+      "camera": "static",
+      "transition": "cut",
+      "grade": "eq=contrast=1.08:saturation=1.22,colorbalance=rs=0.08:bs=-0.06",
+      "seed": 3962123487,
+      "tags": "a white glove dropping through the frame onto the flagstones, close-up, no humans, worn stone flagstones filling the frame, dry rushes across the grain, no room visible, golden hour, warm sunlight, long shadows, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "a white glove dropping through the frame onto the flagstones, close-up, no humans, worn stone flagstones filling the frame, dry rushes across the grain, no room visible, golden hour, warm sunlight, long shadows, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "A white glove drops through the frame onto the flagstones.",
+      "motion_src": "desc:derived from the shot line: 'a white glove dropping through the frame onto the flagstones'"
+    },
+    {
+      "id": "ii_decided_her_fist_00",
+      "template": "react",
+      "clip_secs": 6.0,
+      "intensity": 1.0,
+      "camera": "push",
+      "transition": "cut",
+      "grade": "eq=contrast=1.08:saturation=1.22,colorbalance=rs=0.08:bs=-0.06",
+      "seed": 2529338797,
+      "ref": [
+        "TERRA"
+      ],
+      "tags": "terra branford (final fantasy vi), 1girl, solo, long wavy green hair, very long hair, green eyes, red hair ribbon, female focus, young woman, slender, neutral expression, looking at viewer, closed mouth, torn red cape, gold dress scuffed at the knee, sash loose, dirt on both boots, her fist closing on the edge of the table, medium close-up, castle great hall, long timber banquet table, wooden benches, wide stone fireplace, iron chandelier with candles, tapestries on stone walls, vaulted timber roof beams, rushes on the floor, tall arched windows, golden hour, warm sunlight, long shadows, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "terra branford (final fantasy vi), 1girl, solo, long wavy green hair, very long hair, green eyes, red hair ribbon, female focus, young woman, slender, neutral expression, looking at viewer, closed mouth, torn red cape, gold dress scuffed at the knee, sash loose, dirt on both boots, her fist closing on the edge of the table, medium close-up, castle great hall, long timber banquet table, wooden benches, wide stone fireplace, iron chandelier with candles, tapestries on stone walls, vaulted timber roof beams, rushes on the floor, tall arched windows, golden hour, warm sunlight, long shadows, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "Her fist closes on the edge of the table. Nothing else in the frame moves.",
+      "motion_src": "desc:derived from the shot line: 'her fist closing on the edge of the table'"
+    },
+    {
+      "id": "iii_the_road_the_road_00",
+      "template": "master",
+      "clip_secs": 6.0,
+      "intensity": 1.0,
+      "camera": "handheld",
+      "transition": "dissolve",
+      "grade": "eq=contrast=0.90:saturation=0.68:gamma=1.06,colorbalance=bs=0.04:rm=-0.02",
+      "seed": 1726421530,
+      "ref": [
+        "TERRA"
+      ],
+      "tags": "terra branford (final fantasy vi), 1girl, solo, long wavy green hair, very long hair, green eyes, red hair ribbon, female focus, young woman, slender, neutral expression, looking at viewer, closed mouth, torn red cape, gold dress scuffed at the knee, sash loose, dirt on both boots, walking out of frame to the right, the open moor behind her, medium shot, moorland, heather, rough grass tussocks, peat bog pools, dry stone wall, rolling low hills, gorse, no trees, grey overcast sky, distant rain, overcast, cloudy sky, diffused lighting, no shadows, grey sky, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "terra branford (final fantasy vi), 1girl, solo, long wavy green hair, very long hair, green eyes, red hair ribbon, female focus, young woman, slender, neutral expression, looking at viewer, closed mouth, torn red cape, gold dress scuffed at the knee, sash loose, dirt on both boots, walking out of frame to the right, the open moor behind her, medium shot, moorland, heather, rough grass tussocks, peat bog pools, dry stone wall, rolling low hills, gorse, no trees, grey overcast sky, distant rain, overcast, cloudy sky, diffused lighting, no shadows, grey sky, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "She walks out of frame to the right. Nothing else in the frame moves.",
+      "motion_src": "desc:derived from the shot line: 'walking out of frame to the right'"
+    },
+    {
+      "id": "iii_the_road_the_sash_00",
+      "template": "insert",
+      "clip_secs": 6.0,
+      "intensity": 1.0,
+      "camera": "handheld",
+      "transition": "cut",
+      "grade": "eq=contrast=0.90:saturation=0.68:gamma=1.06,colorbalance=bs=0.04:rm=-0.02",
+      "seed": 3190034316,
+      "tags": "a torn red sash blowing across the frame, close-up, no humans, wet heather and peat filling the frame, no horizon visible, overcast, cloudy sky, diffused lighting, no shadows, grey sky, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "a torn red sash blowing across the frame, close-up, no humans, wet heather and peat filling the frame, no horizon visible, overcast, cloudy sky, diffused lighting, no shadows, grey sky, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "A torn red sash blows across the frame.",
+      "motion_src": "desc:derived from the shot line: 'a torn red sash blowing across the frame'"
+    },
+    {
+      "id": "iii_the_road_the_ford_00",
+      "template": "build",
+      "clip_secs": 6.0,
+      "intensity": 1.0,
+      "camera": "handheld",
+      "transition": "dissolve",
+      "grade": "eq=brightness=-0.06:contrast=1.15:saturation=0.55,colorbalance=bs=0.08:bm=0.04:rm=-0.04,eq=gamma=0.98",
+      "seed": 459249438,
+      "ref": [
+        "TERRA"
+      ],
+      "tags": "terra branford (final fantasy vi), 1girl, solo, long wavy green hair, very long hair, green eyes, red hair ribbon, female focus, young woman, slender, furrowed brow, bead of sweat, narrowed eyes, looking down, fixed stare, closed mouth, pressed lips, red cape gone, gold dress torn at the shoulder, sash used as a bandage on the forearm, one boot split, stumbling forward through shallow water over stones, medium shot, river, grassy bank, reeds, pebble shore, shallow water over stones, overhanging willow, ripples, current, far bank, storm, dark clouds, rain, grey sky, wind, overcast, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "terra branford (final fantasy vi), 1girl, solo, long wavy green hair, very long hair, green eyes, red hair ribbon, female focus, young woman, slender, furrowed brow, bead of sweat, narrowed eyes, looking down, fixed stare, closed mouth, pressed lips, red cape gone, gold dress torn at the shoulder, sash used as a bandage on the forearm, one boot split, stumbling forward through shallow water over stones, medium shot, river, grassy bank, reeds, pebble shore, shallow water over stones, overhanging willow, ripples, current, far bank, storm, dark clouds, rain, grey sky, wind, overcast, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "She stumbles forward through shallow water over stones.",
+      "motion_src": "desc:derived from the shot line: 'stumbling forward through shallow water over stones'"
+    },
+    {
+      "id": "iii_the_road_the_purse_00",
+      "template": "insert",
+      "clip_secs": 6.0,
+      "intensity": 1.0,
+      "camera": "handheld",
+      "transition": "cut",
+      "grade": "eq=brightness=-0.06:contrast=1.15:saturation=0.55,colorbalance=bs=0.08:bm=0.04:rm=-0.04,eq=gamma=0.98",
+      "seed": 1253679702,
+      "tags": "a leather purse dropping into an open hand, close-up, no humans, a wet flat stone at the water edge filling the frame, no bank visible, storm, dark clouds, rain, grey sky, wind, overcast, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "a leather purse dropping into an open hand, close-up, no humans, a wet flat stone at the water edge filling the frame, no bank visible, storm, dark clouds, rain, grey sky, wind, overcast, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "A leather purse drops into an open hand.",
+      "motion_src": "desc:derived from the shot line: 'a leather purse dropping into an open hand'"
+    },
+    {
+      "id": "iii_the_road_what_it_cost_00",
+      "template": "react",
+      "clip_secs": 6.0,
+      "intensity": 1.0,
+      "camera": "handheld",
+      "transition": "cut",
+      "grade": "eq=brightness=-0.06:contrast=1.15:saturation=0.55,colorbalance=bs=0.08:bm=0.04:rm=-0.04,eq=gamma=0.98",
+      "seed": 4066788704,
+      "ref": [
+        "TERRA"
+      ],
+      "tags": "terra branford (final fantasy vi), 1girl, solo, long wavy green hair, very long hair, green eyes, red hair ribbon, female focus, young woman, slender, neutral expression, looking at viewer, closed mouth, no cape, gold dress in rags, bare forearms wrapped in cloth, both boots ruined, blood dried at the temple, her fingers closing over a leather purse at her chest, medium close-up, river, grassy bank, reeds, pebble shore, shallow water over stones, overhanging willow, ripples, current, far bank, storm, dark clouds, rain, grey sky, wind, overcast, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "terra branford (final fantasy vi), 1girl, solo, long wavy green hair, very long hair, green eyes, red hair ribbon, female focus, young woman, slender, neutral expression, looking at viewer, closed mouth, no cape, gold dress in rags, bare forearms wrapped in cloth, both boots ruined, blood dried at the temple, her fingers closing over a leather purse at her chest, medium close-up, river, grassy bank, reeds, pebble shore, shallow water over stones, overhanging willow, ripples, current, far bank, storm, dark clouds, rain, grey sky, wind, overcast, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "Her fingers close over a leather purse at her chest. Nothing else in the frame moves.",
+      "motion_src": "desc:derived from the shot line: 'her fingers closing over a leather purse at her chest'"
+    },
+    {
+      "id": "iv_chosen_the_rail_00",
+      "template": "insert",
+      "clip_secs": 6.0,
+      "intensity": 0.741,
+      "camera": "static",
+      "transition": "fade_black",
+      "grade": "eq=contrast=0.98:saturation=0.82:brightness=0.04,colorbalance=bm=0.07:rs=-0.04:rh=0.04,eq=gamma=1.05",
+      "seed": 3320114979,
+      "tags": "a heavy brown coat swinging on a hook above the cobbles, close-up, no humans, the side of a market stall filling the frame, a row of iron hooks along a rail, no street visible, dawn, early morning, pale blue sky, morning mist, soft light, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "a heavy brown coat swinging on a hook above the cobbles, close-up, no humans, the side of a market stall filling the frame, a row of iron hooks along a rail, no street visible, dawn, early morning, pale blue sky, morning mist, soft light, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "A heavy brown coat swings on a hook above the cobbles.",
+      "motion_src": "desc:derived from the shot line: 'a heavy brown coat swinging on a hook above the cobbles'"
+    },
+    {
+      "id": "iv_chosen_she_asks_00",
+      "template": "speak",
+      "clip_secs": 6.0,
+      "intensity": 0.741,
+      "camera": "static",
+      "transition": "cut",
+      "grade": "eq=contrast=0.98:saturation=0.82:brightness=0.04,colorbalance=bm=0.07:rs=-0.04:rh=0.04,eq=gamma=1.05",
+      "seed": 840541131,
+      "ref": [
+        "TERRA"
+      ],
+      "tags": "terra branford (final fantasy vi), 1girl, solo, long wavy green hair, very long hair, green eyes, red hair ribbon, female focus, young woman, slender, gentle smile, faint blush, relaxed brow, half-closed eyes, looking at viewer, soft gaze, smile, closed mouth, red cape, gold dress, red sash, red boots, travel dust on the hem, close-up, market street, market stalls, striped awnings, crates of vegetables, hanging lanterns, shopfront signs, cobblestones, crowd of shoppers, strings of bunting, produce boxes, wooden handcart, dawn, early morning, pale blue sky, morning mist, soft light, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, a brown coat sleeve hanging at her hand, a stall counter beside her, medium close-up, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "terra branford (final fantasy vi), 1girl, solo, long wavy green hair, very long hair, green eyes, red hair ribbon, female focus, young woman, slender, gentle smile, faint blush, relaxed brow, half-closed eyes, looking at viewer, soft gaze, smile, closed mouth, red cape, gold dress, red sash, red boots, travel dust on the hem, close-up, market street, market stalls, striped awnings, crates of vegetables, hanging lanterns, shopfront signs, cobblestones, crowd of shoppers, strings of bunting, produce boxes, wooden handcart, dawn, early morning, pale blue sky, morning mist, soft light, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, a brown coat sleeve hanging at her hand, a stall counter beside her, medium close-up, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "She reaches her right hand forward toward the camera.",
+      "motion_src": "card:hand_reach",
+      "line": {
+        "who": "TERRA",
+        "text": "How much for the brown one."
+      }
+    },
+    {
+      "id": "iv_chosen_the_sleeve_00",
+      "template": "react",
+      "clip_secs": 6.0,
+      "intensity": 0.741,
+      "camera": "push",
+      "transition": "cut",
+      "grade": "eq=contrast=0.98:saturation=0.82:brightness=0.04,colorbalance=bm=0.07:rs=-0.04:rh=0.04,eq=gamma=1.05",
+      "seed": 263668229,
+      "ref": [
+        "TERRA"
+      ],
+      "tags": "terra branford (final fantasy vi), 1girl, solo, long wavy green hair, very long hair, green eyes, red hair ribbon, female focus, young woman, slender, calm resolve, quiet certainty, steady gaze, closed mouth, red cape, gold dress, red sash, red boots, travel dust on the hem, her arm pushing through the sleeve of a brown coat, medium close-up, market street, market stalls, striped awnings, crates of vegetables, hanging lanterns, shopfront signs, cobblestones, crowd of shoppers, strings of bunting, produce boxes, wooden handcart, dawn, early morning, pale blue sky, morning mist, soft light, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "terra branford (final fantasy vi), 1girl, solo, long wavy green hair, very long hair, green eyes, red hair ribbon, female focus, young woman, slender, calm resolve, quiet certainty, steady gaze, closed mouth, red cape, gold dress, red sash, red boots, travel dust on the hem, her arm pushing through the sleeve of a brown coat, medium close-up, market street, market stalls, striped awnings, crates of vegetables, hanging lanterns, shopfront signs, cobblestones, crowd of shoppers, strings of bunting, produce boxes, wooden handcart, dawn, early morning, pale blue sky, morning mist, soft light, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "Her arm pushes through the sleeve of a brown coat. Nothing else in the frame moves.",
+      "motion_src": "desc:derived from the shot line: 'her arm pushing through the sleeve of a brown coat'"
+    },
+    {
+      "id": "iv_chosen_she_walks_00",
+      "template": "master",
+      "clip_secs": 8.0,
+      "intensity": 0.741,
+      "camera": "static",
+      "transition": "cut",
+      "grade": "eq=contrast=0.98:saturation=0.82:brightness=0.04,colorbalance=bm=0.07:rs=-0.04:rh=0.04,eq=gamma=1.05",
+      "seed": 4067032376,
+      "ref": [
+        "TERRA"
+      ],
+      "tags": "terra branford (final fantasy vi), 1girl, solo, long wavy green hair, very long hair, green eyes, red hair ribbon, female focus, young woman, slender, determined expression, serious, sharp eyes, furrowed brow, closed mouth, red cape, gold dress, red sash, red boots, travel dust on the hem, walking forward toward the camera between the stalls, medium shot, market street, market stalls, striped awnings, crates of vegetables, hanging lanterns, shopfront signs, cobblestones, crowd of shoppers, strings of bunting, produce boxes, wooden handcart, dawn, early morning, pale blue sky, morning mist, soft light, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "terra branford (final fantasy vi), 1girl, solo, long wavy green hair, very long hair, green eyes, red hair ribbon, female focus, young woman, slender, determined expression, serious, sharp eyes, furrowed brow, closed mouth, red cape, gold dress, red sash, red boots, travel dust on the hem, walking forward toward the camera between the stalls, medium shot, market street, market stalls, striped awnings, crates of vegetables, hanging lanterns, shopfront signs, cobblestones, crowd of shoppers, strings of bunting, produce boxes, wooden handcart, dawn, early morning, pale blue sky, morning mist, soft light, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "She walks forward toward the camera between the stalls. Nothing else in the frame moves.",
+      "motion_src": "desc:derived from the shot line: 'walking forward toward the camera between the stalls'"
+    },
+    {
+      "id": "iv_chosen_the_moor_again_00",
+      "template": "hold_silent",
+      "clip_secs": 8.0,
+      "intensity": 0.741,
+      "camera": "static",
+      "transition": "dissolve",
+      "grade": "eq=contrast=1.08:saturation=1.22,colorbalance=rs=0.08:bs=-0.06",
+      "seed": 3618679534,
+      "ref": [
+        "TERRA"
+      ],
+      "tags": "terra branford (final fantasy vi), 1girl, solo, long wavy green hair, very long hair, green eyes, red hair ribbon, female focus, young woman, slender, calm resolve, quiet certainty, steady gaze, closed mouth, torn red cape, gold dress scuffed at the knee, sash loose, dirt on both boots, a heavy brown coat blowing across her legs, the open moor behind her, medium shot, open moorland of heather and rough tussock grass rolling away over low hills, a broken dry stone wall crossing it, gorse, golden hour, warm sunlight, long shadows, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "prompt": "terra branford (final fantasy vi), 1girl, solo, long wavy green hair, very long hair, green eyes, red hair ribbon, female focus, young woman, slender, calm resolve, quiet certainty, steady gaze, closed mouth, torn red cape, gold dress scuffed at the knee, sash loose, dirt on both boots, a heavy brown coat blowing across her legs, the open moor behind her, medium shot, open moorland of heather and rough tussock grass rolling away over low hills, a broken dry stone wall crossing it, gorse, golden hour, warm sunlight, long shadows, retro artstyle, 1990s (style), ova screencap, cel animation, film grain, cinematic, masterpiece, best quality, very aesthetic, absurdres",
+      "motion": "A heavy brown coat blows across her legs. Nothing else in the frame moves.",
+      "motion_src": "desc:derived from the shot line: 'a heavy brown coat blowing across her legs'"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+ "slug": "recipe_card",
+ "lane": "typography",
+ "engine": "flux2",
+ "checkpoint": "flux2_dev_fp8mixed.safetensors",
+ "text_encoder": "mistral_3_small_flux2_fp8.safetensors (CLIPLoader type=flux2)",
+ "vae": "flux2-vae.safetensors",
+ "lora": "none",
+ "turbo": false,
+ "workflow": "workflows/40_flux2_t2i.json",
+ "prompt": "A photograph of a stained handwritten recipe card on a kitchen counter, shot from above. In looping blue fountain pen the heading reads exactly Gran's Fruit Loaf. The ingredient lines beneath read exactly 8oz mixed fruit, exactly 6oz self raising flour and exactly a cup of cold tea. At the bottom in a different hand and a different pen it reads exactly do NOT skip the tea. There are butter stains on the card and one corner is torn. Soft window light, 50mm at f4, natural colour.",
+ "negative_prompt": null,
+ "seed": 20250805,
+ "steps": 20,
+ "guidance": 4.0,
+ "sampler": "euler",
+ "scheduler": "Flux2Scheduler",
+ "size": "1152x1536",
+ "strings_asked": [
+  "Gran's Fruit Loaf",
+  "8oz mixed fruit",
+  "6oz self raising flour",
+  "a cup of cold tea",
+  "do NOT skip the tea"
+ ],
+ "file": "studio/samples/flux2_gallery/typography/recipe_card.png",
+ "seconds": 34.9
+}

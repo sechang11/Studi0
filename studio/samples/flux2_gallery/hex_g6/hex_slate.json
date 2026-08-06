@@ -1,0 +1,50 @@
+{
+ "slug": "hex_slate",
+ "lane": "hex",
+ "engine": "flux2",
+ "checkpoint": "flux2_dev_fp8mixed.safetensors",
+ "text_encoder": "mistral_3_small_flux2_fp8.safetensors (CLIPLoader type=flux2)",
+ "vae": "flux2-vae.safetensors",
+ "lora": "none",
+ "turbo": false,
+ "workflow": "workflows/40_flux2_t2i.json",
+ "prompt": "A flat graphic design poster, shot straight on so the whole sheet fills the frame with nothing else visible. The background is one completely flat field of the colour #3A4750, edge to edge, with no gradient, no texture and no vignette anywhere in it. Centred on that field is a square rotated forty-five degrees, filling about one third of the frame height, in one completely flat field of the colour #F26B38. There is nothing else in the picture: no text, no border, no shadow, no highlight and no paper texture. Both colours are exact.",
+ "negative_prompt": null,
+ "seed": 20250805,
+ "steps": 20,
+ "guidance": 6.0,
+ "sampler": "euler",
+ "scheduler": "Flux2Scheduler",
+ "size": "1024x1024",
+ "asked": {
+  "background": "#3A4750",
+  "shape": "#F26B38"
+ },
+ "shape": "a square rotated forty-five degrees",
+ "file": "studio/samples/flux2_gallery/hex_g6/hex_slate.png",
+ "seconds": 23.8,
+ "got": {
+  "background": "#15282F",
+  "shape": "#FF5E1F"
+ },
+ "error": {
+  "background": {
+   "per_channel": [
+    37,
+    31,
+    33
+   ],
+   "max_channel": 37,
+   "pct_of_255": 14.5
+  },
+  "shape": {
+   "per_channel": [
+    13,
+    13,
+    25
+   ],
+   "max_channel": 25,
+   "pct_of_255": 9.8
+  }
+ }
+}

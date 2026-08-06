@@ -1,0 +1,20 @@
+{
+ "slug": "ps1__sdxl",
+ "lane": "ab",
+ "engine": "sdxl",
+ "checkpoint": "animagine-xl-4.0.safetensors",
+ "lora": "none",
+ "workflow": "in-memory SDXL t2i (see sdxl_wf in this tool)",
+ "prompt": "A frame captured directly out of the framebuffer of a 1997 PlayStation 1 game running on original hardware, 320 by 240 pixels, scaled up so that every single pixel is a visible hard-edged square block. The screenshot shows a hotel lobby at night with a reception desk, a potted palm, and a lift with its doors open casting a rectangle of light. A player character in a blue jacket stands with their back to the camera in the middle of the floor. A small text box at the bottom of the screen reads exactly THE LIFT IS WAITING. Everything in the frame is built from a few hundred large flat-shaded triangles with hard visible edges and no smoothing at all, so every curve is a chain of straight facets and every silhouette is a polygon outline you can trace. The textures are 64 by 64 bitmaps stretched across those triangles with affine mapping, so they visibly warp and slide across the polygon seams and the perspective inside each triangle is wrong. There is no texture filtering anywhere, so every texel is a hard square block of flat colour with no blending into its neighbour. The polygon vertices snap to whole pixels so the edges wobble and crawl. Every gradient is replaced by a coarse checkerboard dither of two colours. Distant geometry is cut off abruptly into a wall of one flat fog colour. The characters have mitten hands with no separate fingers and their faces are a texture painted flat onto the front of the head. No anti-aliasing anywhere: every polygon edge is a hard aliased staircase. Flat per-vertex lighting, no shadows, no reflections, no specular highlights.",
+ "negative_prompt": "lowres, worst quality, jpeg artifacts, watermark, signature",
+ "seed": 20250805,
+ "steps": 28,
+ "cfg": 5.5,
+ "sampler": "dpmpp_2m",
+ "scheduler": "karras",
+ "size": "1536x1152",
+ "medium": "ps1",
+ "medium_name": "PlayStation 1 real-time",
+ "file": "studio/samples/flux2_gallery/_ab/ps1__sdxl.png",
+ "seconds": 5.0
+}

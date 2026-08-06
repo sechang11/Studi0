@@ -1,0 +1,26 @@
+{
+ "slug": "luggage_tag",
+ "lane": "typography",
+ "engine": "flux2",
+ "checkpoint": "flux2_dev_fp8mixed.safetensors",
+ "text_encoder": "mistral_3_small_flux2_fp8.safetensors (CLIPLoader type=flux2)",
+ "vae": "flux2-vae.safetensors",
+ "lora": "none",
+ "turbo": false,
+ "workflow": "workflows/40_flux2_t2i.json",
+ "prompt": "A close photograph of a buff card luggage tag tied with string to the handle of a battered leather suitcase, shot from above. The tag is filled in by hand in fountain pen. The top line reads exactly M. OKONKWO. The next line reads exactly HOLD - NOT WANTED ON VOYAGE. A rubber stamp across the corner reads exactly LIVERPOOL. The card is scuffed and the ink has feathered slightly. Soft window light, 100mm macro at f5.6.",
+ "negative_prompt": null,
+ "seed": 20250805,
+ "steps": 20,
+ "guidance": 4.0,
+ "sampler": "euler",
+ "scheduler": "Flux2Scheduler",
+ "size": "1536x1024",
+ "strings_asked": [
+  "M. OKONKWO",
+  "HOLD - NOT WANTED ON VOYAGE",
+  "LIVERPOOL"
+ ],
+ "file": "studio/samples/flux2_gallery/typography/luggage_tag.png",
+ "seconds": 28.7
+}
