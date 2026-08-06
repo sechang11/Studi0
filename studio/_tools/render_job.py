@@ -14,7 +14,42 @@ nothing. Each image is measured after it lands and rejected if it is dead, with 
 recorded. Rejections go to a rejected/ subfolder rather than being deleted, because a
 failure you can look at is worth more than one you cannot.
 """
-import argparse, json, os, subprocess, sys, time
+import argparse, json, os, re, subprocess, sys, time
+
+
+def slug(s, n=26):
+    s = re.sub(r"[^a-z0-9]+", "-", str(s or "").lower()).strip("-")
+    return s[:n].strip("-")
+
+
+def artifact_name(job, ext):
+    """A filename that says what the thing IS.
+
+    `5ae68bb18535.webp` tells you nothing; you have to open the sidecar to find out what
+    you are looking at, which means a folder of two hundred of them is unsortable and
+    unsearchable. The cards that made it are right there in the job, so they go in the name:
+
+        2026-08-06_1243_image_photorealistic_underwater-city_wide-shot_qwen_5ae68b.webp
+        2026-08-06_1244_music_hopeful-rising_92bpm_d-major_a8b26c.flac
+        2026-08-06_1244_voice_female-02_that-is-not-what-i-said_4017b3.mp3
+
+    Sorting the folder by name groups a run together and then groups by kind. The short id
+    stays on the end so two rolls that drew the same cards still cannot collide, and so the
+    artifact can still be traced back to its sidecar and its seed.
+    """
+    d = job["domain"]
+    if d in ("image", "video"):
+        bits = [job.get("style"), job.get("place"), job.get("character"),
+                job.get("framing"), job.get("engine")]
+    elif d == "music":
+        bits = [job.get("cue"),
+                ("%dbpm" % job["bpm"]) if job.get("bpm") else None, job.get("key")]
+    elif d == "voice":
+        bits = [job.get("voice"), job.get("line")]
+    else:
+        bits = [job.get("preset")]
+    parts = [time.strftime("%Y-%m-%d_%H%M"), d] + [slug(b) for b in bits if b]
+    return "_".join(p for p in parts if p) + "_" + job["id"][:6] + ext
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 STUDIO = os.path.dirname(HERE)
@@ -173,6 +208,55 @@ def render_video(job, outdir):
                         required=False)
 
 
+_KEYSCALE = {}
+
+
+def keyscale(want):
+    """Coerce a cue card's key into a spelling the ACE-Step node will accept, or drop it.
+
+    The cards are written the way a musician writes: `B flat minor`, `E flat major`. The
+    node's widget is a fixed 34-item combo that spells those `Bb minor` and `Eb major`, and
+    a value outside the list is a HARD prompt-validation error - ComfyUI refuses the whole
+    graph, render_job.py dies before printing anything, and the harness sees only
+    `failed (no result)`. That cost 20 of 137 jobs in one run.
+
+    The allowed list is read from the running server rather than copied here, so it cannot
+    drift from the node. Anything still unmatched is dropped: an unkeyed cue is fine, a
+    refused graph is not.
+    """
+    want = str(want or "").strip()
+    if not want:
+        return ""
+    if not _KEYSCALE:
+        try:
+            import urllib.request
+            raw = urllib.request.urlopen(
+                "http://%s/object_info/TextEncodeAceStepAudio1.5" % HOST, timeout=8).read()
+
+            def find(o):
+                if isinstance(o, dict):
+                    for k, v in o.items():
+                        if k == "keyscale":
+                            return v[1]["options"]
+                        r = find(v)
+                        if r:
+                            return r
+                elif isinstance(o, list):
+                    for v in o:
+                        r = find(v)
+                        if r:
+                            return r
+                return None
+            for o in (find(json.loads(raw)) or []):
+                _KEYSCALE[o.lower()] = o
+        except Exception:
+            return ""
+    cand = want.lower()
+    for a, b in ((" flat ", "b "), (" sharp ", "# ")):
+        cand = cand.replace(a, b)
+    return _KEYSCALE.get(cand, "")
+
+
 def render_audio(job, outdir):
     """Music, SFX and voice, each driven through the node map its own domain card carries.
 
@@ -197,7 +281,7 @@ def render_audio(job, outdir):
         # defaulted unmetered cues to 140 bpm and turned an ambient bed into a march.
         if job.get("bpm"):
             put("bpm", job["bpm"])
-        put("key", job.get("key"))
+        put("key", keyscale(job.get("key")))
         put("duration", job["seconds"])
         put("seconds", job["seconds"])
         put("seed2", job["seed"] ^ 0x5bf03635)
@@ -228,6 +312,22 @@ def render_audio(job, outdir):
 
 
 def main():
+    # ALWAYS emit a verdict, even on an unexpected death. A ComfyUI prompt-validation error
+    # used to kill this process before it printed anything, so the harness could only report
+    # `failed (no result)` - true, useless, and it hid a one-line fix for twenty jobs.
+    try:
+        _main()
+    except SystemExit:
+        raise
+    except BaseException as e:
+        try:
+            print(json.dumps({"ok": False, "error": "%s: %s" % (type(e).__name__, e)[:400]}))
+        except Exception:
+            pass
+        raise
+
+
+def _main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default=os.path.join(STUDIO, "samples", "rolled"))
     ap.add_argument("--min-luma", type=float, default=8.0,
@@ -270,10 +370,10 @@ def main():
         if job["domain"] == "video":
             # Keep the video as it came, audio track and all. A rejected clip is moved, not
             # re-encoded - the point of keeping it is to be able to look at what went wrong.
-            dst = os.path.join(dst_dir, "%s.mp4" % job["id"])
+            dst = os.path.join(dst_dir, artifact_name(job, ".mp4"))
             sh("mv", raw, dst)
         else:
-            dst = os.path.join(dst_dir, "%s.webp" % job["id"])
+            dst = os.path.join(dst_dir, artifact_name(job, ".webp"))
             sh("ffmpeg", "-y", "-v", "error", "-i", raw, "-vf", "scale=1024:-1",
                "-quality", "88", dst)
             try:
@@ -281,13 +381,9 @@ def main():
             except OSError:
                 pass
     else:
-        dst = os.path.join(outdir, os.path.basename(raw).replace("_raw_", ""))
+        dst = os.path.join(outdir, artifact_name(job, os.path.splitext(raw)[1] or ".flac"))
         if raw != dst:
-            sh("cp", raw, dst)
-            try:
-                os.remove(raw)
-            except OSError:
-                pass
+            sh("mv", raw, dst)
 
     rec["file"] = dst
     rec["ok"] = ok

@@ -149,24 +149,59 @@ def drawable(libs, group, ready_only=True):
     return sorted(out)
 
 
-def roll_image(rng, libs):
+def _narrow(pool, want, libs, group):
+    """Apply a user constraint to a pool, and REFUSE rather than silently ignoring it.
+
+    A filter that quietly matches nothing is worse than an error: you get a full run of
+    perfectly good output that is not what you asked for, and no way to tell. So an empty
+    result raises here, at roll time, before any GPU is spent.
+    """
+    if not want:
+        return pool
+    want = [w.strip() for w in str(want).split(",") if w.strip()]
+    got = [p for p in pool if p in want]
+    if not got:
+        raise SystemExit(
+            "none of %s is a drawable %s.\n  drawable now: %s"
+            % (", ".join(want), group, ", ".join(pool[:14]) + (" ..." if len(pool) > 14 else "")))
+    return got
+
+
+def roll_image(rng, libs, opt=None):
     import compose
-    style = rng.choice(drawable_styles(libs))
-    place = rng.choice(drawable(libs, "places"))
+    opt = opt or {}
+    styles = drawable_styles(libs)
+    if opt.get("engine"):
+        # The engine is a PROPERTY OF THE STYLE, never a free choice - it is derived through
+        # compose.resolve(). So asking for an engine filters the style pool rather than
+        # overriding the routing, which is what stops a card going to a model that returns
+        # colour soup for it.
+        want = [e.strip() for e in str(opt["engine"]).split(",") if e.strip()]
+        styles = [s for s in styles
+                  if compose.resolve(libs, {"style": s}).get("engine") in want]
+        if not styles:
+            raise SystemExit("no drawable style routes to %s" % opt["engine"])
+    style = rng.choice(_narrow(styles, opt.get("style"), libs, "style"))
+    place = rng.choice(_narrow(drawable(libs, "places"), opt.get("place"), libs, "place"))
     looks = [l for l in drawable(libs, "looks") if l not in BANNED_LOOKS]
     look = rng.choice(looks) if rng.random() < 0.75 else None
 
     # Decide the SUBJECT before anything else, because the style may not leave a choice.
     cast = sorted(c for c, k in libs.get("characters", {}).items()
                   if not c.startswith("_") and k.get("status") == "ready")
+    if opt.get("character"):
+        cast = _narrow(cast, opt["character"], libs, "character")
+    cast_rate = 1.0 if opt.get("character") else float(opt.get("cast_rate", 0.35))
+    if opt.get("no_characters"):
+        cast, cast_rate = [], 0.0
     needs = wants_a_person(libs["styles"][style])
     if needs and not cast:
         # No one to draw and a style that insists on a person: take a different style rather
         # than ship the collision.
-        style = rng.choice([s for s in drawable_styles(libs)
+        style = rng.choice([s for s in styles
                             if not wants_a_person(libs["styles"][s])] or [style])
         needs = False
-    char = rng.choice(cast) if (cast and (needs or rng.random() < 0.35)) else None
+    char = rng.choice(cast) if (cast and (needs or rng.random() < cast_rate)) else None
 
     # An emotion is a face direction. With nobody in frame it composes to nothing, so it is
     # only drawn when there is someone to wear it.
@@ -179,7 +214,15 @@ def roll_image(rng, libs):
     else:
         allowed = FRAMINGS
     framing = rng.choice(allowed)
-    w, h = rng.choice(SIZES)
+    sizes = SIZES
+    orient = opt.get("orientation")
+    if orient == "portrait":
+        sizes = [s for s in SIZES if s[0] < s[1]]
+    elif orient == "landscape":
+        sizes = [s for s in SIZES if s[0] > s[1]]
+    elif orient == "square":
+        sizes = [s for s in SIZES if s[0] == s[1]]
+    w, h = rng.choice(sizes or SIZES)
     sel = {"style": style, "place": place, "look": look, "emotion": emo,
            "character": char}
     r = compose.resolve(libs, sel)
@@ -229,39 +272,58 @@ def roll_image(rng, libs):
     }
 
 
-def roll_video(rng, libs):
-    job = roll_image(rng, libs)
+def roll_video(rng, libs, opt=None):
+    opt = opt or {}
+    job = roll_image(rng, libs, opt)
     motions = [m for m in libs.get("motions", {})
                if libs["motions"][m].get("status") == "ready"]
     if not motions:
         motions = list(libs.get("motions", {}))
+    motions = _narrow(sorted(motions), opt.get("motion"), libs, "ready motion")
     cams = [c for c in drawable(libs, "cameras") if c not in BANNED_CAMERAS]
+    cams = _narrow(cams, opt.get("camera"), libs, "camera")
     job["domain"] = "video"
     job["motion"] = rng.choice(motions) if motions else None
     job["motion_text"] = (libs["motions"].get(job["motion"], {}) or {}).get(
         "text") or (libs["motions"].get(job["motion"], {}) or {}).get("emits") or ""
     job["camera"] = rng.choice(cams) if cams else "static"
-    job["seconds"] = rng.choice([4, 5, 6])       # inside the measured ~8s identity ceiling
+    # Capped at 8s on purpose: identity starts drifting past the measured ~10s ceiling, and
+    # the cost of a clip is nearly flat in length, so a longer one buys drift, not value.
+    job["seconds"] = _secs(rng, opt.get("seconds"), [4, 5, 6], 2, 8)
     return job
 
 
-def roll_music(rng, libs):
-    cue = rng.choice(drawable(libs, "cues")) if libs.get("cues") else None
+def _secs(rng, want, default_pool, lo, hi):
+    """A duration the user asked for, clamped to what the model was measured to hold."""
+    if want in (None, "", "any"):
+        return rng.choice(default_pool)
+    try:
+        return max(lo, min(hi, int(float(want))))
+    except (TypeError, ValueError):
+        return rng.choice(default_pool)
+
+
+def roll_music(rng, libs, opt=None):
+    opt = opt or {}
+    cues = _narrow(drawable(libs, "cues"), opt.get("cue"), libs, "cue")
+    cue = rng.choice(cues) if cues else None
     c = libs.get("cues", {}).get(cue, {}) if cue else {}
     return {
         "domain": "music", "cue": cue,
         "prompt": c.get("tags") or c.get("prompt") or c.get("desc") or "instrumental cue",
-        "seconds": rng.choice([30, 45, 60]),
+        "seconds": _secs(rng, opt.get("seconds"), [30, 45, 60], 10, 240),
         "bpm": c.get("bpm") or 0, "key": c.get("key") or "",
     }
 
 
-def roll_sfx(rng, libs):
-    s = rng.choice(drawable(libs, "sfx")) if libs.get("sfx") else None
+def roll_sfx(rng, libs, opt=None):
+    opt = opt or {}
+    pool = _narrow(drawable(libs, "sfx"), opt.get("preset"), libs, "sfx preset")
+    s = rng.choice(pool) if pool else None
     c = libs.get("sfx", {}).get(s, {}) if s else {}
     return {"domain": "sfx", "preset": s,
             "prompt": c.get("prompt") or c.get("desc") or "a single sound",
-            "seconds": rng.choice([2, 3, 4])}
+            "seconds": _secs(rng, opt.get("seconds"), [2, 3, 4], 1, 20)}
 
 
 LINES = [
@@ -273,11 +335,19 @@ LINES = [
 ]
 
 
-def roll_voice(rng, libs):
-    castable = [v for v, c in libs.get("voices", {}).items()
-                if c.get("status") not in ("blocked", "unavailable")]
-    v = rng.choice(sorted(castable)) if castable else None
-    return {"domain": "voice", "voice": v, "line": rng.choice(LINES)}
+def roll_voice(rng, libs, opt=None):
+    opt = opt or {}
+    castable = sorted(v for v, c in libs.get("voices", {}).items()
+                      if c.get("status") not in ("blocked", "unavailable"))
+    # A blocked voice cannot be requested back in. Four packs here clone real people; asking
+    # for one by name reaches this filter first and finds it already gone from the pool.
+    castable = _narrow(castable, opt.get("voice"), libs, "castable voice")
+    v = rng.choice(castable) if castable else None
+    lines = LINES
+    if opt.get("lines"):
+        custom = [l.strip() for l in str(opt["lines"]).split("|") if l.strip()]
+        lines = custom or LINES
+    return {"domain": "voice", "voice": v, "line": rng.choice(lines)}
 
 
 ROLLERS = {"image": roll_image, "video": roll_video, "music": roll_music,
@@ -292,7 +362,25 @@ def main():
     ap.add_argument("-n", type=int, default=1)
     ap.add_argument("--explain", action="store_true",
                     help="print the drawable space and the exclusions, render nothing")
+    # Constraints. Each takes a comma-separated list and NARROWS the pool; naming something
+    # undrawable is an error rather than a silent full-random run.
+    ap.add_argument("--engine", help="anime, qwen or flux2 - filters the STYLE pool, since "
+                                     "the engine is a property of the style, not a choice")
+    ap.add_argument("--style"); ap.add_argument("--place")
+    ap.add_argument("--character", help="cast this character in every image")
+    ap.add_argument("--no-characters", action="store_true", help="scenery only")
+    ap.add_argument("--cast-rate", type=float, default=0.35,
+                    help="0-1, how often a character appears when none is named")
+    ap.add_argument("--orientation", choices=["portrait", "landscape", "square", "any"])
+    ap.add_argument("--motion"); ap.add_argument("--camera")
+    ap.add_argument("--cue"); ap.add_argument("--preset"); ap.add_argument("--voice")
+    ap.add_argument("--lines", help="pipe-separated lines to speak instead of the built-ins")
+    ap.add_argument("--seconds", help="duration for video, music or sfx - clamped to what "
+                                      "each model was measured to hold")
     a = ap.parse_args()
+
+    opt = {k: v for k, v in vars(a).items()
+           if k not in ("domain", "seed", "n", "explain") and v not in (None, False, "any")}
 
     libs = load_libs()
     seed = a.seed if a.seed is not None else int(time.time() * 1000) ^ os.getpid()
@@ -327,7 +415,7 @@ def main():
         dom = a.domain
         if dom == "any":
             dom = rng.choice(sorted(ROLLERS))
-        job = ROLLERS[dom](rng, libs)
+        job = ROLLERS[dom](rng, libs, opt)
         job["seed"] = rng.randrange(1, 2 ** 31)
         job["roll_seed"] = seed
         job["rolled_at"] = time.strftime("%Y-%m-%dT%H:%M:%S")

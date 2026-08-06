@@ -49,6 +49,13 @@ pre{background:#0b0b10;border:1px solid var(--line);border-radius:7px;padding:12
 .warnbox{border-left-color:#6b5320;color:var(--warn)}
 code{background:#101017;padding:1px 5px;border-radius:4px;font-size:12.5px}
 a{color:var(--accent)}
+.optgrp{border-top:1px solid var(--line);padding:12px 0 4px}
+.optgrp:first-child{border-top:0;padding-top:0}
+.optgrp h3{font-size:13px;margin:0 0 9px;font-weight:600;letter-spacing:.02em}
+.optrow{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(158px,1fr))}
+select{background:#101017;color:var(--ink);border:1px solid var(--line);border-radius:6px;
+  padding:7px 8px;font:inherit;width:100%;max-width:100%}
+#dl{gap:10px}
 </style>
 </head>
 <body>
@@ -98,6 +105,19 @@ a{color:var(--accent)}
   </section>
 
   <section>
+    <h2>Narrow it down</h2>
+    <p>Leave everything on <i>any</i> for the full random draw. Each control filters the
+    pool it names &mdash; a choice that matches nothing is refused before the run starts,
+    rather than quietly giving you a full-random run instead.</p>
+    <div id="opts">reading the libraries…</div>
+    <p class="note" id="dlnote"></p>
+    <p class="note">Engine is not a free choice: it is a <b>property of the style</b>, worked
+    out by the composer. Picking one filters the style pool rather than overriding the
+    routing, which is what keeps a card off a model that returns colour soup for it. Only
+    engines that actually have drawable cards are listed.</p>
+  </section>
+
+  <section>
     <h2>What it draws from</h2>
     <p>Counted from the cards on disk, not from a number typed into this page.</p>
     <pre id="space">reading the libraries…</pre>
@@ -118,6 +138,18 @@ a{color:var(--accent)}
     </div>
     <div class="stat" id="stat"></div>
     <pre id="log">idle.</pre>
+  </section>
+
+  <section>
+    <h2>Download</h2>
+    <p>Files are named for the cards that made them, so a folder sorts into runs and then
+    into kinds. Each bundle carries the recipe sidecars alongside the artifacts.</p>
+    <div class="row" id="dl"></div>
+    <p class="note">An artifact without the cards and seed behind it is just a picture; with
+    them it is something you can make again. That is why the sidecars go into the zip rather
+    than being stripped out of it. Example name:<br>
+    <code>2026-08-06_1243_image_photorealistic_underwater-city_wide-shot_qwen_5ae68b.webp</code>
+    </p>
     <p class="note">Near-black renders are rejected into a <code>rejected/</code> folder with
     the reason recorded rather than deleted &mdash; a failure you can look at is worth more
     than one you cannot. Every artifact keeps a sidecar with the exact cards and seed behind
@@ -181,9 +213,116 @@ async function post(url, body) {
   return r.json();
 }
 
+// ── per-type options ────────────────────────────────────────────────────────────────
+// Each control is (type, key, label, source-list-or-kind). `any` is always first and
+// always the default, so the page opens on the full random draw.
+let LIB = {};
+const CONTROLS = {
+  image: [["engine", "Engine", "engines"], ["style", "Style", "styles"],
+          ["place", "Place", "places"], ["character", "Character", "characters"],
+          ["orientation", "Shape", ["portrait", "landscape", "square"]]],
+  video: [["engine", "Engine", "engines"], ["style", "Style", "styles"],
+          ["place", "Place", "places"], ["character", "Character", "characters"],
+          ["motion", "Motion", "motions"], ["camera", "Camera", "cameras"],
+          ["seconds", "Seconds", ["4", "5", "6", "7", "8"]]],
+  music: [["cue", "Cue", "cues"], ["seconds", "Seconds", ["30", "45", "60", "90", "120"]]],
+  voice: [["voice", "Voice", "voices"]],
+  sfx:   [["preset", "Preset", "sfx"], ["seconds", "Seconds", ["2", "3", "4", "6", "10"]]],
+};
+const chosen = {image: {}, video: {}, music: {}, voice: {}, sfx: {}};
+
+function optList(src) {
+  if (Array.isArray(src)) return src.map(v => [v, v]);
+  const raw = LIB[src] || [];
+  // engines arrive as [name, count] so the page can say how many cards each one has.
+  if (src === "engines") return raw.map(([n, c]) => [n, `${n} (${c} styles)`]);
+  return raw.map(v => [v, v]);
+}
+
+function drawOpts() {
+  $("opts").innerHTML = TYPES.map(([k, c]) => {
+    const rows = (CONTROLS[k] || []).map(([key, label, src]) => {
+      const list = optList(src);
+      if (!list.length) return "";
+      return `<div><label>${label}</label>
+        <select data-t="${k}" data-k="${key}">
+          <option value="">any</option>
+          ${list.map(([v, t]) => `<option value="${v}">${t}</option>`).join("")}
+        </select></div>`;
+    }).join("");
+    const extra = k === "image" || k === "video"
+      ? `<div><label>Cast someone</label>
+           <select data-t="${k}" data-k="cast_rate">
+             <option value="">sometimes (35%)</option>
+             <option value="0">never — scenery only</option>
+             <option value="0.7">often (70%)</option>
+             <option value="1">always</option>
+           </select></div>` : "";
+    return `<div class="optgrp"><h3><span class="dot" style="background:${c}"></span>${k}</h3>
+            <div class="optrow">${rows}${extra}</div></div>`;
+  }).join("");
+  $("opts").querySelectorAll("select").forEach(s => s.onchange = e => {
+    const t = e.target.dataset.t, key = e.target.dataset.k, v = e.target.value;
+    if (v === "") delete chosen[t][key]; else chosen[t][key] = v;
+    // "never" is a real instruction, not an absent one: send the flag roll.py understands.
+    if (key === "cast_rate") {
+      delete chosen[t].no_characters;
+      if (v === "0") { chosen[t].no_characters = true; delete chosen[t].cast_rate; }
+    }
+    summarise();
+  });
+  summarise();
+}
+
+function summarise() {
+  const bits = [];
+  for (const t of Object.keys(chosen)) {
+    const ks = Object.entries(chosen[t]);
+    if (ks.length) bits.push(`${t}: ` + ks.map(([k, v]) =>
+      k === "no_characters" ? "scenery only" : `${k}=${v}`).join(", "));
+  }
+  // These are the choices ON THIS PAGE, which is not the same thing as what a run already
+  // in flight was started with - a run keeps the options it was given. Worded so it cannot
+  // be read as a description of the job currently going.
+  $("dlnote").textContent = bits.length
+    ? "Will apply on the next start — " + bits.join(" · ")
+    : "Nothing selected: the next start uses the full random draw.";
+}
+
+// ── downloads ───────────────────────────────────────────────────────────────────────
+function human(b) {
+  return b > 1e9 ? (b / 1e9).toFixed(1) + " GB"
+       : b > 1e6 ? (b / 1e6).toFixed(1) + " MB"
+       : Math.max(1, Math.round(b / 1e3)) + " KB";
+}
+
+async function drawDownloads() {
+  let d;
+  try { d = await (await fetch("/api/generate/list")).json(); } catch (e) { return; }
+  const doms = d.domains || {};
+  if (!d.total) {
+    $("dl").innerHTML = "<span style='color:var(--dim)'>nothing generated yet</span>";
+    return;
+  }
+  const btn = (dom, n) =>
+    `<button class="ghost" data-dom="${dom}">${dom} (${n})</button>`;
+  $("dl").innerHTML = `<button data-dom="all">Download everything (${d.total})</button>` +
+    Object.entries(doms).map(([k, v]) => btn(k, v.length)).join("");
+  $("dl").querySelectorAll("button").forEach(b => b.onclick = async () => {
+    const was = b.textContent;
+    b.disabled = true; b.textContent = "zipping…";
+    const r = await post("/api/generate/bundle", {domain: b.dataset.dom});
+    b.disabled = false; b.textContent = was;
+    if (r.error) { alert(r.error); return; }
+    // A real navigation, so the browser's own download UI handles it.
+    const a = document.createElement("a");
+    a.href = r.url; a.download = r.file; document.body.appendChild(a); a.click(); a.remove();
+  });
+}
+
 $("start").onclick = async () => {
   $("start").disabled = true;
-  const body = {weights: weightString()};
+  const body = {weights: weightString(), options: chosen};
   if ($("mins").value) body.minutes = +$("mins").value; else body.hours = +$("hrs").value;
   if ($("seed").value.trim()) body.seed = $("seed").value.trim();
   const r = await post("/api/generate/start", body);
@@ -201,7 +340,7 @@ $("stop").onclick = async () => {
 $("dry").onclick = async () => {
   $("dry").disabled = true;
   $("log").textContent = "rolling twelve jobs…";
-  const r = await post("/api/generate/preview", {weights: weightString()});
+  const r = await post("/api/generate/preview", {weights: weightString(), options: chosen});
   $("log").textContent = r.text || r.error || "(nothing came back)";
   $("dry").disabled = false;
 };
@@ -227,14 +366,21 @@ async function poll() {
     stat("minutes left", s.minutes_left == null ? "—" : s.minutes_left),
   ].join("") : "";
   if (s.log) $("log").textContent = s.log;
+  if (sum(k) !== lastKept) { lastKept = sum(k); drawDownloads(); }
   setTimeout(poll, on ? 4000 : 10000);
 }
+let lastKept = -1;
+
+fetch("/api/generate/options").then(r => r.json()).then(d => {
+  LIB = d; drawOpts();
+}).catch(() => { $("opts").textContent = "(options unavailable)"; });
 
 fetch("/api/generate/space").then(r => r.json()).then(d => {
   $("space").textContent = d.text || d.error || "(unavailable)";
 }).catch(() => { $("space").textContent = "(unavailable)"; });
 
 drawWeights();
+drawDownloads();
 poll();
 </script>
 </body>

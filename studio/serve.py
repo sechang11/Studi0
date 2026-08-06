@@ -1187,6 +1187,17 @@ class H(http.server.SimpleHTTPRequestHandler):
             if leaf == "space":
                 body, code = gr.space()
                 return self._send(body, code)
+            if leaf == "options":
+                body, code = gr.options()
+                return self._send(body, code)
+            if leaf == "list":
+                body, code = gr.listing()
+                return self._send(body, code)
+            if leaf.startswith("zip/"):
+                fp = gr.zip_path(leaf[4:])
+                if not fp:
+                    return self._send({"error": "no such bundle"}, 404)
+                return self._send_file(fp, "application/zip")
             return self._send({"error": "unknown generate route"}, 404)
         if path == "/api/guides":
             g = _guides()
@@ -1770,7 +1781,7 @@ class H(http.server.SimpleHTTPRequestHandler):
         if p not in ("/api/save", "/api/render", "/api/make", "/api/workflow",
                      "/api/verify", "/api/tag/reroll", "/api/compose",
                      "/api/generate/start", "/api/generate/stop",
-                     "/api/generate/preview"):
+                     "/api/generate/preview", "/api/generate/bundle"):
             return self._send({"error": "not found"}, 404)
         n = int(self.headers.get("Content-Length", 0))
         try:
@@ -1782,8 +1793,8 @@ class H(http.server.SimpleHTTPRequestHandler):
             if not gr:
                 return self._send({"error": "studio/_tools/generate_routes.py is "
                                             "unavailable"}, 500)
-            fn = {"start": gr.start, "stop": gr.stop,
-                  "preview": gr.preview}[p[len("/api/generate/"):]]
+            fn = {"start": gr.start, "stop": gr.stop, "preview": gr.preview,
+                  "bundle": gr.bundle}[p[len("/api/generate/"):]]
             try:
                 body, code = fn(data)
             except subprocess.TimeoutExpired:

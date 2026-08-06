@@ -32,7 +32,7 @@ RUNDIR="$REPO/.generate"
 PIDFILE="$RUNDIR/generate.pid"
 STOPFILE="$RUNDIR/STOP"
 
-HOURS=""; MINUTES=""; SEED=""; DRY=0
+HOURS=""; MINUTES=""; SEED=""; DRY=0; OPTFILE=""
 WEIGHTS="image=6,video=2,music=1,voice=1,sfx=1"
 
 usage() { sed -n '2,30p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; exit "${1:-0}"; }
@@ -44,6 +44,11 @@ while [ $# -gt 0 ]; do
     --weights) WEIGHTS="${2:-}"; shift 2 ;;
     --seed)    SEED="${2:-}"; shift 2 ;;
     --out)     OUT="${2:-}"; shift 2 ;;
+    # A JSON file mapping a type to the roll.py flags for it, e.g.
+    #   {"image": ["--character","TERRA","--orientation","portrait"], "sfx": ["--seconds","3"]}
+    # A file rather than a flag string so nothing has to survive a second round of shell
+    # quoting on its way from the page to argv.
+    --options) OPTFILE="${2:-}"; shift 2 ;;
     --dry)     DRY=1; shift ;;
     --stop)
       mkdir -p "$RUNDIR"; touch "$STOPFILE"
@@ -169,8 +174,24 @@ while :; do
   SEEDARG=()
   [ -n "$SEED" ] && SEEDARG=(--seed $(( SEED + N )))
 
-  JOB="$(python3 "$REPO/studio/_tools/roll.py" "$TYPE" "${SEEDARG[@]}" 2>>"$LOG")"
-  [ -n "$JOB" ] || { echo "roll failed for $TYPE" | tee -a "$LOG"; sleep 2; continue; }
+  ROLLARGS=()
+  if [ -n "$OPTFILE" ] && [ -f "$OPTFILE" ]; then
+    while IFS= read -r line; do ROLLARGS+=("$line"); done < <(
+      python3 -c 'import json,sys
+for a in (json.load(open(sys.argv[1])).get(sys.argv[2]) or []): print(a)' \
+        "$OPTFILE" "$TYPE" 2>/dev/null)
+  fi
+
+  JOB="$(python3 "$REPO/studio/_tools/roll.py" "$TYPE" "${SEEDARG[@]}" "${ROLLARGS[@]}" 2>>"$LOG")"
+  if [ -z "$JOB" ]; then
+    # roll.py refuses a constraint that matches nothing, and that refusal must be loud.
+    # Silently falling back to a full-random run would give you a folder of perfectly good
+    # output that is not what you asked for, with no way to tell.
+    echo "cannot roll a $TYPE with the options given:" | tee -a "$LOG"
+    python3 "$REPO/studio/_tools/roll.py" "$TYPE" "${ROLLARGS[@]}" 2>&1 >/dev/null \
+      | head -2 | sed 's/^/    /' | tee -a "$LOG"
+    finish
+  fi
 
   if [ "$DRY" = "1" ]; then
     echo "$JOB" | python3 -c 'import json,sys; d=json.load(sys.stdin); print("  %-6s %s"%(d["domain"], d.get("prompt") or d.get("line") or d.get("cue") or "")[:110])'
