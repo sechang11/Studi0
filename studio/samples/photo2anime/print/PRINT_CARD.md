@@ -48,9 +48,9 @@ resolve them. FDM gives you the silhouette and the costume, not the face.
 
 | | |
 |---|---|
-| Surface thinner than 0.80 mm | **0.01%** MEASURED |
+| Surface thinner than 0.80 mm | **0.00%** MEASURED |
 | Surface thinner than 0.30 mm | **0.00%** MEASURED |
-| Thinnest 1% of surface | 2.55 mm MEASURED |
+| Thinnest 1% of surface | 2.39 mm MEASURED |
 | Median wall thickness | 10.8 mm MEASURED |
 | Overhanging past 45 deg | **2.0%** of surface MEASURED |
 | Of that, nothing beneath it | 10% - support from the plate MEASURED |
@@ -59,10 +59,10 @@ resolve them. FDM gives you the silhouette and the costume, not the face.
 
 Where the remaining thin material is (share of all sub-0.80 mm surface):
 
-- **head and face** - holds 50% of it; 0.1% of that region's surface is thin
-- **boots and ankles** - holds 25% of it; 0.0% of that region's surface is thin
-- **hair crown and ribbon** - holds 25% of it; 0.0% of that region's surface is thin
+- **head and face** - holds 100% of it; 0.1% of that region's surface is thin
 - **plinth** - holds 0% of it; 0.0% of that region's surface is thin
+- **boots and ankles** - holds 0% of it; 0.0% of that region's surface is thin
+- **legs and skirt hem** - holds 0% of it; 0.0% of that region's surface is thin
 
 Where the supports go (share of all overhanging surface):
 

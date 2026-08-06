@@ -779,13 +779,19 @@ def stage_print(args):
         p = os.path.join(PRINT, "%s.%s" % (stem, ext))
         if os.path.exists(p):
             d = md("diagnose", p)
+            # mesh_doctor.diagnose reports `volume` in MODEL UNITS. After `solidify`
+            # the model unit is the millimetre, so this is mm3 and calling it cm3
+            # would overstate the figure by a thousand. Both are written, labelled.
+            vol_mm3 = d.get("volume")
             verify[ext] = {"bytes": os.path.getsize(p),
                            "watertight": d.get("is_watertight"),
                            "faces": d.get("faces"),
                            "boundary_edges": d.get("boundary_edges"),
                            "nonmanifold_edges": d.get("nonmanifold_edges"),
-                           "volume_cm3": d.get("volume_cm3") or d.get("volume"),
-                           "bbox": d.get("bbox") or d.get("extents")}
+                           "volume_mm3": vol_mm3,
+                           "volume_cm3": (round(vol_mm3 / 1000.0, 3)
+                                          if isinstance(vol_mm3, (int, float)) else None),
+                           "bbox_mm": d.get("bbox") or d.get("extents")}
             log("  %-4s watertight=%s faces=%s" % (ext, verify[ext]["watertight"],
                                                    verify[ext]["faces"]))
     write_json(os.path.join(PRINT, "VERIFY.json"), verify)
