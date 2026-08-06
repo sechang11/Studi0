@@ -1,0 +1,76 @@
+{
+  "question": "how many photographs does a character need",
+  "subject": "STANDIN-A, synthetic, studio/samples/photo2anime/standin",
+  "engine": "animagine-xl-4.0 (SDXL). LoRAs trained on PHOTOGRAPHS, rendered as anime.",
+  "held_constant": {
+    "steps": 1000,
+    "rank": 16,
+    "lr": 0.0005,
+    "seed": 7311,
+    "train_res": "832x1216",
+    "minutes_each": "10.0 - 13.8",
+    "battery_strength": 0.8,
+    "captions": "trigger, view, wardrobe, backdrop - identical form in every arm"
+  },
+  "arms": {
+    "n4": "4 varied",
+    "n8": "8 varied",
+    "n16": "16, the whole set",
+    "n8bad": "8 poor/awkward, fixed-count quality control",
+    "n8narrow": "8 near-identical fronts, fixed-count spread control"
+  },
+  "battery": "11 cells x 2 seeds x 7 arms",
+  "verdicts": {
+    "n4": {
+      "glasses_at": 0.8,
+      "anime_survives_at_that_strength": true,
+      "face": "adult, ordinary, hers",
+      "note": "identical to n8 on the close-face cell. Weaker on the medium shots."
+    },
+    "n8": {
+      "glasses_at": 0.8,
+      "anime_survives_at_that_strength": true,
+      "face": "adult, ordinary, hers",
+      "note": "the knee. Cheapest arm that is fully hers."
+    },
+    "n16": {
+      "glasses_at": 0.8,
+      "anime_survives_at_that_strength": true,
+      "face": "adult, ordinary, hers - the most consistent across cells",
+      "note": "better than n8 only in robustness across seeds and scenes."
+    },
+    "n8bad": {
+      "glasses_at": 0.8,
+      "anime_survives_at_that_strength": false,
+      "face": "young, idealised, NOT her age or build",
+      "note": "same count as n8, poor sources. Marks arrive, the person does not."
+    },
+    "n8narrow": {
+      "glasses_at": 1.0,
+      "anime_survives_at_that_strength": false,
+      "face": "generic young anime girl, not her",
+      "note": "THE RESULT. Same count as n8, same steps, more close face pixels than any other arm, and it never becomes her."
+    },
+    "ipa_zero_training": {
+      "band": "0.5 - 0.7",
+      "glasses_at": "0.5-0.7 (scene-dependent)",
+      "note": "marks transfer, the person does not. At 0.9+ the reference photo's white wall replaces the scene and the composition breaks."
+    }
+  },
+  "dud_cells_kept_as_evidence": {
+    "face_anime": "failed identically for the no-LoRA control and for IPAdapter - the prompt, not the arms. Replaced by faceb_anime/faceb_water.",
+    "apose_anime": "black silhouette for the control and 2 of 5 LoRAs. Replaced by apose2_anime with a silhouette negative."
+  },
+  "answers": {
+    "printable_figurine": 4,
+    "usable_film_character": 8,
+    "diminishing_returns_after": 8,
+    "vary_in": [
+      "angle - front, both three-quarters, full profile, from behind",
+      "distance - at least one full body and one close head-and-shoulders",
+      "light - window, flat indoor, outdoor overcast",
+      "outfit - AT LEAST TWO, or the trigger absorbs the clothes"
+    ],
+    "count_is_the_wrong_axis": "8 narrow beat by 4 varied. Spread dominates count."
+  }
+}
