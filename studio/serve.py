@@ -47,7 +47,15 @@ BIND = os.environ.get("STUDIO_BIND", "0.0.0.0")
 MIME = {".webp": "image/webp", ".png": "image/png", ".jpg": "image/jpeg",
         ".jpeg": "image/jpeg", ".gif": "image/gif", ".mp4": "video/mp4",
         ".webm": "video/webm", ".mp3": "audio/mpeg", ".wav": "audio/wav",
-        ".svg": "image/svg+xml"}
+        ".svg": "image/svg+xml",
+        # The 3D deliverables, served through the same /samples/ route as every other
+        # sample. Given real types rather than octet-stream so a browser and a slicer
+        # both know what they were handed. None of them renders inline in a browser, so
+        # in practice every one of these is a download - which is the point: a 133 MB
+        # STL streams through _send_file with Range, never read into memory.
+        ".glb": "model/gltf-binary", ".gltf": "model/gltf+json", ".stl": "model/stl",
+        ".3mf": "model/3mf", ".obj": "model/obj",
+        ".ply": "application/octet-stream", ".spz": "application/octet-stream"}
 
 # folders that hold pickable presets, in the order the UI should show them
 GROUPS = ["shots", "cameras", "transitions", "motions", "looks", "lighting", "layers",
@@ -781,7 +789,47 @@ def capabilities():
         "error": idx_error,
         "fix": "python3 studio/_tools/capability_publish.py",
     }
-    return (out, 200)
+    return (capabilities_3d(out), 200)
+
+
+def capabilities_3d(cat):
+    """Tell the capabilities page where the 3D work became visible.
+
+    studio/capabilities.json is capability_scan.py's output. It records
+    21-3d-generation as `script-only` with `app_page: null`, which was true when it was
+    scanned. Half of it still is: GENERATING a mesh is script-only - terra_mesh.py drives
+    ComfyUI and no page queues a Hunyuan3D job - so the exposure VALUE is left alone
+    rather than upgraded, because upgrading it would have the page claim something the
+    app cannot do.
+
+    What changed is that the results are no longer invisible: /model3d shows the source
+    set, every mesh candidate with its renders and diagnostics, the failures, the
+    printability audit and the files. That is exactly what `app_page` is for on this
+    catalogue - 17-lora-mechanics and 31-character-identity already use it the same way -
+    so it is filled in here and the capability card renders it in its own exposure box.
+
+    Corrected in the server rather than in capabilities.json because that file is a
+    scanner's output and the next scan would silently drop an edit. Applied only when
+    the page is actually on disk, so deleting model3d.html takes the claim with it.
+    """
+    if not os.path.exists(f"{HERE}/model3d.html"):
+        return cat
+    page = {
+        "page": "/model3d",
+        "tier": "app",
+        "note": "The RESULTS are in the app: /model3d shows the source images, every "
+                "mesh candidate with its orbit render and its diagnostics, the nine that "
+                "failed, the printability audit and the STL/3MF/GLB downloads. "
+                "GENERATING a new one is still script-only - studio/_tools/terra_mesh.py "
+                "drives ComfyUI and no page queues it, which is why the exposure above "
+                "still reads script only. The recipe for the next character is "
+                "craft/CHARACTER_TO_PRINT.md.",
+    }
+    for key in ("capabilities", "not_exposed_in_app"):
+        for c in cat.get(key) or []:
+            if isinstance(c, dict) and c.get("id") == "21-3d-generation":
+                c["app_page"] = page
+    return cat
 
 
 def cards():
@@ -898,6 +946,29 @@ def cast_dossier_link(html):
     return html.replace(CAST_ACT, CAST_DOSSIER + CAST_ACT, 1)
 
 
+def nav_model3d(html):
+    """Put a `3D print` link in the header nav, the same way and for the same reason as
+    nav_video and nav_dossier above.
+
+    /model3d is a page like /video or /gallery and belongs in the same nav, but the nav
+    lives inside sixteen hand-written HTML files owned by other work. Injecting here
+    means the route is the only thing that changed: no page file is touched, and a page
+    that later grows its own link is left exactly as it is.
+
+    Anchored beside /video because it is the other page of rendered output, and because
+    _page runs nav_video first - so on a page that had neither, the two arrive next to
+    each other rather than at opposite ends of the row.
+    """
+    if 'href="/model3d"' in html:
+        return html
+    for anchor in ('<a href="/video"', '<a href="/gallery"', '<a href="/">'):
+        i = html.find(anchor)
+        if i < 0:
+            continue
+        return html[:i] + '<a href="/model3d">3D print</a>' + html[i:]
+    return html
+
+
 def nav_capabilities(html):
     """Put a `capabilities` link in the header nav, the same way and for the same reason
     as nav_video and nav_dossier.
@@ -972,7 +1043,7 @@ class H(http.server.SimpleHTTPRequestHandler):
             return self._send(f"{name} is missing".encode(), 500, "text/plain")
         with open(p, encoding="utf-8") as f:
             html = f.read()
-        html = nav_dossier(nav_video(html))
+        html = nav_model3d(nav_dossier(nav_video(html)))
         # Every page gets the link except the capabilities page itself, which
         # writes its own nav and omits itself the way styles.html omits /styles.
         if name != "capabilities.html":
@@ -1236,6 +1307,21 @@ class H(http.server.SimpleHTTPRequestHandler):
                                    "hint": "python3 studio/_tools/changelog.py"}, 503)
             with open(p, encoding="utf-8") as f:
                 return self._send(json.load(f))
+        # ---- the 3D pipeline ------------------------------------------------------
+        # /model3d             the character that got furthest
+        # /model3d/<ID>        one character, so the link is shareable
+        # /api/model3d[/<ID>]  the payload behind either
+        #
+        # The meshes, turntables, orbit strips and STL/3MF files are already reachable:
+        # they live under studio/samples/<slug>_3d/ and the /samples/ route above serves
+        # them through _send_file, which honours Range - so a 133 MB STL streams in
+        # 256 KB chunks instead of being read into memory. No new file route is needed
+        # and none is added.
+        if path == "/model3d" or path.startswith("/model3d/"):
+            return self._page("model3d.html")
+        if path == "/api/model3d" or path.startswith("/api/model3d/"):
+            cid = path[len("/api/model3d/"):] if len(path) > len("/api/model3d") else ""
+            return self._model3d(cid)
         if path in ("/loras", "/loras.html"):
             return self._page("loras.html")
         if path == "/api/loras":
@@ -1314,6 +1400,33 @@ class H(http.server.SimpleHTTPRequestHandler):
         if payload.get("error"):
             return self._send(payload, 404)
         return self._send(payload)
+
+    def _model3d(self, cid):
+        """/api/model3d/<id>, or the character that got furthest when no id is given.
+
+        Assembled by studio/_tools/model3d_index.py, imported per request for the same
+        reason the dossier is: re-running the pipeline should show up on a refresh, not
+        on a restart. An import failure is reported as itself rather than as an empty
+        page, because "nothing has been generated yet" that is really a broken import is
+        exactly the silent wrong answer this project keeps finding.
+        """
+        d = f"{HERE}/_tools"
+        if d not in sys.path:
+            sys.path.insert(0, d)
+        try:
+            import model3d_index
+            if getattr(model3d_index, "__file__", "").startswith(d):
+                model3d_index = importlib.reload(model3d_index)
+        except Exception as e:                                      # noqa: BLE001
+            return self._send({"error": "studio/_tools/model3d_index.py did not import",
+                               "detail": "%s: %s" % (type(e).__name__, e),
+                               "trace": traceback.format_exc()[-1500:]}, 500)
+        try:
+            return self._send(model3d_index.payload(safe_name(cid) or None))
+        except Exception as e:                                      # noqa: BLE001
+            return self._send({"error": "the 3D index failed to assemble",
+                               "detail": "%s: %s" % (type(e).__name__, e),
+                               "trace": traceback.format_exc()[-1500:]}, 500)
 
     def _clip(self, cid, clip_id):
         """One motion clip. The mp4s live in ComfyUI's output tree, which the static

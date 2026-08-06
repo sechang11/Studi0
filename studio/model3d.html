@@ -1,0 +1,784 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>studio · 3d print</title>
+<style>
+  :root{--bg:#0f1115;--panel:#161a21;--panel2:#1c2129;--line:#272d38;--ink:#e6e9ef;
+        --dim:#8b94a3;--accent:#6ea8fe;--ok:#4ec9a0;--warn:#e0b252;--bad:#e07a5f}
+  @media (prefers-color-scheme:light){
+    :root{--bg:#f6f7f9;--panel:#fff;--panel2:#f0f2f5;--line:#dde1e8;--ink:#141821;--dim:#5d6470}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font:14px/1.55 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  header{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;padding:13px 18px;
+         border-bottom:1px solid var(--line);background:var(--panel);position:sticky;top:0;z-index:9}
+  header h1{margin:0;font-size:15px;letter-spacing:.07em;text-transform:uppercase}
+  header .sub{color:var(--dim);font-size:12px}
+  header .right{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+  header a{color:var(--dim);font-size:12px;text-decoration:none;border:1px solid var(--line);
+           padding:5px 10px;border-radius:6px}
+  header a:hover{color:var(--ink);border-color:var(--accent)}
+  header a.on{color:var(--ink);border-color:var(--accent)}
+
+  .wrap{max-width:1500px;margin:0 auto}
+  .key{padding:16px 18px 0;color:var(--dim);font-size:12.5px;max-width:112ch}
+  .key b{color:var(--ink)}
+  h2.sec{margin:34px 18px 0;font-size:13px;letter-spacing:.08em;text-transform:uppercase;
+         padding-bottom:7px;border-bottom:1px solid var(--line)}
+  h2.sec span{text-transform:none;letter-spacing:0;color:var(--dim);font-weight:400;
+              font-size:12px;margin-left:9px}
+  p.lede{margin:10px 18px 0;color:var(--dim);font-size:12.5px;max-width:112ch}
+  p.lede b{color:var(--ink)}
+
+  /* ---- the character strip ------------------------------------------------ */
+  .cast{display:flex;gap:8px;flex-wrap:wrap;padding:12px 18px;align-items:center}
+  .cast button{background:var(--panel2);border:1px solid var(--line);color:var(--dim);
+      border-radius:8px;padding:7px 11px;font:inherit;cursor:pointer;font-size:12.5px}
+  .cast button:hover{border-color:var(--accent);color:var(--ink)}
+  .cast button.on{border-color:var(--accent);color:var(--ink);background:var(--panel)}
+  .cast button i{font-style:normal;color:var(--dim);font-size:11px;margin-left:6px}
+  .cast button.none{opacity:.62}
+
+  /* ---- the hero ------------------------------------------------------------ */
+  .hero{margin:14px 18px 0;border:1px solid var(--line);border-radius:13px;
+        background:var(--panel);overflow:hidden}
+  .hero .in{display:grid;grid-template-columns:minmax(280px,440px) 1fr;gap:0}
+  @media (max-width:900px){.hero .in{grid-template-columns:1fr}}
+  .hero .vid{background:#0b0d11;display:flex;align-items:center;justify-content:center;
+             border-right:1px solid var(--line);min-height:260px}
+  .hero .vid video,.hero .vid img{width:100%;height:100%;max-height:560px;object-fit:contain;display:block}
+  .hero .txt{padding:17px 19px}
+  .hero h3{margin:0;font-size:19px}
+  .hero h3 .mono{font-size:14px;color:var(--dim)}
+  .hero .sd{margin:5px 0 0;color:var(--dim);font-size:12.5px}
+  .dl{display:flex;flex-wrap:wrap;gap:8px;margin-top:13px}
+  .dl a{display:block;text-decoration:none;border:1px solid var(--line);border-radius:9px;
+        padding:8px 12px;background:var(--panel2);color:var(--ink);font-size:12.5px;min-width:170px}
+  .dl a:hover{border-color:var(--accent)}
+  .dl a b{display:block;font-family:ui-monospace,Menlo,monospace;font-size:12px;font-weight:600}
+  .dl a i{font-style:normal;color:var(--dim);font-size:11px}
+  .dl a.win{border-color:var(--ok)}
+  .dl a.weak{opacity:.8}
+
+  .alarm{margin:0;padding:12px 19px;border-top:1px solid var(--line);
+         background:color-mix(in srgb,var(--bad) 13%,transparent);font-size:12.5px}
+  .alarm b{color:var(--bad)}
+
+  /* ---- the spine ----------------------------------------------------------- */
+  .spine{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);
+         border-radius:12px;overflow:hidden;margin:12px 18px 0;
+         grid-template-columns:repeat(auto-fit,minmax(215px,1fr))}
+  .spine .st{background:var(--panel);padding:13px 15px}
+  .spine .st h4{margin:0;font-size:13px}
+  .spine .st h4 b{color:var(--accent);font-family:ui-monospace,Menlo,monospace;margin-right:7px}
+  .spine .st code{display:block;margin-top:5px;font-size:11px;color:var(--dim);
+                  font-family:ui-monospace,Menlo,monospace;word-break:break-all}
+  .spine .st p{margin:7px 0 0;font-size:12px;color:var(--dim)}
+
+  /* ---- generic grid of picture cards --------------------------------------- */
+  .grid{padding:12px 18px 0;display:grid;gap:13px;
+        grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
+  .grid.wide{grid-template-columns:repeat(auto-fill,minmax(380px,1fr))}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:11px;
+        overflow:hidden;display:flex;flex-direction:column}
+  .card.click{cursor:pointer}
+  .card.click:hover{border-color:var(--accent)}
+  .card .pic{background:var(--panel2);display:block;line-height:0}
+  .card .pic img{width:100%;max-height:420px;display:block;object-fit:contain;background:#f2f2f2}
+  .strip{max-height:520px;object-fit:contain}
+  .card .b{padding:11px 13px}
+  .card h3{margin:0;font-size:14px;word-break:break-word;display:flex;align-items:baseline;
+           gap:8px;flex-wrap:wrap}
+  .card .fn{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--dim);
+            word-break:break-all}
+  .card p{margin:7px 0 0;font-size:12px;color:var(--dim)}
+  .card .nums{margin-top:auto;border-top:1px solid var(--line);padding:7px 13px;
+              font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--dim);
+              display:flex;flex-wrap:wrap;gap:3px 12px}
+  .card .nums b{color:var(--ink);font-weight:500}
+
+  .badge{font-size:10px;letter-spacing:.06em;text-transform:uppercase;border-radius:99px;
+         padding:2px 8px;border:1px solid var(--line);color:var(--dim);white-space:nowrap}
+  .b-win{border-color:var(--ok);color:var(--ok)}
+  .b-alt{border-color:var(--accent);color:var(--accent)}
+  .b-ok{}
+  .b-weak{border-color:var(--warn);color:var(--warn)}
+  .b-fail{border-color:var(--bad);color:var(--bad)}
+  .st-fail .pic img{outline:2px solid color-mix(in srgb,var(--bad) 55%,transparent);outline-offset:-2px}
+  .st-win .pic img{outline:2px solid var(--ok);outline-offset:-2px}
+
+  .chips{margin-top:8px;display:flex;flex-wrap:wrap;gap:5px}
+  .chip{font-size:10.5px;border:1px solid var(--line);border-radius:99px;padding:2px 8px;
+        color:var(--dim);font-family:ui-monospace,Menlo,monospace;white-space:nowrap}
+  .chip.hi{border-color:var(--accent);color:var(--accent)}
+
+  .bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding:11px 18px 0}
+  .bar select,.bar input{background:var(--panel2);border:1px solid var(--line);color:var(--ink);
+       border-radius:7px;padding:6px 9px;font:inherit;font-size:12.5px}
+  .bar .n{color:var(--dim);font-size:12px;margin-left:auto}
+
+  /* ---- tables -------------------------------------------------------------- */
+  table.t{border-collapse:collapse;font-size:12.5px;width:100%}
+  table.t td,table.t th{padding:6px 9px;border-bottom:1px solid var(--line);text-align:left;
+      vertical-align:top}
+  table.t th{color:var(--dim);font-weight:500;font-size:11px;letter-spacing:.05em;
+      text-transform:uppercase}
+  table.t td.k{color:var(--dim);width:38%;font-family:ui-monospace,Menlo,monospace;font-size:11.5px}
+  table.t td.v{font-family:ui-monospace,Menlo,monospace}
+  .tw{overflow-x:auto;-webkit-overflow-scrolling:touch}
+
+  .panels{display:grid;gap:13px;padding:12px 18px 0;
+          grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+  .pn{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+  .pn h4{margin:0 0 8px;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim)}
+  .chk{display:flex;gap:9px;align-items:flex-start;padding:7px 0;border-bottom:1px solid var(--line)}
+  .chk:last-child{border-bottom:0}
+  .chk .m{font-family:ui-monospace,Menlo,monospace;font-size:13px;line-height:1.3;width:14px;flex:none}
+  .chk .m.ok{color:var(--ok)} .chk .m.bad{color:var(--bad)} .chk .m.warn{color:var(--warn)}
+  .chk .l{flex:1;min-width:0}
+  .chk .l b{font-size:12.5px;font-weight:500}
+  .chk .l .vv{font-family:ui-monospace,Menlo,monospace;color:var(--accent);margin-left:8px;font-size:12px}
+  .chk .l p{margin:3px 0 0;font-size:11.5px;color:var(--dim)}
+  .src{font-size:10px;color:var(--dim);font-family:ui-monospace,Menlo,monospace;opacity:.75}
+
+  .warnbox{padding:11px 13px;border-left:2px solid var(--warn);background:var(--panel2);
+           border-radius:0 8px 8px 0;font-size:12.5px;margin-top:9px}
+  .badbox{padding:11px 13px;border-left:2px solid var(--bad);background:var(--panel2);
+          border-radius:0 8px 8px 0;font-size:12.5px;margin-top:9px}
+  .okbox{padding:11px 13px;border-left:2px solid var(--ok);background:var(--panel2);
+         border-radius:0 8px 8px 0;font-size:12.5px;margin-top:9px}
+  ul.tight{margin:7px 0 0;padding-left:19px;font-size:12.5px;color:var(--dim)}
+  ul.tight li{margin:5px 0}
+  ul.tight li b{color:var(--ink)}
+
+  /* ---- the failure gallery ------------------------------------------------- */
+  .fail{margin:13px 18px 0;border:1px solid var(--line);border-left:3px solid var(--bad);
+        border-radius:0 12px 12px 0;background:var(--panel);overflow:hidden}
+  .fail h3{margin:0;padding:13px 17px 0;font-size:15px}
+  .fail .pics{display:grid;gap:1px;background:var(--line);margin:13px 0 0;
+              grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+  .fail .pics figure{margin:0;background:var(--panel2);cursor:pointer}
+  /* Capped, and it matters. Uncapped, the source-stage evidence sheets are 2186px wide
+     contact sheets that render 1400px tall each and the page grew to 31,000px - you scroll
+     for a minute to get past ten failures. Click opens the full-size original. */
+  .fail .pics img{display:block;margin:0 auto;max-width:100%;max-height:430px;
+                  width:auto;height:auto;background:#f2f2f2}
+  .fail .pics figcaption{padding:6px 12px;font-size:11px;color:var(--dim);
+                         font-family:ui-monospace,Menlo,monospace}
+  .fail .body{padding:13px 17px 15px}
+  .fail .body dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 13px;font-size:12.5px}
+  .fail .body dt{color:var(--dim);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;
+                 padding-top:2px;white-space:nowrap}
+  .fail .body dd{margin:0}
+
+  /* ---- dialogs ------------------------------------------------------------- */
+  dialog{border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--ink);
+         max-width:min(1500px,96vw);width:min(1500px,96vw);max-height:92vh;padding:0;overflow:auto}
+  dialog::backdrop{background:#000c}
+  .dh{display:flex;align-items:baseline;gap:12px;padding:13px 17px;border-bottom:1px solid var(--line);
+      position:sticky;top:0;background:var(--panel);z-index:2;flex-wrap:wrap}
+  .dh h3{margin:0;font-size:17px}
+  .dh .x{margin-left:auto;background:none;border:0;color:var(--dim);font-size:23px;cursor:pointer}
+  .db{padding:16px 17px}
+  dialog#lb{width:auto;max-width:97vw;background:#0b0d11}
+  dialog#lb img{max-width:96vw;max-height:88vh;display:block;background:#f2f2f2}
+  dialog#lb .cap{color:#9aa3b2;font-size:12px;padding:8px 12px;font-family:ui-monospace,Menlo,monospace}
+
+  .strip{width:100%;border:1px solid var(--line);border-radius:9px;display:block;
+         background:#f2f2f2;margin-top:9px}
+  .two{display:grid;gap:13px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+  .lbl{color:var(--dim);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;margin-top:15px}
+  code,.mono{font-family:ui-monospace,Menlo,monospace;font-size:12px}
+
+  /* ---- rendered markdown --------------------------------------------------- */
+  details.doc{margin:12px 18px 0;border:1px solid var(--line);border-radius:12px;
+              background:var(--panel);overflow:hidden}
+  details.doc>summary{padding:13px 17px;cursor:pointer;font-size:13px;letter-spacing:.05em;
+                      text-transform:uppercase;color:var(--dim);list-style:none}
+  details.doc>summary::-webkit-details-marker{display:none}
+  details.doc>summary:hover{color:var(--ink)}
+  details.doc>summary b{color:var(--ink);text-transform:none;letter-spacing:0;font-weight:500}
+  details.doc>summary span{text-transform:none;letter-spacing:0;font-size:12px}
+  .md{padding:0 20px 20px;max-width:104ch;font-size:13.5px;line-height:1.62}
+  .md h1{font-size:18px;margin:22px 0 4px} .md h2{font-size:15px;margin:26px 0 4px;
+     padding-bottom:5px;border-bottom:1px solid var(--line)}
+  .md h3{font-size:13.5px;margin:20px 0 2px} .md h4{font-size:12.5px;margin:16px 0 2px}
+  .md p{margin:9px 0} .md ul,.md ol{margin:9px 0;padding-left:22px} .md li{margin:4px 0}
+  .md hr{border:0;border-top:1px solid var(--line);margin:20px 0}
+  .md code{background:var(--panel2);padding:1px 5px;border-radius:4px}
+  .md pre{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:11px 13px;
+          overflow-x:auto;font-size:12px;line-height:1.5}
+  .md pre code{background:none;padding:0}
+  .md table{border-collapse:collapse;font-size:12.5px;margin:11px 0;width:100%}
+  .md th,.md td{border:1px solid var(--line);padding:5px 9px;text-align:left}
+  .md th{background:var(--panel2);color:var(--dim);font-weight:500}
+  .md blockquote{margin:9px 0;padding-left:12px;border-left:2px solid var(--line);color:var(--dim)}
+  .md a{color:var(--accent)}
+  .mdw{overflow-x:auto}
+
+  .foot{padding:30px 18px 46px;color:var(--dim);font-size:12px;max-width:112ch}
+  .err{margin:22px 18px;padding:14px 16px;border:1px solid var(--bad);border-radius:11px;
+       background:color-mix(in srgb,var(--bad) 10%,transparent);font-size:13px}
+  .empty{padding:36px 18px;color:var(--dim)}
+</style>
+</head>
+<body>
+<header>
+  <h1>3d print</h1><span class="sub" id="stat">loading…</span>
+  <div class="right">
+    <a href="/wizard">direct a scene</a><a href="/cast">cast</a><a href="/make">make</a>
+    <a href="/styles">styles</a><a href="/loras">loras</a><a href="/tags">tags</a>
+    <a href="/verify">verify</a><a href="/gallery">gallery</a><a href="/changelog">Changelog</a>
+    <a href="/docs">Docs</a><a href="/video">video</a>
+    <a href="/model3d" class="on">3D print</a><a href="/">library</a>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="key" id="key"></div>
+  <div class="cast" id="cast"></div>
+  <div id="main"></div>
+  <div class="foot" id="foot"></div>
+</div>
+
+<dialog id="dlg">
+  <div class="dh"><h3 id="dname"></h3><span class="badge" id="dbadge"></span>
+    <button class="x" id="dx" title="close">&times;</button></div>
+  <div class="db" id="dbody"></div>
+</dialog>
+
+<dialog id="lb"><img id="lbimg" alt=""><div class="cap" id="lbcap"></div></dialog>
+
+<script>
+let D=null, CH=null, BYNAME={};
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const mb=b=>b==null?"":(b>=1048576?(b/1048576).toFixed(b>10485760?0:1)+" MB":(b/1024).toFixed(0)+" KB");
+const pct=v=>v==null?null:(100*v).toFixed(2)+"%";
+const nf=v=>v==null?null:Number(v).toLocaleString();
+
+const KEY=`Everything on this page was <b>generated and measured on this box</b>. The numbers come
+  out of each character's <code class="mono">mesh/REPORT.json</code>, which the mesh stage wrote
+  straight from <code class="mono">mesh_doctor.py</code>'s own JSON — nothing on this page recomputes
+  them, so a figure here cannot drift from the file it describes. The judgements are marked as such
+  and each one names the section of <code class="mono">VERDICT.md</code> it was read out of.
+  <br><br>
+  <b>The failures are the point.</b> Nine of the seventeen mesh candidates are on this page because
+  they came out wrong, and what a wrong one looks like is the most useful thing here for anyone
+  about to try this. Scroll to <b>what goes wrong</b>.
+  <br><br>
+  There is no inline 3D viewer: it would need a library from a CDN and these pages must work with no
+  network. What you get instead is a <b>software-rendered turntable</b>, an eight-angle orbit strip
+  and a head close-up for every candidate, and the actual files to download.`;
+
+// ── a small markdown renderer ────────────────────────────────────────────────
+// Enough for the two documents this page shows: headings, tables, fenced code, lists,
+// rules, blockquotes and inline emphasis. Escaping happens FIRST and inline patterns are
+// applied to the escaped text, so a document can never inject markup into this page.
+function md(src){
+  if(!src) return "";
+  const lines=String(src).replace(/\r\n?/g,"\n").split("\n");
+  const out=[]; let i=0, list=null;
+  const inline=t=>esc(t)
+    .replace(/`([^`]+)`/g,(m,a)=>"<code>"+a+"</code>")
+    .replace(/\*\*([^*]+)\*\*/g,"<b>$1</b>")
+    .replace(/(^|[^*\w])\*([^*\n]+)\*/g,"$1<em>$2</em>")
+    .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g,'<a href="$2">$1</a>');
+  const BLOCK=/^(#{1,6}\s|```|\s*[-*]\s|\s*\d+[.)]\s|>|\s*\|)/;
+  const closeList=()=>{ if(list){ out.push("</"+list+">"); list=null; } };
+  const row=l=>l.trim().replace(/^\||\|$/g,"").split("|").map(c=>c.trim());
+  while(i<lines.length){
+    const l=lines[i];
+    if(/^```/.test(l)){
+      closeList(); const buf=[]; i++;
+      while(i<lines.length && !/^```/.test(lines[i])) buf.push(lines[i++]);
+      i++; out.push("<pre><code>"+esc(buf.join("\n"))+"</code></pre>"); continue;
+    }
+    if(/^\s*$/.test(l)){ closeList(); i++; continue; }
+    if(/^(-{3,}|\*{3,}|_{3,})\s*$/.test(l)){ closeList(); out.push("<hr>"); i++; continue; }
+    const h=l.match(/^(#{1,6})\s+(.*)$/);
+    if(h){ closeList(); const n=h[1].length; out.push(`<h${n}>${inline(h[2])}</h${n}>`); i++; continue; }
+    // a table: a header row, a separator of dashes, then body rows
+    if(/^\s*\|/.test(l) && i+1<lines.length && /^\s*\|?[\s:-]*-[\s|:-]*$/.test(lines[i+1])){
+      closeList();
+      const head=row(l); i+=2; const body=[];
+      while(i<lines.length && /^\s*\|/.test(lines[i])) body.push(row(lines[i++]));
+      out.push('<div class="mdw"><table><thead><tr>'+head.map(c=>"<th>"+inline(c)+"</th>").join("")+
+        "</tr></thead><tbody>"+body.map(r=>"<tr>"+r.map(c=>"<td>"+inline(c)+"</td>").join("")+"</tr>")
+        .join("")+"</tbody></table></div>");
+      continue;
+    }
+    const ul=l.match(/^\s*[-*]\s+(.*)$/), ol=l.match(/^\s*\d+[.)]\s+(.*)$/);
+    if(ul||ol){
+      const want=ul?"ul":"ol";
+      if(list!==want){ closeList(); out.push("<"+want+">"); list=want; }
+      // Swallow the item's wrapped continuation lines. Without this a wrapped item ends
+      // the list and starts a paragraph, so the NEXT item opens a fresh <ol> and every
+      // numbered item on the page renders as "1." - which is what it did.
+      const buf=[(ul||ol)[1]]; i++;
+      while(i<lines.length && !/^\s*$/.test(lines[i]) &&
+            !BLOCK.test(lines[i])) buf.push(lines[i++].trim());
+      out.push("<li>"+inline(buf.join(" "))+"</li>"); continue;
+    }
+    if(/^>\s?/.test(l)){ closeList(); out.push("<blockquote>"+inline(l.replace(/^>\s?/,""))+"</blockquote>"); i++; continue; }
+    closeList();
+    const para=[l]; i++;
+    while(i<lines.length && !/^\s*$/.test(lines[i]) && !BLOCK.test(lines[i]))
+      para.push(lines[i++]);
+    out.push("<p>"+inline(para.join(" "))+"</p>");
+  }
+  closeList();
+  return out.join("\n");
+}
+
+// ── lightbox ────────────────────────────────────────────────────────────────
+function lightbox(src,cap){
+  $("lbimg").src=src; $("lbcap").textContent=cap||src.split("/").pop(); $("lb").showModal();
+}
+$("lb").onclick=()=>$("lb").close();
+$("dx").onclick=()=>$("dlg").close();
+
+function pic(url,cap,cls){
+  if(!url) return "";
+  return `<figure class="${cls||""}" data-lb="${esc(url)}" data-cap="${esc(cap||"")}">
+    <img loading="lazy" src="${esc(url)}" alt="${esc(cap||"")}">
+    ${cap?`<figcaption>${esc(cap)}</figcaption>`:""}</figure>`;
+}
+function wireLb(root){
+  (root||document).querySelectorAll("[data-lb]").forEach(el=>{
+    el.style.cursor="zoom-in";
+    el.onclick=e=>{ e.stopPropagation(); lightbox(el.dataset.lb, el.dataset.cap); };
+  });
+}
+
+// ── the character strip ─────────────────────────────────────────────────────
+const STATE_WORD={printable:"printable file",meshed:"meshed, not exported",
+  sourced:"source only",started:"started",none:"not run"};
+function castStrip(){
+  $("cast").innerHTML=(D.characters||[]).map(c=>
+    `<button data-c="${esc(c.id)}" class="${c.id===(CH&&CH.id)?"on":""}${
+      c.state==="none"?" none":""}">${esc(c.id)}<i>${esc(STATE_WORD[c.state]||c.state)}${
+      c.candidates?" · "+c.candidates+" candidates":""}</i></button>`).join("");
+  $("cast").querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>load(b.dataset.c));
+}
+
+// ── the deliverable ─────────────────────────────────────────────────────────
+function hero(){
+  const win=(CH.candidates||[]).find(c=>c.state==="win");
+  const rep=win&&(win.repairs||[]).slice().reverse().find(r=>r.turntable||r.orbit);
+  const media=rep&&rep.turntable
+    ?`<video src="${esc(rep.turntable)}#t=0.1" controls loop muted playsinline preload="metadata"></video>`
+    :(rep&&rep.orbit?`<img src="${esc(rep.orbit)}" alt="orbit">`:
+      (win&&win.orbit?`<img src="${esc(win.orbit)}" alt="orbit">`:""));
+  const dl=(CH.deliverables||[]).map(f=>
+    `<a class="${esc(f.state)}" href="${esc(f.url)}" download><b>${esc(f.name)}</b>
+      <i>${mb(f.bytes)}${f.note?" · "+esc(f.note.split(".")[0])+".":""}</i></a>`).join("");
+  const p=CH.prep&&CH.prep.single||{};
+  const recipe=[
+    ["source image", (p.src||"—")+", alpha-cropped onto white, padded square "+
+      ((p.out_px||[]).join("x")||"1024x1024")],
+    ["conditioning", "Hunyuan3Dv2Conditioning (single view) — NOT the MultiView node"],
+    ["latent", "EmptyLatentHunyuan3Dv2 resolution "+(win?win.latent:"—")],
+    ["sampler", "euler / normal, 30 steps, cfg 5.0, seed "+(win?win.seed:"—")],
+    ["decode", "VAEDecodeHunyuan3D octree_resolution "+(win?win.octree:"—")],
+    ["extract", "VoxelToMesh surface net, threshold "+(win?win.threshold:"—")],
+    ["repair", "mesh_doctor repair --method voxel --voxel-res 900"],
+    ["export", "mesh_doctor export --height 150 --up y"],
+  ];
+  return `<h2 class="sec">The deliverable<span>what came out, and the exact recipe that made it</span></h2>
+  <div class="hero"><div class="in">
+    <div class="vid">${media||'<span style="color:var(--dim);font-size:12px">no render</span>'}</div>
+    <div class="txt">
+      <h3>${esc(CH.id)} <span class="mono">${esc(win?win.name:"")}</span></h3>
+      <p class="sd">${win?esc(win.note||""):""}</p>
+      <div class="tw"><table class="t">${recipe.map(r=>
+        `<tr><td class="k">${esc(r[0])}</td><td>${esc(r[1])}</td></tr>`).join("")}</table></div>
+      <div class="lbl">download</div>
+      <div class="dl">${dl||'<span style="color:var(--dim)">nothing exported</span>'}</div>
+    </div></div>
+    <div class="alarm"><b>NOT READY TO SLICE AS-IS.</b> ${esc(
+      (CH.audit&&(CH.audit.geometry||[]).find(g=>g.state==="bad")||{}).why||"")}
+      <br><b>AND NO SLICER HAS OPENED THESE FILES</b> — none is installed on this box. Watertightness
+      is verified by re-loading the written STL through trimesh; that PrusaSlicer, Cura or Bambu
+      Studio ingest it cleanly is <b>not</b> verified. STL is the safer of the two written formats.
+    </div>
+  </div>`;
+}
+
+// ── the pipeline spine ──────────────────────────────────────────────────────
+function spine(){
+  return `<h2 class="sec">The pipeline<span>five stages; the first one is most of the work</span></h2>
+  <div class="spine">${(D.stages||[]).map(s=>
+    `<div class="st"><h4><b>${s.n}</b>${esc(s.title)}</h4>
+      <code>${esc(s.tool)}</code><p>${esc(s.what)}</p></div>`).join("")}</div>`;
+}
+
+// ── the source stage ────────────────────────────────────────────────────────
+function source(){
+  const s=CH.source||{}, r=s.recommendation||{}, sv=r.single_view||{}, mv=r.multi_view||{};
+  const why=(sv.why||[]).map(w=>`<li>${esc(w)}</li>`).join("");
+  const carry=(r.carry_forward_to_the_mesh_stage||[]).map(w=>`<li>${esc(w)}</li>`).join("");
+  const cards=[];
+  if(s.chosen) cards.push({f:s.chosen,badge:"win",t:"the chosen source",
+    p:"Alpha-cropped, composited on white and padded square before it reaches the encoder."});
+  if(s.runner_up) cards.push({f:s.runner_up,badge:"weak",t:"runner-up",p:sv.runner_up||""});
+  (s.others||[]).forEach(f=>cards.push({f:f,badge:"ok",t:"also matted",
+    p:"Matted and kept, not chosen."}));
+  (s.rejected||[]).forEach(f=>cards.push({f:f,badge:"fail",t:"rejected",
+    p:f.caption||"Rejected at the source stage — kept so the rejection can be checked."}));
+
+  const cardHtml=cards.map(c=>`<article class="card st-${c.badge}">
+      ${pic(c.f.url,null,"pic")}
+      <div class="b"><h3>${esc(c.t)}<span class="badge b-${c.badge}">${esc(c.badge)}</span></h3>
+        <div class="fn">${esc(c.f.name)}</div><p>${esc(c.p)}</p></div>
+      <div class="nums"><span>${mb(c.f.bytes)}</span></div></article>`).join("");
+
+  const cardinals=(s.cardinals||[]).map(f=>`<article class="card">
+      ${pic(f.url,null,"pic")}
+      <div class="b"><h3 style="font-size:12.5px">${esc(f.name.replace(/^mvq_|_mv\.png$/g,""))}
+        <span class="badge ${f.fed?"b-ok":"b-weak"}">${f.fed?"fed to prep":"not used"}</span></h3></div>
+    </article>`).join("");
+
+  const ev=(s.evidence||[]).map(f=>`<article class="card click">
+      ${pic(f.url,null,"pic")}
+      <div class="b"><div class="fn">${esc(f.name)}</div>
+      <p>${esc(f.caption||"a sweep from the source stage")}</p></div></article>`).join("");
+
+  return `<h2 class="sec">1 · Source<span>single-image-to-3D means the image IS the prompt</span></h2>
+  <p class="lede">There is no text conditioning in either 3D graph — <b>measured</b>, read out of the
+    workflow. Everything the mesh will be is decided by this picture, which is why the source stage
+    cost an afternoon and the mesh stage cost three minutes.</p>
+  <div class="panels">
+    <div class="pn"><h4>why this image was chosen</h4><ul class="tight">${why}</ul></div>
+    <div class="pn"><h4>what the source stage warned the mesh stage about</h4>
+      <ul class="tight">${carry}</ul>
+      <div class="warnbox">Both warnings landed. The boots do stand on two small triangles and the
+      figure does need a base. The fringe is where the sub-millimetre material is — though
+      <b>not</b> the hair, which the brief predicted and which came back as the thickest material in
+      the model.</div></div>
+  </div>
+  <div class="grid">${cardHtml}</div>
+
+  <h2 class="sec">1b · The turnaround that has nothing to eat it
+    <span>${(s.cardinals||[]).length} views built, ${(s.cardinals||[]).filter(f=>f.fed).length} fed</span></h2>
+  <p class="lede">${esc(mv.prefer_four_not_six||"")} ${esc(mv.cost||"")}
+    <b>They were fed to the MultiView node and it returned noise</b> — see
+    <em>what goes wrong</em> below. The set is good; the checkpoint for it is not installed.</p>
+  <div class="grid">${cardinals}</div>
+
+  <h2 class="sec">1c · The sweeps behind those choices<span>click any sheet to open it full size</span></h2>
+  <div class="grid wide">${ev}</div>`;
+}
+
+// ── candidates ──────────────────────────────────────────────────────────────
+const FAMILY=c=>c.kind==="multi"||/^MV|^N_grid/.test(c.name)?"multi":"single";
+function candCard(c){
+  const nums=[];
+  if(c.raw_faces!=null) nums.push(["faces",nf(c.raw_faces)]);
+  if(c.raw_nonmanifold_pct!=null) nums.push(["non-manifold",c.raw_nonmanifold_pct.toFixed(2)+"%"]);
+  if(c.raw_islands!=null) nums.push(["islands",c.raw_islands]);
+  if(c.wall_s!=null) nums.push(["wall",c.wall_s.toFixed(1)+"s"]);
+  if(!nums.length) nums.push(["","judged from renders only — never diagnosed"]);
+  return `<article class="card click st-${c.state}" data-cand="${esc(c.name)}">
+    ${c.orbit?`<div class="pic"><img loading="lazy" src="${esc(c.orbit)}" alt=""></div>`:""}
+    <div class="b">
+      <h3><span class="mono" style="font-size:13px">${esc(c.name)}</span>
+        <span class="badge b-${c.state}">${c.state==="win"?"winner":c.state==="alt"?"shipped too":
+          c.state==="fail"?"failed":c.state}</span></h3>
+      <div class="chips">
+        <span class="chip${c.octree>=512?" hi":""}">octree ${esc(c.octree)}</span>
+        <span class="chip${c.threshold===0.45?" hi":""}">thr ${esc(c.threshold)}</span>
+        <span class="chip">latent ${esc(c.latent)}</span>
+        <span class="chip">seed ${esc(c.seed)}</span>
+        <span class="chip">${FAMILY(c)==="multi"?"multi-view":"single view"}</span>
+      </div>
+      <p>${esc(c.note||c.why||"")}</p>
+    </div>
+    <div class="nums">${nums.map(n=>`<span>${esc(n[0])} <b>${esc(n[1])}</b></span>`).join("")}</div>
+  </article>`;
+}
+
+function candidates(){
+  const all=CH.candidates||[];
+  return `<h2 class="sec">2 · Every candidate<span>${all.length} meshes generated,
+      ${all.filter(c=>c.state==="fail").length} of them failures kept on purpose</span></h2>
+  <p class="lede">One row per Hunyuan3D run. The picture is an eight-angle orbit strip rendered from
+    the mesh itself. <b>Click a card</b> for the head close-up, the full diagnostic table, the repair
+    ladder where one was run, and the GLB.</p>
+  <div class="bar">
+    <select id="fFam"><option value="">every family</option>
+      <option value="single">single view</option><option value="multi">multi-view</option></select>
+    <select id="fState"><option value="">every outcome</option>
+      <option value="good">the ones that worked</option>
+      <option value="fail">only the failures</option></select>
+    <select id="fSort">
+      <option value="def">in the order they were run</option>
+      <option value="nm">by non-manifold %, worst first</option>
+      <option value="faces">by faces, biggest first</option>
+      <option value="wall">by generation time</option>
+    </select>
+    <span class="n" id="cn"></span>
+  </div>
+  <div class="grid wide" id="cgrid"></div>`;
+}
+
+function drawCands(){
+  const fam=$("fFam").value, st=$("fState").value, sort=$("fSort").value;
+  let list=(CH.candidates||[]).filter(c=>
+    (!fam||FAMILY(c)===fam) &&
+    (!st||(st==="fail"?c.state==="fail":c.state!=="fail")));
+  if(sort==="nm") list.sort((a,b)=>(b.raw_nonmanifold_pct||-1)-(a.raw_nonmanifold_pct||-1));
+  if(sort==="faces") list.sort((a,b)=>(b.raw_faces||-1)-(a.raw_faces||-1));
+  if(sort==="wall") list.sort((a,b)=>(b.wall_s||-1)-(a.wall_s||-1));
+  $("cgrid").innerHTML=list.map(candCard).join("")||'<div class="empty">nothing matches.</div>';
+  $("cn").textContent=list.length+" of "+(CH.candidates||[]).length;
+  $("cgrid").querySelectorAll("[data-cand]").forEach(el=>
+    el.onclick=()=>openCand(el.dataset.cand));
+}
+
+const NUMROWS=[
+  ["why it was run","why"],
+  ["generation wall clock","wall_s","s"],
+  ["VRAM peak","vram_peak_mib"," MiB"],
+  ["raw faces","raw_faces"],
+  ["raw non-manifold edges","raw_nonmanifold"],
+  ["raw non-manifold %","raw_nonmanifold_pct","%"],
+  ["raw boundary (open) edges","raw_boundary"],
+  ["raw islands","raw_islands"],
+  ["raw islands under 1% of the mesh","raw_islands_under_1pct"],
+  ["watertight raw","raw_watertight"],
+  ["faces after repair","fixed_faces"],
+  ["watertight after repair","fixed_watertight"],
+  ["islands after repair","fixed_islands"],
+  ["blocking problems after repair","fixed_blocking"],
+  ["overhang, share of surface past 45deg","overhang_area_frac","frac"],
+  ["near-horizontal ceilings","flat_ceiling_frac","frac"],
+  ["bed contact","bed_contact_mm2"," mm2"],
+];
+function openCand(name){
+  const c=BYNAME[name]; if(!c) return;
+  $("dname").innerHTML=`<span class="mono">${esc(c.name)}</span>`;
+  $("dbadge").className="badge b-"+c.state;
+  $("dbadge").textContent=c.state==="win"?"the winner":c.state==="alt"?"shipped alongside":
+    c.state==="fail"?"failed":c.state;
+  const rows=NUMROWS.map(r=>{
+    let v=c[r[1]];
+    if(v==null||v==="") return "";
+    if(Array.isArray(v)) v=v.length?v.join(", "):"none";
+    else if(typeof v==="boolean") v=v?"yes":"NO";
+    else if(r[2]==="frac") v=pct(v);
+    else if(typeof v==="number") v=(Number.isInteger(v)?nf(v):v.toFixed(2))+(r[2]&&r[2]!=="frac"?r[2]:"");
+    return `<tr><td class="k">${esc(r[0])}</td><td class="v">${esc(v)}</td></tr>`;
+  }).join("");
+  const reps=(c.repairs||[]).map(r=>`
+    <div style="margin-top:13px;border:1px solid var(--line);border-radius:10px;overflow:hidden">
+      <div style="padding:9px 12px;border-bottom:1px solid var(--line);display:flex;gap:9px;
+                  align-items:baseline;flex-wrap:wrap">
+        <b class="mono">${esc(r.label)}</b>
+        <span class="badge b-${esc(r.state)}">${r.state==="win"?"shipped":r.state==="fail"?"destroys the face":r.state}</span>
+        ${r.glb?`<a style="margin-left:auto;color:var(--accent);font-size:12px"
+          href="${esc(r.glb.url)}" download>${esc(r.glb.name)} · ${mb(r.glb.bytes)}</a>`:""}
+      </div>
+      <div style="padding:11px 12px"><p style="margin:0;font-size:12.5px;color:var(--dim)">${esc(r.note)}</p>
+        ${r.turntable?`<video class="strip" src="${esc(r.turntable)}#t=0.1" controls loop muted
+           playsinline preload="metadata"></video>`:""}
+        ${r.head?`<img class="strip" loading="lazy" src="${esc(r.head)}" data-lb="${esc(r.head)}"
+           data-cap="${esc(c.name)} — ${esc(r.label)} — head">`:""}
+        ${r.orbit?`<img class="strip" loading="lazy" src="${esc(r.orbit)}" data-lb="${esc(r.orbit)}"
+           data-cap="${esc(c.name)} — ${esc(r.label)} — orbit">`:""}
+      </div></div>`).join("");
+  const st=c.shipped_thickness;
+  $("dbody").innerHTML=`
+    ${c.note?`<div class="${c.state==="fail"?"badbox":c.state==="win"?"okbox":"warnbox"}">
+      ${esc(c.note)} <span class="src">JUDGED · ${esc(c.note_src||"")}</span></div>`:""}
+    ${c.orbit?`<div class="lbl">orbit, eight angles</div>
+      <img class="strip" src="${esc(c.orbit)}" data-lb="${esc(c.orbit)}" data-cap="${esc(c.name)} orbit">`:""}
+    ${c.head?`<div class="lbl">head close-up — this is where a mesh's quality actually shows</div>
+      <img class="strip" src="${esc(c.head)}" data-lb="${esc(c.head)}" data-cap="${esc(c.name)} head">`:""}
+    ${st?`<div class="lbl">thickness at the SHIPPED repair (voxel-res 900)</div>
+      <div class="warnbox">${st.under_1mm_150!=null?`<b>${st.under_1mm_150.toFixed(2)}%</b> of surface
+        under 1.0 mm at a 150 mm print${st.p10_150_mm!=null?`, p10 <b>${st.p10_150_mm}</b> mm`:""}.
+        ${st.under_03mm_150!=null?`<b>${st.under_03mm_150}%</b> under the 0.3 mm resin floor.`:""}`:""}
+      <br><span class="src">mesh/VERDICT.md — the thickness column in the table below was measured on
+      voxel-res 320 repairs and is optimistic; only this pair was re-measured at 900.</span></div>`:""}
+    <div class="lbl">every number the mesh doctor reported</div>
+    <p style="margin:4px 0 0;font-size:11.5px;color:var(--dim)">The <code class="mono">raw</code>
+      rows are the mesh straight out of Hunyuan3D. Every row below them was measured on a repair at
+      <b>voxel-res 320</b> — the same treatment for every candidate, which is what makes the columns
+      comparable, and <b>not</b> the file that was exported. Absolute values there are optimistic: a
+      0.47 mm voxel cannot represent anything thinner and fattens a thin feature to one voxel.</p>
+    <div class="tw"><table class="t">${rows}</table></div>
+    ${reps?`<div class="lbl">the repair ladder</div>${reps}`:""}
+    <div class="lbl">files</div>
+    <div class="dl">
+      ${c.glb?`<a href="${esc(c.glb.url)}" download><b>${esc(c.glb.name)}</b>
+        <i>raw, straight out of Hunyuan3D · ${mb(c.glb.bytes)}</i></a>`:""}
+      ${c.glb_fixed?`<a href="${esc(c.glb_fixed.url)}" download><b>${esc(c.glb_fixed.name)}</b>
+        <i>repaired at voxel-res 320 · ${mb(c.glb_fixed.bytes)}</i></a>`:""}
+    </div>
+    <p style="margin-top:13px;color:var(--dim);font-size:12px">A raw GLB is <b>not</b> watertight and
+      a slicer will not do anything sensible with it. It is here so the repair can be reproduced, not
+      so it can be printed.</p>`;
+  wireLb($("dbody"));
+  $("dlg").showModal(); $("dbody").scrollTop=0;
+}
+
+// ── the printability audit ──────────────────────────────────────────────────
+function audit(){
+  const a=CH.audit; if(!a) return "";
+  const MARK={ok:"&#10003;",bad:"&#10007;",warn:"!"};
+  const chk=rows=>rows.map(r=>`<div class="chk">
+      <div class="m ${r.state}">${MARK[r.state]||"&#10007;"}</div>
+      <div class="l"><b>${esc(r.label)}</b><span class="vv">${esc(r.value)}</span>
+        ${r.why?`<p>${esc(r.why)}</p>`:""}
+        <p class="src">${esc(r.src||"")}</p></div></div>`).join("");
+  return `<h2 class="sec">3 · Is it printable<span>measured on the file that was exported,
+      <span class="mono">${esc(a.mesh)}</span></span></h2>
+  <p class="lede">${esc(a.provenance||"")}</p>
+  <div class="panels">
+    <div class="pn"><h4>is it a solid</h4>${chk(a.checks)}</div>
+    <div class="pn"><h4>will the thin parts survive</h4>${chk(a.thickness)}
+      <div class="warnbox"><b>Where the thin material is.</b>
+        <div class="tw"><table class="t"><tr><th>band</th><th>under 1 mm</th></tr>
+        ${a.thin_where.map(t=>`<tr><td>${esc(t.band)}</td><td class="v">${esc(t.thin)}</td></tr>`)
+          .join("")}</table></div>
+        <p style="margin:8px 0 0;font-size:12px">${esc(a.thin_where_note)}</p></div>
+    </div>
+    <div class="pn"><h4>will it stay on the plate</h4>${chk(a.geometry)}</div>
+  </div>
+  <div class="panels">
+    <div class="pn"><h4>print height is the cheapest fix, and it is not linear</h4>
+      <div class="tw"><table class="t"><tr><th>height</th><th>surface under 1.0 mm</th><th>p10</th></tr>
+      ${a.height_ladder.map(h=>`<tr><td class="v">${h.height_mm} mm</td>
+        <td class="v">${esc(h.under_1mm)}</td><td class="v">${esc(h.p10)}</td></tr>`).join("")}
+      </table></div>
+      <p style="margin:9px 0 0;font-size:12px;color:var(--dim)">${esc(a.height_ladder_note)}</p>
+      <div class="okbox"><b>150 mm is a resin print. FDM wants 200 mm</b> — or a deliberate
+        thickening pass on the skirt fringe, the way a commercial statuette turns hanging strands
+        into a slab.</div>
+    </div>
+    <div class="pn"><h4>what is NOT proven</h4>
+      <ul class="tight">${a.unverified.map(u=>`<li>${esc(u)}</li>`).join("")}</ul></div>
+  </div>`;
+}
+
+// ── what goes wrong ─────────────────────────────────────────────────────────
+function failures(){
+  const F=D.failures||[];
+  return `<h2 class="sec">4 · What goes wrong<span>${F.length} failure modes, with the picture of
+      each one</span></h2>
+  <p class="lede">The most useful part of this page. Every one of these cost real time to find, and
+    every one is reproducible from a default setting somebody would reasonably pick.
+    <b>Click any picture to open it full size.</b></p>
+  ${F.map(f=>`<div class="fail">
+    <h3>${esc(f.title)}</h3>
+    ${f.image||f.image2?`<div class="pics">
+      ${pic(f.image,f.image_caption||(f.image||"").split("/").pop())}
+      ${f.image2?pic(f.image2,f.image2_caption||f.image2.split("/").pop()):""}
+    </div>`:""}
+    <div class="body"><dl>
+      <dt>looks like</dt><dd>${esc(f.looks_like)}</dd>
+      <dt>cause</dt><dd>${esc(f.cause)}</dd>
+      <dt>the fix</dt><dd><b>${esc(f.fix)}</b></dd>
+      ${f.cost?`<dt>cost</dt><dd>${esc(f.cost)}</dd>`:""}
+      <dt>evidence</dt><dd class="src">${esc(f.src)}</dd>
+    </dl></div></div>`).join("")}`;
+}
+
+// ── splats ──────────────────────────────────────────────────────────────────
+function splats(){
+  const S=CH.splats||[]; if(!S.length) return "";
+  return `<h2 class="sec">5 · The best-looking output, which you cannot print
+      <span>TripoSplat, for comparison</span></h2>
+  <p class="lede">A gaussian splat is a cloud of oriented translucent ellipsoids with opacity. It has
+    <b>no surface, no inside and no outside</b>, so there is nothing for a slicer to fill. It is here
+    because it is comfortably the best-looking result of the whole job — full colour, the correct
+    costume, stable through a full 360 — against Hunyuan3D's grey untextured geometry. Use the splat
+    for the turntable you show someone and the mesh for the thing you print. They are not
+    competitors.</p>
+  <div class="grid wide">${S.map(s=>`<article class="card">
+    ${s.mp4?`<video class="pic" style="width:100%;background:#0b0d11" src="${esc(s.mp4)}#t=0.1" controls
+      loop muted playsinline preload="metadata"></video>`:""}
+    <div class="b"><h3><span class="mono" style="font-size:13px">${esc(s.name)}</span></h3>
+      <div class="chips"><span class="chip">${nf(s.gaussians)} gaussians</span>
+        <span class="chip">${s.wall_s}s</span>
+        <span class="chip">${nf(s.vram_peak_mib)} MiB peak</span></div></div>
+    <div class="nums">${s.spz?`<a href="${esc(s.spz.url)}" download style="color:var(--accent)"
+      >${esc(s.spz.name)} · ${mb(s.spz.bytes)}</a>`:""}</div></article>`).join("")}</div>`;
+}
+
+// ── docs ────────────────────────────────────────────────────────────────────
+function docs(){
+  const v=(CH.docs||{}).verdict;
+  return `<h2 class="sec">6 · The write-ups<span>every claim on this page, with its evidence</span></h2>
+  <details class="doc" open><summary><b>craft/CHARACTER_TO_PRINT.md</b>
+    <span> — the recipe, written to be followed for the next character</span></summary>
+    <div class="md">${md(D.recipe_text)||"<p>not on disk</p>"}</div></details>
+  ${v?`<details class="doc"><summary><b>${esc((CH.docs||{}).verdict_rel||"VERDICT.md")}</b>
+    <span> — which mesh won, against what, written after opening every sheet</span></summary>
+    <div class="md">${md(v)}</div></details>`:""}`;
+}
+
+function notRun(c){
+  return `<div class="err"><b>${esc(c.id)} has no 3D pipeline on disk.</b>
+    Nothing has been generated for this character — <code class="mono">studio/samples/${
+    esc(c.id.toLowerCase())}_3d/</code> does not exist. That is not a failure, it is simply not run.
+    The recipe below is written so it can be.</div>
+  ${spine()}
+  ${failures()}
+  <h2 class="sec">The recipe</h2>
+  <details class="doc" open><summary><b>craft/CHARACTER_TO_PRINT.md</b></summary>
+    <div class="md">${md(D.recipe_text)||"<p>not on disk</p>"}</div></details>`;
+}
+
+// ── assemble ────────────────────────────────────────────────────────────────
+function draw(){
+  $("key").innerHTML=KEY;
+  castStrip();
+  if(!CH||CH.state==="none"){
+    const c=CH||{id:"nobody"};
+    $("main").innerHTML=notRun(c);
+    $("stat").textContent=CH?CH.id+" — not run":"nothing has been run";
+    wireLb($("main")); $("foot").innerHTML=""; return;
+  }
+  BYNAME={}; (CH.candidates||[]).forEach(c=>BYNAME[c.name]=c);
+  $("main").innerHTML=hero()+spine()+source()+candidates()+audit()+failures()+splats()+docs();
+  drawCands();
+  ["fFam","fState","fSort"].forEach(id=>{ const e=$(id); if(e) e.onchange=drawCands; });
+  wireLb($("main"));
+  const t=CH.totals||{};
+  $("stat").textContent=`${CH.id} · ${t.candidates} candidates, ${t.failed} failures · ${
+    (CH.deliverables||[]).length} print files · ${(t.asset_bytes/1e6).toFixed(0)} MB of evidence`;
+  $("foot").innerHTML=`Assembled by <code class="mono">studio/_tools/model3d_index.py</code> from
+    <code class="mono">${esc(CH.rel||"")}</code> on every request, so re-running the pipeline shows up
+    on a refresh. ${CH.missing&&CH.missing.length?`<b style="color:var(--warn)">${
+    CH.missing.length} asset(s) the report names are not on disk:</b> <span class="mono">${
+    esc(CH.missing.join(", "))}</span>`:"Every asset this page names was checked against the "+
+    "filesystem before it was rendered."}`;
+}
+
+async function load(cid){
+  $("stat").textContent="loading…";
+  try{
+    const r=await fetch("/api/model3d"+(cid?"/"+encodeURIComponent(cid):""));
+    const j=await r.json();
+    if(!r.ok) throw new Error(j.error||("HTTP "+r.status));
+    D=j; CH=j.character;
+    if(cid&&(!CH||CH.id!==cid)) CH=(D.characters||[]).find(c=>c.id===cid)||CH;
+    if(history.replaceState) history.replaceState(null,"","/model3d"+(CH?"/"+CH.id:""));
+    draw();
+  }catch(e){
+    $("stat").textContent="unavailable";
+    $("main").innerHTML=`<div class="err"><b>${esc(e.message||e)}</b><br><br>
+      The payload comes from <code class="mono">studio/_tools/model3d_index.py</code>. Check it with
+      <code class="mono">python3 studio/_tools/model3d_index.py --check</code>.</div>`;
+  }
+}
+
+const m=location.pathname.match(/^\/model3d\/([A-Za-z0-9_-]+)/);
+load(m?m[1]:null);
+</script>
+</body>
+</html>

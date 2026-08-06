@@ -1,0 +1,41 @@
+{
+  "_": "WHICH FILE TO FEED WHAT. Written by studio/_tools/terra_3d_source.py --stage publish. Every claim below was measured by the stage named beside it and every image behind it was opened and looked at.",
+  "single_view": {
+    "use": "G_out_dark_s1_rgba.png",
+    "px": "1664x2432 RGBA",
+    "why": [
+      "ARMS CLEAR OF THE TORSO with air on both sides for their whole length, and open hands. Measured in --stage pose: of five pose vocabularies only 'outstretched arms' opened her. The danbooru tag 'spread arms', which MEANS a T-pose, returned arms near the hips at both LoRA strengths tested.",
+      "LEGS AND BOOTS SEPARATE, both feet complete, nothing bridging them.",
+      "NO CAST SHADOW at her feet. Measured in --stage light: the L1 arm left a shadow pool even though its POSITIVE prompt said 'no cast shadow'. Only moving the word to the NEGATIVE prompt (L3) removed it.",
+      "WHOLE FIGURE, 90.0% of frame height, centre offset -0.7%, no edge touched.",
+      "ALPHA IS ONE SHELL PLUS SPECKLE - stray area 0.04% of the figure.",
+      "COSTUME IS THE CARD'S: gold patterned bodice, wear rung 0."
+    ],
+    "runner_up": "B_out_L3_s2_rgba.png - the only grey-plate candidate that mattes to a single connected shell (islands=1), but its cape flares as a thin sheet welded to both forearms."
+  },
+  "multi_view": {
+    "use": "multiview_qwen/  (Q0_front, Q2_side_l, Q3_back, Q4_side_r)",
+    "px": "1024x1408 RGBA, from 832x1248 renders",
+    "why": [
+      "COSTUME AGREES ACROSS VIEWS, which is the only thing that decides whether multi-view conditioning helps or hurts. Same gold bodice, same fringed wrap skirt, same red-and-gold boots in every view.",
+      "Built image-conditioned from the single-view winner through workflow 32 plus the multiple-angles LoRA, so the garment is carried as pixels.",
+      "Then normalised deterministically: one canvas, one figure height, one baseline, centred. Nothing cropped."
+    ],
+    "prefer_four_not_six": "Q1 and Q5 are nominally 45-degree three-quarters but came back close to profile, so the six views do not sample the circle evenly. The four cardinals are honest; adding the two near-duplicates over-weights the sides.",
+    "cost": "Each view is 832x1248 against the single-view candidate's 1664x2432 - about a quarter of the pixels per view. Multi-view buys angular coverage and pays for it in source detail."
+  },
+  "do_not_use": {
+    "what": "studio/samples/cast/TERRA/ 00_front, 01_three_quarter, 02_side_left, 03_side_right, 04_back, 15_full_body",
+    "why": [
+      "THREE OF THE SIX ARE CROPPED BY THE FRAME - 00_front and 02_side_left and 03_side_right lose the legs or the feet. A cropped view cannot be scale-matched to a complete one, so the set has no common scale at all.",
+      "THE COSTUME DISAGREES. The cape is smooth and short in 00_front and 02_side_left and floor-length, shredded and stained in 04_back and 15_full_body. Those are two different garments.",
+      "ARMS ARE AGAINST THE BODY IN ALL SIXTEEN VIEWS - it is the pose the LoRA was trained on - so every view fuses arm to torso.",
+      "MATTES DIRTY: 17 detached fragments on 00_front, 11 on 02_side_left. Each is a floating shell downstream."
+    ]
+  },
+  "carry_forward_to_the_mesh_stage": [
+    "HER BOOTS ARE POINTED WITH A RAISED HEEL. The ground contact is two small triangles. Whatever else happens, this figure needs a base.",
+    "THE HAIR IS THE DOMINANT VOLUME - 30% of the figure from the front and 57% from behind, and it flares away from the body on both sides. It is the overhang problem and the thin-shell problem at once. 'ponytail, hair behind back' was tried in --stage final as F_tamehair and did NOT reduce it; the volume is trained into the LoRA.",
+    "THE SKIRT FRINGE is drawn as many separate hanging strands. At figurine scale each is far below any printable minimum feature size."
+  ]
+}

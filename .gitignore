@@ -116,3 +116,33 @@ studio/samples/flux2_gallery/**/*.png
 # sheets, frame strips and poster as jpg. Nothing below is a finding.
 studio/samples/the_film/__pycache__/
 studio/samples/the_film/*.log
+
+# The 3D pipeline's geometry. SAME POLICY AS gallery/, cast_proof/, the character sweeps,
+# replicated/ AND flux2_gallery/ ABOVE, applied to the largest single artefacts this
+# project has ever produced: studio/samples/terra_3d/ is 2.3 GB and 2.07 GB of that is
+# eight STL, four 3MF, forty-three GLB and two SPZ. One STL is 163 MB on its own. A git
+# host will not take that and it does not belong in history.
+#
+# WHAT MAKES THIS SAFE IS THAT THE RECIPE IS TRACKED AND THE GEOMETRY IS DERIVED. Every
+# mesh here is a pure function of things that stay in the repository: the source image,
+# the workflow JSON, and the three tools with their arguments recorded in the _work JSONs
+# and in mesh/VERDICT.md. craft/CHARACTER_TO_PRINT.md is the end-to-end recipe and
+# craft/PRINTING.md is the spec the result is held to. Re-running terra_3d_source.py,
+# terra_mesh.py and mesh_prep.py reproduces the deliverable.
+#
+# KEPT ON PURPOSE, and this is the half worth reviewing in a diff: every .json (the
+# measurements - REPORT.json, RECOMMENDATION.json, alpha_report.json and the per-stage
+# _work records), every .jpg (the orbit strips, head close-ups, thin maps, contact sheets
+# and evidence sheets - the pictures a person actually reads, 18 MB for all 82 of them),
+# VERDICT.md, PRINT_CARD.md, and the source PNGs under source/ - those last are the INPUT
+# to the pipeline rather than an output of it, the same argument that keeps
+# samples/cast/<ID>/, and they include the four rejected candidates because the failure
+# gallery on /model3d shows them as the evidence for why they lost.
+#
+# The turntable mp4s are already covered by the *.mp4 rule at the top of this file.
+studio/samples/**/*.stl
+studio/samples/**/*.3mf
+studio/samples/**/*.glb
+studio/samples/**/*.spz
+studio/samples/**/*.obj
+studio/samples/**/*.ply
