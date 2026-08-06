@@ -1,0 +1,696 @@
+{
+ "question": "does photo -> anime -> mesh beat photo -> mesh?",
+ "held_constant": {
+  "plate": "grey",
+  "plate_px": 1024,
+  "margin": 0.05,
+  "crop": "center",
+  "views": "single",
+  "latent": 4096,
+  "seed": 20260806,
+  "steps": 30,
+  "cfg": 5.0,
+  "octree": 512,
+  "threshold": 0.45,
+  "algorithm": "surface net"
+ },
+ "prep": {
+  "plate": "grey",
+  "plate_rgb": [
+   132,
+   132,
+   132
+  ],
+  "margin": 0.05,
+  "plate_px": 1024,
+  "arms": {
+   "A_photo": {
+    "source": "studio/samples/photo2anime/standin/ideal/cut_rgba_00001_.png",
+    "source_px": [
+     1152,
+     2048
+    ],
+    "source_mode": "RGBA",
+    "alpha_bbox": [
+     74,
+     190,
+     1111,
+     1963
+    ],
+    "subject_px": [
+     1037,
+     1773
+    ],
+    "square_before_resize": 1951,
+    "plate_file": "p2amesh_A_photo_plate.png"
+   },
+   "B_anime": {
+    "source": "studio/samples/photo2anime/mesh/_work/anime_rgba.png",
+    "source_px": [
+     752,
+     1392
+    ],
+    "source_mode": "RGBA",
+    "alpha_bbox": [
+     35,
+     130,
+     743,
+     1333
+    ],
+    "subject_px": [
+     708,
+     1203
+    ],
+    "square_before_resize": 1323,
+    "plate_file": "p2amesh_B_anime_plate.png"
+   }
+  }
+ },
+ "gen": {
+  "seed": 20260806,
+  "latent": 4096,
+  "octree": 512,
+  "threshold": 0.45,
+  "algorithm": "surface net",
+  "steps": 30,
+  "cfg": 5.0,
+  "views": "single",
+  "crop": "center",
+  "wall_seconds": 312.1,
+  "got": {
+   "A_photo": {
+    "glb": "/home/k4shix/shared/comfy-studio/studio/samples/photo2anime/mesh/A_photo.glb",
+    "bytes": 10128864,
+    "resubmits": 1
+   },
+   "B_anime": {
+    "glb": "/home/k4shix/shared/comfy-studio/studio/samples/photo2anime/mesh/B_anime.glb",
+    "bytes": 10524816,
+    "resubmits": 1
+   }
+  },
+  "unfinished": []
+ },
+ "diagnose": {
+  "A_photo": {
+   "why": "PHOTO DIRECT - control",
+   "diagnose": {
+    "path": "/home/k4shix/shared/comfy-studio/studio/samples/photo2anime/mesh/A_photo.glb",
+    "file_bytes": 10128864,
+    "vertices": 279774,
+    "faces": 564108,
+    "unique_vertex_positions": 279774,
+    "unwelded_vertices": 0,
+    "duplicate_faces": 0,
+    "degenerate_faces": 0,
+    "bounds_min": [
+     -0.619033932685852,
+     -0.9859715700149536,
+     -0.20776492357254028
+    ],
+    "bounds_max": [
+     0.6298912763595581,
+     0.9892985224723816,
+     0.18190178275108337
+    ],
+    "extents": [
+     1.2489252090454102,
+     1.9752700924873352,
+     0.38966670632362366
+    ],
+    "centroid": [
+     0.017094063977058867,
+     0.018668836483411094,
+     -0.0253450794092152
+    ],
+    "unique_edges": 842799,
+    "edge_valence": {
+     "1": 36,
+     "2": 836402,
+     "3": 5960,
+     "4": 401
+    },
+    "boundary_edges": 36,
+    "manifold_edges": 836402,
+    "nonmanifold_edges": 6361,
+    "nonmanifold_fraction": 0.0075474698000353585,
+    "is_watertight": false,
+    "is_winding_consistent": false,
+    "is_volume": false,
+    "euler_number": 1083,
+    "components": 2634,
+    "component_face_counts_top10": [
+     551816,
+     12,
+     12,
+     12,
+     12,
+     12,
+     12,
+     12,
+     12,
+     12
+    ],
+    "components_under_1pct": 2633,
+    "vertex_components": 1,
+    "vertex_component_face_counts_top10": [
+     564108
+    ],
+    "vertex_components_under_1pct": 0,
+    "volume": 0.16294981122599725,
+    "surface_area": 3.0165613548378607,
+    "convex_hull_volume": 0.47011875033596434,
+    "solidity": 0.3466141503812542,
+    "normals_outward": true,
+    "genus": null,
+    "blocking": [
+     "NOT WATERTIGHT - 36 boundary (open) edges. A slicer cannot tell inside from outside.",
+     "NON-MANIFOLD - 6361 of 842799 edges (0.8%) are shared by 3+ faces.",
+     "INCONSISTENT WINDING - face orientation flips across the surface."
+    ],
+    "warnings": [],
+    "printable": false
+   },
+   "thickness": {
+    "samples_requested": 40000,
+    "samples_valid": 39719,
+    "samples_no_far_wall": 281,
+    "min_feature_mm": 1.0,
+    "fraction_below_min": 0.001661673254613661,
+    "thickness_min": 0.01270176951197947,
+    "thickness_max": 55.83126640747272,
+    "thickness_mean": 17.07675298906463,
+    "percentiles": {
+     "1": 1.6432475840842764,
+     "5": 6.736307836081277,
+     "10": 7.761223807105304,
+     "25": 10.037566807739847,
+     "50": 15.683088951612769,
+     "75": 23.172720856420298,
+     "90": 29.779525311273865,
+     "99": 40.42180479498095
+    },
+    "seconds": 0.5,
+    "scale_note": "evaluated at a print height of 150.0 mm (scale factor 75.939)",
+    "trust_warning": "UNTRUSTWORTHY - this mesh is not a closed solid (36 boundary edges, 6361 non-manifold edges = 0.8%). Rays stop on interior membranes, so the numbers below understate real wall thickness, often by several times. Run `repair` first and re-measure.",
+    "input_watertight": false,
+    "thin_region_bounds": {
+     "min": [
+      -28.376539243830713,
+      -10.64683615384125,
+      5.1790360772915705
+     ],
+     "max": [
+      32.117829065474496,
+      10.43448925139697,
+      145.9586215987143
+     ]
+    },
+    "thin_by_height_decile": [
+     {
+      "decile": 0,
+      "z_from": 0.0,
+      "z_to": 15.0,
+      "thin_frac": 0.007088846880907372
+     },
+     {
+      "decile": 1,
+      "z_from": 15.0,
+      "z_to": 30.0,
+      "thin_frac": 0.0
+     },
+     {
+      "decile": 2,
+      "z_from": 30.0,
+      "z_to": 45.0,
+      "thin_frac": 0.0
+     },
+     {
+      "decile": 3,
+      "z_from": 45.0,
+      "z_to": 60.0,
+      "thin_frac": 0.0
+     },
+     {
+      "decile": 4,
+      "z_from": 60.0,
+      "z_to": 75.0,
+      "thin_frac": 0.0
+     },
+     {
+      "decile": 5,
+      "z_from": 75.0,
+      "z_to": 90.0,
+      "thin_frac": 0.0008148631029986962
+     },
+     {
+      "decile": 6,
+      "z_from": 90.0,
+      "z_to": 105.0,
+      "thin_frac": 0.0014829461196243204
+     },
+     {
+      "decile": 7,
+      "z_from": 105.0,
+      "z_to": 120.0,
+      "thin_frac": 0.00022256843979523704
+     },
+     {
+      "decile": 8,
+      "z_from": 120.0,
+      "z_to": 135.0,
+      "thin_frac": 0.004269293924466338
+     },
+     {
+      "decile": 9,
+      "z_from": 135.0,
+      "z_to": 150.0,
+      "thin_frac": 0.0029607698001480384
+     }
+    ]
+   },
+   "overhang": {
+    "angle_deg": 45.0,
+    "faces": 564108,
+    "bed_contact_area": 319.85927583390276,
+    "bed_contact_area_fraction": 0.018387269640308318,
+    "bed_tolerance": 0.3,
+    "overhang_face_fraction": 0.02360009076276174,
+    "overhang_area_fraction": 0.02240816332773393,
+    "overhang_area": 389.80550320882804,
+    "flat_ceiling_area_fraction": 0.001961386438082346,
+    "z_range": [
+     0.0,
+     150.0
+    ],
+    "by_height_decile": [
+     {
+      "decile": 0,
+      "z_from": 0.0,
+      "z_to": 15.0,
+      "overhang_area_frac": 0.036659855470647956
+     },
+     {
+      "decile": 1,
+      "z_from": 15.0,
+      "z_to": 30.0,
+      "overhang_area_frac": 0.0
+     },
+     {
+      "decile": 2,
+      "z_from": 30.0,
+      "z_to": 45.0,
+      "overhang_area_frac": 0.002878709260115461
+     },
+     {
+      "decile": 3,
+      "z_from": 45.0,
+      "z_to": 60.0,
+      "overhang_area_frac": 7.729178333784905e-07
+     },
+     {
+      "decile": 4,
+      "z_from": 60.0,
+      "z_to": 75.0,
+      "overhang_area_frac": 0.09653444094166067
+     },
+     {
+      "decile": 5,
+      "z_from": 75.0,
+      "z_to": 90.0,
+      "overhang_area_frac": 0.008442511927555432
+     },
+     {
+      "decile": 6,
+      "z_from": 90.0,
+      "z_to": 105.0,
+      "overhang_area_frac": 0.004968228298295583
+     },
+     {
+      "decile": 7,
+      "z_from": 105.0,
+      "z_to": 120.0,
+      "overhang_area_frac": 0.006214426631853924
+     },
+     {
+      "decile": 8,
+      "z_from": 120.0,
+      "z_to": 135.0,
+      "overhang_area_frac": 0.03664997173974388
+     },
+     {
+      "decile": 9,
+      "z_from": 135.0,
+      "z_to": 150.0,
+      "overhang_area_frac": 0.025822499268354115
+     }
+    ],
+    "overhang_sampled": 13313,
+    "unsupported_fraction_of_overhangs": 0.6027191466987155,
+    "note_support": "60.3% of overhanging surface has nothing below it - support must be built from the plate.",
+    "bed_contact_vs_height2": 0.014215967814840122,
+    "needs_base": true
+   }
+  },
+  "B_anime": {
+   "why": "ANIME FIRST - treatment",
+   "diagnose": {
+    "path": "/home/k4shix/shared/comfy-studio/studio/samples/photo2anime/mesh/B_anime.glb",
+    "file_bytes": 10524816,
+    "vertices": 289488,
+    "faces": 587390,
+    "unique_vertex_positions": 289488,
+    "unwelded_vertices": 0,
+    "duplicate_faces": 0,
+    "degenerate_faces": 0,
+    "bounds_min": [
+     -0.6190807819366455,
+     -0.9856280088424683,
+     -0.18111588060855865
+    ],
+    "bounds_max": [
+     0.6241470575332642,
+     0.9893143177032471,
+     0.17498886585235596
+    ],
+    "extents": [
+     1.2432278394699097,
+     1.9749423265457153,
+     0.3561047464609146
+    ],
+    "centroid": [
+     0.012597419414858963,
+     0.05215680999722483,
+     -0.010579141916777718
+    ],
+    "unique_edges": 874888,
+    "edge_valence": {
+     "1": 116,
+     "2": 863355,
+     "3": 10324,
+     "4": 1093
+    },
+    "boundary_edges": 116,
+    "manifold_edges": 863355,
+    "nonmanifold_edges": 11417,
+    "nonmanifold_fraction": 0.0130496703578058,
+    "is_watertight": false,
+    "is_winding_consistent": false,
+    "is_volume": false,
+    "euler_number": 1990,
+    "components": 5169,
+    "component_face_counts_top10": [
+     564586,
+     320,
+     140,
+     120,
+     114,
+     50,
+     34,
+     12,
+     12,
+     12
+    ],
+    "components_under_1pct": 5168,
+    "vertex_components": 1,
+    "vertex_component_face_counts_top10": [
+     587390
+    ],
+    "vertex_components_under_1pct": 0,
+    "volume": 0.16229144131282836,
+    "surface_area": 3.1396235358758195,
+    "convex_hull_volume": 0.4623203626051086,
+    "solidity": 0.3510367581439404,
+    "normals_outward": true,
+    "genus": null,
+    "blocking": [
+     "NOT WATERTIGHT - 116 boundary (open) edges. A slicer cannot tell inside from outside.",
+     "NON-MANIFOLD - 11417 of 874888 edges (1.3%) are shared by 3+ faces.",
+     "INCONSISTENT WINDING - face orientation flips across the surface."
+    ],
+    "warnings": [],
+    "printable": false
+   },
+   "thickness": {
+    "samples_requested": 40000,
+    "samples_valid": 39504,
+    "samples_no_far_wall": 496,
+    "min_feature_mm": 1.0,
+    "fraction_below_min": 0.008657351154313488,
+    "thickness_min": 0.008245558197142263,
+    "thickness_max": 55.67994861809852,
+    "thickness_mean": 16.38859477414955,
+    "percentiles": {
+     "1": 1.02846941274224,
+     "5": 2.0509085455150706,
+     "10": 7.293871433040608,
+     "25": 9.448033038353676,
+     "50": 15.456851011477127,
+     "75": 22.599866735588066,
+     "90": 28.412035226896865,
+     "99": 38.28306000438381
+    },
+    "seconds": 0.49,
+    "scale_note": "evaluated at a print height of 150.0 mm (scale factor 75.9516)",
+    "trust_warning": "UNTRUSTWORTHY - this mesh is not a closed solid (116 boundary edges, 11417 non-manifold edges = 1.3%). Rays stop on interior membranes, so the numbers below understate real wall thickness, often by several times. Run `repair` first and re-measure.",
+    "input_watertight": false,
+    "thin_region_bounds": {
+     "min": [
+      -39.22972845623526,
+      -12.519628690954463,
+      9.012599599521664
+     ],
+     "max": [
+      21.467268437575463,
+      12.495348481798978,
+      142.7935991585357
+     ]
+    },
+    "thin_by_height_decile": [
+     {
+      "decile": 0,
+      "z_from": 0.0,
+      "z_to": 15.0,
+      "thin_frac": 0.0018812147272238647
+     },
+     {
+      "decile": 1,
+      "z_from": 15.0,
+      "z_to": 30.0,
+      "thin_frac": 0.0
+     },
+     {
+      "decile": 2,
+      "z_from": 30.0,
+      "z_to": 45.0,
+      "thin_frac": 0.0
+     },
+     {
+      "decile": 3,
+      "z_from": 45.0,
+      "z_to": 60.0,
+      "thin_frac": 0.0
+     },
+     {
+      "decile": 4,
+      "z_from": 60.0,
+      "z_to": 74.99,
+      "thin_frac": 0.0002317497103128621
+     },
+     {
+      "decile": 5,
+      "z_from": 74.99,
+      "z_to": 89.99,
+      "thin_frac": 0.0018882769472856019
+     },
+     {
+      "decile": 6,
+      "z_from": 89.99,
+      "z_to": 104.99,
+      "thin_frac": 0.001717032967032967
+     },
+     {
+      "decile": 7,
+      "z_from": 104.99,
+      "z_to": 119.99,
+      "thin_frac": 0.0091164095371669
+     },
+     {
+      "decile": 8,
+      "z_from": 119.99,
+      "z_to": 134.99,
+      "thin_frac": 0.06501240694789082
+     },
+     {
+      "decile": 9,
+      "z_from": 134.99,
+      "z_to": 149.99,
+      "thin_frac": 0.00435471100554236
+     }
+    ]
+   },
+   "overhang": {
+    "angle_deg": 45.0,
+    "faces": 587390,
+    "bed_contact_area": 282.14742607786684,
+    "bed_contact_area_fraction": 0.015578471129314956,
+    "bed_tolerance": 0.3,
+    "overhang_face_fraction": 0.030208209196615536,
+    "overhang_area_fraction": 0.029285105264235282,
+    "overhang_area": 530.393323204542,
+    "flat_ceiling_area_fraction": 0.0032419387744349877,
+    "z_range": [
+     0.0,
+     150.0
+    ],
+    "by_height_decile": [
+     {
+      "decile": 0,
+      "z_from": 0.0,
+      "z_to": 15.0,
+      "overhang_area_frac": 0.043317532167022485
+     },
+     {
+      "decile": 1,
+      "z_from": 15.0,
+      "z_to": 30.0,
+      "overhang_area_frac": 0.0
+     },
+     {
+      "decile": 2,
+      "z_from": 30.0,
+      "z_to": 45.0,
+      "overhang_area_frac": 0.0035338237202736465
+     },
+     {
+      "decile": 3,
+      "z_from": 45.0,
+      "z_to": 60.0,
+      "overhang_area_frac": 0.0
+     },
+     {
+      "decile": 4,
+      "z_from": 60.0,
+      "z_to": 75.0,
+      "overhang_area_frac": 0.09369889970180723
+     },
+     {
+      "decile": 5,
+      "z_from": 75.0,
+      "z_to": 90.0,
+      "overhang_area_frac": 0.015321081894380084
+     },
+     {
+      "decile": 6,
+      "z_from": 90.0,
+      "z_to": 105.0,
+      "overhang_area_frac": 0.0033497219847750935
+     },
+     {
+      "decile": 7,
+      "z_from": 105.0,
+      "z_to": 120.0,
+      "overhang_area_frac": 0.015546813631841214
+     },
+     {
+      "decile": 8,
+      "z_from": 120.0,
+      "z_to": 135.0,
+      "overhang_area_frac": 0.08685281154344598
+     },
+     {
+      "decile": 9,
+      "z_from": 135.0,
+      "z_to": 150.0,
+      "overhang_area_frac": 0.015748299983612487
+     }
+    ],
+    "overhang_sampled": 17744,
+    "unsupported_fraction_of_overhangs": 0.4896302975653742,
+    "note_support": "49.0% of overhanging surface has nothing below it - support must be built from the plate.",
+    "bed_contact_vs_height2": 0.012539885603460749,
+    "needs_base": true
+   }
+  }
+ },
+ "render": {
+  "A_photo": {
+   "orbit": "/home/k4shix/shared/comfy-studio/studio/samples/photo2anime/mesh/views/A_photo_orbit.jpg",
+   "head": "/home/k4shix/shared/comfy-studio/studio/samples/photo2anime/mesh/views/A_photo_head.jpg",
+   "mp4": null,
+   "up_axis": "y",
+   "extents": [
+    1.2489252090454102,
+    1.9752700924873352,
+    0.38966670632362366
+   ],
+   "faces": 564108,
+   "vertices": 279774
+  },
+  "B_anime": {
+   "orbit": "/home/k4shix/shared/comfy-studio/studio/samples/photo2anime/mesh/views/B_anime_orbit.jpg",
+   "head": "/home/k4shix/shared/comfy-studio/studio/samples/photo2anime/mesh/views/B_anime_head.jpg",
+   "mp4": null,
+   "up_axis": "y",
+   "extents": [
+    1.2432278394699097,
+    1.9749423265457153,
+    0.3561047464609146
+   ],
+   "faces": 587390,
+   "vertices": 289488
+  }
+ },
+ "sheets": {
+  "sheets": [
+   "/home/k4shix/shared/comfy-studio/studio/samples/photo2anime/mesh/sheets/ARGUMENT.jpg",
+   "/home/k4shix/shared/comfy-studio/studio/samples/photo2anime/mesh/sheets/HEAD_HAIR.jpg",
+   "/home/k4shix/shared/comfy-studio/studio/samples/photo2anime/mesh/sheets/FACE.jpg",
+   "/home/k4shix/shared/comfy-studio/studio/samples/photo2anime/mesh/sheets/HANDS.jpg",
+   "/home/k4shix/shared/comfy-studio/studio/samples/photo2anime/mesh/sheets/FISTS.jpg",
+   "/home/k4shix/shared/comfy-studio/studio/samples/photo2anime/mesh/sheets/LIKENESS.jpg",
+   "/home/k4shix/shared/comfy-studio/studio/samples/photo2anime/mesh/sheets/ORBITS.jpg"
+  ]
+ },
+ "print_verify": {
+  "stl": {
+   "bytes": 149550484,
+   "watertight": true,
+   "faces": 2991008,
+   "boundary_edges": 0,
+   "nonmanifold_edges": 0,
+   "volume_cm3": 93819.74993236417,
+   "bbox": [
+    91.3499984741211,
+    78.0,
+    150.0
+   ]
+  },
+  "3mf": {
+   "bytes": 26395326,
+   "watertight": true,
+   "faces": 2991008,
+   "boundary_edges": 0,
+   "nonmanifold_edges": 0,
+   "volume_cm3": 93819.74993236417,
+   "bbox": [
+    91.3499984741211,
+    78.0,
+    150.0
+   ]
+  },
+  "glb": {
+   "bytes": 53838916,
+   "watertight": true,
+   "faces": 2991008,
+   "boundary_edges": 0,
+   "nonmanifold_edges": 0,
+   "volume_cm3": 93819.74993236417,
+   "bbox": [
+    91.3499984741211,
+    78.0,
+    150.0
+   ]
+  }
+ }
+}

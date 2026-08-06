@@ -1,0 +1,98 @@
+{
+ "question": "Does photo -> anime -> mesh beat photo -> mesh?",
+ "answer": "SPLIT, and the thesis is wrong about its own mechanism. The photograph makes the better OBJECT. The drawing makes the better FACE. If the brief is a printable figurine of a generic body, go direct from the photograph. If the brief is a printable figurine OF HER, stylise first and pay for it in repair.",
+ "dated": "2026-08-06",
+ "box": "RTX 5090, Fedora, ComfyUI 127.0.0.1:8188",
+ "subject": "the synthetic stand-in - no real person was used, imaged or named anywhere in this experiment",
+
+ "held_constant": {
+  "note": "The two arms differ in exactly one thing: whether the frame was redrawn before it was meshed.",
+  "source_frame": "standin/ideal/IDEAL_apose_1152x2048.png - the same A-pose for both arms",
+  "matte": "BiRefNet, workflow 14, for both arms",
+  "plate": "grey #848484, alpha-bbox crop, 5% margin, squared, 1024x1024",
+  "conditioning": "Hunyuan3Dv2Conditioning, SINGLE view, CLIPVisionEncode crop=center",
+  "latent": 4096,
+  "sampler": "euler / normal, 30 steps, cfg 5.0, seed 20260806",
+  "octree_resolution": 512,
+  "extract": "VoxelToMesh surface net, threshold 0.45",
+  "resolution_confound_ruled_out": "The anime seed is 752x1392 against the photo's 1152x2048, but both are squared and downscaled to 1024 and CLIPVisionEncode then resamples to 518. Both arms DOWNSAMPLE into the encoder; neither is upsampled to reach it, so the extra photo pixels are discarded before conditioning."
+ },
+
+ "arms": {
+  "A_photo": {"what": "PHOTO DIRECT - control", "source": "standin/ideal/cut_rgba_00001_.png"},
+  "B_anime": {"what": "ANIME FIRST - treatment",
+              "source": "sweep/alt/qwen_ideal_apose.png",
+              "route": "Qwen-Image-Edit 2511 redraw prompt, style LoRA off - the winner of STYLISE 1"}
+ },
+
+ "four_questions": {
+
+  "hair": {
+   "winner": "A_photo",
+   "verdict": "THE THESIS IS REFUTED ON ITS HEADLINE CLAIM, AND THE DIRECTION IS EXACTLY BACKWARDS.",
+   "evidence": "mesh/sheets/HEAD_HAIR.jpg, cells 3 and 6 (180 deg)",
+   "read": "The PHOTOGRAPH gave the closed hair mass the thesis predicted from the drawing: one smooth continuous shell from crown to shoulder blade, a few soft ripples, no separations anywhere. The DRAWING broke into Terra's exact failure mode - the hair ends came through as a row of discrete curled TUBES sitting on the shoulders, with visible gaps and holes between them. The mechanism is that ligne-claire art OUTLINES each lock, and the mesher reads a closed outline as a closed volume. Real hair has no outlines, so photographic hair mass has nothing for the mesher to separate. Fine strands were never the risk; drawn contours are.",
+   "counts_it_shows_up_in": "components 5169 (B) vs 2634 (A); non-manifold edges 11417 vs 6361; boundary edges 116 vs 36"
+  },
+
+  "hands": {
+   "winner": "A_photo, narrowly - effectively a tie",
+   "evidence": "mesh/sheets/FISTS.jpg",
+   "read": "Both arms produced correct closed fists with a thumb, at all three angles, with no extra digits and no fusion into the hip. A_photo has slightly more knuckle relief; B_anime is smoother and simpler. Neither reproduced Terra's bad-hand failure, because the A-pose seed had closed hands in the first place - which is a property of the SOURCE, not of the stylisation. Stylisation neither helped nor hurt here."
+  },
+
+  "likeness": {
+   "winner": "B_anime, and not close",
+   "evidence": "mesh/sheets/LIKENESS.jpg (all four states at once), mesh/sheets/FACE.jpg",
+   "read": "THIS IS THE ONE THAT REVERSES THE VERDICT. The photo mesh's face is a blank: the nose has almost no projection at all (the 75 deg profile is nearly flat), the mouth is a shallow dent, and the glasses came through as one thick squarish slab covering the whole midface. It is not somebody else, it is nobody. The anime mesh has a face - a nose with a bridge and a tip, lips with a philtrum, a chin, a brow - and the glasses are ROUND, correctly scaled and sitting on the nose, which is her most distinctive marker. Its broad midface, wide-set eyes and full mouth track the photograph better than the photo mesh does.",
+   "why": "Facial relief in a photograph is carried by SHADING, which is a millimetre of real depth; the mesher reads it as noise and smooths it away. The redraw converts that shading into LINES, and lines are what this mesher builds relief from. The same property that ruins the hair rescues the face.",
+   "honesty": "Neither is a portrait likeness at 150 mm. B_anime is more recognisably her; it is not recognisable as her."
+  },
+
+  "printable_by_the_numbers": {
+   "winner": "A_photo on the RAW mesh - but the gap mostly closes after repair",
+   "raw": {
+    "components": {"A_photo": 2634, "B_anime": 5169},
+    "components_under_1pct": {"A_photo": 2633, "B_anime": 5168},
+    "nonmanifold_edges": {"A_photo": 6361, "B_anime": 11417},
+    "nonmanifold_fraction": {"A_photo": 0.00755, "B_anime": 0.01305},
+    "boundary_edges": {"A_photo": 36, "B_anime": 116},
+    "faces": {"A_photo": 564108, "B_anime": 587390},
+    "surface_below_min_feature": {"A_photo": 0.00166, "B_anime": 0.00866},
+    "thickness_1st_percentile_mm": {"A_photo": 1.64, "B_anime": 1.03},
+    "overhang_area_fraction": {"A_photo": 0.0224, "B_anime": 0.0293},
+    "bed_contact_mm2": {"A_photo": 320, "B_anime": 282}
+   },
+   "read": "A_photo wins every raw column, by roughly 2x on the topology counts and 5x on sub-minimum surface. But raw Hunyuan3D topology is an argument about how much work the REPAIR has to do, not about what can be printed - mesh_prep's single voxel pass drops strays, closes crevices and grows everything to the minimum feature by construction. Both arms were therefore re-measured on the far side of it."
+  }
+ },
+
+ "decision": {
+  "winner": "B_anime",
+  "why": "The brief says a beautiful mesh of somebody else is a failure, so likeness decides it. Every raw-topology deficit B_anime carries is the kind mesh_prep removes by construction; a face that was never in the geometry cannot be put back by any repair.",
+  "cost_accepted": "the drawn hair-lock tubes survive into the print as a fringe of separate scrolls at the shoulders. They are thick enough to print and they are ugly.",
+  "if_you_want_the_other_thing": "For a figurine where the face does not have to be hers - a background figure, a scale model, a poseable body - PHOTO DIRECT wins outright: half the strays, a third of the thin surface, and hair that is already a closed mass."
+ },
+
+ "for_the_recipe": {
+  "add_to_CHARACTER_TO_PRINT": [
+   "A drawn source is not automatically a cleaner source. Ink outlines around hair locks BECOME separate tubes. If you stylise before meshing, ask the redraw for hair as one silhouette with no internal lock outlines, or accept the tubes.",
+   "Photographic facial relief does not survive Hunyuan3D at figurine scale. Shading is not geometry. If the face has to read, give the mesher lines.",
+   "Judge printability AFTER mesh_prep solidify, not on the raw glb. The raw component and non-manifold counts moved 2x between these two arms and both landed watertight, one body, zero sub-0.8 mm surface."
+  ]
+ },
+
+ "evidence_on_disk": {
+  "sheets": ["mesh/sheets/ARGUMENT.jpg", "mesh/sheets/LIKENESS.jpg", "mesh/sheets/FACE.jpg",
+             "mesh/sheets/HEAD_HAIR.jpg", "mesh/sheets/FISTS.jpg", "mesh/sheets/HANDS.jpg",
+             "mesh/sheets/ORBITS.jpg"],
+  "data": ["mesh/DIAGNOSE.json", "mesh/PREP.json", "mesh/REPORT.json",
+           "print/_work/CONTROL_photo_150mm_audit.json", "print/_work/STANDIN_150mm_audit.json"],
+  "meshes": ["mesh/A_photo.glb", "mesh/B_anime.glb"],
+  "tool": "studio/_tools/photo2anime_mesh.py"
+ },
+
+ "operational": {
+  "paid_for_here": "The box is shared and ComfyUI was restarted under this run twice by another session. A restart WIPES /history AND /queue, so a submitted prompt id simply stops existing - and epic.wait_all, which only asks /history whether a pid has finished, waits for it forever. Twelve minutes of silence that looked exactly like a slow surface-net extraction. photo2anime_mesh.py's gen stage instead asks whether the pid is still SOMETHING the server admits to (running, queued or in history) and resubmits after two consecutive 'gone' polls. Both meshes then landed in 312 s with one resubmit each."
+ }
+}
