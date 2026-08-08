@@ -1,0 +1,65 @@
+{
+  "_": "WHICH SEED TO SCULPT FROM. Written by studio/_tools/terra_3d_source_v2.py --stage publish. Every claim was measured by the stage named beside it and every image behind it was opened and looked at, including the hands at full resolution rather than in a contact sheet.",
+  "first_choice": {
+    "use": "K3_bun_trim_rgba.png",
+    "px": "1664x2432 RGBA",
+    "recipe": "hair H3_bun, hand D4_outfist, seed 4242, lora 0.50, plus the NO_TRIM negative",
+    "why": [
+      "HAIR IS ONE CLOSED VOLUME. A bound cap with a tied topknot, no separated locks, no background visible through it. Measured: hair_bbox_fill_pct 39.3 against the v1-hair control's 28.8, and hair_drop_pct 20.2 against the control's 33.6 - the hair stops at the jaw instead of running past the sash.",
+      "HANDS ARE CLOSED and were checked as a full-resolution crop, not in a thumbnail. Both are soft closed fists with no separated digits. This is the fault the user named on the v1 mesh and it is gone.",
+      "ARMS CLEAR OF THE TORSO for their whole length, with a wide air triangle on both sides. Nothing to fuse.",
+      "NOTHING HANGS BELOW THE HEM. The shin-length sash panels and the fringe strands are gone, which were the features v1 flagged as below any printable minimum size and then shipped anyway.",
+      "LEGS AND BOOTS SEPARATE, both feet complete, nothing bridging them.",
+      "WHOLE FIGURE at 90.1% of frame height, no edge touched, matte clean at the hair edge on the magenta proof - no halo, no plate bleed.",
+      "COSTUME IS THE CARD'S at wear rung 0, and unlike the v1 seed it is not rendered dirty."
+    ],
+    "residual": "Three or four small curl flicks still leave the hair silhouette. They are far smaller than v1's locks but they are the most likely place for a spike, and they are the first thing to check on the mesh."
+  },
+  "runner_up": {
+    "use": "K6_crown_rgba.png",
+    "why": [
+      "THE CLEANEST ALPHA IN THE SET - islands 1, stray area 0.00%. One connected shell and nothing else, where the bun candidates carry 3 speckle fragments.",
+      "THE MOST DEFINITE HANDS - proper clenched fists with a read on the thumb, rather than the bun candidates' softer closed shape.",
+      "SHORTEST HAIR DROP in the set at 18.0%."
+    ],
+    "against": "The shin-length sash panels SURVIVED the NO_TRIM negative here, though the same negative removed them from H3_bun. Two thin sheets hanging to the shin are the worst remaining print feature in the set."
+  },
+  "third": {
+    "use": "K3_bun_rgba.png",
+    "why": "Identical hair and hands to the first choice - it is K3_bun_trim with the NO_TRIM negative off. Offered because it keeps more of the canonical sash, and because holding one variable apart is what makes the trim negative's effect attributable."
+  },
+  "rejected_and_why": {
+    "K0_control": "THE CONTROL, and it earns its place in the evidence rather than the deliverable. Same pose vocabulary as the winners, v1's hair tags restored - and it reproduces BOTH original faults exactly: hair fanned into separated locks past the waist, fingers splayed into thin spikes. That is what makes the fix attributable to the tag surgery rather than to the pose change.",
+    "K1_lowpony, K2_braid": "Hair fixed, HANDS NOT. Both splay the fingers into thin separated spikes at full resolution. See the note under vocabulary_that_worked - the hair treatments that shorten the hair are the same ones that close the hands.",
+    "K2_braid_s2, K3_bun_s2": "Seed 1337 changes the costume rather than the framing: it flares a cape as a thin sheet welded out to the side, and brings back a cast shadow at the feet. Both are v1 failure modes returning.",
+    "K6_crown_trim": "The trim negative cost hair quality here without removing the panels it was aimed at."
+  },
+  "vocabulary_that_worked": {
+    "THE ROOT CAUSE V1 MISSED": "TERRA.json's tags field contains 'long wavy green hair, very long hair', and v1 pasted that string into every prompt then APPENDED 'ponytail, hair behind back' after it. The prompt was arguing with itself. v1 read the failure as proof that the hair volume is trained into the LoRA; that conclusion does not follow and is wrong. REMOVE the competing tags and the LoRA gives up the volume immediately - hair area fell from 13.1% of the figure to 5.1-7.3%.",
+    "hair, as danbooru nouns that worked": [
+      "hair bun, single hair bun, hair up, hair tied back  - best closed mass",
+      "crown braid, braided bun, hair up, short hair       - tightest, best fists",
+      "single braid, braided ponytail, hair tied back      - mass good, hands bad",
+      "low ponytail, hair tied back                        - mass good, hands bad"
+    ],
+    "the anti-strand negative, which is the other half of the fix": "floating hair, very long hair, wavy hair, curly hair, messy hair, hair spread out, windswept, drill hair, hair flowing, big hair, hair over shoulder, sidelocks",
+    "an unexpected coupling, and it is the most reusable finding here": "THE HAIR TREATMENT DECIDES THE HANDS. Every candidate whose hair stayed long (H0, H1, H2) splayed its fingers into thin separated spikes; both candidates whose hair became a short bound cap (H3, H6) closed the hands into fists. The pose words were identical across all five. The model appears to hold one 'long thin strand' habit that it applies to hair and fingers together, so fixing the hair fixed the hands for free. Worth testing on the next character before assuming it generalises.",
+    "the fringe and drapery negative": "fringe, tassel, tassels, frills, long scarf, cape, shawl, drapery, ribbon trim"
+  },
+  "vocabulary_that_did_not_work": {
+    "any unweighted hand noun": "'open hands' and 'clenched hands' BOTH pull the arms down to her sides, beating 'outstretched arms'. v1's winning render had no hand noun at all, which is why it got an open pose AND fingers it never specified.",
+    "moving the hand closure to the negative alone (D5)": "Does not restore the arm. The weight on the arm was the lever, not the negative on the hand.",
+    "(outstretched arms:1.5) (D6)": "Overshoots into a full T-pose and shreds both hands into feathered extra fingers - worse than the fault being fixed. 1.4 is the working value and the window is narrow.",
+    "re-weighting the fist to 1.3 (D7)": "Beats the arm again and the arms drop. The arm and the hand compete; only one can be weighted.",
+    "hands on hips (D2)": "Fuses forearm to hip and closes an arm-to-torso loop. There is no later step that separates it. One cell also drifted off the anime engine to a 3D-render look.",
+    "arms behind back (D3)": "Removes the arms from the silhouette entirely. A reconstructor gets a limbless torso.",
+    "'no cast shadow' in the positive prompt": "Inherited from v1 and still true - a negation does not render. The word has to be in the negative prompt.",
+    "wear rung 0's own words": "'red and blue pattern, clean and unmarked' rendered as a STAINED and torn bodice in v1. Adding damage nouns to the negative fixed it. Rung 0 describing itself is not enough."
+  },
+  "carry_forward_to_the_mesh_stage": [
+    "HER BOOTS ARE STILL POINTED WITH A RAISED HEEL. Ground contact is two small triangles. This figure still needs a base, exactly as v1 found.",
+    "THE HAIR IS NO LONGER THE DOMINANT VOLUME. It was 30% of the figure from the front in v1; it is now 7.3% of figure area with a span of 0.29 of the figure width. The overhang and thin-shell problem v1 flagged should be much reduced - worth re-measuring on the mesh rather than assuming.",
+    "THE REMAINING THIN FEATURES are the earrings, the hair-ribbon prongs and three or four curl flicks at the hair edge. Check these first on the mesh.",
+    "NOTHING WAS PROVEN ABOUT THE MESH. This deliverable is a source image. The claim that these two faults were source faults is now well supported, but it is only confirmed when Hunyuan3D is run on K3_bun_trim and the result is looked at."
+  ]
+}

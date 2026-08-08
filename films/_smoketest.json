@@ -1,0 +1,124 @@
+{
+ "title": "SALT ROAD SMOKE TEST",
+ "subtitle": "episode one - the door in the hill",
+ "ar": "16:9",
+ "fps": 24,
+ "seconds": 6,
+ "tail": 1.1,
+ "default_transition": "cut",
+ "style_lora": "",
+ "style_strength": 0.0,
+ "id_lora": "ltx-2.3-id-lora-talkvid-3k.safetensors",
+ "id_strength": 0.6,
+ "engine": "higgs_v3",
+ "sheets": {
+  "BRENNA": "sheet_dnd_brenna.png",
+  "MIRIEL": "sheet_dnd_miriel.png",
+  "DURGAN": "sheet_dnd_durgan.png",
+  "SKIVV": "sheet_dnd_skivv.png",
+  "VESSARAX": "sheet_dnd_vessarax.png"
+ },
+ "style": {
+  "default": "dark fantasy tabletop illustration, painted in gouache and ink, heavy shadow, painterly brushwork, muted earth palette, detailed faces, the look of a roleplaying rulebook plate, cinematic widescreen composition",
+  "lamp": "dark fantasy tabletop illustration, painted in gouache and ink, heavy shadow, painterly brushwork, muted earth palette, detailed faces, the look of a roleplaying rulebook plate, cinematic widescreen composition, warm lamplight and deep brown shadow, cosy and close",
+  "cold": "dark fantasy tabletop illustration, painted in gouache and ink, heavy shadow, painterly brushwork, muted earth palette, detailed faces, the look of a roleplaying rulebook plate, cinematic widescreen composition, flat grey overcast light, thin rain, desaturated, bleak",
+  "dark": "dark fantasy tabletop illustration, painted in gouache and ink, heavy shadow, painterly brushwork, muted earth palette, detailed faces, the look of a roleplaying rulebook plate, cinematic widescreen composition, near darkness, a single cold light source, crushed shadow",
+  "fire": "dark fantasy tabletop illustration, painted in gouache and ink, heavy shadow, painterly brushwork, muted earth palette, detailed faces, the look of a roleplaying rulebook plate, cinematic widescreen composition, firelight from below, deep orange against black, chiaroscuro",
+  "gold": "dark fantasy tabletop illustration, painted in gouache and ink, heavy shadow, painterly brushwork, muted earth palette, detailed faces, the look of a roleplaying rulebook plate, cinematic widescreen composition, green-gold glow rising from below, sickly and beautiful",
+  "table": "overhead photograph-style painted illustration of a wooden tabletop, hand-drawn hex map, scattered polyhedral dice, pewter miniatures, candlelight, warm and intimate, shallow depth of field"
+ },
+ "characters": {
+  "BRENNA": "the scarred human woman sellsword in ring-mail from the reference image",
+  "MIRIEL": "the young silver-haired elf wizard in a blue coat from the reference image",
+  "DURGAN": "the old grey-bearded dwarf cleric in a dented breastplate from the reference image",
+  "SKIVV": "the small ginger-haired halfling rogue in a green cloak from the reference image",
+  "VESSARAX": "the vast ancient green dragon with a broken iron collar from the reference image"
+ },
+ "voices": {
+  "NARRATOR": {
+   "engine": "higgs_v3",
+   "voice": "voices_examples/higgs_audio/chadwick.wav"
+  },
+  "BRENNA": {
+   "engine": "higgs_v3",
+   "voice": "voices_examples/female/female_01.wav"
+  },
+  "MIRIEL": {
+   "engine": "higgs_v3",
+   "voice": "voices_examples/female/female_04_maya.wav"
+  },
+  "DURGAN": {
+   "engine": "higgs_v3",
+   "voice": "voices_examples/male/male_04_frank.wav"
+  },
+  "SKIVV": {
+   "engine": "higgs_v3",
+   "voice": "voices_examples/male/male_03_carter.wav"
+  },
+  "VESSARAX": {
+   "engine": "higgs_v3",
+   "voice": "voices_examples/higgs_audio/vex.wav"
+  }
+ },
+ "music": [
+  {
+   "at_shot": "010_table",
+   "prefix": "m01_table",
+   "bpm": 62,
+   "key": "D minor",
+   "seconds": 14.0,
+   "level": 0.85,
+   "tags": "warm solo acoustic guitar and low strings, curious and inviting, a story beginning, sparse, instrumental, no drums"
+  }
+ ],
+ "shots": [
+  {
+   "id": "010_table",
+   "look": "table",
+   "prompt": "Overhead view of a candlelit wooden table, a hand-drawn hex map of a river valley weighted down with a tankard, four pewter miniatures standing at the map's edge, a scatter of dice, one twenty-sided die resting on a twenty",
+   "motion": "The candle flame wavers. A hand enters frame and sets a fifth miniature down at the far end of the map. Slow push in on the dice.",
+   "say": "Every campaign begins the same way. Four people who should not trust each other, one road, and a rumour worth more than it ought to be.",
+   "sfx": "A quiet room, a candle guttering, dice settling on wood, no music",
+   "titles": [
+    {
+     "text": "THE SALT ROAD",
+     "at": 1.2,
+     "hold": 3.4,
+     "scale": 1.0
+    }
+   ]
+  },
+  {
+   "id": "020_valley",
+   "look": "cold",
+   "prompt": "Extreme wide shot of a river valley under low grey cloud, a rutted trade road winding between wet green hills, a walled village small in the distance, smoke from three chimneys, no travellers on the road at all",
+   "motion": "Rain drifts across the valley in a slow sheet. The smoke bends. Nothing moves on the road. Very slow push in toward the village.",
+   "say": "The valley is called Marrow Ford. For ninety years the salt carts came down that road from the pans in the east, and for ninety years nothing much happened here. That is the kind of place a story starts.",
+   "sfx": "Cold rain on open hillside, wind, distant rooks, no voices",
+   "titles": [
+    {
+     "text": "EPISODE ONE\nTHE DOOR IN THE HILL",
+     "at": 2.0,
+     "hold": 4.0,
+     "scale": 0.75
+    }
+   ]
+  },
+  {
+   "id": "190_end_table",
+   "look": "table",
+   "prompt": "Overhead view of the candlelit table, four miniatures now standing together at the mouth of a drawn tunnel on the map, a twenty-sided die rolling to a stop showing a one, a hand withdrawing",
+   "motion": "The die rolls, slows, and stops on a one. The hand withdraws from frame. The candle flame leans. Slow push in on the die.",
+   "say": "We stopped there for the night. Somebody had to drive home, and Skivv's player wanted to look up what a halfling can carry.",
+   "sfx": "A die rolling and stopping on wood, a chair pushed back, quiet room tone",
+   "titles": [
+    {
+     "text": "EPISODE TWO\nWHAT THE DARK KEPT",
+     "at": 2.6,
+     "hold": 3.6,
+     "scale": 0.7
+    }
+   ]
+  }
+ ]
+}

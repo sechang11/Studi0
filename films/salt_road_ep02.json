@@ -1,0 +1,258 @@
+{
+ "title": "THE SALT ROAD EP2",
+ "subtitle": "episode two - what the dark kept",
+ "ar": "16:9",
+ "fps": 24,
+ "seconds": 6,
+ "tail": 1.1,
+ "default_transition": "cut",
+ "style_lora": "",
+ "style_strength": 0.0,
+ "id_lora": "ltx-2.3-id-lora-talkvid-3k.safetensors",
+ "id_strength": 0.6,
+ "engine": "higgs_v3",
+ "sheets": {
+  "BRENNA": "sheet_dnd_brenna.png",
+  "MIRIEL": "sheet_dnd_miriel.png",
+  "DURGAN": "sheet_dnd_durgan.png",
+  "SKIVV": "sheet_dnd_skivv.png",
+  "VESSARAX": "sheet_dnd_vessarax.png"
+ },
+ "style": {
+  "default": "dark fantasy tabletop illustration, painted in gouache and ink, heavy shadow, painterly brushwork, muted earth palette, detailed faces, the look of a roleplaying rulebook plate, cinematic widescreen composition",
+  "lamp": "dark fantasy tabletop illustration, painted in gouache and ink, heavy shadow, painterly brushwork, muted earth palette, detailed faces, the look of a roleplaying rulebook plate, cinematic widescreen composition, warm lamplight and deep brown shadow, cosy and close",
+  "cold": "dark fantasy tabletop illustration, painted in gouache and ink, heavy shadow, painterly brushwork, muted earth palette, detailed faces, the look of a roleplaying rulebook plate, cinematic widescreen composition, flat grey overcast light, thin rain, desaturated, bleak",
+  "dark": "dark fantasy tabletop illustration, painted in gouache and ink, heavy shadow, painterly brushwork, muted earth palette, detailed faces, the look of a roleplaying rulebook plate, cinematic widescreen composition, near darkness, a single cold light source, crushed shadow",
+  "fire": "dark fantasy tabletop illustration, painted in gouache and ink, heavy shadow, painterly brushwork, muted earth palette, detailed faces, the look of a roleplaying rulebook plate, cinematic widescreen composition, firelight from below, deep orange against black, chiaroscuro",
+  "gold": "dark fantasy tabletop illustration, painted in gouache and ink, heavy shadow, painterly brushwork, muted earth palette, detailed faces, the look of a roleplaying rulebook plate, cinematic widescreen composition, green-gold glow rising from below, sickly and beautiful",
+  "table": "overhead photograph-style painted illustration of a wooden tabletop, hand-drawn hex map, scattered polyhedral dice, pewter miniatures, candlelight, warm and intimate, shallow depth of field"
+ },
+ "characters": {
+  "BRENNA": "the scarred human woman sellsword in ring-mail from the reference image",
+  "MIRIEL": "the young silver-haired elf wizard in a blue coat from the reference image",
+  "DURGAN": "the old grey-bearded dwarf cleric in a dented breastplate from the reference image",
+  "SKIVV": "the small ginger-haired halfling rogue in a green cloak from the reference image",
+  "VESSARAX": "the vast ancient green dragon with a broken iron collar from the reference image"
+ },
+ "voices": {
+  "NARRATOR": {
+   "engine": "higgs_v3",
+   "voice": "voices_examples/higgs_audio/chadwick.wav"
+  },
+  "BRENNA": {
+   "engine": "higgs_v3",
+   "voice": "voices_examples/female/female_01.wav"
+  },
+  "MIRIEL": {
+   "engine": "higgs_v3",
+   "voice": "voices_examples/female/female_04_maya.wav"
+  },
+  "DURGAN": {
+   "engine": "higgs_v3",
+   "voice": "voices_examples/male/male_04_frank.wav"
+  },
+  "SKIVV": {
+   "engine": "higgs_v3",
+   "voice": "voices_examples/male/male_03_carter.wav"
+  },
+  "VESSARAX": {
+   "engine": "higgs_v3",
+   "voice": "voices_examples/higgs_audio/vex.wav"
+  }
+ },
+ "music": [
+  {
+   "at_shot": "200_table",
+   "prefix": "m01_table2",
+   "bpm": 60,
+   "key": "D minor",
+   "seconds": 24.0,
+   "level": 0.85,
+   "tags": "warm acoustic guitar with a darker turn, low strings entering, a story resuming, sparse, instrumental, no drums"
+  },
+  {
+   "at_shot": "210_entry",
+   "prefix": "m02_dark",
+   "bpm": 48,
+   "key": "C minor",
+   "seconds": 44.0,
+   "level": 0.9,
+   "tags": "very low drone, distant metallic resonance, claustrophobic, almost no melody, dark ambient orchestral, instrumental, no drums"
+  },
+  {
+   "at_shot": "260_shaft",
+   "prefix": "m03_shaft",
+   "bpm": 56,
+   "key": "G minor",
+   "seconds": 46.0,
+   "level": 0.9,
+   "tags": "rising choral pad over a deep drone, vast and awed, slow swelling brass, immense scale, instrumental"
+  },
+  {
+   "at_shot": "300_reveal",
+   "prefix": "m04_dragon",
+   "bpm": 50,
+   "key": "E minor",
+   "seconds": 40.0,
+   "level": 1.0,
+   "tags": "enormous low brass and dark choir, ancient and sad rather than monstrous, slow, overwhelming, dark orchestral, instrumental"
+  }
+ ],
+ "shots": [
+  {
+   "id": "200_table",
+   "look": "table",
+   "prompt": "Overhead view of a candlelit table, a hand-drawn map now weighted open at a tunnel system, four pewter miniatures standing just inside the entrance, a fresh mug, a pencil laid across the map",
+   "motion": "A hand slides the four miniatures forward together one step into the drawn tunnel. The candle steadies. Slow push in.",
+   "say": "Last week they opened a door that a dwarven order sealed three hundred years ago. This week they go in. Everyone at the table already knows this is a mistake.",
+   "sfx": "Quiet room, candle, a pencil set down, miniatures on paper",
+   "titles": [
+    {
+     "text": "EPISODE TWO - WHAT THE DARK KEPT",
+     "at": 1.4,
+     "hold": 3.8,
+     "scale": 0.034
+    }
+   ]
+  },
+  {
+   "id": "210_entry",
+   "look": "dark",
+   "prompt": "Interior of a dwarven tunnel just past the entrance, squared grey stonework running into blackness, a single lantern held high throwing light a few feet, four figures small against the scale of it, dust hanging in the beam",
+   "motion": "Dust drifts through the lantern light. The lantern sways slightly and the shadows swing with it. Slow push forward into the dark.",
+   "say": "The air was dry and dead and three hundred years old, and it moved. Which meant something, somewhere ahead, was open to the sky.",
+   "sfx": "Boots on dry stone, a lantern handle creaking, a faint draught, deep silence"
+  },
+  {
+   "id": "220_hall",
+   "look": "dark",
+   "prompt": "A vast dwarven hall in near darkness, two rows of enormous square pillars disappearing into blackness, a fallen ceiling slab, lantern light reaching only the nearest pillar, immense scale",
+   "motion": "The lantern light slides across one pillar as they pass. The dark beyond does not change. Very slow push in between the pillars.",
+   "say": "Miriel started counting pillars and stopped at forty. Whatever this had been, it was not a mine. Nobody digs a hall like that to get at salt.",
+   "sfx": "Footsteps echoing in a very large stone space, a slow draught, distant dripping"
+  },
+  {
+   "id": "230_carvings",
+   "look": "dark",
+   "prompt": "Close on a carved stone wall lit by a raised lantern, a long relief of small robed dwarven figures carrying something large and bound in chains, the carving deliberate and repetitive, moss and dust in the grooves",
+   "motion": "The lantern light travels slowly along the relief from left to right, revealing more figures and more chain.",
+   "say": "The walls told the story, in the way that walls do, which is to say proudly and without any of the useful details.",
+   "sfx": "A lantern creaking, a hand brushing dust from stone, echoing drips"
+  },
+  {
+   "id": "235_miriel_line",
+   "look": "dark",
+   "prompt": "Close-up of MIRIEL holding a lantern up to a carved wall, her face lit from one side, silver hair bright in the light, reading the carving with her lips moving",
+   "motion": "She moves the lantern slightly to light the next section and her eyes track across it. Slight push in.",
+   "say": "They're not carrying it out. Look at the feet. They're all facing in. They carried it down here on purpose.",
+   "who": "MIRIEL",
+   "sfx": "A lantern creaking, quiet breathing, a large echoing space"
+  },
+  {
+   "id": "240_warren",
+   "look": "fire",
+   "prompt": "A dwarven side chamber crudely converted into a goblin warren, filthy hide partitions strung between carved pillars, a low fire, stolen sacks of salt stacked in a corner, bones and refuse, seen from a dark doorway",
+   "motion": "The fire flickers across the hides. A shadow crosses behind a partition. The camera holds in the dark doorway, then pushes very slowly forward.",
+   "say": "The goblins had been living in it for perhaps forty years. And there, stacked against a carved pillar older than the kingdom, were six weeks of stolen salt.",
+   "sfx": "A crackling fire, muttering voices in a strange tongue, hides moving, dripping"
+  },
+  {
+   "id": "245_salt_stack",
+   "look": "fire",
+   "prompt": "Close on stacked sacks of white salt against ancient carved dwarven stonework, firelight on the coarse cloth, one sack split with salt spilling out, tally marks scratched crudely into the pillar beside them",
+   "motion": "Firelight moves across the sacks. A little salt trickles from the split seam. Slow push in on the tally marks.",
+   "say": "Not eaten. Not sold. Stacked, and counted, and kept. Somebody down here was keeping a tally.",
+   "sfx": "A distant fire, a faint trickle of grain, low guttural voices far off"
+  },
+  {
+   "id": "250_skivv_sneak",
+   "look": "fire",
+   "prompt": "Low angle of SKIVV pressed flat against a carved pillar in shadow, one hand raised behind him signalling stop, firelight from the chamber beyond edging his face, entirely serious for once",
+   "motion": "His raised hand closes into a fist. He does not move. Behind him a goblin shadow passes across the firelit wall. Very slow push in.",
+   "sfx": "A fire, footsteps passing close, held breath, cloth on stone"
+  },
+  {
+   "id": "255_skivv_line",
+   "look": "fire",
+   "prompt": "Close-up of SKIVV in shadow looking back over his shoulder, firelight on half his face, no grin at all",
+   "motion": "He mouths the words rather than speaking them, then turns back to the light. Slight push in.",
+   "say": "There's forty of them. Forty. And they're all facing the same way, and it isn't at us.",
+   "who": "SKIVV",
+   "sfx": "Distant fire, muttering, very quiet movement"
+  },
+  {
+   "id": "260_shaft",
+   "look": "gold",
+   "prompt": "An enormous vertical shaft in the rock lit from far below by a sickly green-gold glow, a spiral stair of dwarven stone running down the wall of it, the bottom not visible, four small figures at the lip",
+   "motion": "The green-gold light from below shifts slowly, as if something enormous had moved in front of it. The figures do not move. Very slow push out over the drop.",
+   "say": "And past the warren, past the hall, the floor simply stopped. And something a long way down was giving off a light.",
+   "sfx": "A vast open echoing space, a deep slow draught rising, distant chain, no music"
+  },
+  {
+   "id": "270_descent",
+   "look": "gold",
+   "prompt": "Four figures descending a narrow dwarven spiral stair carved into the wall of a huge shaft, no rail, the green-gold glow rising from below and lighting them from beneath, immense drop beside them",
+   "motion": "They descend steadily, hands on the rock wall. The light from below strengthens on their faces as they go. Slow push in and downward.",
+   "say": "Nine hundred steps. Durgan counted every one of them, out loud, which the others found either steadying or unbearable depending on the step.",
+   "sfx": "Boots on stone steps, a great echoing shaft, a rising warm draught, a low hum"
+  },
+  {
+   "id": "275_durgan_line",
+   "look": "gold",
+   "prompt": "Close-up of DURGAN on a stone stair lit from below by green-gold light, his face grim, one hand flat against the rock wall, the sun symbol swinging at his chest",
+   "motion": "He stops on the step. His hand presses flatter against the wall. He looks down. Slight push in.",
+   "say": "Six hundred and forty. Lass, my order does not build stairs down to salt.",
+   "who": "DURGAN",
+   "sfx": "Boots halting on stone, a great echo, a low resonant hum from below"
+  },
+  {
+   "id": "280_chains",
+   "look": "gold",
+   "prompt": "Enormous ancient iron chains, each link as tall as a man, running across a vast stone floor and disappearing into darkness, corroded and slack, lit green-gold from one side, a tiny figure standing beside one link for scale",
+   "motion": "The light shifts slowly along the chains. One chain settles with a deep groan. The small figure steps back. Very slow drift along the chain into the dark.",
+   "say": "At the bottom, chains. Slack ones. And a collar the size of a doorway lying open on the stone.",
+   "sfx": "A colossal iron chain settling, a vast echo, deep low resonance"
+  },
+  {
+   "id": "290_eye",
+   "look": "gold",
+   "prompt": "Extreme close-up of an enormous reptilian eye opening in near darkness, the pupil narrowing, green-gold light reflecting in it, ancient and intelligent and unhurried, filling the entire frame",
+   "motion": "The eye opens fully and the pupil contracts. It moves fractionally, tracking something small. Nothing else moves. Very slow push in.",
+   "say": "And then the dark at the far end of the chamber opened one eye, and looked at them, and did not attack.",
+   "sfx": "A single vast slow breath in the dark, chain shifting, no music"
+  },
+  {
+   "id": "300_reveal",
+   "look": "gold",
+   "prompt": "Wide shot of a colossal ancient green dragon lying in a vast underground chamber, moss-dark scales, one blind milky eye, a broken iron collar around the neck, tattered wings folded, four tiny figures frozen at the edge of the light",
+   "motion": "The dragon's head lowers very slightly toward them. Dust falls from the ceiling. The four figures do not move at all. Slow push in.",
+   "say": "Vessarax. Four hundred years old. Chained under a hill by a dwarven order that has been dust for three centuries, and still, technically, alive.",
+   "sfx": "An enormous slow breath, scales on stone, dust falling, a deep low rumble"
+  },
+  {
+   "id": "310_speak",
+   "look": "gold",
+   "prompt": "Medium shot of the vast dragon's head lowered close to the ground, the blind eye nearest camera, jaws slightly parted, green-gold light from beneath, terrible and strangely gentle",
+   "motion": "The great head settles lower onto the stone. The jaws part slightly further. Very slow push in.",
+   "say": "You brought a priest. Oh, that is funny. That is genuinely funny.",
+   "who": "VESSARAX",
+   "sfx": "A colossal voice resonating in stone, chain shifting, dust falling"
+  },
+  {
+   "id": "320_end_table",
+   "look": "table",
+   "prompt": "Overhead view of the candlelit table, four miniatures now standing in a cleared space on the map, a very large dragon figure set down opposite them, several hands frozen mid-reach, one chair pushed back",
+   "motion": "A hand sets the dragon miniature down heavily. Everyone's hands stop moving. The candle flame jumps. Slow push in on the dragon.",
+   "say": "I put the dragon on the table, and nobody reached for a die. Which is exactly what I wanted, because Vessarax has no intention of fighting anybody.",
+   "sfx": "A heavy miniature set on wood, a chair, sudden quiet, a candle",
+   "titles": [
+    {
+     "text": "EPISODE THREE - THE BARGAIN",
+     "at": 2.6,
+     "hold": 3.6,
+     "scale": 0.034
+    }
+   ]
+  }
+ ]
+}

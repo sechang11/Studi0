@@ -1,0 +1,270 @@
+{
+ "title": "THE SALT ROAD EP3",
+ "subtitle": "episode three - the bargain",
+ "ar": "16:9",
+ "fps": 24,
+ "seconds": 6,
+ "tail": 1.1,
+ "default_transition": "cut",
+ "style_lora": "",
+ "style_strength": 0.0,
+ "id_lora": "ltx-2.3-id-lora-talkvid-3k.safetensors",
+ "id_strength": 0.6,
+ "engine": "higgs_v3",
+ "sheets": {
+  "BRENNA": "sheet_dnd_brenna.png",
+  "MIRIEL": "sheet_dnd_miriel.png",
+  "DURGAN": "sheet_dnd_durgan.png",
+  "SKIVV": "sheet_dnd_skivv.png",
+  "VESSARAX": "sheet_dnd_vessarax.png"
+ },
+ "style": {
+  "default": "dark fantasy tabletop illustration, painted in gouache and ink, heavy shadow, painterly brushwork, muted earth palette, detailed faces, the look of a roleplaying rulebook plate, cinematic widescreen composition",
+  "lamp": "dark fantasy tabletop illustration, painted in gouache and ink, heavy shadow, painterly brushwork, muted earth palette, detailed faces, the look of a roleplaying rulebook plate, cinematic widescreen composition, warm lamplight and deep brown shadow, cosy and close",
+  "cold": "dark fantasy tabletop illustration, painted in gouache and ink, heavy shadow, painterly brushwork, muted earth palette, detailed faces, the look of a roleplaying rulebook plate, cinematic widescreen composition, flat grey overcast light, thin rain, desaturated, bleak",
+  "dark": "dark fantasy tabletop illustration, painted in gouache and ink, heavy shadow, painterly brushwork, muted earth palette, detailed faces, the look of a roleplaying rulebook plate, cinematic widescreen composition, near darkness, a single cold light source, crushed shadow",
+  "fire": "dark fantasy tabletop illustration, painted in gouache and ink, heavy shadow, painterly brushwork, muted earth palette, detailed faces, the look of a roleplaying rulebook plate, cinematic widescreen composition, firelight from below, deep orange against black, chiaroscuro",
+  "gold": "dark fantasy tabletop illustration, painted in gouache and ink, heavy shadow, painterly brushwork, muted earth palette, detailed faces, the look of a roleplaying rulebook plate, cinematic widescreen composition, green-gold glow rising from below, sickly and beautiful",
+  "table": "overhead photograph-style painted illustration of a wooden tabletop, hand-drawn hex map, scattered polyhedral dice, pewter miniatures, candlelight, warm and intimate, shallow depth of field"
+ },
+ "characters": {
+  "BRENNA": "the scarred human woman sellsword in ring-mail from the reference image",
+  "MIRIEL": "the young silver-haired elf wizard in a blue coat from the reference image",
+  "DURGAN": "the old grey-bearded dwarf cleric in a dented breastplate from the reference image",
+  "SKIVV": "the small ginger-haired halfling rogue in a green cloak from the reference image",
+  "VESSARAX": "the vast ancient green dragon with a broken iron collar from the reference image"
+ },
+ "voices": {
+  "NARRATOR": {
+   "engine": "higgs_v3",
+   "voice": "voices_examples/higgs_audio/chadwick.wav"
+  },
+  "BRENNA": {
+   "engine": "higgs_v3",
+   "voice": "voices_examples/female/female_01.wav"
+  },
+  "MIRIEL": {
+   "engine": "higgs_v3",
+   "voice": "voices_examples/female/female_04_maya.wav"
+  },
+  "DURGAN": {
+   "engine": "higgs_v3",
+   "voice": "voices_examples/male/male_04_frank.wav"
+  },
+  "SKIVV": {
+   "engine": "higgs_v3",
+   "voice": "voices_examples/male/male_03_carter.wav"
+  },
+  "VESSARAX": {
+   "engine": "higgs_v3",
+   "voice": "voices_examples/higgs_audio/vex.wav"
+  }
+ },
+ "music": [
+  {
+   "at_shot": "400_table",
+   "prefix": "m01_table3",
+   "bpm": 58,
+   "key": "D minor",
+   "seconds": 24.0,
+   "level": 0.85,
+   "tags": "solo acoustic guitar, quiet and reflective, a story reaching its end, warm, instrumental, no drums"
+  },
+  {
+   "at_shot": "420_dragon_close",
+   "prefix": "m02_talk",
+   "bpm": 50,
+   "key": "E minor",
+   "seconds": 50.0,
+   "level": 0.85,
+   "tags": "sustained low strings under a single distant cello line, sad and ancient, patient, dark orchestral, instrumental, no drums"
+  },
+  {
+   "at_shot": "460_the_seal",
+   "prefix": "m03_seal",
+   "bpm": 46,
+   "key": "F minor",
+   "seconds": 38.0,
+   "level": 0.95,
+   "tags": "deep pulsing drone and uneasy metallic shimmer, dread, something enormous sleeping, dark ambient, instrumental"
+  },
+  {
+   "at_shot": "500_durgan_stays",
+   "prefix": "m04_stay",
+   "bpm": 54,
+   "key": "C minor",
+   "seconds": 52.0,
+   "level": 1.0,
+   "tags": "slow swelling strings and a solo horn, noble and grieving, a sacrifice, restrained orchestral, building then falling away, instrumental"
+  },
+  {
+   "at_shot": "540_village",
+   "prefix": "m05_home",
+   "bpm": 66,
+   "key": "Bb major",
+   "seconds": 48.0,
+   "level": 0.9,
+   "tags": "warm folk strings resolving to major, tired and homecoming, gentle, hopeful, instrumental, light percussion"
+  }
+ ],
+ "shots": [
+  {
+   "id": "400_table",
+   "look": "table",
+   "prompt": "Overhead view of a candlelit table, a large dragon miniature facing four small ones across a cleared map, character sheets pushed aside, a die held in a hand above the table but not yet rolled",
+   "motion": "The held die turns slowly between two fingers. It is not rolled. The candle burns down. Slow push in on the hand.",
+   "say": "Here is the thing the rules will not tell you. The most dangerous monster in any dungeon is the one that wants to have a conversation.",
+   "sfx": "Quiet room, a candle, a die turning in fingers, no music",
+   "titles": [
+    {
+     "text": "EPISODE THREE - THE BARGAIN",
+     "at": 1.4,
+     "hold": 3.8,
+     "scale": 0.034
+    }
+   ]
+  },
+  {
+   "id": "410_facing",
+   "look": "gold",
+   "prompt": "Wide shot of four small figures standing in a vast dark chamber facing an enormous green dragon lying among broken chains, green-gold light between them, nobody holding a weapon",
+   "motion": "The dragon breathes slowly. One of the small figures lowers a raised sword very slightly. Dust drifts. Very slow push in.",
+   "say": "So they talked. For an hour and a half of real time, they talked.",
+   "sfx": "A vast slow breath, chain settling, a weapon lowered, deep quiet"
+  },
+  {
+   "id": "420_dragon_close",
+   "look": "gold",
+   "prompt": "Close on the enormous dragon's head resting sideways on stone, the blind milky eye toward camera, the good eye beyond it, ancient scarred scales, green-gold light from below",
+   "motion": "The good eye blinks slowly. The blind one does not. The great jaw shifts slightly against the stone. Slow push in.",
+   "say": "They did not chain me for what I did. They chained me for what I would not do.",
+   "who": "VESSARAX",
+   "sfx": "A colossal quiet voice, scales shifting on stone, deep resonance"
+  },
+  {
+   "id": "430_flashback",
+   "look": "fire",
+   "prompt": "A dwarven hall three hundred years ago lit by torches, dozens of robed dwarven priests standing in ranks before an enormous chained green dragon, one priest with an iron pin raised, a painted memory, warmer and more faded than the present",
+   "motion": "The torchlight wavers across the ranks. The raised pin does not come down. The image holds unnaturally still, like a memory. Very slow push in.",
+   "say": "The order had bound something under this hill. Not the dragon. Something older, in the deep rock below the deep rock. And they needed a lock with a mind, because the thing they were locking in could talk its way past anything that had none.",
+   "sfx": "Torches, many robed figures shifting, a low chant, a great chain"
+  },
+  {
+   "id": "440_dragon_bargain",
+   "look": "gold",
+   "prompt": "Medium shot of the dragon's head raised slightly off the stone, both eyes visible, the broken collar hanging loose at the neck, green-gold light strengthening from below and behind it",
+   "motion": "The head lifts further. The broken collar swings. The light behind brightens slightly. Slow push in.",
+   "say": "Three hundred years I have been the lock. The collar broke ninety years ago. I stayed. Ask yourself why the salt, little priest. Ask what a lock eats.",
+   "who": "VESSARAX",
+   "sfx": "A great head lifting, chain swinging, a low rising resonance"
+  },
+  {
+   "id": "450_realise",
+   "look": "gold",
+   "prompt": "Close-up of DURGAN standing very still in green-gold light, looking up, his face changing as he understands something, the tarnished sun symbol held in his fist",
+   "motion": "His grip tightens on the symbol. His eyes move down and then up again. He has understood. Slight push in.",
+   "say": "Salt. It's not food. You've been salting the seal. Ninety years alone and you kept doing the work.",
+   "who": "DURGAN",
+   "sfx": "A slow breath, a chain far off, a vast quiet room"
+  },
+  {
+   "id": "460_the_seal",
+   "look": "dark",
+   "prompt": "A deep circular shaft in black rock far below the dragon's chamber, its rim crusted thick with white salt, faint red light coming up from inside it, ancient dwarven runes around the edge worn almost smooth",
+   "motion": "The red light from within the shaft pulses very slowly, once. Salt crystals glitter on the rim. Very slow push in over the edge.",
+   "say": "Below the chamber, below the chains, a shaft in the rock crusted white. Ninety years of stolen salt, carried down by goblins who had been taught to do it and had long since forgotten why.",
+   "sfx": "A deep hollow shaft, a very low pulse, salt crystals, distant dripping"
+  },
+  {
+   "id": "470_ask",
+   "look": "gold",
+   "prompt": "Medium shot of BRENNA standing alone in front of the enormous dragon's head, small and unbowed, hands empty at her sides, green-gold light on her armour",
+   "motion": "She takes one step forward. Her hands stay open and empty. The dragon's head lowers fractionally to meet her. Slow push in.",
+   "say": "So what do you want. Nobody stays ninety years for nothing. What's the price.",
+   "who": "BRENNA",
+   "sfx": "One boot step on stone, a vast breath, deep quiet"
+  },
+  {
+   "id": "480_price",
+   "look": "gold",
+   "prompt": "Close on the dragon's good eye filling much of the frame, the pupil wide, the blind eye a pale blur beyond, green-gold light, an expression that is almost tired relief",
+   "motion": "The pupil widens slightly. The great eye closes, and opens again slowly. Very slow push in.",
+   "say": "Someone to take the work. That is all. It was never a prison. It was a post. And I am so very tired of standing it alone.",
+   "who": "VESSARAX",
+   "sfx": "A colossal slow exhale, scales settling, a low sustained resonance"
+  },
+  {
+   "id": "490_choice",
+   "look": "gold",
+   "prompt": "Wide shot of four small figures standing apart from each other in a vast green-gold chamber, each looking in a different direction, the dragon a dark mass behind them, the space between them enormous",
+   "motion": "Nobody moves toward anybody. One figure turns slowly to look at another. Dust drifts through the light. Slow push out to reveal the scale.",
+   "say": "And that is where I stopped talking and let four adults argue with each other for forty minutes, which is the best thing that can happen in this game.",
+   "sfx": "A vast quiet space, distant dripping, boots shifting, no music"
+  },
+  {
+   "id": "500_durgan_stays",
+   "look": "gold",
+   "prompt": "Medium close-up of DURGAN standing alone at the rim of the salt-crusted shaft, his warhammer laid down on the stone beside him, unbuckling his breastplate, calm",
+   "motion": "He sets the breastplate down carefully on the stone. He straightens. He does not look back. Slow push in.",
+   "say": "Sixty years he had waited for his order to give him something to do. It turned out they had left him a job after all. It was just a very long one.",
+   "sfx": "Armour set down on stone, a buckle, a slow breath, a deep hollow shaft"
+  },
+  {
+   "id": "510_goodbye",
+   "look": "gold",
+   "prompt": "Two-shot of DURGAN and BRENNA facing each other in green-gold light, her hand gripping his forearm, both of them entirely still, the vast chamber blurred behind them",
+   "motion": "Her grip tightens. Neither of them speaks. After a moment she lets go and steps back. Slow push in.",
+   "say": "Go on. You've got a valley up there that still wants its salt. Somebody has to lie to them about what's down here.",
+   "who": "DURGAN",
+   "sfx": "Cloth and mail shifting, a long quiet, a distant low pulse"
+  },
+  {
+   "id": "520_leaving",
+   "look": "dark",
+   "prompt": "Three small figures climbing an endless dwarven spiral stair in a vast dark shaft, seen from far above, the green-gold light now far below them and fading, the top not yet visible",
+   "motion": "They climb steadily upward. The light below shrinks. None of them looks down. Very slow push upward ahead of them.",
+   "say": "Three of them went back up the nine hundred steps. Nobody counted them out loud.",
+   "sfx": "Boots on stone stairs, a great echoing shaft, a fading low hum"
+  },
+  {
+   "id": "530_daylight",
+   "look": "cold",
+   "prompt": "The dwarven door in the hillside from outside, standing open, three figures emerging into flat grey daylight and thin rain, blinking, the wet green valley spread out below them",
+   "motion": "They step out one at a time and stop. Rain falls on their faces. One of them turns to look back at the dark doorway. Slow push in on the open door.",
+   "say": "It was still raining. It had been raining for three days. It had never looked better.",
+   "sfx": "Rain on hillside, wind, birds, a stone door settling, breathing"
+  },
+  {
+   "id": "540_village",
+   "look": "lamp",
+   "prompt": "The village of Marrow Ford at dusk seen from the road, warm light in many windows now, a salt cart with a fresh team standing at the gate being loaded, wet cobbles, three small figures walking toward it",
+   "motion": "The cart is loaded sack by sack. The three figures walk slowly toward the lights. Smoke rises. Slow push in on the village.",
+   "say": "The carts started again eleven days later. The valley never knew why they had stopped, and nobody in that room ever told them.",
+   "sfx": "A village at evening, cart wheels, voices, sacks handled, rain easing"
+  },
+  {
+   "id": "550_shaft_end",
+   "look": "gold",
+   "prompt": "Deep underground, a small robed figure sitting alone on the rim of the salt-crusted shaft with a lantern beside him, the enormous dark mass of the dragon lying nearby in the shadow, both of them still",
+   "motion": "The lantern flame burns steady. The great dark shape breathes, once, slowly. Neither of them moves otherwise. Very slow push out to show the scale of the chamber.",
+   "say": "And a long way down, in the dark, an old man who had stopped expecting an answer sat down next to something that had been waiting three hundred years for company.",
+   "sfx": "A vast quiet chamber, one lantern, a single enormous slow breath, deep silence"
+  },
+  {
+   "id": "560_end_table",
+   "look": "table",
+   "prompt": "Overhead view of the candlelit table at the end of the night, one character sheet turned face down and pushed to the centre, three others still out, the dice gathered into a small pile, the candle very low",
+   "motion": "A hand rests flat on the face-down sheet for a moment, then withdraws. The candle gutters and steadies. Slow push in on the turned sheet.",
+   "say": "Durgan's player turned his sheet face down at the end of the night and said, that was a good ending, and started rolling a new character. That is the game. You put somebody down there so the rest of them can walk out.",
+   "sfx": "A paper sheet turned on wood, dice gathered, a chair, a candle, quiet room",
+   "titles": [
+    {
+     "text": "THE SALT ROAD",
+     "at": 3.0,
+     "hold": 4.0,
+     "scale": 0.075
+    }
+   ]
+  }
+ ]
+}

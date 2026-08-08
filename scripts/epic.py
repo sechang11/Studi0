@@ -124,6 +124,13 @@ VOICE_LUFS = -20.0    # every narration line normalised to the same integrated l
 MUSIC_LUFS = -26.0    # ACE-Step output spreads >20 LU; normalise, then trim with `level`
 AMB_LUFS = -34.0      # LTX's own bed spreads ~39 dB across clips; pin it
 AMB_LUFS_BARE = -28.0  # ... a little louder on shots with no narration over them
+SFX_LUFS = -30.0      # designed effects. Open task #46: Stable Audio output was never
+                      # normalised at all, so a bang and a footstep arrived 20 dB apart
+                      # and the only control over either was one fixed multiplier.
+# Sidechain settings per stem, keyed off the narration. Effects duck HARDER and start
+# ducking SOONER than score: a pad under a word is a mix choice, a door slam under a word
+# is a mistake. threshold, ratio.
+DUCK = {"mus": (0.15, 4), "sfx": (0.10, 8)}
 
 
 def measure(path, pre=""):
@@ -856,10 +863,13 @@ def edit(film, outdir, hd=True):
             # dissolves. Narration is laid as one continuous track over the finished
             # picture instead (see the mix pass below), which also means changing a line
             # no longer requires rebuilding its segment.
+            # Effects are NOT baked in here, for the same reason narration is not: anything
+            # welded into the segment audio lands in [0:a] at the mix, where it cannot be
+            # ducked independently of the ambience. A designed effect at a fixed 0.42
+            # multiplier therefore played at full level straight through narration. It is
+            # laid as its own sidechained stem over the finished picture instead.
             ins = ["-i", src]
             n = 1
-            if has_s:
-                ins += ["-i", spath]; sfx_i = n; n += 1
 
             # LTX's own bed spans ~39 dB across clips (measured -51.2 to -12.2 LUFS), so
             # one fixed multiplier is wrong by up to 34 dB: it erased room tone on the
@@ -870,11 +880,6 @@ def edit(film, outdir, hd=True):
             amb = round(min(10 ** ((want - cur) / 20), 6.0), 4) if (cur and cur > -70) else 0.14
             mix = [f"[0:a]volume={amb},apad=pad_dur={total + 0.3:.2f}[amb]"]
             labels = ["[amb]"]
-            if has_s:
-                mix.append(f"[{sfx_i}:a]atrim=0:{total:.2f},asetpts=N/SR/TB,"
-                           f"volume={0.42 if has_v else 0.85},"
-                           f"afade=t=out:st={max(0.1, total-0.7):.2f}:d=0.7[sx]")
-                labels.append("[sx]")
             mix.append("[amb]anull[a]" if len(labels) == 1 else
                        "".join(labels) +
                        f"amix=inputs={len(labels)}:duration=longest:normalize=0[a]")
@@ -988,32 +993,63 @@ def edit(film, outdir, hd=True):
                           f"afade=t=in:st=0:d=2.5,"
                           f"afade=t=out:st={max(0.1, cd2-3.5):.2f}:d=3.5,"))
 
+    # Designed effects, as their own stem. Normalised first: a raw level multiplier
+    # over an un-normalised source gave about 2 dB of usable control over a 20 dB variable.
+    sfx_items = []
+    for s in shots:
+        sp = f"{outdir}/sfx/{s['id']}_00001.mp3"
+        if not s.get("sfx") or not os.path.exists(sp):
+            continue
+        nsp = f"{work}/_sfxn_{s['id']}.wav"
+        if not os.path.exists(nsp):
+            norm_to(sp, nsp, SFX_LUFS, tp=-6.0)
+        sd = adur(nsp)
+        sfx_items.append((nsp, starts.get(s["id"], 0.0), float(s.get("sfx_level", 1.0)),
+                          f"afade=t=out:st={max(0.1, sd - 0.7):.2f}:d=0.7,"))
+
     ntrk = mix_layer(narr_items, total, f"{work}/_narr_{sig}.wav") if narr_items else None
     mtrk = mix_layer(mus_items, total, f"{work}/_mus_{sig}.wav") if mus_items else None
-    tracks, lab, names = ["-i", joined], [f"[0:a]volume='{dip}':eval=frame[base]"], ["[base]"]
-    k = 1
+    strk = mix_layer(sfx_items, total, f"{work}/_sfx_{sig}.wav") if sfx_items else None
+
+    tracks = ["-i", joined]
+    lab = [f"[0:a]volume='{dip}':eval=frame[base]"]
+    names = ["[base]"]
+    k, nlab = 1, None
     if ntrk:
         tracks += ["-i", ntrk]; nlab = f"[{k}:a]"; k += 1
-        names.append(nlab)
-    if mtrk:
-        tracks += ["-i", mtrk]; mlab = f"[{k}:a]"; k += 1
-        if ntrk:
-            # Duck the score under narration. Fixed levels cannot serve a 72% speech duty
-            # cycle. Keying off the finished programme does not work - the depth wanders
-            # with ambience instead of speech - so the key is the narration stem itself.
-            lab.append(f"{mlab}{nlab}sidechaincompress=threshold=0.15:ratio=4:"
-                       f"attack=20:release=350:makeup=1:link=maximum[duck]")
-            names.append("[duck]")
-        else:
-            names.append(mlab)
+    # Every bed that is not speech ducks under speech. Fixed levels cannot serve a 72%
+    # speech duty cycle, and keying off the finished programme does not work - the depth
+    # wanders with ambience instead of speech - so the key is the narration stem itself.
+    keyed = []
+    for trk, tag in ((mtrk, "mus"), (strk, "sfx")):
+        if trk:
+            tracks += ["-i", trk]
+            keyed.append((f"[{k}:a]", tag)); k += 1
+    if nlab and keyed:
+        # An ffmpeg filter output can be consumed exactly once, so the narration has to be
+        # split explicitly: one copy per sidechain key, plus one for the mix itself.
+        keys = [f"[nk{i}]" for i in range(len(keyed))]
+        lab.append(f"{nlab}asplit={len(keyed) + 1}[nmix]" + "".join(keys))
+        names.append("[nmix]")
+        for (slab, tag), key in zip(keyed, keys):
+            thr, ratio = DUCK[tag]
+            lab.append(f"{slab}{key}sidechaincompress=threshold={thr}:ratio={ratio}:"
+                       f"attack=20:release=350:makeup=1:link=maximum[d{tag}]")
+            names.append(f"[d{tag}]")
+    else:
+        if nlab:
+            names.append(nlab)
+        names += [s for s, _ in keyed]
     lab.append("".join(names) +
                f"amix=inputs={len(names)}:duration=first:normalize=0[a]")
     mixed = f"{work}/_mixed_{sig}.mkv"
     sh("ffmpeg", "-y", "-v", "error", *tracks, "-filter_complex", ";".join(lab),
        "-map", "0:v", "-map", "[a]", "-c:v", "copy", "-c:a", "pcm_s16le",
        "-t", f"{total:.2f}", mixed)
-    print(f"  mixed {len(narr_items)} narration lines + {len(mus_items)} cues"
-          f"{' (score ducked under speech)' if ntrk and mtrk else ''}")
+    ducked = [t for t, k in (("score", mtrk), ("effects", strk)) if k and ntrk]
+    print(f"  mixed {len(narr_items)} narration lines + {len(mus_items)} cues "
+          f"+ {len(sfx_items)} effects"
+          + (f" ({' and '.join(ducked)} ducked under speech)" if ducked else ""))
 
     # ---- loudness, fades, master -------------------------------------------
     # Two-pass loudnorm. A single adaptive pass rides the gain across ten minutes of
