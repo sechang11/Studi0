@@ -36,7 +36,36 @@ STORIES = os.path.join(ROOT, "stories")
 # Fields that flow down the chain. Anything not listed is local to its level - a scene's
 # prompt is not something a chapter can supply.
 INHERITED = ("style", "look", "engine", "ar", "fps", "style_lora", "style_strength",
-             "id_lora", "id_strength", "seconds", "transition", "negative", "lipsync")
+             "id_lora", "id_strength", "seconds", "transition", "negative", "lipsync",
+             "title_scale", "subtitle_scale")
+
+# ── RULES ARE THE ROOT OF THE INHERITANCE TREE ──────────────────────────────────────
+# craft/VIDEO_RULES.md sits ABOVE every story, so the chain is really
+#
+#     rules -> story -> chapter -> scene -> take
+#
+# and rules are simply the level nobody owns. That is the right shape rather than a
+# coincidence: a rule exists because something broke once, and a lesson that only applies
+# to the story you were working on when you learned it is worth almost nothing.
+#
+# Rules do two jobs at this level. They SUPPLY DEFAULTS, so a brand new story is already
+# obeying every measured finding without anyone typing anything. And they VALIDATE, so a
+# story that overrides one is told what it is overriding.
+#
+# An override is allowed. A rule is a default and a warning, not a cage - the film that
+# genuinely wants a 0.3 title scale should be able to have one. But because every rule was
+# paid for with a real failure, an override is recorded with its provenance and reported,
+# never silently absorbed.
+RULE_DEFAULTS = {
+    "title_scale": 0.075,      # PICTURE-01: scale is a fraction of frame height
+    "subtitle_scale": 0.034,   # PICTURE-01
+    "transition": "cut",
+    "lipsync": False,          # inverts the picture/voice dependency - opt in per scene
+}
+BANNED = {
+    "look": {"night"},                                    # PICTURE-05: clips to black
+    "camera": {"dolly_zoom", "orbit", "rack_focus"},      # PICTURE-04: identical to static
+}
 
 # A change to any of these means a rendered take no longer matches its inputs. Deliberately
 # NOT the whole scene: editing a note or a title must not invalidate an hour of picture.
@@ -112,6 +141,9 @@ class Scene:
         can tell at a glance what this scene actually decides for itself.
         """
         out = {}
+        # Level 0. Everything below can override it, and will be told that it did.
+        for k, v in RULE_DEFAULTS.items():
+            out[k] = {"value": v, "from": "rules"}
         for level, data in (("story", self.chapter.story.data),
                             ("chapter", self.chapter.data),
                             ("scene", self.data)):
@@ -132,6 +164,32 @@ class Scene:
 
     def flat(self):
         return {k: v["value"] for k, v in self.resolved().items()}
+
+    def rule_violations(self):
+        """What this scene does that the rules say not to, and what it overrides.
+
+        Separated on purpose: a BANNED value is a measured dud and is reported as a
+        violation; an overridden default is a legitimate choice and is reported as a
+        divergence. Conflating the two would either nag about deliberate decisions or hide
+        real mistakes among them.
+        """
+        r, out = self.resolved(), {"violations": [], "overrides": []}
+        for field, bad in BANNED.items():
+            v = r.get(field, {}).get("value")
+            if v in bad:
+                out["violations"].append(
+                    {"field": field, "value": v, "from": r[field]["from"]})
+        for k, v in RULE_DEFAULTS.items():
+            got = r.get(k)
+            if got and got["from"] != "rules" and got["value"] != v:
+                out["overrides"].append({"field": k, "rule_default": v,
+                                         "value": got["value"], "from": got["from"]})
+        # A title scale written as if it were a multiplier is the one that actually shipped.
+        for tt in (self.data.get("titles") or []):
+            if float(tt.get("scale", 0.045)) > 0.15:
+                out["violations"].append(
+                    {"field": "title.scale", "value": tt.get("scale"), "from": "scene"})
+        return out
 
     def inputs_hash(self):
         f = self.flat()

@@ -1016,6 +1016,22 @@ def hub_capabilities(html):
 
 
 
+
+def _story_routes():
+    """studio/_tools/story_routes.py on demand, like _guides and _generate_routes.
+
+    Returning None rather than raising keeps a broken editor from taking the whole studio
+    down: every other page still serves and /story reports plainly that it is unavailable.
+    """
+    try:
+        sys.path.insert(0, os.path.join(HERE, "_tools"))
+        import story_routes
+        importlib.reload(story_routes)
+        return story_routes
+    except Exception:
+        traceback.print_exc()
+        return None
+
 def _generate_routes():
     """Import studio/_tools/generate_routes.py on demand, the same way _guides does.
 
@@ -1199,6 +1215,48 @@ class H(http.server.SimpleHTTPRequestHandler):
                     return self._send({"error": "no such bundle"}, 404)
                 return self._send_file(fp, "application/zip")
             return self._send({"error": "unknown generate route"}, 404)
+        # /story - the scene-by-scene editor. Reads are cheap and synchronous; renders
+        # go through a job table in story_routes so the page stays responsive.
+        if path == "/story" or path.startswith("/story/"):
+            return self._page("story_editor.html")
+        if path == "/api/story" or path.startswith("/api/story/"):
+            sr = _story_routes()
+            if not sr:
+                return self._send({"error": "studio/_tools/story_routes.py is "
+                                            "unavailable"}, 500)
+            rest = path[len("/api/story"):].strip("/")
+            try:
+                if not rest:
+                    body, code = sr.list_stories()
+                    return self._send(body, code)
+                bits = rest.split("/")
+                sid = bits[0]
+                if len(bits) == 1:
+                    body, code = sr.story_tree(sid)
+                    return self._send(body, code)
+                if bits[1] == "job" and len(bits) == 3:
+                    body, code = sr.job_status(bits[2])
+                    return self._send(body, code)
+                if bits[1] == "scene" and len(bits) == 4:
+                    body, code = sr.scene_detail(sid, bits[2], bits[3])
+                    return self._send(body, code)
+                if bits[1] == "thumb" and len(bits) == 4:
+                    fp = sr.thumb(sid, bits[2], bits[3])
+                    if not fp:
+                        return self._send({"error": "no thumb"}, 404)
+                    return self._send_file(fp, "image/png")
+                if bits[1] == "take" and len(bits) == 6:
+                    fp = sr.take_file(sid, bits[2], bits[3], bits[4], bits[5])
+                    if not fp:
+                        return self._send({"error": "no such file"}, 404)
+                    return self._send_file(fp, "video/mp4" if fp.endswith(".mp4")
+                                           else "image/png")
+            except KeyError as e:
+                return self._send({"error": str(e)}, 404)
+            except Exception as e:
+                traceback.print_exc()
+                return self._send({"error": str(e)[:300]}, 500)
+            return self._send({"error": "unknown story route"}, 404)
         if path == "/api/guides":
             g = _guides()
             if not g:
@@ -1781,13 +1839,30 @@ class H(http.server.SimpleHTTPRequestHandler):
         if p not in ("/api/save", "/api/render", "/api/make", "/api/workflow",
                      "/api/verify", "/api/tag/reroll", "/api/compose",
                      "/api/generate/start", "/api/generate/stop",
-                     "/api/generate/preview", "/api/generate/bundle"):
+                     "/api/generate/preview", "/api/generate/bundle",
+                     "/api/story/take", "/api/story/clip", "/api/story/select",
+                     "/api/story/edit", "/api/story/lock"):
             return self._send({"error": "not found"}, 404)
         n = int(self.headers.get("Content-Length", 0))
         try:
             data = json.loads(self.rfile.read(n) or b"{}")
         except Exception as e:
             return self._send({"error": f"bad json: {e}"}, 400)
+        if p.startswith("/api/story/"):
+            sr = _story_routes()
+            if not sr:
+                return self._send({"error": "studio/_tools/story_routes.py is "
+                                            "unavailable"}, 500)
+            fn = {"take": sr.start_take, "clip": sr.start_clip, "select": sr.select,
+                  "edit": sr.edit_scene, "lock": sr.lock}[p[len("/api/story/"):]]
+            try:
+                body, code = fn(data)
+            except KeyError as e:
+                return self._send({"error": str(e)}, 404)
+            except Exception as e:
+                traceback.print_exc()
+                return self._send({"error": str(e)[:300]}, 500)
+            return self._send(body, code)
         if p.startswith("/api/generate/"):
             gr = _generate_routes()
             if not gr:

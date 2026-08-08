@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Story editor &middot; studio</title>
+<style>
+:root{--bg:#0e0e12;--panel:#181820;--line:#2a2a36;--ink:#e9e9f0;--dim:#8d8d9c;
+      --accent:#9fb3ff;--good:#7fd1a0;--warn:#ffc978;--bad:#ff8f8f;--rule:#c9a0ff}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,sans-serif;margin:0}
+nav.top{padding:14px 22px;border-bottom:1px solid var(--line)}
+nav.top a{color:var(--accent);text-decoration:none;margin-right:14px;font-size:14px}
+main{display:flex;height:calc(100vh - 51px)}
+#left{width:340px;border-right:1px solid var(--line);overflow-y:auto;flex:none}
+#right{flex:1;overflow-y:auto;padding:20px 24px}
+h1{font-size:19px;margin:0 0 2px}
+h2{font-size:14px;color:var(--accent);margin:0 0 10px}
+.chap{padding:12px 14px 4px;font-size:12px;color:var(--dim);text-transform:uppercase;
+      letter-spacing:.06em;border-top:1px solid var(--line)}
+.sc{display:flex;gap:9px;padding:7px 12px;cursor:pointer;align-items:center;border-left:3px solid transparent}
+.sc:hover{background:#1c1c25}
+.sc.on{background:#20202b;border-left-color:var(--accent)}
+.sc img{width:64px;height:36px;object-fit:cover;border-radius:3px;background:#000;flex:none}
+.sc .ph{width:64px;height:36px;border:1px dashed var(--line);border-radius:3px;flex:none}
+.sc b{display:block;font-size:12px;font-weight:600}
+.sc span{font-size:11px;color:var(--dim);display:block;overflow:hidden;
+         text-overflow:ellipsis;white-space:nowrap}
+.tag{font-size:10px;padding:1px 5px;border-radius:3px;margin-left:4px}
+.t-stale{background:#4a3a12;color:var(--warn)} .t-lock{background:#333;color:var(--dim)}
+.t-bad{background:#4a1f1f;color:var(--bad)} .t-clip{background:#1f3a2a;color:var(--good)}
+.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
+figure{margin:0;background:var(--panel);border:2px solid var(--line);border-radius:8px;
+       overflow:hidden;cursor:pointer}
+figure.sel{border-color:var(--accent)}
+figure img,figure video{width:100%;display:block;aspect-ratio:16/9;object-fit:cover;background:#000}
+figcaption{padding:7px 9px;font-size:12px;display:flex;justify-content:space-between;gap:6px}
+figcaption .s{color:var(--dim);font-size:11px}
+table.res{width:100%;border-collapse:collapse;font-size:13px}
+table.res td{padding:4px 8px;border-bottom:1px solid #22222c;vertical-align:top}
+table.res td:first-child{color:var(--dim);width:120px}
+.from{font-size:10px;padding:1px 5px;border-radius:3px;margin-left:6px;background:#22222c;color:var(--dim)}
+.from.rules{background:#2e2340;color:var(--rule)}
+.from.scene{background:#1f2a3a;color:var(--accent)}
+button{background:var(--accent);color:#10101a;border:0;border-radius:6px;padding:8px 14px;
+       font:600 13px system-ui;cursor:pointer}
+button.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+button:disabled{opacity:.4;cursor:not-allowed}
+input,textarea,select{background:#101017;color:var(--ink);border:1px solid var(--line);
+  border-radius:6px;padding:7px 9px;font:inherit;width:100%}
+textarea{min-height:64px;resize:vertical;font-size:13px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:14px 16px;margin-bottom:16px}
+.note{font-size:12.5px;color:var(--dim);border-left:2px solid var(--line);padding-left:10px;margin:10px 0 0}
+.note.rule{border-left-color:var(--rule)}
+.note.bad{border-left-color:var(--bad);color:var(--bad)}
+label{font-size:12px;color:var(--dim);display:block;margin:0 0 4px}
+.fld{margin-bottom:10px}
+code{background:#101017;padding:1px 5px;border-radius:3px;font-size:12px}
+</style>
+</head>
+<body>
+<nav class="top">
+  <a href="/">&larr; Studio</a><a href="/generate">Fill the library</a>
+  <a href="/gallery">Gallery</a><a href="/docs">Docs</a>
+  <span id="title" style="color:var(--dim);font-size:14px"></span>
+</nav>
+<main>
+  <div id="left"></div>
+  <div id="right"><p style="color:var(--dim)">Pick a scene.</p></div>
+</main>
+
+<script>
+const $ = i => document.getElementById(i);
+let STORY = null, TREE = null, CUR = null;
+
+async function get(u){ return (await fetch(u)).json(); }
+async function post(u,b){ return (await fetch(u,{method:"POST",
+  headers:{"Content-Type":"application/json"},body:JSON.stringify(b)})).json(); }
+
+async function boot(){
+  const l = await get("/api/story");
+  if(!l.stories || !l.stories.length){ $("left").innerHTML="<p style='padding:16px;color:var(--dim)'>No stories yet.</p>"; return; }
+  STORY = l.stories[0].id;
+  $("title").textContent = "  " + l.stories[0].title;
+  await tree();
+}
+
+async function tree(){
+  TREE = await get("/api/story/"+STORY);
+  $("left").innerHTML = TREE.chapters.map(ch =>
+    `<div class="chap">${ch.title} &middot; ${ch.scenes.length} scenes</div>` +
+    ch.scenes.map(s => {
+      const tags = (s.stale?'<i class="tag t-stale">stale</i>':'')
+                 + (s.locked?'<i class="tag t-lock">lock</i>':'')
+                 + (s.violations?'<i class="tag t-bad">rule</i>':'')
+                 + (s.has_clip?'<i class="tag t-clip">clip</i>':'');
+      const img = s.thumb ? `<img src="${s.thumb}" loading="lazy">` : `<div class="ph"></div>`;
+      return `<div class="sc" data-ch="${ch.id}" data-sc="${s.id}">
+        ${img}<div style="min-width:0"><b>${s.id}${tags}</b>
+        <span>${s.takes} takes${s.selected?' &middot; '+s.selected:''} &middot; ${s.line}</span></div></div>`;
+    }).join("")).join("");
+  $("left").querySelectorAll(".sc").forEach(e =>
+    e.onclick = () => open(e.dataset.ch, e.dataset.sc));
+  if(CUR) mark();
+}
+
+function mark(){
+  $("left").querySelectorAll(".sc").forEach(e =>
+    e.classList.toggle("on", e.dataset.ch===CUR.chapter && e.dataset.sc===CUR.id));
+}
+
+async function open(ch, sc){
+  CUR = await get(`/api/story/${STORY}/scene/${ch}/${sc}`);
+  mark(); draw();
+}
+
+function draw(){
+  const d = CUR, r = d.resolved;
+  const takes = d.takes.map(t => `
+    <figure class="${t.selected?'sel':''}" data-take="${t.id}">
+      ${t.has_clip ? `<video src="${t.clip}" muted loop playsinline
+                        onmouseover="this.play()" onmouseout="this.pause()"></video>`
+                   : `<img src="${t.img}" loading="lazy">`}
+      <figcaption><span>${t.id}${t.selected?' &middot; selected':''}${t.stale?' &middot; stale':''}</span>
+        <span class="s">seed ${t.seed}</span></figcaption>
+    </figure>`).join("") || "<p style='color:var(--dim)'>No takes yet.</p>";
+
+  const rows = Object.keys(r).sort().map(k => {
+    let v = r[k].value;
+    if(typeof v === "object") v = JSON.stringify(v);
+    return `<tr><td>${k}</td><td>${String(v).slice(0,220)}
+      <i class="from ${r[k].from}">${r[k].from}</i></td></tr>`;
+  }).join("");
+
+  const viol = d.rules.violations.map(v =>
+    `<p class="note bad"><b>${v.field} = ${v.value}</b> breaks a rule (set at ${v.from}).</p>`).join("");
+  const over = d.rules.overrides.map(v =>
+    `<p class="note rule">${v.field} is <b>${v.value}</b>, overriding the rule default
+       ${v.rule_default}, set at ${v.from}.</p>`).join("");
+
+  const e = d.editable;
+  $("right").innerHTML = `
+    <div class="row">
+      <h1 style="flex:1">${d.chapter} / ${d.id}</h1>
+      <code>${d.hash}</code>
+      <button class="ghost" id="lock">${d.locked?"Unlock":"Lock"}</button>
+    </div>
+    ${viol}${over}
+    <div class="card">
+      <div class="row">
+        <button id="take4">Render 4 takes</button>
+        <button class="ghost" id="take1">+1</button>
+        <button class="ghost" id="clip">Animate selected</button>
+        <span id="prog" style="color:var(--dim);font-size:13px"></span>
+      </div>
+      <div class="grid">${takes}</div>
+      <p class="note">Keyframes for every take, clips only for the one you pick &mdash; a
+      keyframe is about 3 seconds and a clip about 35, and the keyframe decides the clip.
+      Click a take to select it. Hover a clip to play it.</p>
+    </div>
+    <div class="card">
+      <h2>Inputs</h2>
+      <div class="fld"><label>prompt</label><textarea id="f_prompt">${e.prompt||""}</textarea></div>
+      <div class="fld"><label>motion</label><textarea id="f_motion">${e.motion||""}</textarea></div>
+      <div class="fld"><label>say</label><textarea id="f_say">${e.say||""}</textarea></div>
+      <div class="row">
+        <div style="flex:1"><label>who</label><input id="f_who" value="${e.who||""}"></div>
+        <div style="flex:1"><label>look (blank = inherit)</label><input id="f_look" value="${e.look||""}"></div>
+        <div style="width:110px"><label>seconds</label><input id="f_seconds" value="${e.seconds||""}"></div>
+      </div>
+      <div class="fld"><label>sfx</label><input id="f_sfx" value="${e.sfx||""}"></div>
+      <div class="row"><button id="save">Save inputs</button>
+        <span id="saved" style="color:var(--dim);font-size:13px"></span></div>
+      <p class="note">Clearing a field restores whatever it inherits. Saving does not
+      re-render: it marks affected takes stale so you can see what changed before spending
+      anything.</p>
+    </div>
+    <div class="card">
+      <h2>Resolved &mdash; and where each value came from</h2>
+      <table class="res">${rows}</table>
+      <p class="note rule">Values marked <i class="from rules">rules</i> come from
+      craft/VIDEO_RULES.md, which sits above every story. That is the root of the tree:
+      rules &rarr; story &rarr; chapter &rarr; scene &rarr; take.</p>
+    </div>`;
+
+  $("right").querySelectorAll("figure").forEach(f => f.onclick = async () => {
+    await post("/api/story/select", {story:STORY, chapter:d.chapter, scene:d.id, take:f.dataset.take});
+    await open(d.chapter, d.id); tree();
+  });
+  $("take4").onclick = () => go({n:4});
+  $("take1").onclick = () => go({n:1});
+  $("clip").onclick  = () => go({clip:true});
+  $("lock").onclick  = async () => {
+    await post("/api/story/lock", {story:STORY, chapter:d.chapter, scene:d.id, locked:!d.locked});
+    await open(d.chapter, d.id); tree();
+  };
+  $("save").onclick = async () => {
+    const fields = {};
+    ["prompt","motion","say","who","look","seconds","sfx"].forEach(k =>
+      fields[k] = $("f_"+k).value.trim());
+    const r = await post("/api/story/edit", {story:STORY, chapter:d.chapter, scene:d.id, fields});
+    $("saved").textContent = r.changed
+      ? `saved — inputs changed, ${r.stale_takes} take(s) now stale`
+      : "saved — nothing that affects a render changed";
+    await open(d.chapter, d.id); tree();
+  };
+}
+
+async function go(opt){
+  const d = CUR;
+  const body = {story:STORY, chapter:d.chapter, scene:d.id};
+  let r;
+  if(opt.clip){ r = await post("/api/story/clip", body); }
+  else { body.n = opt.n; r = await post("/api/story/take", body); }
+  if(r.error){ $("prog").textContent = r.error; return; }
+  $("prog").textContent = "rendering…";
+  const t = setInterval(async () => {
+    const j = await get("/api/story/job/"+r.job);
+    $("prog").textContent = j.state==="done"
+      ? (j.error ? "failed: "+j.error : "done")
+      : `rendering ${j.done}/${j.want}…`;
+    if(j.state==="done"){ clearInterval(t); await open(d.chapter, d.id); tree(); }
+  }, 2000);
+}
+
+boot();
+</script>
+</body>
+</html>
