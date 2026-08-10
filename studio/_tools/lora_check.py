@@ -17,7 +17,7 @@ and leaves the judgement to eyes. It also renders a prompt the character was nev
 trained in - a new setting - because reproducing the training set is exactly the failure
 mode a same-setting test would hide.
 """
-import argparse, json, os, subprocess, sys
+import argparse, time, json, os, subprocess, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 STUDIO = os.path.dirname(HERE)
@@ -89,7 +89,23 @@ def main():
                          f"  python3 studio/_tools/train_character.py {a.character}")
 
     trigger = a.character.lower()
-    prompt = f"{trigger}, 1boy, solo, {a.prompt}, {Q}"
+    # The subject tags come from the CARD, not from a hardcoded 1boy. This was written
+    # against a male character and the hardcode was never noticed, so checking a woman
+    # rendered a man: both panels came back as somebody else and the comparison said
+    # nothing at all. A check that silently tests the wrong subject is worse than no
+    # check, because it produces a confident-looking answer.
+    subject = ""
+    for key in ("tags", "base_tags"):
+        v = card.get(key)
+        if isinstance(v, list):
+            v = ", ".join(str(x) for x in v)
+        if v:
+            subject = v
+            break
+    if not subject:
+        subject = "1girl, solo" if "girl" in str(card.get("desc", "")).lower() \
+            else "1boy, solo"
+    prompt = f"{trigger}, {subject}, {a.prompt}, {Q}"
     print("character : %s" % a.character)
     print("lora      : %s at %.2f" % (lora, a.strength))
     print("prompt    : %s" % prompt)
@@ -106,10 +122,17 @@ def main():
         if not outs:
             print("  %-14s no output" % lbl)
             return
-        loc = ensure_local(outs[0], "/tmp/_lc_%s.png" % tag, required=False)
+        # ensure_local returns early if the destination already exists - correct for a
+        # render cache, wrong here. With a fixed /tmp name, the SECOND check of a
+        # character silently re-tiled the FIRST check's images: the prompt was fixed, the
+        # renders were new and correct on the server, and the comparison still showed the
+        # old pair. In a tool whose entire job is to show what actually happened, that is
+        # the worst possible bug. Fetch to a fresh path every time.
+        dest = "/tmp/_lc_%s_%d.png" % (tag, int(time.time() * 1000) % 10 ** 8)
+        loc = ensure_local(outs[0], dest, required=False)
         if not loc:
             return
-        cell = "/tmp/_lcc_%s.png" % tag
+        cell = dest.replace("/_lc_", "/_lcc_")
         sh("ffmpeg", "-y", "-v", "error", "-i", loc, "-vf",
            "scale=520:-1,drawtext=text='%s':fontcolor=yellow:fontsize=22:x=8:y=8:"
            "box=1:boxcolor=black@0.8:boxborderw=5" % lbl, cell)
