@@ -196,3 +196,19 @@ def sheet_file(cid, kind):
         return None
     p = os.path.join(STUDIO, "samples", "cast", cid, "CONTACT_%s.jpg" % kind)
     return p if os.path.isfile(p) else None
+
+
+def analyse(data):
+    """Report the medium a source image is already in, so it can be kept rather than
+    converted. Synchronous: it is one small vision call, about eight seconds."""
+    path = data.get("path") or ""
+    if not os.path.isfile(path):
+        return {"error": "pick a starting image first"}, 400
+    import shutil
+    import character_new as CN
+    from epic import COMFY
+    staged = "analyse_src.png"
+    shutil.copy(path, os.path.join(COMFY, "input", staged))
+    medium = CN.analyse_style(staged)
+    return {"ok": True, "medium": medium,
+            "photographic": CN.looks_photographic(medium)}, 200

@@ -1982,7 +1982,7 @@ class H(http.server.SimpleHTTPRequestHandler):
                      "/api/story/transition",
                      "/api/character/upload", "/api/character/create",
                      "/api/voice/demo", "/api/voice/add",
-                     "/api/character/suite",
+                     "/api/character/suite", "/api/character/analyse",
                      "/api/tool/run", "/api/tool/random"):
             return self._send({"error": "not found"}, 404)
         n = int(self.headers.get("Content-Length", 0))
@@ -2017,7 +2017,8 @@ class H(http.server.SimpleHTTPRequestHandler):
             if not cr:
                 return self._send({"error": "charnew_routes.py is unavailable"}, 500)
             fn = {"upload": cr.upload, "create": cr.create,
-                  "suite": cr.suite}[p[len("/api/character/"):]]
+                  "suite": cr.suite,
+                  "analyse": cr.analyse}[p[len("/api/character/"):]]
             try:
                 body, code = fn(data)
             except Exception as e:

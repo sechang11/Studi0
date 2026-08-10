@@ -70,6 +70,57 @@ def caption(src_name):
     return open(hits[-1], encoding="utf-8", errors="replace").read().strip()
 
 
+MEDIUM_ASK = (
+    "What MEDIUM is this image? Answer with the drawing or photographic technique only, "
+    "as a short phrase that could be used in an image prompt - for example 'a painted "
+    "digital fantasy illustration with soft airbrushed shading', or 'a 35mm colour "
+    "photograph with shallow depth of field'. Name the medium, the rendering technique and "
+    "the palette. Do not describe the subject, the pose or the setting.")
+
+
+def analyse_style(src_name):
+    """Ask the vision model what medium the source is already in.
+
+    This exists so a source that is ALREADY in the right idiom does not have to be
+    converted into something it already is. Redrawing a good illustration into the house
+    style is a lossy round trip for no gain.
+    """
+    wf = load_wf("30_vision_caption.json")
+    set_path(wf, "2.inputs.image", src_name)
+    set_path(wf, "3.inputs.prompt", MEDIUM_ASK)
+    stamp = "med_%d" % (time.time() % 100000)
+    wf["90"] = {"class_type": "SaveText",
+                "inputs": {"text": ["3", 0], "filename_prefix": stamp, "format": "txt"}}
+    run(HOST, wf, quiet=True)
+    hits = sorted(glob.glob(os.path.join(COMFY, "output", "**", stamp + "*"),
+                            recursive=True))
+    if not hits:
+        return ""
+    return " ".join(open(hits[-1], encoding="utf-8", errors="replace")
+                    .read().strip().split())[:300]
+
+
+# Word-boundary matching, and hand-made media win outright. A bare substring test flagged
+# "a digital painting with photorealistic rendering" as photographic, because "photo" sits
+# inside "photorealistic" - and a photorealistic PAINTING is a painting. The warning only
+# earns its place when the sheet is genuinely a photograph; a false positive teaches people
+# to ignore it, which is worse than not warning at all.
+import re as _re
+
+PHOTOGRAPHIC = (r"photograph", r"photographic", r"35\s?mm", r"dslr", r"camera",
+                r"lens", r"film still", r"snapshot", r"polaroid")
+HANDMADE = (r"painting", r"painted", r"illustration", r"illustrated", r"drawing",
+            r"drawn", r"sketch", r"render", r"anime", r"cartoon", r"comic", r"ink",
+            r"watercolou?r", r"gouache", r"3d", r"cgi", r"engraving", r"woodcut")
+
+
+def looks_photographic(medium):
+    m = (medium or "").lower()
+    if any(_re.search(r"\b" + w, m) for w in HANDMADE):
+        return False          # a photorealistic painting is still a painting
+    return any(_re.search(r"\b" + w, m) for w in PHOTOGRAPHIC)
+
+
 def redraw(src_name, style, seed, prefix):
     """Redraw the source in the project's idiom. This becomes the reference sheet."""
     wf = load_wf("22_qwen_edit_2511.json")
@@ -131,16 +182,42 @@ def build(args):
     if args.caption_only:
         return
 
-    print("  redrawing in the project idiom ...")
-    rel = redraw(staged, args.style, args.seed,
-                 "claude-generated/characters/%s" % cid.lower())
     sheet_name = "sheet_%s.png" % cid.lower()
     sheet = os.path.join(COMFY, "input", sheet_name)
-    if rel:
-        ensure_local(rel, sheet, required=False)
+    style_used, medium = args.style, ""
+
+    if str(args.style).strip().lower() in ("keep", "detect"):
+        # KEEP THE SOURCE'S OWN LOOK. The redraw still happens, because a sheet has other
+        # work to do besides medium - it needs the background stripped and the subject
+        # framed as a bust, or the backdrop travels into every later render. So the medium
+        # is detected and fed back in, which converts nothing and fixes the framing.
+        print("  reading the medium ...")
+        medium = analyse_style(staged)
+        print("    %s" % (medium or "(could not tell)"))
+        style_used = medium or HOUSE_STYLE
+        if looks_photographic(medium):
+            print("    NOTE: this source is photographic. A reference sheet imports its "
+                  "medium into everything downstream, so keeping it will make the whole "
+                  "film photographic. That is fine if it is what you want, and a real "
+                  "problem if it is not.")
+
+    if str(args.style).strip().lower() in ("none", "as-is", "asis"):
+        # NO REDRAW AT ALL. The source becomes the sheet untouched. Right when the source
+        # is already a clean bust portrait on a plain backdrop; wrong otherwise, because
+        # whatever is behind the subject gets learned as part of them.
+        print("  keeping the source as the sheet, unmodified")
+        shutil.copy(src, sheet)
+        rel, style_used = "as-is", "unchanged from the source"
         print("    %s" % sheet)
     else:
-        print("    redraw FAILED - card will be written without a sheet")
+        print("  redrawing ...")
+        rel = redraw(staged, style_used, args.seed,
+                     "claude-generated/characters/%s" % cid.lower())
+        if rel:
+            ensure_local(rel, sheet, required=False)
+            print("    %s" % sheet)
+        else:
+            print("    redraw FAILED - card will be written without a sheet")
 
     card = {
         "id": cid, "name": args.name,
@@ -151,6 +228,8 @@ def build(args):
         "base_tags": tags_from(desc or args.desc or ""),
         "wear_tags": [],
         "sheet": sheet_name if rel else None,
+        "sheet_style": style_used,
+        "source_medium": medium or None,
         "voice": args.voice or None,
         # Provenance travels with the card. Six months from now the only way to know why a
         # face looks the way it does is to have written down where it started.
@@ -199,7 +278,9 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--image")
     ap.add_argument("--name")
-    ap.add_argument("--style", default=HOUSE_STYLE)
+    ap.add_argument("--style", default=HOUSE_STYLE,
+                    help="a style to redraw into; 'keep' to detect the source's own "
+                         "medium and stay in it; 'none' to use the source untouched")
     ap.add_argument("--desc", default="", help="used if the vision model returns nothing")
     ap.add_argument("--voice", default="")
     ap.add_argument("--seed", type=int, default=4242)

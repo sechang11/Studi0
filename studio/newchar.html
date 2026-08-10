@@ -86,6 +86,8 @@ a{color:var(--accent)}
       <div style="flex:1"><label>style to redraw into</label>
         <div style="display:flex;gap:7px;margin-bottom:7px">
           <select id="stylePick" style="flex:1">
+            <option value="__keep">keep the source's own look (detect it)</option>
+            <option value="__none">use the source untouched, no redraw</option>
             <option value="">the house style</option>
           </select>
           <button class="ghost" id="dStyle" type="button"
@@ -114,6 +116,10 @@ a{color:var(--accent)}
     never quite theirs. So the picture is used the two ways that do work: it is captioned
     into words, and it is redrawn into your idiom. Words survive every engine; an image
     reference does not.</p>
+    <p class="note"><b>Three ways to handle the look.</b> <i>Keep</i> reads what medium the
+    source is already in and stays there &mdash; the redraw still runs, because a sheet also
+    needs its background stripped and the subject framed as a bust, but it converts nothing.
+    <i>Untouched</i> skips the redraw entirely. Or pick a style card to convert into.</p>
     <p class="note">The redraw matters more than it looks. A reference sheet imports its
     <b>style and its medium</b> into everything downstream, so a sheet that is still a
     photograph quietly turns the whole film photographic.</p>
@@ -142,8 +148,41 @@ get("/api/tool/styles").then(d => {
     + STYLES.map(s => `<option value="${s.id}">${s.id}</option>`).join("");
 }).catch(() => {});
 
-$("stylePick").onchange = () => {
-  const s = STYLES.find(x => x.id === $("stylePick").value);
+const modeKeep = () => $("stylePick").value === "__keep";
+const modeNone = () => $("stylePick").value === "__none";
+
+$("stylePick").onchange = async () => {
+  const v = $("stylePick").value;
+  $("style").disabled = modeKeep() || modeNone();
+  if(modeNone()){
+    $("style").value = "";
+    // No redraw at all. Right when the source is already a clean bust on a plain
+    // backdrop; wrong otherwise, because whatever is behind the subject gets learned
+    // as part of them.
+    $("snote").innerHTML = `<span style="color:var(--warn)">The source becomes the sheet
+      exactly as it is. Only do this if it is already a bust portrait on a plain
+      background — a busy background behind the subject gets learned as part of
+      them.</span>`;
+    return;
+  }
+  if(modeKeep()){
+    if(!SEL){ $("snote").textContent = "pick a starting image first"; return; }
+    $("snote").textContent = "reading the medium…";
+    $("style").value = "";
+    const r = await post("/api/character/analyse", {path: SEL.path});
+    if(r.error){ $("snote").textContent = r.error; return; }
+    $("style").value = r.medium || "";
+    $("snote").innerHTML = r.photographic
+      // The measured trap: a sheet imports its MEDIUM into everything downstream.
+      ? `detected <b>${r.medium}</b> — <span style="color:var(--warn)">this is
+         photographic, and a reference sheet imports its medium into everything
+         downstream, so keeping it makes the whole film photographic. Fine if that is
+         what you want.</span>`
+      : `detected <b>${r.medium}</b> — the redraw stays in this medium and only fixes
+         the framing and background.`;
+    return;
+  }
+  const s = STYLES.find(x => x.id === v);
   $("style").value = s ? s.text : HOUSE;
   $("snote").textContent = s
     ? "from the style card " + s.id + " — edit it freely, it is a starting point"
@@ -248,7 +287,8 @@ $("go").onclick = async () => {
   $("go").disabled = true;
   $("prog").textContent = "captioning and redrawing…";
   const r = await post("/api/character/create", {
-    path: SEL.path, name: $("name").value, style: $("style").value,
+    path: SEL.path, name: $("name").value,
+    style: modeNone() ? "none" : (modeKeep() ? "keep" : $("style").value),
     voice: $("voice").value, seed: $("seed").value, consent: $("consent").checked});
   if(r.error){ $("prog").textContent = r.error; $("go").disabled = false; return; }
   const iv = setInterval(async () => {
