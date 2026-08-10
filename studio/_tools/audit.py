@@ -225,10 +225,17 @@ SILENT = [
     (r"subprocess\.run\([^)]*check\s*=\s*False", "check=False - a failure is swallowed"),
     (r"except\s*:\s*\n\s*pass", "bare except: pass - hides every error"),
     (r"except Exception:\s*\n\s*pass", "except Exception: pass - hides every error"),
-    (r'"-v",\s*"error".*?(silencedetect|signalstats|metadata=print|volumedetect)',
-     "ffmpeg quieted with -v error while being asked to REPORT - the measurement is "
-     "suppressed and reads as zero"),
-    (r"importlib\.reload\(", "reload on every call resets module state such as job tables"),
+    # ONLY filters that report on STDERR. -v error is correct and normal for:
+    #   ffprobe -show_entries      prints to stdout
+    #   metadata=print:file=X      writes to a file
+    #   -f md5 -                   prints to stdout
+    # The real bug is silencedetect / volumedetect / a bare metadata=print, which report at
+    # info level on stderr and vanish when ffmpeg is quieted. Flagging the stdout cases too
+    # produced eight false alarms and would have buried the one real hit.
+    (r'"-v",\s*"error"(?:(?!metadata=print:[^"]*file=)[^\n])*?'
+     r'(silencedetect|volumedetect|metadata=print(?!:[^"]*file=))',
+     "ffmpeg quieted with -v error while being asked to REPORT ON STDERR - the "
+     "measurement is suppressed and reads as zero"),
 ]
 
 
