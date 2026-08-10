@@ -1231,9 +1231,23 @@ class H(http.server.SimpleHTTPRequestHandler):
                     return self._send(body, code)
                 bits = rest.split("/")
                 sid = bits[0]
+                if bits[0] == "job" and len(bits) == 2:
+                    body, code = sr.job_status(bits[1])
+                    return self._send(body, code)
+                if bits[0] == "libraries":
+                    body, code = sr.libraries()
+                    return self._send(body, code)
                 if len(bits) == 1:
                     body, code = sr.story_tree(sid)
                     return self._send(body, code)
+                if bits[1] == "looks" and len(bits) == 3:
+                    body, code = sr.chapter_looks(sid, bits[2])
+                    return self._send(body, code)
+                if bits[1] == "trans" and len(bits) == 5:
+                    fp = sr.trans_file(sid, bits[2], bits[3], bits[4])
+                    if not fp:
+                        return self._send({"error": "no such transition"}, 404)
+                    return self._send_file(fp, "video/mp4")
                 if bits[1] == "file" and len(bits) == 2:
                     body, code = sr.save_file(sid)
                     return self._send(body, code)
@@ -1845,7 +1859,8 @@ class H(http.server.SimpleHTTPRequestHandler):
                      "/api/generate/preview", "/api/generate/bundle",
                      "/api/story/take", "/api/story/clip", "/api/story/select",
                      "/api/story/edit", "/api/story/lock", "/api/story/new",
-                     "/api/story/chapter", "/api/story/scene", "/api/story/load"):
+                     "/api/story/chapter", "/api/story/scene", "/api/story/load",
+                     "/api/story/transition"):
             return self._send({"error": "not found"}, 404)
         n = int(self.headers.get("Content-Length", 0))
         try:
@@ -1860,7 +1875,8 @@ class H(http.server.SimpleHTTPRequestHandler):
             fn = {"take": sr.start_take, "clip": sr.start_clip, "select": sr.select,
                   "edit": sr.edit_scene, "lock": sr.lock, "new": sr.new_story,
                   "chapter": sr.new_chapter, "scene": sr.new_scene,
-                  "load": sr.load_file}[p[len("/api/story/"):]]
+                  "load": sr.load_file,
+                  "transition": sr.transition}[p[len("/api/story/"):]]
             try:
                 body, code = fn(data)
             except KeyError as e:

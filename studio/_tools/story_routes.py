@@ -20,6 +20,14 @@ os.environ.setdefault("COMFY_HOST", "127.0.0.1:8188")
 
 import story as S                                            # noqa: E402
 
+# LTX tops out at 241 frames - 10.0s at 24fps - before identity and geometry drift. Past
+# that the answer is not a longer clip but a CHAIN: each part starts from the previous
+# part's last frame, so the motion runs straight through and the joins are invisible.
+# Cost is nearly flat in length (193 frames measured at 13.7s against 97 at 13.5s), so long
+# shots are close to free and cutting to fill time is the expensive way round.
+FRAME_CAP = 241
+MAX_SECONDS = 10.0
+
 # job id -> {state, scene, want, done, error}. Small and in-memory on purpose: a render
 # queue that survives a restart is a different, much larger feature, and this one is
 # allowed to be forgotten.
@@ -100,7 +108,9 @@ def scene_detail(sid, cid, scid):
             "resolved": sc.resolved(), "rules": sc.rule_violations(),
             "editable": {k: sc.data.get(k) for k in
                          ("prompt", "motion", "say", "who", "sfx", "look", "note",
-                          "seconds", "negative")},
+                          "seconds", "negative", "style", "place", "emotion", "camera")},
+            "neighbours": scene_neighbours(sid, cid, scid),
+            "max_seconds": MAX_SECONDS,
             "takes": takes}, 200
 
 
@@ -109,6 +119,37 @@ def take_file(sid, cid, scid, tid, name):
     sc = st.chapter(cid).scene(scid)
     p = os.path.join(sc.dir, "takes", tid, name)
     return p if os.path.isfile(p) else None
+
+
+def libraries():
+    """Every card a scene can be built from, so the editor offers what exists instead of
+    asking anyone to remember names.
+
+    These are the SAME libraries the wizard and the roller read. There is one set of cards
+    in this project and three consumers of it, not three copies - which is why a card
+    measured to be a dud disappears from all three at once.
+    """
+    sys.path.insert(0, TOOLS)
+    import roll as R
+    libs = R.load_libs()
+    return {
+        "styles": R.drawable_styles(libs),
+        "places": R.drawable(libs, "places"),
+        "looks": [l for l in R.drawable(libs, "looks") if l not in R.BANNED_LOOKS],
+        "emotions": R.drawable(libs, "emotions"),
+        "motions": sorted(m for m in libs.get("motions", {})
+                          if libs["motions"][m].get("status") == "ready"),
+        "cameras": [c for c in R.drawable(libs, "cameras") if c not in R.BANNED_CAMERAS],
+        # Named, so the page can say WHY something is missing rather than leaving a hole.
+        "excluded": {"looks": sorted(R.BANNED_LOOKS),
+                     "cameras": sorted(R.BANNED_CAMERAS)},
+    }, 200
+
+
+def chapter_looks(sid, cid):
+    """The looks THIS chapter defines, which is not the global list."""
+    ch = S.load(sid).chapter(cid)
+    return {"looks": sorted((ch.data.get("style_map") or {}).keys())}, 200
 
 
 def thumb(sid, cid, scid):
@@ -195,7 +236,7 @@ def edit_scene(data):
     before = sc.inputs_hash()
     for k, v in (data.get("fields") or {}).items():
         if k not in ("prompt", "motion", "say", "who", "sfx", "look", "note",
-                     "seconds", "negative"):
+                     "seconds", "negative", "style", "place", "emotion", "camera"):
             continue
         if v in (None, ""):
             sc.data.pop(k, None)          # clearing a field restores what it inherits
@@ -272,8 +313,8 @@ def _render_clip(job, sid, cid, scid):
         f = sc.flat()
         staged = "story_%s_%s_%s.png" % (sid, scid, t.id)
         subprocess.run(["cp", t.keyframe, os.path.join(COMFY, "input", staged)], check=False)
-        secs = float(f.get("seconds") or 6)
-        frames = int(round(secs * 24 / 8)) * 8 + 1
+        secs = min(float(f.get("seconds") or 6), MAX_SECONDS)
+        frames = min(int(round(secs * 24 / 8)) * 8 + 1, FRAME_CAP)
         wf = load_wf("12_ltx23_i2v_audio.json")
         set_path(wf, "8.inputs.image", staged)
         set_path(wf, "10.inputs.text", f.get("motion") or "gentle natural motion")
@@ -312,6 +353,97 @@ def start_take(data):
                      args=(job, data["story"], data["chapter"], data["scene"], n,
                            data.get("seed"))).start()
     return {"ok": True, "job": job, "n": n}, 200
+
+
+def _render_transition(job, sid, cid, a, b, secs, motion):
+    """Generate the shot BETWEEN two scenes: A's chosen keyframe to B's.
+
+    This is the two-image case. LTXVAddGuide pins frame 0 to A and the last frame to B and
+    the model invents the travel between them. It is the ONE transition kind that costs a
+    render - cut, dissolve and fade are ffmpeg filters and are instant - so it is a
+    deliberate action with its own progress, never something that fires off a dropdown.
+    """
+    run, set_path, load_wf, ensure_local, HOST, COMFY = _comfy()
+    try:
+        ch = S.load(sid).chapter(cid)
+        ta, tb = ch.scene(a).selected(), ch.scene(b).selected()
+        if not (ta and ta.has()) or not (tb and tb.has()):
+            raise RuntimeError("both scenes need a selected take with a keyframe")
+        na, nb = "flf_%s_a.png" % a, "flf_%s_b.png" % b
+        subprocess.run(["cp", ta.keyframe, os.path.join(COMFY, "input", na)], check=False)
+        subprocess.run(["cp", tb.keyframe, os.path.join(COMFY, "input", nb)], check=False)
+        secs = max(1.0, min(float(secs or 3), MAX_SECONDS))
+        frames = min(int(round(secs * 24 / 8)) * 8 + 1, FRAME_CAP)
+        wf = load_wf("50_ltx_first_last.json")
+        set_path(wf, "8.inputs.image", na)
+        set_path(wf, "58.inputs.image", nb)
+        set_path(wf, "10.inputs.text",
+                 motion or "a continuous move from one place to the other")
+        set_path(wf, "20.inputs.width", 1216)
+        set_path(wf, "20.inputs.height", 704)
+        set_path(wf, "20.inputs.length", frames)
+        set_path(wf, "21.inputs.frames_number", frames)
+        set_path(wf, "21.inputs.frame_rate", 24)
+        set_path(wf, "32.inputs.noise_seed", abs(hash((a, b, secs))) % 2 ** 31)
+        set_path(wf, "43.inputs.filename_prefix",
+                 "claude-generated/stories/%s/trans_%s__%s" % (sid, a, b))
+        _, outs = run(HOST, wf, quiet=True)
+        if not outs:
+            raise RuntimeError("no output")
+        dest = os.path.join(ch.dir, "transitions", "%s__%s.mp4" % (a, b))
+        os.makedirs(os.path.dirname(dest), exist_ok=True)
+        ensure_local(outs[0], dest, required=False)
+        ch.set_transition(a, b, kind="generated", seconds=secs, generated=True,
+                          motion=motion, file=os.path.basename(dest))
+    except Exception as e:
+        with _LOCK:
+            JOBS[job]["error"] = str(e)[:200]
+    with _LOCK:
+        JOBS[job]["done"] = 1
+        JOBS[job]["state"] = "done"
+
+
+def transition(data):
+    """Read or set a transition. Setting a filter kind is free; generating one is a render."""
+    ch = S.load(data["story"]).chapter(data["chapter"])
+    a, b = data["from"], data["to"]
+    if data.get("generate"):
+        job = "j%d" % (len(JOBS) + 1)
+        with _LOCK:
+            JOBS[job] = {"state": "running", "kind": "transition", "want": 1, "done": 0,
+                         "scene": "%s to %s" % (a, b), "error": None}
+        threading.Thread(target=_render_transition, daemon=True,
+                         args=(job, data["story"], data["chapter"], a, b,
+                               data.get("seconds", 3), data.get("motion", ""))).start()
+        return {"ok": True, "job": job}, 200
+    kw = {k: data[k] for k in ("kind", "seconds", "motion") if k in data}
+    if kw:
+        kw["generated"] = kw.get("kind") == "generated"
+        ch.set_transition(a, b, **kw)
+    return {"ok": True, "transition": ch.transition(a, b)}, 200
+
+
+def scene_neighbours(sid, cid, scid):
+    """The scenes either side, and the transitions on both joins."""
+    ch = S.load(sid).chapter(cid)
+    ids = ch.scene_ids()
+    i = ids.index(scid) if scid in ids else -1
+    prev = ids[i - 1] if i > 0 else None
+    nxt = ids[i + 1] if 0 <= i < len(ids) - 1 else None
+    out = {"prev": prev, "next": nxt}
+    for tag, a, b in (("in", prev, scid), ("out", scid, nxt)):
+        if a and b:
+            tr = ch.transition(a, b)
+            f = os.path.join(ch.dir, "transitions", "%s__%s.mp4" % (a, b))
+            tr["clip"] = ("/api/story/%s/trans/%s/%s/%s" % (sid, cid, a, b)
+                          if os.path.isfile(f) else None)
+            out[tag] = tr
+    return out
+
+
+def trans_file(sid, cid, a, b):
+    p = os.path.join(S.load(sid).chapter(cid).dir, "transitions", "%s__%s.mp4" % (a, b))
+    return p if os.path.isfile(p) else None
 
 
 def start_clip(data):

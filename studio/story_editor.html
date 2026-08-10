@@ -81,7 +81,7 @@ code{background:#101017;padding:1px 5px;border-radius:3px;font-size:12px}
 
 <script>
 const $ = i => document.getElementById(i);
-let STORY = null, TREE = null, CUR = null;
+let STORY = null, TREE = null, CUR = null, LIBS = null;
 
 async function get(u){ return (await fetch(u)).json(); }
 async function post(u,b){ return (await fetch(u,{method:"POST",
@@ -119,7 +119,8 @@ $("bNew").onclick = async () => {
   const r = await post("/api/story/new", {title});
   if(r.error){ alert(r.error); return; }
   localStorage.setItem("story", r.id);
-  await boot();
+  await get("/api/story/libraries").then(l => { LIBS = l; }).catch(()=>{});
+boot();
 };
 
 $("bSave").onclick = async () => {
@@ -210,9 +211,56 @@ function mark(){
     e.classList.toggle("on", e.dataset.ch===CUR.chapter && e.dataset.sc===CUR.id));
 }
 
+let CHLOOKS = [];
 async function open(ch, sc){
   CUR = await get(`/api/story/${STORY}/scene/${ch}/${sc}`);
+  try { CHLOOKS = (await get(`/api/story/${STORY}/looks/${ch}`)).looks || []; }
+  catch(e){ CHLOOKS = []; }
   mark(); draw();
+}
+
+
+function opts(list, cur, blank){
+  const o = [`<option value="">${blank}</option>`];
+  (list||[]).forEach(v => o.push(
+    `<option value="${v}" ${v===cur?"selected":""}>${v}</option>`));
+  // A value already set but no longer in the library must still show, or saving the form
+  // would silently drop it.
+  if(cur && !(list||[]).includes(cur))
+    o.push(`<option value="${cur}" selected>${cur} (not in library)</option>`);
+  return o.join("");
+}
+
+function transPanel(d){
+  const n = d.neighbours || {};
+  if(!n.out) return "";
+  const tr = n.out;
+  const kinds = ["cut","dissolve","fadeblack","wipe","generated"];
+  return `<div class="card">
+    <h2>Transition to ${n.next}</h2>
+    <div class="row">
+      <div style="width:170px"><label>kind</label>
+        <select id="tkind">${kinds.map(k =>
+          `<option value="${k}" ${k===tr.kind?"selected":""}>${k}${
+            k==="generated"?" (renders)":" (instant)"}</option>`).join("")}</select></div>
+      <div style="width:110px"><label>seconds</label>
+        <input id="tsecs" value="${tr.seconds||0.7}"></div>
+      <div style="flex:1"><label>motion (generated only)</label>
+        <input id="tmotion" value="${tr.motion||""}"
+               placeholder="a continuous move from one place to the other"></div>
+    </div>
+    <div class="row">
+      <button class="ghost" id="tsave">Set transition</button>
+      <button id="tgen">Generate the shot between</button>
+      <span id="tprog" style="color:var(--dim);font-size:13px"></span>
+    </div>
+    ${tr.clip ? `<video src="${tr.clip}" controls style="width:100%;max-width:640px;
+       border-radius:8px;display:block"></video>` : ""}
+    <p class="note">cut, dissolve, fadeblack and wipe are ffmpeg filters — instant, no GPU.
+    <b>generated</b> is a real render: it pins the first frame to this scene's chosen take
+    and the last frame to the next scene's, and the model invents the travel between them.
+    About 35 seconds.</p>
+  </div>`;
 }
 
 function draw(){
@@ -265,9 +313,22 @@ function draw(){
       <div class="fld"><label>motion</label><textarea id="f_motion">${e.motion||""}</textarea></div>
       <div class="fld"><label>say</label><textarea id="f_say">${e.say||""}</textarea></div>
       <div class="row">
-        <div style="flex:1"><label>who</label><input id="f_who" value="${e.who||""}"></div>
-        <div style="flex:1"><label>look (blank = inherit)</label><input id="f_look" value="${e.look||""}"></div>
-        <div style="width:110px"><label>seconds</label><input id="f_seconds" value="${e.seconds||""}"></div>
+        <div style="flex:1"><label>look — from this chapter</label>
+          <select id="f_look">${opts(CHLOOKS, e.look, "inherit from chapter")}</select></div>
+        <div style="flex:1"><label>style card</label>
+          <select id="f_style">${opts(LIBS&&LIBS.styles, e.style, "inherit")}</select></div>
+        <div style="flex:1"><label>place card</label>
+          <select id="f_place">${opts(LIBS&&LIBS.places, e.place, "inherit")}</select></div>
+      </div>
+      <div class="row">
+        <div style="flex:1"><label>who speaks</label>
+          <select id="f_who">${opts(TREE&&TREE.voices, e.who, "narrator")}</select></div>
+        <div style="flex:1"><label>emotion</label>
+          <select id="f_emotion">${opts(LIBS&&LIBS.emotions, e.emotion, "none")}</select></div>
+        <div style="flex:1"><label>camera</label>
+          <select id="f_camera">${opts(LIBS&&LIBS.cameras, e.camera, "none")}</select></div>
+        <div style="width:120px"><label>seconds (max ${d.max_seconds||10})</label>
+          <input id="f_seconds" value="${e.seconds||""}"></div>
       </div>
       <div class="fld"><label>sfx</label><input id="f_sfx" value="${e.sfx||""}"></div>
       <div class="row"><button id="save">Save inputs</button>
@@ -276,6 +337,7 @@ function draw(){
       re-render: it marks affected takes stale so you can see what changed before spending
       anything.</p>
     </div>
+    ${transPanel(d)}
     <div class="card">
       <h2>Resolved &mdash; and where each value came from</h2>
       <table class="res">${rows}</table>
@@ -295,9 +357,35 @@ function draw(){
     await post("/api/story/lock", {story:STORY, chapter:d.chapter, scene:d.id, locked:!d.locked});
     await open(d.chapter, d.id); tree();
   };
+  if($("tgen")){
+    const n = d.neighbours;
+    $("tsave").onclick = async () => {
+      await post("/api/story/transition", {story:STORY, chapter:d.chapter,
+        from:d.id, to:n.next, kind:$("tkind").value,
+        seconds:parseFloat($("tsecs").value)||0.7, motion:$("tmotion").value});
+      $("tprog").textContent = "set";
+      await open(d.chapter, d.id);
+    };
+    $("tgen").onclick = async () => {
+      $("tprog").textContent = "rendering the shot between…";
+      const r = await post("/api/story/transition", {story:STORY, chapter:d.chapter,
+        from:d.id, to:n.next, generate:true,
+        seconds:parseFloat($("tsecs").value)||3, motion:$("tmotion").value});
+      if(r.error){ $("tprog").textContent = r.error; return; }
+      const iv = setInterval(async () => {
+        const j = await get("/api/story/job/"+r.job);
+        if(j.state==="done"){
+          clearInterval(iv);
+          $("tprog").textContent = j.error ? "failed: "+j.error : "done";
+          await open(d.chapter, d.id); tree();
+        }
+      }, 2500);
+    };
+  }
   $("save").onclick = async () => {
     const fields = {};
-    ["prompt","motion","say","who","look","seconds","sfx"].forEach(k =>
+    ["prompt","motion","say","who","look","seconds","sfx","style","place",
+     "emotion","camera"].forEach(k =>
       fields[k] = $("f_"+k).value.trim());
     const r = await post("/api/story/edit", {story:STORY, chapter:d.chapter, scene:d.id, fields});
     $("saved").textContent = r.changed
