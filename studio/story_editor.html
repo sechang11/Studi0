@@ -50,6 +50,9 @@ input,textarea,select{background:#101017;color:var(--ink);border:1px solid var(-
   border-radius:6px;padding:7px 9px;font:inherit;width:100%}
 textarea{min-height:64px;resize:vertical;font-size:13px}
 .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+button.sm{padding:5px 10px;font-size:12px}
+.addrow{padding:8px 12px 14px;display:flex;gap:7px}
+.empty{padding:26px 18px;color:var(--dim);font-size:13.5px;line-height:1.6}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:14px 16px;margin-bottom:16px}
 .note{font-size:12.5px;color:var(--dim);border-left:2px solid var(--line);padding-left:10px;margin:10px 0 0}
 .note.rule{border-left-color:var(--rule)}
@@ -63,7 +66,13 @@ code{background:#101017;padding:1px 5px;border-radius:3px;font-size:12px}
 <nav class="top">
   <a href="/">&larr; Studio</a><a href="/generate">Fill the library</a>
   <a href="/gallery">Gallery</a><a href="/docs">Docs</a>
-  <span id="title" style="color:var(--dim);font-size:14px"></span>
+  <span style="float:right;display:flex;gap:8px;align-items:center">
+    <select id="pick" style="width:auto;padding:5px 8px;font-size:13px"></select>
+    <button class="ghost sm" id="bNew">New story</button>
+    <button class="ghost sm" id="bSave">Save .story</button>
+    <button class="ghost sm" id="bLoad">Load .story</button>
+    <input type="file" id="file" accept=".story,.json" style="display:none">
+  </span>
 </nav>
 <main>
   <div id="left"></div>
@@ -80,14 +89,100 @@ async function post(u,b){ return (await fetch(u,{method:"POST",
 
 async function boot(){
   const l = await get("/api/story");
-  if(!l.stories || !l.stories.length){ $("left").innerHTML="<p style='padding:16px;color:var(--dim)'>No stories yet.</p>"; return; }
-  STORY = l.stories[0].id;
-  $("title").textContent = "  " + l.stories[0].title;
+  const keep = localStorage.getItem("story") ;
+  $("pick").innerHTML = (l.stories||[]).map(s =>
+    `<option value="${s.id}">${s.title} — ${s.scenes} scenes</option>`).join("")
+    || `<option value="">no stories yet</option>`;
+  if(!l.stories || !l.stories.length){
+    STORY = null;
+    $("left").innerHTML = `<div class="empty">No stories yet.<br><br>
+      <b>New story</b> starts an empty one — no template chapter, no placeholder scene.<br>
+      <b>Load .story</b> opens one you or someone else saved.</div>`;
+    $("right").innerHTML = "";
+    return;
+  }
+  STORY = (keep && l.stories.some(s=>s.id===keep)) ? keep : l.stories[0].id;
+  $("pick").value = STORY;
   await tree();
+}
+
+$("pick").onchange = async e => {
+  STORY = e.target.value; CUR = null;
+  localStorage.setItem("story", STORY);
+  $("right").innerHTML = "<p style='color:var(--dim)'>Pick a scene.</p>";
+  await tree();
+};
+
+$("bNew").onclick = async () => {
+  const title = prompt("Title for the new story");
+  if(!title) return;
+  const r = await post("/api/story/new", {title});
+  if(r.error){ alert(r.error); return; }
+  localStorage.setItem("story", r.id);
+  await boot();
+};
+
+$("bSave").onclick = async () => {
+  if(!STORY) return;
+  const doc = await get(`/api/story/${STORY}/file`);
+  // Downloaded, not written server-side: the .story file is the thing you copy, version
+  // and hand to someone, so it belongs wherever you keep your work.
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(doc, null, 1)],
+                                        {type:"application/json"}));
+  a.download = STORY + ".story";
+  document.body.appendChild(a); a.click(); a.remove();
+};
+
+$("bLoad").onclick = () => $("file").click();
+$("file").onchange = async e => {
+  const f = e.target.files[0]; if(!f) return;
+  let doc;
+  try { doc = JSON.parse(await f.text()); }
+  catch(err){ alert("that is not a .story file: " + err.message); return; }
+  let r = await post("/api/story/load", {doc});
+  if(r.error && r.existing){
+    const as = prompt(r.error + " -- load it under a different name:",
+                      r.existing + "-copy");
+    if(!as) return;
+    r = await post("/api/story/load", {doc, as});
+  }
+  if(r.error){ alert(r.error); return; }
+  localStorage.setItem("story", r.id);
+  alert(`Loaded ${r.id}: ${r.scenes} scenes` +
+        (r.takes_needing_rerender ? `, ${r.takes_needing_rerender} take(s) need re-rendering `
+         + `(a .story file carries every take's seed and inputs, but not its pixels)` : ""));
+  e.target.value = "";
+  await boot();
+};
+
+async function addChapter(){
+  const title = prompt("Chapter title");
+  if(!title) return;
+  const r = await post("/api/story/chapter", {story:STORY, title});
+  if(r.error){ alert(r.error); return; }
+  tree();
+}
+
+async function addScene(chapter){
+  const name = prompt("Scene name (optional — it gets the next number either way)") ;
+  if(name === null) return;
+  const r = await post("/api/story/scene", {story:STORY, chapter, name});
+  if(r.error){ alert(r.error); return; }
+  await tree();
+  open(chapter, r.id);
 }
 
 async function tree(){
   TREE = await get("/api/story/"+STORY);
+  if(!TREE.chapters.length){
+    $("left").innerHTML = `<div class="empty"><b>${TREE.title}</b> is empty.<br><br>
+      A story is chapters, a chapter is scenes, a scene is takes.<br>
+      Start with a chapter.</div>
+      <div class="addrow"><button class="sm" id="addch">+ Chapter</button></div>`;
+    $("addch").onclick = addChapter;
+    return;
+  }
   $("left").innerHTML = TREE.chapters.map(ch =>
     `<div class="chap">${ch.title} &middot; ${ch.scenes.length} scenes</div>` +
     ch.scenes.map(s => {
@@ -99,9 +194,14 @@ async function tree(){
       return `<div class="sc" data-ch="${ch.id}" data-sc="${s.id}">
         ${img}<div style="min-width:0"><b>${s.id}${tags}</b>
         <span>${s.takes} takes${s.selected?' &middot; '+s.selected:''} &middot; ${s.line}</span></div></div>`;
-    }).join("")).join("");
+    }).join("") +
+    `<div class="addrow"><button class="ghost sm addsc" data-ch="${ch.id}">+ Scene</button></div>`
+  ).join("") + `<div class="addrow"><button class="sm" id="addch">+ Chapter</button></div>`;
   $("left").querySelectorAll(".sc").forEach(e =>
     e.onclick = () => open(e.dataset.ch, e.dataset.sc));
+  $("left").querySelectorAll(".addsc").forEach(e =>
+    e.onclick = () => addScene(e.dataset.ch));
+  $("addch").onclick = addChapter;
   if(CUR) mark();
 }
 

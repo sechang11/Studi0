@@ -3,10 +3,13 @@
 A scene-by-scene editor, so a film is built one good shot at a time instead of being
 re-rolled whole and hoped over.
 
-**Status.** The model, the folder tree, the inheritance resolver, takes and selection are
-built and working (`studio/story.py`, `studio/_tools/story_tool.py`). THE SALT ROAD is
-migrated into it as a real three-chapter story. The web editor is not built yet; what
-exists is the thing a web editor would have to sit on. See *What is not built* at the end.
+**Status.** Built and in use at **`/story`**. The model, folder tree, inheritance resolver,
+takes, selection, locking and staleness all work (`studio/story.py`,
+`studio/_tools/story_tool.py`, `studio/_tools/story_routes.py`). Multiple stories, a
+portable `.story` file, and authoring chapters and scenes from the page all work. THE SALT
+ROAD is migrated in as a real three-chapter, 59-scene story.
+
+Not built: transitions in the UI, audio layers in the UI, and lip sync. See the end.
 
 ---
 
@@ -109,6 +112,41 @@ Two rules about the tree:
    inputs currently in the file.
 
 **Selection is a pointer, never a copy.** `SELECTED` names a take id. Export reads it.
+
+## The .story file
+
+One portable document holding an entire story: settings, cast, chapters, scenes,
+transitions, and which take was chosen for each scene. Load it, edit it, save it, hand it
+to someone else. The exploded folder tree stays the working format and the render cache;
+the .story file is the thing you copy and version.
+
+```json
+{ "format": "comfy-studio/story", "version": 1, "id": "the-salt-road",
+  "story":    { "title": "...", "characters": {...}, "voices": {...} },
+  "chapters": [ { "id": "01-...", "data": {...},
+                  "scenes": [ { "id": "010-table", "data": {...},
+                                "selected": "t03", "takes": [ {...} ] } ],
+                  "transitions": [ {...} ] } ] }
+```
+
+**It deliberately contains no pixels.** A story with six takes on fifty scenes is gigabytes
+of picture, and picture is a cache — it can always be rebuilt from the inputs, which is
+exactly what `inputs_hash` is for. What the file *does* carry is every take's metadata: its
+id, seed and hash. So a reloaded story still knows that a scene had a chosen take at seed
+2601, and says so, and can rebuild it. **You lose the bytes, never the provenance.** Loading
+reports how many takes need re-rendering rather than pretending they are there.
+
+Loading refuses to silently overwrite an existing story — that is almost always a mistake,
+you meant to open it, not replace fifty scenes — so it asks for a different name instead.
+
+## An empty story is a blank page
+
+`New story` creates a story with **no chapters and no scenes**. No template chapter, no
+placeholder scene. Inventing a "Chapter 1" nobody asked for is how a tool starts deciding
+what you are making.
+
+Scenes are numbered in tens — `010`, `020`, `030` — so one can always be slipped between
+two others without renumbering anything.
 
 ## Transitions
 

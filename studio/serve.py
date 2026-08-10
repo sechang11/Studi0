@@ -1234,6 +1234,9 @@ class H(http.server.SimpleHTTPRequestHandler):
                 if len(bits) == 1:
                     body, code = sr.story_tree(sid)
                     return self._send(body, code)
+                if bits[1] == "file" and len(bits) == 2:
+                    body, code = sr.save_file(sid)
+                    return self._send(body, code)
                 if bits[1] == "job" and len(bits) == 3:
                     body, code = sr.job_status(bits[2])
                     return self._send(body, code)
@@ -1841,7 +1844,8 @@ class H(http.server.SimpleHTTPRequestHandler):
                      "/api/generate/start", "/api/generate/stop",
                      "/api/generate/preview", "/api/generate/bundle",
                      "/api/story/take", "/api/story/clip", "/api/story/select",
-                     "/api/story/edit", "/api/story/lock"):
+                     "/api/story/edit", "/api/story/lock", "/api/story/new",
+                     "/api/story/chapter", "/api/story/scene", "/api/story/load"):
             return self._send({"error": "not found"}, 404)
         n = int(self.headers.get("Content-Length", 0))
         try:
@@ -1854,7 +1858,9 @@ class H(http.server.SimpleHTTPRequestHandler):
                 return self._send({"error": "studio/_tools/story_routes.py is "
                                             "unavailable"}, 500)
             fn = {"take": sr.start_take, "clip": sr.start_clip, "select": sr.select,
-                  "edit": sr.edit_scene, "lock": sr.lock}[p[len("/api/story/"):]]
+                  "edit": sr.edit_scene, "lock": sr.lock, "new": sr.new_story,
+                  "chapter": sr.new_chapter, "scene": sr.new_scene,
+                  "load": sr.load_file}[p[len("/api/story/"):]]
             try:
                 body, code = fn(data)
             except KeyError as e:

@@ -117,6 +117,76 @@ def thumb(sid, cid, scid):
     return t.keyframe if t and t.has() else None
 
 
+# ─── authoring ──────────────────────────────────────────────────────────────────────
+# Everything here is cheap and synchronous. Creating a story, a chapter or a scene touches
+# only JSON - no GPU, no job table. The editor should feel like a text editor until the
+# moment you ask it to render something.
+
+def new_story(data):
+    title = (data.get("title") or "").strip()
+    if not title:
+        return {"error": "a title is required"}, 400
+    sid = S.slug(title)
+    if os.path.isdir(os.path.join(S.STORIES, sid)):
+        return {"error": "a story called %r already exists" % sid}, 409
+    # Deliberately EMPTY. No template chapter, no placeholder scene - an empty story is a
+    # blank page, and inventing a "Chapter 1" nobody asked for is how a tool starts
+    # deciding what you are making.
+    st = S.create(title)
+    return {"ok": True, "id": st.id}, 200
+
+
+def new_chapter(data):
+    st = S.load(data["story"])
+    title = (data.get("title") or "").strip() or "untitled chapter"
+    ch = S.add_chapter(st, title)
+    return {"ok": True, "id": ch.id}, 200
+
+
+def new_scene(data):
+    st = S.load(data["story"])
+    ch = st.chapter(data["chapter"])
+    sid = S.next_scene_id(ch, data.get("name", ""))
+    sc = S.add_scene(ch, sid, prompt=data.get("prompt", ""))
+    prev = [s for s in ch.scene_ids() if s != sid]
+    if prev:
+        ch.set_transition(prev[-1], sid, kind=ch.data.get("transition", "cut"),
+                          generated=False)
+    return {"ok": True, "id": sc.id}, 200
+
+
+def save_file(sid):
+    """The whole story as one .story document, ready to download."""
+    st = S.load(sid)
+    return S.to_doc(st), 200
+
+
+def load_file(data):
+    """Take a .story document and write it out as a tree.
+
+    Refuses to silently overwrite. Loading a story whose id already exists is almost always
+    a mistake - you meant to open it, not replace it - so it asks for an explicit new id
+    instead of quietly clobbering fifty scenes.
+    """
+    doc = data.get("doc")
+    if not isinstance(doc, dict):
+        return {"error": "no document"}, 400
+    want = (data.get("as") or "").strip()
+    sid = S.slug(want) if want else (doc.get("id") or S.slug(
+        doc.get("story", {}).get("title", "untitled")))
+    if os.path.isdir(os.path.join(S.STORIES, sid)) and not data.get("overwrite"):
+        return {"error": "a story called %r already exists - load it under a different "
+                         "name, or pass overwrite" % sid, "existing": sid}, 409
+    try:
+        st = S.from_doc(doc, new_id=sid)
+    except ValueError as e:
+        return {"error": str(e)}, 400
+    missing = sum(1 for sc in st.all_scenes() for t in sc.takes()
+                  if t.meta.get("status") == "missing")
+    return {"ok": True, "id": st.id, "scenes": len(st.all_scenes()),
+            "takes_needing_rerender": missing}, 200
+
+
 # ─── writes ─────────────────────────────────────────────────────────────────────────
 
 def edit_scene(data):

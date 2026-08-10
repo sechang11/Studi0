@@ -17,45 +17,37 @@ TD="$CHDIR/scenes/$SC/takes"
 [ -d "$TD" ] || { echo "no takes for $SC" >&2; exit 1; }
 
 SEL=$(cat "$CHDIR/scenes/$SC/SELECTED" 2>/dev/null | tr -d '[:space:]')
+# Fixed cell size so xstack offsets can be plain pixel arithmetic. The previous version
+# built offsets from "0 or w0" and "0 or h0", which only ever addresses a 2x2 grid - with
+# six takes, t05 and t06 were drawn directly on top of t03 and t04 and two takes vanished
+# from the sheet without a word. A chooser that silently hides options is worse than no
+# chooser at all.
+CELLW=520; CELLH=293
 ARGS=(); FC=""; N=0
 for d in "$TD"/t*; do
   K="$d/keyframe.png"; [ -f "$K" ] || continue
   T=$(basename "$d")
-  SEED=$(python3 -c "import json,sys;print(json.load(open('$d/inputs.json')).get('seed',''))" 2>/dev/null)
+  SEED=$(python3 -c "import json;print(json.load(open('$d/inputs.json')).get('seed',''))" 2>/dev/null)
   MARK="$T  seed $SEED"
   [ "$T" = "$SEL" ] && MARK="$MARK  <SELECTED>"
   ARGS+=(-i "$K")
-  # Label burnt in: a grid of unlabelled thumbnails cannot be acted on, because the whole
-  # point is to say "t03" afterwards.
-  FC="$FC[$N:v]scale=520:-1,drawtext=text='$MARK':fontsize=26:fontcolor=white:box=1:boxcolor=black@0.65:x=12:y=12[c$N];"
+  FC="$FC[$N:v]scale=$CELLW:$CELLH:force_original_aspect_ratio=decrease,pad=$CELLW:$CELLH:(ow-iw)/2:(oh-ih)/2:color=0x111111,drawtext=text='$MARK':fontsize=24:fontcolor=white:box=1:boxcolor=black@0.65:x=10:y=10[c$N];"
   N=$((N+1))
 done
 [ "$N" -gt 0 ] || { echo "no rendered keyframes" >&2; exit 1; }
 
+COLS=3; [ "$N" -le 4 ] && COLS=2; [ "$N" -le 1 ] && COLS=1
+LAYOUT=""; IN=""
+for i in $(seq 0 $((N-1))); do
+  X=$(( (i % COLS) * CELLW )); Y=$(( (i / COLS) * CELLH ))
+  LAYOUT="$LAYOUT|${X}_${Y}"; IN="$IN[c$i]"
+done
+LAYOUT="${LAYOUT#|}"
 if [ "$N" = 1 ]; then
   FC="$FC[c0]null[v]"
 else
-  COLS=2; [ "$N" -le 2 ] && COLS=$N
-  LAYOUT=""
-  for i in $(seq 0 $((N-1))); do
-    X=$(( (i % COLS) )); Y=$(( i / COLS ))
-    LAYOUT="$LAYOUT|${X}_${Y}"
-  done
-  # xstack layout wants w0_h0 style offsets; build them from the scaled cell size instead
-  # of pixel maths so a non-16:9 scene still tiles.
-  LAYOUT=""
-  for i in $(seq 0 $((N-1))); do
-    X=$(( i % COLS )); Y=$(( i / COLS ))
-    if [ "$X" = 0 ]; then XE=0; else XE="w0"; fi
-    if [ "$Y" = 0 ]; then YE=0; else YE="h0"; fi
-    LAYOUT="$LAYOUT|${XE}_${YE}"
-  done
-  LAYOUT="${LAYOUT#|}"
-  IN=""; for i in $(seq 0 $((N-1))); do IN="$IN[c$i]"; done
-  # fill= matters: an odd take count leaves empty canvas, and xstack fills that with
-  # BRIGHT GREEN by default.
+  # fill= matters: an odd take count leaves empty canvas and xstack fills it bright green.
   FC="$FC${IN}xstack=inputs=$N:fill=0x111111:layout=$LAYOUT[v]"
 fi
 
-ffmpeg -y -v error "${ARGS[@]}" -filter_complex "$FC" -map "[v]" -frames:v 1 "$OUT" \
-  && echo "$OUT  ($N takes${SEL:+, selected $SEL})"
+ffmpeg -y -v error "${ARGS[@]}" -filter_complex "$FC" -map "[v]" -frames:v 1 "$OUT"   && echo "$OUT  ($N takes${SEL:+, selected $SEL})"

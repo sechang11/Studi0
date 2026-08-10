@@ -369,3 +369,100 @@ def add_scene(ch, sid, **kw):
         ch.data.setdefault("scenes", []).append(sid)
         ch.save()
     return sc
+
+
+# ── THE .story FILE ─────────────────────────────────────────────────────────────────
+# One portable document holding an entire story: settings, cast, chapters, scenes,
+# transitions, and which take was chosen for each scene. Load it, edit it, save it, hand it
+# to someone else.
+#
+# WHAT IT DELIBERATELY DOES NOT CONTAIN: pixels. No keyframes, no clips. A story with six
+# takes on fifty scenes is gigabytes of picture, and picture is a CACHE - it can always be
+# rebuilt from the inputs, which is exactly what the inputs_hash is for. What the file does
+# carry is every take's METADATA: its id, seed and hash. So a reloaded story still knows
+# that scene 040 had a chosen take at seed 2601, and can say so, and can rebuild it. You
+# lose the bytes, never the provenance.
+#
+# The exploded folder tree stays the working format and the render cache. The .story file is
+# the thing you copy, version, and email.
+FORMAT = "comfy-studio/story"
+VERSION = 1
+
+
+def to_doc(st):
+    """Whole story as one document."""
+    doc = {"format": FORMAT, "version": VERSION, "id": st.id,
+           "saved": time.strftime("%Y-%m-%dT%H:%M:%S"),
+           "story": st.data, "chapters": []}
+    for ch in st.chapters():
+        c = {"id": ch.id, "data": ch.data, "scenes": [],
+             "transitions": ch.transitions()}
+        for sc in ch.scenes():
+            c["scenes"].append({
+                "id": sc.id, "data": sc.data, "selected": sc.selected_id,
+                # Metadata only - the picture is a cache, the provenance is not.
+                "takes": [{"id": t.id, "seed": t.meta.get("seed"),
+                           "inputs_hash": t.meta.get("inputs_hash"),
+                           "status": t.meta.get("status"),
+                           "note": t.meta.get("note", "")} for t in sc.takes()],
+            })
+        doc["chapters"].append(c)
+    return doc
+
+
+def from_doc(doc, new_id=None):
+    """Write a document out as a story tree. Returns the Story.
+
+    Takes come back as records with status `missing` rather than being dropped: the scene
+    still says it had a chosen take at a known seed, and `plan` can then tell you exactly
+    what needs re-rendering. Silently forgetting them would turn a portable story into a
+    lossy one.
+    """
+    if doc.get("format") != FORMAT:
+        raise ValueError("not a %s file" % FORMAT)
+    sid = new_id or doc.get("id") or slug(doc["story"].get("title", "untitled"))
+    st = Story(sid)
+    st.data = dict(doc["story"], id=sid)
+    os.makedirs(st.dir, exist_ok=True)
+    st.data["chapters"] = [c["id"] for c in doc.get("chapters", [])]
+    st.save()
+    for c in doc.get("chapters", []):
+        ch = Chapter(st, c["id"])
+        ch.data = c["data"]
+        os.makedirs(ch.dir, exist_ok=True)
+        ch.save()
+        for s in c.get("scenes", []):
+            sc = Scene(ch, s["id"])
+            sc.data = s["data"]
+            os.makedirs(sc.dir, exist_ok=True)
+            sc.save()
+            for tk in s.get("takes", []):
+                t = Take(sc, tk["id"])
+                os.makedirs(t.dir, exist_ok=True)
+                t.save(id=tk["id"], seed=tk.get("seed"),
+                       inputs_hash=tk.get("inputs_hash"),
+                       status="missing" if not os.path.exists(t.keyframe)
+                       else tk.get("status", "rendered"),
+                       note=tk.get("note", ""))
+            if s.get("selected"):
+                try:
+                    sc.select(s["selected"])
+                except KeyError:
+                    pass
+        for tr in c.get("transitions", []):
+            if tr.get("from") and tr.get("to"):
+                ch.set_transition(tr["from"], tr["to"],
+                                  **{k: v for k, v in tr.items()
+                                     if k not in ("from", "to")})
+    return st
+
+
+def next_scene_id(ch, name=""):
+    """Scenes are numbered in tens so one can always be slipped between two others."""
+    nums = []
+    for s in ch.scene_ids():
+        m = re.match(r"^(\d+)", s)
+        if m:
+            nums.append(int(m.group(1)))
+    n = (max(nums) + 10) if nums else 10
+    return "%03d%s" % (n, ("-" + slug(name)) if name else "")
