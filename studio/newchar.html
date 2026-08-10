@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>New character &middot; studio</title>
+<style>
+:root{--bg:#0e0e12;--panel:#181820;--line:#2a2a36;--ink:#e9e9f0;--dim:#8d8d9c;
+      --accent:#9fb3ff;--good:#7fd1a0;--warn:#ffc978;--bad:#ff8f8f}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.55 system-ui,-apple-system,sans-serif;
+     margin:0;padding:0 20px 60px}
+nav.top{padding:14px 0;border-bottom:1px solid var(--line);margin-bottom:20px}
+nav.top a{color:var(--accent);text-decoration:none;margin-right:14px;font-size:14px}
+main{max-width:1020px;margin:0 auto}
+h1{font-size:24px;margin:14px 0 4px}
+h2{font-size:14px;color:var(--accent);margin:0 0 8px}
+p.lede{color:var(--dim);max-width:74ch;margin:0 0 20px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;
+      padding:16px 18px;margin:0 0 16px}
+.row{display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;margin-bottom:12px}
+label{font-size:12px;color:var(--dim);display:block;margin:0 0 4px}
+input,textarea,select{background:#101017;color:var(--ink);border:1px solid var(--line);
+  border-radius:6px;padding:8px 10px;font:inherit;width:100%}
+textarea{min-height:58px;resize:vertical;font-size:13px}
+button{background:var(--accent);color:#10101a;border:0;border-radius:7px;padding:9px 16px;
+       font:600 14px system-ui;cursor:pointer}
+button.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+button:disabled{opacity:.4;cursor:not-allowed}
+.srcs{display:grid;gap:9px;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));
+      max-height:330px;overflow-y:auto;padding:3px}
+.srcs figure{margin:0;cursor:pointer;border:2px solid transparent;border-radius:7px;
+             overflow:hidden;background:#101017}
+.srcs figure.on{border-color:var(--accent)}
+.srcs img{width:100%;height:96px;object-fit:cover;display:block;background:#000}
+.srcs figcaption{font-size:10px;color:var(--dim);padding:4px 5px;overflow:hidden;
+                 text-overflow:ellipsis;white-space:nowrap}
+.note{font-size:12.5px;color:var(--dim);border-left:2px solid var(--line);
+      padding-left:11px;margin:12px 0 0;max-width:78ch}
+.note.warn{border-left-color:#6b5320;color:var(--warn)}
+.pick{display:flex;gap:16px;align-items:flex-start}
+.pick img{width:210px;border-radius:8px;background:#000}
+code{background:#101017;padding:1px 5px;border-radius:4px;font-size:12px}
+a{color:var(--accent)}
+</style>
+</head>
+<body>
+<nav class="top">
+  <a href="/">&larr; Studio</a><a href="/cast">Cast</a><a href="/story">Story editor</a>
+  <a href="/docs">Docs</a>
+</nav>
+<main>
+  <h1>New character from an image</h1>
+  <p class="lede">Start from a picture. It gets described in words and redrawn into your
+  project's idiom, and the redraw becomes the character's reference sheet.</p>
+
+  <div class="card">
+    <h2>1. Starting image</h2>
+    <div class="row">
+      <button class="ghost" id="bUp">Upload an image</button>
+      <input type="file" id="file" accept="image/*" style="display:none">
+      <span id="upNote" style="color:var(--dim);font-size:13px"></span>
+    </div>
+    <div class="srcs" id="srcs">reading…</div>
+  </div>
+
+  <div class="card">
+    <h2>2. Who they are</h2>
+    <div class="row">
+      <div style="flex:1;min-width:200px"><label>name</label>
+        <input id="name" placeholder="MARGIT"></div>
+      <div style="width:150px"><label>voice (optional)</label>
+        <input id="voice" placeholder="male_04_frank"></div>
+      <div style="width:110px"><label>seed</label><input id="seed" value="4242"></div>
+    </div>
+    <div class="row">
+      <div style="flex:1"><label>style to redraw into</label>
+        <textarea id="style"></textarea></div>
+    </div>
+    <label style="display:flex;gap:8px;align-items:flex-start;margin-top:6px">
+      <input type="checkbox" id="consent" style="width:auto;margin-top:3px">
+      <span style="color:var(--dim);font-size:13px">If this is a photograph of a real
+      person, I have their agreement to build a character from their likeness.</span>
+    </label>
+  </div>
+
+  <div class="card">
+    <div class="pick" id="chosen"></div>
+    <div class="row" style="margin-top:14px">
+      <button id="go" disabled>Create the character</button>
+      <span id="prog" style="color:var(--dim);font-size:13px"></span>
+    </div>
+    <p class="note">The source image is a <b>starting point, not the identity</b>. Measured
+    here: an image used as a live identity reference transports hair mass, garment colour
+    and the presence of eyewear &mdash; a costume, not a person &mdash; and the face is
+    never quite theirs. So the picture is used the two ways that do work: it is captioned
+    into words, and it is redrawn into your idiom. Words survive every engine; an image
+    reference does not.</p>
+    <p class="note">The redraw matters more than it looks. A reference sheet imports its
+    <b>style and its medium</b> into everything downstream, so a sheet that is still a
+    photograph quietly turns the whole film photographic.</p>
+    <p class="note warn">What you get is a <b>draft</b>: a description, a sheet, and rough
+    tags to edit. Nothing is measured yet &mdash; no turnaround, no LoRA, no verdicts. If
+    the sheet looks right, the turnaround is the next step.</p>
+  </div>
+</main>
+
+<script>
+const $ = i => document.getElementById(i);
+let SEL = null;
+const get = async u => (await fetch(u)).json();
+const post = async (u,b) => (await fetch(u,{method:"POST",
+  headers:{"Content-Type":"application/json"},body:JSON.stringify(b)})).json();
+
+get("/api/character/style").then(d => $("style").value = d.style || "");
+
+async function loadSources(){
+  const d = await get("/api/character/sources");
+  $("srcs").innerHTML = (d.sources||[]).map((s,i) =>
+    `<figure data-i="${i}"><img src="${s.url}" loading="lazy">
+     <figcaption>${s.where} · ${s.name}</figcaption></figure>`).join("")
+    || "<span style='color:var(--dim)'>nothing to browse yet</span>";
+  $("srcs").querySelectorAll("figure").forEach(f => f.onclick = () => {
+    SEL = d.sources[+f.dataset.i];
+    $("srcs").querySelectorAll("figure").forEach(x => x.classList.remove("on"));
+    f.classList.add("on");
+    $("chosen").innerHTML = `<img src="${SEL.url}">
+      <div><b>${SEL.name}</b><br><span style="color:var(--dim);font-size:13px">
+      ${SEL.where}</span></div>`;
+    $("go").disabled = false;
+  });
+}
+loadSources();
+
+$("bUp").onclick = () => $("file").click();
+$("file").onchange = async e => {
+  const f = e.target.files[0]; if(!f) return;
+  $("upNote").textContent = "uploading…";
+  const data = await new Promise(res => {
+    const r = new FileReader(); r.onload = () => res(r.result); r.readAsDataURL(f);
+  });
+  const r = await post("/api/character/upload", {name:f.name, data});
+  $("upNote").textContent = r.error ? r.error : "uploaded " + r.name;
+  if(!r.error){ await loadSources(); }
+  e.target.value = "";
+};
+
+$("go").onclick = async () => {
+  if(!SEL) return;
+  $("go").disabled = true;
+  $("prog").textContent = "captioning and redrawing…";
+  const r = await post("/api/character/create", {
+    path: SEL.path, name: $("name").value, style: $("style").value,
+    voice: $("voice").value, seed: $("seed").value, consent: $("consent").checked});
+  if(r.error){ $("prog").textContent = r.error; $("go").disabled = false; return; }
+  const iv = setInterval(async () => {
+    const j = await get("/api/character/job/" + r.job);
+    if(j.state === "done"){
+      clearInterval(iv);
+      $("go").disabled = false;
+      $("prog").innerHTML = j.error ? "failed: " + j.error
+        : `created <b>${j.id}</b> — <a href="/character/${j.id}">open the dossier</a>`;
+    }
+  }, 2000);
+};
+</script>
+</body>
+</html>

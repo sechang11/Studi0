@@ -1017,6 +1017,18 @@ def hub_capabilities(html):
 
 
 
+
+def _charnew_routes():
+    """studio/_tools/charnew_routes.py on demand, like the other _tools importers."""
+    try:
+        sys.path.insert(0, os.path.join(HERE, "_tools"))
+        import charnew_routes
+        importlib.reload(charnew_routes)
+        return charnew_routes
+    except Exception:
+        traceback.print_exc()
+        return None
+
 def _story_routes():
     """studio/_tools/story_routes.py on demand, like _guides and _generate_routes.
 
@@ -1274,6 +1286,32 @@ class H(http.server.SimpleHTTPRequestHandler):
                 traceback.print_exc()
                 return self._send({"error": str(e)[:300]}, 500)
             return self._send({"error": "unknown story route"}, 404)
+        if path in ("/character/new", "/newchar"):
+            return self._page("newchar.html")
+        if path.startswith("/api/character/"):
+            cr = _charnew_routes()
+            if cr:
+                rest = path[len("/api/character/"):].strip("/")
+                bits = rest.split("/")
+                try:
+                    if rest == "sources":
+                        body, code = cr.sources()
+                        return self._send(body, code)
+                    if rest == "style":
+                        body, code = cr.house_style()
+                        return self._send(body, code)
+                    if bits[0] == "job" and len(bits) == 2:
+                        body, code = cr.job_status(bits[1])
+                        return self._send(body, code)
+                    if bits[0] == "src" and len(bits) == 3:
+                        fp = cr.src_file(bits[1], bits[2])
+                        if not fp:
+                            return self._send({"error": "no such image"}, 404)
+                        return self._send_file(fp, "image/png")
+                except Exception as e:
+                    traceback.print_exc()
+                    return self._send({"error": str(e)[:300]}, 500)
+            # anything else falls through to the existing dossier API below
         if path == "/api/guides":
             g = _guides()
             if not g:
@@ -1860,13 +1898,25 @@ class H(http.server.SimpleHTTPRequestHandler):
                      "/api/story/take", "/api/story/clip", "/api/story/select",
                      "/api/story/edit", "/api/story/lock", "/api/story/new",
                      "/api/story/chapter", "/api/story/scene", "/api/story/load",
-                     "/api/story/transition"):
+                     "/api/story/transition",
+                     "/api/character/upload", "/api/character/create"):
             return self._send({"error": "not found"}, 404)
         n = int(self.headers.get("Content-Length", 0))
         try:
             data = json.loads(self.rfile.read(n) or b"{}")
         except Exception as e:
             return self._send({"error": f"bad json: {e}"}, 400)
+        if p.startswith("/api/character/"):
+            cr = _charnew_routes()
+            if not cr:
+                return self._send({"error": "charnew_routes.py is unavailable"}, 500)
+            fn = {"upload": cr.upload, "create": cr.create}[p[len("/api/character/"):]]
+            try:
+                body, code = fn(data)
+            except Exception as e:
+                traceback.print_exc()
+                return self._send({"error": str(e)[:300]}, 500)
+            return self._send(body, code)
         if p.startswith("/api/story/"):
             sr = _story_routes()
             if not sr:
