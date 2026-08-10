@@ -805,7 +805,7 @@ def compile_movie(path):
             prefix=f"{r['cue']}_{n:02d}", tags=c["tags"],
             seconds=int(round(span)) + 2,       # generate long, trim in the mix
             at=round(r["start"], 2), level=float(c.get("level", 1.0)),
-            bpm=int(c.get("bpm", 0) or 140), key=c.get("key") or "D minor"))
+            bpm=int(c.get("bpm") or 0), key=c.get("key") or ""))
 
     # ---- consistency warnings ---------------------------------------------------
     # This file's own rule is NOTHING SILENTLY DOES NOTHING, and a missing sheet is

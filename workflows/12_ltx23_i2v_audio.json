@@ -1,82 +1,266 @@
 {
-  "_comment": "LTX-2.3 IMAGE-to-video with generated audio. Best of both worlds for character work: the keyframe locks the character design (which pure text-to-video cannot do across shots), and LTX is still ~8x faster than Wan. Node 23 LTXVImgToVideoInplace writes the start image into the video latent; strength 1.0 = hold the keyframe exactly, lower it (0.6-0.8) to let the model reinterpret.",
-  "_notes": [
-    "length must be 8n+1 (97 = 4.04s @24fps, 145 = 6.04s).",
-    "ManualSigmas on node 30 is the 8-step distilled schedule - do not swap in a normal scheduler.",
-    "CFG stays at 1.0; the model is CFG-distilled.",
-    "LTXVPreprocess img_compression 18 matches the official i2v template; it conditions the model to expect clean input."
-  ],
-
-  "1": { "class_type": "CheckpointLoaderSimple", "inputs": { "ckpt_name": "ltx-2.3-22b-dev-fp8.safetensors" } },
-  "2": {
-    "class_type": "LTXAVTextEncoderLoader",
-    "inputs": {
-      "text_encoder": "gemma_3_12B_it_fp4_mixed.safetensors",
-      "ckpt_name": "ltx-2.3-22b-dev-fp8.safetensors",
-      "device": "default"
-    }
-  },
-  "3": { "class_type": "LTXVAudioVAELoader", "inputs": { "ckpt_name": "ltx-2.3-22b-dev-fp8.safetensors" } },
-  "5": {
-    "class_type": "LoraLoaderModelOnly",
-    "inputs": {
-      "model": ["1", 0],
-      "lora_name": "ltx_2.3_22b_distilled_1.1_lora_dynamic_fro09_avg_rank_111_bf16.safetensors",
-      "strength_model": 0.5
-    }
-  },
-
-  "8": { "class_type": "LoadImage", "inputs": { "image": "ltx_start.png", "upload": "image" } },
-  "9": { "class_type": "LTXVPreprocess", "inputs": { "image": ["8", 0], "img_compression": 18 } },
-
-  "10": {
-    "class_type": "CLIPTextEncode",
-    "inputs": { "clip": ["2", 0], "text": "a scene, gentle natural motion" }
-  },
-  "11": {
-    "class_type": "CLIPTextEncode",
-    "inputs": { "clip": ["2", 0], "text": "static, frozen, blurry, distorted, morphing, warping, ugly, low quality, watermark, text overlay" }
-  },
-  "12": {
-    "class_type": "LTXVConditioning",
-    "inputs": { "positive": ["10", 0], "negative": ["11", 0], "frame_rate": 24.0 }
-  },
-
-  "20": { "class_type": "EmptyLTXVLatentVideo", "inputs": { "width": 768, "height": 512, "length": 97, "batch_size": 1 } },
-  "23": {
-    "class_type": "LTXVImgToVideoInplace",
-    "inputs": { "vae": ["1", 2], "image": ["9", 0], "latent": ["20", 0], "strength": 1.0, "bypass": false }
-  },
-  "21": {
-    "class_type": "LTXVEmptyLatentAudio",
-    "inputs": { "audio_vae": ["3", 0], "frames_number": 97, "frame_rate": 25, "batch_size": 1 }
-  },
-  "22": { "class_type": "LTXVConcatAVLatent", "inputs": { "video_latent": ["23", 0], "audio_latent": ["21", 0] } },
-
-  "30": {
-    "class_type": "ManualSigmas",
-    "inputs": { "sigmas": "1.0, 0.99375, 0.9875, 0.98125, 0.975, 0.909375, 0.725, 0.421875, 0.0" }
-  },
-  "31": {
-    "class_type": "CFGGuider",
-    "inputs": { "model": ["5", 0], "positive": ["12", 0], "negative": ["12", 1], "cfg": 1.0 }
-  },
-  "32": { "class_type": "RandomNoise", "inputs": { "noise_seed": 1234 } },
-  "34": { "class_type": "KSamplerSelect", "inputs": { "sampler_name": "euler" } },
-  "35": {
-    "class_type": "SamplerCustomAdvanced",
-    "inputs": {
-      "noise": ["32", 0], "guider": ["31", 0], "sampler": ["34", 0],
-      "sigmas": ["30", 0], "latent_image": ["22", 0]
-    }
-  },
-
-  "33": { "class_type": "LTXVSeparateAVLatent", "inputs": { "av_latent": ["35", 0] } },
-  "40": { "class_type": "VAEDecode", "inputs": { "samples": ["33", 0], "vae": ["1", 2] } },
-  "41": { "class_type": "LTXVAudioVAEDecode", "inputs": { "samples": ["33", 1], "audio_vae": ["3", 0] } },
-  "42": { "class_type": "CreateVideo", "inputs": { "images": ["40", 0], "audio": ["41", 0], "fps": 24.0 } },
-  "43": {
-    "class_type": "SaveVideo",
-    "inputs": { "video": ["42", 0], "filename_prefix": "claude-generated/ltx_i2v", "format": "auto", "codec": "auto" }
+ "_comment": "LTX-2.3 IMAGE-to-video with generated audio. Best of both worlds for character work: the keyframe locks the character design (which pure text-to-video cannot do across shots), and LTX is still ~8x faster than Wan. Node 23 LTXVImgToVideoInplace writes the start image into the video latent; strength 1.0 = hold the keyframe exactly, lower it (0.6-0.8) to let the model reinterpret.",
+ "_notes": [
+  "length must be 8n+1 (97 = 4.04s @24fps, 145 = 6.04s).",
+  "ManualSigmas on node 30 is the 8-step distilled schedule - do not swap in a normal scheduler.",
+  "CFG stays at 1.0; the model is CFG-distilled.",
+  "LTXVPreprocess img_compression 18 matches the official i2v template; it conditions the model to expect clean input."
+ ],
+ "1": {
+  "class_type": "CheckpointLoaderSimple",
+  "inputs": {
+   "ckpt_name": "ltx-2.3-22b-dev-fp8.safetensors"
   }
+ },
+ "2": {
+  "class_type": "LTXAVTextEncoderLoader",
+  "inputs": {
+   "text_encoder": "gemma_3_12B_it_fp4_mixed.safetensors",
+   "ckpt_name": "ltx-2.3-22b-dev-fp8.safetensors",
+   "device": "default"
+  }
+ },
+ "3": {
+  "class_type": "LTXVAudioVAELoader",
+  "inputs": {
+   "ckpt_name": "ltx-2.3-22b-dev-fp8.safetensors"
+  }
+ },
+ "5": {
+  "class_type": "LoraLoaderModelOnly",
+  "inputs": {
+   "model": [
+    "1",
+    0
+   ],
+   "lora_name": "ltx_2.3_22b_distilled_1.1_lora_dynamic_fro09_avg_rank_111_bf16.safetensors",
+   "strength_model": 0.5
+  }
+ },
+ "8": {
+  "class_type": "LoadImage",
+  "inputs": {
+   "image": "ltx_start.png",
+   "upload": "image"
+  }
+ },
+ "9": {
+  "class_type": "LTXVPreprocess",
+  "inputs": {
+   "image": [
+    "8",
+    0
+   ],
+   "img_compression": 18
+  }
+ },
+ "10": {
+  "class_type": "CLIPTextEncode",
+  "inputs": {
+   "clip": [
+    "2",
+    0
+   ],
+   "text": "a scene, gentle natural motion"
+  }
+ },
+ "11": {
+  "class_type": "CLIPTextEncode",
+  "inputs": {
+   "clip": [
+    "2",
+    0
+   ],
+   "text": "static, frozen, blurry, distorted, morphing, warping, ugly, low quality, watermark, text overlay"
+  }
+ },
+ "12": {
+  "class_type": "LTXVConditioning",
+  "inputs": {
+   "positive": [
+    "10",
+    0
+   ],
+   "negative": [
+    "11",
+    0
+   ],
+   "frame_rate": 24.0
+  }
+ },
+ "20": {
+  "class_type": "EmptyLTXVLatentVideo",
+  "inputs": {
+   "width": 768,
+   "height": 512,
+   "length": 97,
+   "batch_size": 1
+  }
+ },
+ "23": {
+  "class_type": "LTXVImgToVideoInplace",
+  "inputs": {
+   "vae": [
+    "1",
+    2
+   ],
+   "image": [
+    "9",
+    0
+   ],
+   "latent": [
+    "20",
+    0
+   ],
+   "strength": 1.0,
+   "bypass": false
+  }
+ },
+ "21": {
+  "class_type": "LTXVEmptyLatentAudio",
+  "inputs": {
+   "audio_vae": [
+    "3",
+    0
+   ],
+   "frames_number": 97,
+   "frame_rate": 24,
+   "batch_size": 1
+  }
+ },
+ "22": {
+  "class_type": "LTXVConcatAVLatent",
+  "inputs": {
+   "video_latent": [
+    "23",
+    0
+   ],
+   "audio_latent": [
+    "21",
+    0
+   ]
+  }
+ },
+ "30": {
+  "class_type": "ManualSigmas",
+  "inputs": {
+   "sigmas": "1.0, 0.99375, 0.9875, 0.98125, 0.975, 0.909375, 0.725, 0.421875, 0.0"
+  }
+ },
+ "31": {
+  "class_type": "CFGGuider",
+  "inputs": {
+   "model": [
+    "5",
+    0
+   ],
+   "positive": [
+    "12",
+    0
+   ],
+   "negative": [
+    "12",
+    1
+   ],
+   "cfg": 1.0
+  }
+ },
+ "32": {
+  "class_type": "RandomNoise",
+  "inputs": {
+   "noise_seed": 1234
+  }
+ },
+ "34": {
+  "class_type": "KSamplerSelect",
+  "inputs": {
+   "sampler_name": "euler"
+  }
+ },
+ "35": {
+  "class_type": "SamplerCustomAdvanced",
+  "inputs": {
+   "noise": [
+    "32",
+    0
+   ],
+   "guider": [
+    "31",
+    0
+   ],
+   "sampler": [
+    "34",
+    0
+   ],
+   "sigmas": [
+    "30",
+    0
+   ],
+   "latent_image": [
+    "22",
+    0
+   ]
+  }
+ },
+ "33": {
+  "class_type": "LTXVSeparateAVLatent",
+  "inputs": {
+   "av_latent": [
+    "35",
+    0
+   ]
+  }
+ },
+ "40": {
+  "class_type": "VAEDecode",
+  "inputs": {
+   "samples": [
+    "33",
+    0
+   ],
+   "vae": [
+    "1",
+    2
+   ]
+  }
+ },
+ "41": {
+  "class_type": "LTXVAudioVAEDecode",
+  "inputs": {
+   "samples": [
+    "33",
+    1
+   ],
+   "audio_vae": [
+    "3",
+    0
+   ]
+  }
+ },
+ "42": {
+  "class_type": "CreateVideo",
+  "inputs": {
+   "images": [
+    "40",
+    0
+   ],
+   "audio": [
+    "41",
+    0
+   ],
+   "fps": 24.0
+  }
+ },
+ "43": {
+  "class_type": "SaveVideo",
+  "inputs": {
+   "video": [
+    "42",
+    0
+   ],
+   "filename_prefix": "claude-generated/ltx_i2v",
+   "format": "auto",
+   "codec": "auto"
+  }
+ }
 }

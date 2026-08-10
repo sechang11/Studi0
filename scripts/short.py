@@ -60,7 +60,7 @@ os.environ.setdefault("COMFY_HOST", "127.0.0.1:8188")
 from comfy import run, set_path                                        # noqa: E402
 from scene_templates import expand as expand_template   # noqa: E402
 from epic import (sh, dur, adur, measure, norm_to, ensure_local, load_wf, expand,
-                  submit, wait_all, FONT, fgpath, ffesc, COMFY, HOST)   # noqa: E402
+                  submit, wait_all, keyscale, FONT, fgpath, ffesc, COMFY, HOST)   # noqa: E402
 
 KF = (1664, 928)          # keyframes: 16:9, letterboxed into the vertical canvas later
 VID = (1280, 704)         # generated clip size
@@ -619,8 +619,11 @@ def music(film, out, seed0):
         wf = load_wf("06_acestep_music.json")
         set_path(wf, "10.inputs.tags", c["tags"])
         set_path(wf, "10.inputs.lyrics", "")
-        set_path(wf, "10.inputs.bpm", int(c.get("bpm", 140)))
-        set_path(wf, "10.inputs.keyscale", c.get("key", "D minor"))
+        # An unmetered cue keeps the node default rather than being handed a
+        # tempo it never had - 140 turned ambient beds into marches.
+        if c.get("bpm"):
+            set_path(wf, "10.inputs.bpm", int(c["bpm"]))
+        set_path(wf, "10.inputs.keyscale", keyscale(c.get("key")))
         set_path(wf, "10.inputs.duration", float(c["seconds"]))
         set_path(wf, "11.inputs.seconds", float(c["seconds"]))
         set_path(wf, "10.inputs.seed", seed0 + i * 41)

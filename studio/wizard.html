@@ -1692,7 +1692,11 @@ function render(){
   }
 
   if(s==="shots"){
-    const shots = LIB.shots||[], cams = LIB.cameras||[];
+    const shots = LIB.shots||[];
+    // A card marked unavailable is a MEASURED dud, not a style choice:
+    // dolly_zoom, orbit and rack_focus each rendered byte-identical to a
+    // static shot. Offering them is offering a control with no effect.
+    const cams = (LIB.cameras||[]).filter(c => c.status !== 'unavailable');
     p.innerHTML = `
       <h2>Shots</h2>
       <p class="lede">A scene is a run of shots. Dialogue lines are shots too — the speaker is

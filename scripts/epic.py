@@ -581,6 +581,49 @@ def chain_stage(film, outdir, seed0, vw, vh, fps, ndur, plans):
 
 
 # ------------------------------------------------------------------ stage 4
+
+_KEYSCALE = {}
+
+
+def keyscale(want):
+    """Coerce a cue's key into a spelling ACE-Step will accept, or drop it.
+
+    Cards are written the way a musician writes - `B flat minor` - and the node wants
+    `Bb minor`. A value outside its 34-item list kills the whole prompt, so this is a
+    guard rather than a nicety. See SOUND-05 in craft/VIDEO_RULES.md.
+    """
+    want = str(want or "").strip()
+    if not want:
+        return ""
+    if not _KEYSCALE:
+        try:
+            import urllib.request
+            raw = urllib.request.urlopen(
+                "http://%s/object_info/TextEncodeAceStepAudio1.5" % HOST, timeout=8).read()
+
+            def find(o):
+                if isinstance(o, dict):
+                    for k, v in o.items():
+                        if k == "keyscale":
+                            return v[1]["options"]
+                        r = find(v)
+                        if r:
+                            return r
+                elif isinstance(o, list):
+                    for v in o:
+                        r = find(v)
+                        if r:
+                            return r
+                return None
+            for o in (find(json.loads(raw)) or []):
+                _KEYSCALE[o.lower()] = o
+        except Exception:
+            return ""
+    cand = want.lower()
+    for a, b in ((" flat ", "b "), (" sharp ", "# ")):
+        cand = cand.replace(a, b)
+    return _KEYSCALE.get(cand, "")
+
 def sfx(film, outdir, seed0):
     want = [s for s in film["shots"] if s.get("sfx")]
     if not want:
@@ -622,7 +665,7 @@ def music(film, outdir, seed0):
         set_path(wf, "10.inputs.tags", c["tags"])
         set_path(wf, "10.inputs.lyrics", c.get("lyrics", ""))
         set_path(wf, "10.inputs.bpm", int(c.get("bpm", 90)))
-        set_path(wf, "10.inputs.keyscale", c.get("key", "C minor"))
+        set_path(wf, "10.inputs.keyscale", keyscale(c.get("key")))
         set_path(wf, "10.inputs.duration", float(c.get("seconds", 60)))
         set_path(wf, "11.inputs.seconds", float(c.get("seconds", 60)))
         set_path(wf, "10.inputs.seed", seed0 + i * 41)

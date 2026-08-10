@@ -1,84 +1,231 @@
 {
-  "_comment": "LTX-2.3 22B: text -> video WITH natively generated audio, in one pass. This is a simplified single-pass version of the `video_ltx2_3_t2v` template (which does a 768x512 base pass, then a latent upscale + second refinement pass). Single pass is faster and enough to work with; add the upscale pass for delivery.",
-  "_notes": [
-    "The 22B fp8 checkpoint (29 GB) plus the Gemma-3-12B fp4 text encoder (9.4 GB) exceed 32 GB VRAM, so ComfyUI will offload between stages. Expect it to be slower than Wan for the same length.",
-    "ManualSigmas on node 30 is the 8-step distilled schedule taken from the template. Do not replace it with a normal scheduler - the distilled LoRA on node 5 expects these exact sigmas.",
-    "CFG is 1.0 (node 31). The model is CFG-distilled; raising it will burn the output.",
-    "length must be 8n+1 (97 = 4.04s at 24fps).",
-    "Audio and video are sampled as one concatenated latent (node 22), then split back apart (node 33)."
-  ],
-
-  "1": { "class_type": "CheckpointLoaderSimple", "inputs": { "ckpt_name": "ltx-2.3-22b-dev-fp8.safetensors" } },
-  "2": {
-    "class_type": "LTXAVTextEncoderLoader",
-    "inputs": {
-      "text_encoder": "gemma_3_12B_it_fp4_mixed.safetensors",
-      "ckpt_name": "ltx-2.3-22b-dev-fp8.safetensors",
-      "device": "default"
-    }
-  },
-  "3": { "class_type": "LTXVAudioVAELoader", "inputs": { "ckpt_name": "ltx-2.3-22b-dev-fp8.safetensors" } },
-
-  "5": {
-    "class_type": "LoraLoaderModelOnly",
-    "inputs": {
-      "model": ["1", 0],
-      "lora_name": "ltx_2.3_22b_distilled_1.1_lora_dynamic_fro09_avg_rank_111_bf16.safetensors",
-      "strength_model": 0.5
-    }
-  },
-
-  "10": {
-    "class_type": "CLIPTextEncode",
-    "inputs": {
-      "clip": ["2", 0],
-      "text": "A heavy rainstorm hammering a corrugated metal roof at night, water sheeting off the edge in a curtain, a single bare bulb swinging slowly and throwing moving shadows across wet concrete, thunder rolling in the distance. Static camera, shallow depth of field, cinematic."
-    }
-  },
-  "11": {
-    "class_type": "CLIPTextEncode",
-    "inputs": { "clip": ["2", 0], "text": "pc game, console game, video game, cartoon, childish, ugly, blurry, static, silent" }
-  },
-  "12": {
-    "class_type": "LTXVConditioning",
-    "inputs": { "positive": ["10", 0], "negative": ["11", 0], "frame_rate": 24.0 }
-  },
-
-  "20": { "class_type": "EmptyLTXVLatentVideo", "inputs": { "width": 768, "height": 512, "length": 97, "batch_size": 1 } },
-  "21": {
-    "class_type": "LTXVEmptyLatentAudio",
-    "inputs": { "audio_vae": ["3", 0], "frames_number": 97, "frame_rate": 25, "batch_size": 1 }
-  },
-  "22": { "class_type": "LTXVConcatAVLatent", "inputs": { "video_latent": ["20", 0], "audio_latent": ["21", 0] } },
-
-  "30": {
-    "class_type": "ManualSigmas",
-    "inputs": { "sigmas": "1.0, 0.99375, 0.9875, 0.98125, 0.975, 0.909375, 0.725, 0.421875, 0.0" }
-  },
-  "31": {
-    "class_type": "CFGGuider",
-    "inputs": { "model": ["5", 0], "positive": ["12", 0], "negative": ["12", 1], "cfg": 1.0 }
-  },
-  "32": { "class_type": "RandomNoise", "inputs": { "noise_seed": 4242 } },
-  "34": { "class_type": "KSamplerSelect", "inputs": { "sampler_name": "euler" } },
-  "35": {
-    "class_type": "SamplerCustomAdvanced",
-    "inputs": {
-      "noise": ["32", 0],
-      "guider": ["31", 0],
-      "sampler": ["34", 0],
-      "sigmas": ["30", 0],
-      "latent_image": ["22", 0]
-    }
-  },
-
-  "33": { "class_type": "LTXVSeparateAVLatent", "inputs": { "av_latent": ["35", 0] } },
-  "40": { "class_type": "VAEDecode", "inputs": { "samples": ["33", 0], "vae": ["1", 2] } },
-  "41": { "class_type": "LTXVAudioVAEDecode", "inputs": { "samples": ["33", 1], "audio_vae": ["3", 0] } },
-
-  "42": { "class_type": "CreateVideo", "inputs": { "images": ["40", 0], "audio": ["41", 0], "fps": 24.0 } },
-  "43": {
-    "class_type": "SaveVideo",
-    "inputs": { "video": ["42", 0], "filename_prefix": "claude-generated/ltx23_av", "format": "auto", "codec": "auto" }
+ "_comment": "LTX-2.3 22B: text -> video WITH natively generated audio, in one pass. This is a simplified single-pass version of the `video_ltx2_3_t2v` template (which does a 768x512 base pass, then a latent upscale + second refinement pass). Single pass is faster and enough to work with; add the upscale pass for delivery.",
+ "_notes": [
+  "The 22B fp8 checkpoint (29 GB) plus the Gemma-3-12B fp4 text encoder (9.4 GB) exceed 32 GB VRAM, so ComfyUI will offload between stages. Expect it to be slower than Wan for the same length.",
+  "ManualSigmas on node 30 is the 8-step distilled schedule taken from the template. Do not replace it with a normal scheduler - the distilled LoRA on node 5 expects these exact sigmas.",
+  "CFG is 1.0 (node 31). The model is CFG-distilled; raising it will burn the output.",
+  "length must be 8n+1 (97 = 4.04s at 24fps).",
+  "Audio and video are sampled as one concatenated latent (node 22), then split back apart (node 33)."
+ ],
+ "1": {
+  "class_type": "CheckpointLoaderSimple",
+  "inputs": {
+   "ckpt_name": "ltx-2.3-22b-dev-fp8.safetensors"
   }
+ },
+ "2": {
+  "class_type": "LTXAVTextEncoderLoader",
+  "inputs": {
+   "text_encoder": "gemma_3_12B_it_fp4_mixed.safetensors",
+   "ckpt_name": "ltx-2.3-22b-dev-fp8.safetensors",
+   "device": "default"
+  }
+ },
+ "3": {
+  "class_type": "LTXVAudioVAELoader",
+  "inputs": {
+   "ckpt_name": "ltx-2.3-22b-dev-fp8.safetensors"
+  }
+ },
+ "5": {
+  "class_type": "LoraLoaderModelOnly",
+  "inputs": {
+   "model": [
+    "1",
+    0
+   ],
+   "lora_name": "ltx_2.3_22b_distilled_1.1_lora_dynamic_fro09_avg_rank_111_bf16.safetensors",
+   "strength_model": 0.5
+  }
+ },
+ "10": {
+  "class_type": "CLIPTextEncode",
+  "inputs": {
+   "clip": [
+    "2",
+    0
+   ],
+   "text": "A heavy rainstorm hammering a corrugated metal roof at night, water sheeting off the edge in a curtain, a single bare bulb swinging slowly and throwing moving shadows across wet concrete, thunder rolling in the distance. Static camera, shallow depth of field, cinematic."
+  }
+ },
+ "11": {
+  "class_type": "CLIPTextEncode",
+  "inputs": {
+   "clip": [
+    "2",
+    0
+   ],
+   "text": "pc game, console game, video game, cartoon, childish, ugly, blurry, static, silent"
+  }
+ },
+ "12": {
+  "class_type": "LTXVConditioning",
+  "inputs": {
+   "positive": [
+    "10",
+    0
+   ],
+   "negative": [
+    "11",
+    0
+   ],
+   "frame_rate": 24.0
+  }
+ },
+ "20": {
+  "class_type": "EmptyLTXVLatentVideo",
+  "inputs": {
+   "width": 768,
+   "height": 512,
+   "length": 97,
+   "batch_size": 1
+  }
+ },
+ "21": {
+  "class_type": "LTXVEmptyLatentAudio",
+  "inputs": {
+   "audio_vae": [
+    "3",
+    0
+   ],
+   "frames_number": 97,
+   "frame_rate": 24,
+   "batch_size": 1
+  }
+ },
+ "22": {
+  "class_type": "LTXVConcatAVLatent",
+  "inputs": {
+   "video_latent": [
+    "20",
+    0
+   ],
+   "audio_latent": [
+    "21",
+    0
+   ]
+  }
+ },
+ "30": {
+  "class_type": "ManualSigmas",
+  "inputs": {
+   "sigmas": "1.0, 0.99375, 0.9875, 0.98125, 0.975, 0.909375, 0.725, 0.421875, 0.0"
+  }
+ },
+ "31": {
+  "class_type": "CFGGuider",
+  "inputs": {
+   "model": [
+    "5",
+    0
+   ],
+   "positive": [
+    "12",
+    0
+   ],
+   "negative": [
+    "12",
+    1
+   ],
+   "cfg": 1.0
+  }
+ },
+ "32": {
+  "class_type": "RandomNoise",
+  "inputs": {
+   "noise_seed": 4242
+  }
+ },
+ "34": {
+  "class_type": "KSamplerSelect",
+  "inputs": {
+   "sampler_name": "euler"
+  }
+ },
+ "35": {
+  "class_type": "SamplerCustomAdvanced",
+  "inputs": {
+   "noise": [
+    "32",
+    0
+   ],
+   "guider": [
+    "31",
+    0
+   ],
+   "sampler": [
+    "34",
+    0
+   ],
+   "sigmas": [
+    "30",
+    0
+   ],
+   "latent_image": [
+    "22",
+    0
+   ]
+  }
+ },
+ "33": {
+  "class_type": "LTXVSeparateAVLatent",
+  "inputs": {
+   "av_latent": [
+    "35",
+    0
+   ]
+  }
+ },
+ "40": {
+  "class_type": "VAEDecode",
+  "inputs": {
+   "samples": [
+    "33",
+    0
+   ],
+   "vae": [
+    "1",
+    2
+   ]
+  }
+ },
+ "41": {
+  "class_type": "LTXVAudioVAEDecode",
+  "inputs": {
+   "samples": [
+    "33",
+    1
+   ],
+   "audio_vae": [
+    "3",
+    0
+   ]
+  }
+ },
+ "42": {
+  "class_type": "CreateVideo",
+  "inputs": {
+   "images": [
+    "40",
+    0
+   ],
+   "audio": [
+    "41",
+    0
+   ],
+   "fps": 24.0
+  }
+ },
+ "43": {
+  "class_type": "SaveVideo",
+  "inputs": {
+   "video": [
+    "42",
+    0
+   ],
+   "filename_prefix": "claude-generated/ltx23_av",
+   "format": "auto",
+   "codec": "auto"
+  }
+ }
 }

@@ -28,6 +28,7 @@ speech recognition. We already know the text; measuring is exact where ASR would
 """
 import argparse
 import json
+from epic import keyscale
 import os
 import re
 import shutil
@@ -231,7 +232,7 @@ def music(film, outdir, seed0):
         set_path(wf, "10.inputs.tags", c["tags"])
         set_path(wf, "10.inputs.lyrics", c.get("lyrics", ""))
         set_path(wf, "10.inputs.bpm", int(c.get("bpm", 90)))
-        set_path(wf, "10.inputs.keyscale", c.get("key", "C minor"))
+        set_path(wf, "10.inputs.keyscale", keyscale(c.get("key")))
         set_path(wf, "10.inputs.duration", float(c.get("seconds", 40)))
         set_path(wf, "11.inputs.seconds", float(c.get("seconds", 40)))
         set_path(wf, "10.inputs.seed", seed0 + i * 41)

@@ -1,177 +1,320 @@
 {
-  "_comment": "LTX-2.3 the way it was designed to run: TWO STAGES. Sample the whole clip at half resolution, upsample the LATENT 2x with the dedicated spatial upscaler, then re-denoise the upsampled latent at partial strength. Stage 2 is what makes it sharp - a latent upsample on its own is soft, and decoding straight off the upsampler wastes the model. Workflow 11 is the single-stage shortcut; this is the quality path.",
-  "_notes": [
-    "THE IMPORTANT BIT: node 39's sigma schedule is '0.85, 0.7250, 0.4219, 0.0' - it starts at 0.85, not 1.0. That is a deliberate PARTIAL denoise. Stage 2 is refining structure that already exists, not generating from noise. Start it at 1.0 and you throw away stage 1 and get a different, worse clip. This 4-value schedule is lifted from the official video_ltx2_3_t2v template.",
-    "Stage 1 runs at 640x352 and stage 2 lands at 1280x704 - the same resolution workflow 11 reaches in one pass, so the two are directly comparable. Sampling the expensive steps at quarter-area is where the time comes back.",
-    "Both stages reuse ONE CFGGuider (node 31) and one sampler. Only the noise seed and the sigma schedule differ.",
-    "LTX-2.3 is an AUDIO-VIDEO joint model. The latent carries both, so you must LTXVSeparateAVLatent (33) before upsampling - the upscaler only handles the video half - then LTXVConcatAVLatent (38) the stage-1 audio latent back on before stage 2. Feed the AV latent straight to the upsampler and it fails on the channel count.",
-    "Node 43 is VAEDecodeTiled, not VAEDecode. At 1280x704x97 frames a plain decode spikes VRAM hard. tile_size=768 / overlap=64 is the template's setting; temporal_size=4096 effectively disables temporal tiling, which you want, because temporal tiling causes visible seams on motion.",
-    "Dimensions must be multiples of 32 at BOTH stages. 640x352 -> 1280x704 works (352 = 11*32). 768x432 does not, because 432/32 = 13.5.",
-    "The distilled LoRA at strength 0.5 (node 5) is what allows the 8-step stage-1 schedule. Remove it and you need a much longer schedule and cfg above 1.0.",
-    "length=97 at 24 fps is about 4 s. LTX likes (multiple of 8) + 1 frame counts: 97, 121, 193."
-  ],
-  "1": {
-    "class_type": "CheckpointLoaderSimple",
-    "inputs": { "ckpt_name": "ltx-2.3-22b-dev-fp8.safetensors" }
-  },
-  "2": {
-    "class_type": "LTXAVTextEncoderLoader",
-    "inputs": {
-      "text_encoder": "gemma_3_12B_it_fp4_mixed.safetensors",
-      "ckpt_name": "ltx-2.3-22b-dev-fp8.safetensors",
-      "device": "default"
-    }
-  },
-  "3": {
-    "class_type": "LTXVAudioVAELoader",
-    "inputs": { "ckpt_name": "ltx-2.3-22b-dev-fp8.safetensors" }
-  },
-  "5": {
-    "class_type": "LoraLoaderModelOnly",
-    "inputs": {
-      "model": ["1", 0],
-      "lora_name": "ltx_2.3_22b_distilled_1.1_lora_dynamic_fro09_avg_rank_111_bf16.safetensors",
-      "strength_model": 0.5
-    }
-  },
-  "10": {
-    "class_type": "CLIPTextEncode",
-    "inputs": {
-      "clip": ["2", 0],
-      "text": "A brass diving helmet resting on wet stone at the tide line, seawater running off it in thin sheets, gulls calling somewhere off frame, the sea hissing over shingle behind it. Late afternoon light, low and raking, catching the salt crust on the metal. Slow push in, locked-off tripod, no camera shake. Anamorphic lens, shallow depth of field, deep teal and warm brass."
-    }
-  },
-  "11": {
-    "class_type": "CLIPTextEncode",
-    "inputs": {
-      "clip": ["2", 0],
-      "text": "pc game, console game, video game, cartoon, childish, ugly, blurry, static, silent, watermark, text"
-    }
-  },
-  "12": {
-    "class_type": "LTXVConditioning",
-    "inputs": {
-      "positive": ["10", 0],
-      "negative": ["11", 0],
-      "frame_rate": 24.0
-    }
-  },
-  "20": {
-    "class_type": "EmptyLTXVLatentVideo",
-    "inputs": { "width": 640, "height": 352, "length": 97, "batch_size": 1 }
-  },
-  "21": {
-    "class_type": "LTXVEmptyLatentAudio",
-    "inputs": {
-      "audio_vae": ["3", 0],
-      "frames_number": 97,
-      "frame_rate": 25,
-      "batch_size": 1
-    }
-  },
-  "22": {
-    "class_type": "LTXVConcatAVLatent",
-    "inputs": { "video_latent": ["20", 0], "audio_latent": ["21", 0] }
-  },
-  "30": {
-    "class_type": "ManualSigmas",
-    "inputs": { "sigmas": "1.0, 0.99375, 0.9875, 0.98125, 0.975, 0.909375, 0.725, 0.421875, 0.0" }
-  },
-  "31": {
-    "class_type": "CFGGuider",
-    "inputs": {
-      "model": ["5", 0],
-      "positive": ["12", 0],
-      "negative": ["12", 1],
-      "cfg": 1.0
-    }
-  },
-  "32": {
-    "class_type": "RandomNoise",
-    "inputs": { "noise_seed": 88 }
-  },
-  "34": {
-    "class_type": "KSamplerSelect",
-    "inputs": { "sampler_name": "euler" }
-  },
-  "35": {
-    "class_type": "SamplerCustomAdvanced",
-    "inputs": {
-      "noise": ["32", 0],
-      "guider": ["31", 0],
-      "sampler": ["34", 0],
-      "sigmas": ["30", 0],
-      "latent_image": ["22", 0]
-    }
-  },
-  "33": {
-    "class_type": "LTXVSeparateAVLatent",
-    "inputs": { "av_latent": ["35", 0] }
-  },
-  "36": {
-    "class_type": "LatentUpscaleModelLoader",
-    "inputs": { "model_name": "ltx-2.3-spatial-upscaler-x2-1.1.safetensors" }
-  },
-  "37": {
-    "class_type": "LTXVLatentUpsampler",
-    "inputs": {
-      "samples": ["33", 0],
-      "upscale_model": ["36", 0],
-      "vae": ["1", 2]
-    }
-  },
-  "38": {
-    "class_type": "LTXVConcatAVLatent",
-    "inputs": { "video_latent": ["37", 0], "audio_latent": ["33", 1] }
-  },
-  "39": {
-    "class_type": "ManualSigmas",
-    "inputs": { "sigmas": "0.85, 0.7250, 0.4219, 0.0" }
-  },
-  "40": {
-    "class_type": "RandomNoise",
-    "inputs": { "noise_seed": 89 }
-  },
-  "41": {
-    "class_type": "SamplerCustomAdvanced",
-    "inputs": {
-      "noise": ["40", 0],
-      "guider": ["31", 0],
-      "sampler": ["34", 0],
-      "sigmas": ["39", 0],
-      "latent_image": ["38", 0]
-    }
-  },
-  "42": {
-    "class_type": "LTXVSeparateAVLatent",
-    "inputs": { "av_latent": ["41", 0] }
-  },
-  "43": {
-    "class_type": "VAEDecodeTiled",
-    "inputs": {
-      "samples": ["42", 0],
-      "vae": ["1", 2],
-      "tile_size": 768,
-      "overlap": 64,
-      "temporal_size": 4096,
-      "temporal_overlap": 4
-    }
-  },
-  "44": {
-    "class_type": "LTXVAudioVAEDecode",
-    "inputs": { "samples": ["42", 1], "audio_vae": ["3", 0] }
-  },
-  "45": {
-    "class_type": "CreateVideo",
-    "inputs": { "images": ["43", 0], "audio": ["44", 0], "fps": 24.0 }
-  },
-  "46": {
-    "class_type": "SaveVideo",
-    "inputs": {
-      "video": ["45", 0],
-      "filename_prefix": "claude-generated/14-ltx-two-stage-upscale/ltx23_2stage",
-      "format": "auto",
-      "codec": "auto"
-    }
+ "_comment": "LTX-2.3 the way it was designed to run: TWO STAGES. Sample the whole clip at half resolution, upsample the LATENT 2x with the dedicated spatial upscaler, then re-denoise the upsampled latent at partial strength. Stage 2 is what makes it sharp - a latent upsample on its own is soft, and decoding straight off the upsampler wastes the model. Workflow 11 is the single-stage shortcut; this is the quality path.",
+ "_notes": [
+  "THE IMPORTANT BIT: node 39's sigma schedule is '0.85, 0.7250, 0.4219, 0.0' - it starts at 0.85, not 1.0. That is a deliberate PARTIAL denoise. Stage 2 is refining structure that already exists, not generating from noise. Start it at 1.0 and you throw away stage 1 and get a different, worse clip. This 4-value schedule is lifted from the official video_ltx2_3_t2v template.",
+  "Stage 1 runs at 640x352 and stage 2 lands at 1280x704 - the same resolution workflow 11 reaches in one pass, so the two are directly comparable. Sampling the expensive steps at quarter-area is where the time comes back.",
+  "Both stages reuse ONE CFGGuider (node 31) and one sampler. Only the noise seed and the sigma schedule differ.",
+  "LTX-2.3 is an AUDIO-VIDEO joint model. The latent carries both, so you must LTXVSeparateAVLatent (33) before upsampling - the upscaler only handles the video half - then LTXVConcatAVLatent (38) the stage-1 audio latent back on before stage 2. Feed the AV latent straight to the upsampler and it fails on the channel count.",
+  "Node 43 is VAEDecodeTiled, not VAEDecode. At 1280x704x97 frames a plain decode spikes VRAM hard. tile_size=768 / overlap=64 is the template's setting; temporal_size=4096 effectively disables temporal tiling, which you want, because temporal tiling causes visible seams on motion.",
+  "Dimensions must be multiples of 32 at BOTH stages. 640x352 -> 1280x704 works (352 = 11*32). 768x432 does not, because 432/32 = 13.5.",
+  "The distilled LoRA at strength 0.5 (node 5) is what allows the 8-step stage-1 schedule. Remove it and you need a much longer schedule and cfg above 1.0.",
+  "length=97 at 24 fps is about 4 s. LTX likes (multiple of 8) + 1 frame counts: 97, 121, 193."
+ ],
+ "1": {
+  "class_type": "CheckpointLoaderSimple",
+  "inputs": {
+   "ckpt_name": "ltx-2.3-22b-dev-fp8.safetensors"
   }
+ },
+ "2": {
+  "class_type": "LTXAVTextEncoderLoader",
+  "inputs": {
+   "text_encoder": "gemma_3_12B_it_fp4_mixed.safetensors",
+   "ckpt_name": "ltx-2.3-22b-dev-fp8.safetensors",
+   "device": "default"
+  }
+ },
+ "3": {
+  "class_type": "LTXVAudioVAELoader",
+  "inputs": {
+   "ckpt_name": "ltx-2.3-22b-dev-fp8.safetensors"
+  }
+ },
+ "5": {
+  "class_type": "LoraLoaderModelOnly",
+  "inputs": {
+   "model": [
+    "1",
+    0
+   ],
+   "lora_name": "ltx_2.3_22b_distilled_1.1_lora_dynamic_fro09_avg_rank_111_bf16.safetensors",
+   "strength_model": 0.5
+  }
+ },
+ "10": {
+  "class_type": "CLIPTextEncode",
+  "inputs": {
+   "clip": [
+    "2",
+    0
+   ],
+   "text": "A brass diving helmet resting on wet stone at the tide line, seawater running off it in thin sheets, gulls calling somewhere off frame, the sea hissing over shingle behind it. Late afternoon light, low and raking, catching the salt crust on the metal. Slow push in, locked-off tripod, no camera shake. Anamorphic lens, shallow depth of field, deep teal and warm brass."
+  }
+ },
+ "11": {
+  "class_type": "CLIPTextEncode",
+  "inputs": {
+   "clip": [
+    "2",
+    0
+   ],
+   "text": "pc game, console game, video game, cartoon, childish, ugly, blurry, static, silent, watermark, text"
+  }
+ },
+ "12": {
+  "class_type": "LTXVConditioning",
+  "inputs": {
+   "positive": [
+    "10",
+    0
+   ],
+   "negative": [
+    "11",
+    0
+   ],
+   "frame_rate": 24.0
+  }
+ },
+ "20": {
+  "class_type": "EmptyLTXVLatentVideo",
+  "inputs": {
+   "width": 640,
+   "height": 352,
+   "length": 97,
+   "batch_size": 1
+  }
+ },
+ "21": {
+  "class_type": "LTXVEmptyLatentAudio",
+  "inputs": {
+   "audio_vae": [
+    "3",
+    0
+   ],
+   "frames_number": 97,
+   "frame_rate": 24,
+   "batch_size": 1
+  }
+ },
+ "22": {
+  "class_type": "LTXVConcatAVLatent",
+  "inputs": {
+   "video_latent": [
+    "20",
+    0
+   ],
+   "audio_latent": [
+    "21",
+    0
+   ]
+  }
+ },
+ "30": {
+  "class_type": "ManualSigmas",
+  "inputs": {
+   "sigmas": "1.0, 0.99375, 0.9875, 0.98125, 0.975, 0.909375, 0.725, 0.421875, 0.0"
+  }
+ },
+ "31": {
+  "class_type": "CFGGuider",
+  "inputs": {
+   "model": [
+    "5",
+    0
+   ],
+   "positive": [
+    "12",
+    0
+   ],
+   "negative": [
+    "12",
+    1
+   ],
+   "cfg": 1.0
+  }
+ },
+ "32": {
+  "class_type": "RandomNoise",
+  "inputs": {
+   "noise_seed": 88
+  }
+ },
+ "34": {
+  "class_type": "KSamplerSelect",
+  "inputs": {
+   "sampler_name": "euler"
+  }
+ },
+ "35": {
+  "class_type": "SamplerCustomAdvanced",
+  "inputs": {
+   "noise": [
+    "32",
+    0
+   ],
+   "guider": [
+    "31",
+    0
+   ],
+   "sampler": [
+    "34",
+    0
+   ],
+   "sigmas": [
+    "30",
+    0
+   ],
+   "latent_image": [
+    "22",
+    0
+   ]
+  }
+ },
+ "33": {
+  "class_type": "LTXVSeparateAVLatent",
+  "inputs": {
+   "av_latent": [
+    "35",
+    0
+   ]
+  }
+ },
+ "36": {
+  "class_type": "LatentUpscaleModelLoader",
+  "inputs": {
+   "model_name": "ltx-2.3-spatial-upscaler-x2-1.1.safetensors"
+  }
+ },
+ "37": {
+  "class_type": "LTXVLatentUpsampler",
+  "inputs": {
+   "samples": [
+    "33",
+    0
+   ],
+   "upscale_model": [
+    "36",
+    0
+   ],
+   "vae": [
+    "1",
+    2
+   ]
+  }
+ },
+ "38": {
+  "class_type": "LTXVConcatAVLatent",
+  "inputs": {
+   "video_latent": [
+    "37",
+    0
+   ],
+   "audio_latent": [
+    "33",
+    1
+   ]
+  }
+ },
+ "39": {
+  "class_type": "ManualSigmas",
+  "inputs": {
+   "sigmas": "0.85, 0.7250, 0.4219, 0.0"
+  }
+ },
+ "40": {
+  "class_type": "RandomNoise",
+  "inputs": {
+   "noise_seed": 89
+  }
+ },
+ "41": {
+  "class_type": "SamplerCustomAdvanced",
+  "inputs": {
+   "noise": [
+    "40",
+    0
+   ],
+   "guider": [
+    "31",
+    0
+   ],
+   "sampler": [
+    "34",
+    0
+   ],
+   "sigmas": [
+    "39",
+    0
+   ],
+   "latent_image": [
+    "38",
+    0
+   ]
+  }
+ },
+ "42": {
+  "class_type": "LTXVSeparateAVLatent",
+  "inputs": {
+   "av_latent": [
+    "41",
+    0
+   ]
+  }
+ },
+ "43": {
+  "class_type": "VAEDecodeTiled",
+  "inputs": {
+   "samples": [
+    "42",
+    0
+   ],
+   "vae": [
+    "1",
+    2
+   ],
+   "tile_size": 768,
+   "overlap": 64,
+   "temporal_size": 4096,
+   "temporal_overlap": 4
+  }
+ },
+ "44": {
+  "class_type": "LTXVAudioVAEDecode",
+  "inputs": {
+   "samples": [
+    "42",
+    1
+   ],
+   "audio_vae": [
+    "3",
+    0
+   ]
+  }
+ },
+ "45": {
+  "class_type": "CreateVideo",
+  "inputs": {
+   "images": [
+    "43",
+    0
+   ],
+   "audio": [
+    "44",
+    0
+   ],
+   "fps": 24.0
+  }
+ },
+ "46": {
+  "class_type": "SaveVideo",
+  "inputs": {
+   "video": [
+    "45",
+    0
+   ],
+   "filename_prefix": "claude-generated/14-ltx-two-stage-upscale/ltx23_2stage",
+   "format": "auto",
+   "codec": "auto"
+  }
+ }
 }
