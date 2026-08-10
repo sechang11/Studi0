@@ -71,6 +71,32 @@ TOOLBOX = [
               {"n": "--wear", "kind": "text", "default": "default,travelling,armour,ruined"},
               {"n": "--styles", "kind": "text", "default": "house,ink,oil"}]},
 
+    {"id": "train", "group": "Cast", "script": "studio/_tools/train_character.py",
+     "title": "Train the character LoRA",
+     "blurb": "Turns a character from a description into a model. Needs a turnaround set "
+              "first - this is what the identity set is FOR. Minutes, not seconds.",
+     "cost": "minutes on the GPU",
+     "args": [{"n": "character", "kind": "choice", "src": "characters", "pos": True},
+              {"n": "--steps", "kind": "int", "default": 1000},
+              {"n": "--rank", "kind": "int", "default": 16}]},
+
+    {"id": "train_dry", "group": "Cast", "script": "studio/_tools/train_character.py",
+     "title": "Check training readiness",
+     "blurb": "Everything training would do, without spending a GPU-minute: how many "
+              "pairs exist, and the captions it would use. Read the captions - a caption "
+              "is a subtraction, and whatever it omits gets absorbed into the trigger.",
+     "cost": "instant",
+     "args": [{"n": "character", "kind": "choice", "src": "characters", "pos": True},
+              {"n": "--dry", "kind": "flag", "always": True}]},
+
+    {"id": "lora_check", "group": "Cast", "script": "studio/_tools/lora_check.py",
+     "title": "Look at the LoRA",
+     "blurb": "Same prompt, same seed, with and without the weights, side by side. This "
+              "is the check that matters - overfitting and undertraining both show "
+              "instantly here and neither shows in a loss number.",
+     "cost": "a few renders",
+     "args": [{"n": "character", "kind": "choice", "src": "characters", "pos": True}]},
+
     {"id": "audition", "group": "Voice", "script": "studio/_tools/voice_audition.py",
      "title": "Voice audition",
      "blurb": "Speak one line in every castable voice and build a single file to judge "
