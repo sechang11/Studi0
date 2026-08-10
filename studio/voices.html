@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Voices &middot; studio</title>
+<style>
+:root{--bg:#0e0e12;--panel:#181820;--line:#2a2a36;--ink:#e9e9f0;--dim:#8d8d9c;
+      --accent:#9fb3ff;--good:#7fd1a0;--warn:#ffc978;--bad:#ff8f8f}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.55 system-ui,-apple-system,sans-serif;
+     margin:0;padding:0 20px 60px}
+nav.top{padding:14px 0;border-bottom:1px solid var(--line);margin-bottom:18px}
+nav.top a{color:var(--accent);text-decoration:none;margin-right:14px;font-size:14px}
+main{max-width:1080px;margin:0 auto}
+h1{font-size:24px;margin:14px 0 4px}
+h2{font-size:14px;color:var(--accent);margin:0 0 10px}
+p.lede{color:var(--dim);max-width:76ch;margin:0 0 18px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;
+      padding:15px 17px;margin:0 0 14px}
+.v{display:grid;grid-template-columns:210px 1fr 250px;gap:16px;align-items:start;
+   padding:13px 0;border-top:1px solid var(--line)}
+.v:first-child{border-top:0}
+.v.blocked{opacity:.5}
+.v b{font-size:14.5px} .v .id{color:var(--dim);font-size:11.5px;font-family:ui-monospace,monospace}
+.len{font-size:12px;margin-top:5px}
+.len.ok{color:var(--good)} .len.thin{color:var(--warn)}
+.desc{font-size:12.5px;color:var(--dim);line-height:1.5}
+.desc em{color:#b9b9c8;font-style:normal}
+audio{width:100%;height:34px;margin-bottom:5px}
+button{background:var(--accent);color:#10101a;border:0;border-radius:6px;padding:7px 13px;
+       font:600 13px system-ui;cursor:pointer}
+button.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+button.sm{padding:5px 10px;font-size:12px}
+button:disabled{opacity:.4;cursor:not-allowed}
+input,textarea{background:#101017;color:var(--ink);border:1px solid var(--line);
+  border-radius:6px;padding:8px 10px;font:inherit;width:100%}
+label{font-size:12px;color:var(--dim);display:block;margin:0 0 4px}
+.row{display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;margin-bottom:12px}
+.note{font-size:12.5px;color:var(--dim);border-left:2px solid var(--line);
+      padding-left:11px;margin:12px 0 0;max-width:78ch}
+.note.warn{border-left-color:#6b5320;color:var(--warn)}
+.pill{font-size:10.5px;padding:2px 7px;border-radius:99px;border:1px solid var(--line);
+      color:var(--dim);margin-left:6px}
+.pill.blocked{color:var(--bad);border-color:#4a1f1f}
+a{color:var(--accent)}
+</style>
+</head>
+<body>
+<nav class="top">
+  <a href="/">&larr; Studio</a><a href="/cast">Cast</a>
+  <a href="/character/new">New character</a><a href="/story">Story editor</a>
+  <a href="/docs">Docs</a>
+</nav>
+<main>
+  <h1>Voices</h1>
+  <p class="lede">Every voice, on the same line, one click from playing. Casting is the one
+  decision here that cannot be made from a description.</p>
+
+  <div class="card">
+    <div class="row" style="margin:0">
+      <div style="flex:1;min-width:260px"><label>the line every demo speaks</label>
+        <input id="line"></div>
+      <button class="ghost" id="reroll">Re-record all missing demos</button>
+      <span id="prog" style="color:var(--dim);font-size:13px"></span>
+    </div>
+    <p class="note" id="stat"></p>
+  </div>
+
+  <div class="card" id="list">reading…</div>
+
+  <div class="card">
+    <h2>Add a voice</h2>
+    <div class="row">
+      <div style="flex:1;min-width:200px"><label>name</label>
+        <input id="nName" placeholder="Hollis (dry, wry)"></div>
+      <div><label>reference recording</label>
+        <button class="ghost" id="nPick">Choose a file</button>
+        <input type="file" id="nFile" accept="audio/*" style="display:none"></div>
+      <span id="nInfo" style="color:var(--dim);font-size:13px"></span>
+    </div>
+    <div class="row">
+      <div style="flex:1"><label>what it sounds like (optional, your words)</label>
+        <input id="nSounds" placeholder="low, unhurried, slightly amused"></div>
+      <div style="flex:1"><label>casts well as (optional)</label>
+        <input id="nCasts" placeholder="narrator, sceptic, tired professional"></div>
+    </div>
+    <button id="nGo" disabled>Add the voice</button>
+    <span id="nProg" style="color:var(--dim);font-size:13px;margin-left:10px"></span>
+    <p class="note warn"><b>Give it 24 to 30 seconds.</b> That is what the cloning docs ask
+    for, and it is the one thing here that reliably predicts quality: auditioned across this
+    library, every voice that holds up has a reference over 24s, and the ones that sound
+    synthetic are the short ones. Clean speech, one speaker, no music.</p>
+    <p class="note">The card records what can be measured &mdash; duration, and whether it
+    clears the bar. The description stays in your words, because a tool inventing a
+    <code>sounds_like</code> it never measured is how a library fills with confident
+    nonsense.</p>
+  </div>
+</main>
+
+<script>
+const $ = i => document.getElementById(i);
+const get = async u => (await fetch(u)).json();
+const post = async (u,b) => (await fetch(u,{method:"POST",
+  headers:{"Content-Type":"application/json"},body:JSON.stringify(b)})).json();
+let DATA = null, UP = null;
+
+function row(v){
+  const len = v.ref_seconds
+    ? `<div class="len ${v.ref_thin?'thin':'ok'}">reference ${v.ref_seconds}s${
+        v.ref_thin?` — under the ${DATA.good_reference_seconds}s the docs ask for`:' ✓'}</div>`
+    : "";
+  const play = v.blocked
+    ? `<span style="color:var(--bad);font-size:12.5px">Never cast: this pack clones a
+       named real person.</span>`
+    : (v.demo_url ? `<audio controls preload="none" src="${v.demo_url}"></audio>` : "")
+      + (v.ref_url ? `<audio controls preload="none" src="${v.ref_url}"
+           title="the original reference recording"></audio>` : "")
+      + `<button class="ghost sm" data-id="${v.id}">${v.demo_url?"Re-record":"Record"} demo</button>`;
+  const bits = [];
+  if(v.sounds_like) bits.push(`<em>Sounds like.</em> ${v.sounds_like}`);
+  if(v.casts_well_as) bits.push(`<em>Casts well as.</em> ${v.casts_well_as}`);
+  if(v.avoid_for) bits.push(`<em>Avoid for.</em> ${v.avoid_for}`);
+  return `<div class="v ${v.blocked?'blocked':''}">
+    <div><b>${v.name}</b>${v.blocked?'<span class="pill blocked">blocked</span>':''}
+      <div class="id">${v.id}</div>${len}</div>
+    <div class="desc">${bits.join("<br>") || "<span style='color:var(--dim)'>no notes yet</span>"}</div>
+    <div>${play}</div></div>`;
+}
+
+async function load(){
+  DATA = await get("/api/voice");
+  $("line").value = DATA.line;
+  $("stat").innerHTML = `${DATA.castable} castable voices, of which
+    <b>${DATA.good_reference}</b> have a reference over ${DATA.good_reference_seconds}s.
+    Reference length is the one measured predictor of quality here, so it is shown next to
+    every voice.`;
+  $("list").innerHTML = DATA.voices.map(row).join("");
+  $("list").querySelectorAll("button[data-id]").forEach(b =>
+    b.onclick = () => record(b.dataset.id, b));
+}
+
+async function record(id, btn){
+  btn.disabled = true; const was = btn.textContent; btn.textContent = "recording…";
+  const r = await post("/api/voice/demo", {id, line: $("line").value});
+  if(r.error){ btn.textContent = r.error; return; }
+  const iv = setInterval(async () => {
+    const j = await get("/api/voice/job/" + r.job);
+    if(j.state === "done"){
+      clearInterval(iv); btn.disabled = false; btn.textContent = was;
+      if(j.error){ $("prog").textContent = id + ": " + j.error; }
+      else { await load(); }
+    }
+  }, 1500);
+}
+
+$("reroll").onclick = async () => {
+  const missing = DATA.voices.filter(v => v.castable && !v.demo_url);
+  if(!missing.length){ $("prog").textContent = "every castable voice already has a demo"; return; }
+  $("prog").textContent = `recording ${missing.length}…`;
+  for(const v of missing){
+    const r = await post("/api/voice/demo", {id: v.id, line: $("line").value});
+    if(r.error) continue;
+    await new Promise(res => {
+      const iv = setInterval(async () => {
+        const j = await get("/api/voice/job/" + r.job);
+        if(j.state === "done"){ clearInterval(iv); res(); }
+      }, 1500);
+    });
+  }
+  $("prog").textContent = "done";
+  await load();
+};
+
+$("nPick").onclick = () => $("nFile").click();
+$("nFile").onchange = async e => {
+  const f = e.target.files[0]; if(!f) return;
+  UP = {name: f.name, data: await new Promise(res => {
+    const r = new FileReader(); r.onload = () => res(r.result); r.readAsDataURL(f);
+  })};
+  $("nInfo").textContent = f.name;
+  $("nGo").disabled = false;
+};
+
+$("nGo").onclick = async () => {
+  if(!UP) return;
+  $("nGo").disabled = true; $("nProg").textContent = "adding…";
+  const r = await post("/api/voice/add", {
+    name: $("nName").value, data: UP.data,
+    sounds_like: $("nSounds").value, casts_well_as: $("nCasts").value});
+  $("nGo").disabled = false;
+  if(r.error){ $("nProg").textContent = r.error; return; }
+  $("nProg").innerHTML = r.thin
+    ? `added <b>${r.id}</b> — but the reference is only ${r.ref_seconds}s, under the
+       ${DATA.good_reference_seconds}s bar. Expect less stable cloning.`
+    : `added <b>${r.id}</b> — ${r.ref_seconds}s reference, clears the bar.`;
+  UP = null; $("nFile").value = ""; $("nInfo").textContent = "";
+  await load();
+};
+
+load();
+</script>
+</body>
+</html>

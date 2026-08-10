@@ -1029,6 +1029,18 @@ def _charnew_routes():
         traceback.print_exc()
         return None
 
+
+def _voice_routes():
+    """studio/_tools/voice_routes.py on demand, like the other _tools importers."""
+    try:
+        sys.path.insert(0, os.path.join(HERE, "_tools"))
+        import voice_routes
+        importlib.reload(voice_routes)
+        return voice_routes
+    except Exception:
+        traceback.print_exc()
+        return None
+
 def _story_routes():
     """studio/_tools/story_routes.py on demand, like _guides and _generate_routes.
 
@@ -1312,6 +1324,35 @@ class H(http.server.SimpleHTTPRequestHandler):
                     traceback.print_exc()
                     return self._send({"error": str(e)[:300]}, 500)
             # anything else falls through to the existing dossier API below
+        if path in ("/voices", "/voices.html"):
+            return self._page("voices.html")
+        if path == "/api/voice" or path.startswith("/api/voice/"):
+            vr = _voice_routes()
+            if not vr:
+                return self._send({"error": "voice_routes.py is unavailable"}, 500)
+            rest = path[len("/api/voice"):].strip("/")
+            bits = rest.split("/") if rest else []
+            try:
+                if not bits:
+                    body, code = vr.listing()
+                    return self._send(body, code)
+                if bits[0] == "ref" and len(bits) == 2:
+                    fp = vr.ref_file(bits[1])
+                    if not fp:
+                        return self._send({"error": "no reference"}, 404)
+                    return self._send_file(fp, "audio/wav")
+                if bits[0] == "demo" and len(bits) == 2:
+                    fp = vr.demo_file(bits[1])
+                    if not fp:
+                        return self._send({"error": "no demo"}, 404)
+                    return self._send_file(fp, "audio/mpeg")
+                if bits[0] == "job" and len(bits) == 2:
+                    body, code = vr.job_status(bits[1])
+                    return self._send(body, code)
+            except Exception as e:
+                traceback.print_exc()
+                return self._send({"error": str(e)[:300]}, 500)
+            return self._send({"error": "unknown voice route"}, 404)
         if path == "/api/guides":
             g = _guides()
             if not g:
@@ -1899,13 +1940,25 @@ class H(http.server.SimpleHTTPRequestHandler):
                      "/api/story/edit", "/api/story/lock", "/api/story/new",
                      "/api/story/chapter", "/api/story/scene", "/api/story/load",
                      "/api/story/transition",
-                     "/api/character/upload", "/api/character/create"):
+                     "/api/character/upload", "/api/character/create",
+                     "/api/voice/demo", "/api/voice/add"):
             return self._send({"error": "not found"}, 404)
         n = int(self.headers.get("Content-Length", 0))
         try:
             data = json.loads(self.rfile.read(n) or b"{}")
         except Exception as e:
             return self._send({"error": f"bad json: {e}"}, 400)
+        if p.startswith("/api/voice/"):
+            vr = _voice_routes()
+            if not vr:
+                return self._send({"error": "voice_routes.py is unavailable"}, 500)
+            fn = {"demo": vr.demo, "add": vr.add}[p[len("/api/voice/"):]]
+            try:
+                body, code = fn(data)
+            except Exception as e:
+                traceback.print_exc()
+                return self._send({"error": str(e)[:300]}, 500)
+            return self._send(body, code)
         if p.startswith("/api/character/"):
             cr = _charnew_routes()
             if not cr:
