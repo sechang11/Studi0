@@ -127,3 +127,72 @@ def job_status(job):
 def house_style():
     import character_new as CN
     return {"style": CN.HOUSE_STYLE}, 200
+
+
+# ── the picture suite ────────────────────────────────────────────────────────────────
+
+def _suite(job, cid, which, wear, styles, views):
+    import subprocess
+    args = [sys.executable, os.path.join(TOOLS, "character_suite.py"), cid]
+    if which == "identity":
+        args += ["--identity", "--views", str(views)]
+    elif which == "presentation":
+        args += ["--presentation"]
+    if wear:
+        args += ["--wear", wear]
+    if styles:
+        args += ["--styles", styles]
+    r = subprocess.run(args, cwd=ROOT, capture_output=True, text=True)
+    with _LOCK:
+        if r.returncode:
+            JOBS[job]["error"] = (r.stderr.strip()[-250:] or r.stdout.strip()[-250:]
+                                  or "suite failed")
+        JOBS[job]["log"] = r.stdout.strip()[-900:]
+        JOBS[job]["state"] = "done"
+
+
+def suite(data):
+    """Build a character's picture suite. Identity and presentation are separate jobs on
+    purpose - they want opposite things, and running presentation before identity is
+    locked produces a grid that has to be thrown away when the LoRA lands."""
+    cid = re.sub(r"[^A-Z0-9_]", "", str(data.get("id") or "").upper())
+    if not os.path.isfile(os.path.join(STUDIO, "characters", "%s.json" % cid)):
+        return {"error": "no such character"}, 404
+    which = data.get("which") or "both"
+    job = "s%d" % (len(JOBS) + 1)
+    with _LOCK:
+        JOBS[job] = {"state": "running", "error": None, "id": cid, "which": which}
+    threading.Thread(target=_suite, daemon=True,
+                     args=(job, cid, which, data.get("wear") or "",
+                           data.get("styles") or "",
+                           int(data.get("views") or 16))).start()
+    return {"ok": True, "job": job}, 200
+
+
+def suite_state(cid):
+    """What has already been built, so the page can show it rather than re-render it."""
+    cid = re.sub(r"[^A-Z0-9_]", "", str(cid or "").upper())
+    d = os.path.join(STUDIO, "samples", "cast", cid)
+    man = os.path.join(d, "suite.json")
+    out = {"id": cid, "identity": 0, "presentation": 0, "sheets": []}
+    if os.path.isfile(man):
+        try:
+            m = json.load(open(man, encoding="utf-8"))
+            out["identity"] = len(m.get("identity") or [])
+            out["presentation"] = len(m.get("presentation") or [])
+        except Exception:
+            pass
+    for kind in ("identity", "presentation"):
+        f = os.path.join(d, "CONTACT_%s.jpg" % kind)
+        if os.path.isfile(f):
+            out["sheets"].append({"kind": kind,
+                                  "url": "/api/character/sheet/%s/%s" % (cid, kind)})
+    return out, 200
+
+
+def sheet_file(cid, kind):
+    cid = re.sub(r"[^A-Z0-9_]", "", str(cid or "").upper())
+    if kind not in ("identity", "presentation"):
+        return None
+    p = os.path.join(STUDIO, "samples", "cast", cid, "CONTACT_%s.jpg" % kind)
+    return p if os.path.isfile(p) else None

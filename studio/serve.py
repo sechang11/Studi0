@@ -1315,6 +1315,14 @@ class H(http.server.SimpleHTTPRequestHandler):
                     if bits[0] == "job" and len(bits) == 2:
                         body, code = cr.job_status(bits[1])
                         return self._send(body, code)
+                    if bits[0] == "suite" and len(bits) == 2:
+                        body, code = cr.suite_state(bits[1])
+                        return self._send(body, code)
+                    if bits[0] == "sheet" and len(bits) == 3:
+                        fp = cr.sheet_file(bits[1], bits[2])
+                        if not fp:
+                            return self._send({"error": "no sheet"}, 404)
+                        return self._send_file(fp, "image/jpeg")
                     if bits[0] == "src" and len(bits) == 3:
                         fp = cr.src_file(bits[1], bits[2])
                         if not fp:
@@ -1941,7 +1949,8 @@ class H(http.server.SimpleHTTPRequestHandler):
                      "/api/story/chapter", "/api/story/scene", "/api/story/load",
                      "/api/story/transition",
                      "/api/character/upload", "/api/character/create",
-                     "/api/voice/demo", "/api/voice/add"):
+                     "/api/voice/demo", "/api/voice/add",
+                     "/api/character/suite"):
             return self._send({"error": "not found"}, 404)
         n = int(self.headers.get("Content-Length", 0))
         try:
@@ -1963,7 +1972,8 @@ class H(http.server.SimpleHTTPRequestHandler):
             cr = _charnew_routes()
             if not cr:
                 return self._send({"error": "charnew_routes.py is unavailable"}, 500)
-            fn = {"upload": cr.upload, "create": cr.create}[p[len("/api/character/"):]]
+            fn = {"upload": cr.upload, "create": cr.create,
+                  "suite": cr.suite}[p[len("/api/character/"):]]
             try:
                 body, code = fn(data)
             except Exception as e:

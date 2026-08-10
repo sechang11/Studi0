@@ -353,6 +353,20 @@ function flags(c){
   return f;
 }
 
+(function(){
+  const css = document.createElement("style");
+  css.textContent = `
+    .suite{display:flex;gap:6px;align-items:center;flex-wrap:wrap;
+           padding:8px 12px 11px;border-top:1px solid var(--line,#2a2a36)}
+    .suite .sbtn{background:transparent;color:#9fb3ff;border:1px solid #2a2a36;
+      border-radius:5px;padding:4px 9px;font:600 11.5px system-ui;cursor:pointer}
+    .suite .sbtn:hover{background:#1c1c25}
+    .suite .sbtn:disabled{opacity:.45;cursor:not-allowed}
+    .suite .sinfo{font-size:11px;color:#8d8d9c}
+    .suite a{font-size:11px}`;
+  document.head.appendChild(css);
+})();
+
 function draw(){
   const q=$("q").value.trim().toLowerCase(), hf=$("hold").value, af=$("asset").value,
         vf=$("vf").value, sf=$("sort").value;
@@ -390,7 +404,50 @@ function draw(){
   $("grid").innerHTML=v.map(card).join("");
   $("grid").querySelectorAll("[data-id]").forEach(el=>el.onclick=e=>{
     if(e.target.closest("a")) return;
+    if(e.target.closest(".suite")) return;   // the suite row is its own thing
     open_(el.dataset.id);
+  });
+  $("grid").querySelectorAll(".suite").forEach(wireSuite);
+}
+
+async function suiteState(row){
+  const id = row.dataset.suite;
+  let s;
+  try { s = await (await fetch("/api/character/suite/" + id)).json(); } catch(e){ return; }
+  const info = row.querySelector(".sinfo");
+  const bits = [];
+  if(s.identity) bits.push(`${s.identity} identity`);
+  if(s.presentation) bits.push(`${s.presentation} presentation`);
+  info.innerHTML = (bits.join(" · ") || "nothing built yet")
+    + (s.sheets||[]).map(x => ` · <a href="${x.url}" target="_blank">${x.kind} sheet</a>`).join("");
+}
+
+function wireSuite(row){
+  suiteState(row);
+  row.querySelectorAll(".sbtn").forEach(b => b.onclick = async ev => {
+    ev.stopPropagation();
+    const id = row.dataset.suite, which = b.dataset.which;
+    row.querySelectorAll(".sbtn").forEach(x => x.disabled = true);
+    const info = row.querySelector(".sinfo");
+    // Presentation is about a minute for a 4x3 grid; identity is longer because it is
+    // sixteen separate renders. Say which is happening rather than a generic spinner.
+    info.textContent = which === "identity"
+      ? "rendering angles and expressions…" : "rendering wardrobe and styles…";
+    let r;
+    try { r = await (await fetch("/api/character/suite", {method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({id, which})})).json(); } catch(e){ r = {error:String(e)}; }
+    if(r.error){ info.textContent = r.error;
+                 row.querySelectorAll(".sbtn").forEach(x => x.disabled = false); return; }
+    const iv = setInterval(async () => {
+      const j = await (await fetch("/api/character/job/" + r.job)).json();
+      if(j.state === "done"){
+        clearInterval(iv);
+        row.querySelectorAll(".sbtn").forEach(x => x.disabled = false);
+        if(j.error){ info.textContent = j.error; return; }
+        suiteState(row);
+      }
+    }, 3000);
   });
 }
 
@@ -429,6 +486,13 @@ function card(c){
     <div class="act">
       <a href="/wizard" title="open the wizard, then pick ${esc(c.id)} on its cast step">direct a scene &rarr;</a>
       <span class="sp">${(c.demos||[]).length||views?"evidence inside":"nothing rendered yet"}</span>
+    </div>
+    <div class="suite" data-suite="${esc(c.id)}">
+      <button class="sbtn" data-which="identity" title="angles and expressions, one outfit,
+one light - the set a LoRA trains on">identity set</button>
+      <button class="sbtn" data-which="presentation" title="outfits and styles on top of the
+locked sheet - the set you browse when casting">presentation set</button>
+      <span class="sinfo"></span>
     </div></div>`;
 }
 

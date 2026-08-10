@@ -69,8 +69,14 @@ a{color:var(--accent)}
     <div class="row">
       <div style="flex:1;min-width:200px"><label>name</label>
         <input id="name" placeholder="MARGIT"></div>
-      <div style="width:150px"><label>voice (optional)</label>
-        <input id="voice" placeholder="male_04_frank"></div>
+      <div style="flex:1;min-width:240px"><label>voice</label>
+        <div style="display:flex;gap:7px">
+          <select id="voice" style="flex:1"><option value="">no voice yet</option></select>
+          <button class="ghost" id="hear" type="button" title="hear this voice">&#9654;</button>
+        </div>
+        <audio id="vplay" style="display:none"></audio>
+        <div id="vnote" style="font-size:11.5px;color:var(--dim);margin-top:4px"></div>
+      </div>
       <div style="width:110px"><label>seed</label><input id="seed" value="4242"></div>
     </div>
     <div class="row">
@@ -113,6 +119,50 @@ const post = async (u,b) => (await fetch(u,{method:"POST",
   headers:{"Content-Type":"application/json"},body:JSON.stringify(b)})).json();
 
 get("/api/character/style").then(d => $("style").value = d.style || "");
+
+// Voices come from the same roster /voices shows, already filtered to what can be cast.
+// Typing a voice id from memory was the previous design and it is not a design.
+let VOICES = [];
+get("/api/voice").then(d => {
+  VOICES = (d.voices || []).filter(v => v.castable);
+  $("voice").innerHTML = '<option value="">no voice yet</option>' + VOICES.map(v =>
+    `<option value="${v.id}">${v.name} — ${v.ref_seconds}s${
+      v.ref_thin ? " (short reference)" : ""}</option>`).join("");
+  vnote();
+}).catch(() => {});
+
+function vnote(){
+  const v = VOICES.find(x => x.id === $("voice").value);
+  if(!v){ $("vnote").textContent = ""; return; }
+  // The one measured predictor worth surfacing at the moment of choosing.
+  $("vnote").innerHTML = (v.ref_thin
+    ? `<span style="color:var(--warn)">${v.ref_seconds}s reference — under the 24s the
+       cloning docs ask for, so expect a less stable clone.</span> `
+    : `<span style="color:var(--good)">${v.ref_seconds}s reference ✓</span> `)
+    + (v.casts_well_as || "");
+}
+$("voice").onchange = vnote;
+
+$("hear").onclick = async () => {
+  const v = VOICES.find(x => x.id === $("voice").value);
+  if(!v) return;
+  if(v.demo_url){ $("vplay").src = v.demo_url; $("vplay").play(); return; }
+  $("hear").disabled = true; $("vnote").textContent = "recording a demo…";
+  const r = await post("/api/voice/demo", {id: v.id});
+  if(r.error){ $("vnote").textContent = r.error; $("hear").disabled = false; return; }
+  const iv = setInterval(async () => {
+    const j = await get("/api/voice/job/" + r.job);
+    if(j.state === "done"){
+      clearInterval(iv); $("hear").disabled = false;
+      if(j.error){ $("vnote").textContent = j.error; return; }
+      const d = await get("/api/voice");
+      VOICES = (d.voices || []).filter(x => x.castable);
+      const nv = VOICES.find(x => x.id === v.id);
+      if(nv && nv.demo_url){ $("vplay").src = nv.demo_url; $("vplay").play(); }
+      vnote();
+    }
+  }, 1500);
+};
 
 async function loadSources(){
   const d = await get("/api/character/sources");
