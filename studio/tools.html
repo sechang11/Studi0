@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tools &middot; studio</title>
+<style>
+:root{--bg:#0e0e12;--panel:#181820;--line:#2a2a36;--ink:#e9e9f0;--dim:#8d8d9c;
+      --accent:#9fb3ff;--good:#7fd1a0;--warn:#ffc978;--bad:#ff8f8f}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.55 system-ui,-apple-system,sans-serif;
+     margin:0;padding:0 20px 60px}
+nav.top{padding:14px 0;border-bottom:1px solid var(--line);margin-bottom:18px}
+nav.top a{color:var(--accent);text-decoration:none;margin-right:14px;font-size:14px}
+main{max-width:1000px;margin:0 auto}
+h1{font-size:24px;margin:14px 0 4px}
+h2{font-size:13px;color:var(--dim);text-transform:uppercase;letter-spacing:.07em;
+   margin:26px 0 10px}
+p.lede{color:var(--dim);max-width:76ch;margin:0 0 6px}
+.t{background:var(--panel);border:1px solid var(--line);border-radius:10px;
+   padding:14px 16px;margin:0 0 12px}
+.t h3{font-size:15px;margin:0 0 4px}
+.t .blurb{font-size:13px;color:var(--dim);max-width:74ch;margin:0 0 10px}
+.t .cost{font-size:11px;color:var(--dim);border:1px solid var(--line);border-radius:99px;
+         padding:2px 8px;margin-left:8px;white-space:nowrap}
+.args{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;margin-bottom:10px}
+.args>div{min-width:130px}
+label{font-size:11.5px;color:var(--dim);display:block;margin:0 0 3px}
+input,select{background:#101017;color:var(--ink);border:1px solid var(--line);
+  border-radius:6px;padding:7px 9px;font:inherit;width:100%;font-size:13px}
+button{background:var(--accent);color:#10101a;border:0;border-radius:6px;padding:8px 15px;
+       font:600 13px system-ui;cursor:pointer}
+button.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+button:disabled{opacity:.4;cursor:not-allowed}
+pre{background:#0b0b10;border:1px solid var(--line);border-radius:7px;padding:11px;
+    overflow:auto;font:12px/1.5 ui-monospace,monospace;color:#c8c8d6;max-height:340px;
+    margin:10px 0 0;white-space:pre-wrap}
+.cmd{font:11.5px ui-monospace,monospace;color:var(--dim);margin-top:8px}
+.note{font-size:12.5px;color:var(--dim);border-left:2px solid var(--line);
+      padding-left:11px;margin:14px 0 20px;max-width:78ch}
+</style>
+</head>
+<body>
+<nav class="top">
+  <a href="/">&larr; Studio</a><a href="/cast">Cast</a><a href="/voices">Voices</a>
+  <a href="/story">Story editor</a><a href="/docs">Docs</a>
+</nav>
+<main>
+  <h1>Tools</h1>
+  <p class="lede">The project's scripts, with their arguments, as buttons.</p>
+  <p class="note">This is a <b>curated list, not a script runner</b>. There are 99 scripts
+  in <code>studio/_tools</code> and a large minority have no argument parsing at all &mdash;
+  they run their whole job on any argument including <code>--help</code>, and several write
+  files at import time. Every tool here had its interface read before it was listed, and
+  nothing outside this list can be run from the page.</p>
+  <div id="body">reading…</div>
+</main>
+
+<script>
+const $ = i => document.getElementById(i);
+const get = async u => (await fetch(u)).json();
+const post = async (u,b) => (await fetch(u,{method:"POST",
+  headers:{"Content-Type":"application/json"},body:JSON.stringify(b)})).json();
+
+function argField(t, a){
+  const id = `f_${t.id}_${a.n.replace(/-/g,"")}`;
+  if(a.kind === "flag") return "";
+  const label = a.n.replace(/^--/,"");
+  if(a.kind === "choice"){
+    const opts = (a.options||[]).map(o => `<option value="${o}">${o}</option>`).join("");
+    return `<div><label>${label}</label><select id="${id}">${opts||
+      '<option value="">nothing available</option>'}</select></div>`;
+  }
+  return `<div style="${a.kind==='int'?'width:100px':'flex:1;min-width:200px'}">
+    <label>${label}</label>
+    <input id="${id}" value="${a.default!==undefined?a.default:""}"></div>`;
+}
+
+function draw(d){
+  $("body").innerHTML = d.groups.map(g => `<h2>${g.group}</h2>` + g.tools.map(t => `
+    <div class="t">
+      <h3>${t.title}<span class="cost">${t.cost}</span></h3>
+      <div class="blurb">${t.blurb}</div>
+      <div class="args">${t.args.map(a => argField(t,a)).join("")}
+        <button data-run="${t.id}">Run</button></div>
+      <div class="cmd" id="cmd_${t.id}"></div>
+      <pre id="out_${t.id}" style="display:none"></pre>
+    </div>`).join("")).join("");
+
+  $("body").querySelectorAll("[data-run]").forEach(b => b.onclick = async () => {
+    const t = d.groups.flatMap(g => g.tools).find(x => x.id === b.dataset.run);
+    const values = {};
+    t.args.forEach(a => {
+      if(a.kind === "flag") return;
+      const el = $(`f_${t.id}_${a.n.replace(/-/g,"")}`);
+      if(el) values[a.n] = el.value;
+    });
+    b.disabled = true;
+    const out = $("out_"+t.id); out.style.display = "block"; out.textContent = "running…";
+    const r = await post("/api/tool/run", {id: t.id, values});
+    if(r.error){ out.textContent = r.error; b.disabled = false; return; }
+    // Show the exact command, so what the button did is never a mystery.
+    $("cmd_"+t.id).textContent = "$ " + r.cmd;
+    const iv = setInterval(async () => {
+      const j = await get("/api/tool/job/" + r.job);
+      if(j.state === "done"){
+        clearInterval(iv); b.disabled = false;
+        out.textContent = (j.out || "") + (j.err ? "\n--- stderr ---\n" + j.err : "")
+          + `\n\n[exit ${j.code} in ${j.seconds}s]`;
+      }
+    }, 1500);
+  });
+}
+
+get("/api/tool").then(draw).catch(e => $("body").textContent = String(e));
+</script>
+</body>
+</html>

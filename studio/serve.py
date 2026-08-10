@@ -1020,26 +1020,17 @@ def hub_capabilities(html):
 
 def _charnew_routes():
     """studio/_tools/charnew_routes.py on demand, like the other _tools importers."""
-    try:
-        sys.path.insert(0, os.path.join(HERE, "_tools"))
-        import charnew_routes
-        importlib.reload(charnew_routes)
-        return charnew_routes
-    except Exception:
-        traceback.print_exc()
-        return None
+    return _load_tool_module('charnew_routes')
 
 
 def _voice_routes():
     """studio/_tools/voice_routes.py on demand, like the other _tools importers."""
-    try:
-        sys.path.insert(0, os.path.join(HERE, "_tools"))
-        import voice_routes
-        importlib.reload(voice_routes)
-        return voice_routes
-    except Exception:
-        traceback.print_exc()
-        return None
+    return _load_tool_module('voice_routes')
+
+
+def _toolbox():
+    """studio/_tools/toolbox.py on demand, like the other _tools importers."""
+    return _load_tool_module('toolbox')
 
 def _story_routes():
     """studio/_tools/story_routes.py on demand, like _guides and _generate_routes.
@@ -1047,14 +1038,7 @@ def _story_routes():
     Returning None rather than raising keeps a broken editor from taking the whole studio
     down: every other page still serves and /story reports plainly that it is unavailable.
     """
-    try:
-        sys.path.insert(0, os.path.join(HERE, "_tools"))
-        import story_routes
-        importlib.reload(story_routes)
-        return story_routes
-    except Exception:
-        traceback.print_exc()
-        return None
+    return _load_tool_module('story_routes')
 
 def _generate_routes():
     """Import studio/_tools/generate_routes.py on demand, the same way _guides does.
@@ -1063,14 +1047,40 @@ def _generate_routes():
     whole studio down - every other page still serves, and /generate reports plainly that
     its backend is unavailable.
     """
+    return _load_tool_module('generate_routes')
+
+# Route modules are imported once and reloaded ONLY when their file changes on disk.
+#
+# They were being reloaded on every request, and each of them keeps its job table in a
+# module-level dict - so the table was reset between the POST that started a job and the
+# GET that asked how it was going, and every progress poll in the app answered "no such
+# job". The renders still completed, because the worker thread holds its own reference to
+# the old module, so the symptom looked like a routing bug rather than a state bug.
+_MODCACHE = {}
+
+
+def _load_tool_module(name):
+    import importlib.util
+    path = os.path.join(HERE, "_tools", name + ".py")
+    try:
+        mtime = os.path.getmtime(path)
+    except OSError:
+        return None
+    mod, seen = _MODCACHE.get(name, (None, None))
+    if mod is not None and seen == mtime:
+        return mod
     try:
         sys.path.insert(0, os.path.join(HERE, "_tools"))
-        import generate_routes
-        importlib.reload(generate_routes)
-        return generate_routes
+        if mod is None:
+            mod = importlib.import_module(name)
+        else:
+            mod = importlib.reload(mod)
+        _MODCACHE[name] = (mod, mtime)
+        return mod
     except Exception:
         traceback.print_exc()
         return None
+
 
 def _guides():
     """studio/_tools/guides.py, or None. Reloaded per request like the composer, so
@@ -1361,6 +1371,28 @@ class H(http.server.SimpleHTTPRequestHandler):
                 traceback.print_exc()
                 return self._send({"error": str(e)[:300]}, 500)
             return self._send({"error": "unknown voice route"}, 404)
+        if path in ("/tools", "/tools.html"):
+            return self._page("tools.html")
+        if path == "/api/tool" or path.startswith("/api/tool/"):
+            tb = _toolbox()
+            if not tb:
+                return self._send({"error": "toolbox.py is unavailable"}, 500)
+            rest = path[len("/api/tool"):].strip("/")
+            bits = rest.split("/") if rest else []
+            try:
+                if not bits:
+                    body, code = tb.catalogue()
+                    return self._send(body, code)
+                if bits[0] == "styles":
+                    body, code = tb.styles()
+                    return self._send(body, code)
+                if bits[0] == "job" and len(bits) == 2:
+                    body, code = tb.job_status(bits[1])
+                    return self._send(body, code)
+            except Exception as e:
+                traceback.print_exc()
+                return self._send({"error": str(e)[:300]}, 500)
+            return self._send({"error": "unknown tool route"}, 404)
         if path == "/api/guides":
             g = _guides()
             if not g:
@@ -1950,13 +1982,25 @@ class H(http.server.SimpleHTTPRequestHandler):
                      "/api/story/transition",
                      "/api/character/upload", "/api/character/create",
                      "/api/voice/demo", "/api/voice/add",
-                     "/api/character/suite"):
+                     "/api/character/suite",
+                     "/api/tool/run", "/api/tool/random"):
             return self._send({"error": "not found"}, 404)
         n = int(self.headers.get("Content-Length", 0))
         try:
             data = json.loads(self.rfile.read(n) or b"{}")
         except Exception as e:
             return self._send({"error": f"bad json: {e}"}, 400)
+        if p.startswith("/api/tool/"):
+            tb = _toolbox()
+            if not tb:
+                return self._send({"error": "toolbox.py is unavailable"}, 500)
+            fn = {"run": tb.run_tool, "random": tb.randomize}[p[len("/api/tool/"):]]
+            try:
+                body, code = fn(data)
+            except Exception as e:
+                traceback.print_exc()
+                return self._send({"error": str(e)[:300]}, 500)
+            return self._send(body, code)
         if p.startswith("/api/voice/"):
             vr = _voice_routes()
             if not vr:
