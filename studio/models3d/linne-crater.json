@@ -1,0 +1,57 @@
+{
+ "id": "linne-crater",
+ "name": "Linne Crater",
+ "source": "nasa",
+ "source_url": "https://github.com/nasa/NASA-3D-Resources/tree/master/3D%20Printing/Linne%20Crater",
+ "licence": "public domain (US Government work)",
+ "attribution_required": false,
+ "commercial_ok": true,
+ "files": [
+  {
+   "name": "Linne Crater.stl",
+   "bytes": 47499984,
+   "url": "https://raw.githubusercontent.com/nasa/NASA-3D-Resources/master/3D%20Printing/Linne%20Crater/Linne%20Crater.stl"
+  }
+ ],
+ "images": [
+  {
+   "name": "Linne Crater.png",
+   "bytes": 1542395,
+   "url": "https://raw.githubusercontent.com/nasa/NASA-3D-Resources/master/3D%20Printing/Linne%20Crater/Linne%20Crater.png"
+  }
+ ],
+ "fetched": true,
+ "indexed": "2026-08-11T14:12:58",
+ "local_dir": "/home/k4shix/shared/comfy-studio/studio/samples/models3d/linne-crater",
+ "measured": {
+  "mm": [
+   304.0,
+   304.0,
+   64.18
+  ],
+  "faces": 949998,
+  "vertices": 475001,
+  "watertight": true,
+  "winding_consistent": true,
+  "components": 1,
+  "volume_cm3": 4656.1,
+  "printable": true,
+  "blocking": [],
+  "warnings": [
+   "1185 degenerate (zero-area) faces."
+  ]
+ },
+ "measured_file": "Linne Crater.stl",
+ "verdict": {
+  "printable": true,
+  "needs_scale": false,
+  "check_scale": false,
+  "oversize": true,
+  "why": [
+   "1185 degenerate (zero-area) faces.",
+   "304 mm at its widest, past a 256 mm bed - scale it down or split it"
+  ],
+  "state": "printable, needs a step"
+ },
+ "parts": 1
+}

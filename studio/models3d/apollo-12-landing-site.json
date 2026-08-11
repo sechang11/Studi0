@@ -1,0 +1,57 @@
+{
+ "id": "apollo-12-landing-site",
+ "name": "Apollo 12 - Landing Site",
+ "source": "nasa",
+ "source_url": "https://github.com/nasa/NASA-3D-Resources/tree/master/3D%20Printing/Apollo%2012%20-%20Landing%20Site",
+ "licence": "public domain (US Government work)",
+ "attribution_required": false,
+ "commercial_ok": true,
+ "files": [
+  {
+   "name": "Apollo 12 - Landing Site.stl",
+   "bytes": 26418784,
+   "url": "https://raw.githubusercontent.com/nasa/NASA-3D-Resources/master/3D%20Printing/Apollo%2012%20-%20Landing%20Site/Apollo%2012%20-%20Landing%20Site.stl"
+  }
+ ],
+ "images": [
+  {
+   "name": "Apollo 12 - Landing Site.png",
+   "bytes": 1646886,
+   "url": "https://raw.githubusercontent.com/nasa/NASA-3D-Resources/master/3D%20Printing/Apollo%2012%20-%20Landing%20Site/Apollo%2012%20-%20Landing%20Site.png"
+  }
+ ],
+ "fetched": true,
+ "indexed": "2026-08-11T14:12:58",
+ "local_dir": "/home/k4shix/shared/comfy-studio/studio/samples/models3d/apollo-12-landing-site",
+ "measured": {
+  "mm": [
+   511.0,
+   511.0,
+   60.0
+  ],
+  "faces": 528374,
+  "vertices": 264189,
+  "watertight": true,
+  "winding_consistent": true,
+  "components": 1,
+  "volume_cm3": -10322.36,
+  "printable": false,
+  "blocking": [
+   "NORMALS INVERTED - signed volume is negative; the solid is inside out."
+  ],
+  "warnings": []
+ },
+ "measured_file": "Apollo 12 - Landing Site.stl",
+ "verdict": {
+  "printable": false,
+  "needs_scale": false,
+  "check_scale": false,
+  "oversize": true,
+  "why": [
+   "NORMALS INVERTED - signed volume is negative; the solid is inside out.",
+   "511 mm at its widest, past a 256 mm bed - scale it down or split it"
+  ],
+  "state": "not printable"
+ },
+ "parts": 1
+}
