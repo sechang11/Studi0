@@ -969,22 +969,6 @@ def nav_model3d(html):
     return html
 
 
-def nav_prints(html):
-    """A `print library` link in the header nav, the same way as nav_model3d.
-
-    Anchored beside /model3d so the two 3D pages sit together - one downloaded, one
-    generated - rather than at opposite ends of the row.
-    """
-    if 'href="/prints"' in html:
-        return html
-    for a in ('<a href="/model3d"', '<a href="/video"', '<a href="/gallery"', '<a href="/">'):
-        i = html.find(a)
-        if i < 0:
-            continue
-        return html[:i] + '<a href="/prints">print library</a>' + html[i:]
-    return html
-
-
 def nav_capabilities(html):
     """Put a `capabilities` link in the header nav, the same way and for the same reason
     as nav_video and nav_dossier.
@@ -1126,7 +1110,7 @@ class H(http.server.SimpleHTTPRequestHandler):
             return self._send(f"{name} is missing".encode(), 500, "text/plain")
         with open(p, encoding="utf-8") as f:
             html = f.read()
-        html = nav_prints(nav_model3d(nav_dossier(nav_video(html))))
+        html = nav_model3d(nav_dossier(nav_video(html)))
         # Every page gets the link except the capabilities page itself, which
         # writes its own nav and omits itself the way styles.html omits /styles.
         if name != "capabilities.html":
@@ -1575,15 +1559,6 @@ class H(http.server.SimpleHTTPRequestHandler):
         # them through _send_file, which honours Range - so a 133 MB STL streams in
         # 256 KB chunks instead of being read into memory. No new file route is needed
         # and none is added.
-        # /prints is the DOWNLOADED print library (studio/models3d/ cards, meshes under
-        # samples/models3d/). Deliberately not folded into /model3d, which is the
-        # generated-mesh pipeline for a character: different provenance, different
-        # question. One asks "what can I print", the other "did the character survive
-        # being turned into a mesh".
-        if path in ("/prints", "/prints.html"):
-            return self._page("prints.html")
-        if path == "/api/prints":
-            return self._prints()
         if path == "/model3d" or path.startswith("/model3d/"):
             return self._page("model3d.html")
         if path == "/api/model3d" or path.startswith("/api/model3d/"):
@@ -1667,28 +1642,6 @@ class H(http.server.SimpleHTTPRequestHandler):
         if payload.get("error"):
             return self._send(payload, 404)
         return self._send(payload)
-
-    def _prints(self):
-        """/api/prints - the downloaded 3D print library.
-
-        Assembled by studio/_tools/prints_routes.py through _load_tool_module, which
-        re-imports on mtime rather than on every request. Per-request importlib.reload()
-        is what made every story progress poll answer "no such job" - it wiped the
-        module's state each time - so this uses the cached loader like the other tools.
-
-        An import failure is reported as itself. "No models yet" that is really a broken
-        import is precisely the silent wrong answer this project keeps rediscovering.
-        """
-        mod = _load_tool_module("prints_routes")
-        if mod is None:
-            return self._send({"error": "studio/_tools/prints_routes.py is unavailable"},
-                              500)
-        try:
-            return self._send(mod.payload())
-        except Exception as e:                                      # noqa: BLE001
-            return self._send({"error": "the print library failed to assemble",
-                               "detail": "%s: %s" % (type(e).__name__, e),
-                               "trace": traceback.format_exc()[-1500:]}, 500)
 
     def _model3d(self, cid):
         """/api/model3d/<id>, or the character that got furthest when no id is given.
