@@ -969,6 +969,18 @@ def nav_model3d(html):
     return html
 
 
+def nav_make3d(html):
+    """A `make 3d` link in the header nav, the same way as nav_model3d."""
+    if 'href="/make3d"' in html:
+        return html
+    for a in ('<a href="/model3d"', '<a href="/make"', '<a href="/gallery"', '<a href="/">'):
+        i = html.find(a)
+        if i < 0:
+            continue
+        return html[:i] + '<a href="/make3d">make 3d</a>' + html[i:]
+    return html
+
+
 def nav_capabilities(html):
     """Put a `capabilities` link in the header nav, the same way and for the same reason
     as nav_video and nav_dossier.
@@ -1110,7 +1122,7 @@ class H(http.server.SimpleHTTPRequestHandler):
             return self._send(f"{name} is missing".encode(), 500, "text/plain")
         with open(p, encoding="utf-8") as f:
             html = f.read()
-        html = nav_model3d(nav_dossier(nav_video(html)))
+        html = nav_make3d(nav_model3d(nav_dossier(nav_video(html))))
         # Every page gets the link except the capabilities page itself, which
         # writes its own nav and omits itself the way styles.html omits /styles.
         if name != "capabilities.html":
@@ -1559,6 +1571,12 @@ class H(http.server.SimpleHTTPRequestHandler):
         # them through _send_file, which honours Range - so a 133 MB STL streams in
         # 256 KB chunks instead of being read into memory. No new file route is needed
         # and none is added.
+        if path in ("/make3d", "/make3d.html"):
+            return self._page("make3d.html")
+        if path == "/api/make3d":
+            return self._make3d_payload()
+        if path.startswith("/api/make3d/job/"):
+            return self._make3d_job(path[len("/api/make3d/job/"):])
         if path == "/model3d" or path.startswith("/model3d/"):
             return self._page("model3d.html")
         if path == "/api/model3d" or path.startswith("/api/model3d/"):
@@ -1642,6 +1660,35 @@ class H(http.server.SimpleHTTPRequestHandler):
         if payload.get("error"):
             return self._send(payload, 404)
         return self._send(payload)
+
+    def _make3d(self):
+        """The /make3d tool module, loaded on mtime like the other _tools importers.
+
+        NOT importlib.reload() per request: that is what made every story progress poll
+        answer "no such job" - each request rebuilt the module and wiped its JOBS table.
+        A mesh job lives in that table for a minute, so this route would have been the
+        same bug a second time.
+        """
+        return _load_tool_module("make3d_routes")
+
+    def _make3d_payload(self):
+        m = self._make3d()
+        if m is None:
+            return self._send({"error": "studio/_tools/make3d_routes.py is unavailable"},
+                              500)
+        try:
+            return self._send(m.payload())
+        except Exception as e:                                      # noqa: BLE001
+            return self._send({"error": "the 3D maker payload failed to assemble",
+                               "detail": "%s: %s" % (type(e).__name__, e),
+                               "trace": traceback.format_exc()[-1500:]}, 500)
+
+    def _make3d_job(self, job):
+        m = self._make3d()
+        if m is None:
+            return self._send({"error": "make3d_routes.py is unavailable"}, 500)
+        body, code = m.job_status(safe_name(job))
+        return self._send(body, code)
 
     def _model3d(self, cid):
         """/api/model3d/<id>, or the character that got furthest when no id is given.
@@ -1986,13 +2033,25 @@ class H(http.server.SimpleHTTPRequestHandler):
                      "/api/character/upload", "/api/character/create",
                      "/api/voice/demo", "/api/voice/add",
                      "/api/character/suite", "/api/character/analyse",
-                     "/api/tool/run", "/api/tool/random"):
+                     "/api/tool/run", "/api/tool/random",
+                     "/api/make3d/mesh"):
             return self._send({"error": "not found"}, 404)
         n = int(self.headers.get("Content-Length", 0))
         try:
             data = json.loads(self.rfile.read(n) or b"{}")
         except Exception as e:
             return self._send({"error": f"bad json: {e}"}, 400)
+        if p == "/api/make3d/mesh":
+            m = self._make3d()
+            if m is None:
+                return self._send({"error": "make3d_routes.py is unavailable"}, 500)
+            try:
+                body, code = m.mesh(data)
+            except Exception as e:                                  # noqa: BLE001
+                traceback.print_exc()
+                return self._send({"error": "the mesh job could not start",
+                                   "detail": "%s: %s" % (type(e).__name__, e)}, 500)
+            return self._send(body, code)
         if p.startswith("/api/tool/"):
             tb = _toolbox()
             if not tb:
