@@ -1,0 +1,17 @@
+{
+ "id": "newsprint_halftone",
+ "name": "Newsprint halftone",
+ "engine": "flux2",
+ "status": "ready",
+ "compose": "safe",
+ "family": "physical media",
+ "prose": "A close photograph of a folded newspaper page. A headline in a heavy condensed serif runs across two columns above a photograph reproduced in a coarse halftone dot screen, the dots plainly visible, with body text in narrow justified columns beneath. The paper is grey-brown and slightly translucent, with ink showing through from the reverse and a soft fold crease across the middle. Flat even light, shot straight down, natural colour, no vignette. The lettering shows the headline reading exactly \"THE RIVER RETURNS\" across two columns.",
+ "words": "the headline reading exactly \"THE RIVER RETURNS\" across two columns",
+ "text_rule": "Replace `words` with the string you want and keep it QUOTED in the prompt. Unquoted lettering comes back as gibberish.",
+ "negative_add": "blurry text, unreadable lettering, gibberish characters, misspelled words, watermark, signature, logo, lowres, jpeg artifacts, oversaturated, 3d render, cgi, plastic",
+ "means": "Print reproduction as the subject: dot screen, show-through, cheap paper.",
+ "note": "Routed to FLUX.2 deliberately. Before these cards, 132 style cards existed and none named flux2, so an installed and measured engine was unreachable from the app - the engine is a property of the style, so a style card is the only door. Written as prose because FLUX.2 is a sentence engine, and chosen for typography and physical media because that is where it beats Qwen and animagine rather than duplicating them.",
+ "provenance": "invented - no real brand, imprint or person is named",
+ "verdict": "unverified until the sample below is looked at.",
+ "created": "2026-08-12T18:12:14"
+}

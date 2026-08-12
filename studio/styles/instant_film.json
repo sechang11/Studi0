@@ -1,0 +1,17 @@
+{
+ "id": "instant_film",
+ "name": "Instant film snapshot",
+ "engine": "flux2",
+ "status": "ready",
+ "compose": "safe",
+ "family": "physical media",
+ "prose": "A photograph of a developed instant film print held flat against a plain surface. The print has the format's thick white border, wider at the bottom, a handwritten date in ballpoint on that lower margin, and one soft thumbprint on the emulsion. The image inside is slightly milky with crushed shadows, a warm colour cast and low contrast, the way instant film actually renders. Even light, shot straight down, natural colour. The lettering shows the handwritten date on the lower margin reading \"MARCH 1987\".",
+ "words": "the handwritten date on the lower margin reading \"MARCH 1987\"",
+ "text_rule": "Replace `words` with the string you want and keep it QUOTED in the prompt. Unquoted lettering comes back as gibberish.",
+ "negative_add": "blurry text, unreadable lettering, gibberish characters, misspelled words, watermark, signature, logo, lowres, jpeg artifacts, oversaturated, 3d render, cgi, plastic",
+ "means": "An instant photo as a physical object, border and handwriting included.",
+ "note": "Routed to FLUX.2 deliberately. Before these cards, 132 style cards existed and none named flux2, so an installed and measured engine was unreachable from the app - the engine is a property of the style, so a style card is the only door. Written as prose because FLUX.2 is a sentence engine, and chosen for typography and physical media because that is where it beats Qwen and animagine rather than duplicating them.",
+ "provenance": "invented - no real brand, imprint or person is named",
+ "verdict": "unverified until the sample below is looked at.",
+ "created": "2026-08-12T18:12:14"
+}

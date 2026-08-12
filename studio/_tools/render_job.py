@@ -102,22 +102,31 @@ def render_image(job, outdir):
     eng = job.get("engine", "anime")
     if eng == "flux2":
         wf = load_wf("40_flux2_t2i.json")
+        # Dials are applied BY INPUT KEY, not by class name. 40_flux2_t2i is a custom
+        # sampler graph - the seed is `noise_seed` on RandomNoise, the steps and the size
+        # are on Flux2Scheduler, and the latent is EmptyFlux2LatentImage. Matching class
+        # names meant the seed and the size were never set at all, and every flux2 render
+        # silently reused whatever was saved in the workflow file. A steps sweep returned
+        # four pixel-identical frames before this was found.
         for nid, n in wf.items():
             if not isinstance(n, dict):
                 continue
             ct = n.get("class_type", "")
-            if "CLIPTextEncode" in ct or "TextEncode" in ct:
-                if "text" in (n.get("inputs") or {}):
-                    n["inputs"]["text"] = job["prompt"]
-            if ct == "KSampler" or "Sampler" in ct:
-                if "seed" in (n.get("inputs") or {}):
-                    n["inputs"]["seed"] = job["seed"]
-            if ct == "EmptySD3LatentImage" or "EmptyLatent" in ct:
-                if "width" in (n.get("inputs") or {}):
-                    n["inputs"]["width"] = job["width"]
-                    n["inputs"]["height"] = job["height"]
+            ins = n.get("inputs")
+            if not isinstance(ins, dict):
+                continue
+            if ("CLIPTextEncode" in ct or "TextEncode" in ct) and "text" in ins:
+                ins["text"] = job["prompt"]
+            for k in ("noise_seed", "seed"):
+                if k in ins:
+                    ins[k] = job["seed"]
+            if "width" in ins and "height" in ins:
+                ins["width"] = job["width"]
+                ins["height"] = job["height"]
+            if "steps" in ins and job.get("steps"):
+                ins["steps"] = int(job["steps"])
             if ct == "SaveImage":
-                n["inputs"]["filename_prefix"] = "claude-generated/rolled/%s" % job["id"]
+                ins["filename_prefix"] = "claude-generated/rolled/%s" % job["id"]
     elif eng == "qwen":
         wf = load_wf("13_qwen_t2i_styled.json")
         set_path(wf, "10.inputs.text", job["prompt"])

@@ -152,3 +152,27 @@ wide establishing shot of the harbour at dawn, mist on the water, fishing boats 
 ```
 
 and the whole sequence renders unattended.
+
+## FLUX.2 spells only what you quote
+
+**MEASURED**, , sheet in
+. Grid: {quoted, unquoted} x {4, 8, 16, 30 steps},
+one seed, one prompt, nothing else moved.
+
+Ten flux2 style cards were first written describing lettering without saying what it should
+say - "a headline", "a title line in bold". Every proof came back as beautiful physical
+media carrying gibberish: VITREQUS SHOP, Bagike Menu, KNACK ENMETHLES, Rismonicd irc.
+
+The variable is **the quoted string, not the step count**. Given the exact words in quotes,
+FLUX.2 spells them correctly at **4 steps** (7.5 s). Given none, it produces word-shaped
+noise at 4 steps and at 8+ only settles by borrowing a word from elsewhere in the prompt.
+
+    write:  lettering reading exactly "NIGHT PORTER" on the first line and "RING TWICE" below
+    not:    lettering in a bold grotesque face
+
+**The limit, also measured.** Only the quoted string is spelled. Unquoted body copy - a
+paragraph of newspaper text, the blurb on a museum label - still comes back as convincing
+gibberish. Quote the words that must be read; let the rest be texture.
+
+Every flux2 style card carries a `words` field for this reason. Replace it with the string
+you want and keep it quoted.

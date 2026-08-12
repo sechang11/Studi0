@@ -1,0 +1,17 @@
+{
+ "id": "worn_paperback",
+ "name": "Worn paperback cover",
+ "engine": "flux2",
+ "status": "ready",
+ "compose": "safe",
+ "family": "physical media",
+ "prose": "A photograph of a battered mass-market paperback lying on a wooden table, seen from slightly above. The cover is a painted illustration in saturated mid-century colour under a title set in a heavy display face, with a smaller author line beneath and a price corner box. The spine is creased white, the corners are soft and rounded from use, and the paper edges have yellowed. Warm side light from a window, shot on 50mm at f4, natural colour, fine grain. The lettering shows the cover title reading exactly \"THE LONG WINTER\" with a smaller author line \"E. HALLOWAY\".",
+ "words": "the cover title reading exactly \"THE LONG WINTER\" with a smaller author line \"E. HALLOWAY\"",
+ "text_rule": "Replace `words` with the string you want and keep it QUOTED in the prompt. Unquoted lettering comes back as gibberish.",
+ "negative_add": "blurry text, unreadable lettering, gibberish characters, misspelled words, watermark, signature, logo, lowres, jpeg artifacts, oversaturated, 3d render, cgi, plastic",
+ "means": "A book as a used object: creased spine, rounded corners, yellowed edges.",
+ "note": "Routed to FLUX.2 deliberately. Before these cards, 132 style cards existed and none named flux2, so an installed and measured engine was unreachable from the app - the engine is a property of the style, so a style card is the only door. Written as prose because FLUX.2 is a sentence engine, and chosen for typography and physical media because that is where it beats Qwen and animagine rather than duplicating them.",
+ "provenance": "invented - no real brand, imprint or person is named",
+ "verdict": "unverified until the sample below is looked at.",
+ "created": "2026-08-12T18:12:14"
+}
