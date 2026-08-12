@@ -87,7 +87,7 @@ def main():
     for i,(lab,p) in enumerate(cells):
         sh("ffmpeg","-y","-v","error","-i",p,"-vf",
            "scale=480:-1,drawtext=text='%s':fontcolor=yellow:fontsize=19:x=6:y=6:"
-           "box=1:boxcolor=black@0.85:boxborderw=5"%lab.replace(":","\:"),
+           "box=1:boxcolor=black@0.85:boxborderw=5"%lab.replace(":", r"\:"),
            "/tmp/_tpg/%02d.png"%i)
     dst=os.path.join(ROOT,"studio","samples","cast","terra_possibilities.jpg")
     rows=(len(cells)+4)//5
