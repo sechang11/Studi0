@@ -259,8 +259,21 @@ def audit_code():
                 line = src[:m.start()].count("\n") + 1
                 add("info", "code", why, "%s:%d" % (name, line))
 
+        # A *_routes.py module is imported by serve.py and never run from a shell, so the
+        # no-argparse hazard cannot fire on it. Reported at info so the inventory stays
+        # complete, but kept off the warn list, which is only useful if every line on it is
+        # worth acting on. A route module that ALSO has a __main__ block is a script and
+        # falls through to the real check below.
+        _is_route = (name.endswith("_routes.py")
+                     and not re.search(r'if __name__ == .__main__.', src))
+        if _is_route and "argparse" not in src:
+            add("info", "code",
+                "route module imported by serve.py - no argparse needed, never run "
+                "from a shell", name)
+
         # The known hazard: a tool with no argparse runs its whole job on ANY argument.
-        if "/_tools/" in f.replace("\\", "/") and "argparse" not in src:
+        if ("/_tools/" in f.replace("\\", "/") and "argparse" not in src
+                and not _is_route):
             if re.search(r'if __name__ == .__main__.', src) or "\ndef main" not in src:
                 writes = bool(re.search(r"^\s*(open\(|json\.dump|os\.makedirs)", src, re.M))
                 if writes:

@@ -87,6 +87,13 @@ def render(prompt, steps, tag):
 
 
 def main():
+    # argparse even though there are no options yet. Without it this tool runs its entire
+    # 8-render job on ANY argument, including --help - the hazard audit.py flags across
+    # ~20 tools here. Adding one more to that pile while fixing the pile is not on.
+    import argparse
+    argparse.ArgumentParser(
+        description="Does FLUX.2 spell? Sweeps quoted vs unquoted text across step "
+                    "counts and writes a contact sheet.").parse_args()
     os.makedirs(OUT, exist_ok=True)
     rows = []
     for label, prompt in (("quoted", QUOTED), ("unquoted", BASE)):
