@@ -181,7 +181,13 @@ const COMPOSE={
          "no visible difference. Picking it costs a full generation and buys nothing."}
 };
 const STATUS={
-  ready:{cls:"p-ok", long:"Rendered and checked against the control. It does what the card says."},
+  // No control claim here. This string is printed from a lookup table for every ready
+  // card, and twelve ready cards carry a verdict of "unverified" or none at all - so the
+  // page was asserting a comparison that the card itself denied. `status` says the card
+  // WORKS; `verdict` says what was SEEN. Only the verdict can speak for the pixels, and it
+  // is rendered separately under "what it actually did".
+  ready:{cls:"p-ok", long:"Renders and is safe to pick. Whether it was compared against "+
+         "the no-style control is recorded in the verdict below, not here."},
   weak:{cls:"p-part", flag:"weak — rendered, but it barely moved the image",
     long:"This was rendered and it barely changed anything. On several of these the difference is "+
          "small enough to be seed noise."},
@@ -273,7 +279,8 @@ function open_(id){
 
     <div class="lbl">what it actually did</div>
     ${c.verdict?`<div class="verdict">${esc(c.verdict)}</div>`
-               :`<p class="none">Not verified against pixels yet.</p>`}
+               :`<p class="none">Not verified against pixels yet - nobody has looked at a render of
+       this card and written down what it did. Treat the description above as intent.</p>`}
 
     <div class="lbl">how it combines — ${esc(c.compose||"unrecorded")}</div>
     <div class="${c.compose==="injects"?"badbox":c.compose==="replaces"?"warnbox":"verdict"}">
