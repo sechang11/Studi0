@@ -155,8 +155,8 @@ and the whole sequence renders unattended.
 
 ## FLUX.2 spells only what you quote
 
-**MEASURED**, , sheet in
-. Grid: {quoted, unquoted} x {4, 8, 16, 30 steps},
+**MEASURED**, `studio/_tools/flux2_text_sweep.py`, sheet in
+`studio/samples/flux2_text/_sheet.jpg`. Grid: {quoted, unquoted} x {4, 8, 16, 30 steps},
 one seed, one prompt, nothing else moved.
 
 Ten flux2 style cards were first written describing lettering without saying what it should
