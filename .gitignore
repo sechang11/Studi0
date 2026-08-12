@@ -163,3 +163,7 @@ stories/*/exports/
 
 # Print-ready exports: derived from a .glb by studio/_tools/to_print.py, and large.
 studio/samples/print_ready/
+
+# SFX originals kept beside the normalised file so the change is reversible and the
+# tool is idempotent. Regenerable; not worth versioning.
+studio/samples/**/*.orig
