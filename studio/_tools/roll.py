@@ -102,6 +102,17 @@ def is_vista(card):
         " ".join(str(card.get(k) or "") for k in PLACE_TEXT_FIELDS)))
 
 
+def self_contained(card):
+    """True when the style IS the picture: a printed page, a sign, a newspaper.
+
+    The inverse of wants_a_person. Such a card takes no character, no place, no framing and
+    no lighting, because each of those adds a competing noun to a frame that already has its
+    subject. Composed anyway, the roller produced a man, a cave, moonlight and a blueprint
+    in one prompt.
+    """
+    return bool(card.get("self_contained"))
+
+
 def wants_a_person(card):
     return bool(SUBJECT_BOUND.search(
         " ".join(str(card.get(k) or "") for k in STYLE_TEXT_FIELDS)))
@@ -194,6 +205,36 @@ def roll_image(rng, libs, opt=None):
     cast_rate = 1.0 if opt.get("character") else float(opt.get("cast_rate", 0.35))
     if opt.get("no_characters"):
         cast, cast_rate = [], 0.0
+    solo_scene = self_contained(libs["styles"][style])
+    if solo_scene:
+        # Everything the other layers would add is a second subject. The card's own prose
+        # is the entire prompt, and the size is the only thing left to choose.
+        w, h = rng.choice([s for s in SIZES if s[0] == s[1]] or SIZES)
+        card = libs["styles"][style]
+        # The engine is still DERIVED, not assumed. These cards happen to be flux2, but
+        # hardcoding it here would quietly break the day one of them is not.
+        rr = compose.resolve(libs, {"style": style})
+        return {
+            "domain": "image", "engine": rr["engine"], "style": style,
+            "place": None, "look": None, "emotion": None, "framing": None,
+            "character": None, "style_wants_a_person": False, "place_is_vista": False,
+            "character_lora": None, "character_lora_strength": None,
+            "character_lora_reason": "", "self_contained": True,
+            # The CARD PROSE, not compose output. compose prefixes "scenery, no humans."
+            # for a subjectless roll - correct on the anime tag path, wrong here: this is a
+            # prose engine and the model renders nouns, so "scenery" invites a landscape
+            # into a photograph of a printed page.
+            "prompt": card.get("prose") or rr.get("prompt") or "",
+            "negative": rr.get("negative") or card.get("negative_add") or "",
+            "framing_from": "none - the style is the whole scene",
+            "width": w, "height": h,
+            "style_lora": rr.get("style_lora") if rr.get("style_lora_active") else None,
+            "style_lora_strength": (rr.get("style_lora_strength")
+                                    if rr.get("style_lora_active") else None),
+            "engine_reason": rr.get("engine_reason", ""),
+            "errors": [c["message"] for c in rr.get("conflicts", [])
+                       if c.get("severity") == "error"],
+        }
     needs = wants_a_person(libs["styles"][style])
     if needs and not cast:
         # No one to draw and a style that insists on a person: take a different style rather
