@@ -640,7 +640,10 @@ def cut(film, out):
     work = f"{out}/_work"
     os.makedirs(work, exist_ok=True)
     for f in os.listdir(work):
-        os.remove(f"{work}/{f}")
+        # os.remove raises IsADirectoryError on a folder, which killed the whole cut
+        # before a single shot was sliced - for a reason unrelated to the film.
+        p = f"{work}/{f}"
+        (shutil.rmtree if os.path.isdir(p) else os.remove)(p)
 
     print("\n=== SLICING: source clips -> micro-shots ===")
     pieces, cues, caps, t = [], [], [], 0.0
@@ -767,7 +770,7 @@ def cut(film, out):
                       f"box=1:boxcolor=black@0.62:boxborderw=12:"
                       f"enable='between(t,{lo:.2f},{hi:.2f})'")
         # clock ticks 89:00 -> 90:00 across the film, so the countdown is SHOWN not claimed
-        vf.append(f"drawtext={ff}text='89\:%{{eif\:min(59,floor(t*60/{total:.2f}))\:d\:2}}':"
+        vf.append(rf"drawtext={ff}text='89\:%{{eif\:min(59,floor(t*60/{total:.2f}))\:d\:2}}':"
                   f"fontcolor=yellow:fontsize={int(cw*0.036)}:x=(w-text_w)/2:"
                   f"y={top - int(cw*0.055)}:box=1:boxcolor=black@0.62:boxborderw=10")
 
@@ -870,8 +873,31 @@ def cut(film, out):
         sh("ffmpeg", "-y", "-v", "error", "-i", vertical, "-i", mastered,
            "-map", "0:v", "-map", "1:a", "-c:v", "copy", "-c:a", "aac", "-b:a", "256k",
            "-t", f"{total:.2f}", "-movflags", "+faststart", final)
-    else:
+    elif film.get("silent"):
+        # Declared silent. Intent is stated in the film, never inferred from an empty
+        # list, because "no audio was found" and "no audio was wanted" look identical
+        # here and mean opposite things.
+        print("    (silent film, as declared)")
         shutil.copy(vertical, final)
+    else:
+        # Every voice and music file was missing. Copying `vertical` here would ship a
+        # SILENT deliverable with exit code 0 - `vertical` is built with -an. Name what
+        # was actually looked for, so the cause is one look away rather than a hunt.
+        missing = [vp for _s, _e, _l, vp in cues if not os.path.exists(vp)]
+        want_music = [f"{out}/music/{c['prefix']}_00001.mp3"
+                      for c in film.get("music", [])]
+        missing += [p for p in want_music if not os.path.exists(p)]
+        raise SystemExit(
+            "the film has no audio at all: %d voice cue(s) and %d music cue(s) were "
+            "expected and none of the files exist.\n"
+            "  first missing: %s\n"
+            "  Render the voices and music first, or set \"silent\": true in the film "
+            "if it is meant to have no sound.\n"
+            "  Refusing to write a silent %s - a silent film that reports success is "
+            "the failure this check exists for."
+            % (len(cues), len(film.get("music", [])),
+               "\n                 ".join(missing[:4]) or "(none listed)",
+               os.path.basename(final)))
 
     # Check the mix actually COVERS the film before checking how loud it is. `amix` defaults
     # to duration=first, which once truncated a 63s short to 5.2s of audio - and every
