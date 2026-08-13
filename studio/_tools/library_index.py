@@ -145,6 +145,27 @@ SET_AXES = {
     "camera": [("style", 3)],
 }
 
+# NAMED SLOTS, so a set means the SAME THING for every card of a kind.
+#
+# The greedy cover gave each character whatever four framings it happened to own, in
+# whatever order they were newest. Two characters side by side were therefore not
+# comparable - one led with a close-up, the other with a wide, and a missing angle looked
+# identical to an angle that simply sorted late. Fixed slots make the shape of a set a
+# property of the KIND rather than of the card's render history, and a slot nobody filled
+# comes back EMPTY instead of silently shrinking the set.
+FIXED_SLOTS = {
+    "character": (
+        [("framing", v) for v in ("close-up", "medium close-up", "medium shot", "wide shot")]
+        + [("style", None)] * 6
+        + [("place", None)] * 8
+    ),
+    "place": [("pure", None)] * 3 + [("style", None)] * 3 + [("look", None)] * 4,
+    "style": [("pure", None)] + [("place", None)] * 4,
+    "emotion": [("pure", None)] * 2 + [("style", None)] * 2,
+    "motion": [("style", None)] * 3,
+    "camera": [("style", None)] * 3,
+}
+
 
 def packset(facet, value):
     """The frames that make a COMPLETE SET for one card, in order, then everything else.
@@ -167,33 +188,57 @@ def packset(facet, value):
         return {"facet": facet, "value": value, "set": [], "extra": [], "axes": []}
     its.sort(key=lambda x: ((x.get("purity") or {}).get(facet, 9), -x["mtime"]))
 
-    chosen, seen_ids, covered = [], set(), {a: set() for a, _ in axes}
-    for axis, want in axes:
+    # Walk the FIXED slot list. A slot with a named value takes only that value; an
+    # unnamed one takes the next value on that axis not already used. Either way slot n
+    # means the same thing for every card of this kind, and an unfillable slot stays empty
+    # rather than being quietly dropped.
+    slots = FIXED_SLOTS.get(facet) or [(a, None) for a, n in axes for _ in range(n)]
+    chosen, seen_ids, used = [], set(), {}
+    for axis, want in slots:
+        used.setdefault(axis, set())
+        pick = None
         for it in its:
-            if len(covered[axis]) >= want:
-                break
             if it["id"] in seen_ids:
                 continue
             if axis == "pure":
                 if (it.get("purity") or {}).get(facet) != 0:
                     continue
-                key = it["id"]
-                why = "nothing else in the frame"
-            else:
-                key = it.get(axis)
-                if not key or key in covered[axis]:
+                pick, key, why = it, it["id"], "nothing else in the frame"
+                break
+            v = it.get(axis)
+            if not v:
+                continue
+            if want is not None:
+                if v != want:
                     continue
-                why = "%s: %s" % (axis, key)
-            covered[axis].add(key)
-            seen_ids.add(it["id"])
-            chosen.append({"id": it["id"], "url": it["url"], "kind": it["kind"],
-                           "axis": axis, "why": why})
+            elif v in used[axis]:
+                continue
+            pick, key, why = it, v, "%s: %s" % (axis, v)
+            break
+        if pick is None:
+            chosen.append({"id": None, "url": None, "kind": None, "axis": axis,
+                           "why": ("%s: %s" % (axis, want)) if want else axis,
+                           "empty": True})
+            continue
+        used[axis].add(key)
+        seen_ids.add(pick["id"])
+        chosen.append({"id": pick["id"], "url": pick["url"], "kind": pick["kind"],
+                       "axis": axis, "why": why, "empty": False})
     extra = [x for x in its if x["id"] not in seen_ids]
+    filled = [c for c in chosen if not c.get("empty")]
+    per = {}
+    for c in chosen:
+        per.setdefault(c["axis"], [0, 0])
+        per[c["axis"]][1] += 1
+        if not c.get("empty"):
+            per[c["axis"]][0] += 1
     return {"facet": facet, "value": value,
-            "set": chosen, "extra_count": len(extra),
+            "set": chosen, "slots": len(chosen), "filled": len(filled),
+            "empty_slots": [c["why"] for c in chosen if c.get("empty")],
+            "extra_count": len(extra),
             "extra_ids": [x["id"] for x in extra],
-            "axes": [{"axis": a, "want": n, "got": len(covered[a])} for a, n in axes],
-            "complete": all(len(covered[a]) >= n for a, n in axes)}
+            "axes": [{"axis": a, "want": v[1], "got": v[0]} for a, v in per.items()],
+            "complete": len(filled) == len(chosen)}
 
 
 # WHY A LIST AND NOT A TEXT BOX. A typed reason is a note; a chosen reason is DATA. Once
@@ -277,7 +322,7 @@ def reject_report():
     return {"total": len(rows), "reasons": out}
 
 
-def reject(rel, reason="", note=""):
+def reject(rel, reason=""):
     """Move a frame out of the library. MOVED, never deleted.
 
     A picture you reject is evidence: "the train carriage place puts a painting across half
@@ -310,8 +355,6 @@ def reject(rel, reason="", note=""):
             try:
                 r = json.load(open(p, encoding="utf-8"))
                 r["rejected_reason"] = reason
-                if note:
-                    r["rejected_note"] = note
                 r["rejected_at"] = time.strftime("%Y-%m-%dT%H:%M:%S")
                 r["rejected_from"] = rel
                 json.dump(r, open(dst, "w", encoding="utf-8"), indent=1, ensure_ascii=False)

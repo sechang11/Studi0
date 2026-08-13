@@ -159,6 +159,9 @@
   <input id="q" placeholder="search prompts, styles, characters…">
   <label class="sub" style="display:flex;gap:5px;align-items:center">per page
     <select id="per"></select></label>
+  <button id="back" style="display:none;background:var(--panel2);border:1px solid var(--line);
+    color:var(--ink);border-radius:6px;padding:3px 10px;font:inherit;font-size:12px;
+    cursor:pointer" title="back to the last view">&larr; back</button>
   <span class="right"><a href="/">home</a><a href="/gallery">gallery</a><a href="/make3d">make 3d</a></span>
 </header>
 <main>
@@ -180,6 +183,38 @@ const esc = s => String(s==null?"":s).replace(/[&<>"]/g,
 
 let D=null, sel={}, shown=0, view=[], PAGE=100, q="";
 let MODE="frames", BROWSE=null, FAVS=new Set(), ROT={}, SETWHY=new Map();
+let HIST = [];
+// Where a new card of each kind gets authored. Characters have a real page; the rest do
+// not yet, so they point at /generate rather than at a route that does not exist.
+const NEWPAGE = {characters:"/newchar", places:"/generate", styles:"/generate",
+                 looks:"/generate", emotions:"/generate", motions:"/generate",
+                 cameras:"/generate"};
+
+function snapshot(){
+  return {MODE, sel: Object.fromEntries(Object.entries(sel).map(([k,v])=>[k,[...(v||[])]])), q};
+}
+function pushHist(){
+  const s = snapshot();
+  const last = HIST[HIST.length-1];
+  if (last && JSON.stringify(last) === JSON.stringify(s)) return;
+  HIST.push(s);
+  if (HIST.length > 40) HIST.shift();
+  drawBack();
+}
+function drawBack(){
+  const b = document.getElementById("back");
+  if (b) b.style.display = HIST.length > 1 ? "inline-block" : "none";
+}
+function goBack(){
+  if (HIST.length < 2) return;
+  HIST.pop();                       // the view we are in
+  const s = HIST[HIST.length-1];    // the one before it
+  sel = Object.fromEntries(Object.entries(s.sel).map(([k,v])=>[k,new Set(v)]));
+  q = s.q; document.getElementById("q").value = q;
+  MODE = s.MODE;
+  drawBack();
+  setMode(MODE, true);
+}
 // The card kinds that can be browsed one-per-card. Ordered by how often you reach for them.
 const KINDS=[["place","places"],["character","characters"],["style","styles"],
              ["look","looks"],["emotion","emotions"],["motion","motions"],["camera","cameras"]];
@@ -255,6 +290,7 @@ function drawFacets(){
       apply();
     };
     b.onclick = () => {
+      pushHist();
       const only = sel[f] && sel[f].size===1 && sel[f].has(v);
       sel = {};
       if (!only) sel[f] = new Set([v]);
@@ -391,8 +427,9 @@ function drawApplied(){
   };
 }
 
-function setMode(k){
+function setMode(k, replaying){
   MODE=k;
+  if (!replaying) pushHist();
   const frames = (k==="frames"||k==="starred");
   document.getElementById("cardgrid").style.display = frames?"none":"grid";
   document.getElementById("grid").style.display = frames?"grid":"none";
@@ -419,7 +456,15 @@ function drawCards(){
   const b=BROWSE;
   document.getElementById("stat").textContent =
     `${b.total} ${b.kind}` + (b.empty?` · ${b.empty} with no frame yet`:"");
-  document.getElementById("cardgrid").innerHTML = b.cards.map(c=>{
+  // An empty first card that goes to wherever a NEW card of this kind is authored. The
+  // browse view is where you notice the library is missing something, so the way to add
+  // one belongs here rather than on another page.
+  const addCard = `<div class="cd"><a class="big" href="${esc(NEWPAGE[b.kind]||"/generate")}"
+      style="display:flex;align-items:center;justify-content:center;text-decoration:none">
+      <span style="font-size:38px;color:var(--accent);line-height:1">+</span></a>
+    <div class="b"><h3>New ${esc(b.kind.replace(/s$/,""))}</h3>
+      <p>Author a card, then grow it here.</p></div></div>`;
+  document.getElementById("cardgrid").innerHTML = addCard + b.cards.map(c=>{
     const i = ROT[c.id]||0;
     const pics = [c.cover].concat(c.alts||[]).filter(Boolean);
     const src = pics.length ? pics[i % pics.length] : null;
@@ -648,6 +693,10 @@ document.getElementById("q").oninput=e=>{
 fetch("/api/library").then(r=>r.json()).then(d=>{
   if (d.error){ document.getElementById("stat").textContent=d.error; return; }
   D=d;
+  document.getElementById("back").onclick = goBack;
+  // Seed the stack with the view you land on. Without it the first navigation has nothing
+  // behind it and "all frames" becomes unreachable by back.
+  pushHist();
   fetch("/api/library/reasons").then(r=>r.json()).then(x=>{ REASONS = x.reasons||[]; });
   fetch("/api/library/favourites").then(r=>r.json()).then(f=>{
     FAVS=new Set(f.ids||[]); drawModes(); apply();
