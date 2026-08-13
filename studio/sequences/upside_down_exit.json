@@ -19,7 +19,8 @@
    "framing": "insert / extreme close-up",
    "subject": "a hand plants flat on the floor",
    "camera": "locked, low",
-   "note": "Start on a detail, not the person. The audience is oriented by an object, so the next shot can be disorienting without losing them."
+   "note": "Start on a detail, not the person. The audience is oriented by an object, so the next shot can be disorienting without losing them.",
+   "subject_mode": "insert"
   },
   {
    "n": 2,
@@ -31,7 +32,8 @@
    "framing": "extreme close-up, inverted",
    "subject": "the face upside down, holding still",
    "camera": "locked",
-   "note": "MOTION 4.9 - this is a near-still with a whisper of drift. The most striking image in the sequence is the cheapest thing to generate. Buy your best frame here."
+   "note": "MOTION 4.9 - this is a near-still with a whisper of drift. The most striking image in the sequence is the cheapest thing to generate. Buy your best frame here.",
+   "subject_mode": "face"
   },
   {
    "n": 3,
@@ -43,7 +45,8 @@
    "framing": "wide, low angle",
    "subject": "the body inverted into a handstand",
    "camera": "locked, floor level",
-   "note": "MOTION 2.6, the quietest beat. The calm before the burst; it makes the next two read as fast."
+   "note": "MOTION 2.6, the quietest beat. The calm before the burst; it makes the next two read as fast.",
+   "subject_mode": "figure"
   },
   {
    "n": 4,
@@ -55,7 +58,8 @@
    "framing": "wide",
    "subject": "the figure travels away down the corridor",
    "camera": "locked, deep perspective",
-   "note": "MOTION 12.8 - triple the previous beat. The cut INTO this is hidden by the jump in movement. Nobody checks continuity across a spike."
+   "note": "MOTION 12.8 - triple the previous beat. The cut INTO this is hidden by the jump in movement. Nobody checks continuity across a spike.",
+   "subject_mode": "figure"
   },
   {
    "n": 5,
@@ -67,7 +71,8 @@
    "framing": "wide to medium",
    "subject": "the figure comes back at the lens",
    "camera": "locked, subject approaches",
-   "note": "MOTION 14.7 and the shortest beat at 0.77s. Peak movement, minimum time on screen: the eye cannot audit it."
+   "note": "MOTION 14.7 and the shortest beat at 0.77s. Peak movement, minimum time on screen: the eye cannot audit it.",
+   "subject_mode": "figure"
   },
   {
    "n": 6,
@@ -79,7 +84,8 @@
    "framing": "medium",
    "subject": "the subject arrives, gesture toward camera",
    "camera": "whip / handheld settle",
-   "note": "MOTION 9.9, luma easing back. The landing. Let it breathe or the sequence reads as noise."
+   "note": "MOTION 9.9, luma easing back. The landing. Let it breathe or the sequence reads as noise.",
+   "subject_mode": "face"
   }
  ],
  "measured_with": {
@@ -94,5 +100,6 @@
  "reference_sheet": "studio/samples/_refs/upside_down_exit/_sheet.jpg",
  "craft": "THE ILLUSION IS THE EDIT, NOT THE MODEL. Six clips, none longer than 1.5 seconds, read as one impossible continuous action. Measured shape: three quiet beats (motion 2.6-4.9), then two fast ones (12.8, 14.7), then a settle. Luma climbs 101 -> 121 across the run, so the sequence moves toward light.\nTwo rules fall out of that and both are free:\n  1. CUT ON THE MOTION SPIKE. A cut placed where movement jumps is invisible; the same cut in a calm beat is obvious.\n  2. SPEND THE TIME ON THE STILL. The hero shot here barely moves. Generate a great frame, animate it for a second, and stop.",
  "cast_it_with": "Any single character who can be shot in close-up, then at a distance, then approaching. No dialogue, no second subject.",
- "verdict": "Structure measured and annotated from the contact sheet. NOT yet rendered with our own cast - unproven as a template until it is."
+ "verdict": "Structure measured and annotated from the contact sheet. NOT yet rendered with our own cast - unproven as a template until it is.",
+ "subject_mode_note": "insert = no character in the prompt at all; figure = body and action without the face description; face = the full character prose. The first render of this card ignored every framing and action because the character's face prose is a paragraph of nouns and the framing was one token - the model renders nouns, so it drew a face six times."
 }
