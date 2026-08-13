@@ -102,6 +102,90 @@ def purity(item, facet):
     return n
 
 
+# The card libraries a facet browses into. A facet is a recipe field; a KIND is the folder
+# of cards that field names. Browsing by kind answers "what looks do I own", which the item
+# grid cannot: the grid shows generations, and one look with 300 frames drowns one with 3.
+KINDS = {"look": "looks", "place": "places", "style": "styles", "emotion": "emotions",
+         "character": "characters", "motion": "motions", "camera": "cameras"}
+FAVS = os.path.join(STUDIO, "favourites.json")
+
+
+def favourites():
+    try:
+        return set(json.load(open(FAVS, encoding="utf-8")).get("ids") or [])
+    except Exception:
+        return set()
+
+
+def star(item_id, on=True):
+    """Starring is a plain id list on disk. No database, and no per-user anything - one
+    person uses this box. Written whole each time because the file is a few kilobytes and a
+    partial write of a favourites list is a worse problem than rewriting it."""
+    ids = favourites()
+    if on:
+        ids.add(item_id)
+    else:
+        ids.discard(item_id)
+    with open(FAVS, "w", encoding="utf-8") as f:
+        json.dump({"ids": sorted(ids)}, f, indent=1)
+    return {"id": item_id, "starred": on, "total": len(ids)}
+
+
+def browse(kind):
+    """One representative frame per CARD of this kind, plus the alternates.
+
+    Every card is returned, INCLUDING ones with no frame at all. A browse view that hides
+    the cards it has no picture for would quietly under-report the library and hide exactly
+    the gap worth filling.
+
+    The representative is the purest frame - the one where this card is most alone - then
+    the newest among equals. `alts` carries the next few so the page can rotate through
+    them rather than pretending one seed is the whole card.
+    """
+    facet = next((f for f, d in KINDS.items() if d == kind or f == kind), None)
+    if not facet:
+        return None
+    folder = KINDS[facet]
+    d = payload()
+    by = {}
+    for it in d["items"]:
+        v = it.get(facet)
+        if v in (None, ""):
+            continue
+        by.setdefault(str(v), []).append(it)
+
+    out = []
+    for p in sorted(glob.glob(os.path.join(STUDIO, folder, "*.json"))):
+        base = os.path.basename(p)
+        if base.startswith("_"):
+            continue
+        try:
+            card = json.load(open(p, encoding="utf-8"))
+        except Exception:
+            continue
+        cid = card.get("id") or base[:-5]
+        frames = sorted(by.get(cid, []),
+                        key=lambda x: ((x.get("purity") or {}).get(facet, 9), -x["mtime"]))
+        out.append({
+            "id": cid,
+            "name": card.get("name") or cid.replace("_", " "),
+            "desc": (card.get("desc") or card.get("means") or card.get("prose") or "")[:180],
+            "status": card.get("status") or "",
+            "frames": len(frames),
+            "purest": ((frames[0].get("purity") or {}).get(facet) if frames else None),
+            "cover": frames[0]["url"] if frames else None,
+            "cover_id": frames[0]["id"] if frames else None,
+            "alts": [f["url"] for f in frames[1:6]],
+            "alt_ids": [f["id"] for f in frames[1:6]],
+        })
+    # Cards with nothing to show sort last, but they are still on the page - that is the
+    # coverage gap, and it is the thing worth acting on.
+    out.sort(key=lambda c: (c["cover"] is None, c["purest"] if c["purest"] is not None else 9,
+                            -c["frames"]))
+    return {"kind": folder, "facet": facet, "cards": out,
+            "total": len(out), "empty": sum(1 for c in out if not c["cover"])}
+
+
 def _made_at(recipe, fallback):
     """Creation time from the recipe, falling back to the file's mtime."""
     v = recipe.get("rolled_at") or recipe.get("created")

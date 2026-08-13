@@ -1596,6 +1596,10 @@ class H(http.server.SimpleHTTPRequestHandler):
                 return self._library("recipe", _id)
             if path == "/api/library/workflow":
                 return self._library("workflow", _id, download=bool(_q.get("download")))
+            if path == "/api/library/browse":
+                return self._library("browse", _q.get("kind", [""])[0])
+            if path == "/api/library/favourites":
+                return self._library("favourites", "")
         if path in ("/make3d", "/make3d.html"):
             return self._page("make3d.html")
         if path == "/api/make3d":
@@ -1703,6 +1707,13 @@ class H(http.server.SimpleHTTPRequestHandler):
         try:
             if what == "index":
                 return self._send(m.payload())
+            if what == "favourites":
+                return self._send({"ids": sorted(m.favourites())})
+            if what == "browse":
+                got = m.browse(ident)
+                if not got:
+                    return self._send({"error": "no such card kind: %s" % ident}, 404)
+                return self._send(got)
             if not ident:
                 return self._send({"error": "no id"}, 400)
             got = m.recipe(ident) if what == "recipe" else m.workflow(ident)
@@ -2096,13 +2107,25 @@ class H(http.server.SimpleHTTPRequestHandler):
                      "/api/voice/demo", "/api/voice/add",
                      "/api/character/suite", "/api/character/analyse",
                      "/api/tool/run", "/api/tool/random",
-                     "/api/make3d/mesh"):
+                     "/api/make3d/mesh", "/api/library/star"):
             return self._send({"error": "not found"}, 404)
         n = int(self.headers.get("Content-Length", 0))
         try:
             data = json.loads(self.rfile.read(n) or b"{}")
         except Exception as e:
             return self._send({"error": f"bad json: {e}"}, 400)
+        if p == "/api/library/star":
+            m = _load_tool_module("library_index")
+            if m is None:
+                return self._send({"error": "library_index.py is unavailable"}, 500)
+            ident = str(data.get("id") or "")
+            if not ident:
+                return self._send({"error": "no id"}, 400)
+            try:
+                return self._send(m.star(ident, bool(data.get("on", True))))
+            except Exception as e:                                  # noqa: BLE001
+                traceback.print_exc()
+                return self._send({"error": str(e)[:200]}, 500)
         if p == "/api/make3d/mesh":
             m = self._make3d()
             if m is None:
