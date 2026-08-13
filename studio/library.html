@@ -138,6 +138,19 @@
   pre.wf{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:10px;
      font-size:11px;max-height:340px;overflow:auto;white-space:pre;margin:0}
   .note{color:var(--dim);font-size:11.5px;margin:6px 0}
+  .reasonbox{position:absolute;z-index:60;width:320px;background:var(--panel);
+    border:1px solid var(--accent);border-radius:10px;padding:11px 12px;
+    box-shadow:0 10px 30px rgba(0,0,0,.45)}
+  .reasonbox h4{margin:0 0 7px;font-size:11px;letter-spacing:.07em;text-transform:uppercase;
+    color:var(--dim)}
+  .reasonbox button{display:block;width:100%;text-align:left;background:var(--panel2);
+    border:1px solid var(--line);color:var(--ink);border-radius:6px;padding:5px 8px;
+    font:inherit;font-size:12.5px;cursor:pointer;margin-bottom:4px}
+  .reasonbox button:hover{border-color:var(--accent)}
+  .reasonbox input{width:100%;background:var(--bg);border:1px solid var(--line);
+    color:var(--ink);border-radius:6px;padding:5px 8px;font:inherit;font-size:12px;margin-top:4px}
+  .reasonbox .rowend{text-align:right;margin-top:6px}
+  .reasonbox .cancel{display:inline-block;width:auto;background:none;color:var(--dim)}
 </style>
 </head>
 <body>
@@ -479,6 +492,37 @@ per.onchange = () => {
   shown = 0; document.getElementById("grid").innerHTML = ""; more();
 };
 
+let REASONS = [];
+
+function askReason(id, near){
+  // A LIST, NOT A TEXT BOX. A typed reason is a note; a chosen reason is data that can be
+  // counted and crossed against the recipe. The free-text line stays for the detail that
+  // does not fit a slug.
+  document.querySelectorAll(".reasonbox").forEach(x=>x.remove());
+  const box = document.createElement("div");
+  box.className = "reasonbox";
+  box.innerHTML = `<h4>Why does this not belong?</h4>` +
+    REASONS.map(r=>`<button data-slug="${esc(r.slug)}" title="${esc(r.why)}">${esc(r.label)}</button>`).join("") +
+    `<input id="rnote" placeholder="anything else worth knowing (optional)">
+     <div class="rowend"><button class="cancel">cancel</button></div>`;
+  document.body.appendChild(box);
+  const r = near.getBoundingClientRect();
+  box.style.left = Math.min(window.innerWidth-330, r.left+window.scrollX) + "px";
+  box.style.top = (r.bottom + window.scrollY + 6) + "px";
+  box.querySelector(".cancel").onclick = () => box.remove();
+  box.querySelectorAll("[data-slug]").forEach(btn => btn.onclick = () => {
+    const note = box.querySelector("#rnote").value.trim();
+    box.remove();
+    fetch("/api/library/reject",{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({id, reason: btn.dataset.slug, note})}).then(x=>x.json()).then(j=>{
+        if (j.error){ alert(j.error); return; }
+        D.items = D.items.filter(x => x.id !== id);
+        D.total = D.items.length;
+        apply();
+      });
+  });
+}
+
 function bind(){
   document.querySelectorAll(".cell").forEach(c=>c.onclick=e=>{
     if (e.target.closest("[data-star]") || e.target.closest("[data-reject]")) return;
@@ -490,15 +534,7 @@ function bind(){
     // Asked for, because rejecting is a judgement and the judgement is the useful part.
     // "a painting covers half the train" tells the next person something; a deleted file
     // tells them nothing.
-    const why = prompt("Why does this not belong? (kept with the frame)", "");
-    if (why === null) return;
-    fetch("/api/library/reject",{method:"POST",headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({id, reason: why})}).then(r=>r.json()).then(j=>{
-        if (j.error){ alert(j.error); return; }
-        D.items = D.items.filter(x => x.id !== id);
-        D.total = D.items.length;
-        apply();
-      });
+    askReason(id, b);
   });
   document.querySelectorAll("[data-star]").forEach(b=>b.onclick=e=>{
     e.stopPropagation();
@@ -594,6 +630,7 @@ document.getElementById("q").oninput=e=>{
 fetch("/api/library").then(r=>r.json()).then(d=>{
   if (d.error){ document.getElementById("stat").textContent=d.error; return; }
   D=d;
+  fetch("/api/library/reasons").then(r=>r.json()).then(x=>{ REASONS = x.reasons||[]; });
   fetch("/api/library/favourites").then(r=>r.json()).then(f=>{
     FAVS=new Set(f.ids||[]); drawModes(); apply();
   }).catch(()=>{ drawModes(); apply(); });

@@ -196,7 +196,88 @@ def packset(facet, value):
             "complete": all(len(covered[a]) >= n for a, n in axes)}
 
 
-def reject(rel, reason=""):
+# WHY A LIST AND NOT A TEXT BOX. A typed reason is a note; a chosen reason is DATA. Once
+# every rejection carries the same handful of slugs they can be counted and crossed against
+# the recipe - "subject_missing happens at wide shot four times as often as at close-up" is
+# a fact the library can find on its own, and free text never will be.
+#
+# Each one names a FIX, not a feeling. "ugly" is deliberately last and deliberately vague,
+# because a bucket for "I just don't want it" stops people forcing a real reason onto a
+# frame that simply is not good.
+REASONS = [
+    ("subject_missing", "Character tagged but not in frame",
+     "the recipe names a character and nobody is there - usually the framing or the place "
+     "opened up too wide for a person to survive"),
+    ("wrong_subject", "Wrong person, or two of them",
+     "a different face than the card, or the duplicate-subject leak"),
+    ("place_not_recognisable", "Place did not render",
+     "the place card's nouns did not arrive - it could be anywhere"),
+    ("style_not_landed", "Style did not land",
+     "looks like the no-style control, or like a different style entirely"),
+    ("framing_wrong", "Framing is not what was asked",
+     "asked for a wide and got a close-up, or the reverse"),
+    ("occluded", "Subject blocked by something",
+     "an object across the frame - the painting over the train carriage"),
+    ("text_garbled", "Lettering is gibberish",
+     "for the typography cards: the quoted string did not come out"),
+    ("anatomy", "Hands, face or body broken", "the usual failure"),
+    ("emotion_not_read", "Expression is not the emotion",
+     "the face is doing something else, or nothing"),
+    ("motion_wrong", "Clip does not do what the motion says",
+     "for video: the movement is not the shape the card claims"),
+    ("ugly", "Just not good enough",
+     "nothing structurally wrong, it is simply not worth keeping"),
+]
+
+
+def reject_report():
+    """What gets rejected, and what it correlates with.
+
+    This is the point of the slugs. For each reason it reports the recipe fields that show
+    up disproportionately - so a pattern like "subject_missing is mostly wide shots in
+    open places" surfaces without anyone going looking for it.
+    """
+    import collections
+    rows = []
+    for f in glob.glob(os.path.join(REJECTED, "**", "*.json"), recursive=True):
+        try:
+            rows.append(json.load(open(f, encoding="utf-8")))
+        except Exception:
+            pass
+    if not rows:
+        return {"total": 0, "reasons": [], "note": "nothing rejected yet"}
+
+    base = collections.Counter()
+    for it in payload()["items"]:
+        for k in ("framing", "place", "style", "character", "engine"):
+            if it.get(k):
+                base["%s=%s" % (k, it[k])] += 1
+    n_lib = max(1, payload()["total"])
+
+    out = []
+    by_reason = collections.defaultdict(list)
+    for r in rows:
+        by_reason[r.get("rejected_reason") or "unspecified"].append(r)
+    for slug, rs in sorted(by_reason.items(), key=lambda kv: -len(kv[1])):
+        c = collections.Counter()
+        for r in rs:
+            for k in ("framing", "place", "style", "character", "engine"):
+                if r.get(k):
+                    c["%s=%s" % (k, r[k])] += 1
+        # Lift: how much more common a field is among these rejections than in the library.
+        lift = []
+        for key, cnt in c.most_common(20):
+            share = cnt / len(rs)
+            libshare = base.get(key, 0) / n_lib
+            if libshare > 0 and share > libshare * 1.8 and cnt >= 2:
+                lift.append({"field": key, "in_rejects": round(share * 100),
+                             "in_library": round(libshare * 100, 1),
+                             "times": round(share / libshare, 1)})
+        out.append({"reason": slug, "count": len(rs), "over_represented": lift[:6]})
+    return {"total": len(rows), "reasons": out}
+
+
+def reject(rel, reason="", note=""):
     """Move a frame out of the library. MOVED, never deleted.
 
     A picture you reject is evidence: "the train carriage place puts a painting across half
@@ -229,6 +310,8 @@ def reject(rel, reason=""):
             try:
                 r = json.load(open(p, encoding="utf-8"))
                 r["rejected_reason"] = reason
+                if note:
+                    r["rejected_note"] = note
                 r["rejected_at"] = time.strftime("%Y-%m-%dT%H:%M:%S")
                 r["rejected_from"] = rel
                 json.dump(r, open(dst, "w", encoding="utf-8"), indent=1, ensure_ascii=False)

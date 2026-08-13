@@ -1606,6 +1606,17 @@ class H(http.server.SimpleHTTPRequestHandler):
                 return self._send(got)
             if path == "/api/library/browse":
                 return self._library("browse", _q.get("kind", [""])[0])
+            if path == "/api/library/reasons":
+                m = _load_tool_module("library_index")
+                if m is None:
+                    return self._send({"error": "library_index.py is unavailable"}, 500)
+                return self._send({"reasons": [{"slug": s, "label": l, "why": w}
+                                               for s, l, w in m.REASONS]})
+            if path == "/api/library/rejects":
+                m = _load_tool_module("library_index")
+                if m is None:
+                    return self._send({"error": "library_index.py is unavailable"}, 500)
+                return self._send(m.reject_report())
             if path == "/api/library/favourites":
                 return self._library("favourites", "")
         if path in ("/make3d", "/make3d.html"):
@@ -2158,7 +2169,8 @@ class H(http.server.SimpleHTTPRequestHandler):
             if not ident:
                 return self._send({"error": "no id"}, 400)
             try:
-                got = m.reject(ident, str(data.get("reason") or "")[:300])
+                got = m.reject(ident, str(data.get("reason") or "")[:60],
+                               str(data.get("note") or "")[:300])
             except Exception as e:                                  # noqa: BLE001
                 traceback.print_exc()
                 return self._send({"error": str(e)[:200]}, 500)
