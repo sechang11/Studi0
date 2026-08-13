@@ -187,10 +187,10 @@ def main():
             for i in range(a.per):
                 rng = random.Random(a.seed + hash(c["id"]) % 9999 + i)
                 job = roll.roll_image(rng, libs, {
-                    "place": c["id"], "no_characters": True,
+                    "place": c["id"], "no_characters": True, "no_look": True,
                     "style": rng.choice(neutral)})
                 job["seed"] = a.seed + i * 7919
-                job["id"] = "plate_%s_%d" % (slug(c["id"]), i)
+                job["id"] = "clean_%s_%d" % (slug(c["id"]), i)
                 if not go("places", job["id"], job):
                     break
             if out_of_time():
@@ -252,12 +252,27 @@ def main():
 
     # ---- styles: one ordinary subject, so what differs between plates is the style ---
     if a.what in ("all", "styles") and not out_of_time():
-        for c in p["styles"]:
-            if c.get("self_contained"):
-                continue          # already its own whole picture; a plate would duplicate it
+        # ASK ROLL WHICH STYLES IT WILL ACTUALLY DRAW. Its drawable set excludes anything
+        # not ready and anything whose compose mode is injects or inert - and handing it an
+        # excluded card makes _narrow refuse, by design. Passing every card on disk killed
+        # the whole styles phase on its first card, american_comic, after places,
+        # characters and emotions had already completed. 105 frames lost to one bad id.
+        drawable = set(roll.drawable_styles(libs))
+        want = [c for c in p["styles"]
+                if c["id"] in drawable and not c.get("self_contained")]
+        print("  styles: %d of %d cards are drawable and not self-contained"
+              % (len(want), len(p["styles"])))
+        for c in want:
             rng = random.Random(a.seed + hash(c["id"]) % 9999)
-            job = roll.roll_image(rng, libs, {
-                "style": c["id"], "no_characters": True, "place": "market_street"})
+            try:
+                job = roll.roll_image(rng, libs, {
+                    "style": c["id"], "no_characters": True, "no_look": True,
+                    "place": "market_street"})
+            except SystemExit as e:
+                # One card that cannot be composed must not end the phase. The run has
+                # already spent two hours by the time it reaches here.
+                print("  styles      %-34s SKIPPED (%s)" % (c["id"][:34], str(e)[:60]))
+                continue
             job["seed"] = a.seed
             job["id"] = "style_%s" % slug(c["id"])
             if not go("styles", job["id"], job):

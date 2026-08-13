@@ -195,7 +195,10 @@ def roll_image(rng, libs, opt=None):
     style = rng.choice(_narrow(styles, opt.get("style"), libs, "style"))
     place = rng.choice(_narrow(drawable(libs, "places"), opt.get("place"), libs, "place"))
     looks = [l for l in drawable(libs, "looks") if l not in BANNED_LOOKS]
-    look = rng.choice(looks) if rng.random() < 0.75 else None
+    # opt["no_look"] suppresses the grade entirely. A clean plate wants the place, not the
+    # place seen through noir - and a caller asking for one has no other way to say so.
+    look = (None if opt.get("no_look")
+            else (rng.choice(looks) if rng.random() < 0.75 else None))
 
     # Decide the SUBJECT before anything else, because the style may not leave a choice.
     cast = sorted(c for c, k in libs.get("characters", {}).items()
