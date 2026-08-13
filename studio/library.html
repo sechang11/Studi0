@@ -313,7 +313,20 @@ function drawSet(f){
       // NO SEPARATE STRIP. A row of 132px thumbnails is a worse view of a picture than the
       // grid already gives, so the set is marked IN the grid at full size - a border, and
       // the reason it is in the set written under the card. Same pictures, one place to look.
+      const before = new Set(SETWHY.keys());
       SETWHY = new Map(s.set.map(x => [x.id, x.why]));
+      // A rejected set member gets REPLACED: the cover is recomputed and the next best
+      // frame for that axis is promoted. That is the "where did this come from" - it is
+      // not random, it is the set healing itself, and now it says so.
+      if (before.size){
+        const promoted = s.set.filter(x => !before.has(x.id));
+        if (promoted.length){
+          const p = document.querySelector(".focus p");
+          if (p) p.insertAdjacentHTML("beforeend",
+            `<br><b style="color:var(--warn)">Promoted into the set: ` +
+            promoted.map(x=>esc(x.why)).join(", ") + `</b>`);
+        }
+      }
       const rank = new Map(s.set.map((x,i)=>[x.id,i]));
       view.sort((a,b)=>(rank.has(a.id)?rank.get(a.id):9999)-(rank.has(b.id)?rank.get(b.id):9999));
       shown=0; document.getElementById("grid").innerHTML=""; more();
@@ -449,8 +462,11 @@ function drawCards(){
   });
 }
 
-function apply(){
-  SETWHY = new Map();           // stale marks belong to the previous selection
+function apply(keepSet){
+  // The set marks survive a reject. Clearing them on every apply made the borders vanish
+  // and come back a moment later, which looked like the grid reshuffling itself for no
+  // reason. Only a change of selection makes the old set stale.
+  if (!keepSet) SETWHY = new Map();
   view = D.items.filter(matches);
   if (MODE==="starred") view = view.filter(x => FAVS.has(x.id));
   const f = soleFacet();
@@ -518,7 +534,9 @@ function askReason(id, near){
         if (j.error){ alert(j.error); return; }
         D.items = D.items.filter(x => x.id !== id);
         D.total = D.items.length;
-        apply();
+        // The grid also refills to a full page from the frames beyond it, which is the
+        // other reason a picture appears that was not there before.
+        apply(true);
       });
   });
 }
