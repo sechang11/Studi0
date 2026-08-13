@@ -969,6 +969,18 @@ def nav_model3d(html):
     return html
 
 
+def nav_library(html):
+    """A `library` link in the header nav, the same way as nav_model3d."""
+    if 'href="/library"' in html:
+        return html
+    for a in ('<a href="/gallery"', '<a href="/make3d"', '<a href="/">'):
+        i = html.find(a)
+        if i < 0:
+            continue
+        return html[:i] + '<a href="/library">library</a>' + html[i:]
+    return html
+
+
 def nav_make3d(html):
     """A `make 3d` link in the header nav, the same way as nav_model3d."""
     if 'href="/make3d"' in html:
@@ -1122,7 +1134,7 @@ class H(http.server.SimpleHTTPRequestHandler):
             return self._send(f"{name} is missing".encode(), 500, "text/plain")
         with open(p, encoding="utf-8") as f:
             html = f.read()
-        html = nav_make3d(nav_model3d(nav_dossier(nav_video(html))))
+        html = nav_library(nav_make3d(nav_model3d(nav_dossier(nav_video(html)))))
         # Every page gets the link except the capabilities page itself, which
         # writes its own nav and omits itself the way styles.html omits /styles.
         if name != "capabilities.html":
@@ -1571,6 +1583,19 @@ class H(http.server.SimpleHTTPRequestHandler):
         # them through _send_file, which honours Range - so a 133 MB STL streams in
         # 256 KB chunks instead of being read into memory. No new file route is needed
         # and none is added.
+        if path in ("/library", "/library.html"):
+            return self._page("library.html")
+        if path == "/api/library":
+            return self._library("index", "")
+        if path.startswith("/api/library/"):
+            # Parsed here rather than relying on an outer `qs`: this handler reads only
+            # `path`, and the query string is not in scope at this point in do_GET.
+            _q = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query)
+            _id = _q.get("id", [""])[0]
+            if path == "/api/library/recipe":
+                return self._library("recipe", _id)
+            if path == "/api/library/workflow":
+                return self._library("workflow", _id, download=bool(_q.get("download")))
         if path in ("/make3d", "/make3d.html"):
             return self._page("make3d.html")
         if path == "/api/make3d":
@@ -1660,6 +1685,43 @@ class H(http.server.SimpleHTTPRequestHandler):
         if payload.get("error"):
             return self._send(payload, 404)
         return self._send(payload)
+
+    def _library(self, what, ident, download=False):
+        """/library - every generation on disk, its recipe, and the graph that made it.
+
+        Loaded on mtime like the other _tools importers, never importlib.reload() per
+        request: that is what made story progress polls answer "no such job" by wiping the
+        module's state each time.
+
+        `ident` arrives from a query string and is untrusted. library_index resolves it and
+        refuses anything outside studio/samples/ before opening a file.
+        """
+        m = _load_tool_module("library_index")
+        if m is None:
+            return self._send({"error": "studio/_tools/library_index.py is unavailable"},
+                              500)
+        try:
+            if what == "index":
+                return self._send(m.payload())
+            if not ident:
+                return self._send({"error": "no id"}, 400)
+            got = m.recipe(ident) if what == "recipe" else m.workflow(ident)
+            if not got:
+                return self._send({"error": "no such item, or it has no recipe"}, 404)
+            if what == "workflow" and download and got.get("graph"):
+                body = json.dumps(got["graph"], indent=1).encode()
+                self.send_response(200)
+                self.send_header("Content-Type", "application/json")
+                self.send_header("Content-Disposition",
+                                 'attachment; filename="workflow.json"')
+                self.send_header("Content-Length", str(len(body)))
+                self.end_headers()
+                return self.wfile.write(body)
+            return self._send(got)
+        except Exception as e:                                      # noqa: BLE001
+            traceback.print_exc()
+            return self._send({"error": "the library failed to assemble",
+                               "detail": "%s: %s" % (type(e).__name__, e)}, 500)
 
     def _make3d(self):
         """The /make3d tool module, loaded on mtime like the other _tools importers.

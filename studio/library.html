@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>studio · library</title>
+<style>
+  :root{--bg:#0f1115;--panel:#161a21;--panel2:#1c2129;--line:#272d38;--ink:#e6e9ef;
+        --dim:#8b94a3;--accent:#6ea8fe;--ok:#4ec9a0;--warn:#e0b252;--bad:#e07a5f}
+  @media (prefers-color-scheme:light){
+    :root{--bg:#f6f7f9;--panel:#fff;--panel2:#f0f2f5;--line:#dde1e8;--ink:#141821;--dim:#5d6470}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font:14px/1.55 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  header{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;padding:12px 18px;
+         border-bottom:1px solid var(--line);background:var(--panel);position:sticky;top:0;z-index:30}
+  header h1{margin:0;font-size:15px;letter-spacing:.07em;text-transform:uppercase}
+  header .sub{color:var(--dim);font-size:12px}
+  header .right{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+  header a{color:var(--dim);font-size:12px;text-decoration:none;border:1px solid var(--line);
+           padding:3px 9px;border-radius:6px}
+  header a:hover{color:var(--ink);border-color:var(--accent)}
+  #q{background:var(--bg);border:1px solid var(--line);color:var(--ink);border-radius:7px;
+     padding:6px 10px;font:inherit;font-size:12.5px;min-width:220px}
+  main{display:grid;grid-template-columns:250px minmax(0,1fr);gap:16px;padding:16px;
+       max-width:1800px;margin:0 auto}
+  @media (max-width:860px){main{grid-template-columns:1fr}}
+  aside{position:sticky;top:60px;align-self:start;max-height:calc(100vh - 76px);
+        overflow:auto;background:var(--panel);border:1px solid var(--line);
+        border-radius:10px;padding:10px 12px}
+  .fac{margin-bottom:12px}
+  .fac h3{margin:0 0 5px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+  .fac button{display:flex;justify-content:space-between;width:100%;gap:8px;
+    background:none;border:0;color:var(--ink);font:inherit;font-size:12.5px;
+    padding:2px 5px;border-radius:5px;cursor:pointer;text-align:left}
+  .fac button:hover{background:var(--panel2)}
+  .fac button.on{background:var(--accent);color:#08111f;font-weight:600}
+  .fac button span{color:var(--dim);font-variant-numeric:tabular-nums}
+  .fac button.on span{color:#08111f}
+  .fac .more{color:var(--accent);font-size:11.5px;cursor:pointer;padding:2px 5px}
+  .grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));
+        align-content:start}
+  .cell{background:var(--panel);border:1px solid var(--line);border-radius:9px;
+        overflow:hidden;cursor:pointer;position:relative}
+  .cell:hover{border-color:var(--accent)}
+  .cell img,.cell video{width:100%;display:block;aspect-ratio:1;object-fit:cover;background:var(--panel2)}
+  .cell .cap{padding:6px 8px;font-size:11px;color:var(--dim);white-space:nowrap;
+             overflow:hidden;text-overflow:ellipsis}
+  .cell .kind{position:absolute;top:6px;right:6px;background:#000a;color:#fff;
+              font-size:10px;padding:1px 6px;border-radius:20px;letter-spacing:.05em}
+  .aud{display:flex;align-items:center;justify-content:center;aspect-ratio:1;
+       background:var(--panel2);color:var(--dim);font-size:11px;letter-spacing:.08em}
+  .more-btn{margin:16px auto;display:block;background:var(--panel);border:1px solid var(--line);
+    color:var(--ink);border-radius:8px;padding:9px 20px;font:inherit;cursor:pointer}
+  /* detail */
+  dialog{border:0;padding:0;background:transparent;max-width:min(1500px,96vw);width:100%}
+  dialog::backdrop{background:#000c}
+  .sheet{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(320px,1fr);
+         background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden;
+         max-height:92vh}
+  @media (max-width:900px){.sheet{grid-template-columns:1fr}}
+  .big{background:#000;display:flex;align-items:center;justify-content:center;min-height:340px}
+  .big img,.big video{max-width:100%;max-height:88vh;display:block}
+  .meta{padding:16px 18px;overflow:auto}
+  .meta h2{margin:0 0 3px;font-size:15px;word-break:break-word}
+  .meta .sub{color:var(--dim);font-size:12px;margin-bottom:12px}
+  .row{margin-bottom:10px}
+  .row .k{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+  .row .v{font-size:13px;white-space:pre-wrap;word-break:break-word}
+  .row .v.mono{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px}
+  .chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+  .chip{background:var(--panel2);border:1px solid var(--line);border-radius:20px;
+        padding:2px 10px;font-size:11.5px;cursor:pointer;color:var(--ink)}
+  .chip:hover{border-color:var(--accent)}
+  .acts{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+  .acts button,.acts a{background:var(--accent);color:#08111f;border:0;border-radius:7px;
+    padding:8px 14px;font:inherit;font-weight:600;cursor:pointer;text-decoration:none;font-size:12.5px}
+  .acts .alt{background:var(--panel2);color:var(--ink);border:1px solid var(--line);font-weight:400}
+  .close{position:absolute;top:10px;right:14px;background:#000a;color:#fff;border:0;
+         border-radius:20px;width:30px;height:30px;font-size:17px;cursor:pointer;z-index:5}
+  pre.wf{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:10px;
+     font-size:11px;max-height:340px;overflow:auto;white-space:pre;margin:0}
+  .note{color:var(--dim);font-size:11.5px;margin:6px 0}
+</style>
+</head>
+<body>
+<header>
+  <h1>Library</h1><span class="sub" id="stat">loading…</span>
+  <input id="q" placeholder="search prompts, styles, characters…">
+  <span class="right"><a href="/">home</a><a href="/gallery">gallery</a><a href="/make3d">make 3d</a></span>
+</header>
+<main>
+  <aside id="facets"></aside>
+  <div><div class="grid" id="grid"></div><button class="more-btn" id="more" style="display:none">show more</button></div>
+</main>
+
+<dialog id="dlg"><div class="sheet" style="position:relative">
+  <button class="close" id="x">&times;</button>
+  <div class="big" id="big"></div>
+  <div class="meta" id="meta"></div>
+</div></dialog>
+
+<script>
+const esc = s => String(s==null?"":s).replace(/[&<>"]/g,
+  c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+let D=null, sel={}, shown=0, view=[], PAGE=60, q="";
+const OPEN = {};   // which facets are expanded
+
+function matches(it){
+  for (const [f,vals] of Object.entries(sel)){
+    // `vals` can be undefined: facetCounts temporarily blanks a facet and restores the
+    // previous value, which for an untouched facet IS undefined - and assigning undefined
+    // creates an own property, so Object.entries hands it back. Reading .size on it threw
+    // before a single cell was drawn, and the failure was invisible because the page's own
+    // catch turned it into a status line nobody reads.
+    if (!vals || !vals.size) continue;
+    if (!vals.has(String(it[f]==null?"":it[f]))) return false;
+  }
+  if (q){
+    const hay = (it.prompt||"")+" "+(it.style||"")+" "+(it.character||"")+" "+
+                (it.place||"")+" "+(it.name||"");
+    if (!hay.toLowerCase().includes(q)) return false;
+  }
+  return true;
+}
+
+function facetCounts(){
+  // Counts reflect the CURRENT filter, so a facet value that would return nothing is
+  // visibly zero instead of promising results it cannot deliver.
+  const out={};
+  for (const f of Object.keys(D.facets)) out[f]={};
+  for (const it of D.items){
+    for (const f of Object.keys(D.facets)){
+      const save=sel[f]; sel[f]=new Set();          // ignore this facet's own filter
+      const ok=matches(it);
+      if (save===undefined) delete sel[f]; else sel[f]=save;
+      if (!ok) continue;
+      const v=String(it[f]==null?"":it[f]);
+      if (v) out[f][v]=(out[f][v]||0)+1;
+    }
+  }
+  return out;
+}
+
+function drawFacets(){
+  const live=facetCounts();
+  document.getElementById("facets").innerHTML = Object.keys(D.facets).map(f=>{
+    const all=Object.keys(D.facets[f]);
+    const rows=all.map(v=>[v, live[f][v]||0]).sort((a,b)=>b[1]-a[1]);
+    const lim = OPEN[f] ? rows.length : 8;
+    const on = sel[f]||new Set();
+    return `<div class="fac"><h3>${esc(f)}</h3>` +
+      rows.slice(0,lim).map(([v,n])=>
+        `<button data-f="${esc(f)}" data-v="${esc(v)}" class="${on.has(v)?"on":""}">
+           <span style="color:inherit;overflow:hidden;text-overflow:ellipsis">${esc(v)}</span>
+           <span>${n}</span></button>`).join("") +
+      (rows.length>lim?`<div class="more" data-open="${esc(f)}">+${rows.length-lim} more</div>`
+        :(OPEN[f]&&rows.length>8?`<div class="more" data-open="${esc(f)}">less</div>`:"")) +
+      `</div>`;
+  }).join("");
+  document.querySelectorAll("#facets button").forEach(b=>b.onclick=()=>{
+    const f=b.dataset.f, v=b.dataset.v;
+    sel[f]=sel[f]||new Set();
+    sel[f].has(v)?sel[f].delete(v):sel[f].add(v);
+    apply();
+  });
+  document.querySelectorAll("#facets .more").forEach(d=>d.onclick=()=>{
+    OPEN[d.dataset.open]=!OPEN[d.dataset.open]; drawFacets();
+  });
+}
+
+function cellHTML(it){
+  const media = it.kind==="video"
+    ? `<video src="${esc(it.url)}" muted preload="metadata"></video>`
+    : it.kind==="audio"
+      ? `<div class="aud">${esc((it.domain||"audio").toUpperCase())}</div>`
+      : `<img src="${esc(it.url)}" loading="lazy" alt="">`;
+  return `<div class="cell" data-id="${esc(it.id)}">${media}
+    <span class="kind">${esc(it.domain||it.kind)}</span>
+    <div class="cap">${esc(it.style||it.name)}</div></div>`;
+}
+
+function apply(){
+  view = D.items.filter(matches);
+  shown = 0;
+  document.getElementById("grid").innerHTML = "";
+  drawFacets();
+  more();
+  document.getElementById("stat").textContent =
+    `${view.length.toLocaleString()} of ${D.total.toLocaleString()} generations`;
+}
+
+function more(){
+  const next = view.slice(shown, shown+PAGE);
+  document.getElementById("grid").insertAdjacentHTML("beforeend", next.map(cellHTML).join(""));
+  shown += next.length;
+  document.getElementById("more").style.display = shown<view.length ? "block":"none";
+  document.getElementById("more").textContent = `show more (${view.length-shown} left)`;
+  bind();
+}
+document.getElementById("more").onclick = more;
+
+function bind(){
+  document.querySelectorAll(".cell").forEach(c=>c.onclick=()=>open(c.dataset.id));
+}
+
+async function open(id){
+  const it = D.items.find(x=>x.id===id);
+  document.getElementById("big").innerHTML = it.kind==="video"
+    ? `<video src="${esc(it.url)}" controls autoplay loop></video>`
+    : it.kind==="audio"
+      ? `<audio src="${esc(it.url)}" controls style="width:90%"></audio>`
+      : `<img src="${esc(it.url)}" alt="">`;
+  document.getElementById("meta").innerHTML = `<p class="sub">loading recipe…</p>`;
+  document.getElementById("dlg").showModal();
+
+  const r = await fetch("/api/library/recipe?id="+encodeURIComponent(id)).then(x=>x.json());
+  if (r.error){ document.getElementById("meta").innerHTML=`<p class="sub">${esc(r.error)}</p>`; return; }
+
+  // Clicking a value filters the library by it - the fastest way to answer "what else
+  // came out of this style / this seed / this character".
+  const chips = ["style","character","place","engine","collection","look"]
+    .filter(f=>it[f]).map(f=>`<span class="chip" data-f="${f}" data-v="${esc(it[f])}">${esc(f)}: ${esc(it[f])}</span>`).join("");
+
+  const rows = r.fields.map(f=>{
+    const long = f.key==="prompt"||f.key==="negative";
+    return `<div class="row"><div class="k">${esc(f.label)}</div>
+      <div class="v ${long?"mono":""}">${esc(typeof f.value==="object"?JSON.stringify(f.value):f.value)}</div></div>`;
+  }).join("");
+  const extra = Object.keys(r.extra||{}).length
+    ? `<div class="row"><div class="k">Everything else in the recipe</div>
+       <div class="v mono">${esc(JSON.stringify(r.extra,null,1))}</div></div>` : "";
+
+  document.getElementById("meta").innerHTML = `
+    <h2>${esc(it.style||it.name)}</h2>
+    <div class="sub">${esc(it.name)}</div>
+    <div class="chips">${chips}</div>
+    <div class="acts">
+      <button id="wfbtn">workflow</button>
+      <a href="${esc(it.url)}" download class="alt">download</a>
+      <button class="alt" id="copyp">copy prompt</button>
+    </div>
+    <div id="wfout"></div>
+    ${rows}${extra}`;
+
+  document.querySelectorAll(".chip").forEach(c=>c.onclick=()=>{
+    sel[c.dataset.f]=new Set([c.dataset.v]);
+    document.getElementById("dlg").close(); apply(); window.scrollTo(0,0);
+  });
+  document.getElementById("copyp").onclick=()=>{
+    navigator.clipboard.writeText((r.raw&&r.raw.prompt)||"");
+    document.getElementById("copyp").textContent="copied";
+  };
+  document.getElementById("wfbtn").onclick=()=>showWorkflow(id);
+}
+
+async function showWorkflow(id){
+  const out=document.getElementById("wfout");
+  out.innerHTML=`<p class="note">rebuilding the graph…</p>`;
+  const w = await fetch("/api/library/workflow?id="+encodeURIComponent(id)).then(x=>x.json());
+  if (w.error){ out.innerHTML=`<p class="note">${esc(w.error)}</p>`; return; }
+  const dl = w.graph
+    ? `<a class="alt" style="padding:8px 14px;border-radius:7px;border:1px solid var(--line);
+         text-decoration:none;color:var(--ink);background:var(--panel2);font-size:12.5px"
+         href="/api/library/workflow?id=${encodeURIComponent(id)}&download=1"
+         download>download graph (.json)</a>` : "";
+  out.innerHTML = `
+    <div class="row"><div class="k">Workflow</div>
+      <div class="v">${esc(w.file||"unknown")}${w.nodes?` · ${w.nodes} nodes`:""}</div></div>
+    <p class="note">${esc(w.note||"")}</p>
+    <div class="acts">${dl}
+      <a class="alt" href="${esc(COMFY)}" target="_blank" rel="noopener"
+         style="padding:8px 14px;border-radius:7px;text-decoration:none">open ComfyUI</a></div>
+    ${w.graph?`<pre class="wf">${esc(JSON.stringify(w.graph,null,1))}</pre>`:""}`;
+}
+
+let COMFY = "http://" + location.hostname + ":8188";
+
+document.getElementById("x").onclick=()=>document.getElementById("dlg").close();
+document.getElementById("dlg").addEventListener("click", e=>{
+  if (e.target.id==="dlg") document.getElementById("dlg").close();
+});
+let t=null;
+document.getElementById("q").oninput=e=>{
+  clearTimeout(t); t=setTimeout(()=>{ q=e.target.value.trim().toLowerCase(); apply(); }, 200);
+};
+
+fetch("/api/library").then(r=>r.json()).then(d=>{
+  if (d.error){ document.getElementById("stat").textContent=d.error; return; }
+  D=d; apply();
+}).catch(e=>{
+  // Show it, do not tuck it into the header. A blank grid with a quiet status line is how
+  // a broken page looks like an empty library.
+  document.getElementById("stat").textContent="could not load";
+  document.getElementById("grid").innerHTML =
+    `<div style="padding:24px;color:var(--bad)">could not load the library: ${esc(e.message)}
+     <br><span style="color:var(--dim)">check /api/library</span></div>`;
+  console.error(e);
+});
+</script>
+</body>
+</html>

@@ -98,7 +98,13 @@ def luma_sat(path):
     return y, s
 
 
-def render_image(job, outdir):
+def image_graph(job):
+    """The exact ComfyUI graph for this job, built and not submitted.
+
+    Split out of render_image so /library can show the workflow that produced a picture
+    without re-rendering it, and without a second copy of the wiring that would drift away
+    from this one.
+    """
     eng = job.get("engine", "anime")
     if eng == "flux2":
         wf = load_wf("40_flux2_t2i.json")
@@ -164,6 +170,11 @@ def render_image(job, outdir):
                                        job.get("character_lora_strength") or 0.5)}}
             set_path(wf, "8.inputs.model", ["60", 0])
         set_path(wf, "11.inputs.filename_prefix", "claude-generated/rolled/%s" % job["id"])
+    return wf
+
+
+def render_image(job, outdir):
+    wf = image_graph(job)
     _, outs = run(HOST, wf, quiet=True)
     if not outs:
         return None
