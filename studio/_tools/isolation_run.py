@@ -131,9 +131,20 @@ def main():
     ap.add_argument("--hours", type=float)
     ap.add_argument("--plan", action="store_true")
     ap.add_argument("--seed", type=int, default=31337)
+    ap.add_argument("--only", help="one card id - grow just this card")
+    ap.add_argument("--fresh", action="store_true",
+                    help="prefer styles this card has not been rendered in yet")
     a = ap.parse_args()
 
     p = plan(a)
+    if a.only:
+        # Grow ONE card. "Make more of this" is the only sane thing to want when you are
+        # looking at a place with two frames, and browse has a button per card.
+        for k in ("places", "characters", "emotions", "styles"):
+            p[k] = [c for c in p[k] if c.get("id") == a.only]
+        if not sum(len(p[k]) for k in ("places", "characters", "emotions", "styles")):
+            print("  no card named %s" % a.only)
+            return 1
     if a.plan:
         tot = 0
         for k, n in p["counts"].items():
@@ -161,6 +172,38 @@ def main():
 
     neutral = [s for s in NEUTRAL if s in libs["styles"]] or \
               [s for s in libs["styles"] if libs["styles"][s].get("family") == "photographic"]
+    _seen_cache = {}
+
+    def pick_style(pool, facet, cid, rng):
+        """Prefer a style this card has NOT been rendered in yet.
+
+        Random choice repeats itself - six rolls across six styles land on about four - so
+        "more frames" and "more of what is missing" are different things. This asks what
+        already exists and fills the gaps first, which is what growing a card is for.
+        """
+        if not a.fresh:
+            return rng.choice(pool)
+        key = (facet, cid)
+        if key not in _seen_cache:
+            seen = set()
+            for f in glob.glob(os.path.join(STUDIO, "samples", "**", "*.json"),
+                               recursive=True):
+                if os.path.basename(f).startswith("_"):
+                    continue
+                try:
+                    r = json.load(open(f, encoding="utf-8"))
+                except Exception:
+                    continue
+                if isinstance(r, dict) and r.get(facet) == cid and r.get("style"):
+                    seen.add(r["style"])
+            _seen_cache[key] = seen
+        gap = [s for s in pool if s not in _seen_cache[key]]
+        if gap:
+            pick = rng.choice(gap)
+            _seen_cache[key].add(pick)     # do not hand the same gap out twice in one run
+            return pick
+        return rng.choice(pool)
+
     if not neutral:
         print("  no neutral style available - a clean plate needs one")
         return 1
@@ -188,9 +231,13 @@ def main():
                 rng = random.Random(a.seed + hash(c["id"]) % 9999 + i)
                 job = roll.roll_image(rng, libs, {
                     "place": c["id"], "no_characters": True, "no_look": True,
-                    "style": rng.choice(neutral)})
-                job["seed"] = a.seed + i * 7919
-                job["id"] = "clean_%s_%d" % (slug(c["id"]), i)
+                    "style": pick_style(neutral, "place", c["id"], rng)})
+                # Growing uses a time-derived offset so a second run of the same card makes
+                # NEW frames instead of skipping the ones it already has.
+                base = a.seed + (int(time.time()) % 9973 if a.only else 0)
+                job["seed"] = base + i * 7919
+                job["id"] = ("grow_%s_%d_%d" % (slug(c["id"]), base % 9973, i) if a.only
+                             else "clean_%s_%d" % (slug(c["id"]), i))
                 if not go("places", job["id"], job):
                     break
             if out_of_time():
@@ -205,8 +252,10 @@ def main():
                 job = roll.roll_image(rng, libs, {
                     "character": c["id"], "cast_rate": 1.0,
                     "style": rng.choice(neutral)})
-                job["seed"] = a.seed + i * 6151
-                job["id"] = "char_%s_%d" % (slug(c["id"]), i)
+                base = a.seed + (int(time.time()) % 9973 if a.only else 0)
+                job["seed"] = base + i * 6151
+                job["id"] = ("grow_%s_%d_%d" % (slug(c["id"]), base % 9973, i) if a.only
+                             else "char_%s_%d" % (slug(c["id"]), i))
                 # One scale per seed, cycled - the point of a character's own set is to see
                 # them at several distances, not six close-ups.
                 want = SCALES[i % len(SCALES)]
@@ -228,7 +277,11 @@ def main():
             emits = ", ".join(x for x in (c.get("face"), c.get("eyes"), c.get("mouth"),
                                           c.get("body")) if x) or c.get("desc") or c["id"]
             for i in range(2):
-                face = FACES[(hash(c["id"]) + i) % len(FACES)]
+                # Growing rotates onto a DIFFERENT invented face and a new id. Without
+                # this the ids are deterministic, every frame already exists, and the run
+                # reports "skipped 2" as a success while making nothing.
+                off = (int(time.time()) % 9973) if a.only else 0
+                face = FACES[(hash(c["id"]) + i + off) % len(FACES)]
                 rng = random.Random(a.seed + hash(c["id"]) % 9999 + i * 17)
                 r = compose.resolve(libs, {"style": eng_style})
                 job = {
@@ -240,8 +293,9 @@ def main():
                     "prompt": "%s. %s. %s" % (emits, face, FACE_FRAME),
                     "negative": r.get("negative") or "",
                     "width": 1024, "height": 1024,
-                    "seed": a.seed + i * 5417 + hash(c["id"]) % 1000,
-                    "id": "emo_%s_%d" % (slug(c["id"]), i),
+                    "seed": a.seed + off + i * 5417 + hash(c["id"]) % 1000,
+                    "id": ("grow_%s_%d_%d" % (slug(c["id"]), off, i) if a.only
+                           else "emo_%s_%d" % (slug(c["id"]), i)),
                     "generic_face": True,
                     "provenance": "invented face, not a cast member and not a real person",
                 }
@@ -273,13 +327,19 @@ def main():
                 # already spent two hours by the time it reaches here.
                 print("  styles      %-34s SKIPPED (%s)" % (c["id"][:34], str(e)[:60]))
                 continue
-            job["seed"] = a.seed
-            job["id"] = "style_%s" % slug(c["id"])
+            soff = (int(time.time()) % 9973) if a.only else 0
+            job["seed"] = a.seed + soff
+            job["id"] = ("grow_%s_%d" % (slug(c["id"]), soff) if a.only
+                         else "style_%s" % slug(c["id"]))
             if not go("styles", job["id"], job):
                 break
 
     print("\n  done: %s | skipped %d | failed %d"
           % (", ".join("%s %d" % (k, v) for k, v in done.items() if v), skipped, failed))
+    if not sum(done.values()):
+        # "skipped 12, failed 0" reads as success at a glance and means nothing was made.
+        print("  !! NOTHING WAS RENDERED - every frame already existed. Use --only to grow "
+              "a card, which offsets the ids, or delete what is there.")
     print("  rebuild the index:  python3 studio/_tools/library_index.py --build")
     return 0
 

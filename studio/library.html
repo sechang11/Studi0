@@ -330,11 +330,13 @@ function drawCards(){
     const body = src
       ? `<img src="${esc(src)}" loading="lazy" alt="">` +
         (pics.length>1?`<button class="rot" data-rot="${esc(c.id)}">${(i%pics.length)+1}/${pics.length}</button>`:"")
-      : `<div class="none">no frame yet<br>generate one</div>`;
+      : `<div class="none">no frame yet</div>`;
     return `<div class="cd"><div class="big" data-card="${esc(c.id)}">${body}</div>
       <div class="b"><h3>${esc(c.name)}</h3><p>${esc(c.desc)}</p>
         <div class="n">${c.frames} frame${c.frames===1?"":"s"}${
           c.purest!=null?` · purest ${c.purest}`:""}${c.status?" · "+esc(c.status):""}</div>
+        <button class="rot" style="position:static;margin-top:7px;background:var(--panel2);
+          color:var(--ink);border:1px solid var(--line)" data-grow="${esc(c.id)}">make 4 more</button>
       </div></div>`;
   }).join("");
   // Rotate through the alternates instead of pretending one seed is the whole card.
@@ -342,6 +344,17 @@ function drawCards(){
     e.stopPropagation(); ROT[x.dataset.rot]=(ROT[x.dataset.rot]||0)+1; drawCards();
   });
   // Clicking a card drops into the frame grid filtered to it - browse, then dig in.
+  // Grow this card: render more frames, preferring styles it does not already have, so
+  // the new ones fill gaps instead of repeating what is there.
+  document.querySelectorAll("[data-grow]").forEach(x => x.onclick = e => {
+    e.stopPropagation();
+    x.textContent = "starting…"; x.disabled = true;
+    fetch("/api/library/grow", {method:"POST", headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({kind: BROWSE.kind, id: x.dataset.grow, n: 4})})
+      .then(r=>r.json()).then(j=>{
+        x.textContent = j.error ? j.error.slice(0,28) : "rendering…";
+      });
+  });
   document.querySelectorAll("[data-card]").forEach(x => x.onclick = () => {
     sel = {}; sel[b.facet] = new Set([x.dataset.card]);
     setMode("frames");

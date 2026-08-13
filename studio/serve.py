@@ -2107,13 +2107,41 @@ class H(http.server.SimpleHTTPRequestHandler):
                      "/api/voice/demo", "/api/voice/add",
                      "/api/character/suite", "/api/character/analyse",
                      "/api/tool/run", "/api/tool/random",
-                     "/api/make3d/mesh", "/api/library/star"):
+                     "/api/make3d/mesh", "/api/library/star",
+                     "/api/library/grow"):
             return self._send({"error": "not found"}, 404)
         n = int(self.headers.get("Content-Length", 0))
         try:
             data = json.loads(self.rfile.read(n) or b"{}")
         except Exception as e:
             return self._send({"error": f"bad json: {e}"}, 400)
+        if p == "/api/library/grow":
+            # Spawned DETACHED, not run inline. A render takes ten seconds a frame and the
+            # server is single-threaded for pages; holding the request open would freeze
+            # the whole app while the GPU works.
+            kind = re.sub(r"[^a-z]", "", str(data.get("kind") or ""))
+            cid = re.sub(r"[^A-Za-z0-9_.-]", "", str(data.get("id") or ""))
+            try:
+                n = max(1, min(12, int(data.get("n") or 4)))
+            except Exception:
+                n = 4
+            if kind not in ("places", "characters", "emotions", "styles") or not cid:
+                return self._send({"error": "need a kind and a card id"}, 400)
+            import subprocess
+            cmd = [sys.executable, "-u", f"{HERE}/_tools/isolation_run.py",
+                   "--what", kind, "--only", cid, "--per", str(n),
+                   "--fresh", "--hours", "0.5"]
+            log = f"{HERE}/samples/isolation/_grow_{kind}_{cid}.log"
+            try:
+                os.makedirs(os.path.dirname(log), exist_ok=True)
+                with open(log, "w", encoding="utf-8") as lf:
+                    subprocess.Popen(cmd, stdout=lf, stderr=lf,
+                                     cwd=os.path.dirname(HERE), start_new_session=True)
+            except Exception as e:                                  # noqa: BLE001
+                traceback.print_exc()
+                return self._send({"error": "could not start: %s" % str(e)[:160]}, 500)
+            return self._send({"ok": True, "kind": kind, "id": cid, "frames": n,
+                               "note": "rendering in the background - refresh in a minute"})
         if p == "/api/library/star":
             m = _load_tool_module("library_index")
             if m is None:
