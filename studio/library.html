@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>studio · library</title>
 <style>
-  :root{--bg:#0f1115;--panel:#161a21;--panel2:#1c2129;--line:#272d38;--ink:#e6e9ef;
+  :root{color-scheme:light dark;--bg:#0f1115;--panel:#161a21;--panel2:#1c2129;--line:#272d38;--ink:#e6e9ef;
         --dim:#8b94a3;--accent:#6ea8fe;--ok:#4ec9a0;--warn:#e0b252;--bad:#e07a5f}
   @media (prefers-color-scheme:light){
     :root{--bg:#f6f7f9;--panel:#fff;--panel2:#f0f2f5;--line:#dde1e8;--ink:#141821;--dim:#5d6470}}
@@ -53,7 +53,18 @@
   .more-btn{margin:16px auto;display:block;background:var(--panel);border:1px solid var(--line);
     color:var(--ink);border-radius:8px;padding:9px 20px;font:inherit;cursor:pointer}
   /* detail */
-  dialog{border:0;padding:0;background:transparent;max-width:min(1500px,96vw);width:100%}
+  /* colour AND background, both explicit. With background:transparent and no colour, the
+     dialog inherited the browser's UA default CanvasText - measured as rgb(0,0,0) - and
+     drew black text over the dark panel painted by .sheet behind it. That is the "black
+     font on grey" this fixes. color-scheme on :root makes the UA defaults follow the
+     palette too, so a control I forget to style cannot reintroduce it. */
+  dialog{border:0;padding:0;background:transparent;color:var(--ink);
+         max-width:min(1500px,96vw);width:100%}
+  dialog *{color:inherit}
+  .sheet{color:var(--ink)}
+  .row .k{color:var(--dim)}
+  .meta .sub{color:var(--dim)}
+  .note{color:var(--dim)}
   dialog::backdrop{background:#000c}
   .sheet{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(320px,1fr);
          background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden;
@@ -87,6 +98,8 @@
 <header>
   <h1>Library</h1><span class="sub" id="stat">loading…</span>
   <input id="q" placeholder="search prompts, styles, characters…">
+  <label class="sub" style="display:flex;gap:5px;align-items:center">per page
+    <select id="per"></select></label>
   <span class="right"><a href="/">home</a><a href="/gallery">gallery</a><a href="/make3d">make 3d</a></span>
 </header>
 <main>
@@ -104,7 +117,8 @@
 const esc = s => String(s==null?"":s).replace(/[&<>"]/g,
   c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
-let D=null, sel={}, shown=0, view=[], PAGE=60, q="";
+let D=null, sel={}, shown=0, view=[], PAGE=100, q="";
+const PAGE_SIZES=[60,100,300,1000];
 const OPEN = {};   // which facets are expanded
 
 function matches(it){
@@ -196,10 +210,21 @@ function more(){
   document.getElementById("grid").insertAdjacentHTML("beforeend", next.map(cellHTML).join(""));
   shown += next.length;
   document.getElementById("more").style.display = shown<view.length ? "block":"none";
-  document.getElementById("more").textContent = `show more (${view.length-shown} left)`;
+  document.getElementById("more").textContent =
+    `show ${Math.min(PAGE, view.length-shown)} more (${view.length-shown} left)`;
   bind();
 }
 document.getElementById("more").onclick = more;
+
+// Per-page is a real choice, not a fixed 60. 1000 is offered because "show me everything
+// in this style" is a normal thing to want and clicking `show more` eleven times is not.
+const per=document.getElementById("per");
+per.innerHTML = PAGE_SIZES.map(n=>`<option value="${n}"${n===PAGE?" selected":""}>${n}</option>`).join("")
+  + `<option value="all">all</option>`;
+per.onchange = () => {
+  PAGE = per.value==="all" ? 1e9 : +per.value;
+  shown = 0; document.getElementById("grid").innerHTML = ""; more();
+};
 
 function bind(){
   document.querySelectorAll(".cell").forEach(c=>c.onclick=()=>open(c.dataset.id));

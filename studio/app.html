@@ -121,6 +121,8 @@
   <h2 class="sec">Review what came out</h2>
   <div class="grid" id="review"></div>
 
+  <h2 class="sec">Every page</h2>
+  <div class="grid" id="allpages"></div>
   <h2 class="sec">Latest generations</h2>
   <div class="strip" id="recent"></div>
 </main>
@@ -235,16 +237,131 @@ function card(href,title,n,desc,led){
   }catch(e){}
   document.getElementById("review").innerHTML=rev.join("");
 
+  // EVERY page, so nothing is reachable only by typing a URL. Authored rather than globbed
+  // from studio/*.html: a filename cannot say what a page is for, and this list is checked
+  // against the directory by patch_home_links.py so a new page cannot go unlisted quietly.
+  const ALL = [
+  [
+    "/library",
+    "Library",
+    "Every generation, filtered by style, engine, character or place - with the full recipe and the graph that made it."
+  ],
+  [
+    "/gallery",
+    "Gallery",
+    "The manifest view of recent runs."
+  ],
+  [
+    "/wizard",
+    "Direct a scene",
+    "Pick the layers one at a time and render a single shot."
+  ],
+  [
+    "/generate",
+    "Generate",
+    "Start, watch and stop an unattended run."
+  ],
+  [
+    "/story",
+    "Story editor",
+    "Stories, chapters, scenes and takes."
+  ],
+  [
+    "/make",
+    "Make",
+    "The non-film makers: image, voice, music, game assets, mesh."
+  ],
+  [
+    "/make3d",
+    "Make 3D",
+    "An image in, a printable mesh out."
+  ],
+  [
+    "/model3d",
+    "3D print",
+    "The generated-mesh pipeline for a character."
+  ],
+  [
+    "/styles",
+    "Styles",
+    "How it is drawn. The style decides the engine."
+  ],
+  [
+    "/places",
+    "Places",
+    "Where it happens."
+  ],
+  [
+    "/cast",
+    "Cast",
+    "Characters, their faces and their voices."
+  ],
+  [
+    "/voices",
+    "Voices",
+    "Every voice, with a demo you can play."
+  ],
+  [
+    "/loras",
+    "LoRAs",
+    "Trained weights and what they attach to."
+  ],
+  [
+    "/tags",
+    "Tags",
+    "The tag vocabulary."
+  ],
+  [
+    "/video",
+    "Video",
+    "Clips, and what survives the motion pass."
+  ],
+  [
+    "/verify",
+    "Verify",
+    "Judge whether a sample shows what its card claims."
+  ],
+  [
+    "/capabilities",
+    "Capabilities",
+    "What this box can actually do, measured."
+  ],
+  [
+    "/tools",
+    "Tools",
+    "The curated, safe-to-run scripts."
+  ],
+  [
+    "/docs",
+    "Docs",
+    "The reference."
+  ],
+  [
+    "/guide",
+    "Guides",
+    "How to do a thing, end to end."
+  ],
+  [
+    "/changelog",
+    "Changelog",
+    "What changed and when."
+  ]
+];
+  document.getElementById("allpages").innerHTML =
+    ALL.map(p => card(p[0], p[1], null, p[2], "")).join("");
+
+
   // A glance at the most recent work, so the front page is never empty of pictures.
   try{
-    const g=await J("/api/gallery");
-    // Gallery records carry `file`, a path relative to the samples root - not thumb/
-    // image/path, which is what a first guess assumed and why this strip rendered empty.
-    const imgs=g.filter(x=>x.file).slice(-24).reverse();
+    // /api/library, not /api/gallery. The manifest holds 1,828 of 3,599 items and lags the
+    // newest run, so this strip showed 24 frames of one character from an old batch under
+    // the heading "Latest generations". The library index discovers from disk and sorts by
+    // the recipe's rolled_at, so it genuinely is the newest work.
+    const g=(await J("/api/library")).items.filter(x=>x.kind==="image");
+    const imgs=g.slice(0,24);          // already newest-first
     document.getElementById("recent").innerHTML = imgs.map(x=>{
-      const f=String(x.file);
-      const src = f.startsWith("/") ? f : "/samples/gallery/"+f;
-      return `<a href="/gallery" title="${esc(x.id)}"><img loading="lazy" src="${esc(src)}" alt=""></a>`;
+      return `<a href="/library" title="${esc(x.style||x.name)}">` +
+             `<img loading="lazy" src="${esc(x.url)}" alt=""></a>`;
     }).join("") || '<span class="err">no generations yet</span>';
   }catch(e){
     document.getElementById("recent").innerHTML='<span class="err">gallery unavailable</span>';
