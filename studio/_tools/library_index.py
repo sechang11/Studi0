@@ -133,6 +133,68 @@ def star(item_id, on=True):
 
 REJECTED = os.path.join(SAMPLES, "_rejected")
 
+# Which axes make a SET for each kind, in the order a person wants to see them. Framing
+# first for a character because "does the face hold at a wide" is the first question; the
+# clean plate first for a place because that is the only view that is actually the place.
+SET_AXES = {
+    "character": [("framing", 4), ("style", 6), ("place", 8)],
+    "place": [("pure", 3), ("style", 3), ("look", 4)],
+    "style": [("pure", 1), ("place", 4)],
+    "emotion": [("pure", 2), ("style", 2)],
+    "motion": [("style", 3)],
+    "camera": [("style", 3)],
+}
+
+
+def packset(facet, value):
+    """The frames that make a COMPLETE SET for one card, in order, then everything else.
+
+    Greedy cover: walk the axes in order and take the frame that adds a value not yet
+    represented, preferring the purest and then the newest. The result is that the first
+    handful of pictures ARE the set - every framing, then a spread of styles, then a spread
+    of places - rather than a wall sorted by one number where four close-ups sit at the top
+    because they happened to be cleanest.
+
+    Anything not needed for the cover comes after, in any order, because at that point it
+    is extra rather than evidence.
+    """
+    axes = SET_AXES.get(facet)
+    if not axes:
+        return None
+    d = payload()
+    its = [x for x in d["items"] if str(x.get(facet) or "") == str(value)]
+    if not its:
+        return {"facet": facet, "value": value, "set": [], "extra": [], "axes": []}
+    its.sort(key=lambda x: ((x.get("purity") or {}).get(facet, 9), -x["mtime"]))
+
+    chosen, seen_ids, covered = [], set(), {a: set() for a, _ in axes}
+    for axis, want in axes:
+        for it in its:
+            if len(covered[axis]) >= want:
+                break
+            if it["id"] in seen_ids:
+                continue
+            if axis == "pure":
+                if (it.get("purity") or {}).get(facet) != 0:
+                    continue
+                key = it["id"]
+                why = "nothing else in the frame"
+            else:
+                key = it.get(axis)
+                if not key or key in covered[axis]:
+                    continue
+                why = "%s: %s" % (axis, key)
+            covered[axis].add(key)
+            seen_ids.add(it["id"])
+            chosen.append({"id": it["id"], "url": it["url"], "kind": it["kind"],
+                           "axis": axis, "why": why})
+    extra = [x for x in its if x["id"] not in seen_ids]
+    return {"facet": facet, "value": value,
+            "set": chosen, "extra_count": len(extra),
+            "extra_ids": [x["id"] for x in extra],
+            "axes": [{"axis": a, "want": n, "got": len(covered[a])} for a, n in axes],
+            "complete": all(len(covered[a]) >= n for a, n in axes)}
+
 
 def reject(rel, reason=""):
     """Move a frame out of the library. MOVED, never deleted.

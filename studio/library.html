@@ -93,6 +93,12 @@
          padding:11px 14px;margin-bottom:13px}
   .focus h2{margin:0 0 3px;font-size:12px;letter-spacing:.08em;text-transform:uppercase}
   .focus p{margin:0;color:var(--dim);font-size:12.5px}
+  .setrow{display:flex;gap:8px;overflow-x:auto;margin-top:10px;padding-bottom:4px}
+  .setrow figure{margin:0;flex:0 0 132px}
+  .setrow img,.setrow video{width:132px;height:132px;object-fit:cover;border-radius:7px;
+    display:block;background:var(--panel2)}
+  .setrow figcaption{font-size:10.5px;color:var(--dim);margin-top:3px;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .focus b{color:var(--ink)}
   .more-btn{margin:16px auto;display:block;background:var(--panel);border:1px solid var(--line);
     color:var(--ink);border-radius:8px;padding:9px 20px;font:inherit;cursor:pointer}
@@ -265,6 +271,32 @@ function soleFacet(){
   return (on.length===1 && on[0][1].size===1) ? on[0][0] : null;
 }
 
+function drawSet(f){
+  // THE SET FIRST, IN ORDER, THEN THE REST. Sorting by one number put four close-ups at the
+  // top because they happened to be cleanest; a set answers "have I got every angle, in a
+  // few styles, in a few places" at a glance, which is the actual question.
+  const on = sel[f] && sel[f].size === 1 ? [...sel[f]][0] : null;
+  const box = document.getElementById("focus");
+  if (!on) return false;
+  fetch(`/api/library/set?facet=${encodeURIComponent(f)}&value=${encodeURIComponent(on)}`)
+    .then(r=>r.json()).then(s=>{
+      if (s.error || !s.set || !s.set.length) return;
+      const axes = s.axes.map(a=>`${esc(a.axis)} ${a.got}/${a.want}`).join(" · ");
+      box.innerHTML = `<div class="focus"><h2>The ${esc(f)} set — ${esc(on)}</h2>
+        <p>${s.complete?"complete":"INCOMPLETE"} · ${axes} · ${s.extra_count} more beyond the set</p>
+        <div class="setrow">${s.set.map(x=>
+          `<figure><${x.kind==="video"?`video src="${esc(x.url)}#t=0.4" muted`
+                                      :`img src="${esc(x.url)}" loading="lazy"`}></${
+             x.kind==="video"?"video":"img"}><figcaption>${esc(x.why)}</figcaption></figure>`
+        ).join("")}</div></div>`;
+      // Order the grid so the set leads and the extras follow.
+      const rank = new Map(s.set.map((x,i)=>[x.id,i]));
+      view.sort((a,b)=>(rank.has(a.id)?rank.get(a.id):9999)-(rank.has(b.id)?rank.get(b.id):9999));
+      shown=0; document.getElementById("grid").innerHTML=""; more();
+    });
+  return true;
+}
+
 function drawFocus(f){
   const box = document.getElementById("focus");
   if (!f || !D.items.length){ box.innerHTML = ""; return; }
@@ -409,6 +441,7 @@ function apply(){
   drawApplied();
   drawFocus(f);
   more();
+  if (f) drawSet(f);
   document.getElementById("stat").textContent =
     `${view.length.toLocaleString()} of ${D.total.toLocaleString()} generations`;
 }

@@ -1596,6 +1596,14 @@ class H(http.server.SimpleHTTPRequestHandler):
                 return self._library("recipe", _id)
             if path == "/api/library/workflow":
                 return self._library("workflow", _id, download=bool(_q.get("download")))
+            if path == "/api/library/set":
+                m = _load_tool_module("library_index")
+                if m is None:
+                    return self._send({"error": "library_index.py is unavailable"}, 500)
+                got = m.packset(_q.get("facet", [""])[0], _q.get("value", [""])[0])
+                if got is None:
+                    return self._send({"error": "no set defined for that facet"}, 404)
+                return self._send(got)
             if path == "/api/library/browse":
                 return self._library("browse", _q.get("kind", [""])[0])
             if path == "/api/library/favourites":
