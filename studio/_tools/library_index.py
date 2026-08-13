@@ -75,6 +75,33 @@ def _newest_recipe():
     return newest
 
 
+# The layers that COMPETE for a frame. A card is best understood in a picture where as few
+# of these as possible are also present - a place with nobody in it, a character against
+# nothing. Style is not here: every image has one and it cannot be removed, so counting it
+# would score every item identically and say nothing.
+COMPETING = ["character", "place", "look", "emotion", "motion", "camera"]
+
+
+def purity(item, facet):
+    """How ALONE the given facet is in this picture. 0 = nothing else competing.
+
+    This is the sort key behind "just the place" / "just the character". A place with a
+    character, a mood grade and a camera move in it teaches you almost nothing about the
+    place; the same place empty teaches you everything it can.
+
+    Framing is deliberately not counted. A close-up of a character is not a less pure view
+    of them than a wide - it is a different view, and the whole point of a character's own
+    set is to see them at several scales.
+    """
+    n = 0
+    for k in COMPETING:
+        if k == facet:
+            continue
+        if item.get(k) not in (None, "", "static"):
+            n += 1
+    return n
+
+
 def _made_at(recipe, fallback):
     """Creation time from the recipe, falling back to the file's mtime."""
     v = recipe.get("rolled_at") or recipe.get("created")
@@ -137,6 +164,10 @@ def scan():
             if r.get(k) not in (None, ""):
                 it[k] = r[k]
         it.setdefault("domain", it["kind"])
+        # Precomputed here rather than in the browser: it is a handful of integers, and the
+        # page already ships 4 MB without adding a loop over 3,600 items per keystroke.
+        it["purity"] = {f: purity(it, f) for f in
+                        ("character", "place", "style", "look", "emotion", "motion")}
         items.append(it)
         for f in FACETS:
             v = it.get(f) if f != "collection" else collection
