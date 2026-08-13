@@ -167,3 +167,7 @@ studio/samples/print_ready/
 # SFX originals kept beside the normalised file so the change is reversible and the
 # tool is idempotent. Regenerable; not worth versioning.
 studio/samples/**/*.orig
+
+# Bulk roller output, same rule as studio/samples/rolled above: regenerable, large,
+# and the recipes that matter are written beside each file on the box.
+studio/samples/fill_run/
