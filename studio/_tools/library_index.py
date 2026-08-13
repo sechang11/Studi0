@@ -264,6 +264,13 @@ def scan():
         "facets": {f: dict(sorted(v.items(), key=lambda kv: -kv[1])) for f, v in
                    facets.items() if v},
         "total": len(items),
+        # How many CARDS exist per kind, which is what the sidebar promises when you click
+        # it. The facet counts below are distinct values PRESENT IN FRAMES - 9 motions have
+        # been used, 34 motions exist - and showing the smaller number next to a link that
+        # opens the larger list is a small lie repeated on every page load.
+        "kind_counts": {f: len([x for x in glob.glob(os.path.join(STUDIO, d, "*.json"))
+                                if not os.path.basename(x).startswith("_")])
+                        for f, d in KINDS.items()},
         "built": int(time.time()),
         "newest_recipe": int(_newest_recipe()),
     }

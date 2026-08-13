@@ -50,14 +50,20 @@
               font-size:10px;padding:1px 6px;border-radius:20px;letter-spacing:.05em}
   .aud{display:flex;align-items:center;justify-content:center;aspect-ratio:1;
        background:var(--panel2);color:var(--dim);font-size:11px;letter-spacing:.08em}
-  .modes{display:flex;gap:6px;flex-wrap:wrap;padding:9px 18px;border-bottom:1px solid var(--line);
-         background:var(--panel);position:sticky;top:47px;z-index:29}
-  .modes button{background:var(--panel2);border:1px solid var(--line);color:var(--dim);
-    border-radius:20px;padding:3px 11px;font:inherit;font-size:12px;cursor:pointer}
-  .modes button:hover{color:var(--ink)}
-  .modes button.on{background:var(--accent);color:#08111f;border-color:var(--accent);font-weight:600}
-  .applied{display:flex;gap:6px;flex-wrap:wrap;align-items:center;padding:8px 18px;
-           border-bottom:1px solid var(--line);background:var(--bg)}
+  #libnav{margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+  #libnav h3{margin:0 0 5px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+  #libnav button{display:flex;justify-content:space-between;width:100%;gap:8px;
+    background:none;border:0;color:var(--ink);font:inherit;font-size:12.5px;
+    padding:3px 6px;border-radius:5px;cursor:pointer;text-align:left}
+  #libnav button:hover{background:var(--panel2)}
+  #libnav button.on{background:var(--accent);color:#08111f;font-weight:600}
+  #libnav button span{color:var(--dim);font-variant-numeric:tabular-nums}
+  #libnav button.on span{color:#08111f}
+  .fac h3.link{cursor:pointer}
+  .fac h3.link:hover{color:var(--accent)}
+  .applied{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:12px;
+           padding:8px 11px;background:var(--panel);border:1px solid var(--line);
+           border-radius:9px}
   .applied .lbl{color:var(--dim);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase}
   .applied .f{background:var(--accent);color:#08111f;border:0;border-radius:20px;
     padding:3px 10px;font:inherit;font-size:12px;cursor:pointer;font-weight:600}
@@ -68,7 +74,7 @@
   .cd{background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden}
   .cd:hover{border-color:var(--accent)}
   .cd .big{aspect-ratio:1;background:var(--panel2);cursor:pointer;position:relative}
-  .cd .big img{width:100%;height:100%;object-fit:cover;display:block}
+  .cd .big img,.cd .big video{width:100%;height:100%;object-fit:cover;display:block}
   .cd .none{display:flex;align-items:center;justify-content:center;height:100%;
             color:var(--warn);font-size:11.5px;text-align:center;padding:12px}
   .cd .rot{position:absolute;bottom:6px;right:6px;background:#000b;color:#fff;border:0;
@@ -138,11 +144,10 @@
     <select id="per"></select></label>
   <span class="right"><a href="/">home</a><a href="/gallery">gallery</a><a href="/make3d">make 3d</a></span>
 </header>
-<div class="modes" id="modes"></div>
-<div class="applied" id="applied" style="display:none"></div>
 <main>
-  <aside id="facets"></aside>
-  <div><div id="focus"></div><div class="cardgrid" id="cardgrid" style="display:none"></div>
+  <aside><div id="libnav"></div><div id="facets"></div></aside>
+  <div><div class="applied" id="applied" style="display:none"></div>
+       <div id="focus"></div><div class="cardgrid" id="cardgrid" style="display:none"></div>
        <div class="grid" id="grid"></div><button class="more-btn" id="more" style="display:none">show more</button></div>
 </main>
 
@@ -207,7 +212,11 @@ function drawFacets(){
     const rows=all.map(v=>[v, live[f][v]||0]).sort((a,b)=>b[1]-a[1]);
     const lim = OPEN[f] ? rows.length : 8;
     const on = sel[f]||new Set();
-    return `<div class="fac"><h3>${esc(f)}</h3>` +
+    // The heading is a link to that kind's card view. Clicking "PLACE" to see the places
+    // is the obvious gesture, and it was doing nothing.
+    const kind = (KINDS.find(([ff]) => ff === f) || [])[1];
+    return `<div class="fac"><h3${kind?` class="link" data-jump="${kind}" title="see all ${kind}"`:""}>${
+      esc(f)}${kind?" →":""}</h3>` +
       rows.slice(0,lim).map(([v,n])=>
         `<button data-f="${esc(f)}" data-v="${esc(v)}" class="${on.has(v)?"on":""}">
            <span style="color:inherit;overflow:hidden;text-overflow:ellipsis">${esc(v)}</span>
@@ -222,6 +231,7 @@ function drawFacets(){
     sel[f].has(v)?sel[f].delete(v):sel[f].add(v);
     apply();
   });
+  document.querySelectorAll("#facets [data-jump]").forEach(h=>h.onclick=()=>setMode(h.dataset.jump));
   document.querySelectorAll("#facets .more").forEach(d=>d.onclick=()=>{
     OPEN[d.dataset.open]=!OPEN[d.dataset.open]; drawFacets();
   });
@@ -267,11 +277,19 @@ function drawFocus(f){
 }
 
 function drawModes(){
-  document.getElementById("modes").innerHTML =
-    `<button data-k="frames" class="${MODE==="frames"?"on":""}">all frames</button>` +
-    `<button data-k="starred" class="${MODE==="starred"?"on":""}">starred ${FAVS.size?"("+FAVS.size+")":""}</button>` +
-    KINDS.map(([f,k]) => `<button data-k="${k}" class="${MODE===k?"on":""}">${k}</button>`).join("");
-  document.querySelectorAll("#modes button").forEach(b => b.onclick = () => setMode(b.dataset.k));
+  // The library list lives in the sidebar, above the filters, because it IS the navigation:
+  // "show me the places" is the same kind of act as "filter to this place", and having one
+  // in a top strip and the other in a column made them look unrelated.
+  const n = D ? D.facets : {};
+  document.getElementById("libnav").innerHTML =
+    `<h3>library</h3>` +
+    `<button data-k="frames" class="${MODE==="frames"?"on":""}">all frames<span>${
+        D?D.total.toLocaleString():""}</span></button>` +
+    `<button data-k="starred" class="${MODE==="starred"?"on":""}">starred<span>${
+        FAVS.size||""}</span></button>` +
+    KINDS.map(([f,k]) => `<button data-k="${k}" class="${MODE===k?"on":""}">${k}<span>${
+        (D&&D.kind_counts&&D.kind_counts[f])||""}</span></button>`).join("");
+  document.querySelectorAll("#libnav button").forEach(b => b.onclick = () => setMode(b.dataset.k));
 }
 
 function drawApplied(){
@@ -302,12 +320,9 @@ function setMode(k){
   document.getElementById("cardgrid").style.display = frames?"none":"grid";
   document.getElementById("grid").style.display = frames?"grid":"none";
   document.getElementById("more").style.display = "none";
-  // Collapse main's SIDEBAR COLUMN, not just the sidebar. main is a two-column grid;
-  // hiding the aside leaves its 250px track in place, so the card grid was rendering one
-  // card wide inside a 250px column while the rest of the page sat empty.
-  document.querySelector("aside").style.display = frames?"block":"none";
-  document.querySelector("main").style.gridTemplateColumns =
-    frames ? "250px minmax(0,1fr)" : "minmax(0,1fr)";
+  // The sidebar STAYS in browse mode - it holds the navigation now. Only the facet groups
+  // hide, because they filter frames and there are no frames on screen.
+  document.getElementById("facets").style.display = frames?"block":"none";
   drawModes();
   if (frames){ apply(); return; }
   document.getElementById("focus").innerHTML="";
@@ -327,8 +342,13 @@ function drawCards(){
     const i = ROT[c.id]||0;
     const pics = [c.cover].concat(c.alts||[]).filter(Boolean);
     const src = pics.length ? pics[i % pics.length] : null;
+    // A MOTION or CAMERA card's only frames are clips. Rendering an .mp4 inside an <img>
+    // shows nothing, which is why those two kinds looked like they had no thumbnails.
+    const isVid = /\.(mp4|webm)$/i.test(src||"");
     const body = src
-      ? `<img src="${esc(src)}" loading="lazy" alt="">` +
+      ? (isVid
+          ? `<video src="${esc(src)}#t=0.4" muted playsinline preload="metadata"></video>`
+          : `<img src="${esc(src)}" loading="lazy" alt="">`) +
         (pics.length>1?`<button class="rot" data-rot="${esc(c.id)}">${(i%pics.length)+1}/${pics.length}</button>`:"")
       : `<div class="none">no frame yet</div>`;
     return `<div class="cd"><div class="big" data-card="${esc(c.id)}">${body}</div>
