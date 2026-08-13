@@ -93,12 +93,8 @@
          padding:11px 14px;margin-bottom:13px}
   .focus h2{margin:0 0 3px;font-size:12px;letter-spacing:.08em;text-transform:uppercase}
   .focus p{margin:0;color:var(--dim);font-size:12.5px}
-  .setrow{display:flex;gap:8px;overflow-x:auto;margin-top:10px;padding-bottom:4px}
-  .setrow figure{margin:0;flex:0 0 132px}
-  .setrow img,.setrow video{width:132px;height:132px;object-fit:cover;border-radius:7px;
-    display:block;background:var(--panel2)}
-  .setrow figcaption{font-size:10.5px;color:var(--dim);margin-top:3px;
-    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .cell.inset{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+  .cell.inset .cap{color:var(--accent);font-weight:600;white-space:normal}
   .focus b{color:var(--ink)}
   .more-btn{margin:16px auto;display:block;background:var(--panel);border:1px solid var(--line);
     color:var(--ink);border-radius:8px;padding:9px 20px;font:inherit;cursor:pointer}
@@ -170,7 +166,7 @@ const esc = s => String(s==null?"":s).replace(/[&<>"]/g,
   c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
 let D=null, sel={}, shown=0, view=[], PAGE=100, q="";
-let MODE="frames", BROWSE=null, FAVS=new Set(), ROT={};
+let MODE="frames", BROWSE=null, FAVS=new Set(), ROT={}, SETWHY=new Map();
 // The card kinds that can be browsed one-per-card. Ordered by how often you reach for them.
 const KINDS=[["place","places"],["character","characters"],["style","styles"],
              ["look","looks"],["emotion","emotions"],["motion","motions"],["camera","cameras"]];
@@ -233,15 +229,30 @@ function drawFacets(){
         :(OPEN[f]&&rows.length>8?`<div class="more" data-open="${esc(f)}">less</div>`:"")) +
       `</div>`;
   }).join("");
-  document.querySelectorAll("#facets button").forEach(b=>b.onclick=()=>{
+  // LEFT CLICK REPLACES, RIGHT CLICK ADDS.
+  //
+  // Clicking used to accumulate, so moving from one place to another meant unselecting the
+  // first, and browsing turned into filter admin. Switching is the common act and is now
+  // one click; a compound filter is the rarer one and asks for a right click. Clicking the
+  // value that is already the only selection clears it.
+  document.querySelectorAll("#facets button").forEach(b=>{
     const f=b.dataset.f, v=b.dataset.v;
-    sel[f]=sel[f]||new Set();
-    sel[f].has(v)?sel[f].delete(v):sel[f].add(v);
-    // Picking a value drops out of card browsing and back to frames. The two cannot both
-    // be in force - one shows cards, the other shows pictures - so the child wins and the
-    // parent is simply released rather than fighting it.
-    if (MODE!=="frames" && MODE!=="starred"){ setMode("frames"); return; }
-    apply();
+    const go = () => {
+      if (MODE!=="frames" && MODE!=="starred"){ setMode("frames"); return; }
+      apply();
+    };
+    b.onclick = () => {
+      const only = sel[f] && sel[f].size===1 && sel[f].has(v);
+      sel = {};
+      if (!only) sel[f] = new Set([v]);
+      go();
+    };
+    b.oncontextmenu = e => {
+      e.preventDefault();
+      sel[f] = sel[f] || new Set();
+      sel[f].has(v) ? sel[f].delete(v) : sel[f].add(v);
+      go();
+    };
   });
   document.querySelectorAll("#facets [data-jump]").forEach(h=>h.onclick=()=>setMode(h.dataset.jump));
   document.querySelectorAll("#facets .more").forEach(d=>d.onclick=()=>{
@@ -255,13 +266,14 @@ function cellHTML(it){
     : it.kind==="audio"
       ? `<div class="aud">${esc((it.domain||"audio").toUpperCase())}</div>`
       : `<img src="${esc(it.url)}" loading="lazy" alt="">`;
-  return `<div class="cell" data-id="${esc(it.id)}">${media}
+  const why = SETWHY.get(it.id);
+  return `<div class="cell${why?" inset":""}" data-id="${esc(it.id)}">${media}
     <button class="star ${FAVS.has(it.id)?"on":""}" data-star="${esc(it.id)}"
             title="star">${FAVS.has(it.id)?"★":"☆"}</button>
     <button class="star rej" data-reject="${esc(it.id)}"
             title="does not belong in this card - moves it out of the library">✕</button>
     <span class="kind">${esc(it.domain||it.kind)}</span>
-    <div class="cap">${esc(it.style||it.name)}</div></div>`;
+    <div class="cap">${esc(why || it.style || it.name)}</div></div>`;
 }
 
 function soleFacet(){
@@ -283,13 +295,12 @@ function drawSet(f){
       if (s.error || !s.set || !s.set.length) return;
       const axes = s.axes.map(a=>`${esc(a.axis)} ${a.got}/${a.want}`).join(" · ");
       box.innerHTML = `<div class="focus"><h2>The ${esc(f)} set — ${esc(on)}</h2>
-        <p>${s.complete?"complete":"INCOMPLETE"} · ${axes} · ${s.extra_count} more beyond the set</p>
-        <div class="setrow">${s.set.map(x=>
-          `<figure><${x.kind==="video"?`video src="${esc(x.url)}#t=0.4" muted`
-                                      :`img src="${esc(x.url)}" loading="lazy"`}></${
-             x.kind==="video"?"video":"img"}><figcaption>${esc(x.why)}</figcaption></figure>`
-        ).join("")}</div></div>`;
-      // Order the grid so the set leads and the extras follow.
+        <p>${s.complete?"complete":"INCOMPLETE"} · ${axes} · ${s.extra_count} more beyond the
+           set. Bordered cards below are the set; the caption says what each one adds.</p></div>`;
+      // NO SEPARATE STRIP. A row of 132px thumbnails is a worse view of a picture than the
+      // grid already gives, so the set is marked IN the grid at full size - a border, and
+      // the reason it is in the set written under the card. Same pictures, one place to look.
+      SETWHY = new Map(s.set.map(x => [x.id, x.why]));
       const rank = new Map(s.set.map((x,i)=>[x.id,i]));
       view.sort((a,b)=>(rank.has(a.id)?rank.get(a.id):9999)-(rank.has(b.id)?rank.get(b.id):9999));
       shown=0; document.getElementById("grid").innerHTML=""; more();
@@ -341,7 +352,7 @@ function drawApplied(){
   if (q) on.push(["search", q]);
   if (!on.length){ box.style.display="none"; box.innerHTML=""; return; }
   box.style.display="flex";
-  box.innerHTML = `<span class="lbl">filters</span>` + on.map(([f,v]) =>
+  box.innerHTML = `<span class="lbl">filters <span style="opacity:.65">right-click to add</span></span>` + on.map(([f,v]) =>
       `<button class="f" data-f="${esc(f)}" data-v="${esc(v)}">${esc(f)}: ${esc(v)}<span>&times;</span></button>`
     ).join("") + `<button class="clear">clear all</button>`;
   box.querySelectorAll(".f").forEach(b => b.onclick = () => {
@@ -426,6 +437,7 @@ function drawCards(){
 }
 
 function apply(){
+  SETWHY = new Map();           // stale marks belong to the previous selection
   view = D.items.filter(matches);
   if (MODE==="starred") view = view.filter(x => FAVS.has(x.id));
   const f = soleFacet();
