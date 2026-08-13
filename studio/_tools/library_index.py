@@ -322,7 +322,7 @@ def reject_report():
     return {"total": len(rows), "reasons": out}
 
 
-def reject(rel, reason=""):
+def reject(rel, reason="", note=""):
     """Move a frame out of the library. MOVED, never deleted.
 
     A picture you reject is evidence: "the train carriage place puts a painting across half
@@ -355,6 +355,8 @@ def reject(rel, reason=""):
             try:
                 r = json.load(open(p, encoding="utf-8"))
                 r["rejected_reason"] = reason
+                if note:
+                    r["rejected_note"] = note
                 r["rejected_at"] = time.strftime("%Y-%m-%dT%H:%M:%S")
                 r["rejected_from"] = rel
                 json.dump(r, open(dst, "w", encoding="utf-8"), indent=1, ensure_ascii=False)

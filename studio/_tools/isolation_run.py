@@ -132,6 +132,8 @@ def main():
     ap.add_argument("--plan", action="store_true")
     ap.add_argument("--seed", type=int, default=31337)
     ap.add_argument("--only", help="one card id - grow just this card")
+    ap.add_argument("--wide-styles", dest="wide", action="store_true",
+                    help="draw from every drawable style, not the neutral few")
     ap.add_argument("--fresh", action="store_true",
                     help="prefer styles this card has not been rendered in yet")
     a = ap.parse_args()
@@ -204,6 +206,45 @@ def main():
             return pick
         return rng.choice(pool)
 
+    # A character package wants a SPREAD, not six frames of the same photographic look.
+    # The neutral pool exists so a place plate shows the place; a character set is the
+    # opposite question - does this face survive being drawn six different ways.
+    if a.wide:
+        neutral = sorted(roll.drawable_styles(libs))
+
+    # A CHARACTER CARD IS WRITTEN IN ONE DIALECT, so it may only meet styles on that
+    # engine. A card carrying prose and no tags contributes NOTHING to an animagine prompt:
+    # the person is silently deleted and what renders is the place plus whatever emotion
+    # tags survived. Measured, not guessed - 82 of 200 frames in the first wave-4 run came
+    # back with no character in the prompt at all, including a woman rendered as
+    # "male focus, mature male".
+    #
+    # This is the same rule as a LoRA being a delta on specific weights, one level up: the
+    # card is a delta on a specific PROMPT LANGUAGE, and crossing engines drops it.
+    _style_engine = {}
+
+    def styles_for(card):
+        want_tags = bool((card.get("tags") or "").strip())
+        want_prose = bool((card.get("prose") or "").strip())
+        out = []
+        for s in neutral:
+            # A SELF-CONTAINED style is already the whole picture - a sign, a printed page,
+            # a menu - and roll drops the character when it meets one. Leaving them in a
+            # character's pool is the same bug as the dialect mismatch wearing a different
+            # hat: the frame renders, and the person is not in it.
+            if (libs["styles"].get(s) or {}).get("self_contained"):
+                continue
+            if s not in _style_engine:
+                try:
+                    _style_engine[s] = compose.resolve(libs, {"style": s})["engine"]
+                except Exception:
+                    _style_engine[s] = None
+            e = _style_engine[s]
+            if e == "anime" and want_tags:
+                out.append(s)
+            elif e in ("qwen", "flux2") and want_prose:
+                out.append(s)
+        return out or neutral
     if not neutral:
         print("  no neutral style available - a clean plate needs one")
         return 1
@@ -249,9 +290,10 @@ def main():
         for c in p["characters"]:
             for i in range(a.per):
                 rng = random.Random(a.seed + hash(c["id"]) % 9999 + i * 31)
+                pool = styles_for(c)
                 job = roll.roll_image(rng, libs, {
                     "character": c["id"], "cast_rate": 1.0,
-                    "style": rng.choice(neutral)})
+                    "style": pick_style(pool, "character", c["id"], rng)})
                 base = a.seed + (int(time.time()) % 9973 if a.only else 0)
                 job["seed"] = base + i * 6151
                 job["id"] = ("grow_%s_%d_%d" % (slug(c["id"]), base % 9973, i) if a.only
