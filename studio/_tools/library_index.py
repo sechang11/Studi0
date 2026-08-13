@@ -131,6 +131,62 @@ def star(item_id, on=True):
     return {"id": item_id, "starred": on, "total": len(ids)}
 
 
+REJECTED = os.path.join(SAMPLES, "_rejected")
+
+
+def reject(rel, reason=""):
+    """Move a frame out of the library. MOVED, never deleted.
+
+    A picture you reject is evidence: "the train carriage place puts a painting across half
+    the frame" is a fact about that card worth keeping, and it is gone forever if the file
+    is unlinked. So the media and its recipe go to samples/_rejected/ with the reason and a
+    timestamp written into the recipe, the index stops showing it, and it can be put back.
+
+    The same argument as keeping .orig beside a normalised effect: a change you cannot undo
+    is a change you cannot check.
+    """
+    src = os.path.normpath(os.path.join(STUDIO, rel))
+    if not os.path.abspath(src).startswith(os.path.abspath(SAMPLES)):
+        return None
+    if not os.path.isfile(src):
+        return None
+    stem = os.path.splitext(src)[0]
+    d = os.path.join(REJECTED, time.strftime("%Y%m%d"))
+    os.makedirs(d, exist_ok=True)
+    moved = []
+    for p in (src, stem + ".json"):
+        if not os.path.isfile(p):
+            continue
+        dst = os.path.join(d, os.path.basename(p))
+        n = 1
+        while os.path.exists(dst):
+            b, e = os.path.splitext(os.path.basename(p))
+            dst = os.path.join(d, "%s_%d%s" % (b, n, e))
+            n += 1
+        if p.endswith(".json"):
+            try:
+                r = json.load(open(p, encoding="utf-8"))
+                r["rejected_reason"] = reason
+                r["rejected_at"] = time.strftime("%Y-%m-%dT%H:%M:%S")
+                r["rejected_from"] = rel
+                json.dump(r, open(dst, "w", encoding="utf-8"), indent=1, ensure_ascii=False)
+                os.remove(p)
+                moved.append(dst)
+                continue
+            except Exception:
+                pass
+        os.replace(p, dst)
+        moved.append(dst)
+    # The cache is now wrong about a file that is no longer there. Drop it rather than let
+    # the page keep offering a 404.
+    try:
+        os.remove(CACHE)
+    except OSError:
+        pass
+    return {"id": rel, "moved": len(moved), "to": os.path.relpath(d, STUDIO),
+            "reason": reason}
+
+
 def browse(kind):
     """One representative frame per CARD of this kind, plus the alternates.
 
@@ -202,7 +258,7 @@ def scan():
     items, facets = [], {f: {} for f in FACETS}
     for rp in glob.iglob(os.path.join(SAMPLES, "**", "*.json"), recursive=True):
         base = os.path.basename(rp)
-        if base.startswith("_"):
+        if base.startswith("_") or "/_rejected/" in rp.replace("\\", "/"):
             continue
         stem = rp[:-5]
         media = None

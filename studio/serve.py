@@ -2108,7 +2108,7 @@ class H(http.server.SimpleHTTPRequestHandler):
                      "/api/character/suite", "/api/character/analyse",
                      "/api/tool/run", "/api/tool/random",
                      "/api/make3d/mesh", "/api/library/star",
-                     "/api/library/grow"):
+                     "/api/library/grow", "/api/library/reject"):
             return self._send({"error": "not found"}, 404)
         n = int(self.headers.get("Content-Length", 0))
         try:
@@ -2142,6 +2142,21 @@ class H(http.server.SimpleHTTPRequestHandler):
                 return self._send({"error": "could not start: %s" % str(e)[:160]}, 500)
             return self._send({"ok": True, "kind": kind, "id": cid, "frames": n,
                                "note": "rendering in the background - refresh in a minute"})
+        if p == "/api/library/reject":
+            m = _load_tool_module("library_index")
+            if m is None:
+                return self._send({"error": "library_index.py is unavailable"}, 500)
+            ident = str(data.get("id") or "")
+            if not ident:
+                return self._send({"error": "no id"}, 400)
+            try:
+                got = m.reject(ident, str(data.get("reason") or "")[:300])
+            except Exception as e:                                  # noqa: BLE001
+                traceback.print_exc()
+                return self._send({"error": str(e)[:200]}, 500)
+            if not got:
+                return self._send({"error": "no such frame, or it is outside samples/"}, 404)
+            return self._send(got)
         if p == "/api/library/star":
             m = _load_tool_module("library_index")
             if m is None:

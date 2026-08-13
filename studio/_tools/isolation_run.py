@@ -312,16 +312,20 @@ def main():
         # the whole styles phase on its first card, american_comic, after places,
         # characters and emotions had already completed. 105 frames lost to one bad id.
         drawable = set(roll.drawable_styles(libs))
-        want = [c for c in p["styles"]
-                if c["id"] in drawable and not c.get("self_contained")]
+        # SELF-CONTAINED CARDS ARE INCLUDED, just rendered differently. They are their own
+        # whole picture and take no place, so pinning market_street would fight them - but
+        # skipping them entirely is why the ten flux2 physical-media styles sat on 4-8
+        # frames while every other style had dozens. They were excluded, not unpopular.
+        want = [c for c in p["styles"] if c["id"] in drawable]
         print("  styles: %d of %d cards are drawable and not self-contained"
               % (len(want), len(p["styles"])))
         for c in want:
             rng = random.Random(a.seed + hash(c["id"]) % 9999)
+            solo = bool(c.get("self_contained"))
             try:
-                job = roll.roll_image(rng, libs, {
-                    "style": c["id"], "no_characters": True, "no_look": True,
-                    "place": "market_street"})
+                job = roll.roll_image(rng, libs, dict(
+                    {"style": c["id"], "no_characters": True, "no_look": True},
+                    **({} if solo else {"place": "market_street"})))
             except SystemExit as e:
                 # One card that cannot be composed must not end the phase. The run has
                 # already spent two hours by the time it reaches here.

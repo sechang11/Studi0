@@ -87,6 +87,8 @@
   .star{position:absolute;top:6px;left:6px;background:#000a;border:0;color:#fff;
         border-radius:20px;width:26px;height:26px;font-size:14px;cursor:pointer;line-height:1}
   .star.on{background:var(--warn);color:#1a1206}
+  .star.rej{left:auto;right:6px;top:34px}
+  .star.rej:hover{background:var(--bad);color:#fff}
   .focus{background:var(--panel);border:1px solid var(--accent);border-radius:10px;
          padding:11px 14px;margin-bottom:13px}
   .focus h2{margin:0 0 3px;font-size:12px;letter-spacing:.08em;text-transform:uppercase}
@@ -229,6 +231,10 @@ function drawFacets(){
     const f=b.dataset.f, v=b.dataset.v;
     sel[f]=sel[f]||new Set();
     sel[f].has(v)?sel[f].delete(v):sel[f].add(v);
+    // Picking a value drops out of card browsing and back to frames. The two cannot both
+    // be in force - one shows cards, the other shows pictures - so the child wins and the
+    // parent is simply released rather than fighting it.
+    if (MODE!=="frames" && MODE!=="starred"){ setMode("frames"); return; }
     apply();
   });
   document.querySelectorAll("#facets [data-jump]").forEach(h=>h.onclick=()=>setMode(h.dataset.jump));
@@ -246,6 +252,8 @@ function cellHTML(it){
   return `<div class="cell" data-id="${esc(it.id)}">${media}
     <button class="star ${FAVS.has(it.id)?"on":""}" data-star="${esc(it.id)}"
             title="star">${FAVS.has(it.id)?"★":"☆"}</button>
+    <button class="star rej" data-reject="${esc(it.id)}"
+            title="does not belong in this card - moves it out of the library">✕</button>
     <span class="kind">${esc(it.domain||it.kind)}</span>
     <div class="cap">${esc(it.style||it.name)}</div></div>`;
 }
@@ -320,11 +328,15 @@ function setMode(k){
   document.getElementById("cardgrid").style.display = frames?"none":"grid";
   document.getElementById("grid").style.display = frames?"grid":"none";
   document.getElementById("more").style.display = "none";
-  // The sidebar STAYS in browse mode - it holds the navigation now. Only the facet groups
-  // hide, because they filter frames and there are no frames on screen.
-  document.getElementById("facets").style.display = frames?"block":"none";
+  // The facet groups STAY in browse mode too. Browsing places and seeing the list of
+  // places is not a contradiction - it is the same library from two angles, and hiding one
+  // the moment you look at the other throws away your bearings. A parent and a child
+  // cannot both filter, so clicking a child simply leaves the parent behind.
+  document.getElementById("facets").style.display = "block";
   drawModes();
   if (frames){ apply(); return; }
+  drawFacets();                 // the list stays, so it still needs drawing
+  drawApplied();
   document.getElementById("focus").innerHTML="";
   document.getElementById("applied").style.display="none";
   document.getElementById("stat").textContent = "loading "+k+"…";
@@ -424,8 +436,24 @@ per.onchange = () => {
 
 function bind(){
   document.querySelectorAll(".cell").forEach(c=>c.onclick=e=>{
-    if (e.target.closest("[data-star]")) return;   // starring is not opening
+    if (e.target.closest("[data-star]") || e.target.closest("[data-reject]")) return;
     open(c.dataset.id);
+  });
+  document.querySelectorAll("[data-reject]").forEach(b=>b.onclick=e=>{
+    e.stopPropagation();
+    const id=b.dataset.reject;
+    // Asked for, because rejecting is a judgement and the judgement is the useful part.
+    // "a painting covers half the train" tells the next person something; a deleted file
+    // tells them nothing.
+    const why = prompt("Why does this not belong? (kept with the frame)", "");
+    if (why === null) return;
+    fetch("/api/library/reject",{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({id, reason: why})}).then(r=>r.json()).then(j=>{
+        if (j.error){ alert(j.error); return; }
+        D.items = D.items.filter(x => x.id !== id);
+        D.total = D.items.length;
+        apply();
+      });
   });
   document.querySelectorAll("[data-star]").forEach(b=>b.onclick=e=>{
     e.stopPropagation();
