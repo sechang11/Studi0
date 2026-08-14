@@ -13,6 +13,9 @@ declares its DIALECT and the workflow it belongs to, and the sample proves it.
 """
 import json, os, subprocess, sys
 
+import argparse
+argparse.ArgumentParser(description='make prompts').parse_args()
+# ^ the CLI contract: --help exits HERE, before any work below runs.
 HERE = os.path.dirname(os.path.abspath(__file__))
 STUDIO = os.path.dirname(HERE)
 ROOT = os.path.dirname(STUDIO)

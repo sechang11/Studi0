@@ -23,6 +23,9 @@ transfers above ~50 KB entirely, so an oversized sheet is an invisible sheet.
 """
 import json, os, subprocess, sys
 
+import argparse
+argparse.ArgumentParser(description='contact sheets').parse_args()
+# ^ the CLI contract: --help exits HERE, before any work below runs.
 HERE = os.path.dirname(os.path.abspath(__file__))
 STUDIO = os.path.dirname(HERE)
 CARDS = os.path.join(STUDIO, "cards")

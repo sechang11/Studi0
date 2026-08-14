@@ -26,6 +26,9 @@ import json, os, sys
 from itertools import combinations
 from PIL import Image, ImageChops
 
+import argparse
+argparse.ArgumentParser(description='panel diff').parse_args()
+# ^ the CLI contract: --help exits HERE, before any work below runs.
 HERE = os.path.dirname(os.path.abspath(__file__))
 STUDIO = os.path.dirname(HERE)
 CARDS = os.path.join(STUDIO, "cards")

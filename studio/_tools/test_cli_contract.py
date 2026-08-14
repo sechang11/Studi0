@@ -51,8 +51,11 @@ def module_level_work(tree):
             # An Expr at module level is usually a docstring; a bare call is not.
             if isinstance(node, ast.Expr) and not isinstance(node.value, ast.Call):
                 continue
-            if isinstance(node, ast.If):
-                continue          # __main__ guards and feature checks
+            # An `if` at top level is NOT skipped. A __main__ guard protects imports,
+            # not execution - and the hazard here is execution: --help runs the guard's
+            # body all the same. Skipping these made this checker pass nine tools that
+            # audit flagged, and two checkers disagreeing about one property means
+            # neither can be believed.
         for sub in ast.walk(node):
             if not isinstance(sub, ast.Call):
                 continue

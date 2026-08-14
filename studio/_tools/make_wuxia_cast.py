@@ -17,6 +17,9 @@ without the face changing with it.
 """
 import json, os, sys, time
 
+import argparse
+argparse.ArgumentParser(description='make wuxia cast').parse_args()
+# ^ the CLI contract: --help exits HERE, before any work below runs.
 TOOLS = os.path.dirname(os.path.abspath(__file__))
 STUDIO = os.path.dirname(TOOLS)
 ROOT = os.path.dirname(STUDIO)

@@ -22,6 +22,9 @@ danbooru-name arms and two seeds. 24 cells.
 """
 import os, sys
 
+import argparse
+argparse.ArgumentParser(description='damage nouns').parse_args()
+# ^ the CLI contract: --help exits HERE, before any work below runs.
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import terra_wardrobe as tw   # noqa: E402
 

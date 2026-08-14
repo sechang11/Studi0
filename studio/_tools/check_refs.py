@@ -16,6 +16,9 @@ review. Cheap to check, so check it every time.
 """
 import json, glob, os, sys, collections
 
+import argparse
+argparse.ArgumentParser(description='check refs').parse_args()
+# ^ the CLI contract: --help exits HERE, before any work below runs.
 HERE = os.path.dirname(os.path.abspath(__file__))
 STUDIO = os.path.dirname(HERE)
 

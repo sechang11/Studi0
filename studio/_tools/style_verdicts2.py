@@ -28,6 +28,9 @@ Predictions written into the cards before rendering, and how they scored:
 """
 import json, os
 
+import argparse
+argparse.ArgumentParser(description='style verdicts2').parse_args()
+# ^ the CLI contract: --help exits HERE, before any work below runs.
 HERE = os.path.dirname(os.path.abspath(__file__))
 STYLES = os.path.join(os.path.dirname(HERE), "styles")
 if not os.path.isdir(STYLES):

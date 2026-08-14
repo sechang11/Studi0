@@ -14,6 +14,9 @@ because a reference sheet was MEASURED to suppress style - four styles came back
 render repeated. Dropping the sheet is what lets the style layer through.
 """
 import json, os, subprocess, sys
+import argparse
+argparse.ArgumentParser(description='terra possibilities').parse_args()
+# ^ the CLI contract: --help exits HERE, before any work below runs.
 ROOT = os.path.expanduser("~/shared/comfy-studio")
 sys.path.insert(0, os.path.join(ROOT, "scripts")); sys.path.insert(0, os.path.join(ROOT, "studio"))
 os.environ.setdefault("COMFY_HOST", "127.0.0.1:8188")

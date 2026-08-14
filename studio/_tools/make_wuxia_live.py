@@ -27,6 +27,9 @@ Both characters are invented. No real person is named, referenced, or used as a 
 """
 import json, os, sys, time
 
+import argparse
+argparse.ArgumentParser(description='make wuxia live').parse_args()
+# ^ the CLI contract: --help exits HERE, before any work below runs.
 TOOLS = os.path.dirname(os.path.abspath(__file__))
 STUDIO = os.path.dirname(TOOLS)
 ROOT = os.path.dirname(STUDIO)

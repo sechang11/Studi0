@@ -22,6 +22,9 @@ the trained weights are riding on the tag and she is not really ours.
 """
 import json, os, subprocess, sys
 
+import argparse
+argparse.ArgumentParser(description='terra check').parse_args()
+# ^ the CLI contract: --help exits HERE, before any work below runs.
 ROOT = os.path.expanduser("~/shared/comfy-studio")
 sys.path.insert(0, os.path.join(ROOT, "scripts"))
 os.environ.setdefault("COMFY_HOST", "127.0.0.1:8188")

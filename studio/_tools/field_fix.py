@@ -24,6 +24,9 @@ deleting every mention of the word.
 """
 import os, sys
 
+import argparse
+argparse.ArgumentParser(description='field fix').parse_args()
+# ^ the CLI contract: --help exits HERE, before any work below runs.
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import terra_wardrobe as tw   # noqa: E402  (sets COMFY_ROOT before importing epic)
 

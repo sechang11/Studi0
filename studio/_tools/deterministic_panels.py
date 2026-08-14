@@ -28,6 +28,9 @@ reproducible, and what you see is precisely what the renderer will do.
 """
 import json, os, subprocess, sys
 
+import argparse
+argparse.ArgumentParser(description='deterministic panels').parse_args()
+# ^ the CLI contract: --help exits HERE, before any work below runs.
 HERE = os.path.dirname(os.path.abspath(__file__))
 STUDIO = os.path.dirname(HERE)
 ROOT = os.path.dirname(STUDIO)
