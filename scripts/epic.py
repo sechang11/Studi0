@@ -582,47 +582,13 @@ def chain_stage(film, outdir, seed0, vw, vh, fps, ndur, plans):
 
 # ------------------------------------------------------------------ stage 4
 
-_KEYSCALE = {}
-
-
 def keyscale(want):
-    """Coerce a cue's key into a spelling ACE-Step will accept, or drop it.
+    """Delegates to engine.keyscale (Phase 2) - the two copies were diffed and
+    identical but for this docstring. See SOUND-05 in craft/VIDEO_RULES.md."""
+    sys.path.insert(0, os.path.join(ROOT, "studio"))
+    from engine import keyscale as _keyscale
+    return _keyscale(want)
 
-    Cards are written the way a musician writes - `B flat minor` - and the node wants
-    `Bb minor`. A value outside its 34-item list kills the whole prompt, so this is a
-    guard rather than a nicety. See SOUND-05 in craft/VIDEO_RULES.md.
-    """
-    want = str(want or "").strip()
-    if not want:
-        return ""
-    if not _KEYSCALE:
-        try:
-            import urllib.request
-            raw = urllib.request.urlopen(
-                "http://%s/object_info/TextEncodeAceStepAudio1.5" % HOST, timeout=8).read()
-
-            def find(o):
-                if isinstance(o, dict):
-                    for k, v in o.items():
-                        if k == "keyscale":
-                            return v[1]["options"]
-                        r = find(v)
-                        if r:
-                            return r
-                elif isinstance(o, list):
-                    for v in o:
-                        r = find(v)
-                        if r:
-                            return r
-                return None
-            for o in (find(json.loads(raw)) or []):
-                _KEYSCALE[o.lower()] = o
-        except Exception:
-            return ""
-    cand = want.lower()
-    for a, b in ((" flat ", "b "), (" sharp ", "# ")):
-        cand = cand.replace(a, b)
-    return _KEYSCALE.get(cand, "")
 
 def sfx(film, outdir, seed0):
     want = [s for s in film["shots"] if s.get("sfx")]

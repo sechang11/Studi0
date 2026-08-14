@@ -221,30 +221,13 @@ def main():
     #
     # This is the same rule as a LoRA being a delta on specific weights, one level up: the
     # card is a delta on a specific PROMPT LANGUAGE, and crossing engines drops it.
-    _style_engine = {}
-
     def styles_for(card):
-        want_tags = bool((card.get("tags") or "").strip())
-        want_prose = bool((card.get("prose") or "").strip())
-        out = []
-        for s in neutral:
-            # A SELF-CONTAINED style is already the whole picture - a sign, a printed page,
-            # a menu - and roll drops the character when it meets one. Leaving them in a
-            # character's pool is the same bug as the dialect mismatch wearing a different
-            # hat: the frame renders, and the person is not in it.
-            if (libs["styles"].get(s) or {}).get("self_contained"):
-                continue
-            if s not in _style_engine:
-                try:
-                    _style_engine[s] = compose.resolve(libs, {"style": s})["engine"]
-                except Exception:
-                    _style_engine[s] = None
-            e = _style_engine[s]
-            if e == "anime" and want_tags:
-                out.append(s)
-            elif e in ("qwen", "flux2") and want_prose:
-                out.append(s)
-        return out or neutral
+        # Filtering moved to engine.style_pool (Phase 2), proven set-equal for
+        # every character over both the neutral and wide pools. The empty-pool
+        # fallback and the pool CHOICE stay here - this tool's policy, not engine
+        # law.
+        import engine
+        return engine.style_pool(libs, neutral, card) or neutral
     if not neutral:
         print("  no neutral style available - a clean plate needs one")
         return 1

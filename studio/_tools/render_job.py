@@ -60,6 +60,7 @@ os.environ.setdefault("COMFY_HOST", "127.0.0.1:8188")
 
 from comfy import run, set_path                       # noqa: E402
 from epic import load_wf, ensure_local, HOST, COMFY   # noqa: E402
+from engine import image_graph, keyscale, video_graph  # noqa: E402  (Phase 2: the one home)
 
 
 def sh(*a):
@@ -98,81 +99,6 @@ def luma_sat(path):
     return y, s
 
 
-def image_graph(job):
-    """The exact ComfyUI graph for this job, built and not submitted.
-
-    Split out of render_image so /library can show the workflow that produced a picture
-    without re-rendering it, and without a second copy of the wiring that would drift away
-    from this one.
-    """
-    eng = job.get("engine", "anime")
-    if eng == "flux2":
-        wf = load_wf("40_flux2_t2i.json")
-        # Dials are applied BY INPUT KEY, not by class name. 40_flux2_t2i is a custom
-        # sampler graph - the seed is `noise_seed` on RandomNoise, the steps and the size
-        # are on Flux2Scheduler, and the latent is EmptyFlux2LatentImage. Matching class
-        # names meant the seed and the size were never set at all, and every flux2 render
-        # silently reused whatever was saved in the workflow file. A steps sweep returned
-        # four pixel-identical frames before this was found.
-        for nid, n in wf.items():
-            if not isinstance(n, dict):
-                continue
-            ct = n.get("class_type", "")
-            ins = n.get("inputs")
-            if not isinstance(ins, dict):
-                continue
-            if ("CLIPTextEncode" in ct or "TextEncode" in ct) and "text" in ins:
-                ins["text"] = job["prompt"]
-            for k in ("noise_seed", "seed"):
-                if k in ins:
-                    ins[k] = job["seed"]
-            if "width" in ins and "height" in ins:
-                ins["width"] = job["width"]
-                ins["height"] = job["height"]
-            if "steps" in ins and job.get("steps"):
-                ins["steps"] = int(job["steps"])
-            if ct == "SaveImage":
-                ins["filename_prefix"] = "claude-generated/rolled/%s" % job["id"]
-    elif eng == "qwen":
-        wf = load_wf("13_qwen_t2i_styled.json")
-        set_path(wf, "10.inputs.text", job["prompt"])
-        set_path(wf, "11.inputs.text", job.get("negative") or "")
-        set_path(wf, "12.inputs.width", job["width"])
-        set_path(wf, "12.inputs.height", job["height"])
-        set_path(wf, "13.inputs.seed", job["seed"])
-        if job.get("style_lora"):
-            set_path(wf, "7.inputs.lora_name", job["style_lora"])
-            set_path(wf, "7.inputs.strength_model", float(job.get("style_lora_strength") or 1.0))
-        else:
-            set_path(wf, "7.inputs.strength_model", 0.0)
-        set_path(wf, "15.inputs.filename_prefix", "claude-generated/rolled/%s" % job["id"])
-    else:
-        wf = load_wf("22_anime_kf_ipadapter.json")
-        set_path(wf, "1.inputs.ckpt_name", "animagine-xl-4.0.safetensors")
-        set_path(wf, "4.inputs.weight", 0.0)
-        set_path(wf, "5.inputs.text", job["prompt"])
-        set_path(wf, "6.inputs.text", job.get("negative") or
-                 "lowres, worst quality, bad anatomy, bad hands, watermark, text")
-        set_path(wf, "8.inputs.seed", job["seed"])
-        for n in ("7", "10"):
-            set_path(wf, "%s.inputs.width" % n, job["width"])
-            set_path(wf, "%s.inputs.height" % n, job["height"])
-        if job.get("character_lora"):
-            # compose.resolve() already checked the base model, so reaching here means the
-            # weights genuinely attach to this checkpoint. Injected rather than assumed to
-            # exist in the graph, the same way epic.py does it for identity on clips.
-            wf["60"] = {"class_type": "LoraLoaderModelOnly",
-                        # Spliced between the IPAdapter patch and the sampler, NOT straight
-                        # off the checkpoint - node 8 reads its model from node 4, so
-                        # hanging this on node 1 would leave it dangling and silently unused.
-                        "inputs": {"model": ["4", 0], "lora_name": job["character_lora"],
-                                   "strength_model": float(
-                                       job.get("character_lora_strength") or 0.5)}}
-            set_path(wf, "8.inputs.model", ["60", 0])
-        set_path(wf, "11.inputs.filename_prefix", "claude-generated/rolled/%s" % job["id"])
-    return wf
-
-
 def render_image(job, outdir):
     wf = image_graph(job)
     _, outs = run(HOST, wf, quiet=True)
@@ -200,23 +126,10 @@ def render_video(job, outdir):
     sh("cp", key, os.path.join(COMFY, "input", staged))
     # 8n+1 frames at 24fps is what LTX accepts. Identity starts drifting past about ten
     # seconds, which is why roll.py never asks for more than six.
-    frames = int(round(job["seconds"] * 24 / 8)) * 8 + 1
-    # LTX-2.3 is a 16:9 model; the portrait sizes roll.py draws for stills are wrong here.
-    vw, vh = (1216, 704) if job["width"] <= job["height"] else (
-        min(1216, job["width"] // 8 * 8), min(704, job["height"] // 8 * 8))
-    wf = load_wf("12_ltx23_i2v_audio.json")
-    set_path(wf, "8.inputs.image", staged)
-    set_path(wf, "10.inputs.text", job.get("motion_text") or "gentle natural motion")
-    set_path(wf, "20.inputs.width", vw)
-    set_path(wf, "20.inputs.height", vh)
-    set_path(wf, "20.inputs.length", frames)
-    set_path(wf, "21.inputs.frames_number", frames)
-    # The shipped graph asks the audio latent for 25 fps against a 24 fps video. That is a
-    # 4% drift - a second of slip over half a minute - so it is corrected here to match the
-    # video rate rather than inherited (open task #45 fixes it in the workflow itself).
-    set_path(wf, "21.inputs.frame_rate", 24)
-    set_path(wf, "32.inputs.noise_seed", job["seed"])
-    set_path(wf, "43.inputs.filename_prefix", "claude-generated/rolled/%s" % job["id"])
+    # Graph construction moved to engine.video_graph (Phase 2) - frame math, 16:9
+    # sizing and the 24fps audio-latent correction included - and proven to submit
+    # a byte-identical wf before the inline block was deleted.
+    wf = video_graph(job, staged)
     _, outs = run(HOST, wf, quiet=True)
     try:
         os.remove(key)
@@ -226,55 +139,6 @@ def render_video(job, outdir):
         return None
     return ensure_local(outs[0], os.path.join(outdir, "_raw_%s.mp4" % job["id"]),
                         required=False)
-
-
-_KEYSCALE = {}
-
-
-def keyscale(want):
-    """Coerce a cue card's key into a spelling the ACE-Step node will accept, or drop it.
-
-    The cards are written the way a musician writes: `B flat minor`, `E flat major`. The
-    node's widget is a fixed 34-item combo that spells those `Bb minor` and `Eb major`, and
-    a value outside the list is a HARD prompt-validation error - ComfyUI refuses the whole
-    graph, render_job.py dies before printing anything, and the harness sees only
-    `failed (no result)`. That cost 20 of 137 jobs in one run.
-
-    The allowed list is read from the running server rather than copied here, so it cannot
-    drift from the node. Anything still unmatched is dropped: an unkeyed cue is fine, a
-    refused graph is not.
-    """
-    want = str(want or "").strip()
-    if not want:
-        return ""
-    if not _KEYSCALE:
-        try:
-            import urllib.request
-            raw = urllib.request.urlopen(
-                "http://%s/object_info/TextEncodeAceStepAudio1.5" % HOST, timeout=8).read()
-
-            def find(o):
-                if isinstance(o, dict):
-                    for k, v in o.items():
-                        if k == "keyscale":
-                            return v[1]["options"]
-                        r = find(v)
-                        if r:
-                            return r
-                elif isinstance(o, list):
-                    for v in o:
-                        r = find(v)
-                        if r:
-                            return r
-                return None
-            for o in (find(json.loads(raw)) or []):
-                _KEYSCALE[o.lower()] = o
-        except Exception:
-            return ""
-    cand = want.lower()
-    for a, b in ((" flat ", "b "), (" sharp ", "# ")):
-        cand = cand.replace(a, b)
-    return _KEYSCALE.get(cand, "")
 
 
 def render_audio(job, outdir):
