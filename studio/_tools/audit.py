@@ -282,6 +282,26 @@ def audit_workflow_files():
             "workflows/" + wf, "dead weight, not danger")
 
 
+def audit_card_schema():
+    """Every card against its kind's declared schema (studio/cards.py).
+
+    This differs from audit_cards, which detects INTERNAL inconsistency (a field whose
+    type varies across a kind) without knowing what the kind should look like. The schema
+    check knows: required fields, types, enums, per-kind statuses, and the semantic rules
+    the library has paid for - a character must carry a usable dialect, a wear ladder must
+    be a list. One measures agreement; the other measures conformance to a declaration.
+    """
+    sys.path.insert(0, STUDIO)
+    try:
+        import cards as C
+    except Exception as e:
+        add("error", "schema", "studio/cards.py failed to import: %s" % str(e)[:100])
+        return
+    for sev, kind, cid, msg in C.validate_all():
+        add("error" if sev == "error" else "warn", "schema", msg,
+            "%s/%s" % (kind, cid))
+
+
 # ── silent-failure patterns in our own code ──────────────────────────────────────────
 
 SILENT = [
@@ -371,6 +391,7 @@ def audit_routes():
 
 
 CHECKS = {"workflows": audit_workflows, "wf_files": audit_workflow_files,
+          "schema": audit_card_schema,
           "cards": audit_cards,
           "reach": audit_reachable, "code": audit_code, "routes": audit_routes}
 

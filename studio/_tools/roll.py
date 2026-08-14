@@ -49,7 +49,7 @@ SEEDING. With no --seed the run seed comes from the clock, so running the same s
 gives different work. With --seed it is exactly reproducible, which is what you want when
 something good comes out and you need it again.
 """
-import argparse, hashlib, json, os, random, re, sys, time
+import argparse, sys, hashlib, json, os, random, re, sys, time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 STUDIO = os.path.dirname(HERE)
@@ -119,21 +119,17 @@ def wants_a_person(card):
 
 
 def load_libs():
-    libs = {}
-    for g in GROUPS:
-        d = os.path.join(STUDIO, g)
-        libs[g] = {}
-        if not os.path.isdir(d):
-            continue
-        for fn in sorted(os.listdir(d)):
-            if not fn.endswith(".json"):
-                continue
-            try:
-                with open(os.path.join(d, fn), encoding="utf-8") as f:
-                    libs[g][fn[:-5]] = json.load(f)
-            except Exception:
-                pass
-    return libs
+    """Delegates to the one card loader (ARCHITECTURE Phase 1).
+
+    cards.load_all reproduces this function's exact behaviour - underscore files included,
+    unparseable files skipped - and was proven byte-identical against the old inline read
+    (full libs dict plus five seeded roll_image jobs) before this delegation was kept.
+    The schema, the dialect rules and the blocked-voice enforcement all live in cards.py;
+    this file stops owning any opinion about what a card file is.
+    """
+    sys.path.insert(0, STUDIO)
+    import cards
+    return cards.load_all(GROUPS)
 
 
 def drawable_styles(libs):
@@ -279,6 +275,21 @@ def roll_image(rng, libs, opt=None):
     sel = {"style": style, "place": place, "look": look, "emotion": emo,
            "character": char, "wear": wear}
     r = compose.resolve(libs, sel)
+    # A dialect_mismatch error means the style's engine cannot read this character and
+    # would delete them from the frame. The caller asked for the CHARACTER, so the STYLE
+    # is the thing that moves - same policy as the wants_a_person fallback above. One
+    # reroll from the character's own engines; if none exists the error stands and is
+    # carried in the job, loudly.
+    if char and any(c.get("code") == "dialect_mismatch"
+                    for c in r.get("conflicts", [])):
+        import cards as _cards
+        ok_engines = _cards.engines_for(libs["characters"][char])
+        pool = [s for s in styles
+                if compose.resolve(libs, {"style": s}).get("engine") in ok_engines]
+        if pool:
+            style = rng.choice(pool)
+            sel["style"] = style
+            r = compose.resolve(libs, sel)
     errs = [c for c in r.get("conflicts", []) if c.get("severity") == "error"]
     prompt = r["prompt"]
     # REPLACE the framing, never add one. A character card carries its own framing token, so

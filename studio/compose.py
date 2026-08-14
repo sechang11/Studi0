@@ -1882,6 +1882,24 @@ def _check_character(engine, character, char_id, conflicts):
                 "lora_dead_on_qwen"))
 
     # C5 - a missing sheet is invisible until playback: IPAdapter drops to weight 0.0 and
+    # C20d - THE DIALECT LAW (ARCHITECTURE Phase 1, paid for by wave 4). A character card
+    # is a delta on a prompt language: prose contributes nothing on the tag engine and
+    # tags contribute nothing on the prose engines. Crossing them does not degrade the
+    # character - it DELETES them, silently, and the frame renders whatever nouns remain.
+    # Measured at scale before this check existed: 82 of 200 frames with no character in
+    # the prompt at all, one of them a woman rendered from leftover "male focus" tags.
+    import cards as _cards
+    _ok, _why = _cards.legal(character, engine)
+    if not _ok:
+        conflicts.append(_conflict(
+            "error", ["character", "style"],
+            _why,
+            "pick a style on an engine this character is written for (%s), or add the "
+            "missing dialect to studio/characters/%s.json."
+            % (", ".join(sorted(_cards.engines_for(character))) or "none yet",
+               character.get("id", char_id)),
+            "dialect_mismatch"))
+
     # the face drifts every shot.
     if engine == "anime" and not sheet:
         conflicts.append(_conflict(

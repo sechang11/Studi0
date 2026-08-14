@@ -309,13 +309,13 @@ def render_audio(job, outdir):
         put("text", job.get("line") or "")
         vid = job.get("voice")
         if vid:
-            vc = json.load(open(os.path.join(STUDIO, "voices", vid + ".json"),
-                                encoding="utf-8"))
-            # Refuse to speak in a cloned real person's voice. Four packs here are clones of
-            # named public figures and are marked blocked; roll.py already skips them, and
-            # this is the second lock so a hand-written job cannot reach them either.
-            if vc.get("status") == "blocked":
-                raise RuntimeError("voice %s is blocked (clone of a real person)" % vid)
+            # The blocked-voice refusal lives in cards.require_voice now - ONE enforcement
+            # point instead of a lock re-implemented in every consumer. Same message, same
+            # RuntimeError; a missing voice also becomes a named error instead of a raw
+            # FileNotFoundError from the open() that used to sit here.
+            sys.path.insert(0, STUDIO)
+            import cards
+            vc = cards.require_voice(vid)
             put("voice", vc.get("file") or vid)
     else:
         put("text", job["prompt"])
