@@ -6,6 +6,9 @@ day. A check that over-reports gets ignored; a check that is quietly broken repo
 and looks like good news. Both failures are invisible without a table like this.
 """
 import re, sys
+import argparse
+argparse.ArgumentParser(description='test audit').parse_args()
+# ^ the CLI contract: --help exits HERE, before any work below runs.
 sys.path.insert(0, "studio/_tools")
 import audit
 

@@ -8,6 +8,9 @@ narrator who changed between episodes would break the conceit completely.
 """
 import json, os, sys
 
+import argparse
+argparse.ArgumentParser(description='write ep23').parse_args()
+# ^ the CLI contract: --help exits HERE, before any work below runs.
 ROOT = "/home/k4shix/shared/comfy-studio"
 sys.path.insert(0, os.path.join(ROOT, "studio", "_tools"))
 from write_salt_road import s, film            # noqa: E402

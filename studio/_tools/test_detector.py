@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Table test for the medium detector, including the case that was wrong."""
 import sys
+import argparse
+argparse.ArgumentParser(description='test detector').parse_args()
+# ^ the CLI contract: --help exits HERE, before any work below runs.
 sys.path.insert(0, "studio/_tools")
 sys.path.insert(0, "scripts")
 import character_new as C

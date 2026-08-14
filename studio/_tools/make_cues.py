@@ -14,6 +14,9 @@ needs and lets the mix trim in. See craft/SOUND.md.
 """
 import json, os
 
+import argparse
+argparse.ArgumentParser(description='make cues').parse_args()
+# ^ the CLI contract: --help exits HERE, before any work below runs.
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(os.path.dirname(HERE), "cues")
 

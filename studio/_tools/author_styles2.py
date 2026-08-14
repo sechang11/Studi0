@@ -25,6 +25,9 @@ re-routed that way, so treat the value here as a hypothesis.
 """
 import json, os, sys
 
+import argparse
+argparse.ArgumentParser(description='author styles2').parse_args()
+# ^ the CLI contract: --help exits HERE, before any work below runs.
 OUT = sys.argv[1] if len(sys.argv) > 1 else "studio/styles"
 
 Q = "masterpiece, best quality, very aesthetic, absurdres"

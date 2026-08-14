@@ -267,8 +267,17 @@ def roll_image(rng, libs, opt=None):
     elif orient == "square":
         sizes = [s for s in SIZES if s[0] == s[1]]
     w, h = rng.choice(sizes or SIZES)
+    # The wear rung, EXPLICIT and RECORDED. compose defaulted this to 0 whenever the key
+    # was absent, which meant every rolled frame was rung 0 and no recipe said so - outfit
+    # coverage was unmeasurable and the ladder above rung 1 was unreachable because nothing
+    # ever asked for it. Recording is Phase 0; varying the distribution is task #50.
+    wear = 0
+    try:
+        wear = max(0, min(4, int(opt.get("wear") or 0)))
+    except (TypeError, ValueError):
+        pass
     sel = {"style": style, "place": place, "look": look, "emotion": emo,
-           "character": char}
+           "character": char, "wear": wear}
     r = compose.resolve(libs, sel)
     errs = [c for c in r.get("conflicts", []) if c.get("severity") == "error"]
     prompt = r["prompt"]
@@ -298,6 +307,7 @@ def roll_image(rng, libs, opt=None):
     return {
         "domain": "image", "engine": r["engine"], "style": style, "place": place,
         "look": look, "emotion": emo, "framing": framing, "character": char,
+        "wear": wear if char else None,
         "style_wants_a_person": needs, "place_is_vista": vista,
         # Only when compose says the weights are actually in play. A character LoRA is a
         # delta on specific base weights: TERRA's is trained on the anime checkpoint and

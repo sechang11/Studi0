@@ -16,6 +16,9 @@ set none of them; the fix was to go and look. Same discipline here.
 """
 import json, os
 
+import argparse
+argparse.ArgumentParser(description='make domains').parse_args()
+# ^ the CLI contract: --help exits HERE, before any work below runs.
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(os.path.dirname(HERE), "domains")
 

@@ -23,6 +23,9 @@ against actual output rather than guessed once.
 """
 import json, os
 
+import argparse
+argparse.ArgumentParser(description='make turnaround wf').parse_args()
+# ^ the CLI contract: --help exits HERE, before any work below runs.
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(os.path.dirname(HERE))
 WF = os.path.join(ROOT, "workflows")

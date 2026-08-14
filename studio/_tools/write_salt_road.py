@@ -17,6 +17,9 @@ were lost to that earlier today. Every key below is from the list.
 """
 import json, os
 
+import argparse
+argparse.ArgumentParser(description='write salt road').parse_args()
+# ^ the CLI contract: --help exits HERE, before any work below runs.
 ROOT = "/home/k4shix/shared/comfy-studio"
 
 STYLE_BASE = ("dark fantasy tabletop illustration, painted in gouache and ink, heavy "

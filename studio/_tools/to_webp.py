@@ -6,6 +6,9 @@ The full-size originals live in ~/ComfyUI/output/claude-generated/studio_cards/.
 import os, sys, time
 from PIL import Image
 
+import argparse
+argparse.ArgumentParser(description='to webp').parse_args()
+# ^ the CLI contract: --help exits HERE, before any work below runs.
 ROOT = os.path.expanduser("~/shared/comfy-studio/studio/samples/vars")
 Q = 82
 

@@ -219,6 +219,69 @@ def audit_reachable():
                 % (e, len(ids)), "studio/styles")
 
 
+def audit_workflow_files():
+    """Referenced-vs-exists for workflow files, both directions, loads kept apart from
+    mentions.
+
+    The first scan of this problem counted ANY "NN_name.json" string in a .py file as a
+    reference and reported six missing workflows. Five of the six were prose inside
+    _write_caps.py - "Build workflows/32_..." - plans, not loads. A reachability check that
+    cannot tell a load from a mention would cry wolf forever, so this one separates them:
+
+      error  a literal passed to load_wf()/wf_of() that is not on disk - that path crashes
+      error  a domain card whose `workflow` field is not on disk - the same crash one
+             indirection later, because render_job loads card["workflow"] verbatim
+      info   a mention that is neither loaded nor on disk - a plan or a stale note
+      info   a file on disk that nothing mentions - dead weight, not danger
+    """
+    wf_dir = os.path.join(os.path.dirname(STUDIO), "workflows")
+    if not os.path.isdir(wf_dir):
+        add("error", "reach", "workflows/ directory is missing", wf_dir)
+        return
+    on_disk = {f for f in os.listdir(wf_dir) if f.endswith(".json")}
+
+    load_re = re.compile(r'(?:load_wf|wf_of)\(\s*["\']([^"\']+\.json)')
+    name_re = re.compile(r'["\']([0-9]{2}_[a-z0-9_]+\.json)["\']')
+    loaded, mentioned = {}, {}
+    srcs = (glob.glob(os.path.join(TOOLS, "*.py"))
+            + glob.glob(os.path.join(STUDIO, "*.py"))
+            + glob.glob(os.path.join(os.path.dirname(STUDIO), "scripts", "*.py")))
+    for f in srcs:
+        try:
+            src = open(f, encoding="utf-8", errors="replace").read()
+        except OSError:
+            continue
+        name = os.path.relpath(f, os.path.dirname(STUDIO)).replace("\\", "/")
+        for m in load_re.finditer(src):
+            loaded.setdefault(m.group(1), name)
+        for m in name_re.finditer(src):
+            mentioned.setdefault(m.group(1), name)
+
+    for wf, where in sorted(loaded.items()):
+        if wf not in on_disk:
+            add("error", "reach", "load_wf(%r) but the file is not in workflows/" % wf,
+                where, "that code path crashes the moment it runs")
+    for f in sorted(glob.glob(os.path.join(STUDIO, "domains", "*.json"))):
+        try:
+            card = json.load(open(f, encoding="utf-8"))
+        except Exception:
+            continue
+        w = card.get("workflow")
+        if w and w not in on_disk:
+            add("error", "reach",
+                "domain card names workflow %r which is not on disk" % w,
+                "domains/" + os.path.basename(f),
+                "render_job loads card['workflow'] verbatim - this crashes")
+    for wf, where in sorted(mentioned.items()):
+        if wf not in on_disk and wf not in loaded:
+            add("info", "reach",
+                "%r is mentioned but not on disk and not loaded - a plan or a stale note"
+                % wf, where)
+    for wf in sorted(on_disk - set(mentioned)):
+        add("info", "reach", "workflow %r exists on disk and nothing mentions it" % wf,
+            "workflows/" + wf, "dead weight, not danger")
+
+
 # ── silent-failure patterns in our own code ──────────────────────────────────────────
 
 SILENT = [
@@ -307,7 +370,8 @@ def audit_routes():
                 "is the studio running on 8777?")
 
 
-CHECKS = {"workflows": audit_workflows, "cards": audit_cards,
+CHECKS = {"workflows": audit_workflows, "wf_files": audit_workflow_files,
+          "cards": audit_cards,
           "reach": audit_reachable, "code": audit_code, "routes": audit_routes}
 
 

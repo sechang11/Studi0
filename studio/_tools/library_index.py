@@ -51,6 +51,7 @@ DETAIL = [
     ("character", "Character"), ("character_lora", "Character LoRA"),
     ("character_lora_strength", "Character LoRA strength"),
     ("character_lora_reason", "LoRA note"),
+    ("wear", "Wear rung (0 clean - 4 ruined)"),
     ("place", "Place"), ("look", "Look"), ("emotion", "Emotion"),
     ("framing", "Framing"), ("framing_from", "Framing came from"),
     ("motion", "Motion"), ("motion_text", "Motion text"), ("camera", "Camera"),
@@ -490,7 +491,8 @@ def scan():
             "name": os.path.basename(stem),
         }
         for k in ("domain", "engine", "style", "character", "place", "look", "emotion",
-                  "framing", "motion", "camera", "seed", "width", "height", "prompt"):
+                  "framing", "motion", "camera", "seed", "width", "height", "prompt",
+                  "wear"):
             if r.get(k) not in (None, ""):
                 it[k] = r[k]
         it.setdefault("domain", it["kind"])
@@ -598,7 +600,10 @@ def workflow(rel):
                        "by an LTX image-to-video pass, and audio is driven by its domain "
                        "card - rebuilding either from the recipe alone would be a guess, so "
                        "the workflow file is named instead.")
-        out["file"] = {"video": "11_ltx23_i2v.json"}.get(dom) or "see studio/domains/"
+        # 12_ltx23_i2v_audio.json is what render_job.render_video actually loads
+        # (render_job.py:207). This said 11_ltx23_i2v.json, which does not exist - so the
+        # workflow panel named a ghost file for every video in the library.
+        out["file"] = {"video": "12_ltx23_i2v_audio.json"}.get(dom) or "see studio/domains/"
         return out
     import sys
     for p in (TOOLS, os.path.join(ROOT, "scripts")):
