@@ -1,3 +1,7 @@
+> **Superseded.** This document is absorbed into [ARCHITECTURE.md](ARCHITECTURE.md),
+> which carries the current consolidation plan. Kept because its incident list is
+> the evidence behind that plan; do not extend it here.
+
 # Refactor: what to reorganise before adding more
 
 Written against the tree as it stands: 106 tools in one folder, 22 HTML pages, 21 sibling
