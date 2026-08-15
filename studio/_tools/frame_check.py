@@ -170,7 +170,9 @@ def main():
     for cid, card in sorted(lib.items()):
         if cid.startswith("_") or (a.only and cid != a.only):
             continue
-        frames = sorted(glob.glob(os.path.join(iso, "*%s*.png" % cid)))
+        # character files are char_<lower id>_N.png; place files clean_<id>_N.png
+        frames = sorted(set(glob.glob(os.path.join(iso, "*%s*.png" % cid)))
+                        | set(glob.glob(os.path.join(iso, "*%s*.png" % cid.lower()))))
         if a.limit:
             frames = frames[:a.limit]
         if not frames:
@@ -180,8 +182,15 @@ def main():
                             (card.get("tags") or "").split(",")[:6],
                             (card.get("prose") or "")[:120])
         else:
-            want = nouns_of(card.get("name"), (card.get("desc") or "")[:160],
-                            "person woman man girl boy figure character")
+            # A character's VISUAL identity lives in tags/prose (hair, eyes, clothing);
+            # `desc` is voice/character prose ("Fifty-six. Thirty years...") and matched
+            # nothing - the first pass reported 0/6 on characters the VLM had described
+            # perfectly. Person words are always in: a frame with no person at all is
+            # subject_missing whatever the outfit says.
+            want = nouns_of((card.get("tags") or "").split(",")[:10],
+                            (card.get("prose") or "")[:220],
+                            "person woman man girl boy figure character people "
+                            "portrait face", limit=18)
         seen = 0
         for fp in frames:
             rp = os.path.splitext(fp)[0] + ".json"
@@ -197,9 +206,29 @@ def main():
             else:
                 desc = describe(fp)
             hits = check(desc, want)
+            no_person = False
+            if a.kind == "characters":
+                # Two questions, kept apart. (1) Is ANYONE there? A frame with no person
+                # is the wave-4 disease and the one hard failure (grow_thrane_7798_0: "a
+                # photograph on a white card" - found by this check). (2) Do the identity
+                # words match? Cards describe identity in adjectives (heavyset, weathered)
+                # a VLM rarely repeats, so a person WITHOUT identity hits is "seen,
+                # identity unverified", not a miss - the honest middle.
+                person = check(desc, ["person", "woman", "man", "girl", "boy", "figure",
+                                      "character", "people", "portrait", "face", "lady",
+                                      "gentleman", "child", "warrior", "soldier",
+                                      "swordsman", "sailor", "knight", "elderly", "male",
+                                      "female", "someone"])
+                if not person:
+                    no_person = True
+                    hits = []
+                elif not hits:
+                    hits = ["<person present; identity words not repeated>"]
             rec["frame_check"] = {"seen": bool(hits), "hits": hits[:6],
                                   "expect": want, "description": desc[:400],
                                   "model": "gemma4-e2b via TextGenerate"}
+            if a.kind == "characters":
+                rec["frame_check"]["no_person"] = no_person
             with open(rp, "w", encoding="utf-8") as f:
                 json.dump(rec, f, indent=1, ensure_ascii=False)
             seen += bool(hits)

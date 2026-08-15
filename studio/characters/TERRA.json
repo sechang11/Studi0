@@ -193,9 +193,9 @@
   "sheet_photo_note": "WHAT THE 121-RENDER SWEEP ACTUALLY MEASURED, and three of the four results contradict something this card used to say.\n1. LIGHT IS THE STRONG VARIABLE AND GRADE IS NEARLY INERT. Six lighting-and-lens treatments at one seed produced six visibly different photographs. Five film-stock and grade treatments at one seed - Portra, CineStill 800T, bleach bypass, teal-orange, Ektachrome - changed the background and a little contrast and left the face essentially alone. Spend the prompt on where the light is, not on what it was shot on.\n2. GREEN HAIR DOES NOT RETURN A WIG. This card previously recorded that naming the hair green on a photoreal model gets a wig, and that it therefore had to be named as dye with roots. Measured across five hair treatments at six lights: 'a saturated deep green, long and loose' returned convincing dyed hair in all six lights. The wig in the very first sheet came from the whole cosplay sentence - gold dress, red cape, red boots, flat frontal light - not from the word green. The saturated form is now used, because it is the one that still reads as HER.\n3. EXPRESSION AND GAZE ARE REAL AND CHEAP. Six treatments at one seed gave six different people-in-a-moment: laughing with the eyes creased, a tired half-smile, caught mid-turn before the eyes arrive, exhausted and unfocused. This is the fix for renders that read lifeless, and it costs nothing. It belongs on the SHOT, not on the sheet - the sheet keeps a level neutral gaze so it teaches the face rather than a mood, and the probes confirm the sheet does not impose its expression on anything conditioned on it.\n4. THE RIBBON IS DELIBERATELY ABSENT FROM THE PHOTOREAL SHEET. Rendered explicitly at four seeds (03_finals_ribbon_REJECTED.jpg) as 'a narrow oxblood grosgrain ribbon tied at the crown', it comes back as a large satin gift bow with long tails sitting on top of her head - the governing rule of this project biting again, the model renders nouns. It reads as costume and it undoes the wardrobe work. Her photoreal version has no ribbon and that is a decision, not an oversight. The anime path is unaffected and keeps its headpiece.\n5. A THIRD PANEL DOES NOT HELP. A bust panel was added to make the collar legible for close shots. The edit path refused the framing, returned another standing figure, and invented a gold necklace, so the three-panel sheet was two near-duplicates and a prop. Two panels, face and three-quarter figure.",
   "evidence": {
     "verdict": "MEASURED",
-    "method": "training captions read (no headpiece named -> absorbed into trigger); prose corrected; tags held for the LoRA contract",
+    "method": "frame_check: Gemma-4 description vs card nouns",
     "date": "2026-08-15",
-    "note": "prose now describes the ornament all 160 renders draw; anime tag 'red hair ribbon' is inert under the LoRA and deliberately unchanged"
+    "note": "6 of 6 isolation frames describe as this character (VLM: nouns terra, branford, final, fantasy, girl)"
   },
   "evidence_history": [
     {
@@ -215,6 +215,24 @@
       "method": "package_check: complete",
       "date": "2026-08-15",
       "note": "package complete"
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "training captions read (no headpiece named -> absorbed into trigger); prose corrected; tags held for the LoRA contract",
+      "date": "2026-08-15",
+      "note": "prose now describes the ornament all 160 renders draw; anime tag 'red hair ribbon' is inert under the LoRA and deliberately unchanged"
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "frame_check: Gemma-4 description vs card nouns",
+      "date": "2026-08-15",
+      "note": "2 of 6 isolation frames describe as this character (VLM: nouns terra, doe, know, what, half)"
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "frame_check: Gemma-4 description vs card nouns",
+      "date": "2026-08-15",
+      "note": "6 of 6 isolation frames describe as this character (VLM: nouns terra, branford, final, fantasy, girl)"
     }
   ],
   "headpiece": "pink-and-gold ornament with a red gem and two upswept prongs - NOT a red ribbon. The anime `tags` still say 'red hair ribbon' on purpose: the LoRA absorbed the ornament into the trigger `terra` (its captions name neither), so the tag is inert on the anime engine and changing it would move every render for nothing. `prose` (qwen/flux2, no LoRA) is corrected to the ornament so the two engines finally agree.",

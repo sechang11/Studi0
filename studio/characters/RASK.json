@@ -19,9 +19,9 @@
   "provenance_note": "Invented for this project - nothing in the checkpoint has seen this person, so the reference sheet, turnaround and trained LoRA are all mandatory. See craft/KNOWN_CHARACTERS.md for the alternative, where the checkpoint already knows a named character and the build gets much shorter.",
   "evidence": {
     "verdict": "MEASURED",
-    "method": "package_check: complete",
+    "method": "frame_check: Gemma-4 description vs card nouns",
     "date": "2026-08-15",
-    "note": "package complete"
+    "note": "6 of 6 isolation frames describe as this character (VLM: nouns solo, hair, undercut, yellow, eye)"
   },
   "evidence_history": [
     {
@@ -35,6 +35,24 @@
       "method": "package_check: complete",
       "date": "2026-08-15",
       "note": "package complete"
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "package_check: complete",
+      "date": "2026-08-15",
+      "note": "package complete"
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "frame_check: Gemma-4 description vs card nouns",
+      "date": "2026-08-15",
+      "note": "0 of 6 isolation frames describe as this character (VLM: nouns rask, rival, number, never, lost)"
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "frame_check: Gemma-4 description vs card nouns",
+      "date": "2026-08-15",
+      "note": "5 of 6 isolation frames describe as this character (VLM: nouns solo, hair, undercut, yellow, eye)"
     }
   ]
 }

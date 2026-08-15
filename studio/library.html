@@ -673,8 +673,10 @@ async function open(id){
       <button id="wfbtn">workflow</button>
       <a href="${esc(it.url)}" download class="alt">download</a>
       <button class="alt" id="copyp">copy prompt</button>
+      <button class="alt" id="vlmbtn" title="Ask a vision model what it sees, and whether the place/character you asked for is in it">ask a VLM: is it what I asked for?</button>
     </div>
     <div id="wfout"></div>
+    <div id="vlmout"></div>
     ${rows}${extra}`;
 
   document.querySelectorAll(".chip").forEach(c=>c.onclick=()=>{
@@ -686,6 +688,19 @@ async function open(id){
     document.getElementById("copyp").textContent="copied";
   };
   document.getElementById("wfbtn").onclick=()=>showWorkflow(id);
+  document.getElementById("vlmbtn").onclick=async()=>{
+    const out=document.getElementById("vlmout");
+    out.innerHTML=`<p class="note">asking Gemma-4 what it sees (about 3s)…</p>`;
+    const j=await fetch("/api/library/check",{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({id})}).then(x=>x.json());
+    if(j.error){ out.innerHTML=`<p class="note">${esc(j.error)}</p>`; return; }
+    const verdict = j.seen===null ? "nothing on the recipe to check against"
+      : j.seen ? `YES - saw: ${esc(j.hits.join(", "))}`
+      : `NO - none of ${esc((j.expect||[]).slice(0,6).join(", "))} in the description`
+        + (j.person_present===false && j.checked&&j.checked.includes("character") ? " - and NO PERSON at all" : "");
+    out.innerHTML=`<div class="row"><div class="k">What a VLM saw</div><div class="v">${esc(j.description)}</div></div>
+      <div class="row"><div class="k">Is it what you asked for (${esc(j.checked)})?</div><div class="v"><b>${verdict}</b></div></div>`;
+  };
 }
 
 async function showWorkflow(id){

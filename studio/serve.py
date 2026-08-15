@@ -2149,7 +2149,7 @@ class H(http.server.SimpleHTTPRequestHandler):
                      "/api/tool/run", "/api/tool/random",
                      "/api/make3d/mesh", "/api/library/star",
                      "/api/library/grow", "/api/library/reject",
-                     "/api/verify/card"):
+                     "/api/library/check", "/api/verify/card"):
             return self._send({"error": "not found"}, 404)
         n = int(self.headers.get("Content-Length", 0))
         try:
@@ -2203,6 +2203,61 @@ class H(http.server.SimpleHTTPRequestHandler):
                 return self._send({"error": "could not start: %s" % str(e)[:160]}, 500)
             return self._send({"ok": True, "kind": kind, "id": cid, "frames": n,
                                "note": "rendering in the background - refresh in a minute"})
+        if p == "/api/library/check":
+            # One frame through frame_check (Gemma-4 VLM description vs the recipe's
+            # place/character nouns). Written onto the recipe; nothing is rejected -
+            # the answer sits beside the reject control and the human decides.
+            m = _load_tool_module("library_index")
+            ident = str(data.get("id") or "")
+            if m is None or not ident:
+                return self._send({"error": "no id"}, 400)
+            rec = m.recipe(ident)
+            if not rec:
+                return self._send({"error": "no such frame, or it has no recipe"}, 404)
+            raw = rec.get("raw") or {}
+            fc = _load_tool_module("frame_check")
+            if fc is None:
+                return self._send({"error": "frame_check.py is unavailable"}, 500)
+            sys.path.insert(0, HERE)
+            import cards as _cards
+            want, kind = [], None
+            if raw.get("place"):
+                pc = _cards.load("places").get(str(raw["place"])) or {}
+                want += fc.nouns_of(pc.get("name"), pc.get("family"),
+                                    (pc.get("tags") or "").split(",")[:6],
+                                    (pc.get("prose") or "")[:120])
+                kind = "place"
+            if raw.get("character"):
+                cc = _cards.load("characters").get(str(raw["character"])) or {}
+                want += fc.nouns_of((cc.get("tags") or "").split(",")[:10],
+                                    (cc.get("prose") or "")[:220],
+                                    "person woman man girl boy figure character",
+                                    limit=18)
+                kind = (kind + "+character") if kind else "character"
+            png = os.path.join(HERE, ident) if not ident.startswith("/") else ident
+            if not os.path.isfile(png):
+                png = os.path.join(HERE, "samples", ident.split("samples/", 1)[-1])
+            try:
+                desc = fc.describe(png)
+            except Exception as e:                                  # noqa: BLE001
+                return self._send({"error": "VLM failed: %s" % str(e)[:160]}, 500)
+            hits = fc.check(desc, want) if want else []
+            person = fc.check(desc, ["person", "woman", "man", "girl", "boy", "figure",
+                                     "character", "people", "portrait", "face"])
+            out = {"description": desc, "expect": want, "hits": hits,
+                   "seen": bool(hits) if want else None,
+                   "person_present": bool(person), "checked": kind or "nothing to check"}
+            # write it beside the frame, like the sweep does
+            rp = os.path.splitext(png)[0] + ".json"
+            try:
+                r = json.load(open(rp, encoding="utf-8"))
+                r["frame_check"] = dict(out, model="gemma4-e2b via TextGenerate")
+                with open(rp, "w", encoding="utf-8") as f:
+                    json.dump(r, f, indent=1, ensure_ascii=False)
+            except Exception:
+                traceback.print_exc()
+            return self._send(out)
+
         if p == "/api/library/reject":
             m = _load_tool_module("library_index")
             if m is None:
