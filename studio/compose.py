@@ -2106,7 +2106,7 @@ def _check_shot(engine, character, emotion, wear, desc, template, conflicts):
     # Task 50, MEASURED (samples/wear_sweep/TERRA.jpg): on a LoRA-backed character,
     # damage ADJECTIVES on the trained garment do not reach the pixels above rung 1 -
     # the LoRA's wardrobe wins; garment PRESENCE (cape on/off) and props/place do.
-    if wear >= 2 and character.get("lora"):
+    if wear >= 2 and character and character.get("lora"):
         rung = (character.get("wear_tags") or [""] * 5)
         rung = rung[wear] if wear < len(rung) else ""
         if rung and re.search(r"\b(torn|scuffed|ripped|in rags|ragged|tattered|frayed|"
