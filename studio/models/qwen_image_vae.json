@@ -1,0 +1,35 @@
+{
+  "id": "qwen_image_vae",
+  "name": "qwen_image_vae",
+  "file": "qwen_image_vae.safetensors",
+  "folder": "vae",
+  "size_gb": 0.25,
+  "status": "untested",
+  "engine": null,
+  "dialect": null,
+  "role": "On disk, unmeasured.",
+  "desc": "Nothing on this box has rendered through this model yet.",
+  "strengths": "",
+  "weaknesses": "",
+  "workflows": [
+    "01_qwen_t2i_turbo.json",
+    "02_qwen_t2i_quality.json",
+    "03_qwen_image_edit.json",
+    "05_qwen_controlnet.json",
+    "13_qwen_t2i_styled.json",
+    "14_qwen_edit_ref.json",
+    "16_llm_to_image.json",
+    "19_product_composite.json",
+    "22_qwen_edit_2511.json",
+    "23_qwen_edit_2511_fusion.json",
+    "32_qwen_turnaround.json"
+  ],
+  "reachable": true,
+  "strip": null,
+  "evidence": {
+    "verdict": "UNVERIFIED",
+    "method": "on disk; nothing rendered through it here",
+    "date": "2026-08-15",
+    "note": ""
+  }
+}

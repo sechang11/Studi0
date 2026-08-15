@@ -1,0 +1,26 @@
+{
+  "id": "flux2_dev_fp8mixed",
+  "name": "flux2_dev_fp8mixed",
+  "file": "flux2_dev_fp8mixed.safetensors",
+  "folder": "diffusion_models",
+  "size_gb": 35.46,
+  "status": "ready",
+  "engine": "flux2",
+  "dialect": "prose",
+  "role": "Layout, count, hex colour and QUOTED text.",
+  "desc": "Spells ONLY quoted strings - unquoted text is gibberish even at 4 steps. Dials are set BY INPUT KEY (noise_seed on RandomNoise, steps on Flux2Scheduler): matching class names set nothing and cost a silent no-op sweep. Self-contained styles (signs, printed pages) drop the character - excluded from character pools.",
+  "strengths": "typography (quoted), physical media, layout obedience, hex colour",
+  "weaknesses": "unquoted text, anime faces, character consistency",
+  "workflows": [
+    "26_flux2_t2i.json",
+    "40_flux2_t2i.json"
+  ],
+  "reachable": true,
+  "strip": "samples/flux2_gallery/*.png",
+  "evidence": {
+    "verdict": "MEASURED",
+    "method": "engine sessions on this box; see desc",
+    "date": "2026-08-15",
+    "note": "Layout, count, hex colour and QUOTED text."
+  }
+}

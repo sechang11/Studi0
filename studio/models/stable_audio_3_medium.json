@@ -1,0 +1,25 @@
+{
+  "id": "stable_audio_3_medium",
+  "name": "stable_audio_3_medium",
+  "file": "stable_audio_3_medium.safetensors",
+  "folder": "checkpoints",
+  "size_gb": 9.22,
+  "status": "ready",
+  "engine": "audio",
+  "dialect": "prose",
+  "role": "The SFX engine.",
+  "desc": "Raw output levels are all over the place; SFX are normalised before a film (two-pass loudnorm, alimiter level=disabled - auto-level silently undid a -20.9 to -14.9 LUFS correction once).",
+  "strengths": "short named effects",
+  "weaknesses": "long ambiences, levels",
+  "workflows": [
+    "10_stableaudio_sfx.json"
+  ],
+  "reachable": true,
+  "strip": null,
+  "evidence": {
+    "verdict": "MEASURED",
+    "method": "engine sessions on this box; see desc",
+    "date": "2026-08-15",
+    "note": "The SFX engine."
+  }
+}

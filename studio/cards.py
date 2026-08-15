@@ -115,6 +115,16 @@ KINDS = {
     "layers": {"required": {"id": S, "status": S}, "statuses": {"partial", "ready"}},
     "domains": {"required": {"id": S, "name": S, "workflow": S, "nodes": D},
                 "statuses": set()},
+    # Phase 5: a model is a card, earned by content - dialect, measured strengths, size,
+    # reachability. Rebuilt from disk by _tools/model_cards.py; measured text is keyed
+    # by filename there and survives rescans.
+    "models": {
+        "required": {"id": S, "name": S, "file": S, "folder": S, "status": S,
+                     "role": S, "desc": S},
+        "types": {"engine": NS, "dialect": NS, "size_gb": N, "workflows": L,
+                  "reachable": bool, "strip": NS, "strengths": S, "weaknesses": S},
+        "statuses": {"ready", "untested", "weak", "unavailable"},
+    },
 }
 
 

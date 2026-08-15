@@ -1,0 +1,30 @@
+{
+  "id": "qwen_image_2512_fp8_e4m3fn",
+  "name": "qwen_image_2512_fp8_e4m3fn",
+  "file": "qwen_image_2512_fp8_e4m3fn.safetensors",
+  "folder": "diffusion_models",
+  "size_gb": 20.43,
+  "status": "ready",
+  "engine": "qwen",
+  "dialect": "prose",
+  "role": "The prose engine.",
+  "desc": "Reads PROSE. Cannot be prompted off photography at any cfg - a style must arrive as a LoRA or a concrete noun, never as an adjective. Watercolour and hand-media are its lane against FLUX.2 (measured pair).",
+  "strengths": "painterly and photographic stills, places, hand media",
+  "weaknesses": "typography (gibberish), cannot leave photography by prompt alone",
+  "workflows": [
+    "01_qwen_t2i_turbo.json",
+    "02_qwen_t2i_quality.json",
+    "05_qwen_controlnet.json",
+    "13_qwen_t2i_styled.json",
+    "16_llm_to_image.json",
+    "19_product_composite.json"
+  ],
+  "reachable": true,
+  "strip": "samples/isolation/places/*.png",
+  "evidence": {
+    "verdict": "MEASURED",
+    "method": "engine sessions on this box; see desc",
+    "date": "2026-08-15",
+    "note": "The prose engine."
+  }
+}

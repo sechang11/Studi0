@@ -1,0 +1,30 @@
+{
+  "id": "ltx_2_3_22b_dev_fp8",
+  "name": "ltx-2.3-22b-dev-fp8",
+  "file": "ltx-2.3-22b-dev-fp8.safetensors",
+  "folder": "checkpoints",
+  "size_gb": 29.15,
+  "status": "ready",
+  "engine": "video",
+  "dialect": "prose",
+  "role": "The image-to-video pass with its own audio track.",
+  "desc": "frames = 8n+1 at 24fps (the shipped workflow said 25 for the audio latent and drifted - corrected, task 45). 16:9 at 1216x704; ~10s drift ceiling. Camera moves asked in the motion text FAIL (5-22% measured); cameras render as ffmpeg post passes instead.",
+  "strengths": "gentle subject motion, free ambience track, keyframe fidelity",
+  "weaknesses": "prompted camera moves, long clips, fast action",
+  "workflows": [
+    "11_ltx23_t2v_audio.json",
+    "12_ltx23_i2v_audio.json",
+    "17_ltx23_t2v_upscaled.json",
+    "18_ltx_prompt_enhancer.json",
+    "20_ltx_audio_to_video.json",
+    "50_ltx_first_last.json"
+  ],
+  "reachable": true,
+  "strip": "samples/rolled/video/*.mp4",
+  "evidence": {
+    "verdict": "MEASURED",
+    "method": "engine sessions on this box; see desc",
+    "date": "2026-08-15",
+    "note": "The image-to-video pass with its own audio track."
+  }
+}

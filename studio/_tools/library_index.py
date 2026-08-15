@@ -106,7 +106,8 @@ def purity(item, facet):
 # The card libraries a facet browses into. A facet is a recipe field; a KIND is the folder
 # of cards that field names. Browsing by kind answers "what looks do I own", which the item
 # grid cannot: the grid shows generations, and one look with 300 frames drowns one with 3.
-KINDS = {"look": "looks", "place": "places", "style": "styles", "emotion": "emotions",
+KINDS = {"model": "models",
+         "look": "looks", "place": "places", "style": "styles", "emotion": "emotions",
          "character": "characters", "motion": "motions", "camera": "cameras"}
 FAVS = os.path.join(STUDIO, "favourites.json")
 
@@ -424,6 +425,9 @@ def browse(kind):
             "cover_id": frames[0]["id"] if frames else None,
             "alts": [f["url"] for f in frames[1:6]],
             "alt_ids": [f["id"] for f in frames[1:6]],
+            # Model cards are read, not glanced at - the browse view renders the whole
+            # card face (role, dialect, size, reachability), so it travels along.
+            "card": card if folder == "models" else None,
         })
     # Cards with nothing to show sort last, but they are still on the page - that is the
     # coverage gap, and it is the thing worth acting on.

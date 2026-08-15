@@ -1,0 +1,26 @@
+{
+  "id": "sam3_1_multiplex_fp16",
+  "name": "sam3.1_multiplex_fp16",
+  "file": "sam3.1_multiplex_fp16.safetensors",
+  "folder": "checkpoints",
+  "size_gb": 1.75,
+  "status": "ready",
+  "engine": "utility",
+  "dialect": null,
+  "role": "Segmentation (masks).",
+  "desc": "Reached through its workflow rather than prompted.",
+  "strengths": "",
+  "weaknesses": "",
+  "workflows": [
+    "13_sam3_segment.json",
+    "29_flux_object_removal.json"
+  ],
+  "reachable": false,
+  "strip": null,
+  "evidence": {
+    "verdict": "MEASURED",
+    "method": "engine sessions on this box; see desc",
+    "date": "2026-08-15",
+    "note": "Segmentation (masks)."
+  }
+}

@@ -537,21 +537,16 @@ def gallery():
     taking the whole endpoint down - the writer appends while this reads, so a torn final
     line is normal rather than exceptional.
     """
-    p = f"{HERE}/gallery/manifest.jsonl"
-    if not os.path.exists(p):
+    # Phase 5: the manifest recorded 1,828 of 3,612 real generations - the library's
+    # disk discovery is the canonical record, so this endpoint reads THAT. The manifest
+    # file survives only as the /make flow's newest-record handshake with domain_gen.
+    try:
+        sys.path.insert(0, f"{HERE}/_tools")
+        import library_index as _li
+        return _li.payload().get("items", [])
+    except Exception:
+        traceback.print_exc()
         return []
-    out = []
-    with open(p, encoding="utf-8") as f:
-        for line in f:
-            line = line.strip()
-            if not line:
-                continue
-            try:
-                out.append(json.loads(line))
-            except Exception:
-                continue
-    out.reverse()
-    return out
 
 
 def templates():
@@ -1489,7 +1484,12 @@ class H(http.server.SimpleHTTPRequestHandler):
                 return self._send({"tiers": {}, "vars": {}})
             return self._send(json.load(open(p, encoding="utf-8")))
         if path in ("/gallery", "/gallery.html"):
-            return self._page("gallery.html")
+            # Phase 5: the library is the one browsing surface; the manifest
+            # page under-reported by half and is retired.
+            self.send_response(302)
+            self.send_header("Location", "/library")
+            self.end_headers()
+            return
         if path in ("/make", "/make.html"):
             return self._page("make.html")
         if path in ("/cast", "/cast.html"):

@@ -1,0 +1,25 @@
+{
+  "id": "hunyuan_3d_v2_1",
+  "name": "hunyuan_3d_v2.1",
+  "file": "hunyuan_3d_v2.1.safetensors",
+  "folder": "checkpoints",
+  "size_gb": 7.37,
+  "status": "ready",
+  "engine": "mesh",
+  "dialect": null,
+  "role": "Image-to-mesh for the print pipeline.",
+  "desc": "Feeds to_print/mesh_doctor; characters meshify from turnaround stills.",
+  "strengths": "single-object meshes from clean plates",
+  "weaknesses": "thin features",
+  "workflows": [
+    "24_hunyuan3d_mesh.json"
+  ],
+  "reachable": false,
+  "strip": null,
+  "evidence": {
+    "verdict": "MEASURED",
+    "method": "engine sessions on this box; see desc",
+    "date": "2026-08-15",
+    "note": "Image-to-mesh for the print pipeline."
+  }
+}

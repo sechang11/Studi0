@@ -58,6 +58,14 @@
   #libnav button:hover{background:var(--panel2)}
   #libnav button.on{background:var(--accent);color:#08111f;font-weight:600}
   #libnav button span{color:var(--dim);font-variant-numeric:tabular-nums}
+  .modelcard{grid-column:span 2;min-height:170px;padding:14px;display:flex;
+    flex-direction:column;gap:6px;text-align:left}
+  .modelcard h4{margin:0;font-size:15px}
+  .modelcard .mrole{color:var(--accent);font-size:12px}
+  .modelcard .mdesc{font-size:12px;color:var(--dim);line-height:1.45;flex:1}
+  .modelcard .mfacts{display:flex;gap:10px;flex-wrap:wrap;font-size:11px;color:var(--dim)}
+  .modelcard .mfacts b{color:var(--fg)}
+  .modelcard.unreachable{outline:1px dashed #a33}
   #libnav button.on span{color:#08111f}
   .fac h3.link{cursor:pointer}
   .fac h3.link:hover{color:var(--accent)}
@@ -216,7 +224,7 @@ function goBack(){
   setMode(MODE, true);
 }
 // The card kinds that can be browsed one-per-card. Ordered by how often you reach for them.
-const KINDS=[["place","places"],["character","characters"],["style","styles"],
+const KINDS=[["model","models"],["place","places"],["character","characters"],["style","styles"],
              ["look","looks"],["emotion","emotions"],["motion","motions"],["camera","cameras"]];
 const PAGE_SIZES=[60,100,300,1000];
 const OPEN = {};   // which facets are expanded
@@ -448,7 +456,28 @@ function setMode(k, replaying){
   document.getElementById("stat").textContent = "loading "+k+"…";
   fetch("/api/library/browse?kind="+encodeURIComponent(k)).then(r=>r.json()).then(b=>{
     if (b.error){ document.getElementById("stat").textContent=b.error; return; }
-    BROWSE=b; drawCards();
+    BROWSE=b;
+    if(k==="models"){
+      // Phase 5: a model card is earned by content and read like a spec sheet, so it
+      // renders big - role, dialect, size, reachability, strengths - not as a thumb.
+      document.getElementById("stat").textContent = `${b.total} models`;
+      document.getElementById("cardgrid").innerHTML = b.cards.map(c=>{
+        const d=c.card||c, un=d.reachable===false&&(d.workflows||[]).length>0;
+        return `<div class="cd modelcard ${un?"unreachable":""}">
+          <h4>${esc(d.name||d.id)} <span style="color:var(--dim);font-weight:400">${d.size_gb?d.size_gb+" GB":""}</span></h4>
+          <div class="mrole">${esc(d.role||"")}</div>
+          <div class="mdesc">${esc(d.desc||"")}${d.strengths?"<br><b>Good:</b> "+esc(d.strengths):""}${d.weaknesses?"<br><b>Weak:</b> "+esc(d.weaknesses):""}</div>
+          <div class="mfacts">
+            ${d.engine?`<span>engine <b>${esc(d.engine)}</b></span>`:""}
+            ${d.dialect?`<span>dialect <b>${esc(d.dialect)}</b></span>`:""}
+            <span>status <b>${esc(d.status||"?")}</b></span>
+            <span>${un?"<b>unreachable - no code loads its workflows</b>":((d.workflows||[]).length?`workflows <b>${d.workflows.length}</b>`:"prompted directly")}</span>
+          </div>
+        </div>`;
+      }).join("") || "<p>no model cards - run studio/_tools/model_cards.py</p>";
+      return;
+    }
+    drawCards();
   });
 }
 

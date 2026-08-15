@@ -1,0 +1,27 @@
+{
+  "id": "animagine_xl_4_0",
+  "name": "animagine-xl-4.0",
+  "file": "animagine-xl-4.0.safetensors",
+  "folder": "checkpoints",
+  "size_gb": 6.94,
+  "status": "ready",
+  "engine": "anime",
+  "dialect": "tags",
+  "role": "The tag engine.",
+  "desc": "Reads danbooru TAGS and nothing else - prose contributes NOTHING here (the wave-4 lesson: 82 of 200 frames lost a prose-only character). Fast, consistent anime faces; the character sheet engine.",
+  "strengths": "anime characters, emotions via tags, reference sheets, LoRA base",
+  "weaknesses": "prose-blind; realism reads as anime-realistic at best",
+  "workflows": [
+    "21_sdxl_anime_restyle.json",
+    "22_anime_kf_ipadapter.json",
+    "33_train_character_lora.json"
+  ],
+  "reachable": true,
+  "strip": "samples/isolation/characters/*.png",
+  "evidence": {
+    "verdict": "MEASURED",
+    "method": "engine sessions on this box; see desc",
+    "date": "2026-08-15",
+    "note": "The tag engine."
+  }
+}

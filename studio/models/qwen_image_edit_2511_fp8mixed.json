@@ -1,0 +1,28 @@
+{
+  "id": "qwen_image_edit_2511_fp8mixed",
+  "name": "qwen_image_edit_2511_fp8mixed",
+  "file": "qwen_image_edit_2511_fp8mixed.safetensors",
+  "folder": "diffusion_models",
+  "size_gb": 20.53,
+  "status": "ready",
+  "engine": "utility",
+  "dialect": null,
+  "role": "Qwen image EDIT pass (2511).",
+  "desc": "Reached through its workflow rather than prompted.",
+  "strengths": "",
+  "weaknesses": "",
+  "workflows": [
+    "14_qwen_edit_ref.json",
+    "22_qwen_edit_2511.json",
+    "23_qwen_edit_2511_fusion.json",
+    "32_qwen_turnaround.json"
+  ],
+  "reachable": true,
+  "strip": null,
+  "evidence": {
+    "verdict": "MEASURED",
+    "method": "engine sessions on this box; see desc",
+    "date": "2026-08-15",
+    "note": "Qwen image EDIT pass (2511)."
+  }
+}

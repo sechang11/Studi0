@@ -1,0 +1,26 @@
+{
+  "id": "ace_step_v1_3_5b",
+  "name": "ace_step_v1_3.5b",
+  "file": "ace_step_v1_3.5b.safetensors",
+  "folder": "checkpoints",
+  "size_gb": 7.7,
+  "status": "ready",
+  "engine": "audio",
+  "dialect": "prose",
+  "role": "The music engine.",
+  "desc": "Key names must match its 34-item combo exactly - `B flat minor` kills the whole graph, `Bb minor` passes (SOUND-05; engine.keyscale reads the list from the running server so it cannot drift).",
+  "strengths": "cues, movements, leitmotifs",
+  "weaknesses": "lyrics intelligibility",
+  "workflows": [
+    "15_acestep_v1_full.json",
+    "31_acestep_remix.json"
+  ],
+  "reachable": false,
+  "strip": "samples/audio/*.mp3",
+  "evidence": {
+    "verdict": "MEASURED",
+    "method": "engine sessions on this box; see desc",
+    "date": "2026-08-15",
+    "note": "The music engine."
+  }
+}
