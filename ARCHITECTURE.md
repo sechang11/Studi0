@@ -203,3 +203,23 @@ Ecosystem check (evidence-based, not FOMO): LTX-2.5 (2026-08-12, native multi-sh
 the one worth bringing in - same routed family, needs only the gated download. MiniMax H3
 (110 GB new stack), Wan 2.5+ (not open weights), HunyuanVideo 1.5 (on disk, unrouted, needs
 an A/B) are deferred and the reasons are in `docs/LTX25-RUNBOOK.md`.
+
+### 2026-08-15 evening (second 4h block)
+
+| Commit | What | Gate |
+|---|---|---|
+| `e795f73` | TERRA headpiece resolved (prose fixed, tags held for the LoRA contract, reason on the card); motion-hold probe grades holds like the compiler | healthcheck WRONG 4 -> 0 |
+| `99807dd` | audio_sweep (17 voices measured; 20 sfx + 21 cues rendered+measured); look_check (10 of 25 looks crushed 42-70% to black - task 26 unswept - fixed with held-toe curves, colour intent kept, before/after looked at) | evidence debt 89 -> 16 ready-UNVERIFIED (shots+pacing, structural); audit 0/0 |
+| `28114bb` | frame_check: Gemma-4 VLM on core nodes describes a frame; recipe nouns checked (synonyms grown from looked-at misses; --recheck free); library detail shows "What a VLM saw"; compose C22 measured verdict beats prose regex; check_refs @tokens | places 279/304 seen; C22 0 false warnings; 1947 refs 0 dangling |
+| `a075454` | frame_check on characters (visual nouns from tags/prose; person gate separate from identity) finds 5 no-person wave-4 leftovers, rejected via the library path; "ask a VLM" button + /api/library/check | characters 133/138 seen |
+| `9aefe06` | task 50: --wear flag (ladder was unreachable); wear_sweep sheet looked at: garment PRESENCE renders, damage ADJECTIVES lose to the LoRA; compile-time note | rungs 2-4 note fires, rung 1 quiet |
+
+Instrument lessons this block, all paid for: ebur128's running `I:` line demoted 17
+good voices before the Summary-only parse; ffmpeg signalstats read a PNG at a different
+range than a lut pass and contradicted itself (PIL is the one instrument now); a VLM asked
+YES/NO says NO to things it just described (never ask yes/no - ask for a description and
+check the nouns); a checker's fail verdict and its printed number must come from the same
+measurement or one of them is lying.
+
+Still owed: LTX-2.5 weights (user's HF token), the one-page shell / serve.py split (eyes
+on the UI), motion regeneration for the weak motion shelf, character mesh stage.
