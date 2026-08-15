@@ -172,3 +172,20 @@ Card **ids** (referenced by stories, LoRA paths, inputs hashes). The **samples t
 layout (discovered by path convention). The **recipe shape** (extend only — never rename a
 field something already reads). And during every phase: outputs stay comparable, because
 comparing an output to what it used to be is how every bug in this project has been found.
+
+
+## 9. Phase log
+
+| Phase | Commit | Gate result |
+|---|---|---|
+| 0 - Truth first | `13083d8` (plan) + session commits | 6 missing-workflow refs fixed; workflow-file audit added; CLI contract at 0 grandfathered |
+| 1 - Cards | `36071ac` | one loader (proven byte-identical to `load_libs`), per-kind measured schema, dialect LAW in compose + roll reroll, blocked-voice enforcement at `cards.require_voice` |
+| 2 - Engine | `4a4b980` | `studio/engine.py`; image graphs, submitted video wf, keyscale and style pools all byte-equal before/after; tail (20 `load_wf` sites) closed in `5d2519d` via `epic.load_wf` delegation, proven over all 44 workflows |
+| 3 - One generator | `b2038f6` | `generate.py` roll/scene/grow/isolate/beats; wrapper + page + grow route all through it, live-tested (6 kept in a 2-min run, scoreboard parsed); 4 tools + a stale duplicate retired |
+| 4 - Evidence | `2dc65f4` | every ready card carries dated evidence or honest UNVERIFIED (audit-enforced, 0 errors); 131 panel sheets judged by eye (69 works / 42 mixed / 20 fails); motion sweep 686 clips, `walk_in` demoted, camera demotions reverted with dual-path evidence |
+| 5 - Library absorbs | `600957d` | 46 model cards (13 measured), big-card browse view; /gallery retired to a 302, /api/gallery reads disk discovery (4,899 vs the manifest's 1,828) |
+| 6 - Film spine | `5d2519d` | sound_dept (levelled buses + ducking + sfx stage), transition consumer, master-frame kit (crop/outpaint/edit/chain/scene, demo watched); gate film deck-run: 13.5s, -9.74 LUFS / -0.90 dBTP, filmrules 0, frame strip watched |
+| 7 - Shell | partial | docs collapsed to README + ARCHITECTURE + docs/ + craft/; REMAINING: one page shell + shared stylesheet, serve.py split into route modules, optional card-folder unification - deliberately left for a session with eyes on the UI, because blind cosmetic surgery on 22 pages is how a working app breaks overnight |
+
+Remaining from section 6: depth pass (#22), motion regeneration for the demoted/weak
+motion shelf, character mesh stage, authoring pages for simple kinds.
