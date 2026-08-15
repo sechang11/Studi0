@@ -460,3 +460,15 @@ def job_status(job):
     with _LOCK:
         j = JOBS.get(job)
     return (j or {"error": "no such job"}), (200 if j else 404)
+
+
+if __name__ == "__main__":
+    # A route module: imported by studio/serve.py, never run. Everything that writes a
+    # file lives inside a request handler; the shell entry point exists so --help is
+    # honest and the tool checkers can see that nothing runs at import.
+    import argparse
+    argparse.ArgumentParser(
+        description="story_routes - HTTP route handlers for studio/serve.py; nothing to run "
+                    "from a shell.").parse_args()
+    print("story_routes: route module, imported by serve.py - start the studio instead:  "
+          "python3 studio/serve.py")

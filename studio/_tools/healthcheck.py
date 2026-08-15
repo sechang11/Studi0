@@ -575,6 +575,10 @@ def driver_bindings(drv):
                 v = a.value if isinstance(a, ast.Constant) and isinstance(
                     a.value, str) else None
                 events.append((n.lineno, "write", v))
+            elif fname in ("set_negative", "_set_neg"):
+                # engine.set_negative writes whichever node the graph routes as
+                # `negative`; the concrete path is resolved per target graph below.
+                events.append((n.lineno, "write", "<negative>"))
             elif fname:
                 calls.setdefault(fdef.name, set()).add(fname)
         seq[fdef.name] = sorted(events)
@@ -605,6 +609,22 @@ def driver_bindings(drv):
                             f"{drv}:{fn} loads workflows/{wf} which does not exist")
                 continue
             targets = active if active is not None else (inherited or set())
+            if val == "<negative>":
+                # one binding per target graph, each at THAT graph's negative node
+                for g in sorted(targets):
+                    nid = negative_node(graphs.get(g) or {})
+                    if not nid:
+                        continue
+                    ins = (graphs.get(g) or {}).get(nid, {}).get("inputs") or {}
+                    key = "text" if "text" in ins else "prompt" if "prompt" in ins \
+                        else None
+                    if key is None:
+                        # mirrors engine.set_negative: a negative node with no text
+                        # input (ACE-Step's tag encoder as its own negative) has no
+                        # negative prompt to reach, and the writer writes nothing.
+                        continue
+                    out.append(([g], f"{nid}.inputs.{key}", lineno, fn))
+                continue
             out.append((sorted(targets), val, lineno, fn))
     _BINDINGS[drv] = [(t, p, l, f) for t, p, l, f in out]
     return _BINDINGS[drv]
@@ -794,6 +814,9 @@ def check_defects():
         for targets, path, _ln, _fn in driver_bindings(drv):
             for graph in targets:
                 nid = negative_node(_GRAPHS.get(graph) or {})
+                nins = (_GRAPHS.get(graph) or {}).get(nid or "", {}).get("inputs") or {}
+                if nid and not ("text" in nins or "prompt" in nins):
+                    nid = None          # no negative TEXT to reach - not a defect
                 rec = negs.setdefault((drv, graph), {"written": False,
                                                      "negative_node": nid})
                 if nid and path and path.startswith(f"{nid}.inputs.") \

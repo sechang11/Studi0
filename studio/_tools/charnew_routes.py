@@ -212,3 +212,15 @@ def analyse(data):
     medium = CN.analyse_style(staged)
     return {"ok": True, "medium": medium,
             "photographic": CN.looks_photographic(medium)}, 200
+
+
+if __name__ == "__main__":
+    # A route module: imported by studio/serve.py, never run. Everything that writes a
+    # file lives inside a request handler; the shell entry point exists so --help is
+    # honest and the tool checkers can see that nothing runs at import.
+    import argparse
+    argparse.ArgumentParser(
+        description="charnew_routes - HTTP route handlers for studio/serve.py; nothing to run "
+                    "from a shell.").parse_args()
+    print("charnew_routes: route module, imported by serve.py - start the studio instead:  "
+          "python3 studio/serve.py")

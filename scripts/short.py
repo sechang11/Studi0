@@ -60,6 +60,8 @@ os.environ.setdefault("COMFY_HOST", "127.0.0.1:8188")
 from comfy import run, set_path                                        # noqa: E402
 from scene_templates import expand as expand_template   # noqa: E402
 import sound_dept                                       # noqa: E402  (Phase 6: the one sound department)
+sys.path.insert(0, os.path.join(os.path.dirname(HERE), "studio"))
+from engine import set_negative                         # noqa: E402  (the negative reaches the graph)
 from epic import (sh, dur, adur, measure, norm_to, ensure_local, load_wf, expand,
                   submit, wait_all, keyscale, FONT, fgpath, ffesc, COMFY, HOST)   # noqa: E402
 
@@ -358,6 +360,29 @@ def make_impact(src_cut, dst, frames=2):
 _WORD = re.compile(r"[a-z0-9]+")
 
 
+def film_negative(film, beat, kind="picture"):
+    """The negative a film and a beat ask for, assembled ONCE. Film-level `negative`
+    (or `negative_audio` for music/sfx), plus the beat's own `negative`, plus the style
+    card's negative_add when the film names a style card id. Empty string means "leave
+    the shipped baseline alone"."""
+    parts = []
+    key = "negative_audio" if kind == "audio" else "negative"
+    if film.get(key):
+        parts.append(str(film[key]))
+    if beat is not None and beat.get("negative"):
+        parts.append(str(beat["negative"]))
+    if kind == "picture" and film.get("style_card"):
+        try:
+            sc = json.load(open(os.path.join(os.path.dirname(HERE), "studio", "styles",
+                                             film["style_card"] + ".json"),
+                                encoding="utf-8"))
+            if sc.get("negative_add"):
+                parts.append(str(sc["negative_add"]))
+        except OSError:
+            pass
+    return ", ".join(p for p in parts if p.strip())
+
+
 def _negative(shipped, positive):
     """Drop from the negative any clause the positive prompt is asking for.
 
@@ -519,6 +544,7 @@ def keyframes(film, out, seed0):
                     wf[enc]["inputs"].pop(f"image{n}", None)
             style_lora_slot(wf, film)
             set_path(wf, "10.inputs.prompt", f"{expand(b['prompt'], chars)}, {style}")
+            set_negative(wf, film_negative(film, b), positive=expand(b['prompt'], chars))
             set_path(wf, "20.inputs.width", KF[0])
             set_path(wf, "20.inputs.height", KF[1])
             set_path(wf, "13.inputs.seed", int(b.get("seed", seed0 + i * 7)))
@@ -528,6 +554,7 @@ def keyframes(film, out, seed0):
             wf = load_wf("13_qwen_t2i_styled.json")
             style_lora_slot(wf, film)
             set_path(wf, "10.inputs.text", f"{expand(b['prompt'], chars)}, {style}")
+            set_negative(wf, film_negative(film, b), positive=expand(b['prompt'], chars))
             set_path(wf, "12.inputs.width", KF[0])
             set_path(wf, "12.inputs.height", KF[1])
             set_path(wf, "13.inputs.seed", int(b.get("seed", seed0 + i * 7)))
@@ -602,6 +629,8 @@ def clips(film, out, seed0):
         # measured as ADDED off-brief drift and film["characters"] maps a name to itself.
         set_path(wf, "10.inputs.text",
                  expand(motion_of(b), film.get("characters", {})))
+        set_negative(wf, film_negative(film, b),
+                     positive=expand(motion_of(b), film.get("characters", {})))
         set_path(wf, "20.inputs.width", VID[0])
         set_path(wf, "20.inputs.height", VID[1])
         set_path(wf, "20.inputs.length", length)
@@ -654,6 +683,7 @@ def music(film, out, seed0):
         if os.path.exists(f"{out}/music/{c['prefix']}_00001.mp3"):
             continue
         wf = load_wf("06_acestep_music.json")
+        set_negative(wf, film_negative(film, None, "audio"))
         set_path(wf, "10.inputs.tags", c["tags"])
         set_path(wf, "10.inputs.lyrics", "")
         # An unmetered cue keeps the node default rather than being handed a

@@ -234,6 +234,61 @@ def style_pool(libs, pool, character_card=None, allow_self_contained=None):
     return out
 
 
+def negative_node(wf):
+    """The id of the node feeding a sampler's `negative` input - by GRAPH SHAPE.
+
+    Never by remembered number: node 11 is the negative encoder in 12_ltx23_i2v_audio,
+    a SaveImage prefix in another workflow and an audio duration in a third. The first
+    negative-prompt check grepped for `set_path(wf, "11.` and reported all four graphs
+    healthy while the negative was unreachable in every one of them."""
+    for nid, node in wf.items():
+        if not isinstance(node, dict):
+            continue
+        v = (node.get("inputs") or {}).get("negative")
+        if isinstance(v, list) and v and str(v[0]) in wf:
+            return str(v[0])
+    return None
+
+
+def set_negative(wf, text, keep_shipped=True, positive=""):
+    """Write the negative prompt onto whichever node the graph routes as `negative`.
+
+    keep_shipped: the workflow's committed baseline stays as the head of the string
+    (it encodes per-model lessons - "pc game, console game" on LTX, "3d render" on
+    qwen-edit) and the film/style text is appended. Any shipped clause whose every word
+    the POSITIVE asks for is dropped first - asking for "1girl" and forbidding "1girl,
+    girl, female" on the same beat was fatal for a whole class of character.
+    Returns the node id written, or None when the graph has no negative input (ACE-Step's
+    tag graph, for instance) - callers treat None as "this graph has no negative", not
+    as failure."""
+    nid = negative_node(wf)
+    if nid is None:
+        return None
+    ins = wf[nid].setdefault("inputs", {})
+    key = "text" if "text" in ins else "prompt" if "prompt" in ins else None
+    if key is None:
+        return None
+    parts = []
+    if keep_shipped:
+        shipped = str(ins.get(key) or "")
+        if positive:
+            import re as _re
+            have = set(_re.findall(r"[a-z0-9_]+", positive.lower()))
+            kept = []
+            for clause in shipped.split(","):
+                words = _re.findall(r"[a-z0-9_]+", clause.lower())
+                if words and all(w in have for w in words):
+                    continue
+                kept.append(clause.strip())
+            shipped = ", ".join(k for k in kept if k)
+        if shipped.strip():
+            parts.append(shipped.strip())
+    if str(text or "").strip():
+        parts.append(str(text).strip())
+    ins[key] = ", ".join(parts)
+    return nid
+
+
 def video_graph(job, staged_image):
     """The LTX image-to-video pass over a staged keyframe - extracted verbatim from
     render_job.render_video's build block, frame math and the 24fps audio-latent

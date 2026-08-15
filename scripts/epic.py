@@ -255,6 +255,14 @@ def load_wf(name):
     return _load_wf(name)
 
 
+def _set_neg(wf, text, positive=""):
+    """The negative reaches the graph (see engine.set_negative). Lazy import keeps
+    epic's own import surface unchanged for the tools that import FROM it."""
+    sys.path.insert(0, f"{ROOT}/studio")
+    from engine import set_negative
+    return set_negative(wf, text, positive=positive)
+
+
 def expand(text, chars):
     for name, desc in chars.items():
         text = text.replace("{" + name + "}", desc)
@@ -484,6 +492,7 @@ def keyframes(film, outdir, seed0):
 # ------------------------------------------------------------------ stage 3
 def i2v_wf(film, outdir, staged, motion, vw, vh, frames, seed, prefix):
     wf = load_wf("12_ltx23_i2v_audio.json")
+    _set_neg(wf, str(film.get("negative") or ""), positive=str(motion or ""))
     set_path(wf, "8.inputs.image", staged)
     set_path(wf, "10.inputs.text", expand(motion, film.get("characters", {})))
     set_path(wf, "20.inputs.width", vw)
@@ -607,6 +616,8 @@ def sfx(film, outdir, seed0):
             continue
         secs = max(6.0, shot_frames(s, film, fps, ndur) / fps + 1.0)
         wf = load_wf("10_stableaudio_sfx.json")
+        _set_neg(wf, ", ".join(x for x in (str(film.get("negative_audio") or ""),
+                                           str(s.get("negative") or "")) if x))
         set_path(wf, "3.inputs.text", s["sfx"] + ", no music, no speech")
         set_path(wf, "5.inputs.seconds", round(min(secs, 20.0), 1))
         # Stable Audio is NOT a distilled model, so unlike ACE-Step its cfg 1.0 default
@@ -632,6 +643,8 @@ def music(film, outdir, seed0):
         if os.path.exists(f"{outdir}/music/{c['prefix']}_00001.mp3"):
             continue
         wf = load_wf("06_acestep_music.json")
+        _set_neg(wf, ", ".join(x for x in (str(film.get("negative_audio") or ""),
+                                           str(c.get("negative") or "")) if x))
         set_path(wf, "10.inputs.tags", c["tags"])
         set_path(wf, "10.inputs.lyrics", c.get("lyrics", ""))
         set_path(wf, "10.inputs.bpm", int(c.get("bpm", 90)))

@@ -218,3 +218,15 @@ def add(data):
         f.write("\n")
     return {"ok": True, "id": vid, "ref_seconds": secs,
             "thin": secs < GOOD_REF}, 200
+
+
+if __name__ == "__main__":
+    # A route module: imported by studio/serve.py, never run. Everything that writes a
+    # file lives inside a request handler; the shell entry point exists so --help is
+    # honest and the tool checkers can see that nothing runs at import.
+    import argparse
+    argparse.ArgumentParser(
+        description="voice_routes - HTTP route handlers for studio/serve.py; nothing to run "
+                    "from a shell.").parse_args()
+    print("voice_routes: route module, imported by serve.py - start the studio instead:  "
+          "python3 studio/serve.py")
