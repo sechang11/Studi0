@@ -734,12 +734,21 @@ def check_movies():
         if r.returncode != 0:
             say("BROKEN", "movies", f"{f} does not compile (exit {r.returncode}): "
                                     + text.strip()[-300:])
-        if rec.get("beats") and rec.get("holding"):
-            frac = rec["holding"] / rec["beats"]
+        # Only the REAL holds count - the compiler already grades them. A `fyi:` hold is
+        # correct (an ffmpeg camera does the moving; asking LTX to hold is right); a
+        # "nothing moves in this shot" hold is a beat with no mover named. The summary
+        # line's "holding still" total mixes both and was what this used to report.
+        rec["real_holds"] = len(hold)
+        if rec.get("beats") and hold:
+            frac = len(hold) / rec["beats"]
             if frac >= 0.5:
                 say("WRONG", "movies",
-                    f"{f}: {rec['holding']} of {rec['beats']} beats resolve to a motion "
-                    f"hold - every frame of those beats is the keyframe")
+                    f"{f}: {len(hold)} of {rec['beats']} beats name no mover and resolve "
+                    f"to a hold - every frame of those beats is the keyframe")
+            elif len(hold) >= 2:
+                say("NOTE", "movies",
+                    f"{f}: {len(hold)} beat(s) name no mover and hold - name one with "
+                    f"@motion or an action")
         for w in real:
             say("GAP", "movies", f"{f}: {w[:200]}")
         out[f] = rec
@@ -852,7 +861,16 @@ def check_defects():
         t = json.load(open(tp, encoding="utf-8"))
         tags = (t.get("tags") or "").lower()
         note = json.dumps(t).lower()
-        if "red hair ribbon" in tags and "pink-and-gold ornament" in note:
+        if "red hair ribbon" in tags and "pink-and-gold ornament" in note \
+                and t.get("headpiece"):
+            # Understood and fenced: prose corrected, tags held for the LoRA contract
+            # (captions absorbed the ornament into the trigger). Not a defect any more.
+            out["terra_headpiece"] = "resolved: prose fixed, tags held (LoRA contract)"
+            say("NOTE", "defects",
+                "TERRA tags still say 'red hair ribbon' BY DESIGN - the LoRA absorbed the "
+                "real ornament into its trigger and the tag is inert on the anime engine; "
+                "prose (qwen/flux2) now describes the ornament. See TERRA.json headpiece.")
+        elif "red hair ribbon" in tags and "pink-and-gold ornament" in note:
             out["terra_headpiece"] = "still real"
             say("WRONG", "defects",
                 "STILL REAL - TERRA.json tags say 'red hair ribbon'; the card's own "
