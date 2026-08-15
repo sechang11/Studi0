@@ -25,6 +25,14 @@ Written and verified by Claude on 2026-07-29 against the live box.
 
 > All content I generated goes in `output/claude-generated/` and nowhere else.
 
+## Documents (Phase 7)
+
+Two documents live at the root and only two: this README and
+[ARCHITECTURE.md](ARCHITECTURE.md) - the constitution, the layer map and the phase log.
+Everything else moved to [docs/](docs/) (session reports, measured guides, shopping
+lists) or [craft/](craft/) (machine-read rules the tools enforce). The /docs page in the
+app indexes all of it by what it is FOR.
+
 ## Start here
 
 **Open the gallery: `Z:\ComfyUI\output\claude-generated\gallery.html`**

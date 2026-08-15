@@ -247,8 +247,12 @@ def wait_all(pids, label="jobs"):
 
 
 def load_wf(name):
-    return {k: v for k, v in json.load(open(f"{ROOT}/workflows/{name}")).items()
-            if not k.startswith("_")}
+    """Delegates to engine.load_wf (Phase 2 tail) - proven byte-identical over every
+    workflow on disk before the inline read was deleted. short.py and cartoon.py import
+    this name from here, so all twenty film-script call sites read the one copy."""
+    sys.path.insert(0, f"{ROOT}/studio")
+    from engine import load_wf as _load_wf
+    return _load_wf(name)
 
 
 def expand(text, chars):

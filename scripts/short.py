@@ -59,6 +59,7 @@ os.environ.setdefault("COMFY_ROOT", os.path.expanduser("~/ComfyUI"))
 os.environ.setdefault("COMFY_HOST", "127.0.0.1:8188")
 from comfy import run, set_path                                        # noqa: E402
 from scene_templates import expand as expand_template   # noqa: E402
+import sound_dept                                       # noqa: E402  (Phase 6: the one sound department)
 from epic import (sh, dur, adur, measure, norm_to, ensure_local, load_wf, expand,
                   submit, wait_all, keyscale, FONT, fgpath, ffesc, COMFY, HOST)   # noqa: E402
 
@@ -297,6 +298,42 @@ def slam(src, dst, target=TARGET_LUFS, ceiling=0.87, tries=6):
     for p in tmps:
         os.remove(p)
     return dst
+
+
+def apply_transition(prev, cur, card_id, dst):
+    """Task 24: the transition cards' six real filters, finally consumed.
+
+    A beat may declare {"transition": "dissolve"}; the card's own xfade template joins
+    the LAST micro-shot of the previous beat to the FIRST of this one. The filter comes
+    from studio/transitions/<id>.json - the card is the claim AND the implementation, so
+    a transition that works is a card that earned its `ready`. Too-short pieces skip the
+    join (a 0.2s micro-shot cannot host a 0.25s dissolve) rather than dying: a missing
+    flourish is a style loss, a dead cut stage is a broken film.
+    """
+    card_path = os.path.join(os.path.dirname(HERE), "studio", "transitions",
+                             card_id + ".json")
+    try:
+        card = json.load(open(card_path, encoding="utf-8"))
+    except OSError:
+        print(f"    ! unknown transition card: {card_id}", file=sys.stderr)
+        return None
+    tpl = card.get("filter")
+    if not tpl:
+        print(f"    ! transition {card_id} has no filter (tier: "
+              f"{card.get('tier')}) - hard cut instead", file=sys.stderr)
+        return None
+    d = float(card.get("seconds", 0.25) or 0.25)
+    a, b = dur(prev), dur(cur)
+    d = min(d, a - 0.08, b - 0.08)
+    if d < 0.04:
+        print(f"    ({card_id} skipped: {a:.2f}s/{b:.2f}s pieces are too short to "
+              f"host it - hard cut instead)", file=sys.stderr)
+        return None
+    sh("ffmpeg", "-y", "-v", "error", "-i", prev, "-i", cur, "-filter_complex",
+       f"[0:v][1:v]{tpl.format(d=f'{d:.2f}')}:offset={a - d:.2f}[v]",
+       "-map", "[v]", "-c:v", "libx264", "-crf", "17", "-preset", "veryfast",
+       "-pix_fmt", "yuv420p", "-an", dst)
+    return dst if os.path.exists(dst) else None
 
 
 def make_impact(src_cut, dst, frames=2):
@@ -647,6 +684,7 @@ def cut(film, out):
 
     print("\n=== SLICING: source clips -> micro-shots ===")
     pieces, cues, caps, t = [], [], [], 0.0
+    sfx_cues = []
     n = 0
     for b in film["beats"]:
         src = ensure_local(f"{rel}/clips/{b['id']}_00001_.mp4",
@@ -679,12 +717,27 @@ def cut(film, out):
             pieces.append(p)
             t += dur(p)
             n += 1
+            # Beat boundary transition (task 24): joins this beat's FIRST shot to the
+            # previous beat's last. Times after the join shrink by the overlap, and `t`
+            # is corrected from the real durations so captions and cues stay honest.
+            if ci == 0 and b.get("transition") and len(pieces) >= 2:
+                merged = f"{work}/{n:04d}_x_{b['id']}.mp4"
+                before = dur(pieces[-2]) + dur(pieces[-1])
+                got = apply_transition(pieces[-2], pieces[-1], b["transition"], merged)
+                if got:
+                    t -= before - dur(got)
+                    pieces[-2:] = [got]
+                    n += 1
         if beat_impact and pieces:
             p = f"{work}/{n:04d}_impact.mp4"
             make_impact(pieces[-1], p)
             pieces.append(p)
             t += dur(p)
             n += 1
+        if b.get("sfx"):
+            sp = f"{out}/sfx/{b['id']}_00001.mp3"
+            sfx_cues.append((beat_start + float(b.get("sfx_at", 0.0) or 0.0),
+                             float(b.get("sfx_level", 1.0) or 1.0), sp))
         if b.get("caption"):
             caps.append((beat_start, t, b["caption"]))
         if b.get("line"):
@@ -814,90 +867,54 @@ def cut(film, out):
        "-c:v", "libx264", "-crf", "17", "-preset", "medium", "-pix_fmt", "yuv420p",
        "-an", vertical)
 
-    # ---- audio: dialogue + score, mastered LOUD ------------------------------
-    ins, filt, labels = ["-i", vertical], [], []
-    k = 1
-    for start, _, line, vp in cues:
-        if not os.path.exists(vp):
-            continue
-        ins += ["-i", vp]
-        ms = int(start * 1000)
-        filt.append(f"[{k}:a]volume=1.0,adelay={ms}|{ms}[v{k}]")
-        labels.append(f"[v{k}]")
-        k += 1
+    # ---- audio: the sound department (Phase 6, task 47) ----------------------
+    # Three buses, each stem NORMALISED to its bus target before any level trim, with
+    # score and effects sidechain-ducked under dialogue - sound_dept.py holds the
+    # machinery epic.py proved on the episodes. What this replaced mixed raw files at
+    # fixed multipliers, which is how a bang and a footstep arrived 20 dB apart.
+    voices_l = [(start, vp) for start, _, _line, vp in cues if os.path.exists(vp)]
+    musics_l = []
     for c in film.get("music", []):
         p = f"{out}/music/{c['prefix']}_00001.mp3"
-        if not os.path.exists(p):
-            continue
-        np_ = f"{work}/_m_{c['prefix']}.wav"
-        norm_to(p, np_, -20.0, tp=-3.0)
-        ins += ["-i", np_]
-        at = float(c.get("at", 0))
-        ms = int(at * 1000)
-        filt.append(f"[{k}:a]volume={c.get('level',1.0)},adelay={ms}|{ms}[m{k}]")
-        labels.append(f"[m{k}]")
-        k += 1
+        if os.path.exists(p):
+            musics_l.append((float(c.get("at", 0)), float(c.get("level", 1.0)), p))
+    sfxs_l = [(at, lv, p) for at, lv, p in sfx_cues if os.path.exists(p)]
+
     slug = film["title"].lower().replace(" ", "-")
     final = f"{out}/{slug}.mp4"
-    # The output directory is derived from the TITLE alone, so two films that share a
-    # title silently overwrite each other's master. A 334 MB, 8m46s delivered episode
-    # was one `ffmpeg -y` away from being replaced by a 40-second test render. Archive
-    # instead of clobbering: renders are expensive and a master is not reproducible
-    # once its inputs have moved on.
+    # Archive instead of clobbering: renders are expensive and a master is not
+    # reproducible once its inputs have moved on.
     if os.path.exists(final):
         n = 1
         while os.path.exists(f"{out}/{slug}.prev{n}.mp4"):
             n += 1
         os.rename(final, f"{out}/{slug}.prev{n}.mp4")
         print(f"    archived previous master -> {slug}.prev{n}.mp4")
-    if labels:
-        # Master in three explicit steps, NOT as one filter_complex.
-        #
-        # `loudnorm` inside a filter_complex runs SINGLE-PASS, where it is an adaptive
-        # compressor working blind on a lookahead window - it cannot know the programme
-        # loudness in advance, so it under-delivers badly. Asking for -9 that way measured
-        # -16. Only the two-pass form (measure, then apply a computed static gain) actually
-        # hits a target, which is what norm_to does.
-        raw = f"{work}/_mix_raw.wav"
-        filt.append("".join(labels) +
-                    f"amix=inputs={len(labels)}:duration=longest:normalize=0,"
-                    f"apad[mix]")
-        # keep the video as input 0 so the [k:a] labels built above stay valid
-        sh("ffmpeg", "-y", "-v", "error", *ins, "-filter_complex", ";".join(filt),
-           "-map", "[mix]", "-c:a", "pcm_s24le", "-ar", "48000",
-           "-t", f"{total:.2f}", raw)
 
-        mastered = f"{work}/_mix_master.wav"
-        slam(raw, mastered)
-
-        sh("ffmpeg", "-y", "-v", "error", "-i", vertical, "-i", mastered,
-           "-map", "0:v", "-map", "1:a", "-c:v", "copy", "-c:a", "aac", "-b:a", "256k",
-           "-t", f"{total:.2f}", "-movflags", "+faststart", final)
-    elif film.get("silent"):
-        # Declared silent. Intent is stated in the film, never inferred from an empty
-        # list, because "no audio was found" and "no audio was wanted" look identical
-        # here and mean opposite things.
-        print("    (silent film, as declared)")
-        shutil.copy(vertical, final)
-    else:
-        # Every voice and music file was missing. Copying `vertical` here would ship a
-        # SILENT deliverable with exit code 0 - `vertical` is built with -an. Name what
-        # was actually looked for, so the cause is one look away rather than a hunt.
-        missing = [vp for _s, _e, _l, vp in cues if not os.path.exists(vp)]
-        want_music = [f"{out}/music/{c['prefix']}_00001.mp3"
-                      for c in film.get("music", [])]
-        missing += [p for p in want_music if not os.path.exists(p)]
-        raise SystemExit(
-            "the film has no audio at all: %d voice cue(s) and %d music cue(s) were "
-            "expected and none of the files exist.\n"
-            "  first missing: %s\n"
-            "  Render the voices and music first, or set \"silent\": true in the film "
-            "if it is meant to have no sound.\n"
-            "  Refusing to write a silent %s - a silent film that reports success is "
-            "the failure this check exists for."
-            % (len(cues), len(film.get("music", [])),
-               "\n                 ".join(missing[:4]) or "(none listed)",
-               os.path.basename(final)))
+    got = sound_dept.mix_master(work, vertical, total, voices_l, musics_l, sfxs_l,
+                                final, slam)
+    if not got:
+        if film.get("silent"):
+            # Declared silent. Intent is stated in the film, never inferred from an
+            # empty list - "no audio found" and "no audio wanted" look identical here
+            # and mean opposite things.
+            print("    (silent film, as declared)")
+            shutil.copy(vertical, final)
+        else:
+            missing = [vp for _s, _e, _l, vp in cues if not os.path.exists(vp)]
+            missing += [f"{out}/music/{c['prefix']}_00001.mp3"
+                        for c in film.get("music", [])
+                        if not os.path.exists(f"{out}/music/{c['prefix']}_00001.mp3")]
+            missing += [p for _at, _lv, p in sfx_cues if not os.path.exists(p)]
+            raise SystemExit(
+                "the film has no audio at all: %d voice, %d music and %d sfx cue(s) "
+                "were expected and none of the files exist.\n"
+                "  first missing: %s\n"
+                "  Render the voices/music/sfx first (--stage voices|music|sfx), or "
+                "set \"silent\": true in the film if it is meant to have no sound.\n"
+                "  Refusing to ship a silent film that reports success."
+                % (len(cues), len(film.get("music", [])), len(sfx_cues),
+                   "\n                 ".join(missing[:4]) or "(none listed)"))
 
     # Check the mix actually COVERS the film before checking how loud it is. `amix` defaults
     # to duration=first, which once truncated a 63s short to 5.2s of audio - and every
@@ -923,14 +940,21 @@ def cut(film, out):
     return final
 
 
-STAGES = {"keyframes": keyframes, "clips": clips, "voices": voices, "music": music}
+def sfx(film, out, seed0):
+    """The stage short.py never had (task 47): every beat's named effect, rendered
+    through 10_stableaudio_sfx by the shared sound department."""
+    return sound_dept.render_sfx(film, out, seed0)
+
+
+STAGES = {"keyframes": keyframes, "clips": clips, "voices": voices, "music": music,
+          "sfx": sfx}
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("film")
     ap.add_argument("--stage", default="all",
-                    choices=["all", "keyframes", "clips", "voices", "music", "cut"])
+                    choices=["all", "keyframes", "clips", "voices", "music", "sfx", "cut"])
     ap.add_argument("--seed", type=int, default=4200)
     a = ap.parse_args()
     film = json.load(open(a.film, encoding="utf-8"))
