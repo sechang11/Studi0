@@ -189,3 +189,17 @@ comparing an output to what it used to be is how every bug in this project has b
 
 Remaining from section 6: depth pass (#22), motion regeneration for the demoted/weak
 motion shelf, character mesh stage, authoring pages for simple kinds.
+
+### 2026-08-15 afternoon (4h block)
+
+| Commit | What | Gate |
+|---|---|---|
+| `6bca07c` | ComfyUI 0.28 -> 0.33.1 (tag `pre-0.33-snapshot`); negative prompt reaches every graph via `engine.set_negative`; healthcheck learns the helper; route modules guarded | all 7 domains re-rendered ok; healthcheck WRONG 10 -> 4 |
+| `1c63d40` | `ui2api.py` (UI template -> API graph, server-validated); `51_ltx25_i2v.json`; `ltx25_probe.py`; fetch script + runbook. **Weights gated on HF - user step** | server validation: only gated-file errors remain; 2.3 baseline 28.9s / ssim 0.42 on record |
+| `0587aa3` | photo-count experiment LoRAs get cards (kind `experiment`) | lora_scan clean; healthcheck BROKEN 2 -> 1 |
+| `c5a2a9e` | depth pass (DA3 core nodes) + rack_focus/dolly_zoom as make_cut post steps; probe measures renderability | film re-cut with both; strips looked at; audit 0/0; BROKEN 1 = orbit (honest) |
+
+Ecosystem check (evidence-based, not FOMO): LTX-2.5 (2026-08-12, native multi-shot) is
+the one worth bringing in - same routed family, needs only the gated download. MiniMax H3
+(110 GB new stack), Wan 2.5+ (not open weights), HunyuanVideo 1.5 (on disk, unrouted, needs
+an A/B) are deferred and the reasons are in `docs/LTX25-RUNBOOK.md`.
