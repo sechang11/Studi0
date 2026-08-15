@@ -184,6 +184,33 @@ def main():
             for h in loose:
                 print("    %s" % h)
 
+    # @tokens on .movie shot lines (task 30): `shot: speak @cup_lift | ...` names a
+    # motion card, `shot: establish @push | ...` a camera card. Both are ids and both
+    # must exist - a typo reaches compile.py as an unknown token.
+    import re as _re
+    mv = os.path.join(STUDIO, "movies")
+    known = ids("motions") | ids("cameras")
+    if os.path.isdir(mv) and known:
+        bad = []
+        for p in sorted(glob.glob(os.path.join(mv, "*.movie"))):
+            try:
+                lines = open(p, encoding="utf-8").read().splitlines()
+            except Exception:
+                continue
+            for i, ln in enumerate(lines, 1):
+                s = ln.strip()
+                if s.startswith("//") or not s.startswith("shot:"):
+                    continue
+                for tok in _re.findall(r"@([a-z][a-z0-9_]*)", s.split("|", 1)[0]):
+                    checked += 1
+                    if tok not in known:
+                        bad.append("%s:%d @%s" % (os.path.basename(p), i, tok))
+        if bad:
+            dangling["movies.shot @token -> motions|cameras"] = bad
+            print("movies.shot @token  (%d dangling)" % len(bad))
+            for b in bad:
+                print("    %s" % b)
+
     total = sum(len(v) for v in dangling.values())
     print("\n%d references checked, %d dangling, %d rules skipped (group absent)"
           % (checked, total, skipped))

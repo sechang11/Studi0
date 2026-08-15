@@ -1790,12 +1790,31 @@ def _check_style(engine, style, place_card, place_text, character, template, cam
     # catching it at playback.
     if output == "video":
         wf = str(style.get("works_for", ""))
-        if _VIDEO_RISK_RE.search(wf):
+        vv = style.get("video_verdict")
+        vv = vv if isinstance(vv, dict) else {}
+        holds = str(vv.get("holds") or "").strip().lower()
+        if holds == "no":
+            # MEASURED to fail once it moves - the warning quotes the measurement.
+            conflicts.append(_conflict(
+                "warning", ["style"],
+                "%s was MEASURED to break once it moves: %s"
+                % (nm, _one_line(str(vv.get("failure") or vv.get("saw") or ""))[:220]),
+                "render the keyframes first and look at them, then commit to clips - the "
+                "clip stage costs about eight times what the keyframe does.",
+                "style_video_risk"))
+        elif holds == "yes":
+            pass        # measured to hold; a regex over the prose has no standing here
+        elif _VIDEO_RISK_RE.search(wf) and not re.search(
+                r"CONFIRMED to hold|holds:\s*yes|survives", wf, re.I):
+            # Nothing measured: fall back to the author's prose, and say it is prose.
+            # (Task 28: this regex once matched "boil 0.173" - a LOW measured number
+            # inside a verdict that said the style HOLDS - and warned the opposite.)
             inferred = "INFERRED" in wf
             conflicts.append(_conflict(
                 "warning", ["style"],
-                "%s is expected to be unstable once it moves: %s%s"
-                % (nm, _one_line(wf)[:220],
+                "%s is expected to be unstable once it moves (unmeasured; from the "
+                "card's prose): %s%s"
+                % (nm, _one_line(wf)[:200],
                    " (the card says this was reasoned, not measured)" if inferred else ""),
                 "render the keyframes first and look at them, then commit to clips - the "
                 "clip stage costs about eight times what the keyframe does.",

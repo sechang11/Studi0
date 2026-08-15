@@ -564,7 +564,20 @@ def recipe(rel):
         return None
     fields = [{"key": k, "label": lab, "value": r[k]}
               for k, lab in DETAIL if r.get(k) not in (None, "", [])]
-    shown = {k for k, _ in DETAIL}
+    # frame_check (Gemma-4 VLM description vs the recipe's nouns) - "how do I know the
+    # image is doing what it is supposed to?" answered by an instrument, right under the
+    # prompt: what the model SAW, and whether the asked-for nouns were in it.
+    fc = r.get("frame_check")
+    if isinstance(fc, dict):
+        fields.insert(1, {"key": "frame_check_desc", "label": "What a VLM saw",
+                          "value": fc.get("description", "")})
+        fields.insert(2, {"key": "frame_check_seen",
+                          "label": "Asked-for nouns seen",
+                          "value": ("yes: " + ", ".join(fc.get("hits") or []))
+                                   if fc.get("seen") else
+                                   "NO - none of %s" % ", ".join(
+                                       (fc.get("expect") or [])[:5])})
+    shown = {k for k, _ in DETAIL} | {"frame_check"}
     extra = {k: v for k, v in r.items()
              if k not in shown and v not in (None, "", []) and k != "file"}
     return {"id": rel, "fields": fields, "extra": extra, "raw": r,
