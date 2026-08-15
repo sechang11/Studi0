@@ -193,9 +193,9 @@
   "sheet_photo_note": "WHAT THE 121-RENDER SWEEP ACTUALLY MEASURED, and three of the four results contradict something this card used to say.\n1. LIGHT IS THE STRONG VARIABLE AND GRADE IS NEARLY INERT. Six lighting-and-lens treatments at one seed produced six visibly different photographs. Five film-stock and grade treatments at one seed - Portra, CineStill 800T, bleach bypass, teal-orange, Ektachrome - changed the background and a little contrast and left the face essentially alone. Spend the prompt on where the light is, not on what it was shot on.\n2. GREEN HAIR DOES NOT RETURN A WIG. This card previously recorded that naming the hair green on a photoreal model gets a wig, and that it therefore had to be named as dye with roots. Measured across five hair treatments at six lights: 'a saturated deep green, long and loose' returned convincing dyed hair in all six lights. The wig in the very first sheet came from the whole cosplay sentence - gold dress, red cape, red boots, flat frontal light - not from the word green. The saturated form is now used, because it is the one that still reads as HER.\n3. EXPRESSION AND GAZE ARE REAL AND CHEAP. Six treatments at one seed gave six different people-in-a-moment: laughing with the eyes creased, a tired half-smile, caught mid-turn before the eyes arrive, exhausted and unfocused. This is the fix for renders that read lifeless, and it costs nothing. It belongs on the SHOT, not on the sheet - the sheet keeps a level neutral gaze so it teaches the face rather than a mood, and the probes confirm the sheet does not impose its expression on anything conditioned on it.\n4. THE RIBBON IS DELIBERATELY ABSENT FROM THE PHOTOREAL SHEET. Rendered explicitly at four seeds (03_finals_ribbon_REJECTED.jpg) as 'a narrow oxblood grosgrain ribbon tied at the crown', it comes back as a large satin gift bow with long tails sitting on top of her head - the governing rule of this project biting again, the model renders nouns. It reads as costume and it undoes the wardrobe work. Her photoreal version has no ribbon and that is a decision, not an oversight. The anime path is unaffected and keeps its headpiece.\n5. A THIRD PANEL DOES NOT HELP. A bust panel was added to make the collar legible for close shots. The edit path refused the framing, returned another standing figure, and invented a gold necklace, so the three-panel sheet was two near-duplicates and a prop. Two panels, face and three-quarter figure.",
   "evidence": {
     "verdict": "MEASURED",
-    "method": "frame_check: Gemma-4 description vs card nouns",
+    "method": "wear_sweep 2 seeds x LoRA 0.5/0.7 x rungs 0-4, anime; sheet looked at",
     "date": "2026-08-15",
-    "note": "6 of 6 isolation frames describe as this character (VLM: nouns terra, branford, final, fantasy, girl)"
+    "note": "garment presence reaches pixels (cape on/off honoured); damage adjectives do not (never torn/ragged/bloodied at rungs 2-4; rungs 1-2 pixel-identical at seed 5000); LoRA 0.7 removes rung-0 cape"
   },
   "evidence_history": [
     {
@@ -233,8 +233,21 @@
       "method": "frame_check: Gemma-4 description vs card nouns",
       "date": "2026-08-15",
       "note": "6 of 6 isolation frames describe as this character (VLM: nouns terra, branford, final, fantasy, girl)"
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "frame_check: Gemma-4 description vs card nouns",
+      "date": "2026-08-15",
+      "note": "6 of 6 isolation frames describe as this character (VLM: nouns terra, branford, final, fantasy, girl)"
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "wear_sweep: rungs 0-4 x LoRA [0.5, 0.7] x 2 seeds on anime; VLM damage-word count + MAD vs rung 0; sheet samples/wear_sw",
+      "date": "2026-08-15",
+      "note": "rung 0: damage-words 0.0 clean-words 0.0 mad-vs-0 None; rung 1: damage-words 0.0 clean-words 0.0 mad-vs-0 0.0; rung 2: damage-words 0.0 clean-words 0.0 mad-vs-0 6.67; rung 3: damage-words 0.0 clean-words 0.0 mad-vs-0 10.07; rung 4: damage-words 0.0 clean-words 0.0 mad-vs-0 10.07"
     }
   ],
   "headpiece": "pink-and-gold ornament with a red gem and two upswept prongs - NOT a red ribbon. The anime `tags` still say 'red hair ribbon' on purpose: the LoRA absorbed the ornament into the trigger `terra` (its captions name neither), so the tag is inert on the anime engine and changing it would move every render for nothing. `prose` (qwen/flux2, no LoRA) is corrected to the ornament so the two engines finally agree.",
-  "headpiece_fixed_at": "2026-08-15"
+  "headpiece_fixed_at": "2026-08-15",
+  "wear_ladder_note": "MEASURED 2026-08-15 (samples/wear_sweep/TERRA.jpg): garment PRESENCE reaches the pixels (cape drawn at rungs 0-1, gone at 2-4) but damage ADJECTIVES do not - at rungs 2-4 the dress is never torn/ragged, no bandages, no blood, no split boots; rungs 1 and 2 pixel-identical at one seed; LoRA 0.7 removes even the rung-0 cape. Above rung 1 carry the ladder with NOUNS that change what is in frame: props (a bandage on the forearm as an object, a bloodied cloth in hand), place (rubble, mud, rain), and garment presence (cape/sash on or off) - not adjectives on the trained garment."
 }

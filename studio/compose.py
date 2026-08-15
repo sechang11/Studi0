@@ -2103,11 +2103,30 @@ def _check_shot(engine, character, emotion, wear, desc, template, conflicts):
             "establish template, which drop the character automatically.",
             "empty_frame_with_person"))
 
+    # Task 50, MEASURED (samples/wear_sweep/TERRA.jpg): on a LoRA-backed character,
+    # damage ADJECTIVES on the trained garment do not reach the pixels above rung 1 -
+    # the LoRA's wardrobe wins; garment PRESENCE (cape on/off) and props/place do.
+    if wear >= 2 and character.get("lora"):
+        rung = (character.get("wear_tags") or [""] * 5)
+        rung = rung[wear] if wear < len(rung) else ""
+        if rung and re.search(r"\b(torn|scuffed|ripped|in rags|ragged|tattered|frayed|"
+                              r"stained|bloodied|dusty|dirty|split|ruined|worn|"
+                              r"scratched|dented|burnt|singed)\b", rung, re.I):
+            conflicts.append(_conflict(
+                "note", ["character", "wear"],
+                "wear rung %d on a LoRA-backed character: adjectives on the trained "
+                "garment (torn, scuffed, in rags) were MEASURED not to render - the LoRA's "
+                "wardrobe wins. What does render is garment PRESENCE and props." % wear,
+                "write the rung as nouns that change what is in frame: 'cape gone', "
+                "'a bandage on the forearm', 'bloodied cloth in hand', 'kneeling in mud'.",
+                "wear_adjectives_lose_to_lora"))
+
     if not emotion:
         return
 
     # C20a - the damage state owns the posture above wear 0, so the emotion's body tag is
     # dropped. That is correct, and it used to happen silently.
+
     if wear > 0 and emotion.get("body"):
         conflicts.append(_conflict(
             "note", ["emotion", "wear"],

@@ -197,7 +197,7 @@ def preview(data):
 # before it reaches a command line - the page cannot invent a flag, and neither can a POST.
 OPTION_FLAGS = {
     "image": {"engine": "--engine", "style": "--style", "place": "--place",
-              "character": "--character", "orientation": "--orientation",
+              "character": "--character", "wear": "--wear", "orientation": "--orientation",
               "cast_rate": "--cast-rate", "no_characters": "--no-characters"},
     "video": {"engine": "--engine", "style": "--style", "place": "--place",
               "character": "--character", "orientation": "--orientation",

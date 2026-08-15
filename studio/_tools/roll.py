@@ -433,6 +433,9 @@ def main():
                                      "the engine is a property of the style, not a choice")
     ap.add_argument("--style"); ap.add_argument("--place")
     ap.add_argument("--character", help="cast this character in every image")
+    ap.add_argument("--wear", type=int, choices=range(0, 5),
+                    help="costume wear rung 0 (clean) .. 4 (ruined) - task 50: the "
+                         "ladder was unreachable because nothing could ask for it")
     ap.add_argument("--no-characters", action="store_true", help="scenery only")
     ap.add_argument("--cast-rate", type=float, default=0.35,
                     help="0-1, how often a character appears when none is named")
