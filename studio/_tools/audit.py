@@ -87,17 +87,45 @@ def audit_workflows():
                     "it is submitted, it runs, and the result is thrown away")
 
         # Audio latent rate against video rate. A 4% drift is a second lost per half minute.
+        def rate_of(v, depth=0):
+            """A literal rate, or ("link", node_id) when it is wired. Follows
+            Primitive*/identity-math passthroughs so a rate that is really 24 reads
+            as 24 even when it arrives through a node."""
+            if not isinstance(v, list):
+                return v
+            if depth > 6 or not v or str(v[0]) not in nodes:
+                return ("link", str(v[0]) if v else None)
+            src = nodes[str(v[0])]
+            ct = str(src.get("class_type"))
+            ins = src.get("inputs") or {}
+            if ct in ("PrimitiveInt", "PrimitiveFloat") and "value" in ins:
+                return rate_of(ins["value"], depth + 1)
+            if ct == "ComfyMathExpression" and str(ins.get("expression", "")).strip() \
+                    == "a" and "values.a" in ins:
+                return rate_of(ins["values.a"], depth + 1)
+            return ("link", str(v[0]))
+
         vid = None
         for d in nodes.values():
             if d.get("class_type") == "LTXVConditioning":
                 vid = d["inputs"].get("frame_rate")
-        if vid:
+        if vid is not None:
             for nid, d in nodes.items():
                 if "EmptyLatentAudio" in str(d.get("class_type")):
                     a = d["inputs"].get("frame_rate")
-                    if a and float(a) != float(vid):
+                    if a is None:
+                        continue
+                    ra, rv = rate_of(a), rate_of(vid)
+                    if isinstance(ra, tuple) or isinstance(rv, tuple):
+                        if ra == rv:
+                            continue            # both wired to the same node: agree
+                        add("info", "graph", "audio/video frame rates are wired (%s vs "
+                            "%s) and cannot be compared statically" % (ra, rv),
+                            "%s node %s" % (name, nid), "verify on a rendered clip")
+                        continue
+                    if float(ra) != float(rv):
                         add("error", "graph", "audio latent %sfps against %sfps video"
-                            % (a, vid), "%s node %s" % (name, nid), "drift")
+                            % (ra, rv), "%s node %s" % (name, nid), "drift")
 
         # A LoadImage naming a file that is not in ComfyUI's input dir.
         comfy_in = os.path.expanduser("~/ComfyUI/input")

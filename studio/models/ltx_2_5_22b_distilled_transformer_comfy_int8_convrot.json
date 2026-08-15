@@ -1,0 +1,25 @@
+{
+  "id": "ltx_2_5_22b_distilled_transformer_comfy_int8_convrot",
+  "name": "ltx-2.5-22b-distilled-transformer-comfy-int8-convrot",
+  "file": "ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors",
+  "folder": "diffusion_models",
+  "size_gb": 0,
+  "status": "unavailable",
+  "engine": "video",
+  "dialect": "prose",
+  "role": "LTX-2.5 distilled - the routed video engine's successor.",
+  "desc": "Native MULTI-SHOT generation (connected shots in one pass holding character, environment, lighting and voice across cuts) - the local answer to the Seedance consistency question. Two-stage: base pass at half res, latent x2 upscale, 4-sigma refine. Gemma-4 12B text encoder. LTX-2.x Community License (free under $10M/yr). NOT ON DISK: gated on HuggingFace (Lightricks/LTX-2.5) - accept the licence and fetch with a token; docs/LTX25-RUNBOOK.md has the commands. workflows/51_ltx25_i2v.json is built and server-validated, waiting only on these files.",
+  "strengths": "multi-shot consistency, 4K, distilled speed",
+  "weaknesses": "unmeasured on this box",
+  "workflows": [
+    "51_ltx25_i2v.json"
+  ],
+  "reachable": true,
+  "strip": null,
+  "evidence": {
+    "verdict": "UNVERIFIED",
+    "method": "gated download pending; workflow built",
+    "date": "2026-08-15",
+    "note": ""
+  }
+}

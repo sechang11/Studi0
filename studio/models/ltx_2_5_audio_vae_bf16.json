@@ -1,0 +1,25 @@
+{
+  "id": "ltx_2_5_audio_vae_bf16",
+  "name": "ltx-2.5-audio-vae-bf16",
+  "file": "ltx-2.5-audio-vae-bf16.safetensors",
+  "folder": "vae",
+  "size_gb": 0,
+  "status": "unavailable",
+  "engine": "utility",
+  "dialect": null,
+  "role": "LTX-2.5 audio VAE + vocoder.",
+  "desc": "NOT ON DISK: gated on HuggingFace (Lightricks/LTX-2.5) - accept the licence and fetch with a token; docs/LTX25-RUNBOOK.md has the commands. workflows/51_ltx25_i2v.json is built and server-validated, waiting only on these files.",
+  "strengths": "",
+  "weaknesses": "",
+  "workflows": [
+    "51_ltx25_i2v.json"
+  ],
+  "reachable": true,
+  "strip": null,
+  "evidence": {
+    "verdict": "UNVERIFIED",
+    "method": "gated download pending; workflow built",
+    "date": "2026-08-15",
+    "note": ""
+  }
+}
