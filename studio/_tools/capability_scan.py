@@ -72,7 +72,7 @@ UNDECLARED = {
 # including ones that do not exist.
 APP_PATH = [
     "studio/compose.py", "studio/compile.py", "studio/serve.py",
-    "studio/gallery_gen.py", "studio/tag_examples.py", "scripts/short.py",
+    "studio/_tools/generate.py", "studio/tag_examples.py", "scripts/short.py",
 ]
 # Reachable by running a script by hand, but never from the app UI.
 SCRIPT_PATH = [

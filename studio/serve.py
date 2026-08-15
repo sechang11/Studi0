@@ -2147,9 +2147,10 @@ class H(http.server.SimpleHTTPRequestHandler):
             if kind not in ("places", "characters", "emotions", "styles") or not cid:
                 return self._send({"error": "need a kind and a card id"}, 400)
             import subprocess
-            cmd = [sys.executable, "-u", f"{HERE}/_tools/isolation_run.py",
-                   "--what", kind, "--only", cid, "--per", str(n),
-                   "--fresh", "--hours", "0.5"]
+            # The one generator, mode grow (Phase 3). serve.py no longer knows what
+            # command grows a card - it knows who to ask.
+            cmd = [sys.executable, "-u", f"{HERE}/_tools/generate.py", "grow",
+                   "--kind", kind, "--id", cid, "--n", str(n)]
             log = f"{HERE}/samples/isolation/_grow_{kind}_{cid}.log"
             try:
                 os.makedirs(os.path.dirname(log), exist_ok=True)

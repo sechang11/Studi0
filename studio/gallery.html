@@ -148,7 +148,7 @@ function draw(){
   $("empty").style.display = VIEW.length ? "none" : "block";
   $("empty").textContent = ALL.length
     ? "Nothing matches those filters."
-    : "No generations yet. Run:  python3 studio/_tools/gallery_gen.py --vary all --loop";
+    : "No generations yet. Run:  python3 studio/_tools/generate.py roll --hours 1";
   $("grid").innerHTML = VIEW.slice(0,400).map((r,i)=>`
     <div class="it" data-i="${ALL.indexOf(r)}">
       ${mediaFor(r)}
@@ -179,7 +179,7 @@ function open_(r){
     size:r.size.join("x"), grade:r.grade}));
   // Everything needed to make this exact image again.
   $("drepro").textContent =
-    `# ${r.id}\ncd ~/shared/comfy-studio\npython3 studio/_tools/gallery_gen.py \\\n` +
+    `# ${r.id}\ncd ~/shared/comfy-studio\npython3 studio/_tools/generate.py scene \\\n` +
     `  --template ${r.template} --vary ${r.demonstrates.variable} --shot ${r.shot.template}\n\n` +
     `# or reuse the settings directly:\n` +
     `#   model ${r.model} · seed ${r.seed} · ${r.steps} steps · cfg ${r.cfg} · ${r.sampler}\n` +
