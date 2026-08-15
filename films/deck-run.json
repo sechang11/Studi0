@@ -5,41 +5,93 @@
   "engine": "higgs_v3",
   "style": "painterly anime film still, airship adventure, warm wood and brass, wind-swept ropes and rigging, dramatic clouds, cinematic lighting, detailed background painting",
   "voices": {
-    "NARRATOR": {"engine": "higgs_v3", "voice": "voices_examples/male/male_01.wav"},
-    "KESSA": {"engine": "higgs_v3", "voice": "voices_examples/higgs_audio/vex.wav"}
+    "NARRATOR": {
+      "engine": "higgs_v3",
+      "voice": "voices_examples/male/male_01.wav"
+    },
+    "KESSA": {
+      "engine": "higgs_v3",
+      "voice": "voices_examples/higgs_audio/vex.wav"
+    }
   },
   "music": [
-    {"at": 0, "prefix": "deckrun_theme", "bpm": 128, "key": "E minor", "seconds": 40,
-     "level": 0.9,
-     "tags": "adventurous orchestral flight theme, soaring strings, rhythmic pizzicato, light percussion, wind instruments, hopeful, instrumental"}
+    {
+      "at": 0,
+      "prefix": "deckrun_theme",
+      "bpm": 128,
+      "key": "E minor",
+      "seconds": 40,
+      "level": 0.9,
+      "tags": "adventurous orchestral flight theme, soaring strings, rhythmic pizzicato, light percussion, wind instruments, hopeful, instrumental"
+    }
   ],
   "beats": [
-    {"id": "010_deck", "template": "establish", "clip_secs": 5,
-     "prompt": "Wide establishing shot of a wooden airship deck in flight, rope rigging and mast against towering sunset clouds, tiny figure of a girl in a patched coat standing at the far railing",
-     "motion": "Ropes sway gently. Clouds drift past below the railing. Her coat flaps in the wind.",
-     "caption": "The wind-ship VALE, three days out of port.",
-     "sfx": "strong wind gusting over a wooden ship deck, ropes creaking", "sfx_secs": 4.0, "sfx_level": 0.8},
-    {"id": "020_stow", "template": "build", "clip_secs": 4,
-     "prompt": "Medium shot of a young girl with short copper hair in a patched coat crouched behind wooden crates on an airship deck, glancing over her shoulder, warm evening light",
-     "motion": "She peeks over the crate edge, ducks back down, breath quick.",
-     "line": {"who": "NARRATOR", "text": "She had no ticket. She had no name on the manifest. She had exactly one plan."},
-     "audio_lead": -0.4},
-    {"id": "030_reveal", "template": "reveal", "clip_secs": 4, "transition": "dissolve",
-     "prompt": "Low angle of a tall airship captain in a long weathered coat standing over the camera on a wooden deck, backlit by sunset clouds, stern expression, brass buttons catching light",
-     "motion": "His coat billows slowly. He looks down, one eyebrow rising.",
-     "caption": "The plan had a flaw."},
-    {"id": "040_run", "template": "charge", "clip_secs": 4, "camera": "pan_r",
-     "prompt": "Dynamic action shot of the girl sprinting across the airship deck between coiled ropes and barrels, motion blur, scattering gulls, crew members turning in surprise",
-     "motion": "She sprints hard left to right across the deck. Gulls scatter upward. Crew turn to grab at her and miss.",
-     "sfx": "fast footsteps on wooden planks, seagulls scattering, a shout", "sfx_secs": 3.0, "sfx_at": 0.3},
-    {"id": "050_leap", "template": "clash", "clip_secs": 4, "transition": "whip_pan",
-     "prompt": "Epic wide shot of the small girl leaping from the airship railing toward a rope net hanging from a second airship above, huge clouds behind, her coat streaming",
-     "motion": "She leaps from the railing, arms outstretched, coat streaming, and catches the hanging net as both ships sway.",
-     "line": {"who": "KESSA", "text": "Told you I could make it!"},
-     "audio_lead": -0.2},
-    {"id": "060_after", "template": "aftermath", "clip_secs": 5, "transition": "fade_black",
-     "prompt": "Wide serene shot of two airships sailing side by side into golden sunset clouds, the tiny figure climbing the rope net between them, warm light",
-     "motion": "The ships sail on together. The tiny figure climbs slowly up the net. Clouds glow gold.",
-     "caption": "Some tickets you buy. Some you take."}
+    {
+      "id": "010_deck",
+      "template": "establish",
+      "clip_secs": 5,
+      "prompt": "Wide establishing shot of a wooden airship deck in flight, rope rigging and mast against towering sunset clouds, tiny figure of a girl in a patched coat standing at the far railing",
+      "motion": "Ropes sway gently. Clouds drift past below the railing. Her coat flaps in the wind.",
+      "caption": "The wind-ship VALE, three days out of port.",
+      "sfx": "strong wind gusting over a wooden ship deck, ropes creaking",
+      "sfx_secs": 4.0,
+      "sfx_level": 0.8,
+      "camera": "rack_focus"
+    },
+    {
+      "id": "020_stow",
+      "template": "build",
+      "clip_secs": 4,
+      "prompt": "Medium shot of a young girl with short copper hair in a patched coat crouched behind wooden crates on an airship deck, glancing over her shoulder, warm evening light",
+      "motion": "She peeks over the crate edge, ducks back down, breath quick.",
+      "line": {
+        "who": "NARRATOR",
+        "text": "She had no ticket. She had no name on the manifest. She had exactly one plan."
+      },
+      "audio_lead": -0.4
+    },
+    {
+      "id": "030_reveal",
+      "template": "reveal",
+      "clip_secs": 4,
+      "transition": "dissolve",
+      "prompt": "Low angle of a tall airship captain in a long weathered coat standing over the camera on a wooden deck, backlit by sunset clouds, stern expression, brass buttons catching light",
+      "motion": "His coat billows slowly. He looks down, one eyebrow rising.",
+      "caption": "The plan had a flaw."
+    },
+    {
+      "id": "040_run",
+      "template": "charge",
+      "clip_secs": 4,
+      "camera": "pan_r",
+      "prompt": "Dynamic action shot of the girl sprinting across the airship deck between coiled ropes and barrels, motion blur, scattering gulls, crew members turning in surprise",
+      "motion": "She sprints hard left to right across the deck. Gulls scatter upward. Crew turn to grab at her and miss.",
+      "sfx": "fast footsteps on wooden planks, seagulls scattering, a shout",
+      "sfx_secs": 3.0,
+      "sfx_at": 0.3
+    },
+    {
+      "id": "050_leap",
+      "template": "clash",
+      "clip_secs": 4,
+      "transition": "whip_pan",
+      "prompt": "Epic wide shot of the small girl leaping from the airship railing toward a rope net hanging from a second airship above, huge clouds behind, her coat streaming",
+      "motion": "She leaps from the railing, arms outstretched, coat streaming, and catches the hanging net as both ships sway.",
+      "line": {
+        "who": "KESSA",
+        "text": "Told you I could make it!"
+      },
+      "audio_lead": -0.2
+    },
+    {
+      "id": "060_after",
+      "template": "aftermath",
+      "clip_secs": 5,
+      "transition": "fade_black",
+      "prompt": "Wide serene shot of two airships sailing side by side into golden sunset clouds, the tiny figure climbing the rope net between them, warm light",
+      "motion": "The ships sail on together. The tiny figure climbs slowly up the net. Clouds glow gold.",
+      "caption": "Some tickets you buy. Some you take.",
+      "camera": "dolly_zoom"
+    }
   ]
 }

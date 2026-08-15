@@ -1,10 +1,10 @@
 {
   "id": "dolly_zoom",
   "desc": "Vertigo effect. Dread without moving the subject.",
-  "status": "unavailable",
+  "status": "weak",
   "roadmap": "roadmap/camera-dolly_zoom.md",
-  "verdict": "RENDERED 2026-08-04. THIS MOVE DOES NOTHING. short.py fx_chain() has no branch for dolly_zoom, so the emitted filter chain is empty and the clip is passed through unchanged: mean absolute pixel difference against static is EXACTLY 0.00, both over the still keyframe and over a real generated clip, and all four displacement axes read +0px. compile.py downgrades a non-ready camera to static with a warning, but a hand-authored films/*.json bypasses compile.py and reaches short.py, where beat.camera is appended to the fx list and then silently matches nothing. Asked of the video model instead, LTX destroys the shot - the street collapses into unrecognisable abstract geometry by the halfway point (activity 13.79, the highest in the entire sweep). Neither route delivers a dolly zoom. See dolly_zoom.mp4 (identical to static.mp4) and dolly_zoom_prompted.mp4.",
-  "renders": "none",
+  "verdict": "BUILT (task 22): depth_pass.dolly_zoom - whole-frame zoompan to 1.18x with the NEAR depth band blended back unzoomed (the parallax differential). Strip: studio/samples/depth_pass/dolly_zoom_strip.png - the read is MILD at 1.18x and edges smear where far grows behind near (no disocclusion). Same keyframe-depth limit as rack_focus. Needs a human to judge whether the Vertigo read lands; raise --zoom to test. Prior: RENDERED 2026-08-04. THIS MOVE DOES NOTHING. short.py fx_chain() has no branch for dolly_zoom, so the emitted filter chain is empty and the clip is passed through unchanged: mean absolute pixel difference against static is EXACTLY 0.00, both over the still keyframe and over a real generated clip, an",
+  "renders": "post",
   "why_not": "On a flat plate a dolly-in and a zoom-in are the SAME transformation, so composing one against the other cancels exactly to the identity. The whole visible effect of a dolly zoom IS the differential between how fast near and far pixels move, and a flat image has no such differential. No zoompan, no crop and no combination of the two can produce it. This is why the card sat on the roadmap and why it must not be faked.",
   "needs": "A DEPTH MAP per beat. Then it is two stages: depth-proportional radial parallax via `displace` with maps built by `geq` from the depth image, then the EXISTING push/pull zoompan fragment as a uniform counter-zoom. Both halves parse on this box's ffmpeg 8.1.2. Depth Anything 3 is installed (models/geometry_estimation/depth_anything_3_mono_large.safetensors) and driven by ComfyUI CORE nodes - LoadDA3Model / DA3Inference / DA3Render - so no custom node pack is needed. What does not exist is a depth workflow file and a depth stage in short.py between keyframes() and cut().",
   "cost": "One GPU job per beat, and it moves post from 'no GPU' to 'post needs a generated asset'. The map is estimated from the KEYFRAME and is static while the clip moves, so it drifts out of register as the clip progresses - fine at short.py's 0.2-0.4s median micro-shot, unproven across a full 4s beat.",
@@ -13,9 +13,9 @@
   "chain_params": "A is the parallax gain in pixels, 40 at 1280 wide. displace maps are 8-bit centred on 128 so the hard ceiling is +/-127px, ample here. edge=smear is what fills the occlusion holes the parallax opens, and it WILL smear - keep A modest. Flip the sign of A against the zoompan direction for the other flavour of vertigo. The (1-lum/255) term assumes DA3Render depth is bright=near; check the polarity on the first real render and flip it if the background moves instead of the foreground.",
   "evidence": {
     "verdict": "MEASURED",
-    "method": "package_check: incomplete",
+    "method": "depth_pass on the airship-deck probe clip; md5 differs from source; strips looked at",
     "date": "2026-08-15",
-    "note": "frames 0/3"
+    "note": "BUILT (task 22): depth_pass.dolly_zoom - whole-frame zoompan to 1.18x with the NEAR depth band blended back unzoomed (the parallax differential). Strip: studio/samples/depth_pass/dolly_zoom_strip.png - the read is MILD at 1.18x and edges smear where far grows behind near (no diso"
   },
   "evidence_history": [
     {
@@ -23,6 +23,12 @@
       "method": "measurement session; finding recorded in this card's verdict field",
       "date": "2026-08-04",
       "note": "RENDERED 2026-08-04. THIS MOVE DOES NOTHING. short.py fx_chain() has no branch for dolly_zoom, so the emitted filter chain is empty and the clip is passed through unchanged: mean absolute pixel differ"
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "package_check: incomplete",
+      "date": "2026-08-15",
+      "note": "frames 0/3"
     }
   ]
 }

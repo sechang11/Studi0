@@ -82,9 +82,11 @@ KINDS = {
         "types": {"needs": NS},
         "statuses": {"ready", "weak", "unavailable"},
     },
+    # cameras gained `weak` with the depth cameras (task 22): built, renders, human
+    # read pending - the same middle state motions have always had.
     "cameras": {"required": {"id": S, "status": S, "verdict": S},
                 "types": {"filter": NS},
-                "statuses": {"ready", "unavailable"}},
+                "statuses": {"ready", "weak", "unavailable"}},
     # tier is a DICT - {"picture": "post", "audio": "none"} - on all twelve cards. The
     # first draft of this schema assumed a string and declared every transition broken;
     # when all twelve agree, that is the convention and the schema submits to it.

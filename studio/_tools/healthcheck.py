@@ -755,15 +755,24 @@ def check_defects():
     short = os.path.join(ROOT, "scripts", "short.py")
     src = open(short, encoding="utf-8").read() if os.path.exists(short) else ""
     dead = []
+    # A camera is alive if short.py can RENDER it: either fx_chain has a branch, or it
+    # is a make_cut post step (FX_CAMERAS_DEPTH - the depth cameras, task 22, which
+    # cannot be a flat filter and never will be). Anything in FX_CAMERAS_UNBUILT is dead
+    # by short.py's own declaration.
+    import re as _re
+    def _set(name):
+        m = _re.search(name + r"\s*=\s*\{([^}]*)\}", src, _re.S)
+        return set(_re.findall(r'"([a-z_]+)"', m.group(1))) if m else set()
+    alive = _set("FX_CAMERAS") | _set("FX_CAMERAS_DEPTH")
+    unbuilt = set(_re.findall(r'^\s+"([a-z_]+)":\s+"', src.split("FX_CAMERAS_UNBUILT", 1)[-1]
+                              .split("\n}", 1)[0], _re.M)) if "FX_CAMERAS_UNBUILT" in src else set()
     for cam in ("dolly_zoom", "orbit", "rack_focus"):
-        # A camera is alive only if fx_chain has a branch that appends a filter for it.
-        body = src.split("def fx_chain", 1)[-1].split("\ndef ", 1)[0] if "def fx_chain" in src else ""
-        if f'"{cam}"' not in body:
+        if cam in unbuilt or cam not in alive:
             dead.append(cam)
     out["dead_cameras"] = dead
     if dead:
         say("BROKEN", "defects",
-            f"STILL REAL - fx_chain() has no branch for {', '.join(dead)}, so a clip asking "
+            f"STILL REAL - short.py cannot render {', '.join(dead)}, so a clip asking "
             f"for one is byte-identical to static")
     cards_claiming = []
     cdir = os.path.join(STUDIO, "cameras")

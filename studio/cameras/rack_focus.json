@@ -1,10 +1,10 @@
 {
   "id": "rack_focus",
   "desc": "Shift attention within one frame without cutting.",
-  "status": "unavailable",
+  "status": "weak",
   "roadmap": "roadmap/camera-rack_focus.md",
-  "verdict": "RENDERED 2026-08-04. THIS MOVE DOES NOTHING at the post tier: no branch in fx_chain(), MAD against static exactly 0.00. Asked of the video model, LTX does not shift focus - it HALLUCINATES A HANGING CHAIN into the centre of frame and holds it there for the rest of the clip. Activity is 0.61, BELOW the 1.02 static floor, because the invented foreground is soft and lowers frame-to-frame high-frequency change. A textbook instance of the house rule: asked for an optical quality, the model rendered a noun instead. See rack_focus_prompted.mp4.",
-  "renders": "none",
+  "verdict": "BUILT (task 22): depth_pass.rack_focus - gblur + time-sliding depth-band maskedmerge from the KEYFRAME's Depth Anything 3 map. Strip: studio/samples/depth_pass/rack_focus_strip.png - the sharp band visibly travels near->far. LIMIT: the depth is the keyframe's; on an LTX clip that drifts framing the band stops matching after ~2s. Use on cuts that hold the keyframe's framing (hold/punch templates). Prior: RENDERED 2026-08-04. THIS MOVE DOES NOTHING at the post tier: no branch in fx_chain(), MAD against static exactly 0.00. Asked of the video model, LTX does not shift focus - it HALLUCINATES A HANGING CHAIN into the centre of frame and holds it there for the rest of the clip. Activity is 0.61, BELOW t",
+  "renders": "post",
   "why_not": "Needs to know which pixels are near and which are far. Nothing in the post chain knows that. A radial or vertical blur gradient would LOOK like a focus pull on a wide shot and be wrong on every close-up, which is the same lie in a softer filter.",
   "needs": "A depth ORDERING - not a geometry, and no occlusions are opened, so this is the cheapest of the three. Fixed-sigma gblur plus a time-ramped mask derived from depth, through maskedmerge. THE TRICK THAT MAKES IT WORK IN FFMPEG: gblur's sigma is not expression-evaluable, so ramp the MASK, not the blur strength. Verified to parse: [0:v]split[sharp][pre];[pre]gblur=sigma=12[blur];[1:v]format=gray,geq=lum=clip(255*min(1,abs((lum(X,Y)/255)-(T/DUR))/0.28),0,255)[mask];[sharp][blur][mask]maskedmerge",
   "cost": "The same per-beat depth pass dolly_zoom needs. Worth saying out loud: this is the one of the three that is a genuinely NEW expressive tool - shifting attention inside a frame without cutting is something this project cannot do at all today, and it costs one depth map and four filter nodes.",
@@ -13,9 +13,9 @@
   "chain_params": "sigma 12 = the out-of-focus strength; 0.28 = the depth-of-field band width; (T/DUR) = the focus plane sweeping 0->1 over the clip. Use (1-T/DUR) to pull the other way, or near+(far-near)*T/DUR to rack between two named planes instead of sweeping the whole range. Do NOT try to ramp gblur's sigma - it is not expression-evaluable. Ramping the MASK is what makes this work.",
   "evidence": {
     "verdict": "MEASURED",
-    "method": "package_check: incomplete",
+    "method": "depth_pass on the airship-deck probe clip; md5 differs from source; strips looked at",
     "date": "2026-08-15",
-    "note": "frames 0/3"
+    "note": "BUILT (task 22): depth_pass.rack_focus - gblur + time-sliding depth-band maskedmerge from the KEYFRAME's Depth Anything 3 map. Strip: studio/samples/depth_pass/rack_focus_strip.png - the sharp band visibly travels near->far. LIMIT: the depth is the keyframe's; on an LTX clip that"
   },
   "evidence_history": [
     {
@@ -23,6 +23,12 @@
       "method": "measurement session; finding recorded in this card's verdict field",
       "date": "2026-08-04",
       "note": "RENDERED 2026-08-04. THIS MOVE DOES NOTHING at the post tier: no branch in fx_chain(), MAD against static exactly 0.00. Asked of the video model, LTX does not shift focus - it HALLUCINATES A HANGING C"
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "package_check: incomplete",
+      "date": "2026-08-15",
+      "note": "frames 0/3"
     }
   ]
 }

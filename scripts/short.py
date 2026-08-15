@@ -62,6 +62,7 @@ from scene_templates import expand as expand_template   # noqa: E402
 import sound_dept                                       # noqa: E402  (Phase 6: the one sound department)
 sys.path.insert(0, os.path.join(os.path.dirname(HERE), "studio"))
 from engine import set_negative                         # noqa: E402  (the negative reaches the graph)
+sys.path.insert(0, os.path.join(os.path.dirname(HERE), "studio", "_tools"))
 from epic import (sh, dur, adur, measure, norm_to, ensure_local, load_wf, expand,
                   submit, wait_all, keyscale, FONT, fgpath, ffesc, COMFY, HOST)   # noqa: E402
 
@@ -95,21 +96,19 @@ TARGET_LUFS = -9.5        # the reference short measures -9.43 LUFS. Feed-loud, 
 # A silent no-op is the worst outcome available. It costs a full generation and looks like
 # a rendering choice. So: anything not in one of these two sets is reported, loudly, once.
 FX_CAMERAS = {"static", "push", "punch", "pull", "pan_l", "pan_r", "tilt_u", "tilt_d",
-              "handheld"}
+              "handheld", "dolly_zoom", "rack_focus"}
 FX_EFFECTS = {"shake", "aberr", "glow", "flash", "ramp", "smear", "whiteout", "hot"}
 # Named cameras that exist as cards and render nothing here. Reported differently from a
 # typo because the author did not make a mistake - the app offered them the move.
+# dolly_zoom and rack_focus moved OUT of this set (task 22): studio/_tools/depth_pass.py
+# maps the keyframe's depth through Depth Anything 3 (core nodes on ComfyUI 0.33) and
+# make_cut applies them as a post step. Their limit is stated on their cards: the depth
+# is the KEYFRAME's, so they read best on cuts that hold the keyframe's framing.
+FX_CAMERAS_DEPTH = {"dolly_zoom", "rack_focus"}
 FX_CAMERAS_UNBUILT = {
-    "dolly_zoom": "needs a depth map. On a flat plate a dolly-in and a zoom-in are the "
-                  "SAME transform and cancel exactly to the identity - the whole effect "
-                  "is the near/far parallax differential, which a flat image does not "
-                  "have. No zoompan can fake it.",
     "orbit":      "not achievable after the fact at all. Depth parallax gives a lateral "
                   "slide, not an arc, and cannot reveal a surface the plate never saw; "
                   "the mesh route needs a headless rasterizer this box does not have.",
-    "rack_focus": "needs a depth ordering. The filter chain is known (fixed-sigma gblur "
-                  "plus a depth-derived time-ramped mask through maskedmerge) and the "
-                  "depth pass to feed it does not exist yet.",
 }
 _FX_SAID = set()
 
@@ -256,6 +255,30 @@ def make_cut(src, at, length, fx, dst, seed=0, grade=None):
     sh("ffmpeg", "-y", "-v", "error", "-ss", f"{at:.3f}", "-t", f"{length:.3f}", "-i", src,
        "-vf", vf, "-an", "-r", str(FPS), "-c:v", "libx264", "-crf", "16",
        "-preset", "veryfast", "-pix_fmt", "yuv420p", dst)
+    # Depth cameras (task 22): applied AFTER the flat chain, from the beat keyframe's
+    # depth map. `depth_key` is set by the caller (cut()) when it knows the keyframe;
+    # without one the move is reported and skipped, never silently a no-op.
+    want = [f for f in fx if f in FX_CAMERAS_DEPTH]
+    if want:
+        key = getattr(make_cut, "depth_key", None)
+        if not key or not os.path.exists(key):
+            print(f"    ! {want[0]} asked but no keyframe for a depth map - hard cut",
+                  file=sys.stderr)
+            return dst
+        import depth_pass as _dp
+        dmap = os.path.splitext(key)[0] + "_depth.png"
+        if not os.path.exists(dmap):
+            if not _dp.depth(key, dmap):
+                print(f"    ! depth pass failed for {os.path.basename(key)}",
+                      file=sys.stderr)
+                return dst
+        tmp = dst + ".depthcam.mp4"
+        got = (_dp.rack_focus(dst, dmap, tmp) if want[0] == "rack_focus"
+               else _dp.dolly_zoom(dst, dmap, tmp))
+        if got:
+            os.replace(tmp, dst)
+        else:
+            print(f"    ! {want[0]} post step failed - flat cut kept", file=sys.stderr)
     return dst
 
 
@@ -731,6 +754,9 @@ def cut(film, out):
         # template happened to carry. Without this every template that used `punch`
         # produced the same drift, which read as a rendering artefact rather than style.
         cam = b.get("camera")
+        # the depth cameras need this beat's keyframe (see make_cut)
+        make_cut.depth_key = ensure_local(f"{rel}/keyframes/{b['id']}_00001_.png",
+                                          f"{out}/keyframes/{b['id']}_00001_.png")
         for ci, c in enumerate(beat_cuts):
             if cam:
                 c = dict(c, fx=[f for f in c["fx"]
