@@ -9,9 +9,17 @@
   "avoid_for": "Intimacy, grief, seduction, or slow reflection. Also thin as a cloning reference - see note.",
   "note": "Shortest female reference at 7.6s, well under the 24-30s the VibeVoice README recommends; expect less stable cloning than female_04_maya. Mapped to woman_warm in scripts/make_audio_library.py, which does not match the measured briskness - treat that alias as unreliable.",
   "evidence": {
-    "verdict": "UNVERIFIED",
-    "method": "nothing has checked this card against pixels",
+    "verdict": "MEASURED",
+    "method": "audio_sweep: reference file measured",
     "date": "2026-08-15",
-    "note": ""
-  }
+    "note": "renders and is not broken [seconds=7.58, lufs=-22.8, true_peak=-3.4, silent_fraction=0.04, flatness=0.0275, f0_median=197.8, channels=1]"
+  },
+  "evidence_history": [
+    {
+      "verdict": "UNVERIFIED",
+      "method": "nothing has checked this card against pixels",
+      "date": "2026-08-15",
+      "note": ""
+    }
+  ]
 }

@@ -1,0 +1,33 @@
+{
+ "kind": "sfx",
+ "id": "crowd_murmur",
+ "card": {
+  "id": "crowd_murmur",
+  "desc": "A restaurant, a lobby, a waiting room - people present but not the subject.",
+  "status": "partial",
+  "prompt": "twenty people talking quietly at once in a small room, overlapping low conversation, no single voice louder than the others, cutlery and chairs occasionally, close",
+  "negative": "music, singing, shouting, laughter, announcer, reverb",
+  "seconds": 10,
+  "steps": 100,
+  "cfg": 7,
+  "sampler": "dpmpp_3m_sde",
+  "note": "PARTIAL: you cannot ask for unintelligible. 'Indistinct' is a quality, not a thing, and it does not land - word-like fragments do surface and an audience will latch onto them under dialogue. Fix it deterministically instead of re-rolling seeds: low-pass around 2 kHz with AudioEqualizer3Band and it stops reading as language. Never leave this bed full-range under a scene that has lines.",
+  "evidence": {
+   "verdict": "UNVERIFIED",
+   "method": "nothing has checked this card against pixels",
+   "date": "2026-08-15",
+   "note": ""
+  }
+ },
+ "seed": 4242,
+ "measured": {
+  "sample_rate": 44100,
+  "channels": 2,
+  "seconds": 10.03,
+  "lufs": -11.0,
+  "true_peak": 1.0,
+  "silent_seconds": 0,
+  "silent_fraction": 0.0
+ },
+ "workflow": "10_stableaudio_sfx.json"
+}

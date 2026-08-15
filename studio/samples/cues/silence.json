@@ -1,0 +1,34 @@
+{
+ "kind": "cues",
+ "id": "silence",
+ "card": {
+  "id": "silence",
+  "desc": "No score at all. The most under-used cue in the library.",
+  "status": "ready",
+  "tags": "",
+  "bpm": 0,
+  "key": "",
+  "level": 0.0,
+  "note": "Silence immediately before an impact makes the impact twice as loud. A scene with `silence: true` gets this automatically.",
+  "silent": true,
+  "evidence": {
+   "verdict": "UNVERIFIED",
+   "method": "nothing has checked this card against pixels",
+   "date": "2026-08-15",
+   "note": ""
+  }
+ },
+ "seed": 4242,
+ "measured": {
+  "sample_rate": 48000,
+  "channels": 2,
+  "seconds": 20.0,
+  "lufs": -29.6,
+  "true_peak": -14.7,
+  "silent_seconds": 12.87,
+  "silent_fraction": 0.64,
+  "flatness": 0.0003,
+  "f0_median": 499.8
+ },
+ "workflow": "06_acestep_music.json"
+}

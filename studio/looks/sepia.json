@@ -5,9 +5,29 @@
   "status": "ready",
   "note": "Two stages, and the order matters: hue=s=0.25 first strips the original colour down to near-monochrome, THEN colorbalance paints brown back in. Tinting without stripping first leaves the source colours fighting the sepia and gives muddy results. Measured SATAVG 39.1 -> 15.0 with everything sitting on the red-yellow side (input 128 -> 149,131,117).",
   "evidence": {
-    "verdict": "UNVERIFIED",
-    "method": "nothing has checked this card against pixels",
+    "verdict": "MEASURED",
+    "method": "look_check: grade applied to a reference frame (ffmpeg signalstats)",
     "date": "2026-08-15",
-    "note": ""
-  }
+    "note": "grade applies and moves the frame; bright: mad=8.7 luma 62->65 (+3) sat 79->67 (-12) crushed=1%"
+  },
+  "evidence_history": [
+    {
+      "verdict": "UNVERIFIED",
+      "method": "nothing has checked this card against pixels",
+      "date": "2026-08-15",
+      "note": ""
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "look_check: grade applied to a reference frame (ffmpeg signalstats)",
+      "date": "2026-08-15",
+      "note": "grade applies and moves the frame; bright: mad=8.7 luma 62->65 (+3) sat 79->67 (-12) crushed=1%"
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "look_check: grade applied to a reference frame (ffmpeg signalstats)",
+      "date": "2026-08-15",
+      "note": "grade applies and moves the frame; bright: mad=8.7 luma 62->65 (+3) sat 79->67 (-12) crushed=1%"
+    }
+  ]
 }

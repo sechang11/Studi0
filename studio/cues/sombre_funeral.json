@@ -8,9 +8,17 @@
   "level": 0.75,
   "note": "Sits under dialogue if the dialogue is quiet - it moves too slowly to trip over a line. Different job from desolate: desolate is one person alone, this one has an audience.",
   "evidence": {
-    "verdict": "UNVERIFIED",
-    "method": "nothing has checked this card against pixels",
+    "verdict": "MEASURED",
+    "method": "audio_sweep: rendered + measured (ffmpeg ebur128/silencedetect, librosa flatness)",
     "date": "2026-08-15",
-    "note": ""
-  }
+    "note": "renders and is not broken [seconds=20.0, lufs=-12.3, true_peak=0.1, silent_fraction=0.18, flatness=0.0012, f0_median=131.2, channels=2]"
+  },
+  "evidence_history": [
+    {
+      "verdict": "UNVERIFIED",
+      "method": "nothing has checked this card against pixels",
+      "date": "2026-08-15",
+      "note": ""
+    }
+  ]
 }

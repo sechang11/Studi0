@@ -8,9 +8,17 @@
   "level": 0.7,
   "note": "Sits under dialogue, and under voiceover especially. Pair with look:night - the cue reads as a city, the grade does the dark.",
   "evidence": {
-    "verdict": "UNVERIFIED",
-    "method": "nothing has checked this card against pixels",
+    "verdict": "MEASURED",
+    "method": "audio_sweep: rendered + measured (ffmpeg ebur128/silencedetect, librosa flatness)",
     "date": "2026-08-15",
-    "note": ""
-  }
+    "note": "renders and is not broken [seconds=20.0, lufs=-18.0, true_peak=0.0, silent_fraction=0.32, flatness=0.0002, f0_median=105.1, channels=2]"
+  },
+  "evidence_history": [
+    {
+      "verdict": "UNVERIFIED",
+      "method": "nothing has checked this card against pixels",
+      "date": "2026-08-15",
+      "note": ""
+    }
+  ]
 }

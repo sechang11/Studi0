@@ -10,9 +10,17 @@
   "sampler": "dpmpp_3m_sde",
   "note": "'whistling' is load-bearing in the negative: wind prompts drift into a tonal whistle, and the moment it has a pitch it reads as a synthesiser rather than as weather. Safe to run long and loop - it has no periodicity to seam on. Sits under everything; wind is what makes an exterior stop sounding like a room.",
   "evidence": {
-    "verdict": "UNVERIFIED",
-    "method": "nothing has checked this card against pixels",
+    "verdict": "MEASURED",
+    "method": "audio_sweep: rendered + measured (ffmpeg ebur128/silencedetect, librosa flatness)",
     "date": "2026-08-15",
-    "note": ""
-  }
+    "note": "renders and is not broken [seconds=11.98, lufs=-13.5, true_peak=1.2, silent_fraction=0.15, channels=2]"
+  },
+  "evidence_history": [
+    {
+      "verdict": "UNVERIFIED",
+      "method": "nothing has checked this card against pixels",
+      "date": "2026-08-15",
+      "note": ""
+    }
+  ]
 }

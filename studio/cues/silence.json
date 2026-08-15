@@ -1,7 +1,7 @@
 {
   "id": "silence",
   "desc": "No score at all. The most under-used cue in the library.",
-  "status": "ready",
+  "status": "weak",
   "tags": "",
   "bpm": 0,
   "key": "",
@@ -9,9 +9,18 @@
   "note": "Silence immediately before an impact makes the impact twice as loud. A scene with `silence: true` gets this automatically.",
   "silent": true,
   "evidence": {
-    "verdict": "UNVERIFIED",
-    "method": "nothing has checked this card against pixels",
+    "verdict": "MEASURED",
+    "method": "audio_sweep: rendered + measured (ffmpeg ebur128/silencedetect, librosa flatness)",
     "date": "2026-08-15",
-    "note": ""
-  }
+    "note": "FAILED: 64% silent [seconds=20.0, lufs=-29.6, true_peak=-14.7, silent_fraction=0.64, flatness=0.0003, f0_median=499.8, channels=2]"
+  },
+  "evidence_history": [
+    {
+      "verdict": "UNVERIFIED",
+      "method": "nothing has checked this card against pixels",
+      "date": "2026-08-15",
+      "note": ""
+    }
+  ],
+  "status_before_sweep": "ready"
 }

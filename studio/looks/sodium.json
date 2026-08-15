@@ -1,13 +1,36 @@
 {
   "id": "sodium",
   "tags": "night, street light, lamppost, orange glow, city street, dark",
-  "grade": "eq=brightness=-0.08:contrast=1.12:saturation=0.65,colorbalance=rm=0.14:gm=0.05:bm=-0.14:bs=0.04,eq=gamma=0.97",
+  "grade": "curves=all='0/0.03 0.25/0.21 0.5/0.39 0.75/0.57 1/0.85',eq=saturation=0.65,colorbalance=rm=0.14:gm=0.05:bm=-0.14:bs=0.04,eq=gamma=0.97",
   "status": "ready",
   "note": "Sodium vapour lamps are near-monochromatic amber, so overall saturation drops to 0.65 and the amber is then painted back into the MIDTONES only (rm up, bm down). Shadows keep a touch of blue (bs) so the unlit parts of frame do not also turn orange - that separation is what reads as streetlight rather than as a plain warm grade. Darkness comes from the grade, never from a night tag.",
   "evidence": {
-    "verdict": "UNVERIFIED",
-    "method": "nothing has checked this card against pixels",
+    "verdict": "MEASURED",
+    "method": "look_check: grade applied to a reference frame (ffmpeg signalstats)",
     "date": "2026-08-15",
-    "note": ""
-  }
+    "note": "grade applies and moves the frame; bright: mad=11.3 luma 62->53 (-10) sat 79->82 (+3) crushed=0%"
+  },
+  "evidence_history": [
+    {
+      "verdict": "UNVERIFIED",
+      "method": "nothing has checked this card against pixels",
+      "date": "2026-08-15",
+      "note": ""
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "look_check: grade applied to a reference frame (ffmpeg signalstats)",
+      "date": "2026-08-15",
+      "note": "crushes 59% of the bright frame to black (task 26 defect) | bright: mad=29.0 luma 62->34 (-29) sat 79->189 (+110) crushed=59%"
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "look_check: grade applied to a reference frame (ffmpeg signalstats)",
+      "date": "2026-08-15",
+      "note": "grade applies and moves the frame; bright: mad=11.3 luma 62->53 (-10) sat 79->82 (+3) crushed=0%"
+    }
+  ],
+  "status_before_check": "ready",
+  "grade_before_crush_fix": "eq=brightness=-0.08:contrast=1.12:saturation=0.65,colorbalance=rm=0.14:gm=0.05:bm=-0.14:bs=0.04,eq=gamma=0.97",
+  "crush_fix": "task 26 pattern applied 2026-08-15: crushed 59% -> 0%"
 }

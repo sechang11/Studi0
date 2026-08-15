@@ -1,13 +1,36 @@
 {
   "id": "blockbuster",
   "tags": "cinematic lighting, backlighting, dramatic shadow, lens flare, orange sky",
-  "grade": "eq=contrast=1.16:saturation=0.95,colorbalance=rs=-0.05:bs=0.09:rh=0.09:bh=-0.08,eq=gamma=0.97",
+  "grade": "curves=all='0/0.03 0.25/0.20 0.5/0.5 0.75/0.80 1/0.99',eq=saturation=0.95,colorbalance=rs=-0.05:bs=0.09:rh=0.09:bh=-0.08,eq=gamma=0.97",
   "status": "ready",
   "note": "Teal-and-orange split tone: shadows pushed to teal (rs down, bs up), highlights pushed to orange (rh up, bh down). Measured on flat patches: input 40 grey -> 9,21,33 (teal), input 128 -> 136,123,104 (orange), input 192 -> 213,200,181. The average hue barely moves because the two ends cancel - that is the look working, not the grade failing, so do not judge this one by a mean-hue number. Saturation comes DOWN to 0.95 because the split itself adds apparent colour.",
   "evidence": {
-    "verdict": "UNVERIFIED",
-    "method": "nothing has checked this card against pixels",
+    "verdict": "MEASURED",
+    "method": "look_check: grade applied to a reference frame (ffmpeg signalstats)",
     "date": "2026-08-15",
-    "note": ""
-  }
+    "note": "grade applies and moves the frame; bright: mad=11.3 luma 62->54 (-9) sat 79->150 (+71) crushed=4%"
+  },
+  "evidence_history": [
+    {
+      "verdict": "UNVERIFIED",
+      "method": "nothing has checked this card against pixels",
+      "date": "2026-08-15",
+      "note": ""
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "look_check: grade applied to a reference frame (ffmpeg signalstats)",
+      "date": "2026-08-15",
+      "note": "crushes 42% of the bright frame to black (task 26 defect) | bright: mad=15.8 luma 62->48 (-14) sat 79->179 (+100) crushed=42%"
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "look_check: grade applied to a reference frame (ffmpeg signalstats)",
+      "date": "2026-08-15",
+      "note": "grade applies and moves the frame; bright: mad=11.3 luma 62->54 (-9) sat 79->150 (+71) crushed=4%"
+    }
+  ],
+  "status_before_check": "ready",
+  "grade_before_crush_fix": "eq=contrast=1.16:saturation=0.95,colorbalance=rs=-0.05:bs=0.09:rh=0.09:bh=-0.08,eq=gamma=0.97",
+  "crush_fix": "task 26 pattern applied 2026-08-15: crushed 42% -> 4%"
 }

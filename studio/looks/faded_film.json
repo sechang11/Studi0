@@ -5,9 +5,29 @@
   "status": "ready",
   "note": "Lifted blacks are the whole point of a faded print: gamma 1.12 plus brightness raises input level 40 to 77,78,76, so nothing in frame is ever truly black. A slight magenta split (red AND blue up in shadows, green down in highlights) mimics dye fade. No film grain is added - a grade cannot make grain, and film grain was deliberately left OUT of the tags so this does not promise texture it has no way to deliver.",
   "evidence": {
-    "verdict": "UNVERIFIED",
-    "method": "nothing has checked this card against pixels",
+    "verdict": "MEASURED",
+    "method": "look_check: grade applied to a reference frame (ffmpeg signalstats)",
     "date": "2026-08-15",
-    "note": ""
-  }
+    "note": "grade applies and moves the frame; bright: mad=34.5 luma 62->97 (+34) sat 79->39 (-40) crushed=0%"
+  },
+  "evidence_history": [
+    {
+      "verdict": "UNVERIFIED",
+      "method": "nothing has checked this card against pixels",
+      "date": "2026-08-15",
+      "note": ""
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "look_check: grade applied to a reference frame (ffmpeg signalstats)",
+      "date": "2026-08-15",
+      "note": "grade applies and moves the frame; bright: mad=34.5 luma 62->97 (+34) sat 79->39 (-40) crushed=0%"
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "look_check: grade applied to a reference frame (ffmpeg signalstats)",
+      "date": "2026-08-15",
+      "note": "grade applies and moves the frame; bright: mad=34.5 luma 62->97 (+34) sat 79->39 (-40) crushed=0%"
+    }
+  ]
 }

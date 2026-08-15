@@ -1,13 +1,36 @@
 {
   "id": "day_for_night",
   "tags": "night, floodlights",
-  "grade": "eq=brightness=-0.15:contrast=1.20:saturation=0.72,colorbalance=bs=0.05:rs=-0.03,eq=gamma=0.92",
+  "grade": "curves=all='0/0.03 0.25/0.17 0.5/0.31 0.75/0.46 1/0.75',eq=saturation=0.72,colorbalance=bs=0.05:rs=-0.03,eq=gamma=0.92",
   "status": "ready",
   "note": "Darkness must come from the GRADE. Prompting 'night, dark background' moved measured mean luma 170 -> 161, i.e. nothing. Saturation comes DOWN here to leave headroom - grade stacks multiplicatively with hot/glow/aberr and once turned a third of a film magenta.",
   "evidence": {
-    "verdict": "UNVERIFIED",
-    "method": "nothing has checked this card against pixels",
+    "verdict": "MEASURED",
+    "method": "look_check: grade applied to a reference frame (ffmpeg signalstats)",
     "date": "2026-08-15",
-    "note": ""
-  }
+    "note": "grade applies and moves the frame; bright: mad=27.9 luma 62->35 (-28) sat 79->126 (+47) crushed=23%; EXPECTED brighter, got darker (-28)"
+  },
+  "evidence_history": [
+    {
+      "verdict": "UNVERIFIED",
+      "method": "nothing has checked this card against pixels",
+      "date": "2026-08-15",
+      "note": ""
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "look_check: grade applied to a reference frame (ffmpeg signalstats)",
+      "date": "2026-08-15",
+      "note": "crushes 70% of the bright frame to black (task 26 defect) | bright: mad=43.7 luma 62->19 (-43) sat 79->229 (+150) crushed=70%; EXPECTED brighter, got darker (-43)"
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "look_check: grade applied to a reference frame (ffmpeg signalstats)",
+      "date": "2026-08-15",
+      "note": "grade applies and moves the frame; bright: mad=27.9 luma 62->35 (-28) sat 79->126 (+47) crushed=23%; EXPECTED brighter, got darker (-28)"
+    }
+  ],
+  "status_before_check": "ready",
+  "grade_before_crush_fix": "eq=brightness=-0.15:contrast=1.20:saturation=0.72,colorbalance=bs=0.05:rs=-0.03,eq=gamma=0.92",
+  "crush_fix": "task 26 pattern applied 2026-08-15: crushed 70% -> 23%"
 }

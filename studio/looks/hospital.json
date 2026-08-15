@@ -5,9 +5,29 @@
   "status": "ready",
   "note": "Clinical means BRIGHT and FLAT, not blue: brightness and gamma up, contrast just under 1 so there is nowhere for shadow to hide, and the cool cast confined to highlights so whites go slightly cyan (input 192 -> 219,226,227) the way overlit white walls do. Red pulled a touch from shadows to drain warmth out of skin. Distinct from fluorescent, which is the sickly green version of the same room.",
   "evidence": {
-    "verdict": "UNVERIFIED",
-    "method": "nothing has checked this card against pixels",
+    "verdict": "MEASURED",
+    "method": "look_check: grade applied to a reference frame (ffmpeg signalstats)",
     "date": "2026-08-15",
-    "note": ""
-  }
+    "note": "grade applies and moves the frame; bright: mad=30.6 luma 62->93 (+31) sat 79->52 (-27) crushed=0%"
+  },
+  "evidence_history": [
+    {
+      "verdict": "UNVERIFIED",
+      "method": "nothing has checked this card against pixels",
+      "date": "2026-08-15",
+      "note": ""
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "look_check: grade applied to a reference frame (ffmpeg signalstats)",
+      "date": "2026-08-15",
+      "note": "grade applies and moves the frame; bright: mad=30.6 luma 62->93 (+31) sat 79->52 (-27) crushed=0%"
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "look_check: grade applied to a reference frame (ffmpeg signalstats)",
+      "date": "2026-08-15",
+      "note": "grade applies and moves the frame; bright: mad=30.6 luma 62->93 (+31) sat 79->52 (-27) crushed=0%"
+    }
+  ]
 }

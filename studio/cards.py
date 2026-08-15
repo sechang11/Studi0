@@ -110,10 +110,12 @@ KINDS = {
         "required": {"id": S, "name": S, "status": S, "file": S, "engine": S},
         "statuses": {"ready", "unsupported", "blocked"},
     },
+    # cues/sfx admit `weak` since the audio_sweep (an instrument can demote; only a
+    # human promotes) - e.g. cues/silence measured 64% silent, which may be its job.
     "cues": {"required": {"id": S, "status": S, "tags": S},
-             "statuses": {"ready", "partial"}},
+             "statuses": {"ready", "partial", "weak"}},
     "sfx": {"required": {"id": S, "status": S, "prompt": S, "seconds": N},
-            "statuses": {"ready", "partial"}},
+            "statuses": {"ready", "partial", "weak"}},
     "soundscapes": {"required": {"id": S, "status": S}, "statuses": {"partial", "ready"}},
     "pacing": {"required": {"id": S, "status": S, "rhythm": S}, "statuses": {"ready"}},
     "layers": {"required": {"id": S, "status": S}, "statuses": {"partial", "ready"}},

@@ -1,0 +1,33 @@
+{
+ "kind": "sfx",
+ "id": "breath",
+ "card": {
+  "id": "breath",
+  "desc": "Exhaustion, panic, recovery. The most human sound in a mix.",
+  "status": "ready",
+  "prompt": "one person breathing hard through the mouth after running, ragged inhale and exhale, air over teeth and lips, close microphone, dry, no words",
+  "negative": "music, speech, words, singing, moaning, reverb, footsteps",
+  "seconds": 4,
+  "steps": 100,
+  "cfg": 7,
+  "sampler": "dpmpp_3m_sde",
+  "note": "Keep 'voice' OUT of the negative - it strips the vocal-tract character and you get wind through a tube. 'speech, words' are enough to stop it forming language. 'air over teeth and lips' is what separates a breath from a whoosh; drop that phrase and the two prompts converge.",
+  "evidence": {
+   "verdict": "UNVERIFIED",
+   "method": "nothing has checked this card against pixels",
+   "date": "2026-08-15",
+   "note": ""
+  }
+ },
+ "seed": 4242,
+ "measured": {
+  "sample_rate": 44100,
+  "channels": 2,
+  "seconds": 3.99,
+  "lufs": -8.9,
+  "true_peak": 3.3,
+  "silent_seconds": 1.74,
+  "silent_fraction": 0.44
+ },
+ "workflow": "10_stableaudio_sfx.json"
+}

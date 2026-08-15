@@ -1,0 +1,33 @@
+{
+ "kind": "sfx",
+ "id": "paper",
+ "card": {
+  "id": "paper",
+  "desc": "A letter, a file, a page turned. Small, close, intimate scenes.",
+  "status": "ready",
+  "prompt": "a single sheet of dry paper picked up, handled and set down, page flexing and crackling, one page turned over another, close microphone, quiet, dry",
+  "negative": "music, speech, tonal, reverb, cloth, footsteps",
+  "seconds": 3,
+  "steps": 100,
+  "cfg": 7,
+  "sampler": "dpmpp_3m_sde",
+  "note": "Quiet at source, and the -20 LUFS normalise lifts the noise floor along with the signal - if the result hisses, that is the render being too quiet, not the normalise pass failing. Request 3 s and keep the loudest 1 s. 'cloth' is in the negative because paper and fabric occupy the same band and the model confuses them.",
+  "evidence": {
+   "verdict": "UNVERIFIED",
+   "method": "nothing has checked this card against pixels",
+   "date": "2026-08-15",
+   "note": ""
+  }
+ },
+ "seed": 4242,
+ "measured": {
+  "sample_rate": 44100,
+  "channels": 2,
+  "seconds": 2.97,
+  "lufs": -6.3,
+  "true_peak": 3.4,
+  "silent_seconds": 1.2,
+  "silent_fraction": 0.41
+ },
+ "workflow": "10_stableaudio_sfx.json"
+}

@@ -9,9 +9,17 @@
   "avoid_for": "Deep narration, gravitas, or straight drama - despite how it is labelled elsewhere in this project. See note.",
   "note": "scripts/make_audio_library.py maps this file to narrator_deep and char_narrator. That label is wrong: measured median pitch is 167 Hz, higher than every other male-range voice in the library and 85 Hz above male_02. Use male_02 for deep narration.",
   "evidence": {
-    "verdict": "UNVERIFIED",
-    "method": "nothing has checked this card against pixels",
+    "verdict": "MEASURED",
+    "method": "audio_sweep: reference file measured",
     "date": "2026-08-15",
-    "note": ""
-  }
+    "note": "renders and is not broken [seconds=10.4, lufs=-15.4, true_peak=-0.3, silent_fraction=0.1, flatness=0.082, f0_median=166.8, channels=1]"
+  },
+  "evidence_history": [
+    {
+      "verdict": "UNVERIFIED",
+      "method": "nothing has checked this card against pixels",
+      "date": "2026-08-15",
+      "note": ""
+    }
+  ]
 }

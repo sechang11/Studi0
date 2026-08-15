@@ -10,9 +10,17 @@
   "sampler": "dpmpp_3m_sde",
   "note": "The smallest bed here and the one that does the most work - a body that makes fabric noise reads as physically present even in a shot where nothing else changes. Sit it 12-18 dB under dialogue; if you can consciously hear it, it is too loud and starts sounding like a separate event.",
   "evidence": {
-    "verdict": "UNVERIFIED",
-    "method": "nothing has checked this card against pixels",
+    "verdict": "MEASURED",
+    "method": "audio_sweep: rendered + measured (ffmpeg ebur128/silencedetect, librosa flatness)",
     "date": "2026-08-15",
-    "note": ""
-  }
+    "note": "renders and is not broken [seconds=2.97, lufs=-8.5, true_peak=2.1, silent_fraction=0.28, channels=2]"
+  },
+  "evidence_history": [
+    {
+      "verdict": "UNVERIFIED",
+      "method": "nothing has checked this card against pixels",
+      "date": "2026-08-15",
+      "note": ""
+    }
+  ]
 }

@@ -9,9 +9,17 @@
   "avoid_for": "Casual modern banter, youth, or action. The cadence is formal and will make throwaway lines sound portentous.",
   "note": "The only stereo file in the library (2 channels, 44.1 kHz); all others are mono. This is safe - utils/audio/librosa_fallback.py loads references with mono=True and downmixes anything with more than one channel.",
   "evidence": {
-    "verdict": "UNVERIFIED",
-    "method": "nothing has checked this card against pixels",
+    "verdict": "MEASURED",
+    "method": "audio_sweep: reference file measured",
     "date": "2026-08-15",
-    "note": ""
-  }
+    "note": "renders and is not broken [seconds=19.18, lufs=-17.5, true_peak=-2.1, silent_fraction=0.02, flatness=0.0167, f0_median=108.5, channels=2]"
+  },
+  "evidence_history": [
+    {
+      "verdict": "UNVERIFIED",
+      "method": "nothing has checked this card against pixels",
+      "date": "2026-08-15",
+      "note": ""
+    }
+  ]
 }

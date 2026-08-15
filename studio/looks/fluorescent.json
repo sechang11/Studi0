@@ -5,9 +5,29 @@
   "status": "ready",
   "note": "The sickly institutional green comes from lifting GREEN in midtones and highlights while pulling red down slightly - measured input 128 -> 127,141,127, i.e. green clearly ahead of a neutral pair. Gamma lifts a little because fluorescent tubes flatten shadows. Kept gentle: green is the cast the eye forgives least, so pushing gm past about 0.12 starts to look like a broken render rather than a lighting choice.",
   "evidence": {
-    "verdict": "UNVERIFIED",
-    "method": "nothing has checked this card against pixels",
+    "verdict": "MEASURED",
+    "method": "look_check: grade applied to a reference frame (ffmpeg signalstats)",
     "date": "2026-08-15",
-    "note": ""
-  }
+    "note": "grade applies and moves the frame; bright: mad=7.2 luma 62->63 (+1) sat 79->97 (+18) crushed=2%"
+  },
+  "evidence_history": [
+    {
+      "verdict": "UNVERIFIED",
+      "method": "nothing has checked this card against pixels",
+      "date": "2026-08-15",
+      "note": ""
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "look_check: grade applied to a reference frame (ffmpeg signalstats)",
+      "date": "2026-08-15",
+      "note": "grade applies and moves the frame; bright: mad=7.2 luma 62->63 (+1) sat 79->97 (+18) crushed=2%"
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "look_check: grade applied to a reference frame (ffmpeg signalstats)",
+      "date": "2026-08-15",
+      "note": "grade applies and moves the frame; bright: mad=7.2 luma 62->63 (+1) sat 79->97 (+18) crushed=2%"
+    }
+  ]
 }

@@ -1,0 +1,33 @@
+{
+ "kind": "sfx",
+ "id": "keyboard",
+ "card": {
+  "id": "keyboard",
+  "desc": "Office, newsroom, someone working. Texture that says occupied.",
+  "status": "partial",
+  "prompt": "fingers typing quickly on a mechanical keyboard, individual plastic keys bottoming out with a sharp click and a hollow case resonance, irregular pace, occasional pause, close microphone, dry",
+  "negative": "music, speech, rhythm, drums, typewriter, reverb",
+  "seconds": 8,
+  "steps": 100,
+  "cfg": 7,
+  "sampler": "dpmpp_3m_sde",
+  "note": "PARTIAL: no sync and no control of pace - the keystrokes will not match anything on screen. Fine as texture in a wide or off-camera; if hands are in frame, cut one keystroke out and place them by hand. 'typewriter' is in the negative because mechanical-keyboard prompts drift to a typewriter mechanism and hand you a carriage return you did not ask for.",
+  "evidence": {
+   "verdict": "UNVERIFIED",
+   "method": "nothing has checked this card against pixels",
+   "date": "2026-08-15",
+   "note": ""
+  }
+ },
+ "seed": 4242,
+ "measured": {
+  "sample_rate": 44100,
+  "channels": 2,
+  "seconds": 7.99,
+  "lufs": -11.4,
+  "true_peak": 4.0,
+  "silent_seconds": 1.32,
+  "silent_fraction": 0.17
+ },
+ "workflow": "10_stableaudio_sfx.json"
+}

@@ -5,9 +5,29 @@
   "status": "ready",
   "note": "Warmth is placed in the HIGHLIGHTS (rh up, bh down) with shadows left faintly cool, so the sky and the lit edges go orange while shaded sides stay blue - that contrast is what makes it read as a low sun rather than as an overall warm wash. This is the difference from the existing golden preset, which warms the whole frame uniformly. Measured input 128 -> 143,129,104, input 40 -> 25,27,31.",
   "evidence": {
-    "verdict": "UNVERIFIED",
-    "method": "nothing has checked this card against pixels",
+    "verdict": "MEASURED",
+    "method": "look_check: grade applied to a reference frame (ffmpeg signalstats)",
     "date": "2026-08-15",
-    "note": ""
-  }
+    "note": "grade applies and moves the frame; bright: mad=10.3 luma 62->55 (-8) sat 79->119 (+40) crushed=17%"
+  },
+  "evidence_history": [
+    {
+      "verdict": "UNVERIFIED",
+      "method": "nothing has checked this card against pixels",
+      "date": "2026-08-15",
+      "note": ""
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "look_check: grade applied to a reference frame (ffmpeg signalstats)",
+      "date": "2026-08-15",
+      "note": "grade applies and moves the frame; bright: mad=10.3 luma 62->55 (-8) sat 79->119 (+40) crushed=17%"
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "look_check: grade applied to a reference frame (ffmpeg signalstats)",
+      "date": "2026-08-15",
+      "note": "grade applies and moves the frame; bright: mad=10.3 luma 62->55 (-8) sat 79->119 (+40) crushed=17%"
+    }
+  ]
 }

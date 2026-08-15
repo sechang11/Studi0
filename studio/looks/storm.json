@@ -1,13 +1,36 @@
 {
   "id": "storm",
   "tags": "storm, dark clouds, rain, grey sky, wind, overcast",
-  "grade": "eq=brightness=-0.06:contrast=1.15:saturation=0.55,colorbalance=bs=0.08:bm=0.04:rm=-0.04,eq=gamma=0.98",
+  "grade": "curves=all='0/0.03 0.25/0.21 0.5/0.40 0.75/0.58 1/0.86',eq=saturation=0.55,colorbalance=bs=0.08:bm=0.04:rm=-0.04,eq=gamma=0.98",
   "status": "ready",
   "note": "Heavy slate grey: saturation down to 0.55 kills the colour a storm sky drains away, contrast up for the bruised cloud structure, cool throughout rather than only in shadow. Sits between overcast (flat and dreary, contrast 0.90) and moonlit (silver and much darker) - reach for this when the weather is the threat. Measured YAVG 103 -> 85.",
   "evidence": {
-    "verdict": "UNVERIFIED",
-    "method": "nothing has checked this card against pixels",
+    "verdict": "MEASURED",
+    "method": "look_check: grade applied to a reference frame (ffmpeg signalstats)",
     "date": "2026-08-15",
-    "note": ""
-  }
+    "note": "grade applies and moves the frame; bright: mad=12.9 luma 62->51 (-12) sat 79->82 (+3) crushed=0%"
+  },
+  "evidence_history": [
+    {
+      "verdict": "UNVERIFIED",
+      "method": "nothing has checked this card against pixels",
+      "date": "2026-08-15",
+      "note": ""
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "look_check: grade applied to a reference frame (ffmpeg signalstats)",
+      "date": "2026-08-15",
+      "note": "crushes 58% of the bright frame to black (task 26 defect) | bright: mad=27.6 luma 62->35 (-28) sat 79->177 (+98) crushed=58%"
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "look_check: grade applied to a reference frame (ffmpeg signalstats)",
+      "date": "2026-08-15",
+      "note": "grade applies and moves the frame; bright: mad=12.9 luma 62->51 (-12) sat 79->82 (+3) crushed=0%"
+    }
+  ],
+  "status_before_check": "ready",
+  "grade_before_crush_fix": "eq=brightness=-0.06:contrast=1.15:saturation=0.55,colorbalance=bs=0.08:bm=0.04:rm=-0.04,eq=gamma=0.98",
+  "crush_fix": "task 26 pattern applied 2026-08-15: crushed 58% -> 0%"
 }

@@ -1,13 +1,36 @@
 {
   "id": "moonlit",
   "tags": "moonlight, night, full moon, pale light, silhouette, dark",
-  "grade": "eq=brightness=-0.10:contrast=1.18:saturation=0.50,colorbalance=bs=0.10:bm=0.06:rm=-0.05,eq=gamma=0.96",
+  "grade": "curves=all='0/0.03 0.25/0.19 0.5/0.35 0.75/0.52 1/0.80',eq=saturation=0.50,colorbalance=bs=0.10:bm=0.06:rm=-0.05,eq=gamma=0.96",
   "status": "ready",
   "note": "Silver rather than blue: the defining move is saturation down to 0.50, because the eye sees almost no colour by moonlight, with only a modest blue push on top. That is what separates it from the existing night preset, which holds saturation at 0.72 and is a general darkness rather than a moon source. Also far less crushed than shipped night, which takes input level 64 all the way to black; this holds it at 12,14,29.",
   "evidence": {
-    "verdict": "UNVERIFIED",
-    "method": "nothing has checked this card against pixels",
+    "verdict": "MEASURED",
+    "method": "look_check: grade applied to a reference frame (ffmpeg signalstats)",
     "date": "2026-08-15",
-    "note": ""
-  }
+    "note": "grade applies and moves the frame; bright: mad=19.4 luma 62->44 (-18) sat 79->98 (+19) crushed=0%"
+  },
+  "evidence_history": [
+    {
+      "verdict": "UNVERIFIED",
+      "method": "nothing has checked this card against pixels",
+      "date": "2026-08-15",
+      "note": ""
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "look_check: grade applied to a reference frame (ffmpeg signalstats)",
+      "date": "2026-08-15",
+      "note": "crushes 64% of the bright frame to black (task 26 defect) | bright: mad=36.1 luma 62->26 (-36) sat 79->199 (+120) crushed=64%"
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "look_check: grade applied to a reference frame (ffmpeg signalstats)",
+      "date": "2026-08-15",
+      "note": "grade applies and moves the frame; bright: mad=19.4 luma 62->44 (-18) sat 79->98 (+19) crushed=0%"
+    }
+  ],
+  "status_before_check": "ready",
+  "grade_before_crush_fix": "eq=brightness=-0.10:contrast=1.18:saturation=0.50,colorbalance=bs=0.10:bm=0.06:rm=-0.05,eq=gamma=0.96",
+  "crush_fix": "task 26 pattern applied 2026-08-15: crushed 64% -> 0%"
 }

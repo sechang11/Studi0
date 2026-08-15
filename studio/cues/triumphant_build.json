@@ -8,9 +8,17 @@
   "level": 1.0,
   "note": "One per film. A second one makes the first mean nothing - same discipline as sakuga.",
   "evidence": {
-    "verdict": "UNVERIFIED",
-    "method": "nothing has checked this card against pixels",
+    "verdict": "MEASURED",
+    "method": "audio_sweep: rendered + measured (ffmpeg ebur128/silencedetect, librosa flatness)",
     "date": "2026-08-15",
-    "note": ""
-  }
+    "note": "renders and is not broken [seconds=20.0, lufs=-11.4, true_peak=1.0, silent_fraction=0.27, flatness=0.0011, f0_median=65.1, channels=2]"
+  },
+  "evidence_history": [
+    {
+      "verdict": "UNVERIFIED",
+      "method": "nothing has checked this card against pixels",
+      "date": "2026-08-15",
+      "note": ""
+    }
+  ]
 }

@@ -9,9 +9,17 @@
   "avoid_for": "Youth, excitement, comedy, panic, or anything shouted. It has no top end to open up into.",
   "note": "If you want a deep narrator, this is it - not chadwick, which scripts/make_audio_library.py labels narrator_deep despite measuring 167 Hz. Mapped to calm_measured and char_griffith in that same script.",
   "evidence": {
-    "verdict": "UNVERIFIED",
-    "method": "nothing has checked this card against pixels",
+    "verdict": "MEASURED",
+    "method": "audio_sweep: reference file measured",
     "date": "2026-08-15",
-    "note": ""
-  }
+    "note": "renders and is not broken [seconds=10.4, lufs=-23.9, true_peak=-2.8, silent_fraction=0.1, flatness=0.0187, f0_median=82.9, channels=1]"
+  },
+  "evidence_history": [
+    {
+      "verdict": "UNVERIFIED",
+      "method": "nothing has checked this card against pixels",
+      "date": "2026-08-15",
+      "note": ""
+    }
+  ]
 }

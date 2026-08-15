@@ -1,0 +1,33 @@
+{
+ "kind": "sfx",
+ "id": "wind_open",
+ "card": {
+  "id": "wind_open",
+  "desc": "Exteriors - moor, field, rooftop, anywhere exposed.",
+  "status": "ready",
+  "prompt": "steady cold wind blowing across open ground, air moving over grass and low scrub, rising and falling in strength, no trees, no gusts hitting the microphone, outdoors",
+  "negative": "music, tonal, speech, rain, thunder, birds, whistling",
+  "seconds": 12,
+  "steps": 100,
+  "cfg": 7,
+  "sampler": "dpmpp_3m_sde",
+  "note": "'whistling' is load-bearing in the negative: wind prompts drift into a tonal whistle, and the moment it has a pitch it reads as a synthesiser rather than as weather. Safe to run long and loop - it has no periodicity to seam on. Sits under everything; wind is what makes an exterior stop sounding like a room.",
+  "evidence": {
+   "verdict": "UNVERIFIED",
+   "method": "nothing has checked this card against pixels",
+   "date": "2026-08-15",
+   "note": ""
+  }
+ },
+ "seed": 4242,
+ "measured": {
+  "sample_rate": 44100,
+  "channels": 2,
+  "seconds": 11.98,
+  "lufs": -13.5,
+  "true_peak": 1.2,
+  "silent_seconds": 1.76,
+  "silent_fraction": 0.15
+ },
+ "workflow": "10_stableaudio_sfx.json"
+}

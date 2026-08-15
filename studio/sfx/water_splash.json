@@ -10,9 +10,17 @@
   "sampler": "dpmpp_3m_sde",
   "note": "'rain, waves' are in the negative or the model gives you a body of water instead of one event - it hears 'water' and renders an ambience. 'deep' and 'still' are doing real work: shallow water is a bright slap with no hollow, and you cannot EQ one into the other.",
   "evidence": {
-    "verdict": "UNVERIFIED",
-    "method": "nothing has checked this card against pixels",
+    "verdict": "MEASURED",
+    "method": "audio_sweep: rendered + measured (ffmpeg ebur128/silencedetect, librosa flatness)",
     "date": "2026-08-15",
-    "note": ""
-  }
+    "note": "renders and is not broken [seconds=2.97, lufs=-10.7, true_peak=1.1, silent_fraction=0.32, channels=2]"
+  },
+  "evidence_history": [
+    {
+      "verdict": "UNVERIFIED",
+      "method": "nothing has checked this card against pixels",
+      "date": "2026-08-15",
+      "note": ""
+    }
+  ]
 }

@@ -1,13 +1,54 @@
 {
   "id": "bleach_bypass",
   "tags": "harsh lighting, washed out, high contrast, pale, grim",
-  "grade": "eq=contrast=1.30:saturation=0.28:gamma=0.95,unsharp=5:5:0.6",
+  "grade": "curves=all='0/0.04 0.25/0.19 0.5/0.50 0.75/0.83 1/0.99',eq=saturation=0.28,unsharp=3:3:0.35",
   "status": "ready",
   "note": "Silver-retention look: crushed contrast with colour almost gone but not fully (0.28, so skin still reads as skin). Distinct from the existing bleach preset, which is contrast 1.35 / saturation 0.45 and does not sharpen - this one keeps less colour and adds a mild unsharp for the gritty edge bleach bypass is actually wanted for. Measured SATAVG 39.1 -> 11.4.",
   "evidence": {
-    "verdict": "UNVERIFIED",
-    "method": "nothing has checked this card against pixels",
+    "verdict": "MEASURED",
+    "method": "look_check: grade applied to a reference frame (ffmpeg signalstats)",
     "date": "2026-08-15",
-    "note": ""
-  }
+    "note": "grade applies and moves the frame; bright: mad=10.5 luma 62->55 (-7) sat 79->40 (-39) crushed=0%"
+  },
+  "evidence_history": [
+    {
+      "verdict": "UNVERIFIED",
+      "method": "nothing has checked this card against pixels",
+      "date": "2026-08-15",
+      "note": ""
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "look_check: grade applied to a reference frame (ffmpeg signalstats)",
+      "date": "2026-08-15",
+      "note": "crushes 56% of the bright frame to black (task 26 defect) | bright: mad=25.5 luma 62->40 (-23) sat 79->71 (-8) crushed=56%"
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "look_check: grade applied to a reference frame (ffmpeg signalstats)",
+      "date": "2026-08-15",
+      "note": "crushes 41% of the bright frame to black (task 26 defect) | bright: mad=19.5 luma 62->45 (-17) sat 79->59 (-20) crushed=41%"
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "look_check: grade applied to a reference frame (ffmpeg signalstats)",
+      "date": "2026-08-15",
+      "note": "crushes 41% of the bright frame to black (task 26 defect) | bright: mad=19.5 luma 62->45 (-17) sat 79->59 (-20) crushed=41%"
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "look_check: grade applied to a reference frame (ffmpeg signalstats)",
+      "date": "2026-08-15",
+      "note": "crushes 41% of the bright frame to black (task 26 defect) | bright: mad=19.5 luma 62->45 (-17) sat 79->59 (-20) crushed=41%"
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "look_check: grade applied to a reference frame (ffmpeg signalstats)",
+      "date": "2026-08-15",
+      "note": "grade applies and moves the frame; bright: mad=10.5 luma 62->55 (-7) sat 79->40 (-39) crushed=0%"
+    }
+  ],
+  "status_before_check": "ready",
+  "grade_before_crush_fix": "eq=contrast=1.30:saturation=0.28:gamma=0.95,unsharp=5:5:0.6",
+  "crush_fix": "task 26 pattern + softened unsharp 2026-08-15"
 }

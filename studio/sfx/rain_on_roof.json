@@ -10,9 +10,17 @@
   "sampler": "dpmpp_3m_sde",
   "note": "Name the SURFACE or you get generic hiss - the surface is the whole sound. Metal, canvas, leaves, car roof and window glass are five different beds, so re-run with the noun swapped rather than trying to EQ one into another. Keep thunder out of this bed and run thunder_distant separately; it cannot layer, and mixed in you lose the ability to time the strike.",
   "evidence": {
-    "verdict": "UNVERIFIED",
-    "method": "nothing has checked this card against pixels",
+    "verdict": "MEASURED",
+    "method": "audio_sweep: rendered + measured (ffmpeg ebur128/silencedetect, librosa flatness)",
     "date": "2026-08-15",
-    "note": ""
-  }
+    "note": "renders and is not broken [seconds=11.98, lufs=-9.3, true_peak=2.1, silent_fraction=0.08, channels=2]"
+  },
+  "evidence_history": [
+    {
+      "verdict": "UNVERIFIED",
+      "method": "nothing has checked this card against pixels",
+      "date": "2026-08-15",
+      "note": ""
+    }
+  ]
 }

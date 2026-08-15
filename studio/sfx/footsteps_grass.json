@@ -10,9 +10,17 @@
   "sampler": "dpmpp_3m_sde",
   "note": "PARTIAL: Stable Audio 3 has no hit-point conditioning, so nothing here spots to picture - the steps will not land on your actor's footfalls and the step rate is not controllable. Usable as-is only when feet are off-camera. When feet are in frame, cut ONE step out of this bed and place each footfall by hand. 'wind, birds' sit in the negative because outdoor prompts pull ambience in, and once it is in the same bed you cannot separate it.",
   "evidence": {
-    "verdict": "UNVERIFIED",
-    "method": "nothing has checked this card against pixels",
+    "verdict": "MEASURED",
+    "method": "audio_sweep: rendered + measured (ffmpeg ebur128/silencedetect, librosa flatness)",
     "date": "2026-08-15",
-    "note": ""
-  }
+    "note": "renders and is not broken [seconds=6.04, lufs=-9.1, true_peak=2.5, silent_fraction=0.0, channels=2]"
+  },
+  "evidence_history": [
+    {
+      "verdict": "UNVERIFIED",
+      "method": "nothing has checked this card against pixels",
+      "date": "2026-08-15",
+      "note": ""
+    }
+  ]
 }

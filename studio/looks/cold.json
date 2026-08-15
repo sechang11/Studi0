@@ -5,9 +5,29 @@
   "status": "ready",
   "note": "Darkness must come from the GRADE. Prompting 'night, dark background' moved measured mean luma 170 -> 161, i.e. nothing. Saturation comes DOWN here to leave headroom - grade stacks multiplicatively with hot/glow/aberr and once turned a third of a film magenta.",
   "evidence": {
-    "verdict": "UNVERIFIED",
-    "method": "nothing has checked this card against pixels",
+    "verdict": "MEASURED",
+    "method": "look_check: grade applied to a reference frame (ffmpeg signalstats)",
     "date": "2026-08-15",
-    "note": ""
-  }
+    "note": "grade applies and moves the frame; bright: mad=9.8 luma 62->55 (-8) sat 79->147 (+69) crushed=16%; EXPECTED less saturated, got more (+69)"
+  },
+  "evidence_history": [
+    {
+      "verdict": "UNVERIFIED",
+      "method": "nothing has checked this card against pixels",
+      "date": "2026-08-15",
+      "note": ""
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "look_check: grade applied to a reference frame (ffmpeg signalstats)",
+      "date": "2026-08-15",
+      "note": "grade applies and moves the frame; bright: mad=9.8 luma 62->55 (-8) sat 79->147 (+69) crushed=16%; EXPECTED less saturated, got more (+69)"
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "look_check: grade applied to a reference frame (ffmpeg signalstats)",
+      "date": "2026-08-15",
+      "note": "grade applies and moves the frame; bright: mad=9.8 luma 62->55 (-8) sat 79->147 (+69) crushed=16%; EXPECTED less saturated, got more (+69)"
+    }
+  ]
 }
