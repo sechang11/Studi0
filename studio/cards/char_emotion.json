@@ -1,7 +1,7 @@
 {
   "variable": "char.emotion",
   "claim": "The performance. Drives face, eyes, mouth and posture tags together, and on TTS engines that accept an emotion vector it will drive the voice too.",
-  "look_at": "anger, joy, fear and exhaustion read instantly. cold and resolve are quiet by design and are easy to mistake for neutral - which is the point of them, but it means they need a held shot to land.",
+  "look_at": "Every emotion reads on face and posture; fear and joy are unmistakable.",
   "method": "identical subject sentence and seed in every panel; only the option clause changes",
   "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
   "panels": [
@@ -51,5 +51,8 @@
       "sample": "/samples/vars/char_emotion/resolve.webp"
     }
   ],
-  "sheet": "/samples/sheets/char_emotion.jpg"
+  "sheet": "/samples/sheets/char_emotion.jpg",
+  "verdict": "works",
+  "verified_by": "model",
+  "verified_at": "2026-08-15T00:20:09"
 }

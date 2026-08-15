@@ -390,8 +390,33 @@ def audit_routes():
                 "is the studio running on 8777?")
 
 
+def audit_evidence():
+    """The Phase 4 gate: every `ready` card carries a dated evidence verdict, or is
+    honestly stamped UNVERIFIED. A ready card with NO evidence field is an error - ready
+    is a promise, and an unpromised promise is how 17 of 19 sampled motion cards turned
+    out to fail their own claims. UNVERIFIED on a ready card is info, not error: it is
+    the debt list, stated instead of hidden."""
+    sys.path.insert(0, STUDIO)
+    import cards as C
+    unverified = 0
+    for kind in C.KINDS:
+        for cid, card in C.load(kind).items():
+            if cid.startswith("_") or card.get("status") != "ready":
+                continue
+            e = card.get("evidence")
+            if not e:
+                add("error", "evidence", "ready card has no evidence stamp",
+                    "%s/%s" % (kind, cid),
+                    "cards.stamp(%r, %r, ...) - or relabel it honestly" % (kind, cid))
+            elif C.evidence_of(card)["verdict"] == "UNVERIFIED":
+                unverified += 1
+    if unverified:
+        add("info", "evidence", "%d ready cards are stamped UNVERIFIED - the honest "
+            "debt list" % unverified, "studio/*/", "measure or judge them, then restamp")
+
+
 CHECKS = {"workflows": audit_workflows, "wf_files": audit_workflow_files,
-          "schema": audit_card_schema,
+          "schema": audit_card_schema, "evidence": audit_evidence,
           "cards": audit_cards,
           "reach": audit_reachable, "code": audit_code, "routes": audit_routes}
 

@@ -32,5 +32,19 @@
     "frames": 97,
     "workflow": "12_ltx23_i2v_audio.json"
   },
-  "verdict": "RENDERED 2026-08-04, 3 seeds. Motion 0.675/0.718/2.564 - INSIDE the do-nothing band on two of three seeds. Only 7703 produced a real drift across the lens. The keyframe already contains a steaming cup, so this is the easiest possible ask and it still landed 1/3. motion_probe measured this same string firing 3/3 at its seeds, so the card is seed-fragile rather than dead - which is exactly what a single-seed pass would have hidden. Band 0.406-0.744 (empty control 0.628); frame-scale ceiling 1.191. "
+  "verdict": "RENDERED 2026-08-04, 3 seeds. Motion 0.675/0.718/2.564 - INSIDE the do-nothing band on two of three seeds. Only 7703 produced a real drift across the lens. The keyframe already contains a steaming cup, so this is the easiest possible ask and it still landed 1/3. motion_probe measured this same string firing 3/3 at its seeds, so the card is seed-fragile rather than dead - which is exactly what a single-seed pass would have hidden. Band 0.406-0.744 (empty control 0.628); frame-scale ceiling 1.191. ",
+  "evidence": {
+    "verdict": "MEASURED",
+    "method": "package_check: incomplete",
+    "date": "2026-08-15",
+    "note": "frames 0/3"
+  },
+  "evidence_history": [
+    {
+      "verdict": "MEASURED",
+      "method": "measurement session; finding recorded in this card's verdict field",
+      "date": "2026-08-04",
+      "note": "RENDERED 2026-08-04, 3 seeds. Motion 0.675/0.718/2.564 - INSIDE the do-nothing band on two of three seeds. Only 7703 produced a real drift across the lens. The keyframe already contains a steaming cup"
+    }
+  ]
 }

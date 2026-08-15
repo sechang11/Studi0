@@ -14,5 +14,11 @@
   },
   "picture_note": "Identical to a hard cut, which would be correct if the audio half existed. It does not.",
   "broken": "audio_drop 0.4 HAS NO CONSUMER ANYWHERE. Grepped 2026-08-04: the string appears in this card, in the generated studio/samples/video.json index, and in studio/_tools/video_index.py where it is merely PRINTED into a card panel. Nothing in compile.py, short.py or epic.py reads it. So smash compiles to a plain cut and the card's stated effect - 'the CONTRAST is the whole effect' - is absent from every film ever made here. Unlike j_cut and l_cut, which are picture-identical AND fully wired, this one is picture-identical and wired to nothing. status is now partial and the compiler says so per scene.",
-  "workaround": "Put `silence: true` on the quiet side of the boundary. That is wired (compile.py drops the cue for the scene and restarts it after) and it buys the same contrast today."
+  "workaround": "Put `silence: true` on the quiet side of the boundary. That is wired (compile.py drops the cue for the scene and restarts it after) and it buys the same contrast today.",
+  "evidence": {
+    "verdict": "MEASURED",
+    "method": "measurement session; finding recorded in this card's verdict field",
+    "date": "2026-08-04",
+    "note": "RENDERED 2026-08-04 between two real clips. THE PICTURE IS IDENTICAL TO A HARD CUT - MAD against cut exactly 0.00. Correct: the effect is the audio_drop of 0.4, and the card is explicit that the contr"
+  }
 }

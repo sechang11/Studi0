@@ -142,8 +142,8 @@ def main():
         if len(rows) > 14:
             print("  ... %d more" % (len(rows) - 14))
         print()
-    ok = sum(1 for v in out.values() if v["trustworthy"])
-    print("TRUSTWORTHY: %d of %d cards (%.0f%%)" % (ok, len(out), 100.0 * ok / len(out)))
+    ok = sum(1 for v in out.values() if v["isolates_variable"])
+    print("ISOLATES ITS VARIABLE: %d of %d cards (%.0f%%)" % (ok, len(out), 100.0 * ok / len(out)))
 
 
 if __name__ == "__main__":

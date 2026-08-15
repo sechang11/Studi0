@@ -40,6 +40,9 @@ NS = (str, type(None))          # nullable string - measured in the data, not in
 # names, required or not. `statuses` is per kind because kinds genuinely differ: every
 # emotion is "partial" by design, voices use "blocked" as a hard rule.
 KINDS = {
+    # Every kind may carry `evidence` (Phase 4) - the dated verdict dict written by
+    # cards.stamp - and `evidence_history`. Typed globally below in validate_card rather
+    # than repeated in twenty kind entries.
     "styles": {
         "required": {"id": S, "name": S, "engine": S, "status": S, "compose": S,
                      "family": S, "prose": S, "negative_add": S},
@@ -202,6 +205,47 @@ def require_voice(vid, libs=None):
     return vc
 
 
+EVIDENCE_VERDICTS = ("MEASURED", "JUDGED", "UNVERIFIED")
+
+
+def stamp(kind, cid, verdict, method, note="", when=None):
+    """Write a dated evidence verdict onto a card, preserving the previous one in
+    evidence_history. THE one writer (Phase 4) - checkers call this instead of each
+    inventing a field, which is how `verdict` came to mean four different things.
+
+    verdict: MEASURED (an instrument computed it), JUDGED (someone looked at pixels),
+    UNVERIFIED (the honest default). There is no PREDICTED - every predicted verdict in
+    this project that was later checked was wrong.
+    """
+    import time
+    if verdict not in EVIDENCE_VERDICTS:
+        raise ValueError("verdict must be one of %s" % (EVIDENCE_VERDICTS,))
+    path = os.path.join(STUDIO, kind, cid + ".json")
+    with open(path, encoding="utf-8") as f:
+        card = json.load(f)
+    old = card.get("evidence")
+    if old:
+        hist = card.get("evidence_history") or []
+        hist.append(old)
+        card["evidence_history"] = hist[-8:]
+    card["evidence"] = {"verdict": verdict, "method": str(method)[:120],
+                        "date": when or time.strftime("%Y-%m-%d"),
+                        "note": str(note)[:300]}
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(card, f, indent=2, ensure_ascii=False)
+        f.write("\n")
+    return card["evidence"]
+
+
+def evidence_of(card):
+    """The card's evidence dict, or an UNVERIFIED placeholder if nothing ever checked
+    it. Never None, so readers need no guard."""
+    e = card.get("evidence")
+    if isinstance(e, dict) and e.get("verdict") in EVIDENCE_VERDICTS and e.get("date"):
+        return e
+    return {"verdict": "UNVERIFIED", "method": "", "date": "", "note": ""}
+
+
 def validate_card(kind, cid, card):
     """[(sev, message)] for one card. error = a consumer will misbehave."""
     spec = KINDS.get(kind)
@@ -210,6 +254,12 @@ def validate_card(kind, cid, card):
     probs = []
     if not isinstance(card, dict):
         return [("error", "not a JSON object")]
+    e = card.get("evidence")
+    if e is not None and (not isinstance(e, dict)
+                          or e.get("verdict") not in EVIDENCE_VERDICTS
+                          or not e.get("date")):
+        probs.append(("error", "evidence must be a dict with a verdict in %s and a "
+                               "date" % (EVIDENCE_VERDICTS,)))
     if card.get("id") != cid:
         probs.append(("error", "id %r does not match filename %r" % (card.get("id"), cid)))
     for field, typ in spec.get("required", {}).items():

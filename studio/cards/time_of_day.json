@@ -1,7 +1,7 @@
 {
   "variable": "time.of_day",
   "claim": "Hour of the day. Note this fights the grade: prompting darkness barely works, so night here is reinforced by the look/grade, not by the tag alone.",
-  "look_at": "dawn, dusk and night are distinct. morning and afternoon are nearly identical - if you need those to differ, use light.direction rather than this.",
+  "look_at": "dawn/dusk/night read; noon renders overcast - the card's own warning about darkness holds.",
   "method": "identical subject sentence and seed in every panel; only the option clause changes",
   "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
   "panels": [
@@ -36,5 +36,8 @@
       "sample": "/samples/vars/time_of_day/night.webp"
     }
   ],
-  "sheet": "/samples/sheets/time_of_day.jpg"
+  "sheet": "/samples/sheets/time_of_day.jpg",
+  "verdict": "mixed",
+  "verified_by": "model",
+  "verified_at": "2026-08-15T00:20:09"
 }

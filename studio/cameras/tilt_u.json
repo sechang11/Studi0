@@ -2,7 +2,33 @@
   "id": "tilt_u",
   "desc": "Up. Power, scale, awe.",
   "status": "ready",
-  "verdict": "RENDERED 2026-08-04. Post tier. Content moves DOWN 56px, which is exactly the filter travel (816-704)/2 = 56px; the horizon drops 21px. MAD vs tilt_d 26.39, vs static 30.64. Note a tilt shifts only 56px against a pan's 100px, because the vertical crop margin is smaller - tilts are inherently about half as strong as pans at the same 1.16x upscale. Asked of the video model, tilt_u is the ONE roadmap-style move the prompt route gets right: LTX cranes up the clock tower convincingly (activity 7.45), though it leaves the original framing behind.",
+  "verdict": "RENDERED 2026-08-04. Post tier. Content moves DOWN 56px, which is exactly the filter travel (816-704)/2 = 56px; the horizon drops 21px. MAD vs tilt_d 26.39, vs static 30.64. Note a tilt shifts only 56px against a pan's 100px, because the vertical crop margin is smaller - tilts are inherently about",
   "renders": "post",
-  "filter": "scale=1.16x,crop=w:h travelling -y over the clip"
+  "filter": "scale=1.16x,crop=w:h travelling -y over the clip",
+  "evidence": {
+    "verdict": "MEASURED",
+    "method": "post-pass filter measurement (2026-08-04) + Phase 4 sweep of the prompt path",
+    "date": "2026-08-15",
+    "note": "the post pass this card claims works (confirmed by filter algebra, FFT and geometry); asking the SAME move of LTX in the motion text fails (18 of 94 clips move as the card claims (19%)) - which is why the card renders post."
+  },
+  "evidence_history": [
+    {
+      "verdict": "MEASURED",
+      "method": "measurement session; finding recorded in this card's verdict field",
+      "date": "2026-08-04",
+      "note": "RENDERED 2026-08-04. Post tier. Content moves DOWN 56px, which is exactly the filter travel (816-704)/2 = 56px; the horizon drops 21px. MAD vs tilt_d 26.39, vs static 30.64. Note a tilt shifts only 56"
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "package_check: complete",
+      "date": "2026-08-15",
+      "note": "package complete"
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "motion_check sweep over rendered clips",
+      "date": "2026-08-15",
+      "note": "18 of 94 clips move as the card claims (19%)"
+    }
+  ]
 }

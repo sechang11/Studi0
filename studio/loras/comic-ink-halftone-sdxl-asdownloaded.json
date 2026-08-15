@@ -17,5 +17,11 @@
   "note": "THE GATE THIS WAS BOUGHT AGAINST. studio/_tools/model_intake.py rendered eleven style probes on four installed engines before anything was downloaded (samples/model_intake/base_animagine-xl-4.jpg, base_Illustrious-XL-v2.jpg, cross_flux2.jpg, cross_qwen.jpg). Ten of the eleven were already covered: animagine renders pixel art, coloring-book lineart and a genuine watercolour from tags; Illustrious renders real painterly oil that animagine cannot; FLUX.2 renders claymation, woodcut, comic halftone, low-poly PS1, watercolour and photography outright; Qwen renders photography and nothing else - every probe came back a photograph, exactly as the project's standing rule says. Same root cause and same fix as risograph-print - see that card for the comfy/lora.py line references. The key-fixed derivative loads cleanly and STILL does not deliver the style, so unlike its sibling this one is a genuine rejection rather than a packaging problem. | PROVENANCE. url https://huggingface.co/strkyyy/comic-ink-halftone/resolve/main/comic-ink-halftone.safetensors | licence openrail++ | sha256 40478f80cbf63cce3be92652c23337380df12f62c10b8071da7030faa1a94018 | 93065304 bytes | downloaded 2026-08-05 | upstream base_model stabilityai/stable-diffusion-xl-base-1.0.",
   "example": "/samples/model_intake/ladder_animagine-xl-40_comic-ink-halftone_comic_halftone.jpg",
   "example_kind": "strength ladder, four identical cells",
-  "example_note": "Left cell is the control at strength 0 and the trigger phrase is in that cell too, so strength is the only variable. A LoRA is a delta on the base weights - a single with-the-LoRA image proves nothing, the OFF cell is the evidence."
+  "example_note": "Left cell is the control at strength 0 and the trigger phrase is in that cell too, so strength is the only variable. A LoRA is a delta on the base weights - a single with-the-LoRA image proves nothing, the OFF cell is the evidence.",
+  "evidence": {
+    "verdict": "MEASURED",
+    "method": "measurement session; finding recorded in this card's verdict field",
+    "date": "2026-08-05",
+    "note": "MEASURED INERT. Ladder at 0 / 0.65 / 0.85 / 1.0 on animagine, trigger in every cell: four pixel-identical images, and 3360 `lora key not loaded` lines in the ComfyUI log - 1120 of 1120 keys ignored pe"
+  }
 }

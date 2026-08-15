@@ -2,7 +2,33 @@
   "id": "pan_l",
   "desc": "Lateral reveal leftward, or following action.",
   "status": "ready",
-  "verdict": "RENDERED 2026-08-04. Post tier, and it does exactly what the filter says. Content moves RIGHT by 100px at 1280 wide - the filter upscales 1.16x and travels from centre to edge, (1484-1280)/2 = 102px, so the measurement matches the geometry. Confirmed three independent ways: filter algebra, FFT phase correlation, and tracking the red telephone box (+99px) and the yellow taxi (+100px). Mean absolute pixel difference vs pan_r is 35.43 and vs static 31.83, so the pair is unambiguously distinguishable. Costs 14% of linear resolution to the upscale and produces no parallax. Asked of the video model instead, LTX does pan left, but overshoots into a completely different composition and adds a large uncommanded tilt (activity 12.35 vs 1.02 for static).",
+  "verdict": "RENDERED 2026-08-04. Post tier, and it does exactly what the filter says. Content moves RIGHT by 100px at 1280 wide - the filter upscales 1.16x and travels from centre to edge, (1484-1280)/2 = 102px, so the measurement matches the geometry. Confirmed three independent ways: filter algebra, FFT pha",
   "renders": "post",
-  "filter": "scale=1.16x,crop=w:h travelling -x over the clip"
+  "filter": "scale=1.16x,crop=w:h travelling -x over the clip",
+  "evidence": {
+    "verdict": "MEASURED",
+    "method": "post-pass filter measurement (2026-08-04) + Phase 4 sweep of the prompt path",
+    "date": "2026-08-15",
+    "note": "the post pass this card claims works (confirmed by filter algebra, FFT and geometry); asking the SAME move of LTX in the motion text fails (12 of 96 clips move as the card claims (12%)) - which is why the card renders post."
+  },
+  "evidence_history": [
+    {
+      "verdict": "MEASURED",
+      "method": "measurement session; finding recorded in this card's verdict field",
+      "date": "2026-08-04",
+      "note": "RENDERED 2026-08-04. Post tier, and it does exactly what the filter says. Content moves RIGHT by 100px at 1280 wide - the filter upscales 1.16x and travels from centre to edge, (1484-1280)/2 = 102px, "
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "package_check: complete",
+      "date": "2026-08-15",
+      "note": "package complete"
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "motion_check sweep over rendered clips",
+      "date": "2026-08-15",
+      "note": "12 of 96 clips move as the card claims (12%)"
+    }
+  ]
 }

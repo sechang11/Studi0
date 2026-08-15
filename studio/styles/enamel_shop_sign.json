@@ -1,19 +1,33 @@
 {
- "id": "enamel_shop_sign",
- "name": "Enamel shop sign",
- "engine": "flux2",
- "status": "ready",
- "compose": "safe",
- "family": "physical media",
- "prose": "A photograph of a vitreous enamel shop sign screwed to a brick wall. The sign is deep blue with cream lettering in a bold grotesque face, chipped along the bottom edge where the steel shows rust through the enamel, and it has a soft specular sheen. Raking afternoon light from the left, the brick out of focus behind. Shot on 85mm at f2.8, natural colour, fine grain. The lettering shows lettering reading exactly \"NIGHT PORTER\" on the first line and \"RING TWICE\" below.",
- "words": "lettering reading exactly \"NIGHT PORTER\" on the first line and \"RING TWICE\" below",
- "text_rule": "Replace `words` with the string you want and keep it QUOTED in the prompt. Unquoted lettering comes back as gibberish.",
- "negative_add": "blurry text, unreadable lettering, gibberish characters, misspelled words, watermark, signature, logo, lowres, jpeg artifacts, oversaturated, 3d render, cgi, plastic",
- "means": "Painted metal signage. Chips, rust and a curved specular are what sell it.",
- "note": "Routed to FLUX.2 deliberately. Before these cards, 132 style cards existed and none named flux2, so an installed and measured engine was unreachable from the app - the engine is a property of the style, so a style card is the only door. Written as prose because FLUX.2 is a sentence engine, and chosen for typography and physical media because that is where it beats Qwen and animagine rather than duplicating them.",
- "provenance": "invented - no real brand, imprint or person is named",
- "verdict": "Looked at on the contact sheet in studio/samples/styles/. The medium is convincing and the QUOTED string renders correctly - this card's own words came back right. Unquoted body copy in the same image is still word-shaped gibberish, which is the limit to plan around: quote what must be read, let the rest be texture. NOT compared against the no-style control.",
- "created": "2026-08-12T18:12:14",
- "self_contained": true,
- "self_contained_why": "This card describes a complete object - a page, a sign, a newspaper. Composed with a character and a place the roller produced a man, a cave, moonlight AND a blueprint in one prompt. It takes no other layer."
+  "id": "enamel_shop_sign",
+  "name": "Enamel shop sign",
+  "engine": "flux2",
+  "status": "ready",
+  "compose": "safe",
+  "family": "physical media",
+  "prose": "A photograph of a vitreous enamel shop sign screwed to a brick wall. The sign is deep blue with cream lettering in a bold grotesque face, chipped along the bottom edge where the steel shows rust through the enamel, and it has a soft specular sheen. Raking afternoon light from the left, the brick out of focus behind. Shot on 85mm at f2.8, natural colour, fine grain. The lettering shows lettering reading exactly \"NIGHT PORTER\" on the first line and \"RING TWICE\" below.",
+  "words": "lettering reading exactly \"NIGHT PORTER\" on the first line and \"RING TWICE\" below",
+  "text_rule": "Replace `words` with the string you want and keep it QUOTED in the prompt. Unquoted lettering comes back as gibberish.",
+  "negative_add": "blurry text, unreadable lettering, gibberish characters, misspelled words, watermark, signature, logo, lowres, jpeg artifacts, oversaturated, 3d render, cgi, plastic",
+  "means": "Painted metal signage. Chips, rust and a curved specular are what sell it.",
+  "note": "Routed to FLUX.2 deliberately. Before these cards, 132 style cards existed and none named flux2, so an installed and measured engine was unreachable from the app - the engine is a property of the style, so a style card is the only door. Written as prose because FLUX.2 is a sentence engine, and chosen for typography and physical media because that is where it beats Qwen and animagine rather than duplicating them.",
+  "provenance": "invented - no real brand, imprint or person is named",
+  "verdict": "Looked at on the contact sheet in studio/samples/styles/. The medium is convincing and the QUOTED string renders correctly - this card's own words came back right. Unquoted body copy in the same image is still word-shaped gibberish, which is the limit to plan around: quote what must be read, let the rest be texture. NOT compared against the no-style control.",
+  "created": "2026-08-12T18:12:14",
+  "self_contained": true,
+  "self_contained_why": "This card describes a complete object - a page, a sign, a newspaper. Composed with a character and a place the roller produced a man, a cave, moonlight AND a blueprint in one prompt. It takes no other layer.",
+  "evidence": {
+    "verdict": "MEASURED",
+    "method": "package_check: complete",
+    "date": "2026-08-15",
+    "note": "package complete"
+  },
+  "evidence_history": [
+    {
+      "verdict": "MEASURED",
+      "method": "measurement session; finding recorded in this card's verdict field",
+      "date": "2026-08-12",
+      "note": "Looked at on the contact sheet in studio/samples/styles/. The medium is convincing and the QUOTED string renders correctly - this card's own words came back right. Unquoted body copy in the same image"
+    }
+  ]
 }

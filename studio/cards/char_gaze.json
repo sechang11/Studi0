@@ -1,7 +1,7 @@
 {
   "variable": "char.gaze",
   "claim": "Where the character is looking. Gaze is how a frame directs the audience's attention and how two shots are stitched into one conversation.",
-  "look_at": "at_viewer and away are reliable. off_screen is the useful one for dialogue - it implies a second person without needing to render them.",
+  "look_at": "away/down/up/off_screen all read; at_viewer is a side glance.",
   "method": "identical subject sentence and seed in every panel; only the option clause changes",
   "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
   "panels": [
@@ -31,5 +31,8 @@
       "sample": "/samples/vars/char_gaze/off_screen.webp"
     }
   ],
-  "sheet": "/samples/sheets/char_gaze.jpg"
+  "sheet": "/samples/sheets/char_gaze.jpg",
+  "verdict": "works",
+  "verified_by": "model",
+  "verified_at": "2026-08-15T00:20:09"
 }

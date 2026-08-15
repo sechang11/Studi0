@@ -6,10 +6,19 @@
   "engine": null,
   "kind": "utility",
   "strength": 1.0,
-  "strength_range": [1.0, 1.0],
+  "strength_range": [
+    1.0,
+    1.0
+  ],
   "trigger": "",
   "means": "Patches the PROMPT ENCODER, not an image model. Abliteration removes a language model's refusal behaviour, so a prompt the encoder would otherwise flinch at gets encoded normally.",
   "status": "untested",
   "verdict": "",
-  "note": "THIS IS NOT AN IMAGE LoRA AND IT DOES NOT GO IN A MODEL SLOT. Its 1000 tensors are all `text_encoders.transformer.model.layers.0..47` (674) and `text_encoders.transformer.vision_model.encoder.layers.0..26` (326) - 48 language layers plus a 27-layer SigLIP vision tower, which is Gemma-3-12B. base_model is read off the KEYS, which are unambiguous, and there is no metadata at all. | IT MUST BE LOADED WITH `LoraLoader`, WHICH TAKES A CLIP INPUT - NOT `LoraLoaderModelOnly`. Every other LoRA in this library is model-only; this one is the exception and getting it wrong is a type error, not a quality problem. workflows/18_ltx_prompt_enhancer.json node 4 does it correctly at strength_model 1.0 / strength_clip 1.0. ComfyUI maps the `text_encoders.{...}` prefix in model_lora_keys_clip at comfy/lora.py:99-103. | engine is null for exactly that reason: there is no MODEL socket on any of this project's engines that this can attach to. Which model it actually SERVES is LTX-2.3 - workflows/11_ltx23_t2v_audio.json loads ltx-2.3-22b-dev-fp8 alongside gemma_3_12B_it_fp4_mixed, so this patches LTX's prompt encoder. A resolver offering LoRAs by engine must not list this; a tool building an LTX graph must know it exists. Those are different questions and the card answers both rather than picking one. | purpose (abliteration) is inferred from the filename. Nothing in the file states it, and it has never been tested here - what an abliterated encoder does to ordinary prompts, as opposed to refused ones, is completely unmeasured. | rank 64, no alpha so scale 1.0."
+  "note": "THIS IS NOT AN IMAGE LoRA AND IT DOES NOT GO IN A MODEL SLOT. Its 1000 tensors are all `text_encoders.transformer.model.layers.0..47` (674) and `text_encoders.transformer.vision_model.encoder.layers.0..26` (326) - 48 language layers plus a 27-layer SigLIP vision tower, which is Gemma-3-12B. base_model is read off the KEYS, which are unambiguous, and there is no metadata at all. | IT MUST BE LOADED WITH `LoraLoader`, WHICH TAKES A CLIP INPUT - NOT `LoraLoaderModelOnly`. Every other LoRA in this library is model-only; this one is the exception and getting it wrong is a type error, not a quality problem. workflows/18_ltx_prompt_enhancer.json node 4 does it correctly at strength_model 1.0 / strength_clip 1.0. ComfyUI maps the `text_encoders.{...}` prefix in model_lora_keys_clip at comfy/lora.py:99-103. | engine is null for exactly that reason: there is no MODEL socket on any of this project's engines that this can attach to. Which model it actually SERVES is LTX-2.3 - workflows/11_ltx23_t2v_audio.json loads ltx-2.3-22b-dev-fp8 alongside gemma_3_12B_it_fp4_mixed, so this patches LTX's prompt encoder. A resolver offering LoRAs by engine must not list this; a tool building an LTX graph must know it exists. Those are different questions and the card answers both rather than picking one. | purpose (abliteration) is inferred from the filename. Nothing in the file states it, and it has never been tested here - what an abliterated encoder does to ordinary prompts, as opposed to refused ones, is completely unmeasured. | rank 64, no alpha so scale 1.0.",
+  "evidence": {
+    "verdict": "UNVERIFIED",
+    "method": "nothing has checked this card against pixels",
+    "date": "2026-08-15",
+    "note": ""
+  }
 }

@@ -48,5 +48,9 @@
       "fix": "Cut it back to the one axis that has a real tag anchor and mark the rest non-renderable: keep none (empty clause, baseline) and ao_contact (\"cast shadow, shadow under feet\"), and either drop line_match / color_bleed / shared_grain / full_comp or set the whole variable renderable:false with a skip_reason saying integration is a compositing property of the render, not depictable content in a single still."
     }
   ],
-  "sheet": "/samples/sheets/anime_bg_char_integration.jpg"
+  "sheet": "/samples/sheets/anime_bg_char_integration.jpg",
+  "verdict": "fails",
+  "verified_by": "model",
+  "verified_at": "2026-08-15T00:20:09",
+  "look_at": "Integration illegible through recomposition; color_bleed paints the boy grey."
 }

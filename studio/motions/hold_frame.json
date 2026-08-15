@@ -14,5 +14,19 @@
   "grammar": "[MOVER] [ACTION VERB] [PATH/SPATIAL RELATION]",
   "status": "ready",
   "verdict": "AUTHORED 2026-08-04 BECAUSE hold_nobody FAILED A RENDER. 'Nobody moves.' was sent to LTX over a keyframe the author had written as 'long empty concrete tunnel receding to a bright doorway, no humans'. There was no person in the still. By frame 24 a figure had walked into frame from the left, and it walked away down the corridor for the rest of the clip - drift 10.46 against 1.30 for a beat that got a real derived action. THE HOUSE RULE, again, and in its nastiest form: THE MODEL RENDERS NOUNS. 'Nobody' is a person-shaped noun and it drew one. A negation is not a way to ask for absence. This card says what is true of the frame without naming an occupant of it, and its sentence is the one that appears in the three holding cells the 81-clip sweep measured as the quietest in the set (0.515-0.592).",
-  "note": "n=1 on the hold_nobody failure - one keyframe, one seed. But the failure mode is the one this project has now measured four separate times (a style named after an object drew the object; rack_focus hallucinated a chain; adjectives did nothing while nouns landed), so the card is written the safe way round rather than waiting for a sweep."
+  "note": "n=1 on the hold_nobody failure - one keyframe, one seed. But the failure mode is the one this project has now measured four separate times (a style named after an object drew the object; rack_focus hallucinated a chain; adjectives did nothing while nouns landed), so the card is written the safe way round rather than waiting for a sweep.",
+  "evidence": {
+    "verdict": "MEASURED",
+    "method": "package_check: complete",
+    "date": "2026-08-15",
+    "note": "package complete"
+  },
+  "evidence_history": [
+    {
+      "verdict": "MEASURED",
+      "method": "measurement session; finding recorded in this card's verdict field",
+      "date": "2026-08-04",
+      "note": "AUTHORED 2026-08-04 BECAUSE hold_nobody FAILED A RENDER. 'Nobody moves.' was sent to LTX over a keyframe the author had written as 'long empty concrete tunnel receding to a bright doorway, no humans'."
+    }
+  ]
 }

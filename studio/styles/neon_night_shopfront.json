@@ -1,19 +1,33 @@
 {
- "id": "neon_night_shopfront",
- "name": "Neon shopfront at night",
- "engine": "flux2",
- "status": "ready",
- "compose": "safe",
- "family": "photographic",
- "prose": "A night photograph of a small shopfront, seen straight on from across a wet street. A neon sign in the window spells a short word in warm pink tubing with a visible transformer flicker and a soft bloom, and a second line of smaller cool blue tube script sits under it. The glass reflects the street. Wet asphalt carries long colour smears of the sign. Shot on 35mm at f2, slight motion in the background, natural colour, fine grain. The lettering shows the neon spelling exactly \"OPEN LATE\" in warm pink tubing with \"COFFEE\" in cool blue script beneath.",
- "words": "the neon spelling exactly \"OPEN LATE\" in warm pink tubing with \"COFFEE\" in cool blue script beneath",
- "text_rule": "Replace `words` with the string you want and keep it QUOTED in the prompt. Unquoted lettering comes back as gibberish.",
- "negative_add": "blurry text, unreadable lettering, gibberish characters, misspelled words, watermark, signature, logo, lowres, jpeg artifacts, oversaturated, 3d render, cgi, plastic",
- "means": "Lit lettering at night. Bloom, reflection and wet-road smear rather than a flat glow.",
- "note": "Routed to FLUX.2 deliberately. Before these cards, 132 style cards existed and none named flux2, so an installed and measured engine was unreachable from the app - the engine is a property of the style, so a style card is the only door. Written as prose because FLUX.2 is a sentence engine, and chosen for typography and physical media because that is where it beats Qwen and animagine rather than duplicating them.",
- "provenance": "invented - no real brand, imprint or person is named",
- "verdict": "Looked at on the contact sheet in studio/samples/styles/. The medium is convincing and the QUOTED string renders correctly - this card's own words came back right. Unquoted body copy in the same image is still word-shaped gibberish, which is the limit to plan around: quote what must be read, let the rest be texture. NOT compared against the no-style control.",
- "created": "2026-08-12T18:12:14",
- "self_contained": true,
- "self_contained_why": "This card describes a complete object - a page, a sign, a newspaper. Composed with a character and a place the roller produced a man, a cave, moonlight AND a blueprint in one prompt. It takes no other layer."
+  "id": "neon_night_shopfront",
+  "name": "Neon shopfront at night",
+  "engine": "flux2",
+  "status": "ready",
+  "compose": "safe",
+  "family": "photographic",
+  "prose": "A night photograph of a small shopfront, seen straight on from across a wet street. A neon sign in the window spells a short word in warm pink tubing with a visible transformer flicker and a soft bloom, and a second line of smaller cool blue tube script sits under it. The glass reflects the street. Wet asphalt carries long colour smears of the sign. Shot on 35mm at f2, slight motion in the background, natural colour, fine grain. The lettering shows the neon spelling exactly \"OPEN LATE\" in warm pink tubing with \"COFFEE\" in cool blue script beneath.",
+  "words": "the neon spelling exactly \"OPEN LATE\" in warm pink tubing with \"COFFEE\" in cool blue script beneath",
+  "text_rule": "Replace `words` with the string you want and keep it QUOTED in the prompt. Unquoted lettering comes back as gibberish.",
+  "negative_add": "blurry text, unreadable lettering, gibberish characters, misspelled words, watermark, signature, logo, lowres, jpeg artifacts, oversaturated, 3d render, cgi, plastic",
+  "means": "Lit lettering at night. Bloom, reflection and wet-road smear rather than a flat glow.",
+  "note": "Routed to FLUX.2 deliberately. Before these cards, 132 style cards existed and none named flux2, so an installed and measured engine was unreachable from the app - the engine is a property of the style, so a style card is the only door. Written as prose because FLUX.2 is a sentence engine, and chosen for typography and physical media because that is where it beats Qwen and animagine rather than duplicating them.",
+  "provenance": "invented - no real brand, imprint or person is named",
+  "verdict": "Looked at on the contact sheet in studio/samples/styles/. The medium is convincing and the QUOTED string renders correctly - this card's own words came back right. Unquoted body copy in the same image is still word-shaped gibberish, which is the limit to plan around: quote what must be read, let the rest be texture. NOT compared against the no-style control.",
+  "created": "2026-08-12T18:12:14",
+  "self_contained": true,
+  "self_contained_why": "This card describes a complete object - a page, a sign, a newspaper. Composed with a character and a place the roller produced a man, a cave, moonlight AND a blueprint in one prompt. It takes no other layer.",
+  "evidence": {
+    "verdict": "MEASURED",
+    "method": "package_check: complete",
+    "date": "2026-08-15",
+    "note": "package complete"
+  },
+  "evidence_history": [
+    {
+      "verdict": "MEASURED",
+      "method": "measurement session; finding recorded in this card's verdict field",
+      "date": "2026-08-12",
+      "note": "Looked at on the contact sheet in studio/samples/styles/. The medium is convincing and the QUOTED string renders correctly - this card's own words came back right. Unquoted body copy in the same image"
+    }
+  ]
 }

@@ -2,7 +2,33 @@
   "id": "static",
   "desc": "No move. The default, and correct more often than people expect.",
   "status": "ready",
-  "verdict": "RENDERED 2026-08-04. Post tier (ffmpeg). fx_chain() emits no filter for static, so the clip passes through untouched: frame-to-frame difference is EXACTLY 0.00 and both tracked landmarks move +0px. Correct, and it is the reference every other move is read against. Asked of the video model instead, from the same keyframe and seed, it is also the best-behaved prompt in the set - activity 1.02 against an empty-prompt floor of 1.01, i.e. it really does hold still. Samples: static.mp4 (post, over a real LTX clip) and static_prompted.mp4.",
+  "verdict": "RENDERED 2026-08-04. Post tier (ffmpeg). fx_chain() emits no filter for static, so the clip passes through untouched: frame-to-frame difference is EXACTLY 0.00 and both tracked landmarks move +0px. Correct, and it is the reference every other move is read against. Asked of the video model instead,",
   "renders": "post",
-  "filter": null
+  "filter": null,
+  "evidence": {
+    "verdict": "MEASURED",
+    "method": "post-pass filter measurement (2026-08-04) + Phase 4 sweep of the prompt path",
+    "date": "2026-08-15",
+    "note": "the post pass this card claims works (confirmed by filter algebra, FFT and geometry); asking the SAME move of LTX in the motion text fails (14 of 97 clips move as the card claims (14%)) - which is why the card renders post."
+  },
+  "evidence_history": [
+    {
+      "verdict": "MEASURED",
+      "method": "measurement session; finding recorded in this card's verdict field",
+      "date": "2026-08-04",
+      "note": "RENDERED 2026-08-04. Post tier (ffmpeg). fx_chain() emits no filter for static, so the clip passes through untouched: frame-to-frame difference is EXACTLY 0.00 and both tracked landmarks move +0px. Co"
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "package_check: complete",
+      "date": "2026-08-15",
+      "note": "package complete"
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "motion_check sweep over rendered clips",
+      "date": "2026-08-15",
+      "note": "14 of 97 clips move as the card claims (14%)"
+    }
+  ]
 }

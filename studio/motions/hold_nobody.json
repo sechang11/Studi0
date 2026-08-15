@@ -36,5 +36,19 @@
   },
   "verdict_prior": "RENDERED 2026-08-04 AND IT DREW A PERSON. 'Nobody moves.' was sent to LTX over a keyframe authored as 'long empty concrete tunnel receding to a bright doorway, no humans' - a still with nobody in it. By frame 24 a figure had walked in from frame left, and it walked away down the corridor for the rest of the clip. First-to-last frame drift 10.46, against 1.30 for a beat in the same render that carried a real derived action. THE MODEL RENDERS NOUNS: 'Nobody' is a person-shaped noun and a negation is not a way to ask for absence. This card is at its most dangerous in exactly the place it was written for - a shot with no one in it.",
   "verdict_prior_note": "Written by a second agent authoring in studio/motions/ during this same wave, from a DIFFERENT keyframe (an empty concrete tunnel with no person in it). It is kept because this pass could not have found it: every clip here was rendered over a keyframe that already contains a person, so it cannot show that the word 'Nobody' causes one to be drawn. It does not contradict the measurement below.",
-  "note_prior": "n=1: one keyframe, one seed. Kept rather than deleted because the string is one of the three measured holding cells and may be fine on a shot that already contains people - the failure is specific to using it where there are none."
+  "note_prior": "n=1: one keyframe, one seed. Kept rather than deleted because the string is one of the three measured holding cells and may be fine on a shot that already contains people - the failure is specific to using it where there are none.",
+  "evidence": {
+    "verdict": "MEASURED",
+    "method": "package_check: incomplete",
+    "date": "2026-08-15",
+    "note": "frames 0/3"
+  },
+  "evidence_history": [
+    {
+      "verdict": "MEASURED",
+      "method": "measurement session; finding recorded in this card's verdict field",
+      "date": "2026-08-04",
+      "note": "RENDERED 2026-08-04, 3 seeds. Motion 0.778/0.916/0.447, mean 0.713 - the HIGHEST of the three stillness cards and above the empty control, which is the wrong direction for a hold. Creep 1.03. The shor"
+    }
+  ]
 }

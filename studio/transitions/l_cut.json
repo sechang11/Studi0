@@ -14,5 +14,11 @@
   },
   "picture_note": "IDENTICAL TO A HARD CUT, AND THAT IS CORRECT - NOT A BUG. This card has no picture half to implement. Its whole content is audio, and the audio half is wired end to end: compile.py puts audio_lead on the scene's first spoken beat and short.py cut() shifts the voice cue by it. Whoever reads the gallery and sees a clip that looks like a cut is looking at the card working.",
   "name_note": "THE TWO NAMES ARE SWAPPED relative to standard film usage. Standard: an L-cut is the OUTGOING audio lagging into the next shot, a J-cut is the INCOMING audio leading its own picture. This library says the reverse, both cards have admitted it in prose since they were written, and it has never been fixed because renaming them breaks every .movie that names one.",
-  "test_gap": "Nothing tests the audio. The published sample is a SILENT video, so the gallery proves the picture does nothing and proves nothing about the thing that is the card's entire content."
+  "test_gap": "Nothing tests the audio. The published sample is a SILENT video, so the gallery proves the picture does nothing and proves nothing about the thing that is the card's entire content.",
+  "evidence": {
+    "verdict": "MEASURED",
+    "method": "measurement session; finding recorded in this card's verdict field",
+    "date": "2026-08-04",
+    "note": "RENDERED 2026-08-04 between two real clips. THE PICTURE IS IDENTICAL TO A HARD CUT - MAD against cut exactly 0.00, and identical to j_cut, match_cut and smash. Correct: the effect is entirely the -0.6"
+  }
 }

@@ -10,5 +10,19 @@
   "cost": "The same per-beat depth pass dolly_zoom needs. Worth saying out loud: this is the one of the three that is a genuinely NEW expressive tool - shifting attention inside a frame without cutting is something this project cannot do at all today, and it costs one depth map and four filter nodes.",
   "chain": "[0:v]split[sharp][pre];[pre]gblur=sigma=12[blur];[1:v]format=gray,scale=WxH,geq=lum='clip(255*min(1,abs((lum(X,Y)/255)-(T/DUR))/0.28),0,255)':cb=128:cr=128,format=yuv420p[mask];[sharp][blur][mask]maskedmerge",
   "chain_verified": "MEASURED 2026-08-04, CPU only, no GPU and no project file touched. The chain was run over a synthetic plate of three checkerboard bands with a synthetic depth map (left 255 = near, middle 128, right 0 = far), 48 frames at 24fps. IT DOES WHAT IT CLAIMS. Sharpness, as mean gradient magnitude per band: at t=0 far 58.01 / near 0.15; at t=end far 0.16 / near 59.10. A complete crossover, a ~390x ratio each way, and the midpoint frame is soft on BOTH outer bands because the plane of focus is passing through the middle one - which is what a focus pull looks like. Confirmed by eye on full-resolution crops, not only by the number. PROBE 2 could only say this chain PARSED; it now measures. What is still missing is the depth map, not the filter.",
-  "chain_params": "sigma 12 = the out-of-focus strength; 0.28 = the depth-of-field band width; (T/DUR) = the focus plane sweeping 0->1 over the clip. Use (1-T/DUR) to pull the other way, or near+(far-near)*T/DUR to rack between two named planes instead of sweeping the whole range. Do NOT try to ramp gblur's sigma - it is not expression-evaluable. Ramping the MASK is what makes this work."
+  "chain_params": "sigma 12 = the out-of-focus strength; 0.28 = the depth-of-field band width; (T/DUR) = the focus plane sweeping 0->1 over the clip. Use (1-T/DUR) to pull the other way, or near+(far-near)*T/DUR to rack between two named planes instead of sweeping the whole range. Do NOT try to ramp gblur's sigma - it is not expression-evaluable. Ramping the MASK is what makes this work.",
+  "evidence": {
+    "verdict": "MEASURED",
+    "method": "package_check: incomplete",
+    "date": "2026-08-15",
+    "note": "frames 0/3"
+  },
+  "evidence_history": [
+    {
+      "verdict": "MEASURED",
+      "method": "measurement session; finding recorded in this card's verdict field",
+      "date": "2026-08-04",
+      "note": "RENDERED 2026-08-04. THIS MOVE DOES NOTHING at the post tier: no branch in fx_chain(), MAD against static exactly 0.00. Asked of the video model, LTX does not shift focus - it HALLUCINATES A HANGING C"
+    }
+  ]
 }

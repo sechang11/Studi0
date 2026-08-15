@@ -17,5 +17,11 @@
   "note": "base_model READ FROM THE HEADER: ss_base_model_version = 'qwen_image'. Read the qualifier: the header names the FAMILY, not the revision - it does not say 2512. The revision question is settled by pixels instead, since the measurement above was made on qwen_image_2512_fp8. | THE FILENAME AND THE TRAINING IDENTITY DISAGREE. Internal `name` and `ss_output_name` are both 'qwen_anime_style_v1'; trained 59,000 steps / 317 epochs on ai-toolkit 0.7.29, at the unusual rank 42. The measured behaviour matches the FILENAME (illustration, watercolour), not the internal name (anime). Do not rename the file to agree with its own metadata. | trigger is genuinely empty rather than merely unknown: there is no trigger_phrase key AND it renders the effect without one, which is the pair of facts that distinguishes 'none' from 'unknown'. Contrast qwen-storybook-anime, whose trigger is in the file, and qwen-modern-anime, whose trigger is unknown. | No alpha tensors, so ComfyUI applies scale 1.0. | strength_range: 0.6 is below anything measured and is a guess at where the effect starts; 1.0 and 1.5 are both measured. Above 1.5 is untried.",
   "example": "/samples/loras/illustration_qwen__ladder.jpg",
   "example_kind": "strength ladder",
-  "example_note": "Left cell is the control at strength 0. A LoRA is a delta on the base weights, so a single with-the-LoRA image proves nothing - the OFF cell is the evidence."
+  "example_note": "Left cell is the control at strength 0. A LoRA is a delta on the base weights, so a single with-the-LoRA image proves nothing - the OFF cell is the evidence.",
+  "evidence": {
+    "verdict": "MEASURED",
+    "method": "measurement session; finding recorded in this card's verdict field",
+    "date": "2026-08-04",
+    "note": "MEASURED. At strength 1.0 the same watercolour prose at the same seed produced genuine painted illustration where the identical run without it produced a photograph. At 1.5 it is a full watercolour an"
+  }
 }

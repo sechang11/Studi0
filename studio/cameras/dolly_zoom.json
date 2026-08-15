@@ -10,5 +10,19 @@
   "cost": "One GPU job per beat, and it moves post from 'no GPU' to 'post needs a generated asset'. The map is estimated from the KEYFRAME and is static while the clip moves, so it drifts out of register as the clip progresses - fine at short.py's 0.2-0.4s median micro-shot, unproven across a full 4s beat.",
   "chain": "[0:v][xm][ym]displace=edge=smear,<the existing push/pull zoompan fragment>, where xm/ym are geq maps 128+A*(1-(lum(X,Y)/255))*((X-W/2)/(W/2))*(T/DUR)",
   "chain_verified": "MEASURED 2026-08-04, CPU only. Same synthetic plate and depth map as rack_focus, with a thin white line planted in the near band and another in the far band at mirrored radii, tracked between the first and last frame. THE CONTROL IS THE POINT: plain zoompan (which is what studio/cameras/push already does) moved the near line -39px and the far line +44px - equal and opposite, a differential of 5px, i.e. nothing. That is the flat-plate identity, restated as a measurement. With the depth displace in front of it at gain A=40 the same two lines moved -37px and +18px, a differential of 19px. Near and far now travel by DIFFERENT amounts, which is the parallax differential that IS the dolly zoom. The chain works; the depth map is what does not exist.",
-  "chain_params": "A is the parallax gain in pixels, 40 at 1280 wide. displace maps are 8-bit centred on 128 so the hard ceiling is +/-127px, ample here. edge=smear is what fills the occlusion holes the parallax opens, and it WILL smear - keep A modest. Flip the sign of A against the zoompan direction for the other flavour of vertigo. The (1-lum/255) term assumes DA3Render depth is bright=near; check the polarity on the first real render and flip it if the background moves instead of the foreground."
+  "chain_params": "A is the parallax gain in pixels, 40 at 1280 wide. displace maps are 8-bit centred on 128 so the hard ceiling is +/-127px, ample here. edge=smear is what fills the occlusion holes the parallax opens, and it WILL smear - keep A modest. Flip the sign of A against the zoompan direction for the other flavour of vertigo. The (1-lum/255) term assumes DA3Render depth is bright=near; check the polarity on the first real render and flip it if the background moves instead of the foreground.",
+  "evidence": {
+    "verdict": "MEASURED",
+    "method": "package_check: incomplete",
+    "date": "2026-08-15",
+    "note": "frames 0/3"
+  },
+  "evidence_history": [
+    {
+      "verdict": "MEASURED",
+      "method": "measurement session; finding recorded in this card's verdict field",
+      "date": "2026-08-04",
+      "note": "RENDERED 2026-08-04. THIS MOVE DOES NOTHING. short.py fx_chain() has no branch for dolly_zoom, so the emitted filter chain is empty and the clip is passed through unchanged: mean absolute pixel differ"
+    }
+  ]
 }

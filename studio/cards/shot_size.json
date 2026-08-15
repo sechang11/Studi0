@@ -1,7 +1,7 @@
 {
   "variable": "shot.size",
   "claim": "How much of the subject the frame contains. The single most load-bearing compositional choice - it decides whether a shot is about a person or about a place.",
-  "look_at": "extreme_wide and wide reliably put the figure small in frame. medium_close and close are dependable. extreme_close is the weak one: the model often pulls back to a normal close-up rather than filling frame with one feature.",
+  "look_at": "The full ladder reads extreme_wide to extreme_close, each step distinct.",
   "method": "identical subject sentence and seed in every panel; only the option clause changes",
   "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
   "panels": [
@@ -41,5 +41,8 @@
       "sample": "/samples/vars/shot_size/extreme_close.webp"
     }
   ],
-  "sheet": "/samples/sheets/shot_size.jpg"
+  "sheet": "/samples/sheets/shot_size.jpg",
+  "verdict": "works",
+  "verified_by": "model",
+  "verified_at": "2026-08-15T00:20:09"
 }

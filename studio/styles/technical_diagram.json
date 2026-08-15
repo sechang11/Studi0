@@ -20,5 +20,19 @@
   },
   "compose": "injects",
   "verdict": "Drew a floating exploded-view diagram beside an untouched photo. A STYLE LoRA WAS TRIED AND FAILED: the diagram stayed an overlay across an otherwise normal subject in all seven qwen settings. illustration at 1.0 multiplied the callout leaders and dashed alignment axes without ever making the SUBJECT the thing being diagrammed. The style asks the model to redraw the scene as a diagram; the model draws a diagram into the scene, with or without a LoRA.",
-  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py",
+  "evidence": {
+    "verdict": "MEASURED",
+    "method": "package_check: incomplete",
+    "date": "2026-08-15",
+    "note": "frames 0/4, pure 0/1"
+  },
+  "evidence_history": [
+    {
+      "verdict": "MEASURED",
+      "method": "measurement session; finding recorded in this card's verdict field",
+      "date": "2026-08-03",
+      "note": "Drew a floating exploded-view diagram beside an untouched photo. A STYLE LoRA WAS TRIED AND FAILED: the diagram stayed an overlay across an otherwise normal subject in all seven qwen settings. illustr"
+    }
+  ]
 }

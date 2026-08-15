@@ -17,5 +17,25 @@
   "note": "MEASURED: THE APRON DID NOT RENDER, AND THAT IS THIS CARD'S MAIN RESULT. Every rung of his ladder names a canvas apron, and the sheet plus all 16 turnaround views rendered BLUE DENIM DUNGAREES instead - bib, straps and all. 'canvas apron, brass buckle' was resolved by animagine into overalls with brass anchor buckles, merging the apron with the separately-requested anchor tattoo. The garment noun failed even though it was in the correct slot and in its clean state, which is a caution against assuming that wear_tags alone fixes the uniform problem: the ladder has to name a garment the engine can actually draw. An apron is apparently not one. | ALSO MEASURED: 'bald' BEAT 'grey hair'. He is meant to have a bald crown with a grey horseshoe fringe around the sides; he rendered completely bald in all 17 images. Two tags that a person reads as compatible are read by the model as a contradiction, and the earlier and more specific one won. Either drop 'bald' and say 'balding' or accept a bare scalp. | WHAT DID HOLD, across all 16 views: the heavy build, the full grey moustache, the forearm tattoos, the brass anchor hardware and the face. He is strongly consistent - he simply is not wearing what the card says. | NO LoRA. He was turned around but not trained; NIKA and PIP were the two training targets. His dataset is on disk at ~/ComfyUI/input/brack_train (16 pairs) if anyone wants the third. | AUTHORED AS THE FIX FOR A COMPLAINT WRITTEN INTO SIX TEMPLATE CARDS. argument_small_room, bad_news, confession, lonely_night_city, quiet_aftermath and reconciliation all warn that without a wear_tags override their characters will argue in uniform, because compose.py:1680 falls back to the WEAR constant, whose vocabulary is entirely sports kit. Nothing in his ladder is a uniform: it is an apron, and it fails the way an apron fails - stained, torn off one shoulder, in tatters. | Whether this actually fixes those six templates is UNVERIFIED - it needs one of them compiled and rendered, which was outside this pass. | base_tags is set even though MALE would have been harmless for him, because the constant hard-codes build as well as sex and he is heavy; 'heavyset' replaces a default that says nothing about build. | THE GARMENT LIVES IN wear_tags, NOT IN tags. | `prose` is the VISUAL description used by the qwen engine; `desc` is narrative and tells an image model nothing it can draw.",
   "prose": "a heavyset man in his fifties, bald on top with a grey horseshoe fringe around the sides, a full grey moustache, a nose flattened at the bridge, an anchor tattoo on his right forearm, a gold ring on his left little finger",
   "provenance": "original",
-  "provenance_note": "Invented for this project - nothing in the checkpoint has seen this person, so the reference sheet, turnaround and trained LoRA are all mandatory. See craft/KNOWN_CHARACTERS.md for the alternative, where the checkpoint already knows a named character and the build gets much shorter."
+  "provenance_note": "Invented for this project - nothing in the checkpoint has seen this person, so the reference sheet, turnaround and trained LoRA are all mandatory. See craft/KNOWN_CHARACTERS.md for the alternative, where the checkpoint already knows a named character and the build gets much shorter.",
+  "evidence": {
+    "verdict": "MEASURED",
+    "method": "package_check: complete",
+    "date": "2026-08-15",
+    "note": "package complete"
+  },
+  "evidence_history": [
+    {
+      "verdict": "UNVERIFIED",
+      "method": "nothing has checked this card against pixels",
+      "date": "2026-08-15",
+      "note": ""
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "package_check: complete",
+      "date": "2026-08-15",
+      "note": "package complete"
+    }
+  ]
 }

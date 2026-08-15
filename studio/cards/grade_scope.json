@@ -42,5 +42,9 @@
       "fix": "Keep the three values the model can actually express — full_frame, exclude_characters (\"spot color\" is a real, reliable tag) and hue_range (\"selective color\" likewise) — and demonstrate shadows_only/highlights_only as ffmpeg-masked grades over one identical render, exactly as the watermark card proposes."
     }
   ],
-  "sheet": "/samples/sheets/grade_scope.jpg"
+  "sheet": "/samples/sheets/grade_scope.jpg",
+  "verdict": "fails",
+  "verified_by": "model",
+  "verified_at": "2026-08-15T00:20:09",
+  "look_at": "Scope is a masking operation; prompting it paints streaks on the face instead."
 }

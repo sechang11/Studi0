@@ -1,7 +1,7 @@
 {
   "variable": "weather.type",
   "claim": "Precipitation and atmosphere. Renders as prompt tags today - intensity and wind are not yet honoured, so this card shows the type only.",
-  "look_at": "rain, snow and fog are strong. dust and heat haze are subtle and easily lost behind floodlights. clear is the control panel.",
+  "look_at": "overcast/rain/storm/snow/fog/dust all land; storm brings lightning.",
   "method": "identical subject sentence and seed in every panel; only the option clause changes",
   "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
   "panels": [
@@ -46,5 +46,8 @@
       "sample": "/samples/vars/weather_type/heat.webp"
     }
   ],
-  "sheet": "/samples/sheets/weather_type.jpg"
+  "sheet": "/samples/sheets/weather_type.jpg",
+  "verdict": "works",
+  "verified_by": "model",
+  "verified_at": "2026-08-15T00:20:09"
 }

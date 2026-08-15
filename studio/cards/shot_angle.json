@@ -1,7 +1,7 @@
 {
   "variable": "shot.angle",
   "claim": "Camera height relative to the subject. Low makes a figure powerful, high makes them small. This is how a frame states a power relationship without dialogue.",
-  "look_at": "low_angle and high_angle are strong and reliable. dutch works. worms_eye and birds_eye are extreme and the model sometimes settles for merely low or high.",
+  "look_at": "low/high/worms/birds all read; dutch is mild.",
   "method": "identical subject sentence and seed in every panel; only the option clause changes",
   "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
   "panels": [
@@ -36,5 +36,8 @@
       "sample": "/samples/vars/shot_angle/dutch.webp"
     }
   ],
-  "sheet": "/samples/sheets/shot_angle.jpg"
+  "sheet": "/samples/sheets/shot_angle.jpg",
+  "verdict": "works",
+  "verified_by": "model",
+  "verified_at": "2026-08-15T00:20:09"
 }

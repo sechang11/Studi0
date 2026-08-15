@@ -485,7 +485,28 @@ def verify_queue():
             "review": c.get("review") or [],
         }
         (done if c.get("verdict") else todo).append(item)
-    return {"todo": todo, "done": done, "total": len(todo) + len(done)}
+    # Phase 4: the kind libraries report their evidence here too - /verify is the page
+    # whose whole job is honest gaps, and the UNVERIFIED ready cards are exactly that.
+    kinds = {}
+    try:
+        sys.path.insert(0, HERE)
+        import cards as _cards
+        for kind in _cards.KINDS:
+            tally = {"MEASURED": 0, "JUDGED": 0, "UNVERIFIED": 0}
+            debt = []
+            for cid, card in _cards.load(kind).items():
+                if cid.startswith("_"):
+                    continue
+                v = _cards.evidence_of(card)["verdict"]
+                tally[v] += 1
+                if v == "UNVERIFIED" and card.get("status") == "ready":
+                    debt.append(cid)
+            if sum(tally.values()):
+                kinds[kind] = {"tally": tally, "unverified_ready": sorted(debt)[:40]}
+    except Exception:
+        traceback.print_exc()
+    return {"todo": todo, "done": done, "total": len(todo) + len(done),
+            "kinds": kinds}
 
 
 def domains():
@@ -2127,13 +2148,33 @@ class H(http.server.SimpleHTTPRequestHandler):
                      "/api/character/suite", "/api/character/analyse",
                      "/api/tool/run", "/api/tool/random",
                      "/api/make3d/mesh", "/api/library/star",
-                     "/api/library/grow", "/api/library/reject"):
+                     "/api/library/grow", "/api/library/reject",
+                     "/api/verify/card"):
             return self._send({"error": "not found"}, 404)
         n = int(self.headers.get("Content-Length", 0))
         try:
             data = json.loads(self.rfile.read(n) or b"{}")
         except Exception as e:
             return self._send({"error": f"bad json: {e}"}, 400)
+        if p == "/api/verify/card":
+            # A human judgement on a KIND card - same eye as the panel queue, one writer.
+            sys.path.insert(0, HERE)
+            import cards as _cards
+            kind = re.sub(r"[^a-z]", "", str(data.get("kind") or ""))
+            cid = re.sub(r"[^A-Za-z0-9_.-]", "", str(data.get("id") or ""))
+            verdict = str(data.get("verdict") or "").strip()
+            if kind not in _cards.KINDS or not cid:
+                return self._send({"error": "need a kind and a card id"}, 400)
+            if verdict not in ("works", "mixed", "fails"):
+                return self._send({"error": "verdict must be works, mixed or fails"}, 400)
+            try:
+                e = _cards.stamp(kind, cid, "JUDGED", "human, via /verify",
+                                 note="%s. %s" % (verdict,
+                                                  str(data.get("note") or "")[:200]))
+            except FileNotFoundError:
+                return self._send({"error": "no such card: %s/%s" % (kind, cid)}, 404)
+            return self._send({"ok": True, "evidence": e})
+
         if p == "/api/library/grow":
             # Spawned DETACHED, not run inline. A render takes ten seconds a frame and the
             # server is single-threaded for pages; holding the request open would freeze

@@ -6,10 +6,19 @@
   "engine": "video",
   "kind": "edit",
   "strength": 1.0,
-  "strength_range": [0.5, 1.0],
+  "strength_range": [
+    0.5,
+    1.0
+  ],
   "trigger": "",
   "means": "Control conditioning for LTX-2.3 video - drives a clip from a depth, edge or pose reference instead of from the prompt alone. `Union` means one file covers all of those control types rather than one file each.",
   "status": "untested",
   "verdict": "",
-  "note": "kind is 'edit' because the schema has no 'control' value and edit is the nearest true thing - it conditions generation on a supplied image. Flagging it rather than silently mis-filing it: if a control layer is ever built, this card and ltx-23-transition are the two that want a real kind. | base_model READ FROM THE HEADER: model_version = '2.3.0'. It also carries reference_downscale_factor = 2, which independently corroborates a reference-image control path - a file that had nothing to do with references would have no reason to state one. | 960 tensors over diffusion_model.transformer_blocks.0..47, attn1/attn2/ff only, rank 64, width 4096, no alpha so scale 1.0. NOTE that it has NO audio-attention keys, unlike the other three LTX files here - an earlier version of lora_scan.py required audio families to call something LTX and filed this as 'unknown' because of it. The 48-block count is the reliable signal, not the audio families. | trigger UNKNOWN. Union control LoRAs commonly take a control-type token in the prompt to select depth against edge against pose, and nothing in this file evidences one either way. Empty is what a consumer must send today; it is not a finding. | NOT WIRED into any studio workflow, and there is no control-conditioned video path in the project at all - using this means building one, not just adding a loader node. | Carries the LTX-2 Community License."
+  "note": "kind is 'edit' because the schema has no 'control' value and edit is the nearest true thing - it conditions generation on a supplied image. Flagging it rather than silently mis-filing it: if a control layer is ever built, this card and ltx-23-transition are the two that want a real kind. | base_model READ FROM THE HEADER: model_version = '2.3.0'. It also carries reference_downscale_factor = 2, which independently corroborates a reference-image control path - a file that had nothing to do with references would have no reason to state one. | 960 tensors over diffusion_model.transformer_blocks.0..47, attn1/attn2/ff only, rank 64, width 4096, no alpha so scale 1.0. NOTE that it has NO audio-attention keys, unlike the other three LTX files here - an earlier version of lora_scan.py required audio families to call something LTX and filed this as 'unknown' because of it. The 48-block count is the reliable signal, not the audio families. | trigger UNKNOWN. Union control LoRAs commonly take a control-type token in the prompt to select depth against edge against pose, and nothing in this file evidences one either way. Empty is what a consumer must send today; it is not a finding. | NOT WIRED into any studio workflow, and there is no control-conditioned video path in the project at all - using this means building one, not just adding a loader node. | Carries the LTX-2 Community License.",
+  "evidence": {
+    "verdict": "UNVERIFIED",
+    "method": "nothing has checked this card against pixels",
+    "date": "2026-08-15",
+    "note": ""
+  }
 }

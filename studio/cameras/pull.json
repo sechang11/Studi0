@@ -2,7 +2,33 @@
   "id": "pull",
   "desc": "Slow out. Isolation, abandonment, endings.",
   "status": "ready",
-  "verdict": "RENDERED 2026-08-04. Post tier. A 10% zoom out: content converges, left half +8px and right half -32px, telephone box +54px and taxi -42px. Same off-centre drift as push. MAD vs static 21.07. Asked of the video model, pull is the clearest prompt FAILURE in the set - the landmarks moved +2px and +1px and activity was 1.21 against a 1.02 floor, i.e. LTX ignored the instruction completely and rendered a locked-off shot.",
+  "verdict": "RENDERED 2026-08-04. Post tier. A 10% zoom out: content converges, left half +8px and right half -32px, telephone box +54px and taxi -42px. Same off-centre drift as push. MAD vs static 21.07. Asked of the video model, pull is the clearest prompt FAILURE in the set - the landmarks moved +2px and +1",
   "renders": "post",
-  "filter": "zoompan=z='1.12-0.10*on/N':d=1:x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)'"
+  "filter": "zoompan=z='1.12-0.10*on/N':d=1:x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)'",
+  "evidence": {
+    "verdict": "MEASURED",
+    "method": "post-pass filter measurement (2026-08-04) + Phase 4 sweep of the prompt path",
+    "date": "2026-08-15",
+    "note": "the post pass this card claims works (confirmed by filter algebra, FFT and geometry); asking the SAME move of LTX in the motion text fails (14 of 89 clips move as the card claims (16%)) - which is why the card renders post."
+  },
+  "evidence_history": [
+    {
+      "verdict": "MEASURED",
+      "method": "measurement session; finding recorded in this card's verdict field",
+      "date": "2026-08-04",
+      "note": "RENDERED 2026-08-04. Post tier. A 10% zoom out: content converges, left half +8px and right half -32px, telephone box +54px and taxi -42px. Same off-centre drift as push. MAD vs static 21.07. Asked of"
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "package_check: complete",
+      "date": "2026-08-15",
+      "note": "package complete"
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "motion_check sweep over rendered clips",
+      "date": "2026-08-15",
+      "note": "14 of 89 clips move as the card claims (16%)"
+    }
+  ]
 }

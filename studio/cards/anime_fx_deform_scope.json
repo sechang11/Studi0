@@ -30,5 +30,9 @@
       "fix": "Either mark the variable renderable:false with skip_reason \"scope is a duration/layout decision; the two visible states are already covered by deform_mode\", or delete the overlapping options from deform_mode and let deform_scope own whole_shot vs inset with tag-only clauses (\"chibi, super deformed\" vs \"chibi inset, 2koma, inset panel\")."
     }
   ],
-  "sheet": "/samples/sheets/anime_fx_deform_scope.jpg"
+  "sheet": "/samples/sheets/anime_fx_deform_scope.jpg",
+  "verdict": "fails",
+  "verified_by": "model",
+  "verified_at": "2026-08-15T00:20:09",
+  "look_at": "Only whole_shot delivers; inset never appears; punch_in_beat is a control duplicate."
 }

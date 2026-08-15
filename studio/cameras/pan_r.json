@@ -2,7 +2,33 @@
   "id": "pan_r",
   "desc": "Lateral reveal rightward.",
   "status": "ready",
-  "verdict": "RENDERED 2026-08-04. Post tier. Exact mirror of pan_l: content moves LEFT by 100px, the taxi tracks -96px. (The telephone-box tracker blows out here because the box leaves frame and the tracker latches onto a neon reflection - the taxi is the reliable landmark for this direction.) MAD vs pan_l 35.43, vs static 32.90. Same 1.16x upscale cost and no parallax. Asked of the video model, LTX pans right correctly but swings much further than asked and loses the framing entirely by the second half (activity 12.65).",
+  "verdict": "RENDERED 2026-08-04. Post tier. Exact mirror of pan_l: content moves LEFT by 100px, the taxi tracks -96px. (The telephone-box tracker blows out here because the box leaves frame and the tracker latches onto a neon reflection - the taxi is the reliable landmark for this direction.) MAD vs pan_l 35.4",
   "renders": "post",
-  "filter": "scale=1.16x,crop=w:h travelling +x over the clip"
+  "filter": "scale=1.16x,crop=w:h travelling +x over the clip",
+  "evidence": {
+    "verdict": "MEASURED",
+    "method": "post-pass filter measurement (2026-08-04) + Phase 4 sweep of the prompt path",
+    "date": "2026-08-15",
+    "note": "the post pass this card claims works (confirmed by filter algebra, FFT and geometry); asking the SAME move of LTX in the motion text fails (6 of 111 clips move as the card claims (5%)) - which is why the card renders post."
+  },
+  "evidence_history": [
+    {
+      "verdict": "MEASURED",
+      "method": "measurement session; finding recorded in this card's verdict field",
+      "date": "2026-08-04",
+      "note": "RENDERED 2026-08-04. Post tier. Exact mirror of pan_l: content moves LEFT by 100px, the taxi tracks -96px. (The telephone-box tracker blows out here because the box leaves frame and the tracker latche"
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "package_check: complete",
+      "date": "2026-08-15",
+      "note": "package complete"
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "motion_check sweep over rendered clips",
+      "date": "2026-08-15",
+      "note": "6 of 111 clips move as the card claims (5%)"
+    }
+  ]
 }

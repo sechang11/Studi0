@@ -48,5 +48,19 @@
     "caveats": "boil is NOT a style-stability number in this sweep - it tracks how much the clip moved, and the identical motion prompt produced motion from 0.345 to 2.772 across styles. detail is the load-bearing number, and it too drops when the COMPOSITION changes rather than the texture. Read both against the strips. n=1 clip, one subject, one seed.",
     "measured": "2026-08-04",
     "tool": "studio/_tools/video_examples.py"
-  }
+  },
+  "evidence": {
+    "verdict": "MEASURED",
+    "method": "package_check: incomplete",
+    "date": "2026-08-15",
+    "note": "pure 0/1"
+  },
+  "evidence_history": [
+    {
+      "verdict": "MEASURED",
+      "method": "measurement session; finding recorded in this card's verdict field",
+      "date": "2026-08-04",
+      "note": "B&W with visible dot tone and grainier texture. Genuinely separate from manga_inked."
+    }
+  ]
 }

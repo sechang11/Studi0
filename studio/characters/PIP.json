@@ -29,5 +29,25 @@
   "sheet_photo_verdict": "Faithful on the face - ginger mop, freckles across the nose, the gap between the front teeth, the yellow raincoat - and cluttered below it. The odd boots are held in his hands rather than worn because the framing has no feet, and there are TWO toy dinosaurs where the card names one. Re-render this sheet from a garment clause with the boots removed before using it for anything where the clutter matters; the version on disk is kept as the record of what a below-frame garment noun does.",
   "provenance": "original",
   "provenance_note": "Invented for this project - nothing in the checkpoint has seen this person, so the reference sheet, turnaround and trained LoRA are all mandatory. See craft/KNOWN_CHARACTERS.md for the alternative, where the checkpoint already knows a named character and the build gets much shorter.",
-  "setting_verdict": "CORRECTED 2026-08-04, and it overturns a finding this project reported twice as measured. The rule was 'a character LoRA at 0.85 destroys the setting' - observed on NIKA (a sunlit field became a grey void) and confirmed on TERRA (a snow forest collapsed to flat beige). BOTH OBSERVATIONS WERE REAL AND THE EXPLANATION WAS WRONG. It was never a property of LoRA strength. It was the UNCAPTIONED TAUPE BACKDROP of the turnaround being absorbed into the trigger: at high strength the LoRA reproduced its own training background over whatever place was asked for. Evidence at studio/samples/cast/terra_costume_fix/setting_grid.jpg - the v1 uncaptioned LoRA at 0.85 gives a featureless taupe void for snow_road and reduces a meadow to an arch-shaped window; the v3 LoRA, captioned and trained across two costumes, holds a real forest with depth and a real meadow at THE SAME 0.85 and the same seed. CONSEQUENCE: 0.85 is not inherently unsafe, and 0.5 was a workaround for a dataset defect rather than a law. The default stays 0.5 because that is what the rest of this character's evidence was measured at and nothing has yet shown 0.85 to be BETTER - only that it is no longer destructive. Any future character trained from an uncaptioned single-backdrop turnaround will reproduce the same defect, so caption the backdrop."
+  "setting_verdict": "CORRECTED 2026-08-04, and it overturns a finding this project reported twice as measured. The rule was 'a character LoRA at 0.85 destroys the setting' - observed on NIKA (a sunlit field became a grey void) and confirmed on TERRA (a snow forest collapsed to flat beige). BOTH OBSERVATIONS WERE REAL AND THE EXPLANATION WAS WRONG. It was never a property of LoRA strength. It was the UNCAPTIONED TAUPE BACKDROP of the turnaround being absorbed into the trigger: at high strength the LoRA reproduced its own training background over whatever place was asked for. Evidence at studio/samples/cast/terra_costume_fix/setting_grid.jpg - the v1 uncaptioned LoRA at 0.85 gives a featureless taupe void for snow_road and reduces a meadow to an arch-shaped window; the v3 LoRA, captioned and trained across two costumes, holds a real forest with depth and a real meadow at THE SAME 0.85 and the same seed. CONSEQUENCE: 0.85 is not inherently unsafe, and 0.5 was a workaround for a dataset defect rather than a law. The default stays 0.5 because that is what the rest of this character's evidence was measured at and nothing has yet shown 0.85 to be BETTER - only that it is no longer destructive. Any future character trained from an uncaptioned single-backdrop turnaround will reproduce the same defect, so caption the backdrop.",
+  "evidence": {
+    "verdict": "MEASURED",
+    "method": "package_check: complete",
+    "date": "2026-08-15",
+    "note": "package complete"
+  },
+  "evidence_history": [
+    {
+      "verdict": "UNVERIFIED",
+      "method": "nothing has checked this card against pixels",
+      "date": "2026-08-15",
+      "note": ""
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "package_check: complete",
+      "date": "2026-08-15",
+      "note": "package complete"
+    }
+  ]
 }

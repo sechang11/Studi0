@@ -5,6 +5,14 @@
   "prompt": "a single roll of thunder a long way off, a low rumble building slowly and rolling away for several seconds, no sharp crack, no rain",
   "negative": "music, speech, rain, wind, impact, crack",
   "seconds": 8,
-  "steps": 100, "cfg": 7, "sampler": "dpmpp_3m_sde",
-  "note": "'no sharp crack' is load-bearing - ask for thunder without it and you get a strike overhead. Distance is a low-pass, not a prompt word: if the render still sounds close, roll off above 800 Hz in post rather than re-prompting for 'far away'. Deterministic beats negotiating with the sampler."
+  "steps": 100,
+  "cfg": 7,
+  "sampler": "dpmpp_3m_sde",
+  "note": "'no sharp crack' is load-bearing - ask for thunder without it and you get a strike overhead. Distance is a low-pass, not a prompt word: if the render still sounds close, roll off above 800 Hz in post rather than re-prompting for 'far away'. Deterministic beats negotiating with the sampler.",
+  "evidence": {
+    "verdict": "UNVERIFIED",
+    "method": "nothing has checked this card against pixels",
+    "date": "2026-08-15",
+    "note": ""
+  }
 }

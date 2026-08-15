@@ -6,10 +6,19 @@
   "engine": "qwen",
   "kind": "speedup",
   "strength": 1.0,
-  "strength_range": [1.0, 1.0],
+  "strength_range": [
+    1.0,
+    1.0
+  ],
   "trigger": "",
   "means": "4 steps at cfg 1.0 for the OLDER Qwen-Image-Edit 2509 checkpoint. The studio uses 2511 everywhere, so this exists to make the 2509-only LoRAs - Relight and Light-Migration - affordable to try.",
   "status": "untested",
   "verdict": "",
-  "note": "metadata ABSENT. base_model INFERRED FROM THE FILENAME ONLY - see qwen-edit-2511-lightning-4step for the full caveat, which applies symmetrically: the two files have architecturally identical headers and differ only in sha256 (this one 2a32ce93...). | NOT WIRED INTO ANY STUDIO WORKFLOW. Every graph in the project that touches Qwen-Image-Edit uses 2511. This file is only worth loading alongside qwen-edit-2509-relight or qwen-edit-2509-light-migration, which are 2509 deltas and should not be run on a 2511 base. workflows/03_qwen_image_edit.json is already the 2509 graph and runs at 20 steps / cfg 4.0; adding this makes it 4 steps / cfg 1.0. | Alpha 8 over rank 64 = scale 0.125. | It is entirely possible this file is redundant and should be deleted - but 'possible' is not 'measured', and deleting a 810 MiB file on a guess about which revision it belongs to is exactly the kind of decision this library exists to slow down."
+  "note": "metadata ABSENT. base_model INFERRED FROM THE FILENAME ONLY - see qwen-edit-2511-lightning-4step for the full caveat, which applies symmetrically: the two files have architecturally identical headers and differ only in sha256 (this one 2a32ce93...). | NOT WIRED INTO ANY STUDIO WORKFLOW. Every graph in the project that touches Qwen-Image-Edit uses 2511. This file is only worth loading alongside qwen-edit-2509-relight or qwen-edit-2509-light-migration, which are 2509 deltas and should not be run on a 2511 base. workflows/03_qwen_image_edit.json is already the 2509 graph and runs at 20 steps / cfg 4.0; adding this makes it 4 steps / cfg 1.0. | Alpha 8 over rank 64 = scale 0.125. | It is entirely possible this file is redundant and should be deleted - but 'possible' is not 'measured', and deleting a 810 MiB file on a guess about which revision it belongs to is exactly the kind of decision this library exists to slow down.",
+  "evidence": {
+    "verdict": "UNVERIFIED",
+    "method": "nothing has checked this card against pixels",
+    "date": "2026-08-15",
+    "note": ""
+  }
 }

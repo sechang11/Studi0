@@ -36,5 +36,9 @@
       "fix": "Rewrite on tags the model responds to: fg = \"close-up, subject near camera, blurry background, depth of field\"; mid = \"cowboy shot, subject at middle distance, background in focus\"; bg = \"wide shot, tiny figure, distant subject\". Drop between_fg_mid or give it a concrete occlusion cue (\"partially occluded by foreground object\") so it has something of its own to render."
     }
   ],
-  "sheet": "/samples/sheets/layer_character_plane.jpg"
+  "sheet": "/samples/sheets/layer_character_plane.jpg",
+  "verdict": "mixed",
+  "verified_by": "model",
+  "verified_at": "2026-08-15T00:20:09",
+  "look_at": "fg and mid read; bg never pushes the figure far enough back."
 }

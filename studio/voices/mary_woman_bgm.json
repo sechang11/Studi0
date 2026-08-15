@@ -7,5 +7,11 @@
   "sounds_like": "Mid-high female at 219 Hz, mid timbre (centroid 1546 Hz), 6.7 onsets per second over 26.9s - sitting on top of a continuous music bed that never stops under her.",
   "casts_well_as": "Only cast this where you actively want a music bed cloned into the output along with the voice.",
   "avoid_for": "Clean dialogue of any kind. Any scene that will get its own score later, which in this project is all of them - films/episode01.json lays music under every act.",
-  "note": "PARTIAL - the voice clones, but it drags the background music with it. Measured proof rather than an assumption from the filename: the energy floor never once drops below -35 dB across 26.9s (silence 0%, longest pause 0.00s), and the pitch tracker latches onto a 59 Hz bassline underneath her, giving a nonsense 28.6-semitone span. The VibeVoice README itself says to avoid the BGM variants unless the bed is wanted. Use en_woman or female_04_maya for clean female narration. | NOT ACCEPTED by UnifiedTTSTextNode - ComfyUI rejects this path for higgs_v3/indextts2. The file exists but the node will not take it, so picking it fails mid-run. Verified against /object_info."
+  "note": "PARTIAL - the voice clones, but it drags the background music with it. Measured proof rather than an assumption from the filename: the energy floor never once drops below -35 dB across 26.9s (silence 0%, longest pause 0.00s), and the pitch tracker latches onto a 59 Hz bassline underneath her, giving a nonsense 28.6-semitone span. The VibeVoice README itself says to avoid the BGM variants unless the bed is wanted. Use en_woman or female_04_maya for clean female narration. | NOT ACCEPTED by UnifiedTTSTextNode - ComfyUI rejects this path for higgs_v3/indextts2. The file exists but the node will not take it, so picking it fails mid-run. Verified against /object_info.",
+  "evidence": {
+    "verdict": "UNVERIFIED",
+    "method": "nothing has checked this card against pixels",
+    "date": "2026-08-15",
+    "note": ""
+  }
 }

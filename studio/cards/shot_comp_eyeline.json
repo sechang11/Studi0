@@ -66,5 +66,9 @@
       "fix": "Reduce to the trained set: into_lens \"looking at viewer, eye contact\", to_side \"looking to the side\", away \"looking away\", up \"looking up\", down \"looking down\", closed \"closed eyes\". If L/R values must survive the enum, say in the claim that the still pass cannot fix the side. Point at_object at an object the scene already owns: \"looking at soccer ball\"."
     }
   ],
-  "sheet": "/samples/sheets/shot_comp_eyeline.jpg"
+  "sheet": "/samples/sheets/shot_comp_eyeline.jpg",
+  "verdict": "works",
+  "verified_by": "model",
+  "verified_at": "2026-08-15T00:20:09",
+  "look_at": "left/right/up/down/at_object read; into_lens looks away."
 }

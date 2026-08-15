@@ -21,5 +21,19 @@
   },
   "compose": "injects",
   "verdict": "Recoloured her coat and scarf into a rainbow gradient and left the street a normal photograph. It painted the ramp onto an object instead of remapping the image. A STYLE LoRA WAS TRIED AND FAILED, and it failed in both directions: the ramp-on-the-garment survived modern_anime at 1.0 and 1.5 and storybook at 1.0 completely unchanged, while illustration at 1.0 deleted the ramp altogether and returned an ordinary grey-coat photograph and at 1.5 returned a painted illustration with no thermal anything. False colour is a GLOBAL REMAP of every pixel, and no style LoRA on this box does global remapping. This belongs in studio/looks/ as an ffmpeg grade, which is what the card's own note already argued.",
-  "verified_by": "Looked at, against the no-style control at the same seed with the same subject, on both engines. studio/_tools/style_examples.py --all-engines"
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject, on both engines. studio/_tools/style_examples.py --all-engines",
+  "evidence": {
+    "verdict": "MEASURED",
+    "method": "package_check: incomplete",
+    "date": "2026-08-15",
+    "note": "frames 0/4, pure 0/1"
+  },
+  "evidence_history": [
+    {
+      "verdict": "MEASURED",
+      "method": "measurement session; finding recorded in this card's verdict field",
+      "date": "2026-08-03",
+      "note": "Recoloured her coat and scarf into a rainbow gradient and left the street a normal photograph. It painted the ramp onto an object instead of remapping the image. A STYLE LoRA WAS TRIED AND FAILED, and"
+    }
+  ]
 }

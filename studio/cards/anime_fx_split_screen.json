@@ -66,5 +66,9 @@
       "fix": "Use the danbooru tags that actually encode panel layout: two_v/two_h -> \"2koma\", grid_4 -> \"4koma\", manga_panels -> \"comic, panel layout\", inset_pip -> \"inset\". Drop three_v, which has no tag and no reliable count."
     }
   ],
-  "sheet": "/samples/sheets/anime_fx_split_screen.jpg"
+  "sheet": "/samples/sheets/anime_fx_split_screen.jpg",
+  "verdict": "mixed",
+  "verified_by": "model",
+  "verified_at": "2026-08-15T00:20:09",
+  "look_at": "manga_panels and two_v read; grid_4 and inset_pip never divide the frame."
 }

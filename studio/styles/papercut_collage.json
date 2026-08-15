@@ -22,5 +22,19 @@
   },
   "compose": "injects",
   "verdict": "Drew torn-paper layers as a FRAME around an unmodified photograph. A STYLE LoRA WAS TRIED AND FAILED: the frame survived six of the seven qwen settings intact. The seventh, illustration at 1.5, did delete the frame - and replaced the entire picture with the LoRA's own inked watercolour, which contains no cut paper, no stacked layers and no drop shadows. Deleting a failure is not delivering the style.",
-  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py",
+  "evidence": {
+    "verdict": "MEASURED",
+    "method": "package_check: incomplete",
+    "date": "2026-08-15",
+    "note": "frames 0/4, pure 0/1"
+  },
+  "evidence_history": [
+    {
+      "verdict": "MEASURED",
+      "method": "measurement session; finding recorded in this card's verdict field",
+      "date": "2026-08-03",
+      "note": "Drew torn-paper layers as a FRAME around an unmodified photograph. A STYLE LoRA WAS TRIED AND FAILED: the frame survived six of the seven qwen settings intact. The seventh, illustration at 1.5, did de"
+    }
+  ]
 }

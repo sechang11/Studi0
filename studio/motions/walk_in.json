@@ -11,7 +11,7 @@
   ],
   "needs": "a person in frame with open ground between them and the lens",
   "grammar": "[MOVER] [ACTION VERB] [PATH/SPATIAL RELATION]",
-  "status": "ready",
+  "status": "weak",
   "measured": {
     "motion_per_seed": [
       2.2742,
@@ -99,8 +99,28 @@
     "band_hi_anchor_only": 0.7444,
     "frame_scale_ceiling_anchor_only": 1.191
   },
-  "verdict": "RE-MEASURED ACROSS FOUR STAGINGS 2026-08-04, 3 seeds each, watched at 7702. THE CLEAREST CASE IN THE LIBRARY THAT THE NUMBER IS NOT THE CARD. far 1.115 / mid 1.500 / close 3.592 / anchor 3.191 - and the ranking is BACKWARDS against what actually happens. At `far`, the lowest number in the row, she walks the entire length of the station hall and leaves the frame past the lens by f96: the largest displacement in the whole run. At `close`, the highest number in the entire matrix, SHE NEVER LEAVES HER CHAIR - the 4.278 on seed 7702 is the framing creeping (creep 1.325) and the background sliding behind a subject big enough to fill the frame. At `mid` she does not close distance either. THE CARD NEEDS DISTANCE TO CLOSE, and the metric rewards the stagings where there is none. Ask for it on a wide; do not read its number.",
+  "verdict": "demoted from ready by the Phase 4 sweep: 3 of 17 clips move as the card claims (18%). Prior verdict: RE-MEASURED ACROSS FOUR STAGINGS 2026-08-04, 3 seeds each, watched at 7702. THE CLEAREST CASE IN THE LIBRARY THAT THE NUMBER IS NOT THE CARD. far 1.115 / mid 1.500 / close 3.592 / anchor 3.191 - and the ranking is BACKWARDS against what actually happens. At `far`, the lowest number in the row, she ",
   "number_is_staging_dependent": true,
   "staging_robustness": "conditional",
-  "staging_robustness_evidence": "four stagings (subject 0.19%-7.92% of frame), three seeds of numbers, strips watched at seed 7702: samples/motion_staging/percard/walk_in.png"
+  "staging_robustness_evidence": "four stagings (subject 0.19%-7.92% of frame), three seeds of numbers, strips watched at seed 7702: samples/motion_staging/percard/walk_in.png",
+  "evidence": {
+    "verdict": "MEASURED",
+    "method": "motion_check sweep over rendered clips",
+    "date": "2026-08-15",
+    "note": "3 of 17 clips move as the card claims (18%)"
+  },
+  "evidence_history": [
+    {
+      "verdict": "MEASURED",
+      "method": "measurement session; finding recorded in this card's verdict field",
+      "date": "2026-08-04",
+      "note": "RE-MEASURED ACROSS FOUR STAGINGS 2026-08-04, 3 seeds each, watched at 7702. THE CLEAREST CASE IN THE LIBRARY THAT THE NUMBER IS NOT THE CARD. far 1.115 / mid 1.500 / close 3.592 / anchor 3.191 - and t"
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "package_check: complete",
+      "date": "2026-08-15",
+      "note": "package complete"
+    }
+  ]
 }

@@ -21,5 +21,19 @@
   },
   "compose": "safe",
   "verdict": "Dark ground with some white line, but it never fully inverted. Partial. A STYLE LoRA WAS TRIED AND FAILED TO INVERT IT: all seven qwen settings stayed dark and nearly monochrome without ever becoming white line scratched out of a solid black ground. illustration at 1.0 gives the strongest engraved line in the set - real etched hatching through the coat and hair - but the ground stays mid-tone, and at 1.5 the darkness is lost entirely and the coat returns olive and brown.",
-  "verified_by": "Looked at, against the no-style control at the same seed with the same subject, on both engines. studio/_tools/style_examples.py --all-engines"
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject, on both engines. studio/_tools/style_examples.py --all-engines",
+  "evidence": {
+    "verdict": "MEASURED",
+    "method": "package_check: incomplete",
+    "date": "2026-08-15",
+    "note": "frames 0/4, pure 0/1"
+  },
+  "evidence_history": [
+    {
+      "verdict": "MEASURED",
+      "method": "measurement session; finding recorded in this card's verdict field",
+      "date": "2026-08-03",
+      "note": "Dark ground with some white line, but it never fully inverted. Partial. A STYLE LoRA WAS TRIED AND FAILED TO INVERT IT: all seven qwen settings stayed dark and nearly monochrome without ever becoming "
+    }
+  ]
 }

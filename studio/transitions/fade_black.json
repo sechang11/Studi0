@@ -11,5 +11,11 @@
     "picture": "post",
     "audio": "none"
   },
-  "consumer_gap": "THIS FILTER IS CORRECT AND NO FILM RENDERS IT. scripts/short.py concats micro-shots and has no xfade join path, so it never reads `filter`. scripts/epic.py has its own hardcoded five-name table (cut/soft/dissolve/fade/flash) keyed off shot['in'], while compile.py writes beat['transition'] - different key, different vocabulary - and epic.py never opens studio/transitions/*.json. The sample clip is real because the sample generator applies this filter directly. Six proven filters, zero films that can use them. Out of scope for the 2026-08-04 wave; flagged here so the card stops implying otherwise."
+  "consumer_gap": "THIS FILTER IS CORRECT AND NO FILM RENDERS IT. scripts/short.py concats micro-shots and has no xfade join path, so it never reads `filter`. scripts/epic.py has its own hardcoded five-name table (cut/soft/dissolve/fade/flash) keyed off shot['in'], while compile.py writes beat['transition'] - different key, different vocabulary - and epic.py never opens studio/transitions/*.json. The sample clip is real because the sample generator applies this filter directly. Six proven filters, zero films that can use them. Out of scope for the 2026-08-04 wave; flagged here so the card stops implying otherwise.",
+  "evidence": {
+    "verdict": "MEASURED",
+    "method": "measurement session; finding recorded in this card's verdict field",
+    "date": "2026-08-04",
+    "note": "RENDERED 2026-08-04 between two real clips. Reaches TRUE BLACK - luma touches exactly 0.0 at the midpoint, curve 60 -> 18 -> 0 -> 28 -> 77 -> 169 over 24 frames. Unmistakable against every other card "
+  }
 }

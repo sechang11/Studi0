@@ -54,5 +54,9 @@
       "fix": "Give those three options an explicit per-option renderable:false (or move them into a separate motion-only variable marked renderable:false) so the card does not ship three duplicate stills. Keep film_grain, dust_scratches, halation and paper_texture, which do render. Also add a \"none\" baseline - as written every panel carries damage and there is nothing to compare against."
     }
   ],
-  "sheet": "/samples/sheets/anime_draw_cel_artifacts.jpg"
+  "sheet": "/samples/sheets/anime_draw_cel_artifacts.jpg",
+  "verdict": "fails",
+  "verified_by": "model",
+  "verified_at": "2026-08-15T00:20:09",
+  "look_at": "3 of 7 panels are control duplicates; grain and halation invisible. Deterministic variable - needs the ffmpeg pass."
 }

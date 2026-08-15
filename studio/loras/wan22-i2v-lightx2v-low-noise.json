@@ -14,5 +14,11 @@
   "means": "4-step distillation for the LOW-NOISE expert of Wan 2.2 image-to-video 14B. The other half of the pair - the low-noise expert handles the later, detail-refining part of the denoise.",
   "status": "ready",
   "verdict": "EXERCISED, NOT SWEPT. See wan22-i2v-lightx2v-high-noise - the two were only ever used together, at 1.0, as workflows/04 wires them, across 20 image-to-video clips at 896x512 and 1280x704. All rendered clean. Cost and fidelity results are on the partner card and in studio/samples/video_engines/. Strength was not varied, and the high/low expert assignment remains unverifiable from the files themselves.",
-  "note": "MUST BE USED WITH ITS PARTNER, wan22-i2v-lightx2v-high-noise. See that card for the full provenance caveat, which applies symmetrically and is the important thing on both: metadata is ABSENT, the geometry is identical between the two experts, and only the filename says which is which. This file's sha256 is 024f21de...; the high-noise one is d176c808.... | Wired at 1.0 in workflows/04_wan22_i2v_turbo.json node 6 (its partner is node 5). Base installed: wan2.2_i2v_low_noise_14B_fp8_scaled. | 1200 tensors, 400 modules, rank 64, alpha 8 = scale 0.125. purpose inferred from the filename."
+  "note": "MUST BE USED WITH ITS PARTNER, wan22-i2v-lightx2v-high-noise. See that card for the full provenance caveat, which applies symmetrically and is the important thing on both: metadata is ABSENT, the geometry is identical between the two experts, and only the filename says which is which. This file's sha256 is 024f21de...; the high-noise one is d176c808.... | Wired at 1.0 in workflows/04_wan22_i2v_turbo.json node 6 (its partner is node 5). Base installed: wan2.2_i2v_low_noise_14B_fp8_scaled. | 1200 tensors, 400 modules, rank 64, alpha 8 = scale 0.125. purpose inferred from the filename.",
+  "evidence": {
+    "verdict": "MEASURED",
+    "method": "measurement session; finding recorded in this card's verdict field",
+    "date": "2026-08-04",
+    "note": "EXERCISED, NOT SWEPT. See wan22-i2v-lightx2v-high-noise - the two were only ever used together, at 1.0, as workflows/04 wires them, across 20 image-to-video clips at 896x512 and 1280x704. All rendered"
+  }
 }

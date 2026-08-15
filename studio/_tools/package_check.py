@@ -125,6 +125,8 @@ def main():
     ap.add_argument("--kind")
     ap.add_argument("--short", action="store_true", help="only cards that are incomplete")
     ap.add_argument("--json", action="store_true")
+    ap.add_argument("--stamp", action="store_true",
+                    help="write MEASURED evidence onto each card checked")
     a = ap.parse_args()
 
     kinds = [a.kind] if a.kind else list(PACKAGE)
@@ -151,6 +153,22 @@ def main():
                 print("    %-22s %s" % (r["id"][:22], gaps))
     if a.json:
         print(json.dumps(out, indent=1))
+    if a.stamp:
+        # The counts were measured this run; write them down where they travel with the
+        # card. Complete is a fact, a gap list is a fact - both are MEASURED.
+        sys.path.insert(0, STUDIO)
+        import cards as _cards
+        n = 0
+        for c in out:
+            for r in c.get("cards", []):
+                gaps = ", ".join("%s %d/%d" % (m["axis"], m["have"], m["need"])
+                                 for m in r.get("missing", []))
+                _cards.stamp(c["kind"], r["id"], "MEASURED",
+                             "package_check: %s" % ("complete" if r["complete"]
+                                                    else "incomplete"),
+                             note=gaps or "package complete")
+                n += 1
+        print("stamped %d cards" % n)
     return 0
 
 

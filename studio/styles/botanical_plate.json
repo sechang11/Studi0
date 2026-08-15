@@ -1,19 +1,33 @@
 {
- "id": "botanical_plate",
- "name": "Botanical plate",
- "engine": "flux2",
- "status": "ready",
- "compose": "safe",
- "family": "illustration",
- "prose": "A photograph of a hand-coloured engraved botanical plate on heavy rag paper. A single specimen is drawn with fine stipple and line engraving, watercolour washed over the print in muted greens and a dusty rose, with a dissected detail of the flower parts inset at lower left. Beneath the drawing sits an italic binomial name and a smaller line of plate numbering. Wide clean margins, a faint plate impression pressed into the paper. Even overhead light, shot straight down, natural colour. The lettering shows the italic name beneath reading \"Salvia obscura\" and a plate number \"PLATE XIV\".",
- "words": "the italic name beneath reading \"Salvia obscura\" and a plate number \"PLATE XIV\"",
- "text_rule": "Replace `words` with the string you want and keep it QUOTED in the prompt. Unquoted lettering comes back as gibberish.",
- "negative_add": "blurry text, unreadable lettering, gibberish characters, misspelled words, watermark, signature, logo, lowres, jpeg artifacts, oversaturated, 3d render, cgi, plastic",
- "means": "Scientific illustration with its caption. The plate mark and the wash over engraved line are the tells.",
- "note": "Routed to FLUX.2 deliberately. Before these cards, 132 style cards existed and none named flux2, so an installed and measured engine was unreachable from the app - the engine is a property of the style, so a style card is the only door. Written as prose because FLUX.2 is a sentence engine, and chosen for typography and physical media because that is where it beats Qwen and animagine rather than duplicating them.",
- "provenance": "invented - no real brand, imprint or person is named",
- "verdict": "Looked at on the contact sheet in studio/samples/styles/. The medium is convincing and the QUOTED string renders correctly - this card's own words came back right. Unquoted body copy in the same image is still word-shaped gibberish, which is the limit to plan around: quote what must be read, let the rest be texture. NOT compared against the no-style control.",
- "created": "2026-08-12T18:12:14",
- "self_contained": true,
- "self_contained_why": "This card describes a complete object - a page, a sign, a newspaper. Composed with a character and a place the roller produced a man, a cave, moonlight AND a blueprint in one prompt. It takes no other layer."
+  "id": "botanical_plate",
+  "name": "Botanical plate",
+  "engine": "flux2",
+  "status": "ready",
+  "compose": "safe",
+  "family": "illustration",
+  "prose": "A photograph of a hand-coloured engraved botanical plate on heavy rag paper. A single specimen is drawn with fine stipple and line engraving, watercolour washed over the print in muted greens and a dusty rose, with a dissected detail of the flower parts inset at lower left. Beneath the drawing sits an italic binomial name and a smaller line of plate numbering. Wide clean margins, a faint plate impression pressed into the paper. Even overhead light, shot straight down, natural colour. The lettering shows the italic name beneath reading \"Salvia obscura\" and a plate number \"PLATE XIV\".",
+  "words": "the italic name beneath reading \"Salvia obscura\" and a plate number \"PLATE XIV\"",
+  "text_rule": "Replace `words` with the string you want and keep it QUOTED in the prompt. Unquoted lettering comes back as gibberish.",
+  "negative_add": "blurry text, unreadable lettering, gibberish characters, misspelled words, watermark, signature, logo, lowres, jpeg artifacts, oversaturated, 3d render, cgi, plastic",
+  "means": "Scientific illustration with its caption. The plate mark and the wash over engraved line are the tells.",
+  "note": "Routed to FLUX.2 deliberately. Before these cards, 132 style cards existed and none named flux2, so an installed and measured engine was unreachable from the app - the engine is a property of the style, so a style card is the only door. Written as prose because FLUX.2 is a sentence engine, and chosen for typography and physical media because that is where it beats Qwen and animagine rather than duplicating them.",
+  "provenance": "invented - no real brand, imprint or person is named",
+  "verdict": "Looked at on the contact sheet in studio/samples/styles/. The medium is convincing and the QUOTED string renders correctly - this card's own words came back right. Unquoted body copy in the same image is still word-shaped gibberish, which is the limit to plan around: quote what must be read, let the rest be texture. NOT compared against the no-style control.",
+  "created": "2026-08-12T18:12:14",
+  "self_contained": true,
+  "self_contained_why": "This card describes a complete object - a page, a sign, a newspaper. Composed with a character and a place the roller produced a man, a cave, moonlight AND a blueprint in one prompt. It takes no other layer.",
+  "evidence": {
+    "verdict": "MEASURED",
+    "method": "package_check: complete",
+    "date": "2026-08-15",
+    "note": "package complete"
+  },
+  "evidence_history": [
+    {
+      "verdict": "MEASURED",
+      "method": "measurement session; finding recorded in this card's verdict field",
+      "date": "2026-08-12",
+      "note": "Looked at on the contact sheet in studio/samples/styles/. The medium is convincing and the QUOTED string renders correctly - this card's own words came back right. Unquoted body copy in the same image"
+    }
+  ]
 }

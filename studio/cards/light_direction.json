@@ -1,7 +1,7 @@
 {
   "variable": "light.direction",
   "claim": "Where the key light sits. Direction does more for mood than colour does.",
-  "look_at": "backlighting and rim are the most visually decisive. bottom (uplight) is the least reliable - the model tends to revert to conventional key lighting.",
+  "look_at": "Only bottom unambiguously reads; the rest are near-identical profiles.",
   "method": "identical subject sentence and seed in every panel; only the option clause changes",
   "model": "animagine-xl-4.0, 28 steps, cfg 5.0, euler_ancestral",
   "panels": [
@@ -31,5 +31,8 @@
       "sample": "/samples/vars/light_direction/bottom.webp"
     }
   ],
-  "sheet": "/samples/sheets/light_direction.jpg"
+  "sheet": "/samples/sheets/light_direction.jpg",
+  "verdict": "mixed",
+  "verified_by": "model",
+  "verified_at": "2026-08-15T00:20:09"
 }

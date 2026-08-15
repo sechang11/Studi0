@@ -60,5 +60,9 @@
       "fix": "Keep only the script-distinct values that have real tags (en, ja, zh, ko) and mark es/fr/de as sharing the Latin-script panel, or mark the whole variable renderable:false reusing the watermark argument and demo the caption font via an ffmpeg overlay. Add a sentence to the claim explaining that \"other\" is an author passthrough with no canonical panel, the way layer.fg.content does for `custom`."
     }
   ],
-  "sheet": "/samples/sheets/movie_language.jpg"
+  "sheet": "/samples/sheets/movie_language.jpg",
+  "verdict": "fails",
+  "verified_by": "model",
+  "verified_at": "2026-08-15T00:20:09",
+  "look_at": "Banner glyphs are gibberish in every language; only the layout changes. (panel_diff's one DISTINCT card - distinct pixels, failed claim.)"
 }

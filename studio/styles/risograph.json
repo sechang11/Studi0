@@ -21,5 +21,19 @@
   },
   "compose": "inert",
   "verdict": "On qwen it drew a riso-coloured rectangle over the photo; on the illustration engine, nothing. Misregistration and spot ink are print artifacts neither model has. A STYLE LoRA WAS TRIED AND FAILED: six settings on the qwen path - illustration-1.0-qwen-image at 1.0 and 1.5, qwen_image_modern_anime at 1.0 and 1.5, qwen_image_2512_storybook at 1.0 with and without its trigger phrase. Not one produced misregistration, overprint multiply, coarse flat grain or bare-paper highlights. What did change: at illustration 1.0 the riso-coloured rectangle vanishes and leaves a plain photograph, and at 1.5 the two spot inks arrive as fluorescent pink and teal accents inside the LoRA's own watercolour; under storybook-with-trigger the inks became the stripes of a scarf. The COLOURS are nameable so they arrive; the press mechanics are not, so they never do. The card's own advice stands: build riso in the deterministic tier.",
-  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py"
+  "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py",
+  "evidence": {
+    "verdict": "MEASURED",
+    "method": "package_check: incomplete",
+    "date": "2026-08-15",
+    "note": "frames 0/4, pure 0/1"
+  },
+  "evidence_history": [
+    {
+      "verdict": "MEASURED",
+      "method": "measurement session; finding recorded in this card's verdict field",
+      "date": "2026-08-03",
+      "note": "On qwen it drew a riso-coloured rectangle over the photo; on the illustration engine, nothing. Misregistration and spot ink are print artifacts neither model has. A STYLE LoRA WAS TRIED AND FAILED: si"
+    }
+  ]
 }

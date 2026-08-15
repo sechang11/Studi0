@@ -24,5 +24,19 @@
   "verdict": "THE COMIC ARRIVES; THE HALFTONE DOES NOT. Without a LoRA this is still a photograph sitting inside a newsprint-paper frame with a cyan and magenta fringe on the frame edge, and no dot screen anywhere in the image. With illustration-1.0-qwen-image at 1.0 the photograph becomes a real inked drawing - heavy black outline, spot blacks, drawn hair, paper-toned ground, and a thin cyan fringe along the figure's edge that reads as misregistration - and at seed 5150 the skin carries a genuine tonal flesh screen whose dots darken and crowd into the shading. That is a large improvement on the control. But the Ben-Day screen as the COLOUR MECHANISM does not arrive reliably: at 1.2 the coat carries a proper tonal screen at seed 5150 and almost none at 314159, and at 1.5 the dots become uniform polka dots printed on the garment at every seed tested - the same noun-as-object failure as the control, moved off the frame and onto the coat. Four seeds, six strengths. Left weak deliberately: reach for this for the INK, not for the print. ROUTING BLOCKER: engine=anime on this card, LoRA is qwen-based. studio/_tools/lora_rescue.py; studio/samples/lora_rescue/.",
   "verified_by": "Looked at, against the no-style control at the same seed with the same subject. studio/_tools/style_examples.py",
   "lora": "illustration-qwen-image",
-  "lora_strength": 1.0
+  "lora_strength": 1.0,
+  "evidence": {
+    "verdict": "MEASURED",
+    "method": "package_check: incomplete",
+    "date": "2026-08-15",
+    "note": "frames 0/4, pure 0/1"
+  },
+  "evidence_history": [
+    {
+      "verdict": "MEASURED",
+      "method": "measurement session; finding recorded in this card's verdict field",
+      "date": "2026-08-04",
+      "note": "THE COMIC ARRIVES; THE HALFTONE DOES NOT. Without a LoRA this is still a photograph sitting inside a newsprint-paper frame with a cyan and magenta fringe on the frame edge, and no dot screen anywhere "
+    }
+  ]
 }

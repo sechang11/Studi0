@@ -60,5 +60,9 @@
       "fix": "Keep only the options that are about relationship rather than coordinates - auto (\"sound effects\"), over_subject (\"sound effects, text over the character\") and diagonal (\"sound effects, diagonal text\") - and mark tl/tr/bl/br/center non-renderable, or set the whole variable renderable:false with skip_reason \"quadrant placement is a layout parameter the sampler does not accept\"."
     }
   ],
-  "sheet": "/samples/sheets/anime_fx_onomatopoeia_pos.jpg"
+  "sheet": "/samples/sheets/anime_fx_onomatopoeia_pos.jpg",
+  "verdict": "fails",
+  "verified_by": "model",
+  "verified_at": "2026-08-15T00:20:09",
+  "look_at": "A katakana mark renders but ignores position - every panel is top-left."
 }

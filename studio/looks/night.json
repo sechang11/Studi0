@@ -1,9 +1,15 @@
 {
- "id": "night",
- "tags": "night, dark, moonlight",
- "grade": "curves=all='0/0.02 0.25/0.13 0.5/0.28 0.75/0.48 1/0.70',eq=saturation=0.68,colorbalance=bs=0.10:rs=-0.05:gm=0.02",
- "status": "ready",
- "note": "Darkness comes from the GRADE, not the prompt: night, dark background moved measured mean luma only 170 -> 161. THE OLD GRADE DESTROYED THE SHADOWS. Measured on a 0-255 ramp, inputs 0, 16, 32, 48 and 64 ALL came out as 1 - the entire bottom quarter of the range flattened onto a single value, which is why dark inserts read as featureless black. (It did not clip to zero, as was first recorded; it flattened. Same result on screen, different mechanism.) The cause is order of operations: eq applies brightness before contrast, so 48/255 went 0.188 - 0.15 = 0.038, then (0.038 - 0.5) * 1.20 + 0.5 = -0.054, and clamped. Replaced with an explicit curve. Measured on the same ramp: 0->6, 16->10, 32->17, 48->24, 64->33 - monotonic, separated, still genuinely dark.",
- "grade_previous": "eq=brightness=-0.15:contrast=1.20:saturation=0.72,colorbalance=bs=0.05:rs=-0.03,eq=gamma=0.92",
- "grade_verified": "ramp 0-255 through ffmpeg; shadow separation preserved at every step"
+  "id": "night",
+  "tags": "night, dark, moonlight",
+  "grade": "curves=all='0/0.02 0.25/0.13 0.5/0.28 0.75/0.48 1/0.70',eq=saturation=0.68,colorbalance=bs=0.10:rs=-0.05:gm=0.02",
+  "status": "ready",
+  "note": "Darkness comes from the GRADE, not the prompt: night, dark background moved measured mean luma only 170 -> 161. THE OLD GRADE DESTROYED THE SHADOWS. Measured on a 0-255 ramp, inputs 0, 16, 32, 48 and 64 ALL came out as 1 - the entire bottom quarter of the range flattened onto a single value, which is why dark inserts read as featureless black. (It did not clip to zero, as was first recorded; it flattened. Same result on screen, different mechanism.) The cause is order of operations: eq applies brightness before contrast, so 48/255 went 0.188 - 0.15 = 0.038, then (0.038 - 0.5) * 1.20 + 0.5 = -0.054, and clamped. Replaced with an explicit curve. Measured on the same ramp: 0->6, 16->10, 32->17, 48->24, 64->33 - monotonic, separated, still genuinely dark.",
+  "grade_previous": "eq=brightness=-0.15:contrast=1.20:saturation=0.72,colorbalance=bs=0.05:rs=-0.03,eq=gamma=0.92",
+  "grade_verified": "ramp 0-255 through ffmpeg; shadow separation preserved at every step",
+  "evidence": {
+    "verdict": "UNVERIFIED",
+    "method": "nothing has checked this card against pixels",
+    "date": "2026-08-15",
+    "note": ""
+  }
 }
