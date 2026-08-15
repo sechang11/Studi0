@@ -100,6 +100,8 @@ KINDS = {
         "required": {"id": S, "name": S, "status": S, "kind": S, "file": S,
                      "base_model": S, "trigger": S},
         "types": {"engine": NS},
+        "enums": {"kind": {"character", "style", "speedup", "edit", "utility",
+                           "experiment"}},
         "statuses": {"ready", "untested", "weak", "unavailable"},
     },
     "voices": {

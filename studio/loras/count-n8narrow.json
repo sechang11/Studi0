@@ -1,0 +1,26 @@
+{
+  "id": "count-n8narrow",
+  "name": "Photo-count control: 8 near-identical fronts",
+  "file": "count_n8narrow.safetensors",
+  "base_model": "animagine",
+  "engine": "anime",
+  "kind": "experiment",
+  "strength": 1.0,
+  "strength_range": [
+    0.6,
+    1.0
+  ],
+  "trigger": "standin",
+  "means": "An ARM of the photo-count experiment on the synthetic stand-in (STANDIN-A): 8 near-identical fronts, fixed-count spread control. Not a pickable style - kept so the measurement can be re-run and its verdict re-checked.",
+  "status": "weak",
+  "verdict": "MEASURED (11 cells x 2 seeds x 7 arms battery, animagine-xl-4.0 (SDXL). LoRAs trained on PHOTOGRAPHS, rendered as anime.). face: generic young anime girl, not her. anime survives at strength 1.0: False. THE RESULT. Same count as n8, same steps, more close face pixels than any other arm, and it never becomes her.",
+  "note": "Trained 8 images, 1000 steps, rank 16, lr 0.0005, 13.8 min. Held constant across arms: {\"steps\": 1000, \"rank\": 16, \"lr\": 0.0005, \"seed\": 7311, \"train_res\": \"832x1216\", \"minutes_each\": \"10.0 - 13.8\", \"battery_strength\": 0.8, \"captions\": \"trigger, view, wardrobe, backdrop - identical form in every arm\"}. Full results: studio/samples/photo2anime/count/RESULTS.json; contact sheets under .../count/battery.",
+  "example": "/samples/photo2anime/count/battery",
+  "experiment": "photo_count",
+  "evidence": {
+    "verdict": "MEASURED",
+    "method": "photo-count battery, 11 cells x 2 seeds x 7 arms",
+    "date": "2026-08-15",
+    "note": "THE RESULT. Same count as n8, same steps, more close face pixels than any other arm, and it never becomes her."
+  }
+}

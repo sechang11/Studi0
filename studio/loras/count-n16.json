@@ -1,0 +1,26 @@
+{
+  "id": "count-n16",
+  "name": "Photo-count arm: 16 photos (whole set)",
+  "file": "count_n16.safetensors",
+  "base_model": "animagine",
+  "engine": "anime",
+  "kind": "experiment",
+  "strength": 0.8,
+  "strength_range": [
+    0.6,
+    1.0
+  ],
+  "trigger": "standin",
+  "means": "An ARM of the photo-count experiment on the synthetic stand-in (STANDIN-A): 16, the whole set. Not a pickable style - kept so the measurement can be re-run and its verdict re-checked.",
+  "status": "ready",
+  "verdict": "MEASURED (11 cells x 2 seeds x 7 arms battery, animagine-xl-4.0 (SDXL). LoRAs trained on PHOTOGRAPHS, rendered as anime.). face: adult, ordinary, hers - the most consistent across cells. anime survives at strength 0.8: True. better than n8 only in robustness across seeds and scenes.",
+  "note": "Trained 16 images, 1000 steps, rank 16, lr 0.0005, 10.3 min. Held constant across arms: {\"steps\": 1000, \"rank\": 16, \"lr\": 0.0005, \"seed\": 7311, \"train_res\": \"832x1216\", \"minutes_each\": \"10.0 - 13.8\", \"battery_strength\": 0.8, \"captions\": \"trigger, view, wardrobe, backdrop - identical form in every arm\"}. Full results: studio/samples/photo2anime/count/RESULTS.json; contact sheets under .../count/battery.",
+  "example": "/samples/photo2anime/count/battery",
+  "experiment": "photo_count",
+  "evidence": {
+    "verdict": "MEASURED",
+    "method": "photo-count battery, 11 cells x 2 seeds x 7 arms",
+    "date": "2026-08-15",
+    "note": "better than n8 only in robustness across seeds and scenes."
+  }
+}

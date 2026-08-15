@@ -90,7 +90,11 @@ REQUIRED = ("id", "name", "file", "base_model", "engine", "kind", "strength",
 BASE_MODELS = ("animagine", "illustrious", "sdxl", "qwen", "qwen_edit",
                "ltx", "wan", "flux", "other")
 ENGINES = ("anime", "qwen", "video", None)
-KINDS = ("character", "style", "speedup", "edit", "utility")
+KINDS = ("character", "style", "speedup", "edit", "utility",
+         # experiment: an arm of a measured experiment (photo-count, rank sweeps)
+         # - kept re-runnable, carries its verdict, never pickable as a style
+         # (compose.LORA_STYLE_KINDS is {"style"} only).
+         "experiment")
 STATUSES = ("ready", "weak", "untested", "unavailable")
 
 # base_model -> engine. `engine` is DERIVED, never independently authored, so that a
