@@ -4,22 +4,30 @@
   "file": "gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors",
   "folder": "text_encoders",
   "size_gb": 15.37,
-  "status": "untested",
+  "status": "ready",
   "engine": null,
   "dialect": null,
-  "role": "On disk, unmeasured.",
-  "desc": "Nothing on this box has rendered through this model yet.",
+  "role": "Loaded by the LTX-2.5 multi-shot graph.",
+  "desc": "Part of the LTX-2.5 stack that rendered capability 51. gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors, 15.37 GB, in text_encoders.",
   "strengths": "",
   "weaknesses": "",
   "workflows": [
     "51_ltx25_i2v.json"
   ],
-  "reachable": false,
+  "reachable": true,
   "strip": null,
   "evidence": {
-    "verdict": "UNVERIFIED",
-    "method": "gated download pending; workflow built",
-    "date": "2026-08-15",
-    "note": ""
-  }
+    "verdict": "MEASURED",
+    "method": "rendered through workflow 51",
+    "date": "2026-08-16",
+    "note": "loaded by 51_ltx25_i2v.json, which rendered the published multi-shot samples (deck3, linruo_views): three viewpoints in one pass, identity held across the cuts"
+  },
+  "evidence_history": [
+    {
+      "verdict": "UNVERIFIED",
+      "method": "gated download pending; workflow built",
+      "date": "2026-08-15",
+      "note": ""
+    }
+  ]
 }
