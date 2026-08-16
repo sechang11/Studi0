@@ -1,13 +1,13 @@
 # Short-form slate
 
-3 of 20 rendered. Masters are vertical 1080x1920 with voice, score and effects mixed and mastered.
+5 of 20 rendered. Masters are vertical 1080x1920 with voice, score and effects mixed and mastered.
 
 | id | kind | title | secs | LUFS | hook |
 |---|---|---|---|---|---|
 | ad-atlas-pack | commercial | ATLAS | 10.3 | -9.8 | ATLAS / it has been everywhere |
 | ad-lumen-lamp | commercial | LUMEN | 10.3 | -9.5 | LUMEN / light that knows the hour |
-| ad-northwind-tea | commercial | NORTHWIND TEA | - | - |  |
-| ad-pace-runner | commercial | PACE | - | - |  |
+| ad-northwind-tea | commercial | NORTHWIND TEA | 10.3 | -9.6 | NORTHWIND / the slow cup |
+| ad-pace-runner | commercial | PACE | 10.3 | -9.5 | PACE / built for the fifth mile |
 | ad-slow-sunday | commercial | SLOW SUNDAY | - | - |  |
 | ad-tidewater | commercial | TIDEWATER | - | - |  |
 | hook-door | hook | THE DOOR | - | - |  |
@@ -40,6 +40,20 @@
 - LUMEN moves with the day. Cool and bright when you need to think.
 - Warm and low when you need to stop.
 - LUMEN. Light that knows what time it is.
+
+### ad-northwind-tea - NORTHWIND TEA
+
+- Some mornings you need the day to start slowly.
+- Northwind is a plain black tea. No claims, no ceremony.
+- Grown on a hillside, dried slowly, packed the same week.
+- Northwind. Take the long way through the morning.
+
+### ad-pace-runner - PACE
+
+- The first mile is easy. Anyone can sell you the first mile.
+- PACE is built for the fifth. Where the cushioning usually gives up.
+- A denser midsole that holds its shape when you are tired and sloppy.
+- PACE. The mile that counts is the one after you wanted to stop.
 
 ### sup-creatine - CREATINE
 
