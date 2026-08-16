@@ -750,6 +750,27 @@ def cut(film, out):
         line_start = None
         # a template turns one generated clip into a shaped run of micro-shots
         beat_cuts, beat_impact = expand_template(b, float(b.get("clip_secs", 4)))
+        # PACE THE PICTURE TO THE READ. The template chose these lengths knowing nothing
+        # about the line that plays over them, so a 6.2s read landed on 3.2s of picture
+        # and the film ran out of images long before it ran out of words. The surplus
+        # used to be absorbed by freezing the final frame - 4.2s of frozen picture on
+        # ATLAS, 6.0s on CREATINE, about a quarter of each film.
+        #
+        # The footage to fix it is already here: these are slices of a ~4s generated
+        # clip and the template was using roughly three quarters of it, at a 1.04s
+        # median, which is a machine-gun cut under a calm voice. So stretch this beat's
+        # shots until they cover this beat's line.
+        #
+        # Bounded three ways: only stretch (never compress, the templates' fast runs are
+        # deliberate), never past 3x, and make_cut still clamps every shot inside its
+        # source clip. A beat that cannot stretch far enough falls through to the
+        # held-frame warning, which now fires on a real shortage instead of on every film.
+        if b.get("line"):
+            _vd = adur(f"{out}/voice/{b['id']}.mp3")
+            _pic = sum(float(c["len"]) for c in beat_cuts)
+            if _vd > _pic + 0.1 and _pic > 0.1:
+                _k = min(_vd / _pic, 3.0)
+                beat_cuts = [dict(c, len=float(c["len"]) * _k) for c in beat_cuts]
         # A per-shot camera choice from the screenplay overrides whatever move the
         # template happened to carry. Without this every template that used `punch`
         # produced the same drift, which read as a rendering artefact rather than style.
@@ -820,13 +841,40 @@ def cut(film, out):
           f"{sorted(dur(p) for p in pieces)[len(pieces)//2]:.2f}s")
 
     # Once cues can move they can collide, and two voices talking over each other is
-    # not an L-cut, it is a mistake. Check against the REAL audio length rather than the
-    # caption length, because the voice keeps playing after its caption disappears.
-    # A caption may not still be on screen when the next one arrives: the text renders
-    # on top of itself (seen in the first rendered shorts). Clamp display length to the
-    # gap to the next cue. The AUDIO is deliberately not touched - an L-cut is a real
-    # edit and voice overlap is reported separately below.
+    # not an L-cut, it is a mistake.
+    #
+    # This used to only REPORT the collision and then ship it, and every one of the
+    # first 13 short films tripped the warning. On ATLAS the entire last line was
+    # playing underneath the previous one:
+    #     voice stem 04_turn.mp3   -> "atlas buy it once"
+    #     master, final 3.5s       -> "the trade and we are not going to pretend..."
+    # The warning had no consumer, which is the same bug shape as the truncated last
+    # line above: measured, printed, delivered.
+    #
+    # So the schedule is enforced now. A line may not begin until the previous line has
+    # finished, plus a breath. audio_lead stays a PREFERENCE: it can pull a line early
+    # into silence, never into the line before it.
+    #
+    # This does not fix the root cause, which is authoring - a 6.2s read on a 3.2s beat
+    # is too much copy for the picture, and the held-frame warning at the end of the cut
+    # is where that shows up. But a late line is a late line, and two simultaneous lines
+    # are neither line.
+    #
+    # Then: a caption may not still be on screen when the next one arrives (the text
+    # renders on top of itself, seen in the first rendered shorts), so display length is
+    # clamped to the gap to the next cue. That clamp runs AFTER the re-timing, on the
+    # corrected starts.
     cues.sort(key=lambda c: c[0])
+    BREATH = 0.12
+    floor, pushed = 0.0, 0.0
+    for i, (start, length, line, vp) in enumerate(cues):
+        s = max(start, floor)
+        pushed = max(pushed, s - start)
+        cues[i] = (s, length, line, vp)
+        floor = s + (adur(vp) if os.path.exists(vp) else 1.2) + BREATH
+    if pushed > 0.05:
+        print(f"    voices re-timed: worst line moved {pushed:.2f}s later "
+              f"so it does not play under the one before it")
     for i in range(len(cues) - 1):
         start, length, line, vp = cues[i]
         gap = cues[i + 1][0] - start - 0.08
@@ -862,7 +910,10 @@ def cut(film, out):
     for cstart, _cl, _line, cvp in cues:
         if os.path.exists(cvp):
             audio_end = max(audio_end, cstart + adur(cvp))
-    over = min(4.0, audio_end - total)
+    # Raised from 4.0s: with voices scheduled sequentially the final line can
+    # start later than it used to, and a cut-off last word is worse than a
+    # longer outro on a held frame.
+    over = min(6.0, audio_end - total)
     if over > 0.05:
         held = f"{work}/_joined_held.mp4"
         r = sh("ffmpeg", "-y", "-v", "error", "-i", joined, "-vf",
@@ -871,6 +922,10 @@ def cut(film, out):
                "-pix_fmt", "yuv420p", "-an", held)
         if os.path.exists(held):
             print(f"    held the last frame {over:.2f}s so the final line finishes")
+            if over > 2.0:
+                print(f"    !! {over:.2f}s of that is held frame - there is more\n"
+                      f"       copy than picture in this film; shorten the read\n"
+                      f"       or give the last beats more shots")
             joined = held
             total = dur(joined)
         else:

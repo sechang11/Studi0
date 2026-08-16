@@ -15,9 +15,18 @@ asked for come back. A film that scores high is saying its script. A film that s
 is either mis-speaking it or the mix has buried it under the score - and the report says
 which by also reporting the voice stem's own level.
 
-Not a pass/fail gate. ASR on a mixed track with music under it is imperfect, and a low
-score is a flag for a listen, not a verdict. The transcript is printed beside the script
-so the difference is visible rather than asserted.
+WHAT THE SCORE CANNOT TELL YOU, learned from the transcripts. Granite Speech is an LLM
+with an audio input, not an acoustic transcriber, and it PARAPHRASES: "less settled"
+came back as "less well-studied", "borrowed in 1954" as "copyrighted in 1950". An
+acoustic model mangles phonemes; this one rewrites meaning. So a middling recall score is
+NOT evidence of a dropout and must not be read as one.
+
+WHAT IT IS GOOD FOR is the signature it did catch: a whole clause missing from the END
+while everything before it transcribes cleanly. That is truncation, and it found the
+cut-off last line in all six films rendered before the cutter was fixed. So `tail` -
+the recall of the LAST line alone - is reported beside the overall recall, because that
+is the number that separates "cut off" from "paraphrased". A low tail with a healthy
+body is a real defect; a low overall with a healthy tail is the model being chatty.
 """
 import argparse
 import json
@@ -37,9 +46,27 @@ STOP = set("a an the and or but if of to in on at for with from by is are was we
            "up out about into over than then there here what which who when".split())
 
 
+# ASR writes numbers as digits; scripts write them as words. Without this every number
+# word counts as a miss - hook-lift, a film about the number twelve, scored 40% on a
+# perfectly good read.
+NUM = {"zero": "0", "one": "1", "two": "2", "three": "3", "four": "4", "five": "5",
+       "six": "6", "seven": "7", "eight": "8", "nine": "9", "ten": "10",
+       "eleven": "11", "twelve": "12", "thirteen": "13", "fourteen": "14",
+       "fifteen": "15", "sixteen": "16", "seventeen": "17", "eighteen": "18",
+       "nineteen": "19", "twenty": "20", "thirty": "30", "forty": "40", "fifty": "50",
+       "sixty": "60", "seventy": "70", "eighty": "80", "ninety": "90",
+       "hundred": "100", "thousand": "1000"}
+
+
 def words(s):
-    return [w for w in re.findall(r"[a-z']+", str(s).lower()) if w not in STOP
-            and len(w) > 2]
+    out = []
+    for w in re.findall(r"[a-z']+|\d+", str(s).lower()):
+        w = NUM.get(w, w)
+        if w in STOP:
+            continue
+        if w.isdigit() or len(w) > 2:
+            out.append(w)
+    return out
 
 
 def main():
@@ -82,11 +109,21 @@ def main():
         want, heard = words(script), set(words(text))
         hit = [x for x in want if x in heard]
         score = len(hit) / max(1, len(want))
+        # The LAST line alone. A low tail with a healthy body is truncation - a real
+        # defect. A low overall with a healthy tail is the LLM paraphrasing.
+        last = (r.get("script") or [""])[-1]
+        lw = words(last)
+        tail = (len([x for x in lw if x in heard]) / len(lw)) if lw else None
         scores.append(score)
-        out.append({"id": r["id"], "recall": round(score, 3), "words": len(want),
-                    "script": script, "transcript": text})
-        print("%-22s recall %.0f%%  (%d/%d content words)"
-              % (r["id"], 100 * score, len(hit), len(want)))
+        out.append({"id": r["id"], "recall": round(score, 3),
+                    "tail": round(tail, 3) if tail is not None else None,
+                    "words": len(want), "script": script, "transcript": text})
+        print("%-22s recall %.0f%%  tail %s  (%d/%d content words)"
+              % (r["id"], 100 * score,
+                 "%3.0f%%" % (100 * tail) if tail is not None else "  -",
+                 len(hit), len(want)))
+        if tail is not None and tail < 0.5:
+            print("   LOW TAIL - the last line may be cut off: %r" % last[:120])
         if score < 0.6:
             print("   SCRIPT: %s" % script[:200])
             print("   HEARD : %s" % text[:200])
