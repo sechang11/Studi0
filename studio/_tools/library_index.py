@@ -113,7 +113,10 @@ KINDS = {"model": "models",
          # browse view already renders - so they come in through the same door rather
          # than getting a page of their own. Their samples are mp3s, wired up by
          # _audio_sample below.
-         "sfx": "sfx", "cue": "cues", "voice": "voices", "soundscape": "soundscapes"}
+         "sfx": "sfx", "cue": "cues", "voice": "voices", "soundscape": "soundscapes",
+         # The director-craft encyclopedia: 209 variables, 1067 rendered panels. Its only
+         # consumer was the wizard's pickers, so it could be USED and never READ.
+         "craft": "cards"}
 
 # Folders whose cards are heard rather than looked at.
 AUDIO_KINDS = {"sfx", "cues", "voices", "soundscapes"}
@@ -462,14 +465,24 @@ def browse(kind):
             # card face (role, dialect, size, reachability), so it travels along.
             "card": card if (folder == "models" or folder in AUDIO_KINDS) else None,
             # the sound department: what kind of thing this is, and something to play
-            "category": card.get("category"),
+            # craft cards: the written claim, the option panels, and - for the 72 that
+            # cannot be shown in one frame - the reason, which is content, not a gap.
+            "variable": card.get("variable"),
+            "claim": card.get("claim"),
+            "not_visual": card.get("not_visual"),
+            "panels": card.get("panels") if folder == "cards" else None,
+            "category": card.get("category") or (
+                (card.get("variable") or "").split(".")[0] if folder == "cards" else None),
             "keywords": card.get("keywords"),
             "tempo": card.get("tempo"),
             "audio": _audio_sample(folder, cid) if folder in AUDIO_KINDS else None,
         })
     # Cards with nothing to show sort last, but they are still on the page - that is the
     # coverage gap, and it is the thing worth acting on.
-    if folder in AUDIO_KINDS:
+    if folder == "cards":
+        # by family (shot, light, anime...) then variable name - how a reference is read
+        out.sort(key=lambda c: (c["category"] or "zz", c["variable"] or c["id"]))
+    elif folder in AUDIO_KINDS:
         # Sorting audio by "has a cover" would sort by nothing, since none of them do.
         # Category then name is the order someone actually browses sound in.
         out.sort(key=lambda c: (c["category"] or "zz", c["id"]))

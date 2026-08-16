@@ -122,7 +122,35 @@ def _bus(work, tag, items, target, total):
     return stem if os.path.exists(stem) else None
 
 
-def mix_master(work, vertical, total, voices, musics, sfxs, final, slam):
+# The duck value that reproduces the mix this module shipped before soundscapes were
+# wired. It is the MEDIAN non-zero duck across the eight cards, not a preference:
+# 0.5 0.6 0.6 0.6 0.7 0.7 0.8 -> 0.6. So a card at 0.6 changes nothing and every other
+# card scales against a real anchor.
+DUCK_ANCHOR = 0.6
+
+
+def _scape_levels(scape):
+    """(music_lufs_offset_db, duck_scale) from a soundscape card, or the no-op pair.
+
+    Returns None for the music offset when the card asks for no score at all, which the
+    caller turns into "drop the bus" rather than "drive it to -inf".
+    """
+    import math
+    if not scape:
+        return 0.0, 1.0
+    lvl = scape.get("music_level")
+    if lvl is None:
+        off = 0.0
+    elif float(lvl) <= 0:
+        off = None
+    else:
+        off = 20.0 * math.log10(float(lvl))
+    d = scape.get("duck")
+    scale = 1.0 if d is None else (float(d) / DUCK_ANCHOR)
+    return off, scale
+
+
+def mix_master(work, vertical, total, voices, musics, sfxs, final, slam, scape=None):
     """Three levelled buses, score and effects sidechain-ducked under dialogue, mixed,
     two-pass mastered, muxed under the finished picture.
 
@@ -130,8 +158,17 @@ def mix_master(work, vertical, total, voices, musics, sfxs, final, slam):
     moving `at`, exactly as before). musics/sfxs: [(at, level, path)].
     Returns final on success, None when every bus is empty (the caller decides whether
     silence was DECLARED - this module never ships it silently)."""
+    # A soundscape card, when the film names one, moves the score level and the ducking.
+    # Everything else about this mix is unchanged, and a film with no soundscape takes
+    # the same path it always did.
+    mus_off, duck_scale = _scape_levels(scape)
+    if scape:
+        print(f"    soundscape {scape.get('id', '?')}: "
+              + ("score off" if mus_off is None else f"score {mus_off:+.1f} dB")
+              + f", duck x{duck_scale:.2f}")
     vbus = _bus(work, "voice", [(at, 1.0, p) for at, p in voices], VOICE_LUFS, total)
-    mbus = _bus(work, "mus", musics, MUSIC_LUFS, total)
+    mbus = (None if mus_off is None
+            else _bus(work, "mus", musics, MUSIC_LUFS + mus_off, total))
     sbus = _bus(work, "sfx", sfxs, SFX_LUFS, total)
     if not any((vbus, mbus, sbus)):
         return None
@@ -152,6 +189,12 @@ def mix_master(work, vertical, total, voices, musics, sfxs, final, slam):
         for b in ("mus", "sfx"):
             if b in idx:
                 thr, ratio = DUCK[b]
+                # duck 0 on the card means "do not duck at all", so the sidechain is
+                # bypassed rather than given ratio 1, which is not the same filter.
+                if duck_scale <= 0:
+                    mix_labels.append(f"[{idx[b]}:a]")
+                    continue
+                ratio = max(1.5, min(20.0, ratio * duck_scale))
                 filt.append(f"[{idx[b]}:a][k{b}]sidechaincompress=threshold={thr}:"
                             f"ratio={ratio}:attack=20:release=400[d{b}]")
                 mix_labels.append(f"[d{b}]")

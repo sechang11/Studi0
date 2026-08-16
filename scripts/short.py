@@ -1081,8 +1081,19 @@ def cut(film, out):
         os.rename(final, f"{out}/{slug}.prev{n}.mp4")
         print(f"    archived previous master -> {slug}.prev{n}.mp4")
 
+    # A film may name a soundscape; its card carries the scene's mix intention. Loaded
+    # here rather than inside the mixer so an unknown id fails loudly at the film, which
+    # is where the typo is.
+    _scape = None
+    if film.get("soundscape"):
+        _sp = os.path.join(os.path.dirname(HERE), "studio", "soundscapes",
+                           str(film["soundscape"]) + ".json")
+        try:
+            _scape = json.load(open(_sp, encoding="utf-8"))
+        except OSError:
+            print(f"    ! no soundscape card: {film['soundscape']}", file=sys.stderr)
     got = sound_dept.mix_master(work, vertical, total, voices_l, musics_l, sfxs_l,
-                                final, slam)
+                                final, slam, scape=_scape)
     if not got:
         if film.get("silent"):
             # Declared silent. Intent is stated in the film, never inferred from an

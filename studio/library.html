@@ -166,8 +166,23 @@
 .audcard .kw{display:flex;flex-wrap:wrap;gap:4px;margin:6px 0 2px}
 .audcard .kw span{font-size:10px;color:var(--dim);border:1px solid var(--line);
   border-radius:9px;padding:1px 7px}
+.audcard .mfacts{display:flex;flex-wrap:wrap;gap:3px 10px;margin-top:6px}
 .audcard .noaud{margin-top:8px;font-size:11px;color:var(--dim);font-style:italic}
 .audcard.blocked{opacity:.62}
+.craftcard h4{display:flex;justify-content:space-between;align-items:baseline;gap:8px;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;
+  /* a long variable name must wrap rather than shove the family badge off the card */
+  min-width:0;word-break:break-all}
+.craftcard h4 .cat{flex:0 0 auto;word-break:normal}
+.craftcard .panels{display:flex;gap:6px;overflow-x:auto;margin-top:8px;padding-bottom:4px}
+.craftcard .panels figure{margin:0;flex:0 0 108px}
+.craftcard .panels img{width:108px;height:108px;object-fit:cover;border-radius:5px;
+  background:var(--line);display:block}
+.craftcard .panels figcaption{font-size:10px;color:var(--dim);margin-top:3px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.craftcard .panels figure.ctl img{outline:2px solid var(--accent);outline-offset:-2px}
+.craftcard .notvis{margin-top:8px;font-size:11px;color:var(--dim);font-style:italic;
+  border-left:2px solid var(--line);padding-left:8px}
 </style>
 </head>
 <body>
@@ -236,7 +251,9 @@ function goBack(){
 const KINDS=[["model","models"],["place","places"],["character","characters"],["style","styles"],
              ["look","looks"],["emotion","emotions"],["motion","motions"],["camera","cameras"],
              // the sound department - cards you listen to rather than look at
-             ["sfx","sfx"],["cue","cues"],["voice","voices"],["soundscape","soundscapes"]];
+             ["sfx","sfx"],["cue","cues"],["voice","voices"],["soundscape","soundscapes"],
+             // the director-craft encyclopedia
+             ["craft","cards"]];
 const AUDIOKINDS=["sfx","cues","voices","soundscapes"];
 const PAGE_SIZES=[60,100,300,1000];
 const OPEN = {};   // which facets are expanded
@@ -489,13 +506,41 @@ function setMode(k, replaying){
       }).join("") || "<p>no model cards - run studio/_tools/model_cards.py</p>";
       return;
     }
+    if(k==="cards"){
+      // A reference page, not a thumbnail grid: the claim is the content and the panels
+      // are the evidence for it. Panels lazy-load - 1067 images is not a first paint.
+      const shown=b.cards.filter(c=>(c.panels||[]).length).length;
+      document.getElementById("stat").textContent =
+        `${b.total} craft variables · ${shown} with panels · ` +
+        `${b.total-shown} not visual in one frame`;
+      document.getElementById("cardgrid").innerHTML = b.cards.map(c=>{
+        const ps=c.panels||[];
+        const strip = ps.length
+          ? `<div class="panels">${ps.map(p=>`<figure${p.control?' class="ctl"':''}>
+               <img loading="lazy" src="${esc(p.sample||"")}" alt="${esc(p.value||"")}">
+               <figcaption>${esc(p.value||"")}${p.control?" ·  control":""}</figcaption>
+             </figure>`).join("")}</div>`
+          // Not a gap. These 72 cards say why a single frame cannot carry them, and that
+          // sentence is the most useful thing on the card.
+          : `<div class="notvis">${esc(c.not_visual||"no panels rendered")}</div>`;
+        return `<div class="cd craftcard">
+          <h4>${esc(c.variable||c.id)}<span class="cat">${esc(c.category||"")}</span></h4>
+          <div class="mdesc">${esc(c.claim||c.desc||"")}</div>
+          ${strip}
+        </div>`;
+      }).join("") || "<p>no craft cards</p>";
+      return;
+    }
     if(AUDIOKINDS.includes(k)){
       // Heard, not looked at. Same reasoning as the model branch above: these cards have
       // no frames, so a thumbnail grid would show a wall of blanks. The backend sorts
       // them by category, so they arrive grouped and each one wears its category.
       const playable=b.cards.filter(c=>c.audio).length;
-      document.getElementById("stat").textContent =
-        `${b.total} ${b.kind} · ${playable} playable`;
+      // Soundscapes are mix recipes and own no audio, so "N playable" would be counting
+      // the absence of something they were never meant to have.
+      document.getElementById("stat").textContent = b.kind==="soundscapes"
+        ? `${b.total} soundscapes · mix recipes, not sounds`
+        : `${b.total} ${b.kind} · ${playable} playable`;
       document.getElementById("cardgrid").innerHTML = b.cards.map(c=>{
         const d=c.card||c;
         const kw=(c.keywords||"").split(/\s+/).filter(Boolean)
@@ -505,7 +550,13 @@ function setMode(k, replaying){
           (d.bpm!==undefined&&d.bpm!==null&&d.bpm!=="")?`bpm <b>${esc(String(d.bpm))}</b>`:"",
           d.key?`key <b>${esc(d.key)}</b>`:"",
           d.seconds?`<b>${esc(String(d.seconds))}s</b>`:"",
-          d.engine?`engine <b>${esc(d.engine)}</b>`:""
+          d.engine?`engine <b>${esc(d.engine)}</b>`:"",
+          // a soundscape IS its mix parameters - that is the whole card
+          d.bed_level!==undefined?`bed <b>${esc(String(d.bed_level))}</b>`:"",
+          d.music_level!==undefined?`music <b>${esc(String(d.music_level))}</b>`:"",
+          d.duck!==undefined?`duck <b>${esc(String(d.duck))}</b>`:"",
+          d.reverb?`reverb <b>${esc(d.reverb)}</b>`:"",
+          d.ambience?`bed: ${esc(d.ambience)}`:""
         ].filter(Boolean).map(s=>`<span>${s}</span>`).join("");
         // A blocked voice is listed but has nothing to play, and says why. That is the
         // intended state - the four likeness packs are visible so nobody re-adds them by
@@ -514,7 +565,9 @@ function setMode(k, replaying){
           ? `<audio controls preload="none" src="${esc(c.audio)}"></audio>`
           : `<div class="noaud">${c.status==="blocked"
                ? "blocked - reference audio is not served"
-               : "no sample rendered yet"}</div>`;
+               : (b.kind==="soundscapes"
+                  ? "a mix recipe, not a sound - see the levels above"
+                  : "no sample rendered yet")}</div>`;
         return `<div class="cd audcard ${c.status==="blocked"?"blocked":""}">
           <h4>${esc(c.name||c.id)}<span class="cat">${esc(c.category||"-")}</span></h4>
           <div class="mdesc">${esc(c.desc||"")}</div>

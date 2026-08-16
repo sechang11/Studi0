@@ -1687,8 +1687,14 @@ class H(http.server.SimpleHTTPRequestHandler):
             return self._send(gallery())
         if path == "/api/templates":
             return self._send(templates())
-        if path == "/api/library":
-            return self._send(library())
+        # NOTE: there is no second "/api/library" here. There used to be, returning
+        # library() - the GROUPS enumeration of every preset folder - and it was
+        # unreachable, because the handler at the top of do_GET claims that path first.
+        # That is why the whole sound department was enumerated on every boot and
+        # rendered nowhere: its only other caller is the startup banner, which prints a
+        # count and discards the result. sfx, cues, voices and soundscapes now reach the
+        # UI as library KINDS instead. Do not re-add a route here without checking
+        # whether the path is already taken above.
         if path == "/api/cards":
             return self._send(cards())
         if path == "/api/variables":
