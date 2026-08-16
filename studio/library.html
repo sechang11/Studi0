@@ -159,6 +159,15 @@
     color:var(--ink);border-radius:6px;padding:5px 8px;font:inherit;font-size:12px;margin-top:4px}
   .reasonbox .rowend{text-align:right;margin-top:6px}
   .reasonbox .cancel{display:inline-block;width:auto;background:none;color:var(--dim)}
+.audcard h4{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.audcard .cat{font-size:11px;font-weight:400;color:var(--accent);text-transform:uppercase;
+  letter-spacing:.06em;white-space:nowrap}
+.audcard audio{width:100%;margin-top:8px;height:32px}
+.audcard .kw{display:flex;flex-wrap:wrap;gap:4px;margin:6px 0 2px}
+.audcard .kw span{font-size:10px;color:var(--dim);border:1px solid var(--line);
+  border-radius:9px;padding:1px 7px}
+.audcard .noaud{margin-top:8px;font-size:11px;color:var(--dim);font-style:italic}
+.audcard.blocked{opacity:.62}
 </style>
 </head>
 <body>
@@ -225,7 +234,10 @@ function goBack(){
 }
 // The card kinds that can be browsed one-per-card. Ordered by how often you reach for them.
 const KINDS=[["model","models"],["place","places"],["character","characters"],["style","styles"],
-             ["look","looks"],["emotion","emotions"],["motion","motions"],["camera","cameras"]];
+             ["look","looks"],["emotion","emotions"],["motion","motions"],["camera","cameras"],
+             // the sound department - cards you listen to rather than look at
+             ["sfx","sfx"],["cue","cues"],["voice","voices"],["soundscape","soundscapes"]];
+const AUDIOKINDS=["sfx","cues","voices","soundscapes"];
 const PAGE_SIZES=[60,100,300,1000];
 const OPEN = {};   // which facets are expanded
 
@@ -475,6 +487,42 @@ function setMode(k, replaying){
           </div>
         </div>`;
       }).join("") || "<p>no model cards - run studio/_tools/model_cards.py</p>";
+      return;
+    }
+    if(AUDIOKINDS.includes(k)){
+      // Heard, not looked at. Same reasoning as the model branch above: these cards have
+      // no frames, so a thumbnail grid would show a wall of blanks. The backend sorts
+      // them by category, so they arrive grouped and each one wears its category.
+      const playable=b.cards.filter(c=>c.audio).length;
+      document.getElementById("stat").textContent =
+        `${b.total} ${b.kind} · ${playable} playable`;
+      document.getElementById("cardgrid").innerHTML = b.cards.map(c=>{
+        const d=c.card||c;
+        const kw=(c.keywords||"").split(/\s+/).filter(Boolean)
+                 .map(w=>`<span>${esc(w)}</span>`).join("");
+        const facts=[
+          c.tempo?`tempo <b>${esc(c.tempo)}</b>`:"",
+          (d.bpm!==undefined&&d.bpm!==null&&d.bpm!=="")?`bpm <b>${esc(String(d.bpm))}</b>`:"",
+          d.key?`key <b>${esc(d.key)}</b>`:"",
+          d.seconds?`<b>${esc(String(d.seconds))}s</b>`:"",
+          d.engine?`engine <b>${esc(d.engine)}</b>`:""
+        ].filter(Boolean).map(s=>`<span>${s}</span>`).join("");
+        // A blocked voice is listed but has nothing to play, and says why. That is the
+        // intended state - the four likeness packs are visible so nobody re-adds them by
+        // accident, and their reference audio is never served.
+        const player = c.audio
+          ? `<audio controls preload="none" src="${esc(c.audio)}"></audio>`
+          : `<div class="noaud">${c.status==="blocked"
+               ? "blocked - reference audio is not served"
+               : "no sample rendered yet"}</div>`;
+        return `<div class="cd audcard ${c.status==="blocked"?"blocked":""}">
+          <h4>${esc(c.name||c.id)}<span class="cat">${esc(c.category||"-")}</span></h4>
+          <div class="mdesc">${esc(c.desc||"")}</div>
+          ${kw?`<div class="kw">${kw}</div>`:""}
+          ${facts?`<div class="mfacts">${facts}</div>`:""}
+          ${player}
+        </div>`;
+      }).join("") || "<p>no cards in this folder</p>";
       return;
     }
     drawCards();

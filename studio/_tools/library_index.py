@@ -108,7 +108,40 @@ def purity(item, facet):
 # grid cannot: the grid shows generations, and one look with 300 frames drowns one with 3.
 KINDS = {"model": "models",
          "look": "looks", "place": "places", "style": "styles", "emotion": "emotions",
-         "character": "characters", "motion": "motions", "camera": "cameras"}
+         "character": "characters", "motion": "motions", "camera": "cameras",
+         # The sound department. These are cards with no frames - like models, which the
+         # browse view already renders - so they come in through the same door rather
+         # than getting a page of their own. Their samples are mp3s, wired up by
+         # _audio_sample below.
+         "sfx": "sfx", "cue": "cues", "voice": "voices", "soundscape": "soundscapes"}
+
+# Folders whose cards are heard rather than looked at.
+AUDIO_KINDS = {"sfx", "cues", "voices", "soundscapes"}
+
+
+def _audio_sample(folder, cid):
+    """The playable sample for an audio card, or None.
+
+    Audio cards have no frames, so without this the browse view can show a name and a
+    description and nothing to listen to, which is not a library.
+
+    Voice auditions are named <group>_<id>.mp3 (female_female_01, higgs_audio_belinda)
+    and the audition render DELIBERATELY SKIPS the four blocked likeness packs - so a
+    blocked voice resolves to None here, and is listed without any way to hear it. That
+    is not an accident to fix.
+    """
+    p = os.path.join(STUDIO, "samples", folder, cid + ".mp3")
+    if os.path.exists(p):
+        return "/samples/%s/%s.mp3" % (folder, cid)
+    if folder == "voices":
+        d = os.path.join(STUDIO, "samples", "audition")
+        try:
+            for fn in sorted(os.listdir(d)):
+                if fn.endswith("_%s.mp3" % cid):
+                    return "/samples/audition/" + fn
+        except OSError:
+            pass
+    return None
 FAVS = os.path.join(STUDIO, "favourites.json")
 
 
@@ -427,12 +460,23 @@ def browse(kind):
             "alt_ids": [f["id"] for f in frames[1:6]],
             # Model cards are read, not glanced at - the browse view renders the whole
             # card face (role, dialect, size, reachability), so it travels along.
-            "card": card if folder == "models" else None,
+            "card": card if (folder == "models" or folder in AUDIO_KINDS) else None,
+            # the sound department: what kind of thing this is, and something to play
+            "category": card.get("category"),
+            "keywords": card.get("keywords"),
+            "tempo": card.get("tempo"),
+            "audio": _audio_sample(folder, cid) if folder in AUDIO_KINDS else None,
         })
     # Cards with nothing to show sort last, but they are still on the page - that is the
     # coverage gap, and it is the thing worth acting on.
-    out.sort(key=lambda c: (c["cover"] is None, c["purest"] if c["purest"] is not None else 9,
-                            -c["frames"]))
+    if folder in AUDIO_KINDS:
+        # Sorting audio by "has a cover" would sort by nothing, since none of them do.
+        # Category then name is the order someone actually browses sound in.
+        out.sort(key=lambda c: (c["category"] or "zz", c["id"]))
+    else:
+        out.sort(key=lambda c: (c["cover"] is None,
+                                c["purest"] if c["purest"] is not None else 9,
+                                -c["frames"]))
     return {"kind": folder, "facet": facet, "cards": out,
             "total": len(out), "empty": sum(1 for c in out if not c["cover"])}
 
