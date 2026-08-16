@@ -207,6 +207,33 @@ def fx_chain(fx, w, h, fps, seed=0, length=2.0):
     return ",".join(out)
 
 
+def _restates(caption, line):
+    """True when a story caption only says again what the voice already says.
+
+    Both layers are legitimate - story captions carry plot under a 0.2s cut, dialogue
+    captions serve sound-off viewing - but a beat carrying both prints one sentence
+    twice in two sizes, which is what the short films were doing on every frame.
+
+    Only an exact restatement is suppressed: if the caption contains a single word the
+    spoken line does not, it is carrying information and it stays. Beats with no line
+    keep their caption unconditionally, which is the case this layer was built for.
+    Trailing "s" is stripped because the authored restatements drift by exactly that
+    ("others tear" against "other pack tears").
+    """
+    if not caption or not line:
+        return False
+    said = (line or {}).get("text") or ""
+    if not said:
+        return False
+
+    def bag(s):
+        return {w[:-1] if len(w) > 3 and w.endswith("s") else w
+                for w in re.findall(r"[a-z]+", s.lower())}
+
+    cap = bag(caption)
+    return bool(cap) and not (cap - bag(said))
+
+
 def wrap_caption(txt, width=46):
     """drawtext does not wrap. A long line runs straight off the side of the frame and the
     start of it is simply lost - which is worse than useless, because it looks deliberate."""
@@ -815,7 +842,7 @@ def cut(film, out):
             sp = f"{out}/sfx/{b['id']}_00001.mp3"
             sfx_cues.append((beat_start + float(b.get("sfx_at", 0.0) or 0.0),
                              float(b.get("sfx_level", 1.0) or 1.0), sp))
-        if b.get("caption"):
+        if b.get("caption") and not _restates(b.get("caption"), b.get("line")):
             caps.append((beat_start, t, b["caption"]))
         if b.get("line"):
             vp = f"{out}/voice/{b['id']}.mp3"
