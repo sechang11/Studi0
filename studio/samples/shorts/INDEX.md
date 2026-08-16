@@ -1,29 +1,29 @@
 # Short-form slate
 
-9 of 20 rendered. Masters are vertical 1080x1920 with voice, score and effects mixed and mastered.
+20 of 20 rendered. Masters are vertical 1080x1920 with voice, score and effects mixed and mastered.
 
 | id | kind | title | secs | LUFS | hook |
 |---|---|---|---|---|---|
-| ad-atlas-pack | commercial | ATLAS | 11.6 | -9.8 | ATLAS / it has been everywhere |
-| ad-lumen-lamp | commercial | LUMEN | 11.4 | -9.5 | LUMEN / light that knows the hour |
-| ad-northwind-tea | commercial | NORTHWIND TEA | 12.0 | -9.6 | NORTHWIND / the slow cup |
-| ad-pace-runner | commercial | PACE | 12.6 | -9.6 | PACE / built for the fifth mile |
-| ad-slow-sunday | commercial | SLOW SUNDAY | 11.1 | -9.7 | SLOW SUNDAY / nowhere to be |
-| ad-tidewater | commercial | TIDEWATER | 13.0 | -9.3 | TIDEWATER / three things, that is all |
-| hook-door | hook | THE DOOR | 9.9 | -9.5 | do not open it / until you know |
-| hook-garden | hook | THE GARDEN | 9.9 | -9.4 | it grew overnight / all of it |
-| hook-library | hook | THE RETURN | - | - |  |
-| hook-lift | hook | FLOOR THIRTEEN | - | - |  |
-| hook-signal | hook | THE SIGNAL | - | - |  |
-| hook-tide | hook | LOW TIDE | - | - |  |
-| sup-caffeine | supplement | CAFFEINE + THEANINE | - | - |  |
-| sup-creatine | supplement | CREATINE | 19.9 | -9.4 | creatine / what it actually does |
-| sup-fibre | supplement | FIBRE | - | - |  |
-| sup-magnesium | supplement | MAGNESIUM | - | - |  |
-| sup-omega3 | supplement | OMEGA-3 | - | - |  |
-| sup-protein | supplement | PROTEIN | - | - |  |
-| sup-sleep | supplement | SLEEP & MELATONIN | - | - |  |
-| sup-vitamin-d | supplement | VITAMIN D | - | - |  |
+| ad-atlas-pack | commercial | ATLAS | 14.8 | -9.5 | ATLAS / it has been everywhere |
+| ad-lumen-lamp | commercial | LUMEN | 13.5 | -9.8 | LUMEN / light that knows the hour |
+| ad-northwind-tea | commercial | NORTHWIND TEA | 15.1 | -9.8 | NORTHWIND / the slow cup |
+| ad-pace-runner | commercial | PACE | 15.4 | -9.9 | PACE / built for the fifth mile |
+| ad-slow-sunday | commercial | SLOW SUNDAY | 14.6 | -9.9 | SLOW SUNDAY / nowhere to be |
+| ad-tidewater | commercial | TIDEWATER | 17.6 | -9.8 | TIDEWATER / three things, that is all |
+| hook-door | hook | THE DOOR | 11.0 | -9.7 | do not open it / until you know |
+| hook-garden | hook | THE GARDEN | 12.5 | -9.8 | it grew overnight / all of it |
+| hook-library | hook | THE RETURN | 16.2 | -9.7 | one book / came back late |
+| hook-lift | hook | FLOOR THIRTEEN | 12.2 | -9.8 | the building has twelve / the lift has thirteen |
+| hook-signal | hook | THE SIGNAL | 12.7 | -9.7 | it repeats / every ninety seconds |
+| hook-tide | hook | LOW TIDE | 13.0 | -10.0 | the sea went out / and did not come back |
+| sup-caffeine | supplement | CAFFEINE + THEANINE | 32.8 | -9.6 | caffeine / the calm version |
+| sup-creatine | supplement | CREATINE | 29.7 | -9.8 | creatine / what it actually does |
+| sup-fibre | supplement | FIBRE | 28.5 | -9.9 | fibre / the boring one that works |
+| sup-magnesium | supplement | MAGNESIUM | 29.7 | -9.9 | magnesium / which one, though |
+| sup-omega3 | supplement | OMEGA-3 | 29.6 | -9.9 | omega-3 / fish oil, honestly |
+| sup-protein | supplement | PROTEIN | 27.5 | -9.8 | protein / how much is enough |
+| sup-sleep | supplement | SLEEP & MELATONIN | 31.0 | -9.9 | melatonin / it is a clock, not a sedative |
+| sup-vitamin-d | supplement | VITAMIN D | 27.6 | -9.9 | vitamin D / the sunlight one |
 
 ## Scripts
 
@@ -81,6 +81,38 @@
 - By Tuesday there were shoots. By Wednesday they were at the fence.
 - It is Friday. The shed is gone.
 
+### hook-library - THE RETURN
+
+- This library has four hundred thousand books. All of them are accounted for.
+- Except one, which was borrowed in 1954 and returned last Thursday.
+- Nobody used a card. The desk was locked. The book is warm.
+
+### hook-lift - FLOOR THIRTEEN
+
+- This building has twelve floors. The plans say twelve. The windows count to twelve.
+- The lift has a button for thirteen.
+- It is not a mistake. People have pressed it.
+
+### hook-signal - THE SIGNAL
+
+- This dish has pointed at the same patch of sky for forty years.
+- Ninety seconds ago it heard something. It heard it again ninety seconds before that.
+- The building was decommissioned in the spring.
+
+### hook-tide - LOW TIDE
+
+- The tide goes out twice a day. Everyone here knows the timing by heart.
+- On Tuesday it went out at nine. On Wednesday it did not come back.
+- There is a road down there. There was never a road down there.
+
+### sup-caffeine - CAFFEINE + THEANINE
+
+- Caffeine blocks the signal that makes you feel tired. It does not add energy - it hides the debt.
+- Green tea carries theanine alongside it, which is why tea tends to feel smoother than the same caffeine from coffee.
+- Together they show up in the research as steadier attention with less of the jittery edge.
+- The catch is the same as always: it has a long tail, and afternoon coffee is tomorrow's tiredness.
+- General information, not medical advice. Talk to a doctor about what fits you.
+
 ### sup-creatine - CREATINE
 
 - Creatine is the most studied sports supplement there is.
@@ -88,4 +120,52 @@
 - That mostly shows up in the last rep or two of a heavy set. Small, but real, and it adds up over months.
 - The research also looks at effects beyond the gym, but that work is younger and less settled.
 - It is cheap, it is well studied, and it is not magic.
+- General information, not medical advice. Talk to a doctor about what fits you.
+
+### sup-fibre - FIBRE
+
+- Fibre is the least glamorous thing on this list and probably the one most people are short on.
+- Some of it dissolves and slows digestion. Some of it does not, and keeps things moving.
+- It also feeds the bacteria in your gut, which is where a lot of the current research is pointed.
+- One practical note: add it slowly and drink water, or you will regret the enthusiasm.
+- General information, not medical advice. Talk to a doctor about what fits you.
+
+### sup-magnesium - MAGNESIUM
+
+- Magnesium is not one thing. What it is bound to changes how much you absorb.
+- Most people get some from food. Seeds, greens, beans, whole grains.
+- Different forms are marketed for different things - sleep, digestion, muscle cramps - and the evidence is stronger for some than others.
+- The honest summary: correcting a real shortfall helps. Adding more on top of enough usually does not.
+- General information, not medical advice. Talk to a doctor about what fits you.
+
+### sup-omega3 - OMEGA-3
+
+- Omega-3s are fats your body cannot make. You have to eat them.
+- Two of them do most of the work in the research: EPA and DHA. Both come mainly from marine sources.
+- Eating fish a couple of times a week gets most people there without a bottle.
+- Supplements are for filling the gap when that does not happen. Freshness matters more than people think - rancid oil is common.
+- General information, not medical advice. Talk to a doctor about what fits you.
+
+### sup-protein - PROTEIN
+
+- Protein is the one most people already understand and still get slightly wrong.
+- The research points at a daily total, spread across the day - not a magic window right after training.
+- Powder is a convenience, not a category of its own. It is food that happens to be easy to carry.
+- Needs go up if you are training hard or older. They do not go up to the numbers on the tub.
+- General information, not medical advice. Talk to a doctor about what fits you.
+
+### sup-sleep - SLEEP & MELATONIN
+
+- Melatonin is a timing signal, not a sedative. It tells your body it is night.
+- Bright light late in the evening delays that signal. Which is why the phone is part of the problem.
+- The clearest use in the research is jet lag and shifted schedules - moving the clock, not forcing sleep.
+- For ordinary bad sleep, the dull advice still beats the bottle: same wake time, dark room, less light at night.
+- General information, not medical advice. Talk to a doctor about what fits you.
+
+### sup-vitamin-d - VITAMIN D
+
+- Your skin makes vitamin D from sunlight. That is the whole reason this one is complicated.
+- Far from the equator, in winter, the sun sits too low for your skin to make much of it at all.
+- Some comes from food. Oily fish, egg yolks, fortified milk.
+- It is one of the few where a blood test actually tells you where you stand, instead of guessing.
 - General information, not medical advice. Talk to a doctor about what fits you.

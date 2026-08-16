@@ -244,3 +244,45 @@ written down in this repo from an earlier session.
 
 New tools: `clipmetrics`, `multishot`, `motion_shelf`, `look_sheets`, `reverse_battery`,
 `shorts_specs`, `overnight_shorts`, `shorts_deliver`, `shorts_asr`, `overnight_report`.
+
+### 2026-08-16 - the slate, and three defects between "rendered" and "watchable"
+
+The 20-film slate finished 20/20 with 0 failures. Every one of them was also wrong, in
+three ways that every existing check passed:
+
+| Commit | What | Evidence |
+|---|---|---|
+| `900d1ad` | **Voices were talking over each other in all 13 films then rendered.** The cutter measured the collision, printed `!! voice overlap`, and wrote the master anyway - its own comment says overlap "is not an L-cut, it is a mistake". The warning had no consumer. Lines are now scheduled sequentially | ATLAS voice stem: "atlas buy it once". ATLAS master, final 3.5s: "the trade and we are not going to pretend otherwise" - the WRONG line. The closing line was playing under the previous one |
+| `900d1ad` | **More copy than picture**, which the collision had been hiding. The overflow went to a frozen final frame - a quarter of each film. Each beat's shots now stretch to cover its own read, from clip material already on disk and being discarded | ATLAS 10.3s picture under 14.5s of speech, 4.23s frozen; CREATINE 6.00s frozen, which HIT THE CAP. After: 0 freezes and 0 collisions across all 13 re-cuts |
+| `b7a77b9` | **Every beat printed its sentence twice**, once as a spoken-line caption and once smaller as a story caption. Found by looking at a contact strip, not by measuring | 121 captions across the shorts, 56 suppressed as pure restatements; derby.json's 35 captions untouched |
+| `642834e` | **LTX-2.5 was catalogued, verified, rendered - and invisible.** The gallery is the catalogue PLUS an authored teaching sentence, and 51 had no sentence, so the publisher skipped it silently. I had reported it as done | 34 published entries -> 35, 0 missing |
+| `3ba7c8c` | Four LTX-2.5 model cards still said "gated download pending" and one said `unavailable` for a file that is on disk and loaded by a working workflow | 18.2 GB promoted to ready, stamped MEASURED |
+| `c05fa2f` | **AAC adds ~1 dB of true peak, and nothing was measuring after the encode.** The limiter hit -1.2 dBFS exactly; the shipped MP4 was -0.2. Ceiling moved 0.87 -> 0.78, set for the file that ships. Adds `qc_slate.py`, which measures DELIVERED masters | pace -0.17 -> -1.33 dBTP, magnesium -0.13 -> -1.84, loudness unchanged |
+
+**The slate, verified by ear rather than by counting.** ASR over all 20 finished masters:
+mean recall **98%**, with 14 films at 100% recall and 100% tail. Before the cutter fixes
+ATLAS was 91% recall on a 33% tail, hook-lift 60%, creatine 68%. Those low scores were
+voices talking over each other - not the paraphrase I first blamed - and they came back
+the moment the lines stopped colliding.
+
+**The tail metric earned itself.** Overall ASR recall could not separate "the model
+paraphrased" from "the line is missing" - Granite rewrites meaning, so a middling score
+condemns good films. Recall of the LAST LINE ALONE does separate them, and it is what
+found the ATLAS defect: recall 91%, tail 33%. A low tail with a healthy body is a real
+defect; a low overall with a healthy tail is the model being chatty.
+
+**And the correction that came with it.** An hour earlier I attributed those middling
+recall scores to paraphrase. Paraphrase is real and documented, but it was not the main
+cause: the scripts were being read over each other.
+
+**Three wrong answers from the same typo class.** `find -iname "*spatial_upscaler*"`
+returns nothing for a file named `...-spatial-upscaler-...`. Card ids use underscores,
+filenames use hyphens. It produced a confident "not on disk" about a model that is on
+disk. The fixer that followed asserts nothing - it resolves each file against the models
+tree AND checks the workflow loads it, promotes only what passes both, and prints what it
+left alone.
+
+The through-line for the whole night, in one sentence: **every one of these defects was
+already detected by something in this repo, and none of them had a consumer.** The
+overlap warning printed. The held-frame cap silently truncated. The capability sat
+verified in the catalogue. Detection without a consumer is not a check, it is a comment.

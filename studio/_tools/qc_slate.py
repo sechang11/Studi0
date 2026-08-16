@@ -15,9 +15,12 @@ Checks, and why each one is here rather than assumed:
   true peak       dBTP. Under -1.0 is the ask. Anything above -0.5 is close enough to
                   clipping that a lossy re-encode on the platform's side can push it over,
                   which is the actual failure - it sounds fine here and crunches there.
-  frozen tail     compares the last second against the second before it. A held final
-                  frame is legitimate as an outro, but a LONG one means the film ran out
-                  of picture, and that is worth seeing rather than discovering on a phone.
+  tail motion     clipmetrics motion over the last 2 seconds, against the static
+                  floor of 0.001 this project measured. A held final frame is legitimate
+                  as an outro, but a film that ran out of picture sits ON the floor, and
+                  that is worth seeing rather than discovering on a phone. Uses
+                  clipmetrics rather than a fresh measure, because the first version of
+                  this check invented one and flagged four healthy films.
 
 Prints one line per film and a count of what is out of range. Exit 0 always - this
 reports, it does not gate, because the person reading it is the gate.
@@ -64,15 +67,36 @@ def loudness(p):
     return (float(i.group(1)) if i else None), (float(tp.group(1)) if tp else None)
 
 
-def frozen_tail(p, dur):
-    """How many of the last 2 seconds are a still frame, by frame-to-frame difference."""
+# The static floor this project measured for clipmetrics motion is 0.001. A held frame
+# sits on it; anything an order of magnitude above is moving.
+STATIC_FLOOR = 0.001
+FROZEN_BELOW = 0.01
+
+
+def tail_motion(p, dur):
+    """Motion in the last 2 seconds, via clipmetrics - NOT a new instrument.
+
+    The first version of this counted ffmpeg scene-change hits above a threshold I
+    guessed, and it flagged four healthy supplement films for a "frozen tail" that
+    measures 0.179 on clipmetrics against a 0.001 static floor - 179x the floor, i.e.
+    an ordinary calm ending to a 28-second read.
+
+    That is the third time in this project a hand-rolled measure has produced a
+    confident wrong verdict while a calibrated one sat in the repo unused (see the
+    SSIM-drift and ebur128 mistakes). A QC pass that flags healthy work is worse than
+    none, because it teaches you to skip the real flags. So this asks clipmetrics.
+    """
     if not dur or dur < 3:
-        return 0.0
-    r = sh("ffmpeg", "-v", "error", "-ss", "%.2f" % (dur - 2.0), "-i", p,
-           "-vf", "select='gt(scene,0.0006)',metadata=print:file=-", "-an", "-f", "null", "-")
-    hits = len(re.findall(r"pts_time:", r.stdout or ""))
-    # 2s at 24fps = 48 frames; a live tail changes on most of them
-    return round(max(0.0, 1.0 - hits / 40.0) * 2.0, 2)
+        return None
+    tmp = "/tmp/_qc_tail_%d.mp4" % os.getpid()
+    sh("ffmpeg", "-y", "-v", "error", "-sseof", "-2.0", "-i", p, "-an", tmp)
+    if not os.path.exists(tmp):
+        return None
+    r = sh(sys.executable, os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                        "clipmetrics.py"), tmp)
+    os.remove(tmp)
+    m = re.search(r"motion=([\d.]+)", (r.stdout or "") + (r.stderr or ""))
+    return float(m.group(1)) if m else None
 
 
 def main():
@@ -80,13 +104,14 @@ def main():
     if not files:
         print("nothing delivered under %s" % SHORTS, file=sys.stderr)
         return 0
-    print("%-34s %6s %6s %8s %8s %6s" % ("film", "video", "audio", "LUFS", "dBTP", "frozen"))
+    print("%-34s %6s %6s %8s %8s %8s"
+          % ("film", "video", "audio", "LUFS", "dBTP", "tail mot"))
     bad = []
     for p in files:
         name = os.path.basename(p)[:34]
         v, a = probe_streams(p)
         i, tp = loudness(p)
-        fz = frozen_tail(p, v)
+        fz = tail_motion(p, v)
         flags = []
         if v and a and abs(v - a) > 0.35:
             flags.append("A/V %.2fs apart" % abs(v - a))
@@ -94,12 +119,13 @@ def main():
             flags.append("true peak %.2f" % tp)
         if i is not None and i > -7.0:
             flags.append("hot %.1f LUFS" % i)
-        if fz > 1.5:
-            flags.append("frozen tail %.1fs" % fz)
-        print("%-34s %6.1f %6.1f %8s %8s %6.1f  %s"
+        if fz is not None and fz < FROZEN_BELOW:
+            flags.append("frozen tail (motion %.4f, floor %.3f)" % (fz, STATIC_FLOOR))
+        print("%-34s %6.1f %6.1f %8s %8s %8s  %s"
               % (name, v or 0, a or 0,
                  "%.2f" % i if i is not None else "-",
-                 "%.2f" % tp if tp is not None else "-", fz,
+                 "%.2f" % tp if tp is not None else "-",
+                 "%.3f" % fz if fz is not None else "-",
                  "; ".join(flags)))
         if flags:
             bad.append((name, flags))
