@@ -1,0 +1,100 @@
+{
+  "title": "CAFFEINE + THEANINE",
+  "hook": "caffeine|the calm version",
+  "canvas": [
+    1080,
+    1920
+  ],
+  "fps": 24,
+  "engine": "higgs_v3",
+  "keyframe_engine": "qwen",
+  "kind": "supplement",
+  "style": "clean modern product photography, soft diffused daylight, shallow depth of field, matte surfaces, muted natural palette, minimal composition, crisp focus, high detail",
+  "voices": {
+    "V": {
+      "engine": "higgs_v3",
+      "voice": "voices_examples/female/female_03_alice.wav"
+    }
+  },
+  "music": [
+    {
+      "at": 0,
+      "prefix": "sup_caffeine_score",
+      "bpm": 92,
+      "key": "D major",
+      "seconds": 30,
+      "level": 0.55,
+      "tags": "hopeful rising strings, arpeggiated piano, soft swelling brass, gentle percussion, uplifting, instrumental"
+    }
+  ],
+  "beats": [
+    {
+      "id": "01_open",
+      "template": "hook",
+      "clip_secs": 5,
+      "prompt": "A dark espresso being poured into a small white cup, close-up, warm side light, steam rising",
+      "motion": "The coffee pours and swirls. Steam rises.",
+      "caption": "It hides tiredness, it does not add energy",
+      "line": {
+        "who": "V",
+        "text": "Caffeine blocks the signal that makes you feel tired. It does not add energy - it hides the debt."
+      },
+      "audio_lead": -0.3,
+      "sfx": "espresso pouring into a cup",
+      "sfx_secs": 3.0,
+      "sfx_level": 0.7
+    },
+    {
+      "id": "02_point",
+      "template": "build",
+      "clip_secs": 4,
+      "prompt": "A cup of green tea beside a window in soft morning light, gentle steam, calm composition",
+      "motion": "Steam drifts and curls slowly.",
+      "caption": "Theanine is why tea feels smoother",
+      "line": {
+        "who": "V",
+        "text": "Green tea carries theanine alongside it, which is why tea tends to feel smoother than the same caffeine from coffee."
+      },
+      "audio_lead": -0.3
+    },
+    {
+      "id": "03_detail",
+      "template": "build",
+      "clip_secs": 4,
+      "prompt": "A desk with a notebook, pen and a cup, warm lamp light, focused working mood, shallow focus",
+      "motion": "Light steadies. A page lifts slightly.",
+      "caption": "Steadier attention, less jitter",
+      "line": {
+        "who": "V",
+        "text": "Together they show up in the research as steadier attention with less of the jittery edge."
+      },
+      "audio_lead": -0.3
+    },
+    {
+      "id": "04_turn",
+      "template": "build",
+      "clip_secs": 4,
+      "prompt": "An empty cup beside a dark window at night, low warm light, quiet and still",
+      "motion": "Very still. A faint reflection moves.",
+      "caption": "Afternoon coffee is tomorrow's tiredness",
+      "line": {
+        "who": "V",
+        "text": "The catch is the same as always: it has a long tail, and afternoon coffee is tomorrow's tiredness."
+      },
+      "audio_lead": -0.3
+    },
+    {
+      "id": "05_land",
+      "template": "aftermath",
+      "clip_secs": 4,
+      "prompt": "A clean cup and saucer on a pale surface, soft daylight, minimal",
+      "motion": "Still, light drifting gently.",
+      "caption": "Not medical advice",
+      "line": {
+        "who": "V",
+        "text": "General information, not medical advice. Talk to a doctor about what fits you."
+      },
+      "audio_lead": -0.3
+    }
+  ]
+}

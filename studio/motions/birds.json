@@ -11,7 +11,7 @@
   ],
   "needs": "sky or an exterior",
   "grammar": "[MOVER] [ACTION VERB] [PATH/SPATIAL RELATION]",
-  "status": "unavailable",
+  "status": "ready",
   "measured": {
     "motion_per_seed": [
       0.6089,
@@ -32,12 +32,12 @@
     "frames": 97,
     "workflow": "12_ltx23_i2v_audio.json"
   },
-  "verdict": "RENDERED 2026-08-04, 3 seeds. Motion 0.609/0.668/0.465, mean 0.580 - BELOW the empty control on every seed, the second-quietest card in the library. No birds. Small distant movers do not land, and asking for them makes the frame quieter than asking for nothing. Band 0.406-0.744 (empty control 0.628); frame-scale ceiling 1.191. ",
+  "verdict": "motion_shelf ready: ltx23 alive (motion 4.10, palette drift 0.0029); ltx25 alive (motion 18.25, palette drift 0.0028). Prior: RENDERED 2026-08-04, 3 seeds. Motion 0.609/0.668/0.465, mean 0.580 - BELOW the empty control on every seed, the second-quietest card in the library. No birds. Small distant movers do not land, and asking for them makes the frame quieter than asking for nothing. Band 0.406-0.744 (empty control 0.628); frame-scale ceiling 1.191. ",
   "evidence": {
     "verdict": "MEASURED",
-    "method": "package_check: incomplete",
-    "date": "2026-08-15",
-    "note": "frames 0/3"
+    "method": "motion_shelf: same keyframe and seed on ltx23+ltx25",
+    "date": "2026-08-16",
+    "note": "ltx23 alive (motion 4.10, palette drift 0.0029); ltx25 alive (motion 18.25, palette drift 0.0028)"
   },
   "evidence_history": [
     {
@@ -45,6 +45,20 @@
       "method": "measurement session; finding recorded in this card's verdict field",
       "date": "2026-08-04",
       "note": "RENDERED 2026-08-04, 3 seeds. Motion 0.609/0.668/0.465, mean 0.580 - BELOW the empty control on every seed, the second-quietest card in the library. No birds. Small distant movers do not land, and ask"
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "package_check: incomplete",
+      "date": "2026-08-15",
+      "note": "frames 0/3"
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "motion_shelf: same keyframe and seed on ltx23+ltx25",
+      "date": "2026-08-16",
+      "note": "ltx23 drifts (motion 4.10, drift 0.143); ltx25 drifts (motion 18.25, drift 0.135)"
     }
-  ]
+  ],
+  "status_before_shelf": "unavailable",
+  "best_engine": "ltx23"
 }

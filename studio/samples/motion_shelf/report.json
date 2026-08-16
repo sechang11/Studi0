@@ -1,0 +1,72 @@
+{
+ "birds": {
+  "family": "world",
+  "text": "A flock of birds crosses the frame.",
+  "engines": {
+   "ltx23": {
+    "frames_sampled": 32,
+    "hold_f0": 0.240356,
+    "hold_last": 0.096516,
+    "drift": 0.1438,
+    "palette_drift": 0.0029,
+    "palette_drift_f0": 0.0022,
+    "motion": 4.096,
+    "motion_max": 4.93,
+    "motion_evenness": 0.831,
+    "verdict": "alive"
+   },
+   "ltx25": {
+    "frames_sampled": 32,
+    "hold_f0": 0.222961,
+    "hold_last": 0.088424,
+    "drift": 0.1345,
+    "palette_drift": 0.0028,
+    "palette_drift_f0": 0.0022,
+    "motion": 18.253,
+    "motion_max": 23.077,
+    "motion_evenness": 0.791,
+    "verdict": "alive"
+   }
+  },
+  "best_engine": "ltx23",
+  "verdicts": {
+   "ltx23": "alive",
+   "ltx25": "alive"
+  }
+ },
+ "breath": {
+  "family": "subject",
+  "text": "Her shoulders rise and fall with her breath.",
+  "engines": {
+   "ltx23": {
+    "frames_sampled": 32,
+    "hold_f0": 0.23952,
+    "hold_last": 0.076632,
+    "drift": 0.1629,
+    "palette_drift": 0.0029,
+    "palette_drift_f0": 0.0022,
+    "motion": 4.973,
+    "motion_max": 5.533,
+    "motion_evenness": 0.899,
+    "verdict": "alive"
+   },
+   "ltx25": {
+    "frames_sampled": 32,
+    "hold_f0": 0.223805,
+    "hold_last": 0.071889,
+    "drift": 0.1519,
+    "palette_drift": 0.0031,
+    "palette_drift_f0": 0.0022,
+    "motion": 15.031,
+    "motion_max": 23.448,
+    "motion_evenness": 0.641,
+    "verdict": "alive"
+   }
+  },
+  "best_engine": "ltx23",
+  "verdicts": {
+   "ltx23": "alive",
+   "ltx25": "alive"
+  }
+ }
+}

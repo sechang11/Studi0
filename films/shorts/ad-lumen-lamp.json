@@ -1,0 +1,90 @@
+{
+  "title": "LUMEN",
+  "hook": "LUMEN|light that knows the hour",
+  "canvas": [
+    1080,
+    1920
+  ],
+  "fps": 24,
+  "engine": "higgs_v3",
+  "keyframe_engine": "qwen",
+  "kind": "commercial",
+  "style": "clean modern product photography, soft diffused daylight, shallow depth of field, matte surfaces, muted natural palette, minimal composition, crisp focus, high detail",
+  "voices": {
+    "V": {
+      "engine": "higgs_v3",
+      "voice": "voices_examples/female/female_03_alice.wav"
+    }
+  },
+  "music": [
+    {
+      "at": 0,
+      "prefix": "ad_lumen_lamp_score",
+      "bpm": 92,
+      "key": "D major",
+      "seconds": 30,
+      "level": 0.55,
+      "tags": "hopeful rising strings, arpeggiated piano, soft swelling brass, gentle percussion, uplifting, instrumental"
+    }
+  ],
+  "beats": [
+    {
+      "id": "01_open",
+      "template": "hook",
+      "clip_secs": 5,
+      "prompt": "A minimal desk lamp on an empty desk in a dark room, single warm pool of light, clean product photography",
+      "motion": "The light brightens very slowly.",
+      "caption": "Most lamps have one setting",
+      "line": {
+        "who": "V",
+        "text": "Most desk lamps have one setting: on."
+      },
+      "audio_lead": -0.3,
+      "sfx": "a lamp switch clicking",
+      "sfx_secs": 3.0,
+      "sfx_level": 0.7
+    },
+    {
+      "id": "02_point",
+      "template": "build",
+      "clip_secs": 4,
+      "prompt": "The same lamp casting cool bright light across a desk with an open notebook, daytime mood, crisp",
+      "motion": "The light shifts gradually cooler and brighter.",
+      "caption": "Cool and bright to think",
+      "line": {
+        "who": "V",
+        "text": "LUMEN moves with the day. Cool and bright when you need to think."
+      },
+      "audio_lead": -0.3
+    },
+    {
+      "id": "03_detail",
+      "template": "build",
+      "clip_secs": 4,
+      "prompt": "The lamp in warm amber light over a desk in a dark evening room, cosy, shallow focus",
+      "motion": "The light warms slowly, amber deepening.",
+      "caption": "Warm and low to stop",
+      "line": {
+        "who": "V",
+        "text": "Warm and low when you need to stop."
+      },
+      "audio_lead": -0.3
+    },
+    {
+      "id": "04_turn",
+      "template": "aftermath",
+      "clip_secs": 4,
+      "prompt": "A hand switching the lamp off, room going dark except for a window, calm, cinematic",
+      "motion": "The light fades out. The window glows faintly.",
+      "caption": "LUMEN - light that knows the hour",
+      "line": {
+        "who": "V",
+        "text": "LUMEN. Light that knows what time it is."
+      },
+      "audio_lead": -0.3,
+      "sfx": "a soft click",
+      "sfx_secs": 3.0,
+      "sfx_level": 0.7
+    }
+  ]
+}

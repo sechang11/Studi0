@@ -1,0 +1,100 @@
+{
+  "title": "MAGNESIUM",
+  "hook": "magnesium|which one, though",
+  "canvas": [
+    1080,
+    1920
+  ],
+  "fps": 24,
+  "engine": "higgs_v3",
+  "keyframe_engine": "qwen",
+  "kind": "supplement",
+  "style": "clean modern product photography, soft diffused daylight, shallow depth of field, matte surfaces, muted natural palette, minimal composition, crisp focus, high detail",
+  "voices": {
+    "V": {
+      "engine": "higgs_v3",
+      "voice": "voices_examples/male/male_03_carter.wav"
+    }
+  },
+  "music": [
+    {
+      "at": 0,
+      "prefix": "sup_magnesium_score",
+      "bpm": 76,
+      "key": "C major",
+      "seconds": 30,
+      "level": 0.55,
+      "tags": "warm nostalgic strings, soft piano, gentle, hazy, wistful, instrumental"
+    }
+  ],
+  "beats": [
+    {
+      "id": "01_open",
+      "template": "hook",
+      "clip_secs": 5,
+      "prompt": "Several small unlabelled glass jars of white powder in a row on a pale surface, soft even light, minimal",
+      "motion": "Light shifts slowly across the jars.",
+      "caption": "It is not one thing",
+      "line": {
+        "who": "V",
+        "text": "Magnesium is not one thing. What it is bound to changes how much you absorb."
+      },
+      "audio_lead": -0.3,
+      "sfx": "glass jars set down on a counter",
+      "sfx_secs": 3.0,
+      "sfx_level": 0.7
+    },
+    {
+      "id": "02_point",
+      "template": "build",
+      "clip_secs": 4,
+      "prompt": "A close-up of magnesium-rich foods, pumpkin seeds and dark leafy greens on a wooden board, natural light",
+      "motion": "A faint breeze moves the leaves.",
+      "caption": "Seeds, greens, beans, grains",
+      "line": {
+        "who": "V",
+        "text": "Most people get some from food. Seeds, greens, beans, whole grains."
+      },
+      "audio_lead": -0.3
+    },
+    {
+      "id": "03_detail",
+      "template": "build",
+      "clip_secs": 4,
+      "prompt": "A glass of water on a bedside table in warm low lamplight, evening mood, shallow focus",
+      "motion": "The lamp flickers very slightly. Still otherwise.",
+      "caption": "Different forms, different claims",
+      "line": {
+        "who": "V",
+        "text": "Different forms are marketed for different things - sleep, digestion, muscle cramps - and the evidence is stronger for some than others."
+      },
+      "audio_lead": -0.3
+    },
+    {
+      "id": "04_turn",
+      "template": "build",
+      "clip_secs": 4,
+      "prompt": "An empty bed with soft morning light across white sheets, calm, no people, quiet",
+      "motion": "Light moves slowly across the sheets.",
+      "caption": "Fixing a shortfall helps; more does not",
+      "line": {
+        "who": "V",
+        "text": "The honest summary: correcting a real shortfall helps. Adding more on top of enough usually does not."
+      },
+      "audio_lead": -0.3
+    },
+    {
+      "id": "05_land",
+      "template": "aftermath",
+      "clip_secs": 4,
+      "prompt": "A single glass jar on a clean surface, soft light, minimal composition",
+      "motion": "Still. Light drifts.",
+      "caption": "Not medical advice",
+      "line": {
+        "who": "V",
+        "text": "General information, not medical advice. Talk to a doctor about what fits you."
+      },
+      "audio_lead": -0.3
+    }
+  ]
+}

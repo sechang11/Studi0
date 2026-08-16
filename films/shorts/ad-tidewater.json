@@ -1,0 +1,90 @@
+{
+  "title": "TIDEWATER",
+  "hook": "TIDEWATER|three things, that is all",
+  "canvas": [
+    1080,
+    1920
+  ],
+  "fps": 24,
+  "engine": "higgs_v3",
+  "keyframe_engine": "qwen",
+  "kind": "commercial",
+  "style": "clean modern product photography, soft diffused daylight, shallow depth of field, matte surfaces, muted natural palette, minimal composition, crisp focus, high detail",
+  "voices": {
+    "V": {
+      "engine": "higgs_v3",
+      "voice": "voices_examples/female/female_04_maya.wav"
+    }
+  },
+  "music": [
+    {
+      "at": 0,
+      "prefix": "ad_tidewater_score",
+      "bpm": 64,
+      "key": "G major",
+      "seconds": 30,
+      "level": 0.55,
+      "tags": "gentle sunrise ambient, soft solo piano, warm string pad, distant solo clarinet, calm, spacious, instrumental"
+    }
+  ],
+  "beats": [
+    {
+      "id": "01_open",
+      "template": "hook",
+      "clip_secs": 5,
+      "prompt": "A plain unlabelled glass bottle on a wet stone surface, soft grey daylight, water droplets, minimal",
+      "motion": "A droplet runs down the bottle.",
+      "caption": "Twenty ingredients on the shelf",
+      "line": {
+        "who": "V",
+        "text": "The shelf is full of bottles with twenty ingredients."
+      },
+      "audio_lead": -0.3,
+      "sfx": "water dripping on stone",
+      "sfx_secs": 3.0,
+      "sfx_level": 0.7
+    },
+    {
+      "id": "02_point",
+      "template": "build",
+      "clip_secs": 4,
+      "prompt": "A close-up of clear gel on fingertips, soft light, clean and simple, shallow focus",
+      "motion": "The gel catches the light as the fingers move.",
+      "caption": "Ours has three",
+      "line": {
+        "who": "V",
+        "text": "Tidewater has three. Water, glycerin, and an oil pressed from seed."
+      },
+      "audio_lead": -0.3
+    },
+    {
+      "id": "03_detail",
+      "template": "build",
+      "clip_secs": 4,
+      "prompt": "A plain bottle beside a window with grey sea light outside, calm coastal mood, minimal composition",
+      "motion": "Light shifts slowly. The sea moves far behind.",
+      "caption": "Nothing that needs a chart",
+      "line": {
+        "who": "V",
+        "text": "Nothing that needs explaining. Nothing that needs a chart."
+      },
+      "audio_lead": -0.3,
+      "sfx": "distant surf",
+      "sfx_secs": 3.0,
+      "sfx_level": 0.7
+    },
+    {
+      "id": "04_turn",
+      "template": "aftermath",
+      "clip_secs": 4,
+      "prompt": "The bottle alone on a pale stone surface, soft daylight, quiet product photography",
+      "motion": "Still. Light drifts gently.",
+      "caption": "TIDEWATER - three things",
+      "line": {
+        "who": "V",
+        "text": "Tidewater. Three things, and none of them is a promise."
+      },
+      "audio_lead": -0.3
+    }
+  ]
+}

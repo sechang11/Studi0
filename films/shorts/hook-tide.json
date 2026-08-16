@@ -1,0 +1,86 @@
+{
+  "title": "LOW TIDE",
+  "hook": "the sea went out|and did not come back",
+  "canvas": [
+    1080,
+    1920
+  ],
+  "fps": 24,
+  "engine": "higgs_v3",
+  "keyframe_engine": "qwen",
+  "kind": "hook",
+  "style": "cinematic film still, anamorphic, dramatic contrast, moody practical lighting, rich shadows, filmic grain, high detail",
+  "voices": {
+    "V": {
+      "engine": "higgs_v3",
+      "voice": "voices_examples/male/male_04_frank.wav"
+    }
+  },
+  "music": [
+    {
+      "at": 0,
+      "prefix": "hook_tide_score",
+      "bpm": 60,
+      "key": "F minor",
+      "seconds": 30,
+      "level": 0.55,
+      "tags": "desolate solo piano, distant strings, loss, very sparse, instrumental"
+    }
+  ],
+  "beats": [
+    {
+      "id": "01_open",
+      "template": "hook",
+      "clip_secs": 5,
+      "prompt": "A harbour at low tide with boats resting on wet mud, grey morning light, wide shot, still",
+      "motion": "Water trickles in the channels. A boat settles slightly.",
+      "caption": "Twice a day, like clockwork",
+      "line": {
+        "who": "V",
+        "text": "The tide goes out twice a day. Everyone here knows the timing by heart."
+      },
+      "audio_lead": -0.3,
+      "sfx": "gulls and dripping water",
+      "sfx_secs": 3.0,
+      "sfx_level": 0.7
+    },
+    {
+      "id": "02_point",
+      "template": "build",
+      "clip_secs": 4,
+      "prompt": "A close-up of a stopped harbour clock, salt-corroded face, hard light, high detail",
+      "motion": "The clock hands do not move. Light shifts across the face.",
+      "caption": "On Wednesday it did not come back",
+      "line": {
+        "who": "V",
+        "text": "On Tuesday it went out at nine. On Wednesday it did not come back."
+      },
+      "audio_lead": -0.3,
+      "transition": "dissolve"
+    },
+    {
+      "id": "03_detail",
+      "template": "build",
+      "clip_secs": 4,
+      "prompt": "A vast expanse of exposed seabed stretching to the horizon, strange and wide, cold light, no water",
+      "motion": "Mist drifts slowly across the seabed.",
+      "caption": "There is a road down there",
+      "line": {
+        "who": "V",
+        "text": "There is a road down there. There was never a road down there."
+      },
+      "audio_lead": -0.3,
+      "sfx": "a low wind across open flats",
+      "sfx_secs": 3.0,
+      "sfx_level": 0.7
+    },
+    {
+      "id": "04_turn",
+      "template": "aftermath",
+      "clip_secs": 4,
+      "prompt": "A distant figure walking out along the exposed seabed, tiny in the frame, wide shot, cinematic",
+      "motion": "The figure walks slowly away into the mist.",
+      "transition": "dissolve"
+    }
+  ]
+}

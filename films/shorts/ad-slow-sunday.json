@@ -1,0 +1,90 @@
+{
+  "title": "SLOW SUNDAY",
+  "hook": "SLOW SUNDAY|nowhere to be",
+  "canvas": [
+    1080,
+    1920
+  ],
+  "fps": 24,
+  "engine": "higgs_v3",
+  "keyframe_engine": "qwen",
+  "kind": "commercial",
+  "style": "warm documentary photography, morning kitchen light, natural textures, soft shadows, muted earthy palette, shallow depth of field, high detail",
+  "voices": {
+    "V": {
+      "engine": "higgs_v3",
+      "voice": "voices_examples/female/female_04_maya.wav"
+    }
+  },
+  "music": [
+    {
+      "at": 0,
+      "prefix": "ad_slow_sunday_score",
+      "bpm": 76,
+      "key": "C major",
+      "seconds": 30,
+      "level": 0.55,
+      "tags": "warm nostalgic strings, soft piano, gentle, hazy, wistful, instrumental"
+    }
+  ],
+  "beats": [
+    {
+      "id": "01_open",
+      "template": "hook",
+      "clip_secs": 5,
+      "prompt": "An unmade bed with morning light across the sheets, empty room, warm and quiet, no people",
+      "motion": "Light moves slowly across the sheets.",
+      "caption": "Sunday used to be a whole day",
+      "line": {
+        "who": "V",
+        "text": "Sunday used to be a whole day."
+      },
+      "audio_lead": -0.3,
+      "sfx": "a quiet room, distant birds",
+      "sfx_secs": 3.0,
+      "sfx_level": 0.7
+    },
+    {
+      "id": "02_point",
+      "template": "build",
+      "clip_secs": 4,
+      "prompt": "Coffee brewing slowly in a glass pot on a kitchen counter, steam, warm morning light, close-up",
+      "motion": "The coffee drips slowly. Steam rises.",
+      "caption": "It takes eight minutes",
+      "line": {
+        "who": "V",
+        "text": "Slow Sunday is a coarse ground for a slow brew. It takes eight minutes."
+      },
+      "audio_lead": -0.3,
+      "sfx": "coffee dripping into glass",
+      "sfx_secs": 3.0,
+      "sfx_level": 0.7
+    },
+    {
+      "id": "03_detail",
+      "template": "build",
+      "clip_secs": 4,
+      "prompt": "A newspaper and a full cup on a kitchen table, morning light, unhurried domestic scene",
+      "motion": "A page lifts slightly in a draught. Steam drifts.",
+      "caption": "You cannot rush it, so you do not",
+      "line": {
+        "who": "V",
+        "text": "That is the point. You cannot rush it, so you do not."
+      },
+      "audio_lead": -0.3
+    },
+    {
+      "id": "04_turn",
+      "template": "aftermath",
+      "clip_secs": 4,
+      "prompt": "An empty kitchen in warm late morning light, a single cup on the table, peaceful",
+      "motion": "Light drifts across the table.",
+      "caption": "SLOW SUNDAY - nowhere to be",
+      "line": {
+        "who": "V",
+        "text": "Slow Sunday. Nowhere to be."
+      },
+      "audio_lead": -0.3
+    }
+  ]
+}

@@ -1,0 +1,90 @@
+{
+  "title": "PACE",
+  "hook": "PACE|built for the fifth mile",
+  "canvas": [
+    1080,
+    1920
+  ],
+  "fps": 24,
+  "engine": "higgs_v3",
+  "keyframe_engine": "qwen",
+  "kind": "commercial",
+  "style": "cinematic film still, anamorphic, dramatic contrast, moody practical lighting, rich shadows, filmic grain, high detail",
+  "voices": {
+    "V": {
+      "engine": "higgs_v3",
+      "voice": "voices_examples/male/male_03_carter.wav"
+    }
+  },
+  "music": [
+    {
+      "at": 0,
+      "prefix": "ad_pace_runner_score",
+      "bpm": 128,
+      "key": "E minor",
+      "seconds": 30,
+      "level": 0.55,
+      "tags": "driving percussion, ostinato strings, insistent low brass, forward motion, instrumental"
+    }
+  ],
+  "beats": [
+    {
+      "id": "01_open",
+      "template": "hook",
+      "clip_secs": 5,
+      "prompt": "A single running shoe on wet tarmac at dawn, close-up, cold blue light, water beading on the surface",
+      "motion": "A drop of water runs off the sole.",
+      "caption": "Anyone can sell you mile one",
+      "line": {
+        "who": "V",
+        "text": "The first mile is easy. Anyone can sell you the first mile."
+      },
+      "audio_lead": -0.3,
+      "sfx": "a shoe set down on wet ground",
+      "sfx_secs": 3.0,
+      "sfx_level": 0.7
+    },
+    {
+      "id": "02_point",
+      "template": "build",
+      "clip_secs": 4,
+      "prompt": "A runner's legs mid-stride on an empty city street at dawn, motion blur, cinematic, low angle",
+      "motion": "The legs drive forward hard. Spray kicks up from the road.",
+      "caption": "Built for mile five",
+      "line": {
+        "who": "V",
+        "text": "PACE is built for the fifth. Where the cushioning usually gives up."
+      },
+      "audio_lead": -0.3,
+      "sfx": "fast footsteps on wet tarmac",
+      "sfx_secs": 3.0,
+      "sfx_level": 0.7
+    },
+    {
+      "id": "03_detail",
+      "template": "build",
+      "clip_secs": 4,
+      "prompt": "A close-up of a shoe sole showing dense foam structure, studio light, clean product photography",
+      "motion": "Light travels slowly across the sole.",
+      "caption": "Holds its shape when you are tired",
+      "line": {
+        "who": "V",
+        "text": "A denser midsole that holds its shape when you are tired and sloppy."
+      },
+      "audio_lead": -0.3
+    },
+    {
+      "id": "04_turn",
+      "template": "aftermath",
+      "clip_secs": 4,
+      "prompt": "A runner stopping at the top of a hill at sunrise, seen from behind, wide shot, warm light breaking",
+      "motion": "The runner's chest rises and falls. Light brightens across the hill.",
+      "caption": "PACE - the mile after you wanted to stop",
+      "line": {
+        "who": "V",
+        "text": "PACE. The mile that counts is the one after you wanted to stop."
+      },
+      "audio_lead": -0.3
+    }
+  ]
+}

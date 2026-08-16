@@ -1,0 +1,89 @@
+{
+  "title": "THE SIGNAL",
+  "hook": "it repeats|every ninety seconds",
+  "canvas": [
+    1080,
+    1920
+  ],
+  "fps": 24,
+  "engine": "higgs_v3",
+  "keyframe_engine": "qwen",
+  "kind": "hook",
+  "style": "cinematic film still, anamorphic, dramatic contrast, moody practical lighting, rich shadows, filmic grain, high detail",
+  "voices": {
+    "V": {
+      "engine": "higgs_v3",
+      "voice": "voices_examples/male/male_03_carter.wav"
+    }
+  },
+  "music": [
+    {
+      "at": 0,
+      "prefix": "hook_signal_score",
+      "bpm": 100,
+      "key": "E minor",
+      "seconds": 30,
+      "level": 0.55,
+      "tags": "cold industrial electronic, metallic percussion loop, analog bass drone, detuned synth, mechanical sterile, instrumental"
+    }
+  ],
+  "beats": [
+    {
+      "id": "01_open",
+      "template": "hook",
+      "clip_secs": 5,
+      "prompt": "An enormous radio dish against a grey moorland sky, wide shot, cold light, industrial scale",
+      "motion": "Cloud moves fast behind the dish. The dish holds still.",
+      "caption": "Forty years, one patch of sky",
+      "line": {
+        "who": "V",
+        "text": "This dish has pointed at the same patch of sky for forty years."
+      },
+      "audio_lead": -0.3,
+      "sfx": "wind over open moorland",
+      "sfx_secs": 3.0,
+      "sfx_level": 0.7
+    },
+    {
+      "id": "02_point",
+      "template": "build",
+      "clip_secs": 4,
+      "prompt": "A close-up of an oscilloscope screen with a repeating waveform, green on black, cool light, detail",
+      "motion": "The waveform pulses steadily across the screen.",
+      "caption": "Every ninety seconds",
+      "line": {
+        "who": "V",
+        "text": "Ninety seconds ago it heard something. It heard it again ninety seconds before that."
+      },
+      "audio_lead": -0.3,
+      "sfx": "a soft electronic pulse",
+      "sfx_secs": 3.0,
+      "sfx_level": 0.7,
+      "transition": "flash"
+    },
+    {
+      "id": "03_detail",
+      "template": "build",
+      "clip_secs": 4,
+      "prompt": "An empty control room at night with banks of instruments glowing, wide shot, nobody there, cinematic",
+      "motion": "Indicator lights blink slowly across the desks.",
+      "caption": "The building is decommissioned",
+      "line": {
+        "who": "V",
+        "text": "The building was decommissioned in the spring."
+      },
+      "audio_lead": -0.3,
+      "sfx": "an empty room, faint hum",
+      "sfx_secs": 3.0,
+      "sfx_level": 0.7
+    },
+    {
+      "id": "04_turn",
+      "template": "aftermath",
+      "clip_secs": 4,
+      "prompt": "The dish silhouetted against a dark sky, low angle, single red light on the rim, ominous",
+      "motion": "The red light blinks slowly. Cloud drifts.",
+      "transition": "flash"
+    }
+  ]
+}

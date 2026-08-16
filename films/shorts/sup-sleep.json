@@ -1,0 +1,103 @@
+{
+  "title": "SLEEP & MELATONIN",
+  "hook": "melatonin|it is a clock, not a sedative",
+  "canvas": [
+    1080,
+    1920
+  ],
+  "fps": 24,
+  "engine": "higgs_v3",
+  "keyframe_engine": "qwen",
+  "kind": "supplement",
+  "style": "cinematic film still, anamorphic, dramatic contrast, moody practical lighting, rich shadows, filmic grain, high detail",
+  "voices": {
+    "V": {
+      "engine": "higgs_v3",
+      "voice": "voices_examples/male/male_04_frank.wav"
+    }
+  },
+  "music": [
+    {
+      "at": 0,
+      "prefix": "sup_sleep_score",
+      "bpm": 84,
+      "key": "B flat minor",
+      "seconds": 30,
+      "level": 0.55,
+      "tags": "late night jazz, muted trumpet, brushed drums, upright bass, rhodes piano, smoky lonely, instrumental"
+    }
+  ],
+  "beats": [
+    {
+      "id": "01_open",
+      "template": "hook",
+      "clip_secs": 5,
+      "prompt": "A dark bedroom with a single bedside lamp on, warm pool of light, night outside the window, calm",
+      "motion": "The lamp glows steadily. Shadows shift very slightly.",
+      "caption": "A timing signal, not a sedative",
+      "line": {
+        "who": "V",
+        "text": "Melatonin is a timing signal, not a sedative. It tells your body it is night."
+      },
+      "audio_lead": -0.3,
+      "sfx": "a quiet bedroom at night, faint hum",
+      "sfx_secs": 3.0,
+      "sfx_level": 0.7
+    },
+    {
+      "id": "02_point",
+      "template": "build",
+      "clip_secs": 4,
+      "prompt": "A city window at night with blue screen light spilling into a dark room, moody, cinematic",
+      "motion": "The blue light flickers faintly.",
+      "caption": "Late bright light delays the signal",
+      "line": {
+        "who": "V",
+        "text": "Bright light late in the evening delays that signal. Which is why the phone is part of the problem."
+      },
+      "audio_lead": -0.3
+    },
+    {
+      "id": "03_detail",
+      "template": "build",
+      "clip_secs": 4,
+      "prompt": "An airport departure board at night, out of focus, cool light, travel mood, cinematic",
+      "motion": "The board flickers and updates.",
+      "caption": "Clearest use: moving the clock",
+      "line": {
+        "who": "V",
+        "text": "The clearest use in the research is jet lag and shifted schedules - moving the clock, not forcing sleep."
+      },
+      "audio_lead": -0.3,
+      "sfx": "a distant airport hum",
+      "sfx_secs": 3.0,
+      "sfx_level": 0.7
+    },
+    {
+      "id": "04_turn",
+      "template": "build",
+      "clip_secs": 4,
+      "prompt": "A dark quiet bedroom with the first grey light at the curtains, calm, cinematic, no people",
+      "motion": "The light at the curtain slowly brightens.",
+      "caption": "The dull advice still wins",
+      "line": {
+        "who": "V",
+        "text": "For ordinary bad sleep, the dull advice still beats the bottle: same wake time, dark room, less light at night."
+      },
+      "audio_lead": -0.3
+    },
+    {
+      "id": "05_land",
+      "template": "aftermath",
+      "clip_secs": 4,
+      "prompt": "An empty made bed in soft morning light, calm and quiet, minimal",
+      "motion": "Light brightens slowly.",
+      "caption": "Not medical advice",
+      "line": {
+        "who": "V",
+        "text": "General information, not medical advice. Talk to a doctor about what fits you."
+      },
+      "audio_lead": -0.3
+    }
+  ]
+}

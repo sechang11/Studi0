@@ -1,0 +1,89 @@
+{
+  "title": "THE DOOR",
+  "hook": "do not open it|until you know",
+  "canvas": [
+    1080,
+    1920
+  ],
+  "fps": 24,
+  "engine": "higgs_v3",
+  "keyframe_engine": "qwen",
+  "kind": "hook",
+  "style": "cinematic film still, anamorphic, dramatic contrast, moody practical lighting, rich shadows, filmic grain, high detail",
+  "voices": {
+    "V": {
+      "engine": "higgs_v3",
+      "voice": "voices_examples/male/male_02.wav"
+    }
+  },
+  "music": [
+    {
+      "at": 0,
+      "prefix": "hook_door_score",
+      "bpm": 96,
+      "key": "C minor",
+      "seconds": 30,
+      "level": 0.55,
+      "tags": "low drone, dissonant sustained strings, sparse metallic hits, unsettling, instrumental"
+    }
+  ],
+  "beats": [
+    {
+      "id": "01_open",
+      "template": "hook",
+      "clip_secs": 5,
+      "prompt": "An ordinary door at the end of a dim corridor, single light above it, cinematic, unsettling stillness",
+      "motion": "The light above the door flickers once.",
+      "caption": "Every building has one",
+      "line": {
+        "who": "V",
+        "text": "Every building has one door nobody opens."
+      },
+      "audio_lead": -0.3,
+      "sfx": "a faint electrical hum",
+      "sfx_secs": 3.0,
+      "sfx_level": 0.7
+    },
+    {
+      "id": "02_point",
+      "template": "build",
+      "clip_secs": 4,
+      "prompt": "Extreme close-up of a worn brass door handle, hard side light, high detail, tension",
+      "motion": "The handle turns very slowly.",
+      "caption": "The room is bigger than the building",
+      "line": {
+        "who": "V",
+        "text": "In this one, the room on the other side is bigger than the building."
+      },
+      "audio_lead": -0.3,
+      "sfx": "a handle turning slowly",
+      "sfx_secs": 3.0,
+      "sfx_level": 0.7,
+      "transition": "whip_pan"
+    },
+    {
+      "id": "03_detail",
+      "template": "build",
+      "clip_secs": 4,
+      "prompt": "A vast impossible interior seen through a doorway - cathedral scale, shafts of light, dust, cinematic",
+      "motion": "Dust drifts through the shafts of light.",
+      "caption": "Somebody is already inside",
+      "line": {
+        "who": "V",
+        "text": "Which is a problem, because somebody is already inside."
+      },
+      "audio_lead": -0.3,
+      "sfx": "a distant echo in a huge space",
+      "sfx_secs": 3.0,
+      "sfx_level": 0.7
+    },
+    {
+      "id": "04_turn",
+      "template": "aftermath",
+      "clip_secs": 4,
+      "prompt": "A single small figure standing far away in the vast space, wide shot, silhouetted, cinematic",
+      "motion": "The figure stands completely still. Dust drifts.",
+      "transition": "whip_pan"
+    }
+  ]
+}

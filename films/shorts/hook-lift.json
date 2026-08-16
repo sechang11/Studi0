@@ -1,0 +1,89 @@
+{
+  "title": "FLOOR THIRTEEN",
+  "hook": "the building has twelve|the lift has thirteen",
+  "canvas": [
+    1080,
+    1920
+  ],
+  "fps": 24,
+  "engine": "higgs_v3",
+  "keyframe_engine": "qwen",
+  "kind": "hook",
+  "style": "cinematic film still, anamorphic, dramatic contrast, moody practical lighting, rich shadows, filmic grain, high detail",
+  "voices": {
+    "V": {
+      "engine": "higgs_v3",
+      "voice": "voices_examples/male/male_03_carter.wav"
+    }
+  },
+  "music": [
+    {
+      "at": 0,
+      "prefix": "hook_lift_score",
+      "bpm": 88,
+      "key": "A minor",
+      "seconds": 30,
+      "level": 0.55,
+      "tags": "quiet tense strings, low pulse, anticipation, restrained orchestral, instrumental"
+    }
+  ],
+  "beats": [
+    {
+      "id": "01_open",
+      "template": "hook",
+      "clip_secs": 5,
+      "prompt": "An old civic building lobby with terrazzo floors and brass fittings, wide shot, cold daylight, empty",
+      "motion": "Light shifts slowly across the floor.",
+      "caption": "Twelve floors. Count the windows.",
+      "line": {
+        "who": "V",
+        "text": "This building has twelve floors. The plans say twelve. The windows count to twelve."
+      },
+      "audio_lead": -0.3,
+      "sfx": "an empty lobby, distant footsteps",
+      "sfx_secs": 3.0,
+      "sfx_level": 0.7
+    },
+    {
+      "id": "02_point",
+      "template": "build",
+      "clip_secs": 4,
+      "prompt": "Close-up of an old brass lift panel with numbered buttons, hard side light, aged metal, high detail",
+      "motion": "A button lights up on its own.",
+      "caption": "The lift has thirteen",
+      "line": {
+        "who": "V",
+        "text": "The lift has a button for thirteen."
+      },
+      "audio_lead": -0.3,
+      "sfx": "a lift button clicking",
+      "sfx_secs": 3.0,
+      "sfx_level": 0.7,
+      "transition": "whip_pan"
+    },
+    {
+      "id": "03_detail",
+      "template": "build",
+      "clip_secs": 4,
+      "prompt": "The inside of an old open lift compartment moving past a floor landing, motion, warm interior light, cinematic",
+      "motion": "The compartment rises slowly past the landing.",
+      "caption": "People have pressed it",
+      "line": {
+        "who": "V",
+        "text": "It is not a mistake. People have pressed it."
+      },
+      "audio_lead": -0.3,
+      "sfx": "an old lift mechanism turning",
+      "sfx_secs": 3.0,
+      "sfx_level": 0.7
+    },
+    {
+      "id": "04_turn",
+      "template": "aftermath",
+      "clip_secs": 4,
+      "prompt": "A dark landing lit by one bulb, seen from inside a rising lift, cinematic, unsettling",
+      "motion": "The landing slides slowly out of view upward.",
+      "transition": "whip_pan"
+    }
+  ]
+}

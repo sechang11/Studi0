@@ -1,0 +1,100 @@
+{
+  "title": "OMEGA-3",
+  "hook": "omega-3|fish oil, honestly",
+  "canvas": [
+    1080,
+    1920
+  ],
+  "fps": 24,
+  "engine": "higgs_v3",
+  "keyframe_engine": "qwen",
+  "kind": "supplement",
+  "style": "warm documentary photography, morning kitchen light, natural textures, soft shadows, muted earthy palette, shallow depth of field, high detail",
+  "voices": {
+    "V": {
+      "engine": "higgs_v3",
+      "voice": "voices_examples/male/male_04_frank.wav"
+    }
+  },
+  "music": [
+    {
+      "at": 0,
+      "prefix": "sup_omega3_score",
+      "bpm": 64,
+      "key": "G major",
+      "seconds": 30,
+      "level": 0.55,
+      "tags": "gentle sunrise ambient, soft solo piano, warm string pad, distant solo clarinet, calm, spacious, instrumental"
+    }
+  ],
+  "beats": [
+    {
+      "id": "01_open",
+      "template": "hook",
+      "clip_secs": 5,
+      "prompt": "A fillet of oily fish on ice on a steel counter, close-up, cold blue light, glistening surface",
+      "motion": "Ice melts very slowly. A drop runs down.",
+      "caption": "Your body cannot make these",
+      "line": {
+        "who": "V",
+        "text": "Omega-3s are fats your body cannot make. You have to eat them."
+      },
+      "audio_lead": -0.3,
+      "sfx": "ice shifting on a steel counter",
+      "sfx_secs": 3.0,
+      "sfx_level": 0.7
+    },
+    {
+      "id": "02_point",
+      "template": "build",
+      "clip_secs": 4,
+      "prompt": "Amber capsules spilled on a pale surface beside a glass of water, soft daylight, shallow depth of field",
+      "motion": "The capsules settle. Light glints across them.",
+      "caption": "EPA and DHA do most of the work",
+      "line": {
+        "who": "V",
+        "text": "Two of them do most of the work in the research: EPA and DHA. Both come mainly from marine sources."
+      },
+      "audio_lead": -0.3
+    },
+    {
+      "id": "03_detail",
+      "template": "build",
+      "clip_secs": 4,
+      "prompt": "A plate of grilled salmon and greens on a wooden table, warm kitchen light, documentary style",
+      "motion": "Steam drifts up gently.",
+      "caption": "Fish twice a week gets most people there",
+      "line": {
+        "who": "V",
+        "text": "Eating fish a couple of times a week gets most people there without a bottle."
+      },
+      "audio_lead": -0.3
+    },
+    {
+      "id": "04_turn",
+      "template": "build",
+      "clip_secs": 4,
+      "prompt": "A row of unlabelled amber bottles on a shelf, soft light, muted palette, clean composition",
+      "motion": "Light shifts slowly along the shelf.",
+      "caption": "Freshness matters more than people think",
+      "line": {
+        "who": "V",
+        "text": "Supplements are for filling the gap when that does not happen. Freshness matters more than people think - rancid oil is common."
+      },
+      "audio_lead": -0.3
+    },
+    {
+      "id": "05_land",
+      "template": "aftermath",
+      "clip_secs": 4,
+      "prompt": "A clean empty plate and a glass of water on a wooden table, morning light, calm",
+      "motion": "Still, light drifting.",
+      "caption": "Not medical advice",
+      "line": {
+        "who": "V",
+        "text": "General information, not medical advice. Talk to a doctor about what fits you."
+      },
+      "audio_lead": -0.3
+    }
+  ]
+}

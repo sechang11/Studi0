@@ -51,6 +51,22 @@ def ssim(a, b):
     return None
 
 
+def hist_distance(a, b):
+    """Mean absolute difference of 3x64-bin RGB histograms, normalised to [0,1]."""
+    from PIL import Image
+    hs = []
+    for p in (a, b):
+        im = Image.open(p).convert("RGB").resize((256, 256))
+        v = []
+        for ch in im.split():
+            h = ch.histogram()
+            binned = [sum(h[i * 4:(i + 1) * 4]) for i in range(64)]
+            tot = sum(binned) or 1
+            v.extend(x / tot for x in binned)
+        hs.append(v)
+    return sum(abs(x - y) for x, y in zip(*hs)) / len(hs[0])
+
+
 def mad(a, b):
     from PIL import Image, ImageChops
     ia, ib = Image.open(a).convert("L"), Image.open(b).convert("L")
@@ -71,6 +87,13 @@ def measure(clip, key=None, workdir=None):
         out["hold_last"] = ssim(key, fs[-1])
         if out["hold_f0"] is not None and out["hold_last"] is not None:
             out["drift"] = round(out["hold_f0"] - out["hold_last"], 4)
+    if key and os.path.exists(key):
+        # PALETTE DRIFT - the motion-tolerant "did the world leave" number (the
+        # video_engines session's pal_drift). Things moving inside the frame barely
+        # move a histogram; a style or scene change moves it a lot. SSIM drift above
+        # cannot tell those apart and must not be the judge on its own.
+        out["palette_drift"] = round(hist_distance(key, fs[-1]), 4)
+        out["palette_drift_f0"] = round(hist_distance(key, fs[0]), 4)
     steps = [mad(fs[i], fs[i + 1]) for i in range(len(fs) - 1)]
     out["motion"] = round(sum(steps) / len(steps), 3)
     out["motion_max"] = round(max(steps), 3)

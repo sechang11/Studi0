@@ -1,0 +1,103 @@
+{
+  "title": "PROTEIN",
+  "hook": "protein|how much is enough",
+  "canvas": [
+    1080,
+    1920
+  ],
+  "fps": 24,
+  "engine": "higgs_v3",
+  "keyframe_engine": "qwen",
+  "kind": "supplement",
+  "style": "warm documentary photography, morning kitchen light, natural textures, soft shadows, muted earthy palette, shallow depth of field, high detail",
+  "voices": {
+    "V": {
+      "engine": "higgs_v3",
+      "voice": "voices_examples/male/male_03_carter.wav"
+    }
+  },
+  "music": [
+    {
+      "at": 0,
+      "prefix": "sup_protein_score",
+      "bpm": 132,
+      "key": "A minor",
+      "seconds": 30,
+      "level": 0.55,
+      "tags": "driving montage rock, muted electric guitar ostinato, four on the floor kick, snare build, hand claps, determined, instrumental"
+    }
+  ],
+  "beats": [
+    {
+      "id": "01_open",
+      "template": "hook",
+      "clip_secs": 5,
+      "prompt": "Eggs, chicken, lentils and yoghurt arranged on a wooden board, top-down, natural light, documentary style",
+      "motion": "Light moves slowly across the board.",
+      "caption": "Most people get this slightly wrong",
+      "line": {
+        "who": "V",
+        "text": "Protein is the one most people already understand and still get slightly wrong."
+      },
+      "audio_lead": -0.3,
+      "sfx": "a wooden board set down",
+      "sfx_secs": 3.0,
+      "sfx_level": 0.7
+    },
+    {
+      "id": "02_point",
+      "template": "build",
+      "clip_secs": 4,
+      "prompt": "A kitchen scale with a portion of food on it, close-up, morning light, shallow focus",
+      "motion": "The needle settles. Light drifts.",
+      "caption": "The daily total matters most",
+      "line": {
+        "who": "V",
+        "text": "The research points at a daily total, spread across the day - not a magic window right after training."
+      },
+      "audio_lead": -0.3
+    },
+    {
+      "id": "03_detail",
+      "template": "build",
+      "clip_secs": 4,
+      "prompt": "A protein shaker on a gym bench in warm side light, condensation on the surface, close-up",
+      "motion": "A drop of condensation runs down the side.",
+      "caption": "Powder is convenience, not magic",
+      "line": {
+        "who": "V",
+        "text": "Powder is a convenience, not a category of its own. It is food that happens to be easy to carry."
+      },
+      "audio_lead": -0.3,
+      "sfx": "a shaker set down on a bench",
+      "sfx_secs": 3.0,
+      "sfx_level": 0.7
+    },
+    {
+      "id": "04_turn",
+      "template": "build",
+      "clip_secs": 4,
+      "prompt": "A simple home-cooked meal on a plate, warm evening light, honest and ordinary, documentary style",
+      "motion": "Steam rises gently.",
+      "caption": "Needs go up - not that far up",
+      "line": {
+        "who": "V",
+        "text": "Needs go up if you are training hard or older. They do not go up to the numbers on the tub."
+      },
+      "audio_lead": -0.3
+    },
+    {
+      "id": "05_land",
+      "template": "aftermath",
+      "clip_secs": 4,
+      "prompt": "An empty clean plate on a wooden table, soft light, minimal",
+      "motion": "Still. Light drifting.",
+      "caption": "Not medical advice",
+      "line": {
+        "who": "V",
+        "text": "General information, not medical advice. Talk to a doctor about what fits you."
+      },
+      "audio_lead": -0.3
+    }
+  ]
+}

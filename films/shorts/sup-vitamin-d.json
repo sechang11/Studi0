@@ -1,0 +1,100 @@
+{
+  "title": "VITAMIN D",
+  "hook": "vitamin D|the sunlight one",
+  "canvas": [
+    1080,
+    1920
+  ],
+  "fps": 24,
+  "engine": "higgs_v3",
+  "keyframe_engine": "qwen",
+  "kind": "supplement",
+  "style": "natural light landscape photography, soft golden hour, gentle haze, muted greens and warm neutrals, shallow depth of field, high detail",
+  "voices": {
+    "V": {
+      "engine": "higgs_v3",
+      "voice": "voices_examples/male/male_04_frank.wav"
+    }
+  },
+  "music": [
+    {
+      "at": 0,
+      "prefix": "sup_vitamin_d_score",
+      "bpm": 64,
+      "key": "G major",
+      "seconds": 30,
+      "level": 0.55,
+      "tags": "gentle sunrise ambient, soft solo piano, warm string pad, distant solo clarinet, calm, spacious, instrumental"
+    }
+  ],
+  "beats": [
+    {
+      "id": "01_open",
+      "template": "hook",
+      "clip_secs": 5,
+      "prompt": "Low winter sun through a bare window onto a wooden floor, long shadows, dust in the light, quiet interior",
+      "motion": "The light creeps slowly across the floor. Dust drifts.",
+      "caption": "Your skin makes it from sunlight",
+      "line": {
+        "who": "V",
+        "text": "Your skin makes vitamin D from sunlight. That is the whole reason this one is complicated."
+      },
+      "audio_lead": -0.3,
+      "sfx": "a quiet room, faint outdoor hum",
+      "sfx_secs": 3.0,
+      "sfx_level": 0.7
+    },
+    {
+      "id": "02_point",
+      "template": "build",
+      "clip_secs": 4,
+      "prompt": "An overcast grey sky over a cold northern city rooftop, flat light, muted palette, no people",
+      "motion": "Cloud moves slowly across the sky.",
+      "caption": "In winter, far north, the sun is too low",
+      "line": {
+        "who": "V",
+        "text": "Far from the equator, in winter, the sun sits too low for your skin to make much of it at all."
+      },
+      "audio_lead": -0.3
+    },
+    {
+      "id": "03_detail",
+      "template": "build",
+      "clip_secs": 4,
+      "prompt": "A plate of oily fish and eggs on a plain table, soft daylight, documentary style, close-up",
+      "motion": "Steam drifts gently from the plate.",
+      "caption": "Some comes from food",
+      "line": {
+        "who": "V",
+        "text": "Some comes from food. Oily fish, egg yolks, fortified milk."
+      },
+      "audio_lead": -0.3
+    },
+    {
+      "id": "04_turn",
+      "template": "build",
+      "clip_secs": 4,
+      "prompt": "A small blood sample vial on a clean white surface beside a lab form, cool even light, clinical and calm",
+      "motion": "Very still. A faint shadow shifts.",
+      "caption": "A blood test tells you where you stand",
+      "line": {
+        "who": "V",
+        "text": "It is one of the few where a blood test actually tells you where you stand, instead of guessing."
+      },
+      "audio_lead": -0.3
+    },
+    {
+      "id": "05_land",
+      "template": "aftermath",
+      "clip_secs": 4,
+      "prompt": "A person's silhouette at a bright window, backlit, warm light spilling in, calm and hopeful",
+      "motion": "The light brightens slowly and steadies.",
+      "caption": "Not medical advice",
+      "line": {
+        "who": "V",
+        "text": "General information, not medical advice. Talk to a doctor about what fits you."
+      },
+      "audio_lead": -0.3
+    }
+  ]
+}

@@ -1,0 +1,116 @@
+{
+  "title": "CREATINE",
+  "hook": "creatine|what it actually does",
+  "canvas": [
+    1080,
+    1920
+  ],
+  "fps": 24,
+  "engine": "higgs_v3",
+  "keyframe_engine": "qwen",
+  "kind": "supplement",
+  "style": "clean scientific still life, cool even lighting, white and steel surfaces, glass and precision instruments, shallow depth of field, minimal, high detail",
+  "voices": {
+    "V": {
+      "engine": "higgs_v3",
+      "voice": "voices_examples/male/male_03_carter.wav"
+    }
+  },
+  "music": [
+    {
+      "at": 0,
+      "prefix": "sup_creatine_score",
+      "bpm": 128,
+      "key": "E minor",
+      "seconds": 30,
+      "level": 0.55,
+      "tags": "driving percussion, ostinato strings, insistent low brass, forward motion, instrumental"
+    }
+  ],
+  "beats": [
+    {
+      "id": "01_open",
+      "template": "hook",
+      "clip_secs": 5,
+      "prompt": "A single scoop of fine white powder on a clean steel surface, top-down, soft studio light, one shaft of light across it",
+      "motion": "The powder settles slowly. Dust drifts in the light.",
+      "caption": "The most studied one on the shelf",
+      "line": {
+        "who": "V",
+        "text": "Creatine is the most studied sports supplement there is."
+      },
+      "audio_lead": -0.3,
+      "sfx": "quiet room tone, a soft scoop of powder",
+      "sfx_secs": 3.0,
+      "sfx_level": 0.7
+    },
+    {
+      "id": "02_point",
+      "template": "build",
+      "clip_secs": 4,
+      "prompt": "A glass of water on a steel counter with powder dissolving in it, close-up, backlit, small bubbles rising",
+      "motion": "The powder swirls and dissolves. Bubbles rise slowly.",
+      "caption": "It recycles energy for short hard efforts",
+      "line": {
+        "who": "V",
+        "text": "Your muscles store it as phosphocreatine, and use it to recycle energy during short, hard efforts."
+      },
+      "audio_lead": -0.3
+    },
+    {
+      "id": "03_detail",
+      "template": "build",
+      "clip_secs": 4,
+      "prompt": "A heavy barbell resting on a gym floor in low warm light, chalk dust in the air, close-up on the knurling",
+      "motion": "Chalk dust drifts slowly through the light.",
+      "caption": "Shows up in the last rep or two",
+      "line": {
+        "who": "V",
+        "text": "That mostly shows up in the last rep or two of a heavy set. Small, but real, and it adds up over months."
+      },
+      "audio_lead": -0.3,
+      "sfx": "a barbell settling on a gym floor",
+      "sfx_secs": 3.0,
+      "sfx_level": 0.7
+    },
+    {
+      "id": "04_turn",
+      "template": "build",
+      "clip_secs": 4,
+      "prompt": "A simple glass of water beside a plain notebook on a wooden table, morning light, calm and ordinary",
+      "motion": "Light shifts slowly across the table.",
+      "caption": "Other effects are still being studied",
+      "line": {
+        "who": "V",
+        "text": "The research also looks at effects beyond the gym, but that work is younger and less settled."
+      },
+      "audio_lead": -0.3
+    },
+    {
+      "id": "05_land",
+      "template": "build",
+      "clip_secs": 4,
+      "prompt": "An open palm holding a small amount of white powder, soft daylight, shallow focus, quiet and honest",
+      "motion": "The hand stays still. Light moves gently.",
+      "caption": "Cheap, well studied, not magic",
+      "line": {
+        "who": "V",
+        "text": "It is cheap, it is well studied, and it is not magic."
+      },
+      "audio_lead": -0.3
+    },
+    {
+      "id": "06_close",
+      "template": "aftermath",
+      "clip_secs": 4,
+      "prompt": "A clean empty countertop with a single glass of water, soft light, text-free minimal composition",
+      "motion": "Still. Light drifts almost imperceptibly.",
+      "caption": "Not medical advice",
+      "line": {
+        "who": "V",
+        "text": "General information, not medical advice. Talk to a doctor about what fits you."
+      },
+      "audio_lead": -0.3
+    }
+  ]
+}

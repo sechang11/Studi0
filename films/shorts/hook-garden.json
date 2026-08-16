@@ -1,0 +1,89 @@
+{
+  "title": "THE GARDEN",
+  "hook": "it grew overnight|all of it",
+  "canvas": [
+    1080,
+    1920
+  ],
+  "fps": 24,
+  "engine": "higgs_v3",
+  "keyframe_engine": "qwen",
+  "kind": "hook",
+  "style": "natural light landscape photography, soft golden hour, gentle haze, muted greens and warm neutrals, shallow depth of field, high detail",
+  "voices": {
+    "V": {
+      "engine": "higgs_v3",
+      "voice": "voices_examples/female/female_04_maya.wav"
+    }
+  },
+  "music": [
+    {
+      "at": 0,
+      "prefix": "hook_garden_score",
+      "bpm": 96,
+      "key": "C minor",
+      "seconds": 30,
+      "level": 0.55,
+      "tags": "low drone, dissonant sustained strings, sparse metallic hits, unsettling, instrumental"
+    }
+  ],
+  "beats": [
+    {
+      "id": "01_open",
+      "template": "hook",
+      "clip_secs": 5,
+      "prompt": "A bare winter allotment with dark empty soil, grey morning light, wide shot, nothing growing",
+      "motion": "Mist drifts low across the soil.",
+      "caption": "Monday: nothing but frost",
+      "line": {
+        "who": "V",
+        "text": "On Monday there was nothing here but frost and dark soil."
+      },
+      "audio_lead": -0.3,
+      "sfx": "a cold morning, distant birds",
+      "sfx_secs": 3.0,
+      "sfx_level": 0.7
+    },
+    {
+      "id": "02_point",
+      "template": "build",
+      "clip_secs": 4,
+      "prompt": "A close-up of a green shoot pushing through dark earth, macro, soft light, high detail",
+      "motion": "The shoot rises very slowly through the soil.",
+      "caption": "Wednesday: at the fence",
+      "line": {
+        "who": "V",
+        "text": "By Tuesday there were shoots. By Wednesday they were at the fence."
+      },
+      "audio_lead": -0.3,
+      "sfx": "soil shifting faintly",
+      "sfx_secs": 3.0,
+      "sfx_level": 0.7,
+      "transition": "dissolve"
+    },
+    {
+      "id": "03_detail",
+      "template": "build",
+      "clip_secs": 4,
+      "prompt": "A dense overgrown garden swallowing a shed, green and wild, soft light, slightly wrong scale",
+      "motion": "Leaves move gently. Vines shift.",
+      "caption": "Friday: the shed is gone",
+      "line": {
+        "who": "V",
+        "text": "It is Friday. The shed is gone."
+      },
+      "audio_lead": -0.3,
+      "sfx": "leaves rustling thickly",
+      "sfx_secs": 3.0,
+      "sfx_level": 0.7
+    },
+    {
+      "id": "04_turn",
+      "template": "aftermath",
+      "clip_secs": 4,
+      "prompt": "A wall of dense green growth filling the frame, close-up, soft light, faintly ominous",
+      "motion": "The leaves shift and settle, as if breathing.",
+      "transition": "dissolve"
+    }
+  ]
+}

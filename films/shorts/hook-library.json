@@ -1,0 +1,86 @@
+{
+  "title": "THE RETURN",
+  "hook": "one book|came back late",
+  "canvas": [
+    1080,
+    1920
+  ],
+  "fps": 24,
+  "engine": "higgs_v3",
+  "keyframe_engine": "qwen",
+  "kind": "hook",
+  "style": "cinematic film still, anamorphic, dramatic contrast, moody practical lighting, rich shadows, filmic grain, high detail",
+  "voices": {
+    "V": {
+      "engine": "higgs_v3",
+      "voice": "voices_examples/male/male_02.wav"
+    }
+  },
+  "music": [
+    {
+      "at": 0,
+      "prefix": "hook_library_score",
+      "bpm": 58,
+      "key": "E flat minor",
+      "seconds": 30,
+      "level": 0.55,
+      "tags": "villain theme, low brass, sustained cluster strings, slow timpani, sinister, oppressive, instrumental"
+    }
+  ],
+  "beats": [
+    {
+      "id": "01_open",
+      "template": "hook",
+      "clip_secs": 5,
+      "prompt": "A vast dim library interior with towering shelves, shafts of light, cinematic, no people",
+      "motion": "Dust drifts through the light between the shelves.",
+      "caption": "All of them accounted for",
+      "line": {
+        "who": "V",
+        "text": "This library has four hundred thousand books. All of them are accounted for."
+      },
+      "audio_lead": -0.3,
+      "sfx": "a huge quiet room, faint creaks",
+      "sfx_secs": 3.0,
+      "sfx_level": 0.7
+    },
+    {
+      "id": "02_point",
+      "template": "build",
+      "clip_secs": 4,
+      "prompt": "A close-up of a date stamp card inside an old book cover, hard light, high detail, aged paper",
+      "motion": "The card lifts very slightly.",
+      "caption": "Borrowed 1954. Returned Thursday.",
+      "line": {
+        "who": "V",
+        "text": "Except one, which was borrowed in 1954 and returned last Thursday."
+      },
+      "audio_lead": -0.3,
+      "sfx": "a book closing softly",
+      "sfx_secs": 3.0,
+      "sfx_level": 0.7,
+      "transition": "fade_black"
+    },
+    {
+      "id": "03_detail",
+      "template": "build",
+      "clip_secs": 4,
+      "prompt": "An empty reading desk with a single old book on it under a lamp, warm pool of light, dark around, cinematic",
+      "motion": "The lamp flickers. The pages settle.",
+      "caption": "The book is warm",
+      "line": {
+        "who": "V",
+        "text": "Nobody used a card. The desk was locked. The book is warm."
+      },
+      "audio_lead": -0.3
+    },
+    {
+      "id": "04_turn",
+      "template": "aftermath",
+      "clip_secs": 4,
+      "prompt": "The book alone on the desk in a dark room, close-up, single light, ominous stillness",
+      "motion": "Very still. The light dims slightly.",
+      "transition": "fade_black"
+    }
+  ]
+}

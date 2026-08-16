@@ -1,18 +1,18 @@
 {
-  "generated": "2026-08-05 00:59",
+  "generated": "2026-08-16 00:52",
   "generator": "studio/_tools/capability_scan.py",
   "archive": "/home/k4shix/ComfyUI/output/claude-generated",
   "note": "Read-only catalogue of the capability archive. Representative samples were chosen by looking at the pixels and at frame strips pulled from the clips, not by taking the first file. Audio picks are flagged NOT AUDITIONED.",
   "totals": {
-    "archive_folders": 92,
-    "capabilities": 34,
-    "production_folders": 58,
-    "with_runnable_workflow": 26,
+    "archive_folders": 125,
+    "capabilities": 35,
+    "production_folders": 90,
+    "with_runnable_workflow": 27,
     "exposed_in_app": 8,
-    "script_only": 6,
+    "script_only": 10,
     "adjacent": 1,
-    "not_exposed": 19,
-    "rendered": 26,
+    "not_exposed": 16,
+    "rendered": 27,
     "planned_only": 8,
     "declarations_stale": 7
   },
@@ -65,7 +65,7 @@
     {
       "id": "12-segmentation-matting",
       "name": "Text-prompted segmentation & automatic matting",
-      "exposure": "none",
+      "exposure": "script-only",
       "status": "verified",
       "verdict": "works",
       "workflow": "13_sam3_segment.json",
@@ -155,7 +155,7 @@
     {
       "id": "24-outpaint-removal",
       "name": "Outpainting & object removal",
-      "exposure": "none",
+      "exposure": "script-only",
       "status": "verified",
       "verdict": "mixed",
       "workflow": "28_flux_outpaint.json",
@@ -173,7 +173,7 @@
     {
       "id": "26-vision-caption",
       "name": "Image to text — the pipeline run backwards",
-      "exposure": "none",
+      "exposure": "script-only",
       "status": "verified",
       "verdict": "mixed",
       "workflow": "30_vision_caption.json",
@@ -250,28 +250,34 @@
       "verdict": "planned",
       "workflow": null,
       "sample": null
+    },
+    {
+      "id": "51-multishot-video",
+      "name": "Multi-shot video - connected shots with a real cut, in one pass",
+      "exposure": "script-only",
+      "status": "verified",
+      "verdict": "works",
+      "workflow": "51_ltx25_i2v.json",
+      "sample": "51-multishot-video/deck3.mp4"
     }
   ],
   "ready_and_invisible": [
     "03-controlnet",
     "04-upscaling",
     "07-frame-interpolation",
-    "12-segmentation-matting",
     "14-ltx-two-stage-upscale",
     "15-product-composite",
     "18-audio-to-video",
     "19-llm-lyrics-song",
     "22-flux2",
     "23-control-maps",
-    "24-outpaint-removal",
-    "25-music-remix",
-    "26-vision-caption"
+    "25-music-remix"
   ],
   "app_render_path": [
     "studio/compose.py",
     "studio/compile.py",
     "studio/serve.py",
-    "studio/gallery_gen.py",
+    "studio/_tools/generate.py",
     "studio/tag_examples.py",
     "scripts/short.py"
   ],
@@ -307,7 +313,10 @@
           "exists": true,
           "path": "workflows/02_qwen_t2i_quality.json",
           "used_by": [
-            "scripts/cartoon.py"
+            "scripts/cartoon.py",
+            "studio/_tools/flux2_probe.py",
+            "studio/_tools/model_intake.py",
+            "studio/_tools/replicate_prompts.py"
           ]
         }
       ],
@@ -323,10 +332,12 @@
             "studio/_tools/cast_style.py",
             "studio/_tools/character_demo.py",
             "studio/_tools/layer_demo.py",
+            "studio/_tools/library_index.py",
             "studio/_tools/lora_examples.py",
             "studio/_tools/lora_rescue.py",
             "studio/_tools/make_anime_sheet.py",
             "studio/_tools/make_domains.py",
+            "studio/_tools/make_wuxia_live.py",
             "studio/_tools/motion_examples.py",
             "studio/_tools/motion_probe.py",
             "studio/_tools/motion_staging.py",
@@ -336,7 +347,12 @@
             "studio/_tools/qwen_sheet.py",
             "studio/_tools/realism_ladder.py",
             "studio/_tools/render_templates.py",
+            "studio/_tools/sheets_dnd.py",
+            "studio/_tools/standin_person.py",
+            "studio/_tools/story_routes.py",
+            "studio/_tools/story_tool.py",
             "studio/_tools/style_examples.py",
+            "studio/_tools/terra_real.py",
             "studio/_tools/terra_styles.py",
             "studio/_tools/video_examples.py",
             "studio/_tools/video_index.py",
@@ -425,8 +441,12 @@
             "scripts/short.py",
             "studio/_tools/cast_proof.py",
             "studio/_tools/cast_style.py",
+            "studio/_tools/master_frames.py",
+            "studio/_tools/photo_count_probe.py",
             "studio/_tools/qwen_character.py",
             "studio/_tools/realism_ladder.py",
+            "studio/_tools/standin_person.py",
+            "studio/_tools/terra_real.py",
             "studio/_tools/terra_styles.py"
           ],
           "note": "The app edits with a reference image rather than by bare instruction - short.py and make_sheets.py. The archived 03_qwen_image_edit.json path is not wired up."
@@ -702,7 +722,9 @@
           "file": "11_ltx23_t2v_audio.json",
           "exists": true,
           "path": "workflows/11_ltx23_t2v_audio.json",
-          "used_by": []
+          "used_by": [
+            "studio/_tools/film_audio.py"
+          ]
         },
         {
           "file": "12_ltx23_i2v_audio.json",
@@ -713,10 +735,15 @@
             "scripts/epic.py",
             "scripts/short.py",
             "studio/_tools/cast_motion.py",
+            "studio/_tools/library_index.py",
+            "studio/_tools/ltx25_probe.py",
             "studio/_tools/motion_examples.py",
             "studio/_tools/motion_probe.py",
             "studio/_tools/motion_staging.py",
+            "studio/_tools/story_routes.py",
+            "studio/_tools/story_tool.py",
             "studio/_tools/terra_wardrobe.py",
+            "studio/_tools/video_engine_ab.py",
             "studio/_tools/video_engines.py",
             "studio/_tools/video_examples.py",
             "studio/_tools/video_index.py",
@@ -862,6 +889,8 @@
             "scripts/epic.py",
             "scripts/make_audio_library.py",
             "scripts/short.py",
+            "studio/_tools/audio_sweep.py",
+            "studio/_tools/film_audio.py",
             "studio/_tools/make_domains.py"
           ]
         }
@@ -916,6 +945,8 @@
             "scripts/cartoon.py",
             "scripts/epic.py",
             "scripts/make_audio_library.py",
+            "studio/_tools/audio_sweep.py",
+            "studio/_tools/film_audio.py",
             "studio/_tools/make_domains.py"
           ]
         }
@@ -980,6 +1011,7 @@
             "scripts/make_audio_library.py",
             "scripts/short.py",
             "studio/_tools/cast_voice.py",
+            "studio/_tools/film_audio.py",
             "studio/_tools/make_domains.py"
           ],
           "note": "short.py routes voice to IndexTTS2, which has the forced duration the declaration lists as the one thing missing from Chatterbox."
@@ -991,7 +1023,9 @@
             "scripts/epic.py",
             "scripts/short.py",
             "studio/_tools/cast_voice.py",
-            "studio/_tools/make_domains.py"
+            "studio/_tools/make_domains.py",
+            "studio/_tools/voice_audition.py",
+            "studio/_tools/voice_routes.py"
           ],
           "note": "short.py also routes to Higgs v3, and seventeen named hv3_* voices now sit in the folder. The declared 'one voice pack, characters are pitch-shifted' problem is solved."
         }
@@ -1067,10 +1101,12 @@
             "studio/_tools/cast_style.py",
             "studio/_tools/character_demo.py",
             "studio/_tools/layer_demo.py",
+            "studio/_tools/library_index.py",
             "studio/_tools/lora_examples.py",
             "studio/_tools/lora_rescue.py",
             "studio/_tools/make_anime_sheet.py",
             "studio/_tools/make_domains.py",
+            "studio/_tools/make_wuxia_live.py",
             "studio/_tools/motion_examples.py",
             "studio/_tools/motion_probe.py",
             "studio/_tools/motion_staging.py",
@@ -1080,7 +1116,12 @@
             "studio/_tools/qwen_sheet.py",
             "studio/_tools/realism_ladder.py",
             "studio/_tools/render_templates.py",
+            "studio/_tools/sheets_dnd.py",
+            "studio/_tools/standin_person.py",
+            "studio/_tools/story_routes.py",
+            "studio/_tools/story_tool.py",
             "studio/_tools/style_examples.py",
+            "studio/_tools/terra_real.py",
             "studio/_tools/terra_styles.py",
             "studio/_tools/video_examples.py",
             "studio/_tools/video_index.py",
@@ -1101,18 +1142,18 @@
       },
       "card": null,
       "measured": {
-        "files": 2828,
-        "bytes": 12982576654,
-        "size_h": "12.1 GB",
+        "files": 3385,
+        "bytes": 15801304428,
+        "size_h": "14.7 GB",
         "media": {
-          "audio": 1198,
-          "video": 1099,
-          "image": 440,
-          "text": 90,
+          "audio": 1537,
+          "video": 1243,
+          "image": 502,
+          "text": 102,
           "other": 1
         },
         "oldest": "2026-07-29",
-        "newest": "2026-07-30"
+        "newest": "2026-08-08"
       },
       "strong": [],
       "weak": [],
@@ -1144,14 +1185,19 @@
           "file": "14_birefnet_matte.json",
           "exists": true,
           "path": "workflows/14_birefnet_matte.json",
-          "used_by": []
+          "used_by": [
+            "studio/_tools/photo2anime_mesh.py",
+            "studio/_tools/standin_person.py",
+            "studio/_tools/terra_3d_source.py",
+            "studio/_tools/terra_3d_source_v2.py"
+          ]
         }
       ],
       "app_equivalent": [],
       "app_page": null,
       "has_runnable_workflow": true,
       "exposed_in_app": false,
-      "exposure": "none",
+      "exposure": "script-only",
       "declaration_stale": null,
       "sample": {
         "file": "sam3_proof_on_magenta_00001_.png",
@@ -1416,10 +1462,12 @@
             "studio/_tools/cast_style.py",
             "studio/_tools/character_demo.py",
             "studio/_tools/layer_demo.py",
+            "studio/_tools/library_index.py",
             "studio/_tools/lora_examples.py",
             "studio/_tools/lora_rescue.py",
             "studio/_tools/make_anime_sheet.py",
             "studio/_tools/make_domains.py",
+            "studio/_tools/make_wuxia_live.py",
             "studio/_tools/motion_examples.py",
             "studio/_tools/motion_probe.py",
             "studio/_tools/motion_staging.py",
@@ -1429,7 +1477,12 @@
             "studio/_tools/qwen_sheet.py",
             "studio/_tools/realism_ladder.py",
             "studio/_tools/render_templates.py",
+            "studio/_tools/sheets_dnd.py",
+            "studio/_tools/standin_person.py",
+            "studio/_tools/story_routes.py",
+            "studio/_tools/story_tool.py",
             "studio/_tools/style_examples.py",
+            "studio/_tools/terra_real.py",
             "studio/_tools/terra_styles.py",
             "studio/_tools/video_examples.py",
             "studio/_tools/video_index.py",
@@ -1690,7 +1743,10 @@
           "exists": true,
           "path": "workflows/22_qwen_edit_2511.json",
           "used_by": [
-            "studio/_tools/make_turnaround_wf.py"
+            "studio/_tools/character_new.py",
+            "studio/_tools/character_suite.py",
+            "studio/_tools/make_turnaround_wf.py",
+            "studio/_tools/photo_to_anime.py"
           ]
         },
         {
@@ -1766,7 +1822,8 @@
           "exists": true,
           "path": "workflows/24_hunyuan3d_mesh.json",
           "used_by": [
-            "studio/_tools/make_domains.py"
+            "studio/_tools/make_domains.py",
+            "studio/_tools/photo_to_anime.py"
           ]
         },
         {
@@ -1978,7 +2035,9 @@
           "file": "28_flux_outpaint.json",
           "exists": true,
           "path": "workflows/28_flux_outpaint.json",
-          "used_by": []
+          "used_by": [
+            "studio/_tools/master_frames.py"
+          ]
         },
         {
           "file": "29_flux_object_removal.json",
@@ -1991,7 +2050,7 @@
       "app_page": null,
       "has_runnable_workflow": true,
       "exposed_in_app": false,
-      "exposure": "none",
+      "exposure": "script-only",
       "declaration_stale": null,
       "sample": {
         "file": "outpaint_wide_00001_.png",
@@ -2115,14 +2174,16 @@
           "file": "30_vision_caption.json",
           "exists": true,
           "path": "workflows/30_vision_caption.json",
-          "used_by": []
+          "used_by": [
+            "studio/_tools/character_new.py"
+          ]
         }
       ],
       "app_equivalent": [],
       "app_page": null,
       "has_runnable_workflow": true,
       "exposed_in_app": false,
-      "exposure": "none",
+      "exposure": "script-only",
       "declaration_stale": null,
       "sample": {
         "file": "source_image.png",
@@ -2182,6 +2243,7 @@
           "exists": true,
           "used_by": [
             "studio/_tools/make_train_wf.py",
+            "studio/_tools/photo_count_probe.py",
             "studio/_tools/train_character.py"
           ],
           "note": "SCRIPT TIER, and it flatly contradicts the folder. The workflow exists (2026-08-03) and studio/_tools/train_character.py drives it; TERRA's rank-16 v3 LoRA is its output. The declaration still says 'not built yet'."
@@ -2657,6 +2719,61 @@
         "Then test templates-6-key-frames for genuine long takes.",
         "Pair with the trim handles that epic.py still needs before match cuts actually work."
       ]
+    },
+    {
+      "id": "51-multishot-video",
+      "number": "51",
+      "name": "Multi-shot video - connected shots with a real cut, in one pass",
+      "what_it_does": "LTX-2.5 generates SEVERAL CONNECTED SHOTS in a single generation, holding character, place, lighting and style across the cut. Measured on this box: asked for three viewpoints with 'CUT TO', it produced a wide, an extreme close-up of the same face, and a high overhead - one pass, one seed, the person recognisably the same across both cuts. Until now multi-shot consistency was the one thing this box could not do; it was faked by deriving angles from a master frame.",
+      "why_it_matters": "linruo_views_strip.png - the cut lands between the wide and the close-up and the FACE survives it; that is the whole capability. deck3_strip.png is the place version (deck -> low angle up the mast). The rule that makes it fire: shots must be different VIEWPOINTS. Three descriptions of one continuous action correctly render as one continuous shot with no cut.",
+      "status": "verified",
+      "verdict": "works",
+      "model": "LTX-2.5 22B distilled (int8) + Gemma-4 12B text encoder",
+      "released": "2026-08-12",
+      "vram": "38 GB of weights on disk; runs inside the 32 GB card with offload",
+      "cost": "25.7 s for 4 s at 1280x704 with audio; ~2 min for a 12 s multi-shot",
+      "workflow_declared": "51_ltx25_i2v.json",
+      "workflows": [
+        {
+          "file": "51_ltx25_i2v.json",
+          "exists": true,
+          "path": "workflows/51_ltx25_i2v.json",
+          "used_by": [
+            "studio/_tools/ltx25_probe.py",
+            "studio/_tools/multishot.py",
+            "studio/_tools/ui2api.py"
+          ]
+        }
+      ],
+      "app_equivalent": [],
+      "app_page": null,
+      "has_runnable_workflow": true,
+      "exposed_in_app": false,
+      "exposure": "script-only",
+      "declaration_stale": null,
+      "sample": {
+        "file": "deck3.mp4",
+        "path": "51-multishot-video/deck3.mp4",
+        "why": "Largest media file - no curated pick and no usable declared panel."
+      },
+      "card": null,
+      "measured": {
+        "files": 7,
+        "bytes": 8216080,
+        "size_h": "7.8 MB",
+        "media": {
+          "image": 3,
+          "video": 3,
+          "text": 1
+        },
+        "oldest": "2026-08-16",
+        "newest": "2026-08-16"
+      },
+      "strong": [],
+      "weak": [],
+      "limits": "Cuts fire on VIEWPOINT changes, not action changes. The cut detector finds hard cuts; one soft transition in the viewpoint test was visible in the strip and not counted. In-frame motion is ~5x gentler than LTX-2.3 on a place keyframe, though HIGHER on a character keyframe - measure per subject rather than assuming. The LLM prompt expander rewrites motion text and is left off for films, where a motion card must mean the same thing on every beat.",
+      "alternatives": [],
+      "next_steps": []
     }
   ],
   "workflows_with_no_capability_folder": [
@@ -2697,18 +2814,24 @@
         "studio/_tools/cast_style.py",
         "studio/_tools/character_demo.py",
         "studio/_tools/face_quality.py",
-        "studio/_tools/gallery_gen.py",
         "studio/_tools/known_char_probe.py",
+        "studio/_tools/library_index.py",
         "studio/_tools/lora_check.py",
         "studio/_tools/lora_examples.py",
         "studio/_tools/lora_strength_sweep.py",
         "studio/_tools/make_anime_sheet.py",
         "studio/_tools/make_domains.py",
+        "studio/_tools/make_wuxia_cast.py",
+        "studio/_tools/model_intake.py",
+        "studio/_tools/photo_count_probe.py",
+        "studio/_tools/photo_to_anime.py",
         "studio/_tools/place_examples.py",
         "studio/_tools/realism_ladder.py",
         "studio/_tools/render_templates.py",
         "studio/_tools/style_examples.py",
         "studio/_tools/tag_examples.py",
+        "studio/_tools/terra_3d_source.py",
+        "studio/_tools/terra_3d_source_v2.py",
         "studio/_tools/terra_check.py",
         "studio/_tools/terra_possibilities.py",
         "studio/_tools/terra_styles.py",
@@ -2717,7 +2840,6 @@
         "studio/_tools/video_examples.py",
         "studio/_tools/video_index.py",
         "studio/compose.py",
-        "studio/gallery_gen.py",
         "studio/tag_examples.py"
       ],
       "tier": "app",
@@ -2729,15 +2851,83 @@
       "used_by": [
         "studio/_tools/make_turnaround_wf.py",
         "studio/_tools/qwen_character.py",
+        "studio/_tools/terra_3d_source.py",
         "studio/_tools/terra_views.py",
         "studio/_tools/turnaround.py"
       ],
       "tier": "script",
       "exists": true,
       "note": "One portrait to many consistent views - the input to character LoRA training. Driven by studio/_tools/turnaround.py. A real capability with no folder and no card."
+    },
+    {
+      "file": "40_flux2_t2i.json",
+      "used_by": [
+        "studio/_tools/flux2_probe.py",
+        "studio/_tools/flux2_text_sweep.py",
+        "studio/_tools/library_index.py",
+        "studio/_tools/make_flux2_styles.py",
+        "studio/_tools/model_intake.py",
+        "studio/_tools/photo_to_anime.py",
+        "studio/_tools/replicate_prompts.py"
+      ],
+      "tier": "script",
+      "exists": true,
+      "note": null
+    },
+    {
+      "file": "41_hunyuan_t2v.json",
+      "used_by": [
+        "studio/_tools/video_engine_ab.py"
+      ],
+      "tier": "script",
+      "exists": true,
+      "note": null
+    },
+    {
+      "file": "42_hunyuan_i2v.json",
+      "used_by": [
+        "studio/_tools/video_engine_ab.py"
+      ],
+      "tier": "script",
+      "exists": true,
+      "note": null
+    },
+    {
+      "file": "50_ltx_first_last.json",
+      "used_by": [
+        "studio/_tools/master_frames.py",
+        "studio/_tools/story_routes.py"
+      ],
+      "tier": "script",
+      "exists": true,
+      "note": null
     }
   ],
   "production_folders": [
+    {
+      "folder": "rolled",
+      "files": 5369,
+      "size_h": "11.1 GB",
+      "newest": "2026-08-16",
+      "media": {
+        "image": 3718,
+        "video": 846,
+        "audio": 805
+      }
+    },
+    {
+      "folder": "12-shorts",
+      "files": 2202,
+      "size_h": "4.5 GB",
+      "newest": "2026-08-16",
+      "media": {
+        "video": 1159,
+        "image": 570,
+        "audio": 449,
+        "text": 22,
+        "other": 2
+      }
+    },
     {
       "folder": "studio_gallery",
       "files": 1786,
@@ -2748,24 +2938,30 @@
       }
     },
     {
-      "folder": "12-shorts",
-      "files": 1468,
-      "size_h": "2.8 GB",
-      "newest": "2026-08-04",
-      "media": {
-        "video": 865,
-        "audio": 302,
-        "image": 292,
-        "text": 9
-      }
-    },
-    {
       "folder": "studio_cards",
       "files": 1026,
       "size_h": "1.2 GB",
       "newest": "2026-07-31",
       "media": {
         "image": 1026
+      }
+    },
+    {
+      "folder": "gallery_art",
+      "files": 932,
+      "size_h": "2.4 GB",
+      "newest": "2026-08-05",
+      "media": {
+        "image": 932
+      }
+    },
+    {
+      "folder": "40-flux2",
+      "files": 494,
+      "size_h": "1.3 GB",
+      "newest": "2026-08-05",
+      "media": {
+        "image": 494
       }
     },
     {
@@ -2814,6 +3010,24 @@
       }
     },
     {
+      "folder": "count",
+      "files": 223,
+      "size_h": "251.4 MB",
+      "newest": "2026-08-06",
+      "media": {
+        "image": 223
+      }
+    },
+    {
+      "folder": "studio_cast",
+      "files": 216,
+      "size_h": "228.7 MB",
+      "newest": "2026-08-10",
+      "media": {
+        "image": 216
+      }
+    },
+    {
       "folder": "studio_layers",
       "files": 203,
       "size_h": "312.4 MB",
@@ -2830,6 +3044,15 @@
       "media": {
         "video": 144,
         "image": 36
+      }
+    },
+    {
+      "folder": "terra_real",
+      "files": 178,
+      "size_h": "265.0 MB",
+      "newest": "2026-08-05",
+      "media": {
+        "image": 178
       }
     },
     {
@@ -2851,12 +3074,30 @@
       }
     },
     {
+      "folder": "model_intake",
+      "files": 150,
+      "size_h": "195.6 MB",
+      "newest": "2026-08-05",
+      "media": {
+        "image": 150
+      }
+    },
+    {
       "folder": "cast_proof",
       "files": 146,
       "size_h": "193.8 MB",
       "newest": "2026-08-04",
       "media": {
         "image": 146
+      }
+    },
+    {
+      "folder": "terra_3d",
+      "files": 140,
+      "size_h": "219.9 MB",
+      "newest": "2026-08-06",
+      "media": {
+        "image": 140
       }
     },
     {
@@ -2869,15 +3110,6 @@
       }
     },
     {
-      "folder": "studio_cast",
-      "files": 130,
-      "size_h": "138.1 MB",
-      "newest": "2026-08-04",
-      "media": {
-        "image": 130
-      }
-    },
-    {
       "folder": "studio_places",
       "files": 130,
       "size_h": "164.4 MB",
@@ -2887,12 +3119,30 @@
       }
     },
     {
+      "folder": "replicated",
+      "files": 113,
+      "size_h": "237.6 MB",
+      "newest": "2026-08-05",
+      "media": {
+        "image": 113
+      }
+    },
+    {
       "folder": "motion-lib",
       "files": 105,
       "size_h": "76.6 MB",
       "newest": "2026-08-04",
       "media": {
         "video": 105
+      }
+    },
+    {
+      "folder": "terra_3d_v2",
+      "files": 102,
+      "size_h": "163.8 MB",
+      "newest": "2026-08-06",
+      "media": {
+        "image": 102
       }
     },
     {
@@ -2924,6 +3174,15 @@
       }
     },
     {
+      "folder": "p2a",
+      "files": 82,
+      "size_h": "94.6 MB",
+      "newest": "2026-08-06",
+      "media": {
+        "image": 82
+      }
+    },
+    {
       "folder": "terra_voice",
       "files": 82,
       "size_h": "3.7 MB",
@@ -2931,6 +3190,26 @@
       "media": {
         "text": 47,
         "audio": 35
+      }
+    },
+    {
+      "folder": "the_film_audio",
+      "files": 80,
+      "size_h": "23.6 MB",
+      "newest": "2026-08-05",
+      "media": {
+        "audio": 72,
+        "video": 7,
+        "text": 1
+      }
+    },
+    {
+      "folder": "standin",
+      "files": 77,
+      "size_h": "164.7 MB",
+      "newest": "2026-08-06",
+      "media": {
+        "image": 77
       }
     },
     {
@@ -2981,6 +3260,15 @@
       }
     },
     {
+      "folder": "sheets",
+      "files": 27,
+      "size_h": "53.3 MB",
+      "newest": "2026-08-07",
+      "media": {
+        "image": 27
+      }
+    },
+    {
       "folder": "cast-motion",
       "files": 25,
       "size_h": "24.5 MB",
@@ -2991,12 +3279,60 @@
       }
     },
     {
-      "folder": "sheets",
-      "files": 22,
-      "size_h": "43.0 MB",
-      "newest": "2026-08-04",
+      "folder": "sfx",
+      "files": 24,
+      "size_h": "5.6 MB",
+      "newest": "2026-08-16",
       "media": {
-        "image": 22
+        "audio": 24
+      }
+    },
+    {
+      "folder": "stories",
+      "files": 24,
+      "size_h": "33.4 MB",
+      "newest": "2026-08-10",
+      "media": {
+        "image": 19,
+        "video": 5
+      }
+    },
+    {
+      "folder": "cues",
+      "files": 22,
+      "size_h": "16.9 MB",
+      "newest": "2026-08-15",
+      "media": {
+        "audio": 22
+      }
+    },
+    {
+      "folder": "terra3d",
+      "files": 21,
+      "size_h": "151.1 MB",
+      "newest": "2026-08-06",
+      "media": {
+        "mesh": 19,
+        "video": 2
+      }
+    },
+    {
+      "folder": "styles",
+      "files": 20,
+      "size_h": "32.5 MB",
+      "newest": "2026-08-12",
+      "media": {
+        "image": 20
+      }
+    },
+    {
+      "folder": "master-frames",
+      "files": 19,
+      "size_h": "39.1 MB",
+      "newest": "2026-08-16",
+      "media": {
+        "image": 17,
+        "video": 2
       }
     },
     {
@@ -3009,12 +3345,30 @@
       }
     },
     {
+      "folder": "audition",
+      "files": 17,
+      "size_h": "2.8 MB",
+      "newest": "2026-08-08",
+      "media": {
+        "audio": 17
+      }
+    },
+    {
       "folder": "restyle",
       "files": 17,
       "size_h": "23.4 MB",
       "newest": "2026-07-31",
       "media": {
         "image": 17
+      }
+    },
+    {
+      "folder": "flux2text",
+      "files": 16,
+      "size_h": "27.4 MB",
+      "newest": "2026-08-12",
+      "media": {
+        "image": 16
       }
     },
     {
@@ -3055,12 +3409,30 @@
       }
     },
     {
+      "folder": "hunyuan-ab",
+      "files": 14,
+      "size_h": "9.6 MB",
+      "newest": "2026-08-05",
+      "media": {
+        "video": 14
+      }
+    },
+    {
       "folder": "studio_loras",
       "files": 13,
       "size_h": "17.9 MB",
       "newest": "2026-08-03",
       "media": {
         "image": 13
+      }
+    },
+    {
+      "folder": "cast",
+      "files": 12,
+      "size_h": "14.5 MB",
+      "newest": "2026-08-10",
+      "media": {
+        "image": 12
       }
     },
     {
@@ -3145,6 +3517,15 @@
       }
     },
     {
+      "folder": "wuxia-live",
+      "files": 6,
+      "size_h": "10.2 MB",
+      "newest": "2026-08-10",
+      "media": {
+        "image": 6
+      }
+    },
+    {
       "folder": "faceq",
       "files": 5,
       "size_h": "6.9 MB",
@@ -3163,12 +3544,58 @@
       }
     },
     {
+      "folder": "ltx25_probe",
+      "files": 5,
+      "size_h": "3.9 MB",
+      "newest": "2026-08-15",
+      "media": {
+        "video": 5
+      }
+    },
+    {
+      "folder": "p2amesh",
+      "files": 5,
+      "size_h": "20.8 MB",
+      "newest": "2026-08-06",
+      "media": {
+        "image": 3,
+        "mesh": 2
+      }
+    },
+    {
+      "folder": "terra3dv2",
+      "files": 5,
+      "size_h": "42.8 MB",
+      "newest": "2026-08-06",
+      "media": {
+        "mesh": 5
+      }
+    },
+    {
+      "folder": "characters",
+      "files": 4,
+      "size_h": "4.6 MB",
+      "newest": "2026-08-10",
+      "media": {
+        "image": 4
+      }
+    },
+    {
       "folder": "known_probe",
       "files": 4,
       "size_h": "4.8 MB",
       "newest": "2026-08-04",
       "media": {
         "image": 4
+      }
+    },
+    {
+      "folder": "make3d",
+      "files": 4,
+      "size_h": "72.1 MB",
+      "newest": "2026-08-12",
+      "media": {
+        "mesh": 4
       }
     },
     {
@@ -3217,6 +3644,15 @@
       }
     },
     {
+      "folder": "depth",
+      "files": 3,
+      "size_h": "667.5 KB",
+      "newest": "2026-08-15",
+      "media": {
+        "image": 3
+      }
+    },
+    {
       "folder": "lora-slot-ab",
       "files": 3,
       "size_h": "7.1 MB",
@@ -3226,12 +3662,30 @@
       }
     },
     {
+      "folder": "multishot",
+      "files": 3,
+      "size_h": "7.8 MB",
+      "newest": "2026-08-15",
+      "media": {
+        "video": 3
+      }
+    },
+    {
       "folder": "verify-refpath",
       "files": 3,
       "size_h": "4.9 MB",
       "newest": "2026-08-03",
       "media": {
         "image": 3
+      }
+    },
+    {
+      "folder": "mvtest",
+      "files": 2,
+      "size_h": "7.7 MB",
+      "newest": "2026-08-11",
+      "media": {
+        "mesh": 2
       }
     },
     {
@@ -3248,6 +3702,15 @@
       "files": 2,
       "size_h": "2.6 MB",
       "newest": "2026-08-04",
+      "media": {
+        "image": 2
+      }
+    },
+    {
+      "folder": "wuxia",
+      "files": 2,
+      "size_h": "3.2 MB",
+      "newest": "2026-08-10",
       "media": {
         "image": 2
       }

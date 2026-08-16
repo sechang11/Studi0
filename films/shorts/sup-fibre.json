@@ -1,0 +1,100 @@
+{
+  "title": "FIBRE",
+  "hook": "fibre|the boring one that works",
+  "canvas": [
+    1080,
+    1920
+  ],
+  "fps": 24,
+  "engine": "higgs_v3",
+  "keyframe_engine": "qwen",
+  "kind": "supplement",
+  "style": "warm documentary photography, morning kitchen light, natural textures, soft shadows, muted earthy palette, shallow depth of field, high detail",
+  "voices": {
+    "V": {
+      "engine": "higgs_v3",
+      "voice": "voices_examples/female/female_04_maya.wav"
+    }
+  },
+  "music": [
+    {
+      "at": 0,
+      "prefix": "sup_fibre_score",
+      "bpm": 76,
+      "key": "C major",
+      "seconds": 30,
+      "level": 0.55,
+      "tags": "warm nostalgic strings, soft piano, gentle, hazy, wistful, instrumental"
+    }
+  ],
+  "beats": [
+    {
+      "id": "01_open",
+      "template": "hook",
+      "clip_secs": 5,
+      "prompt": "A rustic loaf of wholegrain bread cut open on a wooden board, close-up, warm morning light, crumb texture visible",
+      "motion": "Crumbs settle. Light moves across the crust.",
+      "caption": "The least glamorous, most missed",
+      "line": {
+        "who": "V",
+        "text": "Fibre is the least glamorous thing on this list and probably the one most people are short on."
+      },
+      "audio_lead": -0.3,
+      "sfx": "a bread knife on a board",
+      "sfx_secs": 3.0,
+      "sfx_level": 0.7
+    },
+    {
+      "id": "02_point",
+      "template": "build",
+      "clip_secs": 4,
+      "prompt": "Oats, beans and apples arranged on a pale surface, top-down, natural light, clean documentary style",
+      "motion": "Light shifts slowly.",
+      "caption": "Two kinds, two jobs",
+      "line": {
+        "who": "V",
+        "text": "Some of it dissolves and slows digestion. Some of it does not, and keeps things moving."
+      },
+      "audio_lead": -0.3
+    },
+    {
+      "id": "03_detail",
+      "template": "build",
+      "clip_secs": 4,
+      "prompt": "A bowl of porridge with berries on a wooden table, warm kitchen light, steam rising, close-up",
+      "motion": "Steam drifts up from the bowl.",
+      "caption": "It feeds your gut bacteria",
+      "line": {
+        "who": "V",
+        "text": "It also feeds the bacteria in your gut, which is where a lot of the current research is pointed."
+      },
+      "audio_lead": -0.3
+    },
+    {
+      "id": "04_turn",
+      "template": "build",
+      "clip_secs": 4,
+      "prompt": "A glass of water beside a bowl of oats on a table, soft daylight, simple composition",
+      "motion": "Light drifts. Very still.",
+      "caption": "Add it slowly. Drink water.",
+      "line": {
+        "who": "V",
+        "text": "One practical note: add it slowly and drink water, or you will regret the enthusiasm."
+      },
+      "audio_lead": -0.3
+    },
+    {
+      "id": "05_land",
+      "template": "aftermath",
+      "clip_secs": 4,
+      "prompt": "An empty wooden board on a table, warm light, minimal",
+      "motion": "Still, light moving gently.",
+      "caption": "Not medical advice",
+      "line": {
+        "who": "V",
+        "text": "General information, not medical advice. Talk to a doctor about what fits you."
+      },
+      "audio_lead": -0.3
+    }
+  ]
+}
