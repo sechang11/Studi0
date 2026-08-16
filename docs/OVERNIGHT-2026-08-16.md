@@ -2,12 +2,13 @@
 
 ## The short-form slate
 
-**5 of 20 films rendered.** Vertical 1080x1920, each with keyframes, an i2v pass, a spoken script, a scored cue, effects, and a mastered mix.
+**20 of 20 films rendered.** Vertical 1080x1920, each with keyframes, an i2v pass, a spoken script, a scored cue, effects, and a mastered mix.
 
-- total runtime 1.0 min across 5 films (11.6 s mean, 10.3-16.6 s)
-- loudness -9.8 to -9.5 LUFS (target -9.5, feed-loud not broadcast)
-- **supplement**: 1 - CREATINE
-- **commercial**: 4 - ATLAS, LUMEN, NORTHWIND TEA, PACE
+- total runtime 6.8 min across 20 films (20.2 s mean, 11.0-32.8 s)
+- loudness -10.0 to -9.5 LUFS (target -9.5, feed-loud not broadcast)
+- **supplement**: 8 - CAFFEINE + THEANINE, CREATINE, FIBRE, MAGNESIUM, OMEGA-3, PROTEIN, SLEEP & MELATONIN, VITAMIN D
+- **commercial**: 6 - ATLAS, LUMEN, NORTHWIND TEA, PACE, SLOW SUNDAY, TIDEWATER
+- **hook**: 6 - THE DOOR, THE GARDEN, THE RETURN, FLOOR THIRTEEN, THE SIGNAL, LOW TIDE
 
 ### Where things are
 
