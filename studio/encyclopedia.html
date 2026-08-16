@@ -73,6 +73,29 @@
 .m .prov{margin-top:9px;font-size:10px;color:var(--dim)}
 .m .prov a{color:var(--accent)}
 .m .cards{margin-top:7px;font-size:11px;color:var(--dim);font-family:ui-monospace,Menlo,monospace}
+.wlist{grid-column:1/-1;display:flex;flex-direction:column;gap:7px}
+.w{background:var(--panel);border:1px solid var(--line);border-radius:9px;overflow:hidden}
+.w.open{border-color:var(--accent)}
+.whead{display:flex;align-items:center;gap:8px;padding:9px 13px;cursor:pointer}
+.whead:hover{background:var(--panel2)}
+.whead .wf{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--accent);
+  flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.wtag{font-size:10px;color:var(--dim);border:1px solid var(--line);border-radius:99px;
+  padding:1px 8px;white-space:nowrap}
+.wtag.ok{color:var(--ok);border-color:var(--ok)}
+.wtag.warn{color:var(--warn);border-color:var(--warn)}
+.wcaret{color:var(--dim);width:12px;text-align:center}
+.wbody{padding:4px 13px 13px;border-top:1px solid var(--line)}
+.wmods{font-size:11px;line-height:1.8}
+.wmods code{font-family:ui-monospace,Menlo,monospace;color:var(--ink)}
+.wacts{display:flex;flex-wrap:wrap;gap:7px;margin-top:13px}
+.wbtn{background:var(--panel2);border:1px solid var(--line);color:var(--dim);
+  border-radius:7px;padding:5px 11px;font:inherit;font-size:12px;cursor:pointer;
+  text-decoration:none;display:inline-block}
+.wbtn:hover{color:var(--ink);border-color:var(--accent)}
+.wbtn.go{border-color:var(--ok);color:var(--ok)}
+.wnote{margin-top:9px;font-size:11px;min-height:14px}
+.wnote.ok{color:var(--ok)} .wnote.bad{color:var(--bad);white-space:pre-wrap}
 </style>
 </head>
 <body>
@@ -86,6 +109,7 @@
 <div class="bar">
   <button class="view on" data-v="caps">capabilities</button>
   <button class="view" data-v="atlas">models in the field</button>
+  <button class="view" data-v="wf">workflows</button>
   <input type="search" id="q" placeholder="search capability, model, workflow…" size="34">
   <label>show <select id="filt">
     <option value="all">everything</option>
@@ -241,11 +265,98 @@ function drawAtlas(){
       catalogue alone is not an atlas.</p></div>`;
 }
 
+let WFS=null, WFOPEN={};
+
+function wfRow(w){
+  const open = WFOPEN[w.file];
+  const tags = [
+    w.kind ? `<span class="wtag">${esc(w.kind)}</span>` : "",
+    w.capability ? `<span class="wtag ok">${esc(w.capability)}</span>`
+                 : `<span class="wtag warn">no capability</span>`,
+    `<span class="wtag">${w.nodes} nodes</span>`,
+    w.api_format ? "" : `<span class="wtag warn">not API format</span>`
+  ].filter(Boolean).join("");
+  return `<div class="w${open?" open":""}">
+    <div class="whead" data-f="${esc(w.file)}">
+      <span class="wf">${esc(w.file)}</span>${tags}
+      <span class="wcaret">${open?"−":"+"}</span>
+    </div>
+    ${open?`<div class="wbody">
+      <div class="lbl">models it loads</div>
+      <div class="wmods">${(w.models||[]).map(m=>`<code>${esc(m)}</code>`).join("<br>")
+        || "<span style='color:var(--dim)'>none — prompted directly</span>"}</div>
+      <div class="lbl">node types</div>
+      <div class="wmods">${(w.classes||[]).map(c=>`<code>${esc(c)}</code>`).join(" · ")}</div>
+      <div class="lbl">run by</div>
+      <div class="wmods">${(w.used_by||[]).map(u=>`<code>${esc(u)}</code>`).join("<br>")
+        || "<span style='color:var(--dim)'>no code loads this graph</span>"}</div>
+      <div class="wacts">
+        <a class="wbtn" href="/api/wf/file?name=${encodeURIComponent(w.file)}"
+           download="${esc(w.file)}">download json</a>
+        <button class="wbtn" data-send="${esc(w.file)}">copy to ComfyUI</button>
+        <button class="wbtn go" data-queue="${esc(w.file)}">queue it now</button>
+        <a class="wbtn" href="${esc((WFS&&WFS.comfy_url)||"http://127.0.0.1:8188")}"
+           target="_blank" rel="noreferrer">open ComfyUI</a>
+      </div>
+      <div class="wnote" id="wn_${esc(w.file).replace(/[^a-z0-9]/gi,"_")}"></div>
+    </div>`:""}
+  </div>`;
+}
+
+function drawWF(){
+  const q=document.getElementById("q").value.trim().toLowerCase();
+  let list=(WFS.workflows||[]);
+  if(q) list=list.filter(w=>JSON.stringify(w).toLowerCase().includes(q));
+  const t=WFS.totals||{};
+  document.getElementById("stat").textContent =
+    `${t.workflows} graphs · ${t.claimed} written up as a capability · ${t.run_by_code} run by code`;
+  document.getElementById("count").textContent = `${list.length} shown`;
+  document.getElementById("wrap").innerHTML =
+    `<div class="wlist">${list.map(wfRow).join("")}</div>`;
+  document.getElementById("gaps").innerHTML = `
+    <h2>adding to this list</h2>
+    <div class="box">Drop a <code>.json</code> into <code>workflows/</code>. The index
+    reads the folder on every request, so there is nothing to register and no upload
+    button that would only write to the same place.
+    <p style="color:var(--dim);margin-top:8px">These are <b>API-format</b> graphs — the
+    shape ComfyUI's <code>/prompt</code> endpoint accepts, not the shape its editor
+    opens. That is why the actions are download, copy and queue rather than an
+    "open in ComfyUI" that would quietly fail.</p></div>`;
+  document.querySelectorAll(".whead").forEach(el=>el.onclick=()=>{
+    WFOPEN[el.dataset.f]=!WFOPEN[el.dataset.f]; drawWF();
+  });
+  const say=(f,msg,bad)=>{
+    const el=document.getElementById("wn_"+f.replace(/[^a-z0-9]/gi,"_"));
+    if(el){ el.textContent=msg; el.className="wnote"+(bad?" bad":" ok"); }
+  };
+  document.querySelectorAll("[data-send]").forEach(b=>b.onclick=()=>{
+    const f=b.dataset.send; say(f,"copying…");
+    fetch("/api/wf/send",{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({name:f})}).then(r=>r.json()).then(d=>
+      d.error?say(f,d.error,true):say(f,"copied to "+d.path));
+  });
+  document.querySelectorAll("[data-queue]").forEach(b=>b.onclick=()=>{
+    const f=b.dataset.queue; say(f,"queueing…");
+    fetch("/api/wf/queue",{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({name:f})}).then(r=>r.json()).then(d=>
+      d.error?say(f,(d.detail||d.error).slice(0,300),true)
+             :say(f,"queued — prompt "+(d.prompt_id||"?")+" — watch it in ComfyUI"));
+  });
+}
+
 function setView(v){
   VIEW=v;
   document.querySelectorAll(".bar .view").forEach(b=>
     b.classList.toggle("on", b.dataset.v===v));
   document.getElementById("filt").style.display = v==="caps" ? "" : "none";
+  if(v==="wf"){
+    if(WFS) return drawWF();
+    return fetch("/api/workflows").then(r=>r.json()).then(d=>{
+      if(d.error){ document.getElementById("wrap").innerHTML =
+        `<div class="empty">${esc(d.error)}</div>`; return; }
+      WFS=d; drawWF();
+    });
+  }
   if(v==="atlas"){
     if(ATLAS) return drawAtlas();
     fetch("/api/atlas").then(r=>r.json()).then(d=>{
@@ -257,7 +368,8 @@ function setView(v){
 }
 document.querySelectorAll(".bar .view").forEach(b=>b.onclick=()=>setView(b.dataset.v));
 
-document.getElementById("q").oninput=()=>VIEW==="atlas"?drawAtlas():draw();
+document.getElementById("q").oninput=()=>
+  VIEW==="atlas"?drawAtlas():VIEW==="wf"?drawWF():draw();
 document.getElementById("filt").onchange=draw;
 </script>
 </body>

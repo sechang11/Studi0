@@ -1,0 +1,1305 @@
+{
+ "generated": "2026-08-16 13:53",
+ "generator": "studio/_tools/workflow_index.py",
+ "note": "Every graph in workflows/, read rather than guessed at. These are API-format graphs - the shape ComfyUI's /prompt endpoint accepts, not the shape its editor opens - so the actions offered are download, copy to ComfyUI's folder, and queue, which all work on this format.",
+ "comfy_url": "http://127.0.0.1:8188",
+ "workflows": [
+  {
+   "file": "01_qwen_t2i_turbo.json",
+   "size_kb": 1.9,
+   "capability": "01-text-to-image",
+   "used_by": [
+    "scripts/cartoon.py",
+    "scripts/epic.py",
+    "scripts/film.py",
+    "scripts/pipeline.py",
+    "scripts/sweep.py"
+   ],
+   "api_format": true,
+   "nodes": 12,
+   "models": [
+    "Qwen-Image-2512-Lightning-4steps-V1.0-fp32.safetensors",
+    "qwen_2.5_vl_7b_fp8_scaled.safetensors",
+    "qwen_image_2512_fp8_e4m3fn.safetensors",
+    "qwen_image_vae.safetensors"
+   ],
+   "classes": [
+    "CLIPTextEncode",
+    "UNETLoader",
+    "CLIPLoader",
+    "VAELoader",
+    "LoraLoaderModelOnly",
+    "ModelSamplingAuraFlow",
+    "CFGNorm",
+    "EmptySD3LatentImage"
+   ],
+   "kind": "image"
+  },
+  {
+   "file": "02_qwen_t2i_quality.json",
+   "size_kb": 1.9,
+   "capability": "01-text-to-image",
+   "used_by": [
+    "scripts/cartoon.py",
+    "studio/_tools/flux2_probe.py",
+    "studio/_tools/model_intake.py",
+    "studio/_tools/replicate_prompts.py"
+   ],
+   "api_format": false,
+   "nodes": 12,
+   "models": [
+    "qwen_2.5_vl_7b_fp8_scaled.safetensors",
+    "qwen_image_2512_fp8_e4m3fn.safetensors",
+    "qwen_image_vae.safetensors"
+   ],
+   "classes": [
+    "CLIPTextEncode",
+    "UNETLoader",
+    "CLIPLoader",
+    "VAELoader",
+    "ModelSamplingAuraFlow",
+    "CFGNorm",
+    "EmptySD3LatentImage",
+    "KSampler"
+   ],
+   "kind": "image"
+  },
+  {
+   "file": "03_qwen_image_edit.json",
+   "size_kb": 2.2,
+   "capability": "02-image-editing",
+   "used_by": [
+    "studio/_tools/qwen_character.py"
+   ],
+   "api_format": false,
+   "nodes": 14,
+   "models": [
+    "qwen_2.5_vl_7b_fp8_scaled.safetensors",
+    "qwen_image_edit_2509_fp8_e4m3fn.safetensors",
+    "qwen_image_vae.safetensors"
+   ],
+   "classes": [
+    "TextEncodeQwenImageEditPlus",
+    "UNETLoader",
+    "CLIPLoader",
+    "VAELoader",
+    "ModelSamplingAuraFlow",
+    "CFGNorm",
+    "LoadImage",
+    "FluxKontextImageScale"
+   ],
+   "kind": "image"
+  },
+  {
+   "file": "04_wan22_i2v_turbo.json",
+   "size_kb": 3.3,
+   "capability": "05-image-to-video",
+   "used_by": [
+    "scripts/film.py",
+    "scripts/pipeline.py",
+    "studio/_tools/video_engines.py",
+    "studio/_tools/video_index.py"
+   ],
+   "api_format": true,
+   "nodes": 17,
+   "models": [
+    "umt5_xxl_fp8_e4m3fn_scaled.safetensors",
+    "wan2.2_i2v_high_noise_14B_fp8_scaled.safetensors",
+    "wan2.2_i2v_lightx2v_4steps_lora_v1_high_noise.safetensors",
+    "wan2.2_i2v_lightx2v_4steps_lora_v1_low_noise.safetensors",
+    "wan2.2_i2v_low_noise_14B_fp8_scaled.safetensors",
+    "wan_2.1_vae.safetensors"
+   ],
+   "classes": [
+    "UNETLoader",
+    "LoraLoaderModelOnly",
+    "ModelSamplingSD3",
+    "CLIPTextEncode",
+    "KSamplerAdvanced",
+    "CLIPLoader",
+    "VAELoader",
+    "LoadImage"
+   ],
+   "kind": "video"
+  },
+  {
+   "file": "05_qwen_controlnet.json",
+   "size_kb": 2.8,
+   "capability": "03-controlnet",
+   "used_by": [
+    "scripts/_write_caps.py"
+   ],
+   "api_format": false,
+   "nodes": 18,
+   "models": [
+    "Qwen-Image-2512-Lightning-4steps-V1.0-fp32.safetensors",
+    "Qwen-Image-InstantX-ControlNet-Union.safetensors",
+    "qwen_2.5_vl_7b_fp8_scaled.safetensors",
+    "qwen_image_2512_fp8_e4m3fn.safetensors",
+    "qwen_image_vae.safetensors"
+   ],
+   "classes": [
+    "CLIPTextEncode",
+    "SaveImage",
+    "UNETLoader",
+    "CLIPLoader",
+    "VAELoader",
+    "LoraLoaderModelOnly",
+    "ModelSamplingAuraFlow",
+    "CFGNorm"
+   ],
+   "kind": "image"
+  },
+  {
+   "file": "06_acestep_music.json",
+   "size_kb": 2.1,
+   "capability": "08-music",
+   "used_by": [
+    "scripts/cartoon.py",
+    "scripts/epic.py",
+    "scripts/make_audio_library.py",
+    "scripts/short.py",
+    "studio/_tools/audio_sweep.py",
+    "studio/_tools/film_audio.py",
+    "studio/_tools/make_domains.py"
+   ],
+   "api_format": false,
+   "nodes": 9,
+   "models": [
+    "ace_1.5_vae.safetensors",
+    "acestep_v1.5_turbo.safetensors",
+    "qwen_0.6b_ace15.safetensors",
+    "qwen_1.7b_ace15.safetensors"
+   ],
+   "classes": [
+    "UNETLoader",
+    "DualCLIPLoader",
+    "VAELoader",
+    "TextEncodeAceStepAudio1.5",
+    "EmptyAceStep1.5LatentAudio",
+    "KSampler",
+    "VAEDecodeAudio",
+    "SaveAudioMP3"
+   ],
+   "kind": "audio"
+  },
+  {
+   "file": "07_video_interpolate.json",
+   "size_kb": 1.3,
+   "capability": "07-frame-interpolation",
+   "used_by": [
+    "scripts/_write_caps.py"
+   ],
+   "api_format": false,
+   "nodes": 8,
+   "models": [
+    "film_net_fp16.safetensors"
+   ],
+   "classes": [
+    "LoadVideo",
+    "GetVideoComponents",
+    "FrameInterpolationModelLoader",
+    "FrameInterpolate",
+    "CreateVideo",
+    "SaveVideo"
+   ],
+   "kind": "video"
+  },
+  {
+   "file": "08_chatterbox_tts.json",
+   "size_kb": 1.0,
+   "capability": "10-voice",
+   "used_by": [
+    "scripts/cartoon.py"
+   ],
+   "api_format": false,
+   "nodes": 3,
+   "models": [],
+   "classes": [
+    "ChatterboxTTS",
+    "SaveAudioMP3"
+   ],
+   "kind": "audio"
+  },
+  {
+   "file": "09_image_upscale.json",
+   "size_kb": 0.6,
+   "capability": "04-upscaling",
+   "used_by": [
+    "scripts/_write_caps.py"
+   ],
+   "api_format": false,
+   "nodes": 5,
+   "models": [
+    "RealESRGAN_x4plus.safetensors"
+   ],
+   "classes": [
+    "LoadImage",
+    "UpscaleModelLoader",
+    "ImageUpscaleWithModel",
+    "SaveImage"
+   ],
+   "kind": "image"
+  },
+  {
+   "file": "10_stableaudio_sfx.json",
+   "size_kb": 1.8,
+   "capability": "09-sound-effects",
+   "used_by": [
+    "scripts/cartoon.py",
+    "scripts/epic.py",
+    "scripts/make_audio_library.py",
+    "studio/_tools/audio_sweep.py",
+    "studio/_tools/film_audio.py",
+    "studio/_tools/make_domains.py"
+   ],
+   "api_format": false,
+   "nodes": 9,
+   "models": [
+    "stable_audio_3_medium.safetensors",
+    "t5gemma_b_b_ul2.safetensors"
+   ],
+   "classes": [
+    "CLIPTextEncode",
+    "CheckpointLoaderSimple",
+    "CLIPLoader",
+    "EmptyLatentAudio",
+    "KSampler",
+    "VAEDecodeAudio",
+    "SaveAudioMP3"
+   ],
+   "kind": "audio"
+  },
+  {
+   "file": "11_ltx23_t2v_audio.json",
+   "size_kb": 4.2,
+   "capability": "06-text-to-video-with-audio",
+   "used_by": [
+    "studio/_tools/film_audio.py"
+   ],
+   "api_format": false,
+   "nodes": 22,
+   "models": [
+    "gemma_3_12B_it_fp4_mixed.safetensors",
+    "ltx-2.3-22b-dev-fp8.safetensors",
+    "ltx_2.3_22b_distilled_1.1_lora_dynamic_fro09_avg_rank_111_bf16.safetensors"
+   ],
+   "classes": [
+    "CLIPTextEncode",
+    "CheckpointLoaderSimple",
+    "LTXAVTextEncoderLoader",
+    "LTXVAudioVAELoader",
+    "LoraLoaderModelOnly",
+    "LTXVConditioning",
+    "EmptyLTXVLatentVideo",
+    "LTXVEmptyLatentAudio"
+   ],
+   "kind": "video"
+  },
+  {
+   "file": "12_ltx23_i2v_audio.json",
+   "size_kb": 4.2,
+   "capability": "06-text-to-video-with-audio",
+   "used_by": [
+    "scripts/cartoon.py",
+    "scripts/epic.py",
+    "scripts/short.py",
+    "studio/_tools/cast_motion.py",
+    "studio/_tools/library_index.py",
+    "studio/_tools/ltx25_probe.py",
+    "studio/_tools/motion_examples.py",
+    "studio/_tools/motion_probe.py",
+    "studio/_tools/motion_staging.py",
+    "studio/_tools/story_routes.py",
+    "studio/_tools/story_tool.py",
+    "studio/_tools/terra_wardrobe.py",
+    "studio/_tools/video_engine_ab.py",
+    "studio/_tools/video_engines.py",
+    "studio/_tools/video_examples.py",
+    "studio/_tools/video_index.py",
+    "studio/compose.py"
+   ],
+   "api_format": false,
+   "nodes": 25,
+   "models": [
+    "gemma_3_12B_it_fp4_mixed.safetensors",
+    "ltx-2.3-22b-dev-fp8.safetensors",
+    "ltx_2.3_22b_distilled_1.1_lora_dynamic_fro09_avg_rank_111_bf16.safetensors"
+   ],
+   "classes": [
+    "CLIPTextEncode",
+    "CheckpointLoaderSimple",
+    "LTXAVTextEncoderLoader",
+    "LTXVAudioVAELoader",
+    "LoraLoaderModelOnly",
+    "LoadImage",
+    "LTXVPreprocess",
+    "LTXVConditioning"
+   ],
+   "kind": "video"
+  },
+  {
+   "file": "13_qwen_t2i_styled.json",
+   "size_kb": 3.3,
+   "capability": null,
+   "used_by": [
+    "scripts/epic.py",
+    "scripts/make_sheets.py",
+    "scripts/short.py",
+    "scripts/style_ab.py",
+    "studio/_tools/capability_scan.py",
+    "studio/_tools/cast_style.py",
+    "studio/_tools/character_demo.py",
+    "studio/_tools/layer_demo.py",
+    "studio/_tools/library_index.py",
+    "studio/_tools/lora_examples.py",
+    "studio/_tools/lora_rescue.py",
+    "studio/_tools/make_anime_sheet.py",
+    "studio/_tools/make_domains.py",
+    "studio/_tools/make_wuxia_live.py",
+    "studio/_tools/motion_examples.py",
+    "studio/_tools/motion_probe.py",
+    "studio/_tools/motion_staging.py",
+    "studio/_tools/photo_sheet_probe.py",
+    "studio/_tools/place_examples.py",
+    "studio/_tools/qwen_character.py",
+    "studio/_tools/qwen_sheet.py",
+    "studio/_tools/realism_ladder.py",
+    "studio/_tools/render_templates.py",
+    "studio/_tools/sheets_dnd.py",
+    "studio/_tools/standin_person.py",
+    "studio/_tools/story_routes.py",
+    "studio/_tools/story_tool.py",
+    "studio/_tools/style_examples.py",
+    "studio/_tools/terra_real.py",
+    "studio/_tools/terra_styles.py",
+    "studio/_tools/video_examples.py",
+    "studio/_tools/video_index.py",
+    "studio/compile.py",
+    "studio/engine.py"
+   ],
+   "api_format": false,
+   "nodes": 15,
+   "models": [
+    "Qwen-Image-2512-Lightning-4steps-V1.0-fp32.safetensors",
+    "qwen_2.5_vl_7b_fp8_scaled.safetensors",
+    "qwen_image_2512_fp8_e4m3fn.safetensors",
+    "qwen_image_2512_storybook_anime_lora.safetensors",
+    "qwen_image_vae.safetensors"
+   ],
+   "classes": [
+    "LoraLoaderModelOnly",
+    "CLIPTextEncode",
+    "UNETLoader",
+    "CLIPLoader",
+    "VAELoader",
+    "ModelSamplingAuraFlow",
+    "CFGNorm",
+    "EmptySD3LatentImage"
+   ],
+   "kind": "image"
+  },
+  {
+   "file": "13_sam3_segment.json",
+   "size_kb": 3.5,
+   "capability": "12-segmentation-matting",
+   "used_by": [
+    "scripts/_write_caps.py"
+   ],
+   "api_format": false,
+   "nodes": 14,
+   "models": [
+    "sam3.1_multiplex_fp16.safetensors"
+   ],
+   "classes": [
+    "SaveImage",
+    "LoadImage",
+    "CheckpointLoaderSimple",
+    "CLIPTextEncode",
+    "SAM3_Detect",
+    "InvertMask",
+    "JoinImageWithAlpha",
+    "MaskToImage"
+   ],
+   "kind": "image"
+  },
+  {
+   "file": "14_birefnet_matte.json",
+   "size_kb": 2.8,
+   "capability": "12-segmentation-matting",
+   "used_by": [
+    "studio/_tools/photo2anime_mesh.py",
+    "studio/_tools/standin_person.py",
+    "studio/_tools/terra_3d_source.py",
+    "studio/_tools/terra_3d_source_v2.py"
+   ],
+   "api_format": false,
+   "nodes": 13,
+   "models": [
+    "birefnet.safetensors"
+   ],
+   "classes": [
+    "SaveImage",
+    "LoadImage",
+    "LoadBackgroundRemovalModel",
+    "RemoveBackground",
+    "InvertMask",
+    "JoinImageWithAlpha",
+    "MaskToImage",
+    "EmptyImage"
+   ],
+   "kind": "image"
+  },
+  {
+   "file": "14_qwen_edit_ref.json",
+   "size_kb": 3.4,
+   "capability": null,
+   "used_by": [
+    "scripts/epic.py",
+    "scripts/make_sheets.py",
+    "scripts/short.py",
+    "studio/_tools/capability_scan.py",
+    "studio/_tools/cast_proof.py",
+    "studio/_tools/cast_style.py",
+    "studio/_tools/master_frames.py",
+    "studio/_tools/photo_count_probe.py",
+    "studio/_tools/qwen_character.py",
+    "studio/_tools/realism_ladder.py",
+    "studio/_tools/standin_person.py",
+    "studio/_tools/terra_real.py",
+    "studio/_tools/terra_styles.py"
+   ],
+   "api_format": false,
+   "nodes": 17,
+   "models": [
+    "Qwen-Image-Edit-2511-Lightning-4steps-V1.0-bf16.safetensors",
+    "qwen_2.5_vl_7b_fp8_scaled.safetensors",
+    "qwen_image_2512_storybook_anime_lora.safetensors",
+    "qwen_image_edit_2511_fp8mixed.safetensors",
+    "qwen_image_vae.safetensors"
+   ],
+   "classes": [
+    "LoraLoaderModelOnly",
+    "LoadImage",
+    "TextEncodeQwenImageEditPlus",
+    "UNETLoader",
+    "CLIPLoader",
+    "VAELoader",
+    "ModelSamplingAuraFlow",
+    "CFGNorm"
+   ],
+   "kind": "image"
+  },
+  {
+   "file": "15_acestep_v1_full.json",
+   "size_kb": 1.8,
+   "capability": null,
+   "used_by": [
+    "studio/_tools/capability_scan.py"
+   ],
+   "api_format": false,
+   "nodes": 9,
+   "models": [
+    "ace_step_v1_3.5b.safetensors"
+   ],
+   "classes": [
+    "TextEncodeAceStepAudio",
+    "CheckpointLoaderSimple",
+    "EmptyAceStepLatentAudio",
+    "KSampler",
+    "VAEDecodeAudio",
+    "SaveAudioMP3"
+   ],
+   "kind": "audio"
+  },
+  {
+   "file": "15_llm_prompt_studio.json",
+   "size_kb": 3.1,
+   "capability": null,
+   "used_by": [
+    "studio/_tools/capability_scan.py"
+   ],
+   "api_format": false,
+   "nodes": 5,
+   "models": [
+    "qwen3.5_2b_bf16.safetensors"
+   ],
+   "classes": [
+    "CLIPLoader",
+    "TextGenerate",
+    "PreviewAny"
+   ],
+   "kind": "other"
+  },
+  {
+   "file": "16_indextts2_voice.json",
+   "size_kb": 2.3,
+   "capability": null,
+   "used_by": [
+    "scripts/epic.py",
+    "scripts/make_audio_library.py",
+    "scripts/short.py",
+    "studio/_tools/capability_scan.py",
+    "studio/_tools/cast_voice.py",
+    "studio/_tools/film_audio.py",
+    "studio/_tools/make_domains.py"
+   ],
+   "api_format": false,
+   "nodes": 6,
+   "models": [],
+   "classes": [
+    "IndexTTSEngineNode",
+    "IndexTTSEmotionOptionsNode",
+    "UnifiedTTSTextNode",
+    "SaveAudioMP3"
+   ],
+   "kind": "audio"
+  },
+  {
+   "file": "16_llm_to_image.json",
+   "size_kb": 4.8,
+   "capability": "13-llm-prompt-studio",
+   "used_by": [
+    "scripts/idea.py"
+   ],
+   "api_format": false,
+   "nodes": 17,
+   "models": [
+    "Qwen-Image-2512-Lightning-4steps-V1.0-fp32.safetensors",
+    "qwen3.5_2b_bf16.safetensors",
+    "qwen_2.5_vl_7b_fp8_scaled.safetensors",
+    "qwen_image_2512_fp8_e4m3fn.safetensors",
+    "qwen_image_vae.safetensors"
+   ],
+   "classes": [
+    "CLIPLoader",
+    "CLIPTextEncode",
+    "TextGenerate",
+    "PreviewAny",
+    "UNETLoader",
+    "VAELoader",
+    "LoraLoaderModelOnly",
+    "ModelSamplingAuraFlow"
+   ],
+   "kind": "image"
+  },
+  {
+   "file": "17_higgs_v3_voice.json",
+   "size_kb": 1.7,
+   "capability": null,
+   "used_by": [
+    "scripts/epic.py",
+    "scripts/short.py",
+    "studio/_tools/capability_scan.py",
+    "studio/_tools/cast_voice.py",
+    "studio/_tools/make_domains.py",
+    "studio/_tools/voice_audition.py",
+    "studio/_tools/voice_routes.py"
+   ],
+   "api_format": false,
+   "nodes": 5,
+   "models": [],
+   "classes": [
+    "HiggsAudioV3EngineNode",
+    "UnifiedTTSTextNode",
+    "SaveAudioMP3"
+   ],
+   "kind": "audio"
+  },
+  {
+   "file": "17_ltx23_t2v_upscaled.json",
+   "size_kb": 6.7,
+   "capability": "14-ltx-two-stage-upscale",
+   "used_by": [
+    "scripts/_write_caps.py"
+   ],
+   "api_format": false,
+   "nodes": 29,
+   "models": [
+    "gemma_3_12B_it_fp4_mixed.safetensors",
+    "ltx-2.3-22b-dev-fp8.safetensors",
+    "ltx-2.3-spatial-upscaler-x2-1.1.safetensors",
+    "ltx_2.3_22b_distilled_1.1_lora_dynamic_fro09_avg_rank_111_bf16.safetensors"
+   ],
+   "classes": [
+    "CLIPTextEncode",
+    "LTXVConcatAVLatent",
+    "ManualSigmas",
+    "RandomNoise",
+    "SamplerCustomAdvanced",
+    "LTXVSeparateAVLatent",
+    "CheckpointLoaderSimple",
+    "LTXAVTextEncoderLoader"
+   ],
+   "kind": "video"
+  },
+  {
+   "file": "18_ltx_prompt_enhancer.json",
+   "size_kb": 3.4,
+   "capability": null,
+   "used_by": [
+    "studio/_tools/capability_scan.py"
+   ],
+   "api_format": false,
+   "nodes": 8,
+   "models": [
+    "gemma-3-12b-it-abliterated_lora_rank64_bf16.safetensors",
+    "gemma_3_12B_it_fp4_mixed.safetensors",
+    "ltx-2.3-22b-dev-fp8.safetensors",
+    "ltx_2.3_22b_distilled_1.1_lora_dynamic_fro09_avg_rank_111_bf16.safetensors"
+   ],
+   "classes": [
+    "CheckpointLoaderSimple",
+    "LTXAVTextEncoderLoader",
+    "LoraLoaderModelOnly",
+    "LoraLoader",
+    "TextGenerateLTX2Prompt",
+    "PreviewAny"
+   ],
+   "kind": "other"
+  },
+  {
+   "file": "19_product_composite.json",
+   "size_kb": 4.8,
+   "capability": "15-product-composite",
+   "used_by": [
+    "scripts/_write_caps.py"
+   ],
+   "api_format": false,
+   "nodes": 19,
+   "models": [
+    "Qwen-Image-2512-Lightning-4steps-V1.0-fp32.safetensors",
+    "birefnet.safetensors",
+    "qwen_2.5_vl_7b_fp8_scaled.safetensors",
+    "qwen_image_2512_fp8_e4m3fn.safetensors",
+    "qwen_image_vae.safetensors"
+   ],
+   "classes": [
+    "CLIPTextEncode",
+    "SaveImage",
+    "LoadImage",
+    "LoadBackgroundRemovalModel",
+    "RemoveBackground",
+    "UNETLoader",
+    "CLIPLoader",
+    "VAELoader"
+   ],
+   "kind": "image"
+  },
+  {
+   "file": "20_ltx_audio_to_video.json",
+   "size_kb": 7.9,
+   "capability": "18-audio-to-video",
+   "used_by": [
+    "scripts/_write_caps.py"
+   ],
+   "api_format": false,
+   "nodes": 40,
+   "models": [
+    "gemma_3_12B_it_fp4_mixed.safetensors",
+    "ltx-2.3-22b-dev-fp8.safetensors",
+    "ltx-2.3-spatial-upscaler-x2-1.1.safetensors",
+    "ltx_2.3_22b_distilled_1.1_lora_dynamic_fro09_avg_rank_111_bf16.safetensors"
+   ],
+   "classes": [
+    "CLIPTextEncode",
+    "LTXVImgToVideoInplace",
+    "LTXVConcatAVLatent",
+    "ManualSigmas",
+    "CFGGuider",
+    "RandomNoise",
+    "SamplerCustomAdvanced",
+    "LTXVSeparateAVLatent"
+   ],
+   "kind": "video"
+  },
+  {
+   "file": "21_llm_lyrics_to_song.json",
+   "size_kb": 4.8,
+   "capability": "19-llm-lyrics-song",
+   "used_by": [
+    "scripts/_write_caps.py"
+   ],
+   "api_format": false,
+   "nodes": 13,
+   "models": [
+    "ace_1.5_vae.safetensors",
+    "acestep_v1.5_turbo.safetensors",
+    "qwen3.5_2b_bf16.safetensors",
+    "qwen_0.6b_ace15.safetensors",
+    "qwen_1.7b_ace15.safetensors"
+   ],
+   "classes": [
+    "UNETLoader",
+    "DualCLIPLoader",
+    "VAELoader",
+    "CLIPLoader",
+    "TextGenerate",
+    "PreviewAny",
+    "TextEncodeAceStepAudio1.5",
+    "EmptyAceStep1.5LatentAudio"
+   ],
+   "kind": "audio"
+  },
+  {
+   "file": "21_sdxl_anime_restyle.json",
+   "size_kb": 1.6,
+   "capability": null,
+   "used_by": [
+    "scripts/restyle_sweep.py",
+    "studio/_tools/capability_scan.py"
+   ],
+   "api_format": true,
+   "nodes": 10,
+   "models": [
+    "animagine-xl-4.0.safetensors"
+   ],
+   "classes": [
+    "ImageScale",
+    "CLIPTextEncode",
+    "CheckpointLoaderSimple",
+    "LoadImage",
+    "VAEEncode",
+    "KSampler",
+    "VAEDecode",
+    "SaveImage"
+   ],
+   "kind": "image"
+  },
+  {
+   "file": "22_anime_kf_ipadapter.json",
+   "size_kb": 2.6,
+   "capability": null,
+   "used_by": [
+    "scripts/short.py",
+    "studio/_tools/capability_scan.py",
+    "studio/_tools/cast_motion.py",
+    "studio/_tools/cast_proof.py",
+    "studio/_tools/cast_style.py",
+    "studio/_tools/character_demo.py",
+    "studio/_tools/face_quality.py",
+    "studio/_tools/known_char_probe.py",
+    "studio/_tools/library_index.py",
+    "studio/_tools/lora_check.py",
+    "studio/_tools/lora_examples.py",
+    "studio/_tools/lora_strength_sweep.py",
+    "studio/_tools/make_anime_sheet.py",
+    "studio/_tools/make_domains.py",
+    "studio/_tools/make_wuxia_cast.py",
+    "studio/_tools/model_intake.py",
+    "studio/_tools/photo_count_probe.py",
+    "studio/_tools/photo_to_anime.py",
+    "studio/_tools/place_examples.py",
+    "studio/_tools/realism_ladder.py",
+    "studio/_tools/render_templates.py",
+    "studio/_tools/style_examples.py",
+    "studio/_tools/tag_examples.py",
+    "studio/_tools/terra_3d_source.py",
+    "studio/_tools/terra_3d_source_v2.py",
+    "studio/_tools/terra_check.py",
+    "studio/_tools/terra_possibilities.py",
+    "studio/_tools/terra_styles.py",
+    "studio/_tools/terra_views.py",
+    "studio/_tools/terra_wardrobe.py",
+    "studio/_tools/video_examples.py",
+    "studio/_tools/video_index.py",
+    "studio/compose.py",
+    "studio/engine.py",
+    "studio/tag_examples.py"
+   ],
+   "api_format": true,
+   "nodes": 11,
+   "models": [
+    "animagine-xl-4.0.safetensors"
+   ],
+   "classes": [
+    "CLIPTextEncode",
+    "CheckpointLoaderSimple",
+    "LoadImage",
+    "IPAdapterUnifiedLoader",
+    "IPAdapterAdvanced",
+    "EmptyLatentImage",
+    "KSampler",
+    "VAEDecode"
+   ],
+   "kind": "image"
+  },
+  {
+   "file": "22_qwen_edit_2511.json",
+   "size_kb": 4.3,
+   "capability": "20-qwen-edit-2511",
+   "used_by": [
+    "studio/_tools/character_new.py",
+    "studio/_tools/character_suite.py",
+    "studio/_tools/make_turnaround_wf.py",
+    "studio/_tools/photo_to_anime.py"
+   ],
+   "api_format": false,
+   "nodes": 18,
+   "models": [
+    "Qwen-Image-Edit-2511-Lightning-4steps-V1.0-bf16.safetensors",
+    "qwen_2.5_vl_7b_fp8_scaled.safetensors",
+    "qwen_image_edit_2511_fp8mixed.safetensors",
+    "qwen_image_vae.safetensors"
+   ],
+   "classes": [
+    "TextEncodeQwenImageEditPlus",
+    "FluxKontextMultiReferenceLatentMethod",
+    "UNETLoader",
+    "CLIPLoader",
+    "VAELoader",
+    "LoraLoaderModelOnly",
+    "ModelSamplingAuraFlow",
+    "CFGNorm"
+   ],
+   "kind": "image"
+  },
+  {
+   "file": "23_qwen_edit_2511_fusion.json",
+   "size_kb": 5.0,
+   "capability": "20-qwen-edit-2511",
+   "used_by": [
+    "scripts/_write_caps.py"
+   ],
+   "api_format": false,
+   "nodes": 20,
+   "models": [
+    "Qwen-Image-Edit-2511-Lightning-4steps-V1.0-bf16.safetensors",
+    "qwen_2.5_vl_7b_fp8_scaled.safetensors",
+    "qwen_image_edit_2511_fp8mixed.safetensors",
+    "qwen_image_vae.safetensors"
+   ],
+   "classes": [
+    "LoadImage",
+    "FluxKontextImageScale",
+    "TextEncodeQwenImageEditPlus",
+    "FluxKontextMultiReferenceLatentMethod",
+    "UNETLoader",
+    "CLIPLoader",
+    "VAELoader",
+    "LoraLoaderModelOnly"
+   ],
+   "kind": "image"
+  },
+  {
+   "file": "24_hunyuan3d_mesh.json",
+   "size_kb": 3.9,
+   "capability": "21-3d-generation",
+   "used_by": [
+    "studio/_tools/make_domains.py",
+    "studio/_tools/photo_to_anime.py"
+   ],
+   "api_format": false,
+   "nodes": 12,
+   "models": [
+    "hunyuan_3d_v2.1.safetensors"
+   ],
+   "classes": [
+    "ImageOnlyCheckpointLoader",
+    "LoadImage",
+    "ModelSamplingAuraFlow",
+    "CLIPVisionEncode",
+    "Hunyuan3Dv2Conditioning",
+    "EmptyLatentHunyuan3Dv2",
+    "KSampler",
+    "VAEDecodeHunyuan3D"
+   ],
+   "kind": "3d"
+  },
+  {
+   "file": "25_triposplat.json",
+   "size_kb": 5.1,
+   "capability": "21-3d-generation",
+   "used_by": [
+    "studio/_tools/make_domains.py"
+   ],
+   "api_format": false,
+   "nodes": 19,
+   "models": [
+    "birefnet.safetensors",
+    "dino_v3_vit_h.safetensors",
+    "flux2-vae.safetensors",
+    "triposplat_fp16.safetensors",
+    "triposplat_vae_decoder_fp16.safetensors"
+   ],
+   "classes": [
+    "VAELoader",
+    "LoadImage",
+    "LoadBackgroundRemovalModel",
+    "RemoveBackground",
+    "TripoSplatPreprocessImage",
+    "UNETLoader",
+    "CLIPVisionLoader",
+    "TripoSplatConditioning"
+   ],
+   "kind": "video"
+  },
+  {
+   "file": "26_flux2_t2i.json",
+   "size_kb": 4.1,
+   "capability": "22-flux2",
+   "used_by": [
+    "scripts/_write_caps.py"
+   ],
+   "api_format": false,
+   "nodes": 16,
+   "models": [
+    "Flux2TurboComfyv2.safetensors",
+    "flux2-vae.safetensors",
+    "flux2_dev_fp8mixed.safetensors",
+    "mistral_3_small_flux2_fp8.safetensors"
+   ],
+   "classes": [
+    "UNETLoader",
+    "CLIPLoader",
+    "LoraLoaderModelOnly",
+    "VAELoader",
+    "CLIPTextEncode",
+    "FluxGuidance",
+    "BasicGuider",
+    "Flux2Scheduler"
+   ],
+   "kind": "image"
+  },
+  {
+   "file": "27_control_maps.json",
+   "size_kb": 5.4,
+   "capability": "23-control-maps",
+   "used_by": [
+    "scripts/_write_caps.py"
+   ],
+   "api_format": false,
+   "nodes": 17,
+   "models": [
+    "depth_anything_3_mono_large.safetensors",
+    "moge_2_vitl_normal_fp16.safetensors",
+    "sdpose_wholebody_fp16.safetensors"
+   ],
+   "classes": [
+    "SaveImage",
+    "DA3Render",
+    "LoadImage",
+    "LoadDA3Model",
+    "DA3Inference",
+    "LoadMoGeModel",
+    "MoGeInference",
+    "MoGeRender"
+   ],
+   "kind": "image"
+  },
+  {
+   "file": "28_flux_outpaint.json",
+   "size_kb": 4.2,
+   "capability": "24-outpaint-removal",
+   "used_by": [
+    "studio/_tools/master_frames.py"
+   ],
+   "api_format": false,
+   "nodes": 15,
+   "models": [
+    "ae.safetensors",
+    "clip_l.safetensors",
+    "flux.1-fill-dev-OneReward-transformer_fp8.safetensors",
+    "t5xxl_fp16.safetensors"
+   ],
+   "classes": [
+    "UNETLoader",
+    "DualCLIPLoader",
+    "VAELoader",
+    "DifferentialDiffusion",
+    "LoadImage",
+    "ImagePadForOutpaint",
+    "CLIPTextEncode",
+    "ConditioningZeroOut"
+   ],
+   "kind": "image"
+  },
+  {
+   "file": "29_flux_object_removal.json",
+   "size_kb": 5.8,
+   "capability": "24-outpaint-removal",
+   "used_by": [
+    "scripts/_write_caps.py"
+   ],
+   "api_format": false,
+   "nodes": 21,
+   "models": [
+    "ae.safetensors",
+    "clip_l.safetensors",
+    "flux.1-fill-dev-OneReward-transformer_fp8.safetensors",
+    "removal_timestep_alpha-2-1740.safetensors",
+    "sam3.1_multiplex_fp16.safetensors",
+    "t5xxl_fp16.safetensors"
+   ],
+   "classes": [
+    "CLIPTextEncode",
+    "SaveImage",
+    "LoadImage",
+    "CheckpointLoaderSimple",
+    "SAM3_Detect",
+    "GrowMask",
+    "UNETLoader",
+    "LoraLoaderModelOnly"
+   ],
+   "kind": "image"
+  },
+  {
+   "file": "30_vision_caption.json",
+   "size_kb": 3.4,
+   "capability": "26-vision-caption",
+   "used_by": [
+    "studio/_tools/character_new.py"
+   ],
+   "api_format": false,
+   "nodes": 6,
+   "models": [
+    "gemma_3_12B_it_fp4_mixed.safetensors"
+   ],
+   "classes": [
+    "CLIPLoader",
+    "LoadImage",
+    "TextGenerate",
+    "PreviewAny"
+   ],
+   "kind": "other"
+  },
+  {
+   "file": "31_acestep_remix.json",
+   "size_kb": 3.1,
+   "capability": "25-music-remix",
+   "used_by": [
+    "scripts/_write_caps.py",
+    "studio/_tools/capability_scan.py"
+   ],
+   "api_format": false,
+   "nodes": 9,
+   "models": [
+    "ace_step_v1_3.5b.safetensors"
+   ],
+   "classes": [
+    "CheckpointLoaderSimple",
+    "LoadAudio",
+    "VAEEncodeAudio",
+    "TextEncodeAceStepAudio",
+    "KSampler",
+    "VAEDecodeAudio",
+    "SaveAudioMP3"
+   ],
+   "kind": "audio"
+  },
+  {
+   "file": "32_qwen_turnaround.json",
+   "size_kb": 3.7,
+   "capability": null,
+   "used_by": [
+    "studio/_tools/capability_scan.py",
+    "studio/_tools/make_turnaround_wf.py",
+    "studio/_tools/qwen_character.py",
+    "studio/_tools/terra_3d_source.py",
+    "studio/_tools/terra_views.py",
+    "studio/_tools/turnaround.py"
+   ],
+   "api_format": true,
+   "nodes": 18,
+   "models": [
+    "Qwen-Image-Edit-2511-Lightning-4steps-V1.0-bf16.safetensors",
+    "qwen-image-edit-2511-multiple-angles-lora.safetensors",
+    "qwen_2.5_vl_7b_fp8_scaled.safetensors",
+    "qwen_image_edit_2511_fp8mixed.safetensors",
+    "qwen_image_vae.safetensors"
+   ],
+   "classes": [
+    "LoraLoaderModelOnly",
+    "TextEncodeQwenImageEditPlus",
+    "FluxKontextMultiReferenceLatentMethod",
+    "UNETLoader",
+    "CLIPLoader",
+    "VAELoader",
+    "ModelSamplingAuraFlow",
+    "CFGNorm"
+   ],
+   "kind": "image"
+  },
+  {
+   "file": "33_train_character_lora.json",
+   "size_kb": 1.9,
+   "capability": null,
+   "used_by": [
+    "studio/_tools/capability_scan.py",
+    "studio/_tools/make_train_wf.py",
+    "studio/_tools/photo_count_probe.py",
+    "studio/_tools/train_character.py"
+   ],
+   "api_format": false,
+   "nodes": 6,
+   "models": [
+    "animagine-xl-4.0.safetensors"
+   ],
+   "classes": [
+    "LoadImageTextDataSetFromFolder",
+    "CheckpointLoaderSimple",
+    "MakeTrainingDataset",
+    "TrainLoraNode",
+    "SaveLoRA"
+   ],
+   "kind": "other"
+  },
+  {
+   "file": "40_flux2_t2i.json",
+   "size_kb": 4.2,
+   "capability": null,
+   "used_by": [
+    "studio/_tools/flux2_probe.py",
+    "studio/_tools/flux2_text_sweep.py",
+    "studio/_tools/library_index.py",
+    "studio/_tools/make_flux2_styles.py",
+    "studio/_tools/model_intake.py",
+    "studio/_tools/photo_to_anime.py",
+    "studio/_tools/replicate_prompts.py",
+    "studio/engine.py"
+   ],
+   "api_format": false,
+   "nodes": 19,
+   "models": [
+    "Flux2TurboComfyv2.safetensors",
+    "flux2-vae.safetensors",
+    "flux2_dev_fp8mixed.safetensors",
+    "mistral_3_small_flux2_fp8.safetensors"
+   ],
+   "classes": [
+    "UNETLoader",
+    "CLIPLoader",
+    "LoraLoaderModelOnly",
+    "VAELoader",
+    "CLIPTextEncode",
+    "FluxGuidance",
+    "BasicGuider",
+    "Flux2Scheduler"
+   ],
+   "kind": "image"
+  },
+  {
+   "file": "41_hunyuan_t2v.json",
+   "size_kb": 6.8,
+   "capability": null,
+   "used_by": [
+    "studio/_tools/video_engine_ab.py"
+   ],
+   "api_format": false,
+   "nodes": 34,
+   "models": [
+    "byt5_small_glyphxl_fp16.safetensors",
+    "hunyuanvideo1.5_1080p_sr_distilled_fp16.safetensors",
+    "hunyuanvideo1.5_720p_t2v_fp16.safetensors",
+    "hunyuanvideo15_latent_upsampler_1080p.safetensors",
+    "hunyuanvideo15_vae_fp16.safetensors",
+    "qwen_2.5_vl_7b_fp8_scaled.safetensors"
+   ],
+   "classes": [
+    "CFGGuider",
+    "SamplerCustomAdvanced",
+    "UNETLoader",
+    "CLIPTextEncode",
+    "ModelSamplingSD3",
+    "RandomNoise",
+    "KSamplerSelect",
+    "BasicScheduler"
+   ],
+   "kind": "video"
+  },
+  {
+   "file": "42_hunyuan_i2v.json",
+   "size_kb": 7.6,
+   "capability": null,
+   "used_by": [
+    "studio/_tools/video_engine_ab.py"
+   ],
+   "api_format": false,
+   "nodes": 37,
+   "models": [
+    "byt5_small_glyphxl_fp16.safetensors",
+    "hunyuanvideo1.5_1080p_sr_distilled_fp16.safetensors",
+    "hunyuanvideo1.5_720p_i2v_fp16.safetensors",
+    "hunyuanvideo15_latent_upsampler_1080p.safetensors",
+    "hunyuanvideo15_vae_fp16.safetensors",
+    "qwen_2.5_vl_7b_fp8_scaled.safetensors",
+    "sigclip_vision_patch14_384.safetensors"
+   ],
+   "classes": [
+    "CFGGuider",
+    "SamplerCustomAdvanced",
+    "UNETLoader",
+    "CLIPTextEncode",
+    "ModelSamplingSD3",
+    "RandomNoise",
+    "KSamplerSelect",
+    "BasicScheduler"
+   ],
+   "kind": "video"
+  },
+  {
+   "file": "50_ltx_first_last.json",
+   "size_kb": 5.0,
+   "capability": null,
+   "used_by": [
+    "studio/_tools/master_frames.py",
+    "studio/_tools/story_routes.py"
+   ],
+   "api_format": false,
+   "nodes": 29,
+   "models": [
+    "gemma_3_12B_it_fp4_mixed.safetensors",
+    "ltx-2.3-22b-dev-fp8.safetensors",
+    "ltx_2.3_22b_distilled_1.1_lora_dynamic_fro09_avg_rank_111_bf16.safetensors"
+   ],
+   "classes": [
+    "LoadImage",
+    "LTXVPreprocess",
+    "CLIPTextEncode",
+    "LTXVAddGuide",
+    "CheckpointLoaderSimple",
+    "LTXAVTextEncoderLoader",
+    "LTXVAudioVAELoader",
+    "LoraLoaderModelOnly"
+   ],
+   "kind": "video"
+  },
+  {
+   "file": "51_ltx25_i2v.json",
+   "size_kb": 9.9,
+   "capability": "51-multishot-video",
+   "used_by": [
+    "studio/_tools/ltx25_probe.py",
+    "studio/_tools/multishot.py",
+    "studio/_tools/ui2api.py"
+   ],
+   "api_format": true,
+   "nodes": 51,
+   "models": [
+    "gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors",
+    "gemma4_e2b_it_bf16.safetensors",
+    "ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors",
+    "ltx-2.5-audio-vae-bf16.safetensors",
+    "ltx-2.5-latent-spatial-upscaler-x2-bf16-1.0.safetensors",
+    "ltx-2.5-video-vae-bf16.safetensors"
+   ],
+   "classes": [
+    "PrimitiveInt",
+    "ComfyMathExpression",
+    "CLIPLoader",
+    "PrimitiveBoolean",
+    "CLIPTextEncode",
+    "VAELoader",
+    "KSamplerSelect",
+    "RandomNoise"
+   ],
+   "kind": "video"
+  }
+ ],
+ "totals": {
+  "workflows": 45,
+  "claimed": 30,
+  "run_by_code": 45,
+  "orphan": 0
+ }
+}

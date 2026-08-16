@@ -34,6 +34,8 @@ _page, which injects the /video nav link rather than editing ten hand-written HT
 """
 import http.server, importlib, inspect, json, os, re, socket, socketserver, subprocess, \
        sys, traceback, urllib.parse
+import shutil
+import urllib.request
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 PORT = int(os.environ.get("STUDIO_PORT", "8777"))
@@ -90,6 +92,8 @@ def library():
 
 
 ROOT = os.path.dirname(HERE)
+# Where ComfyUI is listening, for queueing a graph onto its render queue.
+COMFY = os.environ.get("COMFY_URL", "http://127.0.0.1:8188")
 COMFY_OUT = os.path.expanduser(
     os.environ.get("COMFY_ROOT", "~/ComfyUI")) + "/output/claude-generated/12-shorts"
 
@@ -1621,6 +1625,26 @@ class H(http.server.SimpleHTTPRequestHandler):
             return self._page("library.html")
         if path in ("/encyclopedia", "/encyclopedia.html"):
             return self._page("encyclopedia.html")
+        if path == "/api/workflows":
+            try:
+                wi = _load_tool_module("workflow_index")
+                if hasattr(wi, "main_quiet"):
+                    wi.main_quiet()
+            except Exception as e:
+                return self._send({"error": "workflow_index: %s" % e}, 500)
+            fp = os.path.join(HERE, "samples", "_workflows.json")
+            if not os.path.exists(fp):
+                return self._send({"error": "run studio/_tools/workflow_index.py"}, 500)
+            with open(fp, encoding="utf-8") as f:
+                return self._send(json.load(f))
+        if path.startswith("/api/wf/file"):
+            q = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query)
+            name = re.sub(r"[^A-Za-z0-9_.-]", "", q.get("name", [""])[0])
+            fp = os.path.join(ROOT, "workflows", name)
+            if not name or not os.path.exists(fp):
+                return self._send({"error": "no such workflow"}, 404)
+            with open(fp, "rb") as f:
+                return self._send(f.read(), 200, "application/json")
         if path == "/api/atlas":
             # Rebuilt per request like the encyclopedia, and for the same reason: a
             # reference that lags what it describes is the failure it exists to fix.
@@ -2198,13 +2222,50 @@ class H(http.server.SimpleHTTPRequestHandler):
                      "/api/tool/run", "/api/tool/random",
                      "/api/make3d/mesh", "/api/library/star",
                      "/api/library/grow", "/api/library/reject",
-                     "/api/library/check", "/api/verify/card", "/api/remake"):
+                     "/api/library/check", "/api/verify/card", "/api/remake",
+                     "/api/wf/send", "/api/wf/queue"):
             return self._send({"error": "not found"}, 404)
         n = int(self.headers.get("Content-Length", 0))
         try:
             data = json.loads(self.rfile.read(n) or b"{}")
         except Exception as e:
             return self._send({"error": f"bad json: {e}"}, 400)
+        if p in ("/api/wf/send", "/api/wf/queue"):
+            name = re.sub(r"[^A-Za-z0-9_.-]", "", str(data.get("name") or ""))
+            fp = os.path.join(ROOT, "workflows", name)
+            if not name or not os.path.exists(fp):
+                return self._send({"error": "no such workflow"}, 404)
+            if p == "/api/wf/send":
+                # A copy where ComfyUI can see it. These are API graphs, so its EDITOR
+                # may not open them - the page says exactly that rather than promising
+                # more than the format supports.
+                dst_dir = os.path.join(os.path.expanduser(
+                    os.environ.get("COMFY_ROOT", "~/ComfyUI")),
+                    "user", "default", "workflows", "studio")
+                os.makedirs(dst_dir, exist_ok=True)
+                shutil.copy(fp, os.path.join(dst_dir, name))
+                return self._send({"ok": True,
+                                   "path": "user/default/workflows/studio/" + name})
+            graph = json.load(open(fp, encoding="utf-8"))
+            try:
+                req = urllib.request.Request(
+                    COMFY + "/prompt",
+                    data=json.dumps({"prompt": graph}).encode(),
+                    headers={"Content-Type": "application/json"})
+                with urllib.request.urlopen(req, timeout=25) as r:
+                    out = json.loads(r.read() or b"{}")
+                return self._send({"ok": True, "prompt_id": out.get("prompt_id"),
+                                   "comfy": COMFY})
+            except Exception as e:
+                # A validation failure is real information about the graph, so it travels
+                # back to the page instead of becoming a generic 500.
+                body = b""
+                try:
+                    body = e.read()
+                except Exception:
+                    pass
+                return self._send({"error": str(e),
+                                   "detail": (body or b"").decode()[:600]}, 502)
         if p == "/api/remake":
             # Straight through remake.py so the app and the CLI share one store: a flag
             # raised while listening here is listed and cleared by the same tool there.
