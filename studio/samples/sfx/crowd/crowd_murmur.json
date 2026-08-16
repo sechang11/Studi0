@@ -36,9 +36,14 @@
   "channels": 2,
   "seconds": 10.03,
   "lufs": -11.0,
-  "true_peak": 1.0,
+  "true_peak": -2.4,
   "silent_seconds": 0,
-  "silent_fraction": 0.0
+  "silent_fraction": 0.0,
+  "true_peak_before_limit": 1.0
  },
- "workflow": "10_stableaudio_sfx.json"
+ "workflow": "10_stableaudio_sfx.json",
+ "peak_limited": {
+  "ceiling_dbfs": -3.0,
+  "why": "audition copy had no peak ceiling; the film bus already limits to -3 dBTP"
+ }
 }

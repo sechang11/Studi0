@@ -194,6 +194,8 @@
 #subnav .sub2{width:100%;display:flex;flex-wrap:wrap;gap:6px;
   padding-left:10px;border-left:2px solid var(--line)}
 #subnav .sub2 .chip{border-radius:6px;padding:3px 9px;font-size:11px}
+#libnav h3 em, #facets h3 em{display:block;font-style:normal;font-weight:400;
+  text-transform:none;letter-spacing:0;color:var(--dim);font-size:10px;margin-top:1px}
 </style>
 </head>
 <body>
@@ -309,6 +311,7 @@ function facetCounts(){
 function drawFacets(){
   const live=facetCounts();
   document.getElementById("facets").innerHTML = Object.keys(D.facets).map(f=>{
+    const HINT={domain:"every file ever rendered"};
     const all=Object.keys(D.facets[f]);
     const rows=all.map(v=>[v, live[f][v]||0]).sort((a,b)=>b[1]-a[1]);
     const lim = OPEN[f] ? rows.length : 8;
@@ -317,7 +320,7 @@ function drawFacets(){
     // is the obvious gesture, and it was doing nothing.
     const kind = (KINDS.find(([ff]) => ff === f) || [])[1];
     return `<div class="fac"><h3${kind?` class="link" data-jump="${kind}" title="see all ${kind}"`:""}>${
-      esc(f)}${kind?" →":""}</h3>` +
+      esc(f)}${kind?" →":""}${HINT[f]?`<em>${HINT[f]}</em>`:""}</h3>` +
       rows.slice(0,lim).map(([v,n])=>
         `<button data-f="${esc(f)}" data-v="${esc(v)}" class="${on.has(v)?"on":""}">
            <span style="color:inherit;overflow:hidden;text-overflow:ellipsis">${esc(v)}</span>
@@ -444,7 +447,7 @@ function drawModes(){
   // in a top strip and the other in a column made them look unrelated.
   const n = D ? D.facets : {};
   document.getElementById("libnav").innerHTML =
-    `<h3>library</h3>` +
+    `<h3>library <em>cards you pick from</em></h3>` +
     `<button data-k="frames" class="${MODE==="frames"?"on":""}">all frames<span>${
         D?D.total.toLocaleString():""}</span></button>` +
     `<button data-k="starred" class="${MODE==="starred"?"on":""}">starred<span>${

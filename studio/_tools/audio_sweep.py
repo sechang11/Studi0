@@ -251,7 +251,23 @@ def main():
                     got = (render_cue(card, a.cue_seconds, a.seed) if kind == "cues"
                            else render_sfx(card, a.seed))
                     if got and os.path.exists(got):
-                        shutil.copy(got, sample)
+                        # PEAK-LIMIT ON THE WAY IN. The raw render routinely lands above
+                        # 0 dBTP (33 of 35 did, worst +4.0), and inside a film that never
+                        # shows because sound_dept normalises every effect to tp=-3.0
+                        # before the mix. The audition copy had no ceiling at all, so the
+                        # library you LISTEN to was dirtier than the one you USE - which
+                        # is the wrong way round for deciding what to keep.
+                        # A limiter, not loudnorm: the level relationships are wanted,
+                        # the peaks are not. 192k first so it sees inter-sample peaks.
+                        lim = sample + ".lim.mp3"
+                        r = sh("ffmpeg", "-y", "-v", "error", "-i", got, "-af",
+                               "aresample=192000,alimiter=limit=0.71:attack=1:"
+                               "release=50:level=disabled,aresample=48000",
+                               "-c:a", "libmp3lame", "-q:a", "2", lim)
+                        if os.path.exists(lim):
+                            shutil.move(lim, sample)
+                        else:
+                            shutil.copy(got, sample)
                     else:
                         cards.stamp(kind, cid, "MEASURED", "audio_sweep: render",
                                     note="FAILED: the graph produced no audio")
@@ -267,7 +283,10 @@ def main():
                 json.dump({"kind": kind, "id": cid, "card": card, "seed": a.seed,
                            "measured": m, "workflow": ("06_acestep_music.json" if kind == "cues"
                                                         else "10_stableaudio_sfx.json")},
-                          open(os.path.join(outdir, cid + ".json"), "w"), indent=1)
+                          # BESIDE ITS AUDIO. The mp3 goes into the filed subfolder and
+                          # this was still writing flat, so a remade card ended up with
+                          # its audio in ui/ and its provenance loose in sfx/.
+                          open(os.path.splitext(sample)[0] + ".json", "w"), indent=1)
             status, note = judge(kind, card, m, want)
             method = ("audio_sweep: %s" % ("reference file measured" if kind == "voices"
                                             else "rendered + measured (ffmpeg ebur128/"

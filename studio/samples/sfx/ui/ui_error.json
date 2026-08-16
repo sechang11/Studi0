@@ -16,19 +16,31 @@
   "subcategory": "error",
   "keywords": "interface digital negative buzz",
   "evidence": {
-   "verdict": "UNVERIFIED",
-   "method": "authored, not yet rendered",
+   "verdict": "MEASURED",
+   "method": "audio_sweep: rendered + measured (ffmpeg ebur128/silencedetect, librosa flatness)",
    "date": "2026-08-16",
-   "note": "audio_sweep.py renders and measures"
+   "note": "renders and is not broken [seconds=2.04, lufs=-11.6, true_peak=1.7, silent_fraction=0.0, channels=2]"
+  },
+  "evidence_history": [
+   {
+    "verdict": "UNVERIFIED",
+    "method": "authored, not yet rendered",
+    "date": "2026-08-16",
+    "note": "audio_sweep.py renders and measures"
+   }
+  ],
+  "remake": {
+   "reason": "test: scratchy",
+   "at": "2026-08-16 11:51"
   }
  },
- "seed": 4242,
+ "seed": 9648,
  "measured": {
-  "sample_rate": 44100,
+  "sample_rate": 48000,
   "channels": 2,
   "seconds": 2.04,
-  "lufs": -11.6,
-  "true_peak": 1.7,
+  "lufs": -11.0,
+  "true_peak": -2.8,
   "silent_seconds": 0,
   "silent_fraction": 0.0
  },

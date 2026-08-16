@@ -38,11 +38,16 @@
   "channels": 2,
   "seconds": 20.0,
   "lufs": -12.3,
-  "true_peak": 0.1,
+  "true_peak": -2.7,
   "silent_seconds": 3.52,
   "silent_fraction": 0.18,
   "flatness": 0.0012,
-  "f0_median": 131.2
+  "f0_median": 131.2,
+  "true_peak_before_limit": 0.1
  },
- "workflow": "06_acestep_music.json"
+ "workflow": "06_acestep_music.json",
+ "peak_limited": {
+  "ceiling_dbfs": -3.0,
+  "why": "audition copy had no peak ceiling; the film bus already limits to -3 dBTP"
+ }
 }
