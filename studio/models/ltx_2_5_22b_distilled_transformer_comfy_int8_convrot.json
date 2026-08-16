@@ -3,23 +3,43 @@
   "name": "ltx-2.5-22b-distilled-transformer-comfy-int8-convrot",
   "file": "ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors",
   "folder": "diffusion_models",
-  "size_gb": 0,
-  "status": "unavailable",
-  "engine": "video",
-  "dialect": "prose",
-  "role": "LTX-2.5 distilled - the routed video engine's successor.",
-  "desc": "Native MULTI-SHOT generation (connected shots in one pass holding character, environment, lighting and voice across cuts) - the local answer to the Seedance consistency question. Two-stage: base pass at half res, latent x2 upscale, 4-sigma refine. Gemma-4 12B text encoder. LTX-2.x Community License (free under $10M/yr). NOT ON DISK: gated on HuggingFace (Lightricks/LTX-2.5) - accept the licence and fetch with a token; docs/LTX25-RUNBOOK.md has the commands. workflows/51_ltx25_i2v.json is built and server-validated, waiting only on these files.",
-  "strengths": "multi-shot consistency, 4K, distilled speed",
-  "weaknesses": "unmeasured on this box",
+  "size_gb": 21.5,
+  "status": "ready",
+  "engine": null,
+  "dialect": null,
+  "role": "On disk, unmeasured.",
+  "desc": "MEASURED on this box 2026-08-15 against LTX-2.3, one keyframe, same seed and motion text: 2.5 HOLDS the approved keyframe (drift -0.004 - the last frame is as close as the first) where 2.3 walks off it (drift 0.141); 2.5 moves less (motion 1.54 vs 8.79; static floor 0.001, so it does move); 25.7s vs 27.0s for 4s at 1280x704 with audio. NATIVE MULTI-SHOT CONFIRMED: asked for three viewpoints with 'CUT TO', it produced wide -> extreme close-up of the same face -> high overhead, in ONE pass, character and world holding across the cuts (samples/multishot/linruo_views_strip.png). That capability did not exist on this box before. Cuts fire on different VIEWPOINTS; three descriptions of one continuous action render as one continuous shot, correctly.",
+  "strengths": "keyframe fidelity (no drift), native multi-shot with a real cut, 4K-capable, synchronised audio, distilled 8-step speed",
+  "weaknesses": "~5x less in-frame motion than 2.3; the LLM prompt expander rewrites motion text (leave off for films); 38 GB of weights",
   "workflows": [
     "51_ltx25_i2v.json"
   ],
-  "reachable": true,
-  "strip": null,
+  "reachable": false,
+  "strip": "samples/multishot/linruo_views_strip.png",
   "evidence": {
-    "verdict": "UNVERIFIED",
-    "method": "gated download pending; workflow built",
-    "date": "2026-08-15",
-    "note": ""
-  }
+    "verdict": "MEASURED",
+    "method": "ltx25_probe + clipmetrics vs 2.3, and multishot.py cut detection",
+    "date": "2026-08-16",
+    "note": "holds the keyframe (drift -0.004 vs 2.3's 0.141), moves less (1.54 vs 8.79), 25.7s vs 27.0s; native multi-shot confirmed on viewpoint cuts"
+  },
+  "evidence_history": [
+    {
+      "verdict": "UNVERIFIED",
+      "method": "gated download pending; workflow built",
+      "date": "2026-08-15",
+      "note": ""
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "ltx25_probe vs 2.3 on one keyframe",
+      "date": "2026-08-15",
+      "note": "26.0s, ssim_f0 0.431949 (2.3: 30.3s, 0.422661) - strip at samples/ltx25_probe/ltx25_strip.png; a human must watch"
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "ltx25_probe vs 2.3 on one keyframe",
+      "date": "2026-08-15",
+      "note": "25.7s, ssim_f0 0.431949 (2.3: 27.0s, 0.422661) - strip at samples/ltx25_probe/ltx25_strip.png; a human must watch"
+    }
+  ]
 }

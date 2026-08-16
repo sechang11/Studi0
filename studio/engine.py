@@ -290,9 +290,20 @@ def set_negative(wf, text, keep_shipped=True, positive=""):
 
 
 def video_graph(job, staged_image):
-    """The LTX image-to-video pass over a staged keyframe - extracted verbatim from
-    render_job.render_video's build block, frame math and the 24fps audio-latent
-    correction included (see task #45)."""
+    """The LTX image-to-video pass over a staged keyframe.
+
+    job["video_engine"] picks the model, default unchanged:
+      "ltx23" (default) - 12_ltx23_i2v_audio. More motion (8.79 vs 1.54 measured), but
+                          the picture DRIFTS off the approved keyframe (0.141 SSIM lost
+                          across 4s).
+      "ltx25"           - 51_ltx25_i2v. Holds the keyframe (drift -0.004, i.e. the last
+                          frame is as close as the first) with gentler motion, and is
+                          the only engine here that can generate CONNECTED SHOTS with a
+                          cut inside one pass (studio/_tools/multishot.py).
+    Numbers from samples/ltx25_probe/report.json, one keyframe, same seed and motion
+    text; the static floor is motion 0.001, so 2.5 moves, it just moves less."""
+    if str(job.get("video_engine") or "ltx23") == "ltx25":
+        return video_graph_25(job, staged_image)
     frames = int(round(job["seconds"] * 24 / 8)) * 8 + 1
     vw, vh = (1216, 704) if job["width"] <= job["height"] else (
         min(1216, job["width"] // 8 * 8), min(704, job["height"] // 8 * 8))
@@ -310,4 +321,28 @@ def video_graph(job, staged_image):
     set_path(wf, "21.inputs.frame_rate", 24)
     set_path(wf, "32.inputs.noise_seed", job["seed"])
     set_path(wf, "43.inputs.filename_prefix", "claude-generated/rolled/%s" % job["id"])
+    return wf
+
+
+def video_graph_25(job, staged_image):
+    """LTX-2.5 i2v (51_ltx25_i2v.json). Node ids are the template's own, recorded in the
+    workflow's `_` block: 395 image, 376 prompt, 373 negative, 362 seconds, 361 fps,
+    383 the LLM prompt-expander switch, 339/338 the two sampler seeds, 75 prefix.
+
+    The expander is left OFF by default: it rewrites the motion text into a long cinematic
+    caption, which is lovely for a one-off and fatal for a film, where the same motion card
+    must mean the same thing on every beat."""
+    wf = load_wf("51_ltx25_i2v.json")
+    seconds = float(job.get("seconds") or 4)
+    set_path(wf, "395.inputs.image", staged_image)
+    set_path(wf, "376.inputs.value", job.get("motion_text") or "gentle natural motion")
+    if job.get("negative"):
+        set_path(wf, "373.inputs.text", job["negative"])
+    set_path(wf, "383.inputs.value", bool(job.get("prompt_expander")))
+    set_path(wf, "362.inputs.value", max(1, int(round(seconds))))
+    set_path(wf, "361.inputs.value", 24)
+    set_path(wf, "339.inputs.noise_seed", int(job.get("seed") or 0))
+    set_path(wf, "338.inputs.noise_seed", int(job.get("seed") or 0))
+    set_path(wf, "75.inputs.filename_prefix",
+             "claude-generated/rolled/%s" % job.get("id", "ltx25"))
     return wf
