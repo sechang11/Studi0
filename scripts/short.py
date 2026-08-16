@@ -309,7 +309,18 @@ def make_cut(src, at, length, fx, dst, seed=0, grade=None):
     return dst
 
 
-def slam(src, dst, target=TARGET_LUFS, ceiling=0.87, tries=6):
+# 0.78 is -2.16 dBFS, and it is set for the file that SHIPS rather than the one in the
+# work directory. Measured on the same audio, twice:
+#     _mix_master.wav   -9.8 LUFS   Peak -1.2 dBFS      <- what the limiter delivers
+#     pace.mp4          -9.8 LUFS   Peak -0.2 dBFS      <- the same audio, after AAC
+# AAC adds about 1.0 dB of true peak, because a lossy codec reconstructs a waveform that
+# does not pass through the original sample points and overshoots between them. That is
+# the same inter-sample problem the docstring below describes for 48kHz reconstruction,
+# one stage further down the chain, where nothing was measuring. At 0.87 the delivered
+# masters came out at -0.10 and -0.20 dBTP, which survives here and crunches after a
+# platform re-encodes it. Integrated loudness is unchanged: slam iterates to the LUFS
+# target either way, this only moves where peaks are clamped.
+def slam(src, dst, target=TARGET_LUFS, ceiling=0.78, tries=6):
     """Push a mix to a feed-loud target. Measures after every pass.
 
     THREE THINGS THAT DEFEAT NAIVE ATTEMPTS AT THIS, all of them silent:
