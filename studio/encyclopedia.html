@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>studio · encyclopedia</title>
+<style>
+  :root{--bg:#0f1115;--panel:#161a21;--panel2:#1c2129;--line:#272d38;--ink:#e6e9ef;
+        --dim:#8b94a3;--accent:#6ea8fe;--ok:#4ec9a0;--warn:#e0b252;--bad:#e07a5f}
+  @media (prefers-color-scheme:light){
+    :root{--bg:#f6f7f9;--panel:#fff;--panel2:#f0f2f5;--line:#dde1e8;--ink:#141821;--dim:#5d6470}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font:14px/1.55 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  header{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;padding:13px 18px;
+         border-bottom:1px solid var(--line);background:var(--panel);position:sticky;top:0;z-index:9}
+  header h1{margin:0;font-size:15px;letter-spacing:.07em;text-transform:uppercase}
+  header .sub{color:var(--dim);font-size:12px}
+  header .right{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+  header a{color:var(--dim);font-size:12px;text-decoration:none;border:1px solid var(--line);
+           padding:5px 10px;border-radius:6px}
+  header a:hover{color:var(--ink);border-color:var(--accent)}
+  .bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding:11px 18px;
+       border-bottom:1px solid var(--line);background:var(--panel);position:sticky;top:52px;z-index:8}
+  input[type=search],select{background:var(--panel2);border:1px solid var(--line);color:var(--ink);
+       border-radius:7px;padding:7px 10px;font:inherit}
+  .bar label{color:var(--dim);font-size:12px}
+  .wrap{padding:18px;display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(460px,1fr));
+        align-items:start}
+  .c{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:14px 16px}
+  .c h3{margin:0;font-size:15px;display:flex;gap:9px;align-items:baseline}
+  .c h3 .num{font-family:ui-monospace,Menlo,monospace;color:var(--dim);font-size:12px}
+  .c h3 .v{margin-left:auto;font-size:10px;letter-spacing:.06em;text-transform:uppercase;
+           border:1px solid var(--line);border-radius:99px;padding:1px 8px;white-space:nowrap}
+  .v-works,.v-verified{color:var(--ok)} .v-partial{color:var(--warn)}
+  .v-broken,.v-unavailable{color:var(--bad)} .v-untested,.v-installed-untested{color:var(--dim)}
+  .c p{margin:9px 0 0;font-size:13px}
+  .c .why{margin-top:10px;padding:8px 10px;border-left:2px solid var(--line);color:var(--dim);
+          font-size:12px;background:var(--panel2);border-radius:0 6px 6px 0}
+  .facts{display:flex;flex-wrap:wrap;gap:3px 12px;margin-top:10px;font-size:11px;color:var(--dim)}
+  .facts b{color:var(--ink);font-weight:600}
+  .lbl{color:var(--dim);font-size:10px;letter-spacing:.07em;text-transform:uppercase;margin-top:13px}
+  .wf{margin-top:6px;border:1px solid var(--line);border-radius:8px;padding:8px 10px;
+      background:var(--panel2)}
+  .wf .f{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--accent)}
+  .wf .used{font-size:11px;color:var(--dim);margin-top:2px}
+  .mods{margin-top:6px;display:flex;flex-direction:column;gap:2px}
+  .mods div{font-size:11px;display:flex;gap:8px;align-items:baseline}
+  .mods .mf{font-family:ui-monospace,Menlo,monospace;overflow:hidden;text-overflow:ellipsis;
+            white-space:nowrap;flex:1}
+  .mods .sz{color:var(--dim);white-space:nowrap}
+  .nocard{color:var(--warn)}
+  .gaps{padding:0 18px 30px}
+  .gaps h2{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);
+           margin:22px 0 8px}
+  .gaps .box{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 15px;
+             font-size:12px}
+  .gaps code{font-family:ui-monospace,Menlo,monospace;color:var(--accent)}
+  .empty{padding:40px 18px;color:var(--dim)}
+</style>
+</head>
+<body>
+<header>
+  <h1>encyclopedia</h1><span class="sub" id="stat">loading…</span>
+  <div class="right">
+    <a href="/capabilities">capabilities</a><a href="/library">library</a>
+    <a href="/wizard">direct a scene</a><a href="/">home</a>
+  </div>
+</header>
+<div class="bar">
+  <input type="search" id="q" placeholder="search capability, model, workflow…" size="34">
+  <label>show <select id="filt">
+    <option value="all">everything</option>
+    <option value="works">only what works</option>
+    <option value="notworks">not verified</option>
+    <option value="nowf">no workflow</option>
+    <option value="hidden">not exposed in the app</option>
+  </select></label>
+  <span class="sub" id="count"></span>
+</div>
+<div class="wrap" id="wrap"></div>
+<div class="gaps" id="gaps"></div>
+<script>
+const esc = s => String(s==null?"":s).replace(/[&<>"']/g,
+  c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+let DOC=null;
+
+function vclass(v){ return "v-"+String(v||"untested").replace(/[^a-z]+/gi,"-").toLowerCase(); }
+
+function card(e){
+  const wfs=(e.workflows||[]).map(w=>{
+    const mods=(w.models||[]).map(m=>`<div>
+        <span class="mf${m.card?"":" nocard"}">${esc(m.card||m.file)}</span>
+        <span class="sz">${m.size_gb?m.size_gb+" GB":""}${m.status?" · "+esc(m.status):
+          " · <span class='nocard'>no card</span>"}</span></div>`).join("");
+    return `<div class="wf">
+      <div class="f">${esc(w.file)}${w.exists?"":" — MISSING"}</div>
+      ${(w.used_by||[]).length
+        ? `<div class="used">used by ${w.used_by.map(esc).join(", ")}</div>`
+        : `<div class="used">no code loads this graph</div>`}
+      ${mods?`<div class="mods">${mods}</div>`:""}
+    </div>`;
+  }).join("");
+  const facts=[
+    e.model?`model <b>${esc(e.model)}</b>`:"",
+    e.vram?`vram <b>${esc(e.vram)}</b>`:"",
+    e.cost?`cost <b>${esc(e.cost)}</b>`:"",
+    e.gb?`weights <b>${e.gb} GB</b>`:"",
+    e.released?`released <b>${esc(e.released)}</b>`:"",
+    e.exposure?`in app <b>${esc(e.exposure)}</b>`:""
+  ].filter(Boolean).join(" · ");
+  return `<div class="c">
+    <h3><span class="num">${esc(e.number||"")}</span>${esc(e.name||e.id)}
+      <span class="v ${vclass(e.verdict||e.status)}">${esc(e.verdict||e.status||"")}</span></h3>
+    <p>${esc(e.what_it_does||"")}</p>
+    ${e.why_it_matters?`<div class="why">${esc(e.why_it_matters)}</div>`:""}
+    ${facts?`<div class="facts">${facts}</div>`:""}
+    ${e.limits?`<div class="lbl">limits</div><div class="why">${esc(e.limits)}</div>`:""}
+    ${wfs?`<div class="lbl">workflows and the weights they load</div>${wfs}`
+         :`<div class="lbl">workflows</div><div class="wf"><div class="used">
+            no workflow is declared for this capability</div></div>`}
+  </div>`;
+}
+
+function draw(){
+  const q=document.getElementById("q").value.trim().toLowerCase();
+  const f=document.getElementById("filt").value;
+  let list=DOC.capabilities;
+  if(f==="works")     list=list.filter(e=>e.verdict==="works");
+  if(f==="notworks")  list=list.filter(e=>e.verdict!=="works");
+  if(f==="nowf")      list=list.filter(e=>!(e.workflows||[]).length);
+  if(f==="hidden")    list=list.filter(e=>!e.exposure||e.exposure==="none"||e.exposure==="script-only");
+  if(q) list=list.filter(e=>JSON.stringify(e).toLowerCase().includes(q));
+  document.getElementById("count").textContent =
+    `${list.length} of ${DOC.capabilities.length} shown`;
+  document.getElementById("wrap").innerHTML =
+    list.map(card).join("") || `<div class="empty">nothing matches.</div>`;
+}
+
+fetch("/api/encyclopedia").then(r=>r.json()).then(d=>{
+  DOC=d;
+  const t=d.totals||{};
+  document.getElementById("stat").textContent =
+    `${t.capabilities} capabilities · ${t.workflows_on_disk} workflows · ${t.model_cards} model cards`;
+  draw();
+  // The gaps are the point, not a footnote: this page exists because three libraries
+  // never met, and these are the places they still do not.
+  const ow=d.orphan_workflows||[], om=d.orphan_models||[],
+        vu=d.models_via_unclaimed_workflow||{};
+  const unknown=[...new Set(d.capabilities.flatMap(e=>(e.workflows||[])
+    .flatMap(w=>(w.models||[]).filter(m=>!m.card).map(m=>m.file))))];
+  document.getElementById("gaps").innerHTML = `
+    <h2>${ow.length} workflows no capability claims</h2>
+    <div class="box">${ow.length? ow.map(w=>`<code>${esc(w.file)}</code>`).join(" · ")
+      : "none"}<p style="color:var(--dim);margin-top:8px">A graph on disk that the
+      catalogue does not describe. Some are scratch; some are working features nobody
+      wrote up — which is how LTX-2.5 stayed invisible while it worked.</p></div>
+    <h2>${unknown.length} weights a workflow loads with no model card</h2>
+    <div class="box">${unknown.length? unknown.map(f=>`<code>${esc(f)}</code>`).join(" · ")
+      : "none"}<p style="color:var(--dim);margin-top:8px">Mostly LoRAs and helper nets.
+      Each one is a thing the box depends on and cannot tell you about.</p></div>
+    <h2>${Object.keys(vu).length} model cards reached only through an undeclared workflow</h2>
+    <div class="box">${Object.keys(vu).length
+      ? Object.entries(vu).map(([k,v])=>`<code>${esc(k)}</code> ← ${esc(v[0])}`).join("<br>")
+      : "none"}<p style="color:var(--dim);margin-top:8px">The model is fine. Its workflow
+      needs a capability entry.</p></div>
+    <h2>${om.length} model cards no workflow loads at all</h2>
+    <div class="box">${om.length? om.map(m=>`<code>${esc(m)}</code>`).join(" · ")
+      : "none"}<p style="color:var(--dim);margin-top:8px">Either prompted directly by a
+      script, or weights sitting on disk earning nothing.</p></div>`;
+}).catch(e=>{
+  document.getElementById("wrap").innerHTML =
+    `<div class="empty">could not load the encyclopedia: ${esc(e)}<br>
+     run <code>python3 studio/_tools/encyclopedia.py</code></div>`;
+});
+document.getElementById("q").oninput=draw;
+document.getElementById("filt").onchange=draw;
+</script>
+</body>
+</html>

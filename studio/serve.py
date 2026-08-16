@@ -997,6 +997,18 @@ def nav_library(html):
     return html
 
 
+def nav_encyclopedia(html):
+    """An `encyclopedia` link in the header nav, the same way as nav_library."""
+    if 'href="/encyclopedia"' in html:
+        return html
+    for a in ('<a href="/library"', '<a href="/gallery"', '<a href="/">'):
+        i = html.find(a)
+        if i < 0:
+            continue
+        return html[:i] + '<a href="/encyclopedia">encyclopedia</a>' + html[i:]
+    return html
+
+
 def nav_make3d(html):
     """A `make 3d` link in the header nav, the same way as nav_model3d."""
     if 'href="/make3d"' in html:
@@ -1150,7 +1162,8 @@ class H(http.server.SimpleHTTPRequestHandler):
             return self._send(f"{name} is missing".encode(), 500, "text/plain")
         with open(p, encoding="utf-8") as f:
             html = f.read()
-        html = nav_library(nav_make3d(nav_model3d(nav_dossier(nav_video(html)))))
+        html = nav_encyclopedia(
+            nav_library(nav_make3d(nav_model3d(nav_dossier(nav_video(html))))))
         # Every page gets the link except the capabilities page itself, which
         # writes its own nav and omits itself the way styles.html omits /styles.
         if name != "capabilities.html":
@@ -1606,6 +1619,22 @@ class H(http.server.SimpleHTTPRequestHandler):
         # and none is added.
         if path in ("/library", "/library.html"):
             return self._page("library.html")
+        if path in ("/encyclopedia", "/encyclopedia.html"):
+            return self._page("encyclopedia.html")
+        if path == "/api/encyclopedia":
+            # Rebuilt per request. It is a join over three files already on disk, it
+            # costs milliseconds, and a reference that lags what it describes is the
+            # exact failure this page was written about.
+            try:
+                ency = _load_tool_module("encyclopedia")
+                ency.main_quiet() if hasattr(ency, "main_quiet") else None
+            except Exception as e:
+                return self._send({"error": "encyclopedia tool: %s" % e}, 500)
+            fp = os.path.join(HERE, "samples", "_encyclopedia.json")
+            if not os.path.exists(fp):
+                return self._send({"error": "run studio/_tools/encyclopedia.py"}, 500)
+            with open(fp, encoding="utf-8") as f:
+                return self._send(json.load(f))
         if path == "/api/library":
             return self._library("index", "")
         if path.startswith("/api/library/"):
