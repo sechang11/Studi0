@@ -702,6 +702,11 @@ def compile_movie(path):
                     "output": "video"})
                 d["tags"] = comp["tags"]
                 d["prompt"] = comp["prompt"]
+                # ONTO THE BEAT, not only into the prompt. The emotion reached the
+                # composer - which is why the face renders - and stopped there, so no
+                # compiled film carried it and the voice stage had nothing to look up.
+                if emo:
+                    d["emotion"] = emo
                 for c in comp["conflicts"]:
                     if c["code"] in COMPOSE_CODES_SAID_ELSEWHERE:
                         continue
@@ -712,11 +717,24 @@ def compile_movie(path):
                 # The emotion cards carry a voice_style that TTS does not read yet. This
                 # one stays here rather than moving into the resolver because it names the
                 # BEAT, and a warning that can point at one shot should.
+                # This used to say voice_style "is not routed to TTS yet", which was
+                # true and is now only half true: IndexTTS-2 takes an emotion vector and
+                # the beat's emotion drives it. higgs_v3 has no such input, so the note
+                # names the engine instead of claiming nothing acts on it.
                 e = comp["cards"]["emotion"] or {}
-                if who and e.get("status") == "partial" and e.get("voice_style"):
-                    warns.append(
-                        f"{bid}: emotion '{emo}' renders as face tags, but its "
-                        f"voice_style '{e['voice_style']}' is not routed to TTS yet")
+                if who and e.get("voice_style"):
+                    import sys as _sys
+                    _sys.path.insert(0, f"{HERE}/_tools")
+                    try:
+                        import voice_emotion as _ve
+                        known = _ve.vector(emo) is not None
+                    except Exception:
+                        known = False
+                    if not known:
+                        warns.append(
+                            f"{bid}: emotion '{emo}' has a voice_style "
+                            f"'{e['voice_style']}' but no entry in voice_emotion.TABLE, "
+                            f"so the read will not change")
                 # ---- what the VIDEO model is asked for ---------------------------
                 # This line used to read:
                 #

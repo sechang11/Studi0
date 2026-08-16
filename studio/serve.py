@@ -2246,7 +2246,13 @@ class H(http.server.SimpleHTTPRequestHandler):
                 shutil.copy(fp, os.path.join(dst_dir, name))
                 return self._send({"ok": True,
                                    "path": "user/default/workflows/studio/" + name})
-            graph = json.load(open(fp, encoding="utf-8"))
+            # Underscore keys are METADATA, and ComfyUI's validate_prompt walks every
+            # top-level key expecting a node - a `_notes` list produces
+            # "AttributeError: 'list' object has no attribute 'get'" and a bare 500.
+            # engine.load_wf is the one rule for this; a second copy here would drift.
+            sys.path.insert(0, HERE)
+            from engine import load_wf as _load_wf
+            graph = _load_wf(name)
             try:
                 req = urllib.request.Request(
                     COMFY + "/prompt",

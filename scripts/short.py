@@ -59,7 +59,8 @@ os.environ.setdefault("COMFY_ROOT", os.path.expanduser("~/ComfyUI"))
 os.environ.setdefault("COMFY_HOST", "127.0.0.1:8188")
 from comfy import run, set_path                                        # noqa: E402
 from scene_templates import expand as expand_template   # noqa: E402
-import sound_dept                                       # noqa: E402  (Phase 6: the one sound department)
+import sound_dept
+import voice_emotion                                       # noqa: E402  (Phase 6: the one sound department)
 sys.path.insert(0, os.path.join(os.path.dirname(HERE), "studio"))
 from engine import set_negative                         # noqa: E402  (the negative reaches the graph)
 sys.path.insert(0, os.path.join(os.path.dirname(HERE), "studio", "_tools"))
@@ -719,10 +720,19 @@ def voices(film, out, seed0):
         eng = cfg.get("engine", film.get("engine", "higgs_v3"))
         wf = load_wf("16_indextts2_voice.json" if eng == "indextts2"
                      else "17_higgs_v3_voice.json")
+        # THE BEAT'S EMOTION DRIVES THE READ, falling back to the character's config.
+        # That precedence is the point: a cast setting is a default for the film, a
+        # shot's emotion is a decision about one line. Before this, a character had one
+        # emotion for the whole film and the 27 emotion cards' voice_style never left
+        # the page.
+        emo_id = str(b.get("emotion") or "").strip()
+        vec = voice_emotion.vector(emo_id) if emo_id else None
+        if vec is None:
+            vec = cfg.get("emotion") or {}
         if eng == "indextts2":
             for k in ("Happy", "Angry", "Sad", "Surprised", "Afraid", "Disgusted",
                       "Calm", "Melancholic"):
-                set_path(wf, f"20.inputs.{k}", float((cfg.get("emotion") or {}).get(k, 0)))
+                set_path(wf, f"20.inputs.{k}", float(vec.get(k, 0)))
         set_path(wf, "30.inputs.text", b["line"]["text"])
         set_path(wf, "30.inputs.narrator_voice", cfg["voice"])
         set_path(wf, "30.inputs.seed", seed0 + i * 17)
@@ -732,6 +742,13 @@ def voices(film, out, seed0):
         _, outs = run(HOST, wf, quiet=True)
         raw = ensure_local(outs[0], f"{out}/voice/_raw_{b['id']}.mp3", required=True)
         pre = cfg.get("filter", "")
+        # The card's own voice_rate, in the pass that was already happening. atempo moves
+        # duration without moving pitch, which is what a rate is; IndexTTS exposes no
+        # speed input, so the alternative was to keep ignoring the field. Panic is 1.35,
+        # despair is 0.75 - those are the cards' numbers, not invented here.
+        rate = voice_emotion.rate(emo_id) if emo_id else 1.0
+        if abs(rate - 1.0) > 0.02:
+            pre = (pre + "," if pre else "") + f"atempo={rate:.3f}"
         pre = (pre + "," if pre else "") + \
             "acompressor=threshold=-18dB:ratio=4:attack=5:release=120:makeup=1"
         norm_to(raw, final, -18.0, tp=-3.0, pre=pre)
