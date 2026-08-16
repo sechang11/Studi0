@@ -185,6 +185,15 @@
 .craftcard .panels figure.ctl img{outline:2px solid var(--accent);outline-offset:-2px}
 .craftcard .notvis{margin-top:8px;font-size:11px;color:var(--dim);font-style:italic;
   border-left:2px solid var(--line);padding-left:8px}
+#subnav{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 14px}
+#subnav .chip{background:var(--panel);border:1px solid var(--line);color:var(--dim);
+  border-radius:99px;padding:4px 12px;font:inherit;font-size:12px;cursor:pointer}
+#subnav .chip:hover{color:var(--ink);border-color:var(--accent)}
+#subnav .chip.on{background:var(--accent);border-color:var(--accent);color:#0f1115}
+#subnav .chip span{opacity:.65;margin-left:5px;font-size:11px}
+#subnav .sub2{width:100%;display:flex;flex-wrap:wrap;gap:6px;
+  padding-left:10px;border-left:2px solid var(--line)}
+#subnav .sub2 .chip{border-radius:6px;padding:3px 9px;font-size:11px}
 </style>
 </head>
 <body>
@@ -201,7 +210,8 @@
 <main>
   <aside><div id="libnav"></div><div id="facets"></div></aside>
   <div><div class="applied" id="applied" style="display:none"></div>
-       <div id="focus"></div><div class="cardgrid" id="cardgrid" style="display:none"></div>
+       <div id="focus"></div><div id="subnav" style="display:none"></div>
+       <div class="cardgrid" id="cardgrid" style="display:none"></div>
        <div class="grid" id="grid"></div><button class="more-btn" id="more" style="display:none">show more</button></div>
 </main>
 
@@ -484,11 +494,13 @@ function setMode(k, replaying){
   drawApplied();
   document.getElementById("focus").innerHTML="";
   document.getElementById("applied").style.display="none";
+  CATSEL=null; SUBSEL=null;      // a category from the previous kind matches nothing here
+  document.getElementById("subnav").style.display="none";
   document.getElementById("stat").textContent = "loading "+k+"…";
   fetch("/api/library/browse?kind="+encodeURIComponent(k)).then(r=>r.json()).then(b=>{
     if (b.error){ document.getElementById("stat").textContent=b.error; return; }
     BROWSE=b;
-    if(k==="models"){
+    if(k==="models"){ document.getElementById("subnav").style.display="none";
       // Phase 5: a model card is earned by content and read like a spec sheet, so it
       // renders big - role, dialect, size, reachability, strengths - not as a thumb.
       document.getElementById("stat").textContent = `${b.total} models`;
@@ -509,13 +521,15 @@ function setMode(k, replaying){
       return;
     }
     if(k==="cards"){
+      const renderCraft=()=>{
       // A reference page, not a thumbnail grid: the claim is the content and the panels
       // are the evidence for it. Panels lazy-load - 1067 images is not a first paint.
-      const shown=b.cards.filter(c=>(c.panels||[]).length).length;
+      const LIST=applyCat(b.cards);
+      const withp=LIST.filter(c=>(c.panels||[]).length).length;
       document.getElementById("stat").textContent =
-        `${b.total} craft variables · ${shown} with panels · ` +
-        `${b.total-shown} not visual in one frame`;
-      document.getElementById("cardgrid").innerHTML = b.cards.map(c=>{
+        `${LIST.length===b.total?b.total:LIST.length+" of "+b.total} craft variables · ` +
+        `${withp} with panels · ${LIST.length-withp} not visual in one frame`;
+      document.getElementById("cardgrid").innerHTML = LIST.map(c=>{
         const ps=c.panels||[];
         const strip = ps.length
           ? `<div class="panels">${ps.map(p=>`<figure${p.control?' class="ctl"':''}>
@@ -530,22 +544,28 @@ function setMode(k, replaying){
           <div class="mdesc">${esc(c.claim||c.desc||"")}</div>
           ${strip}
         </div>`;
-      }).join("") || "<p>no craft cards</p>";
+      }).join("") || "<p>nothing in this family</p>";
+      drawSubnav(b, renderCraft);
+      };
+      renderCraft();
       return;
     }
     if(AUDIOKINDS.includes(k)){
+      const renderAudio=()=>{
       // Heard, not looked at. Same reasoning as the model branch above: these cards have
       // no frames, so a thumbnail grid would show a wall of blanks. The backend sorts
       // them by category, so they arrive grouped and each one wears its category.
-      const playable=b.cards.filter(c=>c.audio).length;
+      const LIST=applyCat(b.cards);
+      const playable=LIST.filter(c=>c.audio).length;
       // Soundscapes are mix recipes and own no audio, so "N playable" would be counting
       // the absence of something they were never meant to have.
       // the folder is called cues; nobody shopping for a track thinks "cue"
       const LABEL={cues:"music"};
+      const shown = LIST.length===b.total ? `${b.total}` : `${LIST.length} of ${b.total}`;
       document.getElementById("stat").textContent = b.kind==="soundscapes"
-        ? `${b.total} soundscapes · mix recipes, not sounds`
-        : `${b.total} ${LABEL[b.kind]||b.kind} · ${playable} playable`;
-      document.getElementById("cardgrid").innerHTML = b.cards.map(c=>{
+        ? `${shown} soundscapes · mix recipes, not sounds`
+        : `${shown} ${LABEL[b.kind]||b.kind} · ${playable} playable`;
+      document.getElementById("cardgrid").innerHTML = LIST.map(c=>{
         const d=c.card||c;
         // genre and use are separate rows of pills from the loose keywords, because
         // they are the two things you actually filter a music library by
@@ -587,10 +607,58 @@ function setMode(k, replaying){
           ${facts?`<div class="mfacts">${facts}</div>`:""}
           ${player}
         </div>`;
-      }).join("") || "<p>no cards in this folder</p>";
+      }).join("") || "<p>nothing in this category</p>";
+      drawSubnav(b, renderAudio);
+      };
+      renderAudio();
       return;
     }
+    document.getElementById("subnav").style.display="none";
     drawCards();
+  });
+}
+
+// Which category chip is selected, and which subcategory under it. Reset whenever the
+// kind changes - keeping "weapons" selected while switching to music would show nothing
+// and look broken.
+let CATSEL=null, SUBSEL=null;
+
+function catOf(c){ return c.category || "-"; }
+
+function applyCat(cards){
+  let out = CATSEL ? cards.filter(c=>catOf(c)===CATSEL) : cards;
+  if (CATSEL && SUBSEL) out = out.filter(c=>c.subcategory===SUBSEL);
+  return out;
+}
+
+function drawSubnav(b, redraw){
+  const el=document.getElementById("subnav");
+  const counts={};
+  b.cards.forEach(c=>{ const k=catOf(c); counts[k]=(counts[k]||0)+1; });
+  const keys=Object.keys(counts).sort();
+  // one category is not a taxonomy; do not draw a row of one chip
+  if(keys.length<2){ el.style.display="none"; el.innerHTML=""; return; }
+  let html = `<button class="chip ${CATSEL?"":"on"}" data-c="">all<span>${b.cards.length}</span></button>`
+    + keys.map(k=>`<button class="chip ${CATSEL===k?"on":""}" data-c="${esc(k)}">${esc(k)}<span>${counts[k]}</span></button>`).join("");
+  // second level, only where the cards actually carry one
+  if(CATSEL){
+    const subs={};
+    b.cards.filter(c=>catOf(c)===CATSEL).forEach(c=>{
+      if(c.subcategory) subs[c.subcategory]=(subs[c.subcategory]||0)+1; });
+    const sk=Object.keys(subs).sort();
+    if(sk.length>1 || (sk.length===1 && SUBSEL)){
+      html += `<div class="sub2"><button class="chip ${SUBSEL?"":"on"}" data-s="">all ${esc(CATSEL)}<span>${counts[CATSEL]}</span></button>`
+        + sk.map(s=>`<button class="chip ${SUBSEL===s?"on":""}" data-s="${esc(s)}">${esc(s)}<span>${subs[s]}</span></button>`).join("")
+        + `</div>`;
+    }
+  }
+  el.style.display="flex";
+  el.innerHTML=html;
+  el.querySelectorAll("button[data-c]").forEach(btn=>btn.onclick=()=>{
+    CATSEL = btn.dataset.c || null; SUBSEL=null; redraw();
+  });
+  el.querySelectorAll("button[data-s]").forEach(btn=>btn.onclick=()=>{
+    SUBSEL = btn.dataset.s || null; redraw();
   });
 }
 
