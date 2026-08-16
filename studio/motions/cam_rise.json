@@ -31,12 +31,12 @@
     "frames": 97,
     "workflow": "12_ltx23_i2v_audio.json"
   },
-  "verdict": "RENDERED 2026-08-04, 3 seeds. Motion 2.065/2.104/2.395 - consistently above the ceiling, so something happens on every seed. WHAT happens is not verified as a rise: on 7701 the strip shows no vertical travel, and the only seed with a vertical displacement signature (7703, dy 285/288) has a correlation peak of 0.022, far too low to read a direction from. Fires, direction unproven. Band 0.406-0.744 (empty control 0.628); frame-scale ceiling 1.191. ",
+  "verdict": "motion_shelf 2026-08-16 measured LIVENESS on both engines (ltx23 alive; ltx25 drifts). That is not the card's own claim: liveness says something moved and the world stayed, it does NOT say the described motion happened. Status unchanged by liveness. Prior: motion_shelf ready: ltx23 alive (motion 5.64, palette drift 0.0034); ltx25 drifts (motion 18.77, palette drift 0.0179). Prior: RENDERED 2026-08-04, 3 seeds. Motion 2.065/2.104/2.395 - consistently above the ceiling, so something happens on every seed. WHAT happens is not verified as a rise: on 7701 the strip shows no vertical travel, and the",
   "evidence": {
     "verdict": "MEASURED",
-    "method": "package_check: incomplete",
-    "date": "2026-08-15",
-    "note": "frames 0/3"
+    "method": "motion_shelf: same keyframe and seed on ltx23+ltx25",
+    "date": "2026-08-16",
+    "note": "ltx23 alive (motion 5.64, palette drift 0.0034); ltx25 drifts (motion 18.77, palette drift 0.0179)"
   },
   "evidence_history": [
     {
@@ -44,6 +44,14 @@
       "method": "measurement session; finding recorded in this card's verdict field",
       "date": "2026-08-04",
       "note": "RENDERED 2026-08-04, 3 seeds. Motion 2.065/2.104/2.395 - consistently above the ceiling, so something happens on every seed. WHAT happens is not verified as a rise: on 7701 the strip shows no vertical"
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "package_check: incomplete",
+      "date": "2026-08-15",
+      "note": "frames 0/3"
     }
-  ]
+  ],
+  "status_before_shelf": "weak",
+  "best_engine": "ltx23"
 }

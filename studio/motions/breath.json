@@ -11,7 +11,7 @@
   ],
   "needs": "a person, shoulders visible",
   "grammar": "[MOVER] [ACTION VERB] [PATH/SPATIAL RELATION]",
-  "status": "ready",
+  "status": "weak",
   "measured": {
     "motion_per_seed": [
       0.4174,
@@ -99,7 +99,7 @@
     "band_hi_anchor_only": 0.7444,
     "frame_scale_ceiling_anchor_only": 1.191
   },
-  "verdict": "motion_shelf ready: ltx23 alive (motion 4.97, palette drift 0.0029); ltx25 alive (motion 15.03, palette drift 0.0031). Prior: RE-MEASURED ACROSS FOUR STAGINGS 2026-08-04, 3 seeds each, watched at 7702. THE BEST HOLD IN THE SUBJECT FAMILY, AND IT SHOULD BE FILED AS ONE. Lowest figure at every staging - 0.475 / 0.333 / 0.619 / 0.484, at or under each band's floor - and the strips agree: the subject stands, the framing holds, nothing wanders, at every subject scale from a distant figure to a close-up. As a MOTION card it is correctly marked weak. As the thing to put on a beat that must not move while a person is in it, nothing in `stillness` beats it.",
+  "verdict": "motion_shelf 2026-08-16 measured LIVENESS on both engines (ltx23 alive; ltx25 alive). That is not the card's own claim: liveness says something moved and the world stayed, it does NOT say the described motion happened. Status unchanged by liveness. Prior: motion_shelf ready: ltx23 alive (motion 4.97, palette drift 0.0029); ltx25 alive (motion 15.03, palette drift 0.0031). Prior: RE-MEASURED ACROSS FOUR STAGINGS 2026-08-04, 3 seeds each, watched at 7702. THE BEST HOLD IN THE SUBJECT FAMILY, AND IT SHOULD BE FILED AS ONE. Lowest figure at every staging - 0.475 / 0.333 / 0.619 / 0.484, at or unde",
   "number_is_staging_dependent": true,
   "staging_robustness": "all-stagings",
   "staging_robustness_evidence": "four stagings (subject 0.19%-7.92% of frame), three seeds of numbers, strips watched at seed 7702: samples/motion_staging/percard/breath.png",
@@ -127,6 +127,12 @@
       "method": "motion_shelf: same keyframe and seed on ltx23+ltx25",
       "date": "2026-08-16",
       "note": "ltx23 drifts (motion 4.97, drift 0.164); ltx25 drifts (motion 15.03, drift 0.152)"
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "motion_shelf: same keyframe and seed on ltx23+ltx25",
+      "date": "2026-08-16",
+      "note": "ltx23 alive (motion 4.97, palette drift 0.0029); ltx25 alive (motion 15.03, palette drift 0.0031)"
     }
   ],
   "status_before_shelf": "weak",

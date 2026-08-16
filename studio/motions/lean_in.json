@@ -98,15 +98,15 @@
     "band_hi_anchor_only": 0.7444,
     "frame_scale_ceiling_anchor_only": 1.191
   },
-  "verdict": "RE-MEASURED ACROSS FOUR STAGINGS 2026-08-04, 3 seeds each, watched at 7702. Same split as [[hand_reach]] and for the same reason. At `close` (1.725) she genuinely leans forward over the table; at `anchor` (2.591) it reads as a lean too. At `far` (1.486) and `mid` (1.968) it is not a lean, it is an approach that does not stop - the `far` cell ends on her mouth alone, subject destroyed. Above the frame-scale ceiling at three stagings, and at two of those the shot is unusable.",
+  "verdict": "motion_shelf 2026-08-16 measured LIVENESS on both engines (ltx23 alive; ltx25 alive). That is not the card's own claim: liveness says something moved and the world stayed, it does NOT say the described motion happened. Status unchanged by liveness. Prior: motion_shelf ready: ltx23 alive (motion 5.17, palette drift 0.0036); ltx25 alive (motion 11.93, palette drift 0.0060). Prior: RE-MEASURED ACROSS FOUR STAGINGS 2026-08-04, 3 seeds each, watched at 7702. Same split as [[hand_reach]] and for the same reason. At `close` (1.725) she genuinely leans forward over the table; at `anchor` (2.591) it re",
   "number_is_staging_dependent": true,
   "staging_robustness": "conditional",
   "staging_robustness_evidence": "four stagings (subject 0.19%-7.92% of frame), three seeds of numbers, strips watched at seed 7702: samples/motion_staging/percard/lean_in.png",
   "evidence": {
     "verdict": "MEASURED",
-    "method": "package_check: incomplete",
-    "date": "2026-08-15",
-    "note": "frames 0/3"
+    "method": "motion_shelf: same keyframe and seed on ltx23+ltx25",
+    "date": "2026-08-16",
+    "note": "ltx23 alive (motion 5.17, palette drift 0.0036); ltx25 alive (motion 11.93, palette drift 0.0060)"
   },
   "evidence_history": [
     {
@@ -114,6 +114,14 @@
       "method": "measurement session; finding recorded in this card's verdict field",
       "date": "2026-08-04",
       "note": "RE-MEASURED ACROSS FOUR STAGINGS 2026-08-04, 3 seeds each, watched at 7702. Same split as [[hand_reach]] and for the same reason. At `close` (1.725) she genuinely leans forward over the table; at `anc"
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "package_check: incomplete",
+      "date": "2026-08-15",
+      "note": "frames 0/3"
     }
-  ]
+  ],
+  "status_before_shelf": "weak",
+  "best_engine": "ltx23"
 }

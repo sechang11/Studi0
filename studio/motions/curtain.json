@@ -11,7 +11,7 @@
   ],
   "needs": "a curtain or hanging fabric in frame",
   "grammar": "[MOVER] [ACTION VERB] [PATH/SPATIAL RELATION]",
-  "status": "unavailable",
+  "status": "weak",
   "measured": {
     "motion_per_seed": [
       0.9059,
@@ -32,12 +32,12 @@
     "frames": 97,
     "workflow": "12_ltx23_i2v_audio.json"
   },
-  "verdict": "RENDERED 2026-08-04, 3 seeds, watched. Motion 0.906/0.799/0.742, mean 0.816 - essentially the control. THE CURTAIN DOES NOT LIFT on any seed. This card was written specifically to close motion_probe's open A/B, and IT FAILS TO REPLICATE THAT PROBE'S CLAIM: the probe reported that adding the spatial phrase `behind her` swept the curtain across the frame, but the probe never ran that phrase as a sole cell - it inferred the effect from a two-sentence cell that also contained the hand action. Run clean, the anchor buys nothing. The consistent explanation is the mover, not the grammar: a curtain hangs from a rail and cannot travel, and every mover that worked here was free to cross the frame. Band 0.406-0.744 (empty control 0.628); frame-scale ceiling 1.191. ",
+  "verdict": "motion_shelf 2026-08-16 measured LIVENESS on both engines (ltx23 alive; ltx25 drifts). That is not the card's own claim: liveness says something moved and the world stayed, it does NOT say the described motion happened. Previously marked unavailable, which claimed it renders nothing - that is measurably false and this card is now weak. Prior: motion_shelf ready: ltx23 alive (motion 13.89, palette drift 0.0091); ltx25 drifts (motion 16.10, palette drift 0.0163). Prior: RENDERED 2026-08-04, 3 seeds, watched. Motion 0.906/0.799/0.742, mean 0.816 - essentially the control. THE CURTAIN DOES NOT LIF",
   "evidence": {
     "verdict": "MEASURED",
-    "method": "package_check: incomplete",
-    "date": "2026-08-15",
-    "note": "frames 0/3"
+    "method": "motion_shelf: same keyframe and seed on ltx23+ltx25",
+    "date": "2026-08-16",
+    "note": "ltx23 alive (motion 13.89, palette drift 0.0091); ltx25 drifts (motion 16.10, palette drift 0.0163)"
   },
   "evidence_history": [
     {
@@ -45,6 +45,14 @@
       "method": "measurement session; finding recorded in this card's verdict field",
       "date": "2026-08-04",
       "note": "RENDERED 2026-08-04, 3 seeds, watched. Motion 0.906/0.799/0.742, mean 0.816 - essentially the control. THE CURTAIN DOES NOT LIFT on any seed. This card was written specifically to close motion_probe's"
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "package_check: incomplete",
+      "date": "2026-08-15",
+      "note": "frames 0/3"
     }
-  ]
+  ],
+  "status_before_shelf": "unavailable",
+  "best_engine": "ltx23"
 }

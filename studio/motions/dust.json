@@ -11,7 +11,7 @@
   ],
   "needs": "a visible light source or shaft",
   "grammar": "[MOVER] [ACTION VERB] [PATH/SPATIAL RELATION]",
-  "status": "unavailable",
+  "status": "weak",
   "measured": {
     "motion_per_seed": [
       0.7048,
@@ -32,12 +32,12 @@
     "frames": 97,
     "workflow": "12_ltx23_i2v_audio.json"
   },
-  "verdict": "RENDERED 2026-08-04, 3 seeds. Motion 0.705/0.761/0.546, mean 0.671 - in the band 3/3. No dust, no drift, nothing through the light. Same class as snow and rain: a fine particulate mover the model will not render. Band 0.406-0.744 (empty control 0.628); frame-scale ceiling 1.191. ",
+  "verdict": "motion_shelf 2026-08-16 measured LIVENESS on both engines (ltx23 alive; ltx25 alive). That is not the card's own claim: liveness says something moved and the world stayed, it does NOT say the described motion happened. Previously marked unavailable, which claimed it renders nothing - that is measurably false and this card is now weak. Prior: motion_shelf ready: ltx23 alive (motion 4.53, palette drift 0.0033); ltx25 alive (motion 16.76, palette drift 0.0028). Prior: RENDERED 2026-08-04, 3 seeds. Motion 0.705/0.761/0.546, mean 0.671 - in the band 3/3. No dust, no drift, nothing through the light",
   "evidence": {
     "verdict": "MEASURED",
-    "method": "package_check: incomplete",
-    "date": "2026-08-15",
-    "note": "frames 0/3"
+    "method": "motion_shelf: same keyframe and seed on ltx23+ltx25",
+    "date": "2026-08-16",
+    "note": "ltx23 alive (motion 4.53, palette drift 0.0033); ltx25 alive (motion 16.76, palette drift 0.0028)"
   },
   "evidence_history": [
     {
@@ -45,6 +45,14 @@
       "method": "measurement session; finding recorded in this card's verdict field",
       "date": "2026-08-04",
       "note": "RENDERED 2026-08-04, 3 seeds. Motion 0.705/0.761/0.546, mean 0.671 - in the band 3/3. No dust, no drift, nothing through the light. Same class as snow and rain: a fine particulate mover the model will"
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "package_check: incomplete",
+      "date": "2026-08-15",
+      "note": "frames 0/3"
     }
-  ]
+  ],
+  "status_before_shelf": "unavailable",
+  "best_engine": "ltx23"
 }

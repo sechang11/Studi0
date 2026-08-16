@@ -10,7 +10,7 @@
   ],
   "needs": null,
   "grammar": "[MOVER] [ACTION VERB] [PATH/SPATIAL RELATION]",
-  "status": "unavailable",
+  "status": "weak",
   "measured": {
     "motion_per_seed": [
       2.2356,
@@ -31,12 +31,12 @@
     "frames": 97,
     "workflow": "12_ltx23_i2v_audio.json"
   },
-  "verdict": "RENDERED 2026-08-04, 3 seeds, watched. Motion 2.236/6.552/1.438 - the number says a lot happened and none of it was a track. On 7701 the SUBJECT walks out and the clip ends on an empty room; on 7702 creep is 1.45, i.e. a hard push IN; on 7703 creep 1.00 and nothing moves. Three seeds, three different wrong answers. Reproduces motion_probe's finding that track language renders as a push. Band 0.406-0.744 (empty control 0.628); frame-scale ceiling 1.191. ",
+  "verdict": "motion_shelf 2026-08-16 measured LIVENESS on both engines (ltx23 alive; ltx25 alive). That is not the card's own claim: liveness says something moved and the world stayed, it does NOT say the described motion happened. Previously marked unavailable, which claimed it renders nothing - that is measurably false and this card is now weak. Prior: motion_shelf ready: ltx23 alive (motion 11.62, palette drift 0.0041); ltx25 alive (motion 17.16, palette drift 0.0042). Prior: RENDERED 2026-08-04, 3 seeds, watched. Motion 2.236/6.552/1.438 - the number says a lot happened and none of it was a track. On 7",
   "evidence": {
     "verdict": "MEASURED",
-    "method": "package_check: incomplete",
-    "date": "2026-08-15",
-    "note": "frames 0/3"
+    "method": "motion_shelf: same keyframe and seed on ltx23+ltx25",
+    "date": "2026-08-16",
+    "note": "ltx23 alive (motion 11.62, palette drift 0.0041); ltx25 alive (motion 17.16, palette drift 0.0042)"
   },
   "evidence_history": [
     {
@@ -44,6 +44,14 @@
       "method": "measurement session; finding recorded in this card's verdict field",
       "date": "2026-08-04",
       "note": "RENDERED 2026-08-04, 3 seeds, watched. Motion 2.236/6.552/1.438 - the number says a lot happened and none of it was a track. On 7701 the SUBJECT walks out and the clip ends on an empty room; on 7702 c"
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "package_check: incomplete",
+      "date": "2026-08-15",
+      "note": "frames 0/3"
     }
-  ]
+  ],
+  "status_before_shelf": "unavailable",
+  "best_engine": "ltx23"
 }

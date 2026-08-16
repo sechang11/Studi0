@@ -11,7 +11,7 @@
   ],
   "needs": "an exterior or a window",
   "grammar": "[MOVER] [ACTION VERB] [PATH/SPATIAL RELATION]",
-  "status": "unavailable",
+  "status": "weak",
   "measured": {
     "motion_per_seed": [
       0.7952,
@@ -32,12 +32,12 @@
     "frames": 97,
     "workflow": "12_ltx23_i2v_audio.json"
   },
-  "verdict": "RENDERED 2026-08-04, 3 seeds. Motion 0.795/0.728/0.610, mean 0.711 - inside the do-nothing band on every seed. NO SNOW APPEARS. The only thing that moves is the usual slow framing creep. Caveat: tested on an interior keyframe where snow is scene-implausible - but confetti is equally implausible indoors and scored 6.127, so the model's willingness to invent a mover is not the limit here. Retest on an exterior before reinstating. Band 0.406-0.744 (empty control 0.628); frame-scale ceiling 1.191. ",
+  "verdict": "motion_shelf 2026-08-16 measured LIVENESS on both engines (ltx23 alive; ltx25 alive). That is not the card's own claim: liveness says something moved and the world stayed, it does NOT say the described motion happened. Previously marked unavailable, which claimed it renders nothing - that is measurably false and this card is now weak. Prior: motion_shelf ready: ltx23 alive (motion 6.01, palette drift 0.0031); ltx25 alive (motion 16.38, palette drift 0.0035). Prior: RENDERED 2026-08-04, 3 seeds. Motion 0.795/0.728/0.610, mean 0.711 - inside the do-nothing band on every seed. NO SNOW APPEARS. Th",
   "evidence": {
     "verdict": "MEASURED",
-    "method": "package_check: incomplete",
-    "date": "2026-08-15",
-    "note": "frames 0/3"
+    "method": "motion_shelf: same keyframe and seed on ltx23+ltx25",
+    "date": "2026-08-16",
+    "note": "ltx23 alive (motion 6.01, palette drift 0.0031); ltx25 alive (motion 16.38, palette drift 0.0035)"
   },
   "evidence_history": [
     {
@@ -45,6 +45,14 @@
       "method": "measurement session; finding recorded in this card's verdict field",
       "date": "2026-08-04",
       "note": "RENDERED 2026-08-04, 3 seeds. Motion 0.795/0.728/0.610, mean 0.711 - inside the do-nothing band on every seed. NO SNOW APPEARS. The only thing that moves is the usual slow framing creep. Caveat: teste"
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "package_check: incomplete",
+      "date": "2026-08-15",
+      "note": "frames 0/3"
     }
-  ]
+  ],
+  "status_before_shelf": "unavailable",
+  "best_engine": "ltx23"
 }

@@ -104,9 +104,9 @@
   "staging_robustness_evidence": "four stagings (subject 0.19%-7.92% of frame), three seeds of numbers, strips watched at seed 7702: samples/motion_staging/percard/walk_in_only.png",
   "evidence": {
     "verdict": "MEASURED",
-    "method": "package_check: complete",
-    "date": "2026-08-15",
-    "note": "package complete"
+    "method": "motion_shelf: same keyframe and seed on ltx23+ltx25",
+    "date": "2026-08-16",
+    "note": "ltx23 alive (motion 6.28, palette drift 0.0025); ltx25 alive (motion 13.86, palette drift 0.0026)"
   },
   "evidence_history": [
     {
@@ -114,6 +114,12 @@
       "method": "measurement session; finding recorded in this card's verdict field",
       "date": "2026-08-04",
       "note": "RE-MEASURED ACROSS FOUR STAGINGS 2026-08-04, 3 seeds each, watched at 7702. far 0.823 / mid 1.151 / close 2.943 / anchor 2.476 on that seed, and it behaves exactly as [[walk_in]] does: full traverse a"
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "package_check: complete",
+      "date": "2026-08-15",
+      "note": "package complete"
     }
   ]
 }

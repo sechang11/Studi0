@@ -31,12 +31,12 @@
     "frames": 97,
     "workflow": "12_ltx23_i2v_audio.json"
   },
-  "verdict": "RENDERED 2026-08-04, 3 seeds. Motion 1.151/1.444/0.899 - straddling the ceiling. On 7701 a bright opening does appear at frame right by f82 and she turns toward it, so something door-like happens; on 7703 it sits in the band. There is no door in the keyframe, and unlike confetti the model does not reliably invent one. Band 0.406-0.744 (empty control 0.628); frame-scale ceiling 1.191. ",
+  "verdict": "motion_shelf 2026-08-16 measured LIVENESS on both engines (ltx23 alive; ltx25 alive). That is not the card's own claim: liveness says something moved and the world stayed, it does NOT say the described motion happened. Status unchanged by liveness. Prior: motion_shelf ready: ltx23 alive (motion 4.50, palette drift 0.0032); ltx25 alive (motion 16.24, palette drift 0.0032). Prior: RENDERED 2026-08-04, 3 seeds. Motion 1.151/1.444/0.899 - straddling the ceiling. On 7701 a bright opening does appear at frame right by f82 and she turns toward it, so something door-like happens; on 7703 it sits in th",
   "evidence": {
     "verdict": "MEASURED",
-    "method": "package_check: incomplete",
-    "date": "2026-08-15",
-    "note": "frames 0/3"
+    "method": "motion_shelf: same keyframe and seed on ltx23+ltx25",
+    "date": "2026-08-16",
+    "note": "ltx23 alive (motion 4.50, palette drift 0.0032); ltx25 alive (motion 16.24, palette drift 0.0032)"
   },
   "evidence_history": [
     {
@@ -44,6 +44,14 @@
       "method": "measurement session; finding recorded in this card's verdict field",
       "date": "2026-08-04",
       "note": "RENDERED 2026-08-04, 3 seeds. Motion 1.151/1.444/0.899 - straddling the ceiling. On 7701 a bright opening does appear at frame right by f82 and she turns toward it, so something door-like happens; on "
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "package_check: incomplete",
+      "date": "2026-08-15",
+      "note": "frames 0/3"
     }
-  ]
+  ],
+  "status_before_shelf": "weak",
+  "best_engine": "ltx23"
 }

@@ -31,12 +31,12 @@
     "frames": 97,
     "workflow": "12_ltx23_i2v_audio.json"
   },
-  "verdict": "RENDERED 2026-08-04, 3 seeds. Motion 0.904/0.913/2.647 - two seeds barely above the band, one well above the ceiling. On 7701 a handful of small leaves drift through from f41; it is a long way from the frame-crossing gust the card implies. Tested on an INTERIOR keyframe, which is unfair to it - retest on an exterior before writing it off. Band 0.406-0.744 (empty control 0.628); frame-scale ceiling 1.191. ",
+  "verdict": "motion_shelf 2026-08-16 measured LIVENESS on both engines (ltx23 alive; ltx25 alive). That is not the card's own claim: liveness says something moved and the world stayed, it does NOT say the described motion happened. Status unchanged by liveness. Prior: motion_shelf ready: ltx23 alive (motion 5.95, palette drift 0.0032); ltx25 alive (motion 16.17, palette drift 0.0028). Prior: RENDERED 2026-08-04, 3 seeds. Motion 0.904/0.913/2.647 - two seeds barely above the band, one well above the ceiling. On 7701 a handful of small leaves drift through from f41; it is a long way from the frame-crossing g",
   "evidence": {
     "verdict": "MEASURED",
-    "method": "package_check: incomplete",
-    "date": "2026-08-15",
-    "note": "frames 0/3"
+    "method": "motion_shelf: same keyframe and seed on ltx23+ltx25",
+    "date": "2026-08-16",
+    "note": "ltx23 alive (motion 5.95, palette drift 0.0032); ltx25 alive (motion 16.17, palette drift 0.0028)"
   },
   "evidence_history": [
     {
@@ -44,6 +44,14 @@
       "method": "measurement session; finding recorded in this card's verdict field",
       "date": "2026-08-04",
       "note": "RENDERED 2026-08-04, 3 seeds. Motion 0.904/0.913/2.647 - two seeds barely above the band, one well above the ceiling. On 7701 a handful of small leaves drift through from f41; it is a long way from th"
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "package_check: incomplete",
+      "date": "2026-08-15",
+      "note": "frames 0/3"
     }
-  ]
+  ],
+  "status_before_shelf": "weak",
+  "best_engine": "ltx23"
 }

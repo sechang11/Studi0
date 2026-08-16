@@ -105,9 +105,9 @@
   "staging_robustness_evidence": "four stagings (subject 0.19%-7.92% of frame), three seeds of numbers, strips watched at seed 7702: samples/motion_staging/percard/cup_lift.png",
   "evidence": {
     "verdict": "MEASURED",
-    "method": "package_check: complete",
-    "date": "2026-08-15",
-    "note": "package complete"
+    "method": "motion_shelf: same keyframe and seed on ltx23+ltx25",
+    "date": "2026-08-16",
+    "note": "ltx23 alive (motion 6.09, palette drift 0.0027); ltx25 alive (motion 9.40, palette drift 0.0024)"
   },
   "evidence_history": [
     {
@@ -115,6 +115,12 @@
       "method": "measurement session; finding recorded in this card's verdict field",
       "date": "2026-08-04",
       "note": "RE-MEASURED ACROSS FOUR STAGINGS 2026-08-04, 3 seeds each, watched at 7702. THE PRECONDITION IS NOT `a cup in frame`, IT IS `a cup WITHIN REACH`. At `close` and `anchor`, where the cup is on the table"
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "package_check: complete",
+      "date": "2026-08-15",
+      "note": "package complete"
     }
   ]
 }
