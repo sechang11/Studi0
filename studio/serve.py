@@ -1621,6 +1621,20 @@ class H(http.server.SimpleHTTPRequestHandler):
             return self._page("library.html")
         if path in ("/encyclopedia", "/encyclopedia.html"):
             return self._page("encyclopedia.html")
+        if path == "/api/atlas":
+            # Rebuilt per request like the encyclopedia, and for the same reason: a
+            # reference that lags what it describes is the failure it exists to fix.
+            try:
+                at = _load_tool_module("model_atlas")
+                if hasattr(at, "main_quiet"):
+                    at.main_quiet()
+            except Exception as e:
+                return self._send({"error": "model_atlas: %s" % e}, 500)
+            fp = os.path.join(HERE, "samples", "_atlas.json")
+            if not os.path.exists(fp):
+                return self._send({"error": "run studio/_tools/model_atlas.py"}, 500)
+            with open(fp, encoding="utf-8") as f:
+                return self._send(json.load(f))
         if path == "/api/encyclopedia":
             # Rebuilt per request. It is a join over three files already on disk, it
             # costs milliseconds, and a reference that lags what it describes is the

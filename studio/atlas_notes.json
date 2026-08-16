@@ -1,0 +1,452 @@
+{
+ "generated": "2026-08-16",
+ "note": "The authored layer over the ComfyUI catalogue: what each model is FOR and what makes it worth having, which the catalogue does not carry. HAVE is decided by NAMING our model cards, never by matching the model's name against filenames - the first version of this file did that and reported FLUX.2 as not installed.",
+ "provenance_key": {
+  "searched": "checked on the web 2026-08-16; source URL on the entry",
+  "recalled": "training knowledge, cutoff May 2026 - may be stale",
+  "local": "measured on this machine"
+ },
+ "notes": [
+  {
+   "key": "animagine",
+   "name": "Animagine XL 4.0",
+   "family": "image",
+   "vendor": "Cagliostro Lab",
+   "released": null,
+   "params": "3.5B",
+   "cards": [
+    "animagine_xl_4_0",
+    "illustrious_xl_v2_0"
+   ],
+   "have": true,
+   "node_managed": null,
+   "missing_cards": [],
+   "what": "Danbooru-tag anime generation on an SDXL base.",
+   "special": "Speaks TAGS, not prose - the dialect law. Crossing a character card between this and a prose engine silently deletes the character.",
+   "provenance": "local",
+   "source": null
+  },
+  {
+   "key": "flux_fill",
+   "name": "FLUX.1 Fill + OneReward",
+   "family": "image",
+   "vendor": "Black Forest Labs",
+   "released": null,
+   "params": null,
+   "cards": [
+    "flux_1_fill_dev_onereward_transformer_fp8"
+   ],
+   "have": true,
+   "node_managed": null,
+   "missing_cards": [],
+   "what": "Inpainting and outpainting.",
+   "special": "How master-frame outpainting widens a shot without redrawing the subject.",
+   "provenance": "local",
+   "source": null
+  },
+  {
+   "key": "flux2",
+   "name": "FLUX.2 [dev]",
+   "family": "image",
+   "vendor": "Black Forest Labs",
+   "released": "2025-11-25",
+   "params": "12B+",
+   "cards": [
+    "flux2_dev_fp8mixed",
+    "flux2_vae",
+    "mistral_3_small_flux2_fp8"
+   ],
+   "have": true,
+   "node_managed": null,
+   "missing_cards": [],
+   "what": "Text-to-image and multi-reference editing on an improved diffusion transformer, native up to 4 megapixels.",
+   "special": "The current benchmark for open-weight image quality, and the leader on prompt fidelity. Spells only QUOTED strings - our typography engine.",
+   "provenance": "searched",
+   "source": "https://www.sevenlabs.site/blogs/open-source-image-generation-models-2026"
+  },
+  {
+   "key": "qwen_image",
+   "name": "Qwen-Image 2512",
+   "family": "image",
+   "vendor": "Alibaba Qwen",
+   "released": null,
+   "params": "20B",
+   "cards": [
+    "qwen_image_2512_fp8_e4m3fn",
+    "qwen_image_vae"
+   ],
+   "have": true,
+   "node_managed": null,
+   "missing_cards": [],
+   "what": "Text-to-image with the strongest in-image text rendering of the open models.",
+   "special": "Leads multilingual text-to-image. Our default image engine - PROSE, and it cannot be prompted off photography at any cfg.",
+   "provenance": "searched",
+   "source": "https://medium.com/diffusion-doodles/model-rundown-z-image-turbo-qwen-image-2512-edit-2511-flux-2-dev-fc787f5e87ad"
+  },
+  {
+   "key": "qwen_edit",
+   "name": "Qwen-Image-Edit 2511",
+   "family": "image",
+   "vendor": "Alibaba Qwen",
+   "released": null,
+   "params": "20B",
+   "cards": [
+    "qwen_image_edit_2511_fp8mixed",
+    "qwen_image_edit_2509_fp8_e4m3fn"
+   ],
+   "have": true,
+   "node_managed": null,
+   "missing_cards": [],
+   "what": "Instruction editing: change one thing and keep everything else.",
+   "special": "Two-image fusion - compose separately generated people into one photo. Capability 20.",
+   "provenance": "searched",
+   "source": "https://medium.com/diffusion-doodles/model-rundown-z-image-turbo-qwen-image-2512-edit-2511-flux-2-dev-fc787f5e87ad"
+  },
+  {
+   "key": "zimage",
+   "name": "Z-Image Turbo",
+   "family": "image",
+   "vendor": "Tongyi",
+   "released": null,
+   "params": "6B",
+   "cards": [
+    "z_image_turbo_bf16"
+   ],
+   "have": true,
+   "node_managed": null,
+   "missing_cards": [],
+   "what": "Small, very fast text-to-image - about a second an image.",
+   "special": "Throughput-per-dollar leader. The ideation model: twenty options in the time FLUX.2 takes for one. Capability 33.",
+   "provenance": "searched",
+   "source": "https://zimage.run/blog/zi-068-vs-flux2-dev-en-20260530"
+  },
+  {
+   "key": "hunyuanvideo15",
+   "name": "HunyuanVideo 1.5",
+   "family": "video",
+   "vendor": "Tencent",
+   "released": null,
+   "params": "~13B",
+   "cards": [
+    "hunyuanvideo1_5_720p_i2v_fp16",
+    "hunyuanvideo1_5_720p_t2v_fp16",
+    "hunyuanvideo1_5_1080p_sr_distilled_fp16",
+    "hunyuanvideo15_vae_fp16"
+   ],
+   "have": true,
+   "node_managed": null,
+   "missing_cards": [],
+   "what": "Text-to-video and image-to-video, plus a 1080p super-resolution stage.",
+   "special": "Strongest scene coherence over longer clips and the most realistic human motion. INSTALLED AND UNTESTED here - the largest unopened box in the library.",
+   "provenance": "searched",
+   "source": "https://www.aimagicx.com/blog/open-source-ai-video-models-comparison-2026"
+  },
+  {
+   "key": "ltx23",
+   "name": "LTX-2.3",
+   "family": "video",
+   "vendor": "Lightricks",
+   "released": null,
+   "params": "22B",
+   "cards": [
+    "ltx_2_3_22b_dev_fp8"
+   ],
+   "have": true,
+   "node_managed": null,
+   "missing_cards": [],
+   "what": "Image-to-video with a synchronised audio track in the same forward pass.",
+   "special": "Speed, and a nearly flat cost curve in clip length. The only engine here that generates picture and sound together. Our default.",
+   "provenance": "searched",
+   "source": "https://ltx.io/blog/best-open-source-video-generation-models"
+  },
+  {
+   "key": "ltx25",
+   "name": "LTX-2.5",
+   "family": "video",
+   "vendor": "Lightricks",
+   "released": "2026-08-12",
+   "params": "22B distilled",
+   "cards": [
+    "ltx_2_5_22b_distilled_transformer_comfy_int8_convrot",
+    "ltx_2_5_video_vae_bf16",
+    "ltx_2_5_audio_vae_bf16",
+    "ltx_2_5_latent_spatial_upscaler_x2_bf16_1_0",
+    "gemma4_12b_with_proj_ltx_2_5_comfy_int8_convrot"
+   ],
+   "have": true,
+   "node_managed": null,
+   "missing_cards": [],
+   "what": "Native MULTI-SHOT video: several connected shots with real cuts in one generation.",
+   "special": "A cut is where identity normally breaks. Measured here against 2.3 on the same subject: drift -0.004 against 0.141. Capability 51.",
+   "provenance": "local",
+   "source": null
+  },
+  {
+   "key": "wan_vace",
+   "name": "Wan 2.1 VACE 14B",
+   "family": "video",
+   "vendor": "Alibaba",
+   "released": null,
+   "params": "14B",
+   "cards": [
+    "wan2_1_vace_14b_fp16",
+    "wan_2_1_vae"
+   ],
+   "have": true,
+   "node_managed": null,
+   "missing_cards": [],
+   "what": "Video editing: restyle, inpaint or extend footage that already exists.",
+   "special": "The only real answer here to shot-to-shot look matching. Installed, not built.",
+   "provenance": "local",
+   "source": null
+  },
+  {
+   "key": "wan22",
+   "name": "Wan 2.2",
+   "family": "video",
+   "vendor": "Alibaba",
+   "released": null,
+   "params": "14B MoE (high+low noise)",
+   "cards": [
+    "wan2_2_i2v_high_noise_14b_fp8_scaled",
+    "wan2_2_i2v_low_noise_14b_fp8_scaled",
+    "wan2_2_vae"
+   ],
+   "have": true,
+   "node_managed": null,
+   "missing_cards": [],
+   "what": "Image-to-video, the photorealism leader among open models.",
+   "special": "Best open model for HUMAN subjects - faces, skin and hair hold where others smear. Roughly 8x slower than LTX, which is why LTX carries the slate.",
+   "provenance": "searched",
+   "source": "https://www.aimagicx.com/blog/open-source-ai-video-models-comparison-2026"
+  },
+  {
+   "key": "acestep",
+   "name": "ACE-Step v1 3.5B",
+   "family": "audio",
+   "vendor": "ACE Studio",
+   "released": null,
+   "params": "3.5B",
+   "cards": [
+    "ace_step_v1_3_5b",
+    "acestep_v1_5_turbo",
+    "ace_1_5_vae"
+   ],
+   "have": true,
+   "node_managed": null,
+   "missing_cards": [],
+   "what": "Text-to-music from tag prompts, with bpm and key control.",
+   "special": "Our 32 music cues. The FULL model at cfg 5 - the v1.5 turbo at cfg 1.0 ignores the prompt entirely, measured here the hard way.",
+   "provenance": "local",
+   "source": null
+  },
+  {
+   "key": "cosyvoice2",
+   "name": "CosyVoice2-0.5B",
+   "family": "audio",
+   "vendor": "Alibaba",
+   "released": null,
+   "params": "0.5B",
+   "cards": [],
+   "have": false,
+   "node_managed": null,
+   "missing_cards": [],
+   "what": "Streaming-capable zero-shot TTS.",
+   "special": "Small and fast enough to stream. NOT INSTALLED.",
+   "provenance": "searched",
+   "source": "https://www.siliconflow.com/articles/en/best-open-source-models-for-voice-cloning"
+  },
+  {
+   "key": "f5tts",
+   "name": "F5-TTS",
+   "family": "audio",
+   "vendor": "SWivid",
+   "released": null,
+   "params": "~330M",
+   "cards": [],
+   "have": false,
+   "node_managed": null,
+   "missing_cards": [],
+   "what": "Flow-matching text-to-speech.",
+   "special": "Noticeably more natural prosody than XTTS v2 on long inputs. NOT INSTALLED - the strongest candidate for narration if Higgs disappoints.",
+   "provenance": "searched",
+   "source": "https://rarebuildsoftware.com/blog/best-open-source-voice-cloning-2026"
+  },
+  {
+   "key": "fishspeech",
+   "name": "Fish Speech V1.5",
+   "family": "audio",
+   "vendor": "Fish Audio",
+   "released": null,
+   "params": "~500M",
+   "cards": [],
+   "have": false,
+   "node_managed": null,
+   "missing_cards": [],
+   "what": "Multilingual zero-shot voice cloning.",
+   "special": "Named with IndexTTS-2 and CosyVoice2 as the 2026 front rank. NOT INSTALLED.",
+   "provenance": "searched",
+   "source": "https://www.siliconflow.com/articles/en/best-open-source-models-for-voice-cloning"
+  },
+  {
+   "key": "higgs",
+   "name": "Higgs Audio v3",
+   "family": "audio",
+   "vendor": "Boson AI",
+   "released": null,
+   "params": null,
+   "cards": [],
+   "have": true,
+   "node_managed": "managed by the TTS-Audio-Suite node, no checkpoint in models/ - our 17 voice packs run on it",
+   "missing_cards": [],
+   "what": "Voice cloning from a reference clip.",
+   "special": "What our 17 usable voice packs run on. Node-managed, so no file in models/.",
+   "provenance": "local",
+   "source": null
+  },
+  {
+   "key": "indextts2",
+   "name": "IndexTTS-2",
+   "family": "audio",
+   "vendor": "Bilibili",
+   "released": null,
+   "params": "~1B",
+   "cards": [],
+   "have": true,
+   "node_managed": "managed by the TTS-Audio-Suite node, no checkpoint in models/ - runs every time a film speaks",
+   "missing_cards": [],
+   "what": "Zero-shot voice cloning with independent timbre and emotion control, and precise duration control.",
+   "special": "Beats other zero-shot TTS on word error rate, speaker similarity AND emotional fidelity. The duration control is the dubbing feature - a line can be made to fit a shot. Runs via TTS-Audio-Suite, no checkpoint of its own in models/.",
+   "provenance": "searched",
+   "source": "https://www.siliconflow.com/articles/en/best-open-source-models-for-voice-cloning"
+  },
+  {
+   "key": "stableaudio",
+   "name": "Stable Audio 3 Medium",
+   "family": "audio",
+   "vendor": "Stability AI",
+   "released": null,
+   "params": null,
+   "cards": [
+    "stable_audio_3_medium"
+   ],
+   "have": true,
+   "node_managed": null,
+   "missing_cards": [],
+   "what": "Text-to-audio for sound effects and short samples.",
+   "special": "Our 35 sound effects. One sound per bed at cfg 7 / 100 steps; the defaults produce mush.",
+   "provenance": "local",
+   "source": null
+  },
+  {
+   "key": "hunyuan3d",
+   "name": "Hunyuan3D 2.1",
+   "family": "3d",
+   "vendor": "Tencent",
+   "released": null,
+   "params": null,
+   "cards": [
+    "hunyuan_3d_v2_1"
+   ],
+   "have": true,
+   "node_managed": null,
+   "missing_cards": [],
+   "what": "Image to textured 3D mesh.",
+   "special": "The 3D-print route: shape plus PBR texture rather than shape alone.",
+   "provenance": "local",
+   "source": null
+  },
+  {
+   "key": "triposplat",
+   "name": "TripoSplat",
+   "family": "3d",
+   "vendor": "Tripo AI",
+   "released": null,
+   "params": null,
+   "cards": [
+    "triposplat_fp16",
+    "triposplat_vae_decoder_fp16"
+   ],
+   "have": true,
+   "node_managed": null,
+   "missing_cards": [],
+   "what": "Image to 3D gaussian splat.",
+   "special": "Splats rather than meshes - better for viewing, not printable. Installed, untested.",
+   "provenance": "local",
+   "source": null
+  },
+  {
+   "key": "qwen_vl",
+   "name": "Qwen2.5-VL 7B",
+   "family": "control",
+   "vendor": "Alibaba Qwen",
+   "released": null,
+   "params": "7B",
+   "cards": [
+    "qwen_2_5_vl_7b_fp8_scaled"
+   ],
+   "have": true,
+   "node_managed": null,
+   "missing_cards": [],
+   "what": "Vision-language model: describe an image, answer questions about it.",
+   "special": "Our frame_check instrument - it is what looks at a render and says whether the nouns we asked for are actually in it.",
+   "provenance": "local",
+   "source": null
+  },
+  {
+   "key": "sam31",
+   "name": "SAM 3.1",
+   "family": "control",
+   "vendor": "Meta",
+   "released": null,
+   "params": null,
+   "cards": [
+    "sam3_1_multiplex_fp16"
+   ],
+   "have": true,
+   "node_managed": null,
+   "missing_cards": [],
+   "what": "Segment anything - masks from a point, a box or a prompt.",
+   "special": "The masking layer under removal and compositing.",
+   "provenance": "local",
+   "source": null
+  },
+  {
+   "key": "realesrgan",
+   "name": "RealESRGAN x4plus",
+   "family": "upscale",
+   "vendor": "Tencent ARC",
+   "released": null,
+   "params": null,
+   "cards": [
+    "realesrgan_x4plus"
+   ],
+   "have": true,
+   "node_managed": null,
+   "missing_cards": [],
+   "what": "Classic 4x upscaler.",
+   "special": "1664x928 to 6656x3712 in 4.5s. Fast and predictable; SeedVR2 is the quality option when it is finally tested.",
+   "provenance": "local",
+   "source": null
+  },
+  {
+   "key": "seedvr2",
+   "name": "SeedVR2 3B",
+   "family": "upscale",
+   "vendor": "ByteDance",
+   "released": null,
+   "params": "3B",
+   "cards": [
+    "seedvr2_3b_int8_convrot",
+    "seedvr2_ema_vae_fp16"
+   ],
+   "have": true,
+   "node_managed": null,
+   "missing_cards": [],
+   "what": "Diffusion video and image restoration.",
+   "special": "Restoration, not interpolation - it reconstructs detail instead of smoothing it. Installed, untested.",
+   "provenance": "local",
+   "source": null
+  }
+ ]
+}

@@ -57,6 +57,22 @@
              font-size:12px}
   .gaps code{font-family:ui-monospace,Menlo,monospace;color:var(--accent)}
   .empty{padding:40px 18px;color:var(--dim)}
+.bar .view{background:var(--panel2);border:1px solid var(--line);color:var(--dim);
+  border-radius:7px;padding:7px 12px;font:inherit;cursor:pointer}
+.bar .view.on{background:var(--accent);border-color:var(--accent);color:#0f1115}
+.m{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:14px 16px}
+.m.no{opacity:.72;border-style:dashed}
+.m h3{margin:0;font-size:15px;display:flex;gap:9px;align-items:baseline}
+.m h3 .fam{font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim)}
+.m h3 .have{margin-left:auto;font-size:10px;letter-spacing:.06em;text-transform:uppercase;
+  border-radius:99px;padding:1px 9px;white-space:nowrap}
+.m h3 .have.y{color:var(--ok);border:1px solid var(--ok)}
+.m h3 .have.n{color:var(--warn);border:1px solid var(--warn)}
+.m .sp{margin-top:9px;padding:8px 10px;border-left:2px solid var(--accent);
+  background:var(--panel2);border-radius:0 6px 6px 0;font-size:12px}
+.m .prov{margin-top:9px;font-size:10px;color:var(--dim)}
+.m .prov a{color:var(--accent)}
+.m .cards{margin-top:7px;font-size:11px;color:var(--dim);font-family:ui-monospace,Menlo,monospace}
 </style>
 </head>
 <body>
@@ -68,6 +84,8 @@
   </div>
 </header>
 <div class="bar">
+  <button class="view on" data-v="caps">capabilities</button>
+  <button class="view" data-v="atlas">models in the field</button>
   <input type="search" id="q" placeholder="search capability, model, workflow…" size="34">
   <label>show <select id="filt">
     <option value="all">everything</option>
@@ -173,7 +191,73 @@ fetch("/api/encyclopedia").then(r=>r.json()).then(d=>{
     `<div class="empty">could not load the encyclopedia: ${esc(e)}<br>
      run <code>python3 studio/_tools/encyclopedia.py</code></div>`;
 });
-document.getElementById("q").oninput=draw;
+let VIEW="caps", ATLAS=null;
+
+function atlasCard(n){
+  const src = n.source
+    ? `<a href="${esc(n.source)}" target="_blank" rel="noreferrer">source</a>` : "";
+  return `<div class="m ${n.have?"":"no"}">
+    <h3>${esc(n.name)}<span class="fam">${esc(n.family)}</span>
+      <span class="have ${n.have?"y":"n"}">${n.have?"have":"not installed"}</span></h3>
+    <div class="facts">${[
+      n.vendor?`by <b>${esc(n.vendor)}</b>`:"",
+      n.released?`released <b>${esc(n.released)}</b>`:"released <b>date not sourced</b>",
+      n.params?`<b>${esc(n.params)}</b>`:""
+    ].filter(Boolean).join(" · ")}</div>
+    <p>${esc(n.what||"")}</p>
+    <div class="sp">${esc(n.special||"")}</div>
+    ${n.node_managed?`<div class="cards">${esc(n.node_managed)}</div>`
+      :(n.cards||[]).length?`<div class="cards">${(n.cards||[]).map(esc).join(" · ")}</div>`:""}
+    <div class="prov">${esc(n.provenance)}${src?" · "+src:""}</div>
+  </div>`;
+}
+
+function drawAtlas(){
+  const q=document.getElementById("q").value.trim().toLowerCase();
+  let list=(ATLAS.notes||[]);
+  if(q) list=list.filter(n=>JSON.stringify(n).toLowerCase().includes(q));
+  const t=ATLAS.totals||{};
+  document.getElementById("count").textContent =
+    `${list.filter(n=>n.have).length} we have · ${list.filter(n=>!n.have).length} we do not`;
+  document.getElementById("stat").textContent =
+    `${t.catalogued} in ComfyUI's catalogue · we have ${t.have} of those · ` +
+    `${t.on_disk_uncatalogued} more on disk it has never heard of`;
+  document.getElementById("wrap").innerHTML = list.map(atlasCard).join("");
+  // the catalogue half, and the honest caveat about dates
+  document.getElementById("gaps").innerHTML = `
+    <h2>where these facts come from</h2>
+    <div class="box">${Object.entries(ATLAS.provenance_key||{})
+      .map(([k,v])=>`<code>${esc(k)}</code> — ${esc(v)}`).join("<br>")}
+      <p style="color:var(--dim);margin-top:8px">Release dates are only shown where a
+      source was checked. Most entries say "date not sourced" rather than carrying a
+      guess, because a confidently wrong date in a reference page is worse than a blank.</p>
+    </div>
+    <h2>the ComfyUI catalogue, filtered to what we own</h2>
+    <div class="box">${(ATLAS.models||[]).filter(m=>m.have)
+      .map(m=>`<code>${esc(m.filename)}</code>`).join(" · ") || "none"}
+      <p style="color:var(--dim);margin-top:8px">${ATLAS.totals.have} of
+      ${ATLAS.totals.catalogued}. The other ${ATLAS.totals.on_disk_uncatalogued} weights
+      on this box are newer than the catalogue or were fetched by hand — which is why the
+      catalogue alone is not an atlas.</p></div>`;
+}
+
+function setView(v){
+  VIEW=v;
+  document.querySelectorAll(".bar .view").forEach(b=>
+    b.classList.toggle("on", b.dataset.v===v));
+  document.getElementById("filt").style.display = v==="caps" ? "" : "none";
+  if(v==="atlas"){
+    if(ATLAS) return drawAtlas();
+    fetch("/api/atlas").then(r=>r.json()).then(d=>{
+      if(d.error){ document.getElementById("wrap").innerHTML =
+        `<div class="empty">${esc(d.error)}</div>`; return; }
+      ATLAS=d; drawAtlas();
+    });
+  } else { draw(); }
+}
+document.querySelectorAll(".bar .view").forEach(b=>b.onclick=()=>setView(b.dataset.v));
+
+document.getElementById("q").oninput=()=>VIEW==="atlas"?drawAtlas():draw();
 document.getElementById("filt").onchange=draw;
 </script>
 </body>
