@@ -201,6 +201,16 @@ CURRICULUM = {
             "by audio you already have. It is the only local route to lip-synced dialogue "
             "coverage, and the mechanism is one float: the audio latent is pinned so the "
             "model can only satisfy its objective by moving the face."),
+    "51-multishot-video": dict(group="video", order=12,
+        one_line="One prompt, several shots, one pass - the model cuts between viewpoints "
+                 "by itself and the subject is still the same person after the cut.",
+        why="A cut is exactly where identity normally breaks, which is why every other "
+            "video route here rebuilds continuity by hand from keyframes and character "
+            "cards. This does it inside one generation. Measured against 2.3 on the same "
+            "subject, drift across the clip is -0.004 against 0.141, and motion 1.54 "
+            "against 8.79 on a static floor of 0.001 - so it holds the subject without "
+            "going still. Selectable per film as video_engine ltx25; 2.3 stays the "
+            "default because it is faster."),
     "34-flf2v-transitions": dict(group="video", order=50,
         one_line="Give the model a first frame AND a last frame and it generates the motion "
                  "between them. Not built.",

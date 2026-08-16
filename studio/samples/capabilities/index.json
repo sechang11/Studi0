@@ -1,5 +1,5 @@
 {
- "generated": "2026-08-05 02:02",
+ "generated": "2026-08-16 01:42",
  "generator": "studio/_tools/capability_publish.py",
  "archive": "/home/k4shix/ComfyUI/output/claude-generated",
  "note": "The teaching layer over studio/capabilities.json. Group, order, the plain sentence and the reason to want it are authored here; every fact about models, cost, workflows and exposure comes from the catalogue. Samples are copies, so this page does not depend on ComfyUI's output tree.",
@@ -683,9 +683,27 @@
    "why": "The missing tool for deliberate transitions and cutting on action, and it needs zero downloads. Chain several and you have a long take.",
    "id": "34-flf2v-transitions",
    "no_sample": "Nothing has been rendered for this. The folder holds a capability card and a plan, and that is the honest state."
+  },
+  "51-multishot-video": {
+   "group": "video",
+   "order": 12,
+   "one_line": "One prompt, several shots, one pass - the model cuts between viewpoints by itself and the subject is still the same person after the cut.",
+   "why": "A cut is exactly where identity normally breaks, which is why every other video route here rebuilds continuity by hand from keyframes and character cards. This does it inside one generation. Measured against 2.3 on the same subject, drift across the clip is -0.004 against 0.141, and motion 1.54 against 8.79 on a static floor of 0.001 - so it holds the subject without going still. Selectable per film as video_engine ltx25; 2.3 stays the default because it is faster.",
+   "id": "51-multishot-video",
+   "sample": {
+    "kind": "video",
+    "source": "/home/k4shix/ComfyUI/output/claude-generated/51-multishot-video/deck3.mp4",
+    "bytes_source": 2754050,
+    "duration": 10.0,
+    "file": "sample.mp4",
+    "bytes": 2754050,
+    "why": "Largest media file - no curated pick and no usable declared panel.",
+    "url": "/samples/capabilities/51-multishot-video/sample.mp4",
+    "poster": "/samples/capabilities/51-multishot-video/sample_poster.webp"
+   }
   }
  },
- "published_files": 38,
+ "published_files": 39,
  "missing_files": 0,
  "log": []
 }
