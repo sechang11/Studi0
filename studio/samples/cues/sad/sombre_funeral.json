@@ -1,0 +1,48 @@
+{
+ "kind": "cues",
+ "id": "sombre_funeral",
+ "card": {
+  "id": "sombre_funeral",
+  "desc": "A burial. Formal, public, slow.",
+  "status": "ready",
+  "tags": "funeral march, muted brass chorale, slow bass drum, low strings, solemn processional, instrumental",
+  "bpm": 54,
+  "key": "C minor",
+  "level": 0.75,
+  "note": "Sits under dialogue if the dialogue is quiet - it moves too slowly to trip over a line. Different job from desolate: desolate is one person alone, this one has an audience.",
+  "evidence": {
+   "verdict": "MEASURED",
+   "method": "audio_sweep: rendered + measured (ffmpeg ebur128/silencedetect, librosa flatness)",
+   "date": "2026-08-15",
+   "note": "renders and is not broken [seconds=20.0, lufs=-12.3, true_peak=0.1, silent_fraction=0.18, flatness=0.0012, f0_median=131.2, channels=2]"
+  },
+  "evidence_history": [
+   {
+    "verdict": "UNVERIFIED",
+    "method": "nothing has checked this card against pixels",
+    "date": "2026-08-15",
+    "note": ""
+   }
+  ],
+  "category": "sad",
+  "keywords": "choir orchestral strings titles underscore",
+  "tempo": "slow",
+  "mood": "sad",
+  "genre": "orchestral strings choir",
+  "energy": "low",
+  "use": "underscore titles"
+ },
+ "seed": 4242,
+ "measured": {
+  "sample_rate": 48000,
+  "channels": 2,
+  "seconds": 20.0,
+  "lufs": -12.3,
+  "true_peak": 0.1,
+  "silent_seconds": 3.52,
+  "silent_fraction": 0.18,
+  "flatness": 0.0012,
+  "f0_median": 131.2
+ },
+ "workflow": "06_acestep_music.json"
+}

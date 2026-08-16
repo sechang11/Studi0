@@ -166,6 +166,8 @@
 .audcard .kw{display:flex;flex-wrap:wrap;gap:4px;margin:6px 0 2px}
 .audcard .kw span{font-size:10px;color:var(--dim);border:1px solid var(--line);
   border-radius:9px;padding:1px 7px}
+.audcard .kw span.g{color:var(--accent);border-color:var(--accent)}
+.audcard .kw span.u{color:var(--dim);border-style:dashed}
 .audcard .mfacts{display:flex;flex-wrap:wrap;gap:3px 10px;margin-top:6px}
 .audcard .noaud{margin-top:8px;font-size:11px;color:var(--dim);font-style:italic}
 .audcard.blocked{opacity:.62}
@@ -251,7 +253,7 @@ function goBack(){
 const KINDS=[["model","models"],["place","places"],["character","characters"],["style","styles"],
              ["look","looks"],["emotion","emotions"],["motion","motions"],["camera","cameras"],
              // the sound department - cards you listen to rather than look at
-             ["sfx","sfx"],["cue","cues"],["voice","voices"],["soundscape","soundscapes"],
+             ["sfx","sfx"],["cue","cues","music"],["voice","voices"],["soundscape","soundscapes"],
              // the director-craft encyclopedia
              ["craft","cards"]];
 const AUDIOKINDS=["sfx","cues","voices","soundscapes"];
@@ -437,7 +439,7 @@ function drawModes(){
         D?D.total.toLocaleString():""}</span></button>` +
     `<button data-k="starred" class="${MODE==="starred"?"on":""}">starred<span>${
         FAVS.size||""}</span></button>` +
-    KINDS.map(([f,k]) => `<button data-k="${k}" class="${MODE===k?"on":""}">${k}<span>${
+    KINDS.map(([f,k,label]) => `<button data-k="${k}" class="${MODE===k?"on":""}">${label||k}<span>${
         (D&&D.kind_counts&&D.kind_counts[f])||""}</span></button>`).join("");
   document.querySelectorAll("#libnav button").forEach(b => b.onclick = () => setMode(b.dataset.k));
 }
@@ -538,14 +540,24 @@ function setMode(k, replaying){
       const playable=b.cards.filter(c=>c.audio).length;
       // Soundscapes are mix recipes and own no audio, so "N playable" would be counting
       // the absence of something they were never meant to have.
+      // the folder is called cues; nobody shopping for a track thinks "cue"
+      const LABEL={cues:"music"};
       document.getElementById("stat").textContent = b.kind==="soundscapes"
         ? `${b.total} soundscapes · mix recipes, not sounds`
-        : `${b.total} ${b.kind} · ${playable} playable`;
+        : `${b.total} ${LABEL[b.kind]||b.kind} · ${playable} playable`;
       document.getElementById("cardgrid").innerHTML = b.cards.map(c=>{
         const d=c.card||c;
-        const kw=(c.keywords||"").split(/\s+/).filter(Boolean)
-                 .map(w=>`<span>${esc(w)}</span>`).join("");
+        // genre and use are separate rows of pills from the loose keywords, because
+        // they are the two things you actually filter a music library by
+        const pills=(s,cls)=>(s||"").split(/\s+/).filter(Boolean)
+                 .map(w=>`<span class="${cls}">${esc(w)}</span>`).join("");
+        const kw = c.genre||c.use
+          ? pills(c.genre,"g")+pills(c.use,"u")
+          : pills(c.keywords,"");
         const facts=[
+          // music: the axes it is filed and shopped by
+          c.subcategory?`<b>${esc(c.subcategory)}</b>`:"",
+          c.energy?`energy <b>${esc(c.energy)}</b>`:"",
           c.tempo?`tempo <b>${esc(c.tempo)}</b>`:"",
           (d.bpm!==undefined&&d.bpm!==null&&d.bpm!=="")?`bpm <b>${esc(String(d.bpm))}</b>`:"",
           d.key?`key <b>${esc(d.key)}</b>`:"",

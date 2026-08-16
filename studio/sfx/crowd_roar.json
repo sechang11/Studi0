@@ -12,7 +12,7 @@
   "evidence": {
     "verdict": "MEASURED",
     "method": "audio_sweep: rendered + measured (ffmpeg ebur128/silencedetect, librosa flatness)",
-    "date": "2026-08-15",
+    "date": "2026-08-16",
     "note": "renders and is not broken [seconds=7.99, lufs=-9.2, true_peak=1.3, silent_fraction=0.19, channels=2]"
   },
   "evidence_history": [
@@ -21,8 +21,15 @@
       "method": "nothing has checked this card against pixels",
       "date": "2026-08-15",
       "note": ""
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "audio_sweep: rendered + measured (ffmpeg ebur128/silencedetect, librosa flatness)",
+      "date": "2026-08-15",
+      "note": "renders and is not broken [seconds=7.99, lufs=-9.2, true_peak=1.3, silent_fraction=0.19, channels=2]"
     }
   ],
   "category": "crowd",
-  "keywords": "human exterior loud release"
+  "keywords": "exterior loud release",
+  "subcategory": "roar"
 }

@@ -1,0 +1,29 @@
+{
+  "id": "aircraft_overhead",
+  "desc": "A plane passing high overhead. Scale, and somewhere else to be.",
+  "status": "weak",
+  "prompt": "a distant passenger jet passing high overhead, low rumble rising and falling, exterior, open air",
+  "negative": "music, speech, propeller, helicopter, crowd, indoor, reverb",
+  "seconds": 8,
+  "steps": 100,
+  "cfg": 7,
+  "sampler": "dpmpp_3m_sde",
+  "note": "Distant and low - ask for a jet close and you get a takeoff, which is a different scene entirely.",
+  "category": "vehicles",
+  "subcategory": "aircraft",
+  "keywords": "exterior distant sky rumble",
+  "evidence": {
+    "verdict": "MEASURED",
+    "method": "audio_sweep: rendered + measured (ffmpeg ebur128/silencedetect, librosa flatness)",
+    "date": "2026-08-16",
+    "note": "renders and is not broken [seconds=7.99, lufs=-10.9, true_peak=2.6, silent_fraction=0.21, channels=2]"
+  },
+  "evidence_history": [
+    {
+      "verdict": "UNVERIFIED",
+      "method": "authored, not yet rendered",
+      "date": "2026-08-16",
+      "note": "audio_sweep.py renders and measures"
+    }
+  ]
+}

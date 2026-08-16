@@ -1,0 +1,31 @@
+{
+  "id": "gentle_focus",
+  "desc": "Quiet forward motion. Concentration rather than emotion.",
+  "status": "weak",
+  "tags": "minimal electronic, soft muted piano notes, gentle pulsing synth, light hi-hat, calm, focused, understated, instrumental",
+  "bpm": 92,
+  "key": "A minor",
+  "level": 0.7,
+  "note": "The neutral bed for explainer content - has a pulse so an edit can cut to it, unlike ambient_float.",
+  "category": "calm",
+  "mood": "calm",
+  "genre": "electronic minimal piano",
+  "energy": "low",
+  "use": "corporate podcast underscore",
+  "keywords": "corporate electronic minimal piano podcast underscore",
+  "evidence": {
+    "verdict": "MEASURED",
+    "method": "audio_sweep: rendered + measured (ffmpeg ebur128/silencedetect, librosa flatness)",
+    "date": "2026-08-16",
+    "note": "renders and is not broken [seconds=20.0, lufs=-16.3, true_peak=0.0, silent_fraction=0.33, flatness=0.0002, f0_median=98.6, channels=2]"
+  },
+  "tempo": "walking",
+  "evidence_history": [
+    {
+      "verdict": "UNVERIFIED",
+      "method": "authored, not yet rendered",
+      "date": "2026-08-16",
+      "note": "audio_sweep.py renders and measures; the ear is still yours"
+    }
+  ]
+}

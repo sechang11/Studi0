@@ -12,7 +12,7 @@
   "evidence": {
     "verdict": "MEASURED",
     "method": "audio_sweep: rendered + measured (ffmpeg ebur128/silencedetect, librosa flatness)",
-    "date": "2026-08-15",
+    "date": "2026-08-16",
     "note": "renders and is not broken [seconds=11.98, lufs=-9.3, true_peak=2.1, silent_fraction=0.08, channels=2]"
   },
   "evidence_history": [
@@ -21,8 +21,15 @@
       "method": "nothing has checked this card against pixels",
       "date": "2026-08-15",
       "note": ""
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "audio_sweep: rendered + measured (ffmpeg ebur128/silencedetect, librosa flatness)",
+      "date": "2026-08-15",
+      "note": "renders and is not broken [seconds=11.98, lufs=-9.3, true_peak=2.1, silent_fraction=0.08, channels=2]"
     }
   ],
   "category": "weather",
-  "keywords": "exterior interior-heard loopable wet"
+  "keywords": "exterior interior_heard loopable wet",
+  "subcategory": "rain"
 }

@@ -1,0 +1,44 @@
+{
+ "kind": "sfx",
+ "id": "cloth_movement",
+ "card": {
+  "id": "cloth_movement",
+  "desc": "A body moving in frame - sitting, turning, reaching, putting on a coat.",
+  "status": "ready",
+  "prompt": "a heavy canvas coat being pulled on and shifted, fabric dragging over fabric, a soft rustle and one sharp flap as a sleeve is pulled through, close microphone, dry, quiet",
+  "negative": "music, speech, footsteps, reverb, wind",
+  "seconds": 3,
+  "steps": 100,
+  "cfg": 7,
+  "sampler": "dpmpp_3m_sde",
+  "note": "The smallest bed here and the one that does the most work - a body that makes fabric noise reads as physically present even in a shot where nothing else changes. Sit it 12-18 dB under dialogue; if you can consciously hear it, it is too loud and starts sounding like a separate event.",
+  "evidence": {
+   "verdict": "MEASURED",
+   "method": "audio_sweep: rendered + measured (ffmpeg ebur128/silencedetect, librosa flatness)",
+   "date": "2026-08-15",
+   "note": "renders and is not broken [seconds=2.97, lufs=-8.5, true_peak=2.1, silent_fraction=0.28, channels=2]"
+  },
+  "evidence_history": [
+   {
+    "verdict": "UNVERIFIED",
+    "method": "nothing has checked this card against pixels",
+    "date": "2026-08-15",
+    "note": ""
+   }
+  ],
+  "category": "foley",
+  "keywords": "human close texture",
+  "subcategory": "cloth"
+ },
+ "seed": 4242,
+ "measured": {
+  "sample_rate": 44100,
+  "channels": 2,
+  "seconds": 2.97,
+  "lufs": -8.5,
+  "true_peak": 2.1,
+  "silent_seconds": 0.83,
+  "silent_fraction": 0.28
+ },
+ "workflow": "10_stableaudio_sfx.json"
+}

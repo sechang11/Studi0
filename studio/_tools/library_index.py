@@ -122,7 +122,7 @@ KINDS = {"model": "models",
 AUDIO_KINDS = {"sfx", "cues", "voices", "soundscapes"}
 
 
-def _audio_sample(folder, cid):
+def _audio_sample(folder, cid, sub=None):
     """The playable sample for an audio card, or None.
 
     Audio cards have no frames, so without this the browse view can show a name and a
@@ -133,9 +133,21 @@ def _audio_sample(folder, cid):
     blocked voice resolves to None here, and is listed without any way to hear it. That
     is not an accident to fix.
     """
+    # Filed first: music sits under its mood, sfx under its category. Then the flat
+    # path, for anything not filed yet. Then a glob, so a card whose category was edited
+    # without moving the audio still plays rather than reading as empty - silent misses
+    # are how this library reported soundscapes as missing samples they never had.
+    if sub:
+        p = os.path.join(STUDIO, "samples", folder, sub, cid + ".mp3")
+        if os.path.exists(p):
+            return "/samples/%s/%s/%s.mp3" % (folder, sub, cid)
     p = os.path.join(STUDIO, "samples", folder, cid + ".mp3")
     if os.path.exists(p):
         return "/samples/%s/%s.mp3" % (folder, cid)
+    hit = glob.glob(os.path.join(STUDIO, "samples", folder, "*", cid + ".mp3"))
+    if hit:
+        rel = os.path.relpath(hit[0], os.path.join(STUDIO, "samples"))
+        return "/samples/" + rel.replace(os.sep, "/")
     if folder == "voices":
         d = os.path.join(STUDIO, "samples", "audition")
         try:
@@ -475,7 +487,13 @@ def browse(kind):
                 (card.get("variable") or "").split(".")[0] if folder == "cards" else None),
             "keywords": card.get("keywords"),
             "tempo": card.get("tempo"),
-            "audio": _audio_sample(folder, cid) if folder in AUDIO_KINDS else None,
+            "audio": (_audio_sample(folder, cid, card.get("category"))
+                      if folder in AUDIO_KINDS else None),
+            "subcategory": card.get("subcategory"),
+            "mood": card.get("mood"),
+            "genre": card.get("genre"),
+            "energy": card.get("energy"),
+            "use": card.get("use"),
         })
     # Cards with nothing to show sort last, but they are still on the page - that is the
     # coverage gap, and it is the thing worth acting on.

@@ -1,0 +1,36 @@
+{
+ "kind": "sfx",
+ "id": "bird_song",
+ "card": {
+  "id": "bird_song",
+  "desc": "Birdsong. The cheapest way to say morning and outdoors.",
+  "status": "weak",
+  "prompt": "gentle garden birdsong, a few small birds chirping, exterior, morning, distant",
+  "negative": "music, speech, crow, seagull, traffic, wind, reverb",
+  "seconds": 10,
+  "steps": 100,
+  "cfg": 7,
+  "sampler": "dpmpp_3m_sde",
+  "note": "Loopable bed. Keep 'distant' or it sits on top of dialogue.",
+  "category": "animals",
+  "subcategory": "bird",
+  "keywords": "exterior dawn peaceful loopable",
+  "evidence": {
+   "verdict": "UNVERIFIED",
+   "method": "authored, not yet rendered",
+   "date": "2026-08-16",
+   "note": "audio_sweep.py renders and measures"
+  }
+ },
+ "seed": 4242,
+ "measured": {
+  "sample_rate": 44100,
+  "channels": 2,
+  "seconds": 10.03,
+  "lufs": -16.5,
+  "true_peak": 0.5,
+  "silent_seconds": 0.42,
+  "silent_fraction": 0.04
+ },
+ "workflow": "10_stableaudio_sfx.json"
+}

@@ -1,0 +1,31 @@
+{
+  "id": "bright_morning",
+  "desc": "Nothing is wrong. Morning, routine, someone getting on with it.",
+  "status": "weak",
+  "tags": "bright acoustic folk, fingerpicked guitar, light shaker, warm major key, cheerful, unhurried, instrumental",
+  "bpm": 104,
+  "key": "G major",
+  "level": 0.7,
+  "note": "The default 'life is fine' bed. Sits under narration without pulling focus.",
+  "category": "happy",
+  "mood": "happy",
+  "genre": "acoustic folk guitar",
+  "energy": "medium",
+  "use": "vlog documentary corporate",
+  "keywords": "acoustic corporate documentary folk guitar vlog",
+  "evidence": {
+    "verdict": "MEASURED",
+    "method": "audio_sweep: rendered + measured (ffmpeg ebur128/silencedetect, librosa flatness)",
+    "date": "2026-08-16",
+    "note": "renders and is not broken [seconds=20.0, lufs=-17.2, true_peak=0.1, silent_fraction=0.04, flatness=0.0002, f0_median=98.0, channels=2]"
+  },
+  "evidence_history": [
+    {
+      "verdict": "UNVERIFIED",
+      "method": "authored, not yet rendered",
+      "date": "2026-08-16",
+      "note": "audio_sweep.py renders and measures; the ear is still yours"
+    }
+  ],
+  "tempo": "driving"
+}

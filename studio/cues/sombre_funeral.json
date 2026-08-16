@@ -10,7 +10,7 @@
   "evidence": {
     "verdict": "MEASURED",
     "method": "audio_sweep: rendered + measured (ffmpeg ebur128/silencedetect, librosa flatness)",
-    "date": "2026-08-15",
+    "date": "2026-08-16",
     "note": "renders and is not broken [seconds=20.0, lufs=-12.3, true_peak=0.1, silent_fraction=0.18, flatness=0.0012, f0_median=131.2, channels=2]"
   },
   "evidence_history": [
@@ -19,9 +19,19 @@
       "method": "nothing has checked this card against pixels",
       "date": "2026-08-15",
       "note": ""
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "audio_sweep: rendered + measured (ffmpeg ebur128/silencedetect, librosa flatness)",
+      "date": "2026-08-15",
+      "note": "renders and is not broken [seconds=20.0, lufs=-12.3, true_peak=0.1, silent_fraction=0.18, flatness=0.0012, f0_median=131.2, channels=2]"
     }
   ],
-  "category": "grief",
-  "keywords": "formal public slow",
-  "tempo": "slow"
+  "category": "sad",
+  "keywords": "choir orchestral strings titles underscore",
+  "tempo": "slow",
+  "mood": "sad",
+  "genre": "orchestral strings choir",
+  "energy": "low",
+  "use": "underscore titles"
 }

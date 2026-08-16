@@ -1,0 +1,29 @@
+{
+  "id": "ui_notification",
+  "desc": "A message arrived. Bright, two-tone, unmistakably digital.",
+  "status": "weak",
+  "prompt": "a short bright two-tone digital notification chime, clean synthesised bell, dry",
+  "negative": "music, melody, speech, reverb, long tail, alarm siren",
+  "seconds": 2,
+  "steps": 100,
+  "cfg": 7,
+  "sampler": "dpmpp_3m_sde",
+  "note": "Two tones, not a melody. Ask for more notes and it becomes a ringtone.",
+  "category": "ui",
+  "subcategory": "notification",
+  "keywords": "interface digital alert bright",
+  "evidence": {
+    "verdict": "MEASURED",
+    "method": "audio_sweep: rendered + measured (ffmpeg ebur128/silencedetect, librosa flatness)",
+    "date": "2026-08-16",
+    "note": "renders and is not broken [seconds=2.04, lufs=-7.9, true_peak=1.7, silent_fraction=0.19, channels=2]"
+  },
+  "evidence_history": [
+    {
+      "verdict": "UNVERIFIED",
+      "method": "authored, not yet rendered",
+      "date": "2026-08-16",
+      "note": "audio_sweep.py renders and measures"
+    }
+  ]
+}

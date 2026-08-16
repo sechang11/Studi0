@@ -1,0 +1,44 @@
+{
+ "kind": "sfx",
+ "id": "ui_click",
+ "card": {
+  "id": "ui_click",
+  "desc": "A button, a toggle, a selection. The smallest possible confirmation.",
+  "status": "weak",
+  "prompt": "a single short soft plastic button click, close microphone, dry, no reverb",
+  "negative": "music, speech, reverb, echo, repeating, mechanical motor",
+  "seconds": 2,
+  "steps": 100,
+  "cfg": 7,
+  "sampler": "dpmpp_3m_sde",
+  "note": "Wants to be SHORT and dry - anything with a tail reads as a mechanical switch rather than a UI event.",
+  "category": "ui",
+  "subcategory": "click",
+  "keywords": "interface digital short editorial",
+  "evidence": {
+   "verdict": "MEASURED",
+   "method": "audio_sweep: rendered + measured (ffmpeg ebur128/silencedetect, librosa flatness)",
+   "date": "2026-08-16",
+   "note": "renders and is not broken [seconds=2.04, lufs=-7.9, true_peak=1.4, silent_fraction=0.36, channels=2]"
+  },
+  "evidence_history": [
+   {
+    "verdict": "UNVERIFIED",
+    "method": "authored, not yet rendered",
+    "date": "2026-08-16",
+    "note": "audio_sweep.py renders and measures"
+   }
+  ]
+ },
+ "seed": 4242,
+ "measured": {
+  "sample_rate": 44100,
+  "channels": 2,
+  "seconds": 2.04,
+  "lufs": -7.9,
+  "true_peak": 1.4,
+  "silent_seconds": 0.74,
+  "silent_fraction": 0.36
+ },
+ "workflow": "10_stableaudio_sfx.json"
+}

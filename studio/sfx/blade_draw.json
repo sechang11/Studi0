@@ -1,0 +1,29 @@
+{
+  "id": "blade_draw",
+  "desc": "A blade leaving a sheath. The sound that says a scene has changed.",
+  "status": "weak",
+  "prompt": "a single metal sword blade drawn from a leather sheath, steel scraping, close microphone, dry",
+  "negative": "music, speech, reverb, impact, clash, multiple swords, footsteps",
+  "seconds": 3,
+  "steps": 100,
+  "cfg": 7,
+  "sampler": "dpmpp_3m_sde",
+  "note": "One draw. Asking for a 'sword fight' returns a metallic mush with no attack.",
+  "category": "weapons",
+  "subcategory": "blade",
+  "keywords": "metal scrape tension close",
+  "evidence": {
+    "verdict": "MEASURED",
+    "method": "audio_sweep: rendered + measured (ffmpeg ebur128/silencedetect, librosa flatness)",
+    "date": "2026-08-16",
+    "note": "renders and is not broken [seconds=2.97, lufs=-7.0, true_peak=1.8, silent_fraction=0.34, channels=2]"
+  },
+  "evidence_history": [
+    {
+      "verdict": "UNVERIFIED",
+      "method": "authored, not yet rendered",
+      "date": "2026-08-16",
+      "note": "audio_sweep.py renders and measures"
+    }
+  ]
+}

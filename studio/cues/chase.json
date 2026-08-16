@@ -10,7 +10,7 @@
   "evidence": {
     "verdict": "MEASURED",
     "method": "audio_sweep: rendered + measured (ffmpeg ebur128/silencedetect, librosa flatness)",
-    "date": "2026-08-15",
+    "date": "2026-08-16",
     "note": "renders and is not broken [seconds=20.0, lufs=-11.5, true_peak=0.2, silent_fraction=0.19, flatness=0.0005, f0_median=93.6, channels=2]"
   },
   "evidence_history": [
@@ -19,9 +19,19 @@
       "method": "nothing has checked this card against pixels",
       "date": "2026-08-15",
       "note": ""
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "audio_sweep: rendered + measured (ffmpeg ebur128/silencedetect, librosa flatness)",
+      "date": "2026-08-15",
+      "note": "renders and is not broken [seconds=20.0, lufs=-11.5, true_peak=0.2, silent_fraction=0.19, flatness=0.0005, f0_median=93.6, channels=2]"
     }
   ],
-  "category": "action",
-  "keywords": "pursuit fast percussion",
-  "tempo": "fast"
+  "category": "driving",
+  "keywords": "action gaming orchestral percussion strings trailer",
+  "tempo": "fast",
+  "mood": "driving",
+  "genre": "orchestral strings percussion",
+  "energy": "high",
+  "use": "action trailer gaming"
 }

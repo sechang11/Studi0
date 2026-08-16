@@ -1,0 +1,48 @@
+{
+ "kind": "cues",
+ "id": "training_montage",
+ "card": {
+  "id": "training_montage",
+  "desc": "Work being done over time. Effort that is going to pay off.",
+  "status": "ready",
+  "tags": "driving montage rock, muted electric guitar ostinato, four on the floor kick, snare build, hand claps, determined, instrumental",
+  "bpm": 132,
+  "key": "A minor",
+  "level": 0.9,
+  "note": "Sits under action, not dialogue - guitar and snare live in the same range as a voice. Strictly metered, so cut every shot on the beat and the montage reads as one idea instead of a pile of shots.",
+  "evidence": {
+   "verdict": "MEASURED",
+   "method": "audio_sweep: rendered + measured (ffmpeg ebur128/silencedetect, librosa flatness)",
+   "date": "2026-08-15",
+   "note": "renders and is not broken [seconds=20.0, lufs=-13.0, true_peak=0.9, silent_fraction=0.28, flatness=0.02, f0_median=70.1, channels=2]"
+  },
+  "evidence_history": [
+   {
+    "verdict": "UNVERIFIED",
+    "method": "nothing has checked this card against pixels",
+    "date": "2026-08-15",
+    "note": ""
+   }
+  ],
+  "category": "driving",
+  "keywords": "electronic gaming montage percussion rock vlog",
+  "tempo": "driving",
+  "mood": "driving",
+  "genre": "rock electronic percussion",
+  "energy": "high",
+  "use": "montage vlog gaming"
+ },
+ "seed": 4242,
+ "measured": {
+  "sample_rate": 48000,
+  "channels": 2,
+  "seconds": 20.0,
+  "lufs": -13.0,
+  "true_peak": 0.9,
+  "silent_seconds": 5.61,
+  "silent_fraction": 0.28,
+  "flatness": 0.02,
+  "f0_median": 70.1
+ },
+ "workflow": "06_acestep_music.json"
+}

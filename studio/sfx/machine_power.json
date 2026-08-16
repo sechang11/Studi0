@@ -1,0 +1,29 @@
+{
+  "id": "machine_power",
+  "desc": "A machine coming to life. Servos, then a settled hum.",
+  "status": "weak",
+  "prompt": "a large science fiction machine powering on, deep servo whir then settling electrical hum, designed sound effect, close",
+  "negative": "music, speech, alarm, explosion, crowd, reverb, human",
+  "seconds": 6,
+  "steps": 100,
+  "cfg": 7,
+  "sampler": "dpmpp_3m_sde",
+  "note": "The settled hum at the end is what makes it loopable into a room tone.",
+  "category": "magic_scifi",
+  "subcategory": "machine",
+  "keywords": "sci_fi mechanical hum startup",
+  "evidence": {
+    "verdict": "MEASURED",
+    "method": "audio_sweep: rendered + measured (ffmpeg ebur128/silencedetect, librosa flatness)",
+    "date": "2026-08-16",
+    "note": "renders and is not broken [seconds=6.04, lufs=-9.7, true_peak=0.8, silent_fraction=0.0, channels=2]"
+  },
+  "evidence_history": [
+    {
+      "verdict": "UNVERIFIED",
+      "method": "authored, not yet rendered",
+      "date": "2026-08-16",
+      "note": "audio_sweep.py renders and measures"
+    }
+  ]
+}

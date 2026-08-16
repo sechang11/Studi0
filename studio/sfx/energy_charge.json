@@ -1,0 +1,29 @@
+{
+  "id": "energy_charge",
+  "desc": "Something powering up. Rising, and it is going to end in something.",
+  "status": "weak",
+  "prompt": "a science fiction energy weapon charging up, rising synthesised whine building in pitch and intensity, designed sound effect",
+  "negative": "music, melody, speech, explosion, discharge, crowd, reverb",
+  "seconds": 4,
+  "steps": 100,
+  "cfg": 7,
+  "sampler": "dpmpp_3m_sde",
+  "note": "It must RISE and stop - pair with a discharge or it reads as an unresolved mistake.",
+  "category": "magic_scifi",
+  "subcategory": "energy",
+  "keywords": "sci_fi rising tension synth",
+  "evidence": {
+    "verdict": "MEASURED",
+    "method": "audio_sweep: rendered + measured (ffmpeg ebur128/silencedetect, librosa flatness)",
+    "date": "2026-08-16",
+    "note": "renders and is not broken [seconds=3.99, lufs=-9.1, true_peak=0.7, silent_fraction=0.23, channels=2]"
+  },
+  "evidence_history": [
+    {
+      "verdict": "UNVERIFIED",
+      "method": "authored, not yet rendered",
+      "date": "2026-08-16",
+      "note": "audio_sweep.py renders and measures"
+    }
+  ]
+}

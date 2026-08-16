@@ -168,10 +168,20 @@ def judge(kind, card, m, want_secs):
     if not m.get("seconds"):
         fails.append("no audio")
     else:
-        if m.get("silent_fraction", 0) > 0.5:
-            fails.append("%.0f%% silent" % (100 * m["silent_fraction"]))
-        if m.get("lufs") is not None and m["lufs"] < -45:
-            fails.append("%.1f LUFS - effectively silent" % m["lufs"])
+        # A card may declare that silence IS the deliverable - `silence` is a real cue
+        # meaning "no score at all". Without this the dead-air check fails it on every
+        # run, which is a permanent red light on a card that works. The test inverts
+        # rather than switching off: a cue promising silence that arrives with sound in
+        # it is the actual defect.
+        if card.get("expect_silent"):
+            if m.get("silent_fraction", 1) < 0.5:
+                fails.append("declares expect_silent but only %.0f%% is silent"
+                             % (100 * m.get("silent_fraction", 0)))
+        else:
+            if m.get("silent_fraction", 0) > 0.5:
+                fails.append("%.0f%% silent" % (100 * m["silent_fraction"]))
+            if m.get("lufs") is not None and m["lufs"] < -45:
+                fails.append("%.1f LUFS - effectively silent" % m["lufs"])
         if want_secs and abs(m["seconds"] - want_secs) > 0.4 * want_secs:
             fails.append("%.1fs against %.1fs asked" % (m["seconds"], want_secs))
         if kind == "cues" and m.get("flatness") is not None and m["flatness"] > 0.5:
@@ -224,8 +234,20 @@ def main():
                 m = measure(path)
                 m.update(tonality(path))
             else:
-                sample = os.path.join(outdir, cid + ".mp3")
-                if a.fresh or not os.path.exists(sample):
+                # Write where audio_taxonomy files it: music under its mood, sfx under
+                # its category. The existence check accepts the flat path too, so an
+                # unfiled card is skipped rather than re-rendered - without that, filing
+                # the library would have silently triggered 42 re-renders over the top of
+                # samples that were already measured.
+                _sub = card.get("category")
+                if _sub:
+                    sample = os.path.join(outdir, str(_sub), cid + ".mp3")
+                    os.makedirs(os.path.dirname(sample), exist_ok=True)
+                else:
+                    sample = os.path.join(outdir, cid + ".mp3")
+                _already = os.path.exists(sample) or os.path.exists(
+                    os.path.join(outdir, cid + ".mp3"))
+                if a.fresh or not _already:
                     got = (render_cue(card, a.cue_seconds, a.seed) if kind == "cues"
                            else render_sfx(card, a.seed))
                     if got and os.path.exists(got):

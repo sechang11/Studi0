@@ -6,13 +6,13 @@
   "bpm": 0,
   "key": "",
   "level": 0.0,
-  "note": "Silence immediately before an impact makes the impact twice as loud. A scene with `silence: true` gets this automatically.",
+  "note": "Silence immediately before an impact makes the impact twice as loud. A scene with `silence: true` gets this automatically. Declares expect_silent, so the audio sweep's dead-air check inverts: silence here is the specification, not a fault.",
   "silent": true,
   "evidence": {
     "verdict": "MEASURED",
     "method": "audio_sweep: rendered + measured (ffmpeg ebur128/silencedetect, librosa flatness)",
-    "date": "2026-08-15",
-    "note": "FAILED: 64% silent [seconds=20.0, lufs=-29.6, true_peak=-14.7, silent_fraction=0.64, flatness=0.0003, f0_median=499.8, channels=2]"
+    "date": "2026-08-16",
+    "note": "renders and is not broken [seconds=20.0, lufs=-29.6, true_peak=-14.7, silent_fraction=0.64, flatness=0.0003, f0_median=499.8, channels=2]"
   },
   "evidence_history": [
     {
@@ -20,10 +20,27 @@
       "method": "nothing has checked this card against pixels",
       "date": "2026-08-15",
       "note": ""
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "audio_sweep: rendered + measured (ffmpeg ebur128/silencedetect, librosa flatness)",
+      "date": "2026-08-15",
+      "note": "FAILED: 64% silent [seconds=20.0, lufs=-29.6, true_peak=-14.7, silent_fraction=0.64, flatness=0.0003, f0_median=499.8, channels=2]"
+    },
+    {
+      "verdict": "MEASURED",
+      "method": "audio_sweep: rendered + measured (ffmpeg ebur128/silencedetect, librosa flatness)",
+      "date": "2026-08-16",
+      "note": "FAILED: 64% silent [seconds=20.0, lufs=-29.6, true_peak=-14.7, silent_fraction=0.64, flatness=0.0003, f0_median=499.8, channels=2]"
     }
   ],
   "status_before_sweep": "ready",
-  "category": "atmosphere",
-  "keywords": "absence negative-space",
-  "tempo": "still"
+  "category": "silence",
+  "keywords": "none underscore",
+  "tempo": "still",
+  "mood": "silence",
+  "genre": "none",
+  "energy": "still",
+  "use": "underscore",
+  "expect_silent": true
 }

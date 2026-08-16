@@ -1,0 +1,29 @@
+{
+  "id": "car_pass",
+  "desc": "A car passing the camera. Presence without a shot of the road.",
+  "status": "weak",
+  "prompt": "a single car driving past close on wet asphalt, doppler pass, exterior, no horn",
+  "negative": "music, speech, engine idle, horn, crowd, repeating, indoor",
+  "seconds": 5,
+  "steps": 100,
+  "cfg": 7,
+  "sampler": "dpmpp_3m_sde",
+  "note": "Doppler is the whole point - without the word it renders a static engine loop.",
+  "category": "vehicles",
+  "subcategory": "car",
+  "keywords": "exterior doppler road street",
+  "evidence": {
+    "verdict": "MEASURED",
+    "method": "audio_sweep: rendered + measured (ffmpeg ebur128/silencedetect, librosa flatness)",
+    "date": "2026-08-16",
+    "note": "renders and is not broken [seconds=5.02, lufs=-10.4, true_peak=1.6, silent_fraction=0.0, channels=2]"
+  },
+  "evidence_history": [
+    {
+      "verdict": "UNVERIFIED",
+      "method": "authored, not yet rendered",
+      "date": "2026-08-16",
+      "note": "audio_sweep.py renders and measures"
+    }
+  ]
+}

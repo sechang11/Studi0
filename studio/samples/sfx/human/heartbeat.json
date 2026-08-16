@@ -1,0 +1,44 @@
+{
+ "kind": "sfx",
+ "id": "heartbeat",
+ "card": {
+  "id": "heartbeat",
+  "desc": "Interiority - fear, held breath, the moment before.",
+  "status": "partial",
+  "prompt": "a human heartbeat heard through a chest, a soft double thump low in frequency, repeating steadily, muffled as though through flesh, no room around it",
+  "negative": "music, drums, kick drum, melody, speech, reverb",
+  "seconds": 8,
+  "steps": 100,
+  "cfg": 7,
+  "sampler": "dpmpp_3m_sde",
+  "note": "PARTIAL: there is no tempo conditioning. You get whatever rate the model chooses and it cannot accelerate with the scene, which is the only thing a heartbeat is ever asked to do. Generate this, cut ONE double-thump out, and repeat it in post at the rate you need. 'kick drum' is in the negative because at cfg 7 a periodic low pulse drifts musical fast.",
+  "evidence": {
+   "verdict": "MEASURED",
+   "method": "audio_sweep: rendered + measured (ffmpeg ebur128/silencedetect, librosa flatness)",
+   "date": "2026-08-15",
+   "note": "renders and is not broken [seconds=7.99, lufs=-11.4, true_peak=2.1, silent_fraction=0.05, channels=2]"
+  },
+  "evidence_history": [
+   {
+    "verdict": "UNVERIFIED",
+    "method": "nothing has checked this card against pixels",
+    "date": "2026-08-15",
+    "note": ""
+   }
+  ],
+  "category": "human",
+  "keywords": "tension subjective loopable",
+  "subcategory": "body"
+ },
+ "seed": 4242,
+ "measured": {
+  "sample_rate": 44100,
+  "channels": 2,
+  "seconds": 7.99,
+  "lufs": -11.4,
+  "true_peak": 2.1,
+  "silent_seconds": 0.41,
+  "silent_fraction": 0.05
+ },
+ "workflow": "10_stableaudio_sfx.json"
+}

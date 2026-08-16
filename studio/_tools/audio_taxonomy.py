@@ -1,175 +1,263 @@
 #!/usr/bin/env python3
-"""Give the audio libraries a taxonomy: what KIND of sfx, what KIND of music, and tags.
+"""studio/_tools/audio_taxonomy.py - the sound library, filed the way sound libraries are.
 
-Every category below is derived from the cards that exist, not invented ahead of them -
-20 sfx, 22 cues, 8 soundscapes, 25 voices were read and grouped by what they actually
-are. If a category has one member that is honest, not a gap to pad.
+    python3 studio/_tools/audio_taxonomy.py           # assign, file, report
+    python3 studio/_tools/audio_taxonomy.py --dry     # report only, move nothing
 
-FIELD NAMING, and there is a trap. On a CUE card `tags` is ALREADY TAKEN: it holds the
-ACE-Step prompt ("festive celebration orchestra, bright brass, tambourine and snare").
-Overloading it would silently corrupt music generation. So the taxonomy fields are
-`category` and `keywords` everywhere, on every audio kind, and `tags` keeps meaning
-"the generation prompt" on the cards that had it.
+WHAT CHANGED FROM THE FIRST VERSION. That one gave every card a single `category` string
+derived from what the cards happened to be. Useful, but not how anyone actually shops for
+music: stock libraries let you come at a track from either side - the MOOD you need
+(uplifting, epic, tense) or the GENRE you want it played in (orchestral, lo-fi, chiptune)
+- and they file the audio itself under one of them so a folder is browsable on disk.
 
-`tempo` on cues is DERIVED from the bpm already on the card rather than authored, so it
-cannot drift away from the number it describes.
+So:
+
+  MOOD is the filing axis for music. It is the folder, because a director picks music by
+  what the scene must feel like, not by instrumentation. Eleven moods, named in the
+  vocabulary these libraries use, including the negative half that most collections are
+  short of: uplifting happy epic driving emotional sad dark tense calm quirky silence.
+
+  GENRE, ENERGY and USE are tags, because a track has one mood and several of each. A
+  cue can be orchestral AND hybrid_trailer, and be right for a trailer AND a montage.
+
+  CATEGORY is the filing axis for sfx, with a SUBCATEGORY under it, which is exactly how
+  a foley library is laid out - foley/footsteps, impacts/glass, weather/thunder.
+
+FILES MOVE. studio/samples/cues/chase.mp3 becomes samples/cues/driving/chase.mp3, and its
+render record moves with it, because a sidecar that loses its audio is how provenance
+gets orphaned. Nothing is deleted and nothing is renamed - only filed.
+
+THE EMPTY SLOTS ARE THE POINT. Declaring `weapons`, `vehicles`, `animals`, `ui` and
+`magic_scifi` with nothing in them is not padding: it is the generation worklist, printed
+by this tool, and it is the honest shape of a 20-effect library that wants to be a real
+one. A taxonomy that only describes what you already own cannot tell you what is missing.
 """
+import argparse
+import glob
 import json
 import os
+import shutil
 import sys
 
-# ---- SFX: grouped by what makes the sound -----------------------------------------
-SFX = {
-    "breath":             ("body", "human close tension subjective"),
-    "heartbeat":          ("body", "human tension subjective loopable"),
-    "cloth_movement":     ("body", "human close texture"),
-    "footsteps_concrete": ("body", "human interior hard-floor loopable"),
-    "footsteps_grass":    ("body", "human exterior soft-ground loopable"),
-    "crowd_murmur":       ("crowd", "human interior loopable background"),
-    "crowd_roar":         ("crowd", "human exterior loud release"),
-    "impact_hit":         ("impact", "percussive editorial punctuation"),
-    "glass_break":        ("impact", "percussive violence brittle"),
-    "metal_clang":        ("impact", "percussive metal industrial"),
-    "rain_on_roof":       ("weather", "exterior interior-heard loopable wet"),
-    "thunder_distant":    ("weather", "exterior dread off-screen"),
-    "wind_open":          ("weather", "exterior exposed loopable"),
-    "fire_crackle":       ("element", "warmth threat loopable interior"),
-    "water_splash":       ("element", "wet impact exterior"),
-    "door_wood":          ("object", "interior entrance reveal"),
-    "paper":              ("object", "interior close intimate"),
-    "keyboard":           ("object", "interior work loopable occupied"),
-    "electrical_hum":     ("room_tone", "interior loopable bed powered"),
-    "whoosh":             ("editorial", "transition pan non-diegetic"),
-}
+HERE = os.path.dirname(os.path.abspath(__file__))
+STUDIO = os.path.dirname(HERE)
+SAMPLES = os.path.join(STUDIO, "samples")
 
-# ---- CUES: grouped by dramatic function --------------------------------------------
+# --------------------------------------------------------------------- MUSIC
+# mood -> the folder. The negative half is deliberately as wide as the positive half.
+MUSIC_MOODS = ["uplifting", "happy", "epic", "driving", "emotional",
+               "sad", "dark", "tense", "calm", "quirky", "silence"]
+
+# id: (mood, genre tags, energy, use tags)
 CUES = {
-    "menace":            ("tension", "antagonist low dread"),
-    "tense_strings":     ("tension", "anticipation strings suspense"),
-    "unease":            ("tension", "wrong unresolved ambient"),
-    "chase":             ("action", "pursuit fast percussion"),
-    "epic_battle":       ("action", "armies sustained orchestral"),
-    "driving_pulse":     ("action", "momentum electronic sequence"),
-    "triumphant_build":  ("action", "climax arrival orchestral"),
-    "training_montage":  ("action", "montage effort progress"),
-    "desolate":          ("grief", "loss sparse aftermath"),
-    "melancholy_piano":  ("grief", "piano sparse defeat"),
-    "sombre_funeral":    ("grief", "formal public slow"),
-    "romantic":          ("warmth", "intimate two-hander unhurried"),
-    "warm_memory":       ("warmth", "flashback nostalgic unreliable"),
-    "hopeful_rising":    ("warmth", "turn optimism build"),
-    "quiet_dawn":        ("warmth", "morning calm reset"),
-    "celebration":       ("triumph", "public joy festive brass"),
-    "heroic_fanfare":    ("triumph", "arrival brass announcement"),
-    "comedic_light":     ("levity", "no-stakes light playful"),
-    "playful_mischief":  ("levity", "sneaky comic pizzicato"),
-    "industrial_cold":   ("atmosphere", "machine indifferent texture"),
-    "lonely_night_city": ("atmosphere", "neon nocturne urban"),
-    "silence":           ("atmosphere", "absence negative-space"),
+    "celebration":       ("uplifting", "orchestral brass festive", "high",   "titles montage trailer"),
+    "hopeful_rising":    ("uplifting", "orchestral strings hybrid_trailer", "medium", "montage corporate documentary"),
+    "heroic_fanfare":    ("epic",      "orchestral brass fanfare", "high",   "titles trailer gaming"),
+    "epic_battle":       ("epic",      "orchestral percussion hybrid_trailer", "high", "trailer gaming action"),
+    "triumphant_build":  ("epic",      "orchestral hybrid_trailer", "high",  "trailer titles montage"),
+    "chase":             ("driving",   "orchestral strings percussion", "high", "action trailer gaming"),
+    "driving_pulse":     ("driving",   "electronic synth percussion", "high", "montage corporate vlog"),
+    "training_montage":  ("driving",   "rock electronic percussion", "high", "montage vlog gaming"),
+    "comedic_light":     ("quirky",    "acoustic pizzicato folk", "medium",  "vlog podcast documentary"),
+    "playful_mischief":  ("quirky",    "pizzicato acoustic woodwind", "medium", "vlog gaming podcast"),
+    "romantic":          ("emotional", "piano strings acoustic", "low",      "underscore documentary"),
+    "warm_memory":       ("emotional", "piano strings ambient", "low",       "underscore documentary vlog"),
+    "lonely_night_city": ("emotional", "lofi jazz electronic nocturne", "low", "underscore vlog podcast"),
+    "melancholy_piano":  ("sad",       "piano solo sparse", "low",           "underscore documentary"),
+    "desolate":          ("sad",       "ambient strings sparse", "low",      "underscore documentary"),
+    "sombre_funeral":    ("sad",       "orchestral strings choir", "low",    "underscore titles"),
+    "menace":            ("dark",      "orchestral low_brass drone", "medium", "trailer gaming underscore"),
+    "industrial_cold":   ("dark",      "electronic industrial drone", "medium", "underscore gaming documentary"),
+    "tense_strings":     ("tense",     "orchestral strings ostinato", "medium", "trailer underscore gaming"),
+    "unease":            ("tense",     "ambient drone electronic", "low",    "underscore documentary"),
+    "quiet_dawn":        ("calm",      "ambient piano strings", "low",       "underscore vlog documentary"),
+    "silence":           ("silence",   "none", "still",                      "underscore"),
 }
 
-# ---- SOUNDSCAPES: the bed under a scene, grouped by where you are -------------------
-SCAPES = {
-    "room":       ("interior", "neutral bed dialogue"),
-    "night_room": ("interior", "night quiet bed"),
-    "tunnel":     ("interior", "concrete reverberant"),
-    "street":     ("exterior", "urban bed traffic"),
-    "rain_out":   ("exterior", "wet weather bed"),
-    "stadium":    ("crowd", "packed loud exterior"),
-    "subjective": ("subjective", "interiority breath dropout"),
-    "silence":    ("subjective", "absence pre-impact"),
+# Moods with nothing in them yet are still declared: they are the worklist.
+MUSIC_WANTED = {
+    "happy": "feel-good, bright, major-key - the single most requested mood in any "
+             "library and this one has none of it",
+    "uplifting": "more inspirational/motivational corporate beds; two is thin",
+    "calm": "lo-fi chill, ambient study beds, sleep - a whole genre this box can render",
+    "quirky": "more comedy variety; two cues cannot carry a comedic edit",
 }
 
-# ---- VOICES: grouped by what you would cast them for --------------------------------
-# `category` is the casting role. Language and register go in keywords, because a
-# Mandarin narrator is still a narrator and should sort with them.
-VOICES = {
-    "female_01":       ("narration", "english female level neutral"),
-    "female_04_maya":  ("narration", "english female technical measured"),
-    "male_04_frank":   ("narration", "english male level analyst"),
-    "male_02":         ("narration", "english male deep calm authority"),
-    "en_woman":        ("narration", "english female instructional"),
-    "zh_bowen_man":    ("narration", "mandarin male clean"),
-    "zh_xinran_woman": ("narration", "mandarin female clean"),
-    "male_03_carter":  ("host", "english male warm american presenter"),
-    "female_03_alice": ("host", "english female young conversational"),
-    "en_man":          ("host", "english male brisk corporate"),
-    "female_02":       ("host", "english female brisk formal"),
-    "belinda":         ("character", "english child excited"),
-    "broom_salesman":  ("character", "english male eccentric trader"),
-    "chadwick":        ("character", "english male arch comic"),
-    "mabel":           ("character", "english female bright teasing"),
-    "vex":             ("character", "english bored drawl deadpan"),
-    "male_01":         ("character", "english male radio wry"),
-    "male_05_samuel":  ("character", "indian-english male"),
-    "zh_man_sichuan":  ("character", "mandarin male sichuan comic"),
-    # measured as unusable; kept visible so the gap is legible rather than mysterious
-    "anchen_man_bgm":  ("unusable", "mandarin male music-bed rejected-by-node"),
-    "mary_woman_bgm":  ("unusable", "english female music-bed rejected-by-node"),
-    # The four likeness clones of real people. They stay category `blocked`, they are not
-    # castable, and nothing here un-blocks them or serves their reference audio.
-    "clint_eastwood_cc3":     ("blocked", "real-person-likeness do-not-cast"),
-    "david_attenborough_cc3": ("blocked", "real-person-likeness do-not-cast"),
-    "morgan_freeman_cc3":     ("blocked", "real-person-likeness do-not-cast"),
-    "sophie_anderson_cc3":    ("blocked", "real-person-likeness do-not-cast"),
+# --------------------------------------------------------------------- SFX
+# category -> subcategories. Categories with no cards yet are the generation worklist.
+SFX_TREE = {
+    "foley":       ["footsteps", "cloth", "handling"],
+    "human":       ["breath", "body", "voice_nonverbal"],
+    "impacts":     ["hit", "break", "metal"],
+    "weather":     ["rain", "wind", "thunder"],
+    "elements":    ["fire", "water", "earth"],
+    "objects":     ["door", "paper", "keyboard", "tool"],
+    "ambience":    ["room_tone", "interior", "exterior"],
+    "crowd":       ["murmur", "roar", "applause"],
+    "transitions": ["whoosh", "riser", "stinger"],
+    "ui":          ["click", "notification", "error"],
+    "weapons":     ["blade", "firearm", "bow"],
+    "vehicles":    ["car", "engine", "aircraft"],
+    "animals":     ["dog", "bird", "horse"],
+    "magic_scifi": ["spell", "energy", "machine"],
 }
 
-TABLE = {"sfx": SFX, "cues": CUES, "soundscapes": SCAPES, "voices": VOICES}
+# id: (category, subcategory, keywords)
+SFX = {
+    "footsteps_concrete": ("foley", "footsteps", "human interior hard_floor loopable"),
+    "footsteps_grass":    ("foley", "footsteps", "human exterior soft_ground loopable"),
+    "cloth_movement":     ("foley", "cloth", "human close texture"),
+    "breath":             ("human", "breath", "close tension subjective"),
+    "heartbeat":          ("human", "body", "tension subjective loopable"),
+    "impact_hit":         ("impacts", "hit", "percussive editorial punctuation"),
+    "glass_break":        ("impacts", "break", "percussive violence brittle"),
+    "metal_clang":        ("impacts", "metal", "percussive industrial"),
+    "rain_on_roof":       ("weather", "rain", "exterior interior_heard loopable wet"),
+    "wind_open":          ("weather", "wind", "exterior exposed loopable"),
+    "thunder_distant":    ("weather", "thunder", "exterior dread off_screen"),
+    "fire_crackle":       ("elements", "fire", "warmth threat loopable interior"),
+    "water_splash":       ("elements", "water", "wet impact exterior"),
+    "door_wood":          ("objects", "door", "interior entrance reveal"),
+    "paper":              ("objects", "paper", "interior close intimate"),
+    "keyboard":           ("objects", "keyboard", "interior work loopable occupied"),
+    "electrical_hum":     ("ambience", "room_tone", "interior loopable bed powered"),
+    "crowd_murmur":       ("crowd", "murmur", "interior loopable background"),
+    "crowd_roar":         ("crowd", "roar", "exterior loud release"),
+    "whoosh":             ("transitions", "whoosh", "pan non_diegetic editorial"),
+}
 
 
 def tempo_of(bpm):
-    """Derived from the card's own bpm so the word and the number cannot disagree."""
     try:
         b = float(bpm)
     except (TypeError, ValueError):
         return None
     if b <= 0:
         return "still"
-    if b < 70:
-        return "slow"
-    if b < 100:
-        return "walking"
-    if b < 140:
-        return "driving"
-    return "fast"
+    return "slow" if b < 70 else "walking" if b < 100 else "driving" if b < 140 else "fast"
+
+
+def file_into(folder, cid, sub, dry):
+    """Move <samples>/<folder>/<cid>.mp3 and its render record into <folder>/<sub>/.
+
+    Returns what happened. The sidecar travels with the audio: a render record that has
+    lost the file it describes is how provenance quietly rots.
+    """
+    moved = []
+    for ext in (".mp3", ".json", ".wav", ".flac"):
+        src = os.path.join(SAMPLES, folder, cid + ext)
+        if not os.path.exists(src):
+            continue
+        dst_dir = os.path.join(SAMPLES, folder, sub)
+        dst = os.path.join(dst_dir, cid + ext)
+        if os.path.abspath(src) == os.path.abspath(dst):
+            continue
+        if not dry:
+            os.makedirs(dst_dir, exist_ok=True)
+            shutil.move(src, dst)
+        moved.append(ext)
+    return moved
 
 
 def main():
-    root = "studio"
-    total = missing = extra = 0
-    for folder, table in TABLE.items():
-        d = os.path.join(root, folder)
-        on_disk = {os.path.splitext(f)[0] for f in os.listdir(d) if f.endswith(".json")}
-        named = set(table)
-        for cid in sorted(named - on_disk):
-            print("  ! %s/%s is in the taxonomy but not on disk" % (folder, cid))
-            extra += 1
-        for cid in sorted(on_disk - named):
-            print("  ! %s/%s has no taxonomy entry" % (folder, cid))
-            missing += 1
-        n = 0
-        for cid in sorted(on_disk & named):
-            p = os.path.join(d, cid + ".json")
-            card = json.load(open(p, encoding="utf-8"))
-            cat, kw = table[cid]
-            card["category"] = cat
-            card["keywords"] = kw
-            if folder == "cues":
-                t = tempo_of(card.get("bpm"))
-                if t:
-                    card["tempo"] = t
+    ap = argparse.ArgumentParser(description="File the sound library by mood and category.")
+    ap.add_argument("--dry", action="store_true", help="report only, move nothing")
+    a = ap.parse_args()
+
+    moved_n = 0
+
+    # ---- music
+    print("MUSIC - filed by mood")
+    by_mood = {}
+    on_disk = sorted(os.path.splitext(os.path.basename(x))[0]
+                     for x in glob.glob(os.path.join(STUDIO, "cues", "*.json")))
+    for cid in sorted(set(CUES) | set(on_disk)):
+        p = os.path.join(STUDIO, "cues", cid + ".json")
+        if not os.path.exists(p):
+            print("  ! in the table but no card on disk: %s" % cid)
+            continue
+        card = json.load(open(p, encoding="utf-8"))
+        if cid in CUES:
+            mood, genre, energy, use = CUES[cid]
+        else:
+            # authored after this table was written - it files itself
+            mood = card.get("mood") or card.get("category")
+            genre = card.get("genre") or ""
+            energy = card.get("energy") or ""
+            use = card.get("use") or ""
+            if not mood:
+                print("  ! %s has no mood and no table entry - not filed" % cid)
+                continue
+        card["category"] = mood          # the folder, and the primary browse axis
+        card["mood"] = mood
+        card["genre"] = genre
+        card["energy"] = energy
+        card["use"] = use
+        card["keywords"] = " ".join(sorted(set((genre + " " + use).split())))
+        t = tempo_of(card.get("bpm"))
+        if t:
+            card["tempo"] = t
+        if not a.dry:
             json.dump(card, open(p, "w", encoding="utf-8"), indent=2)
-            n += 1
-        cats = {}
-        for cid in sorted(on_disk & named):
-            cats.setdefault(table[cid][0], []).append(cid)
-        print("%-12s %2d cards, %d categories" % (folder, n, len(cats)))
-        for c in sorted(cats):
-            print("     %-12s %d  %s" % (c, len(cats[c]), " ".join(sorted(cats[c]))[:70]))
-        total += n
-    print("\n%d cards categorised; %d on disk with no entry, %d entries with no card"
-          % (total, missing, extra))
-    return 1 if (missing or extra) else 0
+        if file_into("cues", cid, mood, a.dry):
+            moved_n += 1
+        by_mood.setdefault(mood, []).append(cid)
+    for m in MUSIC_MOODS:
+        ids = by_mood.get(m, [])
+        note = "" if ids else "   <-- EMPTY"
+        print("  %-11s %2d  %s%s" % (m, len(ids), " ".join(sorted(ids))[:58], note))
+
+    # ---- sfx
+    print("\nSFX - filed by category/subcategory")
+    by_cat = {}
+    sfx_disk = sorted(os.path.splitext(os.path.basename(x))[0]
+                      for x in glob.glob(os.path.join(STUDIO, "sfx", "*.json")))
+    for cid in sorted(set(SFX) | set(sfx_disk)):
+        p = os.path.join(STUDIO, "sfx", cid + ".json")
+        if not os.path.exists(p):
+            print("  ! in the table but no card on disk: %s" % cid)
+            continue
+        card = json.load(open(p, encoding="utf-8"))
+        if cid in SFX:
+            cat, sub, kw = SFX[cid]
+        else:
+            cat = card.get("category")
+            sub = card.get("subcategory") or (cat or "")
+            kw = card.get("keywords") or ""
+            if not cat:
+                print("  ! %s has no category and no table entry - not filed" % cid)
+                continue
+        card["category"] = cat
+        card["subcategory"] = sub
+        card["keywords"] = kw
+        if not a.dry:
+            json.dump(card, open(p, "w", encoding="utf-8"), indent=2)
+        if file_into("sfx", cid, cat, a.dry):
+            moved_n += 1
+        by_cat.setdefault(cat, []).append((sub, cid))
+    for cat, subs in SFX_TREE.items():
+        got = by_cat.get(cat, [])
+        note = "   <-- EMPTY" if not got else ""
+        print("  %-12s %2d  %s%s"
+              % (cat, len(got),
+                 " ".join("%s/%s" % (s, i) for s, i in sorted(got))[:58], note))
+
+    # ---- what to render next
+    print("\nWORKLIST - declared and empty, which is the point of declaring them")
+    empty_moods = [m for m in MUSIC_MOODS if not by_mood.get(m)]
+    thin = [m for m in MUSIC_WANTED if len(by_mood.get(m, [])) < 3]
+    empty_cats = [c for c in SFX_TREE if not by_cat.get(c)]
+    if empty_moods:
+        print("  music moods with nothing in them: %s" % ", ".join(empty_moods))
+    for m in thin:
+        print("  music %-10s thin (%d) - %s" % (m, len(by_mood.get(m, [])), MUSIC_WANTED[m]))
+    if empty_cats:
+        print("  sfx categories with nothing in them: %s" % ", ".join(empty_cats))
+        for c in empty_cats:
+            print("      %-12s wants %s" % (c, ", ".join(SFX_TREE[c])))
+
+    print("\n%d cards had audio filed%s" % (moved_n, " (dry run)" if a.dry else ""))
+    return 0
 
 
 if __name__ == "__main__":

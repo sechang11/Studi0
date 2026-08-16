@@ -1,0 +1,44 @@
+{
+ "kind": "sfx",
+ "id": "electrical_hum",
+ "card": {
+  "id": "electrical_hum",
+  "desc": "Fluorescent room, substation, server room, anywhere powered and empty.",
+  "status": "partial",
+  "prompt": "a steady electrical mains hum from a transformer, low continuous drone with a harsh buzzing overtone, faint, no variation, close, indoors",
+  "negative": "music, melody, speech, rhythm, motor, fan",
+  "seconds": 10,
+  "steps": 100,
+  "cfg": 7,
+  "sampler": "dpmpp_3m_sde",
+  "note": "PARTIAL: Stable Audio 3 has no pitch conditioning, so you cannot ask for 50 Hz or 60 Hz and you will not get a region-correct mains hum - you get whatever pitch the sampler picks. If the exact frequency matters, synthesise it (a sine at 50 or 60 Hz plus odd harmonics) instead of generating it. The buzz character and the level are fine; only the pitch is out of reach.",
+  "evidence": {
+   "verdict": "MEASURED",
+   "method": "audio_sweep: rendered + measured (ffmpeg ebur128/silencedetect, librosa flatness)",
+   "date": "2026-08-15",
+   "note": "renders and is not broken [seconds=10.03, lufs=-12.2, true_peak=-3.6, silent_fraction=0.0, channels=2]"
+  },
+  "evidence_history": [
+   {
+    "verdict": "UNVERIFIED",
+    "method": "nothing has checked this card against pixels",
+    "date": "2026-08-15",
+    "note": ""
+   }
+  ],
+  "category": "ambience",
+  "keywords": "interior loopable bed powered",
+  "subcategory": "room_tone"
+ },
+ "seed": 4242,
+ "measured": {
+  "sample_rate": 44100,
+  "channels": 2,
+  "seconds": 10.03,
+  "lufs": -12.2,
+  "true_peak": -3.6,
+  "silent_seconds": 0,
+  "silent_fraction": 0.0
+ },
+ "workflow": "10_stableaudio_sfx.json"
+}

@@ -1,0 +1,29 @@
+{
+  "id": "bow_release",
+  "desc": "An arrow loosed. Creak, release, and the air after it.",
+  "status": "weak",
+  "prompt": "a wooden bow string drawn and released, sharp twang and arrow whoosh, close, dry",
+  "negative": "music, speech, reverb, impact, thud, crowd, repeating",
+  "seconds": 3,
+  "steps": 100,
+  "cfg": 7,
+  "sampler": "dpmpp_3m_sde",
+  "note": "The whoosh sells it more than the twang; keep 'arrow whoosh' in the prompt.",
+  "category": "weapons",
+  "subcategory": "bow",
+  "keywords": "wood string tension release",
+  "evidence": {
+    "verdict": "MEASURED",
+    "method": "audio_sweep: rendered + measured (ffmpeg ebur128/silencedetect, librosa flatness)",
+    "date": "2026-08-16",
+    "note": "renders and is not broken [seconds=2.97, lufs=-7.3, true_peak=1.3, silent_fraction=0.34, channels=2]"
+  },
+  "evidence_history": [
+    {
+      "verdict": "UNVERIFIED",
+      "method": "authored, not yet rendered",
+      "date": "2026-08-16",
+      "note": "audio_sweep.py renders and measures"
+    }
+  ]
+}

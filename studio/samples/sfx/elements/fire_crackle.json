@@ -1,0 +1,44 @@
+{
+ "kind": "sfx",
+ "id": "fire_crackle",
+ "card": {
+  "id": "fire_crackle",
+  "desc": "Hearth, campfire, burning building. Warmth or threat depending on level.",
+  "status": "ready",
+  "prompt": "a wood fire burning close, dry logs popping and cracking irregularly, dry and detailed",
+  "negative": "music, speech, tonal, wind, rain, crowd",
+  "seconds": 12,
+  "steps": 100,
+  "cfg": 7,
+  "sampler": "dpmpp_3m_sde",
+  "note": "ONE SOURCE. The earlier prompt also asked for 'a low roar of flame underneath' and 'embers ticking' - three sources in one bed, which the model cannot layer. Render the flame roar as its own bed and combine with AudioMerge.",
+  "evidence": {
+   "verdict": "MEASURED",
+   "method": "audio_sweep: rendered + measured (ffmpeg ebur128/silencedetect, librosa flatness)",
+   "date": "2026-08-15",
+   "note": "renders and is not broken [seconds=11.98, lufs=-11.2, true_peak=2.8, silent_fraction=0.14, channels=2]"
+  },
+  "evidence_history": [
+   {
+    "verdict": "UNVERIFIED",
+    "method": "nothing has checked this card against pixels",
+    "date": "2026-08-15",
+    "note": ""
+   }
+  ],
+  "category": "elements",
+  "keywords": "warmth threat loopable interior",
+  "subcategory": "fire"
+ },
+ "seed": 4242,
+ "measured": {
+  "sample_rate": 44100,
+  "channels": 2,
+  "seconds": 11.98,
+  "lufs": -11.2,
+  "true_peak": 2.8,
+  "silent_seconds": 1.68,
+  "silent_fraction": 0.14
+ },
+ "workflow": "10_stableaudio_sfx.json"
+}

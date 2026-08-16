@@ -1,0 +1,48 @@
+{
+ "kind": "cues",
+ "id": "lonely_night_city",
+ "card": {
+  "id": "lonely_night_city",
+  "desc": "Wet streets, neon, one person still awake.",
+  "status": "ready",
+  "tags": "late night jazz, muted trumpet, brushed drums, upright bass, rhodes piano, smoky lonely, instrumental",
+  "bpm": 84,
+  "key": "B flat minor",
+  "level": 0.7,
+  "note": "Sits under dialogue, and under voiceover especially. Pair with look:night - the cue reads as a city, the grade does the dark.",
+  "evidence": {
+   "verdict": "MEASURED",
+   "method": "audio_sweep: rendered + measured (ffmpeg ebur128/silencedetect, librosa flatness)",
+   "date": "2026-08-15",
+   "note": "renders and is not broken [seconds=20.0, lufs=-18.0, true_peak=0.0, silent_fraction=0.32, flatness=0.0002, f0_median=105.1, channels=2]"
+  },
+  "evidence_history": [
+   {
+    "verdict": "UNVERIFIED",
+    "method": "nothing has checked this card against pixels",
+    "date": "2026-08-15",
+    "note": ""
+   }
+  ],
+  "category": "emotional",
+  "keywords": "electronic jazz lofi nocturne podcast underscore vlog",
+  "tempo": "walking",
+  "mood": "emotional",
+  "genre": "lofi jazz electronic nocturne",
+  "energy": "low",
+  "use": "underscore vlog podcast"
+ },
+ "seed": 4242,
+ "measured": {
+  "sample_rate": 48000,
+  "channels": 2,
+  "seconds": 20.0,
+  "lufs": -18.0,
+  "true_peak": 0.0,
+  "silent_seconds": 6.41,
+  "silent_fraction": 0.32,
+  "flatness": 0.0002,
+  "f0_median": 105.1
+ },
+ "workflow": "06_acestep_music.json"
+}

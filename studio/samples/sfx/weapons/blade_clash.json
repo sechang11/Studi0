@@ -1,0 +1,36 @@
+{
+ "kind": "sfx",
+ "id": "blade_clash",
+ "card": {
+  "id": "blade_clash",
+  "desc": "Two blades meeting. Single hit, not a fight.",
+  "status": "weak",
+  "prompt": "two steel sword blades striking each other once, sharp metallic ring, close, dry",
+  "negative": "music, speech, reverb, crowd, repeating, footsteps, armour",
+  "seconds": 3,
+  "steps": 100,
+  "cfg": 7,
+  "sampler": "dpmpp_3m_sde",
+  "note": "Pairs with impact_hit underneath for weight - the clash alone is all treble.",
+  "category": "weapons",
+  "subcategory": "blade",
+  "keywords": "metal impact violence percussive",
+  "evidence": {
+   "verdict": "UNVERIFIED",
+   "method": "authored, not yet rendered",
+   "date": "2026-08-16",
+   "note": "audio_sweep.py renders and measures"
+  }
+ },
+ "seed": 4242,
+ "measured": {
+  "sample_rate": 44100,
+  "channels": 2,
+  "seconds": 2.97,
+  "lufs": -7.0,
+  "true_peak": 2.3,
+  "silent_seconds": 1.0,
+  "silent_fraction": 0.34
+ },
+ "workflow": "10_stableaudio_sfx.json"
+}

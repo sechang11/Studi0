@@ -1,0 +1,44 @@
+{
+ "kind": "sfx",
+ "id": "whoosh",
+ "card": {
+  "id": "whoosh",
+  "desc": "A fast pan, a swung object, a wipe between shots.",
+  "status": "ready",
+  "prompt": "a thick length of rope swung fast past a microphone once, air rushing, rising then falling in pitch as it passes, dry, no impact at the end, no reverb",
+  "negative": "music, tonal, speech, impact, hit, thud, reverb",
+  "seconds": 3,
+  "steps": 100,
+  "cfg": 7,
+  "sampler": "dpmpp_3m_sde",
+  "note": "Deliberately ends with no hit so you can place impact_hit on the frame you choose. If a seed comes back with a thump on the tail, trim it off rather than keeping it - a baked-in hit locks you to the model's timing instead of your cut.",
+  "evidence": {
+   "verdict": "MEASURED",
+   "method": "audio_sweep: rendered + measured (ffmpeg ebur128/silencedetect, librosa flatness)",
+   "date": "2026-08-15",
+   "note": "renders and is not broken [seconds=2.97, lufs=-9.5, true_peak=0.1, silent_fraction=0.32, channels=2]"
+  },
+  "evidence_history": [
+   {
+    "verdict": "UNVERIFIED",
+    "method": "nothing has checked this card against pixels",
+    "date": "2026-08-15",
+    "note": ""
+   }
+  ],
+  "category": "transitions",
+  "keywords": "pan non_diegetic editorial",
+  "subcategory": "whoosh"
+ },
+ "seed": 4242,
+ "measured": {
+  "sample_rate": 44100,
+  "channels": 2,
+  "seconds": 2.97,
+  "lufs": -9.5,
+  "true_peak": 0.1,
+  "silent_seconds": 0.95,
+  "silent_fraction": 0.32
+ },
+ "workflow": "10_stableaudio_sfx.json"
+}

@@ -1,0 +1,36 @@
+{
+ "kind": "sfx",
+ "id": "horse_gallop",
+ "card": {
+  "id": "horse_gallop",
+  "desc": "Hooves at a gallop. Arrival, pursuit, a period exterior.",
+  "status": "weak",
+  "prompt": "a single horse galloping on packed dirt, rhythmic hoofbeats, exterior, close",
+  "negative": "music, speech, whinny, cart, crowd, reverb, multiple horses",
+  "seconds": 5,
+  "steps": 100,
+  "cfg": 7,
+  "sampler": "dpmpp_3m_sde",
+  "note": "One horse. A cavalry charge is a different card and a much harder render.",
+  "category": "animals",
+  "subcategory": "horse",
+  "keywords": "exterior hooves rhythm approach",
+  "evidence": {
+   "verdict": "UNVERIFIED",
+   "method": "authored, not yet rendered",
+   "date": "2026-08-16",
+   "note": "audio_sweep.py renders and measures"
+  }
+ },
+ "seed": 4242,
+ "measured": {
+  "sample_rate": 44100,
+  "channels": 2,
+  "seconds": 5.02,
+  "lufs": -11.5,
+  "true_peak": 0.7,
+  "silent_seconds": 0.53,
+  "silent_fraction": 0.11
+ },
+ "workflow": "10_stableaudio_sfx.json"
+}

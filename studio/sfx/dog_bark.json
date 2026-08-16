@@ -1,0 +1,29 @@
+{
+  "id": "dog_bark",
+  "desc": "A dog barking nearby. Suburban, territorial, a warning.",
+  "status": "weak",
+  "prompt": "a single medium sized dog barking twice, close, exterior, dry",
+  "negative": "music, speech, growl, whine, pack of dogs, reverb, repeating loop",
+  "seconds": 3,
+  "steps": 100,
+  "cfg": 7,
+  "sampler": "dpmpp_3m_sde",
+  "note": "Two barks. 'Barking' alone loops into a kennel.",
+  "category": "animals",
+  "subcategory": "dog",
+  "keywords": "exterior domestic alert",
+  "evidence": {
+    "verdict": "MEASURED",
+    "method": "audio_sweep: rendered + measured (ffmpeg ebur128/silencedetect, librosa flatness)",
+    "date": "2026-08-16",
+    "note": "renders and is not broken [seconds=2.97, lufs=-7.4, true_peak=2.5, silent_fraction=0.4, channels=2]"
+  },
+  "evidence_history": [
+    {
+      "verdict": "UNVERIFIED",
+      "method": "authored, not yet rendered",
+      "date": "2026-08-16",
+      "note": "audio_sweep.py renders and measures"
+    }
+  ]
+}

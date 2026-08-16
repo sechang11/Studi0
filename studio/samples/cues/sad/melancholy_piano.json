@@ -1,0 +1,48 @@
+{
+ "kind": "cues",
+ "id": "melancholy_piano",
+ "card": {
+  "id": "melancholy_piano",
+  "desc": "Defeat, aftermath, an empty room. Sparse and restrained.",
+  "status": "ready",
+  "tags": "sparse melancholy piano, single sustained cello, restrained, instrumental",
+  "bpm": 72,
+  "key": "D minor",
+  "level": 0.8,
+  "note": "Leave space. If it fills every bar it stops reading as loss and starts reading as a montage.",
+  "evidence": {
+   "verdict": "MEASURED",
+   "method": "audio_sweep: rendered + measured (ffmpeg ebur128/silencedetect, librosa flatness)",
+   "date": "2026-08-15",
+   "note": "renders and is not broken [seconds=20.0, lufs=-29.3, true_peak=-12.2, silent_fraction=0.34, flatness=0.0002, f0_median=142.7, channels=2]"
+  },
+  "evidence_history": [
+   {
+    "verdict": "UNVERIFIED",
+    "method": "nothing has checked this card against pixels",
+    "date": "2026-08-15",
+    "note": ""
+   }
+  ],
+  "category": "sad",
+  "keywords": "documentary piano solo sparse underscore",
+  "tempo": "walking",
+  "mood": "sad",
+  "genre": "piano solo sparse",
+  "energy": "low",
+  "use": "underscore documentary"
+ },
+ "seed": 4242,
+ "measured": {
+  "sample_rate": 48000,
+  "channels": 2,
+  "seconds": 20.0,
+  "lufs": -29.3,
+  "true_peak": -12.2,
+  "silent_seconds": 6.73,
+  "silent_fraction": 0.34,
+  "flatness": 0.0002,
+  "f0_median": 142.7
+ },
+ "workflow": "06_acestep_music.json"
+}

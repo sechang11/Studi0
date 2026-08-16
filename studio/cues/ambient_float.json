@@ -1,0 +1,31 @@
+{
+  "id": "ambient_float",
+  "desc": "Weightless. Sleep, space, memory, a slow reveal.",
+  "status": "weak",
+  "tags": "ambient atmospheric pad, slow evolving synth drone, soft reverb tails, no drums, peaceful, spacious, instrumental",
+  "bpm": 0,
+  "key": "D major",
+  "level": 0.7,
+  "note": "Unmetered on purpose - bpm 0 so the compiler does not invent 140. Good under a long dissolve.",
+  "category": "calm",
+  "mood": "calm",
+  "genre": "ambient pad drone",
+  "energy": "low",
+  "use": "underscore documentary",
+  "keywords": "ambient documentary drone pad underscore",
+  "evidence": {
+    "verdict": "MEASURED",
+    "method": "audio_sweep: rendered + measured (ffmpeg ebur128/silencedetect, librosa flatness)",
+    "date": "2026-08-16",
+    "note": "renders and is not broken [seconds=20.0, lufs=-19.2, true_peak=-1.8, silent_fraction=0.04, flatness=0.0001, f0_median=110.0, channels=2]"
+  },
+  "evidence_history": [
+    {
+      "verdict": "UNVERIFIED",
+      "method": "authored, not yet rendered",
+      "date": "2026-08-16",
+      "note": "audio_sweep.py renders and measures; the ear is still yours"
+    }
+  ],
+  "tempo": "still"
+}

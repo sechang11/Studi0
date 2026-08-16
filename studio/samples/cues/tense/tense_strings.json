@@ -1,0 +1,48 @@
+{
+ "kind": "cues",
+ "id": "tense_strings",
+ "card": {
+  "id": "tense_strings",
+  "desc": "Anticipation. Something is about to be decided.",
+  "status": "ready",
+  "tags": "quiet tense strings, low pulse, anticipation, restrained orchestral, instrumental",
+  "bpm": 88,
+  "key": "A minor",
+  "level": 0.7,
+  "note": "Sits under dialogue without fighting it - the pulse carries the tension, not the melody.",
+  "evidence": {
+   "verdict": "MEASURED",
+   "method": "audio_sweep: rendered + measured (ffmpeg ebur128/silencedetect, librosa flatness)",
+   "date": "2026-08-15",
+   "note": "renders and is not broken [seconds=20.0, lufs=-21.9, true_peak=-6.1, silent_fraction=0.32, flatness=0.0002, f0_median=82.0, channels=2]"
+  },
+  "evidence_history": [
+   {
+    "verdict": "UNVERIFIED",
+    "method": "nothing has checked this card against pixels",
+    "date": "2026-08-15",
+    "note": ""
+   }
+  ],
+  "category": "tense",
+  "keywords": "gaming orchestral ostinato strings trailer underscore",
+  "tempo": "walking",
+  "mood": "tense",
+  "genre": "orchestral strings ostinato",
+  "energy": "medium",
+  "use": "trailer underscore gaming"
+ },
+ "seed": 4242,
+ "measured": {
+  "sample_rate": 48000,
+  "channels": 2,
+  "seconds": 20.0,
+  "lufs": -21.9,
+  "true_peak": -6.1,
+  "silent_seconds": 6.3,
+  "silent_fraction": 0.32,
+  "flatness": 0.0002,
+  "f0_median": 82.0
+ },
+ "workflow": "06_acestep_music.json"
+}

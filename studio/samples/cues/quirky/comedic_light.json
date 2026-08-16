@@ -1,0 +1,48 @@
+{
+ "kind": "cues",
+ "id": "comedic_light",
+ "card": {
+  "id": "comedic_light",
+  "desc": "Nothing is at stake. Keep it that way.",
+  "status": "ready",
+  "tags": "light comedic underscore, pizzicato strings, bassoon, marimba, woodblock, bouncy, instrumental",
+  "bpm": 108,
+  "key": "F major",
+  "level": 0.6,
+  "note": "A bed under dialogue, deliberately the quietest cue in the library. Comedy dies when the score is louder than the joke - if you can hear the marimba over the line, it is too loud.",
+  "evidence": {
+   "verdict": "MEASURED",
+   "method": "audio_sweep: rendered + measured (ffmpeg ebur128/silencedetect, librosa flatness)",
+   "date": "2026-08-15",
+   "note": "renders and is not broken [seconds=20.0, lufs=-14.4, true_peak=1.3, silent_fraction=0.33, flatness=0.0065, f0_median=135.5, channels=2]"
+  },
+  "evidence_history": [
+   {
+    "verdict": "UNVERIFIED",
+    "method": "nothing has checked this card against pixels",
+    "date": "2026-08-15",
+    "note": ""
+   }
+  ],
+  "category": "quirky",
+  "keywords": "acoustic documentary folk pizzicato podcast vlog",
+  "tempo": "driving",
+  "mood": "quirky",
+  "genre": "acoustic pizzicato folk",
+  "energy": "medium",
+  "use": "vlog podcast documentary"
+ },
+ "seed": 4242,
+ "measured": {
+  "sample_rate": 48000,
+  "channels": 2,
+  "seconds": 20.0,
+  "lufs": -14.4,
+  "true_peak": 1.3,
+  "silent_seconds": 6.52,
+  "silent_fraction": 0.33,
+  "flatness": 0.0065,
+  "f0_median": 135.5
+ },
+ "workflow": "06_acestep_music.json"
+}

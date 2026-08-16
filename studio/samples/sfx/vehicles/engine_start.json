@@ -1,0 +1,36 @@
+{
+ "kind": "sfx",
+ "id": "engine_start",
+ "card": {
+  "id": "engine_start",
+  "desc": "Ignition. A decision has been made and someone is leaving.",
+  "status": "weak",
+  "prompt": "a car engine starting from cold, starter motor crank then idle, close, exterior",
+  "negative": "music, speech, driving away, radio, crowd, reverb",
+  "seconds": 4,
+  "steps": 100,
+  "cfg": 7,
+  "sampler": "dpmpp_3m_sde",
+  "note": "Crank then idle is two events; this is the one place a single-source prompt has to name both or it stops halfway.",
+  "category": "vehicles",
+  "subcategory": "engine",
+  "keywords": "mechanical ignition interior",
+  "evidence": {
+   "verdict": "UNVERIFIED",
+   "method": "authored, not yet rendered",
+   "date": "2026-08-16",
+   "note": "audio_sweep.py renders and measures"
+  }
+ },
+ "seed": 4242,
+ "measured": {
+  "sample_rate": 44100,
+  "channels": 2,
+  "seconds": 3.99,
+  "lufs": -9.2,
+  "true_peak": 2.2,
+  "silent_seconds": 0.9,
+  "silent_fraction": 0.23
+ },
+ "workflow": "10_stableaudio_sfx.json"
+}

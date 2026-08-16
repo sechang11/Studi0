@@ -1,0 +1,36 @@
+{
+ "kind": "sfx",
+ "id": "spell_cast",
+ "card": {
+  "id": "spell_cast",
+  "desc": "A spell released. Designed, not recorded - shimmer with a body under it.",
+  "status": "weak",
+  "prompt": "a magical spell casting whoosh, shimmering bell-like sparkle with a low whoosh underneath, designed sound effect, dry",
+  "negative": "music, melody, speech, reverb, explosion, crowd, repeating",
+  "seconds": 3,
+  "steps": 100,
+  "cfg": 7,
+  "sampler": "dpmpp_3m_sde",
+  "note": "Sparkle alone is thin; the low whoosh is what gives it a body. Layer over impact_hit for a big one.",
+  "category": "magic_scifi",
+  "subcategory": "spell",
+  "keywords": "magic energy whoosh designed",
+  "evidence": {
+   "verdict": "UNVERIFIED",
+   "method": "authored, not yet rendered",
+   "date": "2026-08-16",
+   "note": "audio_sweep.py renders and measures"
+  }
+ },
+ "seed": 4242,
+ "measured": {
+  "sample_rate": 44100,
+  "channels": 2,
+  "seconds": 2.97,
+  "lufs": -8.0,
+  "true_peak": 0.8,
+  "silent_seconds": 0.92,
+  "silent_fraction": 0.31
+ },
+ "workflow": "10_stableaudio_sfx.json"
+}

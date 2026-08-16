@@ -1,0 +1,48 @@
+{
+ "kind": "cues",
+ "id": "desolate",
+ "card": {
+  "id": "desolate",
+  "desc": "Loss that has already happened. Very sparse.",
+  "status": "ready",
+  "tags": "desolate solo piano, distant strings, loss, very sparse, instrumental",
+  "bpm": 60,
+  "key": "F minor",
+  "level": 0.75,
+  "note": "Slower than melancholy_piano and emptier. Use when the character has stopped fighting.",
+  "evidence": {
+   "verdict": "MEASURED",
+   "method": "audio_sweep: rendered + measured (ffmpeg ebur128/silencedetect, librosa flatness)",
+   "date": "2026-08-15",
+   "note": "renders and is not broken [seconds=20.0, lufs=-23.7, true_peak=-2.9, silent_fraction=0.23, flatness=0.0001, f0_median=139.4, channels=2]"
+  },
+  "evidence_history": [
+   {
+    "verdict": "UNVERIFIED",
+    "method": "nothing has checked this card against pixels",
+    "date": "2026-08-15",
+    "note": ""
+   }
+  ],
+  "category": "sad",
+  "keywords": "ambient documentary sparse strings underscore",
+  "tempo": "slow",
+  "mood": "sad",
+  "genre": "ambient strings sparse",
+  "energy": "low",
+  "use": "underscore documentary"
+ },
+ "seed": 4242,
+ "measured": {
+  "sample_rate": 48000,
+  "channels": 2,
+  "seconds": 20.0,
+  "lufs": -23.7,
+  "true_peak": -2.9,
+  "silent_seconds": 4.52,
+  "silent_fraction": 0.23,
+  "flatness": 0.0001,
+  "f0_median": 139.4
+ },
+ "workflow": "06_acestep_music.json"
+}
