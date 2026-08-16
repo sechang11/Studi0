@@ -2198,13 +2198,26 @@ class H(http.server.SimpleHTTPRequestHandler):
                      "/api/tool/run", "/api/tool/random",
                      "/api/make3d/mesh", "/api/library/star",
                      "/api/library/grow", "/api/library/reject",
-                     "/api/library/check", "/api/verify/card"):
+                     "/api/library/check", "/api/verify/card", "/api/remake"):
             return self._send({"error": "not found"}, 404)
         n = int(self.headers.get("Content-Length", 0))
         try:
             data = json.loads(self.rfile.read(n) or b"{}")
         except Exception as e:
             return self._send({"error": f"bad json: {e}"}, 400)
+        if p == "/api/remake":
+            # Straight through remake.py so the app and the CLI share one store: a flag
+            # raised while listening here is listed and cleared by the same tool there.
+            rm = _load_tool_module("remake")
+            kind = "cues" if str(data.get("kind")) in ("cues", "music") else "sfx"
+            cid = re.sub(r"[^A-Za-z0-9_.-]", "", str(data.get("id") or ""))
+            on = bool(data.get("on"))
+            if not cid:
+                return self._send({"error": "need a card id"}, 400)
+            rc = rm.flag(kind, cid, str(data.get("reason") or "")[:200], on)
+            if rc:
+                return self._send({"error": "no such card: %s/%s" % (kind, cid)}, 404)
+            return self._send({"ok": True, "id": cid, "kind": kind, "flagged": on})
         if p == "/api/verify/card":
             # A human judgement on a KIND card - same eye as the panel queue, one writer.
             sys.path.insert(0, HERE)

@@ -196,6 +196,13 @@
 #subnav .sub2 .chip{border-radius:6px;padding:3px 9px;font-size:11px}
 #libnav h3 em, #facets h3 em{display:block;font-style:normal;font-weight:400;
   text-transform:none;letter-spacing:0;color:var(--dim);font-size:10px;margin-top:1px}
+.audcard{position:relative}
+.flagbtn{position:absolute;right:10px;bottom:10px;background:var(--panel2);
+  border:1px solid var(--line);color:var(--dim);border-radius:99px;padding:2px 9px;
+  font:inherit;font-size:10px;letter-spacing:.05em;text-transform:uppercase;cursor:pointer}
+.flagbtn:hover{color:var(--ink);border-color:var(--warn)}
+.flagbtn.on{background:var(--warn);border-color:var(--warn);color:#0f1115}
+.audcard.flagged{border-color:var(--warn)}
 </style>
 </head>
 <body>
@@ -603,14 +610,43 @@ function setMode(k, replaying){
                : (b.kind==="soundscapes"
                   ? "a mix recipe, not a sound - see the levels above"
                   : "no sample rendered yet")}</div>`;
-        return `<div class="cd audcard ${c.status==="blocked"?"blocked":""}">
+        // Raised where you hear the problem. Same store the CLI writes, so a flag set
+        // here shows up in `remake.py --list` and is cleared by `--run`.
+        const flagged = !!(d.remake);
+        const flagBtn = c.audio
+          ? `<button class="flagbtn${flagged?" on":""}" data-kind="${esc(b.kind)}"
+               data-id="${esc(c.id)}" title="${flagged
+                 ? "flagged: "+esc(d.remake.reason||"")+" — click to unflag"
+                 : "mark this take bad, then run remake.py --run"}">${
+                 flagged?"flagged":"flag"}</button>`
+          : "";
+        return `<div class="cd audcard ${c.status==="blocked"?"blocked":""}${flagged?" flagged":""}">
           <h4>${esc(c.name||c.id)}<span class="cat">${esc(c.category||"-")}</span></h4>
+          ${flagBtn}
           <div class="mdesc">${esc(c.desc||"")}</div>
           ${kw?`<div class="kw">${kw}</div>`:""}
           ${facts?`<div class="mfacts">${facts}</div>`:""}
           ${player}
         </div>`;
       }).join("") || "<p>nothing in this category</p>";
+      document.querySelectorAll(".flagbtn").forEach(btn => btn.onclick = () => {
+        const on = !btn.classList.contains("on");
+        const reason = on
+          ? (prompt("What is wrong with this one?", "scratchy / static") || "").trim()
+          : "";
+        if (on && !reason) return;             // cancelled - do not flag blindly
+        btn.disabled = true;
+        fetch("/api/remake", {method:"POST", headers:{"Content-Type":"application/json"},
+          body: JSON.stringify({kind: btn.dataset.kind, id: btn.dataset.id,
+                                on: on, reason: reason})})
+          .then(r=>r.json()).then(res=>{
+            btn.disabled = false;
+            if (res.error) { alert(res.error); return; }
+            btn.classList.toggle("on", on);
+            btn.textContent = on ? "flagged" : "flag";
+            btn.closest(".audcard").classList.toggle("flagged", on);
+          }).catch(e=>{ btn.disabled=false; alert(e); });
+      });
       drawSubnav(b, renderAudio);
       };
       renderAudio();
@@ -624,6 +660,16 @@ function setMode(k, replaying){
 // Which category chip is selected, and which subcategory under it. Reset whenever the
 // kind changes - keeping "weapons" selected while switching to music would show nothing
 // and look broken.
+// ONE SOUND AT A TIME. Each card owns an <audio>, so clicking down a column stacked
+// every effect on top of the last. `play` does not bubble - hence the capture phase,
+// which is why the obvious version of this fix appears to do nothing.
+document.addEventListener("play", e => {
+  if (e.target.tagName !== "AUDIO") return;
+  document.querySelectorAll("audio").forEach(a => {
+    if (a !== e.target && !a.paused) { a.pause(); a.currentTime = 0; }
+  });
+}, true);
+
 let CATSEL=null, SUBSEL=null;
 
 function catOf(c){ return c.category || "-"; }
