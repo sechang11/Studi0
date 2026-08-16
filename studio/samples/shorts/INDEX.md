@@ -1,23 +1,23 @@
 # Short-form slate
 
-7 of 20 rendered. Masters are vertical 1080x1920 with voice, score and effects mixed and mastered.
+9 of 20 rendered. Masters are vertical 1080x1920 with voice, score and effects mixed and mastered.
 
 | id | kind | title | secs | LUFS | hook |
 |---|---|---|---|---|---|
-| ad-atlas-pack | commercial | ATLAS | 10.3 | -9.8 | ATLAS / it has been everywhere |
-| ad-lumen-lamp | commercial | LUMEN | 10.3 | -9.5 | LUMEN / light that knows the hour |
+| ad-atlas-pack | commercial | ATLAS | 11.6 | -9.8 | ATLAS / it has been everywhere |
+| ad-lumen-lamp | commercial | LUMEN | 11.4 | -9.5 | LUMEN / light that knows the hour |
 | ad-northwind-tea | commercial | NORTHWIND TEA | 12.0 | -9.6 | NORTHWIND / the slow cup |
-| ad-pace-runner | commercial | PACE | 10.3 | -9.5 | PACE / built for the fifth mile |
-| ad-slow-sunday | commercial | SLOW SUNDAY | 10.3 | -9.7 | SLOW SUNDAY / nowhere to be |
-| ad-tidewater | commercial | TIDEWATER | 10.3 | -9.6 | TIDEWATER / three things, that is all |
-| hook-door | hook | THE DOOR | - | - |  |
-| hook-garden | hook | THE GARDEN | - | - |  |
+| ad-pace-runner | commercial | PACE | 12.6 | -9.6 | PACE / built for the fifth mile |
+| ad-slow-sunday | commercial | SLOW SUNDAY | 11.1 | -9.7 | SLOW SUNDAY / nowhere to be |
+| ad-tidewater | commercial | TIDEWATER | 13.0 | -9.3 | TIDEWATER / three things, that is all |
+| hook-door | hook | THE DOOR | 9.9 | -9.5 | do not open it / until you know |
+| hook-garden | hook | THE GARDEN | 9.9 | -9.4 | it grew overnight / all of it |
 | hook-library | hook | THE RETURN | - | - |  |
 | hook-lift | hook | FLOOR THIRTEEN | - | - |  |
 | hook-signal | hook | THE SIGNAL | - | - |  |
 | hook-tide | hook | LOW TIDE | - | - |  |
 | sup-caffeine | supplement | CAFFEINE + THEANINE | - | - |  |
-| sup-creatine | supplement | CREATINE | 16.6 | -9.7 | creatine / what it actually does |
+| sup-creatine | supplement | CREATINE | 19.9 | -9.4 | creatine / what it actually does |
 | sup-fibre | supplement | FIBRE | - | - |  |
 | sup-magnesium | supplement | MAGNESIUM | - | - |  |
 | sup-omega3 | supplement | OMEGA-3 | - | - |  |
@@ -68,6 +68,18 @@
 - Tidewater has three. Water, glycerin, and an oil pressed from seed.
 - Nothing that needs explaining. Nothing that needs a chart.
 - Tidewater. Three things, and none of them is a promise.
+
+### hook-door - THE DOOR
+
+- Every building has one door nobody opens.
+- In this one, the room on the other side is bigger than the building.
+- Which is a problem, because somebody is already inside.
+
+### hook-garden - THE GARDEN
+
+- On Monday there was nothing here but frost and dark soil.
+- By Tuesday there were shoots. By Wednesday they were at the fence.
+- It is Friday. The shed is gone.
 
 ### sup-creatine - CREATINE
 

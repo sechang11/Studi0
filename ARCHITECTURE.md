@@ -223,3 +223,24 @@ measurement or one of them is lying.
 
 Still owed: LTX-2.5 weights (user's HF token), the one-page shell / serve.py split (eyes
 on the UI), motion regeneration for the weak motion shelf, character mesh stage.
+
+### 2026-08-15/16 overnight - LTX-2.5, and the first content slate
+
+| Commit | What | Gate |
+|---|---|---|
+| `d848998` | LTX-2.5 lands. `clipmetrics.py` (hold/drift/motion, one instrument for every video comparison); `multishot.py` with robust cut detection. NATIVE MULTI-SHOT CONFIRMED: three viewpoints, one pass, identity across the cuts. Selectable as `video_engine: ltx25`; default unchanged | 2.5 drift -0.004 vs 2.3's 0.141; motion 1.54 vs 8.79 (static floor 0.001) |
+| `33e4ad3` | Reverse-angle battery: 15 derived angles, 5 heroes | palette distance mean 0.0073; VLM names the subject in 14/15 |
+| `fda238d` | Motion shelf on both engines - **and the over-claim rolled back**: liveness is not the card's claim | all 34 alive on 2.3; 26 statuses corrected back |
+| `1a2c6b4` | 20 short-form films authored (8 supplement, 6 commercial, 6 hook) + deadline-bounded harness; LTX-2.5 in the capability gallery as folder 51 | pilot proven before the night; 35 capabilities |
+| `86a0d64` | Cutter: captions cannot overlap each other or the story band | both collisions were visible in the first films |
+| `37b3da8` | **ASR found the last spoken line truncated in EVERY film** - the master is cut at the picture length. Cutter now holds the final frame for the overhang | NORTHWIND recall 64% -> 76%, final line complete; 6 films re-cut |
+
+The night's lesson, again and in three separate places: **an instrument that measures the
+wrong thing is worse than no instrument.** SSIM-drift punished clips for animating.
+Loudness and coverage both passed on films whose last words were missing. Liveness was
+about to promote 34 cards on a test that never checked their claims. Each was caught by
+asking what the number actually means - and in two cases the right instrument was already
+written down in this repo from an earlier session.
+
+New tools: `clipmetrics`, `multishot`, `motion_shelf`, `look_sheets`, `reverse_battery`,
+`shorts_specs`, `overnight_shorts`, `shorts_deliver`, `shorts_asr`, `overnight_report`.
