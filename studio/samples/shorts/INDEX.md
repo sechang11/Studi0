@@ -1,15 +1,15 @@
 # Short-form slate
 
-5 of 20 rendered. Masters are vertical 1080x1920 with voice, score and effects mixed and mastered.
+7 of 20 rendered. Masters are vertical 1080x1920 with voice, score and effects mixed and mastered.
 
 | id | kind | title | secs | LUFS | hook |
 |---|---|---|---|---|---|
 | ad-atlas-pack | commercial | ATLAS | 10.3 | -9.8 | ATLAS / it has been everywhere |
 | ad-lumen-lamp | commercial | LUMEN | 10.3 | -9.5 | LUMEN / light that knows the hour |
-| ad-northwind-tea | commercial | NORTHWIND TEA | 10.3 | -9.6 | NORTHWIND / the slow cup |
+| ad-northwind-tea | commercial | NORTHWIND TEA | 12.0 | -9.6 | NORTHWIND / the slow cup |
 | ad-pace-runner | commercial | PACE | 10.3 | -9.5 | PACE / built for the fifth mile |
-| ad-slow-sunday | commercial | SLOW SUNDAY | - | - |  |
-| ad-tidewater | commercial | TIDEWATER | - | - |  |
+| ad-slow-sunday | commercial | SLOW SUNDAY | 10.3 | -9.7 | SLOW SUNDAY / nowhere to be |
+| ad-tidewater | commercial | TIDEWATER | 10.3 | -9.6 | TIDEWATER / three things, that is all |
 | hook-door | hook | THE DOOR | - | - |  |
 | hook-garden | hook | THE GARDEN | - | - |  |
 | hook-library | hook | THE RETURN | - | - |  |
@@ -54,6 +54,20 @@
 - PACE is built for the fifth. Where the cushioning usually gives up.
 - A denser midsole that holds its shape when you are tired and sloppy.
 - PACE. The mile that counts is the one after you wanted to stop.
+
+### ad-slow-sunday - SLOW SUNDAY
+
+- Sunday used to be a whole day.
+- Slow Sunday is a coarse ground for a slow brew. It takes eight minutes.
+- That is the point. You cannot rush it, so you do not.
+- Slow Sunday. Nowhere to be.
+
+### ad-tidewater - TIDEWATER
+
+- The shelf is full of bottles with twenty ingredients.
+- Tidewater has three. Water, glycerin, and an oil pressed from seed.
+- Nothing that needs explaining. Nothing that needs a chart.
+- Tidewater. Three things, and none of them is a promise.
 
 ### sup-creatine - CREATINE
 

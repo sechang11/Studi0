@@ -851,6 +851,32 @@ def cut(film, out):
        "-c", "copy", joined)
     total = dur(joined)
 
+    # THE LAST LINE MUST FINISH. The master is written with -t total, so a voice that
+    # starts near the end is truncated mid-word - and nothing catches it: loudness is on
+    # target and the audio/video coverage check compares two numbers that are both the
+    # picture length. Found by ASR on a delivered film ("Take the long way through the
+    # morning" arrived as "take the"). Hold the final frame for the overhang so the read
+    # finishes over a held image, which is an ordinary outro. Capped so a runaway read
+    # cannot stretch the film.
+    audio_end = 0.0
+    for cstart, _cl, _line, cvp in cues:
+        if os.path.exists(cvp):
+            audio_end = max(audio_end, cstart + adur(cvp))
+    over = min(4.0, audio_end - total)
+    if over > 0.05:
+        held = f"{work}/_joined_held.mp4"
+        r = sh("ffmpeg", "-y", "-v", "error", "-i", joined, "-vf",
+               f"tpad=stop_mode=clone:stop_duration={over:.2f}",
+               "-c:v", "libx264", "-crf", "16", "-preset", "veryfast",
+               "-pix_fmt", "yuv420p", "-an", held)
+        if os.path.exists(held):
+            print(f"    held the last frame {over:.2f}s so the final line finishes")
+            joined = held
+            total = dur(joined)
+        else:
+            print(f"    !! the last line runs {over:.2f}s past the picture and the hold "
+                  f"failed - it will be cut off", file=sys.stderr)
+
     # ---- composite to the vertical canvas ------------------------------------
     cw, ch = film.get("canvas") or CANVAS
     ff = f"fontfile='{fgpath(FONT)}':" if FONT else ""
