@@ -73,6 +73,8 @@ def probe(p):
 def main():
     ap = argparse.ArgumentParser(description="Collect and index the short-form slate.")
     ap.add_argument("--out", default=os.path.join(STUDIO, "samples", "shorts"))
+    ap.add_argument("--share", default=os.path.expanduser("~/shared/SHORTS"),
+                    help="flat copy on the SMB share (Z:/shared/SHORTS from Windows)")
     a = ap.parse_args()
     rows = []
     for fn in sorted(os.listdir(SHORTS_JSON)):
@@ -137,6 +139,23 @@ def main():
         md += [""]
     io_path = os.path.join(a.out, "INDEX.md")
     open(io_path, "w", encoding="utf-8").write("\n".join(md))
+    # A second, flat copy where a person will actually look for it.
+    if a.share:
+        for r in ready:
+            src = os.path.join(STUDIO, r["file"])
+            kd = os.path.join(a.share, r["kind"])
+            os.makedirs(kd, exist_ok=True)
+            shutil.copy(src, os.path.join(kd, os.path.basename(src)))
+            s = os.path.join(STUDIO, r["contact"])
+            if os.path.exists(s):
+                cd = os.path.join(a.share, "contact")
+                os.makedirs(cd, exist_ok=True)
+                shutil.copy(s, os.path.join(cd, os.path.basename(s)))
+        for extra in ("INDEX.md", "shorts.json"):
+            p = os.path.join(a.out, extra)
+            if os.path.exists(p):
+                shutil.copy(p, os.path.join(a.share, extra))
+        print("share copy: %s" % a.share)
     print("\n%d ready, %d not rendered -> %s" % (len(ready), len(rows) - len(ready), a.out))
     return 0
 

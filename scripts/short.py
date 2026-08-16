@@ -822,6 +822,17 @@ def cut(film, out):
     # Once cues can move they can collide, and two voices talking over each other is
     # not an L-cut, it is a mistake. Check against the REAL audio length rather than the
     # caption length, because the voice keeps playing after its caption disappears.
+    # A caption may not still be on screen when the next one arrives: the text renders
+    # on top of itself (seen in the first rendered shorts). Clamp display length to the
+    # gap to the next cue. The AUDIO is deliberately not touched - an L-cut is a real
+    # edit and voice overlap is reported separately below.
+    cues.sort(key=lambda c: c[0])
+    for i in range(len(cues) - 1):
+        start, length, line, vp = cues[i]
+        gap = cues[i + 1][0] - start - 0.08
+        if gap > 0.3 and length > gap:
+            cues[i] = (start, gap, line, vp)
+
     ordered = sorted(cues, key=lambda c: c[0])
     for (s1, _, l1, p1), (s2, _, l2, _) in zip(ordered, ordered[1:]):
         end1 = s1 + (adur(p1) if os.path.exists(p1) else 1.2)
@@ -911,10 +922,14 @@ def cut(film, out):
     # upward from the baseline so a two-line caption grows away from the bottom edge
     # instead of through it.
     dlg_size = int(cw * 0.036)
+    # The dialogue block grows UPWARD from its baseline, so the baseline must sit a full
+    # caption height above the story band or the two collide - measured: a three-line
+    # dialogue caption reached 1420 on the vertical canvas and the band starts at 1418.
+    dlg_base = min(int(ch * 0.70), band - int(dlg_size * 1.6))
     for start, length, line, _ in cues:
         lines = wrap_caption(line["text"], width=34)
         for li, ln in enumerate(lines):
-            y = int(ch * 0.70) - (len(lines) - 1 - li) * int(dlg_size * 1.35)
+            y = dlg_base - (len(lines) - 1 - li) * int(dlg_size * 1.35)
             vf.append(f"drawtext={ff}text='{ffesc(ln)}':fontcolor=white:fontsize={dlg_size}:"
                       f"x=(w-text_w)/2:y={y}:box=1:boxcolor=black@0.55:boxborderw=12:"
                       f"enable='between(t,{start:.2f},{start+max(length,0.8):.2f})'")

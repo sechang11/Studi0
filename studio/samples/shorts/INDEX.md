@@ -1,11 +1,11 @@
 # Short-form slate
 
-1 of 20 rendered. Masters are vertical 1080x1920 with voice, score and effects mixed and mastered.
+3 of 20 rendered. Masters are vertical 1080x1920 with voice, score and effects mixed and mastered.
 
 | id | kind | title | secs | LUFS | hook |
 |---|---|---|---|---|---|
-| ad-atlas-pack | commercial | ATLAS | - | - |  |
-| ad-lumen-lamp | commercial | LUMEN | - | - |  |
+| ad-atlas-pack | commercial | ATLAS | 10.3 | -9.8 | ATLAS / it has been everywhere |
+| ad-lumen-lamp | commercial | LUMEN | 10.3 | -9.5 | LUMEN / light that knows the hour |
 | ad-northwind-tea | commercial | NORTHWIND TEA | - | - |  |
 | ad-pace-runner | commercial | PACE | - | - |  |
 | ad-slow-sunday | commercial | SLOW SUNDAY | - | - |  |
@@ -26,6 +26,20 @@
 | sup-vitamin-d | supplement | VITAMIN D | - | - |  |
 
 ## Scripts
+
+### ad-atlas-pack - ATLAS
+
+- This pack is nine years old.
+- The stitching is doubled where every other pack tears first.
+- It is heavier than the light ones. That is the trade, and we are not going to pretend otherwise.
+- ATLAS. Buy it once.
+
+### ad-lumen-lamp - LUMEN
+
+- Most desk lamps have one setting: on.
+- LUMEN moves with the day. Cool and bright when you need to think.
+- Warm and low when you need to stop.
+- LUMEN. Light that knows what time it is.
 
 ### sup-creatine - CREATINE
 
