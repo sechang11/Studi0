@@ -44,9 +44,14 @@ def describe(path):
         return {"error": str(e)}
     if not isinstance(g, dict):
         return {"error": "not an object"}
-    api = all(str(k).isdigit() for k in list(g)[:5]) if g else False
+    # API format means "there are nodes in node shape", not "the first key looks like a
+    # number". Most of these graphs open with a `_comment` holding their own docs, and
+    # testing the first five keys put a false "not API format" warning on 40 of 45.
+    nodes = {k: v for k, v in g.items()
+             if not str(k).startswith("_") and isinstance(v, dict)}
+    api = any(str(k).isdigit() and "class_type" in v for k, v in nodes.items())
     classes, models = {}, set()
-    for node in g.values():
+    for node in nodes.values():
         if not isinstance(node, dict):
             continue
         ct = node.get("class_type")
@@ -60,7 +65,8 @@ def describe(path):
         if any(any(c.startswith(x) or x in c for x in keys) for c in classes):
             kind = k
             break
-    return {"api_format": api, "nodes": len(g), "models": sorted(models),
+    return {"api_format": api, "nodes": len(nodes), "models": sorted(models),
+            "notes": g.get("_comment") if isinstance(g.get("_comment"), str) else None,
             "classes": sorted(classes, key=lambda c: -classes[c])[:8], "kind": kind}
 
 

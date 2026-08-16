@@ -94,6 +94,9 @@
   text-decoration:none;display:inline-block}
 .wbtn:hover{color:var(--ink);border-color:var(--accent)}
 .wbtn.go{border-color:var(--ok);color:var(--ok)}
+.wnotes{margin:9px 0 3px;padding:8px 10px;border-left:2px solid var(--accent);
+  background:var(--panel2);border-radius:0 6px 6px 0;font-size:12px;
+  white-space:pre-wrap}
 .wnote{margin-top:9px;font-size:11px;min-height:14px}
 .wnote.ok{color:var(--ok)} .wnote.bad{color:var(--bad);white-space:pre-wrap}
 </style>
@@ -282,6 +285,7 @@ function wfRow(w){
       <span class="wcaret">${open?"−":"+"}</span>
     </div>
     ${open?`<div class="wbody">
+      ${w.notes?`<div class="wnotes">${esc(w.notes)}</div>`:""}
       <div class="lbl">models it loads</div>
       <div class="wmods">${(w.models||[]).map(m=>`<code>${esc(m)}</code>`).join("<br>")
         || "<span style='color:var(--dim)'>none — prompted directly</span>"}</div>

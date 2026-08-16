@@ -1,5 +1,5 @@
 {
- "generated": "2026-08-16 13:53",
+ "generated": "2026-08-16 13:55",
  "generator": "studio/_tools/workflow_index.py",
  "note": "Every graph in workflows/, read rather than guessed at. These are API-format graphs - the shape ComfyUI's /prompt endpoint accepts, not the shape its editor opens - so the actions offered are download, copy to ComfyUI's folder, and queue, which all work on this format.",
  "comfy_url": "http://127.0.0.1:8188",
@@ -23,6 +23,7 @@
     "qwen_image_2512_fp8_e4m3fn.safetensors",
     "qwen_image_vae.safetensors"
    ],
+   "notes": null,
    "classes": [
     "CLIPTextEncode",
     "UNETLoader",
@@ -45,13 +46,14 @@
     "studio/_tools/model_intake.py",
     "studio/_tools/replicate_prompts.py"
    ],
-   "api_format": false,
-   "nodes": 12,
+   "api_format": true,
+   "nodes": 11,
    "models": [
     "qwen_2.5_vl_7b_fp8_scaled.safetensors",
     "qwen_image_2512_fp8_e4m3fn.safetensors",
     "qwen_image_vae.safetensors"
    ],
+   "notes": "Qwen-Image 2512 full quality. No Lightning LoRA: 20 steps, CFG 2.5. ~3-4x slower than 01 but better prompt adherence, text rendering and micro-detail.",
    "classes": [
     "CLIPTextEncode",
     "UNETLoader",
@@ -71,13 +73,14 @@
    "used_by": [
     "studio/_tools/qwen_character.py"
    ],
-   "api_format": false,
-   "nodes": 14,
+   "api_format": true,
+   "nodes": 13,
    "models": [
     "qwen_2.5_vl_7b_fp8_scaled.safetensors",
     "qwen_image_edit_2509_fp8_e4m3fn.safetensors",
     "qwen_image_vae.safetensors"
    ],
+   "notes": "Qwen-Image-Edit 2509. Instruction-driven editing, up to 3 reference images. No Lightning LoRA installed for the EDIT model, so this runs 20 steps / CFG 4.0. If you add Qwen-Image-Edit-2509-Lightning-4steps, drop to steps=4 cfg=1.0 and insert a LoraLoaderModelOnly between node 1 and node 5.",
    "classes": [
     "TextEncodeQwenImageEditPlus",
     "UNETLoader",
@@ -110,6 +113,7 @@
     "wan2.2_i2v_low_noise_14B_fp8_scaled.safetensors",
     "wan_2.1_vae.safetensors"
    ],
+   "notes": null,
    "classes": [
     "UNETLoader",
     "LoraLoaderModelOnly",
@@ -129,8 +133,8 @@
    "used_by": [
     "scripts/_write_caps.py"
    ],
-   "api_format": false,
-   "nodes": 18,
+   "api_format": true,
+   "nodes": 17,
    "models": [
     "Qwen-Image-2512-Lightning-4steps-V1.0-fp32.safetensors",
     "Qwen-Image-InstantX-ControlNet-Union.safetensors",
@@ -138,6 +142,7 @@
     "qwen_image_2512_fp8_e4m3fn.safetensors",
     "qwen_image_vae.safetensors"
    ],
+   "notes": "Qwen-Image 2512 + InstantX ControlNet Union, driven by a Canny edge map. Swap node 20 (Canny) for a depth or pose map once you install Depth Anything 3 / SDPose - the Union controlnet accepts all of them. Node 21 strength 0.6-0.9 is the useful range; 1.0 tends to over-constrain.",
    "classes": [
     "CLIPTextEncode",
     "SaveImage",
@@ -163,14 +168,15 @@
     "studio/_tools/film_audio.py",
     "studio/_tools/make_domains.py"
    ],
-   "api_format": false,
-   "nodes": 9,
+   "api_format": true,
+   "nodes": 8,
    "models": [
     "ace_1.5_vae.safetensors",
     "acestep_v1.5_turbo.safetensors",
     "qwen_0.6b_ace15.safetensors",
     "qwen_1.7b_ace15.safetensors"
    ],
+   "notes": "ACE-Step 1.5 Turbo: text -> music. Put genre/instrumentation/mood in `tags`, leave `lyrics` empty for an instrumental (or write [verse]/[chorus] blocks for a song). `duration` on node 10 and `seconds` on node 11 should match. generate_audio_codes=true runs the LLM front-end: slower but noticeably better structure - turn it off for quick drafts.",
    "classes": [
     "UNETLoader",
     "DualCLIPLoader",
@@ -190,11 +196,12 @@
    "used_by": [
     "scripts/_write_caps.py"
    ],
-   "api_format": false,
-   "nodes": 8,
+   "api_format": true,
+   "nodes": 6,
    "models": [
     "film_net_fp16.safetensors"
    ],
+   "notes": "Frame-rate fix for generated video: 16fps -> 32fps via FILM interpolation. Cheap (~5s for an 81-frame clip) and it removes the most obvious 'AI video' tell. multiplier=2 -> 32fps; multiplier=4 -> 64fps (good for a 2x slow-motion retime afterwards). Set node 1's `file` to a video in ComfyUI/input/ and keep node 7's fps = source_fps * multiplier.",
    "classes": [
     "LoadVideo",
     "GetVideoComponents",
@@ -212,9 +219,10 @@
    "used_by": [
     "scripts/cartoon.py"
    ],
-   "api_format": false,
-   "nodes": 3,
+   "api_format": true,
+   "nodes": 2,
    "models": [],
+   "notes": "Chatterbox TTS (Resemble AI, MIT) - local narration + zero-shot voice cloning. To clone a voice, add a LoadAudio node with 10-20s of clean reference speech and wire it into node 1's optional `audio_prompt` input. exaggeration 0.25 = flat/documentary, 0.5 = natural, 1.0+ = theatrical. cfg_weight lower = slower and more deliberate delivery. First run downloads the model weights (~2GB) automatically.",
    "classes": [
     "ChatterboxTTS",
     "SaveAudioMP3"
@@ -228,11 +236,12 @@
    "used_by": [
     "scripts/_write_caps.py"
    ],
-   "api_format": false,
-   "nodes": 5,
+   "api_format": true,
+   "nodes": 4,
    "models": [
     "RealESRGAN_x4plus.safetensors"
    ],
+   "notes": "4x GAN upscale for stills. 1664x928 -> 6656x3712. Safe on a single image; see the warning in 07 before pointing this at a video frame batch.",
    "classes": [
     "LoadImage",
     "UpscaleModelLoader",
@@ -253,12 +262,13 @@
     "studio/_tools/film_audio.py",
     "studio/_tools/make_domains.py"
    ],
-   "api_format": false,
-   "nodes": 9,
+   "api_format": true,
+   "nodes": 8,
    "models": [
     "stable_audio_3_medium.safetensors",
     "t5gemma_b_b_ul2.safetensors"
    ],
+   "notes": "Stable Audio 3 Medium: text -> sound effects / ambience. This is the direct path with the optional LLM re-prompting stage from the official template stripped out. Sampler settings (8 steps, cfg 1.0, lcm/simple) come from that template. Describe the SOUND, not the scene: 'wind moving through dry grass on an exposed headland, distant surf, occasional gust' beats 'a lonely coastal morning'. qwen3.5_2b_bf16 is only needed for the LLM re-prompt path, so it is not loaded here.",
    "classes": [
     "CLIPTextEncode",
     "CheckpointLoaderSimple",
@@ -277,13 +287,14 @@
    "used_by": [
     "studio/_tools/film_audio.py"
    ],
-   "api_format": false,
-   "nodes": 22,
+   "api_format": true,
+   "nodes": 20,
    "models": [
     "gemma_3_12B_it_fp4_mixed.safetensors",
     "ltx-2.3-22b-dev-fp8.safetensors",
     "ltx_2.3_22b_distilled_1.1_lora_dynamic_fro09_avg_rank_111_bf16.safetensors"
    ],
+   "notes": "LTX-2.3 22B: text -> video WITH natively generated audio, in one pass. This is a simplified single-pass version of the `video_ltx2_3_t2v` template (which does a 768x512 base pass, then a latent upscale + second refinement pass). Single pass is faster and enough to work with; add the upscale pass for delivery.",
    "classes": [
     "CLIPTextEncode",
     "CheckpointLoaderSimple",
@@ -319,13 +330,14 @@
     "studio/_tools/video_index.py",
     "studio/compose.py"
    ],
-   "api_format": false,
-   "nodes": 25,
+   "api_format": true,
+   "nodes": 23,
    "models": [
     "gemma_3_12B_it_fp4_mixed.safetensors",
     "ltx-2.3-22b-dev-fp8.safetensors",
     "ltx_2.3_22b_distilled_1.1_lora_dynamic_fro09_avg_rank_111_bf16.safetensors"
    ],
+   "notes": "LTX-2.3 IMAGE-to-video with generated audio. Best of both worlds for character work: the keyframe locks the character design (which pure text-to-video cannot do across shots), and LTX is still ~8x faster than Wan. Node 23 LTXVImgToVideoInplace writes the start image into the video latent; strength 1.0 = hold the keyframe exactly, lower it (0.6-0.8) to let the model reinterpret.",
    "classes": [
     "CLIPTextEncode",
     "CheckpointLoaderSimple",
@@ -378,8 +390,8 @@
     "studio/compile.py",
     "studio/engine.py"
    ],
-   "api_format": false,
-   "nodes": 15,
+   "api_format": true,
+   "nodes": 13,
    "models": [
     "Qwen-Image-2512-Lightning-4steps-V1.0-fp32.safetensors",
     "qwen_2.5_vl_7b_fp8_scaled.safetensors",
@@ -387,6 +399,7 @@
     "qwen_image_2512_storybook_anime_lora.safetensors",
     "qwen_image_vae.safetensors"
    ],
+   "notes": "Qwen-Image 2512 + Lightning 4-step + a STYLE LoRA stacked on top. Node 7 is the style LoRA - patch 7.inputs.lora_name and 7.inputs.strength_model to sweep looks. Chain order is UNET -> lightning(4) -> style(7) -> ModelSamplingAuraFlow(5), so the speed LoRA stays closest to the base weights.",
    "classes": [
     "LoraLoaderModelOnly",
     "CLIPTextEncode",
@@ -406,11 +419,12 @@
    "used_by": [
     "scripts/_write_caps.py"
    ],
-   "api_format": false,
-   "nodes": 14,
+   "api_format": true,
+   "nodes": 12,
    "models": [
     "sam3.1_multiplex_fp16.safetensors"
    ],
+   "notes": "SAM 3.1 multiplex: TEXT-PROMPTED segmentation. Put the thing you want cut out into node 3 ('the wristwatch', 'her jacket', 'the left hand') and SAM finds it. Saves an RGBA cutout, the raw mask, and a magenta-backed proof render so you can SEE that the alpha is right. This node is what unlocks compositing, targeted inpaint masking and character replacement.",
    "classes": [
     "SaveImage",
     "LoadImage",
@@ -433,11 +447,12 @@
     "studio/_tools/terra_3d_source.py",
     "studio/_tools/terra_3d_source_v2.py"
    ],
-   "api_format": false,
-   "nodes": 13,
+   "api_format": true,
+   "nodes": 11,
    "models": [
     "birefnet.safetensors"
    ],
+   "notes": "BiRefNet background removal: no prompt, no clicks. It finds the salient foreground and returns a clean alpha matte. Faster and cleaner-edged than SAM for the common case of 'cut the subject off the background'. Use SAM (13) instead when you need to choose WHICH object. Saves an RGBA cutout, the matte, and a magenta-backed proof render.",
    "classes": [
     "SaveImage",
     "LoadImage",
@@ -469,8 +484,8 @@
     "studio/_tools/terra_real.py",
     "studio/_tools/terra_styles.py"
    ],
-   "api_format": false,
-   "nodes": 17,
+   "api_format": true,
+   "nodes": 15,
    "models": [
     "Qwen-Image-Edit-2511-Lightning-4steps-V1.0-bf16.safetensors",
     "qwen_2.5_vl_7b_fp8_scaled.safetensors",
@@ -478,6 +493,7 @@
     "qwen_image_edit_2511_fp8mixed.safetensors",
     "qwen_image_vae.safetensors"
    ],
+   "notes": "Qwen-Image-Edit 2511 + 4-step Lightning + optional style LoRA, driven by TextEncodeQwenImageEditPlus with up to 3 REFERENCE images. This is the character-consistency workflow: instead of re-describing a character in words on every shot (which re-invents the face every time), you hand it a canonical character sheet and ask for a new scene.",
    "classes": [
     "LoraLoaderModelOnly",
     "LoadImage",
@@ -497,11 +513,12 @@
    "used_by": [
     "studio/_tools/capability_scan.py"
    ],
-   "api_format": false,
-   "nodes": 9,
+   "api_format": true,
+   "nodes": 7,
    "models": [
     "ace_step_v1_3.5b.safetensors"
    ],
+   "notes": "ACE-Step v1 3.5B - the FULL music model, as opposed to the v1.5 turbo used by workflow 06. Turbo is built for speed at cfg 1.0 and ~20 steps; this is the quality option. CheckpointLoaderSimple bundles model + clip + vae, so the graph is much simpler than the 1.5 one.",
    "classes": [
     "TextEncodeAceStepAudio",
     "CheckpointLoaderSimple",
@@ -519,11 +536,12 @@
    "used_by": [
     "studio/_tools/capability_scan.py"
    ],
-   "api_format": false,
-   "nodes": 5,
+   "api_format": true,
+   "nodes": 3,
    "models": [
     "qwen3.5_2b_bf16.safetensors"
    ],
+   "notes": "Local LLM prompt writer. Qwen3.5-2B runs entirely on the 5090 through the TextGenerate node - no API, no key, no rate limit. Feed it a one-line idea and it returns a full, detailed image prompt. This is the cheapest quality win available to you: Qwen-Image rewards long specific prompts, and writing those by hand is the actual bottleneck in image generation.",
    "classes": [
     "CLIPLoader",
     "TextGenerate",
@@ -544,9 +562,10 @@
     "studio/_tools/film_audio.py",
     "studio/_tools/make_domains.py"
    ],
-   "api_format": false,
-   "nodes": 6,
+   "api_format": true,
+   "nodes": 4,
    "models": [],
+   "notes": "IndexTTS-2 via TTS-Audio-Suite. This replaces the Chatterbox + rubberband approach: characters are cast by picking a distinct REFERENCE VOICE on node 30 (narrator_voice) and directed by setting emotion weights on node 20. No pitch shifting - shifting one voice pack +/-30% is what made the earlier films sound like one actor on a varispeed tape.",
    "classes": [
     "IndexTTSEngineNode",
     "IndexTTSEmotionOptionsNode",
@@ -562,8 +581,8 @@
    "used_by": [
     "scripts/idea.py"
    ],
-   "api_format": false,
-   "nodes": 17,
+   "api_format": true,
+   "nodes": 15,
    "models": [
     "Qwen-Image-2512-Lightning-4steps-V1.0-fp32.safetensors",
     "qwen3.5_2b_bf16.safetensors",
@@ -571,6 +590,7 @@
     "qwen_image_2512_fp8_e4m3fn.safetensors",
     "qwen_image_vae.safetensors"
    ],
+   "notes": "Idea -> prompt -> image, in ONE graph. Qwen3.5-2B writes the prompt, Qwen-Image 2512 + the 4-step Lightning LoRA renders it. You type six words into node 2 and get a fully art-directed 1664x928 render. The whole thing is local. This is the single most useful workflow in the kit for ideation.",
    "classes": [
     "CLIPLoader",
     "CLIPTextEncode",
@@ -596,9 +616,10 @@
     "studio/_tools/voice_audition.py",
     "studio/_tools/voice_routes.py"
    ],
-   "api_format": false,
-   "nodes": 5,
+   "api_format": true,
+   "nodes": 3,
    "models": [],
+   "notes": "Higgs Audio V3 via TTS-Audio-Suite. The house voice engine: it produced the most natural, character-ful reads of every engine tested. Cast a character by pointing node 30's narrator_voice at a reference clip - never by pitch-shifting one voice, which is what made the first films sound like a single actor on a varispeed tape.",
    "classes": [
     "HiggsAudioV3EngineNode",
     "UnifiedTTSTextNode",
@@ -613,14 +634,15 @@
    "used_by": [
     "scripts/_write_caps.py"
    ],
-   "api_format": false,
-   "nodes": 29,
+   "api_format": true,
+   "nodes": 27,
    "models": [
     "gemma_3_12B_it_fp4_mixed.safetensors",
     "ltx-2.3-22b-dev-fp8.safetensors",
     "ltx-2.3-spatial-upscaler-x2-1.1.safetensors",
     "ltx_2.3_22b_distilled_1.1_lora_dynamic_fro09_avg_rank_111_bf16.safetensors"
    ],
+   "notes": "LTX-2.3 the way it was designed to run: TWO STAGES. Sample the whole clip at half resolution, upsample the LATENT 2x with the dedicated spatial upscaler, then re-denoise the upsampled latent at partial strength. Stage 2 is what makes it sharp - a latent upsample on its own is soft, and decoding straight off the upsampler wastes the model. Workflow 11 is the single-stage shortcut; this is the quality path.",
    "classes": [
     "CLIPTextEncode",
     "LTXVConcatAVLatent",
@@ -640,14 +662,15 @@
    "used_by": [
     "studio/_tools/capability_scan.py"
    ],
-   "api_format": false,
-   "nodes": 8,
+   "api_format": true,
+   "nodes": 6,
    "models": [
     "gemma-3-12b-it-abliterated_lora_rank64_bf16.safetensors",
     "gemma_3_12B_it_fp4_mixed.safetensors",
     "ltx-2.3-22b-dev-fp8.safetensors",
     "ltx_2.3_22b_distilled_1.1_lora_dynamic_fro09_avg_rank_111_bf16.safetensors"
    ],
+   "notes": "LTX-2.3's own prompt enhancer. Gemma-3-12B is already loaded as LTX's text encoder, so the abliterated LoRA turns that SAME resident model into a chat LLM that rewrites your one-liner into the dense shot description LTX actually wants. TextGenerateLTX2Prompt has LTX's house style baked into its system prompt - camera move, subject motion, ambience, lighting - which is exactly the structure a video model needs and an image-prompt LLM does not produce.",
    "classes": [
     "CheckpointLoaderSimple",
     "LTXAVTextEncoderLoader",
@@ -665,8 +688,8 @@
    "used_by": [
     "scripts/_write_caps.py"
    ],
-   "api_format": false,
-   "nodes": 19,
+   "api_format": true,
+   "nodes": 17,
    "models": [
     "Qwen-Image-2512-Lightning-4steps-V1.0-fp32.safetensors",
     "birefnet.safetensors",
@@ -674,6 +697,7 @@
     "qwen_image_2512_fp8_e4m3fn.safetensors",
     "qwen_image_vae.safetensors"
    ],
+   "notes": "Product ad in one pass: BiRefNet mattes the product off its original background, Qwen-Image generates a fresh backdrop from a prompt, and ImageCompositeMasked drops the product onto it. This is the 'product placement' / 'product scene relight' use-case family done entirely on installed weights. Swap the prompt in node 12 for a new set - same product, unlimited campaigns.",
    "classes": [
     "CLIPTextEncode",
     "SaveImage",
@@ -693,14 +717,15 @@
    "used_by": [
     "scripts/_write_caps.py"
    ],
-   "api_format": false,
-   "nodes": 40,
+   "api_format": true,
+   "nodes": 38,
    "models": [
     "gemma_3_12B_it_fp4_mixed.safetensors",
     "ltx-2.3-22b-dev-fp8.safetensors",
     "ltx-2.3-spatial-upscaler-x2-1.1.safetensors",
     "ltx_2.3_22b_distilled_1.1_lora_dynamic_fro09_avg_rank_111_bf16.safetensors"
    ],
+   "notes": "AUDIO-DRIVEN VIDEO. You supply a still and a real audio track; LTX-2.3 generates video that matches the audio - mouth movement to speech, motion to music. This is the one capability nothing else local has. Note the direction of travel: workflows 11/17 GENERATE audio alongside video, this one is DRIVEN BY audio you already have.",
    "classes": [
     "CLIPTextEncode",
     "LTXVImgToVideoInplace",
@@ -720,8 +745,8 @@
    "used_by": [
     "scripts/_write_caps.py"
    ],
-   "api_format": false,
-   "nodes": 13,
+   "api_format": true,
+   "nodes": 11,
    "models": [
     "ace_1.5_vae.safetensors",
     "acestep_v1.5_turbo.safetensors",
@@ -729,6 +754,7 @@
     "qwen_0.6b_ace15.safetensors",
     "qwen_1.7b_ace15.safetensors"
    ],
+   "notes": "One line of intent -> a finished song with sung vocals. Qwen3.5-2B writes structured lyrics locally, ACE-Step 1.5 composes and sings them. This is the local equivalent of the audio_ace_step_1_5_split_llm template WITHOUT its extra download: that template wants qwen_4b_ace15 as a second ACE encoder, whereas this routes the LLM you already have into the lyrics field.",
    "classes": [
     "UNETLoader",
     "DualCLIPLoader",
@@ -754,6 +780,7 @@
    "models": [
     "animagine-xl-4.0.safetensors"
    ],
+   "notes": null,
    "classes": [
     "ImageScale",
     "CLIPTextEncode",
@@ -812,6 +839,7 @@
    "models": [
     "animagine-xl-4.0.safetensors"
    ],
+   "notes": null,
    "classes": [
     "CLIPTextEncode",
     "CheckpointLoaderSimple",
@@ -834,14 +862,15 @@
     "studio/_tools/make_turnaround_wf.py",
     "studio/_tools/photo_to_anime.py"
    ],
-   "api_format": false,
-   "nodes": 18,
+   "api_format": true,
+   "nodes": 16,
    "models": [
     "Qwen-Image-Edit-2511-Lightning-4steps-V1.0-bf16.safetensors",
     "qwen_2.5_vl_7b_fp8_scaled.safetensors",
     "qwen_image_edit_2511_fp8mixed.safetensors",
     "qwen_image_vae.safetensors"
    ],
+   "notes": "Qwen-Image-Edit 2511 + its own 4-step Lightning LoRA. This REPLACES workflow 03 (2509 at 20 steps, 48 s). Deliberately uses the same input image and the same prompt as 03 so the two are directly comparable on both speed and quality.",
    "classes": [
     "TextEncodeQwenImageEditPlus",
     "FluxKontextMultiReferenceLatentMethod",
@@ -861,14 +890,15 @@
    "used_by": [
     "scripts/_write_caps.py"
    ],
-   "api_format": false,
-   "nodes": 20,
+   "api_format": true,
+   "nodes": 18,
    "models": [
     "Qwen-Image-Edit-2511-Lightning-4steps-V1.0-bf16.safetensors",
     "qwen_2.5_vl_7b_fp8_scaled.safetensors",
     "qwen_image_edit_2511_fp8mixed.safetensors",
     "qwen_image_vae.safetensors"
    ],
+   "notes": "Two-image fusion with Qwen-Image-Edit 2511. Takes two SEPARATE portraits and composes both people into one photograph. This is 2511's headline improvement over 2509: 2509 blends distinct faces together in multi-person work, 2511 is supposed to keep them apart. This workflow is the test.",
    "classes": [
     "LoadImage",
     "FluxKontextImageScale",
@@ -889,11 +919,12 @@
     "studio/_tools/make_domains.py",
     "studio/_tools/photo_to_anime.py"
    ],
-   "api_format": false,
-   "nodes": 12,
+   "api_format": true,
+   "nodes": 10,
    "models": [
     "hunyuan_3d_v2.1.safetensors"
    ],
+   "notes": "Image -> textured 3D MESH with Hunyuan3D 2.1. Outputs a .glb you can drop straight into Unity, Unreal or Blender. This is the modality the box could not do at all until 2026-07-29.",
    "classes": [
     "ImageOnlyCheckpointLoader",
     "LoadImage",
@@ -913,8 +944,8 @@
    "used_by": [
     "studio/_tools/make_domains.py"
    ],
-   "api_format": false,
-   "nodes": 19,
+   "api_format": true,
+   "nodes": 17,
    "models": [
     "birefnet.safetensors",
     "dino_v3_vit_h.safetensors",
@@ -922,6 +953,7 @@
     "triposplat_fp16.safetensors",
     "triposplat_vae_decoder_fp16.safetensors"
    ],
+   "notes": "Image -> 3D GAUSSIAN SPLAT with TripoSplat, plus a rendered orbit turntable video and a .spz file. TripoSplat beat Hunyuan3D 2.1 in human-preference tests (Elo 1137 vs 996) and is a tenth the download - but it outputs splats, not meshes. Use workflow 24 when you need geometry a game engine can eat.",
    "classes": [
     "VAELoader",
     "LoadImage",
@@ -941,14 +973,15 @@
    "used_by": [
     "scripts/_write_caps.py"
    ],
-   "api_format": false,
-   "nodes": 16,
+   "api_format": true,
+   "nodes": 14,
    "models": [
     "Flux2TurboComfyv2.safetensors",
     "flux2-vae.safetensors",
     "flux2_dev_fp8mixed.safetensors",
     "mistral_3_small_flux2_fp8.safetensors"
    ],
+   "notes": "FLUX.2 dev fp8 + Turbo LoRA - the second aesthetic. Currently leads the open-weight field on photorealism and prompt adherence. Deliberately a text-to-image graph with the SAME structure as 01_qwen_t2i_turbo so the two can be A/B'd on identical prompts.",
    "classes": [
     "UNETLoader",
     "CLIPLoader",
@@ -968,13 +1001,14 @@
    "used_by": [
     "scripts/_write_caps.py"
    ],
-   "api_format": false,
-   "nodes": 17,
+   "api_format": true,
+   "nodes": 15,
    "models": [
     "depth_anything_3_mono_large.safetensors",
     "moge_2_vitl_normal_fp16.safetensors",
     "sdpose_wholebody_fp16.safetensors"
    ],
+   "notes": "Every control map this box can produce, from one input image, in one graph: Depth Anything 3 depth (raw + colourised), MoGe-2 surface normals, and SDPose whole-body pose. These are the inputs that drive controlled composition for both stills (Qwen ControlNet) and video (LTX IC-LoRA). Until now the weights were installed and nothing referenced them.",
    "classes": [
     "SaveImage",
     "DA3Render",
@@ -994,14 +1028,15 @@
    "used_by": [
     "studio/_tools/master_frames.py"
    ],
-   "api_format": false,
-   "nodes": 15,
+   "api_format": true,
+   "nodes": 13,
    "models": [
     "ae.safetensors",
     "clip_l.safetensors",
     "flux.1-fill-dev-OneReward-transformer_fp8.safetensors",
     "t5xxl_fp16.safetensors"
    ],
+   "notes": "OUTPAINTING - extend an image beyond its original frame. FLUX.1 Fill with the OneReward transformer. Takes a 1024x1024 square and grows it into a 2048x1024 cinematic wide, inventing the new left and right thirds so they match the original's light, lens and grain.",
    "classes": [
     "UNETLoader",
     "DualCLIPLoader",
@@ -1021,8 +1056,8 @@
    "used_by": [
     "scripts/_write_caps.py"
    ],
-   "api_format": false,
-   "nodes": 21,
+   "api_format": true,
+   "nodes": 19,
    "models": [
     "ae.safetensors",
     "clip_l.safetensors",
@@ -1031,6 +1066,7 @@
     "sam3.1_multiplex_fp16.safetensors",
     "t5xxl_fp16.safetensors"
    ],
+   "notes": "OBJECT REMOVAL, fully automatic. Name the thing you want gone in plain English (node 5), SAM 3.1 finds it, GrowMask pads the selection, and FLUX.1 Fill + the OneReward removal LoRA reconstructs what was behind it. No mask painting anywhere in this graph.",
    "classes": [
     "CLIPTextEncode",
     "SaveImage",
@@ -1050,11 +1086,12 @@
    "used_by": [
     "studio/_tools/character_new.py"
    ],
-   "api_format": false,
-   "nodes": 6,
+   "api_format": true,
+   "nodes": 4,
    "models": [
     "gemma_3_12B_it_fp4_mixed.safetensors"
    ],
+   "notes": "IMAGE -> TEXT. The reverse direction, and the one nobody demonstrates. Qwen2.5-VL-7B looks at a picture and describes it, entirely locally. Point it at your own renders and it tells you what you actually made rather than what you asked for - which is how you find out a prompt is not landing.",
    "classes": [
     "CLIPLoader",
     "LoadImage",
@@ -1071,11 +1108,12 @@
     "scripts/_write_caps.py",
     "studio/_tools/capability_scan.py"
    ],
-   "api_format": false,
-   "nodes": 9,
+   "api_format": true,
+   "nodes": 7,
    "models": [
     "ace_step_v1_3.5b.safetensors"
    ],
+   "notes": "MUSIC -> MUSIC. Take an existing track and restyle, extend or vary it. This is audio img2img: encode the real audio to a latent, then partially denoise it with new tags. ACE-Step 1.5 CANNOT do this at any setting - music-to-music exists only in ACE-Step 1, which is why the 7.2 GB v1 checkpoint is worth having alongside the newer one.",
    "classes": [
     "CheckpointLoaderSimple",
     "LoadAudio",
@@ -1100,7 +1138,7 @@
     "studio/_tools/turnaround.py"
    ],
    "api_format": true,
-   "nodes": 18,
+   "nodes": 17,
    "models": [
     "Qwen-Image-Edit-2511-Lightning-4steps-V1.0-bf16.safetensors",
     "qwen-image-edit-2511-multiple-angles-lora.safetensors",
@@ -1108,6 +1146,7 @@
     "qwen_image_edit_2511_fp8mixed.safetensors",
     "qwen_image_vae.safetensors"
    ],
+   "notes": null,
    "classes": [
     "LoraLoaderModelOnly",
     "TextEncodeQwenImageEditPlus",
@@ -1130,11 +1169,12 @@
     "studio/_tools/photo_count_probe.py",
     "studio/_tools/train_character.py"
    ],
-   "api_format": false,
-   "nodes": 6,
+   "api_format": true,
+   "nodes": 5,
    "models": [
     "animagine-xl-4.0.safetensors"
    ],
+   "notes": null,
    "classes": [
     "LoadImageTextDataSetFromFolder",
     "CheckpointLoaderSimple",
@@ -1158,14 +1198,15 @@
     "studio/_tools/replicate_prompts.py",
     "studio/engine.py"
    ],
-   "api_format": false,
-   "nodes": 19,
+   "api_format": true,
+   "nodes": 14,
    "models": [
     "Flux2TurboComfyv2.safetensors",
     "flux2-vae.safetensors",
     "flux2_dev_fp8mixed.safetensors",
     "mistral_3_small_flux2_fp8.safetensors"
    ],
+   "notes": "FLUX.2 dev text-to-image, the engine graph. Written to be driven by studio/_tools/flux2_probe.py and by compose.py once flux2 is a routable engine. Supersedes 26_flux2_t2i.json as the app-facing graph; 26 is left untouched as the original capability demo.",
    "classes": [
     "UNETLoader",
     "CLIPLoader",
@@ -1185,8 +1226,8 @@
    "used_by": [
     "studio/_tools/video_engine_ab.py"
    ],
-   "api_format": false,
-   "nodes": 34,
+   "api_format": true,
+   "nodes": 32,
    "models": [
     "byt5_small_glyphxl_fp16.safetensors",
     "hunyuanvideo1.5_1080p_sr_distilled_fp16.safetensors",
@@ -1195,6 +1236,7 @@
     "hunyuanvideo15_vae_fp16.safetensors",
     "qwen_2.5_vl_7b_fp8_scaled.safetensors"
    ],
+   "notes": "HunyuanVideo 1.5 720p TEXT-to-video, plus the 1080p SR distill as an optional second stage. Transcribed from the ComfyUI shipped template video_hunyuan_video_1.5_720p_t2v.json, in which the ENTIRE SR block and both EasyCache nodes ship BYPASSED (mode 4) - so the settings in the base block below are the tested default path and the SR block is opt-in.",
    "classes": [
     "CFGGuider",
     "SamplerCustomAdvanced",
@@ -1214,8 +1256,8 @@
    "used_by": [
     "studio/_tools/video_engine_ab.py"
    ],
-   "api_format": false,
-   "nodes": 37,
+   "api_format": true,
+   "nodes": 35,
    "models": [
     "byt5_small_glyphxl_fp16.safetensors",
     "hunyuanvideo1.5_1080p_sr_distilled_fp16.safetensors",
@@ -1225,6 +1267,7 @@
     "qwen_2.5_vl_7b_fp8_scaled.safetensors",
     "sigclip_vision_patch14_384.safetensors"
    ],
+   "notes": "HunyuanVideo 1.5 720p IMAGE-to-video, plus the 1080p SR distill as an optional second stage. This is the direct rival to 12_ltx23_i2v_audio.json - the keyframe locks the character design and the model animates it. Transcribed from the ComfyUI shipped template video_hunyuan_video_1.5_720p_i2v.json, in which the ENTIRE SR block and both EasyCache nodes ship BYPASSED (mode 4).",
    "classes": [
     "CFGGuider",
     "SamplerCustomAdvanced",
@@ -1245,13 +1288,14 @@
     "studio/_tools/master_frames.py",
     "studio/_tools/story_routes.py"
    ],
-   "api_format": false,
-   "nodes": 29,
+   "api_format": true,
+   "nodes": 27,
    "models": [
     "gemma_3_12B_it_fp4_mixed.safetensors",
     "ltx-2.3-22b-dev-fp8.safetensors",
     "ltx_2.3_22b_distilled_1.1_lora_dynamic_fro09_avg_rank_111_bf16.safetensors"
    ],
+   "notes": "LTX-2.3 IMAGE-to-video with generated audio. Best of both worlds for character work: the keyframe locks the character design (which pure text-to-video cannot do across shots), and LTX is still ~8x faster than Wan. Node 23 LTXVImgToVideoInplace writes the start image into the video latent; strength 1.0 = hold the keyframe exactly, lower it (0.6-0.8) to let the model reinterpret.",
    "classes": [
     "LoadImage",
     "LTXVPreprocess",
@@ -1274,7 +1318,7 @@
     "studio/_tools/ui2api.py"
    ],
    "api_format": true,
-   "nodes": 51,
+   "nodes": 50,
    "models": [
     "gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors",
     "gemma4_e2b_it_bf16.safetensors",
@@ -1283,6 +1327,7 @@
     "ltx-2.5-latent-spatial-upscaler-x2-bf16-1.0.safetensors",
     "ltx-2.5-video-vae-bf16.safetensors"
    ],
+   "notes": null,
    "classes": [
     "PrimitiveInt",
     "ComfyMathExpression",
