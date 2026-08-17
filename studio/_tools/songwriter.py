@@ -188,6 +188,8 @@ def deliver(card, src):
 def _note_failure(card, why):
     """Write the reason onto the card. A failure nobody can see is a card that looks
     merely unrendered, and this library is too big to re-derive that by hand."""
+    if card.get("variant_of"):
+        return          # a variant has no card file; its parent already carries the note
     p = os.path.join(SONGS, card["id"] + ".json")
     try:
         c = json.load(open(p, encoding="utf-8"))
@@ -213,10 +215,23 @@ def main():
     ap.add_argument("--hours", type=float, default=0, help="stop after this long")
     ap.add_argument("--fresh", action="store_true", help="re-render even if delivered")
     ap.add_argument("--limit", type=int, default=0)
+    ap.add_argument("--variants", type=int, default=1,
+                    help="takes per song; 2 gives you a choice, which is the point")
     a = ap.parse_args()
     end = time.time() + a.hours * 3600 if a.hours else None
 
-    todo = [c for c in cards() if not a.only or c["id"] == a.only]
+    base = [c for c in cards() if not a.only or c["id"] == a.only]
+    # Extra takes are the SAME card with a different seed and a suffixed id, so they file
+    # themselves beside the original and nothing else in the pipeline has to know.
+    todo = []
+    for c in base:
+        todo.append(c)
+        for n in range(2, max(1, a.variants) + 1):
+            alt = dict(c)
+            alt["id"] = "%s__v%d" % (c["id"], n)
+            alt["seed"] = int(c.get("seed", 4242)) + 1013 * n
+            alt["variant_of"] = c["id"]
+            todo.append(alt)
     done = skipped = failed = 0
     for i, c in enumerate(todo):
         if a.limit and done >= a.limit:

@@ -1010,11 +1010,20 @@ def cut(film, out):
     if hook:
         # a hook that never leaves the screen - the reference keeps its title up for the
         # entire runtime, which is what stops a scroller from swiping away
-        for li, line in enumerate(hook.split("|")):
-            vf.append(f"drawtext={ff}text='{ffesc(line.strip())}':fontcolor=white:"
-                      f"fontsize={int(cw*0.078)}:x=(w-text_w)/2:"
-                      f"y={int(ch*0.045) + li*int(cw*0.092)}:"
-                      f"shadowcolor=black@0.9:shadowx=3:shadowy=3")
+        # THE HOOK WRAPS TOO. drawtext does not, so a long line runs off BOTH sides -
+        # "breakfast that respects your time" rendered as "eakfast that respects your ti",
+        # losing the first word and the last while still looking deliberate. This is the
+        # one line on screen for the entire film and it was the only text layer never put
+        # through wrap_caption. Width 24 rather than the caption default of 46, because
+        # the hook is set at cw*0.078 against the dialogue's cw*0.036.
+        _hl = 0
+        for line in hook.split("|"):
+            for part in wrap_caption(line.strip(), width=24):
+                vf.append(f"drawtext={ff}text='{ffesc(part)}':fontcolor=white:"
+                          f"fontsize={int(cw*0.078)}:x=(w-text_w)/2:"
+                          f"y={int(ch*0.045) + _hl*int(cw*0.092)}:"
+                          f"shadowcolor=black@0.9:shadowx=3:shadowy=3")
+                _hl += 1
     # BROADCAST HUD - score and a running clock, drawn in post.
     #
     # These were first generated as scoreboard shots and came back as garbled digits
