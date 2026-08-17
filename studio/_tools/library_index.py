@@ -124,6 +124,25 @@ KINDS = {"model": "models",
 AUDIO_KINDS = {"sfx", "cues", "voices", "soundscapes", "songs"}
 
 
+def _audio_takes(folder, cid, sub=None):
+    """Alternate takes of the same card: <id>__v2.mp3 and friends.
+
+    A variant has no card of its own on purpose - two entries for one song would double
+    the chip counts and split the facts. So the takes hang off the parent, which is also
+    how you actually use them: play one, play the other, keep one.
+    """
+    out = []
+    for d in ([os.path.join(STUDIO, "samples", folder, str(sub))] if sub else []) + \
+             [os.path.join(STUDIO, "samples", folder)]:
+        for p in sorted(glob.glob(os.path.join(d, cid + "__v*.mp3"))):
+            rel = os.path.relpath(p, os.path.join(STUDIO, "samples"))
+            url = "/samples/" + rel.replace(os.sep, "/")
+            if url not in [o["url"] for o in out]:
+                out.append({"take": os.path.splitext(os.path.basename(p))[0].split("__v")[-1],
+                            "url": url})
+    return out
+
+
 def _audio_sample(folder, cid, sub=None):
     """The playable sample for an audio card, or None.
 
@@ -490,6 +509,8 @@ def browse(kind):
             "keywords": card.get("keywords"),
             "tempo": card.get("tempo"),
             "audio": (_audio_sample(folder, cid, card.get("category"))
+                      if folder in AUDIO_KINDS else None),
+            "takes": (_audio_takes(folder, cid, card.get("category"))
                       if folder in AUDIO_KINDS else None),
             "subcategory": card.get("subcategory"),
             "title": card.get("title"),

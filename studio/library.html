@@ -203,6 +203,10 @@
 .flagbtn:hover{color:var(--ink);border-color:var(--warn)}
 .flagbtn.on{background:var(--warn);border-color:var(--warn);color:#0f1115}
 .audcard.flagged{border-color:var(--warn)}
+.audcard .take{display:flex;align-items:center;gap:7px;margin-top:6px}
+.audcard .take span{font-size:10px;color:var(--dim);text-transform:uppercase;
+  letter-spacing:.05em;white-space:nowrap;min-width:44px}
+.audcard .take audio{flex:1;margin-top:0}
 </style>
 </head>
 <body>
@@ -607,8 +611,14 @@ function setMode(k, replaying){
         // A blocked voice is listed but has nothing to play, and says why. That is the
         // intended state - the four likeness packs are visible so nobody re-adds them by
         // accident, and their reference audio is never served.
+        // Every take gets its own player, labelled. One card, several performances -
+        // which is what a second take is for.
+        const takes = (c.takes||[]).map(t2 =>
+          `<div class="take"><span>take ${esc(t2.take)}</span>
+             <audio controls preload="none" src="${esc(t2.url)}"></audio></div>`).join("");
         const player = c.audio
-          ? `<audio controls preload="none" src="${esc(c.audio)}"></audio>`
+          ? `<div class="take${takes?" first":""}">${takes?"<span>take 1</span>":""}
+               <audio controls preload="none" src="${esc(c.audio)}"></audio></div>${takes}`
           : `<div class="noaud">${c.status==="blocked"
                ? "blocked - reference audio is not served"
                : (b.kind==="soundscapes"
