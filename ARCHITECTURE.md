@@ -286,3 +286,31 @@ The through-line for the whole night, in one sentence: **every one of these defe
 already detected by something in this repo, and none of them had a consumer.** The
 overlap warning printed. The held-frame cap silently truncated. The capability sat
 verified in the catalogue. Detection without a consumer is not a check, it is a comment.
+
+### 2026-08-17 overnight - music, and the render spine coming back from the dead
+
+| Commit | What | Evidence |
+|---|---|---|
+| `d6c0c3d` | **ACE-Step 1.5 has taken a `lyrics` input the whole time.** Every cue in the library passed `lyrics=""`; the model had never been sent a word to sing. It sings | lyric take -> ASR "i counted in" from a written line; instrumental control -> the hallucinated "thank you" ASR always gives non-speech |
+| `d6c0c3d` | **The house recipe, measured over six tag variants on one lyric and one seed.** Name the voice, then stop | no vocal words 10% · "clear female lead vocal" **90%** · sparse band 90% · + "mixed loud and up front, intelligible diction" **30%** · + "polished studio pop, crisp consonants" 40% |
+| `ff039dc` | **short.py was unimportable for a whole session and every check passed.** `import voice_emotion` sat four lines before the path that makes it importable | three ad renders died before touching the GPU; healthcheck gains a `spine` section, proven by breaking it on purpose |
+| `b064b33` | Ads rebuilt against the two complaints - daylight styles instead of STYLE_CINE's "rich shadows", and single-cut templates so shots ≈ clips | 10 shots from 9 clips, against ATLAS's 9 from 4. And the hook was running off both sides of frame: "eakfast that respects your ti" |
+| `d1f699f` | Alternate takes attached to their parent card | 125 cards, 219 players |
+
+**NAME THE NOUN. AGAIN.** The vocal recipe is the same law the image engines taught this
+project in June and the sound library re-taught it in August: one noun phrase takes
+intelligibility from 10% to 90%, and piling adjectives about the mix on top drops it back
+to 30%. Wave 2's genres are written as INSTRUMENTS for the same reason - "nylon guitar,
+cajon, hand claps" puts a flamenco in the room; "passionate Spanish feeling" does not.
+
+**THE TESTS I SKIPPED ARE THE ONES THAT BROKE.** Twice in two sessions. The queue button
+was never clicked because it costs GPU time, and it was broken. short.py was never run
+end-to-end because the emotion vector had been proven another way, and it did not import
+at all. Both were found by a later task tripping over them rather than by any check.
+Hence the `spine` section: an import is the cheapest possible test and it catches the
+whole class.
+
+**Four bugs the music pipeline hit, all of them ordinary:** one bad card killed a 44-song
+batch because `comfy.run` calls `sys.exit(1)`; `bpm 0` is below ACE-Step's floor of 10;
+`"B flat major"` is not one of the 34 keyscale spellings the model accepts; and delivered
+takes sat 12 dB apart until the audition copies were normalised.
