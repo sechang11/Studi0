@@ -67,16 +67,32 @@ def loud(path):
     return out
 
 
+# Granite hallucinates on long audio. A 150s song comes back as "thank you" - its
+# non-speech placeholder - while the same file transcribes accurately in 45s pieces.
+# Every full-length song was being scored on that hallucination.
+WINDOW = 45
+STARTS = (0, 45)          # a verse and a chorus live in different parts of a song
+
+
 def asr(paths):
-    """One model load for the whole batch - loading Granite per song is most of the cost."""
+    """One model load for the whole batch - loading Granite per song is most of the cost.
+
+    Each song is cut into short windows first. Transcribing the whole file returns the
+    non-speech placeholder for anything much over a minute, which scored real singing at
+    zero.
+    """
     if not paths:
         return {}
     wavs = {}
     for p in paths:
-        w = "/tmp/_sc_%s.wav" % re.sub(r"\W+", "_", os.path.basename(p))[:40]
-        sh("ffmpeg", "-y", "-v", "error", "-i", p, "-ac", "1", "-ar", "16000", w)
-        if os.path.exists(w):
-            wavs[w] = p
+        stem = re.sub(r"\W+", "_", os.path.basename(p))[:36]
+        for s in STARTS:
+            w = "/tmp/_sc_%s_%d.wav" % (stem, s)
+            sh("ffmpeg", "-y", "-v", "error", "-ss", str(s), "-t", str(WINDOW),
+               "-i", p, "-ac", "1", "-ar", "16000", w)
+            # a window past the end of a short track produces an empty file; skip it
+            if os.path.exists(w) and os.path.getsize(w) > 8000:
+                wavs[w] = p
     if not wavs:
         return {}
     code = ("import sys,json;sys.path.insert(0,'studio/_tools')\n"
@@ -87,7 +103,12 @@ def asr(paths):
         got = json.loads((r.stdout or "").strip().splitlines()[-1])
     except Exception:
         return {}
-    return {wavs[k]: v for k, v in got.items() if k in wavs}
+    # several windows per song now, so keep them all against the source path
+    out = {}
+    for k, v in got.items():
+        if k in wavs:
+            out.setdefault(wavs[k], []).append(v)
+    return out
 
 
 def find_sample(card):
@@ -136,10 +157,17 @@ def main():
     heard = asr(list(vocal_paths))
     for p, idx in vocal_paths.items():
         c = rows[idx][0]
-        text = heard.get(p, "")
+        texts = heard.get(p) or [""]
         want = set(words(re.sub(r"\[.*?\]", " ", c.get("lyrics", ""))))
-        got = set(words(text))
-        rows[idx][3] = (len(want & got) / max(1, len(want)), text)
+        # the BEST window, not the average: this ranks how findable the words are, and a
+        # song with a clear chorus and a muddy bridge is a song you can hear.
+        best, best_text = 0.0, ""
+        for text in texts:
+            got = set(words(text))
+            s = len(want & got) / max(1, len(want))
+            if s >= best:
+                best, best_text = s, text
+        rows[idx][3] = (best, best_text)
 
     print("%-24s %-12s %6s %8s %7s  %s"
           % ("id", "family", "secs", "LUFS", "sung", "notes"))
