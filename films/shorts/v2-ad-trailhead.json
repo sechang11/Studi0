@@ -1,0 +1,132 @@
+{
+ "title": "TRAILHEAD",
+ "hook": "TRAILHEAD|shoes for the last mile",
+ "canvas": [
+  1080,
+  1920
+ ],
+ "fps": 24,
+ "engine": "higgs_v3",
+ "keyframe_engine": "qwen",
+ "kind": "commercial",
+ "style": "sunlit outdoor photography, golden hour on open grass, warm rim light, clear sky, vivid natural colour, crisp",
+ "voices": {
+  "V": {
+   "engine": "higgs_v3",
+   "voice": "voices_examples/male/male_03_carter.wav"
+  }
+ },
+ "music": [
+  {
+   "at": 0,
+   "prefix": "v2_trail_score",
+   "bpm": 128,
+   "key": "E minor",
+   "seconds": 30,
+   "level": 0.55,
+   "tags": "motivational hybrid orchestral, driving taiko percussion, soaring strings, brass swells, determined, instrumental"
+  }
+ ],
+ "beats": [
+  {
+   "id": "01_open",
+   "template": "hook",
+   "clip_secs": 3,
+   "prompt": "A running shoe pressing into a dirt trail, sunlit, dust catching the light, close",
+   "motion": "Dust lifts from the tread and drifts.",
+   "caption": "The last mile",
+   "line": {
+    "who": "V",
+    "text": "The last mile is the honest one."
+   },
+   "audio_lead": -0.2,
+   "sfx": "footstep on gravel",
+   "sfx_secs": 2.0,
+   "sfx_level": 0.5
+  },
+  {
+   "id": "02_legs",
+   "template": "beat",
+   "clip_secs": 3,
+   "prompt": "Runner's legs on an open grass trail, golden hour backlight, motion",
+   "motion": "Legs cross the frame, light flaring."
+  },
+  {
+   "id": "03_sole",
+   "template": "beat",
+   "clip_secs": 3,
+   "prompt": "Close on a thick rubber sole flexing over a rock, bright sun, sharp texture",
+   "motion": "The sole flexes and releases.",
+   "line": {
+    "who": "V",
+    "text": "Everything hurts by then."
+   },
+   "audio_lead": -0.2
+  },
+  {
+   "id": "04_hill",
+   "template": "beat",
+   "clip_secs": 3,
+   "prompt": "A runner cresting a green hill against a bright open sky, small in frame",
+   "motion": "The figure crests and keeps going.",
+   "caption": "Built for the end of it",
+   "sfx": "open wind",
+   "sfx_secs": 2.0,
+   "sfx_level": 0.5
+  },
+  {
+   "id": "05_laces",
+   "template": "beat",
+   "clip_secs": 3,
+   "prompt": "Hands pulling laces tight on a trail shoe, sunlit grass behind, close",
+   "motion": "The laces pull taut.",
+   "line": {
+    "who": "V",
+    "text": "So we built the shoe for the end of the run."
+   },
+   "audio_lead": -0.2
+  },
+  {
+   "id": "06_water",
+   "template": "beat",
+   "clip_secs": 3,
+   "prompt": "A running shoe splashing through a shallow clear stream, bright daylight, water spray",
+   "motion": "Water sprays outward and falls.",
+   "sfx": "shallow water splash",
+   "sfx_secs": 2.0,
+   "sfx_level": 0.5
+  },
+  {
+   "id": "07_pair",
+   "template": "beat",
+   "clip_secs": 3,
+   "prompt": "A pair of trail running shoes on a sunlit rock, clean product shot, open landscape behind",
+   "motion": "Slow push in. Light moves across them.",
+   "caption": "TRAILHEAD",
+   "line": {
+    "who": "V",
+    "text": "Not the first mile. The last one."
+   },
+   "audio_lead": -0.2
+  },
+  {
+   "id": "08_summit",
+   "template": "beat",
+   "clip_secs": 3,
+   "prompt": "A runner standing at a bright summit, arms loose, wide open sky, small in frame",
+   "motion": "They straighten up and breathe."
+  },
+  {
+   "id": "09_close",
+   "template": "beat",
+   "clip_secs": 3,
+   "prompt": "A pair of trail shoes on a sunlit rock, bright open sky behind, clean and simple",
+   "motion": "Slow settle on the shoes.",
+   "line": {
+    "who": "V",
+    "text": "TRAILHEAD. Run it out."
+   },
+   "audio_lead": -0.2
+  }
+ ]
+}

@@ -1,0 +1,142 @@
+{
+ "title": "MORNING OAT",
+ "hook": "MORNING OAT|breakfast that respects your time",
+ "canvas": [
+  1080,
+  1920
+ ],
+ "fps": 24,
+ "engine": "higgs_v3",
+ "keyframe_engine": "qwen",
+ "kind": "commercial",
+ "style": "bright natural daylight photography, white kitchen, soft window light, clean pale surfaces, airy, high key, shallow depth of field",
+ "voices": {
+  "V": {
+   "engine": "higgs_v3",
+   "voice": "voices_examples/female/female_03_alice.wav"
+  }
+ },
+ "music": [
+  {
+   "at": 0,
+   "prefix": "v2_oat_score",
+   "bpm": 112,
+   "key": "C major",
+   "seconds": 30,
+   "level": 0.5,
+   "tags": "friendly corporate pop, ukulele, hand claps, light percussion, warm major key, optimistic, instrumental"
+  }
+ ],
+ "beats": [
+  {
+   "id": "01_open",
+   "template": "hook",
+   "clip_secs": 3,
+   "prompt": "A white ceramic bowl of oats on a pale wooden counter, bright morning window light behind",
+   "motion": "Steam rises slowly. Light shifts across the rim.",
+   "caption": "Six a.m.",
+   "line": {
+    "who": "V",
+    "text": "Six in the morning."
+   },
+   "audio_lead": -0.2,
+   "sfx": "quiet kitchen room tone",
+   "sfx_secs": 2.0,
+   "sfx_level": 0.5
+  },
+  {
+   "id": "02_pour",
+   "template": "beat",
+   "clip_secs": 3,
+   "prompt": "Milk pouring into a bowl of oats in slow motion, splash frozen mid air, white kitchen",
+   "motion": "The pour lands and ripples outward.",
+   "sfx": "liquid pouring into a bowl",
+   "sfx_secs": 2.0,
+   "sfx_level": 0.5
+  },
+  {
+   "id": "03_berries",
+   "template": "beat",
+   "clip_secs": 3,
+   "prompt": "A handful of blueberries falling onto oats, bright daylight, shallow focus",
+   "motion": "Berries drop and settle into the surface.",
+   "line": {
+    "who": "V",
+    "text": "Thirty seconds of work."
+   },
+   "audio_lead": -0.2
+  },
+  {
+   "id": "04_spoon",
+   "template": "beat",
+   "clip_secs": 3,
+   "prompt": "A hand lifting a spoon of oats, close, sunlight across the knuckles, white kitchen",
+   "motion": "The spoon lifts and turns slightly.",
+   "line": {
+    "who": "V",
+    "text": "This takes thirty seconds."
+   },
+   "audio_lead": -0.2
+  },
+  {
+   "id": "05_window",
+   "template": "beat",
+   "clip_secs": 3,
+   "prompt": "A woman standing at a bright kitchen window holding a bowl, morning light, back to camera",
+   "motion": "She shifts her weight. Light moves on the glass.",
+   "line": {
+    "who": "V",
+    "text": "Not five minutes. Not ten."
+   },
+   "audio_lead": -0.2
+  },
+  {
+   "id": "06_packet",
+   "template": "beat",
+   "clip_secs": 3,
+   "prompt": "A pale cardboard packet standing on a white counter, soft daylight, clean label",
+   "motion": "Slow push in on the packet.",
+   "caption": "Oats, seeds, nothing else"
+  },
+  {
+   "id": "07_ingredients",
+   "template": "beat",
+   "clip_secs": 3,
+   "prompt": "Rolled oats, pumpkin seeds and dried fruit arranged on white paper, overhead, bright",
+   "motion": "Slow overhead drift across the ingredients.",
+   "line": {
+    "who": "V",
+    "text": "Oats, seeds, fruit. That is the whole list."
+   },
+   "audio_lead": -0.2
+  },
+  {
+   "id": "08_door",
+   "template": "beat",
+   "clip_secs": 3,
+   "prompt": "A woman in a coat picking up a bag by a bright front door, morning light through glass",
+   "motion": "She turns toward the door and reaches.",
+   "line": {
+    "who": "V",
+    "text": "You are already out the door."
+   },
+   "audio_lead": -0.2,
+   "sfx": "front door opening",
+   "sfx_secs": 2.0,
+   "sfx_level": 0.5
+  },
+  {
+   "id": "09_close",
+   "template": "beat",
+   "clip_secs": 3,
+   "prompt": "A pale cardboard packet of oats on a white counter in bright morning light, clean and simple",
+   "motion": "Slow settle. Light steadies.",
+   "caption": "MORNING OAT",
+   "line": {
+    "who": "V",
+    "text": "MORNING OAT. Thirty seconds."
+   },
+   "audio_lead": -0.2
+  }
+ ]
+}

@@ -59,11 +59,17 @@ os.environ.setdefault("COMFY_ROOT", os.path.expanduser("~/ComfyUI"))
 os.environ.setdefault("COMFY_HOST", "127.0.0.1:8188")
 from comfy import run, set_path                                        # noqa: E402
 from scene_templates import expand as expand_template   # noqa: E402
-import sound_dept
-import voice_emotion                                       # noqa: E402  (Phase 6: the one sound department)
+import sound_dept                                        # noqa: E402  (scripts/)
 sys.path.insert(0, os.path.join(os.path.dirname(HERE), "studio"))
 from engine import set_negative                         # noqa: E402  (the negative reaches the graph)
 sys.path.insert(0, os.path.join(os.path.dirname(HERE), "studio", "_tools"))
+# THE ORDER OF THIS BLOCK IS LOAD-BEARING. Three source directories feed this module -
+# scripts/, studio/ and studio/_tools/ - and each import has to come after the line that
+# puts its directory on the path. voice_emotion was once placed beside sound_dept, four
+# lines before _tools was added, and short.py stopped importing at all: every film render
+# died on a ModuleNotFoundError while the unit tests, which never import this file, went
+# on passing.
+import voice_emotion                                    # noqa: E402  (studio/_tools/)
 from epic import (sh, dur, adur, measure, norm_to, ensure_local, load_wf, expand,
                   submit, wait_all, keyscale, FONT, fgpath, ffesc, COMFY, HOST)   # noqa: E402
 

@@ -6,7 +6,7 @@
     python3 studio/_tools/healthcheck.py routes tools # just those sections
     python3 studio/_tools/healthcheck.py --host 127.0.0.1:8777
 
-SECTIONS: routes  tools  cards  workflows  movies  defects
+SECTIONS: routes  tools  cards  workflows  movies  spine  defects
 
 WHY THIS EXISTS. Nothing in this project answered the question "is the app working".
 check_refs.py checks card cross-references, lora_scan.py checks the LoRA library, and
@@ -39,7 +39,7 @@ STUDIO = os.path.dirname(HERE)                             # studio
 ROOT = os.path.dirname(STUDIO)                             # repo root
 HOST = os.environ.get("STUDIO_HOST", "127.0.0.1:8777")
 
-SECTIONS = ["routes", "tools", "cards", "workflows", "movies", "defects"]
+SECTIONS = ["routes", "tools", "cards", "workflows", "movies", "spine", "defects"]
 
 # ── every page and every API the server routes, read off serve.py's do_GET/do_POST ──
 PAGES = ["/", "/wizard", "/styles", "/places", "/cast", "/character", "/character/TERRA",
@@ -763,6 +763,39 @@ def check_movies():
 
 
 # ───────────────────────────────────────────── 6. the known open defects
+def check_spine():
+    """Import every script that renders a film.
+
+    This section exists because short.py was unimportable for a whole session and all six
+    other sections passed - none of them import a film script, so the failure only
+    surfaced when a render was attempted. --help runs the import block and argparse and
+    exits; it costs about a second each and never reaches the GPU.
+    """
+    import subprocess
+    rec = {"checked": 0, "broken": []}
+    for rel in ("scripts/short.py", "scripts/epic.py", "scripts/cartoon.py",
+                "studio/compile.py"):
+        p = os.path.join(ROOT, rel)
+        if not os.path.exists(p):
+            continue
+        rec["checked"] += 1
+        try:
+            r = subprocess.run([sys.executable, p, "--help"], capture_output=True,
+                               text=True, cwd=ROOT, timeout=180)
+        except Exception as e:                                      # noqa: BLE001
+            say("BROKEN", "spine", f"{rel} could not be run at all: {e}")
+            rec["broken"].append(rel)
+            continue
+        if r.returncode != 0:
+            tail = [l for l in (r.stderr or "").strip().splitlines() if l.strip()]
+            why = tail[-1] if tail else f"exit {r.returncode}"
+            say("BROKEN", "spine", f"{rel} cannot be imported: {why[:170]}")
+            rec["broken"].append(rel)
+    if not rec["broken"]:
+        say("NOTE", "spine", f"{rec['checked']} render scripts import cleanly")
+    return rec
+
+
 def check_defects():
     """Each of these was reported before. Verify it is STILL real, by measurement."""
     out = {}
@@ -916,7 +949,7 @@ def main():
     result = {}
     runners = {"routes": check_routes, "tools": check_tools, "cards": check_cards,
                "workflows": check_workflows, "movies": check_movies,
-               "defects": check_defects}
+               "spine": check_spine, "defects": check_defects}
     for s in SECTIONS:
         if s not in want:
             continue
