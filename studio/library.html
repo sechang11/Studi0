@@ -272,10 +272,11 @@ function goBack(){
 const KINDS=[["model","models"],["place","places"],["character","characters"],["style","styles"],
              ["look","looks"],["emotion","emotions"],["motion","motions"],["camera","cameras"],
              // the sound department - cards you listen to rather than look at
-             ["sfx","sfx"],["cue","cues","music"],["voice","voices"],["soundscape","soundscapes"],
+             ["sfx","sfx"],["song","songs"],["cue","cues","beds"],["voice","voices"],
+             ["soundscape","soundscapes"],
              // the director-craft encyclopedia
              ["craft","cards"]];
-const AUDIOKINDS=["sfx","cues","voices","soundscapes"];
+const AUDIOKINDS=["sfx","cues","voices","soundscapes","songs"];
 const PAGE_SIZES=[60,100,300,1000];
 const OPEN = {};   // which facets are expanded
 
@@ -570,7 +571,7 @@ function setMode(k, replaying){
       // Soundscapes are mix recipes and own no audio, so "N playable" would be counting
       // the absence of something they were never meant to have.
       // the folder is called cues; nobody shopping for a track thinks "cue"
-      const LABEL={cues:"music"};
+      const LABEL={cues:"beds"};
       const shown = LIST.length===b.total ? `${b.total}` : `${LIST.length} of ${b.total}`;
       document.getElementById("stat").textContent = b.kind==="soundscapes"
         ? `${shown} soundscapes · mix recipes, not sounds`
@@ -581,12 +582,15 @@ function setMode(k, replaying){
         // they are the two things you actually filter a music library by
         const pills=(s,cls)=>(s||"").split(/\s+/).filter(Boolean)
                  .map(w=>`<span class="${cls}">${esc(w)}</span>`).join("");
-        const kw = c.genre||c.use
-          ? pills(c.genre,"g")+pills(c.use,"u")
-          : pills(c.keywords,"");
+        const kw = c.instruments
+          ? pills((c.instruments||"").replace(/,\s*/g," "),"g")
+          : (c.genre||c.use ? pills(c.genre,"g")+pills(c.use,"u")
+                            : pills(c.keywords,""));
         const facts=[
           // music: the axes it is filed and shopped by
           c.subcategory?`<b>${esc(c.subcategory)}</b>`:"",
+          c.vocal&&c.vocal!=="none"?`<b>${esc(c.vocal)} vocal</b>`:"",
+          c.has_lyrics?`<b>lyrics</b>`:"",
           c.energy?`energy <b>${esc(c.energy)}</b>`:"",
           c.tempo?`tempo <b>${esc(c.tempo)}</b>`:"",
           (d.bpm!==undefined&&d.bpm!==null&&d.bpm!=="")?`bpm <b>${esc(String(d.bpm))}</b>`:"",

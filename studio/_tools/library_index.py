@@ -114,12 +114,14 @@ KINDS = {"model": "models",
          # than getting a page of their own. Their samples are mp3s, wired up by
          # _audio_sample below.
          "sfx": "sfx", "cue": "cues", "voice": "voices", "soundscape": "soundscapes",
+         # Songs: full pieces with a structure, as opposed to a cue, which is a bed.
+         "song": "songs",
          # The director-craft encyclopedia: 209 variables, 1067 rendered panels. Its only
          # consumer was the wizard's pickers, so it could be USED and never READ.
          "craft": "cards"}
 
 # Folders whose cards are heard rather than looked at.
-AUDIO_KINDS = {"sfx", "cues", "voices", "soundscapes"}
+AUDIO_KINDS = {"sfx", "cues", "voices", "soundscapes", "songs"}
 
 
 def _audio_sample(folder, cid, sub=None):
@@ -490,6 +492,13 @@ def browse(kind):
             "audio": (_audio_sample(folder, cid, card.get("category"))
                       if folder in AUDIO_KINDS else None),
             "subcategory": card.get("subcategory"),
+            "title": card.get("title"),
+            "length": card.get("length"),
+            "bpm": card.get("bpm"),
+            "key": card.get("key"),
+            "vocal": card.get("vocal"),
+            "has_lyrics": card.get("has_lyrics"),
+            "instruments": card.get("instruments"),
             "mood": card.get("mood"),
             "genre": card.get("genre"),
             "energy": card.get("energy"),
