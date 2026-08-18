@@ -1,5 +1,5 @@
 {
- "generated": "2026-08-18 00:11",
+ "generated": "2026-08-18 01:07",
  "generator": "studio/_tools/workflow_index.py",
  "note": "Every graph in workflows/, read rather than guessed at. These are API-format graphs - the shape ComfyUI's /prompt endpoint accepts, not the shape its editor opens - so the actions offered are download, copy to ComfyUI's folder, and queue, which all work on this format.",
  "comfy_url": "http://127.0.0.1:8188",
@@ -1310,7 +1310,9 @@
    "file": "44_hunyuan_i2v_1080p.json",
    "size_kb": 9.1,
    "capability": null,
-   "used_by": [],
+   "used_by": [
+    "studio/_tools/engine_ab.py"
+   ],
    "api_format": true,
    "nodes": 35,
    "models": [
@@ -1399,7 +1401,7 @@
  "totals": {
   "workflows": 47,
   "claimed": 30,
-  "run_by_code": 45,
-  "orphan": 2
+  "run_by_code": 46,
+  "orphan": 1
  }
 }

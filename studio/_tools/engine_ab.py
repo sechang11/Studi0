@@ -10,6 +10,11 @@ video is judged by watching and the numbers only say where to look.
 
     python3 studio/_tools/engine_ab.py --out ~/shared/AB/hunyuan_vs_ltx
     python3 studio/_tools/engine_ab.py --engines hunyuan,ltx23 --frames 49
+    python3 studio/_tools/engine_ab.py --engines hunyuan,hunyuan_sr --shots laces
+
+Adding a graph to ENGINES below is how a new workflow gets a consumer here - a video
+workflow nothing calls is an orphan in the index, and a caller is a truer answer to that
+than a note saying it is fine.
 
 WHAT THE COLUMNS MEAN (clipmetrics owns the definitions):
 
@@ -46,6 +51,18 @@ ENGINES = {
         "size": ("20.inputs.width", "20.inputs.height"), "length": ["20.inputs.length"],
         "quantum": 4,      # length must be 4n+1
         "label": "HunyuanVideo 1.5 720p i2v",
+    },
+    # Same graph as `hunyuan` plus the 1080p super-resolution distill. Node ids match
+    # 42's for the dials below, because 44 IS 42 with the SR block still attached - the
+    # base SaveVideo is still node 42 and is what gets measured; node 76 writes the
+    # 1080p file alongside it.
+    "hunyuan_sr": {
+        "wf": "workflows/44_hunyuan_i2v_1080p.json",
+        "image": "8.inputs.image", "text": "10.inputs.text",
+        "seed": "32.inputs.noise_seed", "prefix": "42.inputs.filename_prefix",
+        "size": ("20.inputs.width", "20.inputs.height"), "length": ["20.inputs.length"],
+        "quantum": 4,
+        "label": "HunyuanVideo 1.5 720p i2v + 1080p SR",
     },
     "ltx23": {
         "wf": "workflows/12_ltx23_i2v_audio.json",

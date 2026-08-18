@@ -1,5 +1,5 @@
 {
- "generated": "2026-08-17 09:55",
+ "generated": "2026-08-18 01:06",
  "generator": "studio/_tools/encyclopedia.py",
  "note": "One reference over three libraries that never met: capabilities say what the box can do, workflows are the graphs that do it, model cards are the weights they load. Models resolve BY FILENAME, because card ids use underscores and files use hyphens.",
  "capabilities": [
@@ -2560,6 +2560,25 @@
    "file": "41_hunyuan_t2v.json",
    "models": [
     "byt5_small_glyphxl_fp16.safetensors",
+    "hunyuanvideo1.5_720p_t2v_fp16.safetensors",
+    "hunyuanvideo15_vae_fp16.safetensors",
+    "qwen_2.5_vl_7b_fp8_scaled.safetensors"
+   ]
+  },
+  {
+   "file": "42_hunyuan_i2v.json",
+   "models": [
+    "byt5_small_glyphxl_fp16.safetensors",
+    "hunyuanvideo1.5_720p_i2v_fp16.safetensors",
+    "hunyuanvideo15_vae_fp16.safetensors",
+    "qwen_2.5_vl_7b_fp8_scaled.safetensors",
+    "sigclip_vision_patch14_384.safetensors"
+   ]
+  },
+  {
+   "file": "43_hunyuan_t2v_1080p.json",
+   "models": [
+    "byt5_small_glyphxl_fp16.safetensors",
     "hunyuanvideo1.5_1080p_sr_distilled_fp16.safetensors",
     "hunyuanvideo1.5_720p_t2v_fp16.safetensors",
     "hunyuanvideo15_latent_upsampler_1080p.safetensors",
@@ -2568,7 +2587,7 @@
    ]
   },
   {
-   "file": "42_hunyuan_i2v.json",
+   "file": "44_hunyuan_i2v_1080p.json",
    "models": [
     "byt5_small_glyphxl_fp16.safetensors",
     "hunyuanvideo1.5_1080p_sr_distilled_fp16.safetensors",
@@ -2605,26 +2624,32 @@
   ],
   "byt5_small_glyphxl_fp16": [
    "41_hunyuan_t2v.json",
-   "42_hunyuan_i2v.json"
+   "42_hunyuan_i2v.json",
+   "43_hunyuan_t2v_1080p.json",
+   "44_hunyuan_i2v_1080p.json"
   ],
   "hunyuanvideo15_vae_fp16": [
    "41_hunyuan_t2v.json",
-   "42_hunyuan_i2v.json"
+   "42_hunyuan_i2v.json",
+   "43_hunyuan_t2v_1080p.json",
+   "44_hunyuan_i2v_1080p.json"
   ],
   "hunyuanvideo1_5_1080p_sr_distilled_fp16": [
-   "41_hunyuan_t2v.json",
-   "42_hunyuan_i2v.json"
+   "43_hunyuan_t2v_1080p.json",
+   "44_hunyuan_i2v_1080p.json"
   ],
   "hunyuanvideo1_5_720p_i2v_fp16": [
-   "42_hunyuan_i2v.json"
+   "42_hunyuan_i2v.json",
+   "44_hunyuan_i2v_1080p.json"
   ],
   "hunyuanvideo1_5_720p_t2v_fp16": [
-   "41_hunyuan_t2v.json"
+   "41_hunyuan_t2v.json",
+   "43_hunyuan_t2v_1080p.json"
   ]
  },
  "totals": {
   "capabilities": 35,
-  "workflows_on_disk": 45,
+  "workflows_on_disk": 47,
   "workflows_claimed": 30,
   "model_cards": 52,
   "models_reached": 39
