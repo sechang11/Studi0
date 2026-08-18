@@ -58,6 +58,55 @@
 </style>
 </head>
 <body>
+<style>
+  #hub{padding:16px 18px;border-bottom:1px solid var(--line);background:var(--bg)}
+  #hub h2{margin:0 0 3px;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim)}
+  #hub .lede{color:var(--dim);font-size:13px;margin:0 0 12px;max-width:64em}
+  #hub .jobs{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:12px}
+  #hub .job{display:block;text-decoration:none;color:inherit;background:var(--panel);
+            border:1px solid var(--line);border-radius:9px;padding:13px 15px}
+  #hub .job:hover{border-color:var(--accent)}
+  #hub .job h3{margin:0 0 2px;font-size:14.5px}
+  #hub .job .ask{color:var(--ink);font-size:13px;margin:.2em 0 .45em}
+  #hub .job .means{color:var(--dim);font-size:12.5px;line-height:1.5}
+  #hub .job .count{margin-top:.6em;font-size:12px;color:var(--dim);
+                   font-variant-numeric:tabular-nums}
+  #hub .job .count b{color:var(--accent)}
+  #hub .job.here{border-color:var(--accent);background:var(--panel2)}
+</style>
+<div id="hub">
+  <h2>Verify &mdash; pick a job</h2>
+  <p class="lede">Each of these asks you one question about pictures the machine made.
+     Nothing here is computed: no instrument on this box can judge these, which is why
+     they are waiting for a person. <b>Leaving something unanswered is always allowed</b>
+     &mdash; unjudged counts honestly as &ldquo;not looked at&rdquo;, and a guess puts a
+     number under a verdict nobody made.</p>
+  <div class="jobs">
+    <a class="job" href="/identity">
+      <h3>Identity</h3>
+      <div class="ask">Is this the same character?</div>
+      <div class="means">A reference sheet beside what one method produced. Answer
+        <b>keep</b>, <b>close</b> (them, but a detail is wrong) or <b>not them</b>.
+        Verdicts blame the <i>method</i>, so a failing approach can be reworked.</div>
+      <div class="count" id="hubIdentity">&nbsp;</div>
+    </a>
+    <a class="job here" href="#" onclick="document.getElementById('tabCards').click();return false">
+      <h3>Capability cards</h3>
+      <div class="ask">Does the panel show what the card claims?</div>
+      <div class="means">A rendered comparison against the sentence describing it. Both
+        predictions ever checked against pixels turned out wrong, so the claims cannot be
+        trusted until someone looks.</div>
+      <div class="count" id="hubCards">&nbsp;</div>
+    </a>
+    <a class="job" href="#" onclick="document.getElementById('tabTags').click();return false">
+      <h3>Tag examples</h3>
+      <div class="ask">Does the tag actually change the picture?</div>
+      <div class="means">The same shot with and without one tag. If you cannot tell them
+        apart, the tag is doing nothing and the library should stop offering it.</div>
+      <div class="count" id="hubTags">&nbsp;</div>
+    </a>
+  </div>
+</div>
 <header>
   <h1>verify</h1><span class="sub" id="stat">loading…</span>
   <button class="tab on" id="tabCards">Capability cards</button>
@@ -303,6 +352,40 @@ $("tabDone").onclick=()=>setMode("done");
   TAGS=t.filter(x=>x.example);            // only judgeable if there is a picture
   setMode("cards");
 })();
+</script>
+<script>
+// Counts off the live endpoints, so a tile cannot claim work that is done or hide work
+// that is not.
+fetch("/api/identity").then(r => r.json()).then(d => {
+  const s = (d.samples || []).filter(x => !x.skipped && x.image);
+  const done = s.filter(x => x.verdict).length;
+  document.getElementById("hubIdentity").innerHTML =
+    s.length ? `<b>${s.length - done}</b> still to judge &middot; ${done} of ${s.length} done`
+             : "nothing generated yet";
+}).catch(() => {});
+fetch("/api/verify/queue").then(r => r.json()).then(d => {
+  // Read the keys the endpoint actually returns: todo / done / total. The first version
+  // of this guessed at `cards`/`queue`/`tags`, every lookup missed, and `|| []` turned
+  // the misses into "0 still to judge, all done" while 2 were waiting. A missing key now
+  // shows as unreadable rather than as a comforting zero.
+  const el = document.getElementById("hubCards");
+  if (!el) return;
+  if (!Array.isArray(d.todo) || !Array.isArray(d.done)) {
+    el.innerHTML = "cannot read the queue";
+    return;
+  }
+  const todo = d.todo.length, done = d.done.length, tot = todo + done;
+  el.innerHTML = todo
+    ? `<b>${todo}</b> still to judge &middot; ${done} of ${tot} done`
+    : `all ${tot} judged`;
+}).catch(() => {
+  const el = document.getElementById("hubCards");
+  if (el) el.innerHTML = "cannot read the queue";
+});
+// No endpoint counts tag examples - /api/tags lists tags, nothing reports how many are
+// awaiting a verdict. Saying so is honest; printing 0 would not be.
+(() => { const el = document.getElementById("hubTags");
+         if (el) el.textContent = "no counter for this one yet"; })();
 </script>
 </body>
 </html>

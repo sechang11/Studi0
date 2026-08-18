@@ -100,10 +100,13 @@ def graph_no_ipadapter():
     return p
 
 
-def generate(only=None, seed=11):
+SEEDS = (11, 202, 3003)   # three, so a lucky render cannot pass for a reliable method
+
+
+def generate(only=None, seeds=SEEDS):
     os.makedirs(OUT, exist_ok=True)
     rows = load()
-    have = {(r["character"], r["method"]) for r in rows}
+    have = {r["id"] for r in rows}
     no_ipa = graph_no_ipadapter()
 
     for c in cast():
@@ -115,38 +118,44 @@ def generate(only=None, seed=11):
             ("both", bool(c["sheet"] and c["tags"]), WF_IPA, c["tags"] or ""),
         ]
         for method, possible, wf, prompt in plans:
-            key = (c["name"], method)
-            if key in have:
-                continue
             if not possible:
                 why = ("no reference sheet" if method in ("sheet", "both") and not c["sheet"]
                        else "no tags on the card")
-                rows.append({"id": "%s__%s" % (c["name"], method),
+                sid = "%s__%s" % (c["name"], method)
+                if sid not in have:
+                    rows.append({"id": sid,
+                                 "character": c["name"], "method": method,
+                                 "workflow": os.path.basename(wf), "skipped": why,
+                                 "image": None, "verdict": None})
+                    print("  %-12s %-6s SKIPPED - %s" % (c["name"], method, why))
+                continue
+            for seed in seeds:
+                sid = "%s__%s__%d" % (c["name"], method, seed)
+                if sid in have:
+                    continue
+                sets = [("5.inputs.text", prompt), ("6.inputs.text", NEG),
+                        ("8.inputs.seed", seed),
+                        ("11.inputs.filename_prefix",
+                         "claude-generated/identity/%s_%s_%d"
+                         % (c["name"], method, seed))]
+                if c["sheet"] and method in ("sheet", "both"):
+                    sets.append(("2.inputs.image", c["sheet"]))
+                src, err = run_wf(wf, sets, None)
+                if not src or not os.path.exists(src):
+                    print("  %-12s %-6s seed %-5d FAILED %s"
+                          % (c["name"], method, seed, err or ""))
+                    continue
+                dst = os.path.join(OUT, "%s.png" % sid)
+                sh("cp", src, dst)
+                rows.append({"id": sid,
                              "character": c["name"], "method": method,
-                             "workflow": os.path.basename(wf), "skipped": why,
-                             "image": None, "verdict": None})
-                print("  %-12s %-6s SKIPPED - %s" % (c["name"], method, why))
-                continue
-            sets = [("5.inputs.text", prompt), ("6.inputs.text", NEG),
-                    ("8.inputs.seed", seed),
-                    ("11.inputs.filename_prefix",
-                     "claude-generated/identity/%s_%s" % (c["name"], method))]
-            if c["sheet"] and method in ("sheet", "both"):
-                sets.append(("2.inputs.image", c["sheet"]))
-            src, err = run_wf(wf, sets, None)
-            if not src or not os.path.exists(src):
-                print("  %-12s %-6s FAILED %s" % (c["name"], method, err or ""))
-                continue
-            dst = os.path.join(OUT, "%s__%s.png" % (c["name"], method))
-            sh("cp", src, dst)
-            rows.append({"id": "%s__%s" % (c["name"], method),
-                         "character": c["name"], "method": method,
-                         "workflow": os.path.basename(wf) if wf == WF_IPA
-                                     else "22_anime_kf_ipadapter.json (IPAdapter removed)",
-                         "prompt": prompt[:200], "seed": seed,
-                         "image": os.path.relpath(dst, STUDIO),
-                         "verdict": None})
-            print("  %-12s %-6s ok" % (c["name"], method))
+                             "workflow": os.path.basename(wf) if wf == WF_IPA
+                                         else "22_anime_kf_ipadapter.json "
+                                              "(IPAdapter removed)",
+                             "prompt": prompt[:200], "seed": seed,
+                             "image": os.path.relpath(dst, STUDIO),
+                             "verdict": None})
+                print("  %-12s %-6s seed %-5d ok" % (c["name"], method, seed))
     save(rows)
     return rows
 
@@ -259,6 +268,7 @@ def main():
     ap.add_argument("--sheet", action="store_true")
     ap.add_argument("--report", action="store_true")
     ap.add_argument("--only", default="")
+    ap.add_argument("--seeds", default=",".join(str(s) for s in SEEDS))
     ap.add_argument("--mark", nargs=2, metavar=("ID", "VERDICT"),
                     help="set a verdict from the CLI: ok | x | clear")
     a = ap.parse_args()
@@ -271,7 +281,8 @@ def main():
                 print("%s -> %s" % (r["id"], r["verdict"]))
         save(rows)
     if a.generate:
-        generate(only or None)
+        generate(only or None,
+                 tuple(int(s) for s in a.seeds.split(",") if s.strip()))
     if a.sheet:
         contact()
     if a.report or not (a.generate or a.sheet or a.mark):
