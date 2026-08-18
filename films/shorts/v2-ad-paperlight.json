@@ -1,122 +1,123 @@
 {
- "title": "PAPERLIGHT",
- "hook": "PAPERLIGHT|a notebook that closes flat",
- "canvas": [
-  1080,
-  1920
- ],
- "fps": 24,
- "engine": "higgs_v3",
- "keyframe_engine": "qwen",
- "kind": "commercial",
- "style": "clean product photography, seamless white background, soft even studio light, minimal, sharp, pastel accents",
- "voices": {
-  "V": {
-   "engine": "higgs_v3",
-   "voice": "voices_examples/female/female_04_maya.wav"
-  }
- },
- "music": [
-  {
-   "at": 0,
-   "prefix": "v2_paper_score",
-   "bpm": 90,
-   "key": "D major",
-   "seconds": 30,
-   "level": 0.5,
-   "tags": "minimal luxury, sparse piano, deep sub bass, tasteful strings, calm, expensive, instrumental"
-  }
- ],
- "beats": [
-  {
-   "id": "01_open",
-   "template": "hook",
-   "clip_secs": 3,
-   "prompt": "A slim pale notebook lying closed on a seamless white surface, soft even studio light",
-   "motion": "Slow push in. The cover catches light.",
-   "caption": "It closes flat",
-   "line": {
-    "who": "V",
-    "text": "Most notebooks do not close flat."
-   },
-   "audio_lead": -0.2,
-   "sfx": "paper handling",
-   "sfx_secs": 2.0,
-   "sfx_level": 0.5
+  "title": "PAPERLIGHT",
+  "hook": "PAPERLIGHT|a notebook that closes flat",
+  "canvas": [
+    1080,
+    1920
+  ],
+  "fps": 24,
+  "engine": "higgs_v3",
+  "keyframe_engine": "qwen",
+  "kind": "commercial",
+  "style": "clean product photography, seamless white background, soft even studio light, minimal, sharp, pastel accents",
+  "voices": {
+    "V": {
+      "engine": "higgs_v3",
+      "voice": "voices_examples/female/female_04_maya.wav"
+    }
   },
-  {
-   "id": "02_spine",
-   "template": "insert",
-   "clip_secs": 3,
-   "prompt": "Extreme close on a notebook spine, flat lay binding, white background, sharp detail",
-   "motion": "Slow drift along the spine."
-  },
-  {
-   "id": "03_open_flat",
-   "template": "master",
-   "clip_secs": 3,
-   "prompt": "A notebook lying completely open and flat on a white surface, both pages level, studio light",
-   "motion": "The pages settle level.",
-   "line": {
-    "who": "V",
-    "text": "This one does."
-   },
-   "audio_lead": -0.2,
-   "sfx": "page turning",
-   "sfx_secs": 2.0,
-   "sfx_level": 0.5
-  },
-  {
-   "id": "04_pen",
-   "template": "insert",
-   "clip_secs": 3,
-   "prompt": "A pen writing on a flat open page, close, soft studio light, clean white",
-   "motion": "The pen moves across the page.",
-   "line": {
-    "who": "V",
-    "text": "So the page does not fight your hand."
-   },
-   "audio_lead": -0.2
-  },
-  {
-   "id": "05_stack",
-   "template": "establish",
-   "clip_secs": 3,
-   "prompt": "Three pale notebooks stacked on a white surface, pastel edges, minimal studio light",
-   "motion": "Slow overhead drift across the stack.",
-   "caption": "Three weights of paper"
-  },
-  {
-   "id": "06_paper",
-   "template": "insert",
-   "clip_secs": 3,
-   "prompt": "Macro texture of thick cream paper, raking soft light showing the grain, white background",
-   "motion": "Light rakes slowly across the grain.",
-   "line": {
-    "who": "V",
-    "text": "Thick paper. Ink stays where you put it."
-   },
-   "audio_lead": -0.2
-  },
-  {
-   "id": "07_hand",
-   "template": "insert",
-   "clip_secs": 3,
-   "prompt": "A hand closing a notebook on a white surface, soft studio light, clean minimal",
-   "motion": "The cover comes down and settles."
-  },
-  {
-   "id": "08_close",
-   "template": "master",
-   "clip_secs": 3,
-   "prompt": "A single pale notebook centred on seamless white, soft even light, minimal product shot",
-   "motion": "Slow settle. Even light.",
-   "caption": "PAPERLIGHT",
-   "line": {
-    "who": "V",
-    "text": "PAPERLIGHT. It closes flat."
-   },
-   "audio_lead": -0.2
-  }
- ]
+  "music": [
+    {
+      "at": 0,
+      "prefix": "v2_paper_score",
+      "bpm": 90,
+      "key": "D major",
+      "seconds": 30,
+      "level": 0.5,
+      "tags": "minimal luxury, sparse piano, deep sub bass, tasteful strings, calm, expensive, instrumental"
+    }
+  ],
+  "beats": [
+    {
+      "id": "01_open",
+      "template": "hook",
+      "clip_secs": 3,
+      "prompt": "A slim pale notebook lying closed on a seamless white surface, soft even studio light",
+      "motion": "Slow push in. The cover catches light.",
+      "caption": "It closes flat",
+      "line": {
+        "who": "V",
+        "text": "Most notebooks do not close flat."
+      },
+      "audio_lead": -0.2,
+      "sfx": "paper handling",
+      "sfx_secs": 2.0,
+      "sfx_level": 0.5
+    },
+    {
+      "id": "02_spine",
+      "template": "insert",
+      "clip_secs": 3,
+      "prompt": "Extreme close on a notebook spine, flat lay binding, white background, sharp detail",
+      "motion": "Slow drift along the spine."
+    },
+    {
+      "id": "03_open_flat",
+      "template": "master",
+      "clip_secs": 3,
+      "prompt": "A notebook lying completely open and flat on a white surface, both pages level, studio light",
+      "motion": "The pages settle level.",
+      "line": {
+        "who": "V",
+        "text": "This one does."
+      },
+      "audio_lead": -0.2,
+      "sfx": "page turning",
+      "sfx_secs": 2.0,
+      "sfx_level": 0.5
+    },
+    {
+      "id": "04_pen",
+      "template": "insert",
+      "clip_secs": 3,
+      "prompt": "A pen writing on a flat open page, close, soft studio light, clean white",
+      "motion": "The pen moves across the page.",
+      "line": {
+        "who": "V",
+        "text": "So the page does not fight your hand."
+      },
+      "audio_lead": -0.2
+    },
+    {
+      "id": "05_stack",
+      "template": "establish",
+      "clip_secs": 3,
+      "prompt": "Three pale notebooks stacked on a white surface, pastel edges, minimal studio light",
+      "motion": "Slow overhead drift across the stack.",
+      "caption": "Three weights of paper"
+    },
+    {
+      "id": "06_paper",
+      "template": "insert",
+      "clip_secs": 3,
+      "prompt": "Macro texture of thick cream paper, raking soft light showing the grain, white background",
+      "motion": "Light rakes slowly across the grain.",
+      "line": {
+        "who": "V",
+        "text": "Thick paper. Ink stays where you put it."
+      },
+      "audio_lead": -0.2
+    },
+    {
+      "id": "07_hand",
+      "template": "insert",
+      "clip_secs": 3,
+      "prompt": "A hand closing a notebook on a white surface, soft studio light, clean minimal",
+      "motion": "The cover comes down and settles."
+    },
+    {
+      "id": "08_close",
+      "template": "master",
+      "clip_secs": 3,
+      "prompt": "A single pale notebook centred on seamless white, soft even light, minimal product shot",
+      "motion": "Slow settle. Even light.",
+      "caption": "PAPERLIGHT",
+      "line": {
+        "who": "V",
+        "text": "PAPERLIGHT. It closes flat."
+      },
+      "audio_lead": -0.2
+    }
+  ],
+  "energy": "calm"
 }
