@@ -893,6 +893,29 @@ def music(film, out, seed0):
         run(HOST, wf, quiet=True)
 
 
+# Post-motion. CALM MODE strips these: they are the layer that makes a clip read as
+# violent, and on calm material they read as a fault instead. `hot`, `glow` and the
+# colour effects are NOT here - those change the picture without moving it.
+CALM_STRIP = {"punch", "push", "pull", "pan_l", "pan_r", "tilt_u", "tilt_d",
+              "handheld", "shake", "aberr", "flash"}
+
+
+def calm_beat(beat_cuts, avail):
+    """One shot for the whole beat, with the post-motion taken out.
+
+    The templates the shorts draw on came from an anime action reference at a 0.30s
+    median shot. A four-second product beat cut into three punch-ins on re-crops of one
+    plate is that instinct applied to material it was never measured on.
+    """
+    fx = [f for c in beat_cuts for f in c.get("fx", []) if f not in CALM_STRIP]
+    seen, keep = set(), []
+    for f in fx:
+        if f not in seen:
+            seen.add(f)
+            keep.append(f)
+    return [{"at": 0.0, "len": float(avail), "fx": keep}]
+
+
 # ─────────────────────────────────────────────────────────── the cut
 def cut(film, out):
     rel = out.split("output/")[1]
@@ -919,6 +942,11 @@ def cut(film, out):
         line_start = None
         # a template turns one generated clip into a shaped run of micro-shots
         beat_cuts, beat_impact = expand_template(b, float(b.get("clip_secs", 4)))
+        _calm = str(film.get("energy") or "").lower() == "calm"
+        if _calm:
+            # one shot per beat, no post-motion: let the generated clip be the shot
+            beat_cuts = calm_beat(beat_cuts, dur(src))
+            beat_impact = False
         # PACE THE PICTURE TO THE READ. The template chose these lengths knowing nothing
         # about the line that plays over them, so a 6.2s read landed on 3.2s of picture
         # and the film ran out of images long before it ran out of words. The surplus
