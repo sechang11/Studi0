@@ -2299,8 +2299,9 @@ class H(http.server.SimpleHTTPRequestHandler):
             ip = _load_tool_module("identity_proof")
             cid = str(data.get("id") or "")
             v = data.get("verdict")
-            if v not in (None, "ok", "x"):
-                return self._send({"error": "verdict must be ok, x or null"}, 400)
+            if v not in (None, "ok", "close", "x"):
+                return self._send(
+                    {"error": "verdict must be ok, close, x or null"}, 400)
             rows = ip.load()
             hit = [r for r in rows if r.get("id") == cid]
             if not hit:

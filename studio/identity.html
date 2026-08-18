@@ -1,123 +1,207 @@
-<h1>Identity proof</h1>
-<p class="sub">Every character rendered by every way this project can ask for a face.
-Each card shows the character's <b>reference sheet</b> on the left and what the method produced on the right &mdash; click their name for the full dossier. Cross out the ones that are not them. Crosses tally against the <b>method</b>, not the
-picture &mdash; a path that keeps failing is a path to rework, which is the only kind of
-verdict you can act on.</p>
-
-<div id="tally" class="tally"></div>
-
-<div id="filters" class="filters">
-  <button class="f on" data-f="all">all</button>
-  <button class="f" data-f="unseen">not looked at</button>
-  <button class="f" data-f="x">crossed out</button>
-  <button class="f" data-f="ok">kept</button>
-</div>
-
-<div id="grid" class="grid"></div>
-<div id="skipped" class="skipped"></div>
-
+<!doctype html>
+<meta charset="utf-8">
+<title>Identity proof</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <style>
-  .sub { max-width: 60em; opacity: .8; line-height: 1.5; }
-  .tally { margin: 1.2em 0; border: 1px solid #333; border-radius: 6px; overflow: hidden; }
-  .tally table { border-collapse: collapse; width: 100%; }
-  .tally th, .tally td { padding: .5em .8em; text-align: left; border-bottom: 1px solid #2a2a2a; }
-  .tally th { background: #1c1c1c; font-weight: 600; }
-  .tally .rework { color: #ff8080; font-weight: 600; }
-  .tally .holds { color: #7fdca4; }
-  .filters { margin: 1em 0; display: flex; gap: .5em; flex-wrap: wrap; }
-  .filters .f { background: #222; color: #ddd; border: 1px solid #3a3a3a; border-radius: 5px;
-                padding: .35em .8em; cursor: pointer; font: inherit; }
-  .filters .f.on { background: #3a4a68; border-color: #5a7ab0; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-          gap: 12px; }
-  .card { border: 1px solid #333; border-radius: 6px; overflow: hidden; background: #181818;
-          position: relative; }
-  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: #2a2a2a; }
-  .side { position: relative; background: #111; }
-  .side img { width: 100%; display: block; aspect-ratio: 3/4; object-fit: cover; }
-  .side .tag { position: absolute; top: 4px; left: 4px; z-index: 2; font-size: .68em;
-               letter-spacing: .06em; text-transform: uppercase; padding: .12em .45em;
-               border-radius: 3px; background: #000a; color: #ddd; }
-  .noref { aspect-ratio: 3/4; display: flex; align-items: center; justify-content: center;
-           text-align: center; font-size: .8em; opacity: .5; }
-  .card .desc { opacity: .7; font-size: .95em; margin: .2em 0 .3em; }
-  .card .who a { color: inherit; text-decoration: none; border-bottom: 1px dotted #777; }
-  .card .who a:hover { border-bottom-style: solid; }
-  .card .meta { padding: .45em .6em; font-size: .82em; line-height: 1.35; }
-  .card .who { font-weight: 600; }
-  .card .how { opacity: .65; }
-  .card.x { outline: 2px solid #c04040; }
-  .card.x .side:last-child img { opacity: .3; }
-  .card.ok { outline: 2px solid #3f8f5f; }
-  .btns { display: flex; border-top: 1px solid #2a2a2a; }
-  .btns button { flex: 1; background: #202020; color: #ccc; border: 0; padding: .45em;
-                 cursor: pointer; font: inherit; }
-  .btns button:hover { background: #2c2c2c; }
-  .btns .bx.on { background: #6a2626; color: #fff; }
-  .btns .bo.on { background: #25502f; color: #fff; }
-  .skipped { margin-top: 2em; font-size: .9em; opacity: .75; line-height: 1.6; }
+  /* The house palette, copied from library.html. The first version of this page was a
+     fragment with no :root at all, so it inherited black body text and I had painted
+     charcoal cards under it - unreadable, and entirely self-inflicted. */
+  :root{color-scheme:light dark;--bg:#0f1115;--panel:#161a21;--panel2:#1c2129;--line:#272d38;
+        --ink:#e6e9ef;--dim:#8b94a3;--accent:#6ea8fe;--ok:#4ec9a0;--warn:#e0b252;--bad:#e07a5f}
+  @media (prefers-color-scheme:light){
+    :root{--bg:#f6f7f9;--panel:#fff;--panel2:#f0f2f5;--line:#dde1e8;--ink:#141821;--dim:#5d6470}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font:14px/1.55 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  header{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;padding:12px 18px;
+         border-bottom:1px solid var(--line);background:var(--panel);position:sticky;top:0;z-index:30}
+  header h1{margin:0;font-size:15px;letter-spacing:.07em;text-transform:uppercase}
+  header .sub{color:var(--dim);font-size:12px}
+  header .right{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+  header a{color:var(--dim);font-size:12px;text-decoration:none;border:1px solid var(--line);
+           border-radius:6px;padding:4px 9px}
+  header a:hover{color:var(--ink);border-color:var(--accent)}
+  main{padding:18px;max-width:1600px;margin:0 auto}
+
+  .rubric{background:var(--panel);border:1px solid var(--line);border-radius:9px;
+          padding:14px 16px;margin-bottom:18px;max-width:66em}
+  .rubric h2{margin:0 0 .5em;font-size:13px;letter-spacing:.06em;text-transform:uppercase;
+             color:var(--dim)}
+  .rubric dt{font-weight:600;margin-top:.6em}
+  .rubric dd{margin:.15em 0 0 1.4em;color:var(--dim)}
+  .rubric .q{margin-top:1em;padding-top:.8em;border-top:1px solid var(--line)}
+
+  table.tally{border-collapse:collapse;width:100%;max-width:66em;margin-bottom:18px;
+              background:var(--panel);border:1px solid var(--line);border-radius:9px;overflow:hidden}
+  table.tally th,table.tally td{padding:.5em .8em;text-align:left;border-bottom:1px solid var(--line)}
+  table.tally th{background:var(--panel2);font-size:12px;letter-spacing:.05em;
+                 text-transform:uppercase;color:var(--dim)}
+  .rework{color:var(--bad);font-weight:600}
+  .holds{color:var(--ok)}
+  .early{color:var(--dim)}
+
+  .filters{margin:0 0 14px;display:flex;gap:7px;flex-wrap:wrap}
+  .filters button{background:var(--panel);color:var(--ink);border:1px solid var(--line);
+                  border-radius:6px;padding:5px 11px;cursor:pointer;font:inherit;font-size:13px}
+  .filters button.on{background:var(--accent);color:#08111f;font-weight:600;border-color:var(--accent)}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:14px}
+  .card{border:1px solid var(--line);border-radius:9px;overflow:hidden;background:var(--panel)}
+  .pair{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);cursor:zoom-in}
+  .side{position:relative;background:var(--panel2)}
+  /* NO forced aspect and NO object-fit:cover. The sheets are 16:9; cropping them into a
+     3/4 tile threw away the sides and upscaled what was left, which is what "blurry
+     until I open it" was. */
+  .side img{width:100%;display:block}
+  .side .tag{position:absolute;top:5px;left:5px;font-size:10px;letter-spacing:.07em;
+             text-transform:uppercase;padding:2px 6px;border-radius:3px;
+             background:#000b;color:#fff}
+  .noref{aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;
+         text-align:center;font-size:12px;color:var(--dim);padding:8px}
+  .meta{padding:9px 11px}
+  .who a{color:var(--ink);font-weight:600;text-decoration:none;border-bottom:1px dotted var(--dim)}
+  .who a:hover{border-bottom-style:solid;border-color:var(--accent)}
+  .desc{color:var(--dim);font-size:12.5px;margin:.25em 0 .4em}
+  .how{color:var(--dim);font-size:11.5px;font-family:ui-monospace,Menlo,Consolas,monospace}
+  .btns{display:flex;border-top:1px solid var(--line)}
+  .btns button{flex:1;background:var(--panel2);color:var(--ink);border:0;border-right:1px solid var(--line);
+               padding:8px 4px;cursor:pointer;font:inherit;font-size:12.5px}
+  .btns button:last-child{border-right:0}
+  .btns button:hover{background:var(--line)}
+  .btns .bo.on{background:var(--ok);color:#06231a;font-weight:600}
+  .btns .bc.on{background:var(--warn);color:#2a1e05;font-weight:600}
+  .btns .bx.on{background:var(--bad);color:#2c0f08;font-weight:600}
+  .card.x{border-color:var(--bad)}
+  .card.close{border-color:var(--warn)}
+  .card.ok{border-color:var(--ok)}
+
+  /* The compare overlay - hover the pair, no new tabs. */
+  #zoom{position:fixed;inset:0;background:#000d;z-index:100;display:none;
+        align-items:center;justify-content:center;padding:22px;cursor:zoom-out}
+  #zoom.on{display:flex}
+  #zoom .box{background:var(--panel);border:1px solid var(--line);border-radius:10px;
+             padding:12px;max-width:96vw;max-height:94vh;overflow:auto}
+  #zoom .imgs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  #zoom figure{margin:0}
+  #zoom img{width:100%;display:block;border-radius:6px}
+  #zoom figcaption{color:var(--dim);font-size:12px;padding:5px 2px 0;
+                   letter-spacing:.06em;text-transform:uppercase}
+  #zoom .zt{margin:0 0 8px;font-size:14px}
+  #zoom .zt b{font-size:15px}
+  #zoom .zd{color:var(--dim);font-size:12.5px}
+  .skipped{margin-top:26px;color:var(--dim);font-size:13px;line-height:1.7;max-width:66em}
 </style>
 
+<header>
+  <h1>Identity proof</h1>
+  <span class="sub">is this them?</span>
+  <span class="right">
+    <a href="/">home</a>
+    <a href="/character">cast</a>
+    <a href="/library">library</a>
+  </span>
+</header>
+
+<main>
+<div class="rubric">
+  <h2>How to judge</h2>
+  <p style="margin:.2em 0 .8em">The question is not whether the two pictures match pixel
+  for pixel. It is: <b>would you accept these as the same character in the same film?</b>
+  Hover any pair to compare them large.</p>
+  <dl>
+    <dt style="color:var(--ok)">keep</dt>
+    <dd>You would use this. It reads as them.</dd>
+    <dt style="color:var(--warn)">close</dt>
+    <dd>Recognisably them, but something specific is off &mdash; wrong hairstyle, wrong
+        age, wrong costume. <b>The identity landed and a detail did not.</b> This is the
+        answer for "close but not exact", and it is the most useful verdict on the page:
+        it says the method works and the card needs a better tag.</dd>
+    <dt style="color:var(--bad)">not them</dt>
+    <dd>A different person. Different bone structure, different colouring, nothing you
+        could cut together with the reference.</dd>
+  </dl>
+  <div class="q">
+    <p><b>What if the style is different &mdash; photoreal reference, anime render?</b>
+    That is <i>not</i> an identity failure. Judge the things that survive a change of
+    medium: hair colour, eye colour, build, age, scars, glasses, distinguishing marks.
+    A style change is the pipeline doing what it was asked; a change of person is not.
+    (Every reference in this set happens to be illustration, so it should not come up
+    here.)</p>
+    <p><b>What if you genuinely cannot tell?</b> Leave it. An unjudged sample is counted
+    honestly as "not looked at" and costs nothing. A guess is worse than a gap &mdash; it
+    puts a number under a verdict that nobody actually made. If several are unjudgeable
+    for the same reason, that is worth telling me: it usually means the reference is bad,
+    not that you are.</p>
+  </div>
+</div>
+
+<table class="tally" id="tally"></table>
+
+<div class="filters" id="filters">
+  <button class="on" data-f="all">all</button>
+  <button data-f="unseen">not looked at</button>
+  <button data-f="ok">kept</button>
+  <button data-f="close">close</button>
+  <button data-f="x">not them</button>
+</div>
+
+<div class="grid" id="grid"></div>
+<div class="skipped" id="skipped"></div>
+</main>
+
+<div id="zoom"><div class="box" id="zoombox"></div></div>
+
 <script>
-let ROWS = [];
-let FILTER = "all";
+let ROWS = [], FILTER = "all", hoverTimer = null;
+const MIN_JUDGED = 4;
+const S = p => "/samples/" + String(p).replace(/^samples\//, "");
 
 function tally() {
   const by = {};
   for (const r of ROWS) {
     if (r.skipped) continue;
-    const m = by[r.method] || (by[r.method] = {n:0, ok:0, x:0, unseen:0});
+    const m = by[r.method] || (by[r.method] = {n:0, ok:0, close:0, x:0, unseen:0});
     m.n++;
-    if (r.verdict === "ok") m.ok++; else if (r.verdict === "x") m.x++; else m.unseen++;
+    if (r.verdict === "ok") m.ok++;
+    else if (r.verdict === "close") m.close++;
+    else if (r.verdict === "x") m.x++;
+    else m.unseen++;
   }
-  let h = "<table><tr><th>method</th><th>n</th><th>kept</th><th>crossed</th>" +
+  let h = "<tr><th>method</th><th>n</th><th>kept</th><th>close</th><th>not them</th>" +
           "<th>not looked at</th><th>verdict</th></tr>";
   for (const m of Object.keys(by).sort()) {
-    const s = by[m], judged = s.ok + s.x;
-    // A verdict needs evidence under it. Four judgements minimum, so one click cannot
-    // condemn a method - and the count is shown either way.
-    const MIN = 4;
-    let v = "not looked at yet", cls = "";
-    if (judged && judged < MIN) {
+    const s = by[m], judged = s.ok + s.close + s.x;
+    let v = "not looked at yet", cls = "early";
+    if (judged && judged < MIN_JUDGED) {
       v = "too early &mdash; " + judged + " of " + s.n + " judged";
     } else if (judged) {
-      if (s.x > judged / 2) {
-        v = "REWORK &mdash; " + s.x + " of " + judged + " judged are not them"; cls = "rework";
-      } else if (s.x) { v = "partial &mdash; " + s.x + " of " + judged + " crossed"; }
+      // `close` counts as a pass for the METHOD - the identity landed. It is the card's
+      // tags that need work, not the path.
+      if (s.x > judged / 2) { v = "REWORK &mdash; " + s.x + " of " + judged + " are not them"; cls = "rework"; }
+      else if (s.x || s.close) { v = "partial &mdash; " + s.x + " wrong, " + s.close + " close"; cls = ""; }
       else { v = "holds &mdash; " + s.ok + " of " + judged + " kept"; cls = "holds"; }
     }
-    h += `<tr><td><b>${m}</b></td><td>${s.n}</td><td>${s.ok}</td><td>${s.x}</td>` +
-         `<td>${s.unseen}</td><td class="${cls}">${v}</td></tr>`;
+    h += `<tr><td><b>${m}</b></td><td>${s.n}</td><td>${s.ok}</td><td>${s.close}</td>` +
+         `<td>${s.x}</td><td>${s.unseen}</td><td class="${cls}">${v}</td></tr>`;
   }
-  document.getElementById("tally").innerHTML = h + "</table>";
+  document.getElementById("tally").innerHTML = h;
 }
 
 function draw() {
-  const g = document.getElementById("grid");
-  const show = ROWS.filter(r => {
+  document.getElementById("grid").innerHTML = ROWS.filter(r => {
     if (r.skipped || !r.image) return false;
     if (FILTER === "all") return true;
     if (FILTER === "unseen") return !r.verdict;
     return r.verdict === FILTER;
-  });
-  g.innerHTML = show.map(r => `
-    <div class="card ${r.verdict || ''}" id="c_${r.id}">
-      <div class="pair">
-        <div class="side">
-          <span class="tag">them</span>
-          ${r.ref
-            ? `<img src="/samples/${r.ref.replace(/^samples\//, '')}" loading="lazy"
-                    alt="${r.character} reference sheet">`
-            : `<div class="noref">no reference<br>sheet</div>`}
-        </div>
-        <div class="side">
-          <span class="tag">this</span>
-          <a href="/samples/${r.image.replace(/^samples\//, '')}" target="_blank"
-             title="open the full render">
-            <img src="/samples/${(r.thumb || r.image).replace(/^samples\//, '')}"
-                 loading="lazy" alt="${r.character} by ${r.method}">
-          </a>
-        </div>
+  }).map(r => `
+    <div class="card ${r.verdict || ''}">
+      <div class="pair" onmouseenter="hoverOpen('${r.id}')" onmouseleave="hoverCancel()"
+           onclick="openZoom('${r.id}')">
+        <div class="side"><span class="tag">them</span>${
+          r.ref ? `<img src="${S(r.ref)}" loading="lazy" alt="${r.character} reference">`
+                : `<div class="noref">no reference sheet<br>nothing to compare against</div>`}</div>
+        <div class="side"><span class="tag">this</span>
+          <img src="${S(r.thumb || r.image)}" loading="lazy" alt="${r.character} by ${r.method}"></div>
       </div>
       <div class="meta">
         <div class="who"><a href="${r.dossier}" target="_blank">${r.character}</a></div>
@@ -125,19 +209,41 @@ function draw() {
         <div class="how">${r.method} &middot; ${r.workflow || ''}</div>
       </div>
       <div class="btns">
-        <button class="bo ${r.verdict === 'ok' ? 'on' : ''}"
-                onclick="mark('${r.id}','ok')">keep</button>
-        <button class="bx ${r.verdict === 'x' ? 'on' : ''}"
-                onclick="mark('${r.id}','x')">&times; not them</button>
+        <button class="bo ${r.verdict==='ok'?'on':''}" onclick="mark('${r.id}','ok')">keep</button>
+        <button class="bc ${r.verdict==='close'?'on':''}" onclick="mark('${r.id}','close')">close</button>
+        <button class="bx ${r.verdict==='x'?'on':''}" onclick="mark('${r.id}','x')">not them</button>
       </div>
     </div>`).join("");
   tally();
 }
 
+function openZoom(id) {
+  const r = ROWS.find(x => x.id === id);
+  if (!r) return;
+  document.getElementById("zoombox").innerHTML = `
+    <p class="zt"><b>${r.character}</b> &mdash; ${r.method}
+       <span class="zd">&nbsp;${r.workflow || ''}</span></p>
+    ${r.desc ? `<p class="zd" style="margin:-4px 0 8px">${r.desc}</p>` : ''}
+    <div class="imgs">
+      <figure>${r.ref ? `<img src="${S(r.ref)}">`
+                      : `<div class="noref">no reference sheet</div>`}
+        <figcaption>them &mdash; reference sheet</figcaption></figure>
+      <figure><img src="${S(r.image)}">
+        <figcaption>this &mdash; ${r.method}</figcaption></figure>
+    </div>`;
+  document.getElementById("zoom").classList.add("on");
+}
+function hoverOpen(id) { hoverCancel(); hoverTimer = setTimeout(() => openZoom(id), 320); }
+function hoverCancel() { if (hoverTimer) { clearTimeout(hoverTimer); hoverTimer = null; } }
+function closeZoom() { document.getElementById("zoom").classList.remove("on"); }
+document.getElementById("zoom").onclick = closeZoom;
+addEventListener("keydown", e => { if (e.key === "Escape") closeZoom(); });
+
 async function mark(id, v) {
+  event.stopPropagation();                 // the buttons sit inside nothing clickable, but be safe
   const row = ROWS.find(r => r.id === id);
   if (!row) return;
-  const next = row.verdict === v ? null : v;   // clicking the same button clears it
+  const next = row.verdict === v ? null : v;
   const res = await fetch("/api/identity/verdict", {
     method: "POST", headers: {"Content-Type": "application/json"},
     body: JSON.stringify({id: id, verdict: next})
@@ -152,9 +258,8 @@ function skippedNote() {
   if (!sk.length) return;
   const by = {};
   for (const r of sk) (by[r.skipped] || (by[r.skipped] = [])).push(r.character);
-  let h = "<b>Could not be tested at all.</b> Not a failure &mdash; nobody has given " +
-          "these what they need, and that is a different fact from a face that came " +
-          "back wrong.<br>";
+  let h = "<b>Could not be tested at all.</b> Not a failure &mdash; nobody has given these " +
+          "what they need, which is a different fact from a face that came back wrong.<br>";
   for (const why of Object.keys(by)) {
     const who = [...new Set(by[why])].sort();
     h += `<div>&bull; <b>${why}</b> (${who.length}): ${who.join(", ")}</div>`;
@@ -162,16 +267,12 @@ function skippedNote() {
   document.getElementById("skipped").innerHTML = h;
 }
 
-document.querySelectorAll(".filters .f").forEach(b => b.onclick = () => {
-  document.querySelectorAll(".filters .f").forEach(x => x.classList.remove("on"));
-  b.classList.add("on");
-  FILTER = b.dataset.f;
-  draw();
+document.querySelectorAll("#filters button").forEach(b => b.onclick = () => {
+  document.querySelectorAll("#filters button").forEach(x => x.classList.remove("on"));
+  b.classList.add("on"); FILTER = b.dataset.f; draw();
 });
 
 fetch("/api/identity").then(r => r.json()).then(d => {
-  ROWS = d.samples || [];
-  draw();
-  skippedNote();
+  ROWS = d.samples || []; draw(); skippedNote();
 });
 </script>

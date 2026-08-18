@@ -176,13 +176,18 @@ def report():
         return
     by = {}
     for r in rows:
-        m = by.setdefault(r["method"], {"n": 0, "ok": 0, "x": 0, "unseen": 0})
+        m = by.setdefault(r["method"],
+                          {"n": 0, "ok": 0, "close": 0, "x": 0, "unseen": 0})
         m["n"] += 1
         v = r.get("verdict")
-        m["ok" if v == "ok" else "x" if v == "x" else "unseen"] += 1
-    print("%-8s %6s %6s %6s %8s   %s" % ("method", "n", "ok", "x", "unseen", "verdict"))
+        # `close` is a verdict a person made, not an absence of one. Counting it
+        # as unseen understated how much of the page had been judged.
+        m["ok" if v == "ok" else "close" if v == "close"
+          else "x" if v == "x" else "unseen"] += 1
+    print("%-8s %5s %5s %6s %5s %8s   %s"
+          % ("method", "n", "ok", "close", "x", "unseen", "verdict"))
     for m, s in sorted(by.items()):
-        judged = s["ok"] + s["x"]
+        judged = s["ok"] + s["close"] + s["x"]
         # A verdict needs something under it. One cross out of sixteen, with fifteen
         # never looked at, briefly had this printing REWORK - which is the exact
         # over-reading the tool exists to prevent.
@@ -192,12 +197,14 @@ def report():
             verdict = "too early - %d of %d judged" % (judged, s["n"])
         elif s["x"] > judged / 2:
             verdict = "REWORK - %d of %d judged are not them" % (s["x"], judged)
-        elif s["x"]:
-            verdict = "partial - %d of %d crossed" % (s["x"], judged)
+        elif s["x"] or s["close"]:
+            # `close` counts FOR the method: the identity arrived and a detail was wrong,
+            # which is the card's tags to fix, not the path's.
+            verdict = "partial - %d wrong, %d close" % (s["x"], s["close"])
         else:
             verdict = "holds - %d of %d kept" % (s["ok"], judged)
-        print("%-8s %6d %6d %6d %8d   %s" % (m, s["n"], s["ok"], s["x"], s["unseen"],
-                                             verdict))
+        print("%-8s %5d %5d %6d %5d %8d   %s"
+              % (m, s["n"], s["ok"], s["close"], s["x"], s["unseen"], verdict))
     skipped = [r for r in load() if r.get("skipped")]
     if skipped:
         print("\n%d combinations could not be tested at all:" % len(skipped))
