@@ -156,7 +156,7 @@ def _fx_unknown(name):
               f"effects: {', '.join(sorted(FX_EFFECTS))}.", file=sys.stderr)
 
 
-def fx_chain(fx, w, h, fps, seed=0, length=2.0):
+def fx_chain(fx, w, h, fps, seed=0, length=2.0, phase=(0, 1)):
     """Filter fragments that make a static-ish generated clip read as violent motion.
 
     Deliberately cheap and per-cut. The reference gets its energy here, not from the model.
@@ -173,22 +173,33 @@ def fx_chain(fx, w, h, fps, seed=0, length=2.0):
     # exactly the same way. A camera move must be a CHOICE per shot, and most of the time
     # the right choice is not to move at all.
     n = max(int(length * fps), 2)
+    # WHERE THIS CUT SITS IN ITS BEAT. A beat is one clip sliced into micro-shots, and
+    # every move used to restart on each slice - zoom in, snap back to wide, zoom in
+    # again, the same gesture two or three times in four seconds. A move now covers only
+    # its own slice of the travel, so the beat reads as ONE continuous move through its
+    # cuts. p0/p1 are the fractions of the whole move this cut is responsible for.
+    _pi, _pn = (int(phase[0]), max(1, int(phase[1])))
+    p0, p1 = _pi / float(_pn), (_pi + 1) / float(_pn)
     if "push" in fx or "punch" in fx:          # slow push in: interest, intimacy
-        out.append(f"zoompan=z='1+0.10*on/{n}':d=1:x='iw/2-(iw/zoom/2)':"
+        out.append(f"zoompan=z='{1 + 0.10 * p0:.4f}+{0.10 * (p1 - p0):.4f}*on/{n}':d=1:"
+                   f"x='iw/2-(iw/zoom/2)':"
                    f"y='ih/2-(ih/zoom/2)':s={w}x{h}:fps={fps}")
     if "pull" in fx:                            # pull back: isolation, reveal, endings
-        out.append(f"zoompan=z='1.12-0.10*on/{n}':d=1:x='iw/2-(iw/zoom/2)':"
+        out.append(f"zoompan=z='{1.12 - 0.10 * p0:.4f}-{0.10 * (p1 - p0):.4f}*on/{n}':d=1:"
+                   f"x='iw/2-(iw/zoom/2)':"
                    f"y='ih/2-(ih/zoom/2)':s={w}x{h}:fps={fps}")
     if "pan_l" in fx or "pan_r" in fx:
         d = 1 if "pan_r" in fx else -1
         out.append(f"scale={int(w*1.16)}:{int(h*1.16)},"
-                   f"crop={w}:{h}:'(iw-{w})/2+{d}*(iw-{w})/2*(t/{max(length,0.1):.2f})':"
+                   f"crop={w}:{h}:'(iw-{w})/2+{d}*(iw-{w})/2*"
+                   f"({p0:.4f}+{p1 - p0:.4f}*(t/{max(length,0.1):.2f}))':"
                    f"'(ih-{h})/2'")
     if "tilt_u" in fx or "tilt_d" in fx:
         d = 1 if "tilt_d" in fx else -1
         out.append(f"scale={int(w*1.16)}:{int(h*1.16)},"
                    f"crop={w}:{h}:'(iw-{w})/2':"
-                   f"'(ih-{h})/2+{d}*(ih-{h})/2*(t/{max(length,0.1):.2f})'")
+                   f"'(ih-{h})/2+{d}*(ih-{h})/2*"
+                   f"({p0:.4f}+{p1 - p0:.4f}*(t/{max(length,0.1):.2f}))'")
     if "handheld" in fx:                        # documentary unease, very subtle
         a = 3
         out.append(f"crop={w-2*a}:{h-2*a}:'{a}+{a-1}*sin(t*3.1)':'{a}+{a-1}*cos(t*2.3)',"
@@ -299,13 +310,26 @@ def wrap_caption(txt, width=46, balance=False):
     return lines
 
 
-def make_cut(src, at, length, fx, dst, seed=0, grade=None):
+def make_cut(src, at, length, fx, dst, seed=0, grade=None, phase=(0, 1)):
     w, h = VID
-    chain = fx_chain(fx, w, h, FPS, seed, length)
-    # Every cut is graded the same so the short reads as one piece. Keep this GENTLE:
-    # it multiplies with the `hot` effect, and at 1.12x1.45 saturation whole shots
-    # turned neon magenta.
-    base = "eq=contrast=1.06:saturation=1.12"
+    # phase says which slice of its beat this cut is, so a camera move continues across
+    # the beat's micro-shots instead of restarting on each one.
+    chain = fx_chain(fx, w, h, FPS, seed, length, phase)
+    # Every cut is graded the same so the short reads as one piece.
+    #
+    # An S-CURVE, not linear contrast. The old base was eq=contrast=1.06:saturation=1.12,
+    # kept timid because it multiplies with the per-shot `hot` effect and at 1.12x1.45
+    # saturation whole shots went neon magenta. Timid is also what "it doesn't feel
+    # alive" meant: a delivered frame measured mean RGB 83/81/71 - about a third of the
+    # way up the scale, with a +4.2 green lean in the mids.
+    #
+    # This lifts the MIDTONES rather than crushing the ends, so shadows keep their
+    # detail while the picture opens; takes the green out; puts a little warmth back.
+    # Chosen by rendering four candidates against a delivered frame and looking at all
+    # of them BOTH alone and stacked with `hot` - the magenta case is checked, not
+    # assumed. See studio/_tools/grade_options.py, sheet in ~/shared/AB/grades.
+    base = ("curves=all='0/0.02 0.22/0.26 0.5/0.58 0.78/0.88 1/0.995',"
+            "eq=saturation=1.22,colorbalance=gm=-0.05:rm=0.05:bh=0.03")
     # A PER-BEAT grade from the authored `look` wins. studio/looks/*.json each carry a
     # distinct, tuned grade string, compile.py writes one onto every beat - and until
     # now nothing read it, so night / cold / golden / day_for_night all produced exactly
@@ -933,7 +957,8 @@ def cut(film, out):
             if at + ln > avail:
                 at = max(0.0, avail - ln)
             p = f"{work}/{n:04d}_{b['id']}_{ci}.mp4"
-            make_cut(src, at, ln, c.get("fx", []), p, seed=n, grade=b.get("grade"))
+            make_cut(src, at, ln, c.get("fx", []), p, seed=n, grade=b.get("grade"),
+                     phase=(ci, len(beat_cuts)))
             if line_start is None:
                 line_start = t
             pieces.append(p)
