@@ -76,9 +76,22 @@ def library():
             if not fn.endswith(".json"):
                 continue
             try:
-                items.append(json.load(open(f"{d}/{fn}", encoding="utf-8")))
+                card = json.load(open(f"{d}/{fn}", encoding="utf-8"))
             except Exception as e:
                 items.append({"id": fn[:-5], "desc": f"UNREADABLE: {e}", "status": "error"})
+                continue
+            # A file that PARSES but is not card-shaped used to take the whole app down
+            # at import - studio/looks/_luma.json was a bare list of measurements and
+            # every page went with it, silently, until the next restart hours later.
+            # Report it in place, the same courtesy an unparseable file already got.
+            if not isinstance(card, dict) or "id" not in card:
+                items.append({"id": fn[:-5], "status": "error",
+                              "desc": "NOT A CARD: %s with no usable id. A .json in a "
+                                      "card directory must be an object with an `id`; "
+                                      "measurement output belongs in studio/samples/."
+                                      % type(card).__name__})
+                continue
+            items.append(card)
         for it in items:
             # .webp first: the panels were re-encoded from PNG (14.8x smaller) and a
             # stale .png beside a .webp should not win.
@@ -1625,6 +1638,11 @@ class H(http.server.SimpleHTTPRequestHandler):
             return self._page("library.html")
         if path in ("/encyclopedia", "/encyclopedia.html"):
             return self._page("encyclopedia.html")
+        if path in ("/identity", "/identity.html"):
+            return self._page("identity.html")
+        if path == "/api/identity":
+            ip = _load_tool_module("identity_proof")
+            return self._send({"samples": ip.load()})
         if path == "/api/workflows":
             try:
                 wi = _load_tool_module("workflow_index")
@@ -2223,7 +2241,8 @@ class H(http.server.SimpleHTTPRequestHandler):
                      "/api/make3d/mesh", "/api/library/star",
                      "/api/library/grow", "/api/library/reject",
                      "/api/library/check", "/api/verify/card", "/api/remake",
-                     "/api/wf/send", "/api/wf/queue"):
+                     "/api/wf/send", "/api/wf/queue",
+                     "/api/identity/verdict"):
             return self._send({"error": "not found"}, 404)
         n = int(self.headers.get("Content-Length", 0))
         try:
@@ -2272,6 +2291,23 @@ class H(http.server.SimpleHTTPRequestHandler):
                     pass
                 return self._send({"error": str(e),
                                    "detail": (body or b"").decode()[:600]}, 502)
+        if p == "/api/identity/verdict":
+            # Through identity_proof's own load/save so the page and `--mark` write the
+            # same file. A verdict is a HUMAN judgement - nothing here computes one,
+            # because no instrument on this box can tell whether a face is the right
+            # person, and a guessed verdict would be worse than an empty column.
+            ip = _load_tool_module("identity_proof")
+            cid = str(data.get("id") or "")
+            v = data.get("verdict")
+            if v not in (None, "ok", "x"):
+                return self._send({"error": "verdict must be ok, x or null"}, 400)
+            rows = ip.load()
+            hit = [r for r in rows if r.get("id") == cid]
+            if not hit:
+                return self._send({"error": "no such sample: %s" % cid}, 404)
+            hit[0]["verdict"] = v
+            ip.save(rows)
+            return self._send({"ok": True, "id": cid, "verdict": v})
         if p == "/api/remake":
             # Straight through remake.py so the app and the CLI share one store: a flag
             # raised while listening here is listed and cleared by the same tool there.

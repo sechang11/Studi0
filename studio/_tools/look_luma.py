@@ -96,8 +96,11 @@ def main():
     dark = [r for r in good if r["keep_frame"] < 0.45]
     print("\n%d looks measured · %d take a picture below half its brightness: %s"
           % (len(good), len(dark), ", ".join(r["look"] for r in dark) or "none"))
-    json.dump(good, open(os.path.join(LOOKS, "_luma.json"), "w"), indent=1)
-    print("-> %s/_luma.json" % LOOKS)
+    # NOT into studio/looks/ - the app loads every .json there as a card and
+    # a bare list crashes it at import. Measurement output goes to samples.
+    _out = os.path.join("studio", "samples", "looks_luma.json")
+    json.dump(good, open(_out, "w"), indent=1)
+    print("-> %s" % _out)
 
 
 if __name__ == "__main__":

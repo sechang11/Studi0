@@ -1,0 +1,799 @@
+{
+ "generator": "studio/_tools/identity_proof.py",
+ "note": "One render per character per identity METHOD. `verdict` is set by a person - 'ok' or 'x' - and nothing automatic writes it, because no instrument on this box can tell whether a face is the right person. Crosses tally against the METHOD, so a path that keeps failing can be reworked rather than a picture re-rolled.",
+ "verdicts": {
+  "null": "not looked at yet",
+  "ok": "that is them",
+  "x": "not them"
+ },
+ "samples": [
+  {
+   "id": "BRACK__sheet",
+   "character": "BRACK",
+   "method": "sheet",
+   "workflow": "22_anime_kf_ipadapter.json",
+   "prompt": "1person, solo, standing, full body, masterpiece, best quality",
+   "seed": 11,
+   "image": "samples/identity/BRACK__sheet.png",
+   "verdict": null,
+   "thumb": "samples/identity/thumbs/BRACK__sheet.webp"
+  },
+  {
+   "id": "BRACK__tags",
+   "character": "BRACK",
+   "method": "tags",
+   "workflow": "22_anime_kf_ipadapter.json (IPAdapter removed)",
+   "prompt": "1boy, solo, old man, bald, grey hair, mustache, facial hair, crooked nose, large man, tattoo on arm, anchor tattoo, gold ring",
+   "seed": 11,
+   "image": "samples/identity/BRACK__tags.png",
+   "verdict": null,
+   "thumb": "samples/identity/thumbs/BRACK__tags.webp"
+  },
+  {
+   "id": "BRACK__both",
+   "character": "BRACK",
+   "method": "both",
+   "workflow": "22_anime_kf_ipadapter.json",
+   "prompt": "1boy, solo, old man, bald, grey hair, mustache, facial hair, crooked nose, large man, tattoo on arm, anchor tattoo, gold ring",
+   "seed": 11,
+   "image": "samples/identity/BRACK__both.png",
+   "verdict": null,
+   "thumb": "samples/identity/thumbs/BRACK__both.webp"
+  },
+  {
+   "id": "NIKA__sheet",
+   "character": "NIKA",
+   "method": "sheet",
+   "workflow": "22_anime_kf_ipadapter.json",
+   "prompt": "1person, solo, standing, full body, masterpiece, best quality",
+   "seed": 11,
+   "image": "samples/identity/NIKA__sheet.png",
+   "verdict": null,
+   "thumb": "samples/identity/thumbs/NIKA__sheet.webp"
+  },
+  {
+   "id": "NIKA__tags",
+   "character": "NIKA",
+   "method": "tags",
+   "workflow": "22_anime_kf_ipadapter.json (IPAdapter removed)",
+   "prompt": "1girl, solo, silver hair, very long hair, single braid, sidecut, heterochromia, green eyes, orange eyes, scar on face, black nails",
+   "seed": 11,
+   "image": "samples/identity/NIKA__tags.png",
+   "verdict": null,
+   "thumb": "samples/identity/thumbs/NIKA__tags.webp"
+  },
+  {
+   "id": "NIKA__both",
+   "character": "NIKA",
+   "method": "both",
+   "workflow": "22_anime_kf_ipadapter.json",
+   "prompt": "1girl, solo, silver hair, very long hair, single braid, sidecut, heterochromia, green eyes, orange eyes, scar on face, black nails",
+   "seed": 11,
+   "image": "samples/identity/NIKA__both.png",
+   "verdict": null,
+   "thumb": "samples/identity/thumbs/NIKA__both.webp"
+  },
+  {
+   "id": "TERRA__sheet",
+   "character": "TERRA",
+   "method": "sheet",
+   "workflow": "22_anime_kf_ipadapter.json",
+   "prompt": "1person, solo, standing, full body, masterpiece, best quality",
+   "seed": 11,
+   "image": "samples/identity/TERRA__sheet.png",
+   "verdict": null,
+   "thumb": "samples/identity/thumbs/TERRA__sheet.webp"
+  },
+  {
+   "id": "TERRA__tags",
+   "character": "TERRA",
+   "method": "tags",
+   "workflow": "22_anime_kf_ipadapter.json (IPAdapter removed)",
+   "prompt": "terra branford (final fantasy vi), 1girl, solo, long wavy green hair, very long hair, green eyes, red hair ribbon",
+   "seed": 11,
+   "image": "samples/identity/TERRA__tags.png",
+   "verdict": null,
+   "thumb": "samples/identity/thumbs/TERRA__tags.webp"
+  },
+  {
+   "id": "TERRA__both",
+   "character": "TERRA",
+   "method": "both",
+   "workflow": "22_anime_kf_ipadapter.json",
+   "prompt": "terra branford (final fantasy vi), 1girl, solo, long wavy green hair, very long hair, green eyes, red hair ribbon",
+   "seed": 11,
+   "image": "samples/identity/TERRA__both.png",
+   "verdict": null,
+   "thumb": "samples/identity/thumbs/TERRA__both.webp"
+  },
+  {
+   "id": "AUGUSTIN__sheet",
+   "character": "AUGUSTIN",
+   "method": "sheet",
+   "workflow": "22_anime_kf_ipadapter.json",
+   "skipped": "no reference sheet",
+   "image": null,
+   "verdict": null
+  },
+  {
+   "id": "AUGUSTIN__tags",
+   "character": "AUGUSTIN",
+   "method": "tags",
+   "workflow": "22_anime_kf_ipadapter.json (IPAdapter removed)",
+   "prompt": "1boy, solo, old man, weathered face, deep wrinkles, thin white beard, squinting eyes, sun-darkened skin",
+   "seed": 11,
+   "image": "samples/identity/AUGUSTIN__tags.png",
+   "verdict": null,
+   "thumb": "samples/identity/thumbs/AUGUSTIN__tags.webp"
+  },
+  {
+   "id": "AUGUSTIN__both",
+   "character": "AUGUSTIN",
+   "method": "both",
+   "workflow": "22_anime_kf_ipadapter.json",
+   "skipped": "no reference sheet",
+   "image": null,
+   "verdict": null
+  },
+  {
+   "id": "HERUI__sheet",
+   "character": "HERUI",
+   "method": "sheet",
+   "workflow": "22_anime_kf_ipadapter.json",
+   "prompt": "1person, solo, standing, full body, masterpiece, best quality",
+   "seed": 11,
+   "image": "samples/identity/HERUI__sheet.png",
+   "verdict": null,
+   "thumb": "samples/identity/thumbs/HERUI__sheet.webp"
+  },
+  {
+   "id": "HERUI__tags",
+   "character": "HERUI",
+   "method": "tags",
+   "workflow": "_ident_notags.json",
+   "skipped": "no tags on the card",
+   "image": null,
+   "verdict": null
+  },
+  {
+   "id": "HERUI__both",
+   "character": "HERUI",
+   "method": "both",
+   "workflow": "22_anime_kf_ipadapter.json",
+   "skipped": "no tags on the card",
+   "image": null,
+   "verdict": null
+  },
+  {
+   "id": "KASIMIR__sheet",
+   "character": "KASIMIR",
+   "method": "sheet",
+   "workflow": "22_anime_kf_ipadapter.json",
+   "skipped": "no reference sheet",
+   "image": null,
+   "verdict": null
+  },
+  {
+   "id": "KASIMIR__tags",
+   "character": "KASIMIR",
+   "method": "tags",
+   "workflow": "_ident_notags.json",
+   "skipped": "no tags on the card",
+   "image": null,
+   "verdict": null
+  },
+  {
+   "id": "KASIMIR__both",
+   "character": "KASIMIR",
+   "method": "both",
+   "workflow": "22_anime_kf_ipadapter.json",
+   "skipped": "no reference sheet",
+   "image": null,
+   "verdict": null
+  },
+  {
+   "id": "LINRUO__sheet",
+   "character": "LINRUO",
+   "method": "sheet",
+   "workflow": "22_anime_kf_ipadapter.json",
+   "prompt": "1person, solo, standing, full body, masterpiece, best quality",
+   "seed": 11,
+   "image": "samples/identity/LINRUO__sheet.png",
+   "verdict": null,
+   "thumb": "samples/identity/thumbs/LINRUO__sheet.webp"
+  },
+  {
+   "id": "LINRUO__tags",
+   "character": "LINRUO",
+   "method": "tags",
+   "workflow": "_ident_notags.json",
+   "skipped": "no tags on the card",
+   "image": null,
+   "verdict": null
+  },
+  {
+   "id": "LINRUO__both",
+   "character": "LINRUO",
+   "method": "both",
+   "workflow": "22_anime_kf_ipadapter.json",
+   "skipped": "no tags on the card",
+   "image": null,
+   "verdict": null
+  },
+  {
+   "id": "LIWEN__sheet",
+   "character": "LIWEN",
+   "method": "sheet",
+   "workflow": "22_anime_kf_ipadapter.json",
+   "prompt": "1person, solo, standing, full body, masterpiece, best quality",
+   "seed": 11,
+   "image": "samples/identity/LIWEN__sheet.png",
+   "verdict": null,
+   "thumb": "samples/identity/thumbs/LIWEN__sheet.webp"
+  },
+  {
+   "id": "LIWEN__tags",
+   "character": "LIWEN",
+   "method": "tags",
+   "workflow": "22_anime_kf_ipadapter.json (IPAdapter removed)",
+   "prompt": "1girl, solo, long black hair, very long hair, straight hair, hair ornament, jade hairpin, brown eyes, pale skin, delicate features",
+   "seed": 11,
+   "image": "samples/identity/LIWEN__tags.png",
+   "verdict": null,
+   "thumb": "samples/identity/thumbs/LIWEN__tags.webp"
+  },
+  {
+   "id": "LIWEN__both",
+   "character": "LIWEN",
+   "method": "both",
+   "workflow": "22_anime_kf_ipadapter.json",
+   "prompt": "1girl, solo, long black hair, very long hair, straight hair, hair ornament, jade hairpin, brown eyes, pale skin, delicate features",
+   "seed": 11,
+   "image": "samples/identity/LIWEN__both.png",
+   "verdict": null,
+   "thumb": "samples/identity/thumbs/LIWEN__both.webp"
+  },
+  {
+   "id": "LUMEN__sheet",
+   "character": "LUMEN",
+   "method": "sheet",
+   "workflow": "22_anime_kf_ipadapter.json",
+   "skipped": "no reference sheet",
+   "image": null,
+   "verdict": null
+  },
+  {
+   "id": "LUMEN__tags",
+   "character": "LUMEN",
+   "method": "tags",
+   "workflow": "_ident_notags.json",
+   "skipped": "no tags on the card",
+   "image": null,
+   "verdict": null
+  },
+  {
+   "id": "LUMEN__both",
+   "character": "LUMEN",
+   "method": "both",
+   "workflow": "22_anime_kf_ipadapter.json",
+   "skipped": "no reference sheet",
+   "image": null,
+   "verdict": null
+  },
+  {
+   "id": "MANAGER__sheet",
+   "character": "MANAGER",
+   "method": "sheet",
+   "workflow": "22_anime_kf_ipadapter.json",
+   "prompt": "1person, solo, standing, full body, masterpiece, best quality",
+   "seed": 11,
+   "image": "samples/identity/MANAGER__sheet.png",
+   "verdict": null,
+   "thumb": "samples/identity/thumbs/MANAGER__sheet.webp"
+  },
+  {
+   "id": "MANAGER__tags",
+   "character": "MANAGER",
+   "method": "tags",
+   "workflow": "22_anime_kf_ipadapter.json (IPAdapter removed)",
+   "prompt": "1boy, solo, old man, grey hair, short beard, lined face, wrinkles",
+   "seed": 11,
+   "image": "samples/identity/MANAGER__tags.png",
+   "verdict": null,
+   "thumb": "samples/identity/thumbs/MANAGER__tags.webp"
+  },
+  {
+   "id": "MANAGER__both",
+   "character": "MANAGER",
+   "method": "both",
+   "workflow": "22_anime_kf_ipadapter.json",
+   "prompt": "1boy, solo, old man, grey hair, short beard, lined face, wrinkles",
+   "seed": 11,
+   "image": "samples/identity/MANAGER__both.png",
+   "verdict": null,
+   "thumb": "samples/identity/thumbs/MANAGER__both.webp"
+  },
+  {
+   "id": "MARGIT__sheet",
+   "character": "MARGIT",
+   "method": "sheet",
+   "workflow": "22_anime_kf_ipadapter.json",
+   "prompt": "1person, solo, standing, full body, masterpiece, best quality",
+   "seed": 11,
+   "image": "samples/identity/MARGIT__sheet.png",
+   "verdict": null,
+   "thumb": "samples/identity/thumbs/MARGIT__sheet.webp"
+  },
+  {
+   "id": "MARGIT__tags",
+   "character": "MARGIT",
+   "method": "tags",
+   "workflow": "22_anime_kf_ipadapter.json (IPAdapter removed)",
+   "prompt": "solo, 1boy, cloak, scar",
+   "seed": 11,
+   "image": "samples/identity/MARGIT__tags.png",
+   "verdict": null,
+   "thumb": "samples/identity/thumbs/MARGIT__tags.webp"
+  },
+  {
+   "id": "MARGIT__both",
+   "character": "MARGIT",
+   "method": "both",
+   "workflow": "22_anime_kf_ipadapter.json",
+   "prompt": "solo, 1boy, cloak, scar",
+   "seed": 11,
+   "image": "samples/identity/MARGIT__both.png",
+   "verdict": null,
+   "thumb": "samples/identity/thumbs/MARGIT__both.webp"
+  },
+  {
+   "id": "MERIBEL__sheet",
+   "character": "MERIBEL",
+   "method": "sheet",
+   "workflow": "22_anime_kf_ipadapter.json",
+   "skipped": "no reference sheet",
+   "image": null,
+   "verdict": null
+  },
+  {
+   "id": "MERIBEL__tags",
+   "character": "MERIBEL",
+   "method": "tags",
+   "workflow": "22_anime_kf_ipadapter.json (IPAdapter removed)",
+   "prompt": "1girl, solo, young woman, short black hair, undercut, sharp eyes, cybernetic ear, neon reflections on face, determined expression",
+   "seed": 11,
+   "image": "samples/identity/MERIBEL__tags.png",
+   "verdict": null,
+   "thumb": "samples/identity/thumbs/MERIBEL__tags.webp"
+  },
+  {
+   "id": "MERIBEL__both",
+   "character": "MERIBEL",
+   "method": "both",
+   "workflow": "22_anime_kf_ipadapter.json",
+   "skipped": "no reference sheet",
+   "image": null,
+   "verdict": null
+  },
+  {
+   "id": "MUQING__sheet",
+   "character": "MUQING",
+   "method": "sheet",
+   "workflow": "22_anime_kf_ipadapter.json",
+   "prompt": "1person, solo, standing, full body, masterpiece, best quality",
+   "seed": 11,
+   "image": "samples/identity/MUQING__sheet.png",
+   "verdict": null,
+   "thumb": "samples/identity/thumbs/MUQING__sheet.webp"
+  },
+  {
+   "id": "MUQING__tags",
+   "character": "MUQING",
+   "method": "tags",
+   "workflow": "_ident_notags.json",
+   "skipped": "no tags on the card",
+   "image": null,
+   "verdict": null
+  },
+  {
+   "id": "MUQING__both",
+   "character": "MUQING",
+   "method": "both",
+   "workflow": "22_anime_kf_ipadapter.json",
+   "skipped": "no tags on the card",
+   "image": null,
+   "verdict": null
+  },
+  {
+   "id": "NEVE__sheet",
+   "character": "NEVE",
+   "method": "sheet",
+   "workflow": "22_anime_kf_ipadapter.json",
+   "skipped": "no reference sheet",
+   "image": null,
+   "verdict": null
+  },
+  {
+   "id": "NEVE__tags",
+   "character": "NEVE",
+   "method": "tags",
+   "workflow": "_ident_notags.json",
+   "skipped": "no tags on the card",
+   "image": null,
+   "verdict": null
+  },
+  {
+   "id": "NEVE__both",
+   "character": "NEVE",
+   "method": "both",
+   "workflow": "22_anime_kf_ipadapter.json",
+   "skipped": "no reference sheet",
+   "image": null,
+   "verdict": null
+  },
+  {
+   "id": "ODALIE__sheet",
+   "character": "ODALIE",
+   "method": "sheet",
+   "workflow": "22_anime_kf_ipadapter.json",
+   "skipped": "no reference sheet",
+   "image": null,
+   "verdict": null
+  },
+  {
+   "id": "ODALIE__tags",
+   "character": "ODALIE",
+   "method": "tags",
+   "workflow": "_ident_notags.json",
+   "skipped": "no tags on the card",
+   "image": null,
+   "verdict": null
+  },
+  {
+   "id": "ODALIE__both",
+   "character": "ODALIE",
+   "method": "both",
+   "workflow": "22_anime_kf_ipadapter.json",
+   "skipped": "no reference sheet",
+   "image": null,
+   "verdict": null
+  },
+  {
+   "id": "PIP__sheet",
+   "character": "PIP",
+   "method": "sheet",
+   "workflow": "22_anime_kf_ipadapter.json",
+   "prompt": "1person, solo, standing, full body, masterpiece, best quality",
+   "seed": 11,
+   "image": "samples/identity/PIP__sheet.png",
+   "verdict": null,
+   "thumb": "samples/identity/thumbs/PIP__sheet.webp"
+  },
+  {
+   "id": "PIP__tags",
+   "character": "PIP",
+   "method": "tags",
+   "workflow": "22_anime_kf_ipadapter.json (IPAdapter removed)",
+   "prompt": "1boy, solo, male child, child, orange hair, messy hair, freckles, gap teeth, brown eyes",
+   "seed": 11,
+   "image": "samples/identity/PIP__tags.png",
+   "verdict": null,
+   "thumb": "samples/identity/thumbs/PIP__tags.webp"
+  },
+  {
+   "id": "PIP__both",
+   "character": "PIP",
+   "method": "both",
+   "workflow": "22_anime_kf_ipadapter.json",
+   "prompt": "1boy, solo, male child, child, orange hair, messy hair, freckles, gap teeth, brown eyes",
+   "seed": 11,
+   "image": "samples/identity/PIP__both.png",
+   "verdict": null,
+   "thumb": "samples/identity/thumbs/PIP__both.webp"
+  },
+  {
+   "id": "RASK__sheet",
+   "character": "RASK",
+   "method": "sheet",
+   "workflow": "22_anime_kf_ipadapter.json",
+   "prompt": "1person, solo, standing, full body, masterpiece, best quality",
+   "seed": 11,
+   "image": "samples/identity/RASK__sheet.png",
+   "verdict": null,
+   "thumb": "samples/identity/thumbs/RASK__sheet.webp"
+  },
+  {
+   "id": "RASK__tags",
+   "character": "RASK",
+   "method": "tags",
+   "workflow": "22_anime_kf_ipadapter.json (IPAdapter removed)",
+   "prompt": "1boy, solo, dark red hair, undercut, yellow eyes, scar on eyebrow",
+   "seed": 11,
+   "image": "samples/identity/RASK__tags.png",
+   "verdict": null,
+   "thumb": "samples/identity/thumbs/RASK__tags.webp"
+  },
+  {
+   "id": "RASK__both",
+   "character": "RASK",
+   "method": "both",
+   "workflow": "22_anime_kf_ipadapter.json",
+   "prompt": "1boy, solo, dark red hair, undercut, yellow eyes, scar on eyebrow",
+   "seed": 11,
+   "image": "samples/identity/RASK__both.png",
+   "verdict": null,
+   "thumb": "samples/identity/thumbs/RASK__both.webp"
+  },
+  {
+   "id": "RUZI__sheet",
+   "character": "RUZI",
+   "method": "sheet",
+   "workflow": "22_anime_kf_ipadapter.json",
+   "skipped": "no reference sheet",
+   "image": null,
+   "verdict": null
+  },
+  {
+   "id": "RUZI__tags",
+   "character": "RUZI",
+   "method": "tags",
+   "workflow": "_ident_notags.json",
+   "skipped": "no tags on the card",
+   "image": null,
+   "verdict": null
+  },
+  {
+   "id": "RUZI__both",
+   "character": "RUZI",
+   "method": "both",
+   "workflow": "22_anime_kf_ipadapter.json",
+   "skipped": "no reference sheet",
+   "image": null,
+   "verdict": null
+  },
+  {
+   "id": "SABLE__sheet",
+   "character": "SABLE",
+   "method": "sheet",
+   "workflow": "22_anime_kf_ipadapter.json",
+   "skipped": "no reference sheet",
+   "image": null,
+   "verdict": null
+  },
+  {
+   "id": "SABLE__tags",
+   "character": "SABLE",
+   "method": "tags",
+   "workflow": "_ident_notags.json",
+   "skipped": "no tags on the card",
+   "image": null,
+   "verdict": null
+  },
+  {
+   "id": "SABLE__both",
+   "character": "SABLE",
+   "method": "both",
+   "workflow": "22_anime_kf_ipadapter.json",
+   "skipped": "no reference sheet",
+   "image": null,
+   "verdict": null
+  },
+  {
+   "id": "SELI__sheet",
+   "character": "SELI",
+   "method": "sheet",
+   "workflow": "22_anime_kf_ipadapter.json",
+   "prompt": "1person, solo, standing, full body, masterpiece, best quality",
+   "seed": 11,
+   "image": "samples/identity/SELI__sheet.png",
+   "verdict": null,
+   "thumb": "samples/identity/thumbs/SELI__sheet.webp"
+  },
+  {
+   "id": "SELI__tags",
+   "character": "SELI",
+   "method": "tags",
+   "workflow": "22_anime_kf_ipadapter.json (IPAdapter removed)",
+   "prompt": "solo, brown hair",
+   "seed": 11,
+   "image": "samples/identity/SELI__tags.png",
+   "verdict": null,
+   "thumb": "samples/identity/thumbs/SELI__tags.webp"
+  },
+  {
+   "id": "SELI__both",
+   "character": "SELI",
+   "method": "both",
+   "workflow": "22_anime_kf_ipadapter.json",
+   "prompt": "solo, brown hair",
+   "seed": 11,
+   "image": "samples/identity/SELI__both.png",
+   "verdict": null,
+   "thumb": "samples/identity/thumbs/SELI__both.webp"
+  },
+  {
+   "id": "SHEN__sheet",
+   "character": "SHEN",
+   "method": "sheet",
+   "workflow": "22_anime_kf_ipadapter.json",
+   "prompt": "1person, solo, standing, full body, masterpiece, best quality",
+   "seed": 11,
+   "image": "samples/identity/SHEN__sheet.png",
+   "verdict": null,
+   "thumb": "samples/identity/thumbs/SHEN__sheet.webp"
+  },
+  {
+   "id": "SHEN__tags",
+   "character": "SHEN",
+   "method": "tags",
+   "workflow": "22_anime_kf_ipadapter.json (IPAdapter removed)",
+   "prompt": "1boy, solo, black hair, long hair, high ponytail, dark eyes, sharp features",
+   "seed": 11,
+   "image": "samples/identity/SHEN__tags.png",
+   "verdict": null,
+   "thumb": "samples/identity/thumbs/SHEN__tags.webp"
+  },
+  {
+   "id": "SHEN__both",
+   "character": "SHEN",
+   "method": "both",
+   "workflow": "22_anime_kf_ipadapter.json",
+   "prompt": "1boy, solo, black hair, long hair, high ponytail, dark eyes, sharp features",
+   "seed": 11,
+   "image": "samples/identity/SHEN__both.png",
+   "verdict": null,
+   "thumb": "samples/identity/thumbs/SHEN__both.webp"
+  },
+  {
+   "id": "THRANE__sheet",
+   "character": "THRANE",
+   "method": "sheet",
+   "workflow": "22_anime_kf_ipadapter.json",
+   "skipped": "no reference sheet",
+   "image": null,
+   "verdict": null
+  },
+  {
+   "id": "THRANE__tags",
+   "character": "THRANE",
+   "method": "tags",
+   "workflow": "_ident_notags.json",
+   "skipped": "no tags on the card",
+   "image": null,
+   "verdict": null
+  },
+  {
+   "id": "THRANE__both",
+   "character": "THRANE",
+   "method": "both",
+   "workflow": "22_anime_kf_ipadapter.json",
+   "skipped": "no reference sheet",
+   "image": null,
+   "verdict": null
+  },
+  {
+   "id": "TOLLY__sheet",
+   "character": "TOLLY",
+   "method": "sheet",
+   "workflow": "22_anime_kf_ipadapter.json",
+   "skipped": "no reference sheet",
+   "image": null,
+   "verdict": null
+  },
+  {
+   "id": "TOLLY__tags",
+   "character": "TOLLY",
+   "method": "tags",
+   "workflow": "22_anime_kf_ipadapter.json (IPAdapter removed)",
+   "prompt": "1boy, solo, male child, child, round face, big eyes, freckles, dark curly hair, gap teeth, cheerful",
+   "seed": 11,
+   "image": "samples/identity/TOLLY__tags.png",
+   "verdict": null,
+   "thumb": "samples/identity/thumbs/TOLLY__tags.webp"
+  },
+  {
+   "id": "TOLLY__both",
+   "character": "TOLLY",
+   "method": "both",
+   "workflow": "22_anime_kf_ipadapter.json",
+   "skipped": "no reference sheet",
+   "image": null,
+   "verdict": null
+  },
+  {
+   "id": "VIRO__sheet",
+   "character": "VIRO",
+   "method": "sheet",
+   "workflow": "22_anime_kf_ipadapter.json",
+   "prompt": "1person, solo, standing, full body, masterpiece, best quality",
+   "seed": 11,
+   "image": "samples/identity/VIRO__sheet.png",
+   "verdict": null,
+   "thumb": "samples/identity/thumbs/VIRO__sheet.webp"
+  },
+  {
+   "id": "VIRO__tags",
+   "character": "VIRO",
+   "method": "tags",
+   "workflow": "22_anime_kf_ipadapter.json (IPAdapter removed)",
+   "prompt": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud",
+   "seed": 11,
+   "image": "samples/identity/VIRO__tags.png",
+   "verdict": null,
+   "thumb": "samples/identity/thumbs/VIRO__tags.webp"
+  },
+  {
+   "id": "VIRO__both",
+   "character": "VIRO",
+   "method": "both",
+   "workflow": "22_anime_kf_ipadapter.json",
+   "prompt": "1boy, solo, long dark brown curly hair, ponytail, brown eyes, gold ear stud",
+   "seed": 11,
+   "image": "samples/identity/VIRO__both.png",
+   "verdict": null,
+   "thumb": "samples/identity/thumbs/VIRO__both.webp"
+  },
+  {
+   "id": "XIN__sheet",
+   "character": "XIN",
+   "method": "sheet",
+   "workflow": "22_anime_kf_ipadapter.json",
+   "prompt": "1person, solo, standing, full body, masterpiece, best quality",
+   "seed": 11,
+   "image": "samples/identity/XIN__sheet.png",
+   "verdict": null,
+   "thumb": "samples/identity/thumbs/XIN__sheet.webp"
+  },
+  {
+   "id": "XIN__tags",
+   "character": "XIN",
+   "method": "tags",
+   "workflow": "22_anime_kf_ipadapter.json (IPAdapter removed)",
+   "prompt": "solo, brown hair",
+   "seed": 11,
+   "image": "samples/identity/XIN__tags.png",
+   "verdict": null,
+   "thumb": "samples/identity/thumbs/XIN__tags.webp"
+  },
+  {
+   "id": "XIN__both",
+   "character": "XIN",
+   "method": "both",
+   "workflow": "22_anime_kf_ipadapter.json",
+   "prompt": "solo, brown hair",
+   "seed": 11,
+   "image": "samples/identity/XIN__both.png",
+   "verdict": null,
+   "thumb": "samples/identity/thumbs/XIN__both.webp"
+  },
+  {
+   "id": "YANSHU__sheet",
+   "character": "YANSHU",
+   "method": "sheet",
+   "workflow": "22_anime_kf_ipadapter.json",
+   "prompt": "1person, solo, standing, full body, masterpiece, best quality",
+   "seed": 11,
+   "image": "samples/identity/YANSHU__sheet.png",
+   "verdict": null,
+   "thumb": "samples/identity/thumbs/YANSHU__sheet.webp"
+  },
+  {
+   "id": "YANSHU__tags",
+   "character": "YANSHU",
+   "method": "tags",
+   "workflow": "_ident_notags.json",
+   "skipped": "no tags on the card",
+   "image": null,
+   "verdict": null
+  },
+  {
+   "id": "YANSHU__both",
+   "character": "YANSHU",
+   "method": "both",
+   "workflow": "22_anime_kf_ipadapter.json",
+   "skipped": "no tags on the card",
+   "image": null,
+   "verdict": null
+  }
+ ]
+}

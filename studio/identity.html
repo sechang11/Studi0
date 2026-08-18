@@ -1,0 +1,154 @@
+<h1>Identity proof</h1>
+<p class="sub">Every character rendered by every way this project can ask for a face.
+Cross out the ones that are not them. Crosses tally against the <b>method</b>, not the
+picture &mdash; a path that keeps failing is a path to rework, which is the only kind of
+verdict you can act on.</p>
+
+<div id="tally" class="tally"></div>
+
+<div id="filters" class="filters">
+  <button class="f on" data-f="all">all</button>
+  <button class="f" data-f="unseen">not looked at</button>
+  <button class="f" data-f="x">crossed out</button>
+  <button class="f" data-f="ok">kept</button>
+</div>
+
+<div id="grid" class="grid"></div>
+<div id="skipped" class="skipped"></div>
+
+<style>
+  .sub { max-width: 60em; opacity: .8; line-height: 1.5; }
+  .tally { margin: 1.2em 0; border: 1px solid #333; border-radius: 6px; overflow: hidden; }
+  .tally table { border-collapse: collapse; width: 100%; }
+  .tally th, .tally td { padding: .5em .8em; text-align: left; border-bottom: 1px solid #2a2a2a; }
+  .tally th { background: #1c1c1c; font-weight: 600; }
+  .tally .rework { color: #ff8080; font-weight: 600; }
+  .tally .holds { color: #7fdca4; }
+  .filters { margin: 1em 0; display: flex; gap: .5em; flex-wrap: wrap; }
+  .filters .f { background: #222; color: #ddd; border: 1px solid #3a3a3a; border-radius: 5px;
+                padding: .35em .8em; cursor: pointer; font: inherit; }
+  .filters .f.on { background: #3a4a68; border-color: #5a7ab0; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+          gap: 12px; }
+  .card { border: 1px solid #333; border-radius: 6px; overflow: hidden; background: #181818;
+          position: relative; }
+  .card img { width: 100%; display: block; aspect-ratio: 3/4; object-fit: cover; }
+  .card .meta { padding: .45em .6em; font-size: .82em; line-height: 1.35; }
+  .card .who { font-weight: 600; }
+  .card .how { opacity: .65; }
+  .card.x { outline: 2px solid #c04040; }
+  .card.x img { opacity: .35; }
+  .card.ok { outline: 2px solid #3f8f5f; }
+  .btns { display: flex; border-top: 1px solid #2a2a2a; }
+  .btns button { flex: 1; background: #202020; color: #ccc; border: 0; padding: .45em;
+                 cursor: pointer; font: inherit; }
+  .btns button:hover { background: #2c2c2c; }
+  .btns .bx.on { background: #6a2626; color: #fff; }
+  .btns .bo.on { background: #25502f; color: #fff; }
+  .skipped { margin-top: 2em; font-size: .9em; opacity: .75; line-height: 1.6; }
+</style>
+
+<script>
+let ROWS = [];
+let FILTER = "all";
+
+function tally() {
+  const by = {};
+  for (const r of ROWS) {
+    if (r.skipped) continue;
+    const m = by[r.method] || (by[r.method] = {n:0, ok:0, x:0, unseen:0});
+    m.n++;
+    if (r.verdict === "ok") m.ok++; else if (r.verdict === "x") m.x++; else m.unseen++;
+  }
+  let h = "<table><tr><th>method</th><th>n</th><th>kept</th><th>crossed</th>" +
+          "<th>not looked at</th><th>verdict</th></tr>";
+  for (const m of Object.keys(by).sort()) {
+    const s = by[m], judged = s.ok + s.x;
+    // A verdict needs evidence under it. Four judgements minimum, so one click cannot
+    // condemn a method - and the count is shown either way.
+    const MIN = 4;
+    let v = "not looked at yet", cls = "";
+    if (judged && judged < MIN) {
+      v = "too early &mdash; " + judged + " of " + s.n + " judged";
+    } else if (judged) {
+      if (s.x > judged / 2) {
+        v = "REWORK &mdash; " + s.x + " of " + judged + " judged are not them"; cls = "rework";
+      } else if (s.x) { v = "partial &mdash; " + s.x + " of " + judged + " crossed"; }
+      else { v = "holds &mdash; " + s.ok + " of " + judged + " kept"; cls = "holds"; }
+    }
+    h += `<tr><td><b>${m}</b></td><td>${s.n}</td><td>${s.ok}</td><td>${s.x}</td>` +
+         `<td>${s.unseen}</td><td class="${cls}">${v}</td></tr>`;
+  }
+  document.getElementById("tally").innerHTML = h + "</table>";
+}
+
+function draw() {
+  const g = document.getElementById("grid");
+  const show = ROWS.filter(r => {
+    if (r.skipped || !r.image) return false;
+    if (FILTER === "all") return true;
+    if (FILTER === "unseen") return !r.verdict;
+    return r.verdict === FILTER;
+  });
+  g.innerHTML = show.map(r => `
+    <div class="card ${r.verdict || ''}" id="c_${r.id}">
+      <a href="/samples/${r.image.replace(/^samples\//, '')}" target="_blank"
+         title="open the full render">
+        <img src="/samples/${(r.thumb || r.image).replace(/^samples\//, '')}"
+             loading="lazy" alt="${r.character} by ${r.method}">
+      </a>
+      <div class="meta">
+        <div class="who">${r.character}</div>
+        <div class="how">${r.method} &middot; ${r.workflow || ''}</div>
+      </div>
+      <div class="btns">
+        <button class="bo ${r.verdict === 'ok' ? 'on' : ''}"
+                onclick="mark('${r.id}','ok')">keep</button>
+        <button class="bx ${r.verdict === 'x' ? 'on' : ''}"
+                onclick="mark('${r.id}','x')">&times; not them</button>
+      </div>
+    </div>`).join("");
+  tally();
+}
+
+async function mark(id, v) {
+  const row = ROWS.find(r => r.id === id);
+  if (!row) return;
+  const next = row.verdict === v ? null : v;   // clicking the same button clears it
+  const res = await fetch("/api/identity/verdict", {
+    method: "POST", headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({id: id, verdict: next})
+  });
+  if (!res.ok) { alert("could not save: " + res.status); return; }
+  row.verdict = next;
+  draw();
+}
+
+function skippedNote() {
+  const sk = ROWS.filter(r => r.skipped);
+  if (!sk.length) return;
+  const by = {};
+  for (const r of sk) (by[r.skipped] || (by[r.skipped] = [])).push(r.character);
+  let h = "<b>Could not be tested at all.</b> Not a failure &mdash; nobody has given " +
+          "these what they need, and that is a different fact from a face that came " +
+          "back wrong.<br>";
+  for (const why of Object.keys(by)) {
+    const who = [...new Set(by[why])].sort();
+    h += `<div>&bull; <b>${why}</b> (${who.length}): ${who.join(", ")}</div>`;
+  }
+  document.getElementById("skipped").innerHTML = h;
+}
+
+document.querySelectorAll(".filters .f").forEach(b => b.onclick = () => {
+  document.querySelectorAll(".filters .f").forEach(x => x.classList.remove("on"));
+  b.classList.add("on");
+  FILTER = b.dataset.f;
+  draw();
+});
+
+fetch("/api/identity").then(r => r.json()).then(d => {
+  ROWS = d.samples || [];
+  draw();
+  skippedNote();
+});
+</script>

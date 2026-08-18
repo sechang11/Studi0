@@ -425,6 +425,33 @@ REQUIRED = {
 NO_STEM_ID = {"cards"}
 
 
+def check_card_dirs(out):
+    """Every .json in a card directory must be an object with an id.
+
+    serve.py loads them all at import and reads card["id"]; a bare list there is a
+    TypeError before the server binds a port, so the whole app dies for one stray file
+    and does not die until the next restart. That happened - studio/looks/_luma.json,
+    measurement output written into a card directory - and it was invisible for hours.
+    """
+    import glob as _glob
+    groups = ["shots", "cameras", "transitions", "motions", "looks", "lighting",
+              "layers", "weather", "emotions", "soundscapes", "pacing", "places",
+              "characters", "cues", "prompts", "checkpoints", "voices", "sfx", "mesh"]
+    for g in groups:
+        for p in sorted(_glob.glob(os.path.join(STUDIO, g, "*.json"))):
+            try:
+                d = json.load(open(p, encoding="utf-8"))
+            except Exception as e:
+                out.append(("BROKEN", "%s does not parse: %s" % (os.path.relpath(p), e)))
+                continue
+            if not isinstance(d, dict) or "id" not in d:
+                out.append(("BROKEN",
+                            "%s is a %s with no id - serve.py loads every json in a card "
+                            "directory and reads card['id'], so this takes the whole app "
+                            "down at startup. Move measurement output to studio/samples/."
+                            % (os.path.relpath(p), type(d).__name__)))
+
+
 def check_cards():
     out = {}
     for d in sorted(os.listdir(STUDIO)):
