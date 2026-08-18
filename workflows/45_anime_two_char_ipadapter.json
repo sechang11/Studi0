@@ -1,0 +1,233 @@
+{
+ "_comment": "TWO characters in one frame, one IPAdapter each, separated by attention masks. Built to test whether this project's keyframe-first identity approach holds two people - every previous character test was a single character. Both IPAdapters run on the same model chain; the attn_mask on each restricts its embedding to half the canvas, which is what stops the two identities averaging into one face. Node 4 is character A (left), node 14 is character B (right).",
+ "_notes": [
+  "Set 2.inputs.image and 12.inputs.image to the two reference sheets.",
+  "Weight 0.6 on both, matching the single-character workflow it is derived from.",
+  "PLUS FACE is a portrait preset - it locks a face, not a costume.",
+  "To render the no-mask control, delete the attn_mask links on 4 and 14.",
+  "The negative deliberately does NOT suppress a gender; the single-character workflow does that to keep a second person out of frame, which is the opposite of what this graph wants."
+ ],
+ "1": {
+  "class_type": "CheckpointLoaderSimple",
+  "inputs": {
+   "ckpt_name": "animagine-xl-4.0.safetensors"
+  }
+ },
+ "2": {
+  "class_type": "LoadImage",
+  "inputs": {
+   "image": "sheet_anime_terra.png",
+   "upload": "image"
+  }
+ },
+ "12": {
+  "class_type": "LoadImage",
+  "inputs": {
+   "image": "sheet_anime_brack.png",
+   "upload": "image"
+  }
+ },
+ "3": {
+  "class_type": "IPAdapterUnifiedLoader",
+  "inputs": {
+   "model": [
+    "1",
+    0
+   ],
+   "preset": "PLUS FACE (portraits)"
+  }
+ },
+ "20": {
+  "class_type": "SolidMask",
+  "inputs": {
+   "value": 0.0,
+   "width": 1344,
+   "height": 768
+  }
+ },
+ "21": {
+  "class_type": "SolidMask",
+  "inputs": {
+   "value": 1.0,
+   "width": 672,
+   "height": 768
+  }
+ },
+ "22": {
+  "class_type": "MaskComposite",
+  "inputs": {
+   "destination": [
+    "20",
+    0
+   ],
+   "source": [
+    "21",
+    0
+   ],
+   "x": 0,
+   "y": 0,
+   "operation": "add"
+  }
+ },
+ "23": {
+  "class_type": "MaskComposite",
+  "inputs": {
+   "destination": [
+    "20",
+    0
+   ],
+   "source": [
+    "21",
+    0
+   ],
+   "x": 672,
+   "y": 0,
+   "operation": "add"
+  }
+ },
+ "4": {
+  "class_type": "IPAdapterAdvanced",
+  "inputs": {
+   "model": [
+    "3",
+    0
+   ],
+   "ipadapter": [
+    "3",
+    1
+   ],
+   "image": [
+    "2",
+    0
+   ],
+   "attn_mask": [
+    "22",
+    0
+   ],
+   "weight": 0.6,
+   "weight_type": "linear",
+   "combine_embeds": "concat",
+   "start_at": 0.0,
+   "end_at": 1.0,
+   "embeds_scaling": "V only"
+  }
+ },
+ "14": {
+  "class_type": "IPAdapterAdvanced",
+  "inputs": {
+   "model": [
+    "4",
+    0
+   ],
+   "ipadapter": [
+    "3",
+    1
+   ],
+   "image": [
+    "12",
+    0
+   ],
+   "attn_mask": [
+    "23",
+    0
+   ],
+   "weight": 0.6,
+   "weight_type": "linear",
+   "combine_embeds": "concat",
+   "start_at": 0.0,
+   "end_at": 1.0,
+   "embeds_scaling": "V only"
+  }
+ },
+ "5": {
+  "class_type": "CLIPTextEncode",
+  "inputs": {
+   "clip": [
+    "1",
+    1
+   ],
+   "text": "2people, 1girl and 1boy, standing side by side facing the viewer, full body, masterpiece, best quality"
+  }
+ },
+ "6": {
+  "class_type": "CLIPTextEncode",
+  "inputs": {
+   "clip": [
+    "1",
+    1
+   ],
+   "text": "motion blur, blurry, overexposed, washed out, lowres, bad anatomy, extra limbs, watermark, signature, text"
+  }
+ },
+ "7": {
+  "class_type": "EmptyLatentImage",
+  "inputs": {
+   "width": 1344,
+   "height": 768,
+   "batch_size": 1
+  }
+ },
+ "8": {
+  "class_type": "KSampler",
+  "inputs": {
+   "model": [
+    "14",
+    0
+   ],
+   "positive": [
+    "5",
+    0
+   ],
+   "negative": [
+    "6",
+    0
+   ],
+   "latent_image": [
+    "7",
+    0
+   ],
+   "seed": 11,
+   "steps": 28,
+   "cfg": 5.0,
+   "sampler_name": "euler_ancestral",
+   "scheduler": "normal",
+   "denoise": 1.0
+  }
+ },
+ "9": {
+  "class_type": "VAEDecode",
+  "inputs": {
+   "samples": [
+    "8",
+    0
+   ],
+   "vae": [
+    "1",
+    2
+   ]
+  }
+ },
+ "10": {
+  "class_type": "ImageScale",
+  "inputs": {
+   "image": [
+    "9",
+    0
+   ],
+   "upscale_method": "lanczos",
+   "width": 1664,
+   "height": 928,
+   "crop": "disabled"
+  }
+ },
+ "11": {
+  "class_type": "SaveImage",
+  "inputs": {
+   "images": [
+    "10",
+    0
+   ],
+   "filename_prefix": "claude-generated/twochar/out"
+  }
+ }
+}
