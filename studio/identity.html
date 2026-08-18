@@ -1,6 +1,6 @@
 <h1>Identity proof</h1>
 <p class="sub">Every character rendered by every way this project can ask for a face.
-Cross out the ones that are not them. Crosses tally against the <b>method</b>, not the
+Each card shows the character's <b>reference sheet</b> on the left and what the method produced on the right &mdash; click their name for the full dossier. Cross out the ones that are not them. Crosses tally against the <b>method</b>, not the
 picture &mdash; a path that keeps failing is a path to rework, which is the only kind of
 verdict you can act on.</p>
 
@@ -28,16 +28,26 @@ verdict you can act on.</p>
   .filters .f { background: #222; color: #ddd; border: 1px solid #3a3a3a; border-radius: 5px;
                 padding: .35em .8em; cursor: pointer; font: inherit; }
   .filters .f.on { background: #3a4a68; border-color: #5a7ab0; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
           gap: 12px; }
   .card { border: 1px solid #333; border-radius: 6px; overflow: hidden; background: #181818;
           position: relative; }
-  .card img { width: 100%; display: block; aspect-ratio: 3/4; object-fit: cover; }
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: #2a2a2a; }
+  .side { position: relative; background: #111; }
+  .side img { width: 100%; display: block; aspect-ratio: 3/4; object-fit: cover; }
+  .side .tag { position: absolute; top: 4px; left: 4px; z-index: 2; font-size: .68em;
+               letter-spacing: .06em; text-transform: uppercase; padding: .12em .45em;
+               border-radius: 3px; background: #000a; color: #ddd; }
+  .noref { aspect-ratio: 3/4; display: flex; align-items: center; justify-content: center;
+           text-align: center; font-size: .8em; opacity: .5; }
+  .card .desc { opacity: .7; font-size: .95em; margin: .2em 0 .3em; }
+  .card .who a { color: inherit; text-decoration: none; border-bottom: 1px dotted #777; }
+  .card .who a:hover { border-bottom-style: solid; }
   .card .meta { padding: .45em .6em; font-size: .82em; line-height: 1.35; }
   .card .who { font-weight: 600; }
   .card .how { opacity: .65; }
   .card.x { outline: 2px solid #c04040; }
-  .card.x img { opacity: .35; }
+  .card.x .side:last-child img { opacity: .3; }
   .card.ok { outline: 2px solid #3f8f5f; }
   .btns { display: flex; border-top: 1px solid #2a2a2a; }
   .btns button { flex: 1; background: #202020; color: #ccc; border: 0; padding: .45em;
@@ -92,13 +102,26 @@ function draw() {
   });
   g.innerHTML = show.map(r => `
     <div class="card ${r.verdict || ''}" id="c_${r.id}">
-      <a href="/samples/${r.image.replace(/^samples\//, '')}" target="_blank"
-         title="open the full render">
-        <img src="/samples/${(r.thumb || r.image).replace(/^samples\//, '')}"
-             loading="lazy" alt="${r.character} by ${r.method}">
-      </a>
+      <div class="pair">
+        <div class="side">
+          <span class="tag">them</span>
+          ${r.ref
+            ? `<img src="/samples/${r.ref.replace(/^samples\//, '')}" loading="lazy"
+                    alt="${r.character} reference sheet">`
+            : `<div class="noref">no reference<br>sheet</div>`}
+        </div>
+        <div class="side">
+          <span class="tag">this</span>
+          <a href="/samples/${r.image.replace(/^samples\//, '')}" target="_blank"
+             title="open the full render">
+            <img src="/samples/${(r.thumb || r.image).replace(/^samples\//, '')}"
+                 loading="lazy" alt="${r.character} by ${r.method}">
+          </a>
+        </div>
+      </div>
       <div class="meta">
-        <div class="who">${r.character}</div>
+        <div class="who"><a href="${r.dossier}" target="_blank">${r.character}</a></div>
+        ${r.desc ? `<div class="desc">${r.desc}</div>` : ''}
         <div class="how">${r.method} &middot; ${r.workflow || ''}</div>
       </div>
       <div class="btns">
