@@ -78,7 +78,27 @@ def cuts(clip, fps=8, k=6.0):
     return merged, [round(x, 2) for x in diffs]
 
 
-def render(shots, key, seconds, out, seed=1234, expand=False):
+# The ResolutionSelector's own options; nothing here is invented.
+AR_PORTRAIT = "9:16 (Portrait Widescreen)"
+AR_LANDSCAPE = "16:9 (Widescreen)"
+AR_SQUARE = "1:1 (Square)"
+
+
+def aspect_for(key):
+    """Match the generated shape to the keyframe's, the way short.py's set_format does.
+
+    Workflow 51 pins 16:9. Handed a portrait keyframe it returned a landscape clip and
+    clipmetrics scored the pair at hold_f0 0.117 - almost all of which was the shape
+    mismatch, not the model failing to hold the frame.
+    """
+    from PIL import Image
+    w, h = Image.open(key).size
+    if abs(w - h) / float(max(w, h)) < 0.05:
+        return AR_SQUARE
+    return AR_PORTRAIT if h > w else AR_LANDSCAPE
+
+
+def render(shots, key, seconds, out, seed=1234, expand=False, aspect=None):
     """One LTX-2.5 pass asked for several connected shots."""
     prompt = " ".join(
         "Shot %d: %s." % (i + 1, s.strip().rstrip(".")) for i, s in enumerate(shots))
@@ -91,6 +111,7 @@ def render(shots, key, seconds, out, seed=1234, expand=False):
     set_path(wf, "376.inputs.value", prompt)
     set_path(wf, "383.inputs.value", bool(expand))   # LLM prompt expander on/off
     set_path(wf, "362.inputs.value", int(seconds))
+    set_path(wf, "403.inputs.aspect_ratio", aspect or aspect_for(key))
     set_path(wf, "339.inputs.noise_seed", seed)
     set_path(wf, "338.inputs.noise_seed", seed)
     set_path(wf, "75.inputs.filename_prefix", "claude-generated/multishot/ms")
@@ -114,11 +135,13 @@ def main():
     ap.add_argument("--expand", action="store_true", help="use the LLM prompt enhancer")
     ap.add_argument("--out", default=os.path.join(STUDIO, "samples", "multishot"))
     ap.add_argument("--tag", default="ms")
+    ap.add_argument("--aspect", default=None,
+                    help="override; default follows the keyframe's own shape")
     a = ap.parse_args()
     os.makedirs(a.out, exist_ok=True)
     shots = [s for s in a.shots.split("|") if s.strip()]
     dst = os.path.join(a.out, "%s.mp4" % a.tag)
-    clip, prompt = render(shots, a.key, a.seconds, dst, a.seed, a.expand)
+    clip, prompt = render(shots, a.key, a.seconds, dst, a.seed, a.expand, a.aspect)
     if not clip:
         print("no clip produced", file=sys.stderr)
         return 1
@@ -133,6 +156,8 @@ def main():
     sh("ffmpeg", "-y", "-v", "error", "-i", clip, "-vf",
        "fps=1.5,scale=260:-2,tile=%dx1" % max(6, int(a.seconds * 1.5)),
        os.path.join(a.out, "%s_strip.png" % a.tag))
+    print("aspect %s (from %s)" % (a.aspect or aspect_for(a.key),
+                                   "--aspect" if a.aspect else "the keyframe"))
     print("asked %d shots, found %d cuts at %s" % (len(shots), len(at), at))
     print("metrics:", " ".join("%s=%s" % (k, v) for k, v in m.items()))
     print("strip:", os.path.join(a.out, "%s_strip.png" % a.tag))

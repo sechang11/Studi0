@@ -723,6 +723,24 @@ def motion_of(b):
     return m
 
 
+# Scale words for the extra shots multi-shot is asked for. Deliberately anchored to the
+# beat's OWN subject - "the same X, closer" rather than a new setup - because asking
+# LTX-2.5 for a genuinely different setup is what makes it leave the keyframe and invent
+# a scene. Measured: three different setups produced a man in a suit who was not in the
+# plate; three views of one subject produced a take that progressed and held at 0.879.
+MS_SCALES = ["", "closer on the same subject", "a detail of the same subject",
+             "wider on the same subject"]
+
+
+def multishot_prompt(b, film, n):
+    """The beat's motion, then n-1 anchored variations of it."""
+    base = expand(motion_of(b), film.get("characters", {})).rstrip(". ")
+    shots = [base]
+    for i in range(1, max(1, n)):
+        shots.append("%s, %s" % (base, MS_SCALES[i % len(MS_SCALES)] or "continuing"))
+    return shots
+
+
 def clips(film, out, seed0):
     """One generated clip per beat. Deliberately few - the edit multiplies them."""
     rel = out.split("output/")[1]
@@ -736,6 +754,24 @@ def clips(film, out, seed0):
         staged = f"short_{b['id']}.png"
         shutil.copy(kf, f"{COMFY}/input/{staged}")
         secs = float(b.get("clip_secs", 4))
+        # LTX-2.5 multi-shot, opt-in per film. It runs SYNCHRONOUSLY through its own
+        # tool rather than joining the batch below, because it is one pass per beat and
+        # the batching exists to overlap many small LTX-2.3 jobs.
+        if str(film.get("video_engine") or "").lower() == "ltx25_multishot":
+            import multishot as _ms
+            n_cuts = len(expand_template(b, secs)[0]) or 2
+            got, _p = _ms.render(
+                multishot_prompt(b, film, n_cuts), kf,
+                max(secs, 6.0),                       # it needs room to progress
+                f"{out}/clips/{b['id']}_00001_.mp4",
+                seed=seed0 + i * 13)
+            print(f"  > {b['id']} multi-shot, {n_cuts} shots asked -> "
+                  f"{'ok' if got else 'FAILED'}", flush=True)
+            if not got:
+                print(f"  !! {b['id']} multi-shot produced nothing - this beat will be "
+                      f"missing from the edit rather than silently held",
+                      file=sys.stderr)
+            continue
         length = max(9, int(math.ceil(secs * FPS / 8)) * 8 + 1)
         wf = load_wf("12_ltx23_i2v_audio.json")
         set_path(wf, "8.inputs.image", staged)
