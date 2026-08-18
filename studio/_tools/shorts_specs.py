@@ -53,8 +53,14 @@ V_LOW = "voices_examples/male/male_02.wav"                     # 82 Hz - the low
 STYLE_CLEAN = ("clean modern product photography, soft diffused daylight, shallow depth "
                "of field, matte surfaces, muted natural palette, minimal composition, "
                "crisp focus, high detail")
-STYLE_KITCHEN = ("warm documentary photography, morning kitchen light, natural textures, "
-                 "soft shadows, muted earthy palette, shallow depth of field, high detail")
+# "morning kitchen light" plus "soft shadows, muted earthy palette" cancelled out: this
+# preset measured 94.4 luma against 96.6 for no style at all, i.e. it was inert, while
+# six delivered films leaned on it for exactly the brightness it was not providing.
+# Rebuilt with both halves the measurement supports - a NAMED bright surface and the
+# bright adjectives - and without "muted". Verify with studio/_tools/style_bright.py.
+STYLE_KITCHEN = ("warm documentary photography, a white kitchen counter by a large "
+                 "window, morning sunlight falling across the worktop, bright and airy, "
+                 "natural textures, shallow depth of field, high detail")
 STYLE_LAB = ("clean scientific still life, cool even lighting, white and steel surfaces, "
              "glass and precision instruments, shallow depth of field, minimal, high detail")
 STYLE_NATURE = ("natural light landscape photography, soft golden hour, gentle haze, "
