@@ -7,19 +7,20 @@
   "status": "untested",
   "engine": "video",
   "dialect": null,
-  "role": "Video engine, unrouted.",
-  "desc": "On disk, never rendered through the app. LTX-2.3 is the routed video pass; these would need a measured A/B to earn a route.",
+  "role": "Video engine, unrouted. The i2v sibling is measured; this is not.",
+  "desc": "Not rendered. The i2v checkpoint was measured on 2026-08-18 and is opt-in for hero shots; nothing has been asked of this one, and this project is keyframe-first, so text-to-video has no consumer here. Workflow 41 is built and validated but has never produced a frame.",
   "strengths": "",
   "weaknesses": "",
   "workflows": [
-    "41_hunyuan_t2v.json"
+    "41_hunyuan_t2v.json",
+    "43_hunyuan_t2v_1080p.json"
   ],
   "reachable": true,
   "strip": null,
   "evidence": {
     "verdict": "UNVERIFIED",
-    "method": "on disk; nothing rendered through it here",
-    "date": "2026-08-15",
-    "note": ""
+    "method": "on disk; workflow built and validated, nothing rendered through it",
+    "date": "2026-08-18",
+    "note": "The i2v sibling was measured the same night; this one was not asked."
   }
 }

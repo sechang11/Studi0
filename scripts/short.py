@@ -73,9 +73,29 @@ import voice_emotion                                    # noqa: E402  (studio/_t
 from epic import (sh, dur, adur, measure, norm_to, ensure_local, load_wf, expand,
                   submit, wait_all, keyscale, FONT, fgpath, ffesc, COMFY, HOST)   # noqa: E402
 
-KF = (1664, 928)          # keyframes: 16:9, letterboxed into the vertical canvas later
-VID = (1280, 704)         # generated clip size
 CANVAS = (1080, 1920)     # 9:16 delivery
+# Generation sizes, SET FROM THE CANVAS by set_format() before any stage runs.
+# These are the landscape defaults; a portrait canvas swaps them, because generating
+# 16:9 for a 9:16 delivery put the picture on 40% of the frame and filled the other
+# 60% with black - which is most of what "the shorts look dark" turned out to mean.
+KF = (1664, 928)          # keyframe size
+VID = (1280, 704)         # generated clip size
+
+
+def set_format(canvas):
+    """Point the generators at the shape we actually deliver.
+
+    Both engines take arbitrary sizes at the same cost - measured on this box, a Qwen
+    keyframe is 3.4s at either orientation and an LTX clip is ~23s at either - so there
+    is no reason to generate a shape that has to be padded. Sizes stay on the multiple
+    of 32 both models want.
+    """
+    global KF, VID, CANVAS
+    CANVAS = (int(canvas[0]), int(canvas[1]))
+    portrait = CANVAS[1] > CANVAS[0]
+    KF = (928, 1664) if portrait else (1664, 928)
+    VID = (704, 1280) if portrait else (1280, 704)
+    return KF, VID
 FPS = 24
 NIGHT = True              # day-for-night grade, see make_cut
 TARGET_LUFS = -9.5        # the reference short measures -9.43 LUFS. Feed-loud, not
@@ -997,14 +1017,29 @@ def cut(film, out):
     cw, ch = film.get("canvas") or CANVAS
     ff = f"fontfile='{fgpath(FONT)}':" if FONT else ""
     hook = film.get("hook", "")
-    # The reference letterboxes as well, so black bars are correct for the format - but
-    # its inner content is about 1.38:1 rather than 16:9, filling ~40% of the canvas
-    # against our 31%. Cropping the sides to match buys back a third of the picture.
-    if cw >= ch:
-        # widescreen: the generated clips are already 16:9, so fill the frame
+    # THE PAD IS NOW A FALLBACK, NOT THE PLAN. set_format() points the generators at the
+    # delivery shape, so a portrait film arrives here already portrait and the crop/pad
+    # below is a no-op. It still runs, because a hand-authored film may set a canvas that
+    # does not match its clips, and a mismatched clip has to go somewhere.
+    #
+    # It used to be the plan, and it cost 59% of every delivered frame: crop to 1.38:1
+    # into a 9:16 canvas puts the picture on ~40% of the height and fills the rest with
+    # black. Measured on LUMEN - whole frame mean luma 33.9, picture band alone 79.2,
+    # 1020 of 1920 rows pure black. That is most of what "the shorts look dark" meant.
+    # Pick the composite from the two shapes rather than assuming the clip is wider than
+    # the canvas. The old code cropped the sides unconditionally before padding, which
+    # asked for a 1766px-wide crop out of a 704px-wide portrait clip and died.
+    src_ar = VID[0] / float(VID[1])
+    dst_ar = cw / float(ch)
+    if abs(src_ar - dst_ar) < 0.12 or cw >= ch:
+        # the shapes agree (or it is widescreen, where they always did): cover and crop.
+        # This is the path a natively-portrait film takes, and it leaves no bars at all.
         vf = [f"scale={cw}:{ch}:force_original_aspect_ratio=increase",
               f"crop={cw}:{ch}"]
     else:
+        # a clip whose shape does not match the canvas - a hand-authored film, or
+        # anything rendered before the generators followed the canvas. Take what sides
+        # there are and bar the rest.
         vf = [f"crop=ih*1.38:ih", f"scale={cw}:-2",
               f"pad={cw}:{ch}:0:({ch}-ih)/2:color=black"]
     if hook:
@@ -1191,6 +1226,9 @@ def main():
     ap.add_argument("--seed", type=int, default=4200)
     a = ap.parse_args()
     film = json.load(open(a.film, encoding="utf-8"))
+    kf, vid = set_format(film.get("canvas") or CANVAS)
+    print("  format: canvas %dx%d -> keyframes %dx%d, clips %dx%d"
+          % (CANVAS[0], CANVAS[1], kf[0], kf[1], vid[0], vid[1]))
     slug = film["title"].lower().replace(" ", "-")
     out = f"{COMFY}/output/claude-generated/12-shorts/{slug}"
     for d in ("keyframes", "clips", "voice", "music", "_work"):

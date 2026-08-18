@@ -1,5 +1,5 @@
 {
- "generated": "2026-08-16 13:55",
+ "generated": "2026-08-18 00:11",
  "generator": "studio/_tools/workflow_index.py",
  "note": "Every graph in workflows/, read rather than guessed at. These are API-format graphs - the shape ComfyUI's /prompt endpoint accepts, not the shape its editor opens - so the actions offered are download, copy to ComfyUI's folder, and queue, which all work on this format.",
  "comfy_url": "http://127.0.0.1:8188",
@@ -560,7 +560,8 @@
     "studio/_tools/capability_scan.py",
     "studio/_tools/cast_voice.py",
     "studio/_tools/film_audio.py",
-    "studio/_tools/make_domains.py"
+    "studio/_tools/make_domains.py",
+    "studio/_tools/voice_emotion.py"
    ],
    "api_format": true,
    "nodes": 4,
@@ -1221,11 +1222,67 @@
   },
   {
    "file": "41_hunyuan_t2v.json",
-   "size_kb": 6.8,
+   "size_kb": 4.4,
    "capability": null,
    "used_by": [
     "studio/_tools/video_engine_ab.py"
    ],
+   "api_format": true,
+   "nodes": 15,
+   "models": [
+    "byt5_small_glyphxl_fp16.safetensors",
+    "hunyuanvideo1.5_720p_t2v_fp16.safetensors",
+    "hunyuanvideo15_vae_fp16.safetensors",
+    "qwen_2.5_vl_7b_fp8_scaled.safetensors"
+   ],
+   "notes": "HunyuanVideo 1.5 720p TEXT-to-video, plus the 1080p SR distill as an optional second stage. The 1080p SR stage is NOT in this file. ComfyUI's shipped template carries it bypassed (mode 4); API format has no bypass, so transcribing it whole made a second 1920x1072 pass mandatory and took one 49-frame render to 488s. Use 43_hunyuan_t2v_1080p.json when the resolution is actually wanted.",
+   "classes": [
+    "CLIPTextEncode",
+    "DualCLIPLoader",
+    "UNETLoader",
+    "VAELoader",
+    "EmptyHunyuanVideo15Latent",
+    "ModelSamplingSD3",
+    "CFGGuider",
+    "RandomNoise"
+   ],
+   "kind": "video"
+  },
+  {
+   "file": "42_hunyuan_i2v.json",
+   "size_kb": 5.1,
+   "capability": null,
+   "used_by": [
+    "studio/_tools/engine_ab.py",
+    "studio/_tools/video_engine_ab.py"
+   ],
+   "api_format": true,
+   "nodes": 18,
+   "models": [
+    "byt5_small_glyphxl_fp16.safetensors",
+    "hunyuanvideo1.5_720p_i2v_fp16.safetensors",
+    "hunyuanvideo15_vae_fp16.safetensors",
+    "qwen_2.5_vl_7b_fp8_scaled.safetensors",
+    "sigclip_vision_patch14_384.safetensors"
+   ],
+   "notes": "HunyuanVideo 1.5 720p IMAGE-to-video, plus the 1080p SR distill as an optional second stage. This is the direct rival to 12_ltx23_i2v_audio.json - the keyframe locks the character design and the model animates it. The 1080p SR stage is NOT in this file. ComfyUI's shipped template carries it bypassed (mode 4); API format has no bypass, so transcribing it whole made a second 1920x1072 pass mandatory and took one 49-frame render to 488s. Use 44_hunyuan_i2v_1080p.json when the resolution is actually wanted.",
+   "classes": [
+    "CLIPTextEncode",
+    "DualCLIPLoader",
+    "UNETLoader",
+    "VAELoader",
+    "CLIPVisionLoader",
+    "LoadImage",
+    "CLIPVisionEncode",
+    "HunyuanVideo15ImageToVideo"
+   ],
+   "kind": "video"
+  },
+  {
+   "file": "43_hunyuan_t2v_1080p.json",
+   "size_kb": 8.1,
+   "capability": null,
+   "used_by": [],
    "api_format": true,
    "nodes": 32,
    "models": [
@@ -1236,7 +1293,7 @@
     "hunyuanvideo15_vae_fp16.safetensors",
     "qwen_2.5_vl_7b_fp8_scaled.safetensors"
    ],
-   "notes": "HunyuanVideo 1.5 720p TEXT-to-video, plus the 1080p SR distill as an optional second stage. Transcribed from the ComfyUI shipped template video_hunyuan_video_1.5_720p_t2v.json, in which the ENTIRE SR block and both EasyCache nodes ship BYPASSED (mode 4) - so the settings in the base block below are the tested default path and the SR block is opt-in.",
+   "notes": "HunyuanVideo 1.5 720p TEXT-to-video, plus the 1080p SR distill as an optional second stage. Base pass plus the 1080p super-resolution distill, which is the template's optional second stage. Node 63 HunyuanVideo15SuperResolution re-conditions on the start image, 62 upscales the latent to 1920x1080, and 66 SplitSigmas hands the noised half to 71 and the clean half to 73. This writes TWO videos: the 720p base from node 42 and the 1080p from node 76. Slow - measure before reaching for it.",
    "classes": [
     "CFGGuider",
     "SamplerCustomAdvanced",
@@ -1250,12 +1307,10 @@
    "kind": "video"
   },
   {
-   "file": "42_hunyuan_i2v.json",
-   "size_kb": 7.6,
+   "file": "44_hunyuan_i2v_1080p.json",
+   "size_kb": 9.1,
    "capability": null,
-   "used_by": [
-    "studio/_tools/video_engine_ab.py"
-   ],
+   "used_by": [],
    "api_format": true,
    "nodes": 35,
    "models": [
@@ -1267,7 +1322,7 @@
     "qwen_2.5_vl_7b_fp8_scaled.safetensors",
     "sigclip_vision_patch14_384.safetensors"
    ],
-   "notes": "HunyuanVideo 1.5 720p IMAGE-to-video, plus the 1080p SR distill as an optional second stage. This is the direct rival to 12_ltx23_i2v_audio.json - the keyframe locks the character design and the model animates it. Transcribed from the ComfyUI shipped template video_hunyuan_video_1.5_720p_i2v.json, in which the ENTIRE SR block and both EasyCache nodes ship BYPASSED (mode 4).",
+   "notes": "HunyuanVideo 1.5 720p IMAGE-to-video, plus the 1080p SR distill as an optional second stage. This is the direct rival to 12_ltx23_i2v_audio.json - the keyframe locks the character design and the model animates it. Base pass plus the 1080p super-resolution distill, which is the template's optional second stage. Node 63 HunyuanVideo15SuperResolution re-conditions on the start image, 62 upscales the latent to 1920x1080, and 66 SplitSigmas hands the noised half to 71 and the clean half to 73. This writes TWO videos: the 720p base from node 42 and the 1080p from node 76. Slow - measure before reaching for it.",
    "classes": [
     "CFGGuider",
     "SamplerCustomAdvanced",
@@ -1342,9 +1397,9 @@
   }
  ],
  "totals": {
-  "workflows": 45,
+  "workflows": 47,
   "claimed": 30,
   "run_by_code": 45,
-  "orphan": 0
+  "orphan": 2
  }
 }

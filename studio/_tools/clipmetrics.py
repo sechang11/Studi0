@@ -15,6 +15,12 @@ comparison from here on.
                 you approved; that is the LTX failure mode the film pipeline pays for,
                 and it is NOT the same as motion.
 
+    luma        mean luma of the clip, 0-1. Absolute; a night exterior is meant to be
+                dark, so this one is for sorting a slate, not for accusing.
+    luma_drop   keyframe luma minus clip luma. THE ACCUSATION: positive means the engine
+                delivered something darker than the frame a human approved. 0.05 shows in
+                a side-by-side; 0.10 is the "why is everything murky" complaint, numeric.
+
 A good i2v pass for this project is HIGH hold_f0, LOW drift, NON-ZERO motion. An engine
 that scores low drift only because it froze is caught by motion being ~0 - which is why
 both numbers are always reported together.
@@ -49,6 +55,14 @@ def ssim(a, b):
             except ValueError:
                 pass
     return None
+
+
+def luma(path):
+    """Mean Rec.601 luma of one frame, 0-1."""
+    from PIL import Image
+    im = Image.open(path).convert("L").resize((160, 90))
+    px = im.getdata()
+    return sum(px) / (len(px) * 255.0)
 
 
 def hist_distance(a, b):
@@ -94,6 +108,15 @@ def measure(clip, key=None, workdir=None):
         # cannot tell those apart and must not be the judge on its own.
         out["palette_drift"] = round(hist_distance(key, fs[-1]), 4)
         out["palette_drift_f0"] = round(hist_distance(key, fs[0]), 4)
+    # BRIGHTNESS. The complaint that opened this was "they all seem to have a darkness
+    # to them", and nothing here measured it. luma alone accuses nobody - a night
+    # exterior is meant to be dark - but luma_drop is measured against the keyframe a
+    # human approved, so a positive number means the engine got darker after the yes.
+    lums = [luma(f) for f in fs]
+    out["luma"] = round(sum(lums) / len(lums), 4)
+    out["luma_min"] = round(min(lums), 4)
+    if key and os.path.exists(key):
+        out["luma_drop"] = round(luma(key) - out["luma"], 4)
     steps = [mad(fs[i], fs[i + 1]) for i in range(len(fs) - 1)]
     out["motion"] = round(sum(steps) / len(steps), 3)
     out["motion_max"] = round(max(steps), 3)

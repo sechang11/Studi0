@@ -4,22 +4,23 @@
   "file": "hunyuanvideo1.5_720p_i2v_fp16.safetensors",
   "folder": "diffusion_models",
   "size_gb": 16.65,
-  "status": "untested",
+  "status": "works",
   "engine": "video",
   "dialect": null,
-  "role": "Video engine, unrouted.",
-  "desc": "On disk, never rendered through the app. LTX-2.3 is the routed video pass; these would need a measured A/B to earn a route.",
-  "strengths": "",
-  "weaknesses": "",
+  "role": "Video engine, opt-in for hero shots. LTX-2.3 remains the route.",
+  "desc": "Rendered and measured on this box 2026-08-18. 261 s for a 49-frame 720p clip against LTX-2.3's 28 s for the same shot - 9x the cost. It does not win overall: over four keyframes LTX takes one clean win, Hunyuan none, three split. What it does win is the hero shot. On `laces` - two hands, fine detail, shallow focus - it held the keyframe at drift 0.155 against LTX's 0.605, and it is the only engine here that never darkened a plate (mean luma_drop -0.026, i.e. slightly brighter than the frame it was given; LTX -0.003).",
+  "strengths": "Holds an approved keyframe through fine detail better than LTX on close product/hand work. Smoother motion distribution - mean evenness 0.665 against 0.532, which is the number that maps to 'non fluid, lurching'. Does not darken the plate.",
+  "weaknesses": "9x slower than LTX-2.3 for the same shot, which rules it out as a default for anything longer than a few beats. No audio track, where LTX generates one. n=4 - the sample is small and the shot-to-shot spread is wider than the difference between engines.",
   "workflows": [
-    "42_hunyuan_i2v.json"
+    "42_hunyuan_i2v.json",
+    "44_hunyuan_i2v_1080p.json"
   ],
   "reachable": true,
   "strip": null,
   "evidence": {
-    "verdict": "UNVERIFIED",
-    "method": "on disk; nothing rendered through it here",
-    "date": "2026-08-15",
-    "note": ""
+    "verdict": "MEASURED",
+    "method": "4-keyframe A/B against LTX-2.3 through studio/_tools/engine_ab.py, same prompt/seed/length/resolution, scored with clipmetrics",
+    "date": "2026-08-18",
+    "note": "n=4. Clean wins (lower drift AND higher evenness on the same shot): LTX 1, Hunyuan 0, split 3. Means favour Hunyuan on drift (0.392 vs 0.429) and evenness (0.665 vs 0.532) by less than the shot-to-shot spread, at 9x the wall clock. Not routed. Clips and strips in ~/shared/AB/honest."
   }
 }
