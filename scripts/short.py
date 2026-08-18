@@ -131,7 +131,7 @@ FX_EFFECTS = {"shake", "aberr", "glow", "flash", "ramp", "smear", "whiteout", "h
 # maps the keyframe's depth through Depth Anything 3 (core nodes on ComfyUI 0.33) and
 # make_cut applies them as a post step. Their limit is stated on their cards: the depth
 # is the KEYFRAME's, so they read best on cuts that hold the keyframe's framing.
-FX_CAMERAS_DEPTH = {"dolly_zoom", "rack_focus"}
+FX_CAMERAS_DEPTH = {"dolly_zoom", "rack_focus", "parallax_l", "parallax_r"}
 FX_CAMERAS_UNBUILT = {
     "orbit":      "not achievable after the fact at all. Depth parallax gives a lateral "
                   "slide, not an arc, and cannot reveal a surface the plate never saw; "
@@ -327,8 +327,13 @@ def make_cut(src, at, length, fx, dst, seed=0, grade=None):
                       file=sys.stderr)
                 return dst
         tmp = dst + ".depthcam.mp4"
-        got = (_dp.rack_focus(dst, dmap, tmp) if want[0] == "rack_focus"
-               else _dp.dolly_zoom(dst, dmap, tmp))
+        if want[0] == "rack_focus":
+            got = _dp.rack_focus(dst, dmap, tmp)
+        elif want[0].startswith("parallax_"):
+            # the honest lateral move orbit's card asks for; direction is the suffix
+            got = _dp.parallax(dst, dmap, tmp, direction=want[0].split("_")[1])
+        else:
+            got = _dp.dolly_zoom(dst, dmap, tmp)
         if got:
             os.replace(tmp, dst)
         else:

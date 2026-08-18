@@ -7,7 +7,7 @@
   "renders": "none",
   "why_not": "Not achievable after the fact, by any route on this box. (a) Depth-driven displace gives a lateral parallax SLIDE - it cannot rotate anything and cannot reveal a surface the plate never saw, and an orbit disoccludes far more than a dolly zoom does, so edge=smear would smear badly. Calling that output 'orbit' would be the same lie in a new filter. (b) True 3D is closed: DA3GeometryToMesh exists in ComfyUI core but there is NO headless rasterizer - Load3D / Preview3D / Preview3DAdvanced are browser-canvas viewer widgets, not API-queueable renderers. Closing that means adding nvdiffrast, pytorch3d or a headless Blender plus inpainting the disocclusions. That is a project, not a fix. (c) The PROMPT route is the only thing that has ever produced a real arc here and it is uncontrollable - see the verdict.",
   "needs": "A rasterizer this box does not have. This card is not scheduled; it is withdrawn until one exists.",
-  "instead": "If you want a parallax slide for its own sake it should be a NEW card with an honest name (parallax_l / parallax_r) built on dolly_zoom's depth-displace stage with the counter-zoom omitted. It must not be called orbit.",
+  "instead": "BUILT 2026-08-18 as parallax_l / parallax_r - see those cards. They are dolly_zoom's depth-displace stage with the counter-zoom swapped for a lateral pan, and they measure PSNR y 30.09 dB against a flat pan of the same travel, so the two depth layers genuinely separate. They are NOT this move: nothing rotates, and no surface the plate never saw is revealed. orbit stays broken because it is, and because naming a slide 'orbit' would be the same lie in a new filter.",
   "evidence": {
     "verdict": "MEASURED",
     "method": "package_check: incomplete",

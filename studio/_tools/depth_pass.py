@@ -145,6 +145,56 @@ def dolly_zoom(clip, depth_png, out, zoom_to=1.18):
     return out
 
 
+def parallax(clip, depth_png, out, direction="l", far_px=None, near_ratio=2.2):
+    """A lateral 2.5D slide: near and far pan at different speeds off one plate.
+
+    This is what `orbit` gets asked for and cannot deliver. It is NOT an orbit - nothing
+    rotates and no hidden surface is revealed - it is the depth-displace stage of
+    dolly_zoom with the counter-zoom swapped for a pan, which is the move the orbit card
+    says to build under an honest name.
+
+    Both layers move, unlike dolly_zoom where the near layer is the untouched original.
+    So the depth mask is panned with the NEAR layer before the mask is cut from it -
+    a static mask would slide off its own subject and tear every depth edge.
+    """
+    w, h, dur = probe_wh(clip)
+    if not dur:
+        return None
+    fps = 24
+    n = max(2, int(round(dur * fps)))
+    sign = -1.0 if direction == "l" else 1.0
+    # default travel scales with the frame so it reads the same at any resolution
+    far = float(far_px if far_px is not None else w * 0.020)
+    near = far * near_ratio
+    pad = 1.12                      # margin to pan into; no edge is ever exposed
+
+    def pan(px):
+        # zoompan x expression: centre the padded frame, then walk it
+        return "(iw-iw/zoom)/2+(%.4f)*on/%d" % (sign * px, n)
+
+    fc = ("[0:v]split[a][b];"
+          "[a]scale=iw*%(pad).3f:ih*%(pad).3f,zoompan=z=%(pad).3f:d=1:x='%(nx)s':"
+          "y='(ih-ih/zoom)/2':s=%(w)dx%(h)d:fps=%(fps)d[nl];"
+          "[b]scale=iw*%(pad).3f:ih*%(pad).3f,zoompan=z=%(pad).3f:d=1:x='%(fx)s':"
+          "y='(ih-ih/zoom)/2':s=%(w)dx%(h)d:fps=%(fps)d[fl];"
+          "movie=%(dep)s,loop=loop=-1:size=1,setpts=N/FRAME_RATE/TB[dep];"
+          # the mask travels with the near layer it selects
+          "[dep]format=gray,scale=%(w)d:%(h)d,scale=iw*%(pad).3f:ih*%(pad).3f,"
+          "zoompan=z=%(pad).3f:d=1:x='%(nx)s':y='(ih-ih/zoom)/2':s=%(w)dx%(h)d:"
+          "fps=%(fps)d,geq=lum='255*clip((0.45-p(X,Y)/255)/0.10,0,1)'[near];"
+          "[fl][nl][near]maskedmerge[v]"
+          % {"pad": pad, "nx": pan(near), "fx": pan(far), "w": w, "h": h, "fps": fps,
+             "dep": depth_png.replace("\\", "/")})
+    r = sh("ffmpeg", "-y", "-v", "error", "-i", clip, "-filter_complex", fc,
+           "-map", "[v]", "-map", "0:a?", "-c:v", "libx264", "-crf", "17",
+           "-preset", "veryfast", "-pix_fmt", "yuv420p", "-c:a", "copy",
+           "-t", "%.3f" % dur, out)
+    if r.returncode != 0:
+        print(r.stderr[-600:], file=sys.stderr)
+        return None
+    return out
+
+
 def main():
     ap = argparse.ArgumentParser(description="Depth pass + the two depth cameras.")
     sub = ap.add_subparsers(dest="cmd", required=True)

@@ -1,0 +1,18 @@
+{
+  "status": "works",
+  "renders": "post",
+  "needs": "A DEPTH MAP per beat, same as dolly_zoom and rack_focus - studio/_tools/depth_pass.depth() off the beat keyframe. short.py builds it on demand and caches it beside the keyframe.",
+  "cost": "One GPU job per beat for the depth map (~30s), then CPU only. The map is estimated from the KEYFRAME and is static while the clip moves, so it drifts out of register as the subject moves - keep the travel short.",
+  "chain_verified": "MEASURED 2026-08-18 on shared/AB/honest/laces_ltx23.mp4 with a real depth map. Against the SAME pan with near_ratio=1.0 (both layers at one speed, i.e. a plain pan): PSNR y 30.09 dB, md5 differs. That is the test orbit failed - orbit was byte-identical to static - and it is the only test that distinguishes a parallax slide from a pan. drift 0.004, motion 12.8.",
+  "evidence": {
+    "verdict": "MEASURED",
+    "method": "rendered through depth_pass.parallax on a real clip and compared against the same move with the depth differential disabled",
+    "date": "2026-08-18",
+    "note": "PSNR y 30.09 dB against a flat pan of the same travel. Built because orbit's card specifies it by name as the honest thing to build instead. Reachable as fx `parallax_l` / `parallax_r`."
+  },
+  "id": "parallax_r",
+  "desc": "A lateral slide to the right, near and far at different speeds.",
+  "verdict": "BUILT 2026-08-18: depth_pass.parallax(direction='r'). Identical to parallax_l with the travel reversed; direction is the only parameter that differs. See parallax_l for the measurement.",
+  "why_not": "",
+  "chain": "[0:v]split[a][b]; near layer pans S*2.2px and far layer pans S px, both off a 1.12x pre-scale so no edge is exposed; the depth map takes the NEAR pan before geq cuts the mask; [far][near][mask]maskedmerge. S defaults to 2% of frame width."
+}
