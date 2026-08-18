@@ -261,18 +261,41 @@ def _restates(caption, line):
     return bool(cap) and not (cap - bag(said))
 
 
-def wrap_caption(txt, width=46):
+def wrap_caption(txt, width=46, balance=False):
     """drawtext does not wrap. A long line runs straight off the side of the frame and the
-    start of it is simply lost - which is worse than useless, because it looks deliberate."""
-    words, lines, cur = txt.split(), [], ""
-    for w in words:
-        if len(cur) + len(w) + 1 > width and cur:
+    start of it is simply lost - which is worse than useless, because it looks deliberate.
+
+    balance=True additionally refuses to leave ONE short word alone on the last line.
+    "three things, that is all" is 25 characters against the hook's width of 24 and broke
+    as "three things, that is" / "all", with the orphan sitting over the subject for the
+    whole film. Used for the hook, which is the one text layer on screen throughout;
+    dialogue and story captions wrap at 34 and 46 where an orphan is cheap and widening
+    would run them off the frame.
+    """
+    def _wrap(w_):
+        words, lines, cur = txt.split(), [], ""
+        for w in words:
+            if len(cur) + len(w) + 1 > w_ and cur:
+                lines.append(cur)
+                cur = w
+            else:
+                cur = f"{cur} {w}".strip()
+        if cur:
             lines.append(cur)
-            cur = w
-        else:
-            cur = f"{cur} {w}".strip()
-    if cur:
-        lines.append(cur)
+        return lines
+
+    lines = _wrap(width)
+    if not balance or len(lines) < 2:
+        return lines
+    # relax the width a little at a time; accept the first wrap with no orphan, and never
+    # go past 25% over, which is where the hook starts touching the frame edge
+    for extra in range(1, int(width * 0.25) + 1):
+        if len(lines[-1].split()) > 1:
+            break
+        cand = _wrap(width + extra)
+        if len(cand) < len(lines) or len(cand[-1].split()) > 1:
+            lines = cand
+            break
     return lines
 
 
@@ -1058,7 +1081,7 @@ def cut(film, out):
         # the hook is set at cw*0.078 against the dialogue's cw*0.036.
         _hl = 0
         for line in hook.split("|"):
-            for part in wrap_caption(line.strip(), width=24):
+            for part in wrap_caption(line.strip(), width=24, balance=True):
                 vf.append(f"drawtext={ff}text='{ffesc(part)}':fontcolor=white:"
                           f"fontsize={int(cw*0.078)}:x=(w-text_w)/2:"
                           f"y={int(ch*0.045) + _hl*int(cw*0.092)}:"
@@ -1089,8 +1112,14 @@ def cut(film, out):
     # images cannot carry a plot on their own; these are what stop the film reading as a
     # random pile of pretty frames. Placed just under the picture area, above the spoken
     # lines, so the two never collide.
-    band = (int(ch * 0.88) if cw >= ch
-            else int((ch + int(cw / 1.38)) / 2) + int(ch * 0.035))
+    # Where the captions sit. The old portrait expression - (ch + cw/1.38)/2 - was the
+    # bottom edge of the LETTERBOXED picture, so captions landed in the black bar with
+    # the bar to themselves. With the picture filling the frame that number is arbitrary
+    # and the story and dialogue captions crowd each other over live footage. When there
+    # is no bar, use the same safe area from the bottom the landscape branch always used.
+    _barred = not (abs(VID[0] / float(VID[1]) - cw / float(ch)) < 0.12 or cw >= ch)
+    band = (int((ch + int(cw / 1.38)) / 2) + int(ch * 0.035) if _barred
+            else int(ch * 0.88))
     for cs, ce, txt in caps:
         for li, ln in enumerate(wrap_caption(txt)):
             vf.append(f"drawtext={ff}text='{ffesc(ln)}':fontcolor=white:"
