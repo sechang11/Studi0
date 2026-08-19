@@ -930,6 +930,7 @@ def cut(film, out):
     print("\n=== SLICING: source clips -> micro-shots ===")
     pieces, cues, caps, t = [], [], [], 0.0
     sfx_cues = []
+    hit_times = []
     n = 0
     for b in film["beats"]:
         src = ensure_local(f"{rel}/clips/{b['id']}_00001_.mp4",
@@ -1013,6 +1014,12 @@ def cut(film, out):
             sp = f"{out}/sfx/{b['id']}_00001.mp3"
             sfx_cues.append((beat_start + float(b.get("sfx_at", 0.0) or 0.0),
                              float(b.get("sfx_level", 1.0) or 1.0), sp))
+        # THE FILM'S MOMENT. `hit: true` on a beat makes the cut into it the point the
+        # score builds to, drops away from, and slams back on. `hit_at` moves it inside
+        # the shot for a gesture rather than a cut. No hit on any beat leaves the score
+        # exactly as it was.
+        if b.get("hit"):
+            hit_times.append(beat_start + float(b.get("hit_at", 0.0) or 0.0))
         if b.get("caption") and not _restates(b.get("caption"), b.get("line")):
             caps.append((beat_start, t, b["caption"]))
         if b.get("line"):
@@ -1283,7 +1290,7 @@ def cut(film, out):
         except OSError:
             print(f"    ! no soundscape card: {film['soundscape']}", file=sys.stderr)
     got = sound_dept.mix_master(work, vertical, total, voices_l, musics_l, sfxs_l,
-                                final, slam, scape=_scape)
+                                final, slam, scape=_scape, hits=hit_times)
     if not got:
         if film.get("silent"):
             # Declared silent. Intent is stated in the film, never inferred from an

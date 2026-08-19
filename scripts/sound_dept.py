@@ -150,7 +150,49 @@ def _scape_levels(scape):
     return off, scale
 
 
-def mix_master(work, vertical, total, voices, musics, sfxs, final, slam, scape=None):
+# The shape of one hit, in seconds around it and gain multipliers.
+# BUILD_IN  how long the climb lasts        BUILD_TO  where it climbs to
+# BREATH    how long the drop before it     BREATH_TO how far it drops
+# HIT_TO    the gain on the frame           HIT_DECAY how long it takes to settle
+BUILD_IN, BUILD_TO = 1.60, 1.38
+BREATH, BREATH_TO = 0.35, 0.16
+HIT_TO, HIT_DECAY = 1.30, 1.40
+
+
+def hit_curve(hits, total):
+    """One ffmpeg `volume` fragment per hit; identity outside its own window.
+
+    A hit is only big if the moment before it is small, so the drop is not decoration -
+    it is the mechanism. Gains are relative to the bus's own level, which the mastering
+    pass then normalises, so this shapes the score without changing how loud the film is.
+    """
+    out = []
+    for T in sorted(float(h) for h in hits or []):
+        if T <= 0 or T >= total:
+            continue
+        a = max(0.0, T - BUILD_IN)          # climb starts
+        b = max(0.0, T - BREATH)            # climb ends, breath starts
+        c = min(total, T + HIT_DECAY)       # settled again
+        if b <= a:
+            continue
+        # THE HIT WINDOW IS TESTED FIRST. between() is inclusive at both ends, so a
+        # breath window ending at T is true AT T - tested first it returned 0.16 on the
+        # very frame the hit lands, and the score would have stayed dropped through the
+        # cut. Order is the whole fix.
+        expr = (
+            "if(between(t,{T},{c}), {hit}-{fall}*(t-{T})/{decay},"
+            "if(between(t,{b},{T}), {breath},"
+            "if(between(t,{a},{b}), 1+{gain}*(t-{a})/{span}, 1)))"
+        ).format(a="%.3f" % a, b="%.3f" % b, T="%.3f" % T, c="%.3f" % c,
+                 gain="%.3f" % (BUILD_TO - 1.0), span="%.3f" % (b - a),
+                 breath="%.3f" % BREATH_TO, hit="%.3f" % HIT_TO,
+                 fall="%.3f" % (HIT_TO - 1.0), decay="%.3f" % max(c - T, 0.01))
+        out.append("volume=eval=frame:volume='%s'" % expr)
+    return out
+
+
+def mix_master(work, vertical, total, voices, musics, sfxs, final, slam,
+               scape=None, hits=None):
     """Three levelled buses, score and effects sidechain-ducked under dialogue, mixed,
     two-pass mastered, muxed under the finished picture.
 
@@ -169,6 +211,22 @@ def mix_master(work, vertical, total, voices, musics, sfxs, final, slam, scape=N
     vbus = _bus(work, "voice", [(at, 1.0, p) for at, p in voices], VOICE_LUFS, total)
     mbus = (None if mus_off is None
             else _bus(work, "mus", musics, MUSIC_LUFS + mus_off, total))
+    # THE SCORE GETS A SHAPE. Without this it is a bed at a fixed gain and the film has
+    # no moment - measured across 23 delivered films, build ratio x1.03 and not one
+    # climax on a cut. Applied to the score only: the dialogue must not swell, and the
+    # impact that lands on the frame rides the SFX bus.
+    curve = hit_curve(hits, total)
+    if mbus and curve:
+        shaped = f"{work}/_bus_mus_shaped.wav"
+        r = sh("ffmpeg", "-y", "-v", "error", "-i", mbus,
+               "-af", ",".join(curve), "-c:a", "pcm_s24le", shaped)
+        if os.path.exists(shaped):
+            mbus = shaped
+            print(f"    score shaped around {len(curve)} hit(s): "
+                  f"build x{BUILD_TO:.2f}, breath x{BREATH_TO:.2f}, hit x{HIT_TO:.2f}")
+        else:
+            print("    ! score shaping failed, flat bed kept: "
+                  + (r.stderr or "")[-160:], file=sys.stderr)
     sbus = _bus(work, "sfx", sfxs, SFX_LUFS, total)
     if not any((vbus, mbus, sbus)):
         return None
