@@ -100,6 +100,16 @@ FPS = 24
 # How long a hit beat holds its line back, so the impact and the score swell
 # play into silence. The moment is made by the gap, not by the gain.
 HIT_VOICE_GAP = 0.45
+# Mastering target for a film built around a moment. slam() raises gain into a limiter
+# until the film measures TARGET_LUFS, which lifts the QUIET parts up to meet the loud
+# ones - so the louder the target, the less a hit stands out. Measured on LUMEN's own raw
+# mix, impact level over median level:
+#
+#     raw   x8.19      -9.5  x1.81      -12.5  x2.94      -16.0  x4.15
+#
+# -12.5 keeps two thirds more of the moment than feed-loud does and is still louder than
+# Spotify's -14. A film with no hit keeps TARGET_LUFS; nothing was wrong with it.
+HIT_TARGET_LUFS = -12.5
 NIGHT = True              # day-for-night grade, see make_cut
 TARGET_LUFS = -9.5        # the reference short measures -9.43 LUFS. Feed-loud, not
                           # broadcast-safe. Do not round this to a nicer number - it is
@@ -945,6 +955,7 @@ def cut(film, out):
     pieces, cues, caps, t = [], [], [], 0.0
     sfx_cues = []
     hit_times = []
+    hit_sfx_cues = []
     audio_drops = []
     n = 0
     for b in film["beats"]:
@@ -1027,8 +1038,11 @@ def cut(film, out):
             n += 1
         if b.get("sfx"):
             sp = f"{out}/sfx/{b['id']}_00001.mp3"
-            sfx_cues.append((beat_start + float(b.get("sfx_at", 0.0) or 0.0),
-                             float(b.get("sfx_level", 1.0) or 1.0), sp))
+            _cue = (beat_start + float(b.get("sfx_at", 0.0) or 0.0),
+                    float(b.get("sfx_level", 1.0) or 1.0), sp)
+            # A hit's effect rides its own bus - louder, and never ducked under the
+            # voiceover. Ordinary effects keep the ordinary treatment.
+            (hit_sfx_cues if b.get("hit") else sfx_cues).append(_cue)
         # THE FILM'S MOMENT. `hit: true` on a beat makes the cut into it the point the
         # score builds to, drops away from, and slams back on. `hit_at` moves it inside
         # the shot for a gesture rather than a cut. No hit on any beat leaves the score
@@ -1301,6 +1315,7 @@ def cut(film, out):
         if os.path.exists(p):
             musics_l.append((float(c.get("at", 0)), float(c.get("level", 1.0)), p))
     sfxs_l = [(at, lv, p) for at, lv, p in sfx_cues if os.path.exists(p)]
+    hits_l = [(at, lv, p) for at, lv, p in hit_sfx_cues if os.path.exists(p)]
 
     slug = film["title"].lower().replace(" ", "-")
     final = f"{out}/{slug}.mp4"
@@ -1324,8 +1339,23 @@ def cut(film, out):
             _scape = json.load(open(_sp, encoding="utf-8"))
         except OSError:
             print(f"    ! no soundscape card: {film['soundscape']}", file=sys.stderr)
+    # A film built around a moment masters with room for it. See HIT_TARGET_LUFS: at
+    # -9.5 the limiter lifts the quiet parts until the hit is only 1.8x its surroundings;
+    # at -12.5 it is 2.9x. `loudness` on the film overrides, because this is a real trade
+    # between carrying on a scroll and having a moment at all.
+    _target = film.get("loudness")
+    if _target is None:
+        _target = HIT_TARGET_LUFS if hit_times else TARGET_LUFS
+    _target = float(_target)
+    if abs(_target - TARGET_LUFS) > 0.01:
+        print(f"    mastering at {_target:.1f} LUFS rather than {TARGET_LUFS:.1f} - "
+              f"{'the film declares a hit' if hit_times else 'the film asks for it'}")
+
+    def _slam(a, b):
+        return slam(a, b, target=_target)
+
     got = sound_dept.mix_master(work, vertical, total, voices_l, musics_l, sfxs_l,
-                                final, slam, scape=_scape, hits=hit_times, drops=audio_drops)
+                                final, _slam, scape=_scape, hits=hit_times, drops=audio_drops, hit_sfx=hits_l)
     if not got:
         if film.get("silent"):
             # Declared silent. Intent is stated in the film, never inferred from an

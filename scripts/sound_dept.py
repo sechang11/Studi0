@@ -30,6 +30,10 @@ sys.path.insert(0, SCRIPTS)
 VOICE_LUFS = -20.0
 MUSIC_LUFS = -26.0
 SFX_LUFS = -30.0
+# The impact a hit is built around. Loud, and never ducked: ordinary SFX
+# step aside for dialogue and should, but the one sound the cut exists for
+# does not. Measured need - a quiet score cannot make a moment on its own.
+HIT_SFX_LUFS = -19.0
 # threshold, ratio - keyed off the dialogue bus
 DUCK = {"mus": (0.15, 4), "sfx": (0.10, 8)}
 
@@ -226,7 +230,7 @@ def drop_curve(drops, total):
 
 
 def mix_master(work, vertical, total, voices, musics, sfxs, final, slam,
-               scape=None, hits=None, drops=None):
+               scape=None, hits=None, drops=None, hit_sfx=None):
     """Three levelled buses, score and effects sidechain-ducked under dialogue, mixed,
     two-pass mastered, muxed under the finished picture.
 
@@ -260,17 +264,21 @@ def mix_master(work, vertical, total, voices, musics, sfxs, final, slam,
               f"(build x{BUILD_TO:.2f}, breath x{BREATH_TO:.2f}, hit x{HIT_TO:.2f}), "
               f"{len(drop_curve(drops, total))} smash dip(s)")
     sbus = _bus(work, "sfx", sfxs, SFX_LUFS, total)
-    if not any((vbus, mbus, sbus)):
+    # The impact bus. Louder than ordinary effects and deliberately absent from the
+    # ducking below - see HIT_SFX_LUFS.
+    hbus = _bus(work, "hit", hit_sfx, HIT_SFX_LUFS, total) if hit_sfx else None
+    if not any((vbus, mbus, sbus, hbus)):
         return None
 
     ins, filt, mix_labels = [], [], []
     idx = {}
-    for name, p in (("voice", vbus), ("mus", mbus), ("sfx", sbus)):
+    for name, p in (("voice", vbus), ("mus", mbus), ("sfx", sbus), ("hit", hbus)):
         if p:
             idx[name] = len(ins) // 2
             ins += ["-i", p]
     if vbus:
         # one sidechain key per ducked bus, plus the copy that gets mixed
+        # `hit` is NOT keyed - it never ducks - so it is not counted here.
         need = sum(1 for b in ("mus", "sfx") if idx.get(b) is not None)
         filt.append(f"[{idx['voice']}:a]asplit={need + 1}"
                     + "".join(f"[k{b}]" for b in ("mus", "sfx") if b in idx)
@@ -305,6 +313,9 @@ def mix_master(work, vertical, total, voices, musics, sfxs, final, slam,
                 else:
                     mix_labels.append(f"[{idx[b]}:a]")
 
+    # Straight to the mix, past every duck. This is the point of it.
+    if "hit" in idx:
+        mix_labels.append(f"[{idx['hit']}:a]")
     raw = f"{work}/_mix_raw.wav"
     filt.append("".join(mix_labels)
                 + f"amix=inputs={len(mix_labels)}:duration=longest:normalize=0,"
