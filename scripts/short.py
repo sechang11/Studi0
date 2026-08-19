@@ -1253,9 +1253,16 @@ def cut(film, out):
         _hl = 0
         for line in hook.split("|"):
             for part in wrap_caption(line.strip(), width=24, balance=True):
+                # OUTLINE, not just a shadow. A shadow is offset - it darkens one
+                # side and leaves the opposite edge touching the background - so
+                # over the bright films (10 of 23 now measure >140 luma behind
+                # their text, paperlight 245) the hook dissolved. An outline
+                # surrounds every stroke and holds at any brightness; on the dark
+                # films it is black on black and costs nothing.
                 vf.append(f"drawtext={ff}text='{ffesc(part)}':fontcolor=white:"
                           f"fontsize={int(cw*0.078)}:x=(w-text_w)/2:"
                           f"y={int(ch*0.045) + _hl*int(cw*0.092)}:"
+                          f"borderw=3:bordercolor=black@0.8:"
                           f"shadowcolor=black@0.9:shadowx=3:shadowy=3")
                 _hl += 1
     # BROADCAST HUD - score and a running clock, drawn in post.
@@ -1272,12 +1279,12 @@ def cut(film, out):
         for lo, hi, txt in ((0, goal_at, hud["before"]), (goal_at, total + 1, hud["after"])):
             vf.append(f"drawtext={ff}text='{ffesc(txt)}':fontcolor=white:"
                       f"fontsize={int(cw*0.040)}:x=(w-text_w)/2:y={top}:"
-                      f"box=1:boxcolor=black@0.62:boxborderw=12:"
+                      f"box=1:boxcolor=black@0.78:boxborderw=12:"
                       f"enable='between(t,{lo:.2f},{hi:.2f})'")
         # clock ticks 89:00 -> 90:00 across the film, so the countdown is SHOWN not claimed
         vf.append(rf"drawtext={ff}text='89\:%{{eif\:min(59,floor(t*60/{total:.2f}))\:d\:2}}':"
                   f"fontcolor=yellow:fontsize={int(cw*0.036)}:x=(w-text_w)/2:"
-                  f"y={top - int(cw*0.055)}:box=1:boxcolor=black@0.62:boxborderw=10")
+                  f"y={top - int(cw*0.055)}:box=1:boxcolor=black@0.78:boxborderw=10")
 
     # STORY CAPTIONS - one per beat, held for the whole beat. At a 0.2s median shot the
     # images cannot carry a plot on their own; these are what stop the film reading as a
@@ -1296,7 +1303,7 @@ def cut(film, out):
             vf.append(f"drawtext={ff}text='{ffesc(ln)}':fontcolor=white:"
                   f"fontsize={int(cw*0.026)}:x=(w-text_w)/2:"
                   f"y={band + li*int(cw*0.034)}:"
-                  f"box=1:boxcolor=black@0.55:boxborderw=10:"
+                  f"box=1:boxcolor=black@0.72:boxborderw=10:"
                   f"shadowcolor=black@0.9:shadowx=2:shadowy=2:"
                   f"enable='between(t,{cs:.2f},{ce:.2f})'")
     # DIALOGUE CAPTIONS WRAP TOO.
@@ -1322,7 +1329,7 @@ def cut(film, out):
         for li, ln in enumerate(lines):
             y = dlg_base - (len(lines) - 1 - li) * int(dlg_size * 1.35)
             vf.append(f"drawtext={ff}text='{ffesc(ln)}':fontcolor=white:fontsize={dlg_size}:"
-                      f"x=(w-text_w)/2:y={y}:box=1:boxcolor=black@0.55:boxborderw=12:"
+                      f"x=(w-text_w)/2:y={y}:box=1:boxcolor=black@0.72:boxborderw=12:"
                       f"enable='between(t,{start:.2f},{start+max(length,0.8):.2f})'")
     vertical = f"{work}/_vertical.mp4"
     sh("ffmpeg", "-y", "-v", "error", "-i", joined, "-vf", ",".join(vf),
