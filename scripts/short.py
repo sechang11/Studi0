@@ -82,6 +82,13 @@ KF = (1664, 928)          # keyframe size
 VID = (1280, 704)         # generated clip size
 
 
+def set_night(film):
+    """Day-for-night is a property of a film, not of the renderer. Off unless asked."""
+    global NIGHT
+    NIGHT = bool(film.get("night", False))
+    return NIGHT
+
+
 def set_format(canvas):
     """Point the generators at the shape we actually deliver.
 
@@ -110,7 +117,15 @@ HIT_VOICE_GAP = 0.45
 # -12.5 keeps two thirds more of the moment than feed-loud does and is still louder than
 # Spotify's -14. A film with no hit keeps TARGET_LUFS; nothing was wrong with it.
 HIT_TARGET_LUFS = -12.5
-NIGHT = True              # day-for-night grade, see make_cut
+# DAY-FOR-NIGHT, and it is OFF by default now. This was True from the initial commit,
+# and because no beat sets a per-beat grade it beat the base grade on every film ever
+# rendered: brightness -0.15, gamma 0.92, saturation 0.72. A 28% desaturation applied to
+# the whole library by a flag nobody set per film. The reasoning beside the grade itself
+# is sound - Animagine renders bright stadiums whatever the prompt says, so night must be
+# graded - it was simply never scoped to films that wanted night.
+#
+# set_format() reads `night` off the film, the same way it reads the canvas.
+NIGHT = False
 TARGET_LUFS = -9.5        # the reference short measures -9.43 LUFS. Feed-loud, not
                           # broadcast-safe. Do not round this to a nicer number - it is
                           # a measurement, and the tolerance below is judged against it.
@@ -341,8 +356,19 @@ def make_cut(src, at, length, fx, dst, seed=0, grade=None, phase=(0, 1)):
     # Chosen by rendering four candidates against a delivered frame and looking at all
     # of them BOTH alone and stacked with `hot` - the magenta case is checked, not
     # assumed. See studio/_tools/grade_options.py, sheet in ~/shared/AB/grades.
-    base = ("curves=all='0/0.02 0.22/0.26 0.5/0.58 0.78/0.88 1/0.995',"
-            "eq=saturation=1.22,colorbalance=gm=-0.05:rm=0.05:bh=0.03")
+    # VIBRANCE, not saturation. Measured over four frames of real footage:
+    #
+    #     none          sat 0.351  val 0.333
+    #     old base      sat 0.426  val 0.318
+    #     filmic_warm   sat 0.377  val 0.390     <- shipped, and LESS vivid than old base
+    #     this          sat 0.501  val 0.413     sat +43%, val +24% against no grade
+    #
+    # `vibrance` lifts muted colours much harder than saturated ones, so the greens and
+    # golds come up without pinning the strong colours at full chroma - eq=saturation
+    # strong enough to match this drives sat_p90 to 1.00, which is poster paint. Here it
+    # is 0.902: strong, not pegged. See studio/_tools/vibrancy.py.
+    base = ("curves=all='0/0.02 0.22/0.28 0.5/0.60 0.78/0.88 1/0.995',"
+            "vibrance=intensity=0.60,eq=saturation=1.12")
     # A PER-BEAT grade from the authored `look` wins. studio/looks/*.json each carry a
     # distinct, tuned grade string, compile.py writes one onto every beat - and until
     # now nothing read it, so night / cold / golden / day_for_night all produced exactly
@@ -1425,6 +1451,8 @@ def main():
     a = ap.parse_args()
     film = json.load(open(a.film, encoding="utf-8"))
     kf, vid = set_format(film.get("canvas") or CANVAS)
+    if set_night(film):
+        print("  day-for-night grade ON (the film asks for it)")
     print("  format: canvas %dx%d -> keyframes %dx%d, clips %dx%d"
           % (CANVAS[0], CANVAS[1], kf[0], kf[1], vid[0], vid[1]))
     slug = film["title"].lower().replace(" ", "-")
