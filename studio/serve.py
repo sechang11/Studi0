@@ -1638,6 +1638,15 @@ class H(http.server.SimpleHTTPRequestHandler):
             return self._page("library.html")
         if path in ("/encyclopedia", "/encyclopedia.html"):
             return self._page("encyclopedia.html")
+        if path in ("/shorts", "/shorts.html"):
+            return self._page("shorts.html")
+        if path == "/api/shorts":
+            fp = os.path.join(HERE, "samples", "shorts_v5.json")
+            if not os.path.exists(fp):
+                return self._send(
+                    {"error": "run studio/_tools/shorts_page.py"}, 500)
+            with open(fp, encoding="utf-8") as f:
+                return self._send(json.load(f))
         if path in ("/identity", "/identity.html"):
             return self._page("identity.html")
         if path == "/api/identity":

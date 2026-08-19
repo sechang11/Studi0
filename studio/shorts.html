@@ -1,0 +1,116 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>studio · shorts</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  :root{color-scheme:light dark;--bg:#0f1115;--panel:#161a21;--panel2:#1c2129;--line:#272d38;
+        --ink:#e6e9ef;--dim:#8b94a3;--accent:#6ea8fe;--ok:#4ec9a0;--warn:#e0b252;--bad:#e07a5f}
+  @media (prefers-color-scheme:light){
+    :root{--bg:#f6f7f9;--panel:#fff;--panel2:#f0f2f5;--line:#dde1e8;--ink:#141821;--dim:#5d6470}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font:14px/1.55 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  header{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;padding:12px 18px;
+         border-bottom:1px solid var(--line);background:var(--panel);position:sticky;top:0;z-index:30}
+  header h1{margin:0;font-size:15px;letter-spacing:.07em;text-transform:uppercase}
+  header .sub{color:var(--dim);font-size:12px}
+  header .right{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+  header a{color:var(--dim);font-size:12px;text-decoration:none;border:1px solid var(--line);
+           border-radius:6px;padding:4px 9px}
+  header a:hover{color:var(--ink);border-color:var(--accent)}
+  main{padding:18px;max-width:1500px;margin:0 auto}
+  .lede{color:var(--dim);max-width:64em;margin:0 0 16px}
+  .bar{display:flex;gap:7px;flex-wrap:wrap;margin:0 0 16px}
+  .bar button{background:var(--panel);color:var(--ink);border:1px solid var(--line);
+              border-radius:6px;padding:5px 11px;cursor:pointer;font:inherit;font-size:13px}
+  .bar button.on{background:var(--accent);color:#08111f;font-weight:600;border-color:var(--accent)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+  .film{border:1px solid var(--line);border-radius:9px;overflow:hidden;background:var(--panel)}
+  .film video{width:100%;display:block;background:#000;aspect-ratio:9/16}
+  .meta{padding:10px 12px}
+  .t{font-weight:600;font-size:15px}
+  .h{color:var(--dim);font-size:12.5px;margin:.15em 0 .5em}
+  .nums{display:flex;gap:10px;flex-wrap:wrap;font-size:11.5px;color:var(--dim);
+        font-family:ui-monospace,Menlo,Consolas,monospace}
+  .nums b{color:var(--ink);font-weight:600}
+  .look{display:inline-block;margin-top:.5em;font-size:11px;padding:2px 7px;border-radius:4px;
+        background:var(--panel2);border:1px solid var(--line);color:var(--dim)}
+  .lines{margin:.6em 0 0;padding:0;list-style:none;font-size:12.5px;color:var(--dim)}
+  .lines li{margin:.15em 0;padding-left:.8em;text-indent:-.8em}
+  .note{margin-top:20px;color:var(--dim);font-size:13px;max-width:64em;line-height:1.7}
+</style>
+
+<header>
+  <h1>Shorts</h1><span class="sub" id="stat">loading…</span>
+  <span class="right">
+    <a href="/verify">verify</a><a href="/library">library</a><a href="/">home</a>
+  </span>
+</header>
+
+<main>
+<p class="lede">The delivered slate, playing, with what each film measures. <b>There is no
+quality score here</b> — nothing on this box knows whether a film is good, and a number
+pretending to would be worse than the empty column. The numbers are here to tell you which
+film you are looking at, not whether to like it.</p>
+
+<div class="bar" id="filters">
+  <button class="on" data-f="all">all</button>
+  <button data-f="commercial">commercials</button>
+  <button data-f="hook">hooks</button>
+  <button data-f="supplement">supplements</button>
+</div>
+
+<div class="grid" id="grid"></div>
+
+<div class="note" id="foot"></div>
+</main>
+
+<script>
+let FILMS = [], F = "all";
+const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g,
+  c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function draw() {
+  const show = FILMS.filter(f => F === "all" || f.kind === F);
+  document.getElementById("grid").innerHTML = show.map(f => `
+    <div class="film">
+      <video src="${f.video}" poster="${f.poster}" controls preload="none"
+             playsinline></video>
+      <div class="meta">
+        <div class="t">${esc(f.title)}</div>
+        <div class="h">${esc((f.hook || "").replace("|", " · "))}</div>
+        <div class="nums">
+          <span>luma <b>${f.luma == null ? "?" : f.luma}</b></span>
+          <span>sat <b>${f.sat == null ? "?" : f.sat}</b></span>
+          <span>shots <b>${f.shots == null ? "?" : f.shots}</b></span>
+        </div>
+        ${f.look ? `<span class="look">${esc(f.look)}</span>` : ""}
+        ${f.lines && f.lines.length
+          ? `<ul class="lines">${f.lines.map(l => `<li>· ${esc(l)}</li>`).join("")}</ul>`
+          : ""}
+      </div>
+    </div>`).join("");
+  document.getElementById("stat").textContent =
+    show.length + " of " + FILMS.length + " films";
+}
+
+document.querySelectorAll("#filters button").forEach(b => b.onclick = () => {
+  document.querySelectorAll("#filters button").forEach(x => x.classList.remove("on"));
+  b.classList.add("on"); F = b.dataset.f; draw();
+});
+
+fetch("/api/shorts").then(r => r.json()).then(d => {
+  FILMS = d.films || [];
+  draw();
+  const lu = FILMS.filter(f => f.luma != null).map(f => f.luma);
+  if (lu.length) {
+    const mean = lu.reduce((a, b) => a + b, 0) / lu.length;
+    document.getElementById("foot").innerHTML =
+      `Slate mean luma <b>${mean.toFixed(1)}</b> of 255. For reference the rejected ` +
+      `slate measured 35.6 and spent almost all of its running time under 64. ` +
+      `Every film here wears a look template from <a href="/verify">the director's ` +
+      `notes</a>; <code>moody_hook</code> is deliberately unused, because dark was ` +
+      `inherited rather than chosen.`;
+  }
+});
+</script>
