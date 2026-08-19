@@ -1,0 +1,48 @@
+{
+  "note": "Named bundles of director's notes. A film wears one with \"look_template\": \"<id>\"; studio/_tools/directions.py applies it. The individual notes live in studio/directions/.",
+  "looks": {
+    "product_daylight": {
+      "name": "Product, daylight",
+      "for": "a thing on a table, in a kitchen, in daylight. The default for commercials.",
+      "directions": [
+        "not_dark",
+        "vivid",
+        "no_fake_motion",
+        "beat_per_line"
+      ],
+      "sets": {
+        "night": false,
+        "energy": "calm"
+      }
+    },
+    "outdoor_hero": {
+      "name": "Outdoor hero",
+      "for": "gear, movement, landscape. Reach for figure_in_landscape as the hero shot - it is the one named best across five reviews.",
+      "directions": [
+        "not_dark",
+        "vivid",
+        "no_fake_motion",
+        "beat_per_line",
+        "figure_in_landscape"
+      ],
+      "sets": {
+        "night": false,
+        "energy": "calm"
+      }
+    },
+    "moody_hook": {
+      "name": "Moody hook",
+      "for": "a teaser that wants unease. The ONLY look that should be dark, and it must be dark on purpose - set night true and say so.",
+      "directions": [
+        "no_fake_motion",
+        "no_shake",
+        "beat_per_line"
+      ],
+      "sets": {
+        "night": true,
+        "energy": "calm"
+      },
+      "warning": "day-for-night costs saturation 0.72 and brightness -0.15. Six hook films measured under luma 64 for their whole runtime wearing it by accident. Choose it, do not inherit it."
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "id": "not_dark",
+  "kind": "fix",
+  "heard": "2026-08-18",
+  "note": "they all seem to have a darkness to them",
+  "means": "The delivered film must read as lit. Two causes were found: the picture occupied 40% of a 9:16 frame with the rest black, and every film was graded day-for-night.",
+  "sets": {
+    "night": false
+  },
+  "also": "short.py generates to the delivery canvas since 2026-08-18 (set_format).",
+  "evidence": "black bars: slate mean luma 36.3 -> 66.6, films mostly under luma 64 20 -> 11. day-for-night off: saturation 0.302 -> 0.620, brightness 0.175 -> 0.409 on the same film and seed.",
+  "status": "applied"
+}

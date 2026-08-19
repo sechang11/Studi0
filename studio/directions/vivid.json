@@ -1,0 +1,13 @@
+{
+  "id": "vivid",
+  "kind": "fix",
+  "heard": "2026-08-19",
+  "note": "the colors still don't look vibrant - something is off with the style",
+  "means": "Colour reads as daylight. Greens green, sky blue, skin warm. Reached with vibrance rather than saturation - vibrance lifts MUTED colour hardest, so the strong colours do not pin at full chroma and go to poster paint.",
+  "sets": {
+    "night": false
+  },
+  "grade": "curves=all='0/0.02 0.22/0.28 0.5/0.60 0.78/0.88 1/0.995',vibrance=intensity=0.60,eq=saturation=1.12",
+  "evidence": "over four real frames: sat 0.351 -> 0.501 (+43%), val 0.333 -> 0.413 (+24%), 90th-percentile saturation 0.902 - strong, not pegged. The previous grade (filmic_warm) measured 0.377 and was LESS vivid than the one it replaced.",
+  "status": "applied"
+}
