@@ -191,8 +191,42 @@ def hit_curve(hits, total):
     return out
 
 
+# A smash transition's dip. Shorter and shallower than a hit's breath on purpose - a
+# smash is punctuation between two shots, a hit is the film's moment, and if they wore
+# the same shape the hit would stop reading as special.
+DROP_LEAD, DROP_HOLD, DROP_BACK = 0.10, 0.55, 0.35
+
+
+def drop_curve(drops, total):
+    """One `volume` fragment per smash boundary; identity outside its own window.
+
+    `audio_drop` is read as a TARGET - 0.4 means fall to 40% of level, not by 40%. A
+    transition whose entire effect is contrast wants the bigger reading, and it is what
+    makes the cut audible rather than merely labelled.
+    """
+    out = []
+    for at, depth in sorted((float(a), float(d)) for a, d in (drops or [])):
+        depth = max(0.0, min(1.0, depth))
+        if at <= 0 or at >= total or depth >= 1.0:
+            continue
+        a = max(0.0, at - DROP_LEAD)
+        b = min(total, at + DROP_HOLD)
+        c = min(total, b + DROP_BACK)
+        if b <= a:
+            continue
+        # the dip is tested before the recovery for the same inclusive-between reason
+        # the hit window is tested first
+        expr = ("if(between(t,{a},{b}), {depth},"
+                "if(between(t,{b},{c}), {depth}+{span}*(t-{b})/{back}, 1))"
+                ).format(a="%.3f" % a, b="%.3f" % b, c="%.3f" % c,
+                         depth="%.3f" % depth, span="%.3f" % (1.0 - depth),
+                         back="%.3f" % max(c - b, 0.01))
+        out.append("volume=eval=frame:volume='%s'" % expr)
+    return out
+
+
 def mix_master(work, vertical, total, voices, musics, sfxs, final, slam,
-               scape=None, hits=None):
+               scape=None, hits=None, drops=None):
     """Three levelled buses, score and effects sidechain-ducked under dialogue, mixed,
     two-pass mastered, muxed under the finished picture.
 
@@ -215,18 +249,16 @@ def mix_master(work, vertical, total, voices, musics, sfxs, final, slam,
     # no moment - measured across 23 delivered films, build ratio x1.03 and not one
     # climax on a cut. Applied to the score only: the dialogue must not swell, and the
     # impact that lands on the frame rides the SFX bus.
-    curve = hit_curve(hits, total)
-    if mbus and curve:
-        shaped = f"{work}/_bus_mus_shaped.wav"
-        r = sh("ffmpeg", "-y", "-v", "error", "-i", mbus,
-               "-af", ",".join(curve), "-c:a", "pcm_s24le", shaped)
-        if os.path.exists(shaped):
-            mbus = shaped
-            print(f"    score shaped around {len(curve)} hit(s): "
-                  f"build x{BUILD_TO:.2f}, breath x{BREATH_TO:.2f}, hit x{HIT_TO:.2f}")
-        else:
-            print("    ! score shaping failed, flat bed kept: "
-                  + (r.stderr or "")[-160:], file=sys.stderr)
+    # THE CURVE IS APPLIED LATER, IN THE GRAPH, AFTER THE DUCK. Shaping the bus file
+    # here put the swell in front of the sidechain compressor, whose entire job is to
+    # remove level differences - it flattened the hit on every film whose score is
+    # quieter than its dialogue. Measured: three films moved by nothing at all while the
+    # log cheerfully reported "score shaped".
+    curve = hit_curve(hits, total) + drop_curve(drops, total)
+    if curve:
+        print(f"    score shaped after ducking: {len(hit_curve(hits, total))} hit(s) "
+              f"(build x{BUILD_TO:.2f}, breath x{BREATH_TO:.2f}, hit x{HIT_TO:.2f}), "
+              f"{len(drop_curve(drops, total))} smash dip(s)")
     sbus = _bus(work, "sfx", sfxs, SFX_LUFS, total)
     if not any((vbus, mbus, sbus)):
         return None
@@ -250,16 +282,28 @@ def mix_master(work, vertical, total, voices, musics, sfxs, final, slam,
                 # duck 0 on the card means "do not duck at all", so the sidechain is
                 # bypassed rather than given ratio 1, which is not the same filter.
                 if duck_scale <= 0:
-                    mix_labels.append(f"[{idx[b]}:a]")
+                    if b == "mus" and curve:
+                        filt.append(f"[{idx[b]}:a]{','.join(curve)}[dmusnd]")
+                        mix_labels.append("[dmusnd]")
+                    else:
+                        mix_labels.append(f"[{idx[b]}:a]")
                     continue
                 ratio = max(1.5, min(20.0, ratio * duck_scale))
+                tail = f"[d{b}]" if not (b == "mus" and curve) else f"[d{b}pre]"
                 filt.append(f"[{idx[b]}:a][k{b}]sidechaincompress=threshold={thr}:"
-                            f"ratio={ratio}:attack=20:release=400[d{b}]")
+                            f"ratio={ratio}:attack=20:release=400{tail}")
+                if b == "mus" and curve:
+                    # the shape goes on LAST so the compressor cannot undo it
+                    filt.append(f"[d{b}pre]{','.join(curve)}[d{b}]")
                 mix_labels.append(f"[d{b}]")
     else:
         for b in ("mus", "sfx"):
             if b in idx:
-                mix_labels.append(f"[{idx[b]}:a]")
+                if b == "mus" and curve:
+                    filt.append(f"[{idx[b]}:a]{','.join(curve)}[dmus]")
+                    mix_labels.append("[dmus]")
+                else:
+                    mix_labels.append(f"[{idx[b]}:a]")
 
     raw = f"{work}/_mix_raw.wav"
     filt.append("".join(mix_labels)

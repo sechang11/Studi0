@@ -1,24 +1,32 @@
 {
   "id": "smash",
-  "desc": "Loud-to-quiet or quiet-to-loud. The CONTRAST is the whole effect - and NOTHING PRODUCES IT TODAY: the audio_drop this card declares has no reader in any renderer, so it compiles to a plain cut. Use `silence: true` on the quiet side instead, which is wired.",
+  "desc": "Loud-to-quiet or quiet-to-loud. The CONTRAST is the whole effect. WIRED FOR SHORTS since 2026-08-19: scripts/short.py reads audio_drop off this card and sound_dept.drop_curve dips the score across the boundary. NOT wired for .movie films - epic.py has its own audio path and does not use sound_dept.mix_master, so a smash there is still a plain cut and `silence: true` remains the workaround.",
   "status": "partial",
   "frames": 0,
   "filter": null,
   "audio_drop": 0.4,
   "verdict": "RENDERED 2026-08-04 between two real clips. THE PICTURE IS IDENTICAL TO A HARD CUT - MAD against cut exactly 0.00. Correct: the effect is the audio_drop of 0.4, and the card is explicit that the contrast is the whole point. Nothing happens to the image.",
   "picture": "identical_to_cut",
-  "renders_in": "nothing",
+  "renders_in": "scripts/short.py (audio only; the picture is a hard cut by design)",
   "tier": {
     "picture": "none",
-    "audio": "none"
+    "audio": "shorts only"
   },
-  "picture_note": "Identical to a hard cut, which would be correct if the audio half existed. It does not.",
-  "broken": "audio_drop 0.4 HAS NO CONSUMER ANYWHERE. Grepped 2026-08-04: the string appears in this card, in the generated studio/samples/video.json index, and in studio/_tools/video_index.py where it is merely PRINTED into a card panel. Nothing in compile.py, short.py or epic.py reads it. So smash compiles to a plain cut and the card's stated effect - 'the CONTRAST is the whole effect' - is absent from every film ever made here. Unlike j_cut and l_cut, which are picture-identical AND fully wired, this one is picture-identical and wired to nothing. status is now partial and the compiler says so per scene.",
-  "workaround": "Put `silence: true` on the quiet side of the boundary. That is wired (compile.py drops the cue for the scene and restarts it after) and it buys the same contrast today.",
+  "picture_note": "Identical to a hard cut, which is CORRECT - the effect was always meant to be the audio dip, and in the shorts path that dip now exists.",
+  "broken": "Half closed. audio_drop 0.4 now has a consumer in the SHORTS path (scripts/short.py -> sound_dept.drop_curve: dips to 40% of level from 0.10s before the boundary, holds 0.55s, recovers over 0.35s). It still has none in scripts/epic.py, which is the .movie renderer. Grepped 2026-08-19.",
+  "workaround": "For .movie films only: put `silence: true` on the quiet side of the boundary - compile.py drops the cue for that scene and restarts it after, which buys the same contrast. Shorts need nothing; the field is honoured directly.",
   "evidence": {
     "verdict": "MEASURED",
-    "method": "measurement session; finding recorded in this card's verdict field",
-    "date": "2026-08-04",
-    "note": "RENDERED 2026-08-04 between two real clips. THE PICTURE IS IDENTICAL TO A HARD CUT - MAD against cut exactly 0.00. Correct: the effect is the audio_drop of 0.4, and the card is explicit that the contr"
-  }
+    "method": "wired into scripts/short.py and sound_dept.drop_curve; the gain curve walked at nine timestamps before rendering",
+    "date": "2026-08-19",
+    "note": "Dips to x0.40 from 0.10s before the cut, holds 0.55s, recovers over 0.35s. Deliberately shallower and shorter than a hit's breath (x0.16 for 0.35s then a slam) - a smash is punctuation, a hit is the film's moment, and matching shapes would stop the hit reading as special. Shorts only; epic.py still has no reader."
+  },
+  "evidence_history": [
+    {
+      "verdict": "MEASURED",
+      "method": "measurement session; finding recorded in this card's verdict field",
+      "date": "2026-08-04",
+      "note": "RENDERED 2026-08-04 between two real clips. THE PICTURE IS IDENTICAL TO A HARD CUT - MAD against cut exactly 0.00. Correct: the effect is the audio_drop of 0.4, and the card is explicit that the contr"
+    }
+  ]
 }

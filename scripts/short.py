@@ -97,6 +97,9 @@ def set_format(canvas):
     VID = (704, 1280) if portrait else (1280, 704)
     return KF, VID
 FPS = 24
+# How long a hit beat holds its line back, so the impact and the score swell
+# play into silence. The moment is made by the gap, not by the gain.
+HIT_VOICE_GAP = 0.45
 NIGHT = True              # day-for-night grade, see make_cut
 TARGET_LUFS = -9.5        # the reference short measures -9.43 LUFS. Feed-loud, not
                           # broadcast-safe. Do not round this to a nicer number - it is
@@ -916,6 +919,17 @@ def calm_beat(beat_cuts, avail):
     return [{"at": 0.0, "len": float(avail), "fx": keep}]
 
 
+def _transition_card(name):
+    """The transition's card, for the fields the renderer honours. None when unknown."""
+    p = os.path.join(os.path.dirname(HERE), "studio", "transitions", "%s.json" % name)
+    if not os.path.exists(p):
+        return None
+    try:
+        return json.load(open(p, encoding="utf-8"))
+    except Exception:
+        return None
+
+
 # ─────────────────────────────────────────────────────────── the cut
 def cut(film, out):
     rel = out.split("output/")[1]
@@ -931,6 +945,7 @@ def cut(film, out):
     pieces, cues, caps, t = [], [], [], 0.0
     sfx_cues = []
     hit_times = []
+    audio_drops = []
     n = 0
     for b in film["beats"]:
         src = ensure_local(f"{rel}/clips/{b['id']}_00001_.mp4",
@@ -1020,6 +1035,15 @@ def cut(film, out):
         # exactly as it was.
         if b.get("hit"):
             hit_times.append(beat_start + float(b.get("hit_at", 0.0) or 0.0))
+        # A transition that declares audio_drop finally gets a consumer. `smash` has
+        # carried 0.4 since it was written and only an index ever read it, so every
+        # smash in every film compiled to a plain cut with a label on it.
+        _tr = b.get("transition")
+        if _tr:
+            _tc = _transition_card(_tr)
+            _ad = (_tc or {}).get("audio_drop")
+            if _ad is not None:
+                audio_drops.append((beat_start, float(_ad)))
         if b.get("caption") and not _restates(b.get("caption"), b.get("line")):
             caps.append((beat_start, t, b["caption"]))
         if b.get("line"):
@@ -1040,6 +1064,17 @@ def cut(film, out):
             # before it cannot push the cue to a negative timestamp, which adelay would
             # reject.
             lead = float(b.get("audio_lead", 0.0) or 0.0)
+            # A HIT NEEDS A GAP. Shaping the score alone does nothing on a film whose
+            # score is quiet under dialogue - measured on LUMEN, where the swell moved
+            # the mix by less than the noise. A trailer's hit is not the music getting
+            # louder, it is everything else stopping: the impact and the score get the
+            # moment to themselves and the line comes in after. Only a default; a beat
+            # that states its own audio_lead has made a deliberate choice and keeps it.
+            # A zero lead is the absence of a choice, not a choice. Testing for the
+            # KEY was wrong: shorts_specs writes audio_lead on every beat, so the guard
+            # was false everywhere and the gap never once applied.
+            if b.get("hit") and not lead:
+                lead = HIT_VOICE_GAP
             cue_start = max(0.0, line_start + lead)
             cues.append((cue_start, min(vd, max(t - cue_start, 0.4)), b["line"], vp))
     print(f"  {len(pieces)} shots, {t:.1f}s, median "
@@ -1290,7 +1325,7 @@ def cut(film, out):
         except OSError:
             print(f"    ! no soundscape card: {film['soundscape']}", file=sys.stderr)
     got = sound_dept.mix_master(work, vertical, total, voices_l, musics_l, sfxs_l,
-                                final, slam, scape=_scape, hits=hit_times)
+                                final, slam, scape=_scape, hits=hit_times, drops=audio_drops)
     if not got:
         if film.get("silent"):
             # Declared silent. Intent is stated in the film, never inferred from an

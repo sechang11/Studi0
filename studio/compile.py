@@ -563,7 +563,7 @@ def compile_movie(path):
                 # is the whole effect, so the whole effect is missing.
                 warns.append(
                     f"{sc['id']}: transition '{tr['id']}' declares audio_drop "
-                    f"{tr['audio_drop']} and no renderer reads it, so the score does not "
+                    f"{tr['audio_drop']} and no .movie renderer reads it (shorts do, since 2026-08-19), so the score does not "
                     f"dip across this boundary and the transition compiles to a plain "
                     f"cut. Put `silence: true` on the quiet side if you want the contrast "
                     f"today.")
