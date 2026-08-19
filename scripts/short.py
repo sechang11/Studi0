@@ -107,6 +107,16 @@ FPS = 24
 # How long a hit beat holds its line back, so the impact and the score swell
 # play into silence. The moment is made by the gap, not by the gain.
 HIT_VOICE_GAP = 0.45
+# THE OPENING. Measured over the slate: the median film opens at 0.33x its own average
+# motion and holds shot one for five seconds - the whole of a feed's patience spent on a
+# plate that is barely moving. LTX holds its keyframe before the motion arrives, which is
+# right after a cut and wrong for the first frame anybody sees.
+# OPEN_SKIP is gone. It entered the opening clip 0.7s late to skip a static hold that
+# does not exist - the source clips measure 0.75 to 0.85 flat across five seconds - and it
+# moved opening motion from 0.33 to 0.31, which is noise. It threw away material and
+# bought nothing. Cutting early is the half that worked: ATLAS's first cut went 5.00s to
+# 1.92s. On footage this uniformly slow, the cut is what makes pace.
+OPEN_SECS = 1.80          # the opening beat runs this long, so the first cut is early
 # Mastering target for a film built around a moment. slam() raises gain into a limiter
 # until the film measures TARGET_LUFS, which lifts the QUIET parts up to meet the loud
 # ones - so the louder the target, the less a hit stands out. Measured on LUMEN's own raw
@@ -939,7 +949,7 @@ CALM_STRIP = {"punch", "push", "pull", "pan_l", "pan_r", "tilt_u", "tilt_d",
               "handheld", "shake", "aberr", "flash"}
 
 
-def calm_beat(beat_cuts, avail):
+def calm_beat(beat_cuts, avail, opening=False):
     """One shot for the whole beat, with the post-motion taken out.
 
     The templates the shorts draw on came from an anime action reference at a 0.30s
@@ -952,6 +962,11 @@ def calm_beat(beat_cuts, avail):
         if f not in seen:
             seen.add(f)
             keep.append(f)
+    if opening:
+        # Start past LTX's opening hold and cut away early. The line is untouched - the
+        # mixer plays each voice file whole, so it runs on under the next shot, which is
+        # an L-cut and what a real edit does anyway.
+        return [{"at": 0.0, "len": min(OPEN_SECS, avail), "fx": keep}]
     return [{"at": 0.0, "len": float(avail), "fx": keep}]
 
 
@@ -998,7 +1013,9 @@ def cut(film, out):
         _calm = str(film.get("energy") or "").lower() == "calm"
         if _calm:
             # one shot per beat, no post-motion: let the generated clip be the shot
-            beat_cuts = calm_beat(beat_cuts, dur(src))
+            _first = (b is film["beats"][0]
+                      and not film.get("slow_open"))
+            beat_cuts = calm_beat(beat_cuts, dur(src), opening=_first)
             beat_impact = False
         # PACE THE PICTURE TO THE READ. The template chose these lengths knowing nothing
         # about the line that plays over them, so a 6.2s read landed on 3.2s of picture

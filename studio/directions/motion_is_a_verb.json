@@ -1,0 +1,11 @@
+{
+  "id": "motion_is_a_verb",
+  "kind": "fix",
+  "heard": "2026-08-19",
+  "note": "what would you use to grab a human's attention?",
+  "means": "Name a physical ACTION with a beginning and an end. The video model gives motion to events, not to moods. Every motion string in this project was a variant of 'gentle natural motion', which is asking for calm and getting it.",
+  "sets": {},
+  "evidence": "same keyframe, seed and length, only the motion prompt varying:\n  'gentle natural motion, cinematic'                       2.17  (what we used)\n  'the hands pull the laces tight and tie a knot'          4.66  +114%\n  'finishes tying, stands up and steps out of frame'       5.79  +166%  BEST\n  'wind gusts through the grass, the laces whip'           3.90   +79%\n  'the camera pushes in quickly towards the boot'         10.59  +387%  BREAKS\n  'dynamic, energetic, fast paced, high energy, exciting'  0.84   -61%\n\nAdjectives asking for energy produced LESS motion than asking for gentleness - the nouns-not-adjectives law in its sharpest form yet. And the highest score is the worst clip: 'camera pushes in' holds four still frames then smears into a mess, so motion score is not a quality measure and must be read beside the pixels.",
+  "rule": "Write motion as: SUBJECT does THING, then THING. Physical, ordered, finite. Never 'dynamic', 'energetic', 'cinematic motion'. Never ask the camera to move fast - LTX will move it and destroy the shot.",
+  "status": "measured; motion strings not yet rewritten across the slate"
+}
