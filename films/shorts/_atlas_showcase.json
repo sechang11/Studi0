@@ -1,0 +1,95 @@
+{
+  "title": "ATLAS SHOWCASE",
+  "hook": "ATLAS|it has been everywhere",
+  "canvas": [
+    1080,
+    1920
+  ],
+  "fps": 24,
+  "engine": "higgs_v3",
+  "keyframe_engine": "qwen",
+  "kind": "commercial",
+  "style": "cinematic film still, anamorphic, dramatic contrast, moody practical lighting, rich shadows, filmic grain, high detail",
+  "voices": {
+    "V": {
+      "engine": "higgs_v3",
+      "voice": "voices_examples/male/male_02.wav"
+    }
+  },
+  "music": [
+    {
+      "at": 0,
+      "prefix": "ad_atlas_pack_score",
+      "bpm": 150,
+      "key": "F minor",
+      "seconds": 30,
+      "level": 0.55,
+      "tags": "epic battle orchestra, taiko drums, war choir, heavy low brass, string ostinato, massive, instrumental"
+    }
+  ],
+  "beats": [
+    {
+      "id": "01_open",
+      "template": "hook",
+      "clip_secs": 5,
+      "prompt": "A worn canvas backpack on a rock at altitude, wide mountain light behind, cinematic, weathered texture",
+      "motion": "Wind moves the straps. Cloud drifts behind.",
+      "caption": "Four continents. One hospital.",
+      "line": {
+        "who": "V",
+        "text": "This pack has been to four continents and one hospital."
+      },
+      "audio_lead": -0.3,
+      "sfx": "high wind over rock",
+      "sfx_secs": 3.0,
+      "sfx_level": 0.7
+    },
+    {
+      "id": "02_point",
+      "template": "build",
+      "clip_secs": 4,
+      "prompt": "Close-up of frayed but intact stitching on a canvas strap, hard side light, texture detail",
+      "motion": "Light travels slowly across the stitching.",
+      "caption": "The strap that failed was mine",
+      "line": {
+        "who": "V",
+        "text": "The strap that failed was mine."
+      },
+      "audio_lead": -0.3,
+      "hit": true,
+      "hit_at": 0.0,
+      "sfx": "deep cinematic impact boom, low sub bass hit, single slam, short tail",
+      "sfx_at": 0.0,
+      "sfx_level": 1.6
+    },
+    {
+      "id": "03_detail",
+      "template": "build",
+      "clip_secs": 4,
+      "prompt": "The pack being lifted onto shoulders, seen from behind, dawn light on a mountain trail, cinematic",
+      "motion": "The pack lifts and settles onto the shoulders.",
+      "caption": "Every gram has held",
+      "line": {
+        "who": "V",
+        "text": "It is heavier than the light ones. Every gram is something that has not broken yet."
+      },
+      "audio_lead": -0.3,
+      "sfx": "canvas and buckles shifting",
+      "sfx_secs": 3.0,
+      "sfx_level": 0.7
+    },
+    {
+      "id": "04_turn",
+      "template": "aftermath",
+      "clip_secs": 4,
+      "prompt": "The pack silhouetted against a bright sky at a summit, wide shot, triumphant light",
+      "motion": "Wind moves the straps against the sky.",
+      "line": {
+        "who": "V",
+        "text": "ATLAS. Buy it once."
+      },
+      "audio_lead": -0.3
+    }
+  ],
+  "energy": "calm"
+}

@@ -1393,7 +1393,10 @@ def cut(film, out):
     print(f"    {total:.1f}s  {cw}x{ch}  {len(pieces)} shots  {aa:.1f}s audio  "
           f"{m.get('input_i','?')} LUFS / {m.get('input_tp','?')} dBTP")
     try:
-        off = float(m.get("input_i")) - TARGET_LUFS
+        # against the target THIS FILM was mastered to, not the global constant -
+        # a film that declares a hit masters at HIT_TARGET_LUFS, and comparing it
+        # to -9.5 made the check fire on every correct render.
+        off = float(m.get("input_i")) - _target
         if abs(off) > 1.5:
             print(f"    !! loudness is {off:+.1f} LU off target - the master did not take")
         if float(m.get("input_tp")) > -0.5:
