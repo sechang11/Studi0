@@ -1,0 +1,122 @@
+{
+  "title": "ATLAS OFFER",
+  "hook": "you have bought|the last bag you will need|three times",
+  "canvas": [
+    1080,
+    1920
+  ],
+  "fps": 24,
+  "engine": "ltx23",
+  "keyframe_engine": "qwen",
+  "kind": "commercial",
+  "energy": "calm",
+  "look_template": "outdoor_hero",
+  "night": false,
+  "style": "documentary photography, available light, weathered real materials, rich colour, sharp focus, high detail",
+  "voices": {
+    "V": {
+      "engine": "higgs_v3",
+      "voice": "voices_examples/male/male_02.wav"
+    }
+  },
+  "music": [
+    {
+      "at": 0,
+      "prefix": "atlas_offer_score",
+      "bpm": 96,
+      "key": "D minor",
+      "seconds": 30,
+      "level": 0.5,
+      "tags": "low sustained strings, slow tension build, single low piano note, sparse percussion entering late, restrained, cinematic"
+    }
+  ],
+  "beats": [
+    {
+      "id": "01_open",
+      "template": "hook",
+      "clip_secs": 5,
+      "prompt": "a canvas backpack shoulder strap torn through mid-fibre, the bag dropped on a wet station platform, contents spilled across the concrete, rain, night lights",
+      "motion": "the torn strap fibres pull apart and the bag drops onto the wet concrete",
+      "caption": "It always goes at the worst moment",
+      "line": {
+        "who": "V",
+        "text": "It never goes at home."
+      },
+      "audio_lead": -0.2
+    },
+    {
+      "id": "02_point",
+      "template": "build",
+      "clip_secs": 5,
+      "prompt": "a person crouched on a wet platform at night holding a broken backpack together with both hands, a train blurring past behind them",
+      "motion": "the hands grip the broken bag tighter and the train blurs past behind",
+      "caption": "Never near a shop",
+      "line": {
+        "who": "V",
+        "text": "It goes on a platform, in the rain, with a train to catch."
+      }
+    },
+    {
+      "id": "03_detail",
+      "template": "build",
+      "clip_secs": 5,
+      "prompt": "a wall of identical cheap new backpacks on a bright retail shelf under hard fluorescent light, price tags hanging",
+      "motion": "the price tags swing and the fluorescent light flickers across the row",
+      "caption": "Built to last about two years",
+      "line": {
+        "who": "V",
+        "text": "Most packs are built to last about two years. Long enough for the reviews."
+      }
+    },
+    {
+      "id": "04_turn",
+      "template": "build",
+      "clip_secs": 5,
+      "prompt": "a heavily worn olive canvas backpack on one shoulder, sun-faded and scuffed, mountain light behind, carried by someone walking",
+      "motion": "the pack swings up onto the shoulder and settles as the person turns away",
+      "caption": "This one is nine",
+      "line": {
+        "who": "V",
+        "text": "This one is nine years old."
+      },
+      "hit": true,
+      "hit_at": 0.0
+    },
+    {
+      "id": "05_proof",
+      "template": "insert",
+      "clip_secs": 5,
+      "prompt": "extreme close up of doubled stitching on a canvas strap join, thick waxed thread, worn fabric, shallow focus",
+      "motion": "the fabric flexes and the doubled thread pulls taut without moving",
+      "caption": "Doubled where every other pack tears first",
+      "line": {
+        "who": "V",
+        "text": "Doubled stitching, exactly where every other pack tears first."
+      }
+    },
+    {
+      "id": "06_offer",
+      "template": "insert",
+      "clip_secs": 5,
+      "prompt": "hands at a workbench stitching a worn canvas backpack strap with a heavy needle, tools laid out, warm work light",
+      "motion": "the needle pushes through the canvas and the thread is drawn tight",
+      "caption": "If it ever tears, we fix it. Free. Forever.",
+      "line": {
+        "who": "V",
+        "text": "And if it ever does tear, we fix it. Free. For as long as you own it."
+      }
+    },
+    {
+      "id": "07_close",
+      "template": "aftermath",
+      "clip_secs": 5,
+      "prompt": "the worn olive canvas pack on one shoulder, a person walking away down a trail into low evening sun, long shadow",
+      "motion": "the person walks away down the trail and the shadow stretches behind them",
+      "caption": "ATLAS. Buy it once.",
+      "line": {
+        "who": "V",
+        "text": "Your current bag already has a date on it. You just have not seen it yet. ATLAS. Buy it once."
+      }
+    }
+  ]
+}
