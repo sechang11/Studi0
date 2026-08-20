@@ -41,36 +41,84 @@ TAGS = ("terra branford (final fantasy vi), 1girl, solo, long wavy green hair, v
         "hair, green eyes, red hair ribbon")
 NEG = ("blurry, lowres, bad anatomy, bad hands, extra limbs, watermark, signature, text, "
        "multiple views, cropped")
+Q = "masterpiece, best quality, dynamic lighting, detailed"
 
-SHOTS = [
-    ("magic",
-     "%s, standing, both hands raised in front of her chest, a sphere of pale green light "
-     "gathering between her palms, wind lifting her hair, dark forest clearing at night, "
-     "masterpiece, best quality, dynamic lighting" % TAGS,
-     "the sphere of green light expands outward from her palms and her hair and clothes lift "
-     "in the blast",
-     "a rising magical hum, then a soft concussive whoomph and wind"),
+LISTS = {
+    # FIVE ELEMENTS. Each one a single decisive burst, radial or upward - never a glow
+    # that simply persists, which is what made `wind` the weakest of the first four.
+    "magic": [
+        ("earth", "%s, standing with both palms slammed down towards the ground, rocky "
+                  "canyon floor, dust rising, %s" % (TAGS, Q),
+         "slabs of stone erupt upward out of the ground around her and dust blasts outward",
+         "a deep rumble, stone cracking and grinding upward, debris falling"),
+        ("fire", "%s, standing with one arm thrown out to the side, embers around her, "
+                 "dark ruined hall, %s" % (TAGS, Q),
+         "a column of fire bursts upward from her outstretched hand and rolls outward "
+         "across the frame",
+         "a heavy whoosh of ignition and a roaring column of flame"),
+        ("water", "%s, standing on wet stone with both arms sweeping up, a river behind "
+                  "her, %s" % (TAGS, Q),
+         "a wall of water rises behind her and curls over sideways across the frame",
+         "water surging and rising, a heavy crash of a breaking wave"),
+        ("ice", "%s, standing with one hand extended low, frost forming on the ground, "
+                "frozen lake, %s" % (TAGS, Q),
+         "jagged ice spikes shoot up out of the ground in a line racing away from her hand",
+         "a sharp crystalline crack and ice splitting in sequence"),
+        ("windmagic", "%s, standing with both hands raised overhead, leaves and grit "
+                      "lifting off the ground, open plain, %s" % (TAGS, Q),
+         "a vortex of wind tears up around her, throwing leaves and grit outward in a ring",
+         "a rising howl of wind and debris whipping past"),
+    ],
 
-    ("cute",
-     "%s, standing, head tilted slightly, one hand half raised, smiling, sunlit meadow "
-     "background, masterpiece, best quality" % TAGS,
-     "she tilts her head further to one side and her long hair swings across her shoulder, "
-     "then her raised hand opens in a small wave",
-     "a light breeze, a soft cloth rustle, gentle birdsong"),
+    # FIVE POSES. Cute is a gesture, not an expression - each of these MOVES.
+    "poses": [
+        ("wave", "%s, standing, both hands raised beside her face, smiling, sunlit meadow, %s"
+         % (TAGS, Q),
+         "she swings both hands out into a big two-handed wave and her hair swings with it",
+         "a light breeze and a soft cloth rustle"),
+        ("spin", "%s, standing mid-turn with her skirt beginning to flare, flower field, %s"
+         % (TAGS, Q),
+         "she spins right around on the spot and her skirt and hair flare out in a full circle",
+         "cloth whipping round and a light laugh"),
+        ("peace", "%s, leaning to one side with one hand near her face, bright plaza, %s"
+         % (TAGS, Q),
+         "she leans further to the side and snaps her hand up into a peace sign, hair "
+         "swinging across",
+         "a quick cloth movement and a cheerful chime"),
+        ("hearts", "%s, standing with both hands together in front of her chest, soft pink "
+                   "light, %s" % (TAGS, Q),
+         "she claps her hands together and a burst of small glowing hearts scatters upward "
+         "and outward",
+         "a soft clap and a sparkling chime rising"),
+        ("curtsy", "%s, standing at the top of a stone stair, holding the edge of her skirt, %s"
+         % (TAGS, Q),
+         "she sweeps into a deep curtsy and her long hair falls forward across her shoulder",
+         "cloth sweeping and a single soft bell"),
+    ],
 
-    ("somersault",
-     "%s, crouched low with knees bent ready to spring, arms back, stone courtyard, "
-     "masterpiece, best quality, dynamic pose" % TAGS,
-     "she springs off the ground, rotates backwards through a full somersault and lands "
-     "in a crouch",
-     "a sharp push off stone, cloth snapping through the air, a landing thud"),
-
-    ("wind",
-     "%s, standing on a cliff edge, long hair and skirt streaming sideways, wide sky "
-     "behind, masterpiece, best quality" % TAGS,
-     "the wind gusts harder from the side and her hair and skirt stream out across the frame",
-     "a strong steady wind, cloth snapping, distant sea"),
-]
+    # FIVE FEATS. The somersault proved rotation works, so these commit harder.
+    "feats": [
+        ("cartwheel", "%s, standing side-on with one arm raised, stone courtyard, %s"
+         % (TAGS, Q),
+         "she throws herself sideways into a cartwheel across the frame and lands upright",
+         "hands slapping stone, cloth snapping, a landing step"),
+        ("frontflip", "%s, crouched low ready to spring forward, temple rooftop, %s"
+         % (TAGS, Q),
+         "she springs forward, tucks into a front flip and lands hard in a crouch",
+         "a push off tile, a rush of air, a heavy landing"),
+        ("slash", "%s, holding a thin sword low behind her, ruined courtyard, %s" % (TAGS, Q),
+         "she steps in and swings the sword up across the frame in one committed slash",
+         "a footstep, a steel blade cutting air, a sharp ring"),
+        ("sprint", "%s, side-on in a low sprint start, long road, %s" % (TAGS, Q),
+         "she drives forward into a sprint and runs left to right out of frame, hair "
+         "streaming behind",
+         "hard fast footfalls and wind past the mic"),
+        ("kick", "%s, standing braced with weight on the back foot, training hall, %s"
+         % (TAGS, Q),
+         "she snaps a high kick up and across the frame and drops back into her stance",
+         "cloth snapping, a sharp exhale, a foot landing on wood"),
+    ],
+}
 
 
 def sh(*a, **kw):
@@ -89,9 +137,18 @@ def run(wf, sets):
 
 
 def main():
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--list", default="magic")
+    ap.add_argument("--only", default="")
+    a = ap.parse_args()
+    shots = LISTS.get(a.list) or sys.exit("no list %r" % a.list)
+    want = set(x for x in a.only.split(",") if x)
     os.makedirs(OUT, exist_ok=True)
     made = []
-    for sid, prompt, action, sound in SHOTS:
+    for sid, prompt, action, sound in shots:
+        if want and sid not in want:
+            continue
         print("  %-11s %s" % (sid, action[:56]), flush=True)
         # her own path: animagine + her sheet through IPAdapter + her tags
         kf, err = run("22_anime_kf_ipadapter.json", [
@@ -132,11 +189,11 @@ def main():
                    "-c:a", "aac", "-b:a", "128k", lab)
                 if os.path.exists(lab):
                     f.write("file '%s'\n" % lab)
-        reel = os.path.join(OUT, "terra_reel.mp4")
+        reel = os.path.join(OUT, "terra_%s.mp4" % a.list)
         sh("ffmpeg", "-y", "-v", "error", "-f", "concat", "-safe", "0", "-i", lst,
            "-c", "copy", reel)
         print("\nreel: %s" % reel)
-    print("%d/%d" % (len(made), len(SHOTS)))
+    print("%d/%d" % (len(made), len(shots)))
 
 
 if __name__ == "__main__":
