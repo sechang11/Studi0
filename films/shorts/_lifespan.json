@@ -1,0 +1,135 @@
+{
+  "title": "THE LIFESPAN",
+  "hook": "he can see|how long your bag|has left",
+  "canvas": [
+    1080,
+    1920
+  ],
+  "fps": 24,
+  "engine": "ltx23",
+  "keyframe_engine": "qwen",
+  "kind": "commercial",
+  "energy": "calm",
+  "look_template": "product_daylight",
+  "night": false,
+  "style": "cinematic street photography, anamorphic, shallow depth of field, rich colour, crowded city, available light, sharp focus, high detail",
+  "voices": {},
+  "music": [
+    {
+      "at": 0,
+      "prefix": "lifespan_score",
+      "bpm": 128,
+      "key": "A minor",
+      "seconds": 24,
+      "level": 0.62,
+      "tags": "tense ticking pulse, low synth bass, rising string tension, clock-like percussion, building, cinematic trailer"
+    }
+  ],
+  "beats": [
+    {
+      "id": "01_open",
+      "template": "hook",
+      "clip_secs": 5,
+      "hold_secs": 2.2,
+      "prompt": "a man walking through a crowded city street at rush hour, people passing in both directions, wet pavement, late afternoon light between buildings",
+      "motion": "the man walks forward through the crowd and people cross in front of him",
+      "caption": "He can see how long things have left"
+    },
+    {
+      "id": "02_look",
+      "template": "insert",
+      "clip_secs": 5,
+      "hold_secs": 1.2,
+      "prompt": "close on a man's eyes narrowing as he looks across a busy street, city light on his face, crowd blurred behind",
+      "motion": "the eyes narrow and track sideways across the street"
+    },
+    {
+      "id": "03_bag1",
+      "template": "insert",
+      "clip_secs": 5,
+      "hold_secs": 1.0,
+      "prompt": "a cheap black nylon commuter backpack on a man's shoulder in a crowded city street, worn strap fraying, shallow focus, documentary photography, available light",
+      "motion": "the bag swings with the walk and the strap flexes under the weight",
+      "card": "322 DAYS",
+      "camera": "punch"
+    },
+    {
+      "id": "04_bag2",
+      "template": "insert",
+      "clip_secs": 5,
+      "hold_secs": 0.9,
+      "prompt": "a canvas tote bag over a woman's arm on a busy pavement, handle stitching coming loose, shallow focus, documentary photography, available light",
+      "motion": "the bag swings with the walk and the strap flexes under the weight",
+      "card": "69",
+      "camera": "punch"
+    },
+    {
+      "id": "05_bag3",
+      "template": "insert",
+      "clip_secs": 5,
+      "hold_secs": 0.8,
+      "prompt": "a brown leather satchel on a commuter's shoulder, strap cracked at the buckle, city crowd, shallow focus, documentary photography, available light",
+      "motion": "the bag swings with the walk and the strap flexes under the weight",
+      "card": "84",
+      "camera": "punch"
+    },
+    {
+      "id": "06_bag4",
+      "template": "insert",
+      "clip_secs": 5,
+      "hold_secs": 0.7,
+      "prompt": "a nylon gym duffel carried in one hand through a station concourse, zip teeth splayed, shallow focus, documentary photography, available light",
+      "motion": "the bag swings with the walk and the strap flexes under the weight",
+      "card": "19",
+      "camera": "punch"
+    },
+    {
+      "id": "07_bag5",
+      "template": "insert",
+      "clip_secs": 5,
+      "hold_secs": 0.6,
+      "prompt": "a child's school backpack on a pavement, seam split at the corner, crowd behind, shallow focus, documentary photography, available light",
+      "motion": "the bag swings with the walk and the strap flexes under the weight",
+      "card": "3",
+      "camera": "punch"
+    },
+    {
+      "id": "08_stop",
+      "template": "insert",
+      "clip_secs": 5,
+      "hold_secs": 1.4,
+      "prompt": "a man stopped still in a moving crowd on a city street, everyone else walking past him, he is looking at something off frame",
+      "motion": "the crowd streams past him and he stays still, then his head turns"
+    },
+    {
+      "id": "09_atlas",
+      "template": "insert",
+      "clip_secs": 5,
+      "hold_secs": 1.2,
+      "prompt": "a heavily worn olive canvas backpack on a stranger's shoulder in a city crowd, sun-faded, scuffed, patched, obviously old and completely intact",
+      "motion": "the worn pack rides the walk and the canvas creases and settles",
+      "camera": "punch"
+    },
+    {
+      "id": "10_inf",
+      "template": "insert",
+      "clip_secs": 5,
+      "hold_secs": 2.0,
+      "prompt": "extreme close up of worn olive canvas and a doubled stitched strap join, thick waxed thread, sunlight raking across the weave",
+      "motion": "the canvas flexes and the light rakes across the doubled thread",
+      "card": "∞",
+      "hit": true,
+      "hit_at": 0.0,
+      "camera": "punch"
+    },
+    {
+      "id": "11_close",
+      "template": "aftermath",
+      "clip_secs": 5,
+      "hold_secs": 2.4,
+      "prompt": "a man walking away down a city street wearing a worn olive canvas backpack, crowd around him, low sun down the street",
+      "motion": "the man walks away down the street and the crowd closes behind him",
+      "caption": "ATLAS. Buy it once."
+    }
+  ]
+}

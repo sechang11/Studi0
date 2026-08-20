@@ -994,6 +994,7 @@ def cut(film, out):
 
     print("\n=== SLICING: source clips -> micro-shots ===")
     pieces, cues, caps, t = [], [], [], 0.0
+    cards = []
     sfx_cues = []
     hit_times = []
     hit_sfx_cues = []
@@ -1016,6 +1017,13 @@ def cut(film, out):
             _first = (b is film["beats"][0]
                       and not film.get("slow_open"))
             beat_cuts = calm_beat(beat_cuts, dur(src), opening=_first)
+            # A beat may set its own length. Calm mode gives every beat its whole clip,
+            # which is right for a product film and impossible for one built on ten cuts
+            # in eight seconds.
+            if b.get("hold_secs"):
+                _h = max(0.25, float(b["hold_secs"]))
+                beat_cuts = [dict(c, len=min(_h, dur(src) - float(c["at"])))
+                             for c in beat_cuts]
             beat_impact = False
         # PACE THE PICTURE TO THE READ. The template chose these lengths knowing nothing
         # about the line that plays over them, so a 6.2s read landed on 3.2s of picture
@@ -1103,6 +1111,10 @@ def cut(film, out):
                 audio_drops.append((beat_start, float(_ad)))
         if b.get("caption") and not _restates(b.get("caption"), b.get("line")):
             caps.append((beat_start, t, b["caption"]))
+        # A CARD is big centred text that IS the shot - a number, a word - as opposed to
+        # a caption, which is a note about the shot in the lower safe area.
+        if b.get("card"):
+            cards.append((beat_start, t, str(b["card"])))
         if b.get("line"):
             vp = f"{out}/voice/{b['id']}.mp3"
             vd = adur(vp) if os.path.exists(vp) else 1.2
@@ -1315,6 +1327,14 @@ def cut(film, out):
     _barred = not (abs(VID[0] / float(VID[1]) - cw / float(ch)) < 0.12 or cw >= ch)
     band = (int((ch + int(cw / 1.38)) / 2) + int(ch * 0.035) if _barred
             else int(ch * 0.88))
+    # CARDS first, so a caption drawn later sits on top of one rather than under it.
+    # Centred, huge, outlined - see `card` on a beat.
+    for cs, ce, txt in cards:
+        vf.append(f"drawtext={ff}text='{ffesc(txt)}':fontcolor=white:"
+                  f"fontsize={int(cw * 0.18)}:x=(w-text_w)/2:y=(h-text_h)/2:"
+                  f"borderw=5:bordercolor=black@0.85:"
+                  f"shadowcolor=black@0.9:shadowx=4:shadowy=4:"
+                  f"enable='between(t,{cs:.2f},{ce:.2f})'")
     for cs, ce, txt in caps:
         for li, ln in enumerate(wrap_caption(txt)):
             vf.append(f"drawtext={ff}text='{ffesc(ln)}':fontcolor=white:"

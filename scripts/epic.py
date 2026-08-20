@@ -274,9 +274,24 @@ def _find_font():
         return os.environ["CARD_FONT"]
     for p in ("C:/Windows/Fonts/arialbd.ttf",
               "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
-              "/usr/share/fonts/dejavu-sans-fonts/DejaVuSans-Bold.ttf"):
+              "/usr/share/fonts/dejavu-sans-fonts/DejaVuSans-Bold.ttf",
+              "/usr/share/fonts/liberation-sans-fonts/LiberationSans-Bold.ttf",
+              "/usr/share/fonts/liberation-sans-fonts/LiberationSans-Regular.ttf",
+              "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf"):
         if os.path.exists(p):
             return p
+    # ASK the system rather than guess. All three original paths were absent here, so
+    # FONT was "" and every text layer in every film fell back to whatever ffmpeg chose -
+    # which draws latin text fine and drew THE LIFESPAN's infinity payoff as an empty box.
+    try:
+        import subprocess as _sp
+        for q in ("DejaVu Sans:bold", "Liberation Sans:bold", "sans-serif"):
+            r = _sp.run(["fc-match", "-f", "%{file}", q], capture_output=True, text=True)
+            f = (r.stdout or "").strip()
+            if f and os.path.exists(f):
+                return f
+    except Exception:
+        pass
     return ""
 
 
