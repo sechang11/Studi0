@@ -1,32 +1,32 @@
 #!/usr/bin/env python3
-"""studio/_tools/terra_h3.py - TERRA through MiniMax H3. Two unknowns at once.
+"""studio/_tools/terra_h3.py - rebuilt for scenes rather than solo effects.
 
-Everything H3 has done here is photoreal: bags, water, powder, espresso, a man in a coat.
-TERRA is an anime illustration off animagine with an IPAdapter reference sheet, and nothing
-has asked H3 to animate a drawing. That is unknown one.
+    "be more creative with each. spend a little more time designing the scene. the magic is
+     cast on an enemy beast, party, or object... the athletic moves, have it interact with
+     the same beast... or a longer sequence like a dance routine. the acting cute, make it
+     a bit longer and be more intentional, like a wink, blowing a kiss, blushing, kawaii"
 
-Unknown two is harder. Every successful shot so far has been an OBJECT acted upon - a bag
-struck, a scoop tipped, a wave washing through. A somersault is a body rotating through its
-own axis with weight and timing, which is the thing video models fail at most visibly. If
-it works, character animation is open; if it tears, the finding is that H3 does props and
-not people, and that is worth knowing before anything is built on it.
+THREE THINGS THAT HAD TO CHANGE IN THE RUNNER, each of them a lesson from a failed shot:
 
-FOUR ACTIONS, written the way the library set was - a force with a direction, never toward
-the camera:
+  `solo` COMES OUT OF HER TAGS when there is a target in frame. Her tag string is
+  "terra branford (final fantasy vi), 1girl, SOLO, long wavy green hair..." and solo is a
+  danbooru tag that actively suppresses a second subject. Asking that prompt for a beast
+  is asking it to fight itself - the same shape as STYLE_KITCHEN saying "morning light"
+  and "muted" in one breath.
 
-    magic       light expands OUT of her hands, hair lifting        (radial, in-plane)
-    cute        head tilts, hair swings across, hand comes up        (lateral)
-    somersault  springs, rotates backwards, lands in a crouch        (rotation + gravity)
-    wind        wind lifts her hair and skirt sideways               (lateral, cloth)
+  LENGTH IS PER SHOT. A dance or gymnastics routine cannot happen in 5.2s. 209 frames
+  (8.7s) is the measured ceiling before the kernel OOMs at 43 GB, so the routines get it
+  and the rest stay at 124.
 
-`wind` is the control. It is the easiest thing H3 could possibly be asked for on a figure,
-so if the somersault fails and the wind works, the limit is body mechanics rather than
-anime.
+  FRAMING IS PER SHOT. A wink is a face. Every previous cute shot was full-body, which put
+  her eyes about forty pixels tall - the gesture was correct and invisible.
 
-Her keyframes come from the anime path that already holds her - animagine plus her own
-reference sheet plus her tags, which the identity test scored as the strongest combination
-this project has. H3 only has to move what that gives it.
+AND EVERY ACTION STILL OBEYS THE THREE RULES THE FAILURES ESTABLISHED:
+  one big committed event, not a gentle continuous one       (`wind`)
+  motion across the frame or with gravity, never toward camera (`mud`)
+  rotation stays in the frame's plane                        (`cartwheel` rolled the camera)
 """
+import argparse
 import io
 import os
 import re
@@ -37,86 +37,134 @@ ROOT = os.path.expanduser("~/shared/comfy-studio")
 COMFY = os.path.expanduser("~/ComfyUI")
 OUT = os.path.expanduser("~/shared/TERRA-H3")
 
-TAGS = ("terra branford (final fantasy vi), 1girl, solo, long wavy green hair, very long "
+# WITH and WITHOUT `solo`. The second is for any frame containing something else alive.
+SOLO = ("terra branford (final fantasy vi), 1girl, solo, long wavy green hair, very long "
         "hair, green eyes, red hair ribbon")
+WITH = ("terra branford (final fantasy vi), 1girl, long wavy green hair, very long hair, "
+        "green eyes, red hair ribbon")
 NEG = ("blurry, lowres, bad anatomy, bad hands, extra limbs, watermark, signature, text, "
        "multiple views, cropped")
-Q = "masterpiece, best quality, dynamic lighting, detailed"
+Q = "masterpiece, best quality, detailed, dynamic lighting, anime key visual"
 
+LONG = 209      # 8.7s - the measured ceiling before the kernel OOMs
+SHORT = 124     # 5.2s
+
+# (id, tags, keyframe, action, sound, length)
 LISTS = {
-    # FIVE ELEMENTS. Each one a single decisive burst, radial or upward - never a glow
-    # that simply persists, which is what made `wind` the weakest of the first four.
-    "magic": [
-        ("earth", "%s, standing with both palms slammed down towards the ground, rocky "
-                  "canyon floor, dust rising, %s" % (TAGS, Q),
-         "slabs of stone erupt upward out of the ground around her and dust blasts outward",
-         "a deep rumble, stone cracking and grinding upward, debris falling"),
-        ("fire", "%s, standing with one arm thrown out to the side, embers around her, "
-                 "dark ruined hall, %s" % (TAGS, Q),
-         "a column of fire bursts upward from her outstretched hand and rolls outward "
-         "across the frame",
-         "a heavy whoosh of ignition and a roaring column of flame"),
-        ("water", "%s, standing on wet stone with both arms sweeping up, a river behind "
-                  "her, %s" % (TAGS, Q),
-         "a wall of water rises behind her and curls over sideways across the frame",
-         "water surging and rising, a heavy crash of a breaking wave"),
-        ("ice", "%s, standing with one hand extended low, frost forming on the ground, "
-                "frozen lake, %s" % (TAGS, Q),
-         "jagged ice spikes shoot up out of the ground in a line racing away from her hand",
-         "a sharp crystalline crack and ice splitting in sequence"),
-        ("windmagic", "%s, standing with both hands raised overhead, leaves and grit "
-                      "lifting off the ground, open plain, %s" % (TAGS, Q),
-         "a vortex of wind tears up around her, throwing leaves and grit outward in a ring",
-         "a rising howl of wind and debris whipping past"),
+    # Magic with a TARGET. The spell has to arrive somewhere and something has to react.
+    "spells": [
+        ("fire_wolf", WITH,
+         "%s, standing braced with one arm thrown forward, facing a huge snarling black "
+         "wolf-beast with burning orange eyes lunging at her across a ruined stone bridge, "
+         "night, %s" % (WITH, Q),
+         "a wall of fire bursts from her hand into the lunging wolf and the beast is thrown "
+         "sideways out of frame, embers scattering",
+         "a roar, an ignition whoosh, a heavy impact and a yelp", SHORT),
+
+        ("ice_bridge", SOLO,
+         "%s, standing at the edge of a deep chasm with one hand extended over the drop, "
+         "mist below, mountain pass, %s" % (SOLO, Q),
+         "a bridge of ice crystallises outward across the chasm from her hand, spreading in "
+         "jagged plates until it reaches the far side",
+         "a crystalline crackle spreading, ice groaning, wind in a chasm", SHORT),
+
+        ("stone_wall", WITH,
+         "%s, crouched low with both palms pressed to the ground, a towering moss-covered "
+         "stone golem raising one huge fist above her, forest ruins, %s" % (WITH, Q),
+         "a slab of rock erupts up out of the ground between her and the golem and the fist "
+         "smashes into it, chunks flying sideways",
+         "stone grinding upward, a huge impact, rubble scattering", SHORT),
+
+        ("heal_knight", WITH,
+         "%s, kneeling beside a wounded armoured knight slumped against a broken wall, both "
+         "her hands held over him, green light in her palms, battlefield dusk, %s"
+         % (WITH, Q),
+         "green light flows from her hands down into the knight and he pushes himself "
+         "upright against the wall",
+         "a soft rising chime, armour shifting, a sharp breath", SHORT),
+
+        ("chain_lightning", WITH,
+         "%s, standing with one arm raised, surrounded at a distance by a ring of small "
+         "shadowy four-legged creatures with white eyes, dark marsh, %s" % (WITH, Q),
+         "lightning arcs from her hand and leaps between the shadow creatures in a chain, "
+         "each one bursting apart as it is struck",
+         "a sharp electrical crack and a rapid chain of bursts", SHORT),
     ],
 
-    # FIVE POSES. Cute is a gesture, not an expression - each of these MOVES.
-    "poses": [
-        ("wave", "%s, standing, both hands raised beside her face, smiling, sunlit meadow, %s"
-         % (TAGS, Q),
-         "she swings both hands out into a big two-handed wave and her hair swings with it",
-         "a light breeze and a soft cloth rustle"),
-        ("spin", "%s, standing mid-turn with her skirt beginning to flare, flower field, %s"
-         % (TAGS, Q),
-         "she spins right around on the spot and her skirt and hair flare out in a full circle",
-         "cloth whipping round and a light laugh"),
-        ("peace", "%s, leaning to one side with one hand near her face, bright plaza, %s"
-         % (TAGS, Q),
-         "she leans further to the side and snaps her hand up into a peace sign, hair "
-         "swinging across",
-         "a quick cloth movement and a cheerful chime"),
-        ("hearts", "%s, standing with both hands together in front of her chest, soft pink "
-                   "light, %s" % (TAGS, Q),
-         "she claps her hands together and a burst of small glowing hearts scatters upward "
-         "and outward",
-         "a soft clap and a sparkling chime rising"),
-        ("curtsy", "%s, standing at the top of a stone stair, holding the edge of her skirt, %s"
-         % (TAGS, Q),
-         "she sweeps into a deep curtsy and her long hair falls forward across her shoulder",
-         "cloth sweeping and a single soft bell"),
+    # Athletic, with a target or as a routine. Rotation stays in the frame's plane.
+    "action": [
+        ("vault_beast", WITH,
+         "%s, sprinting towards a huge charging boar-beast side-on, low camera, dust, "
+         "canyon floor, %s" % (WITH, Q),
+         "she plants one hand on the charging beast's back, vaults over it and lands "
+         "running on the far side",
+         "thundering hooves, a hand slap on hide, a landing skid", SHORT),
+
+        ("duel_claw", WITH,
+         "%s, side-on holding a thin sword in a high guard, a huge scaled clawed arm "
+         "swinging down towards her, ruined hall, %s" % (WITH, Q),
+         "she parries the descending claw with her blade in a shower of sparks and steps "
+         "through into a rising counter-slash",
+         "a heavy claw swing, a metallic clash and sparks, a blade ringing", SHORT),
+
+        ("gym_routine", SOLO,
+         "%s, standing at the corner of a sunlit wooden gymnasium floor, arms raised in an "
+         "opening pose, %s" % (SOLO, Q),
+         "she runs across the floor, springs into a front handspring, lands, immediately "
+         "into a second front flip, lands and finishes with both arms raised",
+         "running footfalls on wood, hands slapping the floor, two landings, applause", LONG),
+
+        ("dance", SOLO,
+         "%s, standing centre on a lantern-lit stone plaza at night, arms low, %s"
+         % (SOLO, Q),
+         "she sweeps into a dance - a turn with her skirt flaring, a step to the side, arms "
+         "carving up and across, then a final spin and a held pose",
+         "a rhythmic drum and string melody, cloth whipping, footfalls on stone", LONG),
+
+        ("staff_flourish", SOLO,
+         "%s, holding a long slender staff angled across her body, temple courtyard, %s"
+         % (SOLO, Q),
+         "she spins the staff in a fast figure-of-eight across her body, steps through and "
+         "snaps it to a stop under one arm",
+         "a staff whistling through air in fast arcs and a sharp final snap", SHORT),
     ],
 
-    # FIVE FEATS. The somersault proved rotation works, so these commit harder.
-    "feats": [
-        ("cartwheel", "%s, standing side-on with one arm raised, stone courtyard, %s"
-         % (TAGS, Q),
-         "she throws herself sideways into a cartwheel across the frame and lands upright",
-         "hands slapping stone, cloth snapping, a landing step"),
-        ("frontflip", "%s, crouched low ready to spring forward, temple rooftop, %s"
-         % (TAGS, Q),
-         "she springs forward, tucks into a front flip and lands hard in a crouch",
-         "a push off tile, a rush of air, a heavy landing"),
-        ("slash", "%s, holding a thin sword low behind her, ruined courtyard, %s" % (TAGS, Q),
-         "she steps in and swings the sword up across the frame in one committed slash",
-         "a footstep, a steel blade cutting air, a sharp ring"),
-        ("sprint", "%s, side-on in a low sprint start, long road, %s" % (TAGS, Q),
-         "she drives forward into a sprint and runs left to right out of frame, hair "
-         "streaming behind",
-         "hard fast footfalls and wind past the mic"),
-        ("kick", "%s, standing braced with weight on the back foot, training hall, %s"
-         % (TAGS, Q),
-         "she snaps a high kick up and across the frame and drops back into her stance",
-         "cloth snapping, a sharp exhale, a foot landing on wood"),
+    # Cute, and CLOSE. A wink is a face; every earlier attempt framed her full-length.
+    "kawaii": [
+        ("wink", SOLO,
+         "%s, upper body portrait, close on her face, smiling warmly at the viewer, soft "
+         "sunlit background, %s" % (SOLO, Q),
+         "she closes one eye in a slow deliberate wink and her smile widens, tilting her "
+         "head slightly",
+         "a soft sparkle chime and a gentle breeze", SHORT),
+
+        ("kiss", SOLO,
+         "%s, upper body portrait, one hand raised near her lips, warm pink background, %s"
+         % (SOLO, Q),
+         "she presses her fingers to her lips and sweeps her hand outward blowing a kiss, "
+         "small glowing hearts trailing off her fingertips",
+         "a soft kiss, a rising sparkle chime", SHORT),
+
+        ("blush", SOLO,
+         "%s, upper body portrait, wide-eyed and startled, hands beginning to rise, warm "
+         "interior, %s" % (SOLO, Q),
+         "a deep blush spreads across her cheeks and she claps both hands over her face, "
+         "then peeks out between her fingers",
+         "a small surprised gasp and a soft chime", SHORT),
+
+        ("pout", SOLO,
+         "%s, upper body portrait, cheeks puffed and eyes narrowed in mock annoyance, arms "
+         "folded, soft background, %s" % (SOLO, Q),
+         "she puffs her cheeks further and turns her face away, then glances back and breaks "
+         "into a laugh",
+         "a small huff, then a light laugh", SHORT),
+
+        ("kawaii", SOLO,
+         "%s, upper body portrait, both hands raised beside her cheeks framing her face, "
+         "sparkles in the air, pastel background, %s" % (SOLO, Q),
+         "she tilts her head, opens both hands beside her face and a burst of sparkles "
+         "scatters outward around her",
+         "a bright sparkling chime and a cheerful hum", SHORT),
     ],
 }
 
@@ -137,53 +185,53 @@ def run(wf, sets):
 
 
 def main():
-    import argparse
     ap = argparse.ArgumentParser()
-    ap.add_argument("--list", default="magic")
+    ap.add_argument("--list", default="spells")
     ap.add_argument("--only", default="")
     a = ap.parse_args()
-    shots = LISTS.get(a.list) or sys.exit("no list %r" % a.list)
+    shots = LISTS.get(a.list)
+    if not shots:
+        sys.exit("no list %r - have %s" % (a.list, ", ".join(LISTS)))
     want = set(x for x in a.only.split(",") if x)
     os.makedirs(OUT, exist_ok=True)
+
     made = []
-    for sid, prompt, action, sound in shots:
+    for sid, _tags, prompt, action, sound, length in shots:
         if want and sid not in want:
             continue
-        print("  %-11s %s" % (sid, action[:56]), flush=True)
-        # her own path: animagine + her sheet through IPAdapter + her tags
+        print("  %-16s %.0fs  %s" % (sid, length / 24.0, action[:48]), flush=True)
         kf, err = run("22_anime_kf_ipadapter.json", [
             ("2.inputs.image", "sheet_anime_terra.png"),
             ("5.inputs.text", prompt), ("6.inputs.text", NEG),
             ("7.inputs.width", 768), ("7.inputs.height", 1344),
             ("8.inputs.seed", 11),
             ("10.inputs.width", 768), ("10.inputs.height", 1344),
-            ("11.inputs.filename_prefix", "claude-generated/terrah3/%s" % sid)])
+            ("11.inputs.filename_prefix", "claude-generated/terrav2/%s" % sid)])
         if not kf:
             print("      keyframe FAILED %s" % err)
             continue
-        staged = "terrah3_%s.png" % sid
+        staged = "terrav2_%s.png" % sid
         sh("cp", kf, os.path.join(COMFY, "input", staged))
         clip, err = run("60_minimax_h3_i2v.json", [
             ("8.inputs.image", staged),
             ("20.inputs.prompt", "%s. Anime animation. Sound: %s." % (action, sound)),
-            ("20.inputs.length", 124), ("33.inputs.noise_seed", 11),
-            ("51.inputs.filename_prefix", "claude-generated/terrah3/clip_%s" % sid)])
+            ("20.inputs.length", length), ("33.inputs.noise_seed", 11),
+            ("51.inputs.filename_prefix", "claude-generated/terrav2/clip_%s" % sid)])
         if not clip:
             print("      clip FAILED %s" % err)
             continue
         dst = os.path.join(OUT, "%s.mp4" % sid)
         sh("cp", clip, dst)
-        sh("cp", kf, os.path.join(OUT, "%s_key.png" % sid))
         made.append((sid, dst))
         print("      ok")
 
     if len(made) > 1:
-        lst = "/tmp/_terra.txt"
+        lst = "/tmp/_tv2_%s.txt" % a.list
         with io.open(lst, "w") as f:
             for sid, p in made:
-                lab = "/tmp/_tl_%s.mp4" % sid
+                lab = "/tmp/_tv2_%s.mp4" % sid
                 sh("ffmpeg", "-y", "-v", "error", "-i", p, "-vf",
-                   "scale=540:-2,drawtext=text='%s':fontcolor=white:fontsize=30:x=18:y=18:"
+                   "scale=540:-2,drawtext=text='%s':fontcolor=white:fontsize=28:x=18:y=18:"
                    "borderw=3:bordercolor=black@0.8" % sid,
                    "-c:v", "libx264", "-crf", "20", "-preset", "veryfast",
                    "-c:a", "aac", "-b:a", "128k", lab)
