@@ -1,0 +1,462 @@
+"""Routes behind /foundry - the selector-driven asset creator.
+
+Same architecture as film_routes: reads synchronous, renders on worker threads through an
+in-memory job table, ComfyUI brought back by script when the envelope kills it.
+
+WHAT RENDERS WHAT. Every asset is generated IN its style, because a photoreal seed pack
+cannot serve an anime film:
+
+  character  qwen styles: portrait + full body from the compiled clause, then the
+             multiple-angles LoRA (workflow 32) turns the full body to 3/4, side and
+             back - one concept in, all angles out.
+             anime: animagine renders the full body from compiled TAGS, then re-renders
+             the other views with the full body as its own IPAdapter reference - the
+             self-reference chain that holds a drawn identity.
+  place      three angles at every selected time of day, straight from the description.
+  costume    a card of the garment alone on a stand; assigning it to a character renders
+             the character WEARING it (two-reference edit for qwen styles, sheet +
+             costume tags for anime) - and that combined image is what films anchor on.
+  prop       a hero shot and a macro.
+
+SEND TO FILM is the bridge: characters become cast entries (clause, short, voice,
+portrait, sheet - files COPIED into the film so films stay self-contained), places become
+scenes with the pack's angles injected as anchor candidates, costumes swap a cast
+member's wear clause and reference image. The same place can be sent to two films, which
+is the point.
+"""
+import json, os, re, shutil, subprocess, sys, threading, time
+import urllib.request
+
+TOOLS = os.path.dirname(os.path.abspath(__file__))
+STUDIO = os.path.dirname(TOOLS)
+ROOT = os.path.dirname(STUDIO)
+sys.path.insert(0, STUDIO)
+sys.path.insert(0, os.path.join(ROOT, "scripts"))
+os.environ.setdefault("COMFY_HOST", "127.0.0.1:8188")
+
+import importlib.util as _ilu                                # noqa: E402
+_spec = _ilu.spec_from_file_location("studio_foundry", os.path.join(STUDIO, "foundry.py"))
+FY = _ilu.module_from_spec(_spec)
+_spec.loader.exec_module(FY)
+_fspec = _ilu.spec_from_file_location("studio_film", os.path.join(STUDIO, "film.py"))
+FM = _ilu.module_from_spec(_fspec)
+_fspec.loader.exec_module(FM)
+
+JOBS = {}
+_LOCK = threading.Lock()
+_SEQ = [0]
+
+QUALITY_TAGS = "masterpiece, best quality, anime key visual, detailed"
+ANIME_NEG = ("photorealistic, photograph, 3d render, cgi, realistic skin, blurry, "
+             "lowres, bad anatomy, bad hands, extra limbs, watermark, signature, text, "
+             "multiple views, nsfw")
+
+
+def _comfy():
+    from comfy import run, set_path
+    from epic import load_wf, ensure_local, HOST, COMFY
+    return run, set_path, load_wf, ensure_local, HOST, COMFY
+
+
+def _job(kind, total=1, **extra):
+    with _LOCK:
+        _SEQ[0] += 1
+        jid = "f%d" % _SEQ[0]
+        JOBS[jid] = {"id": jid, "kind": kind, "state": "running", "done": 0,
+                     "total": total, "log": [], "error": "", "started": time.time()}
+        JOBS[jid].update(extra)
+    return jid
+
+
+def _log(jid, msg):
+    with _LOCK:
+        JOBS[jid]["log"].append(msg)
+        JOBS[jid]["log"] = JOBS[jid]["log"][-30:]
+
+
+def _finish(jid, error=""):
+    with _LOCK:
+        JOBS[jid]["state"] = "failed" if error else "done"
+        JOBS[jid]["error"] = error
+
+
+def ensure_comfy(tries=3):
+    for _ in range(tries):
+        try:
+            urllib.request.urlopen("http://127.0.0.1:8188/system_stats", timeout=5).read()
+            return True
+        except Exception:
+            subprocess.run(["bash", os.path.join(ROOT, "scripts", "restart-comfy.sh")],
+                           capture_output=True)
+            for _ in range(60):
+                try:
+                    urllib.request.urlopen("http://127.0.0.1:8188/system_stats",
+                                           timeout=5).read()
+                    time.sleep(3)
+                    return True
+                except Exception:
+                    time.sleep(5)
+    return False
+
+
+# ─── reads ──────────────────────────────────────────────────────────────────────────
+
+def dictionary():
+    D = FY.load_dict()
+    # the voice sub is dynamic: ready packs only, blocked ones never offered
+    voices = []
+    vdir = os.path.join(STUDIO, "voices")
+    if os.path.isdir(vdir):
+        for fn in sorted(os.listdir(vdir)):
+            if fn.endswith(".json"):
+                try:
+                    v = json.load(open(os.path.join(vdir, fn), encoding="utf-8"))
+                    if v.get("status") == "ready":
+                        voices.append({"id": fn[:-5], "label": v.get("name")})
+                except Exception:
+                    continue
+    D["character"]["subs"]["voice"]["options"] = [
+        {"id": v["id"], "label": v["label"], "frag": ""} for v in voices]
+    return D, 200
+
+
+def listing():
+    out = {}
+    for t in FY.TYPES:
+        out[t] = [{"id": a["id"], "name": a["name"], "style": a.get("style"),
+                   "images": a.get("images", {}), "compiled": a.get("compiled", {}),
+                   "assignments": a.get("assignments", {})}
+                  for a in FY.list_assets(t)]
+    films = [{"id": f.id, "title": f.data.get("title")} for f in FM.list_films()]
+    return {"assets": out, "films": films}, 200
+
+
+def detail(atype, aid):
+    return {"asset": FY.load_asset(atype, aid)}, 200
+
+
+def job_status(jid):
+    with _LOCK:
+        j = JOBS.get(jid)
+        return (dict(j), 200) if j else ({"error": "no such job"}, 404)
+
+
+def jobs_all():
+    with _LOCK:
+        return {"jobs": sorted(JOBS.values(), key=lambda j: j["started"],
+                               reverse=True)[:12]}, 200
+
+
+# ─── writes ─────────────────────────────────────────────────────────────────────────
+
+def new(data):
+    a = FY.new_asset(data["type"], data["name"], data.get("style", "cinematic"),
+                     data.get("selections") or {}, data.get("notes", ""))
+    return {"ok": True, "id": a["id"], "compiled": a["compiled"]}, 200
+
+
+def edit(data):
+    a = FY.load_asset(data["type"], data["id"])
+    if "selections" in data:
+        a["selections"] = data["selections"]
+    if "notes" in data:
+        a["notes"] = data["notes"]
+    if "name" in data:
+        a["name"] = data["name"]
+    FY.recompile(a)
+    return {"ok": True, "compiled": a["compiled"]}, 200
+
+
+def delete(data):
+    shutil.rmtree(FY.asset_dir(data["type"], data["id"]), ignore_errors=True)
+    return {"ok": True}, 200
+
+
+# ─── seed pack rendering ────────────────────────────────────────────────────────────
+
+def _stage(comfy_dir, src, name):
+    shutil.copy(src, os.path.join(comfy_dir, "input", name))
+    return name
+
+
+def _render_direct(a, prompt, dest, seed, wide=False):
+    """One image in the asset's style: qwen for everything except anime, which goes
+    through animagine so the whole pack shares the cel prior."""
+    run, set_path, load_wf, ensure_local, HOST, COMFY = _comfy()
+    st = FY.style_info(a["style"])
+    w, h = (1216, 832) if wide else (896, 1216)
+    if st["kf_engine"] == "animagine":
+        wf = load_wf("22_anime_kf_ipadapter.json")
+        set_path(wf, "2.inputs.image", a.get("_ipa_ref") or "sheet_liwen.png")
+        set_path(wf, "4.inputs.weight", 0.55 if a.get("_ipa_ref") else 0.0)
+        set_path(wf, "5.inputs.text", "%s, %s" % (prompt, QUALITY_TAGS))
+        set_path(wf, "6.inputs.text", ANIME_NEG)
+        set_path(wf, "7.inputs.width", w)
+        set_path(wf, "7.inputs.height", h)
+        set_path(wf, "8.inputs.seed", seed)
+        set_path(wf, "10.inputs.width", w)
+        set_path(wf, "10.inputs.height", h)
+        set_path(wf, "11.inputs.filename_prefix",
+                 "claude-generated/foundry/%s_%s" % (a["type"], a["id"]))
+    else:
+        wf = load_wf("01_qwen_t2i_turbo.json")
+        set_path(wf, "10.inputs.text", "%s. %s" % (prompt, st["look_clause"]))
+        set_path(wf, "11.inputs.text", "blurry, low quality, watermark, text, "
+                 + st["neg"] + ", nsfw")
+        set_path(wf, "12.inputs.width", w)
+        set_path(wf, "12.inputs.height", h)
+        set_path(wf, "13.inputs.seed", seed)
+        set_path(wf, "15.inputs.filename_prefix",
+                 "claude-generated/foundry/%s_%s" % (a["type"], a["id"]))
+    _, outs = run(HOST, wf, quiet=True)
+    if not outs:
+        raise RuntimeError("no output")
+    if os.path.exists(dest):
+        os.remove(dest)  # ensure_local skips existing files
+    ensure_local(outs[0], dest)
+    return dest
+
+
+def _render_turnaround(a, src_rel, prompt, dest, seed):
+    """The multiple-angles LoRA: one image of the subject in, the same subject from a
+    named angle out."""
+    run, set_path, load_wf, ensure_local, HOST, COMFY = _comfy()
+    staged = _stage(COMFY, os.path.join(FY.asset_dir(a["type"], a["id"]), src_rel),
+                    "foundry_turn_%s.png" % a["id"])
+    wf = load_wf("32_qwen_turnaround.json")
+    set_path(wf, "7.inputs.image", staged)
+    set_path(wf, "10.inputs.prompt", prompt)
+    set_path(wf, "15.inputs.seed", seed)
+    set_path(wf, "17.inputs.filename_prefix",
+             "claude-generated/foundry/turn_%s" % a["id"])
+    _, outs = run(HOST, wf, quiet=True)
+    if not outs:
+        raise RuntimeError("turnaround: no output")
+    if os.path.exists(dest):
+        os.remove(dest)  # ensure_local skips existing files
+    ensure_local(outs[0], dest)
+    return dest
+
+
+def _seeds_job(jid, atype, aid):
+    try:
+        a = FY.load_asset(atype, aid)
+        st = FY.style_info(a["style"])
+        if not ensure_comfy():
+            raise RuntimeError("ComfyUI will not come up")
+        plan = FY.seed_plan(a)
+        with _LOCK:
+            JOBS[jid]["total"] = len(plan)
+        adir = FY.asset_dir(atype, aid)
+        run, set_path, load_wf, ensure_local, HOST, COMFY = _comfy()
+
+        for key, kind, prompt in plan:
+            dest = os.path.join(adir, key + ".png")
+            _log(jid, key)
+            if atype == "character":
+                if kind == "direct":
+                    full = "%s, %s" % (a["compiled"]["tags"], prompt) \
+                        if st["kf_engine"] == "animagine" else \
+                        "%s of %s, %s" % ("a" if key != "base_portrait" else "a",
+                                          a["compiled"]["clause"], prompt)
+                    if st["kf_engine"] == "animagine":
+                        # self-reference chain: the full body becomes the pack's ref
+                        a["_ipa_ref"] = None
+                        fb = os.path.join(adir, "base_fullbody.png")
+                        if key != "base_fullbody" and os.path.exists(fb):
+                            ref = _stage(COMFY, fb, "foundry_ref_%s.png" % aid)
+                            a["_ipa_ref"] = ref
+                    _render_direct(a, "%s, %s" % (a["compiled"]["clause"], prompt)
+                                   if st["kf_engine"] != "animagine" else
+                                   "%s, %s" % (a["compiled"]["tags"], prompt),
+                                   dest, seed=21)
+                else:
+                    if st["kf_engine"] == "animagine":
+                        # a drawn identity turns through its own IPAdapter, not the LoRA
+                        fb = os.path.join(adir, "base_fullbody.png")
+                        a["_ipa_ref"] = _stage(COMFY, fb,
+                                               "foundry_ref_%s.png" % aid)
+                        view = {"turn_threequarter": "three-quarter view",
+                                "turn_side": "from side, profile",
+                                "turn_back": "from behind"}[key]
+                        _render_direct(a, "%s, full body, standing, %s, plain "
+                                       "background" % (a["compiled"]["tags"], view),
+                                       dest, seed=23)
+                    else:
+                        _render_turnaround(a, "base_fullbody.png", prompt, dest,
+                                           seed=21)
+            elif atype == "place":
+                a["_ipa_ref"] = None
+                if st["kf_engine"] == "animagine":
+                    _render_direct(a, "no humans, scenery, %s" % prompt, dest,
+                                   seed=31, wide=True)
+                else:
+                    _render_direct(a, prompt, dest, seed=31, wide=True)
+            else:
+                a["_ipa_ref"] = None
+                _render_direct(a, prompt, dest, seed=41,
+                               wide=(atype == "prop"))
+            a2 = FY.load_asset(atype, aid)
+            a2["images"][key] = key + ".png"
+            FY.save_asset(a2)
+            with _LOCK:
+                JOBS[jid]["done"] += 1
+        _finish(jid)
+    except Exception as e:
+        _finish(jid, str(e)[:300])
+
+
+def seeds(data):
+    jid = _job("seeds", asset="%s/%s" % (data["type"], data["id"]))
+    threading.Thread(target=_seeds_job, args=(jid, data["type"], data["id"]),
+                     daemon=True).start()
+    return {"job": jid}, 200
+
+
+# ─── costume onto character ─────────────────────────────────────────────────────────
+
+def _apply_job(jid, char_id, costume_id):
+    run, set_path, load_wf, ensure_local, HOST, COMFY = _comfy()
+    try:
+        ch = FY.load_asset("character", char_id)
+        co = FY.load_asset("costume", costume_id)
+        if not ensure_comfy():
+            raise RuntimeError("ComfyUI will not come up")
+        st = FY.style_info(ch["style"])
+        wear = co["compiled"]["wear_clause"]
+        key = "wearing_%s" % costume_id
+        dest = os.path.join(FY.asset_dir("character", char_id), key + ".png")
+        if st["kf_engine"] == "animagine":
+            fb = os.path.join(FY.asset_dir("character", char_id),
+                              "base_fullbody.png")
+            if not os.path.exists(fb):
+                raise RuntimeError("render the character's seed pack first")
+            ch["_ipa_ref"] = _stage(COMFY, fb, "foundry_ref_%s.png" % char_id)
+            _render_direct(ch, "%s, wearing %s, full body, standing, plain background"
+                           % (ch["compiled"]["tags"], wear), dest, seed=25)
+        else:
+            port = os.path.join(FY.asset_dir("character", char_id),
+                                "base_portrait.png")
+            card = os.path.join(FY.asset_dir("costume", costume_id), "card.png")
+            if not (os.path.exists(port) and os.path.exists(card)):
+                raise RuntimeError("both seed packs must exist first")
+            p0 = _stage(COMFY, port, "foundry_ap_%s.png" % char_id)
+            p1 = _stage(COMFY, card, "foundry_ac_%s.png" % costume_id)
+            wf = load_wf("14_qwen_edit_ref.json")
+            set_path(wf, "8.inputs.image", p0)
+            set_path(wf, "9.inputs.image", p1)
+            set_path(wf, "7.inputs.strength_model", 0.0)
+            set_path(wf, "10.inputs.prompt",
+                     "The person from the first reference image with their exact same "
+                     "face unchanged, now wearing the outfit from the second reference "
+                     "image (%s), full body, standing, plain grey background. %s"
+                     % (wear, st["look_clause"]))
+            set_path(wf, "11.inputs.prompt", "blurry, low quality, watermark, text, "
+                     + st["neg"] + ", nsfw")
+            set_path(wf, "20.inputs.width", 896)
+            set_path(wf, "20.inputs.height", 1216)
+            set_path(wf, "13.inputs.seed", 25)
+            set_path(wf, "15.inputs.filename_prefix",
+                     "claude-generated/foundry/apply_%s" % char_id)
+            _, outs = run(HOST, wf, quiet=True)
+            if not outs:
+                raise RuntimeError("apply render returned nothing")
+            if os.path.exists(dest):
+                os.remove(dest)  # ensure_local skips existing files
+            ensure_local(outs[0], dest)
+        ch2 = FY.load_asset("character", char_id)
+        ch2["images"][key] = key + ".png"
+        ch2["assignments"][costume_id] = {"wear": wear, "image": key + ".png"}
+        FY.save_asset(ch2)
+        _finish(jid)
+    except Exception as e:
+        _finish(jid, str(e)[:300])
+
+
+def apply_costume(data):
+    jid = _job("apply", char=data["character"], costume=data["costume"])
+    threading.Thread(target=_apply_job, args=(jid, data["character"],
+                                              data["costume"]), daemon=True).start()
+    return {"job": jid}, 200
+
+
+# ─── the bridge into /film ──────────────────────────────────────────────────────────
+
+def send_to_film(data):
+    """Inject foundry assets into a film. Files are COPIED so films stay
+    self-contained; the same asset can therefore serve many films."""
+    fid = data["film"]
+    f = FM.load(fid)
+    added = {"cast": [], "scenes": []}
+
+    for spec in data.get("characters") or []:
+        cid = spec["id"] if isinstance(spec, dict) else spec
+        costume = (spec.get("costume") if isinstance(spec, dict) else None) or ""
+        ch = FY.load_asset("character", cid)
+        c = ch["compiled"]
+        clause = c["clause"]
+        if costume and costume in ch.get("assignments", {}):
+            clause = "%s, wearing %s" % (clause,
+                                         ch["assignments"][costume]["wear"])
+        key = cid.upper().replace("-", "_")[:12]
+        entry = {"name": ch["name"], "clause": clause, "short": c["short"],
+                 "sheet": "", "voice": c.get("voice", ""),
+                 "voice_desc": c.get("voice_desc", ""), "portrait": ""}
+        adir = FY.asset_dir("character", cid)
+        # the identity images: outfit-applied beats the base when it exists
+        body_img = None
+        if costume and costume in ch.get("assignments", {}):
+            body_img = os.path.join(adir, ch["assignments"][costume]["image"])
+        elif os.path.exists(os.path.join(adir, "base_fullbody.png")):
+            body_img = os.path.join(adir, "base_fullbody.png")
+        port_img = os.path.join(adir, "base_portrait.png")
+        if os.path.exists(port_img):
+            dst = os.path.join(f.dir, "assets", "cast_%s.png" % key)
+            shutil.copy(port_img, dst)
+            entry["portrait"] = "assets/cast_%s.png" % key
+        if body_img and os.path.exists(body_img):
+            if FY.style_info(ch["style"])["kf_engine"] == "animagine":
+                # the sheet the anime identity route hangs on, staged where 22 loads it
+                from epic import COMFY
+                sheet_name = "foundry_sheet_%s.png" % cid
+                shutil.copy(body_img, os.path.join(COMFY, "input", sheet_name))
+                entry["sheet"] = sheet_name
+            dstb = os.path.join(f.dir, "assets", "cast_%s_body.png" % key)
+            shutil.copy(body_img, dstb)
+        f.data["cast"][key] = entry
+        added["cast"].append(key)
+
+    for spec in data.get("places") or []:
+        pid = spec["id"] if isinstance(spec, dict) else spec
+        time_key = (spec.get("time") if isinstance(spec, dict) else None) or ""
+        pl = FY.load_asset("place", pid)
+        c = pl["compiled"]
+        times = [time_key] if time_key else c["times"][:1]
+        t = times[0]
+        sc = f.new_scene("%s (%s)" % (pl["name"], t),
+                         location=c["description"], time_of_day=c["time_frags"].get(t, t),
+                         ambience=c["ambience"], palette=c.get("palette", ""))
+        adir = FY.asset_dir("place", pid)
+        cands = []
+        for akey in ("wide", "reverse", "detail"):
+            src = os.path.join(adir, "%s_%s.png" % (t, akey))
+            if os.path.exists(src):
+                rel = "assets/anchor_%s_c%d.png" % (sc["id"], len(cands))
+                shutil.copy(src, os.path.join(f.dir, rel))
+                cands.append(rel)
+        if cands:
+            shutil.copy(os.path.join(f.dir, cands[0]),
+                        os.path.join(f.dir, "assets", "anchor_%s.png" % sc["id"]))
+            sc["anchor"] = "assets/anchor_%s.png" % sc["id"]
+            sc["anchor_candidates"] = cands
+        added["scenes"].append(sc["id"])
+
+    for spec in data.get("music") or []:
+        mid = spec["id"] if isinstance(spec, dict) else spec
+        scid = spec.get("scene") if isinstance(spec, dict) else None
+        mu = FY.load_asset("music", mid)
+        if scid:
+            f.scene(scid)["music"] = mu["compiled"]["tags"]
+
+    f.save()
+    return {"ok": True, "added": added}, 200

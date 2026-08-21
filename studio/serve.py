@@ -1101,6 +1101,11 @@ def _toolbox():
     """studio/_tools/toolbox.py on demand, like the other _tools importers."""
     return _load_tool_module('toolbox')
 
+def _foundry_routes():
+    """studio/_tools/foundry_routes.py on demand - the selector-driven asset creator."""
+    return _load_tool_module('foundry_routes')
+
+
 def _film_routes():
     """studio/_tools/film_routes.py on demand, like _story_routes. The shot-by-shot
     editor: films/scenes/shots/takes across the 2.5-era engines."""
@@ -1325,6 +1330,47 @@ class H(http.server.SimpleHTTPRequestHandler):
                     return self._send({"error": "no such bundle"}, 404)
                 return self._send_file(fp, "application/zip")
             return self._send({"error": "unknown generate route"}, 404)
+        # /foundry - build characters, places, costumes and props from selectors,
+        # render their seed packs, and send them into films.
+        if path == "/foundry":
+            return self._page("foundry.html")
+        if path.startswith("/foundry/media/"):
+            rel = urllib.parse.unquote(path[len("/foundry/media/"):])
+            base = os.path.realpath(os.path.join(HERE, "foundry"))
+            fp = os.path.realpath(os.path.join(base, rel))
+            if not (fp.startswith(base + os.sep) and os.path.isfile(fp)):
+                return self._send({"error": "no such file"}, 404)
+            ext = os.path.splitext(fp)[1].lower()
+            return self._send_file(fp, MIME.get(ext, "application/octet-stream"))
+        if path == "/api/foundry" or path.startswith("/api/foundry/"):
+            fo = _foundry_routes()
+            if not fo:
+                return self._send({"error": "studio/_tools/foundry_routes.py is "
+                                            "unavailable"}, 500)
+            rest = path[len("/api/foundry"):].strip("/")
+            try:
+                if not rest:
+                    body, code = fo.listing()
+                    return self._send(body, code)
+                bits = rest.split("/")
+                if bits[0] == "dictionary":
+                    body, code = fo.dictionary()
+                    return self._send(body, code)
+                if bits[0] == "jobs":
+                    body, code = fo.jobs_all()
+                    return self._send(body, code)
+                if bits[0] == "job" and len(bits) == 2:
+                    body, code = fo.job_status(bits[1])
+                    return self._send(body, code)
+                if len(bits) == 2:
+                    body, code = fo.detail(bits[0], bits[1])
+                    return self._send(body, code)
+            except KeyError as e:
+                return self._send({"error": str(e)}, 404)
+            except Exception as e:
+                traceback.print_exc()
+                return self._send({"error": str(e)[:300]}, 500)
+            return self._send({"error": "unknown foundry route"}, 404)
         # /film - the shot-by-shot editor on the 2.5-era engines. Same shape as
         # /story: reads are synchronous, renders go through a job table in film_routes.
         if path == "/film":
@@ -2305,6 +2351,9 @@ class H(http.server.SimpleHTTPRequestHandler):
                      "/api/film/takes", "/api/film/anchor", "/api/film/autonext",
                      "/api/film/vo", "/api/film/assemble",
                      "/api/film/portrait", "/api/film/master", "/api/film/draftall",
+                     "/api/foundry/new", "/api/foundry/edit", "/api/foundry/delete",
+                     "/api/foundry/seeds", "/api/foundry/apply",
+                     "/api/foundry/send",
                      "/api/character/upload", "/api/character/create",
                      "/api/voice/demo", "/api/voice/add",
                      "/api/character/suite", "/api/character/analyse",
@@ -2565,6 +2614,22 @@ class H(http.server.SimpleHTTPRequestHandler):
                   "analyse": cr.analyse}[p[len("/api/character/"):]]
             try:
                 body, code = fn(data)
+            except Exception as e:
+                traceback.print_exc()
+                return self._send({"error": str(e)[:300]}, 500)
+            return self._send(body, code)
+        if p.startswith("/api/foundry/"):
+            fo = _foundry_routes()
+            if not fo:
+                return self._send({"error": "studio/_tools/foundry_routes.py is "
+                                            "unavailable"}, 500)
+            fn = {"new": fo.new, "edit": fo.edit, "delete": fo.delete,
+                  "seeds": fo.seeds, "apply": fo.apply_costume,
+                  "send": fo.send_to_film}[p[len("/api/foundry/"):]]
+            try:
+                body, code = fn(data)
+            except KeyError as e:
+                return self._send({"error": str(e)}, 404)
             except Exception as e:
                 traceback.print_exc()
                 return self._send({"error": str(e)[:300]}, 500)

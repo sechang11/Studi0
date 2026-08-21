@@ -319,3 +319,87 @@ Measured across seven re-shoots of the same film, so it does not have to be rele
 
 Anime is different: costume and hair silhouette carry identity through cuts, which is why
 FIRST LIGHT never had this problem.
+
+## §19  The foundry: build by selecting
+
+Freestyle prompt-writing is the hardest interface we ship. The untrained eye
+cannot describe what it wants in one pass with enough detail; it can only
+*recognise* it. The foundry turns that recognition into the workflow: every
+creative decision is a selector, every selector option carries a hidden prompt
+fragment, and the compiled prompt rides along with the asset where nobody has
+to read it.
+
+**Main variables are entities; sub-variables are their selectors.**
+`style`, `character`, `place`, `costume`, `prop`, `music` are main. Face
+shape, hair colour, time of day, closure, aura, tempo are sub. A main
+variable owns files on disk (`studio/foundry/<type>s/<id>/`); a sub variable
+only ever contributes a fragment to its main's compile. Voice is a sub of
+character — offered dynamically from the ready voice packs, never from the
+dictionary file (blocked packs must not appear).
+
+**The dictionary is the single source of truth** (`studio/foundry/dictionary.json`,
+6 mains / 35 subs / 254 options). The UI renders its forms *generically* from
+it: adding an option (or a whole sub) is a data edit, not a UI edit. Each
+style in the spectrum (photoreal → cinematic → noir → watercolour → anime →
+cartoon → claymation → pixel) carries its own `look_clause`, negative, and
+keyframe engine (`qwen` for photographic styles, `animagine` for drawn ones).
+
+**Compile rules learned the hard way:**
+- The prose clause and the danbooru tag stack are compiled SEPARATELY and
+  consumed by different engines (clause → LTX prose; tags → animagine
+  keyframes). Anything appended to only one of them silently fails on the
+  other — free-text notes must join BOTH.
+- Age and facial hair must be explicit tags. Silver hair alone reads as a
+  young bishounen to animagine, never as an elder; "old man, elderly,
+  wrinkles, beard" lands what "grey hair, 70s" cannot.
+- `beast → "creature"` draws emblems and heraldry, not animals. Use
+  "no humans, animal focus, full body" plus the species in notes.
+- Grammar assembly matters: fragments join as "a short, slightly built
+  woman", article first — naive joins produce "short slightly built a woman"
+  and the model draws the confusion.
+
+**Seed packs are the point.** Creating an asset stores selections; *seeding*
+it renders the reference images every later render hangs on: characters get
+portrait + full body + three turnarounds (drawn styles turn through their own
+IPAdapter self-reference at 0.55, photographic styles through the
+multiple-angles LoRA of wf32); places get wide/reverse/detail × every
+selected time of day; costumes get a garment card; props get hero + macro.
+Assets are film-independent. `send_to_film` COPIES files into the film so
+films stay self-contained — the same library place can dress two films, the
+demo being the night-market serving scene 1 (night) and scene 5 (dawn) of the
+same film as two different scenes.
+
+**Costume × character is a render, not a caption.** `apply` re-renders the
+character full-body wearing the costume (drawn styles: self-ref chain + wear
+tags; photo styles: wf14 two-reference edit). The applied image becomes the
+identity sheet the film anchors on, so a cast swap mid-film ("Jin changes
+into festival silks between scenes 4 and 5") is one more `send` with a
+different costume id.
+
+**ensure_local() is download-if-missing.** Any pipeline that re-renders into
+an existing path must delete the file first or the GPU burns and the stale
+file survives, which looks *identical* to "the render worked". Detection
+without a consumer, file edition.
+
+## §20  Directing from selectors: what the 3-minute film proved
+
+THE LANTERN THIEF (~3 min, anime, 5 scenes / 11 shots) was made end-to-end
+from foundry assets: zero free-written look prompts — every character, place,
+costume, prop and music bed came from selector choices, and the shot list
+only wrote *actions* (what happens), never *appearances* (what things look
+like). The division of labour is the doctrine:
+
+- **Appearance lives in assets.** The compiler splices each cast member's
+  full compiled clause (including their costume's wear text) into every beat
+  that names them — re-identification at every cut for free, from data.
+- **Action lives in beats.** A beat is framing + move + subject + action +
+  background + optional dialogue. Beats stay short; the compiled paragraph
+  gets long. That is correct — length from data, not from typing.
+- **Sound lives twice**: the place's ambience bed (from the base + weather
+  selectors) runs under every shot in the scene; the shot's own sfx line
+  adds the named noises. Both restated as continuing unbroken across cuts.
+- **Music is a selector too** (mood × tempo × instruments → ACE tags), sent
+  per-scene, mixed at assembly under the location sound.
+- **Anime dialogue is VO, not lip-sync** — drawn mouths do not move. Keep
+  lines short, prefer two-shots/off-angles for spoken beats, let delivery
+  descriptors ("a wry whisper") do the acting.

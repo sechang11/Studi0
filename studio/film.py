@@ -86,7 +86,7 @@ TRANSITIONS_OUT = ["cut", "fade", "dissolve", "dip to black"]   # at assembly
 CLOSE_ANGLES = {"close-up", "tight close-up", "extreme macro shot"}
 
 # ── engine envelopes, all measured ──────────────────────────────────────────────────
-LTX_SAFE = [(1.0, 30), (1.2, 20), (1.5, 12), (2.0, 8)]   # (max MP, max seconds)
+LTX_SAFE = [(0.9, 30), (1.2, 20), (1.5, 12), (2.0, 8)]   # (max MP, max seconds); 1.0x28 died in VAE decode - 0.9/30 is the MEASURED cell
 H3_MAX_FRAMES = 209                                       # 8.7s; the kernel OOMs past it
 WAN_FRAMES, WAN_FPS = 81, 16                              # ~5s, silent
 

@@ -1,0 +1,297 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Foundry - build by selecting</title>
+<style>
+:root{--bg:#0e0e12;--panel:#181820;--line:#2a2a36;--ink:#e9e9f0;--dim:#8d8d9c;
+      --accent:#9fb3ff;--good:#7fd1a0;--warn:#ffc978;--bad:#ff8f8f;--rule:#c9a0ff}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:14px/1.45 system-ui,-apple-system,sans-serif;margin:0}
+nav.top{padding:12px 22px;border-bottom:1px solid var(--line)}
+nav.top a{color:var(--accent);text-decoration:none;margin-right:14px}
+h1{font-size:18px;margin:0}
+h2{font-size:12px;color:var(--accent);margin:16px 0 8px;text-transform:uppercase;letter-spacing:.06em}
+h3{font-size:13px;margin:10px 0 4px}
+button{background:#232330;color:var(--ink);border:1px solid var(--line);border-radius:6px;
+       padding:5px 10px;cursor:pointer;font:inherit;font-size:13px}
+button:hover{border-color:var(--accent)}
+button.primary{background:#2c3450;border-color:var(--accent)}
+button.small{padding:2px 7px;font-size:12px}
+select,input,textarea{background:#101017;color:var(--ink);border:1px solid var(--line);
+       border-radius:5px;padding:4px 7px;font:inherit;font-size:13px}
+label{font-size:11px;color:var(--dim);display:block;margin:8px 0 3px;text-transform:uppercase;letter-spacing:.04em}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.grow{flex:1}
+#bar{display:flex;gap:12px;align-items:center;padding:10px 22px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+#job{font-size:12px;color:var(--dim);max-width:520px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#job.err{color:var(--bad)}
+#main{display:grid;grid-template-columns:1fr 430px;min-height:calc(100vh - 110px)}
+#left{padding:14px 20px;overflow-y:auto;max-height:calc(100vh - 110px)}
+#right{border-left:1px solid var(--line);padding:0 16px 40px;overflow-y:auto;max-height:calc(100vh - 110px)}
+.spectrum{display:flex;gap:0;border:1px solid var(--line);border-radius:8px;overflow:hidden;margin:6px 0 2px}
+.spectrum div{flex:1;text-align:center;font-size:11px;padding:7px 2px;cursor:pointer;color:var(--dim);
+              border-right:1px solid var(--line)}
+.spectrum div:last-child{border-right:0}
+.spectrum div.sel{background:#2c3450;color:var(--ink)}
+.speclabel{display:flex;justify-content:space-between;font-size:10px;color:var(--dim);margin-bottom:10px}
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px;margin:8px 0 4px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px;cursor:pointer}
+.card.sel{border-color:var(--accent)}
+.card img{width:100%;height:150px;object-fit:cover;border-radius:5px;background:#000}
+.card .noimg{width:100%;height:150px;border-radius:5px;background:#101017;border:1px dashed var(--line);
+             display:flex;align-items:center;justify-content:center;color:var(--dim);font-size:11px}
+.card .t{font-size:13px;margin-top:6px}
+.card .d{font-size:11px;color:var(--dim)}
+.badge{display:inline-block;font-size:10px;border:1px solid var(--line);border-radius:3px;
+       padding:0 4px;margin-right:3px;color:var(--dim)}
+.badge.on{color:var(--good);border-color:var(--good)}
+.chips{display:flex;flex-wrap:wrap;gap:5px}
+.chip{border:1px solid var(--line);border-radius:12px;padding:2px 10px;font-size:12px;cursor:pointer;color:var(--dim)}
+.chip.sel{border-color:var(--accent);color:var(--ink);background:#232338}
+.packgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;margin-top:8px}
+.packgrid figure{margin:0}
+.packgrid img{width:100%;border-radius:5px;background:#000}
+.packgrid figcaption{font-size:10px;color:var(--dim);text-align:center}
+pre.hidden-prompt{background:#101017;border:1px solid var(--line);border-radius:6px;padding:8px;
+    font-size:11px;white-space:pre-wrap;color:var(--dim)}
+.hint{color:var(--dim);font-size:12px}
+.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}
+</style>
+</head>
+<body>
+<nav class="top"><a href="/">studio</a><a href="/foundry"><b>foundry</b></a>
+<a href="/film">film</a><a href="/story">story</a><a href="/video">video</a><a href="/voices.html">voices</a></nav>
+<div id="bar">
+  <h1>Foundry</h1>
+  <span class="hint">build by selecting - the prompts ride along, hidden</span>
+  <span class="grow"></span>
+  <span id="job"></span>
+</div>
+<div id="main">
+  <section id="left"></section>
+  <aside id="right"><div class="hint" style="margin-top:14px">Select an asset, or start a new one.</div></aside>
+</div>
+<script>
+"use strict";
+let DICT=null, DATA=null, STYLE="anime", SEL=null, FORM=null, WATCH=new Set();
+const $=q=>document.querySelector(q);
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const m=p=>`/foundry/media/${p}`;
+async function api(p,body){
+  const r=await fetch("/api/foundry"+p, body?{method:"POST",headers:{"Content-Type":"application/json"},
+                                              body:JSON.stringify(body)}:{});
+  const j=await r.json().catch(()=>({error:"bad json"}));
+  if(!r.ok||j.error){ note(j.error||r.status,true); throw new Error(j.error||r.status); }
+  return j;
+}
+function note(t,err){ const el=$("#job"); el.textContent=t; el.className=err?"err":""; }
+
+async function boot(){
+  DICT=await api("/dictionary");
+  DATA=await api("");
+  renderLeft();
+  pollJobs();
+}
+function thumbOf(a){
+  const im=a.images||{};
+  const pick=im.base_portrait||im.card||im.hero||Object.values(im)[0];
+  return pick?`${a.type||""}s/${a.id}/${pick}`:null;
+}
+function renderLeft(){
+  const spec=DICT.style.spectrum;
+  let h=`<h2>Style - the film's look <span class="hint">(assets are generated in a style)</span></h2>
+    <div class="spectrum">${spec.map(s=>
+      `<div class="${s===STYLE?"sel":""}" onclick="STYLE='${s}';renderLeft();if(FORM)startNew(FORM.type)">
+       ${esc(DICT.style.options[s].label)}</div>`).join("")}</div>
+    <div class="speclabel"><span>← real life</span><span>cartoony →</span></div>`;
+  for(const t of ["character","place","costume","prop","music"]){
+    const assets=(DATA.assets[t]||[]).filter(a=>a.style===STYLE||t==="music");
+    const plural = t==="music" ? "Music" : esc(DICT[t].label)+"s";
+    h+=`<h2>${plural}
+        <button class="small" style="margin-left:8px" onclick="startNew('${t}')">+ new</button></h2>
+      <div class="gallery">`+
+      assets.map(a=>{
+        const th=thumbOf({...a,type:t});
+        const nimg=Object.keys(a.images||{}).length;
+        return `<div class="card ${SEL&&SEL.type===t&&SEL.id===a.id?"sel":""}" onclick="openAsset('${t}','${a.id}')">
+          ${th?`<img src="${m(th)}">`:`<div class="noimg">${t==="music"?"♪":"no seeds yet"}</div>`}
+          <div class="t">${esc(a.name)}</div>
+          <div class="d"><span class="badge">${esc(a.style)}</span>
+            ${nimg?`<span class="badge on">${nimg} seeds</span>`:""}
+            ${Object.keys(a.assignments||{}).length?`<span class="badge on">outfits</span>`:""}</div>
+        </div>`;
+      }).join("")+`</div>`;
+  }
+  $("#left").innerHTML=h;
+}
+
+/* ── the generic selector form, rendered straight from the dictionary ─────── */
+function startNew(type){
+  FORM={type, name:"", selections:FORM&&FORM.type===type?FORM.selections:{}, notes:""};
+  SEL=null; renderLeft(); renderForm();
+}
+function renderForm(){
+  const spec=DICT[FORM.type];
+  let h=`<h2>New ${esc(spec.label)} <span class="badge">${esc(STYLE)}</span></h2>
+    <label>name</label><input id="n_name" value="${esc(FORM.name)}" style="width:100%">`;
+  for(const [sid,sub] of Object.entries(spec.subs)){
+    const cur=FORM.selections[sid];
+    if(sub.multi){
+      h+=`<label>${esc(sub.label)}</label><div class="chips">`+
+        sub.options.map(o=>`<div class="chip ${(cur||[]).includes(o.id)?"sel":""}"
+          onclick="toggleMulti('${sid}','${o.id}')">${esc(o.label)}</div>`).join("")+`</div>`;
+    }else{
+      h+=`<label>${esc(sub.label)}</label>
+        <select onchange="FORM.selections['${sid}']=this.value;preview()" style="width:100%">
+        <option value=""></option>`+
+        sub.options.map(o=>`<option value="${o.id}" ${cur===o.id?"selected":""}>${esc(o.label)}</option>`).join("")+
+        `</select>`;
+    }
+  }
+  h+=`<label>notes (optional free text)</label>
+      <textarea id="n_notes" rows="2" onchange="FORM.notes=this.value;preview()">${esc(FORM.notes)}</textarea>
+      <h2>Hidden prompt <span class="hint">(compiled from your selections)</span></h2>
+      <pre class="hidden-prompt" id="n_preview">-</pre>
+      <div class="row" style="margin-top:8px">
+        <button class="primary" onclick="createAsset()">create</button>
+        <span class="hint">seeds render after creation</span>
+      </div>`;
+  $("#right").innerHTML=h;
+  $("#n_name").oninput=e=>FORM.name=e.target.value;
+  preview();
+}
+function toggleMulti(sid,oid){
+  const cur=FORM.selections[sid]||[];
+  FORM.selections[sid]=cur.includes(oid)?cur.filter(x=>x!==oid):[...cur,oid];
+  renderForm();
+}
+let PREV_T=null;
+function preview(){
+  clearTimeout(PREV_T);
+  PREV_T=setTimeout(()=>{ $("#n_preview").textContent=compileLocal(); },120);
+}
+function compileLocal(){
+  // a light client-side echo: fragments joined in order, enough to SEE what you built
+  const spec=DICT[FORM.type]; const parts=[];
+  for(const [sid,sub] of Object.entries(spec.subs)){
+    const cur=FORM.selections[sid];
+    if(!cur||!cur.length) continue;
+    const opts=Object.fromEntries((sub.options||[]).map(o=>[o.id,o.frag]));
+    if(Array.isArray(cur)) parts.push(...cur.map(c=>opts[c]).filter(Boolean));
+    else if(opts[cur]) parts.push(opts[cur]);
+  }
+  if(FORM.notes) parts.push(FORM.notes);
+  return parts.join(", ")||"(nothing selected yet)";
+}
+async function createAsset(){
+  if(!FORM.name) return note("name it first",true);
+  const j=await api("/new",{type:FORM.type,name:FORM.name,style:STYLE,
+                            selections:FORM.selections,notes:FORM.notes});
+  note("created "+j.id);
+  DATA=await api(""); FORM=null; SEL=null; renderLeft();
+  openAssetById(j.id);
+}
+async function openAssetById(id){
+  for(const t of ["character","place","costume","prop","music"])
+    if((DATA.assets[t]||[]).some(a=>a.id===id)) return openAsset(t,id);
+}
+
+/* ── asset detail ─────────────────────────────────────────────────────────── */
+async function openAsset(type,id){
+  if(!type||!id) return;
+  const j=await api(`/${type}/${id}`);
+  SEL={type,id,asset:j.asset}; FORM=null;
+  renderLeft(); renderDetail();
+}
+function renderDetail(){
+  const a=SEL.asset;
+  const imgs=Object.entries(a.images||{});
+  const compiled=JSON.stringify(a.compiled,null,1);
+  let extra="";
+  if(SEL.type==="character"){
+    const costumes=(DATA.assets.costume||[]).filter(c=>c.style===a.style);
+    extra=`<h2>Costumes</h2>
+      <div class="row">
+        <select id="d_costume">${costumes.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join("")}</select>
+        <button class="small" onclick="applyCostume()">wear it</button>
+      </div>
+      <div class="hint">renders this character wearing the costume - that image is what films anchor on</div>`;
+  }
+  const films=(DATA.films||[]).map(f=>`<option value="${f.id}">${esc(f.title)}</option>`).join("");
+  const sendRow = SEL.type==="music"
+    ? `<span class="hint">music attaches to a scene when sending a place, or set it in the film editor</span>`
+    : `<select id="d_film">${films}</select>
+       ${SEL.type==="place"?`<select id="d_time">${(a.compiled.times||[]).map(t=>`<option>${t}</option>`).join("")}</select>`:""}
+       ${SEL.type==="character"?`<select id="d_sendcostume"><option value="">base outfit</option>
+          ${Object.keys(a.assignments||{}).map(c=>`<option value="${c}">${esc(c)}</option>`).join("")}</select>`:""}
+       <button class="primary small" onclick="sendToFilm()">send to film</button>`;
+  $("#right").innerHTML=`
+    <h2>${esc(a.name)} <span class="badge">${esc(a.style)}</span>
+      <button class="small" style="float:right;color:var(--bad)" onclick="delAsset()">delete</button></h2>
+    <div class="row" style="margin:6px 0">
+      <button class="primary" onclick="genSeeds()">${imgs.length?"re-":""}generate seed pack</button>
+      <span class="hint">${SEL.type==="character"?"portrait, full body + all angles":
+        SEL.type==="place"?"3 angles x every time of day":
+        SEL.type==="music"?"music has no images - tags only":"reference shots"}</span>
+    </div>
+    <div class="packgrid">${imgs.map(([k,f])=>
+      `<figure><img src="${m(SEL.type+"s/"+SEL.id+"/"+f)}?${Date.now()}"><figcaption>${esc(k)}</figcaption></figure>`).join("")}</div>
+    ${extra}
+    <h2>Send to film</h2>
+    <div class="row">${sendRow}</div>
+    <h2>Hidden prompt <button class="small" onclick="$('#d_prompt').style.display=$('#d_prompt').style.display==='none'?'block':'none'">show / hide</button></h2>
+    <pre class="hidden-prompt" id="d_prompt" style="display:none">${esc(compiled)}</pre>
+    <h2>Selections</h2>
+    <pre class="hidden-prompt">${esc(JSON.stringify(a.selections,null,1))}</pre>`;
+}
+async function genSeeds(){
+  const j=await api("/seeds",{type:SEL.type,id:SEL.id});
+  WATCH.add(j.job); note("seed pack: "+j.job);
+}
+async function applyCostume(){
+  const c=$("#d_costume").value; if(!c) return;
+  const j=await api("/apply",{character:SEL.id,costume:c});
+  WATCH.add(j.job); note("outfit render: "+j.job);
+}
+async function delAsset(){
+  if(!confirm("Delete "+SEL.id+"?")) return;
+  await api("/delete",{type:SEL.type,id:SEL.id});
+  SEL=null; DATA=await api(""); renderLeft();
+  $("#right").innerHTML='<div class="hint" style="margin-top:14px">deleted</div>';
+}
+async function sendToFilm(){
+  const film=$("#d_film")&&$("#d_film").value;
+  if(!film) return note("no film selected - create one at /film first",true);
+  const body={film};
+  if(SEL.type==="character")
+    body.characters=[{id:SEL.id,costume:$("#d_sendcostume")?$("#d_sendcostume").value:""}];
+  if(SEL.type==="place")
+    body.places=[{id:SEL.id,time:$("#d_time")?$("#d_time").value:""}];
+  if(SEL.type==="prop") return note("props ride inside clauses - add the prop text to a "
+    +"character's costume or a shot's action",true);
+  const j=await api("/send",body);
+  note("sent to "+film+": "+JSON.stringify(j.added));
+}
+
+/* ── jobs ─────────────────────────────────────────────────────────────────── */
+async function pollJobs(){
+  try{
+    const j=await api("/jobs");
+    for(const job of j.jobs){
+      if(WATCH.has(job.id)&&job.state!=="running"){
+        WATCH.delete(job.id);
+        note(`${job.kind} ${job.state}${job.error?": "+job.error:""}`, job.state==="failed");
+        DATA=await api(""); renderLeft();
+        if(SEL) openAsset(SEL.type,SEL.id);
+      }
+    }
+    const r=j.jobs.find(x=>x.state==="running");
+    if(r) note(`${r.kind} ${r.done}/${r.total} ${r.log&&r.log.length?"· "+r.log[r.log.length-1]:""}`);
+  }catch(e){}
+  setTimeout(pollJobs,2500);
+}
+boot();
+</script>
+</body>
+</html>
