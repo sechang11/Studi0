@@ -71,7 +71,7 @@ FILM = {"assemble": "REST_LTX", "scenes": [
            "where the light refracts through the amber glass"),
          w("the same row of jars", "as the light passes off the end of the row and they go "
            "back to shadow"),
-         "a very quiet room, glass ticking faintly as it warms, a distant street"),
+         "glass jars ticking and ringing faintly as they warm, one nudged against its neighbour, and traffic passing on a street outside"),
 
     spot("lib_omega3", 305,
          "a fillet of oily fish on crushed ice on a steel counter, cold light",
@@ -89,7 +89,7 @@ FILM = {"assemble": "REST_LTX", "scenes": [
          "board beside eggs and a bowl of yoghurt, scattering and coming to rest.",
          m("the surface of the same lentils", "as the last of them roll and stop"),
          w("the same board", "with everything settled and a shaft of light across it"),
-         "dry lentils falling and scattering on wood, then stillness and a quiet kitchen"),
+         "dry lentils pouring and rattling across a wooden board, individual grains bouncing and rolling to a stop, a bowl shifting on wood, and a kitchen extractor humming"),
 
     spot("lib_sleep", 307,
          "a dark bedroom with a single bedside lamp lit, a made bed, curtains drawn",
@@ -97,7 +97,7 @@ FILM = {"assemble": "REST_LTX", "scenes": [
          "dims steadily down and the room falls away into darkness around it.",
          m("the filament of the same lamp", "as it cools from orange to nothing"),
          w("the same dark bedroom", "with only the faint edge of the curtains still visible"),
-         "a switch turning slowly, a room settling into silence, and faint traffic far away"),
+         "a switch clicking over, a lamp filament ticking as it cools, bedding shifting, and faint traffic far away through a window"),
 
     spot("lib_vitamind", 308,
          "low winter sun through a bare window onto a wooden floor, long shadows, empty room",
@@ -105,7 +105,7 @@ FILM = {"assemble": "REST_LTX", "scenes": [
          "sun moves across the bare floorboards and the window's shadow travels with it.",
          m("the same floorboards", "with dust turning slowly through the shaft of light"),
          w("the same empty room", "as the band of light reaches the far wall and climbs it"),
-         "a quiet empty room, floorboards ticking as they warm, and birds outside"),
+         "loud continuous birdsong and a steady wind in trees carrying in through an open window for the whole shot, with floorboards creaking and ticking underneath it"),
 
     spot("lib_morningoat", 309,
          "extreme macro straight down into a white bowl of oats, the oats filling the whole "
@@ -124,7 +124,7 @@ FILM = {"assemble": "REST_LTX", "scenes": [
          "pages fan across and settle completely flat.",
          m("the edge of the same open pages", "as the last one settles and stops moving"),
          w("the same notebook", "lying open and flat on the seamless white surface"),
-         "paper riffling and settling, a soft knock on a hard surface, then silence"),
+         "pages riffling and slapping over one after another, the spine cracking as it opens flat, and a soft knock on a hard surface"),
 
     spot("lib_trailhead", 311,
          "extreme low macro on the surface of a dry dirt trail, grit and pine needles filling "
