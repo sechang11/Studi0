@@ -295,3 +295,27 @@ the total picked runtime, and a blocking list - shots with no takes, takes unpic
 picked takes with QC issues, cast without portraits. The rule it encodes is the oldest
 one in this project: a render that completed is not a shot until something has LOOKED at
 it, and the cheapest looking is a grid.
+
+## 18. Photoreal identity, the whole truth
+
+Measured across seven re-shoots of the same film, so it does not have to be relearned:
+
+- **A portrait pins a keyframe.** Anchors and generated keyframes through the
+  two-reference edit carry the portrait's exact face. Proven repeatedly.
+- **Two references need SIDES.** "On the left stands the woman from the first reference
+  image with her exact same face unchanged, …" held both faces; naming refs abstractly or
+  photo-language lost one. And even sides is a **seed lottery** - so anchors render three
+  candidates and the Scene tab makes picking one a click. A lottery is what a picker is
+  for.
+- **An internal LTX cut re-derives faces from the scene prior.** The start frame's face
+  does not survive a hard cut inside the generation, and facial traits written into the
+  clause do not overpower a strong scene prior either. The compiler warns when a
+  multi-beat photoreal shot carries portrait cast.
+- **The grammar that works: cut in the EDIT, not in the generation.** Identity-critical
+  moments are ONE-beat shots from identity keyframes (the beat's subject leads the
+  keyframe; close framings use that person's portrait alone), joined by assembly cuts.
+  Wide multi-beat shots are geography - identity there is clause-level, and that is fine
+  because nobody reads a face at forty pixels.
+
+Anime is different: costume and hair silhouette carry identity through cuts, which is why
+FIRST LIGHT never had this problem.

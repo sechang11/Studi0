@@ -408,6 +408,16 @@ def _lint_action(txt, flat, warnings, engine):
 
 def _compile_ltx(flat):
     warnings, notes = [], []
+    _cast = flat.get("cast") or {}
+    _beats = flat.get("beats") or []
+    if (flat.get("look") != "anime" and len(_beats) > 1
+            and any((b.get("subject") or "") in _cast for b in _beats)
+            and any(_cast.get(b.get("subject") or "", {}).get("portrait")
+                    for b in _beats)):
+        warnings.append("identity: an internal cut re-derives faces from the scene "
+                        "prior - the start frame's face does not survive it. For "
+                        "identity-critical moments use ONE-beat shots from identity "
+                        "keyframes and cut at assembly instead")
     cast = _CastTracker(flat.get("cast"))
     beats = flat.get("beats") or []
     style_prefix, style_tail, neg_default = _style_bits(flat)
@@ -573,6 +583,14 @@ def keyframe_plan(film, shid):
     if mode == "generate":
         flat = film.flat(shid)
         present = [c for c in (sc.get("cast_present") or []) if c in film.data["cast"]]
+        first = (sh.get("beats") or [{}])[0]
+        subj = first.get("subject") or ""
+        if subj in film.data["cast"]:
+            # the shot's own subject leads, and a close framing is THAT person's frame -
+            # a second portrait in a close-up muddles both faces
+            present = [subj] + [c for c in present if c != subj]
+            if first.get("framing") in CLOSE_ANGLES:
+                present = [subj]
         look = film.data.get("look")
         if look == "anime" and len(present) >= 2:
             wf = "45_anime_two_char_ipadapter.json"
@@ -580,7 +598,6 @@ def keyframe_plan(film, shid):
             wf = "22_anime_kf_ipadapter.json"
         else:
             wf = "01_qwen_t2i_turbo.json"
-        first = (sh.get("beats") or [{}])[0]
         ipa = 0.6 if (first.get("framing") in CLOSE_ANGLES) else 0.3
         return {"mode": "generate", "workflow": wf, "ipa": ipa,
                 "prompt": sh.get("keyframe_prompt") or "", "present": present}

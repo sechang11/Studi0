@@ -179,7 +179,8 @@ def tree(fid):
                           "transition_out": sh.get("transition_out", "cut")})
         scenes.append({k: sc.get(k) for k in ("id", "title", "location", "time_of_day",
                                               "weather", "ambience", "palette", "music",
-                                              "cast_present", "no_people", "anchor")}
+                                              "cast_present", "no_people", "anchor",
+                                              "anchor_candidates")}
                       | {"shots": shots})
     return {"id": f.id, "title": f.data.get("title"), "look": f.data.get("look"),
             "look_clause": f.data.get("look_clause"), "grade": f.data.get("grade"),
@@ -306,6 +307,12 @@ def edit_scene(data):
               "music", "cast_present", "no_people"):
         if k in data:
             sc[k] = data[k]
+    if data.get("anchor") and data["anchor"] in (sc.get("anchor_candidates") or []):
+        # picking a candidate COPIES it over the canonical anchor path, so every shot
+        # that says "anchor: scene" follows the pick with no other change
+        shutil.copy(os.path.join(f.dir, data["anchor"]),
+                    os.path.join(f.dir, "assets", "anchor_%s.png" % sc["id"]))
+        sc["anchor"] = "assets/anchor_%s.png" % sc["id"]
     f.save()
     return {"ok": True}, 200
 
@@ -370,6 +377,9 @@ def _stage(comfy_dir, src, name):
     return name
 
 
+ANCHOR_SEEDS = (5, 21, 77)
+
+
 def _render_scene_anchor(jid, fid, scid):
     run, set_path, load_wf, ensure_local, HOST, COMFY = _comfy()
     f = F.load(fid)
@@ -432,17 +442,31 @@ def _render_scene_anchor(jid, fid, scid):
                             "film_port_%s_0.png" % fid)
                 p1 = _stage(COMFY, os.path.join(f.dir, ports[-1]),
                             "film_port_%s_1.png" % fid)
-                who = " and ".join(f.data["cast"][c]["clause"] for c in present[:2])
                 wf = load_wf("14_qwen_edit_ref.json")
                 set_path(wf, "8.inputs.image", p0)
                 set_path(wf, "9.inputs.image", p1)
                 set_path(wf, "7.inputs.strength_model", 0.0)
-                set_path(wf, "10.inputs.prompt",
-                         "Keep the exact faces and identities of the person in the first "
-                         "reference image%s. Place them in a new scene: %s, %s. %s"
-                         % (" and the person in the second reference image"
-                            if len(ports) > 1 else "", who, ground,
-                            f.data.get("look_clause") or F.LOOK_PHOTO))
+                # each reference must be BOUND to its person by name, or the edit keeps
+                # one face and invents the other - sc01 proved it with a crowd behind
+                if len(ports) > 1 and len(present) > 1:
+                    # the binding that MEASURED as holding both faces: sides, with
+                    # "exact same face unchanged" adjacent to each person. "The first
+                    # reference is X" and photo-language both lost one face.
+                    ca = f.data["cast"][present[0]]
+                    cb = f.data["cast"][present[1]]
+                    prompt14 = ("On the left stands the woman from the first reference "
+                                "image with her exact same face unchanged, %s. On the "
+                                "right stands the man from the second reference image "
+                                "with his exact same face unchanged, %s. %s. %s"
+                                % (ca["clause"], cb["clause"], ground,
+                                   f.data.get("look_clause") or F.LOOK_PHOTO))
+                else:
+                    ca = f.data["cast"][present[0]]
+                    prompt14 = ("Keep the exact face and identity of the person in the "
+                                "reference images. Place %s in a new scene: %s. %s"
+                                % (ca["clause"], ground,
+                                   f.data.get("look_clause") or F.LOOK_PHOTO))
+                set_path(wf, "10.inputs.prompt", prompt14)
                 set_path(wf, "11.inputs.prompt", F.NEG_PHOTO)
                 set_path(wf, "20.inputs.width", 1472)
                 set_path(wf, "20.inputs.height", 832)
@@ -459,12 +483,28 @@ def _render_scene_anchor(jid, fid, scid):
                 set_path(wf, "13.inputs.seed", int(time.time()) % 99991)
                 set_path(wf, "15.inputs.filename_prefix",
                          "claude-generated/films/%s/anchor_%s" % (fid, scid))
-        _, outs = run(HOST, wf, quiet=True)
-        if not outs:
-            raise RuntimeError("no output")
-        ensure_local(outs[0], dest)
-        sc["anchor"] = "assets/anchor_%s.png" % scid
-        f.save()
+        cands = []
+        for i, sd in enumerate(ANCHOR_SEEDS):
+            for node in ("13", "8"):
+                try:
+                    set_path(wf, "%s.inputs.seed" % node, sd)
+                except (KeyError, TypeError):
+                    pass
+            _, outs = run(HOST, wf, quiet=True)
+            if not outs:
+                continue
+            cp = os.path.join(f.dir, "assets", "anchor_%s_c%d.png" % (scid, i))
+            ensure_local(outs[0], cp)
+            cands.append("assets/anchor_%s_c%d.png" % (scid, i))
+            _log(jid, "candidate %d (seed %d)" % (i + 1, sd))
+        if not cands:
+            raise RuntimeError("no candidates rendered")
+        shutil.copy(os.path.join(f.dir, cands[0]), dest)
+        f2 = F.load(fid)
+        sc2 = f2.scene(scid)
+        sc2["anchor"] = "assets/anchor_%s.png" % scid
+        sc2["anchor_candidates"] = cands
+        f2.save()
         _finish(jid)
     except Exception as e:
         _finish(jid, str(e)[:300])

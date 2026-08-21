@@ -465,7 +465,11 @@ function sceneForm(){
       <button class="primary" onclick="saveScene()">save scene</button>
       <button onclick="genAnchor()">generate anchor</button>
     </div>
-    ${sc.anchor?`<img class="anchor" src="${m(sc.anchor)}">`:'<div class="hint" style="margin-top:8px">no anchor yet - shots default to it, so generate one first</div>'}`;
+    ${sc.anchor?`<img class="anchor" src="${m(sc.anchor)}?${Date.now()}">`:'<div class="hint" style="margin-top:8px">no anchor yet - shots default to it, so generate one first</div>'}
+    ${(sc.anchor_candidates||[]).length?`<label>candidates - click to make it THE anchor (identity into a new scene is a seed lottery; the picker is the answer)</label>
+      <div class="row">${sc.anchor_candidates.map(c=>
+        `<img src="${m(c)}?${Date.now()}" style="width:31%;border-radius:5px;cursor:pointer;border:2px solid ${'${'}sc.anchor&&0?'x':'transparent'}"
+              onclick="pickAnchor('${c}')" title="${c}">`).join("")}</div>`:""}`;
 }
 function applyLoc(id){
   const l=(LIBS.locations||[]).find(x=>x.id===id); if(!l) return;
@@ -482,6 +486,10 @@ async function saveScene(){
     cast_present:[...document.querySelectorAll(".sc_cast:checked")].map(x=>x.value),
     no_people:$("#c_np").checked});
   note("scene saved"); openFilm(FID);
+}
+async function pickAnchor(c){
+  await api("/editscene",{film:FID,scene:SCENE_SEL,anchor:c});
+  note("anchor set from candidate"); openFilm(FID);
 }
 async function genAnchor(){
   const j=await api("/anchor",{film:FID,scene:SCENE_SEL});
