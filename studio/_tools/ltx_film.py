@@ -123,9 +123,18 @@ def keyframe(sid, engine, scene, w, h, seed=12, sheet=None, tags=""):
 
 
 def render(sid, prompt, seconds, megapixels=0.9, seed=11, fps=24, aspect=None,
-           start=None, neg=LTX_NEG):
+           start=None, neg=LTX_NEG, enhance=True):
+    """enhance runs the prompt through the gemma enhancer before sampling.
+
+    It was ON by accident all through the first night - `-s ...=false` set a truthy STRING
+    - and once the runner could actually pass a boolean, the comparison was worth making
+    rather than assuming. On a dialogue scene the enhanced version speaks in four bursts
+    spread across the shot; the exact-script version delivers the same lines with long dead
+    air between them. So it is kept ON by default, on evidence, and turned off when a shot
+    needs the prompt honoured literally.
+    """
     sets = [("sg1_376.inputs.value", prompt),
-            ("sg1_383.inputs.value", "false"),      # the LLM prompt enhancer, off
+            ("sg1_383.inputs.value", "true" if enhance else "false")
             ("sg1_373.inputs.text", neg),
             ("sg1_362.inputs.value", seconds),
             ("sg1_361.inputs.value", fps),
@@ -244,7 +253,8 @@ def main():
         clip, err = render(sid, s["prompt"], s["seconds"],
                            megapixels=s.get("megapixels", 0.9),
                            seed=s.get("seed", 11), aspect=s.get("aspect"),
-                           start=staged, neg=s.get("neg", LTX_NEG))
+                           start=staged, neg=s.get("neg", LTX_NEG),
+                           enhance=s.get("enhance", True))
         if not clip:
             print("   clip FAILED %s" % err)
             continue
