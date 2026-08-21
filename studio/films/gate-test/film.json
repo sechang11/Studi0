@@ -1,0 +1,109 @@
+{
+ "title": "Gate Test",
+ "created": "2026-08-21 09:25",
+ "look": "anime",
+ "look_clause": "flat cel-shaded hand-drawn 2D anime with clean line art and painted background art",
+ "grade": "",
+ "negative": "",
+ "fps": 24,
+ "logline": "",
+ "cast": {
+  "LIWEN": {
+   "name": "Liwen",
+   "short": "swordswoman in the white and jade hanfu",
+   "clause": "a young swordswoman with very long straight black hair and a white and jade-green hanfu",
+   "sheet": "sheet_liwen.png",
+   "voice": "female_01",
+   "voice_desc": "a level, quiet accent"
+  },
+  "STRANGER": {
+   "name": "the stranger",
+   "short": "figure in the black robe",
+   "clause": "a tall figure in an all-black travelling robe and a wide dark straw hat, face hidden in shadow",
+   "sheet": "sheet_stranger.png",
+   "voice": "en_man",
+   "voice_desc": "a low, even accent"
+  }
+ },
+ "scenes": [
+  {
+   "id": "sc01",
+   "title": "the courtyard",
+   "location": "a wide flagstone courtyard of a mountain sword school, pine trees and a tiled gate",
+   "time_of_day": "dawn",
+   "weather": "thick mist",
+   "ambience": "a steady wind moving through pine trees, never stopping",
+   "palette": "",
+   "music": "",
+   "cast_present": [
+    "LIWEN",
+    "STRANGER"
+   ],
+   "no_people": false,
+   "anchor": "assets/anchor_sc01.png",
+   "shots": [
+    "010"
+   ]
+  }
+ ],
+ "shots": {
+  "010": {
+   "id": "010",
+   "scene": "sc01",
+   "title": "first exchange",
+   "duration": 12,
+   "aspect": "wide",
+   "anchor": "scene",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "LIWEN",
+     "action": "and the stranger break into a run straight at each other across the flagstones",
+     "background": "dead pine needles thrown up from under their feet",
+     "dialogue": {
+      "char": "",
+      "line": "",
+      "delivery": ""
+     }
+    },
+    {
+     "framing": "medium shot",
+     "move": "static",
+     "transition_in": "hard cut",
+     "subject": "STRANGER",
+     "action": "and the swordswoman crash together, blades locked, sparks bursting off the steel",
+     "background": "",
+     "dialogue": {
+      "char": "",
+      "line": "",
+      "delivery": ""
+     }
+    }
+   ],
+   "sfx": "running footfalls on stone, a violent steel clash, blades grinding",
+   "no_people": null,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t318767601",
+     "engine": "ltx",
+     "seed": 7,
+     "created": "09:27",
+     "file": "takes/010/ltx_t318767601.mp4",
+     "poster": "takes/010/ltx_t318767601.png",
+     "strip": "takes/010/ltx_t318767601_strip.png",
+     "duration": 12.04,
+     "qc": [],
+     "warnings": [],
+     "prompt": "A static wide shot in flat cel-shaded 2D anime: a young swordswoman with very long straight black hair and a white and jade-green hanfu, and the stranger break into a run straight at each other across the flagstones, while dead pine needles thrown up from under their feet, a wide flagstone courtyard of a mountain sword school, pine trees and a tiled gate, dawn, thick mist. A hard cut transitions t"
+    }
+   ],
+   "picked": "t318767601",
+   "engine_notes": ""
+  }
+ }
+}

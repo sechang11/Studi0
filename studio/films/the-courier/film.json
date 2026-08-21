@@ -63,7 +63,8 @@
    "anchor": "assets/anchor_sc02.png",
    "shots": [
     "040",
-    "050"
+    "050",
+    "060"
    ]
   }
  ],
@@ -398,7 +399,7 @@
    "sfx": "rain on the awning above her",
    "no_people": null,
    "enhance": true,
-   "transition_out": "cut",
+   "transition_out": "dip to black",
    "takes": [
     {
      "id": "t318319905",
@@ -415,6 +416,51 @@
     }
    ],
    "picked": "t318319905",
+   "engine_notes": ""
+  },
+  "060": {
+   "id": "060",
+   "scene": "sc02",
+   "title": "the address",
+   "duration": 6,
+   "aspect": "wide",
+   "anchor": "generate",
+   "keyframe_prompt": "extreme close macro of a flat manila envelope held in gloved fingers under an awning at night, one handwritten line of address catching the light, rain blurred behind",
+   "beats": [
+    {
+     "framing": "extreme macro shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "",
+     "action": "her thumb tilts the envelope so the light crosses the handwritten address, and a drop of water lands on the paper and beads off it",
+     "background": "rain streaking past out of focus behind it",
+     "dialogue": {
+      "char": "",
+      "line": "",
+      "delivery": ""
+     }
+    }
+   ],
+   "sfx": "rain on the awning, paper flexing",
+   "no_people": null,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t318641569",
+     "engine": "ltx",
+     "seed": 11,
+     "created": "09:25",
+     "file": "takes/060/ltx_t318641569.mp4",
+     "poster": "takes/060/ltx_t318641569.png",
+     "strip": "takes/060/ltx_t318641569_strip.png",
+     "duration": 6.04,
+     "qc": [],
+     "warnings": [],
+     "prompt": "A static extreme macro shot: her thumb tilts the envelope so the light crosses the handwritten address, and a drop of water lands on the paper and beads off it, while rain streaking past out of focus behind it, a narrow rain-wet street outside the lane, neon signs reflected in standing water, late night, steady rain. Photoreal cinematic film still, 35mm, deep focus, high detail, colour photograph,"
+    }
+   ],
+   "picked": "t318641569",
    "engine_notes": ""
   }
  }
