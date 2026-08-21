@@ -1,0 +1,1546 @@
+{
+ "version": 1,
+ "note": "Main variables are entities; sub-variables are their selectors. Every option carries a hidden prompt fragment. Add an option here and the foundry offers it.",
+ "style": {
+  "main": true,
+  "label": "Style (the film's look)",
+  "spectrum": [
+   "photoreal",
+   "cinematic",
+   "noir",
+   "watercolour",
+   "anime",
+   "cartoon",
+   "claymation",
+   "pixel"
+  ],
+  "options": {
+   "photoreal": {
+    "label": "Photoreal",
+    "spectrum": 0,
+    "look_clause": "photoreal, natural light, high detail, colour photograph, sharp focus",
+    "defense": "",
+    "kf_engine": "qwen",
+    "neg": "cartoon, anime, illustration, painting, cgi, 3d render"
+   },
+   "cinematic": {
+    "label": "Cinematic film",
+    "spectrum": 1,
+    "look_clause": "cinematic film still, 35mm, shallow depth of field, filmic grade, high detail, colour photograph",
+    "defense": "",
+    "kf_engine": "qwen",
+    "neg": "cartoon, anime, illustration, cgi, 3d render, flat lighting"
+   },
+   "noir": {
+    "label": "Film noir",
+    "spectrum": 2,
+    "look_clause": "1940s black and white film noir, hard shadows, heavy film grain, deep blacks, high contrast",
+    "defense": "The whole shot stays black and white film noir throughout",
+    "kf_engine": "qwen",
+    "neg": "colour, cartoon, anime, cgi, flat lighting"
+   },
+   "watercolour": {
+    "label": "Watercolour",
+    "spectrum": 3,
+    "look_clause": "loose watercolour painting on rough cotton paper, visible pigment blooms, white paper showing through",
+    "defense": "The whole shot stays a loose watercolour painting throughout",
+    "kf_engine": "qwen",
+    "neg": "photorealistic, photograph, 3d render, hard outlines"
+   },
+   "anime": {
+    "label": "Anime (cel)",
+    "spectrum": 4,
+    "look_clause": "flat cel-shaded hand-drawn 2D anime with clean line art and painted background art",
+    "defense": "The whole scene stays flat cel-shaded hand-drawn 2D anime with clean line art throughout",
+    "kf_engine": "animagine",
+    "neg": "photorealistic, photograph, live action, 3d render, realistic skin"
+   },
+   "cartoon": {
+    "label": "Cartoon (flat)",
+    "spectrum": 5,
+    "look_clause": "bold flat 2D cartoon, thick clean outlines, simple saturated colour fills, minimal shading",
+    "defense": "The whole shot stays a bold flat 2D cartoon with thick outlines throughout",
+    "kf_engine": "qwen",
+    "neg": "photorealistic, photograph, detailed rendering, realistic shading"
+   },
+   "claymation": {
+    "label": "Claymation",
+    "spectrum": 6,
+    "look_clause": "stop-motion clay animation, visible fingerprints in the plasticine, handmade miniature set, film grain",
+    "defense": "The whole shot stays stop-motion clay animation throughout",
+    "kf_engine": "qwen",
+    "neg": "photorealistic skin, smooth cgi, anime"
+   },
+   "pixel": {
+    "label": "Pixel art",
+    "spectrum": 7,
+    "look_clause": "16-bit pixel art, chunky visible square pixels, limited palette, hard dithering, no antialiasing",
+    "defense": "The whole shot stays 16-bit pixel art with hard visible pixels throughout",
+    "kf_engine": "qwen",
+    "neg": "smooth gradients, photorealistic, antialiasing"
+   }
+  }
+ },
+ "character": {
+  "main": true,
+  "label": "Character",
+  "subs": {
+   "archetype": {
+    "label": "Archetype",
+    "options": [
+     {
+      "id": "human_female",
+      "label": "Human - female",
+      "frag": "a woman"
+     },
+     {
+      "id": "human_male",
+      "label": "Human - male",
+      "frag": "a man"
+     },
+     {
+      "id": "human_androgynous",
+      "label": "Human - androgynous",
+      "frag": "an androgynous person"
+     },
+     {
+      "id": "beast",
+      "label": "Beast / creature",
+      "frag": "a creature"
+     },
+     {
+      "id": "spirit",
+      "label": "Spirit",
+      "frag": "a translucent spirit-being"
+     },
+     {
+      "id": "robot",
+      "label": "Robot",
+      "frag": "a humanoid robot"
+     }
+    ]
+   },
+   "age": {
+    "label": "Age",
+    "options": [
+     {
+      "id": "child",
+      "label": "Child",
+      "frag": "young, a child"
+     },
+     {
+      "id": "teen",
+      "label": "Teenager",
+      "frag": "in their late teens"
+     },
+     {
+      "id": "twenties",
+      "label": "Twenties",
+      "frag": "in their twenties"
+     },
+     {
+      "id": "thirties",
+      "label": "Thirties",
+      "frag": "in their thirties"
+     },
+     {
+      "id": "middle",
+      "label": "Middle-aged",
+      "frag": "in their fifties"
+     },
+     {
+      "id": "old",
+      "label": "Elderly",
+      "frag": "elderly, in their seventies"
+     }
+    ]
+   },
+   "height": {
+    "label": "Height",
+    "options": [
+     {
+      "id": "short",
+      "label": "Short",
+      "frag": "short"
+     },
+     {
+      "id": "average",
+      "label": "Average height",
+      "frag": ""
+     },
+     {
+      "id": "tall",
+      "label": "Tall",
+      "frag": "tall"
+     },
+     {
+      "id": "towering",
+      "label": "Towering",
+      "frag": "towering"
+     }
+    ]
+   },
+   "build": {
+    "label": "Build",
+    "options": [
+     {
+      "id": "slight",
+      "label": "Slight",
+      "frag": "slightly built"
+     },
+     {
+      "id": "lean",
+      "label": "Lean",
+      "frag": "lean"
+     },
+     {
+      "id": "athletic",
+      "label": "Athletic",
+      "frag": "athletic"
+     },
+     {
+      "id": "broad",
+      "label": "Broad",
+      "frag": "broad-shouldered"
+     },
+     {
+      "id": "heavy",
+      "label": "Heavy",
+      "frag": "heavyset"
+     },
+     {
+      "id": "full",
+      "label": "Full-figured",
+      "frag": "full-figured"
+     }
+    ]
+   },
+   "skin": {
+    "label": "Skin / surface",
+    "options": [
+     {
+      "id": "pale",
+      "label": "Pale",
+      "frag": "pale skin"
+     },
+     {
+      "id": "fair",
+      "label": "Fair",
+      "frag": "fair skin"
+     },
+     {
+      "id": "olive",
+      "label": "Olive",
+      "frag": "olive skin"
+     },
+     {
+      "id": "tan",
+      "label": "Tan",
+      "frag": "tan skin"
+     },
+     {
+      "id": "brown",
+      "label": "Brown",
+      "frag": "brown skin"
+     },
+     {
+      "id": "deep",
+      "label": "Deep brown",
+      "frag": "deep brown skin"
+     },
+     {
+      "id": "fur",
+      "label": "Fur (beasts)",
+      "frag": "soft fur"
+     },
+     {
+      "id": "chrome",
+      "label": "Chrome (robots)",
+      "frag": "brushed chrome plating"
+     }
+    ]
+   },
+   "face_shape": {
+    "label": "Face shape",
+    "options": [
+     {
+      "id": "oval",
+      "label": "Oval",
+      "frag": "an oval face"
+     },
+     {
+      "id": "round",
+      "label": "Round",
+      "frag": "a round face"
+     },
+     {
+      "id": "angular",
+      "label": "Angular",
+      "frag": "an angular face with a sharp jaw"
+     },
+     {
+      "id": "square",
+      "label": "Square",
+      "frag": "a square-jawed face"
+     },
+     {
+      "id": "heart",
+      "label": "Heart",
+      "frag": "a heart-shaped face"
+     },
+     {
+      "id": "long",
+      "label": "Long",
+      "frag": "a long narrow face"
+     },
+     {
+      "id": "muzzle",
+      "label": "Muzzle (beasts)",
+      "frag": "a fine tapered muzzle"
+     }
+    ]
+   },
+   "eye_color": {
+    "label": "Eye colour",
+    "options": [
+     {
+      "id": "brown",
+      "label": "Brown",
+      "frag": "brown eyes"
+     },
+     {
+      "id": "dark",
+      "label": "Near-black",
+      "frag": "dark eyes"
+     },
+     {
+      "id": "green",
+      "label": "Green",
+      "frag": "green eyes"
+     },
+     {
+      "id": "blue",
+      "label": "Blue",
+      "frag": "blue eyes"
+     },
+     {
+      "id": "grey",
+      "label": "Grey",
+      "frag": "grey eyes"
+     },
+     {
+      "id": "amber",
+      "label": "Amber",
+      "frag": "amber eyes"
+     },
+     {
+      "id": "violet",
+      "label": "Violet",
+      "frag": "violet eyes"
+     },
+     {
+      "id": "glow",
+      "label": "Glowing",
+      "frag": "faintly glowing eyes"
+     }
+    ]
+   },
+   "eye_shape": {
+    "label": "Eye shape",
+    "options": [
+     {
+      "id": "almond",
+      "label": "Almond",
+      "frag": "almond eyes"
+     },
+     {
+      "id": "narrow",
+      "label": "Narrow",
+      "frag": "narrow watchful eyes"
+     },
+     {
+      "id": "wide",
+      "label": "Wide",
+      "frag": "wide expressive eyes"
+     },
+     {
+      "id": "hooded",
+      "label": "Hooded",
+      "frag": "hooded eyes"
+     },
+     {
+      "id": "upturned",
+      "label": "Upturned",
+      "frag": "upturned eyes"
+     }
+    ]
+   },
+   "brows": {
+    "label": "Brows",
+    "options": [
+     {
+      "id": "soft",
+      "label": "Soft",
+      "frag": ""
+     },
+     {
+      "id": "strong",
+      "label": "Strong",
+      "frag": "strong dark brows"
+     },
+     {
+      "id": "thin",
+      "label": "Thin",
+      "frag": "thin arched brows"
+     },
+     {
+      "id": "bushy",
+      "label": "Bushy",
+      "frag": "bushy brows"
+     }
+    ]
+   },
+   "hair_style": {
+    "label": "Hair / fur style",
+    "options": [
+     {
+      "id": "short_messy",
+      "label": "Short messy",
+      "frag": "short messy hair"
+     },
+     {
+      "id": "short_neat",
+      "label": "Short neat",
+      "frag": "short neat hair"
+     },
+     {
+      "id": "bob",
+      "label": "Bob",
+      "frag": "a chin-length bob"
+     },
+     {
+      "id": "shoulder",
+      "label": "Shoulder-length",
+      "frag": "shoulder-length hair"
+     },
+     {
+      "id": "long_straight",
+      "label": "Long straight",
+      "frag": "very long straight hair"
+     },
+     {
+      "id": "long_wavy",
+      "label": "Long wavy",
+      "frag": "long wavy hair"
+     },
+     {
+      "id": "ponytail",
+      "label": "Ponytail",
+      "frag": "hair in a high ponytail"
+     },
+     {
+      "id": "braid",
+      "label": "Braid",
+      "frag": "a long single braid"
+     },
+     {
+      "id": "topknot",
+      "label": "Topknot",
+      "frag": "hair in a topknot"
+     },
+     {
+      "id": "undercut",
+      "label": "Undercut",
+      "frag": "an undercut"
+     },
+     {
+      "id": "bald",
+      "label": "Bald / none",
+      "frag": "a shaved head"
+     },
+     {
+      "id": "mane",
+      "label": "Mane (beasts)",
+      "frag": "a thick mane"
+     }
+    ]
+   },
+   "hair_color": {
+    "label": "Hair / fur colour",
+    "options": [
+     {
+      "id": "black",
+      "label": "Black",
+      "frag": "black"
+     },
+     {
+      "id": "brown",
+      "label": "Brown",
+      "frag": "brown"
+     },
+     {
+      "id": "chestnut",
+      "label": "Chestnut",
+      "frag": "chestnut"
+     },
+     {
+      "id": "blonde",
+      "label": "Blonde",
+      "frag": "blonde"
+     },
+     {
+      "id": "auburn",
+      "label": "Auburn",
+      "frag": "auburn"
+     },
+     {
+      "id": "red",
+      "label": "Red",
+      "frag": "vivid red"
+     },
+     {
+      "id": "grey",
+      "label": "Grey",
+      "frag": "grey"
+     },
+     {
+      "id": "white",
+      "label": "White",
+      "frag": "white"
+     },
+     {
+      "id": "silver",
+      "label": "Silver",
+      "frag": "silver"
+     },
+     {
+      "id": "blue",
+      "label": "Blue",
+      "frag": "deep blue"
+     },
+     {
+      "id": "green",
+      "label": "Green",
+      "frag": "sea-green"
+     },
+     {
+      "id": "pink",
+      "label": "Pink",
+      "frag": "soft pink"
+     }
+    ]
+   },
+   "facial_hair": {
+    "label": "Facial hair",
+    "options": [
+     {
+      "id": "none",
+      "label": "None",
+      "frag": ""
+     },
+     {
+      "id": "stubble",
+      "label": "Stubble",
+      "frag": "grey-flecked stubble"
+     },
+     {
+      "id": "beard",
+      "label": "Full beard",
+      "frag": "a full beard"
+     },
+     {
+      "id": "moustache",
+      "label": "Moustache",
+      "frag": "a moustache"
+     },
+     {
+      "id": "goatee",
+      "label": "Goatee",
+      "frag": "a goatee"
+     }
+    ]
+   },
+   "marks": {
+    "label": "Distinguishing marks",
+    "multi": true,
+    "options": [
+     {
+      "id": "freckles",
+      "label": "Freckles",
+      "frag": "freckles across the nose"
+     },
+     {
+      "id": "scar_brow",
+      "label": "Scar through brow",
+      "frag": "a thin scar through one brow"
+     },
+     {
+      "id": "scar_cheek",
+      "label": "Scar on cheek",
+      "frag": "a pale scar on one cheek"
+     },
+     {
+      "id": "birthmark",
+      "label": "Birthmark",
+      "frag": "a small birthmark under one eye"
+     },
+     {
+      "id": "tattoo_neck",
+      "label": "Neck tattoo",
+      "frag": "a fine line tattoo up one side of the neck"
+     },
+     {
+      "id": "tattoo_arm",
+      "label": "Arm tattoo",
+      "frag": "an intricate tattoo down one forearm"
+     },
+     {
+      "id": "earring",
+      "label": "Earring",
+      "frag": "a single small earring"
+     },
+     {
+      "id": "glasses",
+      "label": "Glasses",
+      "frag": "round glasses"
+     },
+     {
+      "id": "eyepatch",
+      "label": "Eyepatch",
+      "frag": "an eyepatch"
+     },
+     {
+      "id": "markings",
+      "label": "Glowing markings (beast/spirit)",
+      "frag": "pale glowing markings along the body"
+     }
+    ]
+   },
+   "personality": {
+    "label": "Personality",
+    "options": [
+     {
+      "id": "stoic",
+      "label": "Stoic",
+      "frag": "a calm, unreadable bearing",
+      "delivery": "level, unhurried"
+     },
+     {
+      "id": "warm",
+      "label": "Warm",
+      "frag": "an open, warm bearing",
+      "delivery": "warm, easy"
+     },
+     {
+      "id": "wry",
+      "label": "Wry",
+      "frag": "a wry, knowing look",
+      "delivery": "dry, amused"
+     },
+     {
+      "id": "fierce",
+      "label": "Fierce",
+      "frag": "a fierce, direct gaze",
+      "delivery": "clipped, hard"
+     },
+     {
+      "id": "timid",
+      "label": "Timid",
+      "frag": "a hesitant, careful bearing",
+      "delivery": "quiet, uncertain"
+     },
+     {
+      "id": "cocky",
+      "label": "Cocky",
+      "frag": "an easy, confident grin",
+      "delivery": "quick, cocky"
+     },
+     {
+      "id": "gentle",
+      "label": "Gentle",
+      "frag": "a gentle, patient manner",
+      "delivery": "soft, patient"
+     },
+     {
+      "id": "haunted",
+      "label": "Haunted",
+      "frag": "a distant, haunted look",
+      "delivery": "low, distant"
+     }
+    ]
+   },
+   "voice": {
+    "label": "Voice",
+    "dynamic": "voices"
+   }
+  }
+ },
+ "place": {
+  "main": true,
+  "label": "Place",
+  "subs": {
+   "base": {
+    "label": "Base setting",
+    "options": [
+     {
+      "id": "school",
+      "label": "School",
+      "frag": "a school - corridor of lockers, classroom doors, tall windows"
+     },
+     {
+      "id": "classroom",
+      "label": "Classroom",
+      "frag": "a classroom with rows of desks, a chalkboard, tall windows"
+     },
+     {
+      "id": "park",
+      "label": "Park",
+      "frag": "a city park with winding paths, old trees and iron benches"
+     },
+     {
+      "id": "house",
+      "label": "House interior",
+      "frag": "the interior of a lived-in house, warm lamps, worn wooden floors"
+     },
+     {
+      "id": "boat",
+      "label": "Boat",
+      "frag": "the deck of a small weathered boat, rigging and coiled rope"
+     },
+     {
+      "id": "cityscape",
+      "label": "City street",
+      "frag": "a dense city street, signage stacked up the buildings, wires overhead"
+     },
+     {
+      "id": "library",
+      "label": "Grand library",
+      "frag": "a vast library, towering shelves, shafts of light from high windows"
+     },
+     {
+      "id": "market",
+      "label": "Night market",
+      "frag": "a narrow market lane of food stalls, steam and hanging bulbs"
+     },
+     {
+      "id": "rooftops",
+      "label": "Rooftops",
+      "frag": "a sea of tiled rooftops with ridgelines, chimneys and strung wires"
+     },
+     {
+      "id": "alley",
+      "label": "Alley",
+      "frag": "a narrow alley between tall walls, puddles and drainpipes"
+     },
+     {
+      "id": "temple",
+      "label": "Temple courtyard",
+      "frag": "a wide stone temple courtyard, pines and a tiled gate"
+     },
+     {
+      "id": "beach",
+      "label": "Beach",
+      "frag": "a wide beach with hard wet sand and a long horizon"
+     },
+     {
+      "id": "forest",
+      "label": "Forest",
+      "frag": "a deep forest of tall trunks and layered canopy light"
+     },
+     {
+      "id": "bridge",
+      "label": "Old bridge",
+      "frag": "a stone arch bridge over slow water"
+     },
+     {
+      "id": "station",
+      "label": "Train station",
+      "frag": "a small train station platform under a long canopy"
+     },
+     {
+      "id": "diner",
+      "label": "Diner",
+      "frag": "a small diner interior, counter stools and window booths"
+     }
+    ]
+   },
+   "condition": {
+    "label": "Condition / era",
+    "options": [
+     {
+      "id": "pristine",
+      "label": "Pristine",
+      "frag": "pristine and well kept"
+     },
+     {
+      "id": "lived",
+      "label": "Lived-in",
+      "frag": "lived-in and worn"
+     },
+     {
+      "id": "old",
+      "label": "Old",
+      "frag": "old and weathered"
+     },
+     {
+      "id": "ruined",
+      "label": "Ruined",
+      "frag": "half-ruined and overgrown"
+     },
+     {
+      "id": "festival",
+      "label": "Festival-dressed",
+      "frag": "dressed for a festival with lanterns and paper charms"
+     },
+     {
+      "id": "future",
+      "label": "Futuristic",
+      "frag": "futuristic, glass and light"
+     }
+    ]
+   },
+   "time_of_day": {
+    "label": "Time of day",
+    "multi": true,
+    "options": [
+     {
+      "id": "dawn",
+      "label": "Dawn",
+      "frag": "at dawn, low gold light and long shadows"
+     },
+     {
+      "id": "day",
+      "label": "Day",
+      "frag": "in flat clear daylight"
+     },
+     {
+      "id": "dusk",
+      "label": "Dusk",
+      "frag": "at dusk, the sky burning down to embers"
+     },
+     {
+      "id": "night",
+      "label": "Night",
+      "frag": "at night, lit by its own lamps"
+     },
+     {
+      "id": "late_night",
+      "label": "Late night",
+      "frag": "in the dead of night, almost everything dark"
+     }
+    ]
+   },
+   "weather": {
+    "label": "Weather",
+    "options": [
+     {
+      "id": "clear",
+      "label": "Clear",
+      "frag": ""
+     },
+     {
+      "id": "overcast",
+      "label": "Overcast",
+      "frag": "under a flat overcast sky"
+     },
+     {
+      "id": "rain",
+      "label": "Rain",
+      "frag": "in steady rain, surfaces wet and reflective"
+     },
+     {
+      "id": "storm",
+      "label": "Storm",
+      "frag": "in a storm, wind-driven rain"
+     },
+     {
+      "id": "snow",
+      "label": "Snow",
+      "frag": "under falling snow"
+     },
+     {
+      "id": "fog",
+      "label": "Fog",
+      "frag": "in thick fog"
+     },
+     {
+      "id": "wind",
+      "label": "Windy",
+      "frag": "in a hard wind, everything loose moving"
+     }
+    ]
+   },
+   "crowd": {
+    "label": "People about",
+    "options": [
+     {
+      "id": "empty",
+      "label": "Empty",
+      "frag": "deserted, nobody about"
+     },
+     {
+      "id": "sparse",
+      "label": "A few people",
+      "frag": "a few unhurried figures about"
+     },
+     {
+      "id": "busy",
+      "label": "Busy",
+      "frag": "busy with people moving in every direction"
+     }
+    ]
+   },
+   "palette": {
+    "label": "Palette",
+    "options": [
+     {
+      "id": "neutral",
+      "label": "Natural",
+      "frag": ""
+     },
+     {
+      "id": "warm",
+      "label": "Warm",
+      "frag": "a warm amber palette"
+     },
+     {
+      "id": "cool",
+      "label": "Cool",
+      "frag": "a cool blue palette"
+     },
+     {
+      "id": "teal_amber",
+      "label": "Teal & amber",
+      "frag": "a teal and amber grade"
+     },
+     {
+      "id": "muted",
+      "label": "Muted",
+      "frag": "a muted, desaturated palette"
+     },
+     {
+      "id": "vivid",
+      "label": "Vivid",
+      "frag": "a vivid saturated palette"
+     }
+    ]
+   }
+  }
+ },
+ "costume": {
+  "main": true,
+  "label": "Costume",
+  "subs": {
+   "category": {
+    "label": "Category",
+    "options": [
+     {
+      "id": "casual",
+      "label": "Casual",
+      "frag": "casual clothes - a fitted jacket over a plain shirt and sturdy trousers"
+     },
+     {
+      "id": "formal",
+      "label": "Formal",
+      "frag": "formal wear - a tailored suit, clean lines"
+     },
+     {
+      "id": "uniform",
+      "label": "Uniform",
+      "frag": "a crisp uniform with structured shoulders"
+     },
+     {
+      "id": "school",
+      "label": "School uniform",
+      "frag": "a school uniform with a pleated skirt or pressed trousers"
+     },
+     {
+      "id": "robe",
+      "label": "Robe / hanfu",
+      "frag": "flowing layered robes with wide sleeves and a broad sash"
+     },
+     {
+      "id": "cloak",
+      "label": "Hooded cloak",
+      "frag": "a deep hooded cloak that falls to the calves"
+     },
+     {
+      "id": "techwear",
+      "label": "Techwear",
+      "frag": "technical layered streetwear with straps and sealed pockets"
+     },
+     {
+      "id": "armor",
+      "label": "Armour",
+      "frag": "fitted plate-and-leather armour"
+     },
+     {
+      "id": "dress",
+      "label": "Dress",
+      "frag": "a simple well-cut dress"
+     },
+     {
+      "id": "festival",
+      "label": "Festival wear",
+      "frag": "festival clothes hung with small paper charms"
+     },
+     {
+      "id": "workwear",
+      "label": "Workwear",
+      "frag": "heavy workwear - canvas jacket, tool belt"
+     }
+    ]
+   },
+   "primary": {
+    "label": "Primary colour",
+    "options": [
+     {
+      "id": "black",
+      "label": "Black",
+      "frag": "black"
+     },
+     {
+      "id": "charcoal",
+      "label": "Charcoal",
+      "frag": "charcoal"
+     },
+     {
+      "id": "white",
+      "label": "White",
+      "frag": "white"
+     },
+     {
+      "id": "ivory",
+      "label": "Ivory",
+      "frag": "ivory"
+     },
+     {
+      "id": "grey",
+      "label": "Grey",
+      "frag": "grey"
+     },
+     {
+      "id": "navy",
+      "label": "Navy",
+      "frag": "navy"
+     },
+     {
+      "id": "indigo",
+      "label": "Indigo",
+      "frag": "indigo"
+     },
+     {
+      "id": "green",
+      "label": "Green",
+      "frag": "deep green"
+     },
+     {
+      "id": "jade",
+      "label": "Jade",
+      "frag": "jade-green"
+     },
+     {
+      "id": "red",
+      "label": "Red",
+      "frag": "deep red"
+     },
+     {
+      "id": "burgundy",
+      "label": "Burgundy",
+      "frag": "burgundy"
+     },
+     {
+      "id": "brown",
+      "label": "Brown",
+      "frag": "brown"
+     },
+     {
+      "id": "tan",
+      "label": "Tan",
+      "frag": "tan"
+     },
+     {
+      "id": "gold",
+      "label": "Gold",
+      "frag": "muted gold"
+     }
+    ]
+   },
+   "secondary": {
+    "label": "Accent colour",
+    "options": [
+     {
+      "id": "none",
+      "label": "None",
+      "frag": ""
+     },
+     {
+      "id": "white",
+      "label": "White",
+      "frag": "white trim"
+     },
+     {
+      "id": "black",
+      "label": "Black",
+      "frag": "black trim"
+     },
+     {
+      "id": "red",
+      "label": "Red",
+      "frag": "red accents"
+     },
+     {
+      "id": "gold",
+      "label": "Gold",
+      "frag": "gold detailing"
+     },
+     {
+      "id": "silver",
+      "label": "Silver",
+      "frag": "silver fastenings"
+     },
+     {
+      "id": "jade",
+      "label": "Jade",
+      "frag": "jade-green lining"
+     }
+    ]
+   },
+   "material": {
+    "label": "Material",
+    "options": [
+     {
+      "id": "cotton",
+      "label": "Cotton",
+      "frag": "of heavy cotton"
+     },
+     {
+      "id": "linen",
+      "label": "Linen",
+      "frag": "of crumpled linen"
+     },
+     {
+      "id": "silk",
+      "label": "Silk",
+      "frag": "of flowing silk"
+     },
+     {
+      "id": "wool",
+      "label": "Wool",
+      "frag": "of coarse wool"
+     },
+     {
+      "id": "leather",
+      "label": "Leather",
+      "frag": "of worn leather"
+     },
+     {
+      "id": "canvas",
+      "label": "Canvas",
+      "frag": "of waxed canvas"
+     },
+     {
+      "id": "synthetic",
+      "label": "Technical fabric",
+      "frag": "of matte technical fabric"
+     }
+    ]
+   },
+   "condition": {
+    "label": "Condition",
+    "options": [
+     {
+      "id": "new",
+      "label": "New",
+      "frag": "clean and unmarked"
+     },
+     {
+      "id": "worn",
+      "label": "Worn-in",
+      "frag": "worn-in, softened at the seams"
+     },
+     {
+      "id": "frayed",
+      "label": "Frayed",
+      "frag": "frayed at the hems"
+     },
+     {
+      "id": "patched",
+      "label": "Patched",
+      "frag": "carefully patched"
+     },
+     {
+      "id": "travel",
+      "label": "Travel-stained",
+      "frag": "travel-stained, dust in the creases"
+     }
+    ]
+   },
+   "closure": {
+    "label": "Closure",
+    "options": [
+     {
+      "id": "closed",
+      "label": "Closed / fastened",
+      "frag": "fastened closed all the way up"
+     },
+     {
+      "id": "open",
+      "label": "Open over inner layer",
+      "frag": "worn open over a fitted inner layer"
+     }
+    ]
+   },
+   "accessories": {
+    "label": "Accessories",
+    "multi": true,
+    "options": [
+     {
+      "id": "hood_up",
+      "label": "Hood up",
+      "frag": "hood up"
+     },
+     {
+      "id": "hood_down",
+      "label": "Hood down",
+      "frag": "hood down"
+     },
+     {
+      "id": "scarf",
+      "label": "Scarf",
+      "frag": "a long scarf"
+     },
+     {
+      "id": "gloves",
+      "label": "Gloves",
+      "frag": "fingerless gloves"
+     },
+     {
+      "id": "belt",
+      "label": "Wide belt",
+      "frag": "a wide belt"
+     },
+     {
+      "id": "satchel",
+      "label": "Satchel",
+      "frag": "a leather satchel"
+     },
+     {
+      "id": "shoulder_bag",
+      "label": "Shoulder bag",
+      "frag": "a worn shoulder bag"
+     },
+     {
+      "id": "charms",
+      "label": "Paper charms",
+      "frag": "small paper charms tied at the waist"
+     },
+     {
+      "id": "straw_hat",
+      "label": "Straw hat",
+      "frag": "a wide conical straw hat"
+     },
+     {
+      "id": "mask",
+      "label": "Half mask",
+      "frag": "a half mask over the lower face"
+     }
+    ]
+   }
+  }
+ },
+ "prop": {
+  "main": true,
+  "label": "Prop / weapon",
+  "subs": {
+   "category": {
+    "label": "Category",
+    "options": [
+     {
+      "id": "sword",
+      "label": "Straight sword",
+      "frag": "a slender straight sword"
+     },
+     {
+      "id": "staff",
+      "label": "Staff",
+      "frag": "a long wooden staff"
+     },
+     {
+      "id": "bow",
+      "label": "Bow",
+      "frag": "a recurve bow with a quiver"
+     },
+     {
+      "id": "dagger",
+      "label": "Dagger",
+      "frag": "a short dagger"
+     },
+     {
+      "id": "umbrella",
+      "label": "Umbrella",
+      "frag": "an oil-paper umbrella"
+     },
+     {
+      "id": "lantern",
+      "label": "Paper lantern",
+      "frag": "a round paper lantern"
+     },
+     {
+      "id": "book",
+      "label": "Book",
+      "frag": "a thick clasped book"
+     },
+     {
+      "id": "satchel",
+      "label": "Courier satchel",
+      "frag": "a buckled courier satchel"
+     },
+     {
+      "id": "teapot",
+      "label": "Teapot",
+      "frag": "a small iron teapot"
+     },
+     {
+      "id": "camera",
+      "label": "Old camera",
+      "frag": "an old rangefinder camera"
+     },
+     {
+      "id": "radio",
+      "label": "Radio",
+      "frag": "a battered portable radio"
+     },
+     {
+      "id": "key",
+      "label": "Ornate key",
+      "frag": "an ornate brass key"
+     }
+    ]
+   },
+   "material": {
+    "label": "Material",
+    "options": [
+     {
+      "id": "steel",
+      "label": "Steel",
+      "frag": "of polished steel"
+     },
+     {
+      "id": "iron",
+      "label": "Iron",
+      "frag": "of dark iron"
+     },
+     {
+      "id": "wood",
+      "label": "Wood",
+      "frag": "of oiled wood"
+     },
+     {
+      "id": "bamboo",
+      "label": "Bamboo",
+      "frag": "of bamboo"
+     },
+     {
+      "id": "paper",
+      "label": "Paper",
+      "frag": "of waxed paper"
+     },
+     {
+      "id": "brass",
+      "label": "Brass",
+      "frag": "of worn brass"
+     },
+     {
+      "id": "bone",
+      "label": "Bone",
+      "frag": "of carved bone"
+     }
+    ]
+   },
+   "condition": {
+    "label": "Condition",
+    "options": [
+     {
+      "id": "new",
+      "label": "New",
+      "frag": "newly made"
+     },
+     {
+      "id": "cared",
+      "label": "Well cared-for",
+      "frag": "old but carefully kept"
+     },
+     {
+      "id": "battered",
+      "label": "Battered",
+      "frag": "battered and scarred"
+     },
+     {
+      "id": "ancient",
+      "label": "Ancient",
+      "frag": "ancient, worn smooth by hands"
+     }
+    ]
+   },
+   "aura": {
+    "label": "Aura",
+    "options": [
+     {
+      "id": "none",
+      "label": "None",
+      "frag": ""
+     },
+     {
+      "id": "glow_warm",
+      "label": "Warm glow",
+      "frag": "glowing faintly warm from within"
+     },
+     {
+      "id": "glow_cold",
+      "label": "Cold glow",
+      "frag": "giving off a pale cold light"
+     },
+     {
+      "id": "smoke",
+      "label": "Wisping",
+      "frag": "trailing a faint wisp of vapour"
+     }
+    ]
+   }
+  }
+ },
+ "music": {
+  "main": true,
+  "label": "Music",
+  "subs": {
+   "mood": {
+    "label": "Mood",
+    "options": [
+     {
+      "id": "tense",
+      "label": "Tense",
+      "frag": "tense minimal underscore"
+     },
+     {
+      "id": "warm",
+      "label": "Warm",
+      "frag": "warm intimate underscore"
+     },
+     {
+      "id": "wistful",
+      "label": "Wistful",
+      "frag": "wistful melancholy theme"
+     },
+     {
+      "id": "playful",
+      "label": "Playful",
+      "frag": "light playful theme"
+     },
+     {
+      "id": "epic",
+      "label": "Epic",
+      "frag": "sweeping cinematic theme"
+     },
+     {
+      "id": "mysterious",
+      "label": "Mysterious",
+      "frag": "hushed mysterious underscore"
+     },
+     {
+      "id": "triumphant",
+      "label": "Triumphant",
+      "frag": "rising triumphant theme"
+     },
+     {
+      "id": "quiet",
+      "label": "Barely there",
+      "frag": "sparse ambient underscore"
+     }
+    ]
+   },
+   "tempo": {
+    "label": "Tempo",
+    "options": [
+     {
+      "id": "slow",
+      "label": "Slow",
+      "frag": "slow"
+     },
+     {
+      "id": "mid",
+      "label": "Mid",
+      "frag": "mid-tempo"
+     },
+     {
+      "id": "driving",
+      "label": "Driving",
+      "frag": "driving rhythm"
+     }
+    ]
+   },
+   "instruments": {
+    "label": "Instrumentation",
+    "multi": true,
+    "options": [
+     {
+      "id": "strings",
+      "label": "Strings",
+      "frag": "strings"
+     },
+     {
+      "id": "piano",
+      "label": "Piano",
+      "frag": "sparse piano"
+     },
+     {
+      "id": "guzheng",
+      "label": "Guzheng",
+      "frag": "guzheng"
+     },
+     {
+      "id": "flute",
+      "label": "Flute",
+      "frag": "wooden flute"
+     },
+     {
+      "id": "taiko",
+      "label": "Taiko",
+      "frag": "deep taiko drums"
+     },
+     {
+      "id": "synth",
+      "label": "Synth",
+      "frag": "low pulsing synth"
+     },
+     {
+      "id": "bells",
+      "label": "Bells",
+      "frag": "small bells"
+     },
+     {
+      "id": "cello",
+      "label": "Cello",
+      "frag": "low cello"
+     }
+    ]
+   }
+  }
+ },
+ "shot_reference": {
+  "main": false,
+  "label": "Shot (owned by the /film editor)",
+  "subs_listed": [
+   "framing (12 angles)",
+   "camera move (9 moves)",
+   "transition in (LTX beats)",
+   "transition out (assembly)",
+   "duration",
+   "aspect",
+   "sfx",
+   "dialogue (char, line, delivery)",
+   "no_people",
+   "anchor mode"
+  ]
+ }
+}
