@@ -134,7 +134,7 @@ def render(sid, prompt, seconds, megapixels=0.9, seed=11, fps=24, aspect=None,
     needs the prompt honoured literally.
     """
     sets = [("sg1_376.inputs.value", prompt),
-            ("sg1_383.inputs.value", "true" if enhance else "false")
+            ("sg1_383.inputs.value", "true" if enhance else "false"),
             ("sg1_373.inputs.text", neg),
             ("sg1_362.inputs.value", seconds),
             ("sg1_361.inputs.value", fps),
