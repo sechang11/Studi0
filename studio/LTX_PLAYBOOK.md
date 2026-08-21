@@ -11,10 +11,11 @@ Written so none of it has to be found twice.
 |---|---|---|
 | A shot up to 30s, with sound, that holds its scene | **LTX-2.5** (`70_ltx25_i2v.json` via `studio/_tools/ltx_film.py`) | One sampling pass. No chain, so nothing can drift. |
 | Real cuts inside one shot | **LTX-2.5 multishot** | Several framings, one generation, character held across them. |
-| Spoken dialogue | **LTX-2.5** | Lip-synced, through a mouth that is on screen. |
+| Spoken dialogue, photoreal | **LTX-2.5** | Lip-synced, through a mouth that is on screen. |
+| Spoken dialogue, anime | **LTX-2.5, cut away from the face** | It generates the voice but leaves the drawn mouth shut. |
 | One violent physical event, one unbroken take | **H3** (`60`/`62`) | Still hits harder than LTX. Its "one big committed motion" rule was built for this. |
 | A locked location for 30s, audio not needed | **Wan context windows** (`61`) | The most rigid continuity available, but silent and 832×480. |
-| Music, a score, a crescendo | **Not a video model** | LTX makes wind when asked for an orchestra. ACE-Step is in the repo; MiniMax Music 3 is downloaded and untested. |
+| Music, a score, a crescendo | **ACE-Step** (`06_acestep_music.json`) | LTX makes wind when asked for an orchestra. ACE-Step writes 46 s of real score in 6 s — but fades to silence past about 45 s, so cut the film to the music. MiniMax Music 3 is downloaded and still untested. |
 
 The chaining **workarounds** are obsolete. H3 itself is not.
 
@@ -132,6 +133,10 @@ Harder than it sounds, and it escalates. Try in this order:
 - A dropdown is `["COMBO", {…}]`, not a bare list. `widgets_values` is **positional**, so a
   missed dropdown shifts every later widget by one.
 - Mode 4 is a real **bypass** — drop the node and bridge its links, or it becomes mandatory.
+
+### Reels
+`scripts/make_reel.sh` cuts a showreel to an ACE-Step bed, keeping each clip's own location
+sound quiet underneath so the wok still roars and the blade still rings.
 
 ### And one in the runner
 `-s` used to leave `"false"` as a **string**, which is truthy. Every boolean switch silently
