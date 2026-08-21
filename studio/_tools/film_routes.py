@@ -710,7 +710,11 @@ def _vo_job(jid, fid, shid, tid):
                       "strip": rel[:-4] + "_strip.png", "qc": _qc(dest),
                       "created": time.strftime("%H:%M")})
         f2 = F.load(fid)
-        f2.shot(shid)["takes"].append(take2)
+        sh2 = f2.shot(shid)
+        sh2["takes"].append(take2)
+        # a VO variant of the picked take supersedes it - that is what the button is for
+        if sh2.get("picked") == take["id"] and not take2["qc"]:
+            sh2["picked"] = take2["id"]
         f2.save()
         _finish(jid)
     except Exception as e:

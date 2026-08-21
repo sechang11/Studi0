@@ -1,0 +1,421 @@
+{
+ "title": "The Courier",
+ "created": "2026-08-21 09:01",
+ "look": "photoreal",
+ "look_clause": "photoreal cinematic film still, 35mm, deep focus, high detail, colour photograph, filmic grade",
+ "grade": "hard streetlight and neon on wet surfaces, teal and amber",
+ "negative": "",
+ "fps": 24,
+ "logline": "A courier delivers the last package of the night to a noodle stall that is not really a noodle stall.",
+ "cast": {
+  "COURIER": {
+   "name": "the courier",
+   "short": "courier in the dark green jacket",
+   "clause": "a woman in her thirties in a dark green courier jacket with a worn shoulder bag",
+   "sheet": "",
+   "voice": "female_01",
+   "voice_desc": "a level, unhurried American accent"
+  },
+  "VENDOR": {
+   "name": "the vendor",
+   "short": "vendor in the black shirt",
+   "clause": "a noodle vendor in his fifties in a black shirt with a white towel over his shoulder",
+   "sheet": "",
+   "voice": "en_man",
+   "voice_desc": "a brisk, dry accent"
+  }
+ },
+ "scenes": [
+  {
+   "id": "sc01",
+   "title": "the stall",
+   "location": "a night street food stall on a narrow lane, steam in the air, hanging bulbs",
+   "time_of_day": "late night",
+   "weather": "",
+   "ambience": "a low gas burner and a quiet lane, one distant scooter and a night market murmuring a street away",
+   "palette": "",
+   "music": "tense minimal underscore, low pulsing bass, sparse piano",
+   "cast_present": [
+    "COURIER",
+    "VENDOR"
+   ],
+   "no_people": false,
+   "anchor": "assets/anchor_sc01.png",
+   "shots": [
+    "010",
+    "020",
+    "030"
+   ]
+  },
+  {
+   "id": "sc02",
+   "title": "the street",
+   "location": "a narrow rain-wet street outside the lane, neon signs reflected in standing water",
+   "time_of_day": "late night",
+   "weather": "steady rain",
+   "ambience": "steady rain on tarmac and awnings, water running in a gutter",
+   "palette": "",
+   "music": "the same tense minimal underscore, resolving",
+   "cast_present": [
+    "COURIER"
+   ],
+   "no_people": false,
+   "anchor": "assets/anchor_sc02.png",
+   "shots": [
+    "040",
+    "050"
+   ]
+  }
+ ],
+ "shots": {
+  "010": {
+   "id": "010",
+   "scene": "sc01",
+   "title": "the lane",
+   "duration": 8,
+   "aspect": "wide",
+   "anchor": "scene",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide establishing shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "VENDOR",
+     "action": "works the steel counter of his stall",
+     "background": "the courier walks into the lane from the far end, side on, and steam drifts through the hanging bulbs",
+     "dialogue": {
+      "char": "",
+      "line": "",
+      "delivery": ""
+     }
+    }
+   ],
+   "sfx": "steam hissing off a wok, a bulb buzzing",
+   "no_people": null,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t317293716",
+     "engine": "ltx",
+     "seed": 11,
+     "created": "09:03",
+     "file": "takes/010/ltx_t317293716.mp4",
+     "poster": "takes/010/ltx_t317293716.png",
+     "strip": "takes/010/ltx_t317293716_strip.png",
+     "duration": 8.04,
+     "qc": [],
+     "warnings": [],
+     "prompt": "A static wide establishing shot: a noodle vendor in his fifties in a black shirt with a white towel over his shoulder, works the steel counter of his stall, while the courier walks into the lane from the far end, side on, and steam drifts through the hanging bulbs, a night street food stall on a narrow lane, steam in the air, hanging bulbs, late night. Photoreal cinematic film still, 35mm, deep fo"
+    },
+    {
+     "id": "t317397315",
+     "engine": "h3",
+     "seed": 11,
+     "created": "09:05",
+     "file": "takes/010/h3_t317397315.mp4",
+     "poster": "takes/010/h3_t317397315.png",
+     "strip": "takes/010/h3_t317397315_strip.png",
+     "duration": 8.0,
+     "qc": [],
+     "warnings": [],
+     "prompt": "a noodle vendor in his fifties in a black shirt with a white towel over his shoulder works the steel counter of his stall, the courier walks into the lane from the far end, side on, and steam drifts through the hanging bulbs.  Sound: steam hissing off a wok, a bulb buzzing, a low gas burner and a quiet lane, one distant scooter and a night market murmuring a street away."
+    },
+    {
+     "id": "t317531939",
+     "engine": "wan",
+     "seed": 11,
+     "created": "09:07",
+     "file": "takes/010/wan_t317531939.mp4",
+     "poster": "takes/010/wan_t317531939.png",
+     "strip": "takes/010/wan_t317531939_strip.png",
+     "duration": 5.06,
+     "qc": [
+      "NO AUDIO STREAM"
+     ],
+     "warnings": [
+      "Wan is SILENT - audio would come from another engine or the mix"
+     ],
+     "prompt": "a noodle vendor in his fifties in a black shirt with a white towel over his shoulder works the steel counter of his stall. the courier walks into the lane from the far end, side on, and steam drifts through the hanging bulbs"
+    }
+   ],
+   "picked": "t317293716",
+   "engine_notes": ""
+  },
+  "020": {
+   "id": "020",
+   "scene": "sc01",
+   "title": "the password",
+   "duration": 10,
+   "aspect": "wide",
+   "anchor": "scene",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "medium shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "COURIER",
+     "action": "stops at the counter and sets a small parcel down on the steel",
+     "background": "",
+     "dialogue": {
+      "char": "",
+      "line": "",
+      "delivery": ""
+     }
+    },
+    {
+     "framing": "close-up",
+     "move": "static",
+     "transition_in": "hard cut",
+     "subject": "VENDOR",
+     "action": "looks at the parcel, then at her",
+     "background": "",
+     "dialogue": {
+      "char": "VENDOR",
+      "line": "You're late.",
+      "delivery": "flat"
+     }
+    }
+   ],
+   "sfx": "a ladle set down on steel",
+   "no_people": null,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t317659780",
+     "engine": "ltx",
+     "seed": 11,
+     "created": "09:09",
+     "file": "takes/020/ltx_t317659780.mp4",
+     "poster": "takes/020/ltx_t317659780.png",
+     "strip": "takes/020/ltx_t317659780_strip.png",
+     "duration": 10.04,
+     "qc": [],
+     "warnings": [],
+     "prompt": "A static medium shot: a woman in her thirties in a dark green courier jacket with a worn shoulder bag, stops at the counter and sets a small parcel down on the steel, a night street food stall on a narrow lane, steam in the air, hanging bulbs, late night. A hard cut transitions to a static close-up of a noodle vendor in his fifties in a black shirt with a white towel over his shoulder, looks at th"
+    },
+    {
+     "id": "t317749705",
+     "engine": "ltx",
+     "seed": 12,
+     "created": "09:10",
+     "file": "takes/020/ltx_t317749705.mp4",
+     "poster": "takes/020/ltx_t317749705.png",
+     "strip": "takes/020/ltx_t317749705_strip.png",
+     "duration": 10.04,
+     "qc": [],
+     "warnings": [],
+     "prompt": "A static medium shot: a woman in her thirties in a dark green courier jacket with a worn shoulder bag, stops at the counter and sets a small parcel down on the steel, a night street food stall on a narrow lane, steam in the air, hanging bulbs, late night. A hard cut transitions to a static close-up of a noodle vendor in his fifties in a black shirt with a white towel over his shoulder, looks at th"
+    },
+    {
+     "id": "t317659780v",
+     "engine": "ltx+vo",
+     "seed": 11,
+     "created": "09:18",
+     "file": "takes/020/ltx_t317659780_vo.mp4",
+     "poster": "takes/020/ltx_t317659780_vo.png",
+     "strip": "takes/020/ltx_t317659780_vo_strip.png",
+     "duration": 10.04,
+     "qc": [],
+     "warnings": [],
+     "prompt": "A static medium shot: a woman in her thirties in a dark green courier jacket with a worn shoulder bag, stops at the counter and sets a small parcel down on the steel, a night street food stall on a narrow lane, steam in the air, hanging bulbs, late night. A hard cut transitions to a static close-up of a noodle vendor in his fifties in a black shirt with a white towel over his shoulder, looks at th"
+    }
+   ],
+   "picked": "t317659780v",
+   "engine_notes": ""
+  },
+  "030": {
+   "id": "030",
+   "scene": "sc01",
+   "title": "the handoff",
+   "duration": 10,
+   "aspect": "wide",
+   "anchor": "scene",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "extreme macro shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "",
+     "action": "the small brown-paper parcel slides across the wet steel counter and a second, flatter envelope slides back the other way",
+     "background": "",
+     "dialogue": {
+      "char": "",
+      "line": "",
+      "delivery": ""
+     }
+    },
+    {
+     "framing": "medium shot",
+     "move": "static",
+     "transition_in": "hard cut",
+     "subject": "COURIER",
+     "action": "tucks the envelope into her jacket and turns away from the counter",
+     "background": "the vendor goes back to his wok as though nothing happened",
+     "dialogue": {
+      "char": "COURIER",
+      "line": "Tell him that's the last one.",
+      "delivery": "quiet"
+     }
+    }
+   ],
+   "sfx": "paper sliding on steel, a drawer opening under the counter",
+   "no_people": null,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t317821810",
+     "engine": "ltx",
+     "seed": 11,
+     "created": "09:11",
+     "file": "takes/030/ltx_t317821810.mp4",
+     "poster": "takes/030/ltx_t317821810.png",
+     "strip": "takes/030/ltx_t317821810_strip.png",
+     "duration": 10.04,
+     "qc": [],
+     "warnings": [],
+     "prompt": "A static extreme macro shot: the small brown-paper parcel slides across the wet steel counter and a second, flatter envelope slides back the other way, a night street food stall on a narrow lane, steam in the air, hanging bulbs, late night. A hard cut transitions to a static medium shot of a woman in her thirties in a dark green courier jacket with a worn shoulder bag, tucks the envelope into her "
+    },
+    {
+     "id": "t317902209",
+     "engine": "h3",
+     "seed": 11,
+     "created": "09:14",
+     "file": "takes/030/h3_t317902209.mp4",
+     "poster": "takes/030/h3_t317902209.png",
+     "strip": "takes/030/h3_t317902209_strip.png",
+     "duration": 8.71,
+     "qc": [],
+     "warnings": [
+      "H3 renders beat 1 only - it has no multishot; the other 1 beat(s) are ignored on this engine",
+      "no background action - H3 animates only what the clause names; an unnamed background freezes"
+     ],
+     "prompt": "the small brown-paper parcel slides across the wet steel counter and a second, flatter envelope slides back the other way.  Sound: paper sliding on steel, a drawer opening under the counter, a low gas burner and a quiet lane, one distant scooter and a night market murmuring a street away."
+    },
+    {
+     "id": "t317821810v",
+     "engine": "ltx+vo",
+     "seed": 11,
+     "created": "09:18",
+     "file": "takes/030/ltx_t317821810_vo.mp4",
+     "poster": "takes/030/ltx_t317821810_vo.png",
+     "strip": "takes/030/ltx_t317821810_vo_strip.png",
+     "duration": 10.04,
+     "qc": [],
+     "warnings": [],
+     "prompt": "A static extreme macro shot: the small brown-paper parcel slides across the wet steel counter and a second, flatter envelope slides back the other way, a night street food stall on a narrow lane, steam in the air, hanging bulbs, late night. A hard cut transitions to a static medium shot of a woman in her thirties in a dark green courier jacket with a worn shoulder bag, tucks the envelope into her "
+    }
+   ],
+   "picked": "t317821810v",
+   "engine_notes": ""
+  },
+  "040": {
+   "id": "040",
+   "scene": "sc02",
+   "title": "into the rain",
+   "duration": 8,
+   "aspect": "wide",
+   "anchor": "scene",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide shot",
+     "move": "follow",
+     "transition_in": "",
+     "subject": "COURIER",
+     "action": "walks out of the lane into the rain, side on, hood up",
+     "background": "neon reflections shiver in the puddles as the rain hits them",
+     "dialogue": {
+      "char": "",
+      "line": "",
+      "delivery": ""
+     }
+    }
+   ],
+   "sfx": "her footsteps in standing water",
+   "no_people": null,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t318061853",
+     "engine": "ltx",
+     "seed": 11,
+     "created": "09:16",
+     "file": "takes/040/ltx_t318061853.mp4",
+     "poster": "takes/040/ltx_t318061853.png",
+     "strip": "takes/040/ltx_t318061853_strip.png",
+     "duration": 8.04,
+     "qc": [],
+     "warnings": [],
+     "prompt": "A tracking wide shot: a woman in her thirties in a dark green courier jacket with a worn shoulder bag, walks out of the lane into the rain, side on, hood up, with the camera following the subject, while neon reflections shiver in the puddles as the rain hits them, a narrow rain-wet street outside the lane, neon signs reflected in standing water, late night, steady rain. Photoreal cinematic film st"
+    },
+    {
+     "id": "t318165258",
+     "engine": "h3",
+     "seed": 11,
+     "created": "09:18",
+     "file": "takes/040/h3_t318165258.mp4",
+     "poster": "takes/040/h3_t318165258.png",
+     "strip": "takes/040/h3_t318165258_strip.png",
+     "duration": 8.0,
+     "qc": [],
+     "warnings": [],
+     "prompt": "a woman in her thirties in a dark green courier jacket with a worn shoulder bag walks out of the lane into the rain, side on, hood up, neon reflections shiver in the puddles as the rain hits them.  Sound: her footsteps in standing water, steady rain on tarmac and awnings, water running in a gutter."
+    }
+   ],
+   "picked": "t318061853",
+   "engine_notes": ""
+  },
+  "050": {
+   "id": "050",
+   "scene": "sc02",
+   "title": "she stops",
+   "duration": 6,
+   "aspect": "wide",
+   "anchor": "prev_last",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "close-up",
+     "move": "static",
+     "transition_in": "",
+     "subject": "COURIER",
+     "action": "stops under an awning, takes the envelope out and looks at it, rain streaking past behind her",
+     "background": "",
+     "dialogue": {
+      "char": "",
+      "line": "",
+      "delivery": ""
+     }
+    }
+   ],
+   "sfx": "rain on the awning above her",
+   "no_people": null,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t318319905",
+     "engine": "ltx",
+     "seed": 11,
+     "created": "09:19",
+     "file": "takes/050/ltx_t318319905.mp4",
+     "poster": "takes/050/ltx_t318319905.png",
+     "strip": "takes/050/ltx_t318319905_strip.png",
+     "duration": 6.04,
+     "qc": [],
+     "warnings": [],
+     "prompt": "A static close-up: a woman in her thirties in a dark green courier jacket with a worn shoulder bag, stops under an awning, takes the envelope out and looks at it, rain streaking past behind her, a narrow rain-wet street outside the lane, neon signs reflected in standing water, late night, steady rain. Photoreal cinematic film still, 35mm, deep focus, high detail, colour photograph, filmic grade, h"
+    }
+   ],
+   "picked": "t318319905",
+   "engine_notes": ""
+  }
+ }
+}
