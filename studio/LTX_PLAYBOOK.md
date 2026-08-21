@@ -95,6 +95,10 @@ Harder than it sounds, and it escalates. Try in this order:
 - Re-identify the speaker after every cut, like any other character.
 - **Verify it, don't assume it:** a spectrogram of a speaking close-up shows a voiced
   harmonic stack with syllable gaps; ambience and effects show a broadband wash with none.
+- **Lip sync is photoreal only.** In flat cel anime the voice is generated but the drawn
+  mouth stays shut — the mouth region changes 0.43x as much as the whole frame, against
+  1.01x for a photoreal talking head. Cut anime dialogue the way anime actually is: play
+  the line over an over-shoulder, a back-of-head, or the listener's reaction.
 
 ---
 
