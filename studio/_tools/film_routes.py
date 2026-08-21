@@ -212,6 +212,17 @@ def libraries():
             if d.get("status") != "ready":
                 continue
             voices.append({"id": fn[:-5], "name": d.get("name")})
+    locations = []
+    ldir = os.path.join(STUDIO, "locations")
+    if os.path.isdir(ldir):
+        for fn in sorted(os.listdir(ldir)):
+            if fn.endswith(".json"):
+                try:
+                    d = json.load(open(os.path.join(ldir, fn), encoding="utf-8"))
+                    d["id"] = fn[:-5]
+                    locations.append(d)
+                except Exception:
+                    continue
     templates = []
     if os.path.isdir(F.TEMPLATES):
         for fn in sorted(os.listdir(F.TEMPLATES)):
@@ -222,7 +233,8 @@ def libraries():
                                       "hint": d.get("hint", ""), "shot": d.get("shot")})
                 except Exception:
                     continue
-    return {"characters": chars, "voices": voices, "templates": templates}, 200
+    return {"characters": chars, "voices": voices, "templates": templates,
+            "locations": locations}, 200
 
 
 def job_status(jid):
