@@ -47,7 +47,8 @@
     "010",
     "020",
     "080",
-    "030"
+    "030",
+    "090"
    ],
    "anchor_candidates": [
     "assets/anchor_sc01_c0.png",
@@ -634,7 +635,7 @@
    "id": "030",
    "scene": "sc01",
    "title": "the handoff",
-   "duration": 10,
+   "duration": 8,
    "aspect": "wide",
    "anchor": "scene",
    "keyframe_prompt": "",
@@ -653,16 +654,16 @@
      }
     },
     {
-     "framing": "medium shot",
+     "framing": "extreme macro shot",
      "move": "static",
      "transition_in": "hard cut",
-     "subject": "COURIER",
-     "action": "tucks the envelope into her jacket and turns away from the counter",
-     "background": "the vendor goes back to his wok as though nothing happened",
+     "subject": "",
+     "action": "gloved fingers close on the envelope and draw it out of frame",
+     "background": "steam drifting across the steel",
      "dialogue": {
-      "char": "COURIER",
-      "line": "Tell him that's the last one.",
-      "delivery": "quiet"
+      "char": "",
+      "line": "",
+      "delivery": ""
      }
     }
    ],
@@ -949,9 +950,37 @@
      "qc": [],
      "warnings": [],
      "prompt": "A static extreme macro shot: the small brown-paper parcel slides across the wet steel counter and a second, flatter envelope slides back the other way, a night street food stall on a narrow lane, steam in the air, hanging bulbs, late night. A hard cut transitions to a static medium shot of a woman in her thirties in a dark green courier jacket with a worn shoulder bag, tucks the envelope into her "
+    },
+    {
+     "id": "t329753007",
+     "engine": "ltx",
+     "seed": 27,
+     "created": "12:30",
+     "file": "takes/030/ltx_t329753007.mp4",
+     "poster": "takes/030/ltx_t329753007.png",
+     "strip": "takes/030/ltx_t329753007_strip.png",
+     "duration": 8.04,
+     "fps": 24,
+     "qc": [],
+     "warnings": [],
+     "prompt": "A static extreme macro shot: the small brown-paper parcel slides across the wet steel counter and a second, flatter envelope slides back the other way, a night street food stall on a narrow lane, steam in the air, hanging bulbs, late night. A hard cut transitions to a static extreme macro shot of the scene, gloved fingers close on the envelope and draw it out of frame, steam drifting across the st"
+    },
+    {
+     "id": "t329753007m",
+     "engine": "ltx@48",
+     "seed": 27,
+     "created": "12:31",
+     "file": "takes/030/ltx_t329753007_48.mp4",
+     "poster": "takes/030/ltx_t329753007_48.png",
+     "strip": "takes/030/ltx_t329753007_48_strip.png",
+     "duration": 8.02,
+     "fps": 48,
+     "qc": [],
+     "warnings": [],
+     "prompt": "A static extreme macro shot: the small brown-paper parcel slides across the wet steel counter and a second, flatter envelope slides back the other way, a night street food stall on a narrow lane, steam in the air, hanging bulbs, late night. A hard cut transitions to a static extreme macro shot of the scene, gloved fingers close on the envelope and draw it out of frame, steam drifting across the st"
     }
    ],
-   "picked": "t327208394vm",
+   "picked": "t329753007m",
    "engine_notes": ""
   },
   "040": {
@@ -1388,6 +1417,80 @@
     }
    ],
    "picked": "t329362146vm",
+   "engine_notes": ""
+  },
+  "090": {
+   "id": "090",
+   "scene": "sc01",
+   "title": "the last one",
+   "duration": 5,
+   "aspect": "wide",
+   "anchor": "generate",
+   "keyframe_prompt": "a close-up of the courier at the stall counter at night, tucking a flat envelope into her jacket, steam and hanging bulbs soft behind her",
+   "beats": [
+    {
+     "framing": "close-up",
+     "move": "static",
+     "transition_in": "",
+     "subject": "COURIER",
+     "action": "tucks the envelope into her jacket and looks up at him",
+     "background": "",
+     "dialogue": {
+      "char": "COURIER",
+      "line": "Tell him that's the last one.",
+      "delivery": "quiet"
+     }
+    }
+   ],
+   "sfx": "paper against fabric",
+   "no_people": null,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t329897038",
+     "engine": "ltx",
+     "seed": 27,
+     "created": "12:32",
+     "file": "takes/090/ltx_t329897038.mp4",
+     "poster": "takes/090/ltx_t329897038.png",
+     "strip": "takes/090/ltx_t329897038_strip.png",
+     "duration": 5.04,
+     "fps": 24,
+     "qc": [],
+     "warnings": [],
+     "prompt": "A static close-up: a pale woman in her thirties with strong dark brows, dark hair pulled back and an angular jaw, in a dark green courier jacket with a worn shoulder bag, tucks the envelope into her jacket and looks up at him, who says in a level, unhurried American accent, quiet, \"Tell him that's the last one.\", a night street food stall on a narrow lane, steam in the air, hanging bulbs, late nig"
+    },
+    {
+     "id": "t329897038v",
+     "engine": "ltx+vo",
+     "seed": 27,
+     "created": "12:33",
+     "file": "takes/090/ltx_t329897038_vo.mp4",
+     "poster": "takes/090/ltx_t329897038_vo.png",
+     "strip": "takes/090/ltx_t329897038_vo_strip.png",
+     "duration": 5.04,
+     "fps": 24,
+     "qc": [],
+     "warnings": [],
+     "prompt": "A static close-up: a pale woman in her thirties with strong dark brows, dark hair pulled back and an angular jaw, in a dark green courier jacket with a worn shoulder bag, tucks the envelope into her jacket and looks up at him, who says in a level, unhurried American accent, quiet, \"Tell him that's the last one.\", a night street food stall on a narrow lane, steam in the air, hanging bulbs, late nig"
+    },
+    {
+     "id": "t329897038vm",
+     "engine": "ltx+vo@48",
+     "seed": 27,
+     "created": "12:33",
+     "file": "takes/090/ltx_t329897038_vo_48.mp4",
+     "poster": "takes/090/ltx_t329897038_vo_48.png",
+     "strip": "takes/090/ltx_t329897038_vo_48_strip.png",
+     "duration": 5.01,
+     "fps": 48,
+     "qc": [],
+     "warnings": [],
+     "prompt": "A static close-up: a pale woman in her thirties with strong dark brows, dark hair pulled back and an angular jaw, in a dark green courier jacket with a worn shoulder bag, tucks the envelope into her jacket and looks up at him, who says in a level, unhurried American accent, quiet, \"Tell him that's the last one.\", a night street food stall on a narrow lane, steam in the air, hanging bulbs, late nig"
+    }
+   ],
+   "picked": "t329897038vm",
    "engine_notes": ""
   }
  }
