@@ -103,12 +103,19 @@ def run(wf, sets):
             (r.stderr or r.stdout or "")[-240:])
 
 
-def keyframe(sid, engine, scene, w, h, seed=12, sheet=None, tags=""):
-    """Art direction stays where this project already does it well."""
+def keyframe(sid, engine, scene, w, h, seed=12, sheet=None, tags="", ipa=0.6):
+    """Art direction stays where this project already does it well.
+
+    ipa is the IPAdapter weight, and it needs lowering for anything that is not a portrait.
+    PLUS FACE biases the COMPOSITION as well as the identity: at 0.6 a reference sheet
+    turned "a wide shot on a ruined bridge at night facing a huge wolf-beast" into a close
+    portrait on a blank background, with no bridge, no night and no wolf. Around 0.3 the
+    scene description wins and the face still holds.
+    """
     if engine == "anime":
         return run("22_anime_kf_ipadapter.json", [
             ("2.inputs.image", sheet or "sheet_liwen.png"),
-            ("4.inputs.weight", 0.6 if sheet else 0.0),
+            ("4.inputs.weight", ipa if sheet else 0.0),
             ("5.inputs.text", "%s, %s, %s" % (tags, scene, ANIME)),
             ("6.inputs.text", NEG_ANIME),
             ("7.inputs.width", w), ("7.inputs.height", h),
@@ -233,7 +240,7 @@ def main():
         else:
             kf, err = keyframe(sid, s.get("engine", "photo"), s["keyframe"], w, h,
                                seed=s.get("kseed", 12), sheet=s.get("sheet"),
-                               tags=s.get("tags", ""))
+                               tags=s.get("tags", ""), ipa=s.get("ipa", 0.6))
             if not kf:
                 print("   keyframe FAILED %s" % err)
                 continue
