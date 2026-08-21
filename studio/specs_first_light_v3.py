@@ -56,4 +56,37 @@ FILM = {"scenes": [
            "laid flat on the wet timber of the gate as the wood shifts under it. " + CEL)],
          "slow heavy footsteps on wet stone, a robe snapping in wind, a crow calling, then "
          "the wind dropping to silence and a heavy latch shifting")},
+
+    {"id": "fl3_duel", "seconds": 20, "megapixels": 1.2, "seed": 7, "neg": NEG,
+     "image": "~/shared/EPISODE/s3_duel_wp1.png", "note": "charge -> clash -> apart",
+     "prompt": beats(
+         "A wide shot in flat cel-shaded 2D anime: %s and %s stand far apart across a wide "
+         "flagstone courtyard with dead pine needles blowing between them, then both break "
+         "into a run straight at each other, needles thrown up under their feet"
+         % (LW, HAT),
+         [("A hard cut transitions to", "a medium shot", "the two of them",
+           "crashing together in the centre with their blades locked hard and orange sparks "
+           "bursting off the steel between them"),
+          ("Another hard cut transitions to", "a wide shot", "the two of them",
+           "breaking the bind and stepping through past each other to opposite sides of the "
+           "frame, then stopping back to back, absolutely still. " + CEL)],
+         "a steady wind through pines running under the whole shot and never stopping, with "
+         "two sets of running footfalls on stone over it, a violent steel clash and sparks, "
+         "and blades grinding apart")},
+
+    {"id": "fl3_first", "seconds": 20, "megapixels": 1.2, "seed": 8, "neg": NEG,
+     "image": "~/shared/EPISODE/s4_firstlight_wp1.png", "note": "bow -> departure -> sun",
+     "prompt": beats(
+         "A medium two-shot in flat cel-shaded 2D anime: %s lowers her sword and %s bows "
+         "deeply to her with both hands together, the mist burning off the flagstones "
+         "around them" % (LW, HAT),
+         [("A hard cut transitions to", "a wide shot", HAT,
+           "turning and walking away across the courtyard towards the tiled gate while she "
+           "stays exactly where she is and watches him go"),
+          ("Another hard cut transitions to", "a low-angle wide shot", LW + " alone",
+           "as the first sun breaks over the ridge behind her and floods the courtyard, and "
+           "she slides the sword home and lifts her head into the light. " + CEL)],
+         "a steady wind through pines running under the whole shot and never stopping, with "
+         "cloth folding over it, receding footsteps on stone, birds starting, a blade "
+         "sliding home into a scabbard and one temple bell")},
 ]}
