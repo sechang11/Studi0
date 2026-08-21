@@ -108,6 +108,24 @@ def _dur(p):
         return 0.0
 
 
+def _polish_mod():
+    """studio/_tools/polish.py by explicit path - same collision-proofing as the model."""
+    spec = _ilu.spec_from_file_location("film_polish", os.path.join(TOOLS, "polish.py"))
+    m = _ilu.module_from_spec(spec)
+    spec.loader.exec_module(m)
+    return m
+
+
+def _fps(p):
+    r = _sh("ffprobe", "-v", "error", "-select_streams", "v:0",
+            "-show_entries", "stream=r_frame_rate", "-of", "csv=p=0", p)
+    try:
+        a, _, b = (r.stdout.strip() or "24/1").partition("/")
+        return round(float(a) / float(b or 1))
+    except (ValueError, ZeroDivisionError):
+        return 24
+
+
 def _qc(path):
     try:
         import qc_films
@@ -152,6 +170,12 @@ def tree(fid):
                           "engines": sorted({t["engine"] for t in sh["takes"]}),
                           "picked": sh.get("picked") or "",
                           "poster": picked and picked.get("poster") or "",
+                          "picked_file": picked and picked.get("file") or "",
+                          "picked_qc": len(picked.get("qc") or []) if picked else 0,
+                          "picked_warnings": len(picked.get("warnings") or [])
+                          if picked else 0,
+                          "picked_fps": picked.get("fps", 24) if picked else 0,
+                          "picked_dur": picked.get("duration", 0) if picked else 0,
                           "transition_out": sh.get("transition_out", "cut")})
         scenes.append({k: sc.get(k) for k in ("id", "title", "location", "time_of_day",
                                               "weather", "ambience", "palette", "music",
@@ -399,15 +423,42 @@ def _render_scene_anchor(jid, fid, scid):
             set_path(wf, "11.inputs.filename_prefix",
                      "claude-generated/films/%s/anchor_%s" % (fid, scid))
         else:
-            wf = load_wf("01_qwen_t2i_turbo.json")
-            set_path(wf, "10.inputs.text", "%s. %s" % (prompt, f.data.get("look_clause")
-                                                       or F.LOOK_PHOTO))
-            set_path(wf, "11.inputs.text", F.NEG_PHOTO)
-            set_path(wf, "12.inputs.width", 1472)
-            set_path(wf, "12.inputs.height", 832)
-            set_path(wf, "13.inputs.seed", int(time.time()) % 99991)
-            set_path(wf, "15.inputs.filename_prefix",
-                     "claude-generated/films/%s/anchor_%s" % (fid, scid))
+            ports = [f.data["cast"][c].get("portrait") for c in present
+                     if f.data["cast"][c].get("portrait")][:2]
+            if ports:
+                # the measured identity route: portraits in, the scene out with the same
+                # faces. One portrait doubles as both references for a single character.
+                p0 = _stage(COMFY, os.path.join(f.dir, ports[0]),
+                            "film_port_%s_0.png" % fid)
+                p1 = _stage(COMFY, os.path.join(f.dir, ports[-1]),
+                            "film_port_%s_1.png" % fid)
+                who = " and ".join(f.data["cast"][c]["clause"] for c in present[:2])
+                wf = load_wf("14_qwen_edit_ref.json")
+                set_path(wf, "8.inputs.image", p0)
+                set_path(wf, "9.inputs.image", p1)
+                set_path(wf, "7.inputs.strength_model", 0.0)
+                set_path(wf, "10.inputs.prompt",
+                         "Keep the exact faces and identities of the person in the first "
+                         "reference image%s. Place them in a new scene: %s, %s. %s"
+                         % (" and the person in the second reference image"
+                            if len(ports) > 1 else "", who, ground,
+                            f.data.get("look_clause") or F.LOOK_PHOTO))
+                set_path(wf, "11.inputs.prompt", F.NEG_PHOTO)
+                set_path(wf, "20.inputs.width", 1472)
+                set_path(wf, "20.inputs.height", 832)
+                set_path(wf, "13.inputs.seed", int(time.time()) % 99991)
+                set_path(wf, "15.inputs.filename_prefix",
+                         "claude-generated/films/%s/anchor_%s" % (fid, scid))
+            else:
+                wf = load_wf("01_qwen_t2i_turbo.json")
+                set_path(wf, "10.inputs.text", "%s. %s"
+                         % (prompt, f.data.get("look_clause") or F.LOOK_PHOTO))
+                set_path(wf, "11.inputs.text", F.NEG_PHOTO)
+                set_path(wf, "12.inputs.width", 1472)
+                set_path(wf, "12.inputs.height", 832)
+                set_path(wf, "13.inputs.seed", int(time.time()) % 99991)
+                set_path(wf, "15.inputs.filename_prefix",
+                         "claude-generated/films/%s/anchor_%s" % (fid, scid))
         _, outs = run(HOST, wf, quiet=True)
         if not outs:
             raise RuntimeError("no output")
@@ -464,8 +515,10 @@ def _render_shot_keyframe(f, shid, plan):
     prompt = plan.get("prompt") or ""
     if not prompt:
         raise RuntimeError("anchor=generate needs a keyframe prompt on the shot")
-    key = hashlib.sha1(("%s|%s|%s" % (prompt, plan.get("ipa"),
-                                      f.data.get("look"))).encode()).hexdigest()[:10]
+    ports = [f.data["cast"][c].get("portrait") for c in (plan.get("present") or [])
+             if f.data["cast"].get(c, {}).get("portrait")][:2]
+    key = hashlib.sha1(("%s|%s|%s|%s" % (prompt, plan.get("ipa"), f.data.get("look"),
+                                         "|".join(ports))).encode()).hexdigest()[:10]
     dest = os.path.join(f.dir, "assets", "kf_%s_%s.png" % (shid, key))
     if os.path.exists(dest):
         return dest
@@ -490,6 +543,25 @@ def _render_shot_keyframe(f, shid, plan):
         set_path(wf, "10.inputs.width", min(w, 1216))
         set_path(wf, "10.inputs.height", h if h <= 832 else 1216)
         set_path(wf, "11.inputs.filename_prefix",
+                 "claude-generated/films/%s/kf_%s" % (f.id, shid))
+    elif ports:
+        p0 = _stage(COMFY, os.path.join(f.dir, ports[0]), "film_kfp_%s_0.png" % f.id)
+        p1 = _stage(COMFY, os.path.join(f.dir, ports[-1]), "film_kfp_%s_1.png" % f.id)
+        wf = load_wf("14_qwen_edit_ref.json")
+        set_path(wf, "8.inputs.image", p0)
+        set_path(wf, "9.inputs.image", p1)
+        set_path(wf, "7.inputs.strength_model", 0.0)
+        set_path(wf, "10.inputs.prompt",
+                 "Keep the exact faces and identities of the person in the first "
+                 "reference image%s. Place them in a new scene: %s, %s. %s"
+                 % (" and the person in the second reference image"
+                    if len(ports) > 1 else "", prompt, ground,
+                    f.data.get("look_clause") or F.LOOK_PHOTO))
+        set_path(wf, "11.inputs.prompt", F.NEG_PHOTO)
+        set_path(wf, "20.inputs.width", w)
+        set_path(wf, "20.inputs.height", h)
+        set_path(wf, "13.inputs.seed", 31)
+        set_path(wf, "15.inputs.filename_prefix",
                  "claude-generated/films/%s/kf_%s" % (f.id, shid))
     else:
         wf = load_wf("01_qwen_t2i_turbo.json")
@@ -568,7 +640,7 @@ def _render_take(jid, f, sh, eng, seed):
     qc = _qc(dest)
     take = {"id": tid, "engine": eng, "seed": seed, "created": time.strftime("%H:%M"),
             "file": rel, "poster": rel[:-4] + ".png", "strip": rel[:-4] + "_strip.png",
-            "duration": round(_dur(dest), 2), "qc": qc,
+            "duration": round(_dur(dest), 2), "fps": _fps(dest), "qc": qc,
             "warnings": c.get("warnings") or [], "prompt": c["prompt"][:400]}
     f2 = F.load(f.id)                          # re-load: takes may have landed meanwhile
     sh2 = f2.shot(sh["id"])
@@ -662,14 +734,16 @@ def _vo_job(jid, fid, shid, tid):
         take = next((t for t in sh["takes"] if t["id"] == tid), None)
         if not take:
             raise RuntimeError("no such take")
-        lines = [(b.get("dialogue") or {}) for b in sh.get("beats") or []]
-        lines = [d for d in lines if (d.get("line") or "").strip()]
+        beats_all = sh.get("beats") or []
+        lines = [(i, (b.get("dialogue") or {})) for i, b in enumerate(beats_all)]
+        lines = [(i, d) for i, d in lines if (d.get("line") or "").strip()]
         if not lines:
             raise RuntimeError("shot has no dialogue lines")
         if not ensure_comfy():
             raise RuntimeError("ComfyUI will not come up")
         vo_paths = []
-        for i, d in enumerate(lines):
+        for n_, (bi, d) in enumerate(lines):
+            i = n_
             ch = f.data["cast"].get(d.get("char") or "") or {}
             vid = ch.get("voice") or ""
             vmeta = {}
@@ -702,12 +776,18 @@ def _vo_job(jid, fid, shid, tid):
         for i, vp in enumerate(vo_paths):
             inputs += ["-i", vp]
         fc.append("[0:a]volume=0.35[a0]")
-        at = 0.6
+        # each line starts where its BEAT starts (beats divide the shot evenly on LTX),
+        # nudged 0.4s in so the cut lands first and the voice follows it
+        tdur = _dur(src)
+        nb = max(len(beats_all), 1)
+        floor = 0.0
         for i in range(len(vo_paths)):
+            bi = lines[i][0]
+            at = max(bi * (tdur / nb) + 0.4, floor)
             fc.append("[%d:a]adelay=%d|%d,volume=1.0[v%d]"
                       % (i + 1, int(at * 1000), int(at * 1000), i))
             amix += "[v%d]" % i
-            at += _dur(vo_paths[i]) + 0.4
+            floor = at + _dur(vo_paths[i]) + 0.3
         fc.append("%samix=inputs=%d:duration=first:normalize=0[out]"
                   % (amix, len(vo_paths) + 1))
         r = _sh("ffmpeg", "-y", "-v", "error", *inputs,
@@ -740,12 +820,158 @@ def vo_mix(data):
     return {"job": jid}, 200
 
 
+# ─── the master pass ────────────────────────────────────────────────────────────────
+
+def _master_job(jid, fid, shid):
+    """Finish the picked take: FILM interpolation to 48fps with the audio re-muxed. Lands
+    as a new immutable take that supersedes the pick - drafts stay cheap, keepers get
+    finished."""
+    try:
+        f = F.load(fid)
+        sh = f.shot(shid)
+        take = next((t for t in sh["takes"] if t["id"] == sh.get("picked")), None)
+        if not take:
+            raise RuntimeError("no picked take to master")
+        if take.get("fps", 24) >= 47:
+            raise RuntimeError("picked take is already 48fps")
+        src = os.path.join(f.dir, take["file"])
+        if _dur(src) > 25:
+            raise RuntimeError("interpolation ceiling is 25s - master the shots, not "
+                               "an assembly")
+        if not ensure_comfy():
+            raise RuntimeError("ComfyUI will not come up")
+        pol = _polish_mod()
+        rel = take["file"][:-4] + "_48.mp4"
+        dest = os.path.join(f.dir, rel)
+        _log(jid, "interpolating to 48fps")
+        out, info = pol.polish(src, dest)
+        if not out:
+            raise RuntimeError("polish failed: %s" % info)
+        _thumbs(dest, dest[:-4])
+        take2 = dict(take)
+        take2.update({"id": take["id"] + "m", "engine": take["engine"] + "@48",
+                      "file": rel, "poster": rel[:-4] + ".png",
+                      "strip": rel[:-4] + "_strip.png", "fps": _fps(dest),
+                      "duration": round(_dur(dest), 2), "qc": _qc(dest),
+                      "created": time.strftime("%H:%M")})
+        f2 = F.load(fid)
+        sh2 = f2.shot(shid)
+        sh2["takes"].append(take2)
+        if not take2["qc"]:
+            sh2["picked"] = take2["id"]
+        f2.save()
+        _finish(jid, "" if not take2["qc"] else "QC: " + "; ".join(take2["qc"])[:180])
+    except Exception as e:
+        _finish(jid, str(e)[:300])
+
+
+def master(data):
+    jid = _job("master", film=data["film"], shot=data["shot"])
+    threading.Thread(target=_master_job, args=(jid, data["film"], data["shot"]),
+                     daemon=True).start()
+    return {"job": jid}, 200
+
+
+def _draftall_job(jid, fid, engines, seed):
+    try:
+        f = F.load(fid)
+        todo = [sh["id"] for sh in f.ordered_shots() if not sh["takes"]]
+        with _LOCK:
+            JOBS[jid]["total"] = max(len(todo) * len(engines), 1)
+        for shid in todo:
+            f = F.load(fid)
+            sh = f.shot(shid)
+            for eng in engines:
+                _log(jid, "draft %s %s" % (shid, eng))
+                try:
+                    _render_take(jid, f, sh, eng, seed)
+                except Exception as e:
+                    _log(jid, "FAILED %s: %s" % (shid, str(e)[:140]))
+                    with _LOCK:
+                        JOBS[jid]["error"] = str(e)[:200]
+                with _LOCK:
+                    JOBS[jid]["done"] += 1
+        _finish(jid, JOBS[jid].get("error", ""))
+    except Exception as e:
+        _finish(jid, str(e)[:300])
+
+
+def draft_all(data):
+    engines = [e for e in (data.get("engines") or ["ltx"]) if e in ("ltx", "h3", "wan")]
+    jid = _job("draftall", film=data["film"])
+    threading.Thread(target=_draftall_job,
+                     args=(jid, data["film"], engines, int(data.get("seed") or 11)),
+                     daemon=True).start()
+    return {"job": jid}, 200
+
+
+def _portrait_job(jid, fid, cid):
+    """A portrait card per cast member - the reference the identity route hangs on."""
+    run, set_path, load_wf, ensure_local, HOST, COMFY = _comfy()
+    try:
+        f = F.load(fid)
+        ch = f.data["cast"].get(cid)
+        if not ch:
+            raise RuntimeError("no cast member %r" % cid)
+        if not ensure_comfy():
+            raise RuntimeError("ComfyUI will not come up")
+        dest = os.path.join(f.dir, "assets", "cast_%s.png" % cid)
+        if f.data.get("look") == "anime":
+            wf = load_wf("22_anime_kf_ipadapter.json")
+            set_path(wf, "2.inputs.image", ch.get("sheet") or "")
+            set_path(wf, "4.inputs.weight", 0.6 if ch.get("sheet") else 0.0)
+            set_path(wf, "5.inputs.text", "%s, head and shoulders portrait, plain "
+                     "background, masterpiece, best quality, %s"
+                     % (ch["clause"], F.LOOK_ANIME))
+            set_path(wf, "6.inputs.text", F.NEG_ANIME)
+            set_path(wf, "7.inputs.width", 896)
+            set_path(wf, "7.inputs.height", 1216)
+            set_path(wf, "8.inputs.seed", 21)
+            set_path(wf, "10.inputs.width", 896)
+            set_path(wf, "10.inputs.height", 1216)
+            set_path(wf, "11.inputs.filename_prefix",
+                     "claude-generated/films/%s/cast_%s" % (fid, cid))
+        else:
+            wf = load_wf("01_qwen_t2i_turbo.json")
+            set_path(wf, "10.inputs.text",
+                     "A head and shoulders portrait of %s, plain grey background, soft "
+                     "key light, natural skin texture, sharp focus. %s"
+                     % (ch["clause"], f.data.get("look_clause") or F.LOOK_PHOTO))
+            set_path(wf, "11.inputs.text", F.NEG_PHOTO)
+            set_path(wf, "12.inputs.width", 896)
+            set_path(wf, "12.inputs.height", 1216)
+            set_path(wf, "13.inputs.seed", 21)
+            set_path(wf, "15.inputs.filename_prefix",
+                     "claude-generated/films/%s/cast_%s" % (fid, cid))
+        _, outs = run(HOST, wf, quiet=True)
+        if not outs:
+            raise RuntimeError("no output")
+        ensure_local(outs[0], dest)
+        f2 = F.load(fid)
+        f2.data["cast"][cid]["portrait"] = "assets/cast_%s.png" % cid
+        f2.save()
+        _finish(jid)
+    except Exception as e:
+        _finish(jid, str(e)[:300])
+
+
+def portrait(data):
+    jid = _job("portrait", film=data["film"], cast=data["cast"])
+    threading.Thread(target=_portrait_job, args=(jid, data["film"], data["cast"]),
+                     daemon=True).start()
+    return {"job": jid}, 200
+
+
 # ─── assembly ───────────────────────────────────────────────────────────────────────
 
 def _norm(src, dst, w=1472, h=832, fps=24):
+    """Uniform canvas and rate, plus 0.1s audio fades either end: each take generates its
+    own ambience texture, and the fades are what stop the texture JUMPING at every cut."""
+    d = max(_dur(src), 0.3)
     _sh("ffmpeg", "-y", "-v", "error", "-i", src,
         "-vf", "scale=%d:%d:force_original_aspect_ratio=decrease,"
                "pad=%d:%d:(ow-iw)/2:(oh-ih)/2,fps=%d" % (w, h, w, h, fps),
+        "-af", "afade=t=in:st=0:d=0.1,afade=t=out:st=%.2f:d=0.1" % (d - 0.1),
         "-c:v", "libx264", "-crf", "18", "-preset", "veryfast", "-pix_fmt", "yuv420p",
         "-c:a", "aac", "-b:a", "192k", "-ar", "48000", "-ac", "2", dst)
     return os.path.exists(dst)
@@ -773,6 +999,18 @@ def _assemble_job(jid, fid, music_on):
         shutil.rmtree(tmp, ignore_errors=True)
         os.makedirs(tmp, exist_ok=True)
         scene_files = []
+        picked_files = []
+        for sc in f.data["scenes"]:
+            for shid in sc["shots"]:
+                sh = f.data["shots"].get(shid) or {}
+                tk = next((t for t in sh.get("takes", [])
+                           if t["id"] == sh.get("picked")), None)
+                if tk:
+                    picked_files.append(os.path.join(f.dir, tk["file"]))
+        # the film runs at 48 only when EVERY pick is mastered - a mix would stutter
+        target_fps = 48 if picked_files and all(_fps(p) >= 47 for p in picked_files) \
+            else 24
+        _log(jid, "assembling at %dfps" % target_fps)
         for sc in f.data["scenes"]:
             parts = []
             for shid in sc["shots"]:
@@ -783,7 +1021,8 @@ def _assemble_job(jid, fid, music_on):
                     _log(jid, "skip %s - no picked take" % shid)
                     continue
                 np = os.path.join(tmp, "n_%s.mp4" % shid)
-                if not _norm(os.path.join(f.dir, take["file"]), np):
+                if not _norm(os.path.join(f.dir, take["file"]), np,
+                             fps=target_fps):
                     raise RuntimeError("normalize failed on %s" % shid)
                 parts.append((np, sh.get("transition_out", "cut")))
             if not parts:
@@ -844,7 +1083,10 @@ def _assemble_job(jid, fid, music_on):
         lst = os.path.join(tmp, "film.txt")
         open(lst, "w").write("".join("file '%s'\n" % p for p in scene_files))
         final = os.path.join(f.dir, "assets", "film.mp4")
+        # single-pass loudnorm on the whole film: scenes with dialogue, music beds and
+        # raw ambience land at very different levels, and this is the delivery leveller
         _sh("ffmpeg", "-y", "-v", "error", "-f", "concat", "-safe", "0", "-i", lst,
+            "-af", "loudnorm=I=-16:TP=-1.5:LRA=11,alimiter=limit=0.94",
             "-c:v", "libx264", "-crf", "18", "-preset", "veryfast",
             "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "192k", "-ar", "48000", final)
         if not os.path.exists(final):

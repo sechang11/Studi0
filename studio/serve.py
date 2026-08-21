@@ -2304,6 +2304,7 @@ class H(http.server.SimpleHTTPRequestHandler):
                      "/api/film/reorder", "/api/film/delete", "/api/film/pick",
                      "/api/film/takes", "/api/film/anchor", "/api/film/autonext",
                      "/api/film/vo", "/api/film/assemble",
+                     "/api/film/portrait", "/api/film/master", "/api/film/draftall",
                      "/api/character/upload", "/api/character/create",
                      "/api/voice/demo", "/api/voice/add",
                      "/api/character/suite", "/api/character/analyse",
@@ -2578,7 +2579,9 @@ class H(http.server.SimpleHTTPRequestHandler):
                   "editshot": fr.edit_shot, "reorder": fr.reorder,
                   "delete": fr.delete_shot, "pick": fr.pick, "takes": fr.takes,
                   "anchor": fr.scene_anchor, "autonext": fr.auto_next,
-                  "vo": fr.vo_mix, "assemble": fr.assemble}[p[len("/api/film/"):]]
+                  "vo": fr.vo_mix, "assemble": fr.assemble,
+                  "portrait": fr.portrait, "master": fr.master,
+                  "draftall": fr.draft_all}[p[len("/api/film/"):]]
             try:
                 body, code = fn(data)
             except KeyError as e:

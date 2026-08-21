@@ -244,3 +244,54 @@ QCs the result. The film lands at `studio/films/<id>/assets/film.mp4`.
 The compiler lints, it does not direct. It cannot know that a beat is boring, that a cut
 is in the wrong place, or that the line lands better unsaid. The takes grid is where taste
 happens; everything else here just makes sure taste is the only thing left to supply.
+
+## 14. The quality ladder - draft, pick, master
+
+A take is a DRAFT until it is picked; a pick is a draft until it is mastered. The ladder,
+each rung cheap enough to climb often:
+
+1. **Draft** - one LTX take per shot, compiler defaults. "Draft all missing takes" on the
+   Review tab walks the whole film in one job, so a complete rough cut of a new film is
+   one click and a coffee.
+2. **Pick** - the grid. Regenerate with a nudged seed (click a take's seed to reuse it) or
+   different engines until one reads right.
+3. **Master** - the picked take goes through FILM interpolation to 48fps with its audio
+   re-muxed, landing as a new take that supersedes the pick. The 25s interpolation
+   ceiling applies per shot, which is why mastering happens here and never on an assembly.
+4. **Assemble** - runs at 48fps automatically once every pick is mastered, and at 24
+   otherwise; a mix would stutter, so it is all or nothing by design.
+
+## 15. Identity - portraits are the anchor of the anchor
+
+Costume and place hold a film together, but photoreal FACES drift shot to shot unless
+something pins them. The pin is the **portrait**: each cast member renders one from their
+appearance clause (film tab), and from then on every photoreal scene anchor and every
+generated per-shot keyframe goes through the two-reference edit with the portraits in -
+the identity route this project measured, now applied automatically wherever cast are
+present. Regenerate a scene's anchor after adding portraits and re-shoot its takes; takes
+are immutable, so the old ones remain as history rather than being lost.
+
+Anime identity still rides the character sheet through IPAdapter, weight by framing.
+
+## 16. The sound of an assembled film
+
+Three fixes that turned assemblies from "clips in a row" into one soundtrack:
+
+- **Fades at every cut.** Each take generates its own ambience TEXTURE, and two rains are
+  never the same rain - a 0.1s audio fade either side of every cut stops the texture
+  jumping while the picture cuts hard.
+- **Loudness is levelled at delivery.** Dialogue shots, music beds and raw ambience land
+  at wildly different levels; the final pass runs single-pass loudnorm to -16 LUFS with a
+  limiter behind it. Remember the older lesson: normalisation promotes the median - level
+  the FILM, never an individual hit.
+- **VO lands on its beat.** A synthesized line is delayed to the start of the beat that
+  carries it (beats divide an LTX shot evenly), nudged 0.4s so the cut lands first and
+  the voice follows - not stacked at the head of the shot.
+
+## 17. Review before you believe
+
+The Review tab is the discipline made visible: every scene as a row of picked posters,
+the total picked runtime, and a blocking list - shots with no takes, takes unpicked,
+picked takes with QC issues, cast without portraits. The rule it encodes is the oldest
+one in this project: a render that completed is not a shot until something has LOOKED at
+it, and the cheapest looking is a grid.

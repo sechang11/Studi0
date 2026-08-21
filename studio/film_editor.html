@@ -206,8 +206,11 @@ function renderCenter(){
                            :'<span style="color:var(--good)">QC ✓</span>'}
         ${t.warnings&&t.warnings.length?`<span class="warn" title="${esc(t.warnings.join("; "))}">⚠ ${t.warnings.length}</span>`:""}
         <span class="grow"></span>
+        ${t.fps>=47?'<span class="badge on">48fps</span>':""}
         ${t.id===sh.picked?'<b style="color:var(--good)">picked</b>'
                           :`<button class="small" onclick="pickTake('${t.id}')">pick</button>`}
+        ${t.id===sh.picked&&(t.fps||24)<47&&t.duration<=25
+          ?`<button class="small" onclick="masterTake()" title="FILM interpolation to 48fps, audio re-muxed">master 48</button>`:""}
         ${hasDlg&&!t.engine.endsWith("+vo")?`<button class="small" onclick="voMix('${t.id}')" title="synthesize the character voice(s) and duck them over this take">VO</button>`:""}
       </div>
     </div>`).join("");
@@ -246,6 +249,49 @@ async function autoNext(){
   const j=await api("/autonext",{film:FID,shot:SHOT});
   note(j.note); await openFilm(FID); selShot(j.id);
 }
+async function masterTake(){ const j=await api("/master",{film:FID,shot:SHOT}); WATCH.add(j.job); note("master "+j.job); }
+async function genPortrait(cid){ const j=await api("/portrait",{film:FID,cast:cid}); WATCH.add(j.job); note("portrait "+j.job); }
+async function draftAll(){
+  const j=await api("/draftall",{film:FID,engines:["ltx"],seed:11});
+  WATCH.add(j.job); note("drafting all missing takes: "+j.job);
+}
+function reviewPanel(){
+  let total=0, n=0, blockers=[];
+  const rows=TREE.scenes.map(sc=>{
+    const cells=sc.shots.map(s=>{
+      if(!s.takes) blockers.push(`${s.id} has no takes`);
+      else if(!s.picked) blockers.push(`${s.id} has takes but none picked`);
+      else{
+        total+=s.picked_dur||s.duration||0; n++;
+        if(s.picked_qc) blockers.push(`${s.id} picked take has ${s.picked_qc} QC issue(s)`);
+      }
+      const chip=s.picked?(s.picked_qc?'<span class="qcbad">✗</span>'
+        :(s.picked_fps>=47?'<span style="color:var(--good)">48</span>'
+                          :'<span style="color:var(--good)">✓</span>'))
+        :'<span class="hint">—</span>';
+      return `<td style="padding:3px;text-align:center">
+        <div onclick="selShot('${s.id}')" style="cursor:pointer">
+        ${s.poster?`<img src="${m(s.poster)}" style="width:104px;border-radius:4px">`
+                  :'<div class="noimg" style="width:104px;height:59px;margin:auto">none</div>'}
+        <div class="hint">${s.id} ${chip}${s.transition_out!=="cut"?" · "+s.transition_out:""}</div>
+        </div></td>`;
+    }).join("");
+    return `<tr><td style="color:var(--dim);font-size:11px;white-space:nowrap;vertical-align:top;padding-top:12px">
+            ${esc(sc.title||sc.id)}${sc.music?'<br><span class="badge">music</span>':""}</td>${cells}</tr>`;
+  }).join("");
+  const ports=Object.entries(TREE.cast||{}).filter(([,c])=>!c.portrait).map(([id])=>id);
+  if(ports.length) blockers.push("no portrait yet: "+ports.join(", ")+" (photoreal identity route needs them)");
+  return `<h2>Review</h2>
+    <div class="hint">${n} shots picked · ~${Math.round(total)}s of picked footage</div>
+    <div style="overflow-x:auto;margin-top:8px"><table>${rows}</table></div>
+    <h2>Blocking / attention</h2>
+    ${blockers.length?blockers.map(b=>`<div class="wl">⚠ ${esc(b)}</div>`).join("")
+                     :'<div class="nl" style="color:var(--good)">nothing blocking - ready to assemble</div>'}
+    <div class="row" style="margin-top:10px">
+      <button onclick="draftAll()">draft all missing takes (LTX)</button>
+      <button class="primary" onclick="assemble()">assemble film</button>
+    </div>`;
+}
 async function assemble(){
   const j=await api("/assemble",{film:FID,music:$("#musicchk").checked});
   WATCH.add(j.job); note("assembling: "+j.job);
@@ -253,13 +299,14 @@ async function assemble(){
 
 /* ── right panel ─────────────────────────────────────────────────────────── */
 function renderRight(){
-  const tabs=["shot","context","scene","film"];
+  const tabs=["shot","context","scene","film","review"];
   let h=`<div class="tabs">`+tabs.map(t=>
     `<div class="${TAB===t?"sel":""}" onclick="TAB='${t}';renderRight()">${t}</div>`).join("")+`</div>`;
   if(TAB==="shot") h+=SHOT&&DETAIL?shotForm():'<div class="hint" style="margin-top:10px">select a shot</div>';
   if(TAB==="context") h+=SHOT&&DETAIL?contextPanel():'<div class="hint" style="margin-top:10px">select a shot</div>';
   if(TAB==="scene") h+=SCENE_SEL?sceneForm():'<div class="hint" style="margin-top:10px">select a scene</div>';
   if(TAB==="film") h+=TREE?filmForm():"";
+  if(TAB==="review") h+=TREE?reviewPanel():"";
   $("#right").innerHTML=h;
 }
 const opt=(list,cur)=>list.map(v=>`<option ${v===cur?"selected":""}>${v}</option>`).join("");
@@ -444,7 +491,10 @@ async function genAnchor(){
 function filmForm(){
   const cast=Object.entries(TREE.cast||{}).map(([id,c])=>`
     <div class="cast" data-id="${id}">
-      <div class="row"><b>${id}</b><span class="grow"></span>
+      <div class="row"><b>${id}</b>
+        ${c.portrait?`<img src="${m(c.portrait)}" style="width:34px;height:46px;object-fit:cover;border-radius:4px">`:""}
+        <button class="small" onclick="genPortrait('${id}')" title="render the identity portrait the photoreal keyframe route hangs on">${c.portrait?"re-":""}portrait</button>
+        <span class="grow"></span>
         <button class="small" onclick="rmCast('${id}')" style="color:var(--bad)">remove</button></div>
       <label>name</label><input class="f_name" value="${esc(c.name)}" style="width:100%">
       <label>appearance clause (used at first mention)</label>
@@ -481,7 +531,8 @@ function filmForm(){
 function readCast(){
   const out={};
   document.querySelectorAll(".cast").forEach(el=>{
-    out[el.dataset.id]={name:el.querySelector(".f_name").value,
+    out[el.dataset.id]={portrait:(TREE.cast[el.dataset.id]||{}).portrait||"",
+      name:el.querySelector(".f_name").value,
       clause:el.querySelector(".f_clause").value, short:el.querySelector(".f_short").value,
       sheet:el.querySelector(".f_sheet").value, voice:el.querySelector(".f_voice").value,
       voice_desc:el.querySelector(".f_vdesc").value};
