@@ -1101,6 +1101,12 @@ def _toolbox():
     """studio/_tools/toolbox.py on demand, like the other _tools importers."""
     return _load_tool_module('toolbox')
 
+def _film_routes():
+    """studio/_tools/film_routes.py on demand, like _story_routes. The shot-by-shot
+    editor: films/scenes/shots/takes across the 2.5-era engines."""
+    return _load_tool_module('film_routes')
+
+
 def _story_routes():
     """studio/_tools/story_routes.py on demand, like _guides and _generate_routes.
 
@@ -1319,6 +1325,56 @@ class H(http.server.SimpleHTTPRequestHandler):
                     return self._send({"error": "no such bundle"}, 404)
                 return self._send_file(fp, "application/zip")
             return self._send({"error": "unknown generate route"}, 404)
+        # /film - the shot-by-shot editor on the 2.5-era engines. Same shape as
+        # /story: reads are synchronous, renders go through a job table in film_routes.
+        if path == "/film":
+            return self._page("film_editor.html")
+        if path.startswith("/film/media/"):
+            # a film's takes and assets, served off its own folder with Range - posters,
+            # strips and mp4s. The realpath check keeps it inside that folder.
+            rel = urllib.parse.unquote(path[len("/film/media/"):])
+            fid, _, sub = rel.partition("/")
+            base = os.path.realpath(os.path.join(HERE, "films", fid))
+            fp = os.path.realpath(os.path.join(base, sub))
+            if not (fp.startswith(base + os.sep) and os.path.isfile(fp)):
+                return self._send({"error": "no such file"}, 404)
+            ext = os.path.splitext(fp)[1].lower()
+            return self._send_file(fp, MIME.get(ext, "application/octet-stream"))
+        if path == "/api/film" or path.startswith("/api/film/"):
+            fr = _film_routes()
+            if not fr:
+                return self._send({"error": "studio/_tools/film_routes.py is "
+                                            "unavailable"}, 500)
+            rest = path[len("/api/film"):].strip("/")
+            try:
+                if not rest:
+                    body, code = fr.list_films()
+                    return self._send(body, code)
+                bits = rest.split("/")
+                if bits[0] == "jobs":
+                    body, code = fr.jobs_all()
+                    return self._send(body, code)
+                if bits[0] == "job" and len(bits) == 2:
+                    body, code = fr.job_status(bits[1])
+                    return self._send(body, code)
+                if bits[0] == "libraries":
+                    body, code = fr.libraries()
+                    return self._send(body, code)
+                if len(bits) == 1:
+                    body, code = fr.tree(bits[0])
+                    return self._send(body, code)
+                if bits[1] == "shot" and len(bits) == 3:
+                    body, code = fr.shot_detail(bits[0], bits[2])
+                    return self._send(body, code)
+                if bits[1] == "compile" and len(bits) == 3:
+                    body, code = fr.compile_shot(bits[0], bits[2])
+                    return self._send(body, code)
+            except KeyError as e:
+                return self._send({"error": str(e)}, 404)
+            except Exception as e:
+                traceback.print_exc()
+                return self._send({"error": str(e)[:300]}, 500)
+            return self._send({"error": "unknown film route"}, 404)
         # /story - the scene-by-scene editor. Reads are cheap and synchronous; renders
         # go through a job table in story_routes so the page stays responsive.
         if path == "/story" or path.startswith("/story/"):
@@ -2243,6 +2299,11 @@ class H(http.server.SimpleHTTPRequestHandler):
                      "/api/story/edit", "/api/story/lock", "/api/story/new",
                      "/api/story/chapter", "/api/story/scene", "/api/story/load",
                      "/api/story/transition",
+                     "/api/film/new", "/api/film/edit", "/api/film/scene",
+                     "/api/film/editscene", "/api/film/shot", "/api/film/editshot",
+                     "/api/film/reorder", "/api/film/delete", "/api/film/pick",
+                     "/api/film/takes", "/api/film/anchor", "/api/film/autonext",
+                     "/api/film/vo", "/api/film/assemble",
                      "/api/character/upload", "/api/character/create",
                      "/api/voice/demo", "/api/voice/add",
                      "/api/character/suite", "/api/character/analyse",
@@ -2503,6 +2564,25 @@ class H(http.server.SimpleHTTPRequestHandler):
                   "analyse": cr.analyse}[p[len("/api/character/"):]]
             try:
                 body, code = fn(data)
+            except Exception as e:
+                traceback.print_exc()
+                return self._send({"error": str(e)[:300]}, 500)
+            return self._send(body, code)
+        if p.startswith("/api/film/"):
+            fr = _film_routes()
+            if not fr:
+                return self._send({"error": "studio/_tools/film_routes.py is "
+                                            "unavailable"}, 500)
+            fn = {"new": fr.new_film, "edit": fr.edit_film, "scene": fr.new_scene,
+                  "editscene": fr.edit_scene, "shot": fr.new_shot,
+                  "editshot": fr.edit_shot, "reorder": fr.reorder,
+                  "delete": fr.delete_shot, "pick": fr.pick, "takes": fr.takes,
+                  "anchor": fr.scene_anchor, "autonext": fr.auto_next,
+                  "vo": fr.vo_mix, "assemble": fr.assemble}[p[len("/api/film/"):]]
+            try:
+                body, code = fn(data)
+            except KeyError as e:
+                return self._send({"error": str(e)}, 404)
             except Exception as e:
                 traceback.print_exc()
                 return self._send({"error": str(e)[:300]}, 500)

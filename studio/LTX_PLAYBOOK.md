@@ -142,3 +142,105 @@ sound quiet underneath so the wok still roars and the blade still rings.
 `-s` used to leave `"false"` as a **string**, which is truthy. Every boolean switch silently
 stayed on for a whole night. If a flag appears to do nothing, check the coercion before
 suspecting the workflow.
+
+---
+
+# Part two: the shot doctrine and the /film editor
+
+The first half of this playbook is the engine manual. This half is the FILM manual - how
+shots are actually built here, and the editor that builds them. Most movie shots are under
+six seconds; the unit of work is therefore ONE SHOT, meticulously specified, rendered as
+competing takes, picked, and assembled. The editor at **/film** is these rules as software
+- `studio/film.py` owns the model and the compilers, `studio/_tools/film_routes.py` owns
+the render jobs, and nothing in the UI can forget a rule the compiler enforces.
+
+## 8. The layer model - what one shot is made of
+
+A shot is not a prompt. It is a stack of layers, each its own input, compiled into each
+engine's dialect at render time:
+
+| Layer | What it holds | Who consumes it |
+|---|---|---|
+| **framing** | one of the closed ANGLES list (wide establishing … extreme macro) | every engine's first noun |
+| **camera move** | static, push in, pull back, pan, follow, circle, handheld, tilt | LTX phrases it; H3/Wan bake it into the sentence |
+| **subject** | a CAST id (expanded to the appearance clause) or free text | all |
+| **action** | the one committed event of the beat | all |
+| **background action** | named, or it freezes - H3 animates only what the clause names | all |
+| **dialogue** | char + line + delivery; quoted, with the character's voice description | LTX (photoreal lip sync); off-screen over cutaways in anime |
+| **sfx** | named noises - an absence returns literal silence | LTX, H3 |
+| **ambience** | the scene's continuous bed, "running under the whole shot and never stopping" | LTX |
+| **music** | ACE-Step tags at SCENE level, mixed under at assembly | assembly |
+| **transition in** | between beats, inside one LTX generation: hard cut, dissolve | LTX only |
+| **transition out** | between shots, at assembly: cut, fade, dissolve, dip to black | ffmpeg |
+| **duration / aspect** | clamped per engine envelope; portrait flips canvas + IPA weight | all |
+
+A shot holds up to **4 beats**. On LTX the beats are real cuts inside one generation; on
+H3 and Wan only beat 1 renders - which is exactly what makes the takes grid a fair fight:
+same layers, three engines, pick the read you want.
+
+## 9. The context system - film → scene → shot
+
+Three levels, nearest wins, and every resolved value remembers which level supplied it
+(`Film.resolved()`); the editor's **Context tab** is that table plus the compiled prompt
+per engine, so clicking any point on the timeline answers "what is in force here, and what
+will actually be sent."
+
+- **FILM** carries what must survive the whole movie: the cast (appearance clause, short
+  re-identification form, sheet, voice pack, voice description), the look and its style
+  clause, the grade, the global negative.
+- **SCENE** is a sub-context: location, time of day, weather, palette, who is present, the
+  AMBIENCE bed, the music tags - and the **scene anchor**, one image every shot in the
+  scene starts from by default. One keyframe holding person, wardrobe, place and light
+  together is what kept CLOSING TIME and THE LAST REQUEST coherent; the anchor makes that
+  the default rather than a discipline.
+- **SHOT** owns its beats and layers, and can override `no_people`, the anchor mode
+  (scene | prev_last | generate | file), and the enhancer.
+
+## 10. Consistency, mechanised
+
+- **Re-identification is automatic.** The first mention of a cast id compiles to the full
+  appearance clause; every later mention in the same prompt compiles to "the same
+  <short>". A character can no longer be lost at a cut by forgetting to re-name them.
+- **Absence is automatic.** `no_people` injects the empty-frame clause into EVERY beat and
+  extends the negative - and the compiler lints agent nouns, because a named hand grows a
+  whole person and a starved agency slot once produced a cat.
+- **Voices are per-character, twice over.** The `voice_desc` rides inside every spoken
+  line ("says in a level, unhurried American accent"), which steadies LTX's native voice
+  - and the **VO button** synthesizes the line through the character's assigned voice pack
+  (ready packs only; the blocked real-person packs are excluded at the listing) and ducks
+  it over the take, which is the strong form of consistency across a whole film.
+- **Anchors bound drift.** scene → the scene anchor; prev_last → the previous shot's
+  picked take, last frame; generate → a shot-specific keyframe through the right identity
+  path with the IPAdapter weight chosen by framing (0.6 portrait, 0.3 wide - PLUS FACE
+  hijacks composition at 0.6, and 0.0 loses the style anchor with the identity).
+
+## 11. Takes - the picker is the point
+
+"Generate takes" fans a shot out across LTX / H3 / Wan with seed variation. Every take
+lands immutable with poster, filmstrip, its compile warnings, and a QC verdict measured on
+the bytes (streams present, audio not flat, nothing frozen, no dead black) - because this
+project's worst failures are files that exist, run the right length, and are wrong. The
+first clean take auto-picks so assembly always has something; the grid exists so you
+overrule it.
+
+Engine character, one line each: **LTX** cuts, talks, and holds a scene - the default.
+**H3** hits harder on one violent committed event and makes real pitch - the action
+specialist. **Wan** reads motion differently and is silent - the second opinion.
+
+## 12. Auto-next and assembly
+
+**Auto next shot** drafts the following shot: anchor = previous picked take's last frame,
+framing advanced one step along wide → medium → close and back, and with two cast present
+the subject alternates - plain shot-reverse-shot. It is a draft to be edited, not an
+oracle.
+
+**Assemble** normalizes every picked take (1472×832, 24fps), joins shots per their
+transition_out (xfade for anything that is not a cut), generates each scene's ACE-Step bed
+(≤46s - it fades to silence past that - mixed under at 0.5), concatenates the scenes, and
+QCs the result. The film lands at `studio/films/<id>/assets/film.mp4`.
+
+## 13. What the editor will not save you from
+
+The compiler lints, it does not direct. It cannot know that a beat is boring, that a cut
+is in the wrong place, or that the line lands better unsaid. The takes grid is where taste
+happens; everything else here just makes sure taste is the only thing left to supply.
