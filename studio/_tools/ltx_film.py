@@ -139,25 +139,26 @@ def render(sid, prompt, seconds, megapixels=0.9, seed=11, fps=24, aspect=None,
     return run("70_ltx25_i2v.json", sets)
 
 
-# MEASURED ENVELOPE on this 5090 with 60 GB of system RAM. The refine pass runs at 2x the
-# base resolution, so the cost scales as (4 * megapixels) * frames. Past the budget below
-# the ComfyUI PROCESS IS KILLED - there is no exception to catch, the socket simply closes
-# mid-run, which is why a whole four-scene batch came back as four identical
-# "Connection refused" lines.
+# MEASURED ENVELOPE on this 5090 with 60 GB of system RAM. Past it the ComfyUI PROCESS IS
+# KILLED - there is no exception to catch, the socket simply closes mid-run, which is why a
+# whole batch comes back as identical "Connection refused" lines.
 #
-#   verified good   0.9MP/30s (2596)   1.5MP/12s (1734)   2.0MP/8s (1544)
-#   verified fatal  1.5MP/20s (2886)   1.5MP/25s (3606)   2.5MP/8s (1930)
+# A SINGLE PRODUCT DOES NOT PREDICT THE CLIFF, which is worth stating because that was the
+# first guess and it was wrong. (4*MP)*frames scores 2596 for 0.9MP/30s, which runs, and
+# 2599 for 1.8MP/15s, which dies. Higher base resolution costs more than linearly - the
+# refine pass runs at 2x and the tiled decode carries its own spatial overhead - so the
+# guard below is a table of points that were actually measured, not a curve fitted to them.
 #
-# 2.5MP dies well under budget, so there is a separate spatial ceiling on top of it - the
-# refine pass at 2x would be about 2240 wide. Both limits are enforced.
-BUDGET_MPF = 2600
-MAX_BASE_MP = 2.0
+#   ran     0.9MP/30s   1.2MP/20s   1.5MP/12s   2.0MP/8s
+#   killed  1.5MP/20s   1.8MP/15s   1.5MP/25s   2.5MP/8s
+SAFE = [(1.0, 30), (1.2, 20), (1.5, 12), (2.0, 8)]      # (max megapixels, max seconds)
 
 
 def too_big(megapixels, seconds, fps=24):
-    if megapixels > MAX_BASE_MP:
-        return True
-    return (4.0 * megapixels) * (seconds * fps + 1) > BUDGET_MPF
+    for mp, secs in SAFE:
+        if megapixels <= mp:
+            return seconds > secs
+    return True                                          # past 2.0 MP nothing survived
 
 
 def comfy_up():
@@ -236,9 +237,9 @@ def main():
             print("   ComfyUI will not come back up - stopping")
             break
         if too_big(s.get("megapixels", 0.9), s["seconds"]):
-            print("   REFUSED: %.1f MP x %ss exceeds the measured envelope - this kills "
-                  "the ComfyUI process rather than raising" % (s.get("megapixels", 0.9),
-                                                               s["seconds"]))
+            print("   REFUSED: %.1f MP x %ss is outside the measured envelope %s - past "
+                  "it the ComfyUI process is killed rather than raising"
+                  % (s.get("megapixels", 0.9), s["seconds"], SAFE))
             continue
         clip, err = render(sid, s["prompt"], s["seconds"],
                            megapixels=s.get("megapixels", 0.9),
