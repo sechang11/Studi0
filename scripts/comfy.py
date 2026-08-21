@@ -49,15 +49,22 @@ def set_path(wf, dotted, value):
     node = wf
     for k in keys[:-1]:
         node = node[k]
-    # coerce numeric strings so KSampler gets ints not strings
+    # coerce numeric strings so KSampler gets ints not strings, and BOOLEAN strings so a
+    # switch actually switches. "false" left as a string is truthy, which is how the LTX
+    # prompt enhancer stayed on through a whole night of runs that all passed
+    # `-s ...383.inputs.value=false` and looked like they had turned it off.
     if isinstance(value, str):
-        try:
-            value = int(value)
-        except ValueError:
+        low = value.strip().lower()
+        if low in ("true", "false"):
+            value = (low == "true")
+        else:
             try:
-                value = float(value)
+                value = int(value)
             except ValueError:
-                pass
+                try:
+                    value = float(value)
+                except ValueError:
+                    pass
     node[keys[-1]] = value
 
 
