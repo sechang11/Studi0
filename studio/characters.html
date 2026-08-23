@@ -1,0 +1,191 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Characters</title>
+<style>
+:root{--bg:#0e0e12;--panel:#181820;--line:#2a2a36;--ink:#e9e9f0;--dim:#8d8d9c;
+      --accent:#9fb3ff;--good:#7fd1a0;--warn:#ffc978;--bad:#ff8f8f}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:14px/1.45 system-ui,-apple-system,sans-serif;margin:0}
+h1{font-size:18px;margin:0}
+h2{font-size:12px;color:var(--accent);margin:16px 0 8px;text-transform:uppercase;letter-spacing:.06em}
+button{background:#232330;color:var(--ink);border:1px solid var(--line);border-radius:6px;
+       padding:5px 10px;cursor:pointer;font:inherit;font-size:13px}
+button:hover{border-color:var(--accent)}
+button.primary{background:#2c3450;border-color:var(--accent)}
+button.small{padding:2px 8px;font-size:12px}
+select,input,textarea{background:#101017;color:var(--ink);border:1px solid var(--line);
+       border-radius:5px;padding:4px 7px;font:inherit;font-size:13px}
+label{font-size:11px;color:var(--dim);display:block;margin:8px 0 3px;text-transform:uppercase;letter-spacing:.04em}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+#bar{display:flex;gap:14px;align-items:center;padding:11px 22px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+#job{font-size:12px;color:var(--dim);max-width:460px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#job.err{color:var(--bad)}
+.grow{flex:1}
+main{padding:16px 22px 60px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:9px;
+      cursor:pointer;position:relative}
+.card:hover{border-color:var(--accent)}
+.card img{width:100%;height:190px;object-fit:cover;border-radius:6px;background:#000}
+.card .noimg{width:100%;height:190px;border-radius:6px;background:#101017;
+  border:1px dashed var(--line);display:flex;align-items:center;justify-content:center;
+  color:var(--dim);font-size:11px;text-align:center;padding:8px}
+.card .t{font-size:14px;margin-top:7px}
+.card .d{font-size:11px;color:var(--dim);margin-top:2px;height:28px;overflow:hidden}
+.newcard{display:flex;flex-direction:column;align-items:center;justify-content:center;
+  min-height:250px;border-style:dashed;color:var(--dim)}
+.newcard .plus{font-size:40px;line-height:1;color:var(--accent)}
+.lvl{position:absolute;top:14px;left:14px;font-size:10px;font-weight:700;
+  padding:2px 7px;border-radius:4px;letter-spacing:.05em;text-transform:uppercase}
+.lvl.l0{background:#3a2a2a;color:var(--bad);border:1px solid var(--bad)}
+.lvl.l1,.lvl.l2,.lvl.l3,.lvl.l4,.lvl.l5{background:#1e3a2e;color:var(--good);border:1px solid var(--good)}
+.src{position:absolute;top:14px;right:14px;font-size:9px;padding:2px 6px;border-radius:4px;
+  background:#00000099;color:var(--dim);border:1px solid var(--line);text-transform:uppercase}
+.bar{height:4px;background:#101017;border-radius:2px;overflow:hidden;margin-top:6px}
+.bar i{display:block;height:100%;background:var(--accent)}
+.chips{display:flex;flex-wrap:wrap;gap:5px}
+.chip{border:1px solid var(--line);border-radius:12px;padding:2px 10px;font-size:12px;cursor:pointer;color:var(--dim)}
+.chip.sel{border-color:var(--accent);color:var(--ink);background:#232338}
+#modal{position:fixed;inset:0;background:#000000cc;display:none;z-index:50;
+  padding:38px 20px;overflow-y:auto}
+#modal.on{display:block}
+#sheet{max-width:980px;margin:0 auto;background:var(--panel);border:1px solid var(--line);
+  border-radius:12px;padding:20px 22px 30px}
+.x{float:right}
+.packlist{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.packrow{border:1px solid var(--line);border-radius:6px;padding:7px 9px;font-size:12px}
+.packrow.ok{border-color:var(--good);color:var(--good)}
+.packrow.no{color:var(--dim)}
+.thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px;margin-top:8px}
+.thumbs figure{margin:0}
+.thumbs img{width:100%;border-radius:5px;background:#000}
+.thumbs figcaption{font-size:10px;color:var(--dim);text-align:center}
+.hint{color:var(--dim);font-size:12px}
+pre{background:#101017;border:1px solid var(--line);border-radius:6px;padding:9px;
+  font-size:11px;white-space:pre-wrap;color:var(--dim)}
+</style>
+</head>
+<body>
+<div id="bar">
+  <h1>Characters</h1>
+  <span id="counts" class="hint"></span>
+  <span class="chips" id="filters"></span>
+  <span class="grow"></span>
+  <span id="job"></span>
+</div>
+<main><div class="grid" id="grid"></div></main>
+<div id="modal" onclick="if(event.target.id==='modal')closeModal()"><div id="sheet"></div></div>
+<script>
+"use strict";
+let ROSTER=[], LEVELS=[], FILTER="all", WATCH=new Set(), CUR=null;
+const $=q=>document.querySelector(q);
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function note(t,err){const e=$("#job");e.textContent=t;e.className=err?"err":"";}
+async function api(p,body){
+  const r=await fetch(p,body?{method:"POST",headers:{"Content-Type":"application/json"},
+                             body:JSON.stringify(body)}:{});
+  const j=await r.json().catch(()=>({error:"bad json"}));
+  if(!r.ok||j.error){note(j.error||r.status,true);throw new Error(j.error||r.status);}
+  return j;
+}
+async function boot(){
+  const d=await api("/api/foundry/roster");
+  ROSTER=d.characters; LEVELS=d.levels;
+  $("#counts").textContent=`${d.counts.total} total · ${d.counts.castable} castable · ${d.counts.draft} draft`;
+  $("#filters").innerHTML=[["all","all"],["castable","castable"],["draft","draft"]]
+    .map(([k,l])=>`<div class="chip ${FILTER===k?"sel":""}" onclick="FILTER='${k}';boot()">${l}</div>`).join("");
+  render(); pollJobs();
+}
+function levelName(n){
+  if(n<1) return "draft";
+  const L=LEVELS.find(x=>x.n===n); return L?L.label:("L"+n);
+}
+function render(){
+  const rows=ROSTER.filter(c=>FILTER==="all"||(FILTER==="castable"?c.level>=1:c.level<1));
+  const pct=c=>{
+    const h=c.pack.have,w=c.pack.want;
+    const tot=Object.values(w).reduce((a,b)=>a+b,0);
+    const got=Object.keys(w).reduce((a,k)=>a+Math.min(h[k]||0,w[k]),0);
+    return Math.round(100*got/tot);
+  };
+  $("#grid").innerHTML=
+    `<div class="card newcard" onclick="location.href='/foundry'">
+       <div class="plus">+</div><div style="margin-top:8px">new character</div>
+       <div class="hint" style="margin-top:4px;text-align:center">build one in the foundry</div>
+     </div>`
+    + rows.map(c=>`
+      <div class="card" onclick="openChar('${c.source}','${c.id}')">
+        <span class="lvl l${c.level}">${c.level<1?"draft":"L"+c.level+" "+esc(levelName(c.level))}</span>
+        <span class="src">${esc(c.source)}</span>
+        ${c.thumb?`<img src="${esc(c.thumb)}" loading="lazy">`
+                 :`<div class="noimg">no pack yet</div>`}
+        <div class="t">${esc(c.name)}${c.parent?` <span class="hint">· variant</span>`:""}</div>
+        <div class="d">${esc(c.desc||"")}</div>
+        <div class="bar"><i style="width:${pct(c)}%"></i></div>
+        <div class="hint" style="margin-top:3px">${pct(c)}% of pack 1
+          ${c.lora?" · lora":""}${c.mesh?" · mesh":""}</div>
+      </div>`).join("");
+}
+function openChar(src,id){
+  CUR=ROSTER.find(c=>c.source===src&&c.id===id); if(!CUR) return;
+  const c=CUR, p=c.pack;
+  const names={turnaround:"body turnaround",face:"face turnaround",
+               expressions:"expressions",presentation:"presentation set",mesh:"3D mesh"};
+  $("#sheet").innerHTML=`
+    <button class="x" onclick="closeModal()">close</button>
+    <h1>${esc(c.name)}
+      <span class="lvl l${c.level}" style="position:static;margin-left:6px">
+        ${c.level<1?"draft — not castable":"level "+c.level+" · "+esc(levelName(c.level))}</span></h1>
+    <div class="hint" style="margin-top:4px">${esc(c.source)} · ${c.images} images
+      ${c.style?" · "+esc(c.style):""}${c.lora?" · trained lora":""}
+      ${c.provenance?" · "+esc(c.provenance):""}</div>
+    ${c.variant_note?`<div class="hint">variant of ${esc(c.parent)} — ${esc(c.variant_note)}</div>`:""}
+    <h2>Pack 1 — portable identity</h2>
+    <div class="packlist">${Object.keys(p.want).map(k=>{
+      const ok=(p.have[k]||0)>=p.want[k];
+      return `<div class="packrow ${ok?"ok":"no"}">${ok?"✓":"·"} ${names[k]||k}
+        <div class="hint">${p.have[k]||0} of ${p.want[k]}</div></div>`;}).join("")}</div>
+    ${p.complete?`<div class="hint" style="margin-top:8px;color:var(--good)">
+        complete — this character can be cast in any film</div>`
+      :`<div class="row" style="margin-top:10px">
+         <button class="primary" onclick="buildPack()">build pack 1
+           ${c.source==="cast"?"(imports into the foundry first)":""}</button>
+         <span class="hint">${esc((LEVELS[0]||{}).cost||"")}</span>
+       </div>`}
+    <h2>Description</h2>
+    <pre>${esc(c.desc||"(none)")}</pre>
+    ${c.source==="foundry"?`<div class="row">
+       <button class="small" onclick="location.href='/foundry'">edit in the foundry</button>
+     </div>`:`<div class="hint">a legacy cast card — its LoRA and evidence live in the
+       old store; building pack 1 brings it onto the ladder.</div>`}`;
+  $("#modal").classList.add("on");
+}
+function closeModal(){$("#modal").classList.remove("on");}
+async function buildPack(){
+  if(!CUR) return;
+  if(CUR.source!=="foundry")
+    return note("legacy import is not wired yet — build this one in the foundry",true);
+  const j=await api("/api/foundry/seeds",{type:"character",id:CUR.id});
+  WATCH.add(j.job); note("building pack 1: "+j.job); closeModal();
+}
+async function pollJobs(){
+  try{
+    const j=await api("/api/foundry/jobs");
+    for(const job of j.jobs){
+      if(WATCH.has(job.id)&&job.state!=="running"){
+        WATCH.delete(job.id);
+        note(`${job.kind} ${job.state}${job.error?": "+job.error:""}`,job.state==="failed");
+        boot();
+      }
+    }
+    const r=j.jobs.find(x=>x.state==="running");
+    if(r) note(`${r.kind} ${r.done}/${r.total}${r.log&&r.log.length?" · "+r.log[r.log.length-1]:""}`);
+  }catch(e){}
+  setTimeout(pollJobs,2500);
+}
+boot();
+</script>
+</body>
+</html>

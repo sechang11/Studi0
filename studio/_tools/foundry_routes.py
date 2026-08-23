@@ -583,3 +583,110 @@ def send_to_film(data):
 
     f.save()
     return {"ok": True, "added": added}, 200
+
+
+# ─── one roster over both character systems ─────────────────────────────────────────
+
+CAST_DIR = os.path.join(os.path.dirname(TOOLS), "characters")
+
+
+def _legacy_rows():
+    """The legacy cast cards, read off disk. Only the fields the roster shows."""
+    rows = []
+    if not os.path.isdir(CAST_DIR):
+        return rows
+    for fn in sorted(os.listdir(CAST_DIR)):
+        if not fn.endswith(".json"):
+            continue
+        try:
+            d = json.load(open(os.path.join(CAST_DIR, fn), encoding="utf-8"))
+        except Exception:
+            continue
+        cid = d.get("id") or fn[:-5]
+        sheet = d.get("sheet") or ""
+        turn = os.path.join(COMFY_INPUT(), "turnaround_%s" % cid.lower())
+        views = len([f for f in os.listdir(turn)
+                     if f.endswith(".png")]) if os.path.isdir(turn) else 0
+        rows.append({"id": cid, "name": d.get("name") or cid,
+                     "desc": (d.get("desc") or d.get("prose") or "")[:200],
+                     "status": d.get("status", ""), "sheet": sheet,
+                     "lora": bool(d.get("lora")), "views": views,
+                     "provenance": d.get("provenance", ""),
+                     "sheet_url": _sheet_url(sheet),
+                     "evidence": (d.get("evidence") or {}).get("verdict", "")})
+    return rows
+
+
+REFSHEETS = os.path.join(os.path.dirname(TOOLS), "samples", "_refsheets")
+
+
+def _sheet_url(name):
+    """serve.py mirrors cast sheets into samples/_refsheets so the app can show
+    them. Use the mirror when it exists; a card whose sheet was never mirrored
+    simply has no thumbnail rather than a broken image."""
+    if not name or os.path.basename(name) != name:
+        return ""
+    return ("/samples/_refsheets/%s" % name
+            if os.path.isfile(os.path.join(REFSHEETS, name)) else "")
+
+
+def COMFY_INPUT():
+    try:
+        from epic import COMFY
+        return os.path.join(COMFY, "input")
+    except Exception:
+        return "/nonexistent"
+
+
+def _legacy_pack(row):
+    """Score a legacy card on the level-1 pack: an audit, not a judgement."""
+    have = {"turnaround": min(row["views"], len(FY.CHAR_TURN_VIEWS)),
+            "face": len(FY.CHAR_FACE_VIEWS) if row["sheet"] else 0,
+            "expressions": 0,          # legacy suites never rendered a named set
+            "presentation": 0,
+            "mesh": 0}
+    want = {"turnaround": len(FY.CHAR_TURN_VIEWS), "face": len(FY.CHAR_FACE_VIEWS),
+            "expressions": len(FY.CHAR_EXPRESSIONS),
+            "presentation": len(FY.CHAR_PRESENTATION), "mesh": 1}
+    missing = [k for k in want if have[k] < want[k]]
+    return {"have": have, "want": want, "missing": missing,
+            "complete": not missing}
+
+
+def roster():
+    """Everyone, from both stores, on one ladder."""
+    out = []
+    for a in FY.list_assets("character"):
+        rep = FY.pack_report(a)
+        imgs = a.get("images") or {}
+        thumb = imgs.get("base_portrait") or imgs.get("face_front") \
+            or (list(imgs.values())[0] if imgs else "")
+        out.append({
+            "id": a["id"], "name": a["name"], "source": "foundry",
+            "style": a.get("style", ""), "level": FY.level_of(a),
+            "pack": rep, "parent": a.get("parent", ""),
+            "variant_note": a.get("variant_note", ""),
+            "voice": (a.get("compiled") or {}).get("voice", ""),
+            "lora": bool(a.get("lora")), "mesh": bool(a.get("mesh")),
+            "thumb": ("/foundry/media/characters/%s/%s" % (a["id"], thumb))
+                     if thumb else "",
+            "images": len(imgs),
+            "desc": (a.get("compiled") or {}).get("clause", "")[:200]})
+
+    for row in _legacy_rows():
+        rep = _legacy_pack(row)
+        out.append({
+            "id": row["id"], "name": row["name"], "source": "cast",
+            "style": "", "level": 1 if rep["complete"] else 0,
+            "pack": rep, "parent": "", "variant_note": "",
+            "voice": "", "lora": row["lora"], "mesh": False,
+            "thumb": row["sheet_url"],
+            "images": row["views"], "desc": row["desc"],
+            "status": row["status"], "provenance": row["provenance"],
+            "evidence": row["evidence"]})
+
+    out.sort(key=lambda r: (-r["level"], r["name"].lower()))
+    return {"characters": out, "levels": FY.LEVELS,
+            "counts": {"total": len(out),
+                       "castable": sum(1 for r in out if r["level"] >= 1),
+                       "draft": sum(1 for r in out if r["level"] < 1)}}, 200

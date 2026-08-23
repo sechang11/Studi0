@@ -284,53 +284,104 @@ PROP_VIEWS = [
 # angles; a lead that carries thirty shots earns a trained LoRA. Each level is a
 # superset of the one below and its artefacts are literally the next level's input.
 LEVELS = [
-    {"n": 1, "key": "card", "label": "Card",
-     "blurb": "Words only - the clause, the tags, the voice. No GPU, instant. "
-              "Enough to write a story around and cast later.",
-     "views": [], "turns": [], "expressions": [],
-     "lora": False, "outfits": 0, "mesh": False, "cost": "instant"},
-    {"n": 2, "key": "face", "label": "Face",
-     "blurb": "Portrait and full body. The character has a look you can anchor a "
-              "shot on and dress in a costume.",
-     "views": ["base_portrait", "base_fullbody"], "turns": [], "expressions": [],
-     "lora": False, "outfits": 0, "mesh": False, "cost": "about a minute"},
-    {"n": 3, "key": "turnaround", "label": "Turnaround",
-     "blurb": "Every angle plus a range of expressions, one outfit under one light. "
-              "Keyframes at any framing - and the set a LoRA trains on.",
-     "views": ["base_portrait", "base_fullbody"],
-     "turns": ["threequarter", "side", "back"],
-     "expressions": ["neutral", "joy", "anger", "fear"],
-     "lora": False, "outfits": 0, "mesh": False, "cost": "two or three minutes"},
-    {"n": 4, "key": "trained", "label": "Trained",
-     "blurb": "Everything above, then a character LoRA trained on it. The face stops "
-              "being a reference and becomes a model that holds across prompts.",
-     "views": ["base_portrait", "base_fullbody"],
-     "turns": ["threequarter", "side", "back"],
-     "expressions": ["neutral", "joy", "anger", "fear"],
-     "lora": True, "outfits": 0, "mesh": False, "cost": "twenty minutes or so"},
-    {"n": 5, "key": "production", "label": "Production",
-     "blurb": "A trained lead with every assigned costume rendered and a 3D mesh. "
-              "Nothing left to generate before the shoot.",
-     "views": ["base_portrait", "base_fullbody"],
-     "turns": ["threequarter", "side", "back"],
-     "expressions": ["neutral", "joy", "anger", "fear"],
-     "lora": True, "outfits": -1, "mesh": True, "cost": "the better part of an hour"},
+    {"n": 1, "key": "identity", "label": "Identity",
+     "blurb": "Every angle, the face turned, expressions, a varied set and a mesh - "
+              "built from the seed images. This is the floor: enough to drop the "
+              "character into ANY film without generating them again.",
+     "adds": ["turnaround", "face turnaround", "expressions", "presentation set",
+              "3D mesh"],
+     "castable": True, "lora": False, "mesh": True,
+     "cost": "thirty to forty-five minutes"},
+    {"n": 2, "key": "trained", "label": "Trained",
+     "blurb": "The kit becomes a model. A character LoRA trained on the identity set "
+              "holds the face where a reference degrades - angles you did not shoot, "
+              "light you did not plan. The mesh is cleaned and rigged so pose can be "
+              "driven rather than prompted.",
+     "adds": ["character LoRA", "rigged mesh"],
+     "castable": True, "lora": True, "mesh": True,
+     "cost": "plus about twenty minutes"},
+    {"n": 3, "key": "range", "label": "Range",
+     "blurb": "Not more identity - more situations. Every costume rendered on them, "
+              "plus states: ages, injuries, wet, filthy, formal, disguised. Any point "
+              "in the character's arc is already built.",
+     "adds": ["costumes rendered", "state variants"],
+     "castable": True, "lora": True, "mesh": True,
+     "cost": "a few minutes per costume or state"},
+    {"n": 4, "key": "performance", "label": "Performance",
+     "blurb": "The character can act. A voice bound and auditioned, delivery tied to "
+              "personality, lip-sync references, and a keyframe per emotion so a shot "
+              "can ask for them afraid at three-quarter and get it.",
+     "adds": ["voice bound", "emotion keyframes", "lip-sync references"],
+     "castable": True, "lora": True, "mesh": True,
+     "cost": "plus about ten minutes"},
+    {"n": 5, "key": "canon", "label": "Canon",
+     "blurb": "Continuity above the film. A bible of relationships, history and verbal "
+              "tics; a signature shot grammar - their framings, their palette, how they "
+              "are lit; signature props; and a QC gate that checks new renders against "
+              "the canon instead of against a prompt.",
+     "adds": ["character bible", "shot grammar", "signature kit", "canon QC"],
+     "castable": True, "lora": True, "mesh": True,
+     "cost": "authored, not rendered"},
+]
+
+# The identity set: one person, ONE outfit, ONE light, many views. Locked on purpose.
+CHAR_TURN_VIEWS = [
+    ("front", "standing facing the camera straight on"),
+    ("front_three_quarter", "turned 45 degrees, three-quarter view"),
+    ("side", "turned 90 degrees, full profile from the side"),
+    ("back_three_quarter", "turned 135 degrees, seen from behind at an angle"),
+    ("back", "turned 180 degrees, seen directly from behind"),
+]
+# The face turned on its own - close enough that the head fills the frame.
+CHAR_FACE_VIEWS = [
+    ("face_front", "a tight head-and-shoulders portrait, facing the camera"),
+    ("face_three_quarter", "a tight head-and-shoulders portrait, head turned 45 degrees"),
+    ("face_side", "a tight head-and-shoulders portrait, full profile"),
+]
+# The presentation set: the SAME person deliberately varied. Never fed to training.
+CHAR_PRESENTATION = [
+    ("pres_hero", "a cinematic hero shot, dramatic side lighting, upper body"),
+    ("pres_wide", "a full-length wide shot, even daylight, standing at ease"),
+    ("pres_low", "a low-angle shot looking up at them, moody rim light"),
 ]
 
 LEVEL_BY_N = {L["n"]: L for L in LEVELS}
 
 
+def pack_report(a):
+    """What a character HAS, against what level 1 demands. The cast page shows this,
+    so it must describe the pack on disk and never the level that was requested."""
+    imgs = set((a.get("images") or {}).keys())
+    have = {
+        "turnaround": sum(1 for k, _ in CHAR_TURN_VIEWS if "turn_" + k in imgs),
+        "face": sum(1 for k, _ in CHAR_FACE_VIEWS if k in imgs),
+        "expressions": sum(1 for k, _ in CHAR_EXPRESSIONS if "expr_" + k in imgs),
+        "presentation": sum(1 for k, _ in CHAR_PRESENTATION if k in imgs),
+        "mesh": 1 if a.get("mesh") else 0,
+    }
+    want = {"turnaround": len(CHAR_TURN_VIEWS), "face": len(CHAR_FACE_VIEWS),
+            "expressions": len(CHAR_EXPRESSIONS),
+            "presentation": len(CHAR_PRESENTATION), "mesh": 1}
+    missing = [k for k in want if have[k] < want[k]]
+    return {"have": have, "want": want, "missing": missing,
+            "complete": not missing}
+
+
 def level_of(a):
-    """The level an asset was BUILT to, which is not the level it was asked for -
-    a job can fail halfway. Derived from what is actually on disk."""
-    imgs = a.get("images") or {}
+    """The level a character has actually REACHED. Level 1 is the casting floor, so
+    anything short of a complete pack is 0 - a draft, not a rung."""
+    if not pack_report(a)["complete"]:
+        return 0
+    n = 1
     if a.get("lora"):
-        return 5 if (a.get("mesh") and a.get("assignments")) else 4
-    if any(k.startswith("turn_") for k in imgs):
-        return 3
-    if imgs:
-        return 2
-    return 1
+        n = 2
+    if n >= 2 and (a.get("assignments") or a.get("states")):
+        n = 3
+    if n >= 3 and a.get("voice_bound"):
+        n = 4
+    if n >= 4 and a.get("bible"):
+        n = 5
+    return n
 
 
 CHAR_EXPRESSIONS = [
@@ -338,6 +389,8 @@ CHAR_EXPRESSIONS = [
     ("joy", "laughing, eyes crinkled, plainly delighted"),
     ("anger", "furious, brows down, jaw set"),
     ("fear", "frightened, eyes wide, drawn back"),
+    ("sorrow", "grieving, eyes down, mouth tight"),
+    ("surprise", "caught off guard, brows up, mouth open"),
 ]
 _EXPR = dict(CHAR_EXPRESSIONS)
 
@@ -369,16 +422,21 @@ def seed_plan(a):
     """Which images this asset's pack should hold, as (key, kind, prompt-ish)."""
     t = a["type"]
     if t == "character":
-        L = LEVEL_BY_N.get(int(a.get("level") or 3), LEVEL_BY_N[3])
-        want = set(L["views"])
-        out = [("base_" + k, "direct", p) for k, p in CHAR_VIEWS
-               if ("base_" + k) in want]
-        out += [("turn_" + k, "turnaround", p) for k, p in CHAR_TURNS
-                if k in L["turns"]]
+        # Level 1 is all-or-nothing: the whole portable kit, every time. Higher
+        # levels ADD to it (a LoRA, costumes, a voice) rather than changing it, so
+        # the image plan is the same at every rung.
+        out = [("base_portrait", "direct",
+                "a head-and-shoulders portrait, neutral expression"),
+               ("base_fullbody", "direct",
+                "a full-length standing shot, arms at their sides")]
+        out += [("turn_" + k, "turnaround", p) for k, p in CHAR_TURN_VIEWS]
+        out += [(k, "direct", p) for k, p in CHAR_FACE_VIEWS]
         out += [("expr_" + k, "direct",
-                 "a head and shoulders portrait, %s" % _EXPR[k])
-                for k in L["expressions"] if k in _EXPR]
+                 "a head-and-shoulders portrait, %s" % p)
+                for k, p in CHAR_EXPRESSIONS]
+        out += [(k, "direct", p) for k, p in CHAR_PRESENTATION]
         return out
+
     if t == "place":
         out = []
         for tkey, tfrag in a["compiled"]["time_frags"].items():
