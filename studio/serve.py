@@ -1026,6 +1026,24 @@ def nav_encyclopedia(html):
     return html
 
 
+def nav_three(html):
+    """A `3d` link in the header nav, the same way and for the same reason as
+    nav_model3d: the nav lives inside eighteen hand-written HTML files owned by other
+    work, so injecting here means the route is the only thing that changed.
+
+    Anchored BEFORE /make3d and /model3d because /three is the section those two pages
+    are tools inside - a reader who lands on either should be able to see the way up."""
+    if 'href="/three"' in html:
+        return html
+    for a in ('<a href="/make3d"', '<a href="/model3d"', '<a href="/gallery"',
+              '<a href="/">'):
+        i = html.find(a)
+        if i < 0:
+            continue
+        return html[:i] + '<a href="/three">3d</a>' + html[i:]
+    return html
+
+
 def nav_make3d(html):
     """A `make 3d` link in the header nav, the same way as nav_model3d."""
     if 'href="/make3d"' in html:
@@ -1181,6 +1199,142 @@ def _guides():
         return None
 
 
+
+# ── the one nav ─────────────────────────────────────────────────────────────────────
+# Every page route renders this same bar. Grouped only so thirty links stay legible;
+# the groups carry no meaning yet and the duplicates (make/make3d/model3d/three,
+# cast/character/newchar, library/gallery/encyclopedia) are deliberately all listed
+# rather than quietly dropped - organising them is a separate pass.
+STUDIO_NAV = [
+    ("studio", [
+        ("/", "studio", "app.html"),
+        ("/capabilities", "capabilities", "capabilities.html"),
+        ("/guide", "guide", "guide.html"),
+        ("/docs", "docs", "docs.html"),
+        ("/changelog", "changelog", "changelog.html"),
+    ]),
+    ("direct", [
+        ("/wizard", "wizard", "wizard.html"),
+        ("/story", "story", "story_editor.html"),
+        ("/film", "film", "film_editor.html"),
+        ("/foundry", "foundry", "foundry.html"),
+        ("/generate", "generate", "generate.html"),
+    ]),
+    ("cast", [
+        ("/cast", "cast", "cast.html"),
+        ("/character", "character", "character.html"),
+        ("/character/new", "new character", "newchar.html"),
+        ("/voices", "voices", "voices.html"),
+        ("/identity", "identity", "identity.html"),
+        ("/verify", "verify", "verify.html"),
+    ]),
+    ("look", [
+        ("/styles", "styles", "styles.html"),
+        ("/places", "places", "places.html"),
+        ("/loras", "loras", "loras.html"),
+        ("/tags", "tags", "tags.html"),
+    ]),
+    ("make", [
+        ("/make", "make", "make.html"),
+        ("/video", "video", "video.html"),
+        ("/shorts", "shorts", "shorts.html"),
+    ]),
+    ("3d", [
+        ("/make3d", "make 3d", "make3d.html"),
+        ("/model3d", "models", "model3d.html"),
+        ("/three/", "three", "three.html"),
+    ]),
+    ("library", [
+        ("/library", "library", "library.html"),
+        ("/gallery", "gallery", None),
+        ("/encyclopedia", "encyclopedia", "encyclopedia.html"),
+    ]),
+    ("tools", [
+        ("/tools", "tools", "tools.html"),
+    ]),
+]
+
+STUDIO_NAV_CSS = """<style id="studionav-css">
+#studionav{position:sticky;top:0;z-index:9999;background:#0b0b10;
+  border-bottom:1px solid #2a2a36;padding:6px 14px;display:flex;flex-wrap:wrap;
+  align-items:center;gap:2px 0;
+  font:13px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif}
+#studionav .g{display:flex;align-items:center;gap:2px;padding:0 9px;
+  border-right:1px solid #23232e}
+#studionav .g:last-child{border-right:0}
+#studionav .gl{color:#585868;font-size:9px;letter-spacing:.11em;
+  text-transform:uppercase;margin-right:5px;user-select:none}
+#studionav a{color:#9aa0b4;text-decoration:none;padding:3px 7px;border-radius:5px;
+  white-space:nowrap}
+#studionav a:hover{color:#eaeaf2;background:#1c1c26}
+#studionav a.on{color:#0d0d12;background:#9fb3ff;font-weight:600}
+</style>"""
+
+
+def studio_nav(page=None, path=None):
+    """The bar itself. `page` is the html filename being served, `path` the URL -
+    either identifies the current entry."""
+    out = ['<nav id="studionav">']
+    for label, items in STUDIO_NAV:
+        out.append('<span class="g"><span class="gl">%s</span>' % label)
+        for href, text, owner in items:
+            on = (owner and owner == page) or (path and path == href)
+            out.append('<a href="%s"%s>%s</a>'
+                       % (href, ' class="on"' if on else "", text))
+        out.append("</span>")
+    out.append("</nav>")
+    return STUDIO_NAV_CSS + "".join(out)
+
+
+# Links a page hand-wrote to any endpoint the bar now owns. Stripped from the page's
+# own header so the bar is not shadowed by a second, staler copy of itself.
+_NAV_HREFS = {href for _, items in STUDIO_NAV for href, _, _ in items}
+_NAV_HREFS |= {h.rstrip("/") for h in _NAV_HREFS if h != "/"}
+_A_TAG = re.compile(r'<a\s[^>]*href="([^"]+)"[^>]*>.*?</a>', re.S | re.I)
+_HEADER = re.compile(r"<header\b.*?</header>", re.S | re.I)
+_OLD_NAV = re.compile(r'<nav\b(?![^>]*id="studionav")[^>]*>.*?</nav>', re.S | re.I)
+
+
+def _owns(href):
+    return href in _NAV_HREFS or href.rstrip("/") in _NAV_HREFS
+
+
+# Anything that means the container earns its keep: a control, a heading, an image,
+# a live region a script writes into. story_editor's toolbar and docs' JS rail both
+# live inside the very elements a naive nav-stripper would delete.
+_KEEPS = re.compile(r"<(select|button|input|textarea|form|img|svg|h1|h2|h3|canvas|"
+                    r"video|table)\b", re.I)
+_HAS_ID = re.compile(r'<[a-z]+\b[^>]*\sid="', re.I)
+_TAGS = re.compile(r"<[^>]+>")
+
+
+def _strip_links(chunk):
+    """Remove only the endpoint links, then the shell if nothing real is left."""
+    stripped = _A_TAG.sub(lambda a: "" if _owns(a.group(1)) else a.group(0), chunk)
+    if stripped == chunk:
+        return chunk
+    inner = re.sub(r"^<[^>]+>|</[a-z]+>$", "", stripped.strip(), flags=re.I)
+    if _KEEPS.search(inner) or _HAS_ID.search(inner) or _TAGS.sub("", inner).strip():
+        return stripped                      # it holds something else - keep it
+    return ""                                # an empty shell, drop it
+
+
+def _strip_page_nav(html):
+    html = _OLD_NAV.sub(lambda m: _strip_links(m.group(0)), html, count=1)
+    return _HEADER.sub(lambda m: _A_TAG.sub(
+        lambda a: "" if _owns(a.group(1)) else a.group(0), m.group(0)), html, count=1)
+
+
+def apply_studio_nav(html, page=None, path=None):
+    html = _strip_page_nav(html)
+    bar = studio_nav(page, path)
+    m = re.search(r"<body\b[^>]*>", html, re.I)
+    if m:
+        return html[:m.end()] + bar + html[m.end():]
+    return bar + html
+
+
+
 class H(http.server.SimpleHTTPRequestHandler):
     def _page(self, name):
         """Serve one of the hand-written pages, with the video and dossier links injected
@@ -1190,12 +1344,11 @@ class H(http.server.SimpleHTTPRequestHandler):
             return self._send(f"{name} is missing".encode(), 500, "text/plain")
         with open(p, encoding="utf-8") as f:
             html = f.read()
-        html = nav_encyclopedia(
-            nav_library(nav_make3d(nav_model3d(nav_dossier(nav_video(html))))))
-        # Every page gets the link except the capabilities page itself, which
-        # writes its own nav and omits itself the way styles.html omits /styles.
-        if name != "capabilities.html":
-            html = nav_capabilities(html)
+        # One canonical bar for every page, from STUDIO_NAV. This replaces the seven
+        # nav_* splicers that used to hunt for an anchor link in each hand-written
+        # header - they could only add an endpoint to the pages that happened to
+        # carry the right anchor, which is why nothing linked to /foundry.
+        html = apply_studio_nav(html, page=name)
         if name == "cast.html":
             html = cast_dossier_link(html)
         if name == "app.html":
@@ -1676,7 +1829,10 @@ class H(http.server.SimpleHTTPRequestHandler):
             p = f"{HERE}/docs.html"
             if not os.path.exists(p):
                 return self._send(b"docs.html is missing", 500, "text/plain")
-            return self._send(open(p, "rb").read(), 200, "text/html; charset=utf-8")
+            html = apply_studio_nav(open(p, encoding="utf-8").read(),
+                                    page="docs.html", path="/docs")
+            return self._send(html.encode("utf-8"), 200,
+                              "text/html; charset=utf-8")
         if path == "/api/docs":
             # Built by studio/_tools/docs.py by walking the repository. A stale index is
             # better than a 500, so a missing one reports itself rather than crashing.
@@ -1836,6 +1992,42 @@ class H(http.server.SimpleHTTPRequestHandler):
                 return self._send(m.reject_report())
             if path == "/api/library/favourites":
                 return self._library("favourites", "")
+        # /three  the 3D SECTION: bobblehead bodies and heads, their ledger, the
+        # recipe with its provenance, and the docs read off disk. /make3d queues one mesh
+        # and /model3d is a frozen report on one character; neither is a LIBRARY, which
+        # is what this route adds. studio/_tools/three_routes.py carries the why.
+        if path in ("/three", "/three.html") or (
+                path.startswith("/three/") and not path.startswith("/three/media/")):
+            return self._page("three.html")
+        if path.startswith("/three/media/"):
+            # kind/id/sub - one bobblehead item's renders, meshes and print files, served
+            # off studio/bobblehead with Range so a 33 MB STL streams rather than being
+            # read into memory. The realpath check keeps it inside that folder, the same
+            # contract /film/media works under.
+            rel = urllib.parse.unquote(path[len("/three/media/"):])
+            bits = rel.split("/", 2)
+            if len(bits) < 3 or bits[0] not in ("body", "head", "assembled"):
+                return self._send({"error": "no such file"}, 404)
+            kind, rid, sub = bits
+            folder = {"body": "bodies", "head": "heads",
+                      "assembled": "assembled"}[kind]
+            base = os.path.realpath(os.path.join(HERE, "bobblehead", folder, rid))
+            fp = os.path.realpath(os.path.join(base, sub))
+            if not (fp.startswith(base + os.sep) and os.path.isfile(fp)):
+                return self._send({"error": "no such file"}, 404)
+            ext = os.path.splitext(fp)[1].lower()
+            return self._send_file(fp, MIME.get(ext, "application/octet-stream"))
+        if path == "/api/three":
+            return self._three_payload()
+        if path.startswith("/api/three/item/"):
+            rest = path[len("/api/three/item/"):].split("/")
+            if len(rest) != 2:
+                return self._send({"error": "want /api/three/item/<kind>/<id>"}, 400)
+            return self._three_call("item", rest[0], rest[1])
+        if path.startswith("/api/three/job/"):
+            return self._three_call("job", path[len("/api/three/job/"):])
+        if path == "/api/three/jobs":
+            return self._three_call("jobs")
         if path in ("/make3d", "/make3d.html"):
             return self._page("make3d.html")
         if path == "/api/make3d":
@@ -1975,6 +2167,37 @@ class H(http.server.SimpleHTTPRequestHandler):
             traceback.print_exc()
             return self._send({"error": "the library failed to assemble",
                                "detail": "%s: %s" % (type(e).__name__, e)}, 500)
+
+    def _three(self):
+        """studio/_tools/three_routes.py on demand, like the other _tools importers.
+
+        Cached on mtime by _load_tool_module, which matters here for the same reason it
+        matters for /foundry: the module holds the build-job table, and reloading it per
+        request would lose the job between the POST that starts it and the poll that asks
+        how it is going."""
+        return _load_tool_module("three_routes")
+
+    def _three_payload(self):
+        m = self._three()
+        if m is None:
+            return self._send({"error": "studio/_tools/three_routes.py is unavailable"},
+                              500)
+        try:
+            return self._send(m.payload())
+        except Exception as e:                                      # noqa: BLE001
+            traceback.print_exc()
+            return self._send({"error": "%s: %s" % (type(e).__name__, e)}, 500)
+
+    def _three_call(self, fn, *args):
+        m = self._three()
+        if m is None:
+            return self._send({"error": "three_routes.py is unavailable"}, 500)
+        try:
+            body, code = getattr(m, fn)(*args)
+        except Exception as e:                                      # noqa: BLE001
+            traceback.print_exc()
+            return self._send({"error": "%s: %s" % (type(e).__name__, e)}, 500)
+        return self._send(body, code)
 
     def _make3d(self):
         """The /make3d tool module, loaded on mtime like the other _tools importers.
@@ -2358,6 +2581,7 @@ class H(http.server.SimpleHTTPRequestHandler):
                      "/api/voice/demo", "/api/voice/add",
                      "/api/character/suite", "/api/character/analyse",
                      "/api/tool/run", "/api/tool/random",
+                     "/api/three/build", "/api/three/head",
                      "/api/make3d/mesh", "/api/library/star",
                      "/api/library/grow", "/api/library/reject",
                      "/api/library/check", "/api/verify/card", "/api/remake",
@@ -2572,6 +2796,18 @@ class H(http.server.SimpleHTTPRequestHandler):
             except Exception as e:                                  # noqa: BLE001
                 traceback.print_exc()
                 return self._send({"error": str(e)[:200]}, 500)
+        if p in ("/api/three/build", "/api/three/head"):
+            m = self._three()
+            if m is None:
+                return self._send({"error": "three_routes.py is unavailable"}, 500)
+            fn = m.build if p.endswith("build") else m.head
+            try:
+                body, code = fn(data)
+            except Exception as e:                                  # noqa: BLE001
+                traceback.print_exc()
+                return self._send({"error": "the build could not start",
+                                   "detail": "%s: %s" % (type(e).__name__, e)}, 500)
+            return self._send(body, code)
         if p == "/api/make3d/mesh":
             m = self._make3d()
             if m is None:
