@@ -125,14 +125,19 @@ def listing():
     for t in FY.TYPES:
         out[t] = [{"id": a["id"], "name": a["name"], "style": a.get("style"),
                    "images": a.get("images", {}), "compiled": a.get("compiled", {}),
-                   "assignments": a.get("assignments", {})}
+                   "assignments": a.get("assignments", {}),
+                   "level": a.get("level", 3), "built_level": FY.level_of(a),
+                   "parent": a.get("parent", ""),
+                   "variant_note": a.get("variant_note", "")}
                   for a in FY.list_assets(t)]
     films = [{"id": f.id, "title": f.data.get("title")} for f in FM.list_films()]
     return {"assets": out, "films": films}, 200
 
 
 def detail(atype, aid):
-    return {"asset": FY.load_asset(atype, aid)}, 200
+    a = FY.load_asset(atype, aid)
+    a["built_level"] = FY.level_of(a)
+    return {"asset": a}, 200
 
 
 def job_status(jid):
@@ -151,8 +156,115 @@ def jobs_all():
 
 def new(data):
     a = FY.new_asset(data["type"], data["name"], data.get("style", "cinematic"),
-                     data.get("selections") or {}, data.get("notes", ""))
+                     data.get("selections") or {}, data.get("notes", ""),
+                     level=int(data.get("level") or 3),
+                     parent=data.get("parent", ""),
+                     overrides=data.get("overrides") or {})
+    return {"ok": True, "id": a["id"], "compiled": a["compiled"],
+            "level": a["level"]}, 200
+
+
+def levels(data=None):
+    """The ladder itself, so the UI never hardcodes it."""
+    return {"levels": FY.LEVELS}, 200
+
+
+def variant(data):
+    """A character that inherits its parent and differs in named ways.
+
+    Everything the overrides do not mention is the parent's, including the notes
+    and the style - a variant is the same person under a change, not a new one.
+    Its first render references the parent's own full body so the face carries.
+    """
+    parent = FY.load_asset("character", data["parent"])
+    overrides = data.get("overrides") or {}
+    if not overrides:
+        return {"error": "a variant needs at least one difference"}, 400
+    D = FY.load_dict()
+    sel = FY.variant_selections(parent, overrides)
+    a = FY.new_asset("character", data["name"], parent["style"], sel,
+                     data.get("notes", parent.get("notes", "")),
+                     level=int(data.get("level") or 2),
+                     parent=parent["id"], overrides=overrides)
+    a["variant_note"] = FY.variant_summary(D, parent, overrides)
+    FY.save_asset(a)
+    return {"ok": True, "id": a["id"], "differs": a["variant_note"],
+            "compiled": a["compiled"]}, 200
+
+
+# ─── the two ways in that are not a form ────────────────────────────────────────────
+
+def _caption_image(path):
+    """One vision call: a photograph in, physical facts out. The image is never kept
+    as an identity reference - see the module docstring."""
+    import shutil
+    sys.path.insert(0, TOOLS) if TOOLS not in sys.path else None
+    import character_new as CN
+    from epic import COMFY
+    staged = "foundry_src_%d.png" % (int(time.time()) % 100000)
+    shutil.copy(path, os.path.join(COMFY, "input", staged))
+    return (CN.caption(staged) or "").strip()
+
+
+def describe(data):
+    """Free prose in, a character out. The paragraph becomes the notes, which compile
+    into BOTH the prose clause and the tag stack, so it reaches every engine. Any
+    selectors the caller also set still apply; the description refines them."""
+    text = (data.get("description") or "").strip()
+    if not text:
+        return {"error": "describe the person first"}, 400
+    a = FY.new_asset("character", data["name"], data.get("style", "anime"),
+                     data.get("selections") or {}, text,
+                     level=int(data.get("level") or 2))
     return {"ok": True, "id": a["id"], "compiled": a["compiled"]}, 200
+
+
+def from_image(data):
+    """An uploaded photograph in, a character out, by way of a caption.
+
+    Consent is the gate for a real person's photograph, exactly as character_new.py
+    requires it: the caller must pass consent=True and it is recorded on the asset.
+    """
+    path = data.get("path") or ""
+    if not os.path.isfile(path):
+        return {"error": "no such image: %r" % path}, 400
+    if not data.get("consent"):
+        return {"error": "a photograph of a real person needs consent=true; "
+                         "invented references still need it set, so the record "
+                         "always says who agreed"}, 400
+    jid = _job("from_image", asset="character/%s" % data.get("name", "?"))
+    threading.Thread(target=_from_image_job,
+                     args=(jid, path, data["name"], data.get("style", "anime"),
+                           int(data.get("level") or 2),
+                           data.get("consent_note", "")), daemon=True).start()
+    return {"job": jid}, 200
+
+
+def _from_image_job(jid, path, name, style, level, consent_note):
+    try:
+        with _LOCK:
+            JOBS[jid]["total"] = 2
+        if not ensure_comfy():
+            raise RuntimeError("ComfyUI will not come up")
+        _log(jid, "captioning the source")
+        text = _caption_image(path)
+        if not text:
+            raise RuntimeError("the vision model returned nothing")
+        _log(jid, text[:90])
+        with _LOCK:
+            JOBS[jid]["done"] = 1
+        a = FY.new_asset("character", name, style, {}, text, level=level)
+        a["provenance"] = "from a supplied image"
+        a["provenance_note"] = consent_note or "consent recorded at creation"
+        a["source_caption"] = text
+        FY.save_asset(a)
+        with _LOCK:
+            JOBS[jid]["done"] = 2
+            JOBS[jid]["result"] = {"id": a["id"], "caption": text}
+        _finish(jid)
+    except Exception as e:
+        _finish(jid, str(e)[:300])
+
 
 
 def edit(data):
@@ -163,6 +275,8 @@ def edit(data):
         a["notes"] = data["notes"]
     if "name" in data:
         a["name"] = data["name"]
+    if "level" in data:
+        a["level"] = int(data["level"])
     FY.recompile(a)
     return {"ok": True, "compiled": a["compiled"]}, 200
 
@@ -266,6 +380,15 @@ def _seeds_job(jid, atype, aid):
                         if key != "base_fullbody" and os.path.exists(fb):
                             ref = _stage(COMFY, fb, "foundry_ref_%s.png" % aid)
                             a["_ipa_ref"] = ref
+                        elif a.get("parent"):
+                            # a variant has no body of its own yet - borrow the
+                            # parent's so the face survives the change
+                            pfb = os.path.join(FY.asset_dir("character",
+                                                            a["parent"]),
+                                               "base_fullbody.png")
+                            if os.path.exists(pfb):
+                                a["_ipa_ref"] = _stage(
+                                    COMFY, pfb, "foundry_pref_%s.png" % aid)
                     _render_direct(a, "%s, %s" % (a["compiled"]["clause"], prompt)
                                    if st["kf_engine"] != "animagine" else
                                    "%s, %s" % (a["compiled"]["tags"], prompt),

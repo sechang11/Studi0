@@ -75,6 +75,7 @@ pre.hidden-prompt{background:#101017;border:1px solid var(--line);border-radius:
 <script>
 "use strict";
 let DICT=null, DATA=null, STYLE="anime", SEL=null, FORM=null, WATCH=new Set();
+let LEVELS=[];
 const $=q=>document.querySelector(q);
 const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const m=p=>`/foundry/media/${p}`;
@@ -89,6 +90,7 @@ function note(t,err){ const el=$("#job"); el.textContent=t; el.className=err?"er
 
 async function boot(){
   DICT=await api("/dictionary");
+  LEVELS=(await api("/levels")).levels;
   DATA=await api("");
   renderLeft();
   pollJobs();
@@ -128,13 +130,53 @@ function renderLeft(){
 
 /* ── the generic selector form, rendered straight from the dictionary ─────── */
 function startNew(type){
-  FORM={type, name:"", selections:FORM&&FORM.type===type?FORM.selections:{}, notes:""};
+  FORM={type, name:"", selections:FORM&&FORM.type===type?FORM.selections:{}, notes:"",
+        mode:"build", level:type==="character"?3:3, description:"", imgPath:"",
+        imgPreview:"", consent:false, consentNote:""};
   SEL=null; renderLeft(); renderForm();
+}
+function levelPicker(){
+  if(!LEVELS.length) return "";
+  const cur=LEVELS.find(L=>L.n===FORM.level)||LEVELS[2];
+  return `<label>how deep to build it</label>
+    <div class="spectrum">${LEVELS.map(L=>
+      `<div class="${L.n===FORM.level?"sel":""}" onclick="FORM.level=${L.n};renderForm()"
+        title="${esc(L.blurb)}">${L.n} ${esc(L.label)}</div>`).join("")}</div>
+    <div class="hint" style="margin-bottom:6px">${esc(cur.blurb)}
+      <b style="color:var(--accent)">&middot; ${esc(cur.cost)}</b></div>`;
 }
 function renderForm(){
   const spec=DICT[FORM.type];
-  let h=`<h2>New ${esc(spec.label)} <span class="badge">${esc(STYLE)}</span></h2>
-    <label>name</label><input id="n_name" value="${esc(FORM.name)}" style="width:100%">`;
+  const isChar=FORM.type==="character";
+  let h=`<h2>New ${esc(spec.label)} <span class="badge">${esc(STYLE)}</span></h2>`;
+  if(isChar){
+    h+=`<div class="chips" style="margin-bottom:6px">${
+      [["build","pick features"],["describe","describe them"],["image","from an image"]]
+      .map(([m,l])=>`<div class="chip ${FORM.mode===m?"sel":""}"
+        onclick="FORM.mode='${m}';renderForm()">${l}</div>`).join("")}</div>`;
+  }
+  h+=`<label>name</label><input id="n_name" value="${esc(FORM.name)}" style="width:100%">`;
+  if(isChar) h+=levelPicker();
+  if(isChar && FORM.mode==="describe"){
+    h+=`<label>describe them in a paragraph</label>
+      <textarea id="n_desc" rows="5" placeholder="a wiry man in his sixties with a shaved head, a broken nose, deep-set brown eyes..."
+        onchange="FORM.description=this.value;preview()">${esc(FORM.description)}</textarea>
+      <div class="hint">Physical facts work best - the words reach every engine.
+        You can still set any selector below to pin specifics.</div>`;
+  }
+  if(isChar && FORM.mode==="image"){
+    h+=`<label>starting image</label>
+      <input type="file" id="n_file" accept="image/*" onchange="pickImage(this)">
+      ${FORM.imgPreview?`<img src="${FORM.imgPreview}" style="max-width:100%;
+        border-radius:6px;margin-top:6px;border:1px solid var(--line)">`:""}
+      <div class="hint">The image is captioned into physical facts and then discarded as
+        an identity source - a reference carries hair and clothes, not a face.</div>
+      <label><input type="checkbox" ${FORM.consent?"checked":""}
+        onchange="FORM.consent=this.checked"> the person shown has consented</label>
+      <input placeholder="who consented, and when" value="${esc(FORM.consentNote)}"
+        oninput="FORM.consentNote=this.value" style="width:100%">`;
+  }
+  if(!isChar || FORM.mode==="build" || FORM.mode==="describe"){
   for(const [sid,sub] of Object.entries(spec.subs)){
     const cur=FORM.selections[sid];
     if(sub.multi){
@@ -149,13 +191,17 @@ function renderForm(){
         `</select>`;
     }
   }
-  h+=`<label>notes (optional free text)</label>
-      <textarea id="n_notes" rows="2" onchange="FORM.notes=this.value;preview()">${esc(FORM.notes)}</textarea>
-      <h2>Hidden prompt <span class="hint">(compiled from your selections)</span></h2>
+  }
+  if(!(FORM.type==="character" && FORM.mode!=="build")){
+    h+=`<label>notes (optional free text)</label>
+      <textarea id="n_notes" rows="2" onchange="FORM.notes=this.value;preview()">${esc(FORM.notes)}</textarea>`;
+  }
+  h+=`<h2>Hidden prompt <span class="hint">(compiled from your choices)</span></h2>
       <pre class="hidden-prompt" id="n_preview">-</pre>
       <div class="row" style="margin-top:8px">
         <button class="primary" onclick="createAsset()">create</button>
-        <span class="hint">seeds render after creation</span>
+        <span class="hint">${FORM.level===1?"nothing renders at level 1"
+                                            :"seeds render after creation"}</span>
       </div>`;
   $("#right").innerHTML=h;
   $("#n_name").oninput=e=>FORM.name=e.target.value;
@@ -171,7 +217,28 @@ function preview(){
   clearTimeout(PREV_T);
   PREV_T=setTimeout(()=>{ $("#n_preview").textContent=compileLocal(); },120);
 }
+function pickImage(el){
+  const f=el.files&&el.files[0]; if(!f) return;
+  const r=new FileReader();
+  r.onload=async()=>{
+    FORM.imgPreview=r.result;
+    try{
+      const j=await fetch("/api/character/upload",{method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({name:f.name,data:r.result})}).then(x=>x.json());
+      if(j.error) return note(j.error,true);
+      FORM.imgPath=j.path; note("image staged: "+j.name);
+    }catch(e){ note("upload failed",true); }
+    renderForm();
+  };
+  r.readAsDataURL(f);
+}
 function compileLocal(){
+  if(FORM.type==="character"&&FORM.mode==="describe")
+    return FORM.description||"(describe them above)";
+  if(FORM.type==="character"&&FORM.mode==="image")
+    return FORM.imgPath?"the image will be captioned into physical facts on create"
+                       :"(pick a starting image)";
   // a light client-side echo: fragments joined in order, enough to SEE what you built
   const spec=DICT[FORM.type]; const parts=[];
   for(const [sid,sub] of Object.entries(spec.subs)){
@@ -186,11 +253,28 @@ function compileLocal(){
 }
 async function createAsset(){
   if(!FORM.name) return note("name it first",true);
-  const j=await api("/new",{type:FORM.type,name:FORM.name,style:STYLE,
-                            selections:FORM.selections,notes:FORM.notes});
+  let j;
+  if(FORM.type==="character"&&FORM.mode==="describe"){
+    if(!FORM.description.trim()) return note("describe them first",true);
+    j=await api("/describe",{name:FORM.name,style:STYLE,level:FORM.level,
+                             description:FORM.description,selections:FORM.selections});
+  }else if(FORM.type==="character"&&FORM.mode==="image"){
+    if(!FORM.imgPath) return note("pick a starting image first",true);
+    if(!FORM.consent) return note("tick the consent box - the record has to say who agreed",true);
+    const r=await api("/from_image",{path:FORM.imgPath,name:FORM.name,style:STYLE,
+                                     level:FORM.level,consent:true,
+                                     consent_note:FORM.consentNote});
+    WATCH.add(r.job); note("captioning the image: "+r.job);
+    FORM=null; return;
+  }else{
+    j=await api("/new",{type:FORM.type,name:FORM.name,style:STYLE,level:FORM.level,
+                        selections:FORM.selections,notes:FORM.notes});
+  }
   note("created "+j.id);
+  const id=j.id, lvl=FORM.level;
   DATA=await api(""); FORM=null; SEL=null; renderLeft();
-  openAssetById(j.id);
+  await openAssetById(id);
+  if(lvl>1&&SEL) genSeeds();          // the level was the instruction; act on it
 }
 async function openAssetById(id){
   for(const t of ["character","place","costume","prop","music"])
@@ -210,8 +294,43 @@ function renderDetail(){
   const compiled=JSON.stringify(a.compiled,null,1);
   let extra="";
   if(SEL.type==="character"){
+    const subs=DICT.character.subs;
     const costumes=(DATA.assets.costume||[]).filter(c=>c.style===a.style);
-    extra=`<h2>Costumes</h2>
+    const kids=(DATA.assets.character||[]).filter(c=>c.parent===a.id);
+    extra=`<h2>Depth</h2>
+      <div class="spectrum">${LEVELS.map(L=>
+        `<div class="${L.n===(a.level||3)?"sel":""}"
+          onclick="setLevel(${L.n})" title="${esc(L.blurb)}">${L.n} ${esc(L.label)}</div>`
+        ).join("")}</div>
+      <div class="hint" style="margin-bottom:4px">built to level
+        <b>${a.built_level||1}</b> of <b>${a.level||3}</b> requested.
+        ${(a.built_level||1)<(a.level||3)
+          ?'<b style="color:var(--warn)">re-run the seed pack to catch up</b>':""}</div>
+      ${a.parent?`<div class="hint">a variant of <a href="#"
+         onclick="openAsset('character','${a.parent}');return false"
+         style="color:var(--accent)">${esc(a.parent)}</a> &mdash;
+         ${esc(a.variant_note||"")}</div>`:""}
+      ${a.source_caption?`<div class="hint">from an image &middot;
+         ${esc(a.provenance_note||"")}</div>`:""}
+
+      <h2>Variants <span class="hint">same person, named differences</span></h2>
+      ${kids.length?`<div class="chips" style="margin-bottom:6px">${kids.map(k=>
+        `<div class="chip" onclick="openAsset('character','${k.id}')">${esc(k.name)}</div>`
+        ).join("")}</div>`:'<div class="hint">none yet</div>'}
+      <div class="row">
+        <input id="v_name" placeholder="variant name" style="flex:1">
+        <select id="v_sub" onchange="varSub()">
+          <option value="">what differs...</option>
+          ${Object.entries(subs).map(([sid,s])=>
+            `<option value="${sid}">${esc(s.label)}</option>`).join("")}
+        </select>
+        <span id="v_valwrap"></span>
+        <button class="small" onclick="addOverride()">+</button>
+      </div>
+      <div id="v_list" class="hint" style="margin:6px 0">no differences set</div>
+      <button class="primary small" onclick="makeVariant()">create variant</button>
+
+      <h2>Costumes</h2>
       <div class="row">
         <select id="d_costume">${costumes.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join("")}</select>
         <button class="small" onclick="applyCostume()">wear it</button>
@@ -244,6 +363,39 @@ function renderDetail(){
     <pre class="hidden-prompt" id="d_prompt" style="display:none">${esc(compiled)}</pre>
     <h2>Selections</h2>
     <pre class="hidden-prompt">${esc(JSON.stringify(a.selections,null,1))}</pre>`;
+}
+/* ── variants ─────────────────────────────────────────────────────────────── */
+let OVER={};
+function varSub(){
+  const sid=$("#v_sub").value, w=$("#v_valwrap");
+  if(!sid){ w.innerHTML=""; return; }
+  const sub=DICT.character.subs[sid];
+  w.innerHTML=`<select id="v_val">${(sub.options||[]).map(o=>
+    `<option value="${o.id}">${esc(o.label)}</option>`).join("")}</select>`;
+}
+function addOverride(){
+  const sid=$("#v_sub").value, vv=$("#v_val");
+  if(!sid||!vv) return note("pick what differs",true);
+  const sub=DICT.character.subs[sid];
+  OVER[sid]=sub.multi?[vv.value]:vv.value;
+  const names=Object.entries(OVER).map(([k,v])=>
+    `${DICT.character.subs[k].label}: ${[].concat(v).join(", ")}`);
+  $("#v_list").innerHTML=names.length?esc(names.join(" &middot; ")):"no differences set";
+}
+async function makeVariant(){
+  const name=$("#v_name").value.trim();
+  if(!name) return note("name the variant",true);
+  if(!Object.keys(OVER).length) return note("set at least one difference",true);
+  const j=await api("/variant",{parent:SEL.id,name:name,overrides:OVER,level:2});
+  note("variant: "+j.differs);
+  OVER={}; DATA=await api("");
+  await openAsset("character",j.id);
+  genSeeds();
+}
+async function setLevel(n){
+  await api("/edit",{type:SEL.type,id:SEL.id,level:n});
+  await openAsset(SEL.type,SEL.id);
+  note("level set to "+n+" - run the seed pack to build it");
 }
 async function genSeeds(){
   const j=await api("/seeds",{type:SEL.type,id:SEL.id});

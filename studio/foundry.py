@@ -69,7 +69,8 @@ def list_assets(atype):
     return out
 
 
-def new_asset(atype, name, style, selections, notes=""):
+def new_asset(atype, name, style, selections, notes="", level=3,
+              parent="", overrides=None):
     if atype not in TYPES:
         raise ValueError(atype)
     aid = _slug(name)
@@ -77,6 +78,7 @@ def new_asset(atype, name, style, selections, notes=""):
         raise ValueError("%s %r exists" % (atype, aid))
     a = {"type": atype, "id": aid, "name": name, "style": style,
          "selections": selections, "notes": notes,
+         "level": int(level or 3), "parent": parent or "", "overrides": overrides or {},
          "created": time.strftime("%Y-%m-%d %H:%M"),
          "compiled": compile_asset(atype, style, selections, notes),
          "images": {}, "assignments": {}}
@@ -141,8 +143,11 @@ def _c_character(D, style, sel, notes):
     hair = ("%s %s" % (hair_c, hair_s)).strip() if (hair_c or hair_s) else ""
     marks = _join(_frag(D, "character", "marks", sel.get("marks", [])))
     pers = g("personality")
-    clause = _join([lead, g("age"), g("skin"), head, hair, g("facial_hair"), marks,
-                    pers, notes])
+    picked = [lead, g("age"), g("skin"), head, hair, g("facial_hair"), marks, pers]
+    if notes and not any(p for p in picked[1:]) and not sel.get("archetype"):
+        clause = notes          # described, not selected - the words are the character
+    else:
+        clause = _join(picked + [notes])
     # the re-identification short: the two most distinctive things they carry
     short_bits = [b for b in (hair, marks.split(",")[0] if marks else "",
                               g("eye_color")) if b]
@@ -274,12 +279,106 @@ PROP_VIEWS = [
 ]
 
 
+# ── how deep to build a character ───────────────────────────────────────────────────
+# A character is a seed for a film, not a deliverable. Most need a face and a few
+# angles; a lead that carries thirty shots earns a trained LoRA. Each level is a
+# superset of the one below and its artefacts are literally the next level's input.
+LEVELS = [
+    {"n": 1, "key": "card", "label": "Card",
+     "blurb": "Words only - the clause, the tags, the voice. No GPU, instant. "
+              "Enough to write a story around and cast later.",
+     "views": [], "turns": [], "expressions": [],
+     "lora": False, "outfits": 0, "mesh": False, "cost": "instant"},
+    {"n": 2, "key": "face", "label": "Face",
+     "blurb": "Portrait and full body. The character has a look you can anchor a "
+              "shot on and dress in a costume.",
+     "views": ["base_portrait", "base_fullbody"], "turns": [], "expressions": [],
+     "lora": False, "outfits": 0, "mesh": False, "cost": "about a minute"},
+    {"n": 3, "key": "turnaround", "label": "Turnaround",
+     "blurb": "Every angle plus a range of expressions, one outfit under one light. "
+              "Keyframes at any framing - and the set a LoRA trains on.",
+     "views": ["base_portrait", "base_fullbody"],
+     "turns": ["threequarter", "side", "back"],
+     "expressions": ["neutral", "joy", "anger", "fear"],
+     "lora": False, "outfits": 0, "mesh": False, "cost": "two or three minutes"},
+    {"n": 4, "key": "trained", "label": "Trained",
+     "blurb": "Everything above, then a character LoRA trained on it. The face stops "
+              "being a reference and becomes a model that holds across prompts.",
+     "views": ["base_portrait", "base_fullbody"],
+     "turns": ["threequarter", "side", "back"],
+     "expressions": ["neutral", "joy", "anger", "fear"],
+     "lora": True, "outfits": 0, "mesh": False, "cost": "twenty minutes or so"},
+    {"n": 5, "key": "production", "label": "Production",
+     "blurb": "A trained lead with every assigned costume rendered and a 3D mesh. "
+              "Nothing left to generate before the shoot.",
+     "views": ["base_portrait", "base_fullbody"],
+     "turns": ["threequarter", "side", "back"],
+     "expressions": ["neutral", "joy", "anger", "fear"],
+     "lora": True, "outfits": -1, "mesh": True, "cost": "the better part of an hour"},
+]
+
+LEVEL_BY_N = {L["n"]: L for L in LEVELS}
+
+
+def level_of(a):
+    """The level an asset was BUILT to, which is not the level it was asked for -
+    a job can fail halfway. Derived from what is actually on disk."""
+    imgs = a.get("images") or {}
+    if a.get("lora"):
+        return 5 if (a.get("mesh") and a.get("assignments")) else 4
+    if any(k.startswith("turn_") for k in imgs):
+        return 3
+    if imgs:
+        return 2
+    return 1
+
+
+CHAR_EXPRESSIONS = [
+    ("neutral", "a level, unreadable expression, looking straight at the viewer"),
+    ("joy", "laughing, eyes crinkled, plainly delighted"),
+    ("anger", "furious, brows down, jaw set"),
+    ("fear", "frightened, eyes wide, drawn back"),
+]
+_EXPR = dict(CHAR_EXPRESSIONS)
+
+
+def variant_selections(parent, overrides):
+    """A variant is its parent plus named differences - never a fresh person."""
+    sel = dict(parent.get("selections") or {})
+    sel.update(overrides or {})
+    return sel
+
+
+def variant_summary(D, parent, overrides):
+    """What actually differs, in words, for the card and the UI."""
+    out = []
+    for sub, val in (overrides or {}).items():
+        label = ((D.get("character") or {}).get("subs", {})
+                 .get(sub, {}).get("label", sub))
+        def _say(v):
+            f = _frag(D, "character", sub, v)
+            return _join(f) if isinstance(f, (list, tuple)) else (f or "")
+
+        was = _say((parent.get("selections") or {}).get(sub, ""))
+        now = _say(val)
+        out.append("%s: %s -> %s" % (label, was or "-", now or "-"))
+    return "; ".join(out)
+
+
 def seed_plan(a):
     """Which images this asset's pack should hold, as (key, kind, prompt-ish)."""
     t = a["type"]
     if t == "character":
-        return ([("base_" + k, "direct", p) for k, p in CHAR_VIEWS]
-                + [("turn_" + k, "turnaround", p) for k, p in CHAR_TURNS])
+        L = LEVEL_BY_N.get(int(a.get("level") or 3), LEVEL_BY_N[3])
+        want = set(L["views"])
+        out = [("base_" + k, "direct", p) for k, p in CHAR_VIEWS
+               if ("base_" + k) in want]
+        out += [("turn_" + k, "turnaround", p) for k, p in CHAR_TURNS
+                if k in L["turns"]]
+        out += [("expr_" + k, "direct",
+                 "a head and shoulders portrait, %s" % _EXPR[k])
+                for k in L["expressions"] if k in _EXPR]
+        return out
     if t == "place":
         out = []
         for tkey, tfrag in a["compiled"]["time_frags"].items():
