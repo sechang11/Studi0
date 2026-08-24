@@ -67,6 +67,58 @@ def _load(path, size=96, region=None):
     return list(im.tobytes())
 
 
+# A full-length figure ends in ankles: narrow, and clear of the bottom edge. A
+# thigh-cropped one meets the edge at close to its widest. Measured on packs
+# known good and known bad, the two sit either side of about a third.
+MAX_FOOT_WIDTH = 0.34
+
+FULL_LENGTH_VIEWS = ("base_fullbody", "turn_front", "turn_front_three_quarter",
+                     "turn_side", "turn_back", "turn_back_three_quarter",
+                     "pres_wide")
+
+
+MIN_GROUND_GAP = 0.012      # ground visible below the feet, as a fraction of height
+
+
+def _subject_alpha(path):
+    """The subject's mask via birefnet - the same segmenter compose.py cuts with.
+    Returns None if ComfyUI is not reachable, so the caller can skip rather than
+    invent a verdict."""
+    import importlib.util
+    spec = importlib.util.spec_from_file_location(
+        "compose", os.path.join(TOOLS, "compose.py"))
+    CM = importlib.util.module_from_spec(spec)
+    try:
+        spec.loader.exec_module(CM)
+        out = os.path.join("/tmp", "qc_cut_%s.png" % abs(hash(path)))
+        CM.cutout(path, out, tag="qc")
+        from PIL import Image
+        return Image.open(out).convert("RGBA").split()[-1]
+    except Exception:
+        return None
+
+
+def _truncated(path):
+    """Does the subject run off the bottom of its own frame? -> (bool, detail)."""
+    alpha = _subject_alpha(path)
+    if alpha is None:
+        return None, "no segmenter"
+    from PIL import Image
+    a = alpha.resize((160, int(160 * alpha.size[1] / alpha.size[0])))
+    w, h = a.size
+    px = a.load()
+    rows = []
+    for y in range(h):
+        xs = [x for x in range(w) if px[x, y] > 40]
+        rows.append((max(xs) - min(xs) + 1) if xs else 0)
+    widest = max(rows) or 1
+    lowest = max([y for y, v in enumerate(rows) if v > 0] or [0])
+    gap = (h - 1 - lowest) / float(h)
+    botw = max(rows[-max(2, h // 40):]) / float(widest)
+    ok = gap >= MIN_GROUND_GAP or botw <= MAX_FOOT_WIDTH
+    return (not ok), "gap=%.3f width=%.2f" % (gap, botw)
+
+
 def _dist(a, b):
     return sum(abs(x - y) for x, y in zip(a, b)) / (255.0 * len(a))
 
@@ -110,6 +162,23 @@ def check(cid, verbose=True):
 
     for k in [k for k in have if k.startswith("turn_") and k != "turn_front"]:
         cmp(k, "turn_front", MIN_TURN, "the camera did not move")
+
+    # a view that claims the whole figure has to contain the whole figure
+    for k in FULL_LENGTH_VIEWS:
+        p = os.path.join(d, k + ".png")
+        if not os.path.isfile(p):
+            continue
+        bad, detail = _truncated(p)
+        if bad is None:
+            continue                  # no segmenter: skip, do not invent a pass
+        if bad:
+            issues.append({
+                "pair": [k, "(frame bottom)"], "distance": 0.0,
+                "floor": MAX_FOOT_WIDTH,
+                "why": "the subject meets the bottom of the frame at close to "
+                       "full width (%s) - a thigh or waist crop, not a full "
+                       "body, and everything downstream believes the name"
+                       % detail})
 
     res = {"id": cid, "images": len(have), "issues": issues,
            "clean": not issues}

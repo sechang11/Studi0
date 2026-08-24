@@ -305,7 +305,22 @@ def _ipa_for(key):
             return w
     return 0.55
 
-def _render_direct(a, prompt, dest, seed, wide=False):
+# Views that must show the whole figure. A photographic model needs telling in
+# these words; "full-length standing shot" alone returns a thigh-up crop.
+FULL_LENGTH_KEYS = ("base_fullbody", "turn_", "pres_wide")
+FULL_LENGTH = ("full body shot, head to toe, the entire figure inside the frame, "
+               "both feet visible on the ground, standing at a distance from the "
+               "camera, wide framing with empty space above the head and below "
+               "the feet")
+NOT_CROPPED = ("cropped, cropped legs, cut off at the waist, cut off at the "
+               "thigh, close-up, portrait crop, bust shot, headshot")
+
+
+def _is_full_length(key):
+    return any(key.startswith(k) or key == k for k in FULL_LENGTH_KEYS)
+
+
+def _render_direct(a, prompt, dest, seed, wide=False, full_length=False):
     """One image in the asset's style: qwen for everything except anime, which goes
     through animagine so the whole pack shares the cel prior."""
     run, set_path, load_wf, ensure_local, HOST, COMFY = _comfy()
@@ -327,8 +342,10 @@ def _render_direct(a, prompt, dest, seed, wide=False):
                  "claude-generated/foundry/%s_%s" % (a["type"], a["id"]))
     else:
         wf = load_wf("01_qwen_t2i_turbo.json")
-        set_path(wf, "10.inputs.text", "%s. %s" % (prompt, st["look_clause"]))
+        body = ("%s, %s" % (prompt, FULL_LENGTH)) if full_length else prompt
+        set_path(wf, "10.inputs.text", "%s. %s" % (body, st["look_clause"]))
         set_path(wf, "11.inputs.text", "blurry, low quality, watermark, text, "
+                 + (NOT_CROPPED + ", " if full_length else "")
                  + st["neg"] + ", nsfw")
         set_path(wf, "12.inputs.width", w)
         set_path(wf, "12.inputs.height", h)
@@ -411,10 +428,14 @@ def _seeds_job(jid, atype, aid):
                         drawn = ("%s, %s, %s" % (et, a["compiled"]["tags"], prompt)
                                  if et else
                                  "%s, %s" % (a["compiled"]["tags"], prompt))
-                        _render_direct(a, drawn, dest, seed=21)
+                        if _is_full_length(key):
+                            drawn = "full body, cowboy shot off, " + drawn
+                        _render_direct(a, drawn, dest, seed=21,
+                                       full_length=_is_full_length(key))
                     else:
                         _render_direct(a, "%s, %s" % (a["compiled"]["clause"],
-                                                      prompt), dest, seed=21)
+                                                      prompt), dest, seed=21,
+                                       full_length=_is_full_length(key))
                 else:
                     if st["kf_engine"] == "animagine":
                         # a drawn identity turns through its own IPAdapter, not the LoRA
@@ -426,7 +447,7 @@ def _seeds_job(jid, atype, aid):
                         # out of step with CHAR_TURN_VIEWS
                         _render_direct(a, "%s, full body, %s, plain background"
                                        % (a["compiled"]["tags"], prompt),
-                                       dest, seed=23)
+                                       dest, seed=23, full_length=True)
                     else:
                         _render_turnaround(a, "base_fullbody.png", prompt, dest,
                                            seed=21)
