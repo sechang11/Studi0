@@ -293,6 +293,18 @@ def _stage(comfy_dir, src, name):
     return name
 
 
+# How hard to hold the identity reference, by what the view is for. A view that
+# must VARY cannot be rendered at the weight that holds a turnaround still.
+IPA_BY_KIND = {"turn": 0.55, "face": 0.5, "expr": 0.32, "pres": 0.28,
+               "base": 0.55}
+
+
+def _ipa_for(key):
+    for prefix, w in IPA_BY_KIND.items():
+        if key.startswith(prefix):
+            return w
+    return 0.55
+
 def _render_direct(a, prompt, dest, seed, wide=False):
     """One image in the asset's style: qwen for everything except anime, which goes
     through animagine so the whole pack shares the cel prior."""
@@ -302,7 +314,8 @@ def _render_direct(a, prompt, dest, seed, wide=False):
     if st["kf_engine"] == "animagine":
         wf = load_wf("22_anime_kf_ipadapter.json")
         set_path(wf, "2.inputs.image", a.get("_ipa_ref") or "sheet_liwen.png")
-        set_path(wf, "4.inputs.weight", 0.55 if a.get("_ipa_ref") else 0.0)
+        set_path(wf, "4.inputs.weight",
+                 (a.get("_ipa_weight", 0.55)) if a.get("_ipa_ref") else 0.0)
         set_path(wf, "5.inputs.text", "%s, %s" % (prompt, QUALITY_TAGS))
         set_path(wf, "6.inputs.text", ANIME_NEG)
         set_path(wf, "7.inputs.width", w)
@@ -375,6 +388,7 @@ def _seeds_job(jid, atype, aid):
                                           a["compiled"]["clause"], prompt)
                     if st["kf_engine"] == "animagine":
                         # self-reference chain: the full body becomes the pack's ref
+                        a["_ipa_weight"] = _ipa_for(key)
                         a["_ipa_ref"] = None
                         fb = os.path.join(adir, "base_fullbody.png")
                         if key != "base_fullbody" and os.path.exists(fb):
@@ -389,14 +403,23 @@ def _seeds_job(jid, atype, aid):
                             if os.path.exists(pfb):
                                 a["_ipa_ref"] = _stage(
                                     COMFY, pfb, "foundry_pref_%s.png" % aid)
-                    _render_direct(a, "%s, %s" % (a["compiled"]["clause"], prompt)
-                                   if st["kf_engine"] != "animagine" else
-                                   "%s, %s" % (a["compiled"]["tags"], prompt),
-                                   dest, seed=21)
+                    if st["kf_engine"] == "animagine":
+                        # an expression tag has to LEAD, not trail a long identity
+                        # string - a danbooru model weights by position
+                        et = FY.EXPR_TAGS.get(key[5:]) if key.startswith("expr_") \
+                            else None
+                        drawn = ("%s, %s, %s" % (et, a["compiled"]["tags"], prompt)
+                                 if et else
+                                 "%s, %s" % (a["compiled"]["tags"], prompt))
+                        _render_direct(a, drawn, dest, seed=21)
+                    else:
+                        _render_direct(a, "%s, %s" % (a["compiled"]["clause"],
+                                                      prompt), dest, seed=21)
                 else:
                     if st["kf_engine"] == "animagine":
                         # a drawn identity turns through its own IPAdapter, not the LoRA
                         fb = os.path.join(adir, "base_fullbody.png")
+                        a["_ipa_weight"] = _ipa_for(key)
                         a["_ipa_ref"] = _stage(COMFY, fb,
                                                "foundry_ref_%s.png" % aid)
                         # the plan carries the view text - no key table to fall

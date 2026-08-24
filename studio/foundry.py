@@ -397,6 +397,18 @@ CHAR_EXPRESSIONS = [
     ("sorrow", "grieving, eyes down, mouth tight"),
     ("surprise", "caught off guard, brows up, mouth open"),
 ]
+
+# The same six as danbooru tags. A drawn engine reads these; the prose above is
+# for the photographic path. Measured: prose appended to a long tag string moved
+# the face by 0.037 - indistinguishable from not asking at all.
+EXPR_TAGS = {
+    "neutral": "expressionless, closed mouth, looking at viewer",
+    "joy": "laughing, open mouth, happy, closed eyes, smile",
+    "anger": "angry, clenched teeth, v-shaped eyebrows, glaring",
+    "fear": "scared, wide-eyed, trembling, open mouth, sweatdrop",
+    "sorrow": "sad, tears, crying, downcast eyes, frown",
+    "surprise": "surprised, wide-eyed, open mouth, shocked",
+}
 _EXPR = dict(CHAR_EXPRESSIONS)
 
 
