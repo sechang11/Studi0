@@ -127,6 +127,68 @@ def cutout(src_path, dest, tag="cut"):
     return dest
 
 
+# How much of the relight canvas the figure occupies. The rest is margin so the
+# model has scene to relight her against, and so she cannot reach an edge.
+RELIGHT_MARGIN = 0.66
+
+
+def _edge_touching(rgba, slack=2):
+    """Is the opaque region flush against any edge? Then the figure is cut off
+    and its proportions are unknown - scaling it would invent the missing part."""
+    bb = rgba.split()[-1].getbbox()
+    if not bb:
+        return True
+    W, H = rgba.size
+    return (bb[0] <= slack or bb[1] <= slack
+            or bb[2] >= W - slack or bb[3] >= H - slack)
+
+
+def _aspect_of(rgba):
+    bb = rgba.split()[-1].getbbox()
+    if not bb:
+        return 0.0
+    w, h = bb[2] - bb[0], bb[3] - bb[1]
+    return (w / h) if h else 0.0
+
+
+def tint_to(cut, plate, strength=0.5):
+    """A fallback when the relight is refused: push the cutout toward the plate's
+    own mean colour. It is not lighting - there is no direction to it - but it
+    keeps the body intact, which matters more than a key light."""
+    from PIL import Image, ImageStat
+    st = ImageStat.Stat(plate.convert("RGB"))
+    pr, pg, pb = st.mean[:3]
+    rgb = cut.convert("RGB")
+    cs = ImageStat.Stat(rgb).mean[:3]
+    lut = []
+    for ch, (src, dst) in enumerate(zip(cs, (pr, pg, pb))):
+        shift = (dst - src) * strength
+        lut += [max(0, min(255, int(v + shift))) for v in range(256)]
+    out = rgb.point(lut)
+    out.putalpha(cut.split()[-1])
+    return out
+
+
+def relight_canvas(plate, cut):
+    """The plate, with the whole figure on it at a size that leaves margin. This
+    is what gets relit - never the final framing, which may legitimately crop
+    her and would hand the re-cut a partial body."""
+    from PIL import Image
+    W, H = plate.size
+    cut = _trim(cut)
+    th = int(H * RELIGHT_MARGIN)
+    tw = max(1, int(cut.width * th / cut.height))
+    cut = cut.resize((tw, th), Image.LANCZOS)
+    x = (W - tw) // 2
+    # Seated with real room under the feet: the relight drifts downward, and
+    # with a thin gap it pushes the feet off the canvas. 12% of frame height
+    # below is enough that the measured drift no longer truncates them.
+    y = int(H * 0.88) - th
+    canvas = plate.copy()
+    canvas.paste(cut, (x, y), cut)
+    return canvas
+
+
 def _trim(rgba):
     """Crop to what is actually opaque, so 'her height' means her, not padding."""
     bb = rgba.split()[-1].getbbox()
@@ -348,8 +410,7 @@ def compose(char_id, place_id, plate_key=None, view="turn_front",
             dpath = None
     if dpath is None:
         cut, x, y = place_cut(plate, cut, framing, cx, view)
-    rough = plate.copy()
-    rough.paste(cut, (x, y), cut)
+    rough = relight_canvas(plate, Image.open(cut_p).convert("RGBA"))
     rough_p = os.path.join(work, "02_paste.png")
     rough.save(rough_p)
 
@@ -363,6 +424,8 @@ def compose(char_id, place_id, plate_key=None, view="turn_front",
     anime_w = 0.6 if style in ("anime", "cartoon") else 0.0
     relit_p = qwen_edit(
         rel_ref, plate_ref,
+        "Keep the person full length, her whole body from head to feet inside "
+        "the frame. Do not crop her, do not zoom in, do not reframe. "
         "Relight only the person in the first image so she belongs in this "
         "location: the same colour temperature and direction of light as the "
         "scene around her, light falling on her from the scene's own sources. "
@@ -370,13 +433,28 @@ def compose(char_id, place_id, plate_key=None, view="turn_front",
         "move her. Do not change the background. %s. The location is %s. "
         "The whole image stays %s."
         % (clause, desc, (ch.get("compiled") or {}).get("look", "") or style),
-        os.path.join(work, "03_relit.png"), seed=seed, anime=anime_w)
+        os.path.join(work, "03_relit.png"), seed=seed, anime=anime_w,
+        w=plate.size[0], h=plate.size[1])
 
     # 3 take only her back out
     say("  3 re-cut")
     relit_cut_p = cutout(relit_p, os.path.join(work, "04_relit_cut.png"),
                          tag="r" + str(seed))
     rc = Image.open(relit_cut_p).convert("RGBA")
+    src_cut = Image.open(cut_p).convert("RGBA")
+    a_src, a_rel = _aspect_of(src_cut), _aspect_of(rc)
+    drift = abs(a_rel - a_src) / a_src if a_src else 1.0
+    # Proportion decides. A full-body cutout ends at its own feet, so a bbox
+    # reaching the bottom is ambiguous; a silhouette that changed shape is not.
+    if drift > 0.25:
+        say("  ! relight refused: shape %.2f -> %.2f (%.0f%% drift)%s. Using the "
+            "source cutout tinted to the plate instead - the light will be flat."
+            % (a_src, a_rel, drift * 100,
+               ", and it touches an edge" if _edge_touching(rc) else ""))
+        rc = tint_to(src_cut, plate)
+    elif _edge_touching(rc):
+        say("  . relit cutout reaches an edge (shape held at %.0f%% drift) - "
+            "accepted, but check the feet" % (drift * 100))
     if dpath is not None:
         y_feet, th, _ = place_by_depth(plate, dpath, stand, cx)
         rc = _trim(rc)
