@@ -27,7 +27,8 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 FOUNDRY = os.path.join(HERE, "foundry")
 DICT_PATH = os.path.join(FOUNDRY, "dictionary.json")
 
-TYPES = ("character", "place", "costume", "prop", "music", "motion")
+TYPES = ("character", "place", "costume", "prop", "music", "motion",
+         "camera")
 
 
 def load_dict():
@@ -125,7 +126,7 @@ def style_info(style):
 def compile_asset(atype, style, sel, notes="", tag_notes=""):
     D = load_dict()
     fn = {"character": _c_character, "place": _c_place, "costume": _c_costume,
-          "prop": _c_prop, "music": _c_music, "motion": _c_motion}[atype]
+          "prop": _c_prop, "music": _c_music, "motion": _c_motion, "camera": _c_camera}[atype]
     try:
         return fn(D, style, sel, notes, tag_notes)
     except TypeError:
@@ -251,19 +252,34 @@ def _c_prop(D, style, sel, notes):
     return {"clause": clause}
 
 
+def _c_camera(D, style, sel, notes, tag_notes=""):
+    """A camera selection. `enforced` says whether the engine will actually obey:
+    only `pinned` does, because it is a generation method rather than a request."""
+    g = lambda sub: _frag(D, "camera", sub, sel.get(sub, ""))
+    move = sel.get("move", "")
+    enforced = bool(_optmeta(D, "camera", "move", move, "enforced"))
+    return {"framing": g("framing"), "move": g("move"),
+            "move_id": move, "enforced": enforced,
+            "needs_end_frame": move == "pinned",
+            "clause": _join([g("framing"), g("move"), notes])}
+
+
 def _c_motion(D, style, sel, notes, tag_notes=""):
     """A shot's movement, as a beat can consume it."""
     g = lambda sub: _frag(D, "motion", sub, sel.get(sub, ""))
     action = g("action")
     pace = g("pace")
+    # camera moved out to its own variable; keep reading it if an older asset
+    # still carries one so nothing silently loses its move
+    legacy_cam = g("camera") if sel.get("camera") else ""
     # pace qualifies the action rather than trailing it, so "walks steadily
     # toward the camera, quickly" does not happen
     act = _join([a for a in (action, pace) if a]) if action else ""
     amb = _join(_frag(D, "motion", "ambient", sel.get("ambient", [])))
     return {"action": _join([act, notes]),
-            "camera": g("camera"),
+            "camera": legacy_cam,
             "ambient": amb,
-            "clause": _join([act, g("camera"), amb, notes])}
+            "clause": _join([act, legacy_cam, amb, notes])}
 
 
 def _c_music(D, style, sel, notes):

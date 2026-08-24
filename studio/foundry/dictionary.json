@@ -1569,58 +1569,8 @@
  },
  "motion": {
   "main": true,
-  "label": "Motion",
+  "label": "Character motion",
   "subs": {
-   "camera": {
-    "label": "Camera move",
-    "options": [
-     {
-      "id": "static",
-      "label": "Static",
-      "frag": ""
-     },
-     {
-      "id": "push_in",
-      "label": "Push in",
-      "frag": "as the camera pushes in slowly"
-     },
-     {
-      "id": "pull_back",
-      "label": "Pull back",
-      "frag": "as the camera pulls back"
-     },
-     {
-      "id": "pan",
-      "label": "Pan",
-      "frag": "as the camera pans across"
-     },
-     {
-      "id": "follow",
-      "label": "Follow",
-      "frag": "with the camera following the subject"
-     },
-     {
-      "id": "circle",
-      "label": "Circle",
-      "frag": "as the camera circles around the subject"
-     },
-     {
-      "id": "handheld",
-      "label": "Handheld",
-      "frag": "the camera handheld and unsteady"
-     },
-     {
-      "id": "tilt_up",
-      "label": "Tilt up",
-      "frag": "as the camera tilts upward"
-     },
-     {
-      "id": "tilt_down",
-      "label": "Tilt down",
-      "frag": "as the camera tilts downward"
-     }
-    ]
-   },
    "action": {
     "label": "What they do",
     "options": [
@@ -1703,6 +1653,11 @@
       "id": "speak",
       "label": "Speak",
       "frag": "speaks, mouth moving"
+     },
+     {
+      "id": "crouching",
+      "label": "Crouching",
+      "frag": "is crouched down low, knees bent, weight settled, staying there"
      }
     ]
    },
@@ -1799,6 +1754,147 @@
       "id": "dust",
       "label": "Dust motes",
       "frag": "dust drifts in the air"
+     }
+    ]
+   }
+  }
+ },
+ "camera": {
+  "main": true,
+  "label": "Camera",
+  "subs": {
+   "move": {
+    "label": "Camera move",
+    "options": [
+     {
+      "id": "pinned",
+      "label": "Pinned (both ends chosen)",
+      "frag": "the camera holds its position, locked to the framing of the chosen start and end frames",
+      "enforced": true,
+      "note": "both ends are chosen and H3 interpolates between them, so this is what the camera actually does"
+     },
+     {
+      "id": "static",
+      "label": "Static",
+      "frag": "the camera does not move",
+      "enforced": false,
+      "note": "advisory: LTX has its own camera prior and may ignore this - measured, a shot asking for static still zoomed in"
+     },
+     {
+      "id": "push_in",
+      "label": "Push in",
+      "frag": "as the camera pushes in slowly",
+      "enforced": false,
+      "note": "advisory: LTX has its own camera prior and may ignore this - measured, a shot asking for static still zoomed in"
+     },
+     {
+      "id": "pull_back",
+      "label": "Pull back",
+      "frag": "as the camera pulls back",
+      "enforced": false,
+      "note": "advisory: LTX has its own camera prior and may ignore this - measured, a shot asking for static still zoomed in"
+     },
+     {
+      "id": "pan",
+      "label": "Pan",
+      "frag": "as the camera pans across",
+      "enforced": false,
+      "note": "advisory: LTX has its own camera prior and may ignore this - measured, a shot asking for static still zoomed in"
+     },
+     {
+      "id": "follow",
+      "label": "Follow",
+      "frag": "with the camera following the subject",
+      "enforced": false,
+      "note": "advisory: LTX has its own camera prior and may ignore this - measured, a shot asking for static still zoomed in"
+     },
+     {
+      "id": "circle",
+      "label": "Circle",
+      "frag": "as the camera circles around the subject",
+      "enforced": false,
+      "note": "advisory: LTX has its own camera prior and may ignore this - measured, a shot asking for static still zoomed in"
+     },
+     {
+      "id": "handheld",
+      "label": "Handheld",
+      "frag": "the camera handheld and unsteady",
+      "enforced": false,
+      "note": "advisory: LTX has its own camera prior and may ignore this - measured, a shot asking for static still zoomed in"
+     },
+     {
+      "id": "tilt_up",
+      "label": "Tilt up",
+      "frag": "as the camera tilts upward",
+      "enforced": false,
+      "note": "advisory: LTX has its own camera prior and may ignore this - measured, a shot asking for static still zoomed in"
+     },
+     {
+      "id": "tilt_down",
+      "label": "Tilt down",
+      "frag": "as the camera tilts downward",
+      "enforced": false,
+      "note": "advisory: LTX has its own camera prior and may ignore this - measured, a shot asking for static still zoomed in"
+     }
+    ]
+   },
+   "framing": {
+    "label": "Framing",
+    "options": [
+     {
+      "id": "wide_establishing",
+      "label": "Wide establishing",
+      "frag": "a wide establishing shot"
+     },
+     {
+      "id": "wide",
+      "label": "Wide",
+      "frag": "a wide shot"
+     },
+     {
+      "id": "medium",
+      "label": "Medium",
+      "frag": "a medium shot"
+     },
+     {
+      "id": "medium_two",
+      "label": "Medium two-shot",
+      "frag": "a medium two-shot"
+     },
+     {
+      "id": "close",
+      "label": "Close-up",
+      "frag": "a close-up"
+     },
+     {
+      "id": "tight_close",
+      "label": "Tight close-up",
+      "frag": "a tight close-up"
+     },
+     {
+      "id": "over_shoulder",
+      "label": "Over the shoulder",
+      "frag": "an over-the-shoulder shot"
+     },
+     {
+      "id": "low_angle",
+      "label": "Low angle",
+      "frag": "a low-angle shot"
+     },
+     {
+      "id": "high_angle",
+      "label": "High angle",
+      "frag": "a high-angle shot"
+     },
+     {
+      "id": "overhead",
+      "label": "Overhead",
+      "frag": "an overhead view"
+     },
+     {
+      "id": "macro",
+      "label": "Extreme macro",
+      "frag": "an extreme macro shot"
      }
     ]
    }

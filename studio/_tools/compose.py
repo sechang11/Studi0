@@ -492,6 +492,142 @@ def fidelity(plate_p, final_p):
     return out
 
 
+# ─── pinned shots: choose both ends, let H3 interpolate ─────────────────────────────
+#
+# Prose cannot direct action on LTX. Measured on one crouch, with the enhancer
+# off, the action first and in capitals, and an explicit "locked off on a tripod,
+# no dolly, no zoom, no pan": she did not crouch and the camera pushed in anyway.
+# That is an engine prior, not a wording problem.
+#
+# H3's fl2va checkpoint takes a first frame AND a last frame, so the action stops
+# being a request and becomes the interpolation between two states we choose. The
+# same run, pinned: she lowers across all 192 frames and the framing holds.
+#
+# The end state costs one still. It is made by editing the START frame - same
+# person, same place, same camera - so a pinned shot needs no new asset, and the
+# edit is returned for looking at before any video is rendered, because pinning
+# to a bad end frame tests nothing.
+
+H3_MAX_FRAMES = 209          # 8.7s; the kernel OOMs past it
+H3_FPS = 24
+
+
+# How different the two pinned frames must be, per second of shot, measured in
+# the subject's own region. Below this the model has nothing to interpolate and
+# invents. See the module note above for the three measurements behind it.
+MIN_PIN_RATE = 0.009
+
+
+def _subject_distance(a_path, b_path):
+    """Mean absolute difference across the middle of the frame, where the figure
+    is. The whole frame is dominated by a background that does not move and
+    understates the change."""
+    from PIL import Image
+    a, b = Image.open(a_path).convert("L"), Image.open(b_path).convert("L")
+    W, H = a.size
+    box = (int(W * 0.15), 0, int(W * 0.60), H)
+    a = a.crop(box).resize((160, 110))
+    b = b.crop(box).resize((160, 110))
+    pa, pb = a.tobytes(), b.tobytes()
+    return sum(abs(x - y) for x, y in zip(pa, pb)) / (255.0 * len(pa))
+
+
+def pin_feasible(start_path, end_path, seconds):
+    """-> (ok, rate, the longest duration this pair can actually carry)."""
+    d = _subject_distance(start_path, end_path)
+    rate = d / max(0.1, seconds)
+    longest = d / MIN_PIN_RATE
+    return rate >= MIN_PIN_RATE, rate, longest
+
+
+def h3_length(seconds):
+    """H3 wants 17n+5 frames. Returns the largest valid length within `seconds`."""
+    want = min(int(seconds * H3_FPS), H3_MAX_FRAMES)
+    n = max(0, (want - 5) // 17)
+    return int(17 * n + 5)
+
+
+def end_state(start_path, change, dest, seed=11, keep=None):
+    """The start frame, edited so ONE thing about the subject is different.
+
+    `change` says what moved - "she has lowered into a deep crouch, knees bent".
+    Everything not named is held, because an end frame that also moved the
+    camera or relit the scene turns an interpolation into a dissolve.
+    """
+    from PIL import Image
+    plate = Image.open(start_path)
+    rel = stage(start_path, "pin_src.png")
+    hold = keep or ("her face, her hair, her clothing and the whole background")
+    return qwen_edit(
+        rel, rel,
+        "The same subject in the same place, but %s. Keep %s exactly as they "
+        "are. Same camera position, same framing, same light. Only the pose "
+        "changes." % (change, hold),
+        dest, seed=seed, w=plate.size[0], h=plate.size[1], anime=0.0)
+
+
+def pin_shot(start_path, end_path, prompt, dest, seconds=8, seed=42,
+             force=False):
+    """H3 fl2va between two chosen frames.
+
+    The node hardcodes 768x1344 and renders portrait in silence unless width and
+    height are passed - a bug this project has already paid for once.
+    """
+    from PIL import Image
+    ok, rate, longest = pin_feasible(start_path, end_path, seconds)
+    if not ok and not force:
+        raise RuntimeError(
+            "the two pinned frames are too alike for %.1fs: %.4f change per "
+            "second, and below %.3f the model invents rather than interpolates "
+            "(it has produced a second copy of the subject and fire on water). "
+            "Either pick a bigger change, or run this pair at %.1fs or less."
+            % (seconds, rate, MIN_PIN_RATE, longest))
+    if not ok:
+        print("  ! forced: %.4f/s is under %.3f - expect invention"
+              % (rate, MIN_PIN_RATE), flush=True)
+    COMFY, HOST, run, set_path, load_wf, ensure_local = _comfy()
+    w, h = Image.open(start_path).size
+    a = stage(start_path, "pin_a.png")
+    b = stage(end_path, "pin_b.png")
+    wf = load_wf("62_minimax_h3_fl.json")
+    set_path(wf, "8.inputs.image", a)
+    set_path(wf, "9.inputs.image", b)
+    set_path(wf, "20.inputs.prompt", prompt)
+    set_path(wf, "20.inputs.length", h3_length(seconds))
+    set_path(wf, "20.inputs.width", w)
+    set_path(wf, "20.inputs.height", h)
+    set_path(wf, "33.inputs.noise_seed", seed)
+    set_path(wf, "51.inputs.filename_prefix", "claude-generated/compose/pinned")
+    _, outs = run(HOST, wf, quiet=True)
+    mp4 = next((o for o in outs if str(o).lower().endswith((".mp4", ".webm"))),
+               None)
+    if not mp4:
+        raise RuntimeError("the pinned render returned no video: %s" % outs)
+    if os.path.exists(dest):
+        os.remove(dest)
+    ensure_local(mp4, dest)
+    return dest
+
+
+def pinned(char_id, place_id, change, prompt=None, plate_key=None,
+           view="turn_front", stand=0.28, cx=0.42, seconds=8, seed=42,
+           tag=None):
+    """The whole path: compose a start, edit an end, interpolate between them."""
+    start, plate_p = compose(char_id, place_id, plate_key, view, "full", cx,
+                             seed=seed, stand=stand,
+                             tag=(tag or "%s__%s__pin" % (char_id, place_id)))
+    work = os.path.dirname(start)
+    end = end_state(start, change, os.path.join(work, "05_end.png"), seed=seed)
+    ok, rate, longest = pin_feasible(start, end, seconds)
+    print("  end state -> %s" % end, flush=True)
+    print("  pin rate  -> %.4f/s (floor %.3f); this pair carries up to %.1fs"
+          % (rate, MIN_PIN_RATE, longest), flush=True)
+    vid = pin_shot(start, end,
+                   prompt or ("The subject %s. The camera does not move." % change),
+                   os.path.join(work, "pinned.mp4"), seconds=seconds, seed=seed)
+    return start, end, vid
+
+
 MATRIX = [
     ("bai-liwen", "night-market", "night_wide", "turn_front", "full", 0.42),
     ("bai-liwen", "night-market", "night_wide", "face_three_quarter", "close", 0.38),
@@ -517,6 +653,12 @@ def main():
                     help="0 = at the camera, 1 = at the horizon. Uses the depth "
                          "pass and derives the height from it, instead of the "
                          "framing table.")
+    ap.add_argument("--pin", metavar="CHANGE",
+                    help="make a PINNED shot: compose a start frame, edit it so "
+                         "CHANGE has happened, and interpolate between the two "
+                         "on H3. e.g. --pin \"she has lowered into a deep "
+                         "crouch, knees bent\"")
+    ap.add_argument("--seconds", type=float, default=8.0)
     ap.add_argument("--matrix", action="store_true")
     a = ap.parse_args()
 
@@ -526,6 +668,13 @@ def main():
         ap.error("need --character and --place, or --matrix")
 
     for c, p, pl, v, f, cx in jobs:
+        if a.pin:
+            print("%s in %s - pinned: %s" % (c, p, a.pin), flush=True)
+            s, e, vid = pinned(c, p, a.pin, plate_key=pl, view=v,
+                               stand=(a.stand if a.stand is not None else 0.28),
+                               cx=cx, seconds=a.seconds, seed=a.seed)
+            print("  -> %s" % vid, flush=True)
+            continue
         print("%s in %s (%s, %s)" % (c, p, f, v), flush=True)
         try:
             out, plate = compose(c, p, pl, v, f, cx, a.light, a.seed,
