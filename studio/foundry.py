@@ -70,7 +70,7 @@ def list_assets(atype):
 
 
 def new_asset(atype, name, style, selections, notes="", level=3,
-              parent="", overrides=None):
+              parent="", overrides=None, tag_notes=""):
     if atype not in TYPES:
         raise ValueError(atype)
     aid = _slug(name)
@@ -80,7 +80,8 @@ def new_asset(atype, name, style, selections, notes="", level=3,
          "selections": selections, "notes": notes,
          "level": int(level or 3), "parent": parent or "", "overrides": overrides or {},
          "created": time.strftime("%Y-%m-%d %H:%M"),
-         "compiled": compile_asset(atype, style, selections, notes),
+         "tag_notes": tag_notes,
+         "compiled": compile_asset(atype, style, selections, notes, tag_notes),
          "images": {}, "assignments": {}}
     save_asset(a)
     return a
@@ -88,7 +89,8 @@ def new_asset(atype, name, style, selections, notes="", level=3,
 
 def recompile(a):
     a["compiled"] = compile_asset(a["type"], a["style"], a["selections"],
-                                  a.get("notes", ""))
+                                  a.get("notes", ""),
+                                  a.get("tag_notes", ""))
     save_asset(a)
     return a
 
@@ -120,18 +122,21 @@ def style_info(style):
 
 # ── compilers ───────────────────────────────────────────────────────────────────────
 
-def compile_asset(atype, style, sel, notes=""):
+def compile_asset(atype, style, sel, notes="", tag_notes=""):
     D = load_dict()
     fn = {"character": _c_character, "place": _c_place, "costume": _c_costume,
           "prop": _c_prop, "music": _c_music}[atype]
-    return fn(D, style, sel, notes)
+    try:
+        return fn(D, style, sel, notes, tag_notes)
+    except TypeError:
+        return fn(D, style, sel, notes)   # types without a tag stack
 
 
 def _join(parts, sep=", "):
     return sep.join(p for p in parts if p)
 
 
-def _c_character(D, style, sel, notes):
+def _c_character(D, style, sel, notes, tag_notes=""):
     g = lambda sub: _frag(D, "character", sub, sel.get(sub, ""))
     arche = g("archetype") or "a person"
     art, _, noun = arche.partition(" ")
@@ -184,7 +189,7 @@ def _c_character(D, style, sel, notes):
                       sel.get("age", ""), ""),
                   {"stubble": "stubble", "beard": "beard", "moustache": "mustache",
                    "goatee": "goatee"}.get(sel.get("facial_hair", ""), ""),
-                  notes])
+                  notes, tag_notes])
     return {"clause": clause, "short": short, "tags": tags, "delivery": delivery,
             "voice": sel.get("voice", ""),
             "voice_desc": "a %s voice" % delivery}

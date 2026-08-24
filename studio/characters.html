@@ -135,6 +135,8 @@ function openChar(src,id){
                expressions:"expressions",presentation:"presentation set",mesh:"3D mesh"};
   $("#sheet").innerHTML=`
     <button class="x" onclick="closeModal()">close</button>
+    ${c.source==="foundry"?`<button class="x small" style="margin-right:6px"
+       onclick="renameChar()">rename</button>`:""}
     <h1>${esc(c.name)}
       <span class="lvl l${c.level}" style="position:static;margin-left:6px">
         ${c.level<1?"draft — not castable":"level "+c.level+" · "+esc(levelName(c.level))}</span></h1>
@@ -163,6 +165,16 @@ function openChar(src,id){
   $("#modal").classList.add("on");
 }
 function closeModal(){$("#modal").classList.remove("on");}
+async function renameChar(){
+  if(!CUR) return;
+  const name=prompt("New name for this character", CUR.name);
+  if(name===null) return;
+  if(!name.trim()) return note("a name cannot be empty",true);
+  await api("/api/foundry/rename",{type:"character",id:CUR.id,name:name.trim()});
+  note("renamed to "+name.trim());
+  await boot();
+  openChar(CUR.source,CUR.id);
+}
 async function buildPack(){
   if(!CUR) return;
   if(CUR.source!=="foundry")

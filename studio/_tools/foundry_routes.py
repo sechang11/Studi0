@@ -360,7 +360,7 @@ def _seeds_job(jid, atype, aid):
             raise RuntimeError("ComfyUI will not come up")
         plan = FY.seed_plan(a)
         with _LOCK:
-            JOBS[jid]["total"] = len(plan)
+            JOBS[jid]["total"] = len(plan) + (1 if atype == "character" else 0)
         adir = FY.asset_dir(atype, aid)
         run, set_path, load_wf, ensure_local, HOST, COMFY = _comfy()
 
@@ -399,11 +399,10 @@ def _seeds_job(jid, atype, aid):
                         fb = os.path.join(adir, "base_fullbody.png")
                         a["_ipa_ref"] = _stage(COMFY, fb,
                                                "foundry_ref_%s.png" % aid)
-                        view = {"turn_threequarter": "three-quarter view",
-                                "turn_side": "from side, profile",
-                                "turn_back": "from behind"}[key]
-                        _render_direct(a, "%s, full body, standing, %s, plain "
-                                       "background" % (a["compiled"]["tags"], view),
+                        # the plan carries the view text - no key table to fall
+                        # out of step with CHAR_TURN_VIEWS
+                        _render_direct(a, "%s, full body, %s, plain background"
+                                       % (a["compiled"]["tags"], prompt),
                                        dest, seed=23)
                     else:
                         _render_turnaround(a, "base_fullbody.png", prompt, dest,
@@ -424,6 +423,17 @@ def _seeds_job(jid, atype, aid):
             FY.save_asset(a2)
             with _LOCK:
                 JOBS[jid]["done"] += 1
+        if atype == "character":
+            _log(jid, "mesh")
+            try:
+                _render_mesh(FY.load_asset(atype, aid), adir, jid)
+                a3 = FY.load_asset(atype, aid)
+                a3["mesh"] = "mesh.glb"
+                FY.save_asset(a3)
+            except Exception as e:
+                # a pack without geometry is still worth keeping - it reports 95%
+                # and says why, rather than throwing away nineteen good renders
+                _log(jid, "mesh failed: %s" % str(e)[:120])
         _finish(jid)
     except Exception as e:
         _finish(jid, str(e)[:300])
@@ -690,3 +700,83 @@ def roster():
             "counts": {"total": len(out),
                        "castable": sum(1 for r in out if r["level"] >= 1),
                        "draft": sum(1 for r in out if r["level"] < 1)}}, 200
+
+
+# ─── the mesh step ──────────────────────────────────────────────────────────────────
+
+def _render_mesh(a, adir, jid):
+    """base_fullbody -> a GLB. The recipe is terra_3d's measured winner, reached
+    through the shipped workflow rather than a second opinion about settings."""
+    run, set_path, load_wf, ensure_local, HOST, COMFY = _comfy()
+    src = os.path.join(adir, "base_fullbody.png")
+    if not os.path.exists(src):
+        raise RuntimeError("no base_fullbody to mesh from")
+    staged = _stage(COMFY, src, "foundry_mesh_%s.png" % a["id"])
+    wf = load_wf("24_hunyuan3d_mesh.json")
+    set_path(wf, "2.inputs.image", staged)
+    set_path(wf, "10.inputs.filename_prefix",
+             "claude-generated/foundry/mesh_%s" % a["id"])
+    _, outs = run(HOST, wf, quiet=True)
+    glb = next((o for o in outs if str(o).lower().endswith(".glb")), None)
+    if not glb:
+        raise RuntimeError("the mesh graph returned no glb")
+    dest = os.path.join(adir, "mesh.glb")
+    if os.path.exists(dest):
+        os.remove(dest)
+    ensure_local(glb, dest)
+    return dest
+
+
+# ─── legacy cast -> foundry ─────────────────────────────────────────────────────────
+
+def import_legacy(data):
+    """Lift a legacy cast card onto the ladder. Its words come across; its pixels
+    are re-rendered, because the pack wants one consistent set and a legacy sheet
+    was made by a different tool at a different size."""
+    cid = data["id"]
+    p = os.path.join(CAST_DIR, cid + ".json")
+    if not os.path.isfile(p):
+        return {"error": "no legacy card %r" % cid}, 404
+    d = json.load(open(p, encoding="utf-8"))
+    name = data.get("name") or d.get("name") or cid
+    style = data.get("style", "anime")
+
+    # the words: prose first because it reads as a person, tags after because they
+    # are what the drawn engines actually consume
+    notes = data.get("notes")
+    if notes is None:
+        bits = [d.get("prose") or d.get("desc") or "", d.get("tags") or ""]
+        notes = ", ".join(b.strip() for b in bits if b and b.strip())
+    a = FY.new_asset("character", name, style, data.get("selections") or {}, notes,
+                     level=int(data.get("level") or 1),
+                     tag_notes=data.get("tag_notes", ""))
+    a["imported_from"] = cid
+    a["provenance"] = d.get("provenance", "")
+    a["provenance_note"] = d.get("provenance_note", "")
+    if d.get("lora"):
+        a["legacy_lora"] = d["lora"]
+    sheet = d.get("sheet") or ""
+    if sheet:
+        try:
+            from epic import COMFY
+            src = os.path.join(COMFY, "input", sheet)
+            if os.path.isfile(src):
+                shutil.copy(src, os.path.join(FY.asset_dir("character", a["id"]),
+                                              "seed_source.png"))
+                a["seed_source"] = "seed_source.png"
+        except Exception:
+            pass
+    FY.save_asset(a)
+    return {"ok": True, "id": a["id"], "compiled": a["compiled"]}, 200
+
+
+def rename(data):
+    """Change the display name. The id is a slug that films already reference, so
+    it does NOT move - renaming must not orphan a cast entry pointing at it."""
+    a = FY.load_asset(data["type"], data["id"])
+    new = (data.get("name") or "").strip()
+    if not new:
+        return {"error": "a name cannot be empty"}, 400
+    a["name"] = new
+    FY.save_asset(a)
+    return {"ok": True, "id": a["id"], "name": new}, 200

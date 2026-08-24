@@ -2649,6 +2649,7 @@ class H(http.server.SimpleHTTPRequestHandler):
                      "/api/foundry/seeds", "/api/foundry/apply",
                      "/api/foundry/send", "/api/foundry/variant",
                      "/api/foundry/describe", "/api/foundry/from_image",
+                     "/api/foundry/import_legacy", "/api/foundry/rename",
                      "/api/character/upload", "/api/character/create",
                      "/api/voice/demo", "/api/voice/add",
                      "/api/character/suite", "/api/character/analyse",
@@ -2952,7 +2953,9 @@ class H(http.server.SimpleHTTPRequestHandler):
                   "seeds": fo.seeds, "apply": fo.apply_costume,
                   "send": fo.send_to_film, "variant": fo.variant,
                   "describe": fo.describe,
-                  "from_image": fo.from_image}[p[len("/api/foundry/"):]]
+                  "from_image": fo.from_image,
+                  "import_legacy": fo.import_legacy,
+                  "rename": fo.rename}[p[len("/api/foundry/"):]]
             try:
                 body, code = fn(data)
             except KeyError as e:

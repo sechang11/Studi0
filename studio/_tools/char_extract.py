@@ -211,9 +211,15 @@ def main():
 
     agreed, conflicts = vote(D, caps)
     text = merge_text(caps)
+    subs = [s for s in (D.get("character") or {}).get("subs", {}) if s != "voice"]
+    decided = set(agreed) | {c["sub"] for c in conflicts}
+    gaps = sorted(s for s in subs if s not in decided)
     result = {"sources": len(paths), "captioned": len(got),
               "description": text, "selections": agreed,
               "conflicts": conflicts,
+              # the frame never showed these. The renderer WILL invent them; this
+              # is the list of what it is inventing.
+              "coverage": {"established": sorted(decided), "gaps": gaps},
               "captions": [{"image": os.path.basename(p), "text": c}
                            for p, c in caps]}
 
@@ -234,6 +240,10 @@ def main():
     print("agreed     :")
     for k, v in sorted(agreed.items()):
         print("   %-14s %s" % (k, v))
+    if gaps:
+        print("not shown  : (the images never established these - the renderer")
+        print("             will invent them unless you set them)")
+        print("   %s" % ", ".join(gaps))
     if conflicts:
         print("conflicts  : (not decided - settle these yourself)")
         for c in conflicts:
