@@ -1235,6 +1235,7 @@ STUDIO_NAV = [
     ]),
     ("cast", [
         ("/characters", "characters", "characters.html"),
+        ("/verify/motion", "motion", "motion.html"),
         ("/voices", "voices", "voices.html"),
         ("/identity", "identity", "identity.html"),
         ("/verify", "verify", "verify.html"),
@@ -1542,6 +1543,28 @@ class H(http.server.SimpleHTTPRequestHandler):
         # /characters - the merged roster+dossier. /cast and /character/new are the
         # same page now and redirect, because both are linked from ten hand-written
         # navs and sit in people's history.
+        # /verify/motion - the same claim/evidence/verdict shape as the card
+        # verifier, for clips instead of panels.
+        if path in ("/verify/motion", "/motion", "/motion.html"):
+            return self._page("motion.html")
+        if path == "/api/motion/clips":
+            p = f"{HERE}/motion_verify.json"
+            if not os.path.isfile(p):
+                return self._send([])
+            return self._send(json.load(open(p, encoding="utf-8")))
+        if path == "/api/motion/verdicts":
+            p = f"{HERE}/motion_verdicts.json"
+            if not os.path.isfile(p):
+                return self._send({})
+            return self._send(json.load(open(p, encoding="utf-8")))
+        if path.startswith("/api/motion/media/"):
+            rel = urllib.parse.unquote(path[len("/api/motion/media/"):])
+            base = os.path.realpath(HERE)
+            fp = os.path.realpath(os.path.join(base, rel))
+            if not (fp.startswith(base + os.sep) and os.path.isfile(fp)):
+                return self._send({"error": "no such clip"}, 404)
+            return self._send_file(fp, MIME.get(os.path.splitext(fp)[1].lower(),
+                                                "application/octet-stream"))
         if path in ("/characters", "/characters.html"):
             return self._page("characters.html")
         if path in ("/cast", "/cast.html", "/character/new", "/newchar"):
@@ -2650,6 +2673,7 @@ class H(http.server.SimpleHTTPRequestHandler):
                      "/api/foundry/send", "/api/foundry/variant",
                      "/api/foundry/describe", "/api/foundry/from_image",
                      "/api/foundry/import_legacy", "/api/foundry/rename",
+                     "/api/motion/verdict",
                      "/api/character/upload", "/api/character/create",
                      "/api/voice/demo", "/api/voice/add",
                      "/api/character/suite", "/api/character/analyse",
@@ -2944,6 +2968,21 @@ class H(http.server.SimpleHTTPRequestHandler):
                 traceback.print_exc()
                 return self._send({"error": str(e)[:300]}, 500)
             return self._send(body, code)
+        if p == "/api/motion/verdict":
+            fp = f"{HERE}/motion_verdicts.json"
+            cur = {}
+            if os.path.isfile(fp):
+                try:
+                    cur = json.load(open(fp, encoding="utf-8"))
+                except Exception:
+                    cur = {}
+            vid = str(data.get("id") or "")
+            verdict = str(data.get("verdict") or "")
+            if not vid or verdict not in ("yes", "partly", "no"):
+                return self._send({"error": "id and a yes/partly/no verdict"}, 400)
+            cur[vid] = verdict
+            json.dump(cur, open(fp, "w", encoding="utf-8"), indent=1)
+            return self._send({"ok": True, "answered": len(cur)})
         if p.startswith("/api/foundry/"):
             fo = _foundry_routes()
             if not fo:
