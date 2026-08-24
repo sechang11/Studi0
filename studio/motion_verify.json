@@ -1,40 +1,8 @@
 [
  {
-  "id": "noenh",
-  "shot": "010",
-  "question": "The woman lowers into a crouch, and the camera stays exactly where it is.",
-  "selection": {
-   "camera": "static",
-   "action": "crouch",
-   "pace": "steady",
-   "ambient": [
-    "none"
-   ]
-  },
-  "action": "lowers into a crouch, the whole body folding down, at a steady, natural pace",
-  "ambient": "arm: noenh",
-  "file": "films/motion-diag/takes/010/ltx_t598267623.mp4"
- },
- {
-  "id": "locked",
-  "shot": "020",
-  "question": "The woman lowers into a crouch, and the camera stays exactly where it is.",
-  "selection": {
-   "camera": "static",
-   "action": "crouch",
-   "pace": "steady",
-   "ambient": [
-    "none"
-   ]
-  },
-  "action": "lowers into a crouch, the whole body folding down, at a steady, natural pace. The camera does not move at all: it is loc",
-  "ambient": "arm: locked",
-  "file": "films/motion-diag/takes/020/ltx_t598427648.mp4"
- },
- {
-  "id": "shout",
+  "id": "requested",
   "shot": "030",
-  "question": "The woman lowers into a crouch, and the camera stays exactly where it is.",
+  "question": "She lowers into a crouch, and the camera stays exactly where it is.",
   "selection": {
    "camera": "static",
    "action": "crouch",
@@ -44,7 +12,23 @@
    ]
   },
   "action": "SHE CROUCHES DOWN. lowers into a crouch, the whole body folding down, at a steady, natural pace. The camera does not mov",
-  "ambient": "arm: shout",
+  "ambient": "LTX-2.5, action REQUESTED in prose - enhancer off, action first and in capitals, explicit locked-off camera",
   "file": "films/motion-diag/takes/030/ltx_t598537662.mp4"
+ },
+ {
+  "id": "pinned",
+  "shot": "-",
+  "question": "She lowers into a crouch, and the camera stays exactly where it is.",
+  "selection": {
+   "camera": "pinned",
+   "action": "crouch",
+   "pace": "steady",
+   "ambient": [
+    "none"
+   ]
+  },
+  "action": "H3 fl2va, action PINNED - first frame standing, last frame crouched. The motion is the interpolation between two states, not a request.",
+  "ambient": "start and end frames both chosen; the prompt only describes",
+  "file": "verify_clips/pinned_crouch.mp4"
  }
 ]
