@@ -1,8 +1,8 @@
 [
  {
-  "id": "action_crouch",
+  "id": "noenh",
   "shot": "010",
-  "question": "The woman lowers into a crouch.",
+  "question": "The woman lowers into a crouch, and the camera stays exactly where it is.",
   "selection": {
    "camera": "static",
    "action": "crouch",
@@ -12,56 +12,39 @@
    ]
   },
   "action": "lowers into a crouch, the whole body folding down, at a steady, natural pace",
-  "ambient": "",
-  "file": "films/motion-verify/takes/010/ltx_t597115527.mp4"
+  "ambient": "arm: noenh",
+  "file": "films/motion-diag/takes/010/ltx_t598267623.mp4"
  },
  {
-  "id": "action_turn",
+  "id": "locked",
   "shot": "020",
-  "question": "The woman turns to face the camera, and the framing never moves.",
+  "question": "The woman lowers into a crouch, and the camera stays exactly where it is.",
   "selection": {
    "camera": "static",
-   "action": "turn_to",
-   "pace": "slow",
+   "action": "crouch",
+   "pace": "steady",
    "ambient": [
     "none"
    ]
   },
-  "action": "turns to face the camera, the whole body coming round with the head, slowly and deliberately",
-  "ambient": "",
-  "file": "films/motion-verify/takes/020/ltx_t597225555.mp4"
+  "action": "lowers into a crouch, the whole body folding down, at a steady, natural pace. The camera does not move at all: it is loc",
+  "ambient": "arm: locked",
+  "file": "films/motion-diag/takes/020/ltx_t598427648.mp4"
  },
  {
-  "id": "ambient_on",
+  "id": "shout",
   "shot": "030",
-  "question": "Rain is falling and at least one vehicle moves in the background.",
+  "question": "The woman lowers into a crouch, and the camera stays exactly where it is.",
   "selection": {
    "camera": "static",
-   "action": "stand",
-   "pace": "still",
-   "ambient": [
-    "rain",
-    "traffic"
-   ]
-  },
-  "action": "stands still, breathing, weight settled, barely moving",
-  "ambient": "rain falls steadily through the whole frame, vehicles pass in the background",
-  "file": "films/motion-verify/takes/030/ltx_t597335578.mp4"
- },
- {
-  "id": "ambient_off",
-  "shot": "040",
-  "question": "The background is still - no rain falling and no vehicle moving.",
-  "selection": {
-   "camera": "static",
-   "action": "stand",
-   "pace": "still",
+   "action": "crouch",
+   "pace": "steady",
    "ambient": [
     "none"
    ]
   },
-  "action": "stands still, breathing, weight settled, barely moving",
-  "ambient": "",
-  "file": "films/motion-verify/takes/040/ltx_t597455593.mp4"
+  "action": "SHE CROUCHES DOWN. lowers into a crouch, the whole body folding down, at a steady, natural pace. The camera does not mov",
+  "ambient": "arm: shout",
+  "file": "films/motion-diag/takes/030/ltx_t598537662.mp4"
  }
 ]
