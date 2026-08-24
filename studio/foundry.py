@@ -27,7 +27,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 FOUNDRY = os.path.join(HERE, "foundry")
 DICT_PATH = os.path.join(FOUNDRY, "dictionary.json")
 
-TYPES = ("character", "place", "costume", "prop", "music")
+TYPES = ("character", "place", "costume", "prop", "music", "motion")
 
 
 def load_dict():
@@ -125,7 +125,7 @@ def style_info(style):
 def compile_asset(atype, style, sel, notes="", tag_notes=""):
     D = load_dict()
     fn = {"character": _c_character, "place": _c_place, "costume": _c_costume,
-          "prop": _c_prop, "music": _c_music}[atype]
+          "prop": _c_prop, "music": _c_music, "motion": _c_motion}[atype]
     try:
         return fn(D, style, sel, notes, tag_notes)
     except TypeError:
@@ -249,6 +249,21 @@ def _c_prop(D, style, sel, notes):
     g = lambda sub: _frag(D, "prop", sub, sel.get(sub, ""))
     clause = _join([g("category"), g("material"), g("condition"), g("aura"), notes])
     return {"clause": clause}
+
+
+def _c_motion(D, style, sel, notes, tag_notes=""):
+    """A shot's movement, as a beat can consume it."""
+    g = lambda sub: _frag(D, "motion", sub, sel.get(sub, ""))
+    action = g("action")
+    pace = g("pace")
+    # pace qualifies the action rather than trailing it, so "walks steadily
+    # toward the camera, quickly" does not happen
+    act = _join([a for a in (action, pace) if a]) if action else ""
+    amb = _join(_frag(D, "motion", "ambient", sel.get("ambient", [])))
+    return {"action": _join([act, notes]),
+            "camera": g("camera"),
+            "ambient": amb,
+            "clause": _join([act, g("camera"), amb, notes])}
 
 
 def _c_music(D, style, sel, notes):

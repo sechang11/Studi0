@@ -1566,5 +1566,242 @@
    "no_people",
    "anchor mode"
   ]
+ },
+ "motion": {
+  "main": true,
+  "label": "Motion",
+  "subs": {
+   "camera": {
+    "label": "Camera move",
+    "options": [
+     {
+      "id": "static",
+      "label": "Static",
+      "frag": ""
+     },
+     {
+      "id": "push_in",
+      "label": "Push in",
+      "frag": "as the camera pushes in slowly"
+     },
+     {
+      "id": "pull_back",
+      "label": "Pull back",
+      "frag": "as the camera pulls back"
+     },
+     {
+      "id": "pan",
+      "label": "Pan",
+      "frag": "as the camera pans across"
+     },
+     {
+      "id": "follow",
+      "label": "Follow",
+      "frag": "with the camera following the subject"
+     },
+     {
+      "id": "circle",
+      "label": "Circle",
+      "frag": "as the camera circles around the subject"
+     },
+     {
+      "id": "handheld",
+      "label": "Handheld",
+      "frag": "the camera handheld and unsteady"
+     },
+     {
+      "id": "tilt_up",
+      "label": "Tilt up",
+      "frag": "as the camera tilts upward"
+     },
+     {
+      "id": "tilt_down",
+      "label": "Tilt down",
+      "frag": "as the camera tilts downward"
+     }
+    ]
+   },
+   "action": {
+    "label": "What they do",
+    "options": [
+     {
+      "id": "stand",
+      "label": "Stand still",
+      "frag": "stands still, breathing, weight settled"
+     },
+     {
+      "id": "walk_to",
+      "label": "Walk toward camera",
+      "frag": "walks steadily toward the camera"
+     },
+     {
+      "id": "walk_away",
+      "label": "Walk away",
+      "frag": "walks away from the camera, unhurried"
+     },
+     {
+      "id": "turn_to",
+      "label": "Turn to camera",
+      "frag": "turns to face the camera, the whole body coming round with the head"
+     },
+     {
+      "id": "look_up",
+      "label": "Look up",
+      "frag": "raises their head and looks up"
+     },
+     {
+      "id": "look_off",
+      "label": "Look off",
+      "frag": "turns their head to look off to one side"
+     },
+     {
+      "id": "reach",
+      "label": "Reach for something",
+      "frag": "reaches out with one hand, the shoulder and torso going with it"
+     },
+     {
+      "id": "crouch",
+      "label": "Crouch down",
+      "frag": "lowers into a crouch, the whole body folding down"
+     },
+     {
+      "id": "rise",
+      "label": "Rise",
+      "frag": "straightens up from a crouch to standing"
+     },
+     {
+      "id": "run",
+      "label": "Run",
+      "frag": "runs, the whole body committed to the stride"
+     },
+     {
+      "id": "stumble",
+      "label": "Stumble",
+      "frag": "loses balance and catches themselves"
+     },
+     {
+      "id": "recoil",
+      "label": "Recoil",
+      "frag": "pulls sharply back, the whole body flinching"
+     },
+     {
+      "id": "gesture",
+      "label": "Gesture",
+      "frag": "makes one clear gesture with the arm"
+     },
+     {
+      "id": "nod",
+      "label": "Nod",
+      "frag": "nods once, deliberately"
+     },
+     {
+      "id": "laugh",
+      "label": "Laugh",
+      "frag": "laughs, the shoulders going with it"
+     },
+     {
+      "id": "speak",
+      "label": "Speak",
+      "frag": "speaks, mouth moving"
+     }
+    ]
+   },
+   "pace": {
+    "label": "Pace",
+    "options": [
+     {
+      "id": "still",
+      "label": "Almost still",
+      "frag": "barely moving"
+     },
+     {
+      "id": "slow",
+      "label": "Slow",
+      "frag": "slowly and deliberately"
+     },
+     {
+      "id": "steady",
+      "label": "Steady",
+      "frag": "at a steady, natural pace"
+     },
+     {
+      "id": "quick",
+      "label": "Quick",
+      "frag": "quickly"
+     },
+     {
+      "id": "sudden",
+      "label": "Sudden",
+      "frag": "suddenly, all at once"
+     }
+    ]
+   },
+   "ambient": {
+    "label": "What else moves",
+    "multi": true,
+    "options": [
+     {
+      "id": "none",
+      "label": "Nothing else",
+      "frag": ""
+     },
+     {
+      "id": "crowd",
+      "label": "People passing",
+      "frag": "people move through the background continuously"
+     },
+     {
+      "id": "rain",
+      "label": "Rain",
+      "frag": "rain falls steadily through the whole frame"
+     },
+     {
+      "id": "snow",
+      "label": "Snow",
+      "frag": "snow drifts down across the frame"
+     },
+     {
+      "id": "leaves",
+      "label": "Leaves",
+      "frag": "leaves drift across the frame"
+     },
+     {
+      "id": "steam",
+      "label": "Steam",
+      "frag": "steam rises and curls"
+     },
+     {
+      "id": "lanterns",
+      "label": "Lanterns swaying",
+      "frag": "hanging lanterns sway gently"
+     },
+     {
+      "id": "water",
+      "label": "Water",
+      "frag": "water moves continuously"
+     },
+     {
+      "id": "traffic",
+      "label": "Traffic",
+      "frag": "vehicles pass in the background"
+     },
+     {
+      "id": "cloth",
+      "label": "Cloth in wind",
+      "frag": "hanging cloth and banners lift in the wind"
+     },
+     {
+      "id": "light",
+      "label": "Light shifting",
+      "frag": "the light shifts and flickers across the scene"
+     },
+     {
+      "id": "dust",
+      "label": "Dust motes",
+      "frag": "dust drifts in the air"
+     }
+    ]
+   }
+  }
  }
 }
