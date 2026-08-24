@@ -35,10 +35,35 @@ FOUNDRY = os.path.join(ROOT, "studio", "foundry", "characters")
 MIN_DIFFER = 0.055          # "these two must not be the same picture"
 MIN_TURN = 0.070            # the camera moved, so more should have changed
 
+# Expressions are judged on the MOUTH, which is where expression actually lives,
+# and which separates the styles far better than the whole frame. Measured across
+# one photoreal and one anime pack, neutral vs each of five expressions:
+#     region   photoreal        anime
+#     whole    0.048 - 0.077    0.095 - 0.166
+#     face     0.045 - 0.100    0.145 - 0.232
+#     mouth    0.058 - 0.109    0.179 - 0.248     <- widest floor
+# A photoreal face expresses with far fewer pixels than a cel face, so a
+# whole-frame threshold set on anime cries wolf on every photoreal pack - and a
+# check that cries wolf is ignored within a day. Two identical frames score 0.0,
+# so 0.050 still catches the real failure this exists for.
+MIN_EXPR = 0.050
 
-def _load(path, size=96):
+
+def _load(path, size=96, region=None):
+    """region='mouth' crops to where expression actually lives.
+
+    Expressions are judged on the FACE, not the frame. A photoreal pack keeps a
+    real background across every view, so a genuine smile moves a small fraction
+    of the pixels and a whole-frame distance reads it as "nothing changed" -
+    measured, on two packs whose expressions were plainly correct by eye. An
+    anime pack has a near-blank ground, which is why this only showed up here.
+    """
     from PIL import Image
-    im = Image.open(path).convert("L").resize((size, size))
+    im = Image.open(path).convert("L")
+    if region == "mouth":
+        W, H = im.size
+        im = im.crop((int(W * 0.32), int(H * 0.28), int(W * 0.68), int(H * 0.60)))
+    im = im.resize((size, size))
     return list(im.tobytes())
 
 
@@ -51,28 +76,30 @@ def check(cid, verbose=True):
     ap = os.path.join(d, "asset.json")
     if not os.path.isfile(ap):
         return {"id": cid, "error": "no such character"}
-    have = {}
+    have, faces = {}, {}
     for fn in os.listdir(d):
         if fn.endswith(".png"):
             try:
                 have[fn[:-4]] = _load(os.path.join(d, fn))
+                faces[fn[:-4]] = _load(os.path.join(d, fn), region="mouth")
             except Exception:
                 pass
     issues = []
 
-    def cmp(a, b, floor, why):
-        if a not in have or b not in have:
+    def cmp(a, b, floor, why, src=None):
+        src = src if src is not None else have
+        if a not in src or b not in src:
             return None
-        dd = _dist(have[a], have[b])
+        dd = _dist(src[a], src[b])
         if dd < floor:
             issues.append({"pair": [a, b], "distance": round(dd, 4),
                            "floor": floor, "why": why})
         return dd
 
     for k in [k for k in have if k.startswith("expr_") and k != "expr_neutral"]:
-        cmp(k, "expr_neutral", MIN_DIFFER,
+        cmp(k, "expr_neutral", MIN_EXPR,
             "the expression did not move the face - the identity reference is "
-            "outweighing the instruction")
+            "outweighing the instruction", src=faces)
 
     pres = sorted(k for k in have if k.startswith("pres_"))
     for i in range(len(pres)):

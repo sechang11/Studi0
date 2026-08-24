@@ -88,7 +88,7 @@ def stage(src, name):
     return name
 
 
-def qwen_edit(ref1, ref2, prompt, dest, seed=7, w=1664, h=928, anime=0.6):
+def qwen_edit(ref1, ref2, prompt, dest, seed=7, w=1664, h=928, anime=0.0):
     COMFY, HOST, run, set_path, load_wf, ensure_local = _comfy()
     wf = load_wf("14_qwen_edit_ref.json")
     set_path(wf, "8.inputs.image", ref1)
@@ -236,15 +236,20 @@ def compose(char_id, place_id, plate_key=None, view="turn_front",
     say("  2 relight")
     rel_ref = stage(rough_p, "compose_rough.png")
     plate_ref = stage(plate_p, "compose_plate.png")
+    # the drawn styles need the storybook LoRA during the relight; the
+    # photographic ones must NOT have it or the relight redraws them as cartoons
+    style = ch.get("style", "")
+    anime_w = 0.6 if style in ("anime", "cartoon") else 0.0
     relit_p = qwen_edit(
         rel_ref, plate_ref,
         "Relight only the person in the first image so she belongs in this "
         "location: the same colour temperature and direction of light as the "
         "scene around her, light falling on her from the scene's own sources. "
         "Do not change her face, her hair, her pose or her clothing. Do not "
-        "move her. Do not change the background. %s. The location is %s."
-        % (clause, desc),
-        os.path.join(work, "03_relit.png"), seed=seed)
+        "move her. Do not change the background. %s. The location is %s. "
+        "The whole image stays %s."
+        % (clause, desc, (ch.get("compiled") or {}).get("look", "") or style),
+        os.path.join(work, "03_relit.png"), seed=seed, anime=anime_w)
 
     # 3 take only her back out
     say("  3 re-cut")
