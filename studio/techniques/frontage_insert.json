@@ -1,0 +1,29 @@
+{
+ "id": "frontage_insert",
+ "title": "Put a real shopfront into a wide plate",
+ "one_liner": "Composite a close photograph of a frontage into the archway of a wide street shot.",
+ "engine": "stills",
+ "kind": "plate build",
+ "when": "The wide shot has the geography you need, but the building in it is shut, dark, or missing the detail the film is actually about.",
+ "how": [
+  "Find the halves. No single photograph here was clean: fb-02 has an ungated left window and doors, AD_door_start has a clean right window. Each covers exactly what the other one loses.",
+  "Match the crop ASPECT to the recess before scaling, or every decal stretches.",
+  "Colour-match to CLEAN glass, never to the dark thing you are replacing - matching to what you are removing drags its darkness into the replacement.",
+  "Feather the edge, then check the corners at full resolution."
+ ],
+ "knobs": {
+  "CROP": "which part of the frontage photograph is used",
+  "RW_SRC / RW_DST": "the patch that replaces a barred window",
+  "INSIDE_MIX": "how much real interior shows through the glass"
+ },
+ "gotcha": "Do not reach for a median filter to erase a grille without checking there IS one. An autocorrelation of this frontage had no periodic peak at all, meaning the bars were door stiles and window mullions. The filter ate the shop.",
+ "files": [
+  "build/door_insert.py",
+  "build/debar.py"
+ ],
+ "example": {
+  "film": "sour-pickle-cartoon-intro",
+  "shot": "010",
+  "take": "camrw_to010"
+ }
+}

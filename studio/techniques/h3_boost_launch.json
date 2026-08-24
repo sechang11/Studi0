@@ -1,0 +1,28 @@
+{
+ "id": "h3_boost_launch",
+ "title": "One character launches another",
+ "one_liner": "A cheerleader-style boost that throws a character clear out of the top of frame.",
+ "engine": "h3",
+ "kind": "performance",
+ "when": "A big committed physical event between two characters, where the motion should carry across the cut into the next shot.",
+ "how": [
+  "Build a start frame with both characters small and BACKS TO CAMERA. H3 makes whoever is in frame the hero of that frame and will turn them round to face you given any excuse at all.",
+  "Name the gather AND the flight: the crouch, the cupped hands, the tuck, the rotation, and where he leaves frame.",
+  "Trim the take on the RISE, not at the apex - at a true apex the vertical momentum is zero, so cutting there kills the motion you are handing on."
+ ],
+ "knobs": {
+  "seed": "the only real control over how far the camera drifts",
+  "trim frame": "where the cut lands; track the character by MOTION, not colour",
+  "start-frame scale": "how big they are, which sets how much of the leap fits"
+ },
+ "gotcha": "H3 will not hold a locked camera however firmly you forbid dolly, zoom and crane. Measured here: 5.8% zoom and a 41px pan on the calmest of three seeds. Budget for it, or track it out afterwards.",
+ "files": [
+  "build/h3_run.py",
+  "build/h3_start.py"
+ ],
+ "example": {
+  "film": "sour-pickle-cartoon-intro",
+  "shot": "020",
+  "take": "high_H5520"
+ }
+}

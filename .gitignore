@@ -189,3 +189,41 @@ studio/samples/isolation/
 
 # Rejected frames: kept so a judgement is not lost, but not worth versioning.
 studio/samples/_rejected/
+
+# studio/bobblehead - the 3D section's library.
+#
+# SAME POLICY AS studio/samples/terra_3d ABOVE, and for the same reason: the meshes are
+# large and every one of them is regenerable, while the things a person actually reads are
+# small.
+#
+# WHAT STAYS TRACKED, and why each one is not a cache:
+#
+#   specs.json          the catalogue. This IS the input - every body in the library is
+#                       three fields in this file plus the shared figurine grammar in
+#                       bobble.py. Losing it loses the library; losing a .glb loses 55 s.
+#   */body.json         the record. Dials, seed, every measurement mesh_doctor returned,
+#   */head.json         the neck profile, the timings, and the error if it failed. This is
+#                       the file the /three page is drawn from and the file that makes a
+#                       rebuild reproduce rather than re-roll.
+#   */source.png        the seed image, and source_styled.png for a head. INPUT to the
+#                       pipeline rather than output of it - the same argument that keeps
+#                       terra_3d's source/ and samples/cast/<ID>/. Hunyuan3D is not
+#                       deterministic across a driver change; the picture is.
+#   */views/*.jpg       the orbit strips and close-ups. The pictures a person reads, and
+#                       what the library page shows. Small.
+#   sweeps/*/RESULT.json  the measurement a dial sweep produced. The meshes it compared
+#                       are cached below; the numbers and the verdict are not.
+#
+# WHAT DOES NOT: every mesh at every stage, and the print files derived from them. A body
+# is raw -> solid -> scaled -> body plus an offcut plus an STL and a 3MF, and at 110 mm
+# that is about 120 MB per item. Twenty-four of those is 2.9 GB into a .git already past
+# 2 GB, to store something `python3 studio/_tools/bobble.py fill` rebuilds from the two
+# tracked files above.
+#
+# They remain on disk on the box, and /three serves them from there.
+studio/bobblehead/**/*.glb
+studio/bobblehead/**/*.stl
+studio/bobblehead/**/*.3mf
+studio/bobblehead/**/*.obj
+studio/bobblehead/**/*.ply
+studio/bobblehead/**/source_rgba.png

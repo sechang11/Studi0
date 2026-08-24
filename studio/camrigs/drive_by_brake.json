@@ -1,0 +1,165 @@
+{
+ "summary": "A camera held out of a car window, square to a facade, stopped by a hard brake.",
+ "doc": "Use when a shot has to travel past something and stop on it.\n\nTHE CAMERA NEVER ROTATES. A pan rotates about the camera, so the perspective of everything\nin frame stays fixed; driving past changes your VIEWING ANGLE on a building. Sliding a\nwindow across one photograph can only ever produce a pan - unless that photograph is\nFRONTO-PARALLEL, shot square on from across the road, with both buildings already square on\nin it. Then a pure horizontal translation is geometrically correct and the shot reads as\ntravel. Choosing the right plate is most of this rig.\n\nThe check that there is no rotation left in a take: vertical edges - piers, doorframes,\ndownpipes - stay vertical for the whole shot. If they lean, the camera is turning.\n\nTHE BRAKE IS A BODY. The car decelerates; the operator does not, because inertia. They\npitch forward - and with the camera pointed 90 degrees left, forward is the FRAME'S RIGHT.\nSo the framing accelerates through the brake even though the car is slowing, then the\nreturn from maximum lean is the fastest movement in the shot. That is three phases, and\nthey come from one damped spring driven by the car's own deceleration rather than from\nthree hand-drawn curves that can drift out of agreement with each other.\n\nREAD THE REPORT BEFORE RENDERING. `camrig.py report drive_by_brake` prints framing\nvelocity over time, and the shape is testable:\n\n    phase 2 must SUSTAIN a velocity above the cruise\n    phase 3 must EXCEED phase 2\n\nA setting that fails the second test reads as a car accident: the surge collapses before\nthe brake has finished and the shot jumps straight to the snap-back. Raise `grip` or lower\n`freq` until it passes.\n\nAll positions are in PLATE PIXELS. Upscale the plate and scale the numbers with it.",
+ "params": {
+  "win_w": {
+   "default": 2600,
+   "min": 64,
+   "max": 16384,
+   "doc": "window width in plate px. Wider = more street, less travel."
+  },
+  "win_h": {
+   "default": 1464,
+   "min": 36,
+   "max": 16384,
+   "doc": "window height in plate px. Keep 16:9 against win_w."
+  },
+  "x_start": {
+   "default": 1300,
+   "min": 0,
+   "max": 32768,
+   "doc": "window centre x at the start - square on Building 1."
+  },
+  "x_rest": {
+   "default": 2480,
+   "min": 0,
+   "max": 32768,
+   "doc": "window centre x where the car stops - square on Building 2."
+  },
+  "y_center": {
+   "default": 1808,
+   "min": 0,
+   "max": 32768,
+   "doc": "window centre y. Lower to include more road."
+  },
+  "seconds": {
+   "default": 3.6,
+   "min": 0.5,
+   "max": 20.0,
+   "doc": "total shot length. Leave room after the brake to settle."
+  },
+  "t_cruise": {
+   "default": 1.35,
+   "min": 0.0,
+   "max": 15.0,
+   "doc": "seconds of constant speed before the brake bites."
+  },
+  "t_brake": {
+   "default": 0.4,
+   "min": 0.05,
+   "max": 2.0,
+   "doc": "how long the deceleration lasts. Shorter = more violent."
+  },
+  "grip": {
+   "default": 3.6,
+   "min": 0.0,
+   "max": 8.0,
+   "doc": "how loosely braced the operator is. THE MAIN DIAL. Raise for a bigger lurch."
+  },
+  "freq": {
+   "default": 0.82,
+   "min": 0.3,
+   "max": 3.0,
+   "doc": "natural frequency of the body, Hz. Lower = slower, heavier lean."
+  },
+  "damping": {
+   "default": 0.28,
+   "min": 0.05,
+   "max": 1.0,
+   "doc": "damping ratio. Under ~0.2 wobbles for too long; over ~0.5 kills phase 3."
+  },
+  "dip": {
+   "default": 0.5,
+   "min": 0.0,
+   "max": 2.0,
+   "doc": "px the frame drops per px of lean, as they fold at the waist."
+  },
+  "blur": {
+   "default": 0.8,
+   "min": 0.0,
+   "max": 2.0,
+   "doc": "directional motion blur, scaled from framing velocity. 0 to switch it off."
+  },
+  "breathe_px": {
+   "default": 2.4,
+   "min": 0.0,
+   "max": 6.0,
+   "doc": "plate-px float so held frames are not a freeze. Scale with the plate."
+  },
+  "breathe_hz": {
+   "default": 0.55,
+   "min": 0.05,
+   "max": 3.0,
+   "doc": "rate of that float."
+  },
+  "substeps": {
+   "default": 8,
+   "min": 1,
+   "max": 64,
+   "doc": "integration substeps per frame. 8 is stable; raise only if the spring is very stiff."
+  },
+  "roll_deg": {
+   "default": 1.2,
+   "min": 0.0,
+   "max": 8.0,
+   "doc": "peak wrist roll in DEGREES at a lean of 5% of win_w. Scale invariant - safe to upscale the plate."
+  }
+ },
+ "presets": {
+  "sour_pickle": {
+   "note": "THE PICKED ONE. Sour Pickle intro - a big clear three-phase brake, about 11% softer than `big`, fully settled by 3.9s.",
+   "params": {
+    "grip": 3.9,
+    "freq": 0.82,
+    "damping": 0.27,
+    "seconds": 3.9,
+    "dip": 0.52,
+    "roll_deg": 1.25
+   }
+  },
+  "big": {
+   "note": "Biggest throw and the hardest return. Needs ~4s to come to rest.",
+   "params": {
+    "grip": 4.2,
+    "freq": 0.8,
+    "damping": 0.26,
+    "seconds": 4.0,
+    "dip": 0.54,
+    "roll_deg": 1.5
+   }
+  },
+  "settled": {
+   "note": "Same shape, quickest to stop moving. Use when the cut is tight.",
+   "params": {
+    "grip": 3.2,
+    "freq": 0.92,
+    "damping": 0.33,
+    "seconds": 3.2,
+    "dip": 0.46,
+    "roll_deg": 1.0
+   }
+  },
+  "gentle": {
+   "note": "A coast to a halt rather than a stamp. Phase 2 is present but mild.",
+   "params": {
+    "grip": 2.4,
+    "freq": 0.95,
+    "damping": 0.32,
+    "seconds": 3.2,
+    "dip": 0.38,
+    "roll_deg": 0.8
+   }
+  },
+  "hang": {
+   "note": "Still accelerating when the brake ends, then hangs at full lean before snapping back. Longest settle.",
+   "params": {
+    "grip": 3.6,
+    "freq": 0.72,
+    "damping": 0.22,
+    "seconds": 4.2,
+    "dip": 0.52,
+    "roll_deg": 1.3
+   }
+  }
+ }
+}

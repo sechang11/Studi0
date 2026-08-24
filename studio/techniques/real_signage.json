@@ -1,0 +1,30 @@
+{
+ "id": "real_signage",
+ "title": "Real signage in a generated shot",
+ "one_liner": "Keep the model performance and the photograph lettering in the same frame.",
+ "engine": "h3 + opencv + birefnet",
+ "kind": "compositing",
+ "when": "Any generated shot where real text, a logo or a sign has to be legible and correctly spelled. A video model writing text produces confident nonsense, and no seed fixes it - it is not a sampling problem.",
+ "how": [
+  "Matte the characters with BiRefNet (14_birefnet_matte.json), frame by frame. A threshold matte is not good enough to carry a whole frame; that is a rotoscoping job and this is the rotoscoping tool.",
+  "DISCARD the model background rather than blending with it. Blending double-exposes, because the model REDRAWS the building rather than moving it.",
+  "cv2.findTransformECC, MOTION_AFFINE, with the characters masked OUT of the fit, gives the camera move. Crop each frame background fresh from the full-resolution plate so a push-in gains detail instead of losing it.",
+  "If the camera goes somewhere the photograph cannot follow - through a door - hand over to the model own render on a ramp."
+ ],
+ "knobs": {
+  "HANDOVER": "the scale range over which the plate gives way (1.55 to 1.95)",
+  "matte blur": "edge softness of the cutout",
+  "plate": "which photograph the background is cropped from"
+ },
+ "gotcha": "MOTION_EUCLIDEAN is RIGID - rotation and translation only, no scale. It reported a 0% zoom on a shot that is nothing but a zoom, and buried the error in a 533px pan. Use MOTION_AFFINE.",
+ "files": [
+  "build/h3_biref.py",
+  "build/h3_real.py (abandoned, kept for its --sheet diagnostic)",
+  "opencv-python-headless, installed --user on the box"
+ ],
+ "example": {
+  "film": "sour-pickle-cartoon-intro",
+  "shot": "040",
+  "take": "biref_tr040"
+ }
+}

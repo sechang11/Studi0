@@ -361,6 +361,169 @@ def repair_surface(mesh, min_component_frac=0.01, fill=True, verbose=True):
     return mesh, log
 
 
+def close_tiny_defects(mesh, rounds=3, verbose=True):
+    """Turn an almost-solid back into a solid.
+
+    *** THE DEFECTS THIS CLEANS ARE MINUSCULE AND THEY BLOCK EVERYTHING DOWNSTREAM. ***
+    MEASURED on a Poisson reconstruction of a Hunyuan3D figure: **2 non-manifold edges out
+    of 3,577,969**, 0.0% by any rounding. `is_watertight` is then False, so `export`
+    refuses, `trimesh.boolean` refuses with "Not all meshes are volumes!", and a whole
+    print is blocked by two edges.
+
+    Three local operations, repeated until they stop finding anything:
+      keep the largest shell        Poisson can shed a stray bubble
+      drop faces on an edge with 3+ smallest-area first, because a fin is a sliver and the
+                                    real surface is not
+      fan every boundary loop       to its own centroid, which closes a loop of any shape -
+                                    the boundary of a surface is always a closed curve, so
+                                    each boundary edge gains its second face by construction
+
+    Nothing here resamples, so the surface this is handed is the surface it returns, minus
+    a few slivers and plus a few fan triangles.
+    """
+    trimesh = _tm()
+    import numpy as np
+    log = []
+    m = mesh
+
+    def _largest(x):
+        parts = x.split(only_watertight=False)
+        if len(parts) <= 1:
+            return x, 0
+        big = max(parts, key=lambda q: len(q.faces))
+        return big, len(parts) - 1
+
+    def _overfull_faces(x):
+        es = x.edges_sorted
+        order = np.lexsort((es[:, 1], es[:, 0]))
+        srt = es[order]
+        same = np.all(srt[1:] == srt[:-1], axis=1)
+        starts = np.r_[0, np.flatnonzero(~same) + 1]
+        ends = np.r_[starts[1:], len(srt)]
+        bad = []
+        for a, b in zip(starts, ends):
+            if b - a > 2:
+                bad.extend(order[a:b])
+        if not bad:
+            return np.zeros(0, dtype=np.int64)
+        return np.unique(np.array(bad) // 3)
+
+    m, dropped = _largest(m)
+    if dropped:
+        log.append("dropped %d stray shell(s)" % dropped)
+
+    for _ in range(rounds):
+        if m.is_watertight:
+            break
+        bad = _overfull_faces(m)
+        if len(bad):
+            keep = np.ones(len(m.faces), dtype=bool)
+            keep[bad] = False
+            m.update_faces(keep)
+            m.remove_unreferenced_vertices()
+            log.append("removed %d face(s) on non-manifold edges" % len(bad))
+        bi = trimesh.grouping.group_rows(m.edges_sorted, require_count=1)
+        if len(bi):
+            import networkx as nx
+            be = m.edges_sorted[bi]
+            g = nx.Graph()
+            g.add_edges_from(be)
+            comps = list(nx.connected_components(g))
+            v = np.asarray(m.vertices, dtype=np.float64)
+            f = list(np.asarray(m.faces))
+            apex, newv = {}, []
+            for k, c in enumerate(comps):
+                apex[k] = len(v) + len(newv)
+                newv.append(v[list(c)].mean(axis=0))
+            v = np.vstack([v, np.array(newv)])
+            owner = {n: k for k, c in enumerate(comps) for n in c}
+            for a, b in be:
+                f.append([a, b, apex[owner[a]]])
+            m = trimesh.Trimesh(vertices=v, faces=np.array(f), process=True)
+            log.append("fanned %d boundary loop(s) shut" % len(comps))
+        m, _d = _largest(m)
+    trimesh.repair.fix_winding(m)
+    trimesh.repair.fix_normals(m)
+    log.append("after cleanup: watertight=%s volume=%s" % (m.is_watertight, m.is_volume))
+    return m, log
+
+
+def repair_poisson(mesh, depth=10, samples_per_node=1.5, verbose=True):
+    """Screened Poisson reconstruction - watertight WITHOUT rasterising the surface.
+
+    *** THIS IS THE DEFAULT NOW, AND repair_voxel IS THE FALLBACK. ***
+
+    repair_voxel rasterises to a BINARY occupancy grid and re-extracts, so the 0.5 crossing
+    marching cubes solves for always lands exactly halfway between two cell centres. There
+    is no sub-voxel information left to place a vertex with: detail finer than the pitch is
+    destroyed before the extractor runs, and the result is a staircase whose step size is
+    the pitch. Smoothing afterwards cannot invert that - it can only low-pass what was
+    already quantised, which turns a staircase into melted wax.
+
+    Poisson fits an implicit surface to the mesh's OWN oriented points, so its accuracy is
+    set by the input rather than by a pitch.
+
+    MEASURED on a Hunyuan3D figure at 146.67 mm, as mean distance from the RAW surface:
+
+        repair --method voxel --voxel-res 489, then Taubin 60      0.1500 mm
+        repair --method voxel --voxel-res 1202, then Taubin 20     0.0644 mm
+        repair --method poisson --poisson-depth 10                 0.0028 mm
+
+    JUDGED at 30M splat samples beside the raw mesh: indistinguishable. Hair strands, lapel
+    roll, buttons, pocket flaps and the plinth all survive.
+
+    Depth 10 rather than 12: MEASURED, 12 gives 0.0026 mm - no meaningful difference - and
+    costs 30-42 GB of RSS, which OOM-killed a batch. 10 costs a fraction of that.
+
+    Needs pymeshlab. It is optional on purpose: without it every caller falls back to the
+    voxel path and still gets a printable solid, just a rougher one.
+    """
+    trimesh = _tm()
+    import numpy
+    log = []
+    t0 = time.time()
+    import pymeshlab as ml
+    import tempfile
+    with tempfile.TemporaryDirectory() as td:
+        src = os.path.join(td, "in.ply")
+        mesh.export(src)
+        ms = ml.MeshSet()
+        ms.load_new_mesh(src)
+        ms.generate_surface_reconstruction_screened_poisson(
+            depth=int(depth), samplespernode=float(samples_per_node))
+        ms.meshing_remove_connected_component_by_face_number(mincomponentsize=2000)
+        cm = ms.current_mesh()
+        out = trimesh.Trimesh(vertices=cm.vertex_matrix(), faces=cm.face_matrix(),
+                              process=True)
+    parts = out.split(only_watertight=False)
+    if len(parts) > 1:
+        out = max(parts, key=lambda q: len(q.faces))
+        log.append("kept the largest of %d shells" % len(parts))
+
+    # *** QUANTISE TO float32 BEFORE VALIDATING, BECAUSE GLB WILL DO IT ANYWAY. ***
+    # MEASURED and genuinely confusing until traced: this function returned a mesh with
+    # watertight=True and 0 non-manifold edges, and to_print then reloaded the GLB it had
+    # just written and found 2 non-manifold edges out of 3,577,969. Nothing was wrong with
+    # the repair. GLB stores vertex positions as float32; Poisson produces float64; two
+    # vertices that were distinct at double precision land on the same float32 and weld,
+    # which turns one edge into three-faced.
+    #
+    # Validating a mesh that is not the mesh that gets saved is a trap the whole tool would
+    # keep falling into, so the demotion happens HERE - before the cleanup and before the
+    # verdict. What is checked from this point on is what lands on disk.
+    out.vertices = numpy.asarray(out.vertices, dtype=numpy.float32).astype(numpy.float64)
+    out.merge_vertices()
+    out.update_faces(out.nondegenerate_faces())
+    out.remove_unreferenced_vertices()
+    log.append("screened poisson depth %d -> %d verts / %d faces in %.1fs"
+               % (depth, len(out.vertices), len(out.faces), time.time() - t0))
+    if not out.is_watertight:
+        out, lc = close_tiny_defects(out)
+        log += lc
+    log.append("watertight=%s  volume=%s" % (out.is_watertight, out.is_volume))
+    return out, log
+
+
 def repair_voxel(mesh, resolution=320, fill_method="orthographic", verbose=True):
     """Destructive but reliable: rasterise the surface into a voxel grid, flood
     the interior, and re-extract with marching cubes. The result is watertight,
@@ -804,6 +967,23 @@ def cmd_repair(args):
     log = []
 
     method = args.method
+    # auto now means POISSON FIRST. It is both better and cheaper than the voxel path
+    # (see repair_poisson), so the only reasons to reach the voxel remesh are a box
+    # without pymeshlab, or a mesh Poisson cannot close.
+    if method in ("auto", "poisson"):
+        try:
+            m2, lp = repair_poisson(m, depth=args.poisson_depth)
+            if m2.is_watertight:
+                m, log = m2, log + ["[poisson] " + x for x in lp]
+                method = "done"
+            else:
+                log.append("[poisson] did not close the surface - falling back")
+        except ImportError:
+            log.append("[poisson] pymeshlab is not installed - falling back")
+        except Exception as e:                                        # noqa: BLE001
+            log.append("[poisson] failed (%s) - falling back" % str(e)[:80])
+        if method == "poisson" and not m.is_watertight:
+            method = "auto"          # an explicit --method poisson still gets a solid
     if method in ("auto", "surface"):
         m, l1 = repair_surface(m, min_component_frac=args.min_component_frac, fill=not args.no_fill)
         log += ["[surface] " + x for x in l1]
@@ -1036,10 +1216,16 @@ def build_parser():
     d.set_defaults(func=cmd_diagnose)
 
     r = common(sub.add_parser("repair", help="make the mesh a closed, manifold solid"))
-    r.add_argument("--method", choices=["auto", "surface", "voxel"], default="auto",
-                   help="surface = conservative, keeps detail, cannot fix non-manifold edges. "
-                        "voxel = rasterise and re-extract, always watertight, loses one voxel of detail. "
-                        "auto = surface first, voxel if that is not enough (default)")
+    r.add_argument("--method", choices=["auto", "poisson", "surface", "voxel"],
+                   default="auto",
+                   help="poisson = screened Poisson, watertight without rasterising, keeps "
+                        "the detail (needs pymeshlab). surface = conservative, cannot fix "
+                        "non-manifold edges. voxel = rasterise and re-extract, always "
+                        "watertight, costs one voxel of detail everywhere. auto = poisson, "
+                        "then surface, then voxel (default)")
+    r.add_argument("--poisson-depth", type=int, default=10,
+                   help="octree depth for the Poisson solve (default 10). 12 measures no "
+                        "better and costs 30-42 GB of RSS")
     r.add_argument("--voxel-res", type=int, default=320,
                    help="voxels along the longest axis for the voxel path (default 320)")
     r.add_argument("--voxel-fill", choices=["orthographic", "base", "holes"], default="orthographic",

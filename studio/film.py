@@ -260,7 +260,13 @@ class Film(object):
         return out
 
     def flat(self, shid):
-        return {k: v["value"] for k, v in self.resolved(shid).items()}
+        out = {k: v["value"] for k, v in self.resolved(shid).items()}
+        # `cam` is shot-local and not part of the film/scene/shot context table,
+        # but compile_shot needs it or every cam shot compiles as the default rig
+        cam = (self.shot(shid) or {}).get("cam")
+        if cam:
+            out["cam"] = cam
+        return out
 
 
 # ── subject expansion ───────────────────────────────────────────────────────────────
@@ -320,7 +326,47 @@ def compile_shot(flat, engine):
         return _compile_h3(flat)
     if engine == "wan":
         return _compile_wan(flat)
+    if engine == "cam":
+        return _compile_cam(flat)
     raise ValueError(engine)
+
+
+def _compile_cam(flat):
+    """A camera rig has no prompt - the rig name, its preset and the plate ARE the spec.
+    The verdict is surfaced as warnings so a rig that fails its own shape test says so in
+    the editor rather than after a render."""
+    cam = flat.get("cam") or {}
+    rig = cam.get("rig") or "still_push"
+    out = {"engine": "cam", "rig": rig, "preset": cam.get("preset") or "",
+           "params": cam.get("params") or {}, "prompt": "", "negative": "",
+           "warnings": [], "notes": []}
+    try:
+        import importlib.util
+        sp = importlib.util.spec_from_file_location(
+            "camrig", os.path.join(HERE, "_tools", "camrig.py"))
+        cr = importlib.util.module_from_spec(sp)
+        sp.loader.exec_module(cr)
+        p = cr.resolve(rig, cam.get("params") or {}, cam.get("preset") or None)
+        d = cr.load_rig(rig)
+        out["resolved"] = p
+        out["seconds"] = p.get("seconds")
+        out["notes"].append(d.get("summary", ""))
+        out["notes"].append("%s px window, %s"
+                            % (int(p.get("win_w", 0)),
+                               "preset " + cam["preset"] if cam.get("preset")
+                               else "no preset"))
+        v = cr.verdict(rig, cam.get("params") or {}, cam.get("preset") or None)
+        if v.get("pass") is False:
+            out["warnings"].append(
+                "camrig shape test FAILS - phase2 %s, phase3 %s"
+                % (v.get("phase2_ok"), v.get("phase3_ok")))
+        if v.get("settles_in_shot") is False:
+            out["warnings"].append(
+                "still moving when the shot ends - raise `seconds` or `damping`")
+    except Exception as e:
+        out["warnings"].append("camrig: %s" % str(e)[:160])
+    return out
+
 
 
 def _no_people(flat):
@@ -635,7 +681,7 @@ if __name__ == "__main__":
         ]
         sh["sfx"] = "a cloth wiping steel, a stool scraping"
         f.save()
-        for eng in ("ltx", "h3", "wan"):
+        for eng in ("ltx", "h3", "wan", "cam"):
             c = compile_shot(f.flat(sh["id"]), eng)
             print("=== %s\n%s" % (eng.upper(), c["prompt"]))
             for w in c["warnings"]:

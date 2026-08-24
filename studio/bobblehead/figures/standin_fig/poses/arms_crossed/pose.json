@@ -1,0 +1,160 @@
+{
+ "id": "arms_crossed",
+ "figure": "standin_fig",
+ "kind": "pose",
+ "seed": 4242,
+ "body_mm": 110.0,
+ "socket_target_mm": 8.4,
+ "print_note": "safe - the arms rest on the torso",
+ "recipe": {
+  "latent_resolution": 4096,
+  "octree_resolution": 512,
+  "threshold": 0.45,
+  "algorithm": "surface net",
+  "steps": 30,
+  "cfg": 5.0,
+  "voxel_res": -10
+ },
+ "stages": {
+  "matte": {
+   "alpha_box": [
+    251,
+    124,
+    555,
+    1246
+   ],
+   "alpha_coverage": 0.3285
+  },
+  "mesh": {
+   "mesh_secs": 35.5,
+   "octree": 448,
+   "octree_stepped_down": false,
+   "mesh_vram_mib": 9144
+  },
+  "decimate": {
+   "decimated": false,
+   "faces": 459490,
+   "why": "already at or under target"
+  },
+  "neck": {
+   "neck_f": 0.9199,
+   "neck_area_mm2": 305.57,
+   "neck_equiv_diameter_mm": 19.72,
+   "neck_prominence": 1.036,
+   "shoulder_f": 0.6814,
+   "shoulder_area_mm2": 879.35,
+   "fallback": true,
+   "fallback_why": "no constriction between the shoulder line and 92% of height stood out from its neighbours - cut at the narrowest section in that band instead",
+   "cut_at_mm": 134.92,
+   "full_figure_mm": 146.67,
+   "rescaled_by": 0.8153,
+   "neck_centre": [
+    0.83,
+    3.25
+   ],
+   "neck_diameter_mm": 16.08,
+   "socket_d_mm": 8.4,
+   "socket_depth_mm": 12.0,
+   "socket_reduced": false,
+   "socket_wanted_mm": 8.4,
+   "debris_dropped": [
+    128
+   ],
+   "body_watertight": true,
+   "body_extents_mm": [
+    32.2,
+    26.66,
+    110.0
+   ]
+  }
+ },
+ "built": 1787541036.3467798,
+ "diagnose": {
+  "path": "/home/k4shix/shared/comfy-studio/studio/bobblehead/figures/standin_fig/poses/arms_crossed/body.glb",
+  "file_bytes": 7776488,
+  "vertices": 215993,
+  "faces": 431986,
+  "unique_vertex_positions": 215993,
+  "unwelded_vertices": 0,
+  "duplicate_faces": 0,
+  "degenerate_faces": 0,
+  "bounds_min": [
+   -16.1007022857666,
+   -13.327654838562012,
+   0.0
+  ],
+  "bounds_max": [
+   16.1007022857666,
+   13.327654838562012,
+   110.0
+  ],
+  "extents": [
+   32.2014045715332,
+   26.655309677124023,
+   110.0
+  ],
+  "centroid": [
+   -0.07346288040127387,
+   2.150374185887515,
+   59.019663003583865
+  ],
+  "unique_edges": 647979,
+  "edge_valence": {
+   "2": 647979
+  },
+  "boundary_edges": 0,
+  "manifold_edges": 647979,
+  "nonmanifold_edges": 0,
+  "nonmanifold_fraction": 0.0,
+  "is_watertight": true,
+  "is_winding_consistent": true,
+  "is_volume": true,
+  "euler_number": 0,
+  "components": 1,
+  "component_face_counts_top10": [
+   431986
+  ],
+  "components_under_1pct": 0,
+  "vertex_components": 1,
+  "vertex_component_face_counts_top10": [
+   431986
+  ],
+  "vertex_components_under_1pct": 0,
+  "volume": 30958.744204047423,
+  "surface_area": 9337.736229243746,
+  "convex_hull_volume": 57913.4089404849,
+  "solidity": 0.5345695370110639,
+  "normals_outward": true,
+  "genus": 1.0,
+  "blocking": [],
+  "warnings": [],
+  "printable": true
+ },
+ "print": {
+  "stl": "/home/k4shix/shared/comfy-studio/studio/bobblehead/figures/standin_fig/poses/arms_crossed/print/standin_fig_arms_crossed_110mm.stl",
+  "3mf": "/home/k4shix/shared/comfy-studio/studio/bobblehead/figures/standin_fig/poses/arms_crossed/print/standin_fig_arms_crossed_110mm.3mf",
+  "export": {
+   "written": [
+    {
+     "path": "/home/k4shix/shared/comfy-studio/studio/bobblehead/figures/standin_fig/poses/arms_crossed/print/standin_fig_arms_crossed_110mm.stl",
+     "bytes": 21599384,
+     "reloaded_watertight": true,
+     "reloaded_faces": 431986
+    },
+    {
+     "path": "/home/k4shix/shared/comfy-studio/studio/bobblehead/figures/standin_fig/poses/arms_crossed/print/standin_fig_arms_crossed_110mm.3mf",
+     "bytes": 5701642,
+     "reloaded_watertight": true,
+     "reloaded_faces": 431986
+    }
+   ],
+   "height_mm": null
+  }
+ },
+ "views": [
+  "views/standin_fig_arms_crossed_head.jpg",
+  "views/standin_fig_arms_crossed_orbit.jpg"
+ ],
+ "ok": true,
+ "wall_secs": 101.9
+}

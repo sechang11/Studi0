@@ -1,0 +1,44 @@
+{
+ "id": "suit_male",
+ "dial": "octree",
+ "held": {
+  "latent_resolution": 4096,
+  "octree_resolution": 512,
+  "threshold": 0.45,
+  "algorithm": "surface net",
+  "steps": 30,
+  "cfg": 5.0
+ },
+ "rows": [
+  {
+   "octree": 512,
+   "seed": 1101,
+   "secs": 52.4,
+   "vram_mib": 10387,
+   "faces": 845780,
+   "islands": 3297,
+   "nonmanifold": 8307,
+   "nonmanifold_pct": 0.657,
+   "boundary": 14,
+   "watertight": false
+  },
+  {
+   "octree": 640,
+   "seed": 1101,
+   "error": "URLError: <urlopen error [Errno 111] Connection refused>",
+   "secs": 74.7
+  },
+  {
+   "octree": 768,
+   "seed": 1101,
+   "error": "RuntimeError: comfy error for sweep/oct768: {\"status_str\": \"error\", \"completed\": false, \"messages\": [[\"execution_start\", {\"prompt_id\": \"95aa77ec-d0f6-4b54-bb87-3bf22aa12c1c\", \"timestamp\": 1787447806589}], [\"execution_cached\", {\"nodes\": [], \"prompt_id\": \"95aa77ec-d0f6-4b54-bb87-3bf22aa12c1c\", \"timestamp\": 1787447806602}], [\"execution_error\", {\"prompt_id\": \"95aa77ec-d0f6-4b54-bb87-3bf22aa12c1c\", \"node_id\": \"9\", \"node_type\": \"VoxelToMesh\", \"executed\": [\"8\", \"5\", \"3\", \"7\", \"2\", \"1\", \"4\", \"6\"], \"exception_message\": \"[enforce fail at alloc_cpu.cpp:127] err == 0. DefaultCPUAllocator: can't allocate memory: you tried to allocate 87313268928 bytes. Error code 12 (Cannot allocate memory)\\n\", \"exception_type\": \"RuntimeError\", \"traceback\": [\"  File \\\"/home/k4shix/ComfyUI/execution.py\\\", line 545, in execute\\n    output_data, output_ui, has_subgraph, has_pending_tasks = await get_output_data(prompt_id, unique_id, obj, input_data_all, execution_block_cb=execution_block_cb, pre_execute_cb=pre_execute_cb, v3_data=v3_data)\\n                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n\", \"  File \\\"/home/k4shix/ComfyUI/execution.py\\\", line 344, in get_output_data\\n    return_values = await _async_map_node_over_list(prompt_id, unique_id, obj, input_data_all, obj.FUNCTION, allow_interrupt=True, execution_block_cb=execution_block_cb, pre_execute_cb=pre_execute_cb, v3_data=v3_data)\\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n\", \"  File \\\"/home/k4shix/ComfyUI/execution.py\\\", line 318, in _async_map_node_over_list\\n    await process_inputs(input_dict, i)\\n\", \"  File \\\"/home/k4shix/ComfyUI/execution.py\\\", line 306, in process_inputs\\n    result = f(**inputs)\\n\", \"  File \\\"/home/k4shix/ComfyUI/comfy_api/internal/__init__.py\\\", line 149, in wrapped_func\\n    return method(locked_class, **inputs)\\n\", \"  File \\\"/home/k4shix/ComfyUI/comfy_api/latest/_io.py\\\", line 1990, in EXECUTE_NORMALIZED\\n    to_return = cls.execute(*args, **kwargs)\\n\", \"  File \\\"/home/k4shix/ComfyUI/comfy_extras/nodes_hunyuan3d.py\\\", line 480, in execute\\n    v, f = mesh_function(x, threshold=threshold, device=None)\\n           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n\", \"  File \\\"/home/k4shix/ComfyUI/comfy_extras/nodes_hunyuan3d.py\\\", line 250, in voxel_to_mesh_surfnet\\n    pos = cell_positions.unsqueeze(1) + corner_offsets.unsqueeze(0)\\n          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\n\"], \"current_inputs\": {\"voxel\": [\"<comfy_api.latest._util.geometry_types.VOXEL object at 0x7fb04021a510>\"], \"algorithm\": [\"surface net\"], \"threshold\": [0.45]}, \"current_outputs\": [\"8\", \"5\", \"3\", \"9\", \"7\", \"10\", \"2\", \"1\", \"4\", \"6\"], \"timestamp\": 1787447919686}]]}",
+   "secs": 115.5
+  },
+  {
+   "octree": 1024,
+   "seed": 1101,
+   "error": "URLError: <urlopen error [Errno 111] Connection refused>",
+   "secs": 258.9
+  }
+ ]
+}

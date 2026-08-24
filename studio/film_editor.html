@@ -225,6 +225,7 @@ function renderCenter(){
       <label style="display:inline;margin:0"><input type="checkbox" id="e_ltx" checked> LTX</label>
       <label style="display:inline;margin:0"><input type="checkbox" id="e_h3"> H3</label>
       <label style="display:inline;margin:0"><input type="checkbox" id="e_wan"> Wan</label>
+      <label style="display:inline;margin:0"><input type="checkbox" id="e_cam"> Cam</label>
       <input id="tk_n" type="number" min="1" max="4" value="1" style="width:52px" title="takes per engine">
       <input id="tk_seed" type="number" placeholder="seed (blank=clock)" style="width:150px">
       <button class="primary" onclick="genTakes()">generate</button>
@@ -238,7 +239,7 @@ function playTake(tid){
 }
 async function pickTake(tid){ await api("/pick",{film:FID,shot:SHOT,take:tid}); await selShot(SHOT); openFilm(FID); }
 async function genTakes(){
-  const engines=["ltx","h3","wan"].filter(e=>$("#e_"+e).checked);
+  const engines=["ltx","h3","wan","cam"].filter(e=>$("#e_"+e).checked);
   if(!engines.length) return note("pick at least one engine",true);
   const j=await api("/takes",{film:FID,shot:SHOT,engines,n:+$("#tk_n").value||1,
                               seed:+$("#tk_seed").value||0});

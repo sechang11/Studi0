@@ -1,0 +1,151 @@
+{
+ "id": "pickle",
+ "kind": "head",
+ "source_photo": "source.png",
+ "spec": {
+  "name": "Pickle",
+  "group": "head",
+  "subject": "from a photograph",
+  "costume": "",
+  "pose": ""
+ },
+ "recipe": {
+  "latent_resolution": 4096,
+  "octree_resolution": 512,
+  "threshold": 0.45,
+  "algorithm": "surface net",
+  "steps": 30,
+  "cfg": 5.0,
+  "voxel_res": -10
+ },
+ "seed": 777,
+ "style": "figurine",
+ "height_mm": 95.0,
+ "stages": {
+  "smooth": {
+   "taubin_iters": 0,
+   "volume_kept_pct": 100.0,
+   "watertight_after": true
+  },
+  "decimate": {
+   "decimated": true,
+   "faces_before": 4596410,
+   "faces": 930772,
+   "target": 900000,
+   "steps": [
+    2068384,
+    930772
+   ],
+   "reached_target": true
+  },
+  "socket": {
+   "flat_f": 0.3212,
+   "flat_area_mm2": 778.59,
+   "flat_equiv_diameter_mm": 31.49,
+   "cut_rule": "neck found by prominence (5.89) - shoulders removed",
+   "cut_prominence": 5.89,
+   "rescaled_by": 1.4732,
+   "full_mesh_mm": 95.0,
+   "socket_d_mm": 8.4,
+   "socket_depth_mm": 14.0,
+   "socket_reduced": false,
+   "debris_dropped": [
+    128
+   ],
+   "head_watertight": true,
+   "head_extents_mm": [
+    76.14,
+    96.39,
+    95.0
+   ]
+  },
+  "print": {
+   "stl": "/home/k4shix/shared/comfy-studio/studio/bobblehead/heads/pickle/print/pickle_95mm.stl",
+   "3mf": "/home/k4shix/shared/comfy-studio/studio/bobblehead/heads/pickle/print/pickle_95mm.3mf",
+   "export": {
+    "written": [
+     {
+      "path": "/home/k4shix/shared/comfy-studio/studio/bobblehead/heads/pickle/print/pickle_95mm.stl",
+      "bytes": 38415184,
+      "reloaded_watertight": true,
+      "reloaded_faces": 768302
+     },
+     {
+      "path": "/home/k4shix/shared/comfy-studio/studio/bobblehead/heads/pickle/print/pickle_95mm.3mf",
+      "bytes": 13650321,
+      "reloaded_watertight": true,
+      "reloaded_faces": 768302
+     }
+    ],
+    "height_mm": null
+   }
+  }
+ },
+ "built": 1787530268.0304904,
+ "diagnose": {
+  "path": "/home/k4shix/shared/comfy-studio/studio/bobblehead/heads/pickle/head.glb",
+  "file_bytes": 13830036,
+  "vertices": 384139,
+  "faces": 768302,
+  "unique_vertex_positions": 384139,
+  "unwelded_vertices": 0,
+  "duplicate_faces": 0,
+  "degenerate_faces": 0,
+  "bounds_min": [
+   -37.106658935546875,
+   -48.193878173828125,
+   0.0
+  ],
+  "bounds_max": [
+   39.034969329833984,
+   48.193878173828125,
+   95.0
+  ],
+  "extents": [
+   76.14162826538086,
+   96.38775634765625,
+   95.0
+  ],
+  "centroid": [
+   0.2757923063013165,
+   -4.451436088562953,
+   45.95642030903456
+  ],
+  "unique_edges": 1152453,
+  "edge_valence": {
+   "2": 1152453
+  },
+  "boundary_edges": 0,
+  "manifold_edges": 1152453,
+  "nonmanifold_edges": 0,
+  "nonmanifold_fraction": 0.0,
+  "is_watertight": true,
+  "is_winding_consistent": true,
+  "is_volume": true,
+  "euler_number": -12,
+  "components": 1,
+  "component_face_counts_top10": [
+   768302
+  ],
+  "components_under_1pct": 0,
+  "vertex_components": 1,
+  "vertex_component_face_counts_top10": [
+   768302
+  ],
+  "vertex_components_under_1pct": 0,
+  "volume": 310224.44617059676,
+  "surface_area": 27911.11587281226,
+  "convex_hull_volume": 357081.8873217308,
+  "solidity": 0.8687767629364088,
+  "normals_outward": true,
+  "genus": 7.0,
+  "blocking": [],
+  "warnings": [],
+  "printable": true
+ },
+ "views": [
+  "views/pickle_orbit.jpg"
+ ],
+ "ok": true,
+ "wall_secs": 197.4
+}

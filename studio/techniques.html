@@ -1,0 +1,80 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>techniques</title>
+<style>
+ body{margin:0;background:#0b0b10;color:#e8e8ef;
+      font:14px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif}
+ .wrap{padding:14px 18px 70px;max-width:1500px}
+ h1{font-size:17px;margin:6px 0 2px;font-weight:600}
+ .sub{color:#8b8b9c;font-size:13px;margin-bottom:16px;max-width:820px}
+ .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(430px,1fr));gap:14px}
+ .card{background:#12121a;border:1px solid #262633;border-radius:10px;overflow:hidden;
+       display:flex;flex-direction:column}
+ .card video{width:100%;display:block;background:#000;aspect-ratio:16/9;object-fit:cover}
+ .card .body{padding:11px 14px 14px}
+ .ttl{font-size:15px;font-weight:600;margin:0 0 2px}
+ .one{color:#a6a6ba;font-size:13px;margin:0 0 9px}
+ .pills{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;font-size:11px}
+ .pill{background:#20202b;border:1px solid #313140;border-radius:99px;padding:1px 8px;
+       color:#9a9aae}
+ .pill.eng{border-color:#3c5f49;color:#8fd0a6}
+ h4{margin:11px 0 4px;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;
+    color:#7a7a90;font-weight:700}
+ ol,ul{margin:0;padding-left:19px}
+ li{margin:3px 0;font-size:13px;color:#c6c6d6}
+ .knob{display:grid;grid-template-columns:150px 1fr;gap:4px 10px;font-size:12.5px}
+ .knob b{color:#c9a94a;font-weight:600;font-family:ui-monospace,Menlo,Consolas,monospace}
+ .knob span{color:#a6a6ba}
+ .gotcha{background:#1e1a0c;border:1px solid #4a3c18;border-left:3px solid #c9a94a;
+      border-radius:6px;padding:8px 11px;margin-top:11px;font-size:12.5px;color:#ddc98f}
+ .gotcha b{color:#e9c96a}
+ .files{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11.5px;color:#8b8b9c}
+ .files div{margin:2px 0}
+ .ex{font-size:11.5px;color:#6f6f85;margin-top:9px}
+ .miss{color:#e39a9a}
+ .noex{aspect-ratio:16/9;background:#1a1a24;display:flex;align-items:center;
+       justify-content:center;color:#4a4a5c;font-size:12px}
+</style>
+
+<div class="wrap">
+ <h1>Techniques</h1>
+ <div class="sub">How shots were built, not what they are about — the rigs, the compositing
+  chains, the plate tricks. Anything that turned out to be reusable lives here with the
+  shot itself attached, so it can be used again without rebuilding it and without
+  rediscovering the traps. Every entry carries the gotcha that cost the most time.</div>
+ <div class="grid" id="g"></div>
+</div>
+
+<script>
+const esc=s=>String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+fetch('/api/technique/list').then(r=>r.json()).then(d=>{
+  document.getElementById('g').innerHTML=(d.techniques||[]).map(t=>{
+    const e=t.example||{};
+    // the example is the point: a technique you cannot watch is a paragraph, not a template
+    const media = e.video
+      ? `<video src="${e.video}" ${e.poster?`poster="${e.poster}"`:''}
+               controls muted loop playsinline preload="metadata"></video>`
+      : `<div class="noimg noex">${t.example_missing?esc(t.example_missing):'no example take'}</div>`;
+    const knobs=Object.entries(t.knobs||{}).map(([k,v])=>
+      `<b>${esc(k)}</b><span>${esc(v)}</span>`).join('');
+    return `<div class="card">
+      ${media}
+      <div class="body">
+        <p class="ttl">${esc(t.title)}</p>
+        <p class="one">${esc(t.one_liner)}</p>
+        <div class="pills">
+          <span class="pill eng">${esc(t.engine)}</span>
+          <span class="pill">${esc(t.kind)}</span>
+          <span class="pill">${esc(t.id)}</span>
+        </div>
+        <h4>when to use it</h4><div style="font-size:13px;color:#c6c6d6">${esc(t.when)}</div>
+        <h4>how</h4><ol>${(t.how||[]).map(h=>`<li>${esc(h)}</li>`).join('')}</ol>
+        ${knobs?`<h4>the knobs that matter</h4><div class="knob">${knobs}</div>`:''}
+        <div class="gotcha"><b>Gotcha.</b> ${esc(t.gotcha)}</div>
+        <h4>files</h4><div class="files">${(t.files||[]).map(f=>`<div>${esc(f)}</div>`).join('')}</div>
+        ${e.shot_title?`<div class="ex">example — ${esc(e.film_title)}, shot ${esc(e.shot)}:
+          ${esc(e.shot_title)} · ${esc(e.take)} · ${esc(e.duration)}s</div>`:''}
+      </div></div>`;
+  }).join('') || '<div class="sub">No techniques yet.</div>';
+});
+</script>

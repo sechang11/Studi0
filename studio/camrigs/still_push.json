@@ -1,0 +1,21 @@
+{
+ "summary": "A slow push into a still. The honest answer when a shot must stay pixel-faithful.",
+ "doc": "Use whenever a shot contains something a generative model will wreck: readable signage, a real person's face, a plate of food that must not morph, a logo.\n\nThis rig invents nothing. The frame closes in on a photograph and that is all. It was written because LTX grew hands around a plate of lettuce on every seed tried - the empty-frame clause and a negative did not stop it, because something has to act in a generated shot and a plate of food starves the agency slot. A push on the real photograph has no such problem.\n\nPair it with a borrowed ambience bed so the sound does not drop out at the cut.",
+ "params": {
+  "win_w":      {"default": 2600, "min": 64,  "max": 16384, "doc": "window width in plate px at zoom 1."},
+  "win_h":      {"default": 1464, "min": 36,  "max": 16384, "doc": "window height in plate px at zoom 1."},
+  "cx":         {"default": 1920, "min": 0,   "max": 32768, "doc": "centre x of the push."},
+  "cy":         {"default": 1080, "min": 0,   "max": 32768, "doc": "centre y of the push."},
+  "seconds":    {"default": 5.0,  "min": 0.5, "max": 30.0,  "doc": "shot length."},
+  "zoom_start": {"default": 1.0,  "min": 0.2, "max": 8.0,   "doc": "zoom at the first frame."},
+  "zoom_end":   {"default": 1.09, "min": 0.2, "max": 8.0,   "doc": "zoom at the last frame. 1.06-1.12 reads as alive without drawing attention."},
+  "drift_px":   {"default": 0.0,  "min": -2000, "max": 2000, "doc": "lateral drift across the move. A little stops it feeling mechanical."},
+  "ease":       {"default": 1,    "min": 0,   "max": 1,     "doc": "1 = smooth in and out, 0 = dead linear."}
+ },
+ "presets": {
+  "slow_reveal": {"note": "Barely-there 9% push. The default for food and faces.",
+                  "params": {"zoom_end": 1.09, "seconds": 5.0}},
+  "closer":      {"note": "Firmer 18% push with a touch of drift.",
+                  "params": {"zoom_end": 1.18, "drift_px": 40, "seconds": 6.0}}
+ }
+}

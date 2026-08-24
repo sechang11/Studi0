@@ -1,0 +1,245 @@
+{
+ "_comment": "The body catalogue. Every entry is three fields the seed prompt joins onto the shared figurine grammar in bobble.py: subject, costume, pose. Nothing here says 'no cast shadow' or 'hair as one mass' - those live in the grammar, once, so a new body cannot be added without them. Poses are chosen for the PRINTER first: arms in, no held thin objects, feet together or shoulder-width on a plinth. A pose that reads well on screen and snaps at 110mm is not a pose this library keeps.",
+ "bodies": [
+  {
+   "id": "suit_male",
+   "group": "work",
+   "sex": "male",
+   "name": "Business suit",
+   "subject": "a man in his forties",
+   "costume": "a charcoal two-piece business suit, white shirt, navy tie, polished shoes",
+   "pose": "standing squarely, hands at his sides, shoulders back",
+   "seed": 1101
+  },
+  {
+   "id": "suit_female",
+   "group": "work",
+   "sex": "female",
+   "name": "Business suit",
+   "subject": "a woman in her thirties",
+   "costume": "a tailored navy trouser suit, cream blouse, low heels",
+   "pose": "standing squarely, one hand on her hip, the other at her side",
+   "seed": 1102
+  },
+  {
+   "id": "labcoat",
+   "group": "work",
+   "sex": "female",
+   "name": "Lab coat",
+   "subject": "a woman scientist",
+   "costume": "a buttoned white lab coat over a knit top and trousers, safety glasses pushed up",
+   "pose": "standing, arms folded across her chest",
+   "seed": 1103
+  },
+  {
+   "id": "chef",
+   "group": "work",
+   "sex": "male",
+   "name": "Chef",
+   "subject": "a stout chef",
+   "costume": "a double-breasted white chef jacket, checked trousers, a tall toque, an apron",
+   "pose": "standing, both hands resting on his belly",
+   "seed": 1104
+  },
+  {
+   "id": "nurse_scrubs",
+   "group": "work",
+   "sex": "female",
+   "name": "Scrubs",
+   "subject": "a nurse",
+   "costume": "teal medical scrubs, a stethoscope worn flat around the neck, clogs",
+   "pose": "standing, hands clasped in front at the waist",
+   "seed": 1105
+  },
+  {
+   "id": "firefighter",
+   "group": "duty",
+   "sex": "male",
+   "name": "Firefighter",
+   "subject": "a firefighter",
+   "costume": "heavy tan turnout gear with reflective bands, braces, a helmet held tucked under one arm",
+   "pose": "standing at ease, feet apart, free hand at his side",
+   "seed": 1106
+  },
+  {
+   "id": "pilot",
+   "group": "duty",
+   "sex": "female",
+   "name": "Airline pilot",
+   "subject": "an airline pilot",
+   "costume": "a navy uniform jacket with gold sleeve stripes, a white shirt, a peaked cap",
+   "pose": "standing squarely, hands behind her back",
+   "seed": 1107
+  },
+  {
+   "id": "astronaut",
+   "group": "duty",
+   "sex": "neutral",
+   "name": "Astronaut",
+   "subject": "an astronaut",
+   "costume": "a bulky white pressure suit with a chest control pack and blue trim, no helmet",
+   "pose": "standing, arms slightly out from the padded suit, feet apart",
+   "seed": 1108
+  },
+  {
+   "id": "hoodie_jeans",
+   "group": "casual",
+   "sex": "male",
+   "name": "Hoodie and jeans",
+   "subject": "a young man",
+   "costume": "an oversized pullover hoodie, straight jeans, chunky trainers",
+   "pose": "standing, both hands in the hoodie pocket",
+   "seed": 1109
+  },
+  {
+   "id": "sundress",
+   "group": "casual",
+   "sex": "female",
+   "name": "Summer dress",
+   "subject": "a young woman with a short bob haircut ending at the jaw",
+   "costume": "a knee-length A-line summer dress with a stiff sculpted hem, flat sandals",
+   "pose": "facing the camera, standing, hands resting together in front at the waist",
+   "seed": 3110
+  },
+  {
+   "id": "denim_jacket",
+   "group": "casual",
+   "sex": "female",
+   "name": "Denim jacket",
+   "subject": "a woman in her twenties",
+   "costume": "a buttoned denim jacket, a plain tee, cropped trousers, ankle boots",
+   "pose": "standing, thumbs hooked in her pockets",
+   "seed": 1111
+  },
+  {
+   "id": "yoga",
+   "group": "sport",
+   "sex": "female",
+   "name": "Yoga kit",
+   "subject": "a woman athlete",
+   "costume": "a fitted sports top and leggings, barefoot",
+   "pose": "standing tall, palms pressed together at her chest",
+   "seed": 1112
+  },
+  {
+   "id": "basketball",
+   "group": "sport",
+   "sex": "male",
+   "name": "Basketball kit",
+   "subject": "a tall basketball player",
+   "costume": "a sleeveless team jersey and shorts, high-top shoes, a ball held against the hip",
+   "pose": "standing, one arm curled around the ball at his hip, the other at his side",
+   "seed": 1113
+  },
+  {
+   "id": "footballer",
+   "group": "sport",
+   "sex": "male",
+   "name": "Football kit",
+   "subject": "a footballer",
+   "costume": "a short-sleeved team shirt, shorts, long socks, boots, a ball resting under one foot",
+   "pose": "standing with one foot on the ball, arms at his sides",
+   "seed": 1114
+  },
+  {
+   "id": "golfer",
+   "group": "sport",
+   "sex": "male",
+   "name": "Golfer",
+   "subject": "a golfer",
+   "costume": "a polo shirt, sleeveless sweater vest, tailored trousers, a flat cap",
+   "pose": "standing, arms folded, feet shoulder-width",
+   "seed": 1115
+  },
+  {
+   "id": "knight",
+   "group": "costume",
+   "sex": "male",
+   "name": "Knight",
+   "subject": "a knight",
+   "costume": "full plate armour with rounded pauldrons and a short tabard, no helmet",
+   "pose": "standing, both gauntlets resting one over the other at the belt",
+   "seed": 1116
+  },
+  {
+   "id": "superhero",
+   "group": "costume",
+   "sex": "female",
+   "name": "Superhero",
+   "subject": "a woman in a costumed hero suit",
+   "costume": "a fitted armoured bodysuit with a chest emblem, a wide utility belt, tall boots, bare shoulders and back",
+   "pose": "standing, fists on hips, feet apart",
+   "seed": 3117
+  },
+  {
+   "id": "wizard",
+   "group": "costume",
+   "sex": "male",
+   "name": "Wizard",
+   "subject": "an old wizard",
+   "costume": "heavy floor-length robes with a thick sculpted hem, a wide belt, a pointed hat, a long beard carved as one solid mass",
+   "pose": "standing, hands folded together in front inside the sleeves",
+   "seed": 1118
+  },
+  {
+   "id": "pirate",
+   "group": "costume",
+   "sex": "female",
+   "name": "Pirate",
+   "subject": "a pirate captain",
+   "costume": "a long buttoned coat with wide cuffs, a sash, tall cuffed boots, a tricorn hat",
+   "pose": "standing, one boot up on a low crate, hands on the raised knee",
+   "seed": 1119
+  },
+  {
+   "id": "tuxedo",
+   "group": "formal",
+   "sex": "male",
+   "name": "Tuxedo",
+   "subject": "a man in formal dress",
+   "costume": "a black tuxedo with satin lapels, a bow tie, a boutonniere",
+   "pose": "standing squarely, one hand tucked into the jacket, the other at his side",
+   "seed": 1120
+  },
+  {
+   "id": "gown",
+   "group": "formal",
+   "sex": "female",
+   "name": "Evening gown",
+   "subject": "a woman in formal dress",
+   "costume": "a floor-length column gown with a smooth sculpted skirt and no train",
+   "pose": "standing, hands resting together at the front of the waist",
+   "seed": 1121
+  },
+  {
+   "id": "guitarist",
+   "group": "music",
+   "sex": "male",
+   "name": "Guitarist",
+   "subject": "a rock guitarist",
+   "costume": "a leather jacket over a band tee, skinny jeans, boots, a wide studded belt",
+   "pose": "standing, thumbs hooked in his belt, feet apart",
+   "seed": 2122
+  },
+  {
+   "id": "barista",
+   "group": "work",
+   "sex": "neutral",
+   "name": "Barista",
+   "subject": "a barista",
+   "costume": "a rolled-sleeve shirt, a long canvas apron, a flat cap",
+   "pose": "standing, hands in the apron pocket",
+   "seed": 1123
+  },
+  {
+   "id": "gardener",
+   "group": "casual",
+   "sex": "female",
+   "name": "Gardener",
+   "subject": "a gardener",
+   "costume": "denim dungarees over a long-sleeved shirt, wellington boots, thick gloves, a wide sun hat",
+   "pose": "standing, arms folded, feet apart",
+   "seed": 1124
+  }
+ ]
+}

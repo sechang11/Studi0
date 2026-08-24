@@ -1119,6 +1119,17 @@ def _toolbox():
     """studio/_tools/toolbox.py on demand, like the other _tools importers."""
     return _load_tool_module('toolbox')
 
+def _technique_routes():
+    """studio/_tools/technique_routes.py - how shots were built, and the
+    example take that proves each one works."""
+    return _load_tool_module('technique_routes')
+
+
+def _spec_routes():
+    """studio/_tools/spec_routes.py - the shot-spec editor, English side and machine side."""
+    return _load_tool_module('spec_routes')
+
+
 def _foundry_routes():
     """studio/_tools/foundry_routes.py on demand - the selector-driven asset creator."""
     return _load_tool_module('foundry_routes')
@@ -1217,13 +1228,13 @@ STUDIO_NAV = [
         ("/wizard", "wizard", "wizard.html"),
         ("/story", "story", "story_editor.html"),
         ("/film", "film", "film_editor.html"),
+        ("/specs", "specs", "specs.html"),
+        ("/techniques", "techniques", "techniques.html"),
         ("/foundry", "foundry", "foundry.html"),
         ("/generate", "generate", "generate.html"),
     ]),
     ("cast", [
-        ("/cast", "cast", "cast.html"),
-        ("/character", "character", "character.html"),
-        ("/character/new", "new character", "newchar.html"),
+        ("/characters", "characters", "characters.html"),
         ("/voices", "voices", "voices.html"),
         ("/identity", "identity", "identity.html"),
         ("/verify", "verify", "verify.html"),
@@ -1290,6 +1301,7 @@ def studio_nav(page=None, path=None):
 # own header so the bar is not shadowed by a second, staler copy of itself.
 _NAV_HREFS = {href for _, items in STUDIO_NAV for href, _, _ in items}
 _NAV_HREFS |= {h.rstrip("/") for h in _NAV_HREFS if h != "/"}
+_NAV_HREFS |= {h + ".html" for h in list(_NAV_HREFS) if h != "/"}
 _A_TAG = re.compile(r'<a\s[^>]*href="([^"]+)"[^>]*>.*?</a>', re.S | re.I)
 _HEADER = re.compile(r"<header\b.*?</header>", re.S | re.I)
 _OLD_NAV = re.compile(r'<nav\b(?![^>]*id="studionav")[^>]*>.*?</nav>', re.S | re.I)
@@ -1485,6 +1497,58 @@ class H(http.server.SimpleHTTPRequestHandler):
             return self._send({"error": "unknown generate route"}, 404)
         # /foundry - build characters, places, costumes and props from selectors,
         # render their seed packs, and send them into films.
+        # /techniques - how shots were built, with the shot attached
+        if path == "/techniques":
+            return self._page("techniques.html")
+        if path == "/api/technique" or path.startswith("/api/technique/"):
+            tr = _technique_routes()
+            if not tr:
+                return self._send({"error": "technique_routes.py unavailable"}, 500)
+            rest = path[len("/api/technique"):].strip("/").split("/")
+            try:
+                if rest[0] in ("", "list"):
+                    body, code = tr.listing()
+                else:
+                    body, code = tr.one(rest[0])
+            except Exception as e:
+                traceback.print_exc()
+                return self._send({"error": str(e)[:300]}, 500)
+            return self._send(body, code)
+
+        # /specs - the promises each shot has to keep, editable in English
+        if path == "/specs":
+            return self._page("specs.html")
+        if path == "/api/spec" or path.startswith("/api/spec/"):
+            sr = _spec_routes()
+            if not sr:
+                return self._send({"error": "studio/_tools/spec_routes.py is "
+                                            "unavailable"}, 500)
+            rest = path[len("/api/spec"):].strip("/").split("/")
+            try:
+                if rest[0] == "films":
+                    body, code = sr.films()
+                elif rest[0] == "tree":
+                    body, code = sr.tree(rest[1])
+                elif rest[0] == "md":
+                    body, code = sr.md(rest[1], rest[2])
+                elif rest[0] == "check":
+                    body, code = sr.check(rest[1])
+                else:
+                    body, code = {"error": "unknown spec route"}, 404
+            except Exception as e:
+                traceback.print_exc()
+                return self._send({"error": str(e)[:300]}, 500)
+            return self._send(body, code)
+        # /characters - the merged roster+dossier. /cast and /character/new are the
+        # same page now and redirect, because both are linked from ten hand-written
+        # navs and sit in people's history.
+        if path in ("/characters", "/characters.html"):
+            return self._page("characters.html")
+        if path in ("/cast", "/cast.html", "/character/new", "/newchar"):
+            self.send_response(302)
+            self.send_header("Location", "/characters")
+            self.end_headers()
+            return
         if path == "/foundry":
             return self._page("foundry.html")
         if path.startswith("/foundry/media/"):
@@ -1508,6 +1572,12 @@ class H(http.server.SimpleHTTPRequestHandler):
                 bits = rest.split("/")
                 if bits[0] == "dictionary":
                     body, code = fo.dictionary()
+                    return self._send(body, code)
+                if bits[0] == "levels":
+                    body, code = fo.levels()
+                    return self._send(body, code)
+                if bits[0] == "roster":
+                    body, code = fo.roster()
                     return self._send(body, code)
                 if bits[0] == "jobs":
                     body, code = fo.jobs_all()
@@ -2006,11 +2076,11 @@ class H(http.server.SimpleHTTPRequestHandler):
             # contract /film/media works under.
             rel = urllib.parse.unquote(path[len("/three/media/"):])
             bits = rel.split("/", 2)
-            if len(bits) < 3 or bits[0] not in ("body", "head", "assembled"):
+            if len(bits) < 3 or bits[0] not in ("body", "head", "assembled", "figure"):
                 return self._send({"error": "no such file"}, 404)
             kind, rid, sub = bits
             folder = {"body": "bodies", "head": "heads",
-                      "assembled": "assembled"}[kind]
+                      "assembled": "assembled", "figure": "figures"}[kind]
             base = os.path.realpath(os.path.join(HERE, "bobblehead", folder, rid))
             fp = os.path.realpath(os.path.join(base, sub))
             if not (fp.startswith(base + os.sep) and os.path.isfile(fp)):
@@ -2574,13 +2644,16 @@ class H(http.server.SimpleHTTPRequestHandler):
                      "/api/film/takes", "/api/film/anchor", "/api/film/autonext",
                      "/api/film/vo", "/api/film/assemble",
                      "/api/film/portrait", "/api/film/master", "/api/film/draftall",
+                     "/api/spec/save", "/api/spec/new", "/api/spec/lock",
                      "/api/foundry/new", "/api/foundry/edit", "/api/foundry/delete",
                      "/api/foundry/seeds", "/api/foundry/apply",
-                     "/api/foundry/send",
+                     "/api/foundry/send", "/api/foundry/variant",
+                     "/api/foundry/describe", "/api/foundry/from_image",
                      "/api/character/upload", "/api/character/create",
                      "/api/voice/demo", "/api/voice/add",
                      "/api/character/suite", "/api/character/analyse",
                      "/api/tool/run", "/api/tool/random",
+                     "/api/three/figure", "/api/three/pose",
                      "/api/three/build", "/api/three/head",
                      "/api/make3d/mesh", "/api/library/star",
                      "/api/library/grow", "/api/library/reject",
@@ -2796,11 +2869,13 @@ class H(http.server.SimpleHTTPRequestHandler):
             except Exception as e:                                  # noqa: BLE001
                 traceback.print_exc()
                 return self._send({"error": str(e)[:200]}, 500)
-        if p in ("/api/three/build", "/api/three/head"):
+        if p in ("/api/three/build", "/api/three/head", "/api/three/figure",
+                 "/api/three/pose"):
             m = self._three()
             if m is None:
                 return self._send({"error": "three_routes.py is unavailable"}, 500)
-            fn = m.build if p.endswith("build") else m.head
+            fn = {"build": m.build, "head": m.head,
+                  "figure": m.figure, "pose": m.pose}[p.rsplit("/", 1)[1]]
             try:
                 body, code = fn(data)
             except Exception as e:                                  # noqa: BLE001
@@ -2854,6 +2929,20 @@ class H(http.server.SimpleHTTPRequestHandler):
                 traceback.print_exc()
                 return self._send({"error": str(e)[:300]}, 500)
             return self._send(body, code)
+        if p.startswith("/api/spec/"):
+            sr = _spec_routes()
+            if not sr:
+                return self._send({"error": "studio/_tools/spec_routes.py is "
+                                            "unavailable"}, 500)
+            fn = {"save": sr.save, "new": sr.new, "lock": sr.lock}.get(p[len("/api/spec/"):])
+            if not fn:
+                return self._send({"error": "unknown spec route"}, 404)
+            try:
+                body, code = fn(data)
+            except Exception as e:
+                traceback.print_exc()
+                return self._send({"error": str(e)[:300]}, 500)
+            return self._send(body, code)
         if p.startswith("/api/foundry/"):
             fo = _foundry_routes()
             if not fo:
@@ -2861,7 +2950,9 @@ class H(http.server.SimpleHTTPRequestHandler):
                                             "unavailable"}, 500)
             fn = {"new": fo.new, "edit": fo.edit, "delete": fo.delete,
                   "seeds": fo.seeds, "apply": fo.apply_costume,
-                  "send": fo.send_to_film}[p[len("/api/foundry/"):]]
+                  "send": fo.send_to_film, "variant": fo.variant,
+                  "describe": fo.describe,
+                  "from_image": fo.from_image}[p[len("/api/foundry/"):]]
             try:
                 body, code = fn(data)
             except KeyError as e:

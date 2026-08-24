@@ -1,0 +1,145 @@
+{
+ "id": "stand_in",
+ "kind": "head",
+ "source_photo": "source.png",
+ "spec": {
+  "name": "Stand In",
+  "group": "head",
+  "subject": "from a photograph",
+  "costume": "",
+  "pose": ""
+ },
+ "recipe": {
+  "latent_resolution": 4096,
+  "octree_resolution": 512,
+  "threshold": 0.45,
+  "algorithm": "surface net",
+  "steps": 30,
+  "cfg": 5.0,
+  "voxel_res": -10
+ },
+ "seed": 777,
+ "style": "figurine",
+ "height_mm": 95.0,
+ "stages": {
+  "smooth": {
+   "taubin_iters": 0,
+   "volume_kept_pct": 100.0,
+   "watertight_after": true
+  },
+  "decimate": {
+   "decimated": false,
+   "faces": 4798278,
+   "why": "no decimation step held watertight - kept the full mesh"
+  },
+  "socket": {
+   "flat_f": 0.1721,
+   "flat_area_mm2": 1692.74,
+   "flat_equiv_diameter_mm": 46.42,
+   "cut_rule": "neck found by prominence (1.12) - shoulders removed",
+   "cut_prominence": 1.121,
+   "rescaled_by": 1.2079,
+   "full_mesh_mm": 95.0,
+   "socket_d_mm": 8.4,
+   "socket_depth_mm": 14.0,
+   "socket_reduced": false,
+   "debris_dropped": [
+    128
+   ],
+   "head_watertight": true,
+   "head_extents_mm": [
+    70.71,
+    93.63,
+    95.0
+   ]
+  },
+  "print": {
+   "stl": "/home/k4shix/shared/comfy-studio/studio/bobblehead/heads/stand_in/print/stand_in_95mm.stl",
+   "3mf": "/home/k4shix/shared/comfy-studio/studio/bobblehead/heads/stand_in/print/stand_in_95mm.3mf",
+   "export": {
+    "written": [
+     {
+      "path": "/home/k4shix/shared/comfy-studio/studio/bobblehead/heads/stand_in/print/stand_in_95mm.stl",
+      "bytes": 210423784,
+      "reloaded_watertight": true,
+      "reloaded_faces": 4208474
+     },
+     {
+      "path": "/home/k4shix/shared/comfy-studio/studio/bobblehead/heads/stand_in/print/stand_in_95mm.3mf",
+      "bytes": 52863289,
+      "reloaded_watertight": true,
+      "reloaded_faces": 4208474
+     }
+    ],
+    "height_mm": null
+   }
+  }
+ },
+ "built": 1787530465.5811381,
+ "diagnose": {
+  "path": "/home/k4shix/shared/comfy-studio/studio/bobblehead/heads/stand_in/head.glb",
+  "file_bytes": 75753304,
+  "vertices": 2104239,
+  "faces": 4208474,
+  "unique_vertex_positions": 2104239,
+  "unwelded_vertices": 0,
+  "duplicate_faces": 0,
+  "degenerate_faces": 0,
+  "bounds_min": [
+   -35.357452392578125,
+   -46.817344665527344,
+   0.0
+  ],
+  "bounds_max": [
+   35.357452392578125,
+   46.817344665527344,
+   95.0
+  ],
+  "extents": [
+   70.71490478515625,
+   93.63468933105469,
+   95.0
+  ],
+  "centroid": [
+   0.012554142493677346,
+   1.3227735291935947,
+   43.43439753011077
+  ],
+  "unique_edges": 6312711,
+  "edge_valence": {
+   "2": 6312711
+  },
+  "boundary_edges": 0,
+  "manifold_edges": 6312711,
+  "nonmanifold_edges": 0,
+  "nonmanifold_fraction": 0.0,
+  "is_watertight": true,
+  "is_winding_consistent": true,
+  "is_volume": true,
+  "euler_number": 2,
+  "components": 1,
+  "component_face_counts_top10": [
+   4208474
+  ],
+  "components_under_1pct": 0,
+  "vertex_components": 1,
+  "vertex_component_face_counts_top10": [
+   4208474
+  ],
+  "vertex_components_under_1pct": 0,
+  "volume": 304694.6817355843,
+  "surface_area": 25661.667043714013,
+  "convex_hull_volume": 332027.758265589,
+  "solidity": 0.9176783390859116,
+  "normals_outward": true,
+  "genus": 0.0,
+  "blocking": [],
+  "warnings": [],
+  "printable": true
+ },
+ "views": [
+  "views/stand_in_orbit.jpg"
+ ],
+ "ok": true,
+ "wall_secs": 298.2
+}

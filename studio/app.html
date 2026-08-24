@@ -182,6 +182,26 @@ function card(href,title,n,desc,led){
       ledgerHTML(ledger(ls))));
   }catch(e){ /* page may predate the route */ }
 
+  // The 3D section's own ledger. Not a status count like the other libraries - the three
+  // states here are "mesh_doctor says printable", "built but it does not", and "failed",
+  // and collapsing the first two would be the exact mistake the ledger exists to prevent.
+  try{
+    const t=await J("/api/three");
+    const c=t.ledger.bodies, tot=(c.printable+c.built+c.building+c.failed)||1;
+    const key=[];
+    if(c.printable) key.push(`${c.printable} printable`);
+    if(c.built)     key.push(`${c.built} not printable`);
+    if(c.building)  key.push(`${c.building} building`);
+    if(c.failed)    key.push(`${c.failed} failed`);
+    out.push(card("/three","3D",t.bodies.length+t.heads.length,
+      `Bobblehead bodies and heads. ${t.heads.length} head(s), print files in 3mf and stl.`,
+      `<div class="led"><i class="r" style="width:${(c.printable/tot*100).toFixed(1)}%"></i>
+       <i class="w" style="width:${(c.built/tot*100).toFixed(1)}%"></i>
+       <i class="u" style="width:${(c.failed/tot*100).toFixed(1)}%"></i>
+       <i class="t" style="width:${(c.building/tot*100).toFixed(1)}%"></i></div>
+       <div class="ledk">${esc(key.join(" · "))}</div>`));
+  }catch(e){ /* page may predate the route */ }
+
   try{
     const cs=await J("/api/cast");
     out.push(card("/cast","Cast",cs.length,
@@ -242,6 +262,11 @@ function card(href,title,n,desc,led){
   // from studio/*.html: a filename cannot say what a page is for, and this list is checked
   // against the directory by patch_home_links.py so a new page cannot go unlisted quietly.
   const ALL = [
+  [
+    "/three",
+    "3D",
+    "The bobblehead line: bodies and heads, meshed and cut and bored for the spring, with the print files and the recipe that made them."
+  ],
   [
     "/library",
     "Library",

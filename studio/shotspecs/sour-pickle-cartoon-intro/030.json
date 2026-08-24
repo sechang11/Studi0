@@ -1,0 +1,64 @@
+{
+ "shot": "030",
+ "title": "He lands in his own outline and the shop lights up",
+ "beat": "The hanging sign is EMPTY - just an outline where the pickle should be. He tumbles in from above, lands exactly in it, and the shop lights up behind.",
+ "engine": "cam",
+ "invariants": [
+  {
+   "id": "sign_starts_empty",
+   "title": "Sign starts empty",
+   "rule": "The shot opens on the sign with the pickle ABSENT and only his outline drawn on the board.",
+   "why": "It is the whole gag: the sign is waiting for him."
+  },
+  {
+   "id": "landing_is_pixel_exact",
+   "title": "Landing is pixel exact",
+   "rule": "He lands on exactly the rectangle he was removed from, so the merge is a cross-fade onto the untouched photograph.",
+   "why": "Both the hole and the landing are generated from one measured rect, so they cannot drift apart. An approximate landing reads as a cut.",
+   "check": {
+    "kind": "take_prompt_contains",
+    "value": "outline"
+   }
+  },
+  {
+   "id": "mirrored_to_this_side",
+   "title": "Mirrored to this side",
+   "rule": "The flying figure is mirrored and colour-drifted to the sign's turquoise side.",
+   "why": "1-2.jpg and 2-1.jpg show OPPOSITE sides of the sign - different facing AND different paint. Unmirrored, he arrives backwards and the wrong colour."
+  },
+  {
+   "id": "lights_after_landing",
+   "title": "Lights after landing",
+   "rule": "The lights come on INSIDE the store - masked to the glazing - and only AFTER he lands.",
+   "why": "Grading the whole shopfront reads as an exposure change. Light behind the glass reads as somebody flicking a switch, which is the point."
+  }
+ ],
+ "build": {
+  "script": "build/sign_light.py · assets/2-1.jpg, graded in-script"
+ },
+ "flair": [
+  {
+   "id": "tumble_count",
+   "title": "Tumble count",
+   "note": "two full rotations, easing out into the landing"
+  },
+  {
+   "id": "light_ramp",
+   "title": "Light ramp",
+   "note": "0.55s ramp starting 0.15s after the merge"
+  },
+  {
+   "id": "outline_colour",
+   "title": "Outline colour",
+   "note": "dark wood (54,38,24)"
+  },
+  {
+   "id": "sign_sway",
+   "title": "Sign sway",
+   "note": "3 degrees, damped, from the impact"
+  }
+ ],
+ "locked": true,
+ "locked_take": "signtight_tc030",
+ "locked_at": "2026-08-23 23:10"
+}

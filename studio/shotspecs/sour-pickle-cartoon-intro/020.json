@@ -1,0 +1,146 @@
+{
+ "shot": "020",
+ "title": "They run at the shop, the pickle somersaults out",
+ "beat": "Wide, dead square to the shopfront with the cafe CENTRED. The pickle and the owner run away from camera toward the doors, backs to us; the pickle jumps straight up and out of frame, handing off to 030.",
+ "engine": "cam",
+ "invariants": [
+  {
+   "id": "pickle_is_the_sign_figure",
+   "title": "Pickle is the sign figure",
+   "rule": "Every angle of the pickle descends from the painted figure on the cafe's own sign, via the pickle_set turnaround. Never a re-rendered 3D cucumber.",
+   "why": "H3 and the earlier single derived back both replaced him with something else. He is the shop's own artwork and that is the whole point of him."
+  },
+  {
+   "id": "facing_the_shop",
+   "title": "Facing the shop",
+   "rule": "Both characters are seen from BEHIND, running away from camera toward the doors.",
+   "why": "Front-facing cutouts moving away read as facing the road."
+  },
+  {
+   "id": "no_dancing",
+   "title": "No dancing",
+   "rule": "The pickle RUNS and FLIPS. He does not dance, bounce in place or wave.",
+   "why": "Dancing made him a mascot doing a bit; running makes him a character with somewhere to be."
+  },
+  {
+   "id": "pickle_smaller_than_owner",
+   "title": "Pickle smaller than owner",
+   "rule": "The pickle is clearly smaller than the owner, and she is big enough to reach a door handle.",
+   "why": "Their relative size is character information, and hers had drifted small enough to read as a child."
+  },
+  {
+   "id": "square_on_with_more_road",
+   "title": "Square on with more road",
+   "rule": "Dead perpendicular to the shopfront - the cafe square-on and centred, no angle - with a little more of the roadway visible along the bottom than shot 1 shows.",
+   "why": "The road has to be in frame for them to be seen crossing it, and any angle would make this read as a different spot from shot 1."
+  },
+  {
+   "id": "they_cross_the_street",
+   "title": "They cross the street",
+   "rule": "Both characters start at the near side and cross the road, then the sidewalk, running away from camera toward the gate. They are travelling the whole width of the street, not starting on the pavement outside the shop.",
+   "why": "Crossing toward the shop is what makes it a destination. Starting already outside it wastes the approach."
+  },
+  {
+   "id": "natural_run_cycle",
+   "title": "Natural run cycle",
+   "rule": "A real run - opposing arm and leg, body rising and falling once per stride, feet passing under the body. Not a South Park wiggle, not a hop from one foot to the other, not a shuffle in place.",
+   "why": "Two earlier passes hopped, because the vertical was driven by a function with a corner at every zero crossing. The motion has to read as running or the whole shot reads as cheap."
+  },
+  {
+   "id": "the_lettering_is_the_photograph",
+   "title": "The lettering is the photograph",
+   "rule": "Every word on the shopfront - \"The Sour Pickle Cafe\", \"Organic Coffee!\", \"Breakfast Lunch Catering\", \"ALL DAY BREAKFAST\", \"Bubble Tea\", the 623 - is the cafe's own signage, spelled correctly, because it is never re-rendered. H3 supplies the CHARACTERS only; the shopfront comes from the plate, warped to follow H3's camera (build/h3_real.py). that because it is not a sampling problem. The band holding the signs is protected in the matte, so nothing from the model can get through it.",
+   "why": "A video model writing text produces confident nonsense every time, and no seed fixes"
+  },
+  {
+   "id": "the_shop_is_the_real_one_open",
+   "title": "The shop is the real one, open",
+   "rule": "The archway carries the cafe's ACTUAL frontage, copied from assets/facebook/fb-02.jpg - no gate across it, the OPEN sign lit, the lights on inside with someone at a table, and the real decals: \"Organic Coffee!\", the painted pickle, \"Breakfast\", the menu boards, the 623. The neon OPEN is lit on the left window, and what you can see through the glass is the cafe's own interior from assets/4.JPG - the yellow walls, the chalkboards, the tables. The inside is never invented; it is always a photograph of the actual room. NO GATE ANYWHERE in frame, and the front DOORS STAY SHUT - she opens them in 040 and that beat is not given away early. NOTE: the same insert is on shot 010, and street_x4_open.png is now the standing exterior plate for this film - any future exterior shot starts from it, not from street_x4_hero.",
+   "why": "None of that can be invented and none of it should be. It is the shop. A de-barred wall was open in the geometry and shut to the eye, and it could never have produced an OPEN sign or a lit interior because neither is in the wide photograph."
+  },
+  {
+   "id": "the_cut_lands_on_the_rise",
+   "title": "The cut lands on the rise",
+   "rule": "The shot ends while the pickle is still going UP, not after he tops out - the leap carries across the cut into 030 instead of dying on this side of it.",
+   "why": "At a true apex the vertical momentum is zero, so \"at the apex with momentum increasing\" has to mean the last moment he is still climbing."
+  },
+  {
+   "id": "she_lifts_him",
+   "title": "She lifts him",
+   "rule": "There is no squat jump. At the doorway the OWNER BOOSTS HIM - she crouches, cups her hands under him and launches him upward like a cheerleader base lifting a flyer. He rides that lift into a slow tumbling somersault, rotating as he leaves the top of frame. She stays on the ground with her arms following him up. alone, and it hands a rotation to shot 030 rather than a straight rise.",
+   "why": "It makes the launch a thing the two of them do together rather than a trick he does"
+  },
+  {
+   "id": "superseded_squat_then_rise_at_the_doorwa",
+   "title": "SUPERSEDED - squat then rise at the doorway",
+   "rule": "As he reaches the doorway the pickle GATHERS - a visible squat, knees bent, weight down - and then rises in one slow, heavy, unhurried leap, the way a gymnast rises rather than the way a rocket launches. The gather is readable, not a frame or two. NOTE: this replaces the earlier \"jump at the halfway point\" - see the note in CAN CHANGE.",
+   "why": "A jump with no crouch before it looks weightless. The squat is what sells the power, and arriving at the gate is the beat that hands off to 030."
+  },
+  {
+   "id": "pickle_runs_never_faces_camera",
+   "title": "Pickle runs never faces camera",
+   "rule": "The pickle is striding toward the doors in profile, legs apart, arms pumping. He never turns to face the camera and never waves.",
+   "why": "Waving at camera makes him a mascot doing a bit. Running makes him a character."
+  }
+ ],
+ "build": {
+  "script": "build/run_cross.py · plates2/street_x4_gate_open.png (from open_gate.py) · 2600x1464 at (2420,1978) - shot 010's window size, slid 170px down for the road"
+ },
+ "flair": [
+  {
+   "id": "engine_choice",
+   "title": "Engine choice",
+   "note": "RESOLVED, and against the standing H3 rule. Seven start frames were tried, including one with the pickle removed entirely so H3 had only the owner. It runs her correctly and then cuts to a huge hero close-up of her face at ~2s, every time; given the mascot it turns him front-on to wave. H3 renders whichever character is in frame as the hero of that frame - the opposite of two small figures running away. This shot is therefore camrig (build/run_final.py). Shot 040 remains H3, where the hero treatment is exactly what the beat wants. - option: cam / run_final.py (current) - option: h3 - inserts a hero close-up, breaks facing_the_shop"
+  },
+  {
+   "id": "run_speed",
+   "title": "Run speed",
+   "note": "Crossing takes 0.72 of the shot: they set off at 0.00 and arrive at the gate at 0.72, stride 2.8 Hz. Gather 0.72-0.80, launch at 0.80, out of frame by 0.92. Say \"faster\" or \"slower\" and this is the number that moves - the crossing itself is a promise, its speed is not."
+  },
+  {
+   "id": "where_the_jump_used_to_be",
+   "title": "Where the jump used to be",
+   "note": "It used to be at the halfway point (T_LAUNCH 0.50), because that is what you asked for at the time. \"As he approaches the gate\" supersedes it. Say the word and it goes back."
+  },
+  {
+   "id": "flip_rotation",
+   "title": "Flip rotation",
+   "note": "two turns, tucked, easing into the exit"
+  },
+  {
+   "id": "shot_length",
+   "title": "Shot length",
+   "note": "4.0s"
+  },
+  {
+   "id": "she_is_the_same_person_in_every_shot",
+   "title": "She is the same person in every shot",
+   "note": "Her face does not change between shots or between takes: a cheerful middle-aged East Asian woman with a round face, warm dark almond eyes, short dark brown hair with a soft fringe swept back off her face, a single small earring, in a pink t-shirt and a dark red apron over black trousers and black trainers. so she stopped being the same person across the cut. That description is now written into the prompt VERBATIM for every shot she is in; changing it in one shot and not the others is how continuity breaks."
+  },
+  {
+   "id": "he_is_slim",
+   "title": "He is slim",
+   "note": "A narrow gherkin - taller than he is wide, never rounded or barrel-shaped. Squeezed to 0.78 width in the start frame and prompted as slim on top of that."
+  },
+  {
+   "id": "he_wears_nothing_on_his_head",
+   "title": "He wears nothing on his head",
+   "note": "No durag, cap, hat, hood, scarf or helmet. His head is the rounded top of the pickle itself - one continuous body, head to foot, in a single green."
+  },
+  {
+   "id": "how_real_the_pickle_looks",
+   "title": "How real the pickle looks",
+   "note": "Dimensional rather than flat - soft shading, some surface texture, a real shadow, lit by the same afternoon sun as the street. Still the cafe's own character, just not a sticker."
+  },
+  {
+   "id": "sound",
+   "title": "Sound",
+   "note": "None from the engine. H3 writes its own audio and the launch whoosh could not be dropped without dropping the footsteps too, so the whole bed goes and the music and VO carry it."
+  },
+  {
+   "id": "how_close_it_sits_to_shot_1",
+   "title": "How close it sits to shot 1",
+   "note": "Same place, same square-on view, roughly the same distance - but it does NOT have to match shot 1's scale, resolution or window. That was an invariant and it has been removed: it was forcing this shot onto shot 1's plate and blocking the engine that can actually make two characters run. Similar is enough."
+  }
+ ]
+}

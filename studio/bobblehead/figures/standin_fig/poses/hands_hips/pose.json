@@ -1,0 +1,158 @@
+{
+ "id": "hands_hips",
+ "figure": "standin_fig",
+ "kind": "pose",
+ "seed": 4242,
+ "body_mm": 110.0,
+ "socket_target_mm": 8.4,
+ "print_note": "the elbows enclose a gap on each side; check overhang before slicing",
+ "recipe": {
+  "latent_resolution": 4096,
+  "octree_resolution": 512,
+  "threshold": 0.45,
+  "algorithm": "surface net",
+  "steps": 30,
+  "cfg": 5.0,
+  "voxel_res": -10
+ },
+ "stages": {
+  "matte": {
+   "alpha_box": [
+    140,
+    125,
+    659,
+    1246
+   ],
+   "alpha_coverage": 0.5603
+  },
+  "mesh": {
+   "mesh_secs": 79.5,
+   "octree": 448,
+   "octree_stepped_down": false,
+   "mesh_vram_mib": 31612
+  },
+  "decimate": {
+   "decimated": false,
+   "faces": 507840,
+   "why": "already at or under target"
+  },
+  "neck": {
+   "neck_f": 0.8579,
+   "neck_area_mm2": 335.94,
+   "neck_equiv_diameter_mm": 20.68,
+   "neck_prominence": 1.058,
+   "shoulder_f": 0.7315,
+   "shoulder_area_mm2": 922.34,
+   "fallback": false,
+   "fallback_why": "",
+   "cut_at_mm": 125.83,
+   "full_figure_mm": 146.67,
+   "rescaled_by": 0.8742,
+   "neck_centre": [
+    0.73,
+    1.42
+   ],
+   "neck_diameter_mm": 18.08,
+   "socket_d_mm": 8.4,
+   "socket_depth_mm": 12.0,
+   "socket_reduced": false,
+   "socket_wanted_mm": 8.4,
+   "debris_dropped": [],
+   "body_watertight": true,
+   "body_extents_mm": [
+    62.87,
+    24.36,
+    110.0
+   ]
+  }
+ },
+ "built": 1787541138.4671907,
+ "diagnose": {
+  "path": "/home/k4shix/shared/comfy-studio/studio/bobblehead/figures/standin_fig/poses/hands_hips/body.glb",
+  "file_bytes": 8287440,
+  "vertices": 230182,
+  "faces": 460376,
+  "unique_vertex_positions": 230182,
+  "unwelded_vertices": 0,
+  "duplicate_faces": 0,
+  "degenerate_faces": 0,
+  "bounds_min": [
+   -31.432941436767578,
+   -12.181743621826172,
+   0.0
+  ],
+  "bounds_max": [
+   31.432941436767578,
+   12.181743621826172,
+   110.0
+  ],
+  "extents": [
+   62.865882873535156,
+   24.363487243652344,
+   110.0
+  ],
+  "centroid": [
+   -0.053822951852722435,
+   2.2117515212290817,
+   64.1182996848914
+  ],
+  "unique_edges": 690564,
+  "edge_valence": {
+   "2": 690564
+  },
+  "boundary_edges": 0,
+  "manifold_edges": 690564,
+  "nonmanifold_edges": 0,
+  "nonmanifold_fraction": 0.0,
+  "is_watertight": true,
+  "is_winding_consistent": true,
+  "is_volume": true,
+  "euler_number": -6,
+  "components": 1,
+  "component_face_counts_top10": [
+   460376
+  ],
+  "components_under_1pct": 0,
+  "vertex_components": 1,
+  "vertex_component_face_counts_top10": [
+   460376
+  ],
+  "vertex_components_under_1pct": 0,
+  "volume": 37777.21548799931,
+  "surface_area": 11598.180065708922,
+  "convex_hull_volume": 80885.53856693201,
+  "solidity": 0.4670453601138976,
+  "normals_outward": true,
+  "genus": 4.0,
+  "blocking": [],
+  "warnings": [],
+  "printable": true
+ },
+ "print": {
+  "stl": "/home/k4shix/shared/comfy-studio/studio/bobblehead/figures/standin_fig/poses/hands_hips/print/standin_fig_hands_hips_110mm.stl",
+  "3mf": "/home/k4shix/shared/comfy-studio/studio/bobblehead/figures/standin_fig/poses/hands_hips/print/standin_fig_hands_hips_110mm.3mf",
+  "export": {
+   "written": [
+    {
+     "path": "/home/k4shix/shared/comfy-studio/studio/bobblehead/figures/standin_fig/poses/hands_hips/print/standin_fig_hands_hips_110mm.stl",
+     "bytes": 23018884,
+     "reloaded_watertight": true,
+     "reloaded_faces": 460376
+    },
+    {
+     "path": "/home/k4shix/shared/comfy-studio/studio/bobblehead/figures/standin_fig/poses/hands_hips/print/standin_fig_hands_hips_110mm.3mf",
+     "bytes": 5888446,
+     "reloaded_watertight": true,
+     "reloaded_faces": 460376
+    }
+   ],
+   "height_mm": null
+  }
+ },
+ "views": [
+  "views/standin_fig_hands_hips_head.jpg",
+  "views/standin_fig_hands_hips_orbit.jpg"
+ ],
+ "ok": true,
+ "wall_secs": 214.6
+}

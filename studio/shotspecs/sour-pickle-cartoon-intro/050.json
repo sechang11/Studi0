@@ -1,0 +1,43 @@
+{
+ "invariants": [
+  {
+   "id": "the_inside_is_photographs",
+   "title": "The inside is photographs",
+   "rule": "Every frame is one of the cafe's own interior photographs, panned across. Nothing in this shot is generated, extended or filled in. stitched into a real panorama — and inventing the joins would mean inventing the inside of the cafe, which this film has never done.",
+   "why": "The four photographs were taken from four different places, so they cannot be"
+  },
+  {
+   "id": "it_reads_as_one_continuous_turn",
+   "title": "It reads as one continuous turn",
+   "rule": "The motion never stops and never reverses. The joins are cross-dissolves timed to land mid-move, so the eye reads rotation rather than four cuts."
+  },
+  {
+   "id": "it_ends_on_her_at_the_counter",
+   "title": "It ends on her at the counter",
+   "rule": "The last view is 5-1.jpg and it eases to a stop with the owner behind the counter. She is what the shot is for."
+  }
+ ],
+ "flair": [
+  {
+   "id": "shot_length",
+   "title": "Shot length",
+   "note": "6.5s — about 1.6s per view."
+  },
+  {
+   "id": "how_much_of_each_photograph_is_seen_at_o",
+   "title": "How much of each photograph is seen at once",
+   "note": "CROP_W 0.80. Lower means a tighter window and a longer travel across each picture."
+  },
+  {
+   "id": "the_dissolve",
+   "title": "The dissolve",
+   "note": "0.34s of overlap at each join."
+  }
+ ],
+ "shot": "050",
+ "title": "Inside, the room turns past us and she is behind the counter",
+ "beat": "We are inside the cafe. The camera turns steadily through the room — the yellow wall and the window tables, the brick wall with its chalkboards and pictures — and settles on the counter, where the owner is standing.",
+ "build": {
+  "script": "build/interior_turn.py · assets/3.JPG, 4.JPG, 5.JPG, 5-1.jpg · 6.5s"
+ }
+}

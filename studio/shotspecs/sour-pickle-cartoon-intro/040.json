@@ -1,0 +1,91 @@
+{
+ "shot": "040",
+ "title": "She holds the door and we walk in",
+ "beat": "Shot 020's setting, zoomed in. She carries on running along the SAME line, reaches the door, pulls it open, then turns around into a welcoming stance beside it.",
+ "engine": "h3",
+ "invariants": [
+  {
+   "id": "on_model",
+   "title": "On model",
+   "rule": "Face, glasses, magenta tee, burgundy apron with the gold emblem, black trousers - all from 47.JPG.",
+   "why": "She is a real person and this is her business."
+  },
+  {
+   "id": "opens_then_turns",
+   "title": "Opens then turns",
+   "rule": "She reaches the door, opens it, and THEN turns around into the welcoming stance. In that order.",
+   "why": "Turning first makes it a pose. Turning after makes it an invitation."
+  },
+  {
+   "id": "moving_character_is_h3",
+   "title": "Moving character is h3",
+   "rule": "She moves, so this shot is H3.",
+   "why": "Standing rule for the film.",
+   "check": {
+    "kind": "engine",
+    "value": "h3"
+   }
+  },
+  {
+   "id": "runs_from_the_middle",
+   "title": "Runs from the middle",
+   "rule": "She comes down the MIDDLE of frame, continuing the line she was running in 020 - straight ahead, away from camera, never in from the side. The start frame is now h3_040_start.png, which is 020's own window with her stood where 020 leaves her, so the line continues by construction rather than by luck.",
+   "why": "It is the same run, one cut later.",
+   "check": {
+    "kind": "anchor_contains",
+    "value": "h3_040_start"
+   }
+  },
+  {
+   "id": "head_does_not_expand",
+   "title": "Head does not expand",
+   "rule": "Her head stays the size it is in 47.JPG. H3 will inflate a caricature head if the start frame gives it room; the fix is starting her larger and centred.",
+   "why": "The big head is the caricature. A bigger one is a distortion of a real person."
+  },
+  {
+   "id": "same_shopfront_as_010_and_020",
+   "title": "Same shopfront as 010 and 020",
+   "rule": "The doors, both windows, the neon OPEN, the decals and the posters are the same frontage as shots 010 and 020 - built from street_x4_open_level.png, not from a separate door plate.",
+   "why": "It is one cafe. A different-looking entrance in the last shot undoes the other three."
+  },
+  {
+   "id": "she_resumes_the_run_from_where_020_left_",
+   "title": "She resumes the run from where 020 left her",
+   "rule": "The start frame is 020's window on 020's plate with her standing exactly where 020 leaves her - centre of frame, on the pavement, a few steps short of the doors. She finishes THAT run; she does not restart from somewhere else.",
+   "why": "The two shots are one continuous action across a cut."
+  },
+  {
+   "id": "she_is_the_same_person_in_every_shot",
+   "title": "She is the same person in every shot",
+   "rule": "Her face does not change between shots or between takes: a cheerful middle-aged East Asian woman with a round face, warm dark almond eyes, short dark brown hair with a soft fringe swept back off her face, a single small earring, in a pink t-shirt and a dark red apron over black trousers and black trainers. so she stopped being the same person across the cut. That description is now written into the prompt VERBATIM for every shot she is in; changing it in one shot and not the others is how continuity breaks.",
+   "why": "H3 invents a face when it cannot see one, and it invents a different one every take -"
+  },
+  {
+   "id": "opens_holds_then_looks_at_us",
+   "title": "Opens, holds, then looks at us",
+   "rule": "She pulls a door open, HOLDS it open, and turns to look straight down the lens with a welcoming gesture. She does not let go and she does not turn away. She also STEPS ASIDE. The doorway itself stays empty and unblocked - a clear path straight through into the cafe - and she stands beside it against the glass, never in front of it.",
+   "why": "the camera walks through that doorway. Standing in it blocks the shot the film ends on."
+  },
+  {
+   "id": "the_camera_walks_in",
+   "title": "The camera walks in",
+   "rule": "The camera moves forward at walking pace the whole shot, as if the person holding it is walking into the cafe, until the open doorway fills the frame.",
+   "why": "It is the viewer being invited in, which is the whole point of the film ending here."
+  }
+ ],
+ "build": {
+  "script": "H3 via /film · plates2/AF_door_centre.png"
+ },
+ "flair": [
+  {
+   "id": "take",
+   "title": "Take",
+   "note": "t497424922 - runs from the middle, opens, turns, welcomes. Head growth reduced but not fully gone."
+  },
+  {
+   "id": "shot_length",
+   "title": "Shot length",
+   "note": "4.0s"
+  }
+ ]
+}

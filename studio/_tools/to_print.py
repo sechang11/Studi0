@@ -13,8 +13,15 @@ Bambu Studio will happily import one and slice nonsense from it.
 So this runs the route that was MEASURED to work on this box, recorded in
 studio/samples/terra_3d/mesh/VERDICT.md, and refuses to pretend when it fails:
 
-    repair  --method voxel --voxel-res 900   NOT the default 320
+    repair  --method auto                    screened Poisson, then surface, then voxel
+            --voxel-res 900                  only if it falls back to the voxel remesh
     export  --height <mm> --up y             to .3mf AND .stl
+
+UPDATE: THE VOXEL PATH IS NOW THE FALLBACK, NOT THE ROUTE. `repair --method auto` runs
+screened Poisson first, which is watertight WITHOUT rasterising and therefore has no voxel
+resolution to get wrong - MEASURED 0.0028 mm from the raw surface against 0.1500 mm for the
+recipe this docstring was written for. Everything below still applies when pymeshlab is
+missing and the voxel remesh runs.
 
 THE VOXEL RESOLUTION IS THE WHOLE FINDING. At the default 320 one voxel is 0.47 mm at
 150 mm tall, and a face comes back as a terraced Minecraft mass with no eyes and no nose.
@@ -80,10 +87,16 @@ def main():
     src = a.mesh
     if not a.no_repair and not d0.get("is_watertight"):
         rp = os.path.join(OUT, "%s_repaired.glb" % name)
-        print("  repairing at voxel-res %d (this takes a minute and a lot of RAM)…"
+        # `auto` is screened Poisson first, then surface, then the voxel remesh - see
+        # mesh_doctor.repair_poisson. This used to force `--method voxel --voxel-res 900`,
+        # and forcing it here meant a mesh that had ALREADY been repaired cleanly upstream
+        # was rasterised again on the way to the printer, throwing the detail away twice.
+        # MEASURED on a Hunyuan3D figure: voxel 0.1500 mm from the raw surface, poisson
+        # 0.0028 mm. --voxel-res is still honoured for the fallback.
+        print("  repairing (poisson if pymeshlab is here, voxel-res %d if not)…"
               % a.voxel_res)
         t = time.time()
-        r = md("repair", a.mesh, "--method", "voxel",
+        r = md("repair", a.mesh, "--method", "auto",
                "--voxel-res", str(a.voxel_res), "--out", rp)
         if r.returncode != 0 or not os.path.isfile(rp):
             print("  REPAIR FAILED: %s" % (r.stderr.strip()[-300:] or "no output written"))

@@ -1,0 +1,69 @@
+{
+ "shot": "010",
+ "title": "The drive-by brake",
+ "beat": "A camera held out of a car window, pointed 90 degrees left, travelling down Store Street and stopped dead by a hard brake outside the cafe.",
+ "engine": "cam",
+ "invariants": [
+  {
+   "id": "camera_never_rotates",
+   "title": "Camera never rotates",
+   "rule": "The camera stays square to the facade for the whole shot. Vertical edges - piers, doorframes, downpipes - must stay vertical.",
+   "why": "A pan rotates about the camera and keeps perspective fixed; driving past changes the viewing angle. Cross-dissolving an oblique plate into a square-on one IS a rotation, and it read as the camera turning to face the next building.",
+   "check": {
+    "kind": "camrig_preset",
+    "value": "sour_pickle"
+   }
+  },
+  {
+   "id": "fronto_parallel_plate",
+   "title": "Fronto parallel plate",
+   "rule": "The plate must be one fronto-parallel photograph containing BOTH buildings already square on. fb-08-latest-post.jpg, upscaled. Now street_x4_open.png - the same photograph with the cafe's real open frontage inserted into the arch by door_insert.py, which changes what is INSIDE the archway and nothing about the geometry.",
+   "why": "Only then is a pure horizontal translation geometrically correct. Any other plate can only ever produce a pan, however fast it moves.",
+   "check": {
+    "kind": "anchor_contains",
+    "value": "street_x4"
+   }
+  },
+  {
+   "id": "three_phase_brake",
+   "title": "Three phase brake",
+   "rule": "Constant speed, then the framing ACCELERATES through the brake, then the return from full lean is faster still.",
+   "why": "Phase 2 collapsing early reads as a car accident. camrig's verdict tests it.",
+   "check": {
+    "kind": "engine",
+    "value": "cam"
+   }
+  },
+  {
+   "id": "both_buildings_whole",
+   "title": "Both buildings whole",
+   "rule": "Starts square on a complete neighbouring bay, ends square on the cafe bay - piers either side, arch above, shopfront below.",
+   "why": "Starting at the plate's left edge cut INSIDE OUT in half; it read as the corner of something rather than a building."
+  }
+ ],
+ "build": {
+  "script": "camrig drive_by_brake (studio/_tools/camrig.py) · plates2/street_x4_hero.png · build/grade_street.py then build/dress_shop.py"
+ },
+ "flair": [
+  {
+   "id": "brake_preset",
+   "title": "Brake preset",
+   "note": "drive_by_brake/sour_pickle - grip 3.9, ~11% softer than `big`"
+  },
+  {
+   "id": "grade_strength",
+   "title": "Grade strength",
+   "note": "dress_shop strength 1.2 on the cafe bay"
+  },
+  {
+   "id": "vo_line",
+   "title": "Vo line",
+   "note": "'To the Sour Pickle Cafe!!' - Mabel, IndexTTS joy vector, at 1.20s"
+  },
+  {
+   "id": "shot_length",
+   "title": "Shot length",
+   "note": "3.9s, settled before the cut"
+  }
+ ]
+}

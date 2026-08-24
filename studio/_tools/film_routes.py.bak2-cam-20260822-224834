@@ -1,0 +1,1179 @@
+"""Routes behind /film - the shot-by-shot editor.
+
+Kept out of serve.py because it owns RENDER JOBS, story_routes-style: every render runs on
+a worker thread and reports through a small in-memory job table, so the page can ask for
+six takes across three engines and keep answering while they render. ComfyUI queues GPU
+work internally, so concurrent submissions serialize there rather than here.
+
+WHAT A TAKE IS. One attempt at one shot on one engine with one seed, immutable, QC-checked
+the moment it lands (streams present, audio not flat, nothing frozen) - because this
+project's worst bugs are files that exist, run the right length, and are wrong.
+
+THE PIPELINE PER TAKE:  resolve anchor -> stage to ComfyUI input -> compile (film.py owns
+the rulebook) -> run engine workflow -> pull the file local (never trust the SMB share) ->
+poster + filmstrip -> QC -> record in film.json.
+
+ComfyUI dying mid-batch is normal here - the LTX envelope kills the PROCESS, not the job -
+so every render goes through ensure_comfy(), which restarts it by script and waits.
+"""
+import json, os, re, shutil, subprocess, sys, threading, time
+import urllib.request
+
+TOOLS = os.path.dirname(os.path.abspath(__file__))
+STUDIO = os.path.dirname(TOOLS)
+ROOT = os.path.dirname(STUDIO)
+sys.path.insert(0, STUDIO)
+sys.path.insert(0, os.path.join(ROOT, "scripts"))
+sys.path.insert(0, TOOLS)
+os.environ.setdefault("COMFY_HOST", "127.0.0.1:8188")
+
+# scripts/film.py exists too, and scripts sits first on sys.path - load the studio
+# model by explicit path so the collision can never bite.
+import importlib.util as _ilu                                # noqa: E402
+_spec = _ilu.spec_from_file_location("studio_film", os.path.join(STUDIO, "film.py"))
+F = _ilu.module_from_spec(_spec)
+_spec.loader.exec_module(F)
+
+JOBS = {}
+_LOCK = threading.Lock()
+_SEQ = [0]
+
+
+def _comfy():
+    from comfy import run, set_path
+    from epic import load_wf, ensure_local, HOST, COMFY
+    return run, set_path, load_wf, ensure_local, HOST, COMFY
+
+
+def _job(kind, total=1, **extra):
+    with _LOCK:
+        _SEQ[0] += 1
+        jid = "j%d" % _SEQ[0]
+        JOBS[jid] = {"id": jid, "kind": kind, "state": "running", "done": 0,
+                     "total": total, "log": [], "error": "", "started": time.time()}
+        JOBS[jid].update(extra)
+    return jid
+
+
+def _log(jid, msg):
+    with _LOCK:
+        JOBS[jid]["log"].append(msg)
+        JOBS[jid]["log"] = JOBS[jid]["log"][-30:]
+
+
+def _finish(jid, error=""):
+    with _LOCK:
+        JOBS[jid]["state"] = "failed" if error else "done"
+        JOBS[jid]["error"] = error
+
+
+def ensure_comfy(tries=3):
+    for _ in range(tries):
+        try:
+            urllib.request.urlopen("http://127.0.0.1:8188/system_stats", timeout=5).read()
+            return True
+        except Exception:
+            subprocess.run(["bash", os.path.join(ROOT, "scripts", "restart-comfy.sh")],
+                           capture_output=True)
+            for _ in range(60):
+                try:
+                    urllib.request.urlopen("http://127.0.0.1:8188/system_stats",
+                                           timeout=5).read()
+                    time.sleep(3)
+                    return True
+                except Exception:
+                    time.sleep(5)
+    return False
+
+
+def _sh(*a):
+    return subprocess.run(a, capture_output=True, text=True)
+
+
+def _thumbs(mp4, base):
+    """poster + a 6-frame strip; the strip is what makes a takes grid judgeable."""
+    _sh("ffmpeg", "-y", "-v", "error", "-i", mp4, "-vf", "thumbnail=90,scale=480:-2",
+        "-frames:v", "1", "-update", "1", base + ".png")
+    _sh("ffmpeg", "-y", "-v", "error", "-i", mp4,
+        "-vf", "fps=6/%s,scale=200:-2,tile=6x1" % max(_dur(mp4), 0.5),
+        "-frames:v", "1", "-update", "1", base + "_strip.png")
+
+
+def _dur(p):
+    r = _sh("ffprobe", "-v", "error", "-show_entries", "format=duration",
+            "-of", "csv=p=0", p)
+    try:
+        return float(r.stdout.strip())
+    except ValueError:
+        return 0.0
+
+
+def _polish_mod():
+    """studio/_tools/polish.py by explicit path - same collision-proofing as the model."""
+    spec = _ilu.spec_from_file_location("film_polish", os.path.join(TOOLS, "polish.py"))
+    m = _ilu.module_from_spec(spec)
+    spec.loader.exec_module(m)
+    return m
+
+
+def _fps(p):
+    r = _sh("ffprobe", "-v", "error", "-select_streams", "v:0",
+            "-show_entries", "stream=r_frame_rate", "-of", "csv=p=0", p)
+    try:
+        a, _, b = (r.stdout.strip() or "24/1").partition("/")
+        return round(float(a) / float(b or 1))
+    except (ValueError, ZeroDivisionError):
+        return 24
+
+
+def _qc(path):
+    try:
+        import qc_films
+        return qc_films.check(path)
+    except Exception as e:
+        return ["qc unavailable: %s" % e]
+
+
+# ─── reads ──────────────────────────────────────────────────────────────────────────
+
+def list_films():
+    out = []
+    for f in F.list_films():
+        shots = f.data["shots"]
+        out.append({"id": f.id, "title": f.data.get("title", f.id),
+                    "look": f.data.get("look"),
+                    "scenes": len(f.data["scenes"]), "shots": len(shots),
+                    "picked": sum(1 for s in shots.values() if s.get("picked")),
+                    "film": bool(_film_file(f))})
+    return {"films": out}, 200
+
+
+def _film_file(f):
+    p = os.path.join(f.dir, "assets", "film.mp4")
+    return p if os.path.exists(p) else ""
+
+
+def tree(fid):
+    f = F.load(fid)
+    scenes = []
+    for sc in f.data["scenes"]:
+        shots = []
+        for shid in sc["shots"]:
+            sh = f.data["shots"].get(shid)
+            if not sh:
+                continue
+            picked = next((t for t in sh["takes"] if t["id"] == sh.get("picked")), None)
+            shots.append({"id": shid, "title": sh.get("title"),
+                          "duration": sh.get("duration"),
+                          "beats": len(sh.get("beats") or []),
+                          "takes": len(sh["takes"]),
+                          "engines": sorted({t["engine"] for t in sh["takes"]}),
+                          "picked": sh.get("picked") or "",
+                          "poster": picked and picked.get("poster") or "",
+                          "picked_file": picked and picked.get("file") or "",
+                          "picked_qc": len(picked.get("qc") or []) if picked else 0,
+                          "picked_warnings": len(picked.get("warnings") or [])
+                          if picked else 0,
+                          "picked_fps": picked.get("fps", 24) if picked else 0,
+                          "picked_dur": picked.get("duration", 0) if picked else 0,
+                          "transition_out": sh.get("transition_out", "cut")})
+        scenes.append({k: sc.get(k) for k in ("id", "title", "location", "time_of_day",
+                                              "weather", "ambience", "palette", "music",
+                                              "cast_present", "no_people", "anchor",
+                                              "anchor_candidates")}
+                      | {"shots": shots})
+    return {"id": f.id, "title": f.data.get("title"), "look": f.data.get("look"),
+            "look_clause": f.data.get("look_clause"), "grade": f.data.get("grade"),
+            "logline": f.data.get("logline"), "negative": f.data.get("negative"),
+            "cast": f.data.get("cast"), "scenes": scenes,
+            "film": bool(_film_file(f)),
+            "angles": F.ANGLES, "moves": sorted(F.MOVES),
+            "transitions_out": F.TRANSITIONS_OUT}, 200
+
+
+def shot_detail(fid, shid):
+    f = F.load(fid)
+    sh = f.shot(shid)
+    return {"shot": sh, "resolved": f.resolved(shid),
+            "keyframe_plan": F.keyframe_plan(f, shid)}, 200
+
+
+def compile_shot(fid, shid):
+    f = F.load(fid)
+    flat = f.flat(shid)
+    out = {}
+    for eng in ("ltx", "h3", "wan"):
+        try:
+            out[eng] = F.compile_shot(flat, eng)
+        except Exception as e:
+            out[eng] = {"error": str(e)}
+    return {"compiled": out, "keyframe_plan": F.keyframe_plan(f, shid)}, 200
+
+
+def libraries():
+    """Everything the editor can offer from disk: characters, ready voices, templates."""
+    chars = []
+    if os.path.isdir(F.CHARDIR):
+        for fn in sorted(os.listdir(F.CHARDIR)):
+            if not fn.endswith(".json"):
+                continue
+            try:
+                d = json.load(open(os.path.join(F.CHARDIR, fn), encoding="utf-8"))
+                chars.append({"id": d.get("id", fn[:-5]), "name": d.get("name"),
+                              "sheet": d.get("sheet") or "", "desc": (d.get("desc") or "")[:90]})
+            except Exception:
+                continue
+    voices = []
+    vdir = os.path.join(STUDIO, "voices")
+    if os.path.isdir(vdir):
+        for fn in sorted(os.listdir(vdir)):
+            if not fn.endswith(".json"):
+                continue
+            try:
+                d = json.load(open(os.path.join(vdir, fn), encoding="utf-8"))
+            except Exception:
+                continue
+            # blocked packs are real-person clones and are never offered anywhere
+            if d.get("status") != "ready":
+                continue
+            voices.append({"id": fn[:-5], "name": d.get("name")})
+    locations = []
+    ldir = os.path.join(STUDIO, "locations")
+    if os.path.isdir(ldir):
+        for fn in sorted(os.listdir(ldir)):
+            if fn.endswith(".json"):
+                try:
+                    d = json.load(open(os.path.join(ldir, fn), encoding="utf-8"))
+                    d["id"] = fn[:-5]
+                    locations.append(d)
+                except Exception:
+                    continue
+    templates = []
+    if os.path.isdir(F.TEMPLATES):
+        for fn in sorted(os.listdir(F.TEMPLATES)):
+            if fn.endswith(".json"):
+                try:
+                    d = json.load(open(os.path.join(F.TEMPLATES, fn), encoding="utf-8"))
+                    templates.append({"id": fn[:-5], "title": d.get("title", fn[:-5]),
+                                      "hint": d.get("hint", ""), "shot": d.get("shot")})
+                except Exception:
+                    continue
+    return {"characters": chars, "voices": voices, "templates": templates,
+            "locations": locations}, 200
+
+
+def job_status(jid):
+    with _LOCK:
+        j = JOBS.get(jid)
+        return (dict(j), 200) if j else ({"error": "no such job"}, 404)
+
+
+def jobs_all():
+    with _LOCK:
+        return {"jobs": sorted(JOBS.values(), key=lambda j: j["started"],
+                               reverse=True)[:12]}, 200
+
+
+# ─── writes: structure ──────────────────────────────────────────────────────────────
+
+def new_film(data):
+    f = F.new_film(data["title"], look=data.get("look", "photoreal"))
+    return {"ok": True, "id": f.id}, 200
+
+
+def edit_film(data):
+    f = F.load(data["film"])
+    for k in ("title", "logline", "look", "look_clause", "grade", "negative"):
+        if k in data:
+            f.data[k] = data[k]
+    if "cast" in data:
+        f.data["cast"] = data["cast"]
+    if data.get("look") == "anime" and not data.get("look_clause"):
+        f.data["look_clause"] = F.LOOK_ANIME
+    f.save()
+    return {"ok": True}, 200
+
+
+def new_scene(data):
+    f = F.load(data["film"])
+    sc = f.new_scene(data.get("title") or "scene")
+    return {"ok": True, "id": sc["id"]}, 200
+
+
+def edit_scene(data):
+    f = F.load(data["film"])
+    sc = f.scene(data["scene"])
+    for k in ("title", "location", "time_of_day", "weather", "ambience", "palette",
+              "music", "cast_present", "no_people"):
+        if k in data:
+            sc[k] = data[k]
+    if data.get("anchor") and data["anchor"] in (sc.get("anchor_candidates") or []):
+        # picking a candidate COPIES it over the canonical anchor path, so every shot
+        # that says "anchor: scene" follows the pick with no other change
+        shutil.copy(os.path.join(f.dir, data["anchor"]),
+                    os.path.join(f.dir, "assets", "anchor_%s.png" % sc["id"]))
+        sc["anchor"] = "assets/anchor_%s.png" % sc["id"]
+    f.save()
+    return {"ok": True}, 200
+
+
+def new_shot(data):
+    f = F.load(data["film"])
+    kw = {}
+    if data.get("template"):
+        tp = os.path.join(F.TEMPLATES, data["template"] + ".json")
+        if os.path.exists(tp):
+            kw = json.load(open(tp, encoding="utf-8")).get("shot") or {}
+            kw = json.loads(json.dumps(kw))          # deep copy
+    sh = f.new_shot(data["scene"], after=data.get("after") or None, **kw)
+    return {"ok": True, "id": sh["id"]}, 200
+
+
+def edit_shot(data):
+    f = F.load(data["film"])
+    sh = f.shot(data["shot"])
+    for k in ("title", "duration", "aspect", "anchor", "keyframe_prompt", "beats",
+              "sfx", "no_people", "enhance", "transition_out", "engine_notes",
+              "cam"):
+        if k in data:
+            sh[k] = data[k]
+    f.save()
+    return {"ok": True}, 200
+
+
+def reorder(data):
+    f = F.load(data["film"])
+    sc = f.scene(data["scene"])
+    want = [s for s in data["order"] if s in sc["shots"]]
+    sc["shots"] = want + [s for s in sc["shots"] if s not in want]
+    f.save()
+    return {"ok": True}, 200
+
+
+def delete_shot(data):
+    f = F.load(data["film"])
+    shid = data["shot"]
+    for sc in f.data["scenes"]:
+        if shid in sc["shots"]:
+            sc["shots"].remove(shid)
+    f.data["shots"].pop(shid, None)
+    f.save()
+    return {"ok": True}, 200
+
+
+def pick(data):
+    f = F.load(data["film"])
+    sh = f.shot(data["shot"])
+    if data["take"] and not any(t["id"] == data["take"] for t in sh["takes"]):
+        return {"error": "no such take"}, 404
+    sh["picked"] = data["take"]
+    f.save()
+    return {"ok": True}, 200
+
+
+# ─── anchors and keyframes ──────────────────────────────────────────────────────────
+
+def _stage(comfy_dir, src, name):
+    shutil.copy(src, os.path.join(comfy_dir, "input", name))
+    return name
+
+
+ANCHOR_SEEDS = (5, 21, 77)
+
+
+def _render_scene_anchor(jid, fid, scid):
+    run, set_path, load_wf, ensure_local, HOST, COMFY = _comfy()
+    f = F.load(fid)
+    sc = f.scene(scid)
+    try:
+        if not ensure_comfy():
+            raise RuntimeError("ComfyUI will not come up")
+        look = f.data.get("look")
+        ground = ", ".join(x for x in (sc.get("location"), sc.get("time_of_day"),
+                                       sc.get("weather"), sc.get("palette")) if x)
+        present = [c for c in (sc.get("cast_present") or []) if c in f.data["cast"]]
+        clauses = [f.data["cast"][c]["clause"] for c in present]
+        prompt = ", ".join([x for x in [", ".join(clauses), ground] if x])
+        dest = os.path.join(f.dir, "assets", "anchor_%s.png" % scid)
+        _log(jid, "anchor prompt: %s" % prompt[:120])
+        if look == "anime" and len(present) >= 2:
+            wf = load_wf("45_anime_two_char_ipadapter.json")
+            sheets = [f.data["cast"][c].get("sheet") or "" for c in present[:2]]
+            set_path(wf, "2.inputs.image", sheets[0])
+            set_path(wf, "12.inputs.image", sheets[1])
+            set_path(wf, "20.inputs.width", 1216)
+            set_path(wf, "20.inputs.height", 832)
+            set_path(wf, "21.inputs.width", 608)
+            set_path(wf, "21.inputs.height", 832)
+            set_path(wf, "23.inputs.x", 608)
+            set_path(wf, "5.inputs.text",
+                     "2people, on the LEFT %s, and on the RIGHT %s, %s, %s"
+                     % (clauses[0], clauses[1], ground, F.LOOK_ANIME))
+            set_path(wf, "6.inputs.text", F.NEG_ANIME)
+            set_path(wf, "7.inputs.width", 1216)
+            set_path(wf, "7.inputs.height", 832)
+            set_path(wf, "8.inputs.seed", int(time.time()) % 99991)
+            set_path(wf, "10.inputs.width", 1216)
+            set_path(wf, "10.inputs.height", 832)
+            set_path(wf, "11.inputs.filename_prefix",
+                     "claude-generated/films/%s/anchor_%s" % (fid, scid))
+        elif look == "anime":
+            wf = load_wf("22_anime_kf_ipadapter.json")
+            ch = f.data["cast"].get(present[0]) if present else {}
+            set_path(wf, "2.inputs.image", (ch or {}).get("sheet") or "")
+            set_path(wf, "4.inputs.weight", 0.3)
+            set_path(wf, "5.inputs.text", "%s, %s, masterpiece, best quality, anime key "
+                     "visual, %s" % ((ch or {}).get("tags") or prompt, ground,
+                                     F.LOOK_ANIME))
+            set_path(wf, "6.inputs.text", F.NEG_ANIME)
+            set_path(wf, "7.inputs.width", 1216)
+            set_path(wf, "7.inputs.height", 832)
+            set_path(wf, "8.inputs.seed", int(time.time()) % 99991)
+            set_path(wf, "10.inputs.width", 1216)
+            set_path(wf, "10.inputs.height", 832)
+            set_path(wf, "11.inputs.filename_prefix",
+                     "claude-generated/films/%s/anchor_%s" % (fid, scid))
+        else:
+            ports = [f.data["cast"][c].get("portrait") for c in present
+                     if f.data["cast"][c].get("portrait")][:2]
+            if ports:
+                # the measured identity route: portraits in, the scene out with the same
+                # faces. One portrait doubles as both references for a single character.
+                p0 = _stage(COMFY, os.path.join(f.dir, ports[0]),
+                            "film_port_%s_0.png" % fid)
+                p1 = _stage(COMFY, os.path.join(f.dir, ports[-1]),
+                            "film_port_%s_1.png" % fid)
+                wf = load_wf("14_qwen_edit_ref.json")
+                set_path(wf, "8.inputs.image", p0)
+                set_path(wf, "9.inputs.image", p1)
+                set_path(wf, "7.inputs.strength_model", 0.0)
+                # each reference must be BOUND to its person by name, or the edit keeps
+                # one face and invents the other - sc01 proved it with a crowd behind
+                if len(ports) > 1 and len(present) > 1:
+                    # the binding that MEASURED as holding both faces: sides, with
+                    # "exact same face unchanged" adjacent to each person. "The first
+                    # reference is X" and photo-language both lost one face.
+                    ca = f.data["cast"][present[0]]
+                    cb = f.data["cast"][present[1]]
+                    prompt14 = ("On the left stands the woman from the first reference "
+                                "image with her exact same face unchanged, %s. On the "
+                                "right stands the man from the second reference image "
+                                "with his exact same face unchanged, %s. %s. %s"
+                                % (ca["clause"], cb["clause"], ground,
+                                   f.data.get("look_clause") or F.LOOK_PHOTO))
+                else:
+                    ca = f.data["cast"][present[0]]
+                    prompt14 = ("Keep the exact face and identity of the person in the "
+                                "reference images. Place %s in a new scene: %s. %s"
+                                % (ca["clause"], ground,
+                                   f.data.get("look_clause") or F.LOOK_PHOTO))
+                set_path(wf, "10.inputs.prompt", prompt14)
+                set_path(wf, "11.inputs.prompt", F.NEG_PHOTO)
+                set_path(wf, "20.inputs.width", 1472)
+                set_path(wf, "20.inputs.height", 832)
+                set_path(wf, "13.inputs.seed", int(time.time()) % 99991)
+                set_path(wf, "15.inputs.filename_prefix",
+                         "claude-generated/films/%s/anchor_%s" % (fid, scid))
+            else:
+                wf = load_wf("01_qwen_t2i_turbo.json")
+                set_path(wf, "10.inputs.text", "%s. %s"
+                         % (prompt, f.data.get("look_clause") or F.LOOK_PHOTO))
+                set_path(wf, "11.inputs.text", F.NEG_PHOTO)
+                set_path(wf, "12.inputs.width", 1472)
+                set_path(wf, "12.inputs.height", 832)
+                set_path(wf, "13.inputs.seed", int(time.time()) % 99991)
+                set_path(wf, "15.inputs.filename_prefix",
+                         "claude-generated/films/%s/anchor_%s" % (fid, scid))
+        cands = []
+        for i, sd in enumerate(ANCHOR_SEEDS):
+            for node in ("13", "8"):
+                try:
+                    set_path(wf, "%s.inputs.seed" % node, sd)
+                except (KeyError, TypeError):
+                    pass
+            _, outs = run(HOST, wf, quiet=True)
+            if not outs:
+                continue
+            cp = os.path.join(f.dir, "assets", "anchor_%s_c%d.png" % (scid, i))
+            ensure_local(outs[0], cp)
+            cands.append("assets/anchor_%s_c%d.png" % (scid, i))
+            _log(jid, "candidate %d (seed %d)" % (i + 1, sd))
+        if not cands:
+            raise RuntimeError("no candidates rendered")
+        shutil.copy(os.path.join(f.dir, cands[0]), dest)
+        f2 = F.load(fid)
+        sc2 = f2.scene(scid)
+        sc2["anchor"] = "assets/anchor_%s.png" % scid
+        sc2["anchor_candidates"] = cands
+        f2.save()
+        _finish(jid)
+    except Exception as e:
+        _finish(jid, str(e)[:300])
+
+
+def scene_anchor(data):
+    jid = _job("anchor", film=data["film"], scene=data["scene"])
+    threading.Thread(target=_render_scene_anchor,
+                     args=(jid, data["film"], data["scene"]), daemon=True).start()
+    return {"job": jid}, 200
+
+
+def _resolve_anchor_file(f, shid, jid):
+    """Absolute path of the start image for this shot, generating nothing: the scene
+    anchor and prev_last are files that already exist or an error the caller can show."""
+    plan = F.keyframe_plan(f, shid)
+    if plan["mode"] == "scene":
+        p = plan.get("path")
+        if not p:
+            raise RuntimeError("scene has no anchor yet - generate one in the Scene tab")
+        return os.path.join(f.dir, p)
+    if plan["mode"] == "file":
+        return os.path.expanduser(plan["path"])
+    if plan["mode"] == "prev_last":
+        tf = plan.get("take_file")
+        if not tf:
+            raise RuntimeError("prev_last: previous shot has no picked take")
+        src = os.path.join(f.dir, tf)
+        dest = os.path.join(f.dir, "assets", "last_%s.png" % shid)
+        _sh("ffmpeg", "-y", "-v", "error", "-sseof", "-0.2", "-i", src,
+            "-update", "1", "-frames:v", "1", dest)
+        if not os.path.exists(dest):
+            raise RuntimeError("could not extract last frame")
+        return dest
+    if plan["mode"] == "generate":
+        return _render_shot_keyframe(f, shid, plan)
+    raise RuntimeError(plan.get("error") or "no anchor")
+
+
+def _render_shot_keyframe(f, shid, plan):
+    """A shot-specific start image through the right identity path, cached by content:
+    photoreal through Qwen, anime through the character sheet with the IPAdapter weight
+    the framing calls for (0.6 portrait, 0.3 wide - PLUS FACE hijacks composition)."""
+    import hashlib
+    run, set_path, load_wf, ensure_local, HOST, COMFY = _comfy()
+    sh = f.shot(shid)
+    flat = f.flat(shid)
+    prompt = plan.get("prompt") or ""
+    if not prompt:
+        raise RuntimeError("anchor=generate needs a keyframe prompt on the shot")
+    ports = [f.data["cast"][c].get("portrait") for c in (plan.get("present") or [])
+             if f.data["cast"].get(c, {}).get("portrait")][:2]
+    key = hashlib.sha1(("%s|%s|%s|%s" % (prompt, plan.get("ipa"), f.data.get("look"),
+                                         "|".join(ports))).encode()).hexdigest()[:10]
+    dest = os.path.join(f.dir, "assets", "kf_%s_%s.png" % (shid, key))
+    if os.path.exists(dest):
+        return dest
+    if not ensure_comfy():
+        raise RuntimeError("ComfyUI will not come up")
+    w, h = (896, 1216) if flat.get("aspect") == "portrait" else (1472, 832)
+    ground = ", ".join(x for x in (flat.get("location"), flat.get("time_of_day"),
+                                   flat.get("weather")) if x)
+    if f.data.get("look") == "anime":
+        present = plan.get("present") or []
+        ch = f.data["cast"].get(present[0]) if present else {}
+        wf = load_wf("22_anime_kf_ipadapter.json")
+        set_path(wf, "2.inputs.image", (ch or {}).get("sheet") or "")
+        set_path(wf, "4.inputs.weight", float(plan.get("ipa") or 0.3)
+                 if (ch or {}).get("sheet") else 0.0)
+        set_path(wf, "5.inputs.text", "%s, %s, masterpiece, best quality, anime key "
+                 "visual, %s" % (prompt, ground, F.LOOK_ANIME))
+        set_path(wf, "6.inputs.text", F.NEG_ANIME)
+        set_path(wf, "7.inputs.width", min(w, 1216))
+        set_path(wf, "7.inputs.height", h if h <= 832 else 1216)
+        set_path(wf, "8.inputs.seed", 31)
+        set_path(wf, "10.inputs.width", min(w, 1216))
+        set_path(wf, "10.inputs.height", h if h <= 832 else 1216)
+        set_path(wf, "11.inputs.filename_prefix",
+                 "claude-generated/films/%s/kf_%s" % (f.id, shid))
+    elif ports:
+        p0 = _stage(COMFY, os.path.join(f.dir, ports[0]), "film_kfp_%s_0.png" % f.id)
+        p1 = _stage(COMFY, os.path.join(f.dir, ports[-1]), "film_kfp_%s_1.png" % f.id)
+        wf = load_wf("14_qwen_edit_ref.json")
+        set_path(wf, "8.inputs.image", p0)
+        set_path(wf, "9.inputs.image", p1)
+        set_path(wf, "7.inputs.strength_model", 0.0)
+        set_path(wf, "10.inputs.prompt",
+                 "Keep the exact faces and identities of the person in the first "
+                 "reference image%s. Place them in a new scene: %s, %s. %s"
+                 % (" and the person in the second reference image"
+                    if len(ports) > 1 else "", prompt, ground,
+                    f.data.get("look_clause") or F.LOOK_PHOTO))
+        set_path(wf, "11.inputs.prompt", F.NEG_PHOTO)
+        set_path(wf, "20.inputs.width", w)
+        set_path(wf, "20.inputs.height", h)
+        set_path(wf, "13.inputs.seed", 31)
+        set_path(wf, "15.inputs.filename_prefix",
+                 "claude-generated/films/%s/kf_%s" % (f.id, shid))
+    else:
+        wf = load_wf("01_qwen_t2i_turbo.json")
+        set_path(wf, "10.inputs.text", "%s, %s. %s" % (prompt, ground,
+                 f.data.get("look_clause") or F.LOOK_PHOTO))
+        set_path(wf, "11.inputs.text", F.NEG_PHOTO)
+        set_path(wf, "12.inputs.width", w)
+        set_path(wf, "12.inputs.height", h)
+        set_path(wf, "13.inputs.seed", 31)
+        set_path(wf, "15.inputs.filename_prefix",
+                 "claude-generated/films/%s/kf_%s" % (f.id, shid))
+    _, outs = run(HOST, wf, quiet=True)
+    if not outs:
+        raise RuntimeError("keyframe render returned nothing")
+    ensure_local(outs[0], dest)
+    return dest
+
+
+# ─── takes ──────────────────────────────────────────────────────────────────────────
+
+def _render_take(jid, f, sh, eng, seed):
+    run, set_path, load_wf, ensure_local, HOST, COMFY = _comfy()
+    flat = f.flat(sh["id"])
+    c = F.compile_shot(flat, eng)
+    tid = "t%d" % (int(time.time() * 1000) % 10 ** 9)
+    tdir = os.path.join(f.dir, "takes", sh["id"])
+    os.makedirs(tdir, exist_ok=True)
+    rel = os.path.join("takes", sh["id"], "%s_%s.mp4" % (eng, tid))
+    dest = os.path.join(f.dir, rel)
+    anchor = _resolve_anchor_file(f, sh["id"], jid)
+    staged = _stage(COMFY, anchor, "film_%s_%s.png" % (f.id, sh["id"]))
+    prefix = "claude-generated/films/%s/%s_%s" % (f.id, sh["id"], tid)
+    if not ensure_comfy():
+        raise RuntimeError("ComfyUI will not come up")
+
+    if eng == "ltx":
+        wf = load_wf(c["workflow"])
+        set_path(wf, "395.inputs.image", staged)
+        set_path(wf, "sg1_376.inputs.value", c["prompt"])
+        set_path(wf, "sg1_373.inputs.text", c["negative"])
+        set_path(wf, "sg1_383.inputs.value", bool(c["enhance"]))
+        set_path(wf, "sg1_362.inputs.value", int(c["seconds"]))
+        set_path(wf, "403.inputs.megapixels", float(c["megapixels"]))
+        set_path(wf, "403.inputs.aspect_ratio", c["aspect"])
+        set_path(wf, "sg1_339.inputs.noise_seed", seed)
+        set_path(wf, "75.inputs.filename_prefix", prefix)
+    elif eng == "h3":
+        wf = load_wf(c["workflow"])
+        set_path(wf, "8.inputs.image", staged)
+        set_path(wf, "20.inputs.prompt", c["prompt"])
+        set_path(wf, "20.inputs.width", c["width"])
+        set_path(wf, "20.inputs.height", c["height"])
+        set_path(wf, "20.inputs.length", c["length"])
+        set_path(wf, "33.inputs.noise_seed", seed)
+        set_path(wf, "51.inputs.filename_prefix", prefix)
+    elif eng == "cam":
+        # A camera rig: the motion is arithmetic, the plate is this shot's anchor. No
+        # ComfyUI, no seed lottery - the same parameters always give the same pixels.
+        import importlib.util
+        _cp = os.path.join(STUDIO, "_tools", "camrig.py")
+        _sp = importlib.util.spec_from_file_location("camrig", _cp)
+        camrig = importlib.util.module_from_spec(_sp)
+        _sp.loader.exec_module(camrig)
+        cam = sh.get("cam") or {}
+        rig = cam.get("rig") or "still_push"
+        camrig.render(rig, anchor, dest, params=cam.get("params") or {},
+                      preset=cam.get("preset") or None, fps=int(f.data.get("fps") or 24))
+        _thumbs(dest, dest[:-4])
+        qc = _qc(dest)
+        v = camrig.verdict(rig, cam.get("params") or {}, cam.get("preset") or None)
+        take = {"id": tid, "engine": "cam", "seed": 0,
+                "created": time.strftime("%H:%M"), "file": rel,
+                "poster": rel[:-4] + ".png", "strip": rel[:-4] + "_strip.png",
+                "duration": round(_dur(dest), 2), "fps": _fps(dest), "qc": qc,
+                "warnings": ([] if v.get("pass", True) else
+                             ["camrig shape test FAILED: %s" % v]),
+                "prompt": "camrig %s%s %s" % (rig,
+                                              "/" + cam["preset"] if cam.get("preset") else "",
+                                              cam.get("params") or "")}
+        f2 = F.load(f.id)
+        sh2 = f2.shot(sh["id"])
+        sh2["takes"].append(take)
+        if not sh2.get("picked") and not qc:
+            sh2["picked"] = tid
+        f2.save()
+        return tid
+    elif eng == "wan":
+        wf = load_wf(c["workflow"])
+        set_path(wf, "10.inputs.image", staged)
+        set_path(wf, "11.inputs.text", c["prompt"])
+        set_path(wf, "12.inputs.text", c["negative"])
+        set_path(wf, "13.inputs.length", c["frames"])
+        set_path(wf, "13.inputs.width", 1280)
+        set_path(wf, "13.inputs.height", 720)
+        set_path(wf, "14.inputs.noise_seed", seed)
+        set_path(wf, "17.inputs.fps", float(c["fps"]))
+        set_path(wf, "18.inputs.filename_prefix", prefix)
+    else:
+        raise RuntimeError("unknown engine %r" % eng)
+
+    _, outs = run(HOST, wf, quiet=True)
+    vids = [o for o in outs or [] if o.endswith(".mp4")]
+    if not vids:
+        raise RuntimeError("no video output")
+    ensure_local(vids[0], dest)
+    _thumbs(dest, dest[:-4])
+    qc = _qc(dest)
+    take = {"id": tid, "engine": eng, "seed": seed, "created": time.strftime("%H:%M"),
+            "file": rel, "poster": rel[:-4] + ".png", "strip": rel[:-4] + "_strip.png",
+            "duration": round(_dur(dest), 2), "fps": _fps(dest), "qc": qc,
+            "warnings": c.get("warnings") or [], "prompt": c["prompt"][:400]}
+    f2 = F.load(f.id)                          # re-load: takes may have landed meanwhile
+    sh2 = f2.shot(sh["id"])
+    sh2["takes"].append(take)
+    if not sh2.get("picked") and not qc:
+        sh2["picked"] = tid
+    f2.save()
+    return tid
+
+
+def _takes_job(jid, fid, shid, engines, n, seed):
+    try:
+        f = F.load(fid)
+        sh = f.shot(shid)
+        base = seed or (int(time.time()) % 99991)
+        k = 0
+        for eng in engines:
+            for i in range(n):
+                k += 1
+                _log(jid, "take %d/%d %s seed %d" % (k, len(engines) * n, eng, base + i))
+                try:
+                    _render_take(jid, f, sh, eng, base + i)
+                except Exception as e:
+                    _log(jid, "FAILED %s: %s" % (eng, str(e)[:160]))
+                    with _LOCK:
+                        JOBS[jid]["error"] = str(e)[:200]
+                with _LOCK:
+                    JOBS[jid]["done"] += 1
+        _finish(jid, JOBS[jid].get("error", ""))
+    except Exception as e:
+        _finish(jid, str(e)[:300])
+
+
+def takes(data):
+    engines = [e for e in (data.get("engines") or ["ltx"]) if e in ("ltx", "h3", "wan", "cam")]
+    n = max(1, min(int(data.get("n") or 1), 4))
+    jid = _job("takes", total=len(engines) * n, film=data["film"], shot=data["shot"])
+    threading.Thread(target=_takes_job,
+                     args=(jid, data["film"], data["shot"], engines, n,
+                           int(data.get("seed") or 0)), daemon=True).start()
+    return {"job": jid}, 200
+
+
+# ─── auto-next ──────────────────────────────────────────────────────────────────────
+
+_PROGRESSION = {"wide establishing shot": "medium shot", "wide shot": "medium shot",
+                "medium shot": "close-up", "medium two-shot": "close-up",
+                "close-up": "medium shot", "tight close-up": "medium shot",
+                "over-the-shoulder shot": "close-up", "low-angle shot": "wide shot",
+                "high-angle shot": "medium shot", "overhead view": "wide shot",
+                "extreme macro shot": "wide shot", "low tracking shot": "medium shot"}
+
+
+def auto_next(data):
+    """A DRAFT of the next shot, derived from the previous one: the anchor continues from
+    the picked take's last frame, the framing advances one step (wide -> medium -> close
+    and back out), and with two characters present the subject alternates - a plain
+    shot-reverse-shot. A heuristic, not an oracle: it exists to be edited."""
+    f = F.load(data["film"])
+    prev = f.shot(data["shot"])
+    sc = f.scene(prev["scene"])
+    lastbeat = (prev.get("beats") or [{}])[-1]
+    framing = _PROGRESSION.get(lastbeat.get("framing") or "wide shot", "medium shot")
+    subject = lastbeat.get("subject") or ""
+    present = [c for c in (sc.get("cast_present") or []) if c in f.data["cast"]]
+    if len(present) >= 2 and subject in present:
+        subject = next((c for c in present if c != subject), subject)
+    sh = f.new_shot(prev["scene"], after=prev["id"],
+                    title="after %s" % prev.get("title", prev["id"]),
+                    duration=prev.get("duration", 6),
+                    anchor="prev_last" if prev.get("picked") else "scene",
+                    beats=[{"framing": framing, "move": "static", "transition_in": "",
+                            "subject": subject,
+                            "action": "continues from the previous shot - describe the "
+                                      "next beat",
+                            "background": lastbeat.get("background") or "",
+                            "dialogue": {"char": "", "line": "", "delivery": ""}}],
+                    sfx=prev.get("sfx") or "")
+    return {"ok": True, "id": sh["id"],
+            "note": "draft: anchor=%s, framing=%s, subject=%s"
+                    % (sh["anchor"], framing, subject or "-")}, 200
+
+
+# ─── dialogue VO (consistent character voices) ──────────────────────────────────────
+
+def _vo_job(jid, fid, shid, tid):
+    run, set_path, load_wf, ensure_local, HOST, COMFY = _comfy()
+    try:
+        f = F.load(fid)
+        sh = f.shot(shid)
+        take = next((t for t in sh["takes"] if t["id"] == tid), None)
+        if not take:
+            raise RuntimeError("no such take")
+        beats_all = sh.get("beats") or []
+        lines = [(i, (b.get("dialogue") or {})) for i, b in enumerate(beats_all)]
+        lines = [(i, d) for i, d in lines if (d.get("line") or "").strip()]
+        if not lines:
+            raise RuntimeError("shot has no dialogue lines")
+        if not ensure_comfy():
+            raise RuntimeError("ComfyUI will not come up")
+        vo_paths = []
+        for n_, (bi, d) in enumerate(lines):
+            i = n_
+            ch = f.data["cast"].get(d.get("char") or "") or {}
+            vid = ch.get("voice") or ""
+            vmeta = {}
+            vp = os.path.join(STUDIO, "voices", vid + ".json")
+            if vid and os.path.exists(vp):
+                vmeta = json.load(open(vp, encoding="utf-8"))
+            if not vmeta or vmeta.get("status") != "ready":
+                raise RuntimeError("character %r has no READY voice pack (blocked packs "
+                                   "are never used)" % (d.get("char") or "?"))
+            wf = load_wf("17_higgs_v3_voice.json")
+            set_path(wf, "30.inputs.text", d["line"])
+            set_path(wf, "30.inputs.narrator_voice", vmeta["file"])
+            set_path(wf, "30.inputs.seed", 4242)
+            set_path(wf, "40.inputs.filename_prefix",
+                     "claude-generated/films/%s/vo_%s_%d" % (fid, shid, i))
+            _, outs = run(HOST, wf, quiet=True)
+            auds = [o for o in outs or [] if o.endswith((".wav", ".mp3", ".flac"))]
+            if not auds:
+                raise RuntimeError("voice render returned nothing")
+            vo = os.path.join(f.dir, "assets", "vo_%s_%s_%d%s"
+                              % (shid, tid, i, os.path.splitext(auds[0])[1]))
+            ensure_local(auds[0], vo)
+            vo_paths.append(vo)
+            _log(jid, "line %d voiced (%s)" % (i + 1, vmeta.get("name")))
+        # mix: native track ducked under the VO lines laid end to end from 0.6s
+        src = os.path.join(f.dir, take["file"])
+        rel = take["file"][:-4] + "_vo.mp4"
+        dest = os.path.join(f.dir, rel)
+        inputs, fc, amix = ["-i", src], [], "[a0]"
+        for i, vp in enumerate(vo_paths):
+            inputs += ["-i", vp]
+        fc.append("[0:a]volume=0.35[a0]")
+        # each line starts where its BEAT starts (beats divide the shot evenly on LTX),
+        # nudged 0.4s in so the cut lands first and the voice follows it
+        tdur = _dur(src)
+        nb = max(len(beats_all), 1)
+        floor = 0.0
+        for i in range(len(vo_paths)):
+            bi = lines[i][0]
+            at = max(bi * (tdur / nb) + 0.4, floor)
+            fc.append("[%d:a]adelay=%d|%d,volume=1.0[v%d]"
+                      % (i + 1, int(at * 1000), int(at * 1000), i))
+            amix += "[v%d]" % i
+            floor = at + _dur(vo_paths[i]) + 0.3
+        fc.append("%samix=inputs=%d:duration=first:normalize=0[out]"
+                  % (amix, len(vo_paths) + 1))
+        r = _sh("ffmpeg", "-y", "-v", "error", *inputs,
+                "-filter_complex", ";".join(fc), "-map", "0:v", "-map", "[out]",
+                "-c:v", "copy", "-c:a", "aac", "-b:a", "192k", dest)
+        if not os.path.exists(dest):
+            raise RuntimeError("mix failed: %s" % r.stderr[-160:])
+        _thumbs(dest, dest[:-4])
+        take2 = dict(take)
+        take2.update({"id": take["id"] + "v", "engine": take["engine"] + "+vo",
+                      "file": rel, "poster": rel[:-4] + ".png",
+                      "strip": rel[:-4] + "_strip.png", "qc": _qc(dest),
+                      "created": time.strftime("%H:%M")})
+        f2 = F.load(fid)
+        sh2 = f2.shot(shid)
+        sh2["takes"].append(take2)
+        # a VO variant of the picked take supersedes it - that is what the button is for
+        if sh2.get("picked") == take["id"] and not take2["qc"]:
+            sh2["picked"] = take2["id"]
+        f2.save()
+        _finish(jid)
+    except Exception as e:
+        _finish(jid, str(e)[:300])
+
+
+def vo_mix(data):
+    jid = _job("vo", film=data["film"], shot=data["shot"])
+    threading.Thread(target=_vo_job, args=(jid, data["film"], data["shot"],
+                                           data["take"]), daemon=True).start()
+    return {"job": jid}, 200
+
+
+# ─── the master pass ────────────────────────────────────────────────────────────────
+
+def _master_job(jid, fid, shid):
+    """Finish the picked take: FILM interpolation to 48fps with the audio re-muxed. Lands
+    as a new immutable take that supersedes the pick - drafts stay cheap, keepers get
+    finished."""
+    try:
+        f = F.load(fid)
+        sh = f.shot(shid)
+        take = next((t for t in sh["takes"] if t["id"] == sh.get("picked")), None)
+        if not take:
+            raise RuntimeError("no picked take to master")
+        if take.get("fps", 24) >= 47:
+            raise RuntimeError("picked take is already 48fps")
+        src = os.path.join(f.dir, take["file"])
+        if _dur(src) > 25:
+            raise RuntimeError("interpolation ceiling is 25s - master the shots, not "
+                               "an assembly")
+        if not ensure_comfy():
+            raise RuntimeError("ComfyUI will not come up")
+        pol = _polish_mod()
+        rel = take["file"][:-4] + "_48.mp4"
+        dest = os.path.join(f.dir, rel)
+        _log(jid, "interpolating to 48fps")
+        out, info = pol.polish(src, dest)
+        if not out:
+            raise RuntimeError("polish failed: %s" % info)
+        _thumbs(dest, dest[:-4])
+        take2 = dict(take)
+        take2.update({"id": take["id"] + "m", "engine": take["engine"] + "@48",
+                      "file": rel, "poster": rel[:-4] + ".png",
+                      "strip": rel[:-4] + "_strip.png", "fps": _fps(dest),
+                      "duration": round(_dur(dest), 2), "qc": _qc(dest),
+                      "created": time.strftime("%H:%M")})
+        f2 = F.load(fid)
+        sh2 = f2.shot(shid)
+        sh2["takes"].append(take2)
+        if not take2["qc"]:
+            sh2["picked"] = take2["id"]
+        f2.save()
+        _finish(jid, "" if not take2["qc"] else "QC: " + "; ".join(take2["qc"])[:180])
+    except Exception as e:
+        _finish(jid, str(e)[:300])
+
+
+def master(data):
+    jid = _job("master", film=data["film"], shot=data["shot"])
+    threading.Thread(target=_master_job, args=(jid, data["film"], data["shot"]),
+                     daemon=True).start()
+    return {"job": jid}, 200
+
+
+def _draftall_job(jid, fid, engines, seed):
+    try:
+        f = F.load(fid)
+        todo = [sh["id"] for sh in f.ordered_shots() if not sh["takes"]]
+        with _LOCK:
+            JOBS[jid]["total"] = max(len(todo) * len(engines), 1)
+        for shid in todo:
+            f = F.load(fid)
+            sh = f.shot(shid)
+            for eng in engines:
+                _log(jid, "draft %s %s" % (shid, eng))
+                try:
+                    _render_take(jid, f, sh, eng, seed)
+                except Exception as e:
+                    _log(jid, "FAILED %s: %s" % (shid, str(e)[:140]))
+                    with _LOCK:
+                        JOBS[jid]["error"] = str(e)[:200]
+                with _LOCK:
+                    JOBS[jid]["done"] += 1
+        _finish(jid, JOBS[jid].get("error", ""))
+    except Exception as e:
+        _finish(jid, str(e)[:300])
+
+
+def draft_all(data):
+    engines = [e for e in (data.get("engines") or ["ltx"]) if e in ("ltx", "h3", "wan", "cam")]
+    jid = _job("draftall", film=data["film"])
+    threading.Thread(target=_draftall_job,
+                     args=(jid, data["film"], engines, int(data.get("seed") or 11)),
+                     daemon=True).start()
+    return {"job": jid}, 200
+
+
+def _portrait_job(jid, fid, cid):
+    """A portrait card per cast member - the reference the identity route hangs on."""
+    run, set_path, load_wf, ensure_local, HOST, COMFY = _comfy()
+    try:
+        f = F.load(fid)
+        ch = f.data["cast"].get(cid)
+        if not ch:
+            raise RuntimeError("no cast member %r" % cid)
+        if not ensure_comfy():
+            raise RuntimeError("ComfyUI will not come up")
+        dest = os.path.join(f.dir, "assets", "cast_%s.png" % cid)
+        if f.data.get("look") == "anime":
+            wf = load_wf("22_anime_kf_ipadapter.json")
+            set_path(wf, "2.inputs.image", ch.get("sheet") or "")
+            set_path(wf, "4.inputs.weight", 0.6 if ch.get("sheet") else 0.0)
+            set_path(wf, "5.inputs.text", "%s, head and shoulders portrait, plain "
+                     "background, masterpiece, best quality, %s"
+                     % (ch["clause"], F.LOOK_ANIME))
+            set_path(wf, "6.inputs.text", F.NEG_ANIME)
+            set_path(wf, "7.inputs.width", 896)
+            set_path(wf, "7.inputs.height", 1216)
+            set_path(wf, "8.inputs.seed", 21)
+            set_path(wf, "10.inputs.width", 896)
+            set_path(wf, "10.inputs.height", 1216)
+            set_path(wf, "11.inputs.filename_prefix",
+                     "claude-generated/films/%s/cast_%s" % (fid, cid))
+        else:
+            wf = load_wf("01_qwen_t2i_turbo.json")
+            set_path(wf, "10.inputs.text",
+                     "A head and shoulders portrait of %s, plain grey background, soft "
+                     "key light, natural skin texture, sharp focus. %s"
+                     % (ch["clause"], f.data.get("look_clause") or F.LOOK_PHOTO))
+            set_path(wf, "11.inputs.text", F.NEG_PHOTO)
+            set_path(wf, "12.inputs.width", 896)
+            set_path(wf, "12.inputs.height", 1216)
+            set_path(wf, "13.inputs.seed", 21)
+            set_path(wf, "15.inputs.filename_prefix",
+                     "claude-generated/films/%s/cast_%s" % (fid, cid))
+        _, outs = run(HOST, wf, quiet=True)
+        if not outs:
+            raise RuntimeError("no output")
+        ensure_local(outs[0], dest)
+        f2 = F.load(fid)
+        f2.data["cast"][cid]["portrait"] = "assets/cast_%s.png" % cid
+        f2.save()
+        _finish(jid)
+    except Exception as e:
+        _finish(jid, str(e)[:300])
+
+
+def portrait(data):
+    jid = _job("portrait", film=data["film"], cast=data["cast"])
+    threading.Thread(target=_portrait_job, args=(jid, data["film"], data["cast"]),
+                     daemon=True).start()
+    return {"job": jid}, 200
+
+
+# ─── assembly ───────────────────────────────────────────────────────────────────────
+
+def _norm(src, dst, w=1472, h=832, fps=24):
+    """Uniform canvas and rate, plus 0.1s audio fades either end: each take generates its
+    own ambience texture, and the fades are what stop the texture JUMPING at every cut."""
+    d = max(_dur(src), 0.3)
+    _sh("ffmpeg", "-y", "-v", "error", "-i", src,
+        "-vf", "scale=%d:%d:force_original_aspect_ratio=decrease,"
+               "pad=%d:%d:(ow-iw)/2:(oh-ih)/2,fps=%d" % (w, h, w, h, fps),
+        "-af", "afade=t=in:st=0:d=0.1,afade=t=out:st=%.2f:d=0.1" % (d - 0.1),
+        "-c:v", "libx264", "-crf", "18", "-preset", "veryfast", "-pix_fmt", "yuv420p",
+        "-c:a", "aac", "-b:a", "192k", "-ar", "48000", "-ac", "2", dst)
+    return os.path.exists(dst)
+
+
+def _xfade(a, b, dst, kind, d=0.5):
+    da = _dur(a)
+    off = max(da - d, 0.1)
+    trans = {"dissolve": "dissolve", "fade": "fade", "dip to black": "fadeblack"}\
+        .get(kind, "fade")
+    _sh("ffmpeg", "-y", "-v", "error", "-i", a, "-i", b, "-filter_complex",
+        "[0:v][1:v]xfade=transition=%s:duration=%s:offset=%s[v];"
+        "[0:a][1:a]acrossfade=d=%s[a]" % (trans, d, off, d),
+        "-map", "[v]", "-map", "[a]",
+        "-c:v", "libx264", "-crf", "18", "-preset", "veryfast", "-pix_fmt", "yuv420p",
+        "-c:a", "aac", "-b:a", "192k", "-ar", "48000", dst)
+    return os.path.exists(dst)
+
+
+def _assemble_job(jid, fid, music_on):
+    run, set_path, load_wf, ensure_local, HOST, COMFY = _comfy()
+    try:
+        f = F.load(fid)
+        tmp = os.path.join(f.dir, "assets", "_asm")
+        shutil.rmtree(tmp, ignore_errors=True)
+        os.makedirs(tmp, exist_ok=True)
+        scene_files = []
+        picked_files = []
+        for sc in f.data["scenes"]:
+            for shid in sc["shots"]:
+                sh = f.data["shots"].get(shid) or {}
+                tk = next((t for t in sh.get("takes", [])
+                           if t["id"] == sh.get("picked")), None)
+                if tk:
+                    picked_files.append(os.path.join(f.dir, tk["file"]))
+        # the film runs at 48 only when EVERY pick is mastered - a mix would stutter
+        target_fps = 48 if picked_files and all(_fps(p) >= 47 for p in picked_files) \
+            else 24
+        _log(jid, "assembling at %dfps" % target_fps)
+        for sc in f.data["scenes"]:
+            parts = []
+            for shid in sc["shots"]:
+                sh = f.data["shots"].get(shid) or {}
+                take = next((t for t in sh.get("takes", [])
+                             if t["id"] == sh.get("picked")), None)
+                if not take:
+                    _log(jid, "skip %s - no picked take" % shid)
+                    continue
+                np = os.path.join(tmp, "n_%s.mp4" % shid)
+                if not _norm(os.path.join(f.dir, take["file"]), np,
+                             fps=target_fps):
+                    raise RuntimeError("normalize failed on %s" % shid)
+                parts.append((np, sh.get("transition_out", "cut")))
+            if not parts:
+                continue
+            cur = parts[0][0]
+            for i in range(1, len(parts)):
+                nxt, kind = parts[i][0], parts[i - 1][1]
+                if kind and kind != "cut":
+                    out = os.path.join(tmp, "x_%s_%d.mp4" % (sc["id"], i))
+                    if not _xfade(cur, nxt, out, kind):
+                        raise RuntimeError("xfade failed in %s" % sc["id"])
+                    cur = out
+                else:
+                    lst = os.path.join(tmp, "c_%s_%d.txt" % (sc["id"], i))
+                    open(lst, "w").write("file '%s'\nfile '%s'\n" % (cur, nxt))
+                    out = os.path.join(tmp, "cc_%s_%d.mp4" % (sc["id"], i))
+                    _sh("ffmpeg", "-y", "-v", "error", "-f", "concat", "-safe", "0",
+                        "-i", lst, "-c", "copy", out)
+                    if not os.path.exists(out):
+                        raise RuntimeError("concat failed in %s" % sc["id"])
+                    cur = out
+            scene_out = os.path.join(tmp, "scene_%s.mp4" % sc["id"])
+            shutil.copy(cur, scene_out)
+            # scene music: ACE-Step tags mixed under at 0.5, cut to the scene
+            tags = (sc.get("music") or "").strip()
+            if music_on and tags:
+                secs = min(_dur(scene_out), 46.0)
+                if not ensure_comfy():
+                    raise RuntimeError("ComfyUI will not come up")
+                wf = load_wf("06_acestep_music.json")
+                set_path(wf, "10.inputs.tags", tags + ", instrumental, no vocals, "
+                         "continuous throughout")
+                set_path(wf, "11.inputs.seconds", float(int(secs) + 1))
+                set_path(wf, "12.inputs.seed", 21)
+                set_path(wf, "14.inputs.filename_prefix",
+                         "claude-generated/films/%s/music_%s" % (fid, sc["id"]))
+                _, outs = run(HOST, wf, quiet=True)
+                auds = [o for o in outs or [] if o.endswith((".mp3", ".wav", ".flac"))]
+                if auds:
+                    mp3 = os.path.join(tmp, "music_%s.mp3" % sc["id"])
+                    ensure_local(auds[0], mp3)
+                    mixed = os.path.join(tmp, "scenem_%s.mp4" % sc["id"])
+                    d = _dur(scene_out)
+                    _sh("ffmpeg", "-y", "-v", "error", "-i", scene_out, "-i", mp3,
+                        "-filter_complex",
+                        "[1:a]atrim=0:%s,asetpts=N/SR/TB,volume=0.5[m];"
+                        "[0:a][m]amix=inputs=2:duration=first:normalize=0[a]" % d,
+                        "-map", "0:v", "-map", "[a]", "-c:v", "copy",
+                        "-c:a", "aac", "-b:a", "192k", mixed)
+                    if os.path.exists(mixed):
+                        scene_out = mixed
+                    _log(jid, "music mixed under %s" % sc["id"])
+            scene_files.append(scene_out)
+            with _LOCK:
+                JOBS[jid]["done"] += 1
+        if not scene_files:
+            raise RuntimeError("nothing to assemble - pick takes first")
+        lst = os.path.join(tmp, "film.txt")
+        open(lst, "w").write("".join("file '%s'\n" % p for p in scene_files))
+        final = os.path.join(f.dir, "assets", "film.mp4")
+        # single-pass loudnorm on the whole film: scenes with dialogue, music beds and
+        # raw ambience land at very different levels, and this is the delivery leveller
+        _sh("ffmpeg", "-y", "-v", "error", "-f", "concat", "-safe", "0", "-i", lst,
+            "-af", "loudnorm=I=-16:TP=-1.5:LRA=11,alimiter=limit=0.94",
+            "-c:v", "libx264", "-crf", "18", "-preset", "veryfast",
+            "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "192k", "-ar", "48000", final)
+        if not os.path.exists(final):
+            raise RuntimeError("final concat failed")
+        qc = _qc(final)
+        _log(jid, "assembled %.1fs; QC: %s" % (_dur(final), "; ".join(qc) or "clean"))
+        _finish(jid, "" if not qc else "QC: " + "; ".join(qc)[:200])
+    except Exception as e:
+        _finish(jid, str(e)[:300])
+
+
+def assemble(data):
+    f = F.load(data["film"])
+    jid = _job("assemble", total=max(len(f.data["scenes"]), 1), film=data["film"])
+    threading.Thread(target=_assemble_job,
+                     args=(jid, data["film"], bool(data.get("music", True))),
+                     daemon=True).start()
+    return {"job": jid}, 200

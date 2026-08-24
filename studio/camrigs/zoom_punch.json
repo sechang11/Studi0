@@ -1,0 +1,25 @@
+{
+ "summary": "A fast shove into frame that overshoots and rings out. An impact, a slam, a title landing.",
+ "doc": "Use for the moment something ARRIVES: a hard stop, a door slamming, a card hitting the screen, a joke landing.\n\nThe hit is a step and everything after it is one damped spring, so the recovery can never look unrelated to the blow - which is the usual tell of a hand-keyframed shake. Position and roll are driven off the same oscillator as the zoom, so the whole frame moves as one object.\n\nKeep `overshoot` small. Past about 0.08 it stops reading as an impact and starts reading as a zoom effect.",
+ "params": {
+  "win_w":     {"default": 2600, "min": 64,  "max": 16384, "doc": "window width in plate px at zoom 1."},
+  "win_h":     {"default": 1464, "min": 36,  "max": 16384, "doc": "window height in plate px at zoom 1."},
+  "cx":        {"default": 1920, "min": 0,   "max": 32768, "doc": "centre x."},
+  "cy":        {"default": 1080, "min": 0,   "max": 32768, "doc": "centre y."},
+  "seconds":   {"default": 3.0,  "min": 0.4, "max": 20.0,  "doc": "shot length."},
+  "t_hit":     {"default": 0.55, "min": 0.05, "max": 5.0,  "doc": "seconds of rush before the impact."},
+  "z_start":   {"default": 1.0,  "min": 0.2, "max": 8.0,   "doc": "zoom at the first frame."},
+  "z_rest":    {"default": 1.17, "min": 0.2, "max": 8.0,   "doc": "zoom it settles at."},
+  "overshoot": {"default": 0.055, "min": 0.0, "max": 0.30, "doc": "how far past z_rest the hit throws it. Small."},
+  "freq":      {"default": 1.9,  "min": 0.3, "max": 8.0,   "doc": "ring frequency, Hz. Higher = tighter, more rigid."},
+  "damping":   {"default": 0.30, "min": 0.05, "max": 1.0,  "doc": "damping ratio of the ring-out."},
+  "shake":     {"default": 26.0, "min": 0.0, "max": 300.0, "doc": "px of positional throw riding the same oscillator."},
+  "roll":      {"default": 0.9,  "min": 0.0, "max": 6.0,   "doc": "degrees of roll riding the same oscillator."}
+ },
+ "presets": {
+  "brake_slam": {"note": "A vehicle stopping dead, seen head on.",
+                 "params": {"t_hit": 0.55, "z_rest": 1.17, "overshoot": 0.06, "shake": 34.0}},
+  "title_card": {"note": "Tighter and more rigid - for a card or a logo landing.",
+                 "params": {"t_hit": 0.30, "z_rest": 1.10, "overshoot": 0.035, "freq": 2.6, "damping": 0.38, "shake": 12.0, "roll": 0.4}}
+ }
+}

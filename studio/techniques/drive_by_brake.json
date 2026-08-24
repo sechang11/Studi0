@@ -1,0 +1,31 @@
+{
+ "id": "drive_by_brake",
+ "title": "Drive-by with a hard brake",
+ "one_liner": "Travel past a building, then a three-phase brake that slams the frame onto it.",
+ "engine": "camrig",
+ "kind": "camera move",
+ "when": "A shot has to travel past something and stop hard ON it - an arrival, a reveal, a there-it-is beat. Not for gentle settles.",
+ "how": [
+  "Pick a FRONTO-PARALLEL plate, shot square on, with both buildings already square on in it. Sliding a window across any other photograph gives a pan, not travel. Choosing the plate is most of this rig.",
+  "camrig.py report drive_by_brake --preset <p>, and read it BEFORE rendering: phase 2 must sustain a velocity above cruise, phase 3 must exceed phase 2.",
+  "camrig.py render drive_by_brake <plate.png> <out.mp4> --preset sour_pickle"
+ ],
+ "knobs": {
+  "grip": "how hard the brake bites (3.9 here)",
+  "freq": "spring frequency of the operator body (0.82)",
+  "damping": "how fast the lean settles (0.27)",
+  "dip": "how far they pitch forward (0.52)",
+  "roll_deg": "wrist roll at full lean, in degrees (1.25)"
+ },
+ "gotcha": "The brake is a BODY, not a curve. The car slows but the operator does not, so the framing ACCELERATES through the brake and the snap back is the fastest move in the shot. Three hand-drawn curves drift out of agreement with each other; one damped spring cannot.",
+ "files": [
+  "studio/_tools/camrig.py",
+  "studio/camrigs/drive_by_brake.json",
+  "studio/CAMRIG.md"
+ ],
+ "example": {
+  "film": "sour-pickle-cartoon-intro",
+  "shot": "010",
+  "take": "camrw_to010"
+ }
+}

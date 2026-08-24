@@ -7,6 +7,7 @@
   "spectrum": [
    "photoreal",
    "cinematic",
+   "semi-realistic",
    "noir",
    "watercolour",
    "anime",
@@ -78,6 +79,14 @@
     "defense": "The whole shot stays 16-bit pixel art with hard visible pixels throughout",
     "kf_engine": "qwen",
     "neg": "smooth gradients, photorealistic, antialiasing"
+   },
+   "semi-realistic": {
+    "label": "Semi-realistic caricature",
+    "spectrum": 2,
+    "look_clause": "semi-realistic 3D caricature, exaggerated cartoon proportions with an oversized head and small body, but rendered with photoreal skin texture, real fabric weave and physically accurate lighting, in the manner of a high-end character render composited into live-action photography, soft key light, shallow depth of field",
+    "defense": "",
+    "kf_engine": "qwen",
+    "neg": "flat 2d, line art, cel shading, anime, sketch, painterly, low detail, plastic toy, uncanny dead eyes"
    }
   }
  },
@@ -117,6 +126,11 @@
       "id": "robot",
       "label": "Robot",
       "frag": "a humanoid robot"
+     },
+     {
+      "id": "mascot",
+      "label": "Mascot / costume character",
+      "frag": "a walking cartoon mascot character with arms and legs"
      }
     ]
    },
@@ -761,6 +775,16 @@
       "id": "diner",
       "label": "Diner",
       "frag": "a small diner interior, counter stools and window booths"
+     },
+     {
+      "id": "cafe_exterior",
+      "label": "Cafe - exterior (Sour Pickle)",
+      "frag": "the storefront of a tiny corner cafe set inside a tall red brick arch in a row of Victorian brick arcades on a downtown street - a sage-green painted shopfront with gold hand-painted lettering across the top, tall dark-framed glass doors with a neon OPEN sign, wrought-iron gates folded back either side, festoon bulbs strung under the arch, big wooden planter boxes of leafy green vegetables and flowers on the pavement, a small hand-painted wooden sign of a grinning green pickle hanging from an iron bracket, menu boards in the windows, two small round green tables on the sidewalk, a cherry blossom tree overhanging the kerb"
+     },
+     {
+      "id": "cafe_interior",
+      "label": "Cafe - interior (Sour Pickle)",
+      "frag": "the small bright dining room of a tiny family diner - exposed red brick down one long wall, sunflower-yellow painted walls, mismatched framed pictures and green pickle drawings hung close together, six or seven small tables with speckled green terrazzo tops and bentwood chairs, fresh flowers in little vases on every table, potted plants and window boxes along a tall sunlit front window, a stainless kitchen pass and a pastry case at the back, a shelf of children's books"
      }
     ]
    },

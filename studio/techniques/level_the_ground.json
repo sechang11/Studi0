@@ -1,0 +1,26 @@
+{
+ "id": "level_the_ground",
+ "title": "Level a sloping street",
+ "one_liner": "Shear a plate so the ground reads flat without tipping the building over.",
+ "engine": "stills",
+ "kind": "plate build",
+ "when": "A shot reads as crooked but the verticals look fine.",
+ "how": [
+  "Measure INSIDE the window the shot actually uses. Measuring across the whole plate gave 0.08 degrees here when the truth inside frame was 2.2.",
+  "If verticals are vertical and horizontals slope, it is the GROUND PLANE, so the correction is a SHEAR. A rotation would tip the building over.",
+  "Solve it iteratively - the residual after each pass is the correction still owed."
+ ],
+ "knobs": {
+  "K": "the shear, as ground slope (0.02445 here)",
+  "X0": "the pivot column - put it on the hero building so it does not shift"
+ },
+ "gotcha": "One shear cannot level a whole perspective, because lines parallel in the world converge in the image. Average the two that matter and both land inside a quarter of a degree.",
+ "files": [
+  "build/deskew.py"
+ ],
+ "example": {
+  "film": "sour-pickle-cartoon-intro",
+  "shot": "010",
+  "take": "camrw_to010"
+ }
+}

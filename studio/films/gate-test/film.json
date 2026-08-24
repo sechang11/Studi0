@@ -22,7 +22,8 @@
    "clause": "a tall figure in an all-black travelling robe and a wide dark straw hat, face hidden in shadow",
    "sheet": "sheet_stranger.png",
    "voice": "en_man",
-   "voice_desc": "a low, even accent"
+   "voice_desc": "a low, even accent",
+   "portrait": "assets/cast_STRANGER.png"
   }
  },
  "scenes": [
@@ -42,8 +43,24 @@
    "no_people": false,
    "anchor": "assets/anchor_sc01.png",
    "shots": [
-    "010"
+    "010",
+    "020",
+    "030"
    ]
+  },
+  {
+   "id": "sc02",
+   "title": "2nd",
+   "location": "",
+   "time_of_day": "",
+   "weather": "",
+   "ambience": "",
+   "palette": "",
+   "music": "",
+   "cast_present": [],
+   "no_people": false,
+   "anchor": "",
+   "shots": []
   }
  ],
  "shots": {
@@ -103,6 +120,113 @@
     }
    ],
    "picked": "t318767601",
+   "engine_notes": ""
+  },
+  "020": {
+   "id": "020",
+   "scene": "sc01",
+   "title": "after first exchange",
+   "duration": 12,
+   "aspect": "wide",
+   "anchor": "prev_last",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "close-up",
+     "move": "static",
+     "transition_in": "",
+     "subject": "LIWEN",
+     "action": "continues from the previous shot - describe the next beat",
+     "background": "",
+     "dialogue": {
+      "char": "",
+      "line": "",
+      "delivery": ""
+     }
+    }
+   ],
+   "sfx": "running footfalls on stone, a violent steel clash, blades grinding",
+   "no_people": null,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t334761771",
+     "engine": "ltx",
+     "seed": 95627,
+     "created": "13:54",
+     "file": "takes/020/ltx_t334761771.mp4",
+     "poster": "takes/020/ltx_t334761771.png",
+     "strip": "takes/020/ltx_t334761771_strip.png",
+     "duration": 12.04,
+     "fps": 24,
+     "qc": [],
+     "warnings": [],
+     "prompt": "A static close-up in flat cel-shaded 2D anime: a young swordswoman with very long straight black hair and a white and jade-green hanfu, continues from the previous shot - describe the next beat, a wide flagstone courtyard of a mountain sword school, pine trees and a tiled gate, dawn, thick mist. The whole scene stays flat cel-shaded hand-drawn 2D anime with clean line art and painted background ar"
+    },
+    {
+     "id": "t334770964",
+     "engine": "ltx",
+     "seed": 95636,
+     "created": "13:56",
+     "file": "takes/020/ltx_t334770964.mp4",
+     "poster": "takes/020/ltx_t334770964.png",
+     "strip": "takes/020/ltx_t334770964_strip.png",
+     "duration": 12.04,
+     "fps": 24,
+     "qc": [],
+     "warnings": [],
+     "prompt": "A static close-up in flat cel-shaded 2D anime: a young swordswoman with very long straight black hair and a white and jade-green hanfu, continues from the previous shot - describe the next beat, a wide flagstone courtyard of a mountain sword school, pine trees and a tiled gate, dawn, thick mist. The whole scene stays flat cel-shaded hand-drawn 2D anime with clean line art and painted background ar"
+    },
+    {
+     "id": "t334962767",
+     "engine": "h3",
+     "seed": 95636,
+     "created": "13:58",
+     "file": "takes/020/h3_t334962767.mp4",
+     "poster": "takes/020/h3_t334962767.png",
+     "strip": "takes/020/h3_t334962767_strip.png",
+     "duration": 8.71,
+     "fps": 24,
+     "qc": [],
+     "warnings": [
+      "no background action - H3 animates only what the clause names; an unnamed background freezes"
+     ],
+     "prompt": "a young swordswoman with very long straight black hair and a white and jade-green hanfu continues from the previous shot - describe the next beat. Anime animation.  Sound: running footfalls on stone, a violent steel clash, blades grinding, a steady wind moving through pine trees, never stopping."
+    }
+   ],
+   "picked": "t334962767",
+   "engine_notes": ""
+  },
+  "030": {
+   "id": "030",
+   "scene": "sc01",
+   "title": "shot 030",
+   "duration": 6,
+   "aspect": "wide",
+   "anchor": "scene",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "",
+     "action": "",
+     "background": "",
+     "dialogue": {
+      "char": "",
+      "line": "",
+      "delivery": ""
+     }
+    }
+   ],
+   "sfx": "",
+   "no_people": null,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [],
+   "picked": "",
    "engine_notes": ""
   }
  }

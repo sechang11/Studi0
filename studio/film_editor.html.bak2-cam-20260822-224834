@@ -1,0 +1,590 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Film - shot editor</title>
+<style>
+:root{--bg:#0e0e12;--panel:#181820;--line:#2a2a36;--ink:#e9e9f0;--dim:#8d8d9c;
+      --accent:#9fb3ff;--good:#7fd1a0;--warn:#ffc978;--bad:#ff8f8f;--rule:#c9a0ff}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:14px/1.45 system-ui,-apple-system,sans-serif;margin:0}
+nav.top{padding:12px 22px;border-bottom:1px solid var(--line)}
+nav.top a{color:var(--accent);text-decoration:none;margin-right:14px;font-size:14px}
+h1{font-size:18px;margin:0}
+h2{font-size:12px;color:var(--accent);margin:14px 0 6px;text-transform:uppercase;letter-spacing:.06em}
+button{background:#232330;color:var(--ink);border:1px solid var(--line);border-radius:6px;
+       padding:5px 10px;cursor:pointer;font:inherit;font-size:13px}
+button:hover{border-color:var(--accent)}
+button.primary{background:#2c3450;border-color:var(--accent)}
+button.small{padding:2px 7px;font-size:12px}
+select,input,textarea{background:#101017;color:var(--ink);border:1px solid var(--line);
+       border-radius:5px;padding:4px 7px;font:inherit;font-size:13px}
+textarea{width:100%;resize:vertical}
+label{font-size:11px;color:var(--dim);display:block;margin:7px 0 2px;text-transform:uppercase;letter-spacing:.04em}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.grow{flex:1}
+#bar{display:flex;gap:10px;align-items:center;padding:10px 22px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+#job{font-size:12px;color:var(--dim);max-width:520px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#job.err{color:var(--bad)}
+#main{display:grid;grid-template-columns:320px 1fr 400px;gap:0;min-height:calc(100vh - 110px)}
+#timeline{border-right:1px solid var(--line);overflow-y:auto;max-height:calc(100vh - 110px)}
+#right{border-left:1px solid var(--line);overflow-y:auto;max-height:calc(100vh - 110px);padding:0 14px 40px}
+#center{padding:14px 18px;overflow-y:auto;max-height:calc(100vh - 110px)}
+.scenehead{padding:10px 14px 6px;font-size:12px;color:var(--dim);text-transform:uppercase;
+           letter-spacing:.05em;border-top:1px solid var(--line);cursor:pointer}
+.scenehead:first-child{border-top:0}
+.scenehead b{color:var(--ink)}
+.scenehead.sel{color:var(--rule)}
+.shotcard{display:flex;gap:8px;padding:7px 10px 7px 14px;cursor:pointer;border-left:3px solid transparent}
+.shotcard:hover{background:#1c1c25}
+.shotcard.sel{background:#1e2130;border-left-color:var(--accent)}
+.shotcard img{width:86px;height:49px;object-fit:cover;border-radius:4px;background:#000}
+.shotcard .noimg{width:86px;height:49px;border-radius:4px;background:#101017;border:1px dashed var(--line);
+                 display:flex;align-items:center;justify-content:center;color:var(--dim);font-size:10px}
+.shotmeta{flex:1;min-width:0}
+.shotmeta .t{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.shotmeta .d{font-size:11px;color:var(--dim)}
+.badge{display:inline-block;font-size:10px;border:1px solid var(--line);border-radius:3px;
+       padding:0 4px;margin-right:3px;color:var(--dim)}
+.badge.on{color:var(--good);border-color:var(--good)}
+.timeacts{padding:4px 14px 12px;display:flex;gap:6px}
+.takes{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;margin-top:10px}
+.take{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px}
+.take.picked{border-color:var(--good)}
+.take img.poster{width:100%;border-radius:5px;cursor:pointer;background:#000}
+.take img.strip{width:100%;border-radius:3px;margin-top:4px;opacity:.85}
+.take .meta{font-size:11px;color:var(--dim);margin-top:5px;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.qcbad{color:var(--bad)}
+.warn{color:var(--warn)}
+video{width:100%;max-height:420px;background:#000;border-radius:8px}
+.tabs{display:flex;gap:0;margin:12px -14px 0;border-bottom:1px solid var(--line)}
+.tabs div{padding:8px 12px;cursor:pointer;color:var(--dim);font-size:13px}
+.tabs div.sel{color:var(--ink);border-bottom:2px solid var(--accent)}
+.beat{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin:8px 0}
+.beat .bh{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--dim)}
+.ctx{width:100%;border-collapse:collapse;font-size:12px}
+.ctx td{border-bottom:1px solid var(--line);padding:4px 6px;vertical-align:top}
+.ctx td:first-child{color:var(--dim);white-space:nowrap}
+.src{font-size:10px;border-radius:3px;padding:0 4px;margin-left:6px}
+.src.film{background:#2c3450;color:var(--accent)}
+.src.scene{background:#2e4437;color:var(--good)}
+.src.shot{background:#4a3450;color:var(--rule)}
+pre.compiled{background:#101017;border:1px solid var(--line);border-radius:6px;padding:8px;
+             font-size:11px;white-space:pre-wrap;color:var(--dim);max-height:180px;overflow:auto}
+.wl{font-size:11px;color:var(--warn);margin:2px 0}
+.nl{font-size:11px;color:var(--dim);margin:2px 0}
+.cast{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px;margin:6px 0}
+.hint{color:var(--dim);font-size:12px}
+img.anchor{width:100%;border-radius:6px;margin-top:6px}
+</style>
+</head>
+<body>
+<nav class="top"><a href="/">studio</a><a href="/story">story</a><a href="/film"><b>film</b></a>
+<a href="/video">video</a><a href="/character">cast</a><a href="/voices.html">voices</a></nav>
+<div id="bar">
+  <h1>Shot editor</h1>
+  <select id="filmsel" onchange="openFilm(this.value)"></select>
+  <button onclick="newFilm()">new film</button>
+  <span class="grow"></span>
+  <label style="display:inline;margin:0"><input type="checkbox" id="musicchk" checked> music</label>
+  <button class="primary" onclick="assemble()">assemble film</button>
+  <a id="filmlink" style="display:none;color:var(--good)" target="_blank">▶ film.mp4</a>
+  <span id="job"></span>
+</div>
+<div id="main">
+  <aside id="timeline"></aside>
+  <section id="center"><div class="hint">Pick or create a film, then select a shot.</div></section>
+  <aside id="right"></aside>
+</div>
+<script>
+"use strict";
+let FID="", TREE=null, LIBS=null, SHOT=null, DETAIL=null, COMPILED=null, TAB="shot";
+let WATCH=new Set(), SCENE_SEL="";
+
+const $=q=>document.querySelector(q);
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const m=p=>`/film/media/${FID}/${p}`;
+async function api(p,body){
+  const r=await fetch("/api/film"+p, body?{method:"POST",headers:{"Content-Type":"application/json"},
+                                           body:JSON.stringify(body)}:{});
+  const j=await r.json().catch(()=>({error:"bad json"}));
+  if(!r.ok||j.error){ note(j.error||r.status,true); throw new Error(j.error||r.status); }
+  return j;
+}
+function note(t,err){ const el=$("#job"); el.textContent=t; el.className=err?"err":""; }
+
+async function loadFilms(sel){
+  const j=await api("");
+  const s=$("#filmsel");
+  s.innerHTML='<option value="">- film -</option>'+j.films.map(f=>
+    `<option value="${f.id}">${esc(f.title)} (${f.shots} shots, ${f.picked} picked)</option>`).join("");
+  if(sel){ s.value=sel; }
+}
+async function newFilm(){
+  const t=prompt("Film title?"); if(!t) return;
+  const look=confirm("Photoreal? (cancel = anime)")?"photoreal":"anime";
+  const j=await api("/new",{title:t,look});
+  await loadFilms(j.id); openFilm(j.id);
+}
+async function openFilm(fid){
+  if(!fid) return;
+  FID=fid;
+  LIBS=LIBS||await api("/libraries");
+  TREE=await api("/"+fid);
+  $("#filmlink").style.display=TREE.film?"":"none";
+  $("#filmlink").href=m("assets/film.mp4");
+  renderTimeline();
+  if(SHOT&&TREE.scenes.some(sc=>sc.shots.some(s=>s.id===SHOT))) selShot(SHOT);
+  else { SHOT=null; $("#center").innerHTML='<div class="hint">Select a shot on the timeline.</div>'; renderRight(); }
+}
+
+function renderTimeline(){
+  const el=$("#timeline"); let h="";
+  for(const sc of TREE.scenes){
+    h+=`<div class="scenehead ${SCENE_SEL===sc.id?"sel":""}" onclick="selScene('${sc.id}')">
+        scene <b>${esc(sc.title||sc.id)}</b> · ${sc.shots.length} shots
+        ${sc.anchor?'<span class="badge on">anchor</span>':'<span class="badge">no anchor</span>'}</div>`;
+    sc.shots.forEach((s,i)=>{
+      h+=`<div class="shotcard ${SHOT===s.id?"sel":""}" onclick="selShot('${s.id}')">`+
+         (s.poster?`<img src="${m(s.poster)}">`:'<div class="noimg">no take</div>')+
+         `<div class="shotmeta"><div class="t">${s.id} · ${esc(s.title)}</div>
+          <div class="d">${s.duration}s · ${s.beats} beat${s.beats>1?"s":""} ·
+          ${s.engines.map(e=>`<span class="badge ${s.picked?"":""}">${e}</span>`).join("")}
+          ${s.picked?'<span class="badge on">picked</span>':""}
+          ${s.transition_out!=="cut"?`<span class="badge">${s.transition_out}→</span>`:""}</div></div>
+          <div style="display:flex;flex-direction:column;gap:2px">
+            <button class="small" onclick="event.stopPropagation();move('${sc.id}','${s.id}',-1)">▲</button>
+            <button class="small" onclick="event.stopPropagation();move('${sc.id}','${s.id}',1)">▼</button>
+          </div></div>`;
+    });
+    h+=`<div class="timeacts">
+        <button class="small" onclick="addShot('${sc.id}')">+ shot</button>
+        <select class="small" id="tpl_${sc.id}" style="font-size:11px;max-width:130px">
+          <option value="">template…</option>
+          ${(LIBS.templates||[]).map(t=>`<option value="${t.id}">${esc(t.title)}</option>`).join("")}
+        </select>
+        <button class="small" onclick="addShot('${sc.id}',$('#tpl_${sc.id}').value)">+ from tpl</button>
+        </div>`;
+  }
+  h+=`<div class="timeacts"><button onclick="addScene()">+ scene</button></div>`;
+  el.innerHTML=h;
+}
+async function addScene(){ const t=prompt("Scene title?")||"scene"; await api("/scene",{film:FID,title:t}); openFilm(FID); }
+async function addShot(scid,tpl){ const j=await api("/shot",{film:FID,scene:scid,template:tpl||""}); await openFilm(FID); selShot(j.id); }
+async function move(scid,shid,dir){
+  const sc=TREE.scenes.find(s=>s.id===scid); const ids=sc.shots.map(s=>s.id);
+  const i=ids.indexOf(shid), j=i+dir; if(j<0||j>=ids.length) return;
+  [ids[i],ids[j]]=[ids[j],ids[i]];
+  await api("/reorder",{film:FID,scene:scid,order:ids}); openFilm(FID);
+}
+function selScene(scid){ SCENE_SEL=scid; TAB="scene"; renderTimeline(); renderRight(); }
+
+async function selShot(shid){
+  SHOT=shid;
+  DETAIL=await api(`/${FID}/shot/${shid}`);
+  COMPILED=await api(`/${FID}/compile/${shid}`);
+  SCENE_SEL=DETAIL.shot.scene;
+  if(TAB==="scene") TAB="shot";
+  renderTimeline(); renderCenter(); renderRight();
+}
+
+function renderCenter(){
+  const sh=DETAIL.shot;
+  const picked=sh.takes.find(t=>t.id===sh.picked);
+  const player=picked?`<video controls src="${m(picked.file)}"></video>`
+    :'<div class="hint">No picked take yet - generate some below.</div>';
+  const hasDlg=(sh.beats||[]).some(b=>((b.dialogue||{}).line||"").trim());
+  const takes=sh.takes.slice().reverse().map(t=>`
+    <div class="take ${t.id===sh.picked?"picked":""}">
+      <img class="poster" src="${m(t.poster)}" onclick="playTake('${t.id}')" title="click to play">
+      <img class="strip" src="${m(t.strip)}">
+      <div class="meta">
+        <b>${t.engine}</b> <span style="cursor:pointer;text-decoration:underline dotted"
+          title="use this seed for the next generation"
+          onclick="$('#tk_seed').value=${t.seed}">seed ${t.seed}</span> · ${t.duration}s · ${t.created}
+        ${t.qc&&t.qc.length?`<span class="qcbad" title="${esc(t.qc.join("; "))}">QC ✗ ${t.qc.length}</span>`
+                           :'<span style="color:var(--good)">QC ✓</span>'}
+        ${t.warnings&&t.warnings.length?`<span class="warn" title="${esc(t.warnings.join("; "))}">⚠ ${t.warnings.length}</span>`:""}
+        <span class="grow"></span>
+        ${t.fps>=47?'<span class="badge on">48fps</span>':""}
+        ${t.id===sh.picked?'<b style="color:var(--good)">picked</b>'
+                          :`<button class="small" onclick="pickTake('${t.id}')">pick</button>`}
+        ${t.id===sh.picked&&(t.fps||24)<47&&t.duration<=25
+          ?`<button class="small" onclick="masterTake()" title="FILM interpolation to 48fps, audio re-muxed">master 48</button>`:""}
+        ${hasDlg&&!t.engine.endsWith("+vo")?`<button class="small" onclick="voMix('${t.id}')" title="synthesize the character voice(s) and duck them over this take">VO</button>`:""}
+      </div>
+    </div>`).join("");
+  $("#center").innerHTML=`
+    <div class="row"><h1 style="font-size:16px">${sh.id} · ${esc(sh.title)}</h1>
+      <span class="hint">${sh.duration}s · ${(sh.beats||[]).length} beat(s)</span>
+      <span class="grow"></span>
+      <button class="small" onclick="autoNext()">auto next shot →</button></div>
+    <div id="player">${player}</div>
+    <h2>Generate takes</h2>
+    <div class="row">
+      <label style="display:inline;margin:0"><input type="checkbox" id="e_ltx" checked> LTX</label>
+      <label style="display:inline;margin:0"><input type="checkbox" id="e_h3"> H3</label>
+      <label style="display:inline;margin:0"><input type="checkbox" id="e_wan"> Wan</label>
+      <input id="tk_n" type="number" min="1" max="4" value="1" style="width:52px" title="takes per engine">
+      <input id="tk_seed" type="number" placeholder="seed (blank=clock)" style="width:150px">
+      <button class="primary" onclick="genTakes()">generate</button>
+    </div>
+    <h2>Takes (${sh.takes.length})</h2>
+    <div class="takes">${takes||'<div class="hint">none yet</div>'}</div>`;
+}
+function playTake(tid){
+  const t=DETAIL.shot.takes.find(x=>x.id===tid);
+  $("#player").innerHTML=`<video controls autoplay src="${m(t.file)}"></video>`;
+}
+async function pickTake(tid){ await api("/pick",{film:FID,shot:SHOT,take:tid}); await selShot(SHOT); openFilm(FID); }
+async function genTakes(){
+  const engines=["ltx","h3","wan","cam"].filter(e=>$("#e_"+e).checked);
+  if(!engines.length) return note("pick at least one engine",true);
+  const j=await api("/takes",{film:FID,shot:SHOT,engines,n:+$("#tk_n").value||1,
+                              seed:+$("#tk_seed").value||0});
+  WATCH.add(j.job); note("takes queued: "+j.job);
+}
+async function voMix(tid){ const j=await api("/vo",{film:FID,shot:SHOT,take:tid}); WATCH.add(j.job); note("VO job "+j.job); }
+async function autoNext(){
+  const j=await api("/autonext",{film:FID,shot:SHOT});
+  note(j.note); await openFilm(FID); selShot(j.id);
+}
+async function masterTake(){ const j=await api("/master",{film:FID,shot:SHOT}); WATCH.add(j.job); note("master "+j.job); }
+async function genPortrait(cid){ const j=await api("/portrait",{film:FID,cast:cid}); WATCH.add(j.job); note("portrait "+j.job); }
+async function draftAll(){
+  const j=await api("/draftall",{film:FID,engines:["ltx"],seed:11});
+  WATCH.add(j.job); note("drafting all missing takes: "+j.job);
+}
+function reviewPanel(){
+  let total=0, n=0, blockers=[];
+  const rows=TREE.scenes.map(sc=>{
+    const cells=sc.shots.map(s=>{
+      if(!s.takes) blockers.push(`${s.id} has no takes`);
+      else if(!s.picked) blockers.push(`${s.id} has takes but none picked`);
+      else{
+        total+=s.picked_dur||s.duration||0; n++;
+        if(s.picked_qc) blockers.push(`${s.id} picked take has ${s.picked_qc} QC issue(s)`);
+      }
+      const chip=s.picked?(s.picked_qc?'<span class="qcbad">✗</span>'
+        :(s.picked_fps>=47?'<span style="color:var(--good)">48</span>'
+                          :'<span style="color:var(--good)">✓</span>'))
+        :'<span class="hint">—</span>';
+      return `<td style="padding:3px;text-align:center">
+        <div onclick="selShot('${s.id}')" style="cursor:pointer">
+        ${s.poster?`<img src="${m(s.poster)}" style="width:104px;border-radius:4px">`
+                  :'<div class="noimg" style="width:104px;height:59px;margin:auto">none</div>'}
+        <div class="hint">${s.id} ${chip}${s.transition_out!=="cut"?" · "+s.transition_out:""}</div>
+        </div></td>`;
+    }).join("");
+    return `<tr><td style="color:var(--dim);font-size:11px;white-space:nowrap;vertical-align:top;padding-top:12px">
+            ${esc(sc.title||sc.id)}${sc.music?'<br><span class="badge">music</span>':""}</td>${cells}</tr>`;
+  }).join("");
+  const ports=Object.entries(TREE.cast||{}).filter(([,c])=>!c.portrait).map(([id])=>id);
+  if(ports.length) blockers.push("no portrait yet: "+ports.join(", ")+" (photoreal identity route needs them)");
+  return `<h2>Review</h2>
+    <div class="hint">${n} shots picked · ~${Math.round(total)}s of picked footage</div>
+    <div style="overflow-x:auto;margin-top:8px"><table>${rows}</table></div>
+    <h2>Blocking / attention</h2>
+    ${blockers.length?blockers.map(b=>`<div class="wl">⚠ ${esc(b)}</div>`).join("")
+                     :'<div class="nl" style="color:var(--good)">nothing blocking - ready to assemble</div>'}
+    <div class="row" style="margin-top:10px">
+      <button onclick="draftAll()">draft all missing takes (LTX)</button>
+      <button class="primary" onclick="assemble()">assemble film</button>
+    </div>`;
+}
+async function assemble(){
+  const j=await api("/assemble",{film:FID,music:$("#musicchk").checked});
+  WATCH.add(j.job); note("assembling: "+j.job);
+}
+
+/* ── right panel ─────────────────────────────────────────────────────────── */
+function renderRight(){
+  const tabs=["shot","context","scene","film","review"];
+  let h=`<div class="tabs">`+tabs.map(t=>
+    `<div class="${TAB===t?"sel":""}" onclick="TAB='${t}';renderRight()">${t}</div>`).join("")+`</div>`;
+  if(TAB==="shot") h+=SHOT&&DETAIL?shotForm():'<div class="hint" style="margin-top:10px">select a shot</div>';
+  if(TAB==="context") h+=SHOT&&DETAIL?contextPanel():'<div class="hint" style="margin-top:10px">select a shot</div>';
+  if(TAB==="scene") h+=SCENE_SEL?sceneForm():'<div class="hint" style="margin-top:10px">select a scene</div>';
+  if(TAB==="film") h+=TREE?filmForm():"";
+  if(TAB==="review") h+=TREE?reviewPanel():"";
+  $("#right").innerHTML=h;
+}
+const opt=(list,cur)=>list.map(v=>`<option ${v===cur?"selected":""}>${v}</option>`).join("");
+const castOpts=cur=>`<option value=""></option>`+Object.keys(TREE.cast||{}).map(c=>
+  `<option ${c===cur?"selected":""}>${c}</option>`).join("");
+
+function shotForm(){
+  const sh=DETAIL.shot;
+  const beats=(sh.beats||[]).map((b,i)=>`
+    <div class="beat" data-i="${i}">
+      <div class="bh"><span>beat ${i+1}${i?"":" (opening)"}</span>
+        ${i?`<button class="small" onclick="rmBeat(${i})">remove</button>`:""}</div>
+      ${i?`<label>transition in</label><select class="b_tin">${opt(["hard cut","dissolve"],b.transition_in||"hard cut")}</select>`:""}
+      <div class="row">
+        <div class="grow"><label>framing</label><select class="b_framing" style="width:100%">${opt(TREE.angles,b.framing)}</select></div>
+        <div class="grow"><label>camera</label><select class="b_move" style="width:100%">${opt(TREE.moves,b.move||"static")}</select></div>
+      </div>
+      <label>subject (cast id or free text)</label>
+      <input class="b_subject" list="castlist" value="${esc(b.subject)}" style="width:100%">
+      <label>action</label><textarea class="b_action" rows="2">${esc(b.action)}</textarea>
+      <label>background action</label><textarea class="b_background" rows="1">${esc(b.background)}</textarea>
+      <div class="row">
+        <div><label>dialogue - char</label><select class="b_dchar">${castOpts((b.dialogue||{}).char)}</select></div>
+        <div class="grow"><label>line</label><input class="b_dline" value="${esc((b.dialogue||{}).line)}" style="width:100%"></div>
+        <div><label>delivery</label><input class="b_ddeliv" value="${esc((b.dialogue||{}).delivery)}" style="width:80px"></div>
+      </div>
+    </div>`).join("");
+  return `
+    <datalist id="castlist">${Object.keys(TREE.cast||{}).map(c=>`<option value="${c}">`).join("")}</datalist>
+    <label>title</label><input id="s_title" value="${esc(sh.title)}" style="width:100%">
+    <div class="row">
+      <div><label>duration s</label><input id="s_duration" type="number" value="${sh.duration}" style="width:70px"></div>
+      <div><label>aspect</label><select id="s_aspect">${opt(["wide","portrait"],sh.aspect)}</select></div>
+      <div><label>transition out</label><select id="s_tout">${opt(TREE.transitions_out,sh.transition_out)}</select></div>
+    </div>
+    <div class="row">
+      <div><label>anchor</label><select id="s_anchor" onchange="renderRight.kf=this.value">
+        ${opt(["scene","prev_last","generate"],String(sh.anchor).startsWith("file:")?"file":sh.anchor)}
+        <option ${String(sh.anchor).startsWith("file:")?"selected":""}>file</option></select></div>
+      <div><label>no people</label><select id="s_np">
+        <option value="" ${sh.no_people===null?"selected":""}>inherit</option>
+        <option value="yes" ${sh.no_people===true?"selected":""}>yes</option>
+        <option value="no" ${sh.no_people===false?"selected":""}>no</option></select></div>
+      <div><label>LTX enhancer</label><select id="s_enh">${opt(["on","off"],sh.enhance?"on":"off")}</select></div>
+    </div>
+    <label>keyframe prompt / file path (for anchor = generate | file)</label>
+    <textarea id="s_kf" rows="2">${esc(String(sh.anchor).startsWith("file:")?sh.anchor.slice(5):sh.keyframe_prompt)}</textarea>
+    <label>sfx - name every noise</label><textarea id="s_sfx" rows="2">${esc(sh.sfx)}</textarea>
+    <h2>Beats (${(sh.beats||[]).length}/4) - LTX cuts inside the shot; H3 and Wan render beat 1</h2>
+    ${beats}
+    <div class="row" style="margin-top:6px">
+      <button class="small" onclick="addBeat()">+ beat</button>
+      <span class="grow"></span>
+      <button class="small" onclick="delShot()" style="color:var(--bad)">delete shot</button>
+      <button class="primary" onclick="saveShot()">save shot</button>
+    </div>`;
+}
+function readBeats(){
+  return [...document.querySelectorAll(".beat")].map((el,i)=>({
+    framing:el.querySelector(".b_framing").value,
+    move:el.querySelector(".b_move").value,
+    transition_in:i?(el.querySelector(".b_tin")?.value||"hard cut"):"",
+    subject:el.querySelector(".b_subject").value.trim(),
+    action:el.querySelector(".b_action").value.trim(),
+    background:el.querySelector(".b_background").value.trim(),
+    dialogue:{char:el.querySelector(".b_dchar").value,
+              line:el.querySelector(".b_dline").value.trim(),
+              delivery:el.querySelector(".b_ddeliv").value.trim()}}));
+}
+async function saveShot(){
+  stashForm();
+  const sh=DETAIL.shot;
+  await api("/editshot",{film:FID,shot:SHOT,
+    title:sh.title, duration:sh.duration, aspect:sh.aspect,
+    transition_out:sh.transition_out, anchor:sh.anchor,
+    keyframe_prompt:sh.keyframe_prompt, no_people:sh.no_people,
+    enhance:sh.enhance, sfx:sh.sfx, beats:sh.beats});
+  note("shot saved"); await selShot(SHOT); openFilm(FID);
+}
+function stashForm(){
+  // addBeat/rmBeat re-render the panel, which rebuilds every field from DETAIL - so
+  // everything typed but not yet saved must be read back first, or it is silently lost.
+  const sh=DETAIL.shot;
+  sh.title=$("#s_title").value; sh.duration=+$("#s_duration").value||6;
+  sh.aspect=$("#s_aspect").value; sh.transition_out=$("#s_tout").value;
+  sh.sfx=$("#s_sfx").value; sh.enhance=$("#s_enh").value==="on";
+  const np=$("#s_np").value; sh.no_people=np===""?null:np==="yes";
+  const a=$("#s_anchor").value, kf=$("#s_kf").value.trim();
+  sh.anchor=a==="file"?("file:"+kf):a;
+  if(a==="generate") sh.keyframe_prompt=kf;
+  sh.beats=readBeats();
+}
+function addBeat(){
+  stashForm();
+  if(DETAIL.shot.beats.length>=4) return note("LTX takes at most 4 beats",true);
+  DETAIL.shot.beats.push({framing:"medium shot",move:"static",transition_in:"hard cut",
+    subject:"",action:"",background:"",dialogue:{char:"",line:"",delivery:""}});
+  renderRight();
+}
+function rmBeat(i){ stashForm(); DETAIL.shot.beats.splice(i,1); renderRight(); }
+async function delShot(){
+  if(!confirm("Delete shot "+SHOT+"?")) return;
+  await api("/delete",{film:FID,shot:SHOT}); SHOT=null; openFilm(FID);
+}
+
+function srcChip(s){ return `<span class="src ${s}">${s}</span>`; }
+function contextPanel(){
+  const rows=Object.entries(DETAIL.resolved).map(([k,v])=>{
+    let val=v.value;
+    if(k==="beats") val=`${val.length} beat(s)`;
+    else if(k==="cast") val=Object.keys(val).join(", ");
+    else if(typeof val==="object") val=JSON.stringify(val);
+    return `<tr><td>${k}${srcChip(v.source)}</td><td>${esc(String(val)).slice(0,220)}</td></tr>`;
+  }).join("");
+  const kp=DETAIL.keyframe_plan;
+  const eng=e=>{
+    const c=COMPILED.compiled[e]||{};
+    if(c.error) return `<pre class="compiled">${esc(c.error)}</pre>`;
+    return `<pre class="compiled">${esc(c.prompt)}</pre>`
+      +(c.warnings||[]).map(w=>`<div class="wl">⚠ ${esc(w)}</div>`).join("")
+      +(c.notes||[]).map(n=>`<div class="nl">· ${esc(n)}</div>`).join("");
+  };
+  return `<h2>Context in force here <span class="hint">(what the timeline click shows)</span></h2>
+    <table class="ctx">${rows}</table>
+    <h2>Start image plan</h2>
+    <div class="hint">${esc(JSON.stringify(kp))}</div>
+    <h2>Compiled - LTX</h2>${eng("ltx")}
+    <h2>Compiled - H3</h2>${eng("h3")}
+    <h2>Compiled - Wan</h2>${eng("wan")}`;
+}
+
+function sceneForm(){
+  const sc=TREE.scenes.find(s=>s.id===SCENE_SEL); if(!sc) return "";
+  const castChecks=Object.keys(TREE.cast||{}).map(c=>
+    `<label style="display:inline;margin-right:10px;text-transform:none">
+     <input type="checkbox" class="sc_cast" value="${c}" ${(sc.cast_present||[]).includes(c)?"checked":""}> ${c}</label>`).join("")||'<span class="hint">no cast yet - add in film tab</span>';
+  return `
+    <h2>Scene ${sc.id}</h2>
+    <label>title</label><input id="c_title" value="${esc(sc.title)}" style="width:100%">
+    <label>location <select onchange="applyLoc(this.value)" style="margin-left:8px">
+      <option value="">from library…</option>
+      ${(LIBS.locations||[]).map(l=>`<option value="${l.id}">${esc(l.name)}</option>`).join("")}
+    </select></label><textarea id="c_location" rows="2">${esc(sc.location)}</textarea>
+    <div class="row">
+      <div class="grow"><label>time of day</label><input id="c_tod" value="${esc(sc.time_of_day)}" style="width:100%"></div>
+      <div class="grow"><label>weather</label><input id="c_weather" value="${esc(sc.weather)}" style="width:100%"></div>
+    </div>
+    <label>ambience - the continuous sound bed (a quiet clause returns literal silence)</label>
+    <textarea id="c_amb" rows="2">${esc(sc.ambience)}</textarea>
+    <label>palette / grade note</label><input id="c_palette" value="${esc(sc.palette)}" style="width:100%">
+    <label>music (ACE-Step tags; mixed under at assembly)</label>
+    <input id="c_music" value="${esc(sc.music)}" style="width:100%">
+    <label>cast present</label><div>${castChecks}</div>
+    <label style="text-transform:none"><input type="checkbox" id="c_np" ${sc.no_people?"checked":""}> empty frame scene (no people)</label>
+    <div class="row" style="margin-top:8px">
+      <button class="primary" onclick="saveScene()">save scene</button>
+      <button onclick="genAnchor()">generate anchor</button>
+    </div>
+    ${sc.anchor?`<img class="anchor" src="${m(sc.anchor)}?${Date.now()}">`:'<div class="hint" style="margin-top:8px">no anchor yet - shots default to it, so generate one first</div>'}
+    ${(sc.anchor_candidates||[]).length?`<label>candidates - click to make it THE anchor (identity into a new scene is a seed lottery; the picker is the answer)</label>
+      <div class="row">${sc.anchor_candidates.map(c=>
+        `<img src="${m(c)}?${Date.now()}" style="width:31%;border-radius:5px;cursor:pointer;border:2px solid ${'${'}sc.anchor&&0?'x':'transparent'}"
+              onclick="pickAnchor('${c}')" title="${c}">`).join("")}</div>`:""}`;
+}
+function applyLoc(id){
+  const l=(LIBS.locations||[]).find(x=>x.id===id); if(!l) return;
+  $("#c_location").value=l.description||""; $("#c_amb").value=l.ambience||"";
+  $("#c_palette").value=l.palette||"";
+  if(l.time_of_day) $("#c_tod").value=l.time_of_day;
+}
+async function saveScene(){
+  await api("/editscene",{film:FID,scene:SCENE_SEL,
+    title:$("#c_title").value, location:$("#c_location").value,
+    time_of_day:$("#c_tod").value, weather:$("#c_weather").value,
+    ambience:$("#c_amb").value, palette:$("#c_palette").value,
+    music:$("#c_music").value,
+    cast_present:[...document.querySelectorAll(".sc_cast:checked")].map(x=>x.value),
+    no_people:$("#c_np").checked});
+  note("scene saved"); openFilm(FID);
+}
+async function pickAnchor(c){
+  await api("/editscene",{film:FID,scene:SCENE_SEL,anchor:c});
+  note("anchor set from candidate"); openFilm(FID);
+}
+async function genAnchor(){
+  const j=await api("/anchor",{film:FID,scene:SCENE_SEL});
+  WATCH.add(j.job); note("anchor job "+j.job);
+}
+
+function filmForm(){
+  const cast=Object.entries(TREE.cast||{}).map(([id,c])=>`
+    <div class="cast" data-id="${id}">
+      <div class="row"><b>${id}</b>
+        ${c.portrait?`<img src="${m(c.portrait)}" style="width:34px;height:46px;object-fit:cover;border-radius:4px">`:""}
+        <button class="small" onclick="genPortrait('${id}')" title="render the identity portrait the photoreal keyframe route hangs on">${c.portrait?"re-":""}portrait</button>
+        <span class="grow"></span>
+        <button class="small" onclick="rmCast('${id}')" style="color:var(--bad)">remove</button></div>
+      <label>name</label><input class="f_name" value="${esc(c.name)}" style="width:100%">
+      <label>appearance clause (used at first mention)</label>
+      <textarea class="f_clause" rows="2">${esc(c.clause)}</textarea>
+      <label>short (re-identification: "the same ...")</label>
+      <input class="f_short" value="${esc(c.short)}" style="width:100%">
+      <div class="row">
+        <div class="grow"><label>sheet (anime identity)</label><input class="f_sheet" value="${esc(c.sheet||"")}" style="width:100%"></div>
+        <div><label>voice pack</label><select class="f_voice"><option value=""></option>
+          ${(LIBS.voices||[]).map(v=>`<option value="${v.id}" ${v.id===c.voice?"selected":""}>${esc(v.name)}</option>`).join("")}</select></div>
+      </div>
+      <label>voice description (in-prompt: "says in ...")</label>
+      <input class="f_vdesc" value="${esc(c.voice_desc||"")}" style="width:100%">
+    </div>`).join("");
+  return `
+    <h2>Film</h2>
+    <label>title</label><input id="f_title" value="${esc(TREE.title)}" style="width:100%">
+    <label>logline</label><textarea id="f_logline" rows="2">${esc(TREE.logline||"")}</textarea>
+    <div class="row"><div><label>look</label><select id="f_look">${opt(["photoreal","anime"],TREE.look)}</select></div></div>
+    <label>look clause (the style sentence every prompt carries)</label>
+    <textarea id="f_lookclause" rows="2">${esc(TREE.look_clause||"")}</textarea>
+    <label>grade</label><input id="f_grade" value="${esc(TREE.grade||"")}" style="width:100%">
+    <label>extra negative</label><input id="f_neg" value="${esc(TREE.negative||"")}" style="width:100%">
+    <h2>Cast <span class="hint">(id is what beats reference)</span></h2>
+    ${cast||'<div class="hint">none yet</div>'}
+    <div class="row">
+      <input id="f_newcast" placeholder="new cast id e.g. COOK" style="width:130px">
+      <select id="f_fromchar"><option value="">from character…</option>
+        ${(LIBS.characters||[]).map(c=>`<option value="${c.id}">${esc(c.name||c.id)}</option>`).join("")}</select>
+      <button class="small" onclick="addCast()">add</button>
+    </div>
+    <div class="row" style="margin-top:10px"><button class="primary" onclick="saveFilm()">save film</button></div>`;
+}
+function readCast(){
+  const out={};
+  document.querySelectorAll(".cast").forEach(el=>{
+    out[el.dataset.id]={portrait:(TREE.cast[el.dataset.id]||{}).portrait||"",
+      name:el.querySelector(".f_name").value,
+      clause:el.querySelector(".f_clause").value, short:el.querySelector(".f_short").value,
+      sheet:el.querySelector(".f_sheet").value, voice:el.querySelector(".f_voice").value,
+      voice_desc:el.querySelector(".f_vdesc").value};
+  });
+  return out;
+}
+async function saveFilm(){
+  await api("/edit",{film:FID,title:$("#f_title").value,logline:$("#f_logline").value,
+    look:$("#f_look").value,look_clause:$("#f_lookclause").value,
+    grade:$("#f_grade").value,negative:$("#f_neg").value,cast:readCast()});
+  note("film saved"); openFilm(FID);
+}
+function addCast(){
+  const id=($("#f_newcast").value.trim()||$("#f_fromchar").value||"").toUpperCase();
+  if(!id) return;
+  TREE.cast=TREE.cast||{};
+  const ch=(LIBS.characters||[]).find(c=>c.id===$("#f_fromchar").value)||{};
+  TREE.cast[id]=Object.assign({name:ch.name||id.toLowerCase(),clause:ch.desc||"",short:"",
+    sheet:ch.sheet||"",voice:"",voice_desc:""},readCast()[id]||{});
+  renderRight();
+}
+function rmCast(id){ TREE.cast=readCast(); delete TREE.cast[id]; renderRight(); }
+
+/* ── jobs ────────────────────────────────────────────────────────────────── */
+async function pollJobs(){
+  try{
+    const j=await api("/jobs");
+    const running=j.jobs.filter(x=>x.state==="running");
+    for(const job of j.jobs){
+      if(WATCH.has(job.id)&&job.state!=="running"){
+        WATCH.delete(job.id);
+        note(`${job.kind} ${job.state}${job.error?": "+job.error:""}`, job.state==="failed");
+        await openFilm(FID);
+        if(SHOT) await selShot(SHOT);
+      }
+    }
+    if(running.length){
+      const r=running[0];
+      note(`${r.kind} ${r.done}/${r.total} ${r.log&&r.log.length?"· "+r.log[r.log.length-1]:""}`);
+    }
+  }catch(e){}
+  setTimeout(pollJobs,2500);
+}
+loadFilms(); pollJobs();
+</script>
+</body>
+</html>

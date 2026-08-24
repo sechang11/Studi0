@@ -202,7 +202,7 @@ def compile_shot(fid, shid):
     f = F.load(fid)
     flat = f.flat(shid)
     out = {}
-    for eng in ("ltx", "h3", "wan"):
+    for eng in ("ltx", "h3", "wan", "cam"):
         try:
             out[eng] = F.compile_shot(flat, eng)
         except Exception as e:
@@ -333,7 +333,8 @@ def edit_shot(data):
     f = F.load(data["film"])
     sh = f.shot(data["shot"])
     for k in ("title", "duration", "aspect", "anchor", "keyframe_prompt", "beats",
-              "sfx", "no_people", "enhance", "transition_out", "engine_notes"):
+              "sfx", "no_people", "enhance", "transition_out", "engine_notes",
+              "cam"):
         if k in data:
             sh[k] = data[k]
     f.save()
@@ -657,6 +658,51 @@ def _render_take(jid, f, sh, eng, seed):
         set_path(wf, "20.inputs.length", c["length"])
         set_path(wf, "33.inputs.noise_seed", seed)
         set_path(wf, "51.inputs.filename_prefix", prefix)
+    elif eng == "cam":
+        # A camera rig: the motion is arithmetic, the plate is this shot's anchor. No
+        # ComfyUI, no seed lottery - the same parameters always give the same pixels.
+        import importlib.util
+        _cp = os.path.join(STUDIO, "_tools", "camrig.py")
+        _sp = importlib.util.spec_from_file_location("camrig", _cp)
+        camrig = importlib.util.module_from_spec(_sp)
+        _sp.loader.exec_module(camrig)
+        cam = sh.get("cam") or {}
+        rig = cam.get("rig") or "still_push"
+        silent = dest[:-4] + "_silent.mp4"
+        camrig.render(rig, anchor, silent, params=cam.get("params") or {},
+                      preset=cam.get("preset") or None, fps=int(f.data.get("fps") or 24))
+        # arithmetic has no sound. Mux whatever the shot names, or a silent bed,
+        # so the take still assembles and QC is informative rather than fatal.
+        aud = cam.get("audio")
+        if aud and os.path.exists(os.path.expanduser(aud)):
+            _sh("ffmpeg", "-y", "-v", "error", "-i", silent, "-i",
+                os.path.expanduser(aud), "-map", "0:v", "-map", "1:a",
+                "-shortest", "-c:v", "copy", "-c:a", "aac", "-b:a", "192k", dest)
+        else:
+            _sh("ffmpeg", "-y", "-v", "error", "-i", silent, "-f", "lavfi",
+                "-i", "anullsrc=r=48000:cl=stereo", "-shortest", "-c:v", "copy",
+                "-c:a", "aac", "-b:a", "96k", dest)
+        if os.path.exists(silent):
+            os.remove(silent)
+        _thumbs(dest, dest[:-4])
+        qc = _qc(dest)
+        v = camrig.verdict(rig, cam.get("params") or {}, cam.get("preset") or None)
+        take = {"id": tid, "engine": "cam", "seed": 0,
+                "created": time.strftime("%H:%M"), "file": rel,
+                "poster": rel[:-4] + ".png", "strip": rel[:-4] + "_strip.png",
+                "duration": round(_dur(dest), 2), "fps": _fps(dest), "qc": qc,
+                "warnings": ([] if v.get("pass", True) else
+                             ["camrig shape test FAILED: %s" % v]),
+                "prompt": "camrig %s%s %s" % (rig,
+                                              "/" + cam["preset"] if cam.get("preset") else "",
+                                              cam.get("params") or "")}
+        f2 = F.load(f.id)
+        sh2 = f2.shot(sh["id"])
+        sh2["takes"].append(take)
+        if not sh2.get("picked") and not qc:
+            sh2["picked"] = tid
+        f2.save()
+        return tid
     elif eng == "wan":
         wf = load_wf(c["workflow"])
         set_path(wf, "10.inputs.image", staged)
@@ -715,7 +761,7 @@ def _takes_job(jid, fid, shid, engines, n, seed):
 
 
 def takes(data):
-    engines = [e for e in (data.get("engines") or ["ltx"]) if e in ("ltx", "h3", "wan")]
+    engines = [e for e in (data.get("engines") or ["ltx"]) if e in ("ltx", "h3", "wan", "cam")]
     n = max(1, min(int(data.get("n") or 1), 4))
     jid = _job("takes", total=len(engines) * n, film=data["film"], shot=data["shot"])
     threading.Thread(target=_takes_job,
@@ -937,7 +983,7 @@ def _draftall_job(jid, fid, engines, seed):
 
 
 def draft_all(data):
-    engines = [e for e in (data.get("engines") or ["ltx"]) if e in ("ltx", "h3", "wan")]
+    engines = [e for e in (data.get("engines") or ["ltx"]) if e in ("ltx", "h3", "wan", "cam")]
     jid = _job("draftall", film=data["film"])
     threading.Thread(target=_draftall_job,
                      args=(jid, data["film"], engines, int(data.get("seed") or 11)),

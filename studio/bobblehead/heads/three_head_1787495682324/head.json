@@ -1,0 +1,150 @@
+{
+ "id": "three_head_1787495682324",
+ "kind": "head",
+ "source_photo": "source.png",
+ "spec": {
+  "name": "Three Head 1787495682324",
+  "group": "head",
+  "subject": "from a photograph",
+  "costume": "",
+  "pose": ""
+ },
+ "recipe": {
+  "latent_resolution": 4096,
+  "octree_resolution": 512,
+  "threshold": 0.45,
+  "algorithm": "surface net",
+  "steps": 30,
+  "cfg": 5.0,
+  "voxel_res": -10
+ },
+ "seed": 777,
+ "style": "figurine",
+ "height_mm": 95.0,
+ "stages": {
+  "smooth": {
+   "taubin_iters": 0,
+   "volume_kept_pct": 100.0,
+   "watertight_after": true
+  },
+  "decimate": {
+   "decimated": true,
+   "faces_before": 7573544,
+   "faces": 900000,
+   "target": 900000,
+   "steps": [
+    3408094,
+    1533642,
+    900000
+   ],
+   "reached_target": true
+  },
+  "socket": {
+   "flat_f": 0.1939,
+   "flat_area_mm2": 599.52,
+   "flat_equiv_diameter_mm": 27.63,
+   "cut_rule": "neck found by prominence (1.23) - shoulders removed",
+   "cut_prominence": 1.23,
+   "rescaled_by": 1.2405,
+   "full_mesh_mm": 95.0,
+   "socket_d_mm": 8.4,
+   "socket_depth_mm": 14.0,
+   "socket_reduced": false,
+   "debris_dropped": [],
+   "head_watertight": true,
+   "head_extents_mm": [
+    65.13,
+    87.96,
+    95.0
+   ]
+  },
+  "print": {
+   "stl": "/home/k4shix/shared/comfy-studio/studio/bobblehead/heads/three_head_1787495682324/print/three_head_1787495682324_95mm.stl",
+   "3mf": "/home/k4shix/shared/comfy-studio/studio/bobblehead/heads/three_head_1787495682324/print/three_head_1787495682324_95mm.3mf",
+   "export": {
+    "written": [
+     {
+      "path": "/home/k4shix/shared/comfy-studio/studio/bobblehead/heads/three_head_1787495682324/print/three_head_1787495682324_95mm.stl",
+      "bytes": 30528784,
+      "reloaded_watertight": true,
+      "reloaded_faces": 610574
+     },
+     {
+      "path": "/home/k4shix/shared/comfy-studio/studio/bobblehead/heads/three_head_1787495682324/print/three_head_1787495682324_95mm.3mf",
+      "bytes": 10916471,
+      "reloaded_watertight": true,
+      "reloaded_faces": 610574
+     }
+    ],
+    "height_mm": null
+   }
+  }
+ },
+ "built": 1787530763.9432049,
+ "diagnose": {
+  "path": "/home/k4shix/shared/comfy-studio/studio/bobblehead/heads/three_head_1787495682324/head.glb",
+  "file_bytes": 10991072,
+  "vertices": 305287,
+  "faces": 610574,
+  "unique_vertex_positions": 305287,
+  "unwelded_vertices": 0,
+  "duplicate_faces": 0,
+  "degenerate_faces": 0,
+  "bounds_min": [
+   -32.609195709228516,
+   -46.11982727050781,
+   0.0
+  ],
+  "bounds_max": [
+   32.51784133911133,
+   41.83594512939453,
+   95.0
+  ],
+  "extents": [
+   65.12703704833984,
+   87.95577239990234,
+   95.0
+  ],
+  "centroid": [
+   -0.17828463968243316,
+   5.753275884209442,
+   41.785531783644316
+  ],
+  "unique_edges": 915861,
+  "edge_valence": {
+   "2": 915861
+  },
+  "boundary_edges": 0,
+  "manifold_edges": 915861,
+  "nonmanifold_edges": 0,
+  "nonmanifold_fraction": 0.0,
+  "is_watertight": true,
+  "is_winding_consistent": true,
+  "is_volume": true,
+  "euler_number": 0,
+  "components": 1,
+  "component_face_counts_top10": [
+   610574
+  ],
+  "components_under_1pct": 0,
+  "vertex_components": 1,
+  "vertex_component_face_counts_top10": [
+   610574
+  ],
+  "vertex_components_under_1pct": 0,
+  "volume": 256415.2699204212,
+  "surface_area": 29426.93748787851,
+  "convex_hull_volume": 325687.7613271288,
+  "solidity": 0.7873039775138232,
+  "normals_outward": true,
+  "genus": 1.0,
+  "blocking": [],
+  "warnings": [],
+  "printable": true
+ },
+ "views": [
+  "views/three_head_1787495682324_orbit.jpg"
+ ],
+ "ok": true,
+ "wall_secs": 307.6
+}
