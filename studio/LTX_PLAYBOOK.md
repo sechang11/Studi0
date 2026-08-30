@@ -403,3 +403,152 @@ like). The division of labour is the doctrine:
 - **Anime dialogue is VO, not lip-sync** — drawn mouths do not move. Keep
   lines short, prefer two-shots/off-angles for spoken beats, let delivery
   descriptors ("a wry whisper") do the acting.
+
+## §21  The compositor: putting a built character in a built place
+
+Words always combined — every asset compiles to a clause and clauses
+concatenate. **Images did not.** A shot was one image plus words: either the
+scene anchor won and the character was re-derived from text, or IPAdapter won
+and the place was. `studio/_tools/compose.py` makes the two composable.
+
+**Handing both images to qwen-image-edit and asking for one inside the other
+makes a good picture of a DIFFERENT place.** Measured: the left margin of a
+"relit" composite sat **0.187** from the original plate, against **0.211** for
+that same market at a different time of day. The model does not edit locally, it
+regenerates. So anything you care about has to be kept out of its reach:
+
+    1 paste     the character's cutout onto the plate at a stated scale
+    2 relight   through qwen-image-edit, which fixes the light and wrecks the plate
+    3 re-cut    take ONLY the relit character back out
+    4 shadow    ground her geometrically
+    5 paste     onto the PRISTINE plate, which was never model-touched
+
+Plate fidelity after step 5 is **0.000–0.007** on full framings. The place in the
+shot *is* the asset, not a picture of something like it.
+
+**The relight runs on its own canvas, never at the final framing.** Two bugs
+proved why: `qwen_edit` had its output size hardcoded to a different aspect than
+the plates, so every relight squashed its input (shortened legs); and pasting at
+the final framing put the feet past the bottom edge, so `_trim()` returned a
+legless figure that was then scaled to full height as if whole.
+
+**The guard is PROPORTION, not edges.** The relight also *recomposes* — a
+standing figure came back as a bust from the hips up, touching no edge at all,
+and was placed with its hips on the ground as if they were feet. A cutout of the
+same person keeps its aspect ratio however it is lit, so a silhouette that
+changes shape by more than a quarter is refused and falls back to the source
+cutout tinted to the plate: flat light, but a body with legs, and it says which
+it used.
+
+**A bigger figure on the relight canvas drifts LESS.** The intuition is
+backwards and cost two runs:
+
+| relight canvas | shape drift |
+|---|---|
+| figure at 0.66, bottom-anchored | 16 % |
+| figure at 0.52, centred | 30–37 % |
+
+More empty background gives the model more room to decide the shot is a
+different shot. A figure that dominates the canvas is the one it leaves alone.
+
+**The shadow is geometric, not prompted** — the same reason `bobble.py` cuts
+heads off meshes. A contact pool at the feet plus a sheared silhouette cast. The
+first numbers were invisible (mean diff 26/255 against warm pavement, which
+looks exactly like no shadow), so the pool is wider than the figure and nearly
+opaque.
+
+## §22  Ground placement comes from depth, not from a table
+
+`--stand` is one dial: 0 at the camera, 1 at the horizon. **Where the feet land
+AND how tall she is both follow from it**, because on flat ground an upright
+figure's apparent height is proportional to how far below the horizon the feet
+are. Measured on one plate: `stand=0.28` → 476 px, `stand=0.72` → 186 px, from
+one number. A figure can no longer be far away and gigantic at once.
+
+**The horizon is where the ground stops receding, not where depth is greatest.**
+The first detector took the farthest row, which in any frame with sky *is* the
+sky — so two plates silently returned the clamp, the detector having found
+nothing and reported its floor as an answer. Read bottom-up, depth climbs as the
+ground recedes and turns over at the horizon:
+
+    harbour-dawn   96%:0.04  80%:0.09  64%:0.21  56%:0.28  48%:0.29  40%:0.25
+    rain-street    96%:0.02  80%:0.09  64%:0.21  56%:0.19
+
+Walking up until it turns over gives 53 % and 69 %, which match a hand-read of
+the same images.
+
+**Depth does not know what is standable.** Water and a road are identical to it;
+`--cx` stays a human choice. Depth only guarantees the figure is on the ground
+plane at a consistent scale.
+
+Two engine traps re-confirmed here: `DA3Render.output` is a dynamic combo whose
+chosen option carries its own namespaced required inputs
+(`output.normalization`, `output.apply_sky_clip`), and the H3 node hardcodes
+768×1344 and renders portrait **in silence** unless width and height are passed.
+
+## §23  Motion: requested is advisory, pinned is real
+
+**Prose cannot direct action on LTX.** Verified by a person watching four clips:
+she never crouched; she never turned; rain fell only in one streetlight's cone;
+and the clip whose camera was selected *static* zoomed in. Three suspects were
+isolated one at a time and **all three were wrong**:
+
+| suspect | test | result |
+|---|---|---|
+| the enhancer rewrites the prompt | turned off | no change |
+| `static` maps to `("static", "")` — nothing says the camera holds | added an explicit locked-off-tripod clause | no change |
+| the action sits ~50 words deep | moved it first, in capitals | no change |
+
+And the anchor is not at fault: frame 0 measures 0.081 from the composite, which
+is only LTX resampling. **It is an engine prior.** LTX-2.5 i2v has its own idea
+of a person in a street and follows it.
+
+So every camera option carries `enforced`. **Only `pinned` is true.**
+
+**Pinning both ends makes motion deterministic.** H3's `fl2va` takes a first and
+a last frame, so the action stops being a request and becomes the interpolation
+between two states you choose. Same crouch, pinned: she lowers across all 192
+frames and the framing holds. The end state costs one still and no new asset —
+it is an *edit of the start frame*, so the person, place, camera and light are
+already right and only the pose changes.
+
+**A pin needs enough change PER SECOND, not enough change.** Two nearly identical
+frames leave the model seconds to fill with no motion, and it fills them by
+inventing — a second copy of the subject, fire on the water:
+
+| change | subject distance | seconds | per second | result |
+|---|---|---|---|---|
+| standing → crouched | 0.103 | 8.00 | 0.0129 | good |
+| forward → head turned | 0.043 | 8.00 | **0.0054** | invented |
+| forward → head turned | 0.043 | 3.75 | 0.0115 | good |
+
+`pin_shot` refuses below **0.009/s** and says the longest duration that pair can
+carry. Three points is not a calibration; the floor sits where the evidence is.
+
+Pinned is **near**-locked, not locked: a slight handheld drift, no dolly or zoom.
+
+## §24  The one-beat rule was measuring the anchor
+
+§18 says an internal cut re-derives faces, so identity moments must be one-beat
+shots cut at assembly. That cost THE LANTERN THIEF nineteen renders where five
+or six would have done — **and it was established when anchors were scene
+plates.**
+
+Same two beats, same prompt, differing only in the first frame:
+
+- **composite anchor** — the same woman throughout. Medium, then close-up, and
+  it is her in both: same face, same braid, same freckles.
+- **plate anchor** — the first half is an empty street with one distant figure,
+  and the close-up after the transition is a **different woman entirely**.
+
+A plate anchor does not put the character in the frame at all, let alone hold
+her through a cut. **So the rule holds for plate anchors and does not apply to
+composited ones**, and multi-beat shots are safe when the character is in the
+start frame.
+
+Not established: whether LTX rendered an actual hard cut. A frame-delta detector
+scores this clip 3.3× against 1.7× for a multishot previously accepted as having
+real cuts — a known-good clip scoring lower means the metric is wrong, so it
+cannot separate a cut from a fast push. The identity conclusion does not rest on
+it: the post-transition face is either the same person or not, and that is
+directly visible.
