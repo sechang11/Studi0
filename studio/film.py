@@ -266,6 +266,12 @@ class Film(object):
         cam = (self.shot(shid) or {}).get("cam")
         if cam:
             out["cam"] = cam
+        # also shot-local: set when an anchor was BUILT by compositing a named
+        # character into a named place, which is the only case we can be sure
+        # the start frame contains the character
+        src = (self.shot(shid) or {}).get("anchor_source")
+        if src:
+            out["anchor_source"] = src
         return out
 
 
@@ -456,14 +462,21 @@ def _compile_ltx(flat):
     warnings, notes = [], []
     _cast = flat.get("cast") or {}
     _beats = flat.get("beats") or []
-    if (flat.get("look") != "anime" and len(_beats) > 1
+    # Measured (playbook 24): this is about the ANCHOR, not the cut. With a
+    # composited anchor the character is in the start frame and survives the
+    # transition - same face, same braid - while a plate anchor produced a
+    # different woman entirely. So the warning is for anchors that do not
+    # already contain the character.
+    _anchored = bool(flat.get("anchor_source"))
+    if (not _anchored and flat.get("look") != "anime" and len(_beats) > 1
             and any((b.get("subject") or "") in _cast for b in _beats)
             and any(_cast.get(b.get("subject") or "", {}).get("portrait")
                     for b in _beats)):
         warnings.append("identity: an internal cut re-derives faces from the scene "
-                        "prior - the start frame's face does not survive it. For "
-                        "identity-critical moments use ONE-beat shots from identity "
-                        "keyframes and cut at assembly instead")
+                        "prior - the start frame's face does not survive it. Either "
+                        "compose the anchor so the character is IN the start frame "
+                        "(the cut then holds - measured), or use ONE-beat shots from "
+                        "identity keyframes and cut at assembly")
     cast = _CastTracker(flat.get("cast"))
     beats = flat.get("beats") or []
     style_prefix, style_tail, neg_default = _style_bits(flat)

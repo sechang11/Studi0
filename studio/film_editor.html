@@ -99,11 +99,34 @@ img.anchor{width:100%;border-radius:6px;margin-top:6px}
 <script>
 "use strict";
 let FID="", TREE=null, LIBS=null, SHOT=null, DETAIL=null, COMPILED=null, TAB="shot";
-let WATCH=new Set(), SCENE_SEL="";
+let WATCH=new Set(), SCENE_SEL="", FOUNDRY={};
 
 const $=q=>document.querySelector(q);
 const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const m=p=>`/film/media/${FID}/${p}`;
+function composePlates(){
+  const pid=document.getElementById("c_place").value;
+  const p=(FOUNDRY.place||[]).find(x=>x.id===pid);
+  const sel=document.getElementById("c_plate");
+  sel.innerHTML=((p&&p.plates)||[]).map(f=>
+    `<option value="${f.replace(/\.png$/,"")}">${f.replace(/\.png$/,"")}</option>`).join("");
+}
+async function composeAnchor(){
+  const j=await api("/compose",{film:FID,shot:SHOT,
+    character:document.getElementById("c_char").value,
+    place:document.getElementById("c_place").value,
+    plate:document.getElementById("c_plate").value,
+    stand:parseFloat(document.getElementById("c_stand").value||"0.35"),
+    cx:parseFloat(document.getElementById("c_cx").value||"0.42")});
+  WATCH.add(j.job); note("composing the anchor: "+j.job);
+}
+async function pinMotion(){
+  const change=document.getElementById("c_change").value.trim();
+  if(!change) return note("say what changes by the end of the shot",true);
+  const j=await api("/pin",{film:FID,shot:SHOT,change:change,
+    seconds:parseFloat(document.getElementById("c_secs").value||"8")});
+  WATCH.add(j.job); note("pinning: "+j.job);
+}
 async function api(p,body){
   const r=await fetch("/api/film"+p, body?{method:"POST",headers:{"Content-Type":"application/json"},
                                            body:JSON.stringify(body)}:{});
@@ -131,6 +154,9 @@ async function openFilm(fid){
   FID=fid;
   LIBS=LIBS||await api("/libraries");
   TREE=await api("/"+fid);
+  // what the foundry actually holds, so the pickers list real assets instead of
+  // asking anyone to remember an id
+  try{ FOUNDRY=(await api("/foundry_assets")).assets; }catch(e){ FOUNDRY={}; }
   $("#filmlink").style.display=TREE.film?"":"none";
   $("#filmlink").href=m("assets/film.mp4");
   renderTimeline();
@@ -186,6 +212,7 @@ async function selShot(shid){
   SCENE_SEL=DETAIL.shot.scene;
   if(TAB==="scene") TAB="shot";
   renderTimeline(); renderCenter(); renderRight();
+  if(document.getElementById("c_place")) composePlates();
 }
 
 function renderCenter(){
@@ -355,6 +382,32 @@ function shotForm(){
     </div>
     <label>keyframe prompt / file path (for anchor = generate | file)</label>
     <textarea id="s_kf" rows="2">${esc(String(sh.anchor).startsWith("file:")?sh.anchor.slice(5):sh.keyframe_prompt)}</textarea>
+    <div class="row" style="margin-top:10px;gap:6px;align-items:flex-end">
+      <div><label>compose an anchor - character</label>
+        <select id="c_char">${(FOUNDRY.character||[]).map(c=>
+          `<option value="${c.id}">${esc(c.name)} (${esc(c.style)})</option>`).join("")}</select></div>
+      <div><label>place</label>
+        <select id="c_place" onchange="composePlates()">${(FOUNDRY.place||[]).map(p=>
+          `<option value="${p.id}">${esc(p.name)}</option>`).join("")}</select></div>
+      <div><label>plate</label><select id="c_plate"></select></div>
+      <div><label>stand 0-1</label><input id="c_stand" value="0.35" style="width:70px"></div>
+      <div><label>across 0-1</label><input id="c_cx" value="0.42" style="width:70px"></div>
+      <button class="small" onclick="composeAnchor()">compose</button>
+    </div>
+    <div class="hint">stand is how far into the scene: 0 at the camera, 1 at the
+      horizon. It sets the size too, from the plate's own depth.
+      ${sh.anchor_source?`<b style="color:var(--good)">this anchor was composed:
+        ${esc(sh.anchor_source.character)} in ${esc(sh.anchor_source.place)}</b>`:""}</div>
+    <div class="row" style="margin-top:8px;gap:6px;align-items:flex-end">
+      <div style="flex:1"><label>pin the motion - what changes by the end</label>
+        <input id="c_change" placeholder="she has lowered into a deep crouch, knees bent"
+               value="${esc((sh.takes||[]).filter(t=>t.pin)[0]?.pin?.change||"")}"></div>
+      <div><label>seconds</label><input id="c_secs" value="8" style="width:70px"></div>
+      <button class="small" onclick="pinMotion()">pin</button>
+    </div>
+    <div class="hint">the end state is an EDIT of this shot's anchor, so compose one
+      first. A pin needs enough change per second - too little and the model
+      invents rather than interpolates, and it will say so rather than render it.</div>
     <label>sfx - name every noise</label><textarea id="s_sfx" rows="2">${esc(sh.sfx)}</textarea>
     <h2>Beats (${(sh.beats||[]).length}/4) - LTX cuts inside the shot; H3 and Wan render beat 1</h2>
     ${beats}

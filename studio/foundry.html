@@ -74,6 +74,7 @@ pre.hidden-prompt{background:#101017;border:1px solid var(--line);border-radius:
 </div>
 <script>
 "use strict";
+let TYPES=["character","place","costume","prop","music"];
 let DICT=null, DATA=null, STYLE="anime", SEL=null, FORM=null, WATCH=new Set();
 let LEVELS=[];
 const $=q=>document.querySelector(q);
@@ -90,6 +91,10 @@ function note(t,err){ const el=$("#job"); el.textContent=t; el.className=err?"er
 
 async function boot(){
   DICT=await api("/dictionary");
+  // whatever the dictionary declares as a main variable, in its own order -
+  // camera and motion appeared the moment this stopped being a literal
+  TYPES=Object.keys(DICT).filter(k=>DICT[k]&&DICT[k].main&&DICT[k].subs
+                                  &&k!=="style");
   LEVELS=(await api("/levels")).levels;
   DATA=await api("");
   renderLeft();
@@ -107,7 +112,7 @@ function renderLeft(){
       `<div class="${s===STYLE?"sel":""}" onclick="STYLE='${s}';renderLeft();if(FORM)startNew(FORM.type)">
        ${esc(DICT.style.options[s].label)}</div>`).join("")}</div>
     <div class="speclabel"><span>← real life</span><span>cartoony →</span></div>`;
-  for(const t of ["character","place","costume","prop","music"]){
+  for(const t of TYPES){
     const assets=(DATA.assets[t]||[]).filter(a=>a.style===STYLE||t==="music");
     const plural = t==="music" ? "Music" : esc(DICT[t].label)+"s";
     h+=`<h2>${plural}
@@ -277,7 +282,7 @@ async function createAsset(){
   if(lvl>1&&SEL) genSeeds();          // the level was the instruction; act on it
 }
 async function openAssetById(id){
-  for(const t of ["character","place","costume","prop","music"])
+  for(const t of TYPES)
     if((DATA.assets[t]||[]).some(a=>a.id===id)) return openAsset(t,id);
 }
 

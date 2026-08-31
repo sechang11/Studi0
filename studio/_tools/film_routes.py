@@ -1191,3 +1191,132 @@ def assemble(data):
                      args=(jid, data["film"], bool(data.get("music", True))),
                      daemon=True).start()
     return {"job": jid}, 200
+
+
+# ─── the compositor, behind a shot ──────────────────────────────────────────────────
+
+def _compose_mod():
+    import importlib.util
+    p = os.path.join(os.path.dirname(os.path.abspath(__file__)), "compose.py")
+    spec = importlib.util.spec_from_file_location("compose_tool", p)
+    m = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(m)
+    return m
+
+
+def _compose_anchor_job(jid, fid, shid, char_id, place_id, plate, view,
+                        stand, cx):
+    try:
+        CM = _compose_mod()
+        _log(jid, "composing %s into %s" % (char_id, place_id))
+        out, plate_p = CM.compose(char_id, place_id, plate, view, "full", cx,
+                                  stand=stand, quiet=True)
+        l, r = CM.fidelity(plate_p, out)
+        _log(jid, "plate fidelity L=%.4f R=%.4f" % (l, r))
+        f = F.load(fid)
+        rel = "assets/anchor_shot_%s.png" % shid
+        shutil.copy(out, os.path.join(f.dir, rel))
+        sh = f.shot(shid)
+        sh["anchor"] = "file:" + os.path.join(f.dir, rel)
+        sh["anchor_source"] = {"character": char_id, "place": place_id,
+                               "stand": stand, "cx": cx, "view": view}
+        f.save()
+        with _LOCK:
+            JOBS[jid]["result"] = {"anchor": rel, "fidelity": [l, r]}
+        _finish(jid)
+    except Exception as e:
+        _finish(jid, str(e)[:300])
+
+
+def compose_anchor(data):
+    """Composite a foundry character into a foundry place and pin it to a shot."""
+    jid = _job("compose", film=data["film"], shot=data["shot"])
+    threading.Thread(
+        target=_compose_anchor_job,
+        args=(jid, data["film"], data["shot"], data["character"],
+              data["place"], data.get("plate") or None,
+              data.get("view") or "turn_front",
+              float(data.get("stand", 0.35)), float(data.get("cx", 0.42))),
+        daemon=True).start()
+    return {"job": jid}, 200
+
+
+def _pin_job(jid, fid, shid, change, seconds, seed):
+    try:
+        CM = _compose_mod()
+        f = F.load(fid)
+        sh = f.shot(shid)
+        anchor = str(sh.get("anchor") or "")
+        if not anchor.startswith("file:"):
+            raise RuntimeError("a pinned shot needs a composed anchor first - "
+                               "the end state is an edit of it")
+        start = anchor[5:]
+        work = os.path.join(f.dir, "assets")
+        os.makedirs(work, exist_ok=True)
+        _log(jid, "editing the end state")
+        end = CM.end_state(start, change,
+                           os.path.join(work, "pin_end_%s.png" % shid))
+        ok, rate, longest = CM.pin_feasible(start, end, seconds)
+        _log(jid, "pin rate %.4f/s (floor %.3f), carries %.1fs"
+             % (rate, CM.MIN_PIN_RATE, longest))
+        if not ok:
+            raise RuntimeError(
+                "the two frames are too alike for %.1fs: %.4f/s, below %.3f the "
+                "model invents rather than interpolates. Pick a bigger change or "
+                "use %.1fs or less." % (seconds, rate, CM.MIN_PIN_RATE, longest))
+        _log(jid, "interpolating on H3")
+        tid = "pin_%d" % int(time.time())
+        rel = "takes/%s/%s.mp4" % (shid, tid)
+        dest = os.path.join(f.dir, rel)
+        os.makedirs(os.path.dirname(dest), exist_ok=True)
+        CM.pin_shot(start, end,
+                    "%s. The camera does not move." % change,
+                    dest, seconds=seconds, seed=seed)
+        f = F.load(fid)
+        sh = f.shot(shid)
+        sh.setdefault("takes", []).append({
+            "id": tid, "engine": "h3-pinned", "file": rel,
+            "duration": CM.h3_length(seconds) / 24.0, "fps": 24,
+            "seed": seed, "qc": [], "warnings": [],
+            "pin": {"change": change, "rate": round(rate, 4),
+                    "end": "assets/pin_end_%s.png" % shid}})
+        sh["picked"] = tid
+        f.save()
+        with _LOCK:
+            JOBS[jid]["result"] = {"take": tid, "file": rel}
+        _finish(jid)
+    except Exception as e:
+        _finish(jid, str(e)[:300])
+
+
+def pin_shot(data):
+    """Both ends chosen: the shot's anchor, and an edit of it. H3 interpolates."""
+    jid = _job("pin", film=data["film"], shot=data["shot"])
+    threading.Thread(
+        target=_pin_job,
+        args=(jid, data["film"], data["shot"], data["change"],
+              float(data.get("seconds", 8)), int(data.get("seed", 42))),
+        daemon=True).start()
+    return {"job": jid}, 200
+
+
+def foundry_assets(kind=None):
+    """What the Shot tab can offer: the foundry's built assets, so the picker
+    lists what exists rather than asking anyone to remember ids."""
+    import importlib.util
+    p = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                     "foundry.py")
+    spec = importlib.util.spec_from_file_location("fy_mod", p)
+    FY = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(FY)
+    out = {}
+    for t in ("character", "place"):
+        rows = []
+        for a in FY.list_assets(t):
+            imgs = a.get("images") or {}
+            rows.append({"id": a["id"], "name": a["name"],
+                         "style": a.get("style", ""),
+                         "views": sorted(imgs.keys()),
+                         "plates": sorted(imgs.values()) if t == "place" else []})
+        out[t] = rows
+    return {"assets": out}, 200

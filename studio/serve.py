@@ -1530,6 +1530,8 @@ class H(http.server.SimpleHTTPRequestHandler):
                     body, code = sr.films()
                 elif rest[0] == "tree":
                     body, code = sr.tree(rest[1])
+                elif rest[0] == "media":
+                    body, code = sr.media(rest[1])
                 elif rest[0] == "md":
                     body, code = sr.md(rest[1], rest[2])
                 elif rest[0] == "check":
@@ -1651,6 +1653,9 @@ class H(http.server.SimpleHTTPRequestHandler):
                     return self._send(body, code)
                 if bits[0] == "libraries":
                     body, code = fr.libraries()
+                    return self._send(body, code)
+                if bits[0] == "foundry_assets":
+                    body, code = fr.foundry_assets()
                     return self._send(body, code)
                 if len(bits) == 1:
                     body, code = fr.tree(bits[0])
@@ -2667,6 +2672,7 @@ class H(http.server.SimpleHTTPRequestHandler):
                      "/api/film/takes", "/api/film/anchor", "/api/film/autonext",
                      "/api/film/vo", "/api/film/assemble",
                      "/api/film/portrait", "/api/film/master", "/api/film/draftall",
+                     "/api/film/compose", "/api/film/pin",
                      "/api/spec/save", "/api/spec/new", "/api/spec/lock",
                      "/api/foundry/new", "/api/foundry/edit", "/api/foundry/delete",
                      "/api/foundry/seeds", "/api/foundry/apply",
@@ -3015,7 +3021,9 @@ class H(http.server.SimpleHTTPRequestHandler):
                   "anchor": fr.scene_anchor, "autonext": fr.auto_next,
                   "vo": fr.vo_mix, "assemble": fr.assemble,
                   "portrait": fr.portrait, "master": fr.master,
-                  "draftall": fr.draft_all}[p[len("/api/film/"):]]
+                  "draftall": fr.draft_all,
+                  "compose": fr.compose_anchor,
+                  "pin": fr.pin_shot}[p[len("/api/film/"):]]
             try:
                 body, code = fn(data)
             except KeyError as e:
