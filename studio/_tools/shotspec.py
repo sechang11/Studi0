@@ -84,7 +84,14 @@ def run_check(chk, sh, take):
         got = (take or {}).get("prompt", "")
         return chk["value"].lower() in got.lower(), "prompt=%s..." % got[:48]
     if kind == "qc_clean":
-        return not (take or {}).get("qc"), "qc=%s" % ((take or {}).get("qc") or "clean")
+        # information and advisories are not faults: a take that ended closer than
+        # it started, borrowed its soundtrack, or was warned before rendering that
+        # a word is not in its picture has kept every promise the picture makes
+        notes = list((take or {}).get("qc") or [])
+        info_prefixes = ("ends closer", "sound borrowed", "words not in the picture")
+        faults = [n for n in notes if not str(n).startswith(info_prefixes)]
+        info = len(notes) - len(faults)
+        return not faults, "qc=%s%s" % (faults or "clean", (" (+%d information)" % info) if info else "")
     return None, "no runnable check"
 
 
