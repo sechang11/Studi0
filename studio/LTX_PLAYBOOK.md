@@ -763,3 +763,47 @@ arch bridge over slow water in fog (base: bridge). The compiled description
 says so; the name did not, and a shot list written from the name put boats on
 it. Name places by their base and condition, or read the description before
 writing the prose - and run the anchor check either way.
+
+## §31  A second character is a layer; props are set dressing; the night in numbers
+
+**Two-shots from packs.** A character view is a cutout like a prop with a known
+height, so a compose layer may now name a character instead of a prop
+(`{"character": id, "view": "turn_side", "stand", "cx"}`). The second figure is
+tinted to the plate rather than relit - relight regenerates, and two
+regenerations in one frame are two chances to lose a face - grounded with its
+own shadow and pasted far to near with everything else. Mara and Doran under
+the bridge, one compose, one LTX take: both identities hold for six seconds and
+she turns her head to him. Triage still calls three identities an API shot;
+two is now a deterministic composite, not a graph.
+
+**Props are set dressing, hands are identity.** Shot F of THE FERRYMAN'S BOOK
+put the red umbrella on the ground beside Renji and wrote "rain running off the
+umbrella" as if he held it. LTX kept the words: the umbrella vanished under
+the push-in and he held a book instead. A prop that must be *held* has to be
+in the character's pack (say it in the notes and it renders into every view);
+the compositor's props are things that stand, sit or hang in the scene at a
+distance from the subject. The anchor check said so before the render - "book"
+was in the prose and not in the picture - and was ignored. Read it.
+
+**The second film, as workflow.** Six shots, two scenes, 44s, anime, from the
+night's new library, with the first film's lessons as procedure: every anchor
+captioned and checked before anything rendered; only in-place motions pinned
+(the crouch at the shrine, the Ferryman's raised pole - both held in place at
+0.0063/s and 0.0022/s); ambient named on every beat; scene music from tags.
+Two pins, four LTX takes, one assembly, no retakes needed for continuity - the
+retake was for meaning (the umbrella), and the tool that would have prevented it
+already existed.
+
+**Numbers.** Two films made entirely through the API the Shot tab exposes
+(56s photoreal, 44s anime, both mastered to 48 fps at 1472x832). Fifteen new
+level-1 assets in twelve minutes plus two re-seeds for QC. Compose 16-20s;
+pin preview 15-25s; H3 pin 96-144s for 6-8s; LTX take 78-112s for 6-8s at
+2.0 MP; master ~40-60s a shot; ACE-Step scene music 6-9s a bed. Ten commits.
+Seven playbook sections (§25-31).
+
+**Open, honestly.** A delivery upscale at master time (the field exists; the
+LTX latent upsampler in workflow 17 is the candidate, untested on 2.5 latents).
+A ground line that knows water from stone (three characters stood in rivers
+tonight). Character levels 2-5 executing. The subject-region change floor with
+more than one calibration point. And H3 fl2va for walks - which today means:
+do not.
