@@ -977,3 +977,34 @@ description - and that it stays exactly as it is. On shot E of THE HARBOUR
 LETTER the turn is unchanged and the gulls and the smudge are gone. One sample,
 consistent with the rule that has held all night: give the prior something
 true to hold, because it will not hold an absence.
+
+## §37  A film starts with a form; a take carries its own verdicts
+
+**New film, the way a person starts one.** Title, look, size - and where the
+first scene happens and who is in it, all on the new-film form. The studio
+makes the cast from the packs (a cast id from the NAME: RENJI, INES, KEEPER -
+the first version took it from the appearance clause and produced a cast member
+called BLACK), the first scene with its place and the place's own weather and
+ambience, and lays out the coverage. The first thing a new user sees is a
+timeline with shots in it and people in the pictures. Nothing to fill in but
+what happens.
+
+**Verdicts ride on the take.** THE STATION MASTER, made by coverage and one
+button, came out right in four shots of five. The fifth asked for "wind moving
+a scrap of paper along the platform"; the picture had no paper; the anchor
+check said so; the render grew a sheet the size of a bench flapping across the
+frame. The check was right and nothing consumed it. Now a rendered take carries
+three verdicts as QC notes, so the Review tab shows them and the auto-pick
+prefers a clean take: **scene drift** (last frame vs start picture, limit 60%),
+**the line may not have been spoken** (a dialogue take whose audio peaks below
+-14 dB; lines measured -3.8 to -7.4 dB, an empty street -19.7), and **words not
+in the picture** (the anchor check's list). Make renders once more on a new
+seed when the first two fire.
+
+**Small things that were not small.** The jobs list showed the twelve most
+recent jobs; a long make-all spawned enough sub-jobs to push itself off the list
+while running, so the editor stopped following it and a polling script waited
+forever. Running jobs are now always listed. And `_render_take` has two render
+paths with a QC line each; the drift check first landed on the camera-rig one
+and reported nothing for three renders. When a consumer reports nothing, check
+that it is on the path that runs.
