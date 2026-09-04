@@ -151,7 +151,7 @@ async function poll(){
   setTimeout(poll,4000);
 }
 async function results(){
-  let h=`<h2 style="margin:18px 0 6px;font-size:16px">Variants</h2><div class="hint">every take is kept; the cleanest is picked. Pick another if your eye disagrees.
+  let h=`<h2 style="margin:18px 0 6px;font-size:16px">Variants</h2><div class="hint">every take is kept; the cleanest is picked. Pick another if your eye disagrees. Orange lines are faults; dim lines are information.
     <a href="/film?film=${FID}">open in the editor</a> · <a href="/specs">spec sheet</a></div>`;
   for(const sid of SHOTS){
     const d=(await (await fetch(`/api/film/${FID}/shot/${sid}`)).json()).shot;

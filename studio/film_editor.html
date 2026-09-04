@@ -835,7 +835,7 @@ async function loadTriage(){
         if(tk&&(tk.qc||[]).length) fixes.push([s.id,tk.qc]); }catch(e){}
     }
     if(fixes.length){
-      out+=`<div style="margin-top:8px"><b>what to fix</b> <span class="hint">- what the picked takes say about themselves</span></div>`;
+      out+=`<div style="margin-top:8px"><b>what to fix</b> <span class="hint">- what the picked takes say about themselves; bright lines are faults, dim lines are information (the take ended closer than it started, borrowed its sound, or a word was not in its picture)</span></div>`;
       for(const [id,qc] of fixes){
         out+=`<div style="margin-top:4px"><span class="badge" onclick="selShot('${id}')" style="cursor:pointer">${id}</span>
           <ul class="hint" style="margin:2px 0 0 14px;padding:0">${qc.filter(q=>!/^(ends closer|sound borrowed|words not in the picture)/.test(String(q))).map(q=>`<li>${esc(String(q))}</li>`).join("")}${qc.filter(q=>/^(ends closer|sound borrowed|words not in the picture)/.test(String(q))).map(q=>`<li style="opacity:.6">${esc(String(q))} <span style="opacity:.8">(information)</span></li>`).join("")}</ul></div>`;
