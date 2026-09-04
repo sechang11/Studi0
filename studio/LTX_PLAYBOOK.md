@@ -1008,3 +1008,39 @@ forever. Running jobs are now always listed. And `_render_take` has two render
 paths with a QC line each; the drift check first landed on the camera-rig one
 and reported nothing for three renders. When a consumer reports nothing, check
 that it is on the path that runs.
+
+## §38  Two films from the form, and what their faults taught
+
+THE STATION MASTER and NIGHT DINER were made the way a new user would make
+them: the new-film form (title, look, size, where the first scene happens, who
+is in it), one sentence per shot, a spoken line or two, "Make every missing
+shot, then assemble". Thirty seconds each, about twelve minutes of waiting.
+
+What was right: every person kept their face; the pose changes (look up, laugh)
+happened in place; the lines were spoken and measured (peaks -3.8 to -8.8 dB);
+nobody stood on water; the scene held in eight shots of ten.
+
+What was not, and what each fault changed:
+
+- **The insert grew things the picture never had** - a giant sheet of paper on
+  the platform, coffee cups on the diner counter - because the sentence named
+  them. The anchor check had said so and nothing consumed it. Now the check's
+  words ride on the take as a QC note and the auto-pick prefers a clean take.
+  The rule for the person: describe what is in the picture; to add a thing,
+  add it as a prop or put it in the character's pack.
+- **The scene description flagged every shot.** Coverage writes the scene's
+  location from the place's compiled description, and the check compared it
+  too, so "surfaces, roadside" was reported on shots whose words never said
+  them. The check now reads only the shot's own words.
+- **A cast member called BLACK.** Quickstart took the cast id from the
+  appearance clause. Ids come from names now: INES, RENJI, and for role names
+  all the words - STATION_MASTER, OLD_SHRINE_KEEPER.
+- **One take flagged for drift held its scene** (61% of nouns lost by the
+  caption's reckoning; the diner was still the diner). The limit moved to 65%;
+  the marina, the one known failure, measured 72%. The verify page carries the
+  clip so the director's eye can move it again.
+- **LTX pushes in on every take**, so a figure that starts close ends cropped.
+  Coverage now stands people a little farther back (0.40 wide, 0.22 medium).
+
+The honest shape of "flawless" today: nothing wrong ships silently. Every fault
+the machine can see is on the take, in words a person can act on.
