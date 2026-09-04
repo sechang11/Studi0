@@ -1703,7 +1703,8 @@ def _log_geom(jid, CM, start, end):
             pass
 
 
-_STOP = set("""a an the and or but of to in on at by for with from into onto over under
+_STOP = set("""place scene shot frame picture background foreground image view
+a an the and or but of to in on at by for with from into onto over under
 across through behind beside between along toward towards against about around as is are
 was were be been being it its this that these those there here then while when where who
 which what whose very more most some any each every all both few many much other such only
