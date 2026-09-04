@@ -272,8 +272,11 @@ def job_status(jid):
 
 def jobs_all():
     with _LOCK:
-        return {"jobs": sorted(JOBS.values(), key=lambda j: j["started"],
-                               reverse=True)[:12]}, 200
+        running = [j for j in JOBS.values() if j.get("state") == "running"]
+        done = [j for j in JOBS.values() if j.get("state") != "running"]
+        rows = (sorted(running, key=lambda j: j["started"], reverse=True) +
+                sorted(done, key=lambda j: j["started"], reverse=True)[:24])
+        return {"jobs": rows}, 200
 
 
 # ─── writes: structure ──────────────────────────────────────────────────────────────
