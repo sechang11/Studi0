@@ -1100,3 +1100,32 @@ consumer.
 Also seen: the "school-morning" pack's wide plate is a corridor, not the
 courtyard the name suggests - name places by what their plates show, or read
 the description before writing the shot (§30 again).
+
+## §41  When the empty shot will not stay empty, stop generating the picture
+
+The school courtyard grew a man and a woman; told to be empty, it grew a man
+and a person; with the negative naming students, pedestrians, couples, men and
+women, it grew a man. Three renders, three visitors. The negative has never
+held an absence (§8, §9), and the empty-shot consumer now proves it per take.
+
+So Make changes tools rather than seeds. After the one retry, if the take
+still reports people in a shot marked empty, the shot becomes **the plate
+itself on the camera rig** - `still_push`, arithmetic, no model - with the
+rendered LTX take's audio muxed under it. Nobody can appear in arithmetic;
+the ambience the scene asked for is kept from the render that failed the
+picture. The take carries "the plate itself, moving slowly - generation kept
+adding people" so the director knows why the insert is a push and not a live
+plate.
+
+One trap on the way: the rig's default window (2600 x 1464 at 1920, 1080) is
+sized for a 4K plate. On our 1216 x 832 plates the window covered the whole
+image and the push showed nothing - "almost no motion (0.00) - frozen?" said
+the QC, correctly. The fallback sizes the window to the plate, centred, and
+pushes 12% over the shot's own length; the QC is clean and the push is plain
+on the sheet.
+
+The general rule this adds to the doctrine: **when a generator keeps
+producing the thing you asked it not to, the fix is a different instrument,
+not a stronger prohibition.** Pins for motion prose cannot direct (§23); the
+compositor for identity the scene prior swallows (§21); the rig for emptiness
+the negative cannot hold.
