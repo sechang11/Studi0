@@ -552,3 +552,108 @@ real cuts — a known-good clip scoring lower means the metric is wrong, so it
 cannot separate a cut from a fast push. The identity conclusion does not rest on
 it: the post-transition face is either the same person or not, and that is
 directly visible.
+
+## §25  Resolution is a trade, and triage says which side you are on
+
+The film's resolution used to be derived and silent: LTX took the largest
+megapixel count the shot's length permitted, so an 8s shot came out near 1080p
+and a 30s shot at 720p, and nothing told the director that shortening the shot
+would sharpen it.
+
+A film now carries a **resolution target**, chosen when it is created or
+changed in the Film tab:
+
+| target | MP  | longest shot it permits |
+|--------|-----|-------------------------|
+| auto   | -   | the biggest the length allows (old behaviour) |
+| 720p   | 0.9 | 30s |
+| 1080p  | 1.5 | 12s |
+| max    | 2.0 | 8s  |
+
+The envelope (`LTX_SAFE`) is measured and does not bend. A 20s shot in a 1080p
+film still renders - at 1.2 MP - and its compile carries a warning that says
+exactly what to do: *cut this shot to 12s or less*. A 6s shot in that film
+renders at 1.5 MP, not 2.0, because the target is a target: a film wants one
+resolution across its cuts more than it wants one shot sharper than the rest.
+
+**Triage** answers the question "what do we make here and what needs API
+help", per shot, from the same envelope, in words:
+
+- **local** - inside every measured limit.
+- **trade-off** - it renders here, but something asked for will not be honoured
+  as written: resolution below target; a camera move on LTX (advisory - the
+  engine keeps its prior); a multi-beat character shot without a composed anchor
+  (the face will not survive the cut); anime dialogue (voice yes, lip sync no).
+- **api** - beyond this box: one shot over 30s; more than two identities that
+  must hold in one frame; native 4K.
+
+The Review tab shows the counts and, for every non-local shot, the reasons.
+They are instructions, not grades. `deliver` (an upscale at master time) exists
+on the film but is withheld from the UI until an upscaler is wired; the
+LTX latent upsampler in workflow 17 is the candidate, untested on 2.5 latents.
+
+## §26  Pin preview, and why the end frame must sit on the pristine plate
+
+A pin costs one qwen-edit (seconds) and one H3 interpolation (minutes), and the
+result could not be judged until the minutes were spent. **Preview end** stops
+after the edit: the end frame is shown beside its verdict - enough change for
+these seconds, or too alike, with the longest span the pair could carry. The
+pin then reuses that exact file, so what was approved is what is interpolated.
+
+Looking at the frame found the real defect. qwen-edit **regenerates**, however
+firmly it is told to keep the background: the crouch came back correct and the
+car had moved from the centre of the street to the right, the lamp post had
+shifted, the signage had changed. H3 interpolated the sliding car as faithfully
+as the crouch. That is the "slightly handheld" drift in the pinned shots, and
+the shifted ground plane is the likeliest reason her feet started inside it.
+
+The fix is the compositor's own three steps applied to the end frame: cut the
+figure out of the regeneration and put it back on the **pristine plate** with
+its shadow. Both ends of the pin then share one background, pixel for pixel,
+and H3 has nothing to invent behind her. Requires a composed anchor, because
+that is the only case where the plate is known; `anchor_source` now records it.
+
+**The floor had to move.** `MIN_PIN_RATE = 0.009` was calibrated on end frames
+with regenerated backgrounds. The same verified crouch measures 0.0123/s that
+way and 0.0052/s against the pristine plate - more than half the "change" the
+old floor was seeing was the car. Plate-composited ends use
+`MIN_PIN_RATE_PLATE = 0.0026`, half the one verified interpolation. That is one
+data point and the code says so; the three-measurement calibration behind the
+old floor should be repeated on the new footing. The verdict is advice: the pin
+route takes `force`, and the editor shows **pin anyway** when the preview says
+too alike, because the director has looked at both frames and the number has
+not.
+
+General lesson, worth carrying to any change metric: **a distance that includes
+the background measures the regeneration, not the subject.** Mask to what is
+meant to change, or hold everything else fixed first.
+
+## §27  Props are layers
+
+A prop pack's `hero` view is a cutout waiting to happen. The compositor now
+takes `props=[{id, stand, cx}]`, cuts each one, sizes it from the same depth
+pass that sizes the character - scaled by what it is, in metres, from the
+dictionary category (`PROP_M`: lantern 0.4, sword 1.0, staff 1.7 ... default
+0.5; an asset can override with `size_m`) - and pastes all layers far to near,
+each with its own contact shadow. So a lantern at her feet is lantern-sized
+next to her and a lantern near the camera is big, and whichever is closer
+overlaps whichever is behind.
+
+Verified: bai-liwen in night-market with paper-lantern at stand 0.28 - a small
+lantern on the ground in front of her, with a shadow, plate fidelity R=0.0037
+(the lantern is the only change on that side). Props sit on the ground line;
+a hanging prop wants a height-above-ground offset that does not exist yet.
+
+## §28  Motion and ambient on every beat
+
+Two measured facts shape the beat selectors. LTX animates what the prose
+**names** and freezes what it does not, so **ambient** (rain, lanterns,
+traffic, crowd, water, steam ...) is not decoration: its frags join the beat's
+background clause and are the difference between a living street and a still
+one. And LTX does not take direction on the subject's action from prose, so
+**motion** is labelled advisory there and its real job is the pin: each action
+in the dictionary now has an `end` phrasing ("lowers into a crouch" is what
+happens; "has lowered into a deep crouch, knees bent, weight low" is what the
+end frame shows), and picking a motion prefills the pin's sentence with it.
+Both compile into H3 prompts too; on H3 an unnamed background still freezes,
+and the warning now says to pick ambient motion.

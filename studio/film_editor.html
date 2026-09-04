@@ -153,10 +153,39 @@ async function loadFilms(sel){
     `<option value="${f.id}">${esc(f.title)} (${f.shots} shots, ${f.picked} picked)</option>`).join("");
   if(sel){ s.value=sel; }
 }
-async function newFilm(){
-  const t=prompt("Film title?"); if(!t) return;
-  const look=confirm("Photoreal? (cancel = anime)")?"photoreal":"anime";
-  const j=await api("/new",{title:t,look});
+function newFilm(){
+  const box=document.createElement("div");
+  box.id="newfilm";
+  box.style.cssText="position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;z-index:99";
+  box.innerHTML=`<div style="background:var(--panel,#1b1d22);color:inherit;padding:16px 18px;border-radius:8px;min-width:380px;max-width:520px;border:1px solid var(--line,#333)">
+    <h2 style="margin:0 0 10px">New film</h2>
+    <label>title</label><input id="nf_title" style="width:100%" placeholder="working title">
+    <div class="row" style="gap:8px;margin-top:6px">
+      <div><label>look</label><select id="nf_look"><option>photoreal</option><option>anime</option></select></div>
+      <div class="grow"><label>resolution</label><select id="nf_res" style="width:100%">
+        <option value="auto">auto - the biggest each shot's length allows</option>
+        <option value="720p">720p - 0.9 MP, shots to 30s</option>
+        <option value="1080p">1080p - 1.5 MP, shots to 12s</option>
+        <option value="max">max - 2.0 MP, shots to 8s</option></select></div>
+    </div>
+    <div class="hint" style="margin-top:6px">On this box resolution is bound by shot length. A shot too long for
+      the target still renders, softer, and its compile says what cut would recover the target.
+      Change it any time in the Film tab.</div>
+    <div class="row" style="margin-top:12px;justify-content:flex-end;gap:8px">
+      <button class="small" onclick="document.getElementById('newfilm').remove()">cancel</button>
+      <button class="primary" onclick="createFilm()">create</button></div>
+  </div>`;
+  document.body.appendChild(box);
+  const t=document.getElementById("nf_title"); t.focus();
+  t.addEventListener("keydown",e=>{ if(e.key==="Enter") createFilm(); if(e.key==="Escape") box.remove(); });
+}
+async function createFilm(){
+  const t=document.getElementById("nf_title").value.trim();
+  if(!t) return note("give the film a title",true);
+  const j=await api("/new",{title:t,look:document.getElementById("nf_look").value,
+                            resolution:document.getElementById("nf_res").value});
+  if(!j||!j.id) return note("could not create the film: "+((j||{}).error||"unknown"),true);
+  document.getElementById("newfilm").remove();
   await loadFilms(j.id); openFilm(j.id);
 }
 async function openFilm(fid){
