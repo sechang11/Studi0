@@ -156,6 +156,8 @@ function openChar(src,id){
            ${c.source==="cast"?"(imports into the foundry first)":""}</button>
          <span class="hint">${esc((LEVELS[0]||{}).cost||"")}</span>
        </div>`}
+    ${(c.files||[]).length?`<h2>The pack${(c.files||[]).some(f=>f.startsWith("wearing_"))?" and costumes":""}</h2>
+    <div class="thumbs">${thumbGrid(c)}</div>`:""}
     <h2>Description</h2>
     <pre>${esc(c.desc||"(none)")}</pre>
     ${c.source==="foundry"?`<div class="row">
@@ -163,6 +165,13 @@ function openChar(src,id){
      </div>`:`<div class="hint">a legacy cast card — its LoRA and evidence live in the
        old store; building pack 1 brings it onto the ladder.</div>`}`;
   $("#modal").classList.add("on");
+}
+function thumbGrid(c){
+  const label=f=>{ const k=f.replace(/\.png$/,"");
+    if(k.startsWith("wearing_")) return "wearing: "+k.slice(8).replace(/-/g," ");
+    return k.replace(/^base_/,"").replace(/^turn_/,"turn ").replace(/^face_/,"face ").replace(/^expr_/,"").replace(/^pres_/,"").replace(/_/g," "); };
+  return (c.files||[]).map(f=>`<figure><img src="/foundry/media/characters/${encodeURIComponent(c.id)}/${encodeURIComponent(f)}" loading="lazy" alt="">
+    <figcaption>${esc(label(f))}</figcaption></figure>`).join("");
 }
 function closeModal(){$("#modal").classList.remove("on");}
 async function renameChar(){

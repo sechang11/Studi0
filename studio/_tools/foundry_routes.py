@@ -804,6 +804,29 @@ def _legacy_pack(row):
             "complete": not missing}
 
 
+_PACK_ORDER = ("base_portrait", "base_fullbody", "turn_front", "turn_front_three_quarter",
+               "turn_side", "turn_back_three_quarter", "turn_back", "face_front",
+               "face_three_quarter", "face_side", "expr_neutral", "expr_joy", "expr_sorrow",
+               "expr_anger", "expr_fear", "expr_surprise", "pres_hero", "pres_low", "pres_wide")
+
+
+def _pack_files(cid, imgs):
+    """Every render in the character's folder: the pack in its natural order, then
+    costume variants (wearing_<costume>.png), then anything else."""
+    d = os.path.join(FY.ASSETS if hasattr(FY, "ASSETS") else
+                     os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                                  "foundry"), "characters", cid)
+    try:
+        on_disk = sorted(f for f in os.listdir(d) if f.endswith(".png") and not f.endswith("_depth.png"))
+    except OSError:
+        on_disk = []
+    order = {k: i for i, k in enumerate(_PACK_ORDER)}
+    pack = sorted([f for f in on_disk if f[:-4] in order], key=lambda f: order[f[:-4]])
+    wearing = [f for f in on_disk if f.startswith("wearing_")]
+    rest = [f for f in on_disk if f not in pack and f not in wearing]
+    return pack + wearing + rest
+
+
 def roster():
     """Everyone, from both stores, on one ladder."""
     out = []
@@ -822,6 +845,7 @@ def roster():
             "thumb": ("/foundry/media/characters/%s/%s" % (a["id"], thumb))
                      if thumb else "",
             "images": len(imgs),
+            "files": _pack_files(a["id"], imgs),
             "desc": (a.get("compiled") or {}).get("clause", "")[:200]})
 
     for row in _legacy_rows():
