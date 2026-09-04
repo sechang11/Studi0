@@ -1010,6 +1010,26 @@ def _default_voice(f, cast_id):
     return pool[h]
 
 
+def _inherit_qc(take):
+    """the picture's notes still hold for its voiced copy; the speech notes do not"""
+    return [n for n in (take.get("qc") or [])
+            if "spoken" not in n and "silent" not in n and "no sound" not in n]
+
+
+def _faults(take):
+    """notes that count against a take; 'ends closer' is information, not a fault"""
+    return [n for n in (take.get("qc") or []) if not n.startswith("ends closer")]
+
+
+def _cleanest(sh, takes):
+    """the automatic pick: for a shot with a line only voiced takes are eligible
+    (when any exist); then fewest faults, then the newest"""
+    has_line = any(((b.get("dialogue") or {}).get("line") or "").strip() for b in (sh.get("beats") or []))
+    pool = [t for t in takes if (t.get("engine") or "").endswith("+vo")] if has_line else []
+    pool = pool or list(takes)
+    return sorted(pool, key=lambda t: (len(_faults(t)), -len(t["id"]), t["id"]))[0]
+
+
 def _vo_job(jid, fid, shid, tid, duck=0.35):
     run, set_path, load_wf, ensure_local, HOST, COMFY = _comfy()
     try:
@@ -1091,7 +1111,7 @@ def _vo_job(jid, fid, shid, tid, duck=0.35):
         take2 = dict(take)
         take2.update({"id": take["id"] + "v", "engine": take["engine"] + "+vo",
                       "file": rel, "poster": rel[:-4] + ".png",
-                      "strip": rel[:-4] + "_strip.png", "qc": _qc(dest),
+                      "strip": rel[:-4] + "_strip.png", "qc": _qc(dest) + _inherit_qc(take),
                       "created": time.strftime("%H:%M")})
         f2 = F.load(fid)
         sh2 = f2.shot(shid)
@@ -2129,7 +2149,7 @@ def _make_job(jid, fid, shid, seconds=None, seed=0, variants=1):
             sh = f.shot(shid)
             takes = sh.get("takes") or []
             if takes:
-                best = sorted(takes, key=lambda t: (len(t.get("qc") or []), -len(t["id"]), t["id"]))[0]
+                best = _cleanest(sh, takes)
                 sh["picked"] = best["id"]
                 f.save()
                 _log(jid, "%d variants; picked %s (%s)" % (len(takes), best["id"],
