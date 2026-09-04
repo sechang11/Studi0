@@ -1068,3 +1068,35 @@ second block:
 
 The rule underneath all four: the machine's judgement goes where the person is
 looking, in the person's words, and the person keeps the last word.
+
+## §40  The anime run, and the empty shot that filled itself
+
+SCHOOL MORNING went through the form-to-film path in anime: Renji and the kite
+seller, the school place, two lines, a pinned look-up and a pinned laugh. The
+pins held in place and the faces held. Three things did not, and each got its
+consumer.
+
+- **People appeared in an empty shot.** The insert - a courtyard plate with
+  nobody in it, the shot marked empty - came back with a man in a suit and a
+  woman walking through. The drift check already captions the last frame; when
+  a shot is meant to be empty and that caption names a person, the take now
+  says "people appeared in an empty shot" and Make renders once more. Measured
+  on the re-render: the caption said "man, person" again - LTX's prior for a
+  school courtyard contains students, as its prior for a mountain contains a
+  hiker (§8). The consumer catches it; the cure is still the one from the
+  agency slot: give the motion a non-human cause and no room for a figure.
+- **Silence where a sound bed should be.** Quickstart took the scene's
+  ambience from the place's compiled ambience, and this place had none; a
+  scene with no named sound gets literal silence (4s of it inside a 6s take,
+  caught by the film QC). Quickstart now writes a default bed by the place's
+  base when the compiled one is empty - corridors get distant voices and a
+  bell, boats get water against the hull, diners get the coffee machine.
+- **A two-shot on opposite shores.** Footing walked each figure outward from
+  its own spot, so on the river plate Mara took the left bank and Doran the
+  right. A second character now looks beside the first before walking outward.
+  On that plate the left bank fits one person, so Doran still crossed the river;
+  on a plate with room, they stand together.
+
+Also seen: the "school-morning" pack's wide plate is a corridor, not the
+courtyard the name suggests - name places by what their plates show, or read
+the description before writing the shot (§30 again).
