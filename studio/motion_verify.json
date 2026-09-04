@@ -221,7 +221,7 @@
  {
   "id": "harbour-E-turn-pinned-v3",
   "shot": "050",
-  "question": "Doran turns IN PLACE from side-on to facing the camera. Two things to judge: does the turn read as a turn (yes/partly/no), and do you also see things that were not there - white birds, a dark smudge at his feet?",
+  "question": "Doran turns IN PLACE from side-on to facing the camera. In this version the model was also told what the scene is. Does the turn read as a turn, and is the picture free of things that were not there (birds, smudges)?",
   "selection": {
    "camera": "pinned",
    "action": "turn_to",
@@ -230,9 +230,9 @@
     "water"
    ]
   },
-  "action": "third pass: pinned with the end figure held in place (rate 0.0023/s, above the 0.002 plate floor); H3 fl2va 6s",
+  "action": "pinned, end figure held in place; the pin prompt now describes the scene (\"a stone arch bridge over slow water...\") so the model has something true to hold",
   "ambient": "the first pass fell back to LTX at 0.0013/s with the old placement; the held geometry made the turn measurable",
-  "file": "films/the-harbour-letter/takes/050/pin_1788511540_48.mp4"
+  "file": "films/the-harbour-letter/takes/050/pin_1788525272.mp4"
  },
  {
   "id": "harbour-F-walk-on-ltx-v3",

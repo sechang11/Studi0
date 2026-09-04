@@ -1385,9 +1385,23 @@ def _pin_job(jid, fid, shid, change, seconds, seed, force=False, hold_feet=None)
         rel = "takes/%s/%s.mp4" % (shid, tid)
         dest = os.path.join(f.dir, rel)
         os.makedirs(os.path.dirname(dest), exist_ok=True)
-        CM.pin_shot(start, end,
-                    "%s. The camera does not move." % change,
-                    dest, seconds=seconds, seed=seed, force=True)
+        scene_desc = ""
+        try:
+            src = sh.get("anchor_source") or {}
+            if src.get("place"):
+                import importlib.util
+                p = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "foundry.py")
+                spec = importlib.util.spec_from_file_location("fy_mod4", p)
+                FY = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(FY)
+                place = FY.load_asset("place", src["place"])
+                scene_desc = (place.get("compiled") or {}).get("description", "") or ""
+        except Exception:
+            scene_desc = ""
+        prompt = ("%s. The scene is %s, and it stays exactly as it is. The camera does not move."
+                  % (change, scene_desc)) if scene_desc else ("%s. The camera does not move." % change)
+        _log(jid, "pin prompt: %s" % prompt[:140])
+        CM.pin_shot(start, end, prompt, dest, seconds=seconds, seed=seed, force=True)
         f = F.load(fid)
         sh = f.shot(shid)
         sh.setdefault("takes", []).append({
@@ -1912,6 +1926,50 @@ def _make_job(jid, fid, shid, seconds=None, seed=0):
     except Exception as e:
         traceback.print_exc()
         _finish(jid, str(e)[:300])
+
+
+def _make_all_job(jid, fid, assemble):
+    try:
+        f = F.load(fid)
+        todo = [sh["id"] for sh in f.ordered_shots() if not sh.get("picked")]
+        with _LOCK:
+            JOBS[jid]["total"] = max(len(todo) + (1 if assemble else 0), 1)
+        _log(jid, "%d shot(s) to make" % len(todo))
+        for shid in todo:
+            sub = _job("make", film=fid, shot=shid)
+            _log(jid, "-- shot %s" % shid)
+            _make_job(sub, fid, shid)
+            with _LOCK:
+                err = JOBS.get(sub, {}).get("error")
+                lines = list(JOBS.get(sub, {}).get("log") or [])
+                JOBS[jid]["done"] += 1
+            for l in lines[-3:]:
+                _log(jid, "   " + l)
+            if err:
+                _log(jid, "   shot %s did not finish: %s" % (shid, err[:120]))
+        if assemble:
+            _log(jid, "-- assembling the film")
+            sub = _job("assemble", film=fid)
+            _assemble_job(sub, fid, True)
+            with _LOCK:
+                err = JOBS.get(sub, {}).get("error")
+                JOBS[jid]["done"] += 1
+            _log(jid, "assembled" if not err else "assembly failed: %s" % err[:120])
+        with _LOCK:
+            JOBS[jid]["result"] = {"made": todo}
+        _finish(jid)
+    except Exception as e:
+        traceback.print_exc()
+        _finish(jid, str(e)[:300])
+
+
+def make_all(data):
+    """Make every shot without a picked take, in order, then assemble."""
+    jid = _job("makeall", film=data["film"])
+    threading.Thread(target=_make_all_job,
+                     args=(jid, data["film"], bool(data.get("assemble", True))),
+                     daemon=True).start()
+    return {"job": jid}, 200
 
 
 def make_shot(data):
