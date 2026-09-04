@@ -1,0 +1,388 @@
+{
+ "title": "Builder Test",
+ "created": "2026-09-04 13:02",
+ "look": "photoreal",
+ "look_clause": "photoreal cinematic film still, 35mm, deep focus, high detail, colour photograph, filmic grade",
+ "grade": "",
+ "negative": "",
+ "fps": 24,
+ "logline": "",
+ "resolution": "auto",
+ "deliver": "native",
+ "cast": {
+  "TOMAS": {
+   "name": "Tomas Reyl",
+   "clause": "a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot",
+   "short": "grey a shaved head, brown eyes",
+   "sheet": "/home/k4shix/shared/comfy-studio/studio/foundry/characters/tomas-reyl/base_portrait.png",
+   "portrait": "/home/k4shix/shared/comfy-studio/studio/foundry/characters/tomas-reyl/base_portrait.png",
+   "voice": "male_04_frank",
+   "voice_desc": "",
+   "foundry": "tomas-reyl"
+  }
+ },
+ "scenes": [
+  {
+   "id": "sc01",
+   "title": "build 13:02",
+   "location": "the deck of a small weathered boat, rigging and coiled rope, lived-in and worn, in thick fog, a small fishing harbour at night, fog on the water, sodium lamps along the quay, moored boats",
+   "time_of_day": "",
+   "weather": "fog",
+   "ambience": "water against the hull and rigging knocking, a fog-damped stillness",
+   "palette": "",
+   "music": "",
+   "cast_present": [
+    "TOMAS"
+   ],
+   "no_people": false,
+   "anchor": "",
+   "shots": [
+    "010",
+    "020"
+   ],
+   "place": "harbour-night",
+   "plate": "night_wide"
+  }
+ ],
+ "shots": {
+  "010": {
+   "id": "010",
+   "scene": "sc01",
+   "title": "wide - TOMAS",
+   "duration": 6.0,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/builder-test/assets/anchor_shot_010.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "TOMAS",
+     "action": "stands at the rail looking out into the fog",
+     "background": "what moves here moves: water, light",
+     "motion": "",
+     "ambient": [
+      "water",
+      "light"
+     ],
+     "dialogue": {
+      "char": "TOMAS",
+      "line": "Last boat's not coming back tonight.",
+      "delivery": ""
+     }
+    }
+   ],
+   "sfx": "water against the hull and rigging knocking, a fog-damped stillness",
+   "no_people": false,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t541369475",
+     "engine": "ltx",
+     "seed": 504079080,
+     "created": "13:04",
+     "file": "takes/010/ltx_t541369475.mp4",
+     "poster": "takes/010/ltx_t541369475.png",
+     "strip": "takes/010/ltx_t541369475_strip.png",
+     "duration": 6.04,
+     "fps": 24,
+     "qc": [
+      "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.46 left=0.00 right=0.00)",
+      "words not in the picture: rail"
+     ],
+     "drift": {
+      "lost": 0.5,
+      "missing": [
+       "boot",
+       "build",
+       "bulb",
+       "coil",
+       "fisherman",
+       "horizon",
+       "lamp",
+       "mist",
+       "nylon",
+       "pant",
+       "pier",
+       "rigg"
+      ],
+      "kept": 13,
+      "last_caption": "Dock, ship, masts, ropes, man, jacket, sweater, beard, face, harbor, water, sky, clouds, rain, night, lights, metal, fabric, wood, person, fishing boat."
+     },
+     "warnings": [],
+     "prompt": "A static wide shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, stands at the rail looking out into the fog, who says in a level voice, \"Last boat's not coming back tonig"
+    },
+    {
+     "id": "t541369475v",
+     "engine": "ltx+vo",
+     "seed": 504079080,
+     "created": "13:04",
+     "file": "takes/010/ltx_t541369475_vo.mp4",
+     "poster": "takes/010/ltx_t541369475_vo.png",
+     "strip": "takes/010/ltx_t541369475_vo_strip.png",
+     "duration": 6.04,
+     "fps": 24,
+     "qc": [],
+     "drift": {
+      "lost": 0.5,
+      "missing": [
+       "boot",
+       "build",
+       "bulb",
+       "coil",
+       "fisherman",
+       "horizon",
+       "lamp",
+       "mist",
+       "nylon",
+       "pant",
+       "pier",
+       "rigg"
+      ],
+      "kept": 13,
+      "last_caption": "Dock, ship, masts, ropes, man, jacket, sweater, beard, face, harbor, water, sky, clouds, rain, night, lights, metal, fabric, wood, person, fishing boat."
+     },
+     "warnings": [],
+     "prompt": "A static wide shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, stands at the rail looking out into the fog, who says in a level voice, \"Last boat's not coming back tonig"
+    },
+    {
+     "id": "t541468716",
+     "engine": "ltx",
+     "seed": 273570629,
+     "created": "13:06",
+     "file": "takes/010/ltx_t541468716.mp4",
+     "poster": "takes/010/ltx_t541468716.png",
+     "strip": "takes/010/ltx_t541468716_strip.png",
+     "duration": 6.04,
+     "fps": 24,
+     "qc": [
+      "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.31 left=0.00 right=0.00)"
+     ],
+     "drift": {
+      "lost": 0.35,
+      "missing": [
+       "boot",
+       "build",
+       "bulb",
+       "coil",
+       "dock",
+       "fisherman",
+       "horizon",
+       "nylon",
+       "pier"
+      ],
+      "kept": 17,
+      "last_caption": "Ship, boat, fishing boat, man, man's face, man's hair, man's beard, jacket, hood, shirt, pants, wood, rope, mast, rigging, lights, lamp, lamps, water, sea, ocean, fog, mist, sky, clouds, night, dusk, yellow, gray, brown, metal, vessel."
+     },
+     "warnings": [],
+     "prompt": "A static wide shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, stands at the rail looking out into the fog, who says in a level voice, \"Last boat's not coming back tonig"
+    }
+   ],
+   "picked": "t541369475v",
+   "engine_notes": "",
+   "anchor_source": {
+    "character": "tomas-reyl",
+    "place": "harbour-night",
+    "stand": 0.4,
+    "cx": 0.45,
+    "view": "turn_front",
+    "plate": "/home/k4shix/shared/comfy-studio/studio/foundry/places/harbour-night/night_wide.png",
+    "props": []
+   },
+   "anchor_check": {
+    "caption": "Harbor, fishing boats, ship, masts, ropes, rigging, deck, man, fisherman, jacket, pants, boots, harbor lights, water, sea, fog, mist, night, bulb, lamp, rope coils, wood, metal, nylon, vessels, piers, docks, buildings, horizon, glow.",
+    "missing": [
+     "rail"
+    ],
+    "when": 1788541369
+   }
+  },
+  "020": {
+   "id": "020",
+   "scene": "sc01",
+   "title": "medium - TOMAS",
+   "duration": 6.0,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/builder-test/assets/anchor_shot_020.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "medium shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "TOMAS",
+     "action": "stands at the rail looking out into the fog",
+     "background": "what moves here moves: water, light",
+     "motion": "",
+     "ambient": [
+      "water",
+      "light"
+     ],
+     "dialogue": {
+      "char": "TOMAS",
+      "line": "Last boat's not coming back tonight.",
+      "delivery": ""
+     }
+    }
+   ],
+   "sfx": "water against the hull and rigging knocking, a fog-damped stillness",
+   "no_people": false,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t541590371",
+     "engine": "ltx",
+     "seed": 565057020,
+     "created": "13:08",
+     "file": "takes/020/ltx_t541590371.mp4",
+     "poster": "takes/020/ltx_t541590371.png",
+     "strip": "takes/020/ltx_t541590371_strip.png",
+     "duration": 6.04,
+     "fps": 24,
+     "qc": [
+      "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.47 left=0.00 right=0.00)",
+      "the line may not have been spoken (audio peaks at -18.8 dB)",
+      "words not in the picture: rail"
+     ],
+     "drift": {
+      "lost": 0.5,
+      "missing": [
+       "bulb",
+       "dock",
+       "fish",
+       "lamp",
+       "nets",
+       "pant",
+       "person",
+       "rope",
+       "shoe",
+       "vessel",
+       "weather"
+      ],
+      "kept": 11,
+      "last_caption": "Port, harbor, ship, masts, rigging, man, man\u2019s face, man\u2019s hair, man\u2019s beard, jacket, sweater, hood, clothing, buildings, lights, fog, mist, night, glow, metal, wood, concrete, asphalt, water, sky, yellow, gray, white, darkness."
+     },
+     "warnings": [],
+     "prompt": "A static medium shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, stands at the rail looking out into the fog, who says in a level voice, \"Last boat's not coming back ton"
+    },
+    {
+     "id": "t541680804",
+     "engine": "ltx",
+     "seed": 523893720,
+     "created": "13:09",
+     "file": "takes/020/ltx_t541680804.mp4",
+     "poster": "takes/020/ltx_t541680804.png",
+     "strip": "takes/020/ltx_t541680804_strip.png",
+     "duration": 6.04,
+     "fps": 24,
+     "qc": [
+      "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.69 left=0.00 right=0.00)",
+      "words not in the picture: rail"
+     ],
+     "drift": {
+      "lost": 0.36,
+      "missing": [
+       "bulb",
+       "fish",
+       "lamp",
+       "nets",
+       "night",
+       "pant",
+       "shoe",
+       "vessel"
+      ],
+      "kept": 14,
+      "last_caption": "Here's a breakdown of the nouns present in the image, as requested:\n\nPlace, ship, dock, harbor, background, outdoors.\nStructures, mast, rigging, ropes, cables, ship\u2019s hull, building, wall.\nObjects, jacket, scarf, sweater, clothing, beard, hair, face, head, mouth, eyes, nose.\nMaterials, fabric, metal, wood, wool, plastic, nylon.\nVehicles, ship.\nWater, sea, ocean, water surface.\nWeather, cloudy sky,"
+     },
+     "warnings": [],
+     "prompt": "A static medium shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, stands at the rail looking out into the fog, who says in a level voice, \"Last boat's not coming back ton"
+    },
+    {
+     "id": "t541680804v",
+     "engine": "ltx+vo",
+     "seed": 523893720,
+     "created": "13:09",
+     "file": "takes/020/ltx_t541680804_vo.mp4",
+     "poster": "takes/020/ltx_t541680804_vo.png",
+     "strip": "takes/020/ltx_t541680804_vo_strip.png",
+     "duration": 6.04,
+     "fps": 24,
+     "qc": [],
+     "drift": {
+      "lost": 0.36,
+      "missing": [
+       "bulb",
+       "fish",
+       "lamp",
+       "nets",
+       "night",
+       "pant",
+       "shoe",
+       "vessel"
+      ],
+      "kept": 14,
+      "last_caption": "Here's a breakdown of the nouns present in the image, as requested:\n\nPlace, ship, dock, harbor, background, outdoors.\nStructures, mast, rigging, ropes, cables, ship\u2019s hull, building, wall.\nObjects, jacket, scarf, sweater, clothing, beard, hair, face, head, mouth, eyes, nose.\nMaterials, fabric, metal, wood, wool, plastic, nylon.\nVehicles, ship.\nWater, sea, ocean, water surface.\nWeather, cloudy sky,"
+     },
+     "warnings": [],
+     "prompt": "A static medium shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, stands at the rail looking out into the fog, who says in a level voice, \"Last boat's not coming back ton"
+    },
+    {
+     "id": "t541776509",
+     "engine": "ltx",
+     "seed": 311241418,
+     "created": "13:11",
+     "file": "takes/020/ltx_t541776509.mp4",
+     "poster": "takes/020/ltx_t541776509.png",
+     "strip": "takes/020/ltx_t541776509_strip.png",
+     "duration": 6.04,
+     "fps": 24,
+     "qc": [
+      "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.51 left=0.00 right=0.00)"
+     ],
+     "drift": {
+      "lost": 0.55,
+      "missing": [
+       "build",
+       "bulb",
+       "dock",
+       "fish",
+       "lamp",
+       "nets",
+       "pant",
+       "rope",
+       "shoe",
+       "vessel",
+       "weather",
+       "wood"
+      ],
+      "kept": 10,
+      "last_caption": "Harbor, ship, masts, rigging, man, person, man's face, beard, hair, sweater, jacket, clothing, yellow raincoat, gray sweater, harbor lights, fog, mist, water, sea, night, darkness, artificial light, glow, reflections, shadows."
+     },
+     "warnings": [],
+     "prompt": "A static medium shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, stands at the rail looking out into the fog, who says in a level voice, \"Last boat's not coming back ton"
+    }
+   ],
+   "picked": "t541680804v",
+   "engine_notes": "",
+   "anchor_source": {
+    "character": "tomas-reyl",
+    "place": "harbour-night",
+    "stand": 0.22,
+    "cx": 0.45,
+    "view": "turn_front",
+    "plate": "/home/k4shix/shared/comfy-studio/studio/foundry/places/harbour-night/night_wide.png",
+    "props": []
+   },
+   "anchor_check": {
+    "caption": "Harbor, fishing boats, ship, man, deck, ropes, nets, ropes, wood, dock, masts, ships, water, sea, fog, weather, night, lights, lamps, bulbs, buildings, docks, boats, vessels, person, man, clothing, jacket, pants, shoes, rope.",
+    "missing": [
+     "rail"
+    ],
+    "when": 1788541590
+   }
+  }
+ }
+}
