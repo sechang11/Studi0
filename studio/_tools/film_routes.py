@@ -670,7 +670,8 @@ def _scene_drift(video, start_img, tag):
                 continue
             missing.append(w)
         lost = len(missing) / float(len(A))
-        return {"lost": round(lost, 2), "missing": missing[:12], "kept": len(A) - len(missing)}
+        return {"lost": round(lost, 2), "missing": missing[:12], "kept": len(A) - len(missing),
+                "last_caption": b[:400]}
     except Exception as e:
         return {"error": str(e)[:160]}
 
@@ -851,6 +852,17 @@ def _render_take(jid, f, sh, eng, seed):
         _log(jid, "scene drift %d%% - %s" % (int(_d["lost"] * 100), ", ".join(_d["missing"][:5])))
     elif _d:
         _log(jid, "scene held (%d%% of the start picture's content in the last frame)" % int((1 - _d["lost"]) * 100))
+    # an empty shot that grew people: the last frame's caption names a person
+    _empty = bool(sh.get("no_people")) or (sh.get("no_people") is None and bool(
+        (f.scene(sh["scene"]) or {}).get("no_people")))
+    if _empty and _d and _d.get("last_caption"):
+        _cap = " " + re.sub(r"[^a-z ]", " ", _d["last_caption"].lower()) + " "
+        _who = [w for w in ("man", "men", "woman", "women", "people", "person", "girl", "boy",
+                            "child", "children", "figure", "figures", "pedestrian", "pedestrians",
+                            "crowd", "couple", "student", "students") if " %s " % w in _cap]
+        if _who:
+            qc = list(qc) + ["people appeared in an empty shot (%s)" % ", ".join(_who[:4])]
+            _log(jid, "people appeared in an empty shot: %s" % ", ".join(_who[:4]))
     _cast_here = any((b.get("subject") or "") in (f.data.get("cast") or {}) for b in (sh.get("beats") or []))
     if _cast_here and eng == "ltx":
         try:
@@ -1983,7 +1995,7 @@ def _make_job(jid, fid, shid, seconds=None, seed=0):
             sh = f.shot(shid)
             takes = sorted(sh.get("takes") or [], key=lambda t: t["id"])
             newest = takes[-1] if takes else None
-            if newest and any(str(q).startswith(("scene drift", "the line may not")) for q in newest.get("qc") or []):
+            if newest and any(str(q).startswith(("scene drift", "the line may not", "people appeared")) for q in newest.get("qc") or []):
                 _log(jid, "the take has a fault (%s) - rendering once more on a new seed"
                      % ("; ".join(newest.get("qc") or [])[:80]))
                 _render_take(jid, f, sh, "ltx", random.randint(1, 10 ** 9))
@@ -2118,7 +2130,19 @@ def quickstart(data):
             sc["location"] = (place_a.get("compiled") or {}).get("description", "") or place_a.get("name", "")
             sc["weather"] = sel.get("weather", "")
             sc["time_of_day"] = (sel.get("time_of_day") or [""])[0] if isinstance(sel.get("time_of_day"), list) else (sel.get("time_of_day") or "")
-            sc["ambience"] = (place_a.get("compiled") or {}).get("ambience", "") or ""
+            beds = {"school": "distant voices in corridors, a bell far off, birds outside",
+                    "classroom": "a clock ticking, chalk on a board, muffled voices beyond the door",
+                    "park": "wind in the trees, birds, distant traffic", "house": "a clock, a fridge hum, the street outside",
+                    "boat": "water against the hull, rope creaking, gulls", "cityscape": "traffic, distant sirens, footsteps",
+                    "library": "pages turning, a chair creaking, the hush of a large room",
+                    "market": "voices haggling, a cart wheel, cloth flapping", "rooftops": "wind, distant traffic, a flag snapping",
+                    "alley": "dripping water, a fan humming, distant traffic", "temple": "wind in high trees, a bell, water",
+                    "beach": "waves, wind, gulls", "forest": "wind in leaves, birds, a stream",
+                    "bridge": "water below, wind, footsteps on planks", "station": "wind under the canopy, a board clicking, a distant train",
+                    "diner": "a coffee machine hiss, cutlery, rain on the window", "cafe_exterior": "street chatter, cups, traffic",
+                    "cafe_interior": "an espresso machine, cups, low voices"}
+            sc["ambience"] = ((place_a.get("compiled") or {}).get("ambience", "") or
+                              beds.get(sel.get("base", ""), "wind, distant sounds of the place"))
         except Exception:
             pass
         sc["place"], sc["plate"] = place, plate

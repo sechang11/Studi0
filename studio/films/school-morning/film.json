@@ -1,0 +1,462 @@
+{
+ "title": "School Morning",
+ "created": "2026-09-04 09:32",
+ "look": "anime",
+ "look_clause": "flat cel-shaded hand-drawn 2D anime with clean line art and painted background art",
+ "grade": "",
+ "negative": "",
+ "fps": 24,
+ "logline": "",
+ "resolution": "auto",
+ "deliver": "native",
+ "cast": {
+  "RENJI": {
+   "name": "Renji",
+   "clause": "a lean man, in their twenties, fair skin, an angular face with a sharp jaw, dark eyes, narrow watchful eyes, thin arched brows, black short messy hair, a single small earring, a wry, knowing look, a lantern-maker's apprentice in an indigo work jacket with rolled sleeves, paper dust on his hands",
+   "short": "black short messy hair, a single small earring",
+   "sheet": "/home/k4shix/shared/comfy-studio/studio/foundry/characters/renji/base_portrait.png",
+   "portrait": "/home/k4shix/shared/comfy-studio/studio/foundry/characters/renji/base_portrait.png",
+   "voice": "",
+   "voice_desc": "",
+   "foundry": "renji"
+  },
+  "KITE_SELLER": {
+   "name": "Kite Seller",
+   "clause": "a lean woman, in their thirties, tan skin, an oval face, amber eyes, upturned eyes, chestnut hair in a high ponytail, freckles across the nose, a single small earring, an easy, confident grin, a market kite seller in a patched orange apron over a white shirt, sleeves rolled, a coil of kite string on her belt",
+   "short": "chestnut hair in a high ponytail, freckles across the nose",
+   "sheet": "/home/k4shix/shared/comfy-studio/studio/foundry/characters/kite-seller/base_portrait.png",
+   "portrait": "/home/k4shix/shared/comfy-studio/studio/foundry/characters/kite-seller/base_portrait.png",
+   "voice": "",
+   "voice_desc": "",
+   "foundry": "kite-seller"
+  }
+ },
+ "scenes": [
+  {
+   "id": "sc01",
+   "title": "scene 1",
+   "location": "a school - corridor of lockers, classroom doors, tall windows, lived-in and worn, a school courtyard in the morning, cherry trees, a bicycle rack, long shadows",
+   "time_of_day": "day",
+   "weather": "clear",
+   "ambience": "distant hallway echoes and a ticking wall clock",
+   "palette": "",
+   "music": "anime score, bright piano and strings, morning, school, 96 bpm",
+   "cast_present": [
+    "RENJI",
+    "KITE_SELLER"
+   ],
+   "no_people": false,
+   "anchor": "",
+   "shots": [
+    "010",
+    "020",
+    "030",
+    "040",
+    "050"
+   ],
+   "place": "school-morning",
+   "plate": "day_wide"
+  }
+ ],
+ "shots": {
+  "010": {
+   "id": "010",
+   "scene": "sc01",
+   "title": "wide - establishing",
+   "duration": 6,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/foundry/places/school-morning/day_wide.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide establishing shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "",
+     "action": "the courtyard in the morning, petals drifting, long shadows",
+     "background": "what moves here moves: light",
+     "motion": "",
+     "ambient": [
+      "leaves",
+      "light"
+     ],
+     "dialogue": {}
+    }
+   ],
+   "sfx": "distant hallway echoes and a ticking wall clock",
+   "no_people": true,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t528862338",
+     "engine": "ltx",
+     "seed": 389411023,
+     "created": "09:35",
+     "file": "takes/010/ltx_t528862338.mp4",
+     "poster": "takes/010/ltx_t528862338.png",
+     "strip": "takes/010/ltx_t528862338_strip.png",
+     "duration": 6.04,
+     "fps": 24,
+     "qc": [
+      "words not in the picture: courtyard, morning, petals"
+     ],
+     "drift": {
+      "lost": 0.2,
+      "missing": [
+       "pipe",
+       "roof",
+       "shade",
+       "warehouse"
+      ],
+      "kept": 16
+     },
+     "warnings": [],
+     "prompt": "A static wide establishing shot in flat cel-shaded 2D anime: the courtyard in the morning, petals drifting, long shadows, while what moves here moves: light; leaves drift across the frame; the light shifts and flickers across the scene, a school - corridor of lockers, classroom doors, tall windows, lived-in and worn, a school courtyard in the morning, cherry trees, a bicycle rack, long shadows, da"
+    }
+   ],
+   "picked": "t528862338",
+   "engine_notes": "",
+   "anchor_check": {
+    "caption": "Warehouse, ceiling, roof, beams, structure, windows, doors, walls, floor, shadow, metal, glass, building, interior, room, pipes, vents, light, daytime, sunlight, shade.",
+    "missing": [
+     "courtyard",
+     "morning",
+     "petals"
+    ],
+    "when": 1788528862
+   }
+  },
+  "020": {
+   "id": "020",
+   "scene": "sc01",
+   "title": "wide - RENJI and KITE_SELLER",
+   "duration": 6,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/school-morning/assets/anchor_shot_020.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "medium two-shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "RENJI",
+     "action": "stand by the bicycle rack, she is teasing him",
+     "background": "the scene moves behind them",
+     "motion": "",
+     "ambient": [
+      "leaves",
+      "light"
+     ],
+     "dialogue": {
+      "char": "KITE_SELLER",
+      "line": "You're late again.",
+      "delivery": "teasing"
+     }
+    }
+   ],
+   "sfx": "",
+   "no_people": false,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t528954803",
+     "engine": "ltx",
+     "seed": 766856320,
+     "created": "09:37",
+     "file": "takes/020/ltx_t528954803.mp4",
+     "poster": "takes/020/ltx_t528954803.png",
+     "strip": "takes/020/ltx_t528954803_strip.png",
+     "duration": 6.04,
+     "fps": 24,
+     "qc": [
+      "4s of silence inside the film (at 2s, 3s, 4s, 5s)",
+      "words not in the picture: bicycle, rack, teasing"
+     ],
+     "drift": {
+      "lost": 0.58,
+      "missing": [
+       "apron",
+       "beam",
+       "ceil",
+       "cloth",
+       "corridor",
+       "floor",
+       "interior",
+       "jacket",
+       "kite",
+       "metal",
+       "room",
+       "shoe"
+      ],
+      "kept": 10
+     },
+     "warnings": [
+      "anime dialogue: line is written OFF SCREEN over this beat (LTX voices anime but does not move a drawn mouth)"
+     ],
+     "prompt": "A static medium two-shot in flat cel-shaded 2D anime: a lean man, in their twenties, fair skin, an angular face with a sharp jaw, dark eyes, narrow watchful eyes, thin arched brows, black short messy hair, a single small earring, a wry, knowing look, a lantern-maker's apprentice in an indigo work jacket with rolled sleeves, paper dust on his hands, stand by the bicycle rack, she is teasing him, an"
+    }
+   ],
+   "picked": "t528954803",
+   "engine_notes": "",
+   "anchor_source": {
+    "character": "renji",
+    "place": "school-morning",
+    "stand": 0.4,
+    "cx": 0.38,
+    "view": "turn_front_three_quarter",
+    "plate": "/home/k4shix/shared/comfy-studio/studio/foundry/places/school-morning/day_wide.png",
+    "props": [
+     {
+      "character": "kite-seller",
+      "view": "turn_front_three_quarter",
+      "stand": 0.4,
+      "cx": 0.62
+     }
+    ]
+   },
+   "anchor_check": {
+    "caption": "Warehouse, ceiling, roof, beams, tiles, floor, doors, walls, windows, man, woman, apron, kite, clothing, shoes, jacket, hair, building, concrete, metal, light, shadow, blue, sky, daytime, interior, room, corridor, structure",
+    "missing": [
+     "bicycle",
+     "rack",
+     "teasing"
+    ],
+    "when": 1788528954
+   }
+  },
+  "030": {
+   "id": "030",
+   "scene": "sc01",
+   "title": "medium - RENJI",
+   "duration": 6,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/school-morning/assets/anchor_shot_030.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "medium shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "RENJI",
+     "action": "looks up at the sky and sighs",
+     "background": "the scene moves behind them",
+     "motion": "look_up",
+     "ambient": [
+      "leaves",
+      "light"
+     ],
+     "dialogue": {}
+    }
+   ],
+   "sfx": "",
+   "no_people": false,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "pin_1788529072",
+     "engine": "h3-pinned",
+     "file": "takes/030/pin_1788529072.mp4",
+     "duration": 5.875,
+     "fps": 24,
+     "seed": 42,
+     "qc": [],
+     "warnings": [],
+     "pin": {
+      "change": "the subject has raised their head and is looking up",
+      "rate": 0.0145,
+      "end": "assets/pin_end_030.png"
+     }
+    }
+   ],
+   "picked": "pin_1788529072",
+   "engine_notes": "",
+   "anchor_source": {
+    "character": "renji",
+    "place": "school-morning",
+    "stand": 0.22,
+    "cx": 0.45,
+    "view": "turn_front",
+    "plate": "/home/k4shix/shared/comfy-studio/studio/foundry/places/school-morning/day_wide.png",
+    "props": []
+   },
+   "anchor_check": {
+    "caption": "Here's a breakdown of the nouns present in the image, separated by commas:\n\nPlace, building, hallway, room, corridor, facility, structure.\nMain structures, ceiling, walls, doors, windows, frame, pipes, ducts, vents, support beam.\nObjects, clothing, shirt, pants, shoes, gloves, pocket, lock, handle.\nMaterials, concrete, metal, glass, fabric, wood, tile, paint.\nVehicles, cart, trolley.\nPeople, man, boy.\nLight sources, light, illumination, glow.\nTime of day, daytime.\nWeather, indoor.",
+    "missing": [
+     "sighs"
+    ],
+    "when": 1788529059
+   },
+   "pin_preview": {
+    "change": "the subject has raised their head and is looking up",
+    "seconds": 6.0,
+    "end": "assets/pin_end_030.png",
+    "rate": 0.0145,
+    "ok": true,
+    "longest": 43.5,
+    "seed": 11,
+    "hold_feet": true,
+    "when": 1788529072
+   }
+  },
+  "040": {
+   "id": "040",
+   "scene": "sc01",
+   "title": "medium - KITE_SELLER",
+   "duration": 6,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/school-morning/assets/anchor_shot_040.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "medium shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "KITE_SELLER",
+     "action": "laughs, hands on her hips",
+     "background": "the scene moves behind them",
+     "motion": "laugh",
+     "ambient": [
+      "light"
+     ],
+     "dialogue": {
+      "char": "KITE_SELLER",
+      "line": "Every single morning.",
+      "delivery": "bright"
+     }
+    }
+   ],
+   "sfx": "",
+   "no_people": false,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "pin_1788529185",
+     "engine": "h3-pinned",
+     "file": "takes/040/pin_1788529185.mp4",
+     "duration": 5.875,
+     "fps": 24,
+     "seed": 42,
+     "qc": [],
+     "warnings": [],
+     "pin": {
+      "change": "the subject is laughing, head back, shoulders lifted",
+      "rate": 0.0065,
+      "end": "assets/pin_end_040.png"
+     }
+    }
+   ],
+   "picked": "pin_1788529185",
+   "engine_notes": "",
+   "anchor_source": {
+    "character": "kite-seller",
+    "place": "school-morning",
+    "stand": 0.22,
+    "cx": 0.5,
+    "view": "turn_front",
+    "plate": "/home/k4shix/shared/comfy-studio/studio/foundry/places/school-morning/day_wide.png",
+    "props": []
+   },
+   "anchor_check": {
+    "caption": "Warehouse, ceiling, grid, beams, hallway, doors, walls, floor, woman, apron, shirt, belt, rope, boots, tile, room, building, concrete, metal, wood, paint, blue, orange, white, brown, shadow, light, interior, daytime.",
+    "missing": [
+     "hips"
+    ],
+    "when": 1788529172
+   },
+   "pin_preview": {
+    "change": "the subject is laughing, head back, shoulders lifted",
+    "seconds": 6.0,
+    "end": "assets/pin_end_040.png",
+    "rate": 0.0065,
+    "ok": true,
+    "longest": 19.6,
+    "seed": 11,
+    "hold_feet": true,
+    "when": 1788529185
+   }
+  },
+  "050": {
+   "id": "050",
+   "scene": "sc01",
+   "title": "insert - detail",
+   "duration": 6,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/foundry/places/school-morning/day_detail.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "",
+     "action": "the bicycle rack and the courtyard wall, petals falling",
+     "background": "what moves here moves: light",
+     "motion": "",
+     "ambient": [
+      "leaves",
+      "light"
+     ],
+     "dialogue": {}
+    }
+   ],
+   "sfx": "distant hallway echoes and a ticking wall clock",
+   "no_people": true,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t529282175",
+     "engine": "ltx",
+     "seed": 892232403,
+     "created": "09:42",
+     "file": "takes/050/ltx_t529282175.mp4",
+     "poster": "takes/050/ltx_t529282175.png",
+     "strip": "takes/050/ltx_t529282175_strip.png",
+     "duration": 6.04,
+     "fps": 24,
+     "qc": [
+      "words not in the picture: bicycle, rack, courtyard, wall, petals, falling"
+     ],
+     "drift": {
+      "lost": 0.61,
+      "missing": [
+       "architecture",
+       "bench",
+       "cloud",
+       "color",
+       "daytime",
+       "door",
+       "fence",
+       "flower",
+       "ground",
+       "roof",
+       "shade",
+       "structure"
+      ],
+      "kept": 9
+     },
+     "warnings": [],
+     "prompt": "A static wide shot in flat cel-shaded 2D anime: the bicycle rack and the courtyard wall, petals falling, while what moves here moves: light; leaves drift across the frame; the light shifts and flickers across the scene, a school - corridor of lockers, classroom doors, tall windows, lived-in and worn, a school courtyard in the morning, cherry trees, a bicycle rack, long shadows, day, clear, the fra"
+    }
+   ],
+   "picked": "t529282175",
+   "engine_notes": "",
+   "anchor_check": {
+    "caption": "School, building, structure, windows, doors, roof, shadow, ground, pavement, tree, blossom, flower, branch, bench, fence, sky, clouds, light, sunlight, shade, color, blue, pink, daytime, exterior, architecture.",
+    "missing": [
+     "bicycle",
+     "rack",
+     "courtyard",
+     "wall",
+     "petals",
+     "falling"
+    ],
+    "when": 1788529282
+   }
+  }
+ }
+}
