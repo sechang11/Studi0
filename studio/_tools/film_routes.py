@@ -2008,6 +2008,75 @@ def make_all(data):
     return {"job": jid}, 200
 
 
+def _cast_entry_from_pack(FY, cid):
+    a = FY.load_asset("character", cid)
+    c = a.get("compiled") or {}
+    cdir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                        "foundry", "characters", cid)
+    return {"name": a.get("name", cid), "clause": c.get("clause", ""),
+            "short": c.get("short", "") or a.get("name", cid).split()[0],
+            "sheet": os.path.join(cdir, "base_portrait.png"),
+            "portrait": os.path.join(cdir, "base_portrait.png"),
+            "voice": "", "voice_desc": c.get("voice", "") or "", "foundry": cid}
+
+
+def _quickstart_job(jid, fid, scid, place, plate, chars, prop):
+    _coverage_job(jid, fid, scid, place, plate, chars, prop)
+
+
+def quickstart(data):
+    """Film + cast from packs + first scene with its place + coverage, from one form."""
+    import importlib.util
+    p = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "foundry.py")
+    spec = importlib.util.spec_from_file_location("fy_mod5", p)
+    FY = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(FY)
+    f = F.new_film(data["title"], look=data.get("look", "photoreal"),
+                   resolution=data.get("resolution", "auto"))
+    fid = f.id
+    chars = []
+    for cid in [c for c in (data.get("characters") or []) if c][:2]:
+        try:
+            ent = _cast_entry_from_pack(FY, cid)
+        except Exception:
+            continue
+        # the cast id comes from the NAME (RENJI, INES, KEEPER), never from the
+        # appearance clause - "black-haired man" made a cast member called BLACK
+        words = [w for w in re.findall(r"[A-Za-z]+", ent["name"] or cid)]
+        skip = {"the", "old", "young", "a", "an", "mr", "mrs", "ms", "dr", "little", "big"}
+        pick = next((w for w in words if w.lower() not in skip), None) or (words[-1] if words else cid)
+        cast_id = pick.upper()[:12]
+        n = 2
+        while cast_id in f.data["cast"]:
+            cast_id = "%s%d" % (cast_id.rstrip("0123456789"), n); n += 1
+        f.data["cast"][cast_id] = ent
+        chars.append({"cast": cast_id, "foundry": cid})
+    place = data.get("place") or ""
+    plate = data.get("plate") or ""
+    sc = f.new_scene(data.get("scene_title") or "scene 1")
+    if place:
+        try:
+            place_a = FY.load_asset("place", place)
+            sel = place_a.get("selections") or {}
+            sc["location"] = (place_a.get("compiled") or {}).get("description", "") or place_a.get("name", "")
+            sc["weather"] = sel.get("weather", "")
+            sc["time_of_day"] = (sel.get("time_of_day") or [""])[0] if isinstance(sel.get("time_of_day"), list) else (sel.get("time_of_day") or "")
+            sc["ambience"] = (place_a.get("compiled") or {}).get("ambience", "") or ""
+        except Exception:
+            pass
+        sc["place"], sc["plate"] = place, plate
+    sc["cast_present"] = [c["cast"] for c in chars]
+    f.save()
+    jid = None
+    if place:
+        jid = _job("coverage", film=fid, scene=sc["id"])
+        threading.Thread(target=_quickstart_job,
+                         args=(jid, fid, sc["id"], place, plate or None, chars,
+                               data.get("prop") or None), daemon=True).start()
+    return {"ok": True, "id": fid, "scene": sc["id"], "job": jid,
+            "cast": [c["cast"] for c in chars]}, 200
+
+
 def make_shot(data):
     """Make this shot: character into the scene, words checked, pose change or
     render, picked - in plain words, one button."""

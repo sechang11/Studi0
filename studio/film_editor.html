@@ -171,7 +171,8 @@ async function loadFilms(sel){
     `<option value="${f.id}">${esc(f.title)} (${f.shots} shots, ${f.picked} picked)</option>`).join("");
   if(sel){ s.value=sel; }
 }
-function newFilm(){
+async function newFilm(){
+  if(!Object.keys(FOUNDRY||{}).length){ try{ FOUNDRY=(await api("/foundry_assets")).assets; }catch(e){ FOUNDRY={}; } }
   const box=document.createElement("div");
   box.id="newfilm";
   box.style.cssText="position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;z-index:99";
@@ -186,9 +187,20 @@ function newFilm(){
         <option value="1080p">1080p - 1.5 MP, shots to 12s</option>
         <option value="max">max - 2.0 MP, shots to 8s</option></select></div>
     </div>
-    <div class="hint" style="margin-top:6px">On this box resolution is bound by shot length. A shot too long for
-      the target still renders, softer, and its compile says what cut would recover the target.
-      Change it any time in the Film tab.</div>
+    <div class="hint" style="margin-top:6px">Resolution is bound by shot length here: a shot too long for the
+      target still renders, a little softer, and the shot says what cut would recover it. Change it any time.</div>
+    <h2 style="margin:14px 0 6px;font-size:15px">Where does the first scene happen, and who is in it?</h2>
+    <div class="row" style="gap:8px">
+      <div class="grow"><label>place</label><select id="nf_place" onchange="nfPlates()" style="width:100%">
+        <option value="">choose later</option>${(FOUNDRY.place||[]).map(p=>`<option value="${p.id}">${esc(p.name)} (${esc(p.style)})</option>`).join("")}</select></div>
+      <div><label>background picture</label><select id="nf_plate"></select></div>
+    </div>
+    <div class="row" style="gap:8px;margin-top:6px">
+      ${[1,2].map(i=>`<div class="grow"><label>person ${i}</label><select class="nf_char" style="width:100%">
+        <option value="">nobody</option>${(FOUNDRY.character||[]).map(c=>`<option value="${c.id}">${esc(c.name)} (${esc(c.style)})</option>`).join("")}</select></div>`).join("")}
+    </div>
+    <div class="hint" style="margin-top:6px">If you choose a place, the studio lays out the first scene's shots for you
+      with the people already in the pictures. You then write what happens in each and press Make.</div>
     <div class="row" style="margin-top:12px;justify-content:flex-end;gap:8px">
       <button class="small" onclick="document.getElementById('newfilm').remove()">cancel</button>
       <button class="primary" onclick="createFilm()">create</button></div>
@@ -197,11 +209,26 @@ function newFilm(){
   const t=document.getElementById("nf_title"); t.focus();
   t.addEventListener("keydown",e=>{ if(e.key==="Enter") createFilm(); if(e.key==="Escape") box.remove(); });
 }
+function nfPlates(){
+  const pid=(document.getElementById("nf_place")||{}).value; const sel=document.getElementById("nf_plate"); if(!sel) return;
+  const p=(FOUNDRY.place||[]).find(x=>x.id===pid);
+  sel.innerHTML=((p&&p.plates)||[]).map(f=>`<option value="${f.replace(/\.png$/,"")}">${f.replace(/\.png$/,"")}</option>`).join("");
+  const w=[...sel.options].find(o=>/_wide$/.test(o.value)); if(w) sel.value=w.value;
+}
 async function createFilm(){
   const t=document.getElementById("nf_title").value.trim();
   if(!t) return note("give the film a title",true);
-  const j=await api("/new",{title:t,look:document.getElementById("nf_look").value,
-                            resolution:document.getElementById("nf_res").value});
+  const place=(document.getElementById("nf_place")||{}).value||"";
+  const chars=[...document.querySelectorAll(".nf_char")].map(s=>s.value).filter(Boolean);
+  let j;
+  if(place){
+    j=await api("/quickstart",{title:t,look:document.getElementById("nf_look").value,
+      resolution:document.getElementById("nf_res").value,place,plate:(document.getElementById("nf_plate")||{}).value||"",characters:chars});
+    if(j&&j.job){ WATCH.add(j.job); note("laying out the first scene: "+j.job); }
+  }else{
+    j=await api("/new",{title:t,look:document.getElementById("nf_look").value,
+                        resolution:document.getElementById("nf_res").value});
+  }
   if(!j||!j.id) return note("could not create the film: "+((j||{}).error||"unknown"),true);
   document.getElementById("newfilm").remove();
   await loadFilms(j.id); openFilm(j.id);
