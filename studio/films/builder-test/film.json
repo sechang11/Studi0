@@ -16,7 +16,7 @@
    "short": "grey a shaved head, brown eyes",
    "sheet": "/home/k4shix/shared/comfy-studio/studio/foundry/characters/tomas-reyl/base_portrait.png",
    "portrait": "/home/k4shix/shared/comfy-studio/studio/foundry/characters/tomas-reyl/base_portrait.png",
-   "voice": "",
+   "voice": "male_04_frank",
    "voice_desc": "",
    "foundry": "tomas-reyl"
   },
@@ -117,6 +117,26 @@
    ],
    "place": "autumn-park",
    "plate": "day_wide"
+  },
+  {
+   "id": "sc05",
+   "title": "build 14:23",
+   "location": "the deck of a small weathered boat, rigging and coiled rope, lived-in and worn, in thick fog, a small fishing harbour at night, fog on the water, sodium lamps along the quay, moored boats",
+   "time_of_day": "",
+   "weather": "fog",
+   "ambience": "water against the hull and rigging knocking, a fog-damped stillness",
+   "palette": "",
+   "music": "",
+   "cast_present": [
+    "TOMAS"
+   ],
+   "no_people": false,
+   "anchor": "",
+   "shots": [
+    "120"
+   ],
+   "place": "harbour-night",
+   "plate": "night_wide"
   }
  ],
  "shots": {
@@ -1218,6 +1238,118 @@
      "place"
     ],
     "when": 1788546184
+   }
+  },
+  "120": {
+   "id": "120",
+   "scene": "sc05",
+   "title": "close - TOMAS",
+   "duration": 5.0,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/builder-test/assets/anchor_shot_120.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "close-up",
+     "move": "static",
+     "transition_in": "",
+     "subject": "TOMAS",
+     "action": "listens to the water, then turns his head toward the sound",
+     "background": "",
+     "motion": "",
+     "ambient": [],
+     "dialogue": {
+      "char": "TOMAS",
+      "line": "Last boat's not coming back tonight.",
+      "delivery": ""
+     }
+    }
+   ],
+   "sfx": "water against the hull and rigging knocking, a fog-damped stillness",
+   "no_people": false,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t546370100",
+     "engine": "ltx",
+     "seed": 98835364,
+     "created": "14:30",
+     "file": "takes/120/ltx_t546370100.mp4",
+     "poster": "takes/120/ltx_t546370100.png",
+     "strip": "takes/120/ltx_t546370100_strip.png",
+     "duration": 5.04,
+     "fps": 24,
+     "qc": [
+      "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.41 left=0.00 right=0.00)",
+      "words not in the picture: water, sound"
+     ],
+     "drift": {
+      "lost": 0.46,
+      "missing": [
+       "cabl",
+       "outdoor",
+       "shadow",
+       "structure",
+       "sweater",
+       "zipper"
+      ],
+      "kept": 7,
+      "last_caption": "Harbor, fishing boat, man, pier, ropes, netting, lantern, water, boats, wood, metal, rope, yellow jacket, gray hair, beard, fog, sky, dusk, light, reflections, waves, ocean, coastal area."
+     },
+     "warnings": [],
+     "prompt": "A static close-up: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, listens to the water, then turns his head toward the sound, who says in a level voice, \"Last boat's not com"
+    },
+    {
+     "id": "t546370100v",
+     "engine": "ltx+vo",
+     "seed": 98835364,
+     "created": "14:31",
+     "file": "takes/120/ltx_t546370100_vo.mp4",
+     "poster": "takes/120/ltx_t546370100_vo.png",
+     "strip": "takes/120/ltx_t546370100_vo_strip.png",
+     "duration": 5.04,
+     "fps": 24,
+     "qc": [
+      "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.41 left=0.00 right=0.00)",
+      "words not in the picture: water, sound"
+     ],
+     "drift": {
+      "lost": 0.46,
+      "missing": [
+       "cabl",
+       "outdoor",
+       "shadow",
+       "structure",
+       "sweater",
+       "zipper"
+      ],
+      "kept": 7,
+      "last_caption": "Harbor, fishing boat, man, pier, ropes, netting, lantern, water, boats, wood, metal, rope, yellow jacket, gray hair, beard, fog, sky, dusk, light, reflections, waves, ocean, coastal area."
+     },
+     "warnings": [],
+     "prompt": "A static close-up: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, listens to the water, then turns his head toward the sound, who says in a level voice, \"Last boat's not com"
+    }
+   ],
+   "picked": "t546370100v",
+   "engine_notes": "",
+   "anchor_source": {
+    "character": "tomas-reyl",
+    "framing": "close",
+    "place": "harbour-night",
+    "stand": 0.22,
+    "cx": 0.45,
+    "view": "base_portrait",
+    "plate": "/home/k4shix/shared/comfy-studio/studio/foundry/composites/tomas-reyl__harbour-night__close/00_plate_close.png",
+    "props": []
+   },
+   "anchor_check": {
+    "caption": "Ship, boat, man, beard, jacket, sweater, zipper, face, hair, smile, wood, metal, grey, yellow, brown, fur, light, outdoors, day, sky, background, structure, cables, ropes, shadows.",
+    "missing": [
+     "water",
+     "sound"
+    ],
+    "when": 1788546370
    }
   }
  }
