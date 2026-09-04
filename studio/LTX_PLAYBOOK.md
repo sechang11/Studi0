@@ -1307,3 +1307,46 @@ soft delete, recoverable - and the pickers list 17 films instead of 26.
 builder. Build a shot asks who, where, how, what, and shows variants with
 picks. The film editor holds scenes, shots, Make, what-to-fix. The spec sheet
 holds promises and makes more. Verify judges. Everything else is under *more*.
+
+## §46  A close-up is composed, not zoomed
+
+The builder's third framing was tested and was wrong. "Close" placed the whole
+figure at a near stand on the whole plate, which is a medium-wide with a large
+person in it; LTX then spent the whole five seconds pushing in to reach a face,
+and the first take lost 71% of its picture on the way (drift; retried). The
+picture a close-up starts from has to *be* a close-up.
+
+**How it is composed now.** The depth pass says where a person at medium
+distance would stand; a window of the plate is taken there - 42% of its height
+- and scaled up to the frame. It comes out soft, which is what a background
+behind a face looks like. The pack's portrait view (the face at its native
+resolution, every pack has one) is cut out and placed so that head and
+shoulders fill the frame, a little head room above, the chest cut by the frame
+edge so the render's own bottom is never seen. It is relit by qwen-edit with a
+prompt that holds the framing hard, re-cut, checked by proportion (6% shape
+drift; the floor is 25%) and laid on the untouched window. No footing - the
+feet are out of frame; no shadow; no pin - the pristine-plate end frame is a
+full-figure idea and a close-up renders on LTX with its motion as prose.
+`anchor_source.framing` remembers which kind of anchor a shot has.
+
+**The result.** Mara's face large and sharp from frame one, the bandstand soft
+behind her, the same face at the end; the camera pushes in a little, as it does.
+Composited in eighteen seconds.
+
+**And it was silent.** Both LTX takes of the close-up came back with no sound
+at all (rms 0.0009), although the prompt named birdsong, leaves and a far-off
+dog. This is the speech law again: LTX makes sound from what it sees, and a
+face filling the frame shows nothing that makes a noise. Re-rolling is the
+wrong answer - the second seed was as silent as the first. The right answer is
+the scene's own sound from a sibling take: the wide shot of the same place has
+the park under it. A silent take now borrows the soundtrack of the newest
+sounding, unvoiced take in its scene (or the film), looped to its length, and
+the note says so: *sound borrowed from take X of shot Y - the render was
+silent*. Make no longer spends a render on a silent close-up.
+
+**Two people from the repaired packs.** The two-person medium build worked
+end to end: Mara and Tomas on the path, both whole (Tomas's three-quarter view
+re-rendered whole that morning), both lit like the park, footing checked for
+both. The prose asked them to stand and talk; they walked toward the camera -
+the LTX law, not the picture. The camera variant differed from the seed
+variant in its move alone, as promised.

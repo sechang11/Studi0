@@ -721,6 +721,49 @@ def _peak_db(video):
     return None
 
 
+def _sound_donor(f, sh):
+    """the newest sounding, unvoiced take in the shot's scene, else in the film:
+    (path, take id, shot id) or None"""
+    def cands(shots):
+        out = []
+        for s in shots:
+            for t in (s.get("takes") or []):
+                if (t.get("engine") or "").endswith("+vo"):
+                    continue
+                if any("SILENT" in str(n) for n in (t.get("qc") or [])):
+                    continue
+                rel = t.get("file") or ""
+                p = os.path.join(f.dir, rel)
+                if rel and os.path.exists(p):
+                    out.append((t.get("created") or "", p, t["id"], s["id"]))
+        return out
+    shots = list((f.data.get("shots") or {}).values())
+    same = [s for s in shots if s.get("scene") == sh.get("scene") and s.get("id") != sh.get("id")]
+    others = [s for s in shots if s.get("id") != sh.get("id")]
+    for pool in (same, others):
+        c = sorted(cands(pool), key=lambda x: x[0])
+        if c:
+            return c[-1][1:]
+    return None
+
+
+def _borrow_audio(dest, donor):
+    """dest keeps its picture and takes the donor's soundtrack, looped to length"""
+    tmp = dest[:-4] + "_bed.mp4"
+    try:
+        _sh("ffmpeg", "-y", "-v", "error", "-i", dest, "-stream_loop", "-1", "-i", donor,
+            "-map", "0:v", "-map", "1:a", "-shortest", "-c:v", "copy",
+            "-c:a", "aac", "-b:a", "192k", tmp)
+        if os.path.exists(tmp) and os.path.getsize(tmp) > 1000:
+            os.replace(tmp, dest)
+            return True
+    except Exception:
+        pass
+    if os.path.exists(tmp):
+        os.remove(tmp)
+    return False
+
+
 def _render_take(jid, f, sh, eng, seed):
     run, set_path, load_wf, ensure_local, HOST, COMFY = _comfy()
     flat = f.flat(sh["id"])
@@ -838,6 +881,15 @@ def _render_take(jid, f, sh, eng, seed):
     ensure_local(vids[0], dest)
     _thumbs(dest, dest[:-4])
     qc = _qc(dest)
+    if any("SILENT" in str(n) for n in qc):
+        donor = _sound_donor(f, sh)
+        if donor and _borrow_audio(dest, donor[0]):
+            qc = [n for n in qc if "SILENT" not in str(n)] + [
+                "sound borrowed from take %s of shot %s - the render was silent" % (donor[1], donor[2])]
+            _log(jid, "the render was silent; its soundtrack is borrowed from take %s of shot %s"
+                 % (donor[1], donor[2]))
+        elif not donor:
+            _log(jid, "the render was silent and no other take of this film has sound to lend")
     try:
         _start = _resolve_anchor_file(f, sh["id"], jid)
         _d = _scene_drift(dest, _start, "%s_%s" % (f.id, sh["id"])) if _start else None
