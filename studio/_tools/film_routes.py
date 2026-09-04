@@ -1727,6 +1727,7 @@ def _log_geom(jid, CM, start, end):
 
 
 _STOP = set("""place scene shot frame picture background foreground image view
+camera tripod locked framing lens zoom nothing nobody gets closer nearer farther
 together alone apart each other both
 weight breath breaths beat beats
 sound sounds noise noises voice voices music silence quiet moment time

@@ -16,7 +16,7 @@
    "short": "grey a shaved head, brown eyes",
    "sheet": "/home/k4shix/shared/comfy-studio/studio/foundry/characters/tomas-reyl/base_portrait.png",
    "portrait": "/home/k4shix/shared/comfy-studio/studio/foundry/characters/tomas-reyl/base_portrait.png",
-   "voice": "",
+   "voice": "male_04_frank",
    "voice_desc": "",
    "foundry": "tomas-reyl"
   },
@@ -338,7 +338,8 @@
      "duration": 6.04,
      "fps": 24,
      "qc": [
-      "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.31 left=0.00 right=0.00)"
+      "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.31 left=0.00 right=0.00)",
+      "words not in the picture: rail, locked, tripod, framing, nothing, gets"
      ],
      "drift": {
       "lost": 0.35,
@@ -358,6 +359,113 @@
      },
      "warnings": [],
      "prompt": "A static wide shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, stands at the rail looking out into the fog, who says in a level voice, \"Last boat's not coming back tonig"
+    },
+    {
+     "id": "t555682735",
+     "engine": "ltx",
+     "seed": 855134906,
+     "created": "17:02",
+     "file": "takes/010/ltx_t555682735.mp4",
+     "poster": "takes/010/ltx_t555682735.png",
+     "strip": "takes/010/ltx_t555682735_strip.png",
+     "duration": 6.04,
+     "fps": 24,
+     "qc": [
+      "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.43 left=0.00 right=0.00)",
+      "words not in the picture: rail, locked, tripod, framing, nothing, gets"
+     ],
+     "drift": {
+      "lost": 0.54,
+      "missing": [
+       "boot",
+       "build",
+       "bulb",
+       "coil",
+       "dock",
+       "fish",
+       "fisherman",
+       "horizon",
+       "lamp",
+       "mist",
+       "nylon",
+       "pant"
+      ],
+      "kept": 12,
+      "last_caption": "Harbor, ship, mast, rigging, man, beard, mustache, jacket, shirt, pier, boats, fog, water, sky, night, lights, metal, wood, fabric, person, yellow, gray, brown, gray-blue"
+     },
+     "warnings": [],
+     "prompt": "A static wide shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, stands at the rail looking out into the fog. The camera is locked off on a tripod; the framing never chang"
+    },
+    {
+     "id": "t555682735v",
+     "engine": "ltx+vo",
+     "seed": 855134906,
+     "created": "17:02",
+     "file": "takes/010/ltx_t555682735_vo.mp4",
+     "poster": "takes/010/ltx_t555682735_vo.png",
+     "strip": "takes/010/ltx_t555682735_vo_strip.png",
+     "duration": 6.04,
+     "fps": 24,
+     "qc": [
+      "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.43 left=0.00 right=0.00)",
+      "words not in the picture: rail, locked, tripod, framing, nothing, gets"
+     ],
+     "drift": {
+      "lost": 0.54,
+      "missing": [
+       "boot",
+       "build",
+       "bulb",
+       "coil",
+       "dock",
+       "fish",
+       "fisherman",
+       "horizon",
+       "lamp",
+       "mist",
+       "nylon",
+       "pant"
+      ],
+      "kept": 12,
+      "last_caption": "Harbor, ship, mast, rigging, man, beard, mustache, jacket, shirt, pier, boats, fog, water, sky, night, lights, metal, wood, fabric, person, yellow, gray, brown, gray-blue"
+     },
+     "warnings": [],
+     "prompt": "A static wide shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, stands at the rail looking out into the fog. The camera is locked off on a tripod; the framing never chang"
+    },
+    {
+     "id": "t555775920",
+     "engine": "ltx",
+     "seed": 438726112,
+     "created": "17:04",
+     "file": "takes/010/ltx_t555775920.mp4",
+     "poster": "takes/010/ltx_t555775920.png",
+     "strip": "takes/010/ltx_t555775920_strip.png",
+     "duration": 6.04,
+     "fps": 24,
+     "qc": [
+      "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.41 left=0.00 right=0.00)"
+     ],
+     "drift": {
+      "lost": 0.54,
+      "missing": [
+       "boot",
+       "build",
+       "bulb",
+       "coil",
+       "dock",
+       "fish",
+       "fisherman",
+       "horizon",
+       "mist",
+       "nylon",
+       "pant",
+       "pier"
+      ],
+      "kept": 12,
+      "last_caption": "Ship, harbor, man, beard, jacket, shirt, railing, masts, rigging, lamps, lights, water, sky, clouds, fog, metal, wood, fabric, person, yellow, gray, brown, night, artificial light."
+     },
+     "warnings": [],
+     "prompt": "A static wide shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, stands at the rail looking out into the fog. The camera is locked off on a tripod; the framing never chang"
     }
    ],
    "picked": "t541369475v",
@@ -374,9 +482,14 @@
    "anchor_check": {
     "caption": "Harbor, fishing boats, ship, masts, ropes, rigging, deck, man, fisherman, jacket, pants, boots, harbor lights, water, sea, fog, mist, night, bulb, lamp, rope coils, wood, metal, nylon, vessels, piers, docks, buildings, horizon, glow.",
     "missing": [
-     "rail"
+     "rail",
+     "locked",
+     "tripod",
+     "framing",
+     "nothing",
+     "gets"
     ],
-    "when": 1788552290
+    "when": 1788555682
    }
   },
   "020": {
@@ -443,7 +556,7 @@
        "weather"
       ],
       "kept": 11,
-      "last_caption": "Port, harbor, ship, masts, rigging, man, man\u2019s face, man\u2019s hair, man\u2019s beard, jacket, sweater, hood, clothing, buildings, lights, fog, mist, night, glow, metal, wood, concrete, asphalt, water, sky, yellow, gray, white, darkness."
+      "last_caption": "Port, harbor, ship, masts, rigging, man, man’s face, man’s hair, man’s beard, jacket, sweater, hood, clothing, buildings, lights, fog, mist, night, glow, metal, wood, concrete, asphalt, water, sky, yellow, gray, white, darkness."
      },
      "warnings": [],
      "prompt": "A static medium shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, stands at the rail looking out into the fog, who says in a level voice, \"Last boat's not coming back ton"
@@ -475,7 +588,7 @@
        "vessel"
       ],
       "kept": 14,
-      "last_caption": "Here's a breakdown of the nouns present in the image, as requested:\n\nPlace, ship, dock, harbor, background, outdoors.\nStructures, mast, rigging, ropes, cables, ship\u2019s hull, building, wall.\nObjects, jacket, scarf, sweater, clothing, beard, hair, face, head, mouth, eyes, nose.\nMaterials, fabric, metal, wood, wool, plastic, nylon.\nVehicles, ship.\nWater, sea, ocean, water surface.\nWeather, cloudy sky,"
+      "last_caption": "Here's a breakdown of the nouns present in the image, as requested:\n\nPlace, ship, dock, harbor, background, outdoors.\nStructures, mast, rigging, ropes, cables, ship’s hull, building, wall.\nObjects, jacket, scarf, sweater, clothing, beard, hair, face, head, mouth, eyes, nose.\nMaterials, fabric, metal, wood, wool, plastic, nylon.\nVehicles, ship.\nWater, sea, ocean, water surface.\nWeather, cloudy sky,"
      },
      "warnings": [],
      "prompt": "A static medium shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, stands at the rail looking out into the fog, who says in a level voice, \"Last boat's not coming back ton"
@@ -507,7 +620,7 @@
        "vessel"
       ],
       "kept": 14,
-      "last_caption": "Here's a breakdown of the nouns present in the image, as requested:\n\nPlace, ship, dock, harbor, background, outdoors.\nStructures, mast, rigging, ropes, cables, ship\u2019s hull, building, wall.\nObjects, jacket, scarf, sweater, clothing, beard, hair, face, head, mouth, eyes, nose.\nMaterials, fabric, metal, wood, wool, plastic, nylon.\nVehicles, ship.\nWater, sea, ocean, water surface.\nWeather, cloudy sky,"
+      "last_caption": "Here's a breakdown of the nouns present in the image, as requested:\n\nPlace, ship, dock, harbor, background, outdoors.\nStructures, mast, rigging, ropes, cables, ship’s hull, building, wall.\nObjects, jacket, scarf, sweater, clothing, beard, hair, face, head, mouth, eyes, nose.\nMaterials, fabric, metal, wood, wool, plastic, nylon.\nVehicles, ship.\nWater, sea, ocean, water surface.\nWeather, cloudy sky,"
      },
      "warnings": [],
      "prompt": "A static medium shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, stands at the rail looking out into the fog, who says in a level voice, \"Last boat's not coming back ton"
@@ -730,7 +843,7 @@
        "shirt"
       ],
       "kept": 11,
-      "last_caption": "Here's a breakdown of the image\u2019s contents, listed as requested:\n\nPlace, outdoors, forest, nature, ground, dirt, foliage, vegetation, plants, trees, grass, sky, atmosphere.\n\nStructures, none.\n\nObjects, person, face, head, eyes, nose, mouth, hair, skin, clothing, jacket, olive-green fabric.\n\nMaterials, wood, leaves, earth, cotton, wool, fibers.\n\nVehicles, none.\n\nWater, none.\n\nWeather, daylight, sun"
+      "last_caption": "Here's a breakdown of the image’s contents, listed as requested:\n\nPlace, outdoors, forest, nature, ground, dirt, foliage, vegetation, plants, trees, grass, sky, atmosphere.\n\nStructures, none.\n\nObjects, person, face, head, eyes, nose, mouth, hair, skin, clothing, jacket, olive-green fabric.\n\nMaterials, wood, leaves, earth, cotton, wool, fibers.\n\nVehicles, none.\n\nWater, none.\n\nWeather, daylight, sun"
      },
      "warnings": [],
      "prompt": "A static close-up: a tall, athletic woman, in their thirties, deep brown skin, an angular face with a sharp jaw, dark eyes, almond eyes, strong dark brows, black a long single braid, freckles across the nose, a calm, unreadable bearing, a field geologist in a weathered olive canvas jacket over a grey shirt, sleeves pushed up, a plain leather watch strap, looks up from the path, listening, while wh"
@@ -1527,7 +1640,7 @@
        "shirt"
       ],
       "kept": 7,
-      "last_caption": "Here's a breakdown of the image\u2019s contents, listed as requested:\n\nPerson, woman, face, head, hair, eyes, nose, lips, skin, expression, clothing, jacket, outdoors, nature, forest, trees, foliage, branches, sky, daylight, sunlight, shadows, ground, dirt, texture, close-up, portrait."
+      "last_caption": "Here's a breakdown of the image’s contents, listed as requested:\n\nPerson, woman, face, head, hair, eyes, nose, lips, skin, expression, clothing, jacket, outdoors, nature, forest, trees, foliage, branches, sky, daylight, sunlight, shadows, ground, dirt, texture, close-up, portrait."
      },
      "warnings": [
       "no ambience or sfx set - LTX generates the ambience the picture implies, and a shot with nothing that makes noise returns literal silence"

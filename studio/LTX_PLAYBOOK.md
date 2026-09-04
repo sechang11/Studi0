@@ -1510,3 +1510,13 @@ the alley's lanterns soft behind), one take, no faults. Four close-ups today
 across two engines' looks, all from the portrait view; the photographic ones
 needed a borrowed soundtrack, the drawn one did not (-38 dB, just above the
 line). Composed in 18 s, built in 104 s.
+
+**Late addendum: the camera does not listen.** One more measurement before
+six: shot 010's sentence was given "The camera is locked off on a tripod; the
+framing never changes, nothing gets closer" and re-made on two seeds. Three of
+three new takes ended closer than they started, exactly like the three before.
+The push-in is not a wording problem; it is the engine's prior, and the only
+things that hold a frame are a pin (in place) or the camera rig (no
+generation). The camera promise on a spec sheet stays "prose only" for that
+reason, and the anchor check learned not to count camera words and negations
+as things a picture can lack.
