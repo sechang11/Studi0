@@ -1214,3 +1214,53 @@ it composes the anchor (footing, whole views), writes the shot's SPEC - the
 selections as promises the checker can run - then renders the variants, which
 differ only in the seed (and the camera sentence, if allowed). The bar is
 regrouped as a product: make a film, library, more.
+
+## §44  The builder's first film, measured
+
+The shot builder was given the brief the director gave: Tomas, the night
+harbour, wide and medium, a still camera, water and light moving, six seconds,
+the line "Last boat's not coming back tonight", two variants that may differ
+only in the seed. It made the film `builder-test` unattended.
+
+**What it did, in order.** A film and a scene from the picks; Tomas's cast entry
+from his pack; for each framing a shot with a composed anchor (footing checked,
+a whole compositing view - the packs had just been repaired); a SPEC in the
+spec sheet's own markdown with four promises and their CHECK lines (the people,
+the place, the camera, the length) and three things left free (seed, engine,
+take); then variant one through Make (anchor check, render, the take QC, the
+line through the voice pack) and variant two on a new seed; then the cleanest
+take picked. The checker's verdict on both shots: **all invariants hold**. The
+camera promise is prose-only, so it is written but not machine-checked, and the
+sheet says so.
+
+**What the picks are.** Both picked takes are the voiced ones (`ltx+vo`), both
+with clean QC. The medium shot's first take came back quiet (peak below -14 dB)
+and Make re-rendered it before voicing, as designed. The wide shot's people
+check saw nobody who should not be there. The two shots are on the verify page
+with the question the director cares about: are the words right, is it the same
+man's voice.
+
+**The pack repairs.** Tomas and Mara (and Ines, still running) had every
+compositing view cut at the shin, which is why the director saw awkward
+crouches. Tomas's views re-rendered whole with the detector-and-retry. Mara's
+did not: four seeds, then the far framing, all three-quarter portraits - her
+photographic prior is a portrait whatever the sentence says. The downward
+extension took over: canvas padded by a third, qwen-edit asked to continue the
+legs and shoes onto a plain floor with everything above untouched. The result is
+a whole figure in all three views (base, front, side): the trousers continue,
+brown boots, a flat floor band where the grass ends. The band does not matter -
+these are compositing views, the background is cut away - and the face, hands
+and clothes above the pad are pixel-identical to the render. Legs are not
+identity; that is the whole reason this repair is allowed for a view and was
+refused for meshes.
+
+**Numbers.** Build to picked takes: about nine minutes for two framings times
+two variants including two VO passes. `/build` lists 18 people, 21 places, 15
+motions, 11 ambient chips, 26 films. Verify page: 28 clips (26 judged, 2 new).
+
+**What the builder still cannot promise.** The camera (prose-only on LTX; the
+engine pushes in on most takes); the words (the voice pack says them, the mouth
+does not move to them - lip sync is the encoder's, not the pack's); and a walk
+(H3 pins hold in place only; a walking subject renders on LTX as prose and the
+scene may drift). Each of these is written on the sheet under CAN CHANGE rather
+than promised, so the sheet does not lie.
