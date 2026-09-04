@@ -729,3 +729,37 @@ prose is advisory there, so the honest expectation for a walk on this box is a
 push-in on a standing figure, or a cut. The end-figure geometry for moving
 motions stays, because a correct end frame is still the precondition for the
 day the interpolator honours it.
+
+## §30  The library grows only through its own QC
+
+Fifteen assets in twelve minutes (four characters, five places, six props - all
+invented) is the good news. The sheet showed two failures the packs had already
+detected and shipped anyway:
+
+- **A cropped base poisons the pack.** Ines Varga's `base_fullbody` came back
+  knees-up; every turnaround view is derived from it, so all five turns were
+  knees-up and she would have composited with no legs - the defect the director
+  has flagged twice. The full-length prompt was there; the photographic model
+  declined it for a long coat with hands in pockets. Four seeds in a row gave
+  gap=0.000 (the figure touching the bottom edge) - **a seed does not move a
+  composition prior; words do.** The seeds job now checks the base with
+  `pack_qc._truncated` and re-rolls: two seeds on the prompt as written, then
+  two with a far framing sentence (small in frame, empty space above the head,
+  the floor under both shoes).
+- **A prop hero must be one whole object.** The red umbrella came back as a
+  sliver at the frame edge, the oil lantern and the iron key as pairs - useless
+  as cutouts. The hero render is checked on the segmenter's mask (no edge
+  contact, one contiguous horizontal run) and re-rolls, saying "exactly one
+  single ... nothing else in the picture" on the later tries. Umbrella: whole on
+  seed 43. Lantern: single on the third try.
+
+The pattern is the one from §16 again - detection without a consumer ships the
+defect. Every detector the packs already run (truncation, expression, prop
+wholeness) should gate the render it judges, with a bounded retry and a log
+line that says which attempt won.
+
+**Naming assets for what they are.** The place called "harbour-dawn" is a stone
+arch bridge over slow water in fog (base: bridge). The compiled description
+says so; the name did not, and a shot list written from the name put boats on
+it. Name places by their base and condition, or read the description before
+writing the prose - and run the anchor check either way.

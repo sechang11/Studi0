@@ -1412,6 +1412,29 @@ def _caption_scene(staged):
     return open(hits[-1], encoding="utf-8", errors="replace").read().strip() if hits else ""
 
 
+# what the prose may call a thing the caption calls otherwise
+_SYN = {
+    "shrine": ("temple", "building", "structure"), "temple": ("shrine", "building"),
+    "cedar": ("tree", "pine", "forest"), "cedars": ("tree", "pine", "forest"),
+    "trunk": ("tree", "forest"), "pine": ("tree", "forest"), "willow": ("tree",),
+    "moss": ("vegetation", "grass", "stone"), "quay": ("dock", "pier", "harbour", "harbor", "wharf"),
+    "harbour": ("harbor", "dock", "boat", "pier"), "harbor": ("harbour", "dock", "boat", "pier"),
+    "tarmac": ("asphalt", "road", "street"), "asphalt": ("road", "street", "tarmac"),
+    "puddle": ("water", "rain", "wet", "reflection"), "reflection": ("water", "wet", "puddle"),
+    "neon": ("sign", "light"), "sign": ("signage", "neon", "text"), "shop": ("store", "storefront"),
+    "car": ("vehicle", "traffic"), "vehicle": ("car", "traffic"), "traffic": ("car", "vehicle"),
+    "lamp": ("light", "lantern", "streetlight"), "lantern": ("lamp", "light"),
+    "river": ("water", "stream", "canal"), "canal": ("water", "river"), "stream": ("water", "river"),
+    "arch": ("bridge",), "bridge": ("arch", "footbridge"), "quayside": ("dock", "harbour"),
+    "boat": ("ship", "vessel", "hull"), "ship": ("boat", "vessel"), "mist": ("fog", "haze"),
+    "fog": ("mist", "haze"), "rain": ("wet", "water", "storm"), "bank": ("shore", "grass", "river"),
+    "stone": ("rock", "brick", "masonry"), "iron": ("metal", "steel"), "steel": ("metal", "iron"),
+    "wind": ("air",), "letter": ("paper", "envelope"), "envelope": ("paper", "letter"),
+    "person": ("man", "woman", "people", "figure"), "woman": ("person", "people", "figure"),
+    "man": ("person", "people", "figure"),
+}
+
+
 def _content_words(text):
     import re
     out = []
@@ -1455,6 +1478,9 @@ def _anchor_check_job(jid, fid, shid):
             if s in seen or s in dup:
                 continue
             if any(s[:5] == c[:5] for c in seen if len(c) >= 5):
+                continue
+            syn = _SYN.get(w, ()) + _SYN.get(s, ())
+            if any(_stem(x) in seen or x in seen for x in syn):
                 continue
             dup.add(s)
             missing.append(w)

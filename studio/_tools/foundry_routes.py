@@ -320,6 +320,92 @@ def _is_full_length(key):
     return any(key.startswith(k) or key == k for k in FULL_LENGTH_KEYS)
 
 
+def _fullbody_ok(path):
+    """-> (ok, detail) via pack_qc's truncation detector; ok when unsure."""
+    try:
+        sys.path.insert(0, TOOLS) if TOOLS not in sys.path else None
+        import pack_qc
+        trunc, detail = pack_qc._truncated(path)
+        if trunc is None:
+            return True, detail
+        return (not trunc), detail
+    except Exception as e:
+        return True, "qc unavailable: %s" % str(e)[:60]
+
+
+FAR_FRAMING = ("photographed from far away, the whole person small in the middle of "
+               "the frame with empty space above the head and the floor visible under "
+               "both shoes, wide-angle full-length shot")
+
+
+def _render_full_length(a, prompt, dest, jid, seeds=(21, 22, 23, 24)):
+    """Render a must-be-whole figure and re-roll while the subject runs off the
+    bottom of the frame. Two seeds on the prompt as written, then two with a
+    far framing sentence - a composition prior does not move for a seed, it
+    moves for words. The last attempt stands whatever it shows."""
+    for i, seed in enumerate(seeds):
+        p = prompt if i < 2 else "%s, %s" % (FAR_FRAMING, prompt)
+        _render_direct(a, p, dest, seed=seed, full_length=True)
+        ok, detail = _fullbody_ok(dest)
+        if ok:
+            if i:
+                _log(jid, "full length on seed %d%s (%s)"
+                     % (seed, " with far framing" if i >= 2 else "", detail))
+            return True
+        _log(jid, "cropped on seed %d%s (%s) - re-rolling"
+             % (seed, " with far framing" if i >= 2 else "", detail))
+    _log(jid, "still cropped after %d attempts - keeping the last" % len(seeds))
+    return False
+
+
+def _prop_ok(path):
+    """One whole object inside the frame? -> (ok, detail), from the segmenter's
+    mask: no edge contact, one contiguous horizontal run."""
+    try:
+        sys.path.insert(0, TOOLS) if TOOLS not in sys.path else None
+        import pack_qc
+        alpha = pack_qc._subject_alpha(path)
+        if alpha is None:
+            return True, "no segmenter"
+        a = alpha.resize((160, int(160 * alpha.size[1] / alpha.size[0])))
+        w, h = a.size
+        px = a.load()
+        cols = [any(px[x, y] > 40 for y in range(h)) for x in range(w)]
+        rows = [any(px[x, y] > 40 for x in range(w)) for y in range(h)]
+        if not any(cols):
+            return False, "nothing segmented"
+        x0, x1 = cols.index(True), w - 1 - cols[::-1].index(True)
+        y0, y1 = rows.index(True), h - 1 - rows[::-1].index(True)
+        edge = min(x0, w - 1 - x1, y0, h - 1 - y1) / float(w)
+        # gaps inside the bbox: a second object shows as a run of empty columns
+        gap, best = 0, 0
+        for c in cols[x0:x1 + 1]:
+            gap = gap + 1 if not c else 0
+            best = max(best, gap)
+        detail = "edge=%.3f gap=%.2f" % (edge, best / float(w))
+        return (edge >= 0.02 and best / float(w) <= 0.03), detail
+    except Exception as e:
+        return True, "qc unavailable: %s" % str(e)[:60]
+
+
+def _render_prop_hero(a, prompt, dest, jid, seeds=(41, 42, 43, 44)):
+    """A prop's hero view must be one whole object: re-roll while it is not,
+    saying 'a single' louder on the later tries."""
+    for i, seed in enumerate(seeds):
+        p = prompt if i < 2 else ("exactly one single %s, the whole object centred with "
+                                  "empty space around it, nothing else in the picture"
+                                  % prompt)
+        _render_direct(a, p, dest, seed=seed, wide=True)
+        ok, detail = _prop_ok(dest)
+        if ok:
+            if i:
+                _log(jid, "prop whole on seed %d (%s)" % (seed, detail))
+            return True
+        _log(jid, "prop not one whole object on seed %d (%s) - re-rolling" % (seed, detail))
+    _log(jid, "prop still not clean after %d attempts - keeping the last" % len(seeds))
+    return False
+
+
 def _render_direct(a, prompt, dest, seed, wide=False, full_length=False):
     """One image in the asset's style: qwen for everything except anime, which goes
     through animagine so the whole pack shares the cel prior."""
@@ -430,12 +516,20 @@ def _seeds_job(jid, atype, aid):
                                  "%s, %s" % (a["compiled"]["tags"], prompt))
                         if _is_full_length(key):
                             drawn = "full body, cowboy shot off, " + drawn
-                        _render_direct(a, drawn, dest, seed=21,
-                                       full_length=_is_full_length(key))
+                        if key == "base_fullbody":
+                            _render_full_length(a, drawn, dest, jid)
+                        else:
+                            _render_direct(a, drawn, dest, seed=21,
+                                           full_length=_is_full_length(key))
                     else:
-                        _render_direct(a, "%s, %s" % (a["compiled"]["clause"],
-                                                      prompt), dest, seed=21,
-                                       full_length=_is_full_length(key))
+                        if key == "base_fullbody":
+                            _render_full_length(
+                                a, "%s, %s" % (a["compiled"]["clause"], prompt),
+                                dest, jid)
+                        else:
+                            _render_direct(a, "%s, %s" % (a["compiled"]["clause"],
+                                                          prompt), dest, seed=21,
+                                           full_length=_is_full_length(key))
                 else:
                     if st["kf_engine"] == "animagine":
                         # a drawn identity turns through its own IPAdapter, not the LoRA
@@ -460,8 +554,11 @@ def _seeds_job(jid, atype, aid):
                     _render_direct(a, prompt, dest, seed=31, wide=True)
             else:
                 a["_ipa_ref"] = None
-                _render_direct(a, prompt, dest, seed=41,
-                               wide=(atype == "prop"))
+                if atype == "prop" and key == "hero":
+                    _render_prop_hero(a, prompt, dest, jid)
+                else:
+                    _render_direct(a, prompt, dest, seed=41,
+                                   wide=(atype == "prop"))
             a2 = FY.load_asset(atype, aid)
             a2["images"][key] = key + ".png"
             FY.save_asset(a2)
