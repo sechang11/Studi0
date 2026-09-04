@@ -425,7 +425,7 @@ function renderRight(){
   if(TAB==="review"){
     h+=TREE?`<div class="row" style="gap:10px;align-items:center;margin-bottom:10px">
       <button class="primary" onclick="makeAll()" style="font-size:15px;padding:8px 16px">Make every missing shot, then assemble</button>
-      <span class="hint">runs "Make this shot" on every shot that has no picked take, in order, then assembles the film with its music. Come back in a few minutes per shot.</span></div>`:"";
+      <span class="hint">runs "Make this shot" on every shot that has no picked take, in order, then assembles the film with its music. Count five to ten minutes a shot, retries included - a seven-shot scene is about an hour.</span></div>`:"";
     h+=TREE?reviewPanel()+'<div id="triage_box" class="hint" style="margin-top:10px">triage…</div>':"";
     if(TREE) setTimeout(loadTriage,0);
   }
