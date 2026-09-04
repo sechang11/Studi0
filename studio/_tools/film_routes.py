@@ -1441,15 +1441,21 @@ def _compose_mod():
 
 
 def _compose_anchor_job(jid, fid, shid, char_id, place_id, plate, view,
-                        stand, cx, props=None):
+                        stand, cx, props=None, framing=None):
     try:
         CM = _compose_mod()
         _log(jid, "composing %s into %s%s" % (
             char_id, place_id,
             (" with " + ", ".join(p.get("id") or p.get("character") for p in props))
             if props else ""))
-        out, plate_p = CM.compose(char_id, place_id, plate, view, "full", cx,
-                                  stand=stand, quiet=True, props=props or None)
+        if framing == "close":
+            if props:
+                _log(jid, "a close-up holds one face; the second layer is left out of this shot")
+            out, plate_p = CM.compose_close(char_id, place_id, plate, "base_portrait", cx,
+                                            quiet=True, stand=stand if stand and stand > 0.15 else 0.22)
+        else:
+            out, plate_p = CM.compose(char_id, place_id, plate, view, "full", cx,
+                                      stand=stand, quiet=True, props=props or None)
         l, r = CM.fidelity(plate_p, out)
         _log(jid, "plate fidelity L=%.4f R=%.4f" % (l, r))
         f = F.load(fid)
@@ -1468,7 +1474,7 @@ def _compose_anchor_job(jid, fid, shid, char_id, place_id, plate, view,
                 stand, cx = recipe["stand"], recipe["cx"]
         except Exception:
             pass
-        sh["anchor_source"] = {"character": char_id, "place": place_id,
+        sh["anchor_source"] = {"character": char_id, "framing": framing or "full", "place": place_id,
                                "stand": stand, "cx": cx, "view": view,
                                "plate": plate_p, "props": props or []}
         f.save()
@@ -1488,7 +1494,8 @@ def compose_anchor(data):
               data["place"], data.get("plate") or None,
               data.get("view") or "turn_front",
               float(data.get("stand", 0.35)), float(data.get("cx", 0.42)),
-              [p for p in (data.get("props") or []) if p.get("id") or p.get("character")]),
+              [p for p in (data.get("props") or []) if p.get("id") or p.get("character")],
+              data.get("framing") or None),
         daemon=True).start()
     return {"job": jid}, 200
 
@@ -1631,7 +1638,11 @@ SCENE_ASK = (
     "of day, light sources, signs, and any people or animals. Be literal and complete. "
     "Comma-separated nouns and short noun phrases only, no sentences, no apologies.")
 
-_VERBISH = set("""falls fall hammers hammer comes come moving moves move drifts drift passes
+_VERBISH = set("""listening listens listen watching watches watch waiting waits wait thinking thinks
+think staring stares stare gazing gazes gaze hearing hears hear remembering remembers remember
+hesitating hesitates hesitate breathing breathes breathe smiling smiles smile frowning frowns frown
+talking talks talk whispering whispers whisper wondering wonders wonder noticing notices notice
+falls fall hammers hammer comes come moving moves move drifts drift passes
 pass trembling tremble rocking rock spreads spread glittering glitter lapping lap thins thin
 softens soften turns turn walks walk reads read unfolds unfold crouches crouch picks pick
 running runs run standing stands stand sways sway flickers flicker rises rise sits sit lies
@@ -2027,7 +2038,7 @@ def _make_job(jid, fid, shid, seconds=None, seed=0, variants=1):
         # 3 animate a pose change, or render
         motion = (b.get("motion") or "").strip()
         done = False
-        if motion in IN_PLACE and sh.get("anchor_source"):
+        if motion in IN_PLACE and sh.get("anchor_source") and (sh.get("anchor_source") or {}).get("framing") != "close":
             end = F.motion_option("action", motion).get("end") or ""
             change = ("the subject " + end) if end else (b.get("action") or "")
             secs = min(dur, 8.0)
@@ -2436,7 +2447,8 @@ def _build_job(jid, data):
                 sub = _job("compose", film=fid, shot=shid)
                 _compose_anchor_job(sub, fid, shid, cid0, place, plate or None,
                                     "turn_front_three_quarter" if layers else "turn_front",
-                                    FRAMING_STAND[fr], 0.38 if layers else 0.45, layers or None)
+                                    FRAMING_STAND[fr], 0.38 if layers else 0.45, layers or None,
+                                    framing=fr)
                 with _LOCK:
                     err = JOBS.get(sub, {}).get("error")
                 if err:

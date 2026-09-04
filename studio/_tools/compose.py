@@ -737,6 +737,129 @@ def compose(char_id, place_id, plate_key=None, view="turn_front",
     return out_p, plate_p
 
 
+def compose_close(char_id, place_id, plate_key=None, view="base_portrait", cx=0.45,
+                  light=-0.35, seed=7, tag=None, quiet=False, stand=0.22,
+                  head_room=0.04, fill=1.08, window_frac=0.42):
+    """A close-up: head and shoulders large in the frame, the place soft behind.
+
+    The camera looks where a person at `stand` would stand (depth pass), takes a
+    window of the plate `window_frac` of its height there and scales it up; the
+    portrait view is cut out, scaled so it fills `fill` of the frame height with
+    `head_room` above the head, relit by the plate's light, re-cut, and laid on
+    the untouched window. Returns (final_path, window_plate_path)."""
+    from PIL import Image
+    cdir = os.path.join(CHARS, char_id)
+    pdir = os.path.join(PLACES, place_id)
+    src = os.path.join(cdir, view + ".png")
+    if not os.path.isfile(src):
+        view = "turn_front"
+        src = os.path.join(cdir, view + ".png")
+    if not os.path.isfile(src):
+        raise SystemExit("no such view: %s" % src)
+    plates = sorted(f for f in os.listdir(pdir)
+                    if f.endswith(".png") and not f.endswith("_depth.png"))
+    if plate_key:
+        pf = plate_key if plate_key.endswith(".png") else plate_key + ".png"
+    else:
+        pf = next((p for p in plates if p.endswith("_wide.png")), plates[0])
+    plate_p = os.path.join(pdir, pf)
+    ch = json.load(open(os.path.join(cdir, "asset.json"), encoding="utf-8"))
+    pl = json.load(open(os.path.join(pdir, "asset.json"), encoding="utf-8"))
+    clause = (ch.get("compiled") or {}).get("clause", "")
+    desc = (pl.get("compiled") or {}).get("description", "")
+
+    def say(*a):
+        if not quiet:
+            print(*a, flush=True)
+
+    os.makedirs(OUT_DIR, exist_ok=True)
+    tag = tag or "%s__%s__close" % (char_id, place_id)
+    work = os.path.join(OUT_DIR, tag)
+    os.makedirs(work, exist_ok=True)
+    plate = Image.open(plate_p).convert("RGB")
+    W, H = plate.size
+
+    # 0 where the camera looks: the head of a person standing at `stand`
+    try:
+        dpath = depth_for_plate(plate_p)
+        y_feet, th, y_h = place_by_depth(plate, dpath, stand, cx)
+        head_y = y_feet - th
+    except Exception as e:
+        say("  0 depth unavailable (%s) - looking at the upper middle" % str(e)[:60])
+        head_y = int(H * 0.30)
+    win_h = max(64, int(H * window_frac))
+    win_w = max(64, int(win_h * W / H))
+    top = max(0, min(H - win_h, head_y - int(win_h * 0.42)))
+    left = max(0, min(W - win_w, int(W * cx) - win_w // 2))
+    window = plate.crop((left, top, left + win_w, top + win_h)).resize((W, H), Image.LANCZOS)
+    win_p = os.path.join(work, "00_plate_close.png")
+    window.save(win_p)
+    say("  0 window %dx%d at (%d,%d), %.1fx" % (win_w, win_h, left, top, W / float(win_w)))
+
+    # 1 cut the portrait and place it: head room above, the chest cut by the frame
+    say("  1 cut")
+    cut_p = cutout(src, os.path.join(work, "01_cut.png"), tag="c" + str(seed))
+    cut = _trim(Image.open(cut_p).convert("RGBA"))
+    h2 = max(1, int(H * fill))
+    w2 = max(1, int(cut.width * h2 / float(cut.height)))
+    cut = cut.resize((w2, h2), Image.LANCZOS)
+    x, y = int(W * cx) - w2 // 2, int(H * head_room)
+    src_clip = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    src_clip.paste(cut, (x, y), cut)
+    rough = window.copy()
+    rough.paste(cut, (x, y), cut)
+    rough_p = os.path.join(work, "02_paste.png")
+    rough.save(rough_p)
+
+    # 2 relight - the face is large, so the prompt holds the framing hard
+    say("  2 relight")
+    rel_ref = stage(rough_p, "compose_rough.png")
+    plate_ref = stage(win_p, "compose_plate.png")
+    style = ch.get("style", "")
+    anime_w = 0.6 if style in ("anime", "cartoon") else 0.0
+    look = (ch.get("compiled") or {}).get("look", "") or style
+    relit_p = qwen_edit(
+        rel_ref, plate_ref,
+        "Keep the framing exactly as it is: a close-up, head and shoulders, the "
+        "face large in the frame. Do not zoom out, do not show more of the body, "
+        "do not reframe, do not crop. Relight only the person in the first image "
+        "so she belongs in this location: the same colour temperature and "
+        "direction of light as the scene behind her, light falling on her face "
+        "from the scene's own sources. Do not change her face, her hair, her "
+        "expression or her clothing. Do not move her. Do not change the "
+        "background. %s. The location is %s. The whole image stays %s."
+        % (clause, desc, look),
+        os.path.join(work, "03_relit.png"), seed=seed, anime=anime_w, w=W, h=H)
+
+    # 3 take only her back out; proportion decides whether the relight held
+    say("  3 re-cut")
+    relit_cut_p = cutout(relit_p, os.path.join(work, "04_relit_cut.png"), tag="r" + str(seed))
+    rc = Image.open(relit_cut_p).convert("RGBA")
+    if rc.size != (W, H):
+        rc = rc.resize((W, H), Image.LANCZOS)
+    a_src, a_rel = _aspect_of(src_clip), _aspect_of(rc)
+    drift = abs(a_rel - a_src) / a_src if a_src else 1.0
+    if drift > 0.25:
+        say("  ! relight refused: shape %.2f -> %.2f (%.0f%% drift). Using the source "
+            "cutout tinted to the plate instead - the light will be flat." % (a_src, a_rel, drift * 100))
+        rc = tint_to(src_clip, window)
+    else:
+        say("  . relight held (shape drift %.0f%%)" % (drift * 100))
+
+    # 4 onto the window that was never touched; no shadow - the feet are out of frame
+    say("  4 paste")
+    final = window.copy()
+    final.paste(rc, (0, 0), rc)
+    out_p = os.path.join(work, "final.png")
+    final.save(out_p)
+    json.dump({"character": char_id, "view": view, "place": place_id, "plate": pf,
+               "framing": "close", "cx": cx, "light": light, "seed": seed, "stand": stand,
+               "window": [left, top, win_w, win_h], "fill": fill, "head_room": head_room,
+               "relight_drift": round(drift, 3)},
+              open(os.path.join(work, "recipe.json"), "w"), indent=1)
+    return out_p, win_p
+
+
 def fidelity(plate_p, final_p):
     """How much of the plate survived. The number this whole shape exists for."""
     from PIL import Image
