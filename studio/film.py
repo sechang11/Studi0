@@ -86,7 +86,31 @@ TRANSITIONS_OUT = ["cut", "fade", "dissolve", "dip to black"]   # at assembly
 CLOSE_ANGLES = {"close-up", "tight close-up", "extreme macro shot"}
 
 # ── engine envelopes, all measured ──────────────────────────────────────────────────
-LTX_SAFE = [(0.9, 30), (1.2, 20), (1.5, 12), (2.0, 8)]   # (max MP, max seconds); 1.0x28 died in VAE decode - 0.9/30 is the MEASURED cell
+LTX_SAFE = [(0.9, 30), (1.2, 20), (1.5, 12), (2.0, 8)]
+# A resolution target is a megapixel count, and the envelope decides how long a
+# shot at that count may run. "auto" is the old behaviour: the biggest the
+# duration permits. Everything else is a stated preference the compiler honours
+# where it can and explains where it cannot.
+RESOLUTIONS = {
+    "auto":  {"mp": None, "label": "auto - biggest the duration allows"},
+    "720p":  {"mp": 0.9,  "label": "720p - 0.9 MP, shots to 30s"},
+    "1080p": {"mp": 1.5,  "label": "1080p - 1.5 MP, shots to 12s"},
+    "max":   {"mp": 2.0,  "label": "max - 2.0 MP, shots to 8s"},
+}
+
+
+def max_seconds_at(mp):
+    """The longest shot the envelope permits at this megapixel count."""
+    caps = [s for m, s in LTX_SAFE if m >= mp]
+    return max(caps) if caps else LTX_SAFE[-1][1]
+
+
+def best_mp_for(secs):
+    mp = LTX_SAFE[0][0]
+    for cap_mp, cap_s in LTX_SAFE:
+        if secs <= cap_s:
+            mp = cap_mp
+    return mp   # (max MP, max seconds); 1.0x28 died in VAE decode - 0.9/30 is the MEASURED cell
 H3_MAX_FRAMES = 209                                       # 8.7s; the kernel OOMs past it
 WAN_FRAMES, WAN_FPS = 81, 16                              # ~5s, silent
 
@@ -137,7 +161,7 @@ def list_films():
     return out
 
 
-def new_film(title, look="photoreal"):
+def new_film(title, look="photoreal", resolution="auto", deliver="native"):
     fid = _slug(title)
     d = os.path.join(FILMS, fid)
     if os.path.exists(os.path.join(d, "film.json")):
@@ -149,6 +173,8 @@ def new_film(title, look="photoreal"):
         "look": look,                       # photoreal | anime
         "look_clause": LOOK_PHOTO if look == "photoreal" else LOOK_ANIME,
         "grade": "", "negative": "", "fps": 24, "logline": "",
+        "resolution": resolution if resolution in RESOLUTIONS else "auto",
+        "deliver": deliver,                  # native | 1080p | 4k - upscale at assembly
         "cast": {},                          # id -> {name, clause, short, sheet, ipa, voice, voice_desc}
         "scenes": [], "shots": {},
     })
@@ -272,6 +298,11 @@ class Film(object):
         src = (self.shot(shid) or {}).get("anchor_source")
         if src:
             out["anchor_source"] = src
+        # film-wide delivery choices: not in the context table because a shot
+        # never overrides them, but the compiler needs them to pick a size
+        for k in ("resolution", "deliver"):
+            if self.data.get(k):
+                out[k] = self.data[k]
         return out
 
 
@@ -547,10 +578,24 @@ def _compile_ltx(flat):
                         % LTX_SAFE[0][1])
         secs = LTX_SAFE[0][1]
     mp = LTX_SAFE[0][0]
-    for cap_mp, cap_s in LTX_SAFE:
-        if secs <= cap_s:
-            mp = cap_mp
-    notes.append("%.1f MP, %ds - inside the measured envelope" % (mp, secs))
+    mp = best_mp_for(secs)
+    want = (flat.get("resolution") or "auto")
+    want_mp = (RESOLUTIONS.get(want) or RESOLUTIONS["auto"])["mp"]
+    if want_mp is None:
+        notes.append("%.1f MP, %ds - inside the measured envelope" % (mp, secs))
+    elif want_mp <= mp:
+        # the duration permits at least what was asked for
+        mp = want_mp
+        notes.append("%.1f MP, %ds - the film's %s target, inside the envelope"
+                     % (mp, secs, want))
+    else:
+        warnings.append(
+            "resolution: the film asks for %s (%.1f MP) but a %ds shot only fits "
+            "%.1f MP in the measured envelope. It renders at %.1f MP; to get %s, "
+            "cut this shot to %ds or less"
+            % (want, want_mp, secs, mp, mp, want, max_seconds_at(want_mp)))
+        notes.append("%.1f MP, %ds - envelope-limited below the %s target"
+                     % (mp, secs, want))
 
     neg = ", ".join(x for x in [LTX_NEG, neg_default, flat.get("negative") or "",
                                 ("person, model, hands, arms, face, crowd, animal, cat, "
@@ -661,6 +706,72 @@ def keyframe_plan(film, shid):
         return {"mode": "generate", "workflow": wf, "ipa": ipa,
                 "prompt": sh.get("keyframe_prompt") or "", "present": present}
     return {"mode": "scene", "path": sc.get("anchor") or ""}
+
+
+# ── triage: what this box can make, and what wants outside help ─────────────────────
+
+def triage_shot(film, shid):
+    """-> {"verdict": local | trade-off | api, "reasons": [...]}, from the measured
+    envelope. The reasons are the point; the verdict is a summary of them."""
+    sh = film.shot(shid)
+    flat = film.flat(shid)
+    beats = sh.get("beats") or []
+    secs = float(sh.get("duration") or 6)
+    cast_here = {b.get("subject") for b in beats if b.get("subject")} & \
+        set((film.data.get("cast") or {}).keys())
+    reasons, worst = [], "local"
+
+    def bump(level, why):
+        nonlocal worst
+        reasons.append(why)
+        order = ["local", "trade-off", "api"]
+        if order.index(level) > order.index(worst):
+            worst = level
+
+    if secs > LTX_SAFE[0][1]:
+        bump("api", "%.0fs in one shot - the local envelope stops at %ds. Split "
+                    "it, or this is an API shot" % (secs, LTX_SAFE[0][1]))
+    want = film.data.get("resolution") or "auto"
+    want_mp = (RESOLUTIONS.get(want) or RESOLUTIONS["auto"])["mp"]
+    if want_mp and want_mp > best_mp_for(secs):
+        bump("trade-off", "wants %s but %.0fs only fits %.1f MP here - renders "
+                          "softer, or cut to %ds" % (want, secs,
+                                                     best_mp_for(secs),
+                                                     max_seconds_at(want_mp)))
+    if film.data.get("deliver") == "4k":
+        bump("trade-off", "4K delivery is an upscale of a %.1f MP render, not "
+                          "native 4K - fine for many shots, visible on faces "
+                          "in close-up" % best_mp_for(secs))
+    if len(cast_here) > 2:
+        bump("api", "%d identities in one frame - local holds one reliably, "
+                    "two with the two-character graph, not %d"
+             % (len(cast_here), len(cast_here)))
+    anc = str(sh.get("anchor") or "")
+    if len(beats) > 1 and cast_here and not sh.get("anchor_source"):
+        bump("trade-off", "multi-beat with a character and no composed anchor - "
+                          "the face will not survive the cut. Compose the "
+                          "anchor, or split into one-beat shots")
+    if any((b.get("move") or "static") not in ("static",) for b in beats):
+        bump("trade-off", "a camera move is requested - on LTX this is advisory, "
+                          "the engine keeps its own prior. Pin the shot on H3 "
+                          "if the move matters")
+    if flat.get("look") == "anime" and any(
+            (b.get("dialogue") or {}).get("line") for b in beats):
+        bump("trade-off", "anime dialogue - the voice is generated but the drawn "
+                          "mouth stays shut; play the line on a cutaway")
+    if not reasons:
+        reasons.append("inside every measured limit")
+    return {"verdict": worst, "reasons": reasons, "seconds": secs,
+            "mp": best_mp_for(secs)}
+
+
+def triage_film(film):
+    out = {"shots": {}, "counts": {"local": 0, "trade-off": 0, "api": 0}}
+    for sh in film.ordered_shots():
+        tr = triage_shot(film, sh["id"])
+        out["shots"][sh["id"]] = tr
+        out["counts"][tr["verdict"]] += 1
+    return out
 
 
 # ── selftest ────────────────────────────────────────────────────────────────────────

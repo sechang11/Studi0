@@ -334,7 +334,10 @@ function renderRight(){
   if(TAB==="context") h+=SHOT&&DETAIL?contextPanel():'<div class="hint" style="margin-top:10px">select a shot</div>';
   if(TAB==="scene") h+=SCENE_SEL?sceneForm():'<div class="hint" style="margin-top:10px">select a scene</div>';
   if(TAB==="film") h+=TREE?filmForm():"";
-  if(TAB==="review") h+=TREE?reviewPanel():"";
+  if(TAB==="review"){
+    h+=TREE?reviewPanel()+'<div id="triage_box" class="hint" style="margin-top:10px">triage…</div>':"";
+    if(TREE) setTimeout(loadTriage,0);
+  }
   $("#right").innerHTML=h;
 }
 const opt=(list,cur)=>list.map(v=>`<option ${v===cur?"selected":""}>${v}</option>`).join("");
@@ -575,7 +578,13 @@ function filmForm(){
     <h2>Film</h2>
     <label>title</label><input id="f_title" value="${esc(TREE.title)}" style="width:100%">
     <label>logline</label><textarea id="f_logline" rows="2">${esc(TREE.logline||"")}</textarea>
-    <div class="row"><div><label>look</label><select id="f_look">${opt(["photoreal","anime"],TREE.look)}</select></div></div>
+    <div class="row" style="gap:8px">
+      <div><label>look</label><select id="f_look">${opt(["photoreal","anime"],TREE.look)}</select></div>
+      <div><label>resolution</label><select id="f_res">${opt(["auto","720p","1080p","max"],TREE.resolution||"auto")}</select></div>
+    </div>
+    <div class="hint">resolution is bound by shot length on this box: <b>max</b> (2.0 MP) holds to 8s,
+      <b>1080p</b> (1.5 MP) to 12s, <b>720p</b> (0.9 MP) to 30s; <b>auto</b> takes the biggest each
+      shot's length allows. A shot too long for the target still renders, softer, and says so.</div>
     <label>look clause (the style sentence every prompt carries)</label>
     <textarea id="f_lookclause" rows="2">${esc(TREE.look_clause||"")}</textarea>
     <label>grade</label><input id="f_grade" value="${esc(TREE.grade||"")}" style="width:100%">
@@ -601,9 +610,31 @@ function readCast(){
   });
   return out;
 }
+async function loadTriage(){
+  // what this box can make as asked, what it makes with a stated compromise,
+  // and what wants an API - per shot, in words
+  const box=document.getElementById("triage_box"); if(!box) return;
+  try{
+    const t=await api("/triage",{film:FID});
+    const c=t.counts||{};
+    let out=`<div style="margin-top:4px"><b>what this box can make</b> &nbsp;
+      <span style="color:var(--good)">${c.local||0} local</span> &middot;
+      <span style="color:var(--warn,#d9a441)">${c["trade-off"]||0} trade-off</span> &middot;
+      <span style="color:var(--bad,#e05a5a)">${c.api||0} api</span></div>`;
+    const flagged=Object.entries(t.shots||{}).filter(([,tr])=>tr.verdict!=="local");
+    if(!flagged.length) out+=`<div class="hint">every shot is inside the measured envelope</div>`;
+    for(const [id,tr] of flagged){
+      out+=`<div style="margin-top:6px"><span class="badge" onclick="selShot('${id}')" style="cursor:pointer">${id}</span>
+        <b style="color:${tr.verdict==="api"?"var(--bad,#e05a5a)":"var(--warn,#d9a441)"}">${tr.verdict}</b>
+        <ul class="hint" style="margin:2px 0 0 14px;padding:0">${tr.reasons.map(r=>`<li>${esc(r)}</li>`).join("")}</ul></div>`;
+    }
+    box.innerHTML=out;
+  }catch(e){ box.innerHTML=`<div class="hint">triage unavailable: ${esc(String(e))}</div>`; }
+}
 async function saveFilm(){
   await api("/edit",{film:FID,title:$("#f_title").value,logline:$("#f_logline").value,
     look:$("#f_look").value,look_clause:$("#f_lookclause").value,
+    resolution:$("#f_res").value,
     grade:$("#f_grade").value,negative:$("#f_neg").value,cast:readCast()});
   note("film saved"); openFilm(FID);
 }

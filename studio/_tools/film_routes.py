@@ -183,6 +183,8 @@ def tree(fid):
                                               "anchor_candidates")}
                       | {"shots": shots})
     return {"id": f.id, "title": f.data.get("title"), "look": f.data.get("look"),
+            "resolution": f.data.get("resolution", "auto"),
+            "deliver": f.data.get("deliver", "native"),
             "look_clause": f.data.get("look_clause"), "grade": f.data.get("grade"),
             "logline": f.data.get("logline"), "negative": f.data.get("negative"),
             "cast": f.data.get("cast"), "scenes": scenes,
@@ -277,13 +279,16 @@ def jobs_all():
 # ─── writes: structure ──────────────────────────────────────────────────────────────
 
 def new_film(data):
-    f = F.new_film(data["title"], look=data.get("look", "photoreal"))
+    f = F.new_film(data["title"], look=data.get("look", "photoreal"),
+                   resolution=data.get("resolution", "auto"),
+                   deliver=data.get("deliver", "native"))
     return {"ok": True, "id": f.id}, 200
 
 
 def edit_film(data):
     f = F.load(data["film"])
-    for k in ("title", "logline", "look", "look_clause", "grade", "negative"):
+    for k in ("title", "logline", "look", "look_clause", "grade", "negative",
+              "resolution", "deliver"):
         if k in data:
             f.data[k] = data[k]
     if "cast" in data:
@@ -292,6 +297,12 @@ def edit_film(data):
         f.data["look_clause"] = F.LOOK_ANIME
     f.save()
     return {"ok": True}, 200
+
+
+def triage(data):
+    """Per shot: local / trade-off / api, with the reasons in words. Read-only."""
+    f = F.load(data["film"])
+    return F.triage_film(f), 200
 
 
 def new_scene(data):
