@@ -2577,8 +2577,10 @@ def _build_job(jid, data):
             sh = f.shot(shid)
             promises = []
             if cast_ids:
-                promises.append({"title": "The people are these people", "rule": "%s%s, from their packs, are in the start picture; no one else."
-                                 % (cast_ids[0], (" and " + cast_ids[1]) if len(cast_ids) > 1 else ""),
+                two = len(cast_ids) > 1 and fr != "close"
+                promises.append({"title": "The people are these people", "rule": "%s%s, from their packs, are in the start picture; no one else.%s"
+                                 % (cast_ids[0], (" and " + cast_ids[1]) if two else "",
+                                    (" A close-up holds one face; %s is in the other framings." % cast_ids[1]) if (len(cast_ids) > 1 and fr == "close") else ""),
                                  "why": "identity comes from the composited anchor, not from the engine's prior",
                                  "check": "anchor contains anchor_shot_%s" % shid})
             else:
@@ -2586,7 +2588,8 @@ def _build_job(jid, data):
                                  "why": "an empty shot that grows a person is a different shot",
                                  "check": "qc is clean"})
             if place:
-                promises.append({"title": "The place is %s" % place, "rule": "The background is the %s plate %s and stays that place for the whole take."
+                promises.append({"title": "The place is %s" % place, "rule": ("The background is a window of the %s plate %s, soft behind the face, and stays that place for the whole take."
+                                 if fr == "close" else "The background is the %s plate %s and stays that place for the whole take.")
                                  % (place, plate or "wide"), "why": "words that name what the plate lacks make the engine rewrite it",
                                  "check": "qc is clean"})
             promises.append({"title": "Camera: %s" % camera, "rule": "The camera %s." % ("does not move" if camera in ("static", "pinned") else camera + "s"),
