@@ -159,7 +159,8 @@ async function results(){
       (d.takes||[]).map(t=>`<div class="take ${t.id===d.picked?"picked":""}">
         ${t.file?`<video src="/film/media/${FID}/${t.file}" poster="/film/media/${FID}/${t.poster||""}" controls muted preload="none"></video>`:""}
         <div class="body"><b>${esc(t.engine)}</b> <span class="hint">${esc(t.id)}</span>
-          ${(t.qc||[]).length?`<div class="qc">${t.qc.map(esc).join("<br>")}</div>`:`<div class="ok">no faults reported</div>`}
+          ${(()=>{const isInfo=n=>/^(ends closer|sound borrowed)/.test(n); const faults=(t.qc||[]).filter(n=>!isInfo(n)), info=(t.qc||[]).filter(isInfo);
+            return (faults.length?`<div class="qc">${faults.map(esc).join("<br>")}</div>`:`<div class="ok">no faults reported</div>`)+(info.length?`<div class="hint" style="font-size:11px;margin-top:3px">${info.map(esc).join("<br>")}</div>`:"");})()}
           <div class="row" style="margin-top:6px"><button class="small" onclick="pick('${sid}','${t.id}')">${t.id===d.picked?"picked":"pick this one"}</button></div>
         </div></div>`).join("")+`</div>`;
   }
