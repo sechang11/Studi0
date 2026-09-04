@@ -1446,3 +1446,13 @@ take's verdicts in plain words and a what-to-fix list. What still needs a
 person: the sentences (the neutral ones are placeholders that render), the
 picks when the eye disagrees, and the verify page's verdicts, which are how
 the next rules get written.
+
+**Information is not a fault, anywhere a person reads it.** The same hour's
+last fix ran through every surface: the film tree counts faults in
+`picked_qc` and information separately; the editor's take badge shows faults
+in red and information dim; what-to-fix lists faults first and marks the rest
+*(information)*; the builder's results do the same; and the spec checker's
+*qc is clean* fails on faults alone - a take that ended closer than it started,
+borrowed its soundtrack, or was warned before rendering that a word is not in
+its picture has kept every promise the picture makes. The builder's film, with
+twelve picked takes and their honest notes: *all invariants hold*.
