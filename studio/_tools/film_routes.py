@@ -1100,7 +1100,8 @@ def _inherit_qc(take):
 
 def _faults(take):
     """notes that count against a take; 'ends closer' is information, not a fault"""
-    return [n for n in (take.get("qc") or []) if not n.startswith("ends closer")]
+    return [n for n in (take.get("qc") or [])
+            if not n.startswith(("ends closer", "sound borrowed"))]
 
 
 def _cleanest(sh, takes):
@@ -2073,6 +2074,27 @@ def _make_job(jid, fid, shid, seconds=None, seed=0, variants=1):
         cast_ids = set((f.data.get("cast") or {}).keys())
         dur = float(seconds or sh.get("duration") or 6)
 
+        # 0 a shot nobody has written yet: a neutral sentence by framing, never the
+        # placeholder itself - the engine must not be asked to "describe the beat"
+        changed = False
+        for bt in beats:
+            act = (bt.get("action") or "").strip()
+            if act and "describe" not in act.lower():
+                continue
+            fr = (bt.get("framing") or "").lower()
+            if "close" in fr:
+                bt["action"] = "looks off, then back, a slow breath; the face held in the frame"
+            elif "two" in fr or " and " in act:
+                bt["action"] = "stand together, talking quietly, looking out at the place"
+            elif bt.get("subject"):
+                bt["action"] = "stands in the scene, weight shifting, looking out at it"
+            else:
+                bt["action"] = "the place as it is, alive"
+            changed = True
+        if changed:
+            f.save()
+            _log(jid, "the shot had no sentence yet; a neutral one was written in - edit it when you know the beat")
+
         # 1 the character into the scene
         if subject in cast_ids and not sh.get("anchor_source"):
             cid = _foundry_for(f, subject, FY)
@@ -2167,7 +2189,7 @@ def _make_job(jid, fid, shid, seconds=None, seed=0, variants=1):
             newest = takes[-1] if takes else None
             if newest and any(str(q).startswith(("scene drift", "the line may not", "people appeared", "audio is effectively SILENT")) for q in newest.get("qc") or []):
                 _log(jid, "the take has a fault (%s) - rendering once more on a new seed"
-                     % ("; ".join(newest.get("qc") or [])[:80]))
+                     % ("; ".join(_faults(newest))[:80]))
                 _render_take(jid, f, sh, "ltx", random.randint(1, 10 ** 9))
                 f = F.load(fid)
                 sh = f.shot(shid)

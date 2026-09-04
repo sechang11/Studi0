@@ -928,15 +928,39 @@
    "no_people": true,
    "enhance": true,
    "transition_out": "cut",
-   "takes": [],
-   "picked": "",
+   "takes": [
+    {
+     "id": "t546869908",
+     "engine": "ltx",
+     "seed": 837064091,
+     "created": "14:38",
+     "file": "takes/050/ltx_t546869908.mp4",
+     "poster": "takes/050/ltx_t546869908.png",
+     "strip": "takes/050/ltx_t546869908_strip.png",
+     "duration": 8.04,
+     "fps": 24,
+     "qc": [],
+     "drift": {
+      "lost": 0.11,
+      "missing": [
+       "bandstand",
+       "daylight"
+      ],
+      "kept": 16,
+      "last_caption": "Park, pavilion, benches, path, grass, trees, leaves, lamp posts, stone, metal, wood, sidewalk, lawn, ground, autumn, rain, overcast sky, daytime, light, shadows, foliage, parkway, grass clippings."
+     },
+     "warnings": [
+      "no ambience or sfx set - LTX generates the ambience the picture implies, and a shot with nothing that makes noise returns literal silence"
+     ],
+     "prompt": "A static wide establishing shot: the place as it is, alive, while what moves here moves: light; the light shifts and flickers across the scene, the frame completely empty of people and hands. Photoreal cinematic film still, 35mm, deep focus, high detail, colour photograph, filmic grade."
+    }
+   ],
+   "picked": "t546869908",
    "engine_notes": "",
    "anchor_check": {
     "caption": "Park, bandstand, benches, path, grass, trees, leaves, lamp posts, stone, metal, grass, lawn, foliage, ground, rain, autumn, daylight, shadows, light, lamps, parkway.",
-    "missing": [
-     "place"
-    ],
-    "when": 1788545886
+    "missing": [],
+    "when": 1788546869
    }
   },
   "060": {
@@ -970,8 +994,41 @@
    "no_people": false,
    "enhance": true,
    "transition_out": "cut",
-   "takes": [],
-   "picked": "",
+   "takes": [
+    {
+     "id": "t547166424",
+     "engine": "ltx",
+     "seed": 677546608,
+     "created": "14:43",
+     "file": "takes/060/ltx_t547166424.mp4",
+     "poster": "takes/060/ltx_t547166424.png",
+     "strip": "takes/060/ltx_t547166424_strip.png",
+     "duration": 6.04,
+     "fps": 24,
+     "qc": [
+      "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.34 left=0.00 right=0.00)"
+     ],
+     "drift": {
+      "lost": 0.41,
+      "missing": [
+       "bench",
+       "coat",
+       "daylight",
+       "parkway",
+       "path",
+       "rain",
+       "shoe"
+      ],
+      "kept": 10,
+      "last_caption": "Park, pavilion, pathway, woman, man, jacket, shirt, watch, pants, sweater, grass, trees, sky, building, stone, concrete, leaves, ground, light, autumn, day, clouds, shadows, clothing, person, foliage."
+     },
+     "warnings": [
+      "no ambience or sfx set - LTX generates the ambience the picture implies, and a shot with nothing that makes noise returns literal silence"
+     ],
+     "prompt": "A static medium two-shot: a tall, athletic woman, in their thirties, deep brown skin, an angular face with a sharp jaw, dark eyes, almond eyes, strong dark brows, black a long single braid, freckles across the nose, a calm, unreadable bearing, a field geologist in a weathered olive canvas jacket over a grey shirt, sleeves pushed up, a plain leather watch strap, and TOMAS stand in the scene - descr"
+    }
+   ],
+   "picked": "t547166424",
    "engine_notes": "",
    "anchor_source": {
     "character": "mara-okonjo",
@@ -993,7 +1050,7 @@
    "anchor_check": {
     "caption": "Park, pavilion, benches, path, trees, man, man, jacket, pants, shoes, coat, rain jacket, grass, ground, sky, clouds, leaves, rain, autumn, daylight, light, shadows, parkway.",
     "missing": [],
-    "when": 1788545934
+    "when": 1788547166
    }
   },
   "070": {
@@ -1027,8 +1084,46 @@
    "no_people": false,
    "enhance": true,
    "transition_out": "cut",
-   "takes": [],
-   "picked": "",
+   "takes": [
+    {
+     "id": "t547479723",
+     "engine": "ltx",
+     "seed": 429288927,
+     "created": "14:49",
+     "file": "takes/070/ltx_t547479723.mp4",
+     "poster": "takes/070/ltx_t547479723.png",
+     "strip": "takes/070/ltx_t547479723_strip.png",
+     "duration": 6.04,
+     "fps": 24,
+     "qc": [
+      "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.46 left=0.00 right=0.00)"
+     ],
+     "drift": {
+      "lost": 0.61,
+      "missing": [
+       "autumn",
+       "bandstand",
+       "bench",
+       "boot",
+       "build",
+       "ground",
+       "landscape",
+       "pant",
+       "parkway",
+       "path",
+       "pavement",
+       "structure"
+      ],
+      "kept": 9,
+      "last_caption": "Park, woman, jacket, shirt, braid, hair, face, skin, eyes, trees, grass, sky, foliage, light, outdoors, daytime, clothing, person."
+     },
+     "warnings": [
+      "no ambience or sfx set - LTX generates the ambience the picture implies, and a shot with nothing that makes noise returns literal silence"
+     ],
+     "prompt": "A static medium shot: a tall, athletic woman, in their thirties, deep brown skin, an angular face with a sharp jaw, dark eyes, almond eyes, strong dark brows, black a long single braid, freckles across the nose, a calm, unreadable bearing, a field geologist in a weathered olive canvas jacket over a grey shirt, sleeves pushed up, a plain leather watch strap, describe the beat, while the scene moves"
+    }
+   ],
+   "picked": "t547479723",
    "engine_notes": "",
    "anchor_source": {
     "character": "mara-okonjo",
@@ -1043,7 +1138,7 @@
    "anchor_check": {
     "caption": "Park, bandstand, bench, path, jacket, pants, shirt, watch, boots, grass, trees, leaves, sky, ground, pavement, foliage, light, autumn, day, park bench, parkway, buildings, structure, vegetation, weather, outdoor, landscape, person, woman.",
     "missing": [],
-    "when": 1788545984
+    "when": 1788547479
    }
   },
   "080": {
@@ -1077,8 +1172,86 @@
    "no_people": false,
    "enhance": true,
    "transition_out": "cut",
-   "takes": [],
-   "picked": "",
+   "takes": [
+    {
+     "id": "t547831063",
+     "engine": "ltx",
+     "seed": 51350416,
+     "created": "14:57",
+     "file": "takes/080/ltx_t547831063.mp4",
+     "poster": "takes/080/ltx_t547831063.png",
+     "strip": "takes/080/ltx_t547831063_strip.png",
+     "duration": 6.04,
+     "fps": 24,
+     "qc": [
+      "sound borrowed from take t547166424 of shot 060 - the render was silent",
+      "scene drift: the last frame has lost 67% of the start picture (bench, gras, ground, lamp, pant)",
+      "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.68 left=0.00 right=0.00)"
+     ],
+     "drift": {
+      "lost": 0.67,
+      "missing": [
+       "bench",
+       "gras",
+       "ground",
+       "lamp",
+       "pant",
+       "parkway",
+       "path",
+       "pavilion",
+       "rain",
+       "shadow",
+       "shoe",
+       "wetnes"
+      ],
+      "kept": 6,
+      "last_caption": "Here's a breakdown of the nouns present in the image, as requested:\n\nPark, man, person, jacket, sweater, beard, hair, face, smile, trees, branches, leaves, sky, clouds, light, outdoors, autumn, foliage, clothing, head, body."
+     },
+     "warnings": [
+      "no ambience or sfx set - LTX generates the ambience the picture implies, and a shot with nothing that makes noise returns literal silence"
+     ],
+     "prompt": "A static medium shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, describe the beat, while the scene moves behind them; the light shifts and flickers across the scene. Ph"
+    },
+    {
+     "id": "t548248461",
+     "engine": "ltx",
+     "seed": 860940948,
+     "created": "15:04",
+     "file": "takes/080/ltx_t548248461.mp4",
+     "poster": "takes/080/ltx_t548248461.png",
+     "strip": "takes/080/ltx_t548248461_strip.png",
+     "duration": 6.04,
+     "fps": 24,
+     "qc": [
+      "scene drift: the last frame has lost 72% of the start picture (autumn, bench, cloud, gras, lamp)",
+      "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.61 left=0.00 right=0.00)"
+     ],
+     "drift": {
+      "lost": 0.72,
+      "missing": [
+       "autumn",
+       "bench",
+       "cloud",
+       "gras",
+       "lamp",
+       "pant",
+       "parkway",
+       "path",
+       "pavilion",
+       "rain",
+       "shadow",
+       "shoe"
+      ],
+      "kept": 5,
+      "last_caption": "Park, man, person, beard, hair, jacket, sweater, hoodie, face, head, outdoors, nature, tree, foliage, leaves, branches, sky, light, sunshine, daytime, clothing, fabric, wool, cotton, yellow, gray, white, wood, ground."
+     },
+     "warnings": [
+      "no ambience or sfx set - LTX generates the ambience the picture implies, and a shot with nothing that makes noise returns literal silence"
+     ],
+     "prompt": "A static medium shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, describe the beat, while the scene moves behind them; the light shifts and flickers across the scene. Ph"
+    }
+   ],
+   "picked": "t548248461",
    "engine_notes": "",
    "anchor_source": {
     "character": "tomas-reyl",
@@ -1093,7 +1266,7 @@
    "anchor_check": {
     "caption": "Park, pavilion, path, benches, man, jacket, pants, shoes, grass, trees, leaves, sky, clouds, rain, wetness, autumn, day, light, shadows, lamp, parkway, ground, foliage.",
     "missing": [],
-    "when": 1788546040
+    "when": 1788547831
    }
   },
   "090": {
@@ -1127,8 +1300,81 @@
    "no_people": false,
    "enhance": true,
    "transition_out": "cut",
-   "takes": [],
-   "picked": "",
+   "takes": [
+    {
+     "id": "t548749539",
+     "engine": "ltx",
+     "seed": 923647800,
+     "created": "15:12",
+     "file": "takes/090/ltx_t548749539.mp4",
+     "poster": "takes/090/ltx_t548749539.png",
+     "strip": "takes/090/ltx_t548749539_strip.png",
+     "duration": 5.04,
+     "fps": 24,
+     "qc": [
+      "scene drift: the last frame has lost 69% of the start picture (braid, cotton, daytime, denim, foliage)",
+      "ends closer than it started - the person fills the frame edge at the end (top=0.54 bottom=0.95 left=0.00 right=0.11)"
+     ],
+     "drift": {
+      "lost": 0.69,
+      "missing": [
+       "braid",
+       "cotton",
+       "daytime",
+       "denim",
+       "foliage",
+       "gras",
+       "olive",
+       "park",
+       "ponytail",
+       "shadow",
+       "tree"
+      ],
+      "kept": 5,
+      "last_caption": "Here's a breakdown of the image's contents, listed as requested:\n\nPerson, woman, face, head, hair, eyebrows, eyes, nose, lips, skin, freckles, clothing, shirt, jacket, outdoors, close-up, portrait, digital art, rendering, studio lighting, artificial light."
+     },
+     "warnings": [
+      "no ambience or sfx set - LTX generates the ambience the picture implies, and a shot with nothing that makes noise returns literal silence"
+     ],
+     "prompt": "A static close-up: a tall, athletic woman, in their thirties, deep brown skin, an angular face with a sharp jaw, dark eyes, almond eyes, strong dark brows, black a long single braid, freckles across the nose, a calm, unreadable bearing, a field geologist in a weathered olive canvas jacket over a grey shirt, sleeves pushed up, a plain leather watch strap, describe the beat, while the place soft beh"
+    },
+    {
+     "id": "t549154286",
+     "engine": "ltx",
+     "seed": 40489850,
+     "created": "15:19",
+     "file": "takes/090/ltx_t549154286.mp4",
+     "poster": "takes/090/ltx_t549154286.png",
+     "strip": "takes/090/ltx_t549154286_strip.png",
+     "duration": 5.04,
+     "fps": 24,
+     "qc": [
+      "sound borrowed from take t547831063 of shot 080 - the render was too quiet (mean -44 dB)",
+      "ends closer than it started - the person fills the frame edge at the end (top=0.44 bottom=0.89 left=0.00 right=0.00)"
+     ],
+     "drift": {
+      "lost": 0.56,
+      "missing": [
+       "braid",
+       "cotton",
+       "daytime",
+       "denim",
+       "gras",
+       "olive",
+       "park",
+       "ponytail",
+       "shirt"
+      ],
+      "kept": 7,
+      "last_caption": "Here's a breakdown of the image\u2019s contents, listed as requested:\n\nPerson, woman, face, head, hair, eyes, nose, lips, skin, expression, clothing, jacket, outdoors, nature, forest, trees, foliage, branches, sky, daylight, sunlight, shadows, ground, dirt, texture, close-up, portrait."
+     },
+     "warnings": [
+      "no ambience or sfx set - LTX generates the ambience the picture implies, and a shot with nothing that makes noise returns literal silence"
+     ],
+     "prompt": "A static close-up: a tall, athletic woman, in their thirties, deep brown skin, an angular face with a sharp jaw, dark eyes, almond eyes, strong dark brows, black a long single braid, freckles across the nose, a calm, unreadable bearing, a field geologist in a weathered olive canvas jacket over a grey shirt, sleeves pushed up, a plain leather watch strap, describe the beat, while the place soft beh"
+    }
+   ],
+   "picked": "t549154286",
    "engine_notes": "",
    "anchor_source": {
     "character": "mara-okonjo",
@@ -1142,10 +1388,8 @@
    },
    "anchor_check": {
     "caption": "Park, woman, jacket, shirt, braid, watch, trees, foliage, grass, sky, light, shadows, outdoor, daytime, olive-green, cotton, denim, ponytail, head, face, person, woman, outdoors.",
-    "missing": [
-     "place"
-    ],
-    "when": 1788546088
+    "missing": [],
+    "when": 1788548749
    }
   },
   "100": {
@@ -1179,8 +1423,46 @@
    "no_people": false,
    "enhance": true,
    "transition_out": "cut",
-   "takes": [],
-   "picked": "",
+   "takes": [
+    {
+     "id": "t549648673",
+     "engine": "ltx",
+     "seed": 65201843,
+     "created": "15:27",
+     "file": "takes/100/ltx_t549648673.mp4",
+     "poster": "takes/100/ltx_t549648673.png",
+     "strip": "takes/100/ltx_t549648673_strip.png",
+     "duration": 5.04,
+     "fps": 24,
+     "qc": [
+      "ends closer than it started - the person fills the frame edge at the end (top=0.39 bottom=0.56 left=0.00 right=0.00)"
+     ],
+     "drift": {
+      "lost": 0.61,
+      "missing": [
+       "brick",
+       "build",
+       "cloth",
+       "coat",
+       "color",
+       "ground",
+       "hood",
+       "overcast",
+       "plant",
+       "stone",
+       "structure",
+       "tower"
+      ],
+      "kept": 9,
+      "last_caption": "Person, man, face, head, hair, beard, mustache, smile, teeth, eyes, skin, jacket, yellow material, collar, fur, outdoors, background, foliage, trees, branches, daylight, sunlight, sky"
+     },
+     "warnings": [
+      "no ambience or sfx set - LTX generates the ambience the picture implies, and a shot with nothing that makes noise returns literal silence"
+     ],
+     "prompt": "A static close-up: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, describe the beat, while the place soft behind them; the light shifts and flickers across the scene. Photor"
+    }
+   ],
+   "picked": "t549648673",
    "engine_notes": "",
    "anchor_source": {
     "character": "tomas-reyl",
@@ -1195,7 +1477,7 @@
    "anchor_check": {
     "caption": "Person, man, face, head, hair, beard, mustache, smile, jacket, zipper, hood, clothing, coat, grey hair, yellow color, background, place, outdoors, trees, foliage, branches, sky, weather, overcast, daylight, light, building, structure, tower, stone, brick, plants, leaves, ground.",
     "missing": [],
-    "when": 1788546137
+    "when": 1788549648
    }
   },
   "110": {
@@ -1229,16 +1511,99 @@
    "no_people": true,
    "enhance": true,
    "transition_out": "cut",
-   "takes": [],
-   "picked": "",
+   "takes": [
+    {
+     "id": "t550137222",
+     "engine": "ltx",
+     "seed": 335516705,
+     "created": "15:34",
+     "file": "takes/110/ltx_t550137222.mp4",
+     "poster": "takes/110/ltx_t550137222.png",
+     "strip": "takes/110/ltx_t550137222_strip.png",
+     "duration": 6.04,
+     "fps": 24,
+     "qc": [
+      "sound borrowed from take t549648673 of shot 100 - the render was too quiet (mean -52 dB)",
+      "people appeared in an empty shot (man, person)"
+     ],
+     "drift": {
+      "lost": 0.12,
+      "missing": [
+       "daytime",
+       "rain"
+      ],
+      "kept": 14,
+      "last_caption": "Park, bandstand, pavilion, bench, path, sidewalk, man, person, suit, jacket, trousers, shoes, bag, briefcase, grass, leaves, tree, trees, foliage, ground, pavement, stone, concrete, metal, wood, leather, autumn, daylight, overcast, clouds, sky, shadows, lamp, lamppost, light."
+     },
+     "warnings": [
+      "no ambience or sfx set - LTX generates the ambience the picture implies, and a shot with nothing that makes noise returns literal silence"
+     ],
+     "prompt": "A static wide shot: a close detail of the place, while what moves here moves: light; the light shifts and flickers across the scene, the frame completely empty of people and hands. Photoreal cinematic film still, 35mm, deep focus, high detail, colour photograph, filmic grade."
+    },
+    {
+     "id": "t550470161",
+     "engine": "ltx",
+     "seed": 264941021,
+     "created": "15:40",
+     "file": "takes/110/ltx_t550470161.mp4",
+     "poster": "takes/110/ltx_t550470161.png",
+     "strip": "takes/110/ltx_t550470161_strip.png",
+     "duration": 6.04,
+     "fps": 24,
+     "qc": [
+      "sound borrowed from take t549648673 of shot 100 - the render was too quiet (mean -50 dB)",
+      "people appeared in an empty shot (woman)"
+     ],
+     "drift": {
+      "lost": 0.25,
+      "missing": [
+       "bandstand",
+       "daytime",
+       "foliage",
+       "rain"
+      ],
+      "kept": 12,
+      "last_caption": "Park, pavilion, benches, woman, dog, trees, grass, path, leaves, stone, metal, wood, jacket, jeans, boots, bag, sky, clouds, autumn, daylight, shadows, lamp, pavement."
+     },
+     "warnings": [
+      "no ambience or sfx set - LTX generates the ambience the picture implies, and a shot with nothing that makes noise returns literal silence"
+     ],
+     "prompt": "A static wide shot: a close detail of the place, while what moves here moves: light; the light shifts and flickers across the scene, the frame completely empty of people and hands. Photoreal cinematic film still, 35mm, deep focus, high detail, colour photograph, filmic grade."
+    },
+    {
+     "id": "t550804812",
+     "engine": "cam",
+     "seed": 0,
+     "created": "15:42",
+     "file": "takes/110/cam_t550804812.mp4",
+     "poster": "takes/110/cam_t550804812.png",
+     "strip": "takes/110/cam_t550804812_strip.png",
+     "duration": 6.0,
+     "fps": 24,
+     "qc": [
+      "the plate itself, moving slowly - generation kept adding people"
+     ],
+     "drift": {
+      "lost": 0.12,
+      "missing": [
+       "daytime",
+       "rain"
+      ],
+      "kept": 14,
+      "last_caption": "Park, bandstand, benches, path, grass, trees, leaves, ground, stone, metal, wood, foliage, autumn, daylight, overcast sky, lamp, shadows, pavement."
+     },
+     "warnings": [],
+     "prompt": "camrig still_push {'seconds': 6.0, 'zoom_start': 1.0, 'zoom_end': 1.12, 'win_w': 1216, 'win_h': 832, 'cx': 608, 'cy': 416}"
+    }
+   ],
+   "picked": "t550804812",
    "engine_notes": "",
    "anchor_check": {
     "caption": "Park, bandstand, benches, path, trees, grass, leaves, stone, metal, wood, pavement, sky, rain, autumn, daytime, light, lamp, shadows, foliage.",
-    "missing": [
-     "place"
-    ],
-    "when": 1788546184
-   }
+    "missing": [],
+    "when": 1788550137
+   },
+   "cam": null
   },
   "120": {
    "id": "120",
