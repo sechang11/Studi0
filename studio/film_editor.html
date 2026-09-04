@@ -126,6 +126,11 @@ async function composeAnchor(){
       return [L]; })()});
   WATCH.add(j.job); note("composing the anchor: "+j.job);
 }
+async function makeShot(){
+  stashForm(); await saveShot();
+  const j=await api("/make",{film:FID,shot:SHOT});
+  WATCH.add(j.job); note("making the shot: "+j.job);
+}
 async function anchorCheck(){
   const j=await api("/anchorcheck",{film:FID,shot:SHOT});
   WATCH.add(j.job); note("captioning the anchor: "+j.job);
@@ -457,17 +462,24 @@ function shotForm(){
     </div>
     <label>keyframe prompt / file path (for anchor = generate | file)</label>
     <textarea id="s_kf" rows="2">${esc(String(sh.anchor).startsWith("file:")?sh.anchor.slice(5):sh.keyframe_prompt)}</textarea>
+    <div class="row" style="margin-top:12px;gap:10px;align-items:center">
+      <button class="primary" onclick="makeShot()" style="font-size:15px;padding:8px 16px">Make this shot</button>
+      <span class="hint">puts the named character into the scene, checks your words against the picture,
+        animates a pose change or renders, and picks the result - in that order, telling you what it is doing.
+        Fill in who, what happens and the motion below first.</span>
+    </div>
+    <details style="margin-top:10px"><summary class="hint" style="cursor:pointer">Advanced - how this shot is built (character placement, pose change, checks)</summary>
     <div class="row" style="margin-top:10px;gap:6px;align-items:flex-end">
-      <div><label>compose an anchor - character</label>
+      <div><label>who is in the frame</label>
         <select id="c_char">${(FOUNDRY.character||[]).map(c=>
           `<option value="${c.id}">${esc(c.name)} (${esc(c.style)})</option>`).join("")}</select></div>
       <div><label>place</label>
         <select id="c_place" onchange="composePlates()">${(FOUNDRY.place||[]).map(p=>
           `<option value="${p.id}">${esc(p.name)}</option>`).join("")}</select></div>
-      <div><label>plate</label><select id="c_plate"></select></div>
-      <div><label>stand 0-1</label><input id="c_stand" value="0.35" style="width:70px"></div>
-      <div><label>across 0-1</label><input id="c_cx" value="0.42" style="width:70px"></div>
-      <button class="small" onclick="composeAnchor()">compose</button>
+      <div><label>background picture</label><select id="c_plate"></select></div>
+      <div><label>distance (0 near - 1 far)</label><input id="c_stand" value="0.35" style="width:70px"></div>
+      <div><label>position (0 left - 1 right)</label><input id="c_cx" value="0.42" style="width:70px"></div>
+      <button class="small" onclick="composeAnchor()">put them in the scene</button>
     </div>
     <div class="row" style="margin-top:4px;gap:6px;align-items:flex-end">
       <div><label>second layer (optional)</label>
@@ -482,29 +494,29 @@ function shotForm(){
       <span class="hint">sized for its depth from what it is - a lantern stays lantern-sized, a second character stands 1.7 m; both identities come from packs</span>
     </div>
     <div class="row" style="margin-top:6px;gap:8px;align-items:center">
-      <button class="small" onclick="anchorCheck()">check prose against anchor</button>
-      <span class="hint">one vision call: words the prose uses that the picture does not contain
-        are what LTX will rewrite the plate toward</span>
+      <button class="small" onclick="anchorCheck()">check the words against the picture</button>
+      <span class="hint">lists what your words name that the picture does not show - the render
+        will drift toward those things, so change the words or the picture</span>
     </div>
     ${sh.anchor_check?`<div class="hint" style="margin-top:4px;padding:6px 8px;border-left:3px solid ${(sh.anchor_check.missing||[]).length?"var(--warn,#d9a441)":"var(--good)"}">
       <b>the anchor shows:</b> ${esc(sh.anchor_check.caption.slice(0,260))}${sh.anchor_check.caption.length>260?"…":""}<br>
       ${(sh.anchor_check.missing||[]).length
         ?`<b style="color:var(--warn,#d9a441)">named in the prose, not in the anchor:</b> ${sh.anchor_check.missing.map(esc).join(", ")} - change the words, or the plate`
         :`<b style="color:var(--good)">every content word in the prose is in the anchor</b>`}</div>`:""}
-    <div class="hint">stand is how far into the scene: 0 at the camera, 1 at the
-      horizon. It sets the size too, from the plate's own depth.
+    <div class="hint">distance sets the size too; the picture is asked what is under the
+      feet, and nobody is placed on water.
       ${sh.anchor_source?`<b style="color:var(--good)">this anchor was composed:
         ${esc(sh.anchor_source.character)} in ${esc(sh.anchor_source.place)}</b>`:""}</div>
     <div class="row" style="margin-top:8px;gap:6px;align-items:flex-end">
-      <div style="flex:1"><label>pin the motion - what changes by the end</label>
+      <div style="flex:1"><label>pose change - what is different at the end of the shot</label>
         <input id="c_change" placeholder="she has lowered into a deep crouch, knees bent"
                value="${esc((sh.takes||[]).filter(t=>t.pin)[0]?.pin?.change||"")}"></div>
       <div><label>seconds</label><input id="c_secs" value="${esc(String((sh.pin_preview||{}).seconds||8))}" style="width:70px"></div>
       <div><label title="in-place motion: the end figure keeps the start figure's feet and size. Off for walking or running, where the change of size and place IS the motion">feet planted</label>
         <input type="checkbox" id="c_hold" ${((sh.pin_preview||{}).hold_feet===false)?"":"checked"}></div>
-      <button class="small" onclick="pinPreview()">preview end</button>
-      <button class="small" onclick="pinMotion(false)">${sh.pin_preview?"pin from this end frame":"pin"}</button>
-      ${sh.pin_preview&&!sh.pin_preview.ok?`<button class="small" onclick="pinMotion(true)" title="below the change floor - interpolate anyway">pin anyway</button>`:""}
+      <button class="small" onclick="pinPreview()">show the end pose</button>
+      <button class="small" onclick="pinMotion(false)">${sh.pin_preview?"animate from this end pose":"animate the pose change"}</button>
+      ${sh.pin_preview&&!sh.pin_preview.ok?`<button class="small" onclick="pinMotion(true)" title="the change is small; animate anyway">animate anyway</button>`:""}
     </div>
     ${sh.pin_preview?`<div class="row" style="margin-top:6px;gap:10px;align-items:flex-start">
       <img src="${m(sh.pin_preview.end)}?t=${sh.pin_preview.when}" style="width:220px;border-radius:4px;border:1px solid ${sh.pin_preview.ok?"var(--good)":"var(--bad,#e05a5a)"}">
@@ -514,10 +526,11 @@ function shotForm(){
           :`<b style="color:var(--bad,#e05a5a)">too alike</b> for ${esc(String(sh.pin_preview.seconds))}s (${sh.pin_preview.rate}/s) - the model would invent rather than interpolate. Bigger change, or ${sh.pin_preview.longest}s or less.`}
         <br>Not the end you meant? Change the words and preview again; the pin always takes the latest preview.</div>
     </div>`:""}
-    <div class="hint">the end state is an EDIT of this shot's anchor, so compose one
-      first. A pin needs enough change per second - too little and the model
-      invents rather than interpolates, and it will say so rather than render it.</div>
-    <label>sfx - name every noise</label><textarea id="s_sfx" rows="2">${esc(sh.sfx)}</textarea>
+    <div class="hint">the end pose is made from this shot's start picture, so put the character
+      in the scene first. Pose changes that happen in place (crouch, turn, look, reach) animate
+      well; walking does not - render those instead.</div>
+    </details>
+    <label>sounds - name every noise you want to hear</label><textarea id="s_sfx" rows="2">${esc(sh.sfx)}</textarea>
     <h2>Beats (${(sh.beats||[]).length}/4) - LTX cuts inside the shot; H3 and Wan render beat 1</h2>
     ${beats}
     <div class="row" style="margin-top:6px">
@@ -630,10 +643,12 @@ function sceneForm(){
       <button class="primary" onclick="saveScene()">save scene</button>
       <button onclick="genAnchor()">generate anchor</button>
     </div>
-    <h2 style="margin-top:14px">Coverage - the standard shots, from selectors</h2>
+    <h2 style="margin-top:14px">Where this scene happens, and its standard shots</h2>
+    <div class="hint">pick the place and background picture, then save the scene. "Make this shot" uses them
+      to put people into the picture. "Generate coverage" makes the usual set of shots for you.</div>
     <div class="row" style="gap:6px;align-items:flex-end">
       <div><label>place</label><select id="cv_place" onchange="coveragePlates()">${(FOUNDRY.place||[]).map(p=>
-        `<option value="${p.id}">${esc(p.name)}</option>`).join("")}</select></div>
+        `<option value="${p.id}" ${sc.place===p.id?"selected":""}>${esc(p.name)}</option>`).join("")}</select></div>
       <div><label>plate</label><select id="cv_plate"></select></div>
       <div><label>prop (optional)</label><select id="cv_prop"><option value="">none</option>${(FOUNDRY.prop||[]).map(p=>
         `<option value="${p.id}">${esc(p.name)}</option>`).join("")}</select></div>
@@ -665,6 +680,9 @@ function coveragePlates(){
   const p=(FOUNDRY.place||[]).find(x=>x.id===pid); const sel=document.getElementById("cv_plate");
   if(!sel) return;
   sel.innerHTML=((p&&p.plates)||[]).map(f=>`<option value="${f.replace(/\.png$/,"")}">${f.replace(/\.png$/,"")}</option>`).join("");
+  const sc=(TREE.scenes||[]).find(s=>s.id===SCENE_SEL)||{};
+  const keep=sc.place===pid&&sc.plate&&[...sel.options].some(o=>o.value===sc.plate);
+  if(keep){ sel.value=sc.plate; return; }
   const w=[...sel.options].find(o=>/_wide$/.test(o.value)); if(w) sel.value=w.value;
 }
 async function genCoverage(){
@@ -682,7 +700,9 @@ async function saveScene(){
     ambience:$("#c_amb").value, palette:$("#c_palette").value,
     music:$("#c_music").value,
     cast_present:[...document.querySelectorAll(".sc_cast:checked")].map(x=>x.value),
-    no_people:$("#c_np").checked});
+    no_people:$("#c_np").checked,
+    place:(document.getElementById("cv_place")||{}).value||"",
+    plate:(document.getElementById("cv_plate")||{}).value||""});
   note("scene saved"); openFilm(FID);
 }
 async function pickAnchor(c){
@@ -758,15 +778,16 @@ async function loadTriage(){
   try{
     const t=await api("/triage",{film:FID});
     const c=t.counts||{};
-    let out=`<div style="margin-top:4px"><b>what this box can make</b> &nbsp;
-      <span style="color:var(--good)">${c.local||0} local</span> &middot;
-      <span style="color:var(--warn,#d9a441)">${c["trade-off"]||0} trade-off</span> &middot;
-      <span style="color:var(--bad,#e05a5a)">${c.api||0} api</span></div>`;
+    const words={"local":"ready to make here","trade-off":"will differ from what was asked","api":"needs an outside service"};
+    let out=`<div style="margin-top:4px"><b>what this computer can make</b> &nbsp;
+      <span style="color:var(--good)">${c.local||0} ready</span> &middot;
+      <span style="color:var(--warn,#d9a441)">${c["trade-off"]||0} will differ from what was asked</span> &middot;
+      <span style="color:var(--bad,#e05a5a)">${c.api||0} need an outside service</span></div>`;
     const flagged=Object.entries(t.shots||{}).filter(([,tr])=>tr.verdict!=="local");
-    if(!flagged.length) out+=`<div class="hint">every shot is inside the measured envelope</div>`;
+    if(!flagged.length) out+=`<div class="hint">every shot can be made here as asked</div>`;
     for(const [id,tr] of flagged){
       out+=`<div style="margin-top:6px"><span class="badge" onclick="selShot('${id}')" style="cursor:pointer">${id}</span>
-        <b style="color:${tr.verdict==="api"?"var(--bad,#e05a5a)":"var(--warn,#d9a441)"}">${tr.verdict}</b>
+        <b style="color:${tr.verdict==="api"?"var(--bad,#e05a5a)":"var(--warn,#d9a441)"}">${words[tr.verdict]||tr.verdict}</b>
         <ul class="hint" style="margin:2px 0 0 14px;padding:0">${tr.reasons.map(r=>`<li>${esc(r)}</li>`).join("")}</ul></div>`;
     }
     box.innerHTML=out;

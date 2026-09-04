@@ -177,7 +177,7 @@ def tree(fid):
                           "picked_fps": picked.get("fps", 24) if picked else 0,
                           "picked_dur": picked.get("duration", 0) if picked else 0,
                           "transition_out": sh.get("transition_out", "cut")})
-        scenes.append({k: sc.get(k) for k in ("id", "title", "location", "time_of_day",
+        scenes.append({k: sc.get(k) for k in ("id", "title", "location", "time_of_day", "place", "plate",
                                               "weather", "ambience", "palette", "music",
                                               "cast_present", "no_people", "anchor",
                                               "anchor_candidates")}
@@ -314,7 +314,7 @@ def new_scene(data):
 def edit_scene(data):
     f = F.load(data["film"])
     sc = f.scene(data["scene"])
-    for k in ("title", "location", "time_of_day", "weather", "ambience", "palette",
+    for k in ("title", "location", "time_of_day", "weather", "ambience", "palette", "place", "plate",
               "music", "cast_present", "no_people"):
         if k in data:
             sc[k] = data[k]
@@ -1588,6 +1588,7 @@ def _coverage_job(jid, fid, scid, place_id, plate, chars, prop):
         psel = place.get("selections") or {}
         pdesc = (place.get("compiled") or {}).get("description", "") or place.get("name", place_id)
         plate_p = CM.plate_for(place_id, plate or None)
+        sc["place"], sc["plate"] = place_id, os.path.basename(plate_p)[:-4]
         detail = None
         try:
             detail = CM.plate_for(place_id, os.path.basename(plate_p).replace("_wide", "_detail")[:-4])
@@ -1688,6 +1689,154 @@ def coverage(data):
     threading.Thread(target=_coverage_job,
                      args=(jid, data["film"], data["scene"], data["place"],
                            data.get("plate") or None, chars, data.get("prop") or None),
+                     daemon=True).start()
+    return {"job": jid}, 200
+
+
+# ─── make this shot: the one button ────────────────────────────────────────────────
+
+IN_PLACE = ("crouch", "crouching", "rise", "turn_to", "look_up", "look_off", "reach",
+            "gesture", "nod", "laugh", "recoil", "stumble", "speak")
+
+
+def _foundry_for(f, cast_id, FY):
+    """The foundry pack behind a cast entry: recorded, or matched by name."""
+    ent = (f.data.get("cast") or {}).get(cast_id) or {}
+    if ent.get("foundry"):
+        return ent["foundry"]
+    name = (ent.get("name") or cast_id).strip().lower()
+    for a in FY.list_assets("character"):
+        if a["id"] == name.replace(" ", "-") or (a.get("name") or "").strip().lower() == name:
+            return a["id"]
+    return None
+
+
+def _make_job(jid, fid, shid, seconds=None, seed=0):
+    try:
+        import importlib.util, random
+        f = F.load(fid)
+        sh = f.shot(shid)
+        sc = f.scene(sh["scene"])
+        beats = sh.get("beats") or []
+        b = beats[0] if beats else {}
+        subject = (b.get("subject") or "").strip()
+        p = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "foundry.py")
+        spec = importlib.util.spec_from_file_location("fy_mod3", p)
+        FY = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(FY)
+        cast_ids = set((f.data.get("cast") or {}).keys())
+        dur = float(seconds or sh.get("duration") or 6)
+
+        # 1 the character into the scene
+        if subject in cast_ids and not sh.get("anchor_source"):
+            cid = _foundry_for(f, subject, FY)
+            place, plate = sc.get("place"), sc.get("plate")
+            if not (place and plate):
+                anc = str(sh.get("anchor") or "")
+                m = re.search(r"/foundry/places/([^/]+)/([^/]+)\.png$", anc)
+                if m:
+                    place, plate = m.group(1), m.group(2)
+            if not cid:
+                raise RuntimeError("%s has no character pack yet - build one on the "
+                                   "Characters page, then try again" % subject)
+            if not (place and plate):
+                raise RuntimeError("this scene has no place yet - pick one on the Scene "
+                                   "tab (place and background picture), then try again")
+            others = [c for c in cast_ids if c != subject and c in
+                      (" ".join([b.get("action", ""), b.get("background", "")])).upper().split()]
+            layers = []
+            for o in others[:1]:
+                oc = _foundry_for(f, o, FY)
+                if oc:
+                    layers.append({"character": oc, "view": "turn_front_three_quarter",
+                                   "stand": 0.35, "cx": 0.62})
+            _log(jid, "putting %s into %s%s" % (subject, sc.get("title") or place,
+                                                (" with " + others[0]) if layers else ""))
+            sub = _job("compose", film=fid, shot=shid)
+            _compose_anchor_job(sub, fid, shid, cid, place, plate,
+                                "turn_front_three_quarter" if layers else "turn_front",
+                                0.35, 0.38 if layers else 0.42, layers or None)
+            with _LOCK:
+                err = JOBS.get(sub, {}).get("error")
+            if err:
+                raise RuntimeError("could not put %s into the scene: %s" % (subject, err))
+            f = F.load(fid)
+            sh = f.shot(shid)
+        elif subject and subject not in cast_ids:
+            _log(jid, "'%s' is not in the cast, so the words describe them; add them to "
+                      "the cast (Film tab) to use a character pack" % subject)
+
+        # 2 the words against the picture
+        if sh.get("anchor") or sh.get("anchor_source") or (sc.get("anchor")):
+            sub = _job("anchorcheck", film=fid, shot=shid)
+            _log(jid, "checking the words against the picture")
+            _anchor_check_job(sub, fid, shid)
+            with _LOCK:
+                res = JOBS.get(sub, {}).get("result") or {}
+            if res.get("missing"):
+                _log(jid, "the picture does not show: %s - the shot may drift toward them"
+                     % ", ".join(res["missing"][:6]))
+            else:
+                _log(jid, "the words match the picture")
+            f = F.load(fid)
+            sh = f.shot(shid)
+
+        # 3 animate a pose change, or render
+        motion = (b.get("motion") or "").strip()
+        done = False
+        if motion in IN_PLACE and sh.get("anchor_source"):
+            end = F.motion_option("action", motion).get("end") or ""
+            change = ("the subject " + end) if end else (b.get("action") or "")
+            secs = min(dur, 8.0)
+            _log(jid, "animating the pose change (%s, %.0fs): first the end pose" % (motion, secs))
+            sub = _job("pinpreview", film=fid, shot=shid)
+            _pin_preview_job(sub, fid, shid, change, secs, 11, True)
+            f = F.load(fid)
+            sh = f.shot(shid)
+            pv = sh.get("pin_preview") or {}
+            if pv.get("ok") or pv.get("rate", 0) >= 0.0012:
+                sub = _job("pin", film=fid, shot=shid)
+                _log(jid, "interpolating between the two poses")
+                _pin_job(sub, fid, shid, change, secs, 42, not pv.get("ok"), True)
+                with _LOCK:
+                    err = JOBS.get(sub, {}).get("error")
+                if not err:
+                    done = True
+                else:
+                    _log(jid, "the pose change did not take (%s) - rendering instead" % err[:80])
+            else:
+                _log(jid, "too small a change to animate as a pose (%.4f) - rendering instead"
+                     % pv.get("rate", 0))
+        if not done:
+            f = F.load(fid)
+            sh = f.shot(shid)
+            _log(jid, "rendering the shot (%.0fs)" % dur)
+            _render_take(jid, f, sh, "ltx", seed or random.randint(1, 10 ** 9))
+            f = F.load(fid)
+            sh = f.shot(shid)
+            takes = sh.get("takes") or []
+            if takes:
+                newest = sorted(takes, key=lambda t: t["id"])[-1]
+                sh["picked"] = newest["id"]
+                f.save()
+                _log(jid, "done - %s%s" % (newest["id"], (" (QC: %s)" % ", ".join(newest["qc"]))
+                                           if newest.get("qc") else ""))
+        else:
+            _log(jid, "done - the pose change is the picked take")
+        with _LOCK:
+            JOBS[jid]["result"] = {"shot": shid}
+        _finish(jid)
+    except Exception as e:
+        traceback.print_exc()
+        _finish(jid, str(e)[:300])
+
+
+def make_shot(data):
+    """Make this shot: character into the scene, words checked, pose change or
+    render, picked - in plain words, one button."""
+    jid = _job("make", film=data["film"], shot=data["shot"])
+    threading.Thread(target=_make_job, args=(jid, data["film"], data["shot"],
+                                             data.get("seconds"), int(data.get("seed") or 0)),
                      daemon=True).start()
     return {"job": jid}, 200
 
