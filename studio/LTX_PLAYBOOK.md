@@ -1500,3 +1500,12 @@ in place only; the delivery upscale is a deliverable, not a master step; a
 walk regenerates the scene; some drift is the seed's and no sentence fixes it.
 The five new verify clips await the director's verdicts, which is how the next
 rules get written.
+
+**Late addendum: the drawn close-up.** The same close-up path on an anime
+character - Bai Liwen in the back alley at night, the storybook LoRA on for
+the relight: shape drift 1.3%, the relit figure moved back 10,-9 px to its
+composed spot, the look held through the take (she looks up, a small smile,
+the alley's lanterns soft behind), one take, no faults. Four close-ups today
+across two engines' looks, all from the portrait view; the photographic ones
+needed a borrowed soundtrack, the drawn one did not (-38 dB, just above the
+line). Composed in 18 s, built in 104 s.
