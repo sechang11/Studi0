@@ -1858,6 +1858,7 @@ def _make_job(jid, fid, shid, seconds=None, seed=0):
                       "the cast (Film tab) to use a character pack" % subject)
 
         # 2 the words against the picture
+        missing_words = []
         if sh.get("anchor") or sh.get("anchor_source") or (sc.get("anchor")):
             sub = _job("anchorcheck", film=fid, shot=shid)
             _log(jid, "checking the words against the picture")
@@ -1867,6 +1868,7 @@ def _make_job(jid, fid, shid, seconds=None, seed=0):
             if res.get("missing"):
                 _log(jid, "the picture does not show: %s - the shot may drift toward them"
                      % ", ".join(res["missing"][:6]))
+                missing_words = list(res["missing"][:6])
             else:
                 _log(jid, "the words match the picture")
             f = F.load(fid)
@@ -1916,6 +1918,12 @@ def _make_job(jid, fid, shid, seconds=None, seed=0):
                 cands = takes[-2:]
                 newest = sorted(cands, key=lambda t: (len(t.get("qc") or []),
                                                       (t.get("drift") or {}).get("lost", 0)))[0]
+            if newest and missing_words:
+                note = "words not in the picture: %s" % ", ".join(missing_words)
+                for t in takes[-2:]:
+                    if note not in (t.get("qc") or []):
+                        t.setdefault("qc", []).append(note)
+                f.save()
             if newest:
                 sh["picked"] = newest["id"]
                 f.save()

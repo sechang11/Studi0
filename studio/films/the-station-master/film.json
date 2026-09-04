@@ -1,0 +1,442 @@
+{
+ "title": "The Station Master",
+ "created": "2026-09-04 08:37",
+ "look": "photoreal",
+ "look_clause": "photoreal cinematic film still, 35mm, deep focus, high detail, colour photograph, filmic grade",
+ "grade": "",
+ "negative": "",
+ "fps": 24,
+ "logline": "The last train is late; the station master and a woman in a knit cap wait.",
+ "resolution": "auto",
+ "deliver": "native",
+ "cast": {
+  "MASTER": {
+   "name": "Station Master",
+   "clause": "a tall, broad-shouldered man, in their fifties, brown skin, a square-jawed face, brown eyes, almond eyes, strong dark brows, black short neat hair, a moustache, a calm, unreadable bearing, a small-town station master in a dark uniform coat with a peaked cap, a pocket watch chain, a whistle on a cord",
+   "short": "black short neat hair, brown eyes",
+   "sheet": "/home/k4shix/shared/comfy-studio/studio/foundry/characters/station-master/base_portrait.png",
+   "portrait": "/home/k4shix/shared/comfy-studio/studio/foundry/characters/station-master/base_portrait.png",
+   "voice": "male_03_carter",
+   "voice_desc": "a deep, unhurried man's voice",
+   "foundry": "station-master"
+  },
+  "INES": {
+   "name": "Ines Varga",
+   "clause": "a tall, athletic woman, in their fifties, olive skin, an angular face with a sharp jaw, grey eyes, hooded eyes, strong dark brows, grey short neat hair, a thin scar through one brow, a calm, unreadable bearing, a harbour master in a dark wool coat and a grey knit cap, salt-weathered, hands in her pockets",
+   "short": "grey short neat hair, a thin scar through one brow",
+   "sheet": "/home/k4shix/shared/comfy-studio/studio/foundry/characters/ines-varga/base_portrait.png",
+   "portrait": "/home/k4shix/shared/comfy-studio/studio/foundry/characters/ines-varga/base_portrait.png",
+   "voice": "female_04_maya",
+   "voice_desc": "a low, dry woman's voice",
+   "foundry": "ines-varga"
+  }
+ },
+ "scenes": [
+  {
+   "id": "sc01",
+   "title": "platform, dusk",
+   "location": "a small-town railway platform under a long canopy at dusk",
+   "time_of_day": "dusk",
+   "weather": "overcast",
+   "ambience": "wind under the canopy, the departures board clicking, a distant train",
+   "palette": "",
+   "music": "cinematic, sparse piano, dusk, waiting, 64 bpm",
+   "cast_present": [
+    "MASTER",
+    "INES"
+   ],
+   "no_people": false,
+   "anchor": "",
+   "shots": [
+    "010",
+    "020",
+    "030",
+    "040",
+    "050"
+   ],
+   "place": "station-dusk",
+   "plate": "dusk_wide"
+  }
+ ],
+ "shots": {
+  "010": {
+   "id": "010",
+   "scene": "sc01",
+   "title": "wide - establishing",
+   "duration": 6,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/foundry/places/station-dusk/dusk_wide.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide establishing shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "",
+     "action": "the empty platform at dusk, the departures board flickering, lights far down the line",
+     "background": "the whole scene alive: light, crowd",
+     "motion": "",
+     "ambient": [
+      "light",
+      "traffic"
+     ],
+     "dialogue": {}
+    }
+   ],
+   "sfx": "wind under the canopy, the departures board clicking, a distant train",
+   "no_people": true,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t525533635",
+     "engine": "ltx",
+     "seed": 921397571,
+     "created": "08:40",
+     "file": "takes/010/ltx_t525533635.mp4",
+     "poster": "takes/010/ltx_t525533635.png",
+     "strip": "takes/010/ltx_t525533635_strip.png",
+     "duration": 6.04,
+     "fps": 24,
+     "qc": [],
+     "drift": {
+      "lost": 0.16,
+      "missing": [
+       "display",
+       "even",
+       "shadow",
+       "transportation",
+       "vegetation"
+      ],
+      "kept": 27
+     },
+     "warnings": [],
+     "prompt": "A static wide establishing shot: the empty platform at dusk, the departures board flickering, lights far down the line, while the whole scene alive: light, crowd; the light shifts and flickers across the scene; vehicles pass in the background, a small-town railway platform under a long canopy at dusk, dusk, overcast, the frame completely empty of people and hands. Photoreal cinematic film still, 3"
+    }
+   ],
+   "picked": "t525533635",
+   "engine_notes": "",
+   "anchor_check": {
+    "caption": "Railway station, train station, platform, tracks, railway, rails, bench, sign, timetable, building, structure, wood, metal, concrete, railroad, telegraph pole, sky, clouds, sunset, dusk, twilight, horizon, grass, vegetation, trees, light, glow, shadows, evening, illumination, display board, schedule, transportation.",
+    "missing": [
+     "crowd"
+    ],
+    "when": 1788525533
+   }
+  },
+  "020": {
+   "id": "020",
+   "scene": "sc01",
+   "title": "wide - MASTER and INES",
+   "duration": 6,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/the-station-master/assets/anchor_shot_020.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "medium two-shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "MASTER",
+     "action": "stand under the canopy looking down the line for the train",
+     "background": "the scene moves behind them",
+     "motion": "",
+     "ambient": [
+      "light",
+      "cloth"
+     ],
+     "dialogue": {
+      "char": "MASTER",
+      "line": "It's late. It is never late.",
+      "delivery": "quiet"
+     }
+    }
+   ],
+   "sfx": "",
+   "no_people": false,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t525626605",
+     "engine": "ltx",
+     "seed": 624090559,
+     "created": "08:41",
+     "file": "takes/020/ltx_t525626605.mp4",
+     "poster": "takes/020/ltx_t525626605.png",
+     "strip": "takes/020/ltx_t525626605_strip.png",
+     "duration": 6.04,
+     "fps": 24,
+     "qc": [],
+     "drift": {
+      "lost": 0.21,
+      "missing": [
+       "bench",
+       "ground",
+       "metal",
+       "pole",
+       "timetable"
+      ],
+      "kept": 19
+     },
+     "warnings": [],
+     "prompt": "A static medium two-shot: a tall, broad-shouldered man, in their fifties, brown skin, a square-jawed face, brown eyes, almond eyes, strong dark brows, black short neat hair, a moustache, a calm, unreadable bearing, a small-town station master in a dark uniform coat with a peaked cap, a pocket watch chain, a whistle on a cord, stand under the canopy looking down the line for the train, who says in "
+    }
+   ],
+   "picked": "t525626605",
+   "engine_notes": "",
+   "anchor_source": {
+    "character": "station-master",
+    "place": "station-dusk",
+    "stand": 0.35,
+    "cx": 0.38,
+    "view": "turn_front_three_quarter",
+    "plate": "/home/k4shix/shared/comfy-studio/studio/foundry/places/station-dusk/dusk_wide.png",
+    "props": [
+     {
+      "character": "ines-varga",
+      "view": "turn_front_three_quarter",
+      "stand": 0.35,
+      "cx": 0.62
+     }
+    ]
+   },
+   "anchor_check": {
+    "caption": "Station, platform, tracks, bench, man, timetable, sign, coat, hat, train, railway, wood, metal, stone, concrete, sky, sunset, clouds, trees, grass, dusk, light, glow, shadows, poles, rails, ground, evening, station building, railway station.",
+    "missing": [],
+    "when": 1788525626
+   }
+  },
+  "030": {
+   "id": "030",
+   "scene": "sc01",
+   "title": "medium - MASTER",
+   "duration": 6,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/the-station-master/assets/anchor_shot_030.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "medium shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "MASTER",
+     "action": "checks his pocket watch and looks up",
+     "background": "the scene moves behind them",
+     "motion": "look_up",
+     "ambient": [
+      "light"
+     ],
+     "dialogue": {}
+    }
+   ],
+   "sfx": "",
+   "no_people": false,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "pin_1788525736",
+     "engine": "h3-pinned",
+     "file": "takes/030/pin_1788525736.mp4",
+     "duration": 5.875,
+     "fps": 24,
+     "seed": 42,
+     "qc": [],
+     "warnings": [],
+     "pin": {
+      "change": "the subject has raised their head and is looking up",
+      "rate": 0.0017,
+      "end": "assets/pin_end_030.png"
+     }
+    }
+   ],
+   "picked": "pin_1788525736",
+   "engine_notes": "",
+   "anchor_source": {
+    "character": "station-master",
+    "place": "station-dusk",
+    "stand": 0.15,
+    "cx": 0.45,
+    "view": "turn_front",
+    "plate": "/home/k4shix/shared/comfy-studio/studio/foundry/places/station-dusk/dusk_wide.png",
+    "props": []
+   },
+   "anchor_check": {
+    "caption": "Station, platform, tracks, bench, man, hat, jacket, shirt, tie, watch, pants, shoes, telegraph pole, telegraph wires, building, sunset, sky, clouds, grass, railroad, wood, metal, stone, concrete, dusk, light, glow, sign, lettering.",
+    "missing": [
+     "checks",
+     "pocket",
+     "railway"
+    ],
+    "when": 1788525722
+   },
+   "pin_preview": {
+    "change": "the subject has raised their head and is looking up",
+    "seconds": 6.0,
+    "end": "assets/pin_end_030.png",
+    "rate": 0.0017,
+    "ok": false,
+    "longest": 5.0,
+    "seed": 11,
+    "hold_feet": true,
+    "when": 1788525736
+   }
+  },
+  "040": {
+   "id": "040",
+   "scene": "sc01",
+   "title": "medium - INES",
+   "duration": 6,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/the-station-master/assets/anchor_shot_040.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "medium shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "INES",
+     "action": "watches the empty track without moving",
+     "background": "the scene moves behind them",
+     "motion": "",
+     "ambient": [
+      "light",
+      "cloth"
+     ],
+     "dialogue": {
+      "char": "INES",
+      "line": "It'll come. They always do.",
+      "delivery": "low, dry"
+     }
+    }
+   ],
+   "sfx": "",
+   "no_people": false,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t525832336",
+     "engine": "ltx",
+     "seed": 276319863,
+     "created": "08:45",
+     "file": "takes/040/ltx_t525832336.mp4",
+     "poster": "takes/040/ltx_t525832336.png",
+     "strip": "takes/040/ltx_t525832336_strip.png",
+     "duration": 6.04,
+     "fps": 24,
+     "qc": [],
+     "drift": {
+      "lost": 0.46,
+      "missing": [
+       "asphalt",
+       "bench",
+       "board",
+       "concrete",
+       "even",
+       "gras",
+       "pant",
+       "pole",
+       "schedule",
+       "shoe",
+       "sign",
+       "sweater"
+      ],
+      "kept": 15
+     },
+     "warnings": [],
+     "prompt": "A static medium shot: a tall, athletic woman, in their fifties, olive skin, an angular face with a sharp jaw, grey eyes, hooded eyes, strong dark brows, grey short neat hair, a thin scar through one brow, a calm, unreadable bearing, a harbour master in a dark wool coat and a grey knit cap, salt-weathered, hands in her pockets, watches the empty track without moving, who says in a low, dry woman's "
+    }
+   ],
+   "picked": "t525832336",
+   "engine_notes": "",
+   "anchor_source": {
+    "character": "ines-varga",
+    "place": "station-dusk",
+    "stand": 0.15,
+    "cx": 0.5,
+    "view": "turn_front",
+    "plate": "/home/k4shix/shared/comfy-studio/studio/foundry/places/station-dusk/dusk_wide.png",
+    "props": []
+   },
+   "anchor_check": {
+    "caption": "Station, platform, train station, railway, tracks, bench, building, structure, wood, concrete, asphalt, coat, sweater, pants, shoes, person, man, sky, sunset, clouds, dusk, evening, light, glow, poles, wires, grass, trees, horizon, sign, schedule, board.",
+    "missing": [
+     "watches",
+     "without"
+    ],
+    "when": 1788525832
+   }
+  },
+  "050": {
+   "id": "050",
+   "scene": "sc01",
+   "title": "insert - detail",
+   "duration": 6,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/foundry/places/station-dusk/dusk_detail.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "",
+     "action": "the departures board, the bench, wind moving a scrap of paper along the platform",
+     "background": "what moves here moves",
+     "motion": "",
+     "ambient": [
+      "light",
+      "cloth"
+     ],
+     "dialogue": {}
+    }
+   ],
+   "sfx": "wind under the canopy, the departures board clicking, a distant train",
+   "no_people": true,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t525924884",
+     "engine": "ltx",
+     "seed": 424023178,
+     "created": "08:46",
+     "file": "takes/050/ltx_t525924884.mp4",
+     "poster": "takes/050/ltx_t525924884.png",
+     "strip": "takes/050/ltx_t525924884_strip.png",
+     "duration": 6.04,
+     "fps": 24,
+     "qc": [],
+     "drift": {
+      "lost": 0.29,
+      "missing": [
+       "electricity",
+       "foliage",
+       "number",
+       "pole",
+       "railroad",
+       "shadow",
+       "timetable",
+       "window"
+      ],
+      "kept": 20
+     },
+     "warnings": [],
+     "prompt": "A static wide shot: the departures board, the bench, wind moving a scrap of paper along the platform, while what moves here moves; the light shifts and flickers across the scene; hanging cloth and banners lift in the wind, a small-town railway platform under a long canopy at dusk, dusk, overcast, the frame completely empty of people and hands. Photoreal cinematic film still, 35mm, deep focus, high"
+    }
+   ],
+   "picked": "t525924884",
+   "engine_notes": "",
+   "anchor_check": {
+    "caption": "Railway station, train station, platform, bench, tracks, railroad tracks, sign, timetable, window, building, house, pole, sky, clouds, sunset, dusk, wood, metal, concrete, stone, grass, foliage, trees, orange, pink, yellow, brown, gray, light, glow, shadow, electricity, numbers, letters.",
+    "missing": [
+     "scrap",
+     "paper"
+    ],
+    "when": 1788525924
+   }
+  }
+ }
+}
