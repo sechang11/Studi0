@@ -397,6 +397,8 @@ function reviewPanel(){
   }).join("");
   const ports=Object.entries(TREE.cast||{}).filter(([,c])=>!c.portrait).map(([id])=>id);
   if(ports.length) blockers.push("no portrait yet: "+ports.join(", ")+" (photoreal identity route needs them)");
+  const unwritten=TREE.scenes.flatMap(sc=>sc.shots.filter(s=>s.needs_sentence).map(s=>s.id));
+  if(unwritten.length) blockers.push("waiting for your sentence - a neutral one renders meanwhile: "+unwritten.join(", "));
   return `<h2>Review</h2>
     <div class="hint">${n} shots picked · ~${Math.round(total)}s of picked footage</div>
     <div style="overflow-x:auto;margin-top:8px"><table>${rows}</table></div>

@@ -177,6 +177,7 @@ def tree(fid):
                           if picked else 0,
                           "picked_fps": picked.get("fps", 24) if picked else 0,
                           "picked_dur": picked.get("duration", 0) if picked else 0,
+                          "needs_sentence": _needs_sentence(sh),
                           "transition_out": sh.get("transition_out", "cut")})
         scenes.append({k: sc.get(k) for k in ("id", "title", "location", "time_of_day", "place", "plate",
                                               "weather", "ambience", "palette", "music",
@@ -1097,6 +1098,26 @@ def _inherit_qc(take):
     """the picture's notes still hold for its voiced copy; the speech notes do not"""
     return [n for n in (take.get("qc") or [])
             if "spoken" not in n and "silent" not in n and "no sound" not in n]
+
+
+_NEUTRAL_SENTENCES = (
+    "looks off, then back, a slow breath; the face held in the frame",
+    "stands in the scene, looking out at it, a slow breath",
+    "stands in the scene, weight shifting, looking out at it",
+    "stand together, talking quietly, looking out at the place",
+)
+
+
+def _needs_sentence(sh):
+    """true when a shot with a person in it is still on a placeholder or on the
+    neutral sentence Make wrote in - it renders, but it is not the director's"""
+    for b in (sh.get("beats") or []):
+        act = (b.get("action") or "").strip()
+        if not (b.get("subject") or "").strip():
+            continue
+        if not act or "describe" in act.lower() or act in _NEUTRAL_SENTENCES:
+            return True
+    return False
 
 
 def _faults(take):
