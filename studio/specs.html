@@ -244,6 +244,10 @@
   <select id="film"></select>
   <button onclick="loadFilm()">reload</button>
   <button onclick="runCheck()">run checks</button>
+  <span style="margin-left:14px">
+    <select id="nvar" title="how many more takes of this shot; same picture, same promises, new seeds"><option value="1">1 more take</option><option value="2" selected>2 more variants</option><option value="3">3 more variants</option><option value="4">4 more variants</option></select>
+    <button onclick="moreVariants()" title="renders more takes of the open shot against its anchor and promises; the cleanest is picked">make them</button>
+  </span>
   <span id="runtime" class="sub" style="margin:0"></span>
  </div>
 
@@ -1052,6 +1056,24 @@ async function save(){
     +((r.warnings&&r.warnings.length)?`  ⚠ CHECK not understood: ${r.warnings.join('; ')}`:'');
   if(r.warnings&&r.warnings.length) m.className='msg warn';
   loadFilm();
+}
+let MORE=null;
+async function moreVariants(){
+  if(!FILM||!SHOT) return;
+  const n=parseInt($('#nvar').value||"2");
+  $('#msg').textContent='making '+n+' more of shot '+SHOT+' - same picture, same promises, new seeds…'; $('#msg').className='msg';
+  const r=await fetch('/api/film/make',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({film:FILM,shot:SHOT,variants:n})}).then(x=>x.json()).catch(e=>({error:String(e)}));
+  if(!r||!r.job){ $('#msg').textContent='could not start: '+((r||{}).error||'unknown'); $('#msg').className='msg err'; return; }
+  MORE=r.job;
+  const tick=async()=>{
+    const j=(await fetch('/api/film/jobs').then(x=>x.json()).catch(()=>({jobs:[]}))).jobs.find(x=>x.id===MORE);
+    if(!j){ $('#msg').textContent='the job is no longer listed'; return; }
+    const last=(j.log||[]).slice(-1)[0]||'';
+    if(j.state==='running'){ $('#msg').textContent='making more of '+SHOT+': '+last.slice(0,120); setTimeout(tick,6000); return; }
+    $('#msg').textContent=(j.error?('stopped: '+j.error):('done: '+last.slice(0,160))); $('#msg').className='msg'+(j.error?' err':'');
+    MORE=null; loadFilm();
+  };
+  setTimeout(tick,4000);
 }
 async function runCheck(){
   const r=await api('check/'+FILM);

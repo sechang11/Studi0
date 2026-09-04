@@ -2488,7 +2488,7 @@ def _build_job(jid, data):
                 sh = f.shot(shid)
                 takes = sh.get("takes") or []
                 if takes:
-                    best = sorted(takes, key=lambda t: (len(t.get("qc") or []), t["id"]))[0]
+                    best = _cleanest(sh, takes)
                     sh["picked"] = best["id"]
                     f.save()
             with _LOCK:
