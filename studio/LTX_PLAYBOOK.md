@@ -1354,3 +1354,54 @@ re-rendered whole that morning), both lit like the park, footing checked for
 both. The prose asked them to stand and talk; they walked toward the camera -
 the LTX law, not the picture. The camera variant differed from the seed
 variant in its move alone, as promised.
+
+## §47  Built by clicking: the afternoon's second half, measured
+
+**From the page, not the API.** The builder was driven the way a person drives
+it - a browser clicking: Tomas, the night harbour, the close framing, one
+sentence ("listens to the water, then turns his head toward the sound"), the
+line, one variant, into the builder's film. 456 seconds later the page showed
+two takes, the voiced one picked, its promises one click away, the shot one
+click away in the editor. No API call was written. That is the product the
+director asked for, on one shot.
+
+**What the take taught.** The close-up anchor is right - Tomas's face large,
+the lamp and rigging soft behind him, head room held by the new geometry rule.
+Then the sentence did exactly what it said: at one second he turns his head
+toward the sound, and for the remaining four the camera has the back of his
+head, the harbour beyond. The voice pack says the line to his collar. A
+close-up whose subject is asked to turn away is an authoring choice, not a
+pipeline fault; the lesson for the Start page is that in a close-up "turns
+toward" means the model turns the whole head, and the face is gone. Keep the
+face in a close-up: "glances", "looks up", "listens" - not "turns".
+
+**Coverage in numbers.** Seven shots for a two-person scene: the empty wide,
+the two-shot, a medium on each, a close-up on each, the insert. Composing the
+anchors took 1350 s: the two-shot alone about six minutes (two footing
+readings, two relights, two re-cuts, two shadows), each single about two, each
+close-up about twenty seconds, and then the anchor check about a minute per
+shot - the vision caption is the slow part. The close-ups were the fastest and
+the cleanest of the seven.
+
+**The sound rule, in numbers.** Mean volume by shot kind on this box: harbour
+takes -18 to -21 dB (water, engines - LTX hears what it sees); the park
+two-shot -34 to -45 dB; the park close-ups -48 to -60 dB (a face shows nothing
+that makes a noise). The rms "silent" test caught only the last. The line is
+now -40 dB, measured on every take; a take under it borrows from the loudest
+take above it in its own scene, else in a scene of the same place, normalised
+to -26 LUFS. The first version borrowed across the film and put the harbour
+under the park; wrong sound is a fault, quiet is not, so a borrow never crosses
+places. The re-made park close-up: -31 dB, the park's own leaves and distant
+voices under Mara's face.
+
+**Where the anchor check stands.** Two more classes of false positive fell
+today: words that name the picture itself (place, scene, frame, background) and
+words of hearing and attention (sound, voice, listening, watching). What
+remains flagged is what a picture can lack: a rail, a path, people. On a
+close-up "path" is a true absence, and the note is right to say the shot may
+drift toward it.
+
+**The block so far.** From noon: 24 commits on main, all mine; the shot
+builder, its film of five builder shots and a coverage scene, three playbook
+sections, thirty-one clips on the verify page (five new, awaiting the
+director), the report published three times.
