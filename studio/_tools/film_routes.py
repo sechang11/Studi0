@@ -2005,6 +2005,40 @@ def _make_job(jid, fid, shid, seconds=None, seed=0):
                 cands = takes[-2:]
                 newest = sorted(cands, key=lambda t: (len(t.get("qc") or []),
                                                       (t.get("drift") or {}).get("lost", 0)))[0]
+            if newest and any(str(q).startswith("people appeared") for q in newest.get("qc") or []):
+                # generation keeps filling the empty frame; the rig cannot
+                _log(jid, "the picture kept growing people - this shot becomes the plate itself, "
+                          "moving slowly, with the rendered sound under it")
+                try:
+                    f = F.load(fid)
+                    sh = f.shot(shid)
+                    prev_cam = sh.get("cam")
+                    # the rig's default window is sized for a 4K plate; on our plates it
+                    # covered the whole image and the push showed nothing. Window = the
+                    # plate itself, centred, pushing in 12% over the shot's own length.
+                    try:
+                        from PIL import Image as _Im
+                        _pw, _ph = _Im.open(_resolve_anchor_file(f, shid, jid)).size
+                    except Exception:
+                        _pw, _ph = 1216, 832
+                    sh["cam"] = {"rig": "still_push", "audio": os.path.join(f.dir, newest["file"]),
+                                 "params": {"seconds": float(sh.get("duration") or dur), "zoom_start": 1.0,
+                                            "zoom_end": 1.12, "win_w": _pw, "win_h": _ph,
+                                            "cx": _pw // 2, "cy": _ph // 2}}
+                    f.save()
+                    _render_take(jid, f, sh, "cam", 0)
+                    f = F.load(fid)
+                    sh = f.shot(shid)
+                    sh["cam"] = prev_cam
+                    cams = [t for t in sh.get("takes") or [] if t.get("engine") == "cam"]
+                    if cams:
+                        newest = sorted(cams, key=lambda t: t["id"])[-1]
+                        newest.setdefault("qc", [])
+                        newest["qc"] = [q for q in newest["qc"] if not str(q).startswith("people appeared")]
+                        newest["qc"].append("the plate itself, moving slowly - generation kept adding people")
+                    f.save()
+                except Exception as e:
+                    _log(jid, "rig fallback failed: %s" % str(e)[:120])
             if newest and missing_words:
                 note = "words not in the picture: %s" % ", ".join(missing_words)
                 for t in takes[-2:]:
