@@ -807,3 +807,36 @@ A ground line that knows water from stone (three characters stood in rivers
 tonight). Character levels 2-5 executing. The subject-region change floor with
 more than one calibration point. And H3 fl2va for walks - which today means:
 do not.
+
+## §32  Coverage: the scene starts with its standard shots
+
+A director does not begin a scene by inventing shots. They begin with
+coverage - the wide, the two-shot, the singles, the insert - and then decide what
+happens in each. The Scene tab now does that in one click from selectors:
+
+- **place** and **plate** (from the foundry), one or two **cast** members with
+  their **packs**, an optional **prop**;
+- the wide, empty, on the plate itself; the wide with the cast (a two-shot when
+  there are two, the second as a compositor layer, the prop as set dressing);
+  a medium on each; an insert on the plate's `_detail` sibling;
+- every character shot gets a **composed anchor**, every anchor is **checked
+  against its prose**, every beat gets **ambient** from the scene's weather and
+  the place's base (rain/storm -> rain, cloth; boat/beach/bridge -> water;
+  market/station/cityscape with a crowd -> crowd), and the actions are left as
+  the director's blanks - "describe the beat".
+
+Measured: Ines and Tomas on the harbour boat, five shots, three composed
+anchors, all checked, 72 seconds. The cast entry remembers its pack
+(`foundry`) so the next coverage needs no asking. From there the Review tab's
+"draft every missing shot" renders takes for the lot.
+
+**The anchor check, as it settled.** Six passes in one night, each removing a
+class of false positive: the captioner had to be asked about the scene and not
+the person; verbs and adverbs went; then adjectives and participles (moored,
+swaying, weathered); then a small literal synonym map (shrine~temple,
+cedar~tree, quay~dock, tarmac~asphalt, hull~boat); then body parts, pose verbs
+and light words (face, hand, points, sodium, streaks); then cast names and
+coverage's placeholders. What remains is what a picture can lack: the letter
+that is not in the anchor, the footbridge the plate is not, the book in the
+prose and not in the frame. It is advice on the shot and a trade-off in triage,
+and it was right every time the director was wrong tonight.
