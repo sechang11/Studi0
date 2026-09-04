@@ -1342,6 +1342,10 @@ def _log_geom(jid, CM, start, end):
         _log(jid, "end figure held in place: scale %.2f (head %s -> %s px), feet y=%s"
              % (g.get("scale", 1.0), g.get("head_start", "?"), g.get("head_end", "?"),
                 g.get("y_feet", "?")))
+    elif g.get("rel_scale") is not None:
+        _log(jid, "end figure moved: %.2fx the start figure by head width (clamped), "
+                  "feet y=%s from y=%s by the plate's depth"
+             % (g.get("rel_scale", 1.0), g.get("y_feet", "?"), g.get("y_feet_start", "?")))
     else:
         _log(jid, "end figure keeps the regeneration's placement (moving motion)")
     rb = g.get("raw_box")
@@ -1357,6 +1361,87 @@ def _log_geom(jid, CM, start, end):
             _log(jid, "subject-region change %.3f (logged for calibration, not gating)" % sc)
         except Exception:
             pass
+
+
+_STOP = set("""a an the and or but of to in on at by for with from into onto over under
+across through behind beside between along toward towards against about around as is are
+was were be been being it its this that these those there here then while when where who
+which what whose very more most some any each every all both few many much other such only
+own same so than too can will just also still yet again ever never once now already slowly
+gently steadily quickly suddenly softly quietly continuously slightly little few first last
+one two three camera frame shot scene background foreground beat light lights lighting
+his her their our your my she he they we you them him himself herself itself image picture
+start end same before after moment""".split())
+
+
+def _content_words(text):
+    import re
+    out = []
+    for w in re.findall(r"[a-zA-Z]+", (text or "").lower()):
+        if len(w) < 4 or w in _STOP or w.endswith("ly"):
+            continue
+        out.append(w)
+    return out
+
+
+def _stem(w):
+    for suf in ("ings", "ing", "es", "s", "ed"):
+        if w.endswith(suf) and len(w) - len(suf) >= 4:
+            return w[:-len(suf)]
+    return w
+
+
+def _anchor_check_job(jid, fid, shid):
+    try:
+        f = F.load(fid)
+        sh = f.shot(shid)
+        anchor = _resolve_anchor_file(f, shid, jid)
+        _log(jid, "captioning the anchor")
+        here = os.path.dirname(os.path.abspath(__file__))
+        if here not in sys.path:
+            sys.path.insert(0, here)
+        import character_new as CN
+        _run, _sp, _lw, _el, _host, comfy_dir = _comfy()
+        staged = "anchor_check_%d.png" % (int(time.time()) % 100000)
+        shutil.copy(anchor, os.path.join(comfy_dir, "input", staged))
+        cap = (CN.caption(staged) or "").strip()
+        if not cap:
+            raise RuntimeError("the captioner returned nothing")
+        flat = f.flat(shid)
+        prose = " ".join(
+            [(b.get("action") or "") + " " + (b.get("background") or "")
+             for b in (sh.get("beats") or [])] + [str(flat.get("location") or "")])
+        seen = {_stem(w) for w in _content_words(cap)}
+        missing, dup = [], set()
+        for w in _content_words(prose):
+            s = _stem(w)
+            if s in seen or s in dup:
+                continue
+            if any(s[:5] == c[:5] for c in seen if len(c) >= 5):
+                continue
+            dup.add(s)
+            missing.append(w)
+        _log(jid, "caption: %s" % cap[:160])
+        _log(jid, ("not in the anchor: %s" % ", ".join(missing)) if missing
+             else "every content word in the prose is also in the caption")
+        f = F.load(fid)
+        sh = f.shot(shid)
+        sh["anchor_check"] = {"caption": cap, "missing": missing,
+                              "when": int(time.time())}
+        f.save()
+        with _LOCK:
+            JOBS[jid]["result"] = dict(sh["anchor_check"])
+        _finish(jid)
+    except Exception as e:
+        _finish(jid, str(e)[:300])
+
+
+def anchor_check(data):
+    """Caption the shot's anchor and list the prose words it does not contain."""
+    jid = _job("anchorcheck", film=data["film"], shot=data["shot"])
+    threading.Thread(target=_anchor_check_job,
+                     args=(jid, data["film"], data["shot"]), daemon=True).start()
+    return {"job": jid}, 200
 
 
 def _pin_preview_job(jid, fid, shid, change, seconds, seed, hold_feet=None):

@@ -766,6 +766,18 @@ def triage_shot(film, shid):
         bump("trade-off", "a camera move is requested - on LTX this is advisory, "
                           "the engine keeps its own prior. Pin the shot on H3 "
                           "if the move matters")
+    pinned = any(t.get("engine", "").startswith("h3-pinned")
+                 for t in (sh.get("takes") or []) if t.get("id") == sh.get("picked"))
+    wants = [b.get("motion") for b in beats if b.get("motion")]
+    if wants and not pinned:
+        bump("trade-off", "motion '%s' is selected on a beat - on LTX prose does not "
+                          "direct the subject's action (measured). Compose the anchor "
+                          "and pin the shot to enforce it" % wants[0])
+    ac = sh.get("anchor_check") or {}
+    if ac.get("missing"):
+        bump("trade-off", "the prose names things the anchor does not show (%s) - the "
+                          "engine will rewrite the plate toward them. Change the words "
+                          "or the plate" % ", ".join(ac["missing"][:6]))
     if flat.get("look") == "anime" and any(
             (b.get("dialogue") or {}).get("line") for b in beats):
         bump("trade-off", "anime dialogue - the voice is generated but the drawn "

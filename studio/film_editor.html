@@ -123,6 +123,10 @@ async function composeAnchor(){
       cx:parseFloat(document.getElementById("c_pcx").value||"0.62")}]:[])});
   WATCH.add(j.job); note("composing the anchor: "+j.job);
 }
+async function anchorCheck(){
+  const j=await api("/anchorcheck",{film:FID,shot:SHOT});
+  WATCH.add(j.job); note("captioning the anchor: "+j.job);
+}
 async function pinPreview(){
   const change=document.getElementById("c_change").value.trim();
   if(!change) return note("say what changes by the end of the shot",true);
@@ -469,6 +473,16 @@ function shotForm(){
       <div><label>prop across</label><input id="c_pcx" value="0.62" style="width:70px"></div>
       <span class="hint">sized for its depth from what it is - a lantern stays lantern-sized next to her</span>
     </div>
+    <div class="row" style="margin-top:6px;gap:8px;align-items:center">
+      <button class="small" onclick="anchorCheck()">check prose against anchor</button>
+      <span class="hint">one vision call: words the prose uses that the picture does not contain
+        are what LTX will rewrite the plate toward</span>
+    </div>
+    ${sh.anchor_check?`<div class="hint" style="margin-top:4px;padding:6px 8px;border-left:3px solid ${(sh.anchor_check.missing||[]).length?"var(--warn,#d9a441)":"var(--good)"}">
+      <b>the anchor shows:</b> ${esc(sh.anchor_check.caption.slice(0,260))}${sh.anchor_check.caption.length>260?"…":""}<br>
+      ${(sh.anchor_check.missing||[]).length
+        ?`<b style="color:var(--warn,#d9a441)">named in the prose, not in the anchor:</b> ${sh.anchor_check.missing.map(esc).join(", ")} - change the words, or the plate`
+        :`<b style="color:var(--good)">every content word in the prose is in the anchor</b>`}</div>`:""}
     <div class="hint">stand is how far into the scene: 0 at the camera, 1 at the
       horizon. It sets the size too, from the plate's own depth.
       ${sh.anchor_source?`<b style="color:var(--good)">this anchor was composed:

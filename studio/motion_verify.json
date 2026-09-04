@@ -30,5 +30,72 @@
   "action": "one shot, two beats, a hard cut between them",
   "ambient": "anchor: the bare plate, character described only in words - how the editor works today",
   "file": "films/one-beat-test/takes/030/ltx_t601585604.mp4"
+ },
+ {
+  "id": "harbour-B-crouch-in-place",
+  "shot": "020",
+  "question": "She crouches IN PLACE: her feet stay on the same spot of road from start to end, she does not walk toward the camera first, and the cars and lamp post behind her do not move.",
+  "selection": {
+   "camera": "pinned",
+   "action": "crouching",
+   "pace": "steady",
+   "ambient": [
+    "rain"
+   ]
+  },
+  "action": "pinned: start = composed anchor, end = the crouch cut from a qwen-edit and put back on the pristine plate with her feet held on the ground line and her scale matched by head width",
+  "ambient": "H3 fl2va interpolation, 8s",
+  "file": "films/the-harbour-letter/takes/020/pin_1788502088.mp4"
+ },
+ {
+  "id": "harbour-F-walk-to-camera",
+  "shot": "060",
+  "question": "She walks TOWARD the camera along the quay - she gets larger and lower in the frame - and the harbour behind her does not slide or change.",
+  "selection": {
+   "camera": "pinned",
+   "action": "walk_to",
+   "pace": "steady",
+   "ambient": [
+    "water",
+    "light"
+   ]
+  },
+  "action": "pinned: end frame keeps the regeneration's placement because for a walk the change of size IS the motion (feet not held)",
+  "ambient": "H3 fl2va interpolation, 8s",
+  "file": "films/the-harbour-letter/takes/060/pin_1788502477.mp4"
+ },
+ {
+  "id": "harbour-E-turn-ltx-fallback",
+  "shot": "050",
+  "question": "He turns from the water to face the camera. (This shot is an LTX take, not a pin: the pin preview judged the turn too small a change at his distance. Did LTX turn him anyway?)",
+  "selection": {
+   "camera": "static",
+   "action": "turn_to",
+   "pace": "steady",
+   "ambient": [
+    "water"
+   ]
+  },
+  "action": "LTX i2v from the composed anchor; motion selector 'turn_to' in the prose (advisory)",
+  "ambient": "compare with B and F: prose-requested motion vs pinned motion",
+  "file": "films/the-harbour-letter/takes/050/ltx_t501568715.mp4"
+ },
+ {
+  "id": "harbour-A-ambient-named",
+  "shot": "010",
+  "question": "In the empty street the rain visibly falls and at least one car moves - the ambient selectors (rain, traffic, light) named them in the prose.",
+  "selection": {
+   "camera": "static",
+   "action": "-",
+   "pace": "-",
+   "ambient": [
+    "rain",
+    "traffic",
+    "light"
+   ]
+  },
+  "action": "LTX i2v from the bare plate, no people",
+  "ambient": "unnamed backgrounds freeze - this tests that named ones do not",
+  "file": "films/the-harbour-letter/takes/010/ltx_t501056623.mp4"
  }
 ]

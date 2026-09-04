@@ -657,3 +657,60 @@ happens; "has lowered into a deep crouch, knees bent, weight low" is what the
 end frame shows), and picking a motion prefills the pin's sentence with it.
 Both compile into H3 prompts too; on H3 an unnamed background still freezes,
 and the warning now says to pick ambient motion.
+
+## §29  The end figure is constrained, not requested - and the prose must describe the anchor
+
+THE HARBOUR LETTER was made entirely through the API the Shot tab exposes:
+eight shots, two scenes, composed anchors, three pins, ambient selectors,
+scene music, assembly. Its contact sheets found three faults, all of the same
+species: the engine did exactly what it was given.
+
+**The end figure drifts in scale.** qwen-edit was told "same camera position,
+same framing, only the pose changes". It returned the crouch with the woman a
+quarter nearer the camera (head 76 px against 61 in the start frame). Pasted
+where the regeneration put her, the end frame said "walked forward, then
+crouched", and H3 interpolated that: she grows for three seconds before she
+bends. Asked for "walked closer", it returned a medium shot - four times the
+head width, thirty metres in eight seconds - and H3 bridged the gap by
+inventing willow trees that slid past her.
+
+An edit model regenerates composition as well as content; nothing in the
+sentence anchors scale. So the end figure is now **constrained** from the
+anchor recipe (`anchor_source`: stand, cx, plate) instead of asked for:
+
+- **In-place motions** (crouch, rise, turn, look, reach, gesture, nod): the
+  end figure's bottom goes on the start figure's ground line from the depth
+  pass, centred on the same x, and it is scaled so its **head is as wide as the
+  start figure's head**. Head width is the one measure of a person that a
+  change of pose leaves alone; height, width and bounding box all move with the
+  pose. The start silhouette is recovered as the difference between the start
+  frame and the pristine plate.
+- **Moving motions** (walk_to, walk_away, run): the change of scale is clamped
+  to 0.6-1.6x by head width, and the feet go where the plate's own depth puts a
+  figure of that height - the inverse of `place_by_depth` - so a larger figure
+  is lower in the frame by exactly the amount the plate implies.
+- `hold_feet` chooses between them. The editor's **feet planted** box follows
+  the motion selector (off for walk_to / walk_away / run). Left unset, the
+  change sentence decides (walk, closer, further, run ...).
+
+Verified on shot B re-pinned: she bends in place across eight seconds, same
+feet, same size, the cars and the lamp post fixed behind her, and H3 drew the
+envelope she reaches for from the pin prompt. Measured: held in place the
+crouch is 0.0028-0.0032/s; the plate floor is 0.002.
+
+**Prose that contradicts the anchor rewrites it.** The "harbour" place pack is
+a stone arch bridge over slow water in fog (base: bridge). The prose said
+boats, moorings, a quay. By the fourth second LTX had turned the bridge into a
+marina with a dozen boats. This is "unnamed backgrounds freeze" seen from the
+other side: words that name things the anchor lacks are instructions to leave
+the anchor. The Shot tab now has **check prose against anchor** - one vision
+call captions the anchor, and every content word in the beats and the scene
+location that the caption does not contain is listed on the shot. Change the
+words or change the plate; the engine will not split the difference.
+
+**Two things the compositor still does not know.** A ground line from depth
+does not know water from stone: at stand 0.40 on the bridge plate, Doran stands
+on the river. And a turn on a small distant figure measures below any floor
+(0.0013/s) - the frame-wide rate shrinks with distance. A subject-region change
+is now logged beside it for calibration; until it gates, the preview's "pin
+anyway" is the director's override.
