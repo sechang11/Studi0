@@ -316,7 +316,7 @@ function renderCenter(){
         <b>${t.engine}</b> <span style="cursor:pointer;text-decoration:underline dotted"
           title="use this seed for the next generation"
           onclick="$('#tk_seed').value=${t.seed}">seed ${t.seed}</span> · ${t.duration}s · ${t.created}
-        ${(()=>{const isInfo=n=>/^(ends closer|sound borrowed)/.test(String(n)); const f=(t.qc||[]).filter(n=>!isInfo(n)), i=(t.qc||[]).filter(isInfo);
+        ${(()=>{const isInfo=n=>/^(ends closer|sound borrowed|words not in the picture)/.test(String(n)); const f=(t.qc||[]).filter(n=>!isInfo(n)), i=(t.qc||[]).filter(isInfo);
           return (f.length?`<span class="qcbad" title="${esc(f.join("; "))}">QC ✗ ${f.length}</span>`:'<span style="color:var(--good)">QC ✓</span>')
                +(i.length?` <span class="hint" title="${esc(i.join("; "))}" style="cursor:help">ⓘ ${i.length}</span>`:"");})()}
         ${t.warnings&&t.warnings.length?`<span class="warn" title="${esc(t.warnings.join("; "))}">⚠ ${t.warnings.length}</span>`:""}
@@ -684,7 +684,7 @@ function sceneForm(){
     </div>
     <h2 style="margin-top:14px">Where this scene happens, and its standard shots</h2>
     <div class="hint">pick the place and background picture, then save the scene. "Make this shot" uses them
-      to put people into the picture. "Generate coverage" makes the usual set of shots for you.</div>
+      to put people into the picture. "Generate coverage" makes the usual set of shots for you: the empty wide, the wide with the people in it, a medium and a close-up on each person, and an insert - each with its picture already composed.</div>
     <div class="row" style="gap:6px;align-items:flex-end">
       <div><label>place</label><select id="cv_place" onchange="coveragePlates()">${(FOUNDRY.place||[]).map(p=>
         `<option value="${p.id}" ${sc.place===p.id?"selected":""}>${esc(p.name)}</option>`).join("")}</select></div>
@@ -838,7 +838,7 @@ async function loadTriage(){
       out+=`<div style="margin-top:8px"><b>what to fix</b> <span class="hint">- what the picked takes say about themselves</span></div>`;
       for(const [id,qc] of fixes){
         out+=`<div style="margin-top:4px"><span class="badge" onclick="selShot('${id}')" style="cursor:pointer">${id}</span>
-          <ul class="hint" style="margin:2px 0 0 14px;padding:0">${qc.filter(q=>!/^(ends closer|sound borrowed)/.test(String(q))).map(q=>`<li>${esc(String(q))}</li>`).join("")}${qc.filter(q=>/^(ends closer|sound borrowed)/.test(String(q))).map(q=>`<li style="opacity:.6">${esc(String(q))} <span style="opacity:.8">(information)</span></li>`).join("")}</ul></div>`;
+          <ul class="hint" style="margin:2px 0 0 14px;padding:0">${qc.filter(q=>!/^(ends closer|sound borrowed|words not in the picture)/.test(String(q))).map(q=>`<li>${esc(String(q))}</li>`).join("")}${qc.filter(q=>/^(ends closer|sound borrowed|words not in the picture)/.test(String(q))).map(q=>`<li style="opacity:.6">${esc(String(q))} <span style="opacity:.8">(information)</span></li>`).join("")}</ul></div>`;
       }
     }
     if(!flagged.length&&!fixes.length) out+=`<div class="hint">every shot can be made here as asked, and no picked take reports a fault</div>`;

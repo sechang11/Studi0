@@ -1102,7 +1102,7 @@ def _inherit_qc(take):
 def _faults(take):
     """notes that count against a take; 'ends closer' is information, not a fault"""
     return [n for n in (take.get("qc") or [])
-            if not n.startswith(("ends closer", "sound borrowed"))]
+            if not n.startswith(("ends closer", "sound borrowed", "words not in the picture"))]
 
 
 def _cleanest(sh, takes):
