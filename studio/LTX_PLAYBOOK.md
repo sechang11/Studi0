@@ -1456,3 +1456,47 @@ in red and information dim; what-to-fix lists faults first and marks the rest
 borrowed its soundtrack, or was warned before rendering that a word is not in
 its picture has kept every promise the picture makes. The builder's film, with
 twelve picked takes and their honest notes: *all invariants hold*.
+
+## §49  The afternoon block in numbers
+
+Noon to a quarter past four, unattended, on main: 39 commits, all this
+session's. Six playbook sections (§43-§48). The report republished a dozen
+times as it grew.
+
+**The builder's film.** `builder-test`: 14 shots across 7 scenes, 35 takes, 14
+picked, 7 spec sheets; the spec checker: *all invariants hold*. Five shots from
+`/build` (two by a browser clicking, not by API), seven from coverage, two
+close-ups composed as close-ups, three voiced lines, one film assembled: 70.5 s,
+1472x832, 24 fps, -17.9 dB mean.
+
+**The verify page.** 31 clips, 26 judged this morning, 5 new and first in the
+list: the two voiced harbour shots, the composed close-up, the two-shot with a
+camera variant, the close-up built by clicking.
+
+**Times a person can plan around, measured today.** A builder variant: three to
+four minutes, plus a minute for a spoken line. A close-up composite: 18-20 s.
+A two-shot composite: about six minutes (two footings, two relights, two
+re-cuts, two shadows). Coverage anchors for a two-person scene: 22 minutes, the
+anchor check about a minute a shot. Make-all on seven shots: 70 minutes with
+retries. A build from the page to a voiced pick: 456 s; a two-person medium
+with two variants and a retry: 336 s.
+
+**Loudness by shot kind on this box.** Harbour -18 to -21 dB; park two-shot
+-34 to -45; close-ups -48 to -60. The line is -40; a take under it borrows the
+loudest take above it in its own scene, else a same-place scene, normalised to
+-26 LUFS. Never across places.
+
+**The rules that changed today, in one line each.** Lines go through voice
+packs. Make never forces a pin. Only whole views are placed; cropped packs are
+repaired, then extended downward. A close-up is composed, not zoomed. A silent
+take borrows its place's sound. A shot nobody has written gets a neutral
+sentence, never the placeholder. Information is not a fault, anywhere a person
+reads it. Words that name the picture, hearing, attention or arrangement are
+not things a picture can lack. The pages point at each other: builder, sheet,
+editor, start.
+
+**Still open.** LTX pushes in on most takes and speaks unreliably; H3 pins hold
+in place only; the delivery upscale is a deliverable, not a master step; a
+walk regenerates the scene; some drift is the seed's and no sentence fixes it.
+The five new verify clips await the director's verdicts, which is how the next
+rules get written.
