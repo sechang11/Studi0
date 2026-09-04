@@ -892,7 +892,10 @@ async function pollJobs(){
   }catch(e){}
   setTimeout(pollJobs,2500);
 }
-loadFilms(); pollJobs();
+(async()=>{ const q=new URLSearchParams(location.search);
+  await loadFilms(q.get("film")||"");
+  if(q.get("film")){ try{ await openFilm(q.get("film")); if(q.get("shot")) await selShot(q.get("shot")); }catch(e){ note("could not open "+q.get("film"), true); } }
+})(); pollJobs();
 </script>
 </body>
 </html>
