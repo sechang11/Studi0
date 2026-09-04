@@ -1616,9 +1616,11 @@ def _anchor_check_job(jid, fid, shid):
         if not cap:
             raise RuntimeError("the captioner returned nothing")
         flat = f.flat(shid)
+        # the shot's own words - not the scene description, which coverage writes
+        # from the place and which would flag the same nouns on every shot
         prose = " ".join(
             [(b.get("action") or "") + " " + (b.get("background") or "")
-             for b in (sh.get("beats") or [])] + [str(flat.get("location") or "")])
+             for b in (sh.get("beats") or [])])
         seen = {_stem(w) for w in _content_words(cap)}
         # the cast is what the compositor put there; their names are not things
         # the picture can lack. Nor are coverage's own blanks.
@@ -1736,8 +1738,8 @@ def _coverage_job(jid, fid, scid, place_id, plate, chars, prop):
                                               (" with " + prop) if prop else ""))
         # 1 the wide, empty
         shot("wide - establishing", 8,
-             [beat("wide establishing shot", "", "the %s; what moves here moves" % pdesc,
-                   "the whole scene alive: " + ", ".join(amb))],
+             [beat("wide establishing shot", "", "the place as it is, alive",
+                   "what moves here moves: " + ", ".join(amb))],
              anchor="file:" + plate_p, no_people=True, sfx=sc.get("ambience") or "")
         plan = []
         if a:
@@ -1767,7 +1769,7 @@ def _coverage_job(jid, fid, scid, place_id, plate, chars, prop):
         # 5 the insert
         if detail and os.path.exists(detail):
             shot("insert - detail", 6,
-                 [beat("wide shot", "", "a detail of the %s" % pdesc, "what moves here moves")],
+                 [beat("wide shot", "", "a close detail of the place", "what moves here moves: " + ", ".join(amb))],
                  anchor="file:" + detail, no_people=True, sfx=sc.get("ambience") or "")
         f.save()
         _log(jid, "%d shots created: %s" % (len(made), ", ".join(made)))
