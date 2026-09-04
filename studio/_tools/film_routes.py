@@ -2512,8 +2512,13 @@ def _build_job(jid, data):
         if fid:
             f = F.load(fid)
         else:
-            f = F.new_film(data.get("title") or "Shot builds %s" % time.strftime("%m-%d"),
-                           look=data.get("look", "photoreal"), resolution=data.get("resolution", "auto"))
+            title = data.get("title") or "Shot builds %s" % time.strftime("%m-%d")
+            want = F._slug(title)
+            if os.path.exists(os.path.join(F.FILMS, want, "film.json")):
+                f = F.load(want)
+                _log(jid, "building into %s (today's builds film)" % want)
+            else:
+                f = F.new_film(title, look=data.get("look", "photoreal"), resolution=data.get("resolution", "auto"))
             fid = f.id
         place, plate = data.get("place") or "", data.get("plate") or ""
         chars_in = [c for c in (data.get("characters") or []) if c][:2]
