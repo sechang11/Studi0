@@ -753,6 +753,7 @@ def _borrow_audio(dest, donor):
     try:
         _sh("ffmpeg", "-y", "-v", "error", "-i", dest, "-stream_loop", "-1", "-i", donor,
             "-map", "0:v", "-map", "1:a", "-shortest", "-c:v", "copy",
+            "-filter:a", "loudnorm=I=-26:TP=-2:LRA=11",
             "-c:a", "aac", "-b:a", "192k", tmp)
         if os.path.exists(tmp) and os.path.getsize(tmp) > 1000:
             os.replace(tmp, dest)

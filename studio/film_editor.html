@@ -116,6 +116,7 @@ async function composeAnchor(){
     character:document.getElementById("c_char").value,
     place:document.getElementById("c_place").value,
     plate:document.getElementById("c_plate").value,
+    framing:(document.getElementById("c_framing")||{}).value||"full",
     stand:parseFloat(document.getElementById("c_stand").value||"0.35"),
     cx:parseFloat(document.getElementById("c_cx").value||"0.42"),
     props:(()=>{ const v=document.getElementById("c_prop").value; if(!v) return [];
@@ -513,6 +514,7 @@ function shotForm(){
         <select id="c_place" onchange="composePlates()">${(FOUNDRY.place||[]).map(p=>
           `<option value="${p.id}">${esc(p.name)}</option>`).join("")}</select></div>
       <div><label>background picture</label><select id="c_plate"></select></div>
+      <div><label>framing</label><select id="c_framing" title="a close-up uses the person's portrait picture on a window of the place; distance and position still choose where the camera looks"><option value="full">whole figure</option><option value="close">close-up</option></select></div>
       <div><label>distance (0 near - 1 far)</label><input id="c_stand" value="0.35" style="width:70px"></div>
       <div><label>position (0 left - 1 right)</label><input id="c_cx" value="0.42" style="width:70px"></div>
       <button class="small" onclick="composeAnchor()">put them in the scene</button>
