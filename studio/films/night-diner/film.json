@@ -1,0 +1,529 @@
+{
+ "title": "Night Diner",
+ "created": "2026-09-04 09:03",
+ "look": "photoreal",
+ "look_clause": "photoreal cinematic film still, 35mm, deep focus, high detail, colour photograph, filmic grade",
+ "grade": "",
+ "negative": "",
+ "fps": 24,
+ "logline": "",
+ "resolution": "auto",
+ "deliver": "native",
+ "cast": {
+  "STATION": {
+   "name": "Station Master",
+   "clause": "a tall, broad-shouldered man, in their fifties, brown skin, a square-jawed face, brown eyes, almond eyes, strong dark brows, black short neat hair, a moustache, a calm, unreadable bearing, a small-town station master in a dark uniform coat with a peaked cap, a pocket watch chain, a whistle on a cord",
+   "short": "black short neat hair, brown eyes",
+   "sheet": "/home/k4shix/shared/comfy-studio/studio/foundry/characters/station-master/base_portrait.png",
+   "portrait": "/home/k4shix/shared/comfy-studio/studio/foundry/characters/station-master/base_portrait.png",
+   "voice": "",
+   "voice_desc": "",
+   "foundry": "station-master"
+  },
+  "TOMAS": {
+   "name": "Tomas Reyl",
+   "clause": "a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot",
+   "short": "grey a shaved head, brown eyes",
+   "sheet": "/home/k4shix/shared/comfy-studio/studio/foundry/characters/tomas-reyl/base_portrait.png",
+   "portrait": "/home/k4shix/shared/comfy-studio/studio/foundry/characters/tomas-reyl/base_portrait.png",
+   "voice": "",
+   "voice_desc": "",
+   "foundry": "tomas-reyl"
+  }
+ },
+ "scenes": [
+  {
+   "id": "sc01",
+   "title": "scene 1",
+   "location": "a small diner interior, counter stools and window booths, old and weathered, in steady rain, surfaces wet and reflective, a roadside diner at night, neon in the window, rain on the lot, one car",
+   "time_of_day": "night",
+   "weather": "rain",
+   "ambience": "a refrigerator hum and a coffee machine ticking, steady rain on every surface",
+   "palette": "",
+   "music": "cinematic, late night diner, lonely saxophone, rain, 58 bpm",
+   "cast_present": [
+    "STATION",
+    "TOMAS"
+   ],
+   "no_people": false,
+   "anchor": "",
+   "shots": [
+    "010",
+    "020",
+    "030",
+    "040",
+    "050"
+   ],
+   "place": "night-diner",
+   "plate": "night_wide"
+  }
+ ],
+ "shots": {
+  "010": {
+   "id": "010",
+   "scene": "sc01",
+   "title": "wide - establishing",
+   "duration": 6,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/foundry/places/night-diner/night_wide.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide establishing shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "",
+     "action": "the diner at night, rain on the window, the neon flickering",
+     "background": "the whole scene alive: light, rain",
+     "motion": "",
+     "ambient": [
+      "rain",
+      "light"
+     ],
+     "dialogue": {}
+    }
+   ],
+   "sfx": "a refrigerator hum and a coffee machine ticking, steady rain on every surface",
+   "no_people": true,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t527090732",
+     "engine": "ltx",
+     "seed": 865032190,
+     "created": "09:06",
+     "file": "takes/010/ltx_t527090732.mp4",
+     "poster": "takes/010/ltx_t527090732.png",
+     "strip": "takes/010/ltx_t527090732_strip.png",
+     "duration": 6.04,
+     "fps": 24,
+     "qc": [
+      "words not in the picture: interior, surfaces, roadside"
+     ],
+     "drift": {
+      "lost": 0.38,
+      "missing": [
+       "build",
+       "cars",
+       "cloud",
+       "concrete",
+       "curb",
+       "door",
+       "droplet",
+       "pavement",
+       "rainstorm",
+       "restaurant",
+       "road",
+       "shadow"
+      ],
+      "kept": 21
+     },
+     "warnings": [],
+     "prompt": "A static wide establishing shot: the diner at night, rain on the window, the neon flickering, while the whole scene alive: light, rain; rain falls steadily through the whole frame; the light shifts and flickers across the scene, a small diner interior, counter stools and window booths, old and weathered, in steady rain, surfaces wet and reflective, a roadside diner at night, neon in the window, ra"
+    }
+   ],
+   "picked": "t527090732",
+   "engine_notes": "",
+   "anchor_check": {
+    "caption": "Diner, restaurant, counter, stools, booths, tables, floor, walls, windows, doors, frame, glass, neon signs, letters, curb, road, street, cars, vehicles, rain, water, droplets, rainstorm, night, darkness, light, glow, neon light, reflections, shadows, booths, cushions, leather, metal, concrete, pavement, buildings, sky, clouds.",
+    "missing": [
+     "interior",
+     "surfaces",
+     "roadside"
+    ],
+    "when": 1788527090
+   }
+  },
+  "020": {
+   "id": "020",
+   "scene": "sc01",
+   "title": "wide - STATION and TOMAS",
+   "duration": 6,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/night-diner/assets/anchor_shot_020.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "medium two-shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "STATION",
+     "action": "sit at the counter, not looking at each other",
+     "background": "the scene moves behind them",
+     "motion": "",
+     "ambient": [
+      "light"
+     ],
+     "dialogue": {
+      "char": "TOMAS",
+      "line": "You're not from around here.",
+      "delivery": "gruff, friendly"
+     }
+    }
+   ],
+   "sfx": "",
+   "no_people": false,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t527184194",
+     "engine": "ltx",
+     "seed": 888104676,
+     "created": "09:07",
+     "file": "takes/020/ltx_t527184194.mp4",
+     "poster": "takes/020/ltx_t527184194.png",
+     "strip": "takes/020/ltx_t527184194_strip.png",
+     "duration": 6.04,
+     "fps": 24,
+     "qc": [
+      "words not in the picture: surfaces, roadside"
+     ],
+     "drift": {
+      "lost": 0.59,
+      "missing": [
+       "asphalt",
+       "beard",
+       "concrete",
+       "counter",
+       "drop",
+       "floor",
+       "interior",
+       "leather",
+       "metal",
+       "plastic",
+       "restaurant",
+       "shadow"
+      ],
+      "kept": 12
+     },
+     "warnings": [],
+     "prompt": "A static medium two-shot: a tall, broad-shouldered man, in their fifties, brown skin, a square-jawed face, brown eyes, almond eyes, strong dark brows, black short neat hair, a moustache, a calm, unreadable bearing, a small-town station master in a dark uniform coat with a peaked cap, a pocket watch chain, a whistle on a cord, sit at the counter, not looking at each other, a short, heavyset man, el"
+    }
+   ],
+   "picked": "t527184194",
+   "engine_notes": "",
+   "anchor_source": {
+    "character": "station-master",
+    "place": "night-diner",
+    "stand": 0.35,
+    "cx": 0.38,
+    "view": "turn_front_three_quarter",
+    "plate": "/home/k4shix/shared/comfy-studio/studio/foundry/places/night-diner/night_wide.png",
+    "props": [
+     {
+      "character": "tomas-reyl",
+      "view": "turn_front_three_quarter",
+      "stand": 0.35,
+      "cx": 0.62
+     }
+    ]
+   },
+   "anchor_check": {
+    "caption": "Diner, restaurant, counter, stools, booth, window, frame, wall, floor, man, man, jacket, uniform, hat, beard, hair, rain, water, street, car, bus, building, neon sign, light, glow, reflection, rain drops, night, interior, metal, glass, plastic, leather, wood, asphalt, concrete, shadow.",
+    "missing": [
+     "surfaces",
+     "roadside"
+    ],
+    "when": 1788527184
+   }
+  },
+  "030": {
+   "id": "030",
+   "scene": "sc01",
+   "title": "medium - STATION",
+   "duration": 6,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/night-diner/assets/anchor_shot_030.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "medium shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "STATION",
+     "action": "turns his head to look at the man beside him",
+     "background": "the scene moves behind them",
+     "motion": "look_off",
+     "ambient": [
+      "light"
+     ],
+     "dialogue": {}
+    }
+   ],
+   "sfx": "",
+   "no_people": false,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t527289621",
+     "engine": "ltx",
+     "seed": 383174556,
+     "created": "09:09",
+     "file": "takes/030/ltx_t527289621.mp4",
+     "poster": "takes/030/ltx_t527289621.png",
+     "strip": "takes/030/ltx_t527289621_strip.png",
+     "duration": 6.04,
+     "fps": 24,
+     "qc": [
+      "scene drift: the last frame has lost 61% of the start picture (asphalt, booth, chrome, floor, fluorescent)",
+      "words not in the picture: interior, surfaces, reflective, roadside"
+     ],
+     "drift": {
+      "lost": 0.61,
+      "missing": [
+       "asphalt",
+       "booth",
+       "chrome",
+       "floor",
+       "fluorescent",
+       "leather",
+       "letter",
+       "officer",
+       "pavement",
+       "plastic",
+       "police",
+       "rain"
+      ],
+      "kept": 12
+     },
+     "warnings": [
+      "beat 1 motion 'look_off' is advisory on LTX - measured, prose does not direct the subject's action here. Pin the shot to enforce it"
+     ],
+     "prompt": "A static medium shot: a tall, broad-shouldered man, in their fifties, brown skin, a square-jawed face, brown eyes, almond eyes, strong dark brows, black short neat hair, a moustache, a calm, unreadable bearing, a small-town station master in a dark uniform coat with a peaked cap, a pocket watch chain, a whistle on a cord, turns his head to look at the man beside him; turns their head to look off t"
+    },
+    {
+     "id": "t527378065",
+     "engine": "ltx",
+     "seed": 24224611,
+     "created": "09:11",
+     "file": "takes/030/ltx_t527378065.mp4",
+     "poster": "takes/030/ltx_t527378065.png",
+     "strip": "takes/030/ltx_t527378065_strip.png",
+     "duration": 6.04,
+     "fps": 24,
+     "qc": [
+      "scene drift: the last frame has lost 68% of the start picture (badge, booth, chrome, cloth, fluorescent)",
+      "words not in the picture: interior, surfaces, reflective, roadside"
+     ],
+     "drift": {
+      "lost": 0.68,
+      "missing": [
+       "badge",
+       "booth",
+       "chrome",
+       "cloth",
+       "fluorescent",
+       "glas",
+       "leather",
+       "letter",
+       "metal",
+       "officer",
+       "pavement",
+       "plastic"
+      ],
+      "kept": 10
+     },
+     "warnings": [
+      "beat 1 motion 'look_off' is advisory on LTX - measured, prose does not direct the subject's action here. Pin the shot to enforce it"
+     ],
+     "prompt": "A static medium shot: a tall, broad-shouldered man, in their fifties, brown skin, a square-jawed face, brown eyes, almond eyes, strong dark brows, black short neat hair, a moustache, a calm, unreadable bearing, a small-town station master in a dark uniform coat with a peaked cap, a pocket watch chain, a whistle on a cord, turns his head to look at the man beside him; turns their head to look off t"
+    }
+   ],
+   "picked": "t527289621",
+   "engine_notes": "",
+   "anchor_source": {
+    "character": "station-master",
+    "place": "night-diner",
+    "stand": 0.15,
+    "cx": 0.45,
+    "view": "turn_front",
+    "plate": "/home/k4shix/shared/comfy-studio/studio/foundry/places/night-diner/night_wide.png",
+    "props": []
+   },
+   "anchor_check": {
+    "caption": "Diner, restaurant, counter, stools, booths, floor, walls, windows, rain, pavement, car, truck, bus, metal, glass, plastic, leather, vinyl, chrome, asphalt, water, rainwater, night, darkness, fluorescent lights, neon signs, sign, lettering, police officer, man, uniform, badge, clothing.",
+    "missing": [
+     "interior",
+     "surfaces",
+     "reflective",
+     "roadside"
+    ],
+    "when": 1788527275
+   },
+   "pin_preview": {
+    "change": "the subject has turned their head to look off to one side",
+    "seconds": 6.0,
+    "end": "assets/pin_end_030.png",
+    "rate": 0.001,
+    "ok": false,
+    "longest": 3.0,
+    "seed": 11,
+    "hold_feet": true,
+    "when": 1788527289
+   }
+  },
+  "040": {
+   "id": "040",
+   "scene": "sc01",
+   "title": "medium - TOMAS",
+   "duration": 6,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/night-diner/assets/anchor_shot_040.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "medium shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "TOMAS",
+     "action": "laughs and shakes his head",
+     "background": "the scene moves behind them",
+     "motion": "laugh",
+     "ambient": [
+      "light"
+     ],
+     "dialogue": {
+      "char": "TOMAS",
+      "line": "Nobody is. That's the point of the place.",
+      "delivery": "warm"
+     }
+    }
+   ],
+   "sfx": "",
+   "no_people": false,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "pin_1788527486",
+     "engine": "h3-pinned",
+     "file": "takes/040/pin_1788527486.mp4",
+     "duration": 5.875,
+     "fps": 24,
+     "seed": 42,
+     "qc": [],
+     "warnings": [],
+     "pin": {
+      "change": "the subject is laughing, head back, shoulders lifted",
+      "rate": 0.0029,
+      "end": "assets/pin_end_040.png"
+     }
+    }
+   ],
+   "picked": "pin_1788527486",
+   "engine_notes": "",
+   "anchor_source": {
+    "character": "tomas-reyl",
+    "place": "night-diner",
+    "stand": 0.15,
+    "cx": 0.5,
+    "view": "turn_front",
+    "plate": "/home/k4shix/shared/comfy-studio/studio/foundry/places/night-diner/night_wide.png",
+    "props": []
+   },
+   "anchor_check": {
+    "caption": "Diner, restaurant, building, windows, exterior, rain, man, person, jacket, suit, stool, stools, counter, booth, booths, leather, metal, plastic, asphalt, road, car, cars, headlights, sky, raindrops, water, rain, night, darkness, fluorescent lights, neon signs, lettering, text, letters, reflection, glow, shadows, trees, foliage.",
+    "missing": [
+     "shakes",
+     "interior",
+     "surfaces",
+     "roadside"
+    ],
+    "when": 1788527472
+   },
+   "pin_preview": {
+    "change": "the subject is laughing, head back, shoulders lifted",
+    "seconds": 6.0,
+    "end": "assets/pin_end_040.png",
+    "rate": 0.0029,
+    "ok": true,
+    "longest": 8.6,
+    "seed": 11,
+    "hold_feet": true,
+    "when": 1788527486
+   }
+  },
+  "050": {
+   "id": "050",
+   "scene": "sc01",
+   "title": "insert - detail",
+   "duration": 6,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/foundry/places/night-diner/night_detail.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "",
+     "action": "the counter, a coffee cup, steam rising, neon reflected in the chrome",
+     "background": "what moves here moves",
+     "motion": "",
+     "ambient": [
+      "steam",
+      "light"
+     ],
+     "dialogue": {}
+    }
+   ],
+   "sfx": "a refrigerator hum and a coffee machine ticking, steady rain on every surface",
+   "no_people": true,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t527584503",
+     "engine": "ltx",
+     "seed": 249823305,
+     "created": "09:14",
+     "file": "takes/050/ltx_t527584503.mp4",
+     "poster": "takes/050/ltx_t527584503.png",
+     "strip": "takes/050/ltx_t527584503_strip.png",
+     "duration": 6.04,
+     "fps": 24,
+     "qc": [
+      "words not in the picture: coffee, steam, chrome, interior, surfaces, roadside"
+     ],
+     "drift": {
+      "lost": 0.38,
+      "missing": [
+       "cars",
+       "city",
+       "counter",
+       "curb",
+       "floor",
+       "foliage",
+       "letter",
+       "plastic",
+       "puddl",
+       "restaurant",
+       "sidewalk",
+       "vehicl"
+      ],
+      "kept": 21
+     },
+     "warnings": [],
+     "prompt": "A static wide shot: the counter, a coffee cup, steam rising, neon reflected in the chrome, while what moves here moves; steam rises and curls; the light shifts and flickers across the scene, a small diner interior, counter stools and window booths, old and weathered, in steady rain, surfaces wet and reflective, a roadside diner at night, neon in the window, rain on the lot, one car, night, rain, t"
+    }
+   ],
+   "picked": "t527584503",
+   "engine_notes": "",
+   "anchor_check": {
+    "caption": "Diner, restaurant, booths, counter, stools, floor, walls, windows, rain, street, cars, building, signs, neon, lights, reflections, water, puddles, wetness, night, darkness, glow, neon sign, lettering, curb, sidewalk, asphalt, glass, metal, wood, plastic, vinyl, brown, gray, red, blue, black, city, vehicles, streetlights, trees, foliage.",
+    "missing": [
+     "coffee",
+     "steam",
+     "chrome",
+     "interior",
+     "surfaces",
+     "roadside"
+    ],
+    "when": 1788527584
+   }
+  }
+ }
+}
