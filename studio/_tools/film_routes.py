@@ -757,9 +757,15 @@ def _sound_donor(f, sh):
                         out.append((t["loud"], p, t["id"], s["id"]))
         return out
     shots = list((f.data.get("shots") or {}).values())
+    scenes = f.data.get("scenes") or {}
+    if isinstance(scenes, list):
+        scenes = {s.get("id"): s for s in scenes}
+    my_place = (scenes.get(sh.get("scene")) or {}).get("place") or ""
     same = [s for s in shots if s.get("scene") == sh.get("scene") and s.get("id") != sh.get("id")]
-    others = [s for s in shots if s.get("id") != sh.get("id")]
-    for pool in (same, others):
+    same_place = [s for s in shots if s.get("id") != sh.get("id") and my_place
+                  and ((scenes.get(s.get("scene")) or {}).get("place") or "") == my_place]
+    anywhere = [s for s in shots if s.get("id") != sh.get("id")] if not my_place else []
+    for pool in (same, same_place, anywhere):
         c = sorted(cands(pool), key=lambda x: x[0])
         if c:
             return c[-1][1:]
@@ -913,7 +919,7 @@ def _render_take(jid, f, sh, eng, seed):
                  "the render was %s; its soundtrack is borrowed from take %s of shot %s" % (how, donor[1], donor[2]))
             loud = _mean_db(dest)
         elif not donor:
-            _log(jid, "the render was %s and no other take of this film is loud enough to lend its sound" % how)
+            _log(jid, "the render was %s and no take of this place is loud enough to lend its sound" % how)
     try:
         _start = _resolve_anchor_file(f, sh["id"], jid)
         _d = _scene_drift(dest, _start, "%s_%s" % (f.id, sh["id"])) if _start else None
@@ -1977,6 +1983,14 @@ def _coverage_job(jid, fid, scid, place_id, plate, chars, prop):
                 s4 = shot("medium - %s" % b["cast"], 6,
                           [beat("medium shot", b["cast"], "describe the beat", "the scene moves behind them")])
                 plan.append((s4["id"], b["foundry"], "turn_front", 0.22, 0.50, []))
+            # 4b a close-up on each: the portrait view on a window of the place
+            s5 = shot("close - %s" % a["cast"], 5,
+                      [beat("close-up", a["cast"], "describe the beat", "the place soft behind them")])
+            plan.append((s5["id"], a["foundry"], "base_portrait", 0.22, 0.45, [], "close"))
+            if b:
+                s6 = shot("close - %s" % b["cast"], 5,
+                          [beat("close-up", b["cast"], "describe the beat", "the place soft behind them")])
+                plan.append((s6["id"], b["foundry"], "base_portrait", 0.22, 0.50, [], "close"))
         # 5 the insert
         if detail and os.path.exists(detail):
             shot("insert - detail", 6,
@@ -1984,11 +1998,13 @@ def _coverage_job(jid, fid, scid, place_id, plate, chars, prop):
                  anchor="file:" + detail, no_people=True, sfx=sc.get("ambience") or "")
         f.save()
         _log(jid, "%d shots created: %s" % (len(made), ", ".join(made)))
-        for shid, cid, view, stand, cx, layers in plan:
+        for entry in plan:
+            shid, cid, view, stand, cx, layers = entry[:6]
+            framing = entry[6] if len(entry) > 6 else None
             sub = _job("compose", film=fid, shot=shid)
-            _log(jid, "composing %s for %s" % (cid, shid))
+            _log(jid, "composing %s for %s%s" % (cid, shid, " (close-up)" if framing == "close" else ""))
             _compose_anchor_job(sub, fid, shid, cid, place_id, plate or None, view, stand, cx,
-                                layers or None)
+                                layers or None, framing=framing)
             with _LOCK:
                 err = JOBS.get(sub, {}).get("error")
             if err:

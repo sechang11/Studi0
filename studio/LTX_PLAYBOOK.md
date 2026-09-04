@@ -1339,10 +1339,14 @@ dog. This is the speech law again: LTX makes sound from what it sees, and a
 face filling the frame shows nothing that makes a noise. Re-rolling is the
 wrong answer - the second seed was as silent as the first. The right answer is
 the scene's own sound from a sibling take: the wide shot of the same place has
-the park under it. A silent take now borrows the soundtrack of the newest
-sounding, unvoiced take in its scene (or the film), looped to its length, and
-the note says so: *sound borrowed from take X of shot Y - the render was
-silent*. Make no longer spends a render on a silent close-up.
+the park under it. Loudness decides, measured: the harbour takes sit at -20 dB,
+the park two-shot at -35 to -45, the close-ups at -48 to -60, and the rms
+"silent" test caught only the last. A take whose mean volume is under -40 dB
+borrows the soundtrack of the loudest unvoiced take in its scene, else in a
+scene of the same place (the first borrow reached across the film and put the
+harbour's water under the park - a wrong bed is a fault, quiet is not), that is
+itself above -40, looped to length and normalised to -26 LUFS on the way in; the note says so: *sound borrowed from take X of shot Y - the
+render was too quiet (mean -52 dB)*. Make no longer spends a render on it.
 
 **Two people from the repaired packs.** The two-person medium build worked
 end to end: Mara and Tomas on the path, both whole (Tomas's three-quarter view
