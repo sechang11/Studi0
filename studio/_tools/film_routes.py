@@ -1705,6 +1705,7 @@ def _log_geom(jid, CM, start, end):
 
 
 _STOP = set("""place scene shot frame picture background foreground image view
+weight breath breaths beat beats
 sound sounds noise noises voice voices music silence quiet moment time
 a an the and or but of to in on at by for with from into onto over under
 across through behind beside between along toward towards against about around as is are
@@ -1723,7 +1724,8 @@ SCENE_ASK = (
     "of day, light sources, signs, and any people or animals. Be literal and complete. "
     "Comma-separated nouns and short noun phrases only, no sentences, no apologies.")
 
-_VERBISH = set("""listening listens listen watching watches watch waiting waits wait thinking thinks
+_VERBISH = set("""shifting shifts shift breathing breathes
+listening listens listen watching watches watch waiting waits wait thinking thinks
 think staring stares stare gazing gazes gaze hearing hears hear remembering remembers remember
 hesitating hesitates hesitate breathing breathes breathe smiling smiles smile frowning frowns frown
 talking talks talk whispering whispers whisper wondering wonders wonder noticing notices notice
@@ -2087,7 +2089,7 @@ def _make_job(jid, fid, shid, seconds=None, seed=0, variants=1):
             elif "two" in fr or " and " in act:
                 bt["action"] = "stand together, talking quietly, looking out at the place"
             elif bt.get("subject"):
-                bt["action"] = "stands in the scene, weight shifting, looking out at it"
+                bt["action"] = "stands in the scene, looking out at it, a slow breath"
             else:
                 bt["action"] = "the place as it is, alive"
             changed = True

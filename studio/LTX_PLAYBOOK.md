@@ -1405,3 +1405,44 @@ drift toward it.
 builder, its film of five builder shots and a coverage scene, three playbook
 sections, thirty-one clips on the verify page (five new, awaiting the
 director), the report published three times.
+
+## §48  The builder's film, made and assembled
+
+The last test of the block was the film editor's one button on the builder's
+own film: *Make every missing shot, then assemble*. The coverage scene's seven
+shots had anchors and no takes; the builder's five shots had their picks.
+
+**What happened, unattended.** Seventy minutes for seven shots, retries
+included: the empty wide held (89% of its picture in the last frame); the
+two-shot and the mediums pushed in as LTX does; Tomas's medium drifted 67% and
+72% on both seeds and kept the lesser; Mara's close-up came back too quiet
+(-44 dB) and borrowed the park from Tomas's medium; the insert kept growing
+people and fell to the camera rig with borrowed sound under it. Every shot
+picked. Then the assembly: twelve shots across five scenes, 70.5 s at
+1472x832, 24 fps, mastered to -17.9 dB mean, -0.8 dB peak. The contact sheet
+reads as one film: the harbour with the line, the park close-up, the two-shot,
+the coverage in order, the close-up built by clicking.
+
+**Two things it exposed, fixed the same hour.** Coverage writes a placeholder
+sentence - *describe the beat* - into the shots it lays out, and make-all
+rendered the placeholder literally: the engine was asked, in so many words, to
+describe. A shot nobody has written now gets a neutral sentence by framing
+before it renders (*looks off, then back, a slow breath; the face held in the
+frame* for a close-up; *stands in the scene, looking out at it, a slow breath*
+for a single; *stand together, talking quietly* for a two-shot; *the place as
+it is, alive* for an empty one), written into the shot so the editor and the
+sheet tell the truth, with a log line asking for the real one. Measured at
+once on Tomas's medium: with the neutral sentence the first seed still lost
+72% of its picture - the same as with the placeholder - and the second seed
+held; so the drift on that plate is the push-in law and the seed, not the
+sentence; the fix is for honesty, not for drift. And a borrowed soundtrack no longer counts as a fault when takes are
+compared or when Make decides to re-roll.
+
+**Where the day leaves the product.** A person can: start on the Start page;
+build a shot from pickers and get variants with promises; open the promises on
+the sheet and make more; make a film from a form, lay out a scene's coverage
+with real close-ups, press one button, and get an assembled film with every
+take's verdicts in plain words and a what-to-fix list. What still needs a
+person: the sentences (the neutral ones are placeholders that render), the
+picks when the eye disagrees, and the verify page's verdicts, which are how
+the next rules get written.
