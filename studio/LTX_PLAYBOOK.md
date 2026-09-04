@@ -1162,3 +1162,55 @@ short film from a form and a few sentences, and every fault the machine can see
 is written on the take in that person's words. Faults the machine cannot see -
 the taste of a shot, whether a laugh is a laugh - still want the eye, which is
 what the verify page is for.
+
+## §43  The director's verdicts, and what each one changed
+
+Twenty-six clips were judged on the verify page. Yes: the crouches and turns
+that were pinned from whole figures, the two-shot, the ambient street, the
+empty shots that the checks had flagged (the director confirmed the paper, the
+people, the bunting). Partly: the crouches whose start figure was cut at the
+knee. No: nearly every spoken line, and every small pose change that had been
+forced below the floor.
+
+**"Most voices were wrong - incorrect speech or no speech."** LTX's own speech
+is not reliable enough to ship. A shot with a line now gets the VO pass after
+it is made: the line synthesised through the character's voice pack (a READY
+synthetic pack, never a blocked one; a cast member without one is given one by
+archetype, deterministically, and keeps it), laid on the beat, with the native
+track ducked to 0.12 so the engine's murmur does not compete. The speech-peak
+check measured loudness; it could not hear that the words were wrong. Only a
+person could, and did.
+
+**"Most crouching started with characters cropped below the knees."** The packs'
+compositing views were cut at the shin on several characters - Mara and Tomas in
+every view. The compositor now checks each candidate view with the truncation
+detector (cached beside the pack) and uses the first whole one, or refuses with
+the fix named. A repair route rebuilds a character's cropped views with the
+detector-and-retry on every full-length render, not only the base; anime
+turnarounds re-roll the same way. And when four seeds and the far framing still
+crop - Mara's photographic prior is a three-quarter portrait, whatever the
+sentence - the render is extended downward: the canvas padded by a third and
+qwen-edit asked to continue the legs and shoes onto a plain floor, with
+everything above untouched. Legs are not identity, which is why this is allowed
+for a compositing view and was refused for meshes.
+
+**The small pose changes that read as "no"** were the pins forced below the
+floor (0.0012-0.0019/s: look up, look off, nod, laugh). Forced pins produce
+invention, exactly as the floor said they would. Make no longer forces: a pose
+change clears the plate floor or the shot renders on LTX with the motion as
+prose, and the log says why.
+
+**A reason with each verdict.** Yes/partly/no cannot tell "wrong words" from "no
+words". The verify page now takes a few words with each verdict and keeps them
+with it.
+
+**The shot builder.** The director's brief for the product: choose the
+character, the setting, the camera, the motion and whatever else, and have the
+studio build the shot and many variants of it, holding the invariants the way
+the spec sheet does. `/build` is that: pickers for who (with faces), where (with
+plates), how (framings, camera, motion, ambient, length) and what happens (a
+sentence, a line), and how many variants may differ in what. For each framing
+it composes the anchor (footing, whole views), writes the shot's SPEC - the
+selections as promises the checker can run - then renders the variants, which
+differ only in the seed (and the camera sentence, if allowed). The bar is
+regrouped as a product: make a film, library, more.

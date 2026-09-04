@@ -61,7 +61,7 @@ async function boot(){
 }
 function render(){
   $("#list").innerHTML = CLIPS.map(c=>{
-    const v=V[c.id]||"";
+    const raw=V[c.id]||""; const v=(typeof raw==="object"&&raw)?(raw.verdict||""):raw; const why=(typeof raw==="object"&&raw)?(raw.why||""):"";
     const amb=c.ambient||"(nothing named)";
     return `<div class="clip">
       <div><video src="/api/motion/media/${encodeURIComponent(c.file)}"
@@ -82,17 +82,29 @@ ambient ${esc(amb)}</pre>
           <button class="part ${v==="partly"?"on":""}" onclick="setV('${c.id}','partly')">partly</button>
           <button class="no ${v==="no"?"on":""}" onclick="setV('${c.id}','no')">no</button>
         </div>
+        <div style="margin-top:6px"><input id="why_${c.id}" value="${(why||"").replace(/"/g,"&quot;")}"
+          placeholder="why - in a few words (what was wrong, or right)" style="width:100%;max-width:520px"
+          onblur="saveWhy('${c.id}')" onkeydown="if(event.key==='Enter'){this.blur();}"></div>
         <div class="verdict">${v?("recorded: <b>"+esc(v)+"</b>"):"not answered yet"}</div>
       </div></div>`;
   }).join("");
   const done=CLIPS.filter(c=>V[c.id]).length;
   $("#stat").textContent = `${done} of ${CLIPS.length} answered`;
 }
+async function saveWhy(id){
+  const raw=V[id]; const v=(typeof raw==="object"&&raw)?(raw.verdict||""):(raw||"");
+  if(!v) return;   // a reason hangs on a verdict
+  const why=((document.getElementById("why_"+id)||{}).value||"").trim();
+  await fetch("/api/motion/verdict",{method:"POST",headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({id,verdict:v,why})});
+  V[id]={verdict:v,why};
+}
 async function setV(id,verdict){
-  V[id]=verdict; render();
+  const whyEl=document.getElementById("why_"+id); const why=whyEl?whyEl.value.trim():"";
+  V[id]=why?{verdict,why}:verdict; render();
   await fetch("/api/motion/verdict",{method:"POST",
     headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({id:id,verdict:verdict})});
+    body:JSON.stringify({id:id,verdict:verdict,why})});
 }
 boot();
 </script>
