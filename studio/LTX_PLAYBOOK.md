@@ -897,3 +897,12 @@ latent upsampler already inside the 2.5 pipeline is the only route that adds
 detail the model meant rather than texture an upscaler guessed - untested on its
 own past the pipeline's second pass. `deliver` stays in the film's data and out
 of the UI until one of those is measured.
+
+**Third pass (04:50).** With the end figure held in place, the same turn that
+measured 0.0013/s at the old placement measured 0.0023/s - above the plate
+floor - and pinned: Doran turns from side-on to camera in place, background
+fixed. H3 also invented gulls in the fog and a dark smudge at his feet that
+neither frame contains; the turn itself is real. The walk went to LTX from the
+composed anchor: she stays put, the fog thickens and thins, the scene holds.
+Both takes are on the verify page for the director's verdict; the film in the
+repo carries the third pass.

@@ -479,9 +479,42 @@
       "beat 1 motion 'turn_to' is advisory on LTX - measured, prose does not direct the subject's action here. Pin the shot to enforce it"
      ],
      "prompt": "A static wide shot: a heavyset man, in their fifties, fair skin, a square-jawed face, grey eyes, hooded eyes, bushy brows, grey short neat hair, a full beard, a thin scar through one brow, a wry, knowing look, a harbour master in a navy wool coat with a high collar, a knitted scarf, heavy work boots, turns from the water to face the camera; turns to face the camera, the whole body coming round wit"
+    },
+    {
+     "id": "pin_1788511540",
+     "engine": "h3-pinned",
+     "file": "takes/050/pin_1788511540.mp4",
+     "duration": 5.875,
+     "fps": 24,
+     "seed": 42,
+     "qc": [],
+     "warnings": [],
+     "pin": {
+      "change": "the subject has turned to face the camera squarely, looking straight into the lens",
+      "rate": 0.0023,
+      "end": "assets/pin_end_050.png"
+     }
+    },
+    {
+     "id": "pin_1788511540m",
+     "engine": "h3-pinned@48",
+     "file": "takes/050/pin_1788511540_48.mp4",
+     "duration": 5.85,
+     "fps": 48,
+     "seed": 42,
+     "qc": [],
+     "warnings": [],
+     "pin": {
+      "change": "the subject has turned to face the camera squarely, looking straight into the lens",
+      "rate": 0.0023,
+      "end": "assets/pin_end_050.png"
+     },
+     "poster": "takes/050/pin_1788511540_48.png",
+     "strip": "takes/050/pin_1788511540_48_strip.png",
+     "created": "04:49"
     }
    ],
-   "picked": "t501568715m",
+   "picked": "pin_1788511540m",
    "engine_notes": "",
    "anchor_source": {
     "character": "doran-vey",
@@ -496,11 +529,12 @@
     "change": "the subject has turned to face the camera squarely, looking straight into the lens",
     "seconds": 6.0,
     "end": "assets/pin_end_050.png",
-    "rate": 0.0013,
-    "ok": false,
-    "longest": 3.0,
+    "rate": 0.0023,
+    "ok": true,
+    "longest": 7.0,
     "seed": 11,
-    "when": 1788501565
+    "hold_feet": true,
+    "when": 1788511538
    },
    "anchor_check": {
     "caption": "Bridge, countryside, man, coat, trousers, boots, water, river, stone, fog, mist, trees, grass, sky, clouds, light, glow, reflection, shadow, person, clothing.",
@@ -583,9 +617,43 @@
      "poster": "takes/060/pin_1788502477_48.png",
      "strip": "takes/060/pin_1788502477_48_strip.png",
      "created": "02:56"
+    },
+    {
+     "id": "t511636505",
+     "engine": "ltx",
+     "seed": 72610,
+     "created": "04:49",
+     "file": "takes/060/ltx_t511636505.mp4",
+     "poster": "takes/060/ltx_t511636505.png",
+     "strip": "takes/060/ltx_t511636505_strip.png",
+     "duration": 8.04,
+     "fps": 24,
+     "qc": [],
+     "warnings": [
+      "motion toward the camera - the axis a still cannot imply; it killed shots on every engine",
+      "beat 1 motion 'walk_to' is advisory on LTX - measured, prose does not direct the subject's action here. Pin the shot to enforce it"
+     ],
+     "prompt": "A static wide shot: a tall, athletic woman, in their thirties, deep brown skin, an angular face with a sharp jaw, dark eyes, almond eyes, strong dark brows, black a long single braid, freckles across the nose, a calm, unreadable bearing, a field geologist in a weathered olive canvas jacket over a grey shirt, sleeves pushed up, a plain leather watch strap, walks a few steps closer along the bank, t"
+    },
+    {
+     "id": "t511636505m",
+     "engine": "ltx@48",
+     "seed": 72610,
+     "created": "04:50",
+     "file": "takes/060/ltx_t511636505_48.mp4",
+     "poster": "takes/060/ltx_t511636505_48.png",
+     "strip": "takes/060/ltx_t511636505_48_strip.png",
+     "duration": 8.02,
+     "fps": 48,
+     "qc": [],
+     "warnings": [
+      "motion toward the camera - the axis a still cannot imply; it killed shots on every engine",
+      "beat 1 motion 'walk_to' is advisory on LTX - measured, prose does not direct the subject's action here. Pin the shot to enforce it"
+     ],
+     "prompt": "A static wide shot: a tall, athletic woman, in their thirties, deep brown skin, an angular face with a sharp jaw, dark eyes, almond eyes, strong dark brows, black a long single braid, freckles across the nose, a calm, unreadable bearing, a field geologist in a weathered olive canvas jacket over a grey shirt, sleeves pushed up, a plain leather watch strap, walks a few steps closer along the bank, t"
     }
    ],
-   "picked": "pin_1788502477m",
+   "picked": "t511636505m",
    "engine_notes": "",
    "anchor_source": {
     "character": "mara-okonjo",
