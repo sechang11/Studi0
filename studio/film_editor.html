@@ -262,6 +262,7 @@ async function selShot(shid){
   if(TAB==="scene") TAB="shot";
   renderTimeline(); renderCenter(); renderRight();
   if(document.getElementById("c_place")) composePlates();
+  if(document.getElementById("cv_place")) coveragePlates();
 }
 
 function renderCenter(){
@@ -629,6 +630,24 @@ function sceneForm(){
       <button class="primary" onclick="saveScene()">save scene</button>
       <button onclick="genAnchor()">generate anchor</button>
     </div>
+    <h2 style="margin-top:14px">Coverage - the standard shots, from selectors</h2>
+    <div class="row" style="gap:6px;align-items:flex-end">
+      <div><label>place</label><select id="cv_place" onchange="coveragePlates()">${(FOUNDRY.place||[]).map(p=>
+        `<option value="${p.id}">${esc(p.name)}</option>`).join("")}</select></div>
+      <div><label>plate</label><select id="cv_plate"></select></div>
+      <div><label>prop (optional)</label><select id="cv_prop"><option value="">none</option>${(FOUNDRY.prop||[]).map(p=>
+        `<option value="${p.id}">${esc(p.name)}</option>`).join("")}</select></div>
+    </div>
+    <div class="row" style="gap:6px;align-items:flex-end;margin-top:4px">
+      ${[0,1].map(i=>`<div><label>cast ${i+1}</label><select class="cv_cast"><option value="">-</option>${Object.keys(TREE.cast||{}).map(c=>
+        `<option value="${c}" ${(sc.cast_present||[])[i]===c?"selected":""}>${c}</option>`).join("")}</select></div>
+      <div><label>pack</label><select class="cv_pack"><option value="">-</option>${(FOUNDRY.character||[]).map(ch=>
+        `<option value="${ch.id}" ${((TREE.cast||{})[(sc.cast_present||[])[i]]||{}).foundry===ch.id||(((TREE.cast||{})[(sc.cast_present||[])[i]]||{}).name||"").toLowerCase()===ch.name.toLowerCase()?"selected":""}>${esc(ch.name)}</option>`).join("")}</select></div>`).join("")}
+      <button class="small" onclick="genCoverage()">generate coverage</button>
+    </div>
+    <div class="hint">the wide (empty), the wide with the cast (a two-shot when there are two), a medium on each,
+      an insert on the detail plate. Character shots get composed anchors; every anchor is checked against
+      its prose. The actions are left as your blanks.</div>
     ${sc.anchor?`<img class="anchor" src="${m(sc.anchor)}?${Date.now()}">`:'<div class="hint" style="margin-top:8px">no anchor yet - shots default to it, so generate one first</div>'}
     ${(sc.anchor_candidates||[]).length?`<label>candidates - click to make it THE anchor (identity into a new scene is a seed lottery; the picker is the answer)</label>
       <div class="row">${sc.anchor_candidates.map(c=>
@@ -640,6 +659,21 @@ function applyLoc(id){
   $("#c_location").value=l.description||""; $("#c_amb").value=l.ambience||"";
   $("#c_palette").value=l.palette||"";
   if(l.time_of_day) $("#c_tod").value=l.time_of_day;
+}
+function coveragePlates(){
+  const pid=(document.getElementById("cv_place")||{}).value;
+  const p=(FOUNDRY.place||[]).find(x=>x.id===pid); const sel=document.getElementById("cv_plate");
+  if(!sel) return;
+  sel.innerHTML=((p&&p.plates)||[]).map(f=>`<option value="${f.replace(/\.png$/,"")}">${f.replace(/\.png$/,"")}</option>`).join("");
+  const w=[...sel.options].find(o=>/_wide$/.test(o.value)); if(w) sel.value=w.value;
+}
+async function genCoverage(){
+  const casts=[...document.querySelectorAll(".cv_cast")].map(x=>x.value);
+  const packs=[...document.querySelectorAll(".cv_pack")].map(x=>x.value);
+  const characters=casts.map((c,i)=>({cast:c,foundry:packs[i]})).filter(x=>x.cast&&x.foundry);
+  const j=await api("/coverage",{film:FID,scene:SCENE_SEL,place:document.getElementById("cv_place").value,
+    plate:document.getElementById("cv_plate").value,prop:document.getElementById("cv_prop").value,characters});
+  WATCH.add(j.job); note("coverage: "+j.job);
 }
 async function saveScene(){
   await api("/editscene",{film:FID,scene:SCENE_SEL,

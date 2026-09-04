@@ -16,7 +16,7 @@ poster + filmstrip -> QC -> record in film.json.
 ComfyUI dying mid-batch is normal here - the LTX envelope kills the PROCESS, not the job -
 so every render goes through ensure_comfy(), which restarts it by script and waits.
 """
-import json, os, re, shutil, subprocess, sys, threading, time
+import json, os, re, shutil, subprocess, sys, threading, time, traceback
 import urllib.request
 
 TOOLS = os.path.dirname(os.path.abspath(__file__))
@@ -1494,9 +1494,21 @@ def _anchor_check_job(jid, fid, shid):
             [(b.get("action") or "") + " " + (b.get("background") or "")
              for b in (sh.get("beats") or [])] + [str(flat.get("location") or "")])
         seen = {_stem(w) for w in _content_words(cap)}
+        # the cast is what the compositor put there; their names are not things
+        # the picture can lack. Nor are coverage's own blanks.
+        cast_words = set()
+        for cid, ent in (f.data.get("cast") or {}).items():
+            cast_words.add(cid.lower())
+            for part in str((ent or {}).get("name") or "").lower().split():
+                cast_words.add(part)
+            for part in str((ent or {}).get("short") or "").lower().split():
+                cast_words.add(part)
+        cast_words |= {"describe", "beat", "scene", "lived", "worn", "alive", "detail"}
         missing, dup = [], set()
         for w in _content_words(prose):
             s = _stem(w)
+            if w in cast_words or s in cast_words:
+                continue
             if s in seen or s in dup:
                 continue
             if any(s[:5] == c[:5] for c in seen if len(c) >= 5):
@@ -1526,6 +1538,146 @@ def anchor_check(data):
     jid = _job("anchorcheck", film=data["film"], shot=data["shot"])
     threading.Thread(target=_anchor_check_job,
                      args=(jid, data["film"], data["shot"]), daemon=True).start()
+    return {"job": jid}, 200
+
+
+# ─── coverage: the standard shots of a scene, from selectors ─────────────────────────
+
+def _ambient_for(weather, place_sel):
+    w = (weather or "").lower()
+    amb = ["light"]
+    if "rain" in w or "storm" in w:
+        amb.append("rain")
+    if "snow" in w:
+        amb.append("snow")
+    if "wind" in w or "storm" in w:
+        amb.append("cloth")
+    base = (place_sel or {}).get("base", "")
+    if base in ("boat", "beach", "bridge") or "harbour" in base or "harbor" in base:
+        amb.append("water")
+    if base in ("market", "station", "cityscape", "cafe_exterior") and \
+            (place_sel or {}).get("crowd") in ("sparse", "busy"):
+        amb.append("crowd")
+    return amb
+
+
+def _coverage_job(jid, fid, scid, place_id, plate, chars, prop):
+    """chars: [{"cast": "MARA", "foundry": "mara-okonjo"}] (1-2). Creates the shots,
+    composes the anchors one after another, checks each against its prose."""
+    try:
+        CM = _compose_mod()
+        f = F.load(fid)
+        sc = f.scene(scid)
+        import importlib.util
+        p = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "foundry.py")
+        spec = importlib.util.spec_from_file_location("fy_mod2", p)
+        FY = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(FY)
+        place = FY.load_asset("place", place_id)
+        psel = place.get("selections") or {}
+        pdesc = (place.get("compiled") or {}).get("description", "") or place.get("name", place_id)
+        plate_p = CM.plate_for(place_id, plate or None)
+        detail = None
+        try:
+            detail = CM.plate_for(place_id, os.path.basename(plate_p).replace("_wide", "_detail")[:-4])
+        except Exception:
+            detail = None
+        amb = _ambient_for(sc.get("weather") or psel.get("weather"), psel)
+        a, b = (chars + [None, None])[:2]
+        names = [c["cast"] for c in chars]
+        # remember the foundry pack on the cast entry, so the next coverage needs no asking
+        for c in chars:
+            ent = f.data["cast"].get(c["cast"])
+            if ent is not None and c.get("foundry"):
+                ent["foundry"] = c["foundry"]
+        made = []
+
+        def shot(title, dur, beats, anchor=None, no_people=False, sfx=""):
+            sh = f.new_shot(scid, title=title, duration=dur, beats=beats, sfx=sfx,
+                            anchor=anchor or "scene", no_people=no_people,
+                            transition_out="cut")
+            made.append(sh["id"])
+            return sh
+
+        def beat(framing, subject, action, bg):
+            return {"framing": framing, "move": "static", "transition_in": "",
+                    "subject": subject, "action": action, "background": bg,
+                    "motion": "", "ambient": amb,
+                    "dialogue": {"char": "", "line": "", "delivery": ""}}
+
+        _log(jid, "coverage for %s: %s%s" % (sc.get("title") or scid, ", ".join(names) or "no cast",
+                                              (" with " + prop) if prop else ""))
+        # 1 the wide, empty
+        shot("wide - establishing", 8,
+             [beat("wide establishing shot", "", "the %s; what moves here moves" % pdesc,
+                   "the whole scene alive: " + ", ".join(amb))],
+             anchor="file:" + plate_p, no_people=True, sfx=sc.get("ambience") or "")
+        plan = []
+        if a:
+            # 2 the wide with the cast in it (two-shot when there are two)
+            layers = []
+            if b:
+                layers.append({"character": b["foundry"], "view": "turn_front_three_quarter",
+                               "stand": 0.35, "cx": 0.62})
+            if prop:
+                layers.append({"id": prop, "stand": 0.30, "cx": 0.50 if b else 0.60})
+            s2 = shot("wide - %s" % (" and ".join(names)), 6,
+                      [beat("wide shot" if not b else "medium two-shot", a["cast"],
+                            ("and %s stand in the scene - describe what they do" % b["cast"]) if b
+                            else "stands in the scene - describe what they do",
+                            "the scene moves behind them")])
+            plan.append((s2["id"], a["foundry"], "turn_front_three_quarter" if b else "turn_front",
+                         0.35, 0.38 if b else 0.42, layers))
+            # 3 single on A
+            s3 = shot("medium - %s" % a["cast"], 6,
+                      [beat("medium shot", a["cast"], "describe the beat", "the scene moves behind them")])
+            plan.append((s3["id"], a["foundry"], "turn_front", 0.15, 0.45, []))
+            # 4 single on B
+            if b:
+                s4 = shot("medium - %s" % b["cast"], 6,
+                          [beat("medium shot", b["cast"], "describe the beat", "the scene moves behind them")])
+                plan.append((s4["id"], b["foundry"], "turn_front", 0.15, 0.50, []))
+        # 5 the insert
+        if detail and os.path.exists(detail):
+            shot("insert - detail", 6,
+                 [beat("wide shot", "", "a detail of the %s" % pdesc, "what moves here moves")],
+                 anchor="file:" + detail, no_people=True, sfx=sc.get("ambience") or "")
+        f.save()
+        _log(jid, "%d shots created: %s" % (len(made), ", ".join(made)))
+        for shid, cid, view, stand, cx, layers in plan:
+            sub = _job("compose", film=fid, shot=shid)
+            _log(jid, "composing %s for %s" % (cid, shid))
+            _compose_anchor_job(sub, fid, shid, cid, place_id, plate or None, view, stand, cx,
+                                layers or None)
+            with _LOCK:
+                err = JOBS.get(sub, {}).get("error")
+            if err:
+                _log(jid, "  compose failed on %s: %s" % (shid, err))
+        for shid in made:
+            sub = _job("anchorcheck", film=fid, shot=shid)
+            _anchor_check_job(sub, fid, shid)
+            with _LOCK:
+                res = JOBS.get(sub, {}).get("result") or {}
+            if res.get("missing"):
+                _log(jid, "  %s: prose names what the anchor lacks: %s"
+                     % (shid, ", ".join(res["missing"][:6])))
+        with _LOCK:
+            JOBS[jid]["result"] = {"shots": made}
+        _finish(jid)
+    except Exception as e:
+        traceback.print_exc()
+        _finish(jid, str(e)[:300])
+
+
+def coverage(data):
+    """Standard coverage for a scene from selectors: place (+plate), one or two
+    cast members with their foundry packs, an optional prop."""
+    chars = [c for c in (data.get("characters") or []) if c.get("cast") and c.get("foundry")][:2]
+    jid = _job("coverage", film=data["film"], scene=data["scene"])
+    threading.Thread(target=_coverage_job,
+                     args=(jid, data["film"], data["scene"], data["place"],
+                           data.get("plate") or None, chars, data.get("prop") or None),
+                     daemon=True).start()
     return {"job": jid}, 200
 
 
