@@ -53,23 +53,77 @@
     Every metric below MUST match between the two or the colours drift off the text. */
  .ed{position:relative;border:1px solid #2c2c38;border-radius:8px;background:#101017;
      overflow:hidden}
+ /* THE SPEC SHEET'S OWN TITLE. The markdown always opens with "# 080 - something"; that
+    line is the document's name and it was being read as body text like everything else. */
+ .sstitle{position:relative;display:flex;align-items:baseline;gap:10px;padding:9px 13px;
+     border:1px solid #2c2c38;border-bottom:0;border-radius:8px 8px 0 0;
+     background:linear-gradient(180deg,#15151f,#101017)}
+ .sstitle b{font:600 15px/1.3 ui-sans-serif,system-ui;color:#ffa06b}
+ .sstitle i{font-style:normal;font:600 10.5px/1 ui-sans-serif,system-ui;letter-spacing:.09em;
+     text-transform:uppercase;color:#8ad6d2}
+ /* ONLY THE FOLD CONTROL GETS THE AUTO MARGIN. "span" caught the chevron too, and an auto
+    margin on the FIRST child pushes it and everything after it to the right - which is why
+    the title was drifting to the far edge of its own bar. */
+ .sstitle #ssfold{margin-left:auto;font-size:11px;color:#6f6f85}
+ .sstitle #sscopy{font-size:11px;color:#6f6f85;padding:3px 4px}
+ .sstitle #sscopy:hover{color:#e8e8ef}
+ .sstitle #sssave{font-size:11px;color:#8fd0a6;border:1px solid #2c4a38;border-radius:5px;
+     padding:3px 9px;background:#12241b}
+ .sstitle #sssave:hover{background:#183324;color:#b6e8c8}
+ .sstitle #sssave.dirty{border-color:#6b5520;background:#241d0d;color:#e9c96a}
+ /* SHUT, THE BAR LOOKS EXACTLY AS IT DOES OPEN - same chip, same title, same place. The
+    only thing that changes is what is underneath it. */
+
+ .ed.hastitle{border-radius:0 0 8px 8px}
+ .sstitle.shut{border-bottom:1px solid #2c2c38;border-radius:8px}
+ .sstitle .chev{cursor:pointer;color:#8b8b9c;font-size:13px;line-height:1;
+     padding:2px 5px;border-radius:4px}
+ .sstitle .chev:hover{background:#20202b;color:#e8e8ef}
+ .hidewhenshut{display:none}
+ /* the minimap - a whole page of spec at a glance, and a window you drag down it */
+ .mini{position:absolute;top:0;right:0;width:86px;height:100%;cursor:grab;
+     background:#0c0c12;border-left:1px solid #23232e;z-index:3}
+ .mini.grabbing{cursor:grabbing}
+ .mini canvas{display:block;width:100%;height:100%}
+ .mini .vp{position:absolute;left:0;width:100%;background:#7fb2ff1f;
+     border-top:1px solid #7fb2ff55;border-bottom:1px solid #7fb2ff55;pointer-events:none}
+ /* THE FOLD CONTROL CANNOT LIVE IN THE HIGHLIGHT LAYER.
+    The <pre> sits UNDER a transparent <textarea>, so however many pointer-events a span in
+    it opts into, the textarea is what the mouse actually hits - the click just drops a
+    caret. (Calling .click() on the span from a console works, which is exactly why the
+    first version looked fine and was not.) So the controls go in a gutter of their own,
+    above the textarea, positioned from the headings' real offsets in the <pre> - which is
+    already a pixel-accurate mirror of the text, wrapping and all. */
+ .gut{position:absolute;top:0;left:0;width:22px;height:100%;z-index:4;
+     pointer-events:none;overflow:hidden}   /* clip, or the markers for lines
+                                               below the fold float over the page */
+ .gut b{position:absolute;left:2px;width:20px;display:flex;align-items:center;
+     justify-content:center;cursor:pointer;pointer-events:auto;color:#6f6f85;
+     font:600 var(--fs,14px)/1 ui-monospace,Menlo,Consolas,monospace;border-radius:3px}
+ .gut b:hover{color:#e8e8ef;background:#23232e}
+ .foldmark{color:#6f6f85}
  .ed.locked{border-color:#6b5520;background:#12100a}
  .ed textarea,.ed pre{margin:0;padding:12px 14px;border:0;
      font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
      font-size:var(--fs,14px);line-height:1.65;tab-size:2;
      white-space:pre-wrap;overflow-wrap:break-word;word-break:normal}
- .ed pre{position:absolute;inset:0;overflow:auto;color:#cfcfdd;pointer-events:none}
+ .ed pre{position:absolute;inset:0;overflow:auto;color:#cfcfdd;pointer-events:none;
+     padding-right:100px;padding-left:36px}
  .ed textarea{position:relative;width:100%;height:var(--eh,62vh);display:block;
+     padding-right:100px;padding-left:36px;
      background:transparent;color:transparent;caret-color:#e8e8ef;resize:vertical;
      overflow:auto;outline:none}
  .ed textarea::selection{background:#31507a;color:transparent}
 
  /* the language's colours - one hue per kind of thing, same idea as an IDE */
- .t-title{color:#f0f0f8;font-weight:700}
+    .t-title{color:#ffa06b;font-weight:700}       /* # the sheet's own title  */
  .t-sec{color:#7fb2ff;font-weight:700}          /* ## a section heading      */
  .t-sec-inv{color:#e9c96a;font-weight:700}      /* ## MUST NEVER CHANGE     */
  .t-sec-flair{color:#8fd0a6;font-weight:700}    /* ## CAN CHANGE            */
- .t-name-inv{color:#ffd98a;font-weight:600}     /* ### inside the promises  */
+ .t-name-inv{color:#7fb2ff;font-weight:600}     /* ### inside the promises - the
+                                                   same blue as the ## above it,
+                                                   because they are the same kind
+                                                   of thing at two depths */
  .t-name-flair{color:#b6e8c8;font-weight:600}   /* ### inside the flair     */
  .t-name{color:#c9c9da;font-weight:600}
  .t-lbl{color:#7a7a90;font-weight:600}          /* the WHY: / CHECK: word   */
@@ -105,9 +159,52 @@
  .pctl button.play{background:#2b4b6b;border-color:#37628a;color:#cfe4ff}
  .pctl button.play:hover{background:#345c81}
  /* the running order, so you can see where you are in the film while it plays */
+ .scrub{width:100%;margin:8px 0 2px;accent-color:#4fa06f;display:block}
+ .mus{border-top:1px solid #2a2a36;padding-top:7px;margin-top:9px}
+ .mus select{background:#1a1a22;color:#dfe6f2;border:1px solid #333;border-radius:4px;
+      padding:3px 6px;font-size:12px;max-width:230px}
+ /* the volume slider was 110px wide with default padding, so the thumb could not actually
+    reach either end - you could get near silence and near full but not to them */
+ .mus input[type=range]{width:150px;accent-color:#a07fd0;margin:0;padding:0}
+ .tstamp{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11.5px;color:#cfe0ff;
+      background:#191922;border:1px solid #2c2c3a;border-radius:4px;padding:1px 6px;
+      cursor:copy}
+ .tstamp:hover{border-color:#4c4c62}
+ /* the media browser: the palette, and the filter over it */
+ .media{margin-top:14px;border:1px solid #2a2a36;border-radius:8px;background:#141419}
+ .media h3{margin:0;padding:9px 12px;font-size:12px;letter-spacing:.09em;color:#8c8ca0;
+      text-transform:uppercase;border-bottom:1px solid #23232e;display:flex;gap:10px;
+      align-items:center;cursor:pointer}
+ .media h3 .cnt{color:#5f5f74;letter-spacing:0}
+ .mbody{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:12px;padding:12px}
+ .mbody.hide{display:none}
+ .mfilt{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
+ .mfilt button{padding:3px 10px;font-size:11.5px}
+ .mfilt button.on{background:#2b4b6b;border-color:#37628a;color:#cfe4ff}
+ .mfilt input{background:#1a1a22;color:#dfe6f2;border:1px solid #333;border-radius:4px;
+      padding:3px 8px;font-size:12px;flex:1 1 120px;min-width:90px}
+ .mlist{max-height:330px;overflow:auto;border:1px solid #23232e;border-radius:6px}
+ .mrow{display:flex;gap:8px;align-items:center;padding:4px 8px;font-size:11.5px;
+      color:#a6a6ba;cursor:pointer;border-bottom:1px solid #1c1c25}
+ .mrow:hover{background:#1b1b24}
+ .mrow.on{background:#22323f;color:#dff1ff}
+ .mrow .k{color:#5f5f74;width:42px;flex:0 0 auto}
+ .mrow .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1 1 auto}
+ .mrow .u{color:#4fa06f;flex:0 0 auto;font-size:10.5px}
+ .mprev{border:1px solid #23232e;border-radius:6px;padding:10px;background:#111116}
+ .mprev img{max-width:100%;border-radius:4px;display:block;background:#000}
+ .mprev .fn{font-size:12px;color:#dfe6f2;word-break:break-all;margin-bottom:6px}
+ .mprev .meta{font-size:11px;color:#7c7c90;margin-top:6px;line-height:1.6}
+ .mprev .used{margin-top:8px;font-size:11.5px;color:#4fa06f}
+ .mprev .used b{color:#dff1e6}
+ .mlab{color:#8c8ca0;font-size:11px;text-transform:uppercase;letter-spacing:.08em}
+ #minfo{color:#8c8ca0;font-size:11px}
+ audio#bgm{display:none}
+ .fno{font-family:ui-monospace,Menlo,Consolas,monospace;color:#cfe0ff;font-size:12px}
  .reel{display:flex;gap:3px;margin-top:8px}
  .reel div{flex:1 1 0;height:5px;border-radius:3px;background:#26263200;
       border:1px solid #2e2e3c;overflow:hidden;position:relative}
+ .reel div.now{border-color:#4fa06f;background:#4fa06f55}
  .reel div i{position:absolute;inset:0;width:0;background:#4fa06f;display:block}
  .reel div.done i{width:100%}
  .reel span{font-size:10px;color:#6f6f85}
@@ -128,12 +225,17 @@
  pre.rep{background:#101017;border:1px solid #262633;border-radius:8px;padding:10px;
       font:12px/1.5 ui-monospace,Menlo,Consolas,monospace;white-space:pre-wrap;
       max-height:40vh;overflow:auto;color:#c6c6d6;margin-top:10px}
+ /* THE PAGE HAS A NAME NOW. "the spec" and "the page" were the same words for two
+    different things in every conversation about this shot; the panel says which it is. */
+ .sslab{font:600 10.5px/1 ui-sans-serif,system-ui;letter-spacing:.09em;
+      text-transform:uppercase;color:#8ad6d2;background:#12313040;border:1px solid #21514e;
+      border-radius:5px;padding:4px 7px}
  .lg{display:flex;gap:10px;flex-wrap:wrap;font-size:11.5px;color:#8b8b9c}
  .lg span b{font-weight:600}
 </style>
 
 <div class="wrap">
- <h1>Shot specs</h1>
+ <h1>Spec Sheet</h1>
  <div class="sub">The promises each shot has to keep, in English. Edit, save, and the
    machine-readable copy is rewritten for you. Lock a shot you're happy with and it
    stops moving.</div>
@@ -150,23 +252,48 @@
  <div class="cols">
   <div>
    <div class="bar">
+    <span class="sslab">Spec Sheet</span>
     <b id="who">pick a shot above</b>
     <span style="flex:1"></span>
     <div class="fs" id="fs"></div>
     <button id="lockbtn" class="lock" onclick="toggleLock()" disabled>lock</button>
-    <button onclick="copyMd()">copy</button>
-    <button class="primary" id="savebtn" onclick="save()">save</button>
+    <button id="foldbtn" onclick="toggleVars()"
+            title="hide the CAN CHANGE half while you work on the promises">▾ variants</button>
+    <!-- copy and save moved onto the sheet's own bar. Two saves on one screen is one save
+         too many: which one you reach for should never be a question. The bar up here is
+         about the SHOT - lock it, fold its variants - and the bar below is about the
+         DOCUMENT. -->
+    <button class="primary" id="savebtn" onclick="save()" style="display:none">save</button>
    </div>
    <div class="play" id="play" style="display:none">
     <div>
-     <video id="vid" playsinline preload="metadata"></video>
+     <video id="vid" playsinline preload="metadata" title="click to play or pause"
+            style="cursor:pointer" onclick="togglePlay()"></video>
      <div class="pctl">
-      <button onclick="replay()">↻ replay</button>
-      <button class="play" id="allbtn" onclick="playAll()">▶ play the whole film</button>
-      <label><input type="checkbox" id="loop" checked> loop</label>
-      <label><input type="checkbox" id="mute" checked> mute</label>
-      <span id="vinfo"></span>
+      <button class="play" id="pp" onclick="togglePlay()">▶ play</button>
+      <button onclick="step(-1)" title="previous frame  (left arrow)">◀|</button>
+      <button onclick="step(1)" title="next frame  (right arrow)">|▶</button>
+      <button onclick="replay()">↻ restart</button>
+      <label title="when this shot ends, roll straight into the next one">
+       <input type="checkbox" id="chain" checked> continue into next shot</label>
+      <label><input type="checkbox" id="loop"> loop</label>
+      <label title="the shot's own audio - sound effects and any dialogue">
+       <input type="checkbox" id="mute" checked> mute sfx</label>
      </div>
+     <div class="pctl mus">
+      <span class="mlab">music</span>
+      <select id="track"><option value="">none</option></select>
+      <label title="silence the background track without losing your place in it">
+       <input type="checkbox" id="mmute"> mute music</label>
+      <input type="range" id="mvol" min="0" max="100" value="55"
+             title="background music volume">
+      <span class="tstamp" id="mclock" title="film time · click to copy"
+            onclick="copyStamp('mclock')">0:00.000</span>
+      <span id="minfo"></span>
+     </div>
+     <audio id="bgm" preload="auto"></audio>
+     <input type="range" class="scrub" id="scrub" min="0" max="0" step="1" value="0">
+     <div class="pctl"><b id="fno" class="fno"></b><span id="vinfo"></span></div>
      <div class="reel" id="reel"></div>
     </div>
     <div class="side">
@@ -177,9 +304,27 @@
     </div>
    </div>
    <div class="note" id="note"></div>
-   <div class="ed" id="ed">
+   <div class="sstitle" id="sstitle" style="display:none">
+    <span class="chev" id="sshide"
+          title="minimise the whole sheet to this bar, or open it again">&#9662;</span>
+    <i>Spec Sheet</i><b id="sstitletx"></b>
+    <span id="ssfold" title="click any ### heading to fold just that one"
+          style="cursor:pointer">fold all</span>
+    <!-- SAVE WHERE THE WRITING IS. There is a save in the bar above, but that bar belongs to
+         the shot; by the time you have read to the bottom of a spec it is off screen and the
+         thing you want is right here. It saves the whole sheet, folds put back. -->
+    <span id="sscopy" title="copy the whole sheet to the clipboard"
+          style="cursor:pointer">copy</span>
+    <span id="sssave" title="save the sheet (folded sections included)"
+          style="cursor:pointer">save</span>
+   </div>
+   <div class="ed hastitle" id="ed">
     <pre id="hl" aria-hidden="true"></pre>
+    <div class="gut" id="gut"></div>
     <textarea id="md" spellcheck="false" placeholder="pick a shot from the timeline"></textarea>
+    <div class="mini" id="mini" title="drag to scroll">
+     <canvas id="minic"></canvas><div class="vp" id="minivp"></div>
+    </div>
    </div>
    <div class="lg">
     <span><b class="t-sec-inv">MUST NEVER CHANGE</b></span>
@@ -189,7 +334,23 @@
     <span><b class="t-chk">CHECK it can run</b></span>
     <span><b class="t-chk-bad">CHECK it can't</b></span>
    </div>
-   <div class="msg" id="msg"></div>
+   <div class="media">
+   <h3 onclick="const h=$('#mbody').classList.toggle('hide'); PREF.set('mfold',h)">media
+     <span class="cnt" id="mcount"></span>
+     <span class="cnt" style="margin-left:auto">click to fold</span></h3>
+   <div class="mbody" id="mbody">
+    <div>
+     <div class="mfilt" id="mfilt"></div>
+     <div class="mlist" id="mlist"></div>
+    </div>
+    <div class="mprev" id="mprev">
+     <div class="meta">pick a file to hear it or look at it.<br>
+      Plays on its own - it does not touch the shot player.</div>
+    </div>
+   </div>
+  </div>
+  <audio id="pal" preload="metadata"></audio>
+  <div class="msg" id="msg"></div>
    <pre class="rep" id="rep" style="display:none"></pre>
   </div>
 
@@ -271,20 +432,39 @@ function inline(t){                       // numbers and `code`, inside ordinary
                         m=>`<span class="t-num">${m}</span>`);
 }
 function highlight(src){
-  let sec=null;                           // which section we're inside, for ### colour
+  let sec=null, fi=0;                     // which section we're inside, for ### colour
   return src.split('\n').map(line=>{
     let m;
     if(m=line.match(/^#\s+(.*)$/))
       return `<span class="t-title">${esc(line)}</span>`;
     if(m=line.match(/^##\s+(.*)$/)){
+      // INVARIANTS counts as the promises half too - every spec in this film heads that
+      // section "## INVARIANTS" rather than "## MUST NEVER CHANGE", so its ### headings were
+      // falling through to the plain grey. The heading itself keeps the blue it already has;
+      // only its ### children change, to the same blue, because they are the same kind of
+      // thing one level down.
       const u=m[1].toUpperCase();
-      sec = u.includes('NEVER')?'inv' : u.includes('CAN CHANGE')?'flair' : null;
-      const c = sec==='inv'?'t-sec-inv' : sec==='flair'?'t-sec-flair' : 't-sec';
+      const inv = u.includes('NEVER') || u.includes('INVARIANT');
+      sec = inv ? 'inv' : u.includes('CAN CHANGE') ? 'flair' : null;
+      const c = u.includes('NEVER') ? 't-sec-inv'
+              : sec==='flair' ? 't-sec-flair' : 't-sec';
       return `<span class="${c}">${esc(line)}</span>`;
     }
     if(line.match(/^###\s+/)){
+      // CLICKABLE. The <pre> is pointer-events:none so typing stays native, but a child can
+      // opt back in - so the heading itself is the fold control, the way an IDE does it.
+      // Folding TAKES THE LINES OUT and keeps them, rather than hiding them: the text you
+      // can see is the text in the box, which is the only kind of collapse that cannot
+      // quietly lose an edit. It is the same move the CAN CHANGE half already uses.
       const c = sec==='inv'?'t-name-inv' : sec==='flair'?'t-name-flair' : 't-name';
-      return `<span class="${c}">${esc(line)}</span>`;
+      const key = line.trim(), shut = FOLDS.has(key);
+      // NO MARKER IN THE TEXT. The gutter is the control, and a second arrow sitting in
+      // the line was both redundant and a thing you could try to click. What stays is the
+      // count of what is hidden, which is information rather than a control.
+      return `<span class="fold ${c}" data-k="${esc(key)}" id="fh${fi++}">`
+           + `${esc(line.trim())}`
+           + (shut?` <span class="foldmark">… ${FOLDS.get(key).length} lines</span>`:'')
+           + `</span>`;
     }
     if(m=line.match(/^(\s*)(WHY:)(.*)$/i))
       return `${m[1]}<span class="t-lbl">${esc(m[2])}</span>`
@@ -302,16 +482,142 @@ function highlight(src){
     return inline(line);
   }).join('\n');
 }
+/* ── the spec sheet's title, its minimap and its folds ─────────────────────────────*/
+const FOLDS = new Map();          // "### heading" -> the body lines taken out of the box
+
+function titleOf(t){ const m=t.match(/^#\s+(.+)$/m); return m ? m[1].trim() : ''; }
+
+function drawMini(){
+  const ta=$('#md'), cv=$('#minic'), box=$('#mini');
+  const w=box.clientWidth, h=box.clientHeight;
+  if(!w||!h) return;
+  const dpr=window.devicePixelRatio||1;
+  cv.width=w*dpr; cv.height=h*dpr;
+  const g=cv.getContext('2d'); g.setTransform(dpr,0,0,dpr,0,0);
+  g.clearRect(0,0,w,h);
+  const lines=ta.value.split(String.fromCharCode(10)), n=Math.max(lines.length,1);
+  const lh=Math.max(1.1, Math.min(3.4, h/n));
+  for(let i=0;i<n;i++){
+    const t=lines[i].trim(); if(!t) continue;
+    let col='#4a4a5c';
+    if(/^#\s/.test(t)) col='#ff6a45';
+    else if(/^##\s+MUST NEVER CHANGE/i.test(t)) col='#e9c96a';
+    else if(/^##\s+CAN CHANGE/i.test(t)) col='#8fd0a6';
+    else if(/^##\s/.test(t)) col='#7fb2ff';
+    else if(/^###\s/.test(t)) col='#7fb2ff';
+    else if(/^WHY/i.test(t)) col='#c98ad6';
+    g.fillStyle=col;
+    g.fillRect(3, i*lh, Math.max(2,(w-8)*Math.min(1,t.length/78)), Math.max(1, lh-0.6));
+  }
+  const vp=$('#minivp'), sh=Math.max(ta.scrollHeight,1);
+  vp.style.height=Math.max(14, h*(ta.clientHeight/sh))+'px';
+  vp.style.top=(h*(ta.scrollTop/sh))+'px';
+}
+function miniScroll(ev){
+  const ta=$('#md'), r=$('#mini').getBoundingClientRect();
+  const y=(ev.clientY-r.top)/Math.max(r.height,1);
+  const vh=ta.clientHeight/Math.max(ta.scrollHeight,1);
+  ta.scrollTop=Math.max(0,(y-vh/2))*ta.scrollHeight;
+  $('#hl').scrollTop=ta.scrollTop; drawMini();
+}
+function foldKey(key){
+  const ta=$('#md'), lines=ta.value.split(String.fromCharCode(10));
+  const at=lines.findIndex(l=>l.trim()===key);
+  if(at<0) return;
+  if(FOLDS.has(key)){ lines.splice(at+1, 0, ...FOLDS.get(key)); FOLDS.delete(key); }
+  else{
+    let end=at+1;
+    while(end<lines.length && !/^#{1,3}\s/.test(lines[end])) end++;
+    const body=lines.splice(at+1, end-at-1);
+    if(!body.length) return;
+    FOLDS.set(key, body);
+  }
+  ta.value=lines.join(String.fromCharCode(10)); DIRTY=true; sync();
+}
+// `shut` is what you want to END UP with, not what to toggle. Passing "is anything folded"
+// meant fold-all could fold and never unfold: with everything shut the test asked for
+// exactly the state it was already in and did nothing.
+function foldAll(shut){
+  const here=$('#md').value.split(String.fromCharCode(10))
+             .filter(l=>/^###\s/.test(l)).map(l=>l.trim());
+  [...new Set([...here, ...FOLDS.keys()])].forEach(k=>{
+    if(shut!==FOLDS.has(k)) foldKey(k); });
+}
+// EVERY FOLD PUT BACK BEFORE ANYTHING IS SAVED OR COPIED. A folded section is out of the
+// box, so saving what is in the box would delete it.
+function unfolded(){
+  let t=$('#md').value;
+  for(const [k,body] of FOLDS){
+    const lines=t.split(String.fromCharCode(10)), at=lines.findIndex(l=>l.trim()===k);
+    if(at<0) continue;
+    lines.splice(at+1, 0, ...body); t=lines.join(String.fromCharCode(10));
+  }
+  return t;
+}
+
+function drawGutter(){
+  const g=$('#gut'), hl=$('#hl');
+  const cs=getComputedStyle(hl);
+  const LINEH=parseFloat(cs.lineHeight) || (parseFloat(cs.fontSize)*1.65);
+  g.innerHTML='';
+  hl.querySelectorAll('.fold').forEach(sp=>{
+    const b=document.createElement('b');
+    const shut=FOLDS.has(sp.dataset.k);
+    b.textContent = shut ? '▸' : '▾';
+    b.title = shut ? 'open this section' : 'fold this section';
+    // ON THE MIDDLE OF ITS LINE. The marker is a box the height of one line box, and the
+    // glyph is centred inside it, so it lines up with the heading at any font size.
+    // offsetTop is the top of the SPAN, not of the line box it sits in, and the difference
+    // is the half-leading - which is why the marker sat a few pixels low.
+    b.style.top = (sp.offsetTop - hl.scrollTop - (LINEH - sp.offsetHeight) / 2) + 'px';
+    b.style.height = LINEH + 'px';
+    b.onclick = ev => { ev.preventDefault(); ev.stopPropagation(); foldKey(sp.dataset.k); };
+    g.appendChild(b);
+  });
+}
+
 function sync(){
   const ta=$('#md'), hl=$('#hl');
   // the trailing space keeps a final newline from collapsing, which would let the two
   // layers disagree about height on the last line
   hl.innerHTML=highlight(ta.value)+'\n ';
   hl.scrollTop=ta.scrollTop; hl.scrollLeft=ta.scrollLeft;
+  drawGutter();
+  const tt=titleOf(ta.value);
+  $('#sstitle').style.display = tt ? 'flex' : 'none';
+  $('#sstitletx').textContent = tt;
+  $('#ssfold').textContent = FOLDS.size ? ('unfold all ('+FOLDS.size+')') : 'fold all';
+  drawMini();
 }
 $('#md').addEventListener('input',()=>{DIRTY=true; sync();});
+setInterval(()=>{ const b=$('#sssave'); if(b) b.classList.toggle('dirty', !!DIRTY); }, 400);
 $('#md').addEventListener('scroll',()=>{
-  $('#hl').scrollTop=$('#md').scrollTop; $('#hl').scrollLeft=$('#md').scrollLeft;});
+  $('#hl').scrollTop=$('#md').scrollTop; $('#hl').scrollLeft=$('#md').scrollLeft;
+  drawGutter(); drawMini();});
+$('#ssfold').onclick=()=>foldAll(FOLDS.size===0);
+// MINIMISE THE WHOLE SHEET IN PLACE. Not a separate panel that opens elsewhere - the title
+// bar stays exactly where it is and everything under it goes, so the page does not jump
+// about when you put it away. Remembered, because a preference you have to set every time
+// is not a preference.
+function sheetShut(shut){
+  $('#ed').classList.toggle('hidewhenshut', shut);
+  document.querySelectorAll('.lg,.note').forEach(e=>e.classList.toggle('hidewhenshut',shut));
+  $('#sstitle').classList.toggle('shut', shut);
+  $('#sshide').innerHTML = shut ? '&#9656;' : '&#9662;';
+  $('#ssfold').style.display = shut ? 'none' : '';
+  PREF.set('sheetshut', shut?1:0);
+  if(!shut) sync();
+}
+$('#sssave').onclick=()=>save();
+$('#sscopy').onclick=()=>copyMd();
+$('#sshide').onclick=()=>sheetShut(!$('#ed').classList.contains('hidewhenshut'));
+(function(){
+  const box=$('#mini'); let down=false;
+  box.addEventListener('mousedown',e=>{ down=true; box.classList.add('grabbing');
+                                        miniScroll(e); e.preventDefault(); });
+  window.addEventListener('mousemove',e=>{ if(down) miniScroll(e); });
+  window.addEventListener('mouseup',()=>{ down=false; box.classList.remove('grabbing'); });
+})();
 new ResizeObserver(sync).observe($('#md'));
 
 /* ── film + timeline ────────────────────────────────────────────────────────────────*/
@@ -319,8 +625,10 @@ async function boot(){
   const d=await api('films');
   const sel=$('#film');
   sel.innerHTML=d.films.map(f=>`<option value="${f.id}">${f.title} — ${f.shots} shots, ${f.specs} specs</option>`).join('');
-  const pref=d.films.find(f=>f.specs>0)||d.films[0];
-  if(pref){sel.value=pref.id; await loadFilm();}
+  const q=new URLSearchParams(location.search);
+  const want=d.films.find(f=>f.id===q.get('film'));
+  const pref=want||d.films.find(f=>f.specs>0)||d.films[0];
+  if(pref){sel.value=pref.id; await loadFilm(); if(want&&q.get('shot')) await open_(q.get('shot'));}
   sel.onchange=()=>{SHOT=null; loadFilm();};
 }
 async function loadFilm(){
@@ -345,47 +653,246 @@ async function loadFilm(){
         </div>
       </div>
     </div>`).join('');
+  ORDER=d.shots.map(s=>s.shot);
+  STARTS_AT={}; d.shots.forEach(s=>{ STARTS_AT[s.shot]=s.starts_at||0; });
+  if(JSON.stringify(d.music||[])!==JSON.stringify(MUSIC)){ MUSIC=d.music||[]; drawTracks(); }
+  drawReel();
   const me=d.shots.find(s=>s.shot===SHOT);
-  if(me){applyLock(me);
-    if(REEL_AT<0&&(me.picked!==PICKED||!TAKES.length)) loadPlayer(me);}
+  if(me){applyLock(me); if(me.picked!==PICKED||!TAKES.length) loadPlayer(me);}
   if(!SHOT&&d.shots.length) open_(d.shots[0].shot);
+  if(!MEDIA.length) loadMedia();
 }
-let TAKES=[], PICKED='', PLAYING='';
+let TAKES=[], PICKED='', PLAYING='', PLAY_ON_LOAD=false;
 /* ── playing the film ────────────────────────────────────────────────────────────────
    Chained rather than concatenated: each shot's own picked take plays, and when it ends
    the next one starts. That means what you watch is exactly what the timeline says, with
    no export step to go stale - change a pick and the next play-through has it. */
-let REEL=[], REEL_AT=-1, SHOTS=[];
-function stopReel(){
-  REEL_AT=-1; $('#allbtn').textContent='▶ play the whole film';
-  $('#vid').loop=$('#loop').checked; drawReel();
+let ORDER=[], FPS=24, FRAMES=0, SCRUBBING=false, WANT=null;
+
+/* CONTINUE, don't restart. The old button played the film from shot 1 whatever you were
+   looking at, which is the wrong verb for a review tool: you are almost always partway in.
+   Now playback simply carries on into whatever shot follows THIS one. */
+function nextShot(){
+  const i=ORDER.indexOf(SHOT);
+  return (i>=0 && i+1<ORDER.length) ? ORDER[i+1] : null;
 }
 function drawReel(){
-  $('#reel').innerHTML=REEL.length? REEL.map((r,i)=>
-    `<div class="${i<REEL_AT?'done':''}" title="${r.shot} — ${r.dur}s"><i id="rb${i}"></i></div>`
-  ).join('')+`<span>${REEL.reduce((a,r)=>a+r.dur,0).toFixed(1)}s</span>` : '';
+  $('#reel').innerHTML=ORDER.map(id=>
+    `<div class="${id===SHOT?'now':''}" title="shot ${id}"><i></i></div>`).join('');
 }
-async function playAll(){
-  if(REEL_AT>=0){ stopReel(); $('#vid').pause(); return; }
-  const d=await api('tree/'+FILM);
-  REEL=d.shots.filter(s=>s.video).map(s=>({shot:s.shot,file:s.video,dur:s.duration}));
-  if(!REEL.length){ $('#msg').className='msg err';
-    $('#msg').textContent='no picked takes to play'; return; }
-  $('#allbtn').textContent='■ stop';
-  $('#vid').loop=false;                       // looping shot 1 would never reach shot 2
-  REEL_AT=0; drawReel(); playReelAt(0);
+
+/* FRAME EXACTNESS. currentTime is seconds, but notes are given in frames - "the crack at
+   frame 4" - so the scrub bar is indexed in frames and the readout says which one you are
+   on. Seeking lands mid-frame if you ask for exactly frame/fps, so it asks for the middle
+   of the frame instead and rounds back the same way. */
+/* MUSIC RUNS ON THE FILM'S CLOCK, NOT THE SHOT'S.
+   A background track is one piece of music laid under the whole cut, so the only correct
+   place for it at any moment is (where this shot starts in the film) + (how far into the
+   shot we are). Restarting it per shot would be a different thing entirely - six openings
+   instead of one piece - and jumping to shot 050 would keep replaying the first two seconds
+   of the track under the last shot of the film.
+   STARTS_AT comes from the server because it is derived from the PICKED takes, and those
+   change under us. */
+let MUSIC=[], STARTS_AT={};
+function filmTime(){ return (STARTS_AT[SHOT]||0) + ($('#vid').currentTime||0); }
+function musicSeek(){
+  const m=$('#bgm'); if(!m.src) return;
+  const want=filmTime();
+  if(!m.duration || want<=m.duration) { m.currentTime=want; return; }
+  /* the track is shorter than the film: loop it rather than fall silent, so what you hear
+     is at least the right part of a repeat */
+  m.currentTime=want % m.duration;
 }
-function playReelAt(i){
-  const r=REEL[i]; if(!r) return;
-  REEL_AT=i; drawReel();
-  SHOT=r.shot; open_(r.shot, true);
+function musicFollow(){
+  const m=$('#bgm'), v=$('#vid');
+  if(!m.src) return;
+  if(v.paused){ m.pause(); return; }
+  if(m.paused) m.play().catch(()=>{});
+  /* nudge rather than seek: setting currentTime every tick stutters. Only correct when it
+     has drifted more than a frame and a half. */
+  const want=filmTime(), have=m.duration? want % m.duration : want;
+  if(Math.abs(m.currentTime-have) > 0.06) m.currentTime=have;
+}
+function drawTracks(){
+  const sel=$('#track'), was=sel.value;
+  sel.innerHTML='<option value="">none</option>'+MUSIC.map(t=>
+    `<option value="${t.id}">${t.name}${t.state==='using'?' ★':''}</option>`).join('');
+  if(MUSIC.some(t=>t.id===was)) sel.value=was;
+  else if(localStorage.spMusic && MUSIC.some(t=>t.id===localStorage.spMusic))
+    { sel.value=localStorage.spMusic; setTrack(sel.value); }
+  $('#minfo').textContent=MUSIC.length? '' : 'nothing in shots/media - run build/push_media.py';
+}
+function setTrack(id){
+  const m=$('#bgm'), t=MUSIC.find(x=>x.id===id);
+  localStorage.spMusic=id||'';
+  if(!t){ m.pause(); m.removeAttribute('src'); m.load(); $('#minfo').textContent=''; return; }
+  m.src=mediaUrl(t.file);
+  m.volume=(+$('#mvol').value)/100;
+  $('#minfo').textContent=`${t.duration}s · ${t.state}`;
+  m.addEventListener('loadedmetadata', musicSeek, {once:true});
+  if(!$('#vid').paused) m.play().catch(()=>{});
+}
+$('#track').onchange=e=>setTrack(e.target.value);
+$('#mvol').oninput=e=>{ $('#bgm').volume=(+e.target.value)/100; PREF.set('vol', +e.target.value); };
+
+/* TIMESTAMPS TO THE MILLISECOND.
+   These exist to be written down and handed back - "shot 5 starts at 0:17.280" - so the
+   readout has to be precise enough to act on and in a form you can paste. Seconds and
+   milliseconds, not frames, because the thing being lined up is a piece of MUSIC, and music
+   does not know what 24fps is. */
+function stamp(t){
+  t = Math.max(0, t||0);
+  const m = Math.floor(t/60), sec = Math.floor(t%60), ms = Math.round((t%1)*1000);
+  return `${m}:${String(sec).padStart(2,'0')}.${String(ms%1000).padStart(3,'0')}`;
+}
+function copyStamp(id){
+  const el = $('#'+id), was = el.textContent;
+  navigator.clipboard?.writeText(was);
+  el.textContent = 'copied'; setTimeout(()=>{ el.textContent = was; }, 550);
+}
+
+function frameOf(){ return Math.round($('#vid').currentTime*FPS - 0.5); }
+function gotoFrame(f){
   const v=$('#vid');
-  v.src=mediaUrl(r.file); v.muted=$('#mute').checked; v.loop=false;
-  v.play().catch(()=>{});
-  $('#vinfo').textContent=`playing the film — shot ${r.shot} (${i+1} of ${REEL.length})`;
+  f=Math.max(0,Math.min(FRAMES-1,f));
+  /* THE LAST FRAME IS PAST THE END OF THE VIDEO. Asking for the MIDDLE of frame F-1 is
+     asking for a time a half-frame beyond the duration, and the browser silently clamps it -
+     then the next timeupdate reports the earlier frame it actually landed on and the slider
+     springs back off the end. Same story in reverse at 0 once a seek rounds down. So the
+     request is clamped here, and WANT is what the readout believes until a real seek lands. */
+  WANT=f;
+  const t=(f+0.5)/FPS;
+  v.currentTime = (v.duration && t > v.duration-1e-3) ? Math.max(0, v.duration-1e-3) : t;
+  showFrame(f);
 }
-document.addEventListener('DOMContentLoaded',()=>{});
+function showFrame(f){
+  if(f==null){
+    f=frameOf();
+    /* if we asked for an end frame the player could not land on exactly, keep believing the
+       request rather than the clamp - otherwise the bar can never show its own last stop */
+    if(WANT!=null && Math.abs(WANT-f)<=1 && (WANT===0||WANT===FRAMES-1)) f=WANT;
+  } else WANT=f;
+  if(!SCRUBBING) $('#scrub').value=f;
+  const mc=$('#mclock'); if(mc && mc.textContent!=='copied') mc.textContent=stamp(filmTime());
+  $('#fno').textContent=`frame ${f} / ${FRAMES-1}   ${(f/FPS).toFixed(3)}s`;
+}
+function step(n){ $('#vid').pause(); gotoFrame(frameOf()+n); }
+function togglePlay(){ const v=$('#vid'); v.paused? v.play().catch(()=>{}) : v.pause(); }
+function setDur(dur,fps){
+  FPS=fps||24; FRAMES=Math.max(1,Math.round((dur||0)*FPS));
+  $('#scrub').max=FRAMES-1; showFrame(0);
+}
+$('#scrub').addEventListener('input',e=>{ SCRUBBING=true; gotoFrame(+e.target.value); });
+$('#scrub').addEventListener('change',()=>{ SCRUBBING=false; });
+document.addEventListener('keydown',e=>{
+  if(document.activeElement===$('#md')) return;      // typing in the spec, not scrubbing
+  if(e.key==='ArrowLeft'){ step(-1); e.preventDefault(); }
+  if(e.key==='ArrowRight'){ step(1); e.preventDefault(); }
+  if(e.key===' '){ togglePlay(); e.preventDefault(); }
+});
+
+/* WHAT THE PAGE REMEMBERS.
+   A review tool is opened, closed and opened again all day. Everything here is a VIEW
+   preference - what is folded, how loud the music is, which file you were listening to -
+   so losing it on refresh costs real work and risks nothing. Media selection is kept per
+   STATE, three separate bookmarks, because using / considering / palette are three different
+   errands and you are usually part-way through more than one. */
+const PREF = {
+  get(k, d){ try{ const v=localStorage.getItem('sp.'+k); return v===null?d:JSON.parse(v); }
+             catch(e){ return d; } },
+  set(k, v){ try{ localStorage.setItem('sp.'+k, JSON.stringify(v)); }catch(e){} },
+};
+
 function mediaUrl(f){return '/film/media/'+FILM+'/'+f;}
+
+/* THE PALETTE, AND THE FILTER OVER IT.
+   Three states: what the film uses, what is being considered, and everything we have. The
+   point of showing all three together is that the filter only means something if you can see
+   what it filtered OUT.
+   It plays on its own audio element. Sharing one with the background music would mean
+   auditioning a track stopped the film, which is exactly backwards - you audition a track in
+   order to decide where it goes. */
+let MEDIA=[], MSTATE=PREF.get('mstate','using'), MSEL=null;
+let MBOOK=PREF.get('mbook',{});          // one remembered file per state, not one overall
+function fmtSize(n){ return n>1048576 ? (n/1048576).toFixed(1)+' MB'
+                                      : Math.max(1,Math.round(n/1024))+' KB'; }
+async function loadMedia(){
+  if(PREF.get('mfold',false)) $('#mbody').classList.add('hide');
+  if(PREF.get('sheetshut', 0)) sheetShut(true);
+  const mm = PREF.get('mmute', 0);
+  if(mm){ $('#mmute').checked=true; $('#bgm').muted=true; }
+  const v0 = PREF.get('vol', null);
+  if(v0!==null){ $('#mvol').value=v0; $('#bgm').volume=v0/100; }
+  const r = await fetch('/api/spec/media/'+FILM); const d = await r.json();
+  MEDIA = d.groups||[];
+  const tot = MEDIA.reduce((a,g)=>a+g.count,0);
+  $('#mcount').textContent = MEDIA.map(g=>`${g.state} ${g.count}`).join('  ·  ')||'nothing';
+  $('#mfilt').innerHTML = MEDIA.map(g=>
+      `<button data-s="${g.state}" onclick="setMState('${g.state}')">${g.state}</button>`).join('')
+    + `<input id="mq" placeholder="filter by name" oninput="drawMedia()">`;
+  if(!MEDIA.some(g=>g.state===MSTATE&&g.count)) MSTATE=(MEDIA.find(g=>g.count)||{}).state||'palette';
+  setMState(MSTATE);
+}
+function setMState(st){ MSTATE=st; PREF.set('mstate', st);
+  [...$('#mfilt').querySelectorAll('button')].forEach(b=>
+    b.classList.toggle('on', b.dataset.s===st));
+  drawMedia();
+  const back = MBOOK[st];
+  if(back && findMedia(back)) pickMedia(back, true);
+}
+function drawMedia(){
+  const g = MEDIA.find(x=>x.state===MSTATE) || {items:[]};
+  const q = ($('#mq')?.value||'').toLowerCase();
+  const rows = g.items.filter(i=>!q || i.name.toLowerCase().includes(q)
+                                || i.folder.toLowerCase().includes(q));
+  $('#mlist').innerHTML = rows.map((i,n)=>
+    `<div class="mrow${MSEL&&MSEL.rel===i.rel?' on':''}" onclick="pickMedia('${i.rel}')">
+       <span class="k">${i.kind}</span>
+       <span class="nm" title="${i.rel}">${i.folder&&i.folder!=='.'?i.folder+'/':''}${i.name}</span>
+       ${i.used_by.length?`<span class="u">${i.used_by.join(' ')}</span>`:''}
+     </div>`).join('') || '<div class="mrow"><span class="nm">nothing matches</span></div>';
+}
+function findMedia(rel){
+  for(const g of MEDIA){ const i=g.items.find(x=>x.rel===rel); if(i) return i; }
+  return null;
+}
+function pickMedia(rel, quiet){
+  const i = findMedia(rel); if(!i) return;
+  MSEL = i; MBOOK[MSTATE]=rel; PREF.set('mbook', MBOOK); drawMedia();
+  const used = i.used_by.length
+    ? `<div class="used">used in <b>${i.used_by.join(', ')}</b></div>`
+    : `<div class="meta">not named by any shot's spec or takes</div>`;
+  const meta = `<div class="meta">${i.kind} · ${fmtSize(i.size)}<br>${i.rel}</div>`;
+  if(i.kind==='image'){
+    $('#pal').pause();
+    $('#mprev').innerHTML = `<div class="fn">${i.name}</div>
+      <img src="${mediaUrl(i.url)}">${meta}${used}`;
+  } else {
+    $('#mprev').innerHTML = `<div class="fn">${i.name}</div>
+      <div class="pctl">
+        <button class="play" id="palpp" onclick="palToggle()">▶ play</button>
+        <button onclick="palSeek(-5)">−5s</button>
+        <button onclick="palSeek(5)">+5s</button>
+        <span class="tstamp" id="palclock" title="click to copy"
+              onclick="copyStamp('palclock')">0:00.000</span>
+      </div>
+      <input type="range" class="scrub" id="palscrub" min="0" max="1000" value="0">
+      ${meta}${used}`;
+    const a=$('#pal'); a.src=mediaUrl(i.url); a.currentTime=0;
+    $('#palscrub').addEventListener('input',e=>{
+      if(a.duration) a.currentTime = a.duration * (+e.target.value/1000); });
+  }
+}
+function palToggle(){ const a=$('#pal'); a.paused? a.play().catch(()=>{}) : a.pause(); }
+function palSeek(d){ const a=$('#pal'); a.currentTime=Math.max(0,a.currentTime+d); }
+$('#pal').addEventListener('timeupdate',()=>{
+  const c=$('#palclock'), sc=$('#palscrub'), a=$('#pal');
+  if(c && c.textContent!=='copied') c.textContent=stamp(a.currentTime)
+      + (a.duration? ' / '+stamp(a.duration) : '');
+  if(sc && a.duration) sc.value = Math.round(1000*a.currentTime/a.duration);
+});
+$('#pal').addEventListener('play',()=>{ const b=$('#palpp'); if(b) b.textContent='❚❚ pause'; });
+$('#pal').addEventListener('pause',()=>{ const b=$('#palpp'); if(b) b.textContent='▶ play'; });
 function loadPlayer(s){
   TAKES=s.takes||[]; PICKED=s.picked||'';
   const box=$('#play'), v=$('#vid');
@@ -402,12 +909,16 @@ function loadPlayer(s){
         <span style="color:#6f6f85">${t.id}</span></div>
     </div>`).join('');
   playTake(pick.id);
+  if(!PLAY_ON_LOAD) $('#vid').pause();   // opening a shot should not start it playing
+  PLAY_ON_LOAD=false;
 }
 function playTake(id){
   const t=TAKES.find(x=>x.id===id); if(!t) return;
   PLAYING=id;
   const v=$('#vid');
   v.src=mediaUrl(t.file); v.loop=$('#loop').checked; v.muted=$('#mute').checked;
+  setDur(t.duration, t.fps);
+  musicSeek();                     // the shot changed, so the film time did too
   v.play().catch(()=>{});   // autoplay can be refused; the poster still shows
   $('#vinfo').textContent=`${t.engine||'?'} · ${t.duration}s`
     +(id===PICKED?'  ★ this is the take the film uses':'  (not the picked take)');
@@ -417,20 +928,35 @@ function playTake(id){
     if(on) c.scrollIntoView({block:'nearest'});   // 20+ takes a shot; find it for me
   });
 }
-function replay(){const v=$('#vid'); v.currentTime=0; v.play().catch(()=>{});}
+function replay(){ gotoFrame(0); $('#vid').play().catch(()=>{}); }
+/* THE MUSIC DOES NOT STOP AT A SHOT BOUNDARY.
+   Rolling into the next shot swaps the <video> source, which fires pause on the old element
+   and play on the new one - and those handlers were pausing the track and then SEEKING it
+   back to the film clock. A seek on an <audio> element re-buffers, so every join had a stop,
+   a jump and a restart in it: the chop. Across a join the track is simply left alone and
+   musicFollow's drift correction picks up any small error, which is what it is for. */
+let CHAINING=false;
 $('#vid').addEventListener('ended',()=>{
-  if(REEL_AT<0) return;
-  if(REEL_AT+1<REEL.length) playReelAt(REEL_AT+1);
-  else { REEL_AT=REEL.length; drawReel(); stopReel();
-         $('#vinfo').textContent='end of film'; }
+  if(!$('#chain').checked) return;
+  const nxt=nextShot();
+  if(nxt){ CHAINING=true; open_(nxt, false, true);
+           setTimeout(()=>{ CHAINING=false; }, 1200); }
+  else $('#vinfo').textContent='end of film';
 });
-$('#vid').addEventListener('timeupdate',()=>{
-  if(REEL_AT<0) return;
-  const b=document.getElementById('rb'+REEL_AT), v=$('#vid');
-  if(b&&v.duration) b.style.width=(100*v.currentTime/v.duration)+'%';
-});
+$('#vid').addEventListener('timeupdate',()=>{ showFrame(); musicFollow(); });
+$('#vid').addEventListener('seeked',()=>{ showFrame(); musicSeek(); });
+$('#vid').addEventListener('play',()=>{ $('#pp').textContent='❚❚ pause';
+  if(!CHAINING) musicSeek();
+  const m=$('#bgm'); if(m.src) m.play().catch(()=>{}); });
+$('#vid').addEventListener('pause',()=>{ $('#pp').textContent='▶ play';
+  if(!CHAINING) $('#bgm').pause(); });
 $('#loop').onchange=e=>{$('#vid').loop=e.target.checked;};
 $('#mute').onchange=e=>{$('#vid').muted=e.target.checked;};
+// MUTING THE MUSIC IS NOT TURNING IT DOWN. The slider loses the level you set; the mute
+// keeps it, and keeps the track rolling underneath, so unmuting lands you where the film
+// actually is rather than back at the start.
+$('#mmute').onchange=e=>{ $('#bgm').muted=e.target.checked;
+                          PREF.set('mmute', e.target.checked?1:0); };
 
 function applyLock(s){
   LOCKED=!!s.locked;
@@ -453,13 +979,14 @@ function applyLock(s){
       Read-only, and not to be rebuilt. Press <b>unlock</b> to change it.`;
   } else n.style.display='none';
 }
-async function open_(shot, fromReel){
-  if(!fromReel&&REEL_AT>=0) stopReel();
+async function open_(shot, fromReel, autoplay){
   if(DIRTY&&!confirm('Unsaved changes on '+SHOT+'. Discard them?')) return;
-  SHOT=shot; DIRTY=false;
-  if(!fromReel) TAKES=[];             // force the player to reload for the new shot
+  SHOT=shot; DIRTY=false; PLAY_ON_LOAD=!!autoplay;
+  TAKES=[];                           // force the player to reload for the new shot
   const d=await api('md/'+FILM+'/'+shot);
-  $('#md').value=d.md; sync();
+  VARTAIL=null;                       // a new shot's text arrives whole
+  FOLDS.clear(); $('#md').value=d.md; sync();
+  if(PREF.get('foldvars',false)) foldVars(true, true);
   $('#who').textContent=FILM+'  /  shot '+shot+(d.exists?'':'   (new — this is a starting point)');
   $('#msg').textContent=''; $('#msg').className='msg';
   loadFilm();
@@ -479,10 +1006,43 @@ async function toggleLock(){
                         :`shot ${SHOT} unlocked`;
   loadFilm();
 }
+/* FOLDING THE VARIANTS.
+   A spec is two halves that get read at different times: the promises, which are the
+   contract, and the variants, which are the things still in play. When you are checking a
+   shot against its promises the second half is noise.
+   The tail is held here and put back on save, so the file on disk is always whole - folding
+   is a view, never an edit. The split is the "## CAN CHANGE" heading itself, which every
+   spec in this film has. */
+let VARTAIL = null;
+const VARMARK = new RegExp(String.fromCharCode(10) + '## CAN CHANGE');
+function splitVars(){
+  const t = $('#md').value, m = t.match(VARMARK);
+  return m ? [t.slice(0, m.index), t.slice(m.index)] : [t, ''];
+}
+function foldVars(on, keepDirty){
+  const btn = $('#foldbtn');
+  if(on){
+    if(VARTAIL!==null) return;
+    const [head, tail] = splitVars();
+    if(!tail){ btn.textContent='▾ variants'; return; }   // nothing to fold on this shot
+    VARTAIL = tail; $('#md').value = head;
+  } else {
+    if(VARTAIL===null) return;
+    $('#md').value = $('#md').value + VARTAIL; VARTAIL = null;
+  }
+  btn.textContent = VARTAIL===null ? '▾ variants' : '▸ variants (folded)';
+  btn.classList.toggle('on', VARTAIL!==null);
+  PREF.set('foldvars', VARTAIL!==null);
+  if(!keepDirty) DIRTY = DIRTY;      // folding is not an edit
+  sync();
+}
+function toggleVars(){ foldVars(VARTAIL===null); }
+function wholeMd(){ return unfolded() + (VARTAIL||''); }
+
 async function save(){
   if(!SHOT||LOCKED) return;
   const r=await api('save',{method:'POST',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({film:FILM,shot:SHOT,md:$('#md').value})});
+    body:JSON.stringify({film:FILM,shot:SHOT,md:wholeMd()})});
   const m=$('#msg');
   if(r.error){m.className='msg err'; m.textContent=r.error; return;}
   DIRTY=false;
@@ -499,7 +1059,7 @@ async function runCheck(){
   p.textContent=r.report||r.error||'(no output)';
 }
 function copyMd(){
-  navigator.clipboard.writeText($('#md').value);
+  navigator.clipboard.writeText(wholeMd());
   $('#msg').className='msg'; $('#msg').textContent='copied to clipboard';
 }
 window.addEventListener('beforeunload',e=>{if(DIRTY){e.preventDefault();e.returnValue='';}});

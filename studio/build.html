@@ -153,7 +153,7 @@ async function results(){
     <a href="/film?film=${FID}">open in the editor</a> · <a href="/specs">spec sheet</a></div>`;
   for(const sid of SHOTS){
     const d=(await (await fetch(`/api/film/${FID}/shot/${sid}`)).json()).shot;
-    h+=`<h3 style="margin:14px 0 4px;font-size:14px">${esc(d.title||sid)}</h3><div class="takes">`+
+    h+=`<h3 style="margin:14px 0 4px;font-size:14px">${esc(d.title||sid)} <span class="hint" style="font-weight:400">· <a href="/specs?film=${FID}&shot=${sid}">its promises</a> · <a href="/film?film=${FID}&shot=${sid}">in the editor</a></span></h3><div class="takes">`+
       (d.takes||[]).map(t=>`<div class="take ${t.id===d.picked?"picked":""}">
         ${t.file?`<video src="/film/media/${FID}/${t.file}" poster="/film/media/${FID}/${t.poster||""}" controls muted preload="none"></video>`:""}
         <div class="body"><b>${esc(t.engine)}</b> <span class="hint">${esc(t.id)}</span>
