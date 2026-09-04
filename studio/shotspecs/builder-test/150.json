@@ -1,0 +1,63 @@
+{
+ "invariants": [
+  {
+   "id": "the_people_are_these_people",
+   "title": "The people are these people",
+   "rule": "BAI, from their packs, are in the start picture; no one else.",
+   "why": "identity comes from the composited anchor, not from the engine's prior",
+   "check": {
+    "kind": "anchor_contains",
+    "value": "anchor_shot_150"
+   }
+  },
+  {
+   "id": "the_place_is_back_alley",
+   "title": "The place is back-alley",
+   "rule": "The background is a window of the back-alley plate night_wide, soft behind the face, and stays that place for the whole take.",
+   "why": "words that name what the plate lacks make the engine rewrite it",
+   "check": {
+    "kind": "qc_clean"
+   }
+  },
+  {
+   "id": "camera_static",
+   "title": "Camera: static",
+   "rule": "The camera does not move.",
+   "why": "a camera move on LTX is advisory; a pinned shot enforces it"
+  },
+  {
+   "id": "length",
+   "title": "Length",
+   "rule": "5 seconds, within the measured envelope.",
+   "why": "resolution and length trade inside a fixed envelope",
+   "check": {
+    "kind": "duration_between",
+    "min": 3.5,
+    "max": 6.5
+   }
+  }
+ ],
+ "flair": [
+  {
+   "id": "seed",
+   "title": "Seed",
+   "note": "free - the variants differ by seed"
+  },
+  {
+   "id": "motion",
+   "title": "Motion",
+   "note": "none named"
+  },
+  {
+   "id": "ambient",
+   "title": "Ambient",
+   "note": "leaves"
+  }
+ ],
+ "shot": "150",
+ "title": "close",
+ "beat": "looks up, a small smile",
+ "build": {
+  "script": "Make this shot: composed anchor, static"
+ }
+}

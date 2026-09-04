@@ -39,6 +39,16 @@
    "voice": "",
    "voice_desc": "",
    "foundry": "ines-varga"
+  },
+  "BAI": {
+   "name": "Bai Liwen",
+   "clause": "a slightly built woman, in their twenties, pale skin, an oval face, brown eyes, almond eyes, thin arched brows, black very long straight hair, a calm, unreadable bearing, A young swordswoman of the Cloud Terrace school. Quick, watchful, and better at the sword than at saying so.",
+   "short": "black very long straight hair, brown eyes",
+   "sheet": "/home/k4shix/shared/comfy-studio/studio/foundry/characters/bai-liwen/base_portrait.png",
+   "portrait": "/home/k4shix/shared/comfy-studio/studio/foundry/characters/bai-liwen/base_portrait.png",
+   "voice": "",
+   "voice_desc": "",
+   "foundry": "bai-liwen"
   }
  },
  "scenes": [
@@ -188,6 +198,26 @@
     "140"
    ],
    "place": "harbour-night",
+   "plate": "night_wide"
+  },
+  {
+   "id": "sc08",
+   "title": "build 16:26",
+   "location": "a narrow alley between tall walls, puddles and drainpipes, lived-in and worn, in steady rain, surfaces wet and reflective",
+   "time_of_day": "",
+   "weather": "rain",
+   "ambience": "dripping water and the muffled street beyond, steady rain on every surface",
+   "palette": "",
+   "music": "",
+   "cast_present": [
+    "BAI"
+   ],
+   "no_people": false,
+   "anchor": "",
+   "shots": [
+    "150"
+   ],
+   "place": "back-alley",
    "plate": "night_wide"
   }
  ],
@@ -2107,6 +2137,92 @@
      "together"
     ],
     "when": 1788552546
+   }
+  },
+  "150": {
+   "id": "150",
+   "scene": "sc08",
+   "title": "close - BAI",
+   "duration": 5.0,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/builder-test/assets/anchor_shot_150.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "close-up",
+     "move": "static",
+     "transition_in": "",
+     "subject": "BAI",
+     "action": "looks up, a small smile",
+     "background": "what moves here moves: leaves",
+     "motion": "",
+     "ambient": [
+      "leaves"
+     ],
+     "dialogue": {
+      "char": "",
+      "line": "",
+      "delivery": ""
+     }
+    }
+   ],
+   "sfx": "dripping water and the muffled street beyond, steady rain on every surface",
+   "no_people": false,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t553639157",
+     "engine": "ltx",
+     "seed": 510017842,
+     "created": "16:28",
+     "file": "takes/150/ltx_t553639157.mp4",
+     "poster": "takes/150/ltx_t553639157.png",
+     "strip": "takes/150/ltx_t553639157_strip.png",
+     "duration": 5.04,
+     "fps": 24,
+     "qc": [
+      "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.82 left=0.00 right=0.03)"
+     ],
+     "drift": {
+      "lost": 0.64,
+      "missing": [
+       "alleyway",
+       "breakdown",
+       "bulb",
+       "character",
+       "city",
+       "cloth",
+       "fence",
+       "lantern",
+       "noun",
+       "object",
+       "person",
+       "present"
+      ],
+      "kept": 9,
+      "last_caption": "Anime, girl, hair, eyes, face, flower, hairpin, shirt, collar, background, interior, room, building, wall, structure, metal, light, glow, shadow, darkness, illustration."
+     },
+     "warnings": [],
+     "prompt": "A static close-up: a slightly built woman, in their twenties, pale skin, an oval face, brown eyes, almond eyes, thin arched brows, black very long straight hair, a calm, unreadable bearing, A young swordswoman of the Cloud Terrace school. Quick, watchful, and better at the sword than at saying so., looks up, a small smile, while what moves here moves: leaves; leaves drift across the frame, a narro"
+    }
+   ],
+   "picked": "t553639157",
+   "engine_notes": "",
+   "anchor_source": {
+    "character": "bai-liwen",
+    "framing": "close",
+    "place": "back-alley",
+    "stand": 0.22,
+    "cx": 0.45,
+    "view": "base_portrait",
+    "plate": "/home/k4shix/shared/comfy-studio/studio/foundry/composites/bai-liwen__back-alley__close/00_plate_close.png",
+    "props": []
+   },
+   "anchor_check": {
+    "caption": "Here's a breakdown of the nouns present in the image, as requested:\n\nPlace, alleyway, background, city, structure, building, wall, stairs, railing, fence, web, wires, light, bulb, lantern, object, hair, hairpin, flower, clothing, shirt, collar, face, eyes, expression, person, girl, anime character.",
+    "missing": [],
+    "when": 1788553639
    }
   }
  }
