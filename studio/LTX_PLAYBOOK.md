@@ -1469,9 +1469,10 @@ picked, 7 spec sheets; the spec checker: *all invariants hold*. Five shots from
 close-ups composed as close-ups, three voiced lines, one film assembled: 70.5 s,
 1472x832, 24 fps, -17.9 dB mean.
 
-**The verify page.** 31 clips, 26 judged this morning, 5 new and first in the
+**The verify page.** 33 clips, 26 judged this morning, 7 new and first in the
 list: the two voiced harbour shots, the composed close-up, the two-shot with a
-camera variant, the close-up built by clicking.
+camera variant, the close-up built by clicking, the two-person medium built
+from the page, the drawn close-up.
 
 **Times a person can plan around, measured today.** A builder variant: three to
 four minutes, plus a minute for a spoken line. A close-up composite: 18-20 s.
