@@ -1995,7 +1995,7 @@ def _make_job(jid, fid, shid, seconds=None, seed=0):
             sh = f.shot(shid)
             takes = sorted(sh.get("takes") or [], key=lambda t: t["id"])
             newest = takes[-1] if takes else None
-            if newest and any(str(q).startswith(("scene drift", "the line may not", "people appeared")) for q in newest.get("qc") or []):
+            if newest and any(str(q).startswith(("scene drift", "the line may not", "people appeared", "audio is effectively SILENT")) for q in newest.get("qc") or []):
                 _log(jid, "the take has a fault (%s) - rendering once more on a new seed"
                      % ("; ".join(newest.get("qc") or [])[:80]))
                 _render_take(jid, f, sh, "ltx", random.randint(1, 10 ** 9))

@@ -1,0 +1,436 @@
+{
+ "title": "Autumn Park",
+ "created": "2026-09-04 10:06",
+ "look": "photoreal",
+ "look_clause": "photoreal cinematic film still, 35mm, deep focus, high detail, colour photograph, filmic grade",
+ "grade": "",
+ "negative": "",
+ "fps": 24,
+ "logline": "",
+ "resolution": "auto",
+ "deliver": "native",
+ "cast": {
+  "INES": {
+   "name": "Ines Varga",
+   "clause": "a tall, athletic woman, in their fifties, olive skin, an angular face with a sharp jaw, grey eyes, hooded eyes, strong dark brows, grey short neat hair, a thin scar through one brow, a calm, unreadable bearing, a harbour master in a dark wool coat and a grey knit cap, salt-weathered, hands in her pockets",
+   "short": "grey short neat hair, a thin scar through one brow",
+   "sheet": "/home/k4shix/shared/comfy-studio/studio/foundry/characters/ines-varga/base_portrait.png",
+   "portrait": "/home/k4shix/shared/comfy-studio/studio/foundry/characters/ines-varga/base_portrait.png",
+   "voice": "",
+   "voice_desc": "",
+   "foundry": "ines-varga"
+  },
+  "STATION_MASTER": {
+   "name": "Station Master",
+   "clause": "a tall, broad-shouldered man, in their fifties, brown skin, a square-jawed face, brown eyes, almond eyes, strong dark brows, black short neat hair, a moustache, a calm, unreadable bearing, a small-town station master in a dark uniform coat with a peaked cap, a pocket watch chain, a whistle on a cord",
+   "short": "black short neat hair, brown eyes",
+   "sheet": "/home/k4shix/shared/comfy-studio/studio/foundry/characters/station-master/base_portrait.png",
+   "portrait": "/home/k4shix/shared/comfy-studio/studio/foundry/characters/station-master/base_portrait.png",
+   "voice": "",
+   "voice_desc": "",
+   "foundry": "station-master"
+  }
+ },
+ "scenes": [
+  {
+   "id": "sc01",
+   "title": "scene 1",
+   "location": "a city park with winding paths, old trees and iron benches, lived-in and worn, under a flat overcast sky, a city park in autumn, wet leaves on the path, iron benches, a bandstand far off",
+   "time_of_day": "day",
+   "weather": "overcast",
+   "ambience": "birdsong and leaves moving, a far-off dog",
+   "palette": "",
+   "music": "cinematic, autumn, solo clarinet and strings, overcast, 62 bpm",
+   "cast_present": [
+    "INES",
+    "STATION_MASTER"
+   ],
+   "no_people": false,
+   "anchor": "",
+   "shots": [
+    "010",
+    "020",
+    "030",
+    "040",
+    "050"
+   ],
+   "place": "autumn-park",
+   "plate": "day_wide"
+  }
+ ],
+ "shots": {
+  "010": {
+   "id": "010",
+   "scene": "sc01",
+   "title": "wide - establishing",
+   "duration": 6,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/foundry/places/autumn-park/day_wide.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide establishing shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "",
+     "action": "the park path under grey sky, leaves drifting down",
+     "background": "what moves here moves: light",
+     "motion": "",
+     "ambient": [
+      "leaves",
+      "light"
+     ],
+     "dialogue": {}
+    }
+   ],
+   "sfx": "birdsong and leaves moving, a far-off dog",
+   "no_people": true,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t530864801",
+     "engine": "ltx",
+     "seed": 178090679,
+     "created": "10:09",
+     "file": "takes/010/ltx_t530864801.mp4",
+     "poster": "takes/010/ltx_t530864801.png",
+     "strip": "takes/010/ltx_t530864801_strip.png",
+     "duration": 6.04,
+     "fps": 24,
+     "qc": [
+      "audio is effectively SILENT throughout (rms 0.00130)"
+     ],
+     "drift": {
+      "lost": 0.11,
+      "missing": [
+       "bandstand",
+       "parkway"
+      ],
+      "kept": 16,
+      "last_caption": "Park, pavilion, benches, path, grass, trees, leaves, lamp posts, stone, metal, lawn, sky, clouds, rain, autumn, daylight, shadows, light, park bench, foliage, ground, weather, season, outdoor, landscape."
+     },
+     "warnings": [],
+     "prompt": "A static wide establishing shot: the park path under grey sky, leaves drifting down, while what moves here moves: light; leaves drift across the frame; the light shifts and flickers across the scene, a city park with winding paths, old trees and iron benches, lived-in and worn, under a flat overcast sky, a city park in autumn, wet leaves on the path, iron benches, a bandstand far off, day, overcas"
+    }
+   ],
+   "picked": "t530864801",
+   "engine_notes": "",
+   "anchor_check": {
+    "caption": "Park, bandstand, benches, path, grass, trees, leaves, lamp posts, stone, metal, grass, lawn, foliage, ground, rain, autumn, daylight, shadows, light, lamps, parkway.",
+    "missing": [],
+    "when": 1788530864
+   }
+  },
+  "020": {
+   "id": "020",
+   "scene": "sc01",
+   "title": "wide - INES and STATION_MASTER",
+   "duration": 6,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/autumn-park/assets/anchor_shot_020.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "medium two-shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "INES",
+     "action": "stand on the path a few steps apart, both looking at the trees",
+     "background": "the scene moves behind them",
+     "motion": "",
+     "ambient": [
+      "leaves"
+     ],
+     "dialogue": {
+      "char": "INES",
+      "line": "You kept the watch.",
+      "delivery": "quiet"
+     }
+    }
+   ],
+   "sfx": "",
+   "no_people": false,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t530955340",
+     "engine": "ltx",
+     "seed": 146568949,
+     "created": "10:10",
+     "file": "takes/020/ltx_t530955340.mp4",
+     "poster": "takes/020/ltx_t530955340.png",
+     "strip": "takes/020/ltx_t530955340_strip.png",
+     "duration": 6.04,
+     "fps": 24,
+     "qc": [
+      "words not in the picture: apart"
+     ],
+     "drift": {
+      "lost": 0.35,
+      "missing": [
+       "branch",
+       "dirt",
+       "gazebo",
+       "parkway",
+       "pavement",
+       "weather"
+      ],
+      "kept": 11,
+      "last_caption": "Park, pavilion, trees, benches, path, sidewalk, leaves, grass, man, police officer, coat, hat, shoes, uniform, boots, asphalt, foliage, autumn, rain, drizzle, day, afternoon, light, shadows, lamp, lamp post, ground."
+     },
+     "warnings": [],
+     "prompt": "A static medium two-shot: a tall, athletic woman, in their fifties, olive skin, an angular face with a sharp jaw, grey eyes, hooded eyes, strong dark brows, grey short neat hair, a thin scar through one brow, a calm, unreadable bearing, a harbour master in a dark wool coat and a grey knit cap, salt-weathered, hands in her pockets, stand on the path a few steps apart, both looking at the trees, who"
+    }
+   ],
+   "picked": "t530955340",
+   "engine_notes": "",
+   "anchor_source": {
+    "character": "ines-varga",
+    "place": "autumn-park",
+    "stand": 0.4,
+    "cx": 0.38,
+    "view": "turn_front_three_quarter",
+    "plate": "/home/k4shix/shared/comfy-studio/studio/foundry/places/autumn-park/day_wide.png",
+    "props": [
+     {
+      "character": "station-master",
+      "view": "turn_front_three_quarter",
+      "stand": 0.4,
+      "cx": 0.62
+     }
+    ]
+   },
+   "anchor_check": {
+    "caption": "Park, trees, bench, man, man, gazebo, grass, path, leaves, coat, hat, shoes, uniform, pavement, ground, autumn, weather, day, light, sky, foliage, branches, grass, dirt, parkway, benches.",
+    "missing": [
+     "apart"
+    ],
+    "when": 1788530955
+   }
+  },
+  "030": {
+   "id": "030",
+   "scene": "sc01",
+   "title": "medium - INES",
+   "duration": 6,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/autumn-park/assets/anchor_shot_030.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "medium shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "INES",
+     "action": "turns her head toward him",
+     "background": "the scene moves behind them",
+     "motion": "look_off",
+     "ambient": [
+      "leaves",
+      "light"
+     ],
+     "dialogue": {}
+    }
+   ],
+   "sfx": "",
+   "no_people": false,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "pin_1788531064",
+     "engine": "h3-pinned",
+     "file": "takes/030/pin_1788531064.mp4",
+     "duration": 5.875,
+     "fps": 24,
+     "seed": 42,
+     "qc": [],
+     "warnings": [],
+     "pin": {
+      "change": "the subject has turned their head to look off to one side",
+      "rate": 0.0036,
+      "end": "assets/pin_end_030.png"
+     }
+    }
+   ],
+   "picked": "pin_1788531064",
+   "engine_notes": "",
+   "anchor_source": {
+    "character": "ines-varga",
+    "place": "autumn-park",
+    "stand": 0.22,
+    "cx": 0.45,
+    "view": "turn_front",
+    "plate": "/home/k4shix/shared/comfy-studio/studio/foundry/places/autumn-park/day_wide.png",
+    "props": []
+   },
+   "anchor_check": {
+    "caption": "Park, pavilion, benches, path, trees, woman, coat, hat, sweater, shoes, grass, leaves, ground, sky, clouds, pavement, stone, wood, asphalt, autumn, rain, drizzle, daylight, overcast, shadows, light, park bench, foliage.",
+    "missing": [],
+    "when": 1788531051
+   },
+   "pin_preview": {
+    "change": "the subject has turned their head to look off to one side",
+    "seconds": 6.0,
+    "end": "assets/pin_end_030.png",
+    "rate": 0.0036,
+    "ok": true,
+    "longest": 10.7,
+    "seed": 11,
+    "hold_feet": true,
+    "when": 1788531064
+   }
+  },
+  "040": {
+   "id": "040",
+   "scene": "sc01",
+   "title": "medium - STATION_MASTER",
+   "duration": 6,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/autumn-park/assets/anchor_shot_040.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "medium shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "STATION_MASTER",
+     "action": "looks down at the watch in his hand and nods once",
+     "background": "the scene moves behind them",
+     "motion": "nod",
+     "ambient": [
+      "leaves"
+     ],
+     "dialogue": {
+      "char": "STATION_MASTER",
+      "line": "It still runs. That's something.",
+      "delivery": "low"
+     }
+    }
+   ],
+   "sfx": "",
+   "no_people": false,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "pin_1788531174",
+     "engine": "h3-pinned",
+     "file": "takes/040/pin_1788531174.mp4",
+     "duration": 5.875,
+     "fps": 24,
+     "seed": 42,
+     "qc": [],
+     "warnings": [],
+     "pin": {
+      "change": "the subject has their head bowed in a nod",
+      "rate": 0.007,
+      "end": "assets/pin_end_040.png"
+     }
+    }
+   ],
+   "picked": "pin_1788531174",
+   "engine_notes": "",
+   "anchor_source": {
+    "character": "station-master",
+    "place": "autumn-park",
+    "stand": 0.22,
+    "cx": 0.5,
+    "view": "turn_front",
+    "plate": "/home/k4shix/shared/comfy-studio/studio/foundry/places/autumn-park/day_wide.png",
+    "props": []
+   },
+   "anchor_check": {
+    "caption": "Park, bandstand, path, benches, trees, grass, leaves, man, uniform, suit, shoes, belt, pocket watch, pavement, ground, sky, clouds, fog, autumn, daylight, shadows, light, lamp, metal, wood, stone, plants, water, air.",
+    "missing": [],
+    "when": 1788531161
+   },
+   "pin_preview": {
+    "change": "the subject has their head bowed in a nod",
+    "seconds": 6.0,
+    "end": "assets/pin_end_040.png",
+    "rate": 0.007,
+    "ok": true,
+    "longest": 20.9,
+    "seed": 11,
+    "hold_feet": true,
+    "when": 1788531174
+   }
+  },
+  "050": {
+   "id": "050",
+   "scene": "sc01",
+   "title": "insert - detail",
+   "duration": 6,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/foundry/places/autumn-park/day_detail.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "",
+     "action": "wet leaves on the path, a bench, the wind moving the branches",
+     "background": "what moves here moves: light",
+     "motion": "",
+     "ambient": [
+      "leaves",
+      "cloth"
+     ],
+     "dialogue": {}
+    }
+   ],
+   "sfx": "birdsong and leaves moving, a far-off dog",
+   "no_people": true,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t531271157",
+     "engine": "ltx",
+     "seed": 997464538,
+     "created": "10:16",
+     "file": "takes/050/ltx_t531271157.mp4",
+     "poster": "takes/050/ltx_t531271157.png",
+     "strip": "takes/050/ltx_t531271157_strip.png",
+     "duration": 6.04,
+     "fps": 24,
+     "qc": [
+      "words not in the picture: branches"
+     ],
+     "drift": {
+      "lost": 0.62,
+      "missing": [
+       "bandstand",
+       "bench",
+       "daytime",
+       "metal",
+       "path",
+       "pavement",
+       "rain",
+       "shadow",
+       "stone",
+       "wood"
+      ],
+      "kept": 6,
+      "last_caption": "Park, gazebo, tree, flags, leaves, building, lamp, grass, sky, autumn, daylight, light, banner material, foliage, branches, architecture, outdoor space."
+     },
+     "warnings": [],
+     "prompt": "A static wide shot: wet leaves on the path, a bench, the wind moving the branches, while what moves here moves: light; leaves drift across the frame; hanging cloth and banners lift in the wind, a city park with winding paths, old trees and iron benches, lived-in and worn, under a flat overcast sky, a city park in autumn, wet leaves on the path, iron benches, a bandstand far off, day, overcast, the"
+    }
+   ],
+   "picked": "t531271157",
+   "engine_notes": "",
+   "anchor_check": {
+    "caption": "Park, bandstand, benches, path, trees, grass, leaves, stone, metal, wood, pavement, sky, rain, autumn, daytime, light, lamp, shadows, foliage.",
+    "missing": [
+     "branches"
+    ],
+    "when": 1788531271
+   }
+  }
+ }
+}
