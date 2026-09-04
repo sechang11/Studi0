@@ -1,0 +1,63 @@
+{
+ "invariants": [
+  {
+   "id": "the_people_are_these_people",
+   "title": "The people are these people",
+   "rule": "TOMAS, from their packs, are in the start picture; no one else.",
+   "why": "identity comes from the composited anchor, not from the engine's prior",
+   "check": {
+    "kind": "anchor_contains",
+    "value": "anchor_shot_020"
+   }
+  },
+  {
+   "id": "the_place_is_harbour_night",
+   "title": "The place is harbour-night",
+   "rule": "The background is the harbour-night plate night_wide and stays that place for the whole take.",
+   "why": "words that name what the plate lacks make the engine rewrite it",
+   "check": {
+    "kind": "qc_clean"
+   }
+  },
+  {
+   "id": "camera_static",
+   "title": "Camera: static",
+   "rule": "The camera does not move.",
+   "why": "a camera move on LTX is advisory; a pinned shot enforces it"
+  },
+  {
+   "id": "length",
+   "title": "Length",
+   "rule": "5 seconds, within the measured envelope.",
+   "why": "resolution and length trade inside a fixed envelope",
+   "check": {
+    "kind": "duration_between",
+    "min": 3.5,
+    "max": 6.5
+   }
+  }
+ ],
+ "flair": [
+  {
+   "id": "seed",
+   "title": "Seed",
+   "note": "free - the variants differ by seed"
+  },
+  {
+   "id": "motion",
+   "title": "Motion",
+   "note": "none named"
+  },
+  {
+   "id": "ambient",
+   "title": "Ambient",
+   "note": "water"
+  }
+ ],
+ "shot": "020",
+ "title": "wide",
+ "beat": "stands at the rail, looking out at the boats",
+ "build": {
+  "script": "Make this shot: composed anchor, static"
+ }
+}

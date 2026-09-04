@@ -1,0 +1,239 @@
+{
+ "title": "Shot builds 09-04",
+ "created": "2026-09-04 16:19",
+ "look": "photoreal",
+ "look_clause": "photoreal cinematic film still, 35mm, deep focus, high detail, colour photograph, filmic grade",
+ "grade": "",
+ "negative": "",
+ "fps": 24,
+ "logline": "",
+ "resolution": "auto",
+ "deliver": "native",
+ "cast": {
+  "TOMAS": {
+   "name": "Tomas Reyl",
+   "clause": "a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot",
+   "short": "grey a shaved head, brown eyes",
+   "sheet": "/home/k4shix/shared/comfy-studio/studio/foundry/characters/tomas-reyl/base_portrait.png",
+   "portrait": "/home/k4shix/shared/comfy-studio/studio/foundry/characters/tomas-reyl/base_portrait.png",
+   "voice": "",
+   "voice_desc": "",
+   "foundry": "tomas-reyl"
+  }
+ },
+ "scenes": [
+  {
+   "id": "sc01",
+   "title": "build 16:19",
+   "location": "the deck of a small weathered boat, rigging and coiled rope, lived-in and worn, in thick fog, a small fishing harbour at night, fog on the water, sodium lamps along the quay, moored boats",
+   "time_of_day": "",
+   "weather": "fog",
+   "ambience": "water against the hull and rigging knocking, a fog-damped stillness",
+   "palette": "",
+   "music": "",
+   "cast_present": [
+    "TOMAS"
+   ],
+   "no_people": false,
+   "anchor": "",
+   "shots": [
+    "010"
+   ],
+   "place": "harbour-night",
+   "plate": "night_wide"
+  },
+  {
+   "id": "sc02",
+   "title": "build 16:21",
+   "location": "the deck of a small weathered boat, rigging and coiled rope, lived-in and worn, in thick fog, a small fishing harbour at night, fog on the water, sodium lamps along the quay, moored boats",
+   "time_of_day": "",
+   "weather": "fog",
+   "ambience": "water against the hull and rigging knocking, a fog-damped stillness",
+   "palette": "",
+   "music": "",
+   "cast_present": [
+    "TOMAS"
+   ],
+   "no_people": false,
+   "anchor": "",
+   "shots": [
+    "020"
+   ],
+   "place": "harbour-night",
+   "plate": "night_wide"
+  }
+ ],
+ "shots": {
+  "010": {
+   "id": "010",
+   "scene": "sc01",
+   "title": "wide - TOMAS",
+   "duration": 5.0,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/shot-builds-09-04/assets/anchor_shot_010.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "TOMAS",
+     "action": "stands at the rail, looking out at the boats",
+     "background": "what moves here moves: water",
+     "motion": "",
+     "ambient": [
+      "water"
+     ],
+     "dialogue": {
+      "char": "",
+      "line": "",
+      "delivery": ""
+     }
+    }
+   ],
+   "sfx": "water against the hull and rigging knocking, a fog-damped stillness",
+   "no_people": false,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t553205566",
+     "engine": "ltx",
+     "seed": 580579435,
+     "created": "16:21",
+     "file": "takes/010/ltx_t553205566.mp4",
+     "poster": "takes/010/ltx_t553205566.png",
+     "strip": "takes/010/ltx_t553205566_strip.png",
+     "duration": 5.04,
+     "fps": 24,
+     "qc": [
+      "words not in the picture: rail"
+     ],
+     "drift": {
+      "lost": 0.42,
+      "missing": [
+       "build",
+       "bulb",
+       "coil",
+       "dock",
+       "fisherman",
+       "horizon",
+       "jacket",
+       "mist",
+       "nylon",
+       "pier",
+       "vessel"
+      ],
+      "kept": 15,
+      "last_caption": "Harbor, fishing boats, ship, man, deck, ropes, nets, railing, hull, masts, rigging, lantern, lights, water, fog, clouds, sky, ocean, yellow raincoat, yellow pants, boots, wood, metal, rope, gray sky, night, artificial light, glow, shadows."
+     },
+     "warnings": [],
+     "prompt": "A static wide shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, stands at the rail, looking out at the boats, while what moves here moves: water; water moves continuously"
+    }
+   ],
+   "picked": "t553205566",
+   "engine_notes": "",
+   "anchor_source": {
+    "character": "tomas-reyl",
+    "framing": "wide",
+    "place": "harbour-night",
+    "stand": 0.4,
+    "cx": 0.45,
+    "view": "turn_front",
+    "plate": "/home/k4shix/shared/comfy-studio/studio/foundry/places/harbour-night/night_wide.png",
+    "props": []
+   },
+   "anchor_check": {
+    "caption": "Harbor, fishing boats, ship, masts, ropes, rigging, deck, man, fisherman, jacket, pants, boots, harbor lights, water, sea, fog, mist, night, bulb, lamp, rope coils, wood, metal, nylon, vessels, piers, docks, buildings, horizon, glow.",
+    "missing": [
+     "rail"
+    ],
+    "when": 1788553205
+   }
+  },
+  "020": {
+   "id": "020",
+   "scene": "sc02",
+   "title": "wide - TOMAS",
+   "duration": 5.0,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/shot-builds-09-04/assets/anchor_shot_020.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "TOMAS",
+     "action": "stands at the rail, looking out at the boats",
+     "background": "what moves here moves: water",
+     "motion": "",
+     "ambient": [
+      "water"
+     ],
+     "dialogue": {
+      "char": "",
+      "line": "",
+      "delivery": ""
+     }
+    }
+   ],
+   "sfx": "water against the hull and rigging knocking, a fog-damped stillness",
+   "no_people": false,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t553309582",
+     "engine": "ltx",
+     "seed": 865781248,
+     "created": "16:23",
+     "file": "takes/020/ltx_t553309582.mp4",
+     "poster": "takes/020/ltx_t553309582.png",
+     "strip": "takes/020/ltx_t553309582_strip.png",
+     "duration": 5.04,
+     "fps": 24,
+     "qc": [
+      "words not in the picture: rail"
+     ],
+     "drift": {
+      "lost": 0.31,
+      "missing": [
+       "build",
+       "bulb",
+       "coil",
+       "dock",
+       "fisherman",
+       "horizon",
+       "pier",
+       "rigg"
+      ],
+      "kept": 18,
+      "last_caption": "Port, ship, fishing boat, man, deck, rope, net, railing, hull, water, sea, fog, clouds, sky, jacket, pants, boots, beard, hair, lights, lamps, vessels, masts, ropes, wood, metal, fabric, nylon, ocean, mist, night, glow, illumination, person."
+     },
+     "warnings": [],
+     "prompt": "A static wide shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, stands at the rail, looking out at the boats, while what moves here moves: water; water moves continuously"
+    }
+   ],
+   "picked": "t553309582",
+   "engine_notes": "",
+   "anchor_source": {
+    "character": "tomas-reyl",
+    "framing": "wide",
+    "place": "harbour-night",
+    "stand": 0.4,
+    "cx": 0.45,
+    "view": "turn_front",
+    "plate": "/home/k4shix/shared/comfy-studio/studio/foundry/places/harbour-night/night_wide.png",
+    "props": []
+   },
+   "anchor_check": {
+    "caption": "Harbor, fishing boats, ship, masts, ropes, rigging, deck, man, fisherman, jacket, pants, boots, harbor lights, water, sea, fog, mist, night, bulb, lamp, rope coils, wood, metal, nylon, vessels, piers, docks, buildings, horizon, glow.",
+    "missing": [
+     "rail"
+    ],
+    "when": 1788553309
+   }
+  }
+ }
+}
