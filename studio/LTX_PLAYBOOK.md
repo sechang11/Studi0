@@ -714,3 +714,18 @@ on the river. And a turn on a small distant figure measures below any floor
 (0.0013/s) - the frame-wide rate shrinks with distance. A subject-region change
 is now logged beside it for calibration; until it gates, the preview's "pin
 anyway" is the director's override.
+
+**Amendment, measured twice the same night: H3 fl2va holds the pinned frames for
+in-place motion only.** Shot F was pinned twice - first with the oversized end
+figure, then with the clamped one on the pristine plate - and both times the
+result showed willow trees and a grass path from **frame 0**, when the start
+frame is a small figure in a river under a stone arch with no tree in it. For
+a walk toward the camera, H3's own prior (a tracking shot down a path) took
+over and regenerated the scene; the two conditioning frames were advice.
+Shot B, a crouch in place, honoured both frames exactly. So: **pin in-place
+motions on H3; do not pin walks.** A walk wants LTX i2v from the composed
+anchor (LTX holds the plate, see shots C and G) with the motion as prose - and
+prose is advisory there, so the honest expectation for a walk on this box is a
+push-in on a standing figure, or a cut. The end-figure geometry for moving
+motions stays, because a correct end frame is still the precondition for the
+day the interpolator honours it.

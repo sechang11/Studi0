@@ -1374,11 +1374,49 @@ his her their our your my she he they we you them him himself herself itself ima
 start end same before after moment""".split())
 
 
+SCENE_ASK = (
+    "Describe what is physically in this image as a list of nouns: the kind of place, "
+    "the main structures and objects, materials, vehicles, plants, water, weather, time "
+    "of day, light sources, signs, and any people or animals. Be literal and complete. "
+    "Comma-separated nouns and short noun phrases only, no sentences, no apologies.")
+
+_VERBISH = set("""falls fall hammers hammer comes come moving moves move drifts drift passes
+pass trembling tremble rocking rock spreads spread glittering glitter lapping lap thins thin
+softens soften turns turn walks walk reads read unfolds unfold crouches crouch picks pick
+running runs run standing stands stand sways sway flickers flicker rises rise sits sit lies
+lie looks look reaching reach holding holds hold carrying carries carry crossing crosses cross
+lowers lower straightens nods nod laughs laugh speaks speak changing changes change coming
+going goes gone leaving leaves flowing flows flow shining shines shine glowing glows glow
+hanging hangs hang blowing blows blow hitting hits hit pouring pours pour dripping drips drip
+slow slowly quick quickly thick thin narrow wide soaked wet dry empty full gentle gently
+steady old young small large big tiny huge distant near close far dark bright dim warm cold
+heavy soft hard quiet loud still calm rough smooth deep shallow high low long short early late
+beneath below above under over behind between across through along toward towards away
+against inside outside around continuous continuously visible invisible""".split())
+
+
+def _caption_scene(staged):
+    """One vision call with a scene question. Same graph as the character
+    captioner, different ask; SaveText appended so the answer lands in a file."""
+    import glob
+    run, set_path, load_wf, ensure_local, HOST, comfy_dir = _comfy()
+    wf = load_wf("30_vision_caption.json")
+    set_path(wf, "2.inputs.image", staged)
+    set_path(wf, "3.inputs.prompt", SCENE_ASK)
+    stamp = "anchorcap_%d" % (int(time.time()) % 100000)
+    wf["90"] = {"class_type": "SaveText",
+                "inputs": {"text": ["3", 0], "filename_prefix": stamp, "format": "txt"}}
+    run(HOST, wf, quiet=True)
+    hits = sorted(glob.glob(os.path.join(comfy_dir, "output", "**", stamp + "*"),
+                            recursive=True))
+    return open(hits[-1], encoding="utf-8", errors="replace").read().strip() if hits else ""
+
+
 def _content_words(text):
     import re
     out = []
     for w in re.findall(r"[a-zA-Z]+", (text or "").lower()):
-        if len(w) < 4 or w in _STOP or w.endswith("ly"):
+        if len(w) < 4 or w in _STOP or w in _VERBISH or w.endswith("ly"):
             continue
         out.append(w)
     return out
@@ -1400,11 +1438,10 @@ def _anchor_check_job(jid, fid, shid):
         here = os.path.dirname(os.path.abspath(__file__))
         if here not in sys.path:
             sys.path.insert(0, here)
-        import character_new as CN
         _run, _sp, _lw, _el, _host, comfy_dir = _comfy()
         staged = "anchor_check_%d.png" % (int(time.time()) % 100000)
         shutil.copy(anchor, os.path.join(comfy_dir, "input", staged))
-        cap = (CN.caption(staged) or "").strip()
+        cap = (_caption_scene(staged) or "").strip()
         if not cap:
             raise RuntimeError("the captioner returned nothing")
         flat = f.flat(shid)
