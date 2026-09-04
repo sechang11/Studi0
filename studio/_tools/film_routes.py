@@ -1393,7 +1393,14 @@ slow slowly quick quickly thick thin narrow wide soaked wet dry empty full gentl
 steady old young small large big tiny huge distant near close far dark bright dim warm cold
 heavy soft hard quiet loud still calm rough smooth deep shallow high low long short early late
 beneath below above under over behind between across through along toward towards away
-against inside outside around continuous continuously visible invisible""".split())
+against inside outside around continuous continuously visible invisible
+moored swaying sway hazing haze hazy weathered bound black white grey gray red blue green
+yellow orange brown dark light pale faint bright wet damp drenched sodden streaked trembling
+flickering flicker glittering shimmering rippling drifting rolling curling rising lifting
+sitting standing lying leaning waiting watching looking staring holding carrying wearing
+empty crowded busy quiet still silent distant nearby far near first last single few several
+many more most every each whole entire same other another new old ancient young little big
+small large tall short long wide narrow thick thin heavy light soft hard""".split())
 
 
 def _caption_scene(staged):
@@ -1433,6 +1440,16 @@ _SYN = {
     "wind": ("air",), "letter": ("paper", "envelope"), "envelope": ("paper", "letter"),
     "person": ("man", "woman", "people", "figure"), "woman": ("person", "people", "figure"),
     "man": ("person", "people", "figure"),
+    "hull": ("boat", "ship", "vessel"), "rigging": ("rope", "mast", "boat", "ship"),
+    "mast": ("boat", "ship", "rigging"), "deck": ("boat", "ship", "wood"),
+    "buoy": ("water", "harbour", "harbor"), "quayside": ("dock", "pier"),
+    "platform": ("station", "train", "railway"), "canopy": ("roof", "station"),
+    "departures": ("board", "sign", "station"), "board": ("sign", "text"),
+    "line": ("track", "rail", "railway"), "track": ("rail", "railway", "line"),
+    "lamppost": ("lamp", "light", "pole"), "streetlight": ("lamp", "light", "pole"),
+    "pole": ("post", "lamp", "mast"), "cable": ("wire",), "wire": ("cable",),
+    "awning": ("shop", "storefront", "canopy"), "shutter": ("shop", "storefront", "door"),
+    "storefront": ("shop", "store"), "puddles": ("water", "reflection", "wet"),
 }
 
 

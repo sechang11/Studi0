@@ -753,9 +753,11 @@ def triage_shot(film, shid):
         bump("trade-off", "4K delivery is an upscale of a %.1f MP render, not "
                           "native 4K - fine for many shots, visible on faces "
                           "in close-up" % best_mp_for(secs))
-    if len(cast_here) > 2:
-        bump("api", "%d identities in one frame - local holds one reliably, "
-                    "two with the two-character graph, not %d"
+    layers = [p for p in ((sh.get("anchor_source") or {}).get("props") or [])
+              if p.get("character")]
+    if len(cast_here) > 2 and len(layers) < len(cast_here) - 1:
+        bump("api", "%d identities in one frame - the compositor holds two as layers "
+                    "(one relit, one tinted); %d is an API shot, or a cut"
              % (len(cast_here), len(cast_here)))
     anc = str(sh.get("anchor") or "")
     if len(beats) > 1 and cast_here and not sh.get("anchor_source"):
@@ -769,6 +771,11 @@ def triage_shot(film, shid):
     pinned = any(t.get("engine", "").startswith("h3-pinned")
                  for t in (sh.get("takes") or []) if t.get("id") == sh.get("picked"))
     wants = [b.get("motion") for b in beats if b.get("motion")]
+    MOVING_MOTIONS = ("walk_to", "walk_away", "run")
+    if pinned and any(w in MOVING_MOTIONS for w in wants):
+        bump("trade-off", "a pinned walk - H3 fl2va honoured both frames for in-place "
+                          "motion and regenerated the scene for a walk, twice (measured). "
+                          "Render walks on LTX from the composed anchor, or cut")
     if wants and not pinned:
         bump("trade-off", "motion '%s' is selected on a beat - on LTX prose does not "
                           "direct the subject's action (measured). Compose the anchor "
