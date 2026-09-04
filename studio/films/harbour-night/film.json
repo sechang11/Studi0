@@ -1,0 +1,572 @@
+{
+ "title": "Harbour Night",
+ "created": "2026-09-04 03:12",
+ "look": "photoreal",
+ "look_clause": "photoreal cinematic film still, 35mm, deep focus, high detail, colour photograph, filmic grade",
+ "grade": "",
+ "negative": "",
+ "fps": 24,
+ "logline": "A harbour master and a fisherman wait out the fog; by dusk she is on the platform alone.",
+ "resolution": "auto",
+ "deliver": "native",
+ "cast": {
+  "INES": {
+   "name": "Ines Varga",
+   "clause": "a tall, athletic woman, in their fifties, olive skin, an angular face with a sharp jaw, grey eyes, hooded eyes, strong dark brows, grey short neat hair, a thin scar through one brow, a calm, unreadable bearing, a harbour master in a dark wool coat and a grey knit cap, salt-weathered, hands in her pockets",
+   "short": "grey short neat hair, a thin scar through one brow",
+   "sheet": "/home/k4shix/shared/comfy-studio/studio/foundry/characters/ines-varga/base_portrait.png",
+   "portrait": "/home/k4shix/shared/comfy-studio/studio/foundry/characters/ines-varga/base_portrait.png",
+   "voice": "",
+   "voice_desc": ""
+  },
+  "TOMAS": {
+   "name": "Tomas Reyl",
+   "clause": "a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot",
+   "short": "grey a shaved head, brown eyes",
+   "sheet": "/home/k4shix/shared/comfy-studio/studio/foundry/characters/tomas-reyl/base_portrait.png",
+   "portrait": "/home/k4shix/shared/comfy-studio/studio/foundry/characters/tomas-reyl/base_portrait.png",
+   "voice": "",
+   "voice_desc": ""
+  }
+ },
+ "scenes": [
+  {
+   "id": "sc01",
+   "title": "harbour, night",
+   "location": "the deck of a small weathered fishing boat in a fog-bound harbour at night, sodium lamps on the quay",
+   "time_of_day": "night",
+   "weather": "fog",
+   "ambience": "water against the hull, rope creaking, a foghorn far off",
+   "palette": "",
+   "music": "cinematic ambient, low cello, fog, night, patient, 60 bpm",
+   "cast_present": [
+    "INES",
+    "TOMAS"
+   ],
+   "no_people": false,
+   "anchor": "",
+   "shots": [
+    "010",
+    "020",
+    "030",
+    "040"
+   ]
+  },
+  {
+   "id": "sc02",
+   "title": "station, dusk",
+   "location": "a small-town railway platform under a long canopy at dusk, a departures board",
+   "time_of_day": "dusk",
+   "weather": "overcast",
+   "ambience": "wind under the canopy, a distant train, the board clicking",
+   "palette": "",
+   "music": "cinematic, sparse piano, dusk, departure, 66 bpm",
+   "cast_present": [
+    "INES"
+   ],
+   "no_people": false,
+   "anchor": "",
+   "shots": [
+    "050",
+    "060"
+   ]
+  }
+ ],
+ "shots": {
+  "010": {
+   "id": "010",
+   "scene": "sc01",
+   "title": "A",
+   "duration": 8,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/foundry/places/harbour-night/night_wide.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide establishing shot",
+     "move": "static",
+     "subject": "",
+     "action": "fog drifts over the black water between the moored boats, the sodium lamps hazing, ropes and rigging swaying",
+     "background": "the water moves under the hulls",
+     "motion": "",
+     "ambient": [
+      "water",
+      "light",
+      "cloth"
+     ],
+     "dialogue": {}
+    }
+   ],
+   "sfx": "water against the hull, rope creaking, a foghorn far off",
+   "no_people": true,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t505953770",
+     "engine": "ltx",
+     "seed": 66927,
+     "created": "03:14",
+     "file": "takes/010/ltx_t505953770.mp4",
+     "poster": "takes/010/ltx_t505953770.png",
+     "strip": "takes/010/ltx_t505953770_strip.png",
+     "duration": 8.04,
+     "fps": 24,
+     "qc": [],
+     "warnings": [],
+     "prompt": "A static wide establishing shot: fog drifts over the black water between the moored boats, the sodium lamps hazing, ropes and rigging swaying, while the water moves under the hulls; water moves continuously; the light shifts and flickers across the scene; hanging cloth and banners lift in the wind, the deck of a small weathered fishing boat in a fog-bound harbour at night, sodium lamps on the quay"
+    },
+    {
+     "id": "t505953770m",
+     "engine": "ltx@48",
+     "seed": 66927,
+     "created": "03:26",
+     "file": "takes/010/ltx_t505953770_48.mp4",
+     "poster": "takes/010/ltx_t505953770_48.png",
+     "strip": "takes/010/ltx_t505953770_48_strip.png",
+     "duration": 8.02,
+     "fps": 48,
+     "qc": [],
+     "warnings": [],
+     "prompt": "A static wide establishing shot: fog drifts over the black water between the moored boats, the sodium lamps hazing, ropes and rigging swaying, while the water moves under the hulls; water moves continuously; the light shifts and flickers across the scene; hanging cloth and banners lift in the wind, the deck of a small weathered fishing boat in a fog-bound harbour at night, sodium lamps on the quay"
+    }
+   ],
+   "picked": "t505953770m",
+   "engine_notes": "",
+   "anchor_check": {
+    "caption": "Harbor, fishing boats, ships, masts, ropes, deck, wood, barrels, nets, buoys, docks, water, sea, fog, mist, night, lamps, lights, reflections, piers, vessels, metal, ropes, ropes, ropes, rope coils, wood planks, harbor lights, distant ships, distant lights.",
+    "missing": [],
+    "when": 1788507386
+   }
+  },
+  "020": {
+   "id": "020",
+   "scene": "sc01",
+   "title": "B",
+   "duration": 6,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/harbour-night/assets/anchor_shot_020.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide shot",
+     "move": "static",
+     "subject": "INES",
+     "action": "stands on the deck by the lantern and points out across the water",
+     "background": "fog drifts between the boats",
+     "motion": "gesture",
+     "ambient": [
+      "water",
+      "light"
+     ],
+     "dialogue": {}
+    }
+   ],
+   "sfx": "water, rope, her coat moving",
+   "no_people": false,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "pin_1788506113",
+     "engine": "h3-pinned",
+     "file": "takes/020/pin_1788506113.mp4",
+     "duration": 5.875,
+     "fps": 24,
+     "seed": 42,
+     "qc": [],
+     "warnings": [],
+     "pin": {
+      "change": "the subject has raised one arm and is pointing out across the water",
+      "rate": 0.0046,
+      "end": "assets/pin_end_020.png"
+     }
+    },
+    {
+     "id": "pin_1788506113m",
+     "engine": "h3-pinned@48",
+     "file": "takes/020/pin_1788506113_48.mp4",
+     "duration": 5.85,
+     "fps": 48,
+     "seed": 42,
+     "qc": [],
+     "warnings": [],
+     "pin": {
+      "change": "the subject has raised one arm and is pointing out across the water",
+      "rate": 0.0046,
+      "end": "assets/pin_end_020.png"
+     },
+     "poster": "takes/020/pin_1788506113_48.png",
+     "strip": "takes/020/pin_1788506113_48_strip.png",
+     "created": "03:26"
+    }
+   ],
+   "picked": "pin_1788506113m",
+   "engine_notes": "",
+   "anchor_source": {
+    "character": "ines-varga",
+    "place": "harbour-night",
+    "stand": 0.35,
+    "cx": 0.4,
+    "view": "turn_front",
+    "plate": "/home/k4shix/shared/comfy-studio/studio/foundry/places/harbour-night/night_wide.png",
+    "props": [
+     {
+      "id": "oil-lantern",
+      "stand": 0.3,
+      "cx": 0.58
+     }
+    ]
+   },
+   "anchor_check": {
+    "caption": "Harbor, fishing boats, ship, man, coat, hat, hands, deck, ropes, lantern, wood, masts, rigging, ropes, harbor lights, fog, water, sea, sky, night, lamps, bulbs, vessels, rope coils, wooden planks, shadows, ropes, fishing gear.",
+    "missing": [],
+    "when": 1788507400
+   },
+   "pin_preview": {
+    "change": "the subject has raised one arm and is pointing out across the water",
+    "seconds": 6.0,
+    "end": "assets/pin_end_020.png",
+    "rate": 0.0046,
+    "ok": true,
+    "longest": 13.7,
+    "seed": 11,
+    "hold_feet": true,
+    "when": 1788506111
+   }
+  },
+  "030": {
+   "id": "030",
+   "scene": "sc01",
+   "title": "C",
+   "duration": 8,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/harbour-night/assets/anchor_shot_030.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "medium two-shot",
+     "move": "static",
+     "subject": "INES",
+     "action": "and the fisherman beside her stand on the deck facing each other, she speaks and he nods",
+     "background": "fog and lamplight over the water behind them",
+     "motion": "nod",
+     "ambient": [
+      "water",
+      "light",
+      "cloth"
+     ],
+     "dialogue": {}
+    }
+   ],
+   "sfx": "water against the hull, his low laugh, rope",
+   "no_people": false,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t506241825",
+     "engine": "ltx",
+     "seed": 67215,
+     "created": "03:19",
+     "file": "takes/030/ltx_t506241825.mp4",
+     "poster": "takes/030/ltx_t506241825.png",
+     "strip": "takes/030/ltx_t506241825_strip.png",
+     "duration": 8.04,
+     "fps": 24,
+     "qc": [],
+     "warnings": [
+      "beat 1 motion 'nod' is advisory on LTX - measured, prose does not direct the subject's action here. Pin the shot to enforce it"
+     ],
+     "prompt": "A static medium two-shot: a tall, athletic woman, in their fifties, olive skin, an angular face with a sharp jaw, grey eyes, hooded eyes, strong dark brows, grey short neat hair, a thin scar through one brow, a calm, unreadable bearing, a harbour master in a dark wool coat and a grey knit cap, salt-weathered, hands in her pockets, and the fisherman beside her stand on the deck facing each other, s"
+    },
+    {
+     "id": "t506241825m",
+     "engine": "ltx@48",
+     "seed": 67215,
+     "created": "03:27",
+     "file": "takes/030/ltx_t506241825_48.mp4",
+     "poster": "takes/030/ltx_t506241825_48.png",
+     "strip": "takes/030/ltx_t506241825_48_strip.png",
+     "duration": 8.02,
+     "fps": 48,
+     "qc": [],
+     "warnings": [
+      "beat 1 motion 'nod' is advisory on LTX - measured, prose does not direct the subject's action here. Pin the shot to enforce it"
+     ],
+     "prompt": "A static medium two-shot: a tall, athletic woman, in their fifties, olive skin, an angular face with a sharp jaw, grey eyes, hooded eyes, strong dark brows, grey short neat hair, a thin scar through one brow, a calm, unreadable bearing, a harbour master in a dark wool coat and a grey knit cap, salt-weathered, hands in her pockets, and the fisherman beside her stand on the deck facing each other, s"
+    }
+   ],
+   "picked": "t506241825m",
+   "engine_notes": "",
+   "anchor_source": {
+    "character": "ines-varga",
+    "place": "harbour-night",
+    "stand": 0.32,
+    "cx": 0.36,
+    "view": "turn_front_three_quarter",
+    "plate": "/home/k4shix/shared/comfy-studio/studio/foundry/places/harbour-night/night_reverse.png",
+    "props": [
+     {
+      "character": "tomas-reyl",
+      "view": "turn_front_three_quarter",
+      "stand": 0.32,
+      "cx": 0.62
+     }
+    ]
+   },
+   "anchor_check": {
+    "caption": "Harbor, fishing boats, masts, ropes, deck, wood, rope, nets, hulls, metal, water, sea, fog, mist, weather, night, lights, lamps, buildings, docks, people, men, coats, jackets, hats, beard, boats.",
+    "missing": [
+     "fisherman",
+     "lamplight"
+    ],
+    "when": 1788507415
+   }
+  },
+  "040": {
+   "id": "040",
+   "scene": "sc01",
+   "title": "D",
+   "duration": 6,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/harbour-night/assets/anchor_shot_040.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "medium shot",
+     "move": "static",
+     "subject": "TOMAS",
+     "action": "crouches to the field radio on the deck",
+     "background": "fog over the water behind him",
+     "motion": "crouch",
+     "ambient": [
+      "water"
+     ],
+     "dialogue": {}
+    }
+   ],
+   "sfx": "the radio crackling, water, his boots on the deck",
+   "no_people": false,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "pin_1788506401",
+     "engine": "h3-pinned",
+     "file": "takes/040/pin_1788506401.mp4",
+     "duration": 5.875,
+     "fps": 24,
+     "seed": 42,
+     "qc": [],
+     "warnings": [],
+     "pin": {
+      "change": "the subject has crouched down low, knees bent, one hand reaching toward the radio on the deck",
+      "rate": 0.0083,
+      "end": "assets/pin_end_040.png"
+     }
+    },
+    {
+     "id": "pin_1788506401m",
+     "engine": "h3-pinned@48",
+     "file": "takes/040/pin_1788506401_48.mp4",
+     "duration": 5.85,
+     "fps": 48,
+     "seed": 42,
+     "qc": [],
+     "warnings": [],
+     "pin": {
+      "change": "the subject has crouched down low, knees bent, one hand reaching toward the radio on the deck",
+      "rate": 0.0083,
+      "end": "assets/pin_end_040.png"
+     },
+     "poster": "takes/040/pin_1788506401_48.png",
+     "strip": "takes/040/pin_1788506401_48_strip.png",
+     "created": "03:27"
+    }
+   ],
+   "picked": "pin_1788506401m",
+   "engine_notes": "",
+   "anchor_source": {
+    "character": "tomas-reyl",
+    "place": "harbour-night",
+    "stand": 0.25,
+    "cx": 0.5,
+    "view": "turn_front",
+    "plate": "/home/k4shix/shared/comfy-studio/studio/foundry/places/harbour-night/night_detail.png",
+    "props": [
+     {
+      "id": "field-radio",
+      "stand": 0.2,
+      "cx": 0.68
+     }
+    ]
+   },
+   "anchor_check": {
+    "caption": "Harbor, fishing boats, ship, deck, man, radio, rope, wood, yellow jacket, gray sweater, pants, fog, water, ocean, rain, night, lamp, lantern, lights, masts, piers, boats, vessels, sky, clouds.",
+    "missing": [
+     "field"
+    ],
+    "when": 1788507429
+   },
+   "pin_preview": {
+    "change": "the subject has crouched down low, knees bent, one hand reaching toward the radio on the deck",
+    "seconds": 6.0,
+    "end": "assets/pin_end_040.png",
+    "rate": 0.0083,
+    "ok": true,
+    "longest": 24.8,
+    "seed": 11,
+    "hold_feet": true,
+    "when": 1788506399
+   }
+  },
+  "050": {
+   "id": "050",
+   "scene": "sc02",
+   "title": "E",
+   "duration": 6,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/foundry/places/station-dusk/dusk_wide.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide establishing shot",
+     "move": "static",
+     "subject": "",
+     "action": "the empty platform at dusk, the departures board flickering, lights far down the line",
+     "background": "the canopy lamps flicker",
+     "motion": "",
+     "ambient": [
+      "light",
+      "traffic"
+     ],
+     "dialogue": {}
+    }
+   ],
+   "sfx": "wind under the canopy, the departures board clicking, a distant train",
+   "no_people": true,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t506505883",
+     "engine": "ltx",
+     "seed": 67479,
+     "created": "03:23",
+     "file": "takes/050/ltx_t506505883.mp4",
+     "poster": "takes/050/ltx_t506505883.png",
+     "strip": "takes/050/ltx_t506505883_strip.png",
+     "duration": 6.04,
+     "fps": 24,
+     "qc": [],
+     "warnings": [],
+     "prompt": "A static wide establishing shot: the empty platform at dusk, the departures board flickering, lights far down the line, while the canopy lamps flicker; the light shifts and flickers across the scene; vehicles pass in the background, a small-town railway platform under a long canopy at dusk, a departures board, dusk, overcast, the frame completely empty of people and hands. Photoreal cinematic film"
+    },
+    {
+     "id": "t506505883m",
+     "engine": "ltx@48",
+     "seed": 67479,
+     "created": "03:28",
+     "file": "takes/050/ltx_t506505883_48.mp4",
+     "poster": "takes/050/ltx_t506505883_48.png",
+     "strip": "takes/050/ltx_t506505883_48_strip.png",
+     "duration": 6.02,
+     "fps": 48,
+     "qc": [],
+     "warnings": [],
+     "prompt": "A static wide establishing shot: the empty platform at dusk, the departures board flickering, lights far down the line, while the canopy lamps flicker; the light shifts and flickers across the scene; vehicles pass in the background, a small-town railway platform under a long canopy at dusk, a departures board, dusk, overcast, the frame completely empty of people and hands. Photoreal cinematic film"
+    }
+   ],
+   "picked": "t506505883m",
+   "engine_notes": "",
+   "anchor_check": {
+    "caption": "Railway station, train station, platform, tracks, railway, rails, bench, sign, timetable, building, structure, wood, metal, concrete, railroad, telegraph pole, sky, clouds, sunset, dusk, twilight, horizon, grass, vegetation, trees, light, glow, shadows, evening, illumination, display board, schedule, transportation.",
+    "missing": [
+     "lamps"
+    ],
+    "when": 1788507443
+   }
+  },
+  "060": {
+   "id": "060",
+   "scene": "sc02",
+   "title": "F",
+   "duration": 6,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/harbour-night/assets/anchor_shot_060.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "medium shot",
+     "move": "static",
+     "subject": "INES",
+     "action": "stands on the platform looking down the line, her coat moving in the wind",
+     "background": "the lamps flicker along the canopy",
+     "motion": "look_off",
+     "ambient": [
+      "cloth",
+      "light"
+     ],
+     "dialogue": {}
+    }
+   ],
+   "sfx": "wind, her coat, the board clicking",
+   "no_people": false,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t506617912",
+     "engine": "ltx",
+     "seed": 67591,
+     "created": "03:24",
+     "file": "takes/060/ltx_t506617912.mp4",
+     "poster": "takes/060/ltx_t506617912.png",
+     "strip": "takes/060/ltx_t506617912_strip.png",
+     "duration": 6.04,
+     "fps": 24,
+     "qc": [],
+     "warnings": [
+      "beat 1 motion 'look_off' is advisory on LTX - measured, prose does not direct the subject's action here. Pin the shot to enforce it"
+     ],
+     "prompt": "A static medium shot: a tall, athletic woman, in their fifties, olive skin, an angular face with a sharp jaw, grey eyes, hooded eyes, strong dark brows, grey short neat hair, a thin scar through one brow, a calm, unreadable bearing, a harbour master in a dark wool coat and a grey knit cap, salt-weathered, hands in her pockets, stands on the platform looking down the line, her coat moving in the wi"
+    },
+    {
+     "id": "t506617912m",
+     "engine": "ltx@48",
+     "seed": 67591,
+     "created": "03:28",
+     "file": "takes/060/ltx_t506617912_48.mp4",
+     "poster": "takes/060/ltx_t506617912_48.png",
+     "strip": "takes/060/ltx_t506617912_48_strip.png",
+     "duration": 6.02,
+     "fps": 48,
+     "qc": [],
+     "warnings": [
+      "beat 1 motion 'look_off' is advisory on LTX - measured, prose does not direct the subject's action here. Pin the shot to enforce it"
+     ],
+     "prompt": "A static medium shot: a tall, athletic woman, in their fifties, olive skin, an angular face with a sharp jaw, grey eyes, hooded eyes, strong dark brows, grey short neat hair, a thin scar through one brow, a calm, unreadable bearing, a harbour master in a dark wool coat and a grey knit cap, salt-weathered, hands in her pockets, stands on the platform looking down the line, her coat moving in the wi"
+    }
+   ],
+   "picked": "t506617912m",
+   "engine_notes": "",
+   "anchor_source": {
+    "character": "ines-varga",
+    "place": "station-dusk",
+    "stand": 0.22,
+    "cx": 0.42,
+    "view": "turn_side",
+    "plate": "/home/k4shix/shared/comfy-studio/studio/foundry/places/station-dusk/dusk_wide.png",
+    "props": []
+   },
+   "anchor_check": {
+    "caption": "Station, railway station, platform, bench, tracks, rails, train station, building, station house, station sign, sky, sunset, dusk, trees, grass, railroad, telegraph pole, wood, stone, concrete, metal, clothing, coat, hat, person, man, sky, clouds, light, glow, sunset colors, shadows.",
+    "missing": [
+     "lamps"
+    ],
+    "when": 1788507457
+   }
+  }
+ }
+}

@@ -1,0 +1,582 @@
+{
+ "title": "The Ferryman's Book",
+ "created": "2026-09-04 02:32",
+ "look": "anime",
+ "look_clause": "flat cel-shaded hand-drawn 2D anime with clean line art and painted background art",
+ "grade": "",
+ "negative": "",
+ "fps": 24,
+ "logline": "An apprentice finds a book at a forest shrine; its owner waits on the rain bridge.",
+ "resolution": "auto",
+ "deliver": "native",
+ "cast": {
+  "RENJI": {
+   "name": "Renji",
+   "clause": "a lean man, in their twenties, fair skin, an angular face with a sharp jaw, dark eyes, narrow watchful eyes, thin arched brows, black short messy hair, a single small earring, a wry, knowing look, a lantern-maker's apprentice in an indigo work jacket with rolled sleeves, paper dust on his hands",
+   "short": "black short messy hair, a single small earring",
+   "sheet": "/home/k4shix/shared/comfy-studio/studio/foundry/characters/renji/base_portrait.png",
+   "portrait": "/home/k4shix/shared/comfy-studio/studio/foundry/characters/renji/base_portrait.png",
+   "voice": "",
+   "voice_desc": ""
+  },
+  "FERRY": {
+   "name": "The Ferryman",
+   "clause": "a towering, lean translucent spirit-being, elderly, in their seventies, pale skin, a long narrow face, faintly glowing eyes, narrow watchful eyes, thin arched brows, white very long straight hair, pale glowing markings along the body, a distant, haunted look, a river spirit in layered grey robes that fade to mist at the hem, holding a long pole, lantern light on the water behind",
+   "short": "white very long straight hair, pale glowing markings along the body",
+   "sheet": "/home/k4shix/shared/comfy-studio/studio/foundry/characters/the-ferryman/base_portrait.png",
+   "portrait": "/home/k4shix/shared/comfy-studio/studio/foundry/characters/the-ferryman/base_portrait.png",
+   "voice": "",
+   "voice_desc": ""
+  }
+ },
+ "scenes": [
+  {
+   "id": "sc01",
+   "title": "forest shrine, dawn",
+   "location": "a moss-covered shrine deep in a cedar forest, mist between the trunks, stone lanterns",
+   "time_of_day": "dawn",
+   "weather": "fog",
+   "ambience": "wind in cedar branches, a bell far off, dripping moss",
+   "palette": "",
+   "music": "anime score, soft koto and strings, mist, dawn, gentle, 62 bpm",
+   "cast_present": [
+    "RENJI"
+   ],
+   "no_people": false,
+   "anchor": "",
+   "shots": [
+    "010",
+    "020",
+    "030"
+   ]
+  },
+  {
+   "id": "sc02",
+   "title": "rain bridge, night",
+   "location": "an iron footbridge over a canal at night, rain, paper lanterns along the rail",
+   "time_of_day": "night",
+   "weather": "rain",
+   "ambience": "rain on iron and water, a lantern creaking",
+   "palette": "",
+   "music": "anime score, low strings and a music box, rain, night, uneasy, 58 bpm",
+   "cast_present": [
+    "RENJI",
+    "FERRY"
+   ],
+   "no_people": false,
+   "anchor": "",
+   "shots": [
+    "040",
+    "050",
+    "060"
+   ]
+  }
+ ],
+ "shots": {
+  "010": {
+   "id": "010",
+   "scene": "sc01",
+   "title": "A",
+   "duration": 8,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/foundry/places/forest-shrine/dawn_wide.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide establishing shot",
+     "move": "static",
+     "subject": "",
+     "action": "mist drifts between the cedar trunks around the old shrine, first light through the fog",
+     "background": "leaves stir in the wind",
+     "motion": "",
+     "ambient": [
+      "leaves",
+      "light"
+     ],
+     "dialogue": {}
+    }
+   ],
+   "sfx": "wind in high branches, dripping moss, a distant bell",
+   "no_people": true,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t503563551",
+     "engine": "ltx",
+     "seed": 64537,
+     "created": "02:34",
+     "file": "takes/010/ltx_t503563551.mp4",
+     "poster": "takes/010/ltx_t503563551.png",
+     "strip": "takes/010/ltx_t503563551_strip.png",
+     "duration": 8.04,
+     "fps": 24,
+     "qc": [],
+     "warnings": [],
+     "prompt": "A static wide establishing shot in flat cel-shaded 2D anime: mist drifts between the cedar trunks around the old shrine, first light through the fog, while leaves stir in the wind; leaves drift across the frame; the light shifts and flickers across the scene, a moss-covered shrine deep in a cedar forest, mist between the trunks, stone lanterns, dawn, fog, the frame completely empty of people and h"
+    },
+    {
+     "id": "t503563551m",
+     "engine": "ltx@48",
+     "seed": 64537,
+     "created": "02:58",
+     "file": "takes/010/ltx_t503563551_48.mp4",
+     "poster": "takes/010/ltx_t503563551_48.png",
+     "strip": "takes/010/ltx_t503563551_48_strip.png",
+     "duration": 8.02,
+     "fps": 48,
+     "qc": [],
+     "warnings": [],
+     "prompt": "A static wide establishing shot in flat cel-shaded 2D anime: mist drifts between the cedar trunks around the old shrine, first light through the fog, while leaves stir in the wind; leaves drift across the frame; the light shifts and flickers across the scene, a moss-covered shrine deep in a cedar forest, mist between the trunks, stone lanterns, dawn, fog, the frame completely empty of people and h"
+    }
+   ],
+   "picked": "t503563551m",
+   "engine_notes": "",
+   "anchor_check": {
+    "caption": "Forest, building, temple, structure, lanterns, stone path, steps, windows, wood, stone, fog, mist, trees, pine trees, light, glow, illumination, night, dusk, lamps, lanterns, shadows, beams, architecture.",
+    "missing": [],
+    "when": 1788507462
+   }
+  },
+  "020": {
+   "id": "020",
+   "scene": "sc01",
+   "title": "B",
+   "duration": 6,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/the-ferryman-s-book/assets/anchor_shot_020.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide shot",
+     "move": "static",
+     "subject": "RENJI",
+     "action": "stands before the shrine looking at the old book left on the stone",
+     "background": "mist drifts between the trunks",
+     "motion": "look_off",
+     "ambient": [
+      "leaves",
+      "light"
+     ],
+     "dialogue": {}
+    }
+   ],
+   "sfx": "wind, his footsteps on wet stone, pages",
+   "no_people": false,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t503795587",
+     "engine": "ltx",
+     "seed": 64769,
+     "created": "02:38",
+     "file": "takes/020/ltx_t503795587.mp4",
+     "poster": "takes/020/ltx_t503795587.png",
+     "strip": "takes/020/ltx_t503795587_strip.png",
+     "duration": 6.04,
+     "fps": 24,
+     "qc": [],
+     "warnings": [
+      "beat 1 motion 'look_off' is advisory on LTX - measured, prose does not direct the subject's action here. Pin the shot to enforce it"
+     ],
+     "prompt": "A static wide shot in flat cel-shaded 2D anime: a lean man, in their twenties, fair skin, an angular face with a sharp jaw, dark eyes, narrow watchful eyes, thin arched brows, black short messy hair, a single small earring, a wry, knowing look, a lantern-maker's apprentice in an indigo work jacket with rolled sleeves, paper dust on his hands, stands before the shrine looking at the old book left o"
+    },
+    {
+     "id": "t503795587m",
+     "engine": "ltx@48",
+     "seed": 64769,
+     "created": "02:58",
+     "file": "takes/020/ltx_t503795587_48.mp4",
+     "poster": "takes/020/ltx_t503795587_48.png",
+     "strip": "takes/020/ltx_t503795587_48_strip.png",
+     "duration": 6.02,
+     "fps": 48,
+     "qc": [],
+     "warnings": [
+      "beat 1 motion 'look_off' is advisory on LTX - measured, prose does not direct the subject's action here. Pin the shot to enforce it"
+     ],
+     "prompt": "A static wide shot in flat cel-shaded 2D anime: a lean man, in their twenties, fair skin, an angular face with a sharp jaw, dark eyes, narrow watchful eyes, thin arched brows, black short messy hair, a single small earring, a wry, knowing look, a lantern-maker's apprentice in an indigo work jacket with rolled sleeves, paper dust on his hands, stands before the shrine looking at the old book left o"
+    }
+   ],
+   "picked": "t503795587m",
+   "engine_notes": "",
+   "anchor_source": {
+    "character": "renji",
+    "place": "forest-shrine",
+    "stand": 0.3,
+    "cx": 0.4,
+    "view": "turn_front",
+    "plate": "/home/k4shix/shared/comfy-studio/studio/foundry/places/forest-shrine/dawn_wide.png",
+    "props": [
+     {
+      "id": "old-book",
+      "stand": 0.22,
+      "cx": 0.62
+     }
+    ]
+   },
+   "anchor_check": {
+    "caption": "Forest, temple, building, lantern, book, man, shirt, pants, socks, shoes, stone, path, wood, roof, windows, light, fog, trees, grass, sky, dusk, glow, lamp, lantern post, shadow.",
+    "missing": [
+     "mist"
+    ],
+    "when": 1788507475
+   }
+  },
+  "030": {
+   "id": "030",
+   "scene": "sc01",
+   "title": "C",
+   "duration": 6,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/the-ferryman-s-book/assets/anchor_shot_030.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "medium shot",
+     "move": "static",
+     "subject": "RENJI",
+     "action": "crouches to pick up the book",
+     "background": "mist drifts behind him",
+     "motion": "crouch",
+     "ambient": [
+      "leaves"
+     ],
+     "dialogue": {}
+    }
+   ],
+   "sfx": "wind, cloth, pages turning",
+   "no_people": false,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "pin_1788504011",
+     "engine": "h3-pinned",
+     "file": "takes/030/pin_1788504011.mp4",
+     "duration": 5.875,
+     "fps": 24,
+     "seed": 42,
+     "qc": [],
+     "warnings": [],
+     "pin": {
+      "change": "the subject has lowered into a crouch, knees bent, one hand reaching down to the ground",
+      "rate": 0.0063,
+      "end": "assets/pin_end_030.png"
+     }
+    },
+    {
+     "id": "pin_1788504011m",
+     "engine": "h3-pinned@48",
+     "file": "takes/030/pin_1788504011_48.mp4",
+     "duration": 5.85,
+     "fps": 48,
+     "seed": 42,
+     "qc": [],
+     "warnings": [],
+     "pin": {
+      "change": "the subject has lowered into a crouch, knees bent, one hand reaching down to the ground",
+      "rate": 0.0063,
+      "end": "assets/pin_end_030.png"
+     },
+     "poster": "takes/030/pin_1788504011_48.png",
+     "strip": "takes/030/pin_1788504011_48_strip.png",
+     "created": "02:59"
+    }
+   ],
+   "picked": "pin_1788504011m",
+   "engine_notes": "",
+   "anchor_source": {
+    "character": "renji",
+    "place": "forest-shrine",
+    "stand": 0.3,
+    "cx": 0.45,
+    "view": "turn_front_three_quarter",
+    "plate": "/home/k4shix/shared/comfy-studio/studio/foundry/places/forest-shrine/dawn_detail.png",
+    "props": []
+   },
+   "anchor_check": {
+    "caption": "Forest, building, house, roof, windows, steps, lantern, stone, path, lamp, tree, pine, fog, mist, sky, night, light, glow, boy, person, clothing, jacket, lantern, hanging charm.",
+    "missing": [
+     "book"
+    ],
+    "when": 1788507489
+   },
+   "pin_preview": {
+    "change": "the subject has lowered into a crouch, knees bent, one hand reaching down to the ground",
+    "seconds": 6.0,
+    "end": "assets/pin_end_030.png",
+    "rate": 0.0063,
+    "ok": true,
+    "longest": 19.0,
+    "seed": 11,
+    "hold_feet": true,
+    "when": 1788504007
+   }
+  },
+  "040": {
+   "id": "040",
+   "scene": "sc02",
+   "title": "D",
+   "duration": 8,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/foundry/places/rain-bridge/night_wide.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide establishing shot",
+     "move": "static",
+     "subject": "",
+     "action": "rain falls across the iron footbridge, paper lanterns swaying along the rail, the canal moving below",
+     "background": "rain streaks through the lantern light",
+     "motion": "",
+     "ambient": [
+      "rain",
+      "lanterns",
+      "water"
+     ],
+     "dialogue": {}
+    }
+   ],
+   "sfx": "rain on iron and water, a lantern creaking, distant thunder",
+   "no_people": true,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t504139646",
+     "engine": "ltx",
+     "seed": 65113,
+     "created": "02:44",
+     "file": "takes/040/ltx_t504139646.mp4",
+     "poster": "takes/040/ltx_t504139646.png",
+     "strip": "takes/040/ltx_t504139646_strip.png",
+     "duration": 8.04,
+     "fps": 24,
+     "qc": [],
+     "warnings": [],
+     "prompt": "A static wide establishing shot in flat cel-shaded 2D anime: rain falls across the iron footbridge, paper lanterns swaying along the rail, the canal moving below, while rain streaks through the lantern light; rain falls steadily through the whole frame; hanging lanterns sway gently; water moves continuously, an iron footbridge over a canal at night, rain, paper lanterns along the rail, night, rain"
+    },
+    {
+     "id": "t504139646m",
+     "engine": "ltx@48",
+     "seed": 65113,
+     "created": "02:59",
+     "file": "takes/040/ltx_t504139646_48.mp4",
+     "poster": "takes/040/ltx_t504139646_48.png",
+     "strip": "takes/040/ltx_t504139646_48_strip.png",
+     "duration": 8.02,
+     "fps": 48,
+     "qc": [],
+     "warnings": [],
+     "prompt": "A static wide establishing shot in flat cel-shaded 2D anime: rain falls across the iron footbridge, paper lanterns swaying along the rail, the canal moving below, while rain streaks through the lantern light; rain falls steadily through the whole frame; hanging lanterns sway gently; water moves continuously, an iron footbridge over a canal at night, rain, paper lanterns along the rail, night, rain"
+    }
+   ],
+   "picked": "t504139646m",
+   "engine_notes": "",
+   "anchor_check": {
+    "caption": "Street, city, buildings, structures, lanterns, light, reflections, water, rain, road, pavement, wood, metal, glow, illumination, sky, night, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow,",
+    "missing": [
+     "footbridge",
+     "paper",
+     "rail"
+    ],
+    "when": 1788507515
+   }
+  },
+  "050": {
+   "id": "050",
+   "scene": "sc02",
+   "title": "E",
+   "duration": 8,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/the-ferryman-s-book/assets/anchor_shot_050.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide shot",
+     "move": "static",
+     "subject": "FERRY",
+     "action": "raises the pole and looks up into the rain",
+     "background": "lanterns sway along the rail",
+     "motion": "look_up",
+     "ambient": [
+      "rain",
+      "lanterns",
+      "water"
+     ],
+     "dialogue": {}
+    }
+   ],
+   "sfx": "rain, water, the lantern creaking, a low hum",
+   "no_people": false,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "pin_1788504379",
+     "engine": "h3-pinned",
+     "file": "takes/050/pin_1788504379.mp4",
+     "duration": 8.0,
+     "fps": 24,
+     "seed": 42,
+     "qc": [],
+     "warnings": [],
+     "pin": {
+      "change": "the subject has raised one arm, the long pole lifted, and is looking up",
+      "rate": 0.0022,
+      "end": "assets/pin_end_050.png"
+     }
+    },
+    {
+     "id": "pin_1788504379m",
+     "engine": "h3-pinned@48",
+     "file": "takes/050/pin_1788504379_48.mp4",
+     "duration": 7.98,
+     "fps": 48,
+     "seed": 42,
+     "qc": [],
+     "warnings": [],
+     "pin": {
+      "change": "the subject has raised one arm, the long pole lifted, and is looking up",
+      "rate": 0.0022,
+      "end": "assets/pin_end_050.png"
+     },
+     "poster": "takes/050/pin_1788504379_48.png",
+     "strip": "takes/050/pin_1788504379_48_strip.png",
+     "created": "03:00"
+    }
+   ],
+   "picked": "pin_1788504379m",
+   "engine_notes": "",
+   "anchor_source": {
+    "character": "the-ferryman",
+    "place": "rain-bridge",
+    "stand": 0.45,
+    "cx": 0.55,
+    "view": "turn_front",
+    "plate": "/home/k4shix/shared/comfy-studio/studio/foundry/places/rain-bridge/night_wide.png",
+    "props": [
+     {
+      "id": "paper-lantern",
+      "stand": 0.4,
+      "cx": 0.7
+     }
+    ]
+   },
+   "anchor_check": {
+    "caption": "Place, bridge, walkway, structure, building, lantern, staff, man, clothing, robe, wood, stone, reflection, water, rain, night, light, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow, glow,",
+    "missing": [
+     "pole",
+     "rail",
+     "iron",
+     "footbridge",
+     "paper"
+    ],
+    "when": 1788507540
+   },
+   "pin_preview": {
+    "change": "the subject has raised one arm, the long pole lifted, and is looking up",
+    "seconds": 8.0,
+    "end": "assets/pin_end_050.png",
+    "rate": 0.0022,
+    "ok": true,
+    "longest": 8.9,
+    "seed": 11,
+    "hold_feet": true,
+    "when": 1788504372
+   }
+  },
+  "060": {
+   "id": "060",
+   "scene": "sc02",
+   "title": "F",
+   "duration": 8,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/the-ferryman-s-book/assets/anchor_shot_060.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "medium shot",
+     "move": "static",
+     "subject": "RENJI",
+     "action": "holds the book to his chest and looks across the bridge, rain running off the umbrella",
+     "background": "rain falls through the lantern light, lanterns swaying",
+     "motion": "look_off",
+     "ambient": [
+      "rain",
+      "lanterns"
+     ],
+     "dialogue": {}
+    }
+   ],
+   "sfx": "rain on the umbrella, water below, his breath",
+   "no_people": false,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t504603721",
+     "engine": "ltx",
+     "seed": 65577,
+     "created": "02:51",
+     "file": "takes/060/ltx_t504603721.mp4",
+     "poster": "takes/060/ltx_t504603721.png",
+     "strip": "takes/060/ltx_t504603721_strip.png",
+     "duration": 8.04,
+     "fps": 24,
+     "qc": [],
+     "warnings": [
+      "beat 1 motion 'look_off' is advisory on LTX - measured, prose does not direct the subject's action here. Pin the shot to enforce it"
+     ],
+     "prompt": "A static medium shot in flat cel-shaded 2D anime: a lean man, in their twenties, fair skin, an angular face with a sharp jaw, dark eyes, narrow watchful eyes, thin arched brows, black short messy hair, a single small earring, a wry, knowing look, a lantern-maker's apprentice in an indigo work jacket with rolled sleeves, paper dust on his hands, holds the book to his chest and looks across the brid"
+    },
+    {
+     "id": "t504603721m",
+     "engine": "ltx@48",
+     "seed": 65577,
+     "created": "03:00",
+     "file": "takes/060/ltx_t504603721_48.mp4",
+     "poster": "takes/060/ltx_t504603721_48.png",
+     "strip": "takes/060/ltx_t504603721_48_strip.png",
+     "duration": 8.02,
+     "fps": 48,
+     "qc": [],
+     "warnings": [
+      "beat 1 motion 'look_off' is advisory on LTX - measured, prose does not direct the subject's action here. Pin the shot to enforce it"
+     ],
+     "prompt": "A static medium shot in flat cel-shaded 2D anime: a lean man, in their twenties, fair skin, an angular face with a sharp jaw, dark eyes, narrow watchful eyes, thin arched brows, black short messy hair, a single small earring, a wry, knowing look, a lantern-maker's apprentice in an indigo work jacket with rolled sleeves, paper dust on his hands, holds the book to his chest and looks across the brid"
+    }
+   ],
+   "picked": "t504603721m",
+   "engine_notes": "",
+   "anchor_source": {
+    "character": "renji",
+    "place": "rain-bridge",
+    "stand": 0.15,
+    "cx": 0.45,
+    "view": "turn_front",
+    "plate": "/home/k4shix/shared/comfy-studio/studio/foundry/places/rain-bridge/night_detail.png",
+    "props": [
+     {
+      "id": "red-umbrella",
+      "stand": 0.13,
+      "cx": 0.72
+     }
+    ]
+   },
+   "anchor_check": {
+    "caption": "Alleyway, lanterns, boy, umbrella, rain, reflections, puddles, building, brick, stone, shirt, pants, socks, shoes, jacket, denim, cotton, metal, wood, umbrella ribs, umbrella fabric, sky, night, light, glow, water droplets, wetness, shadows.",
+    "missing": [
+     "book",
+     "bridge",
+     "footbridge",
+     "paper",
+     "rail"
+    ],
+    "when": 1788507553
+   }
+  }
+ }
+}

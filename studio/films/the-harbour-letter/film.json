@@ -1,0 +1,762 @@
+{
+ "title": "The Harbour Letter",
+ "created": "2026-09-04 01:50",
+ "look": "photoreal",
+ "look_clause": "photoreal cinematic film still, 35mm, deep focus, high detail, colour photograph, filmic grade",
+ "grade": "",
+ "negative": "",
+ "fps": 24,
+ "logline": "A letter found in the rain is carried to the old bridge at dawn.",
+ "resolution": "auto",
+ "deliver": "native",
+ "cast": {
+  "MARA": {
+   "name": "Mara Okonjo",
+   "clause": "a tall, athletic woman, in their thirties, deep brown skin, an angular face with a sharp jaw, dark eyes, almond eyes, strong dark brows, black a long single braid, freckles across the nose, a calm, unreadable bearing, a field geologist in a weathered olive canvas jacket over a grey shirt, sleeves pushed up, a plain leather watch strap",
+   "short": "black a long single braid, freckles across the nose",
+   "sheet": "/home/k4shix/shared/comfy-studio/studio/foundry/characters/mara-okonjo/base_portrait.png",
+   "portrait": "/home/k4shix/shared/comfy-studio/studio/foundry/characters/mara-okonjo/base_portrait.png",
+   "voice": "",
+   "voice_desc": ""
+  },
+  "DORAN": {
+   "name": "Doran Vey",
+   "clause": "a heavyset man, in their fifties, fair skin, a square-jawed face, grey eyes, hooded eyes, bushy brows, grey short neat hair, a full beard, a thin scar through one brow, a wry, knowing look, a harbour master in a navy wool coat with a high collar, a knitted scarf, heavy work boots",
+   "short": "grey short neat hair, a thin scar through one brow",
+   "sheet": "/home/k4shix/shared/comfy-studio/studio/foundry/characters/doran-vey/base_portrait.png",
+   "portrait": "/home/k4shix/shared/comfy-studio/studio/foundry/characters/doran-vey/base_portrait.png",
+   "voice": "",
+   "voice_desc": ""
+  }
+ },
+ "scenes": [
+  {
+   "id": "sc01",
+   "title": "rain street, night",
+   "location": "a narrow rain-soaked street at night, shuttered shops, neon signs, wet tarmac",
+   "time_of_day": "night",
+   "weather": "heavy rain",
+   "ambience": "rain on tarmac and awnings, distant traffic, a neon buzz",
+   "palette": "",
+   "music": "cinematic ambient, slow solo piano, rain, melancholic, sparse, 70 bpm",
+   "cast_present": [
+    "MARA"
+   ],
+   "no_people": false,
+   "anchor": "",
+   "shots": [
+    "010",
+    "020",
+    "030"
+   ]
+  },
+  {
+   "id": "sc02",
+   "title": "the old bridge, dawn",
+   "location": "an old stone arch bridge over slow water, thick fog, first light",
+   "time_of_day": "dawn",
+   "weather": "clear and cold",
+   "ambience": "slow water under the arch, drips from the stone, a distant bird",
+   "palette": "",
+   "music": "cinematic ambient, warm strings, hopeful, dawn, slow, 65 bpm",
+   "cast_present": [
+    "MARA",
+    "DORAN"
+   ],
+   "no_people": false,
+   "anchor": "",
+   "shots": [
+    "040",
+    "050",
+    "060",
+    "070",
+    "080"
+   ]
+  }
+ ],
+ "shots": {
+  "010": {
+   "id": "010",
+   "scene": "sc01",
+   "title": "A",
+   "duration": 8,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/foundry/places/rain-street/night_wide.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide establishing shot",
+     "move": "static",
+     "subject": "",
+     "action": "rain hammers the empty street, neon reflections trembling in the puddles",
+     "background": "a car passes slowly at the far end",
+     "motion": "",
+     "ambient": [
+      "rain",
+      "traffic",
+      "light"
+     ],
+     "dialogue": {}
+    }
+   ],
+   "sfx": "rain on tarmac, distant tyres on a wet road, a neon sign buzzing",
+   "no_people": true,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t501056623",
+     "engine": "ltx",
+     "seed": 62030,
+     "created": "01:52",
+     "file": "takes/010/ltx_t501056623.mp4",
+     "poster": "takes/010/ltx_t501056623.png",
+     "strip": "takes/010/ltx_t501056623_strip.png",
+     "duration": 8.04,
+     "fps": 24,
+     "qc": [],
+     "warnings": [],
+     "prompt": "A static wide establishing shot: rain hammers the empty street, neon reflections trembling in the puddles, while a car passes slowly at the far end; rain falls steadily through the whole frame; vehicles pass in the background; the light shifts and flickers across the scene, a narrow rain-soaked street at night, shuttered shops, neon signs, wet tarmac, night, heavy rain, the frame completely empty "
+    },
+    {
+     "id": "t501056623m",
+     "engine": "ltx@48",
+     "seed": 62030,
+     "created": "02:53",
+     "file": "takes/010/ltx_t501056623_48.mp4",
+     "poster": "takes/010/ltx_t501056623_48.png",
+     "strip": "takes/010/ltx_t501056623_48_strip.png",
+     "duration": 8.02,
+     "fps": 48,
+     "qc": [],
+     "warnings": [],
+     "prompt": "A static wide establishing shot: rain hammers the empty street, neon reflections trembling in the puddles, while a car passes slowly at the far end; rain falls steadily through the whole frame; vehicles pass in the background; the light shifts and flickers across the scene, a narrow rain-soaked street at night, shuttered shops, neon signs, wet tarmac, night, heavy rain, the frame completely empty "
+    }
+   ],
+   "picked": "t501056623m",
+   "engine_notes": "",
+   "anchor_check": {
+    "caption": "City, street, buildings, apartments, shops, cars, vehicles, asphalt, road, concrete, metal, windows, signs, neon lights, wires, cables, storefronts, shutters, rain, water, puddles, wetness, night, darkness, glow, lamps, streetlights, illumination, reflections, characters, script, lettering, advertisements.",
+    "missing": [],
+    "when": 1788507568
+   }
+  },
+  "020": {
+   "id": "020",
+   "scene": "sc01",
+   "title": "B",
+   "duration": 8,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/the-harbour-letter/assets/anchor_shot_020.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide shot",
+     "move": "static",
+     "subject": "MARA",
+     "action": "crouches to pick a sodden letter off the road",
+     "background": "rain falls through the street light",
+     "motion": "crouch",
+     "ambient": [
+      "rain"
+     ],
+     "dialogue": {}
+    }
+   ],
+   "sfx": "rain, her boots on wet tarmac, a distant car",
+   "no_people": false,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "pin_1788501200",
+     "engine": "h3-pinned",
+     "file": "takes/020/pin_1788501200.mp4",
+     "duration": 8.0,
+     "fps": 24,
+     "seed": 42,
+     "qc": [],
+     "warnings": [],
+     "pin": {
+      "change": "the subject has lowered into a deep crouch, knees bent, weight low, one hand reaching for a sodden envelope on the wet road",
+      "rate": 0.0055,
+      "end": "assets/pin_end_020.png"
+     }
+    },
+    {
+     "id": "pin_1788502088",
+     "engine": "h3-pinned",
+     "file": "takes/020/pin_1788502088.mp4",
+     "duration": 8.0,
+     "fps": 24,
+     "seed": 42,
+     "qc": [],
+     "warnings": [],
+     "pin": {
+      "change": "the subject has lowered into a deep crouch, knees bent, weight low, one hand reaching for a sodden envelope on the wet road",
+      "rate": 0.0032,
+      "end": "assets/pin_end_020.png"
+     }
+    },
+    {
+     "id": "pin_1788502088m",
+     "engine": "h3-pinned@48",
+     "file": "takes/020/pin_1788502088_48.mp4",
+     "duration": 7.98,
+     "fps": 48,
+     "seed": 42,
+     "qc": [],
+     "warnings": [],
+     "pin": {
+      "change": "the subject has lowered into a deep crouch, knees bent, weight low, one hand reaching for a sodden envelope on the wet road",
+      "rate": 0.0032,
+      "end": "assets/pin_end_020.png"
+     },
+     "poster": "takes/020/pin_1788502088_48.png",
+     "strip": "takes/020/pin_1788502088_48_strip.png",
+     "created": "02:54"
+    }
+   ],
+   "picked": "pin_1788502088m",
+   "engine_notes": "",
+   "anchor_source": {
+    "character": "mara-okonjo",
+    "place": "rain-street",
+    "stand": 0.35,
+    "cx": 0.42,
+    "view": "turn_front",
+    "plate": "/home/k4shix/shared/comfy-studio/studio/foundry/places/rain-street/night_wide.png",
+    "props": []
+   },
+   "pin_preview": {
+    "change": "the subject has lowered into a deep crouch, knees bent, weight low, one hand reaching for a sodden envelope on the wet road",
+    "seconds": 8.0,
+    "end": "assets/pin_end_020.png",
+    "rate": 0.0032,
+    "ok": true,
+    "longest": 12.6,
+    "seed": 11,
+    "hold_feet": true,
+    "when": 1788502086
+   },
+   "anchor_check": {
+    "caption": "Here's a breakdown of the nouns present in the image, as requested:\n\nCity, street, alleyway, buildings, apartments, shops, storefronts, cars, vehicles, asphalt, concrete, metal, windows, walls, signs, neon signs, Chinese characters, wires, cables, electricity poles, rain, water, puddles, wetness, night, darkness, streetlights, lamps, glow, reflections, shadows, person, woman, clothing, shirt, pants, hair, braid, cars, vehicles, storefronts, storefront shutters.",
+    "missing": [
+     "letter",
+     "road"
+    ],
+    "when": 1788507581
+   }
+  },
+  "030": {
+   "id": "030",
+   "scene": "sc01",
+   "title": "C",
+   "duration": 6,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/the-harbour-letter/assets/anchor_shot_030.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "medium shot",
+     "move": "static",
+     "subject": "MARA",
+     "action": "unfolds the wet letter and reads it, rain running off her hair, her face changing as she reads",
+     "background": "rain streaks through the light behind her",
+     "motion": "look_off",
+     "ambient": [
+      "rain",
+      "light"
+     ],
+     "dialogue": {}
+    }
+   ],
+   "sfx": "rain, paper crackling wetly",
+   "no_people": false,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t501360679",
+     "engine": "ltx",
+     "seed": 62334,
+     "created": "01:57",
+     "file": "takes/030/ltx_t501360679.mp4",
+     "poster": "takes/030/ltx_t501360679.png",
+     "strip": "takes/030/ltx_t501360679_strip.png",
+     "duration": 6.04,
+     "fps": 24,
+     "qc": [],
+     "warnings": [
+      "beat 1 motion 'look_off' is advisory on LTX - measured, prose does not direct the subject's action here. Pin the shot to enforce it"
+     ],
+     "prompt": "A static medium shot: a tall, athletic woman, in their thirties, deep brown skin, an angular face with a sharp jaw, dark eyes, almond eyes, strong dark brows, black a long single braid, freckles across the nose, a calm, unreadable bearing, a field geologist in a weathered olive canvas jacket over a grey shirt, sleeves pushed up, a plain leather watch strap, unfolds the wet letter and reads it, rai"
+    },
+    {
+     "id": "t501360679m",
+     "engine": "ltx@48",
+     "seed": 62334,
+     "created": "02:54",
+     "file": "takes/030/ltx_t501360679_48.mp4",
+     "poster": "takes/030/ltx_t501360679_48.png",
+     "strip": "takes/030/ltx_t501360679_48_strip.png",
+     "duration": 6.02,
+     "fps": 48,
+     "qc": [],
+     "warnings": [
+      "beat 1 motion 'look_off' is advisory on LTX - measured, prose does not direct the subject's action here. Pin the shot to enforce it"
+     ],
+     "prompt": "A static medium shot: a tall, athletic woman, in their thirties, deep brown skin, an angular face with a sharp jaw, dark eyes, almond eyes, strong dark brows, black a long single braid, freckles across the nose, a calm, unreadable bearing, a field geologist in a weathered olive canvas jacket over a grey shirt, sleeves pushed up, a plain leather watch strap, unfolds the wet letter and reads it, rai"
+    }
+   ],
+   "picked": "t501360679m",
+   "engine_notes": "",
+   "anchor_source": {
+    "character": "mara-okonjo",
+    "place": "rain-street",
+    "stand": 0.12,
+    "cx": 0.45,
+    "view": "turn_front_three_quarter",
+    "plate": "/home/k4shix/shared/comfy-studio/studio/foundry/places/rain-street/night_detail.png",
+    "props": []
+   },
+   "anchor_check": {
+    "caption": "Here's a breakdown of the nouns present in the image, separated by commas:\n\n**Place:** Street, alleyway, city, district, neighborhood, urban area.\n\n**Main Structures:** Buildings, storefronts, shutters, walls, awnings, signs, balconies.\n\n**Objects:** Woman, clothing, jacket, pants, belt, boots, bag, trash can, pole, cable, wires, drain, puddle, orange cone.\n\n**Materials:** Concrete, metal, glass, plastic, fabric, wood, paint, asphalt.\n\n**Vehicles:** None visible.\n\n**Plants:** Flower pot, plant, foliage.\n\n**Water:** Rain, puddles, wetness.\n\n**Weather:** Rain, storm.\n\n**Time of Day:** Night.\n\n**Light Sources:** Street light, neon signs, building lights, reflections.\n\n**Signs:** Chinese characters, English text, shop names.\n\n**People:** Woman.\n\n**Animals:** None visible.",
+    "missing": [
+     "letter"
+    ],
+    "when": 1788507598
+   }
+  },
+  "040": {
+   "id": "040",
+   "scene": "sc02",
+   "title": "D",
+   "duration": 8,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/foundry/places/harbour-dawn/dawn_wide.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide establishing shot",
+     "move": "static",
+     "subject": "",
+     "action": "first light comes through the fog under the old stone bridge, the slow river moving beneath the arch",
+     "background": "mist drifts across the water",
+     "motion": "",
+     "ambient": [
+      "water",
+      "light"
+     ],
+     "dialogue": {}
+    }
+   ],
+   "sfx": "slow water under the arch, drips from the stone, a distant bird",
+   "no_people": true,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t501440691",
+     "engine": "ltx",
+     "seed": 62414,
+     "created": "01:58",
+     "file": "takes/040/ltx_t501440691.mp4",
+     "poster": "takes/040/ltx_t501440691.png",
+     "strip": "takes/040/ltx_t501440691_strip.png",
+     "duration": 8.04,
+     "fps": 24,
+     "qc": [],
+     "warnings": [],
+     "prompt": "A static wide establishing shot: first light spreads across the harbour, boats rocking gently at their moorings, while the water moves continuously, gulls cross the sky; water moves continuously; the light shifts and flickers across the scene, a small fishing harbour at first light, wet stone quay, moored boats, dawn, clear and cold, the frame completely empty of people and hands. Photoreal cinema"
+    },
+    {
+     "id": "t502265368",
+     "engine": "ltx",
+     "seed": 63239,
+     "created": "02:12",
+     "file": "takes/040/ltx_t502265368.mp4",
+     "poster": "takes/040/ltx_t502265368.png",
+     "strip": "takes/040/ltx_t502265368_strip.png",
+     "duration": 8.04,
+     "fps": 24,
+     "qc": [],
+     "warnings": [],
+     "prompt": "A static wide establishing shot: first light comes through the fog under the old stone bridge, the slow river moving beneath the arch, while mist drifts across the water; water moves continuously; the light shifts and flickers across the scene, an old stone arch bridge over slow water, thick fog, first light, dawn, clear and cold, the frame completely empty of people and hands. Photoreal cinematic"
+    },
+    {
+     "id": "t502373554",
+     "engine": "ltx",
+     "seed": 63347,
+     "created": "02:14",
+     "file": "takes/040/ltx_t502373554.mp4",
+     "poster": "takes/040/ltx_t502373554.png",
+     "strip": "takes/040/ltx_t502373554_strip.png",
+     "duration": 8.04,
+     "fps": 24,
+     "qc": [],
+     "warnings": [],
+     "prompt": "A static wide establishing shot: first light comes through the fog under the old stone bridge, the slow river moving beneath the arch, while mist drifts across the water; water moves continuously; the light shifts and flickers across the scene, an old stone arch bridge over slow water, thick fog, first light, dawn, clear and cold, the frame completely empty of people and hands. Photoreal cinematic"
+    },
+    {
+     "id": "t502373554m",
+     "engine": "ltx@48",
+     "seed": 63347,
+     "created": "02:55",
+     "file": "takes/040/ltx_t502373554_48.mp4",
+     "poster": "takes/040/ltx_t502373554_48.png",
+     "strip": "takes/040/ltx_t502373554_48_strip.png",
+     "duration": 8.02,
+     "fps": 48,
+     "qc": [],
+     "warnings": [],
+     "prompt": "A static wide establishing shot: first light comes through the fog under the old stone bridge, the slow river moving beneath the arch, while mist drifts across the water; water moves continuously; the light shifts and flickers across the scene, an old stone arch bridge over slow water, thick fog, first light, dawn, clear and cold, the frame completely empty of people and hands. Photoreal cinematic"
+    }
+   ],
+   "picked": "t502373554m",
+   "engine_notes": "",
+   "anchor_check": {
+    "caption": "Place, countryside, bridge, stone bridge, arch, river, water, bank, vegetation, grass, mist, fog, morning, sunlight, light, shadow, stone, rock, current, stream, landscape, nature.",
+    "missing": [],
+    "when": 1788507608
+   }
+  },
+  "050": {
+   "id": "050",
+   "scene": "sc02",
+   "title": "E",
+   "duration": 6,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/the-harbour-letter/assets/anchor_shot_050.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide shot",
+     "move": "static",
+     "subject": "DORAN",
+     "action": "turns from the water to face the camera, fog behind him",
+     "background": "fog drifts under the arch behind him",
+     "motion": "turn_to",
+     "ambient": [
+      "water"
+     ],
+     "dialogue": {}
+    }
+   ],
+   "sfx": "slow water, his coat moving",
+   "no_people": false,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t501568715",
+     "engine": "ltx",
+     "seed": 62542,
+     "created": "02:00",
+     "file": "takes/050/ltx_t501568715.mp4",
+     "poster": "takes/050/ltx_t501568715.png",
+     "strip": "takes/050/ltx_t501568715_strip.png",
+     "duration": 6.04,
+     "fps": 24,
+     "qc": [],
+     "warnings": [
+      "beat 1 motion 'turn_to' is advisory on LTX - measured, prose does not direct the subject's action here. Pin the shot to enforce it"
+     ],
+     "prompt": "A static wide shot: a heavyset man, in their fifties, fair skin, a square-jawed face, grey eyes, hooded eyes, bushy brows, grey short neat hair, a full beard, a thin scar through one brow, a wry, knowing look, a harbour master in a navy wool coat with a high collar, a knitted scarf, heavy work boots, turns from the water to face the camera; turns to face the camera, the whole body coming round wit"
+    },
+    {
+     "id": "t501568715m",
+     "engine": "ltx@48",
+     "seed": 62542,
+     "created": "02:55",
+     "file": "takes/050/ltx_t501568715_48.mp4",
+     "poster": "takes/050/ltx_t501568715_48.png",
+     "strip": "takes/050/ltx_t501568715_48_strip.png",
+     "duration": 6.02,
+     "fps": 48,
+     "qc": [],
+     "warnings": [
+      "beat 1 motion 'turn_to' is advisory on LTX - measured, prose does not direct the subject's action here. Pin the shot to enforce it"
+     ],
+     "prompt": "A static wide shot: a heavyset man, in their fifties, fair skin, a square-jawed face, grey eyes, hooded eyes, bushy brows, grey short neat hair, a full beard, a thin scar through one brow, a wry, knowing look, a harbour master in a navy wool coat with a high collar, a knitted scarf, heavy work boots, turns from the water to face the camera; turns to face the camera, the whole body coming round wit"
+    }
+   ],
+   "picked": "t501568715m",
+   "engine_notes": "",
+   "anchor_source": {
+    "character": "doran-vey",
+    "place": "harbour-dawn",
+    "stand": 0.4,
+    "cx": 0.56,
+    "view": "turn_side",
+    "plate": "/home/k4shix/shared/comfy-studio/studio/foundry/places/harbour-dawn/dawn_wide.png",
+    "props": []
+   },
+   "pin_preview": {
+    "change": "the subject has turned to face the camera squarely, looking straight into the lens",
+    "seconds": 6.0,
+    "end": "assets/pin_end_050.png",
+    "rate": 0.0013,
+    "ok": false,
+    "longest": 3.0,
+    "seed": 11,
+    "when": 1788501565
+   },
+   "anchor_check": {
+    "caption": "Bridge, countryside, man, coat, trousers, boots, water, river, stone, fog, mist, trees, grass, sky, clouds, light, glow, reflection, shadow, person, clothing.",
+    "missing": [],
+    "when": 1788507618
+   }
+  },
+  "060": {
+   "id": "060",
+   "scene": "sc02",
+   "title": "F",
+   "duration": 8,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/the-harbour-letter/assets/anchor_shot_060.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide shot",
+     "move": "static",
+     "subject": "MARA",
+     "action": "walks a few steps closer along the bank, the letter in her hand",
+     "background": "the fog thins over the water behind her",
+     "motion": "walk_to",
+     "ambient": [
+      "water",
+      "light"
+     ],
+     "dialogue": {}
+    }
+   ],
+   "sfx": "her boots on wet grass, slow water",
+   "no_people": false,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "pin_1788501696",
+     "engine": "h3-pinned",
+     "file": "takes/060/pin_1788501696.mp4",
+     "duration": 8.0,
+     "fps": 24,
+     "seed": 42,
+     "qc": [],
+     "warnings": [],
+     "pin": {
+      "change": "the subject has walked closer to the camera and is larger in the frame, still holding the letter",
+      "rate": 0.0106,
+      "end": "assets/pin_end_060.png"
+     }
+    },
+    {
+     "id": "pin_1788502477",
+     "engine": "h3-pinned",
+     "file": "takes/060/pin_1788502477.mp4",
+     "duration": 8.0,
+     "fps": 24,
+     "seed": 42,
+     "qc": [],
+     "warnings": [],
+     "pin": {
+      "change": "the subject has walked a few steps closer to the camera along the bank, a little larger in the frame, still holding the letter",
+      "rate": 0.0038,
+      "end": "assets/pin_end_060.png"
+     }
+    },
+    {
+     "id": "pin_1788502477m",
+     "engine": "h3-pinned@48",
+     "file": "takes/060/pin_1788502477_48.mp4",
+     "duration": 7.98,
+     "fps": 48,
+     "seed": 42,
+     "qc": [],
+     "warnings": [],
+     "pin": {
+      "change": "the subject has walked a few steps closer to the camera along the bank, a little larger in the frame, still holding the letter",
+      "rate": 0.0038,
+      "end": "assets/pin_end_060.png"
+     },
+     "poster": "takes/060/pin_1788502477_48.png",
+     "strip": "takes/060/pin_1788502477_48_strip.png",
+     "created": "02:56"
+    }
+   ],
+   "picked": "pin_1788502477m",
+   "engine_notes": "",
+   "anchor_source": {
+    "character": "mara-okonjo",
+    "place": "harbour-dawn",
+    "stand": 0.55,
+    "cx": 0.45,
+    "view": "turn_front",
+    "plate": "/home/k4shix/shared/comfy-studio/studio/foundry/places/harbour-dawn/dawn_reverse.png",
+    "props": []
+   },
+   "pin_preview": {
+    "change": "the subject has walked a few steps closer to the camera along the bank, a little larger in the frame, still holding the letter",
+    "seconds": 8.0,
+    "end": "assets/pin_end_060.png",
+    "rate": 0.0038,
+    "ok": true,
+    "longest": 15.3,
+    "seed": 11,
+    "hold_feet": false,
+    "when": 1788502475
+   },
+   "anchor_check": {
+    "caption": "Bridge, town, building, woman, water, river, stone, concrete, clothing, shirt, pants, watch, grass, foliage, mist, fog, sky, clouds, light, glow, stream, bank, vegetation, dawn, morning, shadow, reflection.",
+    "missing": [
+     "letter"
+    ],
+    "when": 1788507629
+   }
+  },
+  "070": {
+   "id": "070",
+   "scene": "sc02",
+   "title": "G",
+   "duration": 6,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/the-harbour-letter/assets/anchor_shot_070.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "medium shot",
+     "move": "static",
+     "subject": "DORAN",
+     "action": "his expression softens as he sees her, a small nod",
+     "background": "fog over the water behind him",
+     "motion": "nod",
+     "ambient": [
+      "water",
+      "light"
+     ],
+     "dialogue": {}
+    }
+   ],
+   "sfx": "water, a gull, his breath",
+   "no_people": false,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t501856767",
+     "engine": "ltx",
+     "seed": 62830,
+     "created": "02:05",
+     "file": "takes/070/ltx_t501856767.mp4",
+     "poster": "takes/070/ltx_t501856767.png",
+     "strip": "takes/070/ltx_t501856767_strip.png",
+     "duration": 6.04,
+     "fps": 24,
+     "qc": [],
+     "warnings": [
+      "beat 1 motion 'nod' is advisory on LTX - measured, prose does not direct the subject's action here. Pin the shot to enforce it"
+     ],
+     "prompt": "A static medium shot: a heavyset man, in their fifties, fair skin, a square-jawed face, grey eyes, hooded eyes, bushy brows, grey short neat hair, a full beard, a thin scar through one brow, a wry, knowing look, a harbour master in a navy wool coat with a high collar, a knitted scarf, heavy work boots, his expression softens as he sees her, a small nod; nods once, deliberately, while the water gli"
+    },
+    {
+     "id": "t501856767m",
+     "engine": "ltx@48",
+     "seed": 62830,
+     "created": "02:56",
+     "file": "takes/070/ltx_t501856767_48.mp4",
+     "poster": "takes/070/ltx_t501856767_48.png",
+     "strip": "takes/070/ltx_t501856767_48_strip.png",
+     "duration": 6.02,
+     "fps": 48,
+     "qc": [],
+     "warnings": [
+      "beat 1 motion 'nod' is advisory on LTX - measured, prose does not direct the subject's action here. Pin the shot to enforce it"
+     ],
+     "prompt": "A static medium shot: a heavyset man, in their fifties, fair skin, a square-jawed face, grey eyes, hooded eyes, bushy brows, grey short neat hair, a full beard, a thin scar through one brow, a wry, knowing look, a harbour master in a navy wool coat with a high collar, a knitted scarf, heavy work boots, his expression softens as he sees her, a small nod; nods once, deliberately, while the water gli"
+    }
+   ],
+   "picked": "t501856767m",
+   "engine_notes": "",
+   "anchor_source": {
+    "character": "doran-vey",
+    "place": "harbour-dawn",
+    "stand": 0.15,
+    "cx": 0.5,
+    "view": "turn_front",
+    "plate": "/home/k4shix/shared/comfy-studio/studio/foundry/places/harbour-dawn/dawn_wide.png",
+    "props": []
+   },
+   "anchor_check": {
+    "caption": "Place, countryside, riverbank, bridge, man, coat, sweater, pants, boots, stone, water, river, fog, mist, trees, plants, grass, sky, clouds, light, glow, shadow, person, man.",
+    "missing": [],
+    "when": 1788507640
+   }
+  },
+  "080": {
+   "id": "080",
+   "scene": "sc02",
+   "title": "H",
+   "duration": 6,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/foundry/places/harbour-dawn/dawn_detail.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide shot",
+     "move": "static",
+     "subject": "",
+     "action": "sunlight spreads across the wet stone of the old bridge, the river glittering below",
+     "background": "ripples cross the slow water",
+     "motion": "",
+     "ambient": [
+      "water",
+      "light"
+     ],
+     "dialogue": {}
+    }
+   ],
+   "sfx": "water lapping at the quay, a single gull",
+   "no_people": true,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t501936780",
+     "engine": "ltx",
+     "seed": 62910,
+     "created": "02:06",
+     "file": "takes/080/ltx_t501936780.mp4",
+     "poster": "takes/080/ltx_t501936780.png",
+     "strip": "takes/080/ltx_t501936780_strip.png",
+     "duration": 6.04,
+     "fps": 24,
+     "qc": [],
+     "warnings": [],
+     "prompt": "A static wide shot: sunlight spreads across the wet stone of the quay, the water glittering, while ripples cross the harbour; water moves continuously; the light shifts and flickers across the scene, a small fishing harbour at first light, wet stone quay, moored boats, dawn, clear and cold, the frame completely empty of people and hands. Photoreal cinematic film still, 35mm, deep focus, high detai"
+    },
+    {
+     "id": "t501936780m",
+     "engine": "ltx@48",
+     "seed": 62910,
+     "created": "02:57",
+     "file": "takes/080/ltx_t501936780_48.mp4",
+     "poster": "takes/080/ltx_t501936780_48.png",
+     "strip": "takes/080/ltx_t501936780_48_strip.png",
+     "duration": 6.02,
+     "fps": 48,
+     "qc": [],
+     "warnings": [],
+     "prompt": "A static wide shot: sunlight spreads across the wet stone of the quay, the water glittering, while ripples cross the harbour; water moves continuously; the light shifts and flickers across the scene, a small fishing harbour at first light, wet stone quay, moored boats, dawn, clear and cold, the frame completely empty of people and hands. Photoreal cinematic film still, 35mm, deep focus, high detai"
+    }
+   ],
+   "picked": "t501936780m",
+   "engine_notes": "",
+   "anchor_check": {
+    "caption": "Bridge, countryside, stone bridge, arch, river, water, rocks, stream, vegetation, forest, mist, fog, sunlight, glow, morning, landscape, stone, plants, water flow, rocks, moss, trees, light, atmosphere, horizon.",
+    "missing": [],
+    "when": 1788507652
+   }
+  }
+ }
+}
