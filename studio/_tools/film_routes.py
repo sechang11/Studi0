@@ -1206,6 +1206,16 @@ def _assemble_job(jid, fid, music_on):
                            if t["id"] == sh.get("picked")), None)
                 if tk:
                     picked_files.append(os.path.join(f.dir, tk["file"]))
+        # what the picked takes say about themselves, so nothing wrong ships silently
+        notes = []
+        for sh in f.ordered_shots():
+            tk = next((t for t in sh.get("takes") or [] if t["id"] == sh.get("picked")), None)
+            if tk and tk.get("qc"):
+                notes.append("%s: %s" % (sh["id"], "; ".join(str(q) for q in tk["qc"])[:120]))
+        if notes:
+            _log(jid, "picked takes with notes (%d): %s" % (len(notes), " | ".join(notes)[:600]))
+        else:
+            _log(jid, "no picked take reports a fault")
         # the film runs at 48 only when EVERY pick is mastered - a mix would stutter
         target_fps = 48 if picked_files and all(_fps(p) >= 47 for p in picked_files) \
             else 24

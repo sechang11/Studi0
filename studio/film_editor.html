@@ -819,7 +819,22 @@ async function loadTriage(){
       <span style="color:var(--warn,#d9a441)">${c["trade-off"]||0} will differ from what was asked</span> &middot;
       <span style="color:var(--bad,#e05a5a)">${c.api||0} need an outside service</span></div>`;
     const flagged=Object.entries(t.shots||{}).filter(([,tr])=>tr.verdict!=="local");
-    if(!flagged.length) out+=`<div class="hint">every shot can be made here as asked</div>`;
+    // the picked takes' own verdicts, per shot, in the words they were written
+    const fixes=[];
+    for(const sc of (TREE.scenes||[])) for(const s of (sc.shots||[])){
+      if(!s.picked||!s.picked_qc) continue;
+      try{ const d=await api(`/${FID}/shot/${s.id}`); const tk=(d.shot.takes||[]).find(t=>t.id===d.shot.picked);
+        if(tk&&(tk.qc||[]).length) fixes.push([s.id,tk.qc]); }catch(e){}
+    }
+    if(fixes.length){
+      out+=`<div style="margin-top:8px"><b>what to fix</b> <span class="hint">- what the picked takes say about themselves</span></div>`;
+      for(const [id,qc] of fixes){
+        out+=`<div style="margin-top:4px"><span class="badge" onclick="selShot('${id}')" style="cursor:pointer">${id}</span>
+          <ul class="hint" style="margin:2px 0 0 14px;padding:0">${qc.map(q=>`<li>${esc(String(q))}</li>`).join("")}</ul></div>`;
+      }
+    }
+    if(!flagged.length&&!fixes.length) out+=`<div class="hint">every shot can be made here as asked, and no picked take reports a fault</div>`;
+    else if(!flagged.length) out+=`<div class="hint">every shot can be made here as asked</div>`;
     for(const [id,tr] of flagged){
       out+=`<div style="margin-top:6px"><span class="badge" onclick="selShot('${id}')" style="cursor:pointer">${id}</span>
         <b style="color:${tr.verdict==="api"?"var(--bad,#e05a5a)":"var(--warn,#d9a441)"}">${words[tr.verdict]||tr.verdict}</b>
