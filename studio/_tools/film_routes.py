@@ -974,7 +974,43 @@ def auto_next(data):
 
 # ─── dialogue VO (consistent character voices) ──────────────────────────────────────
 
-def _vo_job(jid, fid, shid, tid):
+FEMALE_VOICES = ["female_03_alice", "female_04_maya", "female_01", "female_02", "en_woman", "mabel"]
+MALE_VOICES = ["male_02", "male_03_carter", "male_01", "male_04_frank", "male_05_samuel", "en_man", "vex"]
+
+
+def _voice_ready(vid):
+    p = os.path.join(STUDIO, "voices", (vid or "") + ".json")
+    try:
+        return bool(vid) and json.load(open(p, encoding="utf-8")).get("status") == "ready"
+    except Exception:
+        return False
+
+
+def _default_voice(f, cast_id):
+    """A READY synthetic pack for a cast member without one, chosen by the pack's
+    archetype and fixed by the cast id, so the character keeps it across films."""
+    ent = (f.data.get("cast") or {}).get(cast_id) or {}
+    arche = ""
+    try:
+        import importlib.util
+        p = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "foundry.py")
+        spec = importlib.util.spec_from_file_location("fy_mod6", p)
+        FY = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(FY)
+        cid = ent.get("foundry") or _foundry_for(f, cast_id, FY)
+        if cid:
+            arche = ((FY.load_asset("character", cid).get("selections") or {}).get("archetype") or "")
+    except Exception:
+        arche = ""
+    pool = FEMALE_VOICES if "female" in arche else MALE_VOICES if "male" in arche else (FEMALE_VOICES + MALE_VOICES)
+    pool = [v for v in pool if _voice_ready(v)] or [v for v in FEMALE_VOICES + MALE_VOICES if _voice_ready(v)]
+    if not pool:
+        return ""
+    h = sum(ord(c) for c in cast_id) % len(pool)
+    return pool[h]
+
+
+def _vo_job(jid, fid, shid, tid, duck=0.35):
     run, set_path, load_wf, ensure_local, HOST, COMFY = _comfy()
     try:
         f = F.load(fid)
@@ -994,6 +1030,14 @@ def _vo_job(jid, fid, shid, tid):
             i = n_
             ch = f.data["cast"].get(d.get("char") or "") or {}
             vid = ch.get("voice") or ""
+            if not _voice_ready(vid):
+                # no voice, or a blocked one: pick a ready synthetic pack by archetype
+                # and remember it on the cast entry
+                vid = _default_voice(f, d.get("char") or "")
+                if vid and ch:
+                    ch["voice"] = vid
+                    f.save()
+                    _log(jid, "%s has no voice pack - using %s" % (d.get("char"), vid))
             vmeta = {}
             vp = os.path.join(STUDIO, "voices", vid + ".json")
             if vid and os.path.exists(vp):
@@ -1023,7 +1067,7 @@ def _vo_job(jid, fid, shid, tid):
         inputs, fc, amix = ["-i", src], [], "[a0]"
         for i, vp in enumerate(vo_paths):
             inputs += ["-i", vp]
-        fc.append("[0:a]volume=0.35[a0]")
+        fc.append("[0:a]volume=%.2f[a0]" % duck)
         # each line starts where its BEAT starts (beats divide the shot evenly on LTX),
         # nudged 0.4s in so the cut lands first and the voice follows it
         tdur = _dur(src)
@@ -1888,7 +1932,7 @@ def _foundry_for(f, cast_id, FY):
     return None
 
 
-def _make_job(jid, fid, shid, seconds=None, seed=0):
+def _make_job(jid, fid, shid, seconds=None, seed=0, variants=1):
     try:
         import importlib.util, random
         f = F.load(fid)
@@ -1973,10 +2017,10 @@ def _make_job(jid, fid, shid, seconds=None, seed=0):
             f = F.load(fid)
             sh = f.shot(shid)
             pv = sh.get("pin_preview") or {}
-            if pv.get("ok") or pv.get("rate", 0) >= 0.0012:
+            if pv.get("ok"):
                 sub = _job("pin", film=fid, shot=shid)
                 _log(jid, "interpolating between the two poses")
-                _pin_job(sub, fid, shid, change, secs, 42, not pv.get("ok"), True)
+                _pin_job(sub, fid, shid, change, secs, 42, False, True)
                 with _LOCK:
                     err = JOBS.get(sub, {}).get("error")
                 if not err:
@@ -1984,8 +2028,9 @@ def _make_job(jid, fid, shid, seconds=None, seed=0):
                 else:
                     _log(jid, "the pose change did not take (%s) - rendering instead" % err[:80])
             else:
-                _log(jid, "too small a change to animate as a pose (%.4f) - rendering instead"
-                     % pv.get("rate", 0))
+                _log(jid, "too small a change to animate as a pose (%.4f/s, floor %.4f) - "
+                          "rendering instead; forced pins below the floor came back wrong"
+                     % (pv.get("rate", 0), 0.002))
         if not done:
             f = F.load(fid)
             sh = f.shot(shid)
@@ -2052,6 +2097,43 @@ def _make_job(jid, fid, shid, seconds=None, seed=0):
                                            if newest.get("qc") else ""))
         else:
             _log(jid, "done - the pose change is the picked take")
+        # a line is spoken through the character's voice pack, not left to the engine
+        f = F.load(fid)
+        sh = f.shot(shid)
+        has_line = any(((bb.get("dialogue") or {}).get("line") or "").strip() for bb in (sh.get("beats") or []))
+        picked = sh.get("picked")
+        if has_line and picked and not str(picked).endswith("v"):
+            _log(jid, "voicing the line through the character's voice pack")
+            sub = _job("vo", film=fid, shot=shid)
+            _vo_job(sub, fid, shid, picked, 0.12)
+            with _LOCK:
+                err = JOBS.get(sub, {}).get("error")
+            if err:
+                _log(jid, "the line could not be voiced: %s" % err[:120])
+            else:
+                f = F.load(fid)
+                sh = f.shot(shid)
+                vo = [t for t in sh.get("takes") or [] if t["id"] == picked + "v"]
+                if vo:
+                    sh["picked"] = vo[0]["id"]
+                    f.save()
+                    _log(jid, "done - the voiced take is picked")
+        # more variants: same anchor, same promises, new seeds
+        for k in range(1, max(1, int(variants or 1))):
+            f = F.load(fid)
+            sh = f.shot(shid)
+            _log(jid, "variant %d: rendering on a new seed" % (k + 1))
+            _render_take(jid, f, sh, "ltx", random.randint(1, 10 ** 9))
+        if int(variants or 1) > 1:
+            f = F.load(fid)
+            sh = f.shot(shid)
+            takes = sh.get("takes") or []
+            if takes:
+                best = sorted(takes, key=lambda t: (len(t.get("qc") or []), -len(t["id"]), t["id"]))[0]
+                sh["picked"] = best["id"]
+                f.save()
+                _log(jid, "%d variants; picked %s (%s)" % (len(takes), best["id"],
+                                                             "; ".join(best.get("qc") or []) or "no faults"))
         with _LOCK:
             JOBS[jid]["result"] = {"shot": shid}
         _finish(jid)
@@ -2203,12 +2285,217 @@ def delete_film(data):
     return {"ok": True, "moved_to": os.path.relpath(dest, F.FILMS)}, 200
 
 
+FRAMING_STAND = {"wide": 0.40, "medium": 0.22, "close": 0.10}
+FRAMING_NAME = {"wide": "wide shot", "medium": "medium shot", "close": "close-up"}
+CAMERA_VARIANTS = ["static", "push in", "pan", "pull back"]
+
+
+def _spec_md(title, beat, built, promises, flair):
+    """A spec in the markdown the spec sheet parses (specmd.parse_md)."""
+    out = ["# Shot %s" % title, "", "## WHAT HAPPENS", "", beat, "", "## BUILT WITH", "", built, "",
+           "## MUST NEVER CHANGE", "", "*These are the promises. They do not change without a conversation.*", ""]
+    for p in promises:
+        out += ["### %s" % p["title"], p["rule"], "WHY: %s" % p["why"]]
+        if p.get("check"):
+            out.append("CHECK: %s" % p["check"])
+        out.append("")
+    out += ["## CAN CHANGE", "", "*Free to move. Add MAKE PERMANENT under any of these to promote it above.*", ""]
+    for fl in flair:
+        out += ["### %s" % fl["title"], fl["value"], ""]
+    return "\n".join(out)
+
+
+def _write_spec(fid, shid, title, beat, built, promises, flair, jid):
+    try:
+        sr = _load_sibling("spec_routes")
+        body, code = sr.save({"film": fid, "shot": shid,
+                              "md": _spec_md(title, beat, built, promises, flair)})
+        if code == 200:
+            _log(jid, "spec written: %d promises, %d free" % (body.get("invariants", 0), body.get("flair", 0)))
+        else:
+            _log(jid, "spec not written: %s" % str(body)[:120])
+    except Exception as e:
+        _log(jid, "spec not written: %s" % str(e)[:120])
+
+
+def _load_sibling(name):
+    import importlib.util
+    p = os.path.join(os.path.dirname(os.path.abspath(__file__)), name + ".py")
+    spec = importlib.util.spec_from_file_location("sib_" + name, p)
+    m = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(m)
+    return m
+
+
+def _build_job(jid, data):
+    try:
+        import importlib.util, random
+        p = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "foundry.py")
+        spec = importlib.util.spec_from_file_location("fy_mod7", p)
+        FY = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(FY)
+        CM = _compose_mod()
+        # the film and scene: given, or made
+        fid = data.get("film")
+        if fid:
+            f = F.load(fid)
+        else:
+            f = F.new_film(data.get("title") or "Shot builds %s" % time.strftime("%m-%d"),
+                           look=data.get("look", "photoreal"), resolution=data.get("resolution", "auto"))
+            fid = f.id
+        place, plate = data.get("place") or "", data.get("plate") or ""
+        chars_in = [c for c in (data.get("characters") or []) if c][:2]
+        cast_ids = []
+        for cid in chars_in:
+            if cid in (f.data.get("cast") or {}):
+                cast_ids.append(cid); continue
+            try:
+                ent = _cast_entry_from_pack(FY, cid)
+            except Exception:
+                _log(jid, "no character pack %r - skipped" % cid); continue
+            words = re.findall(r"[A-Za-z]+", ent["name"] or cid)
+            core = [w for w in words if w.lower() not in {"the", "a", "an"}] or words
+            cast_id = core[0].upper()[:12]
+            n = 2
+            while cast_id in f.data["cast"] and f.data["cast"][cast_id].get("foundry") != cid:
+                cast_id = "%s%d" % (core[0].upper()[:10], n); n += 1
+            f.data["cast"][cast_id] = ent
+            cast_ids.append(cast_id)
+        scid = data.get("scene")
+        if not scid:
+            sc = f.new_scene(data.get("scene_title") or ("build %s" % time.strftime("%H:%M")))
+            scid = sc["id"]
+            try:
+                pa = FY.load_asset("place", place) if place else {}
+                sel = pa.get("selections") or {}
+                sc["location"] = (pa.get("compiled") or {}).get("description", "") or place
+                sc["weather"] = sel.get("weather", "")
+                sc["ambience"] = (pa.get("compiled") or {}).get("ambience", "") or "wind, distant sounds of the place"
+            except Exception:
+                pass
+            sc["place"], sc["plate"], sc["cast_present"] = place, plate, cast_ids
+        f.save()
+        plate_p = CM.plate_for(place, plate or None) if place else None
+        framings = [x for x in (data.get("framings") or ["wide"]) if x in FRAMING_STAND] or ["wide"]
+        camera = data.get("camera") or "static"
+        motion = (data.get("motion") or "").strip()
+        line = (data.get("line") or "").strip()
+        who = (data.get("who") or (cast_ids[0] if cast_ids else "")).strip()
+        amb = [a for a in (data.get("ambient") or []) if a]
+        dur = float(data.get("duration") or 6)
+        n = max(1, min(int(data.get("variants") or 3), 6))
+        vary = set(data.get("vary") or ["seed"])
+        action = (data.get("action") or "").strip()
+        made = []
+        for fr in framings:
+            f = F.load(fid)
+            subject = cast_ids[0] if cast_ids else ""
+            beat = {"framing": FRAMING_NAME[fr], "move": camera if camera in ("static", "push in", "pull back", "pan", "tilt up", "tilt down", "follow", "circle", "handheld") else "static",
+                    "transition_in": "", "subject": subject,
+                    "action": action or ("stands in the scene" if subject else "the place as it is, alive"),
+                    "background": "what moves here moves: " + ", ".join(amb) if amb else "",
+                    "motion": motion, "ambient": amb,
+                    "dialogue": {"char": who, "line": line, "delivery": ""} if line else {"char": "", "line": "", "delivery": ""}}
+            sh = f.new_shot(scid, title="%s - %s" % (fr, " / ".join(cast_ids) or "empty"), duration=dur,
+                            beats=[beat], sfx=(f.scene(scid) or {}).get("ambience") or "",
+                            anchor=("file:" + plate_p) if (plate_p and not cast_ids) else "scene",
+                            no_people=not cast_ids, transition_out="cut")
+            f.save()
+            shid = sh["id"]
+            made.append(shid)
+            _log(jid, "-- %s shot %s" % (fr, shid))
+            # the anchor: character into the place, footing checked, whole views only
+            if cast_ids and plate_p:
+                layers = []
+                if len(cast_ids) > 1:
+                    oc = (f.data["cast"].get(cast_ids[1]) or {}).get("foundry")
+                    if oc:
+                        layers.append({"character": oc, "view": "turn_front_three_quarter",
+                                       "stand": FRAMING_STAND[fr], "cx": 0.62})
+                cid0 = (f.data["cast"].get(cast_ids[0]) or {}).get("foundry")
+                sub = _job("compose", film=fid, shot=shid)
+                _compose_anchor_job(sub, fid, shid, cid0, place, plate or None,
+                                    "turn_front_three_quarter" if layers else "turn_front",
+                                    FRAMING_STAND[fr], 0.38 if layers else 0.45, layers or None)
+                with _LOCK:
+                    err = JOBS.get(sub, {}).get("error")
+                if err:
+                    _log(jid, "   could not place the character: %s" % err[:140]); continue
+            # the spec: selections as promises
+            f = F.load(fid)
+            sh = f.shot(shid)
+            promises = []
+            if cast_ids:
+                promises.append({"title": "The people are these people", "rule": "%s%s, from their packs, are in the start picture; no one else."
+                                 % (cast_ids[0], (" and " + cast_ids[1]) if len(cast_ids) > 1 else ""),
+                                 "why": "identity comes from the composited anchor, not from the engine's prior",
+                                 "check": "anchor contains anchor_shot_%s" % shid})
+            else:
+                promises.append({"title": "Nobody is in the frame", "rule": "The shot is the place alone.",
+                                 "why": "an empty shot that grows a person is a different shot",
+                                 "check": "qc is clean"})
+            if place:
+                promises.append({"title": "The place is %s" % place, "rule": "The background is the %s plate %s and stays that place for the whole take."
+                                 % (place, plate or "wide"), "why": "words that name what the plate lacks make the engine rewrite it",
+                                 "check": "qc is clean"})
+            promises.append({"title": "Camera: %s" % camera, "rule": "The camera %s." % ("does not move" if camera in ("static", "pinned") else camera + "s"),
+                             "why": "a camera move on LTX is advisory; a pinned shot enforces it", "check": None})
+            promises.append({"title": "Length", "rule": "%.0f seconds, within the measured envelope." % dur,
+                             "why": "resolution and length trade inside a fixed envelope", "check": "duration between %.1f and %.1f" % (max(0.5, dur - 1.5), dur + 1.5)})
+            flair = [{"title": "Seed", "value": "free - the variants differ by seed"},
+                     {"title": "Motion", "value": motion or "none named"},
+                     {"title": "Ambient", "value": ", ".join(amb) or "none named"}]
+            _write_spec(fid, shid, "%s - %s" % (shid, fr), beat["action"], "Make this shot: %s anchor, %s" % ("composed" if cast_ids else "plate", camera), promises, flair, jid)
+            # the variants: same anchor, same promises; only what vary allows changes
+            for k in range(n):
+                f = F.load(fid)
+                sh = f.shot(shid)
+                if "camera" in vary and k > 0:
+                    sh["beats"][0]["move"] = CAMERA_VARIANTS[k % len(CAMERA_VARIANTS)]
+                    f.save()
+                    _log(jid, "   variant %d: camera %s" % (k + 1, sh["beats"][0]["move"]))
+                if k == 0:
+                    sub = _job("make", film=fid, shot=shid)
+                    _make_job(sub, fid, shid)
+                    with _LOCK:
+                        err = JOBS.get(sub, {}).get("error")
+                    if err:
+                        _log(jid, "   variant 1 failed: %s" % err[:120])
+                else:
+                    _log(jid, "   variant %d: rendering on a new seed" % (k + 1))
+                    _render_take(jid, f, sh, "ltx", random.randint(1, 10 ** 9))
+                f = F.load(fid)
+                sh = f.shot(shid)
+                takes = sh.get("takes") or []
+                if takes:
+                    best = sorted(takes, key=lambda t: (len(t.get("qc") or []), t["id"]))[0]
+                    sh["picked"] = best["id"]
+                    f.save()
+            with _LOCK:
+                JOBS[jid]["done"] += 1
+        with _LOCK:
+            JOBS[jid]["result"] = {"film": fid, "scene": scid, "shots": made}
+        _log(jid, "built %d shot(s) with %d variant(s) each" % (len(made), n))
+        _finish(jid)
+    except Exception as e:
+        traceback.print_exc()
+        _finish(jid, str(e)[:300])
+
+
+def build_shot(data):
+    """Select; the studio builds the shot and its variants, holding the promises."""
+    jid = _job("build", total=max(len(data.get("framings") or ["wide"]), 1), film=data.get("film") or "")
+    threading.Thread(target=_build_job, args=(jid, data), daemon=True).start()
+    return {"job": jid}, 200
+
+
 def make_shot(data):
     """Make this shot: character into the scene, words checked, pose change or
     render, picked - in plain words, one button."""
     jid = _job("make", film=data["film"], shot=data["shot"])
     threading.Thread(target=_make_job, args=(jid, data["film"], data["shot"],
-                                             data.get("seconds"), int(data.get("seed") or 0)),
+                                             data.get("seconds"), int(data.get("seed") or 0),
+                                             max(1, min(int(data.get("variants") or 1), 6))),
                      daemon=True).start()
     return {"job": jid}, 200
 

@@ -132,7 +132,7 @@ async function makeAll(){
 }
 async function makeShot(){
   stashForm(); await saveShot();
-  const j=await api("/make",{film:FID,shot:SHOT});
+  const j=await api("/make",{film:FID,shot:SHOT,variants:parseInt((document.getElementById("c_variants")||{}).value||"1")});
   WATCH.add(j.job); note("making the shot: "+j.job);
 }
 async function anchorCheck(){
@@ -499,6 +499,7 @@ function shotForm(){
     <textarea id="s_kf" rows="2">${esc(String(sh.anchor).startsWith("file:")?sh.anchor.slice(5):sh.keyframe_prompt)}</textarea>
     <div class="row" style="margin-top:12px;gap:10px;align-items:center">
       <button class="primary" onclick="makeShot()" style="font-size:15px;padding:8px 16px">Make this shot</button>
+      <select id="c_variants" title="how many variants to make; they differ by seed, not by what you chose"><option value="1">1 take</option><option value="2">2 variants</option><option value="3">3 variants</option><option value="4">4 variants</option></select>
       <span class="hint">puts the named character into the scene, checks your words against the picture,
         animates a pose change or renders, and picks the result - in that order, telling you what it is doing.
         Fill in who, what happens and the motion below first.</span>

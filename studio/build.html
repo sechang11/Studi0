@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Shot builder</title>
+<style>
+  :root{--bg:#121416;--panel:#1a1d21;--line:#2a2f35;--ink:#e8eae6;--dim:#9aa3a8;--accent:#e0a14a;--good:#6bc0a8;--warn:#d9a441;--bad:#e05a5a}
+  body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+  main{max-width:1180px;margin:0 auto;padding:22px 20px 60px}
+  h1{font-size:26px;margin:6px 0 2px;letter-spacing:-.01em}
+  .lead{color:var(--dim);margin:0 0 18px;max-width:70ch}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+  .card h2{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);margin:0 0 8px;font-weight:600}
+  label{display:block;font-size:12px;color:var(--dim);margin:8px 0 3px}
+  select,input[type=text],input[type=number]{width:100%;background:#0f1113;color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:6px 8px;font:inherit}
+  .people{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:8px;max-height:280px;overflow:auto}
+  .person{cursor:pointer;border:2px solid transparent;border-radius:8px;overflow:hidden;background:#0f1113;text-align:center;font-size:11px;color:var(--dim)}
+  .person img{width:100%;aspect-ratio:3/4;object-fit:cover;display:block}
+  .person.on{border-color:var(--accent);color:var(--ink)}
+  .person span{display:block;padding:3px 4px 5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .plates{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+  .plate{cursor:pointer;border:2px solid transparent;border-radius:6px;overflow:hidden;width:120px}
+  .plate img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block}
+  .plate.on{border-color:var(--accent)}
+  .chips{display:flex;gap:6px;flex-wrap:wrap}
+  .chip{padding:4px 9px;border-radius:14px;border:1px solid var(--line);cursor:pointer;font-size:12px;color:var(--dim);user-select:none}
+  .chip.on{border-color:var(--accent);color:var(--ink);background:#26210f}
+  .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  button.primary{background:var(--accent);color:#1a1200;border:0;border-radius:7px;padding:10px 18px;font:inherit;font-weight:700;font-size:15px;cursor:pointer}
+  button.small{background:#0f1113;color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:5px 10px;font:inherit;font-size:12px;cursor:pointer}
+  button:focus-visible,.person:focus-visible,.chip:focus-visible{outline:2px solid var(--good);outline-offset:2px}
+  .hint{color:var(--dim);font-size:12px}
+  #log{background:#0f1113;border:1px solid var(--line);border-radius:8px;padding:10px 12px;font:12px/1.5 ui-monospace,Menlo,Consolas,monospace;max-height:220px;overflow:auto;white-space:pre-wrap;color:var(--ink)}
+  .takes{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px;margin-top:10px}
+  .take{background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+  .take img,.take video{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;background:#000}
+  .take .body{padding:8px 10px}
+  .take .qc{font-size:11px;color:var(--warn);margin-top:4px}
+  .take .ok{font-size:11px;color:var(--good);margin-top:4px}
+  .take.picked{border-color:var(--good)}
+  .promise{font-size:12px;color:var(--dim);border-left:3px solid var(--good);padding:2px 8px;margin:4px 0}
+  a{color:var(--accent)}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<main>
+  <h1>Shot builder</h1>
+  <p class="lead">Choose who, where, how the camera behaves and what happens. The studio builds the shot
+    and several variants of it. What you chose is written down as promises the shot keeps across every
+    variant; only the seed (and, if you allow it, the camera) is free to change.</p>
+
+  <div class="grid">
+    <div class="card">
+      <h2>Who</h2>
+      <div class="hint">up to two. The first is the subject.</div>
+      <div class="people" id="people"></div>
+    </div>
+    <div class="card">
+      <h2>Where</h2>
+      <label>place</label><select id="place" onchange="plates()"></select>
+      <div class="plates" id="plates"></div>
+      <label>look</label><select id="look"><option>photoreal</option><option>anime</option></select>
+      <label>resolution</label><select id="res"><option value="auto">auto - biggest the length allows</option><option value="720p">720p</option><option value="1080p">1080p (shots to 12s)</option><option value="max">max (shots to 8s)</option></select>
+    </div>
+    <div class="card">
+      <h2>How</h2>
+      <label>framings to build (one shot each)</label>
+      <div class="chips" id="framings"><span class="chip on" data-v="wide">wide</span><span class="chip on" data-v="medium">medium</span><span class="chip" data-v="close">close</span></div>
+      <label>camera</label><select id="camera">
+        <option value="static">still (the picture holds; the engine may still push in a little)</option>
+        <option value="pinned">pinned (a pose change, animated between two chosen frames)</option>
+        <option value="push in">push in</option><option value="pull back">pull back</option><option value="pan">pan</option></select>
+      <label>motion of the subject (in place works; walking does not)</label><select id="motion"><option value="">none</option></select>
+      <label>ambient motion - what moves in the picture</label>
+      <div class="chips" id="ambient"></div>
+      <label>length (seconds)</label><input type="number" id="dur" value="6" min="3" max="30">
+    </div>
+    <div class="card">
+      <h2>What happens</h2>
+      <label>in one sentence</label><input type="text" id="action" placeholder="stands at the rail looking out into the fog">
+      <label>a spoken line (optional) - said by the first person</label><input type="text" id="line" placeholder="Last boat's not coming back tonight.">
+      <label>variants</label><select id="variants"><option>1</option><option>2</option><option selected>3</option><option>4</option></select>
+      <label>what may vary between variants</label>
+      <div class="chips" id="vary"><span class="chip on" data-v="seed">the seed</span><span class="chip" data-v="camera">the camera</span></div>
+      <label>film to build into (optional)</label><select id="film"><option value="">a new film for today's builds</option></select>
+      <div class="row" style="margin-top:14px"><button class="primary" onclick="build()">Build the shot and its variants</button>
+        <span class="hint" id="eta">about two minutes per variant</span></div>
+    </div>
+  </div>
+
+  <div id="promises" style="margin-top:16px"></div>
+  <div id="log" style="margin-top:12px;display:none"></div>
+  <div id="results"></div>
+</main>
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+let FOUNDRY={}, DICT={}, PICK=[], PLATE="";
+async function boot(){
+  try{ FOUNDRY=(await (await fetch("/api/film/foundry_assets")).json()).assets||{}; }catch(e){}
+  try{ DICT=await (await fetch("/api/foundry/dictionary")).json(); }catch(e){}
+  $("#people").innerHTML=(FOUNDRY.character||[]).map(c=>`<div class="person" tabindex="0" data-id="${c.id}" onclick="togglePerson('${c.id}')" onkeydown="if(event.key==='Enter')togglePerson('${c.id}')">
+      <img src="/foundry/media/characters/${encodeURIComponent(c.id)}/base_portrait.png" alt="" loading="lazy"><span>${esc(c.name)}</span></div>`).join("");
+  $("#place").innerHTML=`<option value="">no place (empty frame not possible yet)</option>`+(FOUNDRY.place||[]).map(p=>`<option value="${p.id}">${esc(p.name)} (${esc(p.style)})</option>`).join("");
+  const acts=((((DICT.motion||{}).subs||{}).action||{}).options||[]);
+  $("#motion").innerHTML=`<option value="">none</option>`+acts.filter(o=>!["walk_to","walk_away","run"].includes(o.id)).map(o=>`<option value="${o.id}">${esc(o.label||o.id)}</option>`).join("");
+  const amb=((((DICT.motion||{}).subs||{}).ambient||{}).options||[]).filter(o=>o.id!=="none");
+  $("#ambient").innerHTML=amb.map(o=>`<span class="chip" data-v="${o.id}" title="${esc(o.frag||"")}">${esc((o.label||o.id).split(" (")[0])}</span>`).join("");
+  document.querySelectorAll(".chips").forEach(g=>g.addEventListener("click",e=>{ const c=e.target.closest(".chip"); if(!c) return; c.classList.toggle("on"); }));
+  try{ const fl=await (await fetch("/api/film/list")).json(); }catch(e){}
+  try{ const fl=await (await fetch("/api/spec/films")).json(); const rows=(fl.films||fl||[]); if(Array.isArray(rows)) $("#film").innerHTML+=rows.map(f=>`<option value="${f.id||f}">${esc(f.title||f.id||f)}</option>`).join(""); }catch(e){}
+  if((FOUNDRY.place||[]).length){ $("#place").value=(FOUNDRY.place[0].id); plates(); }
+}
+function togglePerson(id){
+  const i=PICK.indexOf(id); if(i>=0) PICK.splice(i,1); else { if(PICK.length>=2) PICK.shift(); PICK.push(id); }
+  document.querySelectorAll(".person").forEach(el=>el.classList.toggle("on",PICK.includes(el.dataset.id)));
+}
+function plates(){
+  const p=(FOUNDRY.place||[]).find(x=>x.id===$("#place").value); const ps=((p&&p.plates)||[]).filter(f=>!/_depth\.png$/.test(f));
+  $("#plates").innerHTML=ps.map(f=>{const k=f.replace(/\.png$/,""); return `<div class="plate ${k.endsWith("_wide")?"on":""}" data-k="${k}" onclick="pickPlate('${k}')"><img src="/foundry/media/places/${encodeURIComponent(p.id)}/${encodeURIComponent(f)}" alt=""><div class="hint" style="padding:2px 4px">${esc(k)}</div></div>`;}).join("");
+  PLATE=(ps.find(f=>f.endsWith("_wide.png"))||ps[0]||"").replace(/\.png$/,"");
+}
+function pickPlate(k){ PLATE=k; document.querySelectorAll(".plate").forEach(el=>el.classList.toggle("on",el.dataset.k===k)); }
+const chips=id=>[...document.querySelectorAll(`#${id} .chip.on`)].map(c=>c.dataset.v);
+let JOB=null, FID=null, SHOTS=[];
+async function build(){
+  const body={film:$("#film").value||undefined, look:$("#look").value, resolution:$("#res").value,
+    place:$("#place").value, plate:PLATE, characters:PICK, framings:chips("framings"), camera:$("#camera").value,
+    motion:$("#motion").value, line:$("#line").value.trim(), action:$("#action").value.trim(), ambient:chips("ambient"),
+    duration:parseFloat($("#dur").value||"6"), variants:parseInt($("#variants").value), vary:chips("vary")};
+  if(!body.place) return alert("choose a place");
+  if(!body.framings.length) return alert("choose at least one framing");
+  const r=await (await fetch("/api/film/build",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)})).json();
+  if(!r.job) return alert("could not start: "+(r.error||"unknown"));
+  JOB=r.job; $("#log").style.display="block"; $("#log").textContent="building…"; $("#results").innerHTML="";
+  $("#promises").innerHTML=`<div class="promise">promise: the people are ${PICK.length?PICK.join(" and "):"nobody"}, from their packs</div>
+    <div class="promise">promise: the place is ${esc(body.place)} (${esc(body.plate)}) and stays that place</div>
+    <div class="promise">promise: camera ${esc(body.camera)}; ${body.duration}s</div>
+    <div class="hint">free to vary: ${body.vary.join(", ")||"nothing"}</div>`;
+  poll();
+}
+async function poll(){
+  const js=(await (await fetch("/api/film/jobs")).json()).jobs||[]; const j=js.find(x=>x.id===JOB);
+  if(j){ $("#log").textContent=(j.log||[]).join("\n"); $("#log").scrollTop=1e9;
+    if(j.state!=="running"){ if(j.result){ FID=j.result.film; SHOTS=j.result.shots||[]; await results(); } if(j.error) $("#log").textContent+="\n! "+j.error; return; } }
+  setTimeout(poll,4000);
+}
+async function results(){
+  let h=`<h2 style="margin:18px 0 6px;font-size:16px">Variants</h2><div class="hint">every take is kept; the cleanest is picked. Pick another if your eye disagrees.
+    <a href="/film?film=${FID}">open in the editor</a> · <a href="/specs">spec sheet</a></div>`;
+  for(const sid of SHOTS){
+    const d=(await (await fetch(`/api/film/${FID}/shot/${sid}`)).json()).shot;
+    h+=`<h3 style="margin:14px 0 4px;font-size:14px">${esc(d.title||sid)}</h3><div class="takes">`+
+      (d.takes||[]).map(t=>`<div class="take ${t.id===d.picked?"picked":""}">
+        ${t.file?`<video src="/film/media/${FID}/${t.file}" poster="/film/media/${FID}/${t.poster||""}" controls muted preload="none"></video>`:""}
+        <div class="body"><b>${esc(t.engine)}</b> <span class="hint">${esc(t.id)}</span>
+          ${(t.qc||[]).length?`<div class="qc">${t.qc.map(esc).join("<br>")}</div>`:`<div class="ok">no faults reported</div>`}
+          <div class="row" style="margin-top:6px"><button class="small" onclick="pick('${sid}','${t.id}')">${t.id===d.picked?"picked":"pick this one"}</button></div>
+        </div></div>`).join("")+`</div>`;
+  }
+  $("#results").innerHTML=h;
+}
+async function pick(sid,tid){
+  await fetch("/api/film/pick",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({film:FID,shot:sid,take:tid})});
+  results();
+}
+boot();
+</script>
+</body>
+</html>

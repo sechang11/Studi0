@@ -1217,53 +1217,45 @@ def _guides():
 # cast/character/newchar, library/gallery/encyclopedia) are deliberately all listed
 # rather than quietly dropped - organising them is a separate pass.
 STUDIO_NAV = [
-    ("studio", [
+    ("make a film", [
         ("/start", "start here", "start.html"),
+        ("/build", "build a shot", "build.html"),
+        ("/film", "film editor", "film_editor.html"),
+        ("/specs", "spec sheet", "specs.html"),
+        ("/verify/motion", "verify", "motion.html"),
+    ]),
+    ("library", [
+        ("/characters", "characters", "characters.html"),
+        ("/places", "places", "places.html"),
+        ("/foundry", "foundry", "foundry.html"),
+        ("/voices", "voices", "voices.html"),
+        ("/styles", "styles", "styles.html"),
+        ("/library", "library", "library.html"),
+        ("/gallery", "gallery", None),
+    ]),
+    ("more", [
         ("/", "studio", "app.html"),
+        ("/wizard", "wizard", "wizard.html"),
+        ("/story", "story", "story_editor.html"),
+        ("/techniques", "techniques", "techniques.html"),
+        ("/generate", "generate", "generate.html"),
+        ("/identity", "identity", "identity.html"),
+        ("/verify", "verify cards", "verify.html"),
+        ("/loras", "loras", "loras.html"),
+        ("/tags", "tags", "tags.html"),
+        ("/make", "make", "make.html"),
+        ("/video", "video", "video.html"),
+        ("/shorts", "shorts", "shorts.html"),
+        ("/make3d", "make 3d", "make3d.html"),
+        ("/model3d", "models", "model3d.html"),
+        ("/three/", "three", "three.html"),
+        ("/encyclopedia", "encyclopedia", "encyclopedia.html"),
+        ("/downloads", "downloads", "downloads.html"),
+        ("/tools", "tools", "tools.html"),
         ("/capabilities", "capabilities", "capabilities.html"),
         ("/guide", "guide", "guide.html"),
         ("/docs", "docs", "docs.html"),
         ("/changelog", "changelog", "changelog.html"),
-    ]),
-    ("direct", [
-        ("/wizard", "wizard", "wizard.html"),
-        ("/story", "story", "story_editor.html"),
-        ("/film", "film", "film_editor.html"),
-        ("/specs", "specs", "specs.html"),
-        ("/techniques", "techniques", "techniques.html"),
-        ("/foundry", "foundry", "foundry.html"),
-        ("/generate", "generate", "generate.html"),
-    ]),
-    ("cast", [
-        ("/characters", "characters", "characters.html"),
-        ("/verify/motion", "motion", "motion.html"),
-        ("/voices", "voices", "voices.html"),
-        ("/identity", "identity", "identity.html"),
-        ("/verify", "verify", "verify.html"),
-    ]),
-    ("look", [
-        ("/styles", "styles", "styles.html"),
-        ("/places", "places", "places.html"),
-        ("/loras", "loras", "loras.html"),
-        ("/tags", "tags", "tags.html"),
-    ]),
-    ("make", [
-        ("/make", "make", "make.html"),
-        ("/video", "video", "video.html"),
-        ("/shorts", "shorts", "shorts.html"),
-    ]),
-    ("3d", [
-        ("/make3d", "make 3d", "make3d.html"),
-        ("/model3d", "models", "model3d.html"),
-        ("/three/", "three", "three.html"),
-    ]),
-    ("library", [
-        ("/library", "library", "library.html"),
-        ("/gallery", "gallery", None),
-        ("/encyclopedia", "encyclopedia", "encyclopedia.html"),
-    ]),
-    ("tools", [
-        ("/tools", "tools", "tools.html"),
     ]),
 ]
 
@@ -1995,6 +1987,8 @@ class H(http.server.SimpleHTTPRequestHandler):
             return self._page("library.html")
         if path in ("/start", "/start.html", "/begin", "/how"):
             return self._page("start.html")
+        if path in ("/build", "/build.html", "/builder"):
+            return self._page("build.html")
         if path in ("/downloads", "/downloads.html"):
             return self._page("downloads.html")
         if path in ("/encyclopedia", "/encyclopedia.html"):
@@ -2047,6 +2041,17 @@ class H(http.server.SimpleHTTPRequestHandler):
                 return self._send({"error": "run studio/_tools/model_atlas.py"}, 500)
             with open(fp, encoding="utf-8") as f:
                 return self._send(json.load(f))
+        if path == "/api/downloads":
+            # Rebuilt per request, like the atlas and the encyclopedia, and for the same
+            # reason those give: an inventory that lags the disk it describes is the exact
+            # failure it exists to prevent. It is a stat() walk plus three json joins.
+            try:
+                dl = _load_tool_module("downloads")
+                if dl is None:
+                    return self._send({"error": "studio/_tools/downloads.py missing"}, 500)
+                return self._send(dl.build())
+            except Exception as e:                                    # noqa: BLE001
+                return self._send({"error": "downloads: %s" % e}, 500)
         if path == "/api/encyclopedia":
             # Rebuilt per request. It is a join over three files already on disk, it
             # costs milliseconds, and a reference that lags what it describes is the
@@ -2677,10 +2682,10 @@ class H(http.server.SimpleHTTPRequestHandler):
                      "/api/film/takes", "/api/film/anchor", "/api/film/autonext",
                      "/api/film/vo", "/api/film/assemble",
                      "/api/film/portrait", "/api/film/master", "/api/film/draftall",
-                     "/api/film/compose", "/api/film/pin", "/api/film/triage", "/api/film/pinpreview", "/api/film/anchorcheck", "/api/film/coverage", "/api/film/make", "/api/film/makeall", "/api/film/quickstart", "/api/film/deletefilm",
+                     "/api/film/compose", "/api/film/pin", "/api/film/triage", "/api/film/pinpreview", "/api/film/anchorcheck", "/api/film/coverage", "/api/film/make", "/api/film/makeall", "/api/film/quickstart", "/api/film/deletefilm", "/api/film/build",
                      "/api/spec/save", "/api/spec/new", "/api/spec/lock",
                      "/api/foundry/new", "/api/foundry/edit", "/api/foundry/delete",
-                     "/api/foundry/seeds", "/api/foundry/apply",
+                     "/api/foundry/seeds", "/api/foundry/repair", "/api/foundry/apply",
                      "/api/foundry/send", "/api/foundry/variant",
                      "/api/foundry/describe", "/api/foundry/from_image",
                      "/api/foundry/import_legacy", "/api/foundry/rename",
@@ -2991,7 +2996,11 @@ class H(http.server.SimpleHTTPRequestHandler):
             verdict = str(data.get("verdict") or "")
             if not vid or verdict not in ("yes", "partly", "no"):
                 return self._send({"error": "id and a yes/partly/no verdict"}, 400)
-            cur[vid] = verdict
+            why = str(data.get("why") or "").strip()[:500]
+            prev = cur.get(vid)
+            if not why and isinstance(prev, dict):
+                why = prev.get("why") or ""
+            cur[vid] = {"verdict": verdict, "why": why} if why else verdict
             json.dump(cur, open(fp, "w", encoding="utf-8"), indent=1)
             return self._send({"ok": True, "answered": len(cur)})
         if p.startswith("/api/foundry/"):
@@ -3000,7 +3009,7 @@ class H(http.server.SimpleHTTPRequestHandler):
                 return self._send({"error": "studio/_tools/foundry_routes.py is "
                                             "unavailable"}, 500)
             fn = {"new": fo.new, "edit": fo.edit, "delete": fo.delete,
-                  "seeds": fo.seeds, "apply": fo.apply_costume,
+                  "seeds": fo.seeds, "repair": fo.repair, "apply": fo.apply_costume,
                   "send": fo.send_to_film, "variant": fo.variant,
                   "describe": fo.describe,
                   "from_image": fo.from_image,
@@ -3036,7 +3045,8 @@ class H(http.server.SimpleHTTPRequestHandler):
                   "make": fr.make_shot,
                   "makeall": fr.make_all,
                   "quickstart": fr.quickstart,
-                  "deletefilm": fr.delete_film}[p[len("/api/film/"):]]
+                  "deletefilm": fr.delete_film,
+                  "build": fr.build_shot}[p[len("/api/film/"):]]
             try:
                 body, code = fn(data)
             except KeyError as e:

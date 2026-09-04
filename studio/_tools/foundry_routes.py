@@ -338,6 +338,48 @@ FAR_FRAMING = ("photographed from far away, the whole person small in the middle
                "both shoes, wide-angle full-length shot")
 
 
+def _extend_down(a, dest, jid, frac=0.34):
+    """Pad the render at the bottom and ask qwen-edit to continue the legs onto a
+    plain floor. -> True if the result is whole."""
+    try:
+        from PIL import Image, ImageStat
+        import importlib.util
+        cp = os.path.join(TOOLS, "compose.py")
+        spec = importlib.util.spec_from_file_location("compose_tool_fx", cp)
+        CM = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(CM)
+        im = Image.open(dest).convert("RGB")
+        W, H = im.size
+        pad = int(H * frac)
+        # the bottom row's mean colour continues the background under the figure
+        st = ImageStat.Stat(im.crop((0, H - 4, W, H)))
+        canvas = Image.new("RGB", (W, H + pad), tuple(int(v) for v in st.mean[:3]))
+        canvas.paste(im, (0, 0))
+        padded = dest[:-4] + "_padded.png"
+        canvas.save(padded)
+        ref = CM.stage(padded, "extend_%s.png" % os.path.basename(dest)[:-4])
+        clause = (a.get("compiled") or {}).get("clause", "")
+        out = CM.qwen_edit(
+            ref, ref,
+            "Complete the bottom of this picture. The same person continues below the "
+            "edge of the original image: their legs, trousers or skirt and shoes, standing "
+            "on a plain floor that matches the background. Do not change anything in the "
+            "original part of the image - the face, hair, clothing and pose stay exactly as "
+            "they are. %s" % clause,
+            dest[:-4] + "_extended.png", seed=7,
+            anime=0.6 if a.get("style") in ("anime", "cartoon") else 0.0,
+            w=canvas.size[0], h=canvas.size[1])
+        ok, detail = _fullbody_ok(out)
+        if ok:
+            shutil.move(out, dest)
+            _log(jid, "extended downward to a whole figure (%s)" % detail)
+            return True
+        _log(jid, "extension still cropped (%s) - keeping the original" % detail)
+    except Exception as e:
+        _log(jid, "extension failed: %s" % str(e)[:100])
+    return False
+
+
 def _render_full_length(a, prompt, dest, jid, seeds=(21, 22, 23, 24)):
     """Render a must-be-whole figure and re-roll while the subject runs off the
     bottom of the frame. Two seeds on the prompt as written, then two with a
@@ -354,8 +396,8 @@ def _render_full_length(a, prompt, dest, jid, seeds=(21, 22, 23, 24)):
             return True
         _log(jid, "cropped on seed %d%s (%s) - re-rolling"
              % (seed, " with far framing" if i >= 2 else "", detail))
-    _log(jid, "still cropped after %d attempts - keeping the last" % len(seeds))
-    return False
+    _log(jid, "still cropped after %d attempts - extending the picture downward" % len(seeds))
+    return _extend_down(a, dest, jid)
 
 
 def _prop_ok(path):
@@ -516,20 +558,20 @@ def _seeds_job(jid, atype, aid):
                                  "%s, %s" % (a["compiled"]["tags"], prompt))
                         if _is_full_length(key):
                             drawn = "full body, cowboy shot off, " + drawn
-                        if key == "base_fullbody":
+                        if _is_full_length(key):
                             _render_full_length(a, drawn, dest, jid)
                         else:
                             _render_direct(a, drawn, dest, seed=21,
-                                           full_length=_is_full_length(key))
+                                           full_length=False)
                     else:
-                        if key == "base_fullbody":
+                        if _is_full_length(key):
                             _render_full_length(
                                 a, "%s, %s" % (a["compiled"]["clause"], prompt),
                                 dest, jid)
                         else:
                             _render_direct(a, "%s, %s" % (a["compiled"]["clause"],
                                                           prompt), dest, seed=21,
-                                           full_length=_is_full_length(key))
+                                           full_length=False)
                 else:
                     if st["kf_engine"] == "animagine":
                         # a drawn identity turns through its own IPAdapter, not the LoRA
@@ -539,9 +581,9 @@ def _seeds_job(jid, atype, aid):
                                                "foundry_ref_%s.png" % aid)
                         # the plan carries the view text - no key table to fall
                         # out of step with CHAR_TURN_VIEWS
-                        _render_direct(a, "%s, full body, %s, plain background"
-                                       % (a["compiled"]["tags"], prompt),
-                                       dest, seed=23, full_length=True)
+                        _render_full_length(a, "%s, full body, %s, plain background"
+                                            % (a["compiled"]["tags"], prompt),
+                                            dest, jid, seeds=(23, 24, 25, 26))
                     else:
                         _render_turnaround(a, "base_fullbody.png", prompt, dest,
                                            seed=21)
@@ -578,6 +620,59 @@ def _seeds_job(jid, atype, aid):
         _finish(jid)
     except Exception as e:
         _finish(jid, str(e)[:300])
+
+
+COMPOSITING_VIEWS = ("base_fullbody", "turn_front", "turn_front_three_quarter", "turn_side",
+                     "turn_back_three_quarter", "turn_back", "pres_wide")
+
+
+def _repair_job(jid, cid):
+    """Delete the character's cropped compositing views and re-run the seeds job,
+    which re-renders what is missing with the detector-and-retry."""
+    try:
+        sys.path.insert(0, TOOLS) if TOOLS not in sys.path else None
+        import pack_qc
+        adir = os.path.join(FOUNDRY, "characters", cid) if "FOUNDRY" in globals() else \
+            os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                         "foundry", "characters", cid)
+        gone = []
+        base_cut = False
+        for v in COMPOSITING_VIEWS:
+            p = os.path.join(adir, v + ".png")
+            if not os.path.exists(p):
+                continue
+            trunc, detail = pack_qc._truncated(p)
+            if trunc:
+                gone.append(v)
+                if v == "base_fullbody":
+                    base_cut = True
+        if base_cut:
+            # the turnaround is derived from the base for photographic packs: redo it all
+            for v in COMPOSITING_VIEWS:
+                if v not in gone and os.path.exists(os.path.join(adir, v + ".png")):
+                    gone.append(v)
+        for v in gone:
+            try:
+                os.remove(os.path.join(adir, v + ".png"))
+            except OSError:
+                pass
+        cache = os.path.join(adir, "_views_qc.json")
+        if os.path.exists(cache):
+            os.remove(cache)
+        _log(jid, "cropped views removed: %s" % (", ".join(gone) or "none"))
+        if gone:
+            _seeds_job(jid, "character", cid)
+        else:
+            _finish(jid)
+    except Exception as e:
+        _finish(jid, str(e)[:300])
+
+
+def repair(data):
+    """Rebuild a character's cropped compositing views."""
+    jid = _job("repair", asset="character/%s" % data["id"])
+    threading.Thread(target=_repair_job, args=(jid, data["id"]), daemon=True).start()
+    return {"job": jid}, 200
 
 
 def seeds(data):

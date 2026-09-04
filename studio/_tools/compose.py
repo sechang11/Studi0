@@ -476,6 +476,7 @@ def character_layer(char_id, plate, dpath, stand, cx, view="turn_front", seed=7,
     """A second (or third) character as a layer: cut, sized as a 1.7 m person at
     its depth, tinted to the plate. -> (cut, x, y)."""
     from PIL import Image
+    view, _vnote = pick_full_view(char_id, view)
     src = os.path.join(CHARS, char_id, view + ".png")
     if not os.path.isfile(src):
         raise SystemExit("no such view: %s" % src)
@@ -526,12 +527,69 @@ def character_layer(char_id, plate, dpath, stand, cx, view="turn_front", seed=7,
     return cut, int(W * cx) - tw // 2, y_feet - th
 
 
+VIEW_ORDER = ("base_fullbody", "turn_front_three_quarter", "turn_front", "turn_side",
+              "turn_back_three_quarter", "pres_wide")
+
+
+def view_is_whole(char_id, view):
+    """Is this pack view a whole figure (not cut at the frame bottom)? Cached in
+    <pack>/_views_qc.json by file mtime, because the check is a segmentation."""
+    import time
+    d = os.path.join(CHARS, char_id)
+    src = os.path.join(d, view + ".png")
+    if not os.path.isfile(src):
+        return None
+    cache_p = os.path.join(d, "_views_qc.json")
+    try:
+        cache = json.load(open(cache_p, encoding="utf-8"))
+    except Exception:
+        cache = {}
+    mt = os.path.getmtime(src)
+    ent = cache.get(view)
+    if ent and abs(ent.get("mtime", 0) - mt) < 1:
+        return bool(ent.get("whole"))
+    try:
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        import pack_qc
+        trunc, detail = pack_qc._truncated(src)
+        whole = (trunc is False)
+    except Exception as e:
+        return None
+    cache[view] = {"whole": whole, "detail": detail, "mtime": mt, "when": int(time.time())}
+    try:
+        json.dump(cache, open(cache_p, "w", encoding="utf-8"), indent=1)
+    except Exception:
+        pass
+    return whole
+
+
+def pick_full_view(char_id, view, say=None):
+    """The requested view if it is whole, else the first whole view in VIEW_ORDER.
+    Face and expression views are exempt (they are meant to be crops).
+    -> (view, note or None). Raises if no compositing view is whole."""
+    if view.startswith(("face", "expr")):
+        return view, None
+    if view_is_whole(char_id, view) is not False:
+        return view, None
+    for alt in VIEW_ORDER:
+        if alt == view:
+            continue
+        if view_is_whole(char_id, alt):
+            note = "%s is cropped at the bottom - using %s" % (view, alt)
+            if say:
+                say("  ! " + note)
+            return alt, note
+    raise SystemExit("every compositing view of %s is cropped at the bottom - rebuild the "
+                     "pictures (the seeds job re-rolls a cropped base)" % char_id)
+
+
 def compose(char_id, place_id, plate_key=None, view="turn_front",
             framing="full", cx=0.42, light=-0.35, seed=7, tag=None,
             quiet=False, stand=None, props=None, footing_check=True):
     from PIL import Image
     cdir = os.path.join(CHARS, char_id)
     pdir = os.path.join(PLACES, place_id)
+    view, _vnote = pick_full_view(char_id, view, say=(None if quiet else print))
     src = os.path.join(cdir, view + ".png")
     if not os.path.isfile(src):
         raise SystemExit("no such view: %s" % src)
