@@ -634,6 +634,49 @@ def _render_shot_keyframe(f, shid, plan):
 
 # ─── takes ──────────────────────────────────────────────────────────────────────────
 
+def _last_frame(video, dest):
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-sseof", "-0.3", "-i", video,
+                    "-frames:v", "1", "-update", "1", dest], capture_output=True)
+    return dest if os.path.exists(dest) else None
+
+
+def _scene_drift(video, start_img, tag):
+    """How much of the start picture's content the last frame has lost.
+    -> {"lost": 0..1, "missing": [...], "kept": n} or None if it cannot be judged."""
+    try:
+        run, set_path, load_wf, ensure_local, HOST, comfy_dir = _comfy()
+        last = _last_frame(video, os.path.join(comfy_dir, "input", "drift_%s_last.png" % tag))
+        if not last:
+            return {"error": "could not extract the last frame of %s" % os.path.basename(video)}
+        shutil.copy(start_img, os.path.join(comfy_dir, "input", "drift_%s_start.png" % tag))
+        a = _caption_scene("drift_%s_start.png" % tag)
+        time.sleep(1.1)   # the caption stamp is per second; two calls must not share one
+        b = _caption_scene("drift_%s_last.png" % tag)
+        if not a or not b:
+            return {"error": "caption empty (start %d chars, last %d chars)" % (len(a or ""), len(b or ""))}
+        A = {_stem(w) for w in _content_words(a)}
+        B = {_stem(w) for w in _content_words(b)}
+        if len(A) < 4:
+            return {"error": "start caption too thin: %r" % a[:80]}
+        missing = []
+        for w in sorted(A):
+            if w in B or any(w[:5] == x[:5] for x in B if len(x) >= 5):
+                continue
+            syn = _SYN.get(w, ())
+            if any(_stem(x) in B for x in syn):
+                continue
+            missing.append(w)
+        lost = len(missing) / float(len(A))
+        return {"lost": round(lost, 2), "missing": missing[:12], "kept": len(A) - len(missing)}
+    except Exception as e:
+        return {"error": str(e)[:160]}
+
+
+# calibrated on 2026-09-04: a take that turned a bridge into a marina lost 0.72;
+# takes that held their scene lost 0.09-0.29; one uncertain take 0.50
+DRIFT_LIMIT = 0.6
+
+
 def _render_take(jid, f, sh, eng, seed):
     run, set_path, load_wf, ensure_local, HOST, COMFY = _comfy()
     flat = f.flat(sh["id"])
@@ -697,11 +740,27 @@ def _render_take(jid, f, sh, eng, seed):
             os.remove(silent)
         _thumbs(dest, dest[:-4])
         qc = _qc(dest)
+        try:
+            _start = _resolve_anchor_file(f, sh["id"], jid)
+            _d = _scene_drift(dest, _start, "%s_%s" % (f.id, sh["id"])) if _start else None
+        except Exception as e:
+            _d = {"error": "anchor: %s" % str(e)[:120]}
+        if _d and _d.get("error"):
+            _log(jid, "drift check unavailable: %s" % _d["error"])
+            _d = None
+        if _d and _d["lost"] > DRIFT_LIMIT and len(sh.get("beats") or []) <= 1:
+            qc = list(qc) + ["scene drift: the last frame has lost %d%% of the start "
+                             "picture (%s)" % (int(_d["lost"] * 100), ", ".join(_d["missing"][:5]))]
+            _log(jid, "scene drift %d%% - %s" % (int(_d["lost"] * 100), ", ".join(_d["missing"][:5])))
+        elif _d:
+            _log(jid, "scene held (%d%% of the start picture's content in the last frame)"
+                 % int((1 - _d["lost"]) * 100))
         v = camrig.verdict(rig, cam.get("params") or {}, cam.get("preset") or None)
         take = {"id": tid, "engine": "cam", "seed": 0,
                 "created": time.strftime("%H:%M"), "file": rel,
                 "poster": rel[:-4] + ".png", "strip": rel[:-4] + "_strip.png",
                 "duration": round(_dur(dest), 2), "fps": _fps(dest), "qc": qc,
+                "drift": _d,
                 "warnings": ([] if v.get("pass", True) else
                              ["camrig shape test FAILED: %s" % v]),
                 "prompt": "camrig %s%s %s" % (rig,
@@ -735,9 +794,24 @@ def _render_take(jid, f, sh, eng, seed):
     ensure_local(vids[0], dest)
     _thumbs(dest, dest[:-4])
     qc = _qc(dest)
+    try:
+        _start = _resolve_anchor_file(f, sh["id"], jid)
+        _d = _scene_drift(dest, _start, "%s_%s" % (f.id, sh["id"])) if _start else None
+    except Exception as e:
+        _d = {"error": "anchor: %s" % str(e)[:120]}
+    if _d and _d.get("error"):
+        _log(jid, "drift check unavailable: %s" % _d["error"])
+        _d = None
+    if _d and _d["lost"] > DRIFT_LIMIT and len(sh.get("beats") or []) <= 1:
+        qc = list(qc) + ["scene drift: the last frame has lost %d%% of the start picture (%s)"
+                         % (int(_d["lost"] * 100), ", ".join(_d["missing"][:5]))]
+        _log(jid, "scene drift %d%% - %s" % (int(_d["lost"] * 100), ", ".join(_d["missing"][:5])))
+    elif _d:
+        _log(jid, "scene held (%d%% of the start picture's content in the last frame)" % int((1 - _d["lost"]) * 100))
     take = {"id": tid, "engine": eng, "seed": seed, "created": time.strftime("%H:%M"),
             "file": rel, "poster": rel[:-4] + ".png", "strip": rel[:-4] + "_strip.png",
             "duration": round(_dur(dest), 2), "fps": _fps(dest), "qc": qc,
+            "drift": _d,
             "warnings": c.get("warnings") or [], "prompt": c["prompt"][:400]}
     f2 = F.load(f.id)                          # re-load: takes may have landed meanwhile
     sh2 = f2.shot(sh["id"])
@@ -1814,12 +1888,21 @@ def _make_job(jid, fid, shid, seconds=None, seed=0):
             _render_take(jid, f, sh, "ltx", seed or random.randint(1, 10 ** 9))
             f = F.load(fid)
             sh = f.shot(shid)
-            takes = sh.get("takes") or []
-            if takes:
-                newest = sorted(takes, key=lambda t: t["id"])[-1]
+            takes = sorted(sh.get("takes") or [], key=lambda t: t["id"])
+            newest = takes[-1] if takes else None
+            if newest and any(str(q).startswith("scene drift") for q in newest.get("qc") or []):
+                _log(jid, "the picture drifted - rendering once more on a new seed")
+                _render_take(jid, f, sh, "ltx", random.randint(1, 10 ** 9))
+                f = F.load(fid)
+                sh = f.shot(shid)
+                takes = sorted(sh.get("takes") or [], key=lambda t: t["id"])
+                cands = takes[-2:]
+                newest = sorted(cands, key=lambda t: (len(t.get("qc") or []),
+                                                      (t.get("drift") or {}).get("lost", 0)))[0]
+            if newest:
                 sh["picked"] = newest["id"]
                 f.save()
-                _log(jid, "done - %s%s" % (newest["id"], (" (QC: %s)" % ", ".join(newest["qc"]))
+                _log(jid, "done - %s%s" % (newest["id"], (" (QC: %s)" % "; ".join(newest["qc"]))
                                            if newest.get("qc") else ""))
         else:
             _log(jid, "done - the pose change is the picked take")
