@@ -1044,3 +1044,27 @@ What was not, and what each fault changed:
 
 The honest shape of "flawless" today: nothing wrong ships silently. Every fault
 the machine can see is on the take, in words a person can act on.
+
+## §39  Housekeeping for humans
+
+Small things a person without a terminal needs, added in the last hour of the
+second block:
+
+- **What to fix.** The Review tab lists, under the triage, every shot whose
+  picked take carries a note, with the note in the words it was written -
+  "words not in the picture: coffee, steam", "scene drift: the last frame has
+  lost 61% of the start picture", "the line may not have been spoken". Assembly
+  writes the same list into its log. Nothing wrong ships silently.
+- **Ends closer than it started.** LTX pushes in on nearly every take; when the
+  person fills the frame edge at the end (mask flush along more than a quarter
+  of the bottom, or a third of a side), the take says so. Information for the
+  director, not a re-roll: the push-in is the engine's prior, and a second seed
+  pushes in too. Measured on the coin shot: a wide became a medium close-up.
+- **Delete a film, softly.** A button on the Film tab, with a confirm. The
+  folder moves to `studio/films/_trash/<id>-<stamp>`; nothing is destroyed;
+  the trash stays out of git.
+- **The jobs list keeps running jobs.** A long make-all no longer falls off the
+  list it is being followed on.
+
+The rule underneath all four: the machine's judgement goes where the person is
+looking, in the person's words, and the person keeps the last word.
