@@ -521,9 +521,16 @@ def _compile_ltx(flat):
         speech, dsound = _dialogue_clause(b, cast, warnings, flat.get("look"))
         if dsound:
             dialogue_sounds.append(dsound)
-        action = (b.get("action") or "").strip()
+        action = action_with_motion((b.get("action") or "").strip(), b)
         _lint_action(action, flat, warnings, "ltx")
+        if b.get("motion"):
+            warnings.append("beat %d motion '%s' is advisory on LTX - measured, prose "
+                            "does not direct the subject's action here. Pin the shot "
+                            "to enforce it" % (i + 1, b["motion"]))
         bg = (b.get("background") or "").strip()
+        amb = ambient_clause(b)
+        if amb:
+            bg = ("%s; %s" % (bg, amb)) if bg else amb
         if i == 0:
             head_full = head + (" " + style_prefix if style_prefix else "")
             body = []
@@ -616,15 +623,19 @@ def _compile_h3(flat):
                         "beat(s) are ignored on this engine" % (len(beats) - 1))
     b = beats[0] if beats else {}
     subj = cast.expand(b.get("subject"))
-    action = (b.get("action") or "").strip() or "natural motion in the scene"
+    action = action_with_motion((b.get("action") or "").strip(), b) \
+        or "natural motion in the scene"
     _lint_action(action, flat, warnings, "h3")
     if (b.get("dialogue") or {}).get("line"):
         warnings.append("H3 dialogue is untested here - the line is left out of the "
                         "prompt; put dialogue shots on LTX")
     bg = (b.get("background") or "").strip()
+    amb = ambient_clause(b)
+    if amb:
+        bg = ("%s; %s" % (bg, amb)) if bg else amb
     if not bg:
         warnings.append("no background action - H3 animates only what the clause names; "
-                        "an unnamed background freezes")
+                        "an unnamed background freezes. Pick ambient motion on the beat")
     body = ", ".join(x for x in [subj and ("%s %s" % (subj, action)) or action, bg] if x)
     style = ("Anime animation. " if flat.get("look") == "anime" else "")
     amb = (flat.get("ambience") or "").strip()
@@ -772,6 +783,48 @@ def triage_film(film):
         out["shots"][sh["id"]] = tr
         out["counts"][tr["verdict"]] += 1
     return out
+
+
+# ── foundry motion vocabulary ───────────────────────────────────────────────────────
+
+_DICT_CACHE = {}
+
+
+def _dictionary():
+    p = os.path.join(os.path.dirname(os.path.abspath(__file__)), "foundry",
+                     "dictionary.json")
+    try:
+        mt = os.path.getmtime(p)
+    except OSError:
+        return {}
+    if _DICT_CACHE.get("mtime") != mt:
+        with open(p, encoding="utf-8") as fh:
+            _DICT_CACHE.update(mtime=mt, data=json.load(fh))
+    return _DICT_CACHE.get("data") or {}
+
+
+def motion_option(sub, key):
+    """The dictionary entry for motion/<sub>/<key>, or {}."""
+    if not key:
+        return {}
+    opts = (((_dictionary().get("motion") or {}).get("subs") or {})
+            .get(sub) or {}).get("options") or []
+    return next((o for o in opts if o.get("id") == key), {})
+
+
+def ambient_clause(beat):
+    """Every named ambient motion, as one clause. Unnamed backgrounds freeze."""
+    frags = [motion_option("ambient", k).get("frag", "")
+             for k in (beat.get("ambient") or [])]
+    return "; ".join(f for f in frags if f)
+
+
+def action_with_motion(action, beat):
+    """The typed action plus the selected motion's frag, if any."""
+    frag = motion_option("action", beat.get("motion")).get("frag", "")
+    if not frag or frag.lower() in (action or "").lower():
+        return action
+    return ("%s; %s" % (action, frag)) if action else frag
 
 
 # ── selftest ────────────────────────────────────────────────────────────────────────

@@ -1577,87 +1577,104 @@
      {
       "id": "stand",
       "label": "Stand still",
-      "frag": "stands still, breathing, weight settled"
+      "frag": "stands still, breathing, weight settled",
+      "end": "stands exactly as before, weight settled"
      },
      {
       "id": "walk_to",
       "label": "Walk toward camera",
-      "frag": "walks steadily toward the camera"
+      "frag": "walks steadily toward the camera",
+      "end": "has walked closer to the camera and is larger in the frame"
      },
      {
       "id": "walk_away",
       "label": "Walk away",
-      "frag": "walks away from the camera, unhurried"
+      "frag": "walks away from the camera, unhurried",
+      "end": "has walked further from the camera and is smaller in the frame"
      },
      {
       "id": "turn_to",
       "label": "Turn to camera",
-      "frag": "turns to face the camera, the whole body coming round with the head"
+      "frag": "turns to face the camera, the whole body coming round with the head",
+      "end": "has turned to face the camera squarely"
      },
      {
       "id": "look_up",
       "label": "Look up",
-      "frag": "raises their head and looks up"
+      "frag": "raises their head and looks up",
+      "end": "has raised their head and is looking up"
      },
      {
       "id": "look_off",
       "label": "Look off",
-      "frag": "turns their head to look off to one side"
+      "frag": "turns their head to look off to one side",
+      "end": "has turned their head to look off to one side"
      },
      {
       "id": "reach",
       "label": "Reach for something",
-      "frag": "reaches out with one hand, the shoulder and torso going with it"
+      "frag": "reaches out with one hand, the shoulder and torso going with it",
+      "end": "has one arm fully extended, reaching out"
      },
      {
       "id": "crouch",
       "label": "Crouch down",
-      "frag": "lowers into a crouch, the whole body folding down"
+      "frag": "lowers into a crouch, the whole body folding down",
+      "end": "has lowered into a deep crouch, knees bent, weight low"
      },
      {
       "id": "rise",
       "label": "Rise",
-      "frag": "straightens up from a crouch to standing"
+      "frag": "straightens up from a crouch to standing",
+      "end": "is standing fully upright, risen from the crouch"
      },
      {
       "id": "run",
       "label": "Run",
-      "frag": "runs, the whole body committed to the stride"
+      "frag": "runs, the whole body committed to the stride",
+      "end": "is mid-stride, running, the whole body committed"
      },
      {
       "id": "stumble",
       "label": "Stumble",
-      "frag": "loses balance and catches themselves"
+      "frag": "loses balance and catches themselves",
+      "end": "has lost their balance, body tilted, one hand out to catch themselves"
      },
      {
       "id": "recoil",
       "label": "Recoil",
-      "frag": "pulls sharply back, the whole body flinching"
+      "frag": "pulls sharply back, the whole body flinching",
+      "end": "has pulled sharply back, the whole body flinching away"
      },
      {
       "id": "gesture",
       "label": "Gesture",
-      "frag": "makes one clear gesture with the arm"
+      "frag": "makes one clear gesture with the arm",
+      "end": "has one arm raised in a clear gesture"
      },
      {
       "id": "nod",
       "label": "Nod",
-      "frag": "nods once, deliberately"
+      "frag": "nods once, deliberately",
+      "end": "has their head bowed in a nod"
      },
      {
       "id": "laugh",
       "label": "Laugh",
-      "frag": "laughs, the shoulders going with it"
+      "frag": "laughs, the shoulders going with it",
+      "end": "is laughing, head back, shoulders lifted"
      },
      {
       "id": "speak",
       "label": "Speak",
-      "frag": "speaks, mouth moving"
+      "frag": "speaks, mouth moving",
+      "end": "has their mouth open mid-word"
      },
      {
       "id": "crouching",
       "label": "Crouching",
-      "frag": "is crouched down low, knees bent, weight settled, staying there"
+      "frag": "is crouched down low, knees bent, weight settled, staying there",
+      "end": "is crouched down low, knees bent, weight settled"
      }
     ]
    },
@@ -1895,6 +1912,73 @@
       "id": "macro",
       "label": "Extreme macro",
       "frag": "an extreme macro shot"
+     }
+    ]
+   }
+  }
+ },
+ "bobblehead": {
+  "main": true,
+  "label": "Bobblehead",
+  "note": "Proportion and head treatment are independent axes: a mega-scale faithful portrait and a classic-scale caricature are different objects and both are wanted. Proportion options carry millimetres rather than prompt text.",
+  "subs": {
+   "proportion": {
+    "label": "Proportion",
+    "note": "Head mass grows with the CUBE of head height while the socket that carries it grows with the neck - and exaggerating the ratio makes the body, and so the neck, smaller. MEASURED in PLA: a 95 mm head is 457 g solid, a 165 mm head is 2404 g. The big ones are hollow by necessity, not by preference.",
+    "options": [
+     {
+      "id": "statuette",
+      "label": "Statuette",
+      "frag": "",
+      "body_mm": 130.0,
+      "head_mm": 55.0,
+      "hollow": false,
+      "say": "true human proportion - a small standing portrait, not a bobblehead"
+     },
+     {
+      "id": "classic",
+      "label": "Classic",
+      "frag": "",
+      "body_mm": 110.0,
+      "head_mm": 95.0,
+      "hollow": false,
+      "say": "the familiar souvenir proportion, head about as tall as the body"
+     },
+     {
+      "id": "caricature",
+      "label": "Caricature",
+      "frag": "",
+      "body_mm": 95.0,
+      "head_mm": 125.0,
+      "hollow": true,
+      "say": "head half again the body - clearly exaggerated, still shelf-sized"
+     },
+     {
+      "id": "mega",
+      "label": "Mega head",
+      "frag": "",
+      "body_mm": 80.0,
+      "head_mm": 165.0,
+      "hollow": true,
+      "say": "head twice the body. Must print hollow; check the spring load"
+     }
+    ]
+   },
+   "head_treatment": {
+    "label": "Head",
+    "note": "A caricature AMPLIFIES what is there and never adds. The fragment is written as a rule rather than a description on purpose: naming a big nose gives every subject a big nose, which is a caricature of nobody. Same failure as describing one person's hair in FIGURE_PRESERVE and imposing it on everyone.",
+    "options": [
+     {
+      "id": "faithful",
+      "label": "Faithful likeness",
+      "frag": "",
+      "say": "the person as photographed"
+     },
+     {
+      "id": "caricature",
+      "label": "Caricature",
+      "frag": "Redraw this as a caricature sculpture of this exact person, keeping them instantly recognisable as themselves. Work only from what is already in the photograph: every feature you exaggerate must be one that is visibly there, drawn further in the direction it already goes. Whatever is already the most distinctive thing about this face becomes more so, and whatever is ordinary about it stays ordinary. Keep the same hair, the same colouring, the same expression and the same clothing. Make the head large and the features bold enough to read as a sculpture, on the flat plain light grey background with even shadowless lighting.",
+      "say": "their own most distinctive features, drawn further"
      }
     ]
    }

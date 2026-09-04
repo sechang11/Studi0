@@ -49,6 +49,14 @@ for p in (TOOLS, os.path.join(ROOT, "scripts")):
 CHARS = os.path.join(ROOT, "studio", "foundry", "characters")
 PLACES = os.path.join(ROOT, "studio", "foundry", "places")
 OUT_DIR = os.path.join(ROOT, "studio", "foundry", "composites")
+PROPS = os.path.join(ROOT, "studio", "foundry", "props")
+
+# How tall a prop is in the world, in metres, by dictionary category. The depth
+# pass sizes a 1.7 m person; a prop is that height scaled by this. An asset can
+# override with "size_m" in its asset.json.
+PROP_M = {"sword": 1.0, "staff": 1.7, "bow": 1.6, "dagger": 0.35, "umbrella": 0.95,
+          "lantern": 0.4, "book": 0.25, "satchel": 0.4}
+PROP_M_DEFAULT = 0.5
 
 # Framing is (height as a fraction of frame, where the BOTTOM of the source image
 # lands as a fraction of frame). Two tables, because the anchor means different
@@ -355,16 +363,45 @@ def place_cut(plate, cut, framing="full", cx=0.42, view="turn_front"):
     return cut, x, y
 
 
+def prop_layer(prop_id, plate, dpath, stand, cx, view="hero", seed=7, work=None,
+               framing="full"):
+    """Cut a prop's view and size it for its depth. -> (cut, x, y), bottom at
+    the ground line for that stand."""
+    from PIL import Image
+    pdir = os.path.join(PROPS, prop_id)
+    src = os.path.join(pdir, view + ".png")
+    if not os.path.isfile(src):
+        raise SystemExit("no such prop view: %s" % src)
+    meta = json.load(open(os.path.join(pdir, "asset.json"), encoding="utf-8"))
+    cat = (meta.get("selections") or {}).get("category") or ""
+    size_m = float(meta.get("size_m") or PROP_M.get(cat, PROP_M_DEFAULT))
+    cut_p = cutout(src, os.path.join(work or OUT_DIR, "prop_%s_cut.png" % prop_id),
+                   tag="p" + str(seed))
+    cut = _trim(Image.open(cut_p).convert("RGBA"))
+    W, H = plate.size
+    if dpath is not None:
+        y_feet, th_person, _ = place_by_depth(plate, dpath, stand, cx)
+        th = max(8, int(th_person * size_m / 1.7))
+    else:
+        scale, feet = _framings_for("turn_front")[framing]
+        th = max(8, int(H * scale * size_m / 1.7))
+        y_feet = int(H * feet)
+    tw = max(1, int(cut.width * th / cut.height))
+    cut = cut.resize((tw, th), Image.LANCZOS)
+    return cut, int(W * cx) - tw // 2, y_feet - th
+
+
 def compose(char_id, place_id, plate_key=None, view="turn_front",
             framing="full", cx=0.42, light=-0.35, seed=7, tag=None,
-            quiet=False, stand=None):
+            quiet=False, stand=None, props=None):
     from PIL import Image
     cdir = os.path.join(CHARS, char_id)
     pdir = os.path.join(PLACES, place_id)
     src = os.path.join(cdir, view + ".png")
     if not os.path.isfile(src):
         raise SystemExit("no such view: %s" % src)
-    plates = sorted(f for f in os.listdir(pdir) if f.endswith(".png"))
+    plates = sorted(f for f in os.listdir(pdir)
+                    if f.endswith(".png") and not f.endswith("_depth.png"))
     if plate_key:
         pf = plate_key if plate_key.endswith(".png") else plate_key + ".png"
     else:
@@ -464,17 +501,28 @@ def compose(char_id, place_id, plate_key=None, view="turn_front",
     else:
         rc, rx, ry = place_cut(plate, rc, framing, cx, view)
 
-    # 4 + 5 ground her, then paste onto the plate that was never touched
+    # 4 + 5 ground everything, far to near, onto the plate that was never touched.
+    # Props are layers like her: same depth pass, their own world size.
     say("  4 shadow + paste")
-    final = ground(plate, rc, rx, ry, light=light)
-    final.paste(rc, (rx, ry), rc)
+    c_stand = stand if stand is not None else 0.5
+    layers = [(c_stand, rc, rx, ry)]
+    for p in (props or []):
+        p_stand = float(p.get("stand", c_stand))
+        pc, px, py = prop_layer(p["id"], plate, dpath, p_stand,
+                                float(p.get("cx", 0.6)), view=p.get("view", "hero"),
+                                seed=seed, work=work, framing=framing)
+        layers.append((p_stand, pc, px, py))
+        say("  + prop %s at stand %.2f, %dpx tall" % (p["id"], p_stand, pc.height))
+    final = plate.copy()
+    for _, lc, lx, ly in sorted(layers, key=lambda L: -L[0]):   # far first
+        final = ground(final, lc, lx, ly, light=light)
+        final.paste(lc, (lx, ly), lc)
     out_p = os.path.join(work, "final.png")
     final.save(out_p)
-
     json.dump({"character": char_id, "view": view, "place": place_id,
                "plate": pf, "framing": framing, "cx": cx, "light": light,
-               "seed": seed, "stand": stand}, open(os.path.join(work, "recipe.json"), "w"),
-              indent=1)
+               "seed": seed, "stand": stand, "props": props or []},
+              open(os.path.join(work, "recipe.json"), "w"), indent=1)
     return out_p, plate_p
 
 
@@ -516,6 +564,11 @@ H3_FPS = 24
 # the subject's own region. Below this the model has nothing to interpolate and
 # invents. See the module note above for the three measurements behind it.
 MIN_PIN_RATE = 0.009
+# When the end frame is the figure alone on the pristine plate, the background
+# contributes nothing to the distance and the number is smaller for the same
+# motion. One verified interpolation (the crouch) measures 0.0052/s this way;
+# the floor sits at half of it. First calibration - one data point.
+MIN_PIN_RATE_PLATE = 0.0026
 
 
 def _subject_distance(a_path, b_path):
@@ -532,12 +585,19 @@ def _subject_distance(a_path, b_path):
     return sum(abs(x - y) for x, y in zip(pa, pb)) / (255.0 * len(pa))
 
 
-def pin_feasible(start_path, end_path, seconds):
-    """-> (ok, rate, the longest duration this pair can actually carry)."""
+def pin_floor(on_plate=False):
+    return MIN_PIN_RATE_PLATE if on_plate else MIN_PIN_RATE
+
+
+def pin_feasible(start_path, end_path, seconds, on_plate=False):
+    """-> (ok, rate, the longest duration this pair can actually carry).
+    `on_plate`: the end frame shares the start frame's background exactly, so
+    the smaller floor applies."""
     d = _subject_distance(start_path, end_path)
     rate = d / max(0.1, seconds)
-    longest = d / MIN_PIN_RATE
-    return rate >= MIN_PIN_RATE, rate, longest
+    floor = pin_floor(on_plate)
+    longest = d / floor
+    return rate >= floor, rate, longest
 
 
 def h3_length(seconds):
@@ -547,23 +607,59 @@ def h3_length(seconds):
     return int(17 * n + 5)
 
 
-def end_state(start_path, change, dest, seed=11, keep=None):
+def plate_for(place_id, plate_key=None):
+    """The plate compose() would pick for this place - the same rule, so a
+    caller that only knows the place can find the pristine background."""
+    pdir = os.path.join(PLACES, place_id)
+    plates = sorted(f for f in os.listdir(pdir)
+                    if f.endswith(".png") and not f.endswith("_depth.png"))
+    if plate_key:
+        pf = plate_key if plate_key.endswith(".png") else plate_key + ".png"
+    else:
+        pf = next((p for p in plates if p.endswith("_wide.png")), plates[0])
+    return os.path.join(pdir, pf)
+
+
+def end_state(start_path, change, dest, seed=11, keep=None, plate_path=None,
+              light=-0.35):
     """The start frame, edited so ONE thing about the subject is different.
 
     `change` says what moved - "she has lowered into a deep crouch, knees bent".
     Everything not named is held, because an end frame that also moved the
     camera or relit the scene turns an interpolation into a dissolve.
+
+    qwen-edit regenerates the whole frame, background included, however firmly
+    it is told not to. With `plate_path` - the pristine plate the start frame
+    was composed on - the figure is cut out of the regeneration and put back on
+    that plate with its shadow, so both ends of the pin share one background.
     """
     from PIL import Image
     plate = Image.open(start_path)
     rel = stage(start_path, "pin_src.png")
     hold = keep or ("her face, her hair, her clothing and the whole background")
-    return qwen_edit(
+    raw_dest = dest if not plate_path else dest[:-4] + "_raw.png"
+    raw = qwen_edit(
         rel, rel,
         "The same subject in the same place, but %s. Keep %s exactly as they "
         "are. Same camera position, same framing, same light. Only the pose "
         "changes." % (change, hold),
-        dest, seed=seed, w=plate.size[0], h=plate.size[1], anime=0.0)
+        raw_dest, seed=seed, w=plate.size[0], h=plate.size[1], anime=0.0)
+    if not plate_path:
+        return raw
+    # the figure only, back onto the background that never moved
+    cut_p = cutout(raw, dest[:-4] + "_cut.png", tag="e" + str(seed))
+    cut = Image.open(cut_p).convert("RGBA")
+    bg = Image.open(plate_path).convert("RGB")
+    if bg.size != cut.size:
+        bg = bg.resize(cut.size, Image.LANCZOS)
+    box = cut.getbbox()
+    if not box:
+        return raw          # nothing cut out - keep the regeneration, honestly
+    fig = cut.crop(box)
+    final = ground(bg, fig, box[0], box[1], light=light)
+    final.paste(fig, (box[0], box[1]), fig)
+    final.save(dest)
+    return dest
 
 
 def pin_shot(start_path, end_path, prompt, dest, seconds=8, seed=42,

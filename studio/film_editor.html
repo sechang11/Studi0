@@ -99,7 +99,7 @@ img.anchor{width:100%;border-radius:6px;margin-top:6px}
 <script>
 "use strict";
 let FID="", TREE=null, LIBS=null, SHOT=null, DETAIL=null, COMPILED=null, TAB="shot";
-let WATCH=new Set(), SCENE_SEL="", FOUNDRY={};
+let WATCH=new Set(), SCENE_SEL="", FOUNDRY={}, DICT={};
 
 const $=q=>document.querySelector(q);
 const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -117,13 +117,23 @@ async function composeAnchor(){
     place:document.getElementById("c_place").value,
     plate:document.getElementById("c_plate").value,
     stand:parseFloat(document.getElementById("c_stand").value||"0.35"),
-    cx:parseFloat(document.getElementById("c_cx").value||"0.42")});
+    cx:parseFloat(document.getElementById("c_cx").value||"0.42"),
+    props:(document.getElementById("c_prop").value?[{id:document.getElementById("c_prop").value,
+      stand:parseFloat(document.getElementById("c_pstand").value||"0.3"),
+      cx:parseFloat(document.getElementById("c_pcx").value||"0.62")}]:[])});
   WATCH.add(j.job); note("composing the anchor: "+j.job);
 }
-async function pinMotion(){
+async function pinPreview(){
   const change=document.getElementById("c_change").value.trim();
   if(!change) return note("say what changes by the end of the shot",true);
-  const j=await api("/pin",{film:FID,shot:SHOT,change:change,
+  const j=await api("/pinpreview",{film:FID,shot:SHOT,change:change,
+    seconds:parseFloat(document.getElementById("c_secs").value||"8")});
+  WATCH.add(j.job); note("editing the end frame: "+j.job);
+}
+async function pinMotion(force){
+  const change=document.getElementById("c_change").value.trim();
+  if(!change) return note("say what changes by the end of the shot",true);
+  const j=await api("/pin",{film:FID,shot:SHOT,change:change,force:!!force,
     seconds:parseFloat(document.getElementById("c_secs").value||"8")});
   WATCH.add(j.job); note("pinning: "+j.job);
 }
@@ -157,6 +167,7 @@ async function openFilm(fid){
   // what the foundry actually holds, so the pickers list real assets instead of
   // asking anyone to remember an id
   try{ FOUNDRY=(await api("/foundry_assets")).assets; }catch(e){ FOUNDRY={}; }
+  try{ DICT=await (await fetch("/api/foundry/dictionary")).json(); }catch(e){ DICT={}; }
   $("#filmlink").style.display=TREE.film?"":"none";
   $("#filmlink").href=m("assets/film.mp4");
   renderTimeline();
@@ -341,6 +352,20 @@ function renderRight(){
   $("#right").innerHTML=h;
 }
 const opt=(list,cur)=>list.map(v=>`<option ${v===cur?"selected":""}>${v}</option>`).join("");
+// options from the foundry dictionary: DICT[main].subs[sub].options = [{id,label,frag,...}]
+function dictOpts(main,sub,cur,multi){
+  const os=((((DICT||{})[main]||{}).subs||{})[sub]||{}).options||[];
+  const sel=v=>multi?(cur||[]).includes(v):v===cur;
+  return (multi?"":`<option value="" ${cur?"":"selected"}>none</option>`)+
+    os.filter(o=>o.id!=="none"||multi).map(o=>
+      `<option value="${o.id}" ${sel(o.id)?"selected":""} title="${esc(o.frag||"")}">${esc(o.label||o.id)}</option>`).join("");
+}
+// the selected motion writes the pin's end-state sentence, unless one was typed
+function prefillChange(el){
+  const o=(((((DICT||{}).motion||{}).subs||{}).action||{}).options||[]).find(x=>x.id===el.value);
+  const c=document.getElementById("c_change");
+  if(o&&o.end&&c&&(!c.value.trim()||c.dataset.auto==="1")){ c.value="the subject "+o.end; c.dataset.auto="1"; }
+}
 const castOpts=cur=>`<option value=""></option>`+Object.keys(TREE.cast||{}).map(c=>
   `<option ${c===cur?"selected":""}>${c}</option>`).join("");
 
@@ -359,6 +384,12 @@ function shotForm(){
       <input class="b_subject" list="castlist" value="${esc(b.subject)}" style="width:100%">
       <label>action</label><textarea class="b_action" rows="2">${esc(b.action)}</textarea>
       <label>background action</label><textarea class="b_background" rows="1">${esc(b.background)}</textarea>
+      <div class="row">
+        <div class="grow"><label>motion - advisory on LTX, enforced by a pin</label>
+          <select class="b_motion" onchange="prefillChange(this)">${dictOpts("motion","action",b.motion||"")}</select></div>
+        <div class="grow"><label>ambient - name what moves, or it freezes</label>
+          <select class="b_ambient" multiple size="3" style="width:100%">${dictOpts("motion","ambient",b.ambient||[],true)}</select></div>
+      </div>
       <div class="row">
         <div><label>dialogue - char</label><select class="b_dchar">${castOpts((b.dialogue||{}).char)}</select></div>
         <div class="grow"><label>line</label><input class="b_dline" value="${esc((b.dialogue||{}).line)}" style="width:100%"></div>
@@ -397,6 +428,14 @@ function shotForm(){
       <div><label>across 0-1</label><input id="c_cx" value="0.42" style="width:70px"></div>
       <button class="small" onclick="composeAnchor()">compose</button>
     </div>
+    <div class="row" style="margin-top:4px;gap:6px;align-items:flex-end">
+      <div><label>prop (optional)</label>
+        <select id="c_prop"><option value="">none</option>${(FOUNDRY.prop||[]).map(p=>
+          `<option value="${p.id}">${esc(p.name)} (${esc(p.style)})</option>`).join("")}</select></div>
+      <div><label>prop stand</label><input id="c_pstand" value="0.30" style="width:70px"></div>
+      <div><label>prop across</label><input id="c_pcx" value="0.62" style="width:70px"></div>
+      <span class="hint">sized for its depth from what it is - a lantern stays lantern-sized next to her</span>
+    </div>
     <div class="hint">stand is how far into the scene: 0 at the camera, 1 at the
       horizon. It sets the size too, from the plate's own depth.
       ${sh.anchor_source?`<b style="color:var(--good)">this anchor was composed:
@@ -405,9 +444,19 @@ function shotForm(){
       <div style="flex:1"><label>pin the motion - what changes by the end</label>
         <input id="c_change" placeholder="she has lowered into a deep crouch, knees bent"
                value="${esc((sh.takes||[]).filter(t=>t.pin)[0]?.pin?.change||"")}"></div>
-      <div><label>seconds</label><input id="c_secs" value="8" style="width:70px"></div>
-      <button class="small" onclick="pinMotion()">pin</button>
+      <div><label>seconds</label><input id="c_secs" value="${esc(String((sh.pin_preview||{}).seconds||8))}" style="width:70px"></div>
+      <button class="small" onclick="pinPreview()">preview end</button>
+      <button class="small" onclick="pinMotion(false)">${sh.pin_preview?"pin from this end frame":"pin"}</button>
+      ${sh.pin_preview&&!sh.pin_preview.ok?`<button class="small" onclick="pinMotion(true)" title="below the change floor - interpolate anyway">pin anyway</button>`:""}
     </div>
+    ${sh.pin_preview?`<div class="row" style="margin-top:6px;gap:10px;align-items:flex-start">
+      <img src="${m(sh.pin_preview.end)}?t=${sh.pin_preview.when}" style="width:220px;border-radius:4px;border:1px solid ${sh.pin_preview.ok?"var(--good)":"var(--bad,#e05a5a)"}">
+      <div class="hint" style="flex:1">end frame for <i>${esc(sh.pin_preview.change)}</i><br>
+        ${sh.pin_preview.ok
+          ?`<b style="color:var(--good)">enough change</b> for ${esc(String(sh.pin_preview.seconds))}s (${sh.pin_preview.rate}/s). Pin uses this exact frame.`
+          :`<b style="color:var(--bad,#e05a5a)">too alike</b> for ${esc(String(sh.pin_preview.seconds))}s (${sh.pin_preview.rate}/s) - the model would invent rather than interpolate. Bigger change, or ${sh.pin_preview.longest}s or less.`}
+        <br>Not the end you meant? Change the words and preview again; the pin always takes the latest preview.</div>
+    </div>`:""}
     <div class="hint">the end state is an EDIT of this shot's anchor, so compose one
       first. A pin needs enough change per second - too little and the model
       invents rather than interpolates, and it will say so rather than render it.</div>
@@ -425,6 +474,8 @@ function readBeats(){
   return [...document.querySelectorAll(".beat")].map((el,i)=>({
     framing:el.querySelector(".b_framing").value,
     move:el.querySelector(".b_move").value,
+    motion:el.querySelector(".b_motion").value,
+    ambient:[...el.querySelector(".b_ambient").selectedOptions].map(o=>o.value).filter(v=>v&&v!=="none"),
     transition_in:i?(el.querySelector(".b_tin")?.value||"hard cut"):"",
     subject:el.querySelector(".b_subject").value.trim(),
     action:el.querySelector(".b_action").value.trim(),

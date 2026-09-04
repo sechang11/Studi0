@@ -1216,12 +1216,14 @@ def _compose_mod():
 
 
 def _compose_anchor_job(jid, fid, shid, char_id, place_id, plate, view,
-                        stand, cx):
+                        stand, cx, props=None):
     try:
         CM = _compose_mod()
-        _log(jid, "composing %s into %s" % (char_id, place_id))
+        _log(jid, "composing %s into %s%s" % (
+            char_id, place_id,
+            (" with " + ", ".join(p["id"] for p in props)) if props else ""))
         out, plate_p = CM.compose(char_id, place_id, plate, view, "full", cx,
-                                  stand=stand, quiet=True)
+                                  stand=stand, quiet=True, props=props or None)
         l, r = CM.fidelity(plate_p, out)
         _log(jid, "plate fidelity L=%.4f R=%.4f" % (l, r))
         f = F.load(fid)
@@ -1230,7 +1232,8 @@ def _compose_anchor_job(jid, fid, shid, char_id, place_id, plate, view,
         sh = f.shot(shid)
         sh["anchor"] = "file:" + os.path.join(f.dir, rel)
         sh["anchor_source"] = {"character": char_id, "place": place_id,
-                               "stand": stand, "cx": cx, "view": view}
+                               "stand": stand, "cx": cx, "view": view,
+                               "plate": plate_p, "props": props or []}
         f.save()
         with _LOCK:
             JOBS[jid]["result"] = {"anchor": rel, "fidelity": [l, r]}
@@ -1247,12 +1250,13 @@ def compose_anchor(data):
         args=(jid, data["film"], data["shot"], data["character"],
               data["place"], data.get("plate") or None,
               data.get("view") or "turn_front",
-              float(data.get("stand", 0.35)), float(data.get("cx", 0.42))),
+              float(data.get("stand", 0.35)), float(data.get("cx", 0.42)),
+              [p for p in (data.get("props") or []) if p.get("id")]),
         daemon=True).start()
     return {"job": jid}, 200
 
 
-def _pin_job(jid, fid, shid, change, seconds, seed):
+def _pin_job(jid, fid, shid, change, seconds, seed, force=False):
     try:
         CM = _compose_mod()
         f = F.load(fid)
@@ -1264,12 +1268,25 @@ def _pin_job(jid, fid, shid, change, seconds, seed):
         start = anchor[5:]
         work = os.path.join(f.dir, "assets")
         os.makedirs(work, exist_ok=True)
-        _log(jid, "editing the end state")
-        end = CM.end_state(start, change,
-                           os.path.join(work, "pin_end_%s.png" % shid))
-        ok, rate, longest = CM.pin_feasible(start, end, seconds)
-        _log(jid, "pin rate %.4f/s (floor %.3f), carries %.1fs"
-             % (rate, CM.MIN_PIN_RATE, longest))
+        pv = sh.get("pin_preview") or {}
+        end = os.path.join(f.dir, pv.get("end") or "")
+        plate_p = _plate_of(sh, CM)
+        if pv.get("change") == change and pv.get("end") and os.path.exists(end):
+            # the frame the director looked at is the frame that gets interpolated
+            _log(jid, "using the previewed end frame")
+        else:
+            _log(jid, "editing the end state%s"
+                 % (" on the pristine plate" if plate_p else ""))
+            end = CM.end_state(start, change,
+                               os.path.join(work, "pin_end_%s.png" % shid),
+                               plate_path=plate_p)
+        ok, rate, longest = CM.pin_feasible(start, end, seconds,
+                                            on_plate=bool(plate_p))
+        _log(jid, "pin rate %.4f/s (floor %.4f), carries %.1fs"
+             % (rate, CM.pin_floor(bool(plate_p)), longest))
+        if not ok and force:
+            _log(jid, "below the floor, pinned anyway on the director's word")
+            ok = True
         if not ok:
             raise RuntimeError(
                 "the two frames are too alike for %.1fs: %.4f/s, below %.3f the "
@@ -1282,7 +1299,7 @@ def _pin_job(jid, fid, shid, change, seconds, seed):
         os.makedirs(os.path.dirname(dest), exist_ok=True)
         CM.pin_shot(start, end,
                     "%s. The camera does not move." % change,
-                    dest, seconds=seconds, seed=seed)
+                    dest, seconds=seconds, seed=seed, force=True)
         f = F.load(fid)
         sh = f.shot(shid)
         sh.setdefault("takes", []).append({
@@ -1300,13 +1317,79 @@ def _pin_job(jid, fid, shid, change, seconds, seed):
         _finish(jid, str(e)[:300])
 
 
+def _plate_of(sh, CM):
+    """The pristine plate a composed anchor was built on, if we can know it."""
+    src = sh.get("anchor_source") or {}
+    if src.get("plate") and os.path.exists(str(src["plate"])):
+        return src["plate"]
+    if src.get("place"):
+        try:
+            return CM.plate_for(src["place"])
+        except Exception:
+            return None
+    return None
+
+
+def _pin_preview_job(jid, fid, shid, change, seconds, seed):
+    try:
+        CM = _compose_mod()
+        f = F.load(fid)
+        sh = f.shot(shid)
+        anchor = str(sh.get("anchor") or "")
+        if not anchor.startswith("file:"):
+            raise RuntimeError("a pinned shot needs a composed anchor first - "
+                               "the end state is an edit of it")
+        start = anchor[5:]
+        work = os.path.join(f.dir, "assets")
+        os.makedirs(work, exist_ok=True)
+        rel = "assets/pin_end_%s.png" % shid
+        plate_p = _plate_of(sh, CM)
+        _log(jid, "editing the end state%s"
+             % (" on the pristine plate" if plate_p else ""))
+        end = CM.end_state(start, change, os.path.join(f.dir, rel), seed=seed,
+                           plate_path=plate_p)
+        ok, rate, longest = CM.pin_feasible(start, end, seconds,
+                                            on_plate=bool(plate_p))
+        _log(jid, "pin rate %.4f/s (floor %.4f%s), carries %.1fs"
+             % (rate, CM.pin_floor(bool(plate_p)),
+                " on the pristine plate" if plate_p else "", longest))
+        f = F.load(fid)
+        sh = f.shot(shid)
+        sh["pin_preview"] = {"change": change, "seconds": seconds, "end": rel,
+                             "rate": round(rate, 4), "ok": bool(ok),
+                             "longest": round(longest, 1), "seed": seed,
+                             "when": int(time.time())}
+        f.save()
+        with _LOCK:
+            JOBS[jid]["result"] = dict(sh["pin_preview"])
+        _finish(jid)
+    except Exception as e:
+        _finish(jid, str(e)[:300])
+
+
+def pin_preview(data):
+    """Edit the end state and judge feasibility, then stop. Nothing is spent on
+    H3 until the director has seen the frame."""
+    fid, shid = data["film"], data["shot"]
+    change = (data.get("change") or "").strip()
+    if not change:
+        raise ValueError("say what changes by the end of the shot")
+    seconds = float(data.get("seconds") or 8)
+    seed = int(data.get("seed") or 11)
+    jid = _job("pinpreview", film=fid, shot=shid)
+    threading.Thread(target=_pin_preview_job,
+                     args=(jid, fid, shid, change, seconds, seed),
+                     daemon=True).start()
+    return {"ok": True, "job": jid}, 200
+
+
 def pin_shot(data):
     """Both ends chosen: the shot's anchor, and an edit of it. H3 interpolates."""
     jid = _job("pin", film=data["film"], shot=data["shot"])
     threading.Thread(
         target=_pin_job,
         args=(jid, data["film"], data["shot"], data["change"],
-              float(data.get("seconds", 8)), int(data.get("seed", 42))),
+              float(data.get("seconds", 8)), int(data.get("seed", 42)), bool(data.get("force"))),
         daemon=True).start()
     return {"job": jid}, 200
 
@@ -1321,13 +1404,15 @@ def foundry_assets(kind=None):
     FY = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(FY)
     out = {}
-    for t in ("character", "place"):
+    for t in ("character", "place", "prop"):
         rows = []
         for a in FY.list_assets(t):
             imgs = a.get("images") or {}
             rows.append({"id": a["id"], "name": a["name"],
                          "style": a.get("style", ""),
                          "views": sorted(imgs.keys()),
-                         "plates": sorted(imgs.values()) if t == "place" else []})
+                         "plates": sorted(v for v in imgs.values()
+                                          if not str(v).endswith("_depth.png"))
+                         if t == "place" else []})
         out[t] = rows
     return {"assets": out}, 200
