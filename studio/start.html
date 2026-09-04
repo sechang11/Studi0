@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Start here</title>
+<style>
+  :root{--bg:#121416;--panel:#1a1d21;--line:#2a2f35;--ink:#e8eae6;--dim:#9aa3a8;--accent:#e0a14a;--good:#6bc0a8;--warn:#d9a441}
+  body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+  main{max-width:880px;margin:0 auto;padding:28px 22px 60px}
+  h1{font-size:30px;margin:8px 0 4px;letter-spacing:-.01em}
+  .lead{color:var(--dim);font-size:17px;margin:0 0 26px;max-width:66ch}
+  .step{display:grid;grid-template-columns:56px 1fr;gap:16px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin:12px 0}
+  .num{font-size:30px;font-weight:700;color:var(--accent);line-height:1}
+  .step h2{margin:0 0 6px;font-size:19px}
+  .step p{margin:6px 0;max-width:68ch}
+  .step a.go{display:inline-block;margin-top:8px;padding:7px 14px;border-radius:6px;background:var(--accent);color:#1a1200;text-decoration:none;font-weight:600}
+  .step a.go:hover{filter:brightness(1.08)}
+  .step a.go:focus-visible,a:focus-visible{outline:2px solid var(--good);outline-offset:2px}
+  ul{margin:6px 0 0 0;padding-left:18px}
+  li{margin:3px 0}
+  .fine{color:var(--dim);font-size:14px}
+  .expect{border-left:3px solid var(--warn);padding:2px 0 2px 14px;margin:22px 0;color:var(--ink)}
+  .expect b{color:var(--warn)}
+  table{border-collapse:collapse;margin-top:8px;font-variant-numeric:tabular-nums}
+  td,th{padding:4px 12px 4px 0;text-align:left;border-bottom:1px solid var(--line);color:var(--ink)}
+  th{color:var(--dim);font-weight:500;font-size:13px}
+  code{background:#0f1113;padding:1px 5px;border-radius:4px;font-size:13px}
+  a{color:var(--accent)}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<main>
+  <h1>Start here</h1>
+  <p class="lead">This studio makes short films on this computer, with no account and no bill.
+    You choose people, places and what happens; it draws and animates them. You never have to
+    write a prompt. Three steps.</p>
+
+  <div class="step">
+    <div class="num">1</div>
+    <div>
+      <h2>Choose your people</h2>
+      <p>Every card on the Characters page is a person you can put in a film. Their face, body,
+        turnaround and expressions are already made, so they look the same in every shot.</p>
+      <ul>
+        <li>Want someone new? Click the <b>+</b> card. Describe them in a sentence, or pick traits
+          from lists (age, build, hair, clothes). Building a new person takes about two minutes.</li>
+        <li>You can also start from a photo, but only of someone who has agreed to it. The studio
+          asks you to confirm that.</li>
+        <li>A <b>level 1</b> badge means the person is ready to cast.</li>
+      </ul>
+      <a class="go" href="/characters">Open Characters</a>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="num">2</div>
+    <div>
+      <h2>Choose your places</h2>
+      <p>A place is a set: a street at night, a harbour in fog, a shrine in a forest. Each comes
+        with several background pictures (wide, reverse, detail) so a scene can cut between angles
+        and stay in the same place.</p>
+      <ul>
+        <li>The Foundry page lists places, props and costumes. Making a new place from lists takes
+          about a minute; it renders its own pictures.</li>
+        <li>Props (a lantern, a book, a radio) can sit in a shot. A prop a person must <em>hold</em>
+          should be part of the person instead: say so when you describe them.</li>
+      </ul>
+      <a class="go" href="/foundry">Open the Foundry</a>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="num">3</div>
+    <div>
+      <h2>Make a film</h2>
+      <p>In the film editor: <b>new film</b>, give it a name, choose the look (photoreal or anime)
+        and the resolution. Then, for each scene:</p>
+      <ul>
+        <li>Add the scene, pick <b>where it happens</b> (a place and a background picture), tick
+          who is present, save.</li>
+        <li>Click <b>generate coverage</b>. The studio lays out the usual shots for you: the wide,
+          the two-shot, a close on each person, an insert. The people are already in the pictures.</li>
+        <li>On each shot, write <b>what happens</b> in one sentence, pick a <b>motion</b> if someone
+          moves (crouch, turn, look up), add a spoken <b>line</b> if someone speaks, then press
+          <b>Make this shot</b>. It tells you what it is doing in plain words.</li>
+        <li>When every shot is made, <b>assemble</b> on the Review tab. Music is chosen per scene from
+          a few words.</li>
+      </ul>
+      <a class="go" href="/film">Open the film editor</a>
+    </div>
+  </div>
+
+  <div class="expect">
+    <b>What to expect.</b> A shot takes one to three minutes to make. A film of eight shots is about
+    twenty minutes of waiting, which you can spend writing the next scene. The Review tab tells you,
+    per shot, whether it can be made here as asked, whether it will differ from what you asked (and
+    why), or whether it needs an outside service. If a shot comes out wrong, press <b>Make this
+    shot</b> again: each attempt is kept and you pick the one you like.
+  </div>
+
+  <table>
+    <tr><th>you ask for</th><th>what the studio does well</th><th>what it does not do yet</th></tr>
+    <tr><td>a person standing, turning, crouching, looking, reaching, speaking</td><td>reliably, in place, same face</td><td></td></tr>
+    <tr><td>a person walking toward or away</td><td>the picture holds and the person stays put</td><td>the walk itself</td></tr>
+    <tr><td>two people in one frame</td><td>both keep their faces</td><td>three or more</td></tr>
+    <tr><td>a spoken line</td><td>the voice and the moving mouth, in photoreal</td><td>moving mouths in anime (the line still plays)</td></tr>
+    <tr><td>a shot longer than 30 seconds</td><td></td><td>split it, or cut</td></tr>
+  </table>
+
+  <p class="fine" style="margin-top:22px">Curious how it works underneath? The <a href="/docs">docs</a>
+    and the <a href="/verify/motion">verify page</a> show the measurements behind every rule. You do
+    not need them to make a film.</p>
+</main>
+</body>
+</html>

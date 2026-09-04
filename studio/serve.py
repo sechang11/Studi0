@@ -1218,6 +1218,7 @@ def _guides():
 # rather than quietly dropped - organising them is a separate pass.
 STUDIO_NAV = [
     ("studio", [
+        ("/start", "start here", "start.html"),
         ("/", "studio", "app.html"),
         ("/capabilities", "capabilities", "capabilities.html"),
         ("/guide", "guide", "guide.html"),
@@ -1992,6 +1993,10 @@ class H(http.server.SimpleHTTPRequestHandler):
         # and none is added.
         if path in ("/library", "/library.html"):
             return self._page("library.html")
+        if path in ("/start", "/start.html", "/begin", "/how"):
+            return self._page("start.html")
+        if path in ("/downloads", "/downloads.html"):
+            return self._page("downloads.html")
         if path in ("/encyclopedia", "/encyclopedia.html"):
             return self._page("encyclopedia.html")
         if path in ("/shorts", "/shorts.html"):
