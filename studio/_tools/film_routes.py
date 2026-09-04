@@ -1400,7 +1400,11 @@ flickering flicker glittering shimmering rippling drifting rolling curling risin
 sitting standing lying leaning waiting watching looking staring holding carrying wearing
 empty crowded busy quiet still silent distant nearby far near first last single few several
 many more most every each whole entire same other another new old ancient young little big
-small large tall short long wide narrow thick thin heavy light soft hard""".split())
+small large tall short long wide narrow thick thin heavy light soft hard
+sodium points point facing faces raises raise sees see steps step closer covered down left
+right forward back toward stir stirs town streaks ripples ripple wind breeze gust expression
+face hair hand hands arm arms chest head eyes eye shoulder shoulders knee knees feet foot leg
+legs body mouth lips brow skin fingers finger""".split())
 
 
 def _caption_scene(staged):
