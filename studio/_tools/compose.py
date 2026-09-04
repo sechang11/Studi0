@@ -159,20 +159,30 @@ def footing(plate_p, x, y, tag="foot"):
     return word
 
 
-def find_footing(plate, plate_p, dpath, stand, cx, say=None, max_checks=7):
+def find_footing(plate, plate_p, dpath, stand, cx, say=None, max_checks=7, near=None):
     """Keep the requested spot if it is solid; otherwise walk along the ground
     line, then a step nearer, until the plate says the surface is not water.
+    `near` is the main figure's cx: a second character looks beside them first,
+    so a two-shot stays a two-shot when the middle of the frame is water.
     -> (stand, cx, surface, checks)."""
     W, H = plate.size
     tried = []
     cands = [(stand, cx)]
+    if near is not None:
+        side = 1 if cx >= near else -1
+        for dx in (0.14 * side, -0.14 * side, 0.22 * side, -0.22 * side):
+            c = near + dx
+            if 0.08 <= c <= 0.92 and abs(c - near) >= 0.10:
+                cands.append((stand, c))
     for dx in (0.12, -0.12, 0.24, -0.24, 0.34, -0.34):
         c = cx + dx
         if 0.08 <= c <= 0.92:
             cands.append((stand, c))
     cands.append((max(0.05, stand - 0.1), cx))
     cands.append((min(0.9, stand + 0.15), cx))
-    for i, (s, c) in enumerate(cands[:max_checks]):
+    seen = set()
+    cands = [x for x in cands if not (round(x[1], 2) in seen or seen.add(round(x[1], 2)))]
+    for i, (s, c) in enumerate(cands[:max_checks + (3 if near is not None else 0)]):
         y_feet, th, _ = place_by_depth(plate, dpath, s, c)
         word = footing(plate_p, int(W * c), y_feet, tag="f%d" % i)
         tried.append((round(s, 2), round(c, 2), word))
@@ -461,7 +471,8 @@ def prop_layer(prop_id, plate, dpath, stand, cx, view="hero", seed=7, work=None,
 
 
 def character_layer(char_id, plate, dpath, stand, cx, view="turn_front", seed=7,
-                    work=None, framing="full", plate_p=None, relight=True, footing_check=True):
+                    work=None, framing="full", plate_p=None, relight=True, footing_check=True,
+                    near=None):
     """A second (or third) character as a layer: cut, sized as a 1.7 m person at
     its depth, tinted to the plate. -> (cut, x, y)."""
     from PIL import Image
@@ -474,7 +485,7 @@ def character_layer(char_id, plate, dpath, stand, cx, view="turn_front", seed=7,
     W, H = plate.size
     if dpath is not None:
         if plate_p and footing_check:
-            stand, cx, surface, _tried = find_footing(plate, plate_p, dpath, stand, cx)
+            stand, cx, surface, _tried = find_footing(plate, plate_p, dpath, stand, cx, near=near)
         y_feet, th, _ = place_by_depth(plate, dpath, stand, cx)
     else:
         scale, feet = _framings_for(view)[framing]
@@ -644,7 +655,7 @@ def compose(char_id, place_id, plate_key=None, view="turn_front",
                                          float(p.get("cx", 0.6)),
                                          view=p.get("view", "turn_front"), seed=seed,
                                          work=work, framing=framing, plate_p=plate_p,
-                                         footing_check=footing_check)
+                                         footing_check=footing_check, near=cx)
             say("  + character %s (%s) at stand %.2f, %dpx tall"
                 % (p["character"], p.get("view", "turn_front"), p_stand, pc.height))
         else:
