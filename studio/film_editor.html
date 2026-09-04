@@ -451,16 +451,17 @@ function shotForm(){
       <div><label>transition out</label><select id="s_tout">${opt(TREE.transitions_out,sh.transition_out)}</select></div>
     </div>
     <div class="row">
-      <div><label>anchor</label><select id="s_anchor" onchange="renderRight.kf=this.value">
-        ${opt(["scene","prev_last","generate"],String(sh.anchor).startsWith("file:")?"file":sh.anchor)}
-        <option ${String(sh.anchor).startsWith("file:")?"selected":""}>file</option></select></div>
-      <div><label>no people</label><select id="s_np">
-        <option value="" ${sh.no_people===null?"selected":""}>inherit</option>
+      <div><label>start picture</label><select id="s_anchor" onchange="renderRight.kf=this.value">
+        ${(()=>{const cur=String(sh.anchor).startsWith("file:")?"file":(sh.anchor||"scene");
+          const names={scene:"the scene's picture",prev_last:"where the previous shot ended",generate:"generate a picture from words",file:"a picture file"};
+          return ["scene","prev_last","generate","file"].map(v=>`<option value="${v}" ${v===cur?"selected":""}>${names[v]}</option>`).join("");})()}</select></div>
+      <div><label>empty of people</label><select id="s_np">
+        <option value="" ${sh.no_people===null?"selected":""}>as the scene says</option>
         <option value="yes" ${sh.no_people===true?"selected":""}>yes</option>
         <option value="no" ${sh.no_people===false?"selected":""}>no</option></select></div>
-      <div><label>LTX enhancer</label><select id="s_enh">${opt(["on","off"],sh.enhance?"on":"off")}</select></div>
+      <div><label>let the model expand the words</label><select id="s_enh">${opt(["on","off"],sh.enhance?"on":"off")}</select></div>
     </div>
-    <label>keyframe prompt / file path (for anchor = generate | file)</label>
+    <label>describe the picture to generate, or the path of the picture file (only for those two choices above)</label>
     <textarea id="s_kf" rows="2">${esc(String(sh.anchor).startsWith("file:")?sh.anchor.slice(5):sh.keyframe_prompt)}</textarea>
     <div class="row" style="margin-top:12px;gap:10px;align-items:center">
       <button class="primary" onclick="makeShot()" style="font-size:15px;padding:8px 16px">Make this shot</button>

@@ -906,3 +906,49 @@ neither frame contains; the turn itself is real. The walk went to LTX from the
 composed anchor: she stays put, the fog thickens and thins, the scene holds.
 Both takes are on the verify page for the director's verdict; the film in the
 repo carries the third pass.
+
+## §35  The second block: nobody in the river, one button, and a take that checks itself
+
+Two invariants for this block: a person with no knowledge of AI must be able to
+use it, and what comes out must be right. Four things followed.
+
+**Footing.** The ground line comes from depth and depth does not know water from
+stone; three characters stood in rivers. Before a figure (or a prop, or a second
+character) is placed, the plate is asked - one vision call with a red marker at
+the intended feet: "what surface is under the marker?" Water moves the search
+along the ground line (+-0.12, +-0.24, +-0.34), then a step nearer, then a step
+farther, until the answer is solid. The river plate answered water four times
+and stone at the left bank, in eleven seconds; the street plate kept its spot in
+two. The adjusted stand and cx go into the recipe and into `anchor_source`, so
+the pin's held geometry uses where she actually stands.
+
+**The second character is relit.** It was tinted to the plate's mean colour -
+flat next to the relit first figure. It now goes through the same rough paste,
+relight and re-cut on its own before it is placed, with the same 25% proportion
+guard and the tint as fallback. Twelve more seconds a two-shot.
+
+**Make this shot.** One button on the Shot tab. It does what the measured laws
+say, in order, and says so in plain words: puts the named character into the
+scene's place (the scene now carries a foundry place and plate, set on the
+Scene tab or by coverage); checks the words against the picture and lists what
+the picture lacks; animates an in-place motion as a pose change (end pose first,
+then the interpolation; rendering instead if the change is too small) or renders
+the shot; picks the result. The expert controls fold under "Advanced" with
+plain labels - distance and position instead of stand and cx, "put them in the
+scene" instead of compose, "pose change" instead of pin, "start picture" instead
+of anchor. Tested on a fresh shot: MARA crouching for a coin on the rain street -
+placed, checked ("coin, road" not in the picture), end pose previewed, pinned,
+132 seconds, correct.
+
+**A take checks itself for drift.** LTX rewrites the scene mid-shot and nothing
+measured it. Every rendered take now has its last frame captioned and compared
+with the start picture's caption; the nouns the start has and the last frame
+lost are the drift. Calibrated on the night's takes: the take that turned the
+bridge into a marina lost 72%; takes that held their scene lost 9-29%; one
+uncertain take 50%. The limit is 60%. Over it, "scene drift" is a QC issue on
+the take (it is not auto-picked) and Make renders once more on a new seed and
+keeps the take with fewer issues. Two vision calls a take, about seven seconds.
+One lesson in passing: `_render_take` has two render paths (camera rig, and
+LTX/H3) with a QC line each - the first version of the check landed on the
+wrong one and reported nothing for three renders. When a consumer reports
+nothing, check that it is on the path.
