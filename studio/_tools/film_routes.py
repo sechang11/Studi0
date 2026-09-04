@@ -679,6 +679,29 @@ def _scene_drift(video, start_img, tag):
 # takes that held their scene lost 0.09-0.29; one uncertain take 0.50
 # 2026-09-04 09:15: a take flagged at 0.61 held its scene; two more at 0.62 held. Margin.
 DRIFT_LIMIT = 0.65
+
+
+def _cut_off(frame_png):
+    """Is the subject in this frame flush against an edge? -> (bool, detail).
+    Flush means the mask fills more than 35% of an edge's length, or touches the
+    bottom edge along more than 25% of it (feet out of frame)."""
+    try:
+        sys.path.insert(0, TOOLS) if TOOLS not in sys.path else None
+        import pack_qc
+        alpha = pack_qc._subject_alpha(frame_png)
+        if alpha is None:
+            return False, "no segmenter"
+        a = alpha.resize((160, int(160 * alpha.size[1] / alpha.size[0])))
+        w, h = a.size
+        px = a.load()
+        top = sum(1 for x in range(w) if px[x, 0] > 40 or px[x, 1] > 40) / float(w)
+        bottom = sum(1 for x in range(w) if px[x, h - 1] > 40 or px[x, h - 2] > 40) / float(w)
+        left = sum(1 for y in range(h) if px[0, y] > 40 or px[1, y] > 40) / float(h)
+        right = sum(1 for y in range(h) if px[w - 1, y] > 40 or px[w - 2, y] > 40) / float(h)
+        detail = "top=%.2f bottom=%.2f left=%.2f right=%.2f" % (top, bottom, left, right)
+        return (top > 0.35 or bottom > 0.25 or left > 0.35 or right > 0.35), detail
+    except Exception as e:
+        return False, "qc unavailable: %s" % str(e)[:60]
 # a spoken line peaks well above ambience: measured -6.5 / -7.4 dB for lines against
 # -19.7 for an empty street. Below this, the line was probably not spoken.
 SPEECH_PEAK_DB = -14.0
@@ -828,6 +851,20 @@ def _render_take(jid, f, sh, eng, seed):
         _log(jid, "scene drift %d%% - %s" % (int(_d["lost"] * 100), ", ".join(_d["missing"][:5])))
     elif _d:
         _log(jid, "scene held (%d%% of the start picture's content in the last frame)" % int((1 - _d["lost"]) * 100))
+    _cast_here = any((b.get("subject") or "") in (f.data.get("cast") or {}) for b in (sh.get("beats") or []))
+    if _cast_here and eng == "ltx":
+        try:
+            _lf = _last_frame(dest, dest[:-4] + "_last.png")
+            _co, _cd = _cut_off(_lf) if _lf else (False, "no frame")
+            if _co:
+                # LTX pushes in on nearly every take; ending closer than it started is
+                # information for the director, not a fault to re-roll
+                qc = list(qc) + ["ends closer than it started - the person fills the frame edge at the end (%s)" % _cd]
+                _log(jid, "ends closer than it started: %s" % _cd)
+            else:
+                _log(jid, "framing held at the end (%s)" % _cd)
+        except Exception:
+            pass
     _line = any(((b.get("dialogue") or {}).get("line") or "").strip() for b in (sh.get("beats") or []))
     if _line and eng == "ltx":
         _pk = _peak_db(dest)
