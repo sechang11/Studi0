@@ -136,6 +136,7 @@ async function build(){
   const r=await (await fetch("/api/film/build",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)})).json();
   if(!r.job) return alert("could not start: "+(r.error||"unknown"));
   JOB=r.job; $("#log").style.display="block"; $("#log").textContent="building…"; $("#results").innerHTML="";
+  try{ localStorage.setItem("build.last", JSON.stringify({job:JOB, at:Date.now()})); }catch(e){}
   $("#promises").innerHTML=`<div class="promise">promise: the people are ${PICK.length?PICK.join(" and "):"nobody"}, from their packs</div>
     <div class="promise">promise: the place is ${esc(body.place)} (${esc(body.plate)}) and stays that place</div>
     <div class="promise">promise: camera ${esc(body.camera)}; ${body.duration}s</div>
@@ -145,7 +146,7 @@ async function build(){
 async function poll(){
   const js=(await (await fetch("/api/film/jobs")).json()).jobs||[]; const j=js.find(x=>x.id===JOB);
   if(j){ $("#log").textContent=(j.log||[]).join("\n"); $("#log").scrollTop=1e9;
-    if(j.state!=="running"){ if(j.result){ FID=j.result.film; SHOTS=j.result.shots||[]; await results(); } if(j.error) $("#log").textContent+="\n! "+j.error; return; } }
+    if(j.state!=="running"){ if(j.result){ FID=j.result.film; SHOTS=j.result.shots||[]; try{ localStorage.setItem("build.last", JSON.stringify({film:FID, shots:SHOTS, at:Date.now()})); }catch(e){} await results(); } if(j.error) $("#log").textContent+="\n! "+j.error; return; } }
   setTimeout(poll,4000);
 }
 async function results(){
@@ -167,7 +168,22 @@ async function pick(sid,tid){
   await fetch("/api/film/pick",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({film:FID,shot:sid,take:tid})});
   results();
 }
-boot();
+async function lastBuild(){
+  const q=new URLSearchParams(location.search);
+  let last=null; try{ last=JSON.parse(localStorage.getItem("build.last")||"null"); }catch(e){}
+  const fid=q.get("film")||(last&&last.film);
+  if(!fid) return;
+  if(last&&last.job&&!last.film){ JOB=last.job; $("#log").style.display="block"; $("#log").textContent="a build was running when you left; catching up…"; poll(); return; }
+  FID=fid;
+  if(q.get("film")||!(last&&last.shots)){
+    const t=await (await fetch(`/api/film/${FID}`)).json();
+    const all=(t.scenes||[]).flatMap(sc=>(sc.shots||[]).map(s=>typeof s==="string"?{id:s}:s)).concat(Array.isArray(t.shots)?t.shots.map(s=>typeof s==="string"?{id:s}:s):[]);
+    SHOTS=all.filter(s=>s.title&&/^(wide|medium|close)/i.test(s.title)).map(s=>s.id);
+    if(!SHOTS.length) SHOTS=all.map(s=>s.id);
+  } else SHOTS=last.shots;
+  if(SHOTS.length){ $("#results").innerHTML=`<div class="hint" style="margin-top:14px">your last build, ${esc(FID)}:</div>`; await results(); }
+}
+boot().then(lastBuild);
 </script>
 </body>
 </html>
