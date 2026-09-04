@@ -739,7 +739,7 @@ def compose(char_id, place_id, plate_key=None, view="turn_front",
 
 def compose_close(char_id, place_id, plate_key=None, view="base_portrait", cx=0.45,
                   light=-0.35, seed=7, tag=None, quiet=False, stand=0.22,
-                  head_room=0.04, fill=1.08, window_frac=0.42):
+                  head_room=0.06, fill=1.06, window_frac=0.42):
     """A close-up: head and shoulders large in the frame, the place soft behind.
 
     The camera looks where a person at `stand` would stand (depth pass), takes a
@@ -846,16 +846,28 @@ def compose_close(char_id, place_id, plate_key=None, view="base_portrait", cx=0.
     else:
         say("  . relight held (shape drift %.0f%%)" % (drift * 100))
 
+    # the relight may have nudged her; put the relit figure back where the source sat
+    bb_s, bb_r = src_clip.getbbox(), rc.getbbox()
+    dx = dy = 0
+    if bb_s and bb_r:
+        dx = int((bb_s[0] + bb_s[2]) / 2 - (bb_r[0] + bb_r[2]) / 2)
+        dy = bb_s[1] - bb_r[1]
+        if abs(dx) > W * 0.12 or abs(dy) > H * 0.12:
+            say("  ! relit figure moved %d,%d px - too far, keeping it where it landed" % (dx, dy))
+            dx = dy = 0
+        elif dx or dy:
+            say("  . relit figure moved back %d,%d px to its composed spot" % (dx, dy))
+
     # 4 onto the window that was never touched; no shadow - the feet are out of frame
     say("  4 paste")
     final = window.copy()
-    final.paste(rc, (0, 0), rc)
+    final.paste(rc, (dx, dy), rc)
     out_p = os.path.join(work, "final.png")
     final.save(out_p)
     json.dump({"character": char_id, "view": view, "place": place_id, "plate": pf,
                "framing": "close", "cx": cx, "light": light, "seed": seed, "stand": stand,
                "window": [left, top, win_w, win_h], "fill": fill, "head_room": head_room,
-               "relight_drift": round(drift, 3)},
+               "relight_drift": round(drift, 3), "moved_back": [dx, dy]},
               open(os.path.join(work, "recipe.json"), "w"), indent=1)
     return out_p, win_p
 
