@@ -143,7 +143,7 @@ function startNew(type){
 function levelPicker(){
   if(!LEVELS.length) return "";
   const cur=LEVELS.find(L=>L.n===FORM.level)||LEVELS[2];
-  return `<label>how deep to build it</label>
+  return `<label>how complete to build them</label>
     <div class="spectrum">${LEVELS.map(L=>
       `<div class="${L.n===FORM.level?"sel":""}" onclick="FORM.level=${L.n};renderForm()"
         title="${esc(L.blurb)}">${L.n} ${esc(L.label)}</div>`).join("")}</div>
@@ -163,14 +163,14 @@ function renderForm(){
   h+=`<label>name</label><input id="n_name" value="${esc(FORM.name)}" style="width:100%">`;
   if(isChar) h+=levelPicker();
   if(isChar && FORM.mode==="describe"){
-    h+=`<label>describe them in a paragraph</label>
+    h+=`<label>or describe them in a sentence or two</label>
       <textarea id="n_desc" rows="5" placeholder="a wiry man in his sixties with a shaved head, a broken nose, deep-set brown eyes..."
         onchange="FORM.description=this.value;preview()">${esc(FORM.description)}</textarea>
       <div class="hint">Physical facts work best - the words reach every engine.
         You can still set any selector below to pin specifics.</div>`;
   }
   if(isChar && FORM.mode==="image"){
-    h+=`<label>starting image</label>
+    h+=`<label>a photo to start from (only of someone who agreed)</label>
       <input type="file" id="n_file" accept="image/*" onchange="pickImage(this)">
       ${FORM.imgPreview?`<img src="${FORM.imgPreview}" style="max-width:100%;
         border-radius:6px;margin-top:6px;border:1px solid var(--line)">`:""}
@@ -198,7 +198,7 @@ function renderForm(){
   }
   }
   if(!(FORM.type==="character" && FORM.mode!=="build")){
-    h+=`<label>notes (optional free text)</label>
+    h+=`<label>anything else worth saying about them (optional)</label>
       <textarea id="n_notes" rows="2" onchange="FORM.notes=this.value;preview()">${esc(FORM.notes)}</textarea>`;
   }
   h+=`<h2>Hidden prompt <span class="hint">(compiled from your choices)</span></h2>
@@ -302,7 +302,7 @@ function renderDetail(){
     const subs=DICT.character.subs;
     const costumes=(DATA.assets.costume||[]).filter(c=>c.style===a.style);
     const kids=(DATA.assets.character||[]).filter(c=>c.parent===a.id);
-    extra=`<h2>Depth</h2>
+    extra=`<h2>How complete</h2>
       <div class="spectrum">${LEVELS.map(L=>
         `<div class="${L.n===(a.level||3)?"sel":""}"
           onclick="setLevel(${L.n})" title="${esc(L.blurb)}">${L.n} ${esc(L.label)}</div>`
@@ -333,12 +333,12 @@ function renderDetail(){
         <button class="small" onclick="addOverride()">+</button>
       </div>
       <div id="v_list" class="hint" style="margin:6px 0">no differences set</div>
-      <button class="primary small" onclick="makeVariant()">create variant</button>
+      <button class="primary small" onclick="makeVariant()">make a variant (same one, something changed)</button>
 
       <h2>Costumes</h2>
       <div class="row">
         <select id="d_costume">${costumes.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join("")}</select>
-        <button class="small" onclick="applyCostume()">wear it</button>
+        <button class="small" onclick="applyCostume()">dress them in this</button>
       </div>
       <div class="hint">renders this character wearing the costume - that image is what films anchor on</div>`;
   }
@@ -354,7 +354,7 @@ function renderDetail(){
     <h2>${esc(a.name)} <span class="badge">${esc(a.style)}</span>
       <button class="small" style="float:right;color:var(--bad)" onclick="delAsset()">delete</button></h2>
     <div class="row" style="margin:6px 0">
-      <button class="primary" onclick="genSeeds()">${imgs.length?"re-":""}generate seed pack</button>
+      <button class="primary" onclick="genSeeds()">${imgs.length?"make the pictures again":"make the pictures"}</button>
       <span class="hint">${SEL.type==="character"?"portrait, full body + all angles":
         SEL.type==="place"?"3 angles x every time of day":
         SEL.type==="music"?"music has no images - tags only":"reference shots"}</span>
@@ -366,7 +366,7 @@ function renderDetail(){
     <div class="row">${sendRow}</div>
     <h2>Hidden prompt <button class="small" onclick="$('#d_prompt').style.display=$('#d_prompt').style.display==='none'?'block':'none'">show / hide</button></h2>
     <pre class="hidden-prompt" id="d_prompt" style="display:none">${esc(compiled)}</pre>
-    <h2>Selections</h2>
+    <h2>Choices</h2>
     <pre class="hidden-prompt">${esc(JSON.stringify(a.selections,null,1))}</pre>`;
 }
 /* ── variants ─────────────────────────────────────────────────────────────── */
