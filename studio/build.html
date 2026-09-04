@@ -120,8 +120,8 @@ function togglePerson(id){
 }
 function plates(){
   const p=(FOUNDRY.place||[]).find(x=>x.id===$("#place").value); const ps=((p&&p.plates)||[]).filter(f=>!/_depth\.png$/.test(f));
-  $("#plates").innerHTML=ps.map(f=>{const k=f.replace(/\.png$/,""); return `<div class="plate ${k.endsWith("_wide")?"on":""}" data-k="${k}" onclick="pickPlate('${k}')"><img src="/foundry/media/places/${encodeURIComponent(p.id)}/${encodeURIComponent(f)}" alt=""><div class="hint" style="padding:2px 4px">${esc(k)}</div></div>`;}).join("");
   PLATE=(ps.find(f=>f.endsWith("_wide.png"))||ps[0]||"").replace(/\.png$/,"");
+  $("#plates").innerHTML=ps.map(f=>{const k=f.replace(/\.png$/,""); return `<div class="plate ${k===PLATE?"on":""}" data-k="${k}" onclick="pickPlate('${k}')"><img src="/foundry/media/places/${encodeURIComponent(p.id)}/${encodeURIComponent(f)}" alt=""><div class="hint" style="padding:2px 4px">${esc(k)}</div></div>`;}).join("");
 }
 function pickPlate(k){ PLATE=k; document.querySelectorAll(".plate").forEach(el=>el.classList.toggle("on",el.dataset.k===k)); }
 const chips=id=>[...document.querySelectorAll(`#${id} .chip.on`)].map(c=>c.dataset.v);
