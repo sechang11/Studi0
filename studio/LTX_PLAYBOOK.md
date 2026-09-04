@@ -1264,3 +1264,46 @@ does not move to them - lip sync is the encoder's, not the pack's); and a walk
 (H3 pins hold in place only; a walking subject renders on LTX as prose and the
 scene may drift). Each of these is written on the sheet under CAN CHANGE rather
 than promised, so the sheet does not lie.
+
+## §45  One product, not many builds
+
+The director's other sentence: "we have many builds all over the place in
+this app; we're looking to combine them into usable finished product
+software." The afternoon's second half was that: not new engines, but the
+seams between the pages, so that one path runs from a blank page to a picked
+take without a person knowing which tool made which part.
+
+**The pages point at each other.** A built shot's results link to *its
+promises* (the spec sheet opens on that film and that shot: `/specs?film=&shot=`)
+and to *in the editor* (the film editor opens on the shot too). The Start page
+names the builder as the single-shot path before it explains films. The
+builder remembers its last build and shows it when you come back, or shows any
+film's builder shots from `/build?film=`, so a build that ran while you were
+away is waiting for your eye, not gone.
+
+**The spec sheet makes more.** The sheet was already the closest thing to an
+editor: the shot's markdown, its promises, the reel. It now has a control that
+makes N more variants of the open shot through Make - the same anchor, the same
+promises, new seeds - and reports the job's own words while it runs. The
+builder starts a shot; the sheet keeps it going; the editor fixes it. Three
+pages, one shot.
+
+**The voiced take carries its picture's notes.** A voiced take is the same
+picture with a new soundtrack, but it was created with a fresh QC list, so a
+picked take said *no faults reported* while its picture had ended closer than
+it started and lacked the rail the sentence named. Now the voiced copy inherits
+the picture's notes and drops only the speech ones the voice pass fixed. The
+automatic pick was corrected with it: for a shot with a line only voiced takes
+are eligible when any exist (a clean unvoiced seed must not beat the take that
+says the words), and *ends closer than it started* is information, not a
+fault, so it no longer decides between takes.
+
+**Films, not experiments.** Nine test films from the day's engineering
+(coverage-test, make-test, motion-test, two-shot-test and their kin) were in
+every film picker beside the real ones. They went to the trash folder - the
+soft delete, recoverable - and the pickers list 17 films instead of 26.
+
+**What a person sees now.** Start here explains three steps and names the
+builder. Build a shot asks who, where, how, what, and shows variants with
+picks. The film editor holds scenes, shots, Make, what-to-fix. The spec sheet
+holds promises and makes more. Verify judges. Everything else is under *more*.
