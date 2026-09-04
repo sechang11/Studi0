@@ -840,3 +840,34 @@ coverage's placeholders. What remains is what a picture can lack: the letter
 that is not in the anchor, the footbridge the plate is not, the book in the
 prose and not in the frame. It is advice on the shot and a trade-off in triage,
 and it was right every time the director was wrong tonight.
+
+## §33  Coverage, then dialogue: THE LAST BOAT
+
+The fourth film of the night is the workflow the whole app was reaching for.
+One click of coverage on a scene (Ines and Tomas, the harbour boat, the oil
+lantern) made five shots with composed, checked anchors in 72 seconds. The
+director's entire remaining work was three sentences:
+
+    TOMAS  Last boat's not coming back tonight, Ines.
+    INES   Then we wait with the light on.
+    TOMAS  Aye. We wait.
+
+put on the two-shot and the two singles as dialogue beats, with a delivery note
+each and the speaker named. "Draft every missing shot", assemble. LTX speaks
+through the on-screen mouth (§6): the dialogue takes peak at -6.5 and -7.4 dB
+against -19.7 for the empty wide, and the sheet shows both mouths open
+mid-line. Thirty-two seconds, QC clean, ~8 minutes of GPU, no retakes.
+
+Voices are described, not cloned: the cast entry carries a synthetic voice pack
+name and a description ("a warm, gravelly older man's voice"), and the
+description is what reaches the prose. The four cloned packs in studio/voices
+stay blocked.
+
+The verify page carries the three questions that matter and that only a person
+can answer: is it *her* voice, is the mouth moving *with* the words, and in the
+two-shot is it *Tomas* speaking and not Ines.
+
+**The night, closed.** Four films through the API (56s, 44s, 40s, 32s), 22 new
+level-1 assets, coverage on the Scene tab, fifteen commits, playbook §25-33.
+The director's work in the last film was three sentences. That is the ratio the
+studio exists for.
