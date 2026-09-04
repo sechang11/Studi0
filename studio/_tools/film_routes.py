@@ -721,6 +721,22 @@ def _peak_db(video):
     return None
 
 
+QUIET_DB = -40.0
+
+
+def _mean_db(path):
+    """ffmpeg's volumedetect mean_volume in dB, or None"""
+    try:
+        p = subprocess.run(["ffmpeg", "-v", "info", "-i", path, "-af", "volumedetect", "-f", "null", "-"],
+                           capture_output=True, text=True, timeout=120)
+        for line in p.stderr.splitlines():
+            if "mean_volume:" in line:
+                return float(line.split("mean_volume:")[1].split("dB")[0])
+    except Exception:
+        pass
+    return None
+
+
 def _sound_donor(f, sh):
     """the newest sounding, unvoiced take in the shot's scene, else in the film:
     (path, take id, shot id) or None"""
@@ -735,7 +751,10 @@ def _sound_donor(f, sh):
                 rel = t.get("file") or ""
                 p = os.path.join(f.dir, rel)
                 if rel and os.path.exists(p):
-                    out.append((t.get("created") or "", p, t["id"], s["id"]))
+                    if t.get("loud") is None:
+                        t["loud"] = _mean_db(p)
+                    if t.get("loud") is not None and t["loud"] > QUIET_DB:
+                        out.append((t["loud"], p, t["id"], s["id"]))
         return out
     shots = list((f.data.get("shots") or {}).values())
     same = [s for s in shots if s.get("scene") == sh.get("scene") and s.get("id") != sh.get("id")]
@@ -882,15 +901,19 @@ def _render_take(jid, f, sh, eng, seed):
     ensure_local(vids[0], dest)
     _thumbs(dest, dest[:-4])
     qc = _qc(dest)
-    if any("SILENT" in str(n) for n in qc):
+    loud = _mean_db(dest)
+    if any("SILENT" in str(n) for n in qc) or (loud is not None and loud < QUIET_DB):
+        how = "silent" if any("SILENT" in str(n) for n in qc) else ("too quiet (mean %.0f dB)" % loud)
         donor = _sound_donor(f, sh)
         if donor and _borrow_audio(dest, donor[0]):
             qc = [n for n in qc if "SILENT" not in str(n)] + [
-                "sound borrowed from take %s of shot %s - the render was silent" % (donor[1], donor[2])]
-            _log(jid, "the render was silent; its soundtrack is borrowed from take %s of shot %s"
-                 % (donor[1], donor[2]))
+                "sound borrowed from take %s of shot %s - the render was %s" % (donor[1], donor[2], how)]
+            _log(jid, "the render was %s; its soundtrack is borrowed from take %s of shot %s (%.0f dB)"
+                 % (how, donor[1], donor[2], donor[0] if isinstance(donor[0], float) else 0) if False else
+                 "the render was %s; its soundtrack is borrowed from take %s of shot %s" % (how, donor[1], donor[2]))
+            loud = _mean_db(dest)
         elif not donor:
-            _log(jid, "the render was silent and no other take of this film has sound to lend")
+            _log(jid, "the render was %s and no other take of this film is loud enough to lend its sound" % how)
     try:
         _start = _resolve_anchor_file(f, sh["id"], jid)
         _d = _scene_drift(dest, _start, "%s_%s" % (f.id, sh["id"])) if _start else None
