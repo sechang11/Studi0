@@ -1,0 +1,380 @@
+{
+ "title": "The Last Boat",
+ "created": "2026-09-04 03:58",
+ "look": "photoreal",
+ "look_clause": "photoreal cinematic film still, 35mm, deep focus, high detail, colour photograph, filmic grade",
+ "grade": "",
+ "negative": "",
+ "fps": 24,
+ "logline": "Two people wait on a fog-bound boat for a boat that is not coming.",
+ "resolution": "auto",
+ "deliver": "native",
+ "cast": {
+  "INES": {
+   "name": "Ines Varga",
+   "clause": "a tall, athletic woman, in their fifties, olive skin, an angular face with a sharp jaw, grey eyes, hooded eyes, strong dark brows, grey short neat hair, a thin scar through one brow, a calm, unreadable bearing, a harbour master in a dark wool coat and a grey knit cap, salt-weathered, hands in her pockets",
+   "short": "grey short neat hair, a thin scar through one brow",
+   "sheet": "/home/k4shix/shared/comfy-studio/studio/foundry/characters/ines-varga/base_portrait.png",
+   "portrait": "/home/k4shix/shared/comfy-studio/studio/foundry/characters/ines-varga/base_portrait.png",
+   "voice": "female_04_maya",
+   "voice_desc": "a low, dry woman's voice, unhurried",
+   "foundry": "ines-varga"
+  },
+  "TOMAS": {
+   "name": "Tomas Reyl",
+   "clause": "a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot",
+   "short": "grey a shaved head, brown eyes",
+   "sheet": "/home/k4shix/shared/comfy-studio/studio/foundry/characters/tomas-reyl/base_portrait.png",
+   "portrait": "/home/k4shix/shared/comfy-studio/studio/foundry/characters/tomas-reyl/base_portrait.png",
+   "voice": "male_05_samuel",
+   "voice_desc": "a warm, gravelly older man's voice",
+   "foundry": "tomas-reyl"
+  }
+ },
+ "scenes": [
+  {
+   "id": "sc01",
+   "title": "deck, night",
+   "location": "the deck of a small fishing boat in a fog-bound harbour at night, sodium lamps on the quay",
+   "time_of_day": "night",
+   "weather": "fog",
+   "ambience": "water against the hull, rope creaking, a foghorn far off",
+   "palette": "",
+   "music": "cinematic ambient, low cello, fog, night, patient, 60 bpm",
+   "cast_present": [
+    "INES",
+    "TOMAS"
+   ],
+   "no_people": false,
+   "anchor": "",
+   "shots": [
+    "010",
+    "020",
+    "030",
+    "040",
+    "050"
+   ]
+  }
+ ],
+ "shots": {
+  "010": {
+   "id": "010",
+   "scene": "sc01",
+   "title": "wide - establishing",
+   "duration": 8,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/foundry/places/harbour-night/night_reverse.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide establishing shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "",
+     "action": "the fog-bound deck at night, the lamps hazing, the water moving under the hull",
+     "background": "the whole scene alive: light, water",
+     "motion": "",
+     "ambient": [
+      "light",
+      "water"
+     ],
+     "dialogue": {
+      "char": "",
+      "line": "",
+      "delivery": ""
+     }
+    }
+   ],
+   "sfx": "water against the hull, rope creaking, a foghorn far off",
+   "no_people": true,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t508789737",
+     "engine": "ltx",
+     "seed": 11,
+     "created": "04:01",
+     "file": "takes/010/ltx_t508789737.mp4",
+     "poster": "takes/010/ltx_t508789737.png",
+     "strip": "takes/010/ltx_t508789737_strip.png",
+     "duration": 8.04,
+     "fps": 24,
+     "qc": [],
+     "warnings": [],
+     "prompt": "A static wide establishing shot: the fog-bound deck at night, the lamps hazing, the water moving under the hull, while the whole scene alive: light, water; the light shifts and flickers across the scene; water moves continuously, the deck of a small fishing boat in a fog-bound harbour at night, sodium lamps on the quay, night, fog, the frame completely empty of people and hands. Photoreal cinemati"
+    }
+   ],
+   "picked": "t508789737",
+   "engine_notes": "",
+   "anchor_check": {
+    "caption": "Harbor, fishing boats, ship, deck, ropes, wood, metal, masts, rigging, hulls, water, fog, night, lights, lamps, reflections, docks, piers, vessels, ropes, coils, shadows, darkness, mist, atmosphere, glow, structures, buildings, horizon.",
+    "missing": [],
+    "when": 1788508773
+   }
+  },
+  "020": {
+   "id": "020",
+   "scene": "sc01",
+   "title": "wide - INES and TOMAS",
+   "duration": 6,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/the-last-boat/assets/anchor_shot_020.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "medium two-shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "INES",
+     "action": "stand at the rail looking out into the fog; he speaks without turning",
+     "background": "the scene moves behind them",
+     "motion": "",
+     "ambient": [
+      "light",
+      "water"
+     ],
+     "dialogue": {
+      "char": "TOMAS",
+      "line": "Last boat's not coming back tonight, Ines.",
+      "delivery": "quiet, matter of fact"
+     }
+    }
+   ],
+   "sfx": "",
+   "no_people": false,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t508892799",
+     "engine": "ltx",
+     "seed": 11,
+     "created": "04:02",
+     "file": "takes/020/ltx_t508892799.mp4",
+     "poster": "takes/020/ltx_t508892799.png",
+     "strip": "takes/020/ltx_t508892799_strip.png",
+     "duration": 6.04,
+     "fps": 24,
+     "qc": [],
+     "warnings": [],
+     "prompt": "A static medium two-shot: a tall, athletic woman, in their fifties, olive skin, an angular face with a sharp jaw, grey eyes, hooded eyes, strong dark brows, grey short neat hair, a thin scar through one brow, a calm, unreadable bearing, a harbour master in a dark wool coat and a grey knit cap, salt-weathered, hands in her pockets, stand at the rail looking out into the fog; he speaks without turni"
+    }
+   ],
+   "picked": "t508892799",
+   "engine_notes": "",
+   "anchor_source": {
+    "character": "ines-varga",
+    "place": "harbour-night",
+    "stand": 0.35,
+    "cx": 0.38,
+    "view": "turn_front_three_quarter",
+    "plate": "/home/k4shix/shared/comfy-studio/studio/foundry/places/harbour-night/night_reverse.png",
+    "props": [
+     {
+      "character": "tomas-reyl",
+      "view": "turn_front_three_quarter",
+      "stand": 0.35,
+      "cx": 0.62
+     },
+     {
+      "id": "oil-lantern",
+      "stand": 0.3,
+      "cx": 0.5
+     }
+    ]
+   },
+   "anchor_check": {
+    "caption": "Harbor, fishing boats, ships, masts, ropes, deck, wood, man, men, coats, jacket, lantern, lights, fog, water, sea, night, glow, piers, buildings, docks, metal, rope, wood grain, sky, mist, vessels.",
+    "missing": [],
+    "when": 1788508776
+   }
+  },
+  "030": {
+   "id": "030",
+   "scene": "sc01",
+   "title": "medium - INES",
+   "duration": 6,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/the-last-boat/assets/anchor_shot_030.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "medium shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "INES",
+     "action": "looks out at the fog and answers without looking at him",
+     "background": "the scene moves behind them",
+     "motion": "",
+     "ambient": [
+      "light",
+      "water"
+     ],
+     "dialogue": {
+      "char": "INES",
+      "line": "Then we wait with the light on.",
+      "delivery": "low, steady"
+     }
+    }
+   ],
+   "sfx": "",
+   "no_people": false,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t508962712",
+     "engine": "ltx",
+     "seed": 11,
+     "created": "04:03",
+     "file": "takes/030/ltx_t508962712.mp4",
+     "poster": "takes/030/ltx_t508962712.png",
+     "strip": "takes/030/ltx_t508962712_strip.png",
+     "duration": 6.04,
+     "fps": 24,
+     "qc": [],
+     "warnings": [],
+     "prompt": "A static medium shot: a tall, athletic woman, in their fifties, olive skin, an angular face with a sharp jaw, grey eyes, hooded eyes, strong dark brows, grey short neat hair, a thin scar through one brow, a calm, unreadable bearing, a harbour master in a dark wool coat and a grey knit cap, salt-weathered, hands in her pockets, looks out at the fog and answers without looking at him, who says in a "
+    }
+   ],
+   "picked": "t508962712",
+   "engine_notes": "",
+   "anchor_source": {
+    "character": "ines-varga",
+    "place": "harbour-night",
+    "stand": 0.15,
+    "cx": 0.45,
+    "view": "turn_front",
+    "plate": "/home/k4shix/shared/comfy-studio/studio/foundry/places/harbour-night/night_reverse.png",
+    "props": []
+   },
+   "anchor_check": {
+    "caption": "Harbor, fishing boats, ship, woman, coat, sweater, hat, deck, ropes, wood, metal, masts, rigging, water, ocean, fog, rain, night, lamps, lights, glow, reflections, shadows, piers, buildings, horizon, sky.",
+    "missing": [],
+    "when": 1788508779
+   }
+  },
+  "040": {
+   "id": "040",
+   "scene": "sc01",
+   "title": "medium - TOMAS",
+   "duration": 6,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/the-last-boat/assets/anchor_shot_040.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "medium shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "TOMAS",
+     "action": "nods slowly, the smile coming",
+     "background": "the scene moves behind them",
+     "motion": "",
+     "ambient": [
+      "light",
+      "water"
+     ],
+     "dialogue": {
+      "char": "TOMAS",
+      "line": "Aye. We wait.",
+      "delivery": "warm, almost a laugh"
+     }
+    }
+   ],
+   "sfx": "",
+   "no_people": false,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t509034075",
+     "engine": "ltx",
+     "seed": 11,
+     "created": "04:05",
+     "file": "takes/040/ltx_t509034075.mp4",
+     "poster": "takes/040/ltx_t509034075.png",
+     "strip": "takes/040/ltx_t509034075_strip.png",
+     "duration": 6.04,
+     "fps": 24,
+     "qc": [],
+     "warnings": [],
+     "prompt": "A static medium shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, nods slowly, the smile coming, who says in a warm, gravelly older man's voice, warm, almost a laugh, \"Ay"
+    }
+   ],
+   "picked": "t509034075",
+   "engine_notes": "",
+   "anchor_source": {
+    "character": "tomas-reyl",
+    "place": "harbour-night",
+    "stand": 0.15,
+    "cx": 0.5,
+    "view": "turn_front",
+    "plate": "/home/k4shix/shared/comfy-studio/studio/foundry/places/harbour-night/night_reverse.png",
+    "props": []
+   },
+   "anchor_check": {
+    "caption": "Harbor, fishing boats, ship, man, jacket, sweater, pants, rope, deck, wood, masts, rigging, fog, water, ocean, weather, night, lights, lamps, glow, reflections, vessels, hulls, metal, nylon, sea, mist, atmosphere.",
+    "missing": [],
+    "when": 1788508782
+   }
+  },
+  "050": {
+   "id": "050",
+   "scene": "sc01",
+   "title": "insert - detail",
+   "duration": 6,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/foundry/places/harbour-night/night_reverse.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "",
+     "action": "coiled rope and the lantern on the wet deck, fog drifting past",
+     "background": "what moves here moves",
+     "motion": "",
+     "ambient": [
+      "light",
+      "water"
+     ],
+     "dialogue": {
+      "char": "",
+      "line": "",
+      "delivery": ""
+     }
+    }
+   ],
+   "sfx": "water against the hull, rope creaking, a foghorn far off",
+   "no_people": true,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t509100952",
+     "engine": "ltx",
+     "seed": 11,
+     "created": "04:06",
+     "file": "takes/050/ltx_t509100952.mp4",
+     "poster": "takes/050/ltx_t509100952.png",
+     "strip": "takes/050/ltx_t509100952_strip.png",
+     "duration": 6.04,
+     "fps": 24,
+     "qc": [],
+     "warnings": [],
+     "prompt": "A static wide shot: coiled rope and the lantern on the wet deck, fog drifting past, while what moves here moves; the light shifts and flickers across the scene; water moves continuously, the deck of a small fishing boat in a fog-bound harbour at night, sodium lamps on the quay, night, fog, the frame completely empty of people and hands. Photoreal cinematic film still, 35mm, deep focus, high detail"
+    }
+   ],
+   "picked": "t509100952",
+   "engine_notes": "",
+   "anchor_check": {
+    "caption": "Harbor, fishing boats, ship, deck, ropes, wood, metal, masts, rigging, hulls, water, fog, night, lights, lamps, reflections, docks, piers, vessels, ropes, coils, shadows, darkness, mist, atmosphere, glow, structures, buildings, horizon.",
+    "missing": [],
+    "when": 1788508785
+   }
+  }
+ }
+}
