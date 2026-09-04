@@ -677,7 +677,8 @@ def _scene_drift(video, start_img, tag):
 
 # calibrated on 2026-09-04: a take that turned a bridge into a marina lost 0.72;
 # takes that held their scene lost 0.09-0.29; one uncertain take 0.50
-DRIFT_LIMIT = 0.6
+# 2026-09-04 09:15: a take flagged at 0.61 held its scene; two more at 0.62 held. Margin.
+DRIFT_LIMIT = 0.65
 # a spoken line peaks well above ambience: measured -6.5 / -7.4 dB for lines against
 # -19.7 for an empty street. Below this, the line was probably not spoken.
 SPEECH_PEAK_DB = -14.0
@@ -1747,7 +1748,7 @@ def _coverage_job(jid, fid, scid, place_id, plate, chars, prop):
             layers = []
             if b:
                 layers.append({"character": b["foundry"], "view": "turn_front_three_quarter",
-                               "stand": 0.35, "cx": 0.62})
+                               "stand": 0.40, "cx": 0.62})
             if prop:
                 layers.append({"id": prop, "stand": 0.30, "cx": 0.50 if b else 0.60})
             s2 = shot("wide - %s" % (" and ".join(names)), 6,
@@ -1756,16 +1757,16 @@ def _coverage_job(jid, fid, scid, place_id, plate, chars, prop):
                             else "stands in the scene - describe what they do",
                             "the scene moves behind them")])
             plan.append((s2["id"], a["foundry"], "turn_front_three_quarter" if b else "turn_front",
-                         0.35, 0.38 if b else 0.42, layers))
+                         0.40, 0.38 if b else 0.42, layers))
             # 3 single on A
             s3 = shot("medium - %s" % a["cast"], 6,
                       [beat("medium shot", a["cast"], "describe the beat", "the scene moves behind them")])
-            plan.append((s3["id"], a["foundry"], "turn_front", 0.15, 0.45, []))
+            plan.append((s3["id"], a["foundry"], "turn_front", 0.22, 0.45, []))
             # 4 single on B
             if b:
                 s4 = shot("medium - %s" % b["cast"], 6,
                           [beat("medium shot", b["cast"], "describe the beat", "the scene moves behind them")])
-                plan.append((s4["id"], b["foundry"], "turn_front", 0.15, 0.50, []))
+                plan.append((s4["id"], b["foundry"], "turn_front", 0.22, 0.50, []))
         # 5 the insert
         if detail and os.path.exists(detail):
             shot("insert - detail", 6,
@@ -2045,9 +2046,16 @@ def quickstart(data):
         # the cast id comes from the NAME (RENJI, INES, KEEPER), never from the
         # appearance clause - "black-haired man" made a cast member called BLACK
         words = [w for w in re.findall(r"[A-Za-z]+", ent["name"] or cid)]
-        skip = {"the", "old", "young", "a", "an", "mr", "mrs", "ms", "dr", "little", "big"}
-        pick = next((w for w in words if w.lower() not in skip), None) or (words[-1] if words else cid)
-        cast_id = pick.upper()[:12]
+        roles = {"master", "keeper", "seller", "ferryman", "captain", "doctor", "officer", "guard",
+                 "teacher", "king", "queen", "prince", "princess", "priest", "monk", "nurse",
+                 "driver", "pilot", "sailor", "soldier", "knight", "merchant", "boy", "girl",
+                 "man", "woman", "stranger", "traveller", "traveler", "child", "elder"}
+        skip = {"the", "a", "an", "mr", "mrs", "ms", "dr"}
+        core = [w for w in words if w.lower() not in skip] or words or [cid]
+        if any(w.lower() in roles for w in core):
+            cast_id = "_".join(w.upper() for w in core)[:24]      # STATION_MASTER, OLD_SHRINE_KEEPER
+        else:
+            cast_id = core[0].upper()[:12]                          # INES, RENJI
         n = 2
         while cast_id in f.data["cast"]:
             cast_id = "%s%d" % (cast_id.rstrip("0123456789"), n); n += 1
