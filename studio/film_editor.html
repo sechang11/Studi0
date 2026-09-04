@@ -316,8 +316,9 @@ function renderCenter(){
         <b>${t.engine}</b> <span style="cursor:pointer;text-decoration:underline dotted"
           title="use this seed for the next generation"
           onclick="$('#tk_seed').value=${t.seed}">seed ${t.seed}</span> · ${t.duration}s · ${t.created}
-        ${t.qc&&t.qc.length?`<span class="qcbad" title="${esc(t.qc.join("; "))}">QC ✗ ${t.qc.length}</span>`
-                           :'<span style="color:var(--good)">QC ✓</span>'}
+        ${(()=>{const isInfo=n=>/^(ends closer|sound borrowed)/.test(String(n)); const f=(t.qc||[]).filter(n=>!isInfo(n)), i=(t.qc||[]).filter(isInfo);
+          return (f.length?`<span class="qcbad" title="${esc(f.join("; "))}">QC ✗ ${f.length}</span>`:'<span style="color:var(--good)">QC ✓</span>')
+               +(i.length?` <span class="hint" title="${esc(i.join("; "))}" style="cursor:help">ⓘ ${i.length}</span>`:"");})()}
         ${t.warnings&&t.warnings.length?`<span class="warn" title="${esc(t.warnings.join("; "))}">⚠ ${t.warnings.length}</span>`:""}
         <span class="grow"></span>
         ${t.fps>=47?'<span class="badge on">48fps</span>':""}
@@ -837,7 +838,7 @@ async function loadTriage(){
       out+=`<div style="margin-top:8px"><b>what to fix</b> <span class="hint">- what the picked takes say about themselves</span></div>`;
       for(const [id,qc] of fixes){
         out+=`<div style="margin-top:4px"><span class="badge" onclick="selShot('${id}')" style="cursor:pointer">${id}</span>
-          <ul class="hint" style="margin:2px 0 0 14px;padding:0">${qc.map(q=>`<li>${esc(String(q))}</li>`).join("")}</ul></div>`;
+          <ul class="hint" style="margin:2px 0 0 14px;padding:0">${qc.filter(q=>!/^(ends closer|sound borrowed)/.test(String(q))).map(q=>`<li>${esc(String(q))}</li>`).join("")}${qc.filter(q=>/^(ends closer|sound borrowed)/.test(String(q))).map(q=>`<li style="opacity:.6">${esc(String(q))} <span style="opacity:.8">(information)</span></li>`).join("")}</ul></div>`;
       }
     }
     if(!flagged.length&&!fixes.length) out+=`<div class="hint">every shot can be made here as asked, and no picked take reports a fault</div>`;

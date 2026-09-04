@@ -171,7 +171,8 @@ def tree(fid):
                           "picked": sh.get("picked") or "",
                           "poster": picked and picked.get("poster") or "",
                           "picked_file": picked and picked.get("file") or "",
-                          "picked_qc": len(picked.get("qc") or []) if picked else 0,
+                          "picked_qc": len(_faults(picked)) if picked else 0,
+                          "picked_info": (len(picked.get("qc") or []) - len(_faults(picked))) if picked else 0,
                           "picked_warnings": len(picked.get("warnings") or [])
                           if picked else 0,
                           "picked_fps": picked.get("fps", 24) if picked else 0,
