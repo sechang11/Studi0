@@ -116,6 +116,73 @@ def qwen_edit(ref1, ref2, prompt, dest, seed=7, w=1664, h=928, anime=0.0):
     return dest
 
 
+def ask_image(src_path, question, tag="ask"):
+    """One vision call: an image and a question, a short answer back. Same graph as
+    the character captioner, with SaveText appended so the answer lands in a file."""
+    import glob, time
+    COMFY, HOST, run, set_path, load_wf, ensure_local = _comfy()
+    rel = stage(src_path, "compose_%s.png" % tag)
+    wf = load_wf("30_vision_caption.json")
+    set_path(wf, "2.inputs.image", rel)
+    set_path(wf, "3.inputs.prompt", question)
+    stamp = "ask_%s_%d" % (tag, int(time.time() * 10) % 1000000)
+    wf["90"] = {"class_type": "SaveText",
+                "inputs": {"text": ["3", 0], "filename_prefix": stamp, "format": "txt"}}
+    run(HOST, wf, quiet=True)
+    hits = sorted(glob.glob(os.path.join(COMFY, "output", "**", stamp + "*"), recursive=True))
+    return open(hits[-1], encoding="utf-8", errors="replace").read().strip() if hits else ""
+
+
+SURFACE_ASK = ("There is a red dot drawn on this image. What is the surface directly "
+               "under the red dot? Answer with exactly one word from this list: water, "
+               "road, pavement, grass, sand, stone, wood, deck, floor, mud, snow, other.")
+WET = ("water", "river", "sea", "lake", "canal", "pond", "ocean", "stream", "wave", "waves")
+
+
+def footing(plate_p, x, y, tag="foot"):
+    """What is under the point (x, y) of the plate, by asking it. -> one word."""
+    from PIL import Image, ImageDraw
+    im = Image.open(plate_p).convert("RGB")
+    W, H = im.size
+    scale = min(1.0, 1024.0 / W)
+    im = im.resize((int(W * scale), int(H * scale)), Image.LANCZOS)
+    r = max(6, int(im.width * 0.014))
+    d = ImageDraw.Draw(im)
+    cx, cy = int(x * scale), int(min(H - 1, y) * scale)
+    d.ellipse([cx - r, cy - r, cx + r, cy + r], fill=(255, 0, 0), outline=(255, 255, 255), width=2)
+    tmp = os.path.join(OUT_DIR, "_footing_%s.png" % tag)
+    os.makedirs(OUT_DIR, exist_ok=True)
+    im.save(tmp)
+    ans = ask_image(tmp, SURFACE_ASK, tag="foot").lower()
+    word = next((w for w in ("water", "road", "pavement", "grass", "sand", "stone", "wood",
+                             "deck", "floor", "mud", "snow") if w in ans), ans.split()[0] if ans else "?")
+    return word
+
+
+def find_footing(plate, plate_p, dpath, stand, cx, say=None, max_checks=7):
+    """Keep the requested spot if it is solid; otherwise walk along the ground
+    line, then a step nearer, until the plate says the surface is not water.
+    -> (stand, cx, surface, checks)."""
+    W, H = plate.size
+    tried = []
+    cands = [(stand, cx)]
+    for dx in (0.12, -0.12, 0.24, -0.24, 0.34, -0.34):
+        c = cx + dx
+        if 0.08 <= c <= 0.92:
+            cands.append((stand, c))
+    cands.append((max(0.05, stand - 0.1), cx))
+    cands.append((min(0.9, stand + 0.15), cx))
+    for i, (s, c) in enumerate(cands[:max_checks]):
+        y_feet, th, _ = place_by_depth(plate, dpath, s, c)
+        word = footing(plate_p, int(W * c), y_feet, tag="f%d" % i)
+        tried.append((round(s, 2), round(c, 2), word))
+        if say:
+            say("  ? footing at stand %.2f across %.2f: %s" % (s, c, word))
+        if word not in WET:
+            return s, c, word, tried
+    return stand, cx, tried[0][2] if tried else "?", tried
+
+
 def cutout(src_path, dest, tag="cut"):
     """birefnet -> RGBA. Node 10 saves the RGBA; 11 and 12 save the matte and a
     magenta proof, and either of those looks like a good cutout in a file list
@@ -364,7 +431,7 @@ def place_cut(plate, cut, framing="full", cx=0.42, view="turn_front"):
 
 
 def prop_layer(prop_id, plate, dpath, stand, cx, view="hero", seed=7, work=None,
-               framing="full"):
+               framing="full", plate_p=None):
     """Cut a prop's view and size it for its depth. -> (cut, x, y), bottom at
     the ground line for that stand."""
     from PIL import Image
@@ -380,6 +447,8 @@ def prop_layer(prop_id, plate, dpath, stand, cx, view="hero", seed=7, work=None,
     cut = _trim(Image.open(cut_p).convert("RGBA"))
     W, H = plate.size
     if dpath is not None:
+        if plate_p:
+            stand, cx, _surface, _tried = find_footing(plate, plate_p, dpath, stand, cx)
         y_feet, th_person, _ = place_by_depth(plate, dpath, stand, cx)
         th = max(8, int(th_person * size_m / 1.7))
     else:
@@ -392,7 +461,7 @@ def prop_layer(prop_id, plate, dpath, stand, cx, view="hero", seed=7, work=None,
 
 
 def character_layer(char_id, plate, dpath, stand, cx, view="turn_front", seed=7,
-                    work=None, framing="full"):
+                    work=None, framing="full", plate_p=None, relight=True, footing_check=True):
     """A second (or third) character as a layer: cut, sized as a 1.7 m person at
     its depth, tinted to the plate. -> (cut, x, y)."""
     from PIL import Image
@@ -404,19 +473,51 @@ def character_layer(char_id, plate, dpath, stand, cx, view="turn_front", seed=7,
     cut = _trim(Image.open(cut_p).convert("RGBA"))
     W, H = plate.size
     if dpath is not None:
+        if plate_p and footing_check:
+            stand, cx, surface, _tried = find_footing(plate, plate_p, dpath, stand, cx)
         y_feet, th, _ = place_by_depth(plate, dpath, stand, cx)
     else:
         scale, feet = _framings_for(view)[framing]
         th, y_feet = int(H * scale), int(H * feet)
+    # lit by the scene like the first figure: rough paste alone, relight, re-cut
+    lit = None
+    if plate_p and relight:
+        try:
+            meta = json.load(open(os.path.join(CHARS, char_id, "asset.json"), encoding="utf-8"))
+            clause = (meta.get("compiled") or {}).get("clause", "")
+            style = meta.get("style", "")
+            rough = relight_canvas(plate, Image.open(cut_p).convert("RGBA"))
+            rough_p = os.path.join(work or OUT_DIR, "char_%s_rough.png" % char_id)
+            rough.save(rough_p)
+            relit_p = qwen_edit(
+                stage(rough_p, "compose_rough_%s.png" % char_id),
+                stage(plate_p, "compose_plate_%s.png" % char_id),
+                "Keep the person full length, the whole body from head to feet inside "
+                "the frame. Do not crop, do not zoom in, do not reframe. Relight only the "
+                "person so they belong in this location: the same colour temperature and "
+                "direction of light as the scene around them. Do not change the face, hair, "
+                "pose or clothing. Do not move them. Do not change the background. %s. "
+                "The whole image stays %s." % (clause, (meta.get("compiled") or {}).get("look", "") or style),
+                os.path.join(work or OUT_DIR, "char_%s_relit.png" % char_id), seed=seed,
+                anime=0.6 if style in ("anime", "cartoon") else 0.0,
+                w=plate.size[0], h=plate.size[1])
+            rc = Image.open(cutout(relit_p, os.path.join(work or OUT_DIR, "char_%s_relit_cut.png" % char_id),
+                                   tag="kr" + str(seed))).convert("RGBA")
+            a_src, a_rel = _aspect_of(cut), _aspect_of(rc)
+            drift = abs(a_rel - a_src) / a_src if a_src else 1.0
+            if drift <= 0.25 and rc.getbbox():
+                lit = _trim(rc)
+        except Exception:
+            lit = None
+    cut = lit if lit is not None else tint_to(cut, plate)
     tw = max(1, int(cut.width * th / cut.height))
     cut = cut.resize((tw, th), Image.LANCZOS)
-    cut = tint_to(cut, plate)
     return cut, int(W * cx) - tw // 2, y_feet - th
 
 
 def compose(char_id, place_id, plate_key=None, view="turn_front",
             framing="full", cx=0.42, light=-0.35, seed=7, tag=None,
-            quiet=False, stand=None, props=None):
+            quiet=False, stand=None, props=None, footing_check=True):
     from PIL import Image
     cdir = os.path.join(CHARS, char_id)
     pdir = os.path.join(PLACES, place_id)
@@ -456,9 +557,16 @@ def compose(char_id, place_id, plate_key=None, view="turn_front",
     # dial (how far into the scene) sets BOTH where the feet land and how big she
     # is, so the two can no longer contradict each other.
     dpath = None
+    surface = None
     if stand is not None and not view.startswith(("face", "expr")):
         try:
             dpath = depth_for_plate(plate_p)
+            if footing_check:
+                s2, c2, surface, tried = find_footing(plate, plate_p, dpath, stand, cx, say=say)
+                if (s2, c2) != (stand, cx):
+                    say("  ! footing: moved from stand %.2f across %.2f to %.2f / %.2f (%s)"
+                        % (stand, cx, s2, c2, surface))
+                    stand, cx = s2, c2
             y_feet, th, y_h = place_by_depth(plate, dpath, stand, cx)
             cut = _trim(cut)
             tw = max(1, int(cut.width * th / cut.height))
@@ -535,13 +643,15 @@ def compose(char_id, place_id, plate_key=None, view="turn_front",
             pc, px, py = character_layer(p["character"], plate, dpath, p_stand,
                                          float(p.get("cx", 0.6)),
                                          view=p.get("view", "turn_front"), seed=seed,
-                                         work=work, framing=framing)
+                                         work=work, framing=framing, plate_p=plate_p,
+                                         footing_check=footing_check)
             say("  + character %s (%s) at stand %.2f, %dpx tall"
                 % (p["character"], p.get("view", "turn_front"), p_stand, pc.height))
         else:
             pc, px, py = prop_layer(p["id"], plate, dpath, p_stand,
                                     float(p.get("cx", 0.6)), view=p.get("view", "hero"),
-                                    seed=seed, work=work, framing=framing)
+                                    seed=seed, work=work, framing=framing,
+                                    plate_p=plate_p if footing_check else None)
             say("  + prop %s at stand %.2f, %dpx tall" % (p["id"], p_stand, pc.height))
         layers.append((p_stand, pc, px, py))
     final = plate.copy()
@@ -552,7 +662,8 @@ def compose(char_id, place_id, plate_key=None, view="turn_front",
     final.save(out_p)
     json.dump({"character": char_id, "view": view, "place": place_id,
                "plate": pf, "framing": framing, "cx": cx, "light": light,
-               "seed": seed, "stand": stand, "props": props or []},
+               "seed": seed, "stand": stand, "props": props or [],
+               "surface": surface},
               open(os.path.join(work, "recipe.json"), "w"), indent=1)
     return out_p, plate_p
 

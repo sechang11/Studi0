@@ -1232,6 +1232,17 @@ def _compose_anchor_job(jid, fid, shid, char_id, place_id, plate, view,
         shutil.copy(out, os.path.join(f.dir, rel))
         sh = f.shot(shid)
         sh["anchor"] = "file:" + os.path.join(f.dir, rel)
+        # the compositor may have moved her to solid footing; the pin's held
+        # geometry must use where she actually stands
+        try:
+            recipe = json.load(open(os.path.join(os.path.dirname(out), "recipe.json")))
+            if recipe.get("stand") is not None:
+                if (recipe["stand"], recipe["cx"]) != (stand, cx):
+                    _log(jid, "footing moved her to stand %.2f across %.2f (%s)"
+                         % (recipe["stand"], recipe["cx"], recipe.get("surface")))
+                stand, cx = recipe["stand"], recipe["cx"]
+        except Exception:
+            pass
         sh["anchor_source"] = {"character": char_id, "place": place_id,
                                "stand": stand, "cx": cx, "view": view,
                                "plate": plate_p, "props": props or []}
