@@ -952,3 +952,28 @@ One lesson in passing: `_render_take` has two render paths (camera rig, and
 LTX/H3) with a QC line each - the first version of the check landed on the
 wrong one and reported nothing for three renders. When a consumer reports
 nothing, check that it is on the path.
+
+## §36  Start here; make every missing shot; pins that describe their scene
+
+**Start here.** A page, first in the nav, for a person who has never used an AI
+tool: three steps - choose your people, choose your places, make a film - in
+plain words, with what to expect (a shot takes one to three minutes; the Review
+tab says what will differ from what you asked and why) and a short table of
+what the studio does well and what it does not do yet. No term of art on it.
+The Foundry page's buttons followed: "make the pictures" for the seed pack,
+"how complete" for the level, "dress them in this" for a costume.
+
+**Make every missing shot, then assemble.** The Review tab's one button runs
+Make on every shot without a picked take, in order, and assembles with the
+scene music. With coverage this is the whole flow for a non-expert: a scene
+with a place, coverage, one sentence per shot (and a spoken line where wanted),
+one button, wait. Measured on THE STATION MASTER (five shots, two lines) -
+see below.
+
+**Pins describe their own scene.** The H3 prompt used to be the change plus
+"the camera does not move", and H3 filled the fog with gulls it was never asked
+for. The prompt now also states what the scene is - the place's compiled
+description - and that it stays exactly as it is. On shot E of THE HARBOUR
+LETTER the turn is unchanged and the gulls and the smudge are gone. One sample,
+consistent with the rule that has held all night: give the prior something
+true to hold, because it will not hold an absence.
