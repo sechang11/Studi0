@@ -47,7 +47,8 @@ button.part.on{background:#3a3428;border-color:var(--warn);color:var(--warn)}
     camera static, so the sentence under it is the only thing being tested. Answer the
     sentence as written. A clip that looks good but does not do what the sentence says is
     a <b>no</b> &mdash; that is the whole point of asking this way.</p>
-  <div id="list"></div>
+  <div id="todo" class="hint" style="margin:6px 0 10px"></div>
+<div id="list"></div>
 </main>
 <script>
 "use strict";
@@ -60,7 +61,12 @@ async function boot(){
   render();
 }
 function render(){
-  $("#list").innerHTML = CLIPS.map(c=>{
+  // unjudged first, so what is new for the director's eye is at the top
+  const todo = CLIPS.filter(c=>!V[c.id]).length;
+  const order = [...CLIPS].sort((a,b)=>((V[a.id]?1:0)-(V[b.id]?1:0)));
+  const head = document.getElementById("todo");
+  if(head) head.textContent = todo ? (todo+" clip"+(todo>1?"s":"")+" still to judge - they come first") : "every clip has a verdict";
+  $("#list").innerHTML = order.map(c=>{
     const raw=V[c.id]||""; const v=(typeof raw==="object"&&raw)?(raw.verdict||""):raw; const why=(typeof raw==="object"&&raw)?(raw.why||""):"";
     const amb=c.ambient||"(nothing named)";
     return `<div class="clip">
