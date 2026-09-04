@@ -1475,7 +1475,7 @@ def _compose_anchor_job(jid, fid, shid, char_id, place_id, plate, view,
         except Exception:
             pass
         sh["anchor_source"] = {"character": char_id, "framing": framing or "full", "place": place_id,
-                               "stand": stand, "cx": cx, "view": view,
+                               "stand": stand, "cx": cx, "view": ("base_portrait" if framing == "close" else view),
                                "plate": plate_p, "props": props or []}
         f.save()
         with _LOCK:
