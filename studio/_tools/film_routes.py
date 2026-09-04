@@ -1704,6 +1704,7 @@ def _log_geom(jid, CM, start, end):
 
 
 _STOP = set("""place scene shot frame picture background foreground image view
+sound sounds noise noises voice voices music silence quiet moment time
 a an the and or but of to in on at by for with from into onto over under
 across through behind beside between along toward towards against about around as is are
 was were be been being it its this that these those there here then while when where who
