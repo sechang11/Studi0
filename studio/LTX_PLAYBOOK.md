@@ -1129,3 +1129,36 @@ producing the thing you asked it not to, the fix is a different instrument,
 not a stronger prohibition.** Pins for motion prose cannot direct (§23); the
 compositor for identity the scene prior swallows (§21); the rig for emptiness
 the negative cannot hold.
+
+## §42  The fourth run, and the block in numbers
+
+AUTUMN PARK, the fourth form-to-film run of the morning: Ines and the station
+master on a park path, two pins in place (she turns her head, he nods over the
+watch), a line each, the pins and the faces right. Two notes on the takes:
+
+- **A silent establishing shot.** "Wind in the trees, birds, distant traffic"
+  returned rms 0.0013. The film QC already said "audio is effectively SILENT";
+  Make now retries a silent take like a drifted one. The ambience rule from the
+  QC chapter still holds - name sources; and even named ones sometimes return
+  nothing, which is what the retry is for.
+- **Bunting in the trees.** The insert's ambient words were "leaves, cloth". The
+  cloth frag says "hanging cloth and banners lift in the wind"; in a park that
+  drew bunting. An ambient word is a noun the model will draw. Choose them for
+  what the place has.
+
+**The block, 08:00-12:00, in numbers.** 31 commits. Four films from the form
+(THE STATION MASTER, NIGHT DINER, SCHOOL MORNING, AUTUMN PARK), 30 seconds
+each, about twelve minutes of waiting each, the director's work one sentence per
+shot and a line or two. Five take-level consumers (drift, quiet line, people in
+an empty shot, words not in the picture, ends closer than it started), one
+instrument change (the rig for empty shots), one button for a shot and one for
+a film, a form that starts a film with people already in the pictures, a Start
+page, footing so nobody stands in water, a relit second character, a Review
+tab that says what to fix, a soft delete, a jobs list that keeps running jobs.
+Twenty-six clips on the verify page for the director's eye. Playbook §35-42.
+
+The two invariants, honestly: a person with no knowledge of AI can now make a
+short film from a form and a few sentences, and every fault the machine can see
+is written on the take in that person's words. Faults the machine cannot see -
+the taste of a shot, whether a laugh is a laugh - still want the eye, which is
+what the verify page is for.
