@@ -871,3 +871,29 @@ two-shot is it *Tomas* speaking and not Ines.
 level-1 assets, coverage on the Scene tab, fifteen commits, playbook §25-33.
 The director's work in the last film was three sentences. That is the ratio the
 studio exists for.
+
+## §34  Delivery upscale, measured: possible overnight, not as a master step
+
+The `deliver` field (native / 1080p / 4k) has waited all night for an upscaler.
+The box has the nodes for one with no downloads: core `LoadVideo` ->
+`GetVideoComponents` -> `UpscaleModelLoader` (RealESRGAN_x4plus, the only
+upscale model on disk) -> `ImageUpscaleWithModel` -> `ImageScaleBy` 0.5 ->
+`CreateVideo` -> `SaveVideo`, run in chunks so the float batch fits in RAM
+(12 frames of 1920x1088 at x4 is a 4.4 GB tensor; the box has 60 GB with
+about 18 free while the studio is up).
+
+Measured on a 6s dialogue take: **40 seconds per 12-frame chunk** - x4 on
+1920x1088 is 7680x4352 per frame, roughly 3.3 s a frame on the 5090 before the
+lanczos halving - so **~80x realtime**. A 56-second film is about 75 minutes;
+the 3:08 LANTERN THIEF would be four hours. The third chunk then stalled in
+ComfyUI with the GPU at 1% (the CPU-side halving or the encode; not
+investigated further at 04:25). Interrupted; nothing left in the queue.
+
+Verdict: a frame-wise RealESRGAN pass is a *deliverable*, not a master step -
+something to start and walk away from, chunked and resumable, if it is wanted
+at all. Two cheaper paths remain: a 2x ESRGAN model would cut the work about
+fourfold (none is on disk; downloading one is the director's call), and the LTX
+latent upsampler already inside the 2.5 pipeline is the only route that adds
+detail the model meant rather than texture an upscaler guessed - untested on its
+own past the pipeline's second pass. `deliver` stays in the film's data and out
+of the UI until one of those is measured.
