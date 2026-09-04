@@ -332,5 +332,55 @@
   "action": "LTX render (the look_off change was too small to pin); Make rendered twice and kept the better",
   "ambient": "your answer calibrates the drift limit (currently 60%)",
   "file": "films/night-diner/takes/030/ltx_t527289621.mp4"
+ },
+ {
+  "id": "school-RENJI-lookup",
+  "shot": "030",
+  "question": "Anime: Renji looks up in place at the end of the corridor; the lockers and the light behind him stay put, and the drawn style holds through the motion.",
+  "selection": {
+   "camera": "pinned",
+   "action": "look_up",
+   "pace": "slow",
+   "ambient": [
+    "leaves",
+    "light"
+   ]
+  },
+  "action": "made by the one button from a quickstart film (anime): pose change pinned on H3",
+  "ambient": "the anime style should survive the interpolation",
+  "file": "films/school-morning/takes/030/pin_1788529072.mp4"
+ },
+ {
+  "id": "school-KITE-laugh-line",
+  "shot": "040",
+  "question": "The kite seller laughs, hands on hips, in place; you hear 'Every single morning' - and, as anime, her drawn mouth stays shut while the line plays.",
+  "selection": {
+   "camera": "pinned",
+   "action": "laugh",
+   "pace": "steady",
+   "ambient": [
+    "light"
+   ]
+  },
+  "action": "pinned laugh; the line rides the take's audio (LTX voice); anime lip sync is not expected",
+  "ambient": "this is the known anime limit, not a fault",
+  "file": "films/school-morning/takes/040/pin_1788529185.mp4"
+ },
+ {
+  "id": "school-insert-people",
+  "shot": "050",
+  "question": "The insert was marked EMPTY of people. Do people walk through it? (The new check flagged 'man, person' in the last frame; it re-rendered once and they came back.)",
+  "selection": {
+   "camera": "static",
+   "action": "-",
+   "pace": "-",
+   "ambient": [
+    "leaves",
+    "light"
+   ]
+  },
+  "action": "LTX render of an empty courtyard plate; the agency-slot problem from \u00a78, now measured",
+  "ambient": "your answer says whether the check is right",
+  "file": "films/school-morning/takes/050/ltx_t529282175.mp4"
  }
 ]

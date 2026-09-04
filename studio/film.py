@@ -606,7 +606,8 @@ def _compile_ltx(flat):
 
     neg = ", ".join(x for x in [LTX_NEG, neg_default, flat.get("negative") or "",
                                 ("person, model, hands, arms, face, crowd, animal, cat, "
-                                 "dog, bird" if empty else "")] if x)
+                                 "dog, bird, student, pedestrian, couple, man, woman, "
+                                 "worker, customer, passerby, figure, silhouette" if empty else "")] if x)
     aspect = "9:16 (Portrait)" if flat.get("aspect") == "portrait" else "16:9 (Widescreen)"
     return {"engine": "ltx", "workflow": "70_ltx25_i2v.json", "prompt": prompt,
             "negative": neg, "seconds": secs, "megapixels": mp, "aspect": aspect,
