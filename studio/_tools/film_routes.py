@@ -2097,6 +2097,17 @@ def quickstart(data):
             "cast": [c["cast"] for c in chars]}, 200
 
 
+def delete_film(data):
+    """Move the film's folder to studio/films/_trash/<id>-<stamp>. Reversible."""
+    fid = data["film"]
+    f = F.load(fid)
+    trash = os.path.join(F.FILMS, "_trash")
+    os.makedirs(trash, exist_ok=True)
+    dest = os.path.join(trash, "%s-%d" % (fid, int(time.time())))
+    shutil.move(f.dir, dest)
+    return {"ok": True, "moved_to": os.path.relpath(dest, F.FILMS)}, 200
+
+
 def make_shot(data):
     """Make this shot: character into the scene, words checked, pose change or
     render, picked - in plain words, one button."""

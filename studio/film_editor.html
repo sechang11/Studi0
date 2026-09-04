@@ -785,6 +785,10 @@ function filmForm(){
     <textarea id="f_lookclause" rows="2">${esc(TREE.look_clause||"")}</textarea>
     <label>grade</label><input id="f_grade" value="${esc(TREE.grade||"")}" style="width:100%">
     <label>extra negative</label><input id="f_neg" value="${esc(TREE.negative||"")}" style="width:100%">
+    <div class="row" style="margin-top:10px;justify-content:flex-end">
+      <button class="small" onclick="deleteFilm()" style="color:var(--bad)">delete this film</button>
+      <span class="hint" style="margin-left:8px">moves it to the trash folder; nothing is destroyed</span>
+    </div>
     <h2>Cast <span class="hint">(id is what beats reference)</span></h2>
     ${cast||'<div class="hint">none yet</div>'}
     <div class="row">
@@ -842,6 +846,12 @@ async function loadTriage(){
     }
     box.innerHTML=out;
   }catch(e){ box.innerHTML=`<div class="hint">triage unavailable: ${esc(String(e))}</div>`; }
+}
+async function deleteFilm(){
+  if(!confirm(`Delete the film "${TREE.title}"? It moves to the trash folder and can be brought back.`)) return;
+  const j=await api("/deletefilm",{film:FID});
+  if(j&&j.ok){ note("film moved to the trash"); FID=null; TREE=null; await loadFilms(); location.href="/film"; }
+  else note("could not delete: "+((j||{}).error||"unknown"),true);
 }
 async function saveFilm(){
   await api("/edit",{film:FID,title:$("#f_title").value,logline:$("#f_logline").value,
