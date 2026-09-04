@@ -118,9 +118,12 @@ async function composeAnchor(){
     plate:document.getElementById("c_plate").value,
     stand:parseFloat(document.getElementById("c_stand").value||"0.35"),
     cx:parseFloat(document.getElementById("c_cx").value||"0.42"),
-    props:(document.getElementById("c_prop").value?[{id:document.getElementById("c_prop").value,
-      stand:parseFloat(document.getElementById("c_pstand").value||"0.3"),
-      cx:parseFloat(document.getElementById("c_pcx").value||"0.62")}]:[])});
+    props:(()=>{ const v=document.getElementById("c_prop").value; if(!v) return [];
+      const L={stand:parseFloat(document.getElementById("c_pstand").value||"0.3"),
+               cx:parseFloat(document.getElementById("c_pcx").value||"0.62")};
+      if(v.startsWith("char:")){ L.character=v.slice(5); L.view=document.getElementById("c_pview").value; }
+      else L.id=v;
+      return [L]; })()});
   WATCH.add(j.job); note("composing the anchor: "+j.job);
 }
 async function anchorCheck(){
@@ -466,12 +469,16 @@ function shotForm(){
       <button class="small" onclick="composeAnchor()">compose</button>
     </div>
     <div class="row" style="margin-top:4px;gap:6px;align-items:flex-end">
-      <div><label>prop (optional)</label>
-        <select id="c_prop"><option value="">none</option>${(FOUNDRY.prop||[]).map(p=>
-          `<option value="${p.id}">${esc(p.name)} (${esc(p.style)})</option>`).join("")}</select></div>
+      <div><label>second layer (optional)</label>
+        <select id="c_prop"><option value="">none</option>
+          <optgroup label="props">${(FOUNDRY.prop||[]).map(p=>
+          `<option value="${p.id}">${esc(p.name)} (${esc(p.style)})</option>`).join("")}</optgroup>
+          <optgroup label="second character">${(FOUNDRY.character||[]).map(c=>
+          `<option value="char:${c.id}">${esc(c.name)} (${esc(c.style)})</option>`).join("")}</optgroup></select></div>
+      <div><label>view</label><select id="c_pview"><option>turn_front</option><option>turn_side</option><option>turn_front_three_quarter</option><option>turn_back</option></select></div>
       <div><label>prop stand</label><input id="c_pstand" value="0.30" style="width:70px"></div>
       <div><label>prop across</label><input id="c_pcx" value="0.62" style="width:70px"></div>
-      <span class="hint">sized for its depth from what it is - a lantern stays lantern-sized next to her</span>
+      <span class="hint">sized for its depth from what it is - a lantern stays lantern-sized, a second character stands 1.7 m; both identities come from packs</span>
     </div>
     <div class="row" style="margin-top:6px;gap:8px;align-items:center">
       <button class="small" onclick="anchorCheck()">check prose against anchor</button>

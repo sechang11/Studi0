@@ -1221,7 +1221,8 @@ def _compose_anchor_job(jid, fid, shid, char_id, place_id, plate, view,
         CM = _compose_mod()
         _log(jid, "composing %s into %s%s" % (
             char_id, place_id,
-            (" with " + ", ".join(p["id"] for p in props)) if props else ""))
+            (" with " + ", ".join(p.get("id") or p.get("character") for p in props))
+            if props else ""))
         out, plate_p = CM.compose(char_id, place_id, plate, view, "full", cx,
                                   stand=stand, quiet=True, props=props or None)
         l, r = CM.fidelity(plate_p, out)
@@ -1251,7 +1252,7 @@ def compose_anchor(data):
               data["place"], data.get("plate") or None,
               data.get("view") or "turn_front",
               float(data.get("stand", 0.35)), float(data.get("cx", 0.42)),
-              [p for p in (data.get("props") or []) if p.get("id")]),
+              [p for p in (data.get("props") or []) if p.get("id") or p.get("character")]),
         daemon=True).start()
     return {"job": jid}, 200
 

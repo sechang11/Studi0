@@ -391,6 +391,29 @@ def prop_layer(prop_id, plate, dpath, stand, cx, view="hero", seed=7, work=None,
     return cut, int(W * cx) - tw // 2, y_feet - th
 
 
+def character_layer(char_id, plate, dpath, stand, cx, view="turn_front", seed=7,
+                    work=None, framing="full"):
+    """A second (or third) character as a layer: cut, sized as a 1.7 m person at
+    its depth, tinted to the plate. -> (cut, x, y)."""
+    from PIL import Image
+    src = os.path.join(CHARS, char_id, view + ".png")
+    if not os.path.isfile(src):
+        raise SystemExit("no such view: %s" % src)
+    cut_p = cutout(src, os.path.join(work or OUT_DIR, "char_%s_%s_cut.png" % (char_id, view)),
+                   tag="k" + str(seed))
+    cut = _trim(Image.open(cut_p).convert("RGBA"))
+    W, H = plate.size
+    if dpath is not None:
+        y_feet, th, _ = place_by_depth(plate, dpath, stand, cx)
+    else:
+        scale, feet = _framings_for(view)[framing]
+        th, y_feet = int(H * scale), int(H * feet)
+    tw = max(1, int(cut.width * th / cut.height))
+    cut = cut.resize((tw, th), Image.LANCZOS)
+    cut = tint_to(cut, plate)
+    return cut, int(W * cx) - tw // 2, y_feet - th
+
+
 def compose(char_id, place_id, plate_key=None, view="turn_front",
             framing="full", cx=0.42, light=-0.35, seed=7, tag=None,
             quiet=False, stand=None, props=None):
@@ -508,11 +531,19 @@ def compose(char_id, place_id, plate_key=None, view="turn_front",
     layers = [(c_stand, rc, rx, ry)]
     for p in (props or []):
         p_stand = float(p.get("stand", c_stand))
-        pc, px, py = prop_layer(p["id"], plate, dpath, p_stand,
-                                float(p.get("cx", 0.6)), view=p.get("view", "hero"),
-                                seed=seed, work=work, framing=framing)
+        if p.get("character"):
+            pc, px, py = character_layer(p["character"], plate, dpath, p_stand,
+                                         float(p.get("cx", 0.6)),
+                                         view=p.get("view", "turn_front"), seed=seed,
+                                         work=work, framing=framing)
+            say("  + character %s (%s) at stand %.2f, %dpx tall"
+                % (p["character"], p.get("view", "turn_front"), p_stand, pc.height))
+        else:
+            pc, px, py = prop_layer(p["id"], plate, dpath, p_stand,
+                                    float(p.get("cx", 0.6)), view=p.get("view", "hero"),
+                                    seed=seed, work=work, framing=framing)
+            say("  + prop %s at stand %.2f, %dpx tall" % (p["id"], p_stand, pc.height))
         layers.append((p_stand, pc, px, py))
-        say("  + prop %s at stand %.2f, %dpx tall" % (p["id"], p_stand, pc.height))
     final = plate.copy()
     for _, lc, lx, ly in sorted(layers, key=lambda L: -L[0]):   # far first
         final = ground(final, lc, lx, ly, light=light)
