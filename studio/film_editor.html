@@ -127,13 +127,15 @@ async function pinPreview(){
   const change=document.getElementById("c_change").value.trim();
   if(!change) return note("say what changes by the end of the shot",true);
   const j=await api("/pinpreview",{film:FID,shot:SHOT,change:change,
-    seconds:parseFloat(document.getElementById("c_secs").value||"8")});
+    seconds:parseFloat(document.getElementById("c_secs").value||"8"),
+    hold_feet:document.getElementById("c_hold").checked});
   WATCH.add(j.job); note("editing the end frame: "+j.job);
 }
 async function pinMotion(force){
   const change=document.getElementById("c_change").value.trim();
   if(!change) return note("say what changes by the end of the shot",true);
   const j=await api("/pin",{film:FID,shot:SHOT,change:change,force:!!force,
+    hold_feet:document.getElementById("c_hold").checked,
     seconds:parseFloat(document.getElementById("c_secs").value||"8")});
   WATCH.add(j.job); note("pinning: "+j.job);
 }
@@ -394,6 +396,8 @@ function prefillChange(el){
   const o=(((((DICT||{}).motion||{}).subs||{}).action||{}).options||[]).find(x=>x.id===el.value);
   const c=document.getElementById("c_change");
   if(o&&o.end&&c&&(!c.value.trim()||c.dataset.auto==="1")){ c.value="the subject "+o.end; c.dataset.auto="1"; }
+  const hold=document.getElementById("c_hold");
+  if(hold&&o) hold.checked=!["walk_to","walk_away","run"].includes(o.id);
 }
 const castOpts=cur=>`<option value=""></option>`+Object.keys(TREE.cast||{}).map(c=>
   `<option ${c===cur?"selected":""}>${c}</option>`).join("");
@@ -474,6 +478,8 @@ function shotForm(){
         <input id="c_change" placeholder="she has lowered into a deep crouch, knees bent"
                value="${esc((sh.takes||[]).filter(t=>t.pin)[0]?.pin?.change||"")}"></div>
       <div><label>seconds</label><input id="c_secs" value="${esc(String((sh.pin_preview||{}).seconds||8))}" style="width:70px"></div>
+      <div><label title="in-place motion: the end figure keeps the start figure's feet and size. Off for walking or running, where the change of size and place IS the motion">feet planted</label>
+        <input type="checkbox" id="c_hold" ${((sh.pin_preview||{}).hold_feet===false)?"":"checked"}></div>
       <button class="small" onclick="pinPreview()">preview end</button>
       <button class="small" onclick="pinMotion(false)">${sh.pin_preview?"pin from this end frame":"pin"}</button>
       ${sh.pin_preview&&!sh.pin_preview.ok?`<button class="small" onclick="pinMotion(true)" title="below the change floor - interpolate anyway">pin anyway</button>`:""}

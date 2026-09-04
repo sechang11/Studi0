@@ -568,7 +568,7 @@ MIN_PIN_RATE = 0.009
 # contributes nothing to the distance and the number is smaller for the same
 # motion. One verified interpolation (the crouch) measures 0.0052/s this way;
 # the floor sits at half of it. First calibration - one data point.
-MIN_PIN_RATE_PLATE = 0.0026
+MIN_PIN_RATE_PLATE = 0.002
 
 
 def _subject_distance(a_path, b_path):
@@ -581,6 +581,18 @@ def _subject_distance(a_path, b_path):
     box = (int(W * 0.15), 0, int(W * 0.60), H)
     a = a.crop(box).resize((160, 110))
     b = b.crop(box).resize((160, 110))
+    pa, pb = a.tobytes(), b.tobytes()
+    return sum(abs(x - y) for x, y in zip(pa, pb)) / (255.0 * len(pa))
+
+
+def subject_change(start_path, end_path, roi):
+    """Mean absolute change inside `roi` (x0, y0, x1, y1) - the subject's own
+    region - so the number does not shrink with distance from the camera."""
+    from PIL import Image
+    a = Image.open(start_path).convert("L").crop(roi)
+    b = Image.open(end_path).convert("L").crop(roi)
+    if a.size != b.size or a.size[0] < 2 or a.size[1] < 2:
+        return 0.0
     pa, pb = a.tobytes(), b.tobytes()
     return sum(abs(x - y) for x, y in zip(pa, pb)) / (255.0 * len(pa))
 
@@ -620,8 +632,32 @@ def plate_for(place_id, plate_key=None):
     return os.path.join(pdir, pf)
 
 
+def _head_width(alpha, box):
+    """Width of the figure a little below its top - the head, whatever the pose.
+    Median over the rows 3-9% down the silhouette."""
+    x0, y0, x1, y1 = box
+    h = max(1, y1 - y0)
+    ws = []
+    for y in range(y0 + int(h * 0.03), min(y1, y0 + int(h * 0.09) + 1)):
+        row = alpha.crop((x0, y, x1, y + 1)).tobytes()
+        xs = [i for i, v in enumerate(row) if v > 128]
+        if xs:
+            ws.append(xs[-1] - xs[0] + 1)
+    return sorted(ws)[len(ws) // 2] if ws else 0
+
+
+# How much a moving motion may change the figure's scale (head width, end over
+# start) inside one shot. A walk is a modest change of depth; beyond this the
+# model has to invent the ground she crossed.
+MOVE_SCALE = (0.6, 1.6)
+
+MOVING_WORDS = ("walk", "closer", "further", "farther", "larger in the frame",
+                "smaller in the frame", "run", "steps toward", "steps away",
+                "approach", "retreat", "leaves the frame", "enters")
+
+
 def end_state(start_path, change, dest, seed=11, keep=None, plate_path=None,
-              light=-0.35):
+              light=-0.35, src=None, hold_feet=None):
     """The start frame, edited so ONE thing about the subject is different.
 
     `change` says what moved - "she has lowered into a deep crouch, knees bent".
@@ -656,9 +692,91 @@ def end_state(start_path, change, dest, seed=11, keep=None, plate_path=None,
     if not box:
         return raw          # nothing cut out - keep the regeneration, honestly
     fig = cut.crop(box)
-    final = ground(bg, fig, box[0], box[1], light=light)
-    final.paste(fig, (box[0], box[1]), fig)
+    x, y = box[0], box[1]
+    geom = {"hold_feet": None, "scale": 1.0}
+    if hold_feet is None:
+        hold_feet = not any(k in change.lower() for k in MOVING_WORDS)
+    geom["hold_feet"] = bool(hold_feet)
+    if src and hold_feet:
+        # in-place motion: same feet, same centre, same head size as the start
+        try:
+            from PIL import ImageChops
+            W, H = bg.size
+            stand = float(src.get("stand", 0.35))
+            cx = float(src.get("cx", 0.42))
+            dpath = depth_for_plate(plate_path)
+            y_feet, th, _ = place_by_depth(bg, dpath, stand, cx)
+            start_im = Image.open(start_path).convert("RGB").resize(bg.size)
+            diff = ImageChops.difference(start_im, bg).convert("L").point(
+                lambda v: 255 if v > 14 else 0)
+            cxp = int(W * cx)
+            roi = (max(0, cxp - th), max(0, y_feet - int(th * 1.15)),
+                   min(W, cxp + th), min(H, y_feet))
+            sbox = diff.crop(roi).getbbox()
+            if sbox:
+                sbox = (sbox[0] + roi[0], sbox[1] + roi[1],
+                        sbox[2] + roi[0], sbox[3] + roi[1])
+                hw_s = _head_width(diff, sbox)
+                hw_e = _head_width(fig.split()[-1], (0, 0, fig.width, fig.height))
+                if hw_s > 4 and hw_e > 4:
+                    s = max(0.6, min(1.5, hw_s / float(hw_e)))
+                    if abs(s - 1.0) > 0.03:
+                        fig = fig.resize((max(1, int(fig.width * s)),
+                                          max(1, int(fig.height * s))), Image.LANCZOS)
+                    geom["scale"] = round(s, 3)
+                geom.update(head_start=hw_s, head_end=hw_e)
+            x = cxp - fig.width // 2
+            y = y_feet - fig.height
+            geom.update(y_feet=y_feet, cx=cxp, raw_box=list(box))
+        except Exception as e:
+            geom["error"] = str(e)[:120]
+    elif src and not hold_feet:
+        # a moving motion: clamp the change of scale, then stand the figure at
+        # the depth the plate gives a figure of that height
+        try:
+            from PIL import ImageChops
+            W, H = bg.size
+            stand = float(src.get("stand", 0.35))
+            cx = float(src.get("cx", 0.42))
+            dpath = depth_for_plate(plate_path)
+            y_feet0, th0, y_h = place_by_depth(bg, dpath, stand, cx)
+            start_im = Image.open(start_path).convert("RGB").resize(bg.size)
+            diff = ImageChops.difference(start_im, bg).convert("L").point(
+                lambda v: 255 if v > 14 else 0)
+            cxp = int(W * cx)
+            roi = (max(0, cxp - th0), max(0, y_feet0 - int(th0 * 1.15)),
+                   min(W, cxp + th0), min(H, y_feet0))
+            sbox = diff.crop(roi).getbbox()
+            if sbox:
+                sbox = (sbox[0] + roi[0], sbox[1] + roi[1],
+                        sbox[2] + roi[0], sbox[3] + roi[1])
+                hw_s = _head_width(diff, sbox)
+                hw_e = _head_width(fig.split()[-1], (0, 0, fig.width, fig.height))
+                if hw_s > 4 and hw_e > 4:
+                    want = max(MOVE_SCALE[0], min(MOVE_SCALE[1], hw_e / float(hw_s)))
+                    s = (want * hw_s) / float(hw_e)       # resize so head = want x start
+                    if abs(s - 1.0) > 0.03:
+                        fig = fig.resize((max(1, int(fig.width * s)),
+                                          max(1, int(fig.height * s))), Image.LANCZOS)
+                    geom.update(scale=round(s, 3), rel_scale=round(want, 3),
+                                head_start=hw_s, head_end=hw_e)
+            # where does a figure this tall stand? invert place_by_depth:
+            # th = k * (y_feet - y_h), k = 0.8 H / (H - y_h)
+            k = 0.80 * H / max(1.0, (H - y_h))
+            y_feet = int(y_h + fig.height / k)
+            y_feet = max(y_h + 4, min(H + int(fig.height * 0.35), y_feet))
+            x = cxp - fig.width // 2
+            y = y_feet - fig.height
+            geom.update(y_feet=y_feet, y_feet_start=y_feet0, cx=cxp, raw_box=list(box))
+        except Exception as e:
+            geom["error"] = str(e)[:120]
+    final = ground(bg, fig, x, y, light=light)
+    final.paste(fig, (x, y), fig)
     final.save(dest)
+    try:
+        json.dump(geom, open(dest[:-4] + "_geom.json", "w"), indent=1)
+    except Exception:
+        pass
     return dest
 
 

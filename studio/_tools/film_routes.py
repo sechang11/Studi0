@@ -1256,7 +1256,7 @@ def compose_anchor(data):
     return {"job": jid}, 200
 
 
-def _pin_job(jid, fid, shid, change, seconds, seed, force=False):
+def _pin_job(jid, fid, shid, change, seconds, seed, force=False, hold_feet=None):
     try:
         CM = _compose_mod()
         f = F.load(fid)
@@ -1279,7 +1279,9 @@ def _pin_job(jid, fid, shid, change, seconds, seed, force=False):
                  % (" on the pristine plate" if plate_p else ""))
             end = CM.end_state(start, change,
                                os.path.join(work, "pin_end_%s.png" % shid),
-                               plate_path=plate_p)
+                               plate_path=plate_p, src=sh.get("anchor_source"),
+                               hold_feet=hold_feet)
+            _log_geom(jid, CM, start, end)
         ok, rate, longest = CM.pin_feasible(start, end, seconds,
                                             on_plate=bool(plate_p))
         _log(jid, "pin rate %.4f/s (floor %.4f), carries %.1fs"
@@ -1330,7 +1332,34 @@ def _plate_of(sh, CM):
     return None
 
 
-def _pin_preview_job(jid, fid, shid, change, seconds, seed):
+def _log_geom(jid, CM, start, end):
+    """What end_state did with the figure, and the change inside its region."""
+    try:
+        g = json.load(open(end[:-4] + "_geom.json"))
+    except Exception:
+        return
+    if g.get("hold_feet"):
+        _log(jid, "end figure held in place: scale %.2f (head %s -> %s px), feet y=%s"
+             % (g.get("scale", 1.0), g.get("head_start", "?"), g.get("head_end", "?"),
+                g.get("y_feet", "?")))
+    else:
+        _log(jid, "end figure keeps the regeneration's placement (moving motion)")
+    rb = g.get("raw_box")
+    if rb and g.get("y_feet") is not None:
+        try:
+            from PIL import Image
+            W, H = Image.open(end).size
+            x0 = max(0, min(rb[0], g["cx"] - (rb[2] - rb[0]) // 2) - 20)
+            x1 = min(W, max(rb[2], g["cx"] + (rb[2] - rb[0]) // 2) + 20)
+            y0 = max(0, min(rb[1], g["y_feet"] - (rb[3] - rb[1])) - 20)
+            y1 = min(H, g["y_feet"] + 20)
+            sc = CM.subject_change(start, end, (x0, y0, x1, y1))
+            _log(jid, "subject-region change %.3f (logged for calibration, not gating)" % sc)
+        except Exception:
+            pass
+
+
+def _pin_preview_job(jid, fid, shid, change, seconds, seed, hold_feet=None):
     try:
         CM = _compose_mod()
         f = F.load(fid)
@@ -1347,7 +1376,9 @@ def _pin_preview_job(jid, fid, shid, change, seconds, seed):
         _log(jid, "editing the end state%s"
              % (" on the pristine plate" if plate_p else ""))
         end = CM.end_state(start, change, os.path.join(f.dir, rel), seed=seed,
-                           plate_path=plate_p)
+                           plate_path=plate_p, src=sh.get("anchor_source"),
+                           hold_feet=hold_feet)
+        _log_geom(jid, CM, start, end)
         ok, rate, longest = CM.pin_feasible(start, end, seconds,
                                             on_plate=bool(plate_p))
         _log(jid, "pin rate %.4f/s (floor %.4f%s), carries %.1fs"
@@ -1358,7 +1389,7 @@ def _pin_preview_job(jid, fid, shid, change, seconds, seed):
         sh["pin_preview"] = {"change": change, "seconds": seconds, "end": rel,
                              "rate": round(rate, 4), "ok": bool(ok),
                              "longest": round(longest, 1), "seed": seed,
-                             "when": int(time.time())}
+                             "hold_feet": hold_feet, "when": int(time.time())}
         f.save()
         with _LOCK:
             JOBS[jid]["result"] = dict(sh["pin_preview"])
@@ -1376,9 +1407,11 @@ def pin_preview(data):
         raise ValueError("say what changes by the end of the shot")
     seconds = float(data.get("seconds") or 8)
     seed = int(data.get("seed") or 11)
+    hold = data.get("hold_feet")
+    hold_feet = None if hold is None else bool(hold)
     jid = _job("pinpreview", film=fid, shot=shid)
     threading.Thread(target=_pin_preview_job,
-                     args=(jid, fid, shid, change, seconds, seed),
+                     args=(jid, fid, shid, change, seconds, seed, hold_feet),
                      daemon=True).start()
     return {"ok": True, "job": jid}, 200
 
@@ -1389,7 +1422,8 @@ def pin_shot(data):
     threading.Thread(
         target=_pin_job,
         args=(jid, data["film"], data["shot"], data["change"],
-              float(data.get("seconds", 8)), int(data.get("seed", 42)), bool(data.get("force"))),
+              float(data.get("seconds", 8)), int(data.get("seed", 42)), bool(data.get("force")),
+              None if data.get("hold_feet") is None else bool(data.get("hold_feet"))),
         daemon=True).start()
     return {"job": jid}, 200
 
