@@ -678,6 +678,22 @@ def _scene_drift(video, start_img, tag):
 # calibrated on 2026-09-04: a take that turned a bridge into a marina lost 0.72;
 # takes that held their scene lost 0.09-0.29; one uncertain take 0.50
 DRIFT_LIMIT = 0.6
+# a spoken line peaks well above ambience: measured -6.5 / -7.4 dB for lines against
+# -19.7 for an empty street. Below this, the line was probably not spoken.
+SPEECH_PEAK_DB = -14.0
+
+
+def _peak_db(video):
+    """Peak loudness of the take's audio in dB (0 = full scale), or None."""
+    try:
+        out = subprocess.run(["ffmpeg", "-v", "info", "-i", video, "-vn", "-af", "volumedetect",
+                              "-f", "null", "-"], capture_output=True, text=True).stderr
+        for l in out.splitlines():
+            if "max_volume" in l:
+                return float(l.split("max_volume:")[1].split("dB")[0].strip())
+    except Exception:
+        return None
+    return None
 
 
 def _render_take(jid, f, sh, eng, seed):
@@ -811,6 +827,14 @@ def _render_take(jid, f, sh, eng, seed):
         _log(jid, "scene drift %d%% - %s" % (int(_d["lost"] * 100), ", ".join(_d["missing"][:5])))
     elif _d:
         _log(jid, "scene held (%d%% of the start picture's content in the last frame)" % int((1 - _d["lost"]) * 100))
+    _line = any(((b.get("dialogue") or {}).get("line") or "").strip() for b in (sh.get("beats") or []))
+    if _line and eng == "ltx":
+        _pk = _peak_db(dest)
+        if _pk is not None and _pk < SPEECH_PEAK_DB:
+            qc = list(qc) + ["the line may not have been spoken (audio peaks at %.1f dB)" % _pk]
+            _log(jid, "quiet for a dialogue shot: peak %.1f dB" % _pk)
+        elif _pk is not None:
+            _log(jid, "speech level ok: peak %.1f dB" % _pk)
     take = {"id": tid, "engine": eng, "seed": seed, "created": time.strftime("%H:%M"),
             "file": rel, "poster": rel[:-4] + ".png", "strip": rel[:-4] + "_strip.png",
             "duration": round(_dur(dest), 2), "fps": _fps(dest), "qc": qc,
@@ -1909,8 +1933,9 @@ def _make_job(jid, fid, shid, seconds=None, seed=0):
             sh = f.shot(shid)
             takes = sorted(sh.get("takes") or [], key=lambda t: t["id"])
             newest = takes[-1] if takes else None
-            if newest and any(str(q).startswith("scene drift") for q in newest.get("qc") or []):
-                _log(jid, "the picture drifted - rendering once more on a new seed")
+            if newest and any(str(q).startswith(("scene drift", "the line may not")) for q in newest.get("qc") or []):
+                _log(jid, "the take has a fault (%s) - rendering once more on a new seed"
+                     % ("; ".join(newest.get("qc") or [])[:80]))
                 _render_take(jid, f, sh, "ltx", random.randint(1, 10 ** 9))
                 f = F.load(fid)
                 sh = f.shot(shid)
