@@ -1765,3 +1765,12 @@ have a person walking through it.
 | walk_and_talk | yes | 728 | pull back 15% | uncertain | 3s of silence inside the film (at 3s, 4s, 5s) |
 | montage_details | yes | 232 | push in 18% |  |  |
 | low_angle_wide | yes | 744 | tilt up 11% | a different face | the face is a different one by the end (identity 0.54 -> 0.45); place  |
+
+**The H3 exception, withdrawn.** The bench had H3 obeying *pull back* on one
+anchor at one seed (28% and 41%), and for an hour the builder asked H3 for a
+pull back in prose. The first build to use it, on the builder's own anchor at
+another seed, pushed in 4.2x. One anchor and one seed is a measurement, not a
+law; the exception is withdrawn, and H3 gets the same treatment as LTX - the
+engine is asked to hold still, the move is arithmetic, and when the engine runs
+away past what stabilise can undo, the take says so and the camera promise
+fails honestly.
