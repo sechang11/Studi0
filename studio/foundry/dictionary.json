@@ -1795,35 +1795,87 @@
       "label": "Static",
       "frag": "the camera does not move",
       "enforced": false,
-      "note": "advisory: LTX has its own camera prior and may ignore this - measured, a shot asking for static still zoomed in"
+      "note": "measured 2026-09-05 on every take on disk - LTX: 180 takes, median zoom 1.02, pushed in 45%, pulled back 10%, panned 21%; H3: 71 takes, median zoom 1.06, pushed in 46%, pulled back 7%, panned 32%. A word is a coin flip; a post move (done by the studio) or a pin is exact.",
+      "measured": {
+       "ltx": {
+        "n": 180,
+        "zoom_median": 1.019,
+        "push_rate": 0.45,
+        "pull_rate": 0.1,
+        "pan_rate": 0.21
+       },
+       "h3": {
+        "n": 71,
+        "zoom_median": 1.059,
+        "push_rate": 0.46,
+        "pull_rate": 0.07,
+        "pan_rate": 0.32
+       }
+      }
      },
      {
       "id": "push_in",
       "label": "Push in",
       "frag": "as the camera pushes in slowly",
       "enforced": false,
-      "note": "advisory: LTX has its own camera prior and may ignore this - measured, a shot asking for static still zoomed in"
+      "note": "measured 2026-09-05 on every take on disk - LTX: 10 takes, median zoom 1.39, pushed in 50%, pulled back 10%, panned 30%. A word is a coin flip; a post move (done by the studio) or a pin is exact.",
+      "measured": {
+       "ltx": {
+        "n": 10,
+        "zoom_median": 1.385,
+        "push_rate": 0.5,
+        "pull_rate": 0.1,
+        "pan_rate": 0.3
+       }
+      }
      },
      {
       "id": "pull_back",
       "label": "Pull back",
       "frag": "as the camera pulls back",
       "enforced": false,
-      "note": "advisory: LTX has its own camera prior and may ignore this - measured, a shot asking for static still zoomed in"
+      "note": "measured 2026-09-05 on every take on disk - LTX: 2 takes, median zoom 1.01, pushed in 0%, pulled back 50%, panned 0%. A word is a coin flip; a post move (done by the studio) or a pin is exact.",
+      "measured": {
+       "ltx": {
+        "n": 2,
+        "zoom_median": 1.006,
+        "push_rate": 0.0,
+        "pull_rate": 0.5,
+        "pan_rate": 0.0
+       }
+      }
      },
      {
       "id": "pan",
       "label": "Pan",
       "frag": "as the camera pans across",
       "enforced": false,
-      "note": "advisory: LTX has its own camera prior and may ignore this - measured, a shot asking for static still zoomed in"
+      "note": "measured 2026-09-05 on every take on disk - LTX: 7 takes, median zoom 1.37, pushed in 86%, pulled back 14%, panned 71%. A word is a coin flip; a post move (done by the studio) or a pin is exact.",
+      "measured": {
+       "ltx": {
+        "n": 7,
+        "zoom_median": 1.366,
+        "push_rate": 0.86,
+        "pull_rate": 0.14,
+        "pan_rate": 0.71
+       }
+      }
      },
      {
       "id": "follow",
       "label": "Follow",
       "frag": "with the camera following the subject",
       "enforced": false,
-      "note": "advisory: LTX has its own camera prior and may ignore this - measured, a shot asking for static still zoomed in"
+      "note": "measured 2026-09-05 on every take on disk - LTX: 5 takes, median zoom 0.98, pushed in 0%, pulled back 20%, panned 20%. A word is a coin flip; a post move (done by the studio) or a pin is exact.",
+      "measured": {
+       "ltx": {
+        "n": 5,
+        "zoom_median": 0.976,
+        "push_rate": 0.0,
+        "pull_rate": 0.2,
+        "pan_rate": 0.2
+       }
+      }
      },
      {
       "id": "circle",
@@ -1844,7 +1896,16 @@
       "label": "Tilt up",
       "frag": "as the camera tilts upward",
       "enforced": false,
-      "note": "advisory: LTX has its own camera prior and may ignore this - measured, a shot asking for static still zoomed in"
+      "note": "measured 2026-09-05 on every take on disk - LTX: 2 takes, median zoom 1.00, pushed in 0%, pulled back 50%, panned 0%. A word is a coin flip; a post move (done by the studio) or a pin is exact.",
+      "measured": {
+       "ltx": {
+        "n": 2,
+        "zoom_median": 1.0,
+        "push_rate": 0.0,
+        "pull_rate": 0.5,
+        "pan_rate": 0.0
+       }
+      }
      },
      {
       "id": "tilt_down",
