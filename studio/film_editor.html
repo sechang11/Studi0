@@ -299,6 +299,7 @@ async function selShot(shid){
   if(TAB==="scene") TAB="shot";
   renderTimeline(); renderCenter(); renderRight();
   if(document.getElementById("c_place")) composePlates();
+  if(document.getElementById("c_post")) document.getElementById("c_post").value=postKeyOf(DETAIL.shot.cam);
   if(document.getElementById("cv_place")) coveragePlates();
 }
 
@@ -512,6 +513,17 @@ function shotForm(){
     </div>
     <details style="margin-top:10px"><summary class="hint" style="cursor:pointer">Advanced - how this shot is built (character placement, pose change, checks)</summary>
     <div class="row" style="margin-top:10px;gap:6px;align-items:flex-end">
+      <div><label>camera move by the studio <span class="hint">- applied after the render, then measured</span></label>
+        <select id="c_post" onchange="setPostMove(this.value)">
+          <option value="">none - the engine's camera as it comes</option>
+          <option value="stabilise">still - stabilise the drift out</option>
+          <option value="push">push in 1.14x</option><option value="pull">pull back</option>
+          <option value="pan left">pan left</option><option value="pan right">pan right</option>
+          <option value="tilt up">tilt up</option><option value="tilt down">tilt down</option>
+          <option value="orbit">orbit (2D arc)</option><option value="handheld">handheld</option>
+          <option value="roll">Dutch tilt</option><option value="whip">whip pan</option></select></div>
+    </div>
+    <div class="row" style="margin-top:6px;gap:6px;align-items:flex-end">
       <div><label>who is in the frame</label>
         <select id="c_char">${(FOUNDRY.character||[]).map(c=>
           `<option value="${c.id}">${esc(c.name)} (${esc(c.style)})</option>`).join("")}</select></div>
@@ -596,6 +608,17 @@ function readBeats(){
     dialogue:{char:el.querySelector(".b_dchar").value,
               line:el.querySelector(".b_dline").value.trim(),
               delivery:el.querySelector(".b_ddeliv").value.trim()}}));
+}
+const POST_MOVES_UI={"stabilise":{move:"stabilise"},"push":{move:"push",amount:1.14},"pull":{move:"pull",amount:1.14},
+  "pan left":{move:"pan",amount:0.12,direction:"left",zoom:1.14},"pan right":{move:"pan",amount:0.12,direction:"right",zoom:1.14},
+  "tilt up":{move:"tilt",amount:0.10,direction:"up",zoom:1.14},"tilt down":{move:"tilt",amount:0.10,direction:"down",zoom:1.14},
+  "orbit":{move:"orbit",amount:0.10,zoom:1.12},"handheld":{move:"handheld",amp:14,zoom:1.06},"roll":{move:"roll",amount:8},"whip":{move:"whip",amount:0.2,zoom:1.25}};
+function postKeyOf(cam){ const p=(cam||{}).post; if(!p) return ""; if(p.move==="pan"||p.move==="tilt") return p.move+" "+(p.direction||(p.move==="pan"?"right":"down")); return p.move; }
+async function setPostMove(key){
+  const cam=Object.assign({}, (DETAIL.shot.cam&&typeof DETAIL.shot.cam==="object")?DETAIL.shot.cam:{});
+  if(key) cam.post=Object.assign({}, POST_MOVES_UI[key]); else delete cam.post;
+  await api("/editshot",{film:FID,shot:SHOT,cam:cam});
+  DETAIL.shot.cam=cam; note(key?("camera move set: "+key+" - the next take will carry it"):"camera move cleared");
 }
 async function saveShot(){
   stashForm();
