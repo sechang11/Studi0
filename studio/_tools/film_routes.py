@@ -2940,6 +2940,9 @@ def _load_sibling(name):
 def _cam_block(tpl_build, post, data):
     """what the shot asks of the camera, and whether the studio may cut it at the face"""
     cam = {"rig": tpl_build["rig"]} if tpl_build.get("rig") else ({"post": dict(post)} if post else {})
+    if data.get("_angle"):
+        cam = dict(cam)
+        cam["angle"] = dict(data["_angle"])
     want = data.get("trim_face")
     if want is None:
         want = tpl_build.get("trim_face")
@@ -3037,6 +3040,13 @@ def _build_job(jid, data):
                 # the plate PATH was resolved before the angled one existed, and a shot with
                 # nobody in it uses that path as its anchor - so it has to be resolved again
                 plate_p = got_p
+                # what the source plate measured, so the promise can be relative to it
+                base_m = AM.measure(base_p)
+                data["_angle"] = {"name": angle_name, "asked": round(angle_pitch, 3),
+                                  "plate": (round(m.get("pitch"), 3)
+                                            if m.get("confidence") not in (None, "none") else None),
+                                  "source_plate": (round(base_m.get("pitch"), 3)
+                                                   if base_m.get("confidence") not in (None, "none") else None)}
             except Exception as e:
                 _log(jid, "the angle could not be made: %s" % str(e)[:120])
                 angle_pitch, angle_name = 0.0, "eye level"

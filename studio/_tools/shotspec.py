@@ -92,13 +92,18 @@ def run_check(chk, sh, take):
             return None, "this place has no verticals to measure an angle by"
         p = float(m.get("pitch", 0.0))
         want = (chk.get("want") or "eye level").replace("a ", "").strip()
-        got = "pitch=%+.2f (%s)" % (p, m.get("angle", "?"))
+        # relative to the plate this shot was built on: an ordinary photograph already has
+        # upward-converging verticals, so an absolute threshold passes shots nobody angled
+        base = ((sh.get("cam") or {}).get("angle") or {}).get("source_plate")
+        d = (p - base) if base is not None else p
+        got = ("pitch=%+.2f against the plate's %+.2f (change %+.2f)" % (p, base, d)) if base is not None \
+            else "pitch=%+.2f (%s)" % (p, m.get("angle", "?"))
         if want.startswith("low"):
-            ok = p >= 0.12
+            ok = d >= 0.15
         elif want.startswith("high"):
-            ok = p <= -0.12
+            ok = d <= -0.15
         else:
-            ok = abs(p) < 0.12
+            ok = abs(d) < 0.15
         if m.get("confidence") == "low":
             got += " - measured with low confidence"
         return ok, got

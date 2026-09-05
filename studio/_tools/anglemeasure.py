@@ -36,7 +36,14 @@ import numpy as np
 
 VERT_DEG = 28.0        # a "vertical" line may lean this far and still count
 MIN_LINES = 6
-EYE_LEVEL = 0.12       # |pitch| under this reads as eye level
+# Set from the population, not from theory: 102 readings over every plate and picked take
+# on this box have quartiles 0.00 and +0.80 and a median of +0.39.  A street photographed at
+# chest height converges upward whether or not anyone asked it to.
+EYE_UP = 0.50          # below this, upward convergence is just photography
+EYE_DOWN = -0.15       # downward is rare, so it takes less of it to mean something
+STEEP_UP = 1.10        # the top tenth of the population
+STEEP_DOWN = -0.55
+EYE_LEVEL = EYE_UP     # kept: older callers read this name
 
 
 def _first_frame(path):
@@ -187,17 +194,37 @@ def measure(src):
 
 
 def describe(pitch, conf="medium"):
+    """The absolute word.  For what the studio PROMISED, use describe_change against the
+    plate the take was built on - an ordinary plate is not at zero."""
     if conf == "none":
         return "eye level"
-    if pitch > 0.55:
+    if pitch > STEEP_UP:
         return "a steep low angle"
-    if pitch > EYE_LEVEL:
+    if pitch > EYE_UP:
         return "a low angle"
-    if pitch < -0.55:
+    if pitch < STEEP_DOWN:
         return "a steep high angle"
-    if pitch < -EYE_LEVEL:
+    if pitch < EYE_DOWN:
         return "a high angle"
     return "eye level"
+
+
+def describe_change(pitch, base, conf="medium"):
+    """What the camera did relative to the picture it started from, which is what a
+    director asked for.  A keystone REPLACES a vanishing point rather than adding to it,
+    so this is the take against its own plate, never a sum of two angles."""
+    if conf == "none" or base is None:
+        return describe(pitch, conf)
+    d = pitch - base
+    if d > 0.45:
+        return "well below the plate's own eye line"
+    if d > 0.15:
+        return "below the plate's own eye line"
+    if d < -0.45:
+        return "well above the plate's own eye line"
+    if d < -0.15:
+        return "above the plate's own eye line"
+    return "level with the plate"
 
 
 def note(m):
