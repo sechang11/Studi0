@@ -144,7 +144,7 @@ function showFamily(fid){
   $("#shotcards").innerHTML=shots.map(s=>`<div class="take ${s.id===TEMPLATE?"picked":""}" style="cursor:pointer;padding:8px 10px" onclick="pickShot('${s.id}')">
       <b>${esc(s.title)}</b><div class="hint" style="margin-top:2px">${esc(s.purpose)}</div>
       <div class="hint" style="margin-top:4px;opacity:.7">${esc((s.build.framings||[]).join("/"))} · ${esc(s.build.camera||"static")}${s.build.people===0?" · nobody":s.build.people===2?" · two people":""} · ${s.build.duration||6}s</div>
-      ${s.checked?`<div class="hint" style="margin-top:4px;font-size:11px;color:${s.checked.built?"var(--good)":"var(--bad)"}">${s.checked.built?"checked "+esc(s.checked.when||"")+(s.checked.camera?" · camera: "+esc(String(s.checked.camera).replace(/\s*\(.*$/,"")):"")+(s.checked.identity?" · face: "+esc(String(s.checked.identity).replace(/\s*\(.*$/,"")):""):"did not build when checked"}</div>`:""}</div>`).join("");
+      ${s.checked?`<div class="hint" style="margin-top:4px;font-size:11px;color:${s.checked.built?"var(--good)":"var(--bad)"}">${s.checked.built?"checked "+esc(s.checked.when||"")+(s.checked.camera?" · camera: "+esc(String(s.checked.camera).replace(/\s*\(.*$/,"")):"")+(s.checked.angle&&s.checked.angle!=="eye level"?" · "+esc(s.checked.angle):"")+(s.checked.identity?" · face: "+esc(String(s.checked.identity).replace(/\s*\(.*$/,"")):""):"did not build when checked"}</div>`:""}</div>`).join("");
 }
 function clockWarn(){
   const el=$("#clockwarn"); if(!el) return;

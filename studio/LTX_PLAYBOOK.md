@@ -2081,3 +2081,32 @@ it into the spec, and the length field says it live as the director types.
 Worth noticing what the two numbers mean together: a still shot's face survives 4.8 s and a
 walking one's 4.0 s, so the walk is not uniquely cursed - LTX loses faces at about five
 seconds in general, and a walk toward the camera simply gives it more reason to.
+
+**Where the block ends: 45 entries, all built, all measured.** Thirteen were added today -
+five angles, three moves with mass, two cranes, and three that compose them - and all
+thirteen have now been built once through the builder and measured. Twelve came back clean.
+The one that did not is the runaway-camera fault added this afternoon doing its job: the
+matched-angles entry asked the camera to hold still and the engine pushed 39%, which before
+today would have been an information note on a faultless take.
+
+**Who loses the face, from 119 clocked takes.**
+
+  by framing        close 17 of 19 (89%)   wide 33 of 50 (66%)   full 1 of 6 (17%)
+  by the place      held 42 of 52 (81%)    drifted 20 of 37 (54%)   changed 0 of 5 (0%)
+  by the first frame  0.65+ 45 of 62 (73%)   0.55-0.65 31 of 40 (78%)   under 0.55 4 of 17 (24%)
+
+The place and the face fail together and completely: on the five takes whose place changed
+between the first frame and the last, not one kept the face. An engine that rewrites the scene
+rewrites the person in it, so the remedy there is the plate or the length and never another
+seed - and the fault now says so. A bigger head survives: the framing warns before the build
+from its own record.
+
+The third row looked like the best find of all, because an anchor is a still picture that
+exists before any card time is spent. It does not transfer. On 65 shots with both, the anchor
+reads 0.069 below the take's first frame at the median with a spread of 0.103 - one is a
+plate-sized composite, the other the engine's rendering of it at the film's resolution - and
+across that offset the anchor separates 67% from 79%. Real, and smaller than the noise it
+would be read through. identity.py can score a still, the compositor records what the anchor
+scored, and nothing is gated on it. A 67-against-79 predictor would throw away good anchors
+and keep bad ones while looking rigorous, which is the failure mode this whole project is
+built to avoid.
