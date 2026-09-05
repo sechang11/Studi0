@@ -1691,3 +1691,77 @@ take's engine ran away 65% - too far to stabilise - and kept its move, and the
 pick, now judged by faults, then camera closeness, then the face, chose the
 first. That is the shape of every camera promise from here: asked, done,
 measured, and the measurement chooses.
+
+## §53  The encyclopedia, checked: every entry once, unattended
+
+An encyclopedia of shots is a set of promises; a promise is worth what a test
+says. From 02:10 every entry was built once through the builder into a film of
+its own - `encyclopedia-check` - with Tomas, Ines as the second when two were
+needed, the autumn park by day and the harbour by night, one variant each, and
+the take that came back was measured: the camera, the face, the place, the
+notes. The results ride on the catalog (`checked` per entry) and on the shelf,
+so a person picking a shot type sees what happened the last time it was built.
+
+**What held.** The camera moves the studio performs came back as asked: push
+in 13% for 14, pull back 12% for 12, the insert's push 15%, the two statics
+stabilised to still. The place held on every two-shot and single measured so
+far (0.87-0.93 first frame to last). Where a person walked toward the camera
+the ruler that follows the background said "still" and the ruler that follows
+the face said "a different face" - and it was: the engine redrew him on the
+way in, confirmed by eye against the portrait.
+
+**What the check taught.** The head of a person in a wide or medium framing is
+a few dozen pixels; the same person scores 0.56-0.72 against the portrait
+there, and 0.74-0.78 in a close-up, so the identity bands now depend on the
+framing. A face that fills the frame is what the camera ruler follows, so on a
+close-up the face keeps its box instead of being carried through a "camera"
+that is really the head. The matrix driver read a job's result rather than
+the shot itself and lost one entry to a reload that landed as the job finished;
+the shot had its two takes all along.
+
+**The numbers.** Thirty-two entries, 261 minutes, unattended: 31 built (the one
+recorded as not built was the matrix driver's own loss - its shot has two takes);
+25 picks with no fault; the faults on the other six are the honest kind: a face
+the engine redrew on a walk toward the camera (walk to camera, low angle, the
+tilt reveal, the over-the-shoulder where the near figure occludes at the start),
+people who appeared in an empty pan, and three seconds of silence inside the
+walk-and-talk's voiced take. Every studio camera move measured within two points
+of what was asked: push 13-18%, pull 12-22%, pan 14%, tilt 10-12%, roll 7.9
+degrees, whip 25%, and every static stabilised to still where the drift allowed
+it. The place held (0.86-0.93 first frame to last) on every shot that did not
+have a person walking through it.
+
+| entry | built | s | camera measured | face | faults |
+|---|---|---|---|---|---|
+| establishing_wide | yes | 144 | static |  |  |
+| wide_with_people | yes | 712 | static | uncertain |  |
+| medium_single | NO | 600 |  |  |  |
+| close_up | yes | 336 | tilt down 72% (a face fills the frame; the camera is hard to tell from the head) | unmeasured |  |
+| two_shot_medium | yes | 512 | static | uncertain |  |
+| insert_detail | yes | 392 | push in 15% |  |  |
+| push_in | yes | 584 | push in 13% | uncertain |  |
+| pull_back | yes | 352 | pull back 12% | uncertain |  |
+| pan | yes | 616 | pan right 14% |  | people appeared in an empty shot (people) |
+| tilt | yes | 512 | tilt down 12% | same person |  |
+| orbit | yes | 496 | pan right 11% | uncertain |  |
+| handheld | yes | 496 | static | uncertain |  |
+| locked_off | yes | 192 | static | same person |  |
+| line_on_camera | yes | 736 | static | same person |  |
+| line_close | yes | 568 | static (a face fills the frame; the camera is hard to tell from the head) | same person |  |
+| reaction | yes | 464 | tilt down 70% (a face fills the frame; the camera is hard to tell from the head) | same person |  |
+| turn_in_place | yes | 520 | static | same person |  |
+| crouch | yes | 488 |  |  |  |
+| look_up | yes | 472 | push in 17% (a face fills the frame; the camera is hard to tell from the head) | same person |  |
+| walk_to_camera | yes | 768 | static | a different face | the face is a different one by the end (identity 0.66 -> 0.29); place  |
+| reveal_by_pull | yes | 536 | pull back 22% | same person |  |
+| reveal_by_tilt | yes | 736 | tilt up 10% | a different face | the face is a different one by the end (identity 0.50 -> 0.39); place  |
+| cutaway_detail | yes | 248 | push in 18% |  |  |
+| empty_night | yes | 536 | static |  |  |
+| time_passes | yes | 144 | static |  |  |
+| dutch_tilt | yes | 488 | roll -7.9 deg | uncertain |  |
+| whip_pan | yes | 248 | pan right 25% |  |  |
+| over_the_shoulder | yes | 800 | tilt up 19% | a different face | the face is a different one by the end (identity 0.63 -> 0.33); place  |
+| pov_drift | yes | 256 | static |  |  |
+| walk_and_talk | yes | 728 | pull back 15% | uncertain | 3s of silence inside the film (at 3s, 4s, 5s) |
+| montage_details | yes | 232 | push in 18% |  |  |
+| low_angle_wide | yes | 744 | tilt up 11% | a different face | the face is a different one by the end (identity 0.54 -> 0.45); place  |
