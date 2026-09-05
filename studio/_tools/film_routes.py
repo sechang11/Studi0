@@ -1029,6 +1029,12 @@ def _identity_pass(jid, f, sh, dest, cam_m):
         note, fault = "identity: same person, start %.2f, end %.2f" % (res["start"], res["end"]), False
     if hc and hc.get("lost_at") is not None and hc.get("holds_until"):
         note = "%s; the face holds for the first %.1f s of %.1f" % (note, hc["holds_until"], hc["duration"])
+    if fault and (res.get("place_hold") is not None and res["place_hold"] < 0.70):
+        # measured: on the five takes whose place changed, not one kept the face.  The seed is
+        # not the thing to change here - the engine rewrote the scene and the person with it.
+        note = ("%s - and the place changed with it (%.2f), which on every measured take means "
+                "the engine rewrote the scene; the shot wants a stronger plate or a shorter "
+                "length, not another seed" % (note, res["place_hold"]))
     if res.get("place_hold") is not None:
         note = "%s; place %s (%.2f first to last)" % (note, res.get("place_verdict") or "?", res["place_hold"])
     _log(jid, note)
@@ -3048,6 +3054,26 @@ def face_clock():
     return (_CLOCK["data"] or {}).get("by_motion") or {}
 
 
+# measured over 119 clocked takes: a close-up kept the face on 17 of 19, a wide on 33 of 50,
+# and a full-length framing on 1 of 6.  The head is what the encoder has to hold on to.
+FRAMING_ODDS = {"close": (17, 19), "medium": (19, 32), "wide": (33, 50), "full": (1, 6)}
+
+
+def framing_advice(framing, has_person=True):
+    """-> a sentence when this framing has a poor record of keeping a face, else None"""
+    if not has_person:
+        return None
+    got = FRAMING_ODDS.get((framing or "").lower())
+    if not got:
+        return None
+    kept, total = got
+    if total < 5 or kept / float(total) >= 0.55:
+        return None
+    return ("a %s framing has kept the face on %d of %d measured takes - the head is only a "
+            "few dozen pixels there; a medium or a close-up holds it far better"
+            % (framing, kept, total))
+
+
 def clock_advice(motion, seconds):
     """-> a sentence, or None.  Only speaks when it has seen the face fail at this length."""
     d = face_clock().get((motion or "still").strip().lower())
@@ -3180,6 +3206,10 @@ def _build_job(jid, data):
         _adv = clock_advice(data.get("motion"), dur)
         if _adv:
             _log(jid, "the face clock: %s" % _adv)
+        for _fr in framings:
+            _fadv = framing_advice(_fr, bool(chars_in))
+            if _fadv:
+                _log(jid, "the framing: %s" % _fadv)
         n = max(1, min(int(data.get("variants") or 3), 6))
         vary = set(data.get("vary") or ["seed"])
         action = (data.get("action") or "").strip()
