@@ -1,0 +1,49 @@
+{
+ "title": "Dutch tilt",
+ "hint": "The frame leans as the shot goes: unease arriving. Done by the studio (roll 0 to 8 degrees at a zoom that hides the corners).",
+ "family": "moves",
+ "catalog": "dutch_tilt",
+ "build": {
+  "framings": [
+   "medium"
+  ],
+  "people": 1,
+  "camera": "roll",
+  "duration": 5
+ },
+ "keeps": [
+  "the roll is exactly the degrees asked (measured 7 for 8)"
+ ],
+ "cannot": [
+  "a roll beyond ~15 degrees without heavy crop"
+ ],
+ "measured": "",
+ "shot": {
+  "duration": 5,
+  "beats": [
+   {
+    "framing": "medium shot",
+    "move": "static",
+    "transition_in": "",
+    "subject": "",
+    "action": "",
+    "background": "",
+    "motion": "",
+    "ambient": [],
+    "dialogue": {
+     "char": "",
+     "line": "",
+     "delivery": ""
+    }
+   }
+  ],
+  "sfx": "",
+  "no_people": null,
+  "cam": {
+   "post": {
+    "move": "roll",
+    "amount": 8
+   }
+  }
+ }
+}

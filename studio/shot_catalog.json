@@ -1,6 +1,6 @@
 {
  "_about": "The shot encyclopedia: every kind of shot the studio can build, as a recipe the builder can run. Each entry says what the shot is for, how it is built (framing, where people stand, the camera, the motion, the sound), which promises it keeps and which it cannot, and what was measured. `build` is what /build fills in when a person picks the entry; `camera` names a post move the studio performs (never a sentence the engine is asked for).",
- "version": 1,
+ "version": 2,
  "families": [
   {
    "id": "coverage",
@@ -567,6 +567,194 @@
    ],
    "cannot": [],
    "measured": "empty shots fell to the rig when the engine kept adding people"
+  },
+  {
+   "id": "time_passes",
+   "family": "place",
+   "title": "Time passes",
+   "purpose": "The place's own plates - day to dusk, dusk to night - dissolved into one shot with a slow push. Nothing generated; the light changes, the geometry cannot.",
+   "build": {
+    "framings": [
+     "wide"
+    ],
+    "people": 0,
+    "camera": "push in",
+    "rig": "platefade",
+    "duration": 6,
+    "action": "the day turns in the same place"
+   },
+   "keeps": [
+    "the place, exactly (the plates share one geometry)",
+    "deterministic"
+   ],
+   "cannot": [
+    "people in it",
+    "a time the place has no plate for"
+   ],
+   "measured": "12 places have two or more wide plates; a day-to-dusk dissolve with push 1.06 measured 1.056"
+  },
+  {
+   "id": "dutch_tilt",
+   "family": "moves",
+   "title": "Dutch tilt",
+   "purpose": "The frame leans as the shot goes: unease arriving. Done by the studio (roll 0 to 8 degrees at a zoom that hides the corners).",
+   "build": {
+    "framings": [
+     "medium"
+    ],
+    "people": 1,
+    "camera": "roll",
+    "duration": 5
+   },
+   "keeps": [
+    "the roll is exactly the degrees asked (measured 7 for 8)"
+   ],
+   "cannot": [
+    "a roll beyond ~15 degrees without heavy crop"
+   ],
+   "measured": ""
+  },
+  {
+   "id": "whip_pan",
+   "family": "reveals",
+   "title": "Whip pan",
+   "purpose": "A hard fast pan in the middle of the shot - the frame still, then gone, then still. Cut on it.",
+   "build": {
+    "framings": [
+     "wide"
+    ],
+    "people": 0,
+    "camera": "whip",
+    "duration": 4
+   },
+   "keeps": [
+    "the travel is a fifth of the frame in a third of a second"
+   ],
+   "cannot": [
+    "true motion blur (a crop has none)"
+   ],
+   "measured": "asked 0.25 at zoom 1.16, measured 0.16 - the zoom's room caps the travel"
+  },
+  {
+   "id": "over_the_shoulder",
+   "family": "people",
+   "title": "Over the shoulder",
+   "purpose": "The listener's back and shoulder large in the foreground, the speaker facing us behind. Two packs, two layers: the near one in its back view.",
+   "build": {
+    "framings": [
+     "medium"
+    ],
+    "people": 2,
+    "camera": "static",
+    "duration": 6,
+    "action": "faces the other and speaks quietly",
+    "layers": [
+     {
+      "slot": 1,
+      "view": "turn_back_three_quarter",
+      "stand": 0.06,
+      "cx": 0.22
+     }
+    ]
+   },
+   "keeps": [
+    "both identities (the near one by costume and hair)",
+    "footing for both"
+   ],
+   "cannot": [
+    "the near figure's face (it is turned away by design)"
+   ],
+   "measured": ""
+  },
+  {
+   "id": "pov_drift",
+   "family": "place",
+   "title": "Point of view",
+   "purpose": "What the person sees: the place alone, a slow handheld drift, nobody in frame.",
+   "build": {
+    "framings": [
+     "wide"
+    ],
+    "people": 0,
+    "camera": "handheld",
+    "duration": 5,
+    "action": "the place as it is, alive"
+   },
+   "keeps": [
+    "nobody appears",
+    "the drift is the same every time for the same seed"
+   ],
+   "cannot": [],
+   "measured": ""
+  },
+  {
+   "id": "walk_and_talk",
+   "family": "dialogue",
+   "title": "Walk and talk",
+   "purpose": "Two people walking toward us, one line in the first person's voice. The walk is LTX's; the words are the pack's.",
+   "build": {
+    "framings": [
+     "wide"
+    ],
+    "people": 2,
+    "camera": "static",
+    "motion": "walk",
+    "duration": 6,
+    "line": true,
+    "action": "walk toward the camera together, talking"
+   },
+   "keeps": [
+    "the words",
+    "identities at the start"
+   ],
+   "cannot": [
+    "the place through the walk (drift likely)",
+    "lip sync"
+   ],
+   "measured": "two-shot walks read as walks; the place drifted 67-83% on some seeds"
+  },
+  {
+   "id": "montage_details",
+   "family": "reveals",
+   "title": "Montage of details",
+   "purpose": "Three short inserts of the place, cut together: the studio builds each as a detail plate on a slow push.",
+   "build": {
+    "framings": [
+     "wide"
+    ],
+    "people": 0,
+    "plate": "detail",
+    "camera": "push in",
+    "duration": 3,
+    "count": 3
+   },
+   "keeps": [
+    "nobody appears"
+   ],
+   "cannot": [],
+   "measured": ""
+  },
+  {
+   "id": "low_angle_wide",
+   "family": "people",
+   "title": "Low angle (from the ground)",
+   "purpose": "The person seen from low, monumental. Composed at a near stand, then tilted up by the studio.",
+   "build": {
+    "framings": [
+     "wide"
+    ],
+    "people": 1,
+    "camera": "tilt up",
+    "duration": 5,
+    "action": "stands over the camera, looking down at it"
+   },
+   "keeps": [
+    "identity"
+   ],
+   "cannot": [
+    "a true low camera (the plate's horizon is fixed)"
+   ],
+   "measured": ""
   }
  ]
 }

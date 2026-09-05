@@ -1,0 +1,53 @@
+{
+ "title": "Walk and talk",
+ "hint": "Two people walking toward us, one line in the first person's voice. The walk is LTX's; the words are the pack's.",
+ "family": "dialogue",
+ "catalog": "walk_and_talk",
+ "build": {
+  "framings": [
+   "wide"
+  ],
+  "people": 2,
+  "camera": "static",
+  "motion": "walk",
+  "duration": 6,
+  "line": true,
+  "action": "walk toward the camera together, talking"
+ },
+ "keeps": [
+  "the words",
+  "identities at the start"
+ ],
+ "cannot": [
+  "the place through the walk (drift likely)",
+  "lip sync"
+ ],
+ "measured": "two-shot walks read as walks; the place drifted 67-83% on some seeds",
+ "shot": {
+  "duration": 6,
+  "beats": [
+   {
+    "framing": "wide shot",
+    "move": "static",
+    "transition_in": "",
+    "subject": "",
+    "action": "walk toward the camera together, talking",
+    "background": "",
+    "motion": "walk",
+    "ambient": [],
+    "dialogue": {
+     "char": "",
+     "line": "",
+     "delivery": ""
+    }
+   }
+  ],
+  "sfx": "",
+  "no_people": null,
+  "cam": {
+   "post": {
+    "move": "stabilise"
+   }
+  }
+ }
+}

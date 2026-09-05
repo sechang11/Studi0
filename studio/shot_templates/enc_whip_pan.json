@@ -1,0 +1,50 @@
+{
+ "title": "Whip pan",
+ "hint": "A hard fast pan in the middle of the shot - the frame still, then gone, then still. Cut on it.",
+ "family": "reveals",
+ "catalog": "whip_pan",
+ "build": {
+  "framings": [
+   "wide"
+  ],
+  "people": 0,
+  "camera": "whip",
+  "duration": 4
+ },
+ "keeps": [
+  "the travel is a fifth of the frame in a third of a second"
+ ],
+ "cannot": [
+  "true motion blur (a crop has none)"
+ ],
+ "measured": "asked 0.25 at zoom 1.16, measured 0.16 - the zoom's room caps the travel",
+ "shot": {
+  "duration": 4,
+  "beats": [
+   {
+    "framing": "wide shot",
+    "move": "static",
+    "transition_in": "",
+    "subject": "",
+    "action": "",
+    "background": "",
+    "motion": "",
+    "ambient": [],
+    "dialogue": {
+     "char": "",
+     "line": "",
+     "delivery": ""
+    }
+   }
+  ],
+  "sfx": "",
+  "no_people": true,
+  "cam": {
+   "post": {
+    "move": "whip",
+    "amount": 0.2,
+    "zoom": 1.25
+   }
+  }
+ }
+}

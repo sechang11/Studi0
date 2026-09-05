@@ -1,0 +1,58 @@
+{
+ "title": "Over the shoulder",
+ "hint": "The listener's back and shoulder large in the foreground, the speaker facing us behind. Two packs, two layers: the near one in its back view.",
+ "family": "people",
+ "catalog": "over_the_shoulder",
+ "build": {
+  "framings": [
+   "medium"
+  ],
+  "people": 2,
+  "camera": "static",
+  "duration": 6,
+  "action": "faces the other and speaks quietly",
+  "layers": [
+   {
+    "slot": 1,
+    "view": "turn_back_three_quarter",
+    "stand": 0.06,
+    "cx": 0.22
+   }
+  ]
+ },
+ "keeps": [
+  "both identities (the near one by costume and hair)",
+  "footing for both"
+ ],
+ "cannot": [
+  "the near figure's face (it is turned away by design)"
+ ],
+ "measured": "",
+ "shot": {
+  "duration": 6,
+  "beats": [
+   {
+    "framing": "medium shot",
+    "move": "static",
+    "transition_in": "",
+    "subject": "",
+    "action": "faces the other and speaks quietly",
+    "background": "",
+    "motion": "",
+    "ambient": [],
+    "dialogue": {
+     "char": "",
+     "line": "",
+     "delivery": ""
+    }
+   }
+  ],
+  "sfx": "",
+  "no_people": null,
+  "cam": {
+   "post": {
+    "move": "stabilise"
+   }
+  }
+ }
+}

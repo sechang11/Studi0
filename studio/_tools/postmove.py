@@ -15,6 +15,8 @@ Moves (all with `seconds` = the clip, `ease` = smoothstep unless stated):
     pan       window travels left/right by `amount` of the frame width, at zoom `z`
     tilt      window travels up/down by `amount` of the frame height, at zoom `z`
     orbit     a gentle lateral drift with a counter-zoom - the 2D stand-in for an arc
+    roll      a Dutch tilt that arrives: 0 -> `amount` degrees (default 8)
+    whip      a whip pan: the travel in the middle third, fast; `amount` = fraction of the width
     handheld  a static frame with small correlated shake (amp px, hz)
     stabilise given a measured zoom curve, the compensating crop that holds the
               framing constant (the price is the end frame's crop everywhere)
@@ -73,6 +75,23 @@ def _curve(kind, n, amount, ease=True, z=None, amp=0.0, hz=1.2, seed=7, curve=No
             room = (1.0 - 1.0 / zoom) / 2.0
             cx = 0.5 + min(abs(amount), 2 * room) * (e - 0.5) * (1 if amount > 0 else -1)
             roll = 0.6 * math.sin(math.pi * e) * (1 if amount > 0 else -1)
+        elif kind == "roll":
+            # a Dutch tilt that arrives: roll from 0 to `amount` degrees at a zoom that hides the corners
+            zoom = z or (1.0 + abs(amount) / 40.0 + 0.04)
+            roll = amount * e
+        elif kind == "whip":
+            # a whip pan: the travel happens in the middle third, fast, linear, with the frame
+            # otherwise still; `amount` is the fraction of the frame width, sign = direction
+            zoom = z or 1.16
+            room = (1.0 - 1.0 / zoom) / 2.0
+            travel = min(abs(amount), 2 * room)
+            if u < 0.35:
+                d = -travel / 2
+            elif u > 0.65:
+                d = travel / 2
+            else:
+                d = -travel / 2 + travel * (u - 0.35) / 0.30
+            cx = 0.5 + d * (1 if amount > 0 else -1)
         elif kind == "handheld":
             zoom = z or 1.06
             t = i / 24.0
@@ -109,8 +128,10 @@ def apply(src, dst, move, fps=None, crf=16):
         raise SystemExit("could not decode %s" % src)
     kind = move.get("move", "push")
     amount = float(move.get("amount", 1.12 if kind in ("push", "pull") else 0.1))
-    if kind in ("pan", "tilt") and str(move.get("direction", "")).lower() in ("left", "up"):
+    if kind in ("pan", "tilt", "whip") and str(move.get("direction", "")).lower() in ("left", "up"):
         amount = -abs(amount)
+    if kind == "roll" and move.get("amount") is None:
+        amount = 8.0
     traj = _curve(kind, n, amount, ease=move.get("ease", True), z=move.get("zoom"),
                   amp=float(move.get("amp", 14)), hz=float(move.get("hz", 1.2)),
                   seed=int(move.get("seed", 7)), curve=move.get("curve"))
@@ -153,7 +174,7 @@ def _cli():
     src, dst, kind = a[0], a[1], a[2]
     move = {"move": kind}
     rest = a[3:]
-    if kind in ("pan", "tilt") and rest and rest[0] in ("left", "right", "up", "down"):
+    if kind in ("pan", "tilt", "whip") and rest and rest[0] in ("left", "right", "up", "down"):
         move["direction"] = rest.pop(0)
     if rest and not rest[0].startswith("--"):
         move["amount"] = float(rest.pop(0))
