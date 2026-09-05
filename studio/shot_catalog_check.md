@@ -1,6 +1,6 @@
 # The encyclopedia, checked
 
-Every entry built once through the builder into `encyclopedia-check`, one variant; faces re-scored with the head box carried into the studio's first-frame window. Regenerated 2026-09-05 09:41.
+Every entry built once through the builder into `encyclopedia-check`, one variant; faces re-scored with the head box carried into the studio's first-frame window. Regenerated 2026-09-05 10:03.
 
 | entry | built | s | picked engine | camera measured | face | notes |
 |---|---|---|---|---|---|---|
@@ -21,7 +21,7 @@ Every entry built once through the builder into `encyclopedia-check`, one varian
 | line_close | yes | 568 | ltx+vo | static (a face fills the frame; the camera is hard to tell from the head) | same person | camera: static (a face fills the frame; the camera is hard to tell from the head) (uncerta; ends closer than it started  |
 | reaction | yes | 464 | ltx | tilt down 70% (a face fills the frame; the camera is hard to tell from the head) | same person | camera: tilt down 70% (a face fills the frame; the camera is hard to tell from the head) (; sound borrowed from take t59 |
 | turn_in_place | yes | 520 | ltx | static | same person | camera: static - done by the studio (stabilise); sound borrowed from take t595554809 of shot 150 - the render was too qu |
-| crouch | yes | 488 | h3-pinned | None | a different face | the face is a different one by the end (identity 0.65 -> 0.25); place held (0.94 first to  |
+| crouch | yes | 488 | h3-pinned | None | a different face | identity: same person at the start (0.65); unmeasured (the crouch moves the head and the e |
 | look_up | yes | 472 | ltx | push in 17% (a face fills the frame; the camera is hard to tell from the head) | same person | camera: push in 17% (a face fills the frame; the camera is hard to tell from the head) (un; ends closer than it started  |
 | walk_to_camera | yes | 768 | ltx | static | a different face | camera: static - done by the studio (stabilise); sound borrowed from take t595554809 of shot 150 - the render was too qu |
 | reveal_by_pull | yes | 536 | ltx | pull back 22% | same person | camera: pull back 22% - done by the studio (pull); sound borrowed from take t595554809 of shot 150 - the render was sile |

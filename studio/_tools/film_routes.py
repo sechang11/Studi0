@@ -853,6 +853,9 @@ def _head_box(src):
         return None
 
 
+HEAD_MOVERS = {"crouch", "kneel", "sit", "sit_down", "bow", "lie", "lie_down", "stand_up", "fall", "duck", "pick_up"}
+
+
 def _identity_pass(jid, f, sh, dest, cam_m):
     """(identity dict or None, note or None, is_fault)"""
     src = sh.get("anchor_source") or {}
@@ -901,6 +904,13 @@ def _identity_pass(jid, f, sh, dest, cam_m):
     ident = {k: res.get(k) for k in ("start", "end", "hold", "verdict_start", "verdict_end", "place_hold", "place_verdict", "place_start")}
     ident["who"] = cid
     vs, ve = res.get("verdict_start"), res.get("verdict_end") or ""
+    # the end box follows the camera, not the figure: a motion that moves the head (a crouch drops
+    # it a third of the frame) leaves the ruler reading the chest, so that end reading is information
+    _mover = next((str(b.get("motion") or "").lower() for b in (sh.get("beats") or [])
+                   if str(b.get("motion") or "").lower().replace(" ", "_") in HEAD_MOVERS), None)
+    if _mover and ve in ("a different face", "uncertain") and vs != "a different face":
+        ve = "unmeasured (the %s moves the head and the end box is not followed; %.2f not judged)" % (_mover, res.get("end") or 0)
+        ident["verdict_end"] = ve
     covered = any(bool(p.get("ots")) for p in (src.get("props") or []) if isinstance(p, dict))
     if vs == "a different face" and covered:
         note, fault = "identity: the near figure may cover the face at the start (%.2f); end %s" % (res["start"], ve or "unmeasured"), False
