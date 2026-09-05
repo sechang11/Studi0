@@ -173,6 +173,7 @@ def apply(src, dst, move, fps=None, crf=16):
     z0, z1 = traj[0][2], traj[-1][2]
     return {"move": kind, "amount": amount, "frames": n, "fps": round(fps, 2),
             "zoom_start": round(z0, 3), "zoom_end": round(z1, 3),
+            "cx_start": round(traj[0][0], 4), "cy_start": round(traj[0][1], 4),
             "travel": round((traj[-1][0] - traj[0][0]), 3) if kind in ("pan", "orbit") else round((traj[-1][1] - traj[0][1]), 3),
             "file": dst}
 

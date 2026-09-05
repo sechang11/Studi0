@@ -23,7 +23,9 @@ Run with ComfyUI's python (torch):
     ~/ComfyUI/venv/bin/python identity.py jobs.json      -> results.json beside it
 jobs.json: [{"portrait": ..., "video": ..., "box": [x0,y0,x1,y1] fractions or null,
              "close": bool, "cam": {"zoom":..,"pan":..,"tilt":..} or null, "id": ...,
-             "plate": <the scene's plate, optional -> place_start/place_end/place_verdict>}]
+             "plate": <the scene's plate, optional -> place_hold/place_verdict/place_start>,
+             "window0": {"zoom", "cx", "cy"} - the studio's post move at the first frame, so the
+                        anchor-frame head box is carried into the cropped frame}]
 """
 import json
 import os
@@ -123,6 +125,12 @@ def run(job):
         if first is None:
             return {**out, "error": "could not decode the video"}
         box = job.get("box") or ([0.28, 0.02, 0.72, 0.62] if job.get("close") else [0.35, 0.05, 0.65, 0.45])
+        w0 = job.get("window0")
+        if w0 and float(w0.get("zoom", 1.0) or 1.0) != 1.0 or (w0 and (abs(float(w0.get("cx", 0.5)) - 0.5) > 1e-3 or abs(float(w0.get("cy", 0.5)) - 0.5) > 1e-3)):
+            # the studio's move cropped the first frame: a source point (x, y) shows at
+            # ((x - cx) * zoom + 0.5, (y - cy) * zoom + 0.5); carry the anchor-frame box there
+            z, cx, cy = float(w0.get("zoom", 1.0) or 1.0), float(w0.get("cx", 0.5)), float(w0.get("cy", 0.5))
+            box = [(box[0] - cx) * z + 0.5, (box[1] - cy) * z + 0.5, (box[2] - cx) * z + 0.5, (box[3] - cy) * z + 0.5]
         c0 = crop(first, box)
         if c0 is None:
             return {**out, "error": "the head box left the frame"}
