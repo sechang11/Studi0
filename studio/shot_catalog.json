@@ -1348,6 +1348,55 @@
     "travel beyond the room the zoom gives it (capped at (1 - 1/z)/2 a side)"
    ],
    "measured": "the same solver as the dolly, damping 0.45 over a quarter of the clip"
+  },
+  {
+   "id": "crane_up",
+   "family": "angles",
+   "title": "Crane up",
+   "purpose": "The camera rises through the shot and the world's verticals swing with it. Where the camera IS, changing, rather than fixed for the whole take.",
+   "build": {
+    "framings": [
+     "wide"
+    ],
+    "people": 1,
+    "camera": "crane up",
+    "duration": 5,
+    "action": "stands in the scene",
+    "motion": ""
+   },
+   "keeps": [
+    "the swing, arithmetic per frame, inside a zoom so nothing outside the frame is asked for",
+    "the angle at the end, measured on the last frame"
+   ],
+   "cannot": [
+    "the parallax of a real crane (the depth map belongs to the plate; by the time a take exists there is no depth per frame, so this is a boom on a locked head)",
+    "much travel on a plate that is already steeply angled - a keystone replaces a vanishing point rather than adding to it, so there is less room the further it starts"
+   ],
+   "measured": "asked +0.45 from a plate already at +0.50 delivered +0.22; asked -0.70 from +0.40 delivered -0.76; direction correct 4 of 4"
+  },
+  {
+   "id": "crane_down",
+   "family": "angles",
+   "title": "Crane down",
+   "purpose": "The camera falls through the shot. The classic move onto a face or a table.",
+   "build": {
+    "framings": [
+     "wide"
+    ],
+    "people": 1,
+    "camera": "crane down",
+    "duration": 5,
+    "action": "stands in the scene",
+    "motion": ""
+   },
+   "keeps": [
+    "the swing and where it lands"
+   ],
+   "cannot": [
+    "the parallax of a real crane",
+    "a swing past what the zoom's room allows"
+   ],
+   "measured": "asked -0.45, delivered -0.56 from a plate at +0.50"
   }
  ]
 }

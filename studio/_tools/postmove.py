@@ -18,6 +18,9 @@ Moves (all with `seconds` = the clip, `ease` = smoothstep unless stated):
     roll      a Dutch tilt that arrives: 0 -> `amount` degrees (default 8)
     whip      a whip pan: the travel in the middle third, fast; `amount` = fraction of the width
     handheld  a static frame with small correlated shake (amp px, hz)
+    crane     the angle itself ramps through the shot: verticals swing as the camera
+              rises or falls.  `from` is the starting pitch (default 0), `amount` the
+              change.  A keystone per frame, no parallax - see the note in _keystone.
     stabilise given a measured zoom curve, the compensating crop that holds the
               framing constant (the price is the end frame's crop everywhere)
 
@@ -37,6 +40,24 @@ import tempfile
 
 import cv2
 import numpy as np
+
+
+def _keystone(w, h, pitch):
+    """the homography of a camera tilted by `pitch` (positive = up), about the frame centre.
+
+    The same convention and the same constant as _tools/angle.py, so a crane that ends at
+    +0.4 ends where the angle pass would have put a plate asked for +0.4."""
+    k = max(-0.45, min(0.45, pitch * 0.5))
+    src = np.float32([[0, 0], [w, 0], [w, h], [0, h]])
+    dx = abs(k) * w * 0.5
+    if k >= 0:
+        dst = np.float32([[dx, 0], [w - dx, 0], [w + dx, h], [-dx, h]])
+    else:
+        dst = np.float32([[-dx, 0], [w + dx, 0], [w - dx, h], [dx, h]])
+    return cv2.getPerspectiveTransform(src, dst)
+
+
+CRANE_FRAMING = 0.13      # frame heights the view rises per unit of pitch (as in angle.py)
 
 
 def _smooth(u):
@@ -82,7 +103,7 @@ def _ease_curve(kind, n, ease, zeta, settle):
 
 
 def _curve(kind, n, amount, ease=True, z=None, amp=0.0, hz=1.2, seed=7, curve=None,
-           zeta=0.7, settle=0.55):
+           zeta=0.7, settle=0.55, p_from=0.0):
     """per-frame (cx_frac, cy_frac, zoom, roll_deg)"""
     out = []
     shape = _ease_curve(kind, n, ease, zeta, settle)
@@ -143,6 +164,9 @@ def _curve(kind, n, amount, ease=True, z=None, amp=0.0, hz=1.2, seed=7, curve=No
             cx = 0.5 + (amp / 1000.0) * (0.5 * math.sin(2 * math.pi * hz * t + ph[0]) + 0.5 * nx[i])
             cy = 0.5 + (amp / 1000.0) * (0.5 * math.sin(2 * math.pi * hz * 0.8 * t + ph[1]) + 0.5 * ny[i] + breath)
             roll = (amp / 60.0) * math.sin(2 * math.pi * hz * 0.5 * t + ph[2])
+        elif kind == "crane":
+            # zoom gives the swinging frame its room; the pitch is what actually travels
+            zoom = z or (1.0 + 2.0 * CRANE_FRAMING * max(abs(p_from), abs(p_from + amount)))
         elif kind == "stabilise":
             # curve: measured cumulative [zoom, pan, tilt] per sampled step (or bare zooms);
             # the frame is held at the END frame's view: crop by final/so-far zoom and shift
@@ -187,10 +211,14 @@ def apply(src, dst, move, fps=None, crf=16):
         amount = -abs(amount)
     if kind == "roll" and move.get("amount") is None:
         amount = 8.0
+    p_from = float(move.get("from", 0.0))
     traj = _curve(kind, n, amount, ease=move.get("ease", True), z=move.get("zoom"),
                   amp=float(move.get("amp", 14)), hz=float(move.get("hz", 1.2)),
                   seed=int(move.get("seed", 7)), curve=move.get("curve"),
-                  zeta=float(move.get("zeta", 0.7)), settle=float(move.get("settle", 0.55)))
+                  zeta=float(move.get("zeta", 0.7)), settle=float(move.get("settle", 0.55)),
+                  p_from=p_from)
+    shape = _ease_curve(kind, n, move.get("ease", True),
+                        float(move.get("zeta", 0.7)), float(move.get("settle", 0.55)))
     tmp = tempfile.mkdtemp(prefix="postmove_")
     for i, (fr, (cx, cy, zoom, roll)) in enumerate(zip(frames, traj)):
         vw, vh = W / zoom, H / zoom
@@ -200,7 +228,17 @@ def apply(src, dst, move, fps=None, crf=16):
         M = cv2.getRotationMatrix2D((x, y), roll, zoom)
         M[0, 2] += W / 2 - x
         M[1, 2] += H / 2 - y
-        out = cv2.warpAffine(fr, M, (W, H), flags=cv2.INTER_LANCZOS4, borderMode=cv2.BORDER_REFLECT101)
+        if kind == "crane":
+            e = shape[i] if i < len(shape) else shape[-1]
+            p = p_from + amount * e
+            K = _keystone(W, H, p)
+            # and the tilt looks higher as it rises, the same constant as the angle pass
+            K[1, 2] += CRANE_FRAMING * p * H
+            M3 = np.vstack([M, [0.0, 0.0, 1.0]]).dot(K)
+            out = cv2.warpPerspective(fr, M3, (W, H), flags=cv2.INTER_LANCZOS4,
+                                      borderMode=cv2.BORDER_REFLECT101)
+        else:
+            out = cv2.warpAffine(fr, M, (W, H), flags=cv2.INTER_LANCZOS4, borderMode=cv2.BORDER_REFLECT101)
         cv2.imwrite(os.path.join(tmp, "f%05d.png" % i), out)
     silent = os.path.join(tmp, "video.mp4")
     subprocess.run(["ffmpeg", "-y", "-v", "error", "-framerate", "%.3f" % fps, "-i", os.path.join(tmp, "f%05d.png"),
@@ -226,6 +264,8 @@ def apply(src, dst, move, fps=None, crf=16):
         cx, cy, zoom, _roll = traj[j]
         win.append([round(zoom, 4), round(cx, 4), round(cy, 4)])
     return {"move": kind, "amount": amount, "frames": n, "fps": round(fps, 2),
+            "pitch_from": round(p_from, 3) if kind == "crane" else None,
+            "pitch_to": round(p_from + amount, 3) if kind == "crane" else None,
             "ease": ("spring" if move.get("ease") == "spring" else
                      ("linear" if move.get("ease") in (False, "linear") else "smooth")),
             "zeta": round(float(move.get("zeta", 0.7)), 2) if move.get("ease") == "spring" else None,

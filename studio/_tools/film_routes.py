@@ -515,7 +515,7 @@ def _render_scene_anchor(jid, fid, scid):
                     set_path(wf, "%s.inputs.seed" % node, sd)
                 except (KeyError, TypeError):
                     pass
-            _, outs = run(HOST, wf, quiet=True)
+            _, outs = _run_resilient(jid, run, HOST, wf, "the render")
             if not outs:
                 continue
             cp = os.path.join(f.dir, "assets", "anchor_%s_c%d.png" % (scid, i))
@@ -638,7 +638,7 @@ def _render_shot_keyframe(f, shid, plan):
         set_path(wf, "13.inputs.seed", 31)
         set_path(wf, "15.inputs.filename_prefix",
                  "claude-generated/films/%s/kf_%s" % (f.id, shid))
-    _, outs = run(HOST, wf, quiet=True)
+    _, outs = _run_resilient(None, run, HOST, wf, "the keyframe")
     if not outs:
         raise RuntimeError("keyframe render returned nothing")
     ensure_local(outs[0], dest)
@@ -837,19 +837,24 @@ POST_MOVES = {
     "crash zoom": {"move": "push", "amount": 1.34, "ease": "spring", "zeta": 0.35, "settle": 0.25},
     "snap pan": {"move": "pan", "amount": 0.16, "zoom": 1.2, "ease": "spring", "zeta": 0.45, "settle": 0.3},
     "whip with a bounce": {"move": "whip", "amount": 0.22, "zoom": 1.25, "ease": "spring", "zeta": 0.3, "settle": 0.4},
+    # the angle itself travels: verticals swing as the camera rises or falls
+    "crane up": {"move": "crane", "amount": 0.45},
+    "crane down": {"move": "crane", "amount": -0.45},
 }
 CAMERA_VERB = {"static": "does not move", "pinned": "does not move", "push in": "pushes in", "pull back": "pulls back",
                "pan": "pans", "pan left": "pans left", "pan right": "pans right", "tilt up": "tilts up", "tilt down": "tilts down",
                "orbit": "arcs a little", "handheld": "breathes, handheld", "roll": "leans (a Dutch tilt)", "whip": "whips across",
                "follow": "follows", "circle": "circles",
                "dolly in": "dollies in and settles", "crash zoom": "slams in and rings",
-               "snap pan": "snaps across and settles", "whip with a bounce": "whips across and bounces"}
+               "snap pan": "snaps across and settles", "whip with a bounce": "whips across and bounces",
+               "crane up": "rises, and the verticals swing with it", "crane down": "falls, and the verticals swing with it"}
 CAMERA_CHECK = {"static": "camera is static", "push in": "camera pushes in", "pull back": "camera pulls back",
                 "pan": "camera pans", "pan left": "camera pans left", "pan right": "camera pans right",
                 "tilt up": "camera tilts up", "tilt down": "camera tilts down", "orbit": "camera pans",
                 "handheld": None, "pinned": "camera is static", "roll": None, "whip": "camera pans",
                 "dolly in": "camera pushes in", "crash zoom": "camera pushes in",
-                "snap pan": "camera pans", "whip with a bounce": "camera pans"}
+                "snap pan": "camera pans", "whip with a bounce": "camera pans",
+                "crane up": None, "crane down": None}
 
 
 COMFY_PY = os.path.expanduser("~/ComfyUI/venv/bin/python")
@@ -1092,6 +1097,28 @@ def _trim_to_face(jid, dest, ident, want):
     return {"at": round(keep, 2), "was": round(dur, 2)}
 
 
+DEAD_SOCKET = ("connection refused", "errno 111", "remote end closed", "connection reset",
+               "bad gateway", "connection aborted", "urlopen error")
+
+
+def _run_resilient(jid, run, HOST, wf, label=""):
+    """run(HOST, wf) -> (_, outs), and if ComfyUI has been killed under us, bring it back
+    and try once.  The box's own note on this, written for big renders and true here: the
+    process is killed, there is no exception to catch inside it, the socket simply closes."""
+    try:
+        return run(HOST, wf, quiet=True)
+    except Exception as e:
+        msg = str(e).lower()
+        if not any(k in msg for k in DEAD_SOCKET):
+            raise
+        if jid:
+            _log(jid, "ComfyUI went away during %s (%s) - bringing it back and trying once more"
+                 % (label or "the render", str(e)[:70]))
+        if not ensure_comfy():
+            raise RuntimeError("ComfyUI will not come back up: %s" % str(e)[:100])
+        return run(HOST, wf, quiet=True)
+
+
 def _render_take(jid, f, sh, eng, seed):
     run, set_path, load_wf, ensure_local, HOST, COMFY = _comfy()
     if eng != "cam" and (sh.get("cam") or {}).get("rig") == "platefade":
@@ -1226,7 +1253,7 @@ def _render_take(jid, f, sh, eng, seed):
     else:
         raise RuntimeError("unknown engine %r" % eng)
 
-    _, outs = run(HOST, wf, quiet=True)
+    _, outs = _run_resilient(jid, run, HOST, wf, "the render")
     vids = [o for o in outs or [] if o.endswith(".mp4")]
     if not vids:
         raise RuntimeError("no video output")
@@ -1569,7 +1596,7 @@ def _vo_job(jid, fid, shid, tid, duck=0.35):
             set_path(wf, "30.inputs.seed", 4242)
             set_path(wf, "40.inputs.filename_prefix",
                      "claude-generated/films/%s/vo_%s_%d" % (fid, shid, i))
-            _, outs = run(HOST, wf, quiet=True)
+            _, outs = _run_resilient(jid, run, HOST, wf, "the render")
             auds = [o for o in outs or [] if o.endswith((".wav", ".mp3", ".flac"))]
             if not auds:
                 raise RuntimeError("voice render returned nothing")
@@ -1753,7 +1780,7 @@ def _portrait_job(jid, fid, cid):
             set_path(wf, "13.inputs.seed", 21)
             set_path(wf, "15.inputs.filename_prefix",
                      "claude-generated/films/%s/cast_%s" % (fid, cid))
-        _, outs = run(HOST, wf, quiet=True)
+        _, outs = _run_resilient(jid, run, HOST, wf, "the render")
         if not outs:
             raise RuntimeError("no output")
         ensure_local(outs[0], dest)
@@ -1879,7 +1906,7 @@ def _assemble_job(jid, fid, music_on):
                 set_path(wf, "12.inputs.seed", 21)
                 set_path(wf, "14.inputs.filename_prefix",
                          "claude-generated/films/%s/music_%s" % (fid, sc["id"]))
-                _, outs = run(HOST, wf, quiet=True)
+                _, outs = _run_resilient(jid, run, HOST, wf, "the render")
                 auds = [o for o in outs or [] if o.endswith((".mp3", ".wav", ".flac"))]
                 if auds:
                     mp3 = os.path.join(tmp, "music_%s.mp3" % sc["id"])
