@@ -1887,3 +1887,91 @@ re-rolls a good pin for it. Final matrix after every correction: 32 of 32
 built, 28 clean picks, 16 same person, 4 uncertain, 2 a different face (the
 walk toward the camera and the over-the-shoulder, both explained above), 1
 unmeasured by rule, 9 with no face to judge. 55 commits in the block.
+
+## §55  Precision: the face has a clock, the camera has a place, and the move has mass
+
+The block before this one gave the studio rulers. This one used them to find three things
+the studio had been getting wrong quietly, and built the three things it was missing.
+
+**The face does not fail at the end. It decays through the clip.** The identity ruler read
+the first frame and the last, which answers "did it survive" and not "how long did it
+survive". Reading nine points instead - with the head box carried through the camera as
+measured AT THAT MOMENT, not at the end - turns the verdict into a clock. Over 51 picked
+takes the median face holds 1.000 of its own starting score at the top, 0.977 at a quarter,
+0.962 at half, 0.911 at three quarters and 0.886 at the end: a slow decay with most of the
+loss in the last quarter. On a walk toward the camera the crossing is sharp and has a time -
+3.7 s, 4.5 s and 4.5 s of six second takes. So a six second walk is a good four second shot
+with two seconds of a stranger on the end, and the remedy is not a better seed, it is a cut.
+The studio now reports where the face went, prefers the take whose face lasts longest, and
+will cut the take there when the shot asks (`cam.trim_face`, never below two seconds).
+
+**A repair must not win the pick.** The first build with the cut on came back with one take
+that ran the full six seconds and kept the face, and one that lost the face at three seconds
+and was cut to three - and the cut one won, because a cut take is faultless and its camera
+happened to measure a hair closer to the static that was asked. Three seconds of the right
+shot is not better than six. What a take DELIVERS against what the shot asked now sorts
+above how exactly the camera matched.
+
+**Where the camera is, measured.** cammeasure says what the camera did; anglemeasure says
+where it stands. A camera tilted up makes the world's verticals converge toward the top of
+the frame, so: Canny, Hough, keep the near-vertical segments, find the point most of them
+agree on, and read the pitch off where that point sits. RANSAC, not least squares - least
+squares was the first attempt and it failed on the answer that matters most, calling a
+picture of parallel verticals a steep angle because a few outliers pulled the fit. Against
+synthetic keystones of a known pitch the ruler reads to a median error of 0.008 and a worst
+of 0.045, on seven of eight plates. The eighth is a harbour reverse of masts and rigging
+which has no vertical family; there the ruler says so and the studio promises nothing.
+
+**Where the camera is, performed.** A low angle is two things at once and doing only one of
+them looks wrong. The camera DROPS - near things fall in the frame further than far things,
+which is parallax and comes free from the depth map - and the camera TILTS UP - verticals
+converge, and the view rises. The first version had only the convergence: it measured
+correctly and looked like a lens fault, because what a viewer names as a low angle is mostly
+"we are looking higher than before". The framing move runs inside a zoom, the way postmove
+does a tilt, so no pixel outside the plate is ever invented. Delivered against asked: exact
+to 0.02 on every place the ruler can read. The angled view is kept beside its plate with a
+depth map warped the same way, so compose, the footing check, the identity head box and the
+spec all treat it as what it is - the same place, from a different camera.
+
+**The person from below is harder than the place, and it is not shipped.** The packs' own
+`pres_low` is cropped at the knees in every pack on the box - correct for a presentation
+card, useless for compositing, which needs feet to stand a figure on ground. Made whole
+through the pack's own must-be-whole renderer, four came back whole and three of them were
+not low angles at all, and one was crouching. The cause is the renderer's fallback: when a
+figure runs off the bottom of the frame it adds a FAR FRAMING sentence, and standing well
+back moves the camera to eye level. The detector was satisfied every time because the
+detector measures wholeness and nothing else. **A retry sentence must restate what the shot
+must not lose.** The retry now names the framing AND the angle AND the pose, and when it is
+still cropped it extends the picture downward instead of surrendering the angle. Two packs
+of four then passed both gates. And the composite still reads wrong: a foreshortened view
+scaled to a 1.7 m person by total height puts all of the foreshortening in the head, and the
+result is a big head on a short body. So the place angle ships and the figure angle sits
+behind a flag. What the compositor is missing is a way to scale a figure by head width
+against the pack's own eye-level view rather than by total height.
+
+**The move has mass.** Every post move was eased with a smoothstep: symmetric, arriving
+exactly on its mark with zero velocity, with no physics in it. Real camera moves are made by
+a person pushing a heavy thing. The ease is now a choice, and one choice is a real
+second-order system - x'' + 2 zeta omega x' + omega^2 (x - target) = 0, integrated over the
+clip, with `settle` saying what fraction of the clip the drive takes so the rest is the
+ring-out. Measured back off the rendered file against the analytic curve the solver produced:
+worst step error 0.026 across a smoothstep, a light spring, a critically damped move and a
+crash zoom. The crash zoom asked for 1.34 and peaked at 1.393 asked against 1.364 measured
+before settling. Four of them are in the picker: dolly in, crash zoom, snap pan, whip with
+a bounce.
+
+**The identity LoRA, tested and rejected.** The box carries `ltx-2.3-id-lora-talkvid-3k`, and
+all 864 of its targets match the 2.5 int8 model by name - same 48 blocks, same width. It
+loads and it changes the picture: the same anchor at the same seed rendered a 13% push where
+the control was static. It does not hold the face. Lost at 4.53 s against the control's
+4.47, ending 0.30 against 0.30, with a slight mid-clip gain of about 0.05 that the last
+quarter erases. Kept as `workflows/70_ltx25_i2v_lora.json` for the next LoRA to be tried
+through, not adopted.
+
+**And a rule about rulers, twice over.** A measurement taken on a frame the studio has
+transformed must be taken in the transformed frame's coordinates. Last block that fixed the
+first frame; this block the post move reports where its window sits at nine moments through
+the clip and the face box follows it exactly, which is both cheaper and more accurate than
+reading it back off the pixels. The corollary bit twice more: the head box is computed for
+an upright figure at eye level, so a crouch and a foreshortened low view both put the head
+where the box does not look, and on those the reading is information and never a fault.
