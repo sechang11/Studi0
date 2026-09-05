@@ -890,7 +890,10 @@ def _identity_pass(jid, f, sh, dest, cam_m):
     ident = {k: res.get(k) for k in ("start", "end", "hold", "verdict_start", "verdict_end")}
     ident["who"] = cid
     vs, ve = res.get("verdict_start"), res.get("verdict_end") or ""
-    if vs == "a different face":
+    covered = any(bool(p.get("ots")) for p in (src.get("props") or []) if isinstance(p, dict))
+    if vs == "a different face" and covered:
+        note, fault = "identity: the near figure may cover the face at the start (%.2f); end %s" % (res["start"], ve or "unmeasured"), False
+    elif vs == "a different face":
         note, fault = "the face is not %s's from the first frame (identity %.2f)" % (cid, res["start"]), True
     elif ve == "a different face":
         note, fault = "the face is a different one by the end (identity %.2f -> %.2f)" % (res["start"], res["end"]), True
@@ -1323,13 +1326,41 @@ def _faults(take):
             if not n.startswith(("ends closer", "sound borrowed", "words not in the picture", "camera:", "identity:"))]
 
 
+def _camera_score(sh, take):
+    """0 = the measured camera matches what the shot asked; larger = further off"""
+    m = take.get("cam_measured") or {}
+    if not m:
+        return 0.5
+    post = ((sh.get("cam") or {}) if isinstance(sh.get("cam"), dict) else {}).get("post") or {}
+    want = post.get("move") or ((sh.get("beats") or [{}])[0].get("move") or "static")
+    z, pan, tilt = float(m.get("zoom", 1.0)), float(m.get("pan", 0.0)), float(m.get("tilt", 0.0))
+    if want in ("static", "stabilise", "pinned", "handheld", "roll"):
+        return abs(z - 1.0) + abs(pan) + abs(tilt)
+    if want in ("push", "push in"):
+        return abs(z - float(post.get("amount", 1.14))) + abs(pan) + abs(tilt)
+    if want in ("pull", "pull back"):
+        return abs(z - 1.0) + abs(pan) + abs(tilt) + (0.3 if z > 1.02 else 0.0)
+    if want in ("pan", "whip", "orbit"):
+        return abs(z - float(post.get("zoom", 1.14))) + abs(tilt) + (0.3 if abs(pan) < 0.05 else 0.0)
+    if want == "tilt":
+        return abs(z - float(post.get("zoom", 1.14))) + abs(pan) + (0.3 if abs(tilt) < 0.05 else 0.0)
+    return 0.5
+
+
+def _identity_score(take):
+    """higher is better: the face at the end (or the start when the end is unmeasured)"""
+    i = take.get("identity") or {}
+    v = i.get("end") if i.get("end") is not None else i.get("start")
+    return float(v) if v is not None else 0.5
+
+
 def _cleanest(sh, takes):
     """the automatic pick: for a shot with a line only voiced takes are eligible
     (when any exist); then fewest faults, then the newest"""
     has_line = any(((b.get("dialogue") or {}).get("line") or "").strip() for b in (sh.get("beats") or []))
     pool = [t for t in takes if (t.get("engine") or "").endswith("+vo")] if has_line else []
     pool = pool or list(takes)
-    return sorted(pool, key=lambda t: (len(_faults(t)), -len(t["id"]), t["id"]))[0]
+    return sorted(pool, key=lambda t: (len(_faults(t)), round(_camera_score(sh, t), 2), -round(_identity_score(t), 2), -len(t["id"]), t["id"]))[0]
 
 
 def _vo_job(jid, fid, shid, tid, duck=0.35):
@@ -2804,8 +2835,8 @@ def _build_job(jid, data):
                 sub = _job("compose", film=fid, shot=shid)
                 _compose_anchor_job(sub, fid, shid, cid0, place, plate or None,
                                     "turn_front_three_quarter" if layers else "turn_front",
-                                    FRAMING_STAND[fr], 0.38 if layers else 0.45, layers or None,
-                                    framing=fr)
+                                    FRAMING_STAND[fr], float(tpl_build.get("subject_cx") or (0.38 if layers else 0.45)),
+                                    layers or None, framing=fr)
                 with _LOCK:
                     err = JOBS.get(sub, {}).get("error")
                 if err:
