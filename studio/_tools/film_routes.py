@@ -874,7 +874,9 @@ def _identity_pass(jid, f, sh, dest, cam_m):
     job = {"id": "%s/%s" % (f.id, sh["id"]), "portrait": portrait, "video": dest,
            "box": _head_box(src), "close": src.get("framing") == "close",
            "cam": {k: cam_m.get(k) for k in ("zoom", "pan", "tilt")} if cam_m else None,
-           "plate": plate_p}
+           "plate": plate_p,
+           "window0": ({"zoom": (cam_m.get("post") or {}).get("zoom_start", 1.0), "cx": (cam_m.get("post") or {}).get("cx_start", 0.5),
+                        "cy": (cam_m.get("post") or {}).get("cy_start", 0.5)} if cam_m and cam_m.get("post") else None)}
     jp = dest[:-4] + "_identity_job.json"
     try:
         json.dump([job], open(jp, "w"))
@@ -966,7 +968,7 @@ def _camera_pass(jid, sh, dest, eng):
         return None, None
     small = {k: m[k] for k in ("zoom", "pan", "tilt", "roll", "camera", "confidence")}
     if applied:
-        small["post"] = {k: applied[k] for k in ("move", "amount", "zoom_start", "zoom_end") if k in applied}
+        small["post"] = {k: applied[k] for k in ("move", "amount", "zoom_start", "zoom_end", "cx_start", "cy_start") if k in applied}
     n = CMM.note(m)
     if applied and n:
         n += " - done by the studio (%s)" % applied["move"]
