@@ -1520,3 +1520,59 @@ things that hold a frame are a pin (in place) or the camera rig (no
 generation). The camera promise on a spec sheet stays "prose only" for that
 reason, and the anchor check learned not to count camera words and negations
 as things a picture can lack.
+
+## §50  The camera, measured and done by us
+
+The night block's first question was the director's: maybe the engine has
+keywords for camera moves, and what can we do to assist it? The honest answer
+needed a measurement, so the first thing built was a ruler.
+
+**The ruler.** `cammeasure` follows ORB features from frame to frame through a
+similarity transform (scale, rotation, translation), on the border band of the
+frame where the background lives, and accumulates the result into a zoom
+factor, a pan and a tilt as fractions of the frame, and a roll in degrees.
+Validated against things whose motion was already known: the `still_push` rig
+at zoom 1.12 measured 1.117; two LTX takes that "ended closer" measured 2.98x
+and 1.8x; an empty wide on a static prompt measured 1.09-1.16 (the engine's own
+drift); a genuinely still take measured 0.999. A face that fills the frame
+defeats it - the features follow the head, not the camera - so close-ups are
+marked low confidence and say so.
+
+**The vocabulary, observed.** Every take on disk, 625 of them across every film
+and both sessions' work, was measured and grouped by engine and the beat's
+camera word. LTX asked for *static* (180 takes): median zoom 1.02, but 45%
+pushed in more than 6%, 10% pulled back, 21% panned. H3 asked for *static*
+(71): median 1.06, 46% pushed in, 32% panned. LTX asked to *push in* (10):
+median 1.39, and only half pushed in. H3 *pinned* (20): 1.000, 5% pushed. The
+camera rig (14): 1.000, nothing moved that was not asked to. So: a camera word
+is a coin flip on every generative engine measured here; a pin holds the
+frame; arithmetic holds it exactly. The dictionary's camera moves now carry
+those numbers in their notes, and `camera_vocab.json` states the law.
+
+**Done by us.** `postmove` applies a move to a take the engine already made:
+push, pull, pan, tilt, an orbit stand-in, handheld shake, and *stabilise* - the
+compensating crop that turns a measured drift into a still frame. The engine is
+asked to hold still; the move is arithmetic with the camrig's easing. Measured:
+a post push of 1.15 on a take that had drifted 1.16 came out at 1.31 (the two
+compound, as arithmetic must); a pan of 0.12 measured 0.119; stabilise took a
+1.163 drift to 0.986. The price of stabilise is the end frame's crop
+everywhere, about 14% of the picture for a typical drift.
+
+**Wired in.** Every take now carries `cam_measured` and an information note
+("camera: push in 12%"). A shot's `cam.post` names a move the studio performs
+after the render and before QC. The builder's camera picker maps onto post
+moves - *static* means stabilise - and the spec sheet's camera promise gained a
+CHECK the checker runs on the measured take: `camera is static`, `camera pushes
+in`, `camera pulls back`, `camera pans left/right`, `camera tilts up/down`. The
+camera promise is no longer prose-only. Camera variants in a build are
+different post moves, not different sentences.
+
+**Identity, calibrated.** For the consistency question a second ruler: the
+box has no face detector, but it has CLIP-ViT-H under ComfyUI's own loader,
+which runs on CPU in 1.2 s per crop once the cpu flag is set before import.
+Across 14 packs, a portrait against its own front view's head crop scores a
+median 0.77 (min 0.40 with a crude crop); against another character's portrait
+a median 0.31 (max 0.78 for two drawn characters who share a face by design).
+The reading: 0.62 and above is the same person, 0.50-0.62 uncertain, under
+0.50 a different face. `identity` measures a take's first and last frames
+against the pack portrait, the head box coming from the compose geometry.
