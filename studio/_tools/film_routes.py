@@ -863,9 +863,18 @@ def _identity_pass(jid, f, sh, dest, cam_m):
                             "foundry", "characters", cid, "base_portrait.png")
     if not os.path.exists(portrait):
         return None, None, False
+    plate_p = None
+    try:
+        sc = f.scene(sh["scene"]) or {}
+        if sc.get("place") and sc.get("plate"):
+            cand = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "foundry", "places", sc["place"], sc["plate"] + ".png")
+            plate_p = cand if os.path.exists(cand) else None
+    except Exception:
+        plate_p = None
     job = {"id": "%s/%s" % (f.id, sh["id"]), "portrait": portrait, "video": dest,
            "box": _head_box(src), "close": src.get("framing") == "close",
-           "cam": {k: cam_m.get(k) for k in ("zoom", "pan", "tilt")} if cam_m else None}
+           "cam": {k: cam_m.get(k) for k in ("zoom", "pan", "tilt")} if cam_m else None,
+           "plate": plate_p}
     jp = dest[:-4] + "_identity_job.json"
     try:
         json.dump([job], open(jp, "w"))
@@ -887,7 +896,7 @@ def _identity_pass(jid, f, sh, dest, cam_m):
         for extra in (jp, jp[:-5] + "_results.json"):
             if os.path.exists(extra):
                 os.remove(extra)
-    ident = {k: res.get(k) for k in ("start", "end", "hold", "verdict_start", "verdict_end")}
+    ident = {k: res.get(k) for k in ("start", "end", "hold", "verdict_start", "verdict_end", "place_hold", "place_verdict", "place_start")}
     ident["who"] = cid
     vs, ve = res.get("verdict_start"), res.get("verdict_end") or ""
     covered = any(bool(p.get("ots")) for p in (src.get("props") or []) if isinstance(p, dict))
@@ -903,6 +912,8 @@ def _identity_pass(jid, f, sh, dest, cam_m):
         note, fault = "identity: uncertain by the end (%.2f -> %.2f)" % (res["start"], res["end"]), False
     else:
         note, fault = "identity: same person, start %.2f, end %.2f" % (res["start"], res["end"]), False
+    if res.get("place_hold") is not None:
+        note = "%s; place %s (%.2f first to last)" % (note, res.get("place_verdict") or "?", res["place_hold"])
     _log(jid, note)
     return ident, note, fault
 
@@ -2785,6 +2796,9 @@ def _build_job(jid, data):
         plate_p = CM.plate_for(place, plate or None) if place else None
         framings = [x for x in (data.get("framings") or ["wide"]) if x in FRAMING_STAND] or ["wide"]
         camera = data.get("camera") or "static"
+        engine = data.get("engine") if data.get("engine") in ("ltx", "h3") else "ltx"
+        if engine == "h3":
+            _log(jid, "engine: H3 - variants render directly (a line is not voiced, no pins); a pull back is asked of the engine, which obeys it")
         motion = (data.get("motion") or "").strip()
         line = (data.get("line") or "").strip()
         who = (data.get("who") or (cast_ids[0] if cast_ids else "")).strip()
@@ -2798,6 +2812,8 @@ def _build_job(jid, data):
             f = F.load(fid)
             subject = cast_ids[0] if cast_ids else ""
             post = POST_MOVES.get(camera)
+            if engine == "h3" and camera == "pull back":
+                post = None          # H3 obeys 'pull back' in prose (measured 28% and 41%); arithmetic cannot open a frame wider than the render
             tpl_build = {}
             if data.get("template"):
                 try:
@@ -2889,7 +2905,10 @@ def _build_job(jid, data):
                         sh["beats"][0]["move"] = alt
                     f.save()
                     _log(jid, "   variant %d: camera %s" % (k + 1, alt))
-                if k == 0:
+                if k == 0 and engine == "h3":
+                    _log(jid, "   variant 1: rendering on H3")
+                    _render_take(jid, f, sh, "h3", random.randint(1, 10 ** 9))
+                elif k == 0:
                     sub = _job("make", film=fid, shot=shid)
                     _make_job(sub, fid, shid)
                     with _LOCK:
@@ -2898,7 +2917,7 @@ def _build_job(jid, data):
                         _log(jid, "   variant 1 failed: %s" % err[:120])
                 else:
                     _log(jid, "   variant %d: rendering on a new seed" % (k + 1))
-                    _render_take(jid, f, sh, "ltx", random.randint(1, 10 ** 9))
+                    _render_take(jid, f, sh, engine, random.randint(1, 10 ** 9))
                 f = F.load(fid)
                 sh = f.shot(shid)
                 takes = sh.get("takes") or []

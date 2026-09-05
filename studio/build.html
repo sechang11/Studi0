@@ -69,6 +69,7 @@
       <label>place</label><select id="place" onchange="plates()"></select>
       <div class="plates" id="plates"></div>
       <label>look</label><select id="look"><option>photoreal</option><option>anime</option></select>
+      <label>engine <span class="hint">- LTX voices lines and pins; H3 obeys a pull back</span></label><select id="engine"><option value="ltx">LTX (default)</option><option value="h3">H3</option></select>
       <label>resolution</label><select id="res"><option value="auto">auto - biggest the length allows</option><option value="720p">720p</option><option value="1080p">1080p (shots to 12s)</option><option value="max">max (shots to 8s)</option></select>
     </div>
     <div class="card">
@@ -177,7 +178,7 @@ function pickPlate(k){ PLATE=k; document.querySelectorAll(".plate").forEach(el=>
 const chips=id=>[...document.querySelectorAll(`#${id} .chip.on`)].map(c=>c.dataset.v);
 let JOB=null, FID=null, SHOTS=[];
 async function build(){
-  const body={template:TEMPLATE||undefined,film:$("#film").value||undefined, look:$("#look").value, resolution:$("#res").value,
+  const body={template:TEMPLATE||undefined,engine:$("#engine").value,film:$("#film").value||undefined, look:$("#look").value, resolution:$("#res").value,
     place:$("#place").value, plate:PLATE, characters:PICK, framings:chips("framings"), camera:$("#camera").value,
     motion:$("#motion").value, line:$("#line").value.trim(), action:$("#action").value.trim(), ambient:chips("ambient"),
     duration:parseFloat($("#dur").value||"6"), variants:parseInt($("#variants").value), vary:chips("vary")};
