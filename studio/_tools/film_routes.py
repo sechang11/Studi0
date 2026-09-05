@@ -2792,7 +2792,7 @@ def _build_job(jid, data):
                         lay = {"character": oc, "view": "turn_front_three_quarter", "stand": FRAMING_STAND[fr], "cx": 0.62}
                         for L in (tpl_build.get("layers") or []):
                             if int(L.get("slot", 1)) == 1:
-                                lay.update({k: L[k] for k in ("view", "stand", "cx") if k in L})
+                                lay.update({k: L[k] for k in ("view", "stand", "cx", "ots") if k in L})
                                 _log(jid, "second person as the template asks: %s at stand %.2f, across %.2f" % (lay["view"], lay["stand"], lay["cx"]))
                         layers.append(lay)
                 cid0 = (f.data["cast"].get(cast_ids[0]) or {}).get("foundry")
