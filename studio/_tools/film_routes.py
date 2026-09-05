@@ -2090,6 +2090,21 @@ def _compose_anchor_job(jid, fid, shid, char_id, place_id, plate, view,
                                "stand": stand, "cx": cx, "view": ("base_portrait" if framing == "close" else view),
                                "plate": plate_p, "props": props or []}
         try:
+            _hpx = head_pixels(sh["anchor_source"])
+            if _hpx:
+                sh["head_px"] = _hpx
+                if _hpx < 100:
+                    _hn = ("the head will be about %d px in the delivered frame - measured, a face "
+                           "under 100 px cannot be read at all (65 px scored 0.30 where 135 px "
+                           "scored 0.66 for the same person); stand them nearer or frame closer" % _hpx)
+                    _log(jid, _hn)
+                    if isinstance(sh.get("anchor_check"), dict):
+                        sh["anchor_check"]["head"] = _hn
+                    else:
+                        sh["anchor_check"] = {"head": _hn}
+        except Exception:
+            pass
+        try:
             _face, _fnote = _anchor_face(jid, char_id, os.path.join(f.dir, rel), sh["anchor_source"])
             if _face is not None:
                 sh["anchor_face"] = _face
