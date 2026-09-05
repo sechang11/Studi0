@@ -965,11 +965,18 @@ def _identity_pass(jid, f, sh, dest, cam_m):
     # it a third of the frame) leaves the ruler reading the chest, so that end reading is information
     _mover = next((str(b.get("motion") or "").lower() for b in (sh.get("beats") or [])
                    if str(b.get("motion") or "").lower().replace(" ", "_") in HEAD_MOVERS), None)
+    if not _mover and str(src.get("view") or "").startswith("pres_low"):
+        # the head box is computed for an upright figure at eye level; a foreshortened
+        # low view puts the head smaller and higher than the geometry expects
+        _mover = "low view"
     if _mover and ve in ("a different face", "uncertain") and vs != "a different face":
         ve = "unmeasured (the %s moves the head and the end box is not followed; %.2f not judged)" % (_mover, res.get("end") or 0)
         ident["verdict_end"] = ve
     covered = any(bool(p.get("ots")) for p in (src.get("props") or []) if isinstance(p, dict))
-    if vs == "a different face" and covered:
+    if vs == "a different face" and str(src.get("view") or "").startswith("pres_low"):
+        note, fault = ("identity: the low view puts the head where the box does not look "
+                       "(%.2f, not judged)" % res["start"]), False
+    elif vs == "a different face" and covered:
         note, fault = "identity: the near figure may cover the face at the start (%.2f); end %s" % (res["start"], ve or "unmeasured"), False
     elif vs == "a different face":
         note, fault = "the face is not %s's from the first frame (identity %.2f)" % (cid, res["start"]), True
@@ -3037,7 +3044,8 @@ def _build_job(jid, data):
                         layers.append(lay)
                 cid0 = (f.data["cast"].get(cast_ids[0]) or {}).get("foundry")
                 _view = "turn_front_three_quarter" if layers else "turn_front"
-                if angle_pitch > 0.18 and fr != "close":
+                _stand_scale = 1.0
+                if angle_pitch > 0.18 and fr != "close" and data.get("low_figure"):
                     # the place is seen from below; the person should be too.  Only if the
                     # pack has a WHOLE low view - the presentation card `pres_low` is cropped
                     # at the knees in every pack and cannot be footed on ground.
@@ -3046,13 +3054,20 @@ def _build_job(jid, data):
                     if cid0 and os.path.exists(_lv):
                         _view = "pres_low_full"
                         _log(jid, "the person from below too: the pack's whole low view")
+                        # a low camera makes a standing person loom: the compositor sizes a
+                        # figure from where it stands, so stand it nearer by the same amount
+                        _stand_scale = max(0.55, 1.0 - 0.55 * angle_pitch)
                     else:
                         _log(jid, "the place is angled but %s has no whole low view - the person "
                                   "is still an eye-level cutout" % (cid0 or "the subject"))
+                elif angle_pitch > 0.18 and fr != "close":
+                    _log(jid, "the place is seen from below; the person is composed at eye level "
+                              "(a foreshortened view scaled to a 1.7 m person puts all of the "
+                              "foreshortening in the head - ask for low_figure to try it anyway)")
                 sub = _job("compose", film=fid, shot=shid)
                 _compose_anchor_job(sub, fid, shid, cid0, place, plate or None,
                                     _view,
-                                    FRAMING_STAND[fr], float(tpl_build.get("subject_cx") or (0.38 if layers else 0.45)),
+                                    FRAMING_STAND[fr] * _stand_scale, float(tpl_build.get("subject_cx") or (0.38 if layers else 0.45)),
                                     layers or None, framing=fr)
                 with _LOCK:
                     err = JOBS.get(sub, {}).get("error")

@@ -478,6 +478,46 @@
    ],
    "place": "back-alley",
    "plate": "night_wide"
+  },
+  {
+   "id": "sc22",
+   "title": "build 13:28",
+   "location": "a school - corridor of lockers, classroom doors, tall windows, lived-in and worn, a school courtyard in the morning, cherry trees, a bicycle rack, long shadows",
+   "time_of_day": "",
+   "weather": "clear",
+   "ambience": "distant hallway echoes and a ticking wall clock",
+   "palette": "",
+   "music": "",
+   "cast_present": [
+    "TOMAS"
+   ],
+   "no_people": false,
+   "anchor": "",
+   "shots": [
+    "290"
+   ],
+   "place": "school-morning",
+   "plate": "day_wide"
+  },
+  {
+   "id": "sc23",
+   "title": "build 13:33",
+   "location": "a city park with winding paths, old trees and iron benches, lived-in and worn, under a flat overcast sky, a city park in autumn, wet leaves on the path, iron benches, a bandstand far off",
+   "time_of_day": "",
+   "weather": "overcast",
+   "ambience": "birdsong and leaves moving, a far-off dog",
+   "palette": "",
+   "music": "",
+   "cast_present": [
+    "TOMAS"
+   ],
+   "no_people": false,
+   "anchor": "",
+   "shots": [
+    "300"
+   ],
+   "place": "autumn-park",
+   "plate": "day_wide"
   }
  ],
  "shots": {
@@ -4627,6 +4667,622 @@
     "caption": "Alley, street, buildings, houses, lanterns, puddles, sidewalk, woman, dress, hair, rain, night, light, glow, reflections, stone, concrete, wood, metal, sky, clouds, wetness, darkness, shadows.",
     "missing": [],
     "when": 1788627031
+   }
+  },
+  "290": {
+   "id": "290",
+   "scene": "sc22",
+   "title": "wide - TOMAS",
+   "duration": 5.0,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/builder-test/assets/anchor_shot_290.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "TOMAS",
+     "action": "stands in the yard, looking off to one side",
+     "background": "what moves here moves: Leaves",
+     "motion": "",
+     "ambient": [
+      "Leaves"
+     ],
+     "dialogue": {
+      "char": "",
+      "line": "",
+      "delivery": ""
+     }
+    }
+   ],
+   "sfx": "distant hallway echoes and a ticking wall clock",
+   "no_people": false,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t629308352",
+     "engine": "ltx",
+     "seed": 216258035,
+     "created": "13:30",
+     "file": "takes/290/ltx_t629308352.mp4",
+     "poster": "takes/290/ltx_t629308352.png",
+     "strip": "takes/290/ltx_t629308352_strip.png",
+     "duration": 5.01,
+     "fps": 24,
+     "qc": [
+      "camera: push in 18% - done by the studio (push)",
+      "angle: a low angle (pitch +0.25)",
+      "the face is not tomas-reyl's from the first frame (identity 0.42); the face holds for the first 1.9 s of 5.0; place drifted (0.85 first to last)",
+      "words not in the picture: yard, side"
+     ],
+     "cam_measured": {
+      "zoom": 1.185,
+      "pan": -0.0,
+      "tilt": -0.0,
+      "roll": 0.0,
+      "camera": "push in 18%",
+      "confidence": "high",
+      "curve": [
+       [
+        1.0,
+        0.0,
+        0.0
+       ],
+       [
+        1.026,
+        0.0,
+        -0.0
+       ],
+       [
+        1.071,
+        0.0,
+        -0.001
+       ],
+       [
+        1.12,
+        0.0,
+        -0.0
+       ],
+       [
+        1.158,
+        -0.0,
+        -0.001
+       ],
+       [
+        1.179,
+        -0.0,
+        -0.001
+       ],
+       [
+        1.19,
+        -0.0,
+        -0.001
+       ],
+       [
+        1.192,
+        -0.0,
+        -0.001
+       ],
+       [
+        1.192,
+        -0.0,
+        -0.001
+       ],
+       [
+        1.189,
+        -0.0,
+        -0.0
+       ],
+       [
+        1.186,
+        -0.0,
+        -0.0
+       ],
+       [
+        1.185,
+        -0.0,
+        -0.0
+       ],
+       [
+        1.185,
+        -0.0,
+        -0.0
+       ]
+      ],
+      "post": {
+       "move": "push",
+       "amount": 1.18,
+       "zoom_start": 1.0,
+       "zoom_end": 1.18,
+       "cx_start": 0.5,
+       "cy_start": 0.5
+      }
+     },
+     "identity": {
+      "start": 0.42,
+      "end": 0.317,
+      "hold": 0.534,
+      "verdict_start": "a different face",
+      "verdict_end": "a different face",
+      "place_hold": 0.847,
+      "place_verdict": "drifted",
+      "place_start": 0.47,
+      "who": "tomas-reyl",
+      "hold_curve": {
+       "times": [
+        0.0,
+        0.63,
+        1.25,
+        1.88,
+        2.5,
+        3.13,
+        3.76,
+        4.38,
+        4.89
+       ],
+       "scores": [
+        0.42,
+        0.308,
+        0.424,
+        0.561,
+        0.441,
+        0.442,
+        0.299,
+        0.279,
+        null
+       ],
+       "holds_until": 1.88,
+       "lost_at": 2.5,
+       "holds": false,
+       "duration": 5.01
+      }
+     },
+     "angle_measured": {
+      "pitch": 0.254,
+      "angle": "a low angle",
+      "confidence": "high",
+      "lines": 55,
+      "inliers": 0.71
+     },
+     "drift": {
+      "lost": 0.3,
+      "missing": [
+       "beam",
+       "corridor",
+       "door",
+       "glas",
+       "hallway",
+       "plant",
+       "pole",
+       "rail",
+       "shadow",
+       "sunlight",
+       "transportation",
+       "window"
+      ],
+      "kept": 31,
+      "last_caption": "Here's a breakdown of the nouns present in the image, as requested:\n\nPlace, interior, building, structure, hall, space, room.\nMain structures, ceiling, pillars, walls, floor, archway.\nObjects, man, jacket, shirt, hood, zipper, shoes.\nMaterials, fabric, plastic, metal, concrete, paint.\nVehicles, airplane, aircraft.\nWater, sky.\nWeather, none apparent.\nTime of day, daytime.\nLight sources, artificial "
+     },
+     "warnings": [],
+     "prompt": "A static wide shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, stands in the yard, looking off to one side, while what moves here moves: Leaves, a school - corridor of l"
+    },
+    {
+     "id": "t629414841",
+     "engine": "ltx",
+     "seed": 683332715,
+     "created": "13:32",
+     "file": "takes/290/ltx_t629414841.mp4",
+     "poster": "takes/290/ltx_t629414841.png",
+     "strip": "takes/290/ltx_t629414841_strip.png",
+     "duration": 4.88,
+     "fps": 24,
+     "qc": [
+      "camera: push in 18% - done by the studio (push)",
+      "angle: a low angle (pitch +0.24)",
+      "the face is not tomas-reyl's from the first frame (identity 0.31); the face holds for the first 4.3 s of 4.9; place drifted (0.82 first to last)",
+      "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.43 left=0.00 right=0.00)",
+      "words not in the picture: yard, side"
+     ],
+     "cam_measured": {
+      "zoom": 1.175,
+      "pan": -0.001,
+      "tilt": -0.008,
+      "roll": -0.04,
+      "camera": "push in 18%",
+      "confidence": "high",
+      "curve": [
+       [
+        1.0,
+        0.0,
+        0.0
+       ],
+       [
+        1.027,
+        0.0,
+        -0.003
+       ],
+       [
+        1.073,
+        0.0,
+        -0.006
+       ],
+       [
+        1.122,
+        0.0,
+        -0.008
+       ],
+       [
+        1.159,
+        0.0,
+        -0.008
+       ],
+       [
+        1.178,
+        0.0,
+        -0.009
+       ],
+       [
+        1.187,
+        -0.001,
+        -0.009
+       ],
+       [
+        1.187,
+        -0.001,
+        -0.008
+       ],
+       [
+        1.185,
+        -0.001,
+        -0.008
+       ],
+       [
+        1.18,
+        -0.001,
+        -0.008
+       ],
+       [
+        1.177,
+        -0.001,
+        -0.008
+       ],
+       [
+        1.175,
+        -0.001,
+        -0.008
+       ],
+       [
+        1.175,
+        -0.001,
+        -0.008
+       ]
+      ],
+      "post": {
+       "move": "push",
+       "amount": 1.18,
+       "zoom_start": 1.0,
+       "zoom_end": 1.18,
+       "cx_start": 0.5,
+       "cy_start": 0.5
+      }
+     },
+     "identity": {
+      "start": 0.314,
+      "end": 0.405,
+      "hold": 0.6,
+      "verdict_start": "a different face",
+      "verdict_end": "a different face",
+      "place_hold": 0.821,
+      "place_verdict": "drifted",
+      "place_start": 0.474,
+      "who": "tomas-reyl",
+      "hold_curve": {
+       "times": [
+        0.0,
+        0.61,
+        1.22,
+        1.83,
+        2.44,
+        3.05,
+        3.66,
+        4.27,
+        4.75
+       ],
+       "scores": [
+        0.314,
+        0.44,
+        0.489,
+        0.507,
+        0.501,
+        0.496,
+        0.437,
+        0.471,
+        0.431
+       ],
+       "holds_until": 4.27,
+       "lost_at": 4.75,
+       "holds": false,
+       "duration": 4.88
+      }
+     },
+     "angle_measured": {
+      "pitch": 0.24,
+      "angle": "a low angle",
+      "confidence": "high",
+      "lines": 56,
+      "inliers": 0.57
+     },
+     "drift": {
+      "lost": 0.3,
+      "missing": [
+       "corridor",
+       "door",
+       "floor",
+       "glas",
+       "hallway",
+       "interior",
+       "main",
+       "paint",
+       "pole",
+       "shadow",
+       "transportation",
+       "window"
+      ],
+      "kept": 31,
+      "last_caption": "Here's a breakdown of the nouns present in the image, as requested:\n\nPlace, building, structure, ceiling, roof, exterior, parking lot, garage, space.\nStructures, beams, columns, walls, railings, stairs, panels.\nObjects, jacket, hood, sweater, zipper, coat, bag.\nMaterials, metal, concrete, plastic, fabric, nylon, asphalt.\nVehicles, car, truck.\nPlants, none visible.\nWater, none visible.\nWeather, non"
+     },
+     "warnings": [],
+     "prompt": "A static wide shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, stands in the yard, looking off to one side, while what moves here moves: Leaves, a school - corridor of l"
+    }
+   ],
+   "picked": "t629414841",
+   "engine_notes": "",
+   "cam": {
+    "post": {
+     "move": "push",
+     "amount": 1.18,
+     "ease": "spring",
+     "zeta": 0.65,
+     "settle": 0.55
+    }
+   },
+   "anchor_source": {
+    "character": "tomas-reyl",
+    "framing": "wide",
+    "place": "school-morning",
+    "stand": 0.4,
+    "cx": 0.45,
+    "view": "pres_low_full",
+    "plate": "/home/k4shix/shared/comfy-studio/studio/foundry/places/school-morning/day_wide__angleu32.png",
+    "props": []
+   },
+   "anchor_check": {
+    "caption": "Here's a breakdown of the nouns present in the image, as requested:\n\nPlace, building, corridor, hallway, structure, interior, space.\nMain structures, ceiling, walls, doors, windows, beams, frame.\nObjects, man, jacket, floor, railing, pole, shadow.\nMaterials, concrete, metal, glass, wood, paint, fabric, plastic.\nVehicles, bus, transportation.\nPlants, none.\nWater, none.\nWeather, none.\nTime of day, daytime.\nLight sources, artificial light, sunlight.\nSigns, none.\nPeople, man.\nAnimals, none.",
+    "missing": [
+     "yard",
+     "side"
+    ],
+    "when": 1788629308
+   }
+  },
+  "300": {
+   "id": "300",
+   "scene": "sc23",
+   "title": "wide - TOMAS",
+   "duration": 5.0,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/builder-test/assets/anchor_shot_300.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "TOMAS",
+     "action": "stands on the path, looking off to one side",
+     "background": "what moves here moves: Leaves",
+     "motion": "",
+     "ambient": [
+      "Leaves"
+     ],
+     "dialogue": {
+      "char": "",
+      "line": "",
+      "delivery": ""
+     }
+    }
+   ],
+   "sfx": "birdsong and leaves moving, a far-off dog",
+   "no_people": false,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t629631611",
+     "engine": "ltx",
+     "seed": 799925614,
+     "created": "13:35",
+     "file": "takes/300/ltx_t629631611.mp4",
+     "poster": "takes/300/ltx_t629631611.png",
+     "strip": "takes/300/ltx_t629631611_strip.png",
+     "duration": 4.96,
+     "fps": 24,
+     "qc": [
+      "camera: push in 19% - done by the studio (push)",
+      "identity: same person at the start (0.60); unmeasured (the low view moves the head and the end box is not followed; 0.52 not judged); place drifted (0.79 first to last)",
+      "sound borrowed from take t549648673 of shot 100 - the render was too quiet (mean -53 dB)",
+      "words not in the picture: side"
+     ],
+     "cam_measured": {
+      "zoom": 1.186,
+      "pan": 0.002,
+      "tilt": 0.003,
+      "roll": 0.08,
+      "camera": "push in 19%",
+      "confidence": "high",
+      "curve": [
+       [
+        1.0,
+        0.0,
+        0.0
+       ],
+       [
+        1.025,
+        0.0,
+        0.0
+       ],
+       [
+        1.076,
+        0.0,
+        0.001
+       ],
+       [
+        1.125,
+        0.0,
+        0.002
+       ],
+       [
+        1.158,
+        -0.0,
+        0.002
+       ],
+       [
+        1.18,
+        -0.0,
+        0.002
+       ],
+       [
+        1.189,
+        0.001,
+        0.003
+       ],
+       [
+        1.19,
+        0.001,
+        0.003
+       ],
+       [
+        1.186,
+        0.001,
+        0.003
+       ],
+       [
+        1.185,
+        0.001,
+        0.003
+       ],
+       [
+        1.184,
+        0.001,
+        0.003
+       ],
+       [
+        1.183,
+        0.002,
+        0.003
+       ],
+       [
+        1.184,
+        0.002,
+        0.003
+       ]
+      ],
+      "post": {
+       "move": "push",
+       "amount": 1.18,
+       "zoom_start": 1.0,
+       "zoom_end": 1.18,
+       "cx_start": 0.5,
+       "cy_start": 0.5
+      }
+     },
+     "identity": {
+      "start": 0.603,
+      "end": 0.521,
+      "hold": 0.633,
+      "verdict_start": "same person",
+      "verdict_end": "unmeasured (the low view moves the head and the end box is not followed; 0.52 not judged)",
+      "place_hold": 0.789,
+      "place_verdict": "drifted",
+      "place_start": 0.42,
+      "who": "tomas-reyl",
+      "hold_curve": {
+       "times": [
+        0.0,
+        0.62,
+        1.24,
+        1.86,
+        2.48,
+        3.1,
+        3.72,
+        4.34,
+        4.84
+       ],
+       "scores": [
+        0.603,
+        0.612,
+        0.522,
+        0.599,
+        0.605,
+        0.536,
+        0.532,
+        0.529,
+        0.507
+       ],
+       "holds_until": 4.84,
+       "lost_at": null,
+       "holds": true,
+       "duration": 4.96
+      }
+     },
+     "angle_measured": null,
+     "drift": {
+      "lost": 0.44,
+      "missing": [
+       "autumn",
+       "cloud",
+       "foliage",
+       "gazebo",
+       "ground",
+       "lamp",
+       "wetnes"
+      ],
+      "kept": 9,
+      "last_caption": "Park, pavilion, man, jacket, sweater, pants, shoes, path, bench, grass, trees, leaves, sky, rain, weather, daytime, light, shadows, person."
+     },
+     "warnings": [],
+     "prompt": "A static wide shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, stands on the path, looking off to one side, while what moves here moves: Leaves, a city park with winding"
+    }
+   ],
+   "picked": "t629631611",
+   "engine_notes": "",
+   "cam": {
+    "post": {
+     "move": "push",
+     "amount": 1.18,
+     "ease": "spring",
+     "zeta": 0.65,
+     "settle": 0.55
+    }
+   },
+   "anchor_source": {
+    "character": "tomas-reyl",
+    "framing": "wide",
+    "place": "autumn-park",
+    "stand": 0.3296,
+    "cx": 0.45,
+    "view": "pres_low_full",
+    "plate": "/home/k4shix/shared/comfy-studio/studio/foundry/places/autumn-park/day_wide__angleu32.png",
+    "props": []
+   },
+   "anchor_check": {
+    "caption": "Park, gazebo, man, jacket, pants, bench, trees, grass, path, wetness, rain, autumn, day, light, lamp, leaves, sky, clouds, ground, person, foliage.",
+    "missing": [
+     "side"
+    ],
+    "when": 1788629631
    }
   }
  }
