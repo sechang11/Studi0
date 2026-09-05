@@ -800,6 +800,23 @@ def _borrow_audio(dest, donor):
     return False
 
 
+# Where the camera IS, as POST_MOVES is what it does.  Performed on the plate before the
+# engine sees it (see _tools/angle.py) and measured on the take (see _tools/anglemeasure.py).
+ANGLES = {
+    "eye level": 0.0,
+    "low angle": 0.32,
+    "steep low angle": 0.55,
+    "worm's eye": 0.75,
+    "high angle": -0.32,
+    "steep high angle": -0.55,
+    "bird's eye": -0.75,
+}
+ANGLE_CHECK = {
+    "low angle": "angle is low", "steep low angle": "angle is low", "worm's eye": "angle is low",
+    "high angle": "angle is high", "steep high angle": "angle is high", "bird's eye": "angle is high",
+    "eye level": "angle is eye level",
+}
+
 POST_MOVES = {
     # what the builder's camera picker means, done after the render
     "static": {"move": "stabilise"},
@@ -854,6 +871,27 @@ def _head_box(src):
 
 
 HEAD_MOVERS = {"crouch", "kneel", "sit", "sit_down", "bow", "lie", "lie_down", "stand_up", "fall", "duck", "pick_up"}
+
+
+def _angle_pass(jid, sh, dest):
+    """Where was the camera?  Read off the take's own first frame.
+
+    Only reported when the shot asked for an angle or the reading is confident and not
+    eye level - a note on every take saying "eye level" would be noise, and on a place
+    with no verticals it would be a guess."""
+    try:
+        AM = _load_sibling("anglemeasure")
+        m = AM.measure(dest)
+    except Exception as e:
+        _log(jid, "angle not measured: %s" % str(e)[:100])
+        return None, None
+    if m.get("confidence") in (None, "none"):
+        return None, None
+    small = {k: m.get(k) for k in ("pitch", "angle", "confidence", "lines", "inliers")}
+    asked = (sh.get("cam") or {}).get("angle")
+    if not asked and small["angle"] == "eye level":
+        return small, None
+    return small, AM.note(m)
 
 
 def _identity_pass(jid, f, sh, dest, cam_m):
@@ -1133,7 +1171,7 @@ def _render_take(jid, f, sh, eng, seed):
         take = {"id": tid, "engine": "cam", "seed": 0,
                 "created": time.strftime("%H:%M"), "file": rel,
                 "poster": rel[:-4] + ".png", "strip": rel[:-4] + "_strip.png",
-                "duration": round(_dur(dest), 2), "fps": _fps(dest), "qc": qc, "cam_measured": cam_m, "identity": ident_m,
+                "duration": round(_dur(dest), 2), "fps": _fps(dest), "qc": qc, "cam_measured": cam_m, "identity": ident_m, "angle_measured": angle_m,
                 "drift": _d,
                 "warnings": ([] if v.get("pass", True) else
                              ["camrig shape test FAILED: %s" % v]),
@@ -1171,6 +1209,9 @@ def _render_take(jid, f, sh, eng, seed):
     qc = _qc(dest)
     if _cn:
         qc = list(qc) + [_cn]
+    angle_m, _an = _angle_pass(jid, sh, dest)
+    if _an:
+        qc = list(qc) + [_an]
     ident_m, _in, _if = _identity_pass(jid, f, sh, dest, cam_m)
     if _in:
         qc = list(qc) + [_in]
@@ -1243,7 +1284,7 @@ def _render_take(jid, f, sh, eng, seed):
             _log(jid, "speech level ok: peak %.1f dB" % _pk)
     take = {"id": tid, "engine": eng, "seed": seed, "created": time.strftime("%H:%M"),
             "file": rel, "poster": rel[:-4] + ".png", "strip": rel[:-4] + "_strip.png",
-            "duration": round(_dur(dest), 2), "fps": _fps(dest), "qc": qc, "cam_measured": cam_m, "identity": ident_m,
+            "duration": round(_dur(dest), 2), "fps": _fps(dest), "qc": qc, "cam_measured": cam_m, "identity": ident_m, "angle_measured": angle_m,
             "drift": _d,
             "warnings": c.get("warnings") or [], "prompt": c["prompt"][:400]}
     f2 = F.load(f.id)                          # re-load: takes may have landed meanwhile
@@ -1396,7 +1437,7 @@ def _faults(take):
     """notes that count against a take; 'ends closer' is information, not a fault"""
     return [n for n in (take.get("qc") or [])
             if not n.startswith(("ends closer", "sound borrowed", "words not in the picture", "camera:", "identity:",
-                                 "the studio cut the take"))]
+                                 "angle:", "the studio cut the take"))]
 
 
 def _camera_score(sh, take):
@@ -1999,6 +2040,9 @@ def _pin_job(jid, fid, shid, change, seconds, seed, force=False, hold_feet=None)
             if _cn:
                 pin_qc.append(_cn)
             pin_ident, _in, _if = _identity_pass(jid, f, sh, dest, pin_cam)
+            angle_m, _apn = _angle_pass(jid, sh, dest)
+            if _apn:
+                pin_qc.append(_apn)
             if _in:
                 pin_qc.append(_in)
         except Exception as e:
@@ -2873,6 +2917,14 @@ def _build_job(jid, data):
                 f = F.new_film(title, look=data.get("look", "photoreal"), resolution=data.get("resolution", "auto"))
             fid = f.id
         place, plate = data.get("place") or "", data.get("plate") or ""
+        angle_name = (data.get("angle") or "eye level").strip().lower()
+        angle_pitch = ANGLES.get(angle_name)
+        if angle_pitch is None:
+            try:
+                angle_pitch = float(angle_name)
+                angle_name = "%+.2f" % angle_pitch
+            except Exception:
+                angle_pitch, angle_name = 0.0, "eye level"
         chars_in = [c for c in (data.get("characters") or []) if c][:2]
         cast_ids = []
         for cid in chars_in:
@@ -2914,6 +2966,23 @@ def _build_job(jid, data):
         line = (data.get("line") or "").strip()
         who = (data.get("who") or (cast_ids[0] if cast_ids else "")).strip()
         amb = [a for a in (data.get("ambient") or []) if a]
+        if angle_pitch and place:
+            try:
+                AN = _load_sibling("angle")
+                AM = _load_sibling("anglemeasure")
+                base_p = CM.plate_for(place, plate or None)
+                got_p, got_key = AN.angled_plate(base_p, angle_pitch)
+                m = AM.measure(got_p)
+                if m.get("confidence") == "none":
+                    _log(jid, "the angle is made but this place has no verticals to measure it by - "
+                              "%s is performed, not promised" % angle_name)
+                else:
+                    _log(jid, "the place from %s: asked %+.2f, the plate measures %+.2f (%s)"
+                         % (angle_name, angle_pitch, m.get("pitch", 0.0), m.get("angle")))
+                plate = got_key
+            except Exception as e:
+                _log(jid, "the angle could not be made: %s" % str(e)[:120])
+                angle_pitch, angle_name = 0.0, "eye level"
         dur = float(data.get("duration") or 6)
         n = max(1, min(int(data.get("variants") or 3), 6))
         vary = set(data.get("vary") or ["seed"])
@@ -2986,6 +3055,13 @@ def _build_job(jid, data):
                                  if fr == "close" else "The background is the %s plate %s and stays that place for the whole take.")
                                  % (place, plate or "wide"), "why": "words that name what the plate lacks make the engine rewrite it",
                                  "check": "qc is clean"})
+            if angle_pitch:
+                promises.append({"title": "Angle: %s" % angle_name,
+                                 "rule": "The place is seen from %s. The plate is warped by the studio before "
+                                         "the engine sees it - the camera drops and tilts, with the parallax "
+                                         "taken from the depth map." % angle_name,
+                                 "why": "an engine treats an angle word as a suggestion; a plate is what it copies",
+                                 "check": ANGLE_CHECK.get(angle_name)})
             promises.append({"title": "Camera: %s" % camera,
                              "rule": ("The camera %s - the engine is asked to hold still and the move is done by the studio "
                                       "after the render, then measured." % CAMERA_VERB.get(camera, camera))

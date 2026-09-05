@@ -87,6 +87,17 @@
         <option value="roll">Dutch tilt (the frame leans)</option>
         <option value="whip">whip pan</option>
         <option value="pinned">pinned (a pose change, animated between two chosen frames)</option></select>
+      <label>angle <span class="hint">- where the camera is; the studio warps the plate before the engine sees it</span></label><select id="angle">
+        <option value="eye level">eye level</option>
+        <option value="low angle">low angle (looking up)</option>
+        <option value="steep low angle">steep low angle</option>
+        <option value="worm&#39;s eye">worm&#39;s eye</option>
+        <option value="high angle">high angle (looking down)</option>
+        <option value="steep high angle">steep high angle</option>
+        <option value="bird&#39;s eye">bird&#39;s eye</option></select>
+      <label style="display:flex;gap:6px;align-items:center;margin-top:8px">
+        <input type="checkbox" id="trimface"> <span>cut the take where the face goes</span></label>
+      <div class="hint">a face survives about four seconds of a walk toward the camera; the studio can end the shot there instead of delivering a stranger</div>
       <label>motion of the subject (in place works; walking does not)</label><select id="motion"><option value="">none</option></select>
       <label>ambient motion - what moves in the picture</label>
       <div class="chips" id="ambient"></div>
@@ -133,6 +144,8 @@ function pickShot(id){
   TEMPLATE=id; const b=s.build||{};
   document.querySelectorAll("#framings .chip").forEach(c=>c.classList.toggle("on",(b.framings||[]).includes(c.dataset.v)));
   const cam=$("#camera"); if(b.camera&&[...cam.options].some(o=>o.value===b.camera)) cam.value=b.camera;
+  const ang=$("#angle"); ang.value=(b.angle&&[...ang.options].some(o=>o.value===b.angle))?b.angle:"eye level";
+  $("#trimface").checked=!!b.trim_face;
   if(b.duration) $("#dur").value=b.duration;
   if(b.variants){ const v=$("#variants"); if([...v.options].some(o=>o.value==String(b.variants))) v.value=String(b.variants); }
   if(b.action) $("#action").value=b.action;
@@ -182,7 +195,8 @@ async function build(){
   const body={template:TEMPLATE||undefined,engine:$("#engine").value,film:$("#film").value||undefined, look:$("#look").value, resolution:$("#res").value,
     place:$("#place").value, plate:PLATE, characters:PICK, framings:chips("framings"), camera:$("#camera").value,
     motion:$("#motion").value, line:$("#line").value.trim(), action:$("#action").value.trim(), ambient:chips("ambient"),
-    duration:parseFloat($("#dur").value||"6"), variants:parseInt($("#variants").value), vary:chips("vary")};
+    duration:parseFloat($("#dur").value||"6"), variants:parseInt($("#variants").value), vary:chips("vary"),
+    angle:$("#angle").value, trim_face:$("#trimface").checked};
   if(!body.place) return alert("choose a place");
   if(!body.framings.length) return alert("choose at least one framing");
   const r=await (await fetch("/api/film/build",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)})).json();

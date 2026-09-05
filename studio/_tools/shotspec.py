@@ -83,6 +83,25 @@ def run_check(chk, sh, take):
     if kind == "take_prompt_contains":
         got = (take or {}).get("prompt", "")
         return chk["value"].lower() in got.lower(), "prompt=%s..." % got[:48]
+    if kind == "angle":
+        # where the camera IS.  Measured on the take's own first frame by the vertical
+        # vanishing point; a place with no vertical lines cannot be judged and says so
+        # rather than passing or failing on nothing.
+        m = (take or {}).get("angle_measured") or {}
+        if not m or m.get("confidence") in (None, "none"):
+            return None, "this place has no verticals to measure an angle by"
+        p = float(m.get("pitch", 0.0))
+        want = (chk.get("want") or "eye level").replace("a ", "").strip()
+        got = "pitch=%+.2f (%s)" % (p, m.get("angle", "?"))
+        if want.startswith("low"):
+            ok = p >= 0.12
+        elif want.startswith("high"):
+            ok = p <= -0.12
+        else:
+            ok = abs(p) < 0.12
+        if m.get("confidence") == "low":
+            got += " - measured with low confidence"
+        return ok, got
     if kind == "camera":
         m = (take or {}).get("cam_measured") or {}
         if not m:

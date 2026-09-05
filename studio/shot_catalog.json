@@ -1112,7 +1112,7 @@
    "id": "low_angle_wide",
    "family": "people",
    "title": "Low angle (from the ground)",
-   "purpose": "The person seen from low, monumental. Composed at a near stand, then tilted up by the studio.",
+   "purpose": "The old prose low angle, kept for comparison: the words asked to look up and the engine returned eye level. Use 'Low angle (looking up)' instead.",
    "build": {
     "framings": [
      "wide"
@@ -1128,7 +1128,8 @@
     "three variants by default - the pick keeps the face that held (the seed dance)"
    ],
    "cannot": [
-    "a true low camera (the plate's horizon is fixed)"
+    "a true low camera (the plate's horizon is fixed)",
+    "the angle (it is asked for in prose; the studio's own low angle performs it on the plate instead)"
    ],
    "measured": "",
    "checked": {
@@ -1142,7 +1143,136 @@
      "identity: same person, start 0.64, end 0.62; place drifted (0.83 first to last)"
     ],
     "spec": "47 problem(s) in the film"
-   }
+   },
+   "superseded_by": "low_angle"
+  },
+  {
+   "id": "low_angle",
+   "family": "angles",
+   "title": "Low angle (looking up)",
+   "purpose": "The camera is below eye level. Makes a figure loom and a place feel taller.",
+   "build": {
+    "framings": [
+     "wide"
+    ],
+    "people": 1,
+    "camera": "static",
+    "angle": "low angle",
+    "duration": 5,
+    "action": "stands in the scene",
+    "motion": ""
+   },
+   "keeps": [
+    "the angle: the plate is warped by the studio before the engine sees it, then measured",
+    "the place (the same plate, from a different camera)"
+   ],
+   "cannot": [
+    "the figure seen from that angle (the pack's low view is cropped at the knees and cannot be footed, so the person is still an eye-level view)",
+    "the angle in a place with no straight verticals (a harbour of masts cannot be measured)"
+   ],
+   "measured": "asked +0.32, the plate measures +0.30; delivered pitch is exact to 0.02 on every place the ruler can read"
+  },
+  {
+   "id": "high_angle",
+   "family": "angles",
+   "title": "High angle (looking down)",
+   "purpose": "The camera is above eye level. Diminishes a figure and opens the ground.",
+   "build": {
+    "framings": [
+     "wide"
+    ],
+    "people": 1,
+    "camera": "static",
+    "angle": "high angle",
+    "duration": 5,
+    "action": "stands in the scene",
+    "motion": ""
+   },
+   "keeps": [
+    "the angle, measured on the take",
+    "the place"
+   ],
+   "cannot": [
+    "the figure seen from that angle (the pack's low view is cropped at the knees and cannot be footed, so the person is still an eye-level view)",
+    "the angle in a place with no straight verticals (a harbour of masts cannot be measured)"
+   ],
+   "measured": "the same arithmetic as the low angle with the sign reversed; exact to 0.02"
+  },
+  {
+   "id": "worms_eye",
+   "family": "angles",
+   "title": "Worm's eye",
+   "purpose": "The camera on the ground looking up. The most extreme angle the studio will perform.",
+   "build": {
+    "framings": [
+     "wide"
+    ],
+    "people": 0,
+    "camera": "static",
+    "angle": "worm's eye",
+    "duration": 5,
+    "action": "the place as it is, alive",
+    "motion": ""
+   },
+   "keeps": [
+    "the angle"
+   ],
+   "cannot": [
+    "the angle in a place with no straight verticals (a harbour of masts cannot be measured)",
+    "a figure (past a steep angle the eye-level cutout stops reading; the entry is for the place alone)"
+   ],
+   "measured": "pitch +0.75, at the clamp; past 0.8 the keystone eats the frame"
+  },
+  {
+   "id": "birds_eye",
+   "family": "angles",
+   "title": "Bird's eye",
+   "purpose": "The camera high above looking down on the place.",
+   "build": {
+    "framings": [
+     "wide"
+    ],
+    "people": 0,
+    "camera": "static",
+    "angle": "bird's eye",
+    "duration": 5,
+    "action": "the place as it is, alive",
+    "motion": ""
+   },
+   "keeps": [
+    "the angle"
+   ],
+   "cannot": [
+    "the angle in a place with no straight verticals (a harbour of masts cannot be measured)",
+    "a true overhead (this is a camera raised and tilted, not a camera flown; the plate has no roof in it)"
+   ],
+   "measured": "pitch -0.75, at the clamp"
+  },
+  {
+   "id": "low_angle_push",
+   "family": "angles",
+   "title": "Low angle with a push",
+   "purpose": "Looking up while the frame closes in. Where the camera is and what it does, together.",
+   "build": {
+    "framings": [
+     "wide"
+    ],
+    "people": 1,
+    "camera": "push in",
+    "angle": "low angle",
+    "duration": 5,
+    "action": "stands in the scene",
+    "motion": ""
+   },
+   "keeps": [
+    "the angle on the plate and the push done by the studio after the render",
+    "both measured on the take"
+   ],
+   "cannot": [
+    "the figure seen from that angle (the pack's low view is cropped at the knees and cannot be footed, so the person is still an eye-level view)",
+    "a push past 1.35x on top of an engine that already drifted"
+   ],
+   "measured": "the angle is performed before the render and the move after it; they do not interfere"
   }
  ]
 }

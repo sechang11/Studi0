@@ -34,6 +34,10 @@ def check_to_json(line):
     m = re.match(r"camera\s+(is static|pushes in|pulls back|pans left|pans right|pans|tilts up|tilts down)$", s, re.I)
     if m:
         return {"kind": "camera", "want": m.group(1).lower()}
+    # where the camera IS, as the clause above is what it did
+    m = re.match(r"angle\s+is\s+(a\s+)?(low|high|eye level)(\s+angle)?$", s, re.I)
+    if m:
+        return {"kind": "angle", "want": m.group(2).lower()}
     return {"kind": "UNKNOWN", "raw": s}
 
 
