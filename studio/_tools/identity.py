@@ -101,12 +101,16 @@ def crop(im, box):
     return im.crop((int(x0 * W), int(y0 * H), int(x1 * W), int(y1 * H)))
 
 
-def verdict(s):
+def verdict(s, close=False):
+    """the bands depend on how big the head is: in a wide or medium framing the head crop is
+    a few dozen pixels and the same person scores 0.56-0.72 against the portrait (measured on
+    composed anchors, where the face is the portrait by construction); in a close-up 0.74-0.78"""
     if s is None:
         return "unmeasured"
-    if s >= SAME:
+    same, unsure = (SAME, UNSURE) if close else (0.56, 0.46)
+    if s >= same:
         return "same person"
-    if s >= UNSURE:
+    if s >= unsure:
         return "uncertain"
     return "a different face"
 
@@ -136,13 +140,13 @@ def run(job):
         c1 = None if too_far else crop(last, cb)
         p, e0 = embed(portrait), embed(c0)
         start = float((p * e0).sum())
-        out.update({"start": round(start, 3), "verdict_start": verdict(start), "box": [round(b, 3) for b in box]})
+        out.update({"start": round(start, 3), "verdict_start": verdict(start, job.get("close")), "box": [round(b, 3) for b in box]})
         if c1 is None:
             out.update({"end": None, "hold": None, "verdict_end": "unmeasured (the camera moved too much to follow the head)"})
         else:
             e1 = embed(c1)
             end, hold = float((p * e1).sum()), float((e0 * e1).sum())
-            out.update({"end": round(end, 3), "hold": round(hold, 3), "verdict_end": verdict(end)})
+            out.update({"end": round(end, 3), "hold": round(hold, 3), "verdict_end": verdict(end, job.get("close"))})
         # the place: did the whole frame stay the same picture from first to last?  (the plate
         # against the first frame is framing-dependent - a medium on a person scores 0.48 against
         # its own empty plate - so it is reported, not judged)
