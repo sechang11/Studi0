@@ -646,6 +646,21 @@ def _repair_job(jid, cid):
                 gone.append(v)
                 if v == "base_fullbody":
                     base_cut = True
+        # the other way a view breaks a composite: drawn at proportions the rest of the pack
+        # does not share.  The compositor sizes by total height, so a view whose head is a
+        # third away from the pack's median puts the character on screen a different size.
+        try:
+            sys.path.insert(0, TOOLS) if TOOLS not in sys.path else None
+            import pack_views_check as PVC
+            rep = PVC.check(cid)
+            for v in rep.get("suspect") or []:
+                if v in COMPOSITING_VIEWS and v not in gone:
+                    gone.append(v)
+            if rep.get("suspect"):
+                _log(jid, "out of proportion with the rest of the pack: %s (spread %sx)"
+                     % (", ".join(rep["suspect"]), rep.get("spread")))
+        except Exception as e:
+            _log(jid, "proportion check unavailable: %s" % str(e)[:90])
         if base_cut:
             # the turnaround is derived from the base for photographic packs: redo it all
             for v in COMPOSITING_VIEWS:
@@ -659,7 +674,7 @@ def _repair_job(jid, cid):
         cache = os.path.join(adir, "_views_qc.json")
         if os.path.exists(cache):
             os.remove(cache)
-        _log(jid, "cropped views removed: %s" % (", ".join(gone) or "none"))
+        _log(jid, "views removed for re-rendering: %s" % (", ".join(gone) or "none"))
         if gone:
             _seeds_job(jid, "character", cid)
         else:

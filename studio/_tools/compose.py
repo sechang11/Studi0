@@ -470,6 +470,60 @@ def prop_layer(prop_id, plate, dpath, stand, cx, view="hero", seed=7, work=None,
     return cut, int(W * cx) - tw // 2, y_feet - th
 
 
+HEAD_VIEWS = ("turn_front", "turn_front_three_quarter", "turn_side",
+              "turn_back_three_quarter", "turn_back", "base_fullbody")
+HEAD_CLAMP = 0.15          # a view may move a figure's height by at most this much
+
+
+def head_frac(char_id, view, work=None):
+    """head width as a fraction of the cut figure's height, or None"""
+    from PIL import Image
+    src = os.path.join(CHARS, char_id, view + ".png")
+    if not os.path.isfile(src):
+        return None
+    try:
+        cut_p = cutout(src, os.path.join(work or OUT_DIR, "hf_%s_%s.png" % (char_id, view)), tag="hf")
+        im = _trim(Image.open(cut_p).convert("RGBA"))
+        hw = _head_width(im.split()[-1], (0, 0, im.size[0], im.size[1]))
+        if not hw or not im.size[1]:
+            return None
+        f = hw / float(im.size[1])
+        return f if 0.03 < f < 0.5 else None      # outside this the probe found something else
+    except Exception:
+        return None
+
+
+def head_reference(char_id, work=None, force=False):
+    """The pack's own median head fraction over its turnaround, cached beside the pack.
+
+    Median, not mean, so one broken view cannot move the reference it is being judged
+    against - which is the whole point of having a reference."""
+    import statistics
+    d = os.path.join(CHARS, char_id)
+    cache = os.path.join(d, "_head_ref.json")
+    if os.path.exists(cache) and not force:
+        try:
+            return json.load(open(cache, encoding="utf-8"))
+        except Exception:
+            pass
+    vals = {}
+    for v in HEAD_VIEWS:
+        f = head_frac(char_id, v, work=work)
+        if f:
+            vals[v] = round(f, 4)
+    if len(vals) < 3:
+        out = {"reference": None, "views": vals, "why": "fewer than three views measured"}
+    else:
+        ref = statistics.median(vals.values())
+        out = {"reference": round(ref, 4), "views": vals,
+               "suspect": sorted(k for k, v in vals.items() if v > ref * 1.35 or v < ref / 1.35)}
+    try:
+        json.dump(out, open(cache, "w", encoding="utf-8"), indent=1)
+    except Exception:
+        pass
+    return out
+
+
 def head_scale(char_id, view, ref_view="turn_front", work=None, seed=7):
     """How much smaller this view should be drawn than a plain height match, so that its
     head lands where the reference view's head would.  1.0 means the two views already
@@ -531,11 +585,16 @@ def character_layer(char_id, plate, dpath, stand, cx, view="turn_front", seed=7,
         scale, feet = _framings_for(view)[framing]
         th, y_feet = int(H * scale), int(H * feet)
     if head_ref and not ots:
-        # a uniform scale cannot repair a wrong ratio - it moves head and body together -
-        # so this only reports.  The gate that uses it lives where views are made.
-        f, note = head_scale(char_id, view, head_ref, work=work, seed=seed)
-        if abs(f - 1.0) > 0.02:
-            print("   head proportions: %s" % note)
+        # reported, never applied: see head_reference().  A view whose head is far from its
+        # pack's median is a view to re-render, not a view to quietly resize.
+        try:
+            ref = head_reference(char_id, work=work)
+            mine = head_frac(char_id, view, work=work)
+            if ref.get("reference") and mine and abs(mine / ref["reference"] - 1.0) > 0.15:
+                print("   note: %s has a head %.2fx the pack's own median - the figure may not "
+                      "match its other shots" % (view, mine / ref["reference"]))
+        except Exception:
+            pass
     # lit by the scene like the first figure: rough paste alone, relight, re-cut
     lit = None
     if plate_p and relight:
