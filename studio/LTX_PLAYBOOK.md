@@ -1683,3 +1683,11 @@ which arithmetic cannot do without a wider render - so the encyclopedia's
 *pull back* entry offers it as an engine move on H3 and a post move on LTX.
 The words stay in the dictionary with their measured odds, for the person who
 wants to gamble a seed on them.
+
+**Exact, proven.** After the bench, one more build through the pass with the
+camera set to *push in*, two variants: the first take measured 1.127 for 1.14
+asked (the engine's 9% drift stabilised first, then the push); the second
+take's engine ran away 65% - too far to stabilise - and kept its move, and the
+pick, now judged by faults, then camera closeness, then the face, chose the
+first. That is the shape of every camera promise from here: asked, done,
+measured, and the measurement chooses.
