@@ -3118,7 +3118,8 @@ def _build_job(jid, data):
             except Exception as e:
                 _log(jid, "the angle could not be made: %s" % str(e)[:120])
                 angle_pitch, angle_name = 0.0, "eye level"
-        dur = float(data.get("duration") or 6)
+        # five, not six: 98 measured still takes keep the face to 4.8 s at the third quartile
+        dur = float(data.get("duration") or 5)
         _adv = clock_advice(data.get("motion"), dur)
         if _adv:
             _log(jid, "the face clock: %s" % _adv)

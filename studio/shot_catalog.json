@@ -1397,6 +1397,83 @@
     "a swing past what the zoom's room allows"
    ],
    "measured": "asked -0.45, delivered -0.56 from a plate at +0.50"
+  },
+  {
+   "id": "matched_angles",
+   "family": "angles",
+   "title": "Shot and reverse at matched angles",
+   "purpose": "Two shots of the same conversation from opposite sides, both from the same height, so the cut between them reads as one room rather than two.",
+   "build": {
+    "framings": [
+     "medium"
+    ],
+    "people": 2,
+    "camera": "static",
+    "angle": "low angle",
+    "duration": 5,
+    "action": "faces the other and listens",
+    "motion": ""
+   },
+   "keeps": [
+    "the angle on both sides, because it is arithmetic on the plate and not a request",
+    "the place, since a reverse is another plate of the same place"
+   ],
+   "cannot": [
+    "the eyeline (nothing here measures who is looking at whom)",
+    "the angle in a place with no straight verticals"
+   ],
+   "measured": "the angle pass delivers to 0.04 of what is asked on any readable place, so two shots asked for the same angle land within 0.08 of each other"
+  },
+  {
+   "id": "crane_down_to_face",
+   "family": "angles",
+   "title": "Crane down onto a face",
+   "purpose": "The camera falls through the shot and arrives level. The classic arrival.",
+   "build": {
+    "framings": [
+     "medium"
+    ],
+    "people": 1,
+    "camera": "crane down",
+    "angle": "low angle",
+    "duration": 5,
+    "action": "stands and looks up",
+    "motion": ""
+   },
+   "keeps": [
+    "the fall, per frame, from the plate's angle toward level"
+   ],
+   "cannot": [
+    "the parallax of a real crane",
+    "a face past about five seconds - see the face clock"
+   ],
+   "measured": "crane down asked -0.45 delivered -0.46 on the alley"
+  },
+  {
+   "id": "held_four",
+   "family": "motion",
+   "title": "Four seconds, and the face holds",
+   "purpose": "The shortest useful shot of a person doing something, made short deliberately because that is how long a face lasts.",
+   "build": {
+    "framings": [
+     "medium"
+    ],
+    "people": 1,
+    "camera": "static",
+    "duration": 4,
+    "variants": 3,
+    "action": "stands in the scene, listening",
+    "motion": "",
+    "trim_face": true
+   },
+   "keeps": [
+    "the face, on most seeds, because the shot ends before the engine redraws it",
+    "three variants, so the pick has something to choose between"
+   ],
+   "cannot": [
+    "a long take - that is what this entry exists to avoid"
+   ],
+   "measured": "at 4 s a walk toward the camera kept the face on 2 of 3 seeds; at 6 s it kept it on 0 of 3"
   }
  ]
 }
