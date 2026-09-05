@@ -2129,3 +2129,20 @@ stops re-rolling shots for a failure that is geometry rather than luck.
 That is the shape of the whole block in one finding: a ruler that reports confidently outside
 the range it can actually read does more harm than no ruler at all, and the only way to know
 the range is to render the two cases and look at the numbers.
+
+**And it generalises past the walk.** The four-second result was proven on a walk toward the
+camera, which is the motion that fails hardest, so the advice the studio now gives on every
+motion rested on a survival number rather than a trial. The takes already on the box could
+not check it: almost none of them are under four and a half seconds, because four second
+shots are a thing the studio only started asking for this afternoon. So the same still
+medium shot - same place, same person, same words - was built at two lengths, four seeds each:
+
+  four seconds    3 of 4 kept the face
+  seven seconds   1 of 4 kept it
+
+Same engine, same anchor, same everything but the number in the length field. The one failure
+at four seconds started from a composed face of 0.45 where its siblings started near 0.67,
+which is the other law showing through: a shot that begins badly does not recover.
+
+So the rule stands for any motion, not only the ones that move toward the camera. This engine
+holds a face for about five seconds and the honest thing to do with that is to ask for less.
