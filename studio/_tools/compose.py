@@ -472,11 +472,21 @@ def prop_layer(prop_id, plate, dpath, stand, cx, view="hero", seed=7, work=None,
 
 def character_layer(char_id, plate, dpath, stand, cx, view="turn_front", seed=7,
                     work=None, framing="full", plate_p=None, relight=True, footing_check=True,
-                    near=None):
+                    near=None, ots=False):
     """A second (or third) character as a layer: cut, sized as a 1.7 m person at
-    its depth, tinted to the plate. -> (cut, x, y)."""
+    its depth, tinted to the plate. -> (cut, x, y).
+
+    ots=True: an over-the-shoulder foreground - the exact view asked (a back
+    view), no footing, no relight (a relit back view came back as a face),
+    tinted, allowed below the frame."""
     from PIL import Image
-    view, _vnote = pick_full_view(char_id, view)
+    if ots:
+        footing_check = False
+        relight = False
+        if not os.path.isfile(os.path.join(CHARS, char_id, view + ".png")):
+            view, _vnote = pick_full_view(char_id, view)
+    else:
+        view, _vnote = pick_full_view(char_id, view)
     src = os.path.join(CHARS, char_id, view + ".png")
     if not os.path.isfile(src):
         raise SystemExit("no such view: %s" % src)
@@ -713,7 +723,8 @@ def compose(char_id, place_id, plate_key=None, view="turn_front",
                                          float(p.get("cx", 0.6)),
                                          view=p.get("view", "turn_front"), seed=seed,
                                          work=work, framing=framing, plate_p=plate_p,
-                                         footing_check=footing_check, near=cx)
+                                         footing_check=footing_check, near=cx,
+                                         ots=bool(p.get("ots")))
             say("  + character %s (%s) at stand %.2f, %dpx tall"
                 % (p["character"], p.get("view", "turn_front"), p_stand, pc.height))
         else:
