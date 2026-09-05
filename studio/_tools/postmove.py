@@ -99,14 +99,24 @@ def _curve(kind, n, amount, ease=True, z=None, amp=0.0, hz=1.2, seed=7, curve=No
             cy = 0.5 + (amp / 1000.0) * (0.6 * math.sin(2 * math.pi * hz * 0.8 * t + ph[1]) + 0.4 * ny[i] * 0.5)
             roll = (amp / 60.0) * math.sin(2 * math.pi * hz * 0.5 * t + ph[2])
         elif kind == "stabilise":
-            # curve: measured cumulative zoom per sampled step (len m); the compensating
-            # crop equals the final zoom divided by the zoom so far
-            c = curve or [1.0]
-            zf = c[-1]
+            # curve: measured cumulative [zoom, pan, tilt] per sampled step (or bare zooms);
+            # the frame is held at the END frame's view: crop by final/so-far zoom and shift
+            # the window by the pan and tilt still to come
+            c = curve or [[1.0, 0.0, 0.0]]
+            c = [[x, 0.0, 0.0] if not isinstance(x, (list, tuple)) else list(x) for x in c]
+            zf, pf, tf = c[-1]
             pos = u * (len(c) - 1)
             j = int(math.floor(pos)); f = pos - j
-            zi = c[j] if j >= len(c) - 1 else c[j] * (1 - f) + c[j + 1] * f
+            if j >= len(c) - 1:
+                zi, pi, ti = c[-1]
+            else:
+                zi = c[j][0] * (1 - f) + c[j + 1][0] * f
+                pi = c[j][1] * (1 - f) + c[j + 1][1] * f
+                ti = c[j][2] * (1 - f) + c[j + 1][2] * f
             zoom = max(1.0, zf / max(zi, 1e-6))
+            # the scene still has to move left by (pf - pi) of the frame: look there now
+            cx = 0.5 + (pf - pi)
+            cy = 0.5 + (tf - ti)
         out.append((cx, cy, zoom, roll))
     return out
 

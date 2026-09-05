@@ -926,9 +926,12 @@ def _camera_pass(jid, sh, dest, eng):
                 if drift < 0.03:
                     mv = None
                     _log(jid, "camera: the take is already still (%s) - nothing to stabilise" % (before.get("camera") if before else "?"))
+                elif before.get("zoom", 1.0) > 1.35 or before.get("confidence") != "high":
+                    mv = None
+                    _log(jid, "camera: the engine %s - too far or too uncertain to stabilise; the take keeps its move" % before.get("camera"))
                 else:
                     mv["curve"] = before["curve"]
-            elif drift >= 0.03 and not before.get("error") and before.get("confidence") == "high":
+            elif 0.03 <= drift and before.get("zoom", 1.0) <= 1.35 and not before.get("error") and before.get("confidence") == "high":
                 # the engine's own drift is stabilised first, so the move that follows is exact
                 tmp0 = dest[:-4] + "_still.mp4"
                 PM.apply(dest, tmp0, {"move": "stabilise", "curve": before["curve"]})
@@ -1053,7 +1056,8 @@ def _render_take(jid, f, sh, eng, seed):
         elif _d:
             _log(jid, "scene held (%d%% of the start picture's content in the last frame)"
                  % int((1 - _d["lost"]) * 100))
-        v = camrig.verdict(rig, cam.get("params") or {}, cam.get("preset") or None)
+        v = ({"rig": "platefade", "note": "the place's plates dissolved in order; arithmetic, no verdict to pass"}
+             if rig == "platefade" else camrig.verdict(rig, cam.get("params") or {}, cam.get("preset") or None))
         take = {"id": tid, "engine": "cam", "seed": 0,
                 "created": time.strftime("%H:%M"), "file": rel,
                 "poster": rel[:-4] + ".png", "strip": rel[:-4] + "_strip.png",

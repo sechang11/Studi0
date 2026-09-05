@@ -117,12 +117,12 @@ def _accumulate(frames, mask=None):
     h, w = frames[0].shape[:2]
     cx, cy = w / 2.0, h / 2.0
     scale, tx, ty, rot = 1.0, 0.0, 0.0, 0.0
-    inliers, curve, failed = [], [1.0], 0
+    inliers, curve, failed = [], [[1.0, 0.0, 0.0]], 0
     for a, b in zip(frames, frames[1:]):
         t = _transform(a, b, mask)
         if not t:
             failed += 1
-            curve.append(scale)
+            curve.append(list(curve[-1]))
             continue
         s, r, x, y, n = t
         rr = math.radians(r)
@@ -132,7 +132,7 @@ def _accumulate(frames, mask=None):
         scale *= s
         rot += r
         inliers.append(n)
-        curve.append(scale)
+        curve.append([scale, -tx / w, -ty / h])
     if not inliers:
         return None
     return {"zoom": scale, "pan": -tx / w, "tilt": -ty / h, "roll": rot,
@@ -179,10 +179,14 @@ def measure(path, framing=None):
             src = full
     if (framing or "").lower().startswith("close"):
         conf = "low"
+    curve = src["curve"]
+    if conf == "high" and band and full and len(band["curve"]) == len(full["curve"]):
+        # both estimates trusted: average the zoom so neither the band's nor the frame's bias leads
+        curve = [[(b[0] + f_[0]) / 2, b[1], b[2]] for b, f_ in zip(band["curve"], full["curve"])]
     out = {"file": os.path.basename(path), "duration": round(dur, 2), "fps": round(fps, 2),
            "zoom": round(src["zoom"], 3), "pan": round(src["pan"], 3), "tilt": round(src["tilt"], 3),
            "roll": round(src["roll"], 2), "confidence": conf,
-           "curve": [round(c, 3) for c in src["curve"]],
+           "curve": [[round(c[0], 3), round(c[1], 3), round(c[2], 3)] for c in curve],
            "camera": describe(src["zoom"], src["pan"], src["tilt"], src["roll"])}
     if (framing or "").lower().startswith("close"):
         out["camera"] += " (a face fills the frame; the camera is hard to tell from the head)"
