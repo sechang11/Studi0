@@ -1633,3 +1633,13 @@ the pickers fill in; the info line says what it keeps, what it cannot promise,
 and what was measured; the camera picker names only moves the studio can do
 exactly, plus the pin. The spec sheet's camera promise carries a CHECK the
 checker runs on the measured take. The Start page says so in one paragraph.
+
+**Over the shoulder, third time.** The second build kept the back view but
+left Tomas at Ines's distance: the depth pass places a figure on the ground it
+can see, and the ground behind the camera's shoulder is not in the plate. So
+an over-the-shoulder layer is not placed by depth at all; it is sized to 1.8
+times the frame with the head in the upper sixth and the feet far below, and
+tinted lightly (the plate's blue had bled into his hair at the usual strength).
+The third build is the shot: his back and shoulder large in the near left, her
+face and the harbour beyond. Three builds, three laws - relight invents a face
+for a back, depth cannot see behind the shoulder, tint has a strength.
