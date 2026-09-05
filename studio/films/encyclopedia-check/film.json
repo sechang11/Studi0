@@ -677,6 +677,26 @@
    ],
    "place": "autumn-park",
    "plate": "day_wide"
+  },
+  {
+   "id": "sc34",
+   "title": "build 06:50",
+   "location": "a city park with winding paths, old trees and iron benches, lived-in and worn, under a flat overcast sky, a city park in autumn, wet leaves on the path, iron benches, a bandstand far off",
+   "time_of_day": "",
+   "weather": "overcast",
+   "ambience": "birdsong and leaves moving, a far-off dog",
+   "palette": "",
+   "music": "",
+   "cast_present": [
+    "TOMAS"
+   ],
+   "no_people": false,
+   "anchor": "",
+   "shots": [
+    "340"
+   ],
+   "place": "autumn-park",
+   "plate": "day_wide"
   }
  ],
  "shots": {
@@ -5076,6 +5096,254 @@
     "caption": "Park, pavilion, benches, path, trees, grass, lawn, man, suit, jacket, pants, sweater, shoes, lamp, foliage, leaves, ground, rain, weather, daytime, light, sky, clouds, shadows, stone, metal, wood, parkway.",
     "missing": [],
     "when": 1788604520
+   }
+  },
+  "340": {
+   "id": "340",
+   "scene": "sc34",
+   "title": "wide - TOMAS",
+   "duration": 6.0,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/encyclopedia-check/assets/anchor_shot_340.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "TOMAS",
+     "action": "walks toward the camera, steady",
+     "background": "what moves here moves: leaves",
+     "motion": "walk",
+     "ambient": [
+      "leaves"
+     ],
+     "dialogue": {
+      "char": "",
+      "line": "",
+      "delivery": ""
+     }
+    }
+   ],
+   "sfx": "birdsong and leaves moving, a far-off dog",
+   "no_people": false,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t605641239",
+     "engine": "ltx",
+     "seed": 306068787,
+     "created": "06:58",
+     "file": "takes/340/ltx_t605641239.mp4",
+     "poster": "takes/340/ltx_t605641239.png",
+     "strip": "takes/340/ltx_t605641239_strip.png",
+     "duration": 6.01,
+     "fps": 24,
+     "qc": [
+      "camera: static - done by the studio (stabilise)",
+      "identity: same person, start 0.67, end 0.58; place held (0.89 first to last)"
+     ],
+     "cam_measured": {
+      "zoom": 1.027,
+      "pan": -0.0,
+      "tilt": -0.002,
+      "roll": -0.38,
+      "camera": "static",
+      "confidence": "high",
+      "post": {
+       "move": "stabilise",
+       "amount": 0.1,
+       "zoom_start": 1.126,
+       "zoom_end": 1.0
+      }
+     },
+     "identity": {
+      "start": 0.666,
+      "end": 0.577,
+      "hold": 0.744,
+      "verdict_start": "same person",
+      "verdict_end": "same person",
+      "place_hold": 0.886,
+      "place_verdict": "held",
+      "place_start": 0.486,
+      "who": "tomas-reyl"
+     },
+     "drift": {
+      "lost": 0.56,
+      "missing": [
+       "autumn",
+       "build",
+       "cloth",
+       "ground",
+       "landscape",
+       "material",
+       "metal",
+       "outdoor",
+       "person",
+       "photograph",
+       "stone",
+       "structure"
+      ],
+      "kept": 11,
+      "last_caption": "Park, pavilion, man, jacket, pants, sweater, shoes, path, bench, trees, grass, leaves, sky, rain, clouds, day, light, lamp, foliage."
+     },
+     "warnings": [
+      "motion toward the camera - the axis a still cannot imply; it killed shots on every engine",
+      "beat 1 motion 'walk' is advisory on LTX - measured, prose does not direct the subject's action here. Pin the shot to enforce it"
+     ],
+     "prompt": "A static wide shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, walks toward the camera, steady, while what moves here moves: leaves; leaves drift across the frame, a cit"
+    },
+    {
+     "id": "t605909624",
+     "engine": "ltx",
+     "seed": 535631540,
+     "created": "07:02",
+     "file": "takes/340/ltx_t605909624.mp4",
+     "poster": "takes/340/ltx_t605909624.png",
+     "strip": "takes/340/ltx_t605909624_strip.png",
+     "duration": 6.01,
+     "fps": 24,
+     "qc": [
+      "camera: pull back 9% - done by the studio (stabilise)",
+      "identity: uncertain by the end (0.64 -> 0.47); place drifted (0.85 first to last)"
+     ],
+     "cam_measured": {
+      "zoom": 0.908,
+      "pan": 0.012,
+      "tilt": 0.011,
+      "roll": 0.02,
+      "camera": "pull back 9%",
+      "confidence": "high",
+      "post": {
+       "move": "stabilise",
+       "amount": 0.1,
+       "zoom_start": 1.0,
+       "zoom_end": 1.0
+      }
+     },
+     "identity": {
+      "start": 0.64,
+      "end": 0.469,
+      "hold": 0.535,
+      "verdict_start": "same person",
+      "verdict_end": "uncertain",
+      "place_hold": 0.846,
+      "place_verdict": "drifted",
+      "place_start": 0.547,
+      "who": "tomas-reyl"
+     },
+     "drift": {
+      "lost": 0.56,
+      "missing": [
+       "build",
+       "cloth",
+       "foliage",
+       "ground",
+       "jacket",
+       "landscape",
+       "material",
+       "metal",
+       "outdoor",
+       "photograph",
+       "stone",
+       "structure"
+      ],
+      "kept": 11,
+      "last_caption": "Park, pavilion, man, coat, pants, sweater, bench, grass, path, trees, leaves, sky, rain, autumn, daylight, light, clouds, person."
+     },
+     "warnings": [
+      "motion toward the camera - the axis a still cannot imply; it killed shots on every engine",
+      "beat 1 motion 'walk' is advisory on LTX - measured, prose does not direct the subject's action here. Pin the shot to enforce it"
+     ],
+     "prompt": "A static wide shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, walks toward the camera, steady, while what moves here moves: leaves; leaves drift across the frame, a cit"
+    },
+    {
+     "id": "t606175161",
+     "engine": "ltx",
+     "seed": 402587391,
+     "created": "07:07",
+     "file": "takes/340/ltx_t606175161.mp4",
+     "poster": "takes/340/ltx_t606175161.png",
+     "strip": "takes/340/ltx_t606175161_strip.png",
+     "duration": 6.01,
+     "fps": 24,
+     "qc": [
+      "camera: static - done by the studio (stabilise)",
+      "identity: same person, start 0.64, end 0.56; place held (0.94 first to last)"
+     ],
+     "cam_measured": {
+      "zoom": 1.031,
+      "pan": 0.002,
+      "tilt": -0.002,
+      "roll": -0.51,
+      "camera": "static",
+      "confidence": "high",
+      "post": {
+       "move": "stabilise",
+       "amount": 0.1,
+       "zoom_start": 1.089,
+       "zoom_end": 1.0
+      }
+     },
+     "identity": {
+      "start": 0.641,
+      "end": 0.565,
+      "hold": 0.762,
+      "verdict_start": "same person",
+      "verdict_end": "same person",
+      "place_hold": 0.935,
+      "place_verdict": "held",
+      "place_start": 0.492,
+      "who": "tomas-reyl"
+     },
+     "drift": {
+      "lost": 0.48,
+      "missing": [
+       "build",
+       "cloth",
+       "cloud",
+       "ground",
+       "landscape",
+       "material",
+       "metal",
+       "outdoor",
+       "stone",
+       "structure",
+       "weather",
+       "wood"
+      ],
+      "kept": 13,
+      "last_caption": "Park, pavilion, bench, jacket, sweater, pants, shoes, grass, path, trees, leaves, sky, rain, autumn, daylight, photograph, man, person, foliage."
+     },
+     "warnings": [
+      "motion toward the camera - the axis a still cannot imply; it killed shots on every engine",
+      "beat 1 motion 'walk' is advisory on LTX - measured, prose does not direct the subject's action here. Pin the shot to enforce it"
+     ],
+     "prompt": "A static wide shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, walks toward the camera, steady, while what moves here moves: leaves; leaves drift across the frame, a cit"
+    }
+   ],
+   "picked": "t605641239",
+   "engine_notes": "",
+   "cam": {
+    "post": {
+     "move": "stabilise"
+    }
+   },
+   "anchor_source": {
+    "character": "tomas-reyl",
+    "framing": "wide",
+    "place": "autumn-park",
+    "stand": 0.4,
+    "cx": 0.45,
+    "view": "turn_front",
+    "plate": "/home/k4shix/shared/comfy-studio/studio/foundry/places/autumn-park/day_wide.png",
+    "props": []
+   },
+   "anchor_check": {
+    "caption": "Park, pavilion, man, trees, bench, path, grass, leaves, jacket, pants, light, sky, clouds, ground, rain, autumn, day, photograph, building, structure, foliage, weather, person, clothing, material, wood, stone, metal, outdoor, landscape.",
+    "missing": [],
+    "when": 1788605641
    }
   }
  }

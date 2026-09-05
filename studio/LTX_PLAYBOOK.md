@@ -1781,3 +1781,11 @@ build finishes and before the driver reads the result, and the reload it
 triggers empties the job list. The record was rebuilt from the film itself,
 which had the takes all along: 32 of 32 built, 26 clean picks. A driver should
 read the film, not the job list - the film is what happened.
+
+**The seed dance, proven on the walk.** The walk toward the camera cost the face
+on one seed (0.66 to 0.29). Built again with three variants, the same anchor:
+0.58 same person, 0.47 uncertain, 0.57 same person - two of three kept the face
+- and the pick, judged by faults, then camera, then the face, took the 0.58.
+That is what "seed dance" means here: not hoping a seed behaves, but rendering
+several, measuring each, and letting the measurement choose. The walk entries
+ask for three variants by default now.
