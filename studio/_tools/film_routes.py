@@ -252,6 +252,13 @@ def libraries():
                     locations.append(d)
                 except Exception:
                     continue
+    catalog = {}
+    try:
+        cp = os.path.join(os.path.dirname(F.TEMPLATES), "shot_catalog.json")
+        if os.path.exists(cp):
+            catalog = json.load(open(cp, encoding="utf-8"))
+    except Exception:
+        catalog = {}
     templates = []
     if os.path.isdir(F.TEMPLATES):
         for fn in sorted(os.listdir(F.TEMPLATES)):
@@ -262,7 +269,7 @@ def libraries():
                                       "hint": d.get("hint", ""), "shot": d.get("shot")})
                 except Exception:
                     continue
-    return {"characters": chars, "voices": voices, "templates": templates,
+    return {"characters": chars, "voices": voices, "templates": templates, "catalog": catalog,
             "locations": locations}, 200
 
 
@@ -792,8 +799,73 @@ def _borrow_audio(dest, donor):
     return False
 
 
+POST_MOVES = {
+    # what the builder's camera picker means, done after the render
+    "static": {"move": "stabilise"},
+    "push in": {"move": "push", "amount": 1.14},
+    "pull back": {"move": "pull", "amount": 1.14},
+    "pan": {"move": "pan", "amount": 0.12, "zoom": 1.14},
+    "pan left": {"move": "pan", "amount": 0.12, "direction": "left", "zoom": 1.14},
+    "pan right": {"move": "pan", "amount": 0.12, "direction": "right", "zoom": 1.14},
+    "tilt up": {"move": "tilt", "amount": 0.10, "direction": "up", "zoom": 1.14},
+    "tilt down": {"move": "tilt", "amount": 0.10, "direction": "down", "zoom": 1.14},
+    "orbit": {"move": "orbit", "amount": 0.10, "zoom": 1.12},
+    "handheld": {"move": "handheld", "amp": 14, "zoom": 1.06},
+}
+CAMERA_CHECK = {"static": "camera is static", "push in": "camera pushes in", "pull back": "camera pulls back",
+                "pan": "camera pans", "pan left": "camera pans left", "pan right": "camera pans right",
+                "tilt up": "camera tilts up", "tilt down": "camera tilts down", "orbit": "camera pans",
+                "handheld": None, "pinned": "camera is static"}
+
+
+def _camera_pass(jid, sh, dest, eng):
+    """After a render: apply the shot's post move if it asks for one, then
+    measure what the camera did.  Returns (cam_measured_small, note or None)."""
+    try:
+        CMM = _load_sibling("cammeasure")
+    except Exception as e:
+        _log(jid, "camera measure unavailable: %s" % str(e)[:80])
+        return None, None
+    framing = ((sh.get("beats") or [{}])[0].get("framing") or "")
+    post = ((sh.get("cam") or {}).get("post") or None) if eng != "cam" else None
+    applied = None
+    if post:
+        try:
+            PM = _load_sibling("postmove")
+            mv = dict(post)
+            before = None
+            if mv.get("move") == "stabilise":
+                before = CMM.measure(dest, framing=framing)
+                if before.get("error") or abs(before.get("zoom", 1.0) - 1.0) < 0.03:
+                    mv = None
+                    _log(jid, "camera: the take is already still (%s) - nothing to stabilise" % (before.get("camera") if before else "?"))
+                else:
+                    mv["curve"] = before["curve"]
+            if mv:
+                tmp = dest[:-4] + "_move.mp4"
+                res = PM.apply(dest, tmp, mv)
+                os.replace(tmp, dest)
+                applied = res
+                _log(jid, "camera move by the studio: %s%s" % (
+                    mv["move"], (" %.2f" % mv["amount"]) if mv.get("amount") is not None and mv["move"] != "stabilise" else
+                    (" (from a %d%% drift)" % round((before["zoom"] - 1) * 100) if before else "")))
+        except Exception as e:
+            _log(jid, "camera move failed: %s" % str(e)[:120])
+    m = CMM.measure(dest, framing=framing)
+    if m.get("error"):
+        return None, None
+    small = {k: m[k] for k in ("zoom", "pan", "tilt", "roll", "camera", "confidence")}
+    if applied:
+        small["post"] = {k: applied[k] for k in ("move", "amount", "zoom_start", "zoom_end") if k in applied}
+    n = CMM.note(m)
+    if applied and n:
+        n += " - done by the studio (%s)" % applied["move"]
+    return small, n
+
+
 def _render_take(jid, f, sh, eng, seed):
     run, set_path, load_wf, ensure_local, HOST, COMFY = _comfy()
+    cam_m = None
     flat = f.flat(sh["id"])
     c = F.compile_shot(flat, eng)
     tid = "t%d" % (int(time.time() * 1000) % 10 ** 9)
@@ -855,6 +927,9 @@ def _render_take(jid, f, sh, eng, seed):
             os.remove(silent)
         _thumbs(dest, dest[:-4])
         qc = _qc(dest)
+        cam_m, _cn = _camera_pass(jid, sh, dest, "cam")
+        if _cn:
+            qc = list(qc) + [_cn]
         try:
             _start = _resolve_anchor_file(f, sh["id"], jid)
             _d = _scene_drift(dest, _start, "%s_%s" % (f.id, sh["id"])) if _start else None
@@ -874,7 +949,7 @@ def _render_take(jid, f, sh, eng, seed):
         take = {"id": tid, "engine": "cam", "seed": 0,
                 "created": time.strftime("%H:%M"), "file": rel,
                 "poster": rel[:-4] + ".png", "strip": rel[:-4] + "_strip.png",
-                "duration": round(_dur(dest), 2), "fps": _fps(dest), "qc": qc,
+                "duration": round(_dur(dest), 2), "fps": _fps(dest), "qc": qc, "cam_measured": cam_m,
                 "drift": _d,
                 "warnings": ([] if v.get("pass", True) else
                              ["camrig shape test FAILED: %s" % v]),
@@ -907,8 +982,11 @@ def _render_take(jid, f, sh, eng, seed):
     if not vids:
         raise RuntimeError("no video output")
     ensure_local(vids[0], dest)
+    cam_m, _cn = _camera_pass(jid, sh, dest, eng)
     _thumbs(dest, dest[:-4])
     qc = _qc(dest)
+    if _cn:
+        qc = list(qc) + [_cn]
     loud = _mean_db(dest)
     if any("SILENT" in str(n) for n in qc) or (loud is not None and loud < QUIET_DB):
         how = "silent" if any("SILENT" in str(n) for n in qc) else ("too quiet (mean %.0f dB)" % loud)
@@ -971,7 +1049,7 @@ def _render_take(jid, f, sh, eng, seed):
             _log(jid, "speech level ok: peak %.1f dB" % _pk)
     take = {"id": tid, "engine": eng, "seed": seed, "created": time.strftime("%H:%M"),
             "file": rel, "poster": rel[:-4] + ".png", "strip": rel[:-4] + "_strip.png",
-            "duration": round(_dur(dest), 2), "fps": _fps(dest), "qc": qc,
+            "duration": round(_dur(dest), 2), "fps": _fps(dest), "qc": qc, "cam_measured": cam_m,
             "drift": _d,
             "warnings": c.get("warnings") or [], "prompt": c["prompt"][:400]}
     f2 = F.load(f.id)                          # re-load: takes may have landed meanwhile
@@ -1123,7 +1201,7 @@ def _needs_sentence(sh):
 def _faults(take):
     """notes that count against a take; 'ends closer' is information, not a fault"""
     return [n for n in (take.get("qc") or [])
-            if not n.startswith(("ends closer", "sound borrowed", "words not in the picture"))]
+            if not n.startswith(("ends closer", "sound borrowed", "words not in the picture", "camera:"))]
 
 
 def _cleanest(sh, takes):
@@ -2568,7 +2646,8 @@ def _build_job(jid, data):
         for fr in framings:
             f = F.load(fid)
             subject = cast_ids[0] if cast_ids else ""
-            beat = {"framing": FRAMING_NAME[fr], "move": camera if camera in ("static", "push in", "pull back", "pan", "tilt up", "tilt down", "follow", "circle", "handheld") else "static",
+            post = POST_MOVES.get(camera)
+            beat = {"framing": FRAMING_NAME[fr], "move": ("static" if post else (camera if camera in ("static", "push in", "pull back", "pan", "tilt up", "tilt down", "follow", "circle", "handheld") else "static")),
                     "transition_in": "", "subject": subject,
                     "action": action or ("stands in the scene" if subject else "the place as it is, alive"),
                     "background": "what moves here moves: " + ", ".join(amb) if amb else "",
@@ -2577,7 +2656,8 @@ def _build_job(jid, data):
             sh = f.new_shot(scid, title="%s - %s" % (fr, " / ".join(cast_ids) or "empty"), duration=dur,
                             beats=[beat], sfx=(f.scene(scid) or {}).get("ambience") or "",
                             anchor=("file:" + plate_p) if (plate_p and not cast_ids) else "scene",
-                            no_people=not cast_ids, transition_out="cut")
+                            no_people=not cast_ids, transition_out="cut",
+                            cam=({"post": dict(post)} if post else {}))
             f.save()
             shid = sh["id"]
             made.append(shid)
@@ -2620,22 +2700,34 @@ def _build_job(jid, data):
                                  if fr == "close" else "The background is the %s plate %s and stays that place for the whole take.")
                                  % (place, plate or "wide"), "why": "words that name what the plate lacks make the engine rewrite it",
                                  "check": "qc is clean"})
-            promises.append({"title": "Camera: %s" % camera, "rule": "The camera %s." % ("does not move" if camera in ("static", "pinned") else camera + "s"),
-                             "why": "a camera move on LTX is advisory; a pinned shot enforces it", "check": None})
+            promises.append({"title": "Camera: %s" % camera,
+                             "rule": ("The camera %s - the engine is asked to hold still and the move is done by the studio "
+                                      "after the render, then measured." % ("does not move" if camera in ("static", "pinned") else camera + "s"))
+                                     if POST_MOVES.get(camera) else "The camera %s." % ("does not move" if camera in ("static", "pinned") else camera + "s"),
+                             "why": "an engine cannot be asked for a camera move (measured: a locked-off sentence still pushed in 3 of 3); arithmetic can",
+                             "check": CAMERA_CHECK.get(camera)})
             promises.append({"title": "Length", "rule": "%.0f seconds, within the measured envelope." % dur,
                              "why": "resolution and length trade inside a fixed envelope", "check": "duration between %.1f and %.1f" % (max(0.5, dur - 1.5), dur + 1.5)})
             flair = [{"title": "Seed", "value": "free - the variants differ by seed"},
                      {"title": "Motion", "value": motion or "none named"},
                      {"title": "Ambient", "value": ", ".join(amb) or "none named"}]
-            _write_spec(fid, shid, "%s - %s" % (shid, fr), beat["action"], "Make this shot: %s anchor, %s" % ("composed" if cast_ids else "plate", camera), promises, flair, jid)
+            _write_spec(fid, shid, "%s - %s" % (shid, fr), beat["action"],
+                        "Make this shot: %s anchor, %s%s" % ("composed" if cast_ids else "plate", camera,
+                                                             (", from the encyclopedia entry '%s'" % data.get("template")) if data.get("template") else ""),
+                        promises, flair, jid)
             # the variants: same anchor, same promises; only what vary allows changes
             for k in range(n):
                 f = F.load(fid)
                 sh = f.shot(shid)
                 if "camera" in vary and k > 0:
-                    sh["beats"][0]["move"] = CAMERA_VARIANTS[k % len(CAMERA_VARIANTS)]
+                    alt = CAMERA_VARIANTS[k % len(CAMERA_VARIANTS)]
+                    if POST_MOVES.get(alt):
+                        sh["cam"] = {"post": dict(POST_MOVES[alt])}
+                        sh["beats"][0]["move"] = "static"
+                    else:
+                        sh["beats"][0]["move"] = alt
                     f.save()
-                    _log(jid, "   variant %d: camera %s" % (k + 1, sh["beats"][0]["move"]))
+                    _log(jid, "   variant %d: camera %s" % (k + 1, alt))
                 if k == 0:
                     sub = _job("make", film=fid, shot=shid)
                     _make_job(sub, fid, shid)

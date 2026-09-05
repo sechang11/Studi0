@@ -52,6 +52,12 @@
     and several variants of it. What you chose is written down as promises the shot keeps across every
     variant; only the seed (and, if you allow it, the camera) is free to change.</p>
 
+  <div class="card" id="shotshelf" style="margin-bottom:12px">
+    <h2>Shot types <span class="hint" style="text-transform:none;letter-spacing:0;font-weight:400">- pick one and the pickers below fill in; change anything after</span></h2>
+    <div id="families" class="chips" style="margin-bottom:8px"></div>
+    <div id="shotcards" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px"></div>
+    <div id="shotinfo" class="hint" style="margin-top:8px"></div>
+  </div>
   <div class="grid">
     <div class="card">
       <h2>Who</h2>
@@ -100,8 +106,43 @@
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 let FOUNDRY={}, DICT={}, PICK=[], PLATE="";
+let CATALOG={}, TEMPLATE="";
+function shelf(){
+  const fams=(CATALOG.families||[]); const shots=(CATALOG.shots||[]);
+  $("#families").innerHTML=`<span class="chip on" data-f="" onclick="showFamily('')">all</span>`+fams.map(f=>`<span class="chip" data-f="${f.id}" onclick="showFamily('${f.id}')" title="${esc(f.blurb)}">${esc(f.title)}</span>`).join("");
+  showFamily("");
+}
+function showFamily(fid){
+  document.querySelectorAll("#families .chip").forEach(c=>c.classList.toggle("on", (c.dataset.f||"")===fid));
+  const shots=(CATALOG.shots||[]).filter(s=>!fid||s.family===fid);
+  $("#shotcards").innerHTML=shots.map(s=>`<div class="take ${s.id===TEMPLATE?"picked":""}" style="cursor:pointer;padding:8px 10px" onclick="pickShot('${s.id}')">
+      <b>${esc(s.title)}</b><div class="hint" style="margin-top:2px">${esc(s.purpose)}</div>
+      <div class="hint" style="margin-top:4px;opacity:.7">${esc((s.build.framings||[]).join("/"))} · ${esc(s.build.camera||"static")}${s.build.people===0?" · nobody":s.build.people===2?" · two people":""} · ${s.build.duration||6}s</div></div>`).join("");
+}
+function pickShot(id){
+  const s=(CATALOG.shots||[]).find(x=>x.id===id); if(!s) return;
+  TEMPLATE=id; const b=s.build||{};
+  document.querySelectorAll("#framings .chip").forEach(c=>c.classList.toggle("on",(b.framings||[]).includes(c.dataset.v)));
+  const cam=$("#camera"); if(b.camera&&[...cam.options].some(o=>o.value===b.camera)) cam.value=b.camera;
+  if(b.duration) $("#dur").value=b.duration;
+  if(b.action) $("#action").value=b.action;
+  if(b.motion!==undefined){ const m=$("#motion"); if([...m.options].some(o=>o.value===b.motion)) m.value=b.motion; }
+  if(b.line===true && !$("#line").value) $("#line").value="Last boat's not coming back tonight.";
+  if(b.line!==true) $("#line").value="";
+  if(b.people===0){ PICK=[]; document.querySelectorAll(".person").forEach(p=>p.classList.remove("on")); }
+  showFamily(document.querySelector("#families .chip.on")?.dataset.f||"");
+  $("#shotinfo").innerHTML=`<b>${esc(s.title)}</b> - ${esc(s.purpose)}<br>`+
+    (s.keeps&&s.keeps.length?`<span style="color:var(--good)">keeps:</span> ${s.keeps.map(esc).join("; ")}<br>`:"")+
+    (s.cannot&&s.cannot.length?`<span style="color:var(--warn)">cannot promise:</span> ${s.cannot.map(esc).join("; ")}<br>`:"")+
+    (s.measured?`<span style="opacity:.8">measured: ${esc(s.measured)}</span>`:"")+
+    (b.people===2?`<br>pick two people above (the first is the subject)`:b.people===1?`<br>pick one person above`:`<br>nobody in this one - the place alone`);
+  try{ history.replaceState(null,"",location.pathname+"?template="+encodeURIComponent(id)); }catch(e){}
+}
 async function boot(){
   try{ FOUNDRY=(await (await fetch("/api/film/foundry_assets")).json()).assets||{}; }catch(e){}
+  try{ CATALOG=(await (await fetch("/api/film/libraries")).json()).catalog||{}; }catch(e){}
+  shelf();
+  const want=new URLSearchParams(location.search).get("template"); if(want) setTimeout(()=>pickShot(want), 400);
   try{ DICT=await (await fetch("/api/foundry/dictionary")).json(); }catch(e){}
   $("#people").innerHTML=(FOUNDRY.character||[]).map(c=>`<div class="person" tabindex="0" data-id="${c.id}" onclick="togglePerson('${c.id}')" onkeydown="if(event.key==='Enter')togglePerson('${c.id}')">
       <img src="/foundry/media/characters/${encodeURIComponent(c.id)}/base_portrait.png" alt="" loading="lazy"><span>${esc(c.name)}</span></div>`).join("");
@@ -128,7 +169,7 @@ function pickPlate(k){ PLATE=k; document.querySelectorAll(".plate").forEach(el=>
 const chips=id=>[...document.querySelectorAll(`#${id} .chip.on`)].map(c=>c.dataset.v);
 let JOB=null, FID=null, SHOTS=[];
 async function build(){
-  const body={film:$("#film").value||undefined, look:$("#look").value, resolution:$("#res").value,
+  const body={template:TEMPLATE||undefined,film:$("#film").value||undefined, look:$("#look").value, resolution:$("#res").value,
     place:$("#place").value, plate:PLATE, characters:PICK, framings:chips("framings"), camera:$("#camera").value,
     motion:$("#motion").value, line:$("#line").value.trim(), action:$("#action").value.trim(), ambient:chips("ambient"),
     duration:parseFloat($("#dur").value||"6"), variants:parseInt($("#variants").value), vary:chips("vary")};
@@ -159,7 +200,7 @@ async function results(){
       (d.takes||[]).map(t=>`<div class="take ${t.id===d.picked?"picked":""}">
         ${t.file?`<video src="/film/media/${FID}/${t.file}" poster="/film/media/${FID}/${t.poster||""}" controls muted preload="none"></video>`:""}
         <div class="body"><b>${esc(t.engine)}</b> <span class="hint">${esc(t.id)}</span>
-          ${(()=>{const isInfo=n=>/^(ends closer|sound borrowed|words not in the picture)/.test(n); const faults=(t.qc||[]).filter(n=>!isInfo(n)), info=(t.qc||[]).filter(isInfo);
+          ${(()=>{const isInfo=n=>/^(ends closer|sound borrowed|words not in the picture|camera:)/.test(n); const faults=(t.qc||[]).filter(n=>!isInfo(n)), info=(t.qc||[]).filter(isInfo);
             return (faults.length?`<div class="qc">${faults.map(esc).join("<br>")}</div>`:`<div class="ok">no faults reported</div>`)+(info.length?`<div class="hint" style="font-size:11px;margin-top:3px">${info.map(esc).join("<br>")}</div>`:"");})()}
           <div class="row" style="margin-top:6px"><button class="small" onclick="pick('${sid}','${t.id}')">${t.id===d.picked?"picked":"pick this one"}</button></div>
         </div></div>`).join("")+`</div>`;
