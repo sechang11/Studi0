@@ -1093,10 +1093,11 @@ async function measuredLine(){
     const tk=(d.takes||[]).find(t=>t.id===d.picked); if(!tk) return;
     const cam=(tk.cam_measured||{}).camera, idn=tk.identity||{};
     const bits=[]; if(cam) bits.push('camera, measured: '+cam); if(idn.verdict_end||idn.verdict_start) bits.push('face: '+(idn.verdict_end||idn.verdict_start)+(idn.end!=null?' ('+idn.start+' → '+idn.end+')':''));
-    const am=tk.angle_measured||{}; if(am.angle&&am.confidence&&am.confidence!==none) bits.push(angle: +am.angle);
+    const am=tk.angle_measured||{};
+    if(am.angle&&am.confidence&&am.confidence!=='none') bits.push('angle: '+am.angle);
     const hc=idn.hold_curve||null;
-    if(hc&&hc.lost_at!=null) bits.push(the face holds +hc.holds_until+s of +hc.duration);
-    else if(hc&&hc.holds) bits.push(the face holds throughout);
+    if(hc&&hc.lost_at!=null) bits.push('the face holds '+hc.holds_until+'s of '+hc.duration);
+    else if(hc&&hc.holds) bits.push('the face holds throughout');
     let el=document.getElementById('measured'); if(!el){ el=document.createElement('div'); el.id='measured'; el.className='sub'; el.style.margin='4px 0 6px'; const h=document.querySelector('#takes'); if(h&&h.parentNode) h.parentNode.insertBefore(el,h); }
     el.textContent=bits.join(' · ');
   }catch(e){}
