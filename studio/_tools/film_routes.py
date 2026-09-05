@@ -178,6 +178,7 @@ def tree(fid):
                           "picked_fps": picked.get("fps", 24) if picked else 0,
                           "picked_dur": picked.get("duration", 0) if picked else 0,
                           "needs_sentence": _needs_sentence(sh),
+                          "picked_identity": ((picked.get("identity") or {}).get("verdict_end") or (picked.get("identity") or {}).get("verdict_start") or "") if picked else "",
                           "transition_out": sh.get("transition_out", "cut")})
         scenes.append({k: sc.get(k) for k in ("id", "title", "location", "time_of_day", "place", "plate",
                                               "weather", "ambience", "palette", "music",
@@ -811,11 +812,96 @@ POST_MOVES = {
     "tilt down": {"move": "tilt", "amount": 0.10, "direction": "down", "zoom": 1.14},
     "orbit": {"move": "orbit", "amount": 0.10, "zoom": 1.12},
     "handheld": {"move": "handheld", "amp": 14, "zoom": 1.06},
+    "roll": {"move": "roll", "amount": 8},
+    "whip": {"move": "whip", "amount": 0.2, "zoom": 1.25},
 }
+CAMERA_VERB = {"static": "does not move", "pinned": "does not move", "push in": "pushes in", "pull back": "pulls back",
+               "pan": "pans", "pan left": "pans left", "pan right": "pans right", "tilt up": "tilts up", "tilt down": "tilts down",
+               "orbit": "arcs a little", "handheld": "breathes, handheld", "roll": "leans (a Dutch tilt)", "whip": "whips across",
+               "follow": "follows", "circle": "circles"}
 CAMERA_CHECK = {"static": "camera is static", "push in": "camera pushes in", "pull back": "camera pulls back",
                 "pan": "camera pans", "pan left": "camera pans left", "pan right": "camera pans right",
                 "tilt up": "camera tilts up", "tilt down": "camera tilts down", "orbit": "camera pans",
-                "handheld": None, "pinned": "camera is static"}
+                "handheld": None, "pinned": "camera is static", "roll": None, "whip": "camera pans"}
+
+
+COMFY_PY = os.path.expanduser("~/ComfyUI/venv/bin/python")
+
+
+def _head_box(src):
+    """where the composed person's head is in the anchor frame, as fractions,
+    from the compose geometry: (stand, cx) through the plate's depth pass; a
+    close-up's head sits where the portrait was placed"""
+    if src.get("framing") == "close":
+        return [0.30, 0.03, 0.70, 0.60]
+    try:
+        CM = _compose_mod()
+        from PIL import Image
+        plate_p = src.get("plate") or ""
+        if not (isinstance(plate_p, str) and plate_p.startswith("/")):
+            plate_p = CM.plate_for(src["place"], src.get("plate") or None)
+            if isinstance(plate_p, tuple):
+                plate_p = plate_p[0]
+        plate = Image.open(plate_p).convert("RGB")
+        W, H = plate.size
+        dpath = CM.depth_for_plate(plate_p)
+        y_feet, th, _ = CM.place_by_depth(plate, dpath, float(src.get("stand", 0.3)), float(src.get("cx", 0.45)))
+        hw = th * 0.16
+        cx = float(src.get("cx", 0.45)) * W
+        return [(cx - hw * 0.75) / W, (y_feet - th) / H, (cx + hw * 0.75) / W, (y_feet - th + hw * 1.25) / H]
+    except Exception:
+        return None
+
+
+def _identity_pass(jid, f, sh, dest, cam_m):
+    """(identity dict or None, note or None, is_fault)"""
+    src = sh.get("anchor_source") or {}
+    cid = src.get("character")
+    if not cid or not os.path.exists(COMFY_PY):
+        return None, None, False
+    portrait = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                            "foundry", "characters", cid, "base_portrait.png")
+    if not os.path.exists(portrait):
+        return None, None, False
+    job = {"id": "%s/%s" % (f.id, sh["id"]), "portrait": portrait, "video": dest,
+           "box": _head_box(src), "close": src.get("framing") == "close",
+           "cam": {k: cam_m.get(k) for k in ("zoom", "pan", "tilt")} if cam_m else None}
+    jp = dest[:-4] + "_identity_job.json"
+    try:
+        json.dump([job], open(jp, "w"))
+        p = subprocess.run([COMFY_PY, os.path.join(os.path.dirname(os.path.abspath(__file__)), "identity.py"), jp],
+                           capture_output=True, text=True, timeout=600, cwd=os.path.expanduser("~/ComfyUI"))
+        res = None
+        for line in p.stdout.splitlines():
+            try:
+                res = json.loads(line)
+            except Exception:
+                pass
+        if not res or res.get("error"):
+            _log(jid, "identity check unavailable: %s" % ((res or {}).get("error") or p.stderr[-160:].strip() or "no result"))
+            return None, None, False
+    except Exception as e:
+        _log(jid, "identity check unavailable: %s" % str(e)[:120])
+        return None, None, False
+    finally:
+        for extra in (jp, jp[:-5] + "_results.json"):
+            if os.path.exists(extra):
+                os.remove(extra)
+    ident = {k: res.get(k) for k in ("start", "end", "hold", "verdict_start", "verdict_end")}
+    ident["who"] = cid
+    vs, ve = res.get("verdict_start"), res.get("verdict_end") or ""
+    if vs == "a different face":
+        note, fault = "the face is not %s's from the first frame (identity %.2f)" % (cid, res["start"]), True
+    elif ve == "a different face":
+        note, fault = "the face is a different one by the end (identity %.2f -> %.2f)" % (res["start"], res["end"]), True
+    elif ve.startswith("unmeasured"):
+        note, fault = "identity: %s at the start (%.2f); %s" % (vs, res["start"], ve), False
+    elif ve == "uncertain":
+        note, fault = "identity: uncertain by the end (%.2f -> %.2f)" % (res["start"], res["end"]), False
+    else:
+        note, fault = "identity: same person, start %.2f, end %.2f" % (res["start"], res["end"]), False
+    _log(jid, note)
+    return ident, note, fault
 
 
 def _camera_pass(jid, sh, dest, eng):
@@ -834,13 +920,20 @@ def _camera_pass(jid, sh, dest, eng):
             PM = _load_sibling("postmove")
             mv = dict(post)
             before = None
+            before = CMM.measure(dest, framing=framing)
+            drift = 0.0 if before.get("error") else abs(before.get("zoom", 1.0) - 1.0)
             if mv.get("move") == "stabilise":
-                before = CMM.measure(dest, framing=framing)
-                if before.get("error") or abs(before.get("zoom", 1.0) - 1.0) < 0.03:
+                if drift < 0.03:
                     mv = None
                     _log(jid, "camera: the take is already still (%s) - nothing to stabilise" % (before.get("camera") if before else "?"))
                 else:
                     mv["curve"] = before["curve"]
+            elif drift >= 0.03 and not before.get("error") and before.get("confidence") == "high":
+                # the engine's own drift is stabilised first, so the move that follows is exact
+                tmp0 = dest[:-4] + "_still.mp4"
+                PM.apply(dest, tmp0, {"move": "stabilise", "curve": before["curve"]})
+                os.replace(tmp0, dest)
+                _log(jid, "camera: the engine's %d%% drift stabilised first, then %s" % (round(drift * 100), mv["move"]))
             if mv:
                 tmp = dest[:-4] + "_move.mp4"
                 res = PM.apply(dest, tmp, mv)
@@ -865,7 +958,10 @@ def _camera_pass(jid, sh, dest, eng):
 
 def _render_take(jid, f, sh, eng, seed):
     run, set_path, load_wf, ensure_local, HOST, COMFY = _comfy()
+    if eng != "cam" and (sh.get("cam") or {}).get("rig") == "platefade":
+        eng = "cam"       # the time-lapse of the place's plates is arithmetic, never a generation
     cam_m = None
+    ident_m = None
     flat = f.flat(sh["id"])
     c = F.compile_shot(flat, eng)
     tid = "t%d" % (int(time.time() * 1000) % 10 ** 9)
@@ -910,8 +1006,20 @@ def _render_take(jid, f, sh, eng, seed):
         cam = sh.get("cam") or {}
         rig = cam.get("rig") or "still_push"
         silent = dest[:-4] + "_silent.mp4"
-        camrig.render(rig, anchor, silent, params=cam.get("params") or {},
-                      preset=cam.get("preset") or None, fps=int(f.data.get("fps") or 24))
+        if rig == "platefade":
+            PF = _load_sibling("platefade")
+            sc = f.scene(sh["scene"]) or {}
+            pdir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "foundry", "places", sc.get("place") or "")
+            prm = cam.get("params") or {}
+            secs = float(sh.get("duration") or 6)
+            plates = PF.pick_plates(pdir)
+            hold = max(0.8, (secs - 1.2 * max(1, len(plates) - 1)) / max(1, len(plates)))
+            res = PF.render(pdir, silent, plates=prm.get("plates") or None, hold=prm.get("hold", hold), fade=prm.get("fade", 1.2),
+                            push=prm.get("push", 1.06), fps=int(f.data.get("fps") or 24))
+            _log(jid, "time passes: %s dissolved, %.1fs, push %.2f" % (" -> ".join(res["plates"]), res["seconds"], res["push"]))
+        else:
+            camrig.render(rig, anchor, silent, params=cam.get("params") or {},
+                          preset=cam.get("preset") or None, fps=int(f.data.get("fps") or 24))
         # arithmetic has no sound. Mux whatever the shot names, or a silent bed,
         # so the take still assembles and QC is informative rather than fatal.
         aud = cam.get("audio")
@@ -949,7 +1057,7 @@ def _render_take(jid, f, sh, eng, seed):
         take = {"id": tid, "engine": "cam", "seed": 0,
                 "created": time.strftime("%H:%M"), "file": rel,
                 "poster": rel[:-4] + ".png", "strip": rel[:-4] + "_strip.png",
-                "duration": round(_dur(dest), 2), "fps": _fps(dest), "qc": qc, "cam_measured": cam_m,
+                "duration": round(_dur(dest), 2), "fps": _fps(dest), "qc": qc, "cam_measured": cam_m, "identity": ident_m,
                 "drift": _d,
                 "warnings": ([] if v.get("pass", True) else
                              ["camrig shape test FAILED: %s" % v]),
@@ -987,6 +1095,9 @@ def _render_take(jid, f, sh, eng, seed):
     qc = _qc(dest)
     if _cn:
         qc = list(qc) + [_cn]
+    ident_m, _in, _if = _identity_pass(jid, f, sh, dest, cam_m)
+    if _in:
+        qc = list(qc) + [_in]
     loud = _mean_db(dest)
     if any("SILENT" in str(n) for n in qc) or (loud is not None and loud < QUIET_DB):
         how = "silent" if any("SILENT" in str(n) for n in qc) else ("too quiet (mean %.0f dB)" % loud)
@@ -1049,7 +1160,7 @@ def _render_take(jid, f, sh, eng, seed):
             _log(jid, "speech level ok: peak %.1f dB" % _pk)
     take = {"id": tid, "engine": eng, "seed": seed, "created": time.strftime("%H:%M"),
             "file": rel, "poster": rel[:-4] + ".png", "strip": rel[:-4] + "_strip.png",
-            "duration": round(_dur(dest), 2), "fps": _fps(dest), "qc": qc, "cam_measured": cam_m,
+            "duration": round(_dur(dest), 2), "fps": _fps(dest), "qc": qc, "cam_measured": cam_m, "identity": ident_m,
             "drift": _d,
             "warnings": c.get("warnings") or [], "prompt": c["prompt"][:400]}
     f2 = F.load(f.id)                          # re-load: takes may have landed meanwhile
@@ -1201,7 +1312,7 @@ def _needs_sentence(sh):
 def _faults(take):
     """notes that count against a take; 'ends closer' is information, not a fault"""
     return [n for n in (take.get("qc") or [])
-            if not n.startswith(("ends closer", "sound borrowed", "words not in the picture", "camera:"))]
+            if not n.startswith(("ends closer", "sound borrowed", "words not in the picture", "camera:", "identity:"))]
 
 
 def _cleanest(sh, takes):
@@ -2291,7 +2402,7 @@ def _make_job(jid, fid, shid, seconds=None, seed=0, variants=1):
             sh = f.shot(shid)
             takes = sorted(sh.get("takes") or [], key=lambda t: t["id"])
             newest = takes[-1] if takes else None
-            if newest and any(str(q).startswith(("scene drift", "the line may not", "people appeared", "audio is effectively SILENT")) for q in newest.get("qc") or []):
+            if newest and any(str(q).startswith(("scene drift", "the line may not", "people appeared", "audio is effectively SILENT", "the face is")) for q in newest.get("qc") or []):
                 _log(jid, "the take has a fault (%s) - rendering once more on a new seed"
                      % ("; ".join(_faults(newest))[:80]))
                 _render_take(jid, f, sh, "ltx", random.randint(1, 10 ** 9))
@@ -2647,6 +2758,12 @@ def _build_job(jid, data):
             f = F.load(fid)
             subject = cast_ids[0] if cast_ids else ""
             post = POST_MOVES.get(camera)
+            tpl_build = {}
+            if data.get("template"):
+                try:
+                    tpl_build = (json.load(open(os.path.join(F.TEMPLATES, "enc_%s.json" % data["template"]), encoding="utf-8")).get("build") or {})
+                except Exception:
+                    tpl_build = {}
             beat = {"framing": FRAMING_NAME[fr], "move": ("static" if post else (camera if camera in ("static", "push in", "pull back", "pan", "tilt up", "tilt down", "follow", "circle", "handheld") else "static")),
                     "transition_in": "", "subject": subject,
                     "action": action or ("stands in the scene" if subject else "the place as it is, alive"),
@@ -2657,7 +2774,7 @@ def _build_job(jid, data):
                             beats=[beat], sfx=(f.scene(scid) or {}).get("ambience") or "",
                             anchor=("file:" + plate_p) if (plate_p and not cast_ids) else "scene",
                             no_people=not cast_ids, transition_out="cut",
-                            cam=({"post": dict(post)} if post else {}))
+                            cam=(({"rig": tpl_build["rig"]} if tpl_build.get("rig") else ({"post": dict(post)} if post else {}))))
             f.save()
             shid = sh["id"]
             made.append(shid)
@@ -2668,8 +2785,12 @@ def _build_job(jid, data):
                 if len(cast_ids) > 1:
                     oc = (f.data["cast"].get(cast_ids[1]) or {}).get("foundry")
                     if oc:
-                        layers.append({"character": oc, "view": "turn_front_three_quarter",
-                                       "stand": FRAMING_STAND[fr], "cx": 0.62})
+                        lay = {"character": oc, "view": "turn_front_three_quarter", "stand": FRAMING_STAND[fr], "cx": 0.62}
+                        for L in (tpl_build.get("layers") or []):
+                            if int(L.get("slot", 1)) == 1:
+                                lay.update({k: L[k] for k in ("view", "stand", "cx") if k in L})
+                                _log(jid, "second person as the template asks: %s at stand %.2f, across %.2f" % (lay["view"], lay["stand"], lay["cx"]))
+                        layers.append(lay)
                 cid0 = (f.data["cast"].get(cast_ids[0]) or {}).get("foundry")
                 sub = _job("compose", film=fid, shot=shid)
                 _compose_anchor_job(sub, fid, shid, cid0, place, plate or None,
@@ -2702,8 +2823,8 @@ def _build_job(jid, data):
                                  "check": "qc is clean"})
             promises.append({"title": "Camera: %s" % camera,
                              "rule": ("The camera %s - the engine is asked to hold still and the move is done by the studio "
-                                      "after the render, then measured." % ("does not move" if camera in ("static", "pinned") else camera + "s"))
-                                     if POST_MOVES.get(camera) else "The camera %s." % ("does not move" if camera in ("static", "pinned") else camera + "s"),
+                                      "after the render, then measured." % CAMERA_VERB.get(camera, camera))
+                                     if POST_MOVES.get(camera) else "The camera %s." % CAMERA_VERB.get(camera, camera),
                              "why": "an engine cannot be asked for a camera move (measured: a locked-off sentence still pushed in 3 of 3); arithmetic can",
                              "check": CAMERA_CHECK.get(camera)})
             promises.append({"title": "Length", "rule": "%.0f seconds, within the measured envelope." % dur,

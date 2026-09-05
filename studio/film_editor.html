@@ -316,7 +316,7 @@ function renderCenter(){
         <b>${t.engine}</b> <span style="cursor:pointer;text-decoration:underline dotted"
           title="use this seed for the next generation"
           onclick="$('#tk_seed').value=${t.seed}">seed ${t.seed}</span> · ${t.duration}s · ${t.created}
-        ${(()=>{const isInfo=n=>/^(ends closer|sound borrowed|words not in the picture|camera:)/.test(String(n)); const f=(t.qc||[]).filter(n=>!isInfo(n)), i=(t.qc||[]).filter(isInfo);
+        ${(()=>{const isInfo=n=>/^(ends closer|sound borrowed|words not in the picture|camera:|identity:)/.test(String(n)); const f=(t.qc||[]).filter(n=>!isInfo(n)), i=(t.qc||[]).filter(isInfo);
           return (f.length?`<span class="qcbad" title="${esc(f.join("; "))}">QC ✗ ${f.length}</span>`:'<span style="color:var(--good)">QC ✓</span>')
                +(i.length?` <span class="hint" title="${esc(i.join("; "))}" style="cursor:help">ⓘ ${i.length}</span>`:"");})()}
         ${t.warnings&&t.warnings.length?`<span class="warn" title="${esc(t.warnings.join("; "))}">⚠ ${t.warnings.length}</span>`:""}
@@ -397,6 +397,8 @@ function reviewPanel(){
   }).join("");
   const ports=Object.entries(TREE.cast||{}).filter(([,c])=>!c.portrait).map(([id])=>id);
   if(ports.length) blockers.push("no portrait yet: "+ports.join(", ")+" (photoreal identity route needs them)");
+  const faces=TREE.scenes.flatMap(sc=>sc.shots.filter(s=>s.picked_identity).map(s=>s.id+" "+s.picked_identity));
+  if(faces.length) blockers.push("faces, measured against the packs: "+faces.map(x=>x.replace("same person","held").replace("a different face","CHANGED")).join(" · "));
   const unwritten=TREE.scenes.flatMap(sc=>sc.shots.filter(s=>s.needs_sentence).map(s=>s.id));
   if(unwritten.length) blockers.push("waiting for your sentence - a neutral one renders meanwhile: "+unwritten.join(", "));
   return `<h2>Review</h2>
@@ -840,7 +842,7 @@ async function loadTriage(){
       out+=`<div style="margin-top:8px"><b>what to fix</b> <span class="hint">- what the picked takes say about themselves; bright lines are faults, dim lines are information (the take ended closer than it started, borrowed its sound, or a word was not in its picture)</span></div>`;
       for(const [id,qc] of fixes){
         out+=`<div style="margin-top:4px"><span class="badge" onclick="selShot('${id}')" style="cursor:pointer">${id}</span>
-          <ul class="hint" style="margin:2px 0 0 14px;padding:0">${qc.filter(q=>!/^(ends closer|sound borrowed|words not in the picture|camera:)/.test(String(q))).map(q=>`<li>${esc(String(q))}</li>`).join("")}${qc.filter(q=>/^(ends closer|sound borrowed|words not in the picture|camera:)/.test(String(q))).map(q=>`<li style="opacity:.6">${esc(String(q))} <span style="opacity:.8">(information)</span></li>`).join("")}</ul></div>`;
+          <ul class="hint" style="margin:2px 0 0 14px;padding:0">${qc.filter(q=>!/^(ends closer|sound borrowed|words not in the picture|camera:|identity:)/.test(String(q))).map(q=>`<li>${esc(String(q))}</li>`).join("")}${qc.filter(q=>/^(ends closer|sound borrowed|words not in the picture|camera:|identity:)/.test(String(q))).map(q=>`<li style="opacity:.6">${esc(String(q))} <span style="opacity:.8">(information)</span></li>`).join("")}</ul></div>`;
       }
     }
     if(!flagged.length&&!fixes.length) out+=`<div class="hint">every shot can be made here as asked, and no picked take reports a fault</div>`;

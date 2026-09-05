@@ -75,10 +75,17 @@
       <h2>How</h2>
       <label>framings to build (one shot each)</label>
       <div class="chips" id="framings"><span class="chip on" data-v="wide">wide</span><span class="chip on" data-v="medium">medium</span><span class="chip" data-v="close">close</span></div>
-      <label>camera</label><select id="camera">
-        <option value="static">still (the picture holds; the engine may still push in a little)</option>
-        <option value="pinned">pinned (a pose change, animated between two chosen frames)</option>
-        <option value="push in">push in</option><option value="pull back">pull back</option><option value="pan">pan</option></select>
+      <label>camera <span class="hint">- moves are done by the studio after the render, then measured</span></label><select id="camera">
+        <option value="static">still - the engine's drift is stabilised out</option>
+        <option value="push in">push in (1.14x)</option>
+        <option value="pull back">pull back (from 1.14x)</option>
+        <option value="pan left">pan left</option><option value="pan right">pan right</option>
+        <option value="tilt up">tilt up</option><option value="tilt down">tilt down</option>
+        <option value="orbit">orbit (a 2D arc)</option>
+        <option value="handheld">handheld</option>
+        <option value="roll">Dutch tilt (the frame leans)</option>
+        <option value="whip">whip pan</option>
+        <option value="pinned">pinned (a pose change, animated between two chosen frames)</option></select>
       <label>motion of the subject (in place works; walking does not)</label><select id="motion"><option value="">none</option></select>
       <label>ambient motion - what moves in the picture</label>
       <div class="chips" id="ambient"></div>
@@ -200,7 +207,7 @@ async function results(){
       (d.takes||[]).map(t=>`<div class="take ${t.id===d.picked?"picked":""}">
         ${t.file?`<video src="/film/media/${FID}/${t.file}" poster="/film/media/${FID}/${t.poster||""}" controls muted preload="none"></video>`:""}
         <div class="body"><b>${esc(t.engine)}</b> <span class="hint">${esc(t.id)}</span>
-          ${(()=>{const isInfo=n=>/^(ends closer|sound borrowed|words not in the picture|camera:)/.test(n); const faults=(t.qc||[]).filter(n=>!isInfo(n)), info=(t.qc||[]).filter(isInfo);
+          ${(()=>{const isInfo=n=>/^(ends closer|sound borrowed|words not in the picture|camera:|identity:)/.test(n); const faults=(t.qc||[]).filter(n=>!isInfo(n)), info=(t.qc||[]).filter(isInfo);
             return (faults.length?`<div class="qc">${faults.map(esc).join("<br>")}</div>`:`<div class="ok">no faults reported</div>`)+(info.length?`<div class="hint" style="font-size:11px;margin-top:3px">${info.map(esc).join("<br>")}</div>`:"");})()}
           <div class="row" style="margin-top:6px"><button class="small" onclick="pick('${sid}','${t.id}')">${t.id===d.picked?"picked":"pick this one"}</button></div>
         </div></div>`).join("")+`</div>`;
