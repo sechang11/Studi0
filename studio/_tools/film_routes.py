@@ -1034,6 +1034,10 @@ def _render_take(jid, f, sh, eng, seed):
             _sh("ffmpeg", "-y", "-v", "error", "-i", silent, "-f", "lavfi",
                 "-i", "anullsrc=r=48000:cl=stereo", "-shortest", "-c:v", "copy",
                 "-c:a", "aac", "-b:a", "96k", dest)
+            # a rig take borrows the place's sound rather than shipping silence
+            donor = _sound_donor(f, sh)
+            if donor and _borrow_audio(dest, donor[0]):
+                _log(jid, "the rig has no sound of its own; the soundtrack is borrowed from take %s of shot %s" % (donor[1], donor[2]))
         if os.path.exists(silent):
             os.remove(silent)
         _thumbs(dest, dest[:-4])
@@ -1941,7 +1945,8 @@ SCENE_ASK = (
     "of day, light sources, signs, and any people or animals. Be literal and complete. "
     "Comma-separated nouns and short noun phrases only, no sentences, no apologies.")
 
-_VERBISH = set("""shifting shifts shift breathing breathes
+_VERBISH = set("""deepens deepen turning settles settle
+shifting shifts shift breathing breathes
 listening listens listen watching watches watch waiting waits wait thinking thinks
 think staring stares stare gazing gazes gaze hearing hears hear remembering remembers remember
 hesitating hesitates hesitate breathing breathes breathe smiling smiles smile frowning frowns frown
