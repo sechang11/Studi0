@@ -2000,6 +2000,52 @@ def _compose_mod():
     return m
 
 
+# The take's own first frame predicts well (under 0.55, 4 of 17 kept the face; above it,
+# 73-78%).  The ANCHOR does not: it reads 0.069 lower with a spread of 0.103, and across
+# that offset it separates 67% from 79%.  Kept as a number on the shot, not a gate.
+ANCHOR_FACE_FLOOR = 0.55
+
+
+def _anchor_face(jid, char_id, anchor_path, src):
+    """What the composed face scores against the pack portrait, before anything renders.
+
+    -> (score or None, note or None).  Cheap: one crop, one encoder pass, on the processor."""
+    if not os.path.exists(COMFY_PY):
+        return None, None
+    root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    portrait = os.path.join(root, "foundry", "characters", char_id, "base_portrait.png")
+    if not os.path.exists(portrait):
+        return None, None
+    job = {"id": "anchor", "portrait": portrait, "still": anchor_path,
+           "box": _head_box(src), "close": src.get("framing") == "close"}
+    jp = anchor_path[:-4] + "_face_job.json"
+    try:
+        json.dump([job], open(jp, "w"))
+        p = subprocess.run([COMFY_PY, os.path.join(os.path.dirname(os.path.abspath(__file__)), "identity.py"), jp],
+                           capture_output=True, text=True, timeout=300, cwd=os.path.expanduser("~/ComfyUI"))
+        res = None
+        for line in p.stdout.splitlines():
+            try:
+                res = json.loads(line)
+            except Exception:
+                pass
+    except Exception as e:
+        _log(jid, "the anchor's face could not be scored: %s" % str(e)[:90])
+        return None, None
+    finally:
+        for extra in (jp, jp[:-5] + "_results.json"):
+            if os.path.exists(extra):
+                os.remove(extra)
+    if not res or res.get("error") or res.get("start") is None:
+        return None, None
+    v = res["start"]
+    _log(jid, "the anchor's face: %.2f (%s)" % (v, res.get("verdict_start") or "?"))
+    # no warning: calibrated on 65 shots, an anchor below the equivalent floor kept the face
+    # on 8 of 12 and one above on 42 of 53 - a 67-against-79 predictor read through a spread
+    # of 0.103.  Recorded, so a later block can find a better use for it.
+    return v, None
+
+
 def _compose_anchor_job(jid, fid, shid, char_id, place_id, plate, view,
                         stand, cx, props=None, framing=None):
     try:
@@ -2037,6 +2083,17 @@ def _compose_anchor_job(jid, fid, shid, char_id, place_id, plate, view,
         sh["anchor_source"] = {"character": char_id, "framing": framing or "full", "place": place_id,
                                "stand": stand, "cx": cx, "view": ("base_portrait" if framing == "close" else view),
                                "plate": plate_p, "props": props or []}
+        try:
+            _face, _fnote = _anchor_face(jid, char_id, os.path.join(f.dir, rel), sh["anchor_source"])
+            if _face is not None:
+                sh["anchor_face"] = _face
+            if _fnote:
+                _log(jid, _fnote)
+                sh.setdefault("anchor_check", {})
+                if isinstance(sh["anchor_check"], dict):
+                    sh["anchor_check"]["face"] = _fnote
+        except Exception as e:
+            _log(jid, "the anchor's face check failed: %s" % str(e)[:90])
         f.save()
         with _LOCK:
             JOBS[jid]["result"] = {"anchor": rel, "fidelity": [l, r]}

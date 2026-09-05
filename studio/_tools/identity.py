@@ -24,6 +24,7 @@ Run with ComfyUI's python (torch):
 jobs.json: [{"portrait": ..., "video": ..., "box": [x0,y0,x1,y1] fractions or null,
              "close": bool, "cam": {"zoom":..,"pan":..,"tilt":..} or null, "id": ...,
              "plate": <the scene's plate, optional -> place_hold/place_verdict/place_start>,
+             "still": <a picture instead of a video> -> only `start` is measured,
              "window0": {"zoom", "cx", "cy"} - the studio's post move at the first frame, so the
                         anchor-frame head box is carried into the cropped frame,
              "post_curve": [[zoom, cx, cy], ...] - the studio's own move window at nine
@@ -217,6 +218,17 @@ def run(job):
     out = {"id": job.get("id")}
     try:
         portrait = Image.open(job["portrait"])
+        if job.get("still"):
+            # an anchor is a picture, and scoring it costs a second against the minutes a
+            # render costs.  Same box, same crop, same encoder - only the source differs.
+            im = Image.open(job["still"]).convert("RGB")
+            box = job.get("box") or ([0.28, 0.02, 0.72, 0.62] if job.get("close") else [0.35, 0.05, 0.65, 0.45])
+            c = crop(im, box)
+            if c is None:
+                return {**out, "error": "the head box left the picture"}
+            v = float((embed(portrait) * embed(c)).sum())
+            return {**out, "start": round(v, 3), "verdict_start": verdict(v, job.get("close")),
+                    "box": [round(b, 3) for b in box], "still": True}
         first, last = frames_first_last(job["video"])
         if first is None:
             return {**out, "error": "could not decode the video"}
