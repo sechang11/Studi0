@@ -3036,9 +3036,22 @@ def _build_job(jid, data):
                                 _log(jid, "second person as the template asks: %s at stand %.2f, across %.2f" % (lay["view"], lay["stand"], lay["cx"]))
                         layers.append(lay)
                 cid0 = (f.data["cast"].get(cast_ids[0]) or {}).get("foundry")
+                _view = "turn_front_three_quarter" if layers else "turn_front"
+                if angle_pitch > 0.18 and fr != "close":
+                    # the place is seen from below; the person should be too.  Only if the
+                    # pack has a WHOLE low view - the presentation card `pres_low` is cropped
+                    # at the knees in every pack and cannot be footed on ground.
+                    _lv = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                                       "foundry", "characters", cid0 or "", "pres_low_full.png")
+                    if cid0 and os.path.exists(_lv):
+                        _view = "pres_low_full"
+                        _log(jid, "the person from below too: the pack's whole low view")
+                    else:
+                        _log(jid, "the place is angled but %s has no whole low view - the person "
+                                  "is still an eye-level cutout" % (cid0 or "the subject"))
                 sub = _job("compose", film=fid, shot=shid)
                 _compose_anchor_job(sub, fid, shid, cid0, place, plate or None,
-                                    "turn_front_three_quarter" if layers else "turn_front",
+                                    _view,
                                     FRAMING_STAND[fr], float(tpl_build.get("subject_cx") or (0.38 if layers else 0.45)),
                                     layers or None, framing=fr)
                 with _LOCK:
