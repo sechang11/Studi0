@@ -134,6 +134,7 @@ function pickShot(id){
   document.querySelectorAll("#framings .chip").forEach(c=>c.classList.toggle("on",(b.framings||[]).includes(c.dataset.v)));
   const cam=$("#camera"); if(b.camera&&[...cam.options].some(o=>o.value===b.camera)) cam.value=b.camera;
   if(b.duration) $("#dur").value=b.duration;
+  if(b.variants){ const v=$("#variants"); if([...v.options].some(o=>o.value==String(b.variants))) v.value=String(b.variants); }
   if(b.action) $("#action").value=b.action;
   if(b.motion!==undefined){ const m=$("#motion"); if([...m.options].some(o=>o.value===b.motion)) m.value=b.motion; }
   if(b.line===true && !$("#line").value) $("#line").value="Last boat's not coming back tonight.";

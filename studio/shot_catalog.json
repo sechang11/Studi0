@@ -124,23 +124,25 @@
     "people": 1,
     "camera": "static",
     "duration": 6,
-    "action": "stands in the scene, looking out at it, a slow breath"
+    "action": "stands in the scene, looking out at it, a slow breath",
+    "variants": 3
    },
    "keeps": [
     "identity",
-    "place"
+    "place",
+    "three variants by default - the pick keeps the face that held (the seed dance)"
    ],
    "cannot": [
     "the engine's push-in without stabilise"
    ],
    "measured": "drift 39-72% on some seeds regardless of the sentence",
    "checked": {
-    "when": "2026-09-05 02:34",
+    "when": "2026-09-05 06:45",
     "built": false,
     "camera": null,
     "identity": null,
     "notes": [],
-    "spec": "4 problem(s) in the film"
+    "spec": "48 problem(s) in the film"
    }
   },
   {
@@ -299,7 +301,7 @@
    "cannot": [
     "pulling wider than the render"
    ],
-   "measured": "post pull 12-22% measured for 12 asked; H3 asked in prose obeyed once (28%, 41%) and pushed 4.2x the next time - the studio does it now on both engines",
+   "measured": "",
    "checked": {
     "when": "2026-09-05 03:11",
     "built": true,
@@ -688,14 +690,15 @@
     "camera": "static",
     "motion": "walk",
     "duration": 6,
-    "action": "walks toward the camera, steady"
+    "action": "walks toward the camera, steady",
+    "variants": 3
    },
    "keeps": [
-    "identity at the start (composed anchor)"
+    "identity at the start (composed anchor)",
+    "three variants by default - the pick keeps the face that held (the seed dance)"
    ],
    "cannot": [
-    "the place through the walk (drift is likely)",
-    "the face by the end - LTX redraws it as he nears (identity 0.66 -> 0.29 measured)"
+    "the place through the walk (drift is likely)"
    ],
    "measured": "H3 pinned walks regenerated a riverside path from frame 0, twice",
    "checked": {
@@ -753,12 +756,13 @@
     ],
     "people": 1,
     "camera": "tilt up",
-    "duration": 5
+    "duration": 5,
+    "variants": 3
    },
-   "keeps": [],
-   "cannot": [
-    "the face by the end when the engine walks him toward the camera (measured 0.54 -> 0.45 and 0.50 -> 0.39)"
+   "keeps": [
+    "three variants by default - the pick keeps the face that held (the seed dance)"
    ],
+   "cannot": [],
    "measured": "",
    "checked": {
     "when": "2026-09-05 05:17",
@@ -1033,11 +1037,13 @@
     "motion": "walk",
     "duration": 6,
     "line": true,
-    "action": "walk toward the camera together, talking"
+    "action": "walk toward the camera together, talking",
+    "variants": 3
    },
    "keeps": [
     "the words",
-    "identities at the start"
+    "identities at the start",
+    "three variants by default - the pick keeps the face that held (the seed dance)"
    ],
    "cannot": [
     "the place through the walk (drift likely)",
@@ -1101,14 +1107,15 @@
     "people": 1,
     "camera": "tilt up",
     "duration": 5,
-    "action": "stands over the camera, looking down at it"
+    "action": "stands over the camera, looking down at it",
+    "variants": 3
    },
    "keeps": [
-    "identity"
+    "identity",
+    "three variants by default - the pick keeps the face that held (the seed dance)"
    ],
    "cannot": [
-    "a true low camera (the plate's horizon is fixed)",
-    "the face by the end when the engine walks him toward the camera (measured 0.54 -> 0.45 and 0.50 -> 0.39)"
+    "a true low camera (the plate's horizon is fixed)"
    ],
    "measured": "",
    "checked": {
