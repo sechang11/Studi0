@@ -2048,3 +2048,17 @@ it back and was not calling that where it mattered: a submission into a closed s
 straight out of the take and the variant was lost. Six submission sites now restart ComfyUI
 and try once more. Once, not forever. Separately: a hundred segmenter calls back to back will
 do the same thing, so the pack check is paced.
+
+**The clock, closed.** The whole chain in one build. The face was measured over time; the
+measurement said a walk toward the camera keeps its face about four seconds; the catalog
+entry was changed to ask for four rather than six; and the entry was built again with three
+seeds to see whether the change was worth making.
+
+  six seconds, three seeds (earlier)   0 of 3 kept the face; best held 4.5 s of 6.0
+  four seconds, three seeds            2 of 3 kept the face for the whole shot
+                                       the third lost it at 3.0 s and was cut to 2.5 s
+                                       the pick took a full-length take that held
+
+Nothing about the engine changed. The shot was made shorter than the failure, and the
+failure stopped happening. That is what a ruler is for: not to grade a take after the fact
+but to change what gets asked for.
