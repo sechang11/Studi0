@@ -482,7 +482,8 @@
      "fps": 24,
      "qc": [
       "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.46 left=0.00 right=0.00)",
-      "words not in the picture: rail"
+      "words not in the picture: rail",
+      "the face is a different one by the end (identity 0.72 -> 0.45); place held (0.87 first to last)"
      ],
      "drift": {
       "lost": 0.5,
@@ -504,7 +505,18 @@
       "last_caption": "Dock, ship, masts, ropes, man, jacket, sweater, beard, face, harbor, water, sky, clouds, rain, night, lights, metal, fabric, wood, person, fishing boat."
      },
      "warnings": [],
-     "prompt": "A static wide shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, stands at the rail looking out into the fog, who says in a level voice, \"Last boat's not coming back tonig"
+     "prompt": "A static wide shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, stands at the rail looking out into the fog, who says in a level voice, \"Last boat's not coming back tonig",
+     "identity": {
+      "start": 0.722,
+      "end": 0.452,
+      "hold": 0.713,
+      "verdict_start": "same person",
+      "verdict_end": "a different face",
+      "place_hold": 0.868,
+      "place_verdict": "held",
+      "place_start": 0.746,
+      "who": "tomas-reyl"
+     }
     },
     {
      "id": "t541468716",
@@ -735,7 +747,7 @@
        "weather"
       ],
       "kept": 11,
-      "last_caption": "Port, harbor, ship, masts, rigging, man, man\u2019s face, man\u2019s hair, man\u2019s beard, jacket, sweater, hood, clothing, buildings, lights, fog, mist, night, glow, metal, wood, concrete, asphalt, water, sky, yellow, gray, white, darkness."
+      "last_caption": "Port, harbor, ship, masts, rigging, man, man’s face, man’s hair, man’s beard, jacket, sweater, hood, clothing, buildings, lights, fog, mist, night, glow, metal, wood, concrete, asphalt, water, sky, yellow, gray, white, darkness."
      },
      "warnings": [],
      "prompt": "A static medium shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, stands at the rail looking out into the fog, who says in a level voice, \"Last boat's not coming back ton"
@@ -767,7 +779,7 @@
        "vessel"
       ],
       "kept": 14,
-      "last_caption": "Here's a breakdown of the nouns present in the image, as requested:\n\nPlace, ship, dock, harbor, background, outdoors.\nStructures, mast, rigging, ropes, cables, ship\u2019s hull, building, wall.\nObjects, jacket, scarf, sweater, clothing, beard, hair, face, head, mouth, eyes, nose.\nMaterials, fabric, metal, wood, wool, plastic, nylon.\nVehicles, ship.\nWater, sea, ocean, water surface.\nWeather, cloudy sky,"
+      "last_caption": "Here's a breakdown of the nouns present in the image, as requested:\n\nPlace, ship, dock, harbor, background, outdoors.\nStructures, mast, rigging, ropes, cables, ship’s hull, building, wall.\nObjects, jacket, scarf, sweater, clothing, beard, hair, face, head, mouth, eyes, nose.\nMaterials, fabric, metal, wood, wool, plastic, nylon.\nVehicles, ship.\nWater, sea, ocean, water surface.\nWeather, cloudy sky,"
      },
      "warnings": [],
      "prompt": "A static medium shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, stands at the rail looking out into the fog, who says in a level voice, \"Last boat's not coming back ton"
@@ -784,7 +796,8 @@
      "fps": 24,
      "qc": [
       "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.69 left=0.00 right=0.00)",
-      "words not in the picture: rail"
+      "words not in the picture: rail",
+      "the face is a different one by the end (identity 0.72 -> 0.42); place drifted (0.80 first to last)"
      ],
      "drift": {
       "lost": 0.36,
@@ -799,10 +812,21 @@
        "vessel"
       ],
       "kept": 14,
-      "last_caption": "Here's a breakdown of the nouns present in the image, as requested:\n\nPlace, ship, dock, harbor, background, outdoors.\nStructures, mast, rigging, ropes, cables, ship\u2019s hull, building, wall.\nObjects, jacket, scarf, sweater, clothing, beard, hair, face, head, mouth, eyes, nose.\nMaterials, fabric, metal, wood, wool, plastic, nylon.\nVehicles, ship.\nWater, sea, ocean, water surface.\nWeather, cloudy sky,"
+      "last_caption": "Here's a breakdown of the nouns present in the image, as requested:\n\nPlace, ship, dock, harbor, background, outdoors.\nStructures, mast, rigging, ropes, cables, ship’s hull, building, wall.\nObjects, jacket, scarf, sweater, clothing, beard, hair, face, head, mouth, eyes, nose.\nMaterials, fabric, metal, wood, wool, plastic, nylon.\nVehicles, ship.\nWater, sea, ocean, water surface.\nWeather, cloudy sky,"
      },
      "warnings": [],
-     "prompt": "A static medium shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, stands at the rail looking out into the fog, who says in a level voice, \"Last boat's not coming back ton"
+     "prompt": "A static medium shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, stands at the rail looking out into the fog, who says in a level voice, \"Last boat's not coming back ton",
+     "identity": {
+      "start": 0.716,
+      "end": 0.424,
+      "hold": 0.598,
+      "verdict_start": "same person",
+      "verdict_end": "a different face",
+      "place_hold": 0.802,
+      "place_verdict": "drifted",
+      "place_start": 0.686,
+      "who": "tomas-reyl"
+     }
     },
     {
      "id": "t541776509",
@@ -1022,7 +1046,7 @@
        "shirt"
       ],
       "kept": 11,
-      "last_caption": "Here's a breakdown of the image\u2019s contents, listed as requested:\n\nPlace, outdoors, forest, nature, ground, dirt, foliage, vegetation, plants, trees, grass, sky, atmosphere.\n\nStructures, none.\n\nObjects, person, face, head, eyes, nose, mouth, hair, skin, clothing, jacket, olive-green fabric.\n\nMaterials, wood, leaves, earth, cotton, wool, fibers.\n\nVehicles, none.\n\nWater, none.\n\nWeather, daylight, sun"
+      "last_caption": "Here's a breakdown of the image’s contents, listed as requested:\n\nPlace, outdoors, forest, nature, ground, dirt, foliage, vegetation, plants, trees, grass, sky, atmosphere.\n\nStructures, none.\n\nObjects, person, face, head, eyes, nose, mouth, hair, skin, clothing, jacket, olive-green fabric.\n\nMaterials, wood, leaves, earth, cotton, wool, fibers.\n\nVehicles, none.\n\nWater, none.\n\nWeather, daylight, sun"
      },
      "warnings": [],
      "prompt": "A static close-up: a tall, athletic woman, in their thirties, deep brown skin, an angular face with a sharp jaw, dark eyes, almond eyes, strong dark brows, black a long single braid, freckles across the nose, a calm, unreadable bearing, a field geologist in a weathered olive canvas jacket over a grey shirt, sleeves pushed up, a plain leather watch strap, looks up from the path, listening, while wh"
@@ -1103,7 +1127,8 @@
      "qc": [
       "sound borrowed from take t543326847 of shot 040 - the render was silent",
       "ends closer than it started - the person fills the frame edge at the end (top=0.16 bottom=0.62 left=0.00 right=0.00)",
-      "words not in the picture: path"
+      "words not in the picture: path",
+      "identity: same person, start 0.74, end 0.68; place drifted (0.84 first to last)"
      ],
      "drift": {
       "lost": 0.38,
@@ -1119,7 +1144,18 @@
       "last_caption": "Park, bench, woman, person, jacket, braid, hair, leaves, ground, sidewalk, trees, sky, light, autumn, foliage, clothing, outdoor, daytime, shadows."
      },
      "warnings": [],
-     "prompt": "A static close-up: a tall, athletic woman, in their thirties, deep brown skin, an angular face with a sharp jaw, dark eyes, almond eyes, strong dark brows, black a long single braid, freckles across the nose, a calm, unreadable bearing, a field geologist in a weathered olive canvas jacket over a grey shirt, sleeves pushed up, a plain leather watch strap, looks up from the path, listening, while wh"
+     "prompt": "A static close-up: a tall, athletic woman, in their thirties, deep brown skin, an angular face with a sharp jaw, dark eyes, almond eyes, strong dark brows, black a long single braid, freckles across the nose, a calm, unreadable bearing, a field geologist in a weathered olive canvas jacket over a grey shirt, sleeves pushed up, a plain leather watch strap, looks up from the path, listening, while wh",
+     "identity": {
+      "start": 0.737,
+      "end": 0.679,
+      "hold": 0.846,
+      "verdict_start": "same person",
+      "verdict_end": "same person",
+      "place_hold": 0.839,
+      "place_verdict": "drifted",
+      "place_start": 0.293,
+      "who": "mara-okonjo"
+     }
     }
    ],
    "picked": "t544580147",
@@ -1220,7 +1256,9 @@
      "strip": "takes/040/ltx_t543417455_strip.png",
      "duration": 6.04,
      "fps": 24,
-     "qc": [],
+     "qc": [
+      "identity: same person, start 0.65, end 0.58; place held (0.86 first to last)"
+     ],
      "drift": {
       "lost": 0.52,
       "missing": [
@@ -1241,7 +1279,18 @@
       "last_caption": "Park, path, benches, pavilion, people, man, woman, jacket, rain jacket, pants, shirt, boots, grass, trees, leaves, sky, clouds, rain, autumn, daylight, light, shadows."
      },
      "warnings": [],
-     "prompt": "A slow medium shot: a tall, athletic woman, in their thirties, deep brown skin, an angular face with a sharp jaw, dark eyes, almond eyes, strong dark brows, black a long single braid, freckles across the nose, a calm, unreadable bearing, a field geologist in a weathered olive canvas jacket over a grey shirt, sleeves pushed up, a plain leather watch strap, stand on the path talking quietly, as the "
+     "prompt": "A slow medium shot: a tall, athletic woman, in their thirties, deep brown skin, an angular face with a sharp jaw, dark eyes, almond eyes, strong dark brows, black a long single braid, freckles across the nose, a calm, unreadable bearing, a field geologist in a weathered olive canvas jacket over a grey shirt, sleeves pushed up, a plain leather watch strap, stand on the path talking quietly, as the ",
+     "identity": {
+      "start": 0.646,
+      "end": 0.579,
+      "hold": 0.798,
+      "verdict_start": "same person",
+      "verdict_end": "same person",
+      "place_hold": 0.859,
+      "place_verdict": "held",
+      "place_start": 0.464,
+      "who": "mara-okonjo"
+     }
     }
    ],
    "picked": "t543417455",
@@ -1380,7 +1429,8 @@
      "duration": 6.04,
      "fps": 24,
      "qc": [
-      "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.34 left=0.00 right=0.00)"
+      "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.34 left=0.00 right=0.00)",
+      "the face is a different one by the end (identity 0.70 -> 0.28); place drifted (0.82 first to last)"
      ],
      "drift": {
       "lost": 0.41,
@@ -1399,7 +1449,18 @@
      "warnings": [
       "no ambience or sfx set - LTX generates the ambience the picture implies, and a shot with nothing that makes noise returns literal silence"
      ],
-     "prompt": "A static medium two-shot: a tall, athletic woman, in their thirties, deep brown skin, an angular face with a sharp jaw, dark eyes, almond eyes, strong dark brows, black a long single braid, freckles across the nose, a calm, unreadable bearing, a field geologist in a weathered olive canvas jacket over a grey shirt, sleeves pushed up, a plain leather watch strap, and TOMAS stand in the scene - descr"
+     "prompt": "A static medium two-shot: a tall, athletic woman, in their thirties, deep brown skin, an angular face with a sharp jaw, dark eyes, almond eyes, strong dark brows, black a long single braid, freckles across the nose, a calm, unreadable bearing, a field geologist in a weathered olive canvas jacket over a grey shirt, sleeves pushed up, a plain leather watch strap, and TOMAS stand in the scene - descr",
+     "identity": {
+      "start": 0.703,
+      "end": 0.282,
+      "hold": 0.454,
+      "verdict_start": "same person",
+      "verdict_end": "a different face",
+      "place_hold": 0.825,
+      "place_verdict": "drifted",
+      "place_start": 0.422,
+      "who": "mara-okonjo"
+     }
     }
    ],
    "picked": "t547166424",
@@ -1470,7 +1531,8 @@
      "duration": 6.04,
      "fps": 24,
      "qc": [
-      "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.46 left=0.00 right=0.00)"
+      "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.46 left=0.00 right=0.00)",
+      "the face is a different one by the end (identity 0.69 -> 0.45); place drifted (0.73 first to last)"
      ],
      "drift": {
       "lost": 0.61,
@@ -1494,7 +1556,18 @@
      "warnings": [
       "no ambience or sfx set - LTX generates the ambience the picture implies, and a shot with nothing that makes noise returns literal silence"
      ],
-     "prompt": "A static medium shot: a tall, athletic woman, in their thirties, deep brown skin, an angular face with a sharp jaw, dark eyes, almond eyes, strong dark brows, black a long single braid, freckles across the nose, a calm, unreadable bearing, a field geologist in a weathered olive canvas jacket over a grey shirt, sleeves pushed up, a plain leather watch strap, describe the beat, while the scene moves"
+     "prompt": "A static medium shot: a tall, athletic woman, in their thirties, deep brown skin, an angular face with a sharp jaw, dark eyes, almond eyes, strong dark brows, black a long single braid, freckles across the nose, a calm, unreadable bearing, a field geologist in a weathered olive canvas jacket over a grey shirt, sleeves pushed up, a plain leather watch strap, describe the beat, while the scene moves",
+     "identity": {
+      "start": 0.685,
+      "end": 0.448,
+      "hold": 0.604,
+      "verdict_start": "same person",
+      "verdict_end": "a different face",
+      "place_hold": 0.731,
+      "place_verdict": "drifted",
+      "place_start": 0.547,
+      "who": "mara-okonjo"
+     }
     }
    ],
    "picked": "t547479723",
@@ -1677,7 +1750,8 @@
      "qc": [
       "sound borrowed from take t549648673 of shot 100 - the render was silent",
       "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.64 left=0.00 right=0.00)",
-      "words not in the picture: weight, shifting"
+      "words not in the picture: weight, shifting",
+      "the face is a different one by the end (identity 0.69 -> 0.43); place drifted (0.73 first to last)"
      ],
      "drift": {
       "lost": 0.5,
@@ -1698,7 +1772,18 @@
      "warnings": [
       "no ambience or sfx set - LTX generates the ambience the picture implies, and a shot with nothing that makes noise returns literal silence"
      ],
-     "prompt": "A static medium shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, stands in the scene, weight shifting, looking out at it, while the scene moves behind them; the light sh"
+     "prompt": "A static medium shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, stands in the scene, weight shifting, looking out at it, while the scene moves behind them; the light sh",
+     "identity": {
+      "start": 0.687,
+      "end": 0.426,
+      "hold": 0.603,
+      "verdict_start": "same person",
+      "verdict_end": "a different face",
+      "place_hold": 0.728,
+      "place_verdict": "drifted",
+      "place_start": 0.474,
+      "who": "tomas-reyl"
+     }
     }
    ],
    "picked": "t551158941",
@@ -1803,7 +1888,8 @@
      "fps": 24,
      "qc": [
       "sound borrowed from take t547831063 of shot 080 - the render was too quiet (mean -44 dB)",
-      "ends closer than it started - the person fills the frame edge at the end (top=0.44 bottom=0.89 left=0.00 right=0.00)"
+      "ends closer than it started - the person fills the frame edge at the end (top=0.44 bottom=0.89 left=0.00 right=0.00)",
+      "identity: same person, start 0.76, end 0.63; place drifted (0.81 first to last)"
      ],
      "drift": {
       "lost": 0.56,
@@ -1819,12 +1905,23 @@
        "shirt"
       ],
       "kept": 7,
-      "last_caption": "Here's a breakdown of the image\u2019s contents, listed as requested:\n\nPerson, woman, face, head, hair, eyes, nose, lips, skin, expression, clothing, jacket, outdoors, nature, forest, trees, foliage, branches, sky, daylight, sunlight, shadows, ground, dirt, texture, close-up, portrait."
+      "last_caption": "Here's a breakdown of the image’s contents, listed as requested:\n\nPerson, woman, face, head, hair, eyes, nose, lips, skin, expression, clothing, jacket, outdoors, nature, forest, trees, foliage, branches, sky, daylight, sunlight, shadows, ground, dirt, texture, close-up, portrait."
      },
      "warnings": [
       "no ambience or sfx set - LTX generates the ambience the picture implies, and a shot with nothing that makes noise returns literal silence"
      ],
-     "prompt": "A static close-up: a tall, athletic woman, in their thirties, deep brown skin, an angular face with a sharp jaw, dark eyes, almond eyes, strong dark brows, black a long single braid, freckles across the nose, a calm, unreadable bearing, a field geologist in a weathered olive canvas jacket over a grey shirt, sleeves pushed up, a plain leather watch strap, describe the beat, while the place soft beh"
+     "prompt": "A static close-up: a tall, athletic woman, in their thirties, deep brown skin, an angular face with a sharp jaw, dark eyes, almond eyes, strong dark brows, black a long single braid, freckles across the nose, a calm, unreadable bearing, a field geologist in a weathered olive canvas jacket over a grey shirt, sleeves pushed up, a plain leather watch strap, describe the beat, while the place soft beh",
+     "identity": {
+      "start": 0.756,
+      "end": 0.631,
+      "hold": 0.754,
+      "verdict_start": "same person",
+      "verdict_end": "same person",
+      "place_hold": 0.807,
+      "place_verdict": "drifted",
+      "place_start": 0.302,
+      "who": "mara-okonjo"
+     }
     }
    ],
    "picked": "t549154286",
@@ -1888,7 +1985,8 @@
      "duration": 5.04,
      "fps": 24,
      "qc": [
-      "ends closer than it started - the person fills the frame edge at the end (top=0.39 bottom=0.56 left=0.00 right=0.00)"
+      "ends closer than it started - the person fills the frame edge at the end (top=0.39 bottom=0.56 left=0.00 right=0.00)",
+      "identity: same person, start 0.70, end 0.72; place held (0.87 first to last)"
      ],
      "drift": {
       "lost": 0.61,
@@ -1912,7 +2010,18 @@
      "warnings": [
       "no ambience or sfx set - LTX generates the ambience the picture implies, and a shot with nothing that makes noise returns literal silence"
      ],
-     "prompt": "A static close-up: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, describe the beat, while the place soft behind them; the light shifts and flickers across the scene. Photor"
+     "prompt": "A static close-up: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, describe the beat, while the place soft behind them; the light shifts and flickers across the scene. Photor",
+     "identity": {
+      "start": 0.702,
+      "end": 0.722,
+      "hold": 0.852,
+      "verdict_start": "same person",
+      "verdict_end": "same person",
+      "place_hold": 0.869,
+      "place_verdict": "held",
+      "place_start": 0.323,
+      "who": "tomas-reyl"
+     }
     }
    ],
    "picked": "t549648673",
@@ -2130,7 +2239,8 @@
      "fps": 24,
      "qc": [
       "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.41 left=0.00 right=0.00)",
-      "words not in the picture: water, sound"
+      "words not in the picture: water, sound",
+      "the face is a different one by the end (identity 0.77 -> 0.48); place changed (0.61 first to last)"
      ],
      "drift": {
       "lost": 0.46,
@@ -2146,7 +2256,18 @@
       "last_caption": "Harbor, fishing boat, man, pier, ropes, netting, lantern, water, boats, wood, metal, rope, yellow jacket, gray hair, beard, fog, sky, dusk, light, reflections, waves, ocean, coastal area."
      },
      "warnings": [],
-     "prompt": "A static close-up: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, listens to the water, then turns his head toward the sound, who says in a level voice, \"Last boat's not com"
+     "prompt": "A static close-up: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, listens to the water, then turns his head toward the sound, who says in a level voice, \"Last boat's not com",
+     "identity": {
+      "start": 0.766,
+      "end": 0.479,
+      "hold": 0.481,
+      "verdict_start": "same person",
+      "verdict_end": "a different face",
+      "place_hold": 0.611,
+      "place_verdict": "changed",
+      "place_start": 0.51,
+      "who": "tomas-reyl"
+     }
     }
    ],
    "picked": "t546370100v",
@@ -2213,7 +2334,8 @@
      "duration": 5.04,
      "fps": 24,
      "qc": [
-      "sound borrowed from take t541680804 of shot 020 - the render was too quiet (mean -54 dB)"
+      "sound borrowed from take t541680804 of shot 020 - the render was too quiet (mean -54 dB)",
+      "identity: same person, start 0.78, end 0.78; place held (0.92 first to last)"
      ],
      "drift": {
       "lost": 0.38,
@@ -2232,7 +2354,18 @@
       "last_caption": "Harbor, ship, boat, dock, rope, coat, sweater, person, woman, water, ocean, sea, fog, mist, sky, wood, metal, wool, nylon, clouds, daytime, light, shadows, masts, ropes, railings, hull, paint, barnacles."
      },
      "warnings": [],
-     "prompt": "A static close-up: a tall, athletic woman, in their fifties, olive skin, an angular face with a sharp jaw, grey eyes, hooded eyes, strong dark brows, grey short neat hair, a thin scar through one brow, a calm, unreadable bearing, a harbour master in a dark wool coat and a grey knit cap, salt-weathered, hands in her pockets, listens, eyes on the water, a slow breath, while what moves here moves: wa"
+     "prompt": "A static close-up: a tall, athletic woman, in their fifties, olive skin, an angular face with a sharp jaw, grey eyes, hooded eyes, strong dark brows, grey short neat hair, a thin scar through one brow, a calm, unreadable bearing, a harbour master in a dark wool coat and a grey knit cap, salt-weathered, hands in her pockets, listens, eyes on the water, a slow breath, while what moves here moves: wa",
+     "identity": {
+      "start": 0.783,
+      "end": 0.784,
+      "hold": 0.882,
+      "verdict_start": "same person",
+      "verdict_end": "same person",
+      "place_hold": 0.92,
+      "place_verdict": "held",
+      "place_start": 0.561,
+      "who": "ines-varga"
+     }
     }
    ],
    "picked": "t552029765",
@@ -2379,7 +2512,8 @@
      "fps": 24,
      "qc": [
       "sound borrowed from take t541680804 of shot 020 - the render was too quiet (mean -49 dB)",
-      "ends closer than it started - the person fills the frame edge at the end (top=0.12 bottom=0.61 left=0.00 right=0.00)"
+      "ends closer than it started - the person fills the frame edge at the end (top=0.12 bottom=0.61 left=0.00 right=0.00)",
+      "the face is a different one by the end (identity 0.58 -> 0.42); place drifted (0.72 first to last)"
      ],
      "drift": {
       "lost": 0.61,
@@ -2400,7 +2534,18 @@
       "last_caption": "Here's a breakdown of the nouns present in the image, as requested:\n\nPlace, interior, building, structure, room, space.\nMain structures, coat, jacket, hood, sweater, hat, headwear.\nObjects, face, forehead, eyebrow, eye, nose, mouth, lip, chin, hair, wound, scratch, zipper.\nMaterials, wool, fabric, cotton, metal, glass.\nVehicles, none.\nPlants, none.\nWater, none.\nWeather, cold, indoor.\nTime of day, "
      },
      "warnings": [],
-     "prompt": "A slow medium shot: a tall, athletic woman, in their fifties, olive skin, an angular face with a sharp jaw, grey eyes, hooded eyes, strong dark brows, grey short neat hair, a thin scar through one brow, a calm, unreadable bearing, a harbour master in a dark wool coat and a grey knit cap, salt-weathered, hands in her pockets, stand at the rail together, looking out at the boats, as the camera pushe"
+     "prompt": "A slow medium shot: a tall, athletic woman, in their fifties, olive skin, an angular face with a sharp jaw, grey eyes, hooded eyes, strong dark brows, grey short neat hair, a thin scar through one brow, a calm, unreadable bearing, a harbour master in a dark wool coat and a grey knit cap, salt-weathered, hands in her pockets, stand at the rail together, looking out at the boats, as the camera pushe",
+     "identity": {
+      "start": 0.585,
+      "end": 0.421,
+      "hold": 0.591,
+      "verdict_start": "same person",
+      "verdict_end": "a different face",
+      "place_hold": 0.724,
+      "place_verdict": "drifted",
+      "place_start": 0.667,
+      "who": "ines-varga"
+     }
     }
    ],
    "picked": "t552731407",
@@ -2474,7 +2619,8 @@
      "duration": 5.04,
      "fps": 24,
      "qc": [
-      "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.82 left=0.00 right=0.03)"
+      "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.82 left=0.00 right=0.03)",
+      "identity: same person, start 0.74, end 0.75; place held (0.93 first to last)"
      ],
      "drift": {
       "lost": 0.64,
@@ -2496,7 +2642,18 @@
       "last_caption": "Anime, girl, hair, eyes, face, flower, hairpin, shirt, collar, background, interior, room, building, wall, structure, metal, light, glow, shadow, darkness, illustration."
      },
      "warnings": [],
-     "prompt": "A static close-up: a slightly built woman, in their twenties, pale skin, an oval face, brown eyes, almond eyes, thin arched brows, black very long straight hair, a calm, unreadable bearing, A young swordswoman of the Cloud Terrace school. Quick, watchful, and better at the sword than at saying so., looks up, a small smile, while what moves here moves: leaves; leaves drift across the frame, a narro"
+     "prompt": "A static close-up: a slightly built woman, in their twenties, pale skin, an oval face, brown eyes, almond eyes, thin arched brows, black very long straight hair, a calm, unreadable bearing, A young swordswoman of the Cloud Terrace school. Quick, watchful, and better at the sword than at saying so., looks up, a small smile, while what moves here moves: leaves; leaves drift across the frame, a narro",
+     "identity": {
+      "start": 0.741,
+      "end": 0.753,
+      "hold": 0.878,
+      "verdict_start": "same person",
+      "verdict_end": "same person",
+      "place_hold": 0.934,
+      "place_verdict": "held",
+      "place_start": 0.487,
+      "who": "bai-liwen"
+     }
     }
    ],
    "picked": "t553639157",
@@ -2561,7 +2718,8 @@
      "fps": 24,
      "qc": [
       "camera: push in 47% - done by the studio (push)",
-      "words not in the picture: rail"
+      "words not in the picture: rail",
+      "identity: same person, start 0.73, end 0.67; place held (0.91 first to last)"
      ],
      "cam_measured": {
       "zoom": 1.473,
@@ -2596,7 +2754,18 @@
       "last_caption": "Harbor, fishing boat, man, jacket, pants, rope, railing, deck, lantern, ships, water, fog, sky, clouds, wood, metal, nylon, yellow, gray, blue, ocean, weather, night, light, glow, person, beard."
      },
      "warnings": [],
-     "prompt": "A static wide shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, stands at the rail, looking out at the boats, while what moves here moves: water; water moves continuously"
+     "prompt": "A static wide shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, stands at the rail, looking out at the boats, while what moves here moves: water; water moves continuously",
+     "identity": {
+      "start": 0.727,
+      "end": 0.667,
+      "hold": 0.87,
+      "verdict_start": "same person",
+      "verdict_end": "same person",
+      "place_hold": 0.912,
+      "place_verdict": "held",
+      "place_start": 0.747,
+      "who": "tomas-reyl"
+     }
     }
    ],
    "picked": "t581037514",
@@ -2669,7 +2838,8 @@
      "fps": 24,
      "qc": [
       "camera: pull back 7%, tilt up 9% - done by the studio (stabilise)",
-      "words not in the picture: rail"
+      "words not in the picture: rail",
+      "identity: same person, start 0.71, end 0.60; place held (0.94 first to last)"
      ],
      "cam_measured": {
       "zoom": 0.932,
@@ -2704,7 +2874,18 @@
       "last_caption": "Harbor, ship, fishing boat, man, man's face, man's hair, man's beard, yellow jacket, yellow pants, deck, rope, railing, mast, rigging, lantern, fog, mist, water, boats, sky, dusk, light, glow, metal, wood, fabric, person."
      },
      "warnings": [],
-     "prompt": "A static wide shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, stands at the rail, looking out at the boats, while what moves here moves: water; water moves continuously"
+     "prompt": "A static wide shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, stands at the rail, looking out at the boats, while what moves here moves: water; water moves continuously",
+     "identity": {
+      "start": 0.711,
+      "end": 0.601,
+      "hold": 0.751,
+      "verdict_start": "same person",
+      "verdict_end": "same person",
+      "place_hold": 0.936,
+      "place_verdict": "held",
+      "place_start": 0.654,
+      "who": "tomas-reyl"
+     }
     }
    ],
    "picked": "t581531987",
@@ -2819,8 +3000,8 @@
      "fps": 24,
      "qc": [
       "camera: static",
-      "identity: same person, start 0.58, end 0.62",
-      "sound borrowed from take t555682735 of shot 010 - the render was too quiet (mean -40 dB)"
+      "sound borrowed from take t555682735 of shot 010 - the render was too quiet (mean -40 dB)",
+      "identity: same person, start 0.58, end 0.62; place drifted (0.80 first to last)"
      ],
      "cam_measured": {
       "zoom": 0.975,
@@ -2834,8 +3015,11 @@
       "start": 0.58,
       "end": 0.624,
       "hold": 0.895,
-      "verdict_start": "uncertain",
+      "verdict_start": "same person",
       "verdict_end": "same person",
+      "place_hold": 0.796,
+      "place_verdict": "drifted",
+      "place_start": 0.657,
       "who": "ines-varga"
      },
      "drift": {
@@ -3052,8 +3236,8 @@
      "fps": 24,
      "qc": [
       "camera: push in 83%, pan left 7%, tilt up 18% (uncertain)",
-      "identity: uncertain at the start (0.59); unmeasured (the camera moved too much to follow the head)",
-      "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.51 left=0.00 right=0.00)"
+      "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.51 left=0.00 right=0.00)",
+      "identity: same person at the start (0.59); unmeasured (the camera moved too much to follow the head); place drifted (0.73 first to last)"
      ],
      "cam_measured": {
       "zoom": 1.831,
@@ -3067,8 +3251,11 @@
       "start": 0.591,
       "end": null,
       "hold": null,
-      "verdict_start": "uncertain",
+      "verdict_start": "same person",
       "verdict_end": "unmeasured (the camera moved too much to follow the head)",
+      "place_hold": 0.733,
+      "place_verdict": "drifted",
+      "place_start": 0.722,
       "who": "ines-varga"
      },
      "drift": {
@@ -3166,8 +3353,8 @@
      "fps": 24,
      "qc": [
       "camera: roll -2.5 deg - done by the studio (stabilise)",
-      "the face is not ines-varga's from the first frame (identity 0.24)",
-      "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.45 left=0.00 right=0.00)"
+      "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.45 left=0.00 right=0.00)",
+      "identity: the near figure may cover the face at the start (0.29); end same person; place drifted (0.77 first to last)"
      ],
      "cam_measured": {
       "zoom": 0.989,
@@ -3184,11 +3371,14 @@
       }
      },
      "identity": {
-      "start": 0.237,
-      "end": 0.483,
-      "hold": 0.52,
+      "start": 0.295,
+      "end": 0.615,
+      "hold": 0.461,
       "verdict_start": "a different face",
-      "verdict_end": "a different face",
+      "verdict_end": "same person",
+      "place_hold": 0.766,
+      "place_verdict": "drifted",
+      "place_start": 0.72,
       "who": "ines-varga"
      },
      "drift": {
@@ -3203,7 +3393,7 @@
        "pier"
       ],
       "kept": 16,
-      "last_caption": "Ship, boat, sea, ocean, water, sky, clouds, mast, rigging, ropes, net, ship's wheel, deck, woman, person, woman\u2019s face, woman\u2019s eyes, wool hat, coat, jacket, buttons, sweater, hair, skin, light, glow, fog, mist, darkness, night, dusk, lamps, bulbs, metal, wood, fabric, clothing, grey, black, blue, white."
+      "last_caption": "Ship, boat, sea, ocean, water, sky, clouds, mast, rigging, ropes, net, ship's wheel, deck, woman, person, woman’s face, woman’s eyes, wool hat, coat, jacket, buttons, sweater, hair, skin, light, glow, fog, mist, darkness, night, dusk, lamps, bulbs, metal, wood, fabric, clothing, grey, black, blue, white."
      },
      "warnings": [],
      "prompt": "A static medium shot: a tall, athletic woman, in their fifties, olive skin, an angular face with a sharp jaw, grey eyes, hooded eyes, strong dark brows, grey short neat hair, a thin scar through one brow, a calm, unreadable bearing, a harbour master in a dark wool coat and a grey knit cap, salt-weathered, hands in her pockets, faces the other and speaks quietly, while what moves here moves: water;"
@@ -3342,9 +3532,9 @@
      "fps": 24,
      "qc": [
       "camera: push in 13% - done by the studio (push)",
-      "identity: uncertain by the end (0.65 -> 0.55)",
       "sound borrowed from take t555682735 of shot 010 - the render was too quiet (mean -43 dB)",
-      "words not in the picture: rail"
+      "words not in the picture: rail",
+      "identity: uncertain by the end (0.65 -> 0.55); place held (0.94 first to last)"
      ],
      "cam_measured": {
       "zoom": 1.127,
@@ -3366,6 +3556,9 @@
       "hold": 0.836,
       "verdict_start": "same person",
       "verdict_end": "uncertain",
+      "place_hold": 0.939,
+      "place_verdict": "held",
+      "place_start": 0.677,
       "who": "tomas-reyl"
      },
      "drift": {

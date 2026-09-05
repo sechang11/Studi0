@@ -16,7 +16,7 @@
    "short": "grey a shaved head, brown eyes",
    "sheet": "/home/k4shix/shared/comfy-studio/studio/foundry/characters/tomas-reyl/base_portrait.png",
    "portrait": "/home/k4shix/shared/comfy-studio/studio/foundry/characters/tomas-reyl/base_portrait.png",
-   "voice": "",
+   "voice": "male_04_frank",
    "voice_desc": "",
    "foundry": "tomas-reyl"
   },
@@ -697,6 +697,106 @@
    ],
    "place": "autumn-park",
    "plate": "day_wide"
+  },
+  {
+   "id": "sc35",
+   "title": "build 07:10",
+   "location": "a city park with winding paths, old trees and iron benches, lived-in and worn, under a flat overcast sky, a city park in autumn, wet leaves on the path, iron benches, a bandstand far off",
+   "time_of_day": "",
+   "weather": "overcast",
+   "ambience": "birdsong and leaves moving, a far-off dog",
+   "palette": "",
+   "music": "",
+   "cast_present": [
+    "TOMAS"
+   ],
+   "no_people": false,
+   "anchor": "",
+   "shots": [
+    "350"
+   ],
+   "place": "autumn-park",
+   "plate": "day_wide"
+  },
+  {
+   "id": "sc36",
+   "title": "build 07:32",
+   "location": "a city park with winding paths, old trees and iron benches, lived-in and worn, under a flat overcast sky, a city park in autumn, wet leaves on the path, iron benches, a bandstand far off",
+   "time_of_day": "",
+   "weather": "overcast",
+   "ambience": "birdsong and leaves moving, a far-off dog",
+   "palette": "",
+   "music": "",
+   "cast_present": [
+    "TOMAS"
+   ],
+   "no_people": false,
+   "anchor": "",
+   "shots": [
+    "360"
+   ],
+   "place": "autumn-park",
+   "plate": "day_wide"
+  },
+  {
+   "id": "sc37",
+   "title": "build 08:12",
+   "location": "a city park with winding paths, old trees and iron benches, lived-in and worn, under a flat overcast sky, a city park in autumn, wet leaves on the path, iron benches, a bandstand far off",
+   "time_of_day": "",
+   "weather": "overcast",
+   "ambience": "birdsong and leaves moving, a far-off dog",
+   "palette": "",
+   "music": "",
+   "cast_present": [
+    "TOMAS",
+    "INES"
+   ],
+   "no_people": false,
+   "anchor": "",
+   "shots": [
+    "370"
+   ],
+   "place": "autumn-park",
+   "plate": "day_wide"
+  },
+  {
+   "id": "sc38",
+   "title": "build 08:37",
+   "location": "a city park with winding paths, old trees and iron benches, lived-in and worn, under a flat overcast sky, a city park in autumn, wet leaves on the path, iron benches, a bandstand far off",
+   "time_of_day": "",
+   "weather": "overcast",
+   "ambience": "birdsong and leaves moving, a far-off dog",
+   "palette": "",
+   "music": "",
+   "cast_present": [],
+   "no_people": false,
+   "anchor": "",
+   "shots": [
+    "380"
+   ],
+   "place": "autumn-park",
+   "plate": "day_wide"
+  },
+  {
+   "id": "sc39",
+   "title": "build 08:50",
+   "location": "a city park with winding paths, old trees and iron benches, lived-in and worn, under a flat overcast sky, a city park in autumn, wet leaves on the path, iron benches, a bandstand far off",
+   "time_of_day": "",
+   "weather": "overcast",
+   "ambience": "birdsong and leaves moving, a far-off dog",
+   "palette": "",
+   "music": "",
+   "cast_present": [
+    "TOMAS",
+    "INES"
+   ],
+   "no_people": false,
+   "anchor": "",
+   "shots": [
+    "390"
+   ],
+   "place": "autumn-park",
+   "plate": "day_wide"
   }
  ],
  "shots": {
@@ -830,7 +930,7 @@
      "fps": 24,
      "qc": [
       "camera: static - done by the studio (stabilise)",
-      "identity: uncertain by the end (0.58 -> 0.52)"
+      "identity: same person, start 0.60, end 0.58; place held (0.85 first to last)"
      ],
      "cam_measured": {
       "zoom": 1.008,
@@ -847,11 +947,14 @@
       }
      },
      "identity": {
-      "start": 0.582,
-      "end": 0.519,
-      "hold": 0.799,
-      "verdict_start": "uncertain",
-      "verdict_end": "uncertain",
+      "start": 0.602,
+      "end": 0.583,
+      "hold": 0.796,
+      "verdict_start": "same person",
+      "verdict_end": "same person",
+      "place_hold": 0.854,
+      "place_verdict": "held",
+      "place_start": 0.476,
       "who": "tomas-reyl"
      },
      "drift": {
@@ -943,8 +1046,8 @@
      "fps": 24,
      "qc": [
       "camera: static - done by the studio (stabilise)",
-      "the face is a different one by the end (identity 0.59 -> 0.49)",
-      "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.44 left=0.00 right=0.00)"
+      "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.44 left=0.00 right=0.00)",
+      "identity: uncertain by the end (0.56 -> 0.51); place drifted (0.84 first to last)"
      ],
      "cam_measured": {
       "zoom": 0.993,
@@ -961,11 +1064,14 @@
       }
      },
      "identity": {
-      "start": 0.595,
-      "end": 0.488,
-      "hold": 0.64,
-      "verdict_start": "uncertain",
-      "verdict_end": "a different face",
+      "start": 0.563,
+      "end": 0.512,
+      "hold": 0.68,
+      "verdict_start": "same person",
+      "verdict_end": "uncertain",
+      "place_hold": 0.84,
+      "place_verdict": "drifted",
+      "place_start": 0.493,
       "who": "tomas-reyl"
      },
      "drift": {
@@ -1118,9 +1224,9 @@
      "fps": 24,
      "qc": [
       "camera: tilt down 72% (a face fills the frame; the camera is hard to tell from the head) (uncertain)",
-      "identity: same person at the start (0.70); unmeasured (the camera moved too much to follow the head); place held (0.86 first to last)",
       "ends closer than it started - the person fills the frame edge at the end (top=0.16 bottom=0.56 left=0.00 right=0.00)",
-      "words not in the picture: held"
+      "words not in the picture: held",
+      "identity: uncertain by the end (0.70 -> 0.57); place held (0.86 first to last)"
      ],
      "cam_measured": {
       "zoom": 1.007,
@@ -1132,10 +1238,10 @@
      },
      "identity": {
       "start": 0.696,
-      "end": null,
-      "hold": null,
+      "end": 0.573,
+      "hold": 0.793,
       "verdict_start": "same person",
-      "verdict_end": "unmeasured (the camera moved too much to follow the head)",
+      "verdict_end": "uncertain",
       "place_hold": 0.865,
       "place_verdict": "held",
       "place_start": 0.305,
@@ -1228,8 +1334,8 @@
      "fps": 24,
      "qc": [
       "camera: static - done by the studio (stabilise)",
-      "identity: uncertain by the end (0.60 -> 0.58); place held (0.87 first to last)",
-      "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.42 left=0.00 right=0.00)"
+      "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.42 left=0.00 right=0.00)",
+      "identity: same person, start 0.62, end 0.59; place held (0.87 first to last)"
      ],
      "cam_measured": {
       "zoom": 0.982,
@@ -1246,11 +1352,11 @@
       }
      },
      "identity": {
-      "start": 0.604,
-      "end": 0.576,
-      "hold": 0.857,
-      "verdict_start": "uncertain",
-      "verdict_end": "uncertain",
+      "start": 0.621,
+      "end": 0.592,
+      "hold": 0.719,
+      "verdict_start": "same person",
+      "verdict_end": "same person",
       "place_hold": 0.867,
       "place_verdict": "held",
       "place_start": 0.464,
@@ -1541,7 +1647,7 @@
      "fps": 24,
      "qc": [
       "camera: push in 13% - done by the studio (push)",
-      "identity: uncertain by the end (0.68 -> 0.61); place held (0.88 first to last)"
+      "identity: same person, start 0.68, end 0.61; place held (0.88 first to last)"
      ],
      "cam_measured": {
       "zoom": 1.133,
@@ -1562,7 +1668,7 @@
       "end": 0.611,
       "hold": 0.8,
       "verdict_start": "same person",
-      "verdict_end": "uncertain",
+      "verdict_end": "same person",
       "place_hold": 0.882,
       "place_verdict": "held",
       "place_start": 0.467,
@@ -1657,7 +1763,7 @@
      "fps": 24,
      "qc": [
       "camera: pull back 12% - done by the studio (pull)",
-      "identity: uncertain by the end (0.67 -> 0.61); place held (0.93 first to last)"
+      "identity: same person, start 0.68, end 0.68; place held (0.93 first to last)"
      ],
      "cam_measured": {
       "zoom": 0.879,
@@ -1674,11 +1780,11 @@
       }
      },
      "identity": {
-      "start": 0.67,
-      "end": 0.608,
-      "hold": 0.815,
+      "start": 0.682,
+      "end": 0.68,
+      "hold": 0.858,
       "verdict_start": "same person",
-      "verdict_end": "uncertain",
+      "verdict_end": "same person",
       "place_hold": 0.932,
       "place_verdict": "held",
       "place_start": 0.482,
@@ -1947,7 +2053,7 @@
      "fps": 24,
      "qc": [
       "camera: tilt down 12% - done by the studio (tilt)",
-      "identity: same person, start 0.58, end 0.64; place held (0.92 first to last)"
+      "identity: same person, start 0.68, end 0.64; place held (0.92 first to last)"
      ],
      "cam_measured": {
       "zoom": 1.012,
@@ -1964,9 +2070,9 @@
       }
      },
      "identity": {
-      "start": 0.579,
-      "end": 0.638,
-      "hold": 0.897,
+      "start": 0.682,
+      "end": 0.641,
+      "hold": 0.916,
       "verdict_start": "same person",
       "verdict_end": "same person",
       "place_hold": 0.922,
@@ -2067,7 +2173,7 @@
      "fps": 24,
      "qc": [
       "camera: pan right 11% - done by the studio (orbit)",
-      "identity: uncertain by the end (0.64 -> 0.52); place held (0.91 first to last)"
+      "identity: same person, start 0.59, end 0.60; place held (0.91 first to last)"
      ],
      "cam_measured": {
       "zoom": 0.993,
@@ -2084,11 +2190,11 @@
       }
      },
      "identity": {
-      "start": 0.642,
-      "end": 0.519,
-      "hold": 0.646,
+      "start": 0.591,
+      "end": 0.599,
+      "hold": 0.605,
       "verdict_start": "same person",
-      "verdict_end": "uncertain",
+      "verdict_end": "same person",
       "place_hold": 0.912,
       "place_verdict": "held",
       "place_start": 0.46,
@@ -2186,8 +2292,8 @@
      "fps": 24,
      "qc": [
       "camera: static - done by the studio (handheld)",
-      "identity: uncertain by the end (0.63 -> 0.55); place held (0.86 first to last)",
-      "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.38 left=0.00 right=0.00)"
+      "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.38 left=0.00 right=0.00)",
+      "identity: uncertain by the end (0.64 -> 0.55); place held (0.86 first to last)"
      ],
      "cam_measured": {
       "zoom": 1.045,
@@ -2204,9 +2310,9 @@
       }
      },
      "identity": {
-      "start": 0.633,
+      "start": 0.638,
       "end": 0.547,
-      "hold": 0.828,
+      "hold": 0.801,
       "verdict_start": "same person",
       "verdict_end": "uncertain",
       "place_hold": 0.856,
@@ -2306,7 +2412,7 @@
      "fps": 24,
      "qc": [
       "camera: static - done by the studio (stabilise)",
-      "identity: same person, start 0.67, end 0.64; place held (0.92 first to last)"
+      "identity: same person, start 0.68, end 0.62; place held (0.92 first to last)"
      ],
      "cam_measured": {
       "zoom": 1.022,
@@ -2323,9 +2429,9 @@
       }
      },
      "identity": {
-      "start": 0.669,
-      "end": 0.636,
-      "hold": 0.862,
+      "start": 0.684,
+      "end": 0.619,
+      "hold": 0.821,
       "verdict_start": "same person",
       "verdict_end": "same person",
       "place_hold": 0.921,
@@ -2540,7 +2646,7 @@
      "fps": 24,
      "qc": [
       "camera: static - done by the studio (stabilise)",
-      "identity: same person, start 0.66, end 0.63; place drifted (0.84 first to last)"
+      "identity: same person, start 0.69, end 0.61; place drifted (0.84 first to last)"
      ],
      "cam_measured": {
       "zoom": 1.014,
@@ -2557,9 +2663,9 @@
       }
      },
      "identity": {
-      "start": 0.657,
-      "end": 0.628,
-      "hold": 0.858,
+      "start": 0.689,
+      "end": 0.615,
+      "hold": 0.86,
       "verdict_start": "same person",
       "verdict_end": "same person",
       "place_hold": 0.845,
@@ -2706,9 +2812,9 @@
      "fps": 24,
      "qc": [
       "camera: static (a face fills the frame; the camera is hard to tell from the head) (uncertain)",
-      "identity: same person, start 0.70, end 0.64; place drifted (0.84 first to last)",
       "ends closer than it started - the person fills the frame edge at the end (top=0.12 bottom=0.56 left=0.00 right=0.00)",
-      "words not in the picture: held"
+      "words not in the picture: held",
+      "identity: same person, start 0.70, end 0.64; place drifted (0.84 first to last)"
      ],
      "cam_measured": {
       "zoom": 1.004,
@@ -2816,9 +2922,9 @@
      "fps": 24,
      "qc": [
       "camera: tilt down 70% (a face fills the frame; the camera is hard to tell from the head) (uncertain)",
-      "identity: same person, start 0.70, end 0.67; place held (0.90 first to last)",
       "sound borrowed from take t595554809 of shot 150 - the render was silent",
-      "ends closer than it started - the person fills the frame edge at the end (top=0.10 bottom=0.56 left=0.00 right=0.00)"
+      "ends closer than it started - the person fills the frame edge at the end (top=0.10 bottom=0.56 left=0.00 right=0.00)",
+      "identity: same person, start 0.70, end 0.67; place held (0.90 first to last)"
      ],
      "cam_measured": {
       "zoom": 1.007,
@@ -2924,8 +3030,8 @@
      "fps": 24,
      "qc": [
       "camera: static - done by the studio (stabilise)",
-      "identity: same person, start 0.69, end 0.65; place held (0.91 first to last)",
-      "sound borrowed from take t595554809 of shot 150 - the render was too quiet (mean -45 dB)"
+      "sound borrowed from take t595554809 of shot 150 - the render was too quiet (mean -45 dB)",
+      "identity: same person, start 0.64, end 0.66; place held (0.91 first to last)"
      ],
      "cam_measured": {
       "zoom": 0.994,
@@ -2942,9 +3048,9 @@
       }
      },
      "identity": {
-      "start": 0.686,
-      "end": 0.647,
-      "hold": 0.774,
+      "start": 0.642,
+      "end": 0.655,
+      "hold": 0.842,
       "verdict_start": "same person",
       "verdict_end": "same person",
       "place_hold": 0.913,
@@ -3039,12 +3145,25 @@
      "duration": 4.458333333333333,
      "fps": 24,
      "seed": 42,
-     "qc": [],
+     "qc": [
+      "the face is a different one by the end (identity 0.65 -> 0.25); place held (0.94 first to last)"
+     ],
      "warnings": [],
      "pin": {
       "change": "the subject has lowered into a deep crouch, knees bent, weight low",
       "rate": 0.0082,
       "end": "assets/pin_end_180.png"
+     },
+     "identity": {
+      "start": 0.654,
+      "end": 0.247,
+      "hold": 0.394,
+      "verdict_start": "same person",
+      "verdict_end": "a different face",
+      "place_hold": 0.944,
+      "place_verdict": "held",
+      "place_start": 0.512,
+      "who": "tomas-reyl"
      }
     }
    ],
@@ -3126,8 +3245,8 @@
      "fps": 24,
      "qc": [
       "camera: push in 17% (a face fills the frame; the camera is hard to tell from the head) (uncertain)",
-      "identity: same person, start 0.70, end 0.70; place held (0.93 first to last)",
-      "ends closer than it started - the person fills the frame edge at the end (top=0.25 bottom=0.64 left=0.00 right=0.00)"
+      "ends closer than it started - the person fills the frame edge at the end (top=0.25 bottom=0.64 left=0.00 right=0.00)",
+      "identity: same person, start 0.70, end 0.70; place held (0.93 first to last)"
      ],
      "cam_measured": {
       "zoom": 1.165,
@@ -3238,8 +3357,8 @@
      "fps": 24,
      "qc": [
       "camera: static - done by the studio (stabilise)",
-      "the face is a different one by the end (identity 0.66 -> 0.29); place drifted (0.78 first to last)",
-      "sound borrowed from take t595554809 of shot 150 - the render was too quiet (mean -47 dB)"
+      "sound borrowed from take t595554809 of shot 150 - the render was too quiet (mean -47 dB)",
+      "the face is a different one by the end (identity 0.67 -> 0.34); place drifted (0.74 first to last)"
      ],
      "cam_measured": {
       "zoom": 1.005,
@@ -3256,12 +3375,12 @@
       }
      },
      "identity": {
-      "start": 0.656,
-      "end": 0.286,
-      "hold": 0.436,
+      "start": 0.668,
+      "end": 0.342,
+      "hold": 0.389,
       "verdict_start": "same person",
       "verdict_end": "a different face",
-      "place_hold": 0.777,
+      "place_hold": 0.741,
       "place_verdict": "drifted",
       "place_start": 0.508,
       "who": "tomas-reyl"
@@ -3423,8 +3542,8 @@
      "fps": 24,
      "qc": [
       "camera: pull back 22% - done by the studio (pull)",
-      "identity: same person, start 0.63, end 0.65; place held (0.90 first to last)",
-      "sound borrowed from take t595554809 of shot 150 - the render was silent"
+      "sound borrowed from take t595554809 of shot 150 - the render was silent",
+      "identity: same person, start 0.64, end 0.58; place held (0.90 first to last)"
      ],
      "cam_measured": {
       "zoom": 0.775,
@@ -3441,8 +3560,8 @@
       }
      },
      "identity": {
-      "start": 0.63,
-      "end": 0.649,
+      "start": 0.638,
+      "end": 0.585,
       "hold": 0.836,
       "verdict_start": "same person",
       "verdict_end": "same person",
@@ -3542,8 +3661,8 @@
      "fps": 24,
      "qc": [
       "camera: tilt up 10% - done by the studio (tilt)",
-      "the face is a different one by the end (identity 0.50 -> 0.39); place held (0.88 first to last)",
-      "sound borrowed from take t595554809 of shot 150 - the render was too quiet (mean -51 dB)"
+      "sound borrowed from take t595554809 of shot 150 - the render was too quiet (mean -51 dB)",
+      "identity: same person, start 0.66, end 0.65; place held (0.88 first to last)"
      ],
      "cam_measured": {
       "zoom": 1.0,
@@ -3560,11 +3679,11 @@
       }
      },
      "identity": {
-      "start": 0.504,
-      "end": 0.39,
-      "hold": 0.889,
-      "verdict_start": "uncertain",
-      "verdict_end": "a different face",
+      "start": 0.66,
+      "end": 0.647,
+      "hold": 0.863,
+      "verdict_start": "same person",
+      "verdict_end": "same person",
       "place_hold": 0.884,
       "place_verdict": "held",
       "place_start": 0.476,
@@ -4024,8 +4143,8 @@
      "fps": 24,
      "qc": [
       "camera: roll -7.9 deg - done by the studio (roll)",
-      "identity: uncertain by the end (0.62 -> 0.55); place held (0.88 first to last)",
-      "sound borrowed from take t595554809 of shot 150 - the render was too quiet (mean -45 dB)"
+      "sound borrowed from take t595554809 of shot 150 - the render was too quiet (mean -45 dB)",
+      "identity: same person, start 0.61, end 0.67; place held (0.88 first to last)"
      ],
      "cam_measured": {
       "zoom": 0.979,
@@ -4042,11 +4161,11 @@
       }
      },
      "identity": {
-      "start": 0.624,
-      "end": 0.547,
-      "hold": 0.731,
+      "start": 0.607,
+      "end": 0.673,
+      "hold": 0.752,
       "verdict_start": "same person",
-      "verdict_end": "uncertain",
+      "verdict_end": "same person",
       "place_hold": 0.877,
       "place_verdict": "held",
       "place_start": 0.464,
@@ -4233,9 +4352,9 @@
      "fps": 24,
      "qc": [
       "camera: tilt up 19%",
-      "the face is a different one by the end (identity 0.63 -> 0.33); place drifted (0.83 first to last)",
       "sound borrowed from take t595554809 of shot 150 - the render was silent",
-      "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.82 left=0.33 right=0.00)"
+      "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.82 left=0.33 right=0.00)",
+      "the face is a different one by the end (identity 0.63 -> 0.33); place drifted (0.83 first to last)"
      ],
      "cam_measured": {
       "zoom": 1.027,
@@ -4839,8 +4958,8 @@
      "fps": 24,
      "qc": [
       "camera: tilt up 11% - done by the studio (tilt)",
-      "the face is a different one by the end (identity 0.54 -> 0.45); place drifted (0.83 first to last)",
-      "sound borrowed from take t595554809 of shot 150 - the render was too quiet (mean -52 dB)"
+      "sound borrowed from take t595554809 of shot 150 - the render was too quiet (mean -52 dB)",
+      "identity: same person, start 0.64, end 0.62; place drifted (0.83 first to last)"
      ],
      "cam_measured": {
       "zoom": 1.019,
@@ -4857,11 +4976,11 @@
       }
      },
      "identity": {
-      "start": 0.536,
-      "end": 0.445,
-      "hold": 0.818,
-      "verdict_start": "uncertain",
-      "verdict_end": "a different face",
+      "start": 0.637,
+      "end": 0.625,
+      "hold": 0.792,
+      "verdict_start": "same person",
+      "verdict_end": "same person",
       "place_hold": 0.835,
       "place_verdict": "drifted",
       "place_start": 0.482,
@@ -5023,9 +5142,9 @@
      "fps": 24,
      "qc": [
       "camera: static - done by the studio (stabilise)",
-      "identity: uncertain by the end (0.62 -> 0.51); place drifted (0.82 first to last)",
       "sound borrowed from take t595554809 of shot 150 - the render was too quiet (mean -49 dB)",
-      "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.50 left=0.00 right=0.00)"
+      "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.50 left=0.00 right=0.00)",
+      "identity: uncertain by the end (0.59 -> 0.53); place drifted (0.82 first to last)"
      ],
      "cam_measured": {
       "zoom": 1.039,
@@ -5042,9 +5161,9 @@
       }
      },
      "identity": {
-      "start": 0.62,
-      "end": 0.511,
-      "hold": 0.695,
+      "start": 0.595,
+      "end": 0.531,
+      "hold": 0.719,
       "verdict_start": "same person",
       "verdict_end": "uncertain",
       "place_hold": 0.821,
@@ -5142,7 +5261,7 @@
      "fps": 24,
      "qc": [
       "camera: static - done by the studio (stabilise)",
-      "identity: same person, start 0.67, end 0.58; place held (0.89 first to last)"
+      "identity: uncertain by the end (0.69 -> 0.54); place held (0.89 first to last)"
      ],
      "cam_measured": {
       "zoom": 1.027,
@@ -5159,11 +5278,11 @@
       }
      },
      "identity": {
-      "start": 0.666,
-      "end": 0.577,
-      "hold": 0.744,
+      "start": 0.688,
+      "end": 0.537,
+      "hold": 0.693,
       "verdict_start": "same person",
-      "verdict_end": "same person",
+      "verdict_end": "uncertain",
       "place_hold": 0.886,
       "place_verdict": "held",
       "place_start": 0.486,
@@ -5344,6 +5463,1445 @@
     "caption": "Park, pavilion, man, trees, bench, path, grass, leaves, jacket, pants, light, sky, clouds, ground, rain, autumn, day, photograph, building, structure, foliage, weather, person, clothing, material, wood, stone, metal, outdoor, landscape.",
     "missing": [],
     "when": 1788605641
+   }
+  },
+  "350": {
+   "id": "350",
+   "scene": "sc35",
+   "title": "wide - TOMAS",
+   "duration": 5.0,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/encyclopedia-check/assets/anchor_shot_350.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "TOMAS",
+     "action": "stands in the scene",
+     "background": "what moves here moves: leaves",
+     "motion": "",
+     "ambient": [
+      "leaves"
+     ],
+     "dialogue": {
+      "char": "",
+      "line": "",
+      "delivery": ""
+     }
+    }
+   ],
+   "sfx": "birdsong and leaves moving, a far-off dog",
+   "no_people": false,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t606822239",
+     "engine": "ltx",
+     "seed": 636827815,
+     "created": "07:17",
+     "file": "takes/350/ltx_t606822239.mp4",
+     "poster": "takes/350/ltx_t606822239.png",
+     "strip": "takes/350/ltx_t606822239_strip.png",
+     "duration": 4.88,
+     "fps": 24,
+     "qc": [
+      "camera: tilt up 10% - done by the studio (tilt)",
+      "the face is a different one by the end (identity 0.51 -> 0.42); place held (0.89 first to last)",
+      "sound borrowed from take t595554809 of shot 150 - the render was too quiet (mean -49 dB)"
+     ],
+     "cam_measured": {
+      "zoom": 1.005,
+      "pan": 0.004,
+      "tilt": -0.104,
+      "roll": 0.05,
+      "camera": "tilt up 10%",
+      "confidence": "high",
+      "post": {
+       "move": "tilt",
+       "amount": -0.1,
+       "zoom_start": 1.14,
+       "zoom_end": 1.14
+      }
+     },
+     "identity": {
+      "start": 0.51,
+      "end": 0.418,
+      "hold": 0.893,
+      "verdict_start": "uncertain",
+      "verdict_end": "a different face",
+      "place_hold": 0.888,
+      "place_verdict": "held",
+      "place_start": 0.495,
+      "who": "tomas-reyl"
+     },
+     "drift": {
+      "lost": 0.48,
+      "missing": [
+       "build",
+       "cloth",
+       "ground",
+       "landscape",
+       "material",
+       "metal",
+       "outdoor",
+       "pavilion",
+       "stone",
+       "structure",
+       "weather",
+       "wood"
+      ],
+      "kept": 13,
+      "last_caption": "Park, bandstand, man, jacket, sweater, pants, bench, path, grass, trees, leaves, sky, rain, clouds, autumn, daylight, photograph, lamp, person, foliage."
+     },
+     "warnings": [],
+     "prompt": "A static wide shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, stands in the scene, while what moves here moves: leaves; leaves drift across the frame, a city park with "
+    },
+    {
+     "id": "t607034812",
+     "engine": "ltx",
+     "seed": 215413938,
+     "created": "07:21",
+     "file": "takes/350/ltx_t607034812.mp4",
+     "poster": "takes/350/ltx_t607034812.png",
+     "strip": "takes/350/ltx_t607034812_strip.png",
+     "duration": 4.88,
+     "fps": 24,
+     "qc": [
+      "camera: tilt up 11% - done by the studio (tilt)",
+      "the face is not tomas-reyl's from the first frame (identity 0.43); place held (0.90 first to last)",
+      "sound borrowed from take t595554809 of shot 150 - the render was silent"
+     ],
+     "cam_measured": {
+      "zoom": 1.005,
+      "pan": 0.001,
+      "tilt": -0.105,
+      "roll": 0.38,
+      "camera": "tilt up 11%",
+      "confidence": "high",
+      "post": {
+       "move": "tilt",
+       "amount": -0.1,
+       "zoom_start": 1.14,
+       "zoom_end": 1.14
+      }
+     },
+     "identity": {
+      "start": 0.435,
+      "end": 0.345,
+      "hold": 0.851,
+      "verdict_start": "a different face",
+      "verdict_end": "a different face",
+      "place_hold": 0.898,
+      "place_verdict": "held",
+      "place_start": 0.492,
+      "who": "tomas-reyl"
+     },
+     "drift": {
+      "lost": 0.52,
+      "missing": [
+       "build",
+       "cloth",
+       "cloud",
+       "jacket",
+       "landscape",
+       "material",
+       "metal",
+       "outdoor",
+       "photograph",
+       "stone",
+       "structure",
+       "weather"
+      ],
+      "kept": 12,
+      "last_caption": "Park, pavilion, man, coat, sweater, pants, shoes, leaves, grass, path, bench, lamp, trees, sky, rain, autumn, day, light, gazebo, foliage, ground, person."
+     },
+     "warnings": [],
+     "prompt": "A static wide shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, stands in the scene, while what moves here moves: leaves; leaves drift across the frame, a city park with "
+    },
+    {
+     "id": "t607302517",
+     "engine": "ltx",
+     "seed": 266663916,
+     "created": "07:26",
+     "file": "takes/350/ltx_t607302517.mp4",
+     "poster": "takes/350/ltx_t607302517.png",
+     "strip": "takes/350/ltx_t607302517_strip.png",
+     "duration": 4.88,
+     "fps": 24,
+     "qc": [
+      "camera: tilt up 11% - done by the studio (tilt)",
+      "sound borrowed from take t595554809 of shot 150 - the render was too quiet (mean -43 dB)",
+      "identity: same person, start 0.64, end 0.60; place held (0.87 first to last)"
+     ],
+     "cam_measured": {
+      "zoom": 1.004,
+      "pan": 0.003,
+      "tilt": -0.109,
+      "roll": -0.09,
+      "camera": "tilt up 11%",
+      "confidence": "high",
+      "post": {
+       "move": "tilt",
+       "amount": -0.1,
+       "zoom_start": 1.14,
+       "zoom_end": 1.14
+      }
+     },
+     "identity": {
+      "start": 0.637,
+      "end": 0.601,
+      "hold": 0.856,
+      "verdict_start": "same person",
+      "verdict_end": "same person",
+      "place_hold": 0.874,
+      "place_verdict": "held",
+      "place_start": 0.482,
+      "who": "tomas-reyl"
+     },
+     "drift": {
+      "lost": 0.52,
+      "missing": [
+       "build",
+       "cloth",
+       "cloud",
+       "landscape",
+       "material",
+       "metal",
+       "outdoor",
+       "person",
+       "photograph",
+       "stone",
+       "structure",
+       "weather"
+      ],
+      "kept": 12,
+      "last_caption": "Park, pavilion, man, jacket, pants, shoes, leaves, bench, grass, path, trees, sky, rain, autumn, daylight, light, lamp, foliage, ground."
+     },
+     "warnings": [],
+     "prompt": "A static wide shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, stands in the scene, while what moves here moves: leaves; leaves drift across the frame, a city park with "
+    },
+    {
+     "id": "t607614766",
+     "engine": "ltx",
+     "seed": 986283583,
+     "created": "07:31",
+     "file": "takes/350/ltx_t607614766.mp4",
+     "poster": "takes/350/ltx_t607614766.png",
+     "strip": "takes/350/ltx_t607614766_strip.png",
+     "duration": 4.88,
+     "fps": 24,
+     "qc": [
+      "camera: tilt up 10% - done by the studio (tilt)",
+      "the face is not tomas-reyl's from the first frame (identity 0.43); place held (0.92 first to last)",
+      "sound borrowed from take t595554809 of shot 150 - the render was too quiet (mean -47 dB)"
+     ],
+     "cam_measured": {
+      "zoom": 0.994,
+      "pan": 0.0,
+      "tilt": -0.1,
+      "roll": 0.13,
+      "camera": "tilt up 10%",
+      "confidence": "high",
+      "post": {
+       "move": "tilt",
+       "amount": -0.1,
+       "zoom_start": 1.14,
+       "zoom_end": 1.14
+      }
+     },
+     "identity": {
+      "start": 0.429,
+      "end": 0.323,
+      "hold": 0.708,
+      "verdict_start": "a different face",
+      "verdict_end": "a different face",
+      "place_hold": 0.922,
+      "place_verdict": "held",
+      "place_start": 0.495,
+      "who": "tomas-reyl"
+     },
+     "drift": {
+      "lost": 0.4,
+      "missing": [
+       "build",
+       "landscape",
+       "material",
+       "metal",
+       "outdoor",
+       "pant",
+       "photograph",
+       "stone",
+       "weather",
+       "wood"
+      ],
+      "kept": 15,
+      "last_caption": "Park, pavilion, man, jacket, sweater, grass, trees, leaves, bench, path, rain, sky, clouds, light, day, yellow, grey, green, brown, autumn, foliage, structure, clothing, person, ground."
+     },
+     "warnings": [],
+     "prompt": "A static wide shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, stands in the scene, while what moves here moves: leaves; leaves drift across the frame, a city park with "
+    }
+   ],
+   "picked": "t607302517",
+   "engine_notes": "",
+   "cam": {
+    "post": {
+     "move": "tilt",
+     "amount": 0.1,
+     "direction": "up",
+     "zoom": 1.14
+    }
+   },
+   "anchor_source": {
+    "character": "tomas-reyl",
+    "framing": "wide",
+    "place": "autumn-park",
+    "stand": 0.4,
+    "cx": 0.45,
+    "view": "turn_front",
+    "plate": "/home/k4shix/shared/comfy-studio/studio/foundry/places/autumn-park/day_wide.png",
+    "props": []
+   },
+   "anchor_check": {
+    "caption": "Park, pavilion, man, trees, bench, path, grass, leaves, jacket, pants, light, sky, clouds, ground, rain, autumn, day, photograph, building, structure, foliage, weather, person, clothing, material, wood, stone, metal, outdoor, landscape.",
+    "missing": [],
+    "when": 1788606822
+   }
+  },
+  "360": {
+   "id": "360",
+   "scene": "sc36",
+   "title": "wide - TOMAS",
+   "duration": 5.0,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/encyclopedia-check/assets/anchor_shot_360.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "TOMAS",
+     "action": "stands over the camera, looking down at it",
+     "background": "what moves here moves: leaves",
+     "motion": "",
+     "ambient": [
+      "leaves"
+     ],
+     "dialogue": {
+      "char": "",
+      "line": "",
+      "delivery": ""
+     }
+    }
+   ],
+   "sfx": "birdsong and leaves moving, a far-off dog",
+   "no_people": false,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t608139616",
+     "engine": "ltx",
+     "seed": 268795540,
+     "created": "07:55",
+     "file": "takes/360/ltx_t608139616.mp4",
+     "poster": "takes/360/ltx_t608139616.png",
+     "strip": "takes/360/ltx_t608139616_strip.png",
+     "duration": 4.96,
+     "fps": 24,
+     "qc": [
+      "camera: tilt up 11% - done by the studio (tilt)",
+      "the face is a different one by the end (identity 0.47 -> 0.35); place held (0.89 first to last)",
+      "sound borrowed from take t595554809 of shot 150 - the render was too quiet (mean -50 dB)"
+     ],
+     "cam_measured": {
+      "zoom": 1.018,
+      "pan": 0.0,
+      "tilt": -0.106,
+      "roll": 0.01,
+      "camera": "tilt up 11%",
+      "confidence": "high",
+      "post": {
+       "move": "tilt",
+       "amount": -0.1,
+       "zoom_start": 1.14,
+       "zoom_end": 1.14
+      }
+     },
+     "identity": {
+      "start": 0.474,
+      "end": 0.35,
+      "hold": 0.801,
+      "verdict_start": "uncertain",
+      "verdict_end": "a different face",
+      "place_hold": 0.892,
+      "place_verdict": "held",
+      "place_start": 0.486,
+      "who": "tomas-reyl"
+     },
+     "drift": {
+      "lost": 0.36,
+      "missing": [
+       "build",
+       "landscape",
+       "material",
+       "metal",
+       "outdoor",
+       "stone",
+       "structure",
+       "weather",
+       "wood"
+      ],
+      "kept": 16,
+      "last_caption": "Park, pavilion, man, jacket, sweater, pants, bench, path, grass, trees, lamp, sky, rain, clouds, autumn, day, light, photograph, foliage, ground, person, clothing."
+     },
+     "warnings": [],
+     "prompt": "A static wide shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, stands over the camera, looking down at it, while what moves here moves: leaves; leaves drift across the f"
+    },
+    {
+     "id": "t609304990",
+     "engine": "ltx",
+     "seed": 886499296,
+     "created": "07:59",
+     "file": "takes/360/ltx_t609304990.mp4",
+     "poster": "takes/360/ltx_t609304990.png",
+     "strip": "takes/360/ltx_t609304990_strip.png",
+     "duration": 4.96,
+     "fps": 24,
+     "qc": [
+      "camera: tilt up 11% - done by the studio (tilt)",
+      "sound borrowed from take t595554809 of shot 150 - the render was silent",
+      "identity: same person, start 0.66, end 0.57; place drifted (0.85 first to last)"
+     ],
+     "cam_measured": {
+      "zoom": 1.008,
+      "pan": 0.003,
+      "tilt": -0.107,
+      "roll": 0.14,
+      "camera": "tilt up 11%",
+      "confidence": "high",
+      "post": {
+       "move": "tilt",
+       "amount": -0.1,
+       "zoom_start": 1.14,
+       "zoom_end": 1.14
+      }
+     },
+     "identity": {
+      "start": 0.656,
+      "end": 0.566,
+      "hold": 0.707,
+      "verdict_start": "same person",
+      "verdict_end": "same person",
+      "place_hold": 0.849,
+      "place_verdict": "drifted",
+      "place_start": 0.49,
+      "who": "tomas-reyl"
+     },
+     "drift": {
+      "lost": 0.44,
+      "missing": [
+       "cloth",
+       "ground",
+       "landscape",
+       "material",
+       "metal",
+       "outdoor",
+       "photograph",
+       "stone",
+       "structure",
+       "weather",
+       "wood"
+      ],
+      "kept": 14,
+      "last_caption": "Park, pavilion, man, jacket, pants, sweater, shoes, bench, path, grass, trees, leaves, lamp, building, concrete, foliage, rain, autumn, daylight, clouds, light, lamp post, person."
+     },
+     "warnings": [],
+     "prompt": "A static wide shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, stands over the camera, looking down at it, while what moves here moves: leaves; leaves drift across the f"
+    },
+    {
+     "id": "t609579143",
+     "engine": "ltx",
+     "seed": 295046403,
+     "created": "08:13",
+     "file": "takes/360/ltx_t609579143.mp4",
+     "poster": "takes/360/ltx_t609579143.png",
+     "strip": "takes/360/ltx_t609579143_strip.png",
+     "duration": 4.96,
+     "fps": 24,
+     "qc": [
+      "camera: tilt up 10% - done by the studio (tilt)",
+      "the face is not tomas-reyl's from the first frame (identity 0.45); place drifted (0.81 first to last)",
+      "sound borrowed from take t595554809 of shot 150 - the render was too quiet (mean -54 dB)"
+     ],
+     "cam_measured": {
+      "zoom": 1.006,
+      "pan": 0.001,
+      "tilt": -0.104,
+      "roll": 0.09,
+      "camera": "tilt up 10%",
+      "confidence": "high",
+      "post": {
+       "move": "tilt",
+       "amount": -0.1,
+       "zoom_start": 1.14,
+       "zoom_end": 1.14
+      }
+     },
+     "identity": {
+      "start": 0.45,
+      "end": 0.357,
+      "hold": 0.815,
+      "verdict_start": "a different face",
+      "verdict_end": "a different face",
+      "place_hold": 0.812,
+      "place_verdict": "drifted",
+      "place_start": 0.487,
+      "who": "tomas-reyl"
+     },
+     "drift": {
+      "lost": 0.44,
+      "missing": [
+       "autumn",
+       "cloud",
+       "jacket",
+       "landscape",
+       "material",
+       "metal",
+       "outdoor",
+       "pant",
+       "photograph",
+       "stone",
+       "wood"
+      ],
+      "kept": 14,
+      "last_caption": "Park, pavilion, man, raincoat, sweater, bench, path, grass, trees, leaves, sky, rain, weather, daytime, light, lamp, structure, clothing, foliage, ground, building, person."
+     },
+     "warnings": [],
+     "prompt": "A static wide shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, stands over the camera, looking down at it, while what moves here moves: leaves; leaves drift across the f"
+    },
+    {
+     "id": "t610386661",
+     "engine": "ltx",
+     "seed": 835522732,
+     "created": "08:17",
+     "file": "takes/360/ltx_t610386661.mp4",
+     "poster": "takes/360/ltx_t610386661.png",
+     "strip": "takes/360/ltx_t610386661_strip.png",
+     "duration": 4.96,
+     "fps": 24,
+     "qc": [
+      "camera: tilt up 10% - done by the studio (tilt)",
+      "the face is not tomas-reyl's from the first frame (identity 0.44); place held (0.87 first to last)",
+      "sound borrowed from take t595554809 of shot 150 - the render was silent"
+     ],
+     "cam_measured": {
+      "zoom": 1.01,
+      "pan": 0.001,
+      "tilt": -0.103,
+      "roll": 0.35,
+      "camera": "tilt up 10%",
+      "confidence": "high",
+      "post": {
+       "move": "tilt",
+       "amount": -0.1,
+       "zoom_start": 1.14,
+       "zoom_end": 1.14
+      }
+     },
+     "identity": {
+      "start": 0.443,
+      "end": 0.321,
+      "hold": 0.771,
+      "verdict_start": "a different face",
+      "verdict_end": "a different face",
+      "place_hold": 0.87,
+      "place_verdict": "held",
+      "place_start": 0.488,
+      "who": "tomas-reyl"
+     },
+     "drift": {
+      "lost": 0.48,
+      "missing": [
+       "autumn",
+       "build",
+       "cloth",
+       "ground",
+       "landscape",
+       "material",
+       "metal",
+       "outdoor",
+       "photograph",
+       "structure",
+       "weather",
+       "wood"
+      ],
+      "kept": 13,
+      "last_caption": "Park, pavilion, man, jacket, sweater, pants, bench, path, grass, trees, lamp, pole, stone, brick, foliage, mist, rain, clouds, day, light, shadows, person, leaves."
+     },
+     "warnings": [],
+     "prompt": "A static wide shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, stands over the camera, looking down at it, while what moves here moves: leaves; leaves drift across the f"
+    }
+   ],
+   "picked": "t609304990",
+   "engine_notes": "",
+   "cam": {
+    "post": {
+     "move": "tilt",
+     "amount": 0.1,
+     "direction": "up",
+     "zoom": 1.14
+    }
+   },
+   "anchor_source": {
+    "character": "tomas-reyl",
+    "framing": "wide",
+    "place": "autumn-park",
+    "stand": 0.4,
+    "cx": 0.45,
+    "view": "turn_front",
+    "plate": "/home/k4shix/shared/comfy-studio/studio/foundry/places/autumn-park/day_wide.png",
+    "props": []
+   },
+   "anchor_check": {
+    "caption": "Park, pavilion, man, trees, bench, path, grass, leaves, jacket, pants, light, sky, clouds, ground, rain, autumn, day, photograph, building, structure, foliage, weather, person, clothing, material, wood, stone, metal, outdoor, landscape.",
+    "missing": [],
+    "when": 1788608139
+   }
+  },
+  "370": {
+   "id": "370",
+   "scene": "sc37",
+   "title": "medium - TOMAS / INES",
+   "duration": 6.0,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/encyclopedia-check/assets/anchor_shot_370.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "medium shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "TOMAS",
+     "action": "faces the other and speaks quietly",
+     "background": "what moves here moves: leaves",
+     "motion": "",
+     "ambient": [
+      "leaves"
+     ],
+     "dialogue": {
+      "char": "",
+      "line": "",
+      "delivery": ""
+     }
+    }
+   ],
+   "sfx": "birdsong and leaves moving, a far-off dog",
+   "no_people": false,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t610725930",
+     "engine": "ltx",
+     "seed": 304565731,
+     "created": "08:23",
+     "file": "takes/370/ltx_t610725930.mp4",
+     "poster": "takes/370/ltx_t610725930.png",
+     "strip": "takes/370/ltx_t610725930_strip.png",
+     "duration": 6.04,
+     "fps": 24,
+     "qc": [
+      "camera: tilt up 20%",
+      "the face is a different one by the end (identity 0.63 -> 0.35); place drifted (0.82 first to last)",
+      "sound borrowed from take t595554809 of shot 150 - the render was silent",
+      "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.89 left=0.11 right=0.00)"
+     ],
+     "cam_measured": {
+      "zoom": 0.996,
+      "pan": -0.047,
+      "tilt": -0.204,
+      "roll": -0.5,
+      "camera": "tilt up 20%",
+      "confidence": "high"
+     },
+     "identity": {
+      "start": 0.633,
+      "end": 0.353,
+      "hold": 0.485,
+      "verdict_start": "same person",
+      "verdict_end": "a different face",
+      "place_hold": 0.821,
+      "place_verdict": "drifted",
+      "place_start": 0.478,
+      "who": "tomas-reyl"
+     },
+     "drift": {
+      "lost": 0.5,
+      "missing": [
+       "boot",
+       "build",
+       "foliage",
+       "footwear",
+       "ground",
+       "path",
+       "pavilion",
+       "person",
+       "sweater",
+       "weather"
+      ],
+      "kept": 10,
+      "last_caption": "Park, trees, men, coats, jacket, beanie, bench, lamp post, grass, sky, clouds, leaves, rain, autumn, daylight, shadows, clothing, fabric, wool, nylon, grey, yellow, brown, green, white, stone, concrete."
+     },
+     "warnings": [],
+     "prompt": "A static medium shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, faces the other and speaks quietly, while what moves here moves: leaves; leaves drift across the frame, "
+    },
+    {
+     "id": "t610989770",
+     "engine": "ltx",
+     "seed": 682219277,
+     "created": "08:27",
+     "file": "takes/370/ltx_t610989770.mp4",
+     "poster": "takes/370/ltx_t610989770.png",
+     "strip": "takes/370/ltx_t610989770_strip.png",
+     "duration": 5.96,
+     "fps": 24,
+     "qc": [
+      "camera: tilt up 16% - done by the studio (stabilise)",
+      "the face is a different one by the end (identity 0.61 -> 0.31); place drifted (0.83 first to last)",
+      "sound borrowed from take t595554809 of shot 150 - the render was silent",
+      "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.91 left=0.40 right=0.00)"
+     ],
+     "cam_measured": {
+      "zoom": 0.999,
+      "pan": -0.05,
+      "tilt": -0.156,
+      "roll": -0.12,
+      "camera": "tilt up 16%",
+      "confidence": "high",
+      "post": {
+       "move": "stabilise",
+       "amount": 0.1,
+       "zoom_start": 1.054,
+       "zoom_end": 1.0
+      }
+     },
+     "identity": {
+      "start": 0.614,
+      "end": 0.311,
+      "hold": 0.462,
+      "verdict_start": "same person",
+      "verdict_end": "a different face",
+      "place_hold": 0.828,
+      "place_verdict": "drifted",
+      "place_start": 0.479,
+      "who": "tomas-reyl"
+     },
+     "drift": {
+      "lost": 0.45,
+      "missing": [
+       "bench",
+       "boot",
+       "build",
+       "footwear",
+       "path",
+       "pavilion",
+       "rain",
+       "sweater",
+       "weather"
+      ],
+      "kept": 11,
+      "last_caption": "Park, trees, man, person, hoodie, beanie, raincoat, jacket, coat, streetlights, ground, leaves, sky, clouds, light, daylight, autumn, outdoors, clothing, foliage, branches, grass, shadows."
+     },
+     "warnings": [],
+     "prompt": "A static medium shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, faces the other and speaks quietly, while what moves here moves: leaves; leaves drift across the frame, "
+    },
+    {
+     "id": "t611257652",
+     "engine": "ltx",
+     "seed": 968243105,
+     "created": "08:32",
+     "file": "takes/370/ltx_t611257652.mp4",
+     "poster": "takes/370/ltx_t611257652.png",
+     "strip": "takes/370/ltx_t611257652_strip.png",
+     "duration": 6.0,
+     "fps": 24,
+     "qc": [
+      "camera: tilt up 13% - done by the studio (stabilise)",
+      "sound borrowed from take t595554809 of shot 150 - the render was silent",
+      "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.52 left=0.00 right=0.00)",
+      "the face is a different one by the end (identity 0.66 -> 0.40); place drifted (0.82 first to last)"
+     ],
+     "cam_measured": {
+      "zoom": 0.995,
+      "pan": -0.034,
+      "tilt": -0.131,
+      "roll": -0.2,
+      "camera": "tilt up 13%",
+      "confidence": "high",
+      "post": {
+       "move": "stabilise",
+       "amount": 0.1,
+       "zoom_start": 1.053,
+       "zoom_end": 1.0
+      }
+     },
+     "identity": {
+      "start": 0.66,
+      "end": 0.404,
+      "hold": 0.459,
+      "verdict_start": "same person",
+      "verdict_end": "a different face",
+      "place_hold": 0.824,
+      "place_verdict": "drifted",
+      "place_start": 0.472,
+      "who": "tomas-reyl"
+     },
+     "drift": {
+      "lost": 0.5,
+      "missing": [
+       "autumn",
+       "boot",
+       "build",
+       "cloth",
+       "footwear",
+       "ground",
+       "lamp",
+       "path",
+       "pavilion",
+       "sweater"
+      ],
+      "kept": 10,
+      "last_caption": "Park, trees, man, jacket, hoodie, shirt, grass, bench, foliage, leaves, sky, clouds, rain, weather, daylight, light, person, man."
+     },
+     "warnings": [],
+     "prompt": "A static medium shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, faces the other and speaks quietly, while what moves here moves: leaves; leaves drift across the frame, "
+    },
+    {
+     "id": "t611526601",
+     "engine": "ltx",
+     "seed": 467875503,
+     "created": "08:36",
+     "file": "takes/370/ltx_t611526601.mp4",
+     "poster": "takes/370/ltx_t611526601.png",
+     "strip": "takes/370/ltx_t611526601_strip.png",
+     "duration": 5.96,
+     "fps": 24,
+     "qc": [
+      "camera: tilt up 24% - done by the studio (stabilise)",
+      "the face is a different one by the end (identity 0.58 -> 0.30); place drifted (0.81 first to last)",
+      "sound borrowed from take t595554809 of shot 150 - the render was too quiet (mean -55 dB)",
+      "ends closer than it started - the person fills the frame edge at the end (top=0.04 bottom=0.86 left=0.36 right=0.00)"
+     ],
+     "cam_measured": {
+      "zoom": 1.001,
+      "pan": -0.001,
+      "tilt": -0.236,
+      "roll": -0.25,
+      "camera": "tilt up 24%",
+      "confidence": "high",
+      "post": {
+       "move": "stabilise",
+       "amount": 0.1,
+       "zoom_start": 1.064,
+       "zoom_end": 1.0
+      }
+     },
+     "identity": {
+      "start": 0.584,
+      "end": 0.298,
+      "hold": 0.374,
+      "verdict_start": "same person",
+      "verdict_end": "a different face",
+      "place_hold": 0.813,
+      "place_verdict": "drifted",
+      "place_start": 0.489,
+      "who": "tomas-reyl"
+     },
+     "drift": {
+      "lost": 0.35,
+      "missing": [
+       "boot",
+       "build",
+       "footwear",
+       "gras",
+       "pavilion",
+       "rain",
+       "sweater"
+      ],
+      "kept": 13,
+      "last_caption": "Park, trees, man, person, jacket, hoodie, grey shirt, leaves, path, sidewalk, bench, lamp post, sky, clouds, branches, ground, autumn, daylight, light, shadows, clothing, foliage, outdoors, weather, person in distance."
+     },
+     "warnings": [],
+     "prompt": "A static medium shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, faces the other and speaks quietly, while what moves here moves: leaves; leaves drift across the frame, "
+    }
+   ],
+   "picked": "t611257652",
+   "engine_notes": "",
+   "cam": {
+    "post": {
+     "move": "stabilise"
+    }
+   },
+   "anchor_source": {
+    "character": "tomas-reyl",
+    "framing": "medium",
+    "place": "autumn-park",
+    "stand": 0.22,
+    "cx": 0.6,
+    "view": "turn_front_three_quarter",
+    "plate": "/home/k4shix/shared/comfy-studio/studio/foundry/places/autumn-park/day_wide.png",
+    "props": [
+     {
+      "character": "ines-varga",
+      "view": "turn_back_three_quarter",
+      "stand": 0.06,
+      "cx": 0.2,
+      "ots": true
+     }
+    ]
+   },
+   "anchor_check": {
+    "caption": "Park, pavilion, benches, path, trees, grass, man, jacket, sweater, rain, sky, clouds, boots, leaves, light, lamp, buildings, ground, weather, day, autumn, person, clothing, footwear, foliage.",
+    "missing": [],
+    "when": 1788610725
+   }
+  },
+  "380": {
+   "id": "380",
+   "scene": "sc38",
+   "title": "wide - empty",
+   "duration": 6.0,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/foundry/places/autumn-park/day_wide.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "",
+     "action": "the place as it is, alive",
+     "background": "what moves here moves: leaves",
+     "motion": "",
+     "ambient": [
+      "leaves"
+     ],
+     "dialogue": {
+      "char": "",
+      "line": "",
+      "delivery": ""
+     }
+    }
+   ],
+   "sfx": "birdsong and leaves moving, a far-off dog",
+   "no_people": true,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t611881331",
+     "engine": "ltx",
+     "seed": 157076297,
+     "created": "08:41",
+     "file": "takes/380/ltx_t611881331.mp4",
+     "poster": "takes/380/ltx_t611881331.png",
+     "strip": "takes/380/ltx_t611881331_strip.png",
+     "duration": 5.88,
+     "fps": 24,
+     "qc": [
+      "camera: pan right 14% - done by the studio (pan)",
+      "sound borrowed from take t595554809 of shot 150 - the render was too quiet (mean -46 dB)"
+     ],
+     "cam_measured": {
+      "zoom": 0.986,
+      "pan": 0.142,
+      "tilt": 0.003,
+      "roll": 0.03,
+      "camera": "pan right 14%",
+      "confidence": "high",
+      "post": {
+       "move": "pan",
+       "amount": 0.12,
+       "zoom_start": 1.14,
+       "zoom_end": 1.14
+      }
+     },
+     "identity": null,
+     "drift": {
+      "lost": 0.28,
+      "missing": [
+       "bandstand",
+       "lawn",
+       "parkway",
+       "rain",
+       "shadow"
+      ],
+      "kept": 13,
+      "last_caption": "Park, pavilion, trees, grass, path, bench, leaves, pavement, structure, stone, metal, wood, autumn leaves, sky, clouds, light, lamp, lamp post, foliage, ground, weather, daylight, illumination."
+     },
+     "warnings": [],
+     "prompt": "A static wide shot: the place as it is, alive, while what moves here moves: leaves; leaves drift across the frame, a city park with winding paths, old trees and iron benches, lived-in and worn, under a flat overcast sky, a city park in autumn, wet leaves on the path, iron benches, a bandstand far off, overcast, the frame completely empty of people and hands. Photoreal cinematic film still, 35mm, d"
+    },
+    {
+     "id": "t612103095",
+     "engine": "ltx",
+     "seed": 101221115,
+     "created": "08:45",
+     "file": "takes/380/ltx_t612103095.mp4",
+     "poster": "takes/380/ltx_t612103095.png",
+     "strip": "takes/380/ltx_t612103095_strip.png",
+     "duration": 5.88,
+     "fps": 24,
+     "qc": [
+      "camera: pan right 14% - done by the studio (pan)",
+      "sound borrowed from take t595554809 of shot 150 - the render was too quiet (mean -49 dB)",
+      "people appeared in an empty shot (people)"
+     ],
+     "cam_measured": {
+      "zoom": 0.999,
+      "pan": 0.137,
+      "tilt": 0.005,
+      "roll": 0.46,
+      "camera": "pan right 14%",
+      "confidence": "high",
+      "post": {
+       "move": "pan",
+       "amount": 0.12,
+       "zoom_start": 1.14,
+       "zoom_end": 1.14
+      }
+     },
+     "identity": null,
+     "drift": {
+      "lost": 0.0,
+      "missing": [],
+      "kept": 18,
+      "last_caption": "Park, pavilion, bandstand, benches, path, grass, lawn, trees, leaves, lamp posts, lampp, pavement, ground, sky, rain, clouds, autumn, daylight, light, shadows, stone, metal, wood, grass clippings, puddles, water, foliage, branches, parkway, people, dog."
+     },
+     "warnings": [],
+     "prompt": "A static wide shot: the place as it is, alive, while what moves here moves: leaves; leaves drift across the frame, a city park with winding paths, old trees and iron benches, lived-in and worn, under a flat overcast sky, a city park in autumn, wet leaves on the path, iron benches, a bandstand far off, overcast, the frame completely empty of people and hands. Photoreal cinematic film still, 35mm, d"
+    },
+    {
+     "id": "t612322245",
+     "engine": "ltx",
+     "seed": 766994418,
+     "created": "08:49",
+     "file": "takes/380/ltx_t612322245.mp4",
+     "poster": "takes/380/ltx_t612322245.png",
+     "strip": "takes/380/ltx_t612322245_strip.png",
+     "duration": 5.88,
+     "fps": 24,
+     "qc": [
+      "camera: pan right 14% - done by the studio (pan)",
+      "sound borrowed from take t595554809 of shot 150 - the render was too quiet (mean -44 dB)"
+     ],
+     "cam_measured": {
+      "zoom": 1.008,
+      "pan": 0.142,
+      "tilt": 0.002,
+      "roll": 0.38,
+      "camera": "pan right 14%",
+      "confidence": "high",
+      "post": {
+       "move": "pan",
+       "amount": 0.12,
+       "zoom_start": 1.14,
+       "zoom_end": 1.14
+      }
+     },
+     "identity": null,
+     "drift": {
+      "lost": 0.06,
+      "missing": [
+       "parkway"
+      ],
+      "kept": 17,
+      "last_caption": "Park, pavilion, structure, bandstand, bench, path, grass, lawn, leaves, foliage, trees, branches, sky, clouds, stone, concrete, metal, wood, ground, sidewalk, autumn, season, weather, rain, drizzle, daylight, afternoon, light, shadows, lamp, lamp post, lamp posts, park bench, grass clippings."
+     },
+     "warnings": [],
+     "prompt": "A static wide shot: the place as it is, alive, while what moves here moves: leaves; leaves drift across the frame, a city park with winding paths, old trees and iron benches, lived-in and worn, under a flat overcast sky, a city park in autumn, wet leaves on the path, iron benches, a bandstand far off, overcast, the frame completely empty of people and hands. Photoreal cinematic film still, 35mm, d"
+    }
+   ],
+   "picked": "t612322245",
+   "engine_notes": "",
+   "cam": {
+    "post": {
+     "move": "pan",
+     "amount": 0.12,
+     "direction": "right",
+     "zoom": 1.14
+    }
+   },
+   "anchor_check": {
+    "caption": "Park, bandstand, benches, path, grass, trees, leaves, lamp posts, stone, metal, grass, lawn, foliage, ground, rain, autumn, daylight, shadows, light, lamps, parkway.",
+    "missing": [],
+    "when": 1788611881
+   }
+  },
+  "390": {
+   "id": "390",
+   "scene": "sc39",
+   "title": "wide - TOMAS / INES",
+   "duration": 6.0,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/encyclopedia-check/assets/anchor_shot_390.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "TOMAS",
+     "action": "walk toward the camera together, talking",
+     "background": "what moves here moves: leaves",
+     "motion": "walk",
+     "ambient": [
+      "leaves"
+     ],
+     "dialogue": {
+      "char": "TOMAS",
+      "line": "Last boat's not coming back tonight.",
+      "delivery": ""
+     }
+    }
+   ],
+   "sfx": "birdsong and leaves moving, a far-off dog",
+   "no_people": false,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t612993817",
+     "engine": "ltx",
+     "seed": 208261324,
+     "created": "09:01",
+     "file": "takes/390/ltx_t612993817.mp4",
+     "poster": "takes/390/ltx_t612993817.png",
+     "strip": "takes/390/ltx_t612993817_strip.png",
+     "duration": 6.01,
+     "fps": 24,
+     "qc": [
+      "camera: static - done by the studio (stabilise)",
+      "the face is a different one by the end (identity 0.57 -> 0.34); place held (0.87 first to last)"
+     ],
+     "cam_measured": {
+      "zoom": 1.007,
+      "pan": -0.002,
+      "tilt": 0.002,
+      "roll": -0.43,
+      "camera": "static",
+      "confidence": "high",
+      "post": {
+       "move": "stabilise",
+       "amount": 0.1,
+       "zoom_start": 1.122,
+       "zoom_end": 1.0
+      }
+     },
+     "identity": {
+      "start": 0.572,
+      "end": 0.34,
+      "hold": 0.482,
+      "verdict_start": "same person",
+      "verdict_end": "a different face",
+      "place_hold": 0.872,
+      "place_verdict": "held",
+      "place_start": 0.487,
+      "who": "tomas-reyl"
+     },
+     "drift": {
+      "lost": 0.5,
+      "missing": [
+       "autumn",
+       "boot",
+       "daylight",
+       "foliage",
+       "ground",
+       "pavement",
+       "pavilion",
+       "plant",
+       "weather"
+      ],
+      "kept": 9,
+      "last_caption": "Park, path, trees, man, woman, coats, sweater, rain jacket, pants, bench, grass, sky, clouds, trees, leaves, rain, day, light, shadows, people."
+     },
+     "warnings": [
+      "motion toward the camera - the axis a still cannot imply; it killed shots on every engine",
+      "beat 1 motion 'walk' is advisory on LTX - measured, prose does not direct the subject's action here. Pin the shot to enforce it"
+     ],
+     "prompt": "A static wide shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, walk toward the camera together, talking, who says in a level voice, \"Last boat's not coming back tonight."
+    },
+    {
+     "id": "t613260667",
+     "engine": "ltx",
+     "seed": 669480592,
+     "created": "09:04",
+     "file": "takes/390/ltx_t613260667.mp4",
+     "poster": "takes/390/ltx_t613260667.png",
+     "strip": "takes/390/ltx_t613260667_strip.png",
+     "duration": 6.01,
+     "fps": 24,
+     "qc": [
+      "camera: tilt up 36% - done by the studio (stabilise)",
+      "the face is a different one by the end (identity 0.53 -> 0.23); place changed (0.63 first to last)",
+      "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.71 left=0.00 right=0.00)"
+     ],
+     "cam_measured": {
+      "zoom": 0.998,
+      "pan": 0.005,
+      "tilt": -0.357,
+      "roll": -1.41,
+      "camera": "tilt up 36%",
+      "confidence": "high",
+      "post": {
+       "move": "stabilise",
+       "amount": 0.1,
+       "zoom_start": 1.166,
+       "zoom_end": 1.0
+      }
+     },
+     "identity": {
+      "start": 0.526,
+      "end": 0.225,
+      "hold": 0.426,
+      "verdict_start": "uncertain",
+      "verdict_end": "a different face",
+      "place_hold": 0.632,
+      "place_verdict": "changed",
+      "place_start": 0.459,
+      "who": "tomas-reyl"
+     },
+     "drift": {
+      "lost": 0.56,
+      "missing": [
+       "bench",
+       "boot",
+       "gras",
+       "ground",
+       "path",
+       "pavement",
+       "pavilion",
+       "plant",
+       "rain",
+       "weather"
+      ],
+      "kept": 8,
+      "last_caption": "Park, trees, man, coat, shirt, jacket, stain, beard, hair, sky, clouds, foliage, outdoors, autumn, daylight, light, yellow, gray, brown, green."
+     },
+     "warnings": [
+      "motion toward the camera - the axis a still cannot imply; it killed shots on every engine",
+      "beat 1 motion 'walk' is advisory on LTX - measured, prose does not direct the subject's action here. Pin the shot to enforce it"
+     ],
+     "prompt": "A static wide shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, walk toward the camera together, talking, who says in a level voice, \"Last boat's not coming back tonight."
+    },
+    {
+     "id": "t612993817v",
+     "engine": "ltx+vo",
+     "seed": 208261324,
+     "created": "09:04",
+     "file": "takes/390/ltx_t612993817_vo.mp4",
+     "poster": "takes/390/ltx_t612993817_vo.png",
+     "strip": "takes/390/ltx_t612993817_vo_strip.png",
+     "duration": 6.01,
+     "fps": 24,
+     "qc": [
+      "camera: static - done by the studio (stabilise)",
+      "the face is a different one by the end (identity 0.55 -> 0.39); place held (0.87 first to last)"
+     ],
+     "cam_measured": {
+      "zoom": 1.007,
+      "pan": -0.002,
+      "tilt": 0.002,
+      "roll": -0.43,
+      "camera": "static",
+      "confidence": "high",
+      "post": {
+       "move": "stabilise",
+       "amount": 0.1,
+       "zoom_start": 1.122,
+       "zoom_end": 1.0
+      }
+     },
+     "identity": {
+      "start": 0.547,
+      "end": 0.386,
+      "hold": 0.591,
+      "verdict_start": "uncertain",
+      "verdict_end": "a different face",
+      "place_hold": 0.872,
+      "place_verdict": "held",
+      "place_start": 0.487,
+      "who": "tomas-reyl"
+     },
+     "drift": {
+      "lost": 0.5,
+      "missing": [
+       "autumn",
+       "boot",
+       "daylight",
+       "foliage",
+       "ground",
+       "pavement",
+       "pavilion",
+       "plant",
+       "weather"
+      ],
+      "kept": 9,
+      "last_caption": "Park, path, trees, man, woman, coats, sweater, rain jacket, pants, bench, grass, sky, clouds, trees, leaves, rain, day, light, shadows, people."
+     },
+     "warnings": [
+      "motion toward the camera - the axis a still cannot imply; it killed shots on every engine",
+      "beat 1 motion 'walk' is advisory on LTX - measured, prose does not direct the subject's action here. Pin the shot to enforce it"
+     ],
+     "prompt": "A static wide shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, walk toward the camera together, talking, who says in a level voice, \"Last boat's not coming back tonight."
+    },
+    {
+     "id": "t613486716",
+     "engine": "ltx",
+     "seed": 844093031,
+     "created": "09:07",
+     "file": "takes/390/ltx_t613486716.mp4",
+     "poster": "takes/390/ltx_t613486716.png",
+     "strip": "takes/390/ltx_t613486716_strip.png",
+     "duration": 6.04,
+     "fps": 24,
+     "qc": [
+      "camera: static",
+      "the face is a different one by the end (identity 0.61 -> 0.33); place drifted (0.85 first to last)",
+      "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.36 left=0.00 right=0.00)"
+     ],
+     "cam_measured": {
+      "zoom": 1.017,
+      "pan": -0.006,
+      "tilt": -0.048,
+      "roll": -0.15,
+      "camera": "static",
+      "confidence": "high"
+     },
+     "identity": {
+      "start": 0.608,
+      "end": 0.325,
+      "hold": 0.6,
+      "verdict_start": "same person",
+      "verdict_end": "a different face",
+      "place_hold": 0.848,
+      "place_verdict": "drifted",
+      "place_start": 0.483,
+      "who": "tomas-reyl"
+     },
+     "drift": {
+      "lost": 0.5,
+      "missing": [
+       "autumn",
+       "boot",
+       "daylight",
+       "foliage",
+       "jacket",
+       "pavement",
+       "pavilion",
+       "plant",
+       "weather"
+      ],
+      "kept": 9,
+      "last_caption": "Park, path, trees, people, man, woman, raincoats, coat, pants, hat, bench, grass, leaves, sky, clouds, rain, day, light, shadows, branches, ground."
+     },
+     "warnings": [
+      "motion toward the camera - the axis a still cannot imply; it killed shots on every engine",
+      "beat 1 motion 'walk' is advisory on LTX - measured, prose does not direct the subject's action here. Pin the shot to enforce it"
+     ],
+     "prompt": "A static wide shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, walk toward the camera together, talking, who says in a level voice, \"Last boat's not coming back tonight."
+    },
+    {
+     "id": "t613670567",
+     "engine": "ltx",
+     "seed": 547263843,
+     "created": "09:11",
+     "file": "takes/390/ltx_t613670567.mp4",
+     "poster": "takes/390/ltx_t613670567.png",
+     "strip": "takes/390/ltx_t613670567_strip.png",
+     "duration": 6.01,
+     "fps": 24,
+     "qc": [
+      "camera: static - done by the studio (stabilise)",
+      "the face is a different one by the end (identity 0.54 -> 0.32); place drifted (0.83 first to last)",
+      "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.50 left=0.00 right=0.00)"
+     ],
+     "cam_measured": {
+      "zoom": 1.003,
+      "pan": -0.001,
+      "tilt": -0.001,
+      "roll": -0.04,
+      "camera": "static",
+      "confidence": "high",
+      "post": {
+       "move": "stabilise",
+       "amount": 0.1,
+       "zoom_start": 1.112,
+       "zoom_end": 1.0
+      }
+     },
+     "identity": {
+      "start": 0.543,
+      "end": 0.318,
+      "hold": 0.616,
+      "verdict_start": "uncertain",
+      "verdict_end": "a different face",
+      "place_hold": 0.834,
+      "place_verdict": "drifted",
+      "place_start": 0.494,
+      "who": "tomas-reyl"
+     },
+     "drift": {
+      "lost": 0.28,
+      "missing": [
+       "boot",
+       "foliage",
+       "pavement",
+       "pavilion",
+       "weather"
+      ],
+      "kept": 13,
+      "last_caption": "Park, path, trees, man, woman, coat, jacket, hoodie, sweater, grass, bench, building, stone, brick, leaves, sky, clouds, rain, autumn, daylight, shadows, clothing, plants, ground, outdoor, person."
+     },
+     "warnings": [
+      "motion toward the camera - the axis a still cannot imply; it killed shots on every engine",
+      "beat 1 motion 'walk' is advisory on LTX - measured, prose does not direct the subject's action here. Pin the shot to enforce it"
+     ],
+     "prompt": "A static wide shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, walk toward the camera together, talking, who says in a level voice, \"Last boat's not coming back tonight."
+    }
+   ],
+   "picked": "t612993817v",
+   "engine_notes": "",
+   "cam": {
+    "post": {
+     "move": "stabilise"
+    }
+   },
+   "anchor_source": {
+    "character": "tomas-reyl",
+    "framing": "wide",
+    "place": "autumn-park",
+    "stand": 0.4,
+    "cx": 0.38,
+    "view": "turn_front_three_quarter",
+    "plate": "/home/k4shix/shared/comfy-studio/studio/foundry/places/autumn-park/day_wide.png",
+    "props": [
+     {
+      "character": "ines-varga",
+      "view": "turn_front_three_quarter",
+      "stand": 0.4,
+      "cx": 0.62
+     }
+    ]
+   },
+   "anchor_check": {
+    "caption": "Park, path, benches, pavilion, trees, leaves, man, man, coat, jacket, rain jacket, boots, grass, ground, sky, clouds, weather, autumn, daylight, light, foliage, plants, ground, pavement.",
+    "missing": [],
+    "when": 1788612993
    }
   }
  }
