@@ -1906,10 +1906,23 @@ def _pin_job(jid, fid, shid, change, seconds, seed, force=False, hold_feet=None)
         CM.pin_shot(start, end, prompt, dest, seconds=seconds, seed=seed, force=True)
         f = F.load(fid)
         sh = f.shot(shid)
+        # measured like any other take: the camera (no post move on a pin) and the face
+        pin_qc = []
+        try:
+            pin_cam, _cn = _camera_pass(jid, sh, dest, "cam")
+            if _cn:
+                pin_qc.append(_cn)
+            pin_ident, _in, _if = _identity_pass(jid, f, sh, dest, pin_cam)
+            if _in:
+                pin_qc.append(_in)
+        except Exception as e:
+            pin_cam, pin_ident = None, None
+            _log(jid, "pin measurements unavailable: %s" % str(e)[:100])
         sh.setdefault("takes", []).append({
             "id": tid, "engine": "h3-pinned", "file": rel,
             "duration": CM.h3_length(seconds) / 24.0, "fps": 24,
-            "seed": seed, "qc": [], "warnings": [],
+            "seed": seed, "qc": pin_qc, "warnings": [],
+            "cam_measured": pin_cam, "identity": pin_ident,
             "pin": {"change": change, "rate": round(rate, 4),
                     "end": "assets/pin_end_%s.png" % shid}})
         sh["picked"] = tid

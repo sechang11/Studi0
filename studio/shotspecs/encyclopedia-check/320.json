@@ -1,0 +1,67 @@
+{
+ "invariants": [
+  {
+   "id": "the_people_are_these_people",
+   "title": "The people are these people",
+   "rule": "TOMAS, from their packs, are in the start picture; no one else.",
+   "why": "identity comes from the composited anchor, not from the engine's prior",
+   "check": {
+    "kind": "anchor_contains",
+    "value": "anchor_shot_320"
+   }
+  },
+  {
+   "id": "the_place_is_autumn_park",
+   "title": "The place is autumn-park",
+   "rule": "The background is the autumn-park plate day_wide and stays that place for the whole take.",
+   "why": "words that name what the plate lacks make the engine rewrite it",
+   "check": {
+    "kind": "qc_clean"
+   }
+  },
+  {
+   "id": "camera_tilt_up",
+   "title": "Camera: tilt up",
+   "rule": "The camera tilts up - the engine is asked to hold still and the move is done by the studio after the render, then measured.",
+   "why": "an engine cannot be asked for a camera move (measured: a locked-off sentence still pushed in 3 of 3); arithmetic can",
+   "check": {
+    "kind": "camera",
+    "want": "tilts up"
+   }
+  },
+  {
+   "id": "length",
+   "title": "Length",
+   "rule": "5 seconds, within the measured envelope.",
+   "why": "resolution and length trade inside a fixed envelope",
+   "check": {
+    "kind": "duration_between",
+    "min": 3.5,
+    "max": 6.5
+   }
+  }
+ ],
+ "flair": [
+  {
+   "id": "seed",
+   "title": "Seed",
+   "note": "free - the variants differ by seed"
+  },
+  {
+   "id": "motion",
+   "title": "Motion",
+   "note": "none named"
+  },
+  {
+   "id": "ambient",
+   "title": "Ambient",
+   "note": "leaves"
+  }
+ ],
+ "shot": "320",
+ "title": "wide",
+ "beat": "stands over the camera, looking down at it",
+ "build": {
+  "script": "Make this shot: composed anchor, tilt up, from the encyclopedia entry 'low_angle_wide'"
+ }
+}

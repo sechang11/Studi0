@@ -1,0 +1,66 @@
+{
+ "invariants": [
+  {
+   "id": "nobody_is_in_the_frame",
+   "title": "Nobody is in the frame",
+   "rule": "The shot is the place alone.",
+   "why": "an empty shot that grows a person is a different shot",
+   "check": {
+    "kind": "qc_clean"
+   }
+  },
+  {
+   "id": "the_place_is_autumn_park",
+   "title": "The place is autumn-park",
+   "rule": "The background is the autumn-park plate day_wide and stays that place for the whole take.",
+   "why": "words that name what the plate lacks make the engine rewrite it",
+   "check": {
+    "kind": "qc_clean"
+   }
+  },
+  {
+   "id": "camera_whip",
+   "title": "Camera: whip",
+   "rule": "The camera whips across - the engine is asked to hold still and the move is done by the studio after the render, then measured.",
+   "why": "an engine cannot be asked for a camera move (measured: a locked-off sentence still pushed in 3 of 3); arithmetic can",
+   "check": {
+    "kind": "camera",
+    "want": "pans"
+   }
+  },
+  {
+   "id": "length",
+   "title": "Length",
+   "rule": "4 seconds, within the measured envelope.",
+   "why": "resolution and length trade inside a fixed envelope",
+   "check": {
+    "kind": "duration_between",
+    "min": 2.5,
+    "max": 5.5
+   }
+  }
+ ],
+ "flair": [
+  {
+   "id": "seed",
+   "title": "Seed",
+   "note": "free - the variants differ by seed"
+  },
+  {
+   "id": "motion",
+   "title": "Motion",
+   "note": "none named"
+  },
+  {
+   "id": "ambient",
+   "title": "Ambient",
+   "note": "leaves"
+  }
+ ],
+ "shot": "270",
+ "title": "wide",
+ "beat": "the place as it is, alive",
+ "build": {
+  "script": "Make this shot: plate anchor, whip, from the encyclopedia entry 'whip_pan'"
+ }
+}

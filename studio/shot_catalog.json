@@ -64,7 +64,17 @@
    "cannot": [
     "a camera move by prose - use a post move"
    ],
-   "measured": "LTX drifts 9-17% on a static prompt; stabilise brings it to 1.00"
+   "measured": "LTX drifts 9-17% on a static prompt; stabilise brings it to 1.00",
+   "checked": {
+    "when": "2026-09-05 02:12",
+    "built": true,
+    "camera": "static",
+    "identity": null,
+    "notes": [
+     "camera: static - done by the studio (stabilise)"
+    ],
+    "spec": "2 problem(s) in the film"
+   }
   },
   {
    "id": "wide_with_people",
@@ -89,7 +99,18 @@
    "cannot": [
     "asking them to stand still - LTX may walk them"
    ],
-   "measured": "two-shot composite about six minutes; walks appear on 'talking quietly' prose"
+   "measured": "two-shot composite about six minutes; walks appear on 'talking quietly' prose",
+   "checked": {
+    "when": "2026-09-05 02:24",
+    "built": true,
+    "camera": "static",
+    "identity": "uncertain",
+    "notes": [
+     "camera: static - done by the studio (stabilise)",
+     "identity: uncertain by the end (0.58 -> 0.52)"
+    ],
+    "spec": "3 problem(s) in the film"
+   }
   },
   {
    "id": "medium_single",
@@ -112,7 +133,15 @@
    "cannot": [
     "the engine's push-in without stabilise"
    ],
-   "measured": "drift 39-72% on some seeds regardless of the sentence"
+   "measured": "drift 39-72% on some seeds regardless of the sentence",
+   "checked": {
+    "when": "2026-09-05 02:34",
+    "built": false,
+    "camera": null,
+    "identity": null,
+    "notes": [],
+    "spec": "4 problem(s) in the film"
+   }
   },
   {
    "id": "close_up",
@@ -137,7 +166,20 @@
     "'turns toward' - the whole head turns away",
     "sound from the engine (a face fills the frame: silent) - the place's sound is borrowed"
    ],
-   "measured": "composed in 18-20 s; photographic close-ups -48 to -60 dB before the borrow"
+   "measured": "composed in 18-20 s; photographic close-ups -48 to -60 dB before the borrow",
+   "checked": {
+    "when": "2026-09-05 02:40",
+    "built": true,
+    "camera": "tilt down 72% (a face fills the frame; the camera is hard to tell from the head)",
+    "identity": "unmeasured (the camera moved too much to follow the head)",
+    "notes": [
+     "camera: tilt down 72% (a face fills the frame; the camera is hard to tell from the head) (",
+     "identity: same person at the start (0.70); unmeasured (the camera moved too much to follow",
+     "ends closer than it started - the person fills the frame edge at the end (top=0.16 bottom=",
+     "words not in the picture: held"
+    ],
+    "spec": "6 problem(s) in the film"
+   }
   },
   {
    "id": "two_shot_medium",
@@ -160,7 +202,19 @@
    "cannot": [
     "'stand' - they may walk toward camera (LTX law)"
    ],
-   "measured": "336 s from the page for two variants and a retry"
+   "measured": "336 s from the page for two variants and a retry",
+   "checked": {
+    "when": "2026-09-05 02:48",
+    "built": true,
+    "camera": "static",
+    "identity": "uncertain",
+    "notes": [
+     "camera: static - done by the studio (stabilise)",
+     "identity: uncertain by the end (0.60 -> 0.58); place held (0.87 first to last)",
+     "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom="
+    ],
+    "spec": "7 problem(s) in the film"
+   }
   },
   {
    "id": "insert_detail",
@@ -182,7 +236,17 @@
     "the plate itself when the engine keeps adding people (rig fallback)"
    ],
    "cannot": [],
-   "measured": "the rig's push measured 1.117 for 1.12 asked"
+   "measured": "the rig's push measured 1.117 for 1.12 asked",
+   "checked": {
+    "when": "2026-09-05 02:55",
+    "built": true,
+    "camera": "push in 15%",
+    "identity": null,
+    "notes": [
+     "camera: push in 15% - done by the studio (push)"
+    ],
+    "spec": "9 problem(s) in the film"
+   }
   },
   {
    "id": "push_in",
@@ -203,7 +267,18 @@
    "cannot": [
     "a push beyond ~1.4 without softening (it is a crop)"
    ],
-   "measured": "post push 1.15 on a take that drifted 1.16 measured 1.31 - the two compound"
+   "measured": "post push 1.15 on a take that drifted 1.16 measured 1.31 - the two compound",
+   "checked": {
+    "when": "2026-09-05 03:05",
+    "built": true,
+    "camera": "push in 13%",
+    "identity": "uncertain",
+    "notes": [
+     "camera: push in 13% - done by the studio (push)",
+     "identity: uncertain by the end (0.68 -> 0.61); place held (0.88 first to last)"
+    ],
+    "spec": "10 problem(s) in the film"
+   }
   },
   {
    "id": "pull_back",
@@ -224,7 +299,18 @@
    "cannot": [
     "pulling wider than the render"
    ],
-   "measured": ""
+   "measured": "",
+   "checked": {
+    "when": "2026-09-05 03:11",
+    "built": true,
+    "camera": "pull back 12%",
+    "identity": "uncertain",
+    "notes": [
+     "camera: pull back 12% - done by the studio (pull)",
+     "identity: uncertain by the end (0.67 -> 0.61); place held (0.93 first to last)"
+    ],
+    "spec": "11 problem(s) in the film"
+   }
   },
   {
    "id": "pan",
@@ -245,7 +331,18 @@
    "cannot": [
     "a pan wider than the room the zoom gives"
    ],
-   "measured": ""
+   "measured": "",
+   "checked": {
+    "when": "2026-09-05 03:21",
+    "built": true,
+    "camera": "pan right 14%",
+    "identity": null,
+    "notes": [
+     "camera: pan right 14% - done by the studio (pan)",
+     "people appeared in an empty shot (people)"
+    ],
+    "spec": "13 problem(s) in the film"
+   }
   },
   {
    "id": "tilt",
@@ -264,7 +361,18 @@
     "10% of the frame height, eased"
    ],
    "cannot": [],
-   "measured": ""
+   "measured": "",
+   "checked": {
+    "when": "2026-09-05 03:29",
+    "built": true,
+    "camera": "tilt down 12%",
+    "identity": "same person",
+    "notes": [
+     "camera: tilt down 12% - done by the studio (tilt)",
+     "identity: same person, start 0.58, end 0.64; place held (0.92 first to last)"
+    ],
+    "spec": "14 problem(s) in the film"
+   }
   },
   {
    "id": "orbit",
@@ -285,7 +393,18 @@
    "cannot": [
     "true parallax - the plate is flat"
    ],
-   "measured": ""
+   "measured": "",
+   "checked": {
+    "when": "2026-09-05 03:38",
+    "built": true,
+    "camera": "pan right 11%",
+    "identity": "uncertain",
+    "notes": [
+     "camera: pan right 11% - done by the studio (orbit)",
+     "identity: uncertain by the end (0.64 -> 0.52); place held (0.91 first to last)"
+    ],
+    "spec": "15 problem(s) in the film"
+   }
   },
   {
    "id": "handheld",
@@ -304,7 +423,19 @@
     "the shake is the same every time for the same seed"
    ],
    "cannot": [],
-   "measured": ""
+   "measured": "",
+   "checked": {
+    "when": "2026-09-05 03:46",
+    "built": true,
+    "camera": "static",
+    "identity": "uncertain",
+    "notes": [
+     "camera: static - done by the studio (handheld)",
+     "identity: uncertain by the end (0.63 -> 0.55); place held (0.86 first to last)",
+     "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom="
+    ],
+    "spec": "16 problem(s) in the film"
+   }
   },
   {
    "id": "locked_off",
@@ -325,7 +456,18 @@
    "cannot": [
     "the price is the end frame's crop everywhere"
    ],
-   "measured": "a 'locked off on a tripod' sentence changed nothing (3 of 3)"
+   "measured": "a 'locked off on a tripod' sentence changed nothing (3 of 3)",
+   "checked": {
+    "when": "2026-09-05 03:49",
+    "built": true,
+    "camera": "static",
+    "identity": "same person",
+    "notes": [
+     "camera: static - done by the studio (stabilise)",
+     "identity: same person, start 0.67, end 0.64; place held (0.92 first to last)"
+    ],
+    "spec": "17 problem(s) in the film"
+   }
   },
   {
    "id": "line_on_camera",
@@ -350,7 +492,18 @@
     "lip sync to the pack's words (the mouth is the engine's)",
     "the engine's own speech (wrong or absent - measured on 26 clips)"
    ],
-   "measured": "VO pass about a minute; native track ducked to 0.12"
+   "measured": "VO pass about a minute; native track ducked to 0.12",
+   "checked": {
+    "when": "2026-09-05 04:01",
+    "built": true,
+    "camera": "static",
+    "identity": "same person",
+    "notes": [
+     "camera: static - done by the studio (stabilise)",
+     "identity: same person, start 0.66, end 0.63; place drifted (0.84 first to last)"
+    ],
+    "spec": "18 problem(s) in the film"
+   }
   },
   {
    "id": "line_close",
@@ -374,7 +527,20 @@
    "cannot": [
     "'turns toward' (the head turns away)"
    ],
-   "measured": "456 s from the page to a voiced pick"
+   "measured": "456 s from the page to a voiced pick",
+   "checked": {
+    "when": "2026-09-05 04:11",
+    "built": true,
+    "camera": "static (a face fills the frame; the camera is hard to tell from the head)",
+    "identity": "same person",
+    "notes": [
+     "camera: static (a face fills the frame; the camera is hard to tell from the head) (uncerta",
+     "identity: same person, start 0.70, end 0.64; place drifted (0.84 first to last)",
+     "ends closer than it started - the person fills the frame edge at the end (top=0.12 bottom=",
+     "words not in the picture: held"
+    ],
+    "spec": "19 problem(s) in the film"
+   }
   },
   {
    "id": "reaction",
@@ -394,7 +560,20 @@
     "the face"
    ],
    "cannot": [],
-   "measured": ""
+   "measured": "",
+   "checked": {
+    "when": "2026-09-05 04:19",
+    "built": true,
+    "camera": "tilt down 70% (a face fills the frame; the camera is hard to tell from the head)",
+    "identity": "same person",
+    "notes": [
+     "camera: tilt down 70% (a face fills the frame; the camera is hard to tell from the head) (",
+     "identity: same person, start 0.70, end 0.67; place held (0.90 first to last)",
+     "sound borrowed from take t595554809 of shot 150 - the render was silent",
+     "ends closer than it started - the person fills the frame edge at the end (top=0.10 bottom="
+    ],
+    "spec": "21 problem(s) in the film"
+   }
   },
   {
    "id": "turn_in_place",
@@ -417,7 +596,19 @@
    "cannot": [
     "a pin below the change floor - Make renders on LTX instead, never forces"
    ],
-   "measured": "pins from whole figures judged yes; forced pins judged no"
+   "measured": "pins from whole figures judged yes; forced pins judged no",
+   "checked": {
+    "when": "2026-09-05 04:27",
+    "built": true,
+    "camera": "static",
+    "identity": "same person",
+    "notes": [
+     "camera: static - done by the studio (stabilise)",
+     "identity: same person, start 0.69, end 0.65; place held (0.91 first to last)",
+     "sound borrowed from take t595554809 of shot 150 - the render was too quiet (mean -45 dB)"
+    ],
+    "spec": "22 problem(s) in the film"
+   }
   },
   {
    "id": "crouch",
@@ -439,7 +630,15 @@
    "cannot": [
     "a crouch from a knee-cropped pack - repaired first"
    ],
-   "measured": "the director judged knee-cropped crouches 'partly'"
+   "measured": "the director judged knee-cropped crouches 'partly'",
+   "checked": {
+    "when": "2026-09-05 04:35",
+    "built": true,
+    "camera": null,
+    "identity": null,
+    "notes": [],
+    "spec": "23 problem(s) in the film"
+   }
   },
   {
    "id": "look_up",
@@ -462,7 +661,19 @@
    "cannot": [
     "pinning (below the floor) - LTX prose instead"
    ],
-   "measured": "anime close-up held the look through the take"
+   "measured": "anime close-up held the look through the take",
+   "checked": {
+    "when": "2026-09-05 04:43",
+    "built": true,
+    "camera": "push in 17% (a face fills the frame; the camera is hard to tell from the head)",
+    "identity": "same person",
+    "notes": [
+     "camera: push in 17% (a face fills the frame; the camera is hard to tell from the head) (un",
+     "identity: same person, start 0.70, end 0.70; place held (0.93 first to last)",
+     "ends closer than it started - the person fills the frame edge at the end (top=0.25 bottom="
+    ],
+    "spec": "25 problem(s) in the film"
+   }
   },
   {
    "id": "walk_to_camera",
@@ -485,7 +696,19 @@
    "cannot": [
     "the place through the walk (drift is likely)"
    ],
-   "measured": "H3 pinned walks regenerated a riverside path from frame 0, twice"
+   "measured": "H3 pinned walks regenerated a riverside path from frame 0, twice",
+   "checked": {
+    "when": "2026-09-05 04:56",
+    "built": true,
+    "camera": "static",
+    "identity": "a different face",
+    "notes": [
+     "camera: static - done by the studio (stabilise)",
+     "the face is a different one by the end (identity 0.66 -> 0.29); place drifted (0.78 first ",
+     "sound borrowed from take t595554809 of shot 150 - the render was too quiet (mean -47 dB)"
+    ],
+    "spec": "26 problem(s) in the film"
+   }
   },
   {
    "id": "reveal_by_pull",
@@ -504,7 +727,19 @@
     "the end frame is the composed wide"
    ],
    "cannot": [],
-   "measured": ""
+   "measured": "",
+   "checked": {
+    "when": "2026-09-05 05:05",
+    "built": true,
+    "camera": "pull back 22%",
+    "identity": "same person",
+    "notes": [
+     "camera: pull back 22% - done by the studio (pull)",
+     "identity: same person, start 0.63, end 0.65; place held (0.90 first to last)",
+     "sound borrowed from take t595554809 of shot 150 - the render was silent"
+    ],
+    "spec": "27 problem(s) in the film"
+   }
   },
   {
    "id": "reveal_by_tilt",
@@ -521,7 +756,19 @@
    },
    "keeps": [],
    "cannot": [],
-   "measured": ""
+   "measured": "",
+   "checked": {
+    "when": "2026-09-05 05:17",
+    "built": true,
+    "camera": "tilt up 10%",
+    "identity": "a different face",
+    "notes": [
+     "camera: tilt up 10% - done by the studio (tilt)",
+     "the face is a different one by the end (identity 0.50 -> 0.39); place held (0.88 first to ",
+     "sound borrowed from take t595554809 of shot 150 - the render was too quiet (mean -51 dB)"
+    ],
+    "spec": "28 problem(s) in the film"
+   }
   },
   {
    "id": "cutaway_detail",
@@ -541,7 +788,18 @@
     "nobody appears"
    ],
    "cannot": [],
-   "measured": ""
+   "measured": "",
+   "checked": {
+    "when": "2026-09-05 05:21",
+    "built": true,
+    "camera": "push in 18%",
+    "identity": null,
+    "notes": [
+     "camera: push in 18% - done by the studio (push)",
+     "sound borrowed from take t595554809 of shot 150 - the render was silent"
+    ],
+    "spec": "30 problem(s) in the film"
+   }
   },
   {
    "id": "empty_night",
@@ -566,7 +824,17 @@
     "the place"
    ],
    "cannot": [],
-   "measured": "empty shots fell to the rig when the engine kept adding people"
+   "measured": "empty shots fell to the rig when the engine kept adding people",
+   "checked": {
+    "when": "2026-09-05 05:30",
+    "built": true,
+    "camera": "static",
+    "identity": null,
+    "notes": [
+     "camera: static"
+    ],
+    "spec": "32 problem(s) in the film"
+   }
   },
   {
    "id": "time_passes",
@@ -592,7 +860,17 @@
     "people in it",
     "a time the place has no plate for"
    ],
-   "measured": "12 places have two or more wide plates; a night-to-late-night dissolve with push 1.06 measured 1.056; the boats sit differently in the two plates"
+   "measured": "12 places have two or more wide plates; a night-to-late-night dissolve with push 1.06 measured 1.056; the boats sit differently in the two plates",
+   "checked": {
+    "when": "2026-09-05 05:33",
+    "built": true,
+    "camera": "static",
+    "identity": null,
+    "notes": [
+     "camera: static"
+    ],
+    "spec": "35 problem(s) in the film"
+   }
   },
   {
    "id": "dutch_tilt",
@@ -613,7 +891,19 @@
    "cannot": [
     "a roll beyond ~15 degrees without heavy crop"
    ],
-   "measured": ""
+   "measured": "",
+   "checked": {
+    "when": "2026-09-05 05:41",
+    "built": true,
+    "camera": "roll -7.9 deg",
+    "identity": "uncertain",
+    "notes": [
+     "camera: roll -7.9 deg - done by the studio (roll)",
+     "identity: uncertain by the end (0.62 -> 0.55); place held (0.88 first to last)",
+     "sound borrowed from take t595554809 of shot 150 - the render was too quiet (mean -45 dB)"
+    ],
+    "spec": "36 problem(s) in the film"
+   }
   },
   {
    "id": "whip_pan",
@@ -634,7 +924,18 @@
    "cannot": [
     "true motion blur (a crop has none)"
    ],
-   "measured": "asked 0.25 at zoom 1.16, measured 0.16 - the zoom's room caps the travel"
+   "measured": "asked 0.25 at zoom 1.16, measured 0.16 - the zoom's room caps the travel",
+   "checked": {
+    "when": "2026-09-05 05:45",
+    "built": true,
+    "camera": "pan right 25%",
+    "identity": null,
+    "notes": [
+     "camera: pan right 25% - done by the studio (whip)",
+     "sound borrowed from take t595554809 of shot 150 - the render was too quiet (mean -52 dB)"
+    ],
+    "spec": "38 problem(s) in the film"
+   }
   },
   {
    "id": "over_the_shoulder",
@@ -668,7 +969,20 @@
     "the near figure's face (it is turned away by design)",
     "relighting the near figure (a relit back view came back as a face - it is tinted instead)"
    ],
-   "measured": "third build: the back and shoulder large in the near left, the speaker facing us behind (the near figure is sized 1.8x the frame - the depth pass cannot see the ground behind the shoulder); the first build relit the back view into a face, the second kept him at the speaker's distance"
+   "measured": "third build: the back and shoulder large in the near left, the speaker facing us behind (the near figure is sized 1.8x the frame - the depth pass cannot see the ground behind the shoulder); the first build relit the back view into a face, the second kept him at the speaker's distance",
+   "checked": {
+    "when": "2026-09-05 05:58",
+    "built": true,
+    "camera": "tilt up 19%",
+    "identity": "a different face",
+    "notes": [
+     "camera: tilt up 19%",
+     "the face is a different one by the end (identity 0.63 -> 0.33); place drifted (0.83 first ",
+     "sound borrowed from take t595554809 of shot 150 - the render was silent",
+     "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom="
+    ],
+    "spec": "40 problem(s) in the film"
+   }
   },
   {
    "id": "pov_drift",
@@ -689,7 +1003,18 @@
     "the drift is the same every time for the same seed"
    ],
    "cannot": [],
-   "measured": ""
+   "measured": "",
+   "checked": {
+    "when": "2026-09-05 06:03",
+    "built": true,
+    "camera": "static",
+    "identity": null,
+    "notes": [
+     "camera: static - done by the studio (handheld)",
+     "sound borrowed from take t595554809 of shot 150 - the render was silent"
+    ],
+    "spec": "42 problem(s) in the film"
+   }
   },
   {
    "id": "walk_and_talk",
@@ -715,7 +1040,19 @@
     "the place through the walk (drift likely)",
     "lip sync"
    ],
-   "measured": "two-shot walks read as walks; the place drifted 67-83% on some seeds"
+   "measured": "two-shot walks read as walks; the place drifted 67-83% on some seeds",
+   "checked": {
+    "when": "2026-09-05 06:15",
+    "built": true,
+    "camera": "pull back 15%",
+    "identity": "uncertain",
+    "notes": [
+     "3s of silence inside the film (at 3s, 4s, 5s)",
+     "camera: pull back 15% - done by the studio (stabilise)",
+     "identity: uncertain by the end (0.61 -> 0.51); place held (0.89 first to last)"
+    ],
+    "spec": "44 problem(s) in the film"
+   }
   },
   {
    "id": "montage_details",
@@ -736,7 +1073,18 @@
     "nobody appears"
    ],
    "cannot": [],
-   "measured": ""
+   "measured": "",
+   "checked": {
+    "when": "2026-09-05 06:19",
+    "built": true,
+    "camera": "push in 18%",
+    "identity": null,
+    "notes": [
+     "camera: push in 18% - done by the studio (push)",
+     "sound borrowed from take t595554809 of shot 150 - the render was silent"
+    ],
+    "spec": "46 problem(s) in the film"
+   }
   },
   {
    "id": "low_angle_wide",
@@ -758,7 +1106,19 @@
    "cannot": [
     "a true low camera (the plate's horizon is fixed)"
    ],
-   "measured": ""
+   "measured": "",
+   "checked": {
+    "when": "2026-09-05 06:31",
+    "built": true,
+    "camera": "tilt up 11%",
+    "identity": "a different face",
+    "notes": [
+     "camera: tilt up 11% - done by the studio (tilt)",
+     "the face is a different one by the end (identity 0.54 -> 0.45); place drifted (0.83 first ",
+     "sound borrowed from take t595554809 of shot 150 - the render was too quiet (mean -52 dB)"
+    ],
+    "spec": "47 problem(s) in the film"
+   }
   }
  ]
 }
