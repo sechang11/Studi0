@@ -1,0 +1,25 @@
+{
+ "id": "snap_pan",
+ "family": "moves",
+ "title": "Snap pan",
+ "purpose": "A pan that arrives fast and settles, as a person swinging a tripod head does.",
+ "build": {
+  "framings": [
+   "wide"
+  ],
+  "people": 1,
+  "camera": "snap pan",
+  "duration": 5,
+  "action": "stands in the scene",
+  "motion": ""
+ },
+ "keeps": [
+  "the snap and the settle"
+ ],
+ "cannot": [
+  "travel beyond the room the zoom gives it (capped at (1 - 1/z)/2 a side)"
+ ],
+ "measured": "the same solver as the dolly, damping 0.45 over a quarter of the clip",
+ "catalog": "snap_pan",
+ "hint": "A pan that arrives fast and settles, as a person swinging a tripod head does."
+}

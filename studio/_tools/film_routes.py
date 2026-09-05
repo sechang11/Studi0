@@ -831,15 +831,25 @@ POST_MOVES = {
     "handheld": {"move": "handheld", "amp": 14, "zoom": 1.06},
     "roll": {"move": "roll", "amount": 8},
     "whip": {"move": "whip", "amount": 0.2, "zoom": 1.25},
+    # with mass: a second-order system instead of a smoothstep, so the move overshoots
+    # and settles the way a heavy thing pushed by a person does (see postmove._spring)
+    "dolly in": {"move": "push", "amount": 1.18, "ease": "spring", "zeta": 0.65, "settle": 0.55},
+    "crash zoom": {"move": "push", "amount": 1.34, "ease": "spring", "zeta": 0.35, "settle": 0.25},
+    "snap pan": {"move": "pan", "amount": 0.16, "zoom": 1.2, "ease": "spring", "zeta": 0.45, "settle": 0.3},
+    "whip with a bounce": {"move": "whip", "amount": 0.22, "zoom": 1.25, "ease": "spring", "zeta": 0.3, "settle": 0.4},
 }
 CAMERA_VERB = {"static": "does not move", "pinned": "does not move", "push in": "pushes in", "pull back": "pulls back",
                "pan": "pans", "pan left": "pans left", "pan right": "pans right", "tilt up": "tilts up", "tilt down": "tilts down",
                "orbit": "arcs a little", "handheld": "breathes, handheld", "roll": "leans (a Dutch tilt)", "whip": "whips across",
-               "follow": "follows", "circle": "circles"}
+               "follow": "follows", "circle": "circles",
+               "dolly in": "dollies in and settles", "crash zoom": "slams in and rings",
+               "snap pan": "snaps across and settles", "whip with a bounce": "whips across and bounces"}
 CAMERA_CHECK = {"static": "camera is static", "push in": "camera pushes in", "pull back": "camera pulls back",
                 "pan": "camera pans", "pan left": "camera pans left", "pan right": "camera pans right",
                 "tilt up": "camera tilts up", "tilt down": "camera tilts down", "orbit": "camera pans",
-                "handheld": None, "pinned": "camera is static", "roll": None, "whip": "camera pans"}
+                "handheld": None, "pinned": "camera is static", "roll": None, "whip": "camera pans",
+                "dolly in": "camera pushes in", "crash zoom": "camera pushes in",
+                "snap pan": "camera pans", "whip with a bounce": "camera pans"}
 
 
 COMFY_PY = os.path.expanduser("~/ComfyUI/venv/bin/python")

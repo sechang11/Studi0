@@ -1273,6 +1273,75 @@
     "a push past 1.35x on top of an engine that already drifted"
    ],
    "measured": "the angle is performed before the render and the move after it; they do not interfere"
+  },
+  {
+   "id": "dolly_in",
+   "family": "moves",
+   "title": "Dolly in (with mass)",
+   "purpose": "A push that behaves like a heavy thing pushed by a person: it eases in, slightly overshoots and settles.",
+   "build": {
+    "framings": [
+     "medium"
+    ],
+    "people": 1,
+    "camera": "dolly in",
+    "duration": 5,
+    "action": "stands in the scene",
+    "motion": ""
+   },
+   "keeps": [
+    "the move, arithmetic after the render, measured against the curve it was asked for"
+   ],
+   "cannot": [
+    "a move on top of an engine drift past 1.35x (the take keeps its own move and says so)"
+   ],
+   "measured": "asked 1.18 with damping 0.65; the measured per-step curve tracks the asked curve to 0.026"
+  },
+  {
+   "id": "crash_zoom",
+   "family": "moves",
+   "title": "Crash zoom",
+   "purpose": "A hard, fast push that slams to its mark and rings out. The oldest cheap thrill in the box.",
+   "build": {
+    "framings": [
+     "medium"
+    ],
+    "people": 1,
+    "camera": "crash zoom",
+    "duration": 5,
+    "action": "stands in the scene",
+    "motion": ""
+   },
+   "keeps": [
+    "the slam and the ring-out: the drive takes a quarter of the clip, the rest is the settle"
+   ],
+   "cannot": [
+    "resolution at the end of it (a 1.34x crop of the render is a 1.34x crop)"
+   ],
+   "measured": "asked 1.34, peak 1.393 asked and 1.364 measured, settling to 1.29"
+  },
+  {
+   "id": "snap_pan",
+   "family": "moves",
+   "title": "Snap pan",
+   "purpose": "A pan that arrives fast and settles, as a person swinging a tripod head does.",
+   "build": {
+    "framings": [
+     "wide"
+    ],
+    "people": 1,
+    "camera": "snap pan",
+    "duration": 5,
+    "action": "stands in the scene",
+    "motion": ""
+   },
+   "keeps": [
+    "the snap and the settle"
+   ],
+   "cannot": [
+    "travel beyond the room the zoom gives it (capped at (1 - 1/z)/2 a side)"
+   ],
+   "measured": "the same solver as the dolly, damping 0.45 over a quarter of the clip"
   }
  ]
 }

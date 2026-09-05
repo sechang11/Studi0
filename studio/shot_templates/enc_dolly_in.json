@@ -1,0 +1,25 @@
+{
+ "id": "dolly_in",
+ "family": "moves",
+ "title": "Dolly in (with mass)",
+ "purpose": "A push that behaves like a heavy thing pushed by a person: it eases in, slightly overshoots and settles.",
+ "build": {
+  "framings": [
+   "medium"
+  ],
+  "people": 1,
+  "camera": "dolly in",
+  "duration": 5,
+  "action": "stands in the scene",
+  "motion": ""
+ },
+ "keeps": [
+  "the move, arithmetic after the render, measured against the curve it was asked for"
+ ],
+ "cannot": [
+  "a move on top of an engine drift past 1.35x (the take keeps its own move and says so)"
+ ],
+ "measured": "asked 1.18 with damping 0.65; the measured per-step curve tracks the asked curve to 0.026",
+ "catalog": "dolly_in",
+ "hint": "A push that behaves like a heavy thing pushed by a person: it eases in, slightly overshoots and settles."
+}
