@@ -337,6 +337,27 @@
    ],
    "place": "harbour-night",
    "plate": "night_wide"
+  },
+  {
+   "id": "sc15",
+   "title": "build 00:52",
+   "location": "the deck of a small weathered boat, rigging and coiled rope, lived-in and worn, in thick fog, a small fishing harbour at night, fog on the water, sodium lamps along the quay, moored boats",
+   "time_of_day": "",
+   "weather": "fog",
+   "ambience": "water against the hull and rigging knocking, a fog-damped stillness",
+   "palette": "",
+   "music": "",
+   "cast_present": [
+    "INES",
+    "TOMAS"
+   ],
+   "no_people": false,
+   "anchor": "",
+   "shots": [
+    "220"
+   ],
+   "place": "harbour-night",
+   "plate": "night_wide"
   }
  ],
  "shots": {
@@ -2953,7 +2974,7 @@
    "title": "medium - INES / TOMAS",
    "duration": 6.0,
    "aspect": "wide",
-   "anchor": "scene",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/builder-test/assets/anchor_shot_210.png",
    "keyframe_prompt": "",
    "beats": [
     {
@@ -2978,13 +2999,263 @@
    "no_people": false,
    "enhance": true,
    "transition_out": "cut",
-   "takes": [],
-   "picked": "",
+   "takes": [
+    {
+     "id": "t583414790",
+     "engine": "ltx",
+     "seed": 902923456,
+     "created": "00:48",
+     "file": "takes/210/ltx_t583414790.mp4",
+     "poster": "takes/210/ltx_t583414790.png",
+     "strip": "takes/210/ltx_t583414790_strip.png",
+     "duration": 6.04,
+     "fps": 24,
+     "qc": [
+      "camera: push in 83%, pan left 7%, tilt up 18% (uncertain)",
+      "identity: uncertain at the start (0.59); unmeasured (the camera moved too much to follow the head)",
+      "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.51 left=0.00 right=0.00)"
+     ],
+     "cam_measured": {
+      "zoom": 1.831,
+      "pan": -0.072,
+      "tilt": -0.183,
+      "roll": 0.31,
+      "camera": "push in 83%, pan left 7%, tilt up 18%",
+      "confidence": "low"
+     },
+     "identity": {
+      "start": 0.591,
+      "end": null,
+      "hold": null,
+      "verdict_start": "uncertain",
+      "verdict_end": "unmeasured (the camera moved too much to follow the head)",
+      "who": "ines-varga"
+     },
+     "drift": {
+      "lost": 0.38,
+      "missing": [
+       "boot",
+       "fish",
+       "hats",
+       "mist",
+       "nets",
+       "night",
+       "nylon",
+       "pier",
+       "rail"
+      ],
+      "kept": 15,
+      "last_caption": "Ship, harbor, person, woman, hat, coat, jacket, shirt, sweater, wool, fabric, wood, masts, ropes, rigging, metal, water, sea, sky, clouds, fog, dusk, evening, light, lamps, shadows, darkness, gray, brown, blue, black."
+     },
+     "warnings": [],
+     "prompt": "A static medium shot: a tall, athletic woman, in their fifties, olive skin, an angular face with a sharp jaw, grey eyes, hooded eyes, strong dark brows, grey short neat hair, a thin scar through one brow, a calm, unreadable bearing, a harbour master in a dark wool coat and a grey knit cap, salt-weathered, hands in her pockets, faces the other and speaks quietly, while what moves here moves: water;"
+    }
+   ],
+   "picked": "t583414790",
    "engine_notes": "",
    "cam": {
     "post": {
      "move": "stabilise"
     }
+   },
+   "anchor_source": {
+    "character": "ines-varga",
+    "framing": "medium",
+    "place": "harbour-night",
+    "stand": 0.22,
+    "cx": 0.38,
+    "view": "turn_front_three_quarter",
+    "plate": "/home/k4shix/shared/comfy-studio/studio/foundry/places/harbour-night/night_wide.png",
+    "props": [
+     {
+      "character": "tomas-reyl",
+      "view": "turn_back_three_quarter",
+      "stand": 0.06,
+      "cx": 0.22,
+      "ots": true
+     }
+    ]
+   },
+   "anchor_check": {
+    "caption": "Harbor, fishing boats, pier, deck, rope, nets, railing, masts, rigging, ships, water, fog, sky, coats, hats, boots, man, woman, wood, metal, nylon, yellow, black, gray, blue, light, lamps, lanterns, glow, night, darkness, mist.",
+    "missing": [],
+    "when": 1788583414
+   }
+  },
+  "220": {
+   "id": "220",
+   "scene": "sc15",
+   "title": "medium - INES / TOMAS",
+   "duration": 6.0,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/builder-test/assets/anchor_shot_220.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "medium shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "INES",
+     "action": "faces the other and speaks quietly",
+     "background": "what moves here moves: water",
+     "motion": "",
+     "ambient": [
+      "water"
+     ],
+     "dialogue": {
+      "char": "",
+      "line": "",
+      "delivery": ""
+     }
+    }
+   ],
+   "sfx": "water against the hull and rigging knocking, a fog-damped stillness",
+   "no_people": false,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t584210828",
+     "engine": "ltx",
+     "seed": 241188378,
+     "created": "01:01",
+     "file": "takes/220/ltx_t584210828.mp4",
+     "poster": "takes/220/ltx_t584210828.png",
+     "strip": "takes/220/ltx_t584210828_strip.png",
+     "duration": 6.01,
+     "fps": 24,
+     "qc": [
+      "camera: roll -2.5 deg - done by the studio (stabilise)",
+      "the face is not ines-varga's from the first frame (identity 0.24)",
+      "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.45 left=0.00 right=0.00)"
+     ],
+     "cam_measured": {
+      "zoom": 0.989,
+      "pan": -0.007,
+      "tilt": -0.034,
+      "roll": -2.47,
+      "camera": "roll -2.5 deg",
+      "confidence": "high",
+      "post": {
+       "move": "stabilise",
+       "amount": 0.1,
+       "zoom_start": 1.239,
+       "zoom_end": 1.0
+      }
+     },
+     "identity": {
+      "start": 0.237,
+      "end": 0.483,
+      "hold": 0.52,
+      "verdict_start": "a different face",
+      "verdict_end": "a different face",
+      "who": "ines-varga"
+     },
+     "drift": {
+      "lost": 0.3,
+      "missing": [
+       "build",
+       "cabl",
+       "dock",
+       "fish",
+       "hats",
+       "people",
+       "pier"
+      ],
+      "kept": 16,
+      "last_caption": "Ship, boat, sea, ocean, water, sky, clouds, mast, rigging, ropes, net, ship's wheel, deck, woman, person, woman\u2019s face, woman\u2019s eyes, wool hat, coat, jacket, buttons, sweater, hair, skin, light, glow, fog, mist, darkness, night, dusk, lamps, bulbs, metal, wood, fabric, clothing, grey, black, blue, white."
+     },
+     "warnings": [],
+     "prompt": "A static medium shot: a tall, athletic woman, in their fifties, olive skin, an angular face with a sharp jaw, grey eyes, hooded eyes, strong dark brows, grey short neat hair, a thin scar through one brow, a calm, unreadable bearing, a harbour master in a dark wool coat and a grey knit cap, salt-weathered, hands in her pockets, faces the other and speaks quietly, while what moves here moves: water;"
+    },
+    {
+     "id": "t584482414",
+     "engine": "ltx",
+     "seed": 424367628,
+     "created": "01:05",
+     "file": "takes/220/ltx_t584482414.mp4",
+     "poster": "takes/220/ltx_t584482414.png",
+     "strip": "takes/220/ltx_t584482414_strip.png",
+     "duration": 6.01,
+     "fps": 24,
+     "qc": [
+      "camera: pan left 7%, tilt up 14%, roll -4.9 deg - done by the studio (stabilise)",
+      "the face is not ines-varga's from the first frame (identity 0.23)",
+      "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.48 left=0.00 right=0.00)"
+     ],
+     "cam_measured": {
+      "zoom": 1.021,
+      "pan": -0.074,
+      "tilt": -0.138,
+      "roll": -4.9,
+      "camera": "pan left 7%, tilt up 14%, roll -4.9 deg",
+      "confidence": "high",
+      "post": {
+       "move": "stabilise",
+       "amount": 0.1,
+       "zoom_start": 1.232,
+       "zoom_end": 1.0
+      }
+     },
+     "identity": {
+      "start": 0.225,
+      "end": 0.344,
+      "hold": 0.693,
+      "verdict_start": "a different face",
+      "verdict_end": "a different face",
+      "who": "ines-varga"
+     },
+     "drift": {
+      "lost": 0.48,
+      "missing": [
+       "build",
+       "cabl",
+       "dock",
+       "fish",
+       "hats",
+       "jacket",
+       "lamp",
+       "mist",
+       "people",
+       "pier",
+       "wood"
+      ],
+      "kept": 12,
+      "last_caption": "Ship, harbor, woman, coat, sweater, hood, face, hair, mast, rigging, ropes, water, ocean, night, lights, reflections, darkness, shadows, metal, wool, fabric, clothing, person, vessel."
+     },
+     "warnings": [],
+     "prompt": "A static medium shot: a tall, athletic woman, in their fifties, olive skin, an angular face with a sharp jaw, grey eyes, hooded eyes, strong dark brows, grey short neat hair, a thin scar through one brow, a calm, unreadable bearing, a harbour master in a dark wool coat and a grey knit cap, salt-weathered, hands in her pockets, faces the other and speaks quietly, while what moves here moves: water;"
+    }
+   ],
+   "picked": "t584210828",
+   "engine_notes": "",
+   "cam": {
+    "post": {
+     "move": "stabilise"
+    }
+   },
+   "anchor_source": {
+    "character": "ines-varga",
+    "framing": "medium",
+    "place": "harbour-night",
+    "stand": 0.22,
+    "cx": 0.38,
+    "view": "turn_front_three_quarter",
+    "plate": "/home/k4shix/shared/comfy-studio/studio/foundry/places/harbour-night/night_wide.png",
+    "props": [
+     {
+      "character": "tomas-reyl",
+      "view": "turn_back_three_quarter",
+      "stand": 0.06,
+      "cx": 0.22,
+      "ots": true
+     }
+    ]
+   },
+   "anchor_check": {
+    "caption": "Harbor, docks, pier, boat, fishing boats, people, man, woman, jackets, hats, ropes, wood, deck, metal, water, ocean, fog, mist, night, lamps, lights, glow, reflections, masts, rigging, ropes, cables, buildings, harbor lights, yellow, blue, gray, brown.",
+    "missing": [],
+    "when": 1788584210
    }
   }
  }
