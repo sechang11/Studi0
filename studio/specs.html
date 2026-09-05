@@ -631,12 +631,21 @@ async function boot(){
   sel.innerHTML=d.films.map(f=>`<option value="${f.id}">${f.title} — ${f.shots} shots, ${f.specs} specs</option>`).join('');
   const q=new URLSearchParams(location.search);
   const want=d.films.find(f=>f.id===q.get('film'));
-  const pref=want||d.films.find(f=>f.specs>0)||d.films[0];
-  if(pref){sel.value=pref.id; await loadFilm(); if(want&&q.get('shot')) await open_(q.get('shot'));}
+  /* a refresh keeps you on the film and shot you were on; a ?film= URL still wins */
+  let saved=null; try{saved=d.films.find(f=>f.id===localStorage.getItem('specs_film'));}catch(e){}
+  const pref=want||saved||d.films.find(f=>f.specs>0)||d.films[0];
+  if(pref){
+    sel.value=pref.id;
+    const t=await loadFilm();
+    let sh=q.get('shot');
+    if(!want&&!sh){try{sh=localStorage.getItem('specs_shot_'+pref.id);}catch(e){}}
+    if(sh&&t&&t.shots.some(s=>s.shot===sh)) await open_(sh);
+  }
   sel.onchange=()=>{SHOT=null; loadFilm();};
 }
 async function loadFilm(){
   FILM=$('#film').value;
+  try{localStorage.setItem('specs_film',FILM);}catch(e){}
   const d=await api('tree/'+FILM);
   $('#runtime').textContent=d.runtime+'s total';
   $('#tl').innerHTML=d.shots.map(s=>`
@@ -665,6 +674,7 @@ async function loadFilm(){
   if(me){applyLock(me); if(me.picked!==PICKED||!TAKES.length) loadPlayer(me);}
   if(!SHOT&&d.shots.length) open_(d.shots[0].shot);
   if(!MEDIA.length) loadMedia();
+  return d;
 }
 let TAKES=[], PICKED='', PLAYING='', PLAY_ON_LOAD=false;
 /* ── playing the film ────────────────────────────────────────────────────────────────
@@ -905,6 +915,7 @@ function loadPlayer(s){
   const pick=TAKES.find(t=>t.id===PICKED)||TAKES[TAKES.length-1];
   PLAYING=pick.id;
   // build the list BEFORE playing, or playTake has no rows to highlight or scroll to
+  measuredLine();
   $('#takes').innerHTML=TAKES.map(t=>`
     <div class="tk${t.id===PLAYING?' on':''}${t.id===PICKED?' pick':''}"
          onclick="playTake('${t.id}')" title="${t.id}">
@@ -986,6 +997,7 @@ function applyLock(s){
 async function open_(shot, fromReel, autoplay){
   if(DIRTY&&!confirm('Unsaved changes on '+SHOT+'. Discard them?')) return;
   SHOT=shot; DIRTY=false; PLAY_ON_LOAD=!!autoplay;
+  try{localStorage.setItem('specs_shot_'+FILM,shot);}catch(e){}
   TAKES=[];                           // force the player to reload for the new shot
   const d=await api('md/'+FILM+'/'+shot);
   VARTAIL=null;                       // a new shot's text arrives whole
@@ -1074,6 +1086,16 @@ async function moreVariants(){
     MORE=null; loadFilm();
   };
   setTimeout(tick,4000);
+}
+async function measuredLine(){
+  try{
+    const d=(await fetch('/api/film/'+FILM+'/shot/'+SHOT).then(r=>r.json())).shot;
+    const tk=(d.takes||[]).find(t=>t.id===d.picked); if(!tk) return;
+    const cam=(tk.cam_measured||{}).camera, idn=tk.identity||{};
+    const bits=[]; if(cam) bits.push('camera, measured: '+cam); if(idn.verdict_end||idn.verdict_start) bits.push('face: '+(idn.verdict_end||idn.verdict_start)+(idn.end!=null?' ('+idn.start+' → '+idn.end+')':''));
+    let el=document.getElementById('measured'); if(!el){ el=document.createElement('div'); el.id='measured'; el.className='sub'; el.style.margin='4px 0 6px'; const h=document.querySelector('#takes'); if(h&&h.parentNode) h.parentNode.insertBefore(el,h); }
+    el.textContent=bits.join(' · ');
+  }catch(e){}
 }
 async function runCheck(){
   const r=await api('check/'+FILM);
