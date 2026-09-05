@@ -1,12 +1,12 @@
 # The encyclopedia, checked
 
-Every entry built once through the builder into `encyclopedia-check` (Tomas, Ines as the second; the autumn park by day, the harbour by night), one variant. Generated 2026-09-05 06:31.
+Every entry built once through the builder into `encyclopedia-check` (Tomas, Ines as the second; the autumn park by day, the harbour by night), one variant. Regenerated 2026-09-05 06:49.
 
 | entry | built | s | picked engine | camera measured | face | notes |
 |---|---|---|---|---|---|---|
 | establishing_wide | yes | 144 | ltx | static | None | camera: static - done by the studio (stabilise) |
 | wide_with_people | yes | 712 | ltx | static | uncertain | camera: static - done by the studio (stabilise); identity: uncertain by the end (0.58 -> 0.52) |
-| medium_single | NO (job vanished (a reload?)) | 600 |  |  |  |  |
+| medium_single | yes |  | ltx | static | uncertain | camera: static - done by the studio (stabilise); identity: uncertain by the end (0.62 -> 0.51); place drifted (0.82 firs |
 | close_up | yes | 336 | ltx | tilt down 72% (a face fills the frame; the camera is hard to tell from the head) | unmeasured (the camera moved too much to follow the head) | camera: tilt down 72% (a face fills the frame; the camera is hard to tell from the head) (; identity: same person at the |
 | two_shot_medium | yes | 512 | ltx | static | uncertain | camera: static - done by the studio (stabilise); identity: uncertain by the end (0.60 -> 0.58); place held (0.87 first t |
 | insert_detail | yes | 392 | ltx | push in 15% | None | camera: push in 15% - done by the studio (push) |

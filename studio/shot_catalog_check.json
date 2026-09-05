@@ -47,14 +47,43 @@
   "spec": "3 problem(s) in the film"
  },
  "medium_single": {
-  "when": "2026-09-05 02:34",
-  "seconds": 600,
-  "built": false,
-  "error": "job vanished (a reload?)",
+  "when": "2026-09-05 06:49",
+  "seconds": null,
+  "built": true,
+  "error": null,
   "film": "encyclopedia-check",
-  "shots": [],
-  "takes": [],
-  "spec": "4 problem(s) in the film"
+  "shots": [
+   "330"
+  ],
+  "takes": [
+   {
+    "id": "t604520702",
+    "engine": "ltx",
+    "picked": false,
+    "camera": "tilt up 25%",
+    "identity": "a different face",
+    "notes": [
+     "camera: tilt up 25% - done by the studio (stabilise)",
+     "the face is a different one by the end (identity 0.60 -> 0.32); place drifted (0.78 first ",
+     "sound borrowed from take t595554809 of shot 150 - the render was too quiet (mean -49 dB)",
+     "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom="
+    ]
+   },
+   {
+    "id": "t604870015",
+    "engine": "ltx",
+    "picked": true,
+    "camera": "static",
+    "identity": "uncertain",
+    "notes": [
+     "camera: static - done by the studio (stabilise)",
+     "identity: uncertain by the end (0.62 -> 0.51); place drifted (0.82 first to last)",
+     "sound borrowed from take t595554809 of shot 150 - the render was too quiet (mean -49 dB)",
+     "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom="
+    ]
+   }
+  ],
+  "spec": "repaired from the film after a lost job result"
  },
  "close_up": {
   "when": "2026-09-05 02:40",
