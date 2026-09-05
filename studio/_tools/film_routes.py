@@ -3088,6 +3088,35 @@ def clock_advice(motion, seconds):
             % (d["takes"], safe, d["lost_the_face"], float(seconds)))
 
 
+def head_pixels(src, width=1920):
+    """how many pixels tall the composed head will be in a frame this wide, or None"""
+    box = _head_box(src)
+    if not box:
+        return None
+    try:
+        CM = _compose_mod()
+        p = src.get("plate") or ""
+        if not (isinstance(p, str) and p.startswith("/")):
+            p = CM.plate_for(src["place"], src.get("plate") or None)
+            if isinstance(p, tuple):
+                p = p[0]
+        from PIL import Image
+        W, H = Image.open(p).size
+        return int((box[3] - box[1]) * width * H / float(W))
+    except Exception:
+        return None
+
+
+def _stand_for(framing, data):
+    """how far back the subject stands: the framing's default, or what the caller asked"""
+    want = data.get("stand")
+    try:
+        v = float(want)
+        return max(0.05, min(0.95, v))
+    except (TypeError, ValueError):
+        return FRAMING_STAND[framing]
+
+
 def _cam_block(tpl_build, post, data):
     """what the shot asks of the camera, and whether the studio may cut it at the face"""
     cam = {"rig": tpl_build["rig"]} if tpl_build.get("rig") else ({"post": dict(post)} if post else {})
@@ -3283,7 +3312,7 @@ def _build_job(jid, data):
                 sub = _job("compose", film=fid, shot=shid)
                 _compose_anchor_job(sub, fid, shid, cid0, place, plate or None,
                                     _view,
-                                    FRAMING_STAND[fr] * _stand_scale, float(tpl_build.get("subject_cx") or (0.38 if layers else 0.45)),
+                                    _stand_for(fr, data) * _stand_scale, float(tpl_build.get("subject_cx") or (0.38 if layers else 0.45)),
                                     layers or None, framing=fr)
                 with _LOCK:
                     err = JOBS.get(sub, {}).get("error")

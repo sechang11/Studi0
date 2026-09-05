@@ -25,6 +25,9 @@ jobs.json: [{"portrait": ..., "video": ..., "box": [x0,y0,x1,y1] fractions or nu
              "close": bool, "cam": {"zoom":..,"pan":..,"tilt":..} or null, "id": ...,
              "plate": <the scene's plate, optional -> place_hold/place_verdict/place_start>,
              "still": <a picture instead of a video> -> only `start` is measured,
+    A head under MIN_HEAD_PX pixels comes back unmeasured rather than judged: measured by
+    rendering one shot at two distances, 135 px of head scores 0.66 and 65 px scores 0.30 for
+    the same person, so a verdict there is about the pixels and not about the face.
              "window0": {"zoom", "cx", "cy"} - the studio's post move at the first frame, so the
                         anchor-frame head box is carried into the cropped frame,
              "post_curve": [[zoom, cx, cy], ...] - the studio's own move window at nine
@@ -52,6 +55,10 @@ import subprocess  # noqa: E402
 
 MODEL = os.path.join(COMFY, "models", "clip_vision", "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors")
 SAME, UNSURE = 0.62, 0.50
+# Measured by rendering the same shot at two distances: at 135 px of head the face scores
+# 0.655-0.675, at 65 px the same face scores 0.27-0.32.  Below this the encoder is looking at
+# a smudge and any verdict it gives is about the pixels, not the person.
+MIN_HEAD_PX = 100
 _M = None
 
 
@@ -242,6 +249,13 @@ def run(job):
         c0 = crop(first, box)
         if c0 is None:
             return {**out, "error": "the head box left the frame"}
+        head_px = min(c0.size)
+        if head_px < MIN_HEAD_PX:
+            # not a verdict: the head is too few pixels for the encoder to say anything
+            return {**out, "start": None, "end": None,
+                    "verdict_start": "unmeasured (the head is only %d px in the frame)" % head_px,
+                    "verdict_end": "unmeasured (the head is only %d px in the frame)" % head_px,
+                    "head_px": head_px, "box": [round(b, 3) for b in box]}
         cam = job.get("cam") or {}
         if job.get("close"):
             # a face that fills the frame IS what the camera ruler follows, so the measured
@@ -256,7 +270,8 @@ def run(job):
         c1 = None if too_far else crop(last, cb)
         p, e0 = embed(portrait), embed(c0)
         start = float((p * e0).sum())
-        out.update({"start": round(start, 3), "verdict_start": verdict(start, job.get("close")), "box": [round(b, 3) for b in box]})
+        out.update({"start": round(start, 3), "verdict_start": verdict(start, job.get("close")),
+                    "head_px": head_px, "box": [round(b, 3) for b in box]})
         if c1 is None:
             out.update({"end": None, "hold": None, "verdict_end": "unmeasured (the camera moved too much to follow the head)"})
         else:

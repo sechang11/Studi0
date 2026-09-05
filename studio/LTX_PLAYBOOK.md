@@ -2110,3 +2110,22 @@ would be read through. identity.py can score a still, the compositor records wha
 scored, and nothing is gated on it. A 67-against-79 predictor would throw away good anchors
 and keep bad ones while looking rigorous, which is the failure mode this whole project is
 built to avoid.
+
+**And the last measurement of the block explains the first.** The framing table said a
+close-up keeps the face on 17 of 19 takes and a full-length framing on 1 of 6, which invited
+the obvious guess: head pixels. It could not be tested from the takes already made, because
+the builder derives the standing distance from the framing and never varies it - every wide
+shot on the box stands in the same place. So the builder was given the dial and the same wide
+shot of the same person was rendered at two distances, three seeds each:
+
+  stand 0.22   head 135 px in the delivered frame   the composed face scores 0.655, 0.66, 0.675
+  stand 0.62   head  65 px                          the same face scores 0.27, 0.30, 0.30, 0.32
+
+Not a degraded face - an unreadable one. And the ruler had been calling it a different face,
+which is a fault, which sends Make to render it again on another seed. A seed cannot make a
+head bigger. Below a hundred pixels of head the ruler now declines to judge, and the studio
+stops re-rolling shots for a failure that is geometry rather than luck.
+
+That is the shape of the whole block in one finding: a ruler that reports confidently outside
+the range it can actually read does more harm than no ruler at all, and the only way to know
+the range is to render the two cases and look at the numbers.
