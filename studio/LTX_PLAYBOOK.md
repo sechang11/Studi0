@@ -1866,3 +1866,14 @@ not a lighting change - and in all three the walk ended in a medium or close
 framing the shot never asked for. The ruler is right three of three where it
 disagrees with the wish. A walk toward the camera is the one entry the
 studio cannot yet promise the face on; the shelf says so.
+
+**A reading to distrust, for the next block.** The shelf's checked line on
+*Crouch (pinned)* says "face: a different face". The identity box is carried
+through the measured camera, not through the subject's own motion: in a crouch
+the head drops a third of the frame and the box stays where the head was, so
+the ruler reads the chest. Until the box follows the figure (a face detector,
+or the pin's end frame geometry, which the studio already has for pinned
+shots), an in-place motion that moves the head - crouch, sit, bow, lie down -
+should carry its end box from the pin's end frame, and the reading on those
+entries is not to be trusted. The walk entries and the rest of the shelf
+read correctly; this one is the ruler's blind spot, named.
