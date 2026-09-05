@@ -1009,6 +1009,7 @@ def _camera_pass(jid, sh, dest, eng):
     framing = ((sh.get("beats") or [{}])[0].get("framing") or "")
     post = ((sh.get("cam") or {}).get("post") or None) if eng != "cam" else None
     applied = None
+    runaway = False
     if post:
         try:
             PM = _load_sibling("postmove")
@@ -1024,6 +1025,7 @@ def _camera_pass(jid, sh, dest, eng):
                     _log(jid, "camera: the take is already still (%s) - nothing to stabilise" % (before.get("camera") if before else "?"))
                 elif before.get("zoom", 1.0) > 1.35 or before.get("confidence") != "high":
                     mv = None
+                    runaway = before.get("zoom", 1.0) > 1.35
                     _log(jid, "camera: the engine %s - too far or too uncertain to stabilise; the take keeps its move" % before.get("camera"))
                 else:
                     mv["curve"] = before["curve"]
@@ -1056,6 +1058,10 @@ def _camera_pass(jid, sh, dest, eng):
     n = CMM.note(m)
     if applied and n:
         n += " - done by the studio (%s)" % applied["move"]
+    if runaway:
+        # named as a fault, so Make rolls it again rather than delivering a shot nobody asked for
+        n = ("the camera ran away: the shot asked it to hold still and the engine %s, past the "
+             "1.35x a stabilise can undo" % (m.get("camera") or "moved"))
     return small, n
 
 
@@ -2617,7 +2623,7 @@ def _make_job(jid, fid, shid, seconds=None, seed=0, variants=1):
             sh = f.shot(shid)
             takes = sorted(sh.get("takes") or [], key=lambda t: t["id"])
             newest = takes[-1] if takes else None
-            if newest and any(str(q).startswith(("scene drift", "the line may not", "people appeared", "audio is effectively SILENT", "the face is")) for q in newest.get("qc") or []):
+            if newest and any(str(q).startswith(("scene drift", "the line may not", "people appeared", "audio is effectively SILENT", "the face is", "the camera ran away")) for q in newest.get("qc") or []):
                 _log(jid, "the take has a fault (%s) - rendering once more on a new seed"
                      % ("; ".join(_faults(newest))[:80]))
                 _render_take(jid, f, sh, "ltx", random.randint(1, 10 ** 9))
@@ -3001,6 +3007,9 @@ def _build_job(jid, data):
                     _log(jid, "the place from %s: asked %+.2f, the plate measures %+.2f (%s)"
                          % (angle_name, angle_pitch, m.get("pitch", 0.0), m.get("angle")))
                 plate = got_key
+                # the plate PATH was resolved before the angled one existed, and a shot with
+                # nobody in it uses that path as its anchor - so it has to be resolved again
+                plate_p = got_p
             except Exception as e:
                 _log(jid, "the angle could not be made: %s" % str(e)[:120])
                 angle_pitch, angle_name = 0.0, "eye level"

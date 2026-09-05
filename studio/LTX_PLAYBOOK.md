@@ -1975,3 +1975,36 @@ the clip and the face box follows it exactly, which is both cheaper and more acc
 reading it back off the pixels. The corollary bit twice more: the head box is computed for
 an upright figure at eye level, so a crouch and a foreshortened low view both put the head
 where the box does not look, and on those the reading is information and never a fault.
+
+**Addendum: the angle survives the engine, and the sweep found two holes.** Eleven shots
+built into `angles-and-mass`, one per entry added today, each measured twice - the plate the
+studio made against what was asked, and the take the engine returned against that plate.
+
+  asked -> plate    median error 0.041, worst 0.073
+  plate -> take     median drift 0.118, within 0.20 on 8 of 11
+  by sign           the take reads the angle it was asked for, 6 of 6
+
+That is the whole thesis in three lines. A camera word is a coin flip; a camera move is
+arithmetic the engine cannot argue with; and an angle put into the PLATE is copied, because
+a plate is what the engine copies. Confirmed separately over 56 takes measured at both ends:
+on the six built from angled plates the median drift through the clip is +0.010 and only one
+moved toward eye level.
+
+**Hole one: a shot with nobody in it was losing its angle entirely.** The builder resolves
+the plate to a path before it makes the angled version, and a people-free shot uses that path
+directly as its anchor - so worm's eye and bird's eye were rendered on the pristine plate
+while the log said the angle had been made. Shots with a person were fine, because those pass
+the plate KEY and the compositor resolves the name after the angle exists. Two of the first
+eight shots measured at eye level having asked for the two most extreme angles in the catalog.
+Re-run after the fix: +0.56 and -0.51.
+
+**Hole two: a camera that ran away carried no fault.** The camera pass stabilises an engine's
+drift only to 1.35x, and past that it logs "the take keeps its move" - a note beginning
+"camera:", and every note beginning "camera:" is information. Right for a measurement, wrong
+for a failure: the sweep returned a take that pushed 204% on a shot that asked the camera to
+hold still, with no fault at all, eligible to be picked and to satisfy a spec that reads
+faults. A runaway is now a fault by name and Make rolls it again.
+
+**Also worth knowing where it breaks.** Two of eleven shots ran away, both at the night diner,
+both pushing past 140%. A place can make this engine bolt; the fault now catches it, but the
+place is worth remembering.
