@@ -135,7 +135,9 @@ def rescore(fid):
         if not t:
             continue
         old_ident = t.get("identity") or {}
-        ident = {k: res.get(k) for k in ("start", "end", "hold", "verdict_start", "verdict_end", "place_hold", "place_verdict", "place_start")}
+        ident = dict(old_ident)      # keep what this pass did not measure - the hold curve above all
+        ident.update({k: res.get(k) for k in ("start", "end", "hold", "verdict_start", "verdict_end",
+                                              "place_hold", "place_verdict", "place_start")})
         ident["who"] = cid
         note, fault = verdict_note(res, cid, covered, mover)
         ident["verdict_end"] = res.get("verdict_end")
