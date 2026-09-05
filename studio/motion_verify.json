@@ -548,5 +548,54 @@
   "action": "the close-up compositor on an anime pack: portrait view relit with the storybook LoRA (1.3% shape drift)",
   "ambient": "the same path as the photographic close-ups",
   "file": "films/builder-test/takes/150/ltx_t553639157.mp4"
+ },
+ {
+  "id": "camera-push-by-studio",
+  "shot": "160",
+  "question": "A push in done by the studio after the render: does the frame close in smoothly and evenly over the whole clip, without a jump, and does it read as a deliberate camera move rather than the engine's drift?",
+  "selection": {
+   "camera": "push in",
+   "action": "stand",
+   "pace": "slow",
+   "ambient": [
+    "water"
+   ]
+  },
+  "action": "post move: push 1.14 applied to the take (measured 1.47 with the engine's own drift underneath - this take predates the stabilise-first fix)",
+  "ambient": "the engine was asked to hold still; the move is arithmetic",
+  "file": "films/builder-test/takes/160/ltx_t581037514.mp4"
+ },
+ {
+  "id": "camera-static-stabilised",
+  "shot": "170",
+  "question": "A frame asked to stay still, with the engine's drift cropped out afterwards: does it read as a locked-off camera? Any visible wobble, breathing or softness from the crop?",
+  "selection": {
+   "camera": "static",
+   "action": "stand",
+   "pace": "slow",
+   "ambient": [
+    "water"
+   ]
+  },
+  "action": "stabilise (the first version: zoom only) applied to a take that had drifted; measured afterwards: zoom 0.93, tilt 0.09",
+  "ambient": "later takes use the version that also holds pan and tilt (measured 1.016 / 0.000 / 0.001)",
+  "file": "films/builder-test/takes/170/ltx_t581531987.mp4"
+ },
+ {
+  "id": "time-passes-platefade",
+  "shot": "200",
+  "question": "The harbour's night plate dissolving into its late-night plate with a slow push, nothing generated: does it read as time passing in one place, or as two pictures?",
+  "selection": {
+   "camera": "push in",
+   "action": "none",
+   "pace": "slow",
+   "ambient": [
+    "light",
+    "water"
+   ]
+  },
+  "action": "platefade: the place's own plates held and cross-dissolved, push 1.06; the sound is borrowed from a sounding take of the same place",
+  "ambient": "the plates share one description, so they agree on geometry and differ in light",
+  "file": "films/builder-test/takes/200/cam_t582893282.mp4"
  }
 ]
