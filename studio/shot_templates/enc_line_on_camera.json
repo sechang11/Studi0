@@ -1,0 +1,52 @@
+{
+ "title": "A line, on camera",
+ "hint": "One person says one line. The picture holds them; the voice pack says the words.",
+ "family": "dialogue",
+ "catalog": "line_on_camera",
+ "build": {
+  "framings": [
+   "medium"
+  ],
+  "people": 1,
+  "camera": "static",
+  "duration": 6,
+  "line": true,
+  "action": "looks at the camera and speaks"
+ },
+ "keeps": [
+  "the words are exactly the line (voice pack)",
+  "the speaker's identity"
+ ],
+ "cannot": [
+  "lip sync to the pack's words (the mouth is the engine's)",
+  "the engine's own speech (wrong or absent - measured on 26 clips)"
+ ],
+ "measured": "VO pass about a minute; native track ducked to 0.12",
+ "shot": {
+  "duration": 6,
+  "beats": [
+   {
+    "framing": "medium shot",
+    "move": "static",
+    "transition_in": "",
+    "subject": "",
+    "action": "looks at the camera and speaks",
+    "background": "",
+    "motion": "",
+    "ambient": [],
+    "dialogue": {
+     "char": "",
+     "line": "",
+     "delivery": ""
+    }
+   }
+  ],
+  "sfx": "",
+  "no_people": null,
+  "cam": {
+   "post": {
+    "move": "stabilise"
+   }
+  }
+ }
+}

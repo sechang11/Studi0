@@ -83,6 +83,34 @@ def run_check(chk, sh, take):
     if kind == "take_prompt_contains":
         got = (take or {}).get("prompt", "")
         return chk["value"].lower() in got.lower(), "prompt=%s..." % got[:48]
+    if kind == "camera":
+        m = (take or {}).get("cam_measured") or {}
+        if not m:
+            return False, "camera not measured on this take"
+        z, pan, tilt = float(m.get("zoom", 1.0)), float(m.get("pan", 0.0)), float(m.get("tilt", 0.0))
+        want = chk.get("want", "is static")
+        got = "zoom=%.2f pan=%+.2f tilt=%+.2f (%s)" % (z, pan, tilt, m.get("camera", "?"))
+        if want == "is static":
+            ok = abs(z - 1.0) <= 0.08 and abs(pan) <= 0.08 and abs(tilt) <= 0.08
+        elif want == "pushes in":
+            ok = z >= 1.06
+        elif want == "pulls back":
+            ok = z <= 0.94
+        elif want == "pans":
+            ok = abs(pan) >= 0.06
+        elif want == "pans left":
+            ok = pan <= -0.06
+        elif want == "pans right":
+            ok = pan >= 0.06
+        elif want == "tilts up":
+            ok = tilt <= -0.06
+        elif want == "tilts down":
+            ok = tilt >= 0.06
+        else:
+            ok = False
+        if m.get("confidence") == "low":
+            got += " - measured with low confidence"
+        return ok, got
     if kind == "qc_clean":
         # information and advisories are not faults: a take that ended closer than
         # it started, borrowed its soundtrack, or was warned before rendering that

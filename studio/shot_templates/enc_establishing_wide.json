@@ -1,0 +1,54 @@
+{
+ "title": "Establishing wide",
+ "hint": "Set the place. Nobody in it; the picture is the plate itself, alive.",
+ "family": "coverage",
+ "catalog": "establishing_wide",
+ "build": {
+  "framings": [
+   "wide"
+  ],
+  "people": 0,
+  "camera": "static",
+  "motion": "",
+  "ambient": [
+   "by place"
+  ],
+  "duration": 8,
+  "action": "the place as it is, alive"
+ },
+ "keeps": [
+  "the place stays the place (drift check)",
+  "nobody appears (people check; the rig takes over if the engine keeps adding them)"
+ ],
+ "cannot": [
+  "a camera move by prose - use a post move"
+ ],
+ "measured": "LTX drifts 9-17% on a static prompt; stabilise brings it to 1.00",
+ "shot": {
+  "duration": 8,
+  "beats": [
+   {
+    "framing": "wide shot",
+    "move": "static",
+    "transition_in": "",
+    "subject": "",
+    "action": "the place as it is, alive",
+    "background": "",
+    "motion": "",
+    "ambient": [],
+    "dialogue": {
+     "char": "",
+     "line": "",
+     "delivery": ""
+    }
+   }
+  ],
+  "sfx": "",
+  "no_people": true,
+  "cam": {
+   "post": {
+    "move": "stabilise"
+   }
+  }
+ }
+}

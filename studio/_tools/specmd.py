@@ -31,6 +31,9 @@ def check_to_json(line):
         return {"kind": "take_prompt_contains", "value": m.group(1).strip("`' ")}
     if re.match(r"qc is clean$", s, re.I):
         return {"kind": "qc_clean"}
+    m = re.match(r"camera\s+(is static|pushes in|pulls back|pans left|pans right|pans|tilts up|tilts down)$", s, re.I)
+    if m:
+        return {"kind": "camera", "want": m.group(1).lower()}
     return {"kind": "UNKNOWN", "raw": s}
 
 
@@ -50,6 +53,8 @@ def check_to_md(c):
         return "provenance mentions %s" % c["value"]
     if k == "qc_clean":
         return "qc is clean"
+    if k == "camera":
+        return "camera %s" % c.get("want", "is static")
     return c.get("raw")
 
 

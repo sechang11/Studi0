@@ -1,0 +1,52 @@
+{
+ "title": "The place at night",
+ "hint": "The night plate, lanterns and water moving, nobody in it.",
+ "family": "place",
+ "catalog": "empty_night",
+ "build": {
+  "framings": [
+   "wide"
+  ],
+  "people": 0,
+  "plate": "night_wide",
+  "camera": "static",
+  "ambient": [
+   "light",
+   "water"
+  ],
+  "duration": 8
+ },
+ "keeps": [
+  "nobody appears",
+  "the place"
+ ],
+ "cannot": [],
+ "measured": "empty shots fell to the rig when the engine kept adding people",
+ "shot": {
+  "duration": 8,
+  "beats": [
+   {
+    "framing": "wide shot",
+    "move": "static",
+    "transition_in": "",
+    "subject": "",
+    "action": "",
+    "background": "",
+    "motion": "",
+    "ambient": [],
+    "dialogue": {
+     "char": "",
+     "line": "",
+     "delivery": ""
+    }
+   }
+  ],
+  "sfx": "",
+  "no_people": true,
+  "cam": {
+   "post": {
+    "move": "stabilise"
+   }
+  }
+ }
+}

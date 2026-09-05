@@ -1,0 +1,50 @@
+{
+ "title": "Turn in place (pinned)",
+ "hint": "A body turn that holds the ground: both ends chosen, H3 interpolates.",
+ "family": "motion",
+ "catalog": "turn_in_place",
+ "build": {
+  "framings": [
+   "medium"
+  ],
+  "people": 1,
+  "camera": "static",
+  "motion": "turn",
+  "duration": 5
+ },
+ "keeps": [
+  "the figure's feet and scale (held geometry)",
+  "the plate (pristine end frame)"
+ ],
+ "cannot": [
+  "a pin below the change floor - Make renders on LTX instead, never forces"
+ ],
+ "measured": "pins from whole figures judged yes; forced pins judged no",
+ "shot": {
+  "duration": 5,
+  "beats": [
+   {
+    "framing": "medium shot",
+    "move": "static",
+    "transition_in": "",
+    "subject": "",
+    "action": "",
+    "background": "",
+    "motion": "turn",
+    "ambient": [],
+    "dialogue": {
+     "char": "",
+     "line": "",
+     "delivery": ""
+    }
+   }
+  ],
+  "sfx": "",
+  "no_people": null,
+  "cam": {
+   "post": {
+    "move": "stabilise"
+   }
+  }
+ }
+}

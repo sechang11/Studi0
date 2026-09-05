@@ -1,0 +1,49 @@
+{
+ "title": "Crouch (pinned)",
+ "hint": "Down to the ground and hold.",
+ "family": "motion",
+ "catalog": "crouch",
+ "build": {
+  "framings": [
+   "medium"
+  ],
+  "people": 1,
+  "camera": "static",
+  "motion": "crouch",
+  "duration": 5
+ },
+ "keeps": [
+  "whole figure from the first frame (only whole views are placed)"
+ ],
+ "cannot": [
+  "a crouch from a knee-cropped pack - repaired first"
+ ],
+ "measured": "the director judged knee-cropped crouches 'partly'",
+ "shot": {
+  "duration": 5,
+  "beats": [
+   {
+    "framing": "medium shot",
+    "move": "static",
+    "transition_in": "",
+    "subject": "",
+    "action": "",
+    "background": "",
+    "motion": "crouch",
+    "ambient": [],
+    "dialogue": {
+     "char": "",
+     "line": "",
+     "delivery": ""
+    }
+   }
+  ],
+  "sfx": "",
+  "no_people": null,
+  "cam": {
+   "post": {
+    "move": "stabilise"
+   }
+  }
+ }
+}

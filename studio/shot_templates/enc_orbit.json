@@ -1,0 +1,50 @@
+{
+ "title": "Orbit (2D stand-in)",
+ "hint": "A gentle lateral drift with a counter-zoom and a hair of roll: the flat film's arc.",
+ "family": "moves",
+ "catalog": "orbit",
+ "build": {
+  "framings": [
+   "medium"
+  ],
+  "people": 1,
+  "camera": "orbit",
+  "duration": 6
+ },
+ "keeps": [
+  "deterministic"
+ ],
+ "cannot": [
+  "true parallax - the plate is flat"
+ ],
+ "measured": "",
+ "shot": {
+  "duration": 6,
+  "beats": [
+   {
+    "framing": "medium shot",
+    "move": "static",
+    "transition_in": "",
+    "subject": "",
+    "action": "",
+    "background": "",
+    "motion": "",
+    "ambient": [],
+    "dialogue": {
+     "char": "",
+     "line": "",
+     "delivery": ""
+    }
+   }
+  ],
+  "sfx": "",
+  "no_people": null,
+  "cam": {
+   "post": {
+    "move": "orbit",
+    "amount": 0.1,
+    "zoom": 1.12
+   }
+  }
+ }
+}

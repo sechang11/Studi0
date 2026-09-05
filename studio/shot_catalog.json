@@ -1,0 +1,572 @@
+{
+ "_about": "The shot encyclopedia: every kind of shot the studio can build, as a recipe the builder can run. Each entry says what the shot is for, how it is built (framing, where people stand, the camera, the motion, the sound), which promises it keeps and which it cannot, and what was measured. `build` is what /build fills in when a person picks the entry; `camera` names a post move the studio performs (never a sentence the engine is asked for).",
+ "version": 1,
+ "families": [
+  {
+   "id": "coverage",
+   "title": "Coverage",
+   "blurb": "The shots every scene needs before it needs anything else."
+  },
+  {
+   "id": "moves",
+   "title": "Camera moves",
+   "blurb": "Done by the studio after the render, so the measured camera equals the requested one."
+  },
+  {
+   "id": "people",
+   "title": "People",
+   "blurb": "Framings of one or two people from their packs: whole figures on the plate's ground, faces from the portrait view."
+  },
+  {
+   "id": "place",
+   "title": "Place",
+   "blurb": "The place alone, alive: nobody in it, the camera doing the work."
+  },
+  {
+   "id": "dialogue",
+   "title": "Dialogue",
+   "blurb": "Lines through the voice packs; the picture holds the speaker."
+  },
+  {
+   "id": "motion",
+   "title": "Motion beats",
+   "blurb": "In-place actions that pin (turn, crouch, look up); walks stay on LTX."
+  },
+  {
+   "id": "reveals",
+   "title": "Reveals and transitions",
+   "blurb": "Shots whose point is what changes between the first and the last frame."
+  }
+ ],
+ "shots": [
+  {
+   "id": "establishing_wide",
+   "family": "coverage",
+   "title": "Establishing wide",
+   "purpose": "Set the place. Nobody in it; the picture is the plate itself, alive.",
+   "build": {
+    "framings": [
+     "wide"
+    ],
+    "people": 0,
+    "camera": "static",
+    "motion": "",
+    "ambient": [
+     "by place"
+    ],
+    "duration": 8,
+    "action": "the place as it is, alive"
+   },
+   "keeps": [
+    "the place stays the place (drift check)",
+    "nobody appears (people check; the rig takes over if the engine keeps adding them)"
+   ],
+   "cannot": [
+    "a camera move by prose - use a post move"
+   ],
+   "measured": "LTX drifts 9-17% on a static prompt; stabilise brings it to 1.00"
+  },
+  {
+   "id": "wide_with_people",
+   "family": "coverage",
+   "title": "Wide with the people in it",
+   "purpose": "Who is where. Whole figures on the plate's ground, footing checked.",
+   "build": {
+    "framings": [
+     "wide"
+    ],
+    "people": 2,
+    "camera": "static",
+    "motion": "",
+    "duration": 6,
+    "action": "stand in the scene, looking out at it"
+   },
+   "keeps": [
+    "identities from the packs (composed anchor)",
+    "feet on the ground line (footing)",
+    "the place"
+   ],
+   "cannot": [
+    "asking them to stand still - LTX may walk them"
+   ],
+   "measured": "two-shot composite about six minutes; walks appear on 'talking quietly' prose"
+  },
+  {
+   "id": "medium_single",
+   "family": "people",
+   "title": "Medium on one person",
+   "purpose": "The person, knees up, the place readable behind.",
+   "build": {
+    "framings": [
+     "medium"
+    ],
+    "people": 1,
+    "camera": "static",
+    "duration": 6,
+    "action": "stands in the scene, looking out at it, a slow breath"
+   },
+   "keeps": [
+    "identity",
+    "place"
+   ],
+   "cannot": [
+    "the engine's push-in without stabilise"
+   ],
+   "measured": "drift 39-72% on some seeds regardless of the sentence"
+  },
+  {
+   "id": "close_up",
+   "family": "people",
+   "title": "Close-up",
+   "purpose": "The face, large, from the first frame. Composed from the portrait view on a window of the plate.",
+   "build": {
+    "framings": [
+     "close"
+    ],
+    "people": 1,
+    "camera": "static",
+    "duration": 5,
+    "action": "looks off, then back, a slow breath; the face held in the frame"
+   },
+   "keeps": [
+    "the face is the pack's portrait (relight drift 1-6%)",
+    "head room held"
+   ],
+   "cannot": [
+    "a second person in frame",
+    "'turns toward' - the whole head turns away",
+    "sound from the engine (a face fills the frame: silent) - the place's sound is borrowed"
+   ],
+   "measured": "composed in 18-20 s; photographic close-ups -48 to -60 dB before the borrow"
+  },
+  {
+   "id": "two_shot_medium",
+   "family": "people",
+   "title": "Two-shot, medium",
+   "purpose": "Two people, both whole, both lit like the place.",
+   "build": {
+    "framings": [
+     "medium"
+    ],
+    "people": 2,
+    "camera": "static",
+    "duration": 6,
+    "action": "stand together, talking quietly, looking out at the place"
+   },
+   "keeps": [
+    "both identities (second character as a relit layer)",
+    "footing for both"
+   ],
+   "cannot": [
+    "'stand' - they may walk toward camera (LTX law)"
+   ],
+   "measured": "336 s from the page for two variants and a retry"
+  },
+  {
+   "id": "insert_detail",
+   "family": "coverage",
+   "title": "Insert - a detail of the place",
+   "purpose": "Something small and true: a lamp, a rope, wet leaves. The detail plate, moving slowly.",
+   "build": {
+    "framings": [
+     "wide"
+    ],
+    "people": 0,
+    "plate": "detail",
+    "camera": "push in",
+    "duration": 6,
+    "action": "a close detail of the place"
+   },
+   "keeps": [
+    "nobody appears",
+    "the plate itself when the engine keeps adding people (rig fallback)"
+   ],
+   "cannot": [],
+   "measured": "the rig's push measured 1.117 for 1.12 asked"
+  },
+  {
+   "id": "push_in",
+   "family": "moves",
+   "title": "Push in",
+   "purpose": "Close the distance slowly: attention narrowing. Done by the studio.",
+   "build": {
+    "framings": [
+     "medium"
+    ],
+    "people": 1,
+    "camera": "push in",
+    "duration": 6
+   },
+   "keeps": [
+    "the push is exactly the amount asked (post move 1.14; measured within 1%)"
+   ],
+   "cannot": [
+    "a push beyond ~1.4 without softening (it is a crop)"
+   ],
+   "measured": "post push 1.15 on a take that drifted 1.16 measured 1.31 - the two compound"
+  },
+  {
+   "id": "pull_back",
+   "family": "moves",
+   "title": "Pull back",
+   "purpose": "Open the frame: from the detail to the place. Starts tight, ends at the whole frame.",
+   "build": {
+    "framings": [
+     "medium"
+    ],
+    "people": 1,
+    "camera": "pull back",
+    "duration": 6
+   },
+   "keeps": [
+    "the end frame is the whole render; nothing is invented"
+   ],
+   "cannot": [
+    "pulling wider than the render"
+   ],
+   "measured": ""
+  },
+  {
+   "id": "pan",
+   "family": "moves",
+   "title": "Pan",
+   "purpose": "Travel across the place, left or right, at a slight zoom so there is room to travel.",
+   "build": {
+    "framings": [
+     "wide"
+    ],
+    "people": 0,
+    "camera": "pan right",
+    "duration": 6
+   },
+   "keeps": [
+    "12% of the frame, eased, measured 0.119 for 0.12 asked"
+   ],
+   "cannot": [
+    "a pan wider than the room the zoom gives"
+   ],
+   "measured": ""
+  },
+  {
+   "id": "tilt",
+   "family": "moves",
+   "title": "Tilt",
+   "purpose": "Down from the sky to the ground, or up from the feet to the face.",
+   "build": {
+    "framings": [
+     "wide"
+    ],
+    "people": 1,
+    "camera": "tilt down",
+    "duration": 5
+   },
+   "keeps": [
+    "10% of the frame height, eased"
+   ],
+   "cannot": [],
+   "measured": ""
+  },
+  {
+   "id": "orbit",
+   "family": "moves",
+   "title": "Orbit (2D stand-in)",
+   "purpose": "A gentle lateral drift with a counter-zoom and a hair of roll: the flat film's arc.",
+   "build": {
+    "framings": [
+     "medium"
+    ],
+    "people": 1,
+    "camera": "orbit",
+    "duration": 6
+   },
+   "keeps": [
+    "deterministic"
+   ],
+   "cannot": [
+    "true parallax - the plate is flat"
+   ],
+   "measured": ""
+  },
+  {
+   "id": "handheld",
+   "family": "moves",
+   "title": "Handheld",
+   "purpose": "A frame that breathes: small correlated shake on a static shot.",
+   "build": {
+    "framings": [
+     "medium"
+    ],
+    "people": 1,
+    "camera": "handheld",
+    "duration": 6
+   },
+   "keeps": [
+    "the shake is the same every time for the same seed"
+   ],
+   "cannot": [],
+   "measured": ""
+  },
+  {
+   "id": "locked_off",
+   "family": "moves",
+   "title": "Locked off (stabilised)",
+   "purpose": "A frame that truly does not move. The engine's drift is measured and cropped out.",
+   "build": {
+    "framings": [
+     "wide"
+    ],
+    "people": 1,
+    "camera": "static",
+    "duration": 6
+   },
+   "keeps": [
+    "zoom 1.00 +-0.03 after stabilise (measured 0.986 from a 1.163 drift)"
+   ],
+   "cannot": [
+    "the price is the end frame's crop everywhere"
+   ],
+   "measured": "a 'locked off on a tripod' sentence changed nothing (3 of 3)"
+  },
+  {
+   "id": "line_on_camera",
+   "family": "dialogue",
+   "title": "A line, on camera",
+   "purpose": "One person says one line. The picture holds them; the voice pack says the words.",
+   "build": {
+    "framings": [
+     "medium"
+    ],
+    "people": 1,
+    "camera": "static",
+    "duration": 6,
+    "line": true,
+    "action": "looks at the camera and speaks"
+   },
+   "keeps": [
+    "the words are exactly the line (voice pack)",
+    "the speaker's identity"
+   ],
+   "cannot": [
+    "lip sync to the pack's words (the mouth is the engine's)",
+    "the engine's own speech (wrong or absent - measured on 26 clips)"
+   ],
+   "measured": "VO pass about a minute; native track ducked to 0.12"
+  },
+  {
+   "id": "line_close",
+   "family": "dialogue",
+   "title": "A line, in close-up",
+   "purpose": "The face large, the line in their voice.",
+   "build": {
+    "framings": [
+     "close"
+    ],
+    "people": 1,
+    "camera": "static",
+    "duration": 5,
+    "line": true,
+    "action": "listens, then speaks, the face held in the frame"
+   },
+   "keeps": [
+    "the words",
+    "the face"
+   ],
+   "cannot": [
+    "'turns toward' (the head turns away)"
+   ],
+   "measured": "456 s from the page to a voiced pick"
+  },
+  {
+   "id": "reaction",
+   "family": "dialogue",
+   "title": "Reaction",
+   "purpose": "The listener, not the speaker: a look, a breath, no words.",
+   "build": {
+    "framings": [
+     "close"
+    ],
+    "people": 1,
+    "camera": "static",
+    "duration": 4,
+    "action": "listens, a small change in the eyes, a breath"
+   },
+   "keeps": [
+    "the face"
+   ],
+   "cannot": [],
+   "measured": ""
+  },
+  {
+   "id": "turn_in_place",
+   "family": "motion",
+   "title": "Turn in place (pinned)",
+   "purpose": "A body turn that holds the ground: both ends chosen, H3 interpolates.",
+   "build": {
+    "framings": [
+     "medium"
+    ],
+    "people": 1,
+    "camera": "static",
+    "motion": "turn",
+    "duration": 5
+   },
+   "keeps": [
+    "the figure's feet and scale (held geometry)",
+    "the plate (pristine end frame)"
+   ],
+   "cannot": [
+    "a pin below the change floor - Make renders on LTX instead, never forces"
+   ],
+   "measured": "pins from whole figures judged yes; forced pins judged no"
+  },
+  {
+   "id": "crouch",
+   "family": "motion",
+   "title": "Crouch (pinned)",
+   "purpose": "Down to the ground and hold.",
+   "build": {
+    "framings": [
+     "medium"
+    ],
+    "people": 1,
+    "camera": "static",
+    "motion": "crouch",
+    "duration": 5
+   },
+   "keeps": [
+    "whole figure from the first frame (only whole views are placed)"
+   ],
+   "cannot": [
+    "a crouch from a knee-cropped pack - repaired first"
+   ],
+   "measured": "the director judged knee-cropped crouches 'partly'"
+  },
+  {
+   "id": "look_up",
+   "family": "motion",
+   "title": "Look up",
+   "purpose": "A small lift of the head; the place answers with light.",
+   "build": {
+    "framings": [
+     "close"
+    ],
+    "people": 1,
+    "camera": "static",
+    "motion": "look up",
+    "duration": 4,
+    "action": "looks up, a small smile"
+   },
+   "keeps": [
+    "the face"
+   ],
+   "cannot": [
+    "pinning (below the floor) - LTX prose instead"
+   ],
+   "measured": "anime close-up held the look through the take"
+  },
+  {
+   "id": "walk_to_camera",
+   "family": "motion",
+   "title": "Walk toward camera (LTX)",
+   "purpose": "A figure closes distance. Never pinned: H3 regenerates the scene for a walk.",
+   "build": {
+    "framings": [
+     "wide"
+    ],
+    "people": 1,
+    "camera": "static",
+    "motion": "walk",
+    "duration": 6,
+    "action": "walks toward the camera, steady"
+   },
+   "keeps": [
+    "identity at the start (composed anchor)"
+   ],
+   "cannot": [
+    "the place through the walk (drift is likely)"
+   ],
+   "measured": "H3 pinned walks regenerated a riverside path from frame 0, twice"
+  },
+  {
+   "id": "reveal_by_pull",
+   "family": "reveals",
+   "title": "Reveal by pulling back",
+   "purpose": "Start on the detail, end on the whole: the place revealed around the person.",
+   "build": {
+    "framings": [
+     "wide"
+    ],
+    "people": 1,
+    "camera": "pull back",
+    "duration": 6
+   },
+   "keeps": [
+    "the end frame is the composed wide"
+   ],
+   "cannot": [],
+   "measured": ""
+  },
+  {
+   "id": "reveal_by_tilt",
+   "family": "reveals",
+   "title": "Reveal by tilting up",
+   "purpose": "Feet to face, or ground to sky.",
+   "build": {
+    "framings": [
+     "wide"
+    ],
+    "people": 1,
+    "camera": "tilt up",
+    "duration": 5
+   },
+   "keeps": [],
+   "cannot": [],
+   "measured": ""
+  },
+  {
+   "id": "cutaway_detail",
+   "family": "reveals",
+   "title": "Cutaway",
+   "purpose": "Leave the people for one detail, then come back. The detail plate on a slow push.",
+   "build": {
+    "framings": [
+     "wide"
+    ],
+    "people": 0,
+    "plate": "detail",
+    "camera": "push in",
+    "duration": 4
+   },
+   "keeps": [
+    "nobody appears"
+   ],
+   "cannot": [],
+   "measured": ""
+  },
+  {
+   "id": "empty_night",
+   "family": "place",
+   "title": "The place at night",
+   "purpose": "The night plate, lanterns and water moving, nobody in it.",
+   "build": {
+    "framings": [
+     "wide"
+    ],
+    "people": 0,
+    "plate": "night_wide",
+    "camera": "static",
+    "ambient": [
+     "light",
+     "water"
+    ],
+    "duration": 8
+   },
+   "keeps": [
+    "nobody appears",
+    "the place"
+   ],
+   "cannot": [],
+   "measured": "empty shots fell to the rig when the engine kept adding people"
+  }
+ ]
+}

@@ -1,0 +1,51 @@
+{
+ "title": "Pan",
+ "hint": "Travel across the place, left or right, at a slight zoom so there is room to travel.",
+ "family": "moves",
+ "catalog": "pan",
+ "build": {
+  "framings": [
+   "wide"
+  ],
+  "people": 0,
+  "camera": "pan right",
+  "duration": 6
+ },
+ "keeps": [
+  "12% of the frame, eased, measured 0.119 for 0.12 asked"
+ ],
+ "cannot": [
+  "a pan wider than the room the zoom gives"
+ ],
+ "measured": "",
+ "shot": {
+  "duration": 6,
+  "beats": [
+   {
+    "framing": "wide shot",
+    "move": "static",
+    "transition_in": "",
+    "subject": "",
+    "action": "",
+    "background": "",
+    "motion": "",
+    "ambient": [],
+    "dialogue": {
+     "char": "",
+     "line": "",
+     "delivery": ""
+    }
+   }
+  ],
+  "sfx": "",
+  "no_people": true,
+  "cam": {
+   "post": {
+    "move": "pan",
+    "amount": 0.12,
+    "direction": "right",
+    "zoom": 1.14
+   }
+  }
+ }
+}

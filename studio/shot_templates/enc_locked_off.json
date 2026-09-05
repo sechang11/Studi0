@@ -1,0 +1,48 @@
+{
+ "title": "Locked off (stabilised)",
+ "hint": "A frame that truly does not move. The engine's drift is measured and cropped out.",
+ "family": "moves",
+ "catalog": "locked_off",
+ "build": {
+  "framings": [
+   "wide"
+  ],
+  "people": 1,
+  "camera": "static",
+  "duration": 6
+ },
+ "keeps": [
+  "zoom 1.00 +-0.03 after stabilise (measured 0.986 from a 1.163 drift)"
+ ],
+ "cannot": [
+  "the price is the end frame's crop everywhere"
+ ],
+ "measured": "a 'locked off on a tripod' sentence changed nothing (3 of 3)",
+ "shot": {
+  "duration": 6,
+  "beats": [
+   {
+    "framing": "wide shot",
+    "move": "static",
+    "transition_in": "",
+    "subject": "",
+    "action": "",
+    "background": "",
+    "motion": "",
+    "ambient": [],
+    "dialogue": {
+     "char": "",
+     "line": "",
+     "delivery": ""
+    }
+   }
+  ],
+  "sfx": "",
+  "no_people": null,
+  "cam": {
+   "post": {
+    "move": "stabilise"
+   }
+  }
+ }
+}
