@@ -2146,3 +2146,18 @@ which is the other law showing through: a shot that begins badly does not recove
 
 So the rule stands for any motion, not only the ones that move toward the camera. This engine
 holds a face for about five seconds and the honest thing to do with that is to ask for less.
+
+**Watched, not only measured.** Two features shipped today were checked the way this project
+is supposed to check things - by looking at the render.
+
+The face cut: the six second walk that lost its face at three seconds, cut there, ends on the
+man mid-stride with his own face still on him. It is a shot, not a truncation - a walk cut
+while the person is still walking is how walks are normally cut. The full-length sibling that
+kept its face runs to the end and arrives close; both are usable and the pick correctly took
+the longer one.
+
+The crane: on the alley, up runs +0.09 to +0.20 to +0.40 across first frame, halfway and last,
+and down runs +0.06 to -0.19 to -0.40. The walls converge and splay with it and the midpoint
+sits between the ends, so the ramp is doing what the solver says. The effect is modest rather
+than dramatic, which is exactly what a boom on a locked head should look like and what the
+entry promises.
