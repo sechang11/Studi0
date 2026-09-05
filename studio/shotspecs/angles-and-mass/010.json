@@ -1,0 +1,77 @@
+{
+ "invariants": [
+  {
+   "id": "the_people_are_these_people",
+   "title": "The people are these people",
+   "rule": "TOMAS, from their packs, are in the start picture; no one else.",
+   "why": "identity comes from the composited anchor, not from the engine's prior",
+   "check": {
+    "kind": "anchor_contains",
+    "value": "anchor_shot_010"
+   }
+  },
+  {
+   "id": "the_place_is_cafe_morning",
+   "title": "The place is cafe-morning",
+   "rule": "The background is the cafe-morning plate dawn_wide__angleu32 and stays that place for the whole take.",
+   "why": "words that name what the plate lacks make the engine rewrite it",
+   "check": {
+    "kind": "qc_clean"
+   }
+  },
+  {
+   "id": "angle_low_angle",
+   "title": "Angle: low angle",
+   "rule": "The place is seen from low angle. The plate is warped by the studio before the engine sees it - the camera drops and tilts, with the parallax taken from the depth map.",
+   "why": "an engine treats an angle word as a suggestion; a plate is what it copies",
+   "check": {
+    "kind": "angle",
+    "want": "low"
+   }
+  },
+  {
+   "id": "camera_static",
+   "title": "Camera: static",
+   "rule": "The camera does not move - the engine is asked to hold still and the move is done by the studio after the render, then measured.",
+   "why": "an engine cannot be asked for a camera move (measured: a locked-off sentence still pushed in 3 of 3); arithmetic can",
+   "check": {
+    "kind": "camera",
+    "want": "is static"
+   }
+  },
+  {
+   "id": "length",
+   "title": "Length",
+   "rule": "5 seconds, within the measured envelope.",
+   "why": "resolution and length trade inside a fixed envelope",
+   "check": {
+    "kind": "duration_between",
+    "min": 3.5,
+    "max": 6.5
+   }
+  }
+ ],
+ "flair": [
+  {
+   "id": "seed",
+   "title": "Seed",
+   "note": "free - the variants differ by seed"
+  },
+  {
+   "id": "motion",
+   "title": "Motion",
+   "note": "none named"
+  },
+  {
+   "id": "ambient",
+   "title": "Ambient",
+   "note": "Leaves"
+  }
+ ],
+ "shot": "010",
+ "title": "wide",
+ "beat": "stands by the window, looking out",
+ "build": {
+  "script": "Make this shot: composed anchor, static, from the encyclopedia entry 'low_angle'"
+ }
+}
