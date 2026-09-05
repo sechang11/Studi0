@@ -104,10 +104,11 @@
       <label style="display:flex;gap:6px;align-items:center;margin-top:8px">
         <input type="checkbox" id="trimface"> <span>cut the take where the face goes</span></label>
       <div class="hint">a face survives about four seconds of a walk toward the camera; the studio can end the shot there instead of delivering a stranger</div>
-      <label>motion of the subject (in place works; walking does not)</label><select id="motion"><option value="">none</option></select>
+      <label>motion of the subject (in place works; walking does not)</label><select id="motion" onchange="clockWarn()"><option value="">none</option></select>
       <label>ambient motion - what moves in the picture</label>
       <div class="chips" id="ambient"></div>
-      <label>length (seconds)</label><input type="number" id="dur" value="6" min="3" max="30">
+      <div id="clockwarn" class="hint" style="display:none;color:var(--warn);margin-top:6px"></div>
+      <label>length (seconds)</label><input type="number" id="dur" value="6" min="3" max="30" onchange="clockWarn()" oninput="clockWarn()">
     </div>
     <div class="card">
       <h2>What happens</h2>
@@ -131,7 +132,7 @@
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 let FOUNDRY={}, DICT={}, PICK=[], PLATE="";
-let CATALOG={}, TEMPLATE="";
+let CATALOG={}, TEMPLATE="", FACECLOCK={};
 function shelf(){
   const fams=(CATALOG.families||[]); const shots=(CATALOG.shots||[]);
   $("#families").innerHTML=`<span class="chip on" data-f="" onclick="showFamily('')">all</span>`+fams.map(f=>`<span class="chip" data-f="${f.id}" onclick="showFamily('${f.id}')" title="${esc(f.blurb)}">${esc(f.title)}</span>`).join("");
@@ -145,6 +146,18 @@ function showFamily(fid){
       <div class="hint" style="margin-top:4px;opacity:.7">${esc((s.build.framings||[]).join("/"))} · ${esc(s.build.camera||"static")}${s.build.people===0?" · nobody":s.build.people===2?" · two people":""} · ${s.build.duration||6}s</div>
       ${s.checked?`<div class="hint" style="margin-top:4px;font-size:11px;color:${s.checked.built?"var(--good)":"var(--bad)"}">${s.checked.built?"checked "+esc(s.checked.when||"")+(s.checked.camera?" · camera: "+esc(String(s.checked.camera).replace(/\s*\(.*$/,"")):"")+(s.checked.identity?" · face: "+esc(String(s.checked.identity).replace(/\s*\(.*$/,"")):""):"did not build when checked"}</div>`:""}</div>`).join("");
 }
+function clockWarn(){
+  const el=$("#clockwarn"); if(!el) return;
+  const fc=FACECLOCK||{};
+  const m=(($("#motion")||{}).value||"still").toLowerCase()||"still";
+  const secs=parseFloat(($("#dur")||{}).value||"6");
+  const d=fc[m];
+  if(!d||d.unfollowable||!d.lost_the_face||d.safe_seconds==null||!(secs>Math.max(d.safe_seconds+0.75,d.safe_seconds*1.15))){
+    el.style.display="none"; return;
+  }
+  el.textContent=`the face clock: three quarters of ${d.takes} measured takes of this motion kept the face for ${d.safe_seconds}s, and ${d.lost_the_face} lost it. ${secs}s is longer than the face has reliably held - shorten it, or let the studio cut where the face goes.`;
+  el.style.display="block";
+}
 function pickShot(id){
   const s=(CATALOG.shots||[]).find(x=>x.id===id); if(!s) return;
   TEMPLATE=id; const b=s.build||{};
@@ -152,14 +165,14 @@ function pickShot(id){
   const cam=$("#camera"); if(b.camera&&[...cam.options].some(o=>o.value===b.camera)) cam.value=b.camera;
   const ang=$("#angle"); ang.value=(b.angle&&[...ang.options].some(o=>o.value===b.angle))?b.angle:"eye level";
   $("#trimface").checked=!!b.trim_face;
-  if(b.duration) $("#dur").value=b.duration;
+  if(b.duration) $("#dur").value=b.duration; clockWarn();
   if(b.variants){ const v=$("#variants"); if([...v.options].some(o=>o.value==String(b.variants))) v.value=String(b.variants); }
   if(b.action) $("#action").value=b.action;
   if(b.motion!==undefined){ const m=$("#motion"); if([...m.options].some(o=>o.value===b.motion)) m.value=b.motion; }
   if(b.line===true && !$("#line").value) $("#line").value="Last boat's not coming back tonight.";
   if(b.line!==true) $("#line").value="";
   if(b.people===0){ PICK=[]; document.querySelectorAll(".person").forEach(p=>p.classList.remove("on")); }
-  showFamily(document.querySelector("#families .chip.on")?.dataset.f||"");
+  showFamily(document.querySelector("#families .chip.on")?.dataset.f||""); clockWarn();
   $("#shotinfo").innerHTML=`<b>${esc(s.title)}</b> - ${esc(s.purpose)}<br>`+
     (s.keeps&&s.keeps.length?`<span style="color:var(--good)">keeps:</span> ${s.keeps.map(esc).join("; ")}<br>`:"")+
     (s.cannot&&s.cannot.length?`<span style="color:var(--warn)">cannot promise:</span> ${s.cannot.map(esc).join("; ")}<br>`:"")+
@@ -169,7 +182,7 @@ function pickShot(id){
 }
 async function boot(){
   try{ FOUNDRY=(await (await fetch("/api/film/foundry_assets")).json()).assets||{}; }catch(e){}
-  try{ CATALOG=(await (await fetch("/api/film/libraries")).json()).catalog||{}; }catch(e){}
+  try{ const L=await (await fetch("/api/film/libraries")).json(); CATALOG=L.catalog||{}; FACECLOCK=L.face_clock||{}; }catch(e){}
   shelf();
   const want=new URLSearchParams(location.search).get("template"); if(want) setTimeout(()=>pickShot(want), 400);
   try{ DICT=await (await fetch("/api/foundry/dictionary")).json(); }catch(e){}

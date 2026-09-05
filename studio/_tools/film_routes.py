@@ -303,7 +303,7 @@ def libraries():
                 except Exception:
                     continue
     return {"characters": chars, "voices": voices, "templates": templates, "catalog": catalog,
-            "locations": locations}, 200
+            "locations": locations, "face_clock": face_clock()}, 200
 
 
 def job_status(jid):
@@ -2972,6 +2972,39 @@ def _load_sibling(name):
     return m
 
 
+_CLOCK = {"at": 0, "data": None}
+
+
+def face_clock():
+    """the measured hold per motion, reloaded when the file changes"""
+    p = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "face_clock.json")
+    try:
+        m = os.path.getmtime(p)
+    except OSError:
+        return {}
+    if _CLOCK["at"] != m:
+        try:
+            _CLOCK["data"] = json.load(open(p, encoding="utf-8"))
+            _CLOCK["at"] = m
+        except Exception:
+            return {}
+    return (_CLOCK["data"] or {}).get("by_motion") or {}
+
+
+def clock_advice(motion, seconds):
+    """-> a sentence, or None.  Only speaks when it has seen the face fail at this length."""
+    d = face_clock().get((motion or "still").strip().lower())
+    if not d or d.get("unfollowable") or not d.get("lost_the_face"):
+        return None
+    safe = d.get("safe_seconds")
+    # a margin, so an ordinary five second shot against a 4.8 s survival stays quiet
+    if safe is None or float(seconds) <= max(safe + 0.75, safe * 1.15):
+        return None
+    return ("three quarters of %d measured takes of this motion kept the face for %.1f s, "
+            "and %d of them lost it - %.0f seconds is longer than the face has reliably held"
+            % (d["takes"], safe, d["lost_the_face"], float(seconds)))
+
+
 def _cam_block(tpl_build, post, data):
     """what the shot asks of the camera, and whether the studio may cut it at the face"""
     cam = {"rig": tpl_build["rig"]} if tpl_build.get("rig") else ({"post": dict(post)} if post else {})
@@ -3086,6 +3119,9 @@ def _build_job(jid, data):
                 _log(jid, "the angle could not be made: %s" % str(e)[:120])
                 angle_pitch, angle_name = 0.0, "eye level"
         dur = float(data.get("duration") or 6)
+        _adv = clock_advice(data.get("motion"), dur)
+        if _adv:
+            _log(jid, "the face clock: %s" % _adv)
         n = max(1, min(int(data.get("variants") or 3), 6))
         vary = set(data.get("vary") or ["seed"])
         action = (data.get("action") or "").strip()
@@ -3193,7 +3229,8 @@ def _build_job(jid, data):
                              "check": CAMERA_CHECK.get(camera)})
             promises.append({"title": "Length", "rule": "%.0f seconds, within the measured envelope." % dur,
                              "why": "resolution and length trade inside a fixed envelope", "check": "duration between %.1f and %.1f" % (max(0.5, dur - 1.5), dur + 1.5)})
-            flair = [{"title": "Seed", "value": "free - the variants differ by seed"},
+            flair = ([{"title": "The face clock", "value": _adv}] if _adv else []) + [
+                     {"title": "Seed", "value": "free - the variants differ by seed"},
                      {"title": "Motion", "value": motion or "none named"},
                      {"title": "Ambient", "value": ", ".join(amb) or "none named"}]
             _write_spec(fid, shid, "%s - %s" % (shid, fr), beat["action"],
