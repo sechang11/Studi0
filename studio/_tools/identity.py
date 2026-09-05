@@ -25,7 +25,10 @@ jobs.json: [{"portrait": ..., "video": ..., "box": [x0,y0,x1,y1] fractions or nu
              "close": bool, "cam": {"zoom":..,"pan":..,"tilt":..} or null, "id": ...,
              "plate": <the scene's plate, optional -> place_hold/place_verdict/place_start>,
              "window0": {"zoom", "cx", "cy"} - the studio's post move at the first frame, so the
-                        anchor-frame head box is carried into the cropped frame}]
+                        anchor-frame head box is carried into the cropped frame,
+             "curve": true + "cam_curve": cammeasure's per-step [[zoom,pan,tilt], ...] ->
+                        "hold_curve": the face scored at nine times through the clip, with
+                        holds_until / lost_at in seconds}]
 """
 import json
 import os
@@ -66,6 +69,23 @@ def embed(im):
     return v / v.norm()
 
 
+def _frames_at(path, times):
+    """decode one frame at each timestamp (seconds) over ffmpeg pipes"""
+    out = []
+    for t in times:
+        out.append(_frame(path, ["-ss", "%.3f" % max(0.0, t)]))
+    return out
+
+
+def duration(path):
+    p = subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration",
+                        "-of", "csv=p=0", path], capture_output=True, text=True).stdout.strip()
+    try:
+        return float(p)
+    except Exception:
+        return 0.0
+
+
 def _frame(path, args):
     p = subprocess.run(["ffmpeg", "-v", "error"] + args + ["-i", path, "-frames:v", "1", "-f", "image2pipe",
                         "-vcodec", "png", "-"], capture_output=True).stdout
@@ -101,6 +121,65 @@ def crop(im, box):
     if x1 - x0 < 0.03 or y1 - y0 < 0.03:
         return None
     return im.crop((int(x0 * W), int(y0 * H), int(x1 * W), int(y1 * H)))
+
+
+def hold_curve(job, box, portrait_emb, close, cam_curve, dur, n=9):
+    """cosine against the portrait at n times through the clip, with the head box carried
+    through the camera as measured AT THAT TIME (cammeasure's per-step [zoom, pan, tilt]).
+
+    Returns {"times": [...], "scores": [...], "holds_until": seconds or None, "holds": bool}
+    where holds_until is the last moment before the score falls below the band and stays
+    below.  A face that is lost at 3.4 s of a 6 s take is not a take to throw away: it is a
+    take to cut at 3.4 s, and this is the number that says where."""
+    if dur <= 0:
+        return None
+    times = [dur * i / (n - 1) for i in range(n)]
+    times[-1] = max(0.0, dur - 0.12)
+    frames = _frames_at(job["video"], times)
+    same, unsure = (SAME, UNSURE) if close else (0.56, 0.46)
+    scores, kept = [], []
+    for i, (t, im) in enumerate(zip(times, frames)):
+        if im is None:
+            scores.append(None)
+            continue
+        if close or not cam_curve:
+            b = list(box)
+        else:
+            # cam_curve is sampled evenly over the clip; read it at this fraction
+            u = (t / dur) if dur else 0.0
+            pos = u * (len(cam_curve) - 1)
+            j = int(pos)
+            f = pos - j
+            if j >= len(cam_curve) - 1:
+                c = cam_curve[-1]
+            else:
+                a, b2 = cam_curve[j], cam_curve[j + 1]
+                c = [a[k] * (1 - f) + b2[k] * f for k in range(3)]
+            b = carry_box(box, {"zoom": c[0], "pan": c[1], "tilt": c[2]})
+        cr = crop(im, b)
+        if cr is None:
+            scores.append(None)
+            continue
+        sc = float((portrait_emb * embed(cr)).sum())
+        scores.append(round(sc, 3))
+        kept.append((t, sc))
+    # how long it holds: walk from the end back while the score is under the "same" band
+    holds_until, lost_at = None, None
+    good = [(t, sc) for t, sc in kept if sc >= unsure]
+    if kept:
+        last_good = None
+        for t, sc in kept:
+            if sc >= unsure:
+                last_good = t
+            elif last_good is not None and all(s2 < unsure for t2, s2 in kept if t2 > t):
+                lost_at = t
+                break
+        holds_until = last_good
+    return {"times": [round(t, 2) for t in times], "scores": scores,
+            "holds_until": round(holds_until, 2) if holds_until is not None else None,
+            "lost_at": round(lost_at, 2) if lost_at is not None else None,
+            "holds": bool(kept) and all(sc >= unsure for _, sc in kept),
+            "duration": round(dur, 2)}
 
 
 def verdict(s, close=False):
@@ -155,6 +234,13 @@ def run(job):
             e1 = embed(c1)
             end, hold = float((p * e1).sum()), float((e0 * e1).sum())
             out.update({"end": round(end, 3), "hold": round(hold, 3), "verdict_end": verdict(end, job.get("close"))})
+        if job.get("curve"):
+            try:
+                hc = hold_curve(job, box, p, job.get("close"), job.get("cam_curve"), duration(job["video"]))
+                if hc:
+                    out["hold_curve"] = hc
+            except Exception as e:
+                out["hold_curve_error"] = str(e)[:120]
         # the place: did the whole frame stay the same picture from first to last?  (the plate
         # against the first frame is framing-dependent - a medium on a person scores 0.48 against
         # its own empty plate - so it is reported, not judged)

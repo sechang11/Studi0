@@ -879,7 +879,13 @@ def _identity_pass(jid, f, sh, dest, cam_m):
            "cam": {k: cam_m.get(k) for k in ("zoom", "pan", "tilt")} if cam_m else None,
            "plate": plate_p,
            "window0": ({"zoom": (cam_m.get("post") or {}).get("zoom_start", 1.0), "cx": (cam_m.get("post") or {}).get("cx_start", 0.5),
-                        "cy": (cam_m.get("post") or {}).get("cy_start", 0.5)} if cam_m and cam_m.get("post") else None)}
+                        "cy": (cam_m.get("post") or {}).get("cy_start", 0.5)} if cam_m and cam_m.get("post") else None),
+           # the face over time, not only at the ends: measured over 51 takes, LTX loses about
+           # 11% of the starting score by the end of a clip and most of it in the last quarter,
+           # so WHERE it goes is a cut point, not just a verdict.  A close-up the studio has
+           # moved is skipped: there the box would have to follow the move, not the camera.
+           "curve": not (src.get("framing") == "close" and cam_m and cam_m.get("post")),
+           "cam_curve": (cam_m or {}).get("curve")}
     jp = dest[:-4] + "_identity_job.json"
     try:
         json.dump([job], open(jp, "w"))
@@ -903,6 +909,9 @@ def _identity_pass(jid, f, sh, dest, cam_m):
                 os.remove(extra)
     ident = {k: res.get(k) for k in ("start", "end", "hold", "verdict_start", "verdict_end", "place_hold", "place_verdict", "place_start")}
     ident["who"] = cid
+    hc = res.get("hold_curve") or None
+    if hc:
+        ident["hold_curve"] = hc
     vs, ve = res.get("verdict_start"), res.get("verdict_end") or ""
     # the end box follows the camera, not the figure: a motion that moves the head (a crouch drops
     # it a third of the frame) leaves the ruler reading the chest, so that end reading is information
@@ -924,6 +933,8 @@ def _identity_pass(jid, f, sh, dest, cam_m):
         note, fault = "identity: uncertain by the end (%.2f -> %.2f)" % (res["start"], res["end"]), False
     else:
         note, fault = "identity: same person, start %.2f, end %.2f" % (res["start"], res["end"]), False
+    if hc and hc.get("lost_at") is not None and hc.get("holds_until"):
+        note = "%s; the face holds for the first %.1f s of %.1f" % (note, hc["holds_until"], hc["duration"])
     if res.get("place_hold") is not None:
         note = "%s; place %s (%.2f first to last)" % (note, res.get("place_verdict") or "?", res["place_hold"])
     _log(jid, note)
@@ -979,12 +990,41 @@ def _camera_pass(jid, sh, dest, eng):
     if m.get("error"):
         return None, None
     small = {k: m[k] for k in ("zoom", "pan", "tilt", "roll", "camera", "confidence")}
+    if m.get("curve"):
+        small["curve"] = m["curve"]      # the face is followed through this, and it re-scores later
     if applied:
         small["post"] = {k: applied[k] for k in ("move", "amount", "zoom_start", "zoom_end", "cx_start", "cy_start") if k in applied}
     n = CMM.note(m)
     if applied and n:
         n += " - done by the studio (%s)" % applied["move"]
     return small, n
+
+
+def _trim_to_face(jid, dest, ident, want):
+    """Cut the take at the moment the face went, if the shot asked for it.
+
+    Measured over 51 takes: LTX loses about 11% of the identity score across a clip and
+    most of it in the last quarter, so a six second walk toward the camera is a good four
+    second shot with two seconds of a stranger on the end.  Cutting is the only remedy the
+    studio owns outright - no seed, no engine, no prompt, just arithmetic on the file.
+    Never cuts below two seconds, and never when the face held."""
+    hc = (ident or {}).get("hold_curve") or {}
+    if not (want and hc.get("lost_at") is not None):
+        return None
+    keep = float(hc.get("holds_until") or 0)
+    dur = float(hc.get("duration") or 0)
+    if keep < 2.0 or dur - keep < 0.4:
+        return None
+    tmp = dest[:-4] + "_cut.mp4"
+    try:
+        _sh("ffmpeg", "-y", "-v", "error", "-i", dest, "-t", "%.2f" % keep,
+            "-c:v", "libx264", "-crf", "16", "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "192k", tmp)
+        os.replace(tmp, dest)
+    except Exception as e:
+        _log(jid, "the cut failed: %s" % str(e)[:100])
+        return None
+    _log(jid, "the studio cut the take at %.1f s, where the face went (of %.1f)" % (keep, dur))
+    return {"at": round(keep, 2), "was": round(dur, 2)}
 
 
 def _render_take(jid, f, sh, eng, seed):
@@ -1134,6 +1174,11 @@ def _render_take(jid, f, sh, eng, seed):
     ident_m, _in, _if = _identity_pass(jid, f, sh, dest, cam_m)
     if _in:
         qc = list(qc) + [_in]
+    _cut = _trim_to_face(jid, dest, ident_m, bool((sh.get("cam") or {}).get("trim_face")))
+    if _cut:
+        qc = list(qc) + ["the studio cut the take at %.1f s of %.1f, where the face went" % (_cut["at"], _cut["was"])]
+        _if = False   # a cut take no longer loses the face: that is what the cut was for
+        qc = [n for n in qc if not str(n).startswith("the face is a different one by the end")]
     loud = _mean_db(dest)
     if any("SILENT" in str(n) for n in qc) or (loud is not None and loud < QUIET_DB):
         how = "silent" if any("SILENT" in str(n) for n in qc) else ("too quiet (mean %.0f dB)" % loud)
@@ -1350,7 +1395,8 @@ def _needs_sentence(sh):
 def _faults(take):
     """notes that count against a take; 'ends closer' is information, not a fault"""
     return [n for n in (take.get("qc") or [])
-            if not n.startswith(("ends closer", "sound borrowed", "words not in the picture", "camera:", "identity:"))]
+            if not n.startswith(("ends closer", "sound borrowed", "words not in the picture", "camera:", "identity:",
+                                 "the studio cut the take"))]
 
 
 def _camera_score(sh, take):
@@ -1381,13 +1427,27 @@ def _identity_score(take):
     return float(v) if v is not None else 0.5
 
 
+def _hold_score(take):
+    """higher is better: how much of the clip the face survives (1.0 = all of it).
+
+    Between two takes that both lose the face, the one that keeps it for four seconds is
+    worth more than the one that keeps it for two - it is the one that can still be cut."""
+    hc = ((take.get("identity") or {}).get("hold_curve")) or {}
+    d = hc.get("duration") or 0
+    if not d:
+        return 1.0 if not hc else 0.5
+    if hc.get("holds"):
+        return 1.0
+    return min(1.0, float(hc.get("holds_until") or 0) / d)
+
+
 def _cleanest(sh, takes):
     """the automatic pick: for a shot with a line only voiced takes are eligible
     (when any exist); then fewest faults, then the newest"""
     has_line = any(((b.get("dialogue") or {}).get("line") or "").strip() for b in (sh.get("beats") or []))
     pool = [t for t in takes if (t.get("engine") or "").endswith("+vo")] if has_line else []
     pool = pool or list(takes)
-    return sorted(pool, key=lambda t: (len(_faults(t)), round(_camera_score(sh, t), 2), -round(_identity_score(t), 2), -len(t["id"]), t["id"]))[0]
+    return sorted(pool, key=lambda t: (len(_faults(t)), round(_camera_score(sh, t), 2), -round(_hold_score(t), 2), -round(_identity_score(t), 2), -len(t["id"]), t["id"]))[0]
 
 
 def _vo_job(jid, fid, shid, tid, duck=0.35):
