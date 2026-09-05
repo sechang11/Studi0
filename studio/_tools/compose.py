@@ -608,7 +608,7 @@ def compose(char_id, place_id, plate_key=None, view="turn_front",
     if not os.path.isfile(src):
         raise SystemExit("no such view: %s" % src)
     plates = sorted(f for f in os.listdir(pdir)
-                    if f.endswith(".png") and not f.endswith("_depth.png"))
+                    if f.endswith(".png") and not f.endswith("_depth.png") and "__angle" not in f)
     if plate_key:
         pf = plate_key if plate_key.endswith(".png") else plate_key + ".png"
     else:
@@ -772,7 +772,7 @@ def compose_close(char_id, place_id, plate_key=None, view="base_portrait", cx=0.
     if not os.path.isfile(src):
         raise SystemExit("no such view: %s" % src)
     plates = sorted(f for f in os.listdir(pdir)
-                    if f.endswith(".png") and not f.endswith("_depth.png"))
+                    if f.endswith(".png") and not f.endswith("_depth.png") and "__angle" not in f)
     if plate_key:
         pf = plate_key if plate_key.endswith(".png") else plate_key + ".png"
     else:
@@ -985,7 +985,7 @@ def plate_for(place_id, plate_key=None):
     caller that only knows the place can find the pristine background."""
     pdir = os.path.join(PLACES, place_id)
     plates = sorted(f for f in os.listdir(pdir)
-                    if f.endswith(".png") and not f.endswith("_depth.png"))
+                    if f.endswith(".png") and not f.endswith("_depth.png") and "__angle" not in f)
     if plate_key:
         pf = plate_key if plate_key.endswith(".png") else plate_key + ".png"
     else:

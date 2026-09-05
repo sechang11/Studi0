@@ -912,7 +912,7 @@ def _pack_files(cid, imgs):
                      os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
                                   "foundry"), "characters", cid)
     try:
-        on_disk = sorted(f for f in os.listdir(d) if f.endswith(".png") and not f.endswith("_depth.png"))
+        on_disk = sorted(f for f in os.listdir(d) if f.endswith(".png") and not f.endswith("_depth.png") and "__angle" not in f)
     except OSError:
         on_disk = []
     order = {k: i for i, k in enumerate(_PACK_ORDER)}

@@ -12,11 +12,13 @@
   "motion": "walk",
   "duration": 6,
   "action": "walks toward the camera, steady",
-  "variants": 3
+  "variants": 3,
+  "trim_face": true
  },
  "keeps": [
   "identity at the start (composed anchor)",
-  "three variants by default - the pick keeps the face that held (the seed dance)"
+  "three variants by default - the pick keeps the face that held (the seed dance)",
+  "the studio cuts the take where the face goes (measured, never below two seconds)"
  ],
  "cannot": [
   "the place through the walk (drift is likely)",

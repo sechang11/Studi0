@@ -1441,13 +1441,23 @@ def _hold_score(take):
     return min(1.0, float(hc.get("holds_until") or 0) / d)
 
 
+def _short_score(sh, take):
+    """how many seconds short of what the shot asked this take came back, in half-second
+    steps so that a tenth of a second never decides a pick"""
+    want = float(sh.get("duration") or 0)
+    got = float(take.get("duration") or want or 0)
+    if not want:
+        return 0.0
+    return round(max(0.0, want - got) * 2) / 2.0
+
+
 def _cleanest(sh, takes):
     """the automatic pick: for a shot with a line only voiced takes are eligible
     (when any exist); then fewest faults, then the newest"""
     has_line = any(((b.get("dialogue") or {}).get("line") or "").strip() for b in (sh.get("beats") or []))
     pool = [t for t in takes if (t.get("engine") or "").endswith("+vo")] if has_line else []
     pool = pool or list(takes)
-    return sorted(pool, key=lambda t: (len(_faults(t)), round(_camera_score(sh, t), 2), -round(_hold_score(t), 2), -round(_identity_score(t), 2), -len(t["id"]), t["id"]))[0]
+    return sorted(pool, key=lambda t: (len(_faults(t)), _short_score(sh, t), round(_camera_score(sh, t), 2), -round(_hold_score(t), 2), -round(_identity_score(t), 2), -len(t["id"]), t["id"]))[0]
 
 
 def _vo_job(jid, fid, shid, tid, duck=0.35):
@@ -2829,6 +2839,18 @@ def _load_sibling(name):
     return m
 
 
+def _cam_block(tpl_build, post, data):
+    """what the shot asks of the camera, and whether the studio may cut it at the face"""
+    cam = {"rig": tpl_build["rig"]} if tpl_build.get("rig") else ({"post": dict(post)} if post else {})
+    want = data.get("trim_face")
+    if want is None:
+        want = tpl_build.get("trim_face")
+    if want:
+        cam = dict(cam)
+        cam["trim_face"] = True
+    return cam
+
+
 def _build_job(jid, data):
     try:
         import importlib.util, random
@@ -2917,7 +2939,7 @@ def _build_job(jid, data):
                             beats=[beat], sfx=(f.scene(scid) or {}).get("ambience") or "",
                             anchor=("file:" + plate_p) if (plate_p and not cast_ids) else "scene",
                             no_people=not cast_ids, transition_out="cut",
-                            cam=(({"rig": tpl_build["rig"]} if tpl_build.get("rig") else ({"post": dict(post)} if post else {}))))
+                            cam=_cam_block(tpl_build, post, data))
             f.save()
             shid = sh["id"]
             made.append(shid)

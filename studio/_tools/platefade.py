@@ -29,7 +29,7 @@ def pick_plates(place_dir, key="wide"):
     """the place's plates of one framing key, in time-of-day order"""
     found = []
     for f in os.listdir(place_dir):
-        if not f.endswith(".png") or f.endswith("_depth.png"):
+        if not f.endswith(".png") or f.endswith("_depth.png") or "__angle" in f:
             continue
         stem = f[:-4]
         if not stem.endswith("_" + key):
