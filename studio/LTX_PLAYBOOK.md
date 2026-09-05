@@ -2008,3 +2008,43 @@ faults. A runaway is now a fault by name and Make rolls it again.
 **Also worth knowing where it breaks.** Two of eleven shots ran away, both at the night diner,
 both pushing past 140%. A place can make this engine bolt; the fault now catches it, but the
 place is worth remembering.
+
+**A crane: the angle travels.** The angle lives in the plate, and a plate does not move, so
+every angle so far held for a whole take. A crane is the same keystone applied per frame with
+a pitch that ramps, inside a zoom that gives the swinging frame room. Built through the
+studio on the same alley: up asked +0.45 and delivered +0.31 of change, down asked -0.45 and
+delivered -0.46, first frame against last. What it cannot do is the parallax - the depth map
+belongs to the plate and a rendered take has no depth per frame - so it is a boom on a locked
+head and the entry says so. Note also that the similarity-transform ruler reads a keystone as
+a roll, because a keystone is not a similarity transform; the two rulers disagree honestly.
+
+**The words were wrong, and the population said so.** The ruler was calibrated against
+synthetic keystones, which checks that it measures what it claims and says nothing about what
+the numbers should be CALLED. The first names came from theory - past 0.12 a low angle, past
+0.55 a steep one - and over 102 readings of every plate and picked take on the box that made
+two thirds of ordinary pictures "a steep low angle". Real photographs are not shot dead level
+at the middle of their subject: the population's quartiles are 0.00 and +0.80 with a median
+of +0.39, skewed upward because a camera at chest height in a street has converging verticals
+whether or not anyone asked. The words now come from that distribution, and, because an
+ordinary plate is not at zero, the PROMISE is relative: the builder records what the source
+plate measured and the spec compares the take against that. Score against the baseline, never
+against the ideal - the third time this project has had to learn it.
+
+**Packs: a view can be drawn out of proportion.** Every composite sizes a cutout so its total
+height is what a 1.7 m person subtends where it stands, which only holds if every view of one
+person shares proportions. They do not. On the well-behaved packs the head varies 13% to 33%
+between views of the same character; eight packs of eighteen have at least one view more than
+a third from their own median - a hat brim, a raised arm, a failed cutout, a figure that is
+not standing - and those views are in active use. `_tools/pack_views_check.py` names them and
+the repair job now removes them along with the cropped ones. Scaling by the head instead was
+tried and withdrawn inside the hour: it did not reach the path that composes the subject, and
+a head measured in a finished composite is not the same measurement as one measured in a clean
+cutout. A uniform scale cannot repair a ratio anyway.
+
+**And the box killed ComfyUI three times.** Staging a 20 GB video model while another session
+holds the card ends the process outright - no exception, no traceback, the socket simply
+closes, the signature already written down for oversized renders. The studio knew how to bring
+it back and was not calling that where it mattered: a submission into a closed socket raised
+straight out of the take and the variant was lost. Six submission sites now restart ComfyUI
+and try once more. Once, not forever. Separately: a hundred segmenter calls back to back will
+do the same thing, so the pack check is paced.
