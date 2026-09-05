@@ -123,11 +123,16 @@ def run(job):
         if c0 is None:
             return {**out, "error": "the head box left the frame"}
         cam = job.get("cam") or {}
-        cb = carry_box(box, cam)
-        # how much of the carried box is still inside the frame
-        ix0, iy0, ix1, iy1 = max(0.0, cb[0]), max(0.0, cb[1]), min(1.0, cb[2]), min(1.0, cb[3])
-        inside = max(0.0, ix1 - ix0) * max(0.0, iy1 - iy0) / max(1e-6, (cb[2] - cb[0]) * (cb[3] - cb[1]))
-        too_far = float(cam.get("zoom", 1.0) or 1.0) > 1.6 or inside < 0.6
+        if job.get("close"):
+            # a face that fills the frame IS what the camera ruler follows, so the measured
+            # "camera" is the head; the face stays in the same box, and that is what is compared
+            cb, too_far = list(box), False
+        else:
+            cb = carry_box(box, cam)
+            # how much of the carried box is still inside the frame
+            ix0, iy0, ix1, iy1 = max(0.0, cb[0]), max(0.0, cb[1]), min(1.0, cb[2]), min(1.0, cb[3])
+            inside = max(0.0, ix1 - ix0) * max(0.0, iy1 - iy0) / max(1e-6, (cb[2] - cb[0]) * (cb[3] - cb[1]))
+            too_far = float(cam.get("zoom", 1.0) or 1.0) > 1.6 or inside < 0.6
         c1 = None if too_far else crop(last, cb)
         p, e0 = embed(portrait), embed(c0)
         start = float((p * e0).sum())
