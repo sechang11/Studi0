@@ -1789,3 +1789,60 @@ on one seed (0.66 to 0.29). Built again with three variants, the same anchor:
 That is what "seed dance" means here: not hoping a seed behaves, but rendering
 several, measuring each, and letting the measurement choose. The walk entries
 ask for three variants by default now.
+
+## §54  The block in numbers, and the last correction
+
+Twelve hours from 23:38 to 11:38, one branch, 46 commits. Four films made for
+measurement: `builder-test` (24 shots, 50 takes: the exact push, the
+stabilised static, two time passes, three over-the-shoulder builds, the push
+proven at 1.127 for 1.14, the H3 build), `cam-vocab` (20 shots, the keyword
+bench), `encyclopedia-check` (39 shots, 71 takes: the matrix, the medium
+re-run, the seed dance) and `shot-builds-09-04`. Six playbook sections (§50 to
+§55 counted with this one), 44 verify clips waiting for a verdict, five new
+tools that load fresh per job (cammeasure, postmove, platefade, identity, and
+the OTS mode of compose), a 32-entry catalog with recipes and a `checked`
+block on every entry, a camera grammar in the spec, and a camera picker on the
+builder, the editor and the start page.
+
+**The seed dance on the five faulted entries.** Each faulted entry of the
+matrix was built again with three to five variants, unattended, 05:50 to
+09:15: reveal by tilt (4 takes, 1300 s), low angle wide (2 takes, 2400 s -
+the queue was shared), over the shoulder (4 takes, 1530 s), pan (3 takes,
+750 s), walk and talk (5 takes, 1340 s). The pan came back clean on all three
+(the people who had appeared in the empty pan appeared on one of three; the
+pick took another). The other four picks still read "uncertain" or "a
+different face" when the dance finished - and two of those readings were
+wrong, which is the correction.
+
+**The correction: the ruler was reading the wrong pixels.** A studio move
+crops the first frame - a tilt at zoom 1.12 shows a window of the anchor, not
+the anchor - and the identity ruler had been placing the anchor's head box on
+the cropped frame. On a tilt up the box landed on the chest. postmove now
+reports the first-frame window (zoom, centre) and identity carries the head
+box into it before it crops; 31 picked takes were re-scored on CPU without
+a render, and 22 start scores moved. Reveal by tilt went from 0.42 to 0.64 at
+the start and 0.46 to 0.60 at the end - the same person; low angle wide from
+0.47 to 0.66 and 0.49 to 0.57 - the same person. The dance had found good
+takes an hour earlier; the ruler could not see them. Rule: any measurement
+taken on a frame the studio has transformed must be taken in the transformed
+frame's coordinates - the same law as the camera curve, now applied to the
+face.
+
+**What still fails, honestly.** Three picks end on a different face after the
+re-score: the over-the-shoulder pair (his back covers her face at the start
+by design; the end reading follows the near figure's tint, and the note says
+"may cover"), the walk-and-talk (five seeds, every one redrew the face on the
+walk toward camera: 0.57 to 0.34, 0.61 to 0.33, 0.54 to 0.32 - on this
+anchor the dance did not rescue the walk the way it did on shot 340, so the
+entry says three variants help and do not guarantee), and the medium walk in
+shot 200. The final matrix: 32 of 32 built, 27 clean picks, 16 same person,
+4 uncertain, 3 a different face, 9 with no face to judge (empty frames,
+inserts, time passes).
+
+**For the next block.** A face detector would replace the compose-geometry
+head box and the framing-dependent bands with one band. The walk toward
+camera wants a pin on the end frame (in place, so the H3 rule holds) or a cut
+at the point the face is redrawn. A driver should read the film, not the
+job list. And the window0 lesson generalises: every ruler that runs after a
+studio transform (identity, people, the edge check) should be handed the
+transform.
