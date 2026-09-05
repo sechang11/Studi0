@@ -1,0 +1,1637 @@
+{
+ "title": "Cam Vocab",
+ "created": "2026-09-05 01:05",
+ "look": "photoreal",
+ "look_clause": "photoreal cinematic film still, 35mm, deep focus, high detail, colour photograph, filmic grade",
+ "grade": "",
+ "negative": "",
+ "fps": 24,
+ "logline": "",
+ "resolution": "auto",
+ "deliver": "native",
+ "cast": {},
+ "scenes": [
+  {
+   "id": "sc01",
+   "title": "bench",
+   "location": "",
+   "time_of_day": "",
+   "weather": "",
+   "ambience": "",
+   "palette": "",
+   "music": "",
+   "cast_present": [],
+   "no_people": false,
+   "anchor": "",
+   "shots": [
+    "010",
+    "020",
+    "030",
+    "040",
+    "050",
+    "060",
+    "070",
+    "080",
+    "090",
+    "100",
+    "110",
+    "120",
+    "130",
+    "140",
+    "150",
+    "160",
+    "170",
+    "180",
+    "190",
+    "200"
+   ]
+  }
+ ],
+ "shots": {
+  "010": {
+   "id": "010",
+   "scene": "sc01",
+   "title": "ltx: static",
+   "duration": 5,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/builder-test/assets/anchor_shot_160.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "",
+     "action": "stands at the rail looking out into the fog; the camera does not move",
+     "background": "the harbour at night, fog, lamps",
+     "motion": "",
+     "ambient": [
+      "water"
+     ],
+     "dialogue": {
+      "char": "",
+      "line": "",
+      "delivery": ""
+     }
+    }
+   ],
+   "sfx": "",
+   "no_people": null,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t584757438",
+     "engine": "ltx",
+     "seed": 4242,
+     "created": "01:09",
+     "file": "takes/010/ltx_t584757438.mp4",
+     "poster": "takes/010/ltx_t584757438.png",
+     "strip": "takes/010/ltx_t584757438_strip.png",
+     "duration": 5.04,
+     "fps": 24,
+     "qc": [
+      "camera: static"
+     ],
+     "cam_measured": {
+      "zoom": 1.005,
+      "pan": 0.011,
+      "tilt": -0.003,
+      "roll": -0.26,
+      "camera": "static",
+      "confidence": "high"
+     },
+     "identity": null,
+     "drift": {
+      "lost": 0.5,
+      "missing": [
+       "boot",
+       "build",
+       "bulb",
+       "coil",
+       "dock",
+       "fisherman",
+       "horizon",
+       "metal",
+       "mist",
+       "nylon",
+       "pant",
+       "pier"
+      ],
+      "kept": 13,
+      "last_caption": "Harbor, fishing boat, man, jacket, rope, deck, wood, ship, masts, fog, water, boats, harbor lights, sky, clouds, ocean, weather, night, lantern, lights, reflections, vessels."
+     },
+     "warnings": [
+      "no ambience or sfx set - LTX generates the ambience the picture implies, and a shot with nothing that makes noise returns literal silence"
+     ],
+     "prompt": "A static wide shot: stands at the rail looking out into the fog; the camera does not move, while the harbour at night, fog, lamps; water moves continuously. Photoreal cinematic film still, 35mm, deep focus, high detail, colour photograph, filmic grade."
+    }
+   ],
+   "picked": "",
+   "engine_notes": ""
+  },
+  "020": {
+   "id": "020",
+   "scene": "sc01",
+   "title": "ltx: push in",
+   "duration": 5,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/builder-test/assets/anchor_shot_160.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "",
+     "action": "stands at the rail looking out into the fog; as the camera pushes in slowly",
+     "background": "the harbour at night, fog, lamps",
+     "motion": "",
+     "ambient": [
+      "water"
+     ],
+     "dialogue": {
+      "char": "",
+      "line": "",
+      "delivery": ""
+     }
+    }
+   ],
+   "sfx": "",
+   "no_people": null,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t584965470",
+     "engine": "ltx",
+     "seed": 4242,
+     "created": "01:13",
+     "file": "takes/020/ltx_t584965470.mp4",
+     "poster": "takes/020/ltx_t584965470.png",
+     "strip": "takes/020/ltx_t584965470_strip.png",
+     "duration": 5.04,
+     "fps": 24,
+     "qc": [
+      "camera: tilt up 9%"
+     ],
+     "cam_measured": {
+      "zoom": 1.007,
+      "pan": -0.022,
+      "tilt": -0.091,
+      "roll": -0.22,
+      "camera": "tilt up 9%",
+      "confidence": "high"
+     },
+     "identity": null,
+     "drift": {
+      "lost": 0.38,
+      "missing": [
+       "boot",
+       "build",
+       "bulb",
+       "coil",
+       "dock",
+       "horizon",
+       "nylon",
+       "pant",
+       "pier",
+       "rope"
+      ],
+      "kept": 16,
+      "last_caption": "Harbor, fishing boats, fishing vessel, masts, rigging, hull, deck, fisherman, jacket, water, waves, reflections, fog, sky, night, streetlights, boat lights, dark blue, black, yellow, wood, metal, ocean, weather, mist, dusk, light, glow, shadows."
+     },
+     "warnings": [
+      "no ambience or sfx set - LTX generates the ambience the picture implies, and a shot with nothing that makes noise returns literal silence"
+     ],
+     "prompt": "A static wide shot: stands at the rail looking out into the fog; as the camera pushes in slowly, while the harbour at night, fog, lamps; water moves continuously. Photoreal cinematic film still, 35mm, deep focus, high detail, colour photograph, filmic grade."
+    }
+   ],
+   "picked": "",
+   "engine_notes": ""
+  },
+  "030": {
+   "id": "030",
+   "scene": "sc01",
+   "title": "ltx: pull back",
+   "duration": 5,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/builder-test/assets/anchor_shot_160.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "",
+     "action": "stands at the rail looking out into the fog; as the camera pulls back slowly",
+     "background": "the harbour at night, fog, lamps",
+     "motion": "",
+     "ambient": [
+      "water"
+     ],
+     "dialogue": {
+      "char": "",
+      "line": "",
+      "delivery": ""
+     }
+    }
+   ],
+   "sfx": "",
+   "no_people": null,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t585205507",
+     "engine": "ltx",
+     "seed": 4242,
+     "created": "01:17",
+     "file": "takes/030/ltx_t585205507.mp4",
+     "poster": "takes/030/ltx_t585205507.png",
+     "strip": "takes/030/ltx_t585205507_strip.png",
+     "duration": 5.04,
+     "fps": 24,
+     "qc": [
+      "camera: tilt up 39%, roll 3.5 deg",
+      "sound borrowed from take t584965470 of shot 020 - the render was too quiet (mean -40 dB)"
+     ],
+     "cam_measured": {
+      "zoom": 1.031,
+      "pan": -0.005,
+      "tilt": -0.389,
+      "roll": 3.54,
+      "camera": "tilt up 39%, roll 3.5 deg",
+      "confidence": "high"
+     },
+     "identity": null,
+     "drift": {
+      "lost": 0.38,
+      "missing": [
+       "boot",
+       "bulb",
+       "coil",
+       "fisherman",
+       "horizon",
+       "jacket",
+       "lamp",
+       "nylon",
+       "pant",
+       "rigg"
+      ],
+      "kept": 16,
+      "last_caption": "Canal, harbor, waterway, ships, fishing boats, vessels, masts, hulls, decks, lights, fog, mist, water, canal banks, concrete, metal, wood, ropes, nets, piers, docks, buildings, glow, illumination, night, darkness, atmosphere, clouds, sky, reflections, shadows."
+     },
+     "warnings": [
+      "no ambience or sfx set - LTX generates the ambience the picture implies, and a shot with nothing that makes noise returns literal silence"
+     ],
+     "prompt": "A static wide shot: stands at the rail looking out into the fog; as the camera pulls back slowly, while the harbour at night, fog, lamps; water moves continuously. Photoreal cinematic film still, 35mm, deep focus, high detail, colour photograph, filmic grade."
+    }
+   ],
+   "picked": "",
+   "engine_notes": ""
+  },
+  "040": {
+   "id": "040",
+   "scene": "sc01",
+   "title": "ltx: pan left",
+   "duration": 5,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/builder-test/assets/anchor_shot_160.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "",
+     "action": "stands at the rail looking out into the fog; as the camera pans slowly to the left",
+     "background": "the harbour at night, fog, lamps",
+     "motion": "",
+     "ambient": [
+      "water"
+     ],
+     "dialogue": {
+      "char": "",
+      "line": "",
+      "delivery": ""
+     }
+    }
+   ],
+   "sfx": "",
+   "no_people": null,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t585453538",
+     "engine": "ltx",
+     "seed": 4242,
+     "created": "01:21",
+     "file": "takes/040/ltx_t585453538.mp4",
+     "poster": "takes/040/ltx_t585453538.png",
+     "strip": "takes/040/ltx_t585453538_strip.png",
+     "duration": 5.04,
+     "fps": 24,
+     "qc": [
+      "camera: push in 86%, pan left 6%, tilt up 22% (uncertain)"
+     ],
+     "cam_measured": {
+      "zoom": 1.863,
+      "pan": -0.064,
+      "tilt": -0.223,
+      "roll": 0.38,
+      "camera": "push in 86%, pan left 6%, tilt up 22%",
+      "confidence": "low"
+     },
+     "identity": null,
+     "drift": {
+      "lost": 0.5,
+      "missing": [
+       "boot",
+       "build",
+       "bulb",
+       "coil",
+       "dock",
+       "fish",
+       "fisherman",
+       "harbor",
+       "horizon",
+       "mist",
+       "pant",
+       "pier"
+      ],
+      "kept": 13,
+      "last_caption": "Ship, ocean, man, beard, hair, jacket, shirt, rigging, ropes, masts, deck, wood, fabric, nylon, metal, water, night, fog, light, lamps, glow, person."
+     },
+     "warnings": [
+      "no ambience or sfx set - LTX generates the ambience the picture implies, and a shot with nothing that makes noise returns literal silence"
+     ],
+     "prompt": "A static wide shot: stands at the rail looking out into the fog; as the camera pans slowly to the left, while the harbour at night, fog, lamps; water moves continuously. Photoreal cinematic film still, 35mm, deep focus, high detail, colour photograph, filmic grade."
+    }
+   ],
+   "picked": "",
+   "engine_notes": ""
+  },
+  "050": {
+   "id": "050",
+   "scene": "sc01",
+   "title": "ltx: pan right",
+   "duration": 5,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/builder-test/assets/anchor_shot_160.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "",
+     "action": "stands at the rail looking out into the fog; as the camera pans slowly to the right",
+     "background": "the harbour at night, fog, lamps",
+     "motion": "",
+     "ambient": [
+      "water"
+     ],
+     "dialogue": {
+      "char": "",
+      "line": "",
+      "delivery": ""
+     }
+    }
+   ],
+   "sfx": "",
+   "no_people": null,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t585685570",
+     "engine": "ltx",
+     "seed": 4242,
+     "created": "01:27",
+     "file": "takes/050/ltx_t585685570.mp4",
+     "poster": "takes/050/ltx_t585685570.png",
+     "strip": "takes/050/ltx_t585685570_strip.png",
+     "duration": 5.04,
+     "fps": 24,
+     "qc": [
+      "camera: push in 18%, pan right 42%, tilt up 11%, roll -3.2 deg"
+     ],
+     "cam_measured": {
+      "zoom": 1.175,
+      "pan": 0.419,
+      "tilt": -0.115,
+      "roll": -3.18,
+      "camera": "push in 18%, pan right 42%, tilt up 11%, roll -3.2 deg",
+      "confidence": "high"
+     },
+     "identity": null,
+     "drift": {
+      "lost": 0.35,
+      "missing": [
+       "boot",
+       "build",
+       "coil",
+       "fish",
+       "fisherman",
+       "jacket",
+       "nylon",
+       "pant",
+       "rigg"
+      ],
+      "kept": 17,
+      "last_caption": "Harbor, dock, boat, ship, water, fog, mist, rope, wood, post, light, reflection, pier, masts, hull, metal, night, darkness, glow, lamps, bulbs, horizon, shoreline, boats, vessels."
+     },
+     "warnings": [
+      "no ambience or sfx set - LTX generates the ambience the picture implies, and a shot with nothing that makes noise returns literal silence"
+     ],
+     "prompt": "A static wide shot: stands at the rail looking out into the fog; as the camera pans slowly to the right, while the harbour at night, fog, lamps; water moves continuously. Photoreal cinematic film still, 35mm, deep focus, high detail, colour photograph, filmic grade."
+    }
+   ],
+   "picked": "",
+   "engine_notes": ""
+  },
+  "060": {
+   "id": "060",
+   "scene": "sc01",
+   "title": "ltx: tilt up",
+   "duration": 5,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/builder-test/assets/anchor_shot_160.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "",
+     "action": "stands at the rail looking out into the fog; as the camera tilts slowly upward",
+     "background": "the harbour at night, fog, lamps",
+     "motion": "",
+     "ambient": [
+      "water"
+     ],
+     "dialogue": {
+      "char": "",
+      "line": "",
+      "delivery": ""
+     }
+    }
+   ],
+   "sfx": "",
+   "no_people": null,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t586037618",
+     "engine": "ltx",
+     "seed": 4242,
+     "created": "01:31",
+     "file": "takes/060/ltx_t586037618.mp4",
+     "poster": "takes/060/ltx_t586037618.png",
+     "strip": "takes/060/ltx_t586037618_strip.png",
+     "duration": 5.04,
+     "fps": 24,
+     "qc": [
+      "camera: push in 86%, pan left 6%, tilt up 22% (uncertain)"
+     ],
+     "cam_measured": {
+      "zoom": 1.863,
+      "pan": -0.064,
+      "tilt": -0.223,
+      "roll": 0.38,
+      "camera": "push in 86%, pan left 6%, tilt up 22%",
+      "confidence": "low"
+     },
+     "identity": null,
+     "drift": {
+      "lost": 0.5,
+      "missing": [
+       "boot",
+       "build",
+       "bulb",
+       "coil",
+       "dock",
+       "fish",
+       "fisherman",
+       "harbor",
+       "horizon",
+       "mist",
+       "pant",
+       "pier"
+      ],
+      "kept": 13,
+      "last_caption": "Ship, ocean, man, beard, hair, jacket, shirt, rigging, ropes, masts, deck, wood, fabric, nylon, metal, water, night, fog, light, lamps, glow, person."
+     },
+     "warnings": [
+      "no ambience or sfx set - LTX generates the ambience the picture implies, and a shot with nothing that makes noise returns literal silence"
+     ],
+     "prompt": "A static wide shot: stands at the rail looking out into the fog; as the camera tilts slowly upward, while the harbour at night, fog, lamps; water moves continuously. Photoreal cinematic film still, 35mm, deep focus, high detail, colour photograph, filmic grade."
+    }
+   ],
+   "picked": "",
+   "engine_notes": ""
+  },
+  "070": {
+   "id": "070",
+   "scene": "sc01",
+   "title": "ltx: dolly in",
+   "duration": 5,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/builder-test/assets/anchor_shot_160.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "",
+     "action": "stands at the rail looking out into the fog; a slow dolly in toward him",
+     "background": "the harbour at night, fog, lamps",
+     "motion": "",
+     "ambient": [
+      "water"
+     ],
+     "dialogue": {
+      "char": "",
+      "line": "",
+      "delivery": ""
+     }
+    }
+   ],
+   "sfx": "",
+   "no_people": null,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t586269659",
+     "engine": "ltx",
+     "seed": 4242,
+     "created": "01:34",
+     "file": "takes/070/ltx_t586269659.mp4",
+     "poster": "takes/070/ltx_t586269659.png",
+     "strip": "takes/070/ltx_t586269659_strip.png",
+     "duration": 5.04,
+     "fps": 24,
+     "qc": [
+      "camera: push in 86%, pan left 6%, tilt up 22% (uncertain)"
+     ],
+     "cam_measured": {
+      "zoom": 1.863,
+      "pan": -0.064,
+      "tilt": -0.223,
+      "roll": 0.38,
+      "camera": "push in 86%, pan left 6%, tilt up 22%",
+      "confidence": "low"
+     },
+     "identity": null,
+     "drift": {
+      "lost": 0.5,
+      "missing": [
+       "boot",
+       "build",
+       "bulb",
+       "coil",
+       "dock",
+       "fish",
+       "fisherman",
+       "harbor",
+       "horizon",
+       "mist",
+       "pant",
+       "pier"
+      ],
+      "kept": 13,
+      "last_caption": "Ship, ocean, man, beard, hair, jacket, shirt, rigging, ropes, masts, deck, wood, fabric, nylon, metal, water, night, fog, light, lamps, glow, person."
+     },
+     "warnings": [
+      "no ambience or sfx set - LTX generates the ambience the picture implies, and a shot with nothing that makes noise returns literal silence"
+     ],
+     "prompt": "A static wide shot: stands at the rail looking out into the fog; a slow dolly in toward him, while the harbour at night, fog, lamps; water moves continuously. Photoreal cinematic film still, 35mm, deep focus, high detail, colour photograph, filmic grade."
+    }
+   ],
+   "picked": "",
+   "engine_notes": ""
+  },
+  "080": {
+   "id": "080",
+   "scene": "sc01",
+   "title": "ltx: tracking",
+   "duration": 5,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/builder-test/assets/anchor_shot_160.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "",
+     "action": "stands at the rail looking out into the fog; a tracking shot moving with him",
+     "background": "the harbour at night, fog, lamps",
+     "motion": "",
+     "ambient": [
+      "water"
+     ],
+     "dialogue": {
+      "char": "",
+      "line": "",
+      "delivery": ""
+     }
+    }
+   ],
+   "sfx": "",
+   "no_people": null,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t586477688",
+     "engine": "ltx",
+     "seed": 4242,
+     "created": "01:37",
+     "file": "takes/080/ltx_t586477688.mp4",
+     "poster": "takes/080/ltx_t586477688.png",
+     "strip": "takes/080/ltx_t586477688_strip.png",
+     "duration": 5.04,
+     "fps": 24,
+     "qc": [
+      "camera: pull back 18%"
+     ],
+     "cam_measured": {
+      "zoom": 0.823,
+      "pan": 0.027,
+      "tilt": -0.039,
+      "roll": -1.83,
+      "camera": "pull back 18%",
+      "confidence": "high"
+     },
+     "identity": null,
+     "drift": {
+      "lost": 0.42,
+      "missing": [
+       "boot",
+       "build",
+       "bulb",
+       "coil",
+       "dock",
+       "fisherman",
+       "horizon",
+       "nylon",
+       "pant",
+       "pier",
+       "rigg"
+      ],
+      "kept": 15,
+      "last_caption": "Harbor, fishing boats, ship, deck, ropes, cables, railings, hull, masts, navigation lights, fog, water, ocean, night, lamps, lamps, reflections, vessels, ships, metal, wood, rope, yellow jacket, person, man, fog, mist."
+     },
+     "warnings": [
+      "no ambience or sfx set - LTX generates the ambience the picture implies, and a shot with nothing that makes noise returns literal silence"
+     ],
+     "prompt": "A static wide shot: stands at the rail looking out into the fog; a tracking shot moving with him, while the harbour at night, fog, lamps; water moves continuously. Photoreal cinematic film still, 35mm, deep focus, high detail, colour photograph, filmic grade."
+    }
+   ],
+   "picked": "",
+   "engine_notes": ""
+  },
+  "090": {
+   "id": "090",
+   "scene": "sc01",
+   "title": "h3: static",
+   "duration": 5,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/builder-test/assets/anchor_shot_160.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "",
+     "action": "stands at the rail looking out into the fog; the camera does not move",
+     "background": "the harbour at night, fog, lamps",
+     "motion": "",
+     "ambient": [
+      "water"
+     ],
+     "dialogue": {
+      "char": "",
+      "line": "",
+      "delivery": ""
+     }
+    }
+   ],
+   "sfx": "",
+   "no_people": null,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t586645922",
+     "engine": "h3",
+     "seed": 4242,
+     "created": "01:38",
+     "file": "takes/090/h3_t586645922.mp4",
+     "poster": "takes/090/h3_t586645922.png",
+     "strip": "takes/090/h3_t586645922_strip.png",
+     "duration": 5.17,
+     "fps": 24,
+     "qc": [
+      "camera: push in 20%, pan right 12%, roll 3.7 deg"
+     ],
+     "cam_measured": {
+      "zoom": 1.202,
+      "pan": 0.123,
+      "tilt": 0.009,
+      "roll": 3.69,
+      "camera": "push in 20%, pan right 12%, roll 3.7 deg",
+      "confidence": "high"
+     },
+     "identity": null,
+     "drift": {
+      "lost": 0.35,
+      "missing": [
+       "boot",
+       "build",
+       "bulb",
+       "coil",
+       "fisherman",
+       "horizon",
+       "nylon",
+       "pant",
+       "rigg"
+      ],
+      "kept": 17,
+      "last_caption": "Harbor, docks, piers, boats, fishing boats, vessels, masts, ropes, railings, deck, wood, metal, rope, jacket, man, person, water, ocean, sea, fog, mist, night, darkness, lights, lamps, reflections, waves, sky, clouds."
+     },
+     "warnings": [],
+     "prompt": "stands at the rail looking out into the fog; the camera does not move, the harbour at night, fog, lamps; water moves continuously.  Sound: natural ambience."
+    }
+   ],
+   "picked": "",
+   "engine_notes": ""
+  },
+  "100": {
+   "id": "100",
+   "scene": "sc01",
+   "title": "h3: push in",
+   "duration": 5,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/builder-test/assets/anchor_shot_160.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "",
+     "action": "stands at the rail looking out into the fog; as the camera pushes in slowly",
+     "background": "the harbour at night, fog, lamps",
+     "motion": "",
+     "ambient": [
+      "water"
+     ],
+     "dialogue": {
+      "char": "",
+      "line": "",
+      "delivery": ""
+     }
+    }
+   ],
+   "sfx": "",
+   "no_people": null,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t586733944",
+     "engine": "h3",
+     "seed": 4242,
+     "created": "01:40",
+     "file": "takes/100/h3_t586733944.mp4",
+     "poster": "takes/100/h3_t586733944.png",
+     "strip": "takes/100/h3_t586733944_strip.png",
+     "duration": 5.17,
+     "fps": 24,
+     "qc": [
+      "camera: push in 28%, pan right 9%",
+      "sound borrowed from take t585685570 of shot 050 - the render was silent"
+     ],
+     "cam_measured": {
+      "zoom": 1.28,
+      "pan": 0.088,
+      "tilt": -0.059,
+      "roll": -0.69,
+      "camera": "push in 28%, pan right 9%",
+      "confidence": "high"
+     },
+     "identity": null,
+     "drift": {
+      "lost": 0.31,
+      "missing": [
+       "boot",
+       "build",
+       "dock",
+       "fisherman",
+       "horizon",
+       "lamp",
+       "nylon",
+       "pier"
+      ],
+      "kept": 18,
+      "last_caption": "Harbor, fishing boats, ship, man, ropes, ropes coils, deck, wood, jacket, yellow jacket, pants, rope, water, fog, mist, night, lights, light bulbs, masts, rigging, ropes, metal, vessels, harbor lights, reflections, sea, weather, dusk."
+     },
+     "warnings": [],
+     "prompt": "stands at the rail looking out into the fog; as the camera pushes in slowly, the harbour at night, fog, lamps; water moves continuously.  Sound: natural ambience."
+    }
+   ],
+   "picked": "",
+   "engine_notes": ""
+  },
+  "110": {
+   "id": "110",
+   "scene": "sc01",
+   "title": "h3: pull back",
+   "duration": 5,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/builder-test/assets/anchor_shot_160.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "",
+     "action": "stands at the rail looking out into the fog; as the camera pulls back slowly",
+     "background": "the harbour at night, fog, lamps",
+     "motion": "",
+     "ambient": [
+      "water"
+     ],
+     "dialogue": {
+      "char": "",
+      "line": "",
+      "delivery": ""
+     }
+    }
+   ],
+   "sfx": "",
+   "no_people": null,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t586821963",
+     "engine": "h3",
+     "seed": 4242,
+     "created": "01:41",
+     "file": "takes/110/h3_t586821963.mp4",
+     "poster": "takes/110/h3_t586821963.png",
+     "strip": "takes/110/h3_t586821963_strip.png",
+     "duration": 5.17,
+     "fps": 24,
+     "qc": [
+      "camera: pull back 28%, pan right 6%, roll -2.0 deg",
+      "sound borrowed from take t585685570 of shot 050 - the render was too quiet (mean -50 dB)"
+     ],
+     "cam_measured": {
+      "zoom": 0.718,
+      "pan": 0.064,
+      "tilt": 0.005,
+      "roll": -2.0,
+      "camera": "pull back 28%, pan right 6%, roll -2.0 deg",
+      "confidence": "high"
+     },
+     "identity": null,
+     "drift": {
+      "lost": 0.54,
+      "missing": [
+       "boot",
+       "build",
+       "bulb",
+       "coil",
+       "dock",
+       "fisherman",
+       "horizon",
+       "jacket",
+       "metal",
+       "mist",
+       "nylon",
+       "pant"
+      ],
+      "kept": 12,
+      "last_caption": "Harbor, fishing boats, ship, masts, ropes, deck, men, raincoats, nets, wood, boats, water, fog, night, lights, lamps, harbor lights, sky, people, vessels."
+     },
+     "warnings": [],
+     "prompt": "stands at the rail looking out into the fog; as the camera pulls back slowly, the harbour at night, fog, lamps; water moves continuously.  Sound: natural ambience."
+    }
+   ],
+   "picked": "",
+   "engine_notes": ""
+  },
+  "120": {
+   "id": "120",
+   "scene": "sc01",
+   "title": "h3: pan left",
+   "duration": 5,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/builder-test/assets/anchor_shot_160.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "",
+     "action": "stands at the rail looking out into the fog; as the camera pans slowly to the left",
+     "background": "the harbour at night, fog, lamps",
+     "motion": "",
+     "ambient": [
+      "water"
+     ],
+     "dialogue": {
+      "char": "",
+      "line": "",
+      "delivery": ""
+     }
+    }
+   ],
+   "sfx": "",
+   "no_people": null,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t586909980",
+     "engine": "h3",
+     "seed": 4242,
+     "created": "01:43",
+     "file": "takes/120/h3_t586909980.mp4",
+     "poster": "takes/120/h3_t586909980.png",
+     "strip": "takes/120/h3_t586909980_strip.png",
+     "duration": 5.17,
+     "fps": 24,
+     "qc": [
+      "camera: push in 39%, roll 5.2 deg"
+     ],
+     "cam_measured": {
+      "zoom": 1.393,
+      "pan": -0.01,
+      "tilt": 0.002,
+      "roll": 5.16,
+      "camera": "push in 39%, roll 5.2 deg",
+      "confidence": "high"
+     },
+     "identity": null,
+     "drift": {
+      "lost": 0.27,
+      "missing": [
+       "boot",
+       "build",
+       "bulb",
+       "coil",
+       "dock",
+       "fisherman",
+       "pier"
+      ],
+      "kept": 19,
+      "last_caption": "Harbor, fishing boats, ship, deck, rope, buoy, railing, man, jacket, pants, water, fog, mist, ocean, night, lamp, light, glow, vessel, hull, mast, rigging, metal, wood, nylon, fabric, sea, weather, darkness, illumination, glow, horizon."
+     },
+     "warnings": [],
+     "prompt": "stands at the rail looking out into the fog; as the camera pans slowly to the left, the harbour at night, fog, lamps; water moves continuously.  Sound: natural ambience."
+    }
+   ],
+   "picked": "",
+   "engine_notes": ""
+  },
+  "130": {
+   "id": "130",
+   "scene": "sc01",
+   "title": "h3: pan right",
+   "duration": 5,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/builder-test/assets/anchor_shot_160.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "",
+     "action": "stands at the rail looking out into the fog; as the camera pans slowly to the right",
+     "background": "the harbour at night, fog, lamps",
+     "motion": "",
+     "ambient": [
+      "water"
+     ],
+     "dialogue": {
+      "char": "",
+      "line": "",
+      "delivery": ""
+     }
+    }
+   ],
+   "sfx": "",
+   "no_people": null,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t586997997",
+     "engine": "h3",
+     "seed": 4242,
+     "created": "01:44",
+     "file": "takes/130/h3_t586997997.mp4",
+     "poster": "takes/130/h3_t586997997.png",
+     "strip": "takes/130/h3_t586997997_strip.png",
+     "duration": 5.17,
+     "fps": 24,
+     "qc": [
+      "camera: push in 6%, pan right 17%",
+      "sound borrowed from take t585685570 of shot 050 - the render was too quiet (mean -41 dB)"
+     ],
+     "cam_measured": {
+      "zoom": 1.064,
+      "pan": 0.171,
+      "tilt": -0.005,
+      "roll": 1.05,
+      "camera": "push in 6%, pan right 17%",
+      "confidence": "high"
+     },
+     "identity": null,
+     "drift": {
+      "lost": 0.38,
+      "missing": [
+       "boot",
+       "build",
+       "bulb",
+       "coil",
+       "fisherman",
+       "horizon",
+       "lamp",
+       "mist",
+       "nylon",
+       "vessel"
+      ],
+      "kept": 16,
+      "last_caption": "Harbor, fishing boats, docks, pier, man, jacket, pants, rope, bucket, masts, rigging, water, fog, night, lights, reflections, wood, metal, plastic, clouds, sky, ocean, harbor lights, fishing boat lights, person, shadows."
+     },
+     "warnings": [],
+     "prompt": "stands at the rail looking out into the fog; as the camera pans slowly to the right, the harbour at night, fog, lamps; water moves continuously.  Sound: natural ambience."
+    }
+   ],
+   "picked": "",
+   "engine_notes": ""
+  },
+  "140": {
+   "id": "140",
+   "scene": "sc01",
+   "title": "h3: tilt up",
+   "duration": 5,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/builder-test/assets/anchor_shot_160.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "",
+     "action": "stands at the rail looking out into the fog; as the camera tilts slowly upward",
+     "background": "the harbour at night, fog, lamps",
+     "motion": "",
+     "ambient": [
+      "water"
+     ],
+     "dialogue": {
+      "char": "",
+      "line": "",
+      "delivery": ""
+     }
+    }
+   ],
+   "sfx": "",
+   "no_people": null,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t587086015",
+     "engine": "h3",
+     "seed": 4242,
+     "created": "01:46",
+     "file": "takes/140/h3_t587086015.mp4",
+     "poster": "takes/140/h3_t587086015.png",
+     "strip": "takes/140/h3_t587086015_strip.png",
+     "duration": 5.17,
+     "fps": 24,
+     "qc": [
+      "camera: push in 27%, pan right 11%, tilt up 9%, roll 3.0 deg",
+      "sound borrowed from take t585685570 of shot 050 - the render was too quiet (mean -46 dB)"
+     ],
+     "cam_measured": {
+      "zoom": 1.272,
+      "pan": 0.113,
+      "tilt": -0.094,
+      "roll": 3.04,
+      "camera": "push in 27%, pan right 11%, tilt up 9%, roll 3.0 deg",
+      "confidence": "high"
+     },
+     "identity": null,
+     "drift": {
+      "lost": 0.38,
+      "missing": [
+       "boot",
+       "build",
+       "bulb",
+       "coil",
+       "horizon",
+       "jacket",
+       "mist",
+       "nylon",
+       "pant",
+       "vessel"
+      ],
+      "kept": 16,
+      "last_caption": "Harbor, fishing boat, ship, masts, rigging, rope, railing, deck, fisherman, yellow suit, water, ocean, fog, boats, harbor lights, docks, piers, wood, metal, paint, sky, night, artificial light, lamps, reflections, waves."
+     },
+     "warnings": [],
+     "prompt": "stands at the rail looking out into the fog; as the camera tilts slowly upward, the harbour at night, fog, lamps; water moves continuously.  Sound: natural ambience."
+    }
+   ],
+   "picked": "",
+   "engine_notes": ""
+  },
+  "150": {
+   "id": "150",
+   "scene": "sc01",
+   "title": "h3: dolly in",
+   "duration": 5,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/builder-test/assets/anchor_shot_160.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "",
+     "action": "stands at the rail looking out into the fog; a slow dolly in toward him",
+     "background": "the harbour at night, fog, lamps",
+     "motion": "",
+     "ambient": [
+      "water"
+     ],
+     "dialogue": {
+      "char": "",
+      "line": "",
+      "delivery": ""
+     }
+    }
+   ],
+   "sfx": "",
+   "no_people": null,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t587174028",
+     "engine": "h3",
+     "seed": 4242,
+     "created": "01:47",
+     "file": "takes/150/h3_t587174028.mp4",
+     "poster": "takes/150/h3_t587174028.png",
+     "strip": "takes/150/h3_t587174028_strip.png",
+     "duration": 5.17,
+     "fps": 24,
+     "qc": [
+      "camera: push in 27%, pan right 9%, tilt up 7%, roll -2.1 deg",
+      "sound borrowed from take t585685570 of shot 050 - the render was too quiet (mean -51 dB)"
+     ],
+     "cam_measured": {
+      "zoom": 1.273,
+      "pan": 0.088,
+      "tilt": -0.069,
+      "roll": -2.14,
+      "camera": "push in 27%, pan right 9%, tilt up 7%, roll -2.1 deg",
+      "confidence": "high"
+     },
+     "identity": null,
+     "drift": {
+      "lost": 0.35,
+      "missing": [
+       "boot",
+       "build",
+       "coil",
+       "horizon",
+       "lamp",
+       "mist",
+       "pant",
+       "pier",
+       "rigg"
+      ],
+      "kept": 17,
+      "last_caption": "Harbor, fishing boats, man, man's jacket, rope, deck, railing, water, ocean, fog, ships, masts, ropes, lights, bulb, dock, vessels, metal, wood, nylon, clouds, night, illumination, glow, reflections, person, fisherman."
+     },
+     "warnings": [],
+     "prompt": "stands at the rail looking out into the fog; a slow dolly in toward him, the harbour at night, fog, lamps; water moves continuously.  Sound: natural ambience."
+    }
+   ],
+   "picked": "",
+   "engine_notes": ""
+  },
+  "160": {
+   "id": "160",
+   "scene": "sc01",
+   "title": "h3: tracking",
+   "duration": 5,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/builder-test/assets/anchor_shot_160.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "",
+     "action": "stands at the rail looking out into the fog; a tracking shot moving with him",
+     "background": "the harbour at night, fog, lamps",
+     "motion": "",
+     "ambient": [
+      "water"
+     ],
+     "dialogue": {
+      "char": "",
+      "line": "",
+      "delivery": ""
+     }
+    }
+   ],
+   "sfx": "",
+   "no_people": null,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t587262051",
+     "engine": "h3",
+     "seed": 4242,
+     "created": "01:49",
+     "file": "takes/160/h3_t587262051.mp4",
+     "poster": "takes/160/h3_t587262051.png",
+     "strip": "takes/160/h3_t587262051_strip.png",
+     "duration": 5.17,
+     "fps": 24,
+     "qc": [
+      "camera: push in 14%, pan right 23% (uncertain)"
+     ],
+     "cam_measured": {
+      "zoom": 1.135,
+      "pan": 0.233,
+      "tilt": 0.002,
+      "roll": 0.43,
+      "camera": "push in 14%, pan right 23%",
+      "confidence": "low"
+     },
+     "identity": null,
+     "drift": {
+      "lost": 0.38,
+      "missing": [
+       "build",
+       "bulb",
+       "coil",
+       "fisherman",
+       "horizon",
+       "mist",
+       "nylon",
+       "pant",
+       "rigg",
+       "vessel"
+      ],
+      "kept": 16,
+      "last_caption": "Harbor, fishing boats, pier, dock, man, jacket, boots, rope, net, water, ocean, fog, night, streetlights, boat lights, wood, metal, fabric, clouds, sky, waves, person, red gloves, yellow jacket."
+     },
+     "warnings": [],
+     "prompt": "stands at the rail looking out into the fog; a tracking shot moving with him, the harbour at night, fog, lamps; water moves continuously.  Sound: natural ambience."
+    }
+   ],
+   "picked": "",
+   "engine_notes": ""
+  },
+  "170": {
+   "id": "170",
+   "scene": "sc01",
+   "title": "h3: [Push in]",
+   "duration": 5,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/builder-test/assets/anchor_shot_160.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "",
+     "action": "stands at the rail looking out into the fog; [Push in]",
+     "background": "the harbour at night, fog, lamps",
+     "motion": "",
+     "ambient": [
+      "water"
+     ],
+     "dialogue": {
+      "char": "",
+      "line": "",
+      "delivery": ""
+     }
+    }
+   ],
+   "sfx": "",
+   "no_people": null,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t587350067",
+     "engine": "h3",
+     "seed": 4242,
+     "created": "01:50",
+     "file": "takes/170/h3_t587350067.mp4",
+     "poster": "takes/170/h3_t587350067.png",
+     "strip": "takes/170/h3_t587350067_strip.png",
+     "duration": 5.17,
+     "fps": 24,
+     "qc": [
+      "camera: push in 36%, pan right 11%, tilt up 6%",
+      "sound borrowed from take t585685570 of shot 050 - the render was too quiet (mean -52 dB)"
+     ],
+     "cam_measured": {
+      "zoom": 1.357,
+      "pan": 0.106,
+      "tilt": -0.064,
+      "roll": -1.61,
+      "camera": "push in 36%, pan right 11%, tilt up 6%",
+      "confidence": "high"
+     },
+     "identity": null,
+     "drift": {
+      "lost": 0.31,
+      "missing": [
+       "boot",
+       "build",
+       "bulb",
+       "coil",
+       "fisherman",
+       "horizon",
+       "mist",
+       "pant"
+      ],
+      "kept": 18,
+      "last_caption": "Harbor, fishing boats, ship, man, jacket, rope, lantern, masts, rigging, water, fog, night, lights, docks, piers, wood, metal, nylon, clouds, sky, person, vessels."
+     },
+     "warnings": [],
+     "prompt": "stands at the rail looking out into the fog; [Push in], the harbour at night, fog, lamps; water moves continuously.  Sound: natural ambience."
+    }
+   ],
+   "picked": "",
+   "engine_notes": ""
+  },
+  "180": {
+   "id": "180",
+   "scene": "sc01",
+   "title": "h3: [Pan left]",
+   "duration": 5,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/builder-test/assets/anchor_shot_160.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "",
+     "action": "stands at the rail looking out into the fog; [Pan left]",
+     "background": "the harbour at night, fog, lamps",
+     "motion": "",
+     "ambient": [
+      "water"
+     ],
+     "dialogue": {
+      "char": "",
+      "line": "",
+      "delivery": ""
+     }
+    }
+   ],
+   "sfx": "",
+   "no_people": null,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t587438087",
+     "engine": "h3",
+     "seed": 4242,
+     "created": "01:52",
+     "file": "takes/180/h3_t587438087.mp4",
+     "poster": "takes/180/h3_t587438087.png",
+     "strip": "takes/180/h3_t587438087_strip.png",
+     "duration": 5.17,
+     "fps": 24,
+     "qc": [
+      "camera: push in 41%, roll 4.0 deg (uncertain)"
+     ],
+     "cam_measured": {
+      "zoom": 1.405,
+      "pan": -0.043,
+      "tilt": -0.008,
+      "roll": 4.03,
+      "camera": "push in 41%, roll 4.0 deg",
+      "confidence": "low"
+     },
+     "identity": null,
+     "drift": {
+      "lost": 0.42,
+      "missing": [
+       "boot",
+       "build",
+       "coil",
+       "dock",
+       "fisherman",
+       "horizon",
+       "nylon",
+       "pant",
+       "pier",
+       "rigg",
+       "vessel"
+      ],
+      "kept": 15,
+      "last_caption": "Harbor, fishing boats, ship, deck, railing, rope, bucket, container, jacket, man, water, fog, mist, sky, night, light, lamp, bulb, reflection, wood, metal, fabric, plastic, ocean, weather, darkness, glow."
+     },
+     "warnings": [],
+     "prompt": "stands at the rail looking out into the fog; [Pan left], the harbour at night, fog, lamps; water moves continuously.  Sound: natural ambience."
+    }
+   ],
+   "picked": "",
+   "engine_notes": ""
+  },
+  "190": {
+   "id": "190",
+   "scene": "sc01",
+   "title": "h3: [Static shot]",
+   "duration": 5,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/builder-test/assets/anchor_shot_160.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "",
+     "action": "stands at the rail looking out into the fog; [Static shot]",
+     "background": "the harbour at night, fog, lamps",
+     "motion": "",
+     "ambient": [
+      "water"
+     ],
+     "dialogue": {
+      "char": "",
+      "line": "",
+      "delivery": ""
+     }
+    }
+   ],
+   "sfx": "",
+   "no_people": null,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t587526104",
+     "engine": "h3",
+     "seed": 4242,
+     "created": "01:53",
+     "file": "takes/190/h3_t587526104.mp4",
+     "poster": "takes/190/h3_t587526104.png",
+     "strip": "takes/190/h3_t587526104_strip.png",
+     "duration": 5.17,
+     "fps": 24,
+     "qc": [
+      "camera: pan right 16%, roll 2.2 deg"
+     ],
+     "cam_measured": {
+      "zoom": 1.049,
+      "pan": 0.16,
+      "tilt": -0.007,
+      "roll": 2.16,
+      "camera": "pan right 16%, roll 2.2 deg",
+      "confidence": "high"
+     },
+     "identity": null,
+     "drift": {
+      "lost": 0.42,
+      "missing": [
+       "boot",
+       "build",
+       "bulb",
+       "coil",
+       "fisherman",
+       "horizon",
+       "nylon",
+       "pant",
+       "pier",
+       "rigg",
+       "vessel"
+      ],
+      "kept": 15,
+      "last_caption": "Harbor, boats, fishing boats, ship, dock, deck, rope, railing, man, person, jacket, raincoat, water, ocean, sea, fog, mist, night, darkness, lamps, lights, reflections, wood, metal, paint, yellow, gray, blue, sky, masts, cables."
+     },
+     "warnings": [],
+     "prompt": "stands at the rail looking out into the fog; [Static shot], the harbour at night, fog, lamps; water moves continuously.  Sound: natural ambience."
+    }
+   ],
+   "picked": "",
+   "engine_notes": ""
+  },
+  "200": {
+   "id": "200",
+   "scene": "sc01",
+   "title": "h3: [Zoom out]",
+   "duration": 5,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/builder-test/assets/anchor_shot_160.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "",
+     "action": "stands at the rail looking out into the fog; [Zoom out]",
+     "background": "the harbour at night, fog, lamps",
+     "motion": "",
+     "ambient": [
+      "water"
+     ],
+     "dialogue": {
+      "char": "",
+      "line": "",
+      "delivery": ""
+     }
+    }
+   ],
+   "sfx": "",
+   "no_people": null,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t587614125",
+     "engine": "h3",
+     "seed": 4242,
+     "created": "01:54",
+     "file": "takes/200/h3_t587614125.mp4",
+     "poster": "takes/200/h3_t587614125.png",
+     "strip": "takes/200/h3_t587614125_strip.png",
+     "duration": 5.17,
+     "fps": 24,
+     "qc": [
+      "camera: pull back 41%, pan right 10%"
+     ],
+     "cam_measured": {
+      "zoom": 0.592,
+      "pan": 0.096,
+      "tilt": -0.009,
+      "roll": -1.48,
+      "camera": "pull back 41%, pan right 10%",
+      "confidence": "high"
+     },
+     "identity": null,
+     "drift": {
+      "lost": 0.35,
+      "missing": [
+       "boot",
+       "bulb",
+       "coil",
+       "horizon",
+       "mist",
+       "nylon",
+       "pant",
+       "rigg",
+       "vessel"
+      ],
+      "kept": 17,
+      "last_caption": "Harbor, fishing boats, ship, dock, pier, masts, ropes, nets, railings, hull, deck, stairs, buoys, lights, fog, water, reflections, sky, night, glow, lamps, buildings, fishermen, yellow jackets, blue paint, wood, metal, rope, fog, haze."
+     },
+     "warnings": [],
+     "prompt": "stands at the rail looking out into the fog; [Zoom out], the harbour at night, fog, lamps; water moves continuously.  Sound: natural ambience."
+    }
+   ],
+   "picked": "",
+   "engine_notes": ""
+  }
+ }
+}
