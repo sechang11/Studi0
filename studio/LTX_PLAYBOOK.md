@@ -1643,3 +1643,43 @@ tinted lightly (the plate's blue had bled into his hair at the usual strength).
 The third build is the shot: his back and shoulder large in the near left, her
 face and the harbour beyond. Three builds, three laws - relight invents a face
 for a back, depth cannot see behind the shoulder, tint has a strength.
+
+## §52  The keyword bench: does the engine have camera words?
+
+The director's question deserved a direct experiment, not only the
+observational table. One anchor (Tomas, wide, the night harbour), one seed
+(4242), one engine at a time, one camera phrase per take, the camera measured
+afterwards. Eight phrases on LTX; twelve on H3, six of them in the bracketed
+form its documentation favours ([Push in], [Pan left], [Static shot],
+[Zoom out]).
+
+**LTX (8 phrases).** *static*: zoom 1.005 - still, and so the baseline is a
+still frame. *push in*: 1.007 with a 9% tilt - no push. *pull back*: a 39%
+tilt up - no pull. *pan left*: a push of 86% - the opposite axis. *pan right*:
+pan right 42% (with an 18% push) - obeyed. *tilt up* and *dolly in*: the same
+86% push as *pan left*, to three decimals - three different phrases, three
+different files, one camera; the seed decided the motion and the phrase did
+not change it, so *dolly in* "scores" only because the seed happened to push.
+*tracking*: a pull back of 18%. Honest score: one phrase of seven (pan right)
+moved the camera as it said over and above the seed's own motion.
+
+**H3 (12 phrases).** Everything pushes: *static* pushed 20% and panned right
+12%, and that is the baseline the others sit on. Against that baseline, three
+phrases moved the camera as they said: [Push in] (36%, sixteen points over
+the drift), *pull back* (28% pull, a reversal) and [Zoom out] (41% pull, the
+strongest response in the bench). *push in*, *dolly in*, *pan right* and *tilt
+up* had the asked motion underneath the drift, by five to nine points - not
+distinguishable from luck. *pan left* and [Pan left]: pushes of 39% and 41%,
+no pan - the engine does not turn left on this anchor. [Static shot]: zoom 1.05
+but a 16% pan right - not still. The brackets are not magic: [Zoom out] worked,
+[Pan left] and [Static shot] did not.
+
+**So: what can we do to assist it?** Stop asking, in the frame. The phrase
+that reliably moves a camera on either engine does not exist here at a single
+seed; what moves it reliably is arithmetic after the render (a post move on a
+stabilised take), a pin (both frames chosen) or the rig (no generation). The
+one exception worth keeping is H3's pull back / zoom out, which it obeys and
+which arithmetic cannot do without a wider render - so the encyclopedia's
+*pull back* entry offers it as an engine move on H3 and a post move on LTX.
+The words stay in the dictionary with their measured odds, for the person who
+wants to gamble a seed on them.
