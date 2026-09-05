@@ -1175,7 +1175,21 @@
     "the angle in a place with no straight verticals (a harbour of masts cannot be measured)",
     "the figure seen from below (the pack's low view is foreshortened and the compositor sizes by total height, so it lands as a big head on a short body - the place is angled, the person is not)"
    ],
-   "measured": "asked +0.32, the plate measures +0.30; delivered pitch is exact to 0.02 on every place the ruler can read"
+   "measured": "asked +0.32, the plate measures +0.30; delivered pitch is exact to 0.02 on every place the ruler can read",
+   "checked": {
+    "when": "2026-09-05 15:00",
+    "built": true,
+    "camera": "static",
+    "angle": "eye level",
+    "identity": "same person",
+    "notes": [
+     "camera: static - done by the studio (stabilise)",
+     "identity: same person, start 0.60, end 0.70; place held (0.94 first to last)"
+    ],
+    "film": "angles-and-mass",
+    "shot": "010",
+    "clean": true
+   }
   },
   {
    "id": "high_angle",
@@ -1201,7 +1215,22 @@
     "the figure seen from that angle (the pack's low view is cropped at the knees and cannot be footed, so the person is still an eye-level view)",
     "the angle in a place with no straight verticals (a harbour of masts cannot be measured)"
    ],
-   "measured": "the same arithmetic as the low angle with the sign reversed; exact to 0.02"
+   "measured": "the same arithmetic as the low angle with the sign reversed; exact to 0.02",
+   "checked": {
+    "when": "2026-09-05 15:00",
+    "built": true,
+    "camera": "push in 40%",
+    "angle": "a high angle",
+    "identity": "same person",
+    "notes": [
+     "camera: push in 40%",
+     "identity: same person, start 0.60, end 0.66; place held (0.91 first to last)",
+     "angle: a high angle (pitch -0.23)"
+    ],
+    "film": "angles-and-mass",
+    "shot": "020",
+    "clean": true
+   }
   },
   {
    "id": "worms_eye",
@@ -1227,7 +1256,21 @@
     "a figure (past a steep angle the eye-level cutout stops reading; the entry is for the place alone)",
     "the figure seen from below (the pack's low view is foreshortened and the compositor sizes by total height, so it lands as a big head on a short body - the place is angled, the person is not)"
    ],
-   "measured": "pitch +0.75, at the clamp; past 0.8 the keystone eats the frame"
+   "measured": "pitch +0.75, at the clamp; past 0.8 the keystone eats the frame",
+   "checked": {
+    "when": "2026-09-05 15:00",
+    "built": true,
+    "camera": "pull back 19%, tilt down 37%",
+    "angle": "a low angle",
+    "identity": null,
+    "notes": [
+     "camera: pull back 19%, tilt down 37% - done by the studio (stabilise)",
+     "angle: a low angle (pitch +0.56)"
+    ],
+    "film": "angles-and-mass",
+    "shot": "090",
+    "clean": true
+   }
   },
   {
    "id": "birds_eye",
@@ -1252,7 +1295,21 @@
     "the angle in a place with no straight verticals (a harbour of masts cannot be measured)",
     "a true overhead (this is a camera raised and tilted, not a camera flown; the plate has no roof in it)"
    ],
-   "measured": "pitch -0.75, at the clamp"
+   "measured": "pitch -0.75, at the clamp",
+   "checked": {
+    "when": "2026-09-05 15:00",
+    "built": true,
+    "camera": "static",
+    "angle": "a high angle",
+    "identity": null,
+    "notes": [
+     "camera: static - done by the studio (stabilise)",
+     "angle: a high angle (pitch -0.51)"
+    ],
+    "film": "angles-and-mass",
+    "shot": "100",
+    "clean": true
+   }
   },
   {
    "id": "low_angle_push",
@@ -1278,7 +1335,21 @@
     "a push past 1.35x on top of an engine that already drifted",
     "the figure seen from below (the pack's low view is foreshortened and the compositor sizes by total height, so it lands as a big head on a short body - the place is angled, the person is not)"
    ],
-   "measured": "the angle is performed before the render and the move after it; they do not interfere"
+   "measured": "the angle is performed before the render and the move after it; they do not interfere",
+   "checked": {
+    "when": "2026-09-05 15:00",
+    "built": true,
+    "camera": "push in 13%",
+    "angle": "eye level",
+    "identity": "uncertain",
+    "notes": [
+     "camera: push in 13% - done by the studio (push)",
+     "identity: uncertain by the end (0.53 -> 0.51); place held (0.94 first to last)"
+    ],
+    "film": "angles-and-mass",
+    "shot": "110",
+    "clean": true
+   }
   },
   {
    "id": "dolly_in",
@@ -1301,7 +1372,23 @@
    "cannot": [
     "a move on top of an engine drift past 1.35x (the take keeps its own move and says so)"
    ],
-   "measured": "asked 1.18 with damping 0.65; the measured per-step curve tracks the asked curve to 0.026"
+   "measured": "asked 1.18 with damping 0.65; the measured per-step curve tracks the asked curve to 0.026",
+   "checked": {
+    "when": "2026-09-05 15:00",
+    "built": true,
+    "camera": "push in 144%, tilt up 12%",
+    "angle": "a high angle",
+    "identity": "unmeasured (the camera moved too much to follow the head)",
+    "notes": [
+     "camera: push in 144%, tilt up 12% (uncertain) - done by the studio (push)",
+     "identity: same person at the start (0.68); unmeasured (the camera moved too much to follow",
+     "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=",
+     "angle: a high angle (pitch -0.23)"
+    ],
+    "film": "angles-and-mass",
+    "shot": "060",
+    "clean": true
+   }
   },
   {
    "id": "crash_zoom",
@@ -1324,7 +1411,21 @@
    "cannot": [
     "resolution at the end of it (a 1.34x crop of the render is a 1.34x crop)"
    ],
-   "measured": "asked 1.34, peak 1.393 asked and 1.364 measured, settling to 1.29"
+   "measured": "asked 1.34, peak 1.393 asked and 1.364 measured, settling to 1.29",
+   "checked": {
+    "when": "2026-09-05 15:00",
+    "built": true,
+    "camera": "push in 28%",
+    "angle": "eye level",
+    "identity": "same person",
+    "notes": [
+     "camera: push in 28% - done by the studio (push)",
+     "identity: same person, start 0.61, end 0.58; place drifted (0.84 first to last)"
+    ],
+    "film": "angles-and-mass",
+    "shot": "070",
+    "clean": true
+   }
   },
   {
    "id": "snap_pan",
@@ -1347,7 +1448,21 @@
    "cannot": [
     "travel beyond the room the zoom gives it (capped at (1 - 1/z)/2 a side)"
    ],
-   "measured": "the same solver as the dolly, damping 0.45 over a quarter of the clip"
+   "measured": "the same solver as the dolly, damping 0.45 over a quarter of the clip",
+   "checked": {
+    "when": "2026-09-05 15:00",
+    "built": true,
+    "camera": "pan right 19%",
+    "angle": "eye level",
+    "identity": "same person",
+    "notes": [
+     "camera: pan right 19% - done by the studio (pan)",
+     "identity: same person, start 0.62, end 0.66; place held (0.94 first to last)"
+    ],
+    "film": "angles-and-mass",
+    "shot": "080",
+    "clean": true
+   }
   },
   {
    "id": "crane_up",
@@ -1372,7 +1487,21 @@
     "the parallax of a real crane (the depth map belongs to the plate; by the time a take exists there is no depth per frame, so this is a boom on a locked head)",
     "much travel on a plate that is already steeply angled - a keystone replaces a vanishing point rather than adding to it, so there is less room the further it starts"
    ],
-   "measured": "asked +0.45 from a plate already at +0.50 delivered +0.22; asked -0.70 from +0.40 delivered -0.76; direction correct 4 of 4"
+   "measured": "asked +0.45 from a plate already at +0.50 delivered +0.22; asked -0.70 from +0.40 delivered -0.76; direction correct 4 of 4",
+   "checked": {
+    "when": "2026-09-05 15:00",
+    "built": true,
+    "camera": "pull back 13%, tilt up 6%, roll -6.7 deg",
+    "angle": "eye level",
+    "identity": "uncertain",
+    "notes": [
+     "camera: pull back 13%, tilt up 6%, roll -6.7 deg - done by the studio (crane)",
+     "identity: uncertain by the end (0.60 -> 0.51); place held (0.97 first to last)"
+    ],
+    "film": "angles-and-mass",
+    "shot": "140",
+    "clean": true
+   }
   },
   {
    "id": "crane_down",
@@ -1396,7 +1525,21 @@
     "the parallax of a real crane",
     "a swing past what the zoom's room allows"
    ],
-   "measured": "asked -0.45, delivered -0.56 from a plate at +0.50"
+   "measured": "asked -0.45, delivered -0.56 from a plate at +0.50",
+   "checked": {
+    "when": "2026-09-05 15:00",
+    "built": true,
+    "camera": "roll 6.0 deg",
+    "angle": "eye level",
+    "identity": "uncertain",
+    "notes": [
+     "camera: roll 6.0 deg - done by the studio (crane)",
+     "identity: uncertain by the end (0.59 -> 0.53); place held (0.96 first to last)"
+    ],
+    "film": "angles-and-mass",
+    "shot": "160",
+    "clean": true
+   }
   },
   {
    "id": "matched_angles",
@@ -1422,7 +1565,23 @@
     "the eyeline (nothing here measures who is looking at whom)",
     "the angle in a place with no straight verticals"
    ],
-   "measured": "the angle pass delivers to 0.04 of what is asked on any readable place, so two shots asked for the same angle land within 0.08 of each other"
+   "measured": "the angle pass delivers to 0.04 of what is asked on any readable place, so two shots asked for the same angle land within 0.08 of each other",
+   "checked": {
+    "when": "2026-09-05 16:15",
+    "built": true,
+    "camera": "push in 39%",
+    "angle": "eye level",
+    "identity": "same person",
+    "notes": [
+     "the camera ran away: the shot asked it to hold still and the engine push in 39%, past the ",
+     "angle: eye level (pitch +0.27)",
+     "identity: same person, start 0.60, end 0.59; place drifted (0.83 first to last)",
+     "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom="
+    ],
+    "film": "angles-and-mass",
+    "shot": "141",
+    "clean": false
+   }
   },
   {
    "id": "crane_down_to_face",
@@ -1447,7 +1606,22 @@
     "the parallax of a real crane",
     "a face past about five seconds - see the face clock"
    ],
-   "measured": "crane down asked -0.45 delivered -0.46 on the alley"
+   "measured": "crane down asked -0.45 delivered -0.46 on the alley",
+   "checked": {
+    "when": "2026-09-05 16:15",
+    "built": true,
+    "camera": "roll 4.9 deg",
+    "angle": "eye level",
+    "identity": "uncertain",
+    "notes": [
+     "camera: roll 4.9 deg - done by the studio (crane)",
+     "angle: eye level (pitch +0.20)",
+     "identity: uncertain by the end (0.62 -> 0.52); place held (0.95 first to last)"
+    ],
+    "film": "angles-and-mass",
+    "shot": "150",
+    "clean": true
+   }
   },
   {
    "id": "held_four",
@@ -1473,7 +1647,22 @@
    "cannot": [
     "a long take - that is what this entry exists to avoid"
    ],
-   "measured": "at 4 s a walk toward the camera kept the face on 2 of 3 seeds; at 6 s it kept it on 0 of 3"
+   "measured": "at 4 s a walk toward the camera kept the face on 2 of 3 seeds; at 6 s it kept it on 0 of 3",
+   "checked": {
+    "when": "2026-09-05 16:15",
+    "built": true,
+    "camera": "static",
+    "angle": null,
+    "identity": "uncertain",
+    "notes": [
+     "camera: static - done by the studio (stabilise)",
+     "identity: uncertain by the end (0.66 -> 0.56); place drifted (0.82 first to last)",
+     "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom="
+    ],
+    "film": "angles-and-mass",
+    "shot": "161",
+    "clean": true
+   }
   }
  ]
 }

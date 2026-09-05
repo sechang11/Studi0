@@ -3185,8 +3185,13 @@ def _build_job(jid, data):
                     _log(jid, "the angle is made but this place has no verticals to measure it by - "
                               "%s is performed, not promised" % angle_name)
                 else:
-                    _log(jid, "the place from %s: asked %+.2f, the plate measures %+.2f (%s)"
-                         % (angle_name, angle_pitch, m.get("pitch", 0.0), m.get("angle")))
+                    _base = AM.measure(base_p)
+                    _b = _base.get("pitch") if _base.get("confidence") not in (None, "none") else None
+                    _rel = (AM.describe_change(m.get("pitch", 0.0), _b, m.get("confidence"))
+                            if _b is not None else m.get("angle"))
+                    _log(jid, "the place from %s: asked %+.2f, the plate moved %s to %+.2f%s"
+                         % (angle_name, angle_pitch, ("%+.2f" % (m.get("pitch", 0.0) - _b)) if _b is not None else "",
+                            m.get("pitch", 0.0), (" - %s" % _rel) if _rel else ""))
                 plate = got_key
                 # the plate PATH was resolved before the angled one existed, and a shot with
                 # nobody in it uses that path as its anchor - so it has to be resolved again
@@ -3235,6 +3240,8 @@ def _build_job(jid, data):
                             anchor=("file:" + plate_p) if (plate_p and not cast_ids) else "scene",
                             no_people=not cast_ids, transition_out="cut",
                             cam=_cam_block(tpl_build, post, data))
+            if data.get("template"):
+                sh["template"] = data["template"]      # which entry this shot came from
             f.save()
             shid = sh["id"]
             made.append(shid)

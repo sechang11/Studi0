@@ -3,17 +3,17 @@
   {
    "id": "the_people_are_these_people",
    "title": "The people are these people",
-   "rule": "BAI, from their packs, are in the start picture; no one else.",
+   "rule": "TOMAS and INES, from their packs, are in the start picture; no one else.",
    "why": "identity comes from the composited anchor, not from the engine's prior",
    "check": {
     "kind": "anchor_contains",
-    "value": "anchor_shot_150"
+    "value": "anchor_shot_141"
    }
   },
   {
-   "id": "the_place_is_back_alley",
-   "title": "The place is back-alley",
-   "rule": "The background is the back-alley plate night_wide__angleu32 and stays that place for the whole take.",
+   "id": "the_place_is_cafe_morning",
+   "title": "The place is cafe-morning",
+   "rule": "The background is the cafe-morning plate dawn_wide__angleu32 and stays that place for the whole take.",
    "why": "words that name what the plate lacks make the engine rewrite it",
    "check": {
     "kind": "qc_clean"
@@ -30,10 +30,14 @@
    }
   },
   {
-   "id": "camera_crane_down",
-   "title": "Camera: crane down",
-   "rule": "The camera falls, and the verticals swing with it - the engine is asked to hold still and the move is done by the studio after the render, then measured.",
-   "why": "an engine cannot be asked for a camera move (measured: a locked-off sentence still pushed in 3 of 3); arithmetic can"
+   "id": "camera_static",
+   "title": "Camera: static",
+   "rule": "The camera does not move - the engine is asked to hold still and the move is done by the studio after the render, then measured.",
+   "why": "an engine cannot be asked for a camera move (measured: a locked-off sentence still pushed in 3 of 3); arithmetic can",
+   "check": {
+    "kind": "camera",
+    "want": "is static"
+   }
   },
   {
    "id": "length",
@@ -61,13 +65,13 @@
   {
    "id": "ambient",
    "title": "Ambient",
-   "note": "Rain"
+   "note": "Leaves"
   }
  ],
- "shot": "150",
+ "shot": "141",
  "title": "medium",
- "beat": "stands and looks up",
+ "beat": "faces the other and listens",
  "build": {
-  "script": "Make this shot: composed anchor, crane down, from the encyclopedia entry 'crane_down_to_face'"
+  "script": "Make this shot: composed anchor, static, from the encyclopedia entry 'matched_angles'"
  }
 }

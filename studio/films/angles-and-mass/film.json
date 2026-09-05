@@ -29,6 +29,16 @@
    "voice": "",
    "voice_desc": "",
    "foundry": "bai-liwen"
+  },
+  "INES": {
+   "name": "Ines Varga",
+   "clause": "a tall, athletic woman, in their fifties, olive skin, an angular face with a sharp jaw, grey eyes, hooded eyes, strong dark brows, grey short neat hair, a thin scar through one brow, a calm, unreadable bearing, a harbour master in a dark wool coat and a grey knit cap, salt-weathered, hands in her pockets",
+   "short": "grey short neat hair, a thin scar through one brow",
+   "sheet": "/home/k4shix/shared/comfy-studio/studio/foundry/characters/ines-varga/base_portrait.png",
+   "portrait": "/home/k4shix/shared/comfy-studio/studio/foundry/characters/ines-varga/base_portrait.png",
+   "voice": "",
+   "voice_desc": "",
+   "foundry": "ines-varga"
   }
  },
  "scenes": [
@@ -259,7 +269,8 @@
    "no_people": false,
    "anchor": "",
    "shots": [
-    "140"
+    "140",
+    "141"
    ],
    "place": "back-alley",
    "plate": "night_wide"
@@ -279,10 +290,68 @@
    "no_people": false,
    "anchor": "",
    "shots": [
-    "160"
+    "160",
+    "161"
    ],
    "place": "back-alley",
    "plate": "night_wide"
+  },
+  {
+   "id": "sc14",
+   "title": "build 16:02",
+   "location": "the small bright dining room of a tiny family diner - exposed red brick down one long wall, sunflower-yellow painted walls, mismatched framed pictures and green pickle drawings hung close together, six or seven small tables with speckled green terrazzo tops and bentwood chairs, fresh flowers in little vases on every table, potted plants and window boxes along a tall sunlit front window, a stainless kitchen pass and a pastry case at the back, a shelf of children's books, lived-in and worn, a narrow cafe interior, morning sun through the front window, a wooden counter, steam from the machine",
+   "time_of_day": "",
+   "weather": "clear",
+   "ambience": "a quiet ambient bed",
+   "palette": "",
+   "music": "",
+   "cast_present": [
+    "TOMAS",
+    "INES"
+   ],
+   "no_people": false,
+   "anchor": "",
+   "shots": [],
+   "place": "cafe-morning",
+   "plate": "dawn_wide"
+  },
+  {
+   "id": "sc15",
+   "title": "build 16:07",
+   "location": "a narrow alley between tall walls, puddles and drainpipes, lived-in and worn, in steady rain, surfaces wet and reflective",
+   "time_of_day": "",
+   "weather": "rain",
+   "ambience": "dripping water and the muffled street beyond, steady rain on every surface",
+   "palette": "",
+   "music": "",
+   "cast_present": [
+    "BAI"
+   ],
+   "no_people": false,
+   "anchor": "",
+   "shots": [
+    "150"
+   ],
+   "place": "back-alley",
+   "plate": "night_wide"
+  },
+  {
+   "id": "sc16",
+   "title": "build 16:11",
+   "location": "the small bright dining room of a tiny family diner - exposed red brick down one long wall, sunflower-yellow painted walls, mismatched framed pictures and green pickle drawings hung close together, six or seven small tables with speckled green terrazzo tops and bentwood chairs, fresh flowers in little vases on every table, potted plants and window boxes along a tall sunlit front window, a stainless kitchen pass and a pastry case at the back, a shelf of children's books, lived-in and worn, a narrow cafe interior, morning sun through the front window, a wooden counter, steam from the machine",
+   "time_of_day": "",
+   "weather": "clear",
+   "ambience": "a quiet ambient bed",
+   "palette": "",
+   "music": "",
+   "cast_present": [
+    "TOMAS"
+   ],
+   "no_people": false,
+   "anchor": "",
+   "shots": [],
+   "place": "cafe-morning",
+   "plate": "dawn_wide"
   }
  ],
  "shots": {
@@ -524,7 +593,7 @@
        "table"
       ],
       "kept": 17,
-      "last_caption": "Café, kitchen, tables, chairs, shelves, counter, espresso machine, hood, cabinets, floor, walls, brick, wood, metal, yellow jacket, grey sweater, plants, flowers, pots, vase, window, curtains, light, indoor, daytime, sunshine, steam, man, person."
+      "last_caption": "Caf\u00e9, kitchen, tables, chairs, shelves, counter, espresso machine, hood, cabinets, floor, walls, brick, wood, metal, yellow jacket, grey sweater, plants, flowers, pots, vase, window, curtains, light, indoor, daytime, sunshine, steam, man, person."
      },
      "warnings": [],
      "prompt": "A static wide shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, stands by the window, looking out, while what moves here moves: Leaves, the small bright dining room of a "
@@ -548,10 +617,11 @@
     "props": []
    },
    "anchor_check": {
-    "caption": "Café, interior, brick wall, window, frame, plants, shelves, espresso machine, counter, table, chair, man, jacket, pants, floor, flower, vase, photograph, wood, metal, glass, pot, foliage, sunlight, steam, daytime, lightbulb, fixture, building exterior.",
+    "caption": "Caf\u00e9, interior, brick wall, window, frame, plants, shelves, espresso machine, counter, table, chair, man, jacket, pants, floor, flower, vase, photograph, wood, metal, glass, pot, foliage, sunlight, steam, daytime, lightbulb, fixture, building exterior.",
     "missing": [],
     "when": 1788630012
-   }
+   },
+   "template": "low_angle"
   },
   "020": {
    "id": "020",
@@ -736,7 +806,7 @@
        "vase"
       ],
       "kept": 16,
-      "last_caption": "Café, kitchen, window, brick wall, tables, chairs, man, jacket, pants, coffee machine, cups, pots, plants, flowers, frame, light, steam, floor, building, yellow, brown, green, wood, metal, glass, rain, daytime, indoor lighting, indoors."
+      "last_caption": "Caf\u00e9, kitchen, window, brick wall, tables, chairs, man, jacket, pants, coffee machine, cups, pots, plants, flowers, frame, light, steam, floor, building, yellow, brown, green, wood, metal, glass, rain, daytime, indoor lighting, indoors."
      },
      "warnings": [],
      "prompt": "A static wide shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, stands by the window, looking down at the table, while what moves here moves: Leaves, the small bright din"
@@ -760,10 +830,11 @@
     "props": []
    },
    "anchor_check": {
-    "caption": "Café, room, brick wall, window, frame, plant, pot, shelf, counter, espresso machine, table, chair, floor, man, jacket, pants, flower, vase, light, sunshine, indoor, daytime, lamp, steam, wood, glass, metal, foliage, greenery.",
+    "caption": "Caf\u00e9, room, brick wall, window, frame, plant, pot, shelf, counter, espresso machine, table, chair, floor, man, jacket, pants, flower, vase, light, sunshine, indoor, daytime, lamp, steam, wood, glass, metal, foliage, greenery.",
     "missing": [],
     "when": 1788630148
-   }
+   },
+   "template": "high_angle"
   },
   "030": {
    "id": "030",
@@ -1798,7 +1869,8 @@
     "caption": "Diner, restaurant, windows, counter, stools, booths, tables, floor, man, jacket, pants, rain, street, cars, buildings, reflections, glass, wood, metal, plastic, leather, asphalt, sky, night, neon signs, letters, glow, wetness, raindrops, light, fluorescent lights, neon lights, person.",
     "missing": [],
     "when": 1788630666
-   }
+   },
+   "template": "dolly_in"
   },
   "070": {
    "id": "070",
@@ -2066,10 +2138,11 @@
     "props": []
    },
    "anchor_check": {
-    "caption": "Café, room, brick wall, window, plants, tables, chairs, man, kitchen, counter, hood, shelves, frames, pictures, vases, flowers, wood, metal, fabric, coat, pants, foliage, greenery, steam, floor, light, sunshine, indoor, daytime, lamp, glow.",
+    "caption": "Caf\u00e9, room, brick wall, window, plants, tables, chairs, man, kitchen, counter, hood, shelves, frames, pictures, vases, flowers, wood, metal, fabric, coat, pants, foliage, greenery, steam, floor, light, sunshine, indoor, daytime, lamp, glow.",
     "missing": [],
     "when": 1788630796
-   }
+   },
+   "template": "crash_zoom"
   },
   "080": {
    "id": "080",
@@ -2337,7 +2410,8 @@
     "caption": "Alley, street, buildings, houses, lanterns, light, reflections, puddles, water, rain, wetness, night, darkness, sky, girl, woman, dress, fabric, stone, concrete, metal, pole, wire, shadow, glow, illumination, surface, pavement, reflection, architecture, urban environment.",
     "missing": [],
     "when": 1788630956
-   }
+   },
+   "template": "snap_pan"
   },
   "090": {
    "id": "090",
@@ -2548,7 +2622,8 @@
     "caption": "Alleyway, street, buildings, walls, doors, windows, lanterns, lamps, reflections, puddles, water, rain, wetness, pavement, asphalt, stone, metal, light, glow, fog, mist, night, darkness, shadows, sky, clouds, electricity, illumination, glow, shine, glow, reflection.",
     "missing": [],
     "when": 1788631154
-   }
+   },
+   "template": "worms_eye"
   },
   "100": {
    "id": "100",
@@ -2765,7 +2840,8 @@
     "caption": "Warehouse, interior, ceiling, grid, structure, beams, supports, walls, floor, windows, doors, metal, concrete, glass, shadows, light, room, building, space, daytime, sunlight, reflections, lines, perspective, architecture.",
     "missing": [],
     "when": 1788631248
-   }
+   },
+   "template": "birds_eye"
   },
   "110": {
    "id": "110",
@@ -3001,7 +3077,7 @@
        "vase"
       ],
       "kept": 21,
-      "last_caption": "Café, restaurant, interior, room, man, person, man's face, beard, hair, jacket, pants, table, chairs, counter, cabinets, shelves, hood, vent, coffee machine, espresso machine, pots, plants, flowers, brick wall, window, glass, frame, curtains, floor, wood, metal, ceramic, tile, paint, yellow, green, brown, orange, light, sunlight, indoor lighting, steam, dust, daytime, shadows."
+      "last_caption": "Caf\u00e9, restaurant, interior, room, man, person, man's face, beard, hair, jacket, pants, table, chairs, counter, cabinets, shelves, hood, vent, coffee machine, espresso machine, pots, plants, flowers, brick wall, window, glass, frame, curtains, floor, wood, metal, ceramic, tile, paint, yellow, green, brown, orange, light, sunlight, indoor lighting, steam, dust, daytime, shadows."
      },
      "warnings": [],
      "prompt": "A static wide shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, stands by the window, looking out, while what moves here moves: Leaves, the small bright dining room of a "
@@ -3026,10 +3102,11 @@
     "props": []
    },
    "anchor_check": {
-    "caption": "Café, interior, brick wall, window, frame, plants, shelves, espresso machine, counter, table, chair, man, jacket, pants, floor, flower, vase, photograph, wood, metal, glass, pot, foliage, sunlight, steam, daytime, lightbulb, fixture, building exterior.",
+    "caption": "Caf\u00e9, interior, brick wall, window, frame, plants, shelves, espresso machine, counter, table, chair, man, jacket, pants, floor, flower, vase, photograph, wood, metal, glass, pot, foliage, sunlight, steam, daytime, lightbulb, fixture, building exterior.",
     "missing": [],
     "when": 1788631363
-   }
+   },
+   "template": "low_angle_push"
   },
   "140": {
    "id": "140",
@@ -3291,7 +3368,8 @@
     "caption": "Alley, street, buildings, houses, lanterns, light, reflections, puddles, water, rain, wetness, night, darkness, sky, girl, woman, dress, fabric, stone, concrete, metal, pole, wire, shadow, glow, illumination, surface, pavement, reflection, architecture, urban environment.",
     "missing": [],
     "when": 1788634154
-   }
+   },
+   "template": "crane_up"
   },
   "160": {
    "id": "160",
@@ -3558,6 +3636,1523 @@
     "caption": "Alley, street, buildings, houses, lanterns, light, reflections, puddles, water, rain, wetness, night, darkness, sky, girl, woman, dress, fabric, stone, concrete, metal, pole, wire, shadow, glow, illumination, surface, pavement, reflection, architecture, urban environment.",
     "missing": [],
     "when": 1788635055
+   },
+   "template": "crane_down"
+  },
+  "141": {
+   "id": "141",
+   "scene": "sc14",
+   "title": "medium - TOMAS / INES",
+   "duration": 5.0,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/angles-and-mass/assets/anchor_shot_141.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "medium shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "TOMAS",
+     "action": "faces the other and listens",
+     "background": "what moves here moves: Leaves",
+     "motion": "",
+     "ambient": [
+      "Leaves"
+     ],
+     "dialogue": {
+      "char": "",
+      "line": "",
+      "delivery": ""
+     }
+    }
+   ],
+   "sfx": "dripping water and the muffled street beyond, steady rain on every surface",
+   "no_people": false,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t638613733",
+     "engine": "ltx",
+     "seed": 896891105,
+     "created": "16:05",
+     "file": "takes/141/ltx_t638613733.mp4",
+     "poster": "takes/141/ltx_t638613733.png",
+     "strip": "takes/141/ltx_t638613733_strip.png",
+     "duration": 5.04,
+     "fps": 24,
+     "qc": [
+      "the camera ran away: the shot asked it to hold still and the engine push in 39%, past the 1.35x a stabilise can undo",
+      "angle: eye level (pitch +0.27)",
+      "identity: same person, start 0.60, end 0.59; place drifted (0.83 first to last)",
+      "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.29 left=0.00 right=0.00)"
+     ],
+     "cam_measured": {
+      "zoom": 1.385,
+      "pan": 0.006,
+      "tilt": -0.043,
+      "roll": 0.47,
+      "camera": "push in 39%",
+      "confidence": "high",
+      "curve": [
+       [
+        1.0,
+        0.0,
+        0.0
+       ],
+       [
+        1.017,
+        -0.0,
+        -0.003
+       ],
+       [
+        1.037,
+        -0.0,
+        -0.005
+       ],
+       [
+        1.061,
+        0.001,
+        -0.008
+       ],
+       [
+        1.086,
+        0.003,
+        -0.011
+       ],
+       [
+        1.113,
+        0.005,
+        -0.013
+       ],
+       [
+        1.144,
+        0.005,
+        -0.016
+       ],
+       [
+        1.178,
+        0.004,
+        -0.019
+       ],
+       [
+        1.214,
+        0.004,
+        -0.025
+       ],
+       [
+        1.252,
+        0.005,
+        -0.03
+       ],
+       [
+        1.291,
+        0.005,
+        -0.035
+       ],
+       [
+        1.335,
+        0.006,
+        -0.039
+       ],
+       [
+        1.372,
+        0.006,
+        -0.043
+       ]
+      ]
+     },
+     "identity": {
+      "start": 0.599,
+      "end": 0.59,
+      "hold": 0.859,
+      "verdict_start": "same person",
+      "verdict_end": "same person",
+      "place_hold": 0.833,
+      "place_verdict": "drifted",
+      "place_start": 0.305,
+      "who": "tomas-reyl",
+      "hold_curve": {
+       "times": [
+        0.0,
+        0.63,
+        1.26,
+        1.89,
+        2.52,
+        3.15,
+        3.78,
+        4.41,
+        4.92
+       ],
+       "scores": [
+        0.599,
+        0.621,
+        0.632,
+        0.62,
+        0.603,
+        0.583,
+        0.624,
+        0.587,
+        0.602
+       ],
+       "holds_until": 4.92,
+       "lost_at": null,
+       "holds": true,
+       "duration": 5.04
+      }
+     },
+     "angle_measured": {
+      "pitch": 0.272,
+      "angle": "eye level",
+      "confidence": "medium",
+      "lines": 44,
+      "inliers": 0.52
+     },
+     "drift": {
+      "lost": 0.47,
+      "missing": [
+       "coffee",
+       "flower",
+       "fram",
+       "lamp",
+       "machine",
+       "pictur",
+       "raincoat",
+       "shelv",
+       "sign",
+       "street",
+       "sunlight",
+       "tabl"
+      ],
+      "kept": 18,
+      "last_caption": "Kitchen, room, window, shelf, hood, counter, table, chairs, books, jars, plants, pots, coat, jacket, sweater, beanie, hat, rain jacket, beard, hair, floor, brick, wood, metal, glass, plastic, foliage, greenery, steam, rain, daytime, light, indoor light, reflections, shadows."
+     },
+     "warnings": [],
+     "prompt": "A static medium shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, faces the other and listens, while what moves here moves: Leaves, a narrow alley between tall walls, pud"
+    },
+    {
+     "id": "t638709586",
+     "engine": "ltx",
+     "seed": 572196211,
+     "created": "16:07",
+     "file": "takes/141/ltx_t638709586.mp4",
+     "poster": "takes/141/ltx_t638709586.png",
+     "strip": "takes/141/ltx_t638709586_strip.png",
+     "duration": 5.04,
+     "fps": 24,
+     "qc": [
+      "the camera ran away: the shot asked it to hold still and the engine push in 58%, tilt up 6%, past the 1.35x a stabilise can undo",
+      "angle: eye level (pitch +0.27)",
+      "identity: uncertain by the end (0.60 -> 0.54); place drifted (0.81 first to last)",
+      "sound borrowed from take t634154985 of shot 140 - the render was too quiet (mean -47 dB)",
+      "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.41 left=0.00 right=0.00)"
+     ],
+     "cam_measured": {
+      "zoom": 1.576,
+      "pan": -0.028,
+      "tilt": -0.061,
+      "roll": 0.4,
+      "camera": "push in 58%, tilt up 6%",
+      "confidence": "high",
+      "curve": [
+       [
+        1.0,
+        0.0,
+        0.0
+       ],
+       [
+        1.031,
+        -0.001,
+        -0.004
+       ],
+       [
+        1.066,
+        -0.005,
+        -0.009
+       ],
+       [
+        1.105,
+        -0.008,
+        -0.014
+       ],
+       [
+        1.147,
+        -0.011,
+        -0.019
+       ],
+       [
+        1.194,
+        -0.013,
+        -0.024
+       ],
+       [
+        1.246,
+        -0.014,
+        -0.027
+       ],
+       [
+        1.3,
+        -0.015,
+        -0.034
+       ],
+       [
+        1.356,
+        -0.016,
+        -0.043
+       ],
+       [
+        1.412,
+        -0.019,
+        -0.05
+       ],
+       [
+        1.465,
+        -0.022,
+        -0.055
+       ],
+       [
+        1.518,
+        -0.025,
+        -0.059
+       ],
+       [
+        1.558,
+        -0.028,
+        -0.061
+       ]
+      ]
+     },
+     "identity": {
+      "start": 0.599,
+      "end": 0.538,
+      "hold": 0.809,
+      "verdict_start": "same person",
+      "verdict_end": "uncertain",
+      "place_hold": 0.805,
+      "place_verdict": "drifted",
+      "place_start": 0.309,
+      "who": "tomas-reyl",
+      "hold_curve": {
+       "times": [
+        0.0,
+        0.63,
+        1.26,
+        1.89,
+        2.52,
+        3.15,
+        3.78,
+        4.41,
+        4.92
+       ],
+       "scores": [
+        0.599,
+        0.598,
+        0.597,
+        0.632,
+        0.513,
+        0.518,
+        0.583,
+        0.538,
+        0.539
+       ],
+       "holds_until": 4.92,
+       "lost_at": null,
+       "holds": true,
+       "duration": 5.04
+      }
+     },
+     "angle_measured": {
+      "pitch": 0.273,
+      "angle": "eye level",
+      "confidence": "medium",
+      "lines": 34,
+      "inliers": 0.59
+     },
+     "drift": {
+      "lost": 0.5,
+      "missing": [
+       "chair",
+       "coffee",
+       "flower",
+       "foliage",
+       "fram",
+       "greenery",
+       "lamp",
+       "machine",
+       "pictur",
+       "raincoat",
+       "sign",
+       "street"
+      ],
+      "kept": 17,
+      "last_caption": "Kitchen, room, window, shelves, hood, counter, cabinets, books, floor, coat, beanie, jacket, man, woman, plants, pots, rain, light, steam, building, wood, tile, metal, fabric, glass, brick, indoors, daytime."
+     },
+     "warnings": [],
+     "prompt": "A static medium shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, faces the other and listens, while what moves here moves: Leaves, a narrow alley between tall walls, pud"
+    }
+   ],
+   "picked": "t638613733",
+   "engine_notes": "",
+   "cam": {
+    "post": {
+     "move": "stabilise"
+    },
+    "angle": {
+     "name": "low angle",
+     "asked": 0.32,
+     "plate": 0.322,
+     "source_plate": 0.064
+    }
+   },
+   "template": "matched_angles",
+   "anchor_source": {
+    "character": "tomas-reyl",
+    "framing": "medium",
+    "place": "cafe-morning",
+    "stand": 0.22,
+    "cx": 0.38,
+    "view": "turn_front_three_quarter",
+    "plate": "/home/k4shix/shared/comfy-studio/studio/foundry/places/cafe-morning/dawn_wide__angleu32.png",
+    "props": [
+     {
+      "character": "ines-varga",
+      "view": "turn_front_three_quarter",
+      "stand": 0.22,
+      "cx": 0.62
+     }
+    ]
+   },
+   "anchor_face": 0.61,
+   "anchor_check": {
+    "caption": "Caf\u00e9, kitchen, room, window, brick wall, wooden floor, tables, chairs, frames, pictures, plants, pots, shelves, coffee machine, steam, hood, coats, beanies, flowers, raincoats, wood, glass, metal, foliage, greenery, street, weather, daytime, sunlight, light, lamps, signs, man, woman.",
+    "missing": [],
+    "when": 1788638613
+   }
+  },
+  "150": {
+   "id": "150",
+   "scene": "sc15",
+   "title": "medium - BAI",
+   "duration": 5.0,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/angles-and-mass/assets/anchor_shot_150.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "medium shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "BAI",
+     "action": "stands and looks up",
+     "background": "what moves here moves: Rain",
+     "motion": "",
+     "ambient": [
+      "Rain"
+     ],
+     "dialogue": {
+      "char": "",
+      "line": "",
+      "delivery": ""
+     }
+    }
+   ],
+   "sfx": "dripping water and the muffled street beyond, steady rain on every surface",
+   "no_people": false,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t638850117",
+     "engine": "ltx",
+     "seed": 608137386,
+     "created": "16:09",
+     "file": "takes/150/ltx_t638850117.mp4",
+     "poster": "takes/150/ltx_t638850117.png",
+     "strip": "takes/150/ltx_t638850117_strip.png",
+     "duration": 4.96,
+     "fps": 24,
+     "qc": [
+      "camera: static - done by the studio (crane)",
+      "angle: eye level (pitch +0.18)",
+      "the face is a different one by the end (identity 0.55 -> 0.27); place held (0.88 first to last)"
+     ],
+     "cam_measured": {
+      "zoom": 1.01,
+      "pan": -0.016,
+      "tilt": -0.047,
+      "roll": 1.04,
+      "camera": "static",
+      "confidence": "high",
+      "curve": [
+       [
+        1.0,
+        0.0,
+        0.0
+       ],
+       [
+        1.0,
+        -0.0,
+        -0.0
+       ],
+       [
+        1.004,
+        -0.0,
+        -0.003
+       ],
+       [
+        1.007,
+        -0.001,
+        -0.007
+       ],
+       [
+        1.01,
+        -0.002,
+        -0.011
+       ],
+       [
+        1.017,
+        -0.001,
+        -0.019
+       ],
+       [
+        1.017,
+        -0.003,
+        -0.024
+       ],
+       [
+        1.018,
+        -0.004,
+        -0.029
+       ],
+       [
+        1.013,
+        -0.007,
+        -0.035
+       ],
+       [
+        1.007,
+        -0.01,
+        -0.039
+       ],
+       [
+        0.999,
+        -0.014,
+        -0.042
+       ],
+       [
+        0.994,
+        -0.016,
+        -0.046
+       ],
+       [
+        0.992,
+        -0.016,
+        -0.047
+       ]
+      ],
+      "post": {
+       "move": "crane",
+       "amount": -0.45,
+       "zoom_start": 1.117,
+       "zoom_end": 1.117,
+       "cx_start": 0.5,
+       "cy_start": 0.5,
+       "ease": "smooth",
+       "pitch_from": 0.0,
+       "pitch_to": -0.45,
+       "window": [
+        [
+         1.117,
+         0.5,
+         0.5
+        ],
+        [
+         1.117,
+         0.5,
+         0.5
+        ],
+        [
+         1.117,
+         0.5,
+         0.5
+        ],
+        [
+         1.117,
+         0.5,
+         0.5
+        ],
+        [
+         1.117,
+         0.5,
+         0.5
+        ],
+        [
+         1.117,
+         0.5,
+         0.5
+        ],
+        [
+         1.117,
+         0.5,
+         0.5
+        ],
+        [
+         1.117,
+         0.5,
+         0.5
+        ],
+        [
+         1.117,
+         0.5,
+         0.5
+        ]
+       ]
+      }
+     },
+     "identity": {
+      "start": 0.547,
+      "end": 0.273,
+      "hold": 0.583,
+      "verdict_start": "uncertain",
+      "verdict_end": "a different face",
+      "place_hold": 0.884,
+      "place_verdict": "held",
+      "place_start": 0.648,
+      "who": "bai-liwen",
+      "hold_curve": {
+       "times": [
+        0.0,
+        0.62,
+        1.24,
+        1.86,
+        2.48,
+        3.1,
+        3.72,
+        4.34,
+        4.84
+       ],
+       "scores": [
+        0.543,
+        0.245,
+        0.227,
+        0.219,
+        0.122,
+        0.293,
+        0.203,
+        0.202,
+        0.199
+       ],
+       "holds_until": 0.0,
+       "lost_at": 0.62,
+       "holds": false,
+       "duration": 4.96
+      }
+     },
+     "angle_measured": {
+      "pitch": 0.185,
+      "angle": "eye level",
+      "confidence": "high",
+      "lines": 80,
+      "inliers": 0.63
+     },
+     "drift": {
+      "lost": 0.31,
+      "missing": [
+       "concrete",
+       "darknes",
+       "door",
+       "hous",
+       "road",
+       "roof",
+       "sidewalk",
+       "wetnes",
+       "window"
+      ],
+      "kept": 20,
+      "last_caption": "Alleyway, street, buildings, walls, lanterns, light, rain, puddles, water, weather, night, glow, glow, girl, person, arms, dress, clothing, fabric, shadow, stone, brick, metal, wire, lamp."
+     },
+     "warnings": [],
+     "prompt": "A static medium shot: a slightly built woman, in their twenties, pale skin, an oval face, brown eyes, almond eyes, thin arched brows, black very long straight hair, a calm, unreadable bearing, A young swordswoman of the Cloud Terrace school. Quick, watchful, and better at the sword than at saying so., stands and looks up, while what moves here moves: Rain, a narrow alley between tall walls, puddle"
+    },
+    {
+     "id": "t638958449",
+     "engine": "ltx",
+     "seed": 27192828,
+     "created": "16:11",
+     "file": "takes/150/ltx_t638958449.mp4",
+     "poster": "takes/150/ltx_t638958449.png",
+     "strip": "takes/150/ltx_t638958449_strip.png",
+     "duration": 4.88,
+     "fps": 24,
+     "qc": [
+      "camera: roll 4.9 deg - done by the studio (crane)",
+      "angle: eye level (pitch +0.20)",
+      "identity: uncertain by the end (0.62 -> 0.52); place held (0.95 first to last)"
+     ],
+     "cam_measured": {
+      "zoom": 1.027,
+      "pan": 0.007,
+      "tilt": -0.0,
+      "roll": 4.86,
+      "camera": "roll 4.9 deg",
+      "confidence": "high",
+      "curve": [
+       [
+        1.0,
+        0.0,
+        0.0
+       ],
+       [
+        1.001,
+        -0.0,
+        -0.001
+       ],
+       [
+        1.002,
+        -0.0,
+        -0.002
+       ],
+       [
+        1.005,
+        -0.001,
+        -0.006
+       ],
+       [
+        1.01,
+        -0.001,
+        -0.011
+       ],
+       [
+        1.016,
+        -0.002,
+        -0.018
+       ],
+       [
+        1.018,
+        -0.001,
+        -0.009
+       ],
+       [
+        1.014,
+        0.0,
+        0.004
+       ],
+       [
+        1.018,
+        0.002,
+        0.002
+       ],
+       [
+        1.02,
+        0.004,
+        -0.004
+       ],
+       [
+        1.016,
+        0.005,
+        0.001
+       ],
+       [
+        1.013,
+        0.006,
+        -0.001
+       ],
+       [
+        1.014,
+        0.007,
+        -0.0
+       ]
+      ],
+      "post": {
+       "move": "crane",
+       "amount": -0.45,
+       "zoom_start": 1.117,
+       "zoom_end": 1.117,
+       "cx_start": 0.5,
+       "cy_start": 0.5,
+       "ease": "smooth",
+       "pitch_from": 0.0,
+       "pitch_to": -0.45,
+       "window": [
+        [
+         1.117,
+         0.5,
+         0.5
+        ],
+        [
+         1.117,
+         0.5,
+         0.5
+        ],
+        [
+         1.117,
+         0.5,
+         0.5
+        ],
+        [
+         1.117,
+         0.5,
+         0.5
+        ],
+        [
+         1.117,
+         0.5,
+         0.5
+        ],
+        [
+         1.117,
+         0.5,
+         0.5
+        ],
+        [
+         1.117,
+         0.5,
+         0.5
+        ],
+        [
+         1.117,
+         0.5,
+         0.5
+        ],
+        [
+         1.117,
+         0.5,
+         0.5
+        ]
+       ]
+      }
+     },
+     "identity": {
+      "start": 0.624,
+      "end": 0.516,
+      "hold": 0.759,
+      "verdict_start": "same person",
+      "verdict_end": "uncertain",
+      "place_hold": 0.948,
+      "place_verdict": "held",
+      "place_start": 0.638,
+      "who": "bai-liwen",
+      "hold_curve": {
+       "times": [
+        0.0,
+        0.61,
+        1.22,
+        1.83,
+        2.44,
+        3.05,
+        3.66,
+        4.27,
+        4.75
+       ],
+       "scores": [
+        0.602,
+        0.568,
+        0.514,
+        0.571,
+        0.44,
+        0.478,
+        0.541,
+        0.532,
+        0.529
+       ],
+       "holds_until": 4.75,
+       "lost_at": null,
+       "holds": false,
+       "duration": 4.88
+      }
+     },
+     "angle_measured": {
+      "pitch": 0.197,
+      "angle": "eye level",
+      "confidence": "high",
+      "lines": 95,
+      "inliers": 0.67
+     },
+     "drift": {
+      "lost": 0.24,
+      "missing": [
+       "door",
+       "fabric",
+       "metal",
+       "road",
+       "roof",
+       "wall",
+       "window"
+      ],
+      "kept": 22,
+      "last_caption": "Alley, street, buildings, houses, girl, woman, dress, gown, lantern, lamps, light, pavement, sidewalk, stone, concrete, reflection, water, puddle, rain, wetness, night, darkness, shadow, glow, illumination, electricity, lamp post, pole, structure, architecture, sky, blue, white, black, hair, clothing."
+     },
+     "warnings": [],
+     "prompt": "A static medium shot: a slightly built woman, in their twenties, pale skin, an oval face, brown eyes, almond eyes, thin arched brows, black very long straight hair, a calm, unreadable bearing, A young swordswoman of the Cloud Terrace school. Quick, watchful, and better at the sword than at saying so., stands and looks up, while what moves here moves: Rain, a narrow alley between tall walls, puddle"
+    }
+   ],
+   "picked": "t638958449",
+   "engine_notes": "",
+   "cam": {
+    "post": {
+     "move": "crane",
+     "amount": -0.45
+    },
+    "angle": {
+     "name": "low angle",
+     "asked": 0.32,
+     "plate": 0.304,
+     "source_plate": 0.738
+    }
+   },
+   "template": "crane_down_to_face",
+   "anchor_source": {
+    "character": "bai-liwen",
+    "framing": "medium",
+    "place": "back-alley",
+    "stand": 0.22,
+    "cx": 0.45,
+    "view": "turn_front",
+    "plate": "/home/k4shix/shared/comfy-studio/studio/foundry/places/back-alley/night_wide__angleu32.png",
+    "props": []
+   },
+   "anchor_face": 0.599,
+   "anchor_check": {
+    "caption": "Alleyway, street, buildings, houses, lanterns, lamp, light, rain, puddle, water, wetness, road, sidewalk, roof, wall, window, door, girl, woman, person, hair, dress, clothing, fabric, stone, concrete, metal, sky, night, darkness, shadow, reflection.",
+    "missing": [],
+    "when": 1788638850
+   }
+  },
+  "161": {
+   "id": "161",
+   "scene": "sc16",
+   "title": "medium - TOMAS",
+   "duration": 4.0,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/angles-and-mass/assets/anchor_shot_161.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "medium shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "TOMAS",
+     "action": "stands at the counter, listening",
+     "background": "what moves here moves: Leaves",
+     "motion": "",
+     "ambient": [
+      "Leaves"
+     ],
+     "dialogue": {
+      "char": "",
+      "line": "",
+      "delivery": ""
+     }
+    }
+   ],
+   "sfx": "dripping water and the muffled street beyond, steady rain on every surface",
+   "no_people": false,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t639126873",
+     "engine": "ltx",
+     "seed": 320865933,
+     "created": "16:13",
+     "file": "takes/161/ltx_t639126873.mp4",
+     "poster": "takes/161/ltx_t639126873.png",
+     "strip": "takes/161/ltx_t639126873_strip.png",
+     "duration": 3.88,
+     "fps": 24,
+     "qc": [
+      "camera: static - done by the studio (stabilise)",
+      "identity: same person, start 0.67, end 0.58; place held (0.85 first to last)",
+      "sound borrowed from take t635055332 of shot 160 - the render was too quiet (mean -45 dB)",
+      "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.40 left=0.00 right=0.00)"
+     ],
+     "cam_measured": {
+      "zoom": 0.99,
+      "pan": 0.003,
+      "tilt": 0.02,
+      "roll": 0.2,
+      "camera": "static",
+      "confidence": "high",
+      "curve": [
+       [
+        1.0,
+        0.0,
+        0.0
+       ],
+       [
+        1.0,
+        0.0,
+        0.0
+       ],
+       [
+        0.998,
+        0.001,
+        0.0
+       ],
+       [
+        0.997,
+        0.0,
+        0.002
+       ],
+       [
+        0.995,
+        0.001,
+        0.002
+       ],
+       [
+        0.991,
+        0.002,
+        0.005
+       ],
+       [
+        0.99,
+        0.001,
+        0.011
+       ],
+       [
+        0.988,
+        0.002,
+        0.019
+       ],
+       [
+        0.987,
+        0.002,
+        0.026
+       ],
+       [
+        0.987,
+        0.003,
+        0.031
+       ],
+       [
+        0.987,
+        0.003,
+        0.031
+       ],
+       [
+        0.986,
+        0.003,
+        0.027
+       ],
+       [
+        0.987,
+        0.003,
+        0.02
+       ]
+      ],
+      "post": {
+       "move": "stabilise",
+       "amount": 0.1,
+       "zoom_start": 1.224,
+       "zoom_end": 1.0,
+       "cx_start": 0.489,
+       "cy_start": 0.426,
+       "ease": "smooth",
+       "window": [
+        [
+         1.224,
+         0.489,
+         0.426
+        ],
+        [
+         1.2131,
+         0.4895,
+         0.4275
+        ],
+        [
+         1.193,
+         0.49,
+         0.43
+        ],
+        [
+         1.1646,
+         0.4915,
+         0.4325
+        ],
+        [
+         1.1333,
+         0.492,
+         0.436
+        ],
+        [
+         1.0997,
+         0.4935,
+         0.441
+        ],
+        [
+         1.0653,
+         0.496,
+         0.452
+        ],
+        [
+         1.0299,
+         0.498,
+         0.474
+        ],
+        [
+         1.0,
+         0.5,
+         0.5
+        ]
+       ]
+      }
+     },
+     "identity": {
+      "start": 0.671,
+      "end": 0.581,
+      "hold": 0.819,
+      "verdict_start": "same person",
+      "verdict_end": "same person",
+      "place_hold": 0.853,
+      "place_verdict": "held",
+      "place_start": 0.21,
+      "who": "tomas-reyl",
+      "hold_curve": {
+       "times": [
+        0.0,
+        0.5,
+        1.0,
+        1.5,
+        2.0,
+        2.51,
+        3.01,
+        3.51,
+        3.89
+       ],
+       "scores": [
+        0.535,
+        0.568,
+        0.548,
+        0.558,
+        0.527,
+        0.597,
+        0.564,
+        0.579,
+        null
+       ],
+       "holds_until": 3.51,
+       "lost_at": null,
+       "holds": true,
+       "duration": 4.01
+      }
+     },
+     "angle_measured": {
+      "pitch": 0.089,
+      "angle": "eye level",
+      "confidence": "low",
+      "lines": 56,
+      "inliers": 0.14
+     },
+     "drift": {
+      "lost": 0.46,
+      "missing": [
+       "daytime",
+       "fabric",
+       "floor",
+       "fram",
+       "greenery",
+       "hood",
+       "indoor",
+       "lamp",
+       "pant",
+       "pictur",
+       "room",
+       "sunshine"
+      ],
+      "kept": 15,
+      "last_caption": "Caf\u00e9, interior, man, shelves, kitchen, counter, espresso machine, tables, chairs, brick wall, window, frame, plants, flowers, painting, photograph, coat, shirt, beard, tile, metal, wood, glass, green, yellow, steam, foliage, blossoms, building, day, sunlight, lightbulb, artwork."
+     },
+     "warnings": [],
+     "prompt": "A static medium shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, stands at the counter, listening, while what moves here moves: Leaves, a narrow alley between tall walls"
+    },
+    {
+     "id": "t639234936",
+     "engine": "ltx",
+     "seed": 580732681,
+     "created": "16:15",
+     "file": "takes/161/ltx_t639234936.mp4",
+     "poster": "takes/161/ltx_t639234936.png",
+     "strip": "takes/161/ltx_t639234936_strip.png",
+     "duration": 4.04,
+     "fps": 24,
+     "qc": [
+      "the camera ran away: the shot asked it to hold still and the engine push in 39%, past the 1.35x a stabilise can undo",
+      "angle: a steep high angle (pitch -1.09) (uncertain)",
+      "the face is a different one by the end (identity 0.67 -> 0.44); the face holds for the first 0.5 s of 4.0; place drifted (0.74 first to last)"
+     ],
+     "cam_measured": {
+      "zoom": 1.39,
+      "pan": -0.023,
+      "tilt": -0.043,
+      "roll": 1.37,
+      "camera": "push in 39%",
+      "confidence": "high",
+      "curve": [
+       [
+        1.0,
+        0.0,
+        0.0
+       ],
+       [
+        1.012,
+        -0.0,
+        -0.001
+       ],
+       [
+        1.028,
+        -0.001,
+        -0.001
+       ],
+       [
+        1.049,
+        -0.003,
+        -0.003
+       ],
+       [
+        1.073,
+        -0.003,
+        -0.003
+       ],
+       [
+        1.099,
+        -0.007,
+        -0.001
+       ],
+       [
+        1.125,
+        -0.011,
+        -0.001
+       ],
+       [
+        1.156,
+        -0.015,
+        -0.004
+       ],
+       [
+        1.191,
+        -0.019,
+        -0.012
+       ],
+       [
+        1.228,
+        -0.02,
+        -0.021
+       ],
+       [
+        1.269,
+        -0.02,
+        -0.027
+       ],
+       [
+        1.311,
+        -0.02,
+        -0.034
+       ],
+       [
+        1.357,
+        -0.023,
+        -0.043
+       ]
+      ]
+     },
+     "identity": {
+      "start": 0.665,
+      "end": 0.438,
+      "hold": 0.609,
+      "verdict_start": "same person",
+      "verdict_end": "a different face",
+      "place_hold": 0.736,
+      "place_verdict": "drifted",
+      "place_start": 0.243,
+      "who": "tomas-reyl",
+      "hold_curve": {
+       "times": [
+        0.0,
+        0.51,
+        1.01,
+        1.52,
+        2.02,
+        2.53,
+        3.03,
+        3.54,
+        3.92
+       ],
+       "scores": [
+        0.665,
+        0.566,
+        0.443,
+        0.355,
+        0.398,
+        0.368,
+        0.384,
+        0.436,
+        0.435
+       ],
+       "holds_until": 0.51,
+       "lost_at": 1.01,
+       "holds": false,
+       "duration": 4.04
+      }
+     },
+     "angle_measured": {
+      "pitch": -1.092,
+      "angle": "a steep high angle",
+      "confidence": "low",
+      "lines": 57,
+      "inliers": 0.18
+     },
+     "drift": {
+      "lost": 0.36,
+      "missing": [
+       "coat",
+       "fabric",
+       "floor",
+       "fram",
+       "greenery",
+       "lamp",
+       "pant",
+       "pictur",
+       "tabl",
+       "vase"
+      ],
+      "kept": 18,
+      "last_caption": "Cafe, kitchen, room, window, brick wall, shelves, table, chair, espresso machine, counter, hood, plants, flowers, pot, cup, saucer, stool, jacket, man, wood, metal, glass, tile, rug, steam, light, indoor, daytime, sunshine, foliage."
+     },
+     "warnings": [],
+     "prompt": "A static medium shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, stands at the counter, listening, while what moves here moves: Leaves, a narrow alley between tall walls"
+    },
+    {
+     "id": "t639339727",
+     "engine": "ltx",
+     "seed": 393751823,
+     "created": "16:17",
+     "file": "takes/161/ltx_t639339727.mp4",
+     "poster": "takes/161/ltx_t639339727.png",
+     "strip": "takes/161/ltx_t639339727_strip.png",
+     "duration": 4.01,
+     "fps": 24,
+     "qc": [
+      "camera: static - done by the studio (stabilise)",
+      "identity: uncertain by the end (0.66 -> 0.56); place drifted (0.82 first to last)",
+      "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.33 left=0.00 right=0.00)"
+     ],
+     "cam_measured": {
+      "zoom": 0.996,
+      "pan": 0.002,
+      "tilt": 0.002,
+      "roll": 0.1,
+      "camera": "static",
+      "confidence": "high",
+      "curve": [
+       [
+        1.0,
+        0.0,
+        0.0
+       ],
+       [
+        1.0,
+        -0.0,
+        -0.0
+       ],
+       [
+        0.998,
+        0.001,
+        0.0
+       ],
+       [
+        0.998,
+        0.0,
+        0.0
+       ],
+       [
+        0.995,
+        0.001,
+        0.001
+       ],
+       [
+        0.994,
+        0.001,
+        0.001
+       ],
+       [
+        0.993,
+        0.001,
+        0.001
+       ],
+       [
+        0.992,
+        0.002,
+        0.001
+       ],
+       [
+        0.992,
+        0.002,
+        0.002
+       ],
+       [
+        0.992,
+        0.002,
+        0.002
+       ],
+       [
+        0.992,
+        0.002,
+        0.002
+       ],
+       [
+        0.992,
+        0.002,
+        0.002
+       ],
+       [
+        0.993,
+        0.002,
+        0.002
+       ]
+      ],
+      "post": {
+       "move": "stabilise",
+       "amount": 0.1,
+       "zoom_start": 1.194,
+       "zoom_end": 1.0,
+       "cx_start": 0.495,
+       "cy_start": 0.493,
+       "ease": "smooth",
+       "window": [
+        [
+         1.194,
+         0.495,
+         0.493
+        ],
+        [
+         1.1816,
+         0.4955,
+         0.4935
+        ],
+        [
+         1.1626,
+         0.496,
+         0.494
+        ],
+        [
+         1.1355,
+         0.497,
+         0.495
+        ],
+        [
+         1.1076,
+         0.498,
+         0.495
+        ],
+        [
+         1.0781,
+         0.4985,
+         0.494
+        ],
+        [
+         1.0492,
+         0.499,
+         0.495
+        ],
+        [
+         1.0223,
+         0.4995,
+         0.498
+        ],
+        [
+         1.0,
+         0.5,
+         0.5
+        ]
+       ]
+      }
+     },
+     "identity": {
+      "start": 0.655,
+      "end": 0.557,
+      "hold": 0.772,
+      "verdict_start": "same person",
+      "verdict_end": "uncertain",
+      "place_hold": 0.819,
+      "place_verdict": "drifted",
+      "place_start": 0.224,
+      "who": "tomas-reyl",
+      "hold_curve": {
+       "times": [
+        0.0,
+        0.5,
+        1.0,
+        1.5,
+        2.0,
+        2.51,
+        3.01,
+        3.51,
+        3.89
+       ],
+       "scores": [
+        0.654,
+        0.624,
+        0.581,
+        0.574,
+        0.532,
+        0.556,
+        0.629,
+        0.547,
+        null
+       ],
+       "holds_until": 3.51,
+       "lost_at": null,
+       "holds": true,
+       "duration": 4.01
+      }
+     },
+     "angle_measured": null,
+     "drift": {
+      "lost": 0.39,
+      "missing": [
+       "counter",
+       "fabric",
+       "floor",
+       "foliage",
+       "fram",
+       "greenery",
+       "hood",
+       "kitchen",
+       "lamp",
+       "pant",
+       "pictur"
+      ],
+      "kept": 17,
+      "last_caption": "Caf\u00e9, room, brick wall, window, frame, sill, man, coat, jacket, shirt, tables, chairs, metal, wood, glass, plants, flowers, vases, shelves, paintings, coffee machine, steam, pots, light, sunshine, daytime, indoor, yellow, green, brown, grey, white, person."
+     },
+     "warnings": [],
+     "prompt": "A static medium shot: a short, heavyset man, elderly, in their seventies, tan skin, a round face, brown eyes, hooded eyes, bushy brows, grey a shaved head, a full beard, an open, warm bearing, a fisherman in yellow oilskins over a thick grey jumper, a white beard, a face that has laughed a lot, stands at the counter, listening, while what moves here moves: Leaves, a narrow alley between tall walls"
+    }
+   ],
+   "picked": "t639339727",
+   "engine_notes": "",
+   "cam": {
+    "post": {
+     "move": "stabilise"
+    },
+    "trim_face": true
+   },
+   "template": "held_four",
+   "anchor_source": {
+    "character": "tomas-reyl",
+    "framing": "medium",
+    "place": "cafe-morning",
+    "stand": 0.22,
+    "cx": 0.45,
+    "view": "turn_front",
+    "plate": "/home/k4shix/shared/comfy-studio/studio/foundry/places/cafe-morning/dawn_wide.png",
+    "props": []
+   },
+   "anchor_face": 0.631,
+   "anchor_check": {
+    "caption": "Caf\u00e9, room, brick wall, window, plants, tables, chairs, man, kitchen, counter, hood, shelves, frames, pictures, vases, flowers, wood, metal, fabric, coat, pants, foliage, greenery, steam, floor, light, sunshine, indoor, daytime, lamp, glow.",
+    "missing": [],
+    "when": 1788639126
    }
   }
  }
