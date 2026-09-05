@@ -14,7 +14,6 @@
   "duration": 5.01,
   "qc": [
    "camera: static - done by the studio (stabilise)",
-   "angle: a low angle (pitch +0.21)",
    "identity: same person, start 0.60, end 0.70; place held (0.94 first to last)"
   ]
  },
@@ -33,8 +32,8 @@
   "duration": 5.04,
   "qc": [
    "camera: push in 40%",
-   "angle: a high angle (pitch -0.23)",
-   "identity: same person, start 0.60, end 0.66; place held (0.91 first to last)"
+   "identity: same person, start 0.60, end 0.66; place held (0.91 first to last)",
+   "angle: a high angle (pitch -0.23)"
   ]
  },
  {
@@ -52,7 +51,7 @@
   "duration": 5.01,
   "qc": [
    "camera: static - done by the studio (stabilise)",
-   "angle: a steep low angle (pitch +1.05) (uncertain)"
+   "angle: a low angle (pitch +1.05)"
   ]
  },
  {
@@ -88,7 +87,6 @@
   "duration": 5.01,
   "qc": [
    "camera: push in 204%, tilt down 14%, roll 2.7 deg (uncertain) - done by the studio (push)",
-   "angle: a low angle (pitch +0.24)",
    "identity: uncertain at the start (0.52); unmeasured (the camera moved too much to follow the head); the face h",
    "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.52 left=0.00 right",
    "words not in the picture: side"
@@ -109,9 +107,9 @@
   "duration": 5.01,
   "qc": [
    "camera: push in 144%, tilt up 12% (uncertain) - done by the studio (push)",
-   "angle: a high angle (pitch -0.23) (uncertain)",
    "identity: same person at the start (0.68); unmeasured (the camera moved too much to follow the head); the face",
-   "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.51 left=0.00 right"
+   "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.51 left=0.00 right",
+   "angle: a high angle (pitch -0.23)"
   ]
  },
  {
@@ -165,7 +163,7 @@
   "duration": 5.01,
   "qc": [
    "camera: pull back 19%, tilt down 37% - done by the studio (stabilise)",
-   "angle: a steep low angle (pitch +0.56)"
+   "angle: a low angle (pitch +0.56)"
   ]
  },
  {
@@ -201,8 +199,43 @@
   "duration": 4.88,
   "qc": [
    "camera: push in 13% - done by the studio (push)",
-   "angle: a low angle (pitch +0.23)",
    "identity: uncertain by the end (0.53 -> 0.51); place held (0.94 first to last)"
+  ]
+ },
+ {
+  "shot": "140",
+  "plate": "night_wide.png",
+  "asked": 0.0,
+  "plate_pitch": 0.738,
+  "take": 0.087,
+  "conf": "low",
+  "plate_err": null,
+  "engine_drift": -0.651,
+  "camera": "pull back 13%, tilt up 6%, roll -6.7 deg",
+  "move": "crane",
+  "ease": null,
+  "duration": 4.88,
+  "qc": [
+   "camera: pull back 13%, tilt up 6%, roll -6.7 deg - done by the studio (crane)",
+   "identity: uncertain by the end (0.60 -> 0.51); place held (0.97 first to last)"
+  ]
+ },
+ {
+  "shot": "160",
+  "plate": "night_wide.png",
+  "asked": 0.0,
+  "plate_pitch": 0.738,
+  "take": 0.058,
+  "conf": "low",
+  "plate_err": null,
+  "engine_drift": -0.6799999999999999,
+  "camera": "roll 6.0 deg",
+  "move": "crane",
+  "ease": null,
+  "duration": 5.01,
+  "qc": [
+   "camera: roll 6.0 deg - done by the studio (crane)",
+   "identity: uncertain by the end (0.59 -> 0.53); place held (0.96 first to last)"
   ]
  }
 ]

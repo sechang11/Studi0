@@ -1057,7 +1057,10 @@ def _camera_pass(jid, sh, dest, eng):
     if m.get("curve"):
         small["curve"] = m["curve"]      # the face is followed through this, and it re-scores later
     if applied:
-        small["post"] = {k: applied[k] for k in ("move", "amount", "zoom_start", "zoom_end", "cx_start", "cy_start") if k in applied}
+        small["post"] = {k: applied[k] for k in ("move", "amount", "zoom_start", "zoom_end",
+                                                 "cx_start", "cy_start", "ease", "zeta",
+                                                 "settle", "pitch_from", "pitch_to")
+                         if k in applied and applied[k] is not None}
         if applied.get("window"):
             small["post"]["window"] = applied["window"]
     n = CMM.note(m)

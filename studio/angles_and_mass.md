@@ -18,3 +18,5 @@ the plate is scored against what was asked and the take against the plate.
 | 090 | night_wide__angleu75.png | +0.75 | +0.68 | +0.56 | -0.07 | -0.12 | pull back 19%, tilt down 37% | stabilise | 5.01 |
 | 100 | day_wide__angled75.png | -0.75 | -0.68 | -0.51 | +0.07 | +0.17 | static | stabilise | 5.01 |
 | 110 | dawn_wide__angleu32.png | +0.32 | +0.32 | +0.23 | +0.00 | -0.09 | push in 13% | push | 4.88 |
+| 140 | night_wide.png | +0.00 | +0.74 | +0.09 |   -   | -0.65 | pull back 13%, tilt up 6%, roll -6.7 deg | crane | 4.88 |
+| 160 | night_wide.png | +0.00 | +0.74 | +0.06 |   -   | -0.68 | roll 6.0 deg | crane | 5.01 |
