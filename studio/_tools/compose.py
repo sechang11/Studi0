@@ -494,7 +494,11 @@ def character_layer(char_id, plate, dpath, stand, cx, view="turn_front", seed=7,
                    tag="k" + str(seed))
     cut = _trim(Image.open(cut_p).convert("RGBA"))
     W, H = plate.size
-    if dpath is not None:
+    if ots:
+        # behind the shoulder: taller than the frame, head in the upper sixth, feet below
+        th = int(H * 1.8)
+        y_feet = int(H * 0.12) + th
+    elif dpath is not None:
         if plate_p and footing_check:
             stand, cx, surface, _tried = find_footing(plate, plate_p, dpath, stand, cx, near=near)
         y_feet, th, _ = place_by_depth(plate, dpath, stand, cx)
@@ -531,7 +535,7 @@ def character_layer(char_id, plate, dpath, stand, cx, view="turn_front", seed=7,
                 lit = _trim(rc)
         except Exception:
             lit = None
-    cut = lit if lit is not None else tint_to(cut, plate)
+    cut = lit if lit is not None else tint_to(cut, plate, strength=(0.25 if ots else 0.5))
     tw = max(1, int(cut.width * th / cut.height))
     cut = cut.resize((tw, th), Image.LANCZOS)
     return cut, int(W * cx) - tw // 2, y_feet - th
