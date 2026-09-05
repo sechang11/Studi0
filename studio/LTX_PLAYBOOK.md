@@ -1877,3 +1877,13 @@ shots), an in-place motion that moves the head - crouch, sit, bow, lie down -
 should carry its end box from the pin's end frame, and the reading on those
 entries is not to be trusted. The walk entries and the rest of the shelf
 read correctly; this one is the ruler's blind spot, named.
+
+**Closing numbers, 10:10.** The blind spot above is now named in the code:
+for a motion that moves the head (crouch, kneel, sit, bow, lie, stand up)
+the end reading is information, never a fault, and the rescore applies the
+same rule to the check table. The crouch reads "unmeasured (the crouch moves
+the head; 0.25 not judged)" instead of "a different face", and Make no longer
+re-rolls a good pin for it. Final matrix after every correction: 32 of 32
+built, 28 clean picks, 16 same person, 4 uncertain, 2 a different face (the
+walk toward the camera and the over-the-shoulder, both explained above), 1
+unmeasured by rule, 9 with no face to judge. 55 commits in the block.
