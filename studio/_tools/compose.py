@@ -470,9 +470,34 @@ def prop_layer(prop_id, plate, dpath, stand, cx, view="hero", seed=7, work=None,
     return cut, int(W * cx) - tw // 2, y_feet - th
 
 
+def head_scale(char_id, view, ref_view="turn_front", work=None, seed=7):
+    """How much smaller this view should be drawn than a plain height match, so that its
+    head lands where the reference view's head would.  1.0 means the two views already
+    agree.  -> (factor, note) with the factor clamped to a sane range."""
+    from PIL import Image
+    try:
+        out = []
+        for v in (view, ref_view):
+            src = os.path.join(CHARS, char_id, v + ".png")
+            if not os.path.isfile(src):
+                return 1.0, "no %s to compare with" % v
+            cut_p = cutout(src, os.path.join(work or OUT_DIR, "hs_%s_%s.png" % (char_id, v)), tag="hs")
+            im = _trim(Image.open(cut_p).convert("RGBA"))
+            a = im.split()[-1]
+            hw = _head_width(a, (0, 0, im.size[0], im.size[1]))
+            if not hw or not im.size[1]:
+                return 1.0, "no head found in %s" % v
+            out.append(hw / float(im.size[1]))       # head width as a fraction of height
+        f = out[1] / out[0] if out[0] else 1.0       # <1 when this view's head is bigger
+        f = max(0.45, min(1.6, f))
+        return f, "head %.3f of height against %.3f in %s (factor %.2f)" % (out[0], out[1], ref_view, f)
+    except Exception as e:
+        return 1.0, "head scale unavailable: %s" % str(e)[:70]
+
+
 def character_layer(char_id, plate, dpath, stand, cx, view="turn_front", seed=7,
                     work=None, framing="full", plate_p=None, relight=True, footing_check=True,
-                    near=None, ots=False):
+                    near=None, ots=False, head_ref=None):
     """A second (or third) character as a layer: cut, sized as a 1.7 m person at
     its depth, tinted to the plate. -> (cut, x, y).
 
@@ -505,6 +530,12 @@ def character_layer(char_id, plate, dpath, stand, cx, view="turn_front", seed=7,
     else:
         scale, feet = _framings_for(view)[framing]
         th, y_feet = int(H * scale), int(H * feet)
+    if head_ref and not ots:
+        # a uniform scale cannot repair a wrong ratio - it moves head and body together -
+        # so this only reports.  The gate that uses it lives where views are made.
+        f, note = head_scale(char_id, view, head_ref, work=work, seed=seed)
+        if abs(f - 1.0) > 0.02:
+            print("   head proportions: %s" % note)
     # lit by the scene like the first figure: rough paste alone, relight, re-cut
     lit = None
     if plate_p and relight:
