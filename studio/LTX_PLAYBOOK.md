@@ -1846,3 +1846,14 @@ at the point the face is redrawn. A driver should read the film, not the
 job list. And the window0 lesson generalises: every ruler that runs after a
 studio transform (identity, people, the edge check) should be handed the
 transform.
+
+**Addendum, 09:55: the other two rulers.** The same bias sat under the
+scene-drift and frame-edge checks: the camera pass replaced the take in place,
+so both read the studio's crop and a 1.15 push could be reported as "scene
+drift" - a fault that re-rolls. The pass now keeps the raw render beside the
+moved take (`<take>_raw.mp4`) and those two rulers read it when it exists;
+the identity ruler reads the moved frame through its window. Proven on one
+build in `builder-test` (shot 250): push asked 1.15, measured 1.147, the face
+0.73 to 0.68 (same person), the place 0.91, no drift and no edge note. The
+rule stands: a ruler judges either the engine's picture or the studio's, and
+the code has to say which.
