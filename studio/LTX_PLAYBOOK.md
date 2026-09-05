@@ -1576,3 +1576,60 @@ a median 0.31 (max 0.78 for two drawn characters who share a face by design).
 The reading: 0.62 and above is the same person, 0.50-0.62 uncertain, under
 0.50 a different face. `identity` measures a take's first and last frames
 against the pack portrait, the head box coming from the compose geometry.
+
+## §51  The encyclopedia of shots, and what each entry is allowed to promise
+
+The director asked for templates for every kind of shot. A template here is a
+recipe the builder can run, not a paragraph of prose: the framing, how many
+people and where they stand, the camera (a post move the studio performs, or a
+rig, or a pin - never a sentence the engine is asked for), the motion beat,
+the length, a starting sentence, and the two lists that make it honest: what
+the shot *keeps* and what it *cannot promise*, with what was measured.
+
+**Thirty-two entries in seven families.** Coverage (establishing wide, wide
+with the people, insert). People (medium, close-up, two-shot, over the
+shoulder, low angle). Camera moves (push, pull, pan, tilt, orbit, handheld,
+locked off, Dutch tilt). Place (the place at night, point of view, time
+passes). Dialogue (a line on camera, a line in close-up, reaction, walk and
+talk). Motion beats (turn in place, crouch, look up, walk toward camera).
+Reveals (by pulling back, by tilting up, cutaway, whip pan, montage). Each is
+also a shot template the film editor can add from its own menu, and the
+catalog rides in `/api/film/libraries`, so the builder's shelf and the editor
+read the same file.
+
+**Two new kinds of shot that generate nothing.** *Time passes*: a place in the
+foundry has plates for several times of day made from one description, so they
+agree on geometry and disagree in light - which is a time-lapse. `platefade`
+dissolves them in order with a slow push; twelve places have two or more wide
+plates. Measured: push 1.06 asked, 1.056 measured, nothing else moved. *Over
+the shoulder*: the second person's back view (`turn_back_three_quarter`) as a
+near layer at stand 0.06, the speaker facing us behind - the template carries
+the layer and the builder honours it. The first build of it taught a law: the
+layer went through the usual relight, and qwen-edit, asked to relight a back
+view "without changing the face", gave it one - Tomas came back facing us,
+smiling, at a normal stand, because footing had also walked him onto the deck.
+The compositor now has an over-the-shoulder mode for a layer: the exact back
+view, no footing (its feet are below the frame by design), no relight - tinted
+to the plate instead - and the figure allowed to run off the bottom.
+
+**The compounding law, and its fix.** The first camera build through the new
+pass asked for a push of 1.14 and measured 1.47: the engine had drifted 1.29
+on its own and the studio's push multiplied it. Arithmetic does what it says,
+including to a moving target. The fix is in the order of operations: a post
+move now stabilises the engine's drift first (when it is above 3% and measured
+with confidence), then applies the move, so 1.14 asked is 1.14 got. Stabilise
+itself learned to hold pan and tilt as well as zoom, and to average the border
+band's zoom with the whole frame's: an empty wide that drifted 1.163 came out
+at 1.016, pan 0.000, tilt 0.001 - a still frame. Beyond about 1.35 the
+accumulated error over-corrects (a 1.6x push came back 0.86 with a roll), so a
+take the engine has pushed that far keeps its move and says so; it is a push
+now, and a promise of stillness on it is broken honestly. The whip
+pan taught a second law of the same kind: a pan's travel is capped by the room
+the zoom gives ((1 - 1/z)/2 per side), so asking for 0.25 at zoom 1.16 returns
+0.16; the whip runs at 1.25 now.
+
+**What a person sees.** The builder opens with the shelf. Pick a shot type and
+the pickers fill in; the info line says what it keeps, what it cannot promise,
+and what was measured; the camera picker names only moves the studio can do
+exactly, plus the pin. The spec sheet's camera promise carries a CHECK the
+checker runs on the measured take. The Start page says so in one paragraph.
