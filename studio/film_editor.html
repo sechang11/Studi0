@@ -380,7 +380,7 @@ function reviewPanel(){
       else if(!s.picked) blockers.push(`${s.id} has takes but none picked`);
       else{
         total+=s.picked_dur||s.duration||0; n++;
-        if(s.picked_qc) blockers.push(`${s.id} picked take has ${s.picked_qc} QC issue(s)`);
+        if(s.picked_qc) (s.picked_faults||[`${s.picked_qc} unnamed issue(s)`]).forEach(fl=>blockers.push(`${s.id}: ${fl}`));
       }
       const chip=s.picked?(s.picked_qc?'<span class="qcbad">✗</span>'
         :(s.picked_fps>=47?'<span style="color:var(--good)">48</span>'
@@ -402,8 +402,14 @@ function reviewPanel(){
   if(faces.length) blockers.push("faces, measured against the packs: "+faces.map(x=>x.replace("same person","held").replace("a different face","CHANGED")).join(" · "));
   const unwritten=TREE.scenes.flatMap(sc=>sc.shots.filter(s=>s.needs_sentence).map(s=>s.id));
   if(unwritten.length) blockers.push("waiting for your sentence - a neutral one renders meanwhile: "+unwritten.join(", "));
+  const clocks=TREE.scenes.flatMap(sc=>sc.shots.filter(s=>s.picked_hold!=null&&s.picked_len&&s.picked_hold<s.picked_len-0.4)
+    .map(s=>`${s.id} keeps the face ${s.picked_hold}s of ${s.picked_len}`));
+  if(clocks.length) blockers.push("the face runs out before the shot does: "+clocks.join(" · ")+" - the studio can cut there");
+  (TREE.pack_notes||[]).forEach(p=>blockers.push(
+    `${p.cast}: the pack view${p.views.length>1?"s":""} ${p.views.join(", ")} ${p.views.length>1?"are":"is"} drawn out of proportion with the rest of the pack - repair the character to re-render ${p.views.length>1?"them":"it"}`));
+  const angles=TREE.scenes.flatMap(sc=>sc.shots.filter(s=>s.picked_angle&&s.picked_angle!=="eye level").map(s=>s.id+" "+s.picked_angle));
   return `<h2>Review</h2>
-    <div class="hint">${n} shots picked · ~${Math.round(total)}s of picked footage</div>
+    <div class="hint">${n} shots picked · ~${Math.round(total)}s of picked footage${angles.length?" · where the camera stood: "+angles.join(" · "):""}</div>
     <div style="overflow-x:auto;margin-top:8px"><table>${rows}</table></div>
     <h2>Blocking / attention</h2>
     ${blockers.length?blockers.map(b=>`<div class="wl">⚠ ${esc(b)}</div>`).join("")

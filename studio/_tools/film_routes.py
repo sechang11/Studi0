@@ -153,6 +153,29 @@ def _film_file(f):
     return p if os.path.exists(p) else ""
 
 
+def _pack_notes(f):
+    """Which of this film's cast have a pack view that will hurt a composite.
+
+    Read from the cache the pack check writes, never measured here: this runs on every
+    page load and the measurement wants a segmenter."""
+    out = []
+    root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    for cid, ent in (f.data.get("cast") or {}).items():
+        pack = (ent or {}).get("foundry")
+        if not pack:
+            continue
+        p = os.path.join(root, "foundry", "characters", pack, "_head_ref.json")
+        if not os.path.exists(p):
+            continue
+        try:
+            d = json.load(open(p, encoding="utf-8"))
+        except Exception:
+            continue
+        if d.get("suspect"):
+            out.append({"cast": cid, "pack": pack, "views": d["suspect"]})
+    return out
+
+
 def tree(fid):
     f = F.load(fid)
     scenes = []
@@ -175,6 +198,14 @@ def tree(fid):
                           "picked_info": (len(picked.get("qc") or []) - len(_faults(picked))) if picked else 0,
                           "picked_warnings": len(picked.get("warnings") or [])
                           if picked else 0,
+                          "picked_faults": [str(n)[:150] for n in _faults(picked)] if picked else [],
+                          "picked_angle": ((picked.get("angle_measured") or {}).get("angle") or "")
+                          if picked and (picked.get("angle_measured") or {}).get("confidence") not in (None, "none") else "",
+                          "picked_camera": (picked.get("cam_measured") or {}).get("camera", "") if picked else "",
+                          "picked_hold": (((picked.get("identity") or {}).get("hold_curve") or {}) or {}).get("holds_until")
+                          if picked else None,
+                          "picked_len": (((picked.get("identity") or {}).get("hold_curve") or {}) or {}).get("duration")
+                          if picked else None,
                           "picked_fps": picked.get("fps", 24) if picked else 0,
                           "picked_dur": picked.get("duration", 0) if picked else 0,
                           "needs_sentence": _needs_sentence(sh),
@@ -191,6 +222,7 @@ def tree(fid):
             "look_clause": f.data.get("look_clause"), "grade": f.data.get("grade"),
             "logline": f.data.get("logline"), "negative": f.data.get("negative"),
             "cast": f.data.get("cast"), "scenes": scenes,
+            "pack_notes": _pack_notes(f),
             "film": bool(_film_file(f)),
             "angles": F.ANGLES, "moves": sorted(F.MOVES),
             "transitions_out": F.TRANSITIONS_OUT}, 200
