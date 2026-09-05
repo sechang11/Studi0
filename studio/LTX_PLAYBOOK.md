@@ -1857,3 +1857,12 @@ build in `builder-test` (shot 250): push asked 1.15, measured 1.147, the face
 0.73 to 0.68 (same person), the place 0.91, no drift and no edge note. The
 rule stands: a ruler judges either the engine's picture or the studio's, and
 the code has to say which.
+
+**Checked by eye, 10:00.** The three picks the re-scored ruler still calls a
+different face (shots 200, 370, 390 of `encyclopedia-check`) were looked at,
+first frame against last: in all three the man who arrives at the camera has a
+fuller, whiter beard and a rounder face than the man who set off - a redraw,
+not a lighting change - and in all three the walk ended in a medium or close
+framing the shot never asked for. The ruler is right three of three where it
+disagrees with the wish. A walk toward the camera is the one entry the
+studio cannot yet promise the face on; the shelf says so.
