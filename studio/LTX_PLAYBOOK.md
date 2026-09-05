@@ -1774,3 +1774,10 @@ law; the exception is withdrawn, and H3 gets the same treatment as LTX - the
 engine is asked to hold still, the move is arithmetic, and when the engine runs
 away past what stabilise can undo, the take says so and the camera promise
 fails honestly.
+
+**Correction, an hour later.** The entry recorded as not built was lost a
+second time when it was re-run: my own patch watcher fires in the gap after a
+build finishes and before the driver reads the result, and the reload it
+triggers empties the job list. The record was rebuilt from the film itself,
+which had the takes all along: 32 of 32 built, 26 clean picks. A driver should
+read the film, not the job list - the film is what happened.
