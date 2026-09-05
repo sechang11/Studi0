@@ -2811,7 +2811,7 @@ def _build_job(jid, data):
         camera = data.get("camera") or "static"
         engine = data.get("engine") if data.get("engine") in ("ltx", "h3") else "ltx"
         if engine == "h3":
-            _log(jid, "engine: H3 - variants render directly (a line is not voiced, no pins); a pull back is asked of the engine, which obeys it")
+            _log(jid, "engine: H3 - variants render directly (a line is not voiced, no pins); camera moves are done by the studio as on LTX")
         motion = (data.get("motion") or "").strip()
         line = (data.get("line") or "").strip()
         who = (data.get("who") or (cast_ids[0] if cast_ids else "")).strip()
@@ -2825,8 +2825,6 @@ def _build_job(jid, data):
             f = F.load(fid)
             subject = cast_ids[0] if cast_ids else ""
             post = POST_MOVES.get(camera)
-            if engine == "h3" and camera == "pull back":
-                post = None          # H3 obeys 'pull back' in prose (measured 28% and 41%); arithmetic cannot open a frame wider than the render
             tpl_build = {}
             if data.get("template"):
                 try:
