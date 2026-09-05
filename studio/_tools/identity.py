@@ -22,7 +22,8 @@ median 0.77 (min 0.40 with a crude crop); different people median 0.31
 Run with ComfyUI's python (torch):
     ~/ComfyUI/venv/bin/python identity.py jobs.json      -> results.json beside it
 jobs.json: [{"portrait": ..., "video": ..., "box": [x0,y0,x1,y1] fractions or null,
-             "close": bool, "cam": {"zoom":..,"pan":..,"tilt":..} or null, "id": ...}]
+             "close": bool, "cam": {"zoom":..,"pan":..,"tilt":..} or null, "id": ...,
+             "plate": <the scene's plate, optional -> place_start/place_end/place_verdict>}]
 """
 import json
 import os
@@ -137,6 +138,16 @@ def run(job):
             e1 = embed(c1)
             end, hold = float((p * e1).sum()), float((e0 * e1).sum())
             out.update({"end": round(end, 3), "hold": round(hold, 3), "verdict_end": verdict(end)})
+        # the place: did the whole frame stay the same picture from first to last?  (the plate
+        # against the first frame is framing-dependent - a medium on a person scores 0.48 against
+        # its own empty plate - so it is reported, not judged)
+        f0, f1 = embed(first), embed(last)
+        hold = float((f0 * f1).sum())
+        out.update({"place_hold": round(hold, 3),
+                    "place_verdict": ("held" if hold >= 0.85 else "changed" if hold < 0.70 else "drifted")})
+        if job.get("plate") and os.path.exists(job["plate"]):
+            pl = embed(Image.open(job["plate"]))
+            out["place_start"] = round(float((pl * f0).sum()), 3)
         return out
     except Exception as e:
         return {**out, "error": str(e)[:160]}
