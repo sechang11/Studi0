@@ -124,7 +124,8 @@ function showFamily(fid){
   const shots=(CATALOG.shots||[]).filter(s=>!fid||s.family===fid);
   $("#shotcards").innerHTML=shots.map(s=>`<div class="take ${s.id===TEMPLATE?"picked":""}" style="cursor:pointer;padding:8px 10px" onclick="pickShot('${s.id}')">
       <b>${esc(s.title)}</b><div class="hint" style="margin-top:2px">${esc(s.purpose)}</div>
-      <div class="hint" style="margin-top:4px;opacity:.7">${esc((s.build.framings||[]).join("/"))} · ${esc(s.build.camera||"static")}${s.build.people===0?" · nobody":s.build.people===2?" · two people":""} · ${s.build.duration||6}s</div></div>`).join("");
+      <div class="hint" style="margin-top:4px;opacity:.7">${esc((s.build.framings||[]).join("/"))} · ${esc(s.build.camera||"static")}${s.build.people===0?" · nobody":s.build.people===2?" · two people":""} · ${s.build.duration||6}s</div>
+      ${s.checked?`<div class="hint" style="margin-top:4px;font-size:11px;color:${s.checked.built?"var(--good)":"var(--bad)"}">${s.checked.built?"checked "+esc(s.checked.when||"")+(s.checked.camera?" · camera: "+esc(s.checked.camera):"")+(s.checked.identity?" · face: "+esc(s.checked.identity):""):"did not build when checked"}</div>`:""}</div>`).join("");
 }
 function pickShot(id){
   const s=(CATALOG.shots||[]).find(x=>x.id===id); if(!s) return;
