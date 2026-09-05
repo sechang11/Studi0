@@ -2062,3 +2062,22 @@ seeds to see whether the change was worth making.
 Nothing about the engine changed. The shot was made shorter than the failure, and the
 failure stopped happening. That is what a ruler is for: not to grade a take after the fact
 but to change what gets asked for.
+
+**The clock advises, from 101 takes.** The hold curve was backfilled onto every take the
+studio had already made - CPU only, no renders - and gathered by what the shot asks the
+person to do:
+
+  still   98 takes, 68 held the face throughout, 25 lost it; three quarters held 4.8 s
+  walk    17 takes, 10 held, 7 lost;                         three quarters held 4.0 s
+  crouch   2 takes, neither followable (the head leaves the box the geometry predicts)
+
+The number the builder speaks from is a survival statistic, not the worst take that ever
+happened. The first version used the earliest moment a face had ever been lost, which let one
+unlucky still shot at 1.9 s cap every still shot in the studio at three seconds. A margin
+keeps it quiet on an ordinary five second shot against a 4.8 s survival, because a warning
+that fires on everything is a warning nobody reads. The builder says it in the job log, writes
+it into the spec, and the length field says it live as the director types.
+
+Worth noticing what the two numbers mean together: a still shot's face survives 4.8 s and a
+walking one's 4.0 s, so the walk is not uniquely cursed - LTX loses faces at about five
+seconds in general, and a walk toward the camera simply gives it more reason to.
