@@ -999,6 +999,13 @@ def _identity_pass(jid, f, sh, dest, cam_m):
     hc = res.get("hold_curve") or None
     if hc:
         ident["hold_curve"] = hc
+    if res.get("start") is None:
+        # the head was too small to read: information, never a fault, and nothing to format
+        n = "identity: %s" % (res.get("verdict_start") or "unmeasured")
+        if res.get("place_hold") is not None:
+            n = "%s; place %s (%.2f first to last)" % (n, res.get("place_verdict") or "?", res["place_hold"])
+        _log(jid, n)
+        return ident, n, False
     vs, ve = res.get("verdict_start"), res.get("verdict_end") or ""
     # the end box follows the camera, not the figure: a motion that moves the head (a crouch drops
     # it a third of the frame) leaves the ruler reading the chest, so that end reading is information

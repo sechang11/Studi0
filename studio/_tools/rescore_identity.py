@@ -63,6 +63,8 @@ HEAD_MOVERS = {"crouch", "kneel", "sit", "sit_down", "bow", "lie", "lie_down", "
 
 def verdict_note(res, cid, covered, mover=None):
     vs, ve = res.get("verdict_start"), res.get("verdict_end") or ""
+    if res.get("start") is None:
+        return "identity: %s" % (vs or "unmeasured"), False
     if mover and ve in ("a different face", "uncertain") and vs != "a different face":
         ve = "unmeasured (the %s moves the head and the end box is not followed; %.2f not judged)" % (mover, res.get("end") or 0)
         res["verdict_end"] = ve
