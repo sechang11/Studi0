@@ -932,8 +932,10 @@ def _identity_pass(jid, f, sh, dest, cam_m):
            # 11% of the starting score by the end of a clip and most of it in the last quarter,
            # so WHERE it goes is a cut point, not just a verdict.  A close-up the studio has
            # moved is skipped: there the box would have to follow the move, not the camera.
-           "curve": not (src.get("framing") == "close" and cam_m and cam_m.get("post")),
-           "cam_curve": (cam_m or {}).get("curve")}
+           "curve": True,
+           "cam_curve": (cam_m or {}).get("curve"),
+           # where the studio's own window sits through the clip: exact, not read off pixels
+           "post_curve": ((cam_m or {}).get("post") or {}).get("window")}
     jp = dest[:-4] + "_identity_job.json"
     try:
         json.dump([job], open(jp, "w"))
@@ -1049,6 +1051,8 @@ def _camera_pass(jid, sh, dest, eng):
         small["curve"] = m["curve"]      # the face is followed through this, and it re-scores later
     if applied:
         small["post"] = {k: applied[k] for k in ("move", "amount", "zoom_start", "zoom_end", "cx_start", "cy_start") if k in applied}
+        if applied.get("window"):
+            small["post"]["window"] = applied["window"]
     n = CMM.note(m)
     if applied and n:
         n += " - done by the studio (%s)" % applied["move"]

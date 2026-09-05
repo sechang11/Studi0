@@ -26,6 +26,8 @@ jobs.json: [{"portrait": ..., "video": ..., "box": [x0,y0,x1,y1] fractions or nu
              "plate": <the scene's plate, optional -> place_hold/place_verdict/place_start>,
              "window0": {"zoom", "cx", "cy"} - the studio's post move at the first frame, so the
                         anchor-frame head box is carried into the cropped frame,
+             "post_curve": [[zoom, cx, cy], ...] - the studio's own move window at nine
+                        moments, used in preference to the measured camera because it is exact,
              "curve": true + "cam_curve": cammeasure's per-step [[zoom,pan,tilt], ...] ->
                         "hold_curve": the face scored at nine times through the clip, with
                         holds_until / lost_at in seconds}]
@@ -142,7 +144,22 @@ def hold_curve(job, box, portrait_emb, close, cam_curve, dur, n=9):
         if im is None:
             scores.append(None)
             continue
-        if close or not cam_curve:
+        pw = job.get("post_curve")
+        if pw:
+            # the studio's own window, sampled at nine moments: a source point (x, y) shows
+            # at ((x - cx) * zoom + 0.5, (y - cy) * zoom + 0.5)
+            u = (t / dur) if dur else 0.0
+            pos = u * (len(pw) - 1)
+            j2 = int(pos)
+            f2 = pos - j2
+            if j2 >= len(pw) - 1:
+                zz, cxx, cyy = pw[-1]
+            else:
+                a2, b3 = pw[j2], pw[j2 + 1]
+                zz, cxx, cyy = [a2[k] * (1 - f2) + b3[k] * f2 for k in range(3)]
+            b = [(box[0] - cxx) * zz + 0.5, (box[1] - cyy) * zz + 0.5,
+                 (box[2] - cxx) * zz + 0.5, (box[3] - cyy) * zz + 0.5]
+        elif close or not cam_curve:
             b = list(box)
         else:
             # cam_curve is sampled evenly over the clip; read it at this fraction

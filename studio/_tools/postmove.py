@@ -217,6 +217,14 @@ def apply(src, dst, move, fps=None, crf=16):
         os.remove(os.path.join(tmp, f))
     os.rmdir(tmp)
     z0, z1 = traj[0][2], traj[-1][2]
+    # the window at nine moments through the clip, for the rulers that run afterwards:
+    # a measurement taken on a frame the studio has transformed must be taken in the
+    # transformed frame's coordinates, and this is those coordinates, exactly
+    win = []
+    for i in range(9):
+        j = min(n - 1, int(round(i * (n - 1) / 8.0)))
+        cx, cy, zoom, _roll = traj[j]
+        win.append([round(zoom, 4), round(cx, 4), round(cy, 4)])
     return {"move": kind, "amount": amount, "frames": n, "fps": round(fps, 2),
             "ease": ("spring" if move.get("ease") == "spring" else
                      ("linear" if move.get("ease") in (False, "linear") else "smooth")),
@@ -225,6 +233,7 @@ def apply(src, dst, move, fps=None, crf=16):
             "zoom_start": round(z0, 3), "zoom_end": round(z1, 3),
             "cx_start": round(traj[0][0], 4), "cy_start": round(traj[0][1], 4),
             "travel": round((traj[-1][0] - traj[0][0]), 3) if kind in ("pan", "orbit") else round((traj[-1][1] - traj[0][1]), 3),
+            "window": win,
             "file": dst}
 
 
