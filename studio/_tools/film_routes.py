@@ -938,6 +938,8 @@ def _camera_pass(jid, sh, dest, eng):
             before = None
             before = CMM.measure(dest, framing=framing)
             drift = 0.0 if before.get("error") else abs(before.get("zoom", 1.0) - 1.0)
+            if not os.path.exists(dest[:-4] + "_raw.mp4"):
+                shutil.copy2(dest, dest[:-4] + "_raw.mp4")   # the rulers that judge the engine read this one
             if mv.get("move") == "stabilise":
                 if drift < 0.03:
                     mv = None
@@ -1137,7 +1139,8 @@ def _render_take(jid, f, sh, eng, seed):
             _log(jid, "the render was %s and no take of this place is loud enough to lend its sound" % how)
     try:
         _start = _resolve_anchor_file(f, sh["id"], jid)
-        _d = _scene_drift(dest, _start, "%s_%s" % (f.id, sh["id"])) if _start else None
+        _raw = dest[:-4] + "_raw.mp4" if os.path.exists(dest[:-4] + "_raw.mp4") else dest
+        _d = _scene_drift(_raw, _start, "%s_%s" % (f.id, sh["id"])) if _start else None
     except Exception as e:
         _d = {"error": "anchor: %s" % str(e)[:120]}
     if _d and _d.get("error"):
@@ -1163,7 +1166,8 @@ def _render_take(jid, f, sh, eng, seed):
     _cast_here = any((b.get("subject") or "") in (f.data.get("cast") or {}) for b in (sh.get("beats") or []))
     if _cast_here and eng == "ltx":
         try:
-            _lf = _last_frame(dest, dest[:-4] + "_last.png")
+            _rawf = dest[:-4] + "_raw.mp4" if os.path.exists(dest[:-4] + "_raw.mp4") else dest
+            _lf = _last_frame(_rawf, dest[:-4] + "_last.png")
             _co, _cd = _cut_off(_lf) if _lf else (False, "no frame")
             if _co:
                 # LTX pushes in on nearly every take; ending closer than it started is
