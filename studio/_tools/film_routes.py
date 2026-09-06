@@ -2143,6 +2143,14 @@ def _anchor_face(jid, char_id, anchor_path, src):
         _found = HB.head_box(anchor_path, near=_hint)
     except Exception:
         _found = None
+    if _found and _gb:
+        _ph, _fh = (_gb[3] - _gb[1]), (_found[3] - _found[1])
+        _dy = ((_found[1] + _found[3]) - (_gb[1] + _gb[3])) / 2.0
+        if _ph > 0 and (abs(_fh / _ph - 1.0) > 0.4 or abs(_dy) > 0.12):
+            _log(jid, "the head is not where the geometry expected: predicted %.0f%% of the "
+                      "frame tall at y=%.2f, found %.0f%% at y=%.2f - the plate's depth pass "
+                      "may be putting the figure at the wrong distance"
+                 % (_ph * 100, (_gb[1] + _gb[3]) / 2, _fh * 100, (_found[1] + _found[3]) / 2))
     job = {"id": "anchor", "portrait": portrait, "still": anchor_path,
            "box": _found or _gb, "close": src.get("framing") == "close"}
     jp = anchor_path[:-4] + "_face_job.json"
