@@ -1142,6 +1142,8 @@ def _identity_pass(jid, f, sh, dest, cam_m):
         # the two bands disagree, which is a real state and not a contradiction
         note = ("%s; it stayed recognisable the whole way but ended below the line where the "
                 "studio will call it the same person" % note)
+    if fault:
+        note = "%s%s" % (note, _face_advice(cid))
     if fault and (res.get("place_hold") is not None and res["place_hold"] < 0.70):
         # measured: on the five takes whose place changed, not one kept the face.  The seed is
         # not the thing to change here - the engine rewrote the scene and the person with it.
@@ -1152,6 +1154,28 @@ def _identity_pass(jid, f, sh, dest, cam_m):
         note = "%s; place %s (%.2f first to last)" % (note, res.get("place_verdict") or "?", res["place_hold"])
     _log(jid, note)
     return ident, note, fault
+
+
+def _face_advice(cid):
+    """the sentence that follows a wrong face - which one depends on what the pack carries"""
+    try:
+        root = os.path.join(STUDIO, "foundry", "characters", cid, "asset.json")
+        a = json.load(open(root, encoding="utf-8"))
+    except Exception:
+        return ""
+    lo, wd = a.get("lora") or {}, a.get("lora_withdrawn") or {}
+    if lo.get("file"):
+        return (" - this character's trained face is already in the render, so what missed is "
+                "the shot and not the likeness: a closer framing, a shorter take, another seed")
+    if wd.get("file"):
+        return (" - a trained face was built for this character and did not beat the reference "
+                "image (%s), so training another the same way reaches the same place"
+                % (wd.get("measured") or "it scored lower"))
+    if (a.get("style") or "") == "anime":
+        return (" - this character has no trained face; building one takes about twelve minutes "
+                "on this card and is kept only if it measures better, which it did for four of "
+                "the seven tried")
+    return ""
 
 
 def _camera_pass(jid, sh, dest, eng):
