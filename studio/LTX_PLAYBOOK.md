@@ -3112,3 +3112,25 @@ The last line is the honest cost of the revert. The END verdict on a crouch is n
 because that uses the found head; the CURVE on a crouch is still wrong, because a carried box
 leaves the head a third of a frame behind. So a crouch's `holds_until` is not to be trusted and
 its verdict is. Both facts are on the take.
+
+**A second pack, and a correction to the adoption.** One pack is an anecdote. The same
+pipeline was run on a second drawn pack - dataset from its own views, captions from the narrow
+vision ask, 1200 steps at rank 16 - and the two disagree about exactly one thing:
+
+                       bai-liwen   renji
+    prompt only          not her    0.345
+    IPAdapter at 0.6       0.685    0.538
+    the LoRA               0.749    0.709
+    both                   0.768    0.436
+
+The LoRA alone wins on both, and comfortably. The COMBINATION is a coin flip: best of the four
+on one pack, worst on the other, where the reference image dragged the pose and the props
+across from the portrait while the face drifted younger and rounder. The score caught what the
+eye then confirmed. Two routes to one identity fighting each other is not a thing to ship on
+the strength of one lucky pack, so where a LoRA exists the reference weight goes to zero and
+the LoRA answers for the character alone.
+
+Also worth recording because it cost half an hour: the trained file lands in
+ComfyUI/output/loras and the loader only looks in ComfyUI/models/loras. The studio's older
+trainer moves it and names it to avoid collisions; driving the workflow directly skips that,
+and a LoRA that silently is not there looks exactly like a LoRA that does nothing.

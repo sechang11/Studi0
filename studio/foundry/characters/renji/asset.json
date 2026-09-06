@@ -63,5 +63,14 @@
    "image": "wearing_rain-cape.png"
   }
  },
- "mesh": "mesh.glb"
+ "mesh": "mesh.glb",
+ "lora": {
+  "file": "character_renji_b6.safetensors",
+  "trigger": "renji",
+  "trained": "2026-09-06",
+  "steps": 1200,
+  "rank": 16,
+  "dataset": "the pack's own views, captioned with the clothing and background named",
+  "measured": "a close-up scores 0.709 against the pack portrait where the IPAdapter path scores 0.538 and a prompt alone 0.345; the two together score 0.436, which is why the LoRA is used alone"
+ }
 }

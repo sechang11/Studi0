@@ -673,9 +673,12 @@ def _render_shot_keyframe(f, shid, plan):
         ch = f.data["cast"].get(present[0]) if present else {}
         wf = load_wf("22_anime_kf_ipadapter.json")
         set_path(wf, "2.inputs.image", (ch or {}).get("sheet") or "")
-        set_path(wf, "4.inputs.weight", float(plan.get("ipa") or 0.3)
-                 if (ch or {}).get("sheet") else 0.0)
-        _lora, _trigger = pack_lora((ch or {}).get("foundry"))
+        _lo, _tr = pack_lora((ch or {}).get("foundry"))
+        # a trained LoRA answers for the character alone: measured on two packs, the two
+        # routes together are a coin flip (0.768 on one, 0.436 on the other)
+        set_path(wf, "4.inputs.weight", 0.0 if _lo else (float(plan.get("ipa") or 0.3)
+                 if (ch or {}).get("sheet") else 0.0))
+        _lora, _trigger = _lo, _tr
         _pre = ("%s, " % _trigger) if _lora else ""
         set_path(wf, "5.inputs.text", "%s%s, %s, masterpiece, best quality, anime key "
                  "visual, %s" % (_pre, prompt, ground, F.LOOK_ANIME))
