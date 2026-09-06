@@ -937,6 +937,31 @@ def _pack_files(cid, imgs):
     return pack + wearing + rest
 
 
+def _plain(note):
+    """the earliest adoptions named the node instead of the thing it does"""
+    return (note or "").replace("the IPAdapter path", "the reference-image path")
+
+
+def _likeness(a):
+    """what a person needs to know about this character's trained face, in words
+
+    Three states, and the third is worth as much as the first: trained and kept, trained and
+    declined (someone spent the GPU, it did not beat the reference path, don't try again with
+    the same recipe), or never tried."""
+    lo = a.get("lora") or {}
+    if lo.get("file"):
+        return {"state": "trained",
+                "note": _plain(lo.get("measured")) or "trained on this character's own turnaround",
+                "trained": lo.get("trained", ""), "seeds": lo.get("seeds", 1)}
+    wd = a.get("lora_withdrawn") or {}
+    if wd.get("file"):
+        return {"state": "declined",
+                "note": "a face was trained for this character and not kept - " +
+                        (wd.get("measured") or "it did not beat the reference-image path"),
+                "trained": wd.get("trained", ""), "seeds": wd.get("seeds", 1)}
+    return {"state": "none", "note": "", "trained": "", "seeds": 0}
+
+
 def roster():
     """Everyone, from both stores, on one ladder."""
     out = []
@@ -952,6 +977,7 @@ def roster():
             "variant_note": a.get("variant_note", ""),
             "voice": (a.get("compiled") or {}).get("voice", ""),
             "lora": bool(a.get("lora")), "mesh": bool(a.get("mesh")),
+            "likeness": _likeness(a),
             "thumb": ("/foundry/media/characters/%s/%s" % (a["id"], thumb))
                      if thumb else "",
             "images": len(imgs),
@@ -965,6 +991,7 @@ def roster():
             "style": "", "level": 1 if rep["complete"] else 0,
             "pack": rep, "parent": "", "variant_note": "",
             "voice": "", "lora": row["lora"], "mesh": False,
+            "likeness": {"state": "trained" if row["lora"] else "none", "note": "", "seeds": 0},
             "thumb": row["sheet_url"],
             "images": row["views"], "desc": row["desc"],
             "status": row["status"], "provenance": row["provenance"],
