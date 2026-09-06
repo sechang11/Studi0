@@ -2161,3 +2161,824 @@ and down runs +0.06 to -0.19 to -0.40. The walls converge and splay with it and 
 sits between the ends, so the ramp is doing what the solver says. The effect is modest rather
 than dramatic, which is exactly what a boom on a locked head should look like and what the
 entry promises.
+
+## §56  Putting a REAL person in a costume, and keeping them there
+
+The problem this section solves: a director hands over a folder of a real person's
+photographs and wants that person — their face and their build, recognisably — wearing a
+specific costume, in shot after shot, without the face or the wardrobe drifting between
+shots. Every part of this was measured on the LENGA films; nothing here is inferred.
+
+### 56.1  The five stages
+
+    photodump  ->  sort  ->  train  ->  render  ->  dress
+                    |         |          |           |
+              photosort   lora_train  the LoRA   dress_keep_face
+                          _sdxl.py    is the     (costume + face
+                                      identity    restored)
+
+1. **Sort** (`studio/_tools/photosort.py`). A face LoRA and a body LoRA want different
+   pictures and a folder of both trains neither. One vision call per image answers
+   three fixed lines (FACE / BODY / NOTE); a photo showing both is copied into BOTH.
+2. **Crop** — inside `lora_photoreal.py`, and it is not optional. See 56.3.
+3. **Train** (`studio/_tools/lora_train_sdxl.py`). See 56.4 for the three bugs.
+4. **Render** the person freely with the LoRA. This is where the likeness lives.
+5. **Dress** (`studio/_tools/dress_keep_face.py`). See 56.5 and 56.6.
+
+### 56.2  What is actually on this box, and what is not
+
+| Want | Use | Not |
+|---|---|---|
+| Photoreal person LoRA | `lora_train_sdxl.py` on RealVisXL | ComfyUI's `TrainLoraNode` — it CANNOT bind a concept to a token |
+| Anime character LoRA | `train_character.py` (animagine) | — |
+| Face location | SAM 3.1, text prompt `the person's face` | OpenCV — the build here is headless, no `CascadeClassifier` |
+| Costume on a rendered person | `dress_keep_face.py` | asking the LoRA for the costume in prose — it pulls to its training data's clothes |
+
+**The test that condemns a trainer, in one render pair:** same seed, LoRA loaded both
+times, trigger word present in one prompt and absent in the other. If the two faces are
+IDENTICAL the trigger is doing nothing and the adapter is only an unconditional shift.
+ComfyUI's node failed this four times across 11, 6, 49 and 46 images. No quantity of
+data fixes it.
+
+### 56.3  A face too small to see is a face too small to learn
+
+Phone screenshots put a face in perhaps a tenth of the frame. Resized to 1024 for
+training that is ~150 px of face, and SDXL trains in an 8x-downsampled latent, so the
+identity being shown is about a 19x19 patch. 49 uncropped screenshots at 1800 steps
+produced a clean, coherent, *different* woman on every seed. The same 49, face-cropped
+first, produced her. `lora_photoreal.py --kind face` crops through SAM3 automatically
+(0.75x margin for hair and jaw); `--nocrop` exists and is almost always wrong.
+
+This is the same arithmetic `face_quality.py` already wrote down for RENDERING: no LoRA
+can add detail to a face the sampler never had room to draw. It applies equally to
+training.
+
+### 56.4  The three bugs a from-scratch SDXL trainer will hit
+
+1. **Export throws away the run.** `convert_state_dict_to_kohya` raised "Original type
+   None is not supported" AFTER 1600 finished steps. Write the raw peft adapter FIRST,
+   then map to kohya explicitly: `lora_unet_<module path, dots to underscores>` with
+   `.lora_down.weight` / `.lora_up.weight` / `.alpha`, and `lora_te1_` / `lora_te2_`
+   for the text encoders.
+2. **fp16 with no GradScaler** gives an adapter with no usable strength band — inert
+   below 0.3, image destroyed above 0.5. Use **bf16**: fp32 range, no scaler needed.
+3. **Noising with the INFERENCE scheduler.** RealVisXL ships EulerDiscrete, which works
+   in sigma space and expects its own timestep indices; feeding it random ints in
+   0..1000 noises by the wrong law. The loss still falls — it is fitting something —
+   and the renders are PURE STATIC. Training must use
+   `DDPMScheduler.from_config(pipe.scheduler.config)`.
+
+### 56.5  Text encoders are what make it a PERSON
+
+UNet-only training gave the right ethnicity and the right face *type* and not her.
+Adding LoRA to both CLIP text encoders (`--train-te`, targets `k_proj q_proj v_proj
+out_proj`, text-encoder LR at half the UNet's) produced a real likeness. Trainable
+parameters go 12M -> 59M. **When training the encoders you cannot pre-cache text
+embeddings** — they change every step; cache token ids and encode inside the loop.
+
+Settings that worked, 97 images (49 face crops + 48 body shots, one trigger):
+rank 32, UNet LR 1e-4, TE LR 4e-5, 3600 steps, bf16, aspect-bucketed. Final loss 0.10.
+
+**Strength is not a percentage of likeness.** It scales the trained weight change; 1.0
+is "as trained" and beyond that is extrapolation. This LoRA is stable and recognisably
+her from 0.85 to 1.3. If likeness is short, the answer is a better LoRA, never a higher
+number.
+
+**Train face AND body under one trigger.** A face-only LoRA has no idea what the
+person's build is, and a 5'2" woman renders at whatever height the base model likes.
+
+### 56.6  The costume is applied to the render, and the face is put back
+
+Asking the LoRA for the costume in prose FAILS: it drags everything toward the clothes
+and places in its training photos (casual tops, bedrooms, stone corridors, generic
+tiaras). Asking qwen-image-edit to change only the clothing also fails, but differently
+— **it changes the face too**, because qwen REGENERATES rather than editing locally.
+That is §21's compositor law applied to a face, and the cure is the same: keep what you
+care about out of the model's reach and put it back afterwards.
+
+    1 dress    qwen puts the costume on the LoRA render (and rewrites the face)
+    2 locate   SAM3 finds the face box in BOTH the render and the dressed version
+    3 restore  the ORIGINAL face is scaled, colour-matched and blended back
+
+**Four artifacts, each with a fix, all of them visible to a director immediately:**
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| Bright halo around the head | patch pad too generous, dragged the original's wall in | mask the FACE, not its surroundings |
+| Face sits off the head | the two face boxes aligned by their CORNERS | align CENTRES; scale on the mean of width and height |
+| Restored face glows | no exposure match to a darker plate | masked per-channel mean/std transfer |
+| **"Two faces, one transparent"** | a FEATHERED mask over two different faces is a double exposure | solid core, thin rim: blur then `clip(a*2.6-0.8)` |
+| **"On the edge of the face is another face"** | the patch MATCHED the dressed face, so its jaw and hairline showed around it | oversize the patch ~1.14x so her face COVERS the other one; the rim then lands on hair and background |
+
+### 56.7  Wardrobe consistency is measured, not hoped for
+
+Two rules, both learned the hard way:
+
+- **The costume reference must be the FINISHED LOOK, not the source art.** Pointing
+  `--ref` at the original splash painting made qwen re-invent the headpiece every time
+  (horned circlets, tiaras, spikes). Pointing it at the film's own approved LeNga
+  reproduced the exact three-point circlet with the loop-blade. A film's reference is
+  its own first good frame.
+- **The costume render is stochastic, so dress several times and pick.** The
+  tool's `--variants N` dresses each render on N seeds, extracts the **crown band** - the
+  region above the brow, normalised by the face box so scale and framing cancel - and
+  keeps the variant whose band best correlates with the reference's.
+
+**HOW FAR THAT METRIC ACTUALLY GOES, measured on five approved renders and not further:**
+it ranks variants of ONE source image usefully - on the first close-up the two
+loop-blade crowns scored 0.611 and 0.609 against 0.560 and 0.547 for the spiked ones,
+and it chose correctly. It does NOT compare across images: absolute scores ran 0.078 to
+0.664 on the same wardrobe, because a full-body render gives a small face box and
+therefore a small, noisy band. And it is not reliable even within one image - on the
+second close-up the winning variant (0.658) came back with a SPIKE, while a full-body
+render that scored 0.137 had the correct loop-blade. Read the scores as a weak prior and
+LOOK at the crowns; do not ship on the number alone.
+
+**The honest cure, when a headpiece must be identical shot to shot, is a different
+instrument** - §41's rule again. Cut the crown out of the approved frame and composite
+it onto each render aligned to the head, the way the compositor already places props
+and shadows, rather than asking a generator to draw the same object twice. Prose and
+scoring narrow the field; only arithmetic makes it the same crown.
+
+This is the takes-grid doctrine (§11) applied to wardrobe: generate competing takes,
+score them on the bytes, auto-pick the best, and let the director overrule.
+
+### 56.8  The replicable recipe
+
+    # 1  sort the dump (face/ and body/, collages split first)
+    python3 studio/_tools/photosort.py --src ~/dump --out ~/sets
+
+    # 2  caption the body set (faces are captioned during training prep)
+    python3 studio/_tools/lora_photoreal.py --src ~/sets/body --name NAMEbody \
+        --kind body --dry
+
+    # 3  combine face crops + body shots under ONE trigger, then train
+    python3 studio/_tools/lora_train_sdxl.py --src ~/ComfyUI/input/NAME_train \
+        --name NAME --steps 3600 --rank 32 --train-te --lr 1e-4 --te-lr 4e-5
+
+    # 4  render the person; keep the ones that look like them
+    #    (a numbered contact sheet per framing - the director names numbers)
+
+    # 5  dress the picks against the film's OWN approved look
+    python3 studio/_tools/dress_keep_face.py --src '~/picks/*.png' \
+        --ref lb_canon_look.png --variants 4 --out ~/dressed
+
+Stop ComfyUI before training (it holds ~29 GB) and restart it with
+`scripts/restart-comfy.sh` afterwards. **Never inline `pkill -f 'main.py'` in an ssh
+command string** — the pattern matches the ssh command itself and kills the session;
+kill by PID. ComfyUI also restarts itself whenever a render is attempted, so train with
+nothing queued.
+
+
+## §57  Wardrobe consistency: put the costume in the weights, not in the prompt
+
+§56 got a real person into a costume once. Getting the SAME costume in every shot is a
+different problem, and four approaches were measured before one held.
+
+| Approach | Result |
+|---|---|
+| Ask the identity LoRA for the costume in prose | drags to its training data's clothes - casual tops, bedrooms, generic tiaras |
+| Have qwen dress each render | re-rolls the wardrobe on every image; the crown drifts shot to shot |
+| Dress N times and score the crown band | a weak prior only - it ranked one image's variants correctly and then picked a spike over a loop-blade on the next |
+| **Train a LoRA on her IN the costume** | **the crown is identical across every seed and framing** |
+
+**Why the fourth works, and what it teaches.** Consistency is not a prompting problem.
+The commercial multi-shot models get it two ways - conditioning generation on a
+reference IMAGE rather than words, or generating the shots together in one pass so they
+share context. This project already found the second one independently: §18's rule that
+an internal cut re-derives faces, and that identity-critical cuts belong in the EDIT,
+exists because one generation holds what two generations cannot. A LoRA is the same
+idea moved into the weights: stop asking a generator to draw the same object twice.
+
+**CAPTIONS ARE SUBTRACTION, USED DELIBERATELY IN REVERSE.** train_character.py warns
+that whatever a caption omits is absorbed into the trigger forever - that is how TERRA's
+trigger swallowed her gold dress and her grey wall. To bake a costume in, that is
+exactly what you want: caption the POSE and the ROOM, and never name the crown, the
+cape or the colour. The trigger takes the wardrobe on purpose.
+
+The set: 15 frames already wearing the approved costume, each contributing the whole
+frame AND an upper-body crop so the headpiece is learned large as well as small - 30
+images. rank 32, LR 8e-5, TE LR 3e-5, 2400 steps, text encoders trained. Verified by
+rendering three framings x four seeds with NO costume word in any prompt: every render
+wore the same three-point circlet with the loop-blade.
+
+**THE COST, measured: a costume LoRA trained on generated frames softens the face.**
+Those 15 sources are themselves renders, so the wardrobe LoRA is a copy of a copy and
+carries a generic face along with the costume. Used alone it dresses her perfectly and
+makes her someone else.
+
+**Stacking the two LoRAs does not resolve it.** Chaining costume + identity loaders
+keeps the wardrobe at every identity weight up to 1.0 - the costume LoRA simply owns
+the clothes - but the face stays generic, because the wardrobe LoRA's own face competes.
+Pushing identity past 1.0 destroys both: at 1.4 the costume is gone and the render
+returns to her casual snapshots, at 1.8 it is a phone-mirror selfie with artifacts.
+
+### 57.1  The recipe that holds
+
+    1  costume LoRA renders the shot     wardrobe identical across seeds, from weights
+    2  identity LoRA renders her face    the likeness, from her real photographs
+    3  transplant the face               dress_keep_face.restore_face()
+
+Step 3 needs no matching pose - only the face moves, aligned by its own detected box -
+so one approved portrait of her can supply the face for every shot in a film. Run at
+identity 0.55 / costume 1.0 in the stack so the body reads as hers before the face is
+even replaced.
+
+### 57.2  A worn object needs the CONTACT in the training crop
+
+First costume LoRA: the wardrobe was identical across seeds, and the director's note was
+"some of the crowns are behind the head, it should be sitting on the head." The training
+set explains it. At full-figure scale the tall gold shapes flaring above the hair are
+hundreds of pixels and the band where the headpiece actually MEETS her forehead is a
+handful, so the model learned the salient thing - gold above and behind a head - and not
+the thing that makes it worn.
+
+The fix is §56.3 again in a new place: a relationship too small to see is a relationship
+too small to learn. Every source now also contributes a TIGHT HEAD crop, framed from
+just above the crown to the chin, where that contact fills the frame. Those crops carry
+the only placement words in the whole set - "the headpiece worn on her brow" - so the
+statement sits exactly where the evidence is. 30 images became 44; the crown then read
+as seated on the brow, gem on the forehead, across every seed.
+
+The general form, for any worn or held prop: **train a crop in which the contact point
+is the subject.** A staff needs the hand, a necklace needs the collarbone, a crown needs
+the brow. Whole-figure frames teach what a thing looks like; only the close crop teaches
+where it belongs.
+
+This is §21's compositor law arriving for the third time, and it is worth stating
+plainly as a law of this box: **anything that must be identical shot to shot is either
+in the weights or composited in - never asked for.** Places are composited (§21),
+emptiness is arithmetic (§41), a pinned motion is two chosen frames (§23), and a
+costume is a LoRA. Prose is for what is allowed to vary.
+
+
+## §58  A face that moves: identity per frame, not per shot
+
+§56 put a real person in a costume and §57 kept the costume on her, and both were solved
+in STILLS. The film then failed on the one thing a still cannot test. The director's
+notes, in order, were "faces definitely don't hold up", then "this is like a face sticker
+on a video", then "still no good". Three attempts, and only the third works.
+
+### §58.1  Both failures were the same trade-off
+
+H3 re-renders every frame from the start picture, so a face drifts across a take even
+when the anchor is perfect. Two repairs were tried.
+
+**face_lock.py** transplanted one approved still onto every frame. Identity was perfect
+and the shot was dead: a still cannot turn its head, blink, or catch a moving light, so
+it floats on top of the picture. Rejected on sight, and correctly.
+
+**face_detail.py** ran each frame's OWN face crop through img2img at 0.40 denoise with
+her identity LoRA. Motion, expression, motion blur and lighting all survived, because the
+pass starts from the frame's real pixels. But the identity barely moved - at a denoise
+low enough to keep the performance, SDXL only nudges the face it is given.
+
+These are not two problems. They are the two ends of ONE axis, and there is no setting
+between them, because **neither tool knows where the face is pointing.** A paste ignores
+pose entirely; a low-denoise pass sees pose but has no mechanism to impose an identity on
+it. Any further tuning of either was going to fail the same way, and it did.
+
+### §58.2  What the third tool does differently
+
+inswapper does not work in the frame. It works in the ALIGNED FACE SPACE: five landmarks
+give a similarity transform onto the arcface template, identity is applied to that
+canonical crop, and the result is warped back through the inverse. The pose, the
+expression and the blink belong to the frame; only the identity is replaced. That is the
+capability the other two lacked, and it is the whole reason this works.
+
+The install is deliberately fenced off. `insightface` + `onnxruntime-gpu` live in
+`~/shared/faceswap-venv`, NOT in ComfyUI's environment. onnxruntime-gpu links CUDA 13,
+whose libraries already exist inside ComfyUI's venv, so `face_swap.py` points
+`LD_LIBRARY_PATH` at them and re-executes itself once - the linker reads that variable at
+process start, so setting it from inside a running process is too late. Nothing is
+installed into or changed in ComfyUI. Weights: `buffalo_l` (detector + arcface, fetched
+by insightface) and `inswapper_128.onnx`, whose sha256 is
+`e4a3f08c753cb72d04e10aa0f7dbe3deebbf39567d4ead6dce08e98aa49e16af` - three independent
+mirrors served a byte-identical file, which is the check worth doing on a model this box
+will keep.
+
+### §58.3  Identity is an average, not a photograph
+
+`--source` takes a FOLDER, not a file. Every usable reference contributes a 512-d arcface
+embedding and the mean is re-normalised. One photograph carries its own lighting, angle
+and expression into every frame of the film; forty photographs cancel those out and leave
+only what is consistently her.
+
+This is the single biggest quality lever in the tool, and it is what the `sorted/face`
+set from §56 was actually for. The photo sorter earns its keep here more than it did in
+training.
+
+### §58.4  Jitter is a landmark problem, and smoothing it naively costs you the motion
+
+The detector re-finds the face from scratch every frame, so the five points shimmer by a
+pixel or two even on a still head, and the swapped face wobbles inside the real one.
+
+The obvious fix - average the landmarks over a short window - trades the wobble for LAG.
+In shot 030 she walks at the camera; a lagging landmark set slides the face off the head,
+which is worse than the shimmer.
+
+So split the landmark set in two. The CENTRE passes through exactly as detected, so
+translation tracks perfectly. Only the offsets from that centre - scale, roll, the small
+internal geometry, which is where the shimmer actually lives - are averaged over five
+frames, and only across an unbroken run of detections. Wobble goes, motion stays.
+
+The same split is worth remembering for any per-frame tracked effect: **smooth the shape,
+never the position.**
+
+### §58.5  Do not stack the detailer after the swap. This was measured
+
+The tempting move is to run `face_detail.py` after the swap to add skin texture. It
+undoes the swap, because the detailer REGENERATES the face from SDXL - exactly what the
+swap just overwrote.
+
+Cosine to her averaged identity, across shot 010:
+
+| pass | mean | worst frame |
+|---|---|---|
+| swap only | 0.870 | 0.822 |
+| swap, then detail at 0.25 denoise | 0.694 | 0.478 |
+
+That number is somewhat circular - it is the quantity inswapper optimises - so it is a
+check that the swap APPLIED, not proof of likeness; the eye still decides that, with her
+real photographs in the same picture at the same size. But circular or not, it detects a
+pass that takes identity away, and it did.
+
+**The swap is the identity. Anything after it can only give some of her back.**
+
+### §58.6  The paste-back, and where the softness comes from
+
+inswapper outputs 128x128 against a face two hundred pixels wide, so the swapped face is
+softer than the frame around it. insightface's own paste-back upsamples with bilinear,
+which is where most of that softness is added rather than inherited.
+
+`paste()` reimplements their mask recipe unchanged - warp a white square through the
+inverse transform, erode it well inside the face, blur the edge - and changes only two
+things: LANCZOS4 for the warp, and a mild unsharp on the warped face alone. Measured on
+shot 010 this RAISED identity from 0.870 to 0.884, because a sharper face registers
+better. Free improvement, no artifact.
+
+Do not be tempted to widen or feather that mask. A feathered mask over two faces is a
+double exposure, the director caught it twice in §56.6, and the erode-then-blur keeps the
+blend well inside the jaw where there is nothing to double.
+
+The residual softness is a real limit of a 128px model and the honest fix is a face
+restorer (GFPGAN/CodeFormer as ONNX, same venv, same session). It is not installed here.
+
+### §58.65  Coverage is the failure mode, and the close-up will not show it to you
+
+The first full pass looked finished. Shot 010 measured 0.87 to her averaged identity,
+shot 030 measured 0.88, and the review still on the close-up was convincing. The last
+shot was not her at all - it measured -0.02, which is to say the swap had never run on
+it.
+
+**A frame with no detection gets no swap, so it silently keeps the engine's face.** The
+tool reported success because it had swapped every frame it found, and in the WIDE shots
+it found almost nothing: shot 050 came back with 17 of 48 sampled frames, shot 040 with
+one. She is small there, and motion blur on a fast pass costs the rest. Nothing errored.
+
+Two changes fix it, and the second is the important one:
+
+1. `det_size` 640 -> 1024 and `det_thresh` 0.5 -> 0.4. Worth a little, not much - on shot
+   050 this alone moved 17/48 to about 21/48. **Raising detection resolution is not the
+   fix, and stopping there would have been a wrong conclusion drawn from a real
+   measurement.**
+2. `bridge()` - interpolate the landmarks across SHORT detection gaps. A head cannot
+   teleport in a fifth of a second, so a gap of a few frames between two solid detections
+   can be filled. Guarded twice: only gaps up to `--gap` frames, and only when the face
+   has not JUMPED across the gap, because a jump means two different faces or a genuine
+   exit. Shot 050 went to 60/60.
+
+The frames that stay unswapped after that are the ones that SHOULD - behind the orb,
+before she lands, off the end of the shot.
+
+The general lesson is about how this was nearly missed. An intermittent swap is worse
+than no swap, because it flickers between two people, and it is invisible in exactly the
+place you are most tempted to review: the close-up, where detection never fails. **Check
+per-shot coverage on the WIDE shots, and measure identity on the assembled film rather
+than on the shot you tuned.** `idsheet.py` sampling the finished cut is what caught this;
+the close-up comparison that came before it was, by construction, incapable of catching
+anything.
+
+### §58.7  The recipe
+
+    master take (48fps, pre-effects)
+      -> face_swap.py --source sorted/face --sharp 0.45
+      -> POV effect
+      -> assemble
+
+The order is §55's rule again and it still holds: swap the MASTERED take, never the
+finished one. Swapping a finished take drops a clean face into frames the blink has
+already blurred and darkened, and it stands out. Swap first and the blur, the darkening
+and the knockback all land on her face too, because by then it is part of the picture.
+
+### §58.8  The law this adds
+
+§57 ended on: anything that must be identical shot to shot is either in the weights or
+composited in, never asked for. A face in motion is the case where BOTH of those fail -
+weights drift frame to frame, and a composite cannot turn its head.
+
+So there is a third mechanism, and it is worth naming: **anything that must be identical
+AND must move is neither trained nor pasted - it is re-derived per frame in a space where
+the motion has been factored out.** inswapper factors out pose with five landmarks. That
+is the whole trick, and it generalises: find the space where the thing that varies has
+been normalised away, do the work there, and warp back.
+
+
+## §59  `prev_last` is a snapshot, and the frame it took was the wrong one
+
+The director's note was four words - "shot 5 should use the last frame of shot 4" - and
+shot 050's anchor already said `prev_last`. The data was correct and the cut was wrong,
+which is the interesting part: two separate faults, one hiding behind the other.
+
+### §59.1  An anchor is resolved once, at render time
+
+`prev_last` is not a live link. It is read when the take is rendered and never again.
+Shot 050's master had been rendered against a version of shot 040 that no longer existed
+- 040 has since been re-pinned, head-trimmed, sped 2.9x and face-swapped, and every one
+of those moved its final frame. 050 still opened on the old one: she sat smaller and
+higher, cape flared instead of hanging, the mist and the chains in different places.
+
+Nothing in the film would ever say so. The anchor field still reads `prev_last`, the spec
+check still passes, and the QC still reports clean, because every one of those inspects
+the DECLARATION and not the pixels.
+
+**Rebuilding a shot silently invalidates the start of the shot that follows it.** When a
+shot changes, re-render its successor, or at minimum lay its last frame beside the
+successor's first and look. `assets/cut45.png` in this film is that check; it took one
+ffmpeg call and it is the only thing that would have caught this.
+
+### §59.2  `-frames:v 1` after `-sseof` takes the FIRST frame of the tail, not the last
+
+Re-rendering fixed the staleness and the cut still jumped, less. The anchor the studio
+had extracted was not 040's last frame at all:
+
+    ffmpeg -sseof -0.2 -i src -update 1 -frames:v 1 dest
+
+`-sseof -0.2` seeks to 0.2 s before the end and `-frames:v 1` then takes the FIRST frame
+it finds there. That frame is up to 0.2 s early. On a shot that drifts, nobody notices.
+Shot 040 is sped 2.9x, so 0.2 s of it is ten delivered frames of her settling out of the
+landing - and the next shot began from a pose the audience never sees.
+
+Measured against the true final frame, the extracted one differed by a mean of 24.9 per
+channel. Not subtle; simply never checked.
+
+The fix is smaller than the bug. Drop `-frames:v 1` and let `-update` overwrite its way
+through the window, so the file is left holding the last frame written:
+
+    ffmpeg -sseof -0.5 -i src -update 1 dest
+
+Verified byte-identical to a full `-vf reverse` pass, without reading the clip into
+memory. Fixed at source in `film_routes.py`, in BOTH places that did it: the anchor
+resolver, and `_last_frame()` behind the scene-drift QC - which means every drift score
+this box has ever reported was computed against a frame that was not the last one.
+
+### §59.3  The habit worth taking
+
+Both faults share a shape. `prev_last` claims to mean "the frame the audience last saw"
+and `_last_frame` claims it in its name, and neither delivered it - one because it was
+answered too early, one because it was answered from the wrong end. The declaration was
+right in both cases, so nothing that reads declarations could catch either.
+
+**When a joint between two shots matters, look at the two frames.** Not the anchor field,
+not the QC line, not the take id - the pixels either side of the cut, side by side. That
+comparison is four lines of ffmpeg and it is the only instrument here that measures the
+thing the audience actually experiences.
+
+
+## §60  A live plate is only worth having when the plate is still
+
+"The stairs changed on shot 5" - and they did: across shot 050 the staircase narrows,
+the arches shift and the torches walk, while the shot's own prompt says the camera is
+locked off on a tripod, no zoom, and the hall stays exactly as it is. §21 again: an
+element that is only DESCRIBED is re-invented every step.
+
+### §60.1  The tool that fixed the same fault before, and why it failed here
+
+§v10 cured shot 030's drifting background with pov_fx `comp`: mask the character against
+a static empty plate, lay her over a LIVE empty plate, and the room never comes from the
+character take at all. Shot 050 is the same fault, so it got the same treatment - a new
+plate made from its own first frame, since a plate is framing-specific and the 030 plate
+differed from this framing by a mean of 72 per channel.
+
+It came out worse. Measuring the live plate against its own first frame says why:
+
+| plate frame | 10 | 40 | 100 | 140 |
+|---|---|---|---|---|
+| drift | 17.6 | 36.6 | 50.3 | 56.1 |
+
+There is no stable window. Shot 030's plate held for about three seconds because its
+chains were small and far back; shot 050's framing puts two enormous chains across the
+near foreground, and H3 starts swinging them inside the first fifth of a second. The
+composite delivered a still staircase behind swimming, doubled chains.
+
+**Measure the plate before trusting it.** Its stability is a property of the FRAMING, not
+of the technique, and the number takes one pass to get. A plate that drifts is not a
+weaker version of a good plate - it is a second drifting layer fighting the first.
+
+### §60.2  What holds a room still is a pin at each end
+
+§23's first+last pin is what made shot 040 immune, and it is the right instrument here:
+H3 must ARRIVE at a frame we chose, so the geometry is nailed at both ends and only
+interpolated between. After pinning, the staircase, arches, torches and chains hold for
+the whole shot.
+
+The whole difficulty moves into the end frame, and it took two goes.
+
+**Attempt one: ask qwen to grow the orb.** It obeyed the wrong half - the orb got bigger
+and stayed welded to her staff. The pinned take then charged up and never fired, because
+an end frame that is just a bigger start frame guarantees nothing can travel. The stairs
+were fixed and the payoff was gone, which is not a fix.
+
+**Attempt two: take one thing from each source.** The old drifting take always had a good
+orb - a real rendered sphere racing at the lens; only its hall was wrong. The start frame
+has the right hall and no orb. `orb_end.py` finds the orb by brightness (nothing else in
+a torch-lit hall is above 200), lifts it on a feathered radial mask, drops it on the
+start frame, and adds the light it should be throwing past its own edge. The end pin then
+carries a huge close orb AND the room the shot opens in.
+
+### §60.3  The rule
+
+**A pinned end frame must differ from the start in exactly the thing that is supposed to
+move, and in nothing else.** Change too much and the pin drags the room with it; change
+too little - or the wrong axis of the same object - and the shot has nowhere to go.
+
+When no single generator will produce that frame, build it. The end frame here is a
+composite of two takes and was made with numpy in a few lines; it never had to be a
+render at all. This is §21's law reaching the pins themselves: what must be exact is
+constructed, not requested.
+
+
+## §61  A prompt will hold two of three: the room, the costume, or the scale
+
+"Shot 5 has a different background than shot 4." True, and the cause was not in shot 5.
+
+### §61.1  The fault was in shot 040's own pins
+
+Shot 040's start pin and end pin were TWO DIFFERENT ROOMS, differing by a mean of 64.3
+per channel. The start pin is the wide bright cathedral shot 030 ends in - flat floor,
+chains crossing low, the far staircase small under a stained-glass window. The end pin
+was a dark narrow hall with a big staircase close to camera and the chains crossing high.
+
+So 040 was never drifting. It was doing exactly as instructed: changing rooms, smoothly,
+over three seconds. And because 050 pins off 040's last frame (§59), it inherited the
+second room permanently. **One bad end pin does not spoil one shot; it spoils every shot
+downstream of it.** That is the expensive way to break §60's rule, and it is why an end
+pin deserves the same scrutiny as an anchor.
+
+### §61.2  Three attempts, and what each one traded away
+
+The end pin has to satisfy three things at once: the same room as the start pin, her real
+costume, and a size the audience can read. Each attempt bought one by selling another,
+and the numbers say so plainly.
+
+| attempt | pin diff vs room | costume | her scale |
+|---|---|---|---|
+| original | 64.3 | right | good |
+| qwen, "keep everything, add her" | 43.5 | plain gown | speck - face found in 3 of 145 frames |
+| qwen, "closer, costume from image 3" | 62.9 | right | good, but the room re-framed |
+| **composited** | **4.6** | right | good - face found in 77 of 145 |
+
+The second row is the one worth staring at. All three qwen slots held the same image, so
+nothing in the call carried wardrobe, and §57 applied on schedule - with no costume in
+the reference, qwen invents one. The third row fixed that and lost the room instead:
+asking for her CLOSER is an instruction about framing, and framing is the room.
+
+There is no prompt that holds all three, because all three are the same generator's free
+choice, and a generator asked for three exact things will always trade.
+
+### §61.3  So none of them is asked for
+
+`studio/_tools/figure_paste.py`. The room is a file. The costumed figure is a file. It
+mattes her out with SAM 3.1, scales her to a stated height at a stated place, and matches
+her exposure to the region of the room she will land in - only PART way, because a figure
+lit exactly like the wall behind her disappears into it.
+
+**The occlusion is what stops it reading as a sticker.** The room's golden chains hang in
+the extreme near foreground; a figure pasted over them is instantly wrong. So the chains
+are matted out of the ROOM by the same text-prompted segmentation, and after she is
+pasted those chain pixels go back on top. She ends up standing behind them, which is
+where a person halfway down the hall actually is.
+
+Pin diff fell from 64.3 to 4.6 - the residue is her, the smoke and the orb light, which
+are the only things that should differ.
+
+### §61.4  The law, in its most general form yet
+
+§21 said places are composited. §57 said costumes go in the weights. §60 said a pinned end
+frame must differ from the start in exactly one thing. All three are the same statement,
+and this is it stated once:
+
+**Every requirement you hand a generator is one it may trade against the others. Hand it
+one, and construct the rest.**
+
+The corollary is practical: when a render keeps failing in a different way each time, stop
+rewording. Count the exact things being asked for. If it is more than one, the prompt is
+not the tool.
+
+## §62  Two beats, two pins - and a sound the engine makes rather than reads
+
+### §62.1  A shot with two beats needs two pin pairs
+
+The finale was asked to do two things: she DISPLACES closer to the camera, and then the
+orb fills the screen and fires into the lens. §60 already recorded what happens when one
+pinned render is asked for two things through prose - the orb stayed welded to her staff
+and the shot charged up without ever firing.
+
+So each beat gets its own pin pair, and the join is the frame between them:
+
+    A  displacement   start = 040's last frame     end = her, closer, in the SAME room
+    B  the firing     start = A's last frame       end = the full-screen orb
+
+Both end frames are constructed rather than requested (§61). Her closer position is
+`figure_paste` at a larger height into the same room file, so the hall cannot move while
+she does. The full-screen orb needed nothing built at all: the OLD drifting take had
+already rendered a frame where the orb covers the whole lens, and by then the hall is
+invisible behind it - so that take's drift, which was the fault being fixed, costs
+exactly nothing in the one frame where none of the room is visible.
+
+**A discarded take is still an asset.** It failed at holding a room; it never failed at
+making an orb.
+
+### §62.2  `zap`: what a fade cannot say
+
+`fx_boom` ends on a knockback and a fade to black, which reads as being hit by a LIGHT.
+The brief was to be electrified, so `fx_zap` keeps the knockback and adds three things:
+
+- a violet flash that spikes at contact and decays at exp(-2.2t),
+- forked arcs drawn as random walks with a decaying step, redrawn every second frame,
+- a chromatic shear that pulls R and B apart by 14 px and settles.
+
+The arcs are drawn FROM THE CENTRE OUTWARD. Bolts that start at the frame edge read as
+weather; bolts that start where the orb is read as the thing discharging into us. That is
+the whole difference between an effect that lands and one that decorates.
+
+### §62.3  The sound: stop asking a voice to read a grunt
+
+Three attempts had failed and two of them were the same attempt. StableAudio kiais came
+out as small dogs barking; IndexTTS-2 was given words ("Hee-yah") and then wordless
+grunts, and both are a VOICE MODEL PERFORMING A TEXT. There is no text for the noise a
+person makes when they land, which is why every version sounded like someone SAYING a
+grunt.
+
+The director's question - "can h3 make cute feminine noises?" - is the right one, because
+H3 is a different mechanism, not a different voice. It does not read text; it scores the
+SHOT, given the picture and the action, so the sound arrives already attached to a body
+doing something. `v18_h3voice.py` renders 39-frame landings (17n+5, the shortest render
+that still contains an impact) and keeps only the audio.
+
+Two practical notes:
+
+- H3 hands back a whole SCENE's audio, not an isolated vocal. Dropping 1.6 s of it into
+  the mix drags the chain creak and the floor thud along too. `cut_vocal()` band-passes
+  to 300-3400 Hz, finds the loudest moment of that envelope, and takes a short window
+  around it - the vocal is cut by measurement, not by ear.
+- Picking between candidates has a usable proxy when nobody can listen yet: the ratio of
+  voice-band energy to sub-250 Hz rumble. Across ten clips it ranged 0.75 to 2.46, and it
+  ranks exactly what matters in a mix that already contains a whoomp and a music bed -
+  how much of the clip is VOICE rather than room. It is a tiebreaker, not a verdict; the
+  director's ear still decides.
+
+## §63  The recipe encyclopedia, and why a card must be checked
+
+The studio already knew what its MODELS could do - `capabilities.json`, 35 entries, one
+per thing the box can be asked for. It had no record of what WE could do: the end-to-end
+processes built on top of those models, which is where every hard-won thing in this
+document actually lives. `/recipes` is that record, and it is built on one rule.
+
+### §63.1  A card that is not checked is worse than no card
+
+`studio/_tools/recipes.py` resolves every script, workflow, model and toolbox id a card
+names against the filesystem BEFORE the card is served, and reports what it cannot find
+rather than hiding it. This is `capability_scan.py`'s discipline applied to prose: a card
+claiming a tool that no longer exists sends someone looking, which costs more than the
+card ever saved.
+
+It earned that on the first run, twice. One card named `17_higgs_v3.json`, and the file
+is `17_higgs_v3_voice.json`. Another named `24_qwen_edit_2511_triple.json` - the
+three-reference qwen variant this whole project depends on - and found it only in
+`leblanc-night/`, never installed into the kit's `workflows/`, where every other tool
+looks. It had been used for weeks from one script's hardcoded path. It is installed now.
+
+Neither would have been found by reading. Both were found by a check that runs every
+time the page is opened.
+
+### §63.2  A card leads with a picture
+
+ComfyUI's template gallery leads with an image and ours led with a paragraph, which is
+the wrong way round for a page whose job is "show me what this box can do".
+`recipe_thumbs.py` builds one per card from a small spec language - `img:`, `vid:#frame`,
+`pair:a||b`, `grid:dir#n` - naming files that already exist in the film and asset
+folders. Nothing is pasted in, so the gallery rebuilds from scratch anywhere the work
+exists, and a card whose source was deleted reports a miss instead of showing something
+stale.
+
+Two details that mattered more than expected. **Before/after belongs on any card that is
+about a CHANGE** - the figure-paste and face-swap cards say more as two frames than as
+two paragraphs. And **crop portraits from the top**: centre-cropping a portrait into a
+landscape card cut a close-up down to a shoulder and a torch, because the face is always
+the highest thing in the frame.
+
+### §63.3  What the cards carry that a model card cannot
+
+Each one has the usual - what it does, what it costs, what to run. It also has three
+fields a capability listing has no room for, and they are the reason the page is worth
+maintaining:
+
+    use it when          the case it is actually for
+    not this if          the case it is NOT for, naming the recipe that is
+    what it cost         every gotcha, measured, with the number that settled it
+
+Seventy of those across twenty-four cards. Three cards are marked `superseded` or
+`rejected` ON PURPOSE and kept: the face-sticker approach is on the page as a card,
+because "we tried that and here is exactly how it failed" is the most expensive
+information in this repo and the easiest to lose.
+
+### §63.4  The trap the page exposed on day one
+
+`lora_real` in the toolbox described itself as "the only route here that puts an actual
+person into a render". It runs ComfyUI's `TrainLoraNode`, which §56 had already proved
+cannot bind a concept to its token. The working trainer had existed for a day and was
+not in the app at all.
+
+**A tool's blurb is a claim, and claims rot.** Writing the recipe forced the comparison
+that a scattered set of scripts never does - which is most of the argument for having
+the page.
+
+## §56  Finding the head, and a LoRA that is worth its minutes
+
+Two blocks of work rested on a head box that was a guess. The compose geometry knows where a
+figure was told to stand and how tall a person is there, and from that a head box was derived
+and then carried through the measured camera to find the head at the end of a take. That is
+exact for an upright figure at eye level in a shot where only the camera moved. It is wrong
+every time the person does anything, and the studio has been recording those wrongs as
+failures of the engine.
+
+**There is no face detector on this box, and there did not need to be.** BiRefNet cuts a
+person out of a picture cleanly enough to build every composite in the studio, and the top of
+a silhouette is a head whatever the body is doing. Matte the frame, keep the region the
+geometry says the subject is in, and read the head off its top. Painted onto the frames the
+difference is not subtle: on a pinned crouch the guessed box floats in empty air a third of a
+frame above his head.
+
+**Largest-region was the obvious rule and it is wrong in the one place the studio deliberately
+puts two people in a frame.** An over-the-shoulder foreground is sized past the frame on
+purpose, so it wins any size contest, and the ruler scored the back of the listener's head
+against the speaker's portrait: 0.24 where the guess had said 0.62. So the two signals do what
+each is good at. The geometry knows roughly where the SUBJECT was put, which is what it was
+written down for. The matte knows exactly where a head is. Given the hint, the region whose
+head is nearest it wins.
+
+**Two of the five recorded face failures were the ruler.** Same takes, same encoder, same
+portrait, only the box moved:
+
+  a pinned crouch        0.65 -> 0.25 a different face     0.67 -> 0.56 uncertain
+  walk and talk          0.57 -> 0.34 a different face     0.65 -> 0.63 SAME PERSON
+  over the shoulder      0.62 -> 0.36 a different face     0.67 -> 0.45 a different face
+  a walk to the camera   0.66 -> 0.30 a different face     0.68 -> 0.43 a different face
+  an ordinary wide       0.57 -> 0.66 same person          0.59 -> 0.62 same person
+
+Re-scored across every picked take the studio has: same person 36 to 42, a different face 12
+to 10, unmeasured 6 to 3.
+
+**And the face clock was systematically pessimistic.** The hold curve read nine moments and
+placed the box at each of them by carrying the first one through the camera, which is wrong
+for exactly the shots the clock is most used on. Three mattes instead of two - start, middle,
+end - and the box between them read as a line, because a head does not teleport. The crouch
+went from "lost at 1.11 s of 4.5" to holding the whole way; a walk from 3.72 s to 5.21; a
+walk-and-talk from a loss at 5.26 to holding throughout. The survival numbers the builder
+advises from are built out of those readings, so they were too low: the studio has been
+telling directors to shorten shots on the strength of a ruler looking at the wrong pixels.
+
+**The exemption for head-moving motions is withdrawn** wherever the matte found a head. It was
+correct while the box was a guess and it is not needed when the box is found in the frame it
+is judging. It still applies where the matte finds nothing, because there the fallback is the
+same guess that made it necessary.
+
+**A character LoRA, and whether it is worth its minutes.** The question was put directly, so
+it was answered directly. A foundry pack already holds what a character LoRA wants: a
+turnaround, a face turnaround, expressions and a full body, all one person from one
+description. What it lacks is captions, and captions are the whole game - whatever a caption
+does not name is welded onto the trigger. This pack never specified clothing, so there were no
+words for it; the studio's own vision model was asked a narrow question, the garments and the
+ground behind them and nothing about face, hair or build, and those answers became the
+captions.
+
+1200 steps, rank 16, on the checkpoint the drawn packs were made with. Four routes to the same
+close-up, same seed, same words, scored against the pack portrait on a head found by the matte:
+
+  prompt only          not her at all - a generic figure with the wrong hair
+  IPAdapter at 0.6     0.685    what the studio does now
+  the LoRA             0.749
+  both                 0.768
+
+It generalises rather than memorising. Four asks the training set never contained - a
+lantern-lit alley, a red winter coat in snow, running along a riverbank, sitting at a desk
+with a book - at three strengths: she scores 0.592 to 0.755 and every scene is the scene that
+was asked for. Strength 0.85 is best at a mean of 0.701, and that is the strength the studio
+now uses. The LoRA is recorded on the pack, so nothing has to be told about it twice.
+
+**A note on checking.** The first pass at "did the asked-for scene appear" used the studio's
+character-reference caption, which is written to describe a person and explicitly not their
+surroundings, and it reported 3 of 12. Looking at the pictures, it is 12 of 12. A check is
+only as good as the question it asks, and a check that reports a failure it was never able to
+see is worse than no check at all.

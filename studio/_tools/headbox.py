@@ -88,13 +88,25 @@ def _largest_region(mask):
     return r[0] if r else None
 
 
-def _head_of(reg, sh, sw, head_fraction):
+def figure_box(src, work=None, near=None):
+    """the whole figure's bounding box, in fractions -> [x0, y0, x1, y1] or None"""
+    b = head_box(src, work=work, near=near, _want="figure")
+    return b
+
+
+def _head_of(reg, sh, sw, head_fraction, want="head"):
     ys, xs = np.nonzero(reg)
     if not len(ys):
         return None
     y0, y1 = int(ys.min()), int(ys.max())
     if (y1 - y0 + 1) < MIN_FIGURE * sh or y0 <= 1:
         return None
+    if want == "figure":
+        fxs = np.nonzero(reg.any(axis=0))[0]
+        if not len(fxs):
+            return None
+        return [int(fxs.min()) / float(sw), y0 / float(sh),
+                (int(fxs.max()) + 1) / float(sw), (y1 + 1) / float(sh)]
     hh = max(2, int(round((y1 - y0 + 1) * head_fraction)))
     band = reg[y0:y0 + hh]
     bxs = np.nonzero(band.any(axis=0))[0]
@@ -107,7 +119,7 @@ def _head_of(reg, sh, sw, head_fraction):
             min(sw - 1, x1 + pad_x + 1) / float(sw), min(sh - 1, y0 + hh + pad_y + 1) / float(sh)]
 
 
-def head_box(src, head_fraction=HEAD_FRACTION, work=None, quiet=True, near=None):
+def head_box(src, head_fraction=HEAD_FRACTION, work=None, quiet=True, near=None, _want="head"):
     """-> [x0, y0, x1, y1] in fractions of the picture, or None.
 
     `src` may be a path to an RGBA cutout (used directly) or to an ordinary picture, which
@@ -137,7 +149,7 @@ def head_box(src, head_fraction=HEAD_FRACTION, work=None, quiet=True, near=None)
     if not regs:
         return None
     sh, sw = a.shape
-    boxes = [b for b in (_head_of(r, sh, sw, head_fraction) for r in regs) if b]
+    boxes = [b for b in (_head_of(r, sh, sw, head_fraction, _want) for r in regs) if b]
     if not boxes:
         return None
     if near is None:

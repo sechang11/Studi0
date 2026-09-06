@@ -24,6 +24,8 @@ Run with ComfyUI's python (torch):
 jobs.json: [{"portrait": ..., "video": ..., "box": [x0,y0,x1,y1] fractions or null,
              "close": bool, "cam": {"zoom":..,"pan":..,"tilt":..} or null, "id": ...,
              "plate": <the scene's plate, optional -> place_hold/place_verdict/place_start>,
+             "figure_at": [[seconds, box], ...] - the whole FIGURE at those moments, which is
+                        what says whether the person moved (see subject_motion),
              "box_at": [[seconds, box], ...] - heads found in the picture at those moments;
                         the curve reads between them instead of carrying a box through the camera,
              "box_end": the head box in the LAST frame, found there rather than carried - see
@@ -237,6 +239,36 @@ def hold_curve(job, box, portrait_emb, close, cam_curve, dur, n=9):
             "duration": round(dur, 2)}
 
 
+def subject_motion(figures, cam_zoom=1.0, cam_pan=0.0, cam_tilt=0.0):
+    """From the FIGURE's box at known moments -> what the person did, camera divided out.
+
+    Reading the head box was the first attempt and it measured the figure while calling it
+    the head, because the head box is defined as a fraction of the figure's height: a crouch
+    made the box shorter and the ruler said the person walked away.  The figure's own box
+    says it, given two numbers - how tall it is, and where its feet are."""
+    if not figures or len(figures) < 2:
+        return None
+    (t0, b0), (t1, b1) = figures[0], figures[-1]
+    h0, h1 = max(1e-6, b0[3] - b0[1]), max(1e-6, b1[3] - b1[1])
+    grew = (h1 / h0) / max(1e-6, float(cam_zoom or 1.0))
+    feet = (b1[3] - b0[3]) + float(cam_tilt or 0.0)      # positive = the feet came down
+    across = ((b1[0] + b1[2]) - (b0[0] + b0[2])) / 2.0 + float(cam_pan or 0.0)
+    if grew >= 1.12 and feet >= 0.015:
+        word = "walks toward the camera"
+    elif grew <= 0.9 and feet <= -0.015:
+        word = "moves away from the camera"
+    elif grew <= 0.9:
+        word = "drops in the frame (a crouch, a sit, a kneel)"
+    elif grew >= 1.12:
+        word = "rises in the frame (standing up)"
+    elif abs(across) >= 0.10:
+        word = "crosses the frame " + ("to the right" if across > 0 else "to the left")
+    else:
+        word = "stays where it is"
+    return {"grew": round(grew, 3), "feet": round(feet, 3), "across": round(across, 3),
+            "seconds": round(t1 - t0, 2), "subject": word}
+
+
 def verdict(s, close=False):
     """the bands depend on how big the head is: in a wide or medium framing the head crop is
     a few dozen pixels and the same person scores 0.56-0.72 against the portrait (measured on
@@ -313,6 +345,12 @@ def run(job):
             e1 = embed(c1)
             end, hold = float((p * e1).sum()), float((e0 * e1).sum())
             out.update({"end": round(end, 3), "hold": round(hold, 3), "verdict_end": verdict(end, job.get("close"))})
+        fig = job.get("figure_at") or []
+        if len(fig) >= 2:
+            _c = job.get("cam") or {}
+            sm = subject_motion(fig, _c.get("zoom", 1.0), _c.get("pan", 0.0), _c.get("tilt", 0.0))
+            if sm:
+                out["subject_motion"] = sm
         if job.get("curve"):
             try:
                 hc = hold_curve(job, box, p, job.get("close"), job.get("cam_curve"), duration(job["video"]))
