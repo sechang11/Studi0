@@ -24,6 +24,8 @@ Run with ComfyUI's python (torch):
 jobs.json: [{"portrait": ..., "video": ..., "box": [x0,y0,x1,y1] fractions or null,
              "close": bool, "cam": {"zoom":..,"pan":..,"tilt":..} or null, "id": ...,
              "plate": <the scene's plate, optional -> place_hold/place_verdict/place_start>,
+             "box_end": the head box in the LAST frame, found there rather than carried - see
+                        _tools/headbox.py; when given, the camera curve is not used for it,
              "still": <a picture instead of a video> -> only `start` is measured,
     A head under MIN_HEAD_PX pixels comes back unmeasured rather than judged: measured by
     rendering one shot at two distances, 135 px of head scores 0.66 and 65 px scores 0.30 for
@@ -257,7 +259,12 @@ def run(job):
                     "verdict_end": "unmeasured (the head is only %d px in the frame)" % head_px,
                     "head_px": head_px, "box": [round(b, 3) for b in box]}
         cam = job.get("cam") or {}
-        if job.get("close"):
+        given_end = job.get("box_end")
+        if given_end:
+            # the head was found in the last frame itself: no carrying, no assumption about
+            # what the body did between the two
+            cb, too_far = list(given_end), False
+        elif job.get("close"):
             # a face that fills the frame IS what the camera ruler follows, so the measured
             # "camera" is the head; the face stays in the same box, and that is what is compared
             cb, too_far = list(box), False

@@ -591,8 +591,15 @@ def _resolve_anchor_file(f, shid, jid):
             raise RuntimeError("prev_last: previous shot has no picked take")
         src = os.path.join(f.dir, tf)
         dest = os.path.join(f.dir, "assets", "last_%s.png" % shid)
-        _sh("ffmpeg", "-y", "-v", "error", "-sseof", "-0.2", "-i", src,
-            "-update", "1", "-frames:v", "1", dest)
+        # -frames:v 1 takes the FIRST frame of the tail window, which is up to 0.2s
+        # BEFORE the end. That is invisible on a slow shot and badly wrong on a fast
+        # one: shot 040 is sped 2.9x, so 0.2s there is ten frames of her settling, and
+        # the next shot started from a pose the audience never saw - the cut jumped.
+        # Writing every frame of the window to the same path leaves the LAST one, which
+        # is the frame prev_last actually means. Verified identical to a full reverse
+        # pass, without reading the whole clip into memory.
+        _sh("ffmpeg", "-y", "-v", "error", "-sseof", "-0.5", "-i", src,
+            "-update", "1", dest)
         if not os.path.exists(dest):
             raise RuntimeError("could not extract last frame")
         return dest
@@ -680,8 +687,10 @@ def _render_shot_keyframe(f, shid, plan):
 # ─── takes ──────────────────────────────────────────────────────────────────────────
 
 def _last_frame(video, dest):
-    subprocess.run(["ffmpeg", "-v", "error", "-y", "-sseof", "-0.3", "-i", video,
-                    "-frames:v", "1", "-update", "1", dest], capture_output=True)
+    # no -frames:v 1: that would take the FIRST frame of the tail window, not the
+    # last. Letting -update overwrite through the window leaves the real final frame.
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-sseof", "-0.5", "-i", video,
+                    "-update", "1", dest], capture_output=True)
     return dest if os.path.exists(dest) else None
 
 
@@ -941,6 +950,36 @@ def _angle_pass(jid, sh, dest):
     return small, AM.note(m)
 
 
+def _matte_boxes(jid, dest, hint=None):
+    """Find the head in the first and last frames by matting them.  -> (box, box_end).
+
+    Two segmenter calls a take.  Either may be None, and the caller falls back to the compose
+    geometry for that end - which is right for an upright figure and wrong for a crouch, so
+    the fallback is a fallback and not the plan."""
+    try:
+        HB = _load_sibling("headbox")
+    except Exception as e:
+        _log(jid, "the head finder is unavailable: %s" % str(e)[:80])
+        return None, None
+    out = []
+    for tag, args in (("start", []), ("end", ["-sseof", "-0.2"])):
+        p = dest[:-4] + "_%s_frame.png" % tag
+        try:
+            _sh(*(["ffmpeg", "-y", "-v", "error"] + args + ["-i", dest, "-frames:v", "1", p]))
+            out.append(HB.head_box(p, near=hint) if os.path.exists(p) else None)
+        except Exception as e:
+            _log(jid, "the head could not be found in the %s frame: %s" % (tag, str(e)[:70]))
+            out.append(None)
+        finally:
+            for extra in (p, p[:-4] + "_cut.png"):
+                if os.path.exists(extra):
+                    try:
+                        os.remove(extra)
+                    except OSError:
+                        pass
+    return out[0], out[1]
+
+
 def _identity_pass(jid, f, sh, dest, cam_m):
     """(identity dict or None, note or None, is_fault)"""
     src = sh.get("anchor_source") or {}
@@ -959,8 +998,16 @@ def _identity_pass(jid, f, sh, dest, cam_m):
             plate_p = cand if os.path.exists(cand) else None
     except Exception:
         plate_p = None
+    _gb = _head_box(src)
+    _hint = (((_gb[0] + _gb[2]) / 2, (_gb[1] + _gb[3]) / 2) if _gb else None)
+    m_start, m_end = _matte_boxes(jid, dest, _hint)
+    if m_start or m_end:
+        _log(jid, "the head found by the matte: %s%s" % (
+            ("start %s" % ["%.2f" % v for v in m_start]) if m_start else "start not found",
+            (", end %s" % ["%.2f" % v for v in m_end]) if m_end else ", end not found"))
     job = {"id": "%s/%s" % (f.id, sh["id"]), "portrait": portrait, "video": dest,
-           "box": _head_box(src), "close": src.get("framing") == "close",
+           "box": m_start or _gb, "box_end": m_end,
+           "close": src.get("framing") == "close",
            "cam": {k: cam_m.get(k) for k in ("zoom", "pan", "tilt")} if cam_m else None,
            "plate": plate_p,
            "window0": ({"zoom": (cam_m.get("post") or {}).get("zoom_start", 1.0), "cx": (cam_m.get("post") or {}).get("cx_start", 0.5),

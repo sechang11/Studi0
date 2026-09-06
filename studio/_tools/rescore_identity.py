@@ -13,10 +13,31 @@ import time
 ROOT = os.path.expanduser("~/shared/comfy-studio/studio")
 sys.path.insert(0, os.path.join(ROOT, "_tools"))
 import compose as C  # noqa: E402
+import headbox as HB  # noqa: E402
 from PIL import Image  # noqa: E402
 
 PY = os.path.expanduser("~/ComfyUI/venv/bin/python")
 INFO_PREFIX = ("ends closer", "sound borrowed", "words not in the picture", "camera:", "identity:")
+
+
+def matte_boxes(video, hint):
+    """the head found in the first and last frames, or (None, None)"""
+    out = []
+    for tag, args in (("start", []), ("end", ["-sseof", "-0.2"])):
+        p = "/tmp/rescore_%s_%s.png" % (os.path.basename(video)[:-4], tag)
+        subprocess.run(["ffmpeg", "-y", "-v", "error"] + args + ["-i", video, "-frames:v", "1", p],
+                       capture_output=True)
+        try:
+            out.append(HB.head_box(p, near=hint) if os.path.exists(p) else None)
+        except Exception:
+            out.append(None)
+        for extra in (p, p[:-4] + "_cut.png"):
+            if os.path.exists(extra):
+                try:
+                    os.remove(extra)
+                except OSError:
+                    pass
+    return out[0], out[1]
 
 
 def head_box(src):
@@ -106,7 +127,11 @@ def rescore(fid):
             if not os.path.exists(video):
                 continue
             cam = t.get("cam_measured") or {}
-            jobs.append({"id": "%s/%s/%s" % (fid, shid, t["id"]), "portrait": portrait, "video": video, "box": head_box(src),
+            _gb = head_box(src)
+            _hint = (((_gb[0] + _gb[2]) / 2, (_gb[1] + _gb[3]) / 2) if _gb else None)
+            _ms, _me = matte_boxes(video, _hint)
+            jobs.append({"id": "%s/%s/%s" % (fid, shid, t["id"]), "portrait": portrait, "video": video,
+                         "box": _ms or _gb, "box_end": _me,
                          "close": src.get("framing") == "close", "cam": {k: cam.get(k) for k in ("zoom", "pan", "tilt")} if cam else None,
                          "plate": plate if plate and os.path.exists(plate) else None, "window0": window0(cam.get("post"))})
             _mv = next((str(b.get("motion") or "").lower() for b in (sh.get("beats") or []) if str(b.get("motion") or "").lower().replace(" ", "_") in HEAD_MOVERS), None)
