@@ -18,7 +18,7 @@
   ],
   "means": "The run that proved text-encoder training is what turns a lookalike into a likeness. 2208 tensors, loss 0.117.",
   "verdict": "UNet-only (lengaY) gave the right ethnicity and face TYPE and still was not her; adding LoRA to both CLIP encoders produced a real likeness at 0.70-0.85. Scored lower than lengaFB in the situation bench (0.18 vs 0.31 stacked), so lengaFB is the one to reach for.",
-  "note": "Kept because it is the evidence for the text-encoder finding. Prefer lenga-identity-fb for work.",
+  "note": "Kept because it is the evidence for the text-encoder finding. Prefer lenga-identity-fb for work. LADDERED 2026-09-06: laddered on the same two scenes and the same seed as lengaFB, so the two runs can be read side by side rather than trusted from their scores.",
   "evidence": {
     "verdict": "MEASURED",
     "method": "benched on this box, 2026-09-05/06",

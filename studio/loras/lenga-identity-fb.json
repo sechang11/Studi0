@@ -20,7 +20,7 @@
   ],
   "means": "Puts a REAL person into an SDXL render rather than a description of someone like her. 97 photographs, face and body sets, rank 32 with both text encoders trained.",
   "verdict": "BENCHED OVER 160 IMAGES in 20 unfamiliar situations (§64, §67). Its contribution to the FACE is small by arcface cosine - 0.13-0.18 against her real photographs - but that number was read on the wrong scale: HER OWN photographs score 0.386 against each other, and five of them sit at 0.11-0.24. The director, who knows her, can tell it is her in LoRA-only renders. It does NOT change build: on the seeds it left in frame, leg width moved -0.0024 on a level of 0.10 (§66). AT HIGH STRENGTH IT OVERRIDES PROMPT POSE AND FRAMING - at 0.95 it crossed arms, raised arms and cropped the frame against explicit instructions.",
-  "note": "Use at 0.5 when stacked under a costume LoRA; above ~0.55 it eats the costume, and at 1.4 the costume is gone entirely. Alone, 0.7-0.85.",
+  "note": "Use at 0.5 when stacked under a costume LoRA; above ~0.55 it eats the costume, and at 1.4 the costume is gone entirely. Alone, 0.7-0.85. LADDERED 2026-09-06: a genuine gradient, unlike the costume LoRA's switch - the control renders a man, 0.40-0.50 move age and build, 0.85 is the same woman in both scenes. But at 0.85 both cells PULL IN toward the camera - a full figure between library shelves becomes a near-portrait - because the training set is head-and-shoulders and high strength drags composition back to it. Strength buys likeness and spends framing; the 0.5 default is that trade, not a compromise.",
   "evidence": {
     "verdict": "MEASURED",
     "method": "benched on this box, 2026-09-05/06",
