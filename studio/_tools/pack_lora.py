@@ -166,6 +166,16 @@ def do(pack, steps, rank, dry=False):
                   indent=1, ensure_ascii=False)
         print("  ADOPTED", flush=True)
     else:
+        # a decline is a measurement too: without it the pack looks untried, and the next
+        # person spends the same twelve minutes of card reaching the same tie
+        a["lora_withdrawn"] = {"file": dst_name, "trigger": trigger,
+                               "trained": time.strftime("%Y-%m-%d"), "steps": steps, "rank": rank,
+                               "measured": "a close-up scored %.3f against the pack portrait where "
+                                           "the reference-image path scored %.3f, so it was not kept"
+                                           % (lora or 0, ipa or 0)}
+        a.pop("lora", None)
+        json.dump(a, open(os.path.join(CHARS, pack, "asset.json"), "w", encoding="utf-8"),
+                  indent=1, ensure_ascii=False)
         print("  not adopted: the LoRA did not beat the reference path", flush=True)
     return {"pack": pack, "ipadapter": ipa, "lora": lora, "adopted": bool(better)}
 

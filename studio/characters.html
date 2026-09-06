@@ -131,14 +131,21 @@ function render(){
 function likeChip(c){
   // the roster used to print "lora" here, which names the machinery and not the effect
   const L=c.likeness||{state:c.lora?"trained":"none"};
-  if(L.state==="trained")
-    return ` · <span title="${esc(L.note||"")}" style="color:#7ad39a">trained face</span>`;
+  if(L.state==="trained"&&L.note)
+    return ` · <span title="${esc(L.note)}" style="color:#7ad39a">trained face</span>`;
+  if(L.state==="trained")   // the file is there; nobody compared it against anything
+    return ` · <span class="hint" title="A trained face is on this character from earlier work. It has not been measured against the reference-image path.">trained face — unmeasured</span>`;
   if(L.state==="declined")
     return ` · <span title="${esc(L.note||"")}" class="hint">face training tried</span>`;
   return "";
 }
 function likeLine(c){
-  const L=c.likeness||{}; if(!L.note) return "";
+  const L=c.likeness||{};
+  if(L.state==="trained"&&!L.note)
+    return `<div class="hint" style="margin-top:6px;border-left:2px solid #555;padding-left:8px">
+      This character carries a trained face from earlier work. It has never been compared
+      against the reference-image path, so there is no number saying whether it helps.</div>`;
+  if(!L.note) return "";
   const kept=L.state==="trained";
   return `<div class="hint" style="margin-top:6px;border-left:2px solid ${kept?"#7ad39a":"#555"};
      padding-left:8px">${kept?"This character's face is trained":"A trained face was tried and not kept"}
