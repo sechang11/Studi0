@@ -35,7 +35,22 @@ def build_like_studio(pack, sheet="sheet.png", ipa_plan=0.6):
 
 
 print("%-14s %-8s %-26s %-7s %-24s" % ("pack", "lora?", "lora file", "ref wt", "prompt starts"))
-for pack in ("bai-liwen", "renji", "terra", "tomas-reyl"):
+def _adopted():
+    """ask the packs, do not carry a list - two of the four this was written with are gone"""
+    base = os.path.join(ROOT, "studio", "foundry", "characters")
+    out = []
+    for cid in sorted(os.listdir(base)):
+        try:
+            a = json.load(open(os.path.join(base, cid, "asset.json"), encoding="utf-8"))
+        except Exception:
+            continue
+        if (a.get("lora") or {}).get("file"):
+            out.append(cid)
+    return out
+
+
+CONTROL = "tomas-reyl"   # carries no face: the no-LoRA path should still look right
+for pack in _adopted() + [CONTROL]:
     d = os.path.join(ROOT, "studio", "foundry", "characters", pack)
     if not os.path.isdir(d):
         continue
