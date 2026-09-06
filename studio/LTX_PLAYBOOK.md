@@ -3151,3 +3151,19 @@ edge of it without being told where to look.
 So the count so far is two adopted, one declined, and the declining is the part worth having.
 A pipeline that adopts whatever it produces would have put a worse identity route into the
 studio for that character and nobody would have noticed until a film looked wrong.
+
+**Four packs, and where the method's edge is.**
+
+    pack            the reference path   the LoRA   adopted
+    bai-liwen                   0.685      0.749      yes
+    renji                       0.538      0.709      yes
+    the Ferryman                0.611      0.555      no
+    Terra                       0.825      0.910      yes
+
+Three of four, and the one that lost is a translucent spirit with no garments to name and
+arguably no face for the encoder to compare. Terra is the strongest of the four in both
+columns, which is what a character with a strong, consistent pack should look like.
+
+The method, then, in one line: a drawn character pack contains its own training set, the
+captions have to name what must stay changeable, and the result is adopted only when it beats
+what the studio already does. Half an hour of card time per character, most of it queueing.

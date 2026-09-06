@@ -59,5 +59,13 @@
  "provenance_note": "MEASURED before this card was written, studio/_tools/known_char_probe.py at seed 9090 on animagine-xl-4.0, evidence at studio/samples/cast/known_terra_probe.jpg. The bare name 'terra branford' returns a BLONDE IN A WHITE HOOD - not her. The danbooru form 'terra branford (final fantasy vi)' reaches the right palette and silhouette and reliably adds an orb held in both hands, which is a noun the tag genuinely carries. But the description-only control lands nearly as close, so the tag is thin and the name is doing less work than its fame suggests. She therefore gets the SAME full build as an invented character - sheet, turnaround, trained LoRA - and the name is used only to seed a better starting portrait. See craft/KNOWN_CHARACTERS.md.",
  "legacy_lora": "character_terra_00001_v3.safetensors",
  "seed_source": "seed_source.png",
- "mesh": "mesh.glb"
+ "mesh": "mesh.glb",
+ "lora": {
+  "file": "character_terra_b6.safetensors",
+  "trigger": "terra",
+  "trained": "2026-09-06",
+  "steps": 1200,
+  "rank": 16,
+  "measured": "a close-up scores 0.910 against the pack portrait where the reference-image path scores 0.825"
+ }
 }
