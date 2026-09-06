@@ -3213,6 +3213,33 @@ shot and not the likeness; and a character whose training was tried and lost wil
 tie a second time. A photoreal pack gets no advice at all, deliberately - the trainer's base is
 the anime checkpoint.
 
+**How hard to apply it: 0.85 was a number from a tutorial, and it survives.** Both kept packs
+were swept at 0.55, 0.70, 0.85 and 1.00, two seeds each, scored twice - once on the close
+portrait it was trained for, and once on a framing the training crops never contained (standing,
+three-quarters from behind, looking back over one shoulder, on an empty street). The second
+reading is the one that matters, because a face that has taken over drags every request back to
+the training crop and scores suspiciously well on the first.
+
+    strength   Terra: close   turn      shrine keeper: close   turn
+    0.55              0.816   0.720                    0.807   0.671
+    0.70              0.834   0.747                    0.793   0.744
+    0.85              0.803   0.786                    0.797   0.740
+    1.00              0.888   0.772                    0.798   0.756
+
+Two things, and the second is the useful one. The close-portrait column says nothing: Terra's
+best is 1.00, the shrine keeper's is 0.55, they contradict each other, and Terra's range across
+strengths (0.085) is the same size as its range across seeds at a fixed strength (0.091). The
+metric anyone would reach for to tune this is the metric that cannot see it.
+
+The novel framing does move, and both packs move the same way: a real step from 0.55 to 0.70
+(+0.027 and +0.073), then flat. Everything from 0.70 to 1.00 is inside +/-0.02 on both. So
+**below 0.70 the trained face under-applies on framings it was not trained on, and above 0.70
+nothing further is bought.** 0.85 sits in the middle of the flat region, which is the best thing
+that can be said about a default: it is not worth tuning. Left where it is.
+
+The rigidity that was the reason to run the sweep at all did not appear - neither pack's novel
+framing collapses at 1.00. Two packs, so that is a small claim, not a law.
+
 The method, in one line: a drawn character pack contains its own training set, the captions have
 to name what must stay changeable, the result is adopted only when it beats what the studio
 already does, and it is only adopted for real when it beats it on a seed nobody chose.
