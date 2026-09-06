@@ -139,6 +139,29 @@ def crop(im, box):
     return im.crop((int(x0 * W), int(y0 * H), int(x1 * W), int(y1 * H)))
 
 
+def _plausible(anchors, jump=0.25, scale=0.5):
+    """drop interior anchors that claim the head teleported between its neighbours.
+
+    Kept for the next attempt.  It is sound and it was not enough: with only three anchors an
+    interpolation is a guess about everything between them, and on a medium framing the matte
+    is not reliable enough per-frame to carry that guess.  Nine mattes, or a tracker."""
+    if len(anchors) < 3:
+        return list(anchors)
+    keep = [anchors[0]]
+    for i in range(1, len(anchors) - 1):
+        t, b = anchors[i]
+        (t0, b0), (t1, b1) = anchors[i - 1], anchors[i + 1]
+        f = 0.0 if t1 == t0 else (t - t0) / (t1 - t0)
+        pred = [b0[k] * (1 - f) + b1[k] * f for k in range(4)]
+        dx = ((b[0] + b[2]) - (pred[0] + pred[2])) / 2.0
+        dy = ((b[1] + b[3]) - (pred[1] + pred[3])) / 2.0
+        h, ph = max(1e-6, b[3] - b[1]), max(1e-6, pred[3] - pred[1])
+        if (dx * dx + dy * dy) ** 0.5 <= jump and abs(h / ph - 1.0) <= scale:
+            keep.append(anchors[i])
+    keep.append(anchors[-1])
+    return keep
+
+
 def _between(anchors, t):
     """the box at time t, linearly between the found ones (and held at the ends)"""
     if t <= anchors[0][0]:
@@ -167,7 +190,9 @@ def hold_curve(job, box, portrait_emb, close, cam_curve, dur, n=9):
     frames = _frames_at(job["video"], times)
     # boxes found in the picture beat boxes carried through a camera transform: a head does
     # not teleport, so a line between the ones we have is closer than a guess from the camera
-    anchors = [(t, b) for t, b in (job.get("box_at") or []) if b]
+    # WITHDRAWN: reading between three found heads proved unstable on medium framings - see
+    # the note on _plausible.  The curve carries the first box through the camera, as before.
+    anchors = []
     same, unsure = (SAME, UNSURE) if close else (0.56, 0.46)
     scores, kept = [], []
     for i, (t, im) in enumerate(zip(times, frames)):
@@ -232,7 +257,7 @@ def hold_curve(job, box, portrait_emb, close, cam_curve, dur, n=9):
                 lost_at = t
                 break
         holds_until = last_good
-    return {"times": [round(t, 2) for t in times], "scores": scores,
+    return {"anchors": len(anchors), "times": [round(t, 2) for t in times], "scores": scores,
             "holds_until": round(holds_until, 2) if holds_until is not None else None,
             "lost_at": round(lost_at, 2) if lost_at is not None else None,
             "holds": bool(kept) and all(sc >= unsure for _, sc in kept),

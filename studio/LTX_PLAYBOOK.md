@@ -3013,3 +3013,26 @@ What survives that correction, and what does not:
 The rule for the next block is the rule this block keeps proving: when a ruler changes, every
 claim it produced has to be re-read, and the ones that do not survive have to be said out loud
 rather than left standing because they were convenient.
+
+**And the correction above is itself withdrawn.** Written an hour ago, on numbers produced by
+reading the face clock between three found heads, and that method does not survive being
+checked the way the endpoint change was. On a medium shot in a cafe the nine sampled scores
+wander from 0.20 to 0.63 and back inside two seconds while the first and last frames of the
+same take score 0.66 and 0.46. A face does not do that. Dropping anchors that claim the head
+teleported helped and did not fix it: three anchors are not enough to interpolate through, and
+on a medium framing the per-frame matte is not reliable enough to carry the guess.
+
+So the studio keeps the half that was verified and reverts the half that was not. The first
+and last frames use the found head - checked by eye on six takes and by score on every take
+the studio has, and it turned two recorded failures into ruler errors. The curve goes back to
+carrying the first box through the measured camera, which is approximate for a moving subject
+and is at least stable, and is the basis every number the builder advises from was calibrated
+on. §55's walk result stands as originally measured. The question it raised stays open.
+
+What would settle it: a head found in every sampled frame rather than three, which is nine
+segmenter calls a take instead of three, or a tracker that follows a head between frames
+rather than re-finding it each time. Either is a block's work.
+
+Two withdrawals and one correction-of-a-correction in one block is not a bad night. The
+alternative was three confident numbers, two of which were wrong, sitting in the record where
+the next block would have built on them.
