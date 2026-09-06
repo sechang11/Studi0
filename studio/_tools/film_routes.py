@@ -2132,8 +2132,16 @@ def _anchor_face(jid, char_id, anchor_path, src):
     portrait = os.path.join(root, "foundry", "characters", char_id, "base_portrait.png")
     if not os.path.exists(portrait):
         return None, None
+    _gb = _head_box(src)
+    _found = None
+    try:
+        HB = _load_sibling("headbox")
+        _hint = (((_gb[0] + _gb[2]) / 2, (_gb[1] + _gb[3]) / 2) if _gb else None)
+        _found = HB.head_box(anchor_path, near=_hint)
+    except Exception:
+        _found = None
     job = {"id": "anchor", "portrait": portrait, "still": anchor_path,
-           "box": _head_box(src), "close": src.get("framing") == "close"}
+           "box": _found or _gb, "close": src.get("framing") == "close"}
     jp = anchor_path[:-4] + "_face_job.json"
     try:
         json.dump([job], open(jp, "w"))
