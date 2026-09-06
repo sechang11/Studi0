@@ -608,6 +608,43 @@ def _resolve_anchor_file(f, shid, jid):
     raise RuntimeError(plan.get("error") or "no anchor")
 
 
+LORA_STRENGTH = 0.85       # measured best of 0.60 / 0.85 / 1.00 on four novel asks
+
+
+def pack_lora(pack_id):
+    """-> (lora file, trigger) for a foundry pack that has a trained one, else (None, None)"""
+    if not pack_id:
+        return None, None
+    root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    p = os.path.join(root, "foundry", "characters", pack_id, "asset.json")
+    if not os.path.exists(p):
+        return None, None
+    try:
+        a = json.load(open(p, encoding="utf-8"))
+    except Exception:
+        return None, None
+    lo = a.get("lora") or {}
+    if isinstance(lo, str):
+        lo = {"file": lo}
+    f = lo.get("file")
+    if not f:
+        return None, None
+    if not os.path.exists(os.path.expanduser("~/ComfyUI/models/loras/%s" % f)):
+        return None, None
+    return f, (lo.get("trigger") or pack_id.replace("-", ""))
+
+
+def _add_lora(wf, set_path, lora, strength=LORA_STRENGTH):
+    """put a LoraLoader between the checkpoint and everything that reads it"""
+    wf["packlora"] = {"class_type": "LoraLoader",
+                      "inputs": {"lora_name": lora, "strength_model": strength,
+                                 "strength_clip": strength, "model": ["1", 0], "clip": ["1", 1]}}
+    for node, key, idx in (("3", "model", 0), ("5", "clip", 1), ("6", "clip", 1)):
+        if node in wf and key in (wf[node].get("inputs") or {}):
+            set_path(wf, "%s.inputs.%s" % (node, key), ["packlora", idx])
+    return wf
+
+
 def _render_shot_keyframe(f, shid, plan):
     """A shot-specific start image through the right identity path, cached by content:
     photoreal through Qwen, anime through the character sheet with the IPAdapter weight
@@ -638,8 +675,10 @@ def _render_shot_keyframe(f, shid, plan):
         set_path(wf, "2.inputs.image", (ch or {}).get("sheet") or "")
         set_path(wf, "4.inputs.weight", float(plan.get("ipa") or 0.3)
                  if (ch or {}).get("sheet") else 0.0)
-        set_path(wf, "5.inputs.text", "%s, %s, masterpiece, best quality, anime key "
-                 "visual, %s" % (prompt, ground, F.LOOK_ANIME))
+        _lora, _trigger = pack_lora((ch or {}).get("foundry"))
+        _pre = ("%s, " % _trigger) if _lora else ""
+        set_path(wf, "5.inputs.text", "%s%s, %s, masterpiece, best quality, anime key "
+                 "visual, %s" % (_pre, prompt, ground, F.LOOK_ANIME))
         set_path(wf, "6.inputs.text", F.NEG_ANIME)
         set_path(wf, "7.inputs.width", min(w, 1216))
         set_path(wf, "7.inputs.height", h if h <= 832 else 1216)
@@ -648,6 +687,8 @@ def _render_shot_keyframe(f, shid, plan):
         set_path(wf, "10.inputs.height", h if h <= 832 else 1216)
         set_path(wf, "11.inputs.filename_prefix",
                  "claude-generated/films/%s/kf_%s" % (f.id, shid))
+        if _lora:
+            _add_lora(wf, set_path, _lora)
     elif ports:
         p0 = _stage(COMFY, os.path.join(f.dir, ports[0]), "film_kfp_%s_0.png" % f.id)
         p1 = _stage(COMFY, os.path.join(f.dir, ports[-1]), "film_kfp_%s_1.png" % f.id)
