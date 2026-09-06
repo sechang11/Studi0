@@ -89,10 +89,8 @@ def score(pack, files):
     for tag, p in files.items():
         if not p:
             continue
-        try:
-            box = HB.head_box(p)
-        except Exception:
-            box = None
+        # deliberately no head box - see the note in pack_lora.score
+        box = None
         jobs.append({"id": tag, "portrait": port, "still": p, "box": box, "close": True})
     jp = "/tmp/packlora_%s.json" % pack
     json.dump(jobs, open(jp, "w"))
