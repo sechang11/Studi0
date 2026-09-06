@@ -3134,3 +3134,20 @@ Also worth recording because it cost half an hour: the trained file lands in
 ComfyUI/output/loras and the loader only looks in ComfyUI/models/loras. The studio's older
 trainer moves it and names it to avoid collisions; driving the workflow directly skips that,
 and a LoRA that silently is not there looks exactly like a LoRA that does nothing.
+
+**A third pack, and the gate earning its place.** The whole thing is one command now -
+`_tools/pack_lora.py <pack>` builds the dataset from the pack's views, captions it with the
+narrow vision ask, trains, runs the four-route comparison and adopts only if the LoRA beats
+what the studio already does. Run on a third drawn pack, the Ferryman:
+
+    reference path 0.611    the LoRA 0.555    NOT ADOPTED
+
+Which is the first time it has lost, and it is not mysterious. The Ferryman's own tags read
+"no humans, solo, spirit, translucent, white hair, faintly glowing eyes" - a translucent
+figure with no garments to name and, arguably, no face for the encoder to compare. A method
+that works on two people and not on a spirit is a method with a domain, and the gate found the
+edge of it without being told where to look.
+
+So the count so far is two adopted, one declined, and the declining is the part worth having.
+A pipeline that adopts whatever it produces would have put a worse identity route into the
+studio for that character and nobody would have noticed until a film looked wrong.
