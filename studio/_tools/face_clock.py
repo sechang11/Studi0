@@ -91,7 +91,10 @@ if __name__ == "__main__":
     rows = gather()
     t = table(rows)
     json.dump({"takes": len(rows), "by_motion": t}, open(OUT, "w", encoding="utf-8"), indent=1)
-    print("%-12s %5s %6s %5s %9s %9s %8s" % ("motion", "takes", "held", "lost", "med hold", "first loss", "advise"))
+    print("A face is 'recognisable' while it stays inside the band where the studio can")
+    print("still tell who it is - a wider line than the one the end verdict uses.")
+    print("")
+    print("%-12s %5s %6s %5s %9s %9s %8s" % ("motion", "takes", "recog", "lost", "med hold", "first loss", "advise"))
     for m, d in sorted(t.items(), key=lambda kv: -kv[1]["takes"]):
         print("%-12s %5d %6d %5d %9s %9s %8s" % (
             m[:12], d["takes"], d["held_throughout"], d["lost_the_face"],

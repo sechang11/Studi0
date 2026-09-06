@@ -155,7 +155,7 @@ function clockWarn(){
   if(!d||d.unfollowable||!d.lost_the_face||d.safe_seconds==null||!(secs>Math.max(d.safe_seconds+0.75,d.safe_seconds*1.15))){
     el.style.display="none"; return;
   }
-  el.textContent=`the face clock: three quarters of ${d.takes} measured takes of this motion kept the face for ${d.safe_seconds}s, and ${d.lost_the_face} lost it. ${secs}s is longer than the face has reliably held - shorten it, or let the studio cut where the face goes.`;
+  el.textContent=`the face clock: three quarters of ${d.takes} measured takes of this motion kept the face recognisable for ${d.safe_seconds}s, and ${d.lost_the_face} lost it. ${secs}s is longer than the face has reliably held - shorten it, or let the studio cut where the face goes.`;
   el.style.display="block";
 }
 function pickShot(id){

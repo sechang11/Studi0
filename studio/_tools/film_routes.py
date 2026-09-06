@@ -1134,7 +1134,11 @@ def _identity_pass(jid, f, sh, dest, cam_m):
     else:
         note, fault = "identity: same person, start %.2f, end %.2f" % (res["start"], res["end"]), False
     if hc and hc.get("lost_at") is not None and hc.get("holds_until"):
-        note = "%s; the face holds for the first %.1f s of %.1f" % (note, hc["holds_until"], hc["duration"])
+        note = "%s; recognisable for the first %.1f s of %.1f" % (note, hc["holds_until"], hc["duration"])
+    elif hc and hc.get("holds") and str(res.get("verdict_end") or "").startswith("a different"):
+        # the two bands disagree, which is a real state and not a contradiction
+        note = ("%s; it stayed recognisable the whole way but ended below the line where the "
+                "studio will call it the same person" % note)
     if fault and (res.get("place_hold") is not None and res["place_hold"] < 0.70):
         # measured: on the five takes whose place changed, not one kept the face.  The seed is
         # not the thing to change here - the engine rewrote the scene and the person with it.
