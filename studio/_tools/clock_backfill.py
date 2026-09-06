@@ -25,6 +25,7 @@ from PIL import Image
 PY = os.path.expanduser("~/ComfyUI/venv/bin/python")
 FILMS = os.path.join(ROOT, "films")
 BATCH = 12
+WANT_HEADS = "--heads" in sys.argv     # the curve carries the box; heads are for the endpoints
 
 
 def head_box(src):
@@ -95,8 +96,8 @@ def jobs_for(fid, every=False):
         for t in sh.get("takes") or []:
             if not every and t["id"] != sh.get("picked"):
                 continue
-            if ((t.get("identity") or {}).get("hold_curve") or {}).get("found_heads"):
-                continue          # already measured with a found head
+            if (t.get("identity") or {}).get("hold_curve"):
+                continue
             v = os.path.join(FILMS, fid, t.get("file") or "")
             if not t.get("file") or not os.path.exists(v):
                 continue
@@ -105,7 +106,7 @@ def jobs_for(fid, every=False):
             post = cam.get("post") or {}
             _gb = head_box(src)
             _hint = (((_gb[0] + _gb[2]) / 2, (_gb[1] + _gb[3]) / 2) if _gb else None)
-            _at = found_heads(v, _hint)
+            _at = found_heads(v, _hint) if WANT_HEADS else []
             jobs.append({"id": "%s|%s|%s" % (fid, sid, t["id"]), "portrait": portrait, "video": v,
                          "box": (_at[0][1] if _at else _gb), "box_at": _at,
                          "box_end": (_at[-1][1] if _at else None),

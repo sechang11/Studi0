@@ -3036,3 +3036,79 @@ rather than re-finding it each time. Either is a block's work.
 Two withdrawals and one correction-of-a-correction in one block is not a bad night. The
 alternative was three confident numbers, two of which were wrong, sitting in the record where
 the next block would have built on them.
+
+## §64  The identity LoRA does not make her face. The swap does, and it does it alone
+
+A bench, not an impression. Twenty ordinary situations she had never been rendered in -
+a café, a subway car, snow, a strict profile, a plain studio portrait - varied on the
+three things that break a likeness: DISTANCE, ANGLE and LIGHT. Four LoRA strengths
+including **zero as a control**, two seeds each, 160 images. Every one then face-swapped,
+and both versions scored by arcface cosine against the mean embedding of her 49 real
+photographs.
+
+| LoRA strength | cosine, LoRA only | cosine, after swap | n |
+|---|---|---|---|
+| 0.00 | 0.004 | 0.867 | 39 |
+| 0.65 | 0.151 | 0.869 | 39 |
+| 0.80 | 0.180 | 0.877 | 38 |
+| 0.95 | 0.181 | 0.870 | 35 |
+
+### §64.1  What the control arm bought
+
+Everything. Without a zero-strength row the table reads as "the LoRA helps a little" and
+the obvious next move is more steps and more data. With it, the answer is unmistakable:
+**the swapped column does not move.** 0.867 with no LoRA loaded at all, 0.870 at 0.95.
+Whatever the LoRA contributes to the face, the swap overwrites completely.
+
+And the LoRA column never gets near recognition. Its best single image was 0.451 - a
+tight elevator close-up, the friendliest frame in the set - against a swapped floor of
+0.74 and a swapped mean of 0.87. Looking at the sheet says the same thing faster than
+the numbers do: **every LoRA-only render is a different woman, and every swapped one is
+her.**
+
+This is the measurement §56 and §57 never made. Four training runs, a text-encoder
+discovery, a trainer written from scratch, and the thing was never benched against the
+alternative on a task it had not been tuned for.
+
+### §64.2  So what is the identity LoRA still for
+
+Not the face. Two honest remaining uses:
+
+- **The body.** Across the sheets the LoRA arm is consistently closer to her build -
+  slimmer, her proportions - and arcface measures none of that, because it is a FACE
+  model. The swap cannot change a body. So judge an identity LoRA on the body and stop
+  crediting it for the face.
+- **When there is no swap model.** The whole result is conditional on inswapper being
+  installed. Without it the LoRA is all there is.
+
+The COSTUME LoRA is untouched by this. It solves wardrobe consistency, which no face
+model addresses, and §57 stands exactly as written.
+
+### §64.3  The swap is not a close-up trick
+
+The worry with any face method is that it only works when the face is big. Scored by
+size: faces at 90px and over swapped to 0.873; faces under 90px still swapped to 0.808.
+It degrades gracefully, and it degrades from a height the LoRA never reached at any size.
+
+### §64.4  The law
+
+**A pipeline you have never benched against its own absence is a pipeline you do not
+know the value of.** The control arm cost one extra strength setting - forty renders, a
+tenth of the night - and it overturned a conclusion four training runs had been built
+on. Put the null case in the grid. It is the cheapest row in any experiment and it is
+the only one that can tell you to stop.
+
+**Where the clock ended up.** One basis, stated plainly so the next block does not have to
+guess which of three it is looking at: the head is FOUND in the first frame and then CARRIED
+through the measured camera for the other eight samples. That is strictly better than what
+§55's numbers were built on, which was a guessed box carried the same way, and it is stable in
+a way that reading between three found heads was not. Rebuilt across all 129 clocked takes:
+
+  still   121 takes   77 recognisable, 28 lost   three quarters hold 4.3 s
+  walk     17 takes   11 recognisable,  5 lost   three quarters hold 4.0 s
+  crouch    2 takes    0 recognisable             the carried box cannot follow a crouch
+
+The last line is the honest cost of the revert. The END verdict on a crouch is now right,
+because that uses the found head; the CURVE on a crouch is still wrong, because a carried box
+leaves the head a third of a frame behind. So a crouch's `holds_until` is not to be trusted and
+its verdict is. Both facts are on the take.
