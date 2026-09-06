@@ -1090,6 +1090,10 @@ def _identity_pass(jid, f, sh, dest, cam_m):
     hc = res.get("hold_curve") or None
     if hc:
         ident["hold_curve"] = hc
+    sm = res.get("subject_motion")
+    if sm:
+        # recorded, never spoken: measured 2 of 6 on known cases, see playbook §56
+        ident["subject_motion"] = sm
     if res.get("start") is None:
         # the head was too small to read: information, never a fault, and nothing to format
         n = "identity: %s" % (res.get("verdict_start") or "unmeasured")

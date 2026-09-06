@@ -19,6 +19,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "_tools"))
 import cammeasure as CM
 import compose as C
+import headbox as HB
 from PIL import Image
 
 PY = os.path.expanduser("~/ComfyUI/venv/bin/python")
@@ -44,6 +45,39 @@ def head_box(src):
         return None
 
 
+def _dur(v):
+    o = subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration",
+                        "-of", "csv=p=0", v], capture_output=True, text=True).stdout.strip()
+    try:
+        return float(o)
+    except Exception:
+        return 5.0
+
+
+def found_heads(video, hint):
+    """the head at the start, the middle and the end -> [[seconds, box], ...]"""
+    D = _dur(video)
+    at = []
+    for tag, args, tt in (("s", [], 0.0), ("m", ["-ss", "%.2f" % (D / 2)], D / 2),
+                          ("e", ["-sseof", "-0.2"], max(0.1, D - 0.2))):
+        p = "/tmp/cb_%s_%s.png" % (os.path.basename(video)[:-4], tag)
+        subprocess.run(["ffmpeg", "-y", "-v", "error"] + args + ["-i", video, "-frames:v", "1", p],
+                       capture_output=True)
+        try:
+            b = HB.head_box(p, near=hint) if os.path.exists(p) else None
+        except Exception:
+            b = None
+        if b:
+            at.append([tt, b])
+        for extra in (p, p[:-4] + "_cut.png"):
+            if os.path.exists(extra):
+                try:
+                    os.remove(extra)
+                except OSError:
+                    pass
+    return at
+
+
 def jobs_for(fid, every=False):
     fp = os.path.join(FILMS, fid, "film.json")
     if not os.path.exists(fp):
@@ -61,16 +95,21 @@ def jobs_for(fid, every=False):
         for t in sh.get("takes") or []:
             if not every and t["id"] != sh.get("picked"):
                 continue
-            if ((t.get("identity") or {}).get("hold_curve")):
-                continue
+            if ((t.get("identity") or {}).get("hold_curve") or {}).get("found_heads"):
+                continue          # already measured with a found head
             v = os.path.join(FILMS, fid, t.get("file") or "")
             if not t.get("file") or not os.path.exists(v):
                 continue
             m = CM.measure(v, framing=src.get("framing"))
             cam = t.get("cam_measured") or {}
             post = cam.get("post") or {}
+            _gb = head_box(src)
+            _hint = (((_gb[0] + _gb[2]) / 2, (_gb[1] + _gb[3]) / 2) if _gb else None)
+            _at = found_heads(v, _hint)
             jobs.append({"id": "%s|%s|%s" % (fid, sid, t["id"]), "portrait": portrait, "video": v,
-                         "box": head_box(src), "close": src.get("framing") == "close",
+                         "box": (_at[0][1] if _at else _gb), "box_at": _at,
+                         "box_end": (_at[-1][1] if _at else None),
+                         "close": src.get("framing") == "close",
                          "cam": {k: m.get(k) for k in ("zoom", "pan", "tilt")},
                          "window0": ({"zoom": post.get("zoom_start", 1.0), "cx": post.get("cx_start", 0.5),
                                       "cy": post.get("cy_start", 0.5)} if post else None),
@@ -96,7 +135,7 @@ def run(jobs):
     return out
 
 
-def store(fid, results):
+def store(fid, results, jobs=()):
     fp = os.path.join(FILMS, fid, "film.json")
     film = json.load(open(fp, encoding="utf-8"))
     n = 0
@@ -109,7 +148,9 @@ def store(fid, results):
         if not t:
             continue
         ident = t.get("identity") or {}
-        ident["hold_curve"] = res["hold_curve"]
+        hc = dict(res["hold_curve"])
+        hc["found_heads"] = len(next((j for j in jobs if j["id"] == key), {}).get("box_at") or [])
+        ident["hold_curve"] = hc
         for k in ("start", "end", "verdict_start", "verdict_end"):
             if ident.get(k) is None and res.get(k) is not None:
                 ident[k] = res[k]
@@ -134,8 +175,9 @@ if __name__ == "__main__":
         t0 = time.time()
         done = 0
         for i in range(0, len(jobs), BATCH):
-            res = run(jobs[i:i + BATCH])
-            done += store(fid, res)
+            batch = jobs[i:i + BATCH]
+            res = run(batch)
+            done += store(fid, res, batch)
             print("   %s  %d/%d (%.0fs)" % (fid, min(i + BATCH, len(jobs)), len(jobs), time.time() - t0), flush=True)
         print("%-22s clocked %d of %d takes (%.0fs)" % (fid, done, len(jobs), time.time() - t0), flush=True)
         total += done

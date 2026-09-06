@@ -240,7 +240,14 @@ def hold_curve(job, box, portrait_emb, close, cam_curve, dur, n=9):
 
 
 def subject_motion(figures, cam_zoom=1.0, cam_pan=0.0, cam_tilt=0.0):
-    """From the FIGURE's box at known moments -> what the person did, camera divided out.
+    """WITHDRAWN - measured 2 of 6 on known cases; recorded, never reported.  See §56.
+
+    From the FIGURE's box at known moments -> what the person did, camera divided out.
+
+    Why it fails, for whoever tries next: a person walking toward the camera has their feet
+    leave the frame, so the box stops growing exactly when the approach becomes obvious; and
+    a raised arm, hair or a coat move the box for reasons that have nothing to do with
+    distance.  It needs a landmark that survives the frame edge.
 
     Reading the head box was the first attempt and it measured the figure while calling it
     the head, because the head box is defined as a fraction of the figure's height: a crouch

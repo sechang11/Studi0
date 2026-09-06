@@ -2982,3 +2982,34 @@ character-reference caption, which is written to describe a person and explicitl
 surroundings, and it reported 3 of 12. Looking at the pictures, it is 12 of 12. A check is
 only as good as the question it asks, and a check that reports a failure it was never able to
 see is worse than no check at all.
+
+
+**A correction to §55, owed immediately.** The face clock's numbers, and the advice the
+builder gives from them, were measured with the carried box. Re-measured with the found head
+across every take on the box:
+
+  still   121 takes   80 held -> 71 held    three quarters hold 4.3 s -> 4.5 s
+  walk     17 takes   10 held -> 14 held    three quarters hold 4.0 s (unchanged)
+  crouch    2 takes    0 held ->  2 held    both hold the whole way
+
+The walk line is the one that matters. §55 says that a six second walk toward the camera kept
+its face on none of three seeds and a four second one on two of three, and concludes that the
+shot was made shorter than the failure and the failure stopped happening. Under the corrected
+ruler most six second walks DO hold: of the seventeen walk takes on the box, fourteen keep the
+face, and the six second takes from the seed dance that were recorded as losses now read as
+holds. The engine was doing better than the studio said, and the studio was telling directors
+to shorten shots on the strength of a box that had drifted off the head.
+
+What survives that correction, and what does not:
+
+  survives     the face decays through a clip - that was measured as a fraction of each
+               take's own start, so a box that drifts equally at both ends does not create it
+  survives     head pixels: 135 px scores 0.66 and 65 px scores 0.30 for the same person,
+               measured on first frames where the box was right
+  weakened     the four-against-six walk result, whose two arms were both measured with the
+               carried box, and which the corrected clock does not support
+  unmeasured   the four-against-seven still result, which has not been re-run yet
+
+The rule for the next block is the rule this block keeps proving: when a ruler changes, every
+claim it produced has to be re-read, and the ones that do not survive have to be said out loud
+rather than left standing because they were convenient.
