@@ -3152,18 +3152,140 @@ So the count so far is two adopted, one declined, and the declining is the part 
 A pipeline that adopts whatever it produces would have put a worse identity route into the
 studio for that character and nobody would have noticed until a film looked wrong.
 
-**Four packs, and where the method's edge is.**
+**Eight packs, and two of them kept.** Every drawn pack in the cast was trained and
+compared, then every adoption was re-checked on three seeds:
 
-    pack            the reference path   the LoRA   adopted
-    bai-liwen                   0.685      0.749      yes
-    renji                       0.538      0.709      yes
-    the Ferryman                0.611      0.555      no
-    Terra                       0.825      0.910      yes
+    pack                the reference path   the LoRA   spread   seeds   kept
+    Terra                           0.793      0.873    0.091      3     yes
+    the shrine keeper               0.682      0.794    0.061      3     yes
+    bai-liwen                       0.711      0.625    0.226      2     no
+    renji                           0.718      0.650    0.296      3     no
+    jin                             0.834      0.842       -       1     no
+    jin-elder                       0.790      0.766       -       1     no
+    kite-seller                     0.737      0.694       -       1     no
+    the Ferryman                    0.611      0.555       -       1     no
 
-Three of four, and the one that lost is a translucent spirit with no garments to name and
-arguably no face for the encoder to compare. Terra is the strongest of the four in both
-columns, which is what a character with a strong, consistent pack should look like.
+Two of eight. That is the honest number, and getting to it took undoing four adoptions made
+one render at a time.
 
-The method, then, in one line: a drawn character pack contains its own training set, the
-captions have to name what must stay changeable, and the result is adopted only when it beats
-what the studio already does. Half an hour of card time per character, most of it queueing.
+**THE SPREAD IS THE FINDING, not the mean.** The two that stand wander by 0.06 and 0.09 across
+seeds. The two that were adopted and then fell wander by 0.23 and 0.30 - bai-liwen's LoRA
+scores 0.738 on one seed and 0.512 on the next. Both of those have a best render that looks
+convincing, and neither is a likeness the studio can promise anyone. A single-seed gate cannot
+see the difference between them and Terra, because on its best seed the unstable LoRA wins too.
+So the gate is now `lora > reference + max(0.02, spread/2)`, and `verify_pack_lora.py` re-runs
+it on any adoption whose margin was never tested against its own variance.
+
+**Which characters it works for.** The two that survived are the two with the most distinctive,
+most consistent packs: a green-haired figure in patterned armour, and an elderly man with round
+glasses, a topknot and a white goatee. The reference-image path renders the shrine keeper as a
+visibly YOUNGER person wearing the same glasses - it carries costume across and loses age - and
+the trained face keeps the age lines and the goatee. That is the shape of the win: a LoRA holds
+what a reference image drops, and what a reference image drops is whatever the encoder thinks is
+incidental. It is worth the twelve minutes when a character's identity lives in something the
+IPAdapter treats as texture.
+
+The four that lost cluster too. A translucent spirit has no garments to name and arguably no face
+to compare. jin and jin-elder finished within a hundredth either way. A tie is not a reason to
+add a stage.
+
+**A tally that mixes two instruments is not a tally.** bai-liwen and renji disagreed with their
+own adoption numbers on the same seed - not noise: they were measured by the experiment that
+established the method, before `pack_lora.py` existed to standardise the comparison. Terra,
+measured by the standard harness, reproduces to three decimals. Everything in the table above
+was measured by one instrument.
+
+**And the instrument was not doing what its code said.** Every one of these numbers is CLIP over
+the whole rendered frame, not over a head box. `score()` asked `headbox` for a head and wrapped
+it in a bare `try/except`; `headbox` refuses a figure flush against the top of the frame rather
+than handing back a forehead, and a close portrait always touches the top. So it returned None
+every time, for every pack, silently. The comparison stays fair - both routes got identical
+treatment, and re-scoring the same file three times gives the same number to three decimals -
+but for two blocks the code claimed a crop it never made. Same shape as the LoRA that trained
+into the wrong directory: a thing that silently is not there looks exactly like a thing that
+does nothing. Check the return value of the detector you are trusting.
+
+**The verdict now says what to do about itself.** The studio could say "the face is not Renji's
+from the first frame (identity 0.41)" for two blocks without ever saying what to change. There
+are three different answers and they are not interchangeable: a character with no trained face
+should get one; a character who already has one had it in this render, so what missed is the
+shot and not the likeness; and a character whose training was tried and lost will reach the same
+tie a second time. A photoreal pack gets no advice at all, deliberately - the trainer's base is
+the anime checkpoint.
+
+The method, in one line: a drawn character pack contains its own training set, the captions have
+to name what must stay changeable, the result is adopted only when it beats what the studio
+already does, and it is only adopted for real when it beats it on a seed nobody chose.
+
+## §65  The body claim is unproven, and the reason is worth more than the claim
+
+§64 ended by saying the identity LoRA still earns its keep on BUILD - closer to her slim
+frame, something arcface cannot see because arcface is a face model. That sentence was an
+impression off a contact sheet, and §64.4's own law says a claim you have not benched is
+a claim you do not know the value of. So it was benched. Twice. **Both measurements were
+defeated by the same thing, and the claim stands unproven.**
+
+### §65.1  Attempt one measured arms
+
+One neutral setup - plain standing full-body, plain backdrop, identical prompt - varying
+only LoRA strength and seed. SAM 3.1 mattes the figure; mean silhouette width over
+height. The numbers were clean:
+
+| strength | 0.00 | 0.65 | 0.80 | 0.95 |
+|---|---|---|---|---|
+| slenderness | 0.139 | 0.188 | 0.188 | 0.180 |
+
+Read as build, that says the LoRA broadens her. Looking at the renders says otherwise: at
+strength the LoRA had **overridden the prompt's pose**. Asked for arms relaxed at the
+sides, it produced arms crossed and arms raised overhead. Crossed arms widen a
+silhouette; raised arms widen it more. The metric was measuring limbs.
+
+### §65.2  Attempt two measured the crop
+
+The fix looked sound: measure only the LEG BAND, 0.70 to 0.92 of the figure's height,
+where no arm reaches. Plus a validity gate to reject cropped figures.
+
+| strength | 0.00 | 0.65 | 0.80 | 0.95 | her photos |
+|---|---|---|---|---|---|
+| leg width / height | 0.094 | 0.160 | 0.168 | 0.168 | 0.281 |
+
+A large, consistent effect - and wrong again. The LoRA had **also overridden the
+FRAMING**. The prompt said "whole body from head to feet in frame"; at 0.65 and above
+every seed came back cropped at the thigh. On a thigh-cropped figure, 0.70-0.92 of the
+apparent height lands on THIGHS instead of calves, and thighs are wider. The metric moved
+because the camera moved.
+
+The gate did not catch it, and its failure is instructive: it tested that the mask
+reaches near the bottom of the frame, which is true of a figure standing on the floor AND
+of a figure sliced off at the thigh. **A validity check that cannot distinguish the good
+case from the bad case is decoration.** It reported 6/6 valid at every strength while
+half the set was cropped.
+
+### §65.3  What was actually learned
+
+**An identity LoRA is not a neutral identity dial. It changes the photograph.** Pose and
+framing both, from 0.65 upward, against explicit instructions in the prompt. That follows
+from what it is: it was trained on photographs of a person, and a photograph carries a
+pose and a crop along with a face. At weight it reproduces all three.
+
+The practical consequence is immediate and has nothing to do with build: **if poses or
+framing stop obeying you, suspect the identity LoRA before the prompt.**
+
+### §65.4  What would settle the build question
+
+Nothing derived from a silhouette normalised by apparent height, because the LoRA moves
+the thing the normalisation depends on. It needs the pose and the frame held FIXED from
+outside the model - a pose-conditioned render, so the LoRA can move the person but not
+the camera or the limbs. That is a different experiment and a model this box has not been
+checked for.
+
+Until then the honest statement is: **the identity LoRA's effect on build is unmeasured.**
+It is not zero - something moves, consistently, at every strength - but nothing here can
+separate a wider body from a nearer camera.
+
+### §65.5  The law
+
+**When a variable moves more than one thing, a single number cannot tell you which one
+you measured.** Ask what else your variable touches before you trust the metric, and
+prefer a check that can actually fail. Two benches were spent here learning that the
+subject under test was quietly changing the instrument.
