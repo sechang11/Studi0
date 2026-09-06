@@ -24,6 +24,8 @@ Run with ComfyUI's python (torch):
 jobs.json: [{"portrait": ..., "video": ..., "box": [x0,y0,x1,y1] fractions or null,
              "close": bool, "cam": {"zoom":..,"pan":..,"tilt":..} or null, "id": ...,
              "plate": <the scene's plate, optional -> place_hold/place_verdict/place_start>,
+             "box_at": [[seconds, box], ...] - heads found in the picture at those moments;
+                        the curve reads between them instead of carrying a box through the camera,
              "box_end": the head box in the LAST frame, found there rather than carried - see
                         _tools/headbox.py; when given, the camera curve is not used for it,
              "still": <a picture instead of a video> -> only `start` is measured,
@@ -135,6 +137,19 @@ def crop(im, box):
     return im.crop((int(x0 * W), int(y0 * H), int(x1 * W), int(y1 * H)))
 
 
+def _between(anchors, t):
+    """the box at time t, linearly between the found ones (and held at the ends)"""
+    if t <= anchors[0][0]:
+        return list(anchors[0][1])
+    if t >= anchors[-1][0]:
+        return list(anchors[-1][1])
+    for (t0, b0), (t1, b1) in zip(anchors, anchors[1:]):
+        if t0 <= t <= t1:
+            f = 0.0 if t1 == t0 else (t - t0) / (t1 - t0)
+            return [b0[k] * (1 - f) + b1[k] * f for k in range(4)]
+    return list(anchors[-1][1])
+
+
 def hold_curve(job, box, portrait_emb, close, cam_curve, dur, n=9):
     """cosine against the portrait at n times through the clip, with the head box carried
     through the camera as measured AT THAT TIME (cammeasure's per-step [zoom, pan, tilt]).
@@ -148,11 +163,24 @@ def hold_curve(job, box, portrait_emb, close, cam_curve, dur, n=9):
     times = [dur * i / (n - 1) for i in range(n)]
     times[-1] = max(0.0, dur - 0.12)
     frames = _frames_at(job["video"], times)
+    # boxes found in the picture beat boxes carried through a camera transform: a head does
+    # not teleport, so a line between the ones we have is closer than a guess from the camera
+    anchors = [(t, b) for t, b in (job.get("box_at") or []) if b]
     same, unsure = (SAME, UNSURE) if close else (0.56, 0.46)
     scores, kept = [], []
     for i, (t, im) in enumerate(zip(times, frames)):
         if im is None:
             scores.append(None)
+            continue
+        if anchors:
+            b = _between(anchors, t)
+            cr = crop(im, b)
+            if cr is None:
+                scores.append(None)
+                continue
+            sc = float((portrait_emb * embed(cr)).sum())
+            scores.append(round(sc, 3))
+            kept.append((t, sc))
             continue
         pw = job.get("post_curve")
         if pw:

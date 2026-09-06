@@ -962,7 +962,8 @@ def _matte_boxes(jid, dest, hint=None):
         _log(jid, "the head finder is unavailable: %s" % str(e)[:80])
         return None, None
     out = []
-    for tag, args in (("start", []), ("end", ["-sseof", "-0.2"])):
+    mid = max(0.1, (_dur(dest) or 5.0) / 2.0)
+    for tag, args in (("start", []), ("mid", ["-ss", "%.2f" % mid]), ("end", ["-sseof", "-0.2"])):
         p = dest[:-4] + "_%s_frame.png" % tag
         try:
             _sh(*(["ffmpeg", "-y", "-v", "error"] + args + ["-i", dest, "-frames:v", "1", p]))
@@ -977,7 +978,7 @@ def _matte_boxes(jid, dest, hint=None):
                         os.remove(extra)
                     except OSError:
                         pass
-    return out[0], out[1]
+    return out[0], out[2], out[1], mid
 
 
 def _identity_pass(jid, f, sh, dest, cam_m):
@@ -1000,13 +1001,15 @@ def _identity_pass(jid, f, sh, dest, cam_m):
         plate_p = None
     _gb = _head_box(src)
     _hint = (((_gb[0] + _gb[2]) / 2, (_gb[1] + _gb[3]) / 2) if _gb else None)
-    m_start, m_end = _matte_boxes(jid, dest, _hint)
+    m_start, m_end, m_mid, m_midt = _matte_boxes(jid, dest, _hint)
+    _at = [[0.0, m_start], [m_midt, m_mid], [max(0.1, (_dur(dest) or 5.0) - 0.2), m_end]]
+    _at = [[t, b] for t, b in _at if b]
     if m_start or m_end:
         _log(jid, "the head found by the matte: %s%s" % (
             ("start %s" % ["%.2f" % v for v in m_start]) if m_start else "start not found",
             (", end %s" % ["%.2f" % v for v in m_end]) if m_end else ", end not found"))
     job = {"id": "%s/%s" % (f.id, sh["id"]), "portrait": portrait, "video": dest,
-           "box": m_start or _gb, "box_end": m_end,
+           "box": m_start or _gb, "box_end": m_end, "box_at": _at,
            "close": src.get("framing") == "close",
            "cam": {k: cam_m.get(k) for k in ("zoom", "pan", "tilt")} if cam_m else None,
            "plate": plate_p,
@@ -1062,11 +1065,15 @@ def _identity_pass(jid, f, sh, dest, cam_m):
         # the head box is computed for an upright figure at eye level; a foreshortened
         # low view puts the head smaller and higher than the geometry expects
         _mover = "low view"
+    if _mover and m_end:
+        # the head was found in the last frame rather than carried there, so the reason for
+        # the exemption is gone: a crouch is judged like anything else
+        _mover = None
     if _mover and ve in ("a different face", "uncertain") and vs != "a different face":
         ve = "unmeasured (the %s moves the head and the end box is not followed; %.2f not judged)" % (_mover, res.get("end") or 0)
         ident["verdict_end"] = ve
     covered = any(bool(p.get("ots")) for p in (src.get("props") or []) if isinstance(p, dict))
-    if vs == "a different face" and str(src.get("view") or "").startswith("pres_low"):
+    if vs == "a different face" and str(src.get("view") or "").startswith("pres_low") and not m_start:
         note, fault = ("identity: the low view puts the head where the box does not look "
                        "(%.2f, not judged)" % res["start"]), False
     elif vs == "a different face" and covered:
