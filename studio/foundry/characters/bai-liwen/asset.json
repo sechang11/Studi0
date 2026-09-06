@@ -60,13 +60,14 @@
  "legacy_lora": "character_liwen_00001_.safetensors",
  "seed_source": "seed_source.png",
  "mesh": "mesh.glb",
- "lora": {
+ "lora_withdrawn": {
   "file": "character_bailiwen_b6.safetensors",
   "trigger": "bailiwen",
   "trained": "2026-09-06",
   "steps": 1200,
   "rank": 16,
   "dataset": "the pack's own turnaround, face views, expressions and full body, captioned with the clothing and background named so they stay changeable",
-  "measured": "a close-up scores 0.749 against the pack portrait where the IPAdapter path scores 0.685 and both together 0.768; it generalises to four asks the training set never contained at 0.592 to 0.755, best at strength 0.85"
+  "measured": "a close-up scores 0.625 against the pack portrait where the reference-image path scores 0.711, averaged over 2 seeds (spread 0.226)",
+  "seeds": 2
  }
 }
