@@ -956,8 +956,8 @@ def _likeness(a):
     wd = a.get("lora_withdrawn") or {}
     if wd.get("file"):
         return {"state": "declined",
-                "note": "a face was trained for this character and not kept - " +
-                        (wd.get("measured") or "it did not beat the reference-image path"),
+                # the measurement only - whoever shows it writes the sentence around it
+                "note": _plain(wd.get("measured")) or "it did not beat the reference-image path",
                 "trained": wd.get("trained", ""), "seeds": wd.get("seeds", 1)}
     return {"state": "none", "note": "", "trained": "", "seeds": 0}
 

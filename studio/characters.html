@@ -149,7 +149,7 @@ function likeLine(c){
   const kept=L.state==="trained";
   return `<div class="hint" style="margin-top:6px;border-left:2px solid ${kept?"#7ad39a":"#555"};
      padding-left:8px">${kept?"This character's face is trained":"A trained face was tried and not kept"}
-     — ${esc(L.note)}${L.seeds>1?` (checked on ${L.seeds} renders)`:""}.
+     — ${esc(L.note)}${L.seeds>1&&!/seeds/.test(L.note)?` (checked on ${L.seeds} renders)`:""}.
      ${kept?"Shots of them are made through it; you do not have to do anything.":""}</div>`;
 }
 function openChar(src,id){
