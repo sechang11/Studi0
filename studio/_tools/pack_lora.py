@@ -36,6 +36,7 @@ import headbox as HB  # noqa: E402
 PY = os.path.expanduser("~/ComfyUI/venv/bin/python")
 CHARS = os.path.join(STUDIO, "foundry", "characters")
 STRENGTH = 0.85
+SEEDS = (4242, 7, 913)      # one rendered comparison is the seed lottery this project avoids
 NEG_F = ("1boy, male, lowres, bad anatomy, bad hands, text, error, missing fingers, "
          "worst quality, low quality, jpeg artifacts, watermark, blurry")
 NEG_M = NEG_F.replace("1boy, male,", "1girl, female,")
@@ -134,18 +135,33 @@ def do(pack, steps, rank, dry=False):
         return None
     shutil.move(src, dst)
     print("  trained in %.0fs -> %s" % (time.time() - t0, dst_name), flush=True)
-    files = {"ipadapter": close_up(pack, trigger, tags, None, 0.6, "ipa"),
-             "lora": close_up(pack, trigger, tags, dst_name, 0.0, "lora")}
-    sc = score(pack, files)
-    ipa, lora = sc.get("ipadapter"), sc.get("lora")
-    print("  reference path %s | the LoRA %s" % (
-        ("%.3f" % ipa) if ipa else "-", ("%.3f" % lora) if lora else "-"), flush=True)
-    better = (lora or 0) > (ipa or 0) + 0.02
+    import statistics
+    got = {"ipadapter": [], "lora": []}
+    for seed in SEEDS:
+        files = {"ipadapter": close_up(pack, trigger, tags, None, 0.6, "ipa%d" % seed, seed),
+                 "lora": close_up(pack, trigger, tags, dst_name, 0.0, "lora%d" % seed, seed)}
+        sc = score(pack, files)
+        for k in got:
+            if sc.get(k) is not None:
+                got[k].append(sc[k])
+        print("    seed %d: reference %s | the LoRA %s" % (
+            seed, ("%.3f" % sc["ipadapter"]) if sc.get("ipadapter") else "-",
+            ("%.3f" % sc["lora"]) if sc.get("lora") else "-"), flush=True)
+    ipa = statistics.mean(got["ipadapter"]) if got["ipadapter"] else None
+    lora = statistics.mean(got["lora"]) if got["lora"] else None
+    spread = (max(got["lora"]) - min(got["lora"])) if len(got["lora"]) > 1 else 0.0
+    print("  reference path %s | the LoRA %s (spread %.3f over %d seeds)" % (
+        ("%.3f" % ipa) if ipa else "-", ("%.3f" % lora) if lora else "-",
+        spread, len(got["lora"])), flush=True)
+    # the margin has to beat the seed noise, not just a fixed number
+    better = (lora or 0) > (ipa or 0) + max(0.02, spread / 2.0)
     if better:
         a["lora"] = {"file": dst_name, "trigger": trigger, "trained": time.strftime("%Y-%m-%d"),
                      "steps": steps, "rank": rank,
+                     "seeds": len(got["lora"]),
                      "measured": "a close-up scores %.3f against the pack portrait where the "
-                                 "reference-image path scores %.3f" % (lora or 0, ipa or 0)}
+                                 "reference-image path scores %.3f, averaged over %d seeds "
+                                 "(spread %.3f)" % (lora or 0, ipa or 0, len(got["lora"]), spread)}
         json.dump(a, open(os.path.join(CHARS, pack, "asset.json"), "w", encoding="utf-8"),
                   indent=1, ensure_ascii=False)
         print("  ADOPTED", flush=True)
