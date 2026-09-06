@@ -1,0 +1,37 @@
+{
+  "id": "lenga-identity-te",
+  "file": "lengaTE.safetensors",
+  "name": "LeNga - identity (text-encoder run)",
+  "kind": "character",
+  "category": "character",
+  "engine": "sdxl",
+  "base_model": "RealVisXL_V5.0",
+  "trigger": "lengaTE",
+  "strength": 0.8,
+  "strength_range": [
+    0.7,
+    0.85
+  ],
+  "status": "ready",
+  "related": [
+    "lenga-identity-fb"
+  ],
+  "means": "The run that proved text-encoder training is what turns a lookalike into a likeness. 2208 tensors, loss 0.117.",
+  "verdict": "UNet-only (lengaY) gave the right ethnicity and face TYPE and still was not her; adding LoRA to both CLIP encoders produced a real likeness at 0.70-0.85. Scored lower than lengaFB in the situation bench (0.18 vs 0.31 stacked), so lengaFB is the one to reach for.",
+  "note": "Kept because it is the evidence for the text-encoder finding. Prefer lenga-identity-fb for work.",
+  "evidence": {
+    "verdict": "MEASURED",
+    "method": "benched on this box, 2026-09-05/06",
+    "date": "2026-09-06",
+    "note": "UNet-only (lengaY) gave the right ethnicity and face TYPE and still was not her; adding LoRA to both CLIP encoders produced a real likeness at 0.70-0.85. Scored lower than lengaFB "
+  },
+  "example": "/samples/loras/lenga-identity-te__ladder.jpg",
+  "example_kind": "strength ladder",
+  "example_note": "Strength ladder, same seed and same words in every cell; only the strength changes. The leftmost cell has the LoRA switched OFF, so the base model's own answer is the control. Two scenes neither this LoRA nor any other here was trained on, with the background in frame - a LoRA that memorised its folder shows it somewhere it has never been, and the cost of raising strength appears behind the subject first.",
+  "example_strengths": [
+    0.0,
+    0.7,
+    0.8,
+    0.85
+  ]
+}

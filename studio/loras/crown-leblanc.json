@@ -1,0 +1,37 @@
+{
+  "id": "crown-leblanc",
+  "file": "crownLB.safetensors",
+  "name": "LeBlanc crown (accessory)",
+  "kind": "accessory",
+  "category": "accessory",
+  "engine": "sdxl",
+  "base_model": "RealVisXL_V5.0",
+  "trigger": "crownLB",
+  "strength": 1.0,
+  "strength_range": [
+    0.6,
+    1.0
+  ],
+  "status": "ready",
+  "related": [
+    "lenga-costume-lb3",
+    "lenga-identity-fb"
+  ],
+  "means": "The tall gold headpiece on its own, so a costume can be worn with or without it. 46 contact crops, rank 4, 5.2 minutes, 14.4 MB.",
+  "verdict": "Transfers to people it never saw - it puts a crown on a bearded man and on a woman in her sixties. On its own it reads as A crown rather than THE crown; the specific shape arrives when the costume LoRA is also loaded, which says it leans on costume context it cannot supply alone. Its ladder also shows it needs the head large in frame: in a wide framing it renders nothing at any strength.",
+  "note": "§57.2: trained on crops where the CONTACT POINT fills the frame - crown to brow - or it renders floating behind the head. Adding it as a third layer on top of character+costume breaks the render; prefer a combined costume variant. LADDERED 2026-09-06: renders in a near-camera framing (arrives at 0.6, more ornate at 1.0) and DOES NOT APPEAR AT ALL in a wider one - same seed, same words, both strengths. The head has to be reasonably large in frame or there is nothing for it to attach to, and it fails silently: a good photograph of someone not wearing a crown.",
+  "evidence": {
+    "verdict": "MEASURED",
+    "method": "benched on this box, 2026-09-05/06",
+    "date": "2026-09-06",
+    "note": "Transfers to people it never saw - it puts a crown on a bearded man and on a woman in her sixties. On its own it reads as A crown rather than THE crown; the specific shape arrives "
+  },
+  "example": "/samples/loras/crown-leblanc__ladder.jpg",
+  "example_kind": "strength ladder",
+  "example_note": "Strength ladder, same seed and same words in every cell; only the strength changes. The leftmost cell has the LoRA switched OFF, so the base model's own answer is the control. Two scenes neither this LoRA nor any other here was trained on, with the background in frame - a LoRA that memorised its folder shows it somewhere it has never been, and the cost of raising strength appears behind the subject first.",
+  "example_strengths": [
+    0.0,
+    0.6,
+    1.0
+  ]
+}

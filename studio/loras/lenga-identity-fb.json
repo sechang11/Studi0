@@ -1,0 +1,39 @@
+{
+  "id": "lenga-identity-fb",
+  "file": "lengaFB.safetensors",
+  "name": "LeNga - identity (face + body)",
+  "kind": "character",
+  "category": "character",
+  "engine": "sdxl",
+  "base_model": "RealVisXL_V5.0",
+  "trigger": "lengaFB",
+  "strength": 0.5,
+  "strength_range": [
+    0.4,
+    0.85
+  ],
+  "status": "ready",
+  "related": [
+    "lenga-costume-lb3",
+    "crown-leblanc",
+    "lenga-identity-te"
+  ],
+  "means": "Puts a REAL person into an SDXL render rather than a description of someone like her. 97 photographs, face and body sets, rank 32 with both text encoders trained.",
+  "verdict": "BENCHED OVER 160 IMAGES in 20 unfamiliar situations (§64, §67). Its contribution to the FACE is small by arcface cosine - 0.13-0.18 against her real photographs - but that number was read on the wrong scale: HER OWN photographs score 0.386 against each other, and five of them sit at 0.11-0.24. The director, who knows her, can tell it is her in LoRA-only renders. It does NOT change build: on the seeds it left in frame, leg width moved -0.0024 on a level of 0.10 (§66). AT HIGH STRENGTH IT OVERRIDES PROMPT POSE AND FRAMING - at 0.95 it crossed arms, raised arms and cropped the frame against explicit instructions.",
+  "note": "Use at 0.5 when stacked under a costume LoRA; above ~0.55 it eats the costume, and at 1.4 the costume is gone entirely. Alone, 0.7-0.85.",
+  "evidence": {
+    "verdict": "MEASURED",
+    "method": "benched on this box, 2026-09-05/06",
+    "date": "2026-09-06",
+    "note": "BENCHED OVER 160 IMAGES in 20 unfamiliar situations (§64, §67). Its contribution to the FACE is small by arcface cosine - 0.13-0.18 against her real photographs - but that number w"
+  },
+  "example": "/samples/loras/lenga-identity-fb__ladder.jpg",
+  "example_kind": "strength ladder",
+  "example_note": "Strength ladder, same seed and same words in every cell; only the strength changes. The leftmost cell has the LoRA switched OFF, so the base model's own answer is the control. Two scenes neither this LoRA nor any other here was trained on, with the background in frame - a LoRA that memorised its folder shows it somewhere it has never been, and the cost of raising strength appears behind the subject first.",
+  "example_strengths": [
+    0.0,
+    0.4,
+    0.5,
+    0.85
+  ]
+}

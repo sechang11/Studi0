@@ -1,0 +1,38 @@
+{
+  "id": "lenga-costume-lb3",
+  "file": "lengaLB3.safetensors",
+  "name": "LeBlanc costume - current",
+  "kind": "costume",
+  "category": "costume",
+  "engine": "sdxl",
+  "base_model": "RealVisXL_V5.0",
+  "trigger": "lengaLB3",
+  "strength": 1.0,
+  "strength_range": [
+    1.0,
+    1.0
+  ],
+  "status": "ready",
+  "related": [
+    "lenga-identity-fb",
+    "crown-leblanc",
+    "lenga-costume-lb2"
+  ],
+  "means": "Crown, cape, plum-purple strapped outfit, gold arm guards, belt and thigh boots - identical in every render with NO costume word in the prompt.",
+  "verdict": "Wardrobe identical across 12 poses x 3 seeds. Build corrected relative to lengaLB2 by naming the figure in the captions (§68) - and that also took the three-strap bandeau out of the weights, because a caption subtracts a REGION and a body part shares pixels with what covers it. ADD THE STRAPS BACK IN THE PROMPT: \"a plum-purple bandeau top with THREE lateral straps crossing it\". AT 1.0 IT OVERRIDES THE WEARER - prompt a bearded man and you get her. At 0.4-0.8 other people come through and the costume holds, but the crown falls out. LADDERED: it also carries a FACE. The control renders one woman; at full strength both scenes render a different, consistent one - the person it was trained on came with the clothes. This is why face_detail.py holds the costume at 0.35 against the identity LoRA at 0.95: the low weight is suppressing the costume's own face. Worn by any character other than the one it was trained on, expect it to fight their likeness.",
+  "note": "Two-layer budget: this plus ONE character LoRA is reliable. Three LoRAs at working weights (total ~2.2) melted 2 of 3 seeds. LADDERED 2026-09-06: this is a SWITCH, not a dial. At 0.40 - the published floor - there is no costume at all, in either scene, indistinguishable from the control. At 1.00 the whole costume arrives, identical in both scenes. Use it at full strength or not at all. It also renders the crown, so crownLB is not needed for this character. Range narrowed from [0.4, 1.0] to [1.0, 1.0] on that evidence: a range whose floor does nothing is not a range.",
+  "evidence": {
+    "verdict": "MEASURED",
+    "method": "benched on this box, 2026-09-05/06",
+    "date": "2026-09-06",
+    "note": "Wardrobe identical across 12 poses x 3 seeds. Build corrected relative to lengaLB2 by naming the figure in the captions (§68) - and that also took the three-strap bandeau out of th"
+  },
+  "example": "/samples/loras/lenga-costume-lb3__ladder.jpg",
+  "example_kind": "strength ladder",
+  "example_note": "Strength ladder, same seed and same words in every cell; only the strength changes. The leftmost cell has the LoRA switched OFF, so the base model's own answer is the control. Two scenes neither this LoRA nor any other here was trained on, with the background in frame - a LoRA that memorised its folder shows it somewhere it has never been, and the cost of raising strength appears behind the subject first.",
+  "example_strengths": [
+    0.0,
+    0.4,
+    1.0
+  ]
+}
