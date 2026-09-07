@@ -107,6 +107,15 @@ def main():
         for w in words:
             need(w.lower() in t, "%s: missing %r" % (k, w))
 
+    # 6  the review clock exists, parses, and the agent is told to run it
+    pb = texts["playbook"]
+    mclk = re.search(r"^last_checked:\s*(\d{4}-\d{2}-\d{2})\s*$", pb, re.M)
+    mcad = re.search(r"^cadence_days:\s*(\d+)\s*$", pb, re.M)
+    need(mclk is not None and mcad is not None, "playbook: §0 review clock (last_checked / cadence_days) missing")
+    need("## §0" in pb and pb.find("## §0") < pb.find("## 1."), "playbook: §0 must come before §1")
+    need("review_clock.py" in agent, "CLAUDE.md: must tell the agent to run review_clock.py")
+    need("## §96" in pb, "playbook: §96 (the standard pipeline) missing")
+
     if problems:
         print("METHOD CHECK: %d problem(s)" % len(problems))
         for p in problems:

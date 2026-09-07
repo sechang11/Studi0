@@ -5,7 +5,47 @@ Written so none of it has to be found twice.
 
 ---
 
+## §0  THE REVIEW CLOCK - read this first
+
+```
+last_checked: 2026-09-07
+cadence_days: 14
+```
+
+**If today is `cadence_days` or more past `last_checked`, the review is due: do it before you
+generate anything, then stamp the date.** `python3 studio/_tools/review_clock.py` says whether it
+is due and lists every model file on disk that no workflow names; `--checked` stamps today. The
+stamp means the list below was walked, not that the tool ran. Anyone - the agent, a person - can
+also run the review early; the cadence is a floor, not a schedule.
+
+Why fourteen days: in the single week this section was written the studio discovered twenty
+gigabytes of reference-to-video weights it had never wired (§95.3), a video super-resolution
+model its finish had never used (§96), and a new Seedance shipped that dates the breakdowns the
+method was built against. Things arrive faster than a month.
+
+**The review, in order** (also printed by the tool):
+
+1. New or updated weights for the engines in use - LTX, Wan, MiniMax H3, HunyuanVideo,
+   Qwen-Image / Qwen-Edit, Flux, the SDXL finetunes, ACE-Step, the TTS voices, the upscalers.
+   Hugging Face, the ComfyUI release notes, the model cards.
+2. ComfyUI itself and `comfy_extras`: `git log` since `last_checked`; any new node class. The
+   ref2va node sat in `comfy_extras` for weeks before anyone looked.
+3. **Orphans**: every model on disk that no workflow references. Wire it and measure it, or write
+   why not, here, with a date.
+4. The paid engines - Seedance, Nano Banana, Veo, Kling - capability and price: does the hybrid
+   rule in §96 still hold? It is measured, not assumed: `hybrid_frame_test.py --frame`.
+5. Anything new runs the **standard battery** before it enters the pipeline (§96.6): identity
+   clock, cut-and-timecode test, sound presence, an envelope table, frame count through the finish.
+6. Update `docs/WHERE-WE-STAND.md`'s table and §96; run `method_check.py`; stamp the clock.
+
+The pipeline this clock protects is **§96**. The invariants it applies are **§95**.
+
+---
+
 ## 1. What to reach for
+
+*(The 21 August view. For the procedure that supersedes this table - which engine, in which
+order, and when to spend money - see **§96**. The envelope in §2 stands.)*
 
 | You want | Use | Why |
 |---|---|---|
@@ -4298,3 +4338,205 @@ are in §J.
 The method, in one line: *references first, one identity route per face, one source per scene,
 one beat per face, length from the envelope and pacing from the edit, sound written, place from
 the plate, the finish as half the film, and nothing kept on one render.*
+
+
+## §96  THE STANDARD PIPELINE - the go-to workflow for an RTX 5090 that spends nothing by default
+
+This is the procedure. §95 is the set of invariants it applies; §0 is the clock that says when to
+re-examine it. Every step names the tool, the measured reason, the failure it prevents and roughly
+what it costs in minutes on this card. Where a claim is not yet measured here it says so.
+
+### 96.0  The shape, in one paragraph
+
+Decide the look. Build the library - packs and plates - before a word of a shot is written. Break
+the story into scenes of one place and one light, then into one-beat shots wherever a face
+matters. Compose a start frame per shot from the plate and the pack; that frame is where the
+references live and where money, if any, is spent. Render on LTX-2.5 by default, pin in-place
+motion on H3, read every take against the numbers, retry by changing words, pick only what has
+no faults, cut between faces at assembly, and finish with one look and a master. Measure anything
+new before it enters this list.
+
+### 96.1  Decide the look once
+
+| look | keyframes | identity route | what it unlocks / costs |
+|---|---|---|---|
+| **anime** | animagine-xl-4.0 via `22_anime_kf_ipadapter` (IPAdapter 0.6 for a portrait framing, 0.3 for a wide - PLUS FACE hijacks composition at higher weight) | reference sheet by default; a **trained face** where `pack_lora.py` passes the 3-seed gate (2 of 8 did) | trained faces exist and are wired into the keyframe path (`_add_lora`, weight 0.85, reference weight forced to 0) |
+| **photoreal** | Qwen-Image / Qwen-Edit-ref (`01`, `14`) | reference path only | faces train fine on RealVisXL (`lora_train_sdxl.py`, §56) but **no SDXL LoRA attaches to Qwen** - a photoreal trained face has nowhere to be spent until a photoreal SDXL render route exists (§95.3; queue item 2) |
+
+Mixing looks inside a film is a choice, not an accident; the film-level `look` sets the compiler's
+dialect and the negative.
+
+### 96.2  The library first - nothing else until this exists
+
+1. **Characters → new character** (foundry). A pack is castable at **level 1**: portrait, body
+   turnaround, face turnaround, six expressions, presentation set - about twenty views. ~30 min.
+2. **Anime packs: try a trained face.** `python3 studio/_tools/pack_lora.py <pack>` - dataset from
+   the pack's own views, garment-only captions (whatever a caption omits welds onto the trigger),
+   1200 steps rank 16, ~12 min of card, then the four-route comparison on three seeds. Adopt only
+   if `margin > max(0.02, spread/2)`; the spread separates a likeness from a lottery ticket (the
+   two that fell wandered 0.23-0.30 across seeds; the two kept, 0.06-0.09). Declines are recorded
+   on the pack so nobody retrains the same tie. `verify_pack_lora.py` re-checks an adoption.
+3. **Places → one plate per light** (dawn / day / dusk / night wides, plus a detail and a reverse).
+   The plate is the place: a LoRA gives *a* classroom; the plate gives *the* classroom (§57).
+4. **Voices**: a voice pack per speaking character (`ltx+vo` voices the line at make time).
+
+### 96.3  Story → scenes → shots (the editor)
+
+- **`quickstart`** with a place, a plate and up to two characters creates the film, the cast, the
+  scene, composes the start frames and proposes five coverage shots (wide-establishing, wide,
+  medium, close, insert). Use the coverage as a starting grid or delete it; either way it is a
+  scene with its sources set. Coverage shots inherit the scene's ambience as sound - the first
+  ones rendered silent because nothing wrote it.
+- **A scene** = one place, one light, `cast_present`, an `ambience` line, an optional `music` tag
+  for the finish bed. Set the film's `look`, `grade` note and `negative` once (film tab).
+- **One beat per shot when a face matters.** An internal cut re-derives faces unless the face is in
+  the start frame (§18). Cuts between faces happen at assembly.
+- **The seven blocks** per shot (§95.2): start frame · who/what · framing/camera · beats · sound ·
+  film-level look · check. The `engine` is a field: LTX-2.5 unless you have two exact pictures to
+  pin a movement between; a beat whose `motion` is an in-place motion is pinned automatically.
+- **Length from the envelope**, pacing from the edit: 0.9 MP → 30 s, 1.2 MP → 20 s, 1.5 MP → 12 s,
+  2.0 MP → 8 s. Timecodes set nothing (§95 S5). Plan the face clock: a still holds ~4.3 s, a walk
+  ~4.0 s, a crouch is not followable - a longer beat is two shots.
+- **Sound is written on every shot** (`sfx`; a `dialogue` line needs an on-screen mouth; write
+  *no music* when the edit owns the score). "A quiet room" renders literal silence.
+
+### 96.4  Start frames - the leverage point, and the only place money should go first
+
+The studio composes each shot's start frame from the plate and the pack (`assets/anchor_shot_NNN.png`,
+`anchor: "file:..."`; `prev_last` continues from the previous take's last frame; `generate` makes a
+fresh one from a `keyframe_prompt`). Then it **checks the words against the picture** (the vision
+pass: "the picture does not show: gate, bell" means the shot may drift toward them) and, for a
+pinned motion, composes the end frame too.
+
+Two measured facts govern this step. **The start frame fixes where a shot begins** - a character
+the anchor stands at the steps cannot "walk in". **Detail is not what the video model wants from
+it**: sharpening the anchor through the 2× master lowered first-frame identity three times out of
+three (−0.038, −0.070, −0.029). What a *better* frame would change is composition and identity
+fidelity - which is exactly what a frontier image model sells. Hence:
+
+**THE HYBRID RULE (free vs paid).** The studio spends nothing by default and should keep it that
+way until a measurement says otherwise. If money is spent, it is spent in this order, and each step
+is gated by a number from our own detectors, not by how the output looks in isolation:
+
+1. **Start frames for one scene, not video.** A frontier image (Nano Banana-class) costs a small
+   fraction of a frontier video second; our whole path is image-to-video, so a better start frame
+   improves every local render downstream. Buy 3-5 frames for one scene, render each shot both
+   ways at one seed with `hybrid_frame_test.py --frame PATH`, and adopt only if first-frame
+   identity or QC improves against the composited frame. The numbers to beat are recorded
+   (0.699 / 0.708 / 0.672 on the three measured shots).
+2. **By scene, never by shot.** Adjacent shots of one character in one room from two engines
+   differ visibly in grain, colour response and motion character; the finish's single grade hides
+   some of it, not all.
+3. **Never buy identity you can make.** A trained anime face beat the reference path 2 of 8; the
+   reference path holds "the same actor". A bought clip must beat our identity number on the same
+   beat, scored by the same tool, or it is decoration.
+4. **Whole-scene video from a paid engine is the last resort**, for the one thing local engines
+   measurably cannot do (a fight's physics, say) - score it with our detectors, cut it in at
+   assembly, grade it with the rest. Whichever Seedance is current when this is read, the
+   procedure does not change; the clock (§0) re-checks the price and the capability.
+
+### 96.5  Render
+
+| situation | engine / route | measured basis |
+|---|---|---|
+| default - any beat, up to 30 s, with sound and speech | **LTX-2.5** i2v (`70`) | one pass holds the scene; joint audio; lip-sync through an on-screen mouth; the envelope table (§2) |
+| in-place motion between two exact frames (crouch, rise, turn, reach, look) | **H3 fl2va** (`62`) via the automatic pin | pins hold in-place motion and are ignored for a walk, twice (§62, §94); the studio pins these motions itself |
+| a plate-only camera move, nobody in it | `cam` rig (arithmetic) | no generation, so no drift; the fallback when generation keeps adding people |
+| a locked location, silent, no faces | Wan 2.2 context windows (`61`, 1280×720) | "the most rigid continuity available, silent" (§1) - **not measured against LTX-2.5 in the engine matrix**; queue item 5 |
+| — | HunyuanVideo 1.5 i2v (`42`/`44` + 1080p SR) | measured against LTX 2.3 on four shots (`engine_ab`, `~/shared/AB/hunyuan_vs_ltx`): LTX held the approved frame at least as well on every shot (0.84/0.72, 0.82/0.77, 0.80/0.79, 0.95/0.96), drifted less on both moving shots (0.48 vs 0.60, 0.41 vs 0.59) and was twelve times faster (21 s vs 252 s); Hunyuan was more even on two of four and drifted less on the two near-static ones. Not a default; the matrix predates LTX-2.5 (queue item 5) |
+
+One render per shot, **one retry on a fault** (scene drift, an unspoken line, people in an empty
+frame, silence, a wrong face, a runaway camera), then **one pick rule**: the candidate with the
+fewest faults, then the truest camera, then the least drift - picked iff it has no faults. Notes
+(camera, identity, angle, words not in the picture, borrowed sound, "ends closer") never block a
+pick; faults always do; the log says which. A spoken line is voiced through the character's voice
+pack after the render (`ltx+vo`). Cost: 3.5-5 min a shot including the anchor check, identity,
+camera and angle passes (measured 2026-09-07).
+
+### 96.6  Read the takes, and the standard battery
+
+Under every take: **identity** first→last against the pack portrait on a matte-found head, with the
+verdict and, when it is wrong, which of three things to do (build a trained face / fix the shot not
+the likeness / stop retraining a face that lost); **QC** in plain words; **camera** measured against
+the ask; **angle**; a one-frame-a-second **strip** - look at it beside the numbers, always. Retry by
+changing **words**, not seeds: four seeds stayed cropped, one far-framing sentence fixed it.
+
+**The standard battery** - what anything new (an engine, a model, a route, a paid frame) must pass
+before it enters this pipeline, each with its tool: identity hold on a known beat
+(`hybrid_frame_test.py`, `identity.py`); cut-and-timecode behaviour (`timecode_test.py`); sound
+presence on a written sound clause (QC's SILENT check); an envelope table (§2's method); frame
+count through the finish (`ffprobe -count_frames`, never a container duration); and a strip,
+looked at. Three seeds minimum for anything adopted (§95 S9).
+
+### 96.7  Sound
+
+Written per shot (96.3); voiced lines through the voice pack; the scene **music bed** from
+ACE-Step at the finish, mixed under at 0.5 and cut to the scene; the whole film levelled to
+−16 LUFS. When a render comes back silent or too quiet the studio currently **borrows** the sound
+of a sibling take - a band-aid that keeps a cut from going dead; the right fix, §91's bed built
+from the scene's own ambience for a silent shot, is queue item 6.
+
+### 96.8  Finish - half the film
+
+Assemble → the canvas follows the takes (a fixed canvas was shrinking 1920×1088 takes by a
+quarter) → one **look** on the whole film after the cuts (*filmic* by default: +11% saturation,
++20% brightness, few blown pixels, on ten frames from two films; *punchy*, *soft*, *none*) →
+optional **2× master** (RealESRGAN x4 on a halved frame, 0.35 s/frame, cleaner than the full-frame
+path at 1:1) → loudness → **the frame count of the film equals the frame count of its takes**,
+checked. ~70 s a shot with the master. **`seedvr2_3b`, a video super-resolution model, is on disk
+with its node in `comfy_extras` and no workflow** - the obvious *fine* master; queue item 1.
+
+### 96.9  From the breakdowns the method was built against - what we kept
+
+The two paid Seedance 2.0 breakdowns (2026-09-07) are the best AI video the studio has seen, and
+they will date - a newer Seedance is out as this is written; the clock (§0) re-reads them against
+the current engines. What transfers to this box, and how:
+
+| their rule | ours | status |
+|---|---|---|
+| refs carry identity; never describe the character | the composited start frame + the pack; the caption rule | measured, adopted |
+| timecoded beats inside one generation | the word *cut*; pacing at assembly | measured **false** here (§95 S5) |
+| one mover per beat ("freeze one fighter") | one mover; a whole body, never a fast limb against a still torso | measured (H3 ghosts a fast limb) |
+| the camera has a job; handheld for photoreal | framing + move, one each; a faint float for photoreal | adopted |
+| write the sound; *no music* when the edit owns the score | `sfx`, `dialogue`, ambience; ACE-Step bed at finish | measured |
+| one grade line on every shot | the finish's single look, applied after the cuts | built |
+| AVOID is your spellbook - add what broke last roll | copy QC faults into the shot's negative for the retake | adopted; automation is queue item 7 |
+| **one burst per strike** - effects exist only at impact, then vanish; persistent effects become CGI soup | write effects as instants, never as standing states | **adopted, unmeasured here** - the first fight scene tests it |
+| post is half the film | the finish (96.8) | built |
+| iterate one variable at a time | words, then the negative, then framing; never the seed first | measured |
+
+### 96.10  The queue - what to measure next, in order of value
+
+1. **SeedVR2 as the fine master** (`seedvr2_3b_int8`, `nodes_seedvr.py`): wire, then 1:1 crops and
+   seconds-per-frame against the fast ESRGAN path. If it wins, `--fine` becomes SeedVR2.
+2. **A photoreal SDXL render route** so RealVisXL-trained faces can be spent (§95.3). `compose.py`
+   already treats the anime slot as "animagine, illustrious or sdxl". The other session's
+   `lora_train_sdxl.py` / `lora_photoreal.py` are the trainer side.
+3. **ref2va with a described face** - does the reference *reinforce* a face the words ask for,
+   as the collector's note claims? Three renders (WHERE-WE-STAND §6) showed it does not *supply*
+   one.
+4. **Wan 2.1 VACE** (`wan2.1_vace_14B`, orphan): reference-and-control-guided video - the second
+   candidate for the multi-reference row. Same battery as ref2va.
+5. **Wan 2.2 (`61`) vs LTX-2.5 in `engine_ab.py`** - add an `ltx25` engine to the matrix; the
+   existing matrix predates LTX-2.5.
+6. **The sound bed on silent takes** - §91's builder as the consumer of the SILENT check, instead of
+   borrowing a sibling's audio.
+7. **The negative that learns** - append a retake's QC fault wordings to that shot's negative
+   automatically.
+8. A **stall watchdog**: a job "running" with an idle ComfyUI queue and no log line for N minutes
+   is marked failed with the last comfy.log error.
+9. A **per-scene look override** at the finish.
+10. **Frontier start frames** for one scene through `hybrid_frame_test.py --frame` - the first paid
+    experiment, and only with the user's key.
+
+### 96.11  Timings measured on this card, for planning
+
+| step | time |
+|---|---|
+| one LTX-2.5 shot through make (anchor check, render, identity, camera, angle) | 3.5-5 min |
+| a trained-face attempt (`pack_lora.py`, 1200 steps + 3-seed comparison) | ~12 min train + ~4 min compare |
+| finish with 2× master (fast path) | ~70 s per shot; a 17-shot film in 21 min |
+| the 2× master alone, 4 s take | 55 s (fast) · 215 s (fine) |
+| H3 ref2va, 124 frames 1344×768 | 92 s at 4 steps (turbo LoRA) · 410 s at 30 steps |
+| ComfyUI re-staging a video model after `/free` | 20-60 s |
+| loading a second 20 GB model beside a resident one | kills ComfyUI - free and wait first |

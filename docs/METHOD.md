@@ -300,6 +300,26 @@ described above are the spine of it; the rest are the same moves at other framin
 12. **Finish is half the film.** One look, after the cuts; master; levelled; frame count checked.
 13. **Nothing is kept on one render.** Read the numbers; look at the strip; pick, don't hope.
 
+## L · The pipeline on one page, and the clock that keeps it honest
+
+Everything above, as the order the studio actually works in: **look → library → scenes → seven
+blocks per shot → start frames → render (LTX-2.5 by default, H3 for a pinned in-place movement)
+→ read the takes → sound → finish.** The engineering version, with each step's tool, measured
+reason and cost in minutes, is playbook **§96**; it is the go-to template, and it changes only when
+a measurement changes it.
+
+**When to spend money.** The studio spends nothing by default. If it ever does, the order is fixed:
+start frames for one scene first (a better picture improves every local render downstream), never
+mixing engines inside a scene, never buying a likeness the studio can make, and whole-scene video
+from a paid engine only as a last resort — each step gated by our own identity and QC numbers on the
+same beat, not by how the bought thing looks on its own (§96.4).
+
+**The clock.** Models, nodes and paid engines change faster than a guide. The playbook's first
+section is a review clock: the date the studio last checked for new weights, new ComfyUI nodes,
+models sitting unused on disk and the paid engines' prices, and a fourteen-day cadence. When the
+date is past due, the studio checks before it generates and stamps the date when it has. The
+date at the top of `studio/LTX_PLAYBOOK.md` tells you how current this guide is.
+
 ## Z · What this studio cannot do yet — so you do not spend an evening trying
 
 - Feed several tagged reference pictures into one shot **on the LTX route**: it takes one start

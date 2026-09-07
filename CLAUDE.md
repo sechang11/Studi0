@@ -4,7 +4,20 @@ This repository is an offline AI film studio. Two invariants override everything
 usable by a person with no knowledge of AI, and the generations must be flawless.** Measure
 rather than assert; look at the render before reporting; never adopt anything on one seed.
 
-## The method (single source: `docs/METHOD.md`; measurements: playbook §95)
+## First, the clock
+
+At the start of any session that will generate or change how generation works, run
+`python3 studio/_tools/review_clock.py`. If it says the review is due, walk playbook §0's list
+before generating anything - new weights, new ComfyUI nodes, orphan models on disk, the paid
+engines' price and capability, the standard battery on anything new - update WHERE-WE-STAND and
+§96, run `method_check.py`, then `review_clock.py --checked`. The stamp means the list was walked.
+
+## The pipeline (playbook §96) and the method (single source: `docs/METHOD.md`; measurements: §95)
+
+**§96 is the go-to workflow** - look, then library, then scenes, then the seven blocks per shot,
+render on LTX-2.5 by default, read the takes, finish; and the rule for when money is spent on a
+paid engine (start frames first, by scene, measured with `hybrid_frame_test.py` before committing).
+Build to §96; §95 says why each step is as it is.
 
 Build every story and every shot by these. `docs/METHOD.md` is the source; §95 carries each
 rule's measurement; this file is the summary. **Run `python3 studio/_tools/method_check.py`
