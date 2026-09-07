@@ -148,8 +148,12 @@ def tiled(model, x, tile=384, overlap=24, scale=4):
     return out
 
 
-def upscale(src, dst, scale=2):
+def upscale(src, dst, scale=2, fine=False):
     """RealESRGAN x4 per frame in tiles, resampled to `scale`x, audio re-muxed from the source.
+
+    fast (default): the frame is halved first and the x4 network delivers 2x directly - 0.35 s
+    a frame on this card.  fine: x4 on the full frame, then resampled down - 2.15 s a frame,
+    carrying detail below the half-resolution grid instead of re-synthesising it.
 
     Frames stream through ffmpeg as raw RGB in both directions: no intermediate files, no PNG
     codec.  The first working version wrote and read a PNG per frame and spent most of its
@@ -175,6 +179,9 @@ def upscale(src, dst, scale=2):
     if half:
         desc.model.half()
     mscale = int(getattr(desc, "scale", 4) or 4)
+    # fast: shrink the input so the network's own scale lands on the wanted size (x4 on a half
+    # frame is 2x); fine: full frame through the network, resampled down afterwards
+    pre = 1.0 if (fine or mscale <= scale) else float(scale) / float(mscale)
     tile = 768
     vid = dst + "_v.mp4"
     reader = subprocess.Popen(
@@ -196,6 +203,10 @@ def upscale(src, dst, scale=2):
                 arr = np.frombuffer(buf, dtype=np.uint8).reshape(h, w, 3)
                 x = torch.from_numpy(arr.copy()).to(dev).permute(2, 0, 1).unsqueeze(0)
                 x = (x.half() if half else x.float()) / 255.0
+                if pre != 1.0:
+                    # fast path: the network's x4 lands exactly on the wanted size
+                    x = torch.nn.functional.interpolate(x.float(), scale_factor=pre, mode="area")
+                    x = x.half() if half else x
                 while True:
                     try:
                         y = tiled(desc, x, tile=tile, scale=mscale).clamp_(0, 1)
@@ -205,8 +216,9 @@ def upscale(src, dst, scale=2):
                         if tile <= 96:
                             raise
                         tile //= 2          # the same recovery ComfyUI's own upscale node uses
-                y = torch.nn.functional.interpolate(y.float(), size=(th, tw), mode="bicubic",
-                                                    antialias=True, align_corners=False)
+                if y.shape[2] != th or y.shape[3] != tw:
+                    y = torch.nn.functional.interpolate(y.float(), size=(th, tw), mode="bicubic",
+                                                        antialias=True, align_corners=False)
                 y = (y.clamp_(0, 1) * 255.0).round().byte()[0].permute(1, 2, 0).contiguous()
                 writer.stdin.write(y.cpu().numpy().tobytes())
                 n += 1
@@ -230,8 +242,9 @@ def upscale(src, dst, scale=2):
     if not os.path.exists(dst):
         return None, "mux failed"
     out = probe(dst)
-    return dst, ("%d frames %dx%d -> %dx%d, tile %d, %s"
-                 % (n, w, h, out[0], out[1], tile, why)) if out else "?"
+    return dst, ("%d frames %dx%d -> %dx%d, %s, tile %d, %s"
+                 % (n, w, h, out[0], out[1], "fine" if pre == 1.0 else "fast", tile, why)) \
+        if out else "?"
 
 
 def main():
@@ -241,6 +254,9 @@ def main():
     u.add_argument("src")
     u.add_argument("dst")
     u.add_argument("--scale", type=int, default=2)
+    u.add_argument("--fine", action="store_true",
+                   help="x4 on the full frame then down (2.15 s/frame) instead of half-then-x4 "
+                        "(0.35 s/frame)")
     sub.add_parser("grades")
     a = ap.parse_args()
     if a.cmd == "grades":
@@ -249,7 +265,7 @@ def main():
                                             vf or "-", note))
         return
     try:
-        out, info = upscale(a.src, a.dst, a.scale)
+        out, info = upscale(a.src, a.dst, a.scale, fine=a.fine)
     except Exception as e:           # a traceback on stderr is invisible to the caller's log
         out, info = None, "%s: %s" % (type(e).__name__, str(e)[:160])
     print(("-> %s  %s" % (out, info)) if out else ("FAILED: %s" % info), flush=True)
