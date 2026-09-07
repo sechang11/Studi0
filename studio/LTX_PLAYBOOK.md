@@ -3278,7 +3278,8 @@ where no arm reaches. Plus a validity gate to reject cropped figures.
 
 A large, consistent effect - and wrong again. The LoRA had **also overridden the
 FRAMING**. The prompt said "whole body from head to feet in frame"; at 0.65 and above
-every seed came back cropped at the thigh. On a thigh-cropped figure, 0.70-0.92 of the
+HALF THE SEEDS came back cropped at the thigh - see §66, where that "half" turns out
+to be the whole of this result. On a thigh-cropped figure, 0.70-0.92 of the
 apparent height lands on THIGHS instead of calves, and thighs are wider. The metric moved
 because the camera moved.
 
@@ -3306,9 +3307,11 @@ outside the model - a pose-conditioned render, so the LoRA can move the person b
 the camera or the limbs. That is a different experiment and a model this box has not been
 checked for.
 
-Until then the honest statement is: **the identity LoRA's effect on build is unmeasured.**
-It is not zero - something moves, consistently, at every strength - but nothing here can
-separate a wider body from a nearer camera.
+That was the conclusion reached here, and §66 overturns it without a single new render:
+the crop reached only half the seeds, the other half is a clean experiment, and on it the
+build does not move. The sentence this section originally ended on - "it is not zero,
+something moves consistently at every strength" - was the pooled mean of a bimodal column,
+and it describes none of the images in it.
 
 ### §65.5  The law
 
@@ -3316,3 +3319,937 @@ separate a wider body from a nearer camera.
 you measured.** Ask what else your variable touches before you trust the metric, and
 prefer a check that can actually fail. Two benches were spent here learning that the
 subject under test was quietly changing the instrument.
+
+## §66  Half the seeds were never cropped, and on those the build does not move
+
+§65 found the crop and then threw the whole bench away with it: *"the identity LoRA's
+effect on build is unmeasured. It is not zero - something moves, consistently, at every
+strength."* Both halves of that sentence are wrong, and one more look at the renders is
+all it takes to see why. The crop was not universal, the seeds it spared are a clean
+experiment, and on those the number does not move at all.
+
+### §66.1  The crop was exactly half the seeds, and exactly the half that moved
+
+§65 wrote that at 0.65 and above "every seed came back cropped at the thigh", while two
+paragraphs later noting the gate had passed 6/6 "while half the set was cropped". The
+second statement is the true one. Laid out per seed, leg width over height:
+
+| seed | 0.00 | 0.65 | 0.80 | 0.95 | change | framing at 0.65+ |
+|---|---|---|---|---|---|---|
+| s11 | 0.097 | 0.217 | 0.256 | 0.261 | **+0.164** | cropped at the thigh |
+| s202 | 0.067 | 0.223 | 0.215 | 0.211 | **+0.144** | cropped at the knee, arms overhead |
+| s3003 | 0.096 | 0.239 | 0.255 | 0.238 | **+0.143** | cropped at the thigh |
+| s777 | 0.098 | 0.085 | 0.084 | 0.097 | -0.001 | head to feet, in frame |
+| s4242 | 0.101 | 0.103 | 0.104 | 0.105 | +0.004 | head to feet, in frame |
+| s9090 | 0.103 | 0.094 | 0.094 | 0.093 | -0.010 | head to feet, in frame |
+
+Three re-framed, three not. **The three that were re-framed are precisely the three whose
+number moved, and the correspondence is 3/3 and 3/3 with nothing in between.** There is no
+partial case, no seed that was cropped and stayed flat, no seed that stayed in frame and
+broadened. The pooled 0.094 -> 0.168 in §65.2 is that split averaged, and it is entirely
+crop.
+
+s202 is the clearest demonstration that the normalisation was the casualty. At 0.65 and
+above it raises both arms overhead and is cropped at the knee, so the mask runs from
+fingertips at the top of the frame to a knee at the bottom. The "figure height" everything
+is divided by is not a height of anything. Its 0.70-0.92 band lands on the thigh.
+
+### §66.2  On the three uncropped seeds, nothing happens
+
+Restrict to figures that are head-to-feet in frame at every strength - the only images in
+which the metric means what it says:
+
+| strength | 0.00 | 0.65 | 0.80 | 0.95 |
+|---|---|---|---|---|
+| leg width / height | 0.1006 | 0.0942 | 0.0940 | 0.0982 |
+| spread across the three seeds | 0.0028 | 0.0090 | 0.0098 | 0.0058 |
+
+Paired, zero to 0.95: **-0.010, -0.001, +0.004.** Mean -0.0024 on a level of 0.10, which is
+under three percent, with the sign inconsistent across seeds and the largest single change
+the same size as the spread between seeds at a fixed strength. Two of the three go slightly
+NARROWER. There is no effect here, and the bound is tight enough to say so: whatever the
+identity LoRA does to build, it is smaller than re-rolling the seed.
+
+That is a stronger and more useful statement than §65's "unmeasured". Unmeasured invites
+another night of benching. This says the bench already answered.
+
+### §66.3  The eye agrees, on both halves
+
+The renders were looked at, w000 beside w095, which is what should have happened before
+either metric was believed.
+
+On the uncropped seeds the eye and the numbers agree: s4242 and s9090 at 0.95 are the same
+slim woman as at 0.00 - same shoulder width, same waist, same leg. Nothing a person would
+describe as a build change.
+
+On the cropped seeds the eye overturns the numbers flatly. s11 at 0.00 is a full standing
+figure, barefoot on the floor, arms at her sides, exactly as asked. At 0.65 it is a
+half-length shot cropped above the knee with her arms on her hips; at 0.80 and 0.95 her
+arms are crossed. Nobody looking at those four frames would report "she got wider". They
+would report that the camera moved in and she stopped doing what she was told.
+
+### §66.4  The reference photographs cannot arbitrate anything, and never could
+
+§65.2 printed "her photos 0.281" next to the render numbers as though it were a target. It
+is not. `sorted/body` is 48 Instagram story screenshots, and the majority are selfies and
+mirror shots, not full-body photographs. Four were re-matted and looked at:
+
+    Screenshot_1804_p1   mask covers 78% of the frame   "leg width" 0.530
+    Screenshot_1826      mask covers 58% of the frame   "leg width" 0.323
+    Screenshot_1819      a mirror shot, phone occluding  "leg width" 0.597
+    Screenshot_1817      a mirror shot, usable           "leg width" 0.076
+
+The first two are head-and-shoulders selfies. SAM 3.1 mattes the face correctly, the
+"figure" is then a head, and 0.70-0.92 of a head is the chin and neck - which is wide
+relative to a head. **0.53 is not a possible value for a human leg band.** Across the 29
+measured, the values run 0.006 to 0.60 with a standard deviation of 0.17, which is more
+than ten times the entire effect the render side is being asked about.
+
+A folder named `body` was taken at its word. It holds whatever the sort put in it, and
+nothing downstream checked that a full-body photograph was what came out. **The photo
+column should be struck from §65.2's table rather than reinterpreted.**
+
+### §66.5  What this still does not settle
+
+One caveat, and it is a real one. Build can only be measured on the seeds the LoRA did not
+re-frame - and whether a seed gets re-framed is itself caused by the LoRA. That is
+conditioning on something the treatment decides. If the LoRA broadens her on precisely the
+seeds it also crops, this bench cannot see it, because those are the images where the
+number is meaningless.
+
+Two things keep that from mattering much in practice. The eye finds no build change on the
+frames it can read, and on the frames it cannot read the LoRA has already destroyed the
+composition - so those renders are unusable whatever the build is doing. A benefit that
+only exists in images you would throw away is not a benefit.
+
+Settling it properly still needs the pose and the frame held from outside the model, as
+§65.4 said. The difference is that there is no longer a reason to bother.
+
+### §66.6  The consequence
+
+**The identity LoRA comes out of the stills pipeline.** It does not make her face - the
+swap does that alone and is indifferent to whether the LoRA is loaded (§64). It does not
+make her build - three seeds say flat and the eye agrees (§66.2). And it costs pose and
+framing on half the seeds it touches (§65.3). A stage with no measured benefit and a
+measured cost is not a stage.
+
+It stays on the card as the fallback for a subject with no photographs to swap from, and
+the trainer notes stay because the drawn-pack work depends on them. The card is marked
+superseded, the same way `face-detail` was when the swap made it redundant.
+
+### §66.7  The law
+
+**A confound is a reason to partition your data, not to discard it.** §65 did the hard
+part - it caught the crop that made the number a lie - and then drew the wrong conclusion
+from its own discovery, because it assumed the confound was everywhere. It was in half the
+rows. The other half was a clean experiment sitting inside the ruined one, and it needed no
+new renders, no new script and no new night: only asking which rows were actually spoiled
+and looking at the rest.
+
+Before you write off a bench, count the rows the confound reached. And when a result is
+pooled across a condition your treatment changes, **look at it per-seed before you look at
+it per-strength** - the mean of a bimodal column describes none of the images in it.
+
+## §67  The number was circular, and the director was right. Retracting §64
+
+§64 concluded, from 160 images, that the identity LoRA "does not produce her face" -
+LoRA renders scoring 0.13-0.18 against the mean arcface embedding of her real
+photographs, swapped renders scoring 0.87. The director, who knows her, looked at the
+LoRA renders and said you can tell it is her.
+
+When the person who knows the subject disagrees with the metric, the metric is what is on
+trial. It was put on trial and it lost.
+
+### §67.1  Calibrate against the subject, not against zero
+
+For each of her 45 usable photographs, cosine against the mean of the OTHER 44 -
+leave-one-out, so nothing is compared with itself. And every photograph against every
+other photograph.
+
+| | mean | median | min | max |
+|---|---|---|---|---|
+| her photos, leave-one-out vs the rest | 0.611 | 0.684 | 0.112 | 0.811 |
+| her photos, pairwise | 0.386 | 0.424 | -0.021 | 0.994 |
+| LoRA renders (bench) | 0.13-0.18 | | | |
+| swapped renders (bench) | 0.87 | | | |
+
+**Two real photographs of the same woman average 0.386 against each other.** Five of her
+own photographs score 0.112 to 0.243 against the rest of the set - the exact range I had
+called "not her". Reading 0.18 as failure requires reading five of her real photographs
+as somebody else.
+
+### §67.2  The swap's score is impossible, and impossible is a diagnosis
+
+0.87 is above 0.811, which is the best any REAL photograph of her manages against the
+rest. A render cannot resemble her more than she resembles herself. That is not a
+likeness measurement at all: inswapper computes the source embedding and injects it, so
+scoring the result on that embedding measures the tool against its own objective.
+
+I knew this and wrote it down - the `swap-folder` card says the after-number is "close to
+circular" - and then read the comparison as though both columns were on one scale. **A
+caveat recorded and not applied is a caveat wasted.**
+
+### §67.3  What actually stands
+
+- **The LoRA does contribute recognisable likeness.** Weakly by this metric, visibly to
+  someone who knows her. §64's headline is withdrawn.
+- **The swap still works** - the film and the sheets show it - but 0.87 is not the
+  evidence, and the gap between the columns was never the size it looked.
+- **The BUILD result in §66 is unaffected.** That one compares renders against renders on
+  a geometric measurement, with no embedding anywhere near it, and the three uncropped
+  seeds settle it.
+- **The situation bench itself stands.** Twenty unfamiliar settings, a zero-strength
+  control, per-situation and per-face-size breakdowns: all worth building. Only the
+  reading was wrong.
+
+### §67.4  The law
+
+**A similarity metric has no meaning until you know what the subject scores against
+themselves.** Leave-one-out on the reference set costs one pass and turns an unanchored
+number into a scale. Without it, 0.18 and 0.87 look like failure and triumph; with it,
+0.18 is half of what her own photographs manage on each other, and 0.87 is off the top of
+the scale - which means the instrument is reading its own output.
+
+And the older law, restated because I broke it: **where the number and the person who
+knows the subject disagree, the person wins.** That was already written on the recipes
+page - "where the two disagree, the sheet wins" - one line above the number I trusted.
+
+## §68  A caption subtracts the thing AND what sits on it
+
+The costume LoRA held the wardrobe perfectly and held a body with it. Every costumed
+asset rendered fuller than the real subject, who is 5'2" and very slim, because §57's
+captions named pose and room and nothing else - so the trigger kept the wardrobe, as
+designed, and kept the proportions of the generated frames it was trained on, which
+nobody intended.
+
+### §68.1  Try the free lever before the expensive one
+
+The 36 variants that exposed this carried NO body language in the prompt at all - kept
+out deliberately, so nothing would argue with the costume LoRA. That made "the build is
+welded into the weights" an assumption, not a finding.
+
+Adding proportion language - SMALL HEAD, long neck, narrow shoulders, LONG slender legs,
+with curvy/full-figured in the negative - fixed the waist, the stomach and the legs
+across all twelve test pairs for free. It did NOT fix the bust. So the build was partly
+unopposed prose and partly weights, and only the second part needed a retrain. **Check
+what a prompt can still reach before you retrain anything.**
+
+### §68.2  The retrain, and the cost nobody predicts
+
+Re-captioning the same 44 images with the figure NAMED - "a curvy full-figured woman with
+a large bust, a soft waist and wide hips", written after looking at the images rather than
+assumed - and retraining gave `lengaLB3`. The build came right in all twelve pairs.
+
+And the three-strap bandeau got noticeably less reliable. That is the mechanism working
+exactly as described and further than wanted: **naming the bust subtracted the bust and
+the garment that sits on it.** A caption cannot separate a body part from what covers it,
+because in the pixels they are the same region.
+
+The crown, the cape and the colour were untouched - they are nowhere near the words that
+changed.
+
+### §68.3  Put back only what fell out
+
+The fix is not another retrain. What left the weights can be asked for in the prompt, and
+only that: adding "a plum-purple bandeau top with THREE lateral straps crossing it"
+restores the design while the slim build stays.
+
+    lengaLB3 at 1.0        crown, cape, colour, silhouette - still in the weights
+    lengaFB  at 0.5        her build and face type
+    prompt                 proportion language + the strap detail
+    then the face swap     her actual likeness
+
+This is a deliberate step back from §57's ideal - what must be identical belongs in the
+weights, not in prose - and it is a SMALL and BOUNDED one: one garment detail moved to the
+prompt, everything else stayed. Worth stating plainly rather than pretending the recipe is
+still pure, because the next person will notice the strap words and wonder what they are
+doing there.
+
+### §68.4  The law
+
+**A caption subtracts a region, not a concept.** Name a body part and you also give away
+whatever is worn on it; name a colour and you give away everything that colour touches.
+Before writing one, ask what else lives in the same pixels - and when something falls out
+that you wanted to keep, put it back in the prompt rather than retraining again.
+
+## §69  A wardrobe: make the WEARER the thing that varies
+
+A costume LoRA trained on one person keeps the person. Ours did - `lengaLB3` at strength
+1.0 renders the woman it was trained on no matter who you prompt. Ask for a bearded man
+and she arrives wearing the costume. That single fact is what stops a wardrobe being a
+wardrobe: you cannot mix and match if every garment drags its original owner along.
+
+### §69.1  The law, pointed at the person for once
+
+A LoRA learns whatever is INVARIANT across its training set. Every previous section here
+used that against backgrounds and props; it applies to people identically. Train twenty
+pictures of one woman in one costume and there are TWO invariants, so the trigger takes
+both.
+
+So vary the wearer on purpose. Twenty people - twenty to sixty years old, four builds,
+both sexes, every colouring - and the garment is the only thing left that is constant.
+
+**And vary the SETTING as hard as the wearer.** Ten different rooms, not one. If every
+image were the gothic hall, the hall would be invariant too and would be absorbed exactly
+as the first person LoRA on this box absorbed a phone and a bedroom.
+
+### §69.2  The bootstrap, and why it cannot come from the LoRA
+
+The costume only exists inside a LoRA that returns its owner at working strength, so the
+training set cannot be rendered from it - twenty prompts for twenty different people
+would produce the same woman twenty times.
+
+It comes from qwen multi-reference instead, with no LoRA loaded at all: image1 the
+person, image2 the person again as the face pin, image3 the FINISHED costume (§56). That
+preserved each wearer's face, build, age and background while changing only the clothes.
+
+**The crown was deliberately excluded.** qwen re-invents crowns every time, so twenty
+images would carry twenty different invented crowns and teach the trigger "some crown" -
+worse than teaching it none. The crown is its own rank-4 LoRA, which is what makes it
+optional, which is what the architecture wanted anyway.
+
+### §69.3  It works, and here is the test that says so
+
+`leblancFit`, rank 24, 85 MB, 8.6 minutes. At strength **1.0** - the strength its
+predecessor could never be used at - five people it had never seen came through as
+themselves in the costume: a tall athletic Black woman, a white woman in her sixties, a
+bearded Black man, a red-haired woman with freckles, a plump Latina woman. It still
+dresses the original character at identity 0.5 and at 0.0.
+
+The costume is now a garment rather than a person wearing one.
+
+### §69.4  What it cost
+
+The three-strap detail is softer than `lengaLB3`'s, because the training set varies there
+- qwen drew the straps differently on different bodies, so the straps are no longer fully
+invariant either. Name them in the prompt when they matter. That is the same trade §68
+recorded: what falls out of the weights goes back in the prose, deliberately and in one
+place.
+
+And the captioner gets a vote it has not earned. Eight of twenty captions named the
+costume despite being told not to, and were auto-cleaned; one described a bearded man as
+"a woman with long dark hair". One in twenty wrong is tolerable, but a vision model
+writing your captions is a model making training decisions, and it should be checked
+rather than trusted.
+
+## §70  Chasing exactness through the weights, three times, and losing three times
+
+The director compared the renders with the LeBlanc splash art and named what was missing:
+the shorts, the horizontal straps, the details. Three attempts to close that gap, all
+reasonable, all worse than where they started. The pattern is the finding.
+
+### §70.1  Describing the costume made it worse
+
+The obvious move: name the missing parts. Six corrections read off the art - dark shorts
+not a skirt, HORIZONTAL straps, a white silver plated belt, a gold upper-arm cuff, a
+gold-lined mantle, an asymmetric hip drape - added to the prompt at costume 1.0.
+
+The baseline, with a SHORT prompt and no costume words at all, was closer. It already had
+the horizontal rib straps, the bare midriff, the gold arm cuffs, the gold-edged collar and
+the red-gemmed crown. The described version lost the strapping and gained a skirt.
+
+This is §57 read backwards and it is worth stating as its own rule: **what is in the
+weights must not be asked for.** A prompt that describes what the LoRA already knows does
+not reinforce it, it COMPETES with it - and the prompt is the thing the sampler weighs
+most heavily early, so the prompt wins and the weights lose. A costume card should carry
+the SHORTEST prompt that works, not the most complete description of the garment.
+
+### §70.2  Correcting the training set over-corrected the weights
+
+Second move, and the principled one: if it belongs in the weights, fix the training set.
+A narrow qwen edit - change ONLY the belt to silver plates and ONLY the cape lining to
+gold, everything else unchanged - worked on individual images. The belt appeared, the gold
+lining appeared, faces and poses and backgrounds survived.
+
+Trained on twenty-four of those, the result is gaudy: the belt became a huge chain of
+white plates wrapping the whole torso, the cape became gold-dominated, and the dark
+aubergine balance of the art is gone. Both details arrived and both took over.
+
+**A uniform correction applied to every image is not a correction, it is a bias.** Every
+frame said "silver belt, gold lining" a little too strongly; training averaged that into a
+weight, and a weight has no notion of "a little". The set needed the correction on SOME
+frames and the original on others, so that the model learns the part rather than the
+emphasis.
+
+### §70.3  A prop the size of a crown does not survive as its own LoRA
+
+Third: the crown as a separate accessory. At rank 4 it learned a silhouette and rendered a
+dark triangle. At rank 16 it renders a crown - a dark bronze one, where the art is gold
+with a red gem, and it casts the whole image magenta.
+
+Meanwhile the COSTUME LoRA renders the crown correctly at 1.0, gold and gem and all. And
+§62's stack test already said the reliable budget is two LoRAs. So the optional crown is
+better served by two costume variants - with and without - than by a third layer that
+does not work. 85 MB against a failure mode is a good trade.
+
+### §70.4  Where exactness actually belongs
+
+`lengaLB3` remains the best costume on this box, and it is not exact. Three passes at
+making it exact through training each cost more than they gained.
+
+The instrument for exactness is not the weights. It is §21, unchanged since the beginning:
+**what must be exact is constructed per shot, not trained.** The narrow qwen edit that
+over-corrected as a training set works perfectly as a FINISHING step on one delivered
+frame - it put a silver plated belt and a gold lining on individual renders without
+touching the face, the pose or the room. Render with the LoRA that is close; fix the two
+details on the frame that ships.
+
+That also bounds the cost correctly. A wardrobe LoRA has to be good enough to be
+recognisable across a hundred shots. Only the frames that reach the screen have to be
+exact.
+
+
+## §71  Pin BOTH ends to the same plate when the shot is a motion through a static frame
+
+Shot 7 is a worm's-eye view from the floor: her boots stride across the lens either side of
+the camera and her cape sweeps over it. Twelve SDXL renders across three prompt shapes and
+four seeds failed to produce it — every one reverted to a woman standing in a hall at eye
+level. Both LoRAs were trained on standing figures, and **a prompt cannot outvote weights on
+framing any more than it can on costume (§70.1)**. Framing is not a thing to argue for.
+
+One H3 render got it on the first attempt, with `first` and `last` pinned to the *identical*
+empty ceiling plate.
+
+That is the general move. first+last pinning is the anti-drift instrument (§59), and it is
+usually used to nail two *different* states. Pinning both ends to the **same** picture says
+something stronger and cheaper: *the room is this, and it is still this when you are done* —
+while leaving the entire middle free. Whatever the engine does in between, both cuts are
+safe by construction. Three seeds cost eight minutes; one of them had the boots, one had the
+cape blacking out the lens, and because both were pinned to the same plate they are the same
+room to the pixel and could simply be **joined on their darkest frame** — measured, not eyed,
+because the darkest frame is where the cape covers the most lens and a cut is cheapest.
+
+Reach for this whenever the SUBJECT of a shot is a motion *through* a frame rather than a
+change *of* one: something passing the lens, something entering and leaving, a light going
+by. Those are exactly the shots a still-image model cannot frame and a pinned video model
+finds easy.
+
+## §72  When a description leaves the checkpoint's manifold, change the ENGINE, not the prompt
+
+Three prompt passes on RealVisXL for the three champions:
+
+| | asked for | got |
+|---|---|---|
+| Singed | a leather muzzle over the mouth with the big hooked nose bare above it | a modern rubber respirator covering his whole face |
+| Singed (pass 2) | the same, with "modern gas mask" negated | a bald man with no mask at all |
+| Mordekaiser | an empty helm with two teal flames where the eyes should be | a knight's helmet with a human face inside it |
+
+Sion came out right on the first attempt every time. That is the tell: RealVisXL is a
+**photorealism** checkpoint, and an undead warrior in bolted armour is a photograph it can
+imagine. Two flames floating inside an empty helmet is not. When a description leaves the
+manifold, the model does not render the description — **it renders the nearest photograph**,
+which is a man in armour. No amount of rewording moves it, because the wording was never
+the problem.
+
+Qwen-Image got all three right on the first attempt from almost the same words.
+
+The corollary is Qwen's own failure mode, which is the same property seen from the other
+side: **it is literal.** "The camera is lying on the stone floor" put a DSLR on the
+flagstones in every frame. Rephrased as "we are lying flat on our back on the floor", it
+rendered a man lying on the flagstones in every frame. Describe the viewpoint as pure
+geometry — where he is, where we are, which way his head is turned — and never name the
+apparatus or the observer.
+
+Both facts are one fact: Qwen renders what it is told, and RealVisXL renders what it has
+seen. Pick by which of those the shot needs.
+
+## §73  A negative subtracts the REGION, not the concept — second proof
+
+§68 learned this from captions: naming the bust took the bandeau with it. Negatives behave
+identically, and I walked into it twice in one afternoon.
+
+* `modern gas mask, respirator` did not move Singed's mask off his nose. **It deleted the
+  mask.**
+* `empty dark visor, closed faceplate` did not darken Mordekaiser's helm. **It filled it
+  with a face.**
+
+Both corrections had to move out of the negative and into the positive, as things being
+*described* rather than avoided. "Inside that slit there is only black emptiness, and
+floating in that emptiness are two burning pale teal flames" renders. "No face" does not,
+because **darkness is a thing that can be drawn and an absence is only an instruction.**
+
+Rule: if a correction is about what should be THERE, it goes in the positive. Put in the
+negative only what should not exist anywhere in the frame.
+
+## §74  `-t` after `-i` limits the OUTPUT — and a speed change makes it a silent no-op
+
+Cousin of the `-sseof` bug (§59), and it cost the same way: quietly, in the delivered file.
+
+```bash
+# WRONG - asks for 7.58s of a 4.13s output, and trims nothing at all
+ffmpeg -i zap.mp4 -t 7.583 -filter_complex "[0:v]setpts=PTS/1.9[v]" ... out.mp4
+
+# RIGHT - the trim happens before the speed change, where it means what it says
+ffmpeg -i zap.mp4 -filter_complex "[0:v]trim=end=6.5,setpts=(PTS-STARTPTS)/1.9[v];
+                                   [0:a]atrim=end=6.5,asetpts=PTS-STARTPTS,atempo=1.9[a]" ...
+```
+
+`-t` placed after `-i` is an **output** option. The 13 frames of fade-to-black it was meant
+to remove went straight into the film, and shot 5 delivered a cut from black to a blinding
+hall where the brief called for a blast carrying into the next shot. Nothing errored.
+
+Whenever a filter changes the time base, express trims **inside the graph**.
+
+## §75  Measure every cut, and require a reason for every large number
+
+One number per joint: mean absolute difference between each shot's last frame and the next
+shot's first. It found three separate faults in a single pass:
+
+```
+010 the lash      -> 020 the waking        3.22    both black, by design
+020 the waking    -> 030 the strut        21.84    same room, she is in it
+030 the strut     -> 040 the deception    52.83 -> 40.35
+040 the deception -> 050 the sigil        24.97 ->  4.22    the grade was MISSING on 040
+050 the sigil     -> 060 the fall        195.00 -> 63.68    ending on black, not the blast
+060 the fall      -> 070 stepped over    <big> ->  5.32    settling on a crop, not the plate
+070 stepped over  -> 080 the three       17.49 ->  1.46    render vs plate
+```
+
+There is no threshold. A deliberate cut *should* be large — 030→040 stays at 40 because one
+shot ends on an empty hall and the next begins with her appearing in it, which is the point.
+**The rule is that every large number has to have a reason, and "I meant that" has to be
+checkable.** Three of these did not have one:
+
+* 040 had never been graded at all. The violet was at full strength either side of it and
+  would have popped off and back on across a shot under a second long. A cut number caught a
+  missing *effect* — nothing else would have.
+* 050 ended on black (§74).
+* 060 settled onto the middle 55% of the ceiling because `fx_fall` works inside a 1.8x
+  oversize and was still cropping frame-sized at rest, while 070 opened on the whole plate.
+  The vault jumped wider and a torch appeared. Fix: widen the crop to the full oversize
+  across the settle, so **the last frame IS the plate, pixel for pixel** — which also reads
+  better than the fault it repairs.
+* 070→080 was a render's vault against the plate file. Shot 8 now opens on shot 7's actual
+  last frame and dissolves to the plate in a third of a second, before anything leans in.
+
+Run it after every rebuild. It is thirty seconds and it reads the film in a way watching it
+does not.
+
+## §76  Recolour rather than re-render when only the COLOUR is wrong
+
+The brief turned the orb from violet to gold. The existing take already did the hard part —
+the orb builds on her staff, DETACHES, rushes the lens and swells until it fills the frame —
+and that motion cost a pinned render. Re-rendering to change a hue puts the room, the
+costume and the timing back on the table to win one thing (§61).
+
+`orb_gold.py` moves the hue in a **window**, not a rotation: violet-magenta only
+(244°–338° with soft shoulders), weighted by saturation so white-hot cores stay white, with
+a small warm lift on what the fireball is lighting. A global rotation would have taken the
+torch flames with it — orange to green — and the torches are the one warm thing in this hall
+that must not move.
+
+The general form: ask what is actually wrong. If it is a colour, a level, a grade, a
+duration or a crop, it is arithmetic on the delivered frames. Re-render only when the
+*content* is wrong.
+
+## §77  Dissolve into a de-populated copy of the end pin instead of matting a fade
+
+Shot 3 needed her to go transparent as she kisses the lens. `fx_ghost` mattes her by
+differencing every frame against a clean plate, which requires the plate to be the same room
+to the pixel. Here nothing qualified: the beat is pinned to the STRUT's hall at one end and a
+COMPOSITED pin's hall at the other, and a matte built on a plate matching neither eats the
+torches.
+
+So the end pin was built twice by the same script from the same room file — once with her,
+once without. The camera is locked off, so the two pictures **differ only where she is**,
+which means a plain global cross-dissolve to the empty one removes exactly her, needs no
+matte, and cannot damage the room. The blend rises as u³, so she is solid through the
+caress, translucent through the kiss, and gone on the cut.
+
+It has a second payoff. The empty pin still contains the *far* her standing on the stairs,
+so the reveal the whole shot exists for arrives *through* the same dissolve that takes the
+near her away.
+
+Cost: one extra composite, built by re-running the builder with one block removed. Do it
+that way — rebuild the empty pin **with the same script**, never by another route, or the
+dissolve starts removing torches again.
+
+## §78  Two composite habits worth keeping
+
+Both came out of shot 8 and both are one-liners that decide whether a composite reads.
+
+**Place by the subject's measured head, not by its image box.** Three mattes, three
+different subject heights inside their own canvases; placing each "at a corner" put Sion's
+skull in the bottom-left, half out of frame, with the top of the vault empty. Find the alpha
+bounding box, take its top quarter — the head, for any figure rendered leaning toward the
+lens — and use the centroid of alpha in that band as the anchor. Then the layout is written
+in the terms the shot is about: *this face, at this point, this wide.* Scale by the alpha
+box's width too, never the canvas: the canvas width has nothing to do with how big he looks.
+
+**Feather a matte wherever it touches the border of the render it was cut from.** A figure
+that runs off the bottom of its own picture produces a matte that ends in a dead straight
+line, and that line is instantly the most visible thing in the frame — it was a rectangle
+around Sion's shoulders and another around her hair in the kiss pin. Fade the alpha over the
+last sixth on any edge the matte actually reaches. It is honest as well as invisible: what
+the matte draws past that edge was always a guess.
+
+## §79  A shot built silent is a shot with no room tone, and `duration=first` will find it
+
+Shots 6, 7 and 8 were composited from stills and encoded `-an`, correctly — there is no
+production sound in a fall built from two photographs. The consequence was not obvious: the
+**assembled scene's audio ends where the last shot with a soundtrack does**, twelve seconds
+short of its own picture, and `amix=duration=first` then truncated the entire film to that.
+Every laugh and the closing line were being placed into a file that had already ended. The
+picture was perfect and a third of the film was silent.
+
+Two things follow.
+
+**Pad the scene's audio to the picture before mixing anything into it** —
+`[0:a]apad=whole_dur=<video duration>[sc]` — and add `-shortest` to the mux, or the audio
+outruns the video the other way and the container ends on a blank tail.
+
+**A silently-built shot still needs a room.** Digital silence arriving exactly when we hit
+the floor reads as a fault, not as a scene. Room tone was cut from the film's own hall audio
+and filtered down (`lowpass=760`, `-33 LUFS`) until nothing in it is identifiable as an
+event, then looped under the last three shots. Shot 7 got something better: H3 renders
+NATIVE audio, and the step-over takes had real bootsteps on stone overhead, which I had
+thrown away with `-an` when joining the picture. **The same two frame ranges were cut out of
+the same two takes' audio and joined the same way**, so the steps land on the boots.
+
+And the landing thud is the film's own chain sound pitched down an octave and a half and
+rolled off — not for economy, but because we are a chained prisoner going down on stone, and
+what hits the floor with us is what we are tied to.
+
+## §80  Audit the delivered mix, not the command that produced it
+
+Placing a cue at a computed time proves the ffmpeg was written correctly. It proves nothing
+about whether the sound is *audible*. `s17_audit.py` renders the finished master as an
+envelope with every cue and every shot boundary marked, and prints, for each cue, the level
+in the 0.4s after it against the 0.4s before.
+
+It caught, in one pass:
+
+* the twelve-second silence of §79, immediately and unmistakably;
+* both orb impacts measuring **quieter than the half second before them** — the take's own
+  arcane shriek peaks exactly there and the cues were sitting under it at unity. They came
+  up, and the music bed now dips around the pair on a smooth bell (never a gate — a gate
+  clicks);
+* a decoded peak of 1.305 (+2.3 dBFS) despite a limiter at 0.92, because **`alimiter`'s
+  `level` option is on by default and re-normalises its output back up after limiting it.**
+  `alimiter=limit=0.85:level=disabled` with `loudnorm TP=-2.0` delivers −1.1 dBFS.
+
+A cue that does not lift the level it lands on is a cue nobody will hear, however correctly
+it was placed.
+
+
+## §81  Use a character's own art as a REFERENCE, not as an img2img source
+
+The costume came out of the LeBlanc splash by img2img (§70's successor), so the three
+champions were tried the same way. It failed, for a reason that is specific and worth
+keeping: **img2img preserves the pose, and a splash IS a pose.** Mordekaiser's official art
+is a full-body silhouette in fog whose helm is nearly featureless against a bright sky —
+there is no bust in it to convert. Below 0.5 denoise nothing became photographic; above it
+the designs came apart (Sion into a burnt skull, Singed into a leather aviator).
+
+qwen-edit's reference encoder (`14_qwen_edit_ref.json`) takes the art as a DESIGN reference
+and generates from an empty latent, so the pose is free and the character is not. Sion's
+bolted plates and the red furnace in his chest, Singed's bare hooked nose above the white
+mask on his chin, Mordekaiser's spike pattern and teal seams all came from the pixels
+instead of from a sentence — which is exactly what three passes of description had failed
+to buy (§72).
+
+**The reference cannot supply what it does not show.** Every official picture of
+Mordekaiser has a dark slot where the face would be, so the model filled the slot with the
+thing usually behind a visor: a human face, three times running. That one detail had to be
+described in the positive, as a thing that exists — "black emptiness with two burning teal
+flames floating in it" (§73). Reference for everything visible; words only for what the
+reference is silent about.
+
+Crop the reference onto the head. A reference that is 60% torso teaches the model that this
+is a shot of a torso.
+
+## §82  Some of the director's words describe the PICTURE, not its contents
+
+"Where her lips are seen as if kissing a see-through glass window" is an exact and useful
+note. Passed through into a prompt it produced a framed pane with her reflection in it, and
+on two seeds a second her kissing the first. Every one of those is a correct rendering of
+"a woman kissing a pane of glass" and none of them is a POV kiss.
+
+The pane is not in the shot. **It is where the audience is sitting.** So the prompt describes
+only the CONTACT — lips flattened and spread, pale where they press, edges out of focus
+because they are nearer than the focal plane, breath blooming around them — and every word
+about glass, panes, windows and mirrors moves to the negative.
+
+Ask of every phrase in a note: is this a thing in the frame, or a description of how the
+frame should look? They need opposite treatment.
+
+## §83  When a model's prior beats three prompts, stop asking and construct it
+
+Qwen gave the kiss framing on the first attempt and would not give the one detail that
+mattered: lips SPREAD FLAT by contact rather than pursed forward. Three passes, including a
+negative naming pouts and duck faces explicitly. Its prior for "kiss" is a pucker and it does
+not move.
+
+A mouth pressed against a pane does three measurable things, and all three are arithmetic:
+it **spreads** (wider and shorter, about 4:3 on its resting shape), it **blanches** (flesh
+under pressure loses blood and goes pale and shiny), and it **softens** (it is nearer than
+the focal plane). `press_lips.py` does all three with a smooth radial warp around the mouth,
+in one pass, deterministically. This is §21 again and it keeps being right: **what must be
+exact is constructed, not requested.**
+
+One trap inside the fix, which is general to every auto-locate: the first mouth detector
+found her whole face, because under the violet grade her skin is pink too, and the warp
+stretched the crown with it. Lips differ from skin by SATURATION, not hue. And the radius is
+now capped at what a mouth can actually be in the framing — **a detector that cannot report
+something implausible cannot warp something implausible.**
+
+## §84  A hardcoded take path is a bug waiting for the next rebuild
+
+Shot 8 opens by dissolving out of shot 7's real last frame, and the path to that frame was
+written into the build script as `takes/070/stepover.mp4`. Shot 7 was rebuilt and registered
+under a new name, and shot 8 went on handing over from the retired take — it opened on the
+OLD ceiling and cut to the new one a third of a second later, which is precisely the fault
+the handover exists to prevent.
+
+Anything that reads another shot asks the film which take is PICKED. Never a filename.
+
+## §85  Assemble a shot's audio from the same ranges as its picture
+
+Shot 5 was rebuilt as three frame ranges — the displacement, the gold arrival, and the
+violet arrival — and its audio was assembled from only two of them. `apad` filled the
+0.74s difference with digital silence, and the silence landed exactly on the second impact:
+the violet orb arrived to nothing but its own sound effect, with the room gone.
+
+The picture was perfect and nobody watching a strip would ever see it. It took the mix audit
+(§80) reporting **−88.8 dB in the half second before a cue** to find.
+
+The fix was written by how the shot was built: the violet arrival IS the gold arrival's
+footage played again, so it gets the gold arrival's AUDIO played again — the same orb making
+the same noise twice, which is what the shot is. Whenever picture is assembled out of
+ranges, assemble the sound out of the same ranges.
+
+## §86  Two right answers in one frame: move one, do not compromise both
+
+The note "her face is taking up most of the view" and the note "her double is already
+visible on the stairs" were both correct and they collided: the staircase runs up the middle
+of the hall, which is exactly where a face big enough to satisfy the first one goes.
+
+The wrong fix is to split the difference — a smaller face and a hidden double satisfies
+nobody. The right fix is to move the SUBJECT of one note out of the other's way: the double
+came off the centre line and down the steps to the right, into the part of the hall the near
+her never covers. Both notes then hold at full strength.
+
+Composited elements can be moved. That is most of what compositing is for.
+
+## §87  Synthesise a beat grid rather than generating a music cue
+
+"Shot 2 should have heavier beats" and "shot 2 and shot 3 should sync up better" are two
+requests that a generated cue turns into two problems — you get a performance, and then the
+cut has to be talked into agreeing with it.
+
+Synthesised on a grid they are one fact. A tempo is chosen so the DELIVERED length of shot 2
+is a whole number of beats (95 BPM gave 3.99 beats across 2.521s), the grid starts exactly on
+the cut into shot 2, and shot 3 inherits it at 42% level. The two shots are then in step by
+construction, and the downbeat lands on both cuts.
+
+Each hit is a kick built from parts rather than a sample: a pitch envelope from 78Hz to 41Hz
+in 70ms for the thump, a 6ms noise transient for the beater, and a 33Hz sub for the room.
+
+## §88  When one property will not separate a thing, mask on two
+
+Shot 4 has to hold the violet spell over the whole hall AND carry a gold orb inside it. The
+two operations fight: grade first and the wash re-violets the gold; recolour first and the
+grade does it anyway. Chaining cannot work in either order, so they are MASKED — one mask
+decides which operation each pixel gets.
+
+A brightness mask alone failed. It took the golden chains and the torch flames with it and
+pulled them out from under the spell, because they are bright too. But **the orb is the only
+thing in the frame that is bright AND violet** — the chains are bright and gold, the mist is
+violet and dim. Multiplying the brightness gate by the hue-window weight isolated exactly one
+thing and dropped the masked area from 21% of the frame to 6%.
+
+When a mask is taking too much, the question is not "what threshold" but "what SECOND
+property does the thing I want have that the things I am catching do not".
+
+
+## §89  `atrim` trusts timestamps; `apad` counts samples. Normalise before you filter
+
+The single most expensive bug in this project so far, and it is one filter.
+
+Shot 3's take held **7.70s of audio samples while its audio stream's timestamps already ran
+to 11.00s** — a gap opened by a `-shortest` several rebuilds earlier. Then:
+
+```
+apad=whole_dur=11                 pads by SAMPLE COUNT     -> 11.00s   correct
+apad=whole_dur=11,atrim=0:11      atrim cuts by TIMESTAMP  ->  7.70s   wrong
+```
+
+`atrim` was doing exactly what it exists to do. It read a timestamp of 11.00 at the 7.70s
+mark and stopped, because as far as the clock was concerned the stream was over.
+
+**When a file's declared duration and its sample count disagree, every filter that works in
+time will disagree with every filter that works in samples.** Rebuild the clock from the
+samples first — `aresample=48000,asetpts=N/SR/TB` — and only then pad, trim or mix. Take the
+ceiling from `-t` on the output rather than from a filter that trusts the input.
+
+The tell is free and was printed the whole time: `non monotonically increasing dts` on
+decode. It is not noise.
+
+## §90  One gap, four symptoms — chase the measurement, not the symptom
+
+That single 3.3s gap presented as four apparently unrelated faults, and I fixed three
+things that were not broken before finding it:
+
+| symptom | what I blamed | what it was |
+|---|---|---|
+| master ends 3.3s early | `amix duration=first` | the gap |
+| a hole in the mix before the gold orb | shot 5's audio assembly | the gap |
+| the closing line lands in silence | `-shortest` on the mux | the gap |
+| the hand-built bed "loses" 3.3s in concat | the concat demuxer | the gap |
+
+Every one of those hypotheses was plausible and each got a patch. What ended it was
+**printing the per-shot measurement**: asked 11.000s, got 7.700s, on one line, next to the
+seven shots that were fine. Ten minutes of bisecting `amix` produced nothing; one table
+produced the answer instantly.
+
+When a total is wrong, print the parts before theorising about the operation that combined
+them.
+
+## §91  Build the scene's audio bed yourself as soon as any shot is silent
+
+Three shots in this film are composited from stills and carry no production sound, which is
+correct — there is nothing to record in a fall built from two photographs. The assembler's
+concat does not survive them: its audio stops partway through the last shot that HAD sound,
+and everything after arrives in the master as digital silence with the container still
+advertising a full-length stream.
+
+So the bed is assembled from the same picked takes the picture is cut from: each shot's
+audio clock rebuilt, padded to its own VIDEO duration, silent shots contributing exactly
+their length of silence, concatenated with the concat FILTER (decoded samples, no container
+timestamps to disagree about). It cannot drift, because it is built out of the picture's own
+parts and each part is cut to its own length.
+
+And it is checked against the cut before anything is muxed.
+
+## §92  Render the mix to a file and measure it before it meets the picture
+
+A single ffmpeg invocation that mixes, encodes and muxes cannot tell you which of those went
+wrong, and this one was silently dropping three seconds. Rendering the mix to a WAV first
+costs one pass and makes the length a fact you can read:
+
+```
+  mix rendered: 37.435s against 37.435s of picture
+```
+
+Then pad if short, fail loudly if it cannot be reconciled, and only then mux. Three
+verifiable steps beat one unverifiable one, and the print is what turns the next regression
+into a line of output instead of a delivered master.
+
+## §93  A matte gives you the region you named — and a mask over a face is not the face
+
+SAM 3.1 was asked for "the bald head with the white face mask" and returned the head with a
+HOLE where the mask is. Twice, on two different characters. Which is defensible — a mask is
+not a head — and it deleted the one feature each of them is identified by.
+
+Three fixes, in increasing order of preference:
+
+1. **Name every part and union them.** Works, and introduces its own seam: where two
+   separate segmentations disagree you get a ragged band of nothing, which is how Singed
+   ended up with no eyes.
+2. **Keep the largest connected component.** Kills every floating fragment for free and
+   needs no per-subject tuning — a head with a mask on it is one connected thing, and
+   anything not touching it was never wanted. Do this regardless.
+3. **Use a salient-object matte (BiRefNet) when the frame holds ONE subject on a plain
+   ground.** It has no opinion about where a head stops and a mask starts because it is not
+   being asked. A named matte earns its keep when the frame holds a thing you want AND a
+   thing you don't; here it was solving a problem that did not exist.
+
+## §94  Pinning to another engine's render is a CUT, not a push-in
+
+Shot 3's kiss beat was pinned to a Qwen close-up. The director's note came back: "the kiss
+is changing the camera view, we don't want that."
+
+Exactly right, and worth stating as a rule. A Qwen close-up is its own photograph — its own
+lens, its own hall, its own light. Pinning a shot to it does not move the camera IN, it
+CUTS to a different camera, and no amount of prompting about locked-off framing changes that,
+because the destination frame really was taken from somewhere else.
+
+For a camera MOVE, both pins must be composites of the same plate, differing only in how big
+the subject is. Then the room, the foreground chains and the figure on the staircase are the
+same pixels at two scales, and the only thing that changed between them is the framing —
+which is what a push-in is.
+
+The corollary: a constructed pin is not automatically a safe pin. It is safe when it shares
+its provenance with the pin at the other end.
+
+
+## §95  THE METHOD - invariants for building a story and building a shot
+
+A pair of paid Seedance 2.0 breakdowns (2026-09-07) were worth reading for their *shape*: refs
+before words, a fixed prompt anatomy, a rulebook, post as half the film. Their engine is not ours
+- multi-reference conditioning and 15-second generations are model features we do not have and
+have measured the absence of (§18, `docs/WHERE-WE-STAND.md`). What follows is that shape rebuilt
+on what this studio has actually measured. It is the template for every story and every shot
+from here; the human A-Z is `docs/METHOD.md`, the agent summary is `/CLAUDE.md`.
+
+### 95.1  How a story is built - nine invariants
+
+**S1 · Refs before words.** No shot is written until every character in it is a pack (portrait,
+turnaround, expressions) and every place has a plate. A prompt describes action, framing and
+sound; it never describes a face, a wardrobe or a room a reference already carries.
+*(Wide anchor swallows the subject; the caption rule; §56-57.)*
+
+**S2 · One identity route per character, chosen by measurement, recorded on the pack.** The
+reference-image path is the default. A trained face is used only where it beat the reference on
+three seeds with a margin above its own spread (2 of 8 drawn packs did). Never both at once:
+combined, the two routes scored 0.768 on one pack and 0.436 on another. *(§56, block 6.)*
+
+**S3 · A scene is one place, one light, one anchor.** The scene anchor is a single keyframe that
+holds person, wardrobe, place and light together; every shot in the scene starts from it unless
+it deliberately continues from the previous shot's last frame. *(keyframe doctrine, §18.)*
+
+**S4 · One beat per shot when a face matters.** An internal cut re-derives faces from the scene
+prior; it holds only when the character is already IN the start frame. So: cuts between faces
+happen at assembly; cuts inside one generation are for beats with no face, or with the face in
+frame one. *(§18, measured.)*
+
+**S5 · Length comes from the envelope, pacing from the edit.** 0.9 MP → 30 s, 1.2 MP → 20 s,
+1.5 MP → 12 s, 2.0 MP → 8 s (`LTX_SAFE`). Timecodes in a prompt set nothing on LTX-2.5 - two
+runs, two seeds, four forms; every variant paced its beats at thirds - and the word *cut* is
+what makes a hard cut. A beat that must run long is its own shot. *(`timecode_test.py`.)*
+
+**S6 · Sound is written, never hoped.** Name the noise sources in every shot; "a quiet room"
+renders silence. Dialogue only through an on-screen mouth. Write *no music* when the edit owns
+the score; the scene bed comes from ACE-Step at the finish. *(LTX sound clauses; lip-sync.)*
+
+**S7 · Continuity of place is the plate, not a LoRA.** A LoRA gives *a* classroom; the plate
+gives *the* classroom. Weights are for what must be identical across shots and cannot be
+photographed in advance - a face, a costume - and even then they do not stack past two.
+*(§57; the crown card; block 6.)*
+
+**S8 · The finish is half the film.** One look for the whole film (filmic by default), applied
+after the cuts; the canvas follows the takes; the 2× master when it is wanted; loudness levelled;
+and the frame count of the film equals the frame count of its takes, checked, not assumed.
+*(`docs/WHERE-WE-STAND.md` §5.)*
+
+**S9 · Nothing is adopted on one render.** Three seeds; a margin that beats its own spread;
+identity, QC and angle read on every take; a strip looked at beside every detector. The take is
+chosen, not lucky. *(block 6; every measurement in this file.)*
+
+### 95.2  How a shot is built - the seven blocks
+
+The compiler's fields, in the order a person should think about them. Blocks 1 and 6 belong to
+the scene and the film; a shot only ever writes blocks 2-5 and 7.
+
+| block | field(s) | the rule |
+|---|---|---|
+| **1 · Start frame** | `anchor`: scene / prev_last / generate / `file:<path>` | The references live here, resolved *before* generation. Never describe in words what this frame already carries. A bought frame drops in as `file:`. |
+| **2 · Who and what** | `subject`, `action`, `motion` | The cast id, which the compiler expands; one mover per beat; a whole body travelling, never a fast limb against a still torso (it renders twice); garments named only when no reference carries them. |
+| **3 · Framing and camera** | `framing`, `move` | One framing phrase, one move; the camera has a job or the model gives it one. Angles are performed on the plate, not described. Handheld micro-motion for photoreal. |
+| **4 · Beats** | `beats[]`, `transition_in` | At most four, ordinal, joined by *hard cut* - the word makes the cut, numbers do not pace it. A beat with a face keeps the face in the start frame or becomes its own shot. |
+| **5 · Sound** | `dialogue`, `sfx`, `ambience` | Sources named; the line in quotes for a mouth on screen; silence written as a noise; *no music* where the edit owns the score. |
+| **6 · Look** | film: `look`, `grade`, `negative` | Set once per film. The grade line in the prompt is a hint; the real grade is the finish's. The negative is the film's spellbook: what usually breaks, plus whatever broke on this shot's last take, copied in its own words from the QC line. |
+| **7 · Check** | the take: `identity`, `qc`, `angle_measured` | Read before picking. A wrong face says which of three things to do - build a trained face, fix the shot not the likeness, or stop retraining a face that already lost. Never pick a take with a fault the QC named. |
+
+### 95.3  What this method cannot do, stated so nobody prompts for it
+
+- Carry N tagged identities into one generation (interface: one start frame, two for first-last).
+- Pace beats inside one generation by timecode.
+- Train a photoreal face on the anime trainer (base is animagine-xl-4.0; the SDXL trainer is
+  in progress in the other session).
+- Stack more than two LoRAs (the third breaks the render).
+- Improve a take by sharpening its start frame (−0.038, −0.070, −0.029 identity, 3 of 3).
+
+The method, in one line: *references first, one identity route per face, one anchor per scene,
+one beat per face, length from the envelope and pacing from the edit, sound written, place from
+the plate, the finish as half the film, and nothing kept on one render.*
