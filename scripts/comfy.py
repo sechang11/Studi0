@@ -74,7 +74,15 @@ def run(host, wf, quiet=False):
     resp = api(host, "/prompt", {"prompt": wf, "client_id": client_id})
     if "error" in resp:
         print(json.dumps(resp, indent=2), file=sys.stderr)
-        sys.exit(1)
+        # raise, never exit: inside a studio job thread sys.exit is a SystemExit that no
+        # `except Exception` sees, and the job then reads "running" forever
+        err = resp.get("error") or {}
+        nodes = resp.get("node_errors") or {}
+        detail = "; ".join("%s: %s" % (n, "; ".join(str(e.get("message", e)) for e in (v.get("errors") or [])))
+                           for n, v in nodes.items()) if isinstance(nodes, dict) else str(nodes)
+        raise RuntimeError("ComfyUI rejected the prompt: %s%s" % (
+            err.get("message", err) if isinstance(err, dict) else err,
+            (" - " + detail) if detail else ""))
     pid = resp["prompt_id"]
     if not quiet:
         print(f"queued {pid}", file=sys.stderr)
@@ -89,7 +97,8 @@ def run(host, wf, quiet=False):
             if status.get("status_str") == "error":
                 for m in status.get("messages", []):
                     print(m, file=sys.stderr)
-                sys.exit(1)
+                raise RuntimeError("ComfyUI reported an error for prompt %s: %s"
+                                   % (pid, str(status.get("messages", ""))[:300]))
             if status.get("completed"):
                 break
         q = api(host, "/queue")

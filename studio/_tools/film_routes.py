@@ -476,7 +476,14 @@ def _render_scene_anchor(jid, fid, scid):
         elif look == "anime":
             wf = load_wf("22_anime_kf_ipadapter.json")
             ch = f.data["cast"].get(present[0]) if present else {}
-            set_path(wf, "2.inputs.image", (ch or {}).get("sheet") or "")
+            _sheet = (ch or {}).get("sheet") or ""
+            if _sheet and os.path.isabs(_sheet) and os.path.exists(_sheet):
+                # LoadImage validates against ComfyUI/input - stage the sheet there, by content
+                _staged = "kf_sheet_%s%s" % (hashlib.md5(_sheet.encode()).hexdigest()[:10],
+                                             os.path.splitext(_sheet)[1] or ".png")
+                shutil.copy(_sheet, os.path.join(COMFY, "input", _staged))
+                _sheet = _staged
+            set_path(wf, "2.inputs.image", _sheet)
             set_path(wf, "4.inputs.weight", 0.3)
             set_path(wf, "5.inputs.text", "%s, %s, masterpiece, best quality, anime key "
                      "visual, %s" % ((ch or {}).get("tags") or prompt, ground,
