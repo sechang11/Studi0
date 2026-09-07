@@ -1,0 +1,102 @@
+{
+ "prompt_A": "Shot 1: a wide shot of the empty airship deck at dawn, rope rails, the sky brightening, the camera slowly drifting forward. Shot 2: a close shot of the ship's wheel, brass worn bright, turning a little on its own, the camera holding still. Shot 3: a wide shot looking straight up at the great canvas envelope overhead, clouds sliding past behind it, a slow tilt. The shots are connected: the same place, the same lighting and the same visual style across every cut.",
+ "prompt_B": "0-2s: a wide shot of the empty airship deck at dawn, rope rails, the sky brightening, the camera slowly drifting forward. 2-8s: CUT to a close shot of the ship's wheel, brass worn bright, turning a little on its own, the camera holding still. 8-12s: CUT to a wide shot looking straight up at the great canvas envelope overhead, clouds sliding past behind it, a slow tilt. The shots are connected: the same place, the same lighting and the same visual style across every cut.",
+ "asked": [
+  2.0,
+  8.0
+ ],
+ "seconds": 12,
+ "rows": [
+  {
+   "label": "A_ordinal",
+   "seed": 1234,
+   "clip": "samples/timecode/A_ordinal_1234.mp4",
+   "found": [],
+   "asked": [
+    2.0,
+    8.0
+   ],
+   "dist_to_asked": [
+    null,
+    null
+   ],
+   "dist_to_thirds": [
+    null,
+    null
+   ],
+   "n_found": 0,
+   "secs": 65
+  },
+  {
+   "label": "B_timecoded",
+   "seed": 1234,
+   "clip": "samples/timecode/B_timecoded_1234.mp4",
+   "found": [
+    8.0
+   ],
+   "asked": [
+    2.0,
+    8.0
+   ],
+   "dist_to_asked": [
+    6.0,
+    0.0
+   ],
+   "dist_to_thirds": [
+    4.0,
+    0.0
+   ],
+   "n_found": 1,
+   "secs": 52
+  },
+  {
+   "label": "A_ordinal",
+   "seed": 77,
+   "clip": "samples/timecode/A_ordinal_77.mp4",
+   "found": [],
+   "asked": [
+    2.0,
+    8.0
+   ],
+   "dist_to_asked": [
+    null,
+    null
+   ],
+   "dist_to_thirds": [
+    null,
+    null
+   ],
+   "n_found": 0,
+   "secs": 52
+  },
+  {
+   "label": "B_timecoded",
+   "seed": 77,
+   "clip": "samples/timecode/B_timecoded_77.mp4",
+   "found": [
+    3.12,
+    3.38,
+    3.75,
+    4.12,
+    7.88,
+    8.25,
+    8.62,
+    8.88
+   ],
+   "asked": [
+    2.0,
+    8.0
+   ],
+   "dist_to_asked": [
+    1.12,
+    0.12
+   ],
+   "dist_to_thirds": [
+    0.12,
+    0.12
+   ],
+   "n_found": 8,
+   "secs": 52
+  }
+ ]
+}
