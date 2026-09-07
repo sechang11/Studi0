@@ -175,10 +175,10 @@ picture; it does not any more.
 
 ## J · A worked example — three shots, one scene
 
-*Terra* (an anime character with a trained face) at the *forest shrine*, at dusk. One scene, one
+*Terra* (an anime character with a trained face) at the *forest shrine*, at dawn. One scene, one
 anchor, three shots, cut at assembly.
 
-**Scene:** place *forest-shrine*, light *dusk*, cast *terra*. Film look *anime*. Negative:
+**Scene:** place *forest-shrine*, plate *dawn_wide*, cast *terra*. Film look *anime*. Negative:
 *lowres, bad anatomy, extra limbs, text, watermark, nsfw*.
 
 **Shot 1 · the arrival** — anchor: *scene*. Subject *terra*. Action: *walks in from the left along
