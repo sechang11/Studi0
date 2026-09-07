@@ -16,14 +16,17 @@ where we need them? Or build our own Seedance?"*
 | Native audio and lip-sync | yes | yes — LTX-2.5 joint audio, dialogue lip-synced through an on-screen mouth (measured, playbook) | **match** |
 | Several shots / hard cuts inside one generation | yes | yes — LTX-2.5 multishot, measured with `_tools/multishot.py` (cut detector: frame-difference spikes above the clip's own median + k·MAD) | **match** |
 | Post: upscale, grade, sound design | their Rule 10: *"post is half the film"* | per-take FILM-net interpolation to 48 fps, loudness levelling, scene music under at 0.5. **No grade, no upscale** on the film path | **free win, not yet taken** → §4 |
-| Multi-reference conditioning (`@CHARAC1 @CHARAC2 @PLACE` as separate tagged images) | native | LTX-2.5 i2v: **1** image (start frame). flf2v and H3 first-last: **2** (first + last). Nothing takes N tagged identities | **architectural gap** → §2 |
+| Multi-reference conditioning (`@CHARAC1 @CHARAC2 @PLACE` as separate tagged images) | native | LTX-2.5 i2v: **1** image (start frame). flf2v and H3 first-last: **2**. **H3 ref2va: up to 9 tagged `<Picture i>` references + video/audio refs, native** (`MiniMaxH3ReferenceToVideo`; weights on disk since the collector; wired 2026-09-07 as workflow 63) | **present, unmeasured until §6** → §2 |
 | Raw fidelity and motion realism | frontier-scale training | LTX-2.5 (22 B, open weights) for motion; **Qwen-Image / Qwen-Edit** for photoreal keyframes, **SDXL (animagine-xl-4.0)** for anime keyframes | **scale gap** → §3 |
 
 Both video engines are local weights (`UNETLoader` / `VAELoader` / `SamplerCustomAdvanced`
 in `60_minimax_h3_i2v.json`; the LTX graphs likewise). The studio spends nothing per render today.
 
-So "they have better models" is true for the last two rows and false for the first four.
-Three of the four rows we do not lose on are things nobody has to pay for.
+So "they have better models" is true for the fidelity row, false for the first four, and the
+multi-reference row - written as an architectural gap on 2026-09-07 - was wrong: the box has had
+a native reference-to-video route since the collector pulled `minimax_h3_ref2va` "in case words
+are not enough", and nobody wired it. The first measurement is in §6. Three of the rows we do not
+lose on are things nobody has to pay for.
 
 ## 2. The architectural gap: references resolved inside the model
 
@@ -33,9 +36,9 @@ across every shot and across the internal cuts of a 15-second generation.
 
 We independently arrived at the same law (never describe what a reference carries; `film_routes`
 forces the reference weight to 0 when a trained face is present; `caption_wear.py` captions
-garments only so the face welds onto the trigger). What we cannot do is *feed* N references,
-because the model interface takes one frame. And we have already measured the consequence —
-it is a warning the compiler emits, verbatim:
+garments only so the face welds onto the trigger). On the LTX route we cannot *feed* N references,
+because that interface takes one frame - and we have already measured the consequence; it is a
+warning the compiler emits, verbatim:
 
 > identity: an internal cut re-derives faces from the scene prior — the start frame's face does
 > not survive it. Either compose the anchor so the character is IN the start frame (the cut then
@@ -55,7 +58,7 @@ So the studio *has* a reference system. It resolves references at a different ti
 
 | where identity is resolved | theirs | ours |
 |---|---|---|
-| inside the video model, at generation | `@refs` | — |
+| inside the video model, at generation | `@refs` | H3 `ref2va` (`<Picture i>` tags) - present, measured in §6 |
 | before generation, composited into the start frame | — | anchors, plates, `compose_close` |
 | inside the weights | — | character / costume LoRAs (2 of 8 anime packs survived a three-seed gate; §57's costume-LoRA + face-transplant recipe for photoreal) |
 | in the edit | — | one-beat shots from identity keyframes, cut at assembly |
@@ -215,6 +218,12 @@ Still missing from the finish, in order of value: sound design beyond the scene 
 scene that wants to read differently from the film.
 
 ## 6. Measured results
+
+**H3 ref2va — reference-to-video, first wiring (2026-09-07).** *Result recorded below when the
+render lands; the first attempt killed ComfyUI by loading the 20 GB model on top of resident LTX,
+which is why `ref2va_test.py` now asks for the memory back and waits before it submits.*
+
+__REF2VA_RESULT__
 
 **Timecoded beats — run 1** (12 s, three beats, asked cuts at 2 s and 8 s, seeds 1234 and 77):
 

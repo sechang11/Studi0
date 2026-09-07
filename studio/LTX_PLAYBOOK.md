@@ -4191,8 +4191,11 @@ sound; it never describes a face, a wardrobe or a room a reference already carri
 
 **S2 · One identity route per character, chosen by measurement, recorded on the pack.** The
 reference-image path is the default. A trained face is used only where it beat the reference on
-three seeds with a margin above its own spread (2 of 8 drawn packs did). Never both at once:
-combined, the two routes scored 0.768 on one pack and 0.436 on another. *(§56, block 6.)*
+three seeds by a margin greater than max(0.02, spread/2) - `pack_lora.py`, the code's own gate;
+Terra passed it at 0.080 against a spread of 0.091. Two of eight drawn packs did. Never both at
+once: combined, the two routes scored 0.768 on one pack and 0.436 on another. On the roster,
+**level 1 is a complete pack and the casting floor**; level 2 means the pack also carries a
+trained face - a bonus rung, not a requirement (`foundry.level_of`). *(§56, block 6.)*
 
 **S3 · A scene is one place, one light, one source for every start frame.** Each shot's anchor
 is composed from the scene's plate and the character's pack - person, wardrobe, place and light
@@ -4211,7 +4214,9 @@ frame one. *(§18, measured.)*
 **S5 · Length comes from the envelope, pacing from the edit.** 0.9 MP → 30 s, 1.2 MP → 20 s,
 1.5 MP → 12 s, 2.0 MP → 8 s (`LTX_SAFE`). Timecodes in a prompt set nothing on LTX-2.5 - two
 runs, two seeds, four forms; every variant paced its beats at thirds - and the word *cut* is
-what makes a hard cut. A beat that must run long is its own shot. *(`timecode_test.py`.)*
+what makes a hard cut. A beat that must run long is its own shot. The face clock is by MOTION,
+not by look: across 142 takes a still holds ~4.3 s, a walk ~4.0 s, and a crouch is not followable
+(both crouch takes lost the face, median hold 0.56 s). *(`timecode_test.py`; `face_clock.json`.)*
 
 **S6 · Sound is written, never hoped.** Name the noise sources in every shot; "a quiet room"
 renders silence. Dialogue only through an on-screen mouth. Write *no music* when the edit owns
@@ -4240,7 +4245,7 @@ the scene and the film; a shot only ever writes blocks 2-5 and 7.
 |---|---|---|
 | **1 · Start frame** | `anchor`: scene / prev_last / generate / `file:<path>` | The references live here, resolved *before* generation. Never describe in words what this frame already carries. A bought frame drops in as `file:`. |
 | **2 · Who and what** | `subject`, `action`, `motion` | The cast id, which the compiler expands; one mover per beat; a whole body travelling, never a fast limb against a still torso (it renders twice); garments named only when no reference carries them. |
-| **3 · Framing and camera** | `framing`, `move` | One framing phrase, one move; the camera has a job or the model gives it one. Angles are performed on the plate, not described. Handheld micro-motion for photoreal. |
+| **3 · Framing and camera** | `framing`, `move`, and the shot's `engine` | One framing phrase, one move; the camera has a job or the model gives it one. Angles are performed on the plate, not described. Handheld micro-motion for photoreal. The engine is a field, default LTX-2.5 - nothing infers it; a beat whose `motion` is one of the in-place motions is pinned between two frames (H3) automatically, and H3 honours pins for motion that stays in place and ignores them for a walk (measured twice). |
 | **4 · Beats** | `beats[]`, `transition_in` | At most four, ordinal, joined by *hard cut* - the word makes the cut, numbers do not pace it. A beat with a face keeps the face in the start frame or becomes its own shot. |
 | **5 · Sound** | `dialogue`, `sfx`, `ambience` | Sources named; the line in quotes for a mouth on screen; silence written as a noise; *no music* where the edit owns the score. |
 | **6 · Look** | film: `look`, `grade`, `negative` | Set once per film. The grade line in the prompt is a hint; the real grade is the finish's. The negative is the film's spellbook: what usually breaks, plus whatever broke on this shot's last take, copied in its own words from the QC line. |
@@ -4248,12 +4253,27 @@ the scene and the film; a shot only ever writes blocks 2-5 and 7.
 
 ### 95.3  What this method cannot do, stated so nobody prompts for it
 
-- Carry N tagged identities into one generation (interface: one start frame, two for first-last).
 - Pace beats inside one generation by timecode.
-- Train a photoreal face on the anime trainer (base is animagine-xl-4.0; the SDXL trainer is
-  in progress in the other session).
+- Give a photoreal pack a trained face **from the roster**. Not because photoreal faces cannot be
+  trained - `lora_train_sdxl.py` trains on RealVisXL_V5.0 and produced a real likeness on the
+  LENGA films (§56). Two things are in the way: the roster's trainer is wired to workflow 33,
+  which hard-codes animagine-xl-4.0; and the photoreal keyframe engine is Qwen, a DiT to which
+  no SDXL LoRA attaches (`compose.py` rejects every key). A photoreal trained face has nowhere to
+  be spent until there is a **photoreal SDXL render route** - `compose.py` already treats the
+  anime engine slot as "animagine, illustrious or sdxl", which is the shortest path in.
 - Stack more than two LoRAs (the third breaks the render).
 - Improve a take by sharpening its start frame (−0.038, −0.070, −0.029 identity, 3 of 3).
+
+**Struck from this list, 2026-09-07: "carry N tagged identities into one generation."** That was
+written without looking in `comfy_extras`. `MiniMaxH3ReferenceToVideo` takes up to nine reference
+images, addressed in the prompt as `<Picture 1>`, `<Picture 2>` ..., plus reference videos with
+their audio and standalone audio, and returns the same (conditioning, latent) pair as the
+image-to-video node. The 19.5 GB `minimax_h3_ref2va` weights have been on disk since the collector
+was built, "in case words are not enough", wired to nothing. Workflow `63_minimax_h3_ref2va.json`
+and `_tools/ref2va_test.py` wire it; the first measurement - Terra's portrait and the shrine plate
+as pictures, no start frame, scored against her portrait - is in `docs/WHERE-WE-STAND.md` §6. The
+LTX-2.5 and H3 image-to-video routes still take one start frame (two for first-last); that
+sentence was true of those routes and false of the box.
 
 ### 95.4  The worked example, run
 

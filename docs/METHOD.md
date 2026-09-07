@@ -22,18 +22,32 @@ what it sounds like. Everything in this guide is one of those two things.
 Two engines live here. **LTX-2.5** is the one you will use for nearly everything: up to 30 seconds
 in one go, with sound and speech, and it can hold several framings in one shot. **H3** is for a
 shot pinned between two exact pictures — a character standing still while the camera does the
-work. You do not choose; the editor picks the engine from what the shot asks for.
+work. The engine is a field on the shot and it defaults to **LTX-2.5**; you reach for H3 only
+when you have two exact pictures to pin a movement between. H3 honours both pins for motion
+that stays in one place and ignores them for a walk — measured twice — so pin stillness, not
+travel.
 
 ## B · Before any shot: a character and a place
 
 Nothing about a person or a room should ever be *described* to the engine. It should be *shown*.
 That is the first rule and the one everything else depends on.
 
+@figure figures/fig_identity.jpg | Two people, two ways. Above: described in words alone, the
+same description in three places — three different faces each time, the accessories pinned and
+the face free. Below: the same three places with a reference sheet supplied — one woman, one
+man. The reference is doing the work, not the adjectives.
+
 **A character is a pack.** Go to **Characters → new character** and build one in the foundry. A
 finished pack has a portrait, a body turnaround, a face turnaround, six expressions and a
-presentation set — about twenty pictures of the same person from every side. The roster shows how
-complete a pack is and whether it can be cast. A character below level 2 will not hold together
-across shots; finish the pack first.
+presentation set — twenty pictures of the same person from every side. The roster shows how
+complete a pack is and whether it can be cast. **Level 1 is the casting floor**: a complete
+pack, ready to use. Level 0 means views are still missing — finish it before you cast. Level 2
+means the pack *also* carries a trained face, which most packs never get and none of them
+needs; it is a bonus rung, not a requirement.
+
+@figure figures/fig_pack.jpg | A finished pack: Terra, twenty views. Portrait, a face
+turnaround, a body turnaround, six expressions and a presentation set. This is what the engine
+is shown instead of a sentence.
 
 **A place is a plate.** Go to **Places** and make one: a clean wide picture of the location with
 no one in it, in the light your scene wants. That picture is the room. Every shot in that room
@@ -42,9 +56,15 @@ shot — something no amount of describing achieves.
 
 **Some characters have a trained face.** On the roster you may see *trained face* in green: the
 studio trained a small model on that character's own pack and measured, on three separate
-renders, that it holds the likeness better than showing the engine a portrait does. Two of eight
-tested did. If a character has one, shots of them are made through it automatically; you do not
+renders, that it holds the likeness better than showing the engine a portrait does - and by more
+than half of how much its own score wandered between those renders (the *spread*), because a face
+that scores well on one render and badly on the next is a lottery ticket, not a likeness. Two of
+eight tested did. If a character has one, shots of them are made through it automatically; you do not
 do anything. If it says *face training tried*, it was measured and lost — do not ask for it again.
+
+The roster's trainer builds on the **anime** checkpoint, so this badge is reachable today only
+for drawn packs. Photoreal packs are not short of a trainer — see section Z, which says what
+is actually in the way.
 
 ## C · Build the story: scenes first
 
@@ -61,6 +81,10 @@ you tell it to continue from the end of the previous shot. This is what keeps a 
 their clothes and the room the same from shot to shot: the shots share their starting picture's
 *sources*, not a description. One consequence worth knowing early: the start frame fixes where a
 shot *begins*. A character the anchor already places at the steps cannot "walk in from the left".
+
+@figure figures/fig_plate.jpg | One plate, five shots. The shrine, the lanterns and the path
+are in the same places in every shot because every shot started from the same picture — not
+because any of it was described.
 
 Write the film-level things once, in the **film** tab: the **look** (photoreal or anime), the
 **grade** note, and the **negative** — a list of things that must never appear. The negative is
@@ -85,12 +109,21 @@ picture is carrying it.
 (static, push in, orbit, handheld…). Give the camera a job; if you do not, the engine gives it one,
 badly. For photoreal, a faint handheld float reads as real; a locked-off camera reads as synthetic.
 
+@figure figures/fig_cameras.jpg | Give the camera a job. Each of these was asked for by name
+and then measured on the render; the studio reports what the camera actually did next to what
+you asked for.
+
 **4 · Beats** — up to four things that happen in sequence inside one shot, joined by a *hard cut*
 or a dissolve. Two rules the studio measured:
 - The word **cut** is what makes a hard cut. Writing times like "0–2s, 2–4s" does nothing here —
   the engine paces its beats its own way regardless. If a beat must run long, make it its own shot.
 - A cut *inside* a shot re-draws faces from scratch **unless the character is already in the start
   frame**. So cuts between two faces belong between shots, not inside one.
+
+@figure figures/fig_timecode.jpg | The same shot, the same seed, the same three beats. Above,
+the prompt carries timecodes and no "cut": the beats blur into each other. Below, the word
+*cut* is present: t=3s is still the hull, t=4s is the wheel. Both paced their beats at the
+same places — the numbers set nothing, the word set everything.
 
 **5 · Sound** — *dialogue, sfx, ambience*. Write what it sounds like. Name the sources: "rain on a
 tin roof, a kettle" — asking for "a quiet room" produces literal silence. A spoken line goes in
@@ -117,8 +150,10 @@ Under every take the studio writes what it measured:
 
 - **identity** — how much the face at the start and end of the take is the character's, scored
   against their portrait. *Same person* at both ends is what you want. *Different face* is a fault.
-  For photoreal a single 4-second take typically holds the face for about four seconds; longer than
-  that and the studio will tell you where it stopped being recognisable.
+  How long a face survives depends on what you asked the person to **do**, not on the look.
+  Measured across 142 takes: **still 4.3 s**, **a walk 4.0 s**, and a **crouch is not
+  followable at all** — both crouch takes lost the face, median hold 0.56 s. Ask for longer
+  than the motion can carry and the length field tells you so as you type.
 - **QC** — the plain-language list of things that went wrong: a limb doubled, the camera moved when
   it was told not to, the wardrobe opened, the frame was cropped.
 - **camera** — what the camera actually did against what you asked.
@@ -136,7 +171,8 @@ Longer shots cost resolution, and the trade is a table, not a slider:
 
 | resolution | longest shot |
 |---|---|
-| 720p | 30 s |
+| 720p (0.9 MP) | 30 s |
+| 1.2 MP | 20 s |
 | ~1080p (1.5 MP) | 12 s |
 | full (2.0 MP) | 8 s |
 
@@ -169,6 +205,10 @@ When every shot has a picked take, **assemble film**. Next to the *music* switch
   *punchy* is stronger, for daylight and anime. *soft* is barely visible. *none* is the engines'
   raw output.
 - **2× master** delivers at double resolution. It takes about a minute a shot.
+
+@figure figures/fig_grades.jpg | The four looks on one real frame, through the studio's own
+filters. *none* is the engine's output; *soft* is barely a change; *filmic* opens the shadows
+and warms the mids; *punchy* pushes both further and will turn skin orange if you let it.
 - The scene **music** bed is generated at this step and mixed under the picture; the whole film is
   then levelled to broadcast loudness.
 
@@ -238,6 +278,10 @@ in"*) and not the seed.
 
 ![one frame a second of the finished example](/samples/docs/method_example_strip.jpg)
 
+@figure figures/fig_example.jpg | The example as it was actually built and rendered on this
+box — eight shots off one scene, every one of them picked from its takes. The three shots
+described above are the spine of it; the rest are the same moves at other framings.
+
 ## K · The rulebook — one page to keep open
 
 1. **Show, don't describe.** A pack and a plate carry the person and the room; the words carry
@@ -258,11 +302,28 @@ in"*) and not the seed.
 
 ## Z · What this studio cannot do yet — so you do not spend an evening trying
 
-- Feed several tagged reference pictures into one shot. The engine takes one start frame (two, for
-  a shot pinned between a first and last frame). Put everyone in the anchor instead.
+- Feed several tagged reference pictures into one shot **on the LTX route**: it takes one start
+  frame (two, for a shot pinned between a first and last frame). Put everyone in the anchor. The
+  H3 engine, however, has a reference-to-video mode (`ref2va`) that takes up to nine pictures you
+  name in the words as *Picture 1*, *Picture 2*... - a character portrait and a place plate, for
+  instance - with no start frame at all. It was wired for the first time on 2026-09-07 and is being
+  measured; until the number is in, do not plan a film on it. See `docs/WHERE-WE-STAND.md` §6.
 - Pace beats inside one shot by the clock. Cut at assembly.
-- Train a photoreal face. The trainer's base model is the anime one; photoreal packs use the
-  reference path (a photoreal trainer is being built).
+- Give a **photoreal pack a trained face from the roster**. Not because photoreal faces cannot
+  be trained — they can, and have been: `lora_train_sdxl.py` trains on RealVisXL and produced a
+  real likeness on the LENGA films (playbook §56). Two other things are in the way. First, the
+  roster's own trainer is wired to the anime checkpoint. Second, and the harder one: the
+  photoreal *keyframe* engine here is Qwen, and **no SDXL LoRA can attach to it at all** —
+  anime or photoreal alike, every key is rejected when a Qwen model loads. So a photoreal
+  trained face has nowhere to be spent until there is a photoreal SDXL render route to spend
+  it on. Until then photoreal packs use the reference path, which holds *the same actor*,
+  not the same photograph.
+@figure figures/fig_photoreal_lora.jpg | A photoreal trained face, working. The same seed and
+the same two prompts at four strengths of the LENGA identity LoRA: at 0.00 the engine draws
+strangers, and from 0.70 up it draws her. This is `lora_train_sdxl.py` on RealVisXL — proof
+that the missing piece is a route from the roster to this trainer and a photoreal engine to
+spend the result on, not the training itself.
+
 - Stack more than two trained models on a shot. The third breaks the render.
 - Improve a shot by sharpening its start frame. Measured three times: the face got worse each time.
 

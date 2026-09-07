@@ -1428,7 +1428,7 @@ def _render_take(jid, f, sh, eng, seed):
         f2 = F.load(f.id)
         sh2 = f2.shot(sh["id"])
         sh2["takes"].append(take)
-        if not sh2.get("picked") and not qc:
+        if not sh2.get("picked") and not _faults({"qc": qc}):
             sh2["picked"] = tid
         f2.save()
         return tid
@@ -1537,7 +1537,7 @@ def _render_take(jid, f, sh, eng, seed):
     f2 = F.load(f.id)                          # re-load: takes may have landed meanwhile
     sh2 = f2.shot(sh["id"])
     sh2["takes"].append(take)
-    if not sh2.get("picked") and not qc:
+    if not sh2.get("picked") and not _faults({"qc": qc}):
         sh2["picked"] = tid
     f2.save()
     return tid
@@ -2745,6 +2745,9 @@ def _coverage_job(jid, fid, scid, place_id, plate, chars, prop):
         made = []
 
         def shot(title, dur, beats, anchor=None, no_people=False, sfx=""):
+            # S6: a shot with no written sound renders silence (measured: coverage 020/030,
+            # rms 0.0005) - inherit the scene's ambience unless the shot names its own
+            sfx = sfx or (sc.get("ambience") or "").strip() or (amb or "")
             sh = f.new_shot(scid, title=title, duration=dur, beats=beats, sfx=sfx,
                             anchor=anchor or "scene", no_people=no_people,
                             transition_out="cut")
@@ -2998,7 +3001,9 @@ def _make_job(jid, fid, shid, seconds=None, seed=0, variants=1):
                 sh = f.shot(shid)
                 takes = sorted(sh.get("takes") or [], key=lambda t: t["id"])
                 cands = takes[-2:]
-                newest = sorted(cands, key=lambda t: (len(t.get("qc") or []),
+                # rank by what counts against a take, not by how much was written on it: a
+                # faulted take with two notes must not beat a clean take with five
+                newest = sorted(cands, key=lambda t: (len(_faults(t)), _camera_score(sh, t),
                                                       (t.get("drift") or {}).get("lost", 0)))[0]
             if newest and any(str(q).startswith("people appeared") for q in newest.get("qc") or []):
                 # generation keeps filling the empty frame; the rig cannot
@@ -3041,12 +3046,12 @@ def _make_job(jid, fid, shid, seconds=None, seed=0, variants=1):
                         t.setdefault("qc", []).append(note)
                 f.save()
             if newest:
-                # a take the QC calls a wrong face is never picked for a person - it stays on
-                # the shot to be read, with the advice line saying what to do (method rule 13)
-                _face_fault = next((str(q) for q in (newest.get("qc") or [])
-                                    if str(q).startswith("the face is")), None)
-                if _face_fault:
-                    _log(jid, "done - %s NOT picked: %s" % (newest["id"], _face_fault[:160]))
+                # one rule (method rule 13): a take is picked iff nothing counts against it.
+                # Notes never block a pick; faults always do; the log says which
+                _bad = _faults(newest)
+                if _bad:
+                    _log(jid, "done - %s NOT picked (%s) - read the takes; the advice under each "
+                              "says what to change" % (newest["id"], "; ".join(_bad)[:200]))
                 else:
                     sh["picked"] = newest["id"]
                     _log(jid, "done - %s%s" % (newest["id"], (" (QC: %s)" % "; ".join(newest["qc"]))
