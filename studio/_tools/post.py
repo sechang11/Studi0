@@ -86,6 +86,23 @@ def probe(path):
         return None
 
 
+def duration(path):
+    r = sh("ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", path)
+    try:
+        return float((r.stdout or "0").strip())
+    except ValueError:
+        return 0.0
+
+
+def frames(path):
+    r = sh("ffprobe", "-v", "error", "-select_streams", "v:0", "-count_frames",
+           "-show_entries", "stream=nb_read_frames", "-of", "csv=p=0", path)
+    try:
+        return int((r.stdout or "0").strip())
+    except ValueError:
+        return 0
+
+
 def free_gb():
     import torch
     if not torch.cuda.is_available():
@@ -232,15 +249,20 @@ def upscale(src, dst, scale=2, fine=False):
             torch.cuda.empty_cache()
     if n == 0 or not os.path.exists(vid):
         return None, "no frames encoded"
-    # the take's own audio, untouched
+    # the take's own audio, fitted to the VIDEO's length: -shortest trimmed four frames a take
+    # because LTX writes audio and video to slightly different lengths
+    vdur = duration(vid)
     sh("ffmpeg", "-y", "-v", "error", "-i", vid, "-i", src, "-map", "0:v", "-map", "1:a?",
-       "-c:v", "copy", "-c:a", "aac", "-b:a", "192k", "-shortest", dst)
+       "-af", "apad", "-t", "%.4f" % vdur,
+       "-c:v", "copy", "-c:a", "aac", "-b:a", "192k", dst)
     try:
         os.remove(vid)
     except OSError:
         pass
     if not os.path.exists(dst):
         return None, "mux failed"
+    if frames(dst) < n:
+        return None, "the master has %d frames of the %d the network produced" % (frames(dst), n)
     out = probe(dst)
     return dst, ("%d frames %dx%d -> %dx%d, %s, tile %d, %s"
                  % (n, w, h, out[0], out[1], "fine" if pre == 1.0 else "fast", tile, why)) \
