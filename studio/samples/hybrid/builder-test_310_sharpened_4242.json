@@ -1,0 +1,74 @@
+{
+ "film": "builder-test",
+ "shot": "310",
+ "seed": 4242,
+ "control_anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/builder-test/assets/anchor_shot_310.png",
+ "candidate_frame": "/home/k4shix/shared/comfy-studio/studio/samples/hybrid/builder-test_310_sharpened.png",
+ "label": "sharpened",
+ "control": {
+  "take": "t760480933",
+  "seed": 4242,
+  "engine": "ltx",
+  "identity_start": 0.672,
+  "identity_end": 0.65,
+  "verdict_start": "same person",
+  "verdict_end": "same person",
+  "qc": [
+   "camera: pull back 11% - done by the studio (stabilise)",
+   "identity: same person, start 0.67, end 0.65; place held (0.95 first to last)",
+   "sound borrowed from take t549648673 of shot 100 - the render was silent"
+  ],
+  "angle": null,
+  "drift": {
+   "lost": 0.41,
+   "missing": [
+    "cloth",
+    "ground",
+    "illumination",
+    "landscape",
+    "outdoor",
+    "parkway",
+    "photograph",
+    "plant",
+    "structure",
+    "water",
+    "weather"
+   ],
+   "kept": 16,
+   "last_caption": "Park, pavilion, man, jacket, pants, bench, grass, path, trees, leaves, sky, building, stone, metal, wood, rain, autumn, daylight, light, clouds, person, foliage."
+  },
+  "file": "takes/310/ltx_t760480933.mp4"
+ },
+ "candidate": {
+  "take": "t760588966",
+  "seed": 4242,
+  "engine": "ltx",
+  "identity_start": 0.643,
+  "identity_end": 0.654,
+  "verdict_start": "same person",
+  "verdict_end": "same person",
+  "qc": [
+   "camera: pull back 8% - done by the studio (stabilise)",
+   "identity: same person, start 0.64, end 0.65; place drifted (0.84 first to last)"
+  ],
+  "angle": null,
+  "drift": {
+   "lost": 0.29,
+   "missing": [
+    "autumn",
+    "bandstand",
+    "cloth",
+    "shadow",
+    "wetnes"
+   ],
+   "kept": 12,
+   "last_caption": "Park, gazebo, man, bench, path, grass, jacket, pants, shoes, trees, sky, fog, rain, weather, daylight, light, lamp, foliage, ground, grass, walkway, person."
+  },
+  "file": "takes/310/ltx_t760588966.mp4"
+ },
+ "delta": {
+  "identity_start": -0.029,
+  "identity_end": 0.004,
+  "qc_faults": -1
+ }
+}

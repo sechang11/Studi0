@@ -1,0 +1,80 @@
+{
+ "film": "encyclopedia-check",
+ "shot": "190",
+ "seed": 4242,
+ "control_anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/encyclopedia-check/assets/anchor_shot_190.png",
+ "candidate_frame": "/home/k4shix/shared/comfy-studio/studio/samples/hybrid/encyclopedia-check_190_sharpened.png",
+ "label": "sharpened",
+ "control": {
+  "take": "t760273701",
+  "seed": 4242,
+  "engine": "ltx",
+  "identity_start": 0.708,
+  "identity_end": 0.624,
+  "verdict_start": "same person",
+  "verdict_end": "same person",
+  "qc": [
+   "camera: push in 6% (a face fills the frame; the camera is hard to tell from the head) (uncertain)",
+   "angle: a low angle (pitch +0.91)",
+   "identity: same person, start 0.71, end 0.62; place held (0.93 first to last)",
+   "ends closer than it started - the person fills the frame edge at the end (top=0.17 bottom=0.56 left=0.00 right=0.00)"
+  ],
+  "angle": null,
+  "drift": {
+   "lost": 0.53,
+   "missing": [
+    "bench",
+    "cloud",
+    "gras",
+    "ground",
+    "hood",
+    "shirt",
+    "sunshine",
+    "sweater",
+    "zipper"
+   ],
+   "kept": 8,
+   "last_caption": "Place, outdoors, park, trees, foliage, person, man, face, head, hair, beard, mustache, eyes, nose, mouth, skin, jacket, yellow jacket, fur collar, clothing, fur, fabric, branches, sky, daylight, sunlight, shadows."
+  },
+  "file": "takes/190/ltx_t760273701.mp4"
+ },
+ "candidate": {
+  "take": "t760369733",
+  "seed": 4242,
+  "engine": "ltx",
+  "identity_start": 0.638,
+  "identity_end": 0.615,
+  "verdict_start": "same person",
+  "verdict_end": "uncertain",
+  "qc": [
+   "camera: static (a face fills the frame; the camera is hard to tell from the head) (uncertain)",
+   "identity: uncertain by the end (0.64 -> 0.61); place held (0.96 first to last)",
+   "sound borrowed from take t595554809 of shot 150 - the render was too quiet (mean -49 dB)",
+   "ends closer than it started - the person fills the frame edge at the end (top=0.14 bottom=0.56 left=0.00 right=0.00)"
+  ],
+  "angle": null,
+  "drift": {
+   "lost": 0.56,
+   "missing": [
+    "bench",
+    "color",
+    "gras",
+    "ground",
+    "hood",
+    "park",
+    "rail",
+    "shadow",
+    "stone",
+    "zipper"
+   ],
+   "kept": 8,
+   "last_caption": "Person, man, face, head, hair, beard, mustache, smile, eyes, skin, jacket, clothing, coat, fabric, yellow, knitwear, collar, buttons, outdoors, background, trees, forest, foliage, branches, sky, clouds, daylight, light, nature, environment."
+  },
+  "file": "takes/190/ltx_t760369733.mp4"
+ },
+ "delta": {
+  "identity_start": -0.07,
+  "identity_end": -0.009,
+  "qc_faults": 0
+ }
+}
