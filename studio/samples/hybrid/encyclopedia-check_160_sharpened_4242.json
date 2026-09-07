@@ -1,0 +1,81 @@
+{
+ "film": "encyclopedia-check",
+ "shot": "160",
+ "seed": 4242,
+ "control_anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/encyclopedia-check/assets/anchor_shot_160.png",
+ "candidate_frame": "/home/k4shix/shared/comfy-studio/studio/samples/hybrid/encyclopedia-check_160_sharpened.png",
+ "label": "sharpened",
+ "control": {
+  "take": "t758633440",
+  "seed": 282427734,
+  "engine": "ltx",
+  "identity_start": 0.699,
+  "identity_end": 0.626,
+  "verdict_start": "same person",
+  "verdict_end": "same person",
+  "qc": [
+   "camera: tilt down 87% (a face fills the frame; the camera is hard to tell from the head) (uncertain)",
+   "identity: same person, start 0.70, end 0.63; place held (0.86 first to last)",
+   "sound borrowed from take t595554809 of shot 150 - the render was silent",
+   "ends closer than it started - the person fills the frame edge at the end (top=0.11 bottom=0.56 left=0.00 right=0.00)"
+  ],
+  "angle": null,
+  "drift": {
+   "lost": 0.41,
+   "missing": [
+    "branch",
+    "cloud",
+    "gras",
+    "mustache",
+    "shirt",
+    "sunshine",
+    "zipper"
+   ],
+   "kept": 10,
+   "last_caption": "Park, benches, man, jacket, sweater, hood, beard, smile, leaves, ground, trees, sky, pavement, light, day, autumn, foliage, person, outdoor."
+  },
+  "file": "takes/160/ltx_t758633440.mp4"
+ },
+ "candidate": {
+  "take": "t758826586",
+  "seed": 4242,
+  "engine": "ltx",
+  "identity_start": 0.661,
+  "identity_end": 0.593,
+  "verdict_start": "same person",
+  "verdict_end": "uncertain",
+  "qc": [
+   "camera: tilt down 53% (a face fills the frame; the camera is hard to tell from the head) (uncertain)",
+   "angle: a steep low angle (pitch +1.59)",
+   "identity: uncertain by the end (0.66 -> 0.59); place held (0.91 first to last)",
+   "sound borrowed from take t595554809 of shot 150 - the render was silent",
+   "ends closer than it started - the person fills the frame edge at the end (top=0.12 bottom=0.56 left=0.00 right=0.00)"
+  ],
+  "angle": null,
+  "drift": {
+   "lost": 0.64,
+   "missing": [
+    "branch",
+    "build",
+    "cloth",
+    "cloud",
+    "element",
+    "foliage",
+    "hood",
+    "mustache",
+    "nature",
+    "outdoor",
+    "person",
+    "structure"
+   ],
+   "kept": 8,
+   "last_caption": "Park, man, face, head, hair, beard, jacket, sweater, trees, bench, path, sidewalk, ground, grass, leaves, sky, light, sunshine, day, weather, autumn, yellow, gray, brown, black, car, bus, pigeons."
+  },
+  "file": "takes/160/ltx_t758826586.mp4"
+ },
+ "delta": {
+  "identity_start": -0.038,
+  "identity_end": -0.033,
+  "qc_faults": 1
+ }
+}
