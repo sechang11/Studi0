@@ -87,6 +87,14 @@ img.anchor{width:100%;border-radius:6px;margin-top:6px}
   <button onclick="newFilm()">new film</button>
   <span class="grow"></span>
   <label style="display:inline;margin:0"><input type="checkbox" id="musicchk" checked> music</label>
+  <label style="display:inline;margin:0 0 0 10px" title="One colour treatment on every shot, applied after the cuts so nothing drifts between them. Measured on frames from two delivered films.">look
+    <select id="gradesel" style="margin-left:4px">
+      <option value="filmic" selected>filmic - opens the shadows, warms the mids (default)</option>
+      <option value="punchy">punchy - brighter and more saturated; daylight and anime</option>
+      <option value="soft">soft - the old gentle base, barely visible</option>
+      <option value="none">none - exactly as the engines made it</option>
+    </select></label>
+  <label style="display:inline;margin:0 0 0 10px" title="RealESRGAN on every frame, delivered at 2944x1664 instead of 1472x832. Roughly a minute a shot on this card."><input type="checkbox" id="upchk"> 2x master</label>
   <button class="primary" onclick="assemble()">assemble film</button>
   <a id="filmlink" style="display:none;color:var(--good)" target="_blank">▶ film.mp4</a>
   <span id="job"></span>
@@ -420,12 +428,19 @@ function reviewPanel(){
     </div>`;
 }
 async function assemble(){
-  const j=await api("/assemble",{film:FID,music:$("#musicchk").checked});
+  const j=await api("/assemble",{film:FID,music:$("#musicchk").checked,
+                                 grade:$("#gradesel").value,upscale:$("#upchk").checked});
   WATCH.add(j.job); note("assembling: "+j.job);
 }
 
 /* ── right panel ─────────────────────────────────────────────────────────── */
+function reflectPost(){
+  const p=(TREE&&TREE.post)||{};
+  if(p.grade&&$("#gradesel")) $("#gradesel").value=p.grade;
+  if($("#upchk")) $("#upchk").checked=!!p.upscale;
+}
 function renderRight(){
+  reflectPost();
   const tabs=["shot","context","scene","film","review"];
   let h=`<div class="tabs">`+tabs.map(t=>
     `<div class="${TAB===t?"sel":""}" onclick="TAB='${t}';renderRight()">${t}</div>`).join("")+`</div>`;
