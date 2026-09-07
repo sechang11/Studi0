@@ -66,13 +66,15 @@ GRAPH_BUILDERS = ("studio/_tools/film_routes.py", "studio/compose.py", "studio/_
                   "studio/_tools/train_pack_lora.py", "studio/_tools/lora_train.py",
                   "studio/_tools/lora_train_sdxl.py", "studio/_tools/lora_photoreal.py",
                   "studio/_tools/engine_ab.py", "studio/_tools/multishot.py",
-                  "studio/_tools/dress_keep_face.py", "studio/_tools/polish.py")
+                  "studio/_tools/dress_keep_face.py", "studio/_tools/polish.py",
+                  "studio/_tools/identity.py", "studio/_tools/headbox.py")   # CLIP-ViT-H, BiRefNet
 
 
 def workflow_text():
     out = []
     pats = [os.path.join(ROOT, "workflows", "*.json"),
             os.path.join(ROOT, "studio", "loras", "*.json"),            # the LoRA library cards
+            os.path.join(ROOT, "studio", "characters", "*.json"),       # the legacy cast cards
             os.path.join(ROOT, "studio", "foundry", "*", "*", "asset.json")]  # a pack's adopted face
     for pat in pats:
         for p in glob.glob(pat):
