@@ -74,9 +74,11 @@ def main():
     m = re.search(r"better\s*=.*max\(([\d.]+),\s*spread\s*/\s*([\d.]+)\)", src)
     if m:
         floor, div = m.group(1), m.group(2)
-        need(("max(%s, spread/%s)" % (floor, div)) in s95 or ("spread / %s" % div) in s95
-             or ("half its spread" in s95 or "half of its spread" in s95),
-             "§95: adoption gate must say margin > max(%s, spread/%s)" % (floor, div))
+        fl, dv = float(floor), float(div)
+        forms = {"max(%s, spread/%s)" % (a, b) for a in {floor, "%g" % fl} for b in {div, "%g" % dv}}
+        forms |= {f.replace("/", " / ") for f in set(forms)}
+        need(any(f in s95 for f in forms) or "half its spread" in s95 or "half of its spread" in s95,
+             "§95: adoption gate must say margin > max(%g, spread/%g)" % (fl, dv))
         need("above its own spread" not in s95, "§95: 'above its own spread' overstates the gate")
     else:
         problems.append("pack_lora.py: adoption gate not found where expected")
