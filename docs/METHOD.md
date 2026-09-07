@@ -52,12 +52,15 @@ Open **Film editor** and start a film. Before shots, make **scenes**. A scene is
 
 - **one place** (a plate),
 - **one light** (morning, dusk, lamplight — pick it once),
-- **one anchor**: a single picture the studio composes of your character *in* that place *in*
-  that light, wearing what they wear in this scene.
+- **one source for every start frame**: the studio composes each shot's starting picture from
+  that plate and your character's pack — the person *in* that place *in* that light, wearing what
+  they wear in this scene, framed as the shot asks (wide, medium, close).
 
-Every shot in the scene starts from that anchor unless you tell it to continue from the end of the
-previous shot. This is what keeps a person's face, their clothes and the room the same from shot
-to shot: the shots share a starting picture, not a description.
+Every shot in the scene starts from a picture built from the same plate and the same pack, unless
+you tell it to continue from the end of the previous shot. This is what keeps a person's face,
+their clothes and the room the same from shot to shot: the shots share their starting picture's
+*sources*, not a description. One consequence worth knowing early: the start frame fixes where a
+shot *begins*. A character the anchor already places at the steps cannot "walk in from the left".
 
 Write the film-level things once, in the **film** tab: the **look** (photoreal or anime), the
 **grade** note, and the **negative** — a list of things that must never appear. The negative is
@@ -195,10 +198,45 @@ where he left it."* Sound: *the same wind, closer; the bell again*. 5 s.
 
 Why it is built this way: three shots because each has her face in it and a cut between faces
 belongs at assembly (D4); a wide first because a wide anchor swallows a named character unless the
-scene anchor already holds her (B, C); the line in shot 2 through a mouth that is on screen (D5);
-shot 3 continuing from shot 2's last frame so the push-in's end is the close-up's start (D1); every
-sound named (D5); *no music* because the bed comes at the finish (I). Then *filmic*, 2× master,
-assemble.
+start frame already holds her (B, C); the line in shot 2 through a mouth that is on screen (D5);
+every sound named (D5); *no music* because the bed comes at the finish (I). Then *filmic*, 2×
+master, assemble.
+
+### What happened when it was actually run
+
+This example was built through the editor's own routes and rendered, because a template whose
+example was never run is a belief with a diagram. The **first pass** taught four things, each now
+a rule above:
+
+- Shot 1 as first written said *"walks in from the left and stops at the steps"*. She never walked
+  in — the start frame already stood her at the steps. **The start frame fixes where a shot begins**
+  (C). The action became *"stands at the foot of the steps and slowly raises her eyes to the gate."*
+- In the last two seconds of that wide the engine added a burst of sparkles nobody asked for. The
+  negative grew by their name — *magic sparkles, glowing particles, light burst* — and the retake
+  was clean (H).
+- Shot 3 as first written said *"starts up the steps"* in a close-up. The engine followed the action
+  and abandoned the framing; the last frame was the back of her head and the identity score fell
+  to 0.37 — the scorer was right, the shot was wrong. **Framing and action must agree** (D3). It
+  also continued from shot 2's last frame, inheriting a face that had already drifted to profile;
+  a close-up wants its own start frame (D1). The action became *"closes her eyes for a breath,
+  opens them, and lifts her chin toward the gate"*, from the close frame the studio had composed.
+- The studio then **picked that failed take anyway** — a defect in "make every shot", fixed the same
+  hour: a take whose QC names a face fault is now left unpicked for a person to read (F).
+
+The **corrected pass**, as delivered — 15 s, 3840×2176, every one of the takes' 363 frames:
+
+| shot | what the studio measured |
+|---|---|
+| 1 · the arrival (6 s, wide, static) | camera static as asked · same person at the start (0.65) · recognisable for 4.5 s of 6 · place held 0.92 · sound present |
+| 2 · the look up (5 s, medium, push in) | the push-in overshot (46 %) · same person → uncertain by the end (0.65 → 0.55, she turns to profile) · place held 0.91 · the line voiced through her voice pack |
+| 3 · the decision (4 s, close-up, handheld) | camera static · same person at the start (0.66), the end unmeasured (the head left the tracked box) · place held 0.88 · her own sound rendered too quiet, so the studio carried shot 1's under it |
+
+Shot 3's take was picked by a person on those notes — none is a fault — which is exactly the flow
+section F describes. Shot 2 is the honest weak point: a *slow* push-in that lands at 46 % and a
+turn to profile. The next thing to try, by the method, is the words (*"barely perceptible push
+in"*) and not the seed.
+
+![one frame a second of the finished example](/samples/docs/method_example_strip.jpg)
 
 ## K · The rulebook — one page to keep open
 

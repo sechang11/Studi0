@@ -679,7 +679,15 @@ def _render_shot_keyframe(f, shid, plan):
         present = plan.get("present") or []
         ch = f.data["cast"].get(present[0]) if present else {}
         wf = load_wf("22_anime_kf_ipadapter.json")
-        set_path(wf, "2.inputs.image", (ch or {}).get("sheet") or "")
+        _sheet = (ch or {}).get("sheet") or ""
+        if _sheet and os.path.isabs(_sheet) and os.path.exists(_sheet):
+            # LoadImage validates against ComfyUI/input - stage the sheet there, by content
+            import hashlib as _hl
+            _staged = "kf_sheet_%s%s" % (_hl.md5(_sheet.encode()).hexdigest()[:10],
+                                         os.path.splitext(_sheet)[1] or ".png")
+            shutil.copy(_sheet, os.path.join(COMFY, "input", _staged))
+            _sheet = _staged
+        set_path(wf, "2.inputs.image", _sheet)
         _lo, _tr = pack_lora((ch or {}).get("foundry"))
         # a trained LoRA answers for the character alone: measured on two packs, the two
         # routes together are a coin flip (0.768 on one, 0.436 on the other)

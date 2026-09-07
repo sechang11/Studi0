@@ -4194,9 +4194,14 @@ reference-image path is the default. A trained face is used only where it beat t
 three seeds with a margin above its own spread (2 of 8 drawn packs did). Never both at once:
 combined, the two routes scored 0.768 on one pack and 0.436 on another. *(§56, block 6.)*
 
-**S3 · A scene is one place, one light, one anchor.** The scene anchor is a single keyframe that
-holds person, wardrobe, place and light together; every shot in the scene starts from it unless
-it deliberately continues from the previous shot's last frame. *(keyframe doctrine, §18.)*
+**S3 · A scene is one place, one light, one source for every start frame.** Each shot's anchor
+is composed from the scene's plate and the character's pack - person, wardrobe, place and light
+together, framed as the shot asks (`assets/anchor_shot_NNN.png`, `anchor: "file:..."`) - unless
+it deliberately continues from the previous shot's last frame. The invariant is the shared
+*sources*, not one file. Two corollaries, both paid for in §95.4: **the anchor fixes where a shot
+begins** (a character it already places at the steps cannot "walk in"), and **framing and action
+must agree** (a close-up cannot hold a character whose action walks her away). *(keyframe
+doctrine, §18; the worked example.)*
 
 **S4 · One beat per shot when a face matters.** An internal cut re-derives faces from the scene
 prior; it holds only when the character is already IN the start frame. So: cuts between faces
@@ -4250,6 +4255,22 @@ the scene and the film; a shot only ever writes blocks 2-5 and 7.
 - Stack more than two LoRAs (the third breaks the render).
 - Improve a take by sharpening its start frame (−0.038, −0.070, −0.029 identity, 3 of 3).
 
-The method, in one line: *references first, one identity route per face, one anchor per scene,
+### 95.4  The worked example, run
+
+`docs/METHOD.md` §J - Terra at the forest shrine, three one-beat shots - was built through the
+editor's own routes (`_tools/build_method_example.py`, `retake_method_example.py`,
+`retake_080_file.py`, `finish_method_example.py`). The first pass taught, in order: quickstart
+also proposes five coverage shots, and those with no `sfx` came back **silent** (S6, live); the
+wide's "walks in from the left" could not happen because the anchor already stood her at the
+steps (S3 corollary); the anime engine added sparkles nobody asked for, so the negative grew by
+their name (block 6); the close-up's "starts up the steps" walked her away and the last frame
+was the back of a head - identity 0.66 → 0.37, which the scorer was *right* about (block 3);
+and `makeall` picked that take anyway, unconditionally - fixed the same hour, so a take whose
+QC names a face fault is left for a person (block 7, S9). Two robustness defects fell out too:
+`comfy.run` exited the interpreter on a rejected prompt (a silent dead thread inside a job) and
+the anime keyframe path handed `LoadImage` an absolute path. The results of the corrected pass
+are in §J.
+
+The method, in one line: *references first, one identity route per face, one source per scene,
 one beat per face, length from the envelope and pacing from the edit, sound written, place from
 the plate, the finish as half the film, and nothing kept on one render.*

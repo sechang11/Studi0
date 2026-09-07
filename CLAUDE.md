@@ -13,7 +13,10 @@ Build every story and every shot by these. Each is measured; the measurement is 
    Never describe in a prompt what a reference already carries.
 2. One identity route per character, recorded on the pack: reference path by default; a trained
    face only where it beat the reference on three seeds above its own spread; never both at once.
-3. A scene is one place, one light, one anchor. Shots start from the scene anchor or `prev_last`.
+3. A scene is one place, one light, one source for every start frame: each shot's anchor is
+   composed from the scene's plate and the character's pack (`assets/anchor_shot_NNN.png`,
+   `anchor: "file:..."`), or continues from `prev_last`. The anchor fixes where a shot BEGINS.
+   Framing and action must agree - a close-up cannot hold a character who walks away.
 4. One beat per shot when a face matters. Internal cuts only with the face in the start frame or
    no face at all; cuts between faces happen at assembly.
 5. Length from `LTX_SAFE` (0.9 MP→30 s, 1.5 MP→12 s, 2.0 MP→8 s); pacing from the edit.
