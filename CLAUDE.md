@@ -53,7 +53,9 @@ against a still torso.
 - Stack more than two LoRAs; improve a take by sharpening its start frame (3 of 3 worse).
 - **Multi-reference IS on the box**: `MiniMaxH3ReferenceToVideo` takes up to nine tagged
   `<Picture i>` references (+ video/audio refs); weights `minimax_h3_ref2va` on disk; workflow
-  `63_minimax_h3_ref2va.json`, test `_tools/ref2va_test.py`. Measure before promising it.
+  `63_minimax_h3_ref2va.json`, test `_tools/ref2va_test.py`. **Measured 2026-09-07: as wired
+  it supplies neither identity nor place** (0.19-0.25 vs 0.65 for a composited start frame, 3/3,
+  drawn and photoreal). A route gap, not an architectural one; do not plan a film on it yet.
 
 ## Operating rules that have cost time
 

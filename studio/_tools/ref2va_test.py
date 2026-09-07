@@ -42,9 +42,18 @@ OUT = os.path.join(STUDIO, "samples", "ref2va")
 PORTRAIT = os.path.join(STUDIO, "foundry", "characters", "terra", "base_portrait.png")
 PLATE = os.path.join(STUDIO, "foundry", "places", "forest-shrine", "dawn_wide.png")
 
-PROMPT = ("<Picture 1> stands at the foot of the shrine steps in <Picture 2>, at dawn, and slowly "
-          "raises her eyes to the gate. Wide shot, the camera static. Wind moves the cedar "
-          "branches; a single bell far off; no music.")
+# The first test used a DRAWN character on a video model that defaults to photoreal, in a WIDE
+# framing where the face is a few pixels.  Both weaken the identity reading.  The test takes the
+# character, the place and the framing as arguments so a photoreal character at medium framing
+# can be run on the same harness.
+PROMPTS = {
+    "wide": ("<Picture 1> stands at the foot of the steps in <Picture 2> and slowly raises "
+             "{pron} eyes. Wide shot, the camera static. Wind in the trees; no music."),
+    "medium": ("<Picture 1> stands in <Picture 2>, facing the camera, and slowly turns "
+               "{pron} head to look off to one side. Medium shot, the camera static, a faint "
+               "handheld float. Ambient sound of the place; no music."),
+}
+PROMPT = PROMPTS["wide"].format(pron="her")
 
 
 def frame(video, t, dest):
@@ -81,7 +90,19 @@ def main():
     ap.add_argument("--no-lora", action="store_true", help="drop the fl2v turbo LoRA (needs ~40 steps)")
     ap.add_argument("--seed", type=int, default=4200)
     ap.add_argument("--length", type=int, default=124)
+    ap.add_argument("--character", default="terra", help="foundry character id (its base_portrait is Picture 1)")
+    ap.add_argument("--place", default="forest-shrine")
+    ap.add_argument("--plate", default="dawn_wide")
+    ap.add_argument("--framing", choices=sorted(PROMPTS), default="wide")
+    ap.add_argument("--pronoun", default="her")
     a = ap.parse_args()
+    global PORTRAIT, PLATE, PROMPT
+    PORTRAIT = os.path.join(STUDIO, "foundry", "characters", a.character, "base_portrait.png")
+    PLATE = os.path.join(STUDIO, "foundry", "places", a.place, a.plate + ".png")
+    PROMPT = PROMPTS[a.framing].format(pron=a.pronoun)
+    for p in (PORTRAIT, PLATE):
+        if not os.path.exists(p):
+            sys.exit("missing %s" % p)
     os.makedirs(OUT, exist_ok=True)
     shutil.copy(PORTRAIT, os.path.join(COMFY, "input", "ref2va_pic1.png"))
     shutil.copy(PLATE, os.path.join(COMFY, "input", "ref2va_pic2.png"))
@@ -90,7 +111,8 @@ def main():
     set_path(wf, "20.inputs.length", int(a.length))
     set_path(wf, "32.inputs.steps", int(a.steps))
     set_path(wf, "33.inputs.noise_seed", int(a.seed))
-    tag = "ref_%s_s%d_%d" % ("nolora" if a.no_lora else "turbo", a.steps, a.seed)
+    tag = "ref_%s_%s_%s_s%d_%d" % (a.character, a.framing, "nolora" if a.no_lora else "turbo",
+                                  a.steps, a.seed)
     set_path(wf, "51.inputs.filename_prefix", "claude-generated/h3_ref2va/" + tag)
     if a.no_lora:
         # bypass the LoRA: the sigma shift reads the base model directly

@@ -4270,10 +4270,14 @@ images, addressed in the prompt as `<Picture 1>`, `<Picture 2>` ..., plus refere
 their audio and standalone audio, and returns the same (conditioning, latent) pair as the
 image-to-video node. The 19.5 GB `minimax_h3_ref2va` weights have been on disk since the collector
 was built, "in case words are not enough", wired to nothing. Workflow `63_minimax_h3_ref2va.json`
-and `_tools/ref2va_test.py` wire it; the first measurement - Terra's portrait and the shrine plate
-as pictures, no start frame, scored against her portrait - is in `docs/WHERE-WE-STAND.md` §6. The
-LTX-2.5 and H3 image-to-video routes still take one start frame (two for first-last); that
-sentence was true of those routes and false of the box.
+and `_tools/ref2va_test.py` wire it. **First measurement, three renders: it supplied neither
+identity nor place** - identity 0.23→0.25 (drawn, wide, turbo), 0.25→0.25 (drawn, wide, no LoRA,
+30 steps), 0.23→0.19 (photoreal, medium) against 0.65 for the composited start frame on the same
+beat; the drawn renders show a generic shrine, not the plate. The collector's note held: it
+reinforces an identity the words already ask for and does not supply one. So the route exists and
+does not yet do the job; it is a route gap, not an architectural one. The LTX-2.5 and H3
+image-to-video routes still take one start frame (two for first-last); that sentence was true of
+those routes and false of the box. Detail in `docs/WHERE-WE-STAND.md` §6.
 
 ### 95.4  The worked example, run
 

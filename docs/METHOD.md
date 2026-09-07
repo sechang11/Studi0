@@ -306,8 +306,11 @@ described above are the spine of it; the rest are the same moves at other framin
   frame (two, for a shot pinned between a first and last frame). Put everyone in the anchor. The
   H3 engine, however, has a reference-to-video mode (`ref2va`) that takes up to nine pictures you
   name in the words as *Picture 1*, *Picture 2*... - a character portrait and a place plate, for
-  instance - with no start frame at all. It was wired for the first time on 2026-09-07 and is being
-  measured; until the number is in, do not plan a film on it. See `docs/WHERE-WE-STAND.md` §6.
+  instance - with no start frame at all. It was wired and measured on 2026-09-07: three renders, a
+  drawn character and a photoreal one, and it carried **neither the face nor the place** — the
+  scores read a stranger every time where the start-frame route reads the same person. So it
+  exists, and today it does not do the job. Put everyone in the anchor. See
+  `docs/WHERE-WE-STAND.md` §6.
 - Pace beats inside one shot by the clock. Cut at assembly.
 - Give a **photoreal pack a trained face from the roster**. Not because photoreal faces cannot
   be trained — they can, and have been: `lora_train_sdxl.py` trains on RealVisXL and produced a

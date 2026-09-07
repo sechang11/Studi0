@@ -16,7 +16,7 @@ where we need them? Or build our own Seedance?"*
 | Native audio and lip-sync | yes | yes — LTX-2.5 joint audio, dialogue lip-synced through an on-screen mouth (measured, playbook) | **match** |
 | Several shots / hard cuts inside one generation | yes | yes — LTX-2.5 multishot, measured with `_tools/multishot.py` (cut detector: frame-difference spikes above the clip's own median + k·MAD) | **match** |
 | Post: upscale, grade, sound design | their Rule 10: *"post is half the film"* | per-take FILM-net interpolation to 48 fps, loudness levelling, scene music under at 0.5. **No grade, no upscale** on the film path | **free win, not yet taken** → §4 |
-| Multi-reference conditioning (`@CHARAC1 @CHARAC2 @PLACE` as separate tagged images) | native | LTX-2.5 i2v: **1** image (start frame). flf2v and H3 first-last: **2**. **H3 ref2va: up to 9 tagged `<Picture i>` references + video/audio refs, native** (`MiniMaxH3ReferenceToVideo`; weights on disk since the collector; wired 2026-09-07 as workflow 63) | **present, unmeasured until §6** → §2 |
+| Multi-reference conditioning (`@CHARAC1 @CHARAC2 @PLACE` as separate tagged images) | native | LTX-2.5 i2v: **1** image (start frame). flf2v and H3 first-last: **2**. **H3 ref2va: up to 9 tagged `<Picture i>` references + video/audio refs, native** (`MiniMaxH3ReferenceToVideo`; weights on disk since the collector; wired 2026-09-07 as workflow 63) | **present; measured 2026-09-07: supplies neither identity nor place as wired (3/3), see §6** → §2 |
 | Raw fidelity and motion realism | frontier-scale training | LTX-2.5 (22 B, open weights) for motion; **Qwen-Image / Qwen-Edit** for photoreal keyframes, **SDXL (animagine-xl-4.0)** for anime keyframes | **scale gap** → §3 |
 
 Both video engines are local weights (`UNETLoader` / `VAELoader` / `SamplerCustomAdvanced`
@@ -58,7 +58,7 @@ So the studio *has* a reference system. It resolves references at a different ti
 
 | where identity is resolved | theirs | ours |
 |---|---|---|
-| inside the video model, at generation | `@refs` | H3 `ref2va` (`<Picture i>` tags) - present, measured in §6 |
+| inside the video model, at generation | `@refs` | H3 `ref2va` (`<Picture i>` tags) - present; did not carry identity or place as wired (§6) |
 | before generation, composited into the start frame | — | anchors, plates, `compose_close` |
 | inside the weights | — | character / costume LoRAs (2 of 8 anime packs survived a three-seed gate; §57's costume-LoRA + face-transplant recipe for photoreal) |
 | in the edit | — | one-beat shots from identity keyframes, cut at assembly |
@@ -219,11 +219,35 @@ scene that wants to read differently from the film.
 
 ## 6. Measured results
 
-**H3 ref2va — reference-to-video, first wiring (2026-09-07).** *Result recorded below when the
-render lands; the first attempt killed ComfyUI by loading the 20 GB model on top of resident LTX,
-which is why `ref2va_test.py` now asks for the memory back and waits before it submits.*
+**H3 ref2va — reference-to-video, first wiring and first measurement (2026-09-07).** (The first
+attempt killed ComfyUI by loading the 20 GB model on top of resident LTX; `ref2va_test.py` now asks
+for the memory back and waits before it submits.)
 
-__REF2VA_RESULT__
+| render | character | framing | sampler | identity first → last | verdict |
+|---|---|---|---|---|---|
+| ref2va | Terra (drawn) | wide | fl2v turbo LoRA, 4 steps | 0.228 → 0.248 | a different face |
+| ref2va | Terra (drawn) | wide | no LoRA, 30 steps | 0.247 → 0.250 | a different face |
+| ref2va | tomas-reyl (photoreal) | medium | fl2v turbo LoRA, 4 steps | 0.225 → 0.191 | a different face |
+| i2v, composited start frame | Terra | wide | LTX-2.5 | 0.65 | same person |
+
+Each render gave the engine the character's portrait as `<Picture 1>` and the place plate as
+`<Picture 2>`, the node's own tags in the prompt, and no start frame. The LoRA, the step count and
+the domain are each ruled out as the cause. The two drawn renders also show a generic photoreal
+shrine rather than the dawn cedar-forest plate — the place reference was not carried either. The
+photoreal render is the most telling: a coherent medium shot of a man in a lamplit interior who
+turns his head exactly as asked — framing and action honoured to the letter — and he is not the
+referenced man, and the room is not the referenced café. The *words* were obeyed; the *pictures*
+were not.
+
+**The reference route exists on the box and, as wired today, supplies neither identity nor
+place.** The collector's note from the day the weights were pulled held: it *"reinforces an
+identity the prompt is already asking for; it does not supply one."* Whether it reinforces a
+*described* face is untested, because the method says never to describe what a reference carries.
+One wiring, three renders, `_tools/ref2va_test.py`; a wiring error would look exactly like a weak
+model, and the node's docstring was followed to the letter — so this is a strong result about the
+route as shipped, not a law about the weights. The multi-reference row therefore stays a gap in
+practice, but it is a **route** gap, not an architectural one, and the test that would close or
+confirm it is on the shelf.
 
 **Timecoded beats — run 1** (12 s, three beats, asked cuts at 2 s and 8 s, seeds 1234 and 77):
 
