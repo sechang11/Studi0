@@ -2006,10 +2006,51 @@ def _xfade(a, b, dst, kind, d=0.5):
     return os.path.exists(dst)
 
 
-def _assemble_job(jid, fid, music_on):
+_VENV_PY = os.path.expanduser("~/ComfyUI/venv/bin/python3")
+
+
+def _post_mod():
+    """studio/_tools/post.py by explicit path, like polish.py: grades and the upscale CLI."""
+    spec = _ilu.spec_from_file_location("film_post", os.path.join(TOOLS, "post.py"))
+    m = _ilu.module_from_spec(spec)
+    spec.loader.exec_module(m)
+    return m
+
+
+def _native_canvas(f, floor=(1472, 832)):
+    """The delivery canvas the picked takes actually justify: the largest picked frame, even-
+    rounded, never below the historical 1472x832 and never above 4K.  A fixed canvas was
+    quietly shrinking 1920x1088 takes by a quarter."""
+    w, h = floor
+    for sh in f.ordered_shots():
+        tk = next((t for t in sh.get("takes") or [] if t["id"] == sh.get("picked")), None)
+        if not tk or not tk.get("file"):
+            continue
+        r = _sh("ffprobe", "-v", "error", "-select_streams", "v:0", "-show_entries",
+                "stream=width,height", "-of", "csv=p=0", os.path.join(f.dir, tk["file"]))
+        try:
+            tw, th = [int(x) for x in (r.stdout or "").strip().split(",")[:2]]
+            w, h = max(w, tw), max(h, th)
+        except Exception:
+            continue
+    return (min(w, 3840) // 2 * 2, min(h, 2176) // 2 * 2)
+
+
+def _assemble_job(jid, fid, music_on, grade=None, upscale=False):
     run, set_path, load_wf, ensure_local, HOST, COMFY = _comfy()
     try:
         f = F.load(fid)
+        post = _post_mod()
+        grade = grade if grade in post.GRADES else post.DEFAULT_GRADE
+        vf_grade = post.grade_filter(grade)
+        canvas = _native_canvas(f)
+        if upscale:
+            canvas = (min(canvas[0] * 2, 3840) // 2 * 2, min(canvas[1] * 2, 2176) // 2 * 2)
+        _log(jid, "finish: grade %r (%s); canvas %dx%d%s" % (
+            grade, post.GRADES[grade][1], canvas[0], canvas[1],
+            " (2x master)" if upscale else " (the takes' own size)"))
+        f.data["post"] = {"grade": grade, "upscale": bool(upscale)}
+        f.save()
         tmp = os.path.join(f.dir, "assets", "_asm")
         shutil.rmtree(tmp, ignore_errors=True)
         os.makedirs(tmp, exist_ok=True)
@@ -2046,8 +2087,21 @@ def _assemble_job(jid, fid, music_on):
                     _log(jid, "skip %s - no picked take" % shid)
                     continue
                 np = os.path.join(tmp, "n_%s.mp4" % shid)
-                if not _norm(os.path.join(f.dir, take["file"]), np,
-                             fps=target_fps):
+                src_take = os.path.join(f.dir, take["file"])
+                if upscale:
+                    up = os.path.join(tmp, "u_%s.mp4" % shid)
+                    r = _sh(_VENV_PY, os.path.join(TOOLS, "post.py"), "upscale",
+                            src_take, up, "--scale", "2")
+                    if os.path.exists(up):
+                        _log(jid, "%s mastered 2x" % shid)
+                        src_take = up
+                    else:
+                        # a master that cannot be made must not silently deliver a soft shot
+                        # scaled up by the normaliser - say so and fall back to the takes' size
+                        _log(jid, "%s: upscale failed (%s) - delivering at the takes' own size"
+                             % (shid, (getattr(r, "stdout", "") or "")[-160:].strip()))
+                        canvas = _native_canvas(f)
+                if not _norm(src_take, np, w=canvas[0], h=canvas[1], fps=target_fps):
                     raise RuntimeError("normalize failed on %s" % shid)
                 parts.append((np, sh.get("transition_out", "cut")))
             if not parts:
@@ -2110,7 +2164,9 @@ def _assemble_job(jid, fid, music_on):
         final = os.path.join(f.dir, "assets", "film.mp4")
         # single-pass loudnorm on the whole film: scenes with dialogue, music beds and
         # raw ambience land at very different levels, and this is the delivery leveller
+        # one grade line on the whole film, after the cuts: every shot identical, for free
         _sh("ffmpeg", "-y", "-v", "error", "-f", "concat", "-safe", "0", "-i", lst,
+            *(["-vf", vf_grade] if vf_grade else []),
             "-af", "loudnorm=I=-16:TP=-1.5:LRA=11,alimiter=limit=0.94",
             "-c:v", "libx264", "-crf", "18", "-preset", "veryfast",
             "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "192k", "-ar", "48000", final)
@@ -2126,8 +2182,11 @@ def _assemble_job(jid, fid, music_on):
 def assemble(data):
     f = F.load(data["film"])
     jid = _job("assemble", total=max(len(f.data["scenes"]), 1), film=data["film"])
+    prev = f.data.get("post") or {}
     threading.Thread(target=_assemble_job,
-                     args=(jid, data["film"], bool(data.get("music", True))),
+                     args=(jid, data["film"], bool(data.get("music", True)),
+                           data.get("grade", prev.get("grade")),
+                           bool(data.get("upscale", prev.get("upscale", False)))),
                      daemon=True).start()
     return {"job": jid}, 200
 
