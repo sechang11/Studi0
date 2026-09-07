@@ -235,4 +235,11 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    # The book generator understands everything this one did and the guide's book directives
+    # too; this name stays so the old command keeps working, but there is one typesetter.
+    import importlib.util as _ilu
+    _p = os.path.join(os.path.dirname(os.path.abspath(__file__)), "build_method_book.py")
+    _spec = _ilu.spec_from_file_location("build_method_book", _p)
+    _m = _ilu.module_from_spec(_spec)
+    _spec.loader.exec_module(_m)
+    _m.main()

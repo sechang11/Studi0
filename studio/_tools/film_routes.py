@@ -792,6 +792,31 @@ def _scene_drift(video, start_img, tag):
 DRIFT_LIMIT = 0.65
 
 
+def _drift_verdict(sh, d, ident_m=None):
+    """(qc line or None, log line or None) for a scene-drift measurement.
+
+    Caption overlap has few words to work with when a face fills the frame, and a face that
+    closes its eyes or turns reads as a lost scene.  On a close-up the caption's verdict is a
+    fault only when the identity pass's place score - which looks at the background directly -
+    also says the place drifted; otherwise it is a note.  Measured on Lantern Night shot 040:
+    67% "lost" on a cut whose place held at 0.95; the takes that truly left her face read
+    72-89% and their place score said drifted."""
+    if not d or d.get("error"):
+        return None, None
+    lost = int(d["lost"] * 100)
+    if d["lost"] > DRIFT_LIMIT and len(sh.get("beats") or []) <= 1:
+        framing = ((sh.get("beats") or [{}])[0].get("framing") or "").lower()
+        if "close" in framing and (ident_m or {}).get("place_verdict") == "held":
+            hold = float((ident_m or {}).get("place_hold") or 0)
+            return ("drift by caption %d%% on a close-up, but the place held (%.2f) - a note, not a fault"
+                    % (lost, hold),
+                    "scene drift %d%% by caption on a close-up; the place score says held (%.2f)" % (lost, hold))
+        return ("scene drift: the last frame has lost %d%% of the start picture (%s)"
+                % (lost, ", ".join(d["missing"][:5])),
+                "scene drift %d%% - %s" % (lost, ", ".join(d["missing"][:5])))
+    return None, "scene held (%d%% of the start picture's content in the last frame)" % (100 - lost)
+
+
 def _cut_off(frame_png):
     """Is the subject in this frame flush against an edge? -> (bool, detail).
     Flush means the mask fills more than 35% of an edge's length, or touches the
@@ -853,6 +878,8 @@ def _sound_donor(f, sh):
     def cands(shots):
         out = []
         for s in shots:
+            if any(((b.get("dialogue") or {}).get("line") or "").strip() for b in (s.get("beats") or [])):
+                continue   # the engine's own render of a spoken line is voiced too; lend nothing from it
             for t in (s.get("takes") or []):
                 if (t.get("engine") or "").endswith("+vo"):
                     continue
@@ -1318,6 +1345,7 @@ def _render_take(jid, f, sh, eng, seed):
         eng = "cam"       # the time-lapse of the place's plates is arithmetic, never a generation
     cam_m = None
     ident_m = None
+    angle_m = None
     flat = f.flat(sh["id"])
     c = F.compile_shot(flat, eng)
     tid = "t%d" % (int(time.time() * 1000) % 10 ** 9)
@@ -1398,6 +1426,9 @@ def _render_take(jid, f, sh, eng, seed):
         cam_m, _cn = _camera_pass(jid, sh, dest, "cam")
         if _cn:
             qc = list(qc) + [_cn]
+        angle_m, _an = _angle_pass(jid, sh, dest)
+        if _an:
+            qc = list(qc) + [_an]
         try:
             _start = _resolve_anchor_file(f, sh["id"], jid)
             _d = _scene_drift(dest, _start, "%s_%s" % (f.id, sh["id"])) if _start else None
@@ -1489,12 +1520,11 @@ def _render_take(jid, f, sh, eng, seed):
     if _d and _d.get("error"):
         _log(jid, "drift check unavailable: %s" % _d["error"])
         _d = None
-    if _d and _d["lost"] > DRIFT_LIMIT and len(sh.get("beats") or []) <= 1:
-        qc = list(qc) + ["scene drift: the last frame has lost %d%% of the start picture (%s)"
-                         % (int(_d["lost"] * 100), ", ".join(_d["missing"][:5]))]
-        _log(jid, "scene drift %d%% - %s" % (int(_d["lost"] * 100), ", ".join(_d["missing"][:5])))
-    elif _d:
-        _log(jid, "scene held (%d%% of the start picture's content in the last frame)" % int((1 - _d["lost"]) * 100))
+    _dq, _dl = _drift_verdict(sh, _d, ident_m)
+    if _dq:
+        qc = list(qc) + [_dq]
+    if _dl:
+        _log(jid, _dl)
     # an empty shot that grew people: the last frame's caption names a person
     _empty = bool(sh.get("no_people")) or (sh.get("no_people") is None and bool(
         (f.scene(sh["scene"]) or {}).get("no_people")))
@@ -1684,7 +1714,7 @@ def _faults(take):
     """notes that count against a take; 'ends closer' is information, not a fault"""
     return [n for n in (take.get("qc") or [])
             if not n.startswith(("ends closer", "sound borrowed", "words not in the picture", "camera:", "identity:",
-                                 "angle:", "the studio cut the take"))]
+                                 "angle:", "the studio cut the take", "drift by caption"))]
 
 
 def _camera_score(sh, take):

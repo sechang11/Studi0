@@ -1,0 +1,3471 @@
+{
+ "title": "Lantern Night",
+ "created": "2026-09-07 12:04",
+ "look": "anime",
+ "look_clause": "flat cel-shaded hand-drawn 2D anime with clean line art and painted background art",
+ "grade": "",
+ "negative": "lowres, bad anatomy, extra limbs, text, watermark, nsfw, magic sparkles, glowing particles, light burst, passers-by, strangers, extra people, crowd, a second person, scene change, cut to a different shot",
+ "fps": 24,
+ "logline": "",
+ "resolution": "auto",
+ "deliver": "native",
+ "cast": {
+  "TERRA": {
+   "name": "Terra",
+   "clause": "a slightly built woman, in their twenties, fair skin, an oval face, green eyes, wide expressive eyes, sea-green long wavy hair, a hesitant, careful bearing, a young woman with waist-length wavy green hair held back by a large pink-and-gold ornament with a red gem and two upswept prongs, green eyes, a red half-cape over a sleeveless gold dress patterned in red and blue, and red boots",
+   "short": "sea-green long wavy hair, green eyes",
+   "sheet": "/home/k4shix/shared/comfy-studio/studio/foundry/characters/terra/base_portrait.png",
+   "portrait": "/home/k4shix/shared/comfy-studio/studio/foundry/characters/terra/base_portrait.png",
+   "voice": "en_woman",
+   "voice_desc": "",
+   "foundry": "terra"
+  }
+ },
+ "scenes": [
+  {
+   "id": "sc01",
+   "title": "lantern night",
+   "location": "a narrow market lane of food stalls, steam and hanging bulbs, dressed for a festival with lanterns and paper charms",
+   "time_of_day": "night",
+   "weather": "clear",
+   "ambience": "the murmur of a night market, paper lanterns creaking on their strings, a distant flute, footsteps on wet stone",
+   "palette": "",
+   "music": "soft koto and wind chimes, a night market, gentle and warm",
+   "cast_present": [
+    "TERRA"
+   ],
+   "no_people": false,
+   "anchor": "",
+   "shots": [
+    "010",
+    "020",
+    "030",
+    "040",
+    "050"
+   ],
+   "place": "night-market",
+   "plate": "night_wide"
+  }
+ ],
+ "shots": {
+  "010": {
+   "id": "010",
+   "scene": "sc01",
+   "title": "the market",
+   "duration": 6,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/foundry/places/night-market/night_wide.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide establishing shot",
+     "move": "slow push in",
+     "transition_in": "",
+     "subject": "",
+     "action": "paper lanterns sway gently on their strings over the empty stalls and their light flickers on the wet stone",
+     "background": "the lane empty, the banners still, warm light in every stall",
+     "motion": "",
+     "ambient": [
+      "light",
+      "crowd"
+     ],
+     "dialogue": {
+      "char": "",
+      "line": "",
+      "delivery": ""
+     }
+    }
+   ],
+   "sfx": "the murmur of a night market far off, lanterns creaking on their strings, no music",
+   "no_people": true,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t797740088",
+     "engine": "ltx",
+     "seed": 689035992,
+     "created": "12:17",
+     "file": "takes/010/ltx_t797740088.mp4",
+     "poster": "takes/010/ltx_t797740088.png",
+     "strip": "takes/010/ltx_t797740088_strip.png",
+     "duration": 6.04,
+     "fps": 24,
+     "qc": [
+      "camera: push in 278%, tilt down 9% (uncertain)",
+      "words not in the picture: steam, stirring, flute, somewhere"
+     ],
+     "cam_measured": {
+      "zoom": 3.776,
+      "pan": 0.002,
+      "tilt": 0.088,
+      "roll": -1.43,
+      "camera": "push in 278%, tilt down 9%",
+      "confidence": "low",
+      "curve": [
+       [
+        1.0,
+        0.0,
+        0.0
+       ],
+       [
+        1.0,
+        -0.0,
+        -0.0
+       ],
+       [
+        1.001,
+        -0.0,
+        0.0
+       ],
+       [
+        1.015,
+        -0.001,
+        -0.0
+       ],
+       [
+        1.049,
+        -0.002,
+        -0.002
+       ],
+       [
+        1.114,
+        -0.002,
+        0.0
+       ],
+       [
+        1.224,
+        -0.003,
+        0.004
+       ],
+       [
+        1.396,
+        -0.004,
+        0.012
+       ],
+       [
+        1.65,
+        -0.006,
+        0.02
+       ],
+       [
+        1.986,
+        -0.003,
+        0.03
+       ],
+       [
+        2.496,
+        0.003,
+        0.042
+       ],
+       [
+        3.033,
+        0.003,
+        0.051
+       ],
+       [
+        3.776,
+        0.002,
+        0.088
+       ]
+      ]
+     },
+     "identity": null,
+     "angle_measured": {
+      "pitch": -0.026,
+      "angle": "eye level",
+      "confidence": "low",
+      "lines": 31,
+      "inliers": 0.26
+     },
+     "drift": {
+      "lost": 0.55,
+      "missing": [
+       "atmosphere",
+       "banner",
+       "basket",
+       "brick",
+       "bucket",
+       "character",
+       "crat",
+       "fabric",
+       "letter",
+       "noodl",
+       "paper",
+       "pavement"
+      ],
+      "kept": 13,
+      "last_caption": "Market, street, buildings, stalls, awnings, lanterns, roof, stone path, food, meat, vegetables, wood, stone, metal, sky, mountains, clouds, night, light, glow, string, shadows, stalls, signs."
+     },
+     "warnings": [],
+     "prompt": "A static wide establishing shot in flat cel-shaded 2D anime: paper lanterns sway over the stalls and steam drifts from a food stall, while lantern light on wet stone, banners stirring, a flute somewhere; the light shifts and flickers across the scene; people move through the background continuously, a narrow market lane of food stalls, steam and hanging bulbs, dressed for a festival with lanterns "
+    },
+    {
+     "id": "t799723509",
+     "engine": "ltx",
+     "seed": 350799285,
+     "created": "12:51",
+     "file": "takes/010/ltx_t799723509.mp4",
+     "poster": "takes/010/ltx_t799723509.png",
+     "strip": "takes/010/ltx_t799723509_strip.png",
+     "duration": 6.04,
+     "fps": 24,
+     "qc": [
+      "camera: push in 38%",
+      "angle: a low angle (pitch +0.86) (uncertain)",
+      "sound borrowed from take t798153187 of shot 030 - the render was too quiet (mean -43 dB)",
+      "people appeared in an empty shot (person, boy)"
+     ],
+     "cam_measured": {
+      "zoom": 1.376,
+      "pan": -0.005,
+      "tilt": 0.021,
+      "roll": 0.17,
+      "camera": "push in 38%",
+      "confidence": "high",
+      "curve": [
+       [
+        1.0,
+        0.0,
+        0.0
+       ],
+       [
+        1.0,
+        -0.0,
+        -0.0
+       ],
+       [
+        1.0,
+        -0.0,
+        -0.0
+       ],
+       [
+        1.0,
+        -0.0,
+        -0.0
+       ],
+       [
+        1.004,
+        0.0,
+        0.0
+       ],
+       [
+        1.015,
+        -0.0,
+        0.001
+       ],
+       [
+        1.035,
+        -0.001,
+        0.002
+       ],
+       [
+        1.063,
+        -0.003,
+        0.004
+       ],
+       [
+        1.103,
+        -0.004,
+        0.008
+       ],
+       [
+        1.148,
+        -0.004,
+        0.009
+       ],
+       [
+        1.2,
+        -0.004,
+        0.013
+       ],
+       [
+        1.26,
+        -0.004,
+        0.017
+       ],
+       [
+        1.324,
+        -0.005,
+        0.021
+       ]
+      ]
+     },
+     "identity": null,
+     "angle_measured": {
+      "pitch": 0.861,
+      "angle": "a low angle",
+      "confidence": "low",
+      "lines": 26,
+      "inliers": 0.27
+     },
+     "drift": {
+      "lost": 0.31,
+      "missing": [
+       "atmosphere",
+       "banner",
+       "bucket",
+       "character",
+       "pavement",
+       "post",
+       "roof",
+       "rope",
+       "stool"
+      ],
+      "kept": 20,
+      "last_caption": "Market, street, buildings, stalls, lanterns, awnings, crates, boxes, tables, counters, stone path, brick, wood, fabric, paper, baskets, food, vegetables, noodles, fish, meat, clothing, umbrella, lantern string, mountains, sky, clouds, night, dusk, glow, light, shadows, signs, boy, person."
+     },
+     "warnings": [],
+     "prompt": "A wide establishing shot in flat cel-shaded 2D anime: paper lanterns sway gently on their strings over the empty stalls and their light flickers on the wet stone, while the lane empty, the banners still, warm light in every stall; the light shifts and flickers across the scene; people move through the background continuously, a narrow market lane of food stalls, steam and hanging bulbs, dressed fo"
+    },
+    {
+     "id": "t799862276",
+     "engine": "ltx",
+     "seed": 119637840,
+     "created": "12:53",
+     "file": "takes/010/ltx_t799862276.mp4",
+     "poster": "takes/010/ltx_t799862276.png",
+     "strip": "takes/010/ltx_t799862276_strip.png",
+     "duration": 6.04,
+     "fps": 24,
+     "qc": [
+      "camera: push in 10%",
+      "sound borrowed from take t798153187 of shot 030 - the render was too quiet (mean -40 dB)",
+      "people appeared in an empty shot (man)"
+     ],
+     "cam_measured": {
+      "zoom": 1.103,
+      "pan": 0.002,
+      "tilt": 0.003,
+      "roll": -0.07,
+      "camera": "push in 10%",
+      "confidence": "high",
+      "curve": [
+       [
+        1.0,
+        0.0,
+        0.0
+       ],
+       [
+        1.0,
+        -0.0,
+        -0.0
+       ],
+       [
+        1.0,
+        -0.0,
+        -0.0
+       ],
+       [
+        1.0,
+        -0.0,
+        -0.0
+       ],
+       [
+        0.999,
+        0.0,
+        0.0
+       ],
+       [
+        0.999,
+        0.0,
+        0.0
+       ],
+       [
+        0.999,
+        0.0,
+        0.0
+       ],
+       [
+        1.002,
+        0.0,
+        0.0
+       ],
+       [
+        1.011,
+        -0.0,
+        0.001
+       ],
+       [
+        1.028,
+        0.0,
+        0.001
+       ],
+       [
+        1.048,
+        0.001,
+        0.002
+       ],
+       [
+        1.07,
+        0.001,
+        0.002
+       ],
+       [
+        1.09,
+        0.002,
+        0.003
+       ]
+      ]
+     },
+     "identity": null,
+     "angle_measured": {
+      "pitch": 0.159,
+      "angle": "eye level",
+      "confidence": "low",
+      "lines": 32,
+      "inliers": 0.22
+     },
+     "drift": {
+      "lost": 0.41,
+      "missing": [
+       "atmosphere",
+       "awning",
+       "basket",
+       "bucket",
+       "fabric",
+       "noodl",
+       "post",
+       "roof",
+       "rope",
+       "stool",
+       "tabl",
+       "vegetabl"
+      ],
+      "kept": 17,
+      "last_caption": "Street, market, buildings, stalls, lanterns, string, pathway, pavement, crates, boxes, food, decorations, banners, sign, character, man, light, glow, glow, dusk, night, sky, mountains, wood, paper, cloth, stone, brick, metal, orange, yellow, red, blue, brown, shadow."
+     },
+     "warnings": [],
+     "prompt": "A wide establishing shot in flat cel-shaded 2D anime: paper lanterns sway gently on their strings over the empty stalls and their light flickers on the wet stone, while the lane empty, the banners still, warm light in every stall; the light shifts and flickers across the scene; people move through the background continuously, a narrow market lane of food stalls, steam and hanging bulbs, dressed fo"
+    },
+    {
+     "id": "t801539936",
+     "engine": "cam",
+     "seed": 0,
+     "created": "13:19",
+     "file": "takes/010/cam_t801539936.mp4",
+     "poster": "takes/010/cam_t801539936.png",
+     "strip": "takes/010/cam_t801539936_strip.png",
+     "duration": 6.0,
+     "fps": 24,
+     "qc": [
+      "camera: push in 12%"
+     ],
+     "cam_measured": {
+      "zoom": 1.117,
+      "pan": 0.0,
+      "tilt": -0.001,
+      "roll": -0.01,
+      "camera": "push in 12%",
+      "confidence": "high",
+      "curve": [
+       [
+        1.0,
+        0.0,
+        0.0
+       ],
+       [
+        1.001,
+        0.001,
+        -0.0
+       ],
+       [
+        1.008,
+        0.001,
+        0.001
+       ],
+       [
+        1.018,
+        0.001,
+        -0.0
+       ],
+       [
+        1.03,
+        -0.0,
+        -0.001
+       ],
+       [
+        1.044,
+        -0.0,
+        -0.0
+       ],
+       [
+        1.059,
+        0.0,
+        -0.0
+       ],
+       [
+        1.072,
+        0.0,
+        -0.0
+       ],
+       [
+        1.086,
+        0.001,
+        -0.0
+       ],
+       [
+        1.098,
+        0.0,
+        -0.0
+       ],
+       [
+        1.108,
+        -0.0,
+        0.0
+       ],
+       [
+        1.114,
+        0.0,
+        -0.001
+       ],
+       [
+        1.115,
+        0.0,
+        -0.001
+       ]
+      ]
+     },
+     "identity": null,
+     "angle_measured": null,
+     "drift": {
+      "lost": 0.38,
+      "missing": [
+       "atmosphere",
+       "awning",
+       "basket",
+       "bucket",
+       "character",
+       "crat",
+       "noodl",
+       "post",
+       "rope",
+       "tabl",
+       "vegetabl"
+      ],
+      "kept": 18,
+      "last_caption": "Marketplace, street, lanterns, stalls, buildings, counter, box, stool, brick, pavement, roof, sign, shopfront, food, fabric, mountains, sky, night, dusk, light, glow, paper, wood, stone, string, banner, advertisement, shadow."
+     },
+     "warnings": [],
+     "prompt": "camrig still_push {'seconds': 6.0, 'zoom_start': 1.0, 'zoom_end': 1.12, 'win_w': 1216, 'win_h': 832, 'cx': 608, 'cy': 416}"
+    }
+   ],
+   "picked": "t801539936",
+   "engine_notes": "",
+   "anchor_check": {
+    "caption": "Market, street, lanterns, buildings, stalls, tables, stools, crates, signs, banners, pavement, bricks, wood, paper, fabric, food, noodles, vegetables, baskets, buckets, ropes, posts, roof, awnings, sky, night, glow, light, shadows, lettering, characters, atmosphere.",
+    "missing": [
+     "strings",
+     "lane"
+    ],
+    "when": 1788799723
+   },
+   "cam": {
+    "rig": "still_push",
+    "audio": "/home/k4shix/shared/comfy-studio/studio/films/lantern-night/assets/amb_market.m4a",
+    "params": {
+     "seconds": 6.0,
+     "zoom_start": 1.0,
+     "zoom_end": 1.12,
+     "win_w": 1216,
+     "win_h": 832,
+     "cx": 608,
+     "cy": 416
+    }
+   }
+  },
+  "020": {
+   "id": "020",
+   "scene": "sc01",
+   "title": "Terra arrives",
+   "duration": 5,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/lantern-night/assets/anchor_shot_020.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "wide shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "TERRA",
+     "action": "stands still in the middle of the lane, feet planted, and slowly lifts her eyes to the lanterns above her; she does not walk",
+     "background": "the empty stalls glow behind her, lantern light on her hair",
+     "motion": "",
+     "ambient": [
+      "light",
+      "crowd"
+     ],
+     "dialogue": {
+      "char": "",
+      "line": "",
+      "delivery": ""
+     }
+    }
+   ],
+   "sfx": "the market murmur, closer; a lantern string creaking, no music",
+   "no_people": false,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t797882553",
+     "engine": "ltx",
+     "seed": 401206263,
+     "created": "12:22",
+     "file": "takes/020/ltx_t797882553.mp4",
+     "poster": "takes/020/ltx_t797882553.png",
+     "strip": "takes/020/ltx_t797882553_strip.png",
+     "duration": 5.04,
+     "fps": 24,
+     "qc": [
+      "camera: static",
+      "identity: uncertain by the end (0.68 -> 0.54); place drifted (0.84 first to last)",
+      "ends closer than it started - the person fills the frame edge at the end (top=0.14 bottom=0.28 left=0.00 right=0.00)",
+      "words not in the picture: among, crowd, past",
+      "words not in the picture: middle, lane, planted, lifts, does"
+     ],
+     "cam_measured": {
+      "zoom": 0.943,
+      "pan": -0.0,
+      "tilt": 0.001,
+      "roll": -0.01,
+      "camera": "static",
+      "confidence": "high",
+      "curve": [
+       [
+        1.0,
+        0.0,
+        0.0
+       ],
+       [
+        1.0,
+        -0.0,
+        -0.0
+       ],
+       [
+        1.0,
+        0.0,
+        -0.0
+       ],
+       [
+        1.0,
+        0.0,
+        0.0
+       ],
+       [
+        0.998,
+        0.0,
+        -0.0
+       ],
+       [
+        0.996,
+        0.0,
+        -0.0
+       ],
+       [
+        0.992,
+        0.0,
+        0.0
+       ],
+       [
+        0.986,
+        0.0,
+        0.0
+       ],
+       [
+        0.98,
+        0.0,
+        0.0
+       ],
+       [
+        0.972,
+        0.0,
+        0.0
+       ],
+       [
+        0.965,
+        -0.0,
+        0.001
+       ],
+       [
+        0.955,
+        -0.0,
+        0.001
+       ],
+       [
+        0.946,
+        -0.0,
+        0.001
+       ]
+      ]
+     },
+     "identity": {
+      "start": 0.676,
+      "end": 0.543,
+      "hold": 0.656,
+      "verdict_start": "same person",
+      "verdict_end": "uncertain",
+      "place_hold": 0.841,
+      "place_verdict": "drifted",
+      "place_start": 0.763,
+      "who": "terra",
+      "hold_curve": {
+       "anchors": 0,
+       "times": [
+        0.0,
+        0.63,
+        1.26,
+        1.89,
+        2.52,
+        3.15,
+        3.78,
+        4.41,
+        4.92
+       ],
+       "scores": [
+        0.668,
+        0.652,
+        0.653,
+        0.64,
+        0.636,
+        0.647,
+        0.608,
+        0.598,
+        0.544
+       ],
+       "holds_until": 4.92,
+       "lost_at": null,
+       "holds": true,
+       "duration": 5.04
+      }
+     },
+     "angle_measured": {
+      "pitch": 0.449,
+      "angle": "eye level",
+      "confidence": "low",
+      "lines": 29,
+      "inliers": 0.31
+     },
+     "drift": {
+      "lost": 0.57,
+      "missing": [
+       "basket",
+       "cloth",
+       "crat",
+       "decoration",
+       "food",
+       "mountain",
+       "person",
+       "roof",
+       "shopfront",
+       "stone",
+       "stool",
+       "table"
+      ],
+      "kept": 10,
+      "last_caption": "Market, street, buildings, lanterns, dress, skirt, cape, hair, hands, face, eyes, background, wood, fabric, paper, gold, red, blue, green, light, glow, shadows, night, dusk, signs, writing, stall, structure."
+     },
+     "warnings": [],
+     "prompt": "A static wide shot in flat cel-shaded 2D anime: a slightly built woman, in their twenties, fair skin, an oval face, green eyes, wide expressive eyes, sea-green long wavy hair, a hesitant, careful bearing, a young woman with waist-length wavy green hair held back by a large pink-and-gold ornament with a red gem and two upswept prongs, green eyes, a red half-cape over a sleeveless gold dress pattern"
+    },
+    {
+     "id": "t800069619",
+     "engine": "ltx",
+     "seed": 243392176,
+     "created": "12:57",
+     "file": "takes/020/ltx_t800069619.mp4",
+     "poster": "takes/020/ltx_t800069619.png",
+     "strip": "takes/020/ltx_t800069619_strip.png",
+     "duration": 5.04,
+     "fps": 24,
+     "qc": [
+      "camera: push in 70%, tilt up 17% (uncertain)",
+      "angle: a low angle (pitch +0.75) (uncertain)",
+      "identity: uncertain by the end (0.68 -> 0.54); place drifted (0.82 first to last)",
+      "ends closer than it started - the person fills the frame edge at the end (top=0.00 bottom=0.55 left=0.00 right=0.00)",
+      "words not in the picture: middle, lane, planted, lifts, does"
+     ],
+     "cam_measured": {
+      "zoom": 1.703,
+      "pan": 0.002,
+      "tilt": -0.169,
+      "roll": 0.59,
+      "camera": "push in 70%, tilt up 17%",
+      "confidence": "low",
+      "curve": [
+       [
+        1.0,
+        0.0,
+        0.0
+       ],
+       [
+        1.006,
+        0.0,
+        -0.0
+       ],
+       [
+        1.019,
+        0.001,
+        -0.002
+       ],
+       [
+        1.041,
+        0.001,
+        -0.006
+       ],
+       [
+        1.066,
+        0.002,
+        -0.012
+       ],
+       [
+        1.09,
+        0.001,
+        -0.019
+       ],
+       [
+        1.124,
+        0.002,
+        -0.03
+       ],
+       [
+        1.168,
+        0.001,
+        -0.048
+       ],
+       [
+        1.217,
+        -0.0,
+        -0.067
+       ],
+       [
+        1.271,
+        -0.003,
+        -0.089
+       ],
+       [
+        1.457,
+        -0.001,
+        -0.132
+       ],
+       [
+        1.68,
+        0.002,
+        -0.161
+       ],
+       [
+        1.703,
+        0.002,
+        -0.169
+       ]
+      ]
+     },
+     "identity": {
+      "start": 0.68,
+      "end": 0.539,
+      "hold": 0.741,
+      "verdict_start": "same person",
+      "verdict_end": "uncertain",
+      "place_hold": 0.819,
+      "place_verdict": "drifted",
+      "place_start": 0.757,
+      "who": "terra",
+      "hold_curve": {
+       "anchors": 0,
+       "times": [
+        0.0,
+        0.63,
+        1.26,
+        1.89,
+        2.52,
+        3.15,
+        3.78,
+        4.41,
+        4.92
+       ],
+       "scores": [
+        0.676,
+        0.665,
+        0.677,
+        0.675,
+        0.673,
+        0.671,
+        0.683,
+        0.692,
+        0.698
+       ],
+       "holds_until": 4.92,
+       "lost_at": null,
+       "holds": true,
+       "duration": 5.04
+      }
+     },
+     "angle_measured": {
+      "pitch": 0.754,
+      "angle": "a low angle",
+      "confidence": "low",
+      "lines": 25,
+      "inliers": 0.32
+     },
+     "drift": {
+      "lost": 0.43,
+      "missing": [
+       "basket",
+       "crat",
+       "food",
+       "mountain",
+       "person",
+       "shopfront",
+       "stall",
+       "stool",
+       "table",
+       "woman"
+      ],
+      "kept": 13,
+      "last_caption": "Here's a breakdown of the nouns present in the image, separated by commas:\n\nPlace, street, town, market, lanterns, buildings, cape, hair, face, eyes, earrings, clothing, knot, ornament, lantern, sign, scroll, banner, roof, post, pole, stone, pavement, wood, paper, silk, fabric, red, gold, green, white, black, light, glow, night, dusk, shadows, clouds, sky, atmosphere, decoration, writing, characte"
+     },
+     "warnings": [],
+     "prompt": "A static wide shot in flat cel-shaded 2D anime: a slightly built woman, in their twenties, fair skin, an oval face, green eyes, wide expressive eyes, sea-green long wavy hair, a hesitant, careful bearing, a young woman with waist-length wavy green hair held back by a large pink-and-gold ornament with a red gem and two upswept prongs, green eyes, a red half-cape over a sleeveless gold dress pattern"
+    }
+   ],
+   "picked": "t800069619",
+   "engine_notes": "",
+   "anchor_source": {
+    "character": "terra",
+    "framing": "full",
+    "place": "night-market",
+    "stand": 0.4,
+    "cx": 0.42,
+    "view": "turn_front",
+    "plate": "/home/k4shix/shared/comfy-studio/studio/foundry/places/night-market/night_wide.png",
+    "props": []
+   },
+   "head_px": 125,
+   "anchor_face": 0.658,
+   "anchor_check": {
+    "caption": "Market, street, buildings, stalls, lanterns, food, table, stool, basket, crates, sign, shopfront, roof, stone, wood, fabric, clothing, hair, mountains, sky, night, light, glow, lettering, decoration, person, woman.",
+    "missing": [
+     "middle",
+     "lane",
+     "planted",
+     "lifts",
+     "does"
+    ],
+    "when": 1788800069
+   }
+  },
+  "030": {
+   "id": "030",
+   "scene": "sc01",
+   "title": "the lantern",
+   "duration": 5,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/lantern-night/assets/anchor_shot_030.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "medium shot",
+     "move": "static",
+     "transition_in": "",
+     "subject": "TERRA",
+     "action": "lifts a paper lantern from the stall in both hands and turns it slowly, looking into its light",
+     "background": "the other lanterns glow softly behind her; the lane is empty, no one else in the frame",
+     "motion": "",
+     "ambient": [
+      "light",
+      "crowd"
+     ],
+     "dialogue": {
+      "char": "TERRA",
+      "line": "I remember this place.",
+      "delivery": "quiet, half to herself"
+     }
+    }
+   ],
+   "sfx": "paper rustling, the market softer, no music",
+   "no_people": false,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t798153187",
+     "engine": "ltx",
+     "seed": 143657792,
+     "created": "12:25",
+     "file": "takes/030/ltx_t798153187.mp4",
+     "poster": "takes/030/ltx_t798153187.png",
+     "strip": "takes/030/ltx_t798153187_strip.png",
+     "duration": 5.04,
+     "fps": 24,
+     "qc": [
+      "camera: static",
+      "identity: same person, start 0.68, end 0.64; place held (0.94 first to last)",
+      "words not in the picture: lifts"
+     ],
+     "cam_measured": {
+      "zoom": 1.0,
+      "pan": 0.0,
+      "tilt": -0.0,
+      "roll": -0.01,
+      "camera": "static",
+      "confidence": "high",
+      "curve": [
+       [
+        1.0,
+        0.0,
+        0.0
+       ],
+       [
+        1.0,
+        -0.0,
+        0.0
+       ],
+       [
+        1.0,
+        -0.0,
+        0.0
+       ],
+       [
+        1.0,
+        -0.0,
+        0.0
+       ],
+       [
+        1.0,
+        -0.0,
+        0.0
+       ],
+       [
+        1.0,
+        -0.0,
+        0.0
+       ],
+       [
+        1.0,
+        0.0,
+        -0.0
+       ],
+       [
+        1.0,
+        0.0,
+        -0.0
+       ],
+       [
+        1.0,
+        0.0,
+        -0.0
+       ],
+       [
+        1.0,
+        -0.0,
+        -0.0
+       ],
+       [
+        0.998,
+        -0.0,
+        -0.0
+       ],
+       [
+        0.998,
+        0.0,
+        -0.0
+       ],
+       [
+        0.998,
+        0.0,
+        -0.0
+       ]
+      ]
+     },
+     "identity": {
+      "start": 0.675,
+      "end": 0.644,
+      "hold": 0.891,
+      "verdict_start": "same person",
+      "verdict_end": "same person",
+      "place_hold": 0.943,
+      "place_verdict": "held",
+      "place_start": 0.678,
+      "who": "terra",
+      "hold_curve": {
+       "anchors": 0,
+       "times": [
+        0.0,
+        0.63,
+        1.26,
+        1.89,
+        2.52,
+        3.15,
+        3.78,
+        4.41,
+        4.92
+       ],
+       "scores": [
+        0.675,
+        0.606,
+        0.583,
+        0.626,
+        0.675,
+        0.631,
+        0.692,
+        0.678,
+        0.681
+       ],
+       "holds_until": 4.92,
+       "lost_at": null,
+       "holds": true,
+       "duration": 5.04
+      }
+     },
+     "angle_measured": {
+      "pitch": 0.11,
+      "angle": "eye level",
+      "confidence": "low",
+      "lines": 27,
+      "inliers": 0.3
+     },
+     "drift": {
+      "lost": 0.36,
+      "missing": [
+       "barrel",
+       "boot",
+       "cape",
+       "crate",
+       "fabric",
+       "food",
+       "paint",
+       "stool",
+       "table",
+       "writ"
+      ],
+      "kept": 18,
+      "last_caption": "Here's a breakdown of the nouns present in the image, separated by commas:\n\nStreet, market, buildings, lanterns, shopfronts, woman, people, man, boy, clothing, dress, jacket, skirt, hair, face, eyes, nose, mouth, hands, arms, legs, lantern posts, stall, goods, shelves, baskets, stone pavement, brick wall, window, sign, characters, paper, wood, cloth, metal, light, glow, glow, shadows, night, dusk,"
+     },
+     "warnings": [
+      "anime dialogue: line is written OFF SCREEN over this beat (LTX voices anime but does not move a drawn mouth)"
+     ],
+     "prompt": "A static medium shot in flat cel-shaded 2D anime: a slightly built woman, in their twenties, fair skin, an oval face, green eyes, wide expressive eyes, sea-green long wavy hair, a hesitant, careful bearing, a young woman with waist-length wavy green hair held back by a large pink-and-gold ornament with a red gem and two upswept prongs, green eyes, a red half-cape over a sleeveless gold dress patte"
+    },
+    {
+     "id": "t798153187v",
+     "engine": "ltx+vo",
+     "seed": 143657792,
+     "created": "12:25",
+     "file": "takes/030/ltx_t798153187_vo.mp4",
+     "poster": "takes/030/ltx_t798153187_vo.png",
+     "strip": "takes/030/ltx_t798153187_vo_strip.png",
+     "duration": 5.04,
+     "fps": 24,
+     "qc": [
+      "camera: static",
+      "identity: same person, start 0.68, end 0.64; place held (0.94 first to last)",
+      "words not in the picture: lifts",
+      "words not in the picture: lifts, lane, else"
+     ],
+     "cam_measured": {
+      "zoom": 1.0,
+      "pan": 0.0,
+      "tilt": -0.0,
+      "roll": -0.01,
+      "camera": "static",
+      "confidence": "high",
+      "curve": [
+       [
+        1.0,
+        0.0,
+        0.0
+       ],
+       [
+        1.0,
+        -0.0,
+        0.0
+       ],
+       [
+        1.0,
+        -0.0,
+        0.0
+       ],
+       [
+        1.0,
+        -0.0,
+        0.0
+       ],
+       [
+        1.0,
+        -0.0,
+        0.0
+       ],
+       [
+        1.0,
+        -0.0,
+        0.0
+       ],
+       [
+        1.0,
+        0.0,
+        -0.0
+       ],
+       [
+        1.0,
+        0.0,
+        -0.0
+       ],
+       [
+        1.0,
+        0.0,
+        -0.0
+       ],
+       [
+        1.0,
+        -0.0,
+        -0.0
+       ],
+       [
+        0.998,
+        -0.0,
+        -0.0
+       ],
+       [
+        0.998,
+        0.0,
+        -0.0
+       ],
+       [
+        0.998,
+        0.0,
+        -0.0
+       ]
+      ]
+     },
+     "identity": {
+      "start": 0.675,
+      "end": 0.644,
+      "hold": 0.891,
+      "verdict_start": "same person",
+      "verdict_end": "same person",
+      "place_hold": 0.943,
+      "place_verdict": "held",
+      "place_start": 0.678,
+      "who": "terra",
+      "hold_curve": {
+       "anchors": 0,
+       "times": [
+        0.0,
+        0.63,
+        1.26,
+        1.89,
+        2.52,
+        3.15,
+        3.78,
+        4.41,
+        4.92
+       ],
+       "scores": [
+        0.675,
+        0.606,
+        0.583,
+        0.626,
+        0.675,
+        0.631,
+        0.692,
+        0.678,
+        0.681
+       ],
+       "holds_until": 4.92,
+       "lost_at": null,
+       "holds": true,
+       "duration": 5.04
+      }
+     },
+     "angle_measured": {
+      "pitch": 0.11,
+      "angle": "eye level",
+      "confidence": "low",
+      "lines": 27,
+      "inliers": 0.3
+     },
+     "drift": {
+      "lost": 0.36,
+      "missing": [
+       "barrel",
+       "boot",
+       "cape",
+       "crate",
+       "fabric",
+       "food",
+       "paint",
+       "stool",
+       "table",
+       "writ"
+      ],
+      "kept": 18,
+      "last_caption": "Here's a breakdown of the nouns present in the image, separated by commas:\n\nStreet, market, buildings, lanterns, shopfronts, woman, people, man, boy, clothing, dress, jacket, skirt, hair, face, eyes, nose, mouth, hands, arms, legs, lantern posts, stall, goods, shelves, baskets, stone pavement, brick wall, window, sign, characters, paper, wood, cloth, metal, light, glow, glow, shadows, night, dusk,"
+     },
+     "warnings": [
+      "anime dialogue: line is written OFF SCREEN over this beat (LTX voices anime but does not move a drawn mouth)"
+     ],
+     "prompt": "A static medium shot in flat cel-shaded 2D anime: a slightly built woman, in their twenties, fair skin, an oval face, green eyes, wide expressive eyes, sea-green long wavy hair, a hesitant, careful bearing, a young woman with waist-length wavy green hair held back by a large pink-and-gold ornament with a red gem and two upswept prongs, green eyes, a red half-cape over a sleeveless gold dress patte"
+    },
+    {
+     "id": "t800259695",
+     "engine": "ltx",
+     "seed": 274439948,
+     "created": "13:00",
+     "file": "takes/030/ltx_t800259695.mp4",
+     "poster": "takes/030/ltx_t800259695.png",
+     "strip": "takes/030/ltx_t800259695_strip.png",
+     "duration": 5.04,
+     "fps": 24,
+     "qc": [
+      "camera: push in 29%",
+      "identity: same person, start 0.67, end 0.68; place held (0.94 first to last)",
+      "words not in the picture: lifts, lane, else"
+     ],
+     "cam_measured": {
+      "zoom": 1.29,
+      "pan": -0.007,
+      "tilt": -0.024,
+      "roll": 0.29,
+      "camera": "push in 29%",
+      "confidence": "high",
+      "curve": [
+       [
+        1.0,
+        0.0,
+        0.0
+       ],
+       [
+        1.019,
+        -0.001,
+        -0.002
+       ],
+       [
+        1.041,
+        -0.002,
+        -0.005
+       ],
+       [
+        1.064,
+        -0.003,
+        -0.007
+       ],
+       [
+        1.084,
+        -0.003,
+        -0.009
+       ],
+       [
+        1.105,
+        -0.003,
+        -0.011
+       ],
+       [
+        1.128,
+        -0.003,
+        -0.013
+       ],
+       [
+        1.152,
+        -0.004,
+        -0.015
+       ],
+       [
+        1.174,
+        -0.004,
+        -0.017
+       ],
+       [
+        1.198,
+        -0.005,
+        -0.019
+       ],
+       [
+        1.221,
+        -0.005,
+        -0.021
+       ],
+       [
+        1.246,
+        -0.006,
+        -0.023
+       ],
+       [
+        1.267,
+        -0.007,
+        -0.024
+       ]
+      ]
+     },
+     "identity": {
+      "start": 0.674,
+      "end": 0.681,
+      "hold": 0.903,
+      "verdict_start": "same person",
+      "verdict_end": "same person",
+      "place_hold": 0.936,
+      "place_verdict": "held",
+      "place_start": 0.675,
+      "who": "terra",
+      "hold_curve": {
+       "anchors": 0,
+       "times": [
+        0.0,
+        0.63,
+        1.26,
+        1.89,
+        2.52,
+        3.15,
+        3.78,
+        4.41,
+        4.92
+       ],
+       "scores": [
+        0.678,
+        0.683,
+        0.693,
+        0.675,
+        0.664,
+        0.667,
+        0.671,
+        0.684,
+        0.679
+       ],
+       "holds_until": 4.92,
+       "lost_at": null,
+       "holds": true,
+       "duration": 5.04
+      }
+     },
+     "angle_measured": {
+      "pitch": 0.175,
+      "angle": "eye level",
+      "confidence": "low",
+      "lines": 31,
+      "inliers": 0.23
+     },
+     "drift": {
+      "lost": 0.32,
+      "missing": [
+       "barrel",
+       "boot",
+       "brick",
+       "crate",
+       "fabric",
+       "paint",
+       "stool",
+       "table",
+       "writ"
+      ],
+      "kept": 19,
+      "last_caption": "Street, market, lanterns, woman, hair, dress, cape, lantern, food, stalls, tables, chairs, pavement, buildings, sign, paper, cloth, wood, stone, light, glow, night, dusk, shadows, colors, patterns, shopfronts, decorations."
+     },
+     "warnings": [
+      "anime dialogue: line is written OFF SCREEN over this beat (LTX voices anime but does not move a drawn mouth)"
+     ],
+     "prompt": "A static medium shot in flat cel-shaded 2D anime: a slightly built woman, in their twenties, fair skin, an oval face, green eyes, wide expressive eyes, sea-green long wavy hair, a hesitant, careful bearing, a young woman with waist-length wavy green hair held back by a large pink-and-gold ornament with a red gem and two upswept prongs, green eyes, a red half-cape over a sleeveless gold dress patte"
+    },
+    {
+     "id": "t800259695v",
+     "engine": "ltx+vo",
+     "seed": 274439948,
+     "created": "13:00",
+     "file": "takes/030/ltx_t800259695_vo.mp4",
+     "poster": "takes/030/ltx_t800259695_vo.png",
+     "strip": "takes/030/ltx_t800259695_vo_strip.png",
+     "duration": 5.04,
+     "fps": 24,
+     "qc": [
+      "camera: push in 29%",
+      "identity: same person, start 0.67, end 0.68; place held (0.94 first to last)",
+      "words not in the picture: lifts, lane, else"
+     ],
+     "cam_measured": {
+      "zoom": 1.29,
+      "pan": -0.007,
+      "tilt": -0.024,
+      "roll": 0.29,
+      "camera": "push in 29%",
+      "confidence": "high",
+      "curve": [
+       [
+        1.0,
+        0.0,
+        0.0
+       ],
+       [
+        1.019,
+        -0.001,
+        -0.002
+       ],
+       [
+        1.041,
+        -0.002,
+        -0.005
+       ],
+       [
+        1.064,
+        -0.003,
+        -0.007
+       ],
+       [
+        1.084,
+        -0.003,
+        -0.009
+       ],
+       [
+        1.105,
+        -0.003,
+        -0.011
+       ],
+       [
+        1.128,
+        -0.003,
+        -0.013
+       ],
+       [
+        1.152,
+        -0.004,
+        -0.015
+       ],
+       [
+        1.174,
+        -0.004,
+        -0.017
+       ],
+       [
+        1.198,
+        -0.005,
+        -0.019
+       ],
+       [
+        1.221,
+        -0.005,
+        -0.021
+       ],
+       [
+        1.246,
+        -0.006,
+        -0.023
+       ],
+       [
+        1.267,
+        -0.007,
+        -0.024
+       ]
+      ]
+     },
+     "identity": {
+      "start": 0.674,
+      "end": 0.681,
+      "hold": 0.903,
+      "verdict_start": "same person",
+      "verdict_end": "same person",
+      "place_hold": 0.936,
+      "place_verdict": "held",
+      "place_start": 0.675,
+      "who": "terra",
+      "hold_curve": {
+       "anchors": 0,
+       "times": [
+        0.0,
+        0.63,
+        1.26,
+        1.89,
+        2.52,
+        3.15,
+        3.78,
+        4.41,
+        4.92
+       ],
+       "scores": [
+        0.678,
+        0.683,
+        0.693,
+        0.675,
+        0.664,
+        0.667,
+        0.671,
+        0.684,
+        0.679
+       ],
+       "holds_until": 4.92,
+       "lost_at": null,
+       "holds": true,
+       "duration": 5.04
+      }
+     },
+     "angle_measured": {
+      "pitch": 0.175,
+      "angle": "eye level",
+      "confidence": "low",
+      "lines": 31,
+      "inliers": 0.23
+     },
+     "drift": {
+      "lost": 0.32,
+      "missing": [
+       "barrel",
+       "boot",
+       "brick",
+       "crate",
+       "fabric",
+       "paint",
+       "stool",
+       "table",
+       "writ"
+      ],
+      "kept": 19,
+      "last_caption": "Street, market, lanterns, woman, hair, dress, cape, lantern, food, stalls, tables, chairs, pavement, buildings, sign, paper, cloth, wood, stone, light, glow, night, dusk, shadows, colors, patterns, shopfronts, decorations."
+     },
+     "warnings": [
+      "anime dialogue: line is written OFF SCREEN over this beat (LTX voices anime but does not move a drawn mouth)"
+     ],
+     "prompt": "A static medium shot in flat cel-shaded 2D anime: a slightly built woman, in their twenties, fair skin, an oval face, green eyes, wide expressive eyes, sea-green long wavy hair, a hesitant, careful bearing, a young woman with waist-length wavy green hair held back by a large pink-and-gold ornament with a red gem and two upswept prongs, green eyes, a red half-cape over a sleeveless gold dress patte"
+    }
+   ],
+   "picked": "t800259695v",
+   "engine_notes": "",
+   "anchor_source": {
+    "character": "terra",
+    "framing": "full",
+    "place": "night-market",
+    "stand": 0.22,
+    "cx": 0.45,
+    "view": "turn_front",
+    "plate": "/home/k4shix/shared/comfy-studio/studio/foundry/places/night-market/night_wide.png",
+    "props": []
+   },
+   "head_px": 163,
+   "anchor_face": 0.671,
+   "anchor_check": {
+    "caption": "Market, street, stalls, lanterns, building, shopfront, woman, dress, cape, boots, table, stool, crate, barrel, sign, writing, paper, stone, brick, wood, fabric, paint, food, decoration, light, glow, night, dusk, glow, color, pattern.",
+    "missing": [
+     "lifts",
+     "lane",
+     "else"
+    ],
+    "when": 1788800259
+   }
+  },
+  "040": {
+   "id": "040",
+   "scene": "sc01",
+   "title": "the smile",
+   "duration": 3,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/lantern-night/assets/anchor_shot_040.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "close-up",
+     "move": "static",
+     "transition_in": "",
+     "subject": "TERRA",
+     "action": "smiles slowly; her eyes close for a moment and open again; lantern light glows on her face and the camera holds a tight close-up on her face for the whole shot",
+     "background": "soft lantern bokeh behind her and nothing else",
+     "motion": "",
+     "ambient": [
+      "light",
+      "crowd"
+     ],
+     "dialogue": {
+      "char": "",
+      "line": "",
+      "delivery": ""
+     }
+    }
+   ],
+   "sfx": "the soft creak of lanterns overhead, the market murmur far away, no music",
+   "no_people": false,
+   "enhance": false,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t798334622",
+     "engine": "ltx",
+     "seed": 76147495,
+     "created": "12:28",
+     "file": "takes/040/ltx_t798334622.mp4",
+     "poster": "takes/040/ltx_t798334622.png",
+     "strip": "takes/040/ltx_t798334622_strip.png",
+     "duration": 4.04,
+     "fps": 24,
+     "qc": [
+      "camera: pull back 63%, pan right 7%, tilt down 50% (a face fills the frame; the camera is hard to tell from the head) (uncertain)",
+      "identity: same person, start 0.77, end 0.71; place drifted (0.81 first to last)",
+      "scene drift: the last frame has lost 78% of the start picture (atmosphere, color, decoration, draw, earr)",
+      "words not in the picture: follow, bokeh, crowd"
+     ],
+     "cam_measured": {
+      "zoom": 0.367,
+      "pan": 0.066,
+      "tilt": 0.499,
+      "roll": -0.08,
+      "camera": "pull back 63%, pan right 7%, tilt down 50% (a face fills the frame; the camera is hard to tell from the head)",
+      "confidence": "low",
+      "curve": [
+       [
+        1.0,
+        0.0,
+        0.0
+       ],
+       [
+        1.0,
+        -0.0,
+        -0.0
+       ],
+       [
+        1.0,
+        -0.0,
+        -0.0
+       ],
+       [
+        1.0,
+        -0.0,
+        -0.0
+       ],
+       [
+        0.946,
+        0.005,
+        0.027
+       ],
+       [
+        0.774,
+        0.017,
+        0.128
+       ],
+       [
+        0.597,
+        0.032,
+        0.251
+       ],
+       [
+        0.48,
+        0.047,
+        0.359
+       ],
+       [
+        0.414,
+        0.057,
+        0.434
+       ],
+       [
+        0.38,
+        0.063,
+        0.479
+       ],
+       [
+        0.367,
+        0.066,
+        0.499
+       ],
+       [
+        0.367,
+        0.066,
+        0.499
+       ],
+       [
+        0.367,
+        0.066,
+        0.499
+       ]
+      ]
+     },
+     "identity": {
+      "start": 0.771,
+      "end": 0.709,
+      "hold": 0.798,
+      "verdict_start": "same person",
+      "verdict_end": "same person",
+      "place_hold": 0.814,
+      "place_verdict": "drifted",
+      "place_start": 0.539,
+      "who": "terra",
+      "hold_curve": {
+       "anchors": 0,
+       "times": [
+        0.0,
+        0.51,
+        1.01,
+        1.52,
+        2.02,
+        2.53,
+        3.03,
+        3.54,
+        3.92
+       ],
+       "scores": [
+        0.771,
+        0.73,
+        0.736,
+        0.73,
+        0.766,
+        0.721,
+        0.713,
+        0.694,
+        0.706
+       ],
+       "holds_until": 3.92,
+       "lost_at": null,
+       "holds": true,
+       "duration": 4.04
+      }
+     },
+     "angle_measured": {
+      "pitch": 0.0,
+      "angle": "eye level",
+      "confidence": "low",
+      "lines": 26,
+      "inliers": 0.27
+     },
+     "drift": {
+      "lost": 0.78,
+      "missing": [
+       "atmosphere",
+       "color",
+       "decoration",
+       "draw",
+       "earr",
+       "girl",
+       "illumination",
+       "illustration",
+       "necklace",
+       "ornament",
+       "pendant",
+       "ribbon"
+      ],
+      "kept": 4,
+      "last_caption": "Market, street, lanterns, stalls, food, counter, people, man, woman, boy, cape, dress, boots, hair, sign, flag, building, brick, stone, wood, cloth, paper, food steam, crowd, light, glow, dusk, night, red, yellow, green, blue, brown, sky."
+     },
+     "warnings": [],
+     "prompt": "A static close-up in flat cel-shaded 2D anime: a slightly built woman, in their twenties, fair skin, an oval face, green eyes, wide expressive eyes, sea-green long wavy hair, a hesitant, careful bearing, a young woman with waist-length wavy green hair held back by a large pink-and-gold ornament with a red gem and two upswept prongs, green eyes, a red half-cape over a sleeveless gold dress patterne"
+    },
+    {
+     "id": "t798489734",
+     "engine": "ltx",
+     "seed": 11050657,
+     "created": "12:30",
+     "file": "takes/040/ltx_t798489734.mp4",
+     "poster": "takes/040/ltx_t798489734.png",
+     "strip": "takes/040/ltx_t798489734_strip.png",
+     "duration": 4.04,
+     "fps": 24,
+     "qc": [
+      "camera: pull back 68%, tilt down 53% (a face fills the frame; the camera is hard to tell from the head) (uncertain)",
+      "identity: same person, start 0.77, end 0.79; place drifted (0.75 first to last)",
+      "scene drift: the last frame has lost 89% of the start picture (atmosphere, cloth, color, decoration, draw)",
+      "words not in the picture: follow, bokeh, crowd"
+     ],
+     "cam_measured": {
+      "zoom": 0.321,
+      "pan": -0.005,
+      "tilt": 0.528,
+      "roll": -0.58,
+      "camera": "pull back 68%, tilt down 53% (a face fills the frame; the camera is hard to tell from the head)",
+      "confidence": "low",
+      "curve": [
+       [
+        1.0,
+        0.0,
+        0.0
+       ],
+       [
+        1.0,
+        0.0,
+        -0.001
+       ],
+       [
+        1.0,
+        0.0,
+        -0.001
+       ],
+       [
+        0.975,
+        -0.001,
+        0.018
+       ],
+       [
+        0.855,
+        -0.002,
+        0.067
+       ],
+       [
+        0.703,
+        -0.003,
+        0.137
+       ],
+       [
+        0.567,
+        -0.004,
+        0.222
+       ],
+       [
+        0.453,
+        -0.003,
+        0.31
+       ],
+       [
+        0.37,
+        -0.003,
+        0.391
+       ],
+       [
+        0.343,
+        -0.004,
+        0.465
+       ],
+       [
+        0.327,
+        -0.005,
+        0.512
+       ],
+       [
+        0.321,
+        -0.005,
+        0.529
+       ],
+       [
+        0.321,
+        -0.005,
+        0.528
+       ]
+      ]
+     },
+     "identity": {
+      "start": 0.767,
+      "end": 0.785,
+      "hold": 0.903,
+      "verdict_start": "same person",
+      "verdict_end": "same person",
+      "place_hold": 0.746,
+      "place_verdict": "drifted",
+      "place_start": 0.53,
+      "who": "terra",
+      "hold_curve": {
+       "anchors": 0,
+       "times": [
+        0.0,
+        0.51,
+        1.01,
+        1.52,
+        2.02,
+        2.53,
+        3.03,
+        3.54,
+        3.92
+       ],
+       "scores": [
+        0.767,
+        0.765,
+        0.762,
+        0.78,
+        0.762,
+        0.745,
+        0.704,
+        0.699,
+        0.707
+       ],
+       "holds_until": 3.92,
+       "lost_at": null,
+       "holds": true,
+       "duration": 4.04
+      }
+     },
+     "angle_measured": {
+      "pitch": 0.0,
+      "angle": "eye level",
+      "confidence": "medium",
+      "lines": 17,
+      "inliers": 0.47
+     },
+     "drift": {
+      "lost": 0.89,
+      "missing": [
+       "atmosphere",
+       "cloth",
+       "color",
+       "decoration",
+       "draw",
+       "earr",
+       "girl",
+       "illumination",
+       "illustration",
+       "necklace",
+       "ornament",
+       "paper"
+      ],
+      "kept": 2,
+      "last_caption": "Market, street, lanterns, dress, cape, boots, people, stalls, tables, chairs, buildings, pavement, stone, fabric, red, yellow, green, hair, shoes, crowd, night, glow, light, signs, flags."
+     },
+     "warnings": [],
+     "prompt": "A static close-up in flat cel-shaded 2D anime: a slightly built woman, in their twenties, fair skin, an oval face, green eyes, wide expressive eyes, sea-green long wavy hair, a hesitant, careful bearing, a young woman with waist-length wavy green hair held back by a large pink-and-gold ornament with a red gem and two upswept prongs, green eyes, a red half-cape over a sleeveless gold dress patterne"
+    },
+    {
+     "id": "t800450290",
+     "engine": "ltx",
+     "seed": 953107993,
+     "created": "13:04",
+     "file": "takes/040/ltx_t800450290.mp4",
+     "poster": "takes/040/ltx_t800450290.png",
+     "strip": "takes/040/ltx_t800450290_strip.png",
+     "duration": 4.04,
+     "fps": 24,
+     "qc": [
+      "camera: pull back 30%, tilt down 62% (a face fills the frame; the camera is hard to tell from the head) (uncertain)",
+      "identity: same person, start 0.76, end 0.71; place drifted (0.76 first to last)",
+      "scene drift: the last frame has lost 72% of the start picture (atmosphere, color, draw, earr, girl)",
+      "ends closer than it started - the person fills the frame edge at the end (top=0.29 bottom=0.52 left=0.00 right=0.00)",
+      "words not in the picture: lift, follow, stays, cuts, bokeh, else"
+     ],
+     "cam_measured": {
+      "zoom": 0.699,
+      "pan": 0.007,
+      "tilt": 0.618,
+      "roll": 0.32,
+      "camera": "pull back 30%, tilt down 62% (a face fills the frame; the camera is hard to tell from the head)",
+      "confidence": "low",
+      "curve": [
+       [
+        1.0,
+        0.0,
+        0.0
+       ],
+       [
+        1.0,
+        -0.0,
+        -0.0
+       ],
+       [
+        0.999,
+        0.0,
+        0.003
+       ],
+       [
+        0.984,
+        0.0,
+        0.029
+       ],
+       [
+        0.957,
+        0.001,
+        0.075
+       ],
+       [
+        0.923,
+        0.002,
+        0.138
+       ],
+       [
+        0.886,
+        0.003,
+        0.21
+       ],
+       [
+        0.847,
+        0.003,
+        0.284
+       ],
+       [
+        0.811,
+        0.005,
+        0.361
+       ],
+       [
+        0.777,
+        0.006,
+        0.437
+       ],
+       [
+        0.745,
+        0.007,
+        0.509
+       ],
+       [
+        0.718,
+        0.007,
+        0.571
+       ],
+       [
+        0.699,
+        0.007,
+        0.618
+       ]
+      ]
+     },
+     "identity": {
+      "start": 0.764,
+      "end": 0.712,
+      "hold": 0.832,
+      "verdict_start": "same person",
+      "verdict_end": "same person",
+      "place_hold": 0.762,
+      "place_verdict": "drifted",
+      "place_start": 0.538,
+      "who": "terra",
+      "hold_curve": {
+       "anchors": 0,
+       "times": [
+        0.0,
+        0.51,
+        1.01,
+        1.52,
+        2.02,
+        2.53,
+        3.03,
+        3.54,
+        3.92
+       ],
+       "scores": [
+        0.764,
+        0.764,
+        0.767,
+        0.773,
+        0.806,
+        0.817,
+        0.728,
+        0.707,
+        0.698
+       ],
+       "holds_until": 3.92,
+       "lost_at": null,
+       "holds": true,
+       "duration": 4.04
+      }
+     },
+     "angle_measured": {
+      "pitch": 0.0,
+      "angle": "eye level",
+      "confidence": "medium",
+      "lines": 18,
+      "inliers": 0.39
+     },
+     "drift": {
+      "lost": 0.72,
+      "missing": [
+       "atmosphere",
+       "color",
+       "draw",
+       "earr",
+       "girl",
+       "illumination",
+       "illustration",
+       "necklace",
+       "paper",
+       "pendant",
+       "ribbon",
+       "shade"
+      ],
+      "kept": 5,
+      "last_caption": "Restaurant, street, building, dress, cape, armbands, lantern, table, chair, counter, floor, pattern, fabric, stone, wood, metal, light, glow, warmth, night, shadows, people, woman, hair, clothing, decoration, ornament."
+     },
+     "warnings": [],
+     "prompt": "A static close-up in flat cel-shaded 2D anime: a slightly built woman, in their twenties, fair skin, an oval face, green eyes, wide expressive eyes, sea-green long wavy hair, a hesitant, careful bearing, a young woman with waist-length wavy green hair held back by a large pink-and-gold ornament with a red gem and two upswept prongs, green eyes, a red half-cape over a sleeveless gold dress patterne"
+    },
+    {
+     "id": "t800676475",
+     "engine": "ltx",
+     "seed": 112243562,
+     "created": "13:07",
+     "file": "takes/040/ltx_t800676475.mp4",
+     "poster": "takes/040/ltx_t800676475.png",
+     "strip": "takes/040/ltx_t800676475_strip.png",
+     "duration": 4.04,
+     "fps": 24,
+     "qc": [
+      "camera: push in 41%, pan right 7%, tilt down 93% (a face fills the frame; the camera is hard to tell from the head) (uncertain)",
+      "the face is a different one by the end (identity 0.76 -> 0.41); it stayed recognisable the whole way but ended below the line where the studio will call it the same person - this character's trained face is already in the render, so what missed is the shot and not the likeness: a closer framing, a shorter take, another seed; place drifted (0.77 first to last)",
+      "sound borrowed from take t800259695 of shot 030 - the render was too quiet (mean -42 dB)",
+      "scene drift: the last frame has lost 83% of the start picture (atmosphere, cloth, color, decoration, draw)",
+      "words not in the picture: lift, follow, stays, cuts, bokeh, else"
+     ],
+     "cam_measured": {
+      "zoom": 1.415,
+      "pan": 0.075,
+      "tilt": 0.928,
+      "roll": -0.41,
+      "camera": "push in 41%, pan right 7%, tilt down 93% (a face fills the frame; the camera is hard to tell from the head)",
+      "confidence": "low",
+      "curve": [
+       [
+        1.0,
+        0.0,
+        0.0
+       ],
+       [
+        1.0,
+        -0.0,
+        -0.0
+       ],
+       [
+        1.002,
+        0.0,
+        0.001
+       ],
+       [
+        1.013,
+        0.001,
+        0.009
+       ],
+       [
+        1.036,
+        0.004,
+        0.044
+       ],
+       [
+        1.072,
+        0.01,
+        0.119
+       ],
+       [
+        1.116,
+        0.019,
+        0.228
+       ],
+       [
+        1.167,
+        0.029,
+        0.357
+       ],
+       [
+        1.221,
+        0.04,
+        0.494
+       ],
+       [
+        1.277,
+        0.051,
+        0.631
+       ],
+       [
+        1.33,
+        0.061,
+        0.757
+       ],
+       [
+        1.377,
+        0.069,
+        0.857
+       ],
+       [
+        1.415,
+        0.075,
+        0.928
+       ]
+      ]
+     },
+     "identity": {
+      "start": 0.761,
+      "end": 0.405,
+      "hold": 0.527,
+      "verdict_start": "same person",
+      "verdict_end": "a different face",
+      "place_hold": 0.77,
+      "place_verdict": "drifted",
+      "place_start": 0.535,
+      "who": "terra",
+      "hold_curve": {
+       "anchors": 0,
+       "times": [
+        0.0,
+        0.51,
+        1.01,
+        1.52,
+        2.02,
+        2.53,
+        3.03,
+        3.54,
+        3.92
+       ],
+       "scores": [
+        0.761,
+        0.767,
+        0.754,
+        0.765,
+        0.801,
+        0.771,
+        0.767,
+        0.727,
+        0.691
+       ],
+       "holds_until": 3.92,
+       "lost_at": null,
+       "holds": true,
+       "duration": 4.04
+      }
+     },
+     "angle_measured": {
+      "pitch": 0.0,
+      "angle": "eye level",
+      "confidence": "medium",
+      "lines": 16,
+      "inliers": 0.44
+     },
+     "drift": {
+      "lost": 0.83,
+      "missing": [
+       "atmosphere",
+       "cloth",
+       "color",
+       "decoration",
+       "draw",
+       "earr",
+       "illumination",
+       "illustration",
+       "necklace",
+       "ornament",
+       "paper",
+       "pendant"
+      ],
+      "kept": 3,
+      "last_caption": "Street, market, shops, lanterns, girl, dress, cape, boots, pavement, buildings, wood, stone, fabric, red, green, yellow, brown, steam, sky, night, light, glow, signs, writing, plants, flowers, grass."
+     },
+     "warnings": [],
+     "prompt": "A static close-up in flat cel-shaded 2D anime: a slightly built woman, in their twenties, fair skin, an oval face, green eyes, wide expressive eyes, sea-green long wavy hair, a hesitant, careful bearing, a young woman with waist-length wavy green hair held back by a large pink-and-gold ornament with a red gem and two upswept prongs, green eyes, a red half-cape over a sleeveless gold dress patterne"
+    },
+    {
+     "id": "t801635593",
+     "engine": "ltx",
+     "seed": 637561535,
+     "created": "13:22",
+     "file": "takes/040/ltx_t801635593.mp4",
+     "poster": "takes/040/ltx_t801635593.png",
+     "strip": "takes/040/ltx_t801635593_strip.png",
+     "duration": 3.04,
+     "fps": 24,
+     "qc": [
+      "camera: tilt down 109% (a face fills the frame; the camera is hard to tell from the head) (uncertain)",
+      "identity: uncertain by the end (0.77 -> 0.56); place drifted (0.71 first to last)",
+      "sound borrowed from take t797882553 of shot 020 - the render was silent",
+      "scene drift: the last frame has lost 89% of the start picture (atmosphere, cloth, color, decoration, draw)",
+      "ends closer than it started - the person fills the frame edge at the end (top=0.51 bottom=0.51 left=0.00 right=0.00)",
+      "words not in the picture: open, tight, bokeh, else"
+     ],
+     "cam_measured": {
+      "zoom": 0.98,
+      "pan": -0.002,
+      "tilt": 1.089,
+      "roll": 0.16,
+      "camera": "tilt down 109% (a face fills the frame; the camera is hard to tell from the head)",
+      "confidence": "low",
+      "curve": [
+       [
+        1.0,
+        0.0,
+        0.0
+       ],
+       [
+        1.0,
+        -0.0,
+        -0.0
+       ],
+       [
+        1.0,
+        -0.0,
+        -0.0
+       ],
+       [
+        1.0,
+        -0.0,
+        -0.0
+       ],
+       [
+        1.0,
+        -0.0,
+        -0.0
+       ],
+       [
+        1.0,
+        -0.0,
+        0.003
+       ],
+       [
+        0.999,
+        -0.001,
+        0.114
+       ],
+       [
+        0.998,
+        -0.002,
+        0.321
+       ],
+       [
+        0.998,
+        -0.004,
+        0.536
+       ],
+       [
+        0.997,
+        -0.006,
+        0.735
+       ],
+       [
+        0.997,
+        -0.007,
+        0.914
+       ],
+       [
+        0.981,
+        -0.002,
+        1.043
+       ],
+       [
+        0.98,
+        -0.002,
+        1.089
+       ]
+      ]
+     },
+     "identity": {
+      "start": 0.765,
+      "end": 0.563,
+      "hold": 0.661,
+      "verdict_start": "same person",
+      "verdict_end": "uncertain",
+      "place_hold": 0.715,
+      "place_verdict": "drifted",
+      "place_start": 0.539,
+      "who": "terra",
+      "hold_curve": {
+       "anchors": 0,
+       "times": [
+        0.0,
+        0.38,
+        0.76,
+        1.14,
+        1.52,
+        1.9,
+        2.28,
+        2.66,
+        2.92
+       ],
+       "scores": [
+        0.765,
+        0.759,
+        0.758,
+        0.753,
+        0.765,
+        0.759,
+        0.651,
+        0.564,
+        0.552
+       ],
+       "holds_until": 2.92,
+       "lost_at": null,
+       "holds": true,
+       "duration": 3.04
+      }
+     },
+     "angle_measured": {
+      "pitch": 0.0,
+      "angle": "eye level",
+      "confidence": "medium",
+      "lines": 19,
+      "inliers": 0.37
+     },
+     "drift": {
+      "lost": 0.89,
+      "missing": [
+       "atmosphere",
+       "cloth",
+       "color",
+       "decoration",
+       "draw",
+       "earr",
+       "girl",
+       "illumination",
+       "illustration",
+       "necklace",
+       "ornament",
+       "paper"
+      ],
+      "kept": 2,
+      "last_caption": "City, street, sidewalk, building, dress, skirt, person, people, jacket, sleeve, hand, leg, skin, red fabric, yellow fabric, blue fabric, stone, pavement, crowd, lantern, light, glow, evening, outdoor, shadow."
+     },
+     "warnings": [],
+     "prompt": "A static close-up in flat cel-shaded 2D anime: a slightly built woman, in their twenties, fair skin, an oval face, green eyes, wide expressive eyes, sea-green long wavy hair, a hesitant, careful bearing, a young woman with waist-length wavy green hair held back by a large pink-and-gold ornament with a red gem and two upswept prongs, green eyes, a red half-cape over a sleeveless gold dress patterne"
+    },
+    {
+     "id": "t801762711",
+     "engine": "ltx",
+     "seed": 966047657,
+     "created": "13:24",
+     "file": "takes/040/ltx_t801762711.mp4",
+     "poster": "takes/040/ltx_t801762711.png",
+     "strip": "takes/040/ltx_t801762711_strip.png",
+     "duration": 3.04,
+     "fps": 24,
+     "qc": [
+      "camera: pull back 40%, tilt down 66% (a face fills the frame; the camera is hard to tell from the head) (uncertain)",
+      "identity: same person, start 0.77, end 0.71; place drifted (0.82 first to last)",
+      "sound borrowed from take t797882553 of shot 020 - the render was too quiet (mean -51 dB)",
+      "scene drift: the last frame has lost 83% of the start picture (atmosphere, color, decoration, draw, earr)",
+      "words not in the picture: open, tight, bokeh, else"
+     ],
+     "cam_measured": {
+      "zoom": 0.598,
+      "pan": -0.016,
+      "tilt": 0.663,
+      "roll": -0.34,
+      "camera": "pull back 40%, tilt down 66% (a face fills the frame; the camera is hard to tell from the head)",
+      "confidence": "low",
+      "curve": [
+       [
+        1.0,
+        0.0,
+        0.0
+       ],
+       [
+        1.0,
+        -0.0,
+        -0.0
+       ],
+       [
+        1.0,
+        -0.0,
+        0.0
+       ],
+       [
+        1.0,
+        -0.0,
+        -0.0
+       ],
+       [
+        1.0,
+        -0.0,
+        0.0
+       ],
+       [
+        0.998,
+        -0.001,
+        0.063
+       ],
+       [
+        0.988,
+        -0.005,
+        0.271
+       ],
+       [
+        0.614,
+        0.006,
+        0.339
+       ],
+       [
+        0.605,
+        -0.006,
+        0.516
+       ],
+       [
+        0.6,
+        -0.014,
+        0.629
+       ],
+       [
+        0.598,
+        -0.016,
+        0.663
+       ],
+       [
+        0.598,
+        -0.016,
+        0.663
+       ],
+       [
+        0.598,
+        -0.016,
+        0.663
+       ]
+      ]
+     },
+     "identity": {
+      "start": 0.769,
+      "end": 0.712,
+      "hold": 0.882,
+      "verdict_start": "same person",
+      "verdict_end": "same person",
+      "place_hold": 0.816,
+      "place_verdict": "drifted",
+      "place_start": 0.54,
+      "who": "terra",
+      "hold_curve": {
+       "anchors": 0,
+       "times": [
+        0.0,
+        0.38,
+        0.76,
+        1.14,
+        1.52,
+        1.9,
+        2.28,
+        2.66,
+        2.92
+       ],
+       "scores": [
+        0.769,
+        0.762,
+        0.728,
+        0.753,
+        0.78,
+        0.698,
+        0.703,
+        0.68,
+        0.703
+       ],
+       "holds_until": 2.92,
+       "lost_at": null,
+       "holds": true,
+       "duration": 3.04
+      }
+     },
+     "angle_measured": {
+      "pitch": 0.0,
+      "angle": "eye level",
+      "confidence": "low",
+      "lines": 18,
+      "inliers": 0.33
+     },
+     "drift": {
+      "lost": 0.83,
+      "missing": [
+       "atmosphere",
+       "color",
+       "decoration",
+       "draw",
+       "earr",
+       "girl",
+       "illumination",
+       "illustration",
+       "necklace",
+       "ornament",
+       "paper",
+       "pendant"
+      ],
+      "kept": 3,
+      "last_caption": "Street, market, lanterns, woman, cape, dress, skirt, boots, hair, people, crowd, buildings, stalls, pavement, stone, fabric, metal, wood, red, gold, green, blue, clothing, shadows, light, glow, dusk, night, lamps, signs, posters, crowd of people, man, woman, child, customers, shoppers, pedestrians."
+     },
+     "warnings": [],
+     "prompt": "A static close-up in flat cel-shaded 2D anime: a slightly built woman, in their twenties, fair skin, an oval face, green eyes, wide expressive eyes, sea-green long wavy hair, a hesitant, careful bearing, a young woman with waist-length wavy green hair held back by a large pink-and-gold ornament with a red gem and two upswept prongs, green eyes, a red half-cape over a sleeveless gold dress patterne"
+    },
+    {
+     "id": "t801635593c",
+     "engine": "ltx",
+     "seed": 637561535,
+     "created": "13:32",
+     "file": "takes/040/ltx_t801635593c.mp4",
+     "poster": "takes/040/ltx_t801635593c.png",
+     "strip": "takes/040/ltx_t801635593c_strip.png",
+     "duration": 1.5,
+     "fps": 24,
+     "qc": [
+      "camera: tilt down 9% (a face fills the frame; the camera is hard to tell from the head) (uncertain)",
+      "identity: same person, start 0.76, end 0.76; place held (0.95 first to last)",
+      "drift by caption 67% on a close-up, but the place held (0.95) - a note, not a fault",
+      "the studio cut the take at 1.5 s of 3.0, where the camera left her face"
+     ],
+     "cam_measured": {
+      "zoom": 1.0,
+      "pan": -0.001,
+      "tilt": 0.086,
+      "roll": 0.03,
+      "camera": "tilt down 9% (a face fills the frame; the camera is hard to tell from the head)",
+      "confidence": "low",
+      "curve": [
+       [
+        1.0,
+        0.0,
+        0.0
+       ],
+       [
+        1.0,
+        -0.0,
+        -0.0
+       ],
+       [
+        1.0,
+        -0.0,
+        -0.0
+       ],
+       [
+        1.0,
+        -0.0,
+        -0.0
+       ],
+       [
+        1.0,
+        -0.0,
+        -0.0
+       ],
+       [
+        1.0,
+        -0.0,
+        -0.0
+       ],
+       [
+        1.0,
+        -0.0,
+        -0.0
+       ],
+       [
+        1.0,
+        -0.0,
+        -0.0
+       ],
+       [
+        1.0,
+        -0.0,
+        -0.0
+       ],
+       [
+        1.0,
+        -0.0,
+        -0.0
+       ],
+       [
+        1.0,
+        -0.0,
+        0.0
+       ],
+       [
+        1.0,
+        -0.0,
+        0.023
+       ],
+       [
+        1.0,
+        -0.001,
+        0.086
+       ]
+      ]
+     },
+     "identity": {
+      "start": 0.762,
+      "end": 0.763,
+      "hold": 0.939,
+      "verdict_start": "same person",
+      "verdict_end": "same person",
+      "place_hold": 0.953,
+      "place_verdict": "held",
+      "place_start": 0.541,
+      "who": "terra",
+      "hold_curve": {
+       "anchors": 0,
+       "times": [
+        0.0,
+        0.19,
+        0.38,
+        0.56,
+        0.75,
+        0.94,
+        1.12,
+        1.31,
+        1.38
+       ],
+       "scores": [
+        0.762,
+        0.763,
+        0.764,
+        0.739,
+        0.76,
+        0.754,
+        0.755,
+        0.763,
+        0.759
+       ],
+       "holds_until": 1.38,
+       "lost_at": null,
+       "holds": true,
+       "duration": 1.5
+      }
+     },
+     "angle_measured": {
+      "pitch": 0.0,
+      "angle": "eye level",
+      "confidence": "medium",
+      "lines": 19,
+      "inliers": 0.37
+     },
+     "drift": {
+      "lost": 0.67,
+      "missing": [
+       "atmosphere",
+       "decoration",
+       "draw",
+       "illustration",
+       "lantern",
+       "necklace",
+       "ornament",
+       "paper",
+       "pendant",
+       "shade",
+       "street",
+       "string"
+      ],
+      "kept": 6,
+      "last_caption": "Image:\n\nPlace, interior, room, background, hallway, architecture, building.\nStructures, wall, pillar, frame, archway.\nObjects, hair, face, eyes, smile, ribbon, clothing, jewelry, earrings, collar, crown, weapon, sword, hilt, handle, blade.\nMaterials, metal, fabric, hair, skin, paint, color, gold, red, green, brown.\nPeople, woman, character, girl.\nLight sources, light, glow, illumination.\nTime of d"
+     },
+     "warnings": [],
+     "prompt": "A static close-up in flat cel-shaded 2D anime: a slightly built woman, in their twenties, fair skin, an oval face, green eyes, wide expressive eyes, sea-green long wavy hair, a hesitant, careful bearing, a young woman with waist-length wavy green hair held back by a large pink-and-gold ornament with a red gem and two upswept prongs, green eyes, a red half-cape over a sleeveless gold dress patterne",
+     "cut_from": "t801635593"
+    }
+   ],
+   "picked": "t801635593c",
+   "engine_notes": "",
+   "anchor_source": {
+    "character": "terra",
+    "framing": "close",
+    "place": "night-market",
+    "stand": 0.22,
+    "cx": 0.45,
+    "view": "base_portrait",
+    "plate": "/home/k4shix/shared/comfy-studio/studio/foundry/composites/terra__night-market__close/00_plate_close.png",
+    "props": []
+   },
+   "head_px": 748,
+   "anchor_face": 0.584,
+   "anchor_check": {
+    "caption": "Place, street, background, lanterns, girl, hair, face, eyes, earrings, ribbon, clothing, necklace, pendant, light, glow, string, atmosphere, illustration, drawing, paper, color, decoration, ornament, shade, glow, illumination.",
+    "missing": [
+     "open",
+     "tight",
+     "bokeh",
+     "else"
+    ],
+    "when": 1788801635
+   }
+  },
+  "050": {
+   "id": "050",
+   "scene": "sc01",
+   "title": "a flame",
+   "duration": 4,
+   "aspect": "wide",
+   "anchor": "file:/home/k4shix/shared/comfy-studio/studio/films/lantern-night/assets/anchor_shot_050_lantern.png",
+   "keyframe_prompt": "",
+   "beats": [
+    {
+     "framing": "close-up",
+     "move": "static",
+     "transition_in": "",
+     "subject": "",
+     "action": "the candle flame inside the paper lantern gutters once and steadies",
+     "background": "the lantern's red paper glowing, darkness behind it",
+     "motion": "",
+     "ambient": [
+      "light",
+      "crowd"
+     ],
+     "dialogue": {
+      "char": "",
+      "line": "",
+      "delivery": ""
+     }
+    }
+   ],
+   "sfx": "the flame's faint hiss, the market murmur far away, no music",
+   "no_people": true,
+   "enhance": true,
+   "transition_out": "cut",
+   "takes": [
+    {
+     "id": "t798664615",
+     "engine": "ltx",
+     "seed": 378332301,
+     "created": "12:32",
+     "file": "takes/050/ltx_t798664615.mp4",
+     "poster": "takes/050/ltx_t798664615.png",
+     "strip": "takes/050/ltx_t798664615_strip.png",
+     "duration": 4.04,
+     "fps": 24,
+     "qc": [
+      "camera: push in 14%",
+      "angle: a high angle (pitch -0.47) (uncertain)",
+      "people appeared in an empty shot (person, child)"
+     ],
+     "cam_measured": {
+      "zoom": 1.144,
+      "pan": -0.0,
+      "tilt": 0.0,
+      "roll": 0.03,
+      "camera": "push in 14%",
+      "confidence": "high",
+      "curve": [
+       [
+        1.0,
+        0.0,
+        0.0
+       ],
+       [
+        1.011,
+        -0.0,
+        0.0
+       ],
+       [
+        1.023,
+        0.0,
+        0.0
+       ],
+       [
+        1.034,
+        0.0,
+        0.0
+       ],
+       [
+        1.046,
+        0.0,
+        0.0
+       ],
+       [
+        1.058,
+        0.0,
+        0.0
+       ],
+       [
+        1.069,
+        -0.0,
+        0.0
+       ],
+       [
+        1.081,
+        -0.0,
+        0.0
+       ],
+       [
+        1.094,
+        -0.0,
+        0.0
+       ],
+       [
+        1.106,
+        -0.0,
+        0.0
+       ],
+       [
+        1.119,
+        -0.0,
+        0.001
+       ],
+       [
+        1.132,
+        -0.0,
+        0.001
+       ],
+       [
+        1.143,
+        -0.0,
+        0.0
+       ]
+      ]
+     },
+     "identity": null,
+     "angle_measured": {
+      "pitch": -0.474,
+      "angle": "a high angle",
+      "confidence": "low",
+      "lines": 36,
+      "inliers": 0.33
+     },
+     "drift": {
+      "lost": 0.47,
+      "missing": [
+       "banner",
+       "calligraphy",
+       "character",
+       "even",
+       "flag",
+       "food",
+       "hous",
+       "market",
+       "metal",
+       "noodl",
+       "rope",
+       "sack"
+      ],
+      "kept": 17,
+      "last_caption": "Town, street, buildings, shops, lanterns, awnings, signs, pavement, sidewalk, crates, boxes, posters, person, child, bicycle, clothing, sky, clouds, night, dusk, light, glow, string, wood, brick, stone, paper, fabric, shade, shadows, roof, window, door."
+     },
+     "warnings": [],
+     "prompt": "A static wide shot in flat cel-shaded 2D anime: a single candle flame gutters inside a paper lantern and steadies, while the lantern's red paper, the dark stalls behind; the light shifts and flickers across the scene; people move through the background continuously, a narrow market lane of food stalls, steam and hanging bulbs, dressed for a festival with lanterns and paper charms, night, clear, th"
+    },
+    {
+     "id": "t798766139",
+     "engine": "ltx",
+     "seed": 526342220,
+     "created": "12:34",
+     "file": "takes/050/ltx_t798766139.mp4",
+     "poster": "takes/050/ltx_t798766139.png",
+     "strip": "takes/050/ltx_t798766139_strip.png",
+     "duration": 4.04,
+     "fps": 24,
+     "qc": [
+      "camera: static",
+      "angle: a low angle (pitch +0.70) (uncertain)",
+      "people appeared in an empty shot (people, boy, children, figures)"
+     ],
+     "cam_measured": {
+      "zoom": 1.058,
+      "pan": -0.002,
+      "tilt": -0.005,
+      "roll": 0.07,
+      "camera": "static",
+      "confidence": "high",
+      "curve": [
+       [
+        1.0,
+        0.0,
+        0.0
+       ],
+       [
+        1.004,
+        -0.0,
+        -0.0
+       ],
+       [
+        1.007,
+        -0.0,
+        -0.001
+       ],
+       [
+        1.011,
+        -0.0,
+        -0.001
+       ],
+       [
+        1.014,
+        -0.0,
+        -0.002
+       ],
+       [
+        1.018,
+        -0.001,
+        -0.002
+       ],
+       [
+        1.022,
+        -0.001,
+        -0.002
+       ],
+       [
+        1.026,
+        -0.001,
+        -0.003
+       ],
+       [
+        1.03,
+        -0.001,
+        -0.003
+       ],
+       [
+        1.034,
+        -0.001,
+        -0.003
+       ],
+       [
+        1.038,
+        -0.002,
+        -0.004
+       ],
+       [
+        1.041,
+        -0.002,
+        -0.004
+       ],
+       [
+        1.043,
+        -0.002,
+        -0.005
+       ]
+      ]
+     },
+     "identity": null,
+     "angle_measured": {
+      "pitch": 0.698,
+      "angle": "a low angle",
+      "confidence": "low",
+      "lines": 34,
+      "inliers": 0.32
+     },
+     "drift": {
+      "lost": 0.44,
+      "missing": [
+       "banner",
+       "calligraphy",
+       "character",
+       "even",
+       "flag",
+       "food",
+       "market",
+       "metal",
+       "noodl",
+       "rope",
+       "sack",
+       "stall"
+      ],
+      "kept": 18,
+      "last_caption": "Street, town, alleyway, buildings, houses, shops, lanterns, string of lights, pavement, sidewalk, boxes, crates, signs, posters, awnings, sky, clouds, night, dusk, glow, light, warmth, wood, stone, brick, paper, fabric, figures, people, children, boy, clothing, jacket, shirt, shadows."
+     },
+     "warnings": [],
+     "prompt": "A static wide shot in flat cel-shaded 2D anime: a single candle flame gutters inside a paper lantern and steadies, while the lantern's red paper, the dark stalls behind; the light shifts and flickers across the scene; people move through the background continuously, a narrow market lane of food stalls, steam and hanging bulbs, dressed for a festival with lanterns and paper charms, night, clear, th"
+    },
+    {
+     "id": "t800850412",
+     "engine": "ltx",
+     "seed": 613146632,
+     "created": "13:09",
+     "file": "takes/050/ltx_t800850412.mp4",
+     "poster": "takes/050/ltx_t800850412.png",
+     "strip": "takes/050/ltx_t800850412_strip.png",
+     "duration": 4.04,
+     "fps": 24,
+     "qc": [
+      "camera: push in 38% (a face fills the frame; the camera is hard to tell from the head) (uncertain)",
+      "scene drift: the last frame has lost 77% of the start picture (color, dock, gradient, hook, horizon)",
+      "people appeared in an empty shot (people, crowd)"
+     ],
+     "cam_measured": {
+      "zoom": 1.384,
+      "pan": 0.009,
+      "tilt": 0.01,
+      "roll": 0.21,
+      "camera": "push in 38% (a face fills the frame; the camera is hard to tell from the head)",
+      "confidence": "low",
+      "curve": [
+       [
+        1.0,
+        0.0,
+        0.0
+       ],
+       [
+        0.996,
+        0.001,
+        0.001
+       ],
+       [
+        0.993,
+        0.002,
+        0.003
+       ],
+       [
+        0.998,
+        0.001,
+        0.002
+       ],
+       [
+        1.039,
+        0.002,
+        0.003
+       ],
+       [
+        1.079,
+        0.003,
+        0.004
+       ],
+       [
+        1.121,
+        0.005,
+        0.005
+       ],
+       [
+        1.162,
+        0.005,
+        0.006
+       ],
+       [
+        1.202,
+        0.006,
+        0.007
+       ],
+       [
+        1.243,
+        0.007,
+        0.007
+       ],
+       [
+        1.29,
+        0.007,
+        0.008
+       ],
+       [
+        1.336,
+        0.008,
+        0.009
+       ],
+       [
+        1.384,
+        0.009,
+        0.01
+       ]
+      ]
+     },
+     "identity": null,
+     "angle_measured": null,
+     "drift": {
+      "lost": 0.77,
+      "missing": [
+       "color",
+       "dock",
+       "gradient",
+       "hook",
+       "horizon",
+       "reflection",
+       "rope",
+       "structure",
+       "sunset",
+       "water"
+      ],
+      "kept": 3,
+      "last_caption": "Street, market, buildings, lanterns, flags, stalls, tables, food, steam, people, crowd, sidewalk, roof, signs, banners, posts, pavement, wood, stone, metal, paper, fabric, red, orange, yellow, brown, black, white, night, dusk, glow, light, shadows, sky, clouds, atmosphere, wind, decorations."
+     },
+     "warnings": [],
+     "prompt": "A static close-up in flat cel-shaded 2D anime: the candle flame inside the paper lantern gutters once and steadies, while the lantern's red paper glowing, darkness behind it; the light shifts and flickers across the scene; people move through the background continuously, a narrow market lane of food stalls, steam and hanging bulbs, dressed for a festival with lanterns and paper charms, night, clea"
+    },
+    {
+     "id": "t800954604",
+     "engine": "ltx",
+     "seed": 657115965,
+     "created": "13:11",
+     "file": "takes/050/ltx_t800954604.mp4",
+     "poster": "takes/050/ltx_t800954604.png",
+     "strip": "takes/050/ltx_t800954604_strip.png",
+     "duration": 4.04,
+     "fps": 24,
+     "qc": [
+      "camera: tilt down 46% (a face fills the frame; the camera is hard to tell from the head) (uncertain)",
+      "sound borrowed from take t800259695 of shot 030 - the render was too quiet (mean -41 dB)",
+      "people appeared in an empty shot (people, crowd)"
+     ],
+     "cam_measured": {
+      "zoom": 0.976,
+      "pan": 0.002,
+      "tilt": 0.457,
+      "roll": 0.12,
+      "camera": "tilt down 46% (a face fills the frame; the camera is hard to tell from the head)",
+      "confidence": "low",
+      "curve": [
+       [
+        1.0,
+        0.0,
+        0.0
+       ],
+       [
+        0.988,
+        0.001,
+        0.005
+       ],
+       [
+        0.979,
+        0.002,
+        0.042
+       ],
+       [
+        0.979,
+        0.002,
+        0.042
+       ],
+       [
+        0.979,
+        0.002,
+        0.042
+       ],
+       [
+        0.978,
+        0.002,
+        0.218
+       ],
+       [
+        0.976,
+        0.002,
+        0.342
+       ],
+       [
+        0.976,
+        0.002,
+        0.414
+       ],
+       [
+        0.976,
+        0.002,
+        0.449
+       ],
+       [
+        0.976,
+        0.002,
+        0.457
+       ],
+       [
+        0.976,
+        0.002,
+        0.457
+       ],
+       [
+        0.976,
+        0.002,
+        0.457
+       ],
+       [
+        0.976,
+        0.002,
+        0.457
+       ]
+      ]
+     },
+     "identity": null,
+     "angle_measured": null,
+     "drift": {
+      "lost": 0.62,
+      "missing": [
+       "color",
+       "dock",
+       "gradient",
+       "hook",
+       "horizon",
+       "reflection",
+       "structure",
+       "water"
+      ],
+      "kept": 5,
+      "last_caption": "Street, market, alleyway, buildings, stalls, lanterns, flags, banners, rope, wood, stone, brick, paper, cloth, food, tables, chairs, clothing, people, crowd, sidewalk, sky, clouds, sunset, light, glow, shadows, warmth, dusk, orange, red, yellow, green, brown, dust, steam, atmosphere."
+     },
+     "warnings": [],
+     "prompt": "A static close-up in flat cel-shaded 2D anime: the candle flame inside the paper lantern gutters once and steadies, while the lantern's red paper glowing, darkness behind it; the light shifts and flickers across the scene; people move through the background continuously, a narrow market lane of food stalls, steam and hanging bulbs, dressed for a festival with lanterns and paper charms, night, clea"
+    },
+    {
+     "id": "t801597772",
+     "engine": "cam",
+     "seed": 0,
+     "created": "13:20",
+     "file": "takes/050/cam_t801597772.mp4",
+     "poster": "takes/050/cam_t801597772.png",
+     "strip": "takes/050/cam_t801597772_strip.png",
+     "duration": 4.0,
+     "fps": 24,
+     "qc": [
+      "camera: push in 12% (a face fills the frame; the camera is hard to tell from the head) (uncertain)"
+     ],
+     "cam_measured": {
+      "zoom": 1.116,
+      "pan": -0.002,
+      "tilt": -0.001,
+      "roll": -0.09,
+      "camera": "push in 12% (a face fills the frame; the camera is hard to tell from the head)",
+      "confidence": "low",
+      "curve": [
+       [
+        1.0,
+        0.0,
+        0.0
+       ],
+       [
+        1.001,
+        0.0,
+        0.0
+       ],
+       [
+        1.007,
+        -0.0,
+        0.001
+       ],
+       [
+        1.019,
+        -0.0,
+        -0.0
+       ],
+       [
+        1.029,
+        -0.002,
+        -0.001
+       ],
+       [
+        1.043,
+        -0.002,
+        -0.001
+       ],
+       [
+        1.058,
+        -0.002,
+        -0.0
+       ],
+       [
+        1.07,
+        -0.002,
+        -0.001
+       ],
+       [
+        1.085,
+        -0.001,
+        -0.001
+       ],
+       [
+        1.097,
+        -0.002,
+        -0.001
+       ],
+       [
+        1.107,
+        -0.002,
+        0.0
+       ],
+       [
+        1.115,
+        -0.002,
+        -0.0
+       ],
+       [
+        1.116,
+        -0.002,
+        -0.001
+       ]
+      ]
+     },
+     "identity": null,
+     "angle_measured": null,
+     "drift": {
+      "lost": 0.54,
+      "missing": [
+       "color",
+       "dock",
+       "dusk",
+       "structure",
+       "sunset",
+       "water",
+       "wood"
+      ],
+      "kept": 6,
+      "last_caption": "Desert, sky, lantern, rope, hook, glow, reflection, sand, horizon, light, glow, glow, warmth, gradient."
+     },
+     "warnings": [],
+     "prompt": "camrig still_push {'seconds': 4.0, 'zoom_start': 1.0, 'zoom_end': 1.12, 'win_w': 1216, 'win_h': 832, 'cx': 608, 'cy': 416}"
+    }
+   ],
+   "picked": "t801597772",
+   "engine_notes": "",
+   "anchor_check": {
+    "caption": "Dock, sky, lanterns, rope, hook, water, reflection, glow, wood, structure, light, horizon, gradient, dusk, sunset, glow, color.",
+    "missing": [
+     "candle",
+     "flame",
+     "paper",
+     "gutters",
+     "steadies",
+     "darkness"
+    ],
+    "when": 1788800850
+   },
+   "cam": {
+    "rig": "still_push",
+    "audio": "/home/k4shix/shared/comfy-studio/studio/films/lantern-night/assets/amb_market.m4a",
+    "params": {
+     "seconds": 4.0,
+     "zoom_start": 1.0,
+     "zoom_end": 1.12,
+     "win_w": 1216,
+     "win_h": 832,
+     "cx": 608,
+     "cy": 416
+    }
+   }
+  }
+ },
+ "post": {
+  "grade": "filmic",
+  "upscale": true
+ }
+}

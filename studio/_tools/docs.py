@@ -97,6 +97,8 @@ def title_and_summary(text, fallback):
         if ln.startswith("# "):
             title = ln[2:].strip()
             for nxt in lines[i + 1:]:
+                if nxt.lstrip().startswith("@"):
+                    continue   # a book-layout directive, not prose
                 s = nxt.strip()
                 if not s or s.startswith(("#", "|", "-", "*", ">", "```", "=")):
                     continue

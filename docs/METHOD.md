@@ -1,355 +1,439 @@
-# The Method — building a story and a shot in this studio, A to Z
+# The Method
 
-*This is the studio's own guide, written for someone who has never touched an AI tool. Every rule
-in it was measured on this machine before it was written down; where a rule comes from a
-measurement, the measurement is named so you can go and look. Read it once from A to Z, then keep
-the one-page rulebook (section K) open while you work. Printable copy:
-[METHOD.pdf](/samples/docs/METHOD.pdf). The engineering version is playbook §95.*
+@title | The Method | How one computer makes films that hold together — one picture at a time, and knowing, not hoping, that they do. | book/hero_cover.jpg
 
----
+@toc
 
-## A · What you are making, and what the machine actually does
+@chapter | 0 | Look what one computer made | Five shots, one night market, a character who stays herself. Everything in this book is how this was done. | book/hero_01.jpg
 
-You are making a film out of shots. A shot is a few seconds of moving picture with sound, made by
-a video engine from **one starting picture and one paragraph of words**. That sentence is the
-whole method: the engine does not see your character sheet, your location, your previous shot or
-your intentions. It sees one frame and one paragraph, and it invents everything else.
+Before a single rule, look at these pictures. They are frames from a short film called *Lantern Night*, and every one of them was made on the computer this book is about — a single desktop machine with one graphics card, no studio, no crew, no subscriptions. The film has a place, a person, a spoken line, sound, and music. The person is the same person in every shot she appears in. The place is the same place. That last sentence is the whole reason this book exists.
 
-So the craft is in two places only: **getting the right starting picture**, and **writing the
-paragraph so the engine has nothing left to guess about** — who moves, how the camera moves,
-what it sounds like. Everything in this guide is one of those two things.
+@row book/hero_01.jpg | book/hero_02.jpg | book/hero_03.jpg | *Lantern Night*, shots one to three. The market, empty and glowing. Terra arrives under the lanterns. She lifts one and looks into its light.
 
-Two engines live here. **LTX-2.5** is the one you will use for nearly everything: up to 30 seconds
-in one go, with sound and speech, and it can hold several framings in one shot. **H3** is for a
-shot pinned between two exact pictures — a character standing still while the camera does the
-work. The engine is a field on the shot and it defaults to **LTX-2.5**; you reach for H3 only
-when you have two exact pictures to pin a movement between. H3 honours both pins for motion
-that stays in one place and ignores them for a walk — measured twice — so pin stillness, not
-travel.
+@row book/hero_04.jpg | book/hero_05.jpg | Shots four and five. A close smile, eyes closing. A single lantern in the dark, the camera drifting in.
 
-## B · Before any shot: a character and a place
+Here is what you should notice, because it is the hard part. Between shot two and shot four the camera moves from a wide view to a close one — and it is still Terra. Her hair, her face, her red-and-gold clothes. The stalls behind her are the stalls from shot one. If you have ever asked an AI tool to make a picture twice and got two different people, you already know why this is not obvious. Video tools forget everything the moment they finish. Getting them to *remember* is the craft.
 
-Nothing about a person or a room should ever be *described* to the engine. It should be *shown*.
-That is the first rule and the one everything else depends on.
+@box term | Words we will use from here on
+- **A shot** is a few seconds of moving picture, made in one go.
+- **A scene** is a group of shots in one place, in one kind of light.
+- **A take** is one attempt at a shot. You make several and pick one, exactly like a film set.
+- **The engine** is the program that turns a picture and a paragraph into a moving shot.
+- **The studio** is the app this book describes — the buttons a person presses. The engine lives underneath it.
+@end
 
-@figure figures/fig_identity.jpg | Two people, two ways. Above: described in words alone, the
-same description in three places — three different faces each time, the accessories pinned and
-the face free. Below: the same three places with a reference sheet supplied — one woman, one
-man. The reference is doing the work, not the adjectives.
+### How *Lantern Night* was made, in one breath
 
-**A character is a pack.** Go to **Characters → new character** and build one in the foundry. A
-finished pack has a portrait, a body turnaround, a face turnaround, six expressions and a
-presentation set — twenty pictures of the same person from every side. The roster shows how
-complete a pack is and whether it can be cast. **Level 1 is the casting floor**: a complete
-pack, ready to use. Level 0 means views are still missing — finish it before you cast. Level 2
-means the pack *also* carries a trained face, which most packs never get and none of them
-needs; it is a bonus rung, not a requirement.
+A character called Terra already existed as a **pack** — about twenty pictures of her from every side. A place called the night market already existed as a **plate** — a clean wide picture of the stalls with nobody in them. The studio put Terra *into* the plate and made one start picture per shot. A person wrote one plain sentence for each shot about what happens, one about the camera, and one about the sound. The engine made each shot from its start picture and its sentences — except the two shots with nobody in them, where the engine kept inventing people and the studio moved its own camera slowly over the start picture instead. The studio measured every result — is that still her face? did the camera do what was asked? is there sound? — and kept only the takes that passed. Then it joined them, put one colour treatment over the whole thing, doubled the resolution, laid a music bed underneath, and checked that not one frame had gone missing.
 
-@figure figures/fig_pack.jpg | A finished pack: Terra, twenty views. Portrait, a face
-turnaround, a body turnaround, six expressions and a presentation set. This is what the engine
-is shown instead of a sentence.
+@figure book/hero_strip.jpg | The whole film, one frame per second. Read it left to right like a comic strip: the market, the arrival, the lantern, the smile, the flame.
 
-**A place is a plate.** Go to **Places** and make one: a clean wide picture of the location with
-no one in it, in the light your scene wants. That picture is the room. Every shot in that room
-starts from it, so the desks are in the same place and the window is on the same wall in every
-shot — something no amount of describing achieves.
+That is the method. The rest of this book walks through each of those steps slowly, shows you what goes wrong when you skip one, and gives you an exercise for each so that by the end you can make your own.
 
-**Some characters have a trained face.** On the roster you may see *trained face* in green: the
-studio trained a small model on that character's own pack and measured, on three separate
-renders, that it holds the likeness better than showing the engine a portrait does - and by more
-than half of how much its own score wandered between those renders (the *spread*), because a face
-that scores well on one render and badly on the next is a lottery ticket, not a likeness. Two of
-eight tested did. If a character has one, shots of them are made through it automatically; you do not
-do anything. If it says *face training tried*, it was measured and lost — do not ask for it again.
+@box note | How to read this book
+Chapter 1 explains what the machine really does — five minutes that make everything else make sense. Chapter 2 is the argument: other ways people try this, and why we do it this way. Chapters 3 to 8 are the method itself, one step per chapter, each with an exercise. Chapter 9 is about money. Chapter 10 is about time. Chapter 11 is your final project. The appendices hold the one-page rulebook and the words. If you only read one chapter, read 1. If you only keep one page, keep Appendix A.
+@end
 
-The roster's trainer builds on the **anime** checkpoint, so this badge is reachable today only
-for drawn packs. Photoreal packs are not short of a trainer — see section Z, which says what
-is actually in the way.
+@chapter | 1 | What the machine actually does | One picture and one paragraph go in. A few seconds of moving picture come out. Nothing else is remembered. | book/plate_nightmarket_night_wide.jpg
 
-## C · Build the story: scenes first
+Imagine a flipbook — the little paper kind, where you flick the pages and a drawing moves. Now imagine a very fast artist who can draw you a flipbook from two things: the **first page**, which you hand them already drawn, and a **short note** about what should happen over the next pages. The artist draws the rest. They are astonishingly good at it. But they have one strange limitation: when they finish a flipbook, they forget it completely. Hand them a new first page and a new note and they start from nothing. They do not remember the person in the last book. They do not remember the room. They do not remember what you told them yesterday.
 
-Open **Film editor** and start a film. Before shots, make **scenes**. A scene is:
+That artist is the engine. Everything in this book follows from that one limitation.
 
-- **one place** (a plate),
-- **one light** (morning, dusk, lamplight — pick it once),
-- **one source for every start frame**: the studio composes each shot's starting picture from
-  that plate and your character's pack — the person *in* that place *in* that light, wearing what
-  they wear in this scene, framed as the shot asks (wide, medium, close).
+@wrap right | book/hero_anchor_03.jpg | A first page, handed to the artist. This is the start picture for shot three of *Lantern Night*: Terra, already placed at the stall, already in lantern light. The engine will draw the next five seconds from here.
 
-Every shot in the scene starts from a picture built from the same plate and the same pack, unless
-you tell it to continue from the end of the previous shot. This is what keeps a person's face,
-their clothes and the room the same from shot to shot: the shots share their starting picture's
-*sources*, not a description. One consequence worth knowing early: the start frame fixes where a
-shot *begins*. A character the anchor already places at the steps cannot "walk in from the left".
+So the craft is in exactly two places. **Getting the first page right** — because the engine cannot invent a face it has never seen and get it the same twice; it can only keep drawing the face you hand it. And **writing the note so there is nothing left to guess** — who moves and how, where the camera is and what it does, what the scene sounds like. If the note does not say the camera stays still, the artist will move it. If the note does not mention sound, the flipbook is silent. If the note describes a face that is *also* in the picture, the artist now has two faces to please and draws a third.
 
-@figure figures/fig_plate.jpg | One plate, five shots. The shrine, the lanterns and the path
-are in the same places in every shot because every shot started from the same picture — not
-because any of it was described.
+@box why | Why "one picture and one paragraph" is the right way to think
+People new to this imagine the tool as a director you brief once. It is not. It is a flipbook artist you brief per shot, with no memory. Once you hold that picture in your head, every rule in this book stops being a rule and becomes obvious: of course the people have to be *in* the first page; of course you cut between shots instead of asking one shot to do four things; of course you write down the sound.
+@end
 
-Write the film-level things once, in the **film** tab: the **look** (photoreal or anime), the
-**grade** note, and the **negative** — a list of things that must never appear. The negative is
-your insurance policy; section H tells you how it grows.
+### Two engines, and when each is used
 
-## D · Build a shot: the seven blocks
+The studio has two of these artists, and it chooses between them for you most of the time. The main one is called **LTX-2.5**. It can draw up to thirty seconds in one go, it makes the sound along with the picture — footsteps, wind, a voice — and if a person on screen speaks, their mouth moves with the words. Nearly every shot in this book was made by it.
 
-Each shot is filled in from the same seven blocks, in this order. The editor's fields map to them
-exactly.
+The second is called **H3**, and it is used for one special job: when you have *two* exact pictures — how the shot should start and how it should end — and want the movement in between. A person crouching down. Someone turning to look. H3 is very good at that kind of movement, the kind that stays in one place. It is not good at walking: given a start and an end picture of someone crossing a room, it ignores the pictures and draws its own walk. That was tested twice, and it is why the studio only hands H3 the in-place movements.
 
-**1 · Start frame** — *anchor*. Where the picture the engine starts from comes from: the scene
-anchor (normal), the last frame of the previous shot (to continue an action), a fresh one made for
-this shot, or a file you supply. Whatever this frame shows, **do not describe it in words as well.**
-Describing a face the frame already carries makes the engine draw a second, competing face.
+@box term | Words to know
+- **Engine** — the flipbook artist. LTX-2.5 for almost everything; H3 for movement between two exact pictures.
+- **Start frame** (also called the **anchor**) — the first page you hand the artist. The most important picture in the whole method.
+- **Prompt** — the note. In this studio you never write it as one blob; you fill in a few boxes and the studio writes the note for you, in the wording the engine listens to.
+- **Render** — the artist drawing. "Rendering the shot" means the engine is working. Count a few minutes.
+@end
 
-**2 · Who and what** — *subject, action, motion*. Name the character by their studio name; the
-editor supplies the rest. Then one action. **One mover per beat**: a person walking is safe; a
-person standing still while their arm swings fast renders the arm twice. Name a garment only if no
-picture is carrying it.
+@chapter | 2 | Other ways, and why not | Five ways people try to make the same person appear twice. Four of them were measured here. One of them is this book. | book/ref2va_photoreal.jpg
 
-**3 · Framing and camera** — *framing, move*. One framing (wide, medium, close) and one camera move
-(static, push in, orbit, handheld…). Give the camera a job; if you do not, the engine gives it one,
-badly. For photoreal, a faint handheld float reads as real; a locked-off camera reads as synthetic.
+There are, broadly, five ways to make a film where the people and places stay the same. We tried four of them on this machine and measured what happened. This chapter is that argument, with the evidence, because a method you follow without knowing why is a superstition, and superstitions break the first time something changes.
 
-@figure figures/fig_cameras.jpg | Give the camera a job. Each of these was asked for by name
-and then measured on the render; the studio reports what the camera actually did next to what
-you asked for.
+### Way one: describe everything, every time
 
-**4 · Beats** — up to four things that happen in sequence inside one shot, joined by a *hard cut*
-or a dissolve. Two rules the studio measured:
-- The word **cut** is what makes a hard cut. Writing times like "0–2s, 2–4s" does nothing here —
-  the engine paces its beats its own way regardless. If a beat must run long, make it its own shot.
-- A cut *inside* a shot re-draws faces from scratch **unless the character is already in the start
-  frame**. So cuts between two faces belong between shots, not inside one.
+The obvious first idea. Write a long, careful description of your character — "a young woman with long teal hair, green eyes, a red and gold dress, a jewelled headpiece" — and paste it into every shot. The engine is good at drawing *a* woman like that. It is not good at drawing *the same* woman twice, because a description is a category and a face is a particular. Look at the first row of pictures below: three shots written from words alone, three different women in the same clothes.
 
-@figure figures/fig_timecode.jpg | The same shot, the same seed, the same three beats. Above,
-the prompt carries timecodes and no "cut": the beats blur into each other. Below, the word
-*cut* is present: t=3s is still the hull, t=4s is the wheel. Both paced their beats at the
-same places — the numbers set nothing, the word set everything.
+@row book/identity_prose_1.jpg | book/identity_prose_2.jpg | book/identity_prose_3.jpg | The same character described in words alone, in three shots: three strangers wearing her clothes.
+@row book/identity_ref_1.jpg | book/identity_ref_2.jpg | book/identity_ref_3.jpg | The same three shots with her portrait handed to the engine as the start picture: one person. Nothing about the words changed.
 
-**5 · Sound** — *dialogue, sfx, ambience*. Write what it sounds like. Name the sources: "rain on a
-tin roof, a kettle" — asking for "a quiet room" produces literal silence. A spoken line goes in
-quotes and only works through a mouth that is on screen; narration over an empty room gives
-nothing. Write *no music* when you will add the score yourself at the finish.
+There is a second problem with describing everything, and it is sneakier. If the start picture *already* shows her face, and the words *also* describe her face, the engine has two instructions that do not quite agree and it resolves them by drawing someone in between. This is why the first rule of the method is **never describe in words what a picture is already showing.** The picture carries the person. The words carry what happens.
 
-**6 · Look** — set once for the whole film (section C). Do not restate it per shot.
+### Way two: chain the shots
 
-**7 · Check** — read the take before you pick it (section F).
+The second idea is clever and almost works. Take the last frame of shot one and use it as the first page of shot two. The person carries over! And they do — for one shot. Then the small changes the engine makes each time pile up: the face drifts a little, the room drifts a little, and by shot four you are somewhere else with someone else. We measured this in the early days of the studio and called it *the chaining era*. The method keeps one small piece of it: when a shot should continue exactly from the previous one — a push-in that ends where a close-up begins — the studio can start from the last frame. But it never chains more than once, and it never chains a face that has already started to slip.
 
-## E · Make it
+### Way three: teach the engine everyone and everything
 
-Fill in the shot, press **Make this shot**. The studio composes the start frame, writes the
-paragraph from your blocks, renders, and then *measures* the result before it shows it to you. Count
-five to ten minutes a shot, retries included. **Make every missing shot, then assemble** does the
-whole film in order while you do something else.
+The third idea comes from image tools: *teach* the engine a face by training a small add-on on many pictures of it — the technical name is a **LoRA**, and this book calls it a **trained face**. It works, sometimes spectacularly, and the studio uses it — Chapter 3 shows you how. But three things stop it being the whole answer. It is expensive to check: a trained face that scores brilliantly on one render and badly on the next is a lottery ticket, so the studio only keeps one after three separate renders agree, and only two of the eight it trained passed that test. It does not stack: teach the engine a face *and* a costume *and* a crown and the third one breaks the picture. And for places it is exactly wrong: a trained "classroom" gives you *a* classroom each time, never *the* classroom — the desks move. A plain photograph of the room, handed to the engine as the start picture, gives you the room.
 
-Each render is a **take**. Nothing about a take is ever overwritten; a shot collects takes and you
-**pick** one. Drafts are cheap; keep making them until one is right.
+@row book/ladder_identity_off.jpg | book/ladder_identity_on.jpg | A trained face at work, same seed and same words: on the left the engine's own idea of "a woman in a market"; on the right, with her trained face switched on. This is the kind of thing a trained face buys — when it passes its test.
 
-## F · Pick a take by reading it, not by liking it
+### Way four: hand the engine reference pictures
 
-Under every take the studio writes what it measured:
+The fourth idea is what the best commercial tools do, and it is what the most impressive AI films you have seen are made with. You upload a picture of each character and a picture of the place, give each one a tag — *Picture 1*, *Picture 2* — and write "Picture 1 stands in Picture 2 and looks up." The engine reads the pictures as *who* and *where*, and the words as *what*. It is elegant, and on the paid engines it works.
 
-- **identity** — how much the face at the start and end of the take is the character's, scored
-  against their portrait. *Same person* at both ends is what you want. *Different face* is a fault.
-  How long a face survives depends on what you asked the person to **do**, not on the look.
-  Measured across 142 takes: **still 4.3 s**, **a walk 4.0 s**, and a **crouch is not
-  followable at all** — both crouch takes lost the face, median hold 0.56 s. Ask for longer
-  than the motion can carry and the length field tells you so as you type.
-- **QC** — the plain-language list of things that went wrong: a limb doubled, the camera moved when
-  it was told not to, the wardrobe opened, the frame was cropped.
-- **camera** — what the camera actually did against what you asked.
+Our machine has an engine with this very feature — the H3 engine has a reference mode called *ref2va* — and we tested it exactly that way: Terra's portrait as Picture 1, the plate as Picture 2, no start picture at all. Three renders, a drawn character and a photographic one. Every time the engine obeyed the *words* perfectly and ignored the *pictures*: a coherent shot of a woman looking up, in a market — and not Terra, and not our market. The reference route exists here and, as it is wired today, does not carry a face or a place. That may change; Chapter 10 explains how we keep checking. For now it is a fact, not a hope.
 
-**Never pick a take with a fault the QC named**, however good it looks — the fault will be the
-thing everyone sees. If the face is wrong, the note under it now tells you which of three things is
-true: this character has no trained face and could have one; this character's trained face was
-already in the render, so the fix is the shot (closer framing, a shorter take, another seed), not the
-likeness; or a trained face was tried for this character and lost, so asking again reaches the same
-place.
+@row book/ref2va_terra.jpg | book/ref2va_photoreal.jpg | The reference route, tested. Left: Terra's portrait and the shrine plate handed in as Picture 1 and Picture 2 — a generic shrine, no Terra. Right: a photographic character and a café — the framing and the head-turn exactly as asked, and the wrong man in the wrong room. The words were obeyed; the pictures were not.
 
-## G · Length: what the engine can hold
+### Way five: this book
 
-Longer shots cost resolution, and the trade is a table, not a slider:
+Put the person *into* the place in a still picture first — one composed start frame per shot, made from the character's pack and the place's plate — and only then hand it to the engine with words that describe action, camera and sound and nothing else. Keep each shot to one beat where a face matters, and cut between shots afterwards, the way every film ever made was cut. Measure every take. Keep what passes.
+
+@box why | Why this is the one we chose
+Because it is the only one of the five that we can **measure passing** on this machine. The composed start frame holds the face the engine is handed (the studio scores it: 0.68, 0.67 and 0.76 out of 1 at the start of Terra's three shots in *Lantern Night*, all "same person"). Cutting at assembly means no shot has to carry a face through a change of framing, which is where faces are lost. And it costs nothing per attempt, so you can try again — with different *words* — as often as you like. Describing everything fails on faces. Chaining drifts. Trained faces are a bonus for two characters in eight, not a foundation. The reference route is not there yet. This is what is left, and it works.
+@end
+
+### What this gets you
+
+A film whose characters look like themselves in every shot and whose rooms stay put. A way of working that a person with no knowledge of AI can follow, because every decision is a box to fill in and every result comes back with a plain-language report card. And numbers instead of luck: you will know *why* a take was kept, and when one is wrong, the studio tells you which of three things to do about it.
+
+@chapter | 3 | The library: a character and a place | Nothing about a person or a room is ever described to the engine. It is shown. So first, we make the things to show. | book/pack_pres_wide.jpg
+
+Before any shot, the studio needs two kinds of thing in its library: **characters**, each as a pack of pictures, and **places**, each as a plate. Think of the pack as a passport with twenty photographs instead of one, and the plate as the empty stage before the actors walk on.
+
+### A character is a pack
+
+Go to **Characters → new character** and build one in the foundry. You describe them once — the studio turns your description into the wording the engine wants — and it generates the pack: a portrait, a full-body view, a turnaround (front, three-quarter, side, back), the face from three angles, six expressions, and a small "presentation set" of a hero shot, a low angle and a wide. About twenty pictures of the same person, all from one seed so they agree with one another.
+
+@row book/pack_base_portrait.jpg | book/pack_turn_front.jpg | book/pack_turn_side.jpg | book/pack_turn_back.jpg | Terra's pack, four of twenty: portrait, front, side, back. The engine will be handed these — never a description of them.
+
+@row book/pack_expr_joy.jpg | book/pack_expr_sorrow.jpg | book/pack_expr_anger.jpg | Three of her six expressions. A pack with expressions lets the studio start a shot from the right feeling instead of hoping the engine finds it.
+
+The roster shows how complete a pack is with a level. **Level 1 means complete and ready to cast** — that is the floor, and it is all a character needs. Level 0 means views are still missing; finish it before you use them. Level 2 means the pack *also* has a trained face (below) — a bonus most packs never get and none of them requires.
+
+@box why | Why twenty pictures and not one
+Because the engine will need to start shots from many angles and moods, and it can only keep drawing a face it has been *shown* from that angle. One portrait gets you one framing. The turnaround gets you the back of her head in the walking-away shot. The expressions get you the smile in shot four without asking the engine to invent it. The pack is the whole set of first pages you will ever hand the artist.
+@end
+
+### A place is a plate
+
+Go to **Places** and make one: a clean, wide picture of the location with nobody in it, in a particular light. Then make the same place in its other lights — dawn, day, dusk, night — because light is part of where you are. The studio also makes a *detail* and a *reverse* angle of each, so a scene can cut around the room without leaving it.
+
+@row book/plate_nightmarket_night_wide.jpg | book/plate_nightmarket_dawn_wide.jpg | The night market at night and at dawn. Same stalls, same lanterns, a different film. Each is a plate: the stage before the actors.
+
+**The plate is the place.** When Terra appears in the market in shots two, three and four, she is standing in *this* picture. The stalls do not move between shots because they are not being re-imagined — they are being re-used.
+
+### A trained face, for some characters
+
+For drawn characters the studio can go one step further and *teach* the engine a face from the pack itself. Press the training button on the roster and about a quarter of an hour later the studio has trained a small add-on, rendered a close-up of the character through it, rendered the same close-up the ordinary way, scored both against the pack's portrait — and done that three times on three different seeds. It keeps the trained face only if it wins by more than half of how much its own score wandered across those three renders. That wandering is called the **spread**, and it is the whole reason for the rule: a face that scores 0.74 once and 0.51 the next time is not a face you can promise anyone.
+
+@row book/ladder_costume_off.jpg | book/ladder_costume_040.jpg | book/ladder_costume_100.jpg | Not all trained things behave alike. A trained *costume* at strength 0, 0.4 and 1.0: nothing, nothing, everything — a switch, not a dial. A trained *face* fades in gradually. The studio measured both before writing this caption.
+
+Two of the eight characters we trained passed. On the roster they show a green **trained face**, and from then on every shot of them is made through it — you do not do anything. Characters whose training was tried and lost show *face training tried*, so nobody spends the quarter-hour again on the same result.
+
+@box note | Photographic characters
+Drawn characters get trained faces from the roster. Photographic ("photoreal") characters do not — yet. It is not that their faces cannot be trained; they can, and have been, on a model called RealVisXL. It is that the engine which draws photoreal start frames here is a different one, called Qwen, and a face trained for RealVisXL cannot be plugged into Qwen. Until the studio has a photoreal route that can use it, photoreal characters rely on the pack alone — which holds *the same actor*, if not the same photograph. Appendix D keeps the honest list of things like this.
+@end
+
+@box try | Exercise 3 — build your library
+1. Make one character in the foundry. Wait until the roster says **level 1**. Open the pack and look at all twenty pictures: is the back of the head the same person as the front? If a view is drawn out of proportion, the roster will say so — fix it before you go on.
+2. Make one place with two plates in two lights. Look at them side by side: could you tell someone which stall is where in both?
+3. If your character is drawn, press train. Read the result the roster reports — the two scores and the spread — and write one sentence about whether the face was kept and why.
+@end
+
+@chapter | 4 | Scenes and shots | One place, one light, one thing happening at a time. The seven boxes you fill in for every shot. | book/hero_anchor_02.jpg
+
+Open **Film editor** and start a film. Before shots, make **scenes**. A scene is one place, in one light, with the characters who are in it. *Lantern Night* has one scene: the night market, at night, Terra present. A longer film has many, and the rule holds for each: change the place or the light, and it is a new scene.
+
+@box why | Why one light per scene
+Because the engine draws whatever light the start picture has, and the start picture comes from the plate. If your scene wanders from dusk into night, the studio would have to hand the engine plates from two different lights and every cut would jump. One plate per scene, one light per plate, and the cuts are invisible.
+@end
+
+### One beat per shot
+
+The most important habit in this chapter: **a shot does one thing.** Terra looks up at the lanterns — that is a shot. Terra lifts a lantern and speaks — that is a shot. She smiles — a shot. It is tempting to write "she looks up, lifts a lantern, says a line, smiles and walks off" as one ten-second shot, and the engine will try. But every time the framing changes *inside* a shot — wide to close, say — the engine re-draws the face from scratch, and it does not come back the same. We measured this: an internal cut holds the face only when the face is already in the start picture and stays there. So faces get one beat per shot, and the cuts between beats happen afterwards, in the editor, the way films are actually made.
+
+@wrap left | book/shrine_anchor_060.jpg | A one-beat shot begins here: Terra at the foot of the shrine steps, from an earlier film. The beat is "she raises her eyes to the gate." Nothing else.
+
+There is a length to plan for too. The engine can draw up to thirty seconds in one go — but a face is only held for so long before it wanders. Across 142 takes the studio measured the face clock by what the person is *doing*: a person standing still holds for about **4.3 seconds**, a person walking for about **4.0**, and a person crouching cannot be followed at all (both crouch takes lost the face within a second). In the studio's shorthand: still 4.3 s, walk 4.0 s, crouch not followable. So a still or walking beat of four to five seconds is the sweet spot, and anything that must run longer is two shots.
+
+### The seven boxes
+
+Every shot is filled in from the same seven boxes, in this order. The editor's fields are these boxes.
+
+| box | what you write | *Lantern Night*, shot three |
+|---|---|---|
+| **1 · Start frame** | Where the first picture comes from. Usually the studio composes it for you from the plate and the pack. | Terra at the stall, composed by the studio |
+| **2 · Who and what** | The character's name, and one action. **One mover per beat.** | TERRA — lifts a paper lantern in both hands and turns it slowly |
+| **3 · Framing and camera** | One framing (wide, medium, close) and one camera move (static, slow push in, handheld...). Give the camera a job or the engine gives it one. | medium · static |
+| **4 · Beats** | How many things happen. One, if a face is in it. | one |
+| **5 · Sound** | What it sounds like — name the sources. A spoken line, if any. | paper rustling, the market softer, *no music* · "I remember this place." |
+| **6 · Look** | The film's style and colour, set once for the whole film, not per shot. | anime, filmic |
+| **7 · Check** | Read the take before you keep it (Chapter 6). | identity 0.67 → 0.68, same person; place held 0.94 |
+
+Two details in box 2 are worth their own sentence. **One mover per beat**: a whole person walking is safe; a person standing still while an arm swings fast comes out with two arms — the engine draws the fast limb twice. And **never describe a garment the picture already shows**; the start frame carries the dress.
+
+### Length: what the engine can hold
+
+Longer shots cost resolution, and the trade is a table the studio enforces, not a slider:
 
 | resolution | longest shot |
 |---|---|
-| 720p (0.9 MP) | 30 s |
-| 1.2 MP | 20 s |
+| 720p | 30 s |
+| 1.2 MP (about 1472×832) | 20 s |
 | ~1080p (1.5 MP) | 12 s |
-| full (2.0 MP) | 8 s |
+| full (2.0 MP, 1920×1088) | 8 s |
 
-The editor enforces this and tells you when a shot has been shortened or a resolution stepped down.
-Pacing — how long each moment lasts — is decided **when you cut**, at assembly, not inside a shot.
+Past these the engine's process is simply killed. The editor shortens or steps down for you and says so. Notice what is *not* in the table: how long each moment lasts inside a shot. We tested writing "0–2 s ... 2–4 s ..." into the words the way some guides suggest, on two seeds and four ways, and the engine ignored the numbers every time — it paced the beats its own way. What *did* work was the word **cut**: write it, and the engine makes a hard cut; leave it out, and it dissolves. Pacing, then, is decided when you cut shots together, not inside one.
 
-## H · When it looks wrong
+@box try | Exercise 4 — plan a scene
+Write a three-shot scene on paper before touching the editor: one place, one light, one character. For each shot fill the seven boxes in three lines: *who does what* · *framing and move* · *sound*. Check each shot against three questions: Does exactly one thing happen? Does the framing agree with the action (a close-up cannot hold someone who walks away)? Is the sound written? Then build the scene in the editor and compare your three lines with what the studio wrote in the boxes.
+@end
 
-The QC line is written in the same words you would use. Copy them into the film's **negative**.
-"Ghosting on the moving arm" becomes *ghosting, doubled limb* in the negative, and the next take is
-told not to do it. The negative should grow with every fault you meet; that is what it is for.
+@chapter | 5 | The start frame | The first page you hand the artist. Everything the engine will hold, it holds from here. | book/hero_anchor_04.jpg
 
-Three things that look like the engine's fault and are not:
+When you make a shot, the studio composes its start frame before the engine sees anything: it takes the scene's plate, puts the character from their pack into it at the size and position the framing asks for — wide, medium, or close — in the plate's light, and checks the result. That picture is the shot's **anchor**. For a scene of five shots, five anchors, all from the same plate and the same pack, which is why they agree with one another.
 
-- **The composition is cropped or too close.** Seeds do not fix this — four seeds stayed cropped;
-  one sentence about a farther framing fixed it. Change the words, not the seed.
-- **The background froze.** The engine animates only what is named. Name it: "the crowd moves
-  behind her", "leaves drift".
-- **The wardrobe opened mid-shot.** A start picture fixes a garment's starting state, not its
-  behaviour. Name the garment closed in the action, or shorten the take.
+@row book/hero_anchor_02.jpg | book/hero_anchor_03.jpg | book/hero_anchor_04.jpg | *Lantern Night*'s three composed start frames: Terra wide, medium, and close, all placed into the same night-market plate. The engine never saw a description of her; it saw these.
 
-## I · Finish: half the film
+After composing, the studio **reads the words against the picture**. It looks at the anchor with a vision model and lists what the words mention that the picture does not contain. "Not in the anchor: crowd" is a warning that the shot may drift toward inventing one. When we made *Lantern Night* that warning fired on the empty establishing shot, and the word came out of the sentence before the shot was rendered.
 
-When every shot has a picked take, **assemble film**. Next to the *music* switch you will find
-**look** and **2× master**.
+### What the start frame fixes
 
-- **look** applies one colour treatment to the *whole film, after the cuts*, so nothing drifts
-  between shots. *filmic* (the default) opens the shadows and warms the mid-tones; it was measured
-  on frames from two delivered films to add saturation and brightness without blowing highlights.
-  *punchy* is stronger, for daylight and anime. *soft* is barely visible. *none* is the engines'
-  raw output.
-- **2× master** delivers at double resolution. It takes about a minute a shot.
+Two things the start frame decides that you cannot argue with afterwards. **Where the shot begins.** In an earlier film we wrote "Terra walks in from the left and stops at the steps" — and the anchor already stood her at the steps. She never walked in; there was nowhere to walk from. The action changed to "stands at the steps and raises her eyes," which is what the picture allowed. **Who is in it.** A face not in the start frame is a face the engine invents; a face in it is a face the engine keeps.
 
-@figure figures/fig_grades.jpg | The four looks on one real frame, through the studio's own
-filters. *none* is the engine's output; *soft* is barely a change; *filmic* opens the shadows
-and warms the mids; *punchy* pushes both further and will turn skin orange if you let it.
-- The scene **music** bed is generated at this step and mixed under the picture; the whole film is
-  then levelled to broadcast loudness.
+@wrap right | book/sharpen_control.jpg | The start frame of a shot, sharpened through the studio's own upscaler. It looks better. The take made from it scored worse — three shots out of three.
 
-The studio checks that the finished film has exactly as many frames as its takes. It used to hold
-the last frame of every shot for a fraction of a second because the takes' sound ran past their
-picture; it does not any more.
+And one thing it does *not* need: **detail**. We tried improving a shot by sharpening its start frame first — more texture, crisper edges — and rendered the same shot from both frames at the same seed, three times on three shots. Every time, the sharpened frame produced a face that scored *lower* (−0.038, −0.070, −0.029). The engine reads synthesised detail as noise. What a *better* start frame would change is composition and likeness, not sharpness — which matters for Chapter 9.
 
-## J · A worked example — three shots, one scene
+@box try | Exercise 5 — read a start frame
+Open a shot in the editor and look at its anchor before you make it. Answer three questions: Is the character in it? Is the framing the one you asked for? Is there anything in your action sentence that the picture does not contain? If the answer to the last is yes, change the sentence, not the picture.
+@end
 
-*Terra* (an anime character with a trained face) at the *forest shrine*, at dawn. One scene, one
-anchor, three shots, cut at assembly.
+@chapter | 6 | Make it, then read it | Press the button. Then read what came back like a referee, not a fan. | book/hero_03.jpg
 
-**Scene:** place *forest-shrine*, plate *dawn_wide*, cast *terra*. Film look *anime*. Negative:
-*lowres, bad anatomy, extra limbs, text, watermark, nsfw*.
+Fill the boxes, press **Make this shot**. The studio composes the start frame, writes the engine's paragraph from your boxes, renders, and then — before it shows you anything — measures the result. Count three to five minutes a shot. **Make every missing shot, then assemble** does the whole film in order while you do something else.
 
-**Shot 1 · the arrival** — anchor: *scene*. Subject *terra*. Action: *walks in from the left along
-the stone path and stops at the foot of the shrine steps*. Framing *wide*, move *static*. Sound:
-*wind in the cedars, gravel underfoot, a single bell far off; no music*. 6 s.
+Each render is a **take**, and takes are never overwritten. A shot collects them; you **pick** one. Drafts are cheap. The studio will even retry once on its own if the first take has a fault.
 
-**Shot 2 · the look up** — anchor: *scene*. Subject *terra*. Action: *looks up at the shrine gate,
-her hand resting on the rope rail*. Framing *medium*, move *slow push in*. Dialogue: *"So this is
-where he left it."* Sound: *the same wind, closer; the bell again*. 5 s.
+### The take's report card
 
-**Shot 3 · the decision** — anchor: *prev_last* (continues from shot 2's last frame). Subject
-*terra*. Action: *closes her eyes for a breath, opens them, and starts up the steps*. Framing
-*close*, move *handheld, a faint float*. Sound: *her breath, the wind dropping away*. 4 s.
+Under every take the studio writes what it measured, in plain words:
 
-Why it is built this way: three shots because each has her face in it and a cut between faces
-belongs at assembly (D4); a wide first because a wide anchor swallows a named character unless the
-start frame already holds her (B, C); the line in shot 2 through a mouth that is on screen (D5);
-every sound named (D5); *no music* because the bed comes at the finish (I). Then *filmic*, 2×
-master, assemble.
+- **identity** — how much the face at the start and at the end of the take is your character's, scored against the portrait in their pack. *Same person* at both ends is what you want. *Uncertain* usually means they turned to profile. *A different face* is a fault.
+- **QC** — anything that went wrong: a limb doubled, the audio silent, the scene drifted, people appeared in an empty shot, the person ends up pressed against the frame edge.
+- **camera** — what the camera actually did against what you asked for. "Push in 46%" under a shot that asked for a *slow* push-in is the studio telling you it overshot.
+- **the strip** — one frame per second of the take. Look at it. The numbers say where to look; the strip is what you are judging.
 
-### What happened when it was actually run
+@figure book/hero_take_strip_02.jpg | The strip for *Lantern Night* shot two: Terra under the lanterns, one frame a second. Read the face across it — does it stay hers? Read the background — does it stay put?
 
-This example was built through the editor's own routes and rendered, because a template whose
-example was never run is a belief with a diagram. The **first pass** taught four things, each now
-a rule above:
+### The one rule for picking
 
-- Shot 1 as first written said *"walks in from the left and stops at the steps"*. She never walked
-  in — the start frame already stood her at the steps. **The start frame fixes where a shot begins**
-  (C). The action became *"stands at the foot of the steps and slowly raises her eyes to the gate."*
-- In the last two seconds of that wide the engine added a burst of sparkles nobody asked for. The
-  negative grew by their name — *magic sparkles, glowing particles, light burst* — and the retake
-  was clean (H).
-- Shot 3 as first written said *"starts up the steps"* in a close-up. The engine followed the action
-  and abandoned the framing; the last frame was the back of her head and the identity score fell
-  to 0.37 — the scorer was right, the shot was wrong. **Framing and action must agree** (D3). It
-  also continued from shot 2's last frame, inheriting a face that had already drifted to profile;
-  a close-up wants its own start frame (D1). The action became *"closes her eyes for a breath,
-  opens them, and lifts her chin toward the gate"*, from the close frame the studio had composed.
-- The studio then **picked that failed take anyway** — a defect in "make every shot", fixed the same
-  hour: a take whose QC names a face fault is now left unpicked for a person to read (F).
+**A take is picked if nothing counts against it.** The studio applies exactly this rule itself: when a take has a fault it renders once more on a new seed, ranks the two by how many faults they have, then by how truthful the camera was, then by how much of the scene drifted — and picks the winner only if its faults are zero. Notes never block a pick (the camera did as asked; the sound was borrowed from a sibling take; the person ends up closer than they began). Faults always do. When nothing is pickable the studio says why, and leaves the takes for you.
 
-The **corrected pass**, as delivered — 15 s, 3840×2176, every one of the takes' 363 frames:
+@box warn | Never pick a take with a fault the QC named
+However good it looks. The fault is the thing everyone will see. If the face is wrong, the note under the take now tells you which of three things is true: **this character has no trained face and could have one** (Chapter 3); **this character's trained face was already in the render, so what missed is the shot, not the likeness** — try a closer framing, a shorter take, or another seed; or **a trained face was tried for this character and lost**, so asking again reaches the same place.
+@end
 
-| shot | what the studio measured |
-|---|---|
-| 1 · the arrival (6 s, wide, static) | camera static as asked · same person at the start (0.65) · recognisable for 4.5 s of 6 · place held 0.92 · sound present |
-| 2 · the look up (5 s, medium, push in) | the push-in overshot (46 %) · same person → uncertain by the end (0.65 → 0.55, she turns to profile) · place held 0.91 · the line voiced through her voice pack |
-| 3 · the decision (4 s, close-up, handheld) | camera static · same person at the start (0.66), the end unmeasured (the head left the tracked box) · place held 0.88 · her own sound rendered too quiet, so the studio carried shot 1's under it |
+### Retry by changing words, not luck
 
-Shot 3's take was picked by a person on those notes — none is a fault — which is exactly the flow
-section F describes. Shot 2 is the honest weak point: a *slow* push-in that lands at 46 % and a
-turn to profile. The next thing to try, by the method, is the words (*"barely perceptible push
-in"*) and not the seed.
+When a take is wrong, the instinct is to press Make again. Sometimes that is right — the studio does it once for you. But the measured truth is that seeds do not move a composition: four seeds of a cropped shot all stayed cropped, and one sentence asking for a farther framing fixed it. So read the report card, and change the *words* it points at. The camera overshot? Ask for "barely perceptible" instead of "slow". The background froze? Name it: "the crowd moves behind her". A garment opened mid-shot? Say it stays closed, or shorten the take.
 
-![one frame a second of the finished example](/samples/docs/method_example_strip.jpg)
+### What *Lantern Night* got wrong the first time
 
-@figure figures/fig_example.jpg | The example as it was actually built and rendered on this
-box — eight shots off one scene, every one of them picked from its takes. The three shots
-described above are the spine of it; the rest are the same moves at other framings.
+The film at the front of this book did not come out of the machine in one pass, and it would be dishonest to let you think it did. Here is its first report card, shot by shot, and what changed.
 
-## K · The rulebook — one page to keep open
+@row book/hero_fault_040_a.jpg | book/hero_fault_040_b.jpg | Shot four, first take. Left: second one — Terra, a close-up, exactly as asked. Right: second four of the same take — the engine has cut to a street full of people. The words said "the crowd far away"; the picture had no crowd; the engine went and found one. The report card said *scene drift: the last frame has lost 78% of the start picture*.
 
-1. **Show, don't describe.** A pack and a plate carry the person and the room; the words carry
-   action, camera and sound only.
-2. **One identity route per face.** Reference by default; a trained face only where it measured
-   better on three renders; never both.
-3. **One scene, one place, one light, one anchor.**
+@row book/hero_fault_010_a.jpg | book/hero_fault_010_b.jpg | book/hero_fault_030_a.jpg | book/hero_fault_030_b.jpg | Left pair: shot one, first take, its first and last seconds — a "static" camera that ended deep inside the stalls. Right pair: shot three, first take, seconds one and four — a stranger walks through the foreground while Terra speaks her line.
+
+- **The market pushed in 278%.** Shot one asked for a static wide of the empty stalls; the engine dollied deep into them. Two more takes with "slow push in" written instead each grew a passer-by walking down the lane. The studio's rule for an empty shot the engine keeps filling is to move its own camera over the start picture instead — arithmetic, nothing invented — and that is what shot one became.
+- **"Stands and looks up" walked at the lens.** Shot two ends with Terra much closer than she began, in both takes, whatever the words said. A whole body travelling is the one motion the engine does willingly; the report card notes it and the take was kept, because nothing in it is wrong — it is simply not what was written. The honest fix is to write the walk.
+- **A stranger crossed her line.** Shot three's first take had a man walk through the foreground while she spoke. "The lane is empty, no one else in the frame" and a negative that named passers-by did not stop the second take from seating people at the stalls behind her — the engine draws the market it knows. The second take is the one kept: she is unobstructed, her face scores the same at both ends, the place held at 0.94.
+- **The close-up cut away.** Six takes of shot four held her face for about a second and a half and then pulled back to the street — with a lantern named in the sentence and without, at four seconds and at three, with the engine's prompt-enhancer on and off. A face standing still is a shot this engine will not hold for long; it goes looking for the scene. The remedy the studio owns outright is arithmetic on the file: the sixth take was cut at 1.5 seconds, where the camera left her face — eyes closing, the smile — and the cut was measured like any fresh render: the same person at both ends (0.76), the place held at 0.95. One number disagreed. The caption-based drift score read 67% lost, two points over its limit, because a face with its eyes shut is captioned differently from one with them open. That was a scorer built for scenes being applied to a face; on a close-up it now counts only when the place score agrees, and the report card carries it as a note.
+- **An empty street filled twice.** Shot five, a candle flame in a lantern, was first asked of the wide plate and came back with a family walking through it; then of a start frame showing one lantern in the dark, and the engine zoomed out to a market crowd anyway. It, too, became the start picture moved by the studio's camera.
+
+Three of those failures were the studio's, not the engine's, and were fixed the same afternoon: the camera-over-the-plate fallback crashed on a variable it never set; a quiet take borrowed its soundtrack from a sibling that carried the engine's own version of Terra's spoken line; and the drift scorer faulted a close-up for closing its eyes. All three are in the report cards as they happened. Every rule in this chapter was applied to this film by the people writing it, and it took three passes and a cut.
+
+@box try | Exercise 6 — read three takes
+Make one shot three times with three different action sentences (not three seeds). For each take, write down the identity numbers, the QC line, and one sentence about the strip. Then pick — and write why, in the report card's own words. If you found yourself wanting to pick a take the QC faulted because it *looked* nice, you have found the exact habit this chapter exists to break.
+@end
+
+@chapter | 7 | Sound | The engine makes sound with the picture — but only the sound you wrote down. | book/hero_05.jpg
+
+The LTX engine makes sound as it draws: footsteps on stone, wind, a lantern string creaking, a voice. This is one of the best things about it and one of the easiest to lose, because it only makes the sound that is *written*. When we let the studio propose five shots for the night market and forgot to give them sound, two came back with an audio track that was flat silence, measured. "A quiet room" as a description produces literal silence; "a quiet room — a clock, a fridge hum, rain on the window" produces a quiet room.
+
+@wrap left | book/hero_04.jpg | Shot four: a close smile. Its sound line named the lantern strings overhead and the market far away; the engine's render came back silent anyway, and the studio lent it the soundtrack of shot two — the report card says so.
+
+**Write the sound for every shot.** Name the sources. If a character speaks, put the line in the dialogue box; the engine moves their mouth with it, and the studio voices the line through the character's own voice pack so it sounds like them every time. A voice needs a mouth on screen — narration over an empty room comes back as nothing. And write *no music* when you will add the score yourself, so the engine does not improvise one.
+
+Music comes at the finish (Chapter 8): the scene carries a music tag — "soft koto and wind chimes, a night market, gentle" — and a music engine called ACE-Step writes a bed for it, mixed quietly under the whole scene.
+
+@box note | When a shot comes back quiet anyway
+It happens; *Lantern Night*'s own close-up rendered silent, twice. The studio notices, borrows the soundtrack of a sibling take from the same scene so the cut does not go dead, and says so on the take. The sibling must not be a shot with a spoken line — the engine's own render of shot three carried its version of Terra's words, and until that rule was written it was lent to an empty market. It is a patch, not a fix — the honest fix, building the scene's ambient sound from its own description for a silent shot, is on the studio's to-do list.
+@end
+
+@box try | Exercise 7 — the sound pass
+Take your three-shot scene from Exercise 4. For each shot, write a sound line naming at least two sources, and mark *no music* if you plan a score. Give one character one spoken line in one shot — and make sure their face is on screen in that shot. Make the scene. Open each take's QC and confirm none says *silent*.
+@end
+
+@chapter | 8 | The finish | Half the film happens after the shots are made. One look, a master, and a count. | book/hero_04.jpg
+
+When every shot has a picked take, press **assemble film**. Next to the *music* switch you will find two more choices: **look** and **2× master**. Between them and the music bed, this is the half of filmmaking that turns a set of good shots into a film.
+
+### One look, after the cuts
+
+A film needs one colour treatment over every shot, or the cuts flicker. The studio applies the look to the *whole assembled film* after the shots are joined, so every take gets the identical treatment. Four looks are offered, in words:
+
+- **filmic** — the default. Opens the shadows and warms the mid-tones. Measured on frames from two delivered films: about 11% more colour, 20% more brightness, and very few blown-out pixels.
+- **punchy** — stronger: 17% more colour, 27% brighter. Good for daylight and drawn films; can push skin toward orange.
+- **soft** — the old gentle base, barely visible.
+- **none** — exactly what the engines made.
+
+@row book/grade_none.jpg | book/grade_filmic.jpg | The same frame with no look, and with *filmic*, the default: the shadows open and the mid-tones warm. A stronger candidate was left out of the list on purpose: it added 49% colour by blowing ten times as many highlights and turning every yellow to poster paint. A look that wins by clipping has not won.
+
+### The 2× master
+
+Switch on **2× master** and every take is passed through an upscaler before the film is joined, so a 1920×1088 film is delivered at 3840×2176. About a minute a shot. There were two ways to do it and we measured both; the faster one, which halves the frame and lets the model draw it back at four times the size, turned out cleaner as well as six times quicker — the slower path invented texture on flat surfaces.
+
+@row book/upscale_bicubic.jpg | book/upscale_fast.jpg | book/upscale_fine.jpg | The same detail at 1:1 three ways: a plain player zoom; the fast master; the slow master. The slow one is sharper *and* has invented a mottled texture on the wall that is not in the shot.
+
+### The count
+
+The finished film has exactly as many frames as its takes. The studio checks this, because it once did not: the sound of each take ran a fraction longer than its picture, and the old assembly held the last frame of every shot for three frames while the sound finished — a tiny hitch at every cut that nobody had seen and the numbers caught. Cuts now land on the frame.
+
+@box try | Exercise 8 — finish twice
+Assemble your scene with **look: none** and again with **look: filmic**. Step through both at the same moment and describe the difference in one sentence. Then assemble once with **2× master** on and compare a small detail at full zoom. Finally, check the delivered film's frame count against the sum of your takes — the studio prints it — and confirm they match.
+@end
+
+@chapter | 9 | Money | Everything in this book is free to run. Here is the one place you might spend, and the rule for it. | book/hero_02.jpg
+
+Every render in this book cost nothing. The engines live on the computer; you can try a shot ten times for the price of the electricity. The films you may have seen that look better than *Lantern Night* were mostly made on **paid engines** — you send your pictures and words to a company's computer and pay per second of video they send back. Their engines are bigger; they were trained on more; and some of them take reference pictures the way Chapter 2 described and make it work.
+
+@box term | What a "token" is
+Paid engines charge in **tokens** — small units of work. An image costs a few; a second of video costs many. A useful rule of thumb: a frontier *picture* costs a small fraction of a frontier *second of video*. That asymmetry is the whole strategy below.
+@end
+
+### The rule, if you ever spend
+
+The studio spends nothing by default and should keep it that way until a measurement says otherwise. If money is spent, it is spent in this order, and each step is gated by the studio's own numbers on the same shot — not by how the bought thing looks on its own.
+
+1. **Start frames, for one scene — never video.** Our whole method starts from a picture; a better picture improves every shot made from it, and pictures are cheap. Buy a handful for one scene, render each shot from our composed frame and from the bought one at the same seed, and adopt only if the face scores higher or the QC is cleaner. The studio has a tool for exactly this comparison.
+2. **By scene, never by shot.** Two engines in one room show — the grain, the colour, the way things move. The finish's single look hides some of it, not all.
+3. **Never buy a likeness you can make.** A trained face beat the ordinary route on two of our eight characters; the ordinary route holds *the same actor*. A bought clip must beat our own face score on the same shot, measured by the same tool, or it is decoration.
+4. **Whole-scene video from a paid engine, last** — for the one thing the local engines measurably cannot do, a fight's physics say — scored with our detectors, cut in at assembly, graded with the rest.
+
+@box why | Why start frames and not video
+Because we measured what a start frame does. Sharpening one did *not* help (Chapter 5) — the engine wants likeness and composition from its first page, not detail. Likeness and composition are exactly what a bigger image model sells, and they cost a fraction of what its video costs. And because everything downstream — the engine, the measuring, the finish — stays ours and free.
+@end
+
+@box try | Exercise 9 — the decision, on paper
+Pick the one shot in your project that you like least. Write down its identity numbers and QC line. Then answer: is the problem the *words* (Chapter 6), the *start frame* (Chapter 5), or the *engine*? Only the third is a reason to spend anything, and only after the first two have been tried. Most students never reach the third.
+@end
+
+@chapter | 10 | The clock | Engines change faster than books. This one carries a date, and a rule for when to check. | book/plate_forestshrine_dawn.jpg
+
+Everything in this book was true on the day at the top of the studio's playbook. That is not a modest disclaimer; it is a working part of the method. In the single week this chapter was written, the studio found twenty gigabytes of a reference-to-video engine on its own disk that nobody had ever connected, a video super-resolution model its finish had never used, and learned that the paid engine the best films were made on had just released a new version.
+
+So the studio's playbook — the engineering book behind this one — opens with a **clock**: the date it was last checked, and a cadence of fourteen days. When the date is past due, the studio checks before it makes anything: new engines and weights, new features in the software underneath, models sitting on disk that nothing uses, what the paid engines now cost and can do — and anything new runs the same battery of tests this book's rules came from before it is allowed into the method. Then the date is stamped. A tool prints whether the check is due and lists the unused models, and the studio's own instructions make it the first thing done in any session that will generate.
+
+@box why | Why fourteen days and not "when we remember"
+Because "when we remember" is how the reference engine sat unnoticed. A cadence is a floor, not a schedule — anyone can check early — but it guarantees that nothing in this book is more than two weeks out of date without someone knowing it is.
+@end
+
+@box try | Exercise 10 — read the date
+Open the studio's playbook and read the date at the top. Run the review tool. Read the list of unused models. Pick one and find out, in ten minutes of reading, what it is for — and write a sentence about whether the method should test it. That sentence is exactly how new capabilities enter this book.
+@end
+
+@chapter | 11 | Your final project | One scene, three to five shots, a line spoken, a finish. Everything in this book, once, by you. | book/shrine_frame_wide.jpg
+
+You now know the method. The project is to use it once, start to finish, and hand in a film and a page.
+
+### The brief
+
+Make a **one-scene film of three to five shots**, with one character who is in at least three of them, one spoken line, written sound in every shot, and a finished master with a look and a music bed. Total length between twelve and twenty-five seconds. Any subject; invent your character and your place — the method wants nothing real and nothing borrowed.
+
+### The steps, as a checklist
+
+1. **Library.** One character at level 1; one place with the plate in the light your story needs. (Chapter 3)
+2. **Scene.** One place, one light, the character present, an ambience line, a music tag. (Chapter 4)
+3. **Shots.** Three to five, one beat each, the seven boxes filled, sound written, the line in one shot with the face on screen. Framing agrees with action. (Chapters 4, 7)
+4. **Start frames.** Look at every anchor before making. Fix the words, not the picture. (Chapter 5)
+5. **Make and read.** Make every shot. For each, read identity, QC, camera and the strip. Retry by words. Pick nothing with a named fault. (Chapter 6)
+6. **Finish.** Assemble with a look, the master on, music on. Confirm the frame count. (Chapter 8)
+7. **The page.** One page: for each shot, the seven boxes and the report card of the take you kept; one paragraph on what went wrong and what you changed; the clock's date.
+
+### How it is judged
+
+Not on beauty first. On these, in order: Is it the same person in every shot she is in? Is it the same place? Does every kept take have a clean report card? Is the sound present and the line spoken through a mouth on screen? Does the finished frame count equal the takes? Then, and only then: is it beautiful? A student who hands in a plain film with a perfect page has understood this book. A student who hands in a gorgeous film with a faulted take has not.
+
+@quote The generation is the shoot. The edit is the movie. | a rule this studio borrowed, and measured true
+
+@chapter | A | The rulebook on one page | Keep this open while you work. Every line has a measurement behind it. | book/shrine_anchor_070.jpg
+
+1. **Show, don't describe.** A pack and a plate carry the person and the room; the words carry action, camera and sound only.
+2. **One identity route per face.** Reference by default; a trained face only where it measured better on three renders by more than half its spread; never both at once.
+3. **One scene, one place, one light.** Every start frame in a scene comes from the same plate and the same pack.
 4. **One beat per face.** Cuts between faces happen at assembly.
-5. **Length from the table, pacing from the edit.** Timecodes in a prompt do nothing here.
-6. **The word *cut* makes the cut.**
+5. **Length from the table, pacing from the edit.** 720p→30 s, 1.2 MP→20 s, 1.5 MP→12 s, 2 MP→8 s. Timecodes in the words do nothing here.
+6. **The word *cut* makes the cut.** Without it, a dissolve.
 7. **One mover per beat; a whole body, not a fast limb.**
-8. **Give the camera a job.** Handheld float for photoreal.
+8. **Give the camera a job.** Handheld float for photoreal; a locked camera reads synthetic.
 9. **Write the sound.** Name the sources; a line needs a mouth; *no music* when you own the score.
-10. **The negative grows.** Copy every QC fault into it in its own words.
-11. **The plate is the place.** Weights are for what cannot be photographed in advance.
-12. **Finish is half the film.** One look, after the cuts; master; levelled; frame count checked.
-13. **Nothing is kept on one render.** Read the numbers; look at the strip; pick, don't hope.
+10. **The start frame fixes where a shot begins.** Framing and action must agree.
+11. **The negative grows.** Copy every QC fault into it in its own words.
+12. **The plate is the place.** Trained things are for what cannot be photographed in advance.
+13. **The finish is half the film.** One look, after the cuts; the master; the count.
+14. **Nothing is kept on one render.** Read the numbers; look at the strip; pick only what has no faults.
 
-## L · The pipeline on one page, and the clock that keeps it honest
+@chapter | B | The pipeline on one page | The order the studio works in, and where each chapter fits. | book/hero_anchor_03.jpg
 
-Everything above, as the order the studio actually works in: **look → library → scenes → seven
-blocks per shot → start frames → render (LTX-2.5 by default, H3 for a pinned in-place movement)
-→ read the takes → sound → finish.** The engineering version, with each step's tool, measured
-reason and cost in minutes, is playbook **§96**; it is the go-to template, and it changes only when
-a measurement changes it.
+**Look** → **Library** (a level-1 pack; a trained-face attempt for drawn characters; a plate per light) → **Scenes** (one place, one light, ambience, music tag) → **Seven boxes per shot** (one beat where a face is) → **Start frames** (composed; read the words against the picture) → **Make** (LTX-2.5 by default; H3 for movement between two pictures; one retry) → **Read the takes** (identity, QC, camera, strip; pick iff no faults; retry by words) → **Sound** (written; the line voiced; the bed at the finish) → **Finish** (one look after the cuts; the 2× master; the frame count) → **Money**, only by the rule in Chapter 9 → **The clock**, every fourteen days.
 
-**When to spend money.** The studio spends nothing by default. If it ever does, the order is fixed:
-start frames for one scene first (a better picture improves every local render downstream), never
-mixing engines inside a scene, never buying a likeness the studio can make, and whole-scene video
-from a paid engine only as a last resort — each step gated by our own identity and QC numbers on the
-same beat, not by how the bought thing looks on its own (§96.4).
+The engineering version of this page, with each step's tool, measured reason and cost in minutes, is §96 of the studio's playbook. Its rules with their measurements are §95. This book changes when they do.
 
-**The clock.** Models, nodes and paid engines change faster than a guide. The playbook's first
-section is a review clock: the date the studio last checked for new weights, new ComfyUI nodes,
-models sitting unused on disk and the paid engines' prices, and a fourteen-day cadence. When the
-date is past due, the studio checks before it generates and stamps the date when it has. The
-date at the top of `studio/LTX_PLAYBOOK.md` tells you how current this guide is.
+@chapter | C | Words to know | Every term in this book, in one sentence each. | book/pack_expr_joy.jpg
 
-## Z · What this studio cannot do yet — so you do not spend an evening trying
+- **Anchor / start frame** — the first picture the engine is handed for a shot; composed by the studio from the plate and the pack.
+- **Assemble** — joining the picked takes into a film, with the look, the master and the music.
+- **Beat** — one thing happening. A shot with a face in it has one.
+- **Cut** — where one shot ends and the next begins. Written into the words, it makes a hard cut inside a shot; otherwise cuts happen at assembly.
+- **Engine** — the program that draws the moving picture. LTX-2.5 and H3 here.
+- **Face clock** — how long the engine holds a face: about 4.3 s standing, 4.0 s walking, not at all crouching.
+- **Identity** — the studio's score for "is this still the character", 0 to 1, against the pack portrait.
+- **Level** — how complete a pack is. 1 is complete and castable; 2 also has a trained face.
+- **Look** — the film's single colour treatment: filmic, punchy, soft or none.
+- **Master** — the film at double resolution.
+- **Negative** — the list of things the engine must not draw; it grows with every fault you meet.
+- **Pack** — a character's twenty pictures.
+- **Pick** — the take you keep for a shot.
+- **Plate** — a place's clean wide picture in one light.
+- **QC** — the plain-language list of what went wrong in a take.
+- **Report card** — identity, QC, camera and the strip under a take.
+- **Scene** — shots in one place in one light.
+- **Seed** — the engine's random starting point. Changing it changes small things, not composition.
+- **Spread** — how much a trained face's score wanders across renders; the gate it must clear.
+- **Strip** — one frame per second of a take, for looking.
+- **Take** — one render of a shot.
+- **Trained face** — a small add-on that teaches the engine a character's face from the pack; kept only when measured better.
 
-- Feed several tagged reference pictures into one shot **on the LTX route**: it takes one start
-  frame (two, for a shot pinned between a first and last frame). Put everyone in the anchor. The
-  H3 engine, however, has a reference-to-video mode (`ref2va`) that takes up to nine pictures you
-  name in the words as *Picture 1*, *Picture 2*... - a character portrait and a place plate, for
-  instance - with no start frame at all. It was wired and measured on 2026-09-07: three renders, a
-  drawn character and a photoreal one, and it carried **neither the face nor the place** — the
-  scores read a stranger every time where the start-frame route reads the same person. So it
-  exists, and today it does not do the job. Put everyone in the anchor. See
-  `docs/WHERE-WE-STAND.md` §6.
-- Pace beats inside one shot by the clock. Cut at assembly.
-- Give a **photoreal pack a trained face from the roster**. Not because photoreal faces cannot
-  be trained — they can, and have been: `lora_train_sdxl.py` trains on RealVisXL and produced a
-  real likeness on the LENGA films (playbook §56). Two other things are in the way. First, the
-  roster's own trainer is wired to the anime checkpoint. Second, and the harder one: the
-  photoreal *keyframe* engine here is Qwen, and **no SDXL LoRA can attach to it at all** —
-  anime or photoreal alike, every key is rejected when a Qwen model loads. So a photoreal
-  trained face has nowhere to be spent until there is a photoreal SDXL render route to spend
-  it on. Until then photoreal packs use the reference path, which holds *the same actor*,
-  not the same photograph.
-@figure figures/fig_photoreal_lora.jpg | A photoreal trained face, working. The same seed and
-the same two prompts at four strengths of the LENGA identity LoRA: at 0.00 the engine draws
-strangers, and from 0.70 up it draws her. This is `lora_train_sdxl.py` on RealVisXL — proof
-that the missing piece is a route from the roster to this trainer and a photoreal engine to
-spend the result on, not the training itself.
+@chapter | D | What this studio cannot do yet | So you do not spend an evening trying. Honest as of the date on the playbook. | book/ref2va_terra.jpg
 
-- Stack more than two trained models on a shot. The third breaks the render.
-- Improve a shot by sharpening its start frame. Measured three times: the face got worse each time.
+- **Carry several tagged reference pictures into one shot on the reference route.** The H3 engine's *ref2va* mode takes up to nine tagged pictures, and as wired today it carried neither a face nor a place in three measured renders. Put everyone in the start frame instead.
+- **Pace beats inside one shot by the clock.** Cut at assembly.
+- **Give a photoreal character a trained face from the roster.** Photoreal faces train fine on RealVisXL; the photoreal start-frame engine here is Qwen, which cannot use them. The missing piece is a photoreal render route, not a trainer.
+- **Stack more than two trained things on one shot.** The third breaks the render.
+- **Improve a shot by sharpening its start frame.** Three of three got worse.
+- **Hold a close-up on a still face for more than about a second and a half.** Six takes of *Lantern Night*'s close-up pulled back to the street after 1.5 s, whatever the words said. Keep the beat short, give the face something to do, or cut where the camera leaves it.
+- **Keep an empty street empty.** Asked for a market with nobody in it, the engine added people in six takes out of seven, and pushed the camera 278% into the seventh. For a shot with no one in it, the studio moves its own camera over the plate instead.
 
-*Companion documents: `docs/WHERE-WE-STAND.md` (where this studio stands against the commercial
-stack and why), `studio/LTX_PLAYBOOK.md` §95 (these rules with their measurements), `/CLAUDE.md`
-(the same rules as instructions to the studio's own agent).*
+The full engineering account of where this studio stands against the paid tools, row by row, is the companion document *Where We Stand*.
+
+@quote Every rule in this book was measured on one machine before it was written down. When a measurement changes, the book changes with it. | the studio's only real rule
