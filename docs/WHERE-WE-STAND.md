@@ -189,15 +189,26 @@ If a take cannot be mastered the log says so and that film delivers at the takes
 than silently scaling a soft shot up.
 
 **Exercised end to end** on `angles-and-mass`, 17 shots, filmic + 2× master: delivered
-**3840×2176 at 24 fps, QC clean, 21 minutes wall** including every `/free` wait. The numbers then
-caught a defect the eye would not have: the film came back 82.4 s where its takes summed to 83.7 s,
-and a single mastered take had 93 frames of the 97 the network produced. The mux's `-shortest` was
-trimming each take to whichever of its streams ended first — LTX writes audio and video to slightly
-different lengths. The video is now the master and the audio is padded or cut to exactly its length,
-and the upscaler refuses to return a file with fewer frames than it was given. Verified on the same
-take: 97 frames in, 97 out; 4.0417 s in, 4.0420 s out; 55 s wall on the fast path. A finish that
-shortens the film is not a finish — and the eye did not catch four frames in ninety-seven. The
-numbers did.
+**3840×2176 at 24 fps, QC clean, 21 minutes wall** including every `/free` wait. Then the numbers
+caught two things the eye had not, one new and one old:
+
+- *The master dropped frames.* A single mastered take had 93 frames of the 97 the network produced;
+  the mux's `-shortest` trimmed each take to whichever of its streams ended first. The video is now
+  the master, the audio is padded or cut to exactly its length, and the upscaler refuses to return a
+  file with fewer frames than it was given. Verified: 97 in, 97 out; and on the full film, every
+  take's frame count survives master and normalise — `take == master == normalised` on all 17.
+- *The old assembly held the last frame at every cut.* Auditing why the finished film was "shorter"
+  than its takes: a raw LTX take's audio runs ~135 ms past its video (take 010: 4.875 s of picture,
+  5.010 s of sound), and the old normaliser kept that tail, so at each cut the previous shot's last
+  frame was held for about three frames while its audio finished. The film's longer duration *was*
+  that hold. The finish fits audio to picture (4.875 / 4.885) and cuts now land on the frame.
+
+The delivered film has **1977 frames, and the seventeen picked takes have 1977 frames** — thirteen of
+117, three of 121, one of 93. Frame-exact end to end, through master, normalise, scene join and final
+encode. (I briefly believed four were missing at the scene joins; that was my addition, not the
+film's. Forcing constant frame rate on the final encode would have *added* six duplicates to fill
+AAC priming gaps — the shipped path is the correct one, and the check that settles it is
+`ffprobe -count_frames` on every stage, never a container duration.)
 
 Still missing from the finish, in order of value: sound design beyond the scene music bed
 (`film_audio.py` exists for one film and is not general), and a per-scene grade override for a
