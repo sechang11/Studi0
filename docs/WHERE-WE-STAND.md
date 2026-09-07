@@ -129,11 +129,148 @@ for this studio to output.
 
 ## 5. The post stage (built 2026-09-07)
 
-*Filled in below as the work lands.*
+`studio/_tools/post.py`, wired into assembly. Two jobs, both deterministic:
+
+**One grade line on every shot.** Applied to the whole assembled film in its final encode — which
+already re-encodes, so it costs nothing — and *after* the cuts, so every take gets the identical
+treatment and nothing can drift between shots. Chosen in words in the editor, beside the music
+switch, and remembered on the film:
+
+| look | what it does | measured against no grade (10 frames, 2 films) |
+|---|---|---|
+| **filmic** (default) | opens the shadows, warms the mids | sat +11%, brightness +20%, blown pixels +0.03 |
+| punchy | brighter and more saturated; daylight and anime | sat +17%, brightness +27%, blown +0.05 |
+| soft | the old gentle base | sat +7%, brightness −1% — barely visible |
+| none | exactly as the engines made it | — |
+
+The strongest candidate by the numbers, `vibrance` (+49% saturation), is deliberately not offered:
+it blew ten times the highlights of the ungraded frame and turned every yellow to poster paint on
+the contact sheet. `vibrancy.py`'s own rule — a grade that wins by clipping has not won. A note in
+that file records `filmic_warm` measuring *below* the old base on one earlier clip frame; on ten
+frames from two delivered films it measures above it. Grades behave differently per film, which
+is why the choice is per film and the default is the one that did no harm on either.
+
+**The canvas follows the takes.** Found while building this: assembly fitted every take onto a fixed
+1472×832 canvas — right when takes were rendered at that size, and a silent quarter-resolution
+downgrade now that LTX takes on the 2.0 MP tier come out at 1920×1088. The canvas is now the largest
+picked take (even-rounded, capped at 4K); a 1920×1088 film delivers at 1920×1088 with no AI
+involved. A free win hiding under the free win.
+
+**2x master.** RealESRGAN x4 on every frame through `spandrel` in the ComfyUI venv, delivered at 2×
+the takes' size with each take's own audio re-muxed; run per take before normalisation. Two things
+the first attempt forgot, both measured:
+
+- *The card is shared.* ComfyUI keeps LTX-2.5 resident after a render — 27.8 GB of 31.4 — and every
+  frame of the first finish failed with 500 MB free, silently, falling back to render size. The
+  upscaler now asks ComfyUI to release its models (`/free`, honoured between prompts, never
+  mid-render) and waits for the memory to actually appear before loading anything. The next render
+  re-stages the model in under a minute.
+- *The model is the cost.* Frames stream raw through ffmpeg pipes (a PNG per frame was the first
+  minutes), and the frame is tiled with OOM-halving like ComfyUI's own node. Then the benchmark, one
+  1920×1088 frame on this card:
+
+  | path | per frame |
+  |---|---|
+  | fp32, tiled 768 | 4.08 s |
+  | fp16, tiled 768 (what the finish ran) | 2.15 s |
+  | fp16, whole frame | 1.35 s |
+  | **fp16, halve the frame then x4 — which *is* 2×** | **0.35 s** |
+
+  Six times faster for the same output size — Real-ESRGAN's own `outscale=2` path — at the cost of
+  re-synthesising rather than carrying detail below the half-resolution grid. Looked at 1:1 on three
+  crops of the same frame (`upscale_ab.py`, `samples/hybrid/upscale_fast_vs_fine.jpg`): **fast is at
+  least as good as fine, and cleaner.** Both resolve beard, roof edge and jacket seam far past bicubic;
+  the fine path additionally *invents* a mottled, painterly texture on a stone wall and softens a roof
+  edge — hallucinated detail on soft generative input, the same synthesised texture the start-frame
+  measurement in §6 found the video model dislikes. Fast is the default; `--fine` remains for a film
+  someone wants to compare on.
+
+If a take cannot be mastered the log says so and that film delivers at the takes' own size rather
+than silently scaling a soft shot up.
+
+**Exercised end to end** on `angles-and-mass`, 17 shots, filmic + 2× master: delivered
+**3840×2176 at 24 fps, QC clean, 21 minutes wall** including every `/free` wait. The numbers then
+caught a defect the eye would not have: the film came back 82.4 s where its takes summed to 83.7 s,
+and a single mastered take had 93 frames of the 97 the network produced. The mux's `-shortest` was
+trimming each take to whichever of its streams ended first — LTX writes audio and video to slightly
+different lengths. The video is now the master and the audio is padded or cut to exactly its length,
+and the upscaler refuses to return a file with fewer frames than it was given. Verified on the same
+take: 97 frames in, 97 out; 4.0417 s in, 4.0420 s out; 55 s wall on the fast path. A finish that
+shortens the film is not a finish — and the eye did not catch four frames in ninety-seven. The
+numbers did.
+
+Still missing from the finish, in order of value: sound design beyond the scene music bed
+(`film_audio.py` exists for one film and is not general), and a per-scene grade override for a
+scene that wants to read differently from the film.
 
 ## 6. Measured results
 
-*Filled in below as the tests land.*
+**Timecoded beats — run 1** (12 s, three beats, asked cuts at 2 s and 8 s, seeds 1234 and 77):
+
+| prompt form | seed 1234 | seed 77 |
+|---|---|---|
+| ordinal `Shot 1 / Shot 2 / Shot 3` (the studio today) | no spike | no spike |
+| timecoded `0–2s / 2–8s: CUT to / 8–12s: CUT to` | hard cut at **8.0** | clusters at ~3.5 and ~8.4 |
+
+Looking at one-frame-a-second strips changed what that means. The ordinal clip contains all three
+beats, in order, at nearly the *same times* as the timecoded one (deck to ~2.5 s, wheel to ~7.5 s,
+sky after) — it **dissolved** between them instead of cutting, and a dissolve is a plateau the spike
+detector does not see. So run 1 cannot say whether the numbers moved the pacing; it can say the
+timecoded prompt produced a hard cut where the ordinal produced a dissolve, and the word `CUT` is as
+likely a cause as the numbers. Run 1 also had a design flaw: 8 s of 12 sits exactly on the thirds
+grid, so a model dividing the clip evenly and a model reading the ask both land there.
+
+**Run 2** — four variants, same beats, same key, asked boundaries at 3 s and 9 s (a second off the
+thirds grid at both positions), a dissolve detector (a plateau of raised frame difference) alongside
+the cut detector (a spike), and a one-frame-a-second strip of every clip, looked at:
+
+| prompt form | seed 1234 | seed 77 |
+|---|---|---|
+| A ordinal, no CUT — the studio's `Shot 1 / Shot 2 / Shot 3` | dissolve @ 8.0 | no detectable boundary |
+| B timecodes + `CUT to` | dissolve @ 8.8 | **cuts** @ 3.4–3.8, 8.2–8.9 |
+| C timecodes, no CUT | dissolve @ 8.1 | dissolves @ 4.8, 5.6, 8.7 |
+| D ordinal + `CUT to` | **cuts** @ 4.2, 8.5 | **cuts** @ 3.5–3.9, 5.1–5.8, 8.2 |
+
+The strips show every variant containing the same three beats in the same order at nearly the same
+times — deck until ~3–4 s, wheel until ~8–9 s, sky after — **including A, which was given no times at
+all.** The model's own pacing for three beats is roughly thirds, and the timecodes did not move it:
+B's boundaries on seed 77 (3.4, 8.2) are D's boundaries (3.5, 8.2) to within a tenth, and D has no
+numbers in it. What the timecodes were asked for — 3 and 9 — never arrived; the second boundary sat
+at 8–8.9 in all eight clips.
+
+What *did* change is the transition. Every prompt without the word `CUT` produced dissolves or nothing
+the detector could see; every prompt with it produced hard cuts, on both seeds. **On LTX-2.5 the word
+makes the cut and the numbers set nothing.** The breakdown's `0–2s / 2–4s` structure is decoration on
+our engine.
+
+Two consequences. Our compiler already writes *"A hard cut transitions to …"*, so production shots
+get hard cuts today — no change needed there, and it is now measured rather than assumed. And pacing
+inside one generation is **not available** on this engine by prompt: a beat that must run eight of
+fifteen seconds is two generations and a cut at assembly, which is what §18 said for a different
+reason. D's extra cluster at 5.1–5.8 on seed 77 is a flash on the wheel, not a beat — visible in the
+strip, and the reason a detector is read beside its frames.
+
+**Does a better start frame make a better take?** — `hybrid_frame_test.py`, first measurement.
+The harness renders a shot twice at one seed — from its own anchor, then from a candidate frame
+swapped in as `file:` — and reports the delta on the numbers the studio trusts. Until a frontier
+frame exists, `--sharpen` tests the cheapest honest version: the shot's own anchor through the 2×
+master and back, the same frame with more detail.
+
+Three photoreal shots of the same character (tomas-reyl, LTX, ~4 s), two films, seed 4242:
+
+| shot | identity, first frame | identity, last frame | QC faults |
+|---|---|---|---|
+| encyclopedia-check 160 | 0.699 → 0.661 (**−0.038**) | 0.626 → 0.593 (−0.033) | 4 → 5 |
+| encyclopedia-check 190 | 0.708 → 0.638 (**−0.070**) | 0.624 → 0.615 (−0.009) | 4 → 4 |
+| builder-test 310 | 0.672 → 0.643 (**−0.029**) | 0.650 → 0.654 (+0.004) | 3 → 2 |
+
+**Worse at the first frame, three times out of three; nothing reliable after it.** The first-frame
+identity is the one number the start frame controls directly, and a sharper frame lowered it every
+time. Three shots and one seed, so a strong hint rather than a law — but it says the thing the hybrid
+argument needs said before money moves: the video model does not reward *detail* in its start frame.
+Synthesised texture from an upscaler reads to it as noise, and it re-derives the face from its own
+prior either way. What a frontier frame would change is *composition and identity fidelity*, which
+this stand-in cannot test; that is what `--frame` is for, and the numbers to beat are on the table.
 
 ---
 *Companion to `studio/LTX_PLAYBOOK.md` §18 (cuts re-derive faces), §56 (character LoRA),
