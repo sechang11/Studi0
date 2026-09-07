@@ -1,0 +1,278 @@
+{
+ "prompts": {
+  "A": "Shot 1: a wide shot of the empty airship deck at dawn, rope rails, the sky brightening, the camera slowly drifting forward. Shot 2: a close shot of the ship's wheel, brass worn bright, turning a little on its own, the camera holding still. Shot 3: a wide shot looking straight up at the great canvas envelope overhead, clouds sliding past behind it, a slow tilt. The shots are connected: the same place, the same lighting and the same visual style across every cut.",
+  "B": "0-3s: a wide shot of the empty airship deck at dawn, rope rails, the sky brightening, the camera slowly drifting forward. 3-9s: CUT to a close shot of the ship's wheel, brass worn bright, turning a little on its own, the camera holding still. 9-12s: CUT to a wide shot looking straight up at the great canvas envelope overhead, clouds sliding past behind it, a slow tilt. The shots are connected: the same place, the same lighting and the same visual style across every cut.",
+  "C": "0-3s: a wide shot of the empty airship deck at dawn, rope rails, the sky brightening, the camera slowly drifting forward. 3-9s: a close shot of the ship's wheel, brass worn bright, turning a little on its own, the camera holding still. 9-12s: a wide shot looking straight up at the great canvas envelope overhead, clouds sliding past behind it, a slow tilt. The shots are connected: the same place, the same lighting and the same visual style across every cut.",
+  "D": "Shot 1: a wide shot of the empty airship deck at dawn, rope rails, the sky brightening, the camera slowly drifting forward. CUT to Shot 2: a close shot of the ship's wheel, brass worn bright, turning a little on its own, the camera holding still. CUT to Shot 3: a wide shot looking straight up at the great canvas envelope overhead, clouds sliding past behind it, a slow tilt. The shots are connected: the same place, the same lighting and the same visual style across every cut."
+ },
+ "asked": [
+  3.0,
+  9.0
+ ],
+ "seconds": 12,
+ "rows": [
+  {
+   "variant": "A",
+   "label": "A_ordinal",
+   "seed": 1234,
+   "clip": "samples/timecode/A_ordinal_3_9_1234.mp4",
+   "boundaries": [
+    [
+     8.0,
+     "dissolve"
+    ]
+   ],
+   "asked": [
+    3.0,
+    9.0
+   ],
+   "to_asked": [
+    5.0,
+    1.0
+   ],
+   "to_thirds": [
+    4.0,
+    0.0
+   ],
+   "hard": 0,
+   "soft": 1,
+   "secs": 76
+  },
+  {
+   "variant": "B",
+   "label": "B_time+CUT",
+   "seed": 1234,
+   "clip": "samples/timecode/B_time+CUT_3_9_1234.mp4",
+   "boundaries": [
+    [
+     8.75,
+     "dissolve"
+    ]
+   ],
+   "asked": [
+    3.0,
+    9.0
+   ],
+   "to_asked": [
+    5.75,
+    0.25
+   ],
+   "to_thirds": [
+    4.75,
+    0.75
+   ],
+   "hard": 0,
+   "soft": 1,
+   "secs": 92
+  },
+  {
+   "variant": "C",
+   "label": "C_time_noCUT",
+   "seed": 1234,
+   "clip": "samples/timecode/C_time_noCUT_3_9_1234.mp4",
+   "boundaries": [
+    [
+     8.06,
+     "dissolve"
+    ]
+   ],
+   "asked": [
+    3.0,
+    9.0
+   ],
+   "to_asked": [
+    5.06,
+    0.94
+   ],
+   "to_thirds": [
+    4.06,
+    0.06
+   ],
+   "hard": 0,
+   "soft": 1,
+   "secs": 91
+  },
+  {
+   "variant": "D",
+   "label": "D_ordinal+CUT",
+   "seed": 1234,
+   "clip": "samples/timecode/D_ordinal+CUT_3_9_1234.mp4",
+   "boundaries": [
+    [
+     4.25,
+     "cut"
+    ],
+    [
+     8.5,
+     "cut"
+    ]
+   ],
+   "asked": [
+    3.0,
+    9.0
+   ],
+   "to_asked": [
+    1.25,
+    0.5
+   ],
+   "to_thirds": [
+    0.25,
+    0.5
+   ],
+   "hard": 2,
+   "soft": 0,
+   "secs": 52
+  },
+  {
+   "variant": "A",
+   "label": "A_ordinal",
+   "seed": 77,
+   "clip": "samples/timecode/A_ordinal_3_9_77.mp4",
+   "boundaries": [],
+   "asked": [
+    3.0,
+    9.0
+   ],
+   "to_asked": [
+    null,
+    null
+   ],
+   "to_thirds": [
+    null,
+    null
+   ],
+   "hard": 0,
+   "soft": 0,
+   "secs": 91
+  },
+  {
+   "variant": "B",
+   "label": "B_time+CUT",
+   "seed": 77,
+   "clip": "samples/timecode/B_time+CUT_3_9_77.mp4",
+   "boundaries": [
+    [
+     3.38,
+     "cut"
+    ],
+    [
+     3.75,
+     "cut"
+    ],
+    [
+     6.5,
+     "dissolve"
+    ],
+    [
+     8.25,
+     "cut"
+    ],
+    [
+     8.62,
+     "cut"
+    ],
+    [
+     8.88,
+     "cut"
+    ]
+   ],
+   "asked": [
+    3.0,
+    9.0
+   ],
+   "to_asked": [
+    0.38,
+    0.12
+   ],
+   "to_thirds": [
+    0.25,
+    0.25
+   ],
+   "hard": 5,
+   "soft": 1,
+   "secs": 91
+  },
+  {
+   "variant": "C",
+   "label": "C_time_noCUT",
+   "seed": 77,
+   "clip": "samples/timecode/C_time_noCUT_3_9_77.mp4",
+   "boundaries": [
+    [
+     4.81,
+     "dissolve"
+    ],
+    [
+     5.56,
+     "dissolve"
+    ],
+    [
+     8.69,
+     "dissolve"
+    ]
+   ],
+   "asked": [
+    3.0,
+    9.0
+   ],
+   "to_asked": [
+    1.81,
+    0.31
+   ],
+   "to_thirds": [
+    0.81,
+    0.69
+   ],
+   "hard": 0,
+   "soft": 3,
+   "secs": 90
+  },
+  {
+   "variant": "D",
+   "label": "D_ordinal+CUT",
+   "seed": 77,
+   "clip": "samples/timecode/D_ordinal+CUT_3_9_77.mp4",
+   "boundaries": [
+    [
+     3.5,
+     "cut"
+    ],
+    [
+     3.88,
+     "cut"
+    ],
+    [
+     5.12,
+     "cut"
+    ],
+    [
+     5.38,
+     "cut"
+    ],
+    [
+     5.75,
+     "cut"
+    ],
+    [
+     8.25,
+     "cut"
+    ]
+   ],
+   "asked": [
+    3.0,
+    9.0
+   ],
+   "to_asked": [
+    0.5,
+    0.75
+   ],
+   "to_thirds": [
+    0.12,
+    0.25
+   ],
+   "hard": 6,
+   "soft": 0,
+   "secs": 91
+  }
+ ]
+}
