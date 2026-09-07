@@ -3026,10 +3026,17 @@ def _make_job(jid, fid, shid, seconds=None, seed=0, variants=1):
                         t.setdefault("qc", []).append(note)
                 f.save()
             if newest:
-                sh["picked"] = newest["id"]
+                # a take the QC calls a wrong face is never picked for a person - it stays on
+                # the shot to be read, with the advice line saying what to do (method rule 13)
+                _face_fault = next((str(q) for q in (newest.get("qc") or [])
+                                    if str(q).startswith("the face is")), None)
+                if _face_fault:
+                    _log(jid, "done - %s NOT picked: %s" % (newest["id"], _face_fault[:160]))
+                else:
+                    sh["picked"] = newest["id"]
+                    _log(jid, "done - %s%s" % (newest["id"], (" (QC: %s)" % "; ".join(newest["qc"]))
+                                               if newest.get("qc") else ""))
                 f.save()
-                _log(jid, "done - %s%s" % (newest["id"], (" (QC: %s)" % "; ".join(newest["qc"]))
-                                           if newest.get("qc") else ""))
         else:
             _log(jid, "done - the pose change is the picked take")
         # a line is spoken through the character's voice pack, not left to the engine
