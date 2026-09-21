@@ -1,0 +1,51 @@
+{
+ "arms": {
+  "h3_20": "H3 i2v, NO turbo LoRA, 20 steps euler/beta",
+  "h3_20_spec": "H3 i2v, NO turbo LoRA, 20 steps + Spectrum (Chebyshev forecast)"
+ },
+ "seed": 4207,
+ "seconds": 5.0,
+ "size": [
+  1344,
+  768
+ ],
+ "rows": [
+  {
+   "key": "closeup",
+   "arm": "h3_20",
+   "tag": "spec",
+   "secs": 180.6,
+   "hold_f0": 0.963458,
+   "hold_last": 0.705147,
+   "drift": 0.2583,
+   "motion": 3.074,
+   "luma_drop": 0.0084,
+   "frames": 107,
+   "fps": 24.0,
+   "seconds_out": 4.46,
+   "audio_db": -37.0,
+   "clip": "/home/k4shix/shared/comfy-studio/studio/samples/h3stack/spec_closeup_h3_20.mp4"
+  },
+  {
+   "key": "closeup",
+   "arm": "h3_20_spec",
+   "tag": "spec",
+   "secs": 84.2,
+   "error": "no clip"
+  },
+  {
+   "key": "market",
+   "arm": "h3_20",
+   "tag": "spec",
+   "secs": 0.2,
+   "error": "no clip"
+  },
+  {
+   "key": "market",
+   "arm": "h3_20_spec",
+   "tag": "spec",
+   "secs": 0.1,
+   "error": "no clip"
+  }
+ ]
+}

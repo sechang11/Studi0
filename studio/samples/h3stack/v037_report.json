@@ -1,0 +1,46 @@
+{
+ "arms": {
+  "ltx25": "LTX-2.5 22B distilled i2v (prompt enhancer off)",
+  "h3_v4": "H3 i2v, turbo v4 ema600, 8 steps euler/beta, shift 12"
+ },
+ "seed": 4207,
+ "seconds": 5.0,
+ "size": [
+  1344,
+  768
+ ],
+ "rows": [
+  {
+   "key": "lantern",
+   "arm": "ltx25",
+   "tag": "v037",
+   "secs": 57.7,
+   "hold_f0": 0.301832,
+   "hold_last": 0.088624,
+   "drift": 0.2132,
+   "motion": 3.269,
+   "luma_drop": -0.0121,
+   "frames": 121,
+   "fps": 24.0,
+   "seconds_out": 5.04,
+   "audio_db": -30.9,
+   "clip": "/home/k4shix/shared/comfy-studio/studio/samples/h3stack/v037_lantern_ltx25.mp4"
+  },
+  {
+   "key": "lantern",
+   "arm": "h3_v4",
+   "tag": "v037",
+   "secs": 66.3,
+   "hold_f0": 0.952107,
+   "hold_last": 0.800465,
+   "drift": 0.1516,
+   "motion": 2.011,
+   "luma_drop": 0.0131,
+   "frames": 107,
+   "fps": 24.0,
+   "seconds_out": 4.46,
+   "audio_db": -24.9,
+   "clip": "/home/k4shix/shared/comfy-studio/studio/samples/h3stack/v037_lantern_h3_v4.mp4"
+  }
+ ]
+}

@@ -1,0 +1,93 @@
+{
+ "arms": {
+  "h3_v4": "H3 i2v, turbo v4 ema600, 8 steps euler/beta, shift 12",
+  "h3_v4_sparse": "H3 i2v, v4 turbo 4 steps + BlockSparseAttention sol-attn tau 1.3",
+  "h3_v4_sparse_2": "H3 i2v, v4 turbo 4 steps + BlockSparseAttention sol-attn tau 2.0 (sparser)"
+ },
+ "seed": 4207,
+ "seconds": 5.0,
+ "size": [
+  1344,
+  768
+ ],
+ "rows": [
+  {
+   "key": "closeup",
+   "arm": "h3_v4",
+   "tag": "sparse",
+   "secs": 47.3,
+   "hold_f0": 0.961239,
+   "hold_last": 0.65932,
+   "drift": 0.3019,
+   "motion": 3.741,
+   "luma_drop": 0.0106,
+   "frames": 107,
+   "fps": 24.0,
+   "seconds_out": 4.46,
+   "audio_db": -27.6,
+   "clip": "/home/k4shix/shared/comfy-studio/studio/samples/h3stack/sparse_closeup_h3_v4.mp4"
+  },
+  {
+   "key": "closeup",
+   "arm": "h3_v4_sparse",
+   "tag": "sparse",
+   "secs": 39.2,
+   "hold_f0": 0.961001,
+   "hold_last": 0.667481,
+   "drift": 0.2935,
+   "motion": 3.711,
+   "luma_drop": 0.0113,
+   "frames": 107,
+   "fps": 24.0,
+   "seconds_out": 4.46,
+   "audio_db": -31.9,
+   "clip": "/home/k4shix/shared/comfy-studio/studio/samples/h3stack/sparse_closeup_h3_v4_sparse.mp4"
+  },
+  {
+   "key": "closeup",
+   "arm": "h3_v4_sparse_2",
+   "tag": "sparse",
+   "secs": 0.2,
+   "error": "no clip"
+  },
+  {
+   "key": "market",
+   "arm": "h3_v4",
+   "tag": "sparse",
+   "secs": 48.2,
+   "hold_f0": 0.95321,
+   "hold_last": 0.211384,
+   "drift": 0.7418,
+   "motion": 6.005,
+   "luma_drop": -0.0017,
+   "frames": 107,
+   "fps": 24.0,
+   "seconds_out": 4.46,
+   "audio_db": -28.9,
+   "clip": "/home/k4shix/shared/comfy-studio/studio/samples/h3stack/sparse_market_h3_v4.mp4"
+  },
+  {
+   "key": "market",
+   "arm": "h3_v4_sparse",
+   "tag": "sparse",
+   "secs": 39.2,
+   "hold_f0": 0.952103,
+   "hold_last": 0.206948,
+   "drift": 0.7452,
+   "motion": 6.029,
+   "luma_drop": -0.0008,
+   "frames": 107,
+   "fps": 24.0,
+   "seconds_out": 4.46,
+   "audio_db": -30.5,
+   "clip": "/home/k4shix/shared/comfy-studio/studio/samples/h3stack/sparse_market_h3_v4_sparse.mp4"
+  },
+  {
+   "key": "market",
+   "arm": "h3_v4_sparse_2",
+   "tag": "sparse",
+   "secs": 0.1,
+   "error": "no clip"
+  }
+ ]
+}

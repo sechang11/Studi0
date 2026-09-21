@@ -111,7 +111,9 @@ def best_mp_for(secs):
         if secs <= cap_s:
             mp = cap_mp
     return mp   # (max MP, max seconds); 1.0x28 died in VAE decode - 0.9/30 is the MEASURED cell
-H3_GRAPH = "64_minimax_h3_i2v_turbo_v4.json"   # the v4 turbo recipe; 60 is the v1.0 one
+H3_GRAPH = "67_minimax_h3_i2v_sparse.json"    # v4 turbo + core block sparse attention;
+#                                              64 is the same without it, 60 the v1.0 recipe.
+#                                              67 needs ComfyUI >= 0.35 (PR #16072).
 H3_MAX_FRAMES = 209                                       # 8.7s; the kernel OOMs past it
 WAN_FRAMES, WAN_FPS = 81, 16                              # ~5s, silent
 

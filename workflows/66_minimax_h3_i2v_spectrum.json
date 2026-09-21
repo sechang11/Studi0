@@ -1,0 +1,225 @@
+{
+ "_comment": "MiniMax H3 image-to-video on the v4 turbo graph (64) with Spectrum patched in between the sigma shift and the sampler. Spectrum replaces some transformer evaluations with a Chebyshev ridge forecast, so it only pays on a LONG schedule: run this with the LoRA at strength 0 and steps at 20, which is the path it was written for. On the 4-step turbo path there is nothing to skip and its own README warns it moves composition and motion. Measured 2026-09-20; see WHERE-WE-STAND \u00a77 and studio/_tools/h3_stack_ab.py.",
+ "_notes": [
+  "length must be 17n+5. 124 = ~5.2s, 361 = ~15s. See h3_length() in the builder.",
+  "every pixel dimension must be a multiple of 32: the VAE divides by 16 and the model patchifies the latent by 2, so 1280x720 dies inside patchify_video with a reshape error.",
+  "the turbo LoRA on node 5 is the v4 step-600 EMA checkpoint, and it is NOT the 4-step v1.0 recipe: its card asks for 8 steps, euler, the beta scheduler and shift_video 12.",
+  "sampler is euler and the scheduler is beta - the v4 card's pairing. res_multistep/simple belongs to the v1.0 graph (60/62); do not mix the two halves.",
+  "STEPS: the card says 8 and this graph ships 4. Measured 2026-09-20 on three shot types (held close-up, empty market, a figure with a prop): 4 steps held the approved frame as well or better than 8 on every one - drift 0.275 vs 0.308, 0.743 vs 0.793, 0.138 vs 0.156 - for 58s a clip instead of 106s. The card's reason for 8 is audio-sync stability, which that test did not measure and the numbers cannot adjudicate; the 8-step renders did come back 2-4 dB louder. If a shot's sound matters more than its cost, set steps back to 8.",
+  "audio comes out of node 41 and is muxed by CreateVideo - there is no separate score to lay under this one.",
+  "do NOT call set_negative() on this graph; there is no negative input.",
+  "node 7 is the Spectrum patcher; bypass it by rewiring 30 and 32 back to node 6.",
+  "warmup_steps and tail_actual_steps reserve real evaluations at both ends of the schedule, so a 4-step run is almost entirely reserved and Spectrum does nothing."
+ ],
+ "1": {
+  "class_type": "UNETLoader",
+  "inputs": {
+   "unet_name": "minimax_h3_fl2va_pruned_int8_convrot.safetensors",
+   "weight_dtype": "default"
+  }
+ },
+ "5": {
+  "class_type": "LoraLoaderModelOnly",
+  "inputs": {
+   "model": [
+    "1",
+    0
+   ],
+   "lora_name": "minimax_h3_turbo_v4_step600_ema_pruned_comfyui.safetensors",
+   "strength_model": 1.0
+  }
+ },
+ "6": {
+  "class_type": "MiniMaxH3SigmaShift",
+  "inputs": {
+   "model": [
+    "5",
+    0
+   ],
+   "shift_video": 12.0,
+   "shift_audio": 5.0
+  }
+ },
+ "2": {
+  "class_type": "CLIPLoader",
+  "inputs": {
+   "clip_name": "qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors",
+   "type": "minimax",
+   "device": "default"
+  }
+ },
+ "3": {
+  "class_type": "VAELoader",
+  "inputs": {
+   "vae_name": "minimax_h3_video_vae_fp16.safetensors"
+  }
+ },
+ "4": {
+  "class_type": "VAELoader",
+  "inputs": {
+   "vae_name": "minimax_h3_audio_vae_fp32.safetensors"
+  }
+ },
+ "8": {
+  "class_type": "LoadImage",
+  "inputs": {
+   "image": "h3_start.png",
+   "upload": "image"
+  }
+ },
+ "20": {
+  "class_type": "MiniMaxH3ImageToVideo",
+  "inputs": {
+   "clip": [
+    "2",
+    0
+   ],
+   "vae": [
+    "3",
+    0
+   ],
+   "first_frame": [
+    "8",
+    0
+   ],
+   "prompt": "A scene with natural motion.",
+   "width": 768,
+   "height": 1344,
+   "length": 124
+  }
+ },
+ "30": {
+  "class_type": "BasicGuider",
+  "inputs": {
+   "model": [
+    "7",
+    0
+   ],
+   "conditioning": [
+    "20",
+    0
+   ]
+  }
+ },
+ "31": {
+  "class_type": "KSamplerSelect",
+  "inputs": {
+   "sampler_name": "euler"
+  }
+ },
+ "32": {
+  "class_type": "BasicScheduler",
+  "inputs": {
+   "model": [
+    "7",
+    0
+   ],
+   "scheduler": "beta",
+   "steps": 4,
+   "denoise": 1.0
+  }
+ },
+ "33": {
+  "class_type": "RandomNoise",
+  "inputs": {
+   "noise_seed": 4200
+  }
+ },
+ "35": {
+  "class_type": "SamplerCustomAdvanced",
+  "inputs": {
+   "noise": [
+    "33",
+    0
+   ],
+   "guider": [
+    "30",
+    0
+   ],
+   "sampler": [
+    "31",
+    0
+   ],
+   "sigmas": [
+    "32",
+    0
+   ],
+   "latent_image": [
+    "20",
+    1
+   ]
+  }
+ },
+ "40": {
+  "class_type": "VAEDecode",
+  "inputs": {
+   "samples": [
+    "35",
+    0
+   ],
+   "vae": [
+    "3",
+    0
+   ]
+  }
+ },
+ "41": {
+  "class_type": "VAEDecodeAudio",
+  "inputs": {
+   "samples": [
+    "35",
+    0
+   ],
+   "vae": [
+    "4",
+    0
+   ]
+  }
+ },
+ "50": {
+  "class_type": "CreateVideo",
+  "inputs": {
+   "images": [
+    "40",
+    0
+   ],
+   "audio": [
+    "41",
+    0
+   ],
+   "fps": 24.0,
+   "bit_depth": 8
+  }
+ },
+ "51": {
+  "class_type": "SaveVideo",
+  "inputs": {
+   "video": [
+    "50",
+    0
+   ],
+   "filename_prefix": "claude-generated/h3_i2v_spectrum",
+   "format": "auto",
+   "codec": "h264"
+  }
+ },
+ "7": {
+  "class_type": "SpectrumApplyMiniMaxH3",
+  "inputs": {
+   "enabled": true,
+   "blend_weight": 0.5,
+   "degree": 1,
+   "ridge_lambda": 0.1,
+   "window_size": 2.0,
+   "flex_window": 0.75,
+   "warmup_steps": 1,
+   "tail_actual_steps": 1,
+   "max_history": 8,
+   "debug": false,
+   "model": [
+    "6",
+    0
+   ]
+  }
+ }
+}

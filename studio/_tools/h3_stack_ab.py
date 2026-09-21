@@ -59,6 +59,30 @@ ARMS = {
         "extra": {"32.inputs.steps": 4},
         "label": "H3 i2v, turbo v4 ema600, 4 steps euler/beta, shift 12",
     },
+    # Core block sparse attention (ComfyUI >= 0.35), which has a dedicated MiniMax-H3 path.
+    # Same turbo recipe as h3_v4, so the pair isolates the kernel.
+    "h3_v4_sparse": {
+        "wf": "workflows/67_minimax_h3_i2v_sparse.json", "engine": "h3",
+        "label": "H3 i2v, v4 turbo 4 steps + BlockSparseAttention sol-attn tau 1.3",
+    },
+    "h3_v4_sparse_2": {
+        "wf": "workflows/67_minimax_h3_i2v_sparse.json", "engine": "h3",
+        "extra": {"9.inputs.selection.tau": 2.0},
+        "label": "H3 i2v, v4 turbo 4 steps + BlockSparseAttention sol-attn tau 2.0 (sparser)",
+    },
+    # The non-turbo path, which is the only one Spectrum was written for: the LoRA at strength 0
+    # and a 20-step schedule. Both arms run identically apart from the Spectrum patcher, so the
+    # pair answers "is 20 steps worth it" and "does Spectrum make it affordable" at once.
+    "h3_20": {
+        "wf": "workflows/64_minimax_h3_i2v_turbo_v4.json", "engine": "h3",
+        "extra": {"5.inputs.strength_model": 0.0, "32.inputs.steps": 20},
+        "label": "H3 i2v, NO turbo LoRA, 20 steps euler/beta",
+    },
+    "h3_20_spec": {
+        "wf": "workflows/66_minimax_h3_i2v_spectrum.json", "engine": "h3",
+        "extra": {"5.inputs.strength_model": 0.0, "32.inputs.steps": 20},
+        "label": "H3 i2v, NO turbo LoRA, 20 steps + Spectrum (Chebyshev forecast)",
+    },
     "ltx25": {
         "wf": "workflows/70_ltx25_i2v.json", "engine": "ltx",
         # the enhancer rewrites the prompt; off, so both engines are handed the same words.
