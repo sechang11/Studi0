@@ -1,0 +1,61 @@
+{
+ "arms": {
+  "ltx25_enh": "LTX-2.5 22B distilled i2v (prompt enhancer ON - the film default)"
+ },
+ "seed": 4207,
+ "seconds": 5.0,
+ "size": [
+  1344,
+  768
+ ],
+ "rows": [
+  {
+   "key": "closeup",
+   "arm": "ltx25_enh",
+   "tag": "ltxenh",
+   "secs": 40.8,
+   "hold_f0": 0.291729,
+   "hold_last": 0.090223,
+   "drift": 0.2015,
+   "motion": 12.748,
+   "luma_drop": -0.0077,
+   "frames": 121,
+   "fps": 24.0,
+   "seconds_out": 5.04,
+   "audio_db": -52.7,
+   "clip": "/home/k4shix/shared/comfy-studio/studio/samples/h3stack/ltxenh_closeup_ltx25_enh.mp4"
+  },
+  {
+   "key": "market",
+   "arm": "ltx25_enh",
+   "tag": "ltxenh",
+   "secs": 45.3,
+   "hold_f0": 0.317616,
+   "hold_last": 0.120716,
+   "drift": 0.1969,
+   "motion": 9.488,
+   "luma_drop": -0.0118,
+   "frames": 121,
+   "fps": 24.0,
+   "seconds_out": 5.04,
+   "audio_db": -24.6,
+   "clip": "/home/k4shix/shared/comfy-studio/studio/samples/h3stack/ltxenh_market_ltx25_enh.mp4"
+  },
+  {
+   "key": "lantern",
+   "arm": "ltx25_enh",
+   "tag": "ltxenh",
+   "secs": 48.4,
+   "hold_f0": 0.258201,
+   "hold_last": 0.089183,
+   "drift": 0.169,
+   "motion": 18.909,
+   "luma_drop": -0.0342,
+   "frames": 121,
+   "fps": 24.0,
+   "seconds_out": 5.04,
+   "audio_db": -56.4,
+   "clip": "/home/k4shix/shared/comfy-studio/studio/samples/h3stack/ltxenh_lantern_ltx25_enh.mp4"
+  }
+ ]
+}

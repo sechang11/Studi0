@@ -1,0 +1,46 @@
+{
+ "arms": {
+  "ltx25": "LTX-2.5 22B distilled i2v (prompt enhancer off)",
+  "h3_v4": "H3 i2v, turbo v4 ema600, 8 steps euler/beta, shift 12"
+ },
+ "seed": 4207,
+ "seconds": 5.0,
+ "size": [
+  1344,
+  768
+ ],
+ "rows": [
+  {
+   "key": "market",
+   "arm": "ltx25",
+   "tag": "crowdclause",
+   "secs": 34.9,
+   "hold_f0": 0.266624,
+   "hold_last": 0.151942,
+   "drift": 0.1147,
+   "motion": 19.477,
+   "luma_drop": 0.0237,
+   "frames": 121,
+   "fps": 24.0,
+   "seconds_out": 5.04,
+   "audio_db": -26.8,
+   "clip": "/home/k4shix/shared/comfy-studio/studio/samples/h3stack/crowdclause_market_ltx25.mp4"
+  },
+  {
+   "key": "market",
+   "arm": "h3_v4",
+   "tag": "crowdclause",
+   "secs": 78.8,
+   "hold_f0": 0.955056,
+   "hold_last": 0.902516,
+   "drift": 0.0525,
+   "motion": 7.864,
+   "luma_drop": 0.0606,
+   "frames": 107,
+   "fps": 24.0,
+   "seconds_out": 4.46,
+   "audio_db": -27.5,
+   "clip": "/home/k4shix/shared/comfy-studio/studio/samples/h3stack/crowdclause_market_h3_v4.mp4"
+  }
+ ]
+}

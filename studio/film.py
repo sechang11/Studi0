@@ -111,6 +111,7 @@ def best_mp_for(secs):
         if secs <= cap_s:
             mp = cap_mp
     return mp   # (max MP, max seconds); 1.0x28 died in VAE decode - 0.9/30 is the MEASURED cell
+H3_GRAPH = "64_minimax_h3_i2v_turbo_v4.json"   # the v4 turbo recipe; 60 is the v1.0 one
 H3_MAX_FRAMES = 209                                       # 8.7s; the kernel OOMs past it
 WAN_FRAMES, WAN_FPS = 81, 16                              # ~5s, silent
 
@@ -528,7 +529,11 @@ def _compile_ltx(flat):
                             "does not direct the subject's action here. Pin the shot "
                             "to enforce it" % (i + 1, b["motion"]))
         bg = (b.get("background") or "").strip()
-        amb = ambient_clause(b)
+        amb = ambient_clause(b, empty=empty)
+        for _k in dropped_people_ambients(b, empty):
+            warnings.append("this shot says there are no people, so the %r ambient "
+                            "was left out of the prompt - it asks for people in the "
+                            "background and the engine draws them" % _k)
         if amb:
             bg = ("%s; %s" % (bg, amb)) if bg else amb
         if i == 0:
@@ -631,7 +636,12 @@ def _compile_h3(flat):
         warnings.append("H3 dialogue is untested here - the line is left out of the "
                         "prompt; put dialogue shots on LTX")
     bg = (b.get("background") or "").strip()
-    amb = ambient_clause(b)
+    _empty = _no_people(flat)
+    amb = ambient_clause(b, empty=_empty)
+    for _k in dropped_people_ambients(b, _empty):
+        warnings.append("this shot says there are no people, so the %r ambient was "
+                        "left out of the prompt - it asks for people in the "
+                        "background and the engine draws them" % _k)
     if amb:
         bg = ("%s; %s" % (bg, amb)) if bg else amb
     if not bg:
@@ -649,7 +659,7 @@ def _compile_h3(flat):
     length = min(int(17 * n + 5), H3_MAX_FRAMES)
     notes.append("length %d frames (17n+5), %.1fs" % (length, length / 24.0))
     w, h = (896, 1216) if flat.get("aspect") == "portrait" else (1216, 832)
-    return {"engine": "h3", "workflow": "60_minimax_h3_i2v.json", "prompt": prompt,
+    return {"engine": "h3", "workflow": H3_GRAPH, "prompt": prompt,
             "length": length, "width": w, "height": h,
             "warnings": warnings, "notes": notes}
 
@@ -832,11 +842,28 @@ def motion_option(sub, key):
     return next((o for o in opts if o.get("id") == key), {})
 
 
-def ambient_clause(beat):
-    """Every named ambient motion, as one clause. Unnamed backgrounds freeze."""
-    frags = [motion_option("ambient", k).get("frag", "")
-             for k in (beat.get("ambient") or [])]
+# Ambients that put people in the frame. A shot marked no_people cannot have these: the
+# prompt would contradict itself and the engine settles the argument by adding people.
+# `traffic` is vehicles, not people, so an empty street with cars passing stays legal.
+AMBIENT_WITH_PEOPLE = {"crowd"}
+
+
+def ambient_clause(beat, empty=False):
+    """Every named ambient motion, as one clause. Unnamed backgrounds freeze.
+
+    `empty` is the shot's no_people flag. When it is set, ambients that name people are
+    left out - see dropped_people_ambients() for what to tell the director."""
+    keys = [k for k in (beat.get("ambient") or [])
+            if not (empty and k in AMBIENT_WITH_PEOPLE)]
+    frags = [motion_option("ambient", k).get("frag", "") for k in keys]
     return "; ".join(f for f in frags if f)
+
+
+def dropped_people_ambients(beat, empty=False):
+    """The ambients ambient_clause() just refused to write, for the warnings list."""
+    if not empty:
+        return []
+    return [k for k in (beat.get("ambient") or []) if k in AMBIENT_WITH_PEOPLE]
 
 
 def action_with_motion(action, beat):
