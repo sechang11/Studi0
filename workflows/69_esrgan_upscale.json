@@ -1,0 +1,42 @@
+{
+ "1": {
+  "class_type": "LoadImage",
+  "inputs": {
+   "image": "placeholder.png"
+  }
+ },
+ "2": {
+  "class_type": "UpscaleModelLoader",
+  "inputs": {
+   "model_name": "RealESRGAN_x4plus.safetensors"
+  }
+ },
+ "3": {
+  "class_type": "ImageUpscaleWithModel",
+  "inputs": {
+   "upscale_model": [
+    "2",
+    0
+   ],
+   "image": [
+    "1",
+    0
+   ]
+  }
+ },
+ "4": {
+  "class_type": "SaveImage",
+  "inputs": {
+   "images": [
+    "3",
+    0
+   ],
+   "filename_prefix": "claude-generated/upscaled"
+  }
+ },
+ "_comment": "RealESRGAN x4plus on a still. 1.inputs.image is the source (it must already be staged in ComfyUI/input), 4.inputs.filename_prefix the destination. x4 is the model's native factor and the only one it does well; ask for 2x by resizing afterwards rather than by half-running the model.",
+ "_notes": [
+  "the same weights post.py uses for the film's 2x master, so a card and a frame get the same treatment",
+  "ImageUpscaleWithModel tiles internally; a 4096x5120 output is fine on this card"
+ ]
+}
