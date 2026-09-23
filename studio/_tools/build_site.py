@@ -167,7 +167,7 @@ def main():
            '<p class="sub">Each face was generated once, then carried into every photograph '
            'that follows by handing the engine that portrait rather than a description of it. '
            'One reference picture per person; thirty photographs; no retouching pass.</p>'
-           '<p class="sub" style="margin-top:18px"><a href="casting.html" style="border-bottom:1px solid var(--accent);color:var(--accent)">See the casting call &rarr;</a> &mdash; twenty more faces, six frames each, one of them gets the account.</p>'
+           '<p class="sub" style="margin-top:18px"><a href="casting.html" style="border-bottom:1px solid var(--accent);color:var(--accent)">See the casting call &rarr;</a> &mdash; twenty more faces, six frames each, one of them gets the account. <a href="faces.html" style="border-bottom:1px solid var(--accent);color:var(--accent)">Or browse the face library &rarr;</a></p>'
            '</header><section class="roster">%s</section>%s</div>' % ("".join(cards), FOOT))
     open(os.path.join(a.out, "index.html"), "w", encoding="utf-8").write(page("Agency", idx))
     n = len(os.listdir(img_dir))
