@@ -95,7 +95,116 @@ TIERS = {
                 "features": None, "subject": None},
     "beauty": {"prefix": "g", "frame": BEAUTY_FRAME, "real": BEAUTY_REAL, "note": "",
                "features": BEAUTY_FEATURE, "subject": BEAUTY},
+    # the warm tier builds its prompt from a roster, not from the shared axes; see plan_warm
+    "warm": {"prefix": "w", "frame": "", "real": "", "note": "",
+             "features": None, "subject": None},
 }
+
+# ── the warm tier ──────────────────────────────────────────────────────────────────
+# The beauty tier has exactly one personality in it - composed, chin lifted, straight down the
+# lens - which is aloof by construction. The brief here is the opposite: warm, happy, someone
+# you can read at a glance. A bake-off crossing light against expression settled which half
+# matters: the EXPRESSION carries almost all of it (a composed face under warm window light is
+# still cold), but the BACKGROUND decides whether she reads as a person or a product - a
+# seamless backdrop says campaign, a lived-in room says someone you know.
+#
+# So this tier is a curated roster rather than a random sample, because a line-up needs
+# guaranteed coverage, and personality gets its own axis instead of one repeated gesture.
+
+WARM_SUBJECT = ("genuinely beautiful, the kind of face people notice and remember, with warm "
+                "open features, clear bright eyes and healthy luminous skin")
+
+# "looking at someone out of frame" put an actual second person in the shot on the first run,
+# so the frame is now stated to hold her alone - the same lesson as every other time two
+# clauses were left to argue: say it once, explicitly, in the place it belongs.
+WARM_REAL = ("She is alone in the frame and no one else is visible. Visible fine skin texture "
+             "and pores, individual eyelashes, fine baby hairs at the hairline, a natural "
+             "catchlight in each eye, one subtle asymmetry, shot on an 85mm lens at f2, faint "
+             "film grain. Not retouched, no skin smoothing, no beauty filter, not a 3d render, "
+             "not an illustration.")
+
+# Expression, gesture and gaze together - this is what "personality you can infer from a
+# picture" actually decomposes into.
+PERSONA = [
+    ("delighted", "laughing openly with her head tipped back a little, eyes creased almost "
+                  "shut, entirely unguarded"),
+    ("warm", "smiling a wide easy smile straight into the lens, shoulders relaxed, completely "
+             "at ease"),
+    ("shy", "chin dipped and eyes coming up to the lens, a small smile she is trying to hold "
+            "back, one hand at her collar"),
+    # NOT "looking at someone out of frame": the engine drew the someone, twice, even with
+    # "she is alone in the frame" stated. Name the head turn, never the companion.
+    ("playful", "caught mid-laugh with her head turned to look away to one side, eyebrows up, "
+                "one shoulder lifted"),
+    ("tender", "a soft closed-lip smile, head tilted gently, looking at the camera with real "
+               "affection"),
+    ("mischievous", "one eyebrow slightly raised and a half smile, as though she knows exactly "
+                    "what you are thinking"),
+    ("serene", "eyes half closed towards the light with a calm private smile, perfectly still"),
+    ("radiant", "beaming with her whole face, leaning very slightly towards the camera, hands "
+                "loose"),
+    ("dreamy", "chin resting on her hand looking out of the window with a small private smile, "
+               "somewhere else entirely"),
+    ("amused", "trying not to laugh and failing, lips pressed together, eyes bright and fixed "
+               "on the lens"),
+]
+
+SETTING = [
+    ("window", "at home beside a big window on a bright day, warm daylight wrapping all the way "
+               "round her face, a lived-in room soft and out of focus behind her"),
+    ("kitchen", "in a sunlit kitchen leaning against the counter, warm light bouncing off pale "
+                "tiles, mugs and plants out of focus behind her"),
+    ("morning", "sitting on the end of an unmade bed in soft early morning light, pale linen "
+                "and a bedroom window behind her"),
+    ("garden", "in a green garden in the last hour of sunlight, warm sun behind her lighting "
+               "her hair, leaves and flowers blurred behind"),
+    ("balcony", "on a small balcony crowded with plants in late afternoon sun, warm light and "
+                "soft shadows across her"),
+    ("cafe", "at a corner table in a warm little cafe, low lamps and a window behind her, the "
+             "room golden and out of focus"),
+]
+
+# A deliberate line-up. Every entry names its own colouring, so nothing is left to a dice roll,
+# and the ones asked for by name are all here: albino with blue eyes, blonde with green eyes,
+# several East and Southeast Asian, Brazilian. Ages are explicit and all adult.
+WARM_ROSTER = [
+    ("nordic", "a 24 year old Swedish woman", "long straight golden-blonde hair and bright blue eyes, fair skin"),
+    ("albino-blue", "a 25 year old woman with albinism", "very long white-blonde hair, pale blue eyes and very pale skin with faint freckles"),
+    ("blonde-green", "a 24 year old Polish woman", "thick honey-blonde hair and clear green eyes, fair skin"),
+    ("irish", "a 23 year old Irish woman", "long coppery red hair, green eyes and freckles across her nose, very fair skin"),
+    ("slavic", "a 26 year old Ukrainian woman", "long ash-blonde hair and grey-blue eyes, fair skin"),
+    ("italian", "a 27 year old Italian woman", "long dark brown waves and warm brown eyes, olive skin"),
+    ("spanish", "a 25 year old Spanish woman", "dark chocolate-brown hair to her shoulders and dark eyes, olive skin"),
+    ("greek", "a 26 year old Greek woman", "thick dark wavy hair and hazel-green eyes, light olive skin"),
+    ("lebanese", "a 25 year old Lebanese woman", "long dark hair, strong brows and light grey-green eyes, olive skin"),
+    ("persian", "a 27 year old Iranian woman", "long glossy black hair and very large dark eyes, warm olive skin"),
+    ("moroccan", "a 24 year old Moroccan woman", "dark curly hair and amber-brown eyes, warm golden-brown skin"),
+    ("ethiopian", "a 25 year old Ethiopian woman", "long dark curls and warm brown eyes, deep golden-brown skin"),
+    ("somali", "a 26 year old Somali woman", "black hair in long twists and dark almond eyes, deep brown skin"),
+    ("nigerian", "a 25 year old Nigerian woman", "a full natural afro and dark brown eyes, deep dark brown skin"),
+    ("ghanaian", "a 24 year old Ghanaian woman", "black hair in neat braids and warm dark eyes, deep brown skin"),
+    ("caribbean", "a 26 year old Jamaican woman", "loose dark curls with lighter ends and hazel eyes, warm brown skin"),
+    ("african-american", "a 25 year old African-American woman", "long dark curls and light brown eyes, medium brown skin"),
+    ("brazilian", "a 25 year old Brazilian woman", "long wavy sun-lightened brown hair and hazel eyes, warm golden-brown skin"),
+    ("brazilian-2", "a 24 year old Afro-Brazilian woman", "a big natural curl pattern and dark eyes, warm brown skin"),
+    ("colombian", "a 26 year old Colombian woman", "long dark hair and dark brown eyes, warm tan skin"),
+    ("mexican", "a 25 year old Mexican woman", "long black hair and deep brown eyes, warm brown skin"),
+    ("argentinian", "a 27 year old Argentinian woman", "chestnut brown hair and green-brown eyes, light olive skin"),
+    ("korean", "a 24 year old Korean woman", "long glossy black hair and dark almond eyes, warm fair skin"),
+    ("japanese", "a 25 year old Japanese woman", "a soft dark bob and dark eyes, fair skin"),
+    ("chinese", "a 24 year old Chinese woman", "very long straight black hair and dark eyes, fair skin"),
+    ("thai", "a 25 year old Thai woman", "long dark brown hair and warm dark eyes, golden tan skin"),
+    ("vietnamese", "a 24 year old Vietnamese woman", "long black hair and dark eyes, warm light skin"),
+    ("filipina", "a 25 year old Filipina woman", "long dark wavy hair and dark brown eyes, warm tan skin"),
+    ("indian", "a 25 year old Indian woman", "very long thick black hair and large dark eyes, warm brown skin"),
+    ("pakistani", "a 26 year old Pakistani woman", "long dark hair and light hazel eyes, warm tan skin"),
+    ("kazakh", "a 25 year old Kazakh woman", "long black hair and dark eyes with a soft epicanthic fold, fair skin"),
+    ("samoan", "a 26 year old Samoan woman", "long thick black wavy hair and dark eyes, warm brown skin"),
+    ("maori", "a 25 year old Maori woman", "long dark wavy hair and dark brown eyes, warm brown skin"),
+    ("native", "a 26 year old Native American woman", "long straight black hair and dark eyes, warm brown skin"),
+    ("mixed-1", "a 24 year old woman of Black and Japanese heritage", "dark loose curls and dark eyes, light golden-brown skin"),
+    ("mixed-2", "a 25 year old woman of Nordic and Ethiopian heritage", "loose dark-blonde curls and pale green eyes, light brown skin"),
+]
 
 # Each axis is (filter value, prompt fragment). The filter value is what the picker shows.
 #
@@ -173,8 +282,35 @@ def sh(*a, **kw):
     return subprocess.run(a, capture_output=True, text=True, **kw)
 
 
+def plan_warm(n, seed=20260923):
+    """A line-up: the roster in order, each paired with a different persona and setting.
+
+    Round-robin rather than random, so every heritage on the roster appears before any appears
+    twice, and every persona and every setting gets used. With 36 on the roster, 10 personas
+    and 6 settings, nothing repeats a (heritage, persona) pair until the roster is exhausted.
+    """
+    out = []
+    for i in range(n):
+        lap = i // len(WARM_ROSTER)          # which pass through the roster we are on
+        hkey, who, look = WARM_ROSTER[i % len(WARM_ROSTER)]
+        pkey, pose = PERSONA[i % len(PERSONA)]
+        # 36 is a multiple of 6, so without the lap offset the second pass would hand every
+        # face the same setting it had on the first
+        skey, place = SETTING[(i + lap) % len(SETTING)]
+        out.append({
+            "id": "w%04d" % (i + 1), "tier": "warm", "heritage": hkey, "persona": pkey,
+            "setting": skey, "look": look,
+            "prompt": ("Photo of %s who is %s, with %s. She is %s, %s. Wearing a simple soft "
+                       "knit top. %s"
+                       % (who, WARM_SUBJECT, look, place, pose, WARM_REAL)),
+        })
+    return out
+
+
 def plan(n, seed=20260922, tier="beauty"):
     """n attribute combinations, spread rather than clustered."""
+    if tier == "warm":
+        return plan_warm(n, seed)
     t = TIERS[tier]
     feats = t["features"] or FEATURE
     rng = random.Random(seed)
@@ -250,9 +386,13 @@ def make(n, seed=20260922, tier="beauty"):
         shutil.copy(os.path.join(COMFY_OUT, m.group(1)), dest)
         r["seed"] = seed + i * 17
         json.dump(r, open(meta, "w"), indent=1)
-        print("  %s %-8s %-17s %-10s %-9s %-8s %-13s %5.1fs"
-              % (r["id"], tier, r["heritage"], r["tone"], r["hair_colour"], r["hair_length"],
-                 r["feature"], time.time() - t0))
+        if tier == "warm":
+            print("  %s warm     %-18s %-13s %-9s %5.1fs"
+                  % (r["id"], r["heritage"], r["persona"], r["setting"], time.time() - t0))
+        else:
+            print("  %s %-8s %-17s %-10s %-9s %-8s %-13s %5.1fs"
+                  % (r["id"], tier, r["heritage"], r["tone"], r["hair_colour"],
+                     r["hair_length"], r["feature"], time.time() - t0))
 
 
 def index():
