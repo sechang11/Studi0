@@ -19,9 +19,9 @@ import os
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 SRC = os.path.join(ROOT, "studio", "foundry", "faces")
 
-FACETS = [("heritage", "Heritage"), ("tone", "Skin"), ("hair_colour", "Hair"),
-          ("hair_texture", "Texture"), ("hair_length", "Length"), ("age", "Age"),
-          ("feature", "Feature")]
+FACETS = [("tier", "Tier"), ("heritage", "Heritage"), ("tone", "Skin"),
+          ("hair_colour", "Hair"), ("hair_texture", "Texture"),
+          ("hair_length", "Length"), ("age", "Age"), ("feature", "Feature")]
 
 EXTRA = """
 .bar{position:sticky;top:0;z-index:5;background:var(--paper);border-bottom:1px solid var(--line);
@@ -76,7 +76,8 @@ tiles.forEach(t=>t.onclick=()=>{
     '<code>python3 studio/_tools/faces.py --cast '+t.dataset.id+' --name "NAME" --slug slug</code>'+
     '<br><br><code>python3 studio/_tools/agency.py --posts --who slug</code>';
 });
-apply();
+const t=chips.find(c=>c.dataset.k==='tier'&&c.dataset.v==='beauty');
+if(t)t.click(); else apply();
 """
 
 
@@ -101,6 +102,7 @@ def main():
             continue
         out = "%s.jpg" % r["id"]
         site.web_copy(src, os.path.join(img_dir, out), 420)
+        r.setdefault("tier", "casting")
         for k, _ in FACETS:
             vals[k].add(r.get(k, ""))
         summary = ", ".join(str(r.get(k, "")).replace("-", " ") for k, _ in FACETS)
@@ -124,7 +126,7 @@ def main():
             '<header class="top"><div class="mark">Face library</div>'
             '<h1>Pick a face.</h1>'
             '<p class="sub">%d invented faces, each shot as the same neutral card in the same '
-            'window light so they compare fairly. None is a real person and none is a '
+            'window light so they compare fairly. Two tiers: <b>beauty</b> is lit and styled the way a beauty campaign is, <b>casting</b> is the flat neutral card you judge a face on. None is a real person and none is a '
             'downloaded likeness: every one was grown here from typed attributes, which is also '
             'what the filters above are. Click one to cast it.</p></header>'
             '<div class="bar">%s<div class="facet"><b></b><span class="count" id="count"></span>'

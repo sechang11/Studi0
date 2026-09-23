@@ -45,6 +45,58 @@ FRAME = ("Head and shoulders, square to the camera, indoors beside a large windo
 STRIKING = ("She has the bone structure of a working model but is photographed plainly and her "
             "skin is real.")
 
+# ── the beauty tier ────────────────────────────────────────────────────────────────
+# The casting tier above is deliberately unflattering: flat overcast light, neutral face,
+# square to camera, grey t-shirt. That is what a casting card IS, and it is why those hundred
+# read as ordinary people. This tier is the opposite brief and the difference lives in the
+# LIGHT and the FRAMING, not in adjectives - a bake-off of three formats on two very different
+# colourings settled it (soft single key beat golden hour and bright clean light).
+#
+# The danger on this side is plastic. So "flawless" is spelled out as clear-and-luminous WITH
+# pores, lashes, baby hairs, a catchlight and one asymmetry, and the anti-render clause stays.
+BEAUTY_REAL = ("Visible fine skin texture and pores at close range, individual eyelashes, fine "
+               "baby hairs at the hairline, a natural catchlight in each eye, one subtle "
+               "asymmetry in the face, shot on an 85mm lens at f2 on a full-frame camera, "
+               "faint film grain. Not retouched, no skin smoothing, no beauty filter, not a 3d "
+               "render, not an illustration.")
+# No hair clause here on purpose. The first version said "hair with shape and movement", which
+# fought the length axis and turned a shaved head into a bob - the same two-disagreeing-signals
+# failure as the crowd clause. The hair is already fully described in the subject line.
+BEAUTY_FRAME = ("Photographed indoors against a warm neutral backdrop with a single large soft "
+                "light source just off to one side, soft shadow falling across the far cheek, "
+                "groomed brows, bare-skin makeup with a defined lip, wearing a simple fine-knit "
+                "top, chin slightly lifted, looking straight into the lens with a composed, "
+                "self-possessed expression.")
+BEAUTY = ("exceptionally beautiful, with the facial proportions people call perfect: high "
+          "sculpted cheekbones, a clean defined jawline, a small straight nose, large clear "
+          "wide-set eyes, full lips, a long neck, and flawless luminous skin")
+
+# On this tier the extra trait must ADD to the beauty rather than characterise away from it,
+# so the character-actor traits (gap teeth, hooded eyes, a high forehead) are not offered.
+BEAUTY_FEATURE = [
+    ("green-eyes", "unusually vivid green eyes"),
+    ("grey-eyes", "pale grey eyes"),
+    ("amber-eyes", "light amber eyes"),
+    ("heterochromia", "complete heterochromia, one eye lighter than the other"),
+    ("freckles", "a fine scatter of freckles across her nose"),
+    ("beauty-mark", "a small beauty mark above her lip"),
+    ("long-lashes", "exceptionally long dark lashes"),
+    ("strong-brows", "strong shapely dark brows"),
+    ("cupids-bow", "a sharply defined cupid's bow"),
+    ("cheekbones", "extraordinarily high sculpted cheekbones"),
+    ("long-neck", "a long elegant neck"),
+    ("dimples", "soft dimples when she smiles"),
+    ("widows-peak", "a defined widow's peak"),
+    ("almond-eyes", "long almond eyes with a slight upward tilt"),
+]
+
+TIERS = {
+    "casting": {"prefix": "f", "frame": FRAME, "real": REAL, "note": STRIKING,
+                "features": None, "subject": None},
+    "beauty": {"prefix": "g", "frame": BEAUTY_FRAME, "real": BEAUTY_REAL, "note": "",
+               "features": BEAUTY_FEATURE, "subject": BEAUTY},
+}
+
 # Each axis is (filter value, prompt fragment). The filter value is what the picker shows.
 #
 # Colouring is NOT sampled independently of heritage. The first version of this did that and
@@ -121,15 +173,17 @@ def sh(*a, **kw):
     return subprocess.run(a, capture_output=True, text=True, **kw)
 
 
-def plan(n, seed=20260922):
+def plan(n, seed=20260922, tier="beauty"):
     """n attribute combinations, spread rather than clustered."""
+    t = TIERS[tier]
+    feats = t["features"] or FEATURE
     rng = random.Random(seed)
     out, seen = [], set()
     tries = 0
     while len(out) < n and tries < n * 200:
         tries += 1
         hkey, hphrase, tones, naturals = rng.choice(HERITAGE)
-        feat = rng.choice(FEATURE)
+        feat = rng.choice(feats)
         dyed = rng.random() < 0.18
         if feat[0] == "albinism":
             # albinism decides its own colouring; it cannot also be "deep skin, black hair"
@@ -148,20 +202,28 @@ def plan(n, seed=20260922):
         if key in seen:
             continue
         seen.add(key)
-        hair = ("%s hair dyed %s" % (ht[1], HAIR_COLOUR[hc])) if dyed else \
-               ("%s %s hair" % (ht[1], HAIR_COLOUR[hc]))
-        out.append({"id": "f%04d" % (len(out) + 1), "heritage": hkey, "tone": tone,
+        # "in locs" is a placement, not an adjective: "black hair in locs", not "in locs hair"
+        if ht[0] == "locs":
+            hair = ("hair dyed %s and worn in locs" % HAIR_COLOUR[hc]) if dyed else \
+                   ("%s hair in locs" % HAIR_COLOUR[hc])
+        else:
+            hair = ("%s hair dyed %s" % (ht[1], HAIR_COLOUR[hc])) if dyed else \
+                   ("%s %s hair" % (ht[1], HAIR_COLOUR[hc]))
+        # the beauty tier names the subject as exceptional up front; the casting tier does not
+        who = ("%s who is %s" % (hphrase, t["subject"])) if t["subject"] else hphrase
+        out.append({"id": "%s%04d" % (t["prefix"], len(out) + 1), "tier": tier,
+                    "heritage": hkey, "tone": tone,
                     "hair_colour": hc, "hair_texture": ht[0], "hair_length": hl[0],
                     "age": age[0], "feature": feat[0], "dyed": dyed,
-                    "prompt": ("Photo of %s %s, with %s, %s %s, and %s. %s %s %s"
-                               % (hphrase, age[1], TONE[tone], hair, hl[1], feat[1],
-                                  FRAME, STRIKING, REAL))})
+                    "prompt": ("Photo of %s, %s, with %s, %s %s, and %s. %s %s %s"
+                               % (who, age[1], TONE[tone], hair, hl[1], feat[1],
+                                  t["frame"], t["note"], t["real"])).replace("  ", " ")})
     return out
 
 
-def make(n, seed=20260922):
+def make(n, seed=20260922, tier="beauty"):
     os.makedirs(OUT, exist_ok=True)
-    rows = plan(n, seed)
+    rows = plan(n, seed, tier)
     for i, r in enumerate(rows):
         d = os.path.join(OUT, r["id"])
         os.makedirs(d, exist_ok=True)
@@ -176,6 +238,8 @@ def make(n, seed=20260922):
                "-s", "12.inputs.width=%d" % W, "-s", "12.inputs.height=%d" % H,
                "-s", "11.inputs.noise_seed=%d" % (seed + i * 17),
                "-s", "15.inputs.filename_prefix=claude-generated/faces/%s" % r["id"]]
+        if tier == "beauty":
+            cmd += ["-s", "7.inputs.guidance=3.2"]      # a touch less push than the default 4
         t0 = time.time()
         out = sh(*cmd, cwd=ROOT)
         m = re.search(r"-> (\S+\.png)", out.stdout or "")
@@ -186,8 +250,8 @@ def make(n, seed=20260922):
         shutil.copy(os.path.join(COMFY_OUT, m.group(1)), dest)
         r["seed"] = seed + i * 17
         json.dump(r, open(meta, "w"), indent=1)
-        print("  %s  %-17s %-10s %-9s %-8s %-12s %5.1fs"
-              % (r["id"], r["heritage"], r["tone"], r["hair_colour"], r["hair_length"],
+        print("  %s %-8s %-17s %-10s %-9s %-8s %-13s %5.1fs"
+              % (r["id"], tier, r["heritage"], r["tone"], r["hair_colour"], r["hair_length"],
                  r["feature"], time.time() - t0))
 
 
@@ -230,14 +294,15 @@ def main():
     ap.add_argument("--name", default="")
     ap.add_argument("--slug", default="")
     ap.add_argument("--seed", type=int, default=20260922)
+    ap.add_argument("--tier", default="beauty", choices=sorted(TIERS))
     a = ap.parse_args()
     if a.plan:
-        for r in plan(a.plan, a.seed):
+        for r in plan(a.plan, a.seed, a.tier):
             print("  %s %-17s %-9s %-11s %-9s %-9s %-13s %s"
                   % (r["id"], r["heritage"], r["tone"], r["hair_colour"], r["hair_texture"],
                      r["hair_length"], r["age"], r["feature"]))
     if a.make:
-        make(a.make, a.seed)
+        make(a.make, a.seed, a.tier)
         index()
     if a.index:
         index()
