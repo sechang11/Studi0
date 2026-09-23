@@ -98,6 +98,9 @@ TIERS = {
     # the warm tier builds its prompt from a roster, not from the shared axes; see plan_warm
     "warm": {"prefix": "w", "frame": "", "real": "", "note": "",
              "features": None, "subject": None},
+    # likewise roster-driven; see plan_starlet
+    "starlet": {"prefix": "s", "frame": "", "real": "", "note": "",
+                "features": None, "subject": None},
 }
 
 # ── the warm tier ──────────────────────────────────────────────────────────────────
@@ -282,6 +285,58 @@ def sh(*a, **kw):
     return subprocess.run(a, capture_output=True, text=True, **kw)
 
 
+# ── the starlet tier ───────────────────────────────────────────────────────────────
+# Same format as warm, two deliberate moves: the roster's ages land in 20-23, and beauty is
+# asked for as the mainstream consensus markers rather than as memorability. See patch notes.
+
+STARLET_SUBJECT = ("conventionally beautiful in the way most people mean it, with a symmetrical "
+                   "face, large bright eyes, a small straight nose, full lips, high soft "
+                   "cheekbones and a delicate jaw, clear even skin and thick glossy hair")
+
+# The realism clause has to work harder here, because asking for the consensus markers is
+# exactly what makes a model reach for the retouched plastic version of them.
+STARLET_REAL = ("She is alone in the frame and no one else is visible. Visible fine skin "
+                "texture and pores, individual eyelashes, fine baby hairs at the hairline, a "
+                "natural catchlight in each eye, one subtle asymmetry, shot on an 85mm lens at "
+                "f2, faint film grain. Not retouched, no skin smoothing, no beauty filter, not "
+                "a 3d render, not an illustration.")
+
+
+def _younger(who):
+    """the same person at the younger end of adult: a stated 23-27 lands in 20-23
+
+    Derived rather than retyped so the starlet roster cannot drift out of step with the warm
+    one - every heritage keeps its place, its colouring and its wording, and the only thing
+    that moves is the number.
+    """
+    m = re.search(r"a (\d+) year old", who)
+    if not m:
+        return who
+    a = int(m.group(1))
+    return who.replace(m.group(0), "a %d year old" % (20 + (a - 23) % 4), 1)
+
+
+STARLET_ROSTER = [(k, _younger(who), look) for k, who, look in WARM_ROSTER]
+
+
+def plan_starlet(n, seed=20260923):
+    """plan_warm's line-up, on the starlet roster and subject."""
+    out = []
+    for i in range(n):
+        lap = i // len(STARLET_ROSTER)
+        hkey, who, look = STARLET_ROSTER[i % len(STARLET_ROSTER)]
+        pkey, pose = PERSONA[i % len(PERSONA)]
+        skey, place = SETTING[(i + lap) % len(SETTING)]
+        out.append({
+            "id": "s%04d" % (i + 1), "tier": "starlet", "heritage": hkey, "persona": pkey,
+            "setting": skey, "look": look,
+            "prompt": ("Photo of %s who is %s, with %s. She is %s, %s. Wearing a simple soft "
+                       "knit top. %s"
+                       % (who, STARLET_SUBJECT, look, place, pose, STARLET_REAL)),
+        })
+    return out
+
+
 def plan_warm(n, seed=20260923):
     """A line-up: the roster in order, each paired with a different persona and setting.
 
@@ -311,6 +366,8 @@ def plan(n, seed=20260922, tier="beauty"):
     """n attribute combinations, spread rather than clustered."""
     if tier == "warm":
         return plan_warm(n, seed)
+    if tier == "starlet":
+        return plan_starlet(n, seed)
     t = TIERS[tier]
     feats = t["features"] or FEATURE
     rng = random.Random(seed)
@@ -386,9 +443,10 @@ def make(n, seed=20260922, tier="beauty"):
         shutil.copy(os.path.join(COMFY_OUT, m.group(1)), dest)
         r["seed"] = seed + i * 17
         json.dump(r, open(meta, "w"), indent=1)
-        if tier == "warm":
-            print("  %s warm     %-18s %-13s %-9s %5.1fs"
-                  % (r["id"], r["heritage"], r["persona"], r["setting"], time.time() - t0))
+        if r.get("persona"):          # roster-driven tiers: warm, starlet
+            print("  %s %-8s %-18s %-13s %-9s %5.1fs"
+                  % (r["id"], tier, r["heritage"], r["persona"], r["setting"],
+                     time.time() - t0))
         else:
             print("  %s %-8s %-17s %-10s %-9s %-8s %-13s %5.1fs"
                   % (r["id"], tier, r["heritage"], r["tone"], r["hair_colour"],
