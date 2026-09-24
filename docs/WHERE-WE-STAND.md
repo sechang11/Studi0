@@ -16,7 +16,7 @@ where we need them? Or build our own Seedance?"*
 | Native audio and lip-sync | yes | yes — LTX-2.5 joint audio, dialogue lip-synced through an on-screen mouth (measured, playbook) | **match** |
 | Several shots / hard cuts inside one generation | yes | yes — LTX-2.5 multishot, measured with `_tools/multishot.py` (cut detector: frame-difference spikes above the clip's own median + k·MAD) | **match** |
 | Post: upscale, grade, sound design | their Rule 10: *"post is half the film"* | per-take FILM-net interpolation to 48 fps, loudness levelling, scene music under at 0.5. **No grade, no upscale** on the film path | **free win, not yet taken** → §4 |
-| Multi-reference conditioning (`@CHARAC1 @CHARAC2 @PLACE` as separate tagged images) | native | LTX-2.5 i2v: **1** image (start frame). flf2v and H3 first-last: **2**. **H3 ref2va: up to 9 tagged `<Picture i>` references + video/audio refs, native** (`MiniMaxH3ReferenceToVideo`; weights on disk since the collector; wired 2026-09-07 as workflow 63) | **present; measured 2026-09-07: supplies neither identity nor place as wired (3/3), see §6** → §2 |
+| Multi-reference conditioning (`@CHARAC1 @CHARAC2 @PLACE` as separate tagged images) | native | LTX-2.5 i2v: **1** image (start frame). flf2v and H3 first-last: **2**. **H3 ref2va: up to 9 tagged `<Picture i>` references + video/audio refs, native** (`MiniMaxH3ReferenceToVideo`; weights on disk since the collector; wired 2026-09-07 as workflow 63) | **present; carries identity and wardrobe once correctly wired (2026-09-17) and doubled the person in 2 of 4 - see §6** (the 2026-09-07 "neither identity nor place" measured the prompt alone) → §2 |
 | Raw fidelity and motion realism | frontier-scale training | LTX-2.5 (22 B, open weights) for motion; **Qwen-Image / Qwen-Edit** for photoreal keyframes, **SDXL (animagine-xl-4.0)** for anime keyframes | **scale gap** → §3 |
 
 Both video engines are local weights (`UNETLoader` / `VAELoader` / `SamplerCustomAdvanced`
@@ -58,7 +58,7 @@ So the studio *has* a reference system. It resolves references at a different ti
 
 | where identity is resolved | theirs | ours |
 |---|---|---|
-| inside the video model, at generation | `@refs` | H3 `ref2va` (`<Picture i>` tags) - present; did not carry identity or place as wired (§6) |
+| inside the video model, at generation | `@refs` | H3 `ref2va` (`<Picture i>` tags) - present; carries identity once correctly wired, doubled the person in 2 of 4 (§6, 2026-09-17) |
 | before generation, composited into the start frame | — | anchors, plates, `compose_close` |
 | inside the weights | — | character / costume LoRAs (2 of 8 anime packs survived a three-seed gate; §57's costume-LoRA + face-transplant recipe for photoreal) |
 | in the edit | — | one-beat shots from identity keyframes, cut at assembly |
@@ -122,8 +122,13 @@ Engine-independent ideas, in the order worth testing:
 3. **Post as a stage, not an afterthought.** Their Rule 10. We have the pieces (RealESRGAN x4,
    FILM-net interpolation, loudness levelling, ACE-Step music) and no grade or upscale on the
    delivered film. **Built: see §5.**
-4. **One mover per beat; effects only at the instant of impact.** Their rules 3 and 4. A different
-   cut of our measured `h3-ghosts-a-fast-limb`; both testable, neither in our rulebook yet.
+4. **One mover per beat; effects only at the instant of impact.** Their rules 3 and 4.
+   **Measured 2026-09-24 (playbook §98.3-98.4).** One mover per beat was already ours. Effects at
+   the instant of impact is *not obtainable by prompt on LTX-2.5*: two arms three seeds, the
+   effect accumulates monotonically either way (clear_back 0.02 vs 0.03, difference −0.01 against a
+   spread of 0.03). H3 plateaus on the same anchor and words (0.10, and ~40% less occluded at the
+   end), so an effects beat belongs on H3 - or on the paid engine, which is the one place in this
+   sequence where buying *video* rather than a frame is defensible.
 
 Not worth taking: *codenames not names* exists to dodge IP filters while recreating a copyrighted
 fight — we use invented characters, and our own measurement (wide framings) says leading with
@@ -249,6 +254,26 @@ route as shipped, not a law about the weights. The multi-reference row therefore
 practice, but it is a **route** gap, not an architectural one, and the test that would close or
 confirm it is on the shelf.
 
+**H3 ref2va — the measurement above was of the prompt alone (2026-09-17).** The wiring error this
+entry warned "would look exactly like a weak model" was there. `MiniMaxH3ReferenceToVideo`'s
+`ref_images` is an Autogrow input that ComfyUI reads only as flat, dotted, 0-indexed ids
+(`ref_images.ref_image_0`); workflow 63 passed a nested dict, so the node received no pictures and
+rendered from the words. ComfyUI's own `video_minimax_h3_r2v` template shows the right form. Fixed,
+and the same test run again with only the wiring changed:
+
+| render | character | framing | sampler | identity first → last | looked at |
+|---|---|---|---|---|---|
+| ref2va, wired | Terra (drawn), portrait + plate | wide | fl2v turbo LoRA, 4 steps, seed 4200 | 0.676 → 0.724 | Terra, drawn - and a second Terra behind her |
+| ref2va, wired | tomas-reyl, three views | medium | fl2v turbo LoRA, 4 steps, seed 4200 | 0.536 → 0.471 | him, yellow jacket and all |
+| ref2va, wired | tomas-reyl, three views | medium | seed 11 | 0.396 → 0.406 | two of him |
+| ref2va, wired | tomas-reyl, three views | medium | seed 202 | 0.626 → 0.615 | him, once |
+
+**The reference route supplies identity - face, hair, wardrobe, even the drawing style - and in 2 of
+4 renders it put the person in the frame twice.** Place from a plate: one render, the motifs and not
+the layout. So the multi-reference row is no longer a gap in kind; it is a route that needs a people
+count in QC and more measurement before a film leans on it, and the composited start frame remains
+the method's route. Detail and the queue: `studio/LTX_PLAYBOOK.md` §97.3-97.4.
+
 **Timecoded beats — run 1** (12 s, three beats, asked cuts at 2 s and 8 s, seeds 1234 and 77):
 
 | prompt form | seed 1234 | seed 77 |
@@ -315,6 +340,88 @@ argument needs said before money moves: the video model does not reward *detail*
 Synthesised texture from an upscaler reads to it as noise, and it re-derives the face from its own
 prior either way. What a frontier frame would change is *composition and identity fidelity*, which
 this stand-in cannot test; that is what `--frame` is for, and the numbers to beat are on the table.
+
+## 7. The MiniMax H3 acceleration stack, measured (2026-09-20)
+
+A workflow posted online stacks four things on H3 — TeaCache, SageAttention KJ, Spectrum and the
+"V4 ema600" turbo LoRA — and the question was whether any of it belongs here. Each piece was put
+on the same three start frames at one seed, against LTX-2.5 doing the same shot with the same
+words. `studio/_tools/h3_stack_ab.py` is the harness; the clips and strips are in
+`studio/samples/h3stack/`.
+
+**What each piece turned out to be.**
+
+| piece | verdict |
+|---|---|
+| **V4 ema600 turbo LoRA** | real, and now ours. `minimax_h3_turbo_v4_step600_ema_pruned_comfyui.safetensors`, 620 MB, the ComfyUI conversion of larryvrh's v4 step-600 EMA checkpoint. Its card asks for 8 steps / euler / beta / shift 12, which is a different recipe from the v1.0 4-step graph we already ran — so it got its own graphs, `64` (i2v) and `65` (first-last), rather than a silent edit of `60`/`62`. |
+| **SageAttention** | real, and free. ComfyUI has `--use-sage-attention` natively and H3's attention goes through `optimized_attention`, so the KJ wrapper node is not needed. Only the Triton build (1.0.6) installs here — the 2.x CUDA kernels want nvcc, which this box does not have. Measured on the card: attention alone 1.6–1.8x faster at ~1.4% relative error; end to end on a clip, 50 s against 58 s on the same two warm clips, **1.15x**. |
+| **Spectrum** | not installed. It forecasts denoiser outputs with Chebyshev ridge regression to skip evaluations, and its own README says it changes composition and motion "noticeably" when stacked on a turbo LoRA. Our H3 path is 4 steps; there is nothing to skip. It earns its install only if the 20-step non-turbo path turns out to be worth running, which is not measured yet. |
+| **TeaCache** | rejected on merit, not for want of trying. No H3 implementation exists in the node registry, caching contradicts a 4-step schedule (nothing left to cache), and Spectrum's README warns against running a cache on the same branch. |
+
+**The recipe that shipped.** v4 at **4 steps**, not the card's 8. On all three start frames 4
+steps held the approved frame as well or better than 8 (drift 0.275 vs 0.308 on the close-up,
+0.743 vs 0.793 on the market, 0.138 vs 0.156 on the lantern) for roughly half the time.
+The card's reason for 8 is audio-sync stability, which this test did not measure; the 8-step
+renders did come back 2-4 dB louder. `studio/film.py` now compiles H3 onto `64` (`H3_GRAPH`).
+
+**The finding that matters more than the speed.** H3 keeps the picture it is given and LTX
+re-derives it. SSIM of frame 0 against the start frame, same anchors:
+
+| | H3 (any arm) | LTX-2.5 |
+|---|---|---|
+| close-up | 0.962 | 0.289 |
+| empty market | 0.952 | 0.284 |
+| figure with a prop | 0.953 | 0.300 |
+
+LTX's low *drift* number (0.16–0.23) is not the compliment it looks like: drift is `hold_f0 −
+hold_last`, so an engine that never held the approved frame cannot drift away from it. For a
+method whose central claim is that the start frame decides the shot, this is the difference
+between an engine that obeys the claim and one that treats it as a suggestion.
+
+**The second difference: sound on a held close-up.** LTX returned -55.7 dB on the close-up
+with the enhancer off and -52.7 dB with it on — silence, the same failure *Lantern Night* hit
+twice. H3 returned -27.4 dB with its own ambience.
+
+**What did NOT survive the test.** The two shots H3 was brought in for — a still close-up and an
+empty market — were listed in the guide as things this studio could not do, on the evidence of
+seven *Lantern Night* takes. Handed plain words that name only what the picture holds, **LTX-2.5
+did both correctly**, at 1.0 MP with the prompt enhancer on or off. The production failures were
+this studio writing a contradiction into its own prompt: every shot in that film carried a
+`crowd` ambient from the coverage generator, and the compiler rendered it as "people move through
+the background continuously" — including on the two shots marked `no_people` and on the close-up
+whose own sentence said "nothing else". Proved by adding that one clause back to a prompt that
+was working: same picture, same seed, H3 filled the empty lane with walking figures; without it
+the lane stayed empty. `studio/film.py` now drops a people-bearing ambient on a shot that says
+there are none, and warns instead of doing it silently. Both guide entries were removed.
+
+**Where H3 is now the right call**: a shot that must keep the composed start frame exactly, and a
+held close-up that needs its own sound. Everything else stays on LTX-2.5, which is faster
+(36 s against 60 s a clip here) and carries dialogue.
+
+### 7.1  The rest of the stack, after the review (2026-09-20, same day)
+
+The review that this question triggered found the thing the stack was really a proxy for:
+**ComfyUI was 221 commits behind**, and PR #16072 (merged 2026-09-06) had put kijai's block
+sparse attention into *core*. We were on 0.33.1 from 13 August; the box is now on **v0.37.0**.
+Every one of the 149 node classes our workflows use was checked against upstream before pulling
+and all of them survived; both engines were smoke-tested after.
+
+| acceleration | measured here | verdict |
+|---|---|---|
+| **BlockSparseAttention** (core, `sol-attn`, tau 1.3) | 39.2 s against 47.3 s on the close-up and 39.2 against 48.2 on the market - **1.22x** - with hold_f0 identical to three decimals, drift within 0.01, and the strips indistinguishable | **Adopted.** `workflows/67_minimax_h3_i2v_sparse.json`. The 4x figures in circulation are against stock PyTorch attention on long sequences and a weaker card; on our 107-frame 4-step clips the honest number is 1.22x on top of Sage. |
+| **SageAttention** (`--use-sage-attention`) | H3 1.15x, LTX-2.5 1.10x, hold_f0 unchanged on both, strips indistinguishable | **Adopted as the default flag.** Triton build only (1.0.6); the 2.x CUDA kernels want nvcc. |
+| **Spectrum** (`xmarre/ComfyUI-Spectrum-MiniMax-H3`) | works - the step log alternates 7.1 s real evaluations with 1.0 s forecasts - and cut the 20-step run from 180.6 s to 84.2 s, **2.1x**. Then it killed the ComfyUI process at step 18 of 20, leaking multiprocessing semaphores on the way out | **Installed, measured, disabled.** Kept on disk as `...H3.disabled`. |
+
+**Why Spectrum is disabled even though it works.** It only accelerates a path we should not be
+running. The 20-step non-turbo H3 render scored hold_f0 0.963 and drift 0.258 on the close-up
+against the 4-step turbo's 0.961 and 0.302 - a 0.04 improvement in drift for **180.6 s against
+47.3 s**, nearly four times the cost. Spectrum's 2.1x brings that to 84.2 s, which is still
+slower than the turbo path it is competing with. A tool that halves the price of the wrong
+answer is not a saving, and this one crashes a server two sessions share.
+
+**Where the H3 clip time went today**: about 60 s on 0.33.1 with no flags, 48 s on 0.37.0 with
+Sage, 39 s with sparse attention on top. Roughly **1.5x**, none of it costing a measurable
+change in the picture.
 
 ---
 *Companion to `studio/LTX_PLAYBOOK.md` §18 (cuts re-derive faces), §56 (character LoRA),

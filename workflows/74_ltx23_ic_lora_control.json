@@ -1,0 +1,555 @@
+{
+ "_comment": "LTX-2.3 IC-LoRA UNION CONTROL: a control video (depth here, via MoGe-2) steers the shot's structure and camera while the start frame sets the look. Flattened from ComfyUI's own template video_ltx2_3_ic_lora by scripts/ui2api.py and rewired to the checkpoint this box has. The same LoRA reads canny (core Canny node) and pose (SDPose, workflow 27) maps. Measured 2026-09-17 by studio/_tools/ic_lora_test.py (LTX_PLAYBOOK §97.2): a depth guide made LTX-2.3 pull back 27% against a 26% rig on 3 of 3 seeds (zoom-curve RMSE 0.008), where the same words alone pushed in 17-47%.",
+ "_notes": [
+  "Inputs: node 199 LoadVideo = the control clip (121 frames, the output's aspect); node 200 LoadImage = the start frame, which should BE the look of the control clip's first frame - the guide and the picture have to agree at frame 0.",
+  "The template loads ltx-2.3-22b-distilled-fp8, which this box never downloaded (STATE.md). It runs on dev-fp8 + the distilled LoRA at 0.5, as ComfyUI's own ID-LoRA template does.",
+  "GetICLoRAParameters reads the LoRA's reference_downscale_factor (ref0.5) and hands it to LTXVAddGuide; LTXVCropGuides strips the guide frames before decoding. Do not remove either.",
+  "Feed the raw MoGe 'depth' render, never 'depth_colored' - a colormap is read as content.",
+  "Seed: sg1_704 (KSampler, 8 steps, euler_ancestral, linear_quadratic, cfg 1).",
+  "Changes from the template: checkpoint -> dev-fp8 + distilled LoRA; the prompt enhancer and its abliterated Gemma LoRA removed; two links ui2api mis-resolved repaired (GetVideoComponents.video, MoGeInference.batch_size); the 5 s video slice removed and the length pinned at 121; unused MoGe outputs removed."
+ ],
+ "68": {
+  "class_type": "SaveVideo",
+  "inputs": {
+   "filename_prefix": "claude-generated/iclora/take",
+   "format": "auto",
+   "codec": "auto",
+   "video": [
+    "sg1_122",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "SaveVideo"
+  }
+ },
+ "sg1_101": {
+  "class_type": "LTXVEmptyLatentAudio",
+  "inputs": {
+   "frames_number": 121,
+   "frame_rate": [
+    "sg1_114",
+    0
+   ],
+   "batch_size": 1,
+   "audio_vae": [
+    "sg1_126",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "LTXVEmptyLatentAudio"
+  }
+ },
+ "sg1_106": {
+  "class_type": "LTXVCropGuides",
+  "inputs": {
+   "latent": [
+    "sg1_121",
+    0
+   ],
+   "positive": [
+    "sg1_115",
+    0
+   ],
+   "negative": [
+    "sg1_115",
+    1
+   ]
+  },
+  "_meta": {
+   "title": "LTXVCropGuides"
+  }
+ },
+ "sg1_108": {
+  "class_type": "EmptyLTXVLatentVideo",
+  "inputs": {
+   "width": [
+    "sg1_113",
+    0
+   ],
+   "height": [
+    "sg1_98",
+    0
+   ],
+   "length": 121,
+   "batch_size": 1
+  },
+  "_meta": {
+   "title": "EmptyLTXVLatentVideo"
+  }
+ },
+ "sg1_109": {
+  "class_type": "LTXVConditioning",
+  "inputs": {
+   "frame_rate": [
+    "sg1_123",
+    0
+   ],
+   "positive": [
+    "sg1_128",
+    0
+   ],
+   "negative": [
+    "sg1_112",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "LTXVConditioning"
+  }
+ },
+ "sg1_114": {
+  "class_type": "PrimitiveInt",
+  "inputs": {
+   "value": 25
+  },
+  "_meta": {
+   "title": "Frame Rate(int)"
+  }
+ },
+ "sg1_115": {
+  "class_type": "LTXVAddGuide",
+  "inputs": {
+   "frame_idx": 0,
+   "strength": 1,
+   "positive": [
+    "sg1_109",
+    0
+   ],
+   "negative": [
+    "sg1_109",
+    1
+   ],
+   "iclora_parameters": [
+    "sg1_196",
+    0
+   ],
+   "latent": [
+    "sg1_198",
+    0
+   ],
+   "vae": [
+    "sg1_127",
+    2
+   ],
+   "image": [
+    "sg2_25",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "LTXVAddGuide"
+  }
+ },
+ "sg1_119": {
+  "class_type": "LTXVConcatAVLatent",
+  "inputs": {
+   "audio_latent": [
+    "sg1_101",
+    0
+   ],
+   "video_latent": [
+    "sg1_115",
+    2
+   ]
+  },
+  "_meta": {
+   "title": "LTXVConcatAVLatent"
+  }
+ },
+ "sg1_123": {
+  "class_type": "ComfyMathExpression",
+  "inputs": {
+   "expression": "a",
+   "values.a": [
+    "sg1_114",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "ComfyMathExpression"
+  }
+ },
+ "sg1_113": {
+  "class_type": "PrimitiveInt",
+  "inputs": {
+   "value": 1280
+  },
+  "_meta": {
+   "title": "Width"
+  }
+ },
+ "sg1_98": {
+  "class_type": "PrimitiveInt",
+  "inputs": {
+   "value": 704
+  },
+  "_meta": {
+   "title": "height"
+  }
+ },
+ "sg1_112": {
+  "class_type": "CLIPTextEncode",
+  "inputs": {
+   "text": "blurry, low quality, distorted, warping, flicker, watermark, text, extra limbs, deformed",
+   "clip": [
+    "sg1_103",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "CLIPTextEncode"
+  }
+ },
+ "sg1_122": {
+  "class_type": "CreateVideo",
+  "inputs": {
+   "fps": [
+    "sg1_123",
+    0
+   ],
+   "images": [
+    "sg1_105",
+    0
+   ],
+   "audio": [
+    "sg1_107",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "CreateVideo"
+  }
+ },
+ "sg1_105": {
+  "class_type": "VAEDecodeTiled",
+  "inputs": {
+   "tile_size": 768,
+   "overlap": 64,
+   "temporal_size": 4096,
+   "temporal_overlap": 64,
+   "samples": [
+    "sg1_106",
+    2
+   ],
+   "vae": [
+    "sg1_127",
+    2
+   ]
+  },
+  "_meta": {
+   "title": "VAEDecodeTiled"
+  }
+ },
+ "sg1_107": {
+  "class_type": "LTXVAudioVAEDecode",
+  "inputs": {
+   "samples": [
+    "sg1_121",
+    1
+   ],
+   "audio_vae": [
+    "sg1_126",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "LTXVAudioVAEDecode"
+  }
+ },
+ "sg1_121": {
+  "class_type": "LTXVSeparateAVLatent",
+  "inputs": {
+   "av_latent": [
+    "sg1_704",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "LTXVSeparateAVLatent"
+  }
+ },
+ "sg1_128": {
+  "class_type": "CLIPTextEncode",
+  "inputs": {
+   "text": "The camera pulls back slowly and steadily, revealing more of the room around the frame. Morning light; steam rises from a cup. Ambient cafe sound; no music.",
+   "clip": [
+    "sg1_103",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "CLIPTextEncode"
+  }
+ },
+ "sg1_127": {
+  "class_type": "CheckpointLoaderSimple",
+  "inputs": {
+   "ckpt_name": "ltx-2.3-22b-dev-fp8.safetensors"
+  },
+  "_meta": {
+   "title": "CheckpointLoaderSimple"
+  }
+ },
+ "sg1_126": {
+  "class_type": "LTXVAudioVAELoader",
+  "inputs": {
+   "ckpt_name": "ltx-2.3-22b-dev-fp8.safetensors"
+  },
+  "_meta": {
+   "title": "LTXVAudioVAELoader"
+  }
+ },
+ "sg1_103": {
+  "class_type": "LTXAVTextEncoderLoader",
+  "inputs": {
+   "text_encoder": "gemma_3_12B_it_fp4_mixed.safetensors",
+   "ckpt_name": "ltx-2.3-22b-dev-fp8.safetensors",
+   "device": "default"
+  },
+  "_meta": {
+   "title": "LTXAVTextEncoderLoader"
+  }
+ },
+ "sg1_195": {
+  "class_type": "LoraLoaderModelOnly",
+  "inputs": {
+   "lora_name": "ltx-2.3-22b-ic-lora-union-control-ref0.5.safetensors",
+   "strength_model": 1,
+   "model": [
+    "distill",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "LoraLoaderModelOnly"
+  }
+ },
+ "sg1_196": {
+  "class_type": "GetICLoRAParameters",
+  "inputs": {
+   "iclora_model": [
+    "sg1_195",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "GetICLoRAParameters"
+  }
+ },
+ "sg1_198": {
+  "class_type": "LTXVImgToVideoInplace",
+  "inputs": {
+   "strength": 1,
+   "bypass": false,
+   "latent": [
+    "sg1_108",
+    0
+   ],
+   "vae": [
+    "sg1_127",
+    2
+   ],
+   "image": [
+    "200",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "LTXVImgToVideoInplace"
+  }
+ },
+ "sg1_704": {
+  "class_type": "KSampler",
+  "inputs": {
+   "seed": 0,
+   "steps": 8,
+   "cfg": 1,
+   "sampler_name": "euler_ancestral",
+   "scheduler": "linear_quadratic",
+   "denoise": 1,
+   "latent_image": [
+    "sg1_119",
+    0
+   ],
+   "negative": [
+    "sg1_115",
+    1
+   ],
+   "positive": [
+    "sg1_115",
+    0
+   ],
+   "model": [
+    "sg1_195",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "KSampler"
+  }
+ },
+ "199": {
+  "class_type": "LoadVideo",
+  "inputs": {
+   "file": "iclora_control.mp4"
+  },
+  "_meta": {
+   "title": "LoadVideo"
+  }
+ },
+ "200": {
+  "class_type": "LoadImage",
+  "inputs": {
+   "image": "iclora_start.png"
+  },
+  "_meta": {
+   "title": "LoadImage"
+  }
+ },
+ "sg2_13": {
+  "class_type": "MoGeInference",
+  "inputs": {
+   "resolution_level": 9,
+   "fov_x_degrees": 0,
+   "batch_size": 4,
+   "force_projection": true,
+   "apply_mask": true,
+   "moge_model": [
+    "sg2_32",
+    0
+   ],
+   "image": [
+    "sg2_53",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "MoGeInference"
+  }
+ },
+ "sg2_25": {
+  "class_type": "MoGeRender",
+  "inputs": {
+   "output": "depth",
+   "moge_geometry": [
+    "sg2_13",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "MoGeRender"
+  }
+ },
+ "sg2_32": {
+  "class_type": "LoadMoGeModel",
+  "inputs": {
+   "model_name": "moge_2_vitl_normal_fp16.safetensors"
+  },
+  "_meta": {
+   "title": "LoadMoGeModel"
+  }
+ },
+ "sg2_36": {
+  "class_type": "ComfyMathExpression",
+  "inputs": {
+   "expression": "a > 2048",
+   "values.a": [
+    "sg2_37",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "ComfyMathExpression"
+  }
+ },
+ "sg2_37": {
+  "class_type": "GetImageSize",
+  "inputs": {
+   "image": [
+    "sg2_70",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "GetImageSize"
+  }
+ },
+ "sg2_40": {
+  "class_type": "ResizeImagesByLongerEdge",
+  "inputs": {
+   "longer_edge": 2048,
+   "images": [
+    "sg2_70",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "ResizeImagesByLongerEdge"
+  }
+ },
+ "sg2_42": {
+  "class_type": "ComfySwitchNode",
+  "inputs": {
+   "switch": [
+    "sg2_36",
+    2
+   ],
+   "on_true": [
+    "sg2_40",
+    0
+   ],
+   "on_false": [
+    "sg2_70",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "ComfySwitchNode"
+  }
+ },
+ "sg2_53": {
+  "class_type": "ComfySwitchNode",
+  "inputs": {
+   "switch": true,
+   "on_true": [
+    "sg2_42",
+    0
+   ],
+   "on_false": [
+    "sg2_70",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "ComfySwitchNode"
+  }
+ },
+ "sg2_70": {
+  "class_type": "GetVideoComponents",
+  "inputs": {
+   "video": [
+    "199",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "GetVideoComponents"
+  }
+ },
+ "distill": {
+  "class_type": "LoraLoaderModelOnly",
+  "inputs": {
+   "model": [
+    "sg1_127",
+    0
+   ],
+   "lora_name": "ltx_2.3_22b_distilled_1.1_lora_dynamic_fro09_avg_rank_111_bf16.safetensors",
+   "strength_model": 0.5
+  },
+  "_meta": {
+   "title": "distilled LoRA 0.5 - stands in for ltx-2.3-22b-distilled-fp8"
+  }
+ }
+}

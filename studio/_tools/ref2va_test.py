@@ -38,7 +38,7 @@ from epic import COMFY, HOST, load_wf      # noqa: E402
 import headbox as HB                       # noqa: E402
 
 PY = os.path.expanduser("~/ComfyUI/venv/bin/python3")
-OUT = os.path.join(STUDIO, "samples", "ref2va")
+OUT = os.path.join(STUDIO, "samples", "ref2va", "wired")   # 2026-09-07 renders above it were unwired
 PORTRAIT = os.path.join(STUDIO, "foundry", "characters", "terra", "base_portrait.png")
 PLATE = os.path.join(STUDIO, "foundry", "places", "forest-shrine", "dawn_wide.png")
 
@@ -54,6 +54,17 @@ PROMPTS = {
                "handheld float. Ambient sound of the place; no music."),
 }
 PROMPT = PROMPTS["wide"].format(pron="her")
+
+# --views: the r/comfyui advice (2026-09) - "give 2 or 3 images of the same person to fetch the
+# appearance in various states and poses". The first test gave ONE portrait and a place plate. Here
+# every picture is the same person from the pack, and the place is words (no picture carries it).
+VIEWS_PROMPTS = {
+    "wide": ("{tags} are the same {noun}. The {noun} stands at the foot of stone steps in a quiet "
+             "place and slowly raises {pron} eyes. Wide shot, the camera static. Wind; no music."),
+    "medium": ("{tags} are the same {noun}. The {noun} stands by the window of a small cafe, facing "
+               "the camera, and slowly turns {pron} head to look off to one side. Medium shot, the "
+               "camera static, a faint handheld float. Ambient cafe sound; no music."),
+}
 
 
 def frame(video, t, dest):
@@ -95,24 +106,41 @@ def main():
     ap.add_argument("--plate", default="dawn_wide")
     ap.add_argument("--framing", choices=sorted(PROMPTS), default="wide")
     ap.add_argument("--pronoun", default="her")
+    ap.add_argument("--views", default="",
+                    help="comma-separated pack views, all of the same person, e.g. "
+                         "base_portrait,face_three_quarter,base_fullbody - replaces the plate")
+    ap.add_argument("--noun", default="woman", help="with --views: who the pictures show")
     a = ap.parse_args()
     global PORTRAIT, PLATE, PROMPT
     PORTRAIT = os.path.join(STUDIO, "foundry", "characters", a.character, "base_portrait.png")
     PLATE = os.path.join(STUDIO, "foundry", "places", a.place, a.plate + ".png")
-    PROMPT = PROMPTS[a.framing].format(pron=a.pronoun)
-    for p in (PORTRAIT, PLATE):
+    views = [v.strip() for v in a.views.split(",") if v.strip()]
+    if views:
+        pics = [os.path.join(STUDIO, "foundry", "characters", a.character, v + ".png") for v in views]
+        tags = ", ".join("<Picture %d>" % (i + 1) for i in range(len(pics) - 1)) + \
+            " and <Picture %d>" % len(pics)
+        PROMPT = VIEWS_PROMPTS[a.framing].format(tags=tags, noun=a.noun, pron=a.pronoun)
+    else:
+        pics = [PORTRAIT, PLATE]
+        PROMPT = PROMPTS[a.framing].format(pron=a.pronoun)
+    for p in pics:
         if not os.path.exists(p):
             sys.exit("missing %s" % p)
     os.makedirs(OUT, exist_ok=True)
-    shutil.copy(PORTRAIT, os.path.join(COMFY, "input", "ref2va_pic1.png"))
-    shutil.copy(PLATE, os.path.join(COMFY, "input", "ref2va_pic2.png"))
+    for i, p in enumerate(pics):
+        shutil.copy(p, os.path.join(COMFY, "input", "ref2va_pic%d.png" % (i + 1)))
     wf = load_wf("63_minimax_h3_ref2va.json")
+    # pictures 3..N get their own loaders; 1 and 2 are nodes 8 and 9 in the workflow
+    for i in range(3, len(pics) + 1):
+        nid = "pic%d" % i
+        wf[nid] = {"class_type": "LoadImage", "inputs": {"image": "ref2va_pic%d.png" % i}}
+        wf["20"]["inputs"]["ref_images.ref_image_%d" % (i - 1)] = [nid, 0]
     set_path(wf, "20.inputs.prompt", PROMPT)
     set_path(wf, "20.inputs.length", int(a.length))
     set_path(wf, "32.inputs.steps", int(a.steps))
     set_path(wf, "33.inputs.noise_seed", int(a.seed))
-    tag = "ref_%s_%s_%s_s%d_%d" % (a.character, a.framing, "nolora" if a.no_lora else "turbo",
-                                  a.steps, a.seed)
+    tag = "ref_%s_%s%s_%s_s%d_%d" % (a.character, a.framing, "_views%d" % len(pics) if views else "",
+                                    "nolora" if a.no_lora else "turbo", a.steps, a.seed)
     set_path(wf, "51.inputs.filename_prefix", "claude-generated/h3_ref2va/" + tag)
     if a.no_lora:
         # bypass the LoRA: the sigma shift reads the base model directly
@@ -155,6 +183,7 @@ def main():
         S.save(os.path.join(OUT, tag + "_strip.jpg"), quality=86)
     shutil.rmtree(d, ignore_errors=True)
     report = {"tag": tag, "seconds": round(dt), "duration": dur, "prompt": PROMPT,
+              "pictures": [os.path.relpath(p, STUDIO) for p in pics],
               "identity": {k: {"score": v[0], "verdict": v[1]} for k, v in sc.items()},
               "head_boxes": {j["id"]: j["box"] for j in jobs},
               "i2v_reference": {"shot": "the-method---worked-example/060", "identity_start": 0.65,

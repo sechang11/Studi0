@@ -1,0 +1,43 @@
+{
+ "_comment": "A second shot script, written to test that studio/_tools/fight.py builds any story from data (playbook §98). One character, one place, two shots, no effects.",
+ "film": "the-letter",
+ "grade": "Cinematic film, cool blue-green base, one warm practical, filmic contrast, deep blacks with detail, fine grain, anamorphic.",
+ "avoid": "lowres, blurry, deformed limbs, fused fingers, extra limbs, doubled figure, two of the same person, melting face, morphing, warping, text, watermark, nsfw",
+ "score_tags": "sparse solo piano, a single sustained cello, room tone, slow, patient, melancholic, instrumental, no percussion, no vocals",
+ "realism": "Unretouched photograph, available light, visible skin texture and pores, fine film grain, shallow depth of field, no retouching, no gloss.",
+ "place": {
+  "id": "corridor",
+  "prompt": "Wide photograph of an empty hospital corridor at night, nobody in it: pale green tiled walls, a row of fluorescent panels with one flickering, a line of empty chairs along one side, a dark window at the far end with rain on it, the floor polished and reflecting the lights. Deep perspective, anamorphic, cool desaturated green with one warm practical. Unretouched photograph, available light, visible skin texture and pores, fine film grain, shallow depth of field, no retouching, no gloss."
+ },
+ "cast": {
+  "wren": {
+   "role": "the reader",
+   "prompt": "Full-length reference photograph of a woman of about forty against a plain mid-grey backdrop, even soft light, standing still, facing the camera, arms at her sides. Tired eyes, dark hair pinned back loosely with strands escaping, no make-up. She wears a long charcoal cardigan over a plain shirt, dark trousers, flat shoes, and holds a folded letter in one hand. Unretouched photograph, available light, visible skin texture and pores, fine film grain, shallow depth of field, no retouching, no gloss."
+  }
+ },
+ "shots": [
+  {
+   "id": "010",
+   "title": "the corridor",
+   "secs": 4,
+   "refs": [
+    "corridor"
+   ],
+   "anchor": null,
+   "avoid_extra": "people, a person, a figure, a crowd, hands, movement of a body",
+   "prompt": "Nothing moves in the empty corridor but the light: one fluorescent panel flickers and steadies, rain runs down the dark window at the far end, a reflection shifts on the polished floor. Nobody is here. Handheld camera, a faint float, almost still. Room tone of an empty building at night, a distant hum, rain on glass. No music."
+  },
+  {
+   "id": "020",
+   "title": "she reads it",
+   "secs": 8,
+   "refs": [
+    "wren",
+    "wren",
+    "corridor"
+   ],
+   "anchor": "A still frame from a live-action film, a MEDIUM SHOT, the woman of reference one seated on one of the chairs in the corridor of reference three, turned slightly away from the camera, an unfolded letter held in both hands in her lap, her head bowed over it. The fluorescent light above her is the only light on her face. Cinematic film, cool blue-green base, one warm practical, filmic contrast, deep blacks with detail, fine grain, anamorphic.",
+   "prompt": "She reads the letter in her hands, and then stops reading and lifts her head slowly to look down the corridor, away from the camera. Her hands lower into her lap. She takes one breath. Then she says, quietly: \"He kept it. All of it.\" Handheld camera close, a faint float, almost still. The hum of the lights, rain on the window, paper moving in her hands, her breath. No music."
+  }
+ ]
+}

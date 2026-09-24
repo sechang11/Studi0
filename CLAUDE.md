@@ -66,9 +66,11 @@ against a still torso.
 - Stack more than two LoRAs; improve a take by sharpening its start frame (3 of 3 worse).
 - **Multi-reference IS on the box**: `MiniMaxH3ReferenceToVideo` takes up to nine tagged
   `<Picture i>` references (+ video/audio refs); weights `minimax_h3_ref2va` on disk; workflow
-  `63_minimax_h3_ref2va.json`, test `_tools/ref2va_test.py`. **Measured 2026-09-07: as wired
-  it supplies neither identity nor place** (0.19-0.25 vs 0.65 for a composited start frame, 3/3,
-  drawn and photoreal). A route gap, not an architectural one; do not plan a film on it yet.
+  `63_minimax_h3_ref2va.json`, test `_tools/ref2va_test.py`. **Its Autogrow input must be flat,
+  dotted, 0-indexed ids (`ref_images.ref_image_0`)** - a nested dict is silently ignored, which is
+  why the 2026-09-07 test (0.19-0.25) measured the prompt alone. Wired (2026-09-17) it carries face,
+  hair and wardrobe (Terra 0.68 → 0.72) and doubled the person in 2 of 4 renders. Count the people
+  before picking a ref2va take; do not plan a film on it yet (playbook §97.3).
 
 ## Operating rules that have cost time
 

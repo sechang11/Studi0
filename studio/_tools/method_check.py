@@ -90,6 +90,7 @@ def main():
         ("trainer's base model is the anime one; photoreal packs use", "photoreal faces train on RealVisXL; the gap is the render route"),
         ("For photoreal a single 4-second take typically holds", "the face clock is by motion, not by look"),
         ("nothing takes N tagged identities", "H3 ref2va takes up to nine tagged reference images"),
+        ("as wired it supplies neither identity nor place", "the 09-07 ref2va test never delivered its pictures; wired, it carries identity (§97.3)"),
         ("one anchor per scene,", "one source per scene; the studio composes a start frame per shot"),
     ]
     for phrase, why in forbidden:

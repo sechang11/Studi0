@@ -1,0 +1,731 @@
+{
+ "_comment": "LTX-2.3 TALKING HEAD WITH A CHOSEN VOICE: ID-LoRA (TalkVid-3K) + a ~5 s reference voice clip, through ComfyUI's native LTXVReferenceAudio. Flattened from ComfyUI's own template video_ltx2_3_id_lora by scripts/ui2api.py. The r/comfyui influencer recipe (2026-09): IC/ID-LoRA on LTX 2.3 with [VISUAL]: / [SPEECH]: / [SOUNDS]: sections. Measured 2026-09-17 by studio/_tools/id_lora_test.py (LTX_PLAYBOOK §97.1): it carries the VOICE - speaker similarity to the reference 0.816 against 0.58 without it, 3 of 3 seeds. The face is held by the start frame either way, and the words were spoken 100% with or without the tags. Not auditioned.",
+ "_notes": [
+  "Inputs: node 269 LoadImage = the start frame (16:9, the face large); node 276 LoadAudio = the reference voice, ~5 s of one speaker (the node's own tooltip: the training duration).",
+  "Prompt: node sg1_319. The tags are [VISUAL]: [SPEECH]: [SOUNDS]: - SOUNDS plural, per the ID-LoRA model card; the Reddit comment that popularised this wrote [SOUND].",
+  "The ID-LoRA was trained on LTX-2.3. It is a delta on 2.3 weights - workflow 70 loads it onto LTX-2.5, which is a different base (see §97).",
+  "Two stages: half resolution, x2 latent upsampler, refine. Seeds: sg1_286 (stage 1), sg1_285 (stage 2).",
+  "Identity guidance (sg1_349.identity_guidance_scale, default 3) runs an extra forward pass without the reference on every step - it is the voice's strength, and it costs time.",
+  "Changes from the template: the three VAE links ui2api could not resolve are the checkpoint's VAE; the unused SolidMask is removed; 10 s -> 4.8 s (121 frames, 8n+1)."
+ ],
+ "269": {
+  "class_type": "LoadImage",
+  "inputs": {
+   "image": "idlora_start.png"
+  },
+  "_meta": {
+   "title": "LoadImage"
+  }
+ },
+ "341": {
+  "class_type": "SaveVideo",
+  "inputs": {
+   "filename_prefix": "claude-generated/idlora/take",
+   "format": "auto",
+   "codec": "auto",
+   "video": [
+    "sg1_312",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "SaveVideo"
+  }
+ },
+ "276": {
+  "class_type": "LoadAudio",
+  "inputs": {
+   "audio": "idlora_voice.wav"
+  },
+  "_meta": {
+   "title": "LoadAudio"
+  }
+ },
+ "sg1_285": {
+  "class_type": "RandomNoise",
+  "inputs": {
+   "noise_seed": 42
+  },
+  "_meta": {
+   "title": "RandomNoise"
+  }
+ },
+ "sg1_286": {
+  "class_type": "RandomNoise",
+  "inputs": {
+   "noise_seed": 597157848195547
+  },
+  "_meta": {
+   "title": "RandomNoise"
+  }
+ },
+ "sg1_287": {
+  "class_type": "LTXVConcatAVLatent",
+  "inputs": {
+   "video_latent": [
+    "sg1_296",
+    0
+   ],
+   "audio_latent": [
+    "sg1_309",
+    1
+   ]
+  },
+  "_meta": {
+   "title": "LTXVConcatAVLatent"
+  }
+ },
+ "sg1_288": {
+  "class_type": "KSamplerSelect",
+  "inputs": {
+   "sampler_name": "euler"
+  },
+  "_meta": {
+   "title": "KSamplerSelect"
+  }
+ },
+ "sg1_289": {
+  "class_type": "ManualSigmas",
+  "inputs": {
+   "sigmas": "0.85, 0.7250, 0.4219, 0.0"
+  },
+  "_meta": {
+   "title": "ManualSigmas"
+  }
+ },
+ "sg1_290": {
+  "class_type": "CFGGuider",
+  "inputs": {
+   "cfg": 1,
+   "positive": [
+    "sg1_292",
+    0
+   ],
+   "negative": [
+    "sg1_292",
+    1
+   ],
+   "model": [
+    "sg1_293",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "CFGGuider"
+  }
+ },
+ "sg1_291": {
+  "class_type": "SamplerCustomAdvanced",
+  "inputs": {
+   "noise": [
+    "sg1_286",
+    0
+   ],
+   "guider": [
+    "sg1_315",
+    0
+   ],
+   "sampler": [
+    "sg1_298",
+    0
+   ],
+   "sigmas": [
+    "sg1_308",
+    0
+   ],
+   "latent_image": [
+    "sg1_326",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "SamplerCustomAdvanced"
+  }
+ },
+ "sg1_292": {
+  "class_type": "LTXVCropGuides",
+  "inputs": {
+   "positive": [
+    "sg1_307",
+    0
+   ],
+   "negative": [
+    "sg1_307",
+    1
+   ],
+   "latent": [
+    "sg1_309",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "LTXVCropGuides"
+  }
+ },
+ "sg1_295": {
+  "class_type": "LTXVLatentUpsampler",
+  "inputs": {
+   "samples": [
+    "sg1_309",
+    0
+   ],
+   "upscale_model": [
+    "sg1_313",
+    0
+   ],
+   "vae": [
+    "sg1_317",
+    2
+   ]
+  },
+  "_meta": {
+   "title": "LTXVLatentUpsampler"
+  }
+ },
+ "sg1_296": {
+  "class_type": "LTXVImgToVideoInplace",
+  "inputs": {
+   "strength": 1,
+   "bypass": false,
+   "image": [
+    "sg1_334",
+    0
+   ],
+   "latent": [
+    "sg1_295",
+    0
+   ],
+   "vae": [
+    "sg1_317",
+    2
+   ]
+  },
+  "_meta": {
+   "title": "LTXVImgToVideoInplace"
+  }
+ },
+ "sg1_298": {
+  "class_type": "KSamplerSelect",
+  "inputs": {
+   "sampler_name": "euler"
+  },
+  "_meta": {
+   "title": "KSamplerSelect"
+  }
+ },
+ "sg1_303": {
+  "class_type": "LTXVAudioVAEDecode",
+  "inputs": {
+   "samples": [
+    "sg1_311",
+    1
+   ],
+   "audio_vae": [
+    "sg1_335",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "LTXVAudioVAEDecode"
+  }
+ },
+ "sg1_306": {
+  "class_type": "CLIPTextEncode",
+  "inputs": {
+   "text": [
+    "sg1_319",
+    0
+   ],
+   "clip": [
+    "sg1_318",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "CLIPTextEncode"
+  }
+ },
+ "sg1_307": {
+  "class_type": "LTXVConditioning",
+  "inputs": {
+   "frame_rate": [
+    "sg1_304",
+    0
+   ],
+   "positive": [
+    "sg1_349",
+    1
+   ],
+   "negative": [
+    "sg1_349",
+    2
+   ]
+  },
+  "_meta": {
+   "title": "LTXVConditioning"
+  }
+ },
+ "sg1_308": {
+  "class_type": "ManualSigmas",
+  "inputs": {
+   "sigmas": "1.0, 0.99375, 0.9875, 0.98125, 0.975, 0.909375, 0.725, 0.421875, 0.0"
+  },
+  "_meta": {
+   "title": "ManualSigmas"
+  }
+ },
+ "sg1_309": {
+  "class_type": "LTXVSeparateAVLatent",
+  "inputs": {
+   "av_latent": [
+    "sg1_291",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "LTXVSeparateAVLatent"
+  }
+ },
+ "sg1_310": {
+  "class_type": "SamplerCustomAdvanced",
+  "inputs": {
+   "noise": [
+    "sg1_285",
+    0
+   ],
+   "guider": [
+    "sg1_290",
+    0
+   ],
+   "sampler": [
+    "sg1_288",
+    0
+   ],
+   "sigmas": [
+    "sg1_289",
+    0
+   ],
+   "latent_image": [
+    "sg1_287",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "SamplerCustomAdvanced"
+  }
+ },
+ "sg1_311": {
+  "class_type": "LTXVSeparateAVLatent",
+  "inputs": {
+   "av_latent": [
+    "sg1_310",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "LTXVSeparateAVLatent"
+  }
+ },
+ "sg1_314": {
+  "class_type": "CLIPTextEncode",
+  "inputs": {
+   "text": "pc game, console game, video game, cartoon, childish, ugly",
+   "clip": [
+    "sg1_318",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "CLIPTextEncode"
+  }
+ },
+ "sg1_315": {
+  "class_type": "CFGGuider",
+  "inputs": {
+   "cfg": 1,
+   "positive": [
+    "sg1_307",
+    0
+   ],
+   "negative": [
+    "sg1_307",
+    1
+   ],
+   "model": [
+    "sg1_349",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "CFGGuider"
+  }
+ },
+ "sg1_316": {
+  "class_type": "VAEDecodeTiled",
+  "inputs": {
+   "tile_size": 768,
+   "overlap": 64,
+   "temporal_size": 4096,
+   "temporal_overlap": 4,
+   "samples": [
+    "sg1_311",
+    0
+   ],
+   "vae": [
+    "sg1_317",
+    2
+   ]
+  },
+  "_meta": {
+   "title": "VAEDecodeTiled"
+  }
+ },
+ "sg1_325": {
+  "class_type": "LTXVImgToVideoInplace",
+  "inputs": {
+   "strength": 0.7,
+   "bypass": false,
+   "vae": [
+    "sg1_317",
+    2
+   ],
+   "image": [
+    "sg1_334",
+    0
+   ],
+   "latent": [
+    "sg1_302",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "LTXVImgToVideoInplace"
+  }
+ },
+ "sg1_330": {
+  "class_type": "PrimitiveInt",
+  "inputs": {
+   "value": 1280
+  },
+  "_meta": {
+   "title": "Width"
+  }
+ },
+ "sg1_335": {
+  "class_type": "LTXVAudioVAELoader",
+  "inputs": {
+   "ckpt_name": "ltx-2.3-22b-dev-fp8.safetensors"
+  },
+  "_meta": {
+   "title": "LTXVAudioVAELoader"
+  }
+ },
+ "sg1_294": {
+  "class_type": "ResizeImagesByLongerEdge",
+  "inputs": {
+   "longer_edge": 1536,
+   "images": [
+    "sg1_297",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "ResizeImagesByLongerEdge"
+  }
+ },
+ "sg1_334": {
+  "class_type": "LTXVPreprocess",
+  "inputs": {
+   "img_compression": 18,
+   "image": [
+    "sg1_294",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "LTXVPreprocess"
+  }
+ },
+ "sg1_301": {
+  "class_type": "ComfyMathExpression",
+  "inputs": {
+   "expression": "a/2",
+   "values.a": [
+    "sg1_324",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "ComfyMathExpression"
+  }
+ },
+ "sg1_299": {
+  "class_type": "ComfyMathExpression",
+  "inputs": {
+   "expression": "a/2",
+   "values.a": [
+    "sg1_330",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "ComfyMathExpression"
+  }
+ },
+ "sg1_304": {
+  "class_type": "ComfyMathExpression",
+  "inputs": {
+   "expression": "a",
+   "values.a": [
+    "sg1_323",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "ComfyMathExpression"
+  }
+ },
+ "sg1_312": {
+  "class_type": "CreateVideo",
+  "inputs": {
+   "fps": [
+    "sg1_304",
+    0
+   ],
+   "bit_depth": 8,
+   "images": [
+    "sg1_316",
+    0
+   ],
+   "audio": [
+    "sg1_303",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "CreateVideo"
+  }
+ },
+ "sg1_331": {
+  "class_type": "PrimitiveFloat",
+  "inputs": {
+   "value": 4.8
+  },
+  "_meta": {
+   "title": "Duration"
+  }
+ },
+ "sg1_323": {
+  "class_type": "PrimitiveInt",
+  "inputs": {
+   "value": 25
+  },
+  "_meta": {
+   "title": "Frame Rate"
+  }
+ },
+ "sg1_302": {
+  "class_type": "EmptyLTXVLatentVideo",
+  "inputs": {
+   "width": [
+    "sg1_299",
+    1
+   ],
+   "height": [
+    "sg1_301",
+    1
+   ],
+   "length": [
+    "sg1_329",
+    1
+   ],
+   "batch_size": 1
+  },
+  "_meta": {
+   "title": "EmptyLTXVLatentVideo"
+  }
+ },
+ "sg1_329": {
+  "class_type": "ComfyMathExpression",
+  "inputs": {
+   "expression": "a * b + 1",
+   "values.a": [
+    "sg1_331",
+    0
+   ],
+   "values.b": [
+    "sg1_323",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "ComfyMathExpression"
+  }
+ },
+ "sg1_324": {
+  "class_type": "PrimitiveInt",
+  "inputs": {
+   "value": 720
+  },
+  "_meta": {
+   "title": "Height"
+  }
+ },
+ "sg1_326": {
+  "class_type": "LTXVConcatAVLatent",
+  "inputs": {
+   "video_latent": [
+    "sg1_325",
+    0
+   ],
+   "audio_latent": [
+    "sg1_348",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "LTXVConcatAVLatent"
+  }
+ },
+ "sg1_313": {
+  "class_type": "LatentUpscaleModelLoader",
+  "inputs": {
+   "model_name": "ltx-2.3-spatial-upscaler-x2-1.1.safetensors"
+  },
+  "_meta": {
+   "title": "LatentUpscaleModelLoader"
+  }
+ },
+ "sg1_293": {
+  "class_type": "LoraLoaderModelOnly",
+  "inputs": {
+   "lora_name": "ltx_2.3_22b_distilled_1.1_lora_dynamic_fro09_avg_rank_111_bf16.safetensors",
+   "strength_model": 0.5,
+   "model": [
+    "sg1_317",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "LoraLoaderModelOnly"
+  }
+ },
+ "sg1_317": {
+  "class_type": "CheckpointLoaderSimple",
+  "inputs": {
+   "ckpt_name": "ltx-2.3-22b-dev-fp8.safetensors"
+  },
+  "_meta": {
+   "title": "CheckpointLoaderSimple"
+  }
+ },
+ "sg1_318": {
+  "class_type": "LTXAVTextEncoderLoader",
+  "inputs": {
+   "text_encoder": "gemma_3_12B_it_fp4_mixed.safetensors",
+   "ckpt_name": "ltx-2.3-22b-dev-fp8.safetensors",
+   "device": "default"
+  },
+  "_meta": {
+   "title": "LTXAVTextEncoderLoader"
+  }
+ },
+ "sg1_319": {
+  "class_type": "PrimitiveStringMultiline",
+  "inputs": {
+   "value": "[VISUAL]: A medium close-up. The person in the frame looks directly at the camera and speaks with a warm, easy smile, mouth moving naturally with the words. The camera is static with a faint handheld float.\n[SPEECH]: Morning, everyone. Here are the three things I pack for every trip.\n[SOUNDS]: A warm, clear voice at a natural speaking pace; wind in long grass, a skylark far off. No music."
+  },
+  "_meta": {
+   "title": "Prompt"
+  }
+ },
+ "sg1_297": {
+  "class_type": "ResizeImageMaskNode",
+  "inputs": {
+   "resize_type": "scale dimensions",
+   "resize_type.width": [
+    "sg1_330",
+    0
+   ],
+   "resize_type.height": [
+    "sg1_324",
+    0
+   ],
+   "resize_type.crop": "center",
+   "scale_method": "lanczos",
+   "input": [
+    "269",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "ResizeImageMaskNode"
+  }
+ },
+ "sg1_346": {
+  "class_type": "LoraLoaderModelOnly",
+  "inputs": {
+   "lora_name": "ltx-2.3-id-lora-talkvid-3k.safetensors",
+   "strength_model": 1,
+   "model": [
+    "sg1_293",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "LoraLoaderModelOnly"
+  }
+ },
+ "sg1_348": {
+  "class_type": "LTXVEmptyLatentAudio",
+  "inputs": {
+   "frames_number": [
+    "sg1_329",
+    1
+   ],
+   "frame_rate": [
+    "sg1_304",
+    1
+   ],
+   "batch_size": 1,
+   "audio_vae": [
+    "sg1_335",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "LTXVEmptyLatentAudio"
+  }
+ },
+ "sg1_349": {
+  "class_type": "LTXVReferenceAudio",
+  "inputs": {
+   "identity_guidance_scale": 3,
+   "start_percent": 0,
+   "end_percent": 1,
+   "model": [
+    "sg1_346",
+    0
+   ],
+   "reference_audio": [
+    "276",
+    0
+   ],
+   "audio_vae": [
+    "sg1_335",
+    0
+   ],
+   "negative": [
+    "sg1_314",
+    0
+   ],
+   "positive": [
+    "sg1_306",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "LTXVReferenceAudio"
+  }
+ }
+}

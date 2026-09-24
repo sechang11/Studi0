@@ -345,8 +345,8 @@ Ranked by value ÷ effort. Note that **eight of the top ten cost nothing to acqu
 | 4 | **Port `epic.py`'s transition grammar into `cartoon.py` and `film.py`** | ~40 lines | Story/editing — act structure in the short films where it matters most |
 | 5 | **Add audio lead/lag → real L/J cuts**; decouple `acrossfade` from `xfade` | ~15 lines | Sound — cheapest large gain in perceived craft |
 | 6 | **Add a `loudnorm` finishing pass; swap `dynaudnorm` for `sidechaincompress`** | ffmpeg only | Sound — the difference between amateur and mastered. Measured material starts at −17.9 LUFS |
-| 7 | **Build `24_ltx23_ic_control.json`** (control video → DA3/MoGe → `LTXVAddGuide` + IC-LoRA) | 0 GB | Cinematography — arbitrary camera control, today |
-| 8 | **Build an ID-LoRA workflow** and wire `cartoon.py`'s voice clips into it | 0 GB | Character — unblocks multi-shot narrative |
+| 7 | **Built 2026-09-17 as `74_ltx23_ic_lora_control.json`** (control video → MoGe-2 depth → `LTXVAddGuide` + IC-LoRA): a pull back the words could not get, 3 of 3 (LTX_PLAYBOOK §97.2) | 0 GB | Cinematography — arbitrary camera control, today |
+| 8 | **Built 2026-09-17 as `73_ltx23_id_lora_talking_head.json`** - it carries a chosen voice (0.816 against 0.58, 3 of 3), not the face (§97.1). Wiring `cartoon.py`'s voice clips into it is still to do | 0 GB | Character — one voice across shots |
 | 9 | **Build `25_color_match.json`** — `LoadImageDataSetFromFolder` → `ColorTransfer` (`mkl_lab`, `source_stats=uniform`) | 0 GB | Colour — sequence matching, on no weights at all |
 | 10 | **Wire `ChatterboxTTS.audio_prompt`** + record ~10 s per character | 0 GB | Sound — real casting instead of one pitch-shifted voice |
 | 11 | **Build `26_ltx23_flf2v.json`** (clone `12`, swap in two `LTXVAddGuide` + `LTXVCropGuides`) | 0 GB | Editing — controlled transitions, 8× cheaper than Wan |

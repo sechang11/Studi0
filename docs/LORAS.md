@@ -141,8 +141,8 @@ Regenerate this audit any time with `python3 scripts/_lora_audit.py`.
 | `Qwen-Image-Edit-2509-Relight` | Relight a photo without redrawing it. `image_qwen_image_edit_2509_relight` |
 | `Qwen-Image-Edit-2509-Light-Migration` | Copy the lighting off a *reference* image onto yours. Directly fixes the composite problem in folder 15. |
 | `Qwen-Image-Edit-2509-Anything2RealAlpha` | Stylised → photoreal conversion. |
-| `ltx-2.3-22b-ic-lora-union-control-ref0.5` | **Depth / edge / pose control for VIDEO.** Nothing else you have does this. `video_ltx2_3_ic_lora` |
-| `ltx-2.3-id-lora-talkvid-3k` | **Lock a character's identity across shots.** The missing piece for multi-shot narrative. `video_ltx2_3_id_lora` |
+| `ltx-2.3-22b-ic-lora-union-control-ref0.5` | **Depth / edge / pose control for VIDEO.** Nothing else you have does this. `video_ltx2_3_ic_lora` → workflow `74` (camera measured, §97.2) |
+| `ltx-2.3-id-lora-talkvid-3k` | **Give a talking head a chosen voice** - with `LTXVReferenceAudio` and ~5 s of that voice. Measured: it carries the voice, not the face; the start frame holds the face. `video_ltx2_3_id_lora` → workflow `73` (§97.1) |
 | `ltx2.3-transition` | Morph between two styles over a clip. `template_ltx2_3_style_transition` |
 | `illustration-1.0-qwen-image` | A genuine style LoRA for your Qwen base. Your first one. |
 | `qwen-360-diffusion-2512-int8-bf16-v2` | 360° object turnarounds. `template_qwen_Image_2512_360_lora` |

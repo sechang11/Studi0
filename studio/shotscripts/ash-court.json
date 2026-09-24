@@ -1,0 +1,87 @@
+{
+ "_comment": "A sequence: who is in it, where it happens, how it is graded, and the shots. studio/_tools/fight.py --sequence ash-court reads this. The prompts say what happens, never who anybody is - the start frame carries that (playbook §98, craft/ACTION_SEQUENCE.md).",
+ "film": "ash-court",
+ "grade": "Cinematic film, cool desaturated concrete base, warm practical highlights, filmic contrast, deep blacks with detail, subtle teal-orange, fine grain, anamorphic.",
+ "avoid": "lowres, blurry, deformed limbs, fused fingers, extra limbs, doubled figure, two of the same person, ghosting on fast limbs, weightless floating particles, a standing wall of ash, melting face, morphing, warping, text, watermark, nsfw",
+ "score_tags": "cinematic percussion score, low taiko and toms, sparse metallic hits, groaning low strings, industrial, dark, patient menace building to one hard hit and a long decay, instrumental, no melody, no vocals",
+ "realism": "Unretouched photograph, available light, visible skin texture and pores, fine film grain, shallow depth of field, no retouching, no gloss.",
+ "place": {
+  "id": "court",
+  "prompt": "Wide establishing photograph of an empty round arena, nobody in it: cracked grey concrete tiles, a low circular platform at the centre, tiers of iron balconies above, hanging industrial lamps throwing pools of warm light, fine grey ash drifting in the cold daylight from a high dirty skylight. Deep perspective, anamorphic, cool desaturated concrete with warm practical highlights. Unretouched photograph, available light, visible skin texture and pores, fine film grain, shallow depth of field, no retouching, no gloss."
+ },
+ "cast": {
+  "vesper": {
+   "role": "the striker",
+   "prompt": "Full-length reference photograph of a lean athletic woman of twenty-eight against a plain mid-grey backdrop, even soft light, standing relaxed, facing the camera. A young face with high cheekbones and smooth taut skin, tanned, cropped black hair, a thin pale scar through her left eyebrow. The build of a fighter: broad deltoids, defined forearms, flat stomach, strong thighs. She wears a sleeveless charcoal training vest, loose grey trousers cinched at the ankle, dark cloth strips wrapped around both forearms, heavy iron bands buckled at both wrists, bare feet. Unretouched photograph, available light, visible skin texture and pores, fine film grain, shallow depth of field, no retouching, no gloss."
+  },
+  "koval": {
+   "role": "the guard",
+   "prompt": "Full-length reference photograph of a tall broad man in his forties against a plain mid-grey backdrop, even soft light, standing still and square to the camera, arms folded. Pale skin, shaved head, heavy brow, a flat unreadable expression. He wears a long charcoal wool coat buttoned to a high collar, dark trousers, black boots. Unretouched photograph, available light, visible skin texture and pores, fine film grain, shallow depth of field, no retouching, no gloss."
+  },
+  "marrow": {
+   "role": "the old woman",
+   "prompt": "Full-length reference photograph of a weathered woman in her sixties against a plain mid-grey backdrop, even soft light, standing calmly, facing the camera. Deep-set eyes, a long grey braid over one shoulder, lined skin. She wears a worn oilskin coat over a dark roll-neck and leather gloves. Unretouched photograph, available light, visible skin texture and pores, fine film grain, shallow depth of field, no retouching, no gloss."
+  }
+ },
+ "shots": [
+  {
+   "id": "005",
+   "title": "the court",
+   "secs": 4,
+   "refs": [
+    "court"
+   ],
+   "anchor": null,
+   "avoid_extra": "people, a person, a figure, a crowd, spectators, silhouettes, a face, hands, movement of a body",
+   "prompt": "Nothing moves in the empty court but the air: fine grey ash drifts down through the shafts of light from the skylight and settles on the cracked tiles, and the hanging lamps sway very slightly. Nobody is here. Handheld camera, a faint float, slowly settling. Room tone of a large empty hall, a low reverberation, the distant creak of iron. No music."
+  },
+  {
+   "id": "010",
+   "title": "the guard",
+   "secs": 4,
+   "refs": [
+    "vesper",
+    "koval",
+    "court"
+   ],
+   "anchor": "A still frame from a live-action film, a MEDIUM SHOT from a low angle, both figures large and filling the frame, the round concrete court of reference three thrown out of focus behind them. On the left the woman of reference one, mid-strike, her fist already driving into frame, weight forward, jaw set. On the right the man of reference two, square on and planted, arms folded across his chest, not flinching. Between their bodies a single sharp burst of grey ash snaps upward where her fist arrives. Lamp light raking across them from above. Cinematic film, cool desaturated concrete base, warm practical highlights, filmic contrast, deep blacks with detail, subtle teal-orange, fine grain, anamorphic.",
+   "prompt": "She drives three fast punches into him, one after another. He does not move at all - arms folded, feet planted, cold. At the exact instant each punch arrives a sharp burst of grey ash snaps up between them to stop it dead, and drops away at once; between the punches there is no ash in the air. Handheld camera close on the two of them, a faint float. Muffled granular thuds, the whoosh of cloth, her sharp effort grunts, hissing ash. No music."
+  },
+  {
+   "id": "020",
+   "title": "unbound",
+   "secs": 10,
+   "refs": [
+    "vesper",
+    "koval",
+    "court"
+   ],
+   "anchor": "A still frame from a live-action film, a MEDIUM WIDE SHOT, both figures whole and large in frame, the round concrete court of reference three close behind them. On the left the woman of reference one, wrists bare, two heavy iron bands lying discarded on the tiles at her feet, already dropping into a fighting stance. On the right the man of reference two, arms folded, turning his head toward her. Ash drifts low across the floor between them. Cinematic film, cool desaturated concrete base, warm practical highlights, filmic contrast, deep blacks with detail, subtle teal-orange, fine grain, anamorphic.",
+   "prompt": "The woman attacks in a blur, striking from a new direction each time - from the left flank, then from above, then low - and each time a burst of ash snaps up just in time to turn the blow aside, later and harder with every hit. The still man turns to each new threat a beat too late. Then a hard cut to a close shot: her fist lands clean on his cheek before the ash can rise, his head snaps sideways, and he is thrown off his feet across the tiles. Handheld camera orbiting fast, a faint float, then locked closer for the hit. Layered whooshes, rapid granular thuds, one sharp meaty impact, a heavy body landing on tile, her breathing. No music."
+  },
+  {
+   "id": "025",
+   "title": "the answer",
+   "secs": 5,
+   "refs": [
+    "vesper",
+    "koval",
+    "court"
+   ],
+   "anchor": "A still frame from a live-action film, a MEDIUM WIDE SHOT low to the tiles, both figures large in the round concrete court of reference three. The man of reference two is back on his feet in the centre, coat swinging, one arm sweeping across his body, his face set. The woman of reference one is off her feet in mid-air to the left, driven backwards, her body twisted away from him. A dense wall of grey ash surges out from him toward her, carrying her. Ash and grit fill the lower frame. Cinematic film, cool desaturated concrete base, warm practical highlights, filmic contrast, deep blacks with detail, subtle teal-orange, fine grain, anamorphic.",
+   "prompt": "The man rises and sweeps one arm across his body, and a great mass of grey ash surges out from him and hurls the woman backwards off her feet, across the court, until she lands hard on the tiles and slides. He stays standing, arm still out. Handheld camera low, a faint float, following her across. A deep rumbling surge of ash, a heavy body landing on stone, grit settling, her breath knocked out. No music."
+  },
+  {
+   "id": "030",
+   "title": "the arrival",
+   "secs": 8,
+   "refs": [
+    "vesper",
+    "marrow",
+    "court"
+   ],
+   "anchor": "A still frame from a live-action film, inside the wrecked round concrete court of reference three - broken tiles, rubble, thick ash hanging in the air. The woman of reference one lies face down on the tiles in the foreground, motionless, her arms slack. Behind her a towering mass of grey ash rears up, about to fall. At the edge of the frame the older woman of reference two stands tall and calm in her long coat, one arm beginning to sweep across. Low wide shot. Cinematic film, cool desaturated concrete base, warm practical highlights, filmic contrast, deep blacks with detail, subtle teal-orange, fine grain, anamorphic.",
+   "prompt": "The older woman sweeps her arm across her body in one hard movement and the towering mass of ash is thrown sideways out of frame, away from the woman lying on the tiles. Then a hard cut to a close shot of the older woman facing the camera, lit from one side, and she says: \"Get up. You are not finished.\" Handheld camera, low, a faint float, settling as the ash clears, then still for the close shot. A deep rumble of moving ash, a heavy whoosh as it is swept aside, settling grit, her steady voice. No music."
+  }
+ ]
+}

@@ -192,8 +192,8 @@ From `Z:/shared/comfy-studio/FILM-CRAFT-AUDIT.md` (372 lines, written 2026-07-30
 
 | Weight | On disk | Referenced by |
 |---|---|---|
-| `ltx-2.3-id-lora-talkvid-3k` | yes | nothing |
-| `ltx-2.3-22b-ic-lora-union-control-ref0.5` | yes | nothing |
+| `ltx-2.3-id-lora-talkvid-3k` | yes | `73_ltx23_id_lora_talking_head.json` (2026-09-17, playbook §97.1) |
+| `ltx-2.3-22b-ic-lora-union-control-ref0.5` | yes | `74_ltx23_ic_lora_control.json` (2026-09-17, playbook §97.2) |
 | `sdpose_wholebody_fp16` | yes | `27_control_maps.json` only |
 | `depth_anything_3_mono_large` | yes | `27_control_maps.json` only |
 | `moge_2_vitl_normal_fp16` | yes | `27_control_maps.json` only |

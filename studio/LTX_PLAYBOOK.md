@@ -8,7 +8,7 @@ Written so none of it has to be found twice.
 ## §0  THE REVIEW CLOCK - read this first
 
 ```
-last_checked: 2026-09-07
+last_checked: 2026-09-20
 cadence_days: 14
 ```
 
@@ -41,6 +41,53 @@ method was built against. Things arrive faster than a month.
 The pipeline this clock protects is **§96**. The invariants it applies are **§95**.
 
 ---
+
+### §0.1  Review of 2026-09-20 - what it found
+
+Triggered a day early by a question about an H3 acceleration stack posted online. The full
+measurement is WHERE-WE-STAND §7; this is the review record.
+
+**1. New or updated weights.** The MiniMax H3 **v4 step-600 EMA turbo LoRA** is real and is now
+ours (`64`/`65`, shipped at 4 steps - see §96.5). Upstream also added an **H3 Max** model option
+to the API-side H3 nodes (ComfyUI 0.34.3/0.34.4) - partner-hosted, not local weights, so it is a
+paid route and lives under §96.4's rule, not here. Wan is at 2.6 upstream and we hold 2.2, which
+is unwired anyway (queue item 5); Qwen-Image-2512 and Qwen-Image-Edit-2511 are both newer than
+what the start-frame route uses.
+
+**2. ComfyUI and comfy_extras.** We were **221 commits behind** (0.33.1, 2026-08-13). The one
+that matters: **PR #16072, merged 2026-09-06, puts kijai's block sparse attention into core** as
+`comfy_extras/nodes_sparse_attention.py` with MiniMax H3 backends, alongside a memory compiler
+for long H3 runs. All 149 node classes our workflows use were checked against origin/master
+first; the only eight missing are our own custom nodes. **Now on v0.37.0**, both engines
+smoke-tested after, and the sparse node measured at 1.22x on H3 with no change in the picture
+(`workflows/67`, WHERE-WE-STAND §7.1). The checkout was a detached HEAD at a release tag, so the
+move is tag to tag; roll back with `git checkout 72865f4f27eaf` and reinstall requirements.
+
+**3. Orphans - a verdict each.** Ten model files, 45 GB, that no workflow named:
+
+| file(s) | GB | verdict, 2026-09-20 |
+|---|---|---|
+| `minimax_music3_dit` + its text encoder + `minimax_music3_dav` | 13.35 | **Wire and measure.** Native nodes exist (`MiniMaxMusic3TextEncode`, `EmptyMiniMaxMusic3LatentAudio`) and our music engine is ACE-Step, which fades out past ~46 s. A bed longer than that is the test. Queued above SeedVR2. |
+| `seedvr2_3b_int8` + `seedvr2_ema_vae` | 3.69 | **Still queued** (§96.10 item 1). Five native nodes. The 2x master path works, so this is an upgrade to the finish, not a hole in it. |
+| `z_image_turbo_bf16` | 11.46 | **Measure against Qwen on one anchor.** Appendix D of the guide still lists "no photoreal start-frame route that can use a trained face"; a different image engine is one way at it. |
+| `Illustrious-XL-v2.0` | 6.46 | **Measure against animagine-xl-4.0** on the pack ladder. It is a rival for exactly the job workflow 22 does. |
+| `qwen_3_4b` | 7.49 | **Identify or delete.** No Qwen graph here names it; likely pulled as a dependency of a variant we never built. |
+| `t5_base` | 0.83 | **Delete candidate.** Legacy encoder, nothing on the roadmap wants it. |
+| `wan2.2_vae` | 1.31 | **Keep, blocked.** Belongs to the Wan comparison (§96.10 item 5); pointless to delete before that runs. |
+
+**4. The paid engines.** Seedance 2.0 Fast $0.09/s, Seedance 2.0 Mini $0.067/s at 480p, Kling
+3.0 $0.09-0.14/s, **Veo 3.1 $0.03/s with native audio** - Veo now undercuts the rest for
+sound-bearing video, which changes which door §96.4 points at if it is ever opened. The hybrid
+rule itself holds and is *stronger* than it was: this review deleted two of the reasons we had
+for reaching outward (see §96.5 and the guide's appendix D).
+
+**5. The standard battery** ran on the H3 v4 recipe before it entered the pipeline: three start
+frames, one seed, hold_f0 / drift / motion / luma_drop / frame count / audio level, plus the
+strips, read by eye. WHERE-WE-STAND §7.
+
+**6. Docs updated** (WHERE-WE-STAND §7, §96.5, the guide's chapter 6 and appendix D),
+`method_check.py` passing, clock stamped.
+
 
 ## 1. What to reach for
 
@@ -4319,6 +4366,12 @@ does not yet do the job; it is a route gap, not an architectural one. The LTX-2.
 image-to-video routes still take one start frame (two for first-last); that sentence was true of
 those routes and false of the box. Detail in `docs/WHERE-WE-STAND.md` §6.
 
+**Corrected 2026-09-17: the measurement above was of the prompt alone.** Workflow 63 handed the node
+its pictures in a form ComfyUI does not read - a nested dict where the Autogrow input wants
+`ref_images.ref_image_0` - so no picture reached the model. Wired correctly, the same Terra test
+reads 0.676 → 0.724 (same person), and three views of tomas-reyl carry his face and wardrobe, with
+the person doubled in 2 of 4 renders. The route supplies identity; it is not yet dependable. §97.3.
+
 ### 95.4  The worked example, run
 
 `docs/METHOD.md` §J - Terra at the forest shrine, three one-beat shots - was built through the
@@ -4442,6 +4495,8 @@ is gated by a number from our own detectors, not by how the output looks in isol
 | default - any beat, up to 30 s, with sound and speech | **LTX-2.5** i2v (`70`) | one pass holds the scene; joint audio; lip-sync through an on-screen mouth; the envelope table (§2) |
 | in-place motion between two exact frames (crouch, rise, turn, reach, look) | **H3 fl2va** (`62`) via the automatic pin | pins hold in-place motion and are ignored for a walk, twice (§62, §94); the studio pins these motions itself |
 | a plate-only camera move, nobody in it | `cam` rig (arithmetic) | no generation, so no drift; the fallback when generation keeps adding people |
+| the composed start frame must survive exactly, or a held close-up needs its own sound | **H3 i2v** (`67` = `64` + core block sparse attention, v4 turbo at 4 steps) | H3 keeps frame 0 (SSIM 0.962 vs LTX 0.289 on the same anchor) and returns -27 dB on a close-up where LTX returns -56 dB. Costs about 60 s a clip against LTX's 36. Measured 2026-09-20, `h3_stack_ab.py`; WHERE-WE-STAND §7 |
+| an effects beat - dust, ash, debris at an impact | **H3** (`67`) | LTX-2.5 accumulates an effect monotonically whatever the prompt says (clear_back 0.02); H3 plateaus after ~1 s (0.10) on the same anchor and words, and ends ~40% less occluded. Two seeds; §98.3-98.4 |
 | a locked location, silent, no faces | Wan 2.2 context windows (`61`, 1280×720) | "the most rigid continuity available, silent" (§1) - **not measured against LTX-2.5 in the engine matrix**; queue item 5 |
 | — | HunyuanVideo 1.5 i2v (`42`/`44` + 1080p SR) | measured against LTX 2.3 on four shots (`engine_ab`, `~/shared/AB/hunyuan_vs_ltx`): LTX held the approved frame at least as well on every shot (0.84/0.72, 0.82/0.77, 0.80/0.79, 0.95/0.96), drifted less on both moving shots (0.48 vs 0.60, 0.41 vs 0.59) and was twelve times faster (21 s vs 252 s); Hunyuan was more even on two of four and drifted less on the two near-static ones. Not a default; the matrix predates LTX-2.5 (queue item 5) |
 
@@ -4501,7 +4556,7 @@ the current engines. What transfers to this box, and how:
 | write the sound; *no music* when the edit owns the score | `sfx`, `dialogue`, ambience; ACE-Step bed at finish | measured |
 | one grade line on every shot | the finish's single look, applied after the cuts | built |
 | AVOID is your spellbook - add what broke last roll | copy QC faults into the shot's negative for the retake | adopted; automation is queue item 7 |
-| **one burst per strike** - effects exist only at impact, then vanish; persistent effects become CGI soup | write effects as instants, never as standing states | **adopted, unmeasured here** - the first fight scene tests it |
+| **one burst per strike** - effects exist only at impact, then vanish; persistent effects become CGI soup | an effects beat goes on H3, or stays short, or is composited | **measured 2026-09-24 and it does NOT transfer to LTX-2.5** (§98.3): the sentence does not move it, the effect accumulates either way. H3 plateaus (§98.4) |
 | post is half the film | the finish (96.8) | built |
 | iterate one variable at a time | words, then the negative, then framing; never the seed first | measured |
 
@@ -4512,9 +4567,9 @@ the current engines. What transfers to this box, and how:
 2. **A photoreal SDXL render route** so RealVisXL-trained faces can be spent (§95.3). `compose.py`
    already treats the anime slot as "animagine, illustrious or sdxl". The other session's
    `lora_train_sdxl.py` / `lora_photoreal.py` are the trainer side.
-3. **ref2va with a described face** - does the reference *reinforce* a face the words ask for,
-   as the collector's note claims? Three renders (WHERE-WE-STAND §6) showed it does not *supply*
-   one.
+3. **ref2va, correctly wired** (§97.3) - the official template's sampler (no LoRA, 20 steps): do
+   the doubles go? Then place from a plate on three seeds, and a people count in QC before any
+   ref2va take can be picked. The 09-07 "does not supply one" measured the prompt alone.
 4. **Wan 2.1 VACE** (`wan2.1_vace_14B`, orphan): reference-and-control-guided video - the second
    candidate for the multi-reference row. Same battery as ref2va.
 5. **Wan 2.2 (`61`) vs LTX-2.5 in `engine_ab.py`** - add an `ltx25` engine to the matrix; the
@@ -4528,6 +4583,18 @@ the current engines. What transfers to this box, and how:
 9. A **per-scene look override** at the finish.
 10. **Frontier start frames** for one scene through `hybrid_frame_test.py --frame` - the first paid
     experiment, and only with the user's key.
+11. **The ID-LoRA voice on LTX-2.5** (§97.1) - `id_lora_test.py --arms tags25 idlora25`. If the 2.3
+    delta carries the voice on 2.5, talking heads stay on the default engine; if not, workflow 73.
+12. **IC-LoRA control through the rest of the standard battery** (§97.2), then a real parallax move
+    instead of a 2D rig, then its pose and canny modes.
+13. **A peak check in QC** (§98.6): every LTX-2.5 take measured so far returns `max_volume` 0.0 dB.
+    The SILENT check has a consumer; clipping does not.
+14. **The frame-count invariant counts packets; the master counts decoded frames** (§98.6). They
+    disagree by one on anything that has been through the concat re-encode. Make the check read
+    both ways, or the master will keep looking like it invented a frame.
+15. **H3 for effects beats** (§98.4) - a third seed, then a §96.5 row of its own.
+16. **Seedance 2.5 on a strike beat** (§98.7) - the moment somebody signs in; measure it against the
+    H3 take on the same anchor before any film leans on paid video.
 
 ### 96.11  Timings measured on this card, for planning
 
@@ -4537,6 +4604,358 @@ the current engines. What transfers to this box, and how:
 | a trained-face attempt (`pack_lora.py`, 1200 steps + 3-seed comparison) | ~12 min train + ~4 min compare |
 | finish with 2× master (fast path) | ~70 s per shot; a 17-shot film in 21 min |
 | the 2× master alone, 4 s take | 55 s (fast) · 215 s (fine) |
-| H3 ref2va, 124 frames 1344×768 | 92 s at 4 steps (turbo LoRA) · 410 s at 30 steps |
+| H3 ref2va, 124 frames 1344×768, **unwired** (no picture reached it, §97.3) | 92 s at 4 steps (turbo LoRA) · 410 s at 30 steps |
+| H3 ref2va correctly wired, 2-3 pictures, 124 frames, 4 steps | 102-111 s |
+| LTX-2.3 talking head, 121 frames 1280×720, two stages (`73`) | 29-39 s · 50-56 s with the ID-LoRA's identity guidance |
+| LTX-2.3 IC-LoRA depth control, 121 frames 1280×704, 8 steps (`74`) | 38-39 s without the guide · 74-79 s with it |
 | ComfyUI re-staging a video model after `/free` | 20-60 s |
 | loading a second 20 GB model beside a resident one | kills ComfyUI - free and wait first |
+| H3 ref2va wired, no LoRA, 30 steps, beside another 22 GB process | the kernel OOM-killed ComfyUI at step 11 (37 GB resident): host RAM is a limit too |
+
+## §97  Three recipes from r/comfyui, measured - and the reference route had never received a picture
+
+A thread (r/comfyui, "RTX 5090 vs. ComfyUI", 2026-09) from someone building a talking influencer on
+a laptop 5090 drew three recipes from people doing it. Checked against this studio first; only what
+the studio did not already do was built:
+
+| the thread's hint | here already | action |
+|---|---|---|
+| control each 5-second segment; see every segment before the whole finishes | the film editor: one-beat shots, takes, strips, pick, assemble; `prev_last` chains | none |
+| Wan 2.2 for long video | `04`, `61`; LTX-2.5 is the default (§96) | none |
+| prototype on H3, upscale after the prompt is right | the fast draft and the 2× master (§96.8) | none |
+| flf2va keeps both frames exactly; i2va treats the image as conditioning | measured more precisely: pins hold in-place motion and are ignored for a walk (§62, §94) | none |
+| LTX-2.3 ID-LoRA with `[VISUAL]/[SPEECH]/[SOUND]` prompts for a talking head | LoRA on disk since July, "no kit workflow yet"; workflow 70 loaded it onto 2.5 with no voice | **built `73`, measured (97.1)** |
+| LTX-2.3 IC-LoRA union control | LoRA on disk since July, named by no workflow | **built `74`, measured (97.2)** |
+| H3 ref2va with 2-3 pictures of the same person | "supplies neither identity nor place" (§95.3, 2026-09-07) | **re-tested, and found the wiring bug (97.3)** |
+
+### 97.1  The ID-LoRA carries a VOICE, not a face - and the tags are not what makes it speak
+
+Workflow `73_ltx23_id_lora_talking_head.json` is ComfyUI's own template `video_ltx2_3_id_lora`
+flattened by `ui2api.py` (three VAE links repaired, 121 frames). `_tools/id_lora_test.py`: one start
+frame (mara-okonjo's portrait cropped 16:9), one line, Maya's voice (5 s), seeds 11 / 202 / 3003,
+three arms that each change one thing. Words by Granite Speech (content-word recall); voice by
+Chatterbox's speaker encoder against Maya's clip; face by `identity.py`'s close-up path on the
+portrait's head box carried into the crop (`headbox.py` finds a band of hair on a close-up).
+
+| arm | words | voice vs Maya | face at end | hold | s / take |
+|---|---|---|---|---|---|
+| prose - the line in quotes, as the studio writes it | 100 / 100 / 100 % | 0.580 (0.528-0.622) | 0.642 | 0.815 | 32-70 |
+| `[VISUAL]: [SPEECH]: [SOUNDS]:` tags, the same words | 100 / 100 / 100 % | 0.589 (0.561-0.609) | 0.655 | 0.804 | 29-34 |
+| tags + ID-LoRA + `LTXVReferenceAudio` with Maya | 100 / 100 / 100 % | **0.816 (0.798-0.828)** | 0.641 | 0.783 | 50-56 |
+
+The scale: Maya against another 5 s of Maya 0.939; en_woman 0.716; mabel 0.583; carter 0.491. Every
+ID-LoRA take is nearer Maya than any other voice in the library is; no take without it is. The start
+image itself scores 0.565 against the portrait: every take sits at that ceiling at frame 0 and ends
+above it, in every arm. (The first prose take's 70 s includes loading the model.)
+
+- **The voice claim holds**, 3 of 3, margin 0.227 against half-spreads of 0.015-0.047 - the §96.2
+  gate would adopt it several times over. Cost: about 20 s a take (identity guidance runs an extra
+  forward pass every step).
+- **"Tags or it won't follow instructions" does not hold here**: the prose arm said every content
+  word on every seed. The tags change the audio (waveform correlation 0.105 with the prose take on
+  seed 11) and barely touch the picture (2.7/255 mean pixel difference).
+- **The LoRA does not hold the face; the start frame does.** `docs/LORAS.md` called it "lock a
+  character's identity across shots"; what it measurably locks is the voice.
+- **Workflow 70 was wiring it wrong**: the 2.3 LoRA on the 2.5 transformer - all 864 target modules
+  exist there with the same names and shapes, so it loads without a warning - and no reference
+  audio, the one input the LoRA exists to use. Whether a 2.3 delta carries a voice on 2.5 is not
+  measured; the arms are written and did not run (97.4).
+- **Not auditioned.** Granite and the speaker encoder say the words and the voice are right; a
+  person should listen to `samples/id_lora/idlora_s*.mp4` before a film is voiced this way.
+
+### 97.2  A depth guide makes the camera do what words cannot
+
+Workflow `74_ltx23_ic_lora_control.json` is ComfyUI's own `video_ltx2_3_ic_lora`, rewired from the
+`ltx-2.3-22b-distilled-fp8` checkpoint this box never downloaded to dev-fp8 plus the distilled LoRA
+at 0.5, the prompt enhancer removed, two links `ui2api.py` mis-resolved repaired.
+`_tools/ic_lora_test.py`: a pull back from 1.35× to 1.0×, built by arithmetic on cafe-morning's day
+plate (the ground truth), its first frame the start frame for both arms, seeds 11 / 202 / 3003,
+`cammeasure` on everything.
+
+| arm | seed 11 | seed 202 | seed 3003 | zoom error | curve RMSE (zoom) |
+|---|---|---|---|---|---|
+| the rig (truth) | pull back 26% (0.742) | | | | |
+| words: "The camera pulls back slowly and steadily ..." | **push in** 17% | **push in** 47% | **push in** 21% | 0.542 | 0.26-0.39 |
+| + the rig's MoGe-2 depth through the IC-LoRA | pull back 27% | pull back 27% | pull back 27% | **0.014** | **0.008** |
+
+The words did the opposite of the ask on every seed - the motion_lib finding again: LTX pushes in.
+The guide reproduced the rig's ease-in-out curve, not just its end. Looked at: the last frame has the
+rig's composition, and the room revealed at the border is *generated* (white roses where the plate
+has sunflowers, different paintings on the wall), with the steam still moving - a shot, not a zoomed
+still. The same LoRA reads canny (core `Canny`) and pose (SDPose, workflow 27); neither was measured.
+Before §96.5 adopts it: the rest of the standard battery, and a real parallax move rather than a 2D
+rig.
+
+### 97.3  ref2va had never been given a picture
+
+`MiniMaxH3ReferenceToVideo.ref_images` is an Autogrow input. `comfy_api/latest/_io.py` expands it
+into flat, dotted, **0-indexed** ids - `ref_images.ref_image_0` ... `ref_images.ref_image_8` - and
+counts a slot only when that exact id is among the prompt's inputs. Workflow 63 carried a nested
+dict, `"ref_images": {"ref_image_1": [...]}`: no id matched, the node received no pictures, and it
+rendered anyway, obeying the words. ComfyUI's own template `video_minimax_h3_r2v` stores
+`ref_images.ref_image_0`. Every ref2va render before this date - the three behind §95.3's "supplied
+neither identity nor place", and the first three runs of this test - measured **the prompt alone**.
+Workflow 63 and `ref2va_test.py` are fixed; the unwired renders are kept (the top level of
+`samples/ref2va/`, and `_unwired_nested_dict/`); wired renders go to `samples/ref2va/wired/`.
+
+Same seeds, same sampler (the fl2v turbo LoRA, 4 steps), only the wiring changed:
+
+| configuration | unwired, first → last | wired, first → last | looked at |
+|---|---|---|---|
+| Terra portrait + dawn plate, wide, seed 4200 (the 09-07 test) | 0.228 → 0.248 | **0.676 → 0.724** | Terra, drawn, in a forest with lanterns - **and a second Terra behind her**; the plate's motifs, not its layout |
+| tomas-reyl, three views (portrait, 3/4, full body), medium, seed 4200 | 0.297 → 0.262 | 0.536 → 0.471 | him: the grey beard, the yellow rain jacket over the grey knit |
+| the same, seed 11 | 0.299 → 0.259 | 0.396 → 0.406 | **two of him**, side by side - one head box on a two-head frame; the low score is the double, not the face |
+| the same, seed 202 | 0.318 → 0.304 | 0.626 → 0.615 | him, once |
+
+- **The pictures carry** - face, hair, wardrobe, and the drawing style, which the unwired run never
+  showed (it drew a photographic shrine) - in 4 of 4 wired renders.
+- **It doubled the person in 2 of 4.** "Two or three pictures of the same person" did not prevent it
+  (the prompt said they were the same man). QC must count people before a ref2va take is picked.
+- **Place from a plate**: one render, motifs and not layout. Not measured beyond that.
+- The composited start frame stays the method's route: one person, once, where the anchor put them.
+  ref2va is now an experiment worth running, not a closed door.
+- The LoRA in workflow 63 is `minimax_h3_fl2v_turbo` - trained for fl2va, not ref2va. ComfyUI's r2v
+  template uses no LoRA at 20 steps. Whether the doubles are the LoRA's is the next test (97.4).
+
+### 97.4  What did not run, and why
+
+At 01:40 the kernel's OOM killer took ComfyUI (37 GB resident) eleven steps into the wired ref2va
+no-LoRA 30-step render, with another session's 22 GB solver (`braingames-solver`, a new solve every
+five minutes) beside it on the 60 GB host. Every run queued after it failed on a closed socket.
+ComfyUI was restarted, and the rest was held back rather than risk the OOM killer choosing the other
+session's process. Still to run, commands ready:
+
+    ~/ComfyUI/venv/bin/python3 studio/_tools/ref2va_test.py --seed 4200 --no-lora --steps 20
+    ~/ComfyUI/venv/bin/python3 studio/_tools/ref2va_test.py --character tomas-reyl --framing medium --pronoun his --place cafe-morning --plate dawn_wide --seed 4200
+    ~/ComfyUI/venv/bin/python3 studio/_tools/id_lora_test.py --arms tags25 idlora25
+
+**Host RAM is a limit, not only VRAM.** ComfyUI stages models in system memory: a ref2va run with
+references reached 37 GB resident. Check `free -g`, and what else is running, before an H3 reference
+render.
+
+## §98  THE ACTION SEQUENCE - the breakdown's method on our engines, rule by rule
+
+The two paid PDFs behind §95/§96 arrived in full on 2026-09-24 (`~/bought_pdfs`): *Alter Anime
+Studio* Vol. 01, "How I recreated Lee vs Gaara with AI" - three shots, 5 s / 15 s / 10 s, Seedance
+2.0 image-to-video, with the prompts printed - and their beginner guide, "Anime → live-action".
+§95 was built from notes on them and the notes were right; three things had been lost, and one of
+them matters:
+
+- **They attach the references TO a composed start frame, on every shot.** Shot 1 is "upload →
+  start frame (both fighters in @PLACE) + @CHARAC1 ref + @CHARAC2 ref + @PLACE ref". Not refs
+  *or* a start frame - both. This studio does the first half and, since §97.3, can do the second.
+- The tags are **role labels**, never names or descriptions: `@CHARAC1 the attacker`.
+- A spoken line goes in 「brackets」 (or quotes) and the engine voices and lip-syncs it.
+
+`studio/_tools/fight.py` builds a sequence their way on local weights, and `ash-court` is the
+result: five shots, 31 seconds, invented cast, invented court - their *method*, not their fight
+(their demo is a shot-for-shot Naruto recreation; ours is not a recreation of anything).
+
+**The story is data, not code.** Who is in it, where it happens, the look and the shots live in
+`studio/shotscripts/<film>.json`; `fight.py --sequence <film>` builds whichever one it is handed,
+into `studio/samples/fight/<film>/`. (`studio/sequences/` was already taken - it holds edit
+analyses of reference cuts, a different thing, and the loader says so if it is pointed at one.)
+A second film needs a second JSON and no new code - tested rather than asserted: `studio/shotscripts/the-letter.json` is one character, a hospital corridor at night, two shots, no effects and a held look with a line, and `fight.py --sequence the-letter` built the cast, the plate, both anchors and four takes without an edit to the tool (`studio/samples/fight/the-letter/`).
+
+    cast -> anchors -> shots -> pick -> score -> finish
+    40_flux2_t2i   75_flux2_ref3   70_ltx25_i2v / 67_h3   06_acestep   post.py
+
+### 98.1  The local multi-reference compositor (workflow 75)
+
+`75_flux2_ref3.json` is workflow 68 with a third `ReferenceLatent` stage and an explicit canvas
+(68 reads the output size off reference one, which makes a 16:9 fight frame impossible from two
+portrait character refs). Three pictures - two characters and the place plate - are scaled to 1 MP,
+VAE-encoded and chained into the conditioning. **This is the breakdown's `@CHARAC1 + @CHARAC2 +
+@PLACE` resolved one step earlier than theirs**, in the start frame rather than inside the video
+model, which is the substitute `WHERE-WE-STAND` §2 reasoned its way to before anyone had the node.
+
+**The plate handed in as a reference returns THE room, not a room.** Mean absolute difference per
+pixel on the border band (the outer 22%, where the architecture lives and the figures do not):
+
+| | |
+|---|---|
+| anchor 010 vs 020 vs 030, pairwise | 10.9 · 16.3 · 19.1 |
+| each anchor against the plate itself | 13.0 · 13.6 · 21.8 |
+| the plate against a different place's plate | **73.1** |
+
+Four to seven times closer to each other than an unrelated room is. The lamps, the balcony ironwork
+and the floor cracks are in the same places in all three start frames, for free, because the place
+is a picture and not a sentence (§57's plate doctrine, now available to a *generated* frame).
+
+A character reference costs 11-31 s and an anchor 36-55 s on this card.
+
+**The brief fights realism, and realism wins unless you spell the brief as anatomy.** The first
+striker came back a gaunt woman of fifty from "a wiry woman in her late twenties" - the agency's
+lesson (`agency.py`) in a new place. Re-rolled with the age and the build stated as bone structure
+and muscle, with every realism anchor kept, she came back at twenty-eight.
+
+### 98.2  Staging: a wide swallows a fight
+
+First pass, both fighters whole in a wide of the court, 6 s: `cammeasure` read **push in 50%** and
+the take ends with the two of them standing still - the combo never happened. Restaged as a medium
+from a low angle, both bodies large in frame, 4 s, one beat: the punches read on all three seeds.
+Same engine, same words, same cast. The breakdown stages every fight beat close and gives the
+camera a job; that is not style, it is what makes the action survive.
+
+### 98.3  Rule 3, measured: "one burst per strike" is not available by prompt on LTX-2.5
+
+Their rule 3 - *effects appear at the instant of impact, then vanish; persistent effects turn into
+weightless CGI soup* - was the only one of their ten this studio had adopted without testing.
+Two arms, three seeds each, identical but for one sentence (`fight.py --ab`). Ash in the air raises
+how far a frame sits from the clean first frame; measured over the middle of the picture, the shape
+of that curve is the answer. `clear_back = (peak - end) / peak`: 1.0 cleared completely, 0.0 never
+cleared.
+
+| arm | peak | end | mean | clear_back |
+|---|---|---|---|---|
+| "a burst at the exact instant of each punch, and no ash between them" | 56.6 | 55.7 | 33.2 | **0.02** |
+| "a standing wall of ash for the whole shot" | 60.9 | 59.4 | 39.2 | **0.03** |
+
+The difference between the arms is −0.01 against a within-arm spread of 0.03: **the sentence does
+not move it.** Every one of the six takes accumulates monotonically and none clears. The wording
+changed only how *much* ash (mean 39.2 against 33.2) - never whether it left. So on LTX-2.5 an
+effect is a standing state whatever you write, and the breakdown's cleanest-looking rule is the one
+that does not transfer. What to do instead, in order of cost: keep an effects beat short (the curve
+is still below half its peak at a third of a four-second take), composite the burst in post, or
+render the beat on H3 -
+
+### 98.4  ...because H3 does what the sentence could not
+
+The same anchor, the same words, the other engine (`fight.py --h3`, workflow 67):
+
+| engine | peak | end | mean | clear_back | shape |
+|---|---|---|---|---|---|
+| LTX-2.5 (`70`) | 57.7 | 56.7 | 34.9 | 0.02 | climbs to the last frame |
+| **H3 (`67`)** | **35.0** | 31.6 | 24.9 | **0.10** | rises for a second, then plateaus |
+
+H3 ends about 40% less occluded and stops accumulating after roughly a second, so the strikes stay
+legible to the end of the take; LTX fogs over. `studio/samples/fight/picks/010.jpg` shows it without
+a number in sight: five H3 takes across the top stay clear to the right-hand end of the strip, and
+all eight LTX takes below them disappear into haze. With §96.5's existing rows - H3 for one violent
+committed motion, H3 keeps frame 0 (SSIM 0.962 against 0.289) - **the strike beat of a fight
+belongs on H3 and the rest on LTX-2.5.** Cost: 45-50 s for 90 frames against LTX's 20-44 s for 97.
+Two seeds only; three before this becomes a §96.5 row.
+
+### 98.5  The word *cut* inside a shot, and where it hides
+
+Measured with `multishot.cuts()` on every take (nine takes, three shots):
+
+- **010, no cut asked: none on 3 of 3.** LTX does not invent cuts.
+- **020, one cut asked, both fighters in the start frame** (the case §18 says holds): the
+  discontinuity lands in the asked half on 3 of 3, and by eye it is exactly the intended cut -
+  wide flurry, hard cut, the guard flat on the tiles. The detector reports 2, 7 and 5 spikes,
+  because a body crossing frame at speed is a frame-to-frame discontinuity too. **The cut detector
+  cannot be used inside an action beat**; it was built for clean multishot cuts.
+- **030, one cut asked, a screen-filling effect at the cut point: none detected on 2 of 3** - and
+  the cut is plainly there on the strip. The engine put the transition *inside the ash*: the cloud
+  fills the frame and the picture emerges on the mentor's face. A cut hidden behind an effect is a
+  dissolve as far as any detector is concerned, and it is the better-looking choice of the two.
+
+### 98.5b  Identity across the sequence, and the wrong yardstick
+
+Rule 1's actual claim is that the references hold the character from shot to shot. Here they were
+resolved into each start frame rather than handed to the video model, so the question is whether
+that substitute survives a cut. Measured head against head with `identity.py` (>= 0.62 the same
+person, < 0.50 a different face):
+
+| what | score |
+|---|---|
+| her face in 010 against her face in 020, across the cut | **0.751** same person |
+| the same, from 010's last frame | **0.737** same person |
+| each shot's face against **its own start frame** - 010 first / last (H3, 3.8 s) | **0.925 / 0.894** |
+| 020 first (LTX, 10 s) · 030 first (LTX, 8 s) | 0.828 · 0.846 |
+| 020's LAST frame against its start frame | 0.438 - and the frame holds the *other* character by then, so this number is about framing, not drift |
+
+So identity holds where the face clock says it should: a four-second beat came back at 0.89 against
+its own anchor, and the woman is recognisably the same woman after a cut into the next shot.
+
+**The neutral cast reference is a conditioner, not a yardstick.** Scored against it, the same faces
+read 0.22-0.33 - "a different face" - while reading 0.75 against each other. The reference is a
+studio-lit figure on a grey backdrop and the shots are a dim dusty arena; CLIP reads the lighting
+and the place along with the face. The breakdown asks for one full-body image per character and
+that is right for *conditioning*; for *measuring*, score against the shot's own start frame, or
+against a portrait made in the film's own light - which is exactly why a pack carries a portrait
+as well as a turnaround.
+
+### 98.6  The finish, and two faults in it
+
+`--finish` assembles the picked takes, applies one grade after the cuts, mixes the ACE-Step bed
+under at 0.5 and levels to −16 LUFS. The studio's invariant holds at the cut: **takes 621 frames,
+film 621 frames.**
+
+**The line is spoken, on every seed.** Shot 030 asks for *"Get up. You are not finished."* to
+camera. Granite Speech transcribed all six takes and every one of them says it verbatim - content
+word recall 100%, 6 of 6 (one seed says "get up" twice). Native dialogue with lip-sync is the
+breakdown's headline feature and on LTX-2.5 it is simply reliable, as long as the mouth is on
+screen. Two faults found by looking:
+
+- **Every LTX-2.5 take comes back clipped.** mean −14 to −16 dBFS with `max_volume` at **0.0 dB**
+  on all three shots. The finish's `loudnorm` rescales the mix but cannot un-clip a sample that
+  arrived at full scale. A peak check belongs in QC beside the SILENT check (SOUND-02's rule about
+  measured levels, applied to the engine's own output rather than to our beds).
+- **The master does not add a frame - the re-encode does, and only one counter can see it.**
+  The master came back 532 against the cut's 531, which looked like the upscaler inventing a
+  frame. It is not. Counted two ways:
+
+  | file | `ffprobe -count_frames` | packets | decoded to rawvideo |
+  |---|---|---|---|
+  | a take straight from LTX-2.5 | 241 | 241 | 241 |
+  | a take from H3 | 90 | 90 | 90 |
+  | **anything through the concat + libx264 re-encode** | 621 | 621 | **622** |
+  | the 2× master of that | 622 | 622 | 622 |
+
+  And the gap is **1 with zero junctions**: one take alone through the same path reads 97 / 97 / 98.
+  So the re-encode writes a stream whose decoder emits one frame more than its packets, `upscale()`
+  reads by decoding and faithfully carries it, and the invariant counts packets and cannot see it.
+  Nothing here is dropped or duplicated in the picture; two counters simply disagree about one
+  file. The lesson is §75's, one level down: **count the way the consumer counts** - the invariant
+  should read the master with the same method that produced it, or the master should be measured
+  against the cut's decoded length rather than its packet count.
+
+### 98.7  The paid door, wired and shut
+
+`76_seedance25_ref.json` is Seedance 2.5 through ComfyUI's `ByteDance2ReferenceNodeV2`: up to
+**30 seconds**, 1080p, native audio, up to **30 reference images**, spoken lines in double quotes,
+and `task_type` reference / edit / extend. `fight.py --seedance 010` hands it the same composed
+anchor as reference one and the two character references after it - the breakdown's "start frame +
+@CHARAC refs" on one node.
+
+It cannot run here: API nodes read a Comfy account token that the front end supplies after login,
+and there is none on this box. **Somebody has to sign in at `http://192.168.0.45:8188` with the
+account that holds the credits**; nothing in this repo can create an account or pay for one. The
+ids were read off the live schema rather than guessed - `model.reference_images.image_1`, flat and
+dotted, the §97.3 shape - so the graph should run the moment the token exists, and it spends money
+per call.
+
+Where it is worth spending, given the above: **the strike beats.** §96.4's hybrid rule says buy
+start frames rather than video, and that still holds for everything else in this sequence - the
+anchors are already as good as the shots deserve. But the thing LTX measurably cannot do is hold an
+effect to its instant, and that is exactly what a fight is made of.
+
+### 98.8  Timings on this card
+
+| step | time |
+|---|---|
+| a character reference or a plate (Flux 2 t2i, 8-step turbo) | 11-31 s |
+| a three-reference anchor (workflow 75, 1280×720) | 36-55 s |
+| LTX-2.5, 4 s / 97 frames at 0.9 MP | 20-44 s |
+| LTX-2.5, 10 s / 241 frames | 51-55 s |
+| H3 sparse v4 turbo, 3.8 s / 90 frames at 1280×704 | 45-50 s |
+| ACE-Step bed, 24 s | ~40 s |
+| the 2× master, 531 frames | 74 s |
+| the whole sequence from nothing: cast, anchors, 9 takes, A/B, H3, finish | about 50 min of card |
+
+### 98.9  What the ten rules did here
+
+| their rule | on our engines |
+|---|---|
+| 1 refs carry identity, never describe | holds, and workflow 75 makes it a start frame |
+| 2 codenames not names | not adopted: our cast is invented, so names are free |
+| 3 one burst per strike | **false on LTX-2.5** (98.3); true enough on H3 (98.4) |
+| 4 freeze one fighter | holds - and it is our own one-mover rule |
+| 5 direct with timecodes | still dead (§95 S5); the word *cut* works, and hides inside an effect (98.5) |
+| 6 handheld everything | holds; the camera is measured against the ask on every take |
+| 7 write the sound | holds - and the engine's own audio arrives clipped (98.6) |
+| 8 one grade line every shot | ours is one grade after the cuts, which is strictly better |
+| 9 AVOID is your spellbook | holds; ours grows from measured QC faults |
+| 10 post is half the film | holds; the master's extra frame is ours to fix |

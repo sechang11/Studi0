@@ -1,4 +1,8 @@
 {
+ "_notes": [
+  "2026-09-17, wired correctly (LTX_PLAYBOOK §97.3): the pictures carry face, hair, wardrobe and drawing style in 4 of 4 renders, and the person was doubled in 2 of 4 - count people before picking a take. Node 5 is the fl2v turbo LoRA, trained for fl2va; ComfyUI's own r2v template runs no LoRA at 20 steps. Host RAM: a no-LoRA 30-step run reached 37 GB resident and was OOM-killed beside a 22 GB process.",
+  "2026-09-17: ref_images MUST be flat dotted 0-indexed ids (\"ref_images.ref_image_0\" ...), as ComfyUI's own template stores them. Until this date node 20 carried a nested dict, which the Autogrow expander does not read: every ref2va render before it received NO reference pictures."
+ ],
  "1": {
   "class_type": "UNETLoader",
   "inputs": {
@@ -82,16 +86,14 @@
    "height": 768,
    "length": 124,
    "ref_image_size": "match",
-   "ref_images": {
-    "ref_image_1": [
-     "8",
-     0
-    ],
-    "ref_image_2": [
-     "9",
-     0
-    ]
-   }
+   "ref_images.ref_image_0": [
+    "8",
+    0
+   ],
+   "ref_images.ref_image_1": [
+    "9",
+    0
+   ]
   }
  },
  "30": {
