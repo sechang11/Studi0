@@ -141,9 +141,20 @@ def drivers():
     return idx
 
 
+def _model_dirs():
+    """The review clock's folders when it is importable, so the two tools count the same
+    orphans; the wider list above only when it is not."""
+    try:
+        sys.path.insert(0, os.path.join(ROOT, "studio", "_tools"))
+        import review_clock as rc
+        return tuple(getattr(rc, "MODEL_DIRS", MODEL_DIRS))
+    except Exception:
+        return MODEL_DIRS
+
+
 def models_on_disk():
     out = {}
-    for d in MODEL_DIRS:
+    for d in _model_dirs():
         base = os.path.join(COMFY, "models", d)
         if not os.path.isdir(base):
             continue
