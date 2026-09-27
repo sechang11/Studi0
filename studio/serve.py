@@ -1125,6 +1125,12 @@ def _technique_routes():
     return _load_tool_module('technique_routes')
 
 
+def _shots_routes():
+    """studio/_tools/shots_routes.py - the shot-script pipeline (fight.py) as a page.
+    Owns a child process, like _generate_routes."""
+    return _load_tool_module('shots_routes')
+
+
 def _spec_routes():
     """studio/_tools/spec_routes.py - the shot-spec editor, English side and machine side."""
     return _load_tool_module('spec_routes')
@@ -1222,6 +1228,7 @@ STUDIO_NAV = [
         ("/build", "build a shot", "build.html"),
         ("/film", "film editor", "film_editor.html"),
         ("/specs", "spec sheet", "specs.html"),
+        ("/shots", "shot script", "shots.html"),
         ("/verify/motion", "verify", "motion.html"),
     ]),
     ("library", [
@@ -1504,6 +1511,21 @@ class H(http.server.SimpleHTTPRequestHandler):
                     body, code = tr.listing()
                 else:
                     body, code = tr.one(rest[0])
+            except Exception as e:
+                traceback.print_exc()
+                return self._send({"error": str(e)[:300]}, 500)
+            return self._send(body, code)
+
+        # /shots - a shot script run stage by stage: refs, start frames, shots, score, finish
+        if path == "/shots":
+            return self._page("shots.html")
+        if path == "/api/shots" or path.startswith("/api/shots/"):
+            shr = _shots_routes()
+            if not shr:
+                return self._send({"error": "studio/_tools/shots_routes.py is unavailable"}, 500)
+            try:
+                body, code = shr.get(path[len("/api/shots"):],
+                                     urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query))
             except Exception as e:
                 traceback.print_exc()
                 return self._send({"error": str(e)[:300]}, 500)
@@ -2684,6 +2706,7 @@ class H(http.server.SimpleHTTPRequestHandler):
                      "/api/film/portrait", "/api/film/master", "/api/film/draftall",
                      "/api/film/compose", "/api/film/pin", "/api/film/triage", "/api/film/pinpreview", "/api/film/anchorcheck", "/api/film/coverage", "/api/film/make", "/api/film/makeall", "/api/film/quickstart", "/api/film/deletefilm", "/api/film/build",
                      "/api/spec/save", "/api/spec/new", "/api/spec/lock",
+                     "/api/shots/save", "/api/shots/new", "/api/shots/run", "/api/shots/stop",
                      "/api/foundry/new", "/api/foundry/edit", "/api/foundry/delete",
                      "/api/foundry/seeds", "/api/foundry/repair", "/api/foundry/apply",
                      "/api/foundry/send", "/api/foundry/variant",
@@ -2966,6 +2989,16 @@ class H(http.server.SimpleHTTPRequestHandler):
                   "analyse": cr.analyse}[p[len("/api/character/"):]]
             try:
                 body, code = fn(data)
+            except Exception as e:
+                traceback.print_exc()
+                return self._send({"error": str(e)[:300]}, 500)
+            return self._send(body, code)
+        if p.startswith("/api/shots/"):
+            shr = _shots_routes()
+            if not shr:
+                return self._send({"error": "studio/_tools/shots_routes.py is unavailable"}, 500)
+            try:
+                body, code = shr.post(p[len("/api/shots"):], data)
             except Exception as e:
                 traceback.print_exc()
                 return self._send({"error": str(e)[:300]}, 500)

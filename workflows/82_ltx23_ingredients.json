@@ -1,20 +1,8 @@
 {
- "_comment": [
-  "LTX-2.3 IC-LoRA UNION CONTROL: a control video (depth here, via MoGe-2) steers the shot's structure and camera while the start frame sets the look. Flattened from ComfyUI's own template video_ltx2_3_ic_lora by scripts/ui2api.py and rewired to the checkpoint this box has. The same LoRA reads canny (core Canny node) and pose (SDPose, workflow 27) maps. Measured 2026-09-17 by studio/_tools/ic_lora_test.py (LTX_PLAYBOOK \u00a797.2): a depth guide made LTX-2.3 pull back 27% against a 26% rig on 3 of 3 seeds (zoom-curve RMSE 0.008), where the same words alone pushed in 17-47%.",
-  "2026-09-27: MoGeInference gained a required refine_steps input in ComfyUI 0.37; set to its default (3)."
- ],
- "_notes": [
-  "Inputs: node 199 LoadVideo = the control clip (121 frames, the output's aspect); node 200 LoadImage = the start frame, which should BE the look of the control clip's first frame - the guide and the picture have to agree at frame 0.",
-  "The template loads ltx-2.3-22b-distilled-fp8, which this box never downloaded (STATE.md). It runs on dev-fp8 + the distilled LoRA at 0.5, as ComfyUI's own ID-LoRA template does.",
-  "GetICLoRAParameters reads the LoRA's reference_downscale_factor (ref0.5) and hands it to LTXVAddGuide; LTXVCropGuides strips the guide frames before decoding. Do not remove either.",
-  "Feed the raw MoGe 'depth' render, never 'depth_colored' - a colormap is read as content.",
-  "Seed: sg1_704 (KSampler, 8 steps, euler_ancestral, linear_quadratic, cfg 1).",
-  "Changes from the template: checkpoint -> dev-fp8 + distilled LoRA; the prompt enhancer and its abliterated Gemma LoRA removed; two links ui2api mis-resolved repaired (GetVideoComponents.video, MoGeInference.batch_size); the 5 s video slice removed and the length pinned at 121; unused MoGe outputs removed."
- ],
  "68": {
   "class_type": "SaveVideo",
   "inputs": {
-   "filename_prefix": "claude-generated/iclora/take",
+   "filename_prefix": "claude-generated/ingredients/take",
    "format": "auto",
    "codec": "auto",
    "video": [
@@ -29,7 +17,10 @@
  "sg1_101": {
   "class_type": "LTXVEmptyLatentAudio",
   "inputs": {
-   "frames_number": 121,
+   "frames_number": [
+    "sg1_710",
+    2
+   ],
    "frame_rate": [
     "sg1_114",
     0
@@ -75,7 +66,10 @@
     "sg1_98",
     0
    ],
-   "length": 121,
+   "length": [
+    "sg1_710",
+    2
+   ],
    "batch_size": 1
   },
   "_meta": {
@@ -105,7 +99,10 @@
  "sg1_114": {
   "class_type": "PrimitiveInt",
   "inputs": {
-   "value": 25
+   "value": [
+    "716",
+    0
+   ]
   },
   "_meta": {
    "title": "Frame Rate(int)"
@@ -137,7 +134,7 @@
     2
    ],
    "image": [
-    "sg2_25",
+    "722",
     0
    ]
   },
@@ -177,7 +174,10 @@
  "sg1_113": {
   "class_type": "PrimitiveInt",
   "inputs": {
-   "value": 1280
+   "value": [
+    "721",
+    0
+   ]
   },
   "_meta": {
    "title": "Width"
@@ -186,7 +186,10 @@
  "sg1_98": {
   "class_type": "PrimitiveInt",
   "inputs": {
-   "value": 704
+   "value": [
+    "721",
+    1
+   ]
   },
   "_meta": {
    "title": "height"
@@ -195,7 +198,7 @@
  "sg1_112": {
   "class_type": "CLIPTextEncode",
   "inputs": {
-   "text": "blurry, low quality, distorted, warping, flicker, watermark, text, extra limbs, deformed",
+   "text": "blurry, out of focus, overexposed, underexposed, low contrast, washed out colors, excessive noise, grainy texture, poor lighting, flickering, motion blur, distorted proportions, unnatural skin tones, deformed facial features, asymmetrical face, missing facial features, extra limbs, disfigured hands, wrong hand count, artifacts around text, unreadable text on shirt or hat, incorrect lettering on cap (“PNTR”), incorrect t-shirt slogan (“JUST DO IT”), missing microphone, misplaced microphone, inconsistent perspective, camera shake, incorrect depth of field, background too sharp, background clutter, distracting reflections, harsh shadows, inconsistent lighting direction, color banding, cartoonish rendering, 3D CGI look, unrealistic materials, uncanny valley effect, incorrect ethnicity, wrong gender, exaggerated expressions, smiling, laughing, exaggerated sadness, wrong gaze direction, eyes looking at camera, mismatched lip sync, silent or muted audio, distorted voice, robotic voice, echo, background noise, off-sync audio, missing sniff sounds, incorrect dialogue, added dialogue, repetitive speech, jittery movement, awkward pauses, incorrect timing, unnatural transitions, inconsistent framing, tilted camera, missing door or shelves, missing shallow depth of field, flat lighting, inconsistent tone, cinematic oversaturation, stylized filters, or AI artifacts.",
    "clip": [
     "sg1_103",
     0
@@ -276,7 +279,7 @@
  "sg1_128": {
   "class_type": "CLIPTextEncode",
   "inputs": {
-   "text": "The camera pulls back slowly and steadily, revealing more of the room around the frame. Morning light; steam rises from a cup. Ambient cafe sound; no music.",
+   "text": "### Reference Sheet Description\n**Top row, left two panels (Character A):** a woman's face, then her full figure.\n**Top row, right two panels (Character B):** a man's face, then his full figure.\n**Bottom row (Location):** a stone courtyard at dawn.\n### Target Description\nA medium shot in the courtyard: the woman and the man stand facing each other, he speaks, she listens. Static camera. Ambient courtyard sound; no music.",
    "clip": [
     "sg1_103",
     0
@@ -318,7 +321,7 @@
  "sg1_195": {
   "class_type": "LoraLoaderModelOnly",
   "inputs": {
-   "lora_name": "ltx-2.3-22b-ic-lora-union-control-ref0.5.safetensors",
+   "lora_name": "ltx-2.3-22b-ic-lora-ingredients-0.9.safetensors",
    "strength_model": 1,
    "model": [
     "distill",
@@ -345,7 +348,10 @@
   "class_type": "LTXVImgToVideoInplace",
   "inputs": {
    "strength": 1,
-   "bypass": false,
+   "bypass": [
+    "sg1_711",
+    0
+   ],
    "latent": [
     "sg1_108",
     0
@@ -355,7 +361,7 @@
     2
    ],
    "image": [
-    "200",
+    "712",
     0
    ]
   },
@@ -366,7 +372,7 @@
  "sg1_704": {
   "class_type": "KSampler",
   "inputs": {
-   "seed": 0,
+   "seed": 4242,
    "steps": 8,
    "cfg": 1,
    "sampler_name": "euler_ancestral",
@@ -393,86 +399,11 @@
    "title": "KSampler"
   }
  },
- "199": {
-  "class_type": "LoadVideo",
-  "inputs": {
-   "file": "iclora_control.mp4"
-  },
-  "_meta": {
-   "title": "LoadVideo"
-  }
- },
- "200": {
-  "class_type": "LoadImage",
-  "inputs": {
-   "image": "iclora_start.png"
-  },
-  "_meta": {
-   "title": "LoadImage"
-  }
- },
- "sg2_13": {
-  "class_type": "MoGeInference",
-  "inputs": {
-   "resolution_level": 9,
-   "fov_x_degrees": 0,
-   "batch_size": 4,
-   "force_projection": true,
-   "apply_mask": true,
-   "moge_model": [
-    "sg2_32",
-    0
-   ],
-   "image": [
-    "sg2_53",
-    0
-   ],
-   "refine_steps": 3
-  },
-  "_meta": {
-   "title": "MoGeInference"
-  }
- },
- "sg2_25": {
-  "class_type": "MoGeRender",
-  "inputs": {
-   "output": "depth",
-   "moge_geometry": [
-    "sg2_13",
-    0
-   ]
-  },
-  "_meta": {
-   "title": "MoGeRender"
-  }
- },
- "sg2_32": {
-  "class_type": "LoadMoGeModel",
-  "inputs": {
-   "model_name": "moge_2_vitl_normal_fp16.safetensors"
-  },
-  "_meta": {
-   "title": "LoadMoGeModel"
-  }
- },
- "sg2_36": {
-  "class_type": "ComfyMathExpression",
-  "inputs": {
-   "expression": "a > 2048",
-   "values.a": [
-    "sg2_37",
-    0
-   ]
-  },
-  "_meta": {
-   "title": "ComfyMathExpression"
-  }
- },
- "sg2_37": {
+ "sg1_710": {
   "class_type": "GetImageSize",
   "inputs": {
    "image": [
-    "sg2_70",
+    "722",
     0
    ]
   },
@@ -480,66 +411,113 @@
    "title": "GetImageSize"
   }
  },
- "sg2_40": {
-  "class_type": "ResizeImagesByLongerEdge",
+ "sg1_711": {
+  "class_type": "PrimitiveBoolean",
   "inputs": {
-   "longer_edge": 2048,
-   "images": [
-    "sg2_70",
-    0
-   ]
+   "value": true
   },
   "_meta": {
-   "title": "ResizeImagesByLongerEdge"
+   "title": "PrimitiveBoolean"
   }
  },
- "sg2_42": {
-  "class_type": "ComfySwitchNode",
+ "709": {
+  "class_type": "RepeatImageBatch",
   "inputs": {
-   "switch": [
-    "sg2_36",
-    2
+   "amount": [
+    "717",
+    1
    ],
-   "on_true": [
-    "sg2_40",
-    0
-   ],
-   "on_false": [
-    "sg2_70",
+   "image": [
+    "724",
     0
    ]
   },
   "_meta": {
-   "title": "ComfySwitchNode"
+   "title": "RepeatImageBatch"
   }
  },
- "sg2_53": {
-  "class_type": "ComfySwitchNode",
+ "712": {
+  "class_type": "EmptyImage",
   "inputs": {
-   "switch": true,
-   "on_true": [
-    "sg2_42",
-    0
-   ],
-   "on_false": [
-    "sg2_70",
-    0
-   ]
+   "width": 512,
+   "height": 512,
+   "batch_size": 1,
+   "color": 0
   },
   "_meta": {
-   "title": "ComfySwitchNode"
+   "title": "EmptyImage"
   }
  },
- "sg2_70": {
-  "class_type": "GetVideoComponents",
+ "715": {
+  "class_type": "PrimitiveInt",
   "inputs": {
-   "video": [
-    "199",
+   "value": 4
+  },
+  "_meta": {
+   "title": "Int (duration)"
+  }
+ },
+ "716": {
+  "class_type": "PrimitiveInt",
+  "inputs": {
+   "value": 24
+  },
+  "_meta": {
+   "title": "Int (fps)"
+  }
+ },
+ "717": {
+  "class_type": "ComfyMathExpression",
+  "inputs": {
+   "expression": "a * b + 1",
+   "values.a": [
+    "715",
+    0
+   ],
+   "values.b": [
+    "716",
     0
    ]
   },
   "_meta": {
-   "title": "GetVideoComponents"
+   "title": "ComfyMathExpression"
+  }
+ },
+ "721": {
+  "class_type": "GetImageSize",
+  "inputs": {
+   "image": [
+    "722",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "GetImageSize"
+  }
+ },
+ "722": {
+  "class_type": "ResizeAndPadImage",
+  "inputs": {
+   "target_width": 1280,
+   "target_height": 704,
+   "padding_color": "black",
+   "interpolation": "lanczos",
+   "image": [
+    "709",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "Resize And Pad Image (Size)"
+  }
+ },
+ "724": {
+  "class_type": "LoadImage",
+  "inputs": {
+   "image": "ingredients_sheet.png"
+  },
+  "_meta": {
+   "title": "LoadImage"
   }
  },
  "distill": {
@@ -551,9 +529,29 @@
    ],
    "lora_name": "ltx_2.3_22b_distilled_1.1_lora_dynamic_fro09_avg_rank_111_bf16.safetensors",
    "strength_model": 0.5
-  },
-  "_meta": {
-   "title": "distilled LoRA 0.5 - stands in for ltx-2.3-22b-distilled-fp8"
   }
- }
+ },
+ "725": {
+  "class_type": "LoadImage",
+  "inputs": {
+   "image": "ingredients_anchor.png"
+  }
+ },
+ "_comment": [
+  "82 LTX-2.3 + the IC-LoRA INGREDIENTS adapter: a REFERENCE SHEET (one composite picture, one",
+  "clean panel per character face / character body / prop / place, black background, no text)",
+  "conditions the whole clip, so the people and the room in it are the ones on the sheet. This",
+  "is the breakdown's @CHARAC1 @CHARAC2 @PLACE resolved INSIDE the video model, on local weights.",
+  "Converted from template_ltx2_3_ic_lora_ingredients and moved onto the dev-fp8 + distilled",
+  "LoRA 0.5 stack that 74 runs (the template's distilled checkpoint is not on this box).",
+  "The sheet is looped into a static video (709 RepeatImageBatch) of the output length and",
+  "padded to the canvas (722), then attached as an IC-LoRA guide at frame 0 (sg1_115).",
+  "Knobs: 724 sheet (ComfyUI/input), 725 optional START FRAME - to use it set sg1_198.image to",
+  "['725',0] and sg1_711.value false; 715 seconds, 716 fps (717 makes 8n+1 frames), 722 canvas,",
+  "sg1_128 prompt ('### Reference Sheet Description' panels, then '### Target Description'),",
+  "sg1_112 negative, sg1_704 seed, 68 prefix. Trained at 768x448 x 121 frames; larger panels",
+  "carry more faithfully (model card). The 2.5 adapter exists but is GATED on Hugging Face",
+  "(Lightricks/LTX-2.5-22b-IC-LoRA-Ingredients, 403 for this box's account, 2026-09-27); the",
+  "2.3 one is public at Comfy-Org/ltx-2.3."
+ ]
 }

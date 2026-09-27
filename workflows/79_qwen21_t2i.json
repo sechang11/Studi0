@@ -1,0 +1,106 @@
+{
+ "_comment": [
+  "79 Qwen-Image-2.1 text-to-image (open weights 2026-09-20, 7B, native 2K, RGBA-capable,",
+  "one checkpoint for generation AND editing). 25 steps, cfg 1, euler/simple as the template.",
+  "Knobs: 6 prompt + negative_prompt, 9 width/height (multiples of 32), 10 seed, 12 prefix.",
+  "For a transparent subject wrap the prompt as the template says: 'This is an RGBA format",
+  "image with transparency. [subject]. The image has an alpha channel and a transparent",
+  "background.' and save PNG. Weights: qwen_image_2.1_int8_convrot 7.3 GB +",
+  "qwen3vl_8b_int8_convrot 9.4 GB + qwen_image_2.1_vae_bf16 0.7 GB. Licence: qwen-research."
+ ],
+ "1": {
+  "class_type": "UNETLoader",
+  "inputs": {
+   "unet_name": "qwen_image_2.1_int8_convrot.safetensors",
+   "weight_dtype": "default"
+  }
+ },
+ "2": {
+  "class_type": "CLIPLoader",
+  "inputs": {
+   "clip_name": "qwen3vl_8b_int8_convrot.safetensors",
+   "type": "qwen_image",
+   "device": "default"
+  }
+ },
+ "3": {
+  "class_type": "VAELoader",
+  "inputs": {
+   "vae_name": "qwen_image_2.1_vae_bf16.safetensors"
+  }
+ },
+ "6": {
+  "class_type": "TextEncodeQwenImage21",
+  "inputs": {
+   "prompt": "Unretouched photograph of an empty stone courtyard at dawn, fine film grain.",
+   "negative_prompt": "lowres, blurry, deformed, extra limbs, fused fingers, doubled figure, text, watermark, logo, nsfw",
+   "resolution": 1024,
+   "clip": [
+    "2",
+    0
+   ],
+   "vae": [
+    "3",
+    0
+   ]
+  }
+ },
+ "9": {
+  "class_type": "EmptyLatentImage",
+  "inputs": {
+   "width": 1280,
+   "height": 704,
+   "batch_size": 1
+  }
+ },
+ "10": {
+  "class_type": "KSampler",
+  "inputs": {
+   "seed": 4242,
+   "steps": 25,
+   "cfg": 1.0,
+   "sampler_name": "euler",
+   "scheduler": "simple",
+   "denoise": 1.0,
+   "model": [
+    "1",
+    0
+   ],
+   "positive": [
+    "6",
+    0
+   ],
+   "negative": [
+    "6",
+    1
+   ],
+   "latent_image": [
+    "9",
+    0
+   ]
+  }
+ },
+ "11": {
+  "class_type": "VAEDecode",
+  "inputs": {
+   "samples": [
+    "10",
+    0
+   ],
+   "vae": [
+    "3",
+    0
+   ]
+  }
+ },
+ "12": {
+  "class_type": "SaveImage",
+  "inputs": {
+   "filename_prefix": "claude-generated/qwen21/t2i",
+   "images": [
+    "11",
+    0
+   ]
+  }
+ }
+}

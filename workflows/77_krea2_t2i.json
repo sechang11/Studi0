@@ -1,0 +1,109 @@
+{
+ "_comment": [
+  "77 Krea 2 Turbo text-to-image (open weights 2026-06-22, ComfyUI-native since 0.26).",
+  "12.9B DiT, 8 steps, cfg 1, euler/simple, 1K-2K native. No ModelSampling node: the",
+  "template samples the raw UNET. Knobs: 6 prompt, 9 width/height, 10 seed, 12 prefix.",
+  "Style LoRAs (Comfy-Org/Krea-2/loras, strength 0.8-1.0) go on a LoraLoaderModelOnly",
+  "between 1 and 10 if ever wanted; none is installed. Weights: krea2_turbo_fp8_scaled",
+  "(13.1 GB) + qwen3vl_4b_fp8_scaled (5.2 GB) + the Qwen-Image VAE already on disk.",
+  "Licence: Krea 2 Community License (free commercial use under $1M/yr, 50 seats)."
+ ],
+ "1": {
+  "class_type": "UNETLoader",
+  "inputs": {
+   "unet_name": "krea2_turbo_fp8_scaled.safetensors",
+   "weight_dtype": "default"
+  }
+ },
+ "2": {
+  "class_type": "CLIPLoader",
+  "inputs": {
+   "clip_name": "qwen3vl_4b_fp8_scaled.safetensors",
+   "type": "krea2",
+   "device": "default"
+  }
+ },
+ "3": {
+  "class_type": "VAELoader",
+  "inputs": {
+   "vae_name": "qwen_image_vae.safetensors"
+  }
+ },
+ "6": {
+  "class_type": "CLIPTextEncode",
+  "inputs": {
+   "text": "Unretouched photograph of an empty stone courtyard at dawn, fine film grain.",
+   "clip": [
+    "2",
+    0
+   ]
+  }
+ },
+ "7": {
+  "class_type": "ConditioningZeroOut",
+  "inputs": {
+   "conditioning": [
+    "6",
+    0
+   ]
+  }
+ },
+ "9": {
+  "class_type": "EmptyLatentImage",
+  "inputs": {
+   "width": 1280,
+   "height": 704,
+   "batch_size": 1
+  }
+ },
+ "10": {
+  "class_type": "KSampler",
+  "inputs": {
+   "seed": 4242,
+   "steps": 8,
+   "cfg": 1.0,
+   "sampler_name": "euler",
+   "scheduler": "simple",
+   "denoise": 1.0,
+   "model": [
+    "1",
+    0
+   ],
+   "positive": [
+    "6",
+    0
+   ],
+   "negative": [
+    "7",
+    0
+   ],
+   "latent_image": [
+    "9",
+    0
+   ]
+  }
+ },
+ "11": {
+  "class_type": "VAEDecode",
+  "inputs": {
+   "samples": [
+    "10",
+    0
+   ],
+   "vae": [
+    "3",
+    0
+   ]
+  }
+ },
+ "12": {
+  "class_type": "SaveImage",
+  "inputs": {
+   "filename_prefix": "claude-generated/krea2/t2i",
+   "images": [
+    "11",
+    0
+   ]
+  }
+ }
+}

@@ -17,6 +17,9 @@ where we need them? Or build our own Seedance?"*
 | Several shots / hard cuts inside one generation | yes | yes — LTX-2.5 multishot, measured with `_tools/multishot.py` (cut detector: frame-difference spikes above the clip's own median + k·MAD) | **match** |
 | Post: upscale, grade, sound design | their Rule 10: *"post is half the film"* | per-take FILM-net interpolation to 48 fps, loudness levelling, scene music under at 0.5. **No grade, no upscale** on the film path | **free win, not yet taken** → §4 |
 | Multi-reference conditioning (`@CHARAC1 @CHARAC2 @PLACE` as separate tagged images) | native | LTX-2.5 i2v: **1** image (start frame). flf2v and H3 first-last: **2**. **H3 ref2va: up to 9 tagged `<Picture i>` references + video/audio refs, native** (`MiniMaxH3ReferenceToVideo`; weights on disk since the collector; wired 2026-09-07 as workflow 63) | **present; carries identity and wardrobe once correctly wired (2026-09-17) and doubled the person in 2 of 4 - see §6** (the 2026-09-07 "neither identity nor place" measured the prompt alone) → §2 |
+| The START FRAME composed from several references (plate + people + props) | Nano Banana 2: up to 14 reference images, ~$0.045-0.151 a picture (wired as `85`, off) | **Qwen-Image-2.1 (`80`): up to 16 references, 15 s, open weights** - measured against Flux 2 ref3 on the same pictures and words: a tie on one face, +0.09 on the other, the room held (§0.2); Flux 2 ref3 (`75`) still the default until it holds on a second shot | **match on the mechanism; the paid one unmeasured** - the hybrid test (§96.4) is the only way to know |
+| A character performing a given motion (motion transfer / replacement) | Kling motion control, Seedance 2.5 reference-to-video, Wan 2.7 (API) | **Wan Animate 2 (`81`)**, open weights: runs; the driver's motion is performed in the reference's clothes; the first wiring cropped the reference's head, so identity is unmeasured (§0.2) | **present, unmeasured** |
+| A physical beat choreographed, not hoped for | "physics" as a model property | **a physics engine**: Blender 5.2 previz (`previz_blender.py`) -> depth-controlled LTX (`74`), or H3 pose control (`84`): the first run carried the geometry, the timing and the camera arc of a sixteen-crate collapse (motion agreement 0.84 / 0.71, §0.2) | **ahead on the mechanism** - a simulated beat lands where the simulation says; theirs is hoped for. Fidelity is still theirs |
 | Raw fidelity and motion realism | frontier-scale training | LTX-2.5 (22 B, open weights) for motion; **Qwen-Image / Qwen-Edit** for photoreal keyframes, **SDXL (animagine-xl-4.0)** for anime keyframes | **scale gap** → §3 |
 
 Both video engines are local weights (`UNETLoader` / `VAELoader` / `SamplerCustomAdvanced`
@@ -422,6 +425,22 @@ answer is not a saving, and this one crashes a server two sessions share.
 **Where the H3 clip time went today**: about 60 s on 0.33.1 with no flags, 48 s on 0.37.0 with
 Sage, 39 s with sparse attention on top. Roughly **1.5x**, none of it costing a measurable
 change in the picture.
+
+## 8. The review of 2026-09-27 - four capabilities were installed and unused
+
+The question was "are we using the latest models - Krea 2?". A new tool (`inventory.py`) diffs
+ComfyUI's shipped template set against our workflows; it found Krea 2, Qwen-Image-2.1, Wan
+Animate 2 and the LTX Ingredients adapter installed and unmirrored, and the review record is
+playbook §0.2. What changed in this document's table: a row for the start-frame compositor
+(Qwen-Image-2.1 measured against Flux 2 ref3 - the local side got better, so the case for
+buying start frames got weaker), a row for motion transfer, a row for a physics beat. What did
+not change: the fidelity row. Nobody trained a frontier video model this week either.
+
+On character references, the question that keeps coming back ("can we do them ourselves or
+should we outsource them to Nano Banana?"): the pictures are ours already - a pack is twenty
+views against their one - and the composite start frame is now measured on two local engines.
+The paid compositor's only remaining claim is a number it has never been asked for; the harness
+that asks (`hybrid_frame_test.py --frame`) costs a few cents to run when someone wants to know.
 
 ---
 *Companion to `studio/LTX_PLAYBOOK.md` §18 (cuts re-derive faces), §56 (character LoRA),

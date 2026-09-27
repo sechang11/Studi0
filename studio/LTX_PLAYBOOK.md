@@ -8,7 +8,7 @@ Written so none of it has to be found twice.
 ## §0  THE REVIEW CLOCK - read this first
 
 ```
-last_checked: 2026-09-20
+last_checked: 2026-09-27
 cadence_days: 14
 ```
 
@@ -88,6 +88,133 @@ strips, read by eye. WHERE-WE-STAND §7.
 **6. Docs updated** (WHERE-WE-STAND §7, §96.5, the guide's chapter 6 and appendix D),
 `method_check.py` passing, clock stamped.
 
+
+### §0.2  Review of 2026-09-27 - what it found
+
+Run seven days early, on the question "are we using the latest models; are we using Krea 2". The
+tool for the next one is new: `studio/_tools/inventory.py` diffs the template set ComfyUI ships
+against our workflows and lists what nobody has mirrored. Run against the box that morning it
+listed Krea 2 (shipped 2026-06-22), Wan Animate 2 (08-07), Qwen-Image-2.1 (09-20) and the LTX
+Ingredients adapter (07-13) - four capabilities sitting installed-but-unused, the same way the
+ref2va weights once did. It also writes `workflows/INDEX.md` and `docs/MODELS.md`.
+
+**1. New or updated weights.** Installed today, each with a numbered workflow and a first render:
+
+| weights | what it is | workflow | first number (2026-09-27) |
+|---|---|---|---|
+| **Krea 2 Turbo** fp8 (13.1 GB) + qwen3vl-4b + the style-reference LoRA | a 12.9B open image model built for LOOK: 2K native, 8 steps, and one picture can set the style of another | `77`, `78` | 4.5-8 s for a 768x1344 cast reference on the same words as the Qwen-2512 cast picture: a plainer, more photographic register (skin, backdrop and shadow read as a real studio) and a different reading of the same description - which casts best is queue item 22. The style reference (`78`, the court plate as the look) carried the plate's palette and grain onto the guard, not its room: a look tool, as billed, not a place tool |
+| **Qwen-Image-2.1** int8 (7.3 GB) + qwen3vl-8b (9.4 GB) + its VAE | one 7B checkpoint for generation AND editing, up to 16 reference images, native 2K, RGBA | `79`, `80` | **the start-frame compositor A/B below** |
+| **Wan Animate 2** int8 (16.7 GB) + distill LoRA + clip-vision-h + VAE | reference image (who) + driving video (what motion) -> that character performing it; no pose extraction | `81` | runs (65 s for 81 frames at 848x464): the driver's punches are performed by a figure in vesper's clothes, motion agreement r 0.59 / 0.63 against the driving take - but this first wiring CROPPED the reference's head (a portrait reference forced into a landscape canvas), so its identity numbers (0.56 falling to 0.44 over the clip) measured a torso. Queue 19 |
+| **LTX-2.3 IC-LoRA Ingredients** (1.3 GB, Comfy-Org mirror) | a reference SHEET - one picture of faces, figures and the place - conditions a whole clip. The 2.5 adapter exists and is GATED (Lightricks, 403 for this box's account) | `82` + `refsheet.py` | the people carry with NO start frame: against the anchor's own heads a sheet-only clip reads 0.62 / 0.49 (vesper / koval, dev + distill LoRA) and 0.68 / 0.56 (the distilled checkpoint) - the same-person band starts at 0.56 - where a start frame alone reads 0.87 / 0.84. The room's framing is the model's own. Not a route (below) |
+| **H3 Fun ControlNet union** patch (2.3 GB) + RT-DETR + the official **ref2v turbo LoRA** (2.0 GB) | pose-skeleton control on H3; and the sampler our ref2va route was missing (queue item 3) | `84`, `83` | both run with our own pictures (`validate_h3.py`): `83` pins four frames of shot 010's take and returns 107 frames in 65 s with the pair held; `84` turns koval's take into a pose skeleton and renders 90 frames in 83 s - the arms fold and rise where the driver's do, the room is the words' (no plate). Unmeasured beyond that (queue 19-20) |
+| the **distilled LTX-2.3 checkpoint** (29.5 GB) | the Ingredients template's own base, pulled to remove a confound | `82 --ckpt` | see Ingredients |
+
+Not installed, on purpose: Flux.2 [klein] (4B Apache / 9B non-commercial, four-reference editing
+in under a second) - Flux 2 dev and Qwen-2.1 already cover the job; Wan 2.7 / 3.0 - API only,
+the open line stops at 2.2; HunyuanVideo - nothing newer than 1.5. Blender 5.2 was already on
+the box as a flatpak and is now a tool (`previz_blender.py`, below).
+
+**2. ComfyUI.** 0.37.0 here, 0.37.4 upstream: partner nodes only (Seedance 2.5 Draft mode, Seedream
+5.0 Flash, Hunyuan Image 3.5) and a ming-image support that was reverted. Not upgraded. One
+schema drift found and fixed: `MoGeInference` grew a required `refine_steps` in 0.37, which
+silently broke workflow 74 - after any upgrade, validate every graph with one render.
+
+**3. Orphans.** The same ten files as 09-20 (45 GB), same verdicts; nothing installed today is an
+orphan - every new weight has a numbered graph. One is now identified: `qwen_3_4b` is the Z-Image
+(and Flux.2-klein) text encoder, so it stays with `z_image_turbo` for queue item 22. `t5_base`
+remains a delete candidate. `inventory.py` also turned the question around - not "what is on disk
+unused" but "what could be on this ComfyUI and is not": 53 templates dated since March with no
+mirror here, among them **FastVideo FastH3** (09-15, a faster H3), **MoGe 3** and **Marigold V2**
+depth (09-14/18), **SAM 3D Body** (a 3D human mesh from one photo - the previz route's missing
+actor), **YuE2** music, **Wan Dancer**, **SCAIL-2** character replacement, and the SeedVR2 and
+MiniMax Music 3 templates that would consume two of the orphans above. That list is the agenda
+for the next review, not this one.
+
+**4. The paid engines.** Nano Banana 2 (Gemini 3.1 Flash Image, 2026-02-26): up to 14 reference
+images, about $0.045 (0.5K) / $0.067 (1K) / $0.151 (4K) a picture - wired as `85`, off. Seedance
+2.5 gained a cheaper Draft mode on 09-25 (needs ComfyUI 0.37.3+). The hybrid rule (§96.4) holds
+and is stronger again: the local compositor got better today, so the case for buying start
+frames shrank (below). Krea 2's Community License is free under $1M/yr and 50 seats.
+
+**5. The battery - what was measured, and what was not.**
+
+*The start-frame compositor, A/B* (`compositor_ab.py`; shot 010 of ash-court, the same three
+pictures and the same words, three seeds; identity = the head against the character's own
+reference head, CLIP-ViT-H cosine, medium framing bands 0.56 same / 0.46 uncertain; room = the
+border band against the plate, 11-19 the same room):
+
+| compositor | vesper (the striker) | koval (the guard) | room | seconds |
+|---|---|---|---|---|
+| Flux 2 ref3 (`75`, the anchor stage today) | 0.547 / 0.507 / 0.514 = **0.523** | 0.751 / 0.726 / 0.757 = **0.745** | 18.7 / 20.2 / 18.8 | 41-42 |
+| Qwen-Image-2.1 (`80`) | 0.509 / 0.527 / 0.563 = **0.533** | 0.832 / 0.828 / 0.844 = **0.835** | 30.1 / 24.9 / 29.8 | 15 |
+
+By the adoption rule (win by more than max(0.02, spread/2)): a **tie on vesper**, **Qwen wins on
+koval by 0.09**, at a third of the time. The room band is wider for Qwen because it framed the
+figures larger, as the words asked ("both figures large") - the same arena by eye on every
+frame. A second run with plate-first wording (`newmodels_test.py --stage qwen21`) agreed: vesper
+0.508 / 0.583 / 0.592, koval 0.760 / 0.696 / 0.794, room 11.6-18.3, against the fight tool's own
+anchor_010 at 0.481 / 0.731 / 16.3. **`75` stays the anchor stage's default until the A/B has
+run on a second shot and on the-letter (queue 17); `80` is the challenger, not the incumbent.**
+
+*The reference sheet* (`82`, three stacks: dev + distilled LoRA at 1280x704, the distilled
+checkpoint, and the adapter's trained 768x448 x 121 bucket; arms A sheet only, B sheet + start
+frame, C start frame with no sheet as the control; two seeds each). The first pass scored the
+frames against the studio-lit cast references and read 0.3-0.4 for people who were, by eye,
+plainly the cast - §98.5b's lesson relearned - so the frames were rescored against the heads in
+anchor_010, lit by the same arena (`rescore_ingredients.py`; means of two seeds, vesper / koval;
+the same-person band starts at 0.56):
+
+| stack | A - sheet only | B - sheet + start frame | C - start frame only (control) |
+|---|---|---|---|
+| dev-fp8 + distilled LoRA 0.5, 1280x704 (what 74 runs) | 0.617 / 0.492 | 0.689 / 0.528 | 0.872 / 0.835 |
+| the distilled checkpoint, 1280x704 (the template's base) | 0.684 / 0.559 | 0.739 / 0.521 | 0.831 / 0.824 |
+| the adapter's trained bucket, 768x448 x 121 | 0.439 / 0.523 | 0.463 / 0.468 | 0.719 / 0.736 |
+
+Three things the table says. **The sheet carries the cast with no start frame at all** - 0.62-0.68
+for vesper on the two full-size stacks, over the same-person line, and the figures are
+unmistakably the cast on every contact sheet; that is the multi-reference resolved inside the
+video model, on local weights, for the first time. **It does not beat a start frame**, and adding
+it to one *lowers* identity against the start frame alone (B under C in every stack), because the
+adapter's guide and the anchor both claim frame 0. **The room's framing is the model's own** - with
+no anchor it looked up at the glass roof - so the plate band reads "unrelated" in the same arena;
+the roof, lamps and railings are there on every frame. The trained bucket is worst on this
+instrument because its heads are 40 px. A black-gutter sheet (the model card's advice) turned the
+whole world black on the first run; Lightricks' own example sheet has light gutters, and that is
+what `refsheet.py` writes now. Verdict: **wired, not a route** - use it to see a cast move before an
+anchor exists; the pack's turnaround as the sheet and the 2.5 adapter are queue item 18.
+
+*Physics previz -> a controlled shot* (`previz_blender.py` -> `74`): a wall of sixteen crates, a
+twelve-kilo ball rolled into it and a proxy figure, simulated in Blender in about a minute and
+rendered flat (89 frames, 8n+1). Through 74's depth control LTX-2.3 drew a brick hall, a wooden
+crate wall that bursts open when a black ball rolls into it, and a woman in a dark coat at the
+right edge who flinches - the geometry, the timing and the camera arc are the simulation's. Motion
+agreement r **0.84 / 0.71** (the render's frame-to-frame energy against the previz's), 44 s and 21 s
+a take. (The peak-frame comparison is not usable: the render's largest change is its first-frame
+settle.) This is the route for a physical beat: choreograph it, then draw it - queue item 20 puts
+one in a film.
+
+*Motion transfer* (`81`): runs, 65 s for 81 frames at 848x464; the driver's punches are performed by
+a figure in vesper's clothes (motion agreement r 0.59 / 0.63). The first wiring CROPPED the
+reference's head - a portrait reference forced into a landscape canvas - so its identity numbers
+(0.56 falling to 0.44 over the clip) measured a torso and say nothing yet. Queue item 19: letterbox
+the reference, then the identity clock through the motion.
+
+*Not run today* - the standard battery proper (identity clock, cut-and-timecode, sound presence,
+an envelope table, the frame count through the finish) on any of the new engines. So **nothing
+new is in the pipeline**: `80` is a measured challenger for one stage, `82`/`81`/`83`/`84` are
+wired, dated and shown to run, and the queue (§96.10, 17-23) says what each needs.
+
+**6. Docs.** This record; §96.5 rows; §96.10 items 17-23; WHERE-WE-STAND §8 and two table rows;
+CLAUDE.md; `craft/ACTION_SEQUENCE.md`; the app's `/shots` page and Start page; README rewritten as
+the map; `workflows/INDEX.md` and `docs/MODELS.md` generated. `method_check.py` passing; clock
+stamped.
+
+**Three instrument lessons, again.** (1) A `LoadVideo` node reports the video it LOADED among a
+prompt's outputs, first; a collector that takes the first video takes the input - two renders
+"failed" that had succeeded. (2) Scoring an arena-lit face against a studio-lit reference reads
+0.3-0.4 for the same person; §98.5b said so, and it had to be relearned on the sheet. (3) A border
+band against the plate measures FRAMING as much as room; a clip that chose its own angle scores
+"unrelated" in the same arena. Check the ruler first.
 
 ## 1. What to reach for
 
@@ -4302,8 +4429,15 @@ frame one. *(§18, measured.)*
 1.5 MP → 12 s, 2.0 MP → 8 s (`LTX_SAFE`). Timecodes in a prompt set nothing on LTX-2.5 - two
 runs, two seeds, four forms; every variant paced its beats at thirds - and the word *cut* is
 what makes a hard cut. A beat that must run long is its own shot. The face clock is by MOTION,
-not by look: across 142 takes a still holds ~4.3 s, a walk ~4.0 s, and a crouch is not followable
-(both crouch takes lost the face, median hold 0.56 s). *(`timecode_test.py`; `face_clock.json`.)*
+not by look: across 142 takes a still holds ~4.3 s and a walk ~4.0 s. **A crouch is UNMEASURED,
+not unheld** - corrected 2026-09-24. `face_clock.py`'s `unfollowable` is not a reading but a lookup
+in `HEAD_MOVERS`, the motions whose head leaves the box the tracker carries, and the clock's crouch
+sample is two takes of 142, both unpinned LTX. Pinned on H3 a crouch is among the best-behaved shots
+on this box - §29's "she lowers across all 192 frames and the framing holds", the pin table's
+standing→crouched at 0.0129/s (good), "shot B, a crouch in place, honoured both frames exactly" -
+and `film_routes.IN_PLACE` lists it first and pins it automatically. The clock cannot see a motion
+that moves the head; that is a fact about the ruler.
+*(`timecode_test.py`; `face_clock.json`; §29.)*
 
 **S6 · Sound is written, never hoped.** Name the noise sources in every shot; "a quiet room"
 renders silence. Dialogue only through an on-screen mouth. Write *no music* when the edit owns
@@ -4449,7 +4583,9 @@ dialect and the negative.
   pin a movement between; a beat whose `motion` is an in-place motion is pinned automatically.
 - **Length from the envelope**, pacing from the edit: 0.9 MP → 30 s, 1.2 MP → 20 s, 1.5 MP → 12 s,
   2.0 MP → 8 s. Timecodes set nothing (§95 S5). Plan the face clock: a still holds ~4.3 s, a walk
-  ~4.0 s, a crouch is not followable - a longer beat is two shots.
+  ~4.0 s - a longer beat is two shots. A crouch the clock cannot measure (the tracker loses the
+  head), which is not the same as cannot hold: it is an in-place motion, and `IN_PLACE` pins it on
+  H3 automatically.
 - **Sound is written on every shot** (`sfx`; a `dialogue` line needs an on-screen mouth; write
   *no music* when the edit owns the score). "A quiet room" renders literal silence.
 
@@ -4499,6 +4635,11 @@ is gated by a number from our own detectors, not by how the output looks in isol
 | an effects beat - dust, ash, debris at an impact | **H3** (`67`) | LTX-2.5 accumulates an effect monotonically whatever the prompt says (clear_back 0.02); H3 plateaus after ~1 s (0.10) on the same anchor and words, and ends ~40% less occluded. Two seeds; §98.3-98.4 |
 | a locked location, silent, no faces | Wan 2.2 context windows (`61`, 1280×720) | "the most rigid continuity available, silent" (§1) - **not measured against LTX-2.5 in the engine matrix**; queue item 5 |
 | — | HunyuanVideo 1.5 i2v (`42`/`44` + 1080p SR) | measured against LTX 2.3 on four shots (`engine_ab`, `~/shared/AB/hunyuan_vs_ltx`): LTX held the approved frame at least as well on every shot (0.84/0.72, 0.82/0.77, 0.80/0.79, 0.95/0.96), drifted less on both moving shots (0.48 vs 0.60, 0.41 vs 0.59) and was twelve times faster (21 s vs 252 s); Hunyuan was more even on two of four and drifted less on the two near-static ones. Not a default; the matrix predates LTX-2.5 (queue item 5) |
+
+| the START FRAME from several pictures (plate + two people) | Flux 2 ref3 (`75`) today; **Qwen-Image-2.1 (`80`) the measured challenger** | `compositor_ab.py`, shot 010, three seeds: a tie on one face, +0.09 on the other, 15 s against 42; the room holds in both (§0.2). Switch the anchor stage when it holds on a second shot (§96.10 item 17) |
+| the people and the place carried INSIDE a clip from one reference sheet, no start frame | LTX-2.3 + Ingredients (`82`, `refsheet.py`) | a first render only: the cast carries at 0.62-0.68 / 0.49-0.56 against the anchor's heads with no start frame (same-person band from 0.56), the framing is the model's own, and adding the sheet to a start frame LOWERS identity against the start frame alone (0.69-0.74 / 0.52-0.53 vs 0.83-0.87 / 0.82-0.84). See a cast move before an anchor exists; not a route (§0.2, queue 18) |
+| a character performing a motion taken from another take or a phone video | Wan Animate 2 (`81`) | runs (65 s / 81 frames at 848x464); the motion transfers (r 0.59-0.63); the first wiring cropped the reference's head, so identity is unmeasured (queue 19) |
+| a physical beat choreographed in a physics engine | Blender previz (`previz_blender.py`) -> LTX-2.3 IC-LoRA depth (`74`); H3 pose control (`84`) the other route | measured once: r 0.84 / 0.71 between the simulation's motion and the render's; the geometry, timing and camera arc carried (§0.2). The route for a physical beat; not yet used in a film (queue 20) |
 
 One render per shot, **one retry on a fault** (scene drift, an unspoken line, people in an empty
 frame, silence, a wrong face, a runaway camera), then **one pick rule**: the candidate with the
@@ -4595,6 +4736,26 @@ the current engines. What transfers to this box, and how:
 15. **H3 for effects beats** (§98.4) - a third seed, then a §96.5 row of its own.
 16. **Seedance 2.5 on a strike beat** (§98.7) - the moment somebody signs in; measure it against the
     H3 take on the same anchor before any film leans on paid video.
+
+17. **The compositor A/B on a second shot and on the-letter** (`compositor_ab.py --shot 020`, then
+    `--film the-letter --shot 020`): if Qwen-Image-2.1 (`80`) still ties or wins on every face, the
+    anchor stage in `fight.py` moves to it - three times faster, and sixteen references instead of
+    three when a scene has a prop or a third person (§0.2).
+18. **The Ingredients adapter done properly**: a sheet from the PACK (the 20-view turnaround, several
+    face angles, as Lightricks' own example sheet is built), at the trained 768x448 x 121 bucket,
+    scored head to head against the anchor (`rescore_ingredients.py`); then the 2.5 adapter the day
+    the Hugging Face access is granted (it is gated; ask on the model page).
+19. **Wan Animate 2 through the battery**: identity through motion on three seeds against a full-body
+    driving take; the motion agreement number needs a driver whose motion is not mostly camera.
+20. **A physics beat in a film**: the previz route (`previz_blender.py` -> `74`) on a shot the
+    story needs, then the same previz through H3 pose control (`84`) on the same seeds.
+21. **Krea 2 RAW as the trainable photoreal face** (§95.3's missing unlock): musubi-tuner and
+    ai-toolkit train LoRAs on RAW and infer on Turbo; `77` is the inference side. Measure one pack's
+    face against the reference route by the LoRA gate.
+22. **One anchor, three image engines**: Qwen-2512 (the cast stage today), Krea 2 Turbo, Z-Image
+    Turbo (the orphan) - which reference casts best, by the pack ladder.
+23. **ComfyUI 0.37.4** when the paid door is opened (Seedance 2.5 Draft is partner-node only), tag
+    to tag as in §0.1, then one render of every graph (§0.2, item 2).
 
 ### 96.11  Timings measured on this card, for planning
 

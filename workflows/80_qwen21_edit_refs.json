@@ -1,0 +1,141 @@
+{
+ "_comment": [
+  "80 Qwen-Image-2.1 EDIT with reference images - the local compositor for @PLACE + @CHARAC1",
+  "+ @CHARAC2 in one frame. Up to 16 references on TextEncodeQwenImage21's autogrow input;",
+  "the flat ids are images.image_1 ... images.image_16 (1-indexed, names style - a nested",
+  "dict is silently ignored, playbook §95.3). Refer to them in the prompt as <image1>,",
+  "<image2>... The CANVAS FOLLOWS image_1 (resized to about resolution^2 px, multiples of 32),",
+  "so put the PLATE first when the shot is a 16:9 frame. `resolution` 1024 = ~1 MP canvas.",
+  "Knobs: 21/22/23 refs (add 24.. and images.image_4.. for more), 6 prompt/negative,",
+  "10 seed, 12 prefix. 25 steps cfg 1 euler/simple; QwenImage21Cache keeps the reference",
+  "prefix between steps (device auto)."
+ ],
+ "1": {
+  "class_type": "UNETLoader",
+  "inputs": {
+   "unet_name": "qwen_image_2.1_int8_convrot.safetensors",
+   "weight_dtype": "default"
+  }
+ },
+ "2": {
+  "class_type": "CLIPLoader",
+  "inputs": {
+   "clip_name": "qwen3vl_8b_int8_convrot.safetensors",
+   "type": "qwen_image",
+   "device": "default"
+  }
+ },
+ "3": {
+  "class_type": "VAELoader",
+  "inputs": {
+   "vae_name": "qwen_image_2.1_vae_bf16.safetensors"
+  }
+ },
+ "5": {
+  "class_type": "QwenImage21Cache",
+  "inputs": {
+   "device": "auto",
+   "dtype": "default",
+   "model": [
+    "1",
+    0
+   ]
+  }
+ },
+ "21": {
+  "class_type": "LoadImage",
+  "inputs": {
+   "image": "qwen21_ref1.png"
+  }
+ },
+ "22": {
+  "class_type": "LoadImage",
+  "inputs": {
+   "image": "qwen21_ref2.png"
+  }
+ },
+ "23": {
+  "class_type": "LoadImage",
+  "inputs": {
+   "image": "qwen21_ref3.png"
+  }
+ },
+ "6": {
+  "class_type": "TextEncodeQwenImage21",
+  "inputs": {
+   "prompt": "A still frame from a live-action film: the woman of <image2> and the man of <image3> stand facing each other in the place of <image1>, medium shot.",
+   "negative_prompt": "lowres, blurry, deformed, extra limbs, fused fingers, doubled figure, text, watermark, logo, nsfw",
+   "resolution": 1024,
+   "clip": [
+    "2",
+    0
+   ],
+   "vae": [
+    "3",
+    0
+   ],
+   "images.image_1": [
+    "21",
+    0
+   ],
+   "images.image_2": [
+    "22",
+    0
+   ],
+   "images.image_3": [
+    "23",
+    0
+   ]
+  }
+ },
+ "10": {
+  "class_type": "KSampler",
+  "inputs": {
+   "seed": 4242,
+   "steps": 25,
+   "cfg": 1.0,
+   "sampler_name": "euler",
+   "scheduler": "simple",
+   "denoise": 1.0,
+   "model": [
+    "5",
+    0
+   ],
+   "positive": [
+    "6",
+    0
+   ],
+   "negative": [
+    "6",
+    1
+   ],
+   "latent_image": [
+    "6",
+    2
+   ]
+  }
+ },
+ "11": {
+  "class_type": "VAEDecode",
+  "inputs": {
+   "samples": [
+    "10",
+    0
+   ],
+   "vae": [
+    "3",
+    0
+   ]
+  }
+ },
+ "12": {
+  "class_type": "SaveImage",
+  "inputs": {
+   "filename_prefix": "claude-generated/qwen21/edit",
+   "images": [
+    "11",
+    0
+   ]
+  }
+ }
+}

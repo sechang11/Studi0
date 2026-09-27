@@ -1,0 +1,63 @@
+{
+ "_comment": [
+  "85 Nano Banana 2 (Gemini 3.1 Flash Image) through ComfyUI's partner node - the PAID door for",
+  "start frames, wired and switched off like 76. Needs the Comfy account token the frontend",
+  "supplies after login; none on this box. Price 2026-09: about $0.045 (0.5K) / $0.067 (1K) /",
+  "$0.151 (4K) per image. Up to 14 reference images on model.images.image_1..14 (a DynamicCombo",
+  "under `model`, names style); resolution 1K/2K/4K; aspect 16:9 etc. Use ONLY under the hybrid",
+  "rule (§96.4): a scene's start frames, scored with hybrid_frame_test.py against the local",
+  "compositor (80 / 75) before any is adopted. Knobs: 21-23 refs, 1 prompt/seed/aspect/res."
+ ],
+ "21": {
+  "class_type": "LoadImage",
+  "inputs": {
+   "image": "nb2_ref1.png"
+  }
+ },
+ "22": {
+  "class_type": "LoadImage",
+  "inputs": {
+   "image": "nb2_ref2.png"
+  }
+ },
+ "23": {
+  "class_type": "LoadImage",
+  "inputs": {
+   "image": "nb2_ref3.png"
+  }
+ },
+ "1": {
+  "class_type": "GeminiNanoBanana2V2",
+  "inputs": {
+   "prompt": "A still frame from a live-action film: the woman of image 2 and the man of image 3 stand facing each other in the place of image 1, medium shot, natural light.",
+   "model": "Nano Banana 2 (Gemini 3.1 Flash Image)",
+   "model.aspect_ratio": "16:9",
+   "model.resolution": "1K",
+   "model.thinking_level": "MINIMAL",
+   "model.images.image_1": [
+    "21",
+    0
+   ],
+   "model.images.image_2": [
+    "22",
+    0
+   ],
+   "model.images.image_3": [
+    "23",
+    0
+   ],
+   "seed": 4242,
+   "response_modalities": "IMAGE"
+  }
+ },
+ "12": {
+  "class_type": "SaveImage",
+  "inputs": {
+   "filename_prefix": "claude-generated/nano_banana2/ref",
+   "images": [
+    "1",
+    0
+   ]
+  }
+ }
+}

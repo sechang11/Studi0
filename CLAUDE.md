@@ -11,6 +11,9 @@ At the start of any session that will generate or change how generation works, r
 before generating anything - new weights, new ComfyUI nodes, orphan models on disk, the paid
 engines' price and capability, the standard battery on anything new - update WHERE-WE-STAND and
 §96, run `method_check.py`, then `review_clock.py --checked`. The stamp means the list was walked.
+Then `python3 studio/_tools/inventory.py`: it writes `workflows/INDEX.md` and `docs/MODELS.md` and
+lists every template ComfyUI ships that no workflow here mirrors - a capability the box could have
+and does not. On 2026-09-27 that list held four engines that had sat installed for two months.
 
 ## The pipeline (playbook §96) and the method (single source: `docs/METHOD.md`; measurements: §95)
 
@@ -71,6 +74,13 @@ against a still torso.
   why the 2026-09-07 test (0.19-0.25) measured the prompt alone. Wired (2026-09-17) it carries face,
   hair and wardrobe (Terra 0.68 → 0.72) and doubled the person in 2 of 4 renders. Count the people
   before picking a ref2va take; do not plan a film on it yet (playbook §97.3).
+- **Since 2026-09-27** (§0.2): the start frame can also be composed by **Qwen-Image-2.1** with up to
+  sixteen references (`80`; flat ids `images.image_1..`), measured against Flux 2 ref3 - a tie on
+  one face, +0.09 on the other, three times faster; `75` stays the default until it holds on a
+  second shot. The **Ingredients** reference sheet (`82`, `refsheet.py`), **Wan Animate 2** (`81`),
+  **H3 multi-frame reference** (`83`) and **H3 pose control** (`84`) are wired, dated and shown to
+  run - none is a route yet. A physics beat can be choreographed in Blender
+  (`previz_blender.py`) and drawn through `74`. Nothing enters the pipeline on a look.
 
 ## Operating rules that have cost time
 
@@ -89,6 +99,12 @@ against a still torso.
   exiting, and a reload of film_routes clears the zombie from JOBS.
 - Stage explicit paths only (shared checkout); renders and film state stay out of git.
 - Compare frame counts (`ffprobe -count_frames`), never container durations.
+- A ComfyUI upgrade can grow a REQUIRED input on a node (`MoGeInference.refine_steps`, 0.37) and
+  silently break a graph that ran last month: after an upgrade, one render of every graph.
+- `LoadVideo` reports the video it loaded among a prompt's OUTPUTS, listed first: a collector must
+  take the file under the save prefix, not the first video.
+- Score a face against a head lit like it (the anchor's), never against the studio-lit reference
+  (§98.5b, relearned on 2026-09-27); a border band against the plate measures framing as much as room.
 - Real people's voices in `studio/voices/` marked blocked stay blocked; no real people as
   subjects; consent gates any photo-derived character; `nsfw` in every negative.
 

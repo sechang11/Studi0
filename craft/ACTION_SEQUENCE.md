@@ -61,7 +61,7 @@ This is the only file you edit to tell a different story.
 |---|---|---|---|---|
 | 0.9 MP (1280×704) | 30 s | | still | 4.3 s |
 | 1.2 MP | 20 s | | a walk | 4.0 s |
-| 1.5 MP | 12 s | | a crouch | not followable |
+| 1.5 MP | 12 s | | a crouch | unmeasured — pin it on H3 |
 | 2.0 MP | 8 s | | | |
 
 An action beat wants **4 s**. A beat that must run longer is two shots.
@@ -246,3 +246,25 @@ good as the shots deserve, so there is nothing else here worth paying for.
 | the bed | ~15 s |
 | the 2× master, 742 frames | ~110 s |
 | **a whole five-shot sequence from nothing, three seeds a shot** | **about 50 minutes** |
+
+
+## 2026-09-27: the page, the sheet, the compositor
+
+- **The page.** Every stage above is one button on http://192.168.0.45:8777/shots, in order, with
+  what it writes, what to look at before the next, the log, and the script editable in a form
+  (`studio/_tools/shots_routes.py`, `studio/shots.html`). It runs the same `fight.py` with the same
+  flags; nothing the page does is more than the shell does. One stage at a time, on purpose.
+- **Stage 2 (new, optional): the reference sheet.** `refsheet.py` lays the cast faces, figures and
+  the plate on one board for the Ingredients adapter (workflow `82`), which carries the people into
+  a clip with no start frame at all. Measured on 2026-09-27 (playbook §0.2): the people carry, the
+  camera angle is the model's own, and it is not yet a route - use it to see the cast move before
+  a start frame exists, not to make the shot.
+- **The compositor is now a measured choice.** `compositor_ab.py --film X --shot NNN` renders one
+  shot's anchor with Flux 2 ref3 (`75`) and Qwen-Image-2.1 (`80`) on the same seeds and scores both
+  by the studio's identity and room instruments. On ash-court 010: a tie on one face, +0.09 on the
+  other for Qwen, 15 s against 42. `75` stays the default until the A/B holds on a second shot.
+- **A look from one picture.** Krea 2's style reference (`78`) turns a plate, a painting or a frame
+  grab into the look of a new picture - a way to "decide the look once" (§96.1) with a picture
+  instead of an adjective.
+- **A physics beat.** `previz_blender.py` simulates it (rigid bodies, a proxy figure, a camera arc),
+  and `74` draws the real scene over its depth. The measured first run is in §0.2.

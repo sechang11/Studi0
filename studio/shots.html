@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Shot script</title>
+<style>
+  :root{--bg:#121416;--panel:#1a1d21;--panel2:#20242a;--line:#2a2f35;--ink:#e8eae6;--dim:#9aa3a8;--accent:#e0a14a;--good:#6bc0a8;--warn:#d9a441;--bad:#e05a5a;--mono:ui-monospace,Menlo,Consolas,monospace}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+  main{max-width:1380px;margin:0 auto;padding:22px 20px 80px}
+  h1{font-size:26px;margin:6px 0 2px;letter-spacing:-.01em}
+  .lead{color:var(--dim);margin:0 0 16px;max-width:78ch}
+  .lead b{color:var(--ink)}
+  .top{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
+  select,input[type=text],input[type=number],textarea{background:#0f1113;color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:6px 8px;font:inherit}
+  textarea{width:100%;min-height:64px;resize:vertical;font-family:inherit}
+  textarea.mono{font-family:var(--mono);font-size:12px;min-height:280px}
+  button{background:var(--accent);color:#1a1200;border:0;border-radius:6px;padding:7px 13px;font:inherit;font-weight:600;cursor:pointer}
+  button.ghost{background:transparent;color:var(--dim);border:1px solid var(--line)}
+  button.ghost:hover{color:var(--ink);border-color:var(--accent)}
+  button:disabled{opacity:.45;cursor:default}
+  .cols{display:grid;grid-template-columns:minmax(0,440px) minmax(0,1fr);gap:16px}
+  @media (max-width:980px){.cols{grid-template-columns:1fr}}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:12px}
+  .card h2{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);margin:0 0 8px;font-weight:600}
+  label{display:block;font-size:12px;color:var(--dim);margin:8px 0 3px}
+  .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .row > *{flex:1 1 auto}
+  .row .n{flex:0 0 70px}
+  .small{font-size:12px;color:var(--dim)}
+  .stage{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:10px}
+  .stage.done{border-left:3px solid var(--good)}
+  .stage.todo{border-left:3px solid var(--line)}
+  .stage.busy{border-left:3px solid var(--warn)}
+  .stage h3{margin:0;font-size:15px;display:flex;align-items:center;gap:10px}
+  .stage h3 .st{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);margin-left:auto}
+  .stage .what{margin:6px 0 4px;color:var(--ink);max-width:80ch}
+  .stage .look{margin:0 0 8px;color:var(--dim);max-width:80ch;font-size:13px}
+  .stage .look b{color:var(--warn);font-weight:600}
+  .thumbs{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0 4px}
+  .thumbs img{height:96px;border-radius:5px;background:#000;display:block}
+  .thumbs video{height:120px;border-radius:5px;background:#000;display:block}
+  .thumbs .t{text-align:center;font-size:11px;color:var(--dim);max-width:180px}
+  .thumbs .t img.strip{height:auto;width:100%;max-width:520px}
+  .files{font-family:var(--mono);font-size:11px;color:var(--dim);margin-top:4px}
+  pre.log{background:#0b0c0e;border:1px solid var(--line);border-radius:8px;padding:10px;max-height:320px;overflow:auto;font:12px/1.4 var(--mono);color:#cfd3d8;white-space:pre-wrap}
+  .pill{display:inline-block;border:1px solid var(--line);border-radius:99px;padding:1px 8px;font-size:11px;color:var(--dim);margin-right:4px}
+  .pill.ok{border-color:#3c5f49;color:#8fd0a6}
+  .pill.warn{border-color:#5f4f2c;color:#e0b252}
+  .err{color:var(--bad);font-size:13px;margin:6px 0}
+  details summary{cursor:pointer;color:var(--dim);font-size:13px}
+  .shot{border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin:8px 0;background:var(--panel2)}
+  .shot .hd{display:flex;gap:8px;align-items:center}
+  .shot .hd input{flex:1}
+  .refs{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+  .chip{padding:3px 8px;border-radius:14px;border:1px solid var(--line);cursor:pointer;font-size:12px;color:var(--dim);user-select:none}
+  .chip.on{border-color:var(--accent);color:var(--ink);background:#26210f}
+  .castrow{display:grid;grid-template-columns:110px 120px 1fr 28px;gap:6px;align-items:start;margin:6px 0}
+  .castrow textarea{min-height:48px}
+  .x{background:none;border:0;color:var(--dim);font-size:16px;cursor:pointer;padding:4px}
+  .x:hover{color:var(--bad)}
+  code{background:#0f1113;padding:1px 5px;border-radius:4px;font-size:12px}
+</style>
+</head>
+<body>
+<main>
+  <h1>Shot script → master</h1>
+  <p class="lead">The way the paid breakdowns make a sequence, on this computer: <b>pictures first</b> (a reference
+    per person, a plate for the place), <b>a composed start frame per shot</b>, <b>one beat per shot</b> with sound written in,
+    <b>three seeds</b>, a pick by measurement, one grade at the finish. Each step below runs the same tool as the shell
+    (<code>studio/_tools/fight.py</code>) and shows what it wrote. Do them in order; read what to look at before the next.</p>
+
+  <div class="top">
+    <label style="margin:0">Film</label>
+    <select id="film"></select>
+    <button class="ghost" id="reload">Reload</button>
+    <input type="text" id="newname" placeholder="new film slug, e.g. the-letter-2" style="width:220px">
+    <button class="ghost" id="new">New script</button>
+    <span class="small" id="jobline"></span>
+    <button class="ghost" id="stop" style="display:none">Stop</button>
+  </div>
+
+  <div class="cols">
+    <section>
+      <div class="card">
+        <h2>The script</h2>
+        <p class="small">Who is in it, where it happens, and what each shot does. A character is described <b>once</b>, here;
+          every shot after that points at the picture. Saving writes <code>studio/shotscripts/&lt;film&gt;.json</code>.</p>
+        <label>Cast <span class="small">(id · role · what they look like, full length, plain backdrop)</span></label>
+        <div id="cast"></div>
+        <button class="ghost" id="addcast">+ character</button>
+        <label>Place <span class="small">(id · the plate: wide, nobody in it)</span></label>
+        <div class="row"><input type="text" id="place_id" class="n" placeholder="court" style="flex:0 0 110px"><textarea id="place_prompt" placeholder="Wide photograph of ..."></textarea></div>
+        <label>Shots</label>
+        <div id="shots"></div>
+        <button class="ghost" id="addshot">+ shot</button>
+        <details style="margin-top:10px"><summary>Look, negative, music, realism</summary>
+          <label>Grade (the look, one line, applied at the finish and in every anchor)</label><textarea id="grade"></textarea>
+          <label>Avoid (the negative)</label><textarea id="avoid"></textarea>
+          <label>Score tags (ACE-Step)</label><textarea id="score_tags"></textarea>
+          <label>Realism (appended to reference prompts)</label><textarea id="realism"></textarea>
+        </details>
+        <details style="margin-top:10px"><summary>The JSON itself</summary>
+          <textarea id="json" class="mono" spellcheck="false"></textarea>
+          <p class="small">Editing here and saving replaces the form's contents.</p>
+        </details>
+        <div class="row" style="margin-top:10px"><button id="save">Save script</button><span class="small" id="savemsg"></span></div>
+        <div class="err" id="err"></div>
+      </div>
+    </section>
+
+    <section id="stages"></section>
+  </div>
+
+  <div class="card" style="margin-top:6px">
+    <h2>Log <span id="logname" class="small"></span></h2>
+    <pre class="log" id="log">idle.</pre>
+  </div>
+</main>
+
+<script>
+(() => {
+  const $ = s => document.querySelector(s);
+  let STAGES = [], FILMS = [], film = null, script = null, tree = null, pollTimer = null;
+
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  const api = (p, opt) => fetch(p, opt).then(r => r.json().then(j => ({ok: r.ok, code: r.status, ...j})));
+  const post = (p, body) => api(p, {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(body)});
+
+  // ------------------------------------------------------------------ the script form
+  function refIds() {
+    const ids = Object.keys(script.cast || {});
+    if (script.place && script.place.id) ids.push(script.place.id);
+    return ids;
+  }
+  function renderCast() {
+    const box = $("#cast"); box.innerHTML = "";
+    Object.entries(script.cast || {}).forEach(([id, c]) => {
+      const row = document.createElement("div"); row.className = "castrow";
+      row.innerHTML = `<input type="text" value="${esc(id)}" data-k="id" placeholder="id">
+        <input type="text" value="${esc(c.role||"")}" data-k="role" placeholder="role">
+        <textarea data-k="prompt" placeholder="Full-length reference photograph of ...">${esc(c.prompt||"")}</textarea>
+        <button class="x" title="remove">×</button>`;
+      row.querySelectorAll("[data-k]").forEach(el => el.addEventListener("change", () => {
+        const newId = row.querySelector('[data-k="id"]').value.trim();
+        const val = {role: row.querySelector('[data-k="role"]').value, prompt: row.querySelector('[data-k="prompt"]').value};
+        const cast = {};
+        Object.entries(script.cast).forEach(([k, v]) => { cast[k === id ? newId : k] = (k === id ? val : v); });
+        script.cast = cast; renderCast(); renderShots(); syncJson();
+      }));
+      row.querySelector(".x").addEventListener("click", () => { delete script.cast[id]; renderCast(); renderShots(); syncJson(); });
+      box.appendChild(row);
+    });
+  }
+  function renderShots() {
+    const box = $("#shots"); box.innerHTML = "";
+    const ids = refIds();
+    (script.shots || []).forEach((s, i) => {
+      const d = document.createElement("div"); d.className = "shot";
+      d.innerHTML = `<div class="hd">
+          <input type="text" class="n" style="flex:0 0 58px" value="${esc(s.id)}" data-k="id" title="three digits">
+          <input type="text" value="${esc(s.title||"")}" data-k="title" placeholder="title">
+          <input type="number" class="n" style="flex:0 0 70px" min="1" max="30" value="${esc(s.secs||4)}" data-k="secs" title="seconds">
+          <button class="x" title="remove">×</button></div>
+        <div class="small" style="margin-top:6px">references (order matters: reference one, two, three in the anchor)</div>
+        <div class="refs">${ids.map(r => `<span class="chip ${ (s.refs||[]).includes(r) ? "on" : ""}" data-r="${esc(r)}">${esc(r)}</span>`).join("")}
+          <span class="small" style="align-self:center">→ ${esc((s.refs||[]).join(", ") || "none")}</span></div>
+        <label>start frame <span class="small">(what the composed first picture shows; leave empty to start on the plate)</span></label>
+        <textarea data-k="anchor" placeholder="A still frame from a live-action film, a MEDIUM SHOT, the person of reference one ...">${esc(s.anchor||"")}</textarea>
+        <label>what happens <span class="small">(one beat; the word <i>cut</i> makes a cut; sound written in; a line in quotes)</span></label>
+        <textarea data-k="prompt">${esc(s.prompt||"")}</textarea>
+        <label>avoid, extra <span class="small">(only for this shot)</span></label>
+        <input type="text" value="${esc(s.avoid_extra||"")}" data-k="avoid_extra">`;
+      d.querySelectorAll("[data-k]").forEach(el => el.addEventListener("change", () => {
+        const k = el.dataset.k; let v = el.value;
+        if (k === "secs") v = Number(v);
+        if (k === "anchor" && !v.trim()) v = null;
+        s[k] = v; syncJson();
+      }));
+      d.querySelectorAll(".chip").forEach(ch => ch.addEventListener("click", () => {
+        const r = ch.dataset.r; s.refs = s.refs || [];
+        // a click adds another mention (a character may be reference one AND two); a click on the last mention removes one
+        if (s.refs[s.refs.length - 1] === r) s.refs.pop(); else s.refs.push(r);
+        renderShots(); syncJson();
+      }));
+      d.querySelector(".x").addEventListener("click", () => { script.shots.splice(i, 1); renderShots(); syncJson(); });
+      box.appendChild(d);
+    });
+  }
+  function renderForm() {
+    $("#place_id").value = (script.place && script.place.id) || "";
+    $("#place_prompt").value = (script.place && script.place.prompt) || "";
+    ["grade", "avoid", "score_tags", "realism"].forEach(k => { $("#" + k).value = script[k] || ""; });
+    renderCast(); renderShots(); syncJson();
+  }
+  function syncJson() { $("#json").value = JSON.stringify(script, null, 1); }
+  ["place_id", "place_prompt", "grade", "avoid", "score_tags", "realism"].forEach(k => {
+    $("#" + k).addEventListener("change", () => {
+      if (k === "place_id") { script.place = script.place || {}; script.place.id = $("#place_id").value.trim(); renderShots(); }
+      else if (k === "place_prompt") { script.place = script.place || {}; script.place.prompt = $("#place_prompt").value; }
+      else script[k] = $("#" + k).value;
+      syncJson();
+    });
+  });
+  $("#json").addEventListener("change", () => {
+    try { script = JSON.parse($("#json").value); $("#err").textContent = ""; renderForm(); }
+    catch (e) { $("#err").textContent = "That JSON does not parse: " + e.message; }
+  });
+  $("#addcast").addEventListener("click", () => {
+    script.cast = script.cast || {}; let n = 1; while (script.cast["person" + n]) n++;
+    script.cast["person" + n] = {role: "", prompt: ""}; renderCast(); renderShots(); syncJson();
+  });
+  $("#addshot").addEventListener("click", () => {
+    script.shots = script.shots || [];
+    const last = script.shots.length ? parseInt(script.shots[script.shots.length - 1].id, 10) || 0 : 0;
+    script.shots.push({id: String(last + 10).padStart(3, "0"), title: "", secs: 4, refs: [], anchor: null, prompt: ""});
+    renderShots(); syncJson();
+  });
+  $("#save").addEventListener("click", async () => {
+    $("#savemsg").textContent = "saving…"; $("#err").textContent = "";
+    const r = await post("/api/shots/save", {film, script});
+    if (!r.ok) { $("#savemsg").textContent = ""; $("#err").textContent = r.error || ("HTTP " + r.code); return; }
+    $("#savemsg").textContent = "saved " + r.path; loadTree();
+  });
+
+  // ------------------------------------------------------------------ the stages
+  function stageCard(st) {
+    const files = (tree && tree.stages[st.id]) || [];
+    const busy = tree && tree.running && tree.running.running && tree.running.film === film && tree.running.stage === st.id;
+    const cls = busy ? "busy" : (files.length ? "done" : "todo");
+    const status = busy ? "running" : (files.length ? files.length + " file" + (files.length > 1 ? "s" : "") : "not yet");
+    let args = "";
+    if ((st.args || []).includes("shot")) args += `<input type="text" placeholder="shot id, e.g. 010" data-a="shot" style="width:120px">`;
+    if ((st.args || []).includes("seeds")) args += `<input type="text" placeholder="seeds: 11 202 3003" data-a="seeds" style="width:170px">`;
+    if ((st.args || []).includes("picks")) args += `<input type="text" placeholder="picks: 010=202,020=11,030=h3:3003" data-a="picks" style="width:260px">
+      <label class="small" style="display:inline"><input type="checkbox" data-a="master"> 2× master</label>`;
+    if (st.id === "cast") args += `<input type="text" placeholder="re-roll only (id)" data-a="only" style="width:130px">
+      <input type="text" placeholder="seed" data-a="seed" style="width:80px">`;
+    if (st.id !== "cast" && st.id !== "sheet") args += `<label class="small" style="display:inline"><input type="checkbox" data-a="force"> redo existing</label>`;
+    let out = "";
+    if (files.length) {
+      const imgs = files.filter(f => /\.(png|jpg)$/i.test(f.name) && !/_strip\.jpg$/.test(f.name));
+      const vids = files.filter(f => /\.mp4$/i.test(f.name));
+      const others = files.filter(f => !/\.(png|jpg|mp4)$/i.test(f.name));
+      out += `<div class="thumbs">`;
+      imgs.slice(0, 12).forEach(f => { out += `<div class="t"><a href="${f.url}" target="_blank"><img src="${f.url}" alt=""></a><div>${esc(f.name)}</div></div>`; });
+      vids.slice(0, 12).forEach(f => {
+        const key = f.name.replace(/\.mp4$/, ""); const strip = tree.strips && tree.strips[key];
+        const cam = tree.measured && tree.measured[f.name] ? ` · ${esc(tree.measured[f.name].camera)} · ${tree.measured[f.name].frames} fr` : "";
+        out += `<div class="t"><video src="${f.url}" controls preload="none"></video>${strip ? `<img class="strip" src="${strip}" alt="">` : ""}<div>${esc(f.name)}${cam}</div></div>`;
+      });
+      out += `</div>`;
+      if (others.length) out += `<div class="files">${others.map(f => `<a href="${f.url}" target="_blank" style="color:inherit">${esc(f.name)}</a>`).join(" · ")}</div>`;
+      if (imgs.length > 12 || vids.length > 12) out += `<div class="small">… and ${files.length - 24} more on disk</div>`;
+    }
+    return `<div class="stage ${cls}" data-stage="${st.id}">
+      <h3>${esc(st.title)} <span class="st">${status}</span></h3>
+      <p class="what">${esc(st.what)}</p>
+      <p class="look"><b>Look at:</b> ${esc(st.look)}</p>
+      <div class="row">${args}<button data-run="${st.id}" ${busy ? "disabled" : ""}>${busy ? "running…" : "Run"}</button></div>
+      ${out}
+    </div>`;
+  }
+  function renderStages() {
+    const box = $("#stages");
+    box.innerHTML = STAGES.map(stageCard).join("");
+    box.querySelectorAll("[data-run]").forEach(b => b.addEventListener("click", async () => {
+      const card = b.closest(".stage"); const body = {film, stage: b.dataset.run};
+      card.querySelectorAll("[data-a]").forEach(el => { body[el.dataset.a] = el.type === "checkbox" ? el.checked : el.value; });
+      $("#err").textContent = "";
+      const r = await post("/api/shots/run", body);
+      if (!r.ok) { $("#err").textContent = r.error || ("HTTP " + r.code); return; }
+      startPolling();
+    }));
+  }
+
+  // ------------------------------------------------------------------ loading + polling
+  async function loadList() {
+    const d = await api("/api/shots/list");
+    STAGES = d.stages || []; FILMS = d.films || [];
+    const sel = $("#film"); const cur = film || (FILMS[0] && FILMS[0].film);
+    sel.innerHTML = FILMS.map(f => `<option value="${esc(f.film)}" ${f.film === cur ? "selected" : ""}>${esc(f.film)} — ${f.shots.length} shots, ${f.cast.length} in the cast</option>`).join("");
+    film = sel.value || null;
+    if (film) { await loadScript(); await loadTree(); }
+    showJob(d.running);
+  }
+  async function loadScript() {
+    const d = await api("/api/shots/script?film=" + encodeURIComponent(film));
+    if (!d.ok) { $("#err").textContent = d.error; return; }
+    script = d.script; renderForm();
+  }
+  async function loadTree() {
+    const d = await api("/api/shots/tree?film=" + encodeURIComponent(film));
+    if (!d.ok) { $("#err").textContent = d.error; return; }
+    tree = d; renderStages();
+    const running = d.running && d.running.running;
+    $("#log").textContent = (running ? d.running.log : d.log) || "idle.";
+    $("#logname").textContent = running ? `(${d.running.stage} on ${d.running.film}, live)` : (d.log_name ? `(${d.log_name})` : "");
+    $("#log").scrollTop = $("#log").scrollHeight;
+    showJob(d.running);
+    if (running) startPolling(); else stopPolling();
+  }
+  function showJob(j) {
+    const on = j && j.running;
+    $("#jobline").textContent = on ? `running: ${j.stage} on ${j.film}` : (j && j.returncode != null ? `last job exited ${j.returncode}` : "");
+    $("#stop").style.display = on ? "" : "none";
+  }
+  function startPolling() { if (!pollTimer) pollTimer = setInterval(loadTree, 4000); }
+  function stopPolling() { if (pollTimer) { clearInterval(pollTimer); pollTimer = null; } }
+
+  $("#film").addEventListener("change", async () => { film = $("#film").value; await loadScript(); await loadTree(); });
+  $("#reload").addEventListener("click", loadList);
+  $("#stop").addEventListener("click", async () => { await post("/api/shots/stop", {}); loadTree(); });
+  $("#new").addEventListener("click", async () => {
+    const name = $("#newname").value.trim(); if (!name) { $("#err").textContent = "name the new film with a slug"; return; }
+    const r = await post("/api/shots/new", {film: name, from: $("#film").value || null});
+    if (!r.ok) { $("#err").textContent = r.error || ("HTTP " + r.code); return; }
+    film = name; $("#newname").value = ""; await loadList();
+  });
+  loadList();
+})();
+</script>
+</body>
+</html>
