@@ -1,0 +1,751 @@
+{
+ "_comment": "The 'even harder' test (2026-09-30): one character in layered velvet, brass and leather held through a built 360-degree orbit, zero-g mercury, a helmet POV, a free fall and a jetpack landing.",
+ "film": "cyber-alchemist",
+ "title": "THE CYBER-ALCHEMIST'S DESCENT",
+ "logline": "An alchemist breaks gravity with a drop of mercury, and follows it down.",
+ "grade": "Cinematic film, a dark stone workshop at night, Rembrandt lighting from one warm key with deep shadows, neon blue tubes, haze and drifting smoke, hyper-detailed textures, 35mm film grain, anamorphic.",
+ "avoid": "lowres, blurry, deformed limbs, fused fingers, extra fingers, extra limbs, doubled figure, two of the same person, melting face, morphing, warping, clothes melting into skin, text, subtitles, captions, watermark, nsfw",
+ "realism": "Unretouched photograph, available light, visible skin texture and pores, fine film grain, shallow depth of field, no retouching, no gloss.",
+ "score_tags": "dark cinematic score, deep brass drones, ticking mechanical percussion, eerie glass harmonics, slow build of tension, low strings, instrumental, no vocals",
+ "score_tags_b": "epic cinematic score, pounding drums, soaring strings and synth, a vast rush of speed, then a triumphant landing and a quiet resolution, instrumental, no vocals",
+ "place": {
+  "id": "workshop",
+  "prompt": "Wide photograph of a dark alchemist's workshop carved from stone at night, nobody in it: rough stone walls and a vaulted ceiling, a long workbench crowded with glass alembics, brass apparatus and small glass vials of liquid mercury, neon blue tubes along the walls, a single warm lamp casting hard Rembrandt light, drifting smoke, and at the far side a steel railing at the edge of a vast dark vertical shaft. Deep perspective, anamorphic. Unretouched photograph, available light, visible skin texture and pores, fine film grain, shallow depth of field, no retouching, no gloss."
+ },
+ "cast": {
+  "alch": {
+   "role": "the alchemist",
+   "prompt": "Full-length reference photograph of a woman of about thirty against a plain mid-grey backdrop, even soft light, standing still, facing the camera, arms at her sides. A cyber-alchemist with a strong, striking face, a glowing silver cybernetic iris in her left eye, long dark hair in one thick braid over her right shoulder. She wears a heavily textured crimson velvet coat, open, over a complex brass steampunk corset of riveted plates and small gears; intricate mechanical leather gauntlets up to the elbows with brass gears, visible stitching and thin glowing blue wires running along them; a dynamic asymmetric cape of patched dark fabrics hanging from her left shoulder; a compact folded brass jetpack strapped to her back; dark leather trousers and heavy buckled boots. Unretouched photograph, available light, visible skin texture and pores, fine film grain, shallow depth of field, no retouching, no gloss."
+  },
+  "alch_back": {
+   "role": "the alchemist from behind",
+   "sheet_view": [
+    "alch",
+    "turn_back"
+   ],
+   "prompt": "The back view from the alchemist's character sheet."
+  },
+  "alch_face": {
+   "role": "the alchemist's face",
+   "sheet_view": [
+    "alch",
+    "face_front_r"
+   ],
+   "prompt": "The three-quarter face from the alchemist's character sheet."
+  },
+  "helmet": {
+   "role": "her helmet",
+   "prompt": "Reference photograph of a single object against a plain mid-grey backdrop, even soft light: a round brass mechanical helmet with riveted plates and small gears at the temples, its whole front one large curved clear glass visor like a diving helmet's faceplate, so the inside of the helmet shows through it, a faint glowing blue heads-up display of thin lines and small readouts projected on the inside of the glass, empty, standing on its own, the whole helmet in frame, three-quarter view. Unretouched photograph, available light, fine film grain, shallow depth of field, no gloss."
+  },
+  "shaft": {
+   "role": "the shaft (a second place)",
+   "place": true,
+   "prompt": "Wide photograph looking straight down a colossal vertical elevator shaft inside a megastructure, nobody in it: steel walls ribbed with girders and cables, rows of cold blue work lights receding down into total darkness, a steel railing edge in the foreground. Deep perspective, anamorphic. Unretouched photograph, available light, visible skin texture and pores, fine film grain, shallow depth of field, no retouching, no gloss."
+  },
+  "canyon": {
+   "role": "the city canyon (a third place)",
+   "place": true,
+   "prompt": "Wide photograph looking straight down a narrow cyberpunk city canyon at night from high above, nobody in it: sheer towers on both sides covered in neon signs in magenta and cyan, rain falling, sky bridges and cables crossing, the glowing street far below. Deep perspective, anamorphic. Unretouched photograph, available light, visible skin texture and pores, fine film grain, shallow depth of field, no retouching, no gloss."
+  },
+  "street": {
+   "role": "the street (a fourth place)",
+   "place": true,
+   "prompt": "Wide photograph of a narrow wet asphalt street at the bottom of a cyberpunk city canyon at night, nobody in it: deep puddles reflecting magenta and cyan neon, steam rising from grates, towers climbing out of frame. Low angle, deep perspective, anamorphic. Unretouched photograph, available light, visible skin texture and pores, fine film grain, shallow depth of field, no retouching, no gloss."
+  }
+ },
+ "shots": [
+  {
+   "id": "101",
+   "name": "workshop",
+   "title": "the workshop",
+   "secs": 5,
+   "refs": [
+    "workshop"
+   ],
+   "engine": "ltx",
+   "face": "none",
+   "anchor": null,
+   "prompt": "Smoke drifts slowly through the dark stone workshop; the neon blue tubes hum and flicker; the warm lamp throws hard light and deep shadow across the bench of glass and brass; beyond the railing the shaft is black. Nobody is here. The camera pushes slowly in. Room tone, a low electrical hum, bubbling glass, a distant mechanical groan from the shaft. No music.",
+   "avoid_extra": "people, a person, a figure, a crowd, a face, hands"
+  },
+  {
+   "id": "102",
+   "name": "master",
+   "title": "the master",
+   "secs": 4,
+   "refs": [
+    "alch",
+    "alch",
+    "workshop"
+   ],
+   "engine": "ltx",
+   "face": "medium",
+   "anchor": "A still frame from a live-action film, a MEDIUM SHOT of the woman of reference one standing in the dark stone workshop of reference three beside the workbench, facing the camera, a single warm key light from her right in Rembrandt style casting deep shadow across the other half of her face, her crimson velvet coat, brass corset and glowing blue gauntlets catching the light, neon blue tubes behind her, smoke drifting. Cinematic film, a dark stone workshop at night, Rembrandt lighting from one warm key with deep shadows, neon blue tubes, haze and drifting smoke, hyper-detailed textures, 35mm film grain, anamorphic.",
+   "prompt": "She stands completely still, breathing slowly; only the smoke moves around her and the blue wires on her gauntlets pulse faintly. The camera is locked off, perfectly still. Low hum, her slow breath, bubbling glass. No music.",
+   "trim": {
+    "take": "11",
+    "in": 0.0,
+    "out": 2.5
+   }
+  },
+  {
+   "id": "103",
+   "name": "orbit1",
+   "title": "the orbit, 1 of 8",
+   "secs": 4,
+   "refs": [
+    "workshop"
+   ],
+   "engine": "previz",
+   "face": "none",
+   "anchor": null,
+   "prompt": "A slow, steady camera orbit all the way around a woman standing perfectly still in a dark stone alchemist's workshop at night: a crimson velvet coat over a brass corset, mechanical leather gauntlets with glowing blue wires, a patched dark cape hanging from her right shoulder, a long dark braid, a compact brass jetpack of two tanks strapped to her back. The camera circles her at an even pace. Neon blue tubes on the stone piers all around the room rim-light her from every side, so from behind the velvet, the patched cape, the braid and the brass jetpack stay clearly visible; the warm lamp on the workbench stays where it is. Around the room: a wooden workbench of glassware, tall wooden shelves of old books and jars against the far wall, wooden barrels in the corners, a small table with a candle lantern, a steel railing at the edge of a dark shaft, smoke drifting. Low hum, her slow breath. No music.",
+   "previz": {
+    "scene": "orbit",
+    "chain": "103-110",
+    "degrees": 360,
+    "radius": 3.3,
+    "lens": 42,
+    "cam_z": 1.45,
+    "look_z": 1.25,
+    "figure_glb": "studio/sheets/the-cyber-alchemist-s-descent-alch/model.glb"
+   }
+  },
+  {
+   "id": "104",
+   "name": "orbit2",
+   "title": "the orbit, 2 of 8",
+   "secs": 4,
+   "refs": [
+    "workshop"
+   ],
+   "engine": "previz",
+   "face": "none",
+   "anchor": null,
+   "prompt": "A slow, steady camera orbit all the way around a woman standing perfectly still in a dark stone alchemist's workshop at night: a crimson velvet coat over a brass corset, mechanical leather gauntlets with glowing blue wires, a patched dark cape hanging from her right shoulder, a long dark braid, a compact brass jetpack of two tanks strapped to her back. The camera circles her at an even pace. Neon blue tubes on the stone piers all around the room rim-light her from every side, so from behind the velvet, the patched cape, the braid and the brass jetpack stay clearly visible; the warm lamp on the workbench stays where it is. Around the room: a wooden workbench of glassware, tall wooden shelves of old books and jars against the far wall, wooden barrels in the corners, a small table with a candle lantern, a steel railing at the edge of a dark shaft, smoke drifting. Low hum, her slow breath. No music.",
+   "trim": {
+    "take": "pv:404",
+    "in": 0.0417,
+    "out": 0.0
+   }
+  },
+  {
+   "id": "105",
+   "name": "orbit3",
+   "title": "the orbit, 3 of 8",
+   "secs": 4,
+   "refs": [
+    "workshop"
+   ],
+   "engine": "previz",
+   "face": "none",
+   "anchor": null,
+   "prompt": "A slow, steady camera orbit all the way around a woman standing perfectly still in a dark stone alchemist's workshop at night: a crimson velvet coat over a brass corset, mechanical leather gauntlets with glowing blue wires, a patched dark cape hanging from her right shoulder, a long dark braid, a compact brass jetpack of two tanks strapped to her back. The camera circles her at an even pace. Neon blue tubes on the stone piers all around the room rim-light her from every side, so from behind the velvet, the patched cape, the braid and the brass jetpack stay clearly visible; the warm lamp on the workbench stays where it is. Around the room: a wooden workbench of glassware, tall wooden shelves of old books and jars against the far wall, wooden barrels in the corners, a small table with a candle lantern, a steel railing at the edge of a dark shaft, smoke drifting. Low hum, her slow breath. No music.",
+   "trim": {
+    "take": "pv:404",
+    "in": 0.0417,
+    "out": 0.0
+   }
+  },
+  {
+   "id": "106",
+   "name": "orbit4",
+   "title": "the orbit, 4 of 8",
+   "secs": 4,
+   "refs": [
+    "workshop"
+   ],
+   "engine": "previz",
+   "face": "none",
+   "anchor": null,
+   "prompt": "A slow, steady camera orbit all the way around a woman standing perfectly still in a dark stone alchemist's workshop at night: a crimson velvet coat over a brass corset, mechanical leather gauntlets with glowing blue wires, a patched dark cape hanging from her right shoulder, a long dark braid, a compact brass jetpack of two tanks strapped to her back. The camera circles her at an even pace. Neon blue tubes on the stone piers all around the room rim-light her from every side, so from behind the velvet, the patched cape, the braid and the brass jetpack stay clearly visible; the warm lamp on the workbench stays where it is. Around the room: a wooden workbench of glassware, tall wooden shelves of old books and jars against the far wall, wooden barrels in the corners, a small table with a candle lantern, a steel railing at the edge of a dark shaft, smoke drifting. Low hum, her slow breath. No music.",
+   "trim": {
+    "take": "pv:404",
+    "in": 0.0417,
+    "out": 0.0
+   }
+  },
+  {
+   "id": "107",
+   "name": "orbit5",
+   "title": "the orbit, 5 of 8",
+   "secs": 4,
+   "refs": [
+    "workshop"
+   ],
+   "engine": "previz",
+   "face": "none",
+   "anchor": null,
+   "prompt": "A slow, steady camera orbit all the way around a woman standing perfectly still in a dark stone alchemist's workshop at night: a crimson velvet coat over a brass corset, mechanical leather gauntlets with glowing blue wires, a patched dark cape hanging from her right shoulder, a long dark braid, a compact brass jetpack of two tanks strapped to her back. The camera circles her at an even pace. Neon blue tubes on the stone piers all around the room rim-light her from every side, so from behind the velvet, the patched cape, the braid and the brass jetpack stay clearly visible; the warm lamp on the workbench stays where it is. Around the room: a wooden workbench of glassware, tall wooden shelves of old books and jars against the far wall, wooden barrels in the corners, a small table with a candle lantern, a steel railing at the edge of a dark shaft, smoke drifting. Low hum, her slow breath. No music.",
+   "trim": {
+    "take": "pvj:11",
+    "in": 0.0417,
+    "out": 0.0
+   }
+  },
+  {
+   "id": "108",
+   "name": "orbit6",
+   "title": "the orbit, 6 of 8",
+   "secs": 4,
+   "refs": [
+    "workshop"
+   ],
+   "engine": "previz",
+   "face": "none",
+   "anchor": null,
+   "prompt": "A slow, steady camera orbit all the way around a woman standing perfectly still in a dark stone alchemist's workshop at night: a crimson velvet coat over a brass corset, mechanical leather gauntlets with glowing blue wires, a patched dark cape hanging from her right shoulder, a long dark braid, a compact brass jetpack of two tanks strapped to her back. The camera circles her at an even pace. Neon blue tubes on the stone piers all around the room rim-light her from every side, so from behind the velvet, the patched cape, the braid and the brass jetpack stay clearly visible; the warm lamp on the workbench stays where it is. Around the room: a wooden workbench of glassware, tall wooden shelves of old books and jars against the far wall, wooden barrels in the corners, a small table with a candle lantern, a steel railing at the edge of a dark shaft, smoke drifting. Low hum, her slow breath. No music.",
+   "trim": {
+    "take": "pv:606",
+    "in": 0.0417,
+    "out": 0.0
+   }
+  },
+  {
+   "id": "109",
+   "name": "orbit7",
+   "title": "the orbit, 7 of 8",
+   "secs": 4,
+   "refs": [
+    "workshop"
+   ],
+   "engine": "previz",
+   "face": "none",
+   "anchor": null,
+   "prompt": "A slow, steady camera orbit all the way around a woman standing perfectly still in a dark stone alchemist's workshop at night: a crimson velvet coat over a brass corset, mechanical leather gauntlets with glowing blue wires, a patched dark cape hanging from her right shoulder, a long dark braid, a compact brass jetpack of two tanks strapped to her back. The camera circles her at an even pace. Neon blue tubes on the stone piers all around the room rim-light her from every side, so from behind the velvet, the patched cape, the braid and the brass jetpack stay clearly visible; the warm lamp on the workbench stays where it is. Around the room: a wooden workbench of glassware, tall wooden shelves of old books and jars against the far wall, wooden barrels in the corners, a small table with a candle lantern, a steel railing at the edge of a dark shaft, smoke drifting. Low hum, her slow breath. No music.",
+   "trim": {
+    "take": "pv:606",
+    "in": 0.0417,
+    "out": 0.0
+   }
+  },
+  {
+   "id": "110",
+   "name": "orbit8",
+   "title": "the orbit, 8 of 8",
+   "secs": 4,
+   "refs": [
+    "workshop"
+   ],
+   "engine": "previz",
+   "face": "none",
+   "anchor": null,
+   "prompt": "A slow, steady camera orbit all the way around a woman standing perfectly still in a dark stone alchemist's workshop at night: a crimson velvet coat over a brass corset, mechanical leather gauntlets with glowing blue wires, a patched dark cape hanging from her right shoulder, a long dark braid, a compact brass jetpack of two tanks strapped to her back. The camera circles her at an even pace. Neon blue tubes on the stone piers all around the room rim-light her from every side, so from behind the velvet, the patched cape, the braid and the brass jetpack stay clearly visible; the warm lamp on the workbench stays where it is. Around the room: a wooden workbench of glassware, tall wooden shelves of old books and jars against the far wall, wooden barrels in the corners, a small table with a candle lantern, a steel railing at the edge of a dark shaft, smoke drifting. Low hum, her slow breath. No music.",
+   "trim": {
+    "take": "pv:606",
+    "in": 0.0417,
+    "out": 0.0
+   }
+  },
+  {
+   "id": "111",
+   "name": "eye",
+   "title": "the iris",
+   "secs": 4,
+   "refs": [
+    "alch_face",
+    "alch",
+    "workshop"
+   ],
+   "engine": "ltx",
+   "face": "close",
+   "anchor": "A still frame from a live-action film, an EXTREME MACRO CLOSE-UP of the left eye of the woman of reference one in the dark stone workshop of reference three: a glowing silver cybernetic iris with fine mechanical rings, the pupil adjusting, individual lashes and skin pores in hard Rembrandt light, smoke drifting across. Cinematic film, a dark stone workshop at night, Rembrandt lighting from one warm key with deep shadows, neon blue tubes, haze and drifting smoke, hyper-detailed textures, 35mm film grain, anamorphic.",
+   "prompt": "The silver cybernetic iris rotates and refocuses, its fine rings turning with a faint whir; she blinks once; smoke drifts across the lens. Macro lens, static. A tiny mechanical whir, her breath. No music."
+  },
+  {
+   "id": "112",
+   "name": "tilt_hands",
+   "title": "down to the hands",
+   "secs": 3,
+   "refs": [
+    "workshop"
+   ],
+   "engine": "flf",
+   "face": "none",
+   "anchor": null,
+   "prompt": "The camera tilts smoothly down from her eye, past the collar of the crimson velvet coat and the brass corset, to her gloved hands at the workbench as they pick up a small glass vial of liquid mercury. Smoke drifts. A soft whir, the clink of glass. No music.",
+   "flf": {
+    "first": "end:shot_111_s11.mp4",
+    "last": "anchor_112e.png"
+   }
+  },
+  {
+   "id": "112e",
+   "name": "hands",
+   "title": "(end frame: the hands)",
+   "secs": 4,
+   "refs": [
+    "alch",
+    "alch",
+    "workshop"
+   ],
+   "engine": "key",
+   "face": "none",
+   "anchor": "A still frame from a live-action film, an EXTREME MACRO CLOSE-UP of the hands of the woman of reference one at the workbench of the stone workshop of reference three: her intricate mechanical leather gauntlets with visible stitching, small brass gears at the knuckles and thin glowing blue wires, the fingers closing around a small glass vial of liquid mercury, smoke drifting across. Cinematic film, a dark stone workshop at night, Rembrandt lighting from one warm key with deep shadows, neon blue tubes, haze and drifting smoke, hyper-detailed textures, 35mm film grain, anamorphic.",
+   "prompt": "",
+   "key_for": "tilt_hands"
+  },
+  {
+   "id": "113",
+   "name": "gauntlet",
+   "title": "the gauntlet",
+   "secs": 4,
+   "refs": [
+    "alch",
+    "alch",
+    "workshop"
+   ],
+   "engine": "both",
+   "face": "none",
+   "anchor": "A still frame from a live-action film, an EXTREME MACRO CLOSE-UP of the right mechanical leather gauntlet of the woman of reference one holding a glass vial of liquid mercury at the workbench of the stone workshop of reference three: the leather creasing at the knuckles, the stitching, the small brass gears and the glowing blue wires bending with her fingers. Cinematic film, a dark stone workshop at night, Rembrandt lighting from one warm key with deep shadows, neon blue tubes, haze and drifting smoke, hyper-detailed textures, 35mm film grain, anamorphic.",
+   "prompt": "Her fingers flex around the vial; the leather creases and the tiny brass gears at the knuckles turn; the blue wires brighten as they bend; smoke drifts across the frame. Macro lens, a slow tracking move. Leather creaking, tiny gears ticking. No music."
+  },
+  {
+   "id": "114",
+   "name": "mercury",
+   "title": "mercury",
+   "secs": 4,
+   "refs": [
+    "alch",
+    "alch",
+    "workshop"
+   ],
+   "engine": "ltx",
+   "face": "close",
+   "anchor": "A still frame from a live-action film, a CLOSE-UP of the woman of reference one in the stone workshop of reference three holding a small glass vial of liquid mercury up at eye level, the silver liquid rolling heavily inside the glass and reflecting the neon blue light, her silver iris reflected in it. Cinematic film, a dark stone workshop at night, Rembrandt lighting from one warm key with deep shadows, neon blue tubes, haze and drifting smoke, hyper-detailed textures, 35mm film grain, anamorphic.",
+   "prompt": "She tilts the vial slowly and the mercury rolls inside the glass like a heavy mirror, reflecting the neon blue light; she watches it intently. Static camera. Glass tinkling, a low hum. No music."
+  },
+  {
+   "id": "201",
+   "name": "slip",
+   "title": "it slips",
+   "secs": 4,
+   "refs": [
+    "alch",
+    "alch",
+    "workshop"
+   ],
+   "engine": "ltx",
+   "face": "none",
+   "anchor": "A still frame from a live-action film, an EXTREME CLOSE-UP of the gloved mechanical fingers of the woman of reference one in the stone workshop of reference three, a small glass vial of mercury slipping out of them, the blue wires flaring. Cinematic film, a dark stone workshop at night, Rembrandt lighting from one warm key with deep shadows, neon blue tubes, haze and drifting smoke, hyper-detailed textures, 35mm film grain, anamorphic.",
+   "prompt": "The vial slips out of her gloved fingers and drops out of the bottom of the frame; her fingers snap closed a moment too late. Static camera. A sharp intake of breath. No music."
+  },
+  {
+   "id": "202",
+   "name": "shatter",
+   "title": "the shatter",
+   "secs": 5,
+   "refs": [
+    "workshop",
+    "workshop",
+    "workshop"
+   ],
+   "engine": "both",
+   "face": "none",
+   "anchor": "A still frame from a live-action film, a HIGH-SPEED SLOW-MOTION CLOSE SHOT at floor level on the stone floor of the workshop of reference one: a small glass vial of liquid mercury just touching the stone as it begins to shatter, neon blue light reflected in the glass. Cinematic film, a dark stone workshop at night, Rembrandt lighting from one warm key with deep shadows, neon blue tubes, haze and drifting smoke, hyper-detailed textures, 35mm film grain, anamorphic.",
+   "prompt": "In extreme slow motion, a thousand frames a second, the vial hits the stone floor and the glass bursts into glittering shards; the mercury flies out in heavy silver beads. The camera is locked at floor level. A slowed crystalline crack, a deep low boom. No music.",
+   "avoid_extra": "people, a person, a figure, a crowd, a face, hands"
+  },
+  {
+   "id": "203",
+   "name": "zero_g",
+   "title": "zero gravity",
+   "secs": 5,
+   "refs": [
+    "workshop",
+    "workshop",
+    "workshop"
+   ],
+   "engine": "both",
+   "face": "none",
+   "anchor": "A still frame from a live-action film, a HIGH-SPEED SLOW-MOTION CLOSE SHOT above the stone floor of the workshop of reference one: beads of liquid mercury rising upward off the floor into the air like weightless silver droplets, broken glass hanging among them, every droplet refracting the neon blue light. Cinematic film, a dark stone workshop at night, Rembrandt lighting from one warm key with deep shadows, neon blue tubes, haze and drifting smoke, hyper-detailed textures, 35mm film grain, anamorphic.",
+   "prompt": "The mercury rises upward off the floor in zero gravity, splitting into trembling silver droplets that hang and turn in the air, each one bending the blue neon light like a lens; shards of glass drift up among them. Slow motion, the camera drifting slowly upward with them. A deep hum, a crystalline shimmer. No music.",
+   "avoid_extra": "people, a person, a figure, a crowd, a face, hands"
+  },
+  {
+   "id": "204",
+   "name": "shockwave",
+   "title": "the shockwave",
+   "secs": 5,
+   "refs": [
+    "alch",
+    "alch",
+    "workshop"
+   ],
+   "engine": "both",
+   "face": "medium",
+   "anchor": "A still frame from a live-action film, a WIDE SHOT of the woman of reference one standing in the stone workshop of reference three as a shockwave of reversed gravity ripples outward from the floor: her crimson velvet coat tails and her patched cape billowing up above her, silver droplets of mercury floating all around her, smoke swirling upward. Cinematic film, a dark stone workshop at night, Rembrandt lighting from one warm key with deep shadows, neon blue tubes, haze and drifting smoke, hyper-detailed textures, 35mm film grain, anamorphic.",
+   "prompt": "A pulse of reversed gravity ripples out from the floor: her coat tails and patched cape lift and billow upward, silver droplets and loose papers float up around her, her braid rises off her shoulder; she spreads her arms to keep her balance. Slow motion, static camera. A deep thrum, fabric snapping, glass tinkling. No music."
+  },
+  {
+   "id": "205",
+   "name": "floating",
+   "title": "everything floats",
+   "secs": 5,
+   "refs": [
+    "alch",
+    "alch",
+    "workshop"
+   ],
+   "engine": "both",
+   "face": "wide",
+   "anchor": "A still frame from a live-action film, a WIDE HIGH SHOT of the whole stone workshop of reference three with everything floating: glass alembics, books, brass tools and droplets of mercury drifting up off the bench toward the vaulted ceiling, and the woman of reference one standing among them, small in the middle of the room. Cinematic film, a dark stone workshop at night, Rembrandt lighting from one warm key with deep shadows, neon blue tubes, haze and drifting smoke, hyper-detailed textures, 35mm film grain, anamorphic.",
+   "prompt": "Everything in the workshop drifts slowly upward: books turning over, glass alembics tumbling, silver droplets rising toward the vaulted ceiling; she turns slowly on the spot, watching it go. The camera cranes slowly up. Glass clinking softly, pages fluttering, a deep hum. No music."
+  },
+  {
+   "id": "206",
+   "name": "iris_up",
+   "title": "the iris, looking up",
+   "secs": 4,
+   "refs": [
+    "alch_face",
+    "alch",
+    "workshop"
+   ],
+   "engine": "ltx",
+   "face": "close",
+   "anchor": "A still frame from a live-action film, a CLOSE-UP of the woman of reference one in the stone workshop of reference three looking up in astonishment at silver droplets of mercury floating in the air above her, her silver cybernetic iris glowing brighter, the droplets reflected in it. Cinematic film, a dark stone workshop at night, Rembrandt lighting from one warm key with deep shadows, neon blue tubes, haze and drifting smoke, hyper-detailed textures, 35mm film grain, anamorphic.",
+   "prompt": "She looks up at the floating mercury; her silver iris whirs and glows brighter as it focuses; a droplet drifts past her face. Static camera, close. A soft whir, a deep hum. No music."
+  },
+  {
+   "id": "207",
+   "name": "helmet_on",
+   "title": "the helmet",
+   "secs": 5,
+   "refs": [
+    "alch",
+    "helmet",
+    "workshop"
+   ],
+   "engine": "ltx",
+   "face": "medium",
+   "anchor": "A still frame from a live-action film, a MEDIUM SHOT of the woman of reference one in the stone workshop of reference three lifting the round brass mechanical helmet of reference two with both gloved hands, about to lower it over her head, floating droplets of mercury around her. Cinematic film, a dark stone workshop at night, Rembrandt lighting from one warm key with deep shadows, neon blue tubes, haze and drifting smoke, hyper-detailed textures, 35mm film grain, anamorphic.",
+   "prompt": "She lowers the brass helmet over her head and it seals with a hiss; the curved glass visor slides down and a faint blue display flickers on inside it. Static camera. A mechanical clunk, a hiss of air, a rising electronic chime. No music."
+  },
+  {
+   "id": "208",
+   "name": "hud",
+   "title": "inside the helmet",
+   "secs": 4,
+   "refs": [
+    "alch",
+    "alch",
+    "workshop"
+   ],
+   "engine": "ltx",
+   "face": "none",
+   "anchor": "A still frame from a live-action film, a FIRST-PERSON POINT-OF-VIEW SHOT from inside a brass mechanical helmet looking out through its curved glass visor at the dark stone workshop of reference three: the rim of the helmet framing the view, a glowing blue heads-up display across the glass with targeting lines, readouts and a gravity warning, the display glitching with digital static, droplets of mercury floating beyond; the gloved hands of the woman of reference one at the bottom of the frame. Cinematic film, a dark stone workshop at night, Rembrandt lighting from one warm key with deep shadows, neon blue tubes, haze and drifting smoke, hyper-detailed textures, 35mm film grain, anamorphic.",
+   "prompt": "First-person view from inside the helmet: the blue heads-up display boots up across the visor, flickers and glitches with bursts of digital static and scanlines, then steadies; the view sways as she breathes. Handheld. Her breath loud inside the helmet, electronic chirps, static crackle. No music."
+  },
+  {
+   "id": "209",
+   "name": "railing",
+   "title": "the railing",
+   "secs": 4,
+   "refs": [
+    "shaft",
+    "alch",
+    "alch"
+   ],
+   "engine": "ltx",
+   "face": "none",
+   "anchor": "A still frame from a live-action film, a FIRST-PERSON POINT-OF-VIEW SHOT from inside a brass mechanical helmet looking down through its curved glass visor, a glitching blue heads-up display across the glass: two hands in intricate mechanical leather gauntlets with glowing blue wires gripping a steel railing at the edge of the colossal shaft of reference one, as worn by the woman of reference two. Cinematic film, a colossal dark elevator shaft, cold blue work lights receding into blackness, haze, high contrast, 35mm film grain, anamorphic.",
+   "prompt": "First-person view: her gauntleted hands grip the steel railing and tighten; the heads-up display glitches with static; the view shakes. Handheld, chaotic. Her breath inside the helmet, metal creaking, static. No music."
+  },
+  {
+   "id": "210",
+   "name": "tilt_shaft",
+   "title": "the shaft",
+   "secs": 5,
+   "refs": [
+    "shaft"
+   ],
+   "engine": "flf",
+   "face": "none",
+   "anchor": null,
+   "prompt": "First-person view: the camera tilts rapidly up from her hands on the railing to face the colossal vertical shaft, its rows of blue lights plunging down into darkness; the view shakes and blurs with the speed of the move; the display flickers. Handheld, chaotic, natural motion blur. Her breath, a deep wind moaning up the shaft. No music.",
+   "flf": {
+    "first": "end:shot_209_s11.mp4",
+    "last": "anchor_210e.png"
+   },
+   "trim": {
+    "take": "fl:11",
+    "in": 0.0,
+    "out": 3.2
+   }
+  },
+  {
+   "id": "210e",
+   "name": "shaft_view",
+   "title": "(end frame: the shaft)",
+   "secs": 4,
+   "refs": [
+    "shaft",
+    "shaft",
+    "shaft"
+   ],
+   "engine": "key",
+   "face": "none",
+   "anchor": "A still frame from a live-action film, a FIRST-PERSON POINT-OF-VIEW SHOT from inside a brass mechanical helmet looking out and down into the colossal vertical shaft of reference one, rows of cold blue lights plunging away into total darkness, a glitching blue heads-up display across the visor glass. Cinematic film, a colossal dark elevator shaft, cold blue work lights receding into blackness, haze, high contrast, 35mm film grain, anamorphic.",
+   "prompt": "",
+   "key_for": "tilt_shaft"
+  },
+  {
+   "id": "211",
+   "name": "over",
+   "title": "over the rail",
+   "secs": 4,
+   "refs": [
+    "shaft",
+    "alch_back",
+    "helmet"
+   ],
+   "engine": "ltx",
+   "face": "none",
+   "anchor": "A still frame from a live-action film, a MEDIUM SHOT from behind the woman of reference two, wearing the round brass helmet of reference three, climbing over the steel railing at the edge of the colossal shaft of reference one, her crimson coat and patched cape hanging over the drop, blue lights falling away below. Cinematic film, a colossal dark elevator shaft, cold blue work lights receding into blackness, haze, high contrast, 35mm film grain, anamorphic.",
+   "prompt": "She swings one leg over the railing and then the other, and stands on the edge with her back to us, holding the rail behind her; wind rushes up and lifts her cape. Static camera. Wind moaning up the shaft, metal creaking. No music."
+  },
+  {
+   "id": "212",
+   "name": "drop",
+   "title": "the drop",
+   "secs": 4,
+   "refs": [
+    "shaft",
+    "alch_back",
+    "helmet"
+   ],
+   "engine": "both",
+   "face": "none",
+   "anchor": "A still frame from a live-action film, a HIGH ANGLE SHOT looking down the colossal shaft of reference one past the woman of reference two, wearing the brass helmet of reference three, as she lets go of the railing and falls forward into the dark, her coat and cape streaming up. Cinematic film, a colossal dark elevator shaft, cold blue work lights receding into blackness, haze, high contrast, 35mm film grain, anamorphic.",
+   "prompt": "She lets go and falls forward into the shaft; the camera tips down after her as she drops away into the rows of blue light, her coat and cape streaming upward. Wind roaring. No music."
+  },
+  {
+   "id": "301",
+   "name": "freefall",
+   "title": "free fall",
+   "secs": 5,
+   "refs": [
+    "canyon",
+    "alch_back",
+    "helmet"
+   ],
+   "engine": "both",
+   "face": "none",
+   "anchor": "A still frame from a live-action film, a HIGH-VELOCITY FPV DRONE SHOT looking straight down the narrow cyberpunk city canyon of reference one from just behind and above the woman of reference two, wearing the brass helmet of reference three, free-falling head first toward the neon street far below, her crimson velvet coat, long braid and patched cape whipping upward in the wind. Cinematic film, night, a narrow cyberpunk city canyon, streaking neon in magenta and cyan, rain, motion blur, high contrast, 35mm film grain, anamorphic.",
+   "prompt": "She plunges head first down the canyon and the camera dives right behind her at the same speed; her coat, braid and patched cape whip and snap violently in the wind; neon signs streak past on both sides into long bright trails. Roaring wind, the rush of air. No music."
+  },
+  {
+   "id": "302",
+   "name": "whip",
+   "title": "whipping",
+   "secs": 4,
+   "refs": [
+    "canyon",
+    "alch",
+    "helmet"
+   ],
+   "engine": "both",
+   "face": "none",
+   "anchor": "A still frame from a live-action film, a CLOSE TRACKING SHOT beside the woman of reference two falling through the narrow neon city canyon of reference one, wearing the brass helmet of reference three: the crimson velvet coat, the long braid and the patched cape whipping violently in the wind against her mechanical gauntlets, neon streaking past. Cinematic film, night, a narrow cyberpunk city canyon, streaking neon in magenta and cyan, rain, motion blur, high contrast, 35mm film grain, anamorphic.",
+   "prompt": "The fabric whips and hammers in the wind: velvet coat tails, the patched cape and her long braid snapping violently, the edges staying sharp; her gauntlets glow blue; neon smears past behind her. The camera falls alongside her. Deafening wind, flapping fabric. No music."
+  },
+  {
+   "id": "303",
+   "name": "below",
+   "title": "from below",
+   "secs": 4,
+   "refs": [
+    "canyon",
+    "alch",
+    "helmet"
+   ],
+   "engine": "both",
+   "face": "none",
+   "anchor": "A still frame from a live-action film, a LOW ANGLE SHOT looking straight up the narrow neon city canyon of reference one as the woman of reference two, wearing the brass helmet of reference three, plunges head first down toward the camera, her coat and cape streaming above her against the neon. Cinematic film, night, a narrow cyberpunk city canyon, streaking neon in magenta and cyan, rain, motion blur, high contrast, 35mm film grain, anamorphic.",
+   "prompt": "She hurtles down toward the camera out of the neon canyon, growing fast, coat and cape streaming; rain streaks past the lens. Static camera looking straight up. A rising roar of wind. No music."
+  },
+  {
+   "id": "304",
+   "name": "streaks",
+   "title": "the city streaks",
+   "secs": 4,
+   "refs": [
+    "canyon",
+    "canyon",
+    "canyon"
+   ],
+   "engine": "ltx",
+   "face": "none",
+   "anchor": "A still frame from a live-action film, a FIRST-PERSON FALLING SHOT straight down the narrow cyberpunk city canyon of reference one at terrifying speed, neon signs stretching into long streaks, the street rushing up. Cinematic film, night, a narrow cyberpunk city canyon, streaking neon in magenta and cyan, rain, motion blur, high contrast, 35mm film grain, anamorphic.",
+   "prompt": "First-person view diving straight down the canyon; the neon signs stretch into long streaks of magenta and cyan and the street rushes up; rain streaks past. A roaring rush of air. No music.",
+   "avoid_extra": "people, a person, a figure, a crowd, a face, hands"
+  },
+  {
+   "id": "305",
+   "name": "visor",
+   "title": "her face",
+   "secs": 4,
+   "refs": [
+    "canyon",
+    "alch_face",
+    "helmet"
+   ],
+   "engine": "ltx",
+   "face": "close",
+   "anchor": "A still frame from a live-action film, a CLOSE-UP of the face of the woman of reference two seen through the curved glass visor of the brass helmet of reference three as she free-falls down the neon city canyon of reference one, the blue display glowing on the glass, her silver iris bright, neon streaking behind. Cinematic film, night, a narrow cyberpunk city canyon, streaking neon in magenta and cyan, rain, motion blur, high contrast, 35mm film grain, anamorphic.",
+   "prompt": "Wind hammers the helmet as she falls; behind the visor her eyes are fierce and steady, her silver iris glowing; neon streaks past in the glass. The camera falls with her, close. Roaring wind, her breath. No music."
+  },
+  {
+   "id": "306",
+   "name": "jetpack",
+   "title": "the jetpack",
+   "secs": 4,
+   "refs": [
+    "canyon",
+    "alch_back",
+    "helmet"
+   ],
+   "engine": "both",
+   "face": "none",
+   "anchor": "A still frame from a live-action film, a CLOSE SHOT from behind the woman of reference two, wearing the brass helmet of reference three, falling down the neon city canyon of reference one as the compact brass jetpack on her back unfolds, its nozzles opening. Cinematic film, night, a narrow cyberpunk city canyon, streaking neon in magenta and cyan, rain, motion blur, high contrast, 35mm film grain, anamorphic.",
+   "prompt": "She pulls a cord at her chest and the brass jetpack on her back unfolds with a mechanical clatter, its nozzles swinging open and igniting in bright blue flame. The camera falls with her. A clatter of metal, then a roaring ignition. No music."
+  },
+  {
+   "id": "307",
+   "name": "vertigo",
+   "title": "vertigo",
+   "secs": 5,
+   "refs": [
+    "canyon",
+    "alch",
+    "helmet"
+   ],
+   "engine": "previz",
+   "face": "none",
+   "anchor": "A still frame from a live-action film, a TRACKING SHOT of the woman of reference two, wearing the brass helmet of reference three, in the neon city canyon of reference one, her jetpack firing bright blue flames as she brakes in mid-air, her coat and cape flung upward. Cinematic film, night, a narrow cyberpunk city canyon, streaking neon in magenta and cyan, rain, motion blur, high contrast, 35mm film grain, anamorphic.",
+   "prompt": "Reverse dolly zoom: she stays the same size in the centre of the frame while the canyon around her seems to stretch and tunnel away, as the jetpack roars bright blue and she brakes hard in mid-air, her coat and cape flung upward. A vertigo effect. The roar of the jets, the wind dropping. No music.",
+   "previz": {
+    "scene": "canyon",
+    "seconds": 5,
+    "radius": 14.0,
+    "radius_to": 3.5,
+    "lens": 100,
+    "lens_to": 25,
+    "cam_z": 1.1,
+    "look_z": 1.1,
+    "figure_glb": "studio/sheets/the-cyber-alchemist-s-descent-alch/model.glb",
+    "grade": "Cinematic film, night, a narrow cyberpunk city canyon, streaking neon in magenta and cyan, rain, motion blur, high contrast, 35mm film grain, anamorphic.",
+    "dress": "Turn <image1> into a still frame from a live-action film. Keep the camera, the perspective and the layout of <image1> exactly. The grey figure is the woman of <image3> wearing the brass helmet of <image4>, hovering upright in mid-air in exactly that place and at that size, facing the camera, a brass jetpack on her back firing two bright blue flames downward, her crimson coat and patched cape blown upward. The grey towers are the towers of the narrow neon city canyon of <image2>, covered in magenta and cyan neon signs, rain falling, the street glowing far below."
+   }
+  },
+  {
+   "id": "308",
+   "name": "descent",
+   "title": "descent",
+   "secs": 4,
+   "refs": [
+    "street",
+    "alch",
+    "helmet"
+   ],
+   "engine": "ltx",
+   "face": "none",
+   "anchor": "A still frame from a live-action film, a WIDE AERIAL SHOT looking down into the narrow wet street of reference one from above: the woman of reference two, wearing the brass helmet of reference three, descending slowly on two bright blue jets, the downdraft blowing the puddles into rings. Cinematic film, night, a wet asphalt street at the bottom of a city canyon, neon reflections in puddles, blue jet light, steam, 35mm film grain, anamorphic.",
+   "prompt": "She descends slowly on the blue jets toward the wet street; the downdraft ripples the puddles and blows the steam aside; the camera cranes down with her. The jets roaring and slowing. No music."
+  },
+  {
+   "id": "309",
+   "name": "touchdown",
+   "title": "touchdown",
+   "secs": 4,
+   "refs": [
+    "street",
+    "alch",
+    "helmet"
+   ],
+   "engine": "both",
+   "face": "none",
+   "anchor": "A still frame from a live-action film, a LOW-ANGLE GROUND SHOT at puddle level on the wet asphalt street of reference one: the heavy buckled boots of the woman of reference two touching down in a deep puddle reflecting the neon, blue jet flames just above, spray starting to fly outward. Cinematic film, night, a wet asphalt street at the bottom of a city canyon, neon reflections in puddles, blue jet light, steam, 35mm film grain, anamorphic.",
+   "prompt": "Her boots hit the wet asphalt and the puddle explodes outward in a ring of neon-lit spray; the jets cut out with a sigh; steam curls around her boots. Low camera, tracking. A heavy splash, the jets dying. No music."
+  },
+  {
+   "id": "310",
+   "name": "tilt_face",
+   "title": "up to her face",
+   "secs": 5,
+   "refs": [
+    "street",
+    "alch",
+    "helmet"
+   ],
+   "engine": "previz",
+   "face": "none",
+   "anchor": null,
+   "prompt": "The camera sinks smoothly from her face, past the brass corset and the crimson velvet coat hanging open over her dark leather trousers, past the glowing gauntlets, down to her heavy buckled leather boots standing in a shallow puddle on the wet asphalt, drawing back a little as it goes. She is fully dressed: dark leather trousers, the long crimson velvet coat, heavy boots. She stands completely still, breathing slowly; steam drifts slowly sideways past her; neon shimmers in the puddle. The low hum of the city, the tick of the cooling jetpack. No music.",
+   "avoid_extra": "bare legs, bare thighs, underwear, briefs, lingerie, shorts, skirt",
+   "previz": {
+    "scene": "street",
+    "seconds": 5,
+    "radius": 1.0,
+    "radius_to": 1.4,
+    "lens": 35,
+    "lens_to": 24,
+    "cam_z": 1.58,
+    "cam_z_to": 0.22,
+    "look_z": 1.47,
+    "look_z_to": 0.12,
+    "figure_turn": 35,
+    "reverse": true,
+    "figure_glb": "studio/sheets/the-cyber-alchemist-s-descent-alch/model.glb",
+    "start": "anchor_311.png"
+   }
+  },
+  {
+   "id": "310e",
+   "name": "standing",
+   "title": "(end frame: standing)",
+   "secs": 4,
+   "refs": [
+    "street",
+    "alch",
+    "helmet"
+   ],
+   "engine": "key",
+   "face": "none",
+   "anchor": "A still frame from a live-action film, a LOW-ANGLE SHOT looking up at the woman of reference two standing on the wet neon street of reference one, the brass helmet of reference three held under one arm, her face bare, her long braid over her shoulder, her silver iris glowing, steam around her. Cinematic film, night, a wet asphalt street at the bottom of a city canyon, neon reflections in puddles, blue jet light, steam, 35mm film grain, anamorphic.",
+   "prompt": "",
+   "key_for": "tilt_face"
+  },
+  {
+   "id": "311",
+   "name": "her",
+   "title": "her",
+   "secs": 5,
+   "refs": [
+    "alch_face",
+    "alch",
+    "street"
+   ],
+   "engine": "ltx",
+   "face": "close",
+   "anchor": "A still frame from a live-action film, a CLOSE-UP of the face of the woman of reference one standing on the wet neon street of reference three, her silver cybernetic iris glowing, rain on her skin, her crimson velvet collar and a glowing gauntlet at the edge of the frame. Cinematic film, night, a wet asphalt street at the bottom of a city canyon, neon reflections in puddles, blue jet light, steam, 35mm film grain, anamorphic.",
+   "prompt": "She looks up the canyon she fell down, breathing hard, then lowers her gaze to the camera; a slow, satisfied smile. Static camera, close. Rain, distant sirens, the hiss of the cooling jetpack. No music."
+  },
+  {
+   "id": "312",
+   "name": "street_end",
+   "title": "the street",
+   "secs": 5,
+   "refs": [
+    "street",
+    "alch",
+    "helmet"
+   ],
+   "engine": "ltx",
+   "face": "wide",
+   "anchor": "A still frame from a live-action film, a WIDE SHOT of the wet neon street of reference one, the woman of reference two standing in the middle of it with the brass helmet of reference three under her arm, steam rising, neon reflected in the puddles around her, the towers climbing out of frame. Cinematic film, night, a wet asphalt street at the bottom of a city canyon, neon reflections in puddles, blue jet light, steam, 35mm film grain, anamorphic.",
+   "prompt": "She stands in the middle of the street as steam drifts past and the neon flickers in the puddles; she turns and walks away into the haze. The camera pulls back slowly. Rain, steam, a distant city. No music."
+  }
+ ]
+}
