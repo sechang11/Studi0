@@ -86,7 +86,7 @@ def _args():
     argv = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", required=True)
-    ap.add_argument("--scene", default="crates", choices=["crates", "fall"])
+    ap.add_argument("--scene", default="crates", choices=["crates", "fall", "aisle"])
     ap.add_argument("--seconds", type=float, default=4.0)
     ap.add_argument("--fps", type=int, default=24)
     ap.add_argument("--width", type=int, default=1280)
@@ -241,6 +241,52 @@ def build_fall(sc, seed):
     return {"crates": 7}
 
 
+def build_aisle(sc, seed):
+    """DEAD STOCK 070: an aisle between two walls of crates; the tall stack on the right is pushed
+    over into the aisle and piles up across it; a proxy figure stands far down the aisle beyond.
+    The walls are PASSIVE rigid bodies so the falling crates collide with them; the pusher is
+    kinematic, hidden from the render, and retracts upward once the stack is committed."""
+    import random
+    random.seed(seed)
+    ground = _mat("ground", (0.30, 0.30, 0.31))
+    crate = _mat("crate", (0.62, 0.45, 0.25))
+    crate2 = _mat("crate2", (0.52, 0.38, 0.21))
+    skin = _mat("figure", (0.55, 0.55, 0.6))
+    _box("ground", (0, 12, -0.5), (40, 70, 1), ground, active=False)
+    _box("back", (0, 34, 4), (40, 0.4, 8), ground, active=False)
+    s, half = 0.7, 1.6
+    for side in (-1, 1):
+        for i in range(30):
+            y = 1.0 + i * (s + 0.02)
+            if side == 1 and 3.3 <= y <= 6.2:
+                continue                    # the gap the toppling stack stands in
+            for k in range(4):
+                _box("wall_%d_%d_%d" % (side, i, k), (side * (half + s / 2), y, k * (s + 0.005) + s / 2),
+                     (s, s, s), crate2 if (i + k) % 2 else crate, active=False)
+    tops = []
+    for c in range(3):
+        y = 3.6 + c * (s + 0.02)
+        for k in range(6):
+            ob = _box("fall_%d_%d" % (c, k),
+                      (half + s / 2 + random.uniform(-0.01, 0.01), y, k * (s + 0.005) + s / 2),
+                      (s, s, s), crate if (c + k) % 2 else crate2, mass=2.0)
+            if k == 5:
+                tops.append(ob)
+    z_top = 5 * (s + 0.005) + s / 2
+    pusher = _box("pusher", (half + s + 0.35, 4.35, z_top), (0.3, 2.4, 0.5), crate, mass=20.0)
+    _interp("LINEAR")
+    pusher.rigid_body.kinematic = True
+    pusher.keyframe_insert("location", frame=1)
+    pusher.keyframe_insert("location", frame=10)
+    pusher.location = (half - 0.15, 4.35, z_top)
+    pusher.keyframe_insert("location", frame=22)
+    pusher.location = (half - 0.15, 4.35, z_top + 8.0)
+    pusher.keyframe_insert("location", frame=28)
+    pusher.hide_render = True
+    _figure("far_figure", (0.0, 14.5, 0.0), skin)
+    return {"falling_crates": 18, "tops": [t.name for t in tops]}
+
+
 def main():
     a = _args()
     out = os.path.abspath(os.path.expanduser(a.out))
@@ -260,15 +306,21 @@ def main():
     sc.rigidbody_world.point_cache.frame_start = 1
     sc.rigidbody_world.point_cache.frame_end = frames
 
-    info = {"crates": build_crates, "fall": build_fall}[a.scene](sc, a.seed)
+    info = {"crates": build_crates, "fall": build_fall, "aisle": build_aisle}[a.scene](sc, a.seed)
 
-    # camera: a slow arc from front-left to front-right, slightly above, looking at the wall
-    look = Vector((0.0, 1.5, 1.0))
-    pts = []
-    for i in range(5):
-        t = i / 4
-        ang = math.radians(-35 + 70 * t)
-        pts.append(Vector((7.5 * math.sin(ang), 1.5 - 7.5 * math.cos(ang), 2.0 - 0.4 * t)))
+    if a.scene == "aisle":
+        # eye height at the near end of the aisle, drifting a little forward: the stack comes down
+        # across the frame between us and the far figure
+        look = Vector((0.0, 11.0, 1.35))
+        pts = [Vector((0.35, -1.6, 1.6)), Vector((0.3, -1.3, 1.58)), Vector((0.25, -1.0, 1.56))]
+    else:
+        # a slow arc from front-left to front-right, slightly above, looking at the wall
+        look = Vector((0.0, 1.5, 1.0))
+        pts = []
+        for i in range(5):
+            t = i / 4
+            ang = math.radians(-35 + 70 * t)
+            pts.append(Vector((7.5 * math.sin(ang), 1.5 - 7.5 * math.cos(ang), 2.0 - 0.4 * t)))
     _camera(sc, pts, look, frames)
 
     # flat, quick, unambiguous shading: workbench, studio light, object colours
@@ -302,6 +354,14 @@ def main():
                 step_len = (v - prev).length
             prev = v
         info["strike_frame"] = first_hit
+    if a.scene == "aisle":
+        # the impact: the first frame a top crate comes down below 1.2 m
+        tops = [bpy.data.objects[n] for n in info.get("tops", []) if n in bpy.data.objects]
+        for f in range(1, frames + 1):
+            sc.frame_set(f)
+            if any(t.matrix_world.translation.z < 1.2 for t in tops):
+                info["impact_frame"] = f
+                break
     sc.frame_set(1)
 
     # a PNG sequence: the flatpak Blender has no video encoder; the wrapper encodes it

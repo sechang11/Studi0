@@ -74,6 +74,10 @@ against a still torso.
   why the 2026-09-07 test (0.19-0.25) measured the prompt alone. Wired (2026-09-17) it carries face,
   hair and wardrobe (Terra 0.68 → 0.72) and doubled the person in 2 of 4 renders. Count the people
   before picking a ref2va take; do not plan a film on it yet (playbook §97.3).
+- **Since 2026-09-29** (§0.3): **Qwen-Image-2.1 (`80`) is the default start-frame compositor** - it beat
+  Flux 2 ref3 on 19 of 20 face-scored shots (+0.108), three times faster; Flux 2 (`75`) still frames
+  inserts and close-ups more faithfully (3 of 5 by-eye overrides). `fight.py --anchors --compositor best`
+  runs both and scores them. The three demo films and their walkthrough PDF are §0.3.
 - **Since 2026-09-27** (§0.2): the start frame can also be composed by **Qwen-Image-2.1** with up to
   sixteen references (`80`; flat ids `images.image_1..`), measured against Flux 2 ref3 - a tie on
   one face, +0.09 on the other, three times faster; `75` stays the default until it holds on a

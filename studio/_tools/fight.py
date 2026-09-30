@@ -196,33 +196,229 @@ def stage_cast(force=False, only="", seed=4242):
             print("  ref_%s FAILED" % name, flush=True)
 
 
-def stage_anchors(force=False):
+def _unique(seq):
+    out = []
+    for x in seq:
+        if x not in out:
+            out.append(x)
+    return out
+
+
+def _to_canvas(p, size=(1280, 720)):
+    """Every start frame is 1280x720, whichever compositor drew it: Qwen-2.1's canvas follows its
+    first reference at a pixel budget, not a size. Cover-fit and centre-crop, never stretch."""
+    from PIL import Image
+    im = Image.open(p).convert("RGB")
+    if im.size == size:
+        return p
+    r = max(size[0] / im.width, size[1] / im.height)
+    im = im.resize((round(im.width * r), round(im.height * r)), Image.LANCZOS)
+    l, t = (im.width - size[0]) // 2, (im.height - size[1]) // 2
+    im.crop((l, t, l + size[0], t + size[1])).save(p)
+    return p
+
+
+def _flux_anchor(s, seed, dst):
+    """Workflow 75: three chained ReferenceLatent stages, in the shot's own reference order."""
+    refs = [os.path.join(OUT, "ref_%s.png" % r) for r in s["refs"]]
+    if len(refs) != 3:
+        sys.exit("shot %s: a composed start frame takes exactly three references (repeat one: "
+                 "[who, who, place])" % s["id"])
+    for i, p in enumerate(refs, 1):
+        shutil.copy(p, os.path.join(COMFY, "input", "fight_ref%d.png" % i))
+    wf = {k: v for k, v in load_wf("75_flux2_ref3.json").items()
+          if isinstance(v, dict) and "class_type" in v}
+    wf["sg1_6"]["inputs"]["text"] = s["anchor"]
+    wf["sg1_25"]["inputs"]["noise_seed"] = int(seed)
+    wf["9"]["inputs"]["filename_prefix"] = "claude-generated/fight/anchor_%s_flux2" % s["id"]
+    return collect(submit(wf, "anchor_%s flux2" % s["id"]), dst)
+
+
+_WORDS = ["one", "two", "three", "four", "five"]
+
+
+def _qwen_anchor(s, seed, dst):
+    """Workflow 80: Qwen-Image-2.1 with the shot's pictures as <imageN>. The PLATE goes first because
+    the canvas follows image_1; a character named twice is sent once; the shot's words ('the woman of
+    reference one') are renumbered to the pictures' new order."""
+    import re
+    order = _unique(([PLACE_ID] if PLACE_ID in s["refs"] else []) +
+                    [r for r in s["refs"] if r != PLACE_ID])
+    idx = {r: i for i, r in enumerate(order, 1)}
+    words = s["anchor"]
+    for n, r in enumerate(s["refs"], 1):
+        words = re.sub(r"reference (%s|%d)\b" % (_WORDS[n - 1], n), "<image%d>" % idx[r], words,
+                       flags=re.I)
+    wf = {k: v for k, v in load_wf("80_qwen21_edit_refs.json").items()
+          if isinstance(v, dict) and "class_type" in v}
+    for k in ("21", "22", "23"):
+        wf.pop(k, None)
+    for k in list(wf["6"]["inputs"]):
+        if k.startswith("images."):
+            del wf["6"]["inputs"][k]
+    for r, i in idx.items():
+        name = "fight_q%d.png" % i
+        shutil.copy(os.path.join(OUT, "ref_%s.png" % r), os.path.join(COMFY, "input", name))
+        wf["q%d" % i] = {"class_type": "LoadImage", "inputs": {"image": name}}
+        wf["6"]["inputs"]["images.image_%d" % i] = ["q%d" % i, 0]
+    wf["6"]["inputs"]["prompt"] = words
+    wf["6"]["inputs"]["negative_prompt"] = AVOID
+    wf["10"]["inputs"]["seed"] = int(seed)
+    wf["12"]["inputs"]["filename_prefix"] = "claude-generated/fight/anchor_%s_qwen21_s%d" % (s["id"], seed)
+    if collect(submit(wf, "anchor_%s qwen21 s%d" % (s["id"], seed)), dst):
+        return _to_canvas(dst)
+    return None
+
+
+def _ref_head(who):
+    """The character's head cut from their reference, found with headbox - the yardstick."""
+    import newmodels_test as nm
+    dst = os.path.join(OUT, "_refhead_%s.png" % who)
+    if not os.path.exists(dst):
+        try:
+            nm.head_crop_file(os.path.join(OUT, "ref_%s.png" % who), dst)
+        except Exception as e:
+            print("  no head found in ref_%s: %s" % (who, str(e)[:80]), flush=True)
+    return dst if os.path.exists(dst) else None
+
+
+def score_faces(png, s, yard=None, tag="x"):
+    """Each character's head in `png` against a yardstick head (the reference, unless given). A
+    single face is found on the whole frame; two faces are found one per half (headbox finds one
+    head per picture). Wide shots and inserts are not scored: the head is too few pixels or absent.
+    Returns {who: cosine}."""
+    import newmodels_test as nm
+    face = s.get("face", "medium")
+    chars = _unique([r for r in s["refs"] if r in CAST])
+    if face in ("none", "wide") or not chars:
+        return {}
+    yard = yard or {c: _ref_head(c) for c in chars}
+    work = os.path.join(OUT, "_score")
+    os.makedirs(work, exist_ok=True)
+    if len(chars) >= 2:
+        sc = nm.score_pair(png, {c: yard[c] for c in chars if yard.get(c)}, work, tag)
+        return {c: sc[c]["score"] for c in chars if isinstance(sc.get(c), dict) and sc[c]["score"] is not None}
+    c = chars[0]
+    if not yard.get(c):
+        return {}
+    import headbox
+    try:
+        box = headbox.head_box(png)
+    except Exception:
+        box = None
+    if box and face == "close" and (box[3] - box[1]) < 0.12:
+        box = None           # a close-up's "head" that is a strip of hair: use the close default box
+    got = nm.identity_scores([{"id": tag, "portrait": yard[c], "still": png, "box": box,
+                               "close": face == "close"}], work)
+    v = got.get(tag, (None, None))[0]
+    return {c: v} if v is not None else {}
+
+
+def stage_anchors(force=False, compositor="best", qseeds=(11, 202), overrides=None):
+    """One start frame per shot. `best` renders the shot with BOTH compositors - Flux 2 ref3 (75),
+    one seed, and Qwen-Image-2.1 (80), `qseeds` - scores every candidate's faces against the cast
+    references, and keeps the highest; shots with no face to score keep Qwen s11 unless overridden.
+    All Flux renders run first and all Qwen renders second, so each model loads once per film.
+    The candidates and their numbers go to anchors.json and a board per four shots in picks/."""
+    overrides = overrides or {}
+    todo = []
     for s in SHOTS:
         dst = os.path.join(OUT, "anchor_%s.png" % s["id"])
-        if os.path.exists(dst) and not force:
-            print("  anchor_%s.png already there" % s["id"], flush=True)
+        if s.get("engine") == "previz":
+            print("  anchor_%s  <- built by previz_shot.py (engine previz)" % s["id"], flush=True)
             continue
         refs = [os.path.join(OUT, "ref_%s.png" % r) for r in s["refs"]]
         if not all(os.path.exists(p) for p in refs):
             sys.exit("cast first: missing %s" % [p for p in refs if not os.path.exists(p)])
         if s.get("anchor") is None:
-            # nobody in it: the plate is already the start frame
-            shutil.copy(refs[0], dst)
-            print("  anchor_%s  <- the plate itself (no cast in this shot)" % s["id"], flush=True)
+            if not os.path.exists(dst) or force:
+                shutil.copy(refs[0], dst)
+                print("  anchor_%s  <- the plate itself (no cast in this shot)" % s["id"], flush=True)
             continue
-        for i, p in enumerate(refs, 1):
-            shutil.copy(p, os.path.join(COMFY, "input", "fight_ref%d.png" % i))
-        wf = {k: v for k, v in load_wf("75_flux2_ref3.json").items()
-              if isinstance(v, dict) and "class_type" in v}
-        wf["sg1_6"]["inputs"]["text"] = s["anchor"]
-        wf["sg1_25"]["inputs"]["noise_seed"] = 4242
-        wf["9"]["inputs"]["filename_prefix"] = "claude-generated/fight/anchor_%s" % s["id"]
-        wait_for_queue()
-        t0 = time.time()
-        if collect(submit(wf, "anchor_" + s["id"]), dst):
-            print("  anchor_%s  %4.0fs  refs %s" % (s["id"], time.time() - t0, ",".join(s["refs"])), flush=True)
-        else:
-            print("  anchor_%s FAILED" % s["id"], flush=True)
+        if os.path.exists(dst) and not force and s["id"] not in overrides:
+            print("  anchor_%s.png already there" % s["id"], flush=True)
+            continue
+        todo.append(s)
+    cands = {s["id"]: {} for s in todo}
+    if compositor in ("flux2", "best"):
+        for s in todo:
+            p = os.path.join(OUT, "anchor_%s_flux2.png" % s["id"])
+            if not os.path.exists(p) or force:
+                wait_for_queue()
+                t0 = time.time()
+                if not _flux_anchor(s, 4242, p):
+                    print("  anchor_%s flux2 FAILED" % s["id"], flush=True)
+                    continue
+                print("  anchor_%s flux2       %4.0fs" % (s["id"], time.time() - t0), flush=True)
+            cands[s["id"]]["flux2"] = p
+    if compositor in ("qwen21", "best"):
+        for s in todo:
+            for q in qseeds:
+                p = os.path.join(OUT, "anchor_%s_qwen21_s%d.png" % (s["id"], q))
+                if not os.path.exists(p) or force:
+                    wait_for_queue()
+                    t0 = time.time()
+                    if not _qwen_anchor(s, q, p):
+                        print("  anchor_%s qwen21 s%d FAILED" % (s["id"], q), flush=True)
+                        continue
+                    print("  anchor_%s qwen21 s%-5d %4.0fs" % (s["id"], q, time.time() - t0), flush=True)
+                cands[s["id"]]["qwen21_s%d" % q] = p
+    record_p = os.path.join(OUT, "anchors.json")
+    record = json.load(open(record_p)) if os.path.exists(record_p) else {}
+    for s in todo:
+        sid, c = s["id"], cands[s["id"]]
+        if not c:
+            continue
+        scored = {}
+        for name, p in c.items():
+            f = score_faces(p, s, tag="anchor_%s_%s" % (sid, name))
+            scored[name] = {"file": os.path.basename(p), "faces": f,
+                            "mean": round(sum(f.values()) / len(f), 3) if f else None}
+        pick = overrides.get(sid)
+        why = "override"
+        if not pick:
+            ranked = sorted((v["mean"], k) for k, v in scored.items() if v["mean"] is not None)
+            if ranked:
+                pick, why = ranked[-1][1], "highest face score"
+            else:
+                pick = "qwen21_s%d" % qseeds[0] if "qwen21_s%d" % qseeds[0] in c else sorted(c)[0]
+                why = "no face to score - default"
+        if pick not in c:
+            print("  anchor_%s: no candidate %r (have %s)" % (sid, pick, ", ".join(sorted(c))), flush=True)
+            continue
+        shutil.copy(c[pick], os.path.join(OUT, "anchor_%s.png" % sid))
+        record[sid] = {"candidates": scored, "chosen": pick, "why": why}
+        print("  anchor_%s <- %-11s (%s)  %s" % (sid, pick, why, "  ".join(
+            "%s %s" % (k, v["mean"]) for k, v in sorted(scored.items()))), flush=True)
+    json.dump(record, open(record_p, "w"), indent=1)
+    anchor_boards(record)
+
+
+def anchor_boards(record, per=4):
+    from PIL import Image, ImageDraw, ImageFont
+    if not record:
+        return
+    font = ImageFont.truetype("/usr/share/fonts/liberation-sans-fonts/LiberationSans-Bold.ttf", 16)
+    board_dir = os.path.join(OUT, "picks")
+    os.makedirs(board_dir, exist_ok=True)
+    sids = [s["id"] for s in SHOTS if s["id"] in record]
+    for b in range(0, len(sids), per):
+        chunk = sids[b:b + per]
+        cw, chh = 480, 270
+        cols = max(len(record[sid]["candidates"]) for sid in chunk)
+        board = Image.new("RGB", (cols * cw, len(chunk) * (chh + 26)), (18, 18, 20))
+        d = ImageDraw.Draw(board)
+        for r, sid in enumerate(chunk):
+            y = r * (chh + 26)
+            for c, (name, v) in enumerate(sorted(record[sid]["candidates"].items())):
+                im = Image.open(os.path.join(OUT, v["file"])).convert("RGB").resize((cw, chh))
+                board.paste(im, (c * cw, y + 26))
+                chosen = name == record[sid]["chosen"]
+                d.text((c * cw + 6, y + 4), "%s %s  faces %s%s" % (sid, name, v["mean"], "  <- CHOSEN" if chosen else ""),
+                       font=font, fill=(120, 255, 140) if chosen else (255, 214, 102))
+        p = os.path.join(board_dir, "anchors_%d.jpg" % (b // per + 1))
+        board.save(p, quality=85)
+        print("  board -> %s" % p, flush=True)
 
 
 def ltx_graph(start_png, prompt, secs, seed, prefix):
@@ -242,6 +438,8 @@ def ltx_graph(start_png, prompt, secs, seed, prefix):
 
 def stage_shots(seeds=(11,), force=False):
     for s in SHOTS:
+        if s.get("engine", "ltx") not in ("ltx", "both"):
+            continue            # h3-only shots render in --h3 all; previz shots in previz_shot.py
         anchor = os.path.join(OUT, "anchor_%s.png" % s["id"])
         if not os.path.exists(anchor):
             sys.exit("anchors first: %s missing" % anchor)
@@ -325,16 +523,21 @@ def stage_seedance(shot_id, resolution="1080p", force=False):
         print("  seedance_%s already there" % shot_id, flush=True)
         return dst
     anchor = os.path.join(OUT, "anchor_%s.png" % shot_id)
-    chars = [os.path.join(OUT, "ref_%s.png" % r) for r in s["refs"] if r != "court"]
-    for i, p_ in enumerate([anchor] + chars[:2], 1):
+    # [image 1] the composed first frame, [image 2] the character, [image 3] the place - the order
+    # every `seedance.prompt` in the shot scripts is written against
+    chars = _unique([r for r in s["refs"] if r != PLACE_ID])
+    pics = ([anchor] + [os.path.join(OUT, "ref_%s.png" % r) for r in chars[:1]] +
+            [os.path.join(OUT, "ref_%s.png" % PLACE_ID)])[:3]
+    for i, p_ in enumerate(pics, 1):
         if not os.path.exists(p_):
             sys.exit("missing %s" % p_)
         shutil.copy(p_, os.path.join(COMFY, "input", "fight_sd_ref%d.png" % i))
     wf = {k: v for k, v in load_wf("76_seedance25_ref.json").items()
           if isinstance(v, dict) and "class_type" in v}
     n = wf["seedance"]["inputs"]
-    n["model.prompt"] = ("Reference image one is the first frame of the shot. " + s["prompt"])
-    n["model.duration"] = int(s["secs"])
+    sd = s.get("seedance") or {}
+    n["model.prompt"] = sd.get("prompt") or ("Reference image one is the first frame of the shot. " + s["prompt"])
+    n["model.duration"] = int(sd.get("secs") or s["secs"])
     n["model.resolution"] = resolution
     n["seed"] = 11
     wf["save"]["inputs"]["filename_prefix"] = "claude-generated/fight/seedance_%s" % shot_id
@@ -358,8 +561,14 @@ def h3_length(secs, fps=24):
 
 
 def stage_h3(shot_id, seeds=(11,), force=False):
-    """The same start frame and the same words, on H3 instead of LTX-2.5."""
+    """The same start frame and the same words, on H3 instead of LTX-2.5. `all` renders every shot
+    whose engine is h3 or both."""
     from PIL import Image
+    if shot_id == "all":
+        for x in SHOTS:
+            if x.get("engine") in ("h3", "both"):
+                stage_h3(x["id"], seeds, force)
+        return
     s = next((x for x in SHOTS if x["id"] == shot_id), None)
     if s is None:
         sys.exit("no shot %s" % shot_id)
@@ -449,10 +658,15 @@ def stage_sheets(picks=None):
         print("  %s  %d takes -> %s" % (sid, len(ims), out), flush=True)
 
 
-def stage_score():
-    rows = {}
+def stage_score(force=False):
+    """Camera against the ask and a frame count, per take. Takes already measured are kept (a film
+    has a hundred takes by the end; re-measuring all of them after each stage cost minutes)."""
+    mp = os.path.join(OUT, "measured.json")
+    rows = json.load(open(mp)) if (os.path.exists(mp) and not force) else {}
     for f in sorted(os.listdir(OUT)):
         if not f.endswith(".mp4"):
+            continue
+        if f in rows and os.path.exists(os.path.join(OUT, f[:-4] + "_strip.jpg")):
             continue
         v = os.path.join(OUT, f)
         dur = strip(v, os.path.join(OUT, f[:-4] + "_strip.jpg"))
@@ -467,34 +681,51 @@ def stage_score():
     return rows
 
 
-def stage_music(seconds=24, seed=77, force=False):
-    """The scene bed, written once for the whole sequence because the shots were rendered silent
-    of music on purpose (the breakdown's rule 7; §96.7 here)."""
-    dst = os.path.join(OUT, "score.mp3")
-    if os.path.exists(dst) and not force:
-        print("  score.mp3 already there", flush=True)
-        return dst
+def _ace_cue(tags, seconds, seed, dst):
     wf = {k: v for k, v in load_wf("06_acestep_music.json").items()
           if isinstance(v, dict) and "class_type" in v}
-    wf["10"]["inputs"]["tags"] = SCORE_TAGS
+    wf["10"]["inputs"]["tags"] = tags
     wf["10"]["inputs"]["lyrics"] = ""
     wf["11"]["inputs"]["seconds"] = float(seconds)
     if "duration" in wf["10"]["inputs"]:
         wf["10"]["inputs"]["duration"] = float(seconds)
     wf["12"]["inputs"]["seed"] = int(seed)
-    wf["14"]["inputs"]["filename_prefix"] = "claude-generated/fight/score"
+    wf["14"]["inputs"]["filename_prefix"] = "claude-generated/fight/score_%s" % FILM
     wait_for_queue()
-    import post
-    post.make_room(need_gb=10.0, budget=180)
     t0 = time.time()
     outs = submit(wf, "score")
     got = [o for o in outs if str(o).lower().endswith((".mp3", ".flac", ".wav"))]
     if not got:
-        print("  score FAILED (%s)" % outs, flush=True)
+        print("  cue FAILED (%s)" % outs, flush=True)
         return None
     shutil.copy(os.path.join(COMFY, "output", got[0]), dst)
-    print("  score  %4.0fs  %ss of bed" % (time.time() - t0, seconds), flush=True)
+    print("  cue  %4.0fs  %ss  %s" % (time.time() - t0, seconds, os.path.basename(dst)), flush=True)
     return dst
+
+
+def stage_music(seconds=24, seed=77, force=False):
+    """The scene bed, written once for the whole sequence because the shots were rendered silent
+    of music on purpose (the breakdown's rule 7; §96.7 here). ACE-Step fades to silence past about
+    45 s (playbook §1), so a longer film gets TWO cues - the script's score_tags, then its
+    score_tags_b (or the same tags on the next seed) - crossfaded over four seconds: an act break
+    in the score instead of a fade in the middle of the film."""
+    dst = os.path.join(OUT, "score.mp3")
+    if os.path.exists(dst) and not force:
+        print("  score.mp3 already there", flush=True)
+        return dst
+    import post
+    post.make_room(need_gb=10.0, budget=180)
+    if seconds <= 44:
+        return _ace_cue(SCORE_TAGS, seconds, seed, dst)
+    half = seconds / 2.0 + 4
+    a = _ace_cue(SCORE_TAGS, half, seed, os.path.join(OUT, "_cue_a.mp3"))
+    b = _ace_cue(_seq.get("score_tags_b") or SCORE_TAGS, half, seed + 1, os.path.join(OUT, "_cue_b.mp3"))
+    if not (a and b):
+        return None
+    sh("ffmpeg", "-y", "-v", "error", "-i", a, "-i", b, "-filter_complex",
+       "[0:a][1:a]acrossfade=d=4:c1=tri:c2=tri[m]", "-map", "[m]", "-b:a", "192k", dst)
+    print("  score  two cues of %.0fs crossfaded -> %s (%.1fs)" % (half, dst, post.duration(dst)), flush=True)
+    return dst if os.path.exists(dst) else None
 
 
 def stage_finish(picks=None, grade="filmic", master=False):
@@ -563,7 +794,12 @@ def stage_finish(picks=None, grade="filmic", master=False):
         post.make_room(need_gb=8.0, budget=240)
         hi = os.path.join(OUT, "%s_%s_2x.mp4" % (FILM, grade))
         t0 = time.time()
-        post.upscale(out, hi, scale=2)
+        try:
+            import spandrel  # noqa: F401  (only ComfyUI's venv has it)
+            post.upscale(out, hi, scale=2)
+        except ImportError:
+            sh(PY, "-c", "import sys; sys.path.insert(0, %r); import post; post.upscale(%r, %r, scale=2)"
+               % (TOOLS, out, hi))
         print("2x master -> %s  (%.0fs, frames %d)" % (hi, time.time() - t0, post.frames(hi)), flush=True)
     return out
 
@@ -586,12 +822,18 @@ def main():
     ap.add_argument("--only", default="", help="--cast: just this reference (vesper/koval/marrow/court)")
     ap.add_argument("--seed", type=int, default=4242, help="--cast: the seed for a re-roll")
     ap.add_argument("--seeds", type=int, nargs="+", default=[11])
+    ap.add_argument("--compositor", default="qwen21", choices=["best", "flux2", "qwen21"],
+                    help="--anchors: qwen21 (default since 2026-09-29, playbook §0.3), flux2, or best = both, scored")
+    ap.add_argument("--qseeds", type=int, nargs="+", default=[11, 202], help="--anchors: Qwen-2.1 seeds")
+    ap.add_argument("--anchor-picks", default="", help="--anchors: override, e.g. 020=flux2,030=qwen21_s202")
+    ap.add_argument("--music-secs", type=float, default=0, help="--music: length (default film + 3 s)")
     a = ap.parse_args()
     os.makedirs(OUT, exist_ok=True)
     if a.cast:
         stage_cast(a.force, a.only, a.seed)
     if a.anchors:
-        stage_anchors(a.force)
+        stage_anchors(a.force, a.compositor, tuple(a.qseeds),
+                      dict(kv.split("=", 1) for kv in a.anchor_picks.split(",") if "=" in kv))
     if a.shots:
         stage_shots(tuple(a.seeds), a.force)
     if a.ab:
@@ -601,9 +843,9 @@ def main():
     if a.h3:
         stage_h3(a.h3, tuple(a.seeds), a.force)
     if a.score:
-        stage_score()
+        stage_score(a.force)
     if a.music:
-        stage_music(force=a.force)
+        stage_music(a.music_secs or (sum(float(s["secs"]) for s in SHOTS) + 3), force=a.force)
     if a.sheets:
         stage_sheets(dict(kv.split("=", 1) for kv in a.picks.split(",") if "=" in kv))
     if a.finish:

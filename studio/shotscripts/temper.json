@@ -1,0 +1,198 @@
+{
+ "_comment": "Demo film 3 of 3 (2026-09-29). Texture: fire, sparks and steam. Effects beats rendered on H3 and LTX both and picked by measurement; one multishot generation with internal cuts.",
+ "film": "temper",
+ "title": "TEMPER",
+ "logline": "One night at the forge: fire, hammer, water, and a blade that holds its edge.",
+ "grade": "Cinematic film, night, deep orange firelight against cool blue moonlight from an open doorway, glowing embers, drifting smoke haze, rich blacks with detail, fine grain, anamorphic.",
+ "avoid": "lowres, blurry, deformed limbs, fused fingers, extra fingers, extra limbs, doubled figure, two of the same person, melting face, morphing, warping, text, letters, subtitles, captions, watermark, logo, nsfw",
+ "realism": "Unretouched photograph, available light, visible skin texture and pores, fine film grain, shallow depth of field, no retouching, no gloss.",
+ "score_tags": "slow cinematic build, deep taiko drums, low droning cello, metallic percussion like distant anvils, dark, epic, instrumental, no vocals",
+ "score_tags_b": "cinematic climax and release, full low strings and pounding taiko, then a single long sustained string note fading, instrumental, no vocals",
+ "place": {
+  "id": "forge",
+  "prompt": "Wide photograph of the inside of an old stone village forge at night, nobody in it: a brick hearth with a bed of glowing orange coals under a sooty hood, a heavy black iron anvil on a tree-stump block in the middle of the floor, hammers and tongs hanging on the rough stone wall, a wooden trough of dark water, big leather bellows, smoke drifting under old timber rafters, a doorway open onto blue moonlit night. Deep perspective, anamorphic. Unretouched photograph, available light, visible skin texture and pores, fine film grain, shallow depth of field, no retouching, no gloss."
+ },
+ "cast": {
+  "maren": {
+   "role": "the smith",
+   "prompt": "Full-length reference photograph of a broad-shouldered strong woman of about forty-five against a plain mid-grey backdrop, even soft light, standing still, facing the camera, arms at her sides. Dark hair tied back under a faded red headscarf, a weathered face with a smudge of soot on one cheek, bare muscular forearms streaked with soot, a heavy scorched brown leather apron over a sleeveless grey linen shirt, thick leather work gloves, heavy boots. Unretouched photograph, available light, visible skin texture and pores, fine film grain, shallow depth of field, no retouching, no gloss."
+  }
+ },
+ "shots": [
+  {
+   "id": "010",
+   "title": "the forge",
+   "secs": 5,
+   "refs": [
+    "forge"
+   ],
+   "anchor": null,
+   "engine": "ltx",
+   "face": "none",
+   "avoid_extra": "people, a person, a figure, a crowd, a face, hands",
+   "prompt": "Nothing moves in the empty forge but the fire: the bed of coals glows and pulses, small flames lick up and die back, sparks drift up into the hood, smoke curls along the rafters. Nobody is here. The camera pushes in slowly toward the hearth. The low roar of the fire, crackling coals, a distant owl. No music."
+  },
+  {
+   "id": "020",
+   "title": "bellows",
+   "secs": 4,
+   "refs": [
+    "maren",
+    "maren",
+    "forge"
+   ],
+   "engine": "both",
+   "face": "none",
+   "anchor": "A still frame from a live-action film, an INSERT CLOSE-UP of the big leather bellows beside the hearth of the forge of reference three, the gloved hand of the woman of reference one on the wooden handle, the bed of coals glowing beside it. Cinematic film, night, deep orange firelight against cool blue moonlight from an open doorway, glowing embers, drifting smoke haze, rich blacks with detail, fine grain, anamorphic.",
+   "prompt": "The gloved hand pumps the bellows down hard twice; at each breath of air the coals flare white-hot and a spray of sparks leaps up into the hood. Static camera, close. The deep whoosh of the bellows, the fire roaring up, sparks crackling. No music."
+  },
+  {
+   "id": "030",
+   "title": "watching",
+   "secs": 5,
+   "refs": [
+    "maren",
+    "maren",
+    "forge"
+   ],
+   "engine": "both",
+   "face": "close",
+   "anchor": "A still frame from a live-action film, a CLOSE-UP of the woman of reference one in the forge of reference three, her face lit from below by the orange glow of the hearth, eyes fixed on the fire, sweat on her brow, smoke drifting past. Cinematic film, night, deep orange firelight against cool blue moonlight from an open doorway, glowing embers, drifting smoke haze, rich blacks with detail, fine grain, anamorphic.",
+   "prompt": "She watches the fire without blinking; the glow pulses across her face, and a bead of sweat runs down her temple. Handheld camera close, almost still. The roar of the fire, crackling coals, her slow breath. No music."
+  },
+  {
+   "id": "040",
+   "title": "the blade",
+   "secs": 4,
+   "refs": [
+    "maren",
+    "maren",
+    "forge"
+   ],
+   "engine": "ltx",
+   "face": "none",
+   "anchor": "A still frame from a live-action film, an INSERT CLOSE-UP inside the hearth of the forge of reference three: long iron tongs gripping a blade buried in the glowing coals, held by the gloved hand of the woman of reference one. Cinematic film, night, deep orange firelight against cool blue moonlight from an open doorway, glowing embers, drifting smoke haze, rich blacks with detail, fine grain, anamorphic.",
+   "prompt": "The tongs draw the long blade out of the coals; it glows bright orange-yellow along its whole length and sheds sparks as it comes. Static camera, close. Steel scraping over coals, the fire's crackle and roar. No music."
+  },
+  {
+   "id": "050",
+   "title": "first blow",
+   "secs": 5,
+   "refs": [
+    "maren",
+    "maren",
+    "forge"
+   ],
+   "engine": "both",
+   "face": "medium",
+   "anchor": "A still frame from a live-action film, a MEDIUM SHOT of the woman of reference one standing at the anvil in the forge of reference three, a heavy hammer raised in her right hand, the glowing orange blade held flat on the anvil with tongs in her left, the hearth blazing behind her. Cinematic film, night, deep orange firelight against cool blue moonlight from an open doorway, glowing embers, drifting smoke haze, rich blacks with detail, fine grain, anamorphic.",
+   "prompt": "She brings the hammer down on the glowing blade, once, twice, three times; at each blow a burst of bright sparks sprays off the anvil and dies away. Static camera. The ringing clang of the hammer on hot steel at each blow, the fire roaring behind her. No music.",
+   "seedance": {
+    "secs": 5,
+    "why": "Sparks that exist at the instant of each blow and are gone before the next - the breakdown's rule 3, which we measured does not transfer to LTX-2.5 (the effect accumulates) and partly does to H3. This shot is rendered on both and picked; Seedance is the engine that keys an effect to an impact frame.",
+    "prompt": "[image 1] is the first frame. The woman of [image 2] brings the hammer down on the glowing blade on the anvil of the forge of [image 3] three times in a steady rhythm; at the exact instant each blow lands a burst of white-orange sparks explodes off the steel and is gone before the hammer rises again; between the blows the air is clear. Medium shot, static camera, firelight and blue moonlight. Sound: three ringing clangs, each with the spit of sparks, the fire's roar. No music."
+   }
+  },
+  {
+   "id": "060",
+   "title": "the rhythm",
+   "secs": 8,
+   "refs": [
+    "maren",
+    "maren",
+    "forge"
+   ],
+   "engine": "ltx",
+   "face": "medium",
+   "anchor": "A still frame from a live-action film, a MEDIUM CLOSE SHOT of the woman of reference one at the anvil in the forge of reference three, mid-swing, the hammer high, the glowing blade on the anvil in front of her, sparks hanging in the air, firelight on her face. Cinematic film, night, deep orange firelight against cool blue moonlight from an open doorway, glowing embers, drifting smoke haze, rich blacks with detail, fine grain, anamorphic.",
+   "prompt": "She hammers the glowing blade in a steady rhythm, sparks flying at every blow. Cut to a close-up of the hammer striking the orange steel on the anvil in a burst of sparks. Cut to a close-up of her face, sweat and firelight, eyes on the work. Cut back to her at the anvil as she turns the blade with the tongs and strikes again. Static camera in every shot. The ringing rhythm of the hammer, the roar of the fire, her breath. No music.",
+   "seedance": {
+    "secs": 10,
+    "why": "Several angles on fast repeated strikes in one generation. LTX-2.5 does the cuts (measured: the word cut makes the cut, and the face holds when it is in the start frame) but not the speed of the swing; Seedance's 15-second multi-shot with references is built for exactly this.",
+    "prompt": "[image 1] is the first frame. The woman of [image 2] works the glowing blade on the anvil of the forge of [image 3] in a fast, heavy rhythm. Shot one, medium: three hard blows, sparks bursting at each. Cut to shot two, an extreme close-up: the hammer face meeting the orange steel, sparks spraying at the lens. Cut to shot three, a close-up of her face in the firelight, eyes narrowed, sweat running. Cut to shot four, medium: she turns the blade with the tongs and brings the hammer down again. Sound: the ringing rhythm of the hammer, her breath, the fire's roar. No music."
+   }
+  },
+  {
+   "id": "070",
+   "title": "quench",
+   "secs": 4,
+   "refs": [
+    "maren",
+    "maren",
+    "forge"
+   ],
+   "engine": "both",
+   "face": "none",
+   "anchor": "A still frame from a live-action film, an INSERT CLOSE-UP of a wooden trough of dark water in the forge of reference three, a glowing orange blade held in tongs by the gloved hand of the woman of reference one just above the surface. Cinematic film, night, deep orange firelight against cool blue moonlight from an open doorway, glowing embers, drifting smoke haze, rich blacks with detail, fine grain, anamorphic.",
+   "prompt": "The glowing blade plunges into the water; the water boils violently around it and a thick cloud of white steam bursts up and rolls away across the frame. Static camera, close. A loud angry hiss and bubbling, then the steam's fading sigh. No music.",
+   "seedance": {
+    "secs": 4,
+    "why": "A burst of steam at the instant of contact that must then roll away and clear - rule 3 again. Rendered here on H3 and LTX and picked.",
+    "prompt": "[image 1] is the first frame. The glowing blade held by the woman of [image 2] plunges into the water trough of the forge of [image 3]; at the instant it touches, the water erupts into a violent boil and a burst of white steam, which rolls away and thins in a second to show the dark blade under the water. Insert close-up, static camera. Sound: a sharp angry hiss at the instant of contact, bubbling, then quiet. No music."
+   }
+  },
+  {
+   "id": "080",
+   "title": "through the steam",
+   "secs": 5,
+   "refs": [
+    "maren",
+    "maren",
+    "forge"
+   ],
+   "engine": "both",
+   "face": "medium",
+   "anchor": "A still frame from a live-action film, a MEDIUM CLOSE-UP of the woman of reference one standing in drifting white steam in the forge of reference three, holding a dark blade upright in her gloved hand, firelight behind her. Cinematic film, night, deep orange firelight against cool blue moonlight from an open doorway, glowing embers, drifting smoke haze, rich blacks with detail, fine grain, anamorphic.",
+   "prompt": "The steam thins around her; she raises the dark blade to eye level and sights down its edge, turning it slowly in the firelight. Handheld camera, a faint float. The last hiss of steam, the fire's low roar. No music."
+  },
+  {
+   "id": "090",
+   "title": "the edge",
+   "secs": 5,
+   "refs": [
+    "maren",
+    "maren",
+    "forge"
+   ],
+   "engine": "ltx",
+   "face": "close",
+   "anchor": "A still frame from a live-action film, a CLOSE-UP of the woman of reference one in the forge of reference three holding a finished dark steel blade upright beside her face, its bright edge catching the firelight, soot on her cheek. Cinematic film, night, deep orange firelight against cool blue moonlight from an open doorway, glowing embers, drifting smoke haze, rich blacks with detail, fine grain, anamorphic.",
+   "prompt": "She turns the blade a little so the firelight runs along its edge like a line of light; the ghost of a satisfied smile. Static camera, a faint float. The fire crackling low, her slow breath out. No music."
+  },
+  {
+   "id": "100",
+   "title": "hang the hammer",
+   "secs": 6,
+   "refs": [
+    "maren",
+    "maren",
+    "forge"
+   ],
+   "engine": "ltx",
+   "face": "wide",
+   "anchor": "A still frame from a live-action film, a WIDE SHOT of the forge of reference three at night, the woman of reference one standing by the stone wall hanging a hammer on its hook, the finished blade in her other hand, the fire in the hearth burning low, blue moonlight in the doorway. Cinematic film, night, deep orange firelight against cool blue moonlight from an open doorway, glowing embers, drifting smoke haze, rich blacks with detail, fine grain, anamorphic.",
+   "prompt": "She hangs the hammer on its hook and stands for a moment looking at the fire burning down, the blade in her hand. Static camera. The hammer's clink on the hook, the fire crackling low, an owl outside. No music."
+  },
+  {
+   "id": "110",
+   "title": "embers",
+   "secs": 5,
+   "refs": [
+    "forge"
+   ],
+   "anchor": null,
+   "engine": "ltx",
+   "face": "none",
+   "avoid_extra": "people, a person, a figure, a crowd, a face, hands",
+   "prompt": "Nothing moves in the empty forge but the dying fire: the coals fade from orange to a dull red glow, a last thin curl of smoke rises into the hood, and the moonlight lies still in the doorway. Nobody is here. Static camera. The faint tick and crackle of cooling coals, the night outside. No music."
+  }
+ ],
+ "not_shot": [
+  {
+   "title": "the full forging, one take",
+   "why": "A whole forging in one continuous 15-second take - heat, strike, turn, strike, quench - is a chain of fast motions with effects at each instant. We cut it into one beat per shot, which is what this box does well; Seedance would attempt it in one.",
+   "seedance": "[image 1] is the woman of [image 2] at the anvil of the forge of [image 3]. In one continuous take she draws the glowing blade from the coals, strikes it four times with sparks bursting at each blow, turns it, strikes twice more, then plunges it into the trough in an eruption of steam. Handheld camera circling her slowly. Sound: the fire, six ringing blows, the hiss of the quench. No music.",
+   "secs": 15
+  }
+ ]
+}

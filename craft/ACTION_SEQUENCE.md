@@ -268,3 +268,27 @@ good as the shots deserve, so there is nothing else here worth paying for.
   instead of an adjective.
 - **A physics beat.** `previz_blender.py` simulates it (rigid bodies, a proxy figure, a camera arc),
   and `74` draws the real scene over its depth. The measured first run is in §0.2.
+
+
+## 2026-09-29: three demo films, and what the pipeline gained making them
+
+Three one-minute films - DEAD STOCK, HOUSE RULES, TEMPER - built on this runbook overnight; the
+walkthrough is `studio/samples/docs/DEMO_FILMS_WALKTHROUGH.pdf`. What changed in the runbook:
+
+- **Start frames: Qwen-Image-2.1 by default** (`--anchors` now means `--compositor qwen21`, two seeds,
+  scored). `--compositor best` also draws Flux 2 and keeps whichever face scores higher; use it, or override
+  with `--anchor-picks 090=flux2`, for inserts and true close-ups, where Flux 2 obeys shot size better.
+- **Engine per shot** in the script: `"engine": "ltx" | "h3" | "both" | "previz"`. `--h3 all` renders every
+  h3/both shot. On the nine `both` shots of these films the H3 take won every time.
+- **The pick, measured**: `~/ComfyUI/venv/bin/python3 studio/_tools/take_rank.py --sequence FILM` after
+  `--score` - each face on the last frame against its own start frame, each line through the local speech
+  model, level, camera - writes `ranked.json` and `picks.txt`. Look at the boards anyway: it cannot see an
+  intruding stranger, a shot size, or an effect that should have cleared.
+- **A physics beat**: `"engine": "previz"` with `"previz": {"scene": ..., "seconds": ...}`, then
+  `python3 studio/_tools/previz_shot.py --sequence FILM --shot NNN` - Blender, the dressed first frame,
+  LTX-2.3 depth control; the takes are `pv_NNN_sSEED.mp4`, picked as `NNN=pv:SEED`.
+- **Music past 45 s**: `--music` writes two ACE-Step cues (the script's `score_tags`, then `score_tags_b`)
+  crossfaded over four seconds.
+- **Delivery**: `--finish --master` (the upscale runs under the venv), then `film_cards.py --sequence FILM`
+  for the title card, the 2x final and the annotated cut; `seedance_notation.py` for the prompts the paid
+  engine would have been sent.

@@ -102,7 +102,7 @@ ref2va weights once did. It also writes `workflows/INDEX.md` and `docs/MODELS.md
 
 | weights | what it is | workflow | first number (2026-09-27) |
 |---|---|---|---|
-| **Krea 2 Turbo** fp8 (13.1 GB) + qwen3vl-4b + the style-reference LoRA | a 12.9B open image model built for LOOK: 2K native, 8 steps, and one picture can set the style of another | `77`, `78` | 4.5-8 s for a 768x1344 cast reference on the same words as the Qwen-2512 cast picture: a plainer, more photographic register (skin, backdrop and shadow read as a real studio) and a different reading of the same description - which casts best is queue item 22. The style reference (`78`, the court plate as the look) carried the plate's palette and grain onto the guard, not its room: a look tool, as billed, not a place tool |
+| **Krea 2 Turbo** fp8 (13.1 GB) + qwen3vl-4b + the style-reference LoRA | a 12.9B open image model built for LOOK: 2K native, 8 steps, and one picture can set the style of another | `77`, `78` | 4.5-8 s for a 768x1344 cast reference on the same words as the Flux 2 cast picture (workflow 40): a plainer, more photographic register (skin, backdrop and shadow read as a real studio) and a different reading of the same description - which casts best is queue item 22. The style reference (`78`, the court plate as the look) carried the plate's palette and grain onto the guard, not its room: a look tool, as billed, not a place tool |
 | **Qwen-Image-2.1** int8 (7.3 GB) + qwen3vl-8b (9.4 GB) + its VAE | one 7B checkpoint for generation AND editing, up to 16 reference images, native 2K, RGBA | `79`, `80` | **the start-frame compositor A/B below** |
 | **Wan Animate 2** int8 (16.7 GB) + distill LoRA + clip-vision-h + VAE | reference image (who) + driving video (what motion) -> that character performing it; no pose extraction | `81` | runs (65 s for 81 frames at 848x464): the driver's punches are performed by a figure in vesper's clothes, motion agreement r 0.59 / 0.63 against the driving take - but this first wiring CROPPED the reference's head (a portrait reference forced into a landscape canvas), so its identity numbers (0.56 falling to 0.44 over the clip) measured a torso. Queue 19 |
 | **LTX-2.3 IC-LoRA Ingredients** (1.3 GB, Comfy-Org mirror) | a reference SHEET - one picture of faces, figures and the place - conditions a whole clip. The 2.5 adapter exists and is GATED (Lightricks, 403 for this box's account) | `82` + `refsheet.py` | the people carry with NO start frame: against the anchor's own heads a sheet-only clip reads 0.62 / 0.49 (vesper / koval, dev + distill LoRA) and 0.68 / 0.56 (the distilled checkpoint) - the same-person band starts at 0.56 - where a start frame alone reads 0.87 / 0.84. The room's framing is the model's own. Not a route (below) |
@@ -215,6 +215,54 @@ prompt's outputs, first; a collector that takes the first video takes the input 
 0.3-0.4 for the same person; §98.5b said so, and it had to be relearned on the sheet. (3) A border
 band against the plate measures FRAMING as much as room; a clip that chose its own angle scores
 "unrelated" in the same arena. Check the ruler first.
+
+### §0.3  The demo films of 2026-09-29 - what making them measured
+
+Three one-minute films made overnight on the shot-script pipeline (`fight.py`), each built to show one
+thing: **DEAD STOCK** (action, a physics beat), **HOUSE RULES** (dialogue, five lines, two faces),
+**TEMPER** (fire, sparks, steam). Scripts `studio/shotscripts/{dead-stock,house-rules,temper}.json`;
+renders `studio/samples/fight/<film>/` (`<film>_final.mp4`, `_final_2x.mp4`, `_annotated.mp4`); the
+walkthrough `studio/samples/docs/DEMO_FILMS_WALKTHROUGH.pdf`; the paid prompts not sent
+`studio/samples/fight/SEEDANCE_NOTATION.md`. New tools: `take_rank.py` (the pick, measured),
+`previz_shot.py` (a physics beat), `film_cards.py` (title card, annotated cut), `seedance_notation.py`,
+`walkthrough_pdf.py`. 34 shots, 135 takes (3 seeds a shot, both engines where asked, four retakes); every pick recorded with its reason.
+
+1. **The start-frame compositor contest is settled (queue item 17).** Every composed start frame was drawn
+   by Flux 2 ref3 (`75`, one seed) and Qwen-Image-2.1 (`80`, two seeds), every face scored against its
+   character's reference. On the 20 shots with a face to score, Qwen's better seed beat Flux on **19**
+   (mean +0.108), and Qwen's FIRST seed alone beat Flux on **17** (+0.083) - not an artefact of the extra
+   seed - at 11-15 s a frame against 33-36. By eye, 5 of 30 anchors were overridden: two between Qwen seeds
+   (an intruding stranger at the frame edge; an arm raised for the action), and **three toward Flux, all
+   for SHOT SIZE**: Qwen drew a medium shot where the words asked for a close-up (HOUSE RULES 080) or an
+   insert (090, TEMPER 070). Qwen wins faces; Flux still obeys framing better. `fight.py --anchors` now
+   defaults to `--compositor qwen21`; `best` runs the contest and keeps the boards.
+2. **H3 against LTX-2.5 on the same start frame and words, 9 shots.** The H3 take went in on **9 of 9**:
+   on the 7 with a face, its best take held the face against its own start frame by +0.14 on average over
+   LTX's best (e.g. 0.62 vs 0.45, 0.64 vs 0.47), with a static camera where LTX pushed in by up to half the
+   frame on close-ups that asked for stillness. On the two effects inserts: a bellows pump gave two separate
+   flares on H3, each dying before the next, where every LTX take grew the fire and kept it; a quench on H3
+   burst into steam that held low with the blade visible, where every LTX take whited out the frame -
+   §98.3-98.4's finding (effects accumulate on LTX) extended from dust to fire and steam.
+3. **Dialogue**: 7 lines over 22 takes, read back by the local speech model: 21 word-for-word, one 86%
+   ("raincoat" heard as "rain mote"). The line is the one thing in these films that never failed.
+4. **The physics shot** (`previz_shot.py`): Blender rigid bodies -> the simulation's first frame dressed as
+   the film by Qwen-Image-2.1 (the previz as <image1>, the plate and the cast after it) -> LTX-2.3 IC-LoRA
+   depth control starting on that frame. Motion agreement with the simulation **r 0.918 / 0.846 / 0.918**;
+   without the dressed frame 0.962 / 0.934 but a different room (the fallback arm); on 09-27, with no start
+   frame, 0.84 / 0.71. The dressed frame is what lets the shot cut into the film.
+5. **LTX-2.5 is faster than §96.11 says**: 96 takes at 0.9 MP, median 18 s, a 4 s take in 14 s, an 8 s take
+   in 30 s (the table says 20-44 s). H3 (`67`, v4 turbo, sparse): 30 takes, median 41 s. All of it - three
+   films, casts, 30 start-frame contests, 135 takes - in under two hours of GPU.
+6. **A re-direction, measured**: DEAD STOCK 100 asked for "the faintest smile" and got a full grin on all
+   three seeds; the smile was taken out of the words and four more seeds rendered - no grin on any, and the
+   ranker's pick (0.66, static, the line 100%) is one of them. The first words are kept as `prompt_v1`.
+7. **Instrument notes.** The face yardstick against the take's own start frame (the §98.5b rule) is a good
+   pick signal and a strict fault: it flagged real drift (LTX pushing in on close-ups) and false drift (a
+   woman turning her head to the person she is talking to; the last frame of a multishot shot that ends on
+   an insert, 0.07). A flagged close-up gets a look before it is thrown away. ComfyUI keeps every model it
+   has loaded cached in host RAM - 57 of 60 GB after Flux 2 and Qwen-2.1 - so the chains now POST `/free`
+   between engine families. `post.upscale` needs `spandrel`, which only ComfyUI's venv has: the 2x master
+   now runs the upscale under the venv interpreter whichever python ran `fight.py`.
 
 ## 1. What to reach for
 
@@ -4737,7 +4785,9 @@ the current engines. What transfers to this box, and how:
 16. **Seedance 2.5 on a strike beat** (§98.7) - the moment somebody signs in; measure it against the
     H3 take on the same anchor before any film leans on paid video.
 
-17. **The compositor A/B on a second shot and on the-letter** (`compositor_ab.py --shot 020`, then
+17. **RESOLVED 2026-09-29 (§0.3): Qwen-Image-2.1 won 19 of 20 face-scored shots; it is now the anchor
+    default; Flux 2 kept for framing-critical inserts and close-ups.** The original item:
+    **The compositor A/B on a second shot and on the-letter** (`compositor_ab.py --shot 020`, then
     `--film the-letter --shot 020`): if Qwen-Image-2.1 (`80`) still ties or wins on every face, the
     anchor stage in `fight.py` moves to it - three times faster, and sixteen references instead of
     three when a scene has a prop or a third person (§0.2).
@@ -4752,7 +4802,7 @@ the current engines. What transfers to this box, and how:
 21. **Krea 2 RAW as the trainable photoreal face** (§95.3's missing unlock): musubi-tuner and
     ai-toolkit train LoRAs on RAW and infer on Turbo; `77` is the inference side. Measure one pack's
     face against the reference route by the LoRA gate.
-22. **One anchor, three image engines**: Qwen-2512 (the cast stage today), Krea 2 Turbo, Z-Image
+22. **One reference, three image engines**: Flux 2 (the cast stage today, workflow 40), Krea 2 Turbo, Z-Image
     Turbo (the orphan) - which reference casts best, by the pack ladder.
 23. **ComfyUI 0.37.4** when the paid door is opened (Seedance 2.5 Draft is partner-node only), tag
     to tag as in §0.1, then one render of every graph (§0.2, item 2).

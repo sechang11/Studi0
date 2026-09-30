@@ -46,7 +46,7 @@ STAGES = [
     {"id": "cast", "title": "1 · Cast and place references", "flags": ["--cast"],
      "writes": ["ref_*.png"], "tool": "fight",
      "what": "One full-length picture per character on a plain grey backdrop, and one plate of the place, "
-             "from the descriptions in the script (Qwen-Image). These are the pictures every later step "
+             "from the descriptions in the script (Flux 2, workflow 40). These are the pictures every later step "
              "refers to; a character is never described again.",
      "look": "Is each person who the script meant? Re-roll one with a new seed rather than editing the "
              "words - the face is what will be carried, so it has to be one you accept."},
@@ -56,7 +56,7 @@ STAGES = [
      "look": "Faces should be the biggest panels. Nothing else is needed from you."},
     {"id": "anchors", "title": "3 · Start frames", "flags": ["--anchors"], "writes": ["anchor_*.png"],
      "tool": "fight",
-     "what": "One composed frame per shot from the shot's references (Flux 2, three references at once): "
+     "what": "One composed frame per shot from the shot's references (Qwen-Image-2.1 by default since 2026-09-29, up to sixteen references; Flux 2 on request): "
              "the place, who is in it, where they stand. The start frame fixes where a shot BEGINS.",
      "look": "Right people, right room, right framing. A wrong start frame cannot be fixed by the video."},
     {"id": "shots", "title": "4 · Shots", "flags": ["--shots"], "writes": ["shot_*_s*.mp4"], "tool": "fight",

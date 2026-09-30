@@ -1,0 +1,225 @@
+{
+ "_comment": "Demo film 1 of 3 (2026-09-29). Action, built around a physical beat choreographed in Blender (studio/_tools/previz_shot.py) instead of hoped for from words.",
+ "film": "dead-stock",
+ "title": "DEAD STOCK",
+ "logline": "A courier cornered in a warehouse at night brings the stock down between herself and the man sent to collect it.",
+ "grade": "Cinematic film, night, sodium-orange practical lamps against cold blue-green shadow, wet reflective concrete, haze in the air, deep blacks with detail, fine grain, anamorphic.",
+ "avoid": "lowres, blurry, deformed limbs, fused fingers, extra fingers, extra limbs, doubled figure, two of the same person, melting face, morphing, warping, text, letters, subtitles, captions, watermark, logo, nsfw",
+ "realism": "Unretouched photograph, available light, visible skin texture and pores, fine film grain, shallow depth of field, no retouching, no gloss.",
+ "score_tags": "dark cinematic tension score, low pulsing synth bass, sustained low strings, soft ticking percussion, slow build, suspense, instrumental, no vocals",
+ "score_tags_b": "cinematic aftermath, low strings swell and fall away, a few sparse piano notes, distant thunder, quiet, instrumental, no vocals",
+ "place": {
+  "id": "warehouse",
+  "prompt": "Wide photograph of the inside of a vast old warehouse at night, nobody in it: a long central aisle between towering stacks of old wooden shipping crates, sodium lamps hanging on chains casting pools of orange light, rain running down a row of skylights, puddles on the cracked concrete floor reflecting the lamps, a large loading door at the far end of the aisle half open onto the rain. Deep perspective, anamorphic. Unretouched photograph, available light, visible skin texture and pores, fine film grain, shallow depth of field, no retouching, no gloss."
+ },
+ "cast": {
+  "nadia": {
+   "role": "the courier",
+   "prompt": "Full-length reference photograph of a lean athletic woman of about thirty against a plain mid-grey backdrop, even soft light, standing still, facing the camera, arms at her sides. Short choppy black hair, a small scar through her left eyebrow, a dark olive waterproof rain jacket zipped to the chin, black cargo trousers, worn black trail shoes, a battered brown canvas messenger bag worn across her chest on a wide strap. Unretouched photograph, available light, visible skin texture and pores, fine film grain, shallow depth of field, no retouching, no gloss."
+  },
+  "hale": {
+   "role": "the collector",
+   "prompt": "Full-length reference photograph of a tall broad-shouldered man of about fifty-five against a plain mid-grey backdrop, even soft light, standing still, facing the camera, arms at his sides. Close-cropped grey hair and a short grey beard, a heavy charcoal wool overcoat worn open over a black roll-neck sweater, black leather gloves, dark trousers, polished black shoes. Unretouched photograph, available light, visible skin texture and pores, fine film grain, shallow depth of field, no retouching, no gloss."
+  }
+ },
+ "shots": [
+  {
+   "id": "010",
+   "title": "the warehouse",
+   "secs": 5,
+   "refs": [
+    "warehouse"
+   ],
+   "anchor": null,
+   "engine": "ltx",
+   "face": "none",
+   "avoid_extra": "people, a person, a figure, a crowd, a face, hands",
+   "prompt": "Nothing moves in the empty warehouse but the weather and the light: rain streams down the skylights, one hanging sodium lamp sways slightly on its chain so its pool of orange light drifts across the wet floor, drops fall from the roof into a puddle and ripple the reflection. Nobody is here. The camera pushes in slowly and steadily down the aisle. Heavy rain drumming on the roof, the electrical hum of the lamps, dripping water. No music."
+  },
+  {
+   "id": "020",
+   "title": "hiding",
+   "secs": 4,
+   "refs": [
+    "nadia",
+    "nadia",
+    "warehouse"
+   ],
+   "engine": "both",
+   "face": "close",
+   "anchor": "A still frame from a live-action film, a MEDIUM CLOSE-UP, the woman of reference one pressed with her back flat against a tall stack of wooden crates in the warehouse of reference three, her head turned to listen toward the aisle on her left, the canvas bag held tight to her chest with both hands, rain-wet hair on her forehead. A sodium lamp behind her rims her face in orange; the rest is cold blue shadow. Cinematic film, night, sodium-orange practical lamps against cold blue-green shadow, wet reflective concrete, haze in the air, deep blacks with detail, fine grain, anamorphic.",
+   "prompt": "She holds her breath and listens, her eyes moving toward the aisle, then lets the breath out slowly through her mouth, very quietly. She does not move from the crates. Handheld camera close, a faint float, almost still. Her shallow breathing, rain drumming on the roof far above, a distant drip. No music."
+  },
+  {
+   "id": "030",
+   "title": "the door",
+   "secs": 5,
+   "refs": [
+    "hale",
+    "hale",
+    "warehouse"
+   ],
+   "engine": "ltx",
+   "face": "wide",
+   "anchor": "A still frame from a live-action film, a WIDE SHOT straight down the long central aisle of the warehouse of reference three toward the big loading door at the far end, open onto the rain; in the doorway stands the man of reference one, small and dark against the grey rain outside, one gloved hand on the door frame. Cinematic film, night, sodium-orange practical lamps against cold blue-green shadow, wet reflective concrete, haze in the air, deep blacks with detail, fine grain, anamorphic.",
+   "prompt": "The man in the doorway lets go of the door frame and takes one slow step into the warehouse, out of the rain, and stops, looking down the aisle. Rain blows in around him. Static camera. The heavy loading door creaking on its rails, rain roaring outside, one footstep on wet concrete. No music.",
+   "seedance": {
+    "secs": 5,
+    "why": "A walk. Measured: our engines hold the picture and the person but not the walk itself - he takes one step and stops because we wrote it that way. Seedance would walk him the whole aisle.",
+    "prompt": "[image 1] is the first frame. The man of [image 2] walks in out of the rain through the loading door of the warehouse of [image 3] and comes slowly down the long aisle toward the camera, unhurried, gloved hands loose at his sides, lamplight passing over him lamp by lamp until he stops ten metres from us. Static camera, anamorphic, night, sodium orange and blue shadow. Sound: rain roaring outside, the door on its rails, his footsteps on wet concrete getting closer. No music."
+   }
+  },
+  {
+   "id": "040",
+   "title": "the offer",
+   "secs": 6,
+   "refs": [
+    "hale",
+    "hale",
+    "warehouse"
+   ],
+   "engine": "ltx",
+   "face": "close",
+   "line": "It's only a bag, Nadia. Put it down and walk out of here.",
+   "anchor": "A still frame from a live-action film, a MEDIUM CLOSE-UP of the man of reference one standing in the aisle of the warehouse of reference three under a hanging sodium lamp, rain water on the shoulders of his coat, his face calm and patient, looking a little to the left of camera. Cinematic film, night, sodium-orange practical lamps against cold blue-green shadow, wet reflective concrete, haze in the air, deep blacks with detail, fine grain, anamorphic.",
+   "prompt": "He speaks calmly and quietly, in a low, rough, unhurried voice: \"It's only a bag, Nadia. Put it down and walk out of here.\" Then he waits, very still. Static camera, a faint handheld float. His voice echoing in the big space, rain on the roof, the hum of the lamp. No music."
+  },
+  {
+   "id": "050",
+   "title": "the stack",
+   "secs": 5,
+   "refs": [
+    "nadia",
+    "nadia",
+    "warehouse"
+   ],
+   "engine": "both",
+   "face": "close",
+   "anchor": "A still frame from a live-action film, a CLOSE-UP of the woman of reference one leaning back against the wooden crates in the warehouse of reference three, eyes closed, rain on her face, lit from above by an orange lamp. Cinematic film, night, sodium-orange practical lamps against cold blue-green shadow, wet reflective concrete, haze in the air, deep blacks with detail, fine grain, anamorphic.",
+   "prompt": "Her eyes open and she slowly tilts her head back to look straight up at the top of the tall stack of crates she is leaning on; her jaw sets. Handheld camera close, almost still. Her breath, rain far above, a loose strap tapping against wood. No music."
+  },
+  {
+   "id": "060",
+   "title": "the strap",
+   "secs": 4,
+   "refs": [
+    "nadia",
+    "nadia",
+    "warehouse"
+   ],
+   "engine": "ltx",
+   "face": "medium",
+   "anchor": "A still frame from a live-action film, a MEDIUM SHOT of the woman of reference one at the foot of a towering stack of wooden crates in the warehouse of reference three, both hands gripping a frayed orange cargo strap that hangs down the side of the stack, her body leaning back, ready to pull. Cinematic film, night, sodium-orange practical lamps against cold blue-green shadow, wet reflective concrete, haze in the air, deep blacks with detail, fine grain, anamorphic.",
+   "prompt": "She throws her whole weight back on the strap; it snaps taut and the tower of crates above her groans and begins to tilt. Handheld camera, a faint float. The strap creaking, wood groaning and cracking, rain far above. No music."
+  },
+  {
+   "id": "070",
+   "title": "the fall",
+   "secs": 5,
+   "refs": [
+    "hale",
+    "hale",
+    "warehouse"
+   ],
+   "engine": "previz",
+   "face": "none",
+   "previz": {
+    "scene": "aisle",
+    "seconds": 5
+   },
+   "anchor": null,
+   "prompt": "Inside a vast dark warehouse at night under hanging sodium lamps, a towering stack of old wooden shipping crates topples across the aisle; the crates crash onto the wet concrete, burst apart and tumble, piling up into a wall of broken wood that blocks the aisle, splinters and dust thrown up into the orange lamplight. Far down the aisle a man in a long dark coat stands still. The camera drifts slowly. Sound: a deep groan of wood, then a thunderous crash and clatter of crates, splintering boards, debris settling, rain on the roof. No music.",
+   "seedance": {
+    "secs": 5,
+    "why": "A physical event with dozens of bodies in contact. We choreographed it in Blender and drew it through depth control, so every crate lands where the simulation put it; Seedance would invent the physics from words - better texture at speed, no guarantee where anything lands.",
+    "prompt": "[image 1] is the first frame: the warehouse of [image 3] with the man of [image 2] far down the aisle. A towering stack of old wooden crates beside the camera tips over and falls across the aisle; the crates crash onto the wet concrete, burst apart, tumble and pile up into a wall of broken wood that cuts the aisle in two, splinters and dust bursting into the orange lamplight, the man beyond it raising an arm. Camera low and static, slight shake at the impact. Sound: a long groan of wood, a thunderous crash, boards splintering, debris settling, rain. No music."
+   }
+  },
+  {
+   "id": "080",
+   "title": "the dust",
+   "secs": 4,
+   "refs": [
+    "hale",
+    "hale",
+    "warehouse"
+   ],
+   "engine": "h3",
+   "face": "medium",
+   "anchor": "A still frame from a live-action film, a MEDIUM SHOT of the man of reference one in the aisle of the warehouse of reference three, one arm raised in front of his face as a cloud of dust and splinters rolls toward him out of the dark, a sodium lamp swinging above him. Cinematic film, night, sodium-orange practical lamps against cold blue-green shadow, wet reflective concrete, haze in the air, deep blacks with detail, fine grain, anamorphic.",
+   "prompt": "The dust cloud rolls over him and thins; he slowly lowers his arm and squints ahead through the settling dust. Static camera. Debris settling and pattering, a last board clattering down, his cough, rain. No music.",
+   "seedance": {
+    "secs": 4,
+    "why": "An effect that must arrive at an instant and then clear (the breakdown's rule 3). Measured: LTX lets dust accumulate whatever the words say; H3 plateaus and clears, which is why this shot is on H3. Seedance keys the effect to the impact frame.",
+    "prompt": "[image 1] is the first frame. A wave of dust and splinters from the fallen crates hits the man of [image 2] at the instant it arrives - he flinches behind his raised arm - and in a second the air clears; he lowers the arm and squints through the last of it. Medium shot, static camera, the sodium lamp swinging above him. Sound: the dust's rush, debris pattering, his cough, rain. No music."
+   }
+  },
+  {
+   "id": "090",
+   "title": "the wall",
+   "secs": 5,
+   "refs": [
+    "warehouse",
+    "warehouse",
+    "warehouse"
+   ],
+   "engine": "ltx",
+   "face": "none",
+   "avoid_extra": "people, a person, a figure, a crowd, a face, hands",
+   "anchor": "A still frame from a live-action film, a WIDE SHOT down the aisle of the warehouse of reference one, now completely blocked by a chaotic wall of broken and tumbled wooden crates piled higher than a man, splintered boards everywhere, dust hanging in the orange lamplight, nobody visible. Cinematic film, night, sodium-orange practical lamps against cold blue-green shadow, wet reflective concrete, haze in the air, deep blacks with detail, fine grain, anamorphic.",
+   "prompt": "Nothing moves but the settling dust drifting through the lamplight and one loose board that slides down the pile and clatters onto the floor. Nobody is here. Static camera. Dust hissing down, the board's clatter, rain on the roof, the lamps' hum. No music."
+  },
+  {
+   "id": "100",
+   "title": "fine",
+   "secs": 5,
+   "refs": [
+    "hale",
+    "hale",
+    "warehouse"
+   ],
+   "engine": "ltx",
+   "face": "close",
+   "line": "Fine. Run, then.",
+   "anchor": "A still frame from a live-action film, a CLOSE-UP of the man of reference one in the warehouse of reference three, dust settling on his coat and in his beard, staring ahead at something just past the camera, an orange lamp behind him. Cinematic film, night, sodium-orange practical lamps against cold blue-green shadow, wet reflective concrete, haze in the air, deep blacks with detail, fine grain, anamorphic.",
+   "prompt": "He stares ahead, unreadable, and says quietly, in a low, rough voice: \"Fine. Run, then.\" His face barely moves; only his eyes narrow a little. Static camera, a faint float. His voice, dust pattering, rain. No music.",
+   "prompt_v1": "He stares ahead for a moment, then the corner of his mouth lifts in the faintest smile and he says quietly, in a low, rough voice: \"Fine. Run, then.\" Static camera, a faint float. His voice, dust pattering, rain. No music.",
+   "note": "Re-directed 2026-09-29: all three takes of prompt_v1 turned 'the faintest smile' into a full grin; the smile was taken out of the words and four more seeds rendered. Seeds 11/202/3003 are prompt_v1, 5150/7/8801/9090 this prompt."
+  },
+  {
+   "id": "110",
+   "title": "the other side",
+   "secs": 6,
+   "refs": [
+    "nadia",
+    "nadia",
+    "warehouse"
+   ],
+   "engine": "both",
+   "face": "close",
+   "anchor": "A still frame from a live-action film, a MEDIUM CLOSE-UP of the woman of reference one squeezed into a narrow dark gap between stacks of wooden crates in the warehouse of reference three, the canvas bag clutched to her chest, dust in the air, a thin blade of orange lamplight falling across her eyes. Cinematic film, night, sodium-orange practical lamps against cold blue-green shadow, wet reflective concrete, haze in the air, deep blacks with detail, fine grain, anamorphic.",
+   "prompt": "She listens, completely still, then lets out a long breath, and the ghost of a smile crosses her face. Handheld camera close, almost still. Her breath, dust settling, rain far above. No music."
+  },
+  {
+   "id": "120",
+   "title": "lights out",
+   "secs": 5,
+   "refs": [
+    "warehouse"
+   ],
+   "anchor": null,
+   "engine": "ltx",
+   "face": "none",
+   "avoid_extra": "people, a person, a figure, a crowd, a face, hands",
+   "prompt": "Nothing moves in the empty warehouse but the lamps: the nearest hanging sodium lamp sways slowly on its chain, flickers twice and goes out, leaving only the cold blue light from the skylights and the rain. Nobody is here. Static camera. Rain on the roof, the lamp's buzzing hum and the click as it dies. No music."
+  }
+ ],
+ "not_shot": [
+  {
+   "title": "the sprint",
+   "why": "The obvious action beat - she runs the length of the aisle as the stack comes down behind her - is the one this box measurably cannot do (motion fidelity at speed). The script was written around it: she brings the stack down and is simply on the other side of it.",
+   "seedance": "[image 1] is the woman of [image 2] at the foot of the crates in the warehouse of [image 3]. She sprints flat out down the aisle toward the camera as the tower of crates behind her tips and crashes down, splinters and dust chasing her, lamplight strobing over her as she passes under each lamp; she dives through the last gap as the crates close it. Camera tracking backward low and fast. Sound: her feet slapping wet concrete, her breath, the roar of falling crates. No music.",
+   "secs": 6
+  }
+ ]
+}

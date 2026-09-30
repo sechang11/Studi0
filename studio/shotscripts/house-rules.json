@@ -1,0 +1,190 @@
+{
+ "_comment": "Demo film 2 of 3 (2026-09-29). Dialogue: five spoken lines lip-synced on LTX-2.5, one room, two faces held across cuts by composed start frames.",
+ "film": "house-rules",
+ "title": "HOUSE RULES",
+ "logline": "At three in the morning a soaked stranger walks into a roadside diner, and the waitress remembers him before he says who he is.",
+ "grade": "Cinematic film, three in the morning, warm tungsten light inside against the cold blue rain outside, red and green neon reflections on wet glass and chrome, soft haze, deep blacks with detail, fine grain, anamorphic.",
+ "avoid": "lowres, blurry, deformed limbs, fused fingers, extra fingers, extra limbs, doubled figure, two of the same person, melting face, morphing, warping, text, letters, subtitles, captions, watermark, logo, nsfw",
+ "realism": "Unretouched photograph, available light, visible skin texture and pores, fine film grain, shallow depth of field, no retouching, no gloss.",
+ "score_tags": "sparse late-night solo piano, soft upright bass, very quiet brushed drums, warm, melancholic, tender, slow, instrumental, no vocals",
+ "score_tags_b": "solo piano, gentle warm resolution, soft strings enter under it, hopeful, tender, slow, instrumental, no vocals",
+ "place": {
+  "id": "diner",
+  "prompt": "Wide photograph of the inside of an empty roadside diner at three in the morning, nobody in it: a long counter with a chrome edge and red vinyl stools, a glass pie case holding a cherry pie, a glass coffee pot on a warmer, a row of red booths along big windows streaked with rain, the red and green glow of a neon light outside, blurred to soft shapes by the wet glass, no lettering anywhere, warm tungsten light inside, black night beyond. Deep perspective, anamorphic. Unretouched photograph, available light, visible skin texture and pores, fine film grain, shallow depth of field, no retouching, no gloss."
+ },
+ "cast": {
+  "iris": {
+   "role": "the waitress",
+   "prompt": "Full-length reference photograph of a woman of about sixty-five against a plain mid-grey backdrop, even soft light, standing still, facing the camera, arms at her sides. Silver hair pinned up in a loose bun, a warm lined face, reading glasses hanging on a thin chain round her neck, a pale blue waitress dress with short sleeves and a white apron, a small name badge, white canvas shoes. Unretouched photograph, available light, visible skin texture and pores, fine film grain, shallow depth of field, no retouching, no gloss."
+  },
+  "theo": {
+   "role": "the stranger",
+   "prompt": "Full-length reference photograph of a young man of about twenty-five against a plain mid-grey backdrop, even soft light, standing still, facing the camera, arms at his sides. Dark curly hair wet and flattened by rain, a few days of stubble, tired kind eyes, a faded denim jacket over a grey hooded sweatshirt, both soaked dark with rain, black jeans, scuffed white sneakers. Unretouched photograph, available light, visible skin texture and pores, fine film grain, shallow depth of field, no retouching, no gloss."
+  }
+ },
+ "shots": [
+  {
+   "id": "010",
+   "title": "open all night",
+   "secs": 5,
+   "refs": [
+    "diner"
+   ],
+   "anchor": null,
+   "engine": "ltx",
+   "face": "none",
+   "avoid_extra": "people, a person, a figure, a crowd, a face, hands",
+   "prompt": "Nothing moves in the empty diner but the weather and the light: rain streams down the big windows, the neon glow outside flickers on the wet glass, a thread of steam rises from the coffee pot on its warmer. Nobody is here. The camera pushes in slowly along the counter. Rain against the windows, the buzz of the neon sign, the hum of a refrigerator. No music."
+  },
+  {
+   "id": "020",
+   "title": "the bell",
+   "secs": 4,
+   "refs": [
+    "iris",
+    "iris",
+    "diner"
+   ],
+   "engine": "ltx",
+   "face": "medium",
+   "anchor": "A still frame from a live-action film, a MEDIUM SHOT of the woman of reference one behind the counter of the diner of reference three, drying a white coffee cup with a cloth, her head bowed over it, warm light on her face, rain on the windows behind her. Cinematic film, three in the morning, warm tungsten light inside against the cold blue rain outside, red and green neon reflections on wet glass and chrome, soft haze, deep blacks with detail, fine grain, anamorphic.",
+   "prompt": "The little bell over the door jingles; she looks up from the cup toward the sound and her hands stop. Static camera, a faint handheld float. The bell's jingle, a gust of rain noise from the door, then the rain muffled again. No music."
+  },
+  {
+   "id": "030",
+   "title": "the stranger",
+   "secs": 5,
+   "refs": [
+    "theo",
+    "theo",
+    "diner"
+   ],
+   "engine": "ltx",
+   "face": "medium",
+   "anchor": "A still frame from a live-action film, a MEDIUM SHOT of the young man of reference one standing just inside the glass door of the diner of reference three, soaked, water running off his jacket, the neon glow and the rain behind him through the glass. Cinematic film, three in the morning, warm tungsten light inside against the cold blue rain outside, red and green neon reflections on wet glass and chrome, soft haze, deep blacks with detail, fine grain, anamorphic.",
+   "prompt": "He stands dripping just inside the door and hesitates; he pushes the wet hair off his forehead with one hand and looks toward the counter. Static camera. Water dripping onto the floor mat, the door easing shut behind him, the rain outside muffled. No music.",
+   "seedance": {
+    "secs": 5,
+    "why": "The only candidate in this film, and a weak one: an entrance is a walk, and our engines hold the walker rather than the walk - so he is already inside when the shot begins. Dialogue, faces and a room at night are what this box does best; nothing else here needs paying for.",
+    "prompt": "[image 1] is the first frame. The young man of [image 2] pushes the glass door of the diner of [image 3] open against the wind and steps in out of the rain, the bell jingling above him; he stops on the mat, dripping, and looks toward the counter. Static camera, medium shot, warm tungsten inside, blue rain and neon outside. Sound: the bell, a gust of rain, the door easing shut. No music."
+   }
+  },
+  {
+   "id": "040",
+   "title": "coffee",
+   "secs": 5,
+   "refs": [
+    "theo",
+    "iris",
+    "diner"
+   ],
+   "engine": "ltx",
+   "face": "medium",
+   "anchor": "A still frame from a live-action film, a MEDIUM TWO-SHOT across the chrome counter of the diner of reference three: on the left the young man of reference one sitting on a red stool, wet, his hands around an empty white cup; on the right the woman of reference two behind the counter, holding a glass coffee pot over his cup. Cinematic film, three in the morning, warm tungsten light inside against the cold blue rain outside, red and green neon reflections on wet glass and chrome, soft haze, deep blacks with detail, fine grain, anamorphic.",
+   "prompt": "She pours hot coffee into his cup and steam curls up between them in the warm light; he wraps both hands around it. Neither of them speaks. Static camera. Coffee pouring into the cup, the pot set down on the steel counter, rain on the windows. No music."
+  },
+  {
+   "id": "050",
+   "title": "I can pay",
+   "secs": 5,
+   "refs": [
+    "theo",
+    "theo",
+    "diner"
+   ],
+   "engine": "ltx",
+   "face": "close",
+   "line": "I can pay for it.",
+   "anchor": "A still frame from a live-action film, a MEDIUM CLOSE-UP of the young man of reference one sitting at the counter of the diner of reference three, a steaming white cup in front of him, a few coins in his open palm, warm light on his face, neon glow on the wet window behind him. Cinematic film, three in the morning, warm tungsten light inside against the cold blue rain outside, red and green neon reflections on wet glass and chrome, soft haze, deep blacks with detail, fine grain, anamorphic.",
+   "prompt": "He sets the coins down on the counter one by one and pushes them forward, not quite meeting her eyes, and says quietly, in a soft, hoarse young man's voice: \"I can pay for it.\" Static camera, a faint float. The coins clicking on steel, his voice, the rain. No music."
+  },
+  {
+   "id": "060",
+   "title": "house rules",
+   "secs": 6,
+   "refs": [
+    "iris",
+    "iris",
+    "diner"
+   ],
+   "engine": "ltx",
+   "face": "close",
+   "line": "Coffee's free after three, love. House rules.",
+   "anchor": "A still frame from a live-action film, a MEDIUM CLOSE-UP of the woman of reference one behind the counter of the diner of reference three, leaning on the counter with one hand, looking across at someone just off camera, a kind half-smile, warm light, the pie case glowing behind her. Cinematic film, three in the morning, warm tungsten light inside against the cold blue rain outside, red and green neon reflections on wet glass and chrome, soft haze, deep blacks with detail, fine grain, anamorphic.",
+   "prompt": "She slides the coins back across the counter with two fingers and says, in a warm, low, slightly husky older woman's voice: \"Coffee's free after three, love. House rules.\" Static camera, a faint float. The coins sliding on steel, her voice, the rain on the windows. No music."
+  },
+  {
+   "id": "070",
+   "title": "you don't remember",
+   "secs": 5,
+   "refs": [
+    "theo",
+    "theo",
+    "diner"
+   ],
+   "engine": "ltx",
+   "face": "close",
+   "line": "You don't remember me.",
+   "anchor": "A still frame from a live-action film, a CLOSE-UP of the young man of reference one at the counter of the diner of reference three, rain water still on his face, looking up at someone just off camera, warm light and a red neon glint in his eyes. Cinematic film, three in the morning, warm tungsten light inside against the cold blue rain outside, red and green neon reflections on wet glass and chrome, soft haze, deep blacks with detail, fine grain, anamorphic.",
+   "prompt": "He looks at her for a long moment, then says quietly, in a soft, hoarse young man's voice: \"You don't remember me.\" Static camera, a faint float. His voice, the rain, the refrigerator's hum. No music."
+  },
+  {
+   "id": "080",
+   "title": "yellow raincoat",
+   "secs": 7,
+   "refs": [
+    "iris",
+    "iris",
+    "diner"
+   ],
+   "engine": "ltx",
+   "face": "close",
+   "line": "Yellow raincoat. Cherry pie. You were seven.",
+   "anchor": "A still frame from a live-action film, a CLOSE-UP of the woman of reference one behind the counter of the diner of reference three, her reading glasses on, looking at someone just off camera, warm light on her lined face. Cinematic film, three in the morning, warm tungsten light inside against the cold blue rain outside, red and green neon reflections on wet glass and chrome, soft haze, deep blacks with detail, fine grain, anamorphic.",
+   "prompt": "She takes her reading glasses off slowly and looks at him properly; her face softens and she says, in a warm, low, slightly husky older woman's voice: \"Yellow raincoat. Cherry pie. You were seven.\" Static camera, a faint float. Her voice, the rain, the neon buzz. No music."
+  },
+  {
+   "id": "090",
+   "title": "the pie",
+   "secs": 4,
+   "refs": [
+    "iris",
+    "iris",
+    "diner"
+   ],
+   "engine": "ltx",
+   "face": "none",
+   "anchor": "A still frame from a live-action film, an INSERT CLOSE-UP on the chrome counter of the diner of reference three: a steaming white coffee cup, and the hand of the woman of reference one, in a pale blue sleeve, setting down a plate with a slice of cherry pie beside it. Cinematic film, three in the morning, warm tungsten light inside against the cold blue rain outside, red and green neon reflections on wet glass and chrome, soft haze, deep blacks with detail, fine grain, anamorphic.",
+   "prompt": "Her hand sets the plate down beside the cup, gives it a small push forward, and withdraws. Static camera, close. The plate touching down on steel, the rain. No music."
+  },
+  {
+   "id": "100",
+   "title": "he laughs",
+   "secs": 5,
+   "refs": [
+    "theo",
+    "theo",
+    "diner"
+   ],
+   "engine": "both",
+   "face": "close",
+   "anchor": "A still frame from a live-action film, a CLOSE-UP of the young man of reference one at the counter of the diner of reference three, looking down at something on the counter in front of him, eyes wet, warm light on his face. Cinematic film, three in the morning, warm tungsten light inside against the cold blue rain outside, red and green neon reflections on wet glass and chrome, soft haze, deep blacks with detail, fine grain, anamorphic.",
+   "prompt": "His eyes fill; he laughs once, softly, through his nose, and wipes his eye with the heel of his hand, smiling down at the counter. Static camera, a faint float. His soft breath of a laugh, the rain, the neon buzz. No music."
+  },
+  {
+   "id": "110",
+   "title": "last orders",
+   "secs": 7,
+   "refs": [
+    "theo",
+    "iris",
+    "diner"
+   ],
+   "engine": "ltx",
+   "face": "wide",
+   "anchor": "A still frame from a live-action film, a WIDE SHOT of the diner of reference three from the far end of the counter: the young man of reference one sitting on a stool eating pie, the woman of reference two leaning on the counter across from him, both small in the frame, the neon glow and the rain on the big windows beside them. Cinematic film, three in the morning, warm tungsten light inside against the cold blue rain outside, red and green neon reflections on wet glass and chrome, soft haze, deep blacks with detail, fine grain, anamorphic.",
+   "prompt": "She leans on the counter across from him while he eats; she refills his cup, and they both laugh at something. Static camera. The low murmur of their voices too quiet to make out, rain on the windows, the neon buzz. No music."
+  }
+ ],
+ "not_shot": []
+}
