@@ -1,0 +1,48 @@
+{
+ "invariants": [
+  {
+   "id": "she_does_not_move",
+   "title": "She does not move",
+   "rule": "She stays pressed to the crates for the whole shot; only her eyes and her breath move.",
+   "why": "Hiding is stillness. Any step toward the aisle tells the audience she has a plan before she does."
+  },
+  {
+   "id": "it_is_h3",
+   "title": "It is H3",
+   "rule": "The take in the film is H3's.",
+   "why": "H3 keeps the start frame: her face holds (0.77 against its start frame) where LTX let it drift.",
+   "check": {
+    "kind": "engine",
+    "value": "h3"
+   }
+  },
+  {
+   "id": "the_camera_is_still",
+   "title": "The camera is still",
+   "rule": "Almost still - a float at most.",
+   "why": "The fear is in the stillness; a move would release it.",
+   "check": {
+    "kind": "camera",
+    "want": "is static"
+   }
+  }
+ ],
+ "flair": [
+  {
+   "id": "take",
+   "title": "Take",
+   "note": "h3:11"
+  },
+  {
+   "id": "breath",
+   "title": "Breath",
+   "note": "held, then out slowly through the mouth"
+  }
+ ],
+ "shot": "020",
+ "title": "hiding",
+ "beat": "Nadia with her back to the crates, listening, holding her breath. She does not move.",
+ "build": {
+  "script": "MiniMax H3 (67) from a Qwen-Image-2.1 start frame (qwen21_s202) · take h3:11"
+ }
+}

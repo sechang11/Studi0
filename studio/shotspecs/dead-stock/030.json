@@ -1,0 +1,44 @@
+{
+ "invariants": [
+  {
+   "id": "he_is_small_and_far",
+   "title": "He is small and far",
+   "rule": "A wide shot: the whole aisle between the camera and him.",
+   "why": "The distance is the threat - he has all of it to cross."
+  },
+  {
+   "id": "one_step_then_he_stops",
+   "title": "One step, then he stops",
+   "rule": "He takes a single step out of the rain and stops, looking down the aisle.",
+   "why": "Our engines hold the walker, not the walk; one step is what they do well. The walk is Seedance's (see its tab)."
+  },
+  {
+   "id": "it_is_ltx",
+   "title": "It is LTX",
+   "rule": "The take in the film is LTX-2.5's.",
+   "why": "The rain blowing in around him is LTX's.",
+   "check": {
+    "kind": "engine",
+    "value": "ltx"
+   }
+  }
+ ],
+ "flair": [
+  {
+   "id": "take",
+   "title": "Take",
+   "note": "11"
+  },
+  {
+   "id": "camera",
+   "title": "Camera",
+   "note": "a slow push of about a fifth; still reads as held"
+  }
+ ],
+ "shot": "030",
+ "title": "the door",
+ "beat": "Hale in the doorway at the far end of the aisle, small against the rain. He lets go of the frame and takes one step in.",
+ "build": {
+  "script": "LTX-2.5 (70) from a Qwen-Image-2.1 start frame (qwen21_s11) · take 11"
+ }
+}

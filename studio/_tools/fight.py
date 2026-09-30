@@ -87,6 +87,7 @@ COURT = _seq["place"]["prompt"]
 PLACE_ID = _seq["place"].get("id", "court")
 CAST = {k: {"role": v["role"], "ref": v["prompt"]} for k, v in _seq["cast"].items()}
 SHOTS = _seq["shots"]
+ONLY = set()          # --only-shots: the stages that render per shot skip every other shot
 
 
 def shot(sid):
@@ -100,7 +101,10 @@ def shot(sid):
 def _build_ab():
     """The breakdown's rule 3, as an A/B on shot 010: the effect as an INSTANT against the effect
     as a STANDING state. The swap is asserted - a silent no-op would be a prompt against itself."""
-    instants = shot("010")["prompt"]
+    s010 = next((x for x in SHOTS if x["id"] == "010"), None)
+    if s010 is None:
+        return {}               # a film made in the editor need not have a shot 010
+    instants = s010["prompt"]
     hit = ("At the exact instant each punch arrives a sharp burst of grey ash snaps up between them "
            "to stop it dead, and drops away at once; between the punches there is no ash in the air.")
     wall = ("A standing wall of grey ash hangs in the air between them for the whole shot, swirling "
@@ -170,30 +174,60 @@ def collect(outs, dst, kinds=(".png", ".jpg", ".mp4")):
 
 
 # --------------------------------------------------------------------------- stages
-def stage_cast(force=False, only="", seed=4242):
+CAST_ENGINES = ("flux2", "krea2", "qwen21")      # workflows 40, 77, 79
+
+
+def _cast_graph(engine, prompt, w, h, seed, prefix):
+    """A reference picture from one of three text-to-image engines. Flux 2 made every cast so far;
+    Krea 2 reads more like a photograph of a real studio; Qwen-Image-2.1 is the start-frame
+    compositor, so casting with it keeps one model's idea of a face end to end."""
+    if engine == "krea2":
+        wf = {k: v for k, v in load_wf("77_krea2_t2i.json").items() if isinstance(v, dict) and "class_type" in v}
+        wf["6"]["inputs"]["text"] = prompt
+        wf["9"]["inputs"]["width"], wf["9"]["inputs"]["height"] = w, h
+        wf["10"]["inputs"]["seed"] = int(seed)
+        wf["12"]["inputs"]["filename_prefix"] = prefix
+    elif engine == "qwen21":
+        wf = {k: v for k, v in load_wf("79_qwen21_t2i.json").items() if isinstance(v, dict) and "class_type" in v}
+        wf["6"]["inputs"]["prompt"] = prompt
+        wf["6"]["inputs"]["negative_prompt"] = AVOID
+        wf["9"]["inputs"]["width"], wf["9"]["inputs"]["height"] = w, h
+        wf["10"]["inputs"]["seed"] = int(seed)
+        wf["12"]["inputs"]["filename_prefix"] = prefix
+    else:
+        wf = {k: v for k, v in load_wf("40_flux2_t2i.json").items() if isinstance(v, dict) and "class_type" in v}
+        wf["6"]["inputs"]["text"] = prompt
+        for n in ("9", "12"):
+            wf[n]["inputs"]["width"], wf[n]["inputs"]["height"] = w, h
+        wf["11"]["inputs"]["noise_seed"] = int(seed)
+        wf["15"]["inputs"]["filename_prefix"] = prefix
+    return wf
+
+
+def stage_cast(force=False, only="", seed=4242, engine="flux2"):
     os.makedirs(OUT, exist_ok=True)
     jobs = [(k, v["ref"]) for k, v in CAST.items()] + [(PLACE_ID, COURT)]
     if only:
         jobs = [j for j in jobs if j[0] == only] or sys.exit("no such reference: %s" % only)
+    rp = os.path.join(OUT, "refs.json")
+    record = json.load(open(rp)) if os.path.exists(rp) else {}
     for name, prompt in jobs:
         dst = os.path.join(OUT, "ref_%s.png" % name)
         if os.path.exists(dst) and not force:
             print("  ref_%s.png already there" % name, flush=True)
             continue
-        wf = {k: v for k, v in load_wf("40_flux2_t2i.json").items()
-              if isinstance(v, dict) and "class_type" in v}
-        wf["6"]["inputs"]["text"] = prompt
         w, h = (1280, 720) if name == PLACE_ID else (768, 1344)
-        for n in ("9", "12"):
-            wf[n]["inputs"]["width"], wf[n]["inputs"]["height"] = w, h
-        wf["11"]["inputs"]["noise_seed"] = int(seed)
-        wf["15"]["inputs"]["filename_prefix"] = "claude-generated/fight/ref_%s" % name
+        wf = _cast_graph(engine, prompt, w, h, seed, "claude-generated/fight/ref_%s" % name)
         wait_for_queue()
         t0 = time.time()
         if collect(submit(wf, "ref_" + name), dst):
-            print("  ref_%-8s %4.0fs  %dx%d" % (name, time.time() - t0, w, h), flush=True)
+            if engine == "qwen21":
+                _to_canvas(dst, (w, h))
+            record[name] = {"engine": engine, "seed": int(seed), "prompt": prompt, "at": int(time.time())}
+            print("  ref_%-8s %4.0fs  %dx%d  %s s%d" % (name, time.time() - t0, w, h, engine, seed), flush=True)
         else:
             print("  ref_%s FAILED" % name, flush=True)
+    json.dump(record, open(rp, "w"), indent=1)
 
 
 def _unique(seq):
@@ -314,15 +348,22 @@ def score_faces(png, s, yard=None, tag="x"):
     return {c: v} if v is not None else {}
 
 
-def stage_anchors(force=False, compositor="best", qseeds=(11, 202), overrides=None):
+def stage_anchors(force=False, compositor="best", qseeds=(11, 202), overrides=None, redraw=False):
     """One start frame per shot. `best` renders the shot with BOTH compositors - Flux 2 ref3 (75),
     one seed, and Qwen-Image-2.1 (80), `qseeds` - scores every candidate's faces against the cast
     references, and keeps the highest; shots with no face to score keep Qwen s11 unless overridden.
     All Flux renders run first and all Qwen renders second, so each model loads once per film.
-    The candidates and their numbers go to anchors.json and a board per four shots in picks/."""
+    The candidates and their numbers go to anchors.json and a board per four shots in picks/.
+
+    `redraw` (the editor's "draw start frames"): draw the asked candidates even where the shot already
+    has a start frame, and use the best of THOSE; every candidate drawn before stays on the record with
+    its score. Without it, a start frame somebody CHOSE (an override, or picked in the editor) survives
+    a batch rerun."""
     overrides = overrides or {}
     todo = []
     for s in SHOTS:
+        if ONLY and s["id"] not in ONLY:
+            continue
         dst = os.path.join(OUT, "anchor_%s.png" % s["id"])
         if s.get("engine") == "previz":
             print("  anchor_%s  <- built by previz_shot.py (engine previz)" % s["id"], flush=True)
@@ -335,11 +376,19 @@ def stage_anchors(force=False, compositor="best", qseeds=(11, 202), overrides=No
                 shutil.copy(refs[0], dst)
                 print("  anchor_%s  <- the plate itself (no cast in this shot)" % s["id"], flush=True)
             continue
-        if os.path.exists(dst) and not force and s["id"] not in overrides:
+        if os.path.exists(dst) and not force and not redraw and s["id"] not in overrides:
             print("  anchor_%s.png already there" % s["id"], flush=True)
             continue
         todo.append(s)
     cands = {s["id"]: {} for s in todo}
+    asked = {s["id"]: set() for s in todo}      # the candidates this run was asked for
+    import glob as _glob
+    for s in todo:                      # every candidate already on disk stays a candidate
+        for p in _glob.glob(os.path.join(OUT, "anchor_%s_*.png" % s["id"])):
+            name = os.path.basename(p)[len("anchor_%s_" % s["id"]):-4]
+            if name in ("h3",):
+                continue
+            cands[s["id"]][name] = p
     if compositor in ("flux2", "best"):
         for s in todo:
             p = os.path.join(OUT, "anchor_%s_flux2.png" % s["id"])
@@ -351,6 +400,7 @@ def stage_anchors(force=False, compositor="best", qseeds=(11, 202), overrides=No
                     continue
                 print("  anchor_%s flux2       %4.0fs" % (s["id"], time.time() - t0), flush=True)
             cands[s["id"]]["flux2"] = p
+            asked[s["id"]].add("flux2")
     if compositor in ("qwen21", "best"):
         for s in todo:
             for q in qseeds:
@@ -363,25 +413,40 @@ def stage_anchors(force=False, compositor="best", qseeds=(11, 202), overrides=No
                         continue
                     print("  anchor_%s qwen21 s%-5d %4.0fs" % (s["id"], q, time.time() - t0), flush=True)
                 cands[s["id"]]["qwen21_s%d" % q] = p
+                asked[s["id"]].add("qwen21_s%d" % q)
     record_p = os.path.join(OUT, "anchors.json")
     record = json.load(open(record_p)) if os.path.exists(record_p) else {}
     for s in todo:
         sid, c = s["id"], cands[s["id"]]
         if not c:
             continue
+        prev = (record.get(sid) or {})
+        known = prev.get("candidates", {})
         scored = {}
         for name, p in c.items():
+            k = known.get(name)
+            if k and k.get("file") == os.path.basename(p) and not force and \
+                    os.path.getmtime(p) <= k.get("scored_at", 0):
+                scored[name] = k                       # scored before and not redrawn since
+                continue
             f = score_faces(p, s, tag="anchor_%s_%s" % (sid, name))
             scored[name] = {"file": os.path.basename(p), "faces": f,
-                            "mean": round(sum(f.values()) / len(f), 3) if f else None}
+                            "mean": round(sum(f.values()) / len(f), 3) if f else None,
+                            "scored_at": int(time.time()) + 1}
         pick = overrides.get(sid)
         why = "override"
+        if not pick and not redraw and prev.get("why") in ("override", "chosen in the editor") \
+                and prev.get("chosen") in c:
+            pick, why = prev["chosen"], prev["why"]      # somebody chose it; a batch rerun does not undo that
         if not pick:
-            ranked = sorted((v["mean"], k) for k, v in scored.items() if v["mean"] is not None)
+            # the automatic pick is among what this run drew: an older candidate may show older words
+            # (it stays on the record, one click away in the editor)
+            pool = {k: v for k, v in scored.items() if k in asked[sid]} or scored
+            ranked = sorted((v["mean"], k) for k, v in pool.items() if v["mean"] is not None)
             if ranked:
                 pick, why = ranked[-1][1], "highest face score"
             else:
-                pick = "qwen21_s%d" % qseeds[0] if "qwen21_s%d" % qseeds[0] in c else sorted(c)[0]
+                pick = "qwen21_s%d" % qseeds[0] if "qwen21_s%d" % qseeds[0] in pool else sorted(pool)[0]
                 why = "no face to score - default"
         if pick not in c:
             print("  anchor_%s: no candidate %r (have %s)" % (sid, pick, ", ".join(sorted(c))), flush=True)
@@ -438,7 +503,9 @@ def ltx_graph(start_png, prompt, secs, seed, prefix):
 
 def stage_shots(seeds=(11,), force=False):
     for s in SHOTS:
-        if s.get("engine", "ltx") not in ("ltx", "both"):
+        if ONLY and s["id"] not in ONLY:
+            continue
+        if s.get("engine", "ltx") not in ("ltx", "both") and not ONLY:
             continue            # h3-only shots render in --h3 all; previz shots in previz_shot.py
         anchor = os.path.join(OUT, "anchor_%s.png" % s["id"])
         if not os.path.exists(anchor):
@@ -518,9 +585,11 @@ def stage_seedance(shot_id, resolution="1080p", force=False):
     """The paid half of the hybrid: the same composed start frame and the same character references,
     handed to Seedance 2.5. Costs money per run and needs somebody signed in to a Comfy account."""
     s = next((x for x in SHOTS if x["id"] == shot_id), None) or sys.exit("no shot %s" % shot_id)
-    dst = os.path.join(OUT, "seedance_%s.mp4" % shot_id)
+    # named like every other take (sd_<id>_s<seed>.mp4, pick token sd:11) so it is scored, ranked,
+    # picked and cut with the rest
+    dst = os.path.join(OUT, "sd_%s_s11.mp4" % shot_id)
     if os.path.exists(dst) and not force:
-        print("  seedance_%s already there" % shot_id, flush=True)
+        print("  sd_%s_s11 already there" % shot_id, flush=True)
         return dst
     anchor = os.path.join(OUT, "anchor_%s.png" % shot_id)
     # [image 1] the composed first frame, [image 2] the character, [image 3] the place - the order
@@ -566,8 +635,12 @@ def stage_h3(shot_id, seeds=(11,), force=False):
     from PIL import Image
     if shot_id == "all":
         for x in SHOTS:
-            if x.get("engine") in ("h3", "both"):
+            if x.get("engine") in ("h3", "both") and (not ONLY or x["id"] in ONLY):
                 stage_h3(x["id"], seeds, force)
+        return
+    if "," in shot_id:
+        for sid in [y.strip() for y in shot_id.split(",") if y.strip()]:
+            stage_h3(sid, seeds, force)
         return
     s = next((x for x in SHOTS if x["id"] == shot_id), None)
     if s is None:
@@ -666,9 +739,13 @@ def stage_score(force=False):
     for f in sorted(os.listdir(OUT)):
         if not f.endswith(".mp4"):
             continue
-        if f in rows and os.path.exists(os.path.join(OUT, f[:-4] + "_strip.jpg")):
-            continue
         v = os.path.join(OUT, f)
+        sp = os.path.join(OUT, f[:-4] + "_strip.jpg")
+        if f in rows and os.path.exists(sp):
+            import re
+            take = re.match(r"^(shot|h3|pv|pvb|sd)_\d{3}_s\d+\.mp4$", f)
+            if not take or os.path.getmtime(sp) >= os.path.getmtime(v):
+                continue                    # measured, and not re-rendered since (--force takes are)
         dur = strip(v, os.path.join(OUT, f[:-4] + "_strip.jpg"))
         m = cam(v)
         n = int(sh("ffprobe", "-v", "error", "-count_frames", "-select_streams", "v:0",
@@ -746,6 +823,24 @@ def stage_finish(picks=None, grade="filmic", master=False):
         sys.exit("no picked takes")
     for sid, seed, p in chosen:
         print("  %s <- seed %s" % (sid, seed), flush=True)
+    # trim: a shot may keep only part of its take - "trim": {"take": <the pick>, "in": s, "out": s},
+    # set on /shots. Re-encoded rather than stream-copied, so the cut lands on the frame asked for.
+    trimmed = []
+    for sid, want, p in chosen:
+        tr = shot(sid).get("trim") or {}
+        if tr.get("take") == want:
+            t_in = max(0.0, float(tr.get("in") or 0))
+            t_out = float(tr.get("out") or 0) or post.duration(p)
+            dst = os.path.join(OUT, "_trim_%s.mp4" % os.path.basename(p)[:-4])
+            sh("ffmpeg", "-y", "-v", "error", "-i", p, "-ss", "%.3f" % t_in, "-to", "%.3f" % t_out,
+               "-c:v", "libx264", "-crf", "14", "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "192k", dst)
+            if os.path.exists(dst) and post.frames(dst) > 0:
+                print("  %s trimmed to %.2f-%.2f s (%d frames)" % (sid, t_in, t_out, post.frames(dst)), flush=True)
+                trimmed.append((sid, want, dst))
+                continue
+            print("  %s: the trim failed - using the whole take" % sid, flush=True)
+        trimmed.append((sid, want, p))
+    chosen = trimmed
     # conform: H3 writes 32 kHz audio and LTX 48 kHz, and the concat demuxer wants them identical.
     # Video is copied, so no frame can move.
     conformed = []
@@ -827,13 +922,19 @@ def main():
     ap.add_argument("--qseeds", type=int, nargs="+", default=[11, 202], help="--anchors: Qwen-2.1 seeds")
     ap.add_argument("--anchor-picks", default="", help="--anchors: override, e.g. 020=flux2,030=qwen21_s202")
     ap.add_argument("--music-secs", type=float, default=0, help="--music: length (default film + 3 s)")
+    ap.add_argument("--only-shots", default="", help="--anchors/--shots/--h3 all: just these shots, e.g. 020,030")
+    ap.add_argument("--redraw", action="store_true",
+                    help="--anchors: draw new candidates even where a start frame exists (the editor)")
+    ap.add_argument("--cast-engine", default="flux2", choices=list(CAST_ENGINES),
+                    help="--cast: which text-to-image model draws the reference")
     a = ap.parse_args()
     os.makedirs(OUT, exist_ok=True)
+    ONLY.update(x.strip() for x in a.only_shots.split(",") if x.strip())
     if a.cast:
-        stage_cast(a.force, a.only, a.seed)
+        stage_cast(a.force, a.only, a.seed, a.cast_engine)
     if a.anchors:
         stage_anchors(a.force, a.compositor, tuple(a.qseeds),
-                      dict(kv.split("=", 1) for kv in a.anchor_picks.split(",") if "=" in kv))
+                      dict(kv.split("=", 1) for kv in a.anchor_picks.split(",") if "=" in kv), a.redraw)
     if a.shots:
         stage_shots(tuple(a.seeds), a.force)
     if a.ab:

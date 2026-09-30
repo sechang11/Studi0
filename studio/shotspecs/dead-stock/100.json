@@ -1,0 +1,47 @@
+{
+ "invariants": [
+  {
+   "id": "the_line_is_heard",
+   "title": "The line is heard",
+   "rule": "\"Fine. Run, then.\" - both words, low and rough.",
+   "why": "He lets her go; the film's last spoken words.",
+   "check": {
+    "kind": "qc_clean"
+   }
+  },
+  {
+   "id": "his_face_barely_moves",
+   "title": "His face barely moves",
+   "rule": "Only his eyes narrow.",
+   "why": "He has lost, and will not show it."
+  },
+  {
+   "id": "the_camera_is_still",
+   "title": "The camera is still",
+   "rule": "A faint float at most.",
+   "why": "It is his shot; the frame stays on him.",
+   "check": {
+    "kind": "camera",
+    "want": "is static"
+   }
+  }
+ ],
+ "flair": [
+  {
+   "id": "take",
+   "title": "Take",
+   "note": "7"
+  },
+  {
+   "id": "dust",
+   "title": "Dust",
+   "note": "settling on his coat and beard"
+  }
+ ],
+ "shot": "100",
+ "title": "fine",
+ "beat": "Hale, dust on his coat, stares at the wall and says, quietly: \"Fine. Run, then.\"",
+ "build": {
+  "script": "LTX-2.5 (70) from a Qwen-Image-2.1 start frame (qwen21_s11) · take 7"
+ }
+}

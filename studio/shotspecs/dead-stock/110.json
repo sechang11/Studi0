@@ -1,0 +1,47 @@
+{
+ "invariants": [
+  {
+   "id": "we_hear_her_breathe",
+   "title": "We hear her breathe",
+   "rule": "Her long breath out is audible under the dust and the rain.",
+   "why": "The release IS the breath; the smile only confirms it.",
+   "check": {
+    "kind": "qc_clean"
+   }
+  },
+  {
+   "id": "the_smile_is_a_ghost",
+   "title": "The smile is a ghost",
+   "rule": "A flicker, not a grin.",
+   "why": "She got away with it; she does not celebrate."
+  },
+  {
+   "id": "it_is_h3",
+   "title": "It is H3",
+   "rule": "The take in the film is H3's.",
+   "why": "Her face holds in the gap's thin light.",
+   "check": {
+    "kind": "engine",
+    "value": "h3"
+   }
+  }
+ ],
+ "flair": [
+  {
+   "id": "take",
+   "title": "Take",
+   "note": "h3:11 - every take was faulted; this one the fewest"
+  },
+  {
+   "id": "light",
+   "title": "Light",
+   "note": "a thin blade of orange across her eyes"
+  }
+ ],
+ "shot": "110",
+ "title": "the other side",
+ "beat": "Nadia, squeezed into a gap between the crates, listens. A long breath out, and the ghost of a smile.",
+ "build": {
+  "script": "MiniMax H3 (67) from a Qwen-Image-2.1 start frame (qwen21_s11) · take h3:11"
+ }
+}

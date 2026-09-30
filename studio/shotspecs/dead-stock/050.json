@@ -1,0 +1,47 @@
+{
+ "invariants": [
+  {
+   "id": "the_look_goes_up",
+   "title": "The look goes up",
+   "rule": "Her eyes and head go UP the stack, not toward him.",
+   "why": "This is the shot where she decides; the audience has to see where the idea comes from."
+  },
+  {
+   "id": "her_face_holds",
+   "title": "Her face holds",
+   "rule": "Her face at the end of the take is still hers.",
+   "why": "A close-up is where a drifted face shows most.",
+   "check": {
+    "kind": "qc_clean"
+   }
+  },
+  {
+   "id": "the_camera_is_still",
+   "title": "The camera is still",
+   "rule": "Almost still.",
+   "why": "The decision is small; the frame stays out of its way.",
+   "check": {
+    "kind": "camera",
+    "want": "is static"
+   }
+  }
+ ],
+ "flair": [
+  {
+   "id": "take",
+   "title": "Take",
+   "note": "h3:202"
+  },
+  {
+   "id": "jaw",
+   "title": "Jaw",
+   "note": "sets at the end, not before"
+  }
+ ],
+ "shot": "050",
+ "title": "the stack",
+ "beat": "Nadia opens her eyes and looks straight up the stack of crates she is leaning on. Her jaw sets. The plan arrives.",
+ "build": {
+  "script": "MiniMax H3 (67) from a Qwen-Image-2.1 start frame (qwen21_s11) · take h3:202"
+ }
+}

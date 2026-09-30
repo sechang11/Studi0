@@ -1,0 +1,39 @@
+{
+ "invariants": [
+  {
+   "id": "the_lamp_holds_then_dies",
+   "title": "The lamp holds, then dies",
+   "rule": "The lamp flickers and goes out late in the shot - not in the first frames.",
+   "why": "The last beat of the film needs a beat before it; seed 11 killed the lamp at once."
+  },
+  {
+   "id": "nobody_is_in_it",
+   "title": "Nobody is in it",
+   "rule": "The place alone, as it opened.",
+   "why": "The film ends where it began, emptier."
+  },
+  {
+   "id": "the_camera_is_still",
+   "title": "The camera is still",
+   "rule": "Static.",
+   "why": "The ending is the light, not the camera.",
+   "check": {
+    "kind": "camera",
+    "want": "is static"
+   }
+  }
+ ],
+ "flair": [
+  {
+   "id": "take",
+   "title": "Take",
+   "note": "3003 - picked by eye: the lamps hold a beat before they die"
+  }
+ ],
+ "shot": "120",
+ "title": "lights out",
+ "beat": "The empty warehouse. The nearest lamp sways, flickers twice and dies, leaving the cold blue of the skylights.",
+ "build": {
+  "script": "LTX-2.5 (70) from the place's plate itself · take 3003"
+ }
+}

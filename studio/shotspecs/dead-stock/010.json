@@ -1,0 +1,38 @@
+{
+ "invariants": [
+  {
+   "id": "nobody_is_in_it",
+   "title": "Nobody is in it",
+   "rule": "The first shot is the place alone: no figure, no hand, no silhouette.",
+   "why": "The film opens on where it happens before who; a stray figure here reads as a third character."
+  },
+  {
+   "id": "the_camera_pushes_in",
+   "title": "The camera pushes in",
+   "rule": "The camera moves down the aisle, steadily, with no tilt.",
+   "why": "It is the only camera move that takes us somewhere; seed 11 tilted down as it pushed and read as a stumble.",
+   "check": {
+    "kind": "camera",
+    "want": "pushes in"
+   }
+  }
+ ],
+ "flair": [
+  {
+   "id": "take",
+   "title": "Take",
+   "note": "3003 - picked by eye over the ranker for the steady push"
+  },
+  {
+   "id": "rain",
+   "title": "Rain",
+   "note": "heavy, on the roof and the skylights"
+  }
+ ],
+ "shot": "010",
+ "title": "the warehouse",
+ "beat": "The empty warehouse at night, rain on the skylights, one lamp swaying. Nobody is here yet. The camera pushes down the aisle.",
+ "build": {
+  "script": "LTX-2.5 (70) from the place's plate itself · take 3003"
+ }
+}

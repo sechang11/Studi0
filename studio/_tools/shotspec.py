@@ -61,6 +61,74 @@ def film_json(film):
     return json.load(open(os.path.join(FILMS, film, "film.json"), encoding="utf-8"))
 
 
+# ── shot-script films ───────────────────────────────────────────────────────────────
+# A film made on /shots is a shot script (studio/shotscripts/<film>.json) run by fight.py, with
+# its takes and records in samples/fight/<film>/ - not a film.json. Its specs live in the same
+# place and read the same way; script_view hands the checks the same shape film.json gives them.
+
+SCRIPTS = os.path.join(STUDIO, "shotscripts")
+SCRIPT_OUT = os.path.join(STUDIO, "samples", "fight")
+ENGINE_OF = {"shot": "ltx", "h3": "h3", "pv": "previz", "pvb": "previz", "sd": "seedance"}
+
+
+def _j(p, default):
+    try:
+        return json.load(open(p, encoding="utf-8"))
+    except Exception:
+        return default
+
+
+def is_script(film):
+    return (not os.path.exists(os.path.join(FILMS, film, "film.json"))
+            and os.path.exists(os.path.join(SCRIPTS, film + ".json")))
+
+
+def script_view(film):
+    """A shot script's shots in film.json's shape: the start frame each was drawn from, and the
+    take the film uses - its engine, its length as cut (trim included), its words, the camera
+    cammeasure measured on it and the faults take_rank found (as its qc)."""
+    s = _j(os.path.join(SCRIPTS, film + ".json"), {})
+    out = os.path.join(SCRIPT_OUT, film)
+    picks = {}
+    pp = os.path.join(out, "picks.txt")
+    if os.path.exists(pp):
+        picks = dict(kv.split("=", 1) for kv in open(pp).read().strip().split(",") if "=" in kv)
+    anchors = _j(os.path.join(out, "anchors.json"), {})
+    measured = _j(os.path.join(out, "measured.json"), {})
+    ranked = _j(os.path.join(out, "ranked.json"), {})
+    shots = {}
+    for x in s.get("shots", []):
+        sid = x["id"]
+        tok = picks.get(sid, "")
+        if x.get("engine") == "previz":
+            start = "previz dressed"
+        elif x.get("anchor") is None:
+            start = "plate"
+        else:
+            start = (anchors.get(sid) or {}).get("chosen") or ""
+        sh = {"title": x.get("title", ""), "anchor": "anchor_%s.png %s" % (sid, start),
+              "picked": tok, "takes": []}
+        if tok:
+            eng, _, seed = tok.rpartition(":")
+            stem = eng or "shot"
+            f = "%s_%s_s%s.mp4" % (stem, sid, seed)
+            m = measured.get(f) or {}
+            dur = (m.get("frames") or 0) / 24.0 or float(x.get("secs") or 0)
+            tr = x.get("trim") or {}
+            if tr.get("take") == tok:
+                t_in = float(tr.get("in") or 0)
+                t_out = float(tr.get("out") or 0) or dur
+                dur = max(0.0, min(dur, t_out) - t_in)
+            rt = next((r for r in (ranked.get(sid) or {}).get("takes", []) if r.get("take") == f), {})
+            cam = {k: m[k] for k in ("zoom", "pan", "tilt", "camera", "confidence") if k in m} \
+                if m.get("zoom") is not None else {}
+            sh["takes"].append({"id": tok, "engine": ENGINE_OF.get(stem, stem), "duration": round(dur, 3),
+                                "prompt": x.get("prompt", ""), "cam_measured": cam,
+                                "qc": list(rt.get("faults") or [])})
+        shots[sid] = sh
+    return {"title": s.get("title", film), "shots": shots}
+
+
 # ── checks ──────────────────────────────────────────────────────────────────────────
 # A check is a small declarative statement the spec can carry. Anything not expressible
 # this way still belongs in the spec as prose - an unrunnable invariant is still worth
@@ -148,7 +216,7 @@ def run_check(chk, sh, take):
 
 
 def check(film, only=None):
-    f = film_json(film)
+    f = script_view(film) if is_script(film) else film_json(film)
     bad = 0
     for shot in shots(film):
         if only and shot != only:
@@ -223,20 +291,23 @@ def promote(film, shot, fid):
     print("no flare %r on %s/%s" % (fid, film, shot))
 
 
-a = sys.argv[1:]
-if not a:
-    print(__doc__)
-elif a[0] == "list":
-    for sh in shots(a[1]):
-        s = load(a[1], sh)
-        print("%-6s %-28s %d invariants, %d flare"
-              % (sh, s.get("title", ""), len(s.get("invariants", [])),
-                 len(s.get("flair", s.get("flare", [])))))
-elif a[0] == "show":
-    show(a[1], a[2])
-elif a[0] == "check":
-    sys.exit(1 if check(a[1], a[3] if len(a) > 3 else (a[2] if len(a) > 2 else None)) else 0)
-elif a[0] == "promote":
-    promote(a[1], a[2], a[3])
-else:
-    print(__doc__)
+# the command line only when run as one: spec_routes loads this file as a module, and printing
+# the usage into the studio server's log on every check was noise
+if __name__ == "__main__":
+    a = sys.argv[1:]
+    if not a:
+        print(__doc__)
+    elif a[0] == "list":
+        for sh in shots(a[1]):
+            s = load(a[1], sh)
+            print("%-6s %-28s %d invariants, %d flare"
+                  % (sh, s.get("title", ""), len(s.get("invariants", [])),
+                     len(s.get("flair", s.get("flare", [])))))
+    elif a[0] == "show":
+        show(a[1], a[2])
+    elif a[0] == "check":
+        sys.exit(1 if check(a[1], a[3] if len(a) > 3 else (a[2] if len(a) > 2 else None)) else 0)
+    elif a[0] == "promote":
+        promote(a[1], a[2], a[3])
+    else:
+        print(__doc__)

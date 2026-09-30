@@ -1,0 +1,48 @@
+{
+ "invariants": [
+  {
+   "id": "every_crate_lands_where_the_simulation_p",
+   "title": "Every crate lands where the simulation put it",
+   "rule": "The fall is choreographed in Blender and drawn over its depth.",
+   "why": "It is the one beat whose physics we decide instead of hope for; Seedance would invent it from words.",
+   "check": {
+    "kind": "engine",
+    "value": "previz"
+   }
+  },
+  {
+   "id": "the_aisle_ends_blocked",
+   "title": "The aisle ends blocked",
+   "rule": "The pile closes the aisle completely - he cannot come through.",
+   "why": "The rest of the film stands on that wall."
+  },
+  {
+   "id": "the_start_frame_is_the_simulation_s",
+   "title": "The start frame is the simulation's",
+   "rule": "The first frame is the dressed previz frame, not a composed one.",
+   "why": "The depth guide and the picture must agree from frame one or the crates swim.",
+   "check": {
+    "kind": "anchor_contains",
+    "value": "previz"
+   }
+  }
+ ],
+ "flair": [
+  {
+   "id": "take",
+   "title": "Take",
+   "note": "pv:3003 - the plume of dust at the impact; the same motion agreement as seed 11 (r 0.918)"
+  },
+  {
+   "id": "camera",
+   "title": "Camera",
+   "note": "a slow drift"
+  }
+ ],
+ "shot": "070",
+ "title": "the fall",
+ "beat": "The tower of crates topples across the aisle and bursts on the floor, a wall of broken wood between them. Hale stands beyond it.",
+ "build": {
+  "script": "Blender physics, drawn through LTX-2.3 depth control (74); start frame the simulation's first frame, dressed by Qwen-Image-2.1 · take pv:3003"
+ }
+}

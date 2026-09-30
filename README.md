@@ -13,7 +13,7 @@ in `docs/STATE.md`. This file is the map; `ARCHITECTURE.md` is the constitution.
 | you want | open | it runs |
 |---|---|---|
 | **make a film with no AI knowledge** | http://192.168.0.45:8777/start | the app: characters → places → film editor, every step measured |
-| **make a sequence the way the paid breakdowns do** (refs → start frames → shots → picks → finish) | http://192.168.0.45:8777/shots | `studio/_tools/fight.py` on a shot script in `studio/shotscripts/`, stage by stage, with what to look at before each button |
+| **make a sequence the way the paid breakdowns do** (refs → start frames → shots → picks → finish), hands on | http://192.168.0.45:8777/shots - shots & specs: the spec sheet (what each shot must keep, locked when done) and the shot editor (models, seeds, start frames, takes, picks, trims, a Seedance suggestion) on one page; /specs opens the same page | `studio/_tools/fight.py` on a shot script in `studio/shotscripts/`, the same tools the 2026-09-29 demo films were made with |
 | **drive an engine directly** | the shell | `python3 scripts/comfy.py run workflows/<file>.json -s node.inputs.key=value` |
 
 The runbook for the second way is `craft/ACTION_SEQUENCE.md`; the book for a person with no AI

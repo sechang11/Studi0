@@ -1,0 +1,47 @@
+{
+ "invariants": [
+  {
+   "id": "the_line_is_heard",
+   "title": "The line is heard",
+   "rule": "\"It's only a bag, Nadia. Put it down and walk out of here.\" - every word, in his voice.",
+   "why": "The whole film turns on the offer; the speech model checks every take for the words.",
+   "check": {
+    "kind": "qc_clean"
+   }
+  },
+  {
+   "id": "he_does_not_raise_his_voice",
+   "title": "He does not raise his voice",
+   "rule": "Low, rough, unhurried. He waits after the line.",
+   "why": "He is the reasonable one; the menace is in the patience."
+  },
+  {
+   "id": "the_camera_is_still",
+   "title": "The camera is still",
+   "rule": "A faint float at most.",
+   "why": "Nothing should compete with the line.",
+   "check": {
+    "kind": "camera",
+    "want": "is static"
+   }
+  }
+ ],
+ "flair": [
+  {
+   "id": "take",
+   "title": "Take",
+   "note": "202"
+  },
+  {
+   "id": "the_wait_after_the_line",
+   "title": "The wait after the line",
+   "note": "about a second and a half"
+  }
+ ],
+ "shot": "040",
+ "title": "the offer",
+ "beat": "Hale, calm and patient, makes his offer: \"It's only a bag, Nadia. Put it down and walk out of here.\"",
+ "build": {
+  "script": "LTX-2.5 (70) from a Qwen-Image-2.1 start frame (qwen21_s11) · take 202, lip-synced"
+ }
+}

@@ -41,8 +41,10 @@ def font(name):
 ENGINE = {"shot": "LTX-2.5 (image to video, joint audio)",
           "h3": "MiniMax H3 (image to video, keeps the start frame)",
           "pv": "Blender physics previz -> LTX-2.3 depth control",
-          "pvb": "Blender physics previz -> LTX-2.3 depth control, no start frame"}
-COMPOSITOR = {"flux2": "Flux 2, three references", "qwen21": "Qwen-Image-2.1, reference edit"}
+          "pvb": "Blender physics previz -> LTX-2.3 depth control, no start frame",
+          "sd": "Seedance 2.5 (PAID, reference to video)"}
+COMPOSITOR = {"flux2": "Flux 2, three references", "qwen21": "Qwen-Image-2.1, reference edit",
+              "upload": "a picture uploaded in the editor"}
 
 
 def sh(*a):
@@ -141,6 +143,9 @@ def main():
         p = os.path.join(out, "%s_%s_s%s.mp4" % (stem, s["id"], seed))
         if not os.path.exists(p):
             continue
+        cut = os.path.join(out, "_trim_%s.mp4" % os.path.basename(p)[:-4])
+        if (s.get("trim") or {}).get("take") == want and os.path.exists(cut):
+            p = cut             # the finish cut this shot's take short; count what it concatenated
         d = post.frames(p) / 24.0
         spans.append((s, stem, seed, t, t + d))
         t += d
@@ -148,6 +153,10 @@ def main():
     work = os.path.join(out, "_cards")
     os.makedirs(work, exist_ok=True)
     credit = "Made on one RTX 5090 with open-weight models. Nothing paid for."
+    paid = [s["id"] for s, stem, _, _, _ in spans if stem == "sd"]
+    if paid:        # a take from the paid engine is in the cut (picked in the editor): say so
+        credit = ("Made on one RTX 5090 with open-weight models; shot%s %s on Seedance 2.5 (paid)."
+                  % ("s" if len(paid) > 1 else "", ", ".join(paid)))
     c1 = card(os.path.join(work, "card.mp4"), 1280, 704, title,
               [(seq.get("logline", ""), "sub", "0xDDDDDD"), (credit, "small", "0x9A9A9A")])
     final = join(c1, filmic, os.path.join(out, "%s_final.mp4" % film))
@@ -167,6 +176,8 @@ def main():
             start = "Qwen-Image-2.1 dressing the simulation's first frame"
         elif s.get("anchor") is None:
             start = "the place's plate itself"
+        elif ch == "upload":
+            start = COMPOSITOR["upload"]
         else:
             start = COMPOSITOR.get(ch.split("_")[0], ch or "composed")
             if ch:
@@ -174,13 +185,19 @@ def main():
         r = (ranked.get(s["id"]) or {})
         l1 = "%s   %s" % (s["id"], s["title"])
         l2 = "%s  |  start frame: %s  |  take: seed %s" % (ENGINE.get(stem, stem), start, seed)
+        tr = s.get("trim") or {}
+        if tr.get("take") == str(picks.get(s["id"], 11)):
+            l2 += "  |  trimmed %.2f-%s s" % (float(tr.get("in") or 0),
+                                           "%.2f" % float(tr["out"]) if tr.get("out") else "end")
         why = r.get("why") or ""
         l3 = ("picked: " + why) if why else ""
         if len(l3) > 150:
             l3 = l3[:147].rsplit(" ", 1)[0] + " ..."
         sd = s.get("seedance")
         l4 = ""
-        if sd:
+        if stem == "sd":
+            l4 = "SEEDANCE 2.5 - this take came from the paid engine"
+        elif sd:
             l4 = "SEEDANCE CANDIDATE - %s" % first_sentence(sd.get("why"))
             if len(l4) > 140:
                 l4 = l4[:137].rsplit(" ", 1)[0] + " ..."

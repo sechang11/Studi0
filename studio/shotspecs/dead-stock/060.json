@@ -1,0 +1,44 @@
+{
+ "invariants": [
+  {
+   "id": "the_cause_is_on_screen",
+   "title": "The cause is on screen",
+   "rule": "The strap snaps taut and the tower begins to tilt IN this shot.",
+   "why": "Without the cause the fall in 070 is luck, not her doing."
+  },
+  {
+   "id": "it_is_her_weight",
+   "title": "It is her weight",
+   "rule": "She pulls with her whole body, leaning back.",
+   "why": "It is a courier's strength, not a hero's."
+  },
+  {
+   "id": "it_is_ltx",
+   "title": "It is LTX",
+   "rule": "The take in the film is LTX-2.5's.",
+   "why": "The groan of the wood comes with LTX's sound.",
+   "check": {
+    "kind": "engine",
+    "value": "ltx"
+   }
+  }
+ ],
+ "flair": [
+  {
+   "id": "take",
+   "title": "Take",
+   "note": "11"
+  },
+  {
+   "id": "tilt",
+   "title": "Tilt",
+   "note": "starts in the last second"
+  }
+ ],
+ "shot": "060",
+ "title": "the strap",
+ "beat": "Nadia throws her weight back on the strap; it snaps taut and the tower of crates above her starts to tilt.",
+ "build": {
+  "script": "LTX-2.5 (70) from a Qwen-Image-2.1 start frame (qwen21_s202) · take 11"
+ }
+}

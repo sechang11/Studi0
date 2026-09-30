@@ -3,322 +3,2213 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Shot script</title>
+<title>Shots &amp; Specs</title>
 <style>
-  :root{--bg:#121416;--panel:#1a1d21;--panel2:#20242a;--line:#2a2f35;--ink:#e8eae6;--dim:#9aa3a8;--accent:#e0a14a;--good:#6bc0a8;--warn:#d9a441;--bad:#e05a5a;--mono:ui-monospace,Menlo,Consolas,monospace}
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
-  main{max-width:1380px;margin:0 auto;padding:22px 20px 80px}
-  h1{font-size:26px;margin:6px 0 2px;letter-spacing:-.01em}
-  .lead{color:var(--dim);margin:0 0 16px;max-width:78ch}
-  .lead b{color:var(--ink)}
-  .top{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
-  select,input[type=text],input[type=number],textarea{background:#0f1113;color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:6px 8px;font:inherit}
-  textarea{width:100%;min-height:64px;resize:vertical;font-family:inherit}
-  textarea.mono{font-family:var(--mono);font-size:12px;min-height:280px}
-  button{background:var(--accent);color:#1a1200;border:0;border-radius:6px;padding:7px 13px;font:inherit;font-weight:600;cursor:pointer}
-  button.ghost{background:transparent;color:var(--dim);border:1px solid var(--line)}
-  button.ghost:hover{color:var(--ink);border-color:var(--accent)}
-  button:disabled{opacity:.45;cursor:default}
-  .cols{display:grid;grid-template-columns:minmax(0,440px) minmax(0,1fr);gap:16px}
-  @media (max-width:980px){.cols{grid-template-columns:1fr}}
-  .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:12px}
-  .card h2{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);margin:0 0 8px;font-weight:600}
-  label{display:block;font-size:12px;color:var(--dim);margin:8px 0 3px}
-  .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-  .row > *{flex:1 1 auto}
-  .row .n{flex:0 0 70px}
-  .small{font-size:12px;color:var(--dim)}
-  .stage{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:10px}
-  .stage.done{border-left:3px solid var(--good)}
-  .stage.todo{border-left:3px solid var(--line)}
-  .stage.busy{border-left:3px solid var(--warn)}
-  .stage h3{margin:0;font-size:15px;display:flex;align-items:center;gap:10px}
-  .stage h3 .st{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);margin-left:auto}
-  .stage .what{margin:6px 0 4px;color:var(--ink);max-width:80ch}
-  .stage .look{margin:0 0 8px;color:var(--dim);max-width:80ch;font-size:13px}
-  .stage .look b{color:var(--warn);font-weight:600}
-  .thumbs{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0 4px}
-  .thumbs img{height:96px;border-radius:5px;background:#000;display:block}
-  .thumbs video{height:120px;border-radius:5px;background:#000;display:block}
-  .thumbs .t{text-align:center;font-size:11px;color:var(--dim);max-width:180px}
-  .thumbs .t img.strip{height:auto;width:100%;max-width:520px}
-  .files{font-family:var(--mono);font-size:11px;color:var(--dim);margin-top:4px}
-  pre.log{background:#0b0c0e;border:1px solid var(--line);border-radius:8px;padding:10px;max-height:320px;overflow:auto;font:12px/1.4 var(--mono);color:#cfd3d8;white-space:pre-wrap}
-  .pill{display:inline-block;border:1px solid var(--line);border-radius:99px;padding:1px 8px;font-size:11px;color:var(--dim);margin-right:4px}
-  .pill.ok{border-color:#3c5f49;color:#8fd0a6}
-  .pill.warn{border-color:#5f4f2c;color:#e0b252}
-  .err{color:var(--bad);font-size:13px;margin:6px 0}
-  details summary{cursor:pointer;color:var(--dim);font-size:13px}
-  .shot{border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin:8px 0;background:var(--panel2)}
-  .shot .hd{display:flex;gap:8px;align-items:center}
-  .shot .hd input{flex:1}
-  .refs{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
-  .chip{padding:3px 8px;border-radius:14px;border:1px solid var(--line);cursor:pointer;font-size:12px;color:var(--dim);user-select:none}
-  .chip.on{border-color:var(--accent);color:var(--ink);background:#26210f}
-  .castrow{display:grid;grid-template-columns:110px 120px 1fr 28px;gap:6px;align-items:start;margin:6px 0}
-  .castrow textarea{min-height:48px}
-  .x{background:none;border:0;color:var(--dim);font-size:16px;cursor:pointer;padding:4px}
-  .x:hover{color:var(--bad)}
-  code{background:#0f1113;padding:1px 5px;border-radius:4px;font-size:12px}
+ /* Shots & Specs: the spec sheet (what each shot must keep) and the shot editor (how it gets
+    made) on one page, because they are the two halves of one loop - write the promise, make
+    takes, check the takes against the promise, pick one, lock it. The look is the spec sheet's.
+    No browser pop-ups: questions are asked in the page, deletions are undone rather than
+    confirmed, edits save themselves, and an unsaved spec sheet is kept as a draft. */
+ :root{--bg:#0b0b10;--panel:#12121a;--card:#14141c;--well:#101017;--line:#2a2a36;--line2:#23232e;
+   --ink:#e8e8ef;--dim:#8b8b9c;--faint:#6f6f85;--green:#4fa06f;--gold:#e9c96a;--goldline:#6b5520;
+   --red:#e39a9a;--blue:#7fb2ff;--sd:#f0b43c;--ltx:#7fb2ff;--h3:#b48cf0;--pv:#6bc0a8;
+   --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+ *{box-sizing:border-box}
+ body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+ .wrap{padding:12px 18px 70px}
+ select,button,input,textarea{background:#16161f;color:var(--ink);border:1px solid #33333f;border-radius:6px;
+   padding:6px 10px;font:inherit}
+ input:focus,textarea:focus,select:focus{outline:none;border-color:#4f7d63;box-shadow:0 0 0 2px #4fa06f33}
+ textarea{width:100%;line-height:1.45;resize:vertical}
+ button{cursor:pointer}
+ button:hover{border-color:#5a5a70}
+ button.primary{background:#2b6b4a;border-color:#357d58}
+ button.primary:hover{background:#34805a}
+ button.lock{background:#3a2f13;border-color:#6b5520;color:#e9c96a}
+ button.lock:hover{background:#4a3c18}
+ button.ghost{background:transparent}
+ button.danger{color:var(--red)}
+ button.sdbtn{border-color:#6b5520;color:var(--sd)}
+ button.armed{background:#3a1616!important;border-color:#8a3f3f!important;color:#f3c7bf!important}
+ button[disabled]{opacity:.4;cursor:not-allowed}
+ label.chk{display:inline-flex;gap:5px;align-items:center;color:var(--dim);font-size:12.5px}
+ .grow{flex:1 1 auto}
+ .sub{color:var(--dim);font-size:13px}
+ .hint{color:var(--faint);font-size:12px}
+ a{color:#9fc3ff}
+ [hidden]{display:none!important}
+
+ /* top bar */
+ .top{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:4px 0 2px;position:relative}
+ .top h1{font-size:17px;margin:0 4px 0 0;font-weight:600}
+ .lede{margin:2px 0 10px}
+ #job{display:flex;align-items:center;gap:6px;color:var(--dim);font-size:12px;max-width:470px}
+ #job .dot{width:8px;height:8px;border-radius:50%;background:var(--faint);flex:0 0 auto}
+ #job.on .dot{background:var(--gold);animation:pulse 1s infinite}
+ #job .jbar{width:70px;height:5px;border-radius:3px;background:#262633;overflow:hidden;flex:0 0 auto}
+ #job .jbar i{display:block;height:100%;width:0;background:var(--gold);transition:width .4s}
+ #jobtx{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+ @keyframes pulse{50%{opacity:.3}}
+ body.k-film .scriptonly{display:none!important}
+ body.k-script .filmonly{display:none!important}
+
+ /* the film switcher and the film menu: in-page popovers */
+ .fsw{position:relative}
+ .fswbtn{display:flex;align-items:center;gap:9px;padding:4px 10px 4px 4px;min-width:250px;max-width:420px;text-align:left}
+ .fswbtn img,.fswbtn .noimg{display:inline-block;width:56px;height:32px;object-fit:cover;border-radius:4px;background:#1c1c26;flex:0 0 auto;vertical-align:middle}
+ #fswimg{display:inline-flex;flex:0 0 auto}
+ .fswbtn .t{display:flex;flex-direction:column;min-width:0;line-height:1.25}
+ .fswbtn .t b{font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+ .fswbtn .caret{margin-left:auto;color:var(--dim)}
+ .pop{position:absolute;z-index:40;background:#14141c;border:1px solid #33333f;border-radius:10px;box-shadow:0 14px 40px rgba(0,0,0,.6)}
+ .fswpop{top:calc(100% + 6px);left:0;width:470px;max-width:calc(100vw - 30px)}
+ .fswpop .head{display:flex;gap:6px;padding:8px;border-bottom:1px solid var(--line)}
+ .fswlist{max-height:62vh;overflow:auto;padding:4px 0 8px}
+ .fswlist h4{margin:10px 12px 4px;font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--faint);font-weight:600}
+ .fsrow{display:flex;gap:10px;align-items:center;padding:6px 12px;cursor:pointer}
+ .fsrow:hover,.fsrow.hot{background:#1d1d28}
+ .fsrow.on{background:#1a2a21}
+ .fsrow img,.fsrow .noimg{width:72px;height:41px;object-fit:cover;border-radius:4px;background:#1c1c26;flex:0 0 auto}
+ .fsrow .noimg{display:flex;align-items:center;justify-content:center;color:#4a4a5c;font-size:10px}
+ .fsrow .t{min-width:0;flex:1}
+ .fsrow .t b{display:block;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+ .fsrow .t span{font-size:11.5px;color:var(--faint)}
+ .fsrow.newrow{color:#8fd0a6}
+ .fsrow.newrow .plus{width:72px;height:41px;border:1px dashed #3c5f49;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:20px}
+ .menu{min-width:240px;padding:6px 0}
+ .menu button{display:block;width:100%;text-align:left;border:0;border-radius:0;background:transparent;padding:8px 14px;font-size:13px}
+ .menu button:hover{background:#1d1d28}
+ .menu hr{border:0;border-top:1px solid var(--line);margin:4px 0}
+
+ /* timeline: the spec sheet's poster cards */
+ .tl{display:flex;gap:8px;overflow-x:auto;padding:8px 0 10px}
+ .card{flex:0 0 auto;width:190px;background:var(--card);border:1px solid var(--line);border-radius:9px;overflow:hidden;
+   cursor:pointer;transition:.12s;position:relative}
+ .card:hover{border-color:#4c4c62;transform:translateY(-2px)}
+ .card.on{border-color:var(--green);box-shadow:0 0 0 1px var(--green) inset}
+ .card.locked{border-color:var(--goldline)}
+ .card.locked.on{box-shadow:0 0 0 1px #b08d2e inset}
+ .card.drift{border-color:#8a3f3f}
+ .card.over{border-color:var(--blue)}
+ .card.dragging{opacity:.4}
+ .card img{width:100%;height:107px;object-fit:cover;display:block;background:#000}
+ .card .noimg{width:100%;height:107px;background:#1c1c26;display:flex;align-items:center;justify-content:center;
+   color:#5a5a6e;font-size:12px}
+ .card .m{padding:7px 9px}
+ .card .id{font-weight:600;font-size:13px}
+ .card .id .d{color:#7a7a90;font-weight:400}
+ .card .t{color:#a6a6ba;font-size:12px;line-height:1.35;height:2.7em;overflow:hidden}
+ .card .f{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px;font-size:11px}
+ .card .f .pill{max-width:100%;overflow:hidden;text-overflow:ellipsis}
+ .card.add{width:92px;display:flex;flex-direction:column;align-items:center;justify-content:center;border-style:dashed}
+ .card.add .plus{font-size:30px;color:var(--faint);line-height:1}
+ .card.add:hover .plus{color:var(--green)}
+ .card.busy::after{content:"";position:absolute;inset:0;pointer-events:none;
+   background:repeating-linear-gradient(45deg,rgba(233,201,106,.16) 0 10px,rgba(0,0,0,0) 10px 20px)}
+ .badge{position:absolute;top:6px;right:6px;background:rgba(10,8,2,.82);border:1px solid var(--goldline);color:var(--gold);
+   border-radius:6px;padding:1px 6px;font-size:11px;line-height:1.5}
+ .badge.drift{border-color:#8a3f3f;color:var(--red)}
+ .sdb{position:absolute;top:6px;left:6px;background:var(--sd);color:#1a1200;border-radius:5px;padding:0 5px;font-size:10.5px;font-weight:700}
+ .pill{background:#20202b;border:1px solid #313140;border-radius:99px;padding:1px 7px;color:#9a9aae;white-space:nowrap}
+ .pill.inv{border-color:#3c5f49;color:#8fd0a6}
+ .pill.no{border-color:#6a3b3b;color:var(--red)}
+ .pill.warn{border-color:#5a4a1c;color:var(--gold)}
+ .pill.good{border-color:#3c5f49;color:#8fd0a6}
+ .pill.sd{border-color:#6b5520;color:var(--sd)}
+ .pill.draft{border-color:#34506e;color:#9fc3ff}
+ .eng.ltx,.eng.h3,.eng.pv,.eng.sd,.eng.both{font-weight:700;color:#0b0b10;border-color:transparent}
+ .eng.ltx{background:var(--ltx)} .eng.h3{background:var(--h3)} .eng.pv{background:var(--pv)} .eng.sd{background:var(--sd)}
+ .eng.both{background:linear-gradient(90deg,var(--ltx),var(--h3))}
+
+ /* the reel: the whole film to scale - where each shot sits, and where you are */
+ .reel{position:relative;display:flex;height:22px;border:1px solid var(--line);border-radius:6px;overflow:hidden;
+   cursor:pointer;margin:0 0 12px;background:#0f0f15}
+ .reel .seg{position:relative;border-right:1px solid #2e2e3c;min-width:0;overflow:hidden}
+ .reel .seg:last-of-type{border-right:0}
+ .reel .seg span{position:absolute;left:4px;top:3px;font:10px/1 var(--mono);color:#6f6f85;white-space:nowrap}
+ .reel .seg.now{background:#4fa06f33}
+ .reel .seg.now span{color:#dff1e6}
+ .reel .seg.lk{box-shadow:inset 0 -2px 0 var(--goldline)}
+ .reel .rph{position:absolute;top:0;bottom:0;width:2px;background:var(--red);pointer-events:none;left:0}
+ .reel:hover{border-color:#4c4c62}
+
+ .cols{display:grid;grid-template-columns:minmax(0,1fr) 410px;gap:16px;align-items:start}
+ @media(max-width:1100px){.cols{grid-template-columns:1fr} aside.insp{position:static;max-height:none}}
+ main{min-width:0}
+ .bar{display:flex;gap:8px;align-items:center;margin:0 0 10px;flex-wrap:wrap}
+ .sslab{font:600 10.5px/1 ui-sans-serif,system-ui;letter-spacing:.09em;text-transform:uppercase;color:#8ad6d2;
+   background:#12313040;border:1px solid #21514e;border-radius:5px;padding:4px 7px}
+ .fs{display:flex;gap:0;border:1px solid #33333f;border-radius:6px;overflow:hidden}
+ .fs button{border:0;border-radius:0;padding:6px 9px;background:#16161f;font-size:12px}
+ .fs button.on{background:#2f3a4d;color:#cfe0ff}
+ .note{font-size:12.5px;color:#c9a94a;background:#1e1a0c;border:1px solid #4a3c18;border-radius:6px;padding:7px 10px;
+   margin:0 0 10px;display:none}
+ .note code{background:#2a2410;border-radius:4px;padding:0 5px}
+
+ /* the next step: the one thing this shot needs, with the button that does it */
+ .nextbar{display:flex;gap:10px;align-items:center;background:#11201a;border:1px solid #2c4a38;border-radius:8px;
+   padding:7px 10px;margin:0 0 10px;font-size:13px;color:#cfe9da}
+ .nextbar .lab{font:600 10.5px/1 ui-sans-serif,system-ui;letter-spacing:.09em;text-transform:uppercase;color:#8fd0a6;flex:0 0 auto}
+ .nextbar .tx{flex:1 1 auto;min-width:0}
+ .nextbar.done{background:#15151d;border-color:var(--line);color:var(--dim)}
+ .nextbar.done .lab{color:var(--faint)}
+ .nextbar button{padding:4px 10px;font-size:12.5px;flex:0 0 auto}
+ .nextbar .alt{font-size:12px;color:#9fc3ff;cursor:pointer;flex:0 0 auto}
+
+ /* the player - the shot itself, above the words that promise what it does */
+ .player{background:var(--panel);border:1px solid #262633;border-radius:8px;padding:10px;margin-bottom:12px}
+ .screen{position:relative;background:#000;border-radius:6px 6px 0 0;overflow:hidden;display:flex;align-items:center;
+   justify-content:center;min-height:200px;height:min(46vh,560px)}
+ .screen video,.screen img{max-width:100%;max-height:100%;display:block;cursor:pointer}
+ .screen .ph{color:#555;font-size:14px}
+ .stillbadge{position:absolute;top:8px;left:8px;background:rgba(0,0,0,.65);border:1px solid #444;border-radius:5px;
+   padding:1px 7px;font-size:11px;color:#ccc}
+ .cap{background:#000;border-top:1px solid #1d1d26;border-radius:0 0 6px 6px;padding:6px 12px 7px;min-height:58px;font-size:12px}
+ .cap.off{display:none}
+ .cap .c1{font-weight:700;font-size:14.5px}
+ .cap .c2{color:#d8d8e2}
+ .cap .c3{color:var(--sd)}
+ .pctl{display:flex;gap:6px;align-items:center;margin-top:8px;flex-wrap:wrap;font-size:12px;color:var(--dim)}
+ .pctl button{padding:4px 9px;font-size:12px}
+ .pctl button.play{background:#2b4b6b;border-color:#37628a;color:#cfe4ff;min-width:84px}
+ .pctl button.play:hover{background:#345c81}
+ .mus{border-top:1px solid var(--line);padding-top:7px;margin-top:9px}
+ .mus select{font-size:12px;padding:3px 6px;max-width:250px}
+ .mus input[type=range]{width:140px;accent-color:#a07fd0;margin:0;padding:0;border:0;background:none}
+ .mlab{color:#8c8ca0;font-size:11px;text-transform:uppercase;letter-spacing:.08em}
+ .tstamp{font-family:var(--mono);font-size:11.5px;color:#cfe0ff;background:#191922;border:1px solid #2c2c3a;
+   border-radius:4px;padding:1px 6px;cursor:copy}
+ .scrub{width:100%;margin:8px 0 2px;accent-color:var(--green);display:block;padding:0;border:0;background:none}
+ .fno{font-family:var(--mono);color:#cfe0ff;font-size:12px}
+ audio{display:none}
+
+ /* the spec sheet editor: a highlighter <pre> under a transparent <textarea>, so typing stays
+    native. Every metric must match between the two or the colours drift off the text. */
+ .ed{position:relative;border:1px solid #2c2c38;border-radius:8px;background:var(--well);overflow:hidden}
+ .ed.hastitle{border-radius:0 0 8px 8px}
+ .ed.locked{border-color:var(--goldline);background:#12100a}
+ .sstitle{position:relative;display:flex;align-items:baseline;gap:10px;padding:9px 13px;border:1px solid #2c2c38;
+   border-bottom:0;border-radius:8px 8px 0 0;background:linear-gradient(180deg,#15151f,#101017);flex-wrap:wrap}
+ .sstitle b{font:600 15px/1.3 ui-sans-serif,system-ui;color:#ffa06b}
+ .sstitle i{font-style:normal;font:600 10.5px/1 ui-sans-serif,system-ui;letter-spacing:.09em;text-transform:uppercase;color:#8ad6d2}
+ .sstitle #ssfold{margin-left:auto;font-size:11px;color:#6f6f85}
+ .sstitle .lnk{font-size:11px;color:#6f6f85;padding:3px 4px;cursor:pointer}
+ .sstitle .lnk:hover{color:var(--ink)}
+ .sstitle #sssave{font-size:11px;color:#8fd0a6;border:1px solid #2c4a38;border-radius:5px;padding:3px 9px;background:#12241b;cursor:pointer}
+ .sstitle #sssave:hover{background:#183324;color:#b6e8c8}
+ .sstitle #sssave.dirty{border-color:var(--goldline);background:#241d0d;color:var(--gold)}
+ .sstitle .draftnote{font-size:11px;color:#9fc3ff}
+ .sstitle.shut{border-bottom:1px solid #2c2c38;border-radius:8px}
+ .sstitle .chev{cursor:pointer;color:var(--dim);font-size:13px;line-height:1;padding:2px 5px;border-radius:4px}
+ .sstitle .chev:hover{background:#20202b;color:var(--ink)}
+ .hidewhenshut{display:none}
+ .mini{position:absolute;top:0;right:0;width:86px;height:100%;cursor:grab;background:#0c0c12;border-left:1px solid var(--line2);z-index:3}
+ .mini.grabbing{cursor:grabbing}
+ .mini canvas{display:block;width:100%;height:100%}
+ .mini .vp{position:absolute;left:0;width:100%;background:#7fb2ff1f;border-top:1px solid #7fb2ff55;border-bottom:1px solid #7fb2ff55;pointer-events:none}
+ .gut{position:absolute;top:0;left:0;width:22px;height:100%;z-index:4;pointer-events:none;overflow:hidden}
+ .gut b{position:absolute;left:2px;width:20px;display:flex;align-items:center;justify-content:center;cursor:pointer;pointer-events:auto;
+   color:#6f6f85;font:600 var(--fs,14px)/1 var(--mono);border-radius:3px}
+ .gut b:hover{color:var(--ink);background:var(--line2)}
+ .foldmark{color:#6f6f85}
+ .ed textarea,.ed pre{margin:0;padding:12px 14px;border:0;font-family:var(--mono);font-size:var(--fs,14px);line-height:1.65;tab-size:2;
+   white-space:pre-wrap;overflow-wrap:break-word;word-break:normal;border-radius:0}
+ .ed pre{position:absolute;inset:0;overflow:auto;color:#cfcfdd;pointer-events:none;padding-right:100px;padding-left:36px}
+ .ed textarea{position:relative;width:100%;height:var(--eh,56vh);display:block;padding-right:100px;padding-left:36px;
+   background:transparent;color:transparent;caret-color:var(--ink);resize:vertical;overflow:auto;outline:none;box-shadow:none}
+ .ed textarea::selection{background:#31507a;color:transparent}
+ .t-title{color:#ffa06b;font-weight:700} .t-sec{color:#7fb2ff;font-weight:700} .t-sec-inv{color:#e9c96a;font-weight:700}
+ .t-sec-flair{color:#8fd0a6;font-weight:700} .t-name-inv{color:#7fb2ff;font-weight:600} .t-name-flair{color:#b6e8c8;font-weight:600}
+ .t-name{color:#c9c9da;font-weight:600} .t-lbl{color:#7a7a90;font-weight:600} .t-why{color:#9a9ab2;font-style:italic}
+ .t-chk{color:#63d5d0} .t-chk-bad{color:var(--red);text-decoration:underline wavy #a05252}
+ .t-perm{color:#0b0b10;background:#e9c96a;font-weight:700;border-radius:3px;padding:0 4px}
+ .t-num{color:#e2a3f0} .t-code{color:#d4b483}
+ .lg{display:flex;gap:10px;flex-wrap:wrap;font-size:11.5px;color:var(--dim);margin-top:6px}
+ .lg span b{font-weight:600}
+ .msg{font-size:12.5px;color:#8fd0a6;min-height:1.2em;margin-top:8px}
+ .msg.err{color:var(--red)} .msg.warn{color:var(--gold)}
+ pre.rep{background:var(--well);border:1px solid #262633;border-radius:8px;padding:10px;font:12px/1.5 var(--mono);
+   white-space:pre-wrap;max-height:40vh;overflow:auto;color:#c6c6d6;margin-top:10px}
+ .outbox{margin-top:12px;border:1px solid var(--line);border-radius:8px;background:var(--panel);padding:10px 12px;font-size:12.5px}
+
+ /* the media browser (film-editor films): the palette, and the filter over it */
+ .media{margin-top:12px;border:1px solid var(--line);border-radius:8px;background:#141419}
+ .media h3{margin:0;padding:9px 12px;font-size:12px;letter-spacing:.09em;color:#8c8ca0;text-transform:uppercase;
+   border-bottom:1px solid var(--line2);display:flex;gap:10px;align-items:center;cursor:pointer}
+ .media h3 .cnt{color:#5f5f74;letter-spacing:0}
+ .mbody{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:12px;padding:12px}
+ .mbody.hide{display:none}
+ .mfilt{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
+ .mfilt button{padding:3px 10px;font-size:11.5px}
+ .mfilt button.on{background:#2b4b6b;border-color:#37628a;color:#cfe4ff}
+ .mfilt input{padding:3px 8px;font-size:12px;flex:1 1 120px;min-width:90px}
+ .mlist{max-height:330px;overflow:auto;border:1px solid var(--line2);border-radius:6px}
+ .mrow{display:flex;gap:8px;align-items:center;padding:4px 8px;font-size:11.5px;color:#a6a6ba;cursor:pointer;border-bottom:1px solid #1c1c25}
+ .mrow:hover{background:#1b1b24} .mrow.on{background:#22323f;color:#dff1ff}
+ .mrow .k{color:#5f5f74;width:42px;flex:0 0 auto}
+ .mrow .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1 1 auto}
+ .mrow .u{color:var(--green);flex:0 0 auto;font-size:10.5px}
+ .mprev{border:1px solid var(--line2);border-radius:6px;padding:10px;background:#111116}
+ .mprev img{max-width:100%;border-radius:4px;display:block;background:#000}
+ .mprev .fn{font-size:12px;color:#dfe6f2;word-break:break-all;margin-bottom:6px}
+ .mprev .meta{font-size:11px;color:#7c7c90;margin-top:6px;line-height:1.6}
+ .mprev .used{margin-top:8px;font-size:11.5px;color:var(--green)}
+ @media(max-width:900px){.mbody{grid-template-columns:1fr}}
+
+ /* the inspector: how the shot gets made */
+ aside.insp{position:sticky;top:8px;max-height:calc(100vh - 16px);overflow:auto;background:var(--panel);
+   border:1px solid #262633;border-radius:8px}
+ .tabs{display:flex;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--panel);z-index:2}
+ .tabs button{flex:1;border:0;border-radius:0;background:transparent;padding:9px 3px;color:var(--dim);
+   border-bottom:2px solid transparent;font-size:12.5px}
+ .tabs button.on{color:var(--ink);border-bottom-color:var(--green)}
+ .tabs .sdd{color:var(--sd)}
+ .pane{padding:10px 12px 30px}
+ .pane label.l,.dlg label.l{display:block;font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--dim);margin:10px 0 3px}
+ .pane .n,.dlg .n{color:var(--faint);font-size:11.5px;margin-top:3px}
+ .row{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+ .row>*{flex:0 0 auto}
+ .row .grow{flex:1 1 auto;min-width:60px}
+ .pane select,.pane input{padding:5px 8px}
+ .savestate{font-size:11.5px;color:var(--faint)}
+ .savestate.ok{color:#6f9f84} .savestate.err{color:var(--red)}
+ .lockbar{background:#1e1a0c;border:1px solid #4a3c18;color:#c9a94a;border-radius:6px;padding:7px 10px;font-size:12px;margin-bottom:8px}
+ .slots{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+ .slots select{width:100%}
+ .slots .sl{font-size:10.5px;color:var(--faint);margin-bottom:2px}
+ .cands{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:8px}
+ .cand{border:2px solid var(--line);border-radius:7px;overflow:hidden;background:var(--card);cursor:pointer}
+ .cand.on{border-color:var(--green)}
+ .cand img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;background:#000}
+ .cand .m{padding:4px 6px;font-size:11.5px;display:flex;justify-content:space-between;gap:4px;align-items:center}
+ .bigimg{width:100%;border-radius:7px;display:block;background:#000;aspect-ratio:16/9;object-fit:cover}
+ .take{border:1px solid var(--line);border-radius:8px;margin-bottom:8px;background:var(--card);overflow:hidden}
+ .take.in{border-color:var(--green)}
+ .take .strip{width:100%;height:46px;object-fit:cover;display:block;background:#000;cursor:pointer}
+ .take .m{padding:6px 8px}
+ .take .hd{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+ .take .kv{color:var(--dim);font-size:11.5px;margin-top:3px}
+ .take .ft{color:var(--red);font-size:11.5px}
+ .take .nt{color:var(--gold);font-size:11.5px}
+ .trim{margin-top:7px;padding-top:7px;border-top:1px dashed var(--line)}
+ .ftk{display:flex;gap:8px;align-items:center;background:#181822;border:1px solid var(--line);border-radius:6px;padding:5px 7px;
+   cursor:pointer;font-size:12px;color:#a6a6ba;margin-bottom:5px}
+ .ftk:hover{border-color:#4c4c62} .ftk.on{border-color:var(--green);color:#dff1e6} .ftk.pick{border-color:#b08d2e}
+ .ftk img{width:64px;height:36px;object-fit:cover;border-radius:3px;background:#000;flex:0 0 auto}
+ .lvl{display:inline-block;font-weight:700;border-radius:6px;padding:2px 8px;font-size:11.5px}
+ .lvl.strong{background:#3b2a0c;color:var(--sd);border:1px solid #6b5520}
+ .lvl.consider{background:#2a2410;color:#d9c07a;border:1px solid #4d4420}
+ .lvl.none{background:#1a2420;color:#8fd0a6;border:1px solid #2c4a3e}
+ ul.why{margin:6px 0 0 16px;padding:0;color:var(--dim);font-size:12.5px}
+ ul.why li{margin:3px 0}
+ ul.coach{font-size:11.5px;margin-top:5px}
+ ul.coach li{color:var(--gold)}
+ ul.coach li.ok{color:#8fd0a6}
+ ol.steps{margin:6px 0 2px 18px;padding:0;color:var(--dim);font-size:12.5px}
+ ol.steps li{margin:5px 0}
+ ol.steps b{color:var(--ink)}
+ .ref{display:grid;grid-template-columns:52px 1fr;gap:8px;align-items:center;padding:6px;border:1px solid var(--line);border-radius:8px;
+   margin-bottom:6px;background:var(--card);cursor:pointer}
+ .ref:hover{border-color:#454d57}
+ .ref.open{border-color:var(--green)}
+ .ref img,.ref .noimg{width:52px;height:64px;object-fit:cover;border-radius:5px;background:#000;display:block}
+ .ref.place img,.ref.place .noimg{height:36px}
+ .ref .noimg{display:flex;align-items:center;justify-content:center;color:var(--faint);font-size:10px}
+ .refed{border:1px solid var(--line);border-top:0;border-radius:0 0 8px 8px;margin:-8px 0 8px;padding:8px;background:var(--card)}
+ .promise{border-left:2px solid #6b5520;padding:2px 0 2px 8px;margin:6px 0;font-size:12.5px}
+ .promise b{color:var(--gold)}
+ .promise .w{color:var(--faint);font-style:italic}
+ .adder{border:1px dashed #3a3a48;border-radius:8px;padding:8px;margin-top:8px}
+
+ /* in-page dialogs (not the browser's): new film, new shot, film settings, the paid send, help */
+ dialog.dlg{padding:0;border:1px solid #3a3a48;border-radius:12px;background:#13131b;color:var(--ink);width:min(560px,calc(100vw - 30px));
+   box-shadow:0 20px 60px rgba(0,0,0,.7)}
+ dialog.dlg.wide{width:min(760px,calc(100vw - 30px))}
+ dialog.dlg::backdrop{background:rgba(4,4,8,.66)}
+ .dlg form{margin:0}
+ .dlg-h{display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--line)}
+ .dlg-h b{font-size:15px}
+ .dlg-h .x{margin-left:auto;padding:2px 9px;border-color:transparent;color:var(--dim)}
+ .dlg-b{padding:4px 16px 12px;max-height:68vh;overflow:auto}
+ .dlg-b input[type=text],.dlg-b textarea,.dlg-b select{width:100%}
+ .dlg-err{color:var(--red);font-size:12.5px;padding:0 16px;min-height:0}
+ .dlg-err:not(:empty){padding:6px 16px}
+ .dlg-f{display:flex;gap:8px;justify-content:flex-end;padding:12px 16px;border-top:1px solid var(--line)}
+ .opt{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:8px;padding:9px 11px;margin:6px 0;cursor:pointer;background:#16161f}
+ .opt:hover{border-color:#4c4c62}
+ .opt.on{border-color:var(--green);background:#15221b}
+ .opt input[type=radio]{margin-top:3px}
+ .opt b{display:block;font-size:13px}
+ .opt .d{font-size:12px;color:var(--dim)}
+ .opt select{margin-top:6px}
+ .chips{display:flex;gap:6px;flex-wrap:wrap}
+ .chip{display:inline-flex;align-items:center;gap:7px;border:1px solid #33333f;border-radius:99px;padding:3px 10px 3px 3px;cursor:pointer;background:#16161f;font-size:12.5px}
+ .chip img{width:26px;height:26px;border-radius:50%;object-fit:cover;background:#000}
+ .chip.on{border-color:var(--green);background:#15221b}
+ .seg3{display:flex;border:1px solid #33333f;border-radius:7px;overflow:hidden}
+ .seg3 button{border:0;border-radius:0;background:#16161f;padding:6px 12px;font-size:12.5px}
+ .seg3 button.on{background:#2b4b6b;color:#dfeeff}
+ .preview{background:#0f0f15;border:1px solid var(--line2);border-radius:7px;padding:8px 10px;font:12px/1.5 var(--mono);color:#b9b9cc;white-space:pre-wrap;margin-top:6px}
+ .avail{font-size:12px;margin-top:4px}
+ .avail.ok{color:#8fd0a6} .avail.bad{color:var(--red)}
+ .kbd{font:11.5px var(--mono);background:#1c1c26;border:1px solid #33333f;border-bottom-width:2px;border-radius:4px;padding:0 5px}
+ .keys{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:13px;margin:8px 0}
+
+ #toast{position:fixed;right:16px;bottom:16px;max-width:520px;padding:9px 10px 9px 12px;border-radius:8px;background:#2a1414;
+   border:1px solid #6b2a2a;color:#f0c0b8;display:none;z-index:60;align-items:center;gap:10px}
+ #toast.ok{background:#12251d;border-color:#2c5a45;color:#bfe8d6}
+ #toast span{white-space:pre-wrap}
+ #toast button{padding:3px 10px;font-size:12.5px;color:#fff;border-color:#4c6a5a}
+ #logbox{position:fixed;right:16px;bottom:64px;width:580px;max-width:calc(100vw - 32px);max-height:50vh;display:none;z-index:50;
+   background:#08080c;border:1px solid var(--line);border-radius:8px;box-shadow:0 8px 30px rgba(0,0,0,.6)}
+ #logbox pre{margin:0;padding:10px;overflow:auto;max-height:calc(50vh - 36px);font:11.5px/1.4 var(--mono);color:#cfd3d8;white-space:pre-wrap}
+ #logbox .lh{display:flex;justify-content:space-between;align-items:center;padding:5px 10px;border-bottom:1px solid var(--line);color:var(--dim)}
 </style>
 </head>
-<body>
-<main>
-  <h1>Shot script → master</h1>
-  <p class="lead">The way the paid breakdowns make a sequence, on this computer: <b>pictures first</b> (a reference
-    per person, a plate for the place), <b>a composed start frame per shot</b>, <b>one beat per shot</b> with sound written in,
-    <b>three seeds</b>, a pick by measurement, one grade at the finish. Each step below runs the same tool as the shell
-    (<code>studio/_tools/fight.py</code>) and shows what it wrote. Do them in order; read what to look at before the next.</p>
-
-  <div class="top">
-    <label style="margin:0">Film</label>
-    <select id="film"></select>
-    <button class="ghost" id="reload">Reload</button>
-    <input type="text" id="newname" placeholder="new film slug, e.g. the-letter-2" style="width:220px">
-    <button class="ghost" id="new">New script</button>
-    <span class="small" id="jobline"></span>
-    <button class="ghost" id="stop" style="display:none">Stop</button>
+<body class="k-script">
+<div class="wrap">
+ <div class="top">
+  <h1>Shots &amp; Specs</h1>
+  <div class="fsw" id="fsw">
+   <button class="fswbtn" id="fswbtn" aria-haspopup="true" aria-expanded="false" title="switch film">
+    <span id="fswimg"></span><span class="t"><b id="fswtitle">...</b><span class="hint" id="fswsub"></span></span><span class="caret">&#9662;</span>
+   </button>
+   <div class="pop fswpop" id="fswpop" hidden>
+    <div class="head"><input id="fswq" class="grow" placeholder="find a film" autocomplete="off"></div>
+    <div class="fswlist" id="fswlist"></div>
+   </div>
   </div>
-
-  <div class="cols">
-    <section>
-      <div class="card">
-        <h2>The script</h2>
-        <p class="small">Who is in it, where it happens, and what each shot does. A character is described <b>once</b>, here;
-          every shot after that points at the picture. Saving writes <code>studio/shotscripts/&lt;film&gt;.json</code>.</p>
-        <label>Cast <span class="small">(id · role · what they look like, full length, plain backdrop)</span></label>
-        <div id="cast"></div>
-        <button class="ghost" id="addcast">+ character</button>
-        <label>Place <span class="small">(id · the plate: wide, nobody in it)</span></label>
-        <div class="row"><input type="text" id="place_id" class="n" placeholder="court" style="flex:0 0 110px"><textarea id="place_prompt" placeholder="Wide photograph of ..."></textarea></div>
-        <label>Shots</label>
-        <div id="shots"></div>
-        <button class="ghost" id="addshot">+ shot</button>
-        <details style="margin-top:10px"><summary>Look, negative, music, realism</summary>
-          <label>Grade (the look, one line, applied at the finish and in every anchor)</label><textarea id="grade"></textarea>
-          <label>Avoid (the negative)</label><textarea id="avoid"></textarea>
-          <label>Score tags (ACE-Step)</label><textarea id="score_tags"></textarea>
-          <label>Realism (appended to reference prompts)</label><textarea id="realism"></textarea>
-        </details>
-        <details style="margin-top:10px"><summary>The JSON itself</summary>
-          <textarea id="json" class="mono" spellcheck="false"></textarea>
-          <p class="small">Editing here and saving replaces the form's contents.</p>
-        </details>
-        <div class="row" style="margin-top:10px"><button id="save">Save script</button><span class="small" id="savemsg"></span></div>
-        <div class="err" id="err"></div>
-      </div>
-    </section>
-
-    <section id="stages"></section>
+  <button class="primary" id="newfilm" title="a new shot script, made on this page">+ new film</button>
+  <div style="position:relative">
+   <button class="ghost" id="filmmenu" title="this film: settings, duplicate, archive" aria-haspopup="true">&#8943;</button>
+   <div class="pop menu" id="filmmenupop" hidden style="top:calc(100% + 6px);left:0"></div>
   </div>
+  <span class="grow"></span>
+  <div id="job" class="scriptonly"><span class="dot"></span><span id="jobtx">idle</span>
+   <span class="jbar" id="jbarw" hidden><i id="jbar"></i></span>
+   <button class="ghost" id="joblog" style="padding:3px 8px">log</button>
+   <button class="ghost danger" id="jobstop" style="display:none;padding:3px 8px">stop</button></div>
+  <button id="checks" title="run every CHECK line in this film's spec sheets against the takes the film uses">run checks</button>
+  <button id="music" class="scriptonly" title="write the score bed with ACE-Step, as long as the cut">write music</button>
+  <button id="assemble" class="scriptonly" title="cut the picked takes, grade, mix, title card, annotated cut">assemble</button>
+  <button id="assemble2x" class="scriptonly primary" title="assemble plus the 2x master (2560x1408), a few minutes more">assemble + 2x</button>
+  <a id="toeditor" class="filmonly" href="/film">open in the film editor &#8599;</a>
+  <button class="ghost" id="helpbtn" title="keyboard shortcuts and how it works (?)">?</button>
+ </div>
+ <div class="lede sub" id="lede"></div>
 
-  <div class="card" style="margin-top:6px">
-    <h2>Log <span id="logname" class="small"></span></h2>
-    <pre class="log" id="log">idle.</pre>
-  </div>
-</main>
+ <div class="tl" id="tl"></div>
+ <div class="reel" id="reel" title="the whole film to scale - click to go there"></div>
+
+ <div class="cols">
+  <main>
+   <div class="bar">
+    <span class="sslab">Spec Sheet</span>
+    <span id="who">pick a shot above</span>
+    <span class="grow"></span>
+    <span id="runtime" class="sub"></span>
+    <div class="fs" id="fs"></div>
+    <button id="lockbtn" class="lock" disabled>lock</button>
+    <button id="foldbtn" title="hide the CAN CHANGE half while you work on the promises">&#9662; variants</button>
+   </div>
+   <div class="note" id="note"></div>
+   <div class="nextbar" id="nextbar" hidden></div>
+
+   <div class="player" id="player">
+    <div class="screen">
+     <video id="vid" playsinline preload="metadata" title="click to play or pause"></video>
+     <img id="still" alt="" style="display:none" title="click to play the storyboard">
+     <div class="ph" id="ph">pick a shot</div>
+     <div class="stillbadge" id="stillbadge" style="display:none"></div>
+    </div>
+    <div class="cap" id="cap"><div class="c1" id="c1"></div><div class="c2" id="c2"></div><div class="c3" id="c3"></div></div>
+    <div class="pctl">
+     <button id="pshot" title="previous shot  ( [ )">&#9198;</button>
+     <button class="play" id="pp" title="play / pause  (space)">&#9654; play</button>
+     <button id="nshot" title="next shot  ( ] )">&#9197;</button>
+     <button id="fback" title="previous frame  (left arrow)">&#9664;|</button>
+     <button id="ffwd" title="next frame  (right arrow)">|&#9654;</button>
+     <button id="restart">&#8635; restart</button>
+     <label class="chk" title="when this shot ends, roll straight into the next one"><input type="checkbox" id="chain" checked> continue into next shot</label>
+     <label class="chk"><input type="checkbox" id="loop"> loop</label>
+     <label class="chk" title="the shot's own sound - effects and any dialogue"><input type="checkbox" id="mute"> mute sfx</label>
+     <label class="chk" title="the caption band: engine, seed, start frame, why this take"><input type="checkbox" id="captions" checked> captions</label>
+    </div>
+    <div class="pctl mus">
+     <span class="mlab">music</span>
+     <select id="track"><option value="">none</option></select>
+     <label class="chk" title="silence the music without losing your place in it"><input type="checkbox" id="mmute"> mute music</label>
+     <input type="range" id="mvol" min="0" max="100" value="50" title="music volume">
+     <span class="tstamp" id="mclock" title="film time - click to copy">0:00.000</span>
+     <span id="minfo" class="hint"></span>
+    </div>
+    <input type="range" class="scrub" id="scrub" min="0" max="0" step="1" value="0" title="the take, frame by frame">
+    <div class="pctl"><b id="fno" class="fno"></b><span id="vinfo"></span><span class="grow"></span>
+     <span class="hint">space play &middot; &larr; &rarr; frame &middot; [ ] shot &middot; ? help</span></div>
+   </div>
+
+   <div class="sstitle" id="sstitle" style="display:none">
+    <span class="chev" id="sshide" title="minimise the whole sheet to this bar, or open it again">&#9662;</span>
+    <i>Spec Sheet</i><b id="sstitletx"></b>
+    <span class="draftnote" id="draftnote" hidden></span>
+    <span id="ssfold" class="lnk" title="fold every ### section">fold all</span>
+    <span class="lnk" id="sscopy" title="copy the whole sheet to the clipboard">copy</span>
+    <span class="lnk" id="ssdiscard" hidden title="throw away the unsaved draft and go back to the saved sheet">discard draft</span>
+    <span id="sssave" title="save the sheet (Ctrl+S)">save</span>
+   </div>
+   <div class="ed hastitle" id="ed">
+    <pre id="hl" aria-hidden="true"></pre>
+    <div class="gut" id="gut"></div>
+    <textarea id="md" spellcheck="false" placeholder="pick a shot from the cards"></textarea>
+    <div class="mini" id="mini" title="drag to scroll"><canvas id="minic"></canvas><div class="vp" id="minivp"></div></div>
+   </div>
+   <div class="lg">
+    <span><b class="t-sec-inv">MUST NEVER CHANGE</b></span>
+    <span><b class="t-sec-flair">CAN CHANGE</b></span>
+    <span><b class="t-name">### name</b></span>
+    <span><b class="t-why">WHY</b></span>
+    <span><b class="t-chk">CHECK it can run</b></span>
+    <span><b class="t-chk-bad">CHECK it can't</b></span>
+    <span class="grow"></span><a href="#" id="howlink">how the spec sheet works</a>
+   </div>
+   <div class="msg" id="msg"></div>
+   <pre class="rep" id="rep" style="display:none"></pre>
+
+   <div class="outbox scriptonly" id="outbox"></div>
+
+   <div class="media filmonly" id="mediabox">
+    <h3 id="mhead">media <span class="cnt" id="mcount"></span><span class="cnt" style="margin-left:auto">click to fold</span></h3>
+    <div class="mbody" id="mbody">
+     <div><div class="mfilt" id="mfilt"></div><div class="mlist" id="mlist"></div></div>
+     <div class="mprev" id="mprev"><div class="meta">pick a file to hear it or look at it.<br>Plays on its own - it does not touch the shot player.</div></div>
+    </div>
+   </div>
+  </main>
+
+  <aside class="insp" id="insp"></aside>
+ </div>
+</div>
+
+<dialog class="dlg" id="dlg"><form method="dialog" id="dlgform">
+ <div class="dlg-h"><b id="dlgtitle"></b><button type="button" class="ghost x" id="dlgx" aria-label="close">&#10005;</button></div>
+ <div class="dlg-b" id="dlgbody"></div>
+ <div class="dlg-err" id="dlgerr"></div>
+ <div class="dlg-f" id="dlgfoot"><button type="button" class="ghost" id="dlgcancel">cancel</button><button type="submit" class="primary" id="dlgok">ok</button></div>
+</form></dialog>
+
+<audio id="bgm" preload="auto"></audio>
+<audio id="pal" preload="metadata"></audio>
+<video id="previd" preload="auto" muted style="display:none"></video>
+<div id="toast"></div>
+<div id="logbox"><div class="lh"><span id="logtitle">log</span><button class="ghost" id="logclose" style="padding:3px 8px">close</button></div><pre id="logpre"></pre></div>
+<input type="file" id="filepick" accept="image/png,image/jpeg,image/webp" style="display:none">
 
 <script>
-(() => {
-  const $ = s => document.querySelector(s);
-  let STAGES = [], FILMS = [], film = null, script = null, tree = null, pollTimer = null;
+"use strict";
+const $ = s => document.querySelector(s);
+const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]));
+const PREF = {
+  get(k, d) { try { const v = localStorage.getItem("ss." + k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem("ss." + k, JSON.stringify(v)); } catch (e) {} },
+  del(k) { try { localStorage.removeItem("ss." + k); } catch (e) {} },
+};
+async function api(path, body) {
+  const opt = body === undefined ? {} : {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(body)};
+  const r = await fetch(path, opt);
+  let j = {};
+  try { j = await r.json(); } catch (e) { j = {error: "the server answered " + r.status}; }
+  if (!r.ok || j.error) throw new Error(j.error || ("HTTP " + r.status));
+  return j;
+}
+// a toast can carry an undo, or another action: deleting is undone, not confirmed
+function toast(m, o) {
+  const opt = (o && typeof o === "object") ? o : {ok: !!o};
+  const t = $("#toast");
+  t.className = (opt.ok || opt.undo) ? "ok" : "";
+  t.innerHTML = `<span>${esc(m)}</span>`;
+  const acts = [];
+  if (opt.undo) acts.push({label: "undo", fn: opt.undo});
+  if (opt.action) acts.push(opt.action);
+  acts.forEach(a => { const b = document.createElement("button"); b.className = "ghost"; b.textContent = a.label; b.onclick = () => { t.style.display = "none"; a.fn(); }; t.appendChild(b); });
+  if (opt.ctrlz) { const k = document.createElement("span"); k.className = "hint"; k.textContent = "or Ctrl+Z"; t.appendChild(k); }
+  t.style.display = "flex";
+  const ms = opt.ms || (acts.length ? 12000 : (opt.ok ? 2600 : 7000));
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => { t.style.display = "none"; }, ms);
+  // it does not go while the pointer is on it - reading it should not cost you the undo
+  t.onmouseenter = () => clearTimeout(toast._t);
+  t.onmouseleave = () => { clearTimeout(toast._t); toast._t = setTimeout(() => { t.style.display = "none"; }, 2500); };
+}
+function msg(m, kind) { const e = $("#msg"); e.textContent = m || ""; e.className = "msg" + (kind ? " " + kind : ""); }
+// a second click on the same button, instead of "are you sure?"
+function arm(btn, label, fn, ms) {
+  if (btn.dataset.armed) {
+    clearTimeout(btn._armT); delete btn.dataset.armed; btn.classList.remove("armed"); btn.innerHTML = btn._label; fn(); return;
+  }
+  btn._label = btn.innerHTML; btn.dataset.armed = "1"; btn.classList.add("armed"); btn.textContent = label;
+  btn._armT = setTimeout(() => { delete btn.dataset.armed; btn.classList.remove("armed"); btn.innerHTML = btn._label; }, ms || 3500);
+}
+// the page's own dialog: a form, validated in place, errors shown inside it
+const DLG = {onOk: null, onClose: null};
+function openDialog({title, body, ok = "ok", okClass = "primary", init, onOk, wide, noFoot}) {
+  $("#dlgtitle").textContent = title; $("#dlgbody").innerHTML = body; $("#dlgerr").textContent = "";
+  const b = $("#dlgok"); b.textContent = ok; b.className = okClass; b.disabled = false;
+  $("#dlgfoot").hidden = !!noFoot;
+  $("#dlg").classList.toggle("wide", !!wide);
+  DLG.onOk = onOk;
+  if (!$("#dlg").open) $("#dlg").showModal();
+  if (init) init($("#dlgbody"));
+  const f = $("#dlgbody").querySelector("input[type=text],textarea"); if (f) { f.focus(); if (f.select) f.select(); }
+}
+function closeDialog() { if ($("#dlg").open) $("#dlg").close(); }
+// the open dialog's own handler runs: openDialog sets it, and nothing else clears it
+$("#dlgform").addEventListener("submit", async e => {
+  e.preventDefault();
+  const b = $("#dlgok");
+  if (b.disabled) return;                               // already working on it
+  if (!DLG.onOk) return closeDialog();
+  b.disabled = true; $("#dlgerr").textContent = "";
+  try { const r = await DLG.onOk($("#dlgbody")); if (r !== false) closeDialog(); }
+  catch (err) { $("#dlgerr").textContent = err.message; }
+  finally { b.disabled = false; }
+});
+$("#dlgcancel").onclick = () => closeDialog();
+$("#dlgx").onclick = () => closeDialog();
 
-  const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-  const api = (p, opt) => fetch(p, opt).then(r => r.json().then(j => ({ok: r.ok, code: r.status, ...j})));
-  const post = (p, body) => api(p, {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(body)});
+const fmt = t => { t = Math.max(0, t || 0); const m = Math.floor(t / 60); return m + ":" + (t - m * 60).toFixed(1).padStart(4, "0"); };
+function stamp(t) {
+  t = Math.max(0, t || 0);
+  const m = Math.floor(t / 60), s = Math.floor(t % 60), ms = Math.round((t % 1) * 1000) % 1000;
+  return `${m}:${String(s).padStart(2, "0")}.${String(ms).padStart(3, "0")}`;
+}
+function copyStamp(el) { const was = el.textContent; if (navigator.clipboard) navigator.clipboard.writeText(was); el.textContent = "copied"; setTimeout(() => { el.textContent = was; }, 550); }
+const slugify = t => String(t || "").toLowerCase().normalize("NFKD").replace(/[^\w\s-]/g, "").trim().replace(/[\s_]+/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "").slice(0, 40);
 
-  // ------------------------------------------------------------------ the script form
-  function refIds() {
-    const ids = Object.keys(script.cast || {});
-    if (script.place && script.place.id) ids.push(script.place.id);
-    return ids;
-  }
-  function renderCast() {
-    const box = $("#cast"); box.innerHTML = "";
-    Object.entries(script.cast || {}).forEach(([id, c]) => {
-      const row = document.createElement("div"); row.className = "castrow";
-      row.innerHTML = `<input type="text" value="${esc(id)}" data-k="id" placeholder="id">
-        <input type="text" value="${esc(c.role||"")}" data-k="role" placeholder="role">
-        <textarea data-k="prompt" placeholder="Full-length reference photograph of ...">${esc(c.prompt||"")}</textarea>
-        <button class="x" title="remove">×</button>`;
-      row.querySelectorAll("[data-k]").forEach(el => el.addEventListener("change", () => {
-        const newId = row.querySelector('[data-k="id"]').value.trim();
-        const val = {role: row.querySelector('[data-k="role"]').value, prompt: row.querySelector('[data-k="prompt"]').value};
-        const cast = {};
-        Object.entries(script.cast).forEach(([k, v]) => { cast[k === id ? newId : k] = (k === id ? val : v); });
-        script.cast = cast; renderCast(); renderShots(); syncJson();
-      }));
-      row.querySelector(".x").addEventListener("click", () => { delete script.cast[id]; renderCast(); renderShots(); syncJson(); });
-      box.appendChild(row);
-    });
-  }
-  function renderShots() {
-    const box = $("#shots"); box.innerHTML = "";
-    const ids = refIds();
-    (script.shots || []).forEach((s, i) => {
-      const d = document.createElement("div"); d.className = "shot";
-      d.innerHTML = `<div class="hd">
-          <input type="text" class="n" style="flex:0 0 58px" value="${esc(s.id)}" data-k="id" title="three digits">
-          <input type="text" value="${esc(s.title||"")}" data-k="title" placeholder="title">
-          <input type="number" class="n" style="flex:0 0 70px" min="1" max="30" value="${esc(s.secs||4)}" data-k="secs" title="seconds">
-          <button class="x" title="remove">×</button></div>
-        <div class="small" style="margin-top:6px">references (order matters: reference one, two, three in the anchor)</div>
-        <div class="refs">${ids.map(r => `<span class="chip ${ (s.refs||[]).includes(r) ? "on" : ""}" data-r="${esc(r)}">${esc(r)}</span>`).join("")}
-          <span class="small" style="align-self:center">→ ${esc((s.refs||[]).join(", ") || "none")}</span></div>
-        <label>start frame <span class="small">(what the composed first picture shows; leave empty to start on the plate)</span></label>
-        <textarea data-k="anchor" placeholder="A still frame from a live-action film, a MEDIUM SHOT, the person of reference one ...">${esc(s.anchor||"")}</textarea>
-        <label>what happens <span class="small">(one beat; the word <i>cut</i> makes a cut; sound written in; a line in quotes)</span></label>
-        <textarea data-k="prompt">${esc(s.prompt||"")}</textarea>
-        <label>avoid, extra <span class="small">(only for this shot)</span></label>
-        <input type="text" value="${esc(s.avoid_extra||"")}" data-k="avoid_extra">`;
-      d.querySelectorAll("[data-k]").forEach(el => el.addEventListener("change", () => {
-        const k = el.dataset.k; let v = el.value;
-        if (k === "secs") v = Number(v);
-        if (k === "anchor" && !v.trim()) v = null;
-        s[k] = v; syncJson();
-      }));
-      d.querySelectorAll(".chip").forEach(ch => ch.addEventListener("click", () => {
-        const r = ch.dataset.r; s.refs = s.refs || [];
-        // a click adds another mention (a character may be reference one AND two); a click on the last mention removes one
-        if (s.refs[s.refs.length - 1] === r) s.refs.pop(); else s.refs.push(r);
-        renderShots(); syncJson();
-      }));
-      d.querySelector(".x").addEventListener("click", () => { script.shots.splice(i, 1); renderShots(); syncJson(); });
-      box.appendChild(d);
-    });
-  }
-  function renderForm() {
-    $("#place_id").value = (script.place && script.place.id) || "";
-    $("#place_prompt").value = (script.place && script.place.prompt) || "";
-    ["grade", "avoid", "score_tags", "realism"].forEach(k => { $("#" + k).value = script[k] || ""; });
-    renderCast(); renderShots(); syncJson();
-  }
-  function syncJson() { $("#json").value = JSON.stringify(script, null, 1); }
-  ["place_id", "place_prompt", "grade", "avoid", "score_tags", "realism"].forEach(k => {
-    $("#" + k).addEventListener("change", () => {
-      if (k === "place_id") { script.place = script.place || {}; script.place.id = $("#place_id").value.trim(); renderShots(); }
-      else if (k === "place_prompt") { script.place = script.place || {}; script.place.prompt = $("#place_prompt").value; }
-      else script[k] = $("#" + k).value;
-      syncJson();
-    });
-  });
-  $("#json").addEventListener("change", () => {
-    try { script = JSON.parse($("#json").value); $("#err").textContent = ""; renderForm(); }
-    catch (e) { $("#err").textContent = "That JSON does not parse: " + e.message; }
-  });
-  $("#addcast").addEventListener("click", () => {
-    script.cast = script.cast || {}; let n = 1; while (script.cast["person" + n]) n++;
-    script.cast["person" + n] = {role: "", prompt: ""}; renderCast(); renderShots(); syncJson();
-  });
-  $("#addshot").addEventListener("click", () => {
-    script.shots = script.shots || [];
-    const last = script.shots.length ? parseInt(script.shots[script.shots.length - 1].id, 10) || 0 : 0;
-    script.shots.push({id: String(last + 10).padStart(3, "0"), title: "", secs: 4, refs: [], anchor: null, prompt: ""});
-    renderShots(); syncJson();
-  });
-  $("#save").addEventListener("click", async () => {
-    $("#savemsg").textContent = "saving…"; $("#err").textContent = "";
-    const r = await post("/api/shots/save", {film, script});
-    if (!r.ok) { $("#savemsg").textContent = ""; $("#err").textContent = r.error || ("HTTP " + r.code); return; }
-    $("#savemsg").textContent = "saved " + r.path; loadTree();
-  });
+// ================================================================== state
+const S = {films: [], archived: [], kind: "script", film: null, data: null, script: null, shots: [], runtime: 0, music: [],
+           sel: null, shown: null, tab: {script: PREF.get("tab.script", "takes"), film: "takes"}, dirty: false,
+           frameComp: {}, takeEng: {}, frameSeeds: null, takeSeeds: null, frameReplace: false, takeReplace: false,
+           pickWhy: null, sdDraft: null, openRef: null, measured: "", job: null, poll: null, wasRunning: false};
+const ENGINE_LABEL = {shot: "LTX-2.5", ltx: "LTX-2.5", h3: "H3", pv: "Physics", pvb: "Physics (bypass)", previz: "Physics", both: "Both", sd: "Seedance 2.5"};
+const ENGINE_CLASS = {shot: "ltx", ltx: "ltx", h3: "h3", pv: "pv", pvb: "pv", previz: "pv", sd: "sd", both: "both"};
+const isScript = () => S.kind === "script";
+const cur = () => S.shots.find(x => x.id === S.sel) || null;
+const scriptShot = id => S.script && S.script.shots.find(x => x.id === id);
+const mediaUrl = f => "/film/media/" + S.film + "/" + f;
+const dice = n => Array.from({length: n}, () => 100 + Math.floor(Math.random() * 99900)).join(" ");
 
-  // ------------------------------------------------------------------ the stages
-  function stageCard(st) {
-    const files = (tree && tree.stages[st.id]) || [];
-    const busy = tree && tree.running && tree.running.running && tree.running.film === film && tree.running.stage === st.id;
-    const cls = busy ? "busy" : (files.length ? "done" : "todo");
-    const status = busy ? "running" : (files.length ? files.length + " file" + (files.length > 1 ? "s" : "") : "not yet");
-    let args = "";
-    if ((st.args || []).includes("shot")) args += `<input type="text" placeholder="shot id, e.g. 010" data-a="shot" style="width:120px">`;
-    if ((st.args || []).includes("seeds")) args += `<input type="text" placeholder="seeds: 11 202 3003" data-a="seeds" style="width:170px">`;
-    if ((st.args || []).includes("picks")) args += `<input type="text" placeholder="picks: 010=202,020=11,030=h3:3003" data-a="picks" style="width:260px">
-      <label class="small" style="display:inline"><input type="checkbox" data-a="master"> 2× master</label>`;
-    if (st.id === "cast") args += `<input type="text" placeholder="re-roll only (id)" data-a="only" style="width:130px">
-      <input type="text" placeholder="seed" data-a="seed" style="width:80px">`;
-    if (st.id !== "cast" && st.id !== "sheet") args += `<label class="small" style="display:inline"><input type="checkbox" data-a="force"> redo existing</label>`;
-    let out = "";
-    if (files.length) {
-      const imgs = files.filter(f => /\.(png|jpg)$/i.test(f.name) && !/_strip\.jpg$/.test(f.name));
-      const vids = files.filter(f => /\.mp4$/i.test(f.name));
-      const others = files.filter(f => !/\.(png|jpg|mp4)$/i.test(f.name));
-      out += `<div class="thumbs">`;
-      imgs.slice(0, 12).forEach(f => { out += `<div class="t"><a href="${f.url}" target="_blank"><img src="${f.url}" alt=""></a><div>${esc(f.name)}</div></div>`; });
-      vids.slice(0, 12).forEach(f => {
-        const key = f.name.replace(/\.mp4$/, ""); const strip = tree.strips && tree.strips[key];
-        const cam = tree.measured && tree.measured[f.name] ? ` · ${esc(tree.measured[f.name].camera)} · ${tree.measured[f.name].frames} fr` : "";
-        out += `<div class="t"><video src="${f.url}" controls preload="none"></video>${strip ? `<img class="strip" src="${strip}" alt="">` : ""}<div>${esc(f.name)}${cam}</div></div>`;
-      });
-      out += `</div>`;
-      if (others.length) out += `<div class="files">${others.map(f => `<a href="${f.url}" target="_blank" style="color:inherit">${esc(f.name)}</a>`).join(" · ")}</div>`;
-      if (imgs.length > 12 || vids.length > 12) out += `<div class="small">… and ${files.length - 24} more on disk</div>`;
+// ================================================================== films and the switcher
+async function loadFilms() {
+  const [a, b] = await Promise.all([api("/api/shots/list").catch(() => ({films: [], archived: []})), api("/api/spec/films").catch(() => ({films: []}))]);
+  S.films = a.films.map(f => ({key: "script:" + f.film, kind: "script", id: f.film, title: f.title || f.film, shots: f.shots.length,
+                               specs: f.specs || 0, poster: f.poster || "", logline: f.logline || ""}))
+    .concat(b.films.map(f => ({key: "film:" + f.id, kind: "film", id: f.id, title: f.title || f.id, shots: f.shots, specs: f.specs || 0,
+                               poster: f.poster || "", logline: f.logline || ""})));
+  S.archived = a.archived || [];
+  renderSwitcherButton();
+}
+const takenNames = () => new Set(S.films.map(f => f.id).concat(S.archived.map(f => f.film)));
+function filmLine(f) { return `${f.shots} shot${f.shots === 1 ? "" : "s"}${f.specs ? " · " + f.specs + " spec" + (f.specs === 1 ? "" : "s") : ""}`; }
+function renderSwitcherButton() {
+  const f = S.films.find(x => x.key === S.kind + ":" + S.film);
+  $("#fswtitle").textContent = f ? f.title : "choose a film";
+  $("#fswsub").textContent = f ? filmLine(f) + " · " + (f.kind === "script" ? "shot script" : "film editor") : "";
+  $("#fswimg").innerHTML = f && f.poster ? `<img src="${esc(f.poster)}" alt="">` : `<span class="noimg"></span>`;
+}
+function renderSwitcherList() {
+  const q = $("#fswq").value.trim().toLowerCase(), hit = f => !q || (f.title + " " + f.id + " " + f.logline).toLowerCase().includes(q);
+  const row = f => `<div class="fsrow${f.key === S.kind + ":" + S.film ? " on" : ""}" data-key="${esc(f.key)}" title="${esc(f.logline || f.title)}">
+      ${f.poster ? `<img src="${esc(f.poster)}" alt="" loading="lazy">` : `<span class="noimg">no picture</span>`}
+      <div class="t"><b>${esc(f.title)}</b><span>${esc(filmLine(f))}${f.logline ? " · " + esc(f.logline.slice(0, 70)) : ""}</span></div></div>`;
+  const scripts = S.films.filter(f => f.kind === "script" && hit(f)), others = S.films.filter(f => f.kind === "film" && hit(f));
+  let h = `<div class="fsrow newrow" id="fswnew"><span class="plus">+</span><div class="t"><b>New film</b><span>blank, or a copy of one of these</span></div></div>`;
+  if (scripts.length) h += `<h4>Shot scripts - made here</h4>` + scripts.map(row).join("");
+  if (others.length) h += `<h4>Film-editor films - reviewed here</h4>` + others.map(row).join("");
+  const arc = S.archived.filter(f => !q || (f.title + " " + f.film).toLowerCase().includes(q));
+  if (arc.length) h += `<h4>Archived</h4>` + arc.map(f => `<div class="fsrow" style="cursor:default"><span class="noimg">archived</span>
+      <div class="t"><b>${esc(f.title)}</b><span>${f.shots} shots</span></div><button data-restore="${esc(f.film)}" style="padding:3px 10px">restore</button></div>`).join("");
+  if (!scripts.length && !others.length && !arc.length) h += `<div class="hint" style="padding:10px 14px">nothing matches</div>`;
+  $("#fswlist").innerHTML = h;
+  $("#fswlist").querySelectorAll("[data-key]").forEach(el => el.onclick = () => { closePops(); if (el.dataset.key !== S.kind + ":" + S.film) switchFilm(el.dataset.key); });
+  $("#fswnew").onclick = () => { closePops(); newFilmDialog(); };
+  $("#fswlist").querySelectorAll("[data-restore]").forEach(el => el.onclick = e => { e.stopPropagation(); restoreFilm(el.dataset.restore); });
+}
+function openPop(id) {
+  closePops(id);
+  const p = $(id); p.hidden = !p.hidden;
+  if (id === "#fswpop" && !p.hidden) { $("#fswq").value = ""; renderSwitcherList(); $("#fswq").focus(); }
+  if (id === "#filmmenupop" && !p.hidden) renderFilmMenu();
+}
+function closePops(except) { ["#fswpop", "#filmmenupop"].forEach(id => { if (id !== except) $(id).hidden = true; }); }
+$("#fswbtn").onclick = e => { e.stopPropagation(); openPop("#fswpop"); };
+$("#fswq").oninput = renderSwitcherList;
+$("#fswq").onkeydown = e => {
+  if (e.key === "Enter") { const r = $("#fswlist").querySelector("[data-key]"); if (r) r.click(); }
+  if (e.key === "Escape") closePops();
+};
+$("#filmmenu").onclick = e => { e.stopPropagation(); openPop("#filmmenupop"); };
+document.addEventListener("click", e => { if (!e.target.closest(".pop") && !e.target.closest("#fswbtn") && !e.target.closest("#filmmenu")) closePops(); });
+function renderFilmMenu() {
+  const items = isScript()
+    ? [["settings", "Film settings: title, look, negative, music"], ["dup", "Duplicate this film…"], ["-"], ["archive", "Archive this film"], ["-"], ["help", "Keyboard shortcuts and how it works"]]
+    : [["editor", "Open it in the film editor ↗"], ["classic", "Open the classic spec sheet ↗"], ["-"], ["help", "Keyboard shortcuts and how it works"]];
+  $("#filmmenupop").innerHTML = items.map(([k, l]) => k === "-" ? "<hr>" : `<button data-m="${k}">${esc(l)}</button>`).join("");
+  $("#filmmenupop").querySelectorAll("[data-m]").forEach(b => b.onclick = () => {
+    closePops();
+    const k = b.dataset.m;
+    if (k === "settings") filmSettingsDialog();
+    else if (k === "dup") newFilmDialog({from: S.film});
+    else if (k === "archive") archiveFilm();
+    else if (k === "editor") location.href = "/film?film=" + encodeURIComponent(S.film);
+    else if (k === "classic") location.href = "/specs/classic?film=" + encodeURIComponent(S.film) + (S.sel ? "&shot=" + encodeURIComponent(S.sel) : "");
+    else if (k === "help") helpDialog();
+  });
+}
+function startingPoint() {
+  const q = new URLSearchParams(location.search), qf = q.get("film");
+  let key = null;
+  if (qf) key = (S.films.find(f => f.id === qf && f.kind === "film") || S.films.find(f => f.id === qf) || {}).key || null;
+  if (!key) { const k = PREF.get("film", null); if (S.films.some(f => f.key === k)) key = k; }
+  if (!key && S.films.some(f => f.key === "script:dead-stock")) key = "script:dead-stock";
+  if (!key && S.films.length) key = S.films[0].key;
+  return {key, shot: qf ? q.get("shot") : null};
+}
+// leaving a film saves what is pending first; a script that cannot be saved stops the switch and says why
+async function switchFilm(key, shot) {
+  if (S.dirty && !(await autosave())) {
+    toast("This film has a change that cannot be saved: " + SAVE.err, {action: {label: "discard the change", fn: async () => { S.dirty = false; await selectFilm(key, shot); }}});
+    return;
+  }
+  if (MD.dirty) saveDraftNow();
+  await selectFilm(key, shot);
+}
+async function selectFilm(key, shot) {
+  const f = S.films.find(x => x.key === key); if (!f) return;
+  stopPlayback();
+  S.kind = f.kind; S.film = f.id; S.sel = null; S.shown = null; S.dirty = false; MD.dirty = false; S.openRef = null;
+  PREF.set("film", key);
+  $("#mute").checked = PREF.get("mute." + S.kind, S.kind === "film"); vid.muted = $("#mute").checked;
+  document.body.classList.toggle("k-script", isScript());
+  document.body.classList.toggle("k-film", !isScript());
+  $("#toeditor").href = "/film?film=" + encodeURIComponent(S.film);
+  $("#lede").textContent = isScript()
+    ? "A shot script: each shot is made here - its words, its start frame, its takes - and its spec sheet says what it must keep. Pick, check, lock."
+    : "A film from the film editor: its shots are made and picked there. Here you write what each shot must keep, check the takes against it, and lock the ones that are done.";
+  $("#rep").style.display = "none"; msg("");
+  history.replaceState(null, "", location.pathname + "?film=" + encodeURIComponent(S.film));
+  renderSwitcherButton();
+  try { await loadData(false); } catch (e) { toast(e.message); return; }
+  const remembered = PREF.get("shot:" + key, null);
+  const want = [shot, remembered].find(x => x && S.shots.some(s => s.id === x)) || (S.shots[0] || {}).id;
+  if (want) await openShot(want, {force: true});
+  else { renderInsp(); showEmpty(); renderNext(); }
+  if (!isScript()) loadMedia();
+}
+
+// ================================================================== data
+function normSpec(sp, pick) {
+  sp = sp || {};
+  return {has: !!sp.has, nInv: sp.n_invariants || 0, nFlair: sp.n_flair || 0, locked: !!sp.locked,
+          lockedTake: sp.locked_take || "", lockedAt: sp.locked_at || "", drifted: !!sp.drifted,
+          invariants: sp.invariants || [], picked: pick || ""};
+}
+function normScript(ds) {
+  const takes = ds.takes.map(t => ({key: t.token, engine: t.engine, label: ENGINE_LABEL[t.engine] || t.engine, seed: t.seed, url: t.url,
+                                    strip: t.strip, dur: t.frames ? t.frames / 24 : null, fps: 24, raw: t}));
+  const pick = ds.pick || null, tk = takes.find(t => t.key === pick) || null;
+  const tr = ds.trim && tk && ds.trim.take === pick ? {in: +ds.trim.in || 0, out: +ds.trim.out || 0} : null;
+  const status = !ds.anchor_url && ds.engine !== "previz" ? "no start frame" : (!takes.length ? "no takes" : (!pick ? "pick a take" : ""));
+  const eng = tk ? tk.engine : (ds.engine || "ltx");
+  return {id: ds.id, title: ds.title || "", dur: ds.dur, start: ds.start, poster: ds.anchor_url, takes, pick, trim: tr, status,
+          engine: eng, engineLabel: ENGINE_LABEL[eng] || eng, spec: normSpec(ds.spec, pick), sd: (ds.suggest || {}).level || "none", raw: ds};
+}
+function normFilm(s) {
+  const takes = (s.takes || []).map(t => ({key: t.id, engine: t.engine || "", label: t.engine || "?", seed: null, url: mediaUrl(t.file),
+                                           poster: t.poster ? mediaUrl(t.poster) : null, dur: t.duration, fps: t.fps || 24, raw: t}));
+  return {id: s.shot, title: s.title || "", dur: s.duration || 0, start: s.starts_at || 0, poster: s.poster ? mediaUrl(s.poster) : null,
+          takes, pick: s.picked || null, trim: null, status: takes.length ? "" : "no take", engine: s.engine || "", engineLabel: s.engine || "",
+          spec: normSpec({has: s.has_spec, n_invariants: s.n_invariants, n_flair: s.n_flair, locked: s.locked, locked_take: s.locked_take,
+                          drifted: s.drifted}, s.picked), sd: "none", raw: s};
+}
+async function loadData(keep) {
+  if (isScript()) {
+    const d = await api("/api/shots/editor?film=" + encodeURIComponent(S.film));
+    S.data = d;
+    if (!S.dirty || !keep) { S.script = JSON.parse(JSON.stringify(d.script)); S.dirty = false; }
+    S.shots = d.shots.map(normScript);
+    S.runtime = d.runtime;
+    S.music = d.outputs.score ? [{id: "score", name: "score bed (score.mp3)", url: d.outputs.score, state: "using"}] : [];
+    job(d.job);
+  } else {
+    const d = await api("/api/spec/tree/" + encodeURIComponent(S.film));
+    S.data = d; S.script = null;
+    S.shots = d.shots.map(normFilm);
+    S.runtime = d.runtime;
+    S.music = (d.music || []).map(t => ({id: t.id, name: t.name + (t.state === "using" ? " ★" : ""), url: mediaUrl(t.file), state: t.state,
+                                          info: (t.duration ? t.duration + "s · " : "") + (t.state || "")}));
+  }
+  if (S.sel && !cur()) S.sel = (S.shots[0] || {}).id || null;
+  const f = S.films.find(x => x.key === S.kind + ":" + S.film);
+  if (f) { f.shots = S.shots.length; f.specs = S.shots.filter(s => s.spec.has).length; if (isScript()) f.title = S.data.script.title || f.id; }
+  renderSwitcherButton();
+  $("#runtime").textContent = fmt(S.runtime) + " · " + S.shots.length + " shots";
+  renderCards(); renderReel(); drawTracks(); renderOuts(); renderNext();
+  // a refresh (a job finishing, a save) must not pull the field you are typing in out from under you
+  const ae = document.activeElement;
+  if (!($("#insp").contains(ae) && /INPUT|TEXTAREA|SELECT/.test(ae.tagName))) renderInsp();
+  const me = cur(); if (me) applyLock(me);
+}
+
+// ================================================================== cards + reel
+const draftKey = id => "draft:" + S.kind + ":" + S.film + ":" + id;
+function renderCards() {
+  const busy = (S.job && S.job.running && S.job.film === S.film) ? (S.job.shots || []) : [];
+  let h = S.shots.map(s => {
+    const sp = s.spec, draft = PREF.get(draftKey(s.id), null);
+    const badge = sp.locked ? `<div class="badge${sp.drifted ? " drift" : ""}" title="${esc(sp.drifted ? "locked to take " + sp.lockedTake + " but the film now uses " + (s.pick || "none") : "locked to take " + sp.lockedTake)}">${sp.drifted ? "&#9888; drifted" : "&#128274; locked"}</div>` : "";
+    const sd = s.sd !== "none" ? `<div class="sdb" title="Seedance ${esc(s.sd)}: the paid engine could do this shot better - see its Seedance tab">SD</div>` : "";
+    return `<div class="card${s.id === S.sel ? " on" : ""}${sp.locked ? " locked" : ""}${sp.drifted ? " drift" : ""}${busy.includes(s.id) ? " busy" : ""}" data-shot="${esc(s.id)}"${isScript() ? ' draggable="true"' : ""}>
+      ${badge}${sd}
+      ${s.poster ? `<img src="${esc(s.poster)}" alt="" loading="lazy">` : `<div class="noimg">${esc(s.status || "no picture")}</div>`}
+      <div class="m"><div class="id">${esc(s.id)} <span class="d">${(+s.dur || 0).toFixed(2)}s</span></div>
+       <div class="t">${esc(s.title)}</div>
+       <div class="f">${s.engineLabel ? `<span class="pill eng ${ENGINE_CLASS[s.engine] || ""}">${esc(s.engineLabel)}</span>` : ""}
+        ${sp.has ? `<span class="pill inv">${sp.nInv} promise${sp.nInv === 1 ? "" : "s"}</span>` : `<span class="pill no">no spec</span>`}
+        ${sp.has && sp.nFlair ? `<span class="pill">${sp.nFlair} flair</span>` : ""}
+        ${draft ? `<span class="pill draft" title="the spec sheet has an unsaved draft">&#9998; draft</span>` : ""}
+        ${s.status && s.poster ? `<span class="pill warn">${esc(s.status)}</span>` : ""}</div></div></div>`;
+  }).join("");
+  if (isScript()) h += `<div class="card add" id="addshot" title="add a shot"><div class="plus">+</div><div class="m"><div class="t" style="height:auto">add a shot</div></div></div>`;
+  const tl = $("#tl"), keep = tl.scrollLeft;
+  tl.innerHTML = h; tl.scrollLeft = keep;
+  tl.querySelectorAll(".card[data-shot]").forEach(el => {
+    el.onclick = () => { if (el.dataset.shot !== S.sel) openShot(el.dataset.shot); };
+    if (!isScript()) return;
+    el.ondragstart = e => { e.dataTransfer.setData("text/plain", el.dataset.shot); el.classList.add("dragging"); };
+    el.ondragend = () => el.classList.remove("dragging");
+    el.ondragover = e => { e.preventDefault(); el.classList.add("over"); };
+    el.ondragleave = () => el.classList.remove("over");
+    el.ondrop = async e => {
+      e.preventDefault(); el.classList.remove("over");
+      const from = e.dataTransfer.getData("text/plain"), to = el.dataset.shot;
+      if (!from || from === to) return;
+      const before = JSON.parse(JSON.stringify(S.script));
+      const arr = S.script.shots, a = arr.findIndex(x => x.id === from), b = arr.findIndex(x => x.id === to);
+      const [mv] = arr.splice(a, 1); arr.splice(b, 0, mv);
+      if (await saveScript(false, "moved " + from, before)) {}
+    };
+  });
+  const add = $("#addshot"); if (add) add.onclick = () => newShotDialog();
+  const on = tl.querySelector(".card.on");
+  if (on && (on.offsetLeft < tl.scrollLeft || on.offsetLeft + on.offsetWidth > tl.scrollLeft + tl.clientWidth))
+    tl.scrollLeft = Math.max(0, on.offsetLeft - 40);
+}
+function renderReel() {
+  $("#reel").innerHTML = S.shots.map(s => `<div class="seg${s.id === S.sel ? " now" : ""}${s.spec.locked ? " lk" : ""}" style="flex:${Math.max(0.15, +s.dur || 0)} 1 0" title="${esc(s.id + "  " + s.title + "  " + (+s.dur || 0).toFixed(2) + " s")}"><span>${esc(s.id)}</span></div>`).join("") + `<div class="rph" id="rph"></div>`;
+}
+$("#reel").onclick = e => { const r = $("#reel").getBoundingClientRect(); seekFilm((e.clientX - r.left) / Math.max(1, r.width) * (S.runtime || 0)); };
+function reelAt(t) { const ph = $("#rph"); if (ph) ph.style.left = Math.min(100, 100 * t / (S.runtime || 1)) + "%"; }
+
+// ================================================================== opening a shot
+async function openShot(id, o = {}) {
+  if (MD.dirty) saveDraftNow();           // an unsaved sheet is kept as a draft, never lost and never asked about
+  S.sel = id; S.shown = id; MD.dirty = false; S.measured = "";
+  PREF.set("shot:" + S.kind + ":" + S.film, id);
+  renderCards(); renderReel(); renderInsp(); renderNext();
+  const s = cur(); if (!s) return;
+  applyLock(s);
+  loadPlayer(s, !!o.autoplay);
+  await loadSpec(id);
+  if (!isScript()) measuredLine();
+}
+function showEmpty() {
+  vid.pause(); vid.removeAttribute("src"); vid.style.display = "none"; still.style.display = "none";
+  $("#ph").style.display = ""; $("#ph").textContent = isScript() ? "no shots yet - add one with the + card" : "no shots";
+  $("#md").value = ""; sync();
+}
+
+// ================================================================== the next step
+function nextStep(s) {
+  if (!s) return null;
+  const sheet = () => $("#sstitle").scrollIntoView({behavior: "smooth", block: "start"});
+  if (!isScript()) {
+    if (!s.spec.has) return {text: "Write what this shot must keep - its promises - on the spec sheet below.", act: "go to the spec sheet", fn: sheet};
+    if (!s.spec.locked) return {text: "Happy with the take the film uses? Lock it, and the checks will hold it to that take.", act: "lock it", fn: () => doLock(true)};
+    return {text: "Done - locked to take " + s.spec.lockedTake + ".", done: true};
+  }
+  const ds = s.raw, d = S.data, sh = scriptShot(s.id) || ds;
+  const need = [...new Set((sh.refs || []).filter(r => !(d.refs[r] || {}).url))];
+  if (need.length) return {text: `Make the picture${need.length > 1 ? "s" : ""} for ${need.join(" and ")} first - every shot points at ${need.length > 1 ? "them" : "it"}.`,
+                           act: "open the cast", fn: () => { S.openRef = need[0]; gotoTab("cast"); }};
+  if (!ds.anchor_url && ds.engine !== "previz") {
+    if (ds.anchor === null || ds.anchor === undefined)
+      return {text: "This shot starts on the place's own picture - set it as the start frame.", act: "use the plate", fn: () => runOp({op: "anchors", shots: [s.id], compositor: "qwen21", seeds: "11"})};
+    return {text: "Draw its start frame - the picture every take starts from. Two candidates on Qwen-Image-2.1, about half a minute.",
+            act: "draw 2 start frames", fn: () => runOp({op: "anchors", shots: [s.id], compositor: "qwen21", seeds: "11 202"}), alt: "choose model & seeds", altFn: () => gotoTab("frame")};
+  }
+  if (!s.takes.length) {
+    const eng = sh.engine || "ltx";
+    return {text: `Render takes - ${ENGINE_LABEL[eng] || eng} on three seeds, measured and ranked when they land.`, act: "render 3 takes",
+            fn: () => runOp({op: "takes", shots: [s.id], engine: eng, seeds: "11 202 3003"}), alt: "choose engine & seeds", altFn: () => gotoTab("takes")};
+  }
+  if (!s.pick) return ds.ranker_pick
+    ? {text: `Pick a take - the ranker suggests ${ds.ranker_pick}: ${ds.ranker_why || ""}.`, act: "use " + ds.ranker_pick, fn: () => pickTake(s, ds.ranker_pick), alt: "compare takes", altFn: () => gotoTab("takes")}
+    : {text: "Pick the take that goes in the film.", act: "open takes", fn: () => gotoTab("takes")};
+  // once every shot has a take the film can be cut - that comes before the optional promises and lock
+  const all = S.shots.every(x => x.pick), final = (S.data.outputs || {}).final;
+  if (all && !final) return {text: "Every shot has its take. Assemble the film: the cut, the grade, the music, the title card and the annotated cut.", act: "assemble", fn: () => runOp({op: "assemble", master: false})};
+  if (!s.spec.has) return {text: "Write what it must keep - its promises - on the spec sheet below. It is filled in with what is already known.", act: "go to the spec sheet", fn: sheet};
+  if (!s.spec.locked) return {text: "Happy with it? Lock it to take " + s.pick + ": it cannot be re-picked or re-rendered by accident, and the checks hold it there.", act: "lock it", fn: () => doLock(true)};
+  return {text: "Done - locked to take " + s.spec.lockedTake + ".", done: true};
+}
+function renderNext() {
+  const bar = $("#nextbar"), s = cur(), n = nextStep(s);
+  if (!n) { bar.hidden = true; return; }
+  bar.hidden = false; bar.classList.toggle("done", !!n.done);
+  bar.innerHTML = `<span class="lab">${n.done ? "done" : "next"}</span><span class="tx">${esc(n.text)}</span>` +
+    (n.alt ? `<span class="alt" id="nextalt">${esc(n.alt)}</span>` : "") + (n.act ? `<button class="primary" id="nextact">${esc(n.act)}</button>` : "");
+  const b = $("#nextact"); if (b) b.onclick = () => n.fn();
+  const a = $("#nextalt"); if (a) a.onclick = () => n.altFn();
+}
+function gotoTab(t) { S.tab[S.kind] = t; if (isScript()) PREF.set("tab.script", t); renderInsp(); $("#insp").scrollTop = 0; $("#insp").scrollIntoView({block: "nearest"}); }
+
+// ================================================================== the spec sheet (from /specs)
+const MD = {dirty: false, locked: false, exists: false, server: ""};
+const SIZES = [["S", 13], ["M", 15], ["L", 18], ["XL", 22]];
+function setFs(px) {
+  document.documentElement.style.setProperty("--fs", px + "px");
+  PREF.set("fs", px);
+  Array.from($("#fs").children).forEach(b => b.classList.toggle("on", +b.dataset.px === px));
+  sync();
+}
+$("#fs").innerHTML = SIZES.map(([n, px]) => `<button data-px="${px}" title="${px}px">${n}</button>`).join("");
+Array.from($("#fs").children).forEach(b => b.onclick = () => setFs(+b.dataset.px));
+const hesc = s => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+const CHECKS = [/^anchor contains \S+/i, /^engine is \S+/i, /^duration between\s+[\d.]+\s+and\s+[\d.]+$/i, /^camrig preset is \S+/i,
+                /^provenance mentions \S+/i, /^qc is clean$/i,
+                /^camera\s+(is static|pushes in|pulls back|pans left|pans right|pans|tilts up|tilts down)$/i,
+                /^angle\s+is\s+(a\s+)?(low|high|eye level)(\s+angle)?$/i];
+function inline(t) {
+  return hesc(t).replace(/`[^`]+`/g, m => `<span class="t-code">${m}</span>`)
+    .replace(/(?<![\w.-])\d+(?:\.\d+)?(?:s|x|px|fps|%)?(?![\w-])/g, m => `<span class="t-num">${m}</span>`);
+}
+const FOLDS = new Map();
+function highlight(src) {
+  let sec = null, fi = 0;
+  return src.split("\n").map(line => {
+    let m;
+    if ((m = line.match(/^#\s+(.*)$/))) return `<span class="t-title">${hesc(line)}</span>`;
+    if ((m = line.match(/^##\s+(.*)$/))) {
+      const u = m[1].toUpperCase(), inv = u.includes("NEVER") || u.includes("INVARIANT");
+      sec = inv ? "inv" : u.includes("CAN CHANGE") ? "flair" : null;
+      const c = u.includes("NEVER") ? "t-sec-inv" : sec === "flair" ? "t-sec-flair" : "t-sec";
+      return `<span class="${c}">${hesc(line)}</span>`;
     }
-    return `<div class="stage ${cls}" data-stage="${st.id}">
-      <h3>${esc(st.title)} <span class="st">${status}</span></h3>
-      <p class="what">${esc(st.what)}</p>
-      <p class="look"><b>Look at:</b> ${esc(st.look)}</p>
-      <div class="row">${args}<button data-run="${st.id}" ${busy ? "disabled" : ""}>${busy ? "running…" : "Run"}</button></div>
-      ${out}
-    </div>`;
+    if (line.match(/^###\s+/)) {
+      const c = sec === "inv" ? "t-name-inv" : sec === "flair" ? "t-name-flair" : "t-name";
+      const key = line.trim(), shut = FOLDS.has(key);
+      return `<span class="fold ${c}" data-k="${hesc(key)}" id="fh${fi++}">${hesc(line.trim())}` +
+             (shut ? ` <span class="foldmark">… ${FOLDS.get(key).length} lines</span>` : "") + `</span>`;
+    }
+    if ((m = line.match(/^(\s*)(WHY:)(.*)$/i))) return `${m[1]}<span class="t-lbl">${hesc(m[2])}</span><span class="t-why">${hesc(m[3])}</span>`;
+    if ((m = line.match(/^(\s*)(CHECK:)(\s*)(.*)$/i))) {
+      const ok = CHECKS.some(re => re.test(m[4].trim()));
+      return `${m[1]}<span class="t-lbl">${hesc(m[2])}</span>${m[3]}<span class="${ok ? "t-chk" : "t-chk-bad"}"` +
+             `${ok ? "" : ' title="not a form the checker knows - this rule will be checked by reading"'}>${hesc(m[4])}</span>`;
+    }
+    if (line.trim().toUpperCase() === "MAKE PERMANENT") return `<span class="t-perm">${hesc(line.trim())}</span>`;
+    return inline(line);
+  }).join("\n");
+}
+const titleOf = t => { const m = t.match(/^#\s+(.+)$/m); return m ? m[1].trim() : ""; };
+function drawMini() {
+  const ta = $("#md"), cv = $("#minic"), box = $("#mini");
+  const w = box.clientWidth, h = box.clientHeight;
+  if (!w || !h) return;
+  const dpr = window.devicePixelRatio || 1;
+  cv.width = w * dpr; cv.height = h * dpr;
+  const g = cv.getContext("2d"); g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, w, h);
+  const lines = ta.value.split("\n"), n = Math.max(lines.length, 1), lh = Math.max(1.1, Math.min(3.4, h / n));
+  for (let i = 0; i < n; i++) {
+    const t = lines[i].trim(); if (!t) continue;
+    let col = "#4a4a5c";
+    if (/^#\s/.test(t)) col = "#ff6a45";
+    else if (/^##\s+MUST NEVER CHANGE/i.test(t)) col = "#e9c96a";
+    else if (/^##\s+CAN CHANGE/i.test(t)) col = "#8fd0a6";
+    else if (/^##\s/.test(t) || /^###\s/.test(t)) col = "#7fb2ff";
+    else if (/^WHY/i.test(t)) col = "#c98ad6";
+    g.fillStyle = col;
+    g.fillRect(3, i * lh, Math.max(2, (w - 8) * Math.min(1, t.length / 78)), Math.max(1, lh - 0.6));
   }
-  function renderStages() {
-    const box = $("#stages");
-    box.innerHTML = STAGES.map(stageCard).join("");
-    box.querySelectorAll("[data-run]").forEach(b => b.addEventListener("click", async () => {
-      const card = b.closest(".stage"); const body = {film, stage: b.dataset.run};
-      card.querySelectorAll("[data-a]").forEach(el => { body[el.dataset.a] = el.type === "checkbox" ? el.checked : el.value; });
-      $("#err").textContent = "";
-      const r = await post("/api/shots/run", body);
-      if (!r.ok) { $("#err").textContent = r.error || ("HTTP " + r.code); return; }
-      startPolling();
-    }));
+  const vp = $("#minivp"), sh = Math.max(ta.scrollHeight, 1);
+  vp.style.height = Math.max(14, h * (ta.clientHeight / sh)) + "px";
+  vp.style.top = (h * (ta.scrollTop / sh)) + "px";
+}
+function miniScroll(ev) {
+  const ta = $("#md"), r = $("#mini").getBoundingClientRect();
+  const y = (ev.clientY - r.top) / Math.max(r.height, 1), vh = ta.clientHeight / Math.max(ta.scrollHeight, 1);
+  ta.scrollTop = Math.max(0, (y - vh / 2)) * ta.scrollHeight;
+  $("#hl").scrollTop = ta.scrollTop; drawMini();
+}
+function foldKey(key) {
+  const ta = $("#md"), lines = ta.value.split("\n"), at = lines.findIndex(l => l.trim() === key);
+  if (at < 0) return;
+  if (FOLDS.has(key)) { lines.splice(at + 1, 0, ...FOLDS.get(key)); FOLDS.delete(key); }
+  else {
+    let end = at + 1;
+    while (end < lines.length && !/^#{1,3}\s/.test(lines[end])) end++;
+    const body = lines.splice(at + 1, end - at - 1);
+    if (!body.length) return;
+    FOLDS.set(key, body);
   }
-
-  // ------------------------------------------------------------------ loading + polling
-  async function loadList() {
-    const d = await api("/api/shots/list");
-    STAGES = d.stages || []; FILMS = d.films || [];
-    const sel = $("#film"); const cur = film || (FILMS[0] && FILMS[0].film);
-    sel.innerHTML = FILMS.map(f => `<option value="${esc(f.film)}" ${f.film === cur ? "selected" : ""}>${esc(f.film)} — ${f.shots.length} shots, ${f.cast.length} in the cast</option>`).join("");
-    film = sel.value || null;
-    if (film) { await loadScript(); await loadTree(); }
-    showJob(d.running);
+  ta.value = lines.join("\n"); sync();          // folding is a view: it is put back before any save
+}
+function foldAll(shut) {
+  const here = $("#md").value.split("\n").filter(l => /^###\s/.test(l)).map(l => l.trim());
+  [...new Set([...here, ...FOLDS.keys()])].forEach(k => { if (shut !== FOLDS.has(k)) foldKey(k); });
+}
+function unfolded() {
+  let t = $("#md").value;
+  for (const [k, body] of FOLDS) {
+    const lines = t.split("\n"), at = lines.findIndex(l => l.trim() === k);
+    if (at < 0) continue;
+    lines.splice(at + 1, 0, ...body); t = lines.join("\n");
   }
-  async function loadScript() {
-    const d = await api("/api/shots/script?film=" + encodeURIComponent(film));
-    if (!d.ok) { $("#err").textContent = d.error; return; }
-    script = d.script; renderForm();
-  }
-  async function loadTree() {
-    const d = await api("/api/shots/tree?film=" + encodeURIComponent(film));
-    if (!d.ok) { $("#err").textContent = d.error; return; }
-    tree = d; renderStages();
-    const running = d.running && d.running.running;
-    $("#log").textContent = (running ? d.running.log : d.log) || "idle.";
-    $("#logname").textContent = running ? `(${d.running.stage} on ${d.running.film}, live)` : (d.log_name ? `(${d.log_name})` : "");
-    $("#log").scrollTop = $("#log").scrollHeight;
-    showJob(d.running);
-    if (running) startPolling(); else stopPolling();
-  }
-  function showJob(j) {
-    const on = j && j.running;
-    $("#jobline").textContent = on ? `running: ${j.stage} on ${j.film}` : (j && j.returncode != null ? `last job exited ${j.returncode}` : "");
-    $("#stop").style.display = on ? "" : "none";
-  }
-  function startPolling() { if (!pollTimer) pollTimer = setInterval(loadTree, 4000); }
-  function stopPolling() { if (pollTimer) { clearInterval(pollTimer); pollTimer = null; } }
-
-  $("#film").addEventListener("change", async () => { film = $("#film").value; await loadScript(); await loadTree(); });
-  $("#reload").addEventListener("click", loadList);
-  $("#stop").addEventListener("click", async () => { await post("/api/shots/stop", {}); loadTree(); });
-  $("#new").addEventListener("click", async () => {
-    const name = $("#newname").value.trim(); if (!name) { $("#err").textContent = "name the new film with a slug"; return; }
-    const r = await post("/api/shots/new", {film: name, from: $("#film").value || null});
-    if (!r.ok) { $("#err").textContent = r.error || ("HTTP " + r.code); return; }
-    film = name; $("#newname").value = ""; await loadList();
+  return t;
+}
+function drawGutter() {
+  const g = $("#gut"), hl = $("#hl"), cs = getComputedStyle(hl);
+  const LINEH = parseFloat(cs.lineHeight) || (parseFloat(cs.fontSize) * 1.65);
+  g.innerHTML = "";
+  hl.querySelectorAll(".fold").forEach(sp => {
+    const b = document.createElement("b"), shut = FOLDS.has(sp.dataset.k);
+    b.textContent = shut ? "▸" : "▾"; b.title = shut ? "open this section" : "fold this section";
+    b.style.top = (sp.offsetTop - hl.scrollTop - (LINEH - sp.offsetHeight) / 2) + "px";
+    b.style.height = LINEH + "px";
+    b.onclick = ev => { ev.preventDefault(); ev.stopPropagation(); foldKey(sp.dataset.k); };
+    g.appendChild(b);
   });
-  loadList();
+}
+function sync() {
+  const ta = $("#md"), hl = $("#hl");
+  hl.innerHTML = highlight(ta.value) + "\n ";
+  hl.scrollTop = ta.scrollTop; hl.scrollLeft = ta.scrollLeft;
+  drawGutter();
+  const tt = titleOf(ta.value);
+  $("#sstitle").style.display = tt ? "flex" : "none";
+  $("#sstitletx").textContent = tt;
+  $("#ssfold").textContent = FOLDS.size ? ("unfold all (" + FOLDS.size + ")") : "fold all";
+  drawMini();
+}
+// an unsaved sheet is a DRAFT: kept per shot in this browser, restored when you come back to it
+let draftT = null;
+function saveDraftNow() { clearTimeout(draftT); if (S.shown && MD.dirty && !MD.locked) PREF.set(draftKey(S.shown), {md: wholeMd(), at: Date.now()}); }
+function renderDraftState() {
+  const d = MD.dirty && !MD.locked, s = cur();
+  $("#draftnote").hidden = !d; $("#ssdiscard").hidden = !d;
+  $("#draftnote").textContent = d ? (MD.restored ? "draft from earlier - not saved yet" : "unsaved - kept as a draft") : "";
+  $("#sssave").classList.toggle("dirty", d);
+  // lock needs a sheet to lock: a saved one, or a draft it will save first
+  $("#lockbtn").disabled = !(s && (s.spec.has || MD.dirty || MD.locked));
+}
+$("#md").addEventListener("input", () => {
+  MD.dirty = true; MD.restored = false; sync(); renderDraftState();
+  clearTimeout(draftT); draftT = setTimeout(() => { saveDraftNow(); renderCards(); }, 500);
+});
+$("#md").addEventListener("scroll", () => { $("#hl").scrollTop = $("#md").scrollTop; $("#hl").scrollLeft = $("#md").scrollLeft; drawGutter(); drawMini(); });
+$("#ssfold").onclick = () => foldAll(FOLDS.size === 0);
+function sheetShut(shut) {
+  $("#ed").classList.toggle("hidewhenshut", shut);
+  document.querySelectorAll(".lg").forEach(e => e.classList.toggle("hidewhenshut", shut));
+  $("#sstitle").classList.toggle("shut", shut);
+  $("#sshide").innerHTML = shut ? "&#9656;" : "&#9662;";
+  $("#ssfold").style.display = shut ? "none" : "";
+  PREF.set("sheetshut", shut ? 1 : 0);
+  if (!shut) sync();
+}
+$("#sssave").onclick = () => saveSpec();
+$("#sscopy").onclick = () => { if (navigator.clipboard) navigator.clipboard.writeText(wholeMd()); msg("copied to clipboard"); };
+$("#ssdiscard").onclick = () => {
+  const s = cur(); if (!s) return;
+  const was = wholeMd();
+  PREF.del(draftKey(s.id)); VARTAIL = null; FOLDS.clear(); $("#md").value = MD.server; MD.dirty = false; sync(); renderDraftState(); renderCards();
+  toast("draft thrown away", {undo: () => { $("#md").value = was; MD.dirty = true; sync(); saveDraftNow(); renderDraftState(); renderCards(); }});
+};
+$("#sshide").onclick = () => sheetShut(!$("#ed").classList.contains("hidewhenshut"));
+(function () {
+  const box = $("#mini"); let down = false;
+  box.addEventListener("mousedown", e => { down = true; box.classList.add("grabbing"); miniScroll(e); e.preventDefault(); });
+  window.addEventListener("mousemove", e => { if (down) miniScroll(e); });
+  window.addEventListener("mouseup", () => { down = false; box.classList.remove("grabbing"); });
+})();
+new ResizeObserver(sync).observe($("#md"));
+let VARTAIL = null;
+const VARMARK = /\n## CAN CHANGE/;
+function foldVars(on) {
+  const btn = $("#foldbtn");
+  if (on) {
+    if (VARTAIL !== null) return;
+    const t = $("#md").value, m = t.match(VARMARK);
+    if (!m) { btn.innerHTML = "&#9662; variants"; return; }
+    VARTAIL = t.slice(m.index); $("#md").value = t.slice(0, m.index);
+  } else {
+    if (VARTAIL === null) return;
+    $("#md").value = $("#md").value + VARTAIL; VARTAIL = null;
+  }
+  btn.innerHTML = VARTAIL === null ? "&#9662; variants" : "&#9656; variants (folded)";
+  PREF.set("foldvars", VARTAIL !== null);
+  sync();
+}
+$("#foldbtn").onclick = () => foldVars(VARTAIL === null);
+const wholeMd = () => unfolded() + (VARTAIL || "");
+async function loadSpec(id) {
+  let d;
+  try { d = await api("/api/spec/md/" + encodeURIComponent(S.film) + "/" + encodeURIComponent(id)); }
+  catch (e) { msg("could not read the spec sheet: " + e.message, "err"); return; }
+  if (S.sel !== id) return;                          // moved on while it loaded
+  VARTAIL = null; FOLDS.clear(); MD.server = d.md; MD.exists = !!d.exists;
+  const dr = PREF.get(draftKey(id), null);
+  const s = cur();
+  if (dr && dr.md && dr.md !== d.md && !(s && s.spec.locked)) { $("#md").value = dr.md; MD.dirty = true; MD.restored = true; }
+  else { if (dr) PREF.del(draftKey(id)); $("#md").value = d.md; MD.dirty = false; MD.restored = false; }
+  sync(); renderDraftState();
+  if (PREF.get("foldvars", false)) foldVars(true);
+  showWho(id);
+}
+function showWho(id) {
+  $("#who").innerHTML = `<b>${esc(S.film + "  /  shot " + id)}</b>` + (MD.exists ? "" :
+    ` <span class="pill warn" title="Nothing is saved for this shot yet. The sheet is filled in with what is already known - what happens, what built it, the take in the film. Write its promises and save.">new - not saved yet</span>`);
+}
+async function saveSpec() {
+  const s = cur(); if (!s || MD.locked) return false;
+  try {
+    const r = await api("/api/spec/save", {film: S.film, shot: s.id, md: wholeMd()});
+    MD.dirty = false; MD.exists = true; MD.restored = false; MD.server = wholeMd();
+    PREF.del(draftKey(s.id)); renderDraftState();
+    const warn = r.warnings && r.warnings.length;
+    msg(`saved - ${r.invariants} promises, ${r.flair} flair` + (r.promoted ? `, ${r.promoted} promoted` : "") +
+        (warn ? `  ⚠ CHECK not understood: ${r.warnings.join("; ")}` : ""), warn ? "warn" : "");
+    showWho(s.id);
+    await loadData(true);
+    return true;
+  } catch (e) { msg(e.message, "err"); return false; }
+}
+function applyLock(s) {
+  const sp = s.spec; MD.locked = !!sp.locked;
+  $("#ed").classList.toggle("locked", MD.locked);
+  $("#md").readOnly = MD.locked;
+  const b = $("#lockbtn");
+  b.textContent = MD.locked ? "unlock" : "lock";
+  b.title = MD.locked ? "make it editable and re-makeable again" : "freeze this shot against the take the film uses now";
+  const n = $("#note");
+  if (sp.drifted) {
+    n.style.display = "block";
+    n.innerHTML = `&#9888; <b>Locked, but the film has drifted.</b> This shot was locked to take <code>${esc(sp.lockedTake || "(none)")}</code>;
+      the film now uses <code>${esc(s.pick || "(none)")}</code>. Either re-pick the locked take, or unlock and lock again to accept the new one.`;
+  } else if (MD.locked) {
+    n.style.display = "block";
+    n.innerHTML = `&#128274; <b>Locked</b> to take <code>${esc(sp.lockedTake || "(none)")}</code>${sp.lockedAt ? " since " + esc(sp.lockedAt) : ""}.
+      Read-only, and not to be rebuilt${isScript() ? ": its start frame, takes and pick are frozen too" : ""}. Press <b>unlock</b> to change it.`;
+  } else n.style.display = "none";
+  renderDraftState();
+}
+// lock saves the sheet first if it has unsaved words; unlock is undone with "lock again", not asked about
+async function doLock(want) {
+  const s = cur(); if (!s) return;
+  if (want && MD.dirty && !(await saveSpec())) return;
+  try {
+    const r = await api("/api/spec/lock", {film: S.film, shot: s.id, locked: want});
+    await loadData(true);
+    if (r.locked) toast(`shot ${s.id} locked to take ${r.locked_take || "(none)"}`, {undo: () => doLock(false)});
+    else toast(`shot ${s.id} unlocked - editable and re-makeable`, {ok: true, action: {label: "lock again", fn: () => doLock(true)}});
+  } catch (e) { toast(e.message); }
+}
+$("#lockbtn").onclick = () => doLock(!MD.locked);
+$("#checks").onclick = async () => {
+  const p = $("#rep"); p.style.display = "block"; p.textContent = "checking...";
+  try { const r = await api("/api/spec/check/" + encodeURIComponent(S.film)); p.textContent = r.report || "(no output)"; }
+  catch (e) { p.textContent = e.message; }
+  p.scrollIntoView({block: "nearest", behavior: "smooth"});
+};
+
+// ================================================================== the player (from /specs, plus stills, trims and captions)
+const vid = $("#vid"), still = $("#still"), bgm = $("#bgm");
+const P = {take: null, trim: null, fps: 24, frames: 0, want: null, scrubbing: false, still: false, stillT0: 0, stillTimer: null, chaining: false};
+function takeOf(s) { return s && s.pick ? (s.takes.find(t => t.key === s.pick) || null) : null; }
+function loadPlayer(s, autoplay) {
+  clearTimeout(P.stillTimer); P.still = false;
+  const t = takeOf(s) || (!isScript() && s.takes.length ? s.takes[s.takes.length - 1] : null);
+  if (t) playTake(s, t, autoplay); else showStill(s, autoplay);
+  const i = S.shots.indexOf(s), nx = S.shots[i + 1], nt = takeOf(nx);    // warm the next join
+  if (nt && $("#previd").getAttribute("src") !== nt.url) { $("#previd").src = nt.url; $("#previd").load(); }
+}
+function playTake(s, t, autoplay, whole) {
+  clearTimeout(P.stillTimer); P.still = false;
+  P.take = t; P.trim = whole ? null : (s.pick === t.key ? s.trim : null);
+  still.style.display = "none"; $("#ph").style.display = "none"; $("#stillbadge").style.display = "none"; vid.style.display = "";
+  if (vid.getAttribute("src") !== t.url) vid.src = t.url;
+  vid.muted = $("#mute").checked;
+  $("#scrub").disabled = false;
+  const go = () => {
+    setDur(vid.duration || t.dur || s.dur, t.fps || 24);
+    try { vid.currentTime = (P.trim ? P.trim.in : 0) + 0.5 / P.fps; } catch (e) {}
+    if (autoplay) vid.play().catch(() => {}); else vid.pause();
+    musicSeek();
+  };
+  if (vid.readyState >= 1) go(); else vid.addEventListener("loadedmetadata", go, {once: true});
+  caption(s, t);
+  $("#vinfo").textContent = "  " + (t.label || "?") + " · " + (t.key === s.pick ? "the take the film uses" : "not the take in the film");
+  markTakes();
+}
+function showStill(s, autoplay) {
+  vid.pause(); vid.style.display = "none"; P.take = null; P.trim = null;
+  const url = s.poster;
+  still.style.display = url ? "" : "none"; if (url) still.src = url;
+  $("#ph").style.display = url ? "none" : ""; $("#ph").textContent = s.status || "no picture yet";
+  $("#stillbadge").style.display = url ? "" : "none";
+  $("#stillbadge").textContent = s.takes.length ? "storyboard - no take picked yet" : "storyboard - the start frame, no take yet";
+  $("#scrub").disabled = true; $("#scrub").max = 0; P.frames = 0;
+  $("#fno").textContent = ""; $("#vinfo").textContent = "  a still for " + (+s.dur || 0).toFixed(2) + " s";
+  caption(s, null); showClock(s.start);
+  if (autoplay) startStill(s);
+  else setPP(false);
+}
+function startStill(s) {
+  P.still = true; P.stillT0 = performance.now(); setPP(true);
+  musicSeek(); if (bgm.src) bgm.play().catch(() => {});
+  clearTimeout(P.stillTimer);
+  P.stillTimer = setTimeout(() => { P.still = false; ended(); }, Math.max(0.2, +s.dur || 1) * 1000);
+}
+function stopPlayback() { clearTimeout(P.stillTimer); P.still = false; vid.pause(); bgm.pause(); setPP(false); }
+function setPP(on) { $("#pp").innerHTML = on ? "&#10074;&#10074; pause" : "&#9654; play"; }
+function togglePlay() {
+  const s = cur(); if (!s) return;
+  if (vid.style.display !== "none" && vid.getAttribute("src")) { vid.paused ? vid.play().catch(() => {}) : vid.pause(); return; }
+  if (P.still) { clearTimeout(P.stillTimer); P.still = false; setPP(false); bgm.pause(); }
+  else startStill(s);
+}
+function ended() {
+  const s = cur();
+  if ($("#loop").checked && s) { loadPlayer(s, true); return; }
+  if (!$("#chain").checked) { setPP(false); bgm.pause(); return; }
+  const i = S.shots.findIndex(x => x.id === S.sel), nx = S.shots[i + 1];
+  if (!nx) { setPP(false); bgm.pause(); $("#vinfo").textContent = "  end of film"; return; }
+  P.chaining = true; openShot(nx.id, {autoplay: true});
+  setTimeout(() => { P.chaining = false; }, 1200);
+}
+vid.addEventListener("ended", () => ended());
+vid.addEventListener("timeupdate", () => { showFrame(); musicFollow(); });
+vid.addEventListener("seeked", () => { showFrame(); musicSeek(); });
+vid.addEventListener("play", () => { setPP(true); if (!P.chaining) musicSeek(); if (bgm.src) bgm.play().catch(() => {}); });
+vid.addEventListener("pause", () => { setPP(false); if (!P.chaining) bgm.pause(); });
+vid.onclick = () => togglePlay();
+still.onclick = () => togglePlay();
+(function watch() {
+  if (P.trim && P.trim.out && vid.style.display !== "none" && !vid.paused && vid.currentTime >= P.trim.out) { vid.pause(); ended(); }
+  if (P.still) { const s = cur(); if (s) showClock(s.start + Math.min(+s.dur || 0, (performance.now() - P.stillT0) / 1000)); }
+  requestAnimationFrame(watch);
+})();
+function frameOf() { return Math.round(vid.currentTime * P.fps - 0.5); }
+function setDur(dur, fps) { P.fps = fps || 24; P.frames = Math.max(1, Math.round((dur || 0) * P.fps)); $("#scrub").max = P.frames - 1; showFrame(); }
+function gotoFrame(f) {
+  if (vid.style.display === "none" || !P.frames) return;
+  f = Math.max(0, Math.min(P.frames - 1, f)); P.want = f;
+  const t = (f + 0.5) / P.fps;
+  vid.currentTime = (vid.duration && t > vid.duration - 1e-3) ? Math.max(0, vid.duration - 1e-3) : t;
+  showFrame(f);
+}
+function showFrame(f) {
+  if (vid.style.display === "none") return;
+  if (f == null) {
+    f = frameOf();
+    if (P.want != null && Math.abs(P.want - f) <= 1 && (P.want === 0 || P.want === P.frames - 1)) f = P.want;
+  } else P.want = f;
+  if (!P.scrubbing) $("#scrub").value = f;
+  $("#fno").textContent = `frame ${f} / ${P.frames - 1}   ${(f / P.fps).toFixed(3)}s` + (P.trim ? `   (in the film: ${P.trim.in.toFixed(2)}-${(P.trim.out || vid.duration || 0).toFixed(2)} s)` : "");
+  showClock(filmTime());
+}
+function step(n) { vid.pause(); gotoFrame(frameOf() + n); }
+$("#scrub").addEventListener("input", e => { P.scrubbing = true; gotoFrame(+e.target.value); });
+$("#scrub").addEventListener("change", () => { P.scrubbing = false; });
+$("#pp").onclick = togglePlay;
+$("#fback").onclick = () => step(-1);
+$("#ffwd").onclick = () => step(1);
+$("#restart").onclick = () => { const s = cur(); if (s) loadPlayer(s, true); };
+$("#pshot").onclick = () => { const i = S.shots.findIndex(x => x.id === S.sel); if (i > 0) openShot(S.shots[i - 1].id); };
+$("#nshot").onclick = () => { const i = S.shots.findIndex(x => x.id === S.sel); if (i >= 0 && i < S.shots.length - 1) openShot(S.shots[i + 1].id); };
+$("#mute").onchange = e => { vid.muted = e.target.checked; PREF.set("mute." + S.kind, e.target.checked); };
+$("#captions").onchange = e => { $("#cap").classList.toggle("off", !e.target.checked); PREF.set("captions", e.target.checked); };
+function filmTime() {
+  const s = cur(); if (!s) return 0;
+  if (vid.style.display !== "none" && vid.getAttribute("src")) return s.start + Math.max(0, (vid.currentTime || 0) - (P.trim ? P.trim.in : 0));
+  if (P.still) return s.start + Math.min(+s.dur || 0, (performance.now() - P.stillT0) / 1000);
+  return s.start;
+}
+function showClock(t) { const mc = $("#mclock"); if (mc.textContent !== "copied") mc.textContent = stamp(t); reelAt(t); }
+$("#mclock").onclick = () => copyStamp($("#mclock"));
+function seekFilm(t) {
+  if (!S.shots.length) return;
+  const s = S.shots.find(x => t >= x.start && t < x.start + x.dur) || S.shots[S.shots.length - 1];
+  const off = Math.max(0, Math.min(t - s.start, (+s.dur || 0) - 0.04));
+  const land = () => {
+    const c = cur();
+    if (vid.style.display !== "none" && vid.getAttribute("src")) {
+      const go = () => { vid.currentTime = (P.trim ? P.trim.in : 0) + off; };
+      if (vid.readyState >= 1) go(); else vid.addEventListener("loadedmetadata", go, {once: true});
+    } else if (c) showClock(c.start + off);
+  };
+  if (s.id !== S.sel) openShot(s.id).then(land); else land();
+}
+function drawTracks() {
+  const sel = $("#track"), was = sel.value;
+  sel.innerHTML = '<option value="">none</option>' + S.music.map(t => `<option value="${esc(t.id)}">${esc(t.name)}</option>`).join("");
+  const want = S.music.some(t => t.id === was) ? was : PREF.get("track:" + S.kind + ":" + S.film, isScript() && S.music.length ? S.music[0].id : "");
+  sel.value = S.music.some(t => t.id === want) ? want : "";
+  setTrack(sel.value, true);
+  $("#minfo").textContent = S.music.length ? "" : (isScript() ? "no score yet - write music" : "nothing in the film's media folder");
+}
+function setTrack(id, quiet) {
+  const t = S.music.find(x => x.id === id);
+  if (!quiet) PREF.set("track:" + S.kind + ":" + S.film, id || "");
+  if (!t) { bgm.pause(); bgm.removeAttribute("src"); bgm.load(); return; }
+  if (bgm.getAttribute("src") !== t.url) { bgm.src = t.url; bgm.addEventListener("loadedmetadata", musicSeek, {once: true}); }
+  bgm.volume = (+$("#mvol").value) / 100;
+  $("#minfo").textContent = t.info || "";
+  if (!vid.paused || P.still) bgm.play().catch(() => {});
+}
+$("#track").onchange = e => setTrack(e.target.value);
+$("#mvol").oninput = e => { bgm.volume = (+e.target.value) / 100; PREF.set("vol", +e.target.value); };
+$("#mmute").onchange = e => { bgm.muted = e.target.checked; PREF.set("mmute", e.target.checked ? 1 : 0); };
+function musicSeek() {
+  if (!bgm.getAttribute("src")) return;
+  const want = filmTime();
+  bgm.currentTime = (!bgm.duration || want <= bgm.duration) ? want : want % bgm.duration;
+}
+function musicFollow() {
+  if (!bgm.getAttribute("src")) return;
+  if (vid.paused && !P.still) { bgm.pause(); return; }
+  if (bgm.paused) bgm.play().catch(() => {});
+  const want = filmTime(), have = bgm.duration ? want % bgm.duration : want;
+  if (Math.abs(bgm.currentTime - have) > 0.06) bgm.currentTime = have;
+}
+function caption(s, t) {
+  $("#cap").classList.toggle("off", !$("#captions").checked);
+  let c2 = "", c3 = "";
+  if (isScript()) {
+    const ds = s.raw, a = ds.anchors || {};
+    const startf = ds.engine === "previz" ? "Qwen-Image-2.1 dressing the physics simulation"
+      : (ds.anchor === null || ds.anchor === undefined) ? "the place's plate"
+      : a.chosen ? (a.chosen.startsWith("flux2") ? "Flux 2" : a.chosen.startsWith("qwen21") ? "Qwen-Image-2.1 " + a.chosen.replace("qwen21_", "")
+                   : a.chosen === "upload" ? "your picture" : a.chosen) : "not drawn";
+    c2 = (t ? t.label + " | seed " + t.seed : "storyboard: the start frame") + " | start frame: " + startf +
+         (t && s.pick === t.key && ds.pick_why ? " | picked: " + ds.pick_why : "") +
+         (t && P.trim ? " | trimmed " + P.trim.in.toFixed(2) + "-" + (P.trim.out || ds.take_secs || 0).toFixed(2) + " s" : "") +
+         (t && s.pick !== t.key ? " | not the take in the film" : "");
+    const g = ds.suggest || {};
+    c3 = g.level && g.level !== "none" ? "SEEDANCE " + g.level.toUpperCase() + " - " + ((g.reasons || [])[0] || "") : "";
+  } else {
+    c2 = t ? (t.label || "?") + " · " + (+t.dur || 0).toFixed(2) + " s · " + (t.key === s.pick ? "the take the film uses" : "not the picked take (" + t.key + ")") : "no take yet";
+  }
+  if (s.spec.has) c3 = (c3 ? c3 + "   ·   " : "") + s.spec.nInv + " promise" + (s.spec.nInv === 1 ? "" : "s") + (s.spec.locked ? " · locked" : "");
+  $("#c1").textContent = s.id + "   " + s.title; $("#c2").textContent = c2; $("#c3").textContent = c3;
+}
+
+// ================================================================== saving the shot script: by itself
+const SAVE = {t: null, inflight: null, err: null};
+function markDirty() {
+  S.dirty = true; SAVE.err = null; showSaveState("editing");
+  clearTimeout(SAVE.t); SAVE.t = setTimeout(autosave, 900);
+}
+// resolves once what is typed is on the server (true) or has been refused (false, SAVE.err says why);
+// a save already in flight is waited for, not doubled
+async function autosave() {
+  clearTimeout(SAVE.t);
+  if (SAVE.inflight) await SAVE.inflight;
+  if (!S.dirty || !isScript()) return !SAVE.err;
+  showSaveState("saving");
+  SAVE.inflight = (async () => { try { await saveScript(true); SAVE.err = null; } catch (e) { SAVE.err = e.message; } })();
+  await SAVE.inflight; SAVE.inflight = null;
+  showSaveState();
+  return !SAVE.err;
+}
+function showSaveState(state) {
+  const el = $("#savestate"); if (!el) return;
+  if (state === "editing") { el.className = "savestate"; el.textContent = "editing…"; return; }
+  if (state === "saving") { el.className = "savestate"; el.textContent = "saving…"; return; }
+  if (SAVE.err) { el.className = "savestate err"; el.textContent = "not saved - " + SAVE.err; }
+  else if (S.dirty) { el.className = "savestate"; el.textContent = "not saved yet"; }
+  else { el.className = "savestate ok"; el.textContent = "✓ saved"; }
+}
+// save the script; a change typed while the save was in flight stays dirty and is saved next.
+// `before` is the script as it was before a structural change (delete, move, add): it becomes an undo.
+async function saveScript(quiet, note, before) {
+  S.script.shots.forEach(x => { if (Array.isArray(x.refs)) x.refs = x.refs.filter(Boolean); });
+  const snap = JSON.stringify(S.script);
+  try { await api("/api/shots/save", {film: S.film, script: JSON.parse(snap)}); }
+  catch (e) {
+    if (quiet) throw e;
+    if (before) { S.script = before; S.dirty = false; renderInsp(); }
+    toast(e.message); return false;
+  }
+  if (JSON.stringify(S.script) === snap) S.dirty = false;
+  if (before) { UNDO.push({film: S.film, before, note: note || "that"}); if (UNDO.length > 30) UNDO.shift(); }
+  await loadData(true);
+  if (cur() && S.sel !== S.shown) await openShot(S.sel);
+  if (!quiet) toast(note || "saved", before ? {undo: () => undoLast(), ctrlz: true} : true);
+  if (S.dirty) { clearTimeout(SAVE.t); SAVE.t = setTimeout(autosave, 900); }
+  showSaveState();
+  return true;
+}
+// structural changes (add, delete, move, duplicate, trim, cast) can be walked back, newest first
+const UNDO = [];
+async function undoLast() {
+  while (UNDO.length && UNDO[UNDO.length - 1].film !== S.film) UNDO.pop();
+  const u = UNDO.pop();
+  if (!u) return toast("nothing to undo", true);
+  if (S.dirty && !(await autosave())) return toast("Fix this first - " + SAVE.err);
+  S.script = JSON.parse(JSON.stringify(u.before));
+  if (!S.script.shots.some(x => x.id === S.sel)) S.sel = (S.script.shots[0] || {}).id || null;
+  await saveScript(false, "undone: " + u.note);
+}
+// before a job runs, what is typed is saved; a script that cannot be saved does not run
+async function runOp(body) {
+  if (S.dirty && !(await autosave())) { toast("Fix this first - " + SAVE.err); return; }
+  try {
+    body.film = S.film;
+    const r = await api("/api/shots/run", body);
+    toast("started: " + r.op, true);
+    startPoll(); return r;
+  } catch (e) { toast(e.message); }
+}
+async function pickTake(s, token, why) {
+  try {
+    await api("/api/shots/pick", {film: S.film, shot: s.id, token, why: why || ""});
+    S.pickWhy = null; toast("take " + token + " is in the film", true);
+    await loadData(true); const c = cur(); if (c) loadPlayer(c, false);
+  } catch (e) { toast(e.message); }
+}
+
+// ================================================================== the inspector
+function renderInsp() {
+  const s = cur(), box = $("#insp");
+  if (!s) { box.innerHTML = `<div class="pane"><div class="hint">No shot selected.</div>${isScript() ? paneCast() : ""}</div>`; bindCast(); return; }
+  const tabs = isScript()
+    ? [["shot", "Shot"], ["frame", "Start frame"], ["takes", "Takes (" + s.takes.length + ")"], ["seedance", "Seedance" + (s.sd !== "none" ? ' <span class="sdd">&#9679;</span>' : "")], ["cast", "Cast"]]
+    : [["takes", "Takes (" + s.takes.length + ")"], ["about", "About"]];
+  let tab = S.tab[S.kind]; if (!tabs.some(t => t[0] === tab)) tab = tabs[0][0];
+  let h = `<div class="tabs">${tabs.map(([k, l]) => `<button data-tab="${k}" class="${k === tab ? "on" : ""}">${l}</button>`).join("")}</div><div class="pane">`;
+  if (isScript()) {
+    const sh = scriptShot(s.id), ds = s.raw;
+    if (!sh) h += `<div class="hint">This shot is not in the script yet.</div>`;
+    else if (tab === "shot") h += paneShot(sh, ds, s);
+    else if (tab === "frame") h += paneFrame(sh, ds, s);
+    else if (tab === "takes") h += paneTakes(sh, ds, s);
+    else if (tab === "seedance") h += paneSeedance(sh, ds, s);
+    else h += paneCast();
+  } else {
+    h += tab === "takes" ? paneFilmTakes(s) : paneAbout(s);
+  }
+  h += `</div>`;
+  const keep = box.scrollTop;
+  box.innerHTML = h; box.scrollTop = keep;
+  box.querySelectorAll("[data-tab]").forEach(b => b.onclick = () => gotoTab(b.dataset.tab));
+  if (isScript()) { bindScript(s.id); bindCast(); showSaveState(); }
+  else bindFilm(s);
+  markTakes();
+}
+const optList = (list, v) => list.map(m => `<option value="${m.id}" ${m.id === v ? "selected" : ""}>${esc(m.label)}${m.wf ? " (" + m.wf + ")" : ""}</option>`).join("");
+const noteOf = (list, id) => { const m = list.find(x => x.id === id); return m ? m.note || "" : ""; };
+function refOptions(v) {
+  const sc = S.script, ids = Object.keys(sc.cast).concat([sc.place.id]);
+  return `<option value="">-</option>` + ids.map(i => `<option value="${esc(i)}" ${i === v ? "selected" : ""}>${esc(i)}</option>`).join("");
+}
+const lockBar = s => s.spec.locked ? `<div class="lockbar">&#128274; Locked on its spec sheet to take <b>${esc(s.spec.lockedTake || "(none)")}</b> - start frames, takes and the pick are frozen. Unlock it on the spec sheet to make more.</div>` : "";
+function paneShot(sh, ds, s) {
+  const M = S.data.models, composed = sh.anchor !== null && sh.anchor !== undefined, refs = sh.refs || [];
+  let h = `<div class="row"><b style="font-size:15px">${esc(sh.id)}</b><input class="grow" data-f="title" value="${esc(sh.title || "")}" placeholder="title">
+      <input data-f="secs" type="number" min="1" max="30" step="1" value="${esc(sh.secs)}" style="width:62px" title="seconds"><span class="n">s</span></div>
+    <div class="row" style="margin-top:4px"><span class="savestate" id="savestate"></span></div>
+    <label class="l">engine - what renders the motion</label>
+    <select data-f="engine" style="width:100%">${optList(M.engine, sh.engine || "ltx")}</select>
+    <div class="n">${esc(noteOf(M.engine, sh.engine || "ltx"))}</div>`;
+  if ((sh.engine || "ltx") === "previz") {
+    const pz = sh.previz || {};
+    h += `<label class="l">physics scene (Blender)</label><div class="row"><select data-pz="scene">${optList(M.previz, pz.scene || "aisle")}</select>
+      <span class="n">${esc(noteOf(M.previz, pz.scene || "aisle"))}</span></div>
+      <label class="l">dressing - what the grey simulation becomes</label>
+      <textarea data-pz="dress" rows="4" placeholder="Turn &lt;image1&gt; into a still frame from a live-action film... the floor, the walls and the light are those of the place of &lt;image2&gt;. The grey standing figure is the person of &lt;image3&gt;.">${esc(pz.dress || "")}</textarea>
+      <div class="n">&lt;image1&gt; the simulation's first frame, &lt;image2&gt; the place, &lt;image3&gt; the character. Empty = general words. The film's look is added after.</div>`;
+  }
+  h += `<label class="l">face - how identity is measured</label><select data-f="face">${optList(M.face, sh.face || "medium")}</select>
+    <label class="l">start frame</label>
+    <div class="row"><label class="chk" style="color:var(--ink)"><input type="radio" name="compose" value="1" ${composed ? "checked" : ""}> composed from pictures</label>
+      <label class="chk" style="color:var(--ink)"><input type="radio" name="compose" value="0" ${composed ? "" : "checked"}> the place's plate (nobody in it)</label></div>`;
+  if (composed) {
+    h += `<label class="l">references - who and where, in order</label><div class="slots">
+      ${[0, 1, 2].map(i => `<div><div class="sl">reference ${["one", "two", "three"][i]}</div><select data-slot="${i}">${refOptions(refs[i])}</select></div>`).join("")}</div>
+      <div class="n">Name them in the words as "the woman of reference one". Repeat a character to fill three: [who, who, place].</div>
+      <label class="l">what the start frame shows</label><textarea data-f="anchor" rows="5">${esc(sh.anchor || "")}</textarea>`;
+  }
+  h += `<label class="l">what happens - one beat, the camera, the sound</label><textarea data-f="prompt" rows="7">${esc(sh.prompt || "")}</textarea>
+    <ul class="why coach" id="coach">${coachHtml(sh)}</ul>
+    <label class="l">the line that must be heard (checked by the speech model)</label><input style="width:100%" data-f="line" value="${esc(sh.line || "")}" placeholder="optional">
+    <label class="l">avoid, for this shot only</label><input style="width:100%" data-f="avoid_extra" value="${esc(sh.avoid_extra || "")}" placeholder="e.g. people, a figure">
+    <label class="l">promises</label>
+    <div class="n">${s.spec.has ? `${s.spec.nInv} promise${s.spec.nInv === 1 ? "" : "s"} and ${s.spec.nFlair} flair on its <a href="#sstitle" id="tospec">spec sheet</a>${s.spec.locked ? " - locked" : ""}.`
+      : `None written yet: its <a href="#sstitle" id="tospec">spec sheet</a> (under the player) is filled in with what is known - add what it must keep, and save.`}</div>
+    <div class="row" style="margin-top:14px"><button id="dupshot">duplicate</button><button id="mvl" title="move earlier">&#9664;</button><button id="mvr" title="move later">&#9654;</button>
+      <span class="grow"></span><button class="ghost danger" id="delshot" ${s.spec.locked ? "disabled title=\"locked on its spec sheet\"" : ""}>delete shot</button></div>
+    <div class="n">Changes save themselves. A deleted shot comes back with undo; its takes and spec sheet stay on disk either way.</div>`;
+  if (sh.note) h += `<div class="n" style="margin-top:8px">note: ${esc(sh.note)}</div>`;
+  return h;
+}
+function paneFrame(sh, ds, s) {
+  const M = S.data.models, a = ds.anchors || {}, locked = s.spec.locked;
+  if ((sh.engine || "ltx") === "previz")
+    return lockBar(s) + `<div class="n" style="margin-bottom:8px">A physics shot's start frame is the Blender simulation's first frame, dressed as the film by Qwen-Image-2.1 - it is made when the takes are rendered.</div>
+      ${ds.anchor_url ? `<img class="bigimg" src="${esc(ds.anchor_url)}" alt="">` : `<div class="hint">not made yet - render takes</div>`}
+      <div class="cands">${(a.candidates || []).map(c => candCard(c, a.chosen, locked)).join("")}</div>`;
+  if (sh.anchor === null || sh.anchor === undefined)
+    return lockBar(s) + `<div class="n" style="margin-bottom:8px">This shot starts on the place's plate itself - nobody in it. Choose "composed from pictures" on the Shot tab to draw a start frame.</div>
+      ${ds.anchor_url ? `<img class="bigimg" src="${esc(ds.anchor_url)}" alt="">` : ""}
+      <div class="row" style="margin-top:8px"><button class="primary" id="drawplate" ${locked ? "disabled" : ""}>use the plate</button><button id="upanchor" ${locked ? "disabled" : ""}>upload your own</button></div>`;
+  const comp = S.frameComp[sh.id] || "qwen21", seeds = S.frameSeeds || "11 202";
+  return lockBar(s) + `${ds.anchor_url ? `<img class="bigimg" src="${esc(ds.anchor_url)}" alt="">` : `<div class="hint">no start frame yet</div>`}
+    <div class="n" style="margin-top:4px">${a.chosen ? `in use: <b>${esc(a.chosen)}</b> - ${esc(a.why || "")}` : ""}</div>
+    <label class="l">model</label><select id="fcomp" style="width:100%" ${locked ? "disabled" : ""}>${optList(M.compositor, comp)}</select>
+    <div class="n">${esc(noteOf(M.compositor, comp))}</div>
+    <div class="row" style="margin-top:6px"><span class="n">seeds</span><input id="fseeds" style="width:120px" value="${esc(seeds)}">
+      <button class="ghost" id="fdice" title="fresh seeds">&#127922;</button>
+      <button class="primary" id="drawframes" ${locked ? "disabled" : ""}>draw start frames</button><button id="upanchor" ${locked ? "disabled" : ""}>upload</button></div>
+    <label class="chk" style="margin-top:6px"><input type="checkbox" id="freplace" ${S.frameReplace ? "checked" : ""}> redraw seeds already drawn (after you change the words)</label>
+    <div class="n">A seed already drawn is kept, so new seeds are what cost time. Each candidate's faces are scored against the cast pictures and the best of the ones just drawn is used; older candidates stay below, one click away.</div>
+    <label class="l">candidates (${(a.candidates || []).length})</label>
+    <div class="cands">${(a.candidates || []).map(c => candCard(c, a.chosen, locked)).join("") || `<div class="hint">none yet</div>`}</div>`;
+}
+function candCard(c, chosen, locked) {
+  return `<div class="cand ${c.name === chosen ? "on" : ""}" data-cand="${esc(c.name)}" data-url="${esc(c.url || "")}">
+    ${c.url ? `<img src="${esc(c.url)}" alt="">` : ""}<div class="m"><span>${esc(c.name.replace("qwen21_", "Qwen ").replace("flux2", "Flux 2").replace("pvdress_", "dressed "))}</span>
+    <span>${c.mean != null ? "faces " + c.mean.toFixed(2) : ""}</span></div>
+    <div class="m">${c.name === chosen ? `<span class="pill good">in use</span>` : (locked ? "" : `<button data-usecand="${esc(c.name)}" style="padding:2px 9px">use</button>`)}</div></div>`;
+}
+function promisesHtml(s) {
+  const inv = s.spec.invariants || [];
+  if (!inv.length) return "";
+  return `<label class="l">check every take against its promises</label>` + inv.map(i => `<div class="promise"><b>${esc(i.title)}</b> - ${esc(i.rule)}${i.why ? `<div class="w">why: ${esc(i.why)}</div>` : ""}</div>`).join("");
+}
+function paneTakes(sh, ds, s) {
+  const M = S.data.models, eng = S.takeEng[sh.id] || (sh.engine || "ltx"), seeds = S.takeSeeds || "11 202 3003", locked = s.spec.locked;
+  let h = lockBar(s) + `<label class="l">engine</label><select id="teng" style="width:100%" ${locked ? "disabled" : ""}>${optList(M.engine, eng)}</select>
+    <div class="n">${esc(noteOf(M.engine, eng))}</div>
+    <div class="row" style="margin-top:6px"><span class="n">seeds</span><input id="tseeds" style="width:130px" value="${esc(seeds)}">
+      <button class="ghost" id="tdice" title="fresh seeds">&#127922;</button>
+      <button class="primary" id="rendertakes" ${locked ? "disabled" : ""}>render takes</button><button id="ranktakes" title="measure camera, faces, the line; suggest a pick">measure</button></div>
+    <label class="chk" style="margin-top:6px"><input type="checkbox" id="treplace" ${S.takeReplace ? "checked" : ""}> render seeds already rendered again (after you change the words)</label>
+    <div class="n">New takes are measured and ranked when they finish: the face against its own start frame, the line through the speech model, the level, the camera. The ranker suggests; you choose.</div>`;
+  if (ds.ranker_pick) h += `<div class="n" style="margin-top:6px">ranker suggests <b>${esc(ds.ranker_pick)}</b> - ${esc(ds.ranker_why || "")}</div>`;
+  h += promisesHtml(s);
+  if (!locked) h += `<label class="l">why you'd use a take over the ranker's pick (optional)</label>
+    <input id="pickwhy" style="width:100%" value="${esc(S.pickWhy && S.pickWhy.id === sh.id ? S.pickWhy.text : "")}" placeholder="printed under the shot on the annotated cut">`;
+  h += `<label class="l">takes (${ds.takes.length})</label>`;
+  if (!ds.takes.length) h += `<div class="hint">none yet</div>`;
+  const takes = ds.takes.slice().sort((a, b) => (a.token === ds.pick ? -1 : b.token === ds.pick ? 1 : (b.score || 0) - (a.score || 0)));
+  for (const t of takes) {
+    const inCut = t.token === ds.pick;
+    const faces = t.faces && Object.keys(t.faces).length ? Object.entries(t.faces).map(([k, v]) => k + " " + v.toFixed(2)).join(", ") : "";
+    h += `<div class="take ${inCut ? "in" : ""}" data-take="${esc(t.token)}">
+      ${t.strip ? `<img class="strip" src="${esc(t.strip)}" data-play="${esc(t.token)}" alt="" title="play this take">` : ""}
+      <div class="m"><div class="hd"><span class="pill eng ${ENGINE_CLASS[t.engine] || ""}">${esc(ENGINE_LABEL[t.engine] || t.engine)}</span><b>seed ${t.seed}</b>
+        ${t.token === ds.ranker_pick ? `<span class="pill">ranker's pick</span>` : ""}${inCut ? `<span class="pill good">in the film</span>` : ""}
+        <span class="grow"></span><button data-play="${esc(t.token)}" style="padding:2px 9px">&#9654;</button>${inCut || locked ? "" : `<button class="primary" data-pick="${esc(t.token)}" style="padding:2px 9px">use</button>`}</div>
+      <div class="kv">${[faces ? "face " + faces : "", t.line_hit != null ? "line " + Math.round(t.line_hit * 100) + "%" : "", t.camera ? "camera " + t.camera : "", t.mean_db != null ? t.mean_db.toFixed(0) + " dB" : "", t.score != null ? "score " + t.score.toFixed(3) : ""].filter(Boolean).map(esc).join(" &middot; ") || (t.ranked ? "" : "not measured yet - press measure")}</div>
+      ${t.heard ? `<div class="kv">heard: "${esc(t.heard)}"</div>` : ""}
+      ${(t.faults || []).map(f => `<div class="ft">fault: ${esc(f)}</div>`).join("")}
+      ${(t.notes || []).map(f => `<div class="nt">note: ${esc(f)}</div>`).join("")}
+      ${inCut && !locked ? trimBox(sh, ds, t) : ""}</div></div>`;
+  }
+  return h;
+}
+function trimBox(sh, ds, t) {
+  const full = ds.take_secs || (t.frames ? t.frames / 24 : +sh.secs);
+  const tr = sh.trim && sh.trim.take === t.token ? sh.trim : null;
+  const tin = tr ? (+tr.in || 0) : 0, tout = tr ? (+tr.out || full) : full;
+  return `<div class="trim"><div class="row"><b style="font-size:11.5px">trim</b>
+      <span class="n">in</span><input id="trin" type="number" step="0.04" min="0" max="${full.toFixed(2)}" value="${tin.toFixed(2)}" style="width:70px">
+      <span class="n">out</span><input id="trout" type="number" step="0.04" min="0" max="${full.toFixed(2)}" value="${tout.toFixed(2)}" style="width:70px">
+      <span class="n">of ${full.toFixed(2)} s${tr ? " - the film keeps " + (Math.min(full, tout) - tin).toFixed(2) + " s" : ""}</span></div>
+    <div class="row" style="margin-top:4px"><button id="setin" style="padding:3px 8px">in = playhead</button><button id="setout" style="padding:3px 8px">out = playhead</button>
+      <button class="primary" id="savetrim" style="padding:3px 9px">save trim</button>${tr ? `<button class="ghost" id="cleartrim" style="padding:3px 8px">whole take</button>` : ""}</div></div>`;
+}
+function coachHtml(sh) {
+  const p = sh.prompt || "", t = p.toLowerCase(), out = [];
+  if (/^describe one beat/.test(t)) return `<li>Still the template: write what happens in this shot - one beat, the camera, the sound.</li>`;
+  if (!/no music/.test(t)) out.push('End with "No music." - the score goes under the whole cut at the finish.');
+  if (!/camera|static|push|pull|pan|tilt|dolly|track|handheld|locked|drift|zoom/.test(t)) out.push("Say what the camera does: static, a slow push-in, a drift...");
+  if (!/sound|room tone|silence|silent|voice|says|say|whisper|quiet|hum|rain|wind|creak|footstep|clatter|crash|hiss|noise|breath/.test(t)) out.push("Say what we hear - the take's sound is rendered with its picture.");
+  if (/"[^"]{2,}"/.test(p) && !sh.line) out.push('A line in quotes: copy it into "the line that must be heard" and every take is checked for it.');
+  const n = p.split(/\s+/).filter(Boolean).length;
+  if (n > 110) out.push(n + " words - one beat per shot; this may be two shots.");
+  if (sh.anchor && !/reference (one|two|three|1|2|3)/i.test(sh.anchor)) out.push('The start frame names nobody: say "the woman of reference one" so each picture lands where it should.');
+  return out.length ? out.map(x => `<li>${esc(x)}</li>`).join("") : `<li class="ok">reads like the demo shots: one beat, the camera, the sound</li>`;
+}
+function paneSeedance(sh, ds, s) {
+  const g = ds.suggest || {level: "none", reasons: []}, saved = sh.seedance && sh.seedance.prompt;
+  const prompt = S.sdDraft && S.sdDraft.id === sh.id ? S.sdDraft.prompt : g.prompt;
+  let h = `<div class="row"><span class="lvl ${g.level}">${{strong: "SEEDANCE SUGGESTED", consider: "CONSIDER SEEDANCE", none: "LOCAL ENGINES FIT"}[g.level]}</span>
+      ${saved ? `<span class="pill sd">kept in the script</span>` : ""}</div>`;
+  h += g.reasons.length ? `<ul class="why">${g.reasons.map(r => `<li>${esc(r)}</li>`).join("")}</ul>`
+    : `<div class="n" style="margin-top:6px">Nothing in this shot is on the list of things our engines measurably struggle with: speed, a walk over distance, an effect at an instant, two bodies in contact, a crowd, a travelling camera.</div>`;
+  h += `<label class="l">Seedance 2.5 prompt <span class="n" style="text-transform:none;letter-spacing:0">(${esc(g.prompt_source || "")})</span></label>
+    <textarea id="sdprompt" rows="9">${esc(prompt || "")}</textarea>
+    <div class="n">[image 1] = this shot's start frame (${esc((g.images || [])[0] || "")}), [image 2] = ${esc((g.images || [])[1] || "")}, [image 3] = ${esc((g.images || [])[2] || "")}. Reference mode, 16:9, audio on.</div>
+    <div class="row" style="margin-top:6px"><span class="n">seconds</span><input id="sdsecs" type="number" min="3" max="15" value="${g.secs || sh.secs}" style="width:60px">
+      <span class="n">resolution</span><select id="sdres"><option>1080p</option><option>720p</option><option>480p</option></select></div>
+    <div class="n" id="sdcost">about $${(g.cost || 0).toFixed(2)} a take at $${g.rate || 0.09}/s (the 2.0 Fast rate; 2.5's is unverified)</div>
+    <div class="row" style="margin-top:10px"><button class="primary" id="sdkeep">keep in the notation</button>
+      ${saved ? `<button class="ghost" id="sdclear">remove</button>` : ""}
+      <span class="grow"></span><button class="sdbtn" id="sdsend" ${s.spec.locked ? "disabled" : ""} title="spends credits; needs a Comfy account signed in">send to Seedance (paid)&hellip;</button></div>
+    <div class="n" style="margin-top:8px">Nothing is sent unless you press send and confirm the price. It needs a Comfy account signed in at http://192.168.0.45:8188; the take lands in Takes beside the others (sd_${esc(sh.id)}_s11.mp4), measured and pickable like them.</div>`;
+  return h;
+}
+function paneCast() {
+  if (!S.data || !S.script) return "";
+  const d = S.data, sc = S.script, place = sc.place.id;
+  let h = `<label class="l" style="margin-top:0">cast &amp; place - one picture each, every shot points at it</label>`;
+  for (const id of Object.keys(sc.cast).concat([place])) {
+    const r = d.refs[id] || {}, isPlace = id === place;
+    const made = r.made ? (r.made.engine === "upload" ? "your picture" : `${esc(r.made.engine)} &middot; seed ${esc(r.made.seed)}`) : (r.url ? "" : "not made yet");
+    h += `<div class="ref ${isPlace ? "place" : ""} ${S.openRef === id ? "open" : ""}" data-ref="${esc(id)}">
+      ${r.url ? `<img src="${esc(r.url)}" alt="">` : `<div class="noimg">none</div>`}
+      <div><div style="font-weight:600">${esc(id)}</div><div class="n" style="margin:0">${esc(isPlace ? "the place" : (sc.cast[id].role || ""))}</div>
+      <div class="n" style="margin:0">${made}</div></div></div>`;
+    if (S.openRef === id) {
+      const prompt = isPlace ? sc.place.prompt : sc.cast[id].prompt;
+      h += `<div class="refed">
+        ${isPlace ? "" : `<label class="l">role</label><input style="width:100%" data-refrole="${esc(id)}" value="${esc(sc.cast[id].role || "")}">`}
+        <label class="l">description (drawn once, then every shot points at the picture)</label>
+        <textarea data-refprompt="${esc(id)}" rows="6">${esc(prompt)}</textarea>
+        <label class="l">model</label>
+        <select data-refengine style="width:100%">${d.models.cast.map(m => `<option value="${m.id}" ${(r.made && r.made.engine === m.id) ? "selected" : ""}>${esc(m.label)} (${m.wf}) - ${esc(m.note)}</option>`).join("")}</select>
+        <div class="row" style="margin-top:6px"><span class="n">seed</span><input data-refseed style="width:90px" value="${r.made && r.made.seed ? r.made.seed : 4242}">
+          <button class="ghost" data-refdice title="a fresh seed">&#127922;</button>
+          <button class="primary" data-reroll="${esc(id)}">${r.url ? "re-roll" : "make"}</button><button data-upref="${esc(id)}">upload</button></div>
+        <div class="n">Re-rolling changes this picture for every shot drawn after it; start frames already drawn keep the old one until redrawn.</div>
+        ${isPlace ? "" : `<button class="ghost danger" data-delref="${esc(id)}" style="margin-top:6px">remove ${esc(id)}</button>`}</div>`;
+    }
+  }
+  h += `<div class="adder"><div class="row"><input id="newcharid" class="grow" placeholder="new character's name, e.g. mara" autocomplete="off">
+      <input id="newcharrole" class="grow" placeholder="role, e.g. the driver" autocomplete="off"><button id="addchar">add</button></div>
+    <div class="n" id="newcharmsg">A short name (letters, digits, dashes); describe them once and make their picture here.</div></div>`;
+  return h;
+}
+function paneFilmTakes(s) {
+  let h = `<div class="n" style="margin-top:0">This film was made in the film editor; its takes are made and picked there. Preview any of them here against the spec sheet.</div>
+    <div id="measured" class="n" style="color:var(--dim)">${esc(S.measured || "")}</div>
+    <label class="l">takes (${s.takes.length})</label>`;
+  h += s.takes.slice().reverse().map(t => `<div class="ftk${t.key === s.pick ? " pick" : ""}" data-ftake="${esc(t.key)}" title="${esc(t.key)}">
+      ${t.poster ? `<img src="${esc(t.poster)}" alt="">` : ""}<div style="min-width:0"><div>${t.key === s.pick ? "&#9733; " : ""}${esc(t.label)} · ${(+t.dur || 0).toFixed(2)}s</div>
+      <div class="n" style="margin:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(t.key)}</div></div></div>`).join("") || `<div class="hint">no takes</div>`;
+  h += `<label class="l">more takes of this shot</label>
+    <div class="row"><select id="nvar"><option value="1">1 more take</option><option value="2" selected>2 more</option><option value="3">3 more</option><option value="4">4 more</option></select>
+      <button class="primary" id="morevars" ${s.spec.locked ? "disabled" : ""} title="same picture, same promises, new seeds - the cleanest is picked">make them</button></div>
+    <div class="n">Rendered by the film editor's pipeline against the shot's anchor and promises.</div>
+    <div class="row" style="margin-top:12px"><a href="/film?film=${encodeURIComponent(S.film)}&amp;shot=${encodeURIComponent(s.id)}">pick the film's take in the film editor &#8599;</a></div>`;
+  return h;
+}
+function paneAbout(s) {
+  const d = S.data || {};
+  return `<div style="font-weight:600;font-size:15px">${esc(d.title || S.film)}</div>
+    <div class="n">${S.shots.length} shots · ${fmt(S.runtime)} · ${S.shots.filter(x => x.spec.has).length} spec sheets · ${S.shots.filter(x => x.spec.locked).length} locked</div>
+    <p class="n" style="font-size:12.5px;color:var(--dim)">Films like this one are made in the film editor, which owns their takes and picks. This page reads them so their promises can be written, checked and locked beside the pictures - and so both kinds of film are reviewed the same way.</p>
+    <div class="row"><a href="/film?film=${encodeURIComponent(S.film)}">open it in the film editor &#8599;</a></div>
+    <p class="n">Classic spec sheet page: <a href="/specs/classic?film=${encodeURIComponent(S.film)}&amp;shot=${encodeURIComponent(s.id)}">/specs/classic</a></p>`;
+}
+function markTakes() {
+  const k = P.take ? P.take.key : null;
+  document.querySelectorAll("[data-ftake]").forEach(el => el.classList.toggle("on", el.dataset.ftake === k));
+}
+
+// ------------------------------------------------------------------ inspector bindings (shot scripts)
+// every handler looks the shot up when it fires: a save can swap in the server's copy of the script
+function bindScript(sid) {
+  const P_ = $("#insp"), SH = () => scriptShot(sid), s = cur(), ds = s ? s.raw : null;
+  if (!SH() || !s) return;
+  P_.querySelectorAll("[data-f]").forEach(el => {
+    el.oninput = el.onchange = () => {
+      const sh = SH(); if (!sh) return;
+      const k = el.dataset.f; let v = el.value;
+      if (k === "secs") { v = Math.max(1, Math.min(30, parseFloat(v) || 4)); if (sh.previz) sh.previz.seconds = v; }
+      if (k === "line" || k === "avoid_extra") { if (!v.trim()) delete sh[k]; else sh[k] = v; } else sh[k] = v;
+      if (k === "engine") { if (v === "previz" && !sh.previz) sh.previz = {scene: "aisle", seconds: sh.secs}; markDirty(); renderInsp(); return; }
+      if (/^(prompt|anchor|line)$/.test(k) && $("#coach")) $("#coach").innerHTML = coachHtml(sh);
+      markDirty();
+    };
+    el.addEventListener("blur", () => { if (S.dirty) autosave(); });
+  });
+  P_.querySelectorAll("[data-pz]").forEach(el => el.oninput = el.onchange = () => {
+    const sh = SH(); if (!sh) return;
+    sh.previz = sh.previz || {}; const k = el.dataset.pz;
+    if (k === "dress" && !el.value.trim()) delete sh.previz.dress; else sh.previz[k] = el.value;
+    sh.previz.seconds = sh.secs; markDirty();
+    if (el.tagName === "SELECT") renderInsp();
+  });
+  P_.querySelectorAll("input[name=compose]").forEach(el => el.onchange = () => {
+    const sh = SH(); if (!sh) return;
+    if (el.value === "1") {
+      sh.anchor = sh.anchor || "A still frame from a live-action film, a MEDIUM SHOT, the person of reference one in the place of reference three. " + (S.script.grade || "");
+      const who = Object.keys(S.script.cast)[0];
+      sh.refs = who ? [who, who, S.script.place.id] : [S.script.place.id, S.script.place.id, S.script.place.id];
+    } else { sh.anchor = null; sh.refs = [S.script.place.id]; }
+    markDirty(); renderInsp();
+  });
+  P_.querySelectorAll("[data-slot]").forEach(el => el.onchange = () => { const sh = SH(); if (!sh) return; sh.refs = sh.refs || []; sh.refs[+el.dataset.slot] = el.value; sh.refs = sh.refs.slice(0, 3); markDirty(); });
+  const ts_ = $("#tospec"); if (ts_) ts_.onclick = e => { e.preventDefault(); $("#sstitle").scrollIntoView({behavior: "smooth", block: "start"}); };
+  const du = $("#dupshot"); if (du) du.onclick = async () => {
+    if (S.dirty && !(await autosave())) return toast("Fix this first - " + SAVE.err);
+    const before = JSON.parse(JSON.stringify(S.script)), sh = SH();
+    const c = JSON.parse(JSON.stringify(sh)); c.id = idAfter(sh.id); c.title = (c.title || "") + " (copy)"; delete c.seedance; delete c.trim;
+    const arr = S.script.shots; arr.splice(arr.findIndex(x => x.id === sh.id) + 1, 0, c); S.sel = c.id;
+    saveScript(false, "duplicated as " + c.id, before);
+  };
+  const ml = $("#mvl"), mr = $("#mvr");
+  if (ml) ml.onclick = () => move(sid, -1);
+  if (mr) mr.onclick = () => move(sid, 1);
+  const dl = $("#delshot"); if (dl) dl.onclick = async () => {
+    if (S.dirty && !(await autosave())) return toast("Fix this first - " + SAVE.err);
+    const before = JSON.parse(JSON.stringify(S.script));
+    const arr = S.script.shots, i = arr.findIndex(x => x.id === sid); arr.splice(i, 1);
+    S.sel = (arr[i] || arr[i - 1] || {}).id || null;
+    saveScript(false, "deleted shot " + sid + " - its takes and spec sheet stay on disk", before);
+  };
+  // start frame
+  const fc = $("#fcomp"); if (fc) fc.onchange = () => { S.frameComp[sid] = fc.value; renderInsp(); };
+  const fs = $("#fseeds"); if (fs) fs.oninput = () => { S.frameSeeds = fs.value; };
+  const fd = $("#fdice"); if (fd) fd.onclick = () => { S.frameSeeds = dice(2); fs.value = S.frameSeeds; };
+  const fr = $("#freplace"); if (fr) fr.onchange = () => { S.frameReplace = fr.checked; };
+  const dfb = $("#drawframes"); if (dfb) dfb.onclick = () => {
+    const comp = S.frameComp[sid] || "qwen21", seeds = (S.frameSeeds || "11 202").trim().split(/[\s,]+/);
+    const have = new Set(((ds.anchors || {}).candidates || []).map(c => c.name));
+    const fresh = comp === "flux2" ? !have.has("flux2") : seeds.some(q => !have.has("qwen21_s" + q)) || (comp === "best" && !have.has("flux2"));
+    if (!fresh && !S.frameReplace) return toast("Those seeds are drawn already.", {action: {label: "roll new seeds", fn: () => { S.frameSeeds = dice(2); renderInsp(); }}});
+    runOp({op: "anchors", shots: [sid], compositor: comp, seeds: seeds.join(" "), force: !!S.frameReplace});
+  };
+  const dp = $("#drawplate"); if (dp) dp.onclick = () => runOp({op: "anchors", shots: [sid], compositor: "qwen21", seeds: "11"});
+  const ua = $("#upanchor"); if (ua) ua.onclick = () => pickFile({kind: "anchor", id: sid});
+  P_.querySelectorAll("[data-cand]").forEach(el => el.onclick = e => {
+    if (e.target.dataset.usecand) return;
+    stopPlayback(); vid.style.display = "none"; still.style.display = ""; still.src = el.dataset.url; $("#ph").style.display = "none";
+    $("#stillbadge").style.display = ""; $("#stillbadge").textContent = "start-frame candidate " + el.dataset.cand;
+  });
+  P_.querySelectorAll("[data-usecand]").forEach(el => el.onclick = async () => {
+    try { await api("/api/shots/anchor", {film: S.film, shot: sid, candidate: el.dataset.usecand}); toast("start frame set - takes rendered from now on start there", true); await loadData(true); loadPlayer(cur(), false); }
+    catch (e) { toast(e.message); }
+  });
+  // takes
+  const te = $("#teng"); if (te) te.onchange = () => { S.takeEng[sid] = te.value; renderInsp(); };
+  const tsd = $("#tseeds"); if (tsd) tsd.oninput = () => { S.takeSeeds = tsd.value; };
+  const td = $("#tdice"); if (td) td.onclick = () => { S.takeSeeds = dice(3); tsd.value = S.takeSeeds; };
+  const tr = $("#treplace"); if (tr) tr.onchange = () => { S.takeReplace = tr.checked; };
+  const rt = $("#rendertakes"); if (rt) rt.onclick = () => {
+    const sh = SH(), eng = S.takeEng[sid] || sh.engine || "ltx", seeds = (S.takeSeeds || "11 202 3003").trim().split(/[\s,]+/);
+    const stems = {ltx: ["shot"], h3: ["h3"], both: ["shot", "h3"], previz: ["pv"]}[eng] || ["shot"];
+    const have = new Set(ds.takes.map(t => t.take));
+    const fresh = stems.some(st => seeds.some(q => !have.has(`${st}_${sid}_s${q}.mp4`)));
+    if (!fresh && !S.takeReplace) return toast("Those seeds are rendered already.", {action: {label: "roll new seeds", fn: () => { S.takeSeeds = dice(3); renderInsp(); }}});
+    runOp({op: "takes", shots: [sid], engine: eng, seeds: seeds.join(" "), force: !!S.takeReplace});
+  };
+  const rk = $("#ranktakes"); if (rk) rk.onclick = () => runOp({op: "rank", shots: [sid]});
+  P_.querySelectorAll("[data-play]").forEach(el => el.onclick = () => { const t = s.takes.find(x => x.key === el.dataset.play); if (t) { stopPlayback(); playTake(s, t, true); } });
+  const pw = $("#pickwhy"); if (pw) pw.oninput = () => { S.pickWhy = {id: sid, text: pw.value}; };
+  P_.querySelectorAll("[data-pick]").forEach(el => el.onclick = () => pickTake(s, el.dataset.pick, pw ? pw.value : ""));
+  const tin = $("#trin"), tout = $("#trout"), pickT = s.takes.find(t => t.key === s.pick);
+  const onPick = () => pickT && vid.style.display !== "none" && vid.getAttribute("src") === pickT.url;
+  const mark = box => {
+    if (!onPick() || P.trim) { stopPlayback(); playTake(s, pickT, false, true); return toast("The whole take in the film is in the player - scrub or step to the frame you want, then press again.", true); }
+    vid.pause(); box.value = vid.currentTime.toFixed(2);
+  };
+  const si = $("#setin"); if (si) si.onclick = () => mark(tin);
+  const so = $("#setout"); if (so) so.onclick = () => mark(tout);
+  const svt = $("#savetrim"); if (svt) svt.onclick = () => {
+    const sh = SH(), a = Math.max(0, +tin.value || 0), b = +tout.value || 0, full = ds.take_secs || 0;
+    if (b && b < a + 0.2) return toast("The out point must be at least 0.2 s after the in point.");
+    const before = JSON.parse(JSON.stringify(S.script));
+    if (a < 0.02 && (!b || (full && b > full - 0.02))) delete sh.trim;
+    else sh.trim = {take: ds.pick, in: +a.toFixed(3), out: +(full ? Math.min(b, full) : b).toFixed(3)};
+    saveScript(false, sh.trim ? "trimmed: the film keeps " + ((sh.trim.out || full) - sh.trim.in).toFixed(2) + " s of this take" : "the whole take is in the film", before);
+  };
+  const ctr = $("#cleartrim"); if (ctr) ctr.onclick = () => { const before = JSON.parse(JSON.stringify(S.script)); delete SH().trim; saveScript(false, "the whole take is in the film", before); };
+  // seedance
+  const sp = $("#sdprompt"); if (sp) sp.oninput = () => { S.sdDraft = {id: sid, prompt: sp.value}; };
+  const secs = $("#sdsecs"); if (secs) secs.oninput = () => { const g = ds.suggest || {}; $("#sdcost").textContent = "about $" + ((+secs.value || 5) * (g.rate || 0.09)).toFixed(2) + " a take at $" + (g.rate || 0.09) + "/s (the 2.0 Fast rate; 2.5's is unverified)"; };
+  const kp = $("#sdkeep"); if (kp) kp.onclick = async () => {
+    try {
+      if (S.dirty && !(await autosave())) return toast("Fix this first - " + SAVE.err);
+      await api("/api/shots/seedance", {film: S.film, shot: sid, prompt: $("#sdprompt").value, secs: $("#sdsecs").value, why: ((ds.suggest || {}).reasons || [])[0] || "flagged in the editor"});
+      S.sdDraft = null; toast("kept in the Seedance notation for this shot", true); await loadData(true);
+    } catch (e) { toast(e.message); }
+  };
+  const cl = $("#sdclear"); if (cl) cl.onclick = async () => {
+    const old = SH().seedance;
+    try { await api("/api/shots/seedance", {film: S.film, shot: sid, prompt: ""}); await loadData(true);
+      toast("removed from the notation", {undo: async () => { await api("/api/shots/seedance", {film: S.film, shot: sid, prompt: old.prompt, secs: old.secs, why: old.why}); await loadData(true); }}); }
+    catch (e) { toast(e.message); }
+  };
+  const sd = $("#sdsend"); if (sd) sd.onclick = () => seedanceDialog(sid, ds);
+}
+function bindCast() {
+  const box = $("#insp");
+  box.querySelectorAll("[data-ref]").forEach(el => el.onclick = () => { S.openRef = S.openRef === el.dataset.ref ? null : el.dataset.ref; renderInsp(); });
+  box.querySelectorAll("[data-refprompt]").forEach(el => el.oninput = () => {
+    const id = el.dataset.refprompt; if (id === S.script.place.id) S.script.place.prompt = el.value; else S.script.cast[id].prompt = el.value; markDirty(); });
+  box.querySelectorAll("[data-refrole]").forEach(el => el.oninput = () => { S.script.cast[el.dataset.refrole].role = el.value; markDirty(); });
+  box.querySelectorAll("[data-refdice]").forEach(el => el.onclick = () => { el.closest(".refed").querySelector("[data-refseed]").value = dice(1); });
+  box.querySelectorAll("[data-reroll]").forEach(el => el.onclick = () => {
+    const ed = el.closest(".refed");
+    runOp({op: "cast", only: el.dataset.reroll, engine: ed.querySelector("[data-refengine]").value, seed: ed.querySelector("[data-refseed]").value});
+  });
+  box.querySelectorAll("[data-upref]").forEach(el => el.onclick = () => pickFile({kind: "ref", id: el.dataset.upref}));
+  box.querySelectorAll("[data-delref]").forEach(el => el.onclick = async () => {
+    const id = el.dataset.delref, users = S.script.shots.filter(x => (x.refs || []).includes(id)).map(x => x.id);
+    if (users.length) return toast(`${id} is in shot${users.length > 1 ? "s" : ""} ${users.join(", ")} - take ${users.length > 1 ? "them" : "it"} out of those first`);
+    if (S.dirty && !(await autosave())) return toast("Fix this first - " + SAVE.err);
+    const before = JSON.parse(JSON.stringify(S.script));
+    delete S.script.cast[id]; S.openRef = null;
+    saveScript(false, "removed " + id + " from the cast - the picture stays on disk", before);
+  });
+  const ac = $("#addchar"); if (ac) {
+    const nid = $("#newcharid"), nrole = $("#newcharrole"), m = $("#newcharmsg");
+    const check = () => {
+      const id = slugify(nid.value);
+      if (!nid.value.trim()) { m.className = "n"; m.textContent = "A short name (letters, digits, dashes); describe them once and make their picture here."; return null; }
+      if (!/^[a-z0-9][a-z0-9_-]{0,30}$/.test(id)) { m.className = "n avail bad"; m.textContent = "letters, digits and dashes only"; return null; }
+      if (S.script.cast[id] || id === S.script.place.id) { m.className = "n avail bad"; m.textContent = id + " is taken in this film"; return null; }
+      m.className = "n avail ok"; m.textContent = "adds \"" + id + "\" to the cast"; return id;
+    };
+    nid.oninput = check;
+    const add = async () => {
+      const id = check(); if (!id) return;
+      if (S.dirty && !(await autosave())) return toast("Fix this first - " + SAVE.err);
+      const before = JSON.parse(JSON.stringify(S.script));
+      S.script.cast[id] = {role: nrole.value.trim(), prompt: "Full-length reference photograph of a person against a plain mid-grey backdrop, even soft light, standing still, facing the camera, arms at the sides. ... " + (S.script.realism || "")};
+      S.openRef = id;
+      await saveScript(false, "added " + id + " - describe them, then make their picture", before);
+    };
+    ac.onclick = add;
+    [nid, nrole].forEach(el => el.onkeydown = e => { if (e.key === "Enter") { e.preventDefault(); add(); } });
+  }
+}
+function bindFilm(s) {
+  document.querySelectorAll("[data-ftake]").forEach(el => el.onclick = () => { const t = s.takes.find(x => x.key === el.dataset.ftake); if (t) { stopPlayback(); playTake(s, t, true); } });
+  const mv = $("#morevars"); if (mv) mv.onclick = () => moreVariants(s);
+}
+// a new shot's id sits between its neighbours (035 between 030 and 040) so the numbers keep reading in order
+function idAfter(prev) {
+  const arr = S.script.shots, taken = new Set(arr.map(x => x.id)), i = prev ? arr.findIndex(x => x.id === prev) : -1;
+  const a = prev ? parseInt(prev, 10) : 0, nx = arr[i + 1] ? parseInt(arr[i + 1].id, 10) : NaN;
+  const b = isNaN(nx) || nx <= a ? a + 20 : nx;
+  const mid = Math.floor((a + b) / 2), tries = [Math.round(mid / 5) * 5, mid];
+  for (let n = a + 1; n < b; n++) tries.push(n);
+  for (const n of tries) if (n > a && n < b && n <= 999 && !taken.has(String(n).padStart(3, "0"))) return String(n).padStart(3, "0");
+  let n = Math.min(Math.max(0, ...arr.map(x => parseInt(x.id, 10)).filter(x => !isNaN(x))) + 10, 990);
+  while (taken.has(String(n).padStart(3, "0")) && n < 999) n++;
+  return String(n).padStart(3, "0");
+}
+async function move(id, dir) {
+  if (S.dirty && !(await autosave())) return toast("Fix this first - " + SAVE.err);
+  const arr = S.script.shots, i = arr.findIndex(x => x.id === id), j = i + dir;
+  if (j < 0 || j >= arr.length) return;
+  const before = JSON.parse(JSON.stringify(S.script));
+  [arr[i], arr[j]] = [arr[j], arr[i]]; saveScript(false, "moved " + id, before);
+}
+
+// ================================================================== dialogs: new film, new shot, film settings, paid send, help
+function newFilmDialog(pre) {
+  pre = pre || {};
+  const scripts = S.films.filter(f => f.kind === "script");
+  const copyFrom = pre.from || (isScript() ? S.film : (scripts[0] || {}).id);
+  const opts = scripts.map(f => `<option value="${esc(f.id)}" ${f.id === copyFrom ? "selected" : ""}>${esc(f.title)}</option>`).join("");
+  openDialog({title: pre.from ? "Duplicate " + ((scripts.find(f => f.id === pre.from) || {}).title || pre.from) : "New film", ok: "create film", wide: false, body: `
+    <label class="l">title</label><input type="text" id="nf_title" placeholder="e.g. Night Bus" autocomplete="off">
+    <label class="l">name <span class="n" style="text-transform:none;letter-spacing:0">(used in its file names)</span></label>
+    <input type="text" id="nf_id" placeholder="night-bus" autocomplete="off"><div class="avail" id="nf_avail"></div>
+    <label class="l">in one line <span class="n" style="text-transform:none;letter-spacing:0">(optional - it goes on the title card)</span></label>
+    <input type="text" id="nf_log" placeholder="A night driver picks up a passenger who knows her name." autocomplete="off">
+    <label class="l">start from</label>
+    <label class="opt ${pre.from ? "" : "on"}" data-o="blank"><input type="radio" name="nf_from" value="blank" ${pre.from ? "" : "checked"}>
+      <div class="grow"><b>A blank film</b><div class="d">A place and one character to describe, and two shots to write - the steps guide you from there.</div>
+      <div class="row" style="margin-top:6px"><span class="n">with the look and music of</span><select id="nf_look"><option value="">the default look</option>${opts}</select></div></div></label>
+    <label class="opt ${pre.from ? "on" : ""}" data-o="copy"><input type="radio" name="nf_from" value="copy" ${pre.from ? "checked" : ""}>
+      <div class="grow"><b>A copy of a film</b><div class="d">Its cast, place, shots, look and music tags - not its takes or picks. A way to try a variation without touching the original.</div>
+      <div class="row" style="margin-top:6px"><select id="nf_src">${opts}</select>
+        <label class="chk"><input type="checkbox" id="nf_refs" checked> bring its cast &amp; place pictures too</label></div></div></label>`,
+    init: b => {
+      const title = b.querySelector("#nf_title"), id = b.querySelector("#nf_id"), av = b.querySelector("#nf_avail");
+      let touched = false;
+      const check = () => {
+        const v = id.value.trim(), taken = takenNames();
+        if (!v) { av.className = "avail"; av.textContent = ""; return false; }
+        if (!/^[a-z0-9][a-z0-9-]{1,40}$/.test(v)) { av.className = "avail bad"; av.textContent = "lowercase letters, digits and dashes, at least two characters"; return false; }
+        if (taken.has(v)) { av.className = "avail bad"; av.textContent = "✗ " + v + " is taken" + (S.archived.some(a => a.film === v) ? " by an archived film - restore it from the film list" : ""); return false; }
+        av.className = "avail ok"; av.textContent = "✓ " + v + " is free"; return true;
+      };
+      title.oninput = () => { if (!touched) id.value = slugify(title.value); check(); };
+      id.oninput = () => { touched = true; id.value = id.value.toLowerCase().replace(/[^a-z0-9-]/g, "-"); check(); };
+      b.querySelectorAll(".opt").forEach(o => o.onclick = () => { b.querySelectorAll(".opt").forEach(x => x.classList.toggle("on", x === o)); o.querySelector("input[type=radio]").checked = true; });
+      if (pre.from) {
+        const t = (scripts.find(f => f.id === pre.from) || {}).title || pre.from;
+        title.value = t + " (variation)"; id.value = slugify(pre.from + "-2"); let n = 2;
+        while (takenNames().has(id.value)) id.value = slugify(pre.from + "-" + (++n));
+        check();
+      }
+      DLG.check = check;
+    },
+    onOk: async b => {
+      const title = b.querySelector("#nf_title").value.trim(), id = b.querySelector("#nf_id").value.trim();
+      if (!title) throw new Error("Give the film a title.");
+      if (!DLG.check()) throw new Error("Choose a free name for it.");
+      const copy = b.querySelector("input[name=nf_from]:checked").value === "copy";
+      const body = {film: id, title, logline: b.querySelector("#nf_log").value.trim()};
+      if (copy) { body.from = b.querySelector("#nf_src").value; body.copy_refs = b.querySelector("#nf_refs").checked; }
+      else if (b.querySelector("#nf_look").value) body.look_from = b.querySelector("#nf_look").value;
+      if (S.dirty && !(await autosave())) throw new Error("This film has a change that cannot be saved: " + SAVE.err);
+      const r = await api("/api/shots/new", body);
+      await loadFilms();
+      await selectFilm("script:" + id);
+      toast(`${title} is ready` + (r.copied_refs && r.copied_refs.length ? " - with " + r.copied_refs.join(", ") + "'s pictures" : ""), true);
+    }});
+}
+function newShotDialog() {
+  if (!S.script) return;
+  const sc = S.script, cast = Object.keys(sc.cast), d = S.data, M = d.models;
+  const noun = id => { const p = ((sc.cast[id] || {}).prompt || "").toLowerCase(); return /\b(woman|girl|lady|she|her)\b/.test(p) ? "woman" : /\b(man|boy|he|his)\b/.test(p) ? "man" : "person"; };
+  const after = S.sel || (sc.shots[sc.shots.length - 1] || {}).id || "";
+  openDialog({title: "New shot", ok: "add shot", wide: true, body: `
+    <div class="row"><div class="grow"><label class="l">title</label><input type="text" id="ns_title" placeholder="e.g. the door" autocomplete="off"></div>
+      <div><label class="l">goes</label><select id="ns_after">${sc.shots.map(x => `<option value="${esc(x.id)}" ${x.id === after ? "selected" : ""}>after ${esc(x.id)} ${esc(x.title || "")}</option>`).join("")}<option value="" ${sc.shots.length ? "" : "selected"}>at the start</option></select></div></div>
+    <label class="l">who is in it <span class="n" style="text-transform:none;letter-spacing:0">(up to two; none = the place alone)</span></label>
+    <div class="chips" id="ns_who">${cast.map(id => `<span class="chip" data-who="${esc(id)}">${(d.refs[id] || {}).url ? `<img src="${esc(d.refs[id].url)}" alt="">` : ""}${esc(id)}<span class="n" style="margin:0">${esc(sc.cast[id].role || "")}</span></span>`).join("") || `<span class="n">no cast yet - add characters on the Cast tab</span>`}</div>
+    <div class="row" style="margin-top:4px"><div><label class="l">shot size</label><div class="seg3" id="ns_size"><button type="button" data-v="WIDE SHOT">wide</button><button type="button" data-v="MEDIUM SHOT" class="on">medium</button><button type="button" data-v="CLOSE-UP">close-up</button></div></div>
+      <div><label class="l">camera</label><select id="ns_cam"><option>Static camera</option><option>A slow push-in</option><option>Handheld camera, a faint float</option><option>The camera drifts slowly</option><option>The camera tracks with the movement</option></select></div>
+      <div><label class="l">seconds</label><div class="row"><input type="range" id="ns_secs" min="2" max="10" value="4" style="padding:0;border:0;background:none;width:110px"><span id="ns_secsv">4 s</span></div></div>
+      <div><label class="l">engine</label><select id="ns_eng">${optList(M.engine, "ltx")}</select></div></div>
+    <label class="l">what happens - one beat</label>
+    <textarea id="ns_what" rows="3" placeholder="She lets go of the strap and steps back as the stack groans above her."></textarea>
+    <label class="l">what we hear <span class="n" style="text-transform:none;letter-spacing:0">(put a spoken line in "quotes")</span></label>
+    <input type="text" id="ns_sound" placeholder="rain on the roof, the strap creaking, her breath" autocomplete="off">
+    <label class="l">it will be written as</label><div class="preview" id="ns_prev"></div>`,
+    init: b => {
+      const who = new Set();
+      const build = () => {
+        const size = b.querySelector("#ns_size .on").dataset.v, chars = [...who], place = sc.place.id;
+        const refs = !chars.length ? [place] : chars.length === 1 ? [chars[0], chars[0], place] : [chars[0], chars[1], place];
+        const people = chars.length === 1 ? `the ${noun(chars[0])} of reference one` : `the ${noun(chars[0])} of reference one and the ${noun(chars[1])} of reference two`;
+        const anchor = chars.length ? `A still frame from a live-action film, a ${size}, ${people} in the place of reference three. ${sc.grade || ""}`.trim() : null;
+        const what = b.querySelector("#ns_what").value.trim(), sound = b.querySelector("#ns_sound").value.trim();
+        const sentence = t => t ? t.charAt(0).toUpperCase() + t.slice(1) + (/[.!?"]$/.test(t) ? "" : ".") : "";
+        const prompt = [sentence(what || "…"), sentence(b.querySelector("#ns_cam").value), sentence(sound || "Room tone"), "No music."].join(" ");
+        const eng = b.querySelector("#ns_eng").value, secs = +b.querySelector("#ns_secs").value;
+        const face = !chars.length ? "none" : size === "WIDE SHOT" ? "wide" : size === "CLOSE-UP" ? "close" : "medium";
+        const quoted = (sound.match(/"([^"]{2,})"/) || what.match(/"([^"]{2,})"/) || [])[1];
+        return {refs, anchor, prompt, face, engine: eng, secs, line: quoted};
+      };
+      const show = () => { const x = build(); b.querySelector("#ns_prev").textContent = (x.anchor ? "start frame: " + x.anchor + "\n\n" : "start frame: the place's plate, nobody in it\n\n") + "what happens: " + x.prompt + (x.line ? `\n\nline to check: "${x.line}"` : ""); };
+      b.querySelectorAll("[data-who]").forEach(c => c.onclick = () => {
+        const id = c.dataset.who;
+        if (who.has(id)) who.delete(id); else { if (who.size >= 2) { const first = [...who][0]; who.delete(first); b.querySelector(`[data-who="${first}"]`).classList.remove("on"); } who.add(id); }
+        c.classList.toggle("on", who.has(id)); show();
+      });
+      if (cast.length) { who.add(cast[0]); b.querySelector(`[data-who="${cast[0]}"]`).classList.add("on"); }
+      b.querySelectorAll("#ns_size button").forEach(x => x.onclick = () => { b.querySelectorAll("#ns_size button").forEach(y => y.classList.toggle("on", y === x)); show(); });
+      b.querySelector("#ns_secs").oninput = e => { b.querySelector("#ns_secsv").textContent = e.target.value + " s"; };
+      ["#ns_what", "#ns_sound", "#ns_cam", "#ns_eng"].forEach(q => b.querySelector(q).addEventListener("input", show));
+      show();
+      DLG.build = build;
+    },
+    onOk: async b => {
+      const title = b.querySelector("#ns_title").value.trim(), what = b.querySelector("#ns_what").value.trim();
+      if (!what) throw new Error("Say what happens - one beat is enough.");
+      if (S.dirty && !(await autosave())) throw new Error("This film has a change that cannot be saved: " + SAVE.err);
+      const x = DLG.build(), before = JSON.parse(JSON.stringify(S.script));
+      const afterId = b.querySelector("#ns_after").value, id = idAfter(afterId);
+      const shot = {id, title: title || what.split(/[,.;]/)[0].slice(0, 40).toLowerCase(), secs: x.secs, engine: x.engine, face: x.face, refs: x.refs, anchor: x.anchor, prompt: x.prompt};
+      if (x.line) shot.line = x.line;
+      if (x.engine === "previz") shot.previz = {scene: "aisle", seconds: x.secs};
+      const arr = S.script.shots, at = afterId ? arr.findIndex(y => y.id === afterId) + 1 : 0;
+      arr.splice(at, 0, shot);
+      S.sel = id; S.tab.script = "frame";
+      if (!(await saveScript(false, "added shot " + id + " - next, its start frame", before))) throw new Error("It could not be added - see the message.");
+    }});
+}
+function filmSettingsDialog() {
+  const sc = S.script; if (!sc) return;
+  const f = (k, rows, label, note) => `<label class="l">${label}</label><textarea data-k="${k}" rows="${rows}">${esc(sc[k] || "")}</textarea>${note ? `<div class="n">${note}</div>` : ""}`;
+  openDialog({title: "Film settings - " + (sc.title || S.film), ok: "save", wide: true, body: `
+    <label class="l">title</label><input type="text" data-k="title" value="${esc(sc.title || "")}">
+    <label class="l">in one line</label><input type="text" data-k="logline" value="${esc(sc.logline || "")}">
+    ${f("grade", 3, "look", "New shots start with these words; the physics dressing ends with them.")}
+    ${f("avoid", 3, "avoid", "The negative for every shot.")}
+    ${f("score_tags", 2, "music, first cue", "ACE-Step tags for the score bed.")}
+    ${f("score_tags_b", 2, "music, second cue", "Past 44 s the bed is two cues crossfaded; empty = the first cue's tags again.")}
+    ${f("realism", 2, "realism", "Appended to new character descriptions.")}`,
+    onOk: async b => {
+      const before = JSON.parse(JSON.stringify(S.script));
+      b.querySelectorAll("[data-k]").forEach(el => { S.script[el.dataset.k] = el.value; });
+      if (!(await saveScript(false, "film settings saved", before))) throw new Error("Not saved - see the message.");
+    }});
+}
+function seedanceDialog(sid, ds) {
+  const g = ds.suggest || {}, secsV = +$("#sdsecs").value || g.secs || 5, res = $("#sdres").value, cost = (secsV * (g.rate || 0.09)).toFixed(2), prompt = $("#sdprompt").value;
+  openDialog({title: "Send shot " + sid + " to Seedance 2.5", ok: "spend about $" + cost + " and send", okClass: "sdbtn", body: `
+    <p style="margin:8px 0">This is the paid engine. It <b>spends credits</b> - about <b>$${cost}</b> for ${secsV} s at ${esc(res)}, at the last verified rate ($${g.rate || 0.09}/s, the 2.0 Fast rate; 2.5's may differ).</p>
+    <p class="n">It needs somebody signed in to a Comfy account at http://192.168.0.45:8188. The take lands in Takes as sd_${esc(sid)}_s11.mp4, measured and pickable like the others, and the title card will say a paid engine made it.</p>
+    <label class="l">the prompt it will get</label><div class="preview">${esc(prompt)}</div>`,
+    onOk: async () => {
+      await api("/api/shots/seedance", {film: S.film, shot: sid, prompt, secs: secsV, why: (g.reasons || [])[0] || "sent from the editor"});
+      await runOp({op: "seedance", shots: [sid], resolution: res, confirm_paid: true});
+    }});
+}
+function helpDialog() {
+  openDialog({title: "Shots & Specs", ok: "close", wide: true, body: `
+    <div class="keys"><span class="kbd">space</span><span>play or pause - the whole film rolls on, shot into shot</span>
+      <span><span class="kbd">&larr;</span> <span class="kbd">&rarr;</span></span><span>one frame back or forward</span>
+      <span><span class="kbd">[</span> <span class="kbd">]</span></span><span>previous or next shot</span>
+      <span><span class="kbd">Ctrl</span> <span class="kbd">S</span></span><span>save the spec sheet</span>
+      <span><span class="kbd">Ctrl</span> <span class="kbd">Z</span></span><span>undo the last add, delete, move, trim or cast change (outside a text field)</span>
+      <span class="kbd">?</span><span>this help</span></div>
+    <label class="l">how a shot gets made</label>
+    <ol class="steps">
+      <li><b>Cast &amp; place.</b> One picture each, made on the Cast tab (Flux 2, Krea 2, Qwen) or uploaded.</li>
+      <li><b>Words.</b> The + card asks who is in the shot, how big, what happens, the camera and the sound - and writes them the way the demo films were written.</li>
+      <li><b>Promises.</b> The spec sheet under the player: what the shot must never lose, why, and a CHECK where one can run.</li>
+      <li><b>Start frame.</b> Candidates on a few seeds; faces are scored against the cast pictures.</li>
+      <li><b>Takes.</b> LTX-2.5, H3, both, or the physics engine. Each take is measured: face, line, sound, camera.</li>
+      <li><b>Pick, trim, lock.</b> Check the takes against the promises, use one (say why), trim it, lock the shot.</li>
+      <li><b>Music, assemble, run checks.</b> The next-step bar says what each shot still needs.</li>
+    </ol>
+    <label class="l">the spec sheet</label>
+    <div class="n" style="font-size:12.5px"><b style="color:var(--gold)">## MUST NEVER CHANGE</b> the promises · <b style="color:#8fd0a6">## CAN CHANGE</b> flair, free to move ·
+      <code>MAKE PERMANENT</code> under a flair promotes it · <code>WHY:</code> the reason · <code>CHECK:</code> engine is ltx | h3 | previz, camera is static | pushes in,
+      duration between 3 and 5, anchor contains qwen21, qc is clean. Locking records the take the film uses; the page then refuses to change it, and run checks fails if it ever does.</div>
+    <p class="n">Nothing here asks through a browser pop-up: deletions come with undo, edits save themselves, an unsaved spec sheet is kept as a draft in this browser, and the only confirmation left is the price of the paid engine.</p>`,
+    onOk: async () => true});
+  $("#dlgcancel").hidden = true;
+  $("#dlg").addEventListener("close", () => { $("#dlgcancel").hidden = false; }, {once: true});
+}
+$("#helpbtn").onclick = helpDialog;
+$("#howlink").onclick = e => { e.preventDefault(); helpDialog(); };
+async function archiveFilm() {
+  const film = S.film, title = (S.films.find(f => f.key === "script:" + film) || {}).title || film;
+  if (S.dirty && !(await autosave())) return toast("Fix this first - " + SAVE.err);
+  try {
+    await api("/api/shots/archive", {film});
+    await loadFilms();
+    const next = S.films.find(f => f.kind === "script") || S.films[0];
+    if (next) await selectFilm(next.key);
+    toast(title + " is archived - its renders and spec sheets stay on disk", {undo: () => restoreFilm(film)});
+  } catch (e) { toast(e.message); }
+}
+async function restoreFilm(film) {
+  try { await api("/api/shots/restore", {film}); closePops(); await loadFilms(); await selectFilm("script:" + film); toast("restored", true); }
+  catch (e) { toast(e.message); }
+}
+
+// ------------------------------------------------------------------ film-editor films: more takes, the measured line
+let MORE = null;
+async function moreVariants(s) {
+  const n = parseInt($("#nvar").value || "2", 10);
+  msg("making " + n + " more of shot " + s.id + " - same picture, same promises, new seeds...");
+  let r;
+  try { r = await api("/api/film/make", {film: S.film, shot: s.id, variants: n}); } catch (e) { msg("could not start: " + e.message, "err"); return; }
+  if (!r || !r.job) { msg("could not start: " + ((r || {}).error || "unknown"), "err"); return; }
+  MORE = r.job;
+  const tick = async () => {
+    const j = ((await api("/api/film/jobs").catch(() => ({jobs: []}))).jobs || []).find(x => x.id === MORE);
+    if (!j) { msg("the job is no longer listed"); return; }
+    const last = (j.log || []).slice(-1)[0] || "";
+    if (j.state === "running") { msg("making more of " + s.id + ": " + last.slice(0, 120)); setTimeout(tick, 6000); return; }
+    msg(j.error ? "stopped: " + j.error : "done: " + last.slice(0, 160), j.error ? "err" : "");
+    MORE = null; loadData(true);
+  };
+  setTimeout(tick, 4000);
+}
+async function measuredLine() {
+  try {
+    const d = (await api("/api/film/" + encodeURIComponent(S.film) + "/shot/" + encodeURIComponent(S.sel))).shot;
+    const tk = (d.takes || []).find(t => t.id === d.picked); if (!tk) return;
+    const cam = (tk.cam_measured || {}).camera, idn = tk.identity || {}, am = tk.angle_measured || {}, hc = idn.hold_curve || null;
+    const bits = [];
+    if (cam) bits.push("camera, measured: " + cam);
+    if (idn.verdict_end || idn.verdict_start) bits.push("face: " + (idn.verdict_end || idn.verdict_start) + (idn.end != null ? " (" + idn.start + " → " + idn.end + ")" : ""));
+    if (am.angle && am.confidence && am.confidence !== "none") bits.push("angle: " + am.angle);
+    if (hc && hc.lost_at != null) bits.push("the face holds " + hc.holds_until + "s of " + hc.duration);
+    else if (hc && hc.holds) bits.push("the face holds throughout");
+    S.measured = bits.join(" · ");
+    const el = $("#measured"); if (el) el.textContent = S.measured;
+  } catch (e) {}
+}
+
+// ------------------------------------------------------------------ jobs (shot scripts)
+function job(j) {
+  S.job = j;
+  const on = j && j.running;
+  $("#job").classList.toggle("on", !!on);
+  if (on) {
+    const el = Math.max(0, Math.round(Date.now() / 1000 - (j.started || Date.now() / 1000)));
+    const pr = j.total ? ` · ${Math.min(j.done || 0, j.total)} of ${j.total}` : "";
+    $("#jobtx").textContent = `${j.op}${j.shots && j.shots.length ? " " + j.shots.join(",") : ""}${pr} · ${Math.floor(el / 60)}:${String(el % 60).padStart(2, "0")}`;
+    $("#jobtx").title = j.now || "";
+    $("#jbarw").hidden = !j.total; if (j.total) $("#jbar").style.width = Math.min(100, 100 * (j.done || 0) / j.total) + "%";
+  } else {
+    $("#jobtx").textContent = j && j.returncode != null ? `last job: ${j.op || ""} ${j.returncode === 0 ? "finished" : "exited " + j.returncode}` : "idle";
+    $("#jobtx").title = ""; $("#jbarw").hidden = true;
+  }
+  $("#jobstop").style.display = on ? "" : "none";
+  if ($("#logbox").style.display === "block") { $("#logpre").textContent = (j && j.log) || ""; $("#logpre").scrollTop = 1e9; }
+  if (on) startPoll();
+  if (S.wasRunning && !on && isScript()) {
+    loadData(true).then(() => { const c = cur(); if (c && vid.paused && !P.still) loadPlayer(c, false); });
+    if (j.returncode) toast("the job stopped with an error", {action: {label: "open the log", fn: () => $("#joblog").click()}});
+    else toast("done: " + j.op, true);
+  }
+  S.wasRunning = !!on;
+}
+function startPoll() {
+  if (S.poll) return;
+  S.poll = setInterval(async () => {
+    try {
+      const j = await api("/api/shots/status");
+      if (!j.running) { clearInterval(S.poll); S.poll = null; }
+      job(j);
+      if (j.running && isScript()) renderCards();
+    } catch (e) {}
+  }, 2000);
+}
+$("#joblog").onclick = async () => { try { const j = await api("/api/shots/status"); $("#logbox").style.display = "block"; $("#logtitle").textContent = "log - " + (j.op || "last job"); $("#logpre").textContent = j.log || "no log yet"; $("#logpre").scrollTop = 1e9; } catch (e) { toast(e.message); } };
+$("#logclose").onclick = () => $("#logbox").style.display = "none";
+$("#jobstop").onclick = () => arm($("#jobstop"), "stop it?", async () => { try { await api("/api/shots/stop", {}); toast("stopping", true); } catch (e) { toast(e.message); } });
+$("#music").onclick = () => {
+  const go = () => runOp({op: "music"});
+  if (S.music.length) arm($("#music"), "replace the score?", go); else go();
+};
+$("#assemble").onclick = () => runOp({op: "assemble", master: false});
+$("#assemble2x").onclick = () => runOp({op: "assemble", master: true});
+function renderOuts() {
+  if (!isScript() || !S.data) return;
+  const o = S.data.outputs || {};
+  const links = [["final", "the final cut"], ["final2x", "the 2x master"], ["annotated", "the annotated cut"]].filter(([k]) => o[k]).map(([k, l]) => `<a href="${esc(o[k])}" target="_blank">${l}</a>`);
+  const locked = S.shots.filter(x => x.spec.locked).length, specs = S.shots.filter(x => x.spec.has).length;
+  $("#outbox").innerHTML = `<b style="font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim)">the film</b>
+    <div style="margin-top:4px">${links.join(" &middot; ") || `<span class="hint">not assembled yet - pick a take for every shot, then assemble</span>`}</div>
+    <div class="n" style="margin-top:4px">${specs} of ${S.shots.length} shots have a spec sheet · ${locked} locked · ${S.shots.filter(x => x.pick).length} have a take in the film${S.music.length ? " · a score bed" : " · no score yet"}</div>`;
+}
+
+// ------------------------------------------------------------------ uploads
+let upTarget = null;
+function pickFile(t) { upTarget = t; $("#filepick").value = ""; $("#filepick").click(); }
+$("#filepick").onchange = () => {
+  const f = $("#filepick").files[0]; if (!f || !upTarget) return;
+  const rd = new FileReader();
+  rd.onload = async () => {
+    try { await api("/api/shots/upload", {film: S.film, kind: upTarget.kind, id: upTarget.id, dataurl: rd.result}); toast("picture in place", true); await loadData(true); const c = cur(); if (c) loadPlayer(c, false); }
+    catch (e) { toast(e.message); }
+  };
+  rd.readAsDataURL(f);
+};
+
+// ------------------------------------------------------------------ the media browser (film-editor films, from /specs)
+let MEDIA = [], MSTATE = PREF.get("mstate", "using"), MSEL = null, MBOOK = PREF.get("mbook", {});
+const fmtSize = n => n > 1048576 ? (n / 1048576).toFixed(1) + " MB" : Math.max(1, Math.round(n / 1024)) + " KB";
+async function loadMedia() {
+  if (PREF.get("mfold", false)) $("#mbody").classList.add("hide");
+  let d;
+  try { d = await api("/api/spec/media/" + encodeURIComponent(S.film)); } catch (e) { d = {groups: []}; }
+  MEDIA = d.groups || [];
+  $("#mcount").textContent = MEDIA.map(g => `${g.state} ${g.count}`).join("  ·  ") || (d.error || "nothing");
+  $("#mfilt").innerHTML = MEDIA.map(g => `<button data-s="${esc(g.state)}">${esc(g.state)}</button>`).join("") + `<input id="mq" placeholder="filter by name">`;
+  $("#mfilt").querySelectorAll("[data-s]").forEach(b => b.onclick = () => setMState(b.dataset.s));
+  const mq = $("#mq"); if (mq) mq.oninput = drawMedia;
+  if (!MEDIA.some(g => g.state === MSTATE && g.count)) MSTATE = (MEDIA.find(g => g.count) || {}).state || "palette";
+  setMState(MSTATE);
+}
+$("#mhead").onclick = () => { const h = $("#mbody").classList.toggle("hide"); PREF.set("mfold", h); };
+function setMState(st) {
+  MSTATE = st; PREF.set("mstate", st);
+  $("#mfilt").querySelectorAll("[data-s]").forEach(b => b.classList.toggle("on", b.dataset.s === st));
+  drawMedia();
+  const back = MBOOK[st]; if (back && findMedia(back)) pickMedia(back);
+}
+function drawMedia() {
+  const g = MEDIA.find(x => x.state === MSTATE) || {items: []}, q = (($("#mq") || {}).value || "").toLowerCase();
+  const rows = g.items.filter(i => !q || i.name.toLowerCase().includes(q) || i.folder.toLowerCase().includes(q));
+  $("#mlist").innerHTML = rows.map(i => `<div class="mrow${MSEL && MSEL.rel === i.rel ? " on" : ""}" data-rel="${esc(i.rel)}"><span class="k">${esc(i.kind)}</span>
+      <span class="nm" title="${esc(i.rel)}">${i.folder && i.folder !== "." ? esc(i.folder) + "/" : ""}${esc(i.name)}</span>
+      ${i.used_by.length ? `<span class="u">${esc(i.used_by.join(" "))}</span>` : ""}</div>`).join("") || `<div class="mrow"><span class="nm">nothing matches</span></div>`;
+  $("#mlist").querySelectorAll("[data-rel]").forEach(el => el.onclick = () => pickMedia(el.dataset.rel));
+}
+function findMedia(rel) { for (const g of MEDIA) { const i = g.items.find(x => x.rel === rel); if (i) return i; } return null; }
+function pickMedia(rel) {
+  const i = findMedia(rel); if (!i) return;
+  MSEL = i; MBOOK[MSTATE] = rel; PREF.set("mbook", MBOOK); drawMedia();
+  const used = i.used_by.length ? `<div class="used">used in <b>${esc(i.used_by.join(", "))}</b></div>` : `<div class="meta">not named by any shot's spec or takes</div>`;
+  const meta = `<div class="meta">${esc(i.kind)} · ${fmtSize(i.size)}<br>${esc(i.rel)}</div>`;
+  if (i.kind === "image") { $("#pal").pause(); $("#mprev").innerHTML = `<div class="fn">${esc(i.name)}</div><img src="${esc(mediaUrl(i.url))}" alt="">${meta}${used}`; return; }
+  $("#mprev").innerHTML = `<div class="fn">${esc(i.name)}</div>
+    <div class="pctl"><button class="play" id="palpp">&#9654; play</button><button id="palb">&minus;5s</button><button id="palf">+5s</button>
+     <span class="tstamp" id="palclock" title="click to copy">0:00.000</span></div>
+    <input type="range" class="scrub" id="palscrub" min="0" max="1000" value="0">${meta}${used}`;
+  const a = $("#pal"); a.src = mediaUrl(i.url); a.currentTime = 0;
+  $("#palpp").onclick = () => { a.paused ? a.play().catch(() => {}) : a.pause(); };
+  $("#palb").onclick = () => { a.currentTime = Math.max(0, a.currentTime - 5); };
+  $("#palf").onclick = () => { a.currentTime = a.currentTime + 5; };
+  $("#palclock").onclick = () => copyStamp($("#palclock"));
+  $("#palscrub").addEventListener("input", e => { if (a.duration) a.currentTime = a.duration * (+e.target.value / 1000); });
+}
+$("#pal").addEventListener("timeupdate", () => {
+  const c = $("#palclock"), sc = $("#palscrub"), a = $("#pal");
+  if (c && c.textContent !== "copied") c.textContent = stamp(a.currentTime) + (a.duration ? " / " + stamp(a.duration) : "");
+  if (sc && a.duration) sc.value = Math.round(1000 * a.currentTime / a.duration);
+});
+$("#pal").addEventListener("play", () => { const b = $("#palpp"); if (b) b.innerHTML = "&#10074;&#10074; pause"; });
+$("#pal").addEventListener("pause", () => { const b = $("#palpp"); if (b) b.innerHTML = "&#9654; play"; });
+
+// ------------------------------------------------------------------ keys, leaving, boot
+$("#newfilm").onclick = () => newFilmDialog();
+document.addEventListener("keydown", e => {
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "s") {
+    e.preventDefault();
+    if (MD.dirty) saveSpec(); else if (S.dirty) autosave();
+    return;
+  }
+  if ($("#dlg").open) return;
+  const tag = document.activeElement.tagName;
+  if (e.key === "Escape") { closePops(); $("#logbox").style.display = "none"; return; }
+  if (/INPUT|TEXTAREA|SELECT/.test(tag)) return;      // a field's own Ctrl+Z undoes its typing
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "z" && isScript()) { e.preventDefault(); undoLast(); return; }
+  if (e.key === " ") { if (tag === "BUTTON") return; e.preventDefault(); togglePlay(); }
+  else if (e.key === "ArrowLeft") { e.preventDefault(); step(-1); }
+  else if (e.key === "ArrowRight") { e.preventDefault(); step(1); }
+  else if (e.key === "[" || e.key === "PageUp") { e.preventDefault(); $("#pshot").click(); }
+  else if (e.key === "]" || e.key === "PageDown") { e.preventDefault(); $("#nshot").click(); }
+  else if (e.key === "?") { e.preventDefault(); helpDialog(); }
+});
+// closing the tab loses nothing: the sheet is a draft already, and a pending script change goes out as a beacon
+window.addEventListener("pagehide", () => {
+  if (MD.dirty) saveDraftNow();
+  if (S.dirty && isScript() && S.script && navigator.sendBeacon)
+    navigator.sendBeacon("/api/shots/save", new Blob([JSON.stringify({film: S.film, script: S.script})], {type: "application/json"}));
+});
+
+(async function boot() {
+  setFs(PREF.get("fs", 15));
+  $("#captions").checked = PREF.get("captions", true);
+  const v0 = PREF.get("vol", null); if (v0 !== null) { $("#mvol").value = v0; }
+  bgm.volume = (+$("#mvol").value) / 100;
+  if (PREF.get("mmute", 0)) { $("#mmute").checked = true; bgm.muted = true; }
+  if (PREF.get("sheetshut", 0)) sheetShut(true);
+  try { await loadFilms(); } catch (e) { toast(e.message); return; }
+  const st = startingPoint();
+  if (!st.key) { toast("no films found"); return; }
+  await selectFilm(st.key, st.shot);
 })();
 </script>
 </body>

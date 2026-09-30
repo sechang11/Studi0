@@ -1,0 +1,44 @@
+{
+ "invariants": [
+  {
+   "id": "nobody_is_in_it",
+   "title": "Nobody is in it",
+   "rule": "No figure anywhere - the wall alone.",
+   "why": "The audience should wonder who is on which side."
+  },
+  {
+   "id": "the_wall_is_whole",
+   "title": "The wall is whole",
+   "rule": "The pile reaches higher than a man across the whole aisle.",
+   "why": "A gap in it would undo 070's promise that the aisle ends blocked."
+  },
+  {
+   "id": "it_is_ltx",
+   "title": "It is LTX",
+   "rule": "The take in the film is LTX-2.5's.",
+   "why": "The board's clatter comes with LTX's sound.",
+   "check": {
+    "kind": "engine",
+    "value": "ltx"
+   }
+  }
+ ],
+ "flair": [
+  {
+   "id": "take",
+   "title": "Take",
+   "note": "11"
+  },
+  {
+   "id": "the_board",
+   "title": "The board",
+   "note": "slides once, late in the shot"
+  }
+ ],
+ "shot": "090",
+ "title": "the wall",
+ "beat": "The aisle, blocked by the wall of broken crates. Nothing moves but settling dust and one board sliding down.",
+ "build": {
+  "script": "LTX-2.5 (70) from a Qwen-Image-2.1 start frame (qwen21_s11) · take 11"
+ }
+}

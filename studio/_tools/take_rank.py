@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """studio/_tools/take_rank.py - read every take of a shot script and suggest the picks, by measurement.
 
-For each take of each shot (shot_/h3_/pv_/pvb_<id>_s<seed>.mp4):
+For each take of each shot (shot_/h3_/pv_/pvb_/sd_<id>_s<seed>.mp4):
 
   face     each character's head on the LAST frame against the same character's head in the shot's
            own start frame - the yardstick §98.5b settled on (the studio-lit reference measures the
@@ -41,7 +41,7 @@ SILENT_DB = -55.0
 def takes_of(sid):
     out = []
     for f in sorted(os.listdir(fight.OUT)):
-        m = re.match(r"^(shot|h3|pv|pvb)_%s_s(\d+)\.mp4$" % sid, f)
+        m = re.match(r"^(shot|h3|pv|pvb|sd)_%s_s(\d+)\.mp4$" % sid, f)
         if m:
             out.append((m.group(1), int(m.group(2)), os.path.join(fight.OUT, f)))
     return out
@@ -125,7 +125,11 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--sequence", required=True)
     ap.add_argument("--no-asr", action="store_true")
+    ap.add_argument("--only-shots", default="", help="rank just these shots (the editor); the rest stay as ranked")
+    ap.add_argument("--replace-picks", action="store_true",
+                    help="overwrite picks.txt with the ranker's picks (default: only fill shots with no pick)")
     a = ap.parse_args()
+    only = {x.strip() for x in a.only_shots.split(",") if x.strip()}
     measured = {}
     mp = os.path.join(fight.OUT, "measured.json")
     if os.path.exists(mp):
@@ -135,6 +139,8 @@ def main():
     report, asr_jobs = {}, {}
     for s in fight.SHOTS:
         sid = s["id"]
+        if only and sid not in only:
+            continue
         tk = takes_of(sid)
         if not tk:
             continue
@@ -199,9 +205,24 @@ def main():
                               else "every take faulted; fewest faults (%s)" % "; ".join(best["faults"]))
         picks.append("%s=%s" % (sid, best["token"]))
         print("%s  pick %-8s %s" % (sid, best["token"], report[sid]["why"]), flush=True)
-    json.dump(report, open(os.path.join(fight.OUT, "ranked.json"), "w"), indent=1)
-    open(os.path.join(fight.OUT, "picks.txt"), "w").write(",".join(picks) + "\n")
-    print("PICKS " + ",".join(picks), flush=True)
+    # merge: shots not ranked this time keep their record
+    rp = os.path.join(fight.OUT, "ranked.json")
+    old = json.load(open(rp)) if os.path.exists(rp) else {}
+    old.update(report)
+    ordered = {s["id"]: old[s["id"]] for s in fight.SHOTS if s["id"] in old}
+    json.dump(ordered, open(rp, "w"), indent=1)
+    # picks.txt is the CUT, which a person may have chosen: the ranker only fills a shot with no pick
+    pp = os.path.join(fight.OUT, "picks.txt")
+    cur = {}
+    if os.path.exists(pp) and not a.replace_picks:
+        cur = dict(kv.split("=", 1) for kv in open(pp).read().strip().split(",") if "=" in kv)
+    for kv in picks:
+        sid, tok = kv.split("=", 1)
+        if a.replace_picks or sid not in cur:
+            cur[sid] = tok
+    line = ",".join("%s=%s" % (s["id"], cur[s["id"]]) for s in fight.SHOTS if s["id"] in cur)
+    open(pp, "w").write(line + "\n")
+    print("PICKS " + line, flush=True)
 
 
 if __name__ == "__main__":

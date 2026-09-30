@@ -292,3 +292,102 @@ walkthrough is `studio/samples/docs/DEMO_FILMS_WALKTHROUGH.pdf`. What changed in
 - **Delivery**: `--finish --master` (the upscale runs under the venv), then `film_cards.py --sequence FILM`
   for the title card, the 2x final and the annotated cut; `seedance_notation.py` for the prompts the paid
   engine would have been sent.
+
+
+## 2026-09-29: the shot editor (/shots)
+
+The page at http://192.168.0.45:8777/shots is now an editor over a shot script, laid out like a
+video editor: a timeline of the shots (sized by their takes, thumbnails from the take in the film,
+drag to reorder), a player that plays the cut - the picked takes in order, over the score, with the
+start frame standing in as a storyboard where a shot has no take yet - and, for the shot you are
+on, an inspector with four tabs. It runs the same tools the three demo films were made with, with
+the same flags, one job at a time, and shows their log. What each tab does:
+
+- **Shot** - the words: title, seconds, engine (LTX-2.5 `70`, H3 `67`, both, or Blender physics
+  `74` with its scene and its dressing words), how faces are measured, the three references in
+  order, what the start frame shows (or start on the plate), what happens, the line that must be
+  heard, the per-shot negative, and invariants (the spec sheet's promises, as a checklist for picking;
+  they are not sent to the models). A coach under the prompt flags a missing camera, sound, "No
+  music.", or a quoted line that is not in the line check.
+- **Start frame** - the compositor (Qwen-Image-2.1 `80` default, Flux 2 ref3 `75`, or both scored),
+  seeds and a dice, Draw; every candidate with its face score; Use one, or upload your own. A redraw
+  uses the best of what it just drew; older candidates stay one click away.
+- **Takes** - engine and seeds, Render (render, measure, rank in one job), every take with its strip,
+  face, line, level, camera, faults and notes; Use a take, with an optional reason that is printed on
+  the annotated cut and remembered if you switch back; trim the take in the film (in/out off the
+  player - the finish cuts it frame-exact, `_trim_*.mp4`, and the annotated cut says so).
+- **Seedance** - `seedance_suggest.py` reads the words and the measurements for what our engines
+  measurably struggle with (speed, an effect at an instant, contact, a crowd, a walk over distance, a
+  travelling camera, every take faulted) and says strong / consider / none with the reasons, and a
+  reference-mode prompt ([image 1] the start frame, [image 2] the character, [image 3] the place) to
+  keep in the script's notation. Sending is a separate button behind a price confirmation; nothing
+  paid runs otherwise. A paid take lands as `sd_<id>_s11.mp4` and is measured, picked and cut like
+  any other, and the title card's credit line then says so.
+
+Left panel: the cast and the place, each re-rollable on Flux 2 `40`, Krea 2 `77` or Qwen-Image-2.1
+`79` with a seed (`fight.py --cast --cast-engine E --only X --seed N`), or uploaded; the film's look,
+negative and score tags. Top bar: Write music (sized to the cut as picked and trimmed), Assemble, and
+Assemble + 2x master. Behind it, fight.py gained `--only-shots`, `--redraw`, `--cast-engine` and the
+trim; take_rank.py gained `--only-shots` and only fills a shot's pick if nobody has chosen one
+(`--replace-picks` restores the old behaviour); previz_shot.py takes its dressing words from the
+shot (`previz.dress`), so the physics route is no longer DEAD STOCK's alone. Tested end to end on a
+throwaway two-shot film, `editor-test`: every stage run from the page.
+
+
+## 2026-09-29, later: shots & specs - the spec sheet and the shot editor are one page
+
+/specs (the spec sheet the sour pickle cafe was written in) and /shots (the shot editor above) were
+two halves of one loop - write what a shot must keep, make takes, check the takes against it, pick,
+lock - on two pages, so the promises were never on screen while a take was being picked. They are
+one page now, at both addresses, with the spec sheet's look:
+
+- **Cards and a reel.** The spec sheet's poster cards (engine, promises, flair, lock or drift, and the
+  amber SD for a Seedance suggestion), and under them the whole film to scale - click it to go there.
+- **The player** is the spec sheet's, frame-exact (the scrub bar is in frames, arrows step one), with
+  continue-into-the-next-shot, loop, the music on the film's clock, and the demo films' caption band.
+  A shot with no take plays as its start frame for its length; a trimmed take plays in to out.
+- **The spec sheet** under the player is unchanged: MUST NEVER CHANGE / CAN CHANGE, WHY, CHECK,
+  MAKE PERMANENT, folds, minimap, sizes. For a shot-script film a new sheet is pre-filled from the
+  script (what happens, what built it, the take in the film). Checks now read shot-script films too
+  (`shotspec.script_view`): engine is ltx | h3 | previz | seedance, camera pushes in / is static
+  (cammeasure's numbers), qc is clean (take_rank's faults), anchor contains qwen21 | plate | previz.
+- **Lock** means the same on both kinds of film, and on a shot-script film it is enforced: a locked
+  shot cannot be re-picked, re-drawn, re-rendered, re-trimmed or deleted until it is unlocked.
+- **The right-hand panel** is the shot editor for shot-script films (Shot, Start frame, Takes with the
+  shot's promises listed as a checklist, Seedance, Cast), and for film-editor films a takes preview,
+  "make N more" and the measured line - their takes are still made and picked in /film.
+- The classic spec sheet stays at /specs/classic. DEAD STOCK has spec sheets for all twelve shots
+  as the worked example; run checks passes 21 of 22 and fails one honestly: 110's take is nearly
+  silent (-56 dB) under a promise that we hear her breathe.
+
+
+## 2026-09-29, last: shots & specs without browser pop-ups
+
+The page no longer asks anything through the browser's own prompt / confirm boxes:
+
+- **The film switcher** (the title at the top left) lists every film with a poster and its one line -
+  shot scripts first, film-editor films after, archived films at the bottom with **restore** - and
+  **+ new film** opens the page's own form: a title (the file name fills itself in and says whether
+  it is free), one line for the title card, and where to start - a blank film with the look and
+  music of a film you choose, or a copy of a film with or without its cast and place pictures
+  (`/api/shots/new` takes `title`, `logline`, `from`, `copy_refs`, `look_from`).
+- **The ... menu** holds the film's settings (title, look, negative, music tags, realism), duplicate,
+  and **archive** (`/api/shots/archive` moves the script to `shotscripts/_archive/`; renders and
+  spec sheets stay; `/api/shots/restore` brings it back).
+- **The + card** asks who is in the shot (their pictures as chips), how big, the camera, how long,
+  which engine, what happens and what we hear - and shows the words it will write, the way the
+  demo films are written, including the line to check if one is in quotes. The new shot's number
+  sits between its neighbours (015 between 010 and 020).
+- **Nothing is confirmed that can be undone.** Deleting or moving a shot, removing a character, a
+  trim, the cast: done at once, with **undo** in the message (it stays while the pointer is on it)
+  and **Ctrl+Z** afterwards. Stopping a job and replacing the score take a second click on the same
+  button. Lock is undone with "unlock"; lock saves an unsaved sheet first.
+- **Edits save themselves**: the Shot tab says "editing... / saving... / saved", or why not.
+  **An unsaved spec sheet is a draft**, kept per shot in the browser and restored when you come
+  back to the shot (the card says "draft"); **Ctrl+S** saves it. Leaving the page loses nothing.
+- **The next-step bar** above the player says the one thing the open shot needs next - make the
+  cast pictures, draw a start frame, render takes, pick (the ranker's suggestion as the button),
+  assemble when every shot has a take, write its promises, lock it - with the button that does it.
+- **Jobs show progress**: "takes 020 · 2 of 3 · 1:12", from the lines fight.py prints per picture
+  and take (`status` gives `total`, `done`, `now`).
+- The one confirmation left is the paid engine's: the page's own dialog, with the price on the button.

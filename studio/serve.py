@@ -1227,8 +1227,7 @@ STUDIO_NAV = [
         ("/start", "start here", "start.html"),
         ("/build", "build a shot", "build.html"),
         ("/film", "film editor", "film_editor.html"),
-        ("/specs", "spec sheet", "specs.html"),
-        ("/shots", "shot script", "shots.html"),
+        ("/shots", "shots & specs", "shots.html"),
         ("/verify/motion", "verify", "motion.html"),
     ]),
     ("library", [
@@ -1533,6 +1532,8 @@ class H(http.server.SimpleHTTPRequestHandler):
 
         # /specs - the promises each shot has to keep, editable in English
         if path == "/specs":
+            return self._page("shots.html")      # one page since 2026-09-29: shots & specs
+        if path == "/specs/classic":
             return self._page("specs.html")
         if path == "/api/spec" or path.startswith("/api/spec/"):
             sr = _spec_routes()
@@ -2707,6 +2708,8 @@ class H(http.server.SimpleHTTPRequestHandler):
                      "/api/film/compose", "/api/film/pin", "/api/film/triage", "/api/film/pinpreview", "/api/film/anchorcheck", "/api/film/coverage", "/api/film/make", "/api/film/makeall", "/api/film/quickstart", "/api/film/deletefilm", "/api/film/build",
                      "/api/spec/save", "/api/spec/new", "/api/spec/lock",
                      "/api/shots/save", "/api/shots/new", "/api/shots/run", "/api/shots/stop",
+                     "/api/shots/pick", "/api/shots/anchor", "/api/shots/seedance", "/api/shots/upload",
+                     "/api/shots/archive", "/api/shots/restore",
                      "/api/foundry/new", "/api/foundry/edit", "/api/foundry/delete",
                      "/api/foundry/seeds", "/api/foundry/repair", "/api/foundry/apply",
                      "/api/foundry/send", "/api/foundry/variant",

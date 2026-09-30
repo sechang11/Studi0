@@ -1,0 +1,42 @@
+{
+ "invariants": [
+  {
+   "id": "the_dust_clears",
+   "title": "The dust clears",
+   "rule": "The cloud arrives, then thins - by the end his face is clear.",
+   "why": "Measured: LTX lets an effect accumulate whatever the words say; H3 plateaus and clears. That is why this shot is H3.",
+   "check": {
+    "kind": "engine",
+    "value": "h3"
+   }
+  },
+  {
+   "id": "the_camera_is_still",
+   "title": "The camera is still",
+   "rule": "Static.",
+   "why": "The dust is the only thing moving; a camera move would muddy it.",
+   "check": {
+    "kind": "camera",
+    "want": "is static"
+   }
+  }
+ ],
+ "flair": [
+  {
+   "id": "take",
+   "title": "Take",
+   "note": "h3:202"
+  },
+  {
+   "id": "his_cough",
+   "title": "His cough",
+   "note": "one, late"
+  }
+ ],
+ "shot": "080",
+ "title": "the dust",
+ "beat": "The dust rolls over Hale and thins. He lowers his arm and squints through it.",
+ "build": {
+  "script": "MiniMax H3 (67) from a Qwen-Image-2.1 start frame (qwen21_s202) · take h3:202"
+ }
+}

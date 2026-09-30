@@ -5,6 +5,10 @@ A film's shots are already on a timeline in /film. What was missing is the other
 each shot: the promises it has to keep. This serves those as ENGLISH, editable in the
 browser, and writes them straight back to studio/shotspecs/<film>/<shot>.md.
 
+Since 2026-09-29 the same specs serve shot-script films too (studio/shotscripts/<film>.json,
+made on /shots with fight.py): a new spec is pre-filled from the script, a lock records the
+take picks.txt names, and the checker reads the script's takes through shotspec.script_view.
+
 The .md is the source of truth. The .json beside it is regenerated on every save, because
 the checker reads JSON and a person should never have to.
 
@@ -59,8 +63,19 @@ def films():
             sd = os.path.join(SPECS, f)
             n = len([x for x in os.listdir(sd) if x.endswith(".md")]) \
                 if os.path.isdir(sd) else 0
-            out.append({"id": f, "title": d.get("title", f),
-                        "shots": len(d.get("shots", {})), "specs": n})
+            # a picture for the film switcher: the first shot's picked take's poster
+            poster = ""
+            for sc in d.get("scenes", []):
+                for shid in sc.get("shots", []):
+                    sh = d.get("shots", {}).get(shid) or {}
+                    tk = next((t for t in sh.get("takes", []) if t.get("id") == sh.get("picked")), None)
+                    if tk and tk.get("poster"):
+                        poster = "/film/media/%s/%s" % (f, tk["poster"])
+                        break
+                if poster:
+                    break
+            out.append({"id": f, "title": d.get("title", f), "logline": d.get("logline", ""),
+                        "shots": len(d.get("shots", {})), "specs": n, "poster": poster})
     return {"films": out}, 200
 
 
@@ -110,10 +125,67 @@ def tree(film):
             "runtime": round(sum(s["duration"] for s in out), 2)}, 200
 
 
+ENGINE_WORDS = {"ltx": "LTX-2.5 (workflow 70)", "h3": "MiniMax H3 (67)", "both": "LTX-2.5 and H3, picked by measurement",
+                "previz": "Blender physics, drawn through LTX-2.3 depth control (74)"}
+
+
+def _script_skeleton(film, shot):
+    """A first spec for a shot-script shot, filled in with what the script and the render records
+    already know - what happens, what built it, the take in the film - so a person writes only
+    the promises. The shot's own `invariants`, if the script carries any, become the first ones."""
+    ss = _shotspec()
+    s = ss._j(os.path.join(ss.SCRIPTS, film + ".json"), {})
+    x = next((y for y in s.get("shots", []) if y.get("id") == shot), None)
+    if x is None:
+        return _specmd().skeleton(shot, "")
+    v = ss.script_view(film)["shots"].get(shot) or {}
+    tk = (v.get("takes") or [None])[0]
+    if x.get("engine") == "previz":
+        start = "the physics simulation's first frame, dressed by Qwen-Image-2.1"
+    elif x.get("anchor") is None:
+        start = "the place's plate itself"
+    else:
+        start = "a start frame composed from %s" % ", ".join(x.get("refs") or [])
+    L = ["# Shot %s — %s" % (shot, x.get("title", "")), "",
+         "## WHAT HAPPENS", "", (x.get("prompt") or "").strip(), "",
+         "## BUILT WITH", "",
+         "%s · %s · shot script %s.json" % (ENGINE_WORDS.get(x.get("engine", "ltx"), x.get("engine")), start, film), "",
+         "## MUST NEVER CHANGE", "",
+         "*These are the promises. They do not change without a conversation.*", ""]
+    invs = [i for i in (x.get("invariants") or []) if i.get("title") or i.get("rule")]
+    for i in invs:
+        L += ["### " + (i.get("title") or "promise"), i.get("rule", "")]
+        if i.get("why"):
+            L.append("WHY: " + i["why"])
+        L.append("")
+    if not invs:
+        L += ["### Name this promise", "Write the rule as a sentence.",
+              "WHY: why it matters. This is what stops the rule being argued away later.",
+              "CHECK: engine is %s" % (tk["engine"] if tk else x.get("engine", "ltx")), ""]
+    L += ["## CAN CHANGE", "", "*Free to move. Add MAKE PERMANENT under any of these to promote it above.*", ""]
+    if tk:
+        L += ["### Take", "%s - %s, %.2f s as cut" % (tk["id"], tk["engine"], tk["duration"]), ""]
+    L += ["### Length", "%s s asked for; the take decides" % x.get("secs", "?"), ""]
+    return "\n".join(L).rstrip() + "\n"
+
+
+def _picked(film, shot):
+    """The take the film uses for this shot, whichever pipeline made it."""
+    fj = os.path.join(FILMS, film, "film.json")
+    if os.path.exists(fj):
+        return (json.load(open(fj, encoding="utf-8"))["shots"].get(shot, {}) or {}).get("picked", "")
+    ss = _shotspec()
+    if ss.is_script(film):
+        return (ss.script_view(film)["shots"].get(shot) or {}).get("picked", "")
+    return ""
+
+
 def md(film, shot):
     p = os.path.join(SPECS, film, shot + ".md")
     if os.path.exists(p):
         return {"md": open(p, encoding="utf-8").read(), "exists": True}, 200
+    if _shotspec().is_script(film):
+        return {"exists": False, "md": _script_skeleton(film, shot)}, 200
     # no spec yet: hand back a filled-in skeleton rather than a blank page
     t, code = tree(film)
     title = next((s["title"] for s in t.get("shots", []) if s["shot"] == shot), "")
@@ -149,11 +221,9 @@ def lock(data):
     d, p = _spec_json(film, shot)
     if not d:
         return {"error": "no spec for %s/%s - save one first" % (film, shot)}, 404
-    fj = os.path.join(FILMS, film, "film.json")
-    picked = ""
-    if os.path.exists(fj):
-        picked = (json.load(open(fj, encoding="utf-8"))["shots"]
-                  .get(shot, {}) or {}).get("picked", "")
+    picked = _picked(film, shot)
+    if want and not picked:
+        return {"error": "shot %s has no take in the film yet - pick one before locking it" % shot}, 409
     if want:
         d["locked"] = True
         d["locked_take"] = picked

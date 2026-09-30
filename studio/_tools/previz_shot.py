@@ -38,6 +38,19 @@ import newmodels_test as nm                   # noqa: E402
 COMFY = fight.COMFY
 
 
+def dress_words(s, chars):
+    """What the grey simulation becomes: the shot's own `previz.dress` (written for its place), or a
+    general one - the proxies are crates, the rest is the place of <image2>, the figure <image3>."""
+    pz = s.get("previz") or {}
+    if pz.get("dress"):
+        return pz["dress"].strip()
+    who = " The grey standing figure is the person of <image3>." if chars else ""
+    return ("Turn <image1> into a still frame from a live-action film. Keep the camera, the perspective and "
+            "the layout of <image1> exactly: every box stays exactly where it is. The brown boxes are old "
+            "wooden crates with stencilled planks and iron corners; the flat grey floor, the walls and the "
+            "light are those of the place of <image2>." + who)
+
+
 def dress(s, pv_frame, dst, seed):
     """The previz frame, dressed as the film: previz first (the canvas), then the plate, then cast."""
     chars = fight._unique([r for r in s["refs"] if r in fight.CAST])
@@ -55,17 +68,7 @@ def dress(s, pv_frame, dst, seed):
         shutil.copy(p, os.path.join(COMFY, "input", name))
         wf["d%d" % i] = {"class_type": "LoadImage", "inputs": {"image": name}}
         wf["6"]["inputs"]["images.image_%d" % i] = ["d%d" % i, 0]
-    who = ""
-    if chars:
-        who = (" The grey standing figure far down the aisle is the man of <image3>, small in the "
-               "distance.")
-    wf["6"]["inputs"]["prompt"] = (
-        "Turn <image1> into a still frame from a live-action film. Keep the camera, the perspective and "
-        "the layout of <image1> exactly: every box stays exactly where it is. The brown boxes are "
-        "towering stacks of old wooden shipping crates with stencilled planks and iron corners; the flat "
-        "grey floor is the wet cracked concrete of the warehouse of <image2>, with its puddles, its "
-        "hanging sodium lamps and the rain on its skylights; the far wall is the warehouse's far end in "
-        "shadow." + who + " " + fight.GRADE)
+    wf["6"]["inputs"]["prompt"] = dress_words(s, chars) + " " + fight.GRADE
     wf["6"]["inputs"]["negative_prompt"] = fight.AVOID + ", grey boxes, untextured, 3d render, cgi"
     wf["10"]["inputs"]["seed"] = int(seed)
     wf["12"]["inputs"]["filename_prefix"] = "claude-generated/fight/pv_dress_%s_s%d" % (s["id"], seed)
