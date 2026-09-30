@@ -86,6 +86,17 @@ against a still torso.
   run - none is a route yet. A physics beat can be choreographed in Blender
   (`previz_blender.py`) and drawn through `74`. Nothing enters the pipeline on a look.
 
+## The shot encyclopedia: look before a shot, write after the pick
+
+`craft/shots/` holds one entry per kind of shot (an orbit, a whip-tilt, a glass shatter, a helmet
+POV): the recipe to follow now, the checks before a pick, and every attempt so far, dated and graded,
+with what broke and what fixed it. **Before writing a shot**, look up each kind it is:
+`python3 studio/_tools/shotbook.py --find <word>`, or `craft/shots/INDEX.md`. **After the takes are
+picked**, add a progression step to every entry the shot touched, then run
+`python3 studio/_tools/shotbook.py` (it checks the book and rewrites the index; exit 1 means a
+problem). A kind gets its own entry when its recipe or its failure differs from its neighbour's;
+the rules are in `craft/shots/README.md`.
+
 ## Operating rules that have cost time
 
 - **Never overwrite a tracked file from a local copy without checking it is unchanged since you
