@@ -1,0 +1,176 @@
+{
+ "_comment": "Challenge film 1 of 3 (2026-09-30): transparent liquid, glass refraction, steam on glasses and legible text on a moving hologram, in 2D cyberpunk anime.",
+ "film": "system-error",
+ "title": "SYSTEM ERROR",
+ "logline": "In a noodle bar under a broken billboard, a detective with machine eyes waits out the rain.",
+ "grade": "2D anime, cyberpunk night, muted blue and deep purple palette, high-contrast neon cyan and magenta accents, soft bloom on the neon, rain haze, clean line art, cel shading.",
+ "avoid": "lowres, blurry, deformed hands, fused fingers, extra fingers, extra limbs, doubled figure, two of the same person, melting face, morphing, warping, photorealistic, photograph, 3d render, cgi, subtitles, captions, watermark, nsfw",
+ "realism": "2D anime film still, clean confident line art, cel shading with two tones, painted background art, muted blues and deep purples with high-contrast neon cyan and magenta accents, flat colour, no photographic texture.",
+ "score_tags": "dark synthwave, slow, muted analog synth pads, soft rain ambience, distant city hum, lonely, melancholic, cyberpunk noir, instrumental, no vocals",
+ "score_tags_b": "lo-fi cyberpunk, soft electric piano over warm synth pads, gentle, rain, lonely, resolving, instrumental, no vocals",
+ "place": {
+  "id": "noodlebar",
+  "prompt": "Wide anime background painting of the inside of a tiny noodle bar in a cyberpunk city at night, nobody in it: a narrow wooden counter with six stools, steaming pots and ladles behind it, paper lanterns glowing warm, a big rain-streaked window along one side looking onto a neon alley where a huge holographic billboard glows magenta and cyan, warm lamplight inside against blue night outside. 2D anime film still, clean confident line art, cel shading with two tones, painted background art, muted blues and deep purples with high-contrast neon cyan and magenta accents, flat colour, no photographic texture."
+ },
+ "cast": {
+  "detective": {
+   "role": "the detective",
+   "prompt": "Full-length anime character reference of a young woman detective of about thirty against a plain mid-grey backdrop, even soft light, standing still, facing the camera, arms at her sides. A lean build, short black hair with an undercut, round wire-rimmed glasses over glowing cyan cybernetic eyes with thin circuit lines at the temples, a long dark navy trench coat with a high collar over a grey turtleneck, thin black gloves, black trousers, black boots. 2D anime film still, clean confident line art, cel shading with two tones, painted background art, muted blues and deep purples with high-contrast neon cyan and magenta accents, flat colour, no photographic texture."
+  },
+  "cook": {
+   "role": "the cook",
+   "prompt": "Full-length anime character reference of an old noodle cook of about seventy against a plain mid-grey backdrop, even soft light, standing still, facing the camera, arms at his sides. A small wiry man with a white towel tied around his head, a thin grey moustache, kind tired eyes, a dark blue work shirt with rolled sleeves under a stained white apron, weathered hands, wooden sandals. 2D anime film still, clean confident line art, cel shading with two tones, painted background art, muted blues and deep purples with high-contrast neon cyan and magenta accents, flat colour, no photographic texture."
+  },
+  "alley": {
+   "role": "the alley (a second place)",
+   "place": true,
+   "prompt": "Wide anime background painting of a narrow rainy cyberpunk alley at night seen from street level, nobody in it: wet asphalt reflecting neon, tangled cables overhead, steam rising from a vent, the warm glowing window of a tiny noodle bar on the left, and high on the building opposite a huge holographic billboard floating in the rain that displays the words \"SYSTEM ERROR\" in sharp glowing red-magenta capital letters. 2D anime film still, clean confident line art, cel shading with two tones, painted background art, muted blues and deep purples with high-contrast neon cyan and magenta accents, flat colour, no photographic texture."
+  },
+  "detective_back": {
+   "role": "the detective, seen from behind",
+   "sheet_view": [
+    "detective",
+    "turn_back"
+   ],
+   "prompt": "The back view from the detective's character sheet."
+  }
+ },
+ "shots": [
+  {
+   "id": "010",
+   "title": "the billboard",
+   "secs": 5,
+   "refs": [
+    "alley"
+   ],
+   "engine": "ltx",
+   "face": "none",
+   "avoid_extra": "people, a person, a figure, a crowd, a face, hands",
+   "anchor": "A still frame from a 2D anime film, a WIDE SHOT of the rainy alley of reference one at night, looking up past the glowing window of the noodle bar to the huge holographic billboard floating over the street, its sharp glowing red-magenta letters reading \"SYSTEM ERROR\", rain falling through its light, nobody in the street. 2D anime, cyberpunk night, muted blue and deep purple palette, high-contrast neon cyan and magenta accents, soft bloom on the neon, rain haze, clean line art, cel shading.",
+   "prompt": "Rain pours down through the neon alley. High above, the holographic billboard flickers and glitches for an instant, and the words on it stay sharp and steady, glowing red. Raindrops streak through the hologram light, puddles ripple, steam drifts from a vent. The camera pushes in very slowly toward the billboard. 2D anime, cel shading, clean line art. Heavy rain, a distant city hum, the electric buzz of the billboard. No music."
+  },
+  {
+   "id": "020",
+   "title": "rain on glass",
+   "secs": 4,
+   "refs": [
+    "noodlebar"
+   ],
+   "engine": "both",
+   "face": "none",
+   "avoid_extra": "people, a person, a figure, a crowd, a face, hands",
+   "anchor": "A still frame from a 2D anime film, an EXTREME CLOSE-UP of the big rain-streaked window of the noodle bar of reference one, seen from inside: fat raindrops clinging to the glass and running down it in crooked trails, each drop refracting a tiny upside-down copy of the neon alley outside, the neon beyond melted into soft cyan and magenta bokeh. 2D anime, cyberpunk night, muted blue and deep purple palette, high-contrast neon cyan and magenta accents, soft bloom on the neon, rain haze, clean line art, cel shading.",
+   "prompt": "Raindrops hit the window and run down the glass in crooked trails, merging as they fall; each drop bends the neon light behind it like a lens. The camera holds still, the neon soft beyond. 2D anime, cel shading, clean line art. Rain drumming on glass, the muffled city. No music."
+  },
+  {
+   "id": "030",
+   "title": "the counter",
+   "secs": 5,
+   "refs": [
+    "detective",
+    "detective",
+    "noodlebar"
+   ],
+   "engine": "ltx",
+   "face": "medium",
+   "anchor": "A still frame from a 2D anime film, a MEDIUM SHOT of the woman of reference one sitting alone at the wooden counter of the noodle bar of reference three, side-on to the camera, in her dark trench coat, her glowing cyan eyes behind round glasses, steam drifting across the counter, the rain-streaked window and the neon alley behind her. 2D anime, cyberpunk night, muted blue and deep purple palette, high-contrast neon cyan and magenta accents, soft bloom on the neon, rain haze, clean line art, cel shading.",
+   "prompt": "She sits still at the counter, gloved hands folded; steam drifts across in front of her; she lifts her head slightly toward the kitchen. The camera pushes in slowly. 2D anime, cel shading, clean line art. Rain on the window, a pot simmering, the low murmur of the city. No music."
+  },
+  {
+   "id": "040",
+   "title": "the bowl",
+   "secs": 4,
+   "refs": [
+    "cook",
+    "cook",
+    "noodlebar"
+   ],
+   "engine": "both",
+   "face": "none",
+   "anchor": "A still frame from a 2D anime film, a CLOSE SHOT over the counter of the noodle bar of reference three: the weathered hands of the old man of reference one setting down a deep black ceramic bowl of swirling iridescent broth full of glowing translucent noodles, thick steam billowing up from it, his white apron behind. 2D anime, cyberpunk night, muted blue and deep purple palette, high-contrast neon cyan and magenta accents, soft bloom on the neon, rain haze, clean line art, cel shading.",
+   "prompt": "The old cook's hands set the bowl down gently on the counter and draw back. The iridescent broth swirls slowly, its surface shifting through rainbow colours; thick steam rises and curls. Static camera. 2D anime, cel shading, clean line art. The soft knock of ceramic on wood, broth lapping, a pot bubbling. No music."
+  },
+  {
+   "id": "050",
+   "title": "chopsticks",
+   "secs": 5,
+   "refs": [
+    "detective",
+    "noodlebar"
+   ],
+   "engine": "both",
+   "face": "none",
+   "anchor": "A still frame from a 2D anime film, an EXTREME CLOSE-UP of a steaming bowl on the counter of the noodle bar of reference two: slender black lacquered chopsticks with fine silver inlay, held in the black-gloved hand of the woman of reference one, lifting a bundle of glowing translucent noodles out of swirling iridescent broth; droplets hanging from the noodles, light refracting through them like glass, steam rising. 2D anime, cyberpunk night, muted blue and deep purple palette, high-contrast neon cyan and magenta accents, soft bloom on the neon, rain haze, clean line art, cel shading.",
+   "prompt": "The chopsticks lift the glowing noodles slowly up out of the broth; the translucent strands stretch and sway, broth drips from them in bright droplets back into the swirling bowl and ripples spread across it. Steam rises. The camera holds close and still. 2D anime, cel shading, clean line art. The drip of broth, a soft slurp, rain beyond. No music."
+  },
+  {
+   "id": "060",
+   "title": "fog",
+   "secs": 4,
+   "refs": [
+    "detective",
+    "detective",
+    "noodlebar"
+   ],
+   "engine": "both",
+   "face": "close",
+   "anchor": "A still frame from a 2D anime film, a CLOSE-UP of the face of the woman of reference one at the counter of the noodle bar of reference three, leaning over the steaming bowl, steam rising into her face, her round glasses starting to mist at the bottom edge, her glowing cyan cybernetic eyes shining through the lenses. 2D anime, cyberpunk night, muted blue and deep purple palette, high-contrast neon cyan and magenta accents, soft bloom on the neon, rain haze, clean line art, cel shading.",
+   "prompt": "Steam rises from the bowl into her face and her round lenses mist over from the bottom up, until only the glow of her cyan eyes shows through the fog. She blinks slowly. Static camera, close. 2D anime, cel shading, clean line art. Steam hissing softly, rain on the window. No music."
+  },
+  {
+   "id": "070",
+   "title": "the sign",
+   "secs": 5,
+   "refs": [
+    "detective_back",
+    "noodlebar",
+    "alley"
+   ],
+   "engine": "ltx",
+   "face": "none",
+   "anchor": "A still frame from a 2D anime film, an OVER-THE-SHOULDER SHOT from behind the woman of reference one sitting at the counter of the noodle bar of reference two, looking out through the big rain-streaked window at the alley of reference three, where the huge holographic billboard across the street displays the words \"SYSTEM ERROR\" in sharp glowing red capital letters; raindrops on the glass between us and the sign. 2D anime, cyberpunk night, muted blue and deep purple palette, high-contrast neon cyan and magenta accents, soft bloom on the neon, rain haze, clean line art, cel shading.",
+   "prompt": "Outside the rain-streaked window the holographic billboard glitches: the words flicker, break into scanlines and snap back sharp and legible, while rain streams down the glass in front. She sits motionless, watching. Static camera. 2D anime, cel shading, clean line art. Rain on the glass, the billboard's electric crackle muffled through the window. No music."
+  },
+  {
+   "id": "080",
+   "title": "rain on the hologram",
+   "secs": 4,
+   "refs": [
+    "alley"
+   ],
+   "engine": "both",
+   "face": "none",
+   "avoid_extra": "people, a person, a figure, a crowd, a face, hands",
+   "anchor": "A still frame from a 2D anime film, a CLOSE SHOT of the huge holographic billboard of the alley of reference one, its sharp glowing red letters reading \"SYSTEM ERROR\" filling the frame, heavy rain falling through and in front of the letters, raindrops splashing on the glass projector panel below them in tiny bursts of red light. 2D anime, cyberpunk night, muted blue and deep purple palette, high-contrast neon cyan and magenta accents, soft bloom on the neon, rain haze, clean line art, cel shading.",
+   "prompt": "Heavy raindrops fall through the hologram and burst in tiny splashes of red light on the glass panel below; the letters stay sharp and steady, glitching once and snapping back. The camera drifts very slowly sideways. 2D anime, cel shading, clean line art. Pounding rain, an electric hum. No music."
+  },
+  {
+   "id": "090",
+   "title": "again",
+   "secs": 5,
+   "refs": [
+    "detective",
+    "detective",
+    "noodlebar"
+   ],
+   "engine": "ltx",
+   "face": "close",
+   "line": "System error... again.",
+   "anchor": "A still frame from a 2D anime film, a CLOSE-UP of the woman of reference one at the counter of the noodle bar of reference three, her round glasses clear, red light from the billboard outside glinting in the lenses, her glowing cyan eyes tired, chopsticks resting across the bowl in front of her. 2D anime, cyberpunk night, muted blue and deep purple palette, high-contrast neon cyan and magenta accents, soft bloom on the neon, rain haze, clean line art, cel shading.",
+   "prompt": "Red light from outside flickers across her face. She looks toward the window and says quietly, with a tired half-smile: \"System error... again.\" Static camera, close. 2D anime, cel shading, clean line art. Rain, her voice low and dry. No music."
+  },
+  {
+   "id": "100",
+   "title": "last light",
+   "secs": 5,
+   "refs": [
+    "alley",
+    "detective"
+   ],
+   "engine": "ltx",
+   "face": "wide",
+   "anchor": "A still frame from a 2D anime film, a WIDE SHOT of the rainy alley of reference one at night: the warm glowing window of the noodle bar in the middle of the frame with the small figure of the woman of reference two sitting alone at the counter inside, rain pouring, neon reflections on the wet asphalt, the red glow of the billboard falling across the street. 2D anime, cyberpunk night, muted blue and deep purple palette, high-contrast neon cyan and magenta accents, soft bloom on the neon, rain haze, clean line art, cel shading.",
+   "prompt": "Rain pours down the alley. Inside the warm window she sits alone at the counter, small and still. The red glow of the billboard flickers across the wet street. The camera pulls back slowly into the rain. 2D anime, cel shading, clean line art. Heavy rain, a distant siren, the city hum. No music."
+  }
+ ]
+}

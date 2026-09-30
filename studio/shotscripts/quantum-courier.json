@@ -1,0 +1,570 @@
+{
+ "_comment": "Extra-credit film (2026-09-30): one character in a complex reflective outfit held across three environments, first-person shots, a reflection, and reversed gravity.",
+ "film": "quantum-courier",
+ "title": "THE QUANTUM COURIER",
+ "logline": "A courier runs from something she never looks at, and when the roof runs out, she keeps going.",
+ "grade": "Cinematic film, night, rain, high contrast, hot pink and electric blue neon against deep shadow, wet reflective surfaces, haze, deep blacks with detail, fine grain, anamorphic.",
+ "avoid": "lowres, blurry, deformed limbs, fused fingers, extra fingers, extra limbs, doubled figure, two of the same person, melting face, morphing, warping, subtitles, captions, watermark, nsfw",
+ "realism": "Unretouched photograph, available light, visible skin texture and pores, fine film grain, shallow depth of field, no retouching, no gloss.",
+ "score_tags": "dark driving cyberpunk score, pulsing analog synth bass, tense arpeggios, heavy slow drums building to a chase, rain, cinematic, instrumental, no vocals",
+ "score_tags_b": "soaring cinematic synth score, huge warm pads, euphoric rising strings, weightless, wonder, slow build to a vast resolution at sunset, instrumental, no vocals",
+ "place": {
+  "id": "market",
+  "prompt": "Wide photograph of a narrow cyberpunk street market at night in the rain, nobody in it: stalls under dripping tarpaulins, strings of lanterns, stacked neon signs in hot pink and electric blue, steam rising from food stalls, puddles on the stone reflecting the neon, tangled cables overhead, tall buildings closing in. Deep perspective, anamorphic. Unretouched photograph, available light, visible skin texture and pores, fine film grain, shallow depth of field, no retouching, no gloss."
+ },
+ "cast": {
+  "maya": {
+   "role": "the courier",
+   "prompt": "Full-length reference photograph of a woman of about twenty-eight against a plain mid-grey backdrop, even soft light, standing still, facing the camera, arms at her sides. An East Asian woman with a sharp jawline, short asymmetrical neon-blue hair cut longer on one side, a small silver hoop piercing in her left nostril. She wears a high-collared asymmetrical technical trench coat made of iridescent reflective holographic nylon that shifts from emerald green to deep violet, its left sleeve ending above the elbow; under it a matte black tactical turtleneck with a distinct glowing amber circuit pattern running down the left sleeve; dark grey cargo pants with several loose hanging straps; heavy-soled black combat boots; matte black tactical gloves. Unretouched photograph, available light, visible skin texture and pores, fine film grain, shallow depth of field, no retouching, no gloss."
+  },
+  "maya_back": {
+   "role": "the courier from behind",
+   "sheet_view": [
+    "maya",
+    "turn_back"
+   ],
+   "prompt": "The back view from the courier's character sheet."
+  },
+  "maya_side": {
+   "role": "the courier side-on",
+   "sheet_view": [
+    "maya",
+    "turn_right"
+   ],
+   "prompt": "The side view from the courier's character sheet."
+  },
+  "maya_face": {
+   "role": "the courier's face",
+   "sheet_view": [
+    "maya",
+    "face_front_r"
+   ],
+   "prompt": "The three-quarter face from the courier's character sheet."
+  },
+  "market_high": {
+   "role": "the market from above",
+   "place": true,
+   "place_view": [
+    "market",
+    "angle_aerial"
+   ],
+   "prompt": "The market plate turned to an aerial view (studio/sheets.py)."
+  },
+  "corridor": {
+   "role": "the corridor (a second place)",
+   "place": true,
+   "prompt": "Wide photograph of a long narrow brutalist concrete corridor inside a vast building, nobody in it: raw board-marked concrete walls and ceiling, hard white light falling from high slit windows in stripes across the floor, a waist-high concrete barrier across the corridor halfway down, and at the far end a massive floor-to-ceiling glass window. Deep perspective, anamorphic. Unretouched photograph, available light, visible skin texture and pores, fine film grain, shallow depth of field, no retouching, no gloss."
+  },
+  "canyon": {
+   "role": "the canyon city (a third place)",
+   "place": true,
+   "prompt": "Wide photograph from the edge of a skyscraper rooftop over a blinding sunlit futuristic canyon city, nobody in it: sheer glass and white stone towers plunging down into haze on both sides, sky bridges, the rooftop's concrete edge in the foreground, the sun high and glaring off the glass. Deep perspective, anamorphic. Unretouched photograph, available light, visible skin texture and pores, fine film grain, shallow depth of field, no retouching, no gloss."
+  },
+  "sunset": {
+   "role": "the city at sunset (a fourth place)",
+   "place": true,
+   "prompt": "Wide static landscape photograph of a futuristic canyon city of towers at sunset, nobody in it: a massive orange setting sun low between two towers, a violet and amber sky, haze over the canyon, the towers dark against the light. Anamorphic. Unretouched photograph, available light, visible skin texture and pores, fine film grain, shallow depth of field, no retouching, no gloss."
+  }
+ },
+ "shots": [
+  {
+   "id": "101",
+   "title": "the market",
+   "secs": 5,
+   "refs": [
+    "market"
+   ],
+   "engine": "ltx",
+   "face": "none",
+   "anchor": "A still frame from a live-action film, a HIGH WIDE SHOT of the rainy neon street market of reference one crowded with people under umbrellas, steam rising from the stalls. Cinematic film, night, rain, high contrast, hot pink and electric blue neon against deep shadow, wet reflective surfaces, haze, deep blacks with detail, fine grain, anamorphic.",
+   "prompt": "Rain falls through the neon over the crowded market; umbrellas drift, steam rises from the food stalls, a sign flickers. The camera cranes slowly down toward the crowd. Rain, the murmur of a crowd, sizzling food, distant traffic. No music."
+  },
+  {
+   "id": "102",
+   "title": "the eye",
+   "secs": 4,
+   "refs": [
+    "maya_face",
+    "market"
+   ],
+   "engine": "ltx",
+   "face": "close",
+   "anchor": "A still frame from a live-action film, an EXTREME MACRO CLOSE-UP of the left eye and nose of the woman of reference one in the rainy market of reference two: the small silver hoop in her left nostril, rain streaking down her cheek, pink and blue neon reflected in her eye. Cinematic film, night, rain, high contrast, hot pink and electric blue neon against deep shadow, wet reflective surfaces, haze, deep blacks with detail, fine grain, anamorphic.",
+   "prompt": "A raindrop runs down her cheek past the silver nose ring; she blinks once and her eye shifts to look past the camera; neon light flickers across her skin. Macro lens, static. Rain very close, her breath. No music."
+  },
+  {
+   "id": "103",
+   "title": "the coat",
+   "secs": 4,
+   "refs": [
+    "maya",
+    "market"
+   ],
+   "engine": "both",
+   "face": "none",
+   "anchor": "A still frame from a live-action film, an EXTREME CLOSE-UP of the shoulder and collar of the iridescent holographic trench coat of the woman of reference one in the rainy market of reference two: rain beading on the reflective nylon, its colour sliding from emerald green to deep violet, pink and blue neon mirrored in it. Cinematic film, night, rain, high contrast, hot pink and electric blue neon against deep shadow, wet reflective surfaces, haze, deep blacks with detail, fine grain, anamorphic.",
+   "prompt": "She turns her shoulder slightly; the iridescent fabric ripples and crinkles, its colour sliding from emerald green to deep violet as the angle changes, rain running off it in beads, neon reflections sliding across it. The camera holds close. Rain on nylon, the crowd beyond. No music."
+  },
+  {
+   "id": "104",
+   "title": "she walks",
+   "secs": 5,
+   "refs": [
+    "maya",
+    "maya",
+    "market"
+   ],
+   "engine": "ltx",
+   "face": "medium",
+   "anchor": "A still frame from a live-action film, a LOW ANGLE TRACKING SHOT looking up at forty-five degrees at the woman of reference one walking straight toward the camera through the crowded rainy market of reference three, her trench coat open and flaring, neon signs above her. Cinematic film, night, rain, high contrast, hot pink and electric blue neon against deep shadow, wet reflective surfaces, haze, deep blacks with detail, fine grain, anamorphic.",
+   "prompt": "She walks forward with purpose and the camera dollies backward in front of her at the same speed, low and tilted up; her holographic coat ripples and crinkles with every step and reflects the pink and blue neon; the crowd parts around her. Her boots on wet stone, rain, the crowd. No music."
+  },
+  {
+   "id": "105",
+   "title": "the stall",
+   "secs": 4,
+   "refs": [
+    "maya",
+    "maya",
+    "market"
+   ],
+   "engine": "ltx",
+   "face": "medium",
+   "anchor": "A still frame from a live-action film, a MEDIUM TRACKING SHOT of the woman of reference one walking past a steaming street-food stall in the rainy market of reference three, a floating hologram menu above it throwing cyan and magenta light across her reflective coat. Cinematic film, night, rain, high contrast, hot pink and electric blue neon against deep shadow, wet reflective surfaces, haze, deep blacks with detail, fine grain, anamorphic.",
+   "prompt": "She walks past the stall without looking at it; the hologram's colours slide across her reflective coat as she moves and steam curls around her. The camera tracks with her. Sizzling food, rain, the crowd. No music."
+  },
+  {
+   "id": "106",
+   "title": "boots",
+   "secs": 4,
+   "refs": [
+    "maya",
+    "market"
+   ],
+   "engine": "both",
+   "face": "none",
+   "anchor": "A still frame from a live-action film, a LOW CLOSE SHOT at ground level in the rainy market of reference two: the heavy-soled black combat boots of the woman of reference one splashing through a neon-lit puddle, the loose straps of her grey cargo pants swinging. Cinematic film, night, rain, high contrast, hot pink and electric blue neon against deep shadow, wet reflective surfaces, haze, deep blacks with detail, fine grain, anamorphic.",
+   "prompt": "Her boots stride through the puddle, throwing up splashes of pink and blue light; the loose straps swing with each step. The camera tracks backward at ground level. Heavy footsteps, splashing, rain. No music."
+  },
+  {
+   "id": "107",
+   "title": "the crowd",
+   "secs": 5,
+   "refs": [
+    "maya_back",
+    "market"
+   ],
+   "engine": "ltx",
+   "face": "none",
+   "anchor": "A still frame from a live-action film, an OVER-THE-SHOULDER SHOT from just behind the right shoulder of the woman of reference one, her neon-blue hair in the foreground, as she pushes into a dense crowd of people of every age and look in the rainy market of reference two, umbrellas and neon ahead. Cinematic film, night, rain, high contrast, hot pink and electric blue neon against deep shadow, wet reflective surfaces, haze, deep blacks with detail, fine grain, anamorphic.",
+   "prompt": "She threads her way through the dense crowd, turning her shoulder to slip between people; the camera follows close over her right shoulder. The crowd's voices, rain on umbrellas, a vendor calling out. No music."
+  },
+  {
+   "id": "108",
+   "title": "crane up",
+   "secs": 5,
+   "refs": [
+    "market_high",
+    "maya"
+   ],
+   "engine": "ltx",
+   "face": "none",
+   "anchor": "A still frame from a live-action film, a HIGH ANGLE SHOT looking steeply down into the crowded rainy market of reference one from above: the woman of reference two in the centre of the frame among the umbrellas, her neon-blue hair and her green-violet coat bright against the crowd. Cinematic film, night, rain, high contrast, hot pink and electric blue neon against deep shadow, wet reflective surfaces, haze, deep blacks with detail, fine grain, anamorphic.",
+   "prompt": "The camera cranes straight up and away from her, rising until it looks directly down on the market; she stays in the centre of the frame, moving through the crowd, her blue hair and shifting coat always visible among the umbrellas. Rain, the crowd receding below. No music."
+  },
+  {
+   "id": "109",
+   "title": "top-down",
+   "secs": 4,
+   "refs": [
+    "market_high",
+    "maya"
+   ],
+   "engine": "ltx",
+   "face": "none",
+   "anchor": "A still frame from a live-action film, a TOP-DOWN AERIAL SHOT straight down on the crowded rainy market of reference one: a sea of umbrellas and neon, and in the exact centre the woman of reference two, her neon-blue hair and iridescent coat catching the light. Cinematic film, night, rain, high contrast, hot pink and electric blue neon against deep shadow, wet reflective surfaces, haze, deep blacks with detail, fine grain, anamorphic.",
+   "prompt": "From directly above, umbrellas drift around her like a slow current while she stops still in the centre; the neon flickers on the wet ground. Static camera. Rain, the crowd far below. No music."
+  },
+  {
+   "id": "110",
+   "title": "something behind",
+   "secs": 4,
+   "refs": [
+    "maya_face",
+    "market"
+   ],
+   "engine": "ltx",
+   "face": "close",
+   "anchor": "A still frame from a live-action film, a CLOSE-UP of the woman of reference one in the rainy market of reference two, glancing back over her shoulder, rain on her face, the silver nose ring catching the neon, her eyes sharp. Cinematic film, night, rain, high contrast, hot pink and electric blue neon against deep shadow, wet reflective surfaces, haze, deep blacks with detail, fine grain, anamorphic.",
+   "prompt": "She glances back over her shoulder at something behind her; her eyes narrow; she turns back and her jaw sets. Static camera, close. Rain, the crowd, a low electronic hum rising. No music."
+  },
+  {
+   "id": "111",
+   "title": "she runs",
+   "secs": 4,
+   "refs": [
+    "maya",
+    "maya",
+    "market"
+   ],
+   "engine": "ltx",
+   "face": "medium",
+   "anchor": "A still frame from a live-action film, a MEDIUM SHOT of the woman of reference one breaking into a run through the crowded rainy market of reference three, people turning, her coat flaring. Cinematic film, night, rain, high contrast, hot pink and electric blue neon against deep shadow, wet reflective surfaces, haze, deep blacks with detail, fine grain, anamorphic.",
+   "prompt": "She breaks into a run, pushing through the crowd; people turn and step aside; her coat flares out behind her. The camera whips after her. Running footsteps, shouts, rain. No music."
+  },
+  {
+   "id": "201",
+   "title": "the corridor",
+   "secs": 4,
+   "refs": [
+    "corridor",
+    "maya"
+   ],
+   "engine": "ltx",
+   "face": "none",
+   "anchor": "A still frame from a live-action film, a WIDE SHOT down the long brutalist concrete corridor of reference one: the woman of reference two bursting in at the far end, running toward the camera, stripes of hard white light across the floor. Cinematic film, cold brutalist concrete, hard white light from high slit windows, deep shadow, cyan and grey, high contrast, fine grain, anamorphic.",
+   "prompt": "She sprints toward the camera down the corridor, through the stripes of hard light, her coat streaming behind her. Static camera. Her footsteps echoing on concrete, her breath. No music."
+  },
+  {
+   "id": "202",
+   "title": "side-on",
+   "secs": 5,
+   "refs": [
+    "maya_side",
+    "corridor"
+   ],
+   "engine": "both",
+   "face": "medium",
+   "anchor": "A still frame from a live-action film, a SIDE-PROFILE TRACKING SHOT of the woman of reference one sprinting flat out along the brutalist concrete corridor of reference two, seen side-on, her trench coat tails and the loose straps of her cargo pants whipping out behind her. Cinematic film, cold brutalist concrete, hard white light from high slit windows, deep shadow, cyan and grey, high contrast, fine grain, anamorphic.",
+   "prompt": "She sprints at full speed and the camera tracks alongside her in profile, fast; the tails of her trench coat and the loose straps on her cargo pants whip and snap out behind her in the wind of her run; stripes of light flash over her. Pounding footsteps, whipping fabric, her breath. No music."
+  },
+  {
+   "id": "203",
+   "title": "coat tails",
+   "secs": 4,
+   "refs": [
+    "maya",
+    "corridor"
+   ],
+   "engine": "both",
+   "face": "none",
+   "anchor": "A still frame from a live-action film, a LOW CLOSE TRACKING SHOT behind the running woman of reference one in the concrete corridor of reference two: the tails of her iridescent trench coat and the loose straps of her cargo pants whipping out behind her. Cinematic film, cold brutalist concrete, hard white light from high slit windows, deep shadow, cyan and grey, high contrast, fine grain, anamorphic.",
+   "prompt": "The coat tails billow and snap and the loose straps whip wildly behind her legs as she runs; the camera tracks low and close behind. Flapping fabric, footsteps, wind. No music."
+  },
+  {
+   "id": "204",
+   "title": "the threat",
+   "secs": 4,
+   "refs": [
+    "corridor"
+   ],
+   "engine": "ltx",
+   "face": "none",
+   "anchor": "A still frame from a live-action film, a WIDE SHOT back along the empty brutalist concrete corridor of reference one, red scanning light sweeping across the far wall from somewhere out of sight. Cinematic film, cold brutalist concrete, hard white light from high slit windows, deep shadow, cyan and grey, high contrast, fine grain, anamorphic.",
+   "prompt": "Red scanning light sweeps across the concrete walls of the empty corridor behind her; a deep mechanical hum grows; nothing is seen. Static camera. A rising electronic whine, distant footsteps. No music.",
+   "avoid_extra": "people, a person, a figure, a crowd, a face, hands"
+  },
+  {
+   "id": "205",
+   "title": "the wall",
+   "secs": 4,
+   "refs": [
+    "maya",
+    "maya",
+    "corridor"
+   ],
+   "engine": "ltx",
+   "face": "medium",
+   "anchor": "A still frame from a live-action film, a MEDIUM CLOSE SHOT of the woman of reference one pressed flat with her back against the concrete wall at a corner of the brutalist corridor of reference three, breathing hard, red scanning light sweeping across the wall just beside her. Cinematic film, cold brutalist concrete, hard white light from high slit windows, deep shadow, cyan and grey, high contrast, fine grain, anamorphic.",
+   "prompt": "She holds herself flat against the wall, chest heaving, as the red light sweeps past a hand's width from her face; she waits, then pushes off and runs. Static camera. Her breath, the electronic whine passing. No music."
+  },
+  {
+   "id": "206",
+   "title": "into her head",
+   "secs": 4,
+   "refs": [
+    "maya_back",
+    "corridor"
+   ],
+   "engine": "ltx",
+   "face": "none",
+   "anchor": "A still frame from a live-action film, a MEDIUM SHOT from directly behind the running woman of reference one in the concrete corridor of reference two, her neon-blue hair and the back of her collar filling the middle of the frame. Cinematic film, cold brutalist concrete, hard white light from high slit windows, deep shadow, cyan and grey, high contrast, fine grain, anamorphic.",
+   "prompt": "The camera rushes forward directly into the back of her head until her neon-blue hair fills the whole frame. A rush of air, her breath, footsteps. No music."
+  },
+  {
+   "id": "207",
+   "title": "point of view",
+   "secs": 5,
+   "refs": [
+    "corridor",
+    "maya"
+   ],
+   "engine": "ltx",
+   "face": "none",
+   "anchor": "A still frame from a live-action film, a FIRST-PERSON POINT-OF-VIEW SHOT running down the brutalist concrete corridor of reference one toward a waist-high concrete barrier: two hands in matte black tactical gloves reaching forward at the bottom of the frame, the iridescent coat sleeve on the right arm, the glowing amber circuit sleeve on the left arm, as worn by the woman of reference two. Cinematic film, cold brutalist concrete, hard white light from high slit windows, deep shadow, cyan and grey, high contrast, fine grain, anamorphic.",
+   "prompt": "First-person view: the camera bobs with her running stride as the barrier rushes closer; her gloved hands reach out in front. Heavy breathing, footsteps, the whine behind. No music."
+  },
+  {
+   "id": "208",
+   "title": "the vault",
+   "secs": 4,
+   "refs": [
+    "corridor",
+    "maya"
+   ],
+   "engine": "both",
+   "face": "none",
+   "anchor": "A still frame from a live-action film, a FIRST-PERSON POINT-OF-VIEW SHOT at the waist-high concrete barrier in the corridor of reference one: two hands in matte black tactical gloves planted on top of the barrier, the glowing amber circuit on the left sleeve of the woman of reference two, the corridor floor beyond. Cinematic film, cold brutalist concrete, hard white light from high slit windows, deep shadow, cyan and grey, high contrast, fine grain, anamorphic.",
+   "prompt": "First-person view: her gloved hands slam down on the barrier and she vaults over it; the camera swings up and over, then jolts hard and tilts down as she lands on the far side. A grunt, the slap of gloves on concrete, the thud of landing. No music."
+  },
+  {
+   "id": "209",
+   "title": "the vault, from the side",
+   "secs": 4,
+   "refs": [
+    "maya_side",
+    "corridor"
+   ],
+   "engine": "both",
+   "face": "medium",
+   "anchor": "A still frame from a live-action film, a WIDE SIDE SHOT of the woman of reference one in mid-vault over the waist-high concrete barrier in the corridor of reference two, both gloved hands on the barrier, legs swinging over, coat flying. Cinematic film, cold brutalist concrete, hard white light from high slit windows, deep shadow, cyan and grey, high contrast, fine grain, anamorphic.",
+   "prompt": "She swings her legs over the barrier and lands running on the far side, the coat flying out and falling back. Static camera. Gloves on concrete, the landing, running on. No music."
+  },
+  {
+   "id": "210",
+   "title": "the reflection",
+   "secs": 5,
+   "refs": [
+    "corridor",
+    "maya"
+   ],
+   "engine": "ltx",
+   "face": "wide",
+   "anchor": "A still frame from a live-action film, a FIRST-PERSON POINT-OF-VIEW SHOT looking up at the massive floor-to-ceiling glass window at the end of the concrete corridor of reference one: in the dark glass, the clear reflection of the full body of the woman of reference two standing and looking up at it, her face intent, her iridescent coat mirroring the corridor's light. Cinematic film, cold brutalist concrete, hard white light from high slit windows, deep shadow, cyan and grey, high contrast, fine grain, anamorphic.",
+   "prompt": "First-person view, looking up at the huge window; in the reflection she stands breathing hard, chest rising and falling, her face tense with focus, her coat catching the light in green and violet. The camera tilts up slowly. Breathing, a hum through the glass. No music."
+  },
+  {
+   "id": "211",
+   "title": "her face in the glass",
+   "secs": 4,
+   "refs": [
+    "maya_face",
+    "corridor"
+   ],
+   "engine": "ltx",
+   "face": "close",
+   "anchor": "A still frame from a live-action film, a CLOSE-UP of the reflection of the face of the woman of reference one in the dark glass window of the concrete corridor of reference two, intent, a strand of neon-blue hair across her forehead. Cinematic film, cold brutalist concrete, hard white light from high slit windows, deep shadow, cyan and grey, high contrast, fine grain, anamorphic.",
+   "prompt": "Her reflection breathes hard, eyes fixed and steady, then she looks up toward something above. Static camera. Her breathing slowing. No music."
+  },
+  {
+   "id": "212",
+   "title": "the stairs",
+   "secs": 4,
+   "refs": [
+    "maya_back",
+    "corridor"
+   ],
+   "engine": "ltx",
+   "face": "none",
+   "anchor": "A still frame from a live-action film, a MEDIUM SHOT from behind the woman of reference one running up a steep concrete stairwell off the brutalist corridor of reference two toward a bright door at the top. Cinematic film, cold brutalist concrete, hard white light from high slit windows, deep shadow, cyan and grey, high contrast, fine grain, anamorphic.",
+   "prompt": "She takes the concrete stairs two at a time toward the bright door at the top; the camera follows. Footsteps ringing on concrete, her breath. No music."
+  },
+  {
+   "id": "213",
+   "title": "the roof",
+   "secs": 5,
+   "refs": [
+    "canyon",
+    "maya"
+   ],
+   "engine": "ltx",
+   "face": "none",
+   "anchor": "A still frame from a live-action film, a WIDE SHOT of the skyscraper rooftop of reference one in blinding sunlight: the woman of reference two bursting out of a door onto the roof, the futuristic canyon city beyond. Cinematic film, blinding midday sun over a futuristic canyon city, white-gold light, hard glints, deep blue sky, atmospheric haze, high contrast, fine grain, anamorphic.",
+   "prompt": "She bursts through the door onto the roof and blinding sunlight floods over her; she shields her eyes for a moment and walks toward the edge. Wind, the door banging, the city far below. No music."
+  },
+  {
+   "id": "301",
+   "title": "the edge",
+   "secs": 5,
+   "refs": [
+    "canyon",
+    "maya_back"
+   ],
+   "engine": "ltx",
+   "face": "none",
+   "anchor": "A still frame from a live-action film, a WIDE SHOT from behind the woman of reference two standing at the very edge of the skyscraper rooftop of reference one, the sunlit canyon city plunging away below her, her coat moving in the wind. Cinematic film, blinding midday sun over a futuristic canyon city, white-gold light, hard glints, deep blue sky, atmospheric haze, high contrast, fine grain, anamorphic.",
+   "prompt": "She stands at the very edge with her back to us; the wind tugs at her coat and hair; far below, sky traffic glints between the towers. The camera pushes in slowly. Wind, a distant city. No music."
+  },
+  {
+   "id": "302",
+   "title": "breath",
+   "secs": 4,
+   "refs": [
+    "maya_face",
+    "canyon"
+   ],
+   "engine": "ltx",
+   "face": "close",
+   "anchor": "A still frame from a live-action film, a CLOSE-UP of the face of the woman of reference one at the edge of the sunlit rooftop of reference two, calm now, eyes closed, sunlight on her skin, her neon-blue hair moving in the wind. Cinematic film, blinding midday sun over a futuristic canyon city, white-gold light, hard glints, deep blue sky, atmospheric haze, high contrast, fine grain, anamorphic.",
+   "prompt": "She breathes in slowly, eyes closed, and lets the breath go; she opens her eyes and looks down. Static camera, close. Wind, her breath. No music."
+  },
+  {
+   "id": "303",
+   "title": "step",
+   "secs": 4,
+   "refs": [
+    "maya_side",
+    "canyon"
+   ],
+   "engine": "ltx",
+   "face": "medium",
+   "anchor": "A still frame from a live-action film, a SIDE SHOT of the woman of reference one at the very edge of the rooftop of reference two, one boot stepping out over the drop, the sunlit canyon city below. Cinematic film, blinding midday sun over a futuristic canyon city, white-gold light, hard glints, deep blue sky, atmospheric haze, high contrast, fine grain, anamorphic.",
+   "prompt": "She steps calmly off the edge into the air. The camera holds still as she drops out of the bottom of the frame. Wind, a sudden silence. No music."
+  },
+  {
+   "id": "304",
+   "title": "gravity turns",
+   "secs": 6,
+   "refs": [
+    "maya",
+    "canyon"
+   ],
+   "engine": "both",
+   "face": "medium",
+   "anchor": "A still frame from a live-action film, a WIDE SHOT of the woman of reference one suspended in the bright air beside a sheer glass skyscraper in the sunlit canyon city of reference two, drifting upward, her iridescent coat billowing up toward the sky, dust and grit floating up around her. Cinematic film, blinding midday sun over a futuristic canyon city, white-gold light, hard glints, deep blue sky, atmospheric haze, high contrast, fine grain, anamorphic.",
+   "prompt": "In extreme slow motion she floats upward instead of falling; her coat billows softly up toward the sky as if gravity has turned over; specks of dust drift upward around her, glittering in the sun. The camera rises with her, slowly. A deep soft whoosh, wind slowed right down. No music."
+  },
+  {
+   "id": "305",
+   "title": "the sleeve",
+   "secs": 4,
+   "refs": [
+    "maya",
+    "canyon"
+   ],
+   "engine": "both",
+   "face": "none",
+   "anchor": "A still frame from a live-action film, a CLOSE SHOT of the left arm of the woman of reference one floating in the sunlit air of reference two: the glowing amber circuit pattern on her black sleeve, her matte black gloved hand open, dust motes floating upward past it. Cinematic film, blinding midday sun over a futuristic canyon city, white-gold light, hard glints, deep blue sky, atmospheric haze, high contrast, fine grain, anamorphic.",
+   "prompt": "Her gloved hand drifts open; dust motes float upward past the glowing amber circuit on her sleeve, which pulses slowly. Slow motion, the camera drifting. Soft wind, a low hum. No music."
+  },
+  {
+   "id": "306",
+   "title": "rising",
+   "secs": 4,
+   "refs": [
+    "maya",
+    "canyon"
+   ],
+   "engine": "ltx",
+   "face": "none",
+   "anchor": "A still frame from a live-action film, a LOW ANGLE SHOT looking straight up at the woman of reference one rising against the blinding sun between two sheer towers of the canyon city of reference two, her coat billowing upward. Cinematic film, blinding midday sun over a futuristic canyon city, white-gold light, hard glints, deep blue sky, atmospheric haze, high contrast, fine grain, anamorphic.",
+   "prompt": "She rises slowly up into the sun between the towers, her coat spreading upward like wings; the sun flares around her. Static camera. A deep swell of wind. No music."
+  },
+  {
+   "id": "307",
+   "title": "she flies",
+   "secs": 5,
+   "refs": [
+    "maya",
+    "canyon"
+   ],
+   "engine": "both",
+   "face": "medium",
+   "anchor": "A still frame from a live-action film, a TRACKING SHOT beside the woman of reference one flying horizontally at great speed between the glass skyscrapers of the canyon city of reference two, body stretched out, coat streaming behind her. Cinematic film, blinding midday sun over a futuristic canyon city, white-gold light, hard glints, deep blue sky, atmospheric haze, high contrast, fine grain, anamorphic.",
+   "prompt": "She tips forward and shoots between the skyscrapers at breakneck speed; the camera circles around her as she flies, tight and fast, the towers streaking past behind. Roaring wind, rushing air. No music."
+  },
+  {
+   "id": "308",
+   "title": "through the haze",
+   "secs": 4,
+   "refs": [
+    "maya",
+    "canyon"
+   ],
+   "engine": "both",
+   "face": "medium",
+   "anchor": "A still frame from a live-action film, a TRACKING SHOT of the woman of reference one flying fast out of a bank of white haze between the towers of the sunlit canyon city of reference two, vapour streaming off her coat and her neon-blue hair. Cinematic film, blinding midday sun over a futuristic canyon city, white-gold light, hard glints, deep blue sky, atmospheric haze, high contrast, fine grain, anamorphic.",
+   "prompt": "She bursts out of the white haze at speed, trails of vapour peeling off her coat and hair and streaming behind her in the sun. The camera tracks alongside. A roar of wind, a whoomp of air. No music."
+  },
+  {
+   "id": "309",
+   "title": "the glint",
+   "secs": 4,
+   "refs": [
+    "maya",
+    "canyon"
+   ],
+   "engine": "ltx",
+   "face": "medium",
+   "anchor": "A still frame from a live-action film, a CLOSE TRACKING SHOT of the woman of reference one flying through the sunlit canyon city of reference two, the sun glinting hard off her iridescent holographic coat, green on one side and violet on the other. Cinematic film, blinding midday sun over a futuristic canyon city, white-gold light, hard glints, deep blue sky, atmospheric haze, high contrast, fine grain, anamorphic.",
+   "prompt": "As the camera swings around her, the sunlight glints off her holographic coat and its colour shifts rapidly from emerald green to deep violet with the angle of the sun. Roaring wind. No music."
+  },
+  {
+   "id": "310",
+   "title": "face in flight",
+   "secs": 4,
+   "refs": [
+    "maya_face",
+    "canyon"
+   ],
+   "engine": "ltx",
+   "face": "close",
+   "anchor": "A still frame from a live-action film, an EXTREME CLOSE-UP of the face of the woman of reference one flying through the sunlit canyon city of reference two, wind tearing at her neon-blue hair, the silver nose ring glinting, her eyes bright and fierce. Cinematic film, blinding midday sun over a futuristic canyon city, white-gold light, hard glints, deep blue sky, atmospheric haze, high contrast, fine grain, anamorphic.",
+   "prompt": "Wind tears at her hair and skin as she flies; she narrows her eyes against it and a fierce, wild smile breaks across her face. The camera flies with her, close. A howl of wind. No music."
+  },
+  {
+   "id": "311",
+   "title": "first person",
+   "secs": 4,
+   "refs": [
+    "canyon"
+   ],
+   "engine": "ltx",
+   "face": "none",
+   "anchor": "A still frame from a live-action film, a FIRST-PERSON FLYING SHOT at high speed between the glass and white stone skyscrapers of the canyon city of reference one, a sky bridge rushing toward the camera, sunlight flaring. Cinematic film, blinding midday sun over a futuristic canyon city, white-gold light, hard glints, deep blue sky, atmospheric haze, high contrast, fine grain, anamorphic.",
+   "prompt": "First-person view flying at breakneck speed between the towers; the camera dives under a sky bridge and banks hard around a tower. Rushing wind, a sonic roar. No music.",
+   "avoid_extra": "people, a person, a figure, a crowd, a face, hands"
+  },
+  {
+   "id": "312",
+   "title": "barrel roll",
+   "secs": 4,
+   "refs": [
+    "maya",
+    "canyon"
+   ],
+   "engine": "both",
+   "face": "medium",
+   "anchor": "A still frame from a live-action film, a MEDIUM SHOT of the woman of reference one rolling sideways through the air between the towers of the sunlit canyon city of reference two, coat whipping around her, motion blur. Cinematic film, blinding midday sun over a futuristic canyon city, white-gold light, hard glints, deep blue sky, atmospheric haze, high contrast, fine grain, anamorphic.",
+   "prompt": "She does a tight barrel roll through the air and the camera spins with her; the city blurs into streaks of light around her; the spin slows and steadies. Roaring wind, a rush of sound. No music."
+  },
+  {
+   "id": "313",
+   "title": "the pull back",
+   "secs": 4,
+   "refs": [
+    "sunset",
+    "maya",
+    "maya"
+   ],
+   "engine": "ltx",
+   "face": "medium",
+   "anchor": "A still frame from a live-action film, a MEDIUM WIDE SHOT of the woman of reference two hovering still in the air above the canyon city of reference one at sunset, the huge orange sun directly behind her so she is backlit and almost a silhouette, orange rim light glowing around her neon-blue hair and the edges of her coat, the amber circuit on her left sleeve glowing in the shadow. Cinematic film, a massive orange setting sun, violet and amber sky, long haze, silhouettes, high contrast, fine grain, anamorphic.",
+   "prompt": "The spin stops; the camera pulls back sharply away from her as she hangs still in the air in front of the setting sun. Wind dropping away. No music."
+  },
+  {
+   "id": "314",
+   "title": "sunset",
+   "secs": 6,
+   "refs": [
+    "sunset",
+    "maya",
+    "maya"
+   ],
+   "engine": "ltx",
+   "face": "none",
+   "anchor": "A still frame from a live-action film, a WIDE STATIC LANDSCAPE SHOT of the canyon city of reference one at sunset, the massive orange sun low between the towers, and small in the middle of the sky, right in front of the sun, the woman of reference two hovering perfectly still as a dark backlit silhouette, a thin orange rim of light on her neon-blue hair, the glowing amber circuit on her left sleeve the one bright point on her. Cinematic film, a massive orange setting sun, violet and amber sky, long haze, silhouettes, high contrast, fine grain, anamorphic.",
+   "prompt": "She hovers perfectly still against the enormous setting sun; her coat stirs gently in the wind; the amber glow on her left sleeve pulses once. The camera does not move. Wind, a vast quiet. No music."
+  }
+ ]
+}

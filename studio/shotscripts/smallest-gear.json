@@ -1,0 +1,173 @@
+{
+ "_comment": "Challenge film 2 of 3 (2026-09-30): micro-movements, two characters' hands working together and knitted wool, as a stop-motion puppet film.",
+ "film": "smallest-gear",
+ "title": "THE SMALLEST GEAR",
+ "logline": "An old clockmaker lends his apprentice his steadiness for the smallest part of a watch.",
+ "grade": "Stop-motion film, warm late-afternoon sunlight through a window, a golden shaft of light full of floating dust, cosy tungsten practicals, rich browns and brass, soft shadows, shallow depth of field.",
+ "avoid": "lowres, blurry, deformed limbs, fused fingers, extra fingers, extra limbs, doubled figure, two of the same person, melting face, morphing, warping, text, letters, subtitles, captions, watermark, logo, nsfw, live-action actors, realistic human skin, smooth CGI plastic render",
+ "realism": "Handcrafted stop-motion animation, a real miniature puppet set photographed on a studio stage, puppets with smooth porcelain-like sculpted faces and glass eyes, hand-knitted wool clothing at puppet scale, visible hand-made textures, tilt-shift shallow depth of field, warm practical light.",
+ "score_tags": "gentle whimsical chamber music, pizzicato strings, soft celesta, a music box melody, the ticking of clocks, warm, tender, playful, slow, instrumental, no vocals",
+ "score_tags_b": "warm resolution, soft strings swell under celesta and a music box, tender, hopeful, instrumental, no vocals",
+ "place": {
+  "id": "workshop",
+  "prompt": "Wide photograph of a miniature stop-motion set: the inside of a cluttered, whimsical clockmaker's workshop, nobody in it: dozens of antique clocks of every size covering the walls, pendulums and cuckoo clocks, a long wooden workbench under a window crowded with tiny brass gears, springs, jeweller's tools and a loupe, a green-shaded lamp, stacks of old books, a dramatic shaft of golden late-afternoon sunlight falling through the window across the bench, dust motes floating in it. Handcrafted stop-motion animation, a real miniature puppet set photographed on a studio stage, puppets with smooth porcelain-like sculpted faces and glass eyes, hand-knitted wool clothing at puppet scale, visible hand-made textures, tilt-shift shallow depth of field, warm practical light."
+ },
+ "cast": {
+  "artisan": {
+   "role": "the clockmaker",
+   "prompt": "Full-length reference photograph of a stop-motion puppet of an elderly clockmaker of about eighty against a plain mid-grey backdrop, even soft light, standing still, facing the camera, arms at his sides. A small stooped man with a deeply wrinkled porcelain-like sculpted face, a bulbous nose, wispy white hair and bushy white eyebrows, small round brass spectacles, a thick oatmeal cable-knit wool sweater with hyper-detailed knit texture, a worn brown leather apron, brown corduroy trousers, felt slippers, long careful fingers. Handcrafted stop-motion animation, a real miniature puppet set photographed on a studio stage, puppets with smooth porcelain-like sculpted faces and glass eyes, hand-knitted wool clothing at puppet scale, visible hand-made textures, tilt-shift shallow depth of field, warm practical light."
+  },
+  "apprentice": {
+   "role": "the apprentice",
+   "prompt": "Full-length reference photograph of a stop-motion puppet of a young apprentice girl of about twelve against a plain mid-grey backdrop, even soft light, standing still, facing the camera, arms at her sides. A small girl with a smooth porcelain-like sculpted face, freckles, big earnest eyes, auburn hair in a messy bun held with a pencil, a chunky moss-green hand-knitted wool sweater with sleeves too long, a small canvas apron, brown trousers, lace-up boots. Handcrafted stop-motion animation, a real miniature puppet set photographed on a studio stage, puppets with smooth porcelain-like sculpted faces and glass eyes, hand-knitted wool clothing at puppet scale, visible hand-made textures, tilt-shift shallow depth of field, warm practical light."
+  },
+  "workshop_high": {
+   "role": "the workshop, raised angle",
+   "place": true,
+   "place_view": [
+    "workshop",
+    "angle_high_l"
+   ],
+   "prompt": "The workshop plate turned to a raised three-quarter view (studio/sheets.py)."
+  }
+ },
+ "shots": [
+  {
+   "id": "010",
+   "title": "the workshop",
+   "secs": 5,
+   "refs": [
+    "workshop"
+   ],
+   "anchor": null,
+   "engine": "ltx",
+   "face": "none",
+   "avoid_extra": "people, a person, a figure, a crowd, a face, hands",
+   "prompt": "The workshop is still but for time: pendulums swing, the hands of a dozen clocks tick forward, dust motes drift slowly through the shaft of golden sunlight. Nobody is here. The camera glides slowly along the workbench. Stop-motion animation, handcrafted puppets, miniature set. A chorus of ticking clocks, the soft creak of wood. No music."
+  },
+  {
+   "id": "020",
+   "title": "the lesson",
+   "secs": 5,
+   "refs": [
+    "artisan",
+    "apprentice",
+    "workshop"
+   ],
+   "engine": "ltx",
+   "face": "medium",
+   "anchor": "A still frame from a stop-motion animated film, a MEDIUM TWO-SHOT at the workbench of the workshop of reference three: the old man of reference one and the girl of reference two sitting side by side, bent over an open pocket watch on a cloth, the girl holding a pair of fine tweezers, the old man leaning in beside her, a shaft of golden sunlight across the bench. Stop-motion film, warm late-afternoon sunlight through a window, a golden shaft of light full of floating dust, cosy tungsten practicals, rich browns and brass, soft shadows, shallow depth of field.",
+   "prompt": "The two of them lean over the open pocket watch; the old man points one finger into the watch and the girl nods, gripping her tweezers. The camera pushes in slowly. Stop-motion animation, handcrafted puppets, miniature set. Ticking clocks, the girl's soft breath, a chair creaking. No music."
+  },
+  {
+   "id": "030",
+   "title": "the watch",
+   "secs": 4,
+   "refs": [
+    "workshop"
+   ],
+   "engine": "both",
+   "face": "none",
+   "avoid_extra": "people, a person, a figure, a crowd, a face, hands",
+   "anchor": "A still frame from a stop-motion animated film, an EXTREME CLOSE-UP of an open antique pocket watch lying on a cloth on the workbench of the workshop of reference one: its intricate brass movement of tiny gears and red jewels, one empty spindle where a gear is missing, golden sunlight raking across it, dust motes glittering in the light above the gears. Stop-motion film, warm late-afternoon sunlight through a window, a golden shaft of light full of floating dust, cosy tungsten practicals, rich browns and brass, soft shadows, shallow depth of field.",
+   "prompt": "Dust motes drift down through the shaft of sunlight and settle softly on the tiny still gears of the open watch; one glints as it lands. The camera holds still, very close. Stop-motion animation, handcrafted puppets, miniature set. A deep soft ticking from the clocks around. No music."
+  },
+  {
+   "id": "040",
+   "title": "nerves",
+   "secs": 4,
+   "refs": [
+    "apprentice",
+    "apprentice",
+    "workshop"
+   ],
+   "engine": "ltx",
+   "face": "close",
+   "anchor": "A still frame from a stop-motion animated film, a tight CLOSE-UP that fills the whole frame with the face of the girl of reference one at the workbench of the workshop of reference three, bent close over the watch, biting her lower lip in concentration, her eyes wide, a strand of auburn hair falling across her freckled cheek, golden sunlight on one side of her face. Stop-motion film, warm late-afternoon sunlight through a window, a golden shaft of light full of floating dust, cosy tungsten practicals, rich browns and brass, soft shadows, shallow depth of field.",
+   "prompt": "She holds her breath and her eyes narrow in concentration; the loose strand of hair trembles in front of her face; she swallows. Static camera, close. Stop-motion animation, handcrafted puppets, miniature set. The ticking of many clocks, her held breath. No music."
+  },
+  {
+   "id": "050",
+   "title": "four hands",
+   "secs": 5,
+   "refs": [
+    "artisan",
+    "apprentice",
+    "workshop"
+   ],
+   "engine": "both",
+   "face": "none",
+   "anchor": "A still frame from a stop-motion animated film, an EXTREME MACRO CLOSE-UP that shows only hands, tools and the watch, no faces anywhere in the frame, looking straight down over the open pocket watch on the workbench of the workshop of reference three: the small hand of the girl of reference two holding fine steel precision tweezers that grip a microscopic golden gear, and the old wrinkled hand of the man of reference one resting over hers, his steady fingers gently guiding her hand toward the empty spindle; the thick knitted cuffs of their wool sweaters, oatmeal and moss green, in the frame; golden sunlight and floating dust. Stop-motion film, warm late-afternoon sunlight through a window, a golden shaft of light full of floating dust, cosy tungsten practicals, rich browns and brass, soft shadows, shallow depth of field.",
+   "prompt": "Her hand trembles slightly; his steady fingers close gently around hers and guide the tweezers down, slowly, until the tiny golden gear hovers over the empty spindle. The knitted cuffs of their sweaters shift and crease as they move. Macro lens, static camera, shallow focus. Stop-motion animation, handcrafted puppets, miniature set. Soft ticking, the faint scrape of steel. No music."
+  },
+  {
+   "id": "060",
+   "title": "steady",
+   "secs": 5,
+   "refs": [
+    "artisan",
+    "artisan",
+    "workshop"
+   ],
+   "engine": "ltx",
+   "face": "close",
+   "line": "Steady now... let it find its own place.",
+   "anchor": "A still frame from a stop-motion animated film, a tight CLOSE-UP that fills the whole frame with the face of the old man of reference one at the workbench of the workshop of reference three, his round brass spectacles on his nose, looking down at the watch with a gentle, patient smile, deep wrinkles creasing around his eyes, golden sunlight on his face. Stop-motion film, warm late-afternoon sunlight through a window, a golden shaft of light full of floating dust, cosy tungsten practicals, rich browns and brass, soft shadows, shallow depth of field.",
+   "prompt": "He watches her work with a patient smile and says softly and warmly: \"Steady now... let it find its own place.\" Static camera, close. Stop-motion animation, handcrafted puppets, miniature set. His voice low and kind, the clocks ticking. No music."
+  },
+  {
+   "id": "070",
+   "title": "it catches",
+   "secs": 4,
+   "refs": [
+    "workshop"
+   ],
+   "engine": "both",
+   "face": "none",
+   "avoid_extra": "people, a person, a figure, a crowd, a face, hands",
+   "anchor": "A still frame from a stop-motion animated film, an EXTREME CLOSE-UP of the open pocket watch movement on the workbench of the workshop of reference one: a tiny golden gear sitting on its spindle among the other brass gears, the balance wheel beside it, golden sunlight. Stop-motion film, warm late-afternoon sunlight through a window, a golden shaft of light full of floating dust, cosy tungsten practicals, rich browns and brass, soft shadows, shallow depth of field.",
+   "prompt": "The tiny golden gear settles onto its spindle, the gears engage, and the balance wheel springs to life, swinging back and forth; every gear begins to turn. Static macro camera. Stop-motion animation, handcrafted puppets, miniature set. One tiny click, then a quick bright ticking. No music."
+  },
+  {
+   "id": "080",
+   "title": "breath",
+   "secs": 4,
+   "refs": [
+    "apprentice",
+    "apprentice",
+    "workshop"
+   ],
+   "engine": "ltx",
+   "face": "close",
+   "anchor": "A still frame from a stop-motion animated film, a MEDIUM CLOSE-UP of the girl of reference one at the workbench of the workshop of reference three, sitting back with the tweezers still in her hand, her chunky moss-green knitted sweater bunched at her shoulders, a huge relieved grin spreading across her freckled face. Stop-motion film, warm late-afternoon sunlight through a window, a golden shaft of light full of floating dust, cosy tungsten practicals, rich browns and brass, soft shadows, shallow depth of field.",
+   "prompt": "She lets out a long breath; her shoulders drop and the thick knitted wool of her sweater settles and creases; a huge grin spreads across her face. Static camera. Stop-motion animation, handcrafted puppets, miniature set. A long relieved exhale, the watch ticking quickly. No music."
+  },
+  {
+   "id": "090",
+   "title": "well done",
+   "secs": 5,
+   "refs": [
+    "artisan",
+    "apprentice",
+    "workshop"
+   ],
+   "engine": "ltx",
+   "face": "medium",
+   "anchor": "A still frame from a stop-motion animated film, a MEDIUM TWO-SHOT at the workbench of the workshop of reference three: the old man of reference one resting one hand on the shoulder of the girl of reference two, both smiling down at the ticking pocket watch she holds up in her palm, a shaft of golden sunlight between them. Stop-motion film, warm late-afternoon sunlight through a window, a golden shaft of light full of floating dust, cosy tungsten practicals, rich browns and brass, soft shadows, shallow depth of field.",
+   "prompt": "The old man gives her shoulder a gentle squeeze; she lifts the ticking watch to her ear and laughs; he chuckles. The camera pushes in slowly. Stop-motion animation, handcrafted puppets, miniature set. The watch ticking, a soft chuckle, the clocks around them. No music."
+  },
+  {
+   "id": "100",
+   "title": "on the hour",
+   "secs": 5,
+   "refs": [
+    "workshop_high"
+   ],
+   "engine": "ltx",
+   "face": "none",
+   "avoid_extra": "people, a person, a figure, a crowd, a face, hands",
+   "anchor": "A still frame from a stop-motion animated film, a HIGH WIDE SHOT of the whole workshop of reference one from above the workbench, every clock on the walls, the shaft of golden sunlight across the bench. Stop-motion film, warm late-afternoon sunlight through a window, a golden shaft of light full of floating dust, cosy tungsten practicals, rich browns and brass, soft shadows, shallow depth of field.",
+   "prompt": "Every clock in the workshop strikes the hour at once: pendulums swing, cuckoos pop out of their doors, little bells ring; the dust in the sunbeam swirls. The camera pulls back slowly. Stop-motion animation, handcrafted puppets, miniature set. A joyful chorus of chimes, bells and cuckoos. No music."
+  }
+ ]
+}

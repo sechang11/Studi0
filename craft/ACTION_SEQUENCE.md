@@ -403,3 +403,43 @@ The page no longer asks anything through the browser's own prompt / confirm boxe
   against 49 s planned.
 - **Compare**: tick two takes and they play side by side, in step (within a frame), stepped frame by
   frame together, with one's sound, their measurements under each, and "use" on either.
+
+## 2026-09-30: four challenge films, and what the pipeline gained making them
+
+SYSTEM ERROR (2D cyberpunk anime), THE SMALLEST GEAR (stop-motion puppets), STORM SONATA (photoreal) and THE
+QUANTUM COURIER (one character across three worlds, ~2:50), each written from a brief that names what AI video
+is bad at. Scripts: `studio/shotscripts/_make_challenge_films_0930.py`, `_make_quantum_courier_0930.py`.
+
+- **Made references** (`studio/_tools/sheet_refs.py --sequence FILM`, after `--cast`, before `--anchors`). A cast
+  entry may be `"place": true` (a second place, drawn 1280x720 - `--cast` would draw it as a standing figure),
+  `"place_view": [place, view]` (the plate turned by the multiple-angles LoRA, so it is the SAME room), or
+  `"sheet_view": [who, view]` (a view from the character's own sheet: a shot from behind is handed the back of
+  THEIR coat). Every character it touches gets a whole model sheet on /sheets.
+- **The compositor puts places first** (`fight._qwen_anchor`): the canvas follows image_1, so a shot listed
+  `[the courier, the corridor]` came back portrait-shaped and was cropped to 16:9. The plate and any
+  `"place": true` entry now lead.
+- **Flux 2 still obeys shot size better.** Three more cases: the puppets' close-ups and the four-hands macro came
+  back medium from Qwen-Image-2.1 twice and right from Flux 2 (`--compositor best --redraw`, then
+  `--anchor-picks 050=flux2`). Flux 2 takes exactly three references - repeat one.
+- **The face scorer cannot read drawn faces.** On the anime and puppet films every anchor was "no face to score -
+  default", and `take_rank.py` calls a drawn face "drifted" at 0.5-0.6 when it plainly has not. Pick those by eye.
+- **LTX-2.5 holds 2D anime** from an anime start frame, and **carries legible text**: "SYSTEM ERROR", drawn into the
+  start frame by Qwen-Image, stayed sharp through a 72% push-in and through a glitch that broke it into scanlines
+  and snapped it back.
+- **H3 is still the effects engine.** Steam fogging a pair of glasses happened only on H3 (LTX pushed in and left
+  the lenses clear); "spray flies off the keyboard" made LTX blow the piano apart - the monotonic accumulation of
+  "The two that did not survive" - while H3 gave the chord a lightning flash. The four hands moved on H3 and
+  barely drifted on LTX.
+- **A reference can be wrong in a way the brief cares about.** Maya's put the amber circuit on her right sleeve;
+  her nose ring (left, correctly) ruled out mirroring, and Qwen-Image-Edit-2511 moved the sleeve on three seeds
+  out of three. Check the brief's left-and-right details on the reference before anything is drawn from it.
+- **Stop-motion "on twos"**: `ffmpeg -vf fps=12` on the final - the stepped look of a puppet film - delivered
+  beside the 24 fps cut.
+- **SeedVR2 video master** (`studio/_tools/seedvr2_master.py --sequence FILM`, after `--finish`): the film cut back
+  into its shots and each run through ComfyUI's SeedVR2 3B blueprint. A 121-frame shot at 2560x1408 in one pass
+  is out of memory; with `SeedVR2TemporalChunk` / `Merge` ("auto") it runs, at ~2 s a frame - about 35 minutes
+  for a 45-second film against ~4 for `--master`'s ESRGAN.
+- **Two background jobs on one ComfyUI starve**: `wait_for_queue` waits for an empty queue, and a stage that
+  submits back to back never leaves one. Queue a redraw behind the takes, or re-render after.
+- **The box rebooted at 02:26** for a kernel and NVIDIA driver update (610.57 -> 615.71); ComfyUI and the studio
+  came back by themselves at login.

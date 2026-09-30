@@ -276,8 +276,11 @@ def _qwen_anchor(s, seed, dst):
     the canvas follows image_1; a character named twice is sent once; the shot's words ('the woman of
     reference one') are renumbered to the pictures' new order."""
     import re
-    order = _unique(([PLACE_ID] if PLACE_ID in s["refs"] else []) +
-                    [r for r in s["refs"] if r != PLACE_ID])
+    # places first - the plate, and any second place a cast entry marks "place": true
+    # (sheet_refs.py) - because the canvas follows image_1: [the courier, the corridor] came
+    # back portrait-shaped and was then cropped to 16:9
+    places = [r for r in s["refs"] if r == PLACE_ID or (_seq["cast"].get(r) or {}).get("place")]
+    order = _unique(places + [r for r in s["refs"] if r not in places])
     idx = {r: i for i, r in enumerate(order, 1)}
     words = s["anchor"]
     for n, r in enumerate(s["refs"], 1):

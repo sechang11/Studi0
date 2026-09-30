@@ -1,0 +1,175 @@
+{
+ "_comment": "Challenge film 3 of 3 (2026-09-30): rain, reflections, lightning and fingers racing on piano keys, photoreal.",
+ "film": "storm-sonata",
+ "title": "STORM SONATA",
+ "logline": "A street pianist plays through a thunderstorm in an empty square, and does not stop.",
+ "grade": "Cinematic film, night thunderstorm, cold blue-grey rain light, warm sodium street lamps, white lightning flashes, glossy wet surfaces and reflections, deep blacks with detail, fine grain, anamorphic.",
+ "avoid": "lowres, blurry, deformed limbs, fused fingers, extra fingers, extra limbs, doubled figure, two of the same person, melting face, morphing, warping, text, letters, subtitles, captions, watermark, logo, nsfw",
+ "realism": "Unretouched photograph, available light, visible skin texture and pores, fine film grain, shallow depth of field, no retouching, no gloss.",
+ "score_tags": "virtuosic romantic solo grand piano, fast stormy arpeggios, thundering left hand octaves, passionate, dramatic, intense, fast tempo, instrumental, no vocals, no other instruments",
+ "score_tags_b": "solo grand piano, final crashing chords, then a quiet tender resolution, slow, instrumental, no vocals, no other instruments",
+ "place": {
+  "id": "plaza",
+  "prompt": "Wide photograph of a deserted old European plaza at night in a violent thunderstorm, nobody in it: rain-soaked cobblestones flooded with puddles, a glossy black concert grand piano standing alone in the middle of the square with its lid raised, a baroque church facade and old stone buildings with tall shuttered windows around it, iron street lamps glowing warm, sheets of rain, a fork of lightning over the rooftops lighting the stone white. Deep perspective, anamorphic. Unretouched photograph, available light, visible skin texture and pores, fine film grain, shallow depth of field, no retouching, no gloss."
+ },
+ "cast": {
+  "pianist": {
+   "role": "the pianist",
+   "prompt": "Full-length reference photograph of a man of about thirty against a plain mid-grey backdrop, even soft light, standing still, facing the camera, arms at his sides. A lean, intense street musician with shoulder-length wavy dark hair, a short dark beard, long slender fingers, a white linen shirt with the sleeves rolled to the elbows and open at the collar, dark braces, dark grey trousers, worn brown leather boots. Unretouched photograph, available light, visible skin texture and pores, fine film grain, shallow depth of field, no retouching, no gloss."
+  },
+  "plaza_high": {
+   "role": "the square from above",
+   "place": true,
+   "place_view": [
+    "plaza",
+    "angle_aerial"
+   ],
+   "prompt": "The plaza plate turned to an aerial view (studio/sheets.py)."
+  },
+  "pianist_face": {
+   "role": "the pianist's face, three-quarter",
+   "sheet_view": [
+    "pianist",
+    "face_front_r"
+   ],
+   "prompt": "The three-quarter face view from the pianist's character sheet."
+  }
+ },
+ "shots": [
+  {
+   "id": "010",
+   "title": "the square",
+   "secs": 5,
+   "refs": [
+    "plaza"
+   ],
+   "anchor": null,
+   "engine": "ltx",
+   "face": "none",
+   "avoid_extra": "people, a person, a figure, a crowd, a face, hands",
+   "prompt": "Rain hammers down on the deserted square; a flash of lightning lights the church facade white for an instant and is gone; the puddles on the cobblestones leap with the rain around the lone piano. The camera pushes in slowly toward the piano. Violent rain, a crack of thunder rolling round the square. No music."
+  },
+  {
+   "id": "020",
+   "title": "he plays",
+   "secs": 5,
+   "refs": [
+    "pianist",
+    "pianist",
+    "plaza"
+   ],
+   "engine": "ltx",
+   "face": "wide",
+   "anchor": "A still frame from a live-action film, a WIDE SHOT of the square of reference three in the storm: the man of reference one seated at the glossy black grand piano in the middle of the square, playing with fierce energy, his white shirt soaked through and clinging to him, rain bouncing off the piano, lightning over the rooftops. Cinematic film, night thunderstorm, cold blue-grey rain light, warm sodium street lamps, white lightning flashes, glossy wet surfaces and reflections, deep blacks with detail, fine grain, anamorphic.",
+   "prompt": "He plays furiously in the pouring rain, his whole body driving into the keys, head bowed, soaked hair swinging; lightning flickers across the sky. The camera pushes in slowly. The roar of rain, thunder, the thud of the keys. No music."
+  },
+  {
+   "id": "025",
+   "title": "from above",
+   "secs": 4,
+   "refs": [
+    "plaza_high",
+    "pianist",
+    "pianist"
+   ],
+   "engine": "ltx",
+   "face": "none",
+   "anchor": "A still frame from a live-action film, a HIGH WIDE SHOT looking down on the square of reference one from above the rooftops: the tiny figure of the man of reference two SEATED on the bench at the keyboard of the grand piano in the middle of the flooded square, playing it, heavy rain streaking down through the lamplight, lightning in the clouds. Cinematic film, night thunderstorm, cold blue-grey rain light, warm sodium street lamps, white lightning flashes, glossy wet surfaces and reflections, deep blacks with detail, fine grain, anamorphic.",
+   "prompt": "From high above, the tiny figure plays on at the piano in the middle of the flooded square as sheets of rain sweep across it; lightning flashes and the whole square turns white for an instant. The camera descends slowly. Rain, thunder rolling. No music."
+  },
+  {
+   "id": "030",
+   "title": "rain on lacquer",
+   "secs": 4,
+   "refs": [
+    "plaza"
+   ],
+   "engine": "both",
+   "face": "none",
+   "avoid_extra": "people, a person, a figure, a crowd, a face, hands",
+   "anchor": "A still frame from a live-action film, an EXTREME CLOSE-UP of the glossy black lacquered lid of the grand piano in the square of reference one, heavy rain splashing violently off the wet surface, the mirror-like lacquer reflecting the lit windows of the old buildings and a jagged fork of lightning. Cinematic film, night thunderstorm, cold blue-grey rain light, warm sodium street lamps, white lightning flashes, glossy wet surfaces and reflections, deep blacks with detail, fine grain, anamorphic.",
+   "prompt": "Heavy raindrops smash onto the glossy black lid and burst into splashes and spray; in the mirror-black lacquer the reflection of the old buildings trembles, and a flash of lightning blazes across it. The camera slides slowly along the lid. Rain drumming on wood, a crack of thunder. No music."
+  },
+  {
+   "id": "040",
+   "title": "the run",
+   "secs": 4,
+   "refs": [
+    "pianist",
+    "plaza"
+   ],
+   "engine": "both",
+   "face": "none",
+   "anchor": "A still frame from a live-action film, an EXTREME CLOSE-UP of the keyboard of the glossy black grand piano in the rainy square of reference two: the long slender hands of the man of reference one racing across the wet black and white keys in a fast run, water standing in beads on the ivory, rain falling onto the keys and onto his soaked white shirt cuffs. Cinematic film, night thunderstorm, cold blue-grey rain light, warm sodium street lamps, white lightning flashes, glossy wet surfaces and reflections, deep blacks with detail, fine grain, anamorphic.",
+   "prompt": "His fingers race across the keys in a fast, precise run up the keyboard; with every strike, water droplets fly off the keys in bright sprays; rain keeps falling on his hands. The camera tracks fast alongside the hands. The rapid thud of keys, rain, spray. No music."
+  },
+  {
+   "id": "050",
+   "title": "soaked",
+   "secs": 5,
+   "refs": [
+    "pianist_face",
+    "pianist",
+    "plaza"
+   ],
+   "engine": "both",
+   "face": "close",
+   "anchor": "A still frame from a live-action film, a CLOSE-UP of the face of the man of reference one playing the grand piano in the storm in the square of reference three, eyes closed in passion, his soaked dark hair plastered to his forehead and cheeks, rain and sweat streaming down his face, a flash of lightning lighting one side of his face. Cinematic film, night thunderstorm, cold blue-grey rain light, warm sodium street lamps, white lightning flashes, glossy wet surfaces and reflections, deep blacks with detail, fine grain, anamorphic.",
+   "prompt": "He sways with the music, eyes shut, jaw tight; drops of rain and sweat fly off his hair and chin as he moves; lightning flashes across his face. Static camera, close. Rain, thunder, his hard breathing. No music."
+  },
+  {
+   "id": "060",
+   "title": "the reflection",
+   "secs": 4,
+   "refs": [
+    "pianist",
+    "plaza"
+   ],
+   "engine": "both",
+   "face": "none",
+   "anchor": "A still frame from a live-action film, a LOW ANGLE SHOT of a wide flooded puddle on the cobblestones of the square of reference two, reflecting upside down the grand piano and the man of reference one playing it, rain rings spreading across the reflection, the lit church facade behind. Cinematic film, night thunderstorm, cold blue-grey rain light, warm sodium street lamps, white lightning flashes, glossy wet surfaces and reflections, deep blacks with detail, fine grain, anamorphic.",
+   "prompt": "Raindrops ring across the puddle and shatter the upside-down reflection of the pianist and the piano; a flash of lightning turns the reflection white for an instant. The camera stays low and still. Rain splashing in the puddle, thunder. No music."
+  },
+  {
+   "id": "070",
+   "title": "fortissimo",
+   "secs": 4,
+   "refs": [
+    "pianist",
+    "pianist",
+    "plaza"
+   ],
+   "engine": "both",
+   "face": "medium",
+   "anchor": "A still frame from a live-action film, a MEDIUM SHOT of the man of reference one SEATED on the bench at the keyboard of the glossy black grand piano in the square of reference three, facing the keys, both hands raised high above the keys about to crash down, his soaked shirt clinging, rain sheeting down, a bolt of lightning splitting the sky behind the church. Cinematic film, night thunderstorm, cold blue-grey rain light, warm sodium street lamps, white lightning flashes, glossy wet surfaces and reflections, deep blacks with detail, fine grain, anamorphic.",
+   "prompt": "His hands crash down onto the keys in one huge chord and spray flies off the keyboard; at the same instant lightning strikes behind the church and floods the square with white light. Static camera. The crash of the keys, a deafening crack of thunder, pouring rain. No music."
+  },
+  {
+   "id": "080",
+   "title": "after",
+   "secs": 5,
+   "refs": [
+    "pianist",
+    "plaza"
+   ],
+   "engine": "ltx",
+   "face": "none",
+   "anchor": "A still frame from a live-action film, a CLOSE SHOT of the hands of the man of reference one lifting slowly from the wet keys of the grand piano in the square of reference two, water dripping from his fingertips onto the ivory, his soaked shirt cuffs. Cinematic film, night thunderstorm, cold blue-grey rain light, warm sodium street lamps, white lightning flashes, glossy wet surfaces and reflections, deep blacks with detail, fine grain, anamorphic.",
+   "prompt": "He lifts his hands slowly from the keys and holds them there; water drips from his fingertips onto the ivory; the rain begins to ease. Static camera, close. Dripping water, the rain softening. No music."
+  },
+  {
+   "id": "090",
+   "title": "the rain eases",
+   "secs": 5,
+   "refs": [
+    "pianist",
+    "pianist",
+    "plaza"
+   ],
+   "engine": "ltx",
+   "face": "wide",
+   "anchor": "A still frame from a live-action film, a WIDE SHOT of the square of reference three as the storm breaks: the man of reference one standing beside the grand piano, head tipped back, face turned up to the thinning rain, the wet cobblestones gleaming gold under the street lamps, a last flicker of lightning far away over the rooftops. Cinematic film, night thunderstorm, cold blue-grey rain light, warm sodium street lamps, white lightning flashes, glossy wet surfaces and reflections, deep blacks with detail, fine grain, anamorphic.",
+   "prompt": "He stands by the piano with his face turned up into the thinning rain and breathes; far away a last faint flicker of lightning; the puddles settle. The camera pulls back slowly. Soft rain, distant thunder rolling away, water dripping from the rooftops. No music."
+  }
+ ]
+}
