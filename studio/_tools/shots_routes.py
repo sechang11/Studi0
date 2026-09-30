@@ -18,12 +18,13 @@ film_cards.py) with the same flags, one job at a time; the log it shows is their
     GET  /api/shots/list             every shot script
     GET  /api/shots/script?film=X    one script
     GET  /api/shots/tree?film=X      the outputs per pipeline stage (the older page's view)
-    GET  /api/shots/status           the running job and its log tail
+    GET  /api/shots/status           the running job, its progress and log tail, and the queue
+    GET  /api/shots/plan?film=X      what "make everything missing" would make, and roughly how long
     POST /api/shots/save    {film, script}                    write the script (schema-checked)
     POST /api/shots/new     {film, from?}                     a new script (skeleton, or a copy)
     POST /api/shots/run     {film, op, shots?, ...}           cast | anchors | takes | rank | music |
-                                                              assemble | seedance (paid) | stage (old)
-    POST /api/shots/stop
+                                                              assemble | missing | seedance (paid) | stage (old)
+    POST /api/shots/stop    {} | {queue_id} | {all: true}     stop the job, drop a waiting one, or both
     POST /api/shots/pick    {film, shot, token}               this take is in the film
     POST /api/shots/anchor  {film, shot, candidate}           this start frame is the shot's
     POST /api/shots/seedance {film, shot, prompt, secs, why}  keep this Seedance prompt on the shot
@@ -31,7 +32,8 @@ film_cards.py) with the same flags, one job at a time; the log it shows is their
     POST /api/shots/archive {film}  /  restore {film}         put a film away (shotscripts/_archive/), or back
 
 One job at a time, on purpose: every stage holds the GPU, and two runs on one film would race each
-other's files. Kept out of serve.py because it owns a child process.
+other's files. A job asked for while another runs waits in a queue and starts by itself, in order.
+Kept out of serve.py because it owns a child process.
 """
 import base64
 import glob
@@ -123,7 +125,10 @@ if not hasattr(_STATE, "JOB"):
     _STATE.JOB = {"proc": None, "film": None, "op": None, "shots": [], "started": None, "log": None, "cmd": None,
                   "abort": False, "done": True, "rc": None}
     _STATE.LOCK = threading.Lock()
-_JOB, _LOCK = _STATE.JOB, _STATE.LOCK
+if not hasattr(_STATE, "QUEUE"):
+    # jobs asked for while one runs wait here, in order, and start by themselves - one GPU, one at a time
+    _STATE.QUEUE = []
+_JOB, _LOCK, _QUEUE = _STATE.JOB, _STATE.LOCK, _STATE.QUEUE
 
 
 # ------------------------------------------------------------------------------ helpers
@@ -451,10 +456,13 @@ def status():
     log = _tail(_JOB["log"], 400) if _JOB["log"] else ""
     lines = [x.strip() for x in log.splitlines() if x.strip() and not x.startswith("$ ")]
     return {"running": _running(), "film": _JOB["film"], "op": _JOB["op"], "shots": _JOB["shots"],
-            "started": _JOB["started"], "returncode": _JOB["rc"], "cmd": _JOB["cmd"],
+            "started": _JOB["started"], "returncode": _JOB["rc"], "cmd": _JOB["cmd"], "id": _JOB.get("id"),
             # how far it has got: pictures and takes finished of those asked for, and what it said last
             "total": _JOB.get("total"), "done": len(MADE_RE.findall(log)) if _JOB.get("total") else None,
             "now": (lines[-1][:140] if lines else ""),
+            "queue": [{"id": q["id"], "film": q["film"], "op": q["op"], "shots": q["shots"], "total": q["total"],
+                       "at": q["at"]} for q in list(_QUEUE)],
+            "last": getattr(_STATE, "LAST", None),
             "log": "".join(log.splitlines(True)[-80:])}
 
 
@@ -717,13 +725,28 @@ def _shot_list(data, s):
 
 
 def _start(film, op, shots, cmds, total=None):
+    """Run it now, or - with a job running, or others already waiting - queue it behind them.
+    Called with _LOCK held."""
+    item = {"id": "%d%03d" % (time.time(), len(_QUEUE)), "film": film, "op": op, "shots": shots, "cmds": cmds,
+            "total": total, "at": int(time.time())}
+    if _running() or _QUEUE:
+        _QUEUE.append(item)
+        if not _running():
+            _launch(_QUEUE.pop(0))
+        return {"ok": True, "film": film, "op": op, "queued": len(_QUEUE),
+                "cmd": " && ".join(" ".join(shlex.quote(c) for c in cmd) for cmd in cmds)}, 200
+    return _launch(item)
+
+
+def _launch(item):
+    film, op, shots, cmds, total = item["film"], item["op"], item["shots"], item["cmds"], item["total"]
     out = _out(film)
     os.makedirs(out, exist_ok=True)
     log = os.path.join(out, "_app_%s.log" % op)
     lf = open(log, "w", encoding="utf-8")
     _JOB.update({"proc": None, "film": film, "op": op, "shots": shots, "started": int(time.time()), "log": log,
                  "cmd": " && ".join(" ".join(shlex.quote(c) for c in cmd) for cmd in cmds), "abort": False,
-                 "done": False, "rc": None, "total": total or None})
+                 "done": False, "rc": None, "total": total or None, "id": item["id"]})
     env = dict(os.environ, PYTHONUNBUFFERED="1", FIGHT_SEQUENCE=film)
 
     def work():
@@ -747,15 +770,55 @@ def _start(film, op, shots, cmds, total=None):
                 break
         lf.write("\n[exit %s]\n" % rc)
         lf.close()
-        _JOB.update({"done": True, "rc": rc, "proc": None})
+        with _LOCK:
+            _JOB.update({"done": True, "rc": rc, "proc": None})
+            # the page reads this to say how the job ended even when the next one starts at once
+            _STATE.LAST = {"id": item["id"], "op": op, "film": film, "shots": shots, "rc": rc, "at": int(time.time())}
+            if _QUEUE:                          # the next one waiting starts now
+                _launch(_QUEUE.pop(0))
     threading.Thread(target=work, daemon=True).start()
     return {"ok": True, "film": film, "op": op, "cmd": _JOB["cmd"]}, 200
 
 
+def plan(film, seeds=None, anchor_seeds=None):
+    """What 'make everything missing' would make: the cast and place pictures not drawn yet, the start
+    frames not drawn yet, and a first round of takes for every shot with none - skipping locked
+    shots - with a count for the progress bar and a rough time from what the demo films measured
+    (a Qwen start frame ~14 s, an LTX-2.5 take ~6 s + 4 s per second of film, an H3 take ~45 s)."""
+    s = _load(film)
+    if s is None:
+        return None
+    out = _out(film)
+    files = set(os.listdir(out)) if os.path.isdir(out) else set()
+    seeds = list(seeds or ["11", "202", "3003"])
+    aseeds = list(anchor_seeds or ["11", "202"])
+    cast = [r for r in list(s["cast"]) + [s["place"]["id"]] if "ref_%s.png" % r not in files]
+    anchors, takes, locked, skipped = [], [], [], []
+    for x in s["shots"]:
+        sid, eng = x["id"], x.get("engine", "ltx")
+        if _spec(film, sid)["locked"]:
+            locked.append(sid)
+            continue
+        if eng != "previz" and "anchor_%s.png" % sid not in files:
+            anchors.append({"id": sid, "plate": x.get("anchor") is None})
+        if not any(re.match(TAKE_RE % sid, f) for f in files):
+            if eng == "previz" and not x.get("previz"):
+                skipped.append({"id": sid, "why": "a physics shot with no scene chosen"})
+                continue
+            takes.append({"id": sid, "engine": eng, "secs": float(x.get("secs") or 4)})
+    est = 20 * len(cast) + sum(1 if a["plate"] else 17 * len(aseeds) for a in anchors)
+    for t in takes:
+        per = {"ltx": 6 + 4 * t["secs"], "h3": 45, "both": 51 + 4 * t["secs"], "previz": 45}.get(t["engine"], 30)
+        est += (per + 10) * len(seeds) + (90 if t["engine"] == "previz" else 0)
+    total = len(cast) + sum(0 if a["plate"] else len(aseeds) for a in anchors) + \
+        sum(len(seeds) * (2 if t["engine"] == "both" else 1) for t in takes)
+    return {"film": film, "cast": cast, "anchors": anchors, "takes": takes, "locked": locked, "skipped": skipped,
+            "seeds": seeds, "anchor_seeds": aseeds, "estimate": int(est), "total": total}
+
+
 def run(data):
     with _LOCK:
-        if _running():
-            return {"error": "a job is already running (%s on %s) - one at a time" % (_JOB["op"], _JOB["film"])}, 409
+        # with a job running, this one is queued behind it (_start) rather than refused
         film = str(data.get("film") or "")
         s = _load(film) if FILM_RE.match(film) else None
         if s is None:
@@ -841,6 +904,42 @@ def run(data):
         if op == "rank":
             cmds = [py + ["--score"], rank + (["--only-shots", ",".join(shots)] if shots else [])]
             return _start(film, "rank", shots, cmds)
+        if op == "missing":
+            # one job, in order: pictures, start frames, takes, then measure and rank what was made
+            seeds, err = _seeds(data.get("seeds"))
+            if err:
+                return {"error": err}, 400
+            aseeds, err = _seeds(data.get("anchor_seeds"), ("11", "202"))
+            if err:
+                return {"error": err}, 400
+            p = plan(film, seeds, aseeds)
+            cmds = []
+            if p["cast"]:
+                engine = str(data.get("cast_engine") or "flux2")
+                if engine not in [m["id"] for m in MODELS["cast"]]:
+                    return {"error": "cast model is flux2, krea2 or qwen21"}, 400
+                cmds.append(py + ["--cast", "--cast-engine", engine])      # draws only the ones missing
+            if p["anchors"]:
+                cmds.append(py + ["--anchors", "--only-shots", ",".join(a["id"] for a in p["anchors"]),
+                                  "--compositor", "qwen21", "--qseeds"] + aseeds)
+            ltx = [t["id"] for t in p["takes"] if t["engine"] in ("ltx", "both")]
+            h3 = [t["id"] for t in p["takes"] if t["engine"] in ("h3", "both")]
+            pv = [t["id"] for t in p["takes"] if t["engine"] == "previz"]
+            if ltx:
+                cmds.append(py + ["--shots", "--only-shots", ",".join(ltx), "--seeds"] + seeds)
+            if h3:
+                cmds.append(py + ["--h3", ",".join(h3), "--seeds"] + seeds)
+            for i in pv:
+                cmds.append(["python3", os.path.join(TOOLS, "previz_shot.py"), "--sequence", film, "--shot", i,
+                             "--seeds"] + seeds + ["--bypass-seeds"])
+            made = [t["id"] for t in p["takes"]]
+            if made:
+                cmds.append(py + ["--score"])
+                cmds.append(rank + ["--only-shots", ",".join(made)])
+            if not cmds:
+                return {"error": "nothing is missing - every shot has its pictures, its start frame and takes"}, 400
+            touched = [x["id"] for x in s["shots"] if x["id"] in {a["id"] for a in p["anchors"]} | set(made)]
+            return _start(film, "missing", touched, cmds, total=p["total"])
         if op == "music":
             # as long as the cut really is - the picked takes, trimmed - not the script's planned seconds
             payload, _ = editor(film)
@@ -894,6 +993,17 @@ def _old_stage(film, s, data):
 
 
 def stop(data=None):
+    """Stop the running job ({}), take one waiting job off the queue ({queue_id}), or clear the queue
+    and stop the running job ({all: true}). The queue moves on after a stop."""
+    data = data or {}
+    with _LOCK:
+        if data.get("queue_id"):
+            before = len(_QUEUE)
+            _QUEUE[:] = [q for q in _QUEUE if q["id"] != str(data["queue_id"])]
+            return ({"ok": True, "removed": before - len(_QUEUE)}, 200) if before != len(_QUEUE) else \
+                ({"error": "that job is not waiting any more"}, 404)
+        if data.get("all"):
+            _QUEUE.clear()
     if not _running():
         return {"ok": True, "note": "nothing was running"}, 200
     _JOB["abort"] = True
@@ -924,6 +1034,16 @@ def get(path, query):
         return tree(q.get("film"))
     if rest == "status":
         return status(), 200
+    if rest == "plan":
+        film = q.get("film") or ""
+        if not FILM_RE.match(film):
+            return {"error": "bad film"}, 400
+        seeds, err = _seeds(q.get("seeds"))
+        aseeds, err2 = _seeds(q.get("anchor_seeds"), ("11", "202"))
+        if err or err2:
+            return {"error": err or err2}, 400
+        p = plan(film, seeds, aseeds)
+        return (p, 200) if p else ({"error": "no script %s" % film}, 404)
     return {"error": "unknown shots route"}, 404
 
 

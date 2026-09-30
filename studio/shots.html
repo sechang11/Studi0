@@ -325,6 +325,11 @@
  dialog.dlg{padding:0;border:1px solid #3a3a48;border-radius:12px;background:#13131b;color:var(--ink);width:min(560px,calc(100vw - 30px));
    box-shadow:0 20px 60px rgba(0,0,0,.7)}
  dialog.dlg.wide{width:min(760px,calc(100vw - 30px))}
+ dialog.dlg.xwide{width:min(1240px,calc(100vw - 30px))}
+ .cmp{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px}
+ .cmp video{width:100%;aspect-ratio:16/9;background:#000;border-radius:6px;display:block}
+ .cmpl{margin-top:5px;font-size:13px}
+ @media(max-width:760px){.cmp{grid-template-columns:1fr}}
  dialog.dlg::backdrop{background:rgba(4,4,8,.66)}
  .dlg form{margin:0}
  .dlg-h{display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--line)}
@@ -551,11 +556,12 @@ function arm(btn, label, fn, ms) {
 }
 // the page's own dialog: a form, validated in place, errors shown inside it
 const DLG = {onOk: null, onClose: null};
-function openDialog({title, body, ok = "ok", okClass = "primary", init, onOk, wide, noFoot}) {
+function openDialog({title, body, ok = "ok", okClass = "primary", init, onOk, wide, xwide, noFoot}) {
   $("#dlgtitle").textContent = title; $("#dlgbody").innerHTML = body; $("#dlgerr").textContent = "";
   const b = $("#dlgok"); b.textContent = ok; b.className = okClass; b.disabled = false;
   $("#dlgfoot").hidden = !!noFoot;
   $("#dlg").classList.toggle("wide", !!wide);
+  $("#dlg").classList.toggle("xwide", !!xwide);
   DLG.onOk = onOk;
   if (!$("#dlg").open) $("#dlg").showModal();
   if (init) init($("#dlgbody"));
@@ -651,13 +657,14 @@ $("#filmmenu").onclick = e => { e.stopPropagation(); openPop("#filmmenupop"); };
 document.addEventListener("click", e => { if (!e.target.closest(".pop") && !e.target.closest("#fswbtn") && !e.target.closest("#filmmenu")) closePops(); });
 function renderFilmMenu() {
   const items = isScript()
-    ? [["settings", "Film settings: title, look, negative, music"], ["dup", "Duplicate this film…"], ["-"], ["archive", "Archive this film"], ["-"], ["help", "Keyboard shortcuts and how it works"]]
+    ? [["missing", "Make everything missing…"], ["-"], ["settings", "Film settings: title, look, negative, music"], ["dup", "Duplicate this film…"], ["-"], ["archive", "Archive this film"], ["-"], ["help", "Keyboard shortcuts and how it works"]]
     : [["editor", "Open it in the film editor ↗"], ["classic", "Open the classic spec sheet ↗"], ["-"], ["help", "Keyboard shortcuts and how it works"]];
   $("#filmmenupop").innerHTML = items.map(([k, l]) => k === "-" ? "<hr>" : `<button data-m="${k}">${esc(l)}</button>`).join("");
   $("#filmmenupop").querySelectorAll("[data-m]").forEach(b => b.onclick = () => {
     closePops();
     const k = b.dataset.m;
-    if (k === "settings") filmSettingsDialog();
+    if (k === "missing") missingDialog();
+    else if (k === "settings") filmSettingsDialog();
     else if (k === "dup") newFilmDialog({from: S.film});
     else if (k === "archive") archiveFilm();
     else if (k === "editor") location.href = "/film?film=" + encodeURIComponent(S.film);
@@ -840,7 +847,8 @@ function nextStep(s) {
   const ds = s.raw, d = S.data, sh = scriptShot(s.id) || ds;
   const need = [...new Set((sh.refs || []).filter(r => !(d.refs[r] || {}).url))];
   if (need.length) return {text: `Make the picture${need.length > 1 ? "s" : ""} for ${need.join(" and ")} first - every shot points at ${need.length > 1 ? "them" : "it"}.`,
-                           act: "open the cast", fn: () => { S.openRef = need[0]; gotoTab("cast"); }};
+                           act: "open the cast", fn: () => { S.openRef = need[0]; gotoTab("cast"); },
+                           alt: "or make everything missing", altFn: () => missingDialog()};
   if (!ds.anchor_url && ds.engine !== "previz") {
     if (ds.anchor === null || ds.anchor === undefined)
       return {text: "This shot starts on the place's own picture - set it as the start frame.", act: "use the plate", fn: () => runOp({op: "anchors", shots: [s.id], compositor: "qwen21", seeds: "11"})};
@@ -1377,7 +1385,8 @@ async function runOp(body) {
   try {
     body.film = S.film;
     const r = await api("/api/shots/run", body);
-    toast("started: " + r.op, true);
+    if (r.queued) toast(`${r.op} is queued - ${r.queued === 1 ? "it starts when the running job ends" : (r.queued - 1) + " ahead of it"}`, {ok: true, action: {label: "see the queue", fn: () => $("#joblog").click()}});
+    else toast("started: " + r.op, true);
     startPoll(); return r;
   } catch (e) { toast(e.message); }
 }
@@ -1415,6 +1424,7 @@ function renderInsp() {
   box.querySelectorAll("[data-tab]").forEach(b => b.onclick = () => gotoTab(b.dataset.tab));
   if (isScript()) { bindScript(s.id); bindCast(); showSaveState(); }
   else bindFilm(s);
+  bindCmp(s);
   markTakes();
 }
 const optList = (list, v) => list.map(m => `<option value="${m.id}" ${m.id === v ? "selected" : ""}>${esc(m.label)}${m.wf ? " (" + m.wf + ")" : ""}</option>`).join("");
@@ -1510,7 +1520,7 @@ function paneTakes(sh, ds, s) {
   h += promisesHtml(s);
   if (!locked) h += `<label class="l">why you'd use a take over the ranker's pick (optional)</label>
     <input id="pickwhy" style="width:100%" value="${esc(S.pickWhy && S.pickWhy.id === sh.id ? S.pickWhy.text : "")}" placeholder="printed under the shot on the annotated cut">`;
-  h += `<label class="l">takes (${ds.takes.length})</label>`;
+  h += `<label class="l">takes (${ds.takes.length})</label>` + cmpBar(s);
   if (!ds.takes.length) h += `<div class="hint">none yet</div>`;
   const takes = ds.takes.slice().sort((a, b) => (a.token === ds.pick ? -1 : b.token === ds.pick ? 1 : (b.score || 0) - (a.score || 0)));
   for (const t of takes) {
@@ -1520,7 +1530,7 @@ function paneTakes(sh, ds, s) {
       ${t.strip ? `<img class="strip" src="${esc(t.strip)}" data-play="${esc(t.token)}" alt="" title="play this take">` : ""}
       <div class="m"><div class="hd"><span class="pill eng ${ENGINE_CLASS[t.engine] || ""}">${esc(ENGINE_LABEL[t.engine] || t.engine)}</span><b>seed ${t.seed}</b>
         ${t.token === ds.ranker_pick ? `<span class="pill">ranker's pick</span>` : ""}${inCut ? `<span class="pill good">in the film</span>` : ""}
-        <span class="grow"></span><button data-play="${esc(t.token)}" style="padding:2px 9px">&#9654;</button>${inCut || locked ? "" : `<button class="primary" data-pick="${esc(t.token)}" style="padding:2px 9px">use</button>`}</div>
+        <span class="grow"></span>${cmpBtn(s, t.token)}<button data-play="${esc(t.token)}" style="padding:2px 9px">&#9654;</button>${inCut || locked ? "" : `<button class="primary" data-pick="${esc(t.token)}" style="padding:2px 9px">use</button>`}</div>
       <div class="kv">${[faces ? "face " + faces : "", t.line_hit != null ? "line " + Math.round(t.line_hit * 100) + "%" : "", t.camera ? "camera " + t.camera : "", t.mean_db != null ? t.mean_db.toFixed(0) + " dB" : "", t.score != null ? "score " + t.score.toFixed(3) : ""].filter(Boolean).map(esc).join(" &middot; ") || (t.ranked ? "" : "not measured yet - press measure")}</div>
       ${t.heard ? `<div class="kv">heard: "${esc(t.heard)}"</div>` : ""}
       ${(t.faults || []).map(f => `<div class="ft">fault: ${esc(f)}</div>`).join("")}
@@ -1605,10 +1615,10 @@ function paneCast() {
 function paneFilmTakes(s) {
   let h = `<div class="n" style="margin-top:0">This film was made in the film editor; its takes are made and picked there. Preview any of them here against the spec sheet.</div>
     <div id="measured" class="n" style="color:var(--dim)">${esc(S.measured || "")}</div>
-    <label class="l">takes (${s.takes.length})</label>`;
+    <label class="l">takes (${s.takes.length})</label>` + cmpBar(s);
   h += s.takes.slice().reverse().map(t => `<div class="ftk${t.key === s.pick ? " pick" : ""}" data-ftake="${esc(t.key)}" title="${esc(t.key)}">
-      ${t.poster ? `<img src="${esc(t.poster)}" alt="">` : ""}<div style="min-width:0"><div>${t.key === s.pick ? "&#9733; " : ""}${esc(t.label)} · ${(+t.dur || 0).toFixed(2)}s</div>
-      <div class="n" style="margin:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(t.key)}</div></div></div>`).join("") || `<div class="hint">no takes</div>`;
+      ${t.poster ? `<img src="${esc(t.poster)}" alt="">` : ""}<div style="min-width:0;flex:1"><div>${t.key === s.pick ? "&#9733; " : ""}${esc(t.label)} · ${(+t.dur || 0).toFixed(2)}s</div>
+      <div class="n" style="margin:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(t.key)}</div></div>${cmpBtn(s, t.key)}</div>`).join("") || `<div class="hint">no takes</div>`;
   h += `<label class="l">more takes of this shot</label>
     <div class="row"><select id="nvar"><option value="1">1 more take</option><option value="2" selected>2 more</option><option value="3">3 more</option><option value="4">4 more</option></select>
       <button class="primary" id="morevars" ${s.spec.locked ? "disabled" : ""} title="same picture, same promises, new seeds - the cleanest is picked">make them</button></div>
@@ -1627,6 +1637,76 @@ function paneAbout(s) {
 function markTakes() {
   const k = P.take ? P.take.key : null;
   document.querySelectorAll("[data-ftake]").forEach(el => el.classList.toggle("on", el.dataset.ftake === k));
+}
+// ------------------------------------------------------------------ comparing two takes side by side
+const cmpKeys = s => (S.cmp && S.cmp.film === S.film && S.cmp.id === s.id) ? S.cmp.keys : [];
+const cmpBtn = (s, key) => `<button class="ghost" data-cmp="${esc(key)}" title="tick two takes to watch them side by side" style="padding:2px 7px">${cmpKeys(s).includes(key) ? "&#9745;" : "&#9744;"} compare</button>`;
+function cmpBar(s) {
+  const k = cmpKeys(s);
+  if (!k.length) return s.takes.length > 1 ? `<div class="n" style="margin:0 0 6px">tick <b>compare</b> on two takes to watch them side by side</div>` : "";
+  if (k.length === 1) return `<div class="n" style="margin:0 0 6px">${esc(k[0])} ticked - tick one more to compare</div>`;
+  return `<div class="row" style="margin:0 0 8px"><button class="primary" id="opencmp">compare ${esc(k[0])} and ${esc(k[1])} side by side</button><a href="#" id="clearcmp" class="n">clear</a></div>`;
+}
+function bindCmp(s) {
+  document.querySelectorAll("#insp [data-cmp]").forEach(b => b.onclick = e => {
+    e.stopPropagation();
+    const key = b.dataset.cmp, k = cmpKeys(s).slice(), i = k.indexOf(key);
+    if (i >= 0) k.splice(i, 1); else { k.push(key); if (k.length > 2) k.shift(); }
+    S.cmp = {film: S.film, id: s.id, keys: k};
+    renderInsp();
+    if (k.length === 2) compareDialog(s, k[0], k[1]);
+  });
+  const o = $("#opencmp"); if (o) o.onclick = () => { const k = cmpKeys(s); compareDialog(s, k[0], k[1]); };
+  const c = $("#clearcmp"); if (c) c.onclick = e => { e.preventDefault(); S.cmp = null; renderInsp(); };
+}
+function compareDialog(s, ka, kb) {
+  const ta = s.takes.find(t => t.key === ka), tb = s.takes.find(t => t.key === kb);
+  if (!ta || !tb) return;
+  stopPlayback();
+  const meta = t => {
+    const r = t.raw || {}, f = r.faces && Object.keys(r.faces).length ? "face " + Object.entries(r.faces).map(([k, v]) => k + " " + v.toFixed(2)).join(", ") : "";
+    return [t.label + (t.seed != null ? " · seed " + t.seed : ""), f, r.line_hit != null ? "line " + Math.round(r.line_hit * 100) + "%" : "", r.camera ? "camera " + r.camera : "",
+            r.mean_db != null ? r.mean_db.toFixed(0) + " dB" : "", (r.faults || []).length ? "fault: " + r.faults.join("; ") : ""].filter(Boolean).join(" · ");
+  };
+  const side = (id, t, key) => `<div><video id="${id}" playsinline preload="auto" src="${esc(t.url)}"></video>
+    <div class="cmpl"><b>${esc(key)}</b>${key === s.pick ? ' <span class="pill good">in the film</span>' : ""}<div class="n">${esc(meta(t))}</div></div></div>`;
+  const canUse = isScript() && !s.spec.locked;
+  openDialog({title: `Shot ${s.id} - ${ka} beside ${kb}`, ok: "close", xwide: true, body: `
+    <div class="cmp">${side("cva", ta, ka)}${side("cvb", tb, kb)}</div>
+    <input type="range" class="scrub" id="cscrub" min="0" max="1000" value="0">
+    <div class="pctl"><button class="play" id="cpp">&#9654; play both</button><button id="cback" title="a frame back">&#9664;|</button><button id="cfwd" title="a frame on">|&#9654;</button><button id="crestart">&#8635;</button>
+      <label class="chk"><input type="checkbox" id="cloop" checked> loop</label>
+      <label class="chk">sound from <select id="csnd"><option value="a">${esc(ka)}</option><option value="b">${esc(kb)}</option><option value="">neither</option></select></label>
+      <span class="grow"></span><span class="fno" id="cfno"></span></div>
+    ${canUse ? `<div class="row" style="margin-top:8px">${[ka, kb].filter(k => k !== s.pick).map(k => `<button class="primary" data-cuse="${esc(k)}">use ${esc(k)} in the film</button>`).join("")}</div>` : ""}`,
+    init: b => {
+      const A = b.querySelector("#cva"), B = b.querySelector("#cvb"), sc = b.querySelector("#cscrub"), pp = b.querySelector("#cpp");
+      const dur = () => Math.max(A.duration || 0, B.duration || 0) || 1;
+      const snd = () => { const v = b.querySelector("#csnd").value; A.muted = v !== "a"; B.muted = v !== "b"; };
+      snd(); b.querySelector("#csnd").onchange = snd;
+      const setBoth = t => { [A, B].forEach(v => { if (v.duration) v.currentTime = Math.max(0, Math.min(t, v.duration - 0.01)); }); };
+      const both = on => { [A, B].forEach(v => { if (on) v.play().catch(() => {}); else v.pause(); }); pp.innerHTML = on ? "&#10074;&#10074; pause" : "&#9654; play both"; };
+      pp.onclick = () => both(A.paused && B.paused);
+      const tick = () => {
+        const t = Math.max(A.currentTime || 0, B.currentTime || 0);
+        if (!A.paused && !B.paused && Math.abs(B.currentTime - A.currentTime) > 0.08 && A.currentTime < (B.duration || 0)) B.currentTime = A.currentTime;
+        sc.value = Math.round(1000 * t / dur());
+        b.querySelector("#cfno").textContent = `frame ${Math.round(t * 24)}   ${t.toFixed(2)} s`;
+      };
+      A.ontimeupdate = tick; B.ontimeupdate = tick;
+      const ended = () => { if ((A.ended || A.paused) && (B.ended || B.paused)) { if (b.querySelector("#cloop").checked) { setBoth(0); both(true); } else both(false); } };
+      A.onended = ended; B.onended = ended;
+      const step = n => { both(false); setBoth(Math.max(0, (A.currentTime || 0) + n / 24)); setTimeout(tick, 60); };
+      b.querySelector("#cback").onclick = () => step(-1);
+      b.querySelector("#cfwd").onclick = () => step(1);
+      b.querySelector("#crestart").onclick = () => { setBoth(0); both(true); };
+      sc.oninput = () => { both(false); setBoth(sc.value / 1000 * dur()); tick(); };
+      b.querySelectorAll("[data-cuse]").forEach(x => x.onclick = async () => { both(false); closeDialog(); await pickTake(s, x.dataset.cuse); });
+      Promise.all([A, B].map(v => new Promise(r => v.readyState >= 1 ? r() : v.addEventListener("loadedmetadata", r, {once: true})))).then(() => both(true));
+    },
+    onOk: async () => true});
+  $("#dlgcancel").hidden = true;
+  $("#dlg").addEventListener("close", () => { $("#dlgcancel").hidden = false; ["#cva", "#cvb"].forEach(q => { const v = document.querySelector(q); if (v) { v.pause(); v.removeAttribute("src"); v.load(); } }); }, {once: true});
 }
 
 // ------------------------------------------------------------------ inspector bindings (shot scripts)
@@ -1986,6 +2066,10 @@ function helpDialog() {
       <li><b>Pick, trim, lock.</b> Check the takes against the promises, use one (say why), trim it, lock the shot.</li>
       <li><b>Music, assemble, run checks.</b> The next-step bar says what each shot still needs.</li>
     </ol>
+    <label class="l">working faster</label>
+    <div class="n" style="font-size:12.5px"><b style="color:var(--ink)">Make everything missing</b> (the &#8943; menu, or the film box under the sheet) draws every missing picture and start frame and a first round of takes, in one job, with a time estimate.
+      <b style="color:var(--ink)">Jobs queue</b>: ask for another while one runs and it waits its turn; the log lists what is waiting, and any of it can be taken off.
+      <b style="color:var(--ink)">Compare</b>: tick two takes and they play side by side, in step, frame by frame.</div>
     <label class="l">the spec sheet</label>
     <div class="n" style="font-size:12.5px"><b style="color:var(--gold)">## MUST NEVER CHANGE</b> the promises · <b style="color:#8fd0a6">## CAN CHANGE</b> flair, free to move ·
       <code>MAKE PERMANENT</code> under a flair promotes it · <code>WHY:</code> the reason · <code>CHECK:</code> engine is ltx | h3 | previz, camera is static | pushes in,
@@ -2049,29 +2133,46 @@ async function measuredLine() {
 }
 
 // ------------------------------------------------------------------ jobs (shot scripts)
+const shotList = a => a && a.length ? " " + (a.length > 4 ? a.slice(0, 3).join(",") + " +" + (a.length - 3) : a.join(",")) : "";
 function job(j) {
-  S.job = j;
-  const on = j && j.running;
+  const prev = S.job; S.job = j;
+  const on = j && j.running, q = (j && j.queue) || [];
   $("#job").classList.toggle("on", !!on);
   if (on) {
     const el = Math.max(0, Math.round(Date.now() / 1000 - (j.started || Date.now() / 1000)));
     const pr = j.total ? ` · ${Math.min(j.done || 0, j.total)} of ${j.total}` : "";
-    $("#jobtx").textContent = `${j.op}${j.shots && j.shots.length ? " " + j.shots.join(",") : ""}${pr} · ${Math.floor(el / 60)}:${String(el % 60).padStart(2, "0")}`;
+    $("#jobtx").textContent = `${j.op}${shotList(j.shots)}${j.film !== S.film ? " (" + j.film + ")" : ""}${pr} · ${Math.floor(el / 60)}:${String(el % 60).padStart(2, "0")}${q.length ? " · +" + q.length + " queued" : ""}`;
     $("#jobtx").title = j.now || "";
     $("#jbarw").hidden = !j.total; if (j.total) $("#jbar").style.width = Math.min(100, 100 * (j.done || 0) / j.total) + "%";
   } else {
-    $("#jobtx").textContent = j && j.returncode != null ? `last job: ${j.op || ""} ${j.returncode === 0 ? "finished" : "exited " + j.returncode}` : "idle";
+    const l = j && j.last;
+    $("#jobtx").textContent = l ? `last job: ${l.op} ${l.rc === 0 ? "finished" : "exited " + l.rc}` : "idle";
     $("#jobtx").title = ""; $("#jbarw").hidden = true;
   }
   $("#jobstop").style.display = on ? "" : "none";
-  if ($("#logbox").style.display === "block") { $("#logpre").textContent = (j && j.log) || ""; $("#logpre").scrollTop = 1e9; }
+  if ($("#logbox").style.display === "block") renderLogBox(j);
   if (on) startPoll();
-  if (S.wasRunning && !on && isScript()) {
-    loadData(true).then(() => { const c = cur(); if (c && vid.paused && !P.still) loadPlayer(c, false); });
-    if (j.returncode) toast("the job stopped with an error", {action: {label: "open the log", fn: () => $("#joblog").click()}});
-    else toast("done: " + j.op, true);
+  // a job ended - the one that was running is not running any more, or another took its place
+  if (prev && prev.running && (!on || prev.id !== j.id)) {
+    const l = j.last && j.last.id === prev.id ? j.last : {op: prev.op, rc: on ? 0 : j.returncode, film: prev.film};
+    if (isScript()) loadData(true).then(() => { const c = cur(); if (c && vid.paused && !P.still) loadPlayer(c, false); });
+    if (l.rc) toast(`${l.op} stopped with an error`, {action: {label: "open the log", fn: () => $("#joblog").click()}});
+    else toast(`done: ${l.op}${on ? " - next: " + j.op : ""}`, true);
   }
-  S.wasRunning = !!on;
+}
+// the log box: the running job's log, and the jobs waiting behind it (each one can be taken off)
+function renderLogBox(j) {
+  const q = (j && j.queue) || [];
+  $("#logtitle").innerHTML = `log - ${esc((j && j.op) || "last job")}` + (q.length ? ` <span class="hint">· waiting: ${q.map(x => `${esc(x.op)}${esc(shotList(x.shots))}${x.film !== S.film ? " (" + esc(x.film) + ")" : ""} <a href="#" data-deq="${esc(x.id)}" title="take it off the queue">&#10005;</a>`).join(" · ")}` +
+    ` <a href="#" id="deqall">clear the queue</a></span>` : "");
+  $("#logpre").textContent = (j && j.log) || "no log yet"; $("#logpre").scrollTop = 1e9;
+  $("#logtitle").querySelectorAll("[data-deq]").forEach(a => a.onclick = async e => {
+    e.preventDefault();
+    try { await api("/api/shots/stop", {queue_id: a.dataset.deq}); toast("taken off the queue", true); renderLogBox(await api("/api/shots/status")); } catch (err) { toast(err.message); }
+  });
+  const da = $("#deqall"); if (da) da.onclick = e => { e.preventDefault(); arm(da, "clear all waiting jobs?", async () => {
+    try { for (const x of q) await api("/api/shots/stop", {queue_id: x.id}).catch(() => {}); toast("the queue is empty", true); renderLogBox(await api("/api/shots/status")); } catch (err) { toast(err.message); }
+  }); };
 }
 function startPoll() {
   if (S.poll) return;
@@ -2084,7 +2185,7 @@ function startPoll() {
     } catch (e) {}
   }, 2000);
 }
-$("#joblog").onclick = async () => { try { const j = await api("/api/shots/status"); $("#logbox").style.display = "block"; $("#logtitle").textContent = "log - " + (j.op || "last job"); $("#logpre").textContent = j.log || "no log yet"; $("#logpre").scrollTop = 1e9; } catch (e) { toast(e.message); } };
+$("#joblog").onclick = async () => { try { const j = await api("/api/shots/status"); $("#logbox").style.display = "block"; renderLogBox(j); } catch (e) { toast(e.message); } };
 $("#logclose").onclick = () => $("#logbox").style.display = "none";
 $("#jobstop").onclick = () => arm($("#jobstop"), "stop it?", async () => { try { await api("/api/shots/stop", {}); toast("stopping", true); } catch (e) { toast(e.message); } });
 $("#music").onclick = () => {
@@ -2098,9 +2199,57 @@ function renderOuts() {
   const o = S.data.outputs || {};
   const links = [["final", "the final cut"], ["final2x", "the 2x master"], ["annotated", "the annotated cut"]].filter(([k]) => o[k]).map(([k, l]) => `<a href="${esc(o[k])}" target="_blank">${l}</a>`);
   const locked = S.shots.filter(x => x.spec.locked).length, specs = S.shots.filter(x => x.spec.has).length;
-  $("#outbox").innerHTML = `<b style="font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim)">the film</b>
+  const needing = S.shots.filter(x => x.status === "no start frame" || x.status === "no takes").length;
+  $("#outbox").innerHTML = `<div class="row"><b style="font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim)">the film</b><span class="grow"></span>
+      ${needing ? `<button id="makemissing" class="primary" style="padding:4px 10px">make everything missing (${needing} shot${needing === 1 ? "" : "s"})…</button>` : ""}</div>
     <div style="margin-top:4px">${links.join(" &middot; ") || `<span class="hint">not assembled yet - pick a take for every shot, then assemble</span>`}</div>
     <div class="n" style="margin-top:4px">${specs} of ${S.shots.length} shots have a spec sheet · ${locked} locked · ${S.shots.filter(x => x.pick).length} have a take in the film${S.music.length ? " · a score bed" : " · no score yet"}</div>`;
+  const mm = $("#makemissing"); if (mm) mm.onclick = () => missingDialog();
+}
+const minutes = s => s < 90 ? Math.max(1, Math.round(s)) + " s" : "about " + Math.round(s / 60) + " min";
+// one job that makes whatever the film is still missing, in order, and measures what it made
+async function missingDialog() {
+  if (S.dirty && !(await autosave())) return toast("Fix this first - " + SAVE.err);
+  let p;
+  try { p = await api("/api/shots/plan?film=" + encodeURIComponent(S.film)); } catch (e) { return toast(e.message); }
+  const nothing = !p.cast.length && !p.anchors.length && !p.takes.length;
+  const eng = t => ENGINE_LABEL[t.engine] || t.engine;
+  const d = S.data;
+  openDialog({title: "Make everything missing - " + ((S.films.find(f => f.key === "script:" + S.film) || {}).title || S.film), ok: nothing ? "close" : "make it", wide: true, body: nothing
+    ? `<p style="margin:10px 0">Nothing is missing: every shot has its pictures, its start frame and takes.${p.locked.length ? " (Locked shots are left alone: " + esc(p.locked.join(", ")) + ".)" : ""}</p>`
+    : `<p class="n" style="font-size:12.5px;margin:8px 0">One job, in this order - it waits its turn if another job is running - and every take it makes is measured and ranked when it lands.</p>
+    ${p.cast.length ? `<label class="l">${p.cast.length} cast &amp; place picture${p.cast.length > 1 ? "s" : ""}</label>
+      <div class="row"><span>${p.cast.map(esc).join(", ")}</span><span class="grow"></span><span class="n">on</span>
+      <select id="mm_cast">${d.models.cast.map(m => `<option value="${m.id}">${esc(m.label)}</option>`).join("")}</select></div>` : ""}
+    ${p.anchors.length ? `<label class="l">${p.anchors.length} start frame${p.anchors.length > 1 ? "s" : ""}</label>
+      <div class="row"><span>${p.anchors.map(a => esc(a.id) + (a.plate ? " (the plate)" : "")).join(", ")}</span><span class="grow"></span>
+      <span class="n">Qwen-Image-2.1, seeds</span><input type="text" id="mm_aseeds" value="${esc(p.anchor_seeds.join(" "))}" style="width:90px"></div>` : ""}
+    ${p.takes.length ? `<label class="l">takes for ${p.takes.length} shot${p.takes.length > 1 ? "s" : ""}</label>
+      <div class="row"><span>${p.takes.map(t => esc(t.id) + " " + esc(eng(t))).join(", ")}</span><span class="grow"></span>
+      <span class="n">seeds</span><input type="text" id="mm_seeds" value="${esc(p.seeds.join(" "))}" style="width:110px"></div>` : ""}
+    ${p.skipped.length ? `<div class="n" style="margin-top:8px">left out: ${p.skipped.map(x => esc(x.id) + " - " + esc(x.why)).join("; ")}</div>` : ""}
+    ${p.locked.length ? `<div class="n">locked, left alone: ${esc(p.locked.join(", "))}</div>` : ""}
+    <div class="preview" id="mm_est" style="margin-top:12px">${p.total} pictures and takes · ${minutes(p.estimate)} on this GPU</div>`,
+    init: b => {
+      const upd = async () => {
+        const s1 = (b.querySelector("#mm_seeds") || {}).value, s2 = (b.querySelector("#mm_aseeds") || {}).value;
+        try {
+          const q = await api(`/api/shots/plan?film=${encodeURIComponent(S.film)}${s1 ? "&seeds=" + encodeURIComponent(s1) : ""}${s2 ? "&anchor_seeds=" + encodeURIComponent(s2) : ""}`);
+          b.querySelector("#mm_est").textContent = `${q.total} pictures and takes · ${minutes(q.estimate)} on this GPU`;
+          $("#dlgok").textContent = "make it (" + minutes(q.estimate) + ")";
+        } catch (e) { b.querySelector("#mm_est").textContent = e.message; }
+      };
+      ["#mm_seeds", "#mm_aseeds"].forEach(qs => { const el = b.querySelector(qs); if (el) el.oninput = upd; });
+      if (!nothing) $("#dlgok").textContent = "make it (" + minutes(p.estimate) + ")";
+    },
+    onOk: async b => {
+      if (nothing) return true;
+      const body = {op: "missing"};
+      const s1 = b.querySelector("#mm_seeds"), s2 = b.querySelector("#mm_aseeds"), c = b.querySelector("#mm_cast");
+      if (s1) body.seeds = s1.value; if (s2) body.anchor_seeds = s2.value; if (c) body.cast_engine = c.value;
+      const r = await runOp(body);
+      if (!r) throw new Error("It did not start - see the message.");
+    }});
 }
 
 // ------------------------------------------------------------------ uploads

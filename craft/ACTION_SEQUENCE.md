@@ -391,3 +391,15 @@ The page no longer asks anything through the browser's own prompt / confirm boxe
 - **Jobs show progress**: "takes 020 · 2 of 3 · 1:12", from the lines fight.py prints per picture
   and take (`status` gives `total`, `done`, `now`).
 - The one confirmation left is the paid engine's: the page's own dialog, with the price on the button.
+- **Jobs queue.** Asking for a job while another runs no longer refuses it: it waits, in order, and
+  starts by itself (`shots_routes.py` keeps the queue beside the running job; `status` lists it and
+  says how the last job ended). The log box lists what is waiting; each can be taken off
+  (`/api/shots/stop {queue_id}`).
+- **Make everything missing** (the ... menu, the film box, or the next-step bar on a new film): one job
+  that draws the missing cast and place pictures, the missing start frames (Qwen-Image-2.1), and a
+  first round of takes for every shot with none, on each shot's engine - then measures and ranks what
+  it made. Locked shots are left alone. `GET /api/shots/plan` says what it will make and roughly how
+  long, from what the demo films measured; on editor-test one start frame and one take took 54 s
+  against 49 s planned.
+- **Compare**: tick two takes and they play side by side, in step (within a frame), stepped frame by
+  frame together, with one's sound, their measurements under each, and "use" on either.
