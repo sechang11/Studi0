@@ -1,0 +1,744 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sheets</title>
+<style>
+ /* Sheets: one picture in, every angle out. A character, an item or a place, turned by the
+    multiple-angles LoRA, checked, lifted to HD and laid out as one labelled sheet. The work is
+    studio/sheets.py; the API is studio/_tools/sheets_routes.py. No browser pop-ups: questions are
+    asked in the page, a deletion is undone rather than confirmed, one-way actions take a second click. */
+ :root{--bg:#0b0b10;--panel:#12121a;--card:#14141c;--well:#101017;--line:#2a2a36;--line2:#23232e;
+   --ink:#e8e8ef;--dim:#8b8b9c;--faint:#6f6f85;--green:#4fa06f;--gold:#e9c96a;--goldline:#6b5520;
+   --red:#e39a9a;--blue:#7fb2ff;--amber:#f0b43c;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+ *{box-sizing:border-box}
+ body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+ .wrap{padding:12px 18px 70px}
+ select,button,input,textarea{background:#16161f;color:var(--ink);border:1px solid #33333f;border-radius:6px;padding:6px 10px;font:inherit}
+ input:focus,textarea:focus,select:focus{outline:none;border-color:#4f7d63;box-shadow:0 0 0 2px #4fa06f33}
+ button{cursor:pointer}
+ button:hover{border-color:#5a5a70}
+ button.primary{background:#2b6b4a;border-color:#357d58}
+ button.primary:hover{background:#34805a}
+ button.ghost{background:transparent}
+ button.danger{color:var(--red)}
+ button.armed{background:#3a1616!important;border-color:#8a3f3f!important;color:#f3c7bf!important}
+ button[disabled]{opacity:.4;cursor:not-allowed}
+ button.small{padding:3px 9px;font-size:12.5px}
+ a{color:#9fc3ff}
+ [hidden]{display:none!important}
+ .sub{color:var(--dim);font-size:13px}
+ .hint{color:var(--faint);font-size:12px}
+ .grow{flex:1 1 auto}
+ .top{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:4px 0 12px}
+ .top h1{font-size:17px;margin:0 2px 0 0;font-weight:600}
+ .jobchip{font-size:12.5px;color:#bfe8d6;background:#12251d;border:1px solid #2c5a45;border-radius:99px;padding:3px 11px;cursor:pointer}
+ .cols{display:grid;grid-template-columns:250px 1fr;gap:16px;align-items:start}
+ @media(max-width:860px){.cols{grid-template-columns:1fr}}
+
+ /* the list */
+ #list{display:flex;flex-direction:column;gap:8px;position:sticky;top:8px;max-height:calc(100vh - 20px);overflow:auto;padding-right:2px}
+ .item{display:flex;gap:9px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:9px;padding:6px;cursor:pointer}
+ .item:hover{border-color:#44445a}
+ .item.on{border-color:var(--green);background:#131d18}
+ .item img,.item .noimg{width:52px;height:52px;border-radius:6px;object-fit:cover;background:#1b1b24;flex:0 0 auto}
+ .item b{display:block;font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:170px}
+ .item .m{font-size:11.5px;color:var(--dim)}
+ .item .busy{color:#8fd0a6}
+ .empty{color:var(--dim);font-size:13px;padding:14px;border:1px dashed var(--line);border-radius:9px}
+
+ /* panels */
+ .pane{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:14px 16px;margin-bottom:14px}
+ .pane h2{font-size:15px;margin:0 0 10px;font-weight:600;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+ .pane h3{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);margin:16px 0 8px;font-weight:600;display:flex;gap:10px;align-items:center}
+ .pane h3:first-child{margin-top:0}
+ .step{display:flex;gap:10px;align-items:baseline;margin:16px 0 8px}
+ .step .n{width:22px;height:22px;border-radius:50%;background:#1f2a24;border:1px solid #2c5a45;color:#8fd0a6;font-size:12px;
+   display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto}
+ .step b{font-size:14px}
+ .kinds{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+ @media(max-width:700px){.kinds{grid-template-columns:1fr}}
+ .kind{border:1px solid var(--line);border-radius:10px;padding:11px 13px;background:#16161f;cursor:pointer;text-align:left}
+ .kind:hover{border-color:#4c4c62}
+ .kind.on{border-color:var(--green);background:#15221b}
+ .kind b{display:block;font-size:14px;margin-bottom:3px}
+ .kind span{font-size:12.5px;color:var(--dim)}
+ .seg{display:inline-flex;border:1px solid #33333f;border-radius:7px;overflow:hidden;vertical-align:middle}
+ .seg button{border:0;border-radius:0;background:#16161f;padding:5px 12px;font-size:12.5px}
+ .seg button.on{background:#2b4b6b;color:#dfeeff}
+ .drop{border:1.5px dashed #3a3a4c;border-radius:10px;padding:18px;text-align:center;color:var(--dim);cursor:pointer;background:#111118}
+ .drop.over{border-color:var(--green);background:#13201a;color:#bfe8d6}
+ .pics{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+ .pic{width:150px;background:var(--card);border:1px solid var(--line);border-radius:9px;overflow:hidden;position:relative}
+ .pic img{width:100%;height:150px;object-fit:contain;background:#0d0d12;display:block}
+ .pic select{width:100%;border:0;border-top:1px solid var(--line);border-radius:0;font-size:12px;padding:5px 6px}
+ .pic .x{position:absolute;top:4px;right:4px;padding:0 7px;background:rgba(0,0,0,.7);border-color:#444}
+ .pic .sz{position:absolute;left:6px;top:6px;font-size:11px;background:rgba(0,0,0,.65);padding:0 5px;border-radius:4px;color:#ccc}
+ .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+ .row label{font-size:12px;color:var(--dim)}
+ .field{display:flex;flex-direction:column;gap:3px;min-width:200px}
+ .field span{font-size:11.5px;color:var(--dim);letter-spacing:.03em}
+ label.chk{display:inline-flex;gap:6px;align-items:center;font-size:13px;color:#cfcfdc;cursor:pointer;margin:3px 14px 3px 0}
+ .chips{display:flex;gap:6px;flex-wrap:wrap}
+ .chip{border:1px solid #33333f;border-radius:99px;padding:3px 11px;cursor:pointer;background:#16161f;font-size:12.5px}
+ .chip.on{border-color:var(--green);background:#15221b;color:#bfe8d6}
+ .go{display:flex;gap:12px;align-items:center;margin-top:18px;flex-wrap:wrap}
+ .go button.primary{font-size:14.5px;padding:8px 18px}
+
+ /* a sheet */
+ .head{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+ .head .name{font-size:19px;font-weight:650;cursor:text;border:1px solid transparent;border-radius:6px;padding:1px 6px;margin-left:-7px}
+ .head .name:hover{border-color:#33333f}
+ .head input.name{font:inherit;font-size:19px;font-weight:650}
+ .tag{font-size:11.5px;border:1px solid #33333f;border-radius:99px;padding:1px 9px;color:var(--dim)}
+ .tag.warn{border-color:#6b5520;color:var(--gold)}
+ .acts{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+ .job{border:1px solid #2c5a45;background:#0f1c16;border-radius:9px;padding:10px 12px;margin-top:12px}
+ .bar{height:7px;background:#1b2a22;border-radius:99px;overflow:hidden;margin:7px 0}
+ .bar i{display:block;height:100%;background:linear-gradient(90deg,#3e8a60,#6fcf97);width:0;transition:width .5s}
+ .job pre{margin:6px 0 0;font:11.5px/1.45 var(--mono);color:#b9d8c8;white-space:pre-wrap;max-height:120px;overflow:auto}
+ .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+ .grid.wide{grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
+ .v{background:var(--card);border:1px solid var(--line);border-radius:9px;overflow:hidden;position:relative;display:flex;flex-direction:column}
+ .v.flag{border-color:#6b5520}
+ .v .im{aspect-ratio:3/4;background:#0d0d12;display:flex;align-items:center;justify-content:center;cursor:zoom-in;overflow:hidden}
+ .grid.wide .v .im{aspect-ratio:3/2}
+ .grid.sq .v .im{aspect-ratio:1/1}
+ .v .im img{width:100%;height:100%;object-fit:contain;display:block}
+ .v .im .wait{font-size:12px;color:var(--faint)}
+ .v .l{display:flex;align-items:center;gap:6px;padding:5px 7px 6px;font-size:12.5px}
+ .v .l b{font-weight:500;flex:1 1 auto;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+ .v .l button{padding:1px 7px;font-size:11.5px}
+ .v .fl{position:absolute;top:6px;left:6px;right:6px;background:rgba(20,14,2,.88);border:1px solid var(--goldline);color:var(--gold);
+   font-size:11px;border-radius:6px;padding:2px 6px}
+ .v .hd{font-size:10.5px;color:var(--faint);text-decoration:none}
+ .v.busy .im{outline:2px solid #3e8a60;outline-offset:-2px}
+ .srcs{display:flex;gap:10px;flex-wrap:wrap}
+ .srcs figure{margin:0;width:120px}
+ .srcs img{width:120px;height:120px;object-fit:contain;background:#0d0d12;border:1px solid var(--line);border-radius:8px;display:block;cursor:zoom-in}
+ .srcs figcaption{font-size:11.5px;color:var(--dim);margin-top:3px}
+ .preview img{max-width:100%;border-radius:8px;border:1px solid var(--line);display:block;cursor:zoom-in;background:#f6f6f3}
+ .sent{font-size:12.5px;color:var(--dim)}
+ video.tt{max-width:420px;width:100%;border-radius:8px;background:#000;display:block}
+
+ /* the page's own dialog */
+ dialog.dlg{padding:0;border:1px solid #3a3a48;border-radius:12px;background:#13131b;color:var(--ink);width:min(560px,calc(100vw - 30px));
+   box-shadow:0 20px 60px rgba(0,0,0,.7)}
+ dialog.dlg::backdrop{background:rgba(4,4,8,.66)}
+ .dlg form{margin:0}
+ .dlg-h{display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--line)}
+ .dlg-h b{font-size:15px}
+ .dlg-h .x{margin-left:auto;padding:2px 9px;border-color:transparent;color:var(--dim)}
+ .dlg-b{padding:4px 16px 12px;max-height:68vh;overflow:auto}
+ .dlg-b input[type=text],.dlg-b select{width:100%}
+ .dlg-b label.l{display:block;font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--dim);margin:12px 0 3px}
+ .dlg-b .n{color:var(--faint);font-size:11.5px;margin-top:3px}
+ .dlg-err{color:var(--red);font-size:12.5px;padding:0 16px}
+ .dlg-err:not(:empty){padding:6px 16px}
+ .dlg-f{display:flex;gap:8px;justify-content:flex-end;padding:12px 16px;border-top:1px solid var(--line)}
+
+ /* the big picture, in the page */
+ /* above the studio nav, which is sticky at z-index 9999 */
+ #lb{position:fixed;inset:0;background:rgba(3,3,6,.94);z-index:10050;display:flex;flex-direction:column}
+ #lb .lbh{display:flex;gap:10px;align-items:center;padding:10px 16px;color:var(--dim);font-size:13px}
+ #lb .lbh b{color:var(--ink);font-size:14px}
+ #lb .lbi{flex:1 1 auto;display:flex;align-items:center;justify-content:center;min-height:0;padding:0 56px 16px;position:relative}
+ #lb img{max-width:100%;max-height:100%;object-fit:contain;background:#0d0d12}
+ #lb .nav{position:absolute;top:50%;transform:translateY(-50%);font-size:22px;padding:8px 13px;background:rgba(20,20,28,.8)}
+ #lb .prev{left:10px} #lb .next{right:10px}
+ #lb .lbp{font:11.5px var(--mono);color:#9a9ab0;padding:0 16px 12px;text-align:center}
+
+ #toast{position:fixed;right:16px;bottom:16px;max-width:520px;padding:9px 10px 9px 12px;border-radius:8px;background:#2a1414;
+   border:1px solid #6b2a2a;color:#f0c0b8;display:none;z-index:10060;align-items:center;gap:10px}
+ #toast.ok{background:#12251d;border-color:#2c5a45;color:#bfe8d6}
+ #toast span{white-space:pre-wrap}
+ #toast button{padding:3px 10px;font-size:12.5px;color:#fff;border-color:#4c6a5a}
+</style>
+</head>
+<body>
+<div class="wrap">
+ <div class="top">
+  <h1>Sheets</h1><span class="sub">one picture in, every angle out &mdash; for a character, an item or a place</span>
+  <span class="grow"></span>
+  <span class="jobchip" id="jobchip" hidden></span>
+  <button class="primary" id="newbtn">+ New sheet</button>
+ </div>
+ <div class="cols">
+  <aside id="list"></aside>
+  <main id="main"></main>
+ </div>
+</div>
+
+<dialog class="dlg" id="dlg"><form method="dialog" id="dlgform">
+ <div class="dlg-h"><b id="dlgtitle"></b><button type="button" class="ghost x" id="dlgx" aria-label="close">&#10005;</button></div>
+ <div class="dlg-b" id="dlgbody"></div>
+ <div class="dlg-err" id="dlgerr"></div>
+ <div class="dlg-f"><button type="button" class="ghost" id="dlgcancel">cancel</button><button type="submit" class="primary" id="dlgok">ok</button></div>
+</form></dialog>
+
+<div id="lb" hidden>
+ <div class="lbh"><b id="lbt"></b><span id="lbm"></span><span class="grow"></span>
+  <a id="lbdl" class="small" download>download</a><button class="ghost small" id="lbx">close &nbsp;<span class="hint">Esc</span></button></div>
+ <div class="lbi"><button class="ghost nav prev" id="lbprev" aria-label="previous">&#8249;</button><img id="lbimg" alt="">
+  <button class="ghost nav next" id="lbnext" aria-label="next">&#8250;</button></div>
+ <div class="lbp" id="lbp"></div>
+</div>
+<div id="toast"></div>
+<input type="file" id="filepick" accept="image/png,image/jpeg,image/webp" multiple hidden>
+
+<script>
+"use strict";
+const $ = s => document.querySelector(s);
+const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]));
+const PREF = {
+  get(k, d) { try { const v = localStorage.getItem("sheets." + k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem("sheets." + k, JSON.stringify(v)); } catch (e) {} },
+};
+async function api(path, body) {
+  const opt = body === undefined ? {} : {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(body)};
+  const r = await fetch(path, opt);
+  let j = {};
+  try { j = await r.json(); } catch (e) { j = {error: "the server answered " + r.status}; }
+  if (!r.ok || j.error) throw new Error(j.error || ("HTTP " + r.status));
+  return j;
+}
+// a message can carry an undo or another action: deleting is undone, not confirmed
+function toast(m, o) {
+  const opt = (o && typeof o === "object") ? o : {ok: !!o};
+  const t = $("#toast");
+  t.className = (opt.ok || opt.undo) ? "ok" : "";
+  t.innerHTML = `<span>${esc(m)}</span>`;
+  const acts = [];
+  if (opt.undo) acts.push({label: "undo", fn: opt.undo});
+  if (opt.action) acts.push(opt.action);
+  acts.forEach(a => { const b = document.createElement("button"); b.className = "ghost"; b.textContent = a.label; b.onclick = () => { t.style.display = "none"; a.fn(); }; t.appendChild(b); });
+  t.style.display = "flex";
+  const ms = opt.ms || (acts.length ? 12000 : (opt.ok ? 2600 : 7000));
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => { t.style.display = "none"; }, ms);
+  t.onmouseenter = () => clearTimeout(toast._t);
+  t.onmouseleave = () => { clearTimeout(toast._t); toast._t = setTimeout(() => { t.style.display = "none"; }, 2500); };
+}
+// a second click on the same button, instead of "are you sure?"
+function arm(btn, label, fn, ms) {
+  if (btn.dataset.armed) { clearTimeout(btn._armT); delete btn.dataset.armed; btn.classList.remove("armed"); btn.innerHTML = btn._label; fn(); return; }
+  btn._label = btn.innerHTML; btn.dataset.armed = "1"; btn.classList.add("armed"); btn.textContent = label;
+  btn._armT = setTimeout(() => { delete btn.dataset.armed; btn.classList.remove("armed"); btn.innerHTML = btn._label; }, ms || 3500);
+}
+const DLG = {onOk: null};
+function openDialog({title, body, ok = "ok", init, onOk}) {
+  $("#dlgtitle").textContent = title; $("#dlgbody").innerHTML = body; $("#dlgerr").textContent = "";
+  const b = $("#dlgok"); b.textContent = ok; b.disabled = false;
+  DLG.onOk = onOk;
+  if (!$("#dlg").open) $("#dlg").showModal();
+  if (init) init($("#dlgbody"));
+}
+function closeDialog() { if ($("#dlg").open) $("#dlg").close(); }
+$("#dlgform").addEventListener("submit", async e => {
+  e.preventDefault();
+  const b = $("#dlgok");
+  if (b.disabled) return;
+  if (!DLG.onOk) return closeDialog();
+  b.disabled = true; $("#dlgerr").textContent = "";
+  try { const r = await DLG.onOk($("#dlgbody")); if (r !== false) closeDialog(); }
+  catch (err) { $("#dlgerr").textContent = err.message; }
+  finally { b.disabled = false; }
+});
+$("#dlgcancel").onclick = closeDialog; $("#dlgx").onclick = closeDialog;
+const mins = s => s < 90 ? `${Math.max(10, Math.round(s / 10) * 10)} s` : `${Math.round(s / 30) / 2} min`.replace(".5", "½");
+const ago = t => { const s = Date.now() / 1000 - t; return s < 90 ? "just now" : s < 5400 ? Math.round(s / 60) + " min ago" : s < 129600 ? Math.round(s / 3600) + " h ago" : new Date(t * 1000).toLocaleDateString(); };
+
+// ================================================================== state
+const KIND = {
+  character: {label: "Character", say: "A person or a creature. Eight angles on grey, face close-ups and expressions.",
+              pics: "A full-length picture turns best. If it stops at the shoulders the body is finished for you. A close-up of the face, if you have one, makes the face views sharper.",
+              subject: "person"},
+  item: {label: "Item", say: "A weapon, a piece of clothing or any object. Its sides, back and top, and its finest detail up close.",
+         pics: "The object on its own is best - its background is cut away. A close-up of a detail, if you have one, is restored and added.",
+         subject: ""},
+  place: {label: "Place", say: "A building, a street, a landscape. Turned left, right, round the back and from the air, at other times of day.",
+          pics: "A wide view of the place. Every angle is turned from it.", subject: "place"},
+};
+const ROLE_LABEL = {main: "turn from this one", closeup: "a close-up", extra: "also on the sheet"};
+const S = {sheets: [], sel: PREF.get("sel", null), data: null, mode: "sheet", job: null, timer: null, lastDone: -1, times: [],
+           draft: Object.assign({kind: "character", item_type: "object", name: "", subject: "", pictures: [],
+                                 options: {faces: true, expressions: true, finish_body: true, upright: false, hd: "x2",
+                                           times: ["midday", "golden", "night", "rain"]}}, PREF.get("draft", {}), {pictures: []})};
+const TIMES = [["dawn", "dawn"], ["midday", "midday"], ["golden", "golden hour"], ["night", "night"], ["rain", "rain"], ["snow", "snow"], ["fog", "fog"]];
+
+// ================================================================== the list
+async function loadList() {
+  const d = await api("/api/sheets");
+  S.sheets = d.sheets; S.job = d.job;
+  renderList(); renderJobChip();
+}
+function busyWith(id) {
+  const j = S.job || {};
+  if (j.running && j.running.sheet === id) return "making";
+  if ((j.queue || []).some(q => q.sheet === id)) return "waiting";
+  // the command line can make a sheet too; its lock shows here and the page follows along
+  if ((S.sheets.find(x => x.id === id) || {}).elsewhere || (S.data && S.data.sheet.id === id && S.data.sheet.elsewhere)) return "making elsewhere";
+  return "";
+}
+const following = () => !!(S.job && (S.job.running || (S.job.queue || []).length)) || !!(S.data && S.data.sheet.elsewhere) || S.sheets.some(x => x.elsewhere);
+function renderList() {
+  const L = $("#list");
+  if (!S.sheets.length) { L.innerHTML = `<div class="empty">No sheets yet. <b>+ New sheet</b> and drop a picture in.</div>`; return; }
+  L.innerHTML = S.sheets.map(s => {
+    const busy = busyWith(s.id);
+    return `<div class="item${S.mode === "sheet" && S.sel === s.id ? " on" : ""}" data-id="${esc(s.id)}">
+      ${s.thumb ? `<img src="${esc(s.thumb)}" alt="">` : `<div class="noimg"></div>`}
+      <div><b title="${esc(s.name)}">${esc(s.name)}</b>
+       <div class="m">${esc(s.kind === "item" ? (s.subject || "item") : s.kind)} · ${s.done}/${s.planned}${s.flagged ? ` · <span style="color:var(--gold)">${s.flagged} to check</span>` : ""}</div>
+       ${busy ? `<div class="m busy">${busy}…</div>` : ""}</div></div>`;
+  }).join("");
+  L.querySelectorAll(".item").forEach(el => el.onclick = () => openSheet(el.dataset.id));
+}
+function renderJobChip() {
+  const c = $("#jobchip"), j = S.job || {};
+  if (!j.running) { c.hidden = true; return; }
+  const r = j.running, q = (j.queue || []).length;
+  c.hidden = false;
+  c.textContent = `making ${nameOf(r.sheet)} · ${r.done}/${r.total || "?"}${q ? ` · ${q} waiting` : ""}`;
+  c.onclick = () => openSheet(r.sheet);
+}
+const nameOf = id => (S.sheets.find(s => s.id === id) || {}).name || id;
+
+// ================================================================== polling
+function poll(on) {
+  clearTimeout(S.timer);
+  if (!on) return;
+  S.timer = setTimeout(async () => {
+    try {
+      const was = S.job && S.job.running ? S.job.running : null;
+      const st = await api("/api/sheets/status");
+      S.job = st;
+      const now = st.running;
+      if (was && (!now || now.id !== was.id)) {             // a job ended
+        const L = st.last || {};
+        if (L.id === was.id) {
+          if (L.ok) toast(`${nameOf(L.sheet)}: ${L.op === "make" || L.op === "redo" ? "sheet made" : L.op === "foundry" ? "saved to the Foundry" : L.op + " made"} in ${mins(L.secs)}`, true);
+          else if (L.error !== "stopped") toast(`${nameOf(L.sheet)}: ${L.error}`);
+        }
+        await loadList();
+        if (S.mode === "sheet" && S.sel === was.sheet) await loadSheet(true);
+      } else if (now && S.mode === "sheet" && S.sel === now.sheet && now.done !== S.lastDone) {
+        S.lastDone = now.done; await loadList(); await loadSheet(true);
+      } else if (S.sheets.some(x => x.elsewhere) || (S.data && S.data.sheet.elsewhere)) {
+        await loadList();                                   // made by the command line: follow it
+        if (S.mode === "sheet" && S.sel) await loadSheet(true);
+      } else if (S.mode === "sheet" && S.sel) renderJob();
+      renderJobChip(); renderList();
+    } catch (e) { /* the server restarting is not worth a message; try again */ }
+    poll(following());
+  }, 1500);
+}
+
+// ================================================================== the new-sheet form
+function newSheet() {
+  S.mode = "new"; renderList();
+  const d = S.draft, k = KIND[d.kind];
+  $("#main").innerHTML = `<div class="pane">
+   <h2>New sheet</h2>
+   <div class="step"><span class="n">1</span><b>What is it?</b></div>
+   <div class="kinds">${Object.entries(KIND).map(([key, v]) => `<button type="button" class="kind${d.kind === key ? " on" : ""}" data-k="${key}"><b>${v.label}</b><span>${v.say}</span></button>`).join("")}</div>
+   <div class="row" style="margin-top:10px" ${d.kind === "item" ? "" : "hidden"}>
+     <span class="sub">It is</span><span class="seg" id="itype">${[["object", "an object"], ["weapon", "a weapon"], ["clothing", "clothing"]].map(([v, l]) => `<button type="button" data-v="${v}" class="${d.item_type === v ? "on" : ""}">${l}</button>`).join("")}</span>
+     <span class="hint">${d.item_type === "weapon" ? "a weapon is stood upright before it turns" : d.item_type === "clothing" ? "clothing is also shown worn, and laid flat" : ""}</span></div>
+   <div class="step"><span class="n">2</span><b>Pictures</b> <span class="hint">up to three</span></div>
+   <div class="drop" id="drop">Drop pictures here, or <u>choose them</u> &nbsp;<span class="hint">PNG, JPEG or WebP · you can also paste one</span></div>
+   <div class="hint" style="margin-top:6px">${esc(k.pics)}</div>
+   <div class="pics" id="pics"></div>
+   <div class="step"><span class="n">3</span><b>Name it</b></div>
+   <div class="row">
+     <label class="field"><span>name</span><input type="text" id="nname" placeholder="${d.kind === "place" ? "e.g. the harbour at night" : d.kind === "item" ? "e.g. the winged sword" : "e.g. Doran Vey"}" value="${esc(d.name)}" maxlength="80"></label>
+     ${d.kind === "place" ? "" : `<label class="field"><span>${d.kind === "item" ? "what it is, in one word" : "what they are"} <span class="hint">- the prompts say "the same ${esc(d.subject || (d.kind === "item" ? "sword" : "person"))}"</span></span>
+       <input type="text" id="nsubj" placeholder="${d.kind === "item" ? "sword, coat, lantern…" : "person"}" value="${esc(d.subject)}" maxlength="40"></label>`}
+   </div>
+   <div class="step"><span class="n">4</span><b>Include</b></div>
+   <div id="incl">${includeForm(d.kind, d.item_type, d.options)}</div>
+   <div class="go"><button class="primary" id="gobtn">Make the sheet</button><span class="sub" id="est"></span></div>
+  </div>`;
+  const M = $("#main");
+  M.querySelectorAll(".kind").forEach(b => b.onclick = () => {
+    d.kind = b.dataset.k; if (d.kind !== "item") d.item_type = "object";
+    d.options.upright = d.kind === "item" && d.item_type === "weapon"; saveDraft(); newSheet();
+  });
+  M.querySelectorAll("#itype button").forEach(b => b.onclick = () => {
+    d.item_type = b.dataset.v; d.options.upright = d.item_type === "weapon"; saveDraft(); newSheet();
+  });
+  const drop = $("#drop");
+  drop.onclick = () => $("#filepick").click();
+  drop.ondragover = e => { e.preventDefault(); drop.classList.add("over"); };
+  drop.ondragleave = () => drop.classList.remove("over");
+  drop.ondrop = e => { e.preventDefault(); drop.classList.remove("over"); addFiles(e.dataTransfer.files); };
+  $("#nname").oninput = e => { d.name = e.target.value; saveDraft(); };
+  if ($("#nsubj")) $("#nsubj").oninput = e => { d.subject = e.target.value.trim(); saveDraft(); };
+  bindInclude($("#incl"), d.options, () => { saveDraft(); estimateNew(); });
+  $("#gobtn").onclick = createSheet;
+  renderPics(); estimateNew();
+}
+function includeForm(kind, itype, o) {
+  const hd = `<div class="row" style="margin-top:8px"><span class="sub">HD</span><span class="seg" data-o="hd">${[["off", "off"], ["x2", "×2 · about 2.5K"], ["x4", "×4 · about 5K"]].map(([v, l]) => `<button type="button" data-v="${v}" class="${o.hd === v ? "on" : ""}">${l}</button>`).join("")}</span>
+     <span class="hint">SeedVR2 restores as it enlarges</span></div>`;
+  if (kind === "character") return `
+    <label class="chk"><input type="checkbox" data-o="faces" ${o.faces ? "checked" : ""}> face close-ups <span class="hint">4</span></label>
+    <label class="chk"><input type="checkbox" data-o="expressions" ${o.expressions ? "checked" : ""}> expressions <span class="hint">5</span></label>
+    <label class="chk"><input type="checkbox" data-o="finish_body" ${o.finish_body ? "checked" : ""}> finish the body if the picture stops above the feet</label>${hd}`;
+  if (kind === "item") return `
+    <label class="chk"><input type="checkbox" data-o="upright" ${o.upright ? "checked" : ""}> stand it upright first <span class="hint">for a sword or a staff lying flat</span></label>
+    ${itype === "clothing" ? `<div class="hint" style="margin:4px 0">clothing also gets: worn by a person (front and back) and a flat lay</div>` : ""}${hd}`;
+  return `<div class="sub" style="margin-bottom:6px">time of day <span class="hint">- the same place, the same camera</span></div>
+    <div class="chips" data-o="times">${TIMES.map(([v, l]) => `<span class="chip${(o.times || []).includes(v) ? " on" : ""}" data-v="${v}">${l}</span>`).join("")}</div>${hd}`;
+}
+function bindInclude(root, o, changed) {
+  root.querySelectorAll("input[type=checkbox][data-o]").forEach(c => c.onchange = () => { o[c.dataset.o] = c.checked; changed(); });
+  root.querySelectorAll(".seg[data-o] button").forEach(b => b.onclick = () => {
+    o[b.parentNode.dataset.o] = b.dataset.v; b.parentNode.querySelectorAll("button").forEach(x => x.classList.toggle("on", x === b)); changed();
+  });
+  root.querySelectorAll(".chips[data-o] .chip").forEach(c => c.onclick = () => {
+    const key = c.parentNode.dataset.o, set = new Set(o[key] || []);
+    set.has(c.dataset.v) ? set.delete(c.dataset.v) : set.add(c.dataset.v);
+    o[key] = TIMES.map(t => t[0]).filter(t => set.has(t)); c.classList.toggle("on", set.has(c.dataset.v)); changed();
+  });
+}
+function saveDraft() { const d = S.draft; PREF.set("draft", {kind: d.kind, item_type: d.item_type, name: d.name, subject: d.subject, options: d.options}); }
+async function estimateNew() {
+  const d = S.draft, o = d.options;
+  const q = new URLSearchParams({kind: d.kind, item_type: d.item_type, faces: o.faces ? 1 : 0, expressions: o.expressions ? 1 : 0,
+                                 times: (o.times || []).join(","), hd: o.hd, closeup: d.pictures.some(p => p.role === "closeup") ? 1 : 0});
+  try { const r = await api("/api/sheets/estimate?" + q); $("#est") && ($("#est").textContent = `${r.views} views · about ${mins(r.seconds)}`); } catch (e) {}
+}
+function addFiles(files) {
+  const d = S.draft;
+  const list = [...files].filter(f => /^image\/(png|jpeg|webp)$/.test(f.type));
+  if (!list.length) return toast("that is not a PNG, JPEG or WebP picture");
+  const room = 3 - d.pictures.length;
+  if (room <= 0) return toast("three pictures at most - remove one first");
+  list.slice(0, room).forEach(f => {
+    if (f.size > 25 * 1024 * 1024) return toast(`${f.name} is over 25 MB`);
+    const r = new FileReader();
+    r.onload = () => {
+      const img = new Image();
+      img.onload = () => {
+        const roles = d.pictures.map(p => p.role);
+        d.pictures.push({dataurl: r.result, name: f.name, w: img.width, h: img.height,
+                         role: !roles.includes("main") ? "main" : (!roles.includes("closeup") && d.kind !== "place") ? "closeup" : "extra"});
+        renderPics(); estimateNew();
+      };
+      img.src = r.result;
+    };
+    r.readAsDataURL(f);
+  });
+  if (list.length > room) toast(`only ${room} more fitted - three pictures at most`);
+}
+function renderPics() {
+  const d = S.draft, box = $("#pics");
+  if (!box) return;
+  box.innerHTML = d.pictures.map((p, i) => `<div class="pic"><img src="${p.dataurl}" alt=""><span class="sz">${p.w}×${p.h}</span>
+    <button type="button" class="ghost x small" data-i="${i}" title="remove">&#10005;</button>
+    <select data-i="${i}">${Object.entries(ROLE_LABEL).filter(([r]) => d.kind !== "place" || r !== "closeup").map(([r, l]) => `<option value="${r}" ${p.role === r ? "selected" : ""}>${l}</option>`).join("")}</select></div>`).join("");
+  box.querySelectorAll(".x").forEach(b => b.onclick = () => { d.pictures.splice(+b.dataset.i, 1); fixRoles(); renderPics(); estimateNew(); });
+  box.querySelectorAll("select").forEach(s => s.onchange = () => {
+    const i = +s.dataset.i;
+    if (s.value !== "extra") d.pictures.forEach((p, j) => { if (j !== i && p.role === s.value) p.role = "extra"; });
+    d.pictures[i].role = s.value; fixRoles(); renderPics(); estimateNew();
+  });
+}
+function fixRoles() { const d = S.draft; if (d.pictures.length && !d.pictures.some(p => p.role === "main")) d.pictures[0].role = "main"; }
+async function createSheet() {
+  const d = S.draft, b = $("#gobtn");
+  if (!d.pictures.length) return toast("add a picture first - every angle is turned from it");
+  if (d.kind === "item" && !d.subject) { $("#nsubj").focus(); return toast('say what it is in a word - "sword", "coat" - the prompts need it'); }
+  b.disabled = true; b.textContent = "sending the pictures…";
+  try {
+    const r = await api("/api/sheets/new", {kind: d.kind, item_type: d.item_type, name: d.name.trim(), subject: d.subject,
+                                            options: d.options, make: true,
+                                            pictures: d.pictures.map(p => ({dataurl: p.dataurl, role: p.role}))});
+    d.pictures = []; d.name = ""; saveDraft();
+    toast(r.position ? `queued behind ${r.position} other job${r.position > 1 ? "s" : ""}` : `making it - about ${mins(r.estimate)}`, true);
+    await loadList(); await openSheet(r.id); poll(true);
+  } catch (e) { toast(e.message); b.disabled = false; b.textContent = "Make the sheet"; }
+}
+document.addEventListener("paste", e => {
+  if (S.mode !== "new") return;
+  const f = [...(e.clipboardData || {}).items || []].filter(i => i.kind === "file").map(i => i.getAsFile()).filter(Boolean);
+  if (f.length) addFiles(f);
+});
+$("#filepick").onchange = e => { addFiles(e.target.files); e.target.value = ""; };
+$("#newbtn").onclick = newSheet;
+
+// ================================================================== a sheet
+async function openSheet(id) {
+  S.mode = "sheet"; S.sel = id; PREF.set("sel", id); S.lastDone = -1;
+  renderList();
+  await loadSheet();
+}
+async function loadSheet(quiet) {
+  if (!S.sel) return;
+  try {
+    const d = await api("/api/sheets/one?id=" + encodeURIComponent(S.sel));
+    S.data = d; S.job = d.job; S.times = d.times;
+    renderSheet(); renderJobChip();
+    poll(following());
+  } catch (e) {
+    if (!quiet) { S.sel = null; PREF.set("sel", null); S.sheets.length ? openSheet(S.sheets[0].id) : newSheet(); }
+  }
+}
+function renderSheet() {
+  const {sheet: s, sources, views} = S.data;
+  const flagged = views.filter(v => v.flag);
+  const done = views.filter(v => v.status === "done").length;
+  const groups = [];
+  views.forEach(v => { if (!groups.length || groups[groups.length - 1].key !== v.group) groups.push({key: v.group, title: v.group_title, views: []}); groups[groups.length - 1].views.push(v); });
+  const shape = g => s.kind === "place" ? "wide" : (g === "faces" || g === "expressions") ? "sq" : (s.kind === "item" && g !== "worn") ? "wide" : "";
+  const kindTag = s.kind === "item" ? `${s.subject || "item"} · ${s.item_type || "object"}` : s.kind;
+  const ex = s.extras || {};
+  $("#main").innerHTML = `
+   <div class="pane">
+    <div class="head"><span class="name" id="sname" title="click to rename">${esc(s.name)}</span>
+     <span class="tag">${esc(kindTag)}</span><span class="tag">${done}/${views.length} views</span>
+     ${flagged.length ? `<span class="tag warn">${flagged.length} to check</span>` : ""}
+     ${s.foundry ? `<a class="tag" href="/foundry" title="in the Foundry as ${esc(s.foundry.type)} ${esc(s.foundry.id)}">in the Foundry</a>` : ""}</div>
+    <div class="acts">
+     ${s.full ? `<a href="${esc(s.full)}" target="_blank"><button class="primary">Open the sheet</button></a><a href="${esc(s.full)}" download="${esc(s.id)}-sheet.png"><button>Download</button></a>` : ""}
+     <button id="sendbtn" ${done ? "" : "disabled"}>Send to a film…</button>
+     ${s.kind !== "place" ? `<button id="fdybtn" ${done ? "" : "disabled"}>Save to the Foundry…</button>
+       <button id="ttbtn" ${done ? "" : "disabled"} title="TripoSplat: a 360-degree orbit video and a gaussian splat">360° turntable</button>
+       <button id="mdlbtn" ${done ? "" : "disabled"} title="Hunyuan3D 2.1: a textured mesh (.glb)">3D model</button>` : ""}
+     ${done < views.length && !busyWith(s.id) ? `<button id="makebtn" class="primary">Make the ${views.length - done} missing · about ${mins(s.estimate)}</button>` : ""}
+     ${flagged.length && !busyWith(s.id) ? `<button id="redoflag">Redo the ${flagged.length} flagged</button>` : ""}
+     <span class="grow"></span><button class="danger ghost" id="delbtn">Delete</button>
+    </div>
+    <div id="jobbox"></div>
+   </div>
+   <div class="pane">
+    <h3>What it was made from</h3>
+    <div class="srcs">
+     ${sources.map((x, i) => `<figure><img src="${esc(x.thumb)}" data-src="${i}" alt=""><figcaption>${esc(ROLE_LABEL[x.role] === "turn from this one" ? "your picture" : ROLE_LABEL[x.role])}${x.size ? ` · ${x.size[0]}×${x.size[1]}` : ""}</figcaption></figure>`).join("")}
+     ${s.base ? `<figure><img src="${esc(s.base)}" data-extra="base" alt=""><figcaption>${s.kind === "place" ? "as used" : s.prep && s.prep.finished_body ? "body finished, cut out" : s.prep && s.prep.upright ? "stood upright, cut out" : "cut out onto grey"}</figcaption></figure>` : ""}
+     ${s.face ? `<figure><img src="${esc(s.face)}" data-extra="face" alt=""><figcaption>face, sharpened</figcaption></figure>` : ""}
+    </div>
+    ${groups.map(g => `<h3>${esc(g.title)} <span class="hint" style="text-transform:none;letter-spacing:0">${g.views.filter(v => v.status === "done").length}/${g.views.length}</span></h3>
+      <div class="grid ${shape(g.key)}">${g.views.map(v => viewCard(v, s)).join("")}</div>`).join("")}
+    <div class="hint" style="margin-top:12px">Each view is checked against the source: flagged if its colours drift from it (a different subject) or it came back almost unchanged (the camera did not move). The check cannot judge a face - redo anything that looks off.</div>
+   </div>
+   ${s.preview ? `<div class="pane preview"><h3>The sheet <span class="hint" style="text-transform:none;letter-spacing:0">${s.full_size ? `${s.full_size[0]}×${s.full_size[1]}` : ""}</span></h3><img src="${esc(s.preview)}" id="previmg" alt="the laid-out sheet"></div>` : ""}
+   ${ex.turntable || ex.model ? `<div class="pane"><h3>3D</h3>
+     ${ex.turntable ? `<video class="tt" src="${esc(ex.turntable.url)}" controls loop muted autoplay playsinline></video>
+       <div class="hint" style="margin-top:4px">TripoSplat orbit, ${ex.turntable.secs} s to make${ex.turntable.splat ? ` · <a href="/sheets/media/${esc(s.id)}/${esc(ex.turntable.splat)}" download>the splat</a>` : ""}</div>` : ""}
+     ${ex.model ? `<div style="margin-top:10px"><a href="${esc(ex.model.url)}" download="${esc(s.id)}.glb"><button>Download the 3D model (.glb)</button></a> <span class="hint">Hunyuan3D 2.1, ${ex.model.secs} s</span></div>` : ""}</div>` : ""}
+   <div class="pane"><h3>Change what it includes</h3><div id="optform">${includeForm(s.kind, s.item_type, Object.assign({}, s.options))}</div>
+     <div class="go"><button id="optbtn" disabled>Update the sheet</button><span class="hint" id="optnote">tick or untick, then update: only what is new is made</span></div></div>
+   ${(s.sent || []).length ? `<div class="pane"><h3>Sent</h3>${s.sent.slice().reverse().map(x => `<div class="sent">to <a href="/shots?film=${encodeURIComponent(x.film)}">${esc(x.film)}</a> as <b>${esc(x.as)}</b>${x.new ? " (new)" : ""} · ${esc(x.view)} · ${ago(x.at)}
+     <button class="ghost small" data-unsend="${x.at}" data-film="${esc(x.film)}" data-as="${esc(x.as)}">undo</button></div>`).join("")}</div>` : ""}`;
+  bindSheet(s, views);
+  renderJob();
+}
+function viewCard(v, s) {
+  // views are made in the order shown: the first one not yet made is the one being made
+  const running = S.job && S.job.running && S.job.running.sheet === s.id;
+  const next = running && (S.data.views.find(x => x.status !== "done") || {}).key === v.key;
+  const busy = running && v.status !== "done";
+  const c = v.check || {};
+  const meas = [c.colours != null ? `colours ${c.colours}` : "", c.change != null ? `change ${c.change}` : ""].filter(Boolean).join(" · ");
+  return `<div class="v${v.flag ? " flag" : ""}${next ? " busy" : ""}" data-k="${esc(v.key)}">
+    <div class="im" data-k="${esc(v.key)}">${v.thumb ? `<img src="${esc(v.thumb)}" alt="${esc(v.label)}" loading="lazy">` : `<span class="wait">${next ? "making…" : busy ? "waiting" : "not made yet"}</span>`}</div>
+    ${v.flag ? `<div class="fl" title="${esc(meas)}">check: ${esc(v.flag)}</div>` : ""}
+    <div class="l"><b title="${esc(v.prompt)}">${esc(v.label)}</b>
+     ${v.hd ? `<a class="hd" href="${esc(v.hd)}" target="_blank" title="the HD file${v.hd_size ? `, ${v.hd_size[0]}×${v.hd_size[1]}` : ""}">HD</a>` : ""}
+     ${v.status === "done" ? `<button class="ghost redo" data-k="${esc(v.key)}" title="make it again on a new seed">redo</button>` : ""}</div></div>`;
+}
+function bindSheet(s, views) {
+  const M = $("#main");
+  $("#sname").onclick = () => renameInline(s);
+  M.querySelectorAll(".v .im[data-k]").forEach(el => el.onclick = () => { const i = views.findIndex(v => v.key === el.dataset.k); if (views[i].status === "done") lightbox(i); });
+  M.querySelectorAll(".srcs img[data-src]").forEach(el => el.onclick = () => lightboxSingle(S.data.sources[+el.dataset.src].file, "your picture"));
+  M.querySelectorAll(".srcs img[data-extra]").forEach(el => el.onclick = () => lightboxSingle(el.src.replace("/_work/thumbs/", "/").replace(".jpg?", ".png?"), el.nextElementSibling.textContent));
+  if ($("#previmg")) $("#previmg").onclick = () => lightboxSingle(s.full, "the sheet");
+  M.querySelectorAll("button.redo").forEach(b => b.onclick = () => redo([b.dataset.k], b));
+  if ($("#redoflag")) $("#redoflag").onclick = () => redo(views.filter(v => v.flag).map(v => v.key), $("#redoflag"));
+  if ($("#makebtn")) $("#makebtn").onclick = async () => { try { await api("/api/sheets/make", {id: s.id}); toast("making what is missing", true); await refreshAfterQueue(); } catch (e) { toast(e.message); } };
+  $("#sendbtn").onclick = () => sendDialog(s, views);
+  if ($("#fdybtn")) $("#fdybtn").onclick = () => foundryDialog(s);
+  if ($("#ttbtn")) $("#ttbtn").onclick = () => extra(s, "turntable", "the 360° turntable");
+  if ($("#mdlbtn")) $("#mdlbtn").onclick = () => extra(s, "model", "the 3D model");
+  $("#delbtn").onclick = e => arm(e.currentTarget, "click again to delete", () => del(s));
+  M.querySelectorAll("[data-unsend]").forEach(b => b.onclick = () => unsend(s.id, +b.dataset.unsend, b.dataset.film, b.dataset.as));
+  const o = Object.assign({}, s.options), form = $("#optform");
+  bindInclude(form, o, () => {
+    const changed = JSON.stringify(o) !== JSON.stringify(s.options);
+    $("#optbtn").disabled = !changed;
+    const remake = ["upright", "finish_body"].some(k => !!o[k] !== !!(s.options || {})[k]);
+    $("#optnote").textContent = remake ? "this changes what every angle is turned from - the whole sheet is made again"
+      : o.hd !== (s.options || {}).hd ? "every view is lifted to the new size again" : "only what is new is made";
+  });
+  $("#optbtn").onclick = async () => {
+    try { const r = await api("/api/sheets/options", {id: s.id, options: o}); toast(r.remade ? "making the whole sheet again" : "updating the sheet", true); await refreshAfterQueue(); }
+    catch (e) { toast(e.message); }
+  };
+}
+async function refreshAfterQueue() { await loadList(); await loadSheet(true); poll(true); }
+function renderJob() {
+  const box = $("#jobbox"); if (!box || !S.data) return;
+  const s = S.data.sheet, j = S.job || {};
+  const run = j.running && j.running.sheet === s.id ? j.running : null;
+  const q = (j.queue || []).filter(x => x.sheet === s.id);
+  if (!run && !q.length && s.elsewhere) {
+    box.innerHTML = `<div class="job"><span class="sub">Being made by another process (the command line) - this page follows along and shows each view as it lands.</span></div>`;
+    return;
+  }
+  if (!run && !q.length) { box.innerHTML = ""; return; }
+  if (run) {
+    const pct = run.total ? Math.round(100 * run.done / run.total) : 3;
+    box.innerHTML = `<div class="job"><div class="row"><b style="font-size:13px">${run.op === "make" || run.op === "redo" ? "Making" : run.op === "foundry" ? "Saving to the Foundry" : "Making the " + run.op}</b>
+      <span class="sub">${esc(run.now || "")}</span><span class="grow"></span><span class="hint">${run.done}/${run.total || "?"} · ${mins(run.elapsed)}</span>
+      <button class="ghost small" id="stopbtn">stop after this view</button></div>
+      <div class="bar"><i style="width:${pct}%"></i></div><pre>${esc((run.log || []).slice(-6).join("\n"))}</pre></div>`;
+    $("#stopbtn").onclick = async e => { try { await api("/api/sheets/stop", {}); e.target.disabled = true; e.target.textContent = "stopping…"; } catch (err) { toast(err.message); } };
+  } else {
+    box.innerHTML = `<div class="job"><span class="sub">waiting behind the job that is running</span>
+      ${q.map(x => `<button class="ghost small" data-q="${esc(x.id)}">take it off the queue</button>`).join("")}</div>`;
+    box.querySelectorAll("[data-q]").forEach(b => b.onclick = async () => { try { await api("/api/sheets/stop", {queue_id: b.dataset.q}); toast("taken off the queue", true); await refreshAfterQueue(); } catch (e) { toast(e.message); } });
+  }
+}
+async function redo(keys, btn) {
+  if (btn) btn.disabled = true;
+  try { const r = await api("/api/sheets/redo", {id: S.sel, views: keys}); toast(`${keys.length === 1 ? "remaking it" : `remaking ${keys.length}`} on a new seed${r.position ? " - queued" : ""}`, true); await refreshAfterQueue(); }
+  catch (e) { toast(e.message); if (btn) btn.disabled = false; }
+}
+async function extra(s, what, label) {
+  try { const r = await api("/api/sheets/extra", {id: s.id, what}); toast(`making ${label}${r.position ? " - queued" : ""}`, true); await refreshAfterQueue(); }
+  catch (e) { toast(e.message); }
+}
+function renameInline(s) {
+  const el = $("#sname"), inp = document.createElement("input");
+  inp.type = "text"; inp.className = "name"; inp.value = s.name; inp.maxLength = 80;
+  el.replaceWith(inp); inp.focus(); inp.select();
+  let done = false;
+  const finish = async keep => {
+    if (done) return; done = true;
+    const v = inp.value.trim();
+    if (keep && v && v !== s.name) { try { await api("/api/sheets/rename", {id: s.id, name: v}); s.name = v; await loadList(); } catch (e) { toast(e.message); } }
+    renderSheet();
+  };
+  inp.onkeydown = e => { if (e.key === "Enter") finish(true); if (e.key === "Escape") finish(false); };
+  inp.onblur = () => finish(true);
+}
+async function del(s) {
+  try {
+    await api("/api/sheets/delete", {id: s.id});
+    const name = s.name;
+    await loadList();
+    S.sheets.length ? openSheet(S.sheets[0].id) : newSheet();
+    toast(`deleted ${name}`, {undo: async () => { try { await api("/api/sheets/restore", {id: s.id}); await loadList(); openSheet(s.id); } catch (e) { toast(e.message); } }});
+  } catch (e) { toast(e.message); }
+}
+
+// ================================================================== sending
+async function sendDialog(s, views) {
+  let films;
+  try { films = (await api("/api/sheets/films")).films; } catch (e) { return toast(e.message); }
+  if (!films.length) return toast("there are no shot-script films yet - make one on the shots page");
+  const done = views.filter(v => v.status === "done");
+  const def = s.kind === "place" ? "" : "turn_front";
+  const lastFilm = PREF.get("sendfilm", null);
+  openDialog({title: `Send ${s.name} to a film`, ok: "Send", body: `
+    <label class="l">film</label><select id="sf">${films.map(f => `<option value="${esc(f.film)}" ${f.film === lastFilm ? "selected" : ""}>${esc(f.title)}</option>`).join("")}</select>
+    <label class="l">in that film, this is</label><select id="st"></select>
+    <div id="snew" hidden><label class="l">a short name the shots will use</label><input type="text" id="sid" value="${esc(s.name.toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_|_$/g, "").slice(0, 24))}">
+      <label class="l">who or what it is</label><input type="text" id="srole" placeholder="the courier, the sword…" value="${esc(s.kind === "item" ? "the " + (s.subject || "item") : "")}"></div>
+    <label class="l">using this picture</label><select id="sv">
+      ${s.kind === "place" ? `<option value="">your picture, as it is</option>` : ""}
+      ${done.map(v => `<option value="${esc(v.key)}" ${v.key === def ? "selected" : ""}>${esc(v.group_title)}: ${esc(v.label)}</option>`).join("")}</select>
+    <div class="n" id="snote"></div>`,
+    init: b => {
+      const fill = () => {
+        const f = films.find(x => x.film === b.querySelector("#sf").value);
+        // nothing already in the film is chosen for you: a new reference unless it is a place
+        const opts = [`<option value="new" ${s.kind !== "place" ? "selected" : ""}>a new reference…</option>`];
+        opts.push(...f.cast.map(c => `<option value="${esc(c.id)}">${esc(c.id)}${c.role ? " - " + esc(c.role) : ""}${c.has ? " (replaces its picture)" : ""}</option>`));
+        if (f.place) opts.push(`<option value="${esc(f.place.id)}" ${s.kind === "place" ? "selected" : ""}>${esc(f.place.id)} - the place${f.place.has ? " (replaces its picture)" : ""}</option>`);
+        b.querySelector("#st").innerHTML = opts.join("");
+        sync();
+      };
+      const sync = () => {
+        const t = b.querySelector("#st").value;
+        b.querySelector("#snew").hidden = t !== "new";
+        b.querySelector("#snote").textContent = t === "new" ? "It is added to the film's cast, with this picture as its reference."
+          : "Its reference picture on the shots page becomes this one (the old one is kept - undo puts it back). Start frames already drawn are not redrawn.";
+      };
+      b.querySelector("#sf").onchange = fill; b.querySelector("#st").onchange = sync;
+      fill();
+    },
+    onOk: async b => {
+      const film = b.querySelector("#sf").value, target = b.querySelector("#st").value;
+      const r = await api("/api/sheets/send", {id: s.id, film, target, view: b.querySelector("#sv").value,
+                                               new_id: (b.querySelector("#sid") || {}).value, role: (b.querySelector("#srole") || {}).value});
+      PREF.set("sendfilm", film);
+      toast(`sent to ${film} as ${r.as}`, {undo: () => unsend(s.id, r.at, film, r.as),
+                                          action: {label: "open the film", fn: () => { location.href = "/shots?film=" + encodeURIComponent(film); }}});
+      await loadSheet(true);
+    }});
+}
+async function unsend(id, at, film, as) {
+  try { await api("/api/sheets/unsend", {id, at}); toast(`${as} in ${film} is back as it was`, true); await loadSheet(true); }
+  catch (e) { toast(e.message); }
+}
+async function foundryDialog(s) {
+  let styles;
+  try { styles = (await api("/api/sheets/styles")).styles; } catch (e) { return toast(e.message); }
+  openDialog({title: `Save ${s.name} to the Foundry`, ok: "Save to the Foundry", body: `
+    <div class="sub">The Foundry keeps it as a ${s.kind === "character" ? "character" : s.item_type === "clothing" ? "costume" : "prop"} whose pictures are this sheet's${s.kind === "character" ? " (turnaround, faces, expressions)" : ""}, with a description the vision model writes from your picture. From there it can be sent to film-editor films${s.kind === "character" ? " and dressed in costumes" : ""}.</div>
+    <label class="l">the look it belongs to</label><select id="fs">${styles.map(x => `<option value="${esc(x.key)}" ${x.key === "cinematic" ? "selected" : ""}>${esc(x.label)}</option>`).join("")}</select>
+    <div class="n">The look decides which engine the Foundry uses when it draws something new for it.</div>`,
+    onOk: async b => {
+      const r = await api("/api/sheets/foundry", {id: s.id, style: b.querySelector("#fs").value});
+      toast(`saving to the Foundry${r.position ? " - queued" : ""}`, true); await refreshAfterQueue();
+    }});
+}
+
+// ================================================================== the big picture
+const LB = {list: [], i: 0};
+function lightbox(i) {
+  const views = S.data.views.filter(v => v.status === "done");
+  const key = S.data.views[i].key;
+  LB.list = views.map(v => ({src: v.hd || v.file, title: `${v.group_title}: ${v.label}`, meta: v.hd_size ? `${v.hd_size[0]}×${v.hd_size[1]}` : "",
+                             prompt: v.prompt + (v.seed != null ? `   · seed ${v.seed}` : ""), flag: v.flag}));
+  LB.i = views.findIndex(v => v.key === key);
+  showLB();
+}
+function lightboxSingle(src, title) { LB.list = [{src, title, meta: "", prompt: ""}]; LB.i = 0; showLB(); }
+function showLB() {
+  const x = LB.list[LB.i];
+  $("#lb").hidden = false; $("#lbimg").src = x.src; $("#lbt").textContent = x.title;
+  $("#lbm").textContent = [x.meta, x.flag ? "check: " + x.flag : ""].filter(Boolean).join(" · ");
+  $("#lbp").textContent = x.prompt || ""; $("#lbdl").href = x.src;
+  $("#lbprev").hidden = $("#lbnext").hidden = LB.list.length < 2;
+}
+function closeLB() { $("#lb").hidden = true; $("#lbimg").src = ""; }
+$("#lbx").onclick = closeLB;
+$("#lbprev").onclick = () => { LB.i = (LB.i - 1 + LB.list.length) % LB.list.length; showLB(); };
+$("#lbnext").onclick = () => { LB.i = (LB.i + 1) % LB.list.length; showLB(); };
+$("#lb").onclick = e => { if (e.target.id === "lb" || e.target.classList.contains("lbi")) closeLB(); };
+document.addEventListener("keydown", e => {
+  if ($("#lb").hidden) return;
+  if (e.key === "Escape") closeLB();
+  if (e.key === "ArrowLeft") $("#lbprev").click();
+  if (e.key === "ArrowRight") $("#lbnext").click();
+});
+
+// ================================================================== start
+(async () => {
+  try { await loadList(); } catch (e) { $("#main").innerHTML = `<div class="empty">Could not load the sheets: ${esc(e.message)}</div>`; return; }
+  const q = new URLSearchParams(location.search).get("sheet");
+  const want = q || S.sel;
+  if (want && S.sheets.some(s => s.id === want)) await openSheet(want);
+  else if (S.sheets.length) await openSheet(S.sheets[0].id);
+  else newSheet();
+  poll(following());
+})();
+</script>
+</body>
+</html>

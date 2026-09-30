@@ -9,9 +9,14 @@ cannot serve an anime film:
   character  qwen styles: portrait + full body from the compiled clause, then the
              multiple-angles LoRA (workflow 32) turns the full body to 3/4, side and
              back - one concept in, all angles out.
-             anime: animagine renders the full body from compiled TAGS, then re-renders
-             the other views with the full body as its own IPAdapter reference - the
-             self-reference chain that holds a drawn identity.
+             anime: animagine renders the full body from compiled TAGS; the turnaround is
+             that full body cut out onto grey and turned by the same LoRA (the IPAdapter
+             self-reference chain it replaced never turned a drawn figure - jin's "back"
+             faced the camera); faces and expressions still re-render with the full body
+             as their IPAdapter reference.
+             from an image: the picture itself is cut out and turned by studio/sheets.py
+             (the /sheets engine) - the pack is that picture's angles, face and
+             expressions, not a lookalike redrawn from its caption.
   place      three angles at every selected time of day, straight from the description.
   costume    a card of the garment alone on a stand; assigning it to a character renders
              the character WEARING it (two-reference edit for qwen styles, sheet +
@@ -195,8 +200,8 @@ def variant(data):
 # ─── the two ways in that are not a form ────────────────────────────────────────────
 
 def _caption_image(path):
-    """One vision call: a photograph in, physical facts out. The image is never kept
-    as an identity reference - see the module docstring."""
+    """One vision call: a photograph in, physical facts out - the asset's words. Since
+    2026-09-30 the picture itself is also turned into the pack (see _from_image_job)."""
     import shutil
     sys.path.insert(0, TOOLS) if TOOLS not in sys.path else None
     import character_new as CN
@@ -260,7 +265,27 @@ def _from_image_job(jid, path, name, style, level, consent_note):
         FY.save_asset(a)
         with _LOCK:
             JOBS[jid]["done"] = 2
-            JOBS[jid]["result"] = {"id": a["id"], "caption": text}
+        # THE PICTURE ITSELF, TURNED (2026-09-30). The caption still writes the asset's words; the
+        # pack is made FROM the picture by studio/sheets.py - the same person from eight angles,
+        # their face close up, five expressions - where it used to be redrawn from the caption,
+        # which made a lookalike. The sheet stays on /sheets as the record of how it was made.
+        SH = _sheets_engine()
+        s = SH.new("character", name, [(path, "main")], options={"hd": "x2"})
+        _log(jid, "turning the picture (sheet %s)" % s["id"])
+
+        def prog(i, n, msg):
+            with _LOCK:
+                JOBS[jid]["total"] = 2 + n
+                JOBS[jid]["done"] = 2 + i
+
+        SH.make(s["id"], log=lambda m: _log(jid, m), progress=prog)
+        a = FY.load_asset("character", a["id"])
+        a["images"] = SH.foundry_images(s["id"], "character", FY.asset_dir("character", a["id"]))
+        a["sheet"] = s["id"]
+        FY.save_asset(a)
+        with _LOCK:
+            JOBS[jid]["result"] = {"id": a["id"], "caption": text, "sheet": s["id"],
+                                   "images": len(a["images"])}
         _finish(jid)
     except Exception as e:
         _finish(jid, str(e)[:300])
@@ -510,6 +535,48 @@ def _render_turnaround(a, src_rel, prompt, dest, seed):
     return dest
 
 
+# ─── a picture, turned (studio/sheets.py) ──────────────────────────────────────────
+
+_SH = {"mod": None, "mtime": None}
+
+
+def _sheets_engine():
+    """studio/sheets.py, by path and reloaded when it changes: the one place a picture is cut
+    out, turned, sharpened and checked - for this page and for /sheets alike."""
+    p = os.path.join(STUDIO, "sheets.py")
+    mt = os.path.getmtime(p)
+    if _SH["mod"] is None or _SH["mtime"] != mt:
+        spec = _ilu.spec_from_file_location("studio_sheets_fy", p)
+        m = _ilu.module_from_spec(spec)
+        spec.loader.exec_module(m)
+        _SH.update(mod=m, mtime=mt)
+    return _SH["mod"]
+
+
+# The pack's turn views in the angles LoRA's own camera words, which studio/sheets.py measured
+# turning figures that plain English left facing the camera.
+TURN_SKS = {"turn_front": "front view", "turn_front_three_quarter": "front-right quarter view",
+            "turn_side": "right side view", "turn_back_three_quarter": "back-right quarter view",
+            "turn_back": "back view"}
+
+
+def _cutout_base(a, adir):
+    """base_fullbody cut out onto flat grey -> its path relative to the asset folder. On grey the
+    angles LoRA turns a DRAWN figure: jin's and hoshi's IPAdapter turnarounds never turned (a "back"
+    view facing the camera, a changed species); the same full bodies on grey turned cleanly
+    (MEASURED 2026-09-30, craft/SHEETS.md)."""
+    src = os.path.join(adir, "base_fullbody.png")
+    rel = os.path.join("_work", "turn_base.png")
+    dest = os.path.join(adir, rel)
+    if os.path.exists(dest) and os.path.getmtime(dest) >= os.path.getmtime(src):
+        return rel
+    os.makedirs(os.path.dirname(dest), exist_ok=True)
+    SH = _sheets_engine()
+    rgba = SH.matte(src, os.path.join(adir, "_work", "turn_rgba.png"), "fy_%s" % a["id"][:24])
+    SH.on_grey(rgba, dest, canvas=(896, 1216), fill=0.86)
+    return rel
+
+
 def _seeds_job(jid, atype, aid):
     try:
         a = FY.load_asset(atype, aid)
@@ -524,7 +591,24 @@ def _seeds_job(jid, atype, aid):
 
         for key, kind, prompt in plan:
             dest = os.path.join(adir, key + ".png")
+            if a.get("sheet") and key in (a.get("images") or {}) and os.path.exists(dest):
+                # a pack made FROM a picture keeps what its sheet made; only the gaps are filled
+                with _LOCK:
+                    JOBS[jid]["done"] += 1
+                continue
             _log(jid, key)
+            if a.get("sheet") and atype == "character" and kind == "direct":
+                # ...and a gap is EDITED from the picture's own full body, never redrawn from
+                # words, which would be a lookalike - the reason the sheet exists
+                _sheets_engine().edit([os.path.join(adir, "base_fullbody.png")],
+                                      "the same person, %s" % prompt, 21, 0, dest,
+                                      "fy_%s_%s" % (aid[:20], key))
+                a2 = FY.load_asset(atype, aid)
+                a2["images"][key] = key + ".png"
+                FY.save_asset(a2)
+                with _LOCK:
+                    JOBS[jid]["done"] += 1
+                continue
             if atype == "character":
                 if kind == "direct":
                     full = "%s, %s" % (a["compiled"]["tags"], prompt) \
@@ -574,16 +658,12 @@ def _seeds_job(jid, atype, aid):
                                            full_length=False)
                 else:
                     if st["kf_engine"] == "animagine":
-                        # a drawn identity turns through its own IPAdapter, not the LoRA
-                        fb = os.path.join(adir, "base_fullbody.png")
-                        a["_ipa_weight"] = _ipa_for(key)
-                        a["_ipa_ref"] = _stage(COMFY, fb,
-                                               "foundry_ref_%s.png" % aid)
-                        # the plan carries the view text - no key table to fall
-                        # out of step with CHAR_TURN_VIEWS
-                        _render_full_length(a, "%s, full body, %s, plain background"
-                                            % (a["compiled"]["tags"], prompt),
-                                            dest, jid, seeds=(23, 24, 25, 26))
+                        # A drawn figure turns through the angles LoRA once it stands on flat
+                        # grey; the IPAdapter self-reference chain this replaced re-drew it
+                        # facing the camera from every "angle" (jin, 2026-09-30).
+                        _render_turnaround(a, _cutout_base(a, adir),
+                                           "<sks> %s eye-level shot medium shot"
+                                           % TURN_SKS.get(key, "front view"), dest, seed=21)
                     else:
                         _render_turnaround(a, "base_fullbody.png", prompt, dest,
                                            seed=21)

@@ -1136,6 +1136,12 @@ def _spec_routes():
     return _load_tool_module('spec_routes')
 
 
+def _sheets_routes():
+    """studio/_tools/sheets_routes.py - one picture in, every angle out (studio/sheets.py does
+    the work). Owns a job queue in a module kept in sys.modules, like _shots_routes."""
+    return _load_tool_module('sheets_routes')
+
+
 def _foundry_routes():
     """studio/_tools/foundry_routes.py on demand - the selector-driven asset creator."""
     return _load_tool_module('foundry_routes')
@@ -1234,6 +1240,7 @@ STUDIO_NAV = [
         ("/characters", "characters", "characters.html"),
         ("/places", "places", "places.html"),
         ("/foundry", "foundry", "foundry.html"),
+        ("/sheets", "sheets", "sheets.html"),
         ("/voices", "voices", "voices.html"),
         ("/styles", "styles", "styles.html"),
         ("/library", "library", "library.html"),
@@ -1590,6 +1597,28 @@ class H(http.server.SimpleHTTPRequestHandler):
             self.send_header("Location", "/characters")
             self.end_headers()
             return
+        # /sheets - one picture in, every angle out: characters, items, places
+        if path == "/sheets":
+            return self._page("sheets.html")
+        if path.startswith("/sheets/media/"):
+            rel = urllib.parse.unquote(path[len("/sheets/media/"):])
+            base = os.path.realpath(os.path.join(HERE, "sheets"))
+            fp = os.path.realpath(os.path.join(base, rel))
+            if not (fp.startswith(base + os.sep) and os.path.isfile(fp)):
+                return self._send({"error": "no such file"}, 404)
+            ext = os.path.splitext(fp)[1].lower()
+            return self._send_file(fp, MIME.get(ext, "application/octet-stream"))
+        if path == "/api/sheets" or path.startswith("/api/sheets/"):
+            shr = _sheets_routes()
+            if not shr:
+                return self._send({"error": "studio/_tools/sheets_routes.py is unavailable"}, 500)
+            try:
+                body, code = shr.get(path[len("/api/sheets"):],
+                                     urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query))
+            except Exception as e:
+                traceback.print_exc()
+                return self._send({"error": str(e)[:300]}, 500)
+            return self._send(body, code)
         if path == "/foundry":
             return self._page("foundry.html")
         if path.startswith("/foundry/media/"):
@@ -2715,6 +2744,9 @@ class H(http.server.SimpleHTTPRequestHandler):
                      "/api/foundry/send", "/api/foundry/variant",
                      "/api/foundry/describe", "/api/foundry/from_image",
                      "/api/foundry/import_legacy", "/api/foundry/rename",
+                     "/api/sheets/new", "/api/sheets/make", "/api/sheets/redo", "/api/sheets/options",
+                     "/api/sheets/rename", "/api/sheets/delete", "/api/sheets/restore", "/api/sheets/stop",
+                     "/api/sheets/send", "/api/sheets/unsend", "/api/sheets/foundry", "/api/sheets/extra",
                      "/api/motion/verdict",
                      "/api/character/upload", "/api/character/create",
                      "/api/voice/demo", "/api/voice/add",
@@ -3039,6 +3071,16 @@ class H(http.server.SimpleHTTPRequestHandler):
             cur[vid] = {"verdict": verdict, "why": why} if why else verdict
             json.dump(cur, open(fp, "w", encoding="utf-8"), indent=1)
             return self._send({"ok": True, "answered": len(cur)})
+        if p.startswith("/api/sheets/"):
+            shr = _sheets_routes()
+            if not shr:
+                return self._send({"error": "studio/_tools/sheets_routes.py is unavailable"}, 500)
+            try:
+                body, code = shr.post(p[len("/api/sheets"):], data)
+            except Exception as e:
+                traceback.print_exc()
+                return self._send({"error": str(e)[:300]}, 500)
+            return self._send(body, code)
         if p.startswith("/api/foundry/"):
             fo = _foundry_routes()
             if not fo:
