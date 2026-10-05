@@ -23,6 +23,10 @@ Measured on each take: motion agreement (Pearson r of frame-to-frame energy) aga
 A camera move is previz too (previz_blender.py --scene street / canyon / orbit): the shot's "previz" block
 carries the move (radius, lens, cam_z, look_z and their *_to ends; figure_glb, the figure's real shape
 from her character sheet), and "reverse": true also writes pvr_<id>_s<seed>.mp4, the take backwards.
+
+A shot in a SET ("scene": "set", "set": "plaza") carries its camera in the set's own metres: "cam", "look",
+"lens" and their *_to ends, or an "arc" about "arc_center"; "frames" for the exact length, "masks": 8 for
+the landmark ID frames set_measure.py reads.
 """
 import argparse
 import json
@@ -41,7 +45,34 @@ import newmodels_test as nm                   # noqa: E402
 
 COMFY = fight.COMFY
 CAMERA_KEYS = ("degrees", "radius", "radius_to", "lens", "lens_to", "cam_z", "cam_z_to", "look_z", "look_z_to",
-               "figure_glb", "figure_turn")
+               "figure_glb", "figure_turn",
+               # a camera in a set (--scene set): where it stands and looks, and where it ends up
+               "set", "cam", "cam_to", "look", "look_to", "arc", "arc_center", "ease", "ortho", "render", "masks",
+               "frames",
+               # a character standing in the set: figure_glb (her mesh) at figure_at, turned figure_turn
+               "figure_at", "figure_height", "figure_name",
+               # the set's choreography for the shot (set_<name>.act), and the place without its characters
+               "action", "hide_figures",
+               # a shot drawn between two frames needs only those two from the set
+               "endpoints")
+
+
+def blender_cmd(s, pdir):
+    """The previz_blender.py command line for a shot's "previz" block. `--key=value`, never `--key value`: a
+    set's coordinates start with a minus sign, which argparse would take for an option."""
+    pz = s.get("previz") or {}
+    cmd = ["python3", os.path.join(TOOLS, "previz_blender.py"), "--out", pdir,
+           "--scene", pz.get("scene", "aisle"), "--seconds", str(pz.get("seconds", s["secs"])), "--fps", "24"]
+    for k in CAMERA_KEYS:                       # a camera move's own settings (previz_blender.py --help)
+        if k not in pz:
+            continue
+        v = pz[k]
+        if k in ("figure_glb", "set") and str(v).lower().endswith((".glb", ".gltf")) and not os.path.isabs(v):
+            v = os.path.join(ROOT, v)
+        if isinstance(v, (list, tuple)):
+            v = ",".join(str(x) for x in v)
+        cmd.append("--%s=%s" % (k.replace("_", "-"), v))
+    return cmd
 
 
 def _room(gb, budget):
@@ -85,6 +116,10 @@ def dress(s, pv_frame, dst, seed):
     chars = fight._unique([r for r in s["refs"] if r in fight.CAST and r not in places])
     pics = [pv_frame, os.path.join(fight.OUT, "ref_%s.png" % place)] + \
            [os.path.join(fight.OUT, "ref_%s.png" % c) for c in chars]
+    if (s.get("previz") or {}).get("scene") == "set":
+        # a set's render carries the place's own look; the plate beside it made Qwen-Image-2.1 return the
+        # PLATE's view instead of the render's for 7 of 7 shots (the plaza test, 2026-09-30)
+        pics = [pv_frame] + [os.path.join(fight.OUT, "ref_%s.png" % c) for c in chars]
     wf = {k: v for k, v in fight.load_wf("80_qwen21_edit_refs.json").items()
           if isinstance(v, dict) and "class_type" in v}
     for k in ("21", "22", "23"):
@@ -162,15 +197,7 @@ def main():
     # 1. simulate
     if not os.path.exists(pv) or a.force:
         t0 = time.time()
-        cmd = ["python3", os.path.join(TOOLS, "previz_blender.py"), "--out", pdir,
-               "--scene", pz.get("scene", "aisle"), "--seconds", str(pz.get("seconds", s["secs"])), "--fps", "24"]
-        for k in CAMERA_KEYS:                   # a camera move's own settings (previz_blender.py --help)
-            if k in pz:
-                v = pz[k]
-                if k == "figure_glb" and not os.path.isabs(v):
-                    v = os.path.join(ROOT, v)
-                cmd += ["--" + k.replace("_", "-"), str(v)]
-        r = subprocess.run(cmd, capture_output=True, text=True)
+        r = subprocess.run(blender_cmd(s, pdir), capture_output=True, text=True)
         print(r.stdout[-600:], r.stderr[-600:], flush=True)
         if not os.path.exists(pv):
             sys.exit("the previz did not render")

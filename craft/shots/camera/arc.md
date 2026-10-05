@@ -2,7 +2,7 @@
 
 | family | status | last tested | best result |
 |---|---|---|---|
-| camera | works-with-caveats | 2026-09-30 | cyber-alchemist 103 as a single 45° piece, grade B |
+| camera | works-with-caveats | 2026-10-01 | plaza 106, a 100° arc in a 3D set pinned at both ends, grade B+ |
 
 **Also called:** arc shot, half orbit, quarter orbit, camera arcs around, semicircle move
 **Not the same as:**
@@ -45,10 +45,33 @@ One previz piece: `previz_blender.py --scene orbit` with `--degrees` set to the 
 - **Got:** the takes in the cut (307 H3 seed 202, 309 LTX seed 202) show her flying past and a glint; nothing circles her. The cut reads as four separate angles.
 - **Learned:** an arc asked for in words is not delivered. Build it.
 
+### 2026-09-30 · plaza 106 · a 100° arc in a 3D set, pinned at both ends · grade B+
+- **Did:** the arc round the fountain as a camera in one set ([`pipe-3d-set`](../pipeline/3d-set.md)), LTX-2.3 IC-LoRA on its depth from a dressed start frame; then again with the move's last frame (the set's render, dressed) pinned at frame -1.
+- **Got:** unpinned, the geometry followed (motion r 0.52-0.71) but the cafe the arc came round to was painted as a pink house with a white awning (the fit held 64-78%); pinned, it arrived as the cafe - striped awning, CAFFE sign - and the fit held 96-97%. Asked in words from a composed frame (LTX-2.5), the camera did not circle at all.
+- **Learned:** depth carries the shapes, only a dressed frame carries the look: pin the end of an arc that reveals.
+
+### 2026-10-01 · the duel orbit test O01 · a 120° arc round a close fight, H3 between the set's two frames · grade C+
+- **Did:** a camera circling Terra and the jester through 120° in 85 frames (the set's `arc`) while they trade six numbered beats; H3 (`65`) between the set's first and last frames, seeds 11 and 202; then with the end frame edited into the beats' last pose (`studio/samples/settest/work/orbit_test.py`, `orbit_key.py`).
+- **Got:** a whip, not an arc, 4 of 4: the side view held to frame ~46, a 4-6 frame smear or speed-line burst, the end view. The fight played through it.
+- **Learned:** between two views far apart H3 whips; it does not travel the arc.
+
+### 2026-10-01 · the duel orbit test O01 · + waypoint keys from the set at 31° and 91° · grade B-
+- **Did:** the set's camera at take frames 30 and 60 rendered and cast, each frame edited into that moment's blow, anchored as keys ([`pipe-key-poses`](../pipeline/key-poses.md), `orbit_way.py`); seeds 11 and 202.
+- **Got:** every view visited in order, 2 of 2 - in steps: the first waypoint held ~16 frames, then a slide to the next; each waypoint is its own painting of the forest.
+- **Learned:** waypoints steer the path, not the glide; a constant glide is the depth's (`pipe-3d-set`, LTX-2.3 IC-LoRA).
+
+### 2026-10-01 · the duel orbit test O01 · five waypoints, one every 15 frames · grade B-
+- **Did:** three more of the set's views on the arc (9°, 60°, 112°) posed into the hook, the backfist and the lock forming, five waypoint keys in all plus the posed end (`orbit_way.py keys5`, `take5`); seeds 11 and 202.
+- **Got:** all five views in order, 2 of 2, in smaller steps; the parking stayed - seed 11's longest still run 13 frames (15 with two waypoints), seed 202's 5 either way.
+- **Learned:** denser waypoints shrink the steps, not the parking; for a glide, the depth.
+
 ## Failure modes
 
 | symptom | cause | fix | seen in |
 |---|---|---|---|
+| a whip instead of an arc: one view, a smear, the other | H3 between two views 120° apart | waypoint keys from the set (in steps), or the set's depth for a glide | duel orbit O01, 4 of 4 |
+| the camera parks on a waypoint, then slides on | each waypoint painted on its own | open: fewer differences between the waypoint paintings | duel orbit O01, 2 of 2 |
+| what the arc comes round to is invented (a pink cafe) | only the start frame carries the look | pin the arc's last frame, a dressed render of the set | plaza 106 |
 | no circling at all | asked in words | a previz piece | quantum-courier 307-310 |
 | the room slides but she does not turn | a stand-in with no front | her mesh | cyber-alchemist 103 cone test |
 

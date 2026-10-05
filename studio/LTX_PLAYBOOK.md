@@ -992,6 +992,10 @@ push-in on a standing figure, or a cut. The end-figure geometry for moving
 motions stays, because a correct end frame is still the precondition for the
 day the interpolator honours it.
 
+**Amendment 2026-09-30 (§99.10):** a walk the camera travels WITH - the camera tracking back at her
+pace, the figure the same size in both frames - held on H3 pins, 2 of 2 (the forest's 302): real steps,
+the place kept. The rule above stands for a walk whose figure grows between the frames.
+
 ## §30  The library grows only through its own QC
 
 Fifteen assets in twelve minutes (four characters, five places, six props - all
@@ -4489,12 +4493,16 @@ that moves the head; that is a fact about the ruler.
 
 **S6 · Sound is written, never hoped.** Name the noise sources in every shot; "a quiet room"
 renders silence. Dialogue only through an on-screen mouth. Write *no music* when the edit owns
-the score; the scene bed comes from ACE-Step at the finish. *(LTX sound clauses; lip-sync.)*
+the score. The score is picked by ear from an audition bank - never a cue nobody has heard, never
+tags alone (craft/SOUND.md §0). *(LTX sound clauses; lip-sync.)*
 
 **S7 · Continuity of place is the plate, not a LoRA.** A LoRA gives *a* classroom; the plate
 gives *the* classroom. Weights are for what must be identical across shots and cannot be
 photographed in advance - a face, a costume - and even then they do not stack past two.
-*(§57; the crown card; block 6.)*
+*(§57; the crown card; block 6.)* **And when a scene looks all round its place** - a reverse, an
+orbit, a crane - the plate holds only what it showed: **the place is a 3D set and every shot a camera
+in it** (§99: on the plaza test the set's start frames fit their views at 0.44 against 0.19 chance, the
+plate's at 0.36 against 0.30, and the plate way grew a dome on the tower inside one take).
 
 **S8 · The finish is half the film.** One look for the whole film (filmic by default), applied
 after the cuts; the canvas follows the takes; the 2× master when it is wanted; loudness levelled;
@@ -4589,7 +4597,8 @@ matters. Compose a start frame per shot from the plate and the pack; that frame 
 references live and where money, if any, is spent. Render on LTX-2.5 by default, pin in-place
 motion on H3, read every take against the numbers, retry by changing words, pick only what has
 no faults, cut between faces at assembly, and finish with one look and a master. Measure anything
-new before it enters this list.
+new before it enters this list. A scene that looks all round its place is built as a 3D set first,
+every shot a camera in it (§99).
 
 ### 96.1  Decide the look once
 
@@ -4644,6 +4653,12 @@ The studio composes each shot's start frame from the plate and the pack (`assets
 fresh one from a `keyframe_prompt`). Then it **checks the words against the picture** (the vision
 pass: "the picture does not show: gate, bell" means the shot may drift toward them) and, for a
 pinned motion, composes the end frame too.
+
+**A scene that looks all round its place is a set (§99).** When the shots see what the plate never
+showed - a reverse, an orbit, a crane - every start frame is the set's render of that shot's camera,
+dressed into the look from the render ALONE (with the plate beside it the dress returned the plate's
+view, 7 of 7); a character is put in where the set says she stands (`set_test.py cast`), never
+dressed in from her reference; and every move that reveals is pinned at its end (`ends`, `pin`).
 
 Two measured facts govern this step. **The start frame fixes where a shot begins** - a character
 the anchor stands at the steps cannot "walk in". **Detail is not what the video model wants from
@@ -4806,6 +4821,13 @@ the current engines. What transfers to this box, and how:
     Turbo (the orphan) - which reference casts best, by the pack ladder.
 23. **ComfyUI 0.37.4** when the paid door is opened (Seedance 2.5 Draft is partner-node only), tag
     to tag as in §0.1, then one render of every graph (§0.2, item 2).
+24. **A set built by GPT-6 Astra** (`--set file.glb`) against the hand-written plaza: does more detail
+    survive the dress, and does it fit better? (§99.8)
+25. **The colour match through a take** (`set_test.py match --apply`, then draw): does a building keep
+    its colour from shot to shot on video, not only on stills (10.7 -> 4.6 dE there)?
+26. **A steep angle from a set**: the dress straightens it (12 of 12); ControlNet canny at full
+    strength and more steps, or the depth-only take recoloured.
+27. **A character who walks in a set**: a rigged figure under the depth, not a statue.
 
 ### 96.11  Timings measured on this card, for planning
 
@@ -4822,6 +4844,8 @@ the current engines. What transfers to this box, and how:
 | ComfyUI re-staging a video model after `/free` | 20-60 s |
 | loading a second 20 GB model beside a resident one | kills ComfyUI - free and wait first |
 | H3 ref2va wired, no LoRA, 30 steps, beside another 22 GB process | the kernel OOM-killed ComfyUI at step 11 (37 GB resident): host RAM is a limit too |
+| a shot from a 3D set: frames, ID masks, a 1280x720 still (`previz_blender.py --scene set`) | 13-17 s |
+| an IC-LoRA take from a set, 97-121 frames, with or without a pinned end (`74`) | 38-59 s |
 
 ## §97  Three recipes from r/comfyui, measured - and the reference route had never received a picture
 
@@ -5170,3 +5194,653 @@ effect to its instant, and that is exactly what a fight is made of.
 | 8 one grade line every shot | ours is one grade after the cuts, which is strictly better |
 | 9 AVOID is your spellbook | holds; ours grows from measured QC faults |
 | 10 post is half the film | holds; the master's extra frame is ours to fix |
+
+## §99  A SCENE INSIDE ONE 3D SET - the place built once, every shot a camera in it
+
+A plate holds the place only where it looked. A reverse angle, a camera circling the fountain, a crane
+rising over the square all see parts of the place the plate never showed, and the engine invents them:
+measured on 2026-09-30, the angles LoRA turning the plate round invented the square's whole south side,
+and the words then drew a different archway; inside one LTX-2.5 take the clock tower grew a dome. So the
+place is built once in Blender - a *set* - and every shot of the scene is a camera standing in it: its
+first frame is the set's render of that camera, painted into the film's look; the take follows the set's
+depth while the camera moves; and the set's own masks measure every frame against where things should
+be. Tested three times the same day: the plaza test (eight shots of one square, set against plate-and-words,
+`studio/shotscripts/_make_plaza_test_0930.py`) and Terra in the plaza (a character standing in the set,
+things added to it, the whole scene in 2D anime, `_make_plaza_terra_0930.py`), and the jester in the
+wood (two characters who move, a fight, magic and physics in a forest, `_make_forest_fight_0930.py`).
+
+### 99.0  The shape, in one paragraph
+
+Write the set (a set module like `studio/_tools/set_plaza.py`; a `.glb` from elsewhere - GPT-6 Astra
+builds Blender scenes - comes in with `--set file.glb`). Write each shot as a camera in it
+(`"engine": "previz"`, `"previz": {"scene": "set", "cam": ..., "look": ..., "lens": ...}`) and check
+every framing on the map. Make the plate from the establishing render. Dress each shot's render into the
+film's look from the render ALONE, with words that name nothing; pick the seed the set's map fits best,
+then look at it. Put a character in by the set (`cast`), not by the dress. Draw every take on LTX-2.3
+with the IC-LoRA reading the render's depth (`74`); pin the last frame of every move that reveals
+(`ends`, `pin`). Measure against the set (`set_measure.py`). Tools: `studio/_tools/previz_blender.py`
+(`--scene set`), `studio/_tools/set_test.py` (render, plate, dress, match, cast, draw, ends, pin),
+`studio/_tools/set_measure.py`, `studio/_tools/previz_shot.py`; for characters who move and things that
+break, `studio/_tools/set_actors.py` and a set's own choreography (`studio/_tools/set_forest.py`, 99.9).
+
+### 99.1  The set
+
+Geometry, not decoration: every building with its windows, shutters, doors and roof as real shapes (the
+dress keeps what is there and invents what is not), each building its own colour, the props that must
+stay put (a stall, a bicycle, pots) as objects. Every object carries a `group` (a landmark: tower, cafe,
+fountain, a character) and a `surface` (group/material: the cafe's wall, its awning's red stripes), and
+`--masks N` renders both as flat ID colours every N frames - the set's answer to "where is the cafe in
+frame 57". The plaza (`set_plaza.py`) took an hour to write; `set_plaza_market.py` adds a market
+afternoon to it in forty lines. A shot renders with its masks in 13-17 s.
+
+### 99.2  Start frames: the render alone, words that name nothing
+
+The dress is Qwen-Image-2.1 (`80`) turning the set's render into the film's look. Three findings, each
+measured on the plaza test's seven non-establishing shots:
+
+| what was handed to the dress | what came back |
+|---|---|
+| the render + the plate "for the look" | the PLATE's view, 7 of 7 shots; told "only the colours", still the plate's view or its tower grafted on |
+| the render + words naming the set's objects | the shot's view, with the named things where they are not: a clock face on the fountain, a tower over the cafe |
+| the render alone + "everything stays exactly where it is; add nothing, remove nothing" | the shot's view: fit 0.26-0.59 against chance 0.10-0.23, six of seven |
+
+It will not keep a steep angle: a look up a tower failed 12 of 12 seeds (8 re-imagined as a level house
+front, 4 straightened to eye level), and a ControlNet start frame (`05`, canny, strength 0.8) redesigned
+the tower instead. A plain wall cut by the frame comes back with a roof on it. Pick by fit, then look:
+the best-fitting frame for one shot kept the set's blobby CG tree (fit 0.52 against a real tree's 0.40).
+
+### 99.3  Takes: the depth carries the shapes, a dressed frame carries the look
+
+LTX-2.3 with the IC-LoRA union control reads the render's depth and starts on the dressed frame; the
+motion follows the set (r 0.52-0.99 against the render, 38-57 s a take). What the start frame did not
+show is painted from nothing: the orbit's cafe came back as a pink house with a white awning, the
+crane's red awning came out white. **Pin the last frame of every move that reveals** - the set's render
+at the move's end, dressed the same way, as a keyframe guide at frame -1 (`set_test.py ends`, `pin`):
+the orbit then arrived on the real cafe and held 96-97% of its fit to the end (64-78% unpinned), the
+crane 90% (61-78%). From a misaligned start frame the depth still pulls the take onto the set by its end
+(fit 0.34 -> 0.44); from the depth alone (`pvb`) the geometry is exact and the colours are its own.
+
+### 99.4  A character in the set
+
+Her real shape goes into the set (`--figure-glb`, `--figure-at`, `--figure-turn`): a Hunyuan3D mesh
+from the clean front view of her character sheet (`/sheets`, 78 s for the sheet and the model). The
+Foundry's own `mesh.glb` had been built from a picture with its decorative card behind her and came in
+as a two-metre box. Two surprises on the way. **Every `--figure-turn` until now did nothing**: the glTF
+importer leaves objects in quaternion mode, where an euler is ignored, so she faced south in every render
+(fixed in `previz_blender._import_figure`). **The dress redraws a character from her reference, at the
+reference's size and framing**: handed her sheet's front view, it drew her full length and centred in
+every shot - where the set had her cut at the knees, seen from behind over her shoulder, or 57 px tall
+across the square (the dressed plate drew her two to three times that). So she is not dressed in.
+`set_test.py cast` dresses the place WITHOUT her, projects her feet and head through the shot's camera,
+takes the view of her sheet nearest the camera's side of her (the eight-view turnaround: a camera 155°
+round from her front gets her back-right view), cuts it out (BiRefNet, the sheets' own matte), scales it
+to her height there and stands it on her feet with a soft shadow. The take animates her on her depth.
+
+Measured on Terra in the plaza (2D anime, four shots, two seeds each): start frames fit the set at 0.55
+against chance 0.14 (the over-the-shoulder frame 0.80); the takes kept 91% of their fit; the moves
+followed the set (r 0.88-0.97; the pinned arc round her scored -0.29 and -0.36 while its frames turn her
+front-right, front, front-left exactly as the set does - on an arc round a figure the motion measure is a
+question to look into, not a verdict). Her hair, dress and sash
+held in every shot; the added things stayed where the set put them - the bicycle against the fountain,
+the pots along the cafe, the stall behind her as the arc begins, the lights across the square; and the
+2D anime look held on LTX-2.3 through every take. Flaw: mid-arc, the white house drifted to a minty grey.
+
+### 99.5  The plaza test, measured
+
+Eight shots of one square, the same plate, prompts and seeds both ways; today's way had its start frames
+picked by the same fit (its best case).
+
+| | one 3D set | one plate + words |
+|---|---|---|
+| start frames: fit / chance | **0.44 / 0.19** | 0.36 / 0.30 |
+| start frames showing the view asked for | **7 of 8** (the steep tilt ties) | 4 of 8 |
+| colour against the plate / spread between shots (dE) | **8.4 / 14.8** | 14.0 / 23.2 |
+| picked takes: fit | **0.43** | 0.32 |
+| all takes: share of the fit kept to the last frame | **91%** | 77% |
+| the crane: fit kept | **90%** (pinned) | 27-36% |
+
+By eye: one square in every shot of the set's film; in the other, a domed tower, a different archway,
+the cafe on a white house, and an orbit and a tilt that never happened. Grades B+ and C-.
+
+### 99.6  Measuring a take against the set
+
+`set_measure.py`: **fit** = 1 - the colour variance left inside each surface of the set's map / the
+picture's whole colour variance (CIELAB, 320 px wide); **chance** = the same picture under the other
+shots' maps; **hold** = a take's fit at its last frame over its first; **dE** = each key surface's
+colour against the plate, and its spread from shot to shot. An edge score was tried first and could not
+tell shots apart (0.318 for the right shot, 0.305 by chance): photographs have edges everywhere. Fit
+rewards whatever the dress left unpainted - rank by it, pick by eye. `set_test.py match` holds each
+building's colour by its surface mask (stills: dE 10.7 -> 4.6, spread 14.6 -> 6.9; not yet drawn
+through a take).
+
+### 99.7  Timings on this card
+
+| step | time |
+|---|---|
+| a shot from the set: frames, masks, a 1280x720 still | 13-17 s |
+| the map of the set with every camera on it | 3 s |
+| a dress (Qwen-Image-2.1, `80`) | 6-12 s |
+| a character's sheet from one picture, with a 3D model (`/sheets`, Hunyuan3D `24`) | 78 s |
+| an IC-LoRA take (`74`), 97-121 frames, with or without a pinned end | 38-59 s |
+| the plaza test end to end: 8 shots two ways, 2 seeds, measured | about 90 min of card |
+
+### 99.8  Open
+
+1. A set built by GPT-6 Astra against a hand-written one: more detail for the dress to keep.
+2. The colour match drawn through a take; dress words that keep each wall's own paint (the pink and
+   the white houses weathered to the same beige).
+3. A steep angle: a ControlNet at full strength and more steps, or the depth-only take recoloured.
+4. Exact choreography with natural bodies (99.10): the pose skeleton driven by real motion on the set's
+   marks - a motion-capture clip, or a move acted on a phone - instead of hand-keyed puppets.
+5. A blast that reads as fire: a solid glowing sphere was painted as dark red blobs; many small glowing
+   pieces, or a lit cloud, under the depth.
+
+### 99.9  Characters who move, and physics, in a set
+
+A Hunyuan3D model is a statue. A character who walks, leaps, punches or casts is a PUPPET in the set
+(`studio/_tools/set_actors.py`): a jointed body in her height and silhouette - Terra's hair mass and
+skirt, the jester's two-horned cap and pointed shoes - posed by keyframes from a library (stand, walk,
+wary, crouch, leap, punch, block, kick, hit, cast, shield, creep, giggle). The set module carries each
+shot's choreography (`act(name)` in `studio/_tools/set_forest.py`; `"action"` in the previz block) and
+records where each character stands and faces at the shot's first and last frames, so `cast` puts the
+right side of each, at the right size, into both. Blender's rigid bodies do what the fight breaks -
+leaves and twigs (damped to drift), pebbles, bark, the tree - each held kinematic and released with the
+velocity of a last push, so every piece lands where the simulation says, in every shot that sees it.
+
+Measured on THE JESTER IN THE WOOD (2026-09-30: a forest set of ~700 trees, seven shots, two characters
+- Terra and a new villain, an original harlequin jester - in 2D anime):
+
+| | |
+|---|---|
+| start frames: fit / chance | 0.44 / 0.14 |
+| motion against the set, pinned takes | r 0.36-0.99: the exchange of blows 0.97-0.99, the leap 0.91-0.94, the fire and the falling oak 0.86-0.95 |
+| characters unpinned | drifted in 4 of 6 shots: her hair narrowed to the puppet's, turned magenta (his colour in the words); his diamond costume became a bare torso |
+| characters pinned at both ends | held in all seven; Terra's colour against the first shot 3.8-5.7 dE pinned, 57-61 unpinned (the drop) |
+
+What it took:
+- **The depth carries the motion, never the look.** The IC-LoRA reads only the puppets' depth; a
+  character's look comes from the frames she is pinned to and from the words. Pin both ends of every shot
+  with a character in it (`cast --ends`, then `pin`). Pinned, the motion followed the set better too (her
+  walk r 0 -> 0.63, the standoff 0.05 -> 0.87).
+- **No colour in one character's words may be another's.** With "magenta hair" in the jester's
+  description, the woman in the foreground came back magenta-haired in two shots: describe each by colours
+  the other does not have, and place them ("in the foreground", "ahead").
+- **A rising fit is a warning when characters move**: unpinned takes "improved" (her walk 0.43 -> 0.68) by
+  turning the character into the puppet's simpler shape; pinned takes hold near 1.0.
+- **A rigid body turns about its origin**: parts built in world coordinates need their origin at their
+  centre of mass first.
+- **A whole tree's convex hull rolls like a ball**: the oak landed on its crown and flipped onto its back.
+  The physics body is the trunk alone, an unseen cylinder, with the visible tree parented to it.
+- **A 20 m tree tipped gently takes over four seconds to fall**; pushed (8° over three frames) it lands in
+  under two, inside a five-second shot.
+- **The wreckage carries over the cut**: the next shot simulates the same fall again and freezes it at the
+  moment the previous shot ended (`set_forest._freeze`); the oak lies across the path exactly where the
+  fire shot left it.
+- **No world fog in Eevee**: a world volume of density 0.012 rendered the whole forest black; the dress
+  paints the mist from its words, shafts of light and all.
+- **A new character in about two minutes of card**: the jester was picked from four designs (three
+  FLUX.2, one Qwen-Image-2.1; the Qwen one), then sheeted and modelled (`/sheets`: eight turnaround views and a Hunyuan3D model).
+- **Flaws left**: the blast - a solid glowing sphere - was painted as dark red blobs, not flame; foliage
+  right at the lens stays a flat green shape; mid-leap the jester's costume blurs pale for a few frames.
+
+Timings: a forest shot with its puppets, physics and masks 14-19 s; a take 39-59 s; the whole scene -
+the set, the jester, seven shots, the re-draws pinned - about 45 minutes of card.
+
+**Superseded the same night for characters who act (99.10):** draw them between the set's frames, not on
+the puppets' depth. The puppets stay as stand-ins - their marks place each character in the frames - and
+the physics stays.
+
+### 99.10  Frames first: the set gives the frames, the engine acts
+
+Drawn on the puppets' depth (99.9), THE JESTER IN THE WOOD's characters moved exactly as keyed and acted
+like puppets: Terra's walk was the puppet's shuffle, one leg splayed, and on one seed her sash became the
+puppet's tube of a skirt; mid-leap the jester's body was a pale smear with no face, his back to the camera
+until the landing frame turned him round. The same night three of its shots were redrawn with the set
+giving only the FRAMES - each shot's first and last pictures, the characters placed in both by
+`set_test.py cast --ends` (99.4) - and an engine acting in between. Against them, the old takes and a
+fourth arm: LTX-2.3 IC-LoRA (`74`) on the puppets' POSE SKELETON instead of their depth
+(`previz_blender.py --joints`: 18 keypoints per puppet a frame, the face's points left out where the
+camera cannot see them). Two seeds each, 22 takes (`studio/samples/settest/work/forest_frames.py`):
+
+| | her walk (302, the camera tracking back) | his drop (304) | the blows (305) |
+|---|---|---|---|
+| old: the set's depth, puppets in it, pinned | the shuffle; a tube skirt on 1 of 2 | a faceless smear mid-leap | stiff, exactly as keyed |
+| **H3 between the frames** (`65`) | **real steps, glances, costume held, 2 of 2** | **leaps, lands crouched, rises facing her, 2 of 2** | **lunge, block, kick, a skid back through the dust, 2 of 2** |
+| LTX-2.5 between the frames (`72`) | real steps, 2 of 2; her hair flares on 1 | leaps in a storm of leaves, 2 of 2 | the bodies tangle, debris sprays, 2 of 2 |
+| LTX-2.5 from the start frame (`70`) | pushes in to her waist instead of tracking back, 2 of 2 | - | - |
+| H3 from the start frame (`67`) | - | leaps; ignores the camera move and her step forward, ends off the set | - |
+| LTX-2.3 on the pose skeleton, pinned | the puppet's shuffle, costume held | the puppet's leap: the smear again | as keyed, like the old |
+
+The place, by its own fit (the set's surface map with the characters left out; chance 0.05-0.18): the old
+way holds it best mid-take (walk 0.37, drop 0.34) - every frame is locked to the set. The takes between
+two frames dip in the middle (walk 0.31-0.39, drop 0.28-0.32) and come back at the pinned end; a take
+from the start frame alone ends off the set (drop 0.22 against 0.31). By eye it is the same forest in
+every pinned take; the deepest dip (the blows, 0.06 against chance 0.05) is dust and a motion smear
+covering it.
+
+What it settles:
+- **The set gives the frames; the engine acts.** A shot where a character walks, leaps or fights is drawn
+  between the set's first and last frames: H3 for the violent beat (the routing table's "still hits
+  harder"), H3 or LTX-2.5 for a walk. The puppets stay as STAND-INS - their marks place each character in
+  the frames - and the set's physics still decides what falls where.
+- **Both ends, always.** A take from the start frame alone acts well and leaves the set: the camera move,
+  and anyone else's movement, belong to the set, and only an end frame carries them.
+- **The set's depth stays for the camera's own shots** - where the camera is the actor and a character is
+  small or still (the path from above, the view from the oak): 301 and 303 keep their takes.
+- **A pinned walk holds when the camera travels with her.** §29's "do not pin walks" was measured on a walk
+  whose figure grew between the two frames. Here the camera tracks back at her pace, she is the same size
+  in both frames, and H3 held both, 2 of 2.
+- **A skeleton is only as good as the motion that drives it.** Taken from the hand-keyed puppets it freed
+  the costume and kept the shuffle and the plank of a leap. Exact choreography with natural bodies needs
+  real motion on the set's marks - a motion-capture clip, or a move acted on a phone - not keyframes
+  (99.8).
+
+The scene recut with the three H3 takes (`studio/samples/fight/forest-fight/frames_test/the-jester-in-the-wood_frames-first.mp4`):
+706 frames, the cuts and the place unchanged around them. Timings: H3 between frames 45-47 s, H3 from a
+start frame 35 s, LTX-2.5 26-38 s, a skeleton take 38-39 s, the joints 2 s a shot.
+
+## §100  A FIGHT TOLD SHOT BY SHOT - how deep the words go, the dialects, a whole duel frames first
+
+THE DUEL IN THE CLEARING (2026-10-01): Terra and the jester, 58 shots and 3:04, built frames first (§99.10)
+in a clearing of the forest set and down the path beside it, H3 acting between every shot's two frames.
+Asked for that night: a fight of wuxia or Dragon Ball caliber, told granularly - the camera, the
+choreography, how deep the instructions must go - with magic, dodges and physics shots, sound to match.
+What it measured, in the order it was learned; the film's verdict in 100.9.
+
+### 100.1  How much a fight has to be told
+
+One exchange (the forest's 305, its two frames from the set, H3 between them), told at four depths, two
+seeds each (`studio/samples/settest/work/fight_words.py`):
+
+| told | beats that happened, of the six |
+|---|---|
+| L1 who and where, "they fight" | 0-1: a generic scuffle, then standing |
+| L2 + camera, pace, "fast, hard-hitting anime action", sound | 1-2, more energy (whole-frame impact flashes, unasked) |
+| L3 + three beats in order | 3 of 3 |
+| L4 + six numbered beats, each with the body mechanics and the effect of the hit | **6 of 6, both seeds** |
+
+A fight is choreography in WORDS: a numbered beat list - who moves which limb where, and what each hit does
+to the other body and to the ground - inside two frames from the set that say where everyone starts and
+ends. Six beats fit 3.75 s. "They fight" is a scuffle.
+
+### 100.2  The genre is a dialect for some things, shot design for others
+
+The L4 exchange in two dialects, two seeds each:
+- **90s shonen battle** ("glowing auras, speed lines, afterimages, a white impact frame on every hit", a
+  shockwave ring when the kick lands): **every mark rendered on 2 of 2** - starburst impact frames, speed
+  lines, a dust trail, the shockwave ring - with the six beats intact.
+- **wuxia** ("graceful, wire-assisted movement, flowing hair and fabric, poised stances", slow motion on
+  the kick): looked like L4. Wuxia is not an adjective at a medium side view: it is shot design - wide,
+  airborne, slow, the body whole in frame (E06b: up the tree trunks).
+- **The dialect only where something is fought.** On the duel's establishing shot the battle dialect
+  fired a white impact frame at nothing and turned her walk into a dash (D01, both seeds): quiet shots -
+  establishing, a look, an aftermath - go without it.
+
+### 100.3  A duel frames first, at scale
+
+The set: `studio/_tools/set_duel.py` - the forest of set_forest.py with a clearing cut around its path
+(standing stones, a boulder pre-cracked into chunks, six trees built in breakable parts) and four more
+breakable trees beside the path south of it; the great oak of the first film still standing. A shot is a
+camera plus its choreography in the film's ACTS FILE (`studio/shotscripts/forest-duel.acts.json`, written
+by `_make_forest_duel_1001.py`): where each character stands and what they face at the first and last
+frames (or "hidden": out of the shot at that end), and the physics events it sets off. The maker writes
+every earlier event into each shot's "done" list, so the wreckage accumulates through the film:
+
+| event | what breaks |
+|---|---|
+| `bark` | the wedges on the struck side of a tree blown out, bark chips flying; the tree stands |
+| `snap` | a tree broken at its wedges, the top falling toward fall_az (the trunk alone is the physics body) |
+| `topple` | several trees blown over away from a blast |
+| `shock` | leaves, twigs and pebbles round a point thrown out and up |
+| `shatter` | the boulder's chunks thrown away from the blow |
+| `leafrain` | leaves loosed from the canopy, unseen until they fall |
+| `oak` | the first film's great oak, blown at its base, falling across the path |
+
+What made 55 shots affordable (`previz_blender.py --endpoints`, the wreck cache): a shot drawn between two
+frames needs only those two from the set, so only frames 1 and N are rendered (the physics still runs
+through all of them); and the first shot that needs an event's wreckage simulates it once and writes
+where every piece settled (`studio/samples/fight/<film>/wreck/`, written atomically - two renders can need
+the same wreckage at once), every later shot reads it. A set render went from ~60 s to 5-6 s - until late
+in the film, where it climbed to 130 s: reading an event from the cache still built every piece as a rigid
+body and took it off again, and by the last act that was over a thousand pieces, each `bpy.ops` call
+walking the whole scene. A cached event is now built DRY (`set_duel._DRY`: no rigid bodies, no release or
+hide keys, the pieces set straight where they settled) - the last shot, with every event before it, 6 s.
+
+The pipeline, per shot (`studio/_tools/set_film.py`, first the work script `duel.py`): `set_test.py render` (previz, masks at
+both ends, the map) -> `set_test.py cast --ends` (the empty place at both ends dressed on two seeds, the
+best fit kept, each character pasted from their sheet where the set puts them) -> H3 first-last
+(`65`) between the two, two seeds -> pick by eye on the board -> cut with one grade and a score.
+
+**Look at every shot's two frames before any take.** Two of the first ten cameras stood behind the
+clearing's ring of standing stones, and a stone filled half the frame (D05, D10): the map shows where a
+camera stands, only the frames show what it sees.
+
+### 100.4  The answers to the night's other questions
+
+- **A rigged character from her sheet model: not yet.** Blender's automatic weights found no solution
+  on Terra's Hunyuan3D model (0 of 214 846 vertices) nor on a watertight voxel remesh of it (0 of 13 302);
+  binding by nearest bone weighted 99.5% of it, and posed in a kick, a punch or a leap her hair and dress
+  tore into shards. The sheet model is one fused surface - arms, hair and skirt melted together. A rig
+  needs a clean, part-separated model; until then the characters come from their sheet views, placed by
+  the set, acted by the engine (`studio/samples/settest/work/rig_test.py`).
+- **A detailed skin on the set:** see 100.5.
+
+### 100.5  A skin on the set buys consistency, not detail
+
+Three of the duel's cameras rendered from the clearing twice - flat colours (`set_duel`) and procedural
+materials Eevee renders at once (`set_duelhd`: bark in grooves, mottled leaves, a floor of soil, moss and
+litter, packed-dirt path, cracked stone) - with nobody in them, each dressed on the same two seeds with
+the same words (`studio/samples/settest/work/skin_test.py`):
+
+| shot | fine detail, render | fine detail, dressed | fit to the set, dressed | spread between seeds |
+|---|---|---|---|---|
+| D01 | 1.89 -> 3.06 | 3.78 -> 3.70 | **0.269 -> 0.418** | **28.9 -> 16.6** |
+| D03 | 1.20 -> 2.64 | 3.86 -> 4.53 | **0.079 -> 0.176** | **27.6 -> 19.2** |
+| D07 | 1.56 -> 2.94 | 3.90 -> 3.99 | 0.213 -> 0.229 | 17.7 -> 34.5 (one seed drifted) |
+
+The skin doubles the render's detail, but the dress paints its own detail either way. What the skin buys
+is the dress keeping the set: on the flat D03 the painter invented a row of standing stones that are not
+there (fit 0.079); on the skinned one it kept the trees, the log and the path. A set gets a skin to anchor
+the painter, not to look finer.
+
+### 100.6  One painting for both frames of a still shot
+
+Dressed one at a time, a still shot's two frames came back as two different paintings of the same wood
+(E01: the stone ring in one, tall straight trunks in the other) - and H3, asked to go from one to the
+other, morphs the place. `set_test.py cast --ends --same-bg`: when the camera does not move and the set's
+two empty renders are all but identical (mean difference under 2.5 of 255), the end frame is the start
+frame's painting with the characters where the set has them at the end. A shot whose camera moves, or
+whose place changes - a tree falls, a boulder bursts - is still dressed at both ends.
+
+### 100.7  What is still open
+
+- **The characters are pasted in front of everything - and the set's depth alone does not fix it.**
+  `set_test.py cast --occlude` (opt-in) renders the empty place's depth with the frames
+  (`previz_blender.py --depth`, 16-bit, 0-80 m) and cuts a character wherever the set has something
+  nearer than they stand. On three end frames (`studio/samples/settest/work/occlusion_test.py`): E10 did
+  not change - nothing in front, right; F15 hid Terra entirely behind the fallen trunks - right, and the
+  shot lost its subject: move the camera; E07 cut both of them off at the knees behind the fallen oak,
+  which the dress had not painted. The mask is only as true as the painting, and the dress drops what it
+  likes. Off by default until it checks that the occluder is in the painting - and an edge check is not
+  that check (tried the morning after): the painting's gradient along the depth's occluder outline, over
+  the box's mean, read 1.20 for Terra in E07 (rightly: no log painted) but 2.71 for the jester beside
+  her, where no log is painted either - the outline fell on the path's edge and the trunks behind. The
+  check needs the painting compared with the set's own render of that spot (its surface map), not with
+  itself.
+- **Standing views at the ends of a shot.** Every first and last frame shows the characters as their
+  sheet views - standing; the action happens between two stances, which is how the beat lists were
+  written. Posed frames came at the end of the night as KEYS: the shot's own frame edited into the pose
+  and anchored where the blow lands (100.10) - a posed END frame ends the shot in its pose (100.11, D07's
+  lock in 100.10), and a posed FIRST frame starts it mid-action: the jester painted upside down
+  mid-somersault, H3 carried the flip on, 2 of 2 - the drop, the landing crouched in dust, the spring up
+  (`studio/samples/settest/work/firstkey_test.py`); one seed drew the landing as a pillar of light (100.9's
+  F10 habit) - key the landing too.
+- **Wuxia as shot design** (E06b up the trunks, F07c the slow-motion dodge) - the long cut's verdict below.
+
+### 100.8  Timings on this card
+
+| step | time |
+|---|---|
+| a set render, frames 1 and N only, wreckage read from the cache | 5-20 s (longer late in the film: more wreckage) |
+| a frame dressed (Qwen-Image-2.1, one seed) | 6-27 s, ~10 s typical |
+| an H3 take between two frames, 73 frames (3 s) | 36 s; 107 frames 55 s |
+| the 30-second fight, start to cut | about 60 min of card, two seeds everywhere |
+| the in-frame check of 58 shots | under a second |
+| the long version's 48 new shots: frames | ~70 min, slowed by the bugs above; with the final tools ~25 min |
+| its 96 takes | 62 min |
+| a key pose painted (Qwen-Image-2.1 edit, one seed) | 6-18 s |
+| an H3 take with two or four keys, 90 frames | 50 s, as without (102 s with the upscaler on the card) |
+| the 2x master of the 3:04 cut (RealESRGAN x4 on the halved frame) | 11 min |
+
+### 100.9  The film
+
+The 30-second cut (`the-duel-30s.mp4`, 10 shots) and the long one (`the-duel-in-the-clearing.mp4`, 58 shots,
+3:04 with a title and an end card, a five-cue ACE-Step score mixed under the takes' own sound - each cue as
+long as its stretch of the film, none past 45 s, crossfaded at the act breaks), in
+`studio/samples/fight/forest-duel/`. 116 takes, two seeds a shot, picked by eye on boards; **every one of
+the 58 shots had a usable take**. Three were re-done afterwards for the better: F05 re-taken, F10 keyed,
+D07 re-staged (100.10).
+
+What H3 gave between two frames and a beat list, on both seeds unless noted:
+- **Magic named in the beat:** her fire aura and fireball volleys, a ring of fire, a fire whip, a wall of
+  fire, a fire beam, a dragon of fire with a head and a roar (F11c); his orbs juggled, thrown, rained from a
+  tornado, stretched into serpents (F06b), pulled from his cap as a string (F11b); a purple tornado (F07);
+  the beam struggle as a cross-shaped flare where the beams meet (F12).
+- **The battle marks:** impact frames, speed lines, afterimages, shockwave rings, dust trails.
+- **Shots it invented from the frames:** the frames of a close two-shot standing apart became a close-up
+  of his gloved fist locked against hers, sparks between them (F03); empty frames looking up into the
+  canopy became the wuxia run up the tree trunks (E06b), the mid-air exchange among the branches (E06c) and
+  the aerial combo (F09).
+- **Wuxia as shot design works:** the trunk run and the slow-motion dodge - the orb streaking a hand's width
+  past her face in a close-up (F07c) - where the wuxia adjectives on a side view did nothing (100.2).
+
+Where it failed, and the pick that went round it:
+- a close-up cutting to a wide shot mid-take (F05 s11 - she appeared full-length in flames); re-taken with
+  "one unbroken close-up", 1 of 2 new seeds held it (s4242, in the cut);
+- the fighters' colours swapped - his beam fire, hers purple (F12 s202): name whose is whose in the beat;
+- an unasked white impact frame at the start of a take, even on fought shots (several) - none in the
+  picks: the nine picks that flash in their first half second (checked frame by frame) all flash on their
+  own asked hit, landing just after the cut;
+- a slam drawn as a pillar of light instead of a crater (F10, both seeds; re-worded as a meteor, 2 of 2
+  more) - no wording moved it. One painted key did (100.10): F10 in the film is now keyed.
+
+The open items (100.7): characters pasted in front of everything - a depth mask is only as true as the
+painting; standing views at a shot's ends - posed keys between them now (100.10). What would make the next
+one better, in order: a key for every blow the words cannot draw, and for every blow that must land on a
+given frame (100.10); the set skinned (100.5) before any frame is dressed; one painting per still shot from
+the start (`--same-bg`); the in-frame check before the first render.
+
+**The master.** `the-duel-in-the-clearing_2x.mp4`, 2560x1408: `post.upscale` (RealESRGAN x4 on the halved
+frame), 4416 frames at a constant 24 fps - the 1x cut's concat holds 38 of its frames over joins (4378
+frames in 183.9 s), the master writes them out - in sync, 48 kHz.
+
+**The sound under the score.** Every take keeps its own sound; the score goes under it at 0.55 and the mix is
+normalised (-15 LUFS). Quiet takes vanish: F05's aura roar is -43 dB mean on its own, and that stretch of
+the film reads -16 dB - all score. A per-shot gain (`set_film.py`, the shot script's `"sound_gain_db"`) of
++14 dB on it moved the stretch by 0.2 dB: lifting the take does not help; the score has to duck under it.
+Tried on the 30-second cut as an A/B (`the-duel-30s_ducked.mp4`, the picture untouched): the score through
+ffmpeg's `sidechaincompress` keyed by the takes' own sound (threshold 0.03, ratio 6, attack 8 ms, release
+350 ms), then the same loudnorm. The mix over the takes' loudest 15% of moments stood 1.8 dB above the rest,
+against 0.7 dB without - the hits a little further forward, the level the same (-16.9 dB). Not adopted: for the
+ear to judge; `set_film.py cut --duck` makes it (within 0.01 dB of the A/B).
+
+### 100.10  Key poses: the blow drawn, H3 in-betweening
+
+The last open item of 100.7, posed frames, tried at the end of the night on the forest's 305 and the
+duel's F10 (`studio/samples/settest/work/keypose.py`, `keypose_shot.py`; the shotbook's `pipe-key-poses`,
+`move-crash-landing`). A KEY is a frame of the shot with the blow in it, painted into the shot's own frame
+by Qwen-Image-2.1 edit (`80`) and anchored mid-take by a `MiniMaxH3AddGuide` chained onto workflow `65`'s
+conditioning - the same `minimax_keyframes` list its first and last frames go into, at any frame of the
+take. Workflow `83` is not a four-frame `65`: it is reference-to-video, its first image a subject
+reference ("motifs, not layout"), its guides at fixed seconds.
+
+**Painting the keys**, two seeds each. The editor moves a character a short way; across the frame it adds
+one:
+
+| key | painted from | got |
+|---|---|---|
+| A his punch landing on her | the start frame | 2 of 2 him lunged across to her (her block a raised hand, not crossed forearms) |
+| B her kick in his chest | the start frame | **2 of 2 a second jester** being kicked, the first left standing at his mark |
+| C the same kick | key A | 2 of 2 kept his punch and its flash, her leg stuck out beneath: it keeps what the words don't change |
+| D key B, the standing jester erased | key B | 2 of 2 clean; a second pass adds contrast, so every key is graded to the start frame (LAB mean and spread) |
+| E his wind-up, G his skid-stop crouch | the start and end frames, where he stands | 4 of 4 clean: a pose in place |
+
+**The takes**, H3 `65`, 90 frames, start at 0 and end at 89, seeds 11 and 202, against the takes of 100.1
+between the same two frames:
+
+| told | where the blows land | between and after them |
+|---|---|---|
+| L4 six beats, no keys | the kick at frame 36 on both seeds: the engine's own timing | all six beats |
+| L4 + keys A at 20, D at 44 | on their frames, 2 of 2 | all six, drawn into and out of the keys: a flying lunge into A, an impact burst out of it, a pivot into D, the launch, the skid |
+| L1 "they fight" + the same keys | on their frames, 2 of 2 | a hit into and out of each key (an impact ring, him knocked into the air) - then he walks back to his mark: no skid, no crouch |
+| L4 + four keys: E at 8, A at 20, D at 44, G at 64 | **all four on their frames, 2 of 2** | wind-up, spring, punch, pivot, kick, launch, skid, crouch, straighten: the whole exchange on a timeline chosen beforehand |
+
+H3 in-betweens a key as animation, not a pasted still: it draws a run-up into it and a follow-through out
+of it, on twos like the rest of the take, and a pose-in-place key arrives with no step in the
+frame-to-frame change. A key fixes the pose and the frame the blow lands on; the words still say what the
+blow does. Keys plus the numbered beat list is the most a shot can be told.
+
+**Where words failed, a key did.** F10's meteor (100.9) - a pillar of light on 4 of 4 seeds however it was
+worded - re-drawn with ONE key at frame 10 of 73: the jester crashed down on one knee, his fist in the
+ground, dirt erupting under a white flash, painted from the shot's END frame (he is already there, drawn
+from his sheet) with her erased first, since she lands later. 2 of 2 drew HIM arriving: s7011 a red-gold
+meteor streak into an impact frame, him crouched in a ring of flying dirt, springing up as she lands. It
+is in the film (`h3f_F10_s7011.mp4`; the cut and the master re-made). On F10 one seed of the editor
+restyled the whole frame - another palette, another hand - on both of its edits: look at every key before
+it goes in.
+
+A key costs 6-18 s of edit, twice that when a copy has to be erased; a take with keys costs what a take
+without them costs.
+
+**In the pipeline** (`studio/_tools/set_test.py`, end of the night): a shot's keys live in its shot script,
+`"keys": [{"at": <take frame, or "end">, "from": "start" | "end" | <an earlier key's frame>, "erase": <words,
+optional>, "pose": <words>, "fx": <words, optional - a last edit, the impact flash at the contact>, "seed": <the
+pick>}]` (F10's: `_make_forest_duel_1001.py`). `set_test.py key`
+paints every key on every seed, grades it to the start frame and boards them (`keys_<id>/keys.jpg`) with each
+one's fine detail against its source: the editor's whole-frame restyle is caught there - restyled keys ran
+x4.4-5.9 their source's detail, kept ones x0.9-2.6, so over x3.5 is flagged. Pick a seed per key, then
+`set_test.py take` draws H3 between the shot's frames with every key anchored (`h3k_<id>_s<seed>.mp4`);
+F10 through the stages drew the meteor again. The restyle is the seed's, on that frame - not the words' and
+not the negative prompt's: workflow `80` samples at CFG 1, so no negative reaches it (a different negative
+gave the identical picture).
+
+**The first shot made through the stages: D07, the flurry, re-staged for both films.** v1 framed his whole
+dash across the clearing, and the flurry played at a quarter of the frame's height - the blows did not read
+(`move-fight`: "a wide framing"). v2: a still medium on the end marks (he streaks in from out of the frame,
+she holds her ground), the flurry as five numbered beats, keys at frames 20 (his fist on her raised forearm,
+the purple blur behind him) and 42 (his high kick caught on her crossed forearms), and a posed END frame (the
+forearms locked, a ring of dust bursting from their feet). Seed 202 restyled all three keys (flagged
+x4.4-4.5); seed 11's were kept. The first end key let the editor turn her toward the camera and swap her red
+boots for sandals - and the take swung her round to face the camera on its way into the lock, 2 of 2;
+naming "side-on to the camera, in profile ... knee-high red boots" in the key held both. In the 30-second
+cut and the long one, re-mastered (`h3f_D07_s9011.mp4` = `h3k_D07_s11.mp4`; picks before it kept as
+`picks_before_D07.json`, `picks_long_before_D07.json`).
+
+**How close keys can sit: a battle-anime flurry** (`studio/samples/settest/work/flurry_test.py`, takes in
+`studio/samples/fight/forest-duel/flurry/`). Both fighters at D07's end marks, its end frame as the take's
+first and last frame, six blows as numbered beats - jab blocked, hook ducked, palm strike, knee blocked,
+spinning backfist dodged, kick caught - against the same words with a key on every blow, one every 6 frames
+(a quarter second), frames 12 to 42; H3 73 frames, seeds 11 and 202:
+
+| told | the six blows | the energy |
+|---|---|---|
+| words alone | roughly, through the flashes | a frenzy: an impact flash every 4-6 frames, smears, a backfist trailing white arcs (frame-to-frame 6-70) |
+| words + six keys, one every 6 frames | **each on its frame, 2 of 2** - real in-betweens between them (a recovery, the rise out of the duck, a wind-up) on twos, not a slideshow | calm: the keys' own small flashes only (frame-to-frame 5-14) |
+
+Keys hold even a quarter second apart - six blows in 1.25 s, each where it was drawn - but dense keys tame
+the battle dialect: the engine spends itself landing every pose. **The fix: paint the dialect into the
+keys.** A second edit on each key ("add a huge white anime impact flash bursting where the blow meets its
+target, with radiating speed lines across the whole frame and a shockwave ring around the contact") - and
+the flurry came back a frenzy (frame-to-frame 0-57) with every blow still on its frame, 2 of 2: impact
+bursts on the keys, shockwave rings and smears between them. The radiating speed lines carry through the
+in-betweens, so the whole flurry plays on a near-constant speed-line backdrop - the genre's look, but a
+choice. The flash painted LOCALLY ("a bright white impact flash ... a small shockwave ring and a few short
+speed lines right around the contact only") keeps the energy on the hits and the forest clean. The four,
+frame-to-frame change over frames 6-50, seeds 11 / 202:
+
+| the flurry | mean | peak | frames over 20 | the blows |
+|---|---|---|---|---|
+| words alone | 12.7 / 21.2 | 26 / 69 | 4 / 20 | rough, through the flashes |
+| six keys | 5.5 / 7.4 | 14 / 26 | 0 / 2 | each on its frame; calm |
+| six keys, the flash and full-frame speed lines painted in | 12.2 / 17.8 | 40 / 57 | 10 / 17 | each on its frame; a constant speed-line backdrop |
+| six keys, the flash painted at the contact only | 8.5 / 11.1 | 26 / 41 | 6 / 7 | each on its frame; bursts, rings and whoosh arcs at the hits, the forest clean |
+
+Painting them: the knee-block key came back with a second Terra (she had to step toward him) - another
+seed gave one.
+
+### 100.11  The camera in a fight: an orbit from the set, and a posed end frame
+
+The night's question about the camera angle, asked of a moving camera. A one-shot test sequence
+(`duel-orbit-test`, `studio/samples/settest/work/orbit_test.py`, `orbit_key.py`, `orbit_way.py`; never in
+the film): F03's place and marks - the two of them a metre apart on the path, all the film's wreckage up
+to F03 - and a camera circling them through 120 degrees in 85 frames (the set's `arc`, smoothstep) while
+they trade six numbered beats that end in an arm-lock. H3 `65`, 90 frames, seeds 11 and 202:
+
+| given | the camera | the fight |
+|---|---|---|
+| the set's start and end frames | **a whip, not an orbit, 2 of 2**: the side view held to frame ~46, a 4-6 frame smear or speed-line burst, the end view | hook, duck, palm strike, the lock at frame 50 - then pulled apart, to stand as the end frame stands |
+| the end frame edited into the arm-lock (a posed END frame, 100.10) | the same whip, 2 of 2 | the six beats, ending IN the lock, held to the last frame, 2 of 2 |
+| + the set's camera at take frames 30 and 60 (31 and 91 degrees) as waypoint keys, each posed into that moment's blow | **every view visited in order, 2 of 2** - in steps: the 31-degree key held ~16 frames, then a slide to the next | the blows on their frames |
+
+H3 does not travel a long arc between two views; it whips, the anime way. Waypoints from the set make it
+pass through the views the set puts on the arc, but in steps - each waypoint is painted on its own, so the
+forest is a slightly different painting at each, and the engine parks on one before sliding to the next.
+A constant glide round a fight is still the set's depth's job (LTX-2.3 IC-LoRA, §99 - stiff fighters). More
+waypoints do not make one: five (frames 15-75, every 15, the three new views posed into the hook, the backfist
+and the lock forming) took the camera through all five views in order, 2 of 2, in smaller steps - but seed 11
+still parked 13 frames on the palm strike (15 with two waypoints), seed 202 never more than 5 either way. What did work outright: **the end frame wins over the last beat** - paint the last
+beat into the end frame and the shot ends in it.
+
+Editing the waypoints: the whole-frame restyle is not one seed's habit - 11 restyled the lock, 202 the
+31-degree waypoint, 3003 neither: which seed, depends on the frame; and "whips a backfist" drew a literal
+whip, 2 of 2 -
+the editor reads a verb as a prop. "A backhanded punch ... his hands are empty" fixed it.
+
+### 100.12  How to tell a fight, as of the morning after
+
+1. **The set gives every frame**: per shot a camera, where each fighter stands and faces at the first and
+   last frame (or enters, or is gone), and the physics it breaks; both frames painted with the characters
+   cast from their sheets (`set_test.py cast --ends`). Frame the exchange, not the run-up. Look at every
+   shot's two frames before any take (`set_film.py check` first).
+2. **The words are a numbered beat list**, six beats at most per 3-4 s shot, each with the body mechanics
+   and what the hit does (100.1); the battle dialect only on shots where something is fought (100.2).
+3. **H3 first-last** between the two frames, two seeds (`set_test.py take`).
+4. **A key pose** for every blow that must land on a given frame or that words cannot draw, and a posed
+   last frame for a shot that must end mid-action (100.10, 100.11): `"keys"` in the shot script,
+   `set_test.py key`, a look at the board (restyles flagged), a seed picked, `take`. In a dense flurry,
+   paint the impact flash into each key, where the blow lands only.
+5. **A camera move round a fight**: two frames give a whip; waypoints give a stepped orbit (100.11).
+6. **Many short shots**, one exchange each, cut with one grade and a score under the takes' own sound.
+
+### 100.13  A fight that is a story (2026-10-05, THE EMBER THIEF)
+
+The director on the duel: "a lot of awkward striking and facing the wrong direction", and the shots "don't
+string together in a solid context... like many individual scenes strung together randomly and not a story
+where each shot before it led to the next one". Asked for: one minute, the script first, a prompt per shot,
+the film on shots & specs. What each complaint turned out to be, and the mechanism that answers it:
+
+1. **Facing the wrong way was a bug, not the engine.** `set_test.py cast` pastes the turnaround view of a
+   character's sheet nearest the camera's side of her; the sheets name a view by the way the CAMERA went
+   round (turn_right = the camera orbited right = it stands at her LEFT, she faces screen-left); the cast read
+   the names the other way round, so every side and three-quarter view went in mirrored (the duel's D07: Terra
+   in profile facing AWAY from the jester she is locked with). Fixed (VIEWS8); and a three-quarter view the
+   sheet drew facing the same way as its twin (Terra's turn_front_l, the jester's turn_back_l - measured: nearer
+   the twin than the twin mirrored) is the twin mirrored. Every set film before today had it.
+2. **One line of action** ([`cont-screen-direction`]): she comes from the south of the clearing, he waits in
+   the north, all twenty cameras stand east of the line between them - she is always on the left of the
+   screen and attacks to the right, he always on the right. The maker checks every first and last frame before
+   anything renders: the camera's side of the line, everyone inside the picture, everyone facing the other ON
+   SCREEN; the first draft failed nine frames.
+3. **A story, not a list of exchanges** ([`cont-shot-chain`]): one goal (he has stolen her ember pendant; she
+   wants it back), four acts that turn on it, each shot's note saying why it happens and what it leads to;
+   every shot starts where the last ended (checked) unless the story moves someone (a vanishing trick, a leap, a
+   blast); cut on the action (110 ends ON the uppercut, 120 is the pendant flying up). Words and frames agree:
+   the set draws people standing, so "slides to a stop crouched" became "skids to a stop, still on her feet".
+4. **The contacts are painted** (100.10): her hook (050, f30), his palm (060, f14 - the editor drew him twice,
+   lunging AND still standing; a key's "fx" may now be a list: the flash, then the copy removed), her uppercut
+   as the shot's last frame (110). The mark where the uppercut lands was moved to 0.9 m in front of her so the
+   key could be painted from the end frame without moving anyone across it.
+5. **The page:** shots & specs now lists a set film's takes (h3f / h3k); each shot carries its prompt, its
+   story note and a spec sheet of its promises (the side of the screen, the facing, where it starts, the story
+   facts it must keep).
+
+**Result:** 20 shots, 62 s (68.7 s with title and end card), graded A- against the duel's B+
+(`craft/shots/reviews/2026-10-05-ember-thief.md`): Terra on the left and the jester on the right in every
+two-shot, facing each other; the three contacts land on their frames; played in order it reads as one story.
+Four shots were re-framed after the first takes (a wide that cut both of them at the bottom, a catch too small
+to see, a close-up with the face at the frame's foot, an ending too wide for the pendant) and one camera had
+drifted behind the jester when his mark moved - the maker's check now names a back view as a fault. What
+keeps it from an A: the small wides (the pendant at 010, his flips at 040). Fixed on the way: his orbs drawn the
+size of her body (100 - "a small glowing purple orb, the size of a fist"); 080's first framing, a wide in which
+his cartwheels were too small to read (re-framed closer, over her shoulder); his leap drawn as a purple pillar
+(130 - he left the top of the picture, so H3 drew a light trail; a last frame with him in the air above her drew
+his body).
+
+**How to tell a fight, as of 2026-10-05** (100.12 still holds; these come first):
+1. A script with ONE goal both of them want, before any shot - every shot's note says why it happens and what
+   it causes.
+2. One line of action for the scene; every camera on one side; the maker checks every frame (side of the line,
+   in the picture, facing on screen, not seen from behind, marks chained) before anything renders.
+3. Words that agree with what the set draws (standing people); a key for every contact and for every shot that
+   must end mid-action.
+4. Look at every shot's two frames, then at eight frames across every take; re-frame rather than re-roll.

@@ -75,6 +75,11 @@ Identity is decided in the start frame: compose faces with Qwen-Image-2.1 from h
 - **Got:** her face at the end of the move is the composed face.
 - **Learned:** end on a composed frame instead of trusting the engine to invent the face on the way.
 
+### 2026-09-30 · Terra in the plaza · one character across four shots, placed by a 3D set · grade A-
+- **Did:** Terra (anime) in four shots of one set - far across the square, facing the camera, from behind over her shoulder, the camera circling her - each start frame the place dressed without her plus the view of her character sheet facing the camera, put in where the set projects her ([`pipe-3d-set`](../pipeline/3d-set.md), `set_test.py cast`).
+- **Got:** the same hair, dress, sash and boots in every shot and through every take, from the side of her each camera sees; dressed in from her reference instead, she came back full length and centred whatever the shot asked.
+- **Learned:** the sheet's turnaround is the character's identity from every side; the set says which side and how big.
+
 ## Failure modes
 
 | symptom | cause | fix | seen in |

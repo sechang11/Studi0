@@ -6,6 +6,7 @@
 
 **Also called:** lightning, thunderstorm flash, lightning strike, flash of lightning
 **Not the same as:**
+- [`fx-impact-frame`](impact-frame.md) - a flash from a blow, not from the sky
 - [`fx-reflective-surface`](reflective-surface.md) - what a glossy surface mirrors; lightning is the light event itself
 - [`fx-electric-arc`](electric-arc.md) - energy discharging into a body, built in post
 

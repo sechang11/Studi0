@@ -1,0 +1,353 @@
+{
+ "_comment": "The jester in the wood (2026-09-30): a fight inside one 3D set, with physics. See _make_forest_fight_0930.py.",
+ "film": "forest-fight",
+ "title": "THE JESTER IN THE WOOD",
+ "logline": "On a path through a dangerous wood, a grinning jester drops from a tree, and she burns it down.",
+ "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a dark fantasy forest at dusk, shafts of low sunlight through the canopy, drifting mist.",
+ "avoid": "lowres, blurry, morphing, warping, melting, flicker, deformed hands, extra fingers, extra limbs, two of the same person, subtitles, captions, watermark, nsfw",
+ "realism": "",
+ "score_tags": "dark fantasy anime score, taiko drums, tense strings, a music-box motif, instrumental, no vocals",
+ "place": {
+  "id": "forest",
+  "prompt": "A dense, dangerous fantasy forest with a dirt path down the middle, painted as an anime background."
+ },
+ "cast": {
+  "terra": {
+   "role": "Terra",
+   "prompt": "Terra: her character sheet (studio/sheets/terra-in-the-plaza-terra)."
+  },
+  "jester": {
+   "role": "the jester",
+   "prompt": "The jester: his character sheet (studio/sheets/forest-fight-the-jester)."
+  }
+ },
+ "shots": [
+  {
+   "id": "301",
+   "name": "the path",
+   "title": "the path",
+   "secs": 5,
+   "face": "none",
+   "engine": "previz",
+   "refs": [
+    "forest",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. High above a dark, dense fantasy forest at dusk, a narrow dirt path winds between huge gnarled trees, shafts of low sunlight cutting through drifting mist. A young woman with long wavy sea-green hair, a red dress, a lilac sash and red boots walks alone along the path, small far below. The camera glides slowly forward and down. Sound: wind in the canopy, a distant crow, creaking branches, footsteps on dirt. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "forest",
+    "action": "walk_far",
+    "frames": 121,
+    "masks": 8,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a dark fantasy forest at dusk, shafts of low sunlight through the canopy, drifting mist.",
+    "start": "anchor_301.png",
+    "cam": [
+     1.0,
+     -15.5,
+     5.0
+    ],
+    "cam_to": [
+     0.9,
+     -12.0,
+     4.2
+    ],
+    "look": [
+     0.4,
+     4.0,
+     1.0
+    ],
+    "look_to": [
+     0.3,
+     5.0,
+     0.8
+    ],
+    "lens": 24
+   }
+  },
+  {
+   "id": "302",
+   "name": "she walks",
+   "title": "she walks",
+   "secs": 4,
+   "face": "none",
+   "engine": "previz",
+   "refs": [
+    "forest",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. A young woman with long wavy sea-green hair, a red dress, a lilac sash and red boots walks slowly toward the camera along a dark forest path, glancing left and right, uneasy; mist drifts between the gnarled trees behind her; the camera moves backward ahead of her at her pace. Sound: her footsteps, leaves rustling, an owl, a twig snapping somewhere. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "forest",
+    "action": "walk_toward",
+    "frames": 97,
+    "masks": 8,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a dark fantasy forest at dusk, shafts of low sunlight through the canopy, drifting mist.",
+    "start": "anchor_302.png",
+    "cam": [
+     -0.112,
+     -0.8,
+     1.45
+    ],
+    "cam_to": [
+     0.387,
+     2.8,
+     1.45
+    ],
+    "look": [
+     -0.596,
+     -4.4,
+     1.2
+    ],
+    "look_to": [
+     -0.112,
+     -0.8,
+     1.2
+    ],
+    "lens": 35
+   }
+  },
+  {
+   "id": "303",
+   "name": "watched",
+   "title": "watched",
+   "secs": 4,
+   "face": "none",
+   "engine": "previz",
+   "refs": [
+    "forest",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. From high on a branch of the old oak, through dark leaves: far below, the young woman with long sea-green hair walks along the forest path, unaware she is being watched; the leaves in the foreground stir. A soft, high giggle close by. Sound: rustling leaves, the giggle, her distant footsteps. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "forest",
+    "action": "watched",
+    "frames": 97,
+    "masks": 8,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a dark fantasy forest at dusk, shafts of low sunlight through the canopy, drifting mist.",
+    "start": "anchor_303.png",
+    "cam": [
+     1.85,
+     7.0,
+     4.65
+    ],
+    "cam_to": [
+     1.8,
+     6.9,
+     4.6
+    ],
+    "look": [
+     -0.387,
+     -2.8,
+     1.0
+    ],
+    "look_to": [
+     0.084,
+     0.6,
+     1.0
+    ],
+    "lens": 32
+   }
+  },
+  {
+   "id": "304",
+   "name": "he drops",
+   "title": "he drops",
+   "secs": 4,
+   "face": "none",
+   "engine": "previz",
+   "refs": [
+    "forest",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. From behind the young woman with long sea-green hair, in the foreground on the forest path: ahead, a lanky harlequin jester in a purple-and-yellow diamond costume and a purple-and-yellow two-horned cap, with a chalk-white face and a wide red grin crouches on a huge branch over the path, then leaps down onto the path in front of her in a shower of falling leaves and twigs, lands in a crouch and rises slowly, grinning. She stops dead. Sound: a high giggle, rustling, a thud on the dirt. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "forest",
+    "action": "drop",
+    "frames": 97,
+    "masks": 8,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a dark fantasy forest at dusk, shafts of low sunlight through the canopy, drifting mist.",
+    "start": "anchor_304.png",
+    "cam": [
+     0.95,
+     -2.3,
+     1.55
+    ],
+    "cam_to": [
+     0.9,
+     -1.8,
+     1.55
+    ],
+    "look": [
+     1.0,
+     6.5,
+     2.4
+    ],
+    "look_to": [
+     0.8,
+     6.0,
+     1.6
+    ],
+    "lens": 28
+   }
+  },
+  {
+   "id": "305",
+   "name": "blows",
+   "title": "blows",
+   "secs": 4,
+   "face": "none",
+   "engine": "previz",
+   "refs": [
+    "forest",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. Side view on the forest path: the grinning jester in his purple-and-yellow diamond costume lunges at the young woman with long sea-green hair and a red dress with a fast punch; she blocks with both forearms, then kicks him in the chest; he skids back along the dirt, kicking up pebbles, and straightens, giggling. Sound: a whoosh, the thump of the block, the kick, scattering pebbles, his laughter. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "forest",
+    "action": "blows",
+    "frames": 97,
+    "masks": 8,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a dark fantasy forest at dusk, shafts of low sunlight through the canopy, drifting mist.",
+    "start": "anchor_305.png",
+    "cam": [
+     4.4,
+     3.6,
+     1.45
+    ],
+    "cam_to": [
+     4.2,
+     3.7,
+     1.45
+    ],
+    "look": [
+     0.3,
+     3.6,
+     1.15
+    ],
+    "lens": 30
+   }
+  },
+  {
+   "id": "306",
+   "name": "fire",
+   "title": "fire",
+   "secs": 5,
+   "face": "none",
+   "engine": "previz",
+   "refs": [
+    "forest",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. Over her shoulder: she thrusts both hands forward and a blazing fireball bursts from them and streaks along the path; the jester flips aside; the fireball slams into the huge old tree behind him - the trunk explodes in fire and splinters, and the whole tree topples and crashes across the path in a storm of leaves and dust. Sound: the roar of the fireball, an explosion, splintering wood, the crash of the tree. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "forest",
+    "action": "fire",
+    "frames": 121,
+    "masks": 8,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a dark fantasy forest at dusk, shafts of low sunlight through the canopy, drifting mist.",
+    "start": "anchor_306.png",
+    "cam": [
+     -1.0,
+     -1.6,
+     1.85
+    ],
+    "cam_to": [
+     -0.9,
+     -1.2,
+     1.9
+    ],
+    "look": [
+     2.2,
+     6.4,
+     2.8
+    ],
+    "look_to": [
+     1.6,
+     7.0,
+     2.2
+    ],
+    "lens": 24,
+    "pin": true
+   }
+  },
+  {
+   "id": "307",
+   "name": "the fallen oak",
+   "title": "the fallen oak",
+   "secs": 4,
+   "face": "none",
+   "engine": "previz",
+   "refs": [
+    "forest",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. The huge fallen tree lies across the forest path, smoke and dust drifting, embers glowing on its shattered trunk; the jester in his purple-and-yellow diamond costume crouches on top of the trunk, head tilted, giggling; the young woman with long sea-green hair and a red dress faces him from the path, her hands rising to cast again. Sound: crackling embers, settling debris, his giggle, wind. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "forest",
+    "action": "aftermath",
+    "frames": 97,
+    "masks": 8,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a dark fantasy forest at dusk, shafts of low sunlight through the canopy, drifting mist.",
+    "start": "anchor_307.png",
+    "cam": [
+     2.2,
+     -0.6,
+     1.7
+    ],
+    "cam_to": [
+     2.3,
+     0.0,
+     1.75
+    ],
+    "look": [
+     0.6,
+     6.2,
+     1.7
+    ],
+    "lens": 28
+   }
+  }
+ ]
+}

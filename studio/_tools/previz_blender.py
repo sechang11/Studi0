@@ -27,6 +27,16 @@ workbench on her right and a railing at the edge of a shaft behind her, and the 
 at a constant rate (`--degrees`, `--radius`, `--lens`, `--cam-z`, `--look-z`; `--frames` sets the
 length exactly). The video engines turn a prompted orbit into a morph; with the move's depth as the
 guide, the room has to stay one room and the back of the figure has a shape to be painted on.
+
+`--scene set` stands the camera in a SET: a whole place built once (a set module beside this file,
+`--set plaza` = set_plaza.py) or imported (`--set <file.glb>`), so every shot of a scene is a camera
+position and a lens in the same world - `--cam x,y,z --look x,y,z --lens 35`, and for a move their
+`--cam-to` / `--look-to` / `--lens-to` ends (eased), or an orbit of `--arc` degrees about
+`--arc-center`; `--ortho W` makes a map, W metres across. A set renders lit (`--render beauty`: Eevee,
+the set's own sun and sky), which is both the picture a start frame is dressed from and the control
+whose depth the IC-LoRA reads. `--masks N` also renders every Nth frame with each landmark in a flat
+ID colour (masks/m_NNNN.png), and previz.json carries the camera of every frame, so a take can be
+measured against the set rather than against an opinion.
 """
 import argparse
 import json
@@ -48,6 +58,7 @@ def _wrapper(argv):
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", required=True)
     ap.add_argument("--fps", type=int, default=24)
+    ap.add_argument("--joints", type=int, default=0)
     a, _ = ap.parse_known_args(argv)
     out = os.path.abspath(os.path.expanduser(a.out))
     os.makedirs(out, exist_ok=True)
@@ -62,6 +73,14 @@ def _wrapper(argv):
     cmd += ["-b", "-P", me, "--"] + passthrough
     r = subprocess.run(cmd, capture_output=True, text=True)
     tail = "\n".join(l for l in r.stdout.splitlines() if not l.startswith("Fra:"))[-3000:]
+    if a.joints:
+        # keypoints only: nothing was rendered, so there is nothing to encode
+        if r.returncode != 0 or not os.path.exists(os.path.join(out, "joints.json")):
+            print(tail)
+            print(r.stderr[-2000:])
+            raise SystemExit("blender failed (%s)" % r.returncode)
+        print("joints:", os.path.join(out, "joints.json"))
+        return
     if r.returncode != 0 or not os.path.isdir(os.path.join(out, "frames")):
         print(tail)
         print(r.stderr[-2000:])
@@ -93,7 +112,8 @@ def _args():
     argv = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", required=True)
-    ap.add_argument("--scene", default="crates", choices=["crates", "fall", "aisle", "orbit", "street", "canyon"])
+    ap.add_argument("--scene", default="crates",
+                    choices=["crates", "fall", "aisle", "orbit", "street", "canyon", "set"])
     ap.add_argument("--seconds", type=float, default=4.0)
     ap.add_argument("--frames", type=int, default=0, help="the exact length (8n+1); overrides --seconds")
     ap.add_argument("--fps", type=int, default=24)
@@ -102,18 +122,200 @@ def _args():
     ap.add_argument("--seed", type=int, default=7)
     ap.add_argument("--degrees", type=float, default=360.0, help="orbit: how far the camera goes round")
     ap.add_argument("--radius", type=float, default=3.3, help="orbit: metres from the figure")
-    ap.add_argument("--lens", type=float, default=42.0, help="orbit: focal length, mm")
+    ap.add_argument("--lens", type=float, default=42.0, help="orbit, set: focal length, mm")
     ap.add_argument("--cam-z", type=float, default=1.45, help="orbit: camera height, m")
     ap.add_argument("--look-z", type=float, default=1.25, help="orbit: the height it looks at, m")
     ap.add_argument("--radius-to", type=float, default=None, help="street/canyon: the distance it ends at")
-    ap.add_argument("--lens-to", type=float, default=None, help="street/canyon: the focal length it ends at")
+    ap.add_argument("--lens-to", type=float, default=None, help="street/canyon, set: the focal length it ends at")
     ap.add_argument("--cam-z-to", type=float, default=None, help="street/canyon: the height it ends at")
     ap.add_argument("--look-z-to", type=float, default=None, help="street/canyon: where it ends up looking")
     ap.add_argument("--figure-turn", type=float, default=0.0,
                     help="degrees the figure is turned about its own axis (+ turns her front toward the right of frame)")
     ap.add_argument("--figure-glb", default="", help="orbit: the figure's real shape (a mesh from her "
                     "character sheet) instead of the proxy")
+    ap.add_argument("--set", default="plaza", help="set: a set module (set_<name>.py beside this file) or a .glb")
+    ap.add_argument("--cam", default="0,-12,1.6", help="set: where the camera stands, x,y,z in metres")
+    ap.add_argument("--cam-to", default="", help="set: where it ends up (a move)")
+    ap.add_argument("--look", default="0,0,1.5", help="set: the point it looks at")
+    ap.add_argument("--look-to", default="", help="set: the point it ends up looking at (a pan or a tilt)")
+    ap.add_argument("--arc", type=float, default=0.0, help="set: degrees the camera travels round --arc-center")
+    ap.add_argument("--arc-center", default="0,0,0", help="set: the vertical axis an --arc turns about")
+    ap.add_argument("--ease", default="smooth", choices=["smooth", "linear"])
+    ap.add_argument("--ortho", type=float, default=0.0, help="set: an orthographic camera this many metres across")
+    ap.add_argument("--render", default="", choices=["", "flat", "beauty"],
+                    help="flat = workbench object colours (the default), beauty = Eevee lit (a set's default)")
+    ap.add_argument("--masks", type=int, default=0, help="set: also render every Nth frame in landmark ID colours")
+    ap.add_argument("--figure-at", default="", help="set: where --figure-glb stands, x,y,z (her feet)")
+    ap.add_argument("--figure-height", type=float, default=1.66, help="set: the figure's height, m")
+    ap.add_argument("--figure-name", default="figure", help="set: the figure's landmark group (her name)")
+    ap.add_argument("--action", default="", help="set: the set module's choreography for this shot (act(name))")
+    ap.add_argument("--hide-figures", type=int, default=0,
+                    help="set: render without the characters (the place a character is put into, set_test.py cast)")
+    ap.add_argument("--joints", type=int, default=0,
+                    help="set: write every puppet's 18 pose keypoints on every frame, as the camera sees them, to "
+                         "joints.json - and render nothing (what a pose skeleton is drawn from)")
+    ap.add_argument("--depth", type=int, default=0,
+                    help="also render each rendered frame as the camera's view-Z depth, 16-bit grey, 0 at the lens and "
+                         "1 at DEPTH_FAR m, to depth/d_NNNN.png (what hides a character behind the set, set_test cast)")
+    ap.add_argument("--endpoints", type=int, default=0,
+                    help="render only the first and the last frame (the physics still runs through every frame "
+                         "between): all a shot drawn between two frames needs from the set")
     return ap.parse_args(argv)
+
+
+def _vec(s):
+    return Vector([float(x) for x in str(s).split(",")])
+
+
+def build_set(sc, a, frames):
+    """A whole place: a set module beside this file (set_<name>.py, whose build() returns its landmark
+    table, and whose act(name, ...) choreographs a shot in it) or a glTF file, whose objects are grouped
+    by the first word of their names."""
+    if a.set.lower().endswith((".glb", ".gltf")):
+        bpy.ops.import_scene.gltf(filepath=os.path.abspath(os.path.expanduser(a.set)))
+        for ob in bpy.data.objects:
+            if ob.type in ("MESH", "FONT") and "group" not in ob.keys():
+                ob["group"] = ob.name.replace(".", "_").split("_")[0].lower()
+        if not any(o.type == "LIGHT" for o in bpy.data.objects):
+            sd = bpy.data.lights.new("sun", type="SUN")
+            sd.energy = 3.5
+            sun = bpy.data.objects.new("sun", sd)
+            sc.collection.objects.link(sun)
+            sun.rotation_euler = (math.radians(55), 0.0, math.radians(35))
+        if sc.world is None:
+            sc.world = bpy.data.worlds.new("sky")
+        return {"set": os.path.basename(a.set), "groups": {}, "landmarks": []}
+    here = os.path.dirname(os.path.abspath(__file__)) if "__file__" in globals() else \
+        os.path.dirname(os.path.abspath(sys.argv[sys.argv.index("-P") + 1]))
+    if here not in sys.path:
+        sys.path.insert(0, here)
+    import importlib
+    mod = importlib.import_module("set_" + a.set)
+    info = mod.build(sc, a.seed)
+    if a.action:
+        mod.act(a.action, sc, frames, info)
+        info["action"] = a.action
+    if a.figure_glb and a.figure_at:
+        # a character standing in the set: her real shape (a Hunyuan3D mesh from her sheet), light grey so
+        # the dress paints her from her reference picture; her own group and surface for the masks
+        mat = _mat("figure", (0.62, 0.62, 0.64))
+        ob = _import_figure(a.figure_glb, mat, height=a.figure_height, turn=a.figure_turn)
+        ob.location = _vec(a.figure_at)
+        ob["group"] = a.figure_name
+        ob["surface"] = "%s/figure" % a.figure_name
+        info.setdefault("groups", {})[a.figure_name] = [255, 255, 255]
+        info.setdefault("landmarks", []).append(a.figure_name)
+        info["figure"] = {"name": a.figure_name, "at": [float(x) for x in a.figure_at.split(",")],
+                          "turn": a.figure_turn, "height": a.figure_height, "glb": os.path.basename(a.figure_glb)}
+    if a.hide_figures:
+        names = {f["name"] for f in info.get("figures", [])} | ({a.figure_name} if a.figure_glb else set())
+        for ob in bpy.data.objects:
+            if ob.get("group") in names:
+                ob.hide_render = True
+    return info
+
+
+def _set_camera(sc, a, frames):
+    """A camera keyed on every frame: from --cam to --cam-to (and round --arc-center by --arc degrees),
+    looking from --look to --look-to, the lens from --lens to --lens-to. Returns the camera of every
+    frame, so the render can be checked against where the camera was said to be."""
+    cd = bpy.data.cameras.new("cam")
+    cd.clip_start, cd.clip_end = 0.05, 2000.0
+    if a.ortho:
+        cd.type = "ORTHO"
+        cd.ortho_scale = a.ortho
+    cam = bpy.data.objects.new("cam", cd)
+    sc.collection.objects.link(cam)
+    sc.camera = cam
+    p0 = _vec(a.cam)
+    p1 = _vec(a.cam_to) if a.cam_to else p0.copy()
+    l0 = _vec(a.look)
+    l1 = _vec(a.look_to) if a.look_to else l0.copy()
+    f0 = a.lens
+    f1 = a.lens_to if a.lens_to is not None else a.lens
+    centre = _vec(a.arc_center)
+    rows = []
+    for f in range(1, frames + 1):
+        t = (f - 1) / max(1, frames - 1)
+        e = t if a.ease == "linear" else t * t * (3 - 2 * t)
+        p = p0.lerp(p1, e)
+        if a.arc:
+            ang = math.radians(a.arc) * e
+            d = p - centre
+            c, s = math.cos(ang), math.sin(ang)
+            p = Vector((centre.x + d.x * c - d.y * s, centre.y + d.x * s + d.y * c, p.z))
+        look = l0.lerp(l1, e)
+        cam.location = p
+        cam.rotation_euler = (look - p).to_track_quat("-Z", "Y").to_euler()
+        cam.keyframe_insert("location", frame=f)
+        cam.keyframe_insert("rotation_euler", frame=f)
+        cd.lens = f0 + (f1 - f0) * e
+        cd.keyframe_insert("lens", frame=f)
+        rows.append({"f": f, "cam": [round(x, 3) for x in p], "look": [round(x, 3) for x in look],
+                     "lens": round(cd.lens, 2)})
+    return rows
+
+
+def _beauty(sc):
+    """Lit the way the set's own sun and sky light it: Eevee."""
+    sc.render.engine = "BLENDER_EEVEE"
+    try:
+        sc.eevee.taa_render_samples = 24
+    except Exception:
+        pass
+    for look in ("AgX - Punchy", "Punchy", "None"):
+        try:
+            sc.view_settings.view_transform = "AgX"
+            sc.view_settings.look = look
+            break
+        except Exception:
+            continue
+
+
+def _masks(sc, out, frames, every, groups):
+    """Every Nth frame again as flat ID colours, no anti-aliasing and no dither, for measuring where
+    everything falls in a take: masks/m_NNNN.png colours each landmark GROUP (the table the set
+    returns), masks/s_NNNN.png each SURFACE (an object's "surface", group/material - the cafe's wall,
+    its awning's red stripes), in colours from a 6-level grid listed in previz.json."""
+    def lin(c):
+        c = c / 255.0
+        return c / 12.92 if c <= 0.04045 else ((c + 0.055) / 1.055) ** 2.4
+    obs = [ob for ob in bpy.data.objects if ob.type in ("MESH", "FONT")]
+    names = sorted(set(ob.get("surface") or ("%s/-" % ob.get("group", "other")) for ob in obs))
+    grid = [(r, g, b) for r in range(0, 256, 51) for g in range(0, 256, 51) for b in range(0, 256, 51)][1:]
+    surfaces = {n: grid[(i * 97) % len(grid)] for i, n in enumerate(names)}   # neighbours in name far apart in colour
+    passes = [("m", {ob.name: groups.get(ob.get("group", ""), (192, 192, 192)) for ob in obs}),
+              ("s", {ob.name: surfaces[ob.get("surface") or ("%s/-" % ob.get("group", "other"))] for ob in obs})]
+    sc.render.engine = "BLENDER_WORKBENCH"
+    sh = sc.display.shading
+    sh.light = "FLAT"
+    sh.color_type = "OBJECT"
+    for attr in ("show_shadows", "show_cavity", "show_object_outline", "show_specular_highlight"):
+        try:
+            setattr(sh, attr, False)
+        except Exception:
+            pass
+    sc.display.render_aa = "OFF"
+    sc.render.dither_intensity = 0.0
+    sc.view_settings.view_transform = "Standard"
+    try:
+        sc.view_settings.look = "None"
+    except Exception:
+        pass
+    if sc.world is not None:
+        sc.world.color = (0.0, 0.0, 0.0)
+    mdir = os.path.join(out, "masks")
+    os.makedirs(mdir, exist_ok=True)
+    picked = sorted(set(list(range(1, frames + 1, every)) + [frames]))
+    for prefix, colour in passes:
+        for ob in obs:
+            rgb = colour[ob.name]
+            ob.color = (lin(rgb[0]), lin(rgb[1]), lin(rgb[2]), 1.0)
+        for f in picked:
+            sc.frame_set(f)
+            sc.render.filepath = os.path.join(mdir, "%s_%04d.png" % (prefix, f))
+            bpy.ops.render.render(write_still=True)
+    return picked, {n: list(c) for n, c in surfaces.items()}
 
 
 def _clear():
@@ -388,6 +590,9 @@ def _import_figure(path, mat, height=1.72, turn=0.0):
     ob.location = (-(min(xs) + max(xs)) / 2, -(min(ys) + max(ys)) / 2, -min(zs))
     bpy.ops.object.transform_apply(location=True, rotation=False, scale=False)
     if turn:
+        # the glTF importer leaves its objects in QUATERNION mode, where an euler is silently ignored: until
+        # 2026-09-30 every --figure-turn did nothing (found turning Terra in the plaza)
+        ob.rotation_mode = "XYZ"
         ob.rotation_euler = (0.0, 0.0, math.radians(turn))
         bpy.ops.object.transform_apply(location=False, rotation=True, scale=False)
     ob.data.materials.clear()
@@ -570,6 +775,113 @@ def _orbit_camera(sc, a, frames):
     return cam
 
 
+# OpenPose's 18 body keypoints, in its order, from a puppet's joints (set_actors.py): a joint's origin, the
+# midpoint of the shoulders (OpenPose's neck), or a point in a joint's own frame in units of the puppet's
+# height - the face sits on the "neck" joint, whose head blob is centred 0.07 above it, and a puppet faces -Y
+POSE18 = [("nose", "neck", (0.0, -0.065, 0.065)), ("neck", None, None),
+          ("r_shoulder", "r_shoulder", None), ("r_elbow", "r_elbow", None), ("r_wrist", "r_elbow", (0.0, 0.0, -0.16)),
+          ("l_shoulder", "l_shoulder", None), ("l_elbow", "l_elbow", None), ("l_wrist", "l_elbow", (0.0, 0.0, -0.16)),
+          ("r_hip", "r_hip", None), ("r_knee", "r_knee", None), ("r_ankle", "r_ankle", None),
+          ("l_hip", "l_hip", None), ("l_knee", "l_knee", None), ("l_ankle", "l_ankle", None),
+          ("r_eye", "neck", (-0.022, -0.055, 0.085)), ("l_eye", "neck", (0.022, -0.055, 0.085)),
+          ("r_ear", "neck", (-0.06, 0.0, 0.075)), ("l_ear", "neck", (0.06, 0.0, 0.075))]
+
+
+def _joints(sc, out, frames):
+    """Every puppet's 18 keypoints on every frame, in pixels as the camera sees them. A face point the camera
+    cannot see is left out, the way a pose detector leaves it out - so a skeleton says which way a face
+    points, which a depth map cannot (the forest's jester, 2026-09-30, turned his back mid-leap)."""
+    from bpy_extras.object_utils import world_to_camera_view
+    roots = [o for o in bpy.data.objects if o.type == "EMPTY" and o.name.endswith("_root")
+             and bpy.data.objects.get(o.name[:-5] + "_hips") is not None]
+    W, H = sc.render.resolution_x, sc.render.resolution_y
+    res = {"width": W, "height": H, "frames": frames, "keypoints": [k[0] for k in POSE18],
+           "puppets": {r.name[:-5]: [] for r in roots}}
+    for f in range(1, frames + 1):
+        sc.frame_set(f)
+        cam = sc.camera
+        cpos = cam.matrix_world.translation
+        for r in roots:
+            n = r.name[:-5]
+            J = lambda j: bpy.data.objects[n + "_" + j].matrix_world
+            h = (J("l_ankle").translation - J("l_knee").translation).length / 0.245
+            head = J("neck") @ Vector((0.0, 0.0, 0.07 * h))
+            to_cam = (cpos - head).normalized()
+            row = []
+            for name, joint, off in POSE18:
+                if joint is None:
+                    w = (J("l_shoulder").translation + J("r_shoulder").translation) / 2
+                elif off is None:
+                    w = J(joint).translation.copy()
+                else:
+                    w = J(joint) @ Vector((off[0] * h, off[1] * h, off[2] * h))
+                seen = True
+                if name in ("nose", "r_eye", "l_eye", "r_ear", "l_ear"):
+                    d = (w - head).normalized().dot(to_cam)
+                    seen = d > {"nose": -0.3, "r_ear": -0.25, "l_ear": -0.25}.get(name, 0.2)
+                v = world_to_camera_view(sc, cam, w)
+                inside = v.z > 0 and -0.05 <= v.x <= 1.05 and -0.05 <= v.y <= 1.05
+                row.append([round(v.x * W, 1), round((1 - v.y) * H, 1), round(v.z, 3)] if seen and inside else None)
+            res["puppets"][n].append(row)
+    json.dump(res, open(os.path.join(out, "joints.json"), "w"))
+    print("joints:", {k: len(v) for k, v in res["puppets"].items()})
+
+
+DEPTH_FAR = 80.0
+
+
+def _depth(sc, out, frames):
+    """The rendered frames again with every surface replaced by its distance along the camera's axis: an
+    emission material over the whole view layer, raw view transform, 16-bit greyscale, the sky as far."""
+    m = bpy.data.materials.new("depth_override")
+    try:
+        m.use_nodes = True
+    except Exception:
+        pass
+    nt = m.node_tree
+    for n in list(nt.nodes):
+        nt.nodes.remove(n)
+    cd = nt.nodes.new("ShaderNodeCameraData")
+    mr = nt.nodes.new("ShaderNodeMapRange")
+    mr.inputs["From Min"].default_value = 0.0
+    mr.inputs["From Max"].default_value = DEPTH_FAR
+    mr.inputs["To Min"].default_value = 0.0
+    mr.inputs["To Max"].default_value = 1.0
+    em = nt.nodes.new("ShaderNodeEmission")
+    em.inputs["Strength"].default_value = 1.0
+    mo = nt.nodes.new("ShaderNodeOutputMaterial")
+    nt.links.new(cd.outputs["View Z Depth"], mr.inputs["Value"])
+    nt.links.new(mr.outputs["Result"], em.inputs["Color"])
+    nt.links.new(em.outputs["Emission"], mo.inputs["Surface"])
+    vl = sc.view_layers[0]
+    keep = (vl.material_override, sc.view_settings.view_transform, sc.render.image_settings.color_depth,
+            sc.render.image_settings.color_mode, sc.world)
+    vl.material_override = m
+    try:
+        sc.view_settings.view_transform = "Raw"
+    except Exception:
+        sc.view_settings.view_transform = "Standard"
+    sc.render.image_settings.color_mode = "BW"
+    sc.render.image_settings.color_depth = "16"
+    sky = bpy.data.worlds.new("depth_sky")                 # nothing hit = as far as it gets
+    try:
+        sky.use_nodes = True
+        bg = next(n for n in sky.node_tree.nodes if n.type == "BACKGROUND")
+        bg.inputs["Color"].default_value = (1.0, 1.0, 1.0, 1.0)
+        bg.inputs["Strength"].default_value = 1.0
+    except Exception:
+        sky.color = (1.0, 1.0, 1.0)
+    sc.world = sky
+    ddir = os.path.join(out, "depth")
+    os.makedirs(ddir, exist_ok=True)
+    for f in frames:
+        sc.frame_set(f)
+        sc.render.filepath = os.path.join(ddir, "d_%04d.png" % f)
+        bpy.ops.render.render(write_still=True)
+    (vl.material_override, sc.view_settings.view_transform, sc.render.image_settings.color_depth,
+     sc.render.image_settings.color_mode, sc.world) = keep
+
+
 def main():
     a = _args()
     out = os.path.abspath(os.path.expanduser(a.out))
@@ -589,13 +901,17 @@ def main():
     sc.rigidbody_world.point_cache.frame_start = 1
     sc.rigidbody_world.point_cache.frame_end = frames
 
-    if a.scene in ("orbit", "street", "canyon"):
+    if a.scene == "set":
+        info = build_set(sc, a, frames)
+    elif a.scene in ("orbit", "street", "canyon"):
         info = {"orbit": build_orbit, "street": build_street, "canyon": build_canyon}[a.scene](
             sc, a.seed, a.figure_glb, a.figure_turn)
     else:
         info = {"crates": build_crates, "fall": build_fall, "aisle": build_aisle}[a.scene](sc, a.seed)
 
-    if a.scene in ("street", "canyon"):
+    if a.scene == "set":
+        info["camera"] = _set_camera(sc, a, frames)
+    elif a.scene in ("street", "canyon"):
         _move_camera(sc, a, frames)
         info.update({"radius": [a.radius, a.radius_to], "lens": [a.lens, a.lens_to], "cam_z": [a.cam_z, a.cam_z_to],
                      "look_z": [a.look_z, a.look_z_to]})
@@ -616,21 +932,24 @@ def main():
             t = i / 4
             ang = math.radians(-35 + 70 * t)
             pts.append(Vector((7.5 * math.sin(ang), 1.5 - 7.5 * math.cos(ang), 2.0 - 0.4 * t)))
-    if a.scene not in ("orbit", "street", "canyon"):
+    if a.scene not in ("orbit", "street", "canyon", "set"):
         _camera(sc, pts, look, frames)
 
-    # flat, quick, unambiguous shading: workbench, studio light, object colours
-    sc.render.engine = "BLENDER_WORKBENCH"
-    sh = sc.display.shading
-    sh.light = "STUDIO"
-    sh.color_type = "MATERIAL"
-    sh.show_shadows = True
-    sh.show_cavity = False
-    sc.display_settings.display_device = "sRGB"
-    try:
-        sc.view_settings.view_transform = "Standard"
-    except Exception:
-        pass
+    if (a.render or ("beauty" if a.scene == "set" else "flat")) == "beauty":
+        _beauty(sc)
+    else:
+        # flat, quick, unambiguous shading: workbench, studio light, object colours
+        sc.render.engine = "BLENDER_WORKBENCH"
+        sh = sc.display.shading
+        sh.light = "STUDIO"
+        sh.color_type = "MATERIAL"
+        sh.show_shadows = True
+        sh.show_cavity = False
+        sc.display_settings.display_device = "sRGB"
+        try:
+            sc.view_settings.view_transform = "Standard"
+        except Exception:
+            pass
 
     # bake so the strike frame can be read off the simulation
     bpy.ops.ptcache.bake_all(bake=True)
@@ -659,6 +978,9 @@ def main():
                 info["impact_frame"] = f
                 break
     sc.frame_set(1)
+    if a.joints:
+        _joints(sc, out, frames)
+        return
 
     # a PNG sequence: the flatpak Blender has no video encoder; the wrapper encodes it
     fdir = os.path.join(out, "frames")
@@ -669,7 +991,14 @@ def main():
     sc.render.image_settings.file_format = "PNG"
     sc.render.image_settings.color_mode = "RGB"
     sc.render.filepath = os.path.join(fdir, "f_")
+    if a.endpoints and frames > 1:
+        sc.frame_step = frames - 1          # frames 1 and N: the rigid-body cache is baked through all of them
     bpy.ops.render.render(animation=True)
+    sc.frame_step = 1
+    if a.depth:
+        _depth(sc, out, [1, frames] if a.endpoints and frames > 1 else list(range(1, frames + 1)))
+    if a.scene == "set" and a.masks:
+        info["mask_frames"], info["surfaces"] = _masks(sc, out, frames, a.masks, info.get("groups", {}))
 
     info.update({"frames": frames, "fps": a.fps, "width": a.width, "height": a.height,
                  "scene": a.scene, "seed": a.seed})

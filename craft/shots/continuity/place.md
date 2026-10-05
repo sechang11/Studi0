@@ -8,15 +8,18 @@
 **Not the same as:**
 - [`cont-move-across-cuts`](move-across-cuts.md) - one move split over generations; here the set across different shots
 - [`frame-establishing-empty`](../framing/establishing-empty.md) - the shot that shows the place first
+- [`pipe-3d-set`](../pipeline/3d-set.md) - the place held by geometry instead of a picture, so what the plate never showed exists too
+- [`cont-screen-direction`](screen-direction.md) - who stands on which side of the screen
 
-## Recipe (v1, 2026-09-30)
+## Recipe (v2, 2026-09-30)
 
-One plate per place, drawn empty, in the references of every shot in it; a second angle of the same place is turned from the plate (angles LoRA), never drawn again from words.
+One plate per place, drawn empty, in the references of every shot in it; a second angle of the same place is turned from the plate (angles LoRA), never drawn again from words. A scene that looks all round its place is built as a 3D set.
 
 1. The plate: `fight.py --cast` draws the film's place empty (1280x720); a second place is a cast entry `"place": true` (`studio/_tools/sheet_refs.py`).
 2. Another angle of the same place: `"place_view": [place, "angle_aerial"]` etc. (angles LoRA) - the same room turned.
 3. Every shot lists its place; the Qwen compositor puts places first (the canvas follows image 1).
 4. A move that goes where the plate never showed (behind the camera) invents the rest: name what should be there.
+5. When the scene's shots look where the plate never did (a reverse, an orbit, a crane), build the place as a set instead: [`pipe-3d-set`](../pipeline/3d-set.md) (v2: the plaza test).
 
 ## Checks before picking
 
@@ -59,12 +62,18 @@ One plate per place, drawn empty, in the references of every shot in it; a secon
 - **Got:** plain English left the place unturned; the LoRA's words turned it (about 6 s a view).
 - **Learned:** `<sks>` words, not prose.
 
+### 2026-09-30 · plaza test · eight shots in one 3D set against one plate and words · grade B+
+- **Did:** the same eight shots of one square made two ways: every camera in one Blender set (start frames dressed from the set's renders, takes drawn on its depth), and this recipe (one plate, words, the plate turned by the angles LoRA for the reverse and the west side).
+- **Got:** the set's map of the square fit the set's start frames at 0.44 against 0.19 chance, and today's way's at 0.36 against 0.30; colour spread from shot to shot 14.8 against 23.2. The set's film kept one tower, arch, cafe and fountain in all eight shots; today's way put a domed tower in 102, a different arch in 103 and the cafe on a white house in 106, and its turned plate invented the whole south side. Recipe v2: step 5.
+- **Learned:** a picture holds the place only where it looked; a set holds it everywhere, including behind the camera.
+
 ## Failure modes
 
 | symptom | cause | fix | seen in |
 |---|---|---|---|
 | a portrait-shaped start frame cropped to 16:9 | a figure reference first in the compositor's order | places first (fight.py patched) | quantum-courier |
 | the room re-invented per key | each angles-LoRA key imagines the unseen room | previz for moves; name the unseen props | cyber-alchemist orbit keys |
+| a reverse or a turned view shows a different place | the plate never saw that side | build the place as a set ([`pipe-3d-set`](../pipeline/3d-set.md)) | plaza 103, 106 (today's way) |
 
 ## Evidence
 

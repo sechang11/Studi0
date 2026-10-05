@@ -9,6 +9,7 @@
 - [`cont-costume-back`](costume-back.md) - the costume's own back
 - [`fx-thruster-flames`](../fx/thruster-flames.md) - the effect the prop makes
 - [`cont-wardrobe`](wardrobe.md) - the costume itself
+- [`cont-shot-chain`](shot-chain.md) - each shot caused by the one before it
 
 ## Recipe (v1, 2026-09-30)
 
@@ -45,6 +46,16 @@ Give the prop its own reference; write its state in every shot's start frame; le
 - **Did:** the recipe above.
 - **Got:** the helmet goes on in 207 and stays on through the fall; the jetpack deploys in 306 (H3); she holds the helmet under her arm at the end. Qwen start frames for 306 drew the helmet on her back.
 - **Learned:** redraw a prop until it can do its job; check the compositor did not merge props.
+
+### 2026-09-30 · the jester in the wood 306 -> 307 · a fallen tree carried over the cut · grade A-
+- **Did:** the fire shot drops the oak across the path by physics; the next shot simulates the same fall again and freezes it at the moment the fire shot ended (`set_forest._freeze`), then sets the standoff in it ([`pipe-3d-set`](../pipeline/3d-set.md)).
+- **Got:** the oak lies across the path in the next shot exactly where the fire shot left it; the jester crouches on its trunk.
+- **Learned:** a state a simulation made is carried across a cut by running the same simulation to the same moment.
+
+### 2026-10-01 · the duel in the clearing · wreckage carried through a whole film · grade A-
+- **Did:** every physics event of the fight - bark blown out of trees, a boulder shattered, shockwaves of leaves and pebbles, trees snapped and toppled, the great oak brought down - written into every later shot's "done" list; the first shot that needs an event's wreckage simulates it and writes where every piece settled (`set_duel.py`, `wreck/`), every later shot reads it ([`pipe-3d-set`](../pipeline/3d-set.md)).
+- **Got:** 58 shots, each standing in all the wreckage before it; a set render 5-6 s instead of ~60 s.
+- **Learned:** the wreckage is data: simulate it once, read it everywhere after.
 
 ## Failure modes
 

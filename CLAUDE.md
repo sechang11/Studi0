@@ -45,9 +45,15 @@ fails when the copies disagree. The PDF is generated only by `studio/_tools/buil
    the edit. Timecodes in a prompt set nothing on LTX-2.5; the word *cut* makes the hard cut.
    The face clock is by motion, not look: still ~4.3 s, walk ~4.0 s, a crouch not followable.
 6. Sound is written: sources named, a line needs an on-screen mouth, *no music* when the edit
-   owns the score, the scene bed from ACE-Step at the finish. Coverage shots inherit the scene's
-   ambience as sfx; a shot with no written sound renders silence.
-7. Continuity of place is the plate, not a LoRA. LoRAs do not stack past two.
+   owns the score. Music is picked by ear: a brief, an audition bank (one variable, same length,
+   levelled), the director picks - never a cue nobody has heard, never tags alone, tempo and key
+   always set (craft/SOUND.md §0). Coverage shots inherit the scene's ambience as sfx; a shot with
+   no written sound renders silence.
+7. Continuity of place is the plate, not a LoRA. LoRAs do not stack past two. A scene that looks
+   all round its place (a reverse, an orbit, a crane) is a 3D set, every shot a camera in it:
+   playbook §99, `set_test.py`, `craft/shots/pipeline/3d-set.md`. A character who acts in a set
+   (walks, leaps, fights) is drawn between the set's first and last frames, not on its stand-ins'
+   depth (§99.10).
 8. The finish is half the film: one grade after the cuts, canvas from the takes, optional 2×
    master, loudness, and the film's frame count equals its takes' - checked.
 9. Nothing is adopted on one render. A take is picked iff `_faults(take)` is empty - one rule

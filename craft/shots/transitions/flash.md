@@ -6,6 +6,7 @@
 
 **Also called:** flash, white flash, flash frame, flash cut
 **Not the same as:**
+- [`fx-impact-frame`](../fx/impact-frame.md) - a flash inside a shot, on a hit, not a cut
 - [`trans-fade-to-black`](fade-to-black.md) - a slow fall to black
 
 ## Recipe (v1, 2026-07-29)

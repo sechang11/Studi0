@@ -92,6 +92,10 @@ def main():
         ("nothing takes N tagged identities", "H3 ref2va takes up to nine tagged reference images"),
         ("as wired it supplies neither identity nor place", "the 09-07 ref2va test never delivered its pictures; wired, it carries identity (§97.3)"),
         ("one anchor per scene,", "one source per scene; the studio composes a start frame per shot"),
+        ("scene bed from ACE-Step", "music is picked by ear from an audition bank; an unheard tag-only bed scored the duel "
+                                    "(2026-10-01) and must never be heard again"),
+        ("scene bed comes from ACE-Step", "music is picked by ear from an audition bank (craft/SOUND.md section 0)"),
+        ("ACE-Step writes a bed for it", "music is picked by ear from an audition bank (craft/SOUND.md section 0)"),
     ]
     for phrase, why in forbidden:
         for k, t in (("guide", guide), ("§95", s95), ("CLAUDE.md", agent)):
@@ -99,9 +103,9 @@ def main():
 
     # 5  the facts a reader most needs, present in every copy
     must = {
-        "guide": ["level 1", "still 4.3", "walk 4.0", "RealVisXL", "Qwen", "ref2va", "spread"],
-        "§95": ["1.2 MP", "RealVisXL", "ref2va", "spread/2", "level 1"],
-        "CLAUDE.md": ["ref2va", "RealVisXL", "spread"],
+        "guide": ["level 1", "still 4.3", "walk 4.0", "RealVisXL", "Qwen", "ref2va", "spread", "picked by ear"],
+        "§95": ["1.2 MP", "RealVisXL", "ref2va", "spread/2", "level 1", "picked by ear"],
+        "CLAUDE.md": ["ref2va", "RealVisXL", "spread", "picked by ear"],
     }
     for k, words in must.items():
         t = {"guide": guide, "§95": s95, "CLAUDE.md": agent}[k].lower()

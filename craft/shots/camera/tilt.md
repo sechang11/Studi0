@@ -44,10 +44,16 @@
 - **Got:** boots, crimson coat, dark leather trousers, brass corset, gauntlet, her face with the silver iris; it lands on 311's first frame (seed 202, motion agreement 0.99).
 - **Learned:** name what the move will reveal.
 
+### 2026-09-30 · plaza 104 · a tilt up a tower in a 3D set · grade C+
+- **Did:** the tilt as a camera in one set ([`pipe-3d-set`](../pipeline/3d-set.md)), drawn down from the clock and reversed; start frames dressed from the render (8 seeds from the tower's foot, 4 from its clock), a ControlNet start frame, and the set's depth alone (`pvb`).
+- **Got:** every dress straightened the steep look up to eye level, and from the foot the tower's plain shaft became a house with a roof. From a straightened start the depth still pulled the take onto the set by its end (fit 0.34 -> 0.44); from the depth alone the angle was exact but the colours were its own (a maroon hall, dE 24-26 against the plate).
+- **Learned:** a steep angle is where the start frame fails, not the set: keep a tilt's start gentle, or accept the depth-only look.
+
 ## Failure modes
 
 | symptom | cause | fix | seen in |
 |---|---|---|---|
+| a steep look up comes back level | the start frame's dress straightens perspective | a gentler angle, or the set's depth alone (`pvb`) | plaza 104 |
 | a push instead of a tilt | the phrase is ignored | post move or previz | §52 |
 | the move has nowhere to land | a dressed start frame ignored the framing | `"start"`: a frame the film has | 310 v1 |
 | wrong or missing clothing on the way | not in the start frame, not named | name every garment; negative bare skin | 310 v2 |

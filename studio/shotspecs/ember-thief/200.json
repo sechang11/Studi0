@@ -1,0 +1,63 @@
+{
+ "invariants": [
+  {
+   "id": "facing",
+   "title": "They face each other",
+   "rule": "Terra faces screen-right (toward him), as the set's frames draw them.",
+   "why": "the duel's frames had them mirrored (set_test.py read the sheets' turnaround names the wrong way round until 2026-10-05) - a take must keep the facing its frames give",
+   "check": {
+    "kind": "eye"
+   }
+  },
+  {
+   "id": "continues",
+   "title": "It starts where the last shot ended",
+   "rule": "Terra starts where 180 left her.",
+   "why": "each shot is caused by the one before it - the director's note on the duel was shots strung together like separate scenes",
+   "check": {
+    "kind": "eye"
+   }
+  },
+  {
+   "id": "story1",
+   "title": "The pendant is around her neck at the end",
+   "rule": "She fastens it on; she ends smiling, looking to the RIGHT where he vanished.",
+   "why": "the script (studio/shotscripts/ember-thief.md)",
+   "check": {
+    "kind": "eye"
+   }
+  },
+  {
+   "id": "length",
+   "title": "Length",
+   "rule": "4.38 seconds (105 frames at 24 fps).",
+   "why": "the cut is timed to the story beats",
+   "check": {
+    "kind": "duration_between",
+    "min": 3.98,
+    "max": 4.98
+   }
+  }
+ ],
+ "flair": [
+  {
+   "id": "seed",
+   "title": "Seed",
+   "note": "free - the takes differ by seed"
+  },
+  {
+   "id": "timing",
+   "title": "Timing inside the shot",
+   "note": "the beats may land a few frames early or late"
+  },
+  {
+   "id": "sound",
+   "title": "Sound",
+   "note": "H3's own: a soft breath, the clasp of a chain, wind in the leaves, a distant bird."
+  }
+ ],
+ "shot": "200",
+ "title": "the pendant",
+ "beat": "The pendant is home. The end. (shot 20 of 20, after 190)",
+ "build": "frames first in the clearing set (set_film.py frames), H3 between the set's two frames (set_film.py takes) - the camera, the marks and the facing come from the set"
+}

@@ -7,6 +7,7 @@
 **Also called:** first-last frame, FLF, start and end frame, keyframe interpolation, in-between
 **Not the same as:**
 - [`pipe-previz`](previz.md) - geometry for every frame; first-last only pins the ends
+- [`pipe-key-poses`](key-poses.md) - a posed frame anchored between the two ends
 
 ## Recipe (v1, 2026-09-30)
 

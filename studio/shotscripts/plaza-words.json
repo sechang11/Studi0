@@ -1,0 +1,309 @@
+{
+ "_comment": "The plaza test (2026-09-30): the same eight shots of one square, each composed from the plate by words. See _make_plaza_test_0930.py.",
+ "film": "plaza-words",
+ "title": "THE PLAZA - one plate and words",
+ "logline": "An afternoon in a small Italian square, from eight places in it.",
+ "grade": "Cinematic film, a sunny afternoon in a small Italian hill town, warm sunlight and soft blue shadows, natural colour, 35mm film grain.",
+ "avoid": "lowres, blurry, morphing, warping, melting buildings, bending walls, flicker, subtitles, captions, watermark, nsfw",
+ "realism": "Unretouched photograph, available light, fine film grain, natural colour, no retouching.",
+ "score_tags": "quiet acoustic guitar and soft strings, a warm lazy afternoon, instrumental, no vocals",
+ "place": {
+  "id": "plaza",
+  "prompt": "Wide photograph of a small Italian hill-town square on a sunny afternoon, nobody in it: a stone clock tower with white clock faces and a green copper roof on the north side between a terracotta town hall with an arcade and a pale yellow house with green shutters; an ochre cafe with a red-and-white striped awning and a green CAFFE sign on the east side; a stone archway gate onto a road of cypresses on the south side between a salmon-pink house and a grey stone bakery with a blue door; a white house with blue shutters and iron balconies and a plane tree on the west side; a round stone fountain in the middle. Unretouched photograph, available light, fine film grain, natural colour, no retouching."
+ },
+ "cast": {
+  "plaza_rev": {
+   "role": "the square turned round",
+   "place_view": [
+    "plaza",
+    "angle_reverse"
+   ],
+   "prompt": "The plate turned round by the angles LoRA."
+  },
+  "plaza_left": {
+   "role": "the square turned left",
+   "place_view": [
+    "plaza",
+    "angle_left"
+   ],
+   "prompt": "The plate turned to the left by the angles LoRA."
+  }
+ },
+ "shots": [
+  {
+   "id": "101",
+   "name": "establishing",
+   "title": "establishing",
+   "secs": 5,
+   "face": "none",
+   "prompt": "A high wide view of a sunlit Italian hill-town square in the afternoon: the stone clock tower with its white clock face and green copper roof, the pale yellow house with green shutters, the ochre cafe with its red-and-white striped awning, the round stone fountain in the middle, a plane tree in the foreground. The camera glides slowly forward and down over the square. Water splashes in the fountain; the plane tree's leaves stir in a light breeze. The square is empty. Sound: the fountain splashing, a light breeze, distant swallows. No music.",
+   "avoid_extra": "people, a person, a figure, a crowd, pedestrians, a face",
+   "engine": "ltx",
+   "refs": [
+    "plaza",
+    "plaza",
+    "plaza"
+   ],
+   "anchor": null,
+   "set_camera": {
+    "cam": [
+     -13,
+     -13.5,
+     11
+    ],
+    "cam_to": [
+     -11.5,
+     -12,
+     10
+    ],
+    "look": [
+     3,
+     8,
+     5
+    ],
+    "lens": 22
+   }
+  },
+  {
+   "id": "102",
+   "name": "the tower",
+   "title": "the tower",
+   "secs": 4,
+   "face": "none",
+   "prompt": "The stone clock tower with its white clock face rises over the square; the terracotta town hall with its arcade stands to its left behind the fountain, the pale yellow house with green shutters to its right. The camera moves slowly forward at eye level. Water splashes in the fountain; the plane tree's leaves stir in a light breeze. The square is empty. Sound: the fountain splashing, a light breeze, distant swallows. No music.",
+   "avoid_extra": "people, a person, a figure, a crowd, pedestrians, a face",
+   "engine": "ltx",
+   "refs": [
+    "plaza",
+    "plaza",
+    "plaza"
+   ],
+   "anchor": "A still frame from a live-action film, a WIDE SHOT at eye level of the square of reference one seen from its south-east side, looking north-north-west: the stone clock tower with its white clock face and green copper roof in the centre, the top of the fountain on the left in front of the terracotta town hall and its arcade, the pale yellow house with green shutters on the right. Nobody is there. Cinematic film, a sunny afternoon in a small Italian hill town, warm sunlight and soft blue shadows, natural colour, 35mm film grain.",
+   "set_camera": {
+    "cam": [
+     6.5,
+     -11,
+     1.6
+    ],
+    "cam_to": [
+     6.0,
+     -9.5,
+     1.6
+    ],
+    "look": [
+     -1,
+     16,
+     8
+    ],
+    "lens": 30
+   }
+  },
+  {
+   "id": "103",
+   "name": "the archway",
+   "title": "the archway",
+   "secs": 4,
+   "face": "none",
+   "prompt": "Looking south across the square: the stone archway gate in the centre, a road lined with cypresses and green hills seen through it; the salmon-pink house with olive shutters and a balcony of red flowers on the right; the grey stone bakery with a blue door on the left; the fountain in the foreground on the left. The camera is still. Water splashes in the fountain; the plane tree's leaves stir in a light breeze. The square is empty. Sound: the fountain splashing, a light breeze, distant swallows. No music.",
+   "avoid_extra": "people, a person, a figure, a crowd, pedestrians, a face",
+   "engine": "ltx",
+   "refs": [
+    "plaza_rev",
+    "plaza",
+    "plaza"
+   ],
+   "anchor": "A still frame from a live-action film, a WIDE SHOT at eye level of the south side of the square of reference one, looking south from beside the fountain: a stone archway gate in the centre with a road of cypress trees and green hills seen through it, a salmon-pink house with olive shutters and a balcony of red flowers on the right of the arch, a grey stone bakery with a blue door on the left of the arch, the fountain in the foreground on the left, a wooden bench and a black lamp post on the right. Nobody is there. Cinematic film, a sunny afternoon in a small Italian hill town, warm sunlight and soft blue shadows, natural colour, 35mm film grain.",
+   "set_camera": {
+    "cam": [
+     -4.0,
+     6.5,
+     1.7
+    ],
+    "look": [
+     -0.5,
+     -17,
+     4.2
+    ],
+    "lens": 28
+   }
+  },
+  {
+   "id": "104",
+   "name": "up the tower",
+   "title": "up the tower",
+   "secs": 5,
+   "face": "none",
+   "prompt": "The stone clock tower on the north side of the square: the camera tilts slowly up its weathered stone shaft from the wooden door at its base to the white clock face high above, the terracotta town hall and its arcade on the left and the pale yellow house on the right. Sound: the fountain splashing, a light breeze, distant swallows. No music.",
+   "avoid_extra": "people, a person, a figure, a crowd, pedestrians, a face",
+   "engine": "ltx",
+   "refs": [
+    "plaza",
+    "plaza",
+    "plaza"
+   ],
+   "anchor": "A still frame from a live-action film, a WIDE SHOT at eye level, looking slightly up at the foot of the stone clock tower of reference one from across the north side of the square: its wooden door at the base, the stone shaft rising out of frame, the terracotta town hall and its arcade on the left, the pale yellow house with green shutters on the right. Nobody is there. Cinematic film, a sunny afternoon in a small Italian hill town, warm sunlight and soft blue shadows, natural colour, 35mm film grain.",
+   "set_camera": {
+    "cam": [
+     1.8,
+     4.0,
+     1.5
+    ],
+    "look": [
+     0,
+     17,
+     15.3
+    ],
+    "look_to": [
+     0,
+     17,
+     3.5
+    ],
+    "lens": 24,
+    "reverse": true
+   }
+  },
+  {
+   "id": "105",
+   "name": "the cafe",
+   "title": "the cafe",
+   "secs": 4,
+   "face": "none",
+   "prompt": "The ochre cafe on the east side of the square: its red-and-white striped awning, the dark green sign that reads CAFFE, three small round tables with chairs outside, a black iron lamp post on the left. The camera drifts slowly toward it. The awning stirs in the breeze. Sound: the fountain splashing, a light breeze, distant swallows. No music.",
+   "avoid_extra": "people, a person, a figure, a crowd, pedestrians, a face",
+   "engine": "ltx",
+   "refs": [
+    "plaza",
+    "plaza",
+    "plaza"
+   ],
+   "anchor": "A still frame from a live-action film, a MEDIUM WIDE SHOT at eye level of the ochre cafe on the east side of the square of reference one: its red-and-white striped awning, a dark green sign reading CAFFE above it, three small round tables with chairs outside, brown shutters on the windows above, a black iron lamp post on the left. Nobody is there. Cinematic film, a sunny afternoon in a small Italian hill town, warm sunlight and soft blue shadows, natural colour, 35mm film grain.",
+   "set_camera": {
+    "cam": [
+     4.5,
+     -5.0,
+     1.7
+    ],
+    "cam_to": [
+     5.5,
+     -4.2,
+     1.7
+    ],
+    "look": [
+     16,
+     2,
+     2.6
+    ],
+    "lens": 32
+   }
+  },
+  {
+   "id": "106",
+   "name": "round the fountain",
+   "title": "round the fountain",
+   "secs": 5,
+   "face": "none",
+   "prompt": "The camera circles slowly around the round stone fountain at a steady pace, keeping it in the centre, while the square turns behind it: from the stone archway gate and the salmon-pink house to the white house with blue shutters, then round to the ochre cafe with its striped awning. Water splashes in the fountain; the plane tree's leaves stir in a light breeze. The square is empty. Sound: the fountain splashing, a light breeze, distant swallows. No music.",
+   "avoid_extra": "people, a person, a figure, a crowd, pedestrians, a face",
+   "engine": "ltx",
+   "refs": [
+    "plaza",
+    "plaza",
+    "plaza"
+   ],
+   "anchor": "A still frame from a live-action film, a WIDE SHOT at eye level of the round stone fountain in the square of reference one, seen from the north side, looking south: the fountain in the centre, the stone archway gate behind it on the left with cypresses seen through it, the salmon-pink house behind it, the white house with blue shutters on the right. Nobody is there. Cinematic film, a sunny afternoon in a small Italian hill town, warm sunlight and soft blue shadows, natural colour, 35mm film grain.",
+   "set_camera": {
+    "cam": [
+     4.0,
+     6.93,
+     2.2
+    ],
+    "arc": 100,
+    "arc_center": [
+     0,
+     0,
+     0
+    ],
+    "look": [
+     0,
+     0,
+     1.6
+    ],
+    "lens": 28,
+    "ease": "linear"
+   }
+  },
+  {
+   "id": "107",
+   "name": "up to the map",
+   "title": "up to the map",
+   "secs": 5,
+   "face": "none",
+   "prompt": "The camera cranes up from beside the fountain, rising high above the square and tilting down until it looks straight down on the round fountain, the paving, the plane tree, the striped awning and the rooftops around the square. Water splashes in the fountain; the plane tree's leaves stir in a light breeze. The square is empty. Sound: the fountain splashing, a light breeze, distant swallows. No music.",
+   "avoid_extra": "people, a person, a figure, a crowd, pedestrians, a face",
+   "engine": "ltx",
+   "refs": [
+    "plaza",
+    "plaza",
+    "plaza"
+   ],
+   "anchor": "A still frame from a live-action film, a WIDE SHOT at eye level of the round stone fountain in the square of reference one seen from the south, looking north: the fountain in the centre, the stone clock tower behind it, the terracotta town hall on the left, the pale yellow house on the right. Nobody is there. Cinematic film, a sunny afternoon in a small Italian hill town, warm sunlight and soft blue shadows, natural colour, 35mm film grain.",
+   "set_camera": {
+    "cam": [
+     0,
+     -9,
+     3.0
+    ],
+    "cam_to": [
+     0,
+     -2.0,
+     38
+    ],
+    "look": [
+     0,
+     2,
+     2.5
+    ],
+    "look_to": [
+     0,
+     0.5,
+     0
+    ],
+    "lens": 24
+   }
+  },
+  {
+   "id": "108",
+   "name": "the west side",
+   "title": "the west side",
+   "secs": 4,
+   "face": "none",
+   "prompt": "Looking west across the fountain at the white house with blue shutters and small iron balconies, the plane tree on the right. The camera tracks slowly sideways to the right. Water splashes in the fountain; the plane tree's leaves stir in a light breeze. The square is empty. Sound: the fountain splashing, a light breeze, distant swallows. No music.",
+   "avoid_extra": "people, a person, a figure, a crowd, pedestrians, a face",
+   "engine": "ltx",
+   "refs": [
+    "plaza_left",
+    "plaza",
+    "plaza"
+   ],
+   "anchor": "A still frame from a live-action film, a WIDE SHOT at eye level of the west side of the square of reference one, looking west across the round stone fountain: a white house with blue shutters and small black iron balconies behind it, the plane tree on the right, the salmon-pink house at the left edge. Nobody is there. Cinematic film, a sunny afternoon in a small Italian hill town, warm sunlight and soft blue shadows, natural colour, 35mm film grain.",
+   "set_camera": {
+    "cam": [
+     8.5,
+     -1.5,
+     1.7
+    ],
+    "cam_to": [
+     8.5,
+     1.5,
+     1.7
+    ],
+    "look": [
+     -20,
+     3,
+     4.5
+    ],
+    "lens": 28
+   }
+  }
+ ]
+}

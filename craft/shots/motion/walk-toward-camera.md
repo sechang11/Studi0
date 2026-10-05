@@ -50,11 +50,17 @@ LTX from a composed start frame with her already in place, 4 s, three seeds, cut
 - **Got:** both read; the walk away hides the face problem by construction.
 - **Learned:** short walks toward; walks away are safe.
 
+### 2026-09-30 · the jester in the wood 302 · a walk the camera tracks back from, pinned between a set's frames · grade B+
+- **Did:** her walk toward a camera that tracks back at her pace, drawn between the set's first and last frames (her placed in both by the set, [`pipe-3d-set`](../pipeline/3d-set.md)) on H3 (`65`) and LTX-2.5 (`72`), against the old take on a puppet's depth and LTX-2.5 from the start frame alone; two seeds each.
+- **Got:** pinned, real alternating steps, her glances left and right, the costume held - H3 2 of 2, LTX-2.5 2 of 2 (her hair flared on one). On the puppet's depth, a shuffle with one leg splayed. From the start frame alone LTX-2.5 pushed in to her waist on both seeds instead of tracking back.
+- **Learned:** a walk the camera travels with holds on a pin: she is the same size in both frames (the 2026-09-04 failures pinned walks whose figure grew between the frames).
+
 ## Failure modes
 
 | symptom | cause | fix | seen in |
 |---|---|---|---|
-| a path and trees appear from nowhere | a walk pinned on H3 | LTX, never pin a walk | §29 |
+| the camera pushes in on her instead of tracking back | LTX-2.5 from a start frame alone, the move in words | pin the end frame too (`72`, or H3 `65`) | forest 302, 2 of 2 |
+| a path and trees appear from nowhere | a walk pinned on H3, the figure growing between the frames | LTX; or move the camera with her - a walk the camera travels with holds on a pin (§99.10) | §29 |
 | a different face by the end | the engine redraws the face on the way in | 4 s; three seeds; cut at the face | §53-§55 |
 | people walk who were told to stand | LTX's prior | say what they do in place; keep it short | §46 |
 

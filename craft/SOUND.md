@@ -11,12 +11,101 @@ Companion docs: `AUDIO.md` (which models, which nodes), `CAPABILITIES.md` (timin
 
 ## 0. The one-paragraph version
 
+**Music is picked by ear.** No generated music goes into a film unless the director has listened to it
+and chosen it: a written brief, an audition bank (one variable at a time, the same length, the same
+seed, levelled to the same loudness), a pick, then the full cue from the pick. Never a cue nobody has
+heard, never tags alone, tempo and key always set, never unrelated cues crossfaded into one score
+(§0.1 - the rule CLAUDE.md, §95 and METHOD.md point at, held by `method_check.py`).
+
 Set every stem to a **loudness target**, never to a multiplier. Multipliers assume the
 generator produces consistent levels; measured, none of them do — ACE-Step's output
 spreads **20.5 LU**, LTX's ambience bed spreads **39 dB**. Normalise each stem with
 **two-pass** `loudnorm`, mix at the bus targets in §2, duck the score under a real
 narration key stem, and run **one** loudness pass at the very end with a limiter after it.
 Narration wants headroom, not gain: never multiply a voice file above unity.
+
+### 0.1 Why music is picked by ear (2026-10-01)
+
+**What must never be heard in our work again.** THE DUEL IN THE CLEARING was scored by the fight
+tools themselves (`fight._ace_cue`, `set_film.py music / sections`): ACE-Step 1.5 turbo from a tag
+line alone - "epic anime battle score, fast taiko drums, driving strings, brass stabs, electric
+guitar" - one take a cue, never listened to by anyone, five cues for five acts crossfaded at the act
+breaks, mixed at 0.55 on top of the takes' own sound. The verdict on the film: the effects were good
+(they were H3's own), the music awful, and that music never again in any project. What made it:
+
+| fault | what it did |
+|---|---|
+| tempo and key never set | `_ace_cue` set the tags, the length and the seed and nothing else, so every cue of every fight film played at workflow 06's own **64 BPM in D minor** - under tags that said "fast", "frantic", "pounding" |
+| a tag line of four idioms | taiko + orchestra + brass + rock guitar in one breath: the model averages them |
+| one take, unheard | no audition, no second seed, nobody chose it |
+| five unrelated cues stitched | each cue its own tempo, key and palette, crossfaded over 1.5 s at the act breaks |
+| mixed on top of the effects | score at a fixed 0.55, one single-pass loudnorm over the lot, peaks over 0 dBFS from the generator |
+
+**What made good music on the same model.** The Sour Pickle Cafe songs came out of ACE-Step through
+the same workflow (`06_acestep_music.json`) - `~/sourpickle/style_bank.py`, `songwriter.py`: a sung
+hook ("name the voice, then stop"), ONE idiom per audition with its instruments named, `bpm` and
+`keyscale` set for every style, fifty 22-second auditions on one seed and one chorus, all levelled to
+-16 LUFS so they A/B fairly, picked by ear, then built into full songs. The model was the same; the
+process was the difference.
+
+**The process, every film - score casting** (`studio/_tools/score_casting.py`): **auditions** (round 1, a
+bank as varied as the brief allows) -> **callbacks** (rounds closer to the director's picks: new seeds, tempo
+nudges, hand-written variants for a word like "heavier drums") -> a **shortlist** (kept along the way) ->
+**finalists** (each built into a full piece the scene's length and mixed under its picture) -> one **cast**
+into the film, the rest kept as **understudies**. Every round is a listening sheet (`sheet_r<N>.html`,
+self-contained): each sample playable, its recipe and parent shown, pick / keep ticks that build the reply.
+Open it in a browser (Chrome): the Claude desktop panel renders the page but does not play its audio.
+First casting: the duel's 30-second fight, 2026-10-01 (`studio/samples/casting/forest-duel/the-30s/`).
+
+The steps underneath it:
+
+1. **A brief** per stretch of film that wants music: function, idiom, lead instrument, tempo, key or
+   mode, the arc (how it starts, builds, ends), how long. One idiom.
+2. **An audition bank**: 4-8 short takes (20-35 s) varying ONE thing (the idiom, or the engine, or the
+   seed), same length, levelled to -16 LUFS with a limiter (peaks under -1.5 dBFS) - a level gain and a
+   limiter, not loudnorm's "linear" mode, which quietly falls back to dynamic and leaves files 1.5 LU apart.
+3. **The director picks** by listening. Nothing past this point is chosen by a number.
+4. **The full cue IS the pick**: the exact take, made the picture's length by an edit of its own bars
+   (`score_casting.py final`: the take itself if the picture is shorter; else it jumps back at a bar line
+   to a matching point and loops its own music, then plays its own ending). A new render of the same recipe
+   at a new length is different music - the director noticed at once (2026-10-01) - so that is only on
+   request (`--fresh`). Loops are scored on the join, the repeats and the overshoot: #5 of the duel's
+   casting became 3:04 by looping its whole 22 s middle 7 times; a 29 s take could only loop 11 s, 15 times.
+   The director heard that 15-times loop at once ("audibly looping"). The answer is **develop**
+   (`score_casting.py develop <finalist> --plan`): the finalist's own edit is covered once per arrangement
+   (the cover engine below: the tune kept, every instrument re-played), each cover the edit's full length
+   and in time with it to within 17 ms, and the piece moves from arrangement to arrangement at the plan's
+   times - each switch on a bar line, crossfaded - so every repeat of the bars is the same tune further
+   orchestrated (strings, then the full orchestra, a build, full force with choir, the climax, a soft
+   piano ending), the arc on the film's acts. Close covers (denoise 0.62-0.68) change the sound only as
+   much as a remix (timbre distance 64-76 against the take); bolder (0.70-0.85) 72-86 and 100, the tune
+   still 0.88-0.93 - both kept as finalists (the duel's f-05, f-06) for the ear to choose.
+5. **The mix**: the takes' own sound leads (H3's effects are the best sound this studio makes); the
+   score goes under it and ducks under it (`set_film.py cut --duck`, `scripts/sound_dept.py`), one
+   two-pass loudness at the end, a limiter after it.
+
+**The engines on this box:**
+
+| engine | how | notes |
+|---|---|---|
+| ACE-Step 1.5 turbo | workflow `06_acestep_music.json` | ALWAYS set `bpm` and `keyscale` (node 10); one idiom, named instruments (§7); fades past ~45 s |
+| MiniMax Music 3 | ComfyUI's template `audio_minimax_music_3.json`; studio/samples/settest/work/music/music3_test.py | on disk since 2026-08-20, first wired 2026-10-01. Caption in three parts: **Global Metadata** (idiom, BPM, key, mood arc, production) -> **Vocal Details** ("No vocals at all. Fully instrumental.") -> **Arrangement** (instruments, then section by section); structure only from the lyric section tags (`[Intro]`, `[Instrumental]`, `[Outro]`...). **It does not keep the caption's tempo or key**: the duel's 155 BPM F sharp minor came back 185 BPM in C major (r2-03) and F major (r1-08) - measure a take before covering or scoring to it. Up to ~5 minutes. 34 s rendered in 26 s. It may end a piece before `max_duration` (an orchestral 34 s came back 22 s): **a piece's length comes from its structure, not from `max_duration`** - a 30-second recipe asked for 187 s came back 28 and 35 s. Measured on one instrumental recipe asked for 187 s: 4 section tags gave 28-35 s, 9 gave 64-88 s, 23 gave 134 s, 31 gave 111-134 s - it levels off near two minutes without lyrics to carry it; a form written in bars gave 72 s. `score_casting.py final` writes one tag per ~6 s and a sentence naming the whole form; a full 3-minute instrumental is still open. Peaks above 0 dBFS: limit. |
+| Cover (a reimagining - Suno's word) | `score_casting.py` engine `cover`: ACE-Step 1.5's cover mode - ComfyUI's `ReferenceTimbreAudio` on the source latent sets `is_covers`, so the model's tokenizer turns the source into its 5 Hz semantic codes and the DiT plays them again | measured 2026-10-01 on TerraTheme and the duel. **From silence (denoise 1.0) the codes keep the rhythm and sections but NOT the tune**: chroma 0.46-0.54 against the source on three sources, no better than text alone (decoded, the hints themselves measure 0.75 - the ComfyUI port matches the official code line for line). **The hybrid works**: start from the source's own latent renoised (denoise 0.70-0.76 = ACE's `cover_noise_strength` 0.24-0.30) with the codes guiding the first half of the steps (`strength` 0.5): the tune and key kept (0.69-0.84) where a plain remix at the same denoise loses them (0.57) - the codes buy about 0.1 more denoise for the same tune, i.e. more of the sound re-made. 20 steps make denoise move in 0.05 steps. TerraTheme round 2 = 8 covers. ComfyUI's node also uses the source as the timbre reference (the official code uses silence), which pulls toward the source's sound; the plain tags guide the second half of the steps for that reason. |
+| Remix (your own recording) | `score_casting.py` engine `remix`: ACE-Step 1.5 audio-to-audio from the recording (workflow 06 + LoadAudio / VAEEncodeAudio), or ACE-Step v1 (`31_acestep_remix.json`) | the `denoise` dial: how much of the original survives, measured as chroma match on TerraTheme (2026-10-01): 0.35 -> 0.95, 0.45 -> 0.87, 0.50 -> 0.82-0.84, 0.65 -> 0.75. 2-6 s a 32 s remix. MiniMax Music 3 takes no audio. A recording's melody survives a remix: someone else's music is for tests, not for publishing. |
+| H3's own audio | every H3 take | the effects for fights: keep them, lead the mix with them |
+| Stable Audio 3 | workflow `10_stableaudio_sfx.json` | one-off effects (§1) |
+
+Online, not downloaded (2026-10-01): ACE-Step 1.5 **XL-SFT** (April 2026, "peak quality"; 9.97 GB model +
+8.38 GB 4B text encoder, Comfy-Org/ace_step_1.5_ComfyUI_files), HeartMuLa (Apache-2.0, moody pop/rock
+songs, slow); for effects from a finished video the **LTX-2.3 Foley LoRA** (0.23 GB,
+FuzzPuppy/LTX-2.3-Foley-LoRA) and Foley-Omni (MIT, video in, speech + effects + music out). The paid
+orchestral specialists (AIVA, Udio) are out of scope.
+
+**The first listening test** (`studio/samples/music3/listen/`, all at -16 LUFS): 0 the duel's score as
+used; 1 ACE-Step on a J-rock fight brief with tempo and key set; 2 MiniMax Music 3 on the same brief;
+3 MiniMax Music 3 orchestral. **The director's verdict: 1, 2 and 3 all great, "leaps and bounds better
+than 0".** Both engines on the box are good enough once the process is right - the model was never the
+problem. No more downloads for music; the XL-SFT and the Foley LoRA wait until a film needs what they add.
 
 ---
 

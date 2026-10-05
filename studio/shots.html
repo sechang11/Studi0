@@ -596,8 +596,8 @@ const S = {films: [], archived: [], kind: "script", film: null, data: null, scri
            sel: null, shown: null, tab: {script: PREF.get("tab.script", "takes"), film: "takes"}, dirty: false,
            frameComp: {}, takeEng: {}, frameSeeds: null, takeSeeds: null, frameReplace: false, takeReplace: false,
            pickWhy: null, sdDraft: null, openRef: null, measured: "", job: null, poll: null, wasRunning: false};
-const ENGINE_LABEL = {shot: "LTX-2.5", ltx: "LTX-2.5", h3: "H3", pv: "Physics", pvb: "Physics (bypass)", previz: "Physics", both: "Both", sd: "Seedance 2.5"};
-const ENGINE_CLASS = {shot: "ltx", ltx: "ltx", h3: "h3", pv: "pv", pvb: "pv", previz: "pv", sd: "sd", both: "both"};
+const ENGINE_LABEL = {shot: "LTX-2.5", ltx: "LTX-2.5", h3: "H3", h3f: "H3 · set frames", h3k: "H3 · key poses", pv: "Physics", pvb: "Physics (bypass)", previz: "Physics", both: "Both", sd: "Seedance 2.5"};
+const ENGINE_CLASS = {shot: "ltx", ltx: "ltx", h3: "h3", h3f: "h3", h3k: "h3", pv: "pv", pvb: "pv", previz: "pv", sd: "sd", both: "both"};
 const isScript = () => S.kind === "script";
 const cur = () => S.shots.find(x => x.id === S.sel) || null;
 const scriptShot = id => S.script && S.script.shots.find(x => x.id === id);

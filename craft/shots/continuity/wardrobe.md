@@ -40,10 +40,16 @@ In the shot-script pipeline: the costume lives in the character's reference and 
 - **Got:** the coat, the circuit sleeve, the corset, gauntlets and jetpack held across 38 shots each.
 - **Learned:** in the shot-script pipeline the references carry the costume.
 
+### 2026-09-30 · the jester in the wood · costumes across seven shots of a fight · grade B+
+- **Did:** two characters in seven shots, start frames composed from their sheets' views by the set ([`pipe-3d-set`](../pipeline/3d-set.md)); takes on puppets' depth, unpinned then pinned at both ends.
+- **Got:** unpinned, the jester's diamond costume became a bare torso and Terra's hair turned the jester's magenta; pinned, both costumes held in all seven.
+- **Learned:** with figures that move, the costume is held by the frames at both ends, and by words whose colours belong to one character only.
+
 ## Failure modes
 
 | symptom | cause | fix | seen in |
 |---|---|---|---|
+| her sash becomes a tube of a skirt | a puppet's tube skirt under the depth | draw her between the set's frames, not on the puppet (§99.10) | forest 302 old, 1 of 2 |
 | the costume re-invented | no costume in the reference | the costume in the reference | §61.2 |
 | part of the costume hidden | a start frame's lighting | pick the start frame that shows it | cyber-alchemist 102 |
 | the costume drifts with prose | describing what the weights carry | stop describing it | §68-§70 |

@@ -761,51 +761,28 @@ def stage_score(force=False):
     return rows
 
 
+NO_UNHEARD_MUSIC = (
+    "No generated music goes into a film unheard (2026-10-01). This tool used to write the score itself: ACE-Step "
+    "from the script's tags alone, one take a cue, never listened to, at the workflow's own 64 BPM in D minor "
+    "whatever the tags asked (it never set tempo or key), long films stitched from cues crossfaded at act breaks. "
+    "The duel in the clearing was scored that way and the verdict was: that music never again, in any project. "
+    "Music now comes from a cue somebody picked by ear from an audition bank - craft/SOUND.md section 0. Put the "
+    "picked cue at %s and run this again.")
+
+
 def _ace_cue(tags, seconds, seed, dst):
-    wf = {k: v for k, v in load_wf("06_acestep_music.json").items()
-          if isinstance(v, dict) and "class_type" in v}
-    wf["10"]["inputs"]["tags"] = tags
-    wf["10"]["inputs"]["lyrics"] = ""
-    wf["11"]["inputs"]["seconds"] = float(seconds)
-    if "duration" in wf["10"]["inputs"]:
-        wf["10"]["inputs"]["duration"] = float(seconds)
-    wf["12"]["inputs"]["seed"] = int(seed)
-    wf["14"]["inputs"]["filename_prefix"] = "claude-generated/fight/score_%s" % FILM
-    wait_for_queue()
-    t0 = time.time()
-    outs = submit(wf, "score")
-    got = [o for o in outs if str(o).lower().endswith((".mp3", ".flac", ".wav"))]
-    if not got:
-        print("  cue FAILED (%s)" % outs, flush=True)
-        return None
-    shutil.copy(os.path.join(COMFY, "output", got[0]), dst)
-    print("  cue  %4.0fs  %ss  %s" % (time.time() - t0, seconds, os.path.basename(dst)), flush=True)
-    return dst
+    """Retired 2026-10-01 - see NO_UNHEARD_MUSIC."""
+    sys.exit(NO_UNHEARD_MUSIC % dst)
 
 
 def stage_music(seconds=24, seed=77, force=False):
-    """The scene bed, written once for the whole sequence because the shots were rendered silent
-    of music on purpose (the breakdown's rule 7; §96.7 here). ACE-Step fades to silence past about
-    45 s (playbook §1), so a longer film gets TWO cues - the script's score_tags, then its
-    score_tags_b (or the same tags on the next seed) - crossfaded over four seconds: an act break
-    in the score instead of a fade in the middle of the film."""
+    """The film's score: the cue the director picked by ear, placed at OUT/score.mp3 (craft/SOUND.md section 0).
+    This stage no longer writes one - see NO_UNHEARD_MUSIC."""
     dst = os.path.join(OUT, "score.mp3")
-    if os.path.exists(dst) and not force:
-        print("  score.mp3 already there", flush=True)
+    if os.path.exists(dst):
+        print("  score.mp3: the picked cue", flush=True)
         return dst
-    import post
-    post.make_room(need_gb=10.0, budget=180)
-    if seconds <= 44:
-        return _ace_cue(SCORE_TAGS, seconds, seed, dst)
-    half = seconds / 2.0 + 4
-    a = _ace_cue(SCORE_TAGS, half, seed, os.path.join(OUT, "_cue_a.mp3"))
-    b = _ace_cue(_seq.get("score_tags_b") or SCORE_TAGS, half, seed + 1, os.path.join(OUT, "_cue_b.mp3"))
-    if not (a and b):
-        return None
-    sh("ffmpeg", "-y", "-v", "error", "-i", a, "-i", b, "-filter_complex",
-       "[0:a][1:a]acrossfade=d=4:c1=tri:c2=tri[m]", "-map", "[m]", "-b:a", "192k", dst)
-    print("  score  two cues of %.0fs crossfaded -> %s (%.1fs)" % (half, dst, post.duration(dst)), flush=True)
-    return dst if os.path.exists(dst) else None
+    sys.exit(NO_UNHEARD_MUSIC % dst)
 
 
 def stage_finish(picks=None, grade="filmic", master=False):

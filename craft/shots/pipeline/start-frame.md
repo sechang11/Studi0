@@ -59,6 +59,8 @@ Draw every shot on both compositors, then pick by eye per shot. Qwen-Image-2.1 k
 | two props merged | Qwen | Flux 2 | cyber-alchemist 306 |
 | a one-eye feature doubled | Qwen | edit | cyber-alchemist 114, 206, 311 |
 | a previz dress ignores the framing | Qwen redraws the composition | use a given start frame (`"start"`) | cyber-alchemist 310 v1 |
+| a dress returns the plate's view, not the render's | the plate handed in beside the render (the same place from another angle) | the render alone, words that name nothing ([`pipe-3d-set`](3d-set.md)) | plaza 102-108 |
+| a steep look up comes back level | Qwen straightens perspective | draw from the depth alone, or stand the camera back | plaza 104 |
 
 ## Evidence
 

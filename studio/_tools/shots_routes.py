@@ -58,9 +58,10 @@ FILM_RE = re.compile(r"^[a-z0-9][a-z0-9-]{1,40}$")
 ID_RE = re.compile(r"^[a-z0-9][a-z0-9_-]{0,30}$")
 SHOT_RE = re.compile(r"^\d{3}$")
 SEED_RE = re.compile(r"^\d{1,9}$")
-PICK_RE = re.compile(r"^((h3|pv|pvb|sd):)?\d{1,9}$")
-PICKS_RE = re.compile(r"^\d{3}=((h3|pv|pvb|sd):)?\d{1,9}(,\d{3}=((h3|pv|pvb|sd):)?\d{1,9})*$")
-TAKE_RE = r"^(shot|h3|pv|pvb|sd)_%s_s(\d+)\.mp4$"       # sd = the paid engine, when somebody paid
+PICK_RE = re.compile(r"^((h3|h3f|h3k|pv|pvb|sd):)?\d{1,9}$")
+PICKS_RE = re.compile(r"^\d{3}=((h3|h3f|h3k|pv|pvb|sd):)?\d{1,9}(,\d{3}=((h3|h3f|h3k|pv|pvb|sd):)?\d{1,9})*$")
+TAKE_RE = r"^(shot|h3|h3f|h3k|pv|pvb|sd)_%s_s(\d+)\.mp4$"       # sd = the paid engine, when somebody paid;
+# h3f / h3k = a film shot in a 3D set (set_film.py): H3 between the set's two frames / with key poses
 
 # The menus the inspector offers, with what each choice is FOR - measured, not advertised.
 MODELS = {
@@ -79,6 +80,7 @@ MODELS = {
         {"id": "h3", "label": "MiniMax H3", "wf": "67", "note": "keeps the start frame; holds faces, clears effects; ~40 s a take"},
         {"id": "both", "label": "Both", "wf": "70+67", "note": "render on each and pick by measurement (H3 won 9 of 9 on 09-29)"},
         {"id": "previz", "label": "Blender physics", "wf": "74", "note": "a physical beat simulated in Blender, drawn through depth control"},
+        {"id": "h3f", "label": "H3 between a set's two frames", "wf": "65", "note": "a film shot in a 3D set: set_film.py frames and takes (key poses: set_test.py key / take) - rendered by those tools, not from this page"},
     ],
     "previz": [
         {"id": "aisle", "label": "aisle collapse", "note": "a stack of crates pushed over across an aisle, a figure beyond"},

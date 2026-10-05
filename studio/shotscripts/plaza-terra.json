@@ -1,0 +1,232 @@
+{
+ "_comment": "Terra in the plaza (2026-09-30): the plaza test's set with a character in it and things added. See _make_plaza_terra_0930.py.",
+ "film": "plaza-terra",
+ "title": "TERRA IN THE PLAZA",
+ "logline": "On a market afternoon, a young woman stops by a fountain and looks at a cafe.",
+ "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, soft afternoon sunlight, gentle colours.",
+ "avoid": "lowres, blurry, morphing, warping, melting buildings, bending walls, flicker, deformed hands, extra fingers, extra limbs, two of the same person, subtitles, captions, watermark, nsfw",
+ "realism": "",
+ "score_tags": "gentle anime slice-of-life score, acoustic guitar, soft strings, instrumental, no vocals",
+ "place": {
+  "id": "plaza",
+  "prompt": "A small Italian hill-town square on a market afternoon, painted as an anime background."
+ },
+ "cast": {
+  "terra": {
+   "role": "Terra",
+   "prompt": "Terra from the front: her character sheet's front view."
+  },
+  "terra_back": {
+   "role": "Terra from behind",
+   "prompt": "Terra from behind: her character sheet's back view."
+  }
+ },
+ "shots": [
+  {
+   "id": "201",
+   "name": "the square, and her",
+   "title": "the square, and her",
+   "secs": 5,
+   "face": "none",
+   "engine": "previz",
+   "refs": [
+    "plaza",
+    "terra_back"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. A high wide view of a sunlit Italian hill-town square in the afternoon: the stone clock tower, the ochre cafe with its red-and-white striped awning, a fruit stall under a yellow striped canopy, strings of lights across the square, the round stone fountain with a red bicycle leaning on it. A young woman with long wavy sea-green hair tied with a red ribbon, a sleeveless red dress, a lilac sash and red boots stands alone near the fountain, looking toward the cafe. The camera glides slowly forward and down. Water splashes in the fountain; her hair and sash stir in the breeze. Sound: the fountain splashing, a light breeze, distant swallows, the murmur of a market. No music.",
+   "avoid_extra": "other people, a crowd, a second woman, a man, 3d render, cgi, photorealistic, live action",
+   "previz": {
+    "scene": "set",
+    "set": "plaza_market",
+    "frames": 121,
+    "masks": 8,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a painted anime background, clean line art, flat cel shading, soft afternoon sunlight. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing. The light grey standing figure is the young woman of <image2>, drawn in the same anime style - her long wavy sea-green hair, her red dress, her lilac sash, her red boots - standing exactly where the figure stands, in the same pose, facing the same way.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, soft afternoon sunlight, gentle colours.",
+    "figure_glb": "studio/sheets/terra-in-the-plaza-terra/model.glb",
+    "figure_at": [
+     6.5,
+     -2.5,
+     0.0
+    ],
+    "figure_turn": 90,
+    "figure_name": "terra",
+    "figure_height": 1.62,
+    "figure_sheet": "studio/sheets/terra-in-the-plaza-terra",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a painted anime background, clean line art, flat cel shading, soft afternoon sunlight. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "cam": [
+     -12,
+     -13,
+     9
+    ],
+    "cam_to": [
+     -10.5,
+     -11.5,
+     8.2
+    ],
+    "look": [
+     5,
+     1,
+     1.5
+    ],
+    "lens": 24,
+    "start": "anchor_201.png"
+   }
+  },
+  {
+   "id": "202",
+   "name": "her face",
+   "title": "her face",
+   "secs": 4,
+   "face": "none",
+   "engine": "previz",
+   "refs": [
+    "plaza",
+    "terra"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. A medium shot: a young woman with long wavy sea-green hair tied with a red ribbon, a sleeveless red dress, a lilac sash and red boots stands facing the camera in a sunlit Italian square, the round stone fountain and the white house with blue shutters behind her. She looks toward the cafe, then smiles softly; her hair and her lilac sash move in the breeze. The camera moves slowly closer. Sound: the fountain splashing, a light breeze, distant swallows, the murmur of a market. No music.",
+   "avoid_extra": "other people, a crowd, a second woman, a man, 3d render, cgi, photorealistic, live action",
+   "previz": {
+    "scene": "set",
+    "set": "plaza_market",
+    "frames": 97,
+    "masks": 8,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a painted anime background, clean line art, flat cel shading, soft afternoon sunlight. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing. The light grey standing figure is the young woman of <image2>, drawn in the same anime style - her long wavy sea-green hair, her red dress, her lilac sash, her red boots - standing exactly where the figure stands, in the same pose, facing the same way.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, soft afternoon sunlight, gentle colours.",
+    "figure_glb": "studio/sheets/terra-in-the-plaza-terra/model.glb",
+    "figure_at": [
+     6.5,
+     -2.5,
+     0.0
+    ],
+    "figure_turn": 90,
+    "figure_name": "terra",
+    "figure_height": 1.62,
+    "figure_sheet": "studio/sheets/terra-in-the-plaza-terra",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a painted anime background, clean line art, flat cel shading, soft afternoon sunlight. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "cam": [
+     11.5,
+     -2.9,
+     1.5
+    ],
+    "cam_to": [
+     10.6,
+     -2.8,
+     1.5
+    ],
+    "look": [
+     6.5,
+     -2.5,
+     1.35
+    ],
+    "lens": 40,
+    "start": "anchor_202.png"
+   }
+  },
+  {
+   "id": "203",
+   "name": "over her shoulder",
+   "title": "over her shoulder",
+   "secs": 4,
+   "face": "none",
+   "engine": "previz",
+   "refs": [
+    "plaza",
+    "terra_back"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. Over her shoulder: the long wavy sea-green hair and lilac sash of the young woman in the foreground on the left, looking across the square at the ochre cafe with its red-and-white striped awning, its green CAFFE sign, terracotta pots of red flowers and small tables outside; strings of lights overhead. She stands still; her hair stirs in the breeze. Sound: the fountain splashing, a light breeze, distant swallows, the murmur of a market. No music.",
+   "avoid_extra": "other people, a crowd, a second woman, a man, 3d render, cgi, photorealistic, live action",
+   "previz": {
+    "scene": "set",
+    "set": "plaza_market",
+    "frames": 97,
+    "masks": 8,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a painted anime background, clean line art, flat cel shading, soft afternoon sunlight. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing. The light grey standing figure is the young woman of <image2>, drawn in the same anime style - her long wavy sea-green hair, her red dress, her lilac sash, her red boots - standing exactly where the figure stands, in the same pose, facing the same way.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, soft afternoon sunlight, gentle colours.",
+    "figure_glb": "studio/sheets/terra-in-the-plaza-terra/model.glb",
+    "figure_at": [
+     6.5,
+     -2.5,
+     0.0
+    ],
+    "figure_turn": 90,
+    "figure_name": "terra",
+    "figure_height": 1.62,
+    "figure_sheet": "studio/sheets/terra-in-the-plaza-terra",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a painted anime background, clean line art, flat cel shading, soft afternoon sunlight. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "cam": [
+     4.6,
+     -3.4,
+     1.75
+    ],
+    "cam_to": [
+     4.85,
+     -3.3,
+     1.75
+    ],
+    "look": [
+     16,
+     -0.5,
+     2.0
+    ],
+    "lens": 32,
+    "start": "anchor_203.png"
+   }
+  },
+  {
+   "id": "204",
+   "name": "round her",
+   "title": "round her",
+   "secs": 5,
+   "face": "none",
+   "engine": "previz",
+   "refs": [
+    "plaza",
+    "terra"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. The camera circles slowly around a young woman with long wavy sea-green hair tied with a red ribbon, a sleeveless red dress, a lilac sash and red boots at a steady pace while she stands still beside the fountain, looking toward the cafe, her hair stirring; the square turns behind her: the town hall and the fruit stall, the white house and the plane tree, then the stone archway. Sound: the fountain splashing, a light breeze, distant swallows, the murmur of a market. No music.",
+   "avoid_extra": "other people, a crowd, a second woman, a man, 3d render, cgi, photorealistic, live action",
+   "previz": {
+    "scene": "set",
+    "set": "plaza_market",
+    "frames": 121,
+    "masks": 8,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a painted anime background, clean line art, flat cel shading, soft afternoon sunlight. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing. The light grey standing figure is the young woman of <image2>, drawn in the same anime style - her long wavy sea-green hair, her red dress, her lilac sash, her red boots - standing exactly where the figure stands, in the same pose, facing the same way.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, soft afternoon sunlight, gentle colours.",
+    "figure_glb": "studio/sheets/terra-in-the-plaza-terra/model.glb",
+    "figure_at": [
+     6.5,
+     -2.5,
+     0.0
+    ],
+    "figure_turn": 90,
+    "figure_name": "terra",
+    "figure_height": 1.62,
+    "figure_sheet": "studio/sheets/terra-in-the-plaza-terra",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a painted anime background, clean line art, flat cel shading, soft afternoon sunlight. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "cam": [
+     8.6,
+     -6.137,
+     1.6
+    ],
+    "arc": 120,
+    "arc_center": [
+     6.5,
+     -2.5,
+     0.0
+    ],
+    "look": [
+     6.5,
+     -2.5,
+     1.35
+    ],
+    "lens": 35,
+    "ease": "linear",
+    "start": "anchor_204.png"
+   }
+  }
+ ]
+}

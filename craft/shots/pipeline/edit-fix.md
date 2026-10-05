@@ -10,6 +10,7 @@
 - [`pipe-reference`](reference.md) - drawing the references
 - [`cont-asymmetric-mark`](../continuity/asymmetric-mark.md) - the most common thing an edit fixes
 - [`pipe-composite`](composite.md) - construct instead of asking an edit
+- [`pipe-key-poses`](key-poses.md) - a shot's frame edited into a pose that never existed, then anchored mid-take
 
 ## Recipe (v1, 2026-09-30)
 

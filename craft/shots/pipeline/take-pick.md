@@ -44,10 +44,16 @@ Two seeds on LTX-2.5 for every shot and two on H3 for every shot with a physical
 - **Got:** of the twelve shots rendered on both, H3 won eight (113, 202, 204, 301, 302, 303, 306, 309); an H3 first-last take won 112; LTX won everything else.
 - **Learned:** H3 for physical interaction; LTX for everything held.
 
+### 2026-09-30 · plaza test · picking by a measured fit to a 3D set · grade B
+- **Did:** start frames and takes picked by how well the set's map of surfaces fits them (`studio/_tools/set_measure.py`).
+- **Got:** the right pick on 6 of 7 start frames; on 108 the best fit (0.52) was the seed whose tree was still the set's flat green blob, and a seed with a real tree (0.40) was the better frame. On 104 the best-fitting take (depth only) had a maroon hall; the pick went to the take whose colours matched the film.
+- **Learned:** a fit to the render rewards whatever the dress left unpainted: the measure ranks, a person picks.
+
 ## Failure modes
 
 | symptom | cause | fix | seen in |
 |---|---|---|---|
+| the best-measured frame has a CG leftover | the fit rewards the render's own colours | look at the pick; take the next seed | plaza 108 |
 | H3 takes stall for half an hour | another process keeps the queue busy | one GPU stream at a time | cyber-alchemist H3 stage |
 | the film comes out short | H3 lengths are 17n+5 frames | plan on the takes' frames | cyber-alchemist (2:36 for 3:00) |
 

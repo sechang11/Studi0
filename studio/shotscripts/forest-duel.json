@@ -1,0 +1,2301 @@
+{
+ "_comment": "The duel in the clearing (2026-10-01): frames first in a set with physics. See _make_forest_duel_1001.py.",
+ "film": "forest-duel",
+ "title": "THE DUEL IN THE CLEARING",
+ "subtitle": "Terra and the jester",
+ "logline": "In a clearing ringed by standing stones, Terra and the jester fight it out with fists, fire and orbs.",
+ "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+ "avoid": "lowres, blurry, morphing, warping, melting, flicker, deformed hands, extra fingers, extra limbs, two of the same person, subtitles, captions, watermark, nsfw",
+ "realism": "",
+ "style": "shon",
+ "score_tags": "epic anime battle score, fast taiko drums, driving strings, brass stabs, electric guitar, instrumental, no vocals",
+ "place": {
+  "id": "clearing",
+  "prompt": "A forest clearing ringed by huge trees and standing stones, painted as an anime background."
+ },
+ "cast": {
+  "terra": {
+   "role": "Terra",
+   "prompt": "Terra: her character sheet (studio/sheets/terra-in-the-plaza-terra)."
+  },
+  "jester": {
+   "role": "the jester",
+   "prompt": "The jester: his character sheet (studio/sheets/forest-fight-the-jester)."
+  }
+ },
+ "shots": [
+  {
+   "id": "D01",
+   "name": "into the clearing",
+   "title": "into the clearing",
+   "secs": 3.04,
+   "face": "none",
+   "engine": "h3f",
+   "refs": [
+    "clearing",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. Wide and low, behind the young woman with long wavy sea-green hair, a red dress and red boots: she walks into a clearing ringed by standing stones; across it the lanky harlequin jester in a purple-and-yellow diamond costume and two-horned cap waits, juggling three glowing purple orbs; a gust tears leaves from the canopy and they swirl down between them. The camera pushes in slowly. The clearing, the trees, the standing stones and the light stay exactly as they are. Sound: wind, rustling leaves, the hum of the orbs, his soft giggle. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "duel",
+    "action": "duel:forest-duel:D01",
+    "frames": 73,
+    "masks": 8,
+    "endpoints": 1,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a forest clearing ringed by huge dark trees and old standing stones, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight falling into the clearing, drifting mist at its edges. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a forest clearing ringed by huge dark trees and old standing stones, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight falling into the clearing, drifting mist at its edges. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+    "cam": [
+     2.6,
+     15.5,
+     1.2
+    ],
+    "cam_to": [
+     2.3,
+     16.8,
+     1.2
+    ],
+    "look": [
+     0.6,
+     30.0,
+     1.8
+    ],
+    "look_to": [
+     0.6,
+     30.0,
+     1.7
+    ],
+    "lens": 26
+   }
+  },
+  {
+   "id": "D02",
+   "name": "the orbs",
+   "title": "the orbs",
+   "secs": 3.04,
+   "face": "none",
+   "engine": "h3f",
+   "refs": [
+    "clearing",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. A fight in the manner of a 90s shonen battle anime - glowing auras, speed lines, afterimages, a white impact frame on every hit. Closer on the lanky harlequin jester in a purple-and-yellow diamond costume and two-horned cap: he juggles three glowing purple orbs faster and faster, catches all three in one hand, grins wide, and hurls them one after another straight at the camera. The clearing, the trees, the standing stones and the light stay exactly as they are. Sound: the crackle of the orbs, his rising laughter, three sharp whooshes. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "duel",
+    "action": "duel:forest-duel:D02",
+    "frames": 73,
+    "masks": 8,
+    "endpoints": 1,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a forest clearing ringed by huge dark trees and old standing stones, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight falling into the clearing, drifting mist at its edges. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a forest clearing ringed by huge dark trees and old standing stones, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight falling into the clearing, drifting mist at its edges. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+    "cam": [
+     1.5,
+     27.6,
+     1.55
+    ],
+    "cam_to": [
+     1.6,
+     28.4,
+     1.55
+    ],
+    "look": [
+     3.0,
+     33.0,
+     1.75
+    ],
+    "lens": 45
+   }
+  },
+  {
+   "id": "D03",
+   "name": "the dodge",
+   "title": "the dodge",
+   "secs": 3.04,
+   "face": "none",
+   "engine": "h3f",
+   "refs": [
+    "clearing",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. A fight in the manner of a 90s shonen battle anime - glowing auras, speed lines, afterimages, a white impact frame on every hit. Side view: three glowing purple orbs streak in from the right at the young woman with long wavy sea-green hair, a red dress and red boots; she flips sideways out of their path and lands crouched; the orbs fly on and slam into the tree behind her one after another, blasting bark and splinters out of its trunk in bursts of purple light. The clearing, the trees, the standing stones and the light stay exactly as they are. Sound: three whooshes, three explosions, splintering wood, her landing. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "duel",
+    "action": "duel:forest-duel:D03",
+    "frames": 73,
+    "masks": 8,
+    "endpoints": 1,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a forest clearing ringed by huge dark trees and old standing stones, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight falling into the clearing, drifting mist at its edges. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a forest clearing ringed by huge dark trees and old standing stones, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight falling into the clearing, drifting mist at its edges. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+    "cam": [
+     6.5,
+     25.5,
+     1.3
+    ],
+    "look": [
+     -1.2,
+     23.4,
+     1.5
+    ],
+    "lens": 28
+   }
+  },
+  {
+   "id": "D04",
+   "name": "her answer",
+   "title": "her answer",
+   "secs": 3.04,
+   "face": "none",
+   "engine": "h3f",
+   "refs": [
+    "clearing",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. A fight in the manner of a 90s shonen battle anime - glowing auras, speed lines, afterimages, a white impact frame on every hit. Low angle on the young woman with long wavy sea-green hair, a red dress and red boots: flames ignite in both her hands and a bright orange aura flares up around her, her hair lifting in the heat; she thrusts both palms forward and fires a rapid volley of fireballs past the camera. The clearing, the trees, the standing stones and the light stay exactly as they are. Sound: the roar of igniting flame, a rising hum, three fiery whooshes. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "duel",
+    "action": "duel:forest-duel:D04",
+    "frames": 73,
+    "masks": 8,
+    "endpoints": 1,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a forest clearing ringed by huge dark trees and old standing stones, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight falling into the clearing, drifting mist at its edges. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a forest clearing ringed by huge dark trees and old standing stones, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight falling into the clearing, drifting mist at its edges. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+    "cam": [
+     1.5,
+     27.6,
+     0.55
+    ],
+    "look": [
+     0.8,
+     25.4,
+     1.45
+    ],
+    "lens": 30
+   }
+  },
+  {
+   "id": "D05",
+   "name": "his dodge",
+   "title": "his dodge",
+   "secs": 3.04,
+   "face": "none",
+   "engine": "h3f",
+   "refs": [
+    "clearing",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. A fight in the manner of a 90s shonen battle anime - glowing auras, speed lines, afterimages, a white impact frame on every hit. Wide: fireballs streak in from the left at the lanky harlequin jester in a purple-and-yellow diamond costume and two-horned cap; he cartwheels and flips out of their way, leaving a trail of afterimages; the fireballs fly on into the great boulder behind him, which bursts apart in a blast of fire and flying rock. The clearing, the trees, the standing stones and the light stay exactly as they are. Sound: fiery whooshes, his gleeful laugh, a thunderous explosion, rocks crashing down. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "duel",
+    "action": "duel:forest-duel:D05",
+    "frames": 73,
+    "masks": 8,
+    "endpoints": 1,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a forest clearing ringed by huge dark trees and old standing stones, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight falling into the clearing, drifting mist at its edges. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a forest clearing ringed by huge dark trees and old standing stones, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight falling into the clearing, drifting mist at its edges. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+    "cam": [
+     7.0,
+     29.2,
+     1.5
+    ],
+    "look": [
+     1.0,
+     34.6,
+     1.6
+    ],
+    "lens": 26
+   }
+  },
+  {
+   "id": "D06",
+   "name": "the grin",
+   "title": "the grin",
+   "secs": 3.04,
+   "face": "none",
+   "engine": "h3f",
+   "refs": [
+    "clearing",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. A fight in the manner of a 90s shonen battle anime - glowing auras, speed lines, afterimages, a white impact frame on every hit. Close on the lanky harlequin jester in a purple-and-yellow diamond costume and two-horned cap: soot on his chalk-white face; he wipes it off with his thumb, his grin widening; his eyes flare purple and a crackling purple aura erupts around him, his costume rippling in it. The clearing, the trees, the standing stones and the light stay exactly as they are. Sound: a low laugh, crackling energy rising, a deep rumble. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "duel",
+    "action": "duel:forest-duel:D06",
+    "frames": 73,
+    "masks": 8,
+    "endpoints": 1,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a forest clearing ringed by huge dark trees and old standing stones, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight falling into the clearing, drifting mist at its edges. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a forest clearing ringed by huge dark trees and old standing stones, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight falling into the clearing, drifting mist at its edges. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+    "cam": [
+     0.0,
+     31.0,
+     1.65
+    ],
+    "cam_to": [
+     -0.05,
+     31.4,
+     1.65
+    ],
+    "look": [
+     -0.6,
+     34.2,
+     1.75
+    ],
+    "lens": 50
+   }
+  },
+  {
+   "id": "D07",
+   "name": "the clash",
+   "title": "the clash",
+   "secs": 3.04,
+   "face": "none",
+   "engine": "h3f",
+   "refs": [
+    "clearing",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. A fight in the manner of a 90s shonen battle anime - glowing auras, speed lines, afterimages, a white impact frame on every hit. Side view: (1) the lanky harlequin jester in a purple-and-yellow diamond costume and two-horned cap streaks in from the right in a blur of purple afterimages and throws a punch at the young woman with long wavy sea-green hair, a red dress and red boots that she blocks on her raised forearm with a white flash; (2) a second punch - she parries it aside; (3) he spins into a high kick that she catches on both crossed forearms with a white flash; (4) their forearms lock, straining, and (5) a shockwave of dust, leaves and pebbles bursts outward from them across the ground. The clearing, the trees, the standing stones and the light stay exactly as they are. Sound: a rush of wind, rapid thuds and cracks, a booming impact, scattering pebbles. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "duel",
+    "action": "duel:forest-duel:D07",
+    "frames": 73,
+    "masks": 8,
+    "endpoints": 1,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a forest clearing ringed by huge dark trees and old standing stones, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight falling into the clearing, drifting mist at its edges. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a forest clearing ringed by huge dark trees and old standing stones, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight falling into the clearing, drifting mist at its edges. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+    "cam": [
+     3.9,
+     28.1,
+     1.3
+    ],
+    "look": [
+     0.35,
+     28.1,
+     1.35
+    ],
+    "lens": 30
+   },
+   "keys": [
+    {
+     "at": 20,
+     "from": "end",
+     "pose": "Edit <image1>: the harlequin jester has just streaked in, a blur of purple afterimages trailing behind him to the right, and his fist meets the raised forearm of the young woman with sea-green hair in a white flash of impact. Both stay where they stand in the picture, the same size; his hands are empty. Everything else - the clearing, the trees, the light, both of their costumes, faces and colours - stays exactly as it is; same camera, same framing.",
+     "seed": 11
+    },
+    {
+     "at": 42,
+     "from": "end",
+     "pose": "Edit <image1>: the harlequin jester spins into a high kick and the young woman with sea-green hair catches his shin on both crossed forearms in a white flash of impact. Both stay where they stand in the picture, the same size; his hands are empty. Everything else - the clearing, the trees, the light, both of their costumes, faces and colours - stays exactly as it is; same camera, same framing.",
+     "seed": 11
+    },
+    {
+     "at": "end",
+     "from": "end",
+     "pose": "Edit <image1>: the young woman with sea-green hair and the harlequin jester have locked forearms, straining against each other face to face, and a ring of dust, leaves and pebbles bursts outward from their feet across the ground. She stays side-on to the camera, in profile as she stands now, in her red dress and knee-high red boots. Both stay where they stand in the picture, the same size; his hands are empty. Everything else - the clearing, the trees, the light, both of their costumes, faces and colours - stays exactly as it is; same camera, same framing.",
+     "seed": 11
+    }
+   ]
+  },
+  {
+   "id": "D08",
+   "name": "the kick",
+   "title": "the kick",
+   "secs": 3.04,
+   "face": "none",
+   "engine": "h3f",
+   "refs": [
+    "clearing",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. A fight in the manner of a 90s shonen battle anime - glowing auras, speed lines, afterimages, a white impact frame on every hit. Low angle: the young woman with long wavy sea-green hair, a red dress and red boots spins and drives a kick into the jester's chest; he is launched backward across the clearing and smashes into a tree trunk, which snaps with a crack - the whole top of the tree topples away behind him and crashes into the forest; he drops to his feet, grinning. The clearing, the trees, the standing stones and the light stay exactly as they are. Sound: the kick's thud, a body slamming into wood, a huge crack, the crash of the falling tree, his giggle. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "duel",
+    "action": "duel:forest-duel:D08",
+    "frames": 73,
+    "masks": 8,
+    "endpoints": 1,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a forest clearing ringed by huge dark trees and old standing stones, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight falling into the clearing, drifting mist at its edges. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a forest clearing ringed by huge dark trees and old standing stones, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight falling into the clearing, drifting mist at its edges. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+    "cam": [
+     3.6,
+     22.8,
+     0.9
+    ],
+    "look": [
+     -2.5,
+     29.0,
+     1.6
+    ],
+    "lens": 26
+   }
+  },
+  {
+   "id": "D09",
+   "name": "in the air",
+   "title": "in the air",
+   "secs": 3.04,
+   "face": "none",
+   "engine": "h3f",
+   "refs": [
+    "clearing",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. A fight in the manner of a 90s shonen battle anime - glowing auras, speed lines, afterimages, a white impact frame on every hit. Wide, from low on the ground: the young woman with long wavy sea-green hair, a red dress and red boots and the lanky harlequin jester in a purple-and-yellow diamond costume and two-horned cap leap high into the air and meet above the clearing in a burst of light; the shockwave shakes the treetops and a rain of leaves pours down as they drop back to the ground on opposite sides. The clearing, the trees, the standing stones and the light stay exactly as they are. Sound: two leaps, a thunderous mid-air impact, the roar of shaken leaves, two landings. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "duel",
+    "action": "duel:forest-duel:D09",
+    "frames": 73,
+    "masks": 8,
+    "endpoints": 1,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a forest clearing ringed by huge dark trees and old standing stones, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight falling into the clearing, drifting mist at its edges. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a forest clearing ringed by huge dark trees and old standing stones, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight falling into the clearing, drifting mist at its edges. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+    "cam": [
+     0.6,
+     17.5,
+     0.5
+    ],
+    "look": [
+     -0.8,
+     29.0,
+     5.0
+    ],
+    "lens": 20
+   }
+  },
+  {
+   "id": "D10",
+   "name": "the blast",
+   "title": "the blast",
+   "secs": 4.38,
+   "face": "none",
+   "engine": "h3f",
+   "refs": [
+    "clearing",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. A fight in the manner of a 90s shonen battle anime - glowing auras, speed lines, afterimages, a white impact frame on every hit. Wide: the young woman with long wavy sea-green hair, a red dress and red boots raises both hands and a huge fireball swells above her; across the clearing the lanky harlequin jester in a purple-and-yellow diamond costume and two-horned cap gathers a giant purple orb; they hurl them and the two spells collide in the middle in a blinding explosion; the blast hurls the jester out of the clearing and tears three great trees out of the ground behind him, toppling them into the forest; she stands braced, her hair whipping in the shockwave, as the smoke rolls past. The clearing, the trees, the standing stones and the light stay exactly as they are. Sound: the roar of fire, crackling energy, an enormous explosion, splintering trunks, crashing trees, then wind. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "duel",
+    "action": "duel:forest-duel:D10",
+    "frames": 105,
+    "masks": 8,
+    "endpoints": 1,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a forest clearing ringed by huge dark trees and old standing stones, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight falling into the clearing, drifting mist at its edges. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a forest clearing ringed by huge dark trees and old standing stones, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight falling into the clearing, drifting mist at its edges. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+    "cam": [
+     6.0,
+     17.5,
+     2.4
+    ],
+    "look": [
+     0.0,
+     31.0,
+     3.0
+    ],
+    "lens": 22
+   }
+  },
+  {
+   "id": "E01",
+   "name": "the giggle",
+   "title": "the giggle",
+   "secs": 3.04,
+   "face": "none",
+   "engine": "h3f",
+   "refs": [
+    "clearing",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. Medium, low: the young woman with long wavy sea-green hair, a red dress and red boots lowers her hands, breathing hard, smoke drifting past her; a high giggle echoes from somewhere behind her and she whirls around. The clearing, the trees, the standing stones and the light stay exactly as they are. Sound: crackling embers, her breathing, a distant echoing giggle, the swish of her turning. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "duel",
+    "action": "duel:forest-duel:E01",
+    "frames": 73,
+    "masks": 73,
+    "endpoints": 1,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a forest clearing ringed by huge dark trees and old standing stones, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight falling into the clearing, drifting mist at its edges. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a forest clearing ringed by huge dark trees and old standing stones, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight falling into the clearing, drifting mist at its edges. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+    "cam": [
+     0.2,
+     23.0,
+     1.2
+    ],
+    "look": [
+     1.6,
+     25.2,
+     1.5
+    ],
+    "lens": 32
+   }
+  },
+  {
+   "id": "E02",
+   "name": "three of him",
+   "title": "three of him",
+   "secs": 3.04,
+   "face": "none",
+   "engine": "h3f",
+   "refs": [
+    "clearing",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. A fight in the manner of a 90s shonen battle anime - glowing auras, speed lines, afterimages, a white impact frame on every hit. Over her shoulder: at the far edge of the clearing the lanky harlequin jester in a purple-and-yellow diamond costume and two-horned cap stands on the path, unharmed, his costume smoking; he bows deeply, snaps his fingers, and two more identical grinning jesters step out from behind him; all three scatter into the trees. The clearing, the trees, the standing stones and the light stay exactly as they are. Sound: a sizzle of smoke, his laughter, a finger snap, a shimmering chime, rustling branches. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "duel",
+    "action": "duel:forest-duel:E02",
+    "frames": 73,
+    "masks": 73,
+    "endpoints": 1,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a forest clearing ringed by huge dark trees and old standing stones, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight falling into the clearing, drifting mist at its edges. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a forest clearing ringed by huge dark trees and old standing stones, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight falling into the clearing, drifting mist at its edges. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+    "cam": [
+     2.2,
+     27.6,
+     1.65
+    ],
+    "look": [
+     1.3,
+     18.6,
+     1.2
+    ],
+    "lens": 35
+   }
+  },
+  {
+   "id": "E03",
+   "name": "she runs",
+   "title": "she runs",
+   "secs": 3.04,
+   "face": "none",
+   "engine": "h3f",
+   "refs": [
+    "clearing",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. A fight in the manner of a 90s shonen battle anime - glowing auras, speed lines, afterimages, a white impact frame on every hit. T runs straight at the camera down the forest path, hair streaming, fire flickering around her fists; the camera rushes backward ahead of her at her speed; purple afterimages of the jester flicker between the trees on either side.he young woman with long wavy sea-green hair, a red dress and red boots The forest, the path, the trees and the light stay exactly as they are. Sound: her running footsteps, rushing wind, crackling flames, giggles panning past. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "duel",
+    "action": "duel:forest-duel:E03",
+    "frames": 73,
+    "masks": 73,
+    "endpoints": 1,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+    "cam": [
+     1.25,
+     19.6,
+     1.15
+    ],
+    "cam_to": [
+     1.3,
+     13.4,
+     1.15
+    ],
+    "look": [
+     1.4,
+     23.0,
+     1.35
+    ],
+    "look_to": [
+     1.4,
+     16.6,
+     1.35
+    ],
+    "lens": 32
+   }
+  },
+  {
+   "id": "E04",
+   "name": "the ambush",
+   "title": "the ambush",
+   "secs": 3.04,
+   "face": "none",
+   "engine": "h3f",
+   "refs": [
+    "clearing",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. A fight in the manner of a 90s shonen battle anime - glowing auras, speed lines, afterimages, a white impact frame on every hit. High angle: as the young woman with long wavy sea-green hair, a red dress and red boots reaches the bend in the path, three identical grinning jesters drop out of the trees around her and land in a ring, crouching, then rise and spread their arms wide. The forest, the path, the trees and the light stay exactly as they are. Sound: rustling branches, three thuds, triple laughter in unison. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "duel",
+    "action": "duel:forest-duel:E04",
+    "frames": 73,
+    "masks": 73,
+    "endpoints": 1,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+    "cam": [
+     5.5,
+     20.0,
+     6.0
+    ],
+    "look": [
+     1.3,
+     14.5,
+     0.6
+    ],
+    "lens": 24
+   }
+  },
+  {
+   "id": "E05",
+   "name": "the fire ring",
+   "title": "the fire ring",
+   "secs": 3.04,
+   "face": "none",
+   "engine": "h3f",
+   "refs": [
+    "clearing",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. A fight in the manner of a 90s shonen battle anime - glowing auras, speed lines, afterimages, a white impact frame on every hit. T spins on one foot and a ring of fire blasts outward from her, ripping up dust and leaves; two of the jesters burst into puffs of purple smoke and confetti - illusions - and the real one back-flips out of the flames and lands further down the path, grinning.he young woman with long wavy sea-green hair, a red dress and red boots The forest, the path, the trees and the light stay exactly as they are. Sound: a roar of flame, two pops, a shower of confetti, his laugh. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "duel",
+    "action": "duel:forest-duel:E05",
+    "frames": 73,
+    "masks": 73,
+    "endpoints": 1,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+    "cam": [
+     -3.6,
+     17.2,
+     1.35
+    ],
+    "look": [
+     1.5,
+     14.0,
+     1.2
+    ],
+    "lens": 26
+   }
+  },
+  {
+   "id": "E05b",
+   "name": "deflected",
+   "title": "deflected",
+   "secs": 3.04,
+   "face": "none",
+   "engine": "h3f",
+   "refs": [
+    "clearing",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. A fight in the manner of a 90s shonen battle anime - glowing auras, speed lines, afterimages, a white impact frame on every hit. Over her shoulder: (1) the jester flings a volley of glowing purple orbs at the young woman with long wavy sea-green hair, a red dress and red boots; (2) she swats each one aside with a flaming palm, left, right, left, (3) the deflected orbs ricocheting away into a tree at the bend, which bursts in sprays of bark and purple sparks; (4) he claps, delighted. The forest, the path, the trees and the light stay exactly as they are. Sound: whooshes, three sharp slaps of fire, explosions in the trees, splintering bark, his applause. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "duel",
+    "action": "duel:forest-duel:E05b",
+    "frames": 73,
+    "masks": 73,
+    "endpoints": 1,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+    "cam": [
+     3.8,
+     18.6,
+     1.4
+    ],
+    "look": [
+     1.3,
+     13.4,
+     1.4
+    ],
+    "lens": 30
+   }
+  },
+  {
+   "id": "E06",
+   "name": "the chase",
+   "title": "the chase",
+   "secs": 3.04,
+   "face": "none",
+   "engine": "h3f",
+   "refs": [
+    "clearing",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. A fight in the manner of a 90s shonen battle anime - glowing auras, speed lines, afterimages, a white impact frame on every hit. Tracking alongside them: the lanky harlequin jester in a purple-and-yellow diamond costume and two-horned cap backs away down the path in cartwheels, flinging glowing purple orbs at the young woman with long wavy sea-green hair, a red dress and red boots; she weaves between them and keeps coming; one orb bursts against a tree trunk beside the path in a spray of bark and purple sparks. The forest, the path, the trees and the light stay exactly as they are. Sound: running feet, whooshes, an explosion, splintering bark, his cackle. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "duel",
+    "action": "duel:forest-duel:E06",
+    "frames": 73,
+    "masks": 73,
+    "endpoints": 1,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+    "cam": [
+     -2.6,
+     15.0,
+     1.3
+    ],
+    "cam_to": [
+     -2.6,
+     12.4,
+     1.3
+    ],
+    "look": [
+     1.3,
+     13.8,
+     1.2
+    ],
+    "look_to": [
+     1.2,
+     11.4,
+     1.2
+    ],
+    "lens": 28
+   }
+  },
+  {
+   "id": "E06b",
+   "name": "up the trunks",
+   "title": "up the trunks",
+   "secs": 3.04,
+   "face": "none",
+   "engine": "h3f",
+   "refs": [
+    "clearing",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. A fight in the manner of a 90s shonen battle anime - glowing auras, speed lines, afterimages, a white impact frame on every hit. Looking up from the path, wuxia style: the jester runs straight up a tree trunk and leaps to the next, and the young woman with long wavy sea-green hair, a red dress and red boots runs up after him; they bound from trunk to trunk high above the path, light and graceful, then drop back down onto the path facing each other. The forest, the path, the trees and the light stay exactly as they are. Sound: quick light footfalls on bark, rushing air, rustling leaves, two soft landings. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "duel",
+    "action": "duel:forest-duel:E06b",
+    "frames": 73,
+    "masks": 73,
+    "endpoints": 1,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+    "cam": [
+     0.0,
+     15.2,
+     0.5
+    ],
+    "look": [
+     1.0,
+     9.0,
+     6.0
+    ],
+    "lens": 20
+   }
+  },
+  {
+   "id": "E06c",
+   "name": "among the branches",
+   "title": "among the branches",
+   "secs": 3.04,
+   "face": "none",
+   "engine": "h3f",
+   "refs": [
+    "clearing",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. A fight in the manner of a 90s shonen battle anime - glowing auras, speed lines, afterimages, a white impact frame on every hit. High among the branches: the young woman with long wavy sea-green hair, a red dress and red boots and the jester meet in mid-air between the trunks and trade three blows in a blur - a kick, a block, a palm strike - each with a white impact flash; the shock shakes a shower of leaves from the canopy as they fall away from each other. The forest, the path, the trees and the light stay exactly as they are. Sound: three sharp impacts, rushing wind, a roar of shaken leaves. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "duel",
+    "action": "duel:forest-duel:E06c",
+    "frames": 73,
+    "masks": 73,
+    "endpoints": 1,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+    "cam": [
+     4.6,
+     12.2,
+     3.2
+    ],
+    "look": [
+     1.0,
+     11.0,
+     4.6
+    ],
+    "lens": 26
+   }
+  },
+  {
+   "id": "E07",
+   "name": "the oak falls",
+   "title": "the oak falls",
+   "secs": 3.04,
+   "face": "none",
+   "engine": "h3f",
+   "refs": [
+    "clearing",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. A fight in the manner of a 90s shonen battle anime - glowing auras, speed lines, afterimages, a white impact frame on every hit. Wide, from down the path: the young woman with long wavy sea-green hair, a red dress and red boots hurls a blazing fireball past the jester into the base of a huge old oak beside the path; the trunk explodes and the whole tree topples across the path in front of him with a thunderous crash; he skids to a stop at the fallen trunk and spins around to face her. The forest, the path, the trees and the light stay exactly as they are. Sound: a fireball's roar, an explosion, splintering wood, the crash of the oak, his skidding feet. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "duel",
+    "action": "duel:forest-duel:E07",
+    "frames": 73,
+    "masks": 73,
+    "endpoints": 1,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+    "cam": [
+     -0.8,
+     1.5,
+     1.1
+    ],
+    "look": [
+     1.4,
+     10.0,
+     2.6
+    ],
+    "lens": 24
+   }
+  },
+  {
+   "id": "E08",
+   "name": "cornered",
+   "title": "cornered",
+   "secs": 2.38,
+   "face": "none",
+   "engine": "h3f",
+   "refs": [
+    "clearing",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. Close on the lanky harlequin jester in a purple-and-yellow diamond costume and two-horned cap, cornered against the fallen trunk: he glances back at it, then at her, and his grin stretches wider; purple flames flicker up around his hands. The forest, the path, the trees and the light stay exactly as they are. Sound: his low chuckle, crackling purple flame, settling wood. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "duel",
+    "action": "duel:forest-duel:E08",
+    "frames": 57,
+    "masks": 57,
+    "endpoints": 1,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+    "cam": [
+     0.7,
+     11.6,
+     1.75
+    ],
+    "look": [
+     1.1,
+     9.6,
+     1.85
+    ],
+    "lens": 50
+   }
+  },
+  {
+   "id": "E09",
+   "name": "at the trunk",
+   "title": "at the trunk",
+   "secs": 3.04,
+   "face": "none",
+   "engine": "h3f",
+   "refs": [
+    "clearing",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. A fight in the manner of a 90s shonen battle anime - glowing auras, speed lines, afterimages, a white impact frame on every hit. Side view: (1) the young woman with long wavy sea-green hair, a red dress and red boots rushes him; (2) the jester ducks her flaming punch and snaps a kick at her head; (3) she blocks it with her forearm in a white flash; (4) she drives her knee into his stomach and (5) he folds and slides back against the fallen trunk, dust bursting from the bark. The forest, the path, the trees and the light stay exactly as they are. Sound: rushing feet, a whoosh of fire, the crack of the block, a thud, his gasp, the trunk shuddering. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "duel",
+    "action": "duel:forest-duel:E09",
+    "frames": 73,
+    "masks": 73,
+    "endpoints": 1,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+    "cam": [
+     6.0,
+     11.0,
+     1.3
+    ],
+    "look": [
+     1.2,
+     10.3,
+     1.2
+    ],
+    "lens": 30
+   }
+  },
+  {
+   "id": "E09b",
+   "name": "trading blows",
+   "title": "trading blows",
+   "secs": 3.04,
+   "face": "none",
+   "engine": "h3f",
+   "refs": [
+    "clearing",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. A fight in the manner of a 90s shonen battle anime - glowing auras, speed lines, afterimages, a white impact frame on every hit. (1) The jester answers with a spinning backfist; (2) the young woman with long wavy sea-green hair, a red dress and red boots ducks under it and (3) drives two fast punches into his ribs; (4) he slaps her third punch aside and (5) kicks her in the stomach, sliding her back a step, (6) and giggles. The forest, the path, the trees and the light stay exactly as they are. Sound: a whoosh, two thuds, a slap, a kick, scuffing feet, his giggle. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "duel",
+    "action": "duel:forest-duel:E09b",
+    "frames": 73,
+    "masks": 73,
+    "endpoints": 1,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+    "cam": [
+     -3.4,
+     11.8,
+     1.2
+    ],
+    "look": [
+     1.3,
+     10.2,
+     1.3
+    ],
+    "lens": 30
+   }
+  },
+  {
+   "id": "E09c",
+   "name": "the elbow",
+   "title": "the elbow",
+   "secs": 2.38,
+   "face": "none",
+   "engine": "h3f",
+   "refs": [
+    "clearing",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. A fight in the manner of a 90s shonen battle anime - glowing auras, speed lines, afterimages, a white impact frame on every hit. Close and fast: the young woman with long wavy sea-green hair, a red dress and red boots catches his wrist, steps in and drives her elbow into his jaw in a white flash; his head snaps back and his cap's bells jangle. The forest, the path, the trees and the light stay exactly as they are. Sound: a grab, a sharp crack, jangling bells. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "duel",
+    "action": "duel:forest-duel:E09c",
+    "frames": 57,
+    "masks": 57,
+    "endpoints": 1,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+    "cam": [
+     4.2,
+     10.8,
+     1.5
+    ],
+    "look": [
+     1.35,
+     10.2,
+     1.45
+    ],
+    "lens": 40
+   }
+  },
+  {
+   "id": "E10",
+   "name": "over the trunk",
+   "title": "over the trunk",
+   "secs": 3.04,
+   "face": "none",
+   "engine": "h3f",
+   "refs": [
+    "clearing",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. A fight in the manner of a 90s shonen battle anime - glowing auras, speed lines, afterimages, a white impact frame on every hit. Low angle: the jester springs backward off the fallen trunk in a high somersault over it and lands crouched on the far side, then wags a finger at the young woman with long wavy sea-green hair, a red dress and red boots and beckons her on. The forest, the path, the trees and the light stay exactly as they are. Sound: a spring, a whoosh, a soft landing, his singsong giggle. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "duel",
+    "action": "duel:forest-duel:E10",
+    "frames": 73,
+    "masks": 73,
+    "endpoints": 1,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+    "cam": [
+     -3.0,
+     10.5,
+     0.8
+    ],
+    "look": [
+     1.0,
+     8.5,
+     1.3
+    ],
+    "lens": 26
+   }
+  },
+  {
+   "id": "F01",
+   "name": "auras",
+   "title": "auras",
+   "secs": 3.04,
+   "face": "none",
+   "engine": "h3f",
+   "refs": [
+    "clearing",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. A fight in the manner of a 90s shonen battle anime - glowing auras, speed lines, afterimages, a white impact frame on every hit. Wide and low: the young woman with long wavy sea-green hair, a red dress and red boots vaults over the fallen trunk and lands facing the jester; both their auras flare up - hers orange fire, his crackling purple - the ground cracking between them and pebbles lifting off it; the leaves around them are torn from the branches and swirl down. The forest, the path, the trees and the light stay exactly as they are. Sound: a leap, a landing, two roaring auras, cracking earth, a rising hum. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "duel",
+    "action": "duel:forest-duel:F01",
+    "frames": 73,
+    "masks": 73,
+    "endpoints": 1,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+    "cam": [
+     -3.6,
+     1.0,
+     0.7
+    ],
+    "look": [
+     0.8,
+     5.0,
+     1.5
+    ],
+    "lens": 24
+   }
+  },
+  {
+   "id": "F02",
+   "name": "fists meet",
+   "title": "fists meet",
+   "secs": 3.04,
+   "face": "none",
+   "engine": "h3f",
+   "refs": [
+    "clearing",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. A fight in the manner of a 90s shonen battle anime - glowing auras, speed lines, afterimages, a white impact frame on every hit. Side view: they dash at each other and their fists meet in the middle with a blinding flash; a shockwave ring of dust and leaves bursts outward across the path; speed lines, the camera shaking. The forest, the path, the trees and the light stay exactly as they are. Sound: two rushes of wind, a thunderous impact, a booming shockwave, scattering pebbles. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "duel",
+    "action": "duel:forest-duel:F02",
+    "frames": 73,
+    "masks": 73,
+    "endpoints": 1,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+    "cam": [
+     5.0,
+     4.6,
+     1.2
+    ],
+    "look": [
+     0.6,
+     4.3,
+     1.3
+    ],
+    "lens": 28
+   }
+  },
+  {
+   "id": "F02b",
+   "name": "blur",
+   "title": "blur",
+   "secs": 3.04,
+   "face": "none",
+   "engine": "h3f",
+   "refs": [
+    "clearing",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. A fight in the manner of a 90s shonen battle anime - glowing auras, speed lines, afterimages, a white impact frame on every hit. At blur speed: they trade a storm of punches and kicks too fast to follow, afterimages smearing behind every limb, white flashes popping like fireworks between them; dust spirals up from their feet. The forest, the path, the trees and the light stay exactly as they are. Sound: a rapid drumroll of impacts, whooshing limbs, crackling energy. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "duel",
+    "action": "duel:forest-duel:F02b",
+    "frames": 73,
+    "masks": 73,
+    "endpoints": 1,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+    "cam": [
+     -3.8,
+     4.0,
+     1.0
+    ],
+    "look": [
+     0.7,
+     4.3,
+     1.3
+    ],
+    "lens": 26
+   }
+  },
+  {
+   "id": "F02c",
+   "name": "the furrows",
+   "title": "the furrows",
+   "secs": 3.04,
+   "face": "none",
+   "engine": "h3f",
+   "refs": [
+    "clearing",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. A fight in the manner of a 90s shonen battle anime - glowing auras, speed lines, afterimages, a white impact frame on every hit. Low angle: a palm strike from the jester catches the young woman with long wavy sea-green hair, a red dress and red boots square in the chest; she is driven back across the path on her heels, her boots ploughing two long furrows through the dirt in a spray of dust and pebbles, until she stops, still standing, and wipes her mouth. The forest, the path, the trees and the light stay exactly as they are. Sound: a heavy impact, scraping boots, spraying gravel, a breath. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "duel",
+    "action": "duel:forest-duel:F02c",
+    "frames": 73,
+    "masks": 73,
+    "endpoints": 1,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+    "cam": [
+     4.8,
+     7.6,
+     0.8
+    ],
+    "look": [
+     0.7,
+     4.0,
+     1.0
+    ],
+    "lens": 26
+   }
+  },
+  {
+   "id": "F03",
+   "name": "locked",
+   "title": "locked",
+   "secs": 2.38,
+   "face": "none",
+   "engine": "h3f",
+   "refs": [
+    "clearing",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. A fight in the manner of a 90s shonen battle anime - glowing auras, speed lines, afterimages, a white impact frame on every hit. Close on their locked fists and forearms, straining against each other; sparks of orange fire and purple energy spit and crackle from the contact; his grin and her gritted teeth at the edges of the frame. The forest, the path, the trees and the light stay exactly as they are. Sound: grinding pressure, crackling sparks, two strained breaths. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "duel",
+    "action": "duel:forest-duel:F03",
+    "frames": 57,
+    "masks": 57,
+    "endpoints": 1,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+    "cam": [
+     2.6,
+     4.6,
+     1.35
+    ],
+    "look": [
+     0.7,
+     4.3,
+     1.3
+    ],
+    "lens": 50
+   }
+  },
+  {
+   "id": "F04",
+   "name": "thrown",
+   "title": "thrown",
+   "secs": 3.04,
+   "face": "none",
+   "engine": "h3f",
+   "refs": [
+    "clearing",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. A fight in the manner of a 90s shonen battle anime - glowing auras, speed lines, afterimages, a white impact frame on every hit. (1) The jester twists, seizes her wrist and (2) spins, hurling the young woman with long wavy sea-green hair, a red dress and red boots across the path; (3) she smashes back-first into a tree trunk and it snaps with a crack, (4) the whole top of the tree toppling away into the forest; (5) she drops to her feet among the splinters. The forest, the path, the trees and the light stay exactly as they are. Sound: a grunt, a whoosh, a body hitting wood, a huge crack, the crash of the falling tree. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "duel",
+    "action": "duel:forest-duel:F04",
+    "frames": 73,
+    "masks": 73,
+    "endpoints": 1,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+    "cam": [
+     -3.6,
+     5.5,
+     1.3
+    ],
+    "look": [
+     1.8,
+     4.4,
+     1.6
+    ],
+    "lens": 26
+   }
+  },
+  {
+   "id": "F05",
+   "name": "her eyes",
+   "title": "her eyes",
+   "secs": 2.38,
+   "face": "none",
+   "engine": "h3f",
+   "refs": [
+    "clearing",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. A fight in the manner of a 90s shonen battle anime - glowing auras, speed lines, afterimages, a white impact frame on every hit. Close on the face of the young woman with long wavy sea-green hair, a red dress and red boots as she rises from the splinters: her eyes blaze, and a roaring orange aura erupts around her head and shoulders, her hair lifting in the heat. The camera stays close on her face the whole time, one unbroken close-up. The forest, the path, the trees and the light stay exactly as they are. Sound: settling splinters, a sharp intake of breath, the roar of her aura. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "duel",
+    "action": "duel:forest-duel:F05",
+    "frames": 57,
+    "masks": 57,
+    "endpoints": 1,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+    "cam": [
+     1.0,
+     4.9,
+     1.45
+    ],
+    "look": [
+     2.3,
+     4.6,
+     1.5
+    ],
+    "lens": 45
+   }
+  },
+  {
+   "id": "F05b",
+   "name": "fire comet",
+   "title": "fire comet",
+   "secs": 3.04,
+   "face": "none",
+   "engine": "h3f",
+   "refs": [
+    "clearing",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. A fight in the manner of a 90s shonen battle anime - glowing auras, speed lines, afterimages, a white impact frame on every hit. The young woman with long wavy sea-green hair, a red dress and red boots launches herself at the jester wreathed in fire like a comet; she tackles him and they tumble over and over across the path in a rolling ball of flame and dust, then kick apart and spring back to their feet. The forest, the path, the trees and the light stay exactly as they are. Sound: a roaring launch, a crash, tumbling bodies, a burst of flame, two landings. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "duel",
+    "action": "duel:forest-duel:F05b",
+    "frames": 73,
+    "masks": 73,
+    "endpoints": 1,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+    "cam": [
+     -3.0,
+     7.2,
+     1.2
+    ],
+    "look": [
+     1.4,
+     4.2,
+     1.2
+    ],
+    "lens": 26
+   }
+  },
+  {
+   "id": "F06",
+   "name": "the fire whip",
+   "title": "the fire whip",
+   "secs": 3.04,
+   "face": "none",
+   "engine": "h3f",
+   "refs": [
+    "clearing",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. A fight in the manner of a 90s shonen battle anime - glowing auras, speed lines, afterimages, a white impact frame on every hit. High angle: the young woman with long wavy sea-green hair, a red dress and red boots lashes a long whip of fire at the jester; he cartwheels away from it down the path; the whip slices clean through a tree beside the path, and the severed top crashes down into the forest. The forest, the path, the trees and the light stay exactly as they are. Sound: the crack and roar of the fire whip, his cartwheels, a slicing hiss, a falling tree. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "duel",
+    "action": "duel:forest-duel:F06",
+    "frames": 73,
+    "masks": 73,
+    "endpoints": 1,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+    "cam": [
+     3.8,
+     9.0,
+     2.6
+    ],
+    "look": [
+     0.9,
+     2.2,
+     0.9
+    ],
+    "lens": 24
+   }
+  },
+  {
+   "id": "F06b",
+   "name": "the serpents",
+   "title": "the serpents",
+   "secs": 3.04,
+   "face": "none",
+   "engine": "h3f",
+   "refs": [
+    "clearing",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. A fight in the manner of a 90s shonen battle anime - glowing auras, speed lines, afterimages, a white impact frame on every hit. The jester juggles three purple orbs, and they stretch into three glowing serpents of purple light that coil through the air at the young woman with long wavy sea-green hair, a red dress and red boots; she spins and her fire catches all three, and they burst into purple sparks. The forest, the path, the trees and the light stay exactly as they are. Sound: an eerie hiss, crackling energy, a roar of flame, three bursts. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "duel",
+    "action": "duel:forest-duel:F06b",
+    "frames": 73,
+    "masks": 73,
+    "endpoints": 1,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+    "cam": [
+     4.4,
+     5.6,
+     1.4
+    ],
+    "look": [
+     0.8,
+     2.4,
+     1.5
+    ],
+    "lens": 26
+   }
+  },
+  {
+   "id": "F07",
+   "name": "the whirlwind",
+   "title": "the whirlwind",
+   "secs": 3.04,
+   "face": "none",
+   "engine": "h3f",
+   "refs": [
+    "clearing",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. A fight in the manner of a 90s shonen battle anime - glowing auras, speed lines, afterimages, a white impact frame on every hit. Wide and low: the jester spins faster and faster until he becomes a howling tornado of purple energy that tears leaves, dust and pebbles up into a spiral; it surges toward the young woman with long wavy sea-green hair, a red dress and red boots and she braces, her hair and dress whipping. The forest, the path, the trees and the light stay exactly as they are. Sound: a rising howl of wind, crackling energy, swirling debris. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "duel",
+    "action": "duel:forest-duel:F07",
+    "frames": 73,
+    "masks": 73,
+    "endpoints": 1,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+    "cam": [
+     -2.8,
+     -3.5,
+     0.6
+    ],
+    "look": [
+     0.8,
+     2.8,
+     2.0
+    ],
+    "lens": 22
+   }
+  },
+  {
+   "id": "F07b",
+   "name": "orb rain",
+   "title": "orb rain",
+   "secs": 3.04,
+   "face": "none",
+   "engine": "h3f",
+   "refs": [
+    "clearing",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. A fight in the manner of a 90s shonen battle anime - glowing auras, speed lines, afterimages, a white impact frame on every hit. The jester rides the top of his tornado up into the treetops and rains glowing purple orbs down on the young woman with long wavy sea-green hair, a red dress and red boots; she dashes and flips between them as they hit the path behind her one after another, each blowing a crater of dirt and pebbles into the air. The forest, the path, the trees and the light stay exactly as they are. Sound: a howling wind, a rain of whistling orbs, a string of explosions, her quick footsteps. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "duel",
+    "action": "duel:forest-duel:F07b",
+    "frames": 73,
+    "masks": 73,
+    "endpoints": 1,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+    "cam": [
+     -3.4,
+     8.6,
+     1.0
+    ],
+    "look": [
+     0.8,
+     3.0,
+     2.6
+    ],
+    "lens": 22
+   }
+  },
+  {
+   "id": "F07c",
+   "name": "slow motion",
+   "title": "slow motion",
+   "secs": 2.38,
+   "face": "none",
+   "engine": "h3f",
+   "refs": [
+    "clearing",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. A fight in the manner of a 90s shonen battle anime - glowing auras, speed lines, afterimages, a white impact frame on every hit. In slow motion, close on the young woman with long wavy sea-green hair, a red dress and red boots: a glowing purple orb streaks straight at her face and she sways back from the waist, the orb passing a hand's width from her nose, its light sliding across her eyes, a strand of her hair lifting in its wake. The forest, the path, the trees and the light stay exactly as they are. Sound: a long, slowed whoosh, a low hum, then sound snapping back to speed. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "duel",
+    "action": "duel:forest-duel:F07c",
+    "frames": 57,
+    "masks": 57,
+    "endpoints": 1,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+    "cam": [
+     0.92,
+     3.85,
+     1.5
+    ],
+    "look": [
+     1.4,
+     5.0,
+     1.52
+    ],
+    "lens": 50
+   }
+  },
+  {
+   "id": "F08",
+   "name": "through the storm",
+   "title": "through the storm",
+   "secs": 3.04,
+   "face": "none",
+   "engine": "h3f",
+   "refs": [
+    "clearing",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. A fight in the manner of a 90s shonen battle anime - glowing auras, speed lines, afterimages, a white impact frame on every hit. Side view: the young woman with long wavy sea-green hair, a red dress and red boots thrusts both palms into the tornado and a spiral of fire bores straight through it; the tornado explodes and the jester is flung spinning high into the air. The forest, the path, the trees and the light stay exactly as they are. Sound: a roaring fire spiral, an explosion, his surprised yelp spiralling upward. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "duel",
+    "action": "duel:forest-duel:F08",
+    "frames": 73,
+    "masks": 73,
+    "endpoints": 1,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+    "cam": [
+     5.0,
+     3.6,
+     1.3
+    ],
+    "look": [
+     0.9,
+     3.8,
+     1.8
+    ],
+    "lens": 26
+   }
+  },
+  {
+   "id": "F09",
+   "name": "in the air",
+   "title": "in the air",
+   "secs": 3.04,
+   "face": "none",
+   "engine": "h3f",
+   "refs": [
+    "clearing",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. A fight in the manner of a 90s shonen battle anime - glowing auras, speed lines, afterimages, a white impact frame on every hit. Looking up from the ground: the young woman with long wavy sea-green hair, a red dress and red boots leaps into the air after the spinning jester and hits him three times in mid-air - a punch, a knee, a spinning kick - each with a white impact flash and speed lines, then spikes him straight down out of frame. The forest, the path, the trees and the light stay exactly as they are. Sound: a leap, three sharp impacts, a final booming kick, a whoosh downward. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "duel",
+    "action": "duel:forest-duel:F09",
+    "frames": 73,
+    "masks": 73,
+    "endpoints": 1,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+    "cam": [
+     2.6,
+     9.6,
+     0.4
+    ],
+    "look": [
+     0.9,
+     3.5,
+     6.0
+    ],
+    "lens": 20
+   }
+  },
+  {
+   "id": "F10",
+   "name": "the crater",
+   "title": "the crater",
+   "secs": 3.04,
+   "face": "none",
+   "engine": "h3f",
+   "refs": [
+    "clearing",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. A fight in the manner of a 90s shonen battle anime - glowing auras, speed lines, afterimages, a white impact frame on every hit. The jester crashes down into the path like a meteor: the dirt blasts open into a crater and a ring of earth, pebbles and dust sprays outward; a beat later he springs up out of the crater onto his feet, laughing, and dusts off his cap; the young woman with long wavy sea-green hair, a red dress and red boots lands beyond him. The forest, the path, the trees and the light stay exactly as they are. Sound: a ground-shaking impact, raining dirt, a spring, his manic laugh, her landing. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "duel",
+    "action": "duel:forest-duel:F10",
+    "frames": 73,
+    "masks": 73,
+    "endpoints": 1,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+    "cam": [
+     -3.5,
+     0.0,
+     1.0
+    ],
+    "look": [
+     0.8,
+     2.0,
+     1.0
+    ],
+    "lens": 26
+   },
+   "keys": [
+    {
+     "at": 10,
+     "from": "end",
+     "erase": "Edit <image1>: remove the young woman with sea-green hair and fill in the forest and the path behind her. The harlequin jester stays exactly as he is; everything else stays exactly as it is; same camera, same framing.",
+     "pose": "Edit <image1>: the harlequin jester has just crashed down from the sky into the middle of the path: he is crouched low on one knee, his fist driven into the ground, and the dirt is erupting around him in a ring of earth, rocks and dust flying outward, a white impact flash under his fist. His face, costume and colours stay exactly as they are; the forest and the light stay exactly as they are; same camera, same framing.",
+     "seed": 202
+    }
+   ]
+  },
+  {
+   "id": "F10b",
+   "name": "pass through",
+   "title": "pass through",
+   "secs": 3.04,
+   "face": "none",
+   "engine": "h3f",
+   "refs": [
+    "clearing",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. A fight in the manner of a 90s shonen battle anime - glowing auras, speed lines, afterimages, a white impact frame on every hit. Side view: they charge at each other from either side and pass straight through each other in a blur - a single white slash of light between them - and land back to back; a beat of stillness, then both stagger, and the jester laughs. The forest, the path, the trees and the light stay exactly as they are. Sound: two rushing charges, a single sharp ring of steel-like light, silence, a stagger, his laugh. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "duel",
+    "action": "duel:forest-duel:F10b",
+    "frames": 73,
+    "masks": 73,
+    "endpoints": 1,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+    "cam": [
+     5.6,
+     2.2,
+     1.1
+    ],
+    "look": [
+     0.8,
+     2.2,
+     1.3
+    ],
+    "lens": 26
+   }
+  },
+  {
+   "id": "F11",
+   "name": "gathering",
+   "title": "gathering",
+   "secs": 3.04,
+   "face": "none",
+   "engine": "h3f",
+   "refs": [
+    "clearing",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. A fight in the manner of a 90s shonen battle anime - glowing auras, speed lines, afterimages, a white impact frame on every hit. Wide side view: they spring apart; the young woman with long wavy sea-green hair, a red dress and red boots draws both hands back and fire gathers between them into a blazing sphere; the jester raises both hands and a crackling purple orb swells above them. The forest, the path, the trees and the light stay exactly as they are. Sound: two leaps, a growing roar of fire, a rising electric whine. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "duel",
+    "action": "duel:forest-duel:F11",
+    "frames": 73,
+    "masks": 73,
+    "endpoints": 1,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+    "cam": [
+     6.5,
+     2.0,
+     1.5
+    ],
+    "look": [
+     0.6,
+     2.0,
+     1.6
+    ],
+    "lens": 24
+   }
+  },
+  {
+   "id": "F11b",
+   "name": "the magician",
+   "title": "the magician",
+   "secs": 3.04,
+   "face": "none",
+   "engine": "h3f",
+   "refs": [
+    "clearing",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. A fight in the manner of a 90s shonen battle anime - glowing auras, speed lines, afterimages, a white impact frame on every hit. The jester sweeps off his cap with a flourish and pulls from it a long string of glowing purple orbs, like a magician's knotted scarves, and whips the whole string at the young woman with long wavy sea-green hair, a red dress and red boots; the orbs burst one after another in a chain of purple explosions racing toward her, and she burns through them with a wall of fire. The forest, the path, the trees and the light stay exactly as they are. Sound: a flourish, a magician's chime, a chain of popping explosions, a roaring wall of flame. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "duel",
+    "action": "duel:forest-duel:F11b",
+    "frames": 73,
+    "masks": 73,
+    "endpoints": 1,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+    "cam": [
+     8.6,
+     1.8,
+     1.7
+    ],
+    "look": [
+     0.6,
+     2.0,
+     1.8
+    ],
+    "lens": 22
+   }
+  },
+  {
+   "id": "F11c",
+   "name": "the fire dragon",
+   "title": "the fire dragon",
+   "secs": 3.04,
+   "face": "none",
+   "engine": "h3f",
+   "refs": [
+    "clearing",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. A fight in the manner of a 90s shonen battle anime - glowing auras, speed lines, afterimages, a white impact frame on every hit. The young woman with long wavy sea-green hair, a red dress and red boots sweeps both arms in a great circle and a dragon of living fire uncoils from her hands, roaring, and snakes through the air at the jester; he cartwheels away from its jaws as it plunges into the ground beside him and bursts into a wall of flame. The forest, the path, the trees and the light stay exactly as they are. Sound: a rising roar, the dragon's howl, his yelp, a fiery explosion. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "duel",
+    "action": "duel:forest-duel:F11c",
+    "frames": 73,
+    "masks": 73,
+    "endpoints": 1,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+    "cam": [
+     7.6,
+     2.4,
+     1.9
+    ],
+    "look": [
+     0.7,
+     2.0,
+     2.2
+    ],
+    "lens": 22
+   }
+  },
+  {
+   "id": "F11d",
+   "name": "ground pound",
+   "title": "ground pound",
+   "secs": 3.04,
+   "face": "none",
+   "engine": "h3f",
+   "refs": [
+    "clearing",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. A fight in the manner of a 90s shonen battle anime - glowing auras, speed lines, afterimages, a white impact frame on every hit. The young woman with long wavy sea-green hair, a red dress and red boots leaps high and drives her flaming fist into the path; a ring of fire and a shockwave split the ground and race outward, throwing dirt and pebbles into the air and knocking the jester off his feet; he flips back upright, laughing. The forest, the path, the trees and the light stay exactly as they are. Sound: a leap, a thunderous impact, cracking earth, a rolling shockwave, his laugh. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "duel",
+    "action": "duel:forest-duel:F11d",
+    "frames": 73,
+    "masks": 73,
+    "endpoints": 1,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+    "cam": [
+     -7.5,
+     2.0,
+     1.0
+    ],
+    "look": [
+     0.7,
+     2.0,
+     1.4
+    ],
+    "lens": 22
+   }
+  },
+  {
+   "id": "F12",
+   "name": "beam struggle",
+   "title": "beam struggle",
+   "secs": 4.38,
+   "face": "none",
+   "engine": "h3f",
+   "refs": [
+    "clearing",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. A fight in the manner of a 90s shonen battle anime - glowing auras, speed lines, afterimages, a white impact frame on every hit. Wide side view: she fires a roaring beam of fire and he fires a crackling beam of purple energy; the two beams collide midway in a blinding, churning ball of light that pushes back and forth between them; the wind tears leaves off the trees and the ground beneath the beams splits. The forest, the path, the trees and the light stay exactly as they are. Sound: two roaring beams, a deafening churning blast, howling wind, cracking earth. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "duel",
+    "action": "duel:forest-duel:F12",
+    "frames": 105,
+    "masks": 105,
+    "endpoints": 1,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+    "cam": [
+     7.5,
+     2.0,
+     1.2
+    ],
+    "look": [
+     0.7,
+     2.0,
+     1.6
+    ],
+    "lens": 22
+   }
+  },
+  {
+   "id": "F12b",
+   "name": "behind her",
+   "title": "behind her",
+   "secs": 3.04,
+   "face": "none",
+   "engine": "h3f",
+   "refs": [
+    "clearing",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. A fight in the manner of a 90s shonen battle anime - glowing auras, speed lines, afterimages, a white impact frame on every hit. From behind the young woman with long wavy sea-green hair, a red dress and red boots: her fire beam pours away from her hands into the churning ball of light where it meets his purple beam; her hair and dress stream back in the gale; the ground cracks under her boots. The forest, the path, the trees and the light stay exactly as they are. Sound: the roar of the beams, howling wind, cracking ground. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "duel",
+    "action": "duel:forest-duel:F12b",
+    "frames": 73,
+    "masks": 73,
+    "endpoints": 1,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+    "cam": [
+     1.9,
+     8.2,
+     1.7
+    ],
+    "look": [
+     0.4,
+     -1.0,
+     1.5
+    ],
+    "lens": 28
+   }
+  },
+  {
+   "id": "F13",
+   "name": "she pushes",
+   "title": "she pushes",
+   "secs": 2.38,
+   "face": "none",
+   "engine": "h3f",
+   "refs": [
+    "clearing",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. A fight in the manner of a 90s shonen battle anime - glowing auras, speed lines, afterimages, a white impact frame on every hit. Close on the young woman with long wavy sea-green hair, a red dress and red boots straining, teeth gritted, hair whipping in the blast, both hands driving the fire beam forward as it flares brighter. The forest, the path, the trees and the light stay exactly as they are. Sound: the roar of the beam, her strained cry. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "duel",
+    "action": "duel:forest-duel:F13",
+    "frames": 57,
+    "masks": 57,
+    "endpoints": 1,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+    "cam": [
+     1.4,
+     4.3,
+     1.55
+    ],
+    "look": [
+     1.2,
+     6.0,
+     1.55
+    ],
+    "lens": 45
+   }
+  },
+  {
+   "id": "F14",
+   "name": "his grin cracks",
+   "title": "his grin cracks",
+   "secs": 2.38,
+   "face": "none",
+   "engine": "h3f",
+   "refs": [
+    "clearing",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. A fight in the manner of a 90s shonen battle anime - glowing auras, speed lines, afterimages, a white impact frame on every hit. Close on the lanky harlequin jester in a purple-and-yellow diamond costume and two-horned cap: sweat running down his chalk-white face paint, which is cracking; his grin falters as the light in front of him grows. The forest, the path, the trees and the light stay exactly as they are. Sound: the crackle of his beam weakening, the roar of fire growing. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "duel",
+    "action": "duel:forest-duel:F14",
+    "frames": 57,
+    "masks": 57,
+    "endpoints": 1,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+    "cam": [
+     0.3,
+     -0.4,
+     1.8
+    ],
+    "look": [
+     0.2,
+     -2.2,
+     1.85
+    ],
+    "lens": 45
+   }
+  },
+  {
+   "id": "F15",
+   "name": "the blast",
+   "title": "the blast",
+   "secs": 4.38,
+   "face": "none",
+   "engine": "h3f",
+   "refs": [
+    "clearing",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. A fight in the manner of a 90s shonen battle anime - glowing auras, speed lines, afterimages, a white impact frame on every hit. High and wide: with a scream the young woman with long wavy sea-green hair, a red dress and red boots pours everything into the fire beam; it surges and drives the ball of light back into the jester, which explodes in a huge blossom of fire that swallows him; the shockwave flattens the undergrowth and tears leaves from every tree. The forest, the path, the trees and the light stay exactly as they are. Sound: her scream, a surging roar, a colossal explosion, a rolling shockwave. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "duel",
+    "action": "duel:forest-duel:F15",
+    "frames": 105,
+    "masks": 105,
+    "endpoints": 1,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+    "cam": [
+     5.5,
+     9.0,
+     4.0
+    ],
+    "look": [
+     0.6,
+     0.5,
+     1.0
+    ],
+    "lens": 22
+   }
+  },
+  {
+   "id": "G01",
+   "name": "ash",
+   "title": "ash",
+   "secs": 3.04,
+   "face": "none",
+   "engine": "h3f",
+   "refs": [
+    "clearing",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. Wide: the smoke rolls away; ash and embers drift down through the shafts of light; the young woman with long wavy sea-green hair, a red dress and red boots lowers her hands, panting, alone on the scorched path. The forest, the path, the trees and the light stay exactly as they are. Sound: settling embers, wind, her breathing. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "duel",
+    "action": "duel:forest-duel:G01",
+    "frames": 73,
+    "masks": 73,
+    "endpoints": 1,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+    "cam": [
+     -3.0,
+     9.5,
+     1.4
+    ],
+    "look": [
+     0.8,
+     2.0,
+     1.3
+    ],
+    "lens": 26
+   }
+  },
+  {
+   "id": "G02",
+   "name": "still laughing",
+   "title": "still laughing",
+   "secs": 3.04,
+   "face": "none",
+   "engine": "h3f",
+   "refs": [
+    "clearing",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. Out of the smoke staggers the lanky harlequin jester in a purple-and-yellow diamond costume and two-horned cap, scorched and swaying, his cap askew, still laughing weakly. The forest, the path, the trees and the light stay exactly as they are. Sound: a wheezing laugh, crunching footsteps, crackling embers. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "duel",
+    "action": "duel:forest-duel:G02",
+    "frames": 73,
+    "masks": 73,
+    "endpoints": 1,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+    "cam": [
+     1.4,
+     4.5,
+     1.6
+    ],
+    "look": [
+     -0.2,
+     0.8,
+     1.5
+    ],
+    "lens": 40
+   }
+  },
+  {
+   "id": "G02b",
+   "name": "the flame",
+   "title": "the flame",
+   "secs": 2.38,
+   "face": "none",
+   "engine": "h3f",
+   "refs": [
+    "clearing",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. Close on the hand of the young woman with long wavy sea-green hair, a red dress and red boots as it rises, trembling, and a small flame flickers to life in her palm and steadies. The forest, the path, the trees and the light stay exactly as they are. Sound: a soft crackle of flame, her breath. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "duel",
+    "action": "duel:forest-duel:G02b",
+    "frames": 57,
+    "masks": 57,
+    "endpoints": 1,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+    "cam": [
+     2.1,
+     4.9,
+     1.3
+    ],
+    "look": [
+     1.2,
+     6.0,
+     1.25
+    ],
+    "lens": 50
+   }
+  },
+  {
+   "id": "G03",
+   "name": "the bow",
+   "title": "the bow",
+   "secs": 3.04,
+   "face": "none",
+   "engine": "h3f",
+   "refs": [
+    "clearing",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. Side view: the young woman with long wavy sea-green hair, a red dress and red boots walks up to him and raises one hand, a small flame dancing in her palm; the jester looks at the flame, then at her, grins, and bows deeply. The forest, the path, the trees and the light stay exactly as they are. Sound: footsteps, a soft crackle of flame, his chuckle. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "duel",
+    "action": "duel:forest-duel:G03",
+    "frames": 73,
+    "masks": 73,
+    "endpoints": 1,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+    "cam": [
+     5.0,
+     2.6,
+     1.3
+    ],
+    "look": [
+     0.5,
+     2.5,
+     1.4
+    ],
+    "lens": 30
+   }
+  },
+  {
+   "id": "G04",
+   "name": "gone",
+   "title": "gone",
+   "secs": 3.04,
+   "face": "none",
+   "engine": "h3f",
+   "refs": [
+    "clearing",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. The jester winks, snaps his fingers and bursts into a cloud of purple smoke and confetti - gone; the confetti flutters down where he stood, and his laughter echoes away into the forest. The forest, the path, the trees and the light stay exactly as they are. Sound: a finger snap, a pop, fluttering confetti, echoing laughter fading. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "duel",
+    "action": "duel:forest-duel:G04",
+    "frames": 73,
+    "masks": 73,
+    "endpoints": 1,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+    "cam": [
+     1.9,
+     4.2,
+     1.6
+    ],
+    "look": [
+     0.0,
+     1.6,
+     1.6
+    ],
+    "lens": 40
+   }
+  },
+  {
+   "id": "G05",
+   "name": "her",
+   "title": "her",
+   "secs": 3.04,
+   "face": "none",
+   "engine": "h3f",
+   "refs": [
+    "clearing",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. Close on the young woman with long wavy sea-green hair, a red dress and red boots: she lets her hand fall and the flame in it goes out; she looks up at the confetti and leaves drifting down around her, and breathes out. The forest, the path, the trees and the light stay exactly as they are. Sound: a soft hiss as the flame goes out, drifting leaves, a long breath. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "duel",
+    "action": "duel:forest-duel:G05",
+    "frames": 73,
+    "masks": 73,
+    "endpoints": 1,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+    "cam": [
+     0.6,
+     1.9,
+     1.5
+    ],
+    "look": [
+     0.9,
+     3.4,
+     1.5
+    ],
+    "lens": 50
+   }
+  },
+  {
+   "id": "G06",
+   "name": "the way home",
+   "title": "the way home",
+   "secs": 4.38,
+   "face": "none",
+   "engine": "h3f",
+   "refs": [
+    "clearing",
+    "terra",
+    "jester"
+   ],
+   "anchor": null,
+   "prompt": "2D anime, hand-drawn cel animation. High and wide: the young woman with long wavy sea-green hair, a red dress and red boots turns and walks away up the path toward the fallen oak, small among the huge trees, leaves drifting down through the evening light; the forest is quiet. The forest, the path, the trees and the light stay exactly as they are. Sound: her footsteps, wind in the leaves, a far bird call. No music.",
+   "avoid_extra": "3d render, cgi, photorealistic, live action, a crowd, other people, blood, gore",
+   "previz": {
+    "scene": "set",
+    "set": "duel",
+    "action": "duel:forest-duel:G06",
+    "frames": 105,
+    "masks": 105,
+    "endpoints": 1,
+    "dress": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "dress_place": "Turn <image1> into a frame from a hand-drawn 2D anime film: a dark fantasy forest path between huge gnarled trees, painted as an anime background, clean line art, flat cel shading, shafts of late sunlight through the canopy, drifting mist. Keep the camera, the lens, the framing, the perspective and the layout of <image1> exactly: everything in it stays exactly where it is, at the same size, with the same colours; add nothing and remove nothing.",
+    "grade": "2D anime film, hand-drawn cel animation, painted backgrounds, a forest clearing at dusk, shafts of low sunlight, drifting mist.",
+    "cam": [
+     0.8,
+     -6.0,
+     4.0
+    ],
+    "look": [
+     1.0,
+     6.0,
+     1.5
+    ],
+    "lens": 24
+   }
+  }
+ ]
+}

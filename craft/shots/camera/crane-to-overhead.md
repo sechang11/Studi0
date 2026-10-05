@@ -30,10 +30,16 @@ Three shots that cut as one move: the start framing, the rise, and the top-down,
 - **Got:** it reads as one crane from over her shoulder to straight down, with her blue hair centred in the market.
 - **Learned:** a move that ends in a very different framing is easier as cuts along its path than as one generation.
 
+### 2026-09-30 · plaza 107 · a crane to straight down in a 3D set · grade B+
+- **Did:** the rise from beside the fountain to 38 m looking straight down, as a camera in one set ([`pipe-3d-set`](../pipeline/3d-set.md)), unpinned and pinned at the top (the set's top-down render, dressed).
+- **Got:** both rose along the set's path (motion r 0.87-0.89). Unpinned, the red-and-white awning came out white from above; pinned, red and white, with the tree and the fountain where the map has them; the fit held 90% (61-78% unpinned). The same crane asked in words (LTX-2.5) held 27-36% and rose over a town that grew as it went.
+- **Learned:** a crane is a reveal: pin its top.
+
 ## Failure modes
 
 | symptom | cause | fix | seen in |
 |---|---|---|---|
+| the ground seen from above is not the ground the shot started on | nothing but depth carries the look up there | pin the top frame, a dressed render of the set | plaza 107 |
 | (none recorded yet) | | | |
 
 ## Evidence
