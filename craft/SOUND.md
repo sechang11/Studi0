@@ -179,6 +179,23 @@ which also loads the checkpoint weights-only. Voiced 87 % of the melody's time, 
 is the model's example English prompt - a TEST voice; anything kept gets an AI-made voice. Layers can now be a
 finished file (`{"file": ...}`): the singer over the real piano.
 
+**Round 10 (2026-10-06): songs whose words are heard, and an orchestra.** The director on round 9: the lyrics
+"aren't really audible". Measured with `lyric_check.py` (IBM Granite Speech 4.1 2B, Apache-2.0, already on the box:
+it transcribes each sung line and scores the words against the lyrics): round 9's vocal 46 % of the words alone, 20 %
+in the mix. What moved it: not speed (85 %: 48 %; 75 %: 29 %), a little the key (3 semitones down: 54 %); **the word
+rhythm** - one word per note had put words on sixteenth pickups (swallowed) and on notes held for seconds (sung as
+bare vowels, consonants gone: a slow chorus scored 0-8 %). `sing.py` "even": each run of sixteenth pickups merged to
+one note, the long notes split for more words - the contour kept, the words at a speaking pace - with lyrics of 8-11
+words a line: 64-72 % alone. **The mix**: the accompaniment WITHOUT the tune (`piano_accomp`, `orch_*_accomp`), the
+voice 9 dB over it, the band ducking ~4 dB while it sings, the voice brighter and drier: 42-67 % in the mix. The
+recognizer under-reads held singing (a listener knows the words a held note carries) - its numbers are a floor.
+`notes_cover.py song` builds a song: sections of the original back to back (a verse on the main theme, a chorus on the
+second theme's slow half), each layer rendered unfaded and unnormalised per section and joined, the vocal from
+`sing.py`. Instrumentals: `orch_*` presets on VSCO-2 CE (orchestra, woodwinds, brass, march, harp, solo violin,
+cello, organ, mallets, winter, strings pad; any of them `_accomp`), `upright_piano`, `--transpose`, harmony
+0.72-0.93. Two traps: a snare in sixteenths with a bass drum swamped the march's harmony (0.89 -> 0.10 - the drums
+kept to a quiet backbeat); glockenspiel and xylophone sound an octave above their written keys.
+
 **The engines on this box:**
 
 | engine | how | notes |
@@ -190,6 +207,7 @@ finished file (`{"file": ...}`): the singer over the real piano.
 | MusicGen-Melody (NON-COMMERCIAL) | `notes_cover.py musicgen` / score_casting engine `musicgen` | Meta's melody-conditioned model, weights CC BY-NC 4.0: tell the director whenever a take uses it. Writes the whole arrangement around the transcribed melody; 32 kHz mono, 30 s a take; seed-sensitive (best of three). Needs the first-step conditioning patch on transformers 5.x (§0.3). |
 | Recorded instruments (VSCO-2 CE) | `notes_cover.py` class `Sfz`, style `vsco_strings` | a CC0 orchestral library played from the lead sheet - the strings that sound like strings (§0.3, round 9). No AI, no codec. |
 | Singing (SoulX-Singer) | ~/music-tools/svs: `svs_meta.py` (lyrics on the melody's notes) -> `svs_run.py` | Apache-2.0; sings exact notes and words in a prompt voice; layered over the piano as a `file` layer. The example prompt voice is for tests only (§0.3). |
+| Songs (sung lyrics) | `notes_cover.py song SPEC OUT` with `sing.py` (SoulX-Singer) and `lyric_check.py` (Granite Speech) | a verse and a chorus of the original's melody with lyrics, in a vocal rhythm (`even`), over an accompaniment without the tune, the voice 9 dB up and the band ducking (§0.3, round 10). |
 | Remix (your own recording) | `score_casting.py` engine `remix`: ACE-Step 1.5 audio-to-audio from the recording (workflow 06 + LoadAudio / VAEEncodeAudio), or ACE-Step v1 (`31_acestep_remix.json`) | the `denoise` dial: how much of the original survives, measured as chroma match on TerraTheme (2026-10-01): 0.35 -> 0.95, 0.45 -> 0.87, 0.50 -> 0.82-0.84, 0.65 -> 0.75. 2-6 s a 32 s remix. MiniMax Music 3 takes no audio. A recording's melody survives a remix: someone else's music is for tests, not for publishing. |
 | H3's own audio | every H3 take | the effects for fights: keep them, lead the mix with them |
 | Stable Audio 3 | workflow `10_stableaudio_sfx.json` | one-off effects (§1) |

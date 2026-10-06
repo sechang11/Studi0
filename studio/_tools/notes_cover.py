@@ -26,6 +26,8 @@ song's notes out of the recording and plays them again:
                         chillhop (Rhodes, 7th chords, swung eighths, jazz kit). --from T: a LAYER that enters at T.
                         --mode major: the tune in its parallel major (3rd, 6th, 7th raised; chords re-spelled).
   stem IN OUT [--keep vocals]   one stem of a finished take (Demucs) - an AI singer lifted off its accompaniment
+  song SPEC.json OUT.wav  a SONG: sections of the original back to back (a verse, a chorus) in layers, and the
+                        lyrics sung on the melody by sing.py, the voice ~9 dB over the band, ducking it (see cmd_song)
   musicgen GUIDE OUT --prompt P [--secs S --seed N --cfg 3]   MusicGen-Melody writes an arrangement from scratch
                         around GUIDE's melody (render the guide with style "melody"). NON-COMMERCIAL weights
                         (CC BY-NC 4.0): tell the director whenever a take uses it. ~/music-tools/models.
@@ -429,10 +431,70 @@ def cmd_prepare(a):
 
 
 # ------------------------------------------------------------------------------------------------ render
-STYLES = ("reduction", "piano", "strings", "band", "band_backing", "piano_voice", "musicbox", "chillhop", "melody",
-          "vsco_strings")
+# recorded-instrument orchestrations (VSCO-2 CE): each part a role - lead (the tune, shifted by octaves), pad (the
+# chord's 3rd and 5th, held), padfull, bass (the root, held), bassline (the transcribed bass), pulse (eighths through
+# the chord), stabs (march chords on the beats), sweep (a harp up the chord), timp (each phrase's first beat), snare
+O = dict
+ORCH = {
+    "orchestra": [O(role="lead", sfz="ViolinEnsSusVib.sfz", shift=-12, gain=3.0, vel=88),
+                  O(role="lead", sfz="FluteSusVib.sfz", shift=0, gain=-8.0, vel=70),
+                  O(role="pad", sfz="ViolaEnsSusVib.sfz", low=55, gain=-5.0, vel=64),
+                  O(role="pad", sfz="ClarinetSus.sfz", low=60, gain=-11.0, vel=60),
+                  O(role="bass", sfz="CelloEnsSusVib.sfz", low=36, gain=-3.0, vel=74),
+                  O(role="bass", sfz="ContrabassSusVB.sfz", low=28, gain=-6.0, vel=70),
+                  O(role="pulse", sfz="CelloEnsPizz.sfz", low=48, gain=-11.0, vel=56, sus=False),
+                  O(role="sweep", sfz="Harp.sfz", low=48, gain=-7.0, vel=58, sus=False),
+                  O(role="timp", sfz="Timpani.sfz", gain=-7.0, vel=86, sus=False)],
+    "woodwinds": [O(role="lead", sfz="FluteSusVib.sfz", shift=-12, gain=3.0, vel=86),
+                  O(role="lead", sfz="OboeSusVib.sfz", shift=-12, gain=-9.0, vel=64),
+                  O(role="pad", sfz="ClarinetSus.sfz", low=55, gain=-4.0, vel=64),
+                  O(role="bass", sfz="BassoonSus.sfz", low=34, gain=-3.0, vel=72),
+                  O(role="bass", sfz="FHornSus.sfz", low=46, gain=-10.0, vel=60),
+                  O(role="pulse", sfz="Harp.sfz", low=48, gain=-9.0, vel=54, sus=False)],
+    "brass": [O(role="lead", sfz="TrumpetSusVib.sfz", shift=-12, gain=1.0, vel=86),
+              O(role="lead", sfz="FHornSus.sfz", shift=-24, gain=-4.0, vel=80),
+              O(role="pad", sfz="TromboneSus.sfz", low=46, gain=-4.0, vel=68),
+              O(role="pad", sfz="FHornSus.sfz", low=53, gain=-8.0, vel=62),
+              O(role="bass", sfz="TubaSus.sfz", low=29, gain=-4.0, vel=72),
+              O(role="timp", sfz="Timpani.sfz", gain=-6.0, vel=90, sus=False)],
+    "march": [O(role="lead", sfz="TrumpetSus.sfz", shift=-12, gain=2.0, vel=96),
+              O(role="lead", sfz="ViolinEnsSusVib.sfz", shift=-12, gain=-5.0, vel=80),
+              O(role="stabs", sfz="FHornStac.sfz", low=53, gain=-7.0, vel=80, sus=False),
+              O(role="bassline", sfz="TubaStac.sfz", low=29, gain=-4.0, vel=84, sus=False),
+              O(role="pulse", sfz="ViolinEnsSpic.sfz", low=55, gain=-10.0, vel=66, sus=False),
+              O(role="snare", sfz="GM-StylePerc.sfz", gain=-21.0, vel=74, sus=False),
+              O(role="timp", sfz="Timpani.sfz", gain=-6.0, vel=92, sus=False)],
+    "harp": [O(role="lead", sfz="Harp.sfz", shift=-12, gain=4.0, vel=90, sus=False),
+             O(role="pulse", sfz="Harp.sfz", low=41, gain=-4.0, vel=60, sus=False),
+             O(role="bass", sfz="Harp.sfz", low=33, gain=-6.0, vel=66, sus=False)],
+    "solo_violin": [O(role="lead", sfz="SViolinVib.sfz", shift=-12, gain=0.0, vel=90)],
+    "cello": [O(role="lead", sfz="CelloEnsSusVib.sfz", shift=-24, gain=0.0, vel=90)],
+    "organ": [O(role="lead", sfz="OrganLoud.sfz", shift=-12, gain=2.0, vel=90),
+              O(role="padfull", sfz="OrganQuiet.sfz", low=55, gain=-6.0, vel=70),
+              O(role="bass", sfz="OrganLoudPedal.sfz", low=36, gain=-4.0, vel=80)],
+    "mallets": [O(role="lead", sfz="Marimba.sfz", shift=-12, gain=3.0, vel=90, roll=True, sus=False),
+                O(role="lead", sfz="Glockenspiel.sfz", shift=-12, gain=-9.0, vel=70, sus=False),
+                O(role="pulse", sfz="Xylophone.sfz", low=60, gain=-14.0, vel=56, sus=False),
+                O(role="bassline", sfz="ContrabassPizz.sfz", low=28, gain=-4.0, vel=84, sus=False)],
+    "strings_pad": [O(role="pad", sfz="ViolinEnsSusVib-Quiet.sfz", low=60, gain=-4.0, vel=62),
+                    O(role="pad", sfz="ViolaEnsSusVib.sfz", low=55, gain=-6.0, vel=60),
+                    O(role="bass", sfz="CelloEnsSusVib.sfz", low=36, gain=-4.0, vel=70),
+                    O(role="bass", sfz="ContrabassSusVB.sfz", low=28, gain=-8.0, vel=66),
+                    O(role="sweep", sfz="Harp.sfz", low=48, gain=-9.0, vel=54, sus=False)],
+    "winter": [O(role="lead", sfz="Glockenspiel.sfz", shift=-12, gain=0.0, vel=84, sus=False),
+               O(role="pulse", sfz="Harp.sfz", low=48, gain=-6.0, vel=58, sus=False),
+               O(role="pad", sfz="ViolinEnsSusVib-Quiet.sfz", low=60, gain=-9.0, vel=60),
+               O(role="bass", sfz="CelloEnsSusVib-Quiet.sfz", low=36, gain=-8.0, vel=64)],
+}
+STYLES = ("reduction", "piano", "piano_accomp", "upright_piano", "strings", "band", "band_backing", "piano_voice",
+          "musicbox", "chillhop", "melody", "vsco_strings") + tuple("orch_" + k for k in ORCH) + \
+    tuple("orch_%s_accomp" % k for k in ORCH)          # _accomp: the orchestration without its lead (under a voice)
 REVERB = {"reduction": (1.4, 0.18), "piano": (1.9, 0.24), "strings": (2.4, 0.32), "band": (1.2, 0.16), "melody": (0.8, 0.05),
-          "vsco_strings": (2.2, 0.22),
+          "vsco_strings": (2.2, 0.22), "piano_accomp": (1.9, 0.24), "upright_piano": (1.5, 0.2),
+          "orch_orchestra": (2.4, 0.26), "orch_woodwinds": (2.0, 0.22), "orch_brass": (2.4, 0.26),
+          "orch_march": (1.8, 0.18), "orch_harp": (2.0, 0.22), "orch_solo_violin": (2.0, 0.22),
+          "orch_cello": (2.0, 0.22), "orch_organ": (3.2, 0.32), "orch_mallets": (1.6, 0.18),
+          "orch_winter": (2.6, 0.3),
           "band_backing": (1.2, 0.16), "piano_voice": (1.9, 0.24), "musicbox": (2.6, 0.34), "chillhop": (1.1, 0.18)}
 
 
@@ -468,7 +530,8 @@ def to_major(sh):
     return out
 
 
-def render(sh, style, start, secs, speed, out, seed=1, from_t=None, mode=None):
+def render(sh, style, start, secs, speed, out, seed=1, from_t=None, mode=None, transpose=0, fade=True,
+           normalize=True):
     """from_t: a LAYER that enters later (original seconds) - nothing of it sounds before then, except a drum fill
     leading in. mode "major": the tune in its parallel major (to_major)."""
     import scipy.signal
@@ -479,6 +542,12 @@ def render(sh, style, start, secs, speed, out, seed=1, from_t=None, mode=None):
     eighth = sh["eighth"]
     if mode == "major":
         sh = to_major(sh)
+    if transpose:                       # the whole song in another key (a singer's range)
+        sh = dict(sh)
+        sh["melody"] = [[s, e, p + transpose, a] for s, e, p, a in sh["melody"]]
+        sh["bass"] = [[s, e, p + transpose, a] for s, e, p, a in sh["bass"]]
+        sh["chords"] = [[c[0], c[1], (c[2] + transpose) % 12, c[3], NAMES[(c[2] + transpose) % 12] + c[3]]
+                        for c in sh["chords"]]
 
     def T(t):
         return (t - start) / speed
@@ -703,6 +772,97 @@ def render(sh, style, start, secs, speed, out, seed=1, from_t=None, mode=None):
                 for j, p in enumerate([place(tl[0], 48), place(tl[1], 52), place(tl[2], 55), place(tl[0], 60),
                                        place(tl[1], 64), place(tl[2], 67)]):
                     note(6, p, c[0] + j * 0.07 * speed, c[0] + eighth * 6, 58, jitter=0.004)
+        elif style == "piano_accomp":
+            # the piano WITHOUT the tune - a rolling left hand and soft half-note chords in the right: under a
+            # singer or a solo instrument, so the melody is theirs alone (round 9: the lyrics did not come through)
+            programs = {0: PIANO_P, 1: PIANO_P}
+            for c in chords:
+                root = place(c[2], 36)
+                pat = [0, 7, 12, 12 + THIRD[c[3]], 19, 12 + THIRD[c[3]], 12, 7]
+                ts = beats_in(c[0], c[1])
+                for i, b in enumerate(ts):
+                    note(1, root + pat[i % 8], b, c[1] + 0.05, 58 if i == 0 else (48 if i % 4 == 0 else 42),
+                         jitter=0.01)
+                for i, b in enumerate(ts[::4]):
+                    for pc in tones(c):
+                        note(0, place(pc, 60), b, min(c[1], b + 4 * eighth) + 0.05, 40 if i else 46, jitter=0.008)
+        elif style.startswith("orch_"):
+            accomp = style.endswith("_accomp")
+            preset = style[5:-7] if accomp else style[5:]
+            if preset not in ORCH:
+                sys.exit("orchestration: " + " | ".join("orch_" + k for k in ORCH))
+            allb = sh["beats"]
+            for chn, part in enumerate(ORCH[preset]):
+                if accomp and part["role"] == "lead":
+                    continue
+                if chn == 9:
+                    chn = 15                          # (any channel number will do: no GM drum channel here)
+                sfz_programs[chn] = part["sfz"]
+                sfz_gain[chn] = part.get("gain", 0.0)
+                if part.get("sus", True):
+                    sustained.add(chn)
+                role, vel = part["role"], part.get("vel", 70)
+                if role == "lead":
+                    for k, n in enumerate(melody):
+                        e = legato(k, n, 0.06, 0.3)
+                        key = n[2] + part.get("shift", 0)
+                        if part.get("roll") and held(n):         # a mallet holds a note by rolling it
+                            sub, t, j = eighth / 2, n[0], 0
+                            while t < n[1] - 1e-6:
+                                note(chn, key, t, t + sub * 1.5, mel_vel(n, vel) - (0 if j == 0 else 14), 0.004)
+                                t, j = t + sub, j + 1
+                        else:
+                            note(chn, key, n[0], e, mel_vel(n, vel), jitter=0.006)
+                elif role in ("pad", "padfull"):
+                    for c in chords:
+                        tl = tones(c) if role == "padfull" else tones(c)[1:]
+                        for pc in tl:
+                            note(chn, place(pc, part["low"]), c[0], c[1] + 0.1, vel, jitter=0.01)
+                elif role == "bass":
+                    for c in chords:
+                        note(chn, place(c[2], part["low"]), c[0], c[1] + 0.1, vel, jitter=0.01)
+                elif role == "bassline":
+                    for n in bass:
+                        note(chn, place(n[2] % 12, part["low"]), n[0], n[1] - 0.02, vel, jitter=0.004)
+                elif role == "pulse":
+                    for c in chords:
+                        tl = tones(c)
+                        lo = part["low"]
+                        pz = [place(tl[0], lo), place(tl[2], lo), place(tl[1], lo + 7), place(tl[2], lo + 7)]
+                        for i, b in enumerate(beats_in(c[0], c[1])):
+                            note(chn, pz[i % 4], b, b + eighth * 0.9, vel + (8 if i % 4 == 0 else 0), jitter=0.008)
+                elif role == "stabs":
+                    for c in chords:
+                        for b in beats_in(c[0], c[1]):
+                            if (allb.index(b) - sh["downbeat_phase"]) % 2 == 0:
+                                for pc in tones(c):
+                                    note(chn, place(pc, part["low"]), b, b + eighth * 0.7, vel, jitter=0.004)
+                elif role == "sweep":
+                    for c in chords:
+                        tl = tones(c)
+                        lo = part["low"]
+                        for j, p in enumerate([place(tl[0], lo), place(tl[1], lo + 4), place(tl[2], lo + 7),
+                                               place(tl[0], lo + 12), place(tl[1], lo + 16), place(tl[2], lo + 19)]):
+                            note(chn, p, c[0] + j * 0.07 * speed, c[0] + eighth * 6, vel, jitter=0.004)
+                elif role == "timp":
+                    for k, b in enumerate(bars):
+                        if k % 4 == 0:
+                            c = chord_at(b + 0.01)
+                            note(chn, place(c[2], 36) if place(c[2], 36) <= 48 else place(c[2], 36) - 12, b,
+                                 b + eighth * 3, vel, jitter=0.003)
+                elif role == "snare":
+                    # a march, kept under the band (round 10: sixteenth ghosts, a bass drum and crashes swamped the
+                    # harmony, 0.89 -> 0.10): the backbeat, soft eighths between
+                    for b in beats:
+                        pos = (allb.index(b) - sh["downbeat_phase"]) % 8
+                        note(chn, 38, b, b + eighth * 0.5, vel + 12 if pos in (2, 6) else vel - 22, jitter=0.003)
+                    for k, b in enumerate(bars):
+                        if k % 8 == 0:
+                            note(chn, 49, b, b + eighth * 4, vel - 10, jitter=0.003)
+        elif style == "upright_piano":
+            sfz_programs = {0: "UprightPiano.sfz", 1: "UprightPiano.sfz"}
+            sfz_gain = {0: 2.0, 1: -2.0}
+            piano_part()
         elif style == "musicbox":
             programs = {0: ("gm", 0, 10, False), 1: ("gm", 0, 8, False), 2: ("gm", 0, 46, False),
                         3: ("gm", 0, 49, False)}
@@ -780,7 +940,7 @@ def render(sh, style, start, secs, speed, out, seed=1, from_t=None, mode=None):
             n = min(len(y), len(dry) - a)
             if n > 0:
                 dry[a:a + n] += y[:n]
-        return _finish(dry, style, secs, speed, out, ev)
+        return _finish(dry, style, secs, speed, out, ev, fade, normalize)
     synth = tinysoundfont.Synth(samplerate=SR, gain=-12)
     fonts = {"piano": synth.sfload(PIANO), "gm": synth.sfload(GM)}
     for ch, (font, bank, preset, drums) in programs.items():
@@ -806,15 +966,16 @@ def render(sh, style, start, secs, speed, out, seed=1, from_t=None, mode=None):
     if n > 0:
         chunks.append(np.frombuffer(synth.generate_simple(n), dtype=np.float32).reshape(-1, 2).copy())
     dry = np.concatenate(chunks)[: int(total * SR)]
-    return _finish(dry, style, secs, speed, out, ev)
+    return _finish(dry, style, secs, speed, out, ev, fade, normalize)
 
 
-def _finish(dry, style, secs, speed, out, ev):
+def _finish(dry, style, secs, speed, out, ev, fade=True, normalize=True):
     """a hall (decaying stereo noise, darkened, convolved), the cut's ring-out and fade, -1 dBFS"""
     import scipy.signal
     import soundfile as sf
     # a hall: decaying stereo noise, darkened, convolved
-    rt60, wet_mix = REVERB[style]
+    base = style[:-7] if style.endswith("_accomp") else style       # an accompaniment keeps its band's hall
+    rt60, wet_mix = REVERB.get(style) or REVERB.get(base) or (2.0, 0.22)
     m = int(SR * rt60 * 1.1)
     h = np.random.default_rng(7).standard_normal((m, 2)) * np.exp(-6.91 * np.arange(m) / SR / rt60)[:, None]
     h = scipy.signal.lfilter([0.45], [1, -0.55], h, axis=0)
@@ -824,15 +985,17 @@ def _finish(dry, style, secs, speed, out, ev):
     mix = dry * (1 - wet_mix) + wet * wet_mix * 2.0
     mix = mix[: int((secs / speed + 1.5) * SR)]           # the cut rings on 1.5 s, the last 2.5 s faded
     fade_n = int(2.5 * SR)
-    mix[-fade_n:] *= np.linspace(1, 0, fade_n)[:, None] ** 1.5
-    mix *= 0.89 / (np.abs(mix).max() + 1e-9)
-    sf.write(out, mix, SR)
+    if fade:                                              # (a song's section rings on into the next, unfaded)
+        mix[-fade_n:] *= np.linspace(1, 0, fade_n)[:, None] ** 1.5
+    if normalize:
+        mix *= 0.89 / (np.abs(mix).max() + 1e-9)
+    sf.write(out, mix.astype(np.float32), SR)
     print("%s: %d notes, %.1f s -> %s" % (style, len(ev), len(mix) / SR, out))
 
 
 def cmd_render(a):
     sh = json.load(open(os.path.join(song_dir(a.song), "leadsheet.json")))
-    render(sh, a.style, a.start, a.secs, a.speed, a.out, a.seed, a.from_t, a.mode)
+    render(sh, a.style, a.start, a.secs, a.speed, a.out, a.seed, a.from_t, a.mode, a.transpose, not a.no_fade)
 
 
 def cmd_stem(a):
@@ -850,6 +1013,110 @@ def cmd_stem(a):
         os.remove(os.path.join(d, f))
     os.rmdir(d)
     os.remove(tmp)
+
+
+# ------------------------------------------------------------------------------------------------ songs
+def _rms_active(y):
+    """loudness of the part that sounds (a layer that enters late, a voice between its lines)"""
+    m = np.abs(y).mean(1) if y.ndim == 2 else np.abs(y)
+    w = int(0.4 * SR)
+    c = np.concatenate([[0.0], np.cumsum(m, dtype=np.float64)])       # a running mean in O(n)
+    env = np.empty(len(m))
+    lo = np.clip(np.arange(len(m)) - w // 2, 0, len(m))
+    hi = np.clip(np.arange(len(m)) + w // 2, 0, len(m))
+    env[:] = (c[hi] - c[lo]) / np.maximum(1, hi - lo)
+    act = env > env.max() * 0.08
+    return float(np.sqrt((y[act] ** 2).mean())) if act.any() else 1e-6
+
+
+def _voice_chain(y, sr):
+    """the sung track made a lead vocal: 44.1 kHz stereo, a low cut at 120 Hz, a presence lift at 3 kHz, a light
+    hall (RT60 1.4 s, 12 % wet) - drier and brighter than round 9's, whose words did not come through"""
+    import scipy.signal
+    import soxr
+    y = soxr.resample(y.astype(np.float32), sr, SR, quality="HQ")
+    b, a = scipy.signal.butter(2, 120 / (SR / 2), btype="high")
+    y = scipy.signal.lfilter(b, a, y)
+    f0, q, gain = 3000.0, 0.9, 10 ** (3.5 / 40)            # RBJ peaking EQ, +3.5 dB
+    w0 = 2 * np.pi * f0 / SR
+    al = np.sin(w0) / (2 * q)
+    bb = [1 + al * gain, -2 * np.cos(w0), 1 - al * gain]
+    aa = [1 + al / gain, -2 * np.cos(w0), 1 - al / gain]
+    y = scipy.signal.lfilter(bb, aa, y)
+    dry = np.stack([y, y], 1)
+    rt, mix = 1.4, 0.12
+    m = int(SR * rt * 1.1)
+    h = np.random.default_rng(11).standard_normal((m, 2)) * np.exp(-6.91 * np.arange(m) / SR / rt)[:, None]
+    h = scipy.signal.lfilter([0.45], [1, -0.55], h, axis=0)
+    h = np.concatenate([np.zeros((int(0.025 * SR), 2)), h])
+    h /= np.sqrt((h ** 2).sum(0))
+    wet = np.stack([scipy.signal.fftconvolve(dry[:, c], h[:, c])[: len(dry)] for c in range(2)], 1)
+    return (dry * (1 - mix) + wet * mix * 2.0).astype(np.float32)
+
+
+def cmd_song(a):
+    """A SONG from the notes: sections of the original (a verse on the main theme, a chorus on the second) played
+    back to back by each layer (each section rendered unfaded and unnormalised, then joined - its last notes ring on
+    into the next), and the lyrics sung on the melody (sing.py) over them, the voice ~9 dB above the band, the band ducking under it.
+    SPEC: {"song", "name", "speed", "transpose", "mode", "seed", "sections": [{start, end, shift, even, lines}],
+           "layers": [{"style", "gain_db"}], "voice_over_db": 9, "duck": 0.37}"""
+    import soundfile as sf
+    spec = json.load(open(a.spec))
+    sh = json.load(open(os.path.join(song_dir(spec.get("song", "terra")), "leadsheet.json")))
+    speed, tr, mode = float(spec.get("speed", 1.0)), int(spec.get("transpose", 0)), spec.get("mode")
+    secs_out = [(float(s["end"]) - float(s["start"])) / speed for s in spec["sections"]]
+    total = sum(secs_out)
+    tmp = a.out[:-4] + "_parts"
+    os.makedirs(tmp, exist_ok=True)
+    band = np.zeros((int((total + 4) * SR), 2), dtype=np.float32)
+    for li, layer in enumerate(spec["layers"]):
+        lay = np.zeros_like(band)
+        off = 0.0
+        for si, sec in enumerate(spec["sections"]):
+            f = os.path.join(tmp, "L%d_S%d.wav" % (li, si))
+            render(sh, layer["style"], float(sec["start"]), float(sec["end"]) - float(sec["start"]), speed, f,
+                   int(spec.get("seed", 1)), None, mode, tr, fade=False, normalize=False)
+            y, _ = sf.read(f, dtype="float32", always_2d=True)
+            i0 = int(off * SR)
+            n = min(len(y), len(lay) - i0)
+            lay[i0:i0 + n] += y[:n]
+            off += secs_out[si]
+        lay *= 0.1 / _rms_active(lay) * 10 ** (float(layer.get("gain_db", 0.0)) / 20)
+        band += lay
+    out = band
+    if any(s.get("lines") for s in spec["sections"]):
+        vf = os.path.join(tmp, "vocal.wav")
+        env = dict(os.environ)
+        r = subprocess.run([sys.executable, os.path.join(os.path.dirname(os.path.abspath(__file__)), "sing.py"),
+                            a.spec, vf], env=env, capture_output=True, text=True)
+        if r.returncode or not os.path.exists(vf):
+            sys.exit("sing.py failed: " + (r.stderr or r.stdout)[-400:])
+        v, vsr = sf.read(vf, dtype="float32")
+        v = _voice_chain(v, vsr)
+        v *= _rms_active(band) / _rms_active(v) * 10 ** (float(spec.get("voice_over_db", 9.0)) / 20)
+        n = min(len(v), len(out))
+        # the band steps back while the voice sings (round 10: the words heard 72 % alone, 44 % in the mix):
+        # its gain follows the voice's envelope, down to -4 dB, in 30 ms, back up over 400 ms
+        hop = int(0.01 * SR)
+        e = np.sqrt(np.convolve((v[:n] ** 2).mean(1)[::hop], np.ones(5) / 5, mode="same"))
+        e = np.clip(e / (np.percentile(e, 95) + 1e-9), 0, 1)
+        g = np.ones(len(e))
+        for i in range(1, len(e)):
+            tgt = 1.0 - float(spec.get("duck", 0.37)) * e[i]
+            k = 0.3 if tgt < g[i - 1] else 0.025
+            g[i] = g[i - 1] + k * (tgt - g[i - 1])
+        gain = np.interp(np.arange(len(out)), np.arange(len(g)) * hop, g, right=1.0)
+        out = out * gain[:, None]
+        out[:n] += v[:n]
+        sf.write(a.out[:-4] + "_vocal.wav", v, SR)
+    end = int((total + 2.5) * SR)
+    out = out[:end]
+    fade_n = int(3.0 * SR)
+    out[-fade_n:] *= np.linspace(1, 0, fade_n)[:, None] ** 1.5
+    out = np.tanh(out / (np.abs(out).max() + 1e-9) * 1.1) * 0.89      # a soft ceiling at -1 dBFS
+    sf.write(a.out, out.astype(np.float32), SR)
+    print("song %s: %d sections, %d layers, %.1f s -> %s" % (spec.get("name", ""), len(spec["sections"]),
+                                                           len(spec["layers"]), len(out) / SR, a.out))
 
 
 # ------------------------------------------------------------------------------------------------ musicgen
@@ -946,10 +1213,15 @@ def main():
     p.add_argument("--from", dest="from_t", type=float, default=None,
                    help="a layer entering later: nothing before this time of the original (a drum fill leads in)")
     p.add_argument("--mode", choices=["major"], default=None, help="the tune in its parallel major key")
+    p.add_argument("--transpose", type=int, default=0, help="semitones, the whole song (a singer's key)")
+    p.add_argument("--no-fade", action="store_true", help="ring on unfaded (a song's section, joined to the next)")
     p = sub.add_parser("stem")
     p.add_argument("inp")
     p.add_argument("out")
     p.add_argument("--keep", default="vocals", choices=["drums", "bass", "other", "vocals"])
+    p = sub.add_parser("song")
+    p.add_argument("spec")
+    p.add_argument("out")
     p = sub.add_parser("musicgen")
     p.add_argument("guide", nargs="?")
     p.add_argument("out", nargs="?")
@@ -965,7 +1237,7 @@ def main():
     p.add_argument("out")
     a = ap.parse_args()
     {"prepare": cmd_prepare, "render": cmd_render, "stem": cmd_stem, "musicgen": cmd_musicgen,
-     "roll": cmd_roll}[a.cmd](a)
+     "song": cmd_song, "roll": cmd_roll}[a.cmd](a)
 
 
 if __name__ == "__main__":
