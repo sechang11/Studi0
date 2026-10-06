@@ -1,0 +1,104 @@
+{
+ "invariants": [
+  {
+   "id": "sides",
+   "title": "Her side on the left, his on the right",
+   "rule": "Terra and the esper are on the LEFT of the screen, the jester on the RIGHT, for the whole shot.",
+   "why": "one line of action for the film: every camera stands east of the line between them",
+   "check": {
+    "kind": "eye"
+   }
+  },
+  {
+   "id": "facing",
+   "title": "Facing",
+   "rule": "Terra faces screen-right (toward him); the esper faces screen-right (toward him); the jester faces screen-left (toward her), as the set's frames draw them.",
+   "why": "a take keeps the facing its two frames give it; the duel's were mirrored by a bug",
+   "check": {
+    "kind": "eye"
+   }
+  },
+  {
+   "id": "continues",
+   "title": "It starts where the last shot ended",
+   "rule": "Terra starts where 110 left her; the jester starts where 130 left him; the esper starts where 120 left it.",
+   "why": "a relay: each leg takes the moment from the one before",
+   "check": {
+    "kind": "eye"
+   }
+  },
+  {
+   "id": "leg",
+   "title": "Its leg of the relay: advance",
+   "rule": "Story time moves on - story time 30 to 33 s.",
+   "why": "LTX_PLAYBOOK §101: every shot is a leg of one moment; an echo repeats time already told",
+   "check": {
+    "kind": "eye"
+   }
+  },
+  {
+   "id": "baton",
+   "title": "The baton it hands on",
+   "rule": "His motion to the right (150 runs on with it).",
+   "why": "the next shot picks it up - without it the cut is a jump",
+   "check": {
+    "kind": "eye"
+   }
+  },
+  {
+   "id": "story1",
+   "title": "The pillars race to the RIGHT",
+   "rule": "From the esper's side toward him; he cartwheels away to the right.",
+   "why": "the script (studio/shotscripts/fire-esper.md)",
+   "check": {
+    "kind": "eye"
+   }
+  },
+  {
+   "id": "story2",
+   "title": "The esper stays behind her",
+   "rule": "It sweeps its arm; it does not walk.",
+   "why": "the script (studio/shotscripts/fire-esper.md)",
+   "check": {
+    "kind": "eye"
+   }
+  },
+  {
+   "id": "length",
+   "title": "Length",
+   "rule": "3.04 seconds (73 frames at 24 fps).",
+   "why": "each leg's length is its share of the story time",
+   "check": {
+    "kind": "duration_between",
+    "min": 2.64,
+    "max": 3.64
+   }
+  }
+ ],
+ "flair": [
+  {
+   "id": "seed",
+   "title": "Seed",
+   "note": "free - the takes differ by seed"
+  },
+  {
+   "id": "timing",
+   "title": "Timing inside the shot",
+   "note": "the beats may land a few frames early or late"
+  },
+  {
+   "id": "place",
+   "title": "How far the place has burned",
+   "note": "the dress for this shot: burning (dusk, red, burning, volcanic - it only ever gets worse)"
+  },
+  {
+   "id": "sound",
+   "title": "Sound",
+   "note": "H3's own: a roar, explosions of fire bursting from the ground one after another."
+  }
+ ],
+ "shot": "140",
+ "title": "the pillars",
+ "beat": "The hunt begins. [advance · story t 30-33 s · baton: his motion to the right (150 runs on with it)] (shot 14 of 23)",
+ "build": "frames first in the clearing set (set_test.py render + cast --ends), H3 between the set's two frames (set_film.py takes) - the camera, the marks and the facing come from the set; the place's state from the shot's dress"
+}

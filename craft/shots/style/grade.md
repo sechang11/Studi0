@@ -2,7 +2,7 @@
 
 | family | status | last tested | best result |
 |---|---|---|---|
-| style | proven | 2026-09-30 | "filmic", one grade after the cuts (all five challenge films), grade A- |
+| style | proven | 2026-10-05 | "filmic", one grade after the cuts (all five challenge films), grade A- |
 
 **Also called:** grade, color grade, look, LUT, night look, filmic
 **Not the same as:**
@@ -28,6 +28,11 @@ One grade after the cuts (`fight.py --finish`, "filmic": +11% saturation, +20% b
 - **Did:** the finish grades the assembled film once.
 - **Got:** the filmic look: +11% saturation, +20% brightness.
 - **Learned:** grade once, after the cut.
+
+### 2026-10-05 · the fire esper · a grade per shot, by the place's state (an option) · grade n/a
+- **Did:** `grade` 'by place' (shot_options.py): each shot graded in the cut by its place_state - dusk, ember (red), fire (burning), ash (volcanic) - all on the filmic base.
+- **Got:** each act has its colour; dissolves carry one look into the next.
+- **Learned:** a per-shot grade is an option; the film's one grade stays the default.
 
 ## Failure modes
 

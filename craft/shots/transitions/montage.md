@@ -7,6 +7,7 @@
 **Also called:** montage, detail montage, sequence of inserts, montage details
 **Not the same as:**
 - [`trans-cutaway`](cutaway.md) - one detail between shots of the people
+- [`cont-relay`](../continuity/relay.md) - shots that carry one moment through story time, not details
 
 ## Recipe (v1, 2026-09-05)
 

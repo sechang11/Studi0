@@ -2,7 +2,7 @@
 
 | family | status | last tested | best result |
 |---|---|---|---|
-| camera | works-with-caveats | 2026-09-30 | builder tilt 10-12% (§53); cyber-alchemist 310 (previz), grade A- |
+| camera | works-with-caveats | 2026-10-05 | builder tilt 10-12% (§53); cyber-alchemist 310 (previz), grade A- |
 
 **Also called:** tilt up, tilt down, reveal by tilting up, pan up (to a face), tilt reveal, reveal by tilt
 **Not the same as:**
@@ -48,6 +48,11 @@
 - **Did:** the tilt as a camera in one set ([`pipe-3d-set`](../pipeline/3d-set.md)), drawn down from the clock and reversed; start frames dressed from the render (8 seeds from the tower's foot, 4 from its clock), a ControlNet start frame, and the set's depth alone (`pvb`).
 - **Got:** every dress straightened the steep look up to eye level, and from the foot the tower's plain shaft became a house with a roof. From a straightened start the depth still pulled the take onto the set by its end (fit 0.34 -> 0.44); from the depth alone the angle was exact but the colours were its own (a maroon hall, dE 24-26 against the plate).
 - **Learned:** a steep angle is where the start frame fails, not the set: keep a tilt's start gentle, or accept the depth-only look.
+
+### 2026-10-05 · the fire esper 110, 160 · a tilt up as a shot option, in a 3D set · grade n/a
+- **Did:** `camera_move` tilt_up 0.2 (5 degrees) with the esper rising over his shoulder (110), 0.35 (9 degrees) as it raises its hand to throw (160).
+- **Got:** the tilt follows the thing rising; 110's push-in first try ran into his shoulder (the frame check caught it) - the tilt kept the over-the-shoulder framing.
+- **Learned:** over a shoulder, tilt or pan; do not push.
 
 ## Failure modes
 

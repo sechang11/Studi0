@@ -2,7 +2,7 @@
 
 | family | status | last tested | best result |
 |---|---|---|---|
-| camera | works-with-caveats | 2026-09-30 | builder post move 12-22% (§53), grade A- |
+| camera | works-with-caveats | 2026-10-05 | builder post move 12-22% (§53), grade A- |
 
 **Also called:** pull back, dolly out, pull out, reveal by pulling back, zoom out, move away, reveal by pull
 **Not the same as:**
@@ -33,6 +33,11 @@
 - **Did:** the words, from a backlit start frame, LTX seed 202, into a static wide (314).
 - **Got:** the pair reads as a pull back into the sunset wide; the pull inside 313 was not measured.
 - **Learned:** a cut to a wider shot carries the pull when the engine may not.
+
+### 2026-10-05 · the fire esper 230 · a pull back as a shot option, in a 3D set · grade n/a
+- **Did:** `camera_move` pull_back 0.35 (14% of the distance back) on the last shot; its end key (the kneel) painted again from the new end frame on the picked seed.
+- **Got:** she sinks to her knees as the camera pulls away and the ruin grows round her.
+- **Learned:** a move that changes the end frame needs its end key painted again (`key --force`).
 
 ## Failure modes
 

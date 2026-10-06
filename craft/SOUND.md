@@ -84,13 +84,112 @@ The steps underneath it:
    score goes under it and ducks under it (`set_film.py cut --duck`, `scripts/sound_dept.py`), one
    two-pass loudness at the end, a limiter after it.
 
+### 0.2 Covers: the key told in a spelling the model plays, one pass, measured (2026-10-05)
+
+Four rounds of TerraTheme covers kept the tune and still sounded wrong - the director: "not only did they
+not sound good - something else was wrong, I can't really describe it" (and before it, "sound effect
+stuff ... not musical"). Measured, three faults, none of them the tune:
+
+| fault | what it did | the fix |
+|---|---|---|
+| the key told as "Ab minor" | ACE-Step 1.5 turbo plays the key it is told only for some spellings (`work/music/key_spelling_probe.py`: every black-key root, both spellings, from silence): **C#, F# (major and minor) and G# minor play true; Db, Eb, Gb, Bb either way, D#, A#, G# major and Ab minor do not** ("Ab minor" came back D major / Eb major). The tune came from the source's codes, the harmony under it from the label: phrase by phrase the covers turned to Ab major or F minor (`work/music/section_check.py`). Harmony held (below): r3 0.39-0.62, r4 0.20-0.63 - **two unrelated passages of the song score 0.53 against each other** | `score_casting.key_label()`: a key told as itself when that label plays true, else as its relative (the same notes) - Ab minor -> "G# minor", Eb minor -> "F# major", Eb major -> "C minor", Bb major -> "G minor". The recipe keeps the real key |
+| two passes (`refine`) | a cover of a cover: haze between the notes, a rising sweep, a noise burst, a dull top end (spectrograms: `work/music/spec_panel.py`) - the "sound effect stuff" | one pass |
+| the XL-SFT model | noisier covers (noise share 0.07-0.12 against 0.02-0.06), not fixed by CFG 7, 4 or 2 | the base turbo model |
+
+**What works** (round 5, 12 covers, `sheet_r5.html`): `ReferenceTimbreAudio` wiring, **denoise 0.55** (0.6 for
+an idiom far from the source), `strength` 0.5, one pass, the key through `key_label`: tune kept 0.82-0.92,
+harmony held 0.76-0.89, one render 3 s (the whole 3:53 song in 12 s). The codes-only node
+(`AceStep15SourceCodes`, `"codes": true`) is cleaner but bends a phrase in a second key centre to the told
+key - kept as an option. **Speed** by `"stretch"` (rubberband before the cover, the pitch kept): 0.8 and 1.25
+hold; 1.5 broke the harmony on a cut across a section change (0.47-0.55) and held on one inside a section
+(0.76). **A song can move between key centres** (TerraTheme: Ab minor and Eb minor phrases, the second theme
+split evenly) - measure the key of the cut (`work/music/cut_keys.py`), not the song's.
+
+**Every cover is measured before the director hears it.** `round` stores, and the sheet shows, *tune kept*
+and **harmony held**: the correlation of the source's and the cover's pitch classes over each 6 s window
+(two bars at 81 BPM), the mean and the weakest window. Under ~0.7 = a phrase in the wrong harmony. Screen
+two seeds per slot and let only takes without a technical fault reach the sheet (`work/music/r5_probe.py`);
+which of those is good is still the director's ear.
+
+### 0.3 Covers from the notes, not the sound (2026-10-05)
+
+After round 5 the director: "the remixes do not sound good". Every cover so far re-coloured the recording - its
+latent half-erased (denoise 0.55) and repainted - so each sample was half the old orchestra and half the new
+instrument; erase more and the tune goes (from silence the codes keep the rhythm, not the tune). The same cover
+engine sounded fine on THE FIRE ESPER's music (f-14 / f-15: covers of the model's own clean MiniMax take). So the
+song's NOTES come out of the recording and are played again - `studio/_tools/notes_cover.py`:
+
+| step | how | TerraTheme |
+|---|---|---|
+| `prepare SONG SOURCE` | stems by Hybrid Demucs (torchaudio's HDEMUCS_HIGH_MUSDB_PLUS, 319 MB, GPU in 10 s chunks, 1.6 GB VRAM, under `systemd-run --user --scope -p MemoryMax`); notes by Basic Pitch (ONNX) from the instrument and bass stems; the LEAD SHEET: the beat grid, bar lines where the bass changes pitch, the melody (the top voice of the loud notes), one chord a bar or half bar, the bass line | 3066 + 982 notes; Abm Ebm Abm Ebm B Gb E-Dbm Abm, one bar each (2.98 s, 80.75 BPM) |
+| the check | the notes played plainly on piano against the recording (`_chroma` / `_harmony`) | **tune 0.87, harmony 0.93** - truer than any ACE cover (0.76-0.89) |
+| `render SONG STYLE START SECS SPEED OUT` | piano (the Salamander grand) / strings / band (GeneralUser GS) at any speed - exact, nothing stretched | piano 0.91, strings 0.95, band 0.87 harmony |
+| score_casting engine `notes` + `polish` | ACE-Step covers THAT render at denoise 0.6: the instruments already right, so it re-plays them for realism instead of morphing an orchestra | strings 0.89, band 0.90 |
+
+Two traps in the transcription: **a held note re-struck in sixteenths** (TerraTheme's top line shimmers on its
+long notes) read note by note is a motor rhythm, not the tune - merge same-pitch repeats into one note before
+picking the top voice; and **the downbeat comes from where the bass changes pitch**, not from its long notes (it
+plays eighths). Round 6 (`sheet_r6.html`, verdict pending): solo piano, strings and band polished, and the two
+before the AI pass. The tools live outside the repo, in `~/music-tools` (lib: basic-pitch, pretty_midi, mido,
+mir_eval, tinysoundfont; sf: Salamander Grand Piano V3, CC-BY 3.0, Alexander Holm, and GeneralUser GS; work:
+each song's stems and lead sheet).
+
+**Rounds 6-7 (2026-10-05).** The director on round 6: "this sounds 1000 times better" - and a metallic sound in
+the first seconds of the two AI-polished samples only. It was the held notes: an AI pass renders a still, held note
+as a steady pure tone without vibrato (evenly spaced overtones, nothing moving), most exposed in the first bar where
+nothing else moves. The original never holds them still (it shimmers on them), so **a held note must MOVE in
+anything the AI re-plays**: the strings bow it tremolo, the band's lead sings it with vibrato (re-striking it in
+sixteenths confused the AI inside a dense band: harmony 0.71-0.85). **The polish is seed-sensitive** (one recipe
+0.59-0.93 harmony across sources and seeds): screen three or four seeds and keep the best. **Layers mix styles**
+(`layers`: the real piano with an AI-polished band joining at bar 9, the real piano over strings - harmony
+0.92-0.94); `--mode major` plays the tune in its parallel major. **ACE-Step cannot sing words onto an existing
+tune**: a cover of an instrumental never grows a voice (lyrics and a singer in the tags, denoise 0.6-1.0, strength
+0.25-0.5: 2-4 % voice, none) - its codes say "instrumental"; text-to-music sings the lyrics clearly (84 % voice) on
+a melody of its own (15 % on the tune's notes). Singing a given tune needs a singing synthesizer (notes + words in,
+voice out) - not on the box. The codes-only wiring (`"codes": true`) crashed the shared ComfyUI on a 47.9 s source
+(CUDA device-side assert, "scatter gather kernel index out of bounds") - score_casting refuses it past 30 s.
+
+**Round 8 (2026-10-05).** The director on round 7: the piano best, the music box not bad, the rest below average;
+the polished strings still metallic ("strings don't sound like strings"); the lyrics should be sung on the tune.
+**The metallic sound is ACE-Step's audio codec**, not the re-play alone: the sampled strings passed through the VAE
+only (encoded, decoded, nothing generated) keep their waves below ~500 Hz (coherence 0.75) and are rebuilt above
+(0.40 at 0.5-1.5 kHz, 0.09 at 1.5-3 kHz, 0.01 above) - every ACE output's top end is synthesised, which a sustained
+string tone gives away and a piano never went through (`sheet_r8.html` #5/#6, the ear test). Real string samples,
+not a polish, are the fix for strings. **MusicGen-Melody** (Meta; the weights CC BY-NC 4.0 - NON-COMMERCIAL ONLY,
+said on every card; ~/music-tools/models/musicgen-melody, 5.9 GB) writes the arrangement from scratch around the
+melody (`notes_cover.py musicgen`, score_casting engine `musicgen`: the melody played alone as its guide, three
+seeds, the best kept by harmony held; 30 s a take): tune 0.82-0.86, harmony 0.80-0.86. **transformers 5.x breaks
+it**: the (empty) cache exists before the first step and MusicGen-Melody drops its conditioning whenever a cache
+exists - prompt and melody both ignored (four prompts, two guidance scales: bit-identical takes); patched in
+`cmd_musicgen` (the first step keeps the conditioning). Engine `file` puts a reference clip on a sheet (an A/B).
+
+**Round 9 (2026-10-06).** The director on round 8: "all MusicGen sound wrong" (dropped: an old model, and the
+transformers 5.x port already broken once), the GM strings "muffled, unnatural". **Recorded instruments, no AI**:
+VSCO-2 Community Edition (CC0, 3.1 GB at ~/music-tools/sf/vsco) - violin, viola and cello sections, double bass,
+solo violin, pizzicato, tremolo, harp - played by a small SFZ player in `notes_cover.py` (`Sfz`: regions by key and
+velocity, round robins, soxr pitch shift to the key, the recording's own attack; each instrument calibrated to one
+level first - raw they differ ~4x and the violins sat under the violas - then a section balance) as style
+`vsco_strings`: harmony 0.83-0.86, with the piano 0.91. Two traps: `default_path` holds spaces ("Strings\Violin
+Section\") and the .sfz case differs from the disk's. **Singing on the tune**: SoulX-Singer (Soul AI Lab, Feb 2026,
+Apache-2.0; ~/music-tools/svs, model.pt 2.8 GB; NOT the 6.9 GB preprocess pack - the metadata is written from the
+lead sheet: one WORD per note, the stressed word on the held note, the tune an octave down, a breath at each line's
+end, one segment per line, `svs_meta.py`). It needs shims on transformers 5.x (LlamaConfig keywords only; LlamaAttention
+takes the rotary embeddings and returns two values) and torchaudio 2.11 (no `load` - soundfile), all in `svs_run.py`,
+which also loads the checkpoint weights-only. Voiced 87 % of the melody's time, 79 % of it on the note. The voice
+is the model's example English prompt - a TEST voice; anything kept gets an AI-made voice. Layers can now be a
+finished file (`{"file": ...}`): the singer over the real piano.
+
 **The engines on this box:**
 
 | engine | how | notes |
 |---|---|---|
-| ACE-Step 1.5 turbo | workflow `06_acestep_music.json` | ALWAYS set `bpm` and `keyscale` (node 10); one idiom, named instruments (§7); fades past ~45 s |
+| ACE-Step 1.5 turbo | workflow `06_acestep_music.json` | ALWAYS set `bpm` and `keyscale` (node 10) - the key in a spelling it plays true (`score_casting.key_label`, §0.2); one idiom, named instruments (§7); fades past ~45 s |
 | MiniMax Music 3 | ComfyUI's template `audio_minimax_music_3.json`; studio/samples/settest/work/music/music3_test.py | on disk since 2026-08-20, first wired 2026-10-01. Caption in three parts: **Global Metadata** (idiom, BPM, key, mood arc, production) -> **Vocal Details** ("No vocals at all. Fully instrumental.") -> **Arrangement** (instruments, then section by section); structure only from the lyric section tags (`[Intro]`, `[Instrumental]`, `[Outro]`...). **It does not keep the caption's tempo or key**: the duel's 155 BPM F sharp minor came back 185 BPM in C major (r2-03) and F major (r1-08) - measure a take before covering or scoring to it. Up to ~5 minutes. 34 s rendered in 26 s. It may end a piece before `max_duration` (an orchestral 34 s came back 22 s): **a piece's length comes from its structure, not from `max_duration`** - a 30-second recipe asked for 187 s came back 28 and 35 s. Measured on one instrumental recipe asked for 187 s: 4 section tags gave 28-35 s, 9 gave 64-88 s, 23 gave 134 s, 31 gave 111-134 s - it levels off near two minutes without lyrics to carry it; a form written in bars gave 72 s. `score_casting.py final` writes one tag per ~6 s and a sentence naming the whole form; a full 3-minute instrumental is still open. Peaks above 0 dBFS: limit. |
-| Cover (a reimagining - Suno's word) | `score_casting.py` engine `cover`: ACE-Step 1.5's cover mode - ComfyUI's `ReferenceTimbreAudio` on the source latent sets `is_covers`, so the model's tokenizer turns the source into its 5 Hz semantic codes and the DiT plays them again | measured 2026-10-01 on TerraTheme and the duel. **From silence (denoise 1.0) the codes keep the rhythm and sections but NOT the tune**: chroma 0.46-0.54 against the source on three sources, no better than text alone (decoded, the hints themselves measure 0.75 - the ComfyUI port matches the official code line for line). **The hybrid works**: start from the source's own latent renoised (denoise 0.70-0.76 = ACE's `cover_noise_strength` 0.24-0.30) with the codes guiding the first half of the steps (`strength` 0.5): the tune and key kept (0.69-0.84) where a plain remix at the same denoise loses them (0.57) - the codes buy about 0.1 more denoise for the same tune, i.e. more of the sound re-made. 20 steps make denoise move in 0.05 steps. TerraTheme round 2 = 8 covers. ComfyUI's node also uses the source as the timbre reference (the official code uses silence), which pulls toward the source's sound; the plain tags guide the second half of the steps for that reason. |
+| Cover (a reimagining - Suno's word) | `score_casting.py` engine `cover`: ACE-Step 1.5's cover mode - ComfyUI's `ReferenceTimbreAudio` on the source latent sets `is_covers`, so the model's tokenizer turns the source into its 5 Hz semantic codes and the DiT plays them again | measured 2026-10-01 on TerraTheme and the duel. **From silence (denoise 1.0) the codes keep the rhythm and sections but NOT the tune**: chroma 0.46-0.54 against the source on three sources, no better than text alone (decoded, the hints themselves measure 0.75 - the ComfyUI port matches the official code line for line). **The hybrid works**: start from the source's own latent renoised (denoise 0.70-0.76 = ACE's `cover_noise_strength` 0.24-0.30) with the codes guiding the first half of the steps (`strength` 0.5): the tune and key kept (0.69-0.84) where a plain remix at the same denoise loses them (0.57) - the codes buy about 0.1 more denoise for the same tune, i.e. more of the sound re-made. 20 steps make denoise move in 0.05 steps. TerraTheme round 2 = 8 covers. ComfyUI's node also uses the source as the timbre reference (the official code uses silence), which pulls toward the source's sound; the plain tags guide the second half of the steps for that reason. **2026-10-05, superseded in part (§0.2)**: the covers above were told "Ab minor", which the model does not play true; with the key told by `key_label` and one pass, denoise 0.55 keeps the tune 0.82-0.92 and the harmony 0.76-0.89. |
+| Notes (a cover from the song's notes) | `studio/_tools/notes_cover.py` (`prepare` once per song, `render` a style) and score_casting engine `notes`, `polish` for an ACE-Step pass over the render | §0.3: the recording transcribed (Demucs stems, Basic Pitch notes, a lead sheet), played again on sampled instruments - a recorded grand piano, GeneralUser GS - at any speed; nothing of the recording's sound used. TerraTheme: harmony 0.87-0.95 against the recording, polished 0.89-0.90. A song someone else wrote stays a test. |
+| MusicGen-Melody (NON-COMMERCIAL) | `notes_cover.py musicgen` / score_casting engine `musicgen` | Meta's melody-conditioned model, weights CC BY-NC 4.0: tell the director whenever a take uses it. Writes the whole arrangement around the transcribed melody; 32 kHz mono, 30 s a take; seed-sensitive (best of three). Needs the first-step conditioning patch on transformers 5.x (§0.3). |
+| Recorded instruments (VSCO-2 CE) | `notes_cover.py` class `Sfz`, style `vsco_strings` | a CC0 orchestral library played from the lead sheet - the strings that sound like strings (§0.3, round 9). No AI, no codec. |
+| Singing (SoulX-Singer) | ~/music-tools/svs: `svs_meta.py` (lyrics on the melody's notes) -> `svs_run.py` | Apache-2.0; sings exact notes and words in a prompt voice; layered over the piano as a `file` layer. The example prompt voice is for tests only (§0.3). |
 | Remix (your own recording) | `score_casting.py` engine `remix`: ACE-Step 1.5 audio-to-audio from the recording (workflow 06 + LoadAudio / VAEEncodeAudio), or ACE-Step v1 (`31_acestep_remix.json`) | the `denoise` dial: how much of the original survives, measured as chroma match on TerraTheme (2026-10-01): 0.35 -> 0.95, 0.45 -> 0.87, 0.50 -> 0.82-0.84, 0.65 -> 0.75. 2-6 s a 32 s remix. MiniMax Music 3 takes no audio. A recording's melody survives a remix: someone else's music is for tests, not for publishing. |
 | H3's own audio | every H3 take | the effects for fights: keep them, lead the mix with them |
 | Stable Audio 3 | workflow `10_stableaudio_sfx.json` | one-off effects (§1) |

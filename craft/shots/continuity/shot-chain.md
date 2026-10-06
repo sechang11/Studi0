@@ -9,6 +9,7 @@
 - [`cont-screen-direction`](screen-direction.md) - who is on which side of the screen
 - [`move-fight`](../motion/fight.md) - how a single exchange of blows is drawn
 - [`cont-prop-state`](prop-state.md) - a prop's state carried across cuts
+- [`cont-relay`](relay.md) - ONE moment stretched across a chain of shots; this entry is a whole story's chain
 
 ## Recipe (v1, 2026-10-05)
 

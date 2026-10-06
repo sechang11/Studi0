@@ -2,7 +2,7 @@
 
 | family | status | last tested | best result |
 |---|---|---|---|
-| fx | works-with-caveats | 2026-10-01 | fight_words shon, 2 of 2 seeds on every hit, grade A- |
+| fx | works-with-caveats | 2026-10-05 | fight_words shon, 2 of 2 seeds on every hit, grade A- |
 
 **Also called:** impact frame, hit flash, starburst on a hit, white flash frame, impact burst frame, sakuga hit
 **Not the same as:**
@@ -33,6 +33,11 @@
 - **Did:** the duel's establishing walk told with the shonen style line.
 - **Got:** a white starburst over her as she walked (seed 11) and a speed-lined dash (seed 202) - nothing was hit.
 - **Learned:** the style line is per shot, not per film.
+
+### 2026-10-05 · the fire esper 090, 180 · impact frames made in the cut (an option) · grade n/a
+- **Did:** `impact_frames` (shot_options.py): 2-3 frames of a black-and-white negative at the hit, drawn by glue_cut.py (negate, desaturate, contrast up) - nothing rendered.
+- **Got:** the slam (090) and the comet (180) read as 90s anime ink negatives, on the frame asked for.
+- **Learned:** made in the cut they land on the exact frame and cost nothing; one or two a film.
 
 ## Failure modes
 

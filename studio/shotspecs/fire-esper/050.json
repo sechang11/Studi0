@@ -1,0 +1,86 @@
+{
+ "invariants": [
+  {
+   "id": "facing",
+   "title": "Facing",
+   "rule": "Terra faces screen-right (toward him), as the set's frames draw them.",
+   "why": "a take keeps the facing its two frames give it; the duel's were mirrored by a bug",
+   "check": {
+    "kind": "eye"
+   }
+  },
+  {
+   "id": "continues",
+   "title": "It starts where the last shot ended",
+   "rule": "Terra starts where 040 left her.",
+   "why": "a relay: each leg takes the moment from the one before",
+   "check": {
+    "kind": "eye"
+   }
+  },
+  {
+   "id": "leg",
+   "title": "Its leg of the relay: echo",
+   "rule": "The same moment again from another angle - story time 9 to 12 s.",
+   "why": "LTX_PLAYBOOK §101: every shot is a leg of one moment; an echo repeats time already told",
+   "check": {
+    "kind": "eye"
+   }
+  },
+  {
+   "id": "glue",
+   "title": "What holds its cut",
+   "rule": "Object: embers drift through every cut from here to 130 (an overlay across the cuts).",
+   "why": "LTX_PLAYBOOK §102 (draft): something overlaps the cut so the next shot does not start fresh",
+   "check": {
+    "kind": "eye"
+   }
+  },
+  {
+   "id": "story1",
+   "title": "The same circle, from above",
+   "rule": "It turns round her; her hair begins to lift. The same moment as 040.",
+   "why": "the script (studio/shotscripts/fire-esper.md)",
+   "check": {
+    "kind": "eye"
+   }
+  },
+  {
+   "id": "length",
+   "title": "Length",
+   "rule": "2.38 seconds (57 frames at 24 fps).",
+   "why": "each leg's length is its share of the story time",
+   "check": {
+    "kind": "duration_between",
+    "min": 1.98,
+    "max": 2.98
+   }
+  }
+ ],
+ "flair": [
+  {
+   "id": "seed",
+   "title": "Seed",
+   "note": "free - the takes differ by seed"
+  },
+  {
+   "id": "timing",
+   "title": "Timing inside the shot",
+   "note": "the beats may land a few frames early or late"
+  },
+  {
+   "id": "place",
+   "title": "How far the place has burned",
+   "note": "the dress for this shot: dusk (dusk, red, burning, volcanic - it only ever gets worse)"
+  },
+  {
+   "id": "sound",
+   "title": "Sound",
+   "note": "H3's own: the rising hum, the whisper of the incantation."
+  }
+ ],
+ "shot": "050",
+ "title": "from above",
+ "beat": "The same moment as 040, from above: how big the circle is round her. [echo · story t 9-12 s · glue: object: embers drift through every cut from here to 130 (an overlay across the cuts)] (shot 5 of 23)",
+ "build": "frames first in the clearing set (set_test.py render + cast --ends), H3 between the set's two frames (set_film.py takes) - the camera, the marks and the facing come from the set; the place's state from the shot's dress"
+}

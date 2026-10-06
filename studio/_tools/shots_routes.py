@@ -30,6 +30,11 @@ film_cards.py) with the same flags, one job at a time; the log it shows is their
     POST /api/shots/seedance {film, shot, prompt, secs, why}  keep this Seedance prompt on the shot
     POST /api/shots/upload  {film, kind, id, dataurl}         your own picture as a reference or start frame
     POST /api/shots/archive {film}  /  restore {film}         put a film away (shotscripts/_archive/), or back
+    GET  /api/shots/options?film=X   the SHOT OPTIONS (shot_options.py): what can be asked for, what is
+    POST /api/shots/save {film, options}                      save them (checked; a locked shot's are frozen) -
+                                                              /api/shots/options too, once serve.py lists it
+    POST /api/shots/run {op: set_render | sounds | glue}      a set film's shot again with its options / the
+                                                              beat sounds / the cut again from its plan
 
 One job at a time, on purpose: every stage holds the GPU, and two runs on one film would race each
 other's files. A job asked for while another runs waits in a queue and starts by itself, in order.
@@ -150,7 +155,9 @@ def _url(path):
 def _films():
     if not os.path.isdir(SEQ_DIR):
         return []
-    return sorted(f[:-5] for f in os.listdir(SEQ_DIR) if f.endswith(".json") and not f.startswith("_"))
+    # a film's sidecars (<film>.acts.json, .cut.json, .options.json) are not films: only a slug is a film's name
+    return sorted(f[:-5] for f in os.listdir(SEQ_DIR) if f.endswith(".json") and not f.startswith("_")
+                  and FILM_RE.match(f[:-5]))
 
 
 def _load(film):
@@ -204,8 +211,8 @@ def _check(script):
                 return "shot %s: seconds must be 1-30" % s["id"]
         except (TypeError, ValueError):
             return "shot %s: seconds must be a number" % s["id"]
-        if s.get("engine", "ltx") not in ("ltx", "h3", "both", "previz"):
-            return "shot %s: engine is ltx, h3, both or previz" % s["id"]
+        if s.get("engine", "ltx") not in ("ltx", "h3", "both", "previz", "h3f"):
+            return "shot %s: engine is ltx, h3, both, previz or h3f (a film shot in a 3D set)" % s["id"]
         refs = s.get("refs") or []
         for r in refs:
             if r not in known:
@@ -216,7 +223,7 @@ def _check(script):
             return ("shot %s: a composed start frame takes exactly three references - repeat one, e.g. "
                     "[who, who, place]" % s["id"])
         if s.get("engine") == "previz" and (s.get("previz") or {}).get("scene") not in \
-                [m["id"] for m in MODELS["previz"]]:
+                [m["id"] for m in MODELS["previz"]] and (s.get("previz") or {}).get("scene") != "set":
             return "shot %s: a physics shot needs a scene (%s)" % (
                 s["id"], ", ".join(m["id"] for m in MODELS["previz"]))
         tr = s.get("trim")
@@ -266,6 +273,27 @@ def _tail(path, n=80):
 
 def _running():
     return not _JOB["done"]
+
+
+def _options():
+    """studio/_tools/shot_options.py, reloaded on each call so an edit to it is live without a restart."""
+    sys.path.insert(0, TOOLS)
+    import importlib
+    import shot_options
+    return importlib.reload(shot_options)
+
+
+def _beat_urls(so, film):
+    """{shot: [url of each beat sound asked for, or None while it is not made]} - to hear one on the Options tab."""
+    out = {}
+    for sid, row in (so.load(film).get("shots") or {}).items():
+        b = row.get("beat_sounds") or {}
+        out[sid] = [_url(so.beat_file(film, sid, x)) if x.get("sound") else None for x in b.get("beats", [])]
+    return out
+
+
+def _is_set_film(s):
+    return any((x.get("previz") or {}).get("scene") == "set" for x in s.get("shots", []))
 
 
 def _seedance():
@@ -383,8 +411,12 @@ def editor(film):
                       ("filmic", "%s_filmic.mp4")):
         outs[key] = _url(os.path.join(out, name % film))
     outs["score"] = _url(os.path.join(out, "score.mp3"))
+    so = _options()
     return {"film": film, "script": s, "refs": refs, "shots": shots, "runtime": round(t, 3), "outputs": outs,
-            "models": MODELS, "films": _films(), "job": status()}, 200
+            "models": MODELS, "films": _films(), "job": status(),
+            "options": so.load(film), "option_defs": so.OPTIONS, "set_film": _is_set_film(s),
+            "beat_urls": _beat_urls(so, film),
+            "cut_plan": os.path.exists(os.path.join(SEQ_DIR, film + ".cut.json"))}, 200
 
 
 # ------------------------------------------------------------------------------ older GET views
@@ -468,9 +500,48 @@ def status():
             "log": "".join(log.splitlines(True)[-80:])}
 
 
+def options_get(film):
+    if not FILM_RE.match(film or ""):
+        return {"error": "bad film"}, 400
+    s = _load(film)
+    if s is None:
+        return {"error": "no script %s" % film}, 404
+    so = _options()
+    return {"film": film, "defs": so.OPTIONS, "values": so.load(film), "set_film": _is_set_film(s),
+            "cut_plan": os.path.exists(os.path.join(SEQ_DIR, film + ".cut.json"))}, 200
+
+
+def options_save(data):
+    """The whole options document for a film, checked against shot_options.OPTIONS. A shot locked on its spec
+    sheet keeps its options as they are: changing them would change what the film shows for it."""
+    film = str(data.get("film") or "")
+    s = _load(film) if FILM_RE.match(film) else None
+    if s is None:
+        return {"error": "no script %r" % film}, 404
+    so = _options()
+    try:
+        new = so.clean(data.get("values") or {})
+    except ValueError as e:
+        return {"error": str(e)}, 400
+    ids = {x["id"] for x in s["shots"]}
+    unknown = [i for i in new["shots"] if i not in ids]
+    if unknown:
+        return {"error": "no shot %s in %s" % (", ".join(unknown), film)}, 400
+    old = so.load(film)
+    for sid in ids:
+        if _spec(film, sid)["locked"] and (old["shots"].get(sid) or {}) != (new["shots"].get(sid) or {}):
+            return {"error": "shot %s is locked on its spec sheet - unlock it to change its options" % sid}, 409
+    saved = so.save(film, new)
+    return {"ok": True, "film": film, "values": {"film": saved["film"], "shots": saved["shots"]}}, 200
+
+
 # ------------------------------------------------------------------------------ writes
 def save(data):
     film = str(data.get("film") or "")
+    if "options" in data and "script" not in data:
+        # the shot options ride on the save route: serve.py lets only the routes it lists be POSTed to, and
+        # /api/shots/options is not on its list yet
+        return options_save({"film": film, "values": data.get("options")})
     s = data.get("script")
     if isinstance(s, str):
         try:
@@ -968,6 +1039,40 @@ def run(data):
             if res not in ("480p", "720p", "1080p"):
                 return {"error": "resolution is 480p, 720p or 1080p"}, 400
             return _start(film, "seedance", shots, [py + ["--seedance", shots[0], "--resolution", res, "--force"]])
+        if op == "set_render":
+            # a set film's shot again, with its options (a camera move moves the set's end frame): the set's
+            # renders, the cast into both frames (one painting when the camera is still), the key poses again
+            # from the new frames on the seeds already picked, then the takes - H3 at 12 steps
+            if not _is_set_film(s):
+                return {"error": "set_render is for a film shot in a 3D set"}, 400
+            if not shots:
+                return {"error": "name the shots to render again"}, 400
+            no = _refuse_locked(film, shots, "render it again")
+            if no:
+                return no
+            seeds, err = _seeds(data.get("seeds"), ("11", "202"))
+            if err:
+                return {"error": err}, 400
+            st = ["python3", os.path.join(TOOLS, "set_test.py"), "--sequence", film]
+            keyed = [i for i in shots if next(x for x in s["shots"] if x["id"] == i).get("keys")]
+            plain = [i for i in shots if i not in keyed]
+            cmds = [st + ["render", "--force", "--only"] + shots,
+                    st + ["cast", "--ends", "--same-bg", "--force", "--only"] + shots + ["--seeds", "11", "202"]]
+            if keyed:
+                cmds.append(st + ["key", "--force", "--only"] + keyed + ["--seeds", "11", "202"])
+                cmds.append(st + ["take", "--force", "--only"] + keyed + ["--seeds"] + seeds)
+            if plain:
+                cmds.append(["python3", os.path.join(TOOLS, "set_film.py"), "--sequence", film, "takes", "--only",
+                             ",".join(plain), "--seeds"] + seeds + ["--force"])
+            return _start(film, "set_render", shots, cmds)
+        if op == "sounds":
+            return _start(film, "sounds", [], [["python3", os.path.join(TOOLS, "shot_options.py"), "sounds", film]])
+        if op == "glue":
+            plan_ = os.path.join(SEQ_DIR, film + ".cut.json")
+            if not os.path.exists(plan_):
+                return {"error": "%s has no cut plan (shotscripts/%s.cut.json)" % (film, film)}, 400
+            return _start(film, "glue", [], [["python3", os.path.join(TOOLS, "shot_options.py"), "sounds", film],
+                                             ["python3", os.path.join(TOOLS, "glue_cut.py"), plan_, "--picks"]])
         if op in ("stage",) or data.get("stage"):
             return _old_stage(film, s, data)
         return {"error": "unknown op %r" % op}, 400
@@ -1036,6 +1141,8 @@ def get(path, query):
         return tree(q.get("film"))
     if rest == "status":
         return status(), 200
+    if rest == "options":
+        return options_get(q.get("film"))
     if rest == "plan":
         film = q.get("film") or ""
         if not FILM_RE.match(film):
@@ -1052,7 +1159,8 @@ def get(path, query):
 def post(path, data):
     rest = path.strip("/")
     fn = {"save": save, "new": new, "run": run, "stop": stop, "pick": pick, "anchor": anchor,
-          "seedance": seedance_save, "upload": upload, "archive": archive, "restore": restore}.get(rest)
+          "seedance": seedance_save, "upload": upload, "archive": archive, "restore": restore,
+          "options": options_save}.get(rest)
     if not fn:
         return {"error": "unknown shots route"}, 404
     return fn(data or {})

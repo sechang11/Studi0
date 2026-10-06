@@ -1,0 +1,234 @@
+{
+ "_comment": "THE FIRE ESPER's glued cut (LTX_PLAYBOOK §102 draft), written by studio/samples/settest/work/esper/cutplan.py from the picks and each shot's glue.",
+ "film": "fire-esper",
+ "out": "fire-esper.mp4",
+ "grade": "filmic",
+ "title": {
+  "lines": [
+   [
+    "THE FIRE ESPER",
+    64
+   ],
+   [
+    "Terra and the jester",
+    28
+   ]
+  ],
+  "secs": 3.0,
+  "base": "anchor_010.png"
+ },
+ "end": {
+  "lines": [
+   [
+    "THE END",
+    60
+   ]
+  ],
+  "secs": 3.0,
+  "base": "anchor_230.png"
+ },
+ "shots": [
+  {
+   "id": "010",
+   "take": "h3f_010_s11.mp4",
+   "in": 0.0,
+   "out": 4.008,
+   "audio_out": 4.458
+  },
+  {
+   "id": "020",
+   "take": "h3k_020_s202.mp4",
+   "in": 0.0,
+   "out": 2.642,
+   "audio_out": 3.042
+  },
+  {
+   "id": "030",
+   "take": "h3f_030_s11.mp4",
+   "in": 0.0,
+   "out": 2.333
+  },
+  {
+   "id": "040",
+   "take": "h3f_040_s202.mp4",
+   "in": 0.0,
+   "out": 2.333
+  },
+  {
+   "id": "050",
+   "take": "h3k_050_s11.mp4",
+   "in": 0.0,
+   "out": 2.333
+  },
+  {
+   "id": "060",
+   "take": "h3k_060_s11.mp4",
+   "in": 0.0,
+   "out": 3.042
+  },
+  {
+   "id": "070",
+   "take": "h3k_070_s11.mp4",
+   "in": 0.0,
+   "out": 3.958,
+   "audio_out": 4.458
+  },
+  {
+   "id": "080",
+   "take": "h3k_080_s11.mp4",
+   "in": 0.0,
+   "out": 2.333,
+   "next": {
+    "video": "flash",
+    "secs": 0.35
+   }
+  },
+  {
+   "id": "090",
+   "take": "h3k_090_s11.mp4",
+   "in": 0.0,
+   "out": 3.042,
+   "next": {
+    "video": "flash",
+    "secs": 0.35
+   }
+  },
+  {
+   "id": "100",
+   "take": "h3k_100_s11.mp4",
+   "in": 0.0,
+   "out": 4.458
+  },
+  {
+   "id": "110",
+   "take": "h3f_110_s202.mp4",
+   "in": 0.0,
+   "out": 3.042
+  },
+  {
+   "id": "120",
+   "take": "h3f_120_s202.mp4",
+   "in": 0.0,
+   "out": 1.983,
+   "audio_out": 2.333
+  },
+  {
+   "id": "130",
+   "take": "h3f_130_s202.mp4",
+   "in": 0.0,
+   "out": 2.333
+  },
+  {
+   "id": "140",
+   "take": "h3f_140_s11.mp4",
+   "in": 0.0,
+   "out": 3.042
+  },
+  {
+   "id": "150",
+   "take": "h3f_150_s11.mp4",
+   "in": 0.0,
+   "out": 3.042
+  },
+  {
+   "id": "160",
+   "take": "h3f_160_s11.mp4",
+   "in": 0.0,
+   "out": 3.042
+  },
+  {
+   "id": "170",
+   "take": "h3f_170_s202.mp4",
+   "in": 0.0,
+   "out": 2.333,
+   "next": {
+    "video": "flash",
+    "secs": 0.35
+   }
+  },
+  {
+   "id": "180",
+   "take": "h3f_180_s202.mp4",
+   "in": 0.0,
+   "out": 3.042,
+   "next": {
+    "video": "dissolve",
+    "secs": 0.8
+   }
+  },
+  {
+   "id": "190",
+   "take": "h3f_190_s11.mp4",
+   "in": 0.0,
+   "out": 3.958,
+   "audio_out": 4.458
+  },
+  {
+   "id": "200",
+   "take": "h3f_200_s202.mp4",
+   "in": 0.0,
+   "out": 3.042
+  },
+  {
+   "id": "210",
+   "take": "h3k_210_s11.mp4",
+   "in": 0.0,
+   "out": 4.458
+  },
+  {
+   "id": "220",
+   "take": "h3k_220_s11.mp4",
+   "in": 0.0,
+   "out": 2.333,
+   "next": {
+    "video": "dissolve",
+    "secs": 0.8
+   }
+  },
+  {
+   "id": "230",
+   "take": "h3k_230_s202.mp4",
+   "in": 0.0,
+   "out": 4.458
+  }
+ ],
+ "beds": [
+  {
+   "file": "bed_rumble.mp3",
+   "from": "030",
+   "to": "130",
+   "gain_db": -13,
+   "fade": 2.0
+  },
+  {
+   "file": "bed_fire.mp3",
+   "from": "140",
+   "to": "190",
+   "gain_db": -12,
+   "fade": 1.5
+  },
+  {
+   "file": "bed_ash.mp3",
+   "from": "190",
+   "to": "end",
+   "gain_db": -14,
+   "fade": 2.0
+  }
+ ],
+ "overlays": [
+  {
+   "kind": "embers",
+   "from": "050",
+   "to": "130",
+   "density": 0.8,
+   "seed": 7
+  },
+  {
+   "kind": "embers",
+   "from": "210",
+   "to": "220",
+   "density": 1.3,
+   "seed": 11
+  }
+ ]
+}

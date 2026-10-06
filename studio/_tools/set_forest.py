@@ -41,7 +41,8 @@ GROUPS = {"bigtree": (255, 0, 0), "deadtree": (0, 255, 255), "boulder": (0, 0, 2
           "log": (255, 0, 255), "path": (255, 128, 0), "forest": (128, 128, 128), "ground": (64, 64, 64),
           "props": (192, 192, 192), "terra": (255, 255, 255), "jester": (0, 255, 0), "magic": (128, 0, 255)}
 LANDMARKS = ["bigtree", "deadtree", "boulder", "lantern", "log", "path"]
-SHEETS = {"terra": "studio/sheets/terra-in-the-plaza-terra", "jester": "studio/sheets/forest-fight-the-jester"}
+SHEETS = {"terra": "studio/sheets/terra-in-the-plaza-terra", "jester": "studio/sheets/forest-fight-the-jester",
+          "esper": "studio/sheets/the-fire-esper"}
 BIG = (3.7, 8.2)
 
 

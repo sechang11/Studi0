@@ -2,13 +2,14 @@
 
 | family | status | last tested | best result |
 |---|---|---|---|
-| transitions | proven | 2026-09-07 | shot 070 → 080, the cut number 17.49 → 1.46 (§75), grade A- |
+| transitions | proven | 2026-10-05 | shot 070 → 080, the cut number 17.49 → 1.46 (§75), grade A- |
 
 **Also called:** dissolve, cross-fade, crossfade, mix, fade between shots
 **Not the same as:**
 - [`trans-match-cut`](match-cut.md) - a hard cut between shapes that rhyme
 - [`trans-time-passes`](time-passes.md) - a dissolve between two lights of the same place
 - [`trans-fade-to-black`](fade-to-black.md) - to black, for an act break
+- [`trans-sound-bridge`](sound-bridge.md) - the picture cuts and the SOUND overlaps
 
 ## Recipe (v1, 2026-09-07)
 
@@ -34,6 +35,11 @@ A short dissolve (about 1/3 s) from the previous take's actual last frame; to ma
 - **Did:** the word *cut* inside an ash cloud.
 - **Got:** the cut detector missed it on 2 of 3 takes.
 - **Learned:** "a cut hidden behind an effect is a dissolve as far as any detector is concerned, and it is the better-looking choice".
+
+### 2026-10-05 · the fire esper · dissolves as glue · grade A-
+- **Did:** 0.8 s dissolves where time passes or a thing becomes another: the impact into the warzone's overview (180 → 190), her glowing hands into her alone in the ash (220 → 230), the title in and THE END in (`glue_cut.py`).
+- **Got:** the ruin arrives as time passing; the hands melting into the wide reads as the power gone home.
+- **Learned:** inside a relay a dissolve marks the breath legs - it says time moved on without a word.
 
 ## Failure modes
 

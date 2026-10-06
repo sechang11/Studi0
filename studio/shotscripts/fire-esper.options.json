@@ -1,0 +1,182 @@
+{
+ "_comment": "Shot options for fire-esper - the treatments asked for, off unless set here (studio/_tools/shot_options.py, LTX_PLAYBOOK §103). Written by shots & specs.",
+ "film": {
+  "grade": {
+   "on": true,
+   "look": "by place"
+  }
+ },
+ "shots": {
+  "010": {
+   "camera_move": {
+    "on": true,
+    "move": "push_in",
+    "amount": 0.25
+   }
+  },
+  "020": {
+   "camera_move": {
+    "on": true,
+    "move": "push_in",
+    "amount": 0.3
+   }
+  },
+  "040": {
+   "beat_sounds": {
+    "on": true,
+    "beats": [
+     {
+      "at": 0.3,
+      "sound": "a magical chime and a soft whoosh as a circle of glowing runes ignites on the ground",
+      "gain_db": -4.0,
+      "secs": 2.5
+     }
+    ]
+   }
+  },
+  "090": {
+   "beat_sounds": {
+    "on": true,
+    "beats": [
+     {
+      "at": 0.9,
+      "sound": "a deep heavy boom as two hands slam into the ground",
+      "gain_db": -2.0,
+      "secs": 2.0
+     },
+     {
+      "at": 1.5,
+      "sound": "a roaring column of fire erupting upward with a rushing whoosh",
+      "gain_db": -2.0,
+      "secs": 3.0
+     }
+    ]
+   },
+   "impact_frames": {
+    "on": true,
+    "at": [
+     1.6
+    ],
+    "frames": 2.0,
+    "style": "invert"
+   }
+  },
+  "100": {
+   "beat_sounds": {
+    "on": true,
+    "beats": [
+     {
+      "at": 0.6,
+      "sound": "a deep rumbling demonic growl rising out of a roaring fire",
+      "gain_db": -4.0,
+      "secs": 4.0
+     }
+    ]
+   }
+  },
+  "110": {
+   "camera_move": {
+    "on": true,
+    "move": "tilt_up",
+    "amount": 0.2
+   }
+  },
+  "120": {
+   "camera_move": {
+    "on": true,
+    "move": "push_in",
+    "amount": 0.2
+   },
+   "beat_sounds": {
+    "on": true,
+    "beats": [
+     {
+      "at": 1.2,
+      "sound": "a monstrous demonic roar, deep and thunderous",
+      "gain_db": -2.0,
+      "secs": 2.5
+     }
+    ]
+   }
+  },
+  "160": {
+   "camera_move": {
+    "on": true,
+    "move": "tilt_up",
+    "amount": 0.35
+   },
+   "beat_sounds": {
+    "on": true,
+    "beats": [
+     {
+      "at": 1.7,
+      "sound": "a heavy whoosh of a huge fireball being hurled",
+      "gain_db": -3.0,
+      "secs": 2.0
+     }
+    ]
+   }
+  },
+  "170": {
+   "beat_sounds": {
+    "on": true,
+    "beats": [
+     {
+      "at": 0.05,
+      "sound": "a rising whistle of a falling meteor streaking through the sky",
+      "gain_db": -3.0,
+      "secs": 2.5
+     }
+    ]
+   }
+  },
+  "180": {
+   "beat_sounds": {
+    "on": true,
+    "beats": [
+     {
+      "at": 0.4,
+      "sound": "a colossal explosion with rocks shattering and debris falling",
+      "gain_db": -1.0,
+      "secs": 3.0
+     }
+    ]
+   },
+   "impact_frames": {
+    "on": true,
+    "at": [
+     0.45
+    ],
+    "frames": 3.0,
+    "style": "invert"
+   }
+  },
+  "190": {
+   "camera_move": {
+    "on": true,
+    "move": "orbit_right",
+    "amount": 0.25
+   }
+  },
+  "200": {
+   "beat_sounds": {
+    "on": true,
+    "beats": [
+     {
+      "at": 2.3,
+      "sound": "a sharp finger snap followed by a soft magical poof of smoke",
+      "gain_db": -3.0,
+      "secs": 1.5
+     }
+    ]
+   }
+  },
+  "230": {
+   "camera_move": {
+    "on": true,
+    "move": "pull_back",
+    "amount": 0.35
+   }
+  }
+ }
+}

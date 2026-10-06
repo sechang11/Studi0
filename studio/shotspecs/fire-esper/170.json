@@ -1,0 +1,68 @@
+{
+ "invariants": [
+  {
+   "id": "leg",
+   "title": "Its leg of the relay: advance",
+   "rule": "Story time moves on - story time 38 to 40 s.",
+   "why": "LTX_PLAYBOOK §101: every shot is a leg of one moment; an echo repeats time already told",
+   "check": {
+    "kind": "eye"
+   }
+  },
+  {
+   "id": "glue",
+   "title": "What holds its cut",
+   "rule": "Flash: the impact covers the cut into 180.",
+   "why": "LTX_PLAYBOOK §102 (draft): something overlaps the cut so the next shot does not start fresh",
+   "check": {
+    "kind": "eye"
+   }
+  },
+  {
+   "id": "story1",
+   "title": "Only the comet",
+   "rule": "Nobody is in this shot: the burning treetops, the red sky, the comet crossing to the right and plunging down.",
+   "why": "the script (studio/shotscripts/fire-esper.md)",
+   "check": {
+    "kind": "eye"
+   }
+  },
+  {
+   "id": "length",
+   "title": "Length",
+   "rule": "2.38 seconds (57 frames at 24 fps).",
+   "why": "each leg's length is its share of the story time",
+   "check": {
+    "kind": "duration_between",
+    "min": 1.98,
+    "max": 2.98
+   }
+  }
+ ],
+ "flair": [
+  {
+   "id": "seed",
+   "title": "Seed",
+   "note": "free - the takes differ by seed"
+  },
+  {
+   "id": "timing",
+   "title": "Timing inside the shot",
+   "note": "the beats may land a few frames early or late"
+  },
+  {
+   "id": "place",
+   "title": "How far the place has burned",
+   "note": "the dress for this shot: burning (dusk, red, burning, volcanic - it only ever gets worse)"
+  },
+  {
+   "id": "sound",
+   "title": "Sound",
+   "note": "H3's own: a rising whistling roar."
+  }
+ ],
+ "shot": "170",
+ "title": "across the sky",
+ "beat": "Falling on him. [advance · story t 38-40 s · glue: flash: the impact covers the cut into 180] (shot 17 of 23)",
+ "build": "frames first in the clearing set (set_test.py render + cast --ends), H3 between the set's two frames (set_film.py takes) - the camera, the marks and the facing come from the set; the place's state from the shot's dress"
+}

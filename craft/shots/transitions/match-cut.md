@@ -9,6 +9,8 @@
 - [`cont-move-across-cuts`](../continuity/move-across-cuts.md) - one move split over generations, frame-exact; a match cut joins two different shots that rhyme
 - [`trans-dissolve`](dissolve.md) - a soft blend instead of a cut
 - [`trans-in-shot-cut`](in-shot-cut.md) - a cut made inside one generation
+- [`trans-held-object`](held-object.md) - the SAME object kept across the cut, not a shape that rhymes
+- [`trans-sound-bridge`](sound-bridge.md) - the sound crosses the cut
 
 ## Recipe (v1, 2026-09-30)
 

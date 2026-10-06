@@ -52,7 +52,7 @@ BOULDER = (4.4, 36.0)
 STONES = [(8.6, 25.0), (9.4, 28.6), (8.8, 31.8), (-8.2, 32.6)]
 GROUPS = {"edgetree": (128, 255, 0), "stones": (255, 128, 128), "rock2": (0, 128, 255), "debris": (255, 0, 128),
           "clearing": (128, 64, 0)}
-HEIGHTS = {"terra": 1.62, "jester": 1.88}
+HEIGHTS = {"terra": 1.62, "jester": 1.88, "esper": 6.5}     # the fire esper towers four times over her
 
 
 def _who(name):

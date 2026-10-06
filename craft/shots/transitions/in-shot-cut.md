@@ -7,6 +7,7 @@
 **Also called:** internal cut, multishot, cut inside the take, two shots in one render
 **Not the same as:**
 - [`trans-match-cut`](match-cut.md) - a cut made at assembly between two takes
+- [`cont-relay`](../continuity/relay.md) - one moment broken into separate shots, cut at assembly
 
 ## Recipe (v1, 2026-09-24)
 

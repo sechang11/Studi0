@@ -2,7 +2,7 @@
 
 | family | status | last tested | best result |
 |---|---|---|---|
-| camera | proven | 2026-09-05 | builder post move 1.127 for 1.14 asked (§52), grade A |
+| camera | proven | 2026-10-05 | builder post move 1.127 for 1.14 asked (§52), grade A |
 
 **Also called:** push in, dolly in, move in, slow push, creep in, pull in close, camera moves closer
 **Not the same as:**
@@ -57,6 +57,11 @@ A push you can promise is a post move on a stabilised take; LTX will usually pus
 - **Did:** the push in words, in the shot-script pipeline.
 - **Got:** slow push-ins, as LTX tends to do anyway.
 - **Learned:** in this pipeline the push comes free; the size of it does not.
+
+### 2026-10-05 · the fire esper 010, 020, 120 · a push-in as a shot option, in a 3D set · grade n/a
+- **Did:** a `camera_move` option (shot_options.py: push_in 0.2-0.3 = 8-12% of the way to the subject) turned into the set's end camera; the set's two frames painted separately, H3 at 12 steps between them.
+- **Got:** a slow creep in on the wide (010), on her prayer (020), into its eyes (120) - the two paintings of one place hold together; 120's push meets the roar.
+- **Learned:** a push-in is an option now, not a default; a set film gets it exact from the set's two cameras - check `set_film.py check` before rendering (a push over a shoulder can run into it).
 
 ## Failure modes
 

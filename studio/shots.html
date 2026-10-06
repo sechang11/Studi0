@@ -319,6 +319,12 @@
  .promise{border-left:2px solid #6b5520;padding:2px 0 2px 8px;margin:6px 0;font-size:12.5px}
  .promise b{color:var(--gold)}
  .promise .w{color:var(--faint);font-style:italic}
+ .sopt{border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin:6px 0;background:var(--card)}
+ .sopt.on{border-color:var(--goldline);background:#17150f}
+ .sopt .optf{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:flex-end}
+ .sopt .optf>label.l{flex-basis:100%;margin:6px 0 0}
+ .sopt .optrow{display:flex;gap:4px;align-items:center;margin-top:4px;flex-basis:100%}
+ .pill.sopt{border-color:var(--goldline);color:var(--gold)}
  .adder{border:1px dashed #3a3a48;border-radius:8px;padding:8px;margin-top:8px}
 
  /* in-page dialogs (not the browser's): new film, new shot, film settings, the paid send, help */
@@ -742,6 +748,7 @@ async function loadData(keep) {
   if (isScript()) {
     const d = await api("/api/shots/editor?film=" + encodeURIComponent(S.film));
     S.data = d;
+    if (!S.optPending) S.opts = JSON.parse(JSON.stringify(d.options || {film: {}, shots: {}}));
     if (!S.dirty || !keep) { S.script = JSON.parse(JSON.stringify(d.script)); S.dirty = false; }
     S.shots = d.shots.map(normScript);
     S.runtime = d.runtime;
@@ -784,6 +791,7 @@ function renderCards() {
         ${sp.has ? `<span class="pill inv">${sp.nInv} promise${sp.nInv === 1 ? "" : "s"}</span>` : `<span class="pill no">no spec</span>`}
         ${sp.has && sp.nFlair ? `<span class="pill">${sp.nFlair} flair</span>` : ""}
         ${draft ? `<span class="pill draft" title="the spec sheet has an unsaved draft">&#9998; draft</span>` : ""}
+        ${isScript() && optShotCount(s.id) ? `<span class="pill sopt" title="options asked for on this shot - its Options tab">&#9881; ${optShotCount(s.id)}</span>` : ""}
         ${s.status && s.poster ? `<span class="pill warn">${esc(s.status)}</span>` : ""}</div></div></div>`;
   }).join("");
   if (isScript()) h += `<div class="card add" id="addshot" title="add a shot"><div class="plus">+</div><div class="m"><div class="t" style="height:auto">add a shot</div></div></div>`;
@@ -1403,7 +1411,7 @@ function renderInsp() {
   const s = cur(), box = $("#insp");
   if (!s) { box.innerHTML = `<div class="pane"><div class="hint">No shot selected.</div>${isScript() ? paneCast() : ""}</div>`; bindCast(); return; }
   const tabs = isScript()
-    ? [["shot", "Shot"], ["frame", "Start frame"], ["takes", "Takes (" + s.takes.length + ")"], ["seedance", "Seedance" + (s.sd !== "none" ? ' <span class="sdd">&#9679;</span>' : "")], ["cast", "Cast"]]
+    ? [["shot", "Shot"], ["frame", "Start frame"], ["takes", "Takes (" + s.takes.length + ")"], ["options", "Options" + (optCount(s.id) ? " (" + optCount(s.id) + ")" : "")], ["seedance", "Seedance" + (s.sd !== "none" ? ' <span class="sdd">&#9679;</span>' : "")], ["cast", "Cast"]]
     : [["takes", "Takes (" + s.takes.length + ")"], ["about", "About"]];
   let tab = S.tab[S.kind]; if (!tabs.some(t => t[0] === tab)) tab = tabs[0][0];
   let h = `<div class="tabs">${tabs.map(([k, l]) => `<button data-tab="${k}" class="${k === tab ? "on" : ""}">${l}</button>`).join("")}</div><div class="pane">`;
@@ -1414,6 +1422,7 @@ function renderInsp() {
     else if (tab === "frame") h += paneFrame(sh, ds, s);
     else if (tab === "takes") h += paneTakes(sh, ds, s);
     else if (tab === "seedance") h += paneSeedance(sh, ds, s);
+    else if (tab === "options") h += paneOptions(sh, ds, s);
     else h += paneCast();
   } else {
     h += tab === "takes" ? paneFilmTakes(s) : paneAbout(s);
@@ -1422,10 +1431,125 @@ function renderInsp() {
   const keep = box.scrollTop;
   box.innerHTML = h; box.scrollTop = keep;
   box.querySelectorAll("[data-tab]").forEach(b => b.onclick = () => gotoTab(b.dataset.tab));
-  if (isScript()) { bindScript(s.id); bindCast(); showSaveState(); }
+  if (isScript()) { bindScript(s.id); bindCast(); showSaveState(); if (tab === "options") bindOptions(s.id); }
   else bindFilm(s);
   bindCmp(s);
   markTakes();
+}
+// ================================================================== shot options (studio/_tools/shot_options.py)
+// the treatments a film or a shot ASKS for - off unless set here; the general improvements need no switch
+const optDefs = () => (S.data && S.data.option_defs) || [];
+const optVal = (scope, sid, id) => !S.opts ? undefined : scope === "film" ? (S.opts.film || {})[id] : ((S.opts.shots || {})[sid] || {})[id];
+const optIsOn = (o, v) => o.kind === "bool" ? !!v : !!(v && v.on !== false);
+const optShotCount = sid => optDefs().filter(o => o.scope !== "film" && optIsOn(o, optVal("shot", sid, o.id))).length;
+const optCount = sid => optShotCount(sid) + optDefs().filter(o => o.scope !== "shot" && optIsOn(o, optVal("film", null, o.id))).length;
+function optDefaults(o) { const v = {on: true}; (o.fields || []).forEach(f => { v[f.id] = f.type === "list" ? [] : JSON.parse(JSON.stringify(f.default)); }); return v; }
+function optField(o, f, v, key, locked) {
+  const val = v && v[f.id] !== undefined ? v[f.id] : f.default, dis = locked ? "disabled" : "", dk = `data-optf="${esc(key)}|${esc(f.id)}"`;
+  if (f.type === "enum") return `<label class="l">${esc(f.label)}</label><select ${dk} ${dis}>${f.choices.map(c => `<option value="${esc(c)}" ${c === val ? "selected" : ""}>${esc(c.replace(/_/g, " "))}</option>`).join("")}</select>`;
+  if (f.type === "number") return `<label class="l">${esc(f.label)}</label><input type="number" ${dk} min="${f.min}" max="${f.max}" step="${f.step}" value="${esc(val)}" style="width:90px" ${dis}>`;
+  if (f.type === "numbers") return `<label class="l">${esc(f.label)}</label><input ${dk} value="${esc((val || []).join(", "))}" style="width:100%" ${dis}>`;
+  if (f.type === "text") return `<label class="l">${esc(f.label)}</label><input ${dk} value="${esc(val || "")}" style="width:100%" ${dis}>`;
+  if (f.type !== "list") return "";
+  const rows = (val || []).map((it, i) => `<div class="optrow">${f.item.map(g => g.type === "number"
+      ? `<input type="number" data-optl="${esc(key)}|${esc(f.id)}|${i}|${esc(g.id)}" min="${g.min}" max="${g.max}" step="${g.step}" value="${esc(it[g.id])}" title="${esc(g.label)}" style="width:${g.id === "at" ? 66 : 56}px" ${dis}>`
+      : `<input class="grow" data-optl="${esc(key)}|${esc(f.id)}|${i}|${esc(g.id)}" value="${esc(it[g.id] || "")}" placeholder="${esc(g.label)}" title="${esc(g.label)}" ${dis}>`).join("")}
+      ${(() => { const u = (((S.data || {}).beat_urls || {})[key.split(":")[1]] || [])[i]; return o.id === "beat_sounds" ? (u ? `<button class="ghost" data-beatplay="${esc(u)}" title="hear it" style="padding:2px 8px">&#9654;</button>` : `<span class="n" title="make the beat sounds to hear it">not made</span>`) : ""; })()}
+      <button class="ghost" data-optdel="${esc(key)}|${esc(f.id)}|${i}" title="remove" style="padding:2px 8px" ${dis}>&times;</button></div>`).join("");
+  return `<label class="l">${esc(f.label)}: ${f.item.map(g => esc(g.label)).join(" · ")}</label>${rows || `<div class="n" style="flex-basis:100%">none yet</div>`}
+    <button data-optadd="${esc(key)}|${esc(f.id)}" style="margin-top:4px" ${dis}>+ add one</button>`;
+}
+function optCard(o, scope, sid, locked, inherited) {
+  const v = optVal(scope, sid, o.id), on = optIsOn(o, v), key = scope + ":" + (sid || "") + ":" + o.id;
+  let h = `<div class="sopt ${on ? "on" : ""}"><div class="row"><label class="chk" style="color:var(--ink)"><input type="checkbox" data-opt="${esc(key)}" ${on ? "checked" : ""} ${locked ? "disabled" : ""}> <b>${esc(o.label)}</b></label>
+    <span class="grow"></span><span class="pill" title="where it acts">${esc(o.stage)}</span></div>
+    <div class="n">${esc(o.what)}</div>`;
+  if (!on && inherited) h += `<div class="n" style="color:var(--gold)">the film's setting applies here: ${esc(inherited)}</div>`;
+  if (on && o.kind === "object") h += `<div class="optf">${(o.fields || []).map(f => optField(o, f, v, key, locked)).join("")}</div>`;
+  h += `<div class="n">costs: ${esc(o.cost)}${o.note ? " - " + esc(o.note) : ""}</div></div>`;
+  return h;
+}
+function paneOptions(sh, ds, s) {
+  const D = S.data, defs = optDefs(), locked = s.spec.locked;
+  if (!S.opts) S.opts = JSON.parse(JSON.stringify(D.options || {film: {}, shots: {}}));
+  let h = `<div class="n" style="margin-bottom:6px">Off unless asked. Every film gets the general improvements without a switch - H3 at 12 steps (no mosaic), the maker's checks and the warning for figures too small to read, the glue its script asks for, score candidates mixed under the takes. These are the specialised ones, for the whole film or for this shot alone.</div>
+    <label class="l">the whole film</label>`;
+  h += defs.filter(o => o.scope !== "shot").map(o => optCard(o, "film", null, false)).join("");
+  h += `<label class="l">this shot - ${esc(sh.id)} ${esc(sh.title || "")}</label>` + lockBar(s);
+  h += defs.filter(o => o.scope !== "film").map(o => {
+    const fv = o.scope === "both" ? optVal("film", null, o.id) : null;
+    const inh = fv && optIsOn(o, fv) ? Object.entries(fv).filter(([k]) => k !== "on").map(([, x]) => x).join(" ") || "on" : "";
+    return optCard(o, "shot", sh.id, locked, inh);
+  }).join("");
+  h += `<div class="row" style="margin-top:12px;flex-wrap:wrap;gap:6px">`;
+  if (D.set_film) h += `<button class="primary" id="optrender" ${locked ? "disabled" : ""} title="the set's two frames from the camera as its options leave it, its key poses again, its takes on seeds 11 and 202">render this shot again</button>`;
+  h += `<button id="optsounds" title="Stable Audio: only the beat sounds not made yet">make the beat sounds</button>`;
+  if (D.cut_plan) h += `<button id="optglue" title="the beat sounds, then the whole cut again from its plan and the picked takes">cut the film again</button>`;
+  h += `</div><div class="n">A camera move needs the shot rendered again; sounds, impact frames and grades need only a new cut. <span id="optsave"></span></div>`;
+  return h;
+}
+function saveOptions(note) {
+  clearTimeout(S.optT);
+  S.optPending = true;
+  S.optT = setTimeout(async () => {
+    try {
+      const r = await api("/api/shots/save", {film: S.film, options: S.opts});
+      S.opts = r.values; S.data.options = JSON.parse(JSON.stringify(r.values)); S.optPending = false;
+      const e = $("#optsave"); if (e) { e.textContent = "saved" + (note ? " - " + note : ""); e.style.color = "var(--green)"; }
+      renderCards();
+    } catch (err) {
+      S.optPending = false; toast(err.message);
+      S.opts = JSON.parse(JSON.stringify(S.data.options || {film: {}, shots: {}}));
+      renderInsp();
+    }
+  }, 450);
+}
+function bindOptions(sid) {
+  const P_ = $("#insp"), defs = optDefs();
+  const slot = key => {
+    const [scope, id, oid] = key.split(":"), o = defs.find(x => x.id === oid);
+    if (scope === "film") { S.opts.film = S.opts.film || {}; return {o, get: () => S.opts.film[oid], set: v => { if (v === undefined) delete S.opts.film[oid]; else S.opts.film[oid] = v; }}; }
+    S.opts.shots = S.opts.shots || {};
+    return {o, get: () => (S.opts.shots[id] || {})[oid], set: v => {
+      const row = S.opts.shots[id] = S.opts.shots[id] || {};
+      if (v === undefined) delete row[oid]; else row[oid] = v;
+      if (!Object.keys(row).length) delete S.opts.shots[id];
+    }};
+  };
+  P_.querySelectorAll("[data-opt]").forEach(el => el.onchange = () => {
+    const {o, get, set} = slot(el.dataset.opt), v = get();
+    if (o.kind === "bool") set(el.checked ? true : undefined);
+    else if (el.checked) set(Object.assign(optDefaults(o), v || {}, {on: true}));
+    else if (v) set(Object.assign({}, v, {on: false}));        // off, but what was set is kept for next time
+    saveOptions(); renderInsp(); renderCards();
+  });
+  P_.querySelectorAll("[data-optf]").forEach(el => el.onchange = () => {
+    const [key, fid] = el.dataset.optf.split("|"), {o, get, set} = slot(key), f = o.fields.find(x => x.id === fid);
+    const v = Object.assign({}, get() || optDefaults(o));
+    v[fid] = f.type === "number" ? parseFloat(el.value) : f.type === "numbers" ? el.value.split(/[,;\s]+/).filter(Boolean).map(Number) : el.value;
+    set(v); saveOptions();
+  });
+  P_.querySelectorAll("[data-optl]").forEach(el => el.onchange = () => {
+    const [key, fid, i, gid] = el.dataset.optl.split("|"), {o, get, set} = slot(key), f = o.fields.find(x => x.id === fid), g = f.item.find(x => x.id === gid);
+    const v = Object.assign({}, get()); v[fid] = (v[fid] || []).slice();
+    v[fid][+i] = Object.assign({}, v[fid][+i], {[gid]: g.type === "number" ? parseFloat(el.value) : el.value});
+    set(v); saveOptions();
+  });
+  P_.querySelectorAll("[data-optadd]").forEach(el => el.onclick = () => {
+    const [key, fid] = el.dataset.optadd.split("|"), {o, get, set} = slot(key), f = o.fields.find(x => x.id === fid);
+    const v = Object.assign({}, get()), row = {}; f.item.forEach(g => { row[g.id] = g.default; });
+    v[fid] = (v[fid] || []).concat([row]); set(v); saveOptions(); renderInsp();
+  });
+  P_.querySelectorAll("[data-optdel]").forEach(el => el.onclick = () => {
+    const [key, fid, i] = el.dataset.optdel.split("|"), {get, set} = slot(key), before = JSON.parse(JSON.stringify(S.opts));
+    const v = Object.assign({}, get()); v[fid] = (v[fid] || []).filter((_, j) => j !== +i);
+    set(v); saveOptions(); renderInsp();
+    toast("removed", {undo: () => { S.opts = before; saveOptions("put back"); renderInsp(); }});
+  });
+  P_.querySelectorAll("[data-beatplay]").forEach(el => el.onclick = () => { if (S.beatAudio) S.beatAudio.pause(); S.beatAudio = new Audio(el.dataset.beatplay); S.beatAudio.play().catch(e => toast(e.message)); });
+  const or_ = $("#optrender"); if (or_) or_.onclick = () => runOp({op: "set_render", shots: [sid], seeds: "11 202"});
+  const os_ = $("#optsounds"); if (os_) os_.onclick = () => runOp({op: "sounds"});
+  const og = $("#optglue"); if (og) og.onclick = () => runOp({op: "glue"});
 }
 const optList = (list, v) => list.map(m => `<option value="${m.id}" ${m.id === v ? "selected" : ""}>${esc(m.label)}${m.wf ? " (" + m.wf + ")" : ""}</option>`).join("");
 const noteOf = (list, id) => { const m = list.find(x => x.id === id); return m ? m.note || "" : ""; };

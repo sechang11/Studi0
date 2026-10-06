@@ -5844,3 +5844,228 @@ his body).
 3. Words that agree with what the set draws (standing people); a key for every contact and for every shot that
    must end mid-action.
 4. Look at every shot's two frames, then at eight frames across every take; re-frame rather than re-roll.
+
+## §101  THE RELAY - one moment told as a chain of shots ("expand this shot")
+
+The director, 2026-10-05, after THE EMBER THIEF: the fight "still has many moves that don't connect with one
+another"; asked for a multi-shot sequence in which "each shot prior has to tell a story leading up to the next
+shot" - the spirit from another angle, the opponent's face, an overview with a bird cawing so that time has
+passed, the same spell from several angles at the same moment, or the next window of time ("0 to 3, 3 to 4, 4 to
+6") - and for a NAME, so that "expand or elaborate on this shot" means breaking it into shots that chain one
+narrative.
+
+**The name: a RELAY.** One story moment carried through a chain of shots the way runners carry a baton. When the
+director says *expand*, *elaborate* or *relay* a shot (or a moment), it becomes a relay: legs, each with a window
+of story time and a baton, every cut glued (§102). The first: THE FIRE ESPER (`studio/shotscripts/fire-esper.md`,
+23 legs, 62 s of story) - Terra, losing to the jester, prays; a fire esper answers, hunts him and turns the forest
+into a volcanic warzone.
+
+### 101.1  The five legs
+
+| leg | what it does | its story time | in THE FIRE ESPER |
+|---|---|---|---|
+| **advance** | the moment moves on | the next window: 0-3, then 3-4, then 4-6 | 040 the runes ignite (t 9-12); 090 her eyes snap open (21-24) |
+| **echo** | the same moment again, from another angle - emphasis | a window already told; the same start time for a replay, a later one for a closer look at its end | 050 the circle from above (9-12 again); 110 the rising from his side (24-28 again); 120 its eyes (27-28, inside 100's 24-28) |
+| **answer** | the other side reacts | overlaps what it answers | 030 his eyes drop to her feet; 080 his grin falters; 130 the hot wind hits him |
+| **breath** | a cutaway that lets time pass - the place, the weather, an animal | jumps ahead | 070 the birds flee under a reddening sky (15-19); 190 the warzone from high above, a crow circling (43-49) |
+| **reveal** | the payoff, from the angle that shows it best | the moment the relay exists for | 100 the esper rises behind her |
+
+### 101.2  Story time
+
+Every leg gets a window of STORY time (`t a-b` in the shot script) - not the take's length. The rules, checked by
+the maker before anything renders:
+- an **advance** starts where the told time ended (or later);
+- an **echo** repeats time already told;
+- an **answer** may overlap (it reacts to what just happened);
+- a **breath** may skip time; the leg after it lands later;
+- story time never runs backward except on an echo.
+The windows make the relay readable before a frame is drawn: 23 legs, 62 s of story, 72.7 s of takes - the
+echoes are where the takes outrun the story.
+
+### 101.3  The baton
+
+Each leg hands the next something to pick up, written per shot (`"baton"`, shown on its spec sheet):
+- a **look**: his eyes drop to her feet (030), and 040 is her feet;
+- a **motion**: he cartwheels to the right (140), and 150 runs to the right with him; it throws to the right
+  (160), and the comet crosses the sky to the right (170);
+- a **rhyme**: her eyes open, glowing (090), and its eyes open, glowing (120);
+- an **object**: the circle of runes (040 → 050), the embers (050 → 130, 210 → 220);
+- a **sound** or a **light**: the roar into his face (120 → 130), the column's flash (090 → 100).
+A leg with nothing to hand on is a cut to a new scene - the duel's fault.
+
+### 101.4  The place is in the relay too
+
+One set, its state progressing through the dress: dusk → the sky turning red → burning → a volcanic warzone. Each
+shot names its state (`"place_state"`), which only ever gets worse; the breaths are where it shows (070, 190).
+
+### 101.5  How to expand a shot
+
+1. One sentence: the moment, and its payoff.
+2. The story time, in seconds: the cause, the build, the turn, the payoff, the cost.
+3. The legs. Open on a breath or an advance that says where we are; alternate advance and answer - the other side
+   every one or two legs; echo only what deserves the emphasis (the reveal, the impact), once or twice per payoff;
+   a breath before the payoff (it builds) and one after (it lands).
+4. A baton for every leg, and the glue for every cut (§102).
+5. Lengths: advance and answer 2.4-3 s, echo 1-3 s, breath 4-6 s, reveal about 4.5 s.
+6. One line of action for the whole relay (§100.13): every camera on one side.
+7. The maker: `studio/shotscripts/_make_fire_esper_1005.py` - `shot(sid, ..., leg, t=(a, b), glue=..., baton=...)`
+   and its checks (the line, the picture, the facing, the marks, the story time).
+
+### 101.6  What it measured (THE FIRE ESPER)
+
+**Result:** 23 legs, 62 s of story, a 71.9 s cut with its title and end card, graded **A-**
+(`craft/shots/reviews/2026-10-05-fire-esper.md`; THE EMBER THIEF was A- too - this one is graded on whether one
+moment carries across 23 cuts). Played in order every leg picks up the last one: his look down → the runes at her
+feet → the same circle from above → the power in her face → the birds fleeing a reddening sky → his grin
+faltering → her call → the column → the esper rising out of it, from in front of her, then from behind him, then
+its eyes → the hot wind in his face → the hunt → the comet → the warzone → his bow → the esper going home into her
+hands → her alone, kneeling. What it measured:
+
+1. **The payoff carried by echoes is the strongest stretch.** 100 → 110 → 120 (the rising from her side, the
+   rising from his side, its eyes) make one moment of four seconds last nine, and nobody reads it as a repeat:
+   each echo changes who it is seen by. The answers (080, 130, 200) make the magic land - the hot wind in his face
+   says how big the thing is better than the thing does.
+2. **What the set cannot draw is painted, and that is most of a relay's poses.** The cast draws everyone standing,
+   arms down, eyes open; a prayer, a kneel, a frightened face, a flock in the sky and a circle round her feet were
+   all key poses - 16 keys in 10 shots (`pipe-key-poses`). Two new mechanics in `set_test.py`: a key may replace
+   the FIRST frame (`"at": "start"`), and a key may be painted from a key made before it (`"from": "key:start"`),
+   so a shot's two frames share one pose. The reveal used the second backwards: its last frame (the esper beside
+   her) was painted first, then its first frame from it - "replace the demon with a column of fire as tall, in the
+   same place" - so H3 grows the esper out of the column.
+3. **An echo must repeat its details in words.** 030 drew red, blue and orange balls (010's orbs were purple, but
+   030 did not say so); 050 drew the circle of runes on the open ground in front of her, not round her feet as 040
+   has it. Both fixed - the colour named, the circle painted where it is.
+4. **The last frame decides how a beat ends.** 080's grin faltered and came back: its last frame WAS the grin.
+   Paint the end state (his fear) into the last frame, or the take undoes the beat.
+5. **A style line can run ahead of the relay.** 020 carried the summoning's style ("glowing runes, rays of
+   light") and H3 lit a ring of runes round her as she began to pray - the magic arrived before 040, the leg that
+   ignites it. A leg gets the style of its own moment.
+6. **A giant needs the camera at its height.** The cast pastes a flat picture between a figure's feet and the top
+   of its head; looking up steeply at the 6.5 m esper (120, 160) put its head at the foot of the frame and its feet
+   far below. The camera at the height of what it frames (4.2 m for its eyes), or further back and less tilted.
+7. **Re-framing a shot means repainting its background:** `cast --force` - without it the cast reused the old
+   camera's painting under figures placed for the new one.
+8. **H3 at 4 steps draws a triangle lattice over small characters** (the director, on the first cut: "some
+   distortion of pixels on the characters... I think it's a bug"). A regular mesh of triangles over Terra's sash
+   and the jester's ruff in the wides, over whole figures in 140 - present from the take's FIRST frame, worse where
+   they move. Not the set frames (clean), not the sheet views (clean), not the VAE (a set frame through encode and
+   decode comes back blurred, without triangles): the turbo LoRA's 4 sampling steps. Shot 140, one change at a
+   time: 1536x832 at 4 steps - latticed; H3's native 1344x768 - latticed; the LoRA at 0.7, 8 steps - reduced;
+   8 steps - faint traces; **12 steps - clean**, at about twice the render time (105 frames: 59 s -> 137 s).
+   `set_test.py take` and `set_film.py takes` now render 12 (`H3_STEPS` overrides). Every set film before the
+   fix was rendered at 4 - THE EMBER THIEF's small figures carry it too (040, frame 0).
+
+## §102  GLUE - what holds a cut (a DRAFT, to be settled with the director)
+
+The director: "instead of one shot ending and the next starting fresh, there should be an overlap of something
+to glue them together - the same background track playing through both as the visuals transition, a physical
+frame in the visuals, an object - one object in the frame remains constant while everything else changes". The
+kinds tried so far, and the tool: `studio/_tools/glue_cut.py PLAN.json` (a plan per film: each shot's take and
+trim, the transition into the next, the beds, the overlays; written for THE FIRE ESPER by
+`studio/samples/settest/work/esper/cutplan.py` from each shot's `"glue"`).
+
+| glue | how | when | in the plan |
+|---|---|---|---|
+| **sound - L cut** | the outgoing shot's sound runs on under the next picture | after a breath; after a whisper | `"audio_out"` later than `"out"` |
+| **sound - J cut** | the incoming shot's sound starts under the outgoing picture | something about to arrive | `"audio_in"` earlier than `"in"` |
+| **sound - a bed** | one sound under a range of shots, through their cuts | a leg of the relay: the rumble under the summoning, the fire under the hunt, the wind in the ash | `"beds"` |
+| **sound - the score** | music through the whole relay | the strongest glue there is - picked by ear (craft/SOUND.md §0) | mixed after |
+| **picture - dissolve** | the two shots overlap | time passes (180 → 190); the same thing changing (220 → 230) | `"next": {"video": "dissolve"}` |
+| **picture - flash** | a blast of white light covers the cut | light and impact (080 → 090, 090 → 100, 170 → 180) | `"next": {"video": "flash"}` |
+| **object - overlay** | an element composited over a range of shots in one continuous pass, so it never restarts at a cut | the embers of the spell (050-130, 210-220) | `"overlays"` |
+| **object - in the frame** | the same object in both shots | an echo (the circle of runes, 040 → 050) | the shot design |
+| **frame - match** | the end of one shot and the start of the next share a shape at the same place on screen | a rhyme (her eyes → its eyes) | the shot design |
+
+Not built yet: a physical FRAME that stays while the picture inside it changes (a window, a ring of fire, a
+letterbox); a check that a match cut matches.
+
+**First use (THE FIRE ESPER, 2026-10-05):** five L cuts (the wind and his laugh, her whisper, the birds, the
+roar into his face, the crow), three beds (a rumble rising under the summoning from his look down to his reaction
+to the roar, a forest fire under the hunt, wind in the ash under the end and its card), embers over the summoning
+and over the esper's return, three flashes (her call, the column into the reveal, the comet's impact), two
+dissolves (the impact into the warzone; her glowing hands into her alone in the ash), the title and the end card
+dissolved in. Looked at join by join, each does what its row says; the cut plays as one piece rather than 23
+starts. Measured on the way:
+- a take whose sound ends early leaves a HOLE at the cut (030 → 040: -67 dB for half a second) - a bed that
+  starts one shot earlier fills it, and a bed under the end card keeps it from going dead;
+- `-stream_loop -1` inside the cut's filter graph never ends on ffmpeg 8: the cut hung at 100% CPU - beds are
+  looped to length in their own pass;
+- `blend=screen` on YUV frames screens the chroma planes too and tints everything - the overlay is blended in RGB.
+
+**The score stays under the takes** (2026-10-05). The director's note on the first cut - "there's something
+seriously off with the music... some sound effect stuff going on in there making it not musical and unnatural" - was
+about the TerraTheme covers on the larger model (round 4, XL-SFT), not about this film's score. Read as the score, it
+led to a music-forward remix (`studio/_tools/score_mix.py`: the score levelled and leading over the takes' own sound
+alone, no beds, a gentle duck), which he found "noticeably worse": "the music for the video was fine". The casting
+tool's mix - the takes' own sound leading, the score ducked under it, the beds in - stays the way a score candidate
+is mixed; score_mix.py is kept as an OPTION (`music_forward`, §103), never a default. Ask which piece of music a note
+is about before changing the one that was liked.
+Two ffmpeg 8 traps found building it: `apad,atrim` in an AUDIO-ONLY graph never ends, even with `-t`
+(`apad=whole_dur` does); and an ffmpeg whose parent was killed ran on at 100% CPU for four hours - every call in
+glue_cut.py and score_mix.py now has a time limit.
+
+**Still open (to settle with the director):** which glue is the house default at a cut in a fight (a plain cut on
+the action stays the default for exchanges); the physical frame; how long an L cut's tail may run; the score as
+glue (candidates mixed for his ear, none in the film).
+
+## §103  OPTIONS - what every film gets, and what a film asks for
+
+The director, after THE FIRE ESPER's second pass: "in the future when I prompt you for a video, will you be
+'moving the camera' or 'designing sound for the key beats'? What if I don't want that for every case? ... make
+these into input booleans ... we have a shot spec page and it's meant to generate new shots - can it be there? Make
+the general improvement, but for specialized things it should be an option and not a default."
+
+So an improvement is one of two kinds, decided when it is made:
+
+**ALWAYS - every film, no switch** (a fix or a check: nobody would choose to go without it):
+- H3 takes at 12 steps, not the turbo LoRA's 4 (§101.6 point 8: no triangle mosaic over small figures);
+- the maker's checks before anything renders - one line of action, everyone in the picture, facing on screen, not
+  seen from behind, marks chained, story time a relay (§100.13, §101.2);
+- the frame check's warning for a figure under 200 px tall (`set_film.py check`): a figure that small does not read,
+  and H3 drew its worst artefacts there - a warning, because a wide may want them small;
+- the glue each shot's script asks for (§102), and score candidates mixed by the casting tool, the takes' own
+  sound leading (§102: the music-forward mix was "noticeably worse").
+
+**OPTIONS - off unless asked**, for the whole film or one shot. The registry is `studio/_tools/shot_options.py`
+(`OPTIONS`); a film's choices live in `studio/shotscripts/<film>.options.json`, beside the script - never in it, since
+a film's maker rewrites the script. A film without the file gets none of them.
+
+| option | for | what it does | where it acts | costs |
+|---|---|---|---|---|
+| `camera_move` | a shot | push in, pull back, tilt up/down, pan, orbit, crane up/down, with an amount: the end of the move becomes the shot's previz `cam_to` / `look_to` | when a tool loads the script (`fight.py` calls `shot_options.apply_script`) - set films | the shot rendered again: the set's two frames, its keys, its takes |
+| `beat_sounds` | a shot | a sound made for a beat (Stable Audio, workflow 10) placed on its moment over the take's own sound | `shot_options.py sounds FILM`, then the cut (`glue_cut.py`) | seconds per sound; a new cut |
+| `impact_frames` | a shot | 1-6 frames of a stylised negative (or a white flash) on a hit | the cut | a new cut |
+| `grade` | the film, or a shot | the film: each shot graded by its place's state (dusk, red, burning, volcanic...); a shot: a look of its own (dusk, ember, fire, ash, night, day) - all on the filmic base | the cut | a new cut |
+| `music_forward` | the film | score candidates mixed with the music leading (`score_mix.py`) | the score mixes | the mixes again |
+
+**Where they are set:** shots & specs, the **Options** tab of a shot - the whole film's options at the top, the
+shot's below; each says what it does, where it acts and what it costs; changes save as they are made (no dialogs).
+Its buttons start the jobs that act on them: *render this shot again* (a set film: `set_test.py render --force`,
+`cast --ends --same-bg --force`, `key --force` and `take --force` for its keys, `set_film.py takes --force` for the
+rest - seeds 11 and 202), *make the beat sounds*, *cut the film again* (`glue_cut.py <film>.cut.json --picks`: the
+plan's glue, each shot from its picked take). A shot locked on its spec sheet keeps its options. (The save goes
+through `POST /api/shots/save {film, options}`: serve.py lets only the routes it lists be POSTed to.)
+
+**When the director prompts for a video:** the ALWAYS list applies; an option is on only when he names it ("with
+camera moves", "design the sound for the beats", "impact frames on the hits", "grade it by the place") or the story
+plainly needs it - and then the reply says it was switched on. The others are offered in one line, not applied. A new
+treatment goes into the registry as an option first; it joins ALWAYS only when it is a fix nobody would refuse.
+
+### 103.1  First use (THE FIRE ESPER, 2026-10-05)
+
+Options on: the grade by place (the film); camera moves on seven shots - push in on 010, 020 and 120, tilt up on
+110 and 160, an orbit on 190, a pull back on 230; nine beat sounds on eight shots; impact frames on two hits (090's
+slam, 180's comet). All set on the Options tab (or through the same save); the seven moved shots rendered again by
+the page's own job - *render this shot again* - in about 65 minutes (the cast paints a moving camera's two frames
+separately, about 4 minutes a shot, then 12-step takes); everything else needed only a new cut (about a minute).
+- **The frame check caught the one bad move before anything rendered:** a push-in on 110 (over the jester's
+  shoulder) carried the camera into his shoulder - 1,800 px tall and out of the frame. A tilt up that follows the
+  rising esper instead. Look at `set_film.py check` after setting a camera move, before the render.
+- **A camera move changes the shot's end frame, so its end key is painted again** from the new frame, on the seed
+  already picked (`key --force`): 020's prayer and 230's kneel came out clean on seed 202; seed 11 repainted the
+  whole frame, as it had all day.
+- **The impact frames** read as 90s anime ink negatives on the slam and on the comet; **the grade by place** gives
+  each act its colour (dusk green-blue, red, burning orange, volcanic); **each beat sound** lifts its moment by 4 to
+  8 dB - except where the take's own sound was already as loud (the roar, the column), where it adds little.
+- This film's annotated cut lists each shot's options ("options: camera push in 0.25, 1 beat sound..."), and the
+  Options tab has a play button by each made beat sound, so it can be heard before the cut is made.

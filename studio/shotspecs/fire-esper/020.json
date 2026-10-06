@@ -1,0 +1,86 @@
+{
+ "invariants": [
+  {
+   "id": "facing",
+   "title": "Facing",
+   "rule": "Terra faces screen-right (toward him), as the set's frames draw them.",
+   "why": "a take keeps the facing its two frames give it; the duel's were mirrored by a bug",
+   "check": {
+    "kind": "eye"
+   }
+  },
+  {
+   "id": "continues",
+   "title": "It starts where the last shot ended",
+   "rule": "Terra starts where 010 left her.",
+   "why": "a relay: each leg takes the moment from the one before",
+   "check": {
+    "kind": "eye"
+   }
+  },
+  {
+   "id": "leg",
+   "title": "Its leg of the relay: advance",
+   "rule": "Story time moves on - story time 4 to 7 s.",
+   "why": "LTX_PLAYBOOK §101: every shot is a leg of one moment; an echo repeats time already told",
+   "check": {
+    "kind": "eye"
+   }
+  },
+  {
+   "id": "glue",
+   "title": "What holds its cut",
+   "rule": "L-cut: her whisper runs on under 030.",
+   "why": "LTX_PLAYBOOK §102 (draft): something overlaps the cut so the next shot does not start fresh",
+   "check": {
+    "kind": "eye"
+   }
+  },
+  {
+   "id": "story1",
+   "title": "She stops fighting",
+   "rule": "Eyes closed, palms pressed together - a prayer, not a stance. No attack.",
+   "why": "the script (studio/shotscripts/fire-esper.md)",
+   "check": {
+    "kind": "eye"
+   }
+  },
+  {
+   "id": "length",
+   "title": "Length",
+   "rule": "3.04 seconds (73 frames at 24 fps).",
+   "why": "each leg's length is its share of the story time",
+   "check": {
+    "kind": "duration_between",
+    "min": 2.64,
+    "max": 3.64
+   }
+  }
+ ],
+ "flair": [
+  {
+   "id": "seed",
+   "title": "Seed",
+   "note": "free - the takes differ by seed"
+  },
+  {
+   "id": "timing",
+   "title": "Timing inside the shot",
+   "note": "the beats may land a few frames early or late"
+  },
+  {
+   "id": "place",
+   "title": "How far the place has burned",
+   "note": "the dress for this shot: dusk (dusk, red, burning, volcanic - it only ever gets worse)"
+  },
+  {
+   "id": "sound",
+   "title": "Sound",
+   "note": "H3's own: a whispered incantation, wind."
+  }
+ ],
+ "shot": "020",
+ "title": "the prayer",
+ "beat": "She stops fighting and starts praying. [advance · story t 4-7 s · glue: L-cut: her whisper runs on under 030] (shot 2 of 23)",
+ "build": "frames first in the clearing set (set_test.py render + cast --ends), H3 between the set's two frames (set_film.py takes) - the camera, the marks and the facing come from the set; the place's state from the shot's dress"
+}

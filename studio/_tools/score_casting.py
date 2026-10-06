@@ -43,6 +43,12 @@ the share of the steps that follow the source). remix = the source's own recordi
 mm3 = MiniMax Music 3 (ComfyUI's template audio_minimax_music_3.json; caption in three parts, Global Metadata ->
 Vocal Details -> Arrangement; structure only from the lyrics' section tags; up to ~5 minutes).
 ace = ACE-Step 1.5 turbo (workflow 06; tempo and key ALWAYS set; one idiom, named instruments; ~45 s at most).
+notes = the source's NOTES played again (studio/_tools/notes_cover.py: transcribed once with `prepare`, rendered on
+sampled instruments in a style at any speed); with "polish" ACE-Step then covers that render (2026-10-05: covers of
+a recording are half the old sound; covers of the right instruments are not):
+    {"engine": "notes", "name": "Solo piano", "song": "terra", "style": "piano", "source":
+     "studio/samples/music3/TerraTheme.mp3", "start": 6.9, "secs": 48, "stretch": 1.0, "seed": 1,
+     "polish": {"tags": "...", "denoise": 0.6, "strength": 0.5, "bpm": 81, "key": "Ab minor", "seed": 4242}}
 
 Files: studio/samples/casting/<film>/<scene>/ - casting.json (every sample, its recipe, its parent, the picks),
 r<N>/<id>.mp3 (levelled), finals/<id>.mp3 and <id>_mix.mp4 (under the picture, the score ducked under the
@@ -69,7 +75,10 @@ import comfy  # noqa: E402
 TARGET = -16.0
 MM3_LYRICS = "[Intro]\n\n[Instrumental]\n\n[Instrumental]\n\n[Outro]"
 ENGINE_NAME = {"mm3": "MiniMax Music 3", "ace": "ACE-Step 1.5", "remix": "Remix (ACE-Step)",
-               "cover": "Cover (ACE-Step 1.5)"}
+               "cover": "Cover (ACE-Step 1.5)", "notes": "Notes (sampled instruments)",
+               "musicgen": "MusicGen-Melody - NON-COMMERCIAL", "file": "Reference"}
+NOTES_TOOL = os.path.join(ROOT, "studio", "_tools", "notes_cover.py")
+MUSIC_TOOLS = os.path.expanduser("~/music-tools")     # notes_cover's libraries, instruments and lead sheets
 
 
 # ------------------------------------------------------------------------------------------------ the casting file
@@ -122,12 +131,18 @@ def prep_source(recipe, secs):
     input folder."""
     src = recipe["source"] if os.path.isabs(recipe["source"]) else os.path.join(ROOT, recipe["source"])
     start = float(recipe.get("start", 0.0))
+    # "stretch": the source at another speed, its pitch kept (rubberband), before it is covered - 0.8 a slower
+    # version, 1.25 a faster one; the recipe's bpm is the new tempo (2026-10-05)
+    stretch = float(recipe.get("stretch", 1.0))
     stem = re.sub(r"[^a-z0-9]+", "", os.path.basename(src).lower())[:24]
-    name = "casting_src_%s_%d_%d.wav" % (stem, int(start * 10), int(secs * 10))
+    name = "casting_src_%s_%d_%d%s.wav" % (stem, int(start * 10), int(secs * 10),
+                                          "_x%03d" % round(stretch * 100) if stretch != 1.0 else "")
     dst = os.path.join(COMFY, "input", name)
     if not os.path.exists(dst) or recipe.get("fresh_source"):     # a refine's first pass is new every time
-        subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", "%.2f" % start, "-t", "%.2f" % secs, "-i", src, "-ac", "2",
-                        "-ar", "44100", dst], check=True)
+        cmd = ["ffmpeg", "-v", "error", "-y", "-ss", "%.2f" % start, "-t", "%.2f" % (secs * stretch), "-i", src]
+        if stretch != 1.0:
+            cmd += ["-af", "rubberband=tempo=%.4f" % stretch]
+        subprocess.run(cmd + ["-ac", "2", "-ar", "44100", "-t", "%.2f" % secs, dst], check=True)
     return name
 
 
@@ -157,6 +172,31 @@ def remix_graph(recipe, secs, prefix, seed):
     return wf
 
 
+# 2026-10-05: ACE-Step 1.5 (the smaller model) plays the key it is TOLD only for some spellings. Measured from
+# silence, one prompt, every black-key root in both spellings (work/music/key_spelling_probe.py): C#, F# major and
+# minor and G# minor play true; Db, Eb, Gb, Bb in either spelling, D#, A#, G# major and Ab minor play another key
+# ("Ab minor" -> D major / Eb major). Every TerraTheme cover was told "Ab minor": the tune kept, the harmony under it
+# from a key the model invented (the director: "something else was wrong, I can't really describe it"). A key is
+# told as itself when that label plays true, else as its relative (the same notes) when that one does.
+_PC = {"C": 0, "C#": 1, "Db": 1, "D": 2, "D#": 3, "Eb": 3, "E": 4, "F": 5, "F#": 6, "Gb": 6, "G": 7, "G#": 8,
+       "Ab": 8, "A": 9, "A#": 10, "Bb": 10, "B": 11}
+_TRUE = {(1, "major"): "C# major", (1, "minor"): "C# minor", (6, "major"): "F# major", (6, "minor"): "F# minor",
+         (8, "minor"): "G# minor"}
+_WHITE = {0: "C", 2: "D", 4: "E", 5: "F", 7: "G", 9: "A", 11: "B"}
+
+
+def key_label(key):
+    """The label to tell ACE-Step 1.5 for a key: one it plays true - the key itself, or its relative."""
+    root, q = key.split()
+    pc = _PC[root]
+    for p_, q_ in ((pc, q), ((pc + 3) % 12, "major") if q == "minor" else ((pc - 3) % 12, "minor")):
+        if (p_, q_) in _TRUE:
+            return _TRUE[(p_, q_)]
+        if p_ in _WHITE:
+            return "%s %s" % (_WHITE[p_], q_)
+    return key
+
+
 def cover_graph(recipe, secs, prefix, seed):
     """A COVER (Suno's word; a reimagining): the source's melody, harmony and form kept, every sound new. ACE-Step
     1.5 reads the source's own semantic codes (its 5 Hz tokens: what is played, and when) and plays them again from
@@ -172,33 +212,61 @@ def cover_graph(recipe, secs, prefix, seed):
     # sections but not its tune); below 1.0 = from the source's own latent, renoised - ACE-Step's
     # cover_noise_strength (= 1 - denoise) - so the tune survives while the hints hold the structure
     den = max(0.05, min(1.0, float(recipe.get("denoise", 1.0))))
-    steps = int(recipe.get("steps", 20))
+    xl = recipe.get("model") == "xl"
+    # XL-SFT (2026-10-05, the director approved the download): the 4B DiT, not distilled - Comfy-Org's template
+    # audio_ace_step1_5_xl_sft: 50 steps at CFG 7 (euler, simple), AuraFlow shift 3, the negative its own
+    # conditioning zeroed (which keeps a cover's hints in the negative too, so CFG steers only the style)
+    steps = int(recipe.get("steps", 50 if xl else 20))
+    cfg = float(recipe.get("cfg", 7.0 if xl else 1.0))
     wf = json.load(open(os.path.join(ROOT, "workflows", "06_acestep_music.json")))
     wf = {k: v for k, v in wf.items() if isinstance(v, dict) and "class_type" in v}
+    model = ["1", 0]
+    if xl:
+        wf["1"]["inputs"]["unet_name"] = "acestep_v1.5_xl_sft_bf16.safetensors"
+        wf["2"]["inputs"]["clip_name2"] = "qwen_4b_ace15.safetensors"
+        wf["16"] = {"class_type": "ModelSamplingAuraFlow", "inputs": {"model": ["1", 0], "shift": 3.0}}
+        model = ["16", 0]
     wf["10"]["inputs"].update({"tags": recipe["tags"], "lyrics": recipe.get("lyrics", ""), "bpm": int(recipe["bpm"]),
-                               "keyscale": recipe["key"], "duration": float(secs), "seed": seed,
+                               "keyscale": key_label(recipe["key"]), "duration": float(secs), "seed": seed,
                                "generate_audio_codes": False})   # the node's own advice when the audio is given
     wf["11"]["inputs"]["seconds"] = float(secs)
     wf["50"] = {"class_type": "LoadAudio", "inputs": {"audio": name}}
     wf["51"] = {"class_type": "VAEEncodeAudio", "inputs": {"audio": ["50", 0], "vae": ["3", 0]}}
-    wf["52"] = {"class_type": "ReferenceTimbreAudio", "inputs": {"conditioning": ["10", 0], "latent": ["51", 0]}}
+    if recipe.get("codes") and secs > 30.5:
+        # 2026-10-05: on a 47.9 s source this wiring crashed ComfyUI for everyone (CUDA device-side assert, "scatter
+        # gather kernel index out of bounds", the server aborted; restarted with scripts/restart-comfy.sh). It ran
+        # clean on 30 s sources. Not again past 30 s until the node is understood.
+        sys.exit("cover with \"codes\": 30 s at most (it crashed ComfyUI on 47.9 s, 2026-10-05)")
+    if recipe.get("codes"):
+        # 2026-10-05: the source's semantic codes WITHOUT its timbre. "Set Reference Audio" makes the recording both
+        # the cover's codes and the timbre the encoder imitates - every cover so far was told to sound like the
+        # original while its tags asked for other instruments ("something else was wrong, I can't describe it").
+        # AceStep15SourceCodes (ComfyUI/custom_nodes/ace15_source_codes) hands the model the codes alone.
+        wf["52"] = {"class_type": "AceStep15SourceCodes", "inputs": {"model": ["1", 0], "conditioning": ["10", 0],
+                                                                      "latent": ["51", 0]}}
+    else:
+        wf["52"] = {"class_type": "ReferenceTimbreAudio", "inputs": {"conditioning": ["10", 0], "latent": ["51", 0]}}
+    # the negatives: at CFG 1 (turbo) never read; at CFG 7 (XL) each conditioning zeroed
+    wf["53"] = {"class_type": "ConditioningZeroOut", "inputs": {"conditioning": ["52", 0]}}
+    wf["54"] = {"class_type": "ConditioningZeroOut", "inputs": {"conditioning": ["10", 0]}}
+    neg_cover, neg_plain = (["53", 0], ["54", 0]) if xl else (["52", 0], ["10", 0])
     latent = ["51", 0] if den < 1.0 else ["11", 0]
     s0 = int(round(steps * (1.0 - den)))              # the first step sampled (0 from silence)
     k = s0 + int(round((steps - s0) * st))            # the hints guide steps s0..k, the tags alone k..steps
-    common = {"model": ["1", 0], "noise_seed": seed, "steps": steps, "cfg": 1.0, "sampler_name": "euler",
+    common = {"model": model, "noise_seed": seed, "steps": steps, "cfg": cfg, "sampler_name": "euler",
               "scheduler": "simple"}
     if k <= s0:                                       # strength 0: no hints at all (a plain remix)
         wf["12"] = {"class_type": "KSamplerAdvanced", "inputs": dict(
-            common, add_noise="enable", positive=["10", 0], negative=["10", 0], latent_image=latent,
+            common, add_noise="enable", positive=["10", 0], negative=neg_plain, latent_image=latent,
             start_at_step=s0, end_at_step=10000, return_with_leftover_noise="disable")}
     else:
         wf["12"] = {"class_type": "KSamplerAdvanced", "inputs": dict(
-            common, add_noise="enable", positive=["52", 0], negative=["52", 0], latent_image=latent,
+            common, add_noise="enable", positive=["52", 0], negative=neg_cover, latent_image=latent,
             start_at_step=s0, end_at_step=k if k < steps else 10000,
             return_with_leftover_noise="enable" if k < steps else "disable")}
         if k < steps:
             wf["15"] = {"class_type": "KSamplerAdvanced", "inputs": dict(
-                common, add_noise="disable", positive=["10", 0], negative=["10", 0], latent_image=["12", 0],
+                common, add_noise="disable", positive=["10", 0], negative=neg_plain, latent_image=["12", 0],
                 start_at_step=k, end_at_step=10000, return_with_leftover_noise="disable")}
             wf["13"]["inputs"]["samples"] = ["15", 0]
     wf["14"]["inputs"]["filename_prefix"] = prefix
@@ -237,7 +305,7 @@ def graph(recipe, secs, prefix):
         wf = json.load(open(os.path.join(ROOT, "workflows", "06_acestep_music.json")))
         wf = {k: v for k, v in wf.items() if isinstance(v, dict) and "class_type" in v}
         wf["10"]["inputs"].update({"tags": recipe["tags"], "lyrics": recipe.get("lyrics", ""), "bpm": int(recipe["bpm"]),
-                                   "keyscale": recipe["key"], "duration": float(secs), "seed": seed})
+                                   "keyscale": key_label(recipe["key"]), "duration": float(secs), "seed": seed})
         wf["11"]["inputs"]["seconds"] = float(secs)
         wf["12"]["inputs"]["seed"] = seed
         wf["14"]["inputs"]["filename_prefix"] = prefix
@@ -249,6 +317,15 @@ def render(recipe, secs, dst):
     """One sample. A cover with "refine" is made twice: the first pass, then a cover OF that pass (the refine's
     own denoise / strength / tags) - the second pass starts from audio the model made, not from the recording,
     so less of the recording's own sound survives into it (2026-10-05)."""
+    if recipe.get("engine") == "notes":
+        return _render_notes(recipe, secs, dst)
+    if recipe.get("engine") == "musicgen":
+        return _render_musicgen(recipe, secs, dst)
+    if recipe.get("engine") == "file":           # a reference clip put on a sheet as it is (an A/B, a diagnosis)
+        os.makedirs(os.path.dirname(dst), exist_ok=True)
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", os.path.join(ROOT, recipe["path"]), "-t", "%.2f" % secs,
+                        "-b:a", "320k", dst], check=True)
+        return 0.01
     took = _render_once(recipe, secs, dst)
     if took and recipe.get("engine") == "cover" and recipe.get("refine"):
         first = dst[:-4] + "_pass1" + dst[-4:]
@@ -259,6 +336,107 @@ def render(recipe, secs, dst):
         t2 = _render_once(r2, secs, dst)
         took = took + t2 if t2 else None
     return took
+
+
+def _render_notes(recipe, secs, dst):
+    """engine "notes": notes_cover.py plays the song's lead sheet as a style (secs of output = secs * stretch of
+    the original, at speed `stretch`); with "polish", ACE-Step covers that render - the instruments already the right
+    ones, so the model re-plays them rather than morphing the recording. "layers" mix styles, each with its own
+    polish, gain_db and entry ("from": original seconds; silent before it but for a fill) - a real piano with a
+    polished band joining at bar 9. "mode": "major" plays the tune in the major key (its 3rd, 6th, 7th raised)."""
+    os.makedirs(os.path.dirname(dst), exist_ok=True)
+    t0 = time.time()
+    speed = float(recipe.get("stretch", 1.0))
+    layers = recipe.get("layers") or [{"style": recipe["style"], "polish": recipe.get("polish")}]
+    env = dict(os.environ, PYTHONPATH=os.path.join(MUSIC_TOOLS, "lib"))
+    parts = []
+    for i, L in enumerate(layers):
+        if L.get("file"):                    # a finished part laid in as it is (a sung vocal over the real piano)
+            parts.append((L["file"], float(L.get("gain_db", 0.0)), None))
+            continue
+        wav = dst[:-4] + "_L%d_%s.wav" % (i, L["style"])
+        cmd = ["systemd-run", "--user", "--scope", "-q", "-p", "MemoryMax=6G", VENV_PY, NOTES_TOOL, "render",
+               recipe["song"], L["style"], "%.3f" % float(recipe["start"]), "%.3f" % (secs * speed), "%.4f" % speed,
+               wav, "--seed", str(int(L.get("seed", recipe.get("seed", 1))))]
+        if L.get("from") is not None:
+            cmd += ["--from", "%.3f" % float(L["from"])]
+        if recipe.get("mode"):
+            cmd += ["--mode", recipe["mode"]]
+        r = subprocess.run(cmd, env=env, capture_output=True, text=True, timeout=900)
+        if r.returncode or not os.path.exists(wav):
+            print("  notes render failed: %s" % (r.stderr or r.stdout)[-300:], flush=True)
+            return None
+        part = wav
+        if L.get("polish"):
+            p = dict(L["polish"])
+            p.update({"engine": "cover", "source": os.path.abspath(wav), "start": 0.0, "fresh_source": True,
+                      "secs": secs})
+            part = wav[:-4] + "_polished.mp3"
+            if not _render_once(p, secs, part):
+                return None
+        # a layer entering later stays silent until its lead-in fill (~4 eighths) - an AI pass may whisper there
+        gate = (float(L["from"]) - float(recipe["start"]) - 1.6) / speed if L.get("from") is not None else None
+        parts.append((part, float(L.get("gain_db", 0.0)), gate))
+    if len(parts) == 1 and parts[0][1] == 0.0 and parts[0][2] is None:
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", parts[0][0], "-b:a", "320k", dst], check=True)
+    else:
+        ins, fl = [], []
+        for k, (p, g, gate) in enumerate(parts):
+            ins += ["-i", p]
+            chain = "aresample=44100,aformat=channel_layouts=stereo,volume=%.1fdB" % g
+            if gate is not None and gate > 0:
+                chain += ",volume=enable='lt(t,%.2f)':volume=0,afade=t=in:st=%.2f:d=0.25" % (gate, gate)
+            fl.append("[%d:a]%s[a%d]" % (k, chain, k))
+        fl.append("%samix=inputs=%d:normalize=0:duration=longest,alimiter=limit=0.89:level=false" % (
+            "".join("[a%d]" % k for k in range(len(parts))), len(parts)))
+        subprocess.run(["ffmpeg", "-v", "error", "-y"] + ins + ["-filter_complex", ";".join(fl), "-b:a", "320k",
+                        dst], check=True)
+    return time.time() - t0
+
+
+def _render_musicgen(recipe, secs, dst):
+    """engine "musicgen": MusicGen-Melody (Meta; the weights are CC BY-NC 4.0 - NON-COMMERCIAL ONLY, and the sheet
+    says so on every card) writes an arrangement from scratch around the song's melody: notes_cover renders the
+    melody alone as its guide (secs of output = secs * stretch of the original, at speed `stretch`; 30 s at most, the
+    last 2.5 s faded). MusicGen is seed-sensitive: "seeds" [1, 2, 3] are all made and the take that best holds the
+    original's harmony (harmony_held) is kept.
+    {"engine": "musicgen", "song": "terra", "source": ..., "start": 6.93, "secs": 24, "stretch": 1.0,
+     "prompt": "a lush string orchestra ...", "seeds": [1, 2, 3], "cfg": 3.0}"""
+    os.makedirs(os.path.dirname(dst), exist_ok=True)
+    t0 = time.time()
+    speed = float(recipe.get("stretch", 1.0))
+    gen = min(30.0, secs + 2.0)
+    env = dict(os.environ, PYTHONPATH=os.path.join(MUSIC_TOOLS, "lib"))
+    guide = dst[:-4] + "_guide.wav"
+    r = subprocess.run(["systemd-run", "--user", "--scope", "-q", "-p", "MemoryMax=6G", VENV_PY, NOTES_TOOL, "render",
+                        recipe["song"], "melody", "%.3f" % float(recipe["start"]), "%.3f" % (gen * speed),
+                        "%.4f" % speed, guide], env=env, capture_output=True, text=True, timeout=900)
+    if r.returncode or not os.path.exists(guide):
+        print("  melody guide failed: %s" % (r.stderr or r.stdout)[-300:], flush=True)
+        return None
+    seeds = [int(s) for s in (recipe.get("seeds") or [recipe.get("seed", 1)])]
+    jobs = [{"guide": guide, "out": dst[:-4] + "_mg_s%d.wav" % s, "prompt": recipe["prompt"], "secs": gen, "seed": s,
+             "cfg": float(recipe.get("cfg", 3.0))} for s in seeds]
+    jf = dst[:-4] + "_mg_jobs.json"
+    json.dump(jobs, open(jf, "w"))
+    wait_for_queue()                                   # MusicGen shares the GPU with ComfyUI
+    r = subprocess.run([VENV_PY, NOTES_TOOL, "musicgen", "--jobs", jf], env=env, capture_output=True, text=True,
+                       timeout=2400)
+    takes = [j["out"] for j in jobs if os.path.exists(j["out"])]
+    if not takes:
+        print("  musicgen failed: %s" % (r.stderr or r.stdout)[-300:], flush=True)
+        return None
+    ref = os.path.join(COMFY, "input", prep_source(recipe, secs))
+    best, best_h = takes[0], -9.0
+    for tk in takes:
+        h = harmony_held(ref, tk)
+        if h and h[0] > best_h:
+            best, best_h = tk, h[0]
+    print("  musicgen: kept %s (harmony %.3f) of %d seeds" % (os.path.basename(best), best_h, len(takes)), flush=True)
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", best, "-t", "%.2f" % (secs + 1.5), "-af",
+                    "afade=t=out:st=%.2f:d=2.5" % max(0.0, secs - 1.0), "-ac", "2", "-ar", "44100", "-b:a", "320k",
+                    dst], check=True)
+    return time.time() - t0
 
 
 def _render_once(recipe, secs, dst):
@@ -317,12 +495,42 @@ def summary(r):
     if r["engine"] == "cover":
         den = float(r.get("denoise", 1.0))
         rf = r.get("refine")
-        return "cover of %s from %.0f s · %s · its structure guiding %d%% of the steps%s · %s BPM · %s · %s" % (
-            os.path.basename(r["source"]), float(r.get("start", 0)),
+        st = float(r.get("stretch", 1.0))
+        return "%scover of %s from %.0f s%s · %s · its structure guiding %d%% of the steps%s · %s BPM · %s · %s" % (
+            "ACE-Step 1.5 XL-SFT · " if r.get("model") == "xl" else "", os.path.basename(r["source"]),
+            float(r.get("start", 0)), " at %d%% speed" % round(100 * st) if st != 1.0 else "",
             "re-played from silence" if den >= 1.0 else "re-played from the recording at denoise %.2f" % den,
             round(100 * float(r.get("strength", 1.0))),
             " · then covered again from that first pass at denoise %.2f" % float(rf.get("denoise", 0.55)) if rf else "",
             r.get("bpm"), r.get("key"), r["tags"][:140])
+    if r["engine"] == "notes":
+        st = float(r.get("stretch", 1.0))
+        layers = r.get("layers") or [{"style": r["style"], "polish": r.get("polish")}]
+
+        def one(L):
+            if L.get("file"):
+                return "%s%s" % (L.get("label") or os.path.basename(L["file"]),
+                                 " at %+.0f dB" % float(L["gain_db"]) if L.get("gain_db") else "")
+            p = L.get("polish")
+            return "%s%s%s%s" % (L["style"], " from %.0f s" % float(L["from"]) if L.get("from") is not None else "",
+                                 " at %+.0f dB" % float(L["gain_db"]) if L.get("gain_db") else "",
+                                 " re-played by ACE-Step (denoise %.2f: %s)" % (float(p.get("denoise", 0.6)),
+                                                                                p["tags"][:90]) if p else
+                                 " (sampled, no AI)")
+        return "the notes of %s from %.0f s (transcribed: melody, chords, bass)%s, played on sampled instruments%s: %s" % (
+            os.path.basename(r["source"]), float(r.get("start", 0)),
+            " in a MAJOR key" if r.get("mode") == "major" else "",
+            " at %d%% speed" % round(100 * st) if st != 1.0 else " at its own speed", " + ".join(one(L) for L in layers))
+    if r["engine"] == "musicgen":
+        st = float(r.get("stretch", 1.0))
+        return ("NON-COMMERCIAL (MusicGen weights, CC BY-NC 4.0) · MusicGen-Melody wrote this from scratch around the "
+                "melody of %s from %.0f s (the transcribed notes, played alone as its guide)%s · seed %s · %s" % (
+                    os.path.basename(r["source"]), float(r.get("start", 0)),
+                    " at %d%% speed" % round(100 * st) if st != 1.0 else " at its own speed",
+                    "/".join(str(s) for s in (r.get("seeds") or [r.get("seed", 1)])) + " (the best kept)",
+                    r["prompt"][:140]))
+    if r["engine"] == "file":
+        return "a reference clip, as it is: %s" % os.path.basename(r["path"])
     if r["engine"] == "remix":
         return "remix of %s from %.0f s · denoise %.2f · %s · %s" % (
             os.path.basename(r["source"]), float(r.get("start", 0)), float(r.get("denoise", 0.45)),
@@ -337,10 +545,11 @@ def summary(r):
 def sheet(c, which):
     d = base(c["film"], c["scene"])
     if which == "finals":
-        items, title = c.get("finals", []), "finalists"
+        items, title, note = c.get("finals", []), "finalists", ""
     else:
         r = c["rounds"][int(which) - 1]
         items, title = r["samples"], ("auditions" if r["n"] == 1 else "callbacks, round %d" % r["n"])
+        note = r.get("note", "")     # what this round changed, in a sentence or two (round --note)
     cards = []
     for k, s in enumerate(items, 1):
         prev = os.path.join(d, s.get("preview") or s["file"])
@@ -353,6 +562,9 @@ def sheet(c, which):
         if s.get("kept") is not None:
             lineage += "%stune kept <b>%.2f</b> (1 = the original; about 0.57 = the tune gone)" % (
                 " · " if lineage else "", s["kept"])
+        if s.get("harmony"):
+            lineage += "%sharmony held <b>%.2f</b>, weakest two bars %.2f" % (
+                " · " if lineage else "", s["harmony"][0], s["harmony"][1])
         cards.append("""<article class="card" data-id="%(id)s">
   <header><span class="num">%(k)d</span><span class="id">%(id)s</span><span class="name">%(name)s</span>
   <span class="eng">%(eng)s · %(secs).0f s</span></header>
@@ -371,6 +583,7 @@ def sheet(c, which):
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,sans-serif}
 main{max-width:980px;margin:0 auto;padding:20px 16px 120px}h1{font-size:22px;margin:0 0 4px}
 .brief{color:var(--muted);margin:0 0 18px}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
+.note{background:var(--card);border-left:3px solid var(--accent);border-radius:6px;padding:10px 12px;margin:0 0 18px;font-size:14px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px}
 .card.picked{outline:2px solid var(--accent)}header{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:baseline}
 .num{font-weight:700;font-size:18px;color:var(--accent)}.id{font-family:ui-monospace,monospace;color:var(--muted)}
@@ -384,7 +597,7 @@ background:var(--bg);color:var(--ink);cursor:pointer}#copied{color:var(--muted);
 <h1>Score casting · %(film)s / %(scene)s · %(title)s</h1>
 <p class="brief">%(brief)s - every sample at -16 LUFS. Tick <b>pick</b> for what the next round should be closer to,
 <b>keep</b> for the shortlist; then tell me the line at the bottom.</p>
-<div class="grid">%(cards)s</div></main>
+%(note)s<div class="grid">%(cards)s</div></main>
 <footer><div><span>Reply with:</span><code id="line">nothing ticked yet</code><button id="copy">copy</button>
 <span id="copied"></span></div></footer>
 <script>
@@ -398,7 +611,8 @@ document.getElementById('copy').addEventListener('click',()=>{const t=line();
  if(navigator.clipboard)navigator.clipboard.writeText(t).then(()=>{document.getElementById('copied').textContent='copied'});});
 document.querySelectorAll('audio').forEach(a=>a.addEventListener('play',()=>document.querySelectorAll('audio').forEach(b=>{if(b!==a)b.pause()})));
 </script></body></html>""" % {"film": html.escape(c["film"]), "scene": html.escape(c["scene"]), "title": title,
-                               "brief": html.escape(c.get("brief", "")), "cards": "\n".join(cards)}
+                               "brief": html.escape(c.get("brief", "")), "cards": "\n".join(cards),
+                               "note": '<p class="note">%s</p>\n' % html.escape(note) if note else ""}
     out = os.path.join(d, "sheet_%s.html" % ("finals" if which == "finals" else "r%s" % which))
     open(out, "w", encoding="utf-8").write(page)
     return out
@@ -425,7 +639,7 @@ def cmd_round(a):
     n = len(c["rounds"]) + 1
     d = base(c["film"], c["scene"])
     secs = audition_secs(c)
-    rnd = {"n": n, "samples": [], "picks": []}
+    rnd = {"n": n, "samples": [], "picks": [], "note": a.note or ""}
     for k, r in enumerate(recipes, 1):
         sid = "r%d-%02d" % (n, k)
         raw = os.path.join(d, "r%d" % n, "_raw", sid + ".mp3")
@@ -439,8 +653,10 @@ def cmd_round(a):
         s = {"id": sid, "name": r.get("name", ""), "recipe": {k2: v for k2, v in r.items() if k2 not in ("parent", "note")},
              "parent": r.get("parent"), "note": r.get("note", ""), "file": f, "preview": pv,
              "secs": round(duration(os.path.join(d, f)), 1), "lufs": lufs}
-        if r["engine"] in ("remix", "cover"):
-            s["kept"] = tune_kept(os.path.join(COMFY, "input", prep_source(r, secs)), os.path.join(d, f))
+        if r["engine"] in ("remix", "cover", "notes", "musicgen") or (r["engine"] == "file" and r.get("source")):
+            src = os.path.join(COMFY, "input", prep_source(r, secs))
+            s["kept"] = tune_kept(src, os.path.join(d, f))
+            s["harmony"] = harmony_held(src, os.path.join(d, f))
         rnd["samples"].append(s)
         print("  %s %-28s %-15s %4.0fs render, %.1f s long" % (sid, s["name"][:28], ENGINE_NAME[r["engine"]], took,
                                                                s["secs"]), flush=True)
@@ -581,6 +797,36 @@ def _chroma_impl(src, out):
         cos = (x[:, :m] * y[:, :m]).sum(0) / (np.linalg.norm(x[:, :m], axis=0) * np.linalg.norm(y[:, :m], axis=0) + 1e-9)
         best = max(best, float(cos.mean()))
     print("%.4f" % best)
+
+
+def harmony_held(src, out):
+    """Whether a cover keeps the source's harmony phrase by phrase: the correlation of the two clips' average pitch
+    classes over each 6 s window (two bars at 81 BPM), the mean and the weakest window. 2026-10-05: the TerraTheme
+    covers told "Ab minor" kept the tune but turned whole phrases into Ab major or F minor - a clip's average hides
+    that, its weakest two bars show it. Returns [mean, weakest] or None."""
+    r = subprocess.run([VENV_PY, os.path.abspath(__file__), "_harmony", src, out], capture_output=True, text=True)
+    try:
+        m, w = r.stdout.strip().splitlines()[-1].split()
+        return [round(float(m), 3), round(float(w), 3)]
+    except (ValueError, IndexError):
+        return None
+
+
+def _harmony_impl(src, out, win=6.0):
+    import numpy as np
+    import librosa
+    sr, hop = 22050, 512
+    dur = librosa.get_duration(path=src)
+    ys, yo = librosa.load(src, sr=sr)[0], librosa.load(out, sr=sr, duration=dur)[0]
+    a = librosa.feature.chroma_cqt(y=librosa.effects.harmonic(ys), sr=sr, hop_length=hop)
+    b = librosa.feature.chroma_cqt(y=librosa.effects.harmonic(yo), sr=sr, hop_length=hop)
+    e = librosa.feature.rms(y=ys, hop_length=hop)[0]
+    n, w = min(a.shape[1], b.shape[1], len(e)), int(win * sr / hop)
+    windows = [i for i in range(0, max(1, n - w + 1), w // 2)]
+    loud = max(e[i:i + w].mean() for i in windows)
+    cs = [float(np.corrcoef(a[:, i:i + w].mean(1), b[:, i:i + w].mean(1))[0, 1]) for i in windows
+          if e[i:i + w].mean() > loud / 30]                # a near-silent stretch of the source has no harmony to hold
+    print("%.4f %.4f" % (np.mean(cs), np.min(cs)) if cs else "nan nan")
 
 
 def extend_exact(src, dst, target):
@@ -899,6 +1145,9 @@ def main():
     if len(sys.argv) == 4 and sys.argv[1] == "_chroma":    # tune_kept's worker, run under ComfyUI's venv
         _chroma_impl(sys.argv[2], sys.argv[3])
         return
+    if len(sys.argv) == 4 and sys.argv[1] == "_harmony":   # harmony_held's worker, run under ComfyUI's venv
+        _harmony_impl(sys.argv[2], sys.argv[3])
+        return
     if len(sys.argv) == 3 and sys.argv[1] == "_develop":   # develop's worker, run under ComfyUI's venv
         _develop_impl(sys.argv[2])
         return
@@ -912,6 +1161,7 @@ def main():
     ap.add_argument("--label", default=None, help="final: what this version is for, e.g. 'the 3:04 cut'")
     ap.add_argument("--step", type=float, default=0.08, help="vary: the tempo nudge (0.08 = 8%%; smaller later)")
     ap.add_argument("--brief", default="")
+    ap.add_argument("--note", default="", help="round: what this round changed, shown at the top of its sheet")
     ap.add_argument("--video", default=None)
     ap.add_argument("--sfx", default=None)
     ap.add_argument("--recipes")

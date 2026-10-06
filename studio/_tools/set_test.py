@@ -559,8 +559,9 @@ def keydir(sid):
 
 
 def key_file(sid, at, seed, kind=""):
-    """keys_<id>/k<at>_s<seed>.png - the graded key a take anchors; kind "raw" / "erased" for its steps."""
-    tag = "end" if at == "end" else "k%d" % int(at)
+    """keys_<id>/k<at>_s<seed>.png (start_ / end_ for the first and last frames) - the graded key a take anchors;
+    kind "raw" / "erased" for its steps."""
+    tag = at if at in ("start", "end") else "k%d" % int(at)
     return os.path.join(keydir(sid), "%s%s_s%d.png" % (tag, "_" + kind if kind else "", int(seed)))
 
 
@@ -597,8 +598,11 @@ def stage_key(ids, seeds, force=False):
             row = []
             frm = k.get("from", "start")
             for q in seeds:
+                # "from": "start" / "end" = the set's frame; "key:<at>" = a key made before this one, so a
+                # shot's two keys share one pose (THE FIRE ESPER's prayer, 2026-10-05)
+                kf = frm[4:] if str(frm).startswith("key:") else frm
                 base = start if frm == "start" else end if frm == "end" else \
-                    key_file(sid, frm, next(x for x in s["keys"] if x["at"] == frm).get("seed", q))
+                    key_file(sid, kf, next(x for x in s["keys"] if x["at"] == kf).get("seed", q))
                 dst, raw = key_file(sid, k["at"], q), key_file(sid, k["at"], q, "raw")
                 if force or not os.path.exists(dst):
                     t0 = time.time()
@@ -646,8 +650,10 @@ def stage_take(ids, seeds, force=False):
             print("  %s: a key has no picked seed - look at keys_%s/keys.jpg" % (sid, sid), flush=True)
             continue
         n = h3_len(int(s["previz"]["frames"]))
-        for k in keys:
-            if k["at"] == "end":
+        for k in keys:                                  # a key at the first or the last frame replaces it
+            if k["at"] == "start":
+                start = key_file(sid, "start", k["seed"])
+            elif k["at"] == "end":
                 end = key_file(sid, "end", k["seed"])
         for q in seeds:
             dst = os.path.join(OUT, "%s_%s_s%d.mp4" % ("h3k" if keys else "h3f", sid, q))
@@ -661,7 +667,7 @@ def stage_take(ids, seeds, force=False):
                 wf[node]["inputs"]["image"] = "%s_%s.png" % (tag, name)
             wf["20"]["inputs"].update({"prompt": s["prompt"], "width": 1280, "height": 704, "length": n})
             prev = ["20", 0]
-            for i, k in enumerate(x for x in keys if x["at"] != "end"):
+            for i, k in enumerate(x for x in keys if x["at"] not in ("start", "end")):
                 name = "%s_k%d.png" % (tag, i)
                 shutil.copy(key_file(sid, k["at"], k["seed"]), os.path.join(fight.COMFY, "input", name))
                 wf["k%d" % i] = {"class_type": "LoadImage", "inputs": {"image": name}}
@@ -670,6 +676,9 @@ def stage_take(ids, seeds, force=False):
                                             "frame_idx": min(int(k["at"]), n - 1), "image": ["k%d" % i, 0]}}
                 prev = ["g%d" % i, 0]
             wf["30"]["inputs"]["conditioning"] = prev
+            # 12 steps, not the turbo LoRA's 4: at 4 H3 draws a triangle lattice over small characters (LTX_PLAYBOOK §101.6,
+            # 2026-10-05: 8 steps faint traces, 12 clean, ~2x the time); H3_STEPS overrides
+            wf["32"]["inputs"]["steps"] = int(os.environ.get("H3_STEPS", "12"))
             wf["33"]["inputs"]["noise_seed"] = int(q)
             wf["51"]["inputs"]["filename_prefix"] = "claude-generated/fight/" + tag
             fight.wait_for_queue()

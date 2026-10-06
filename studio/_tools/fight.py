@@ -77,6 +77,16 @@ if not all(k in _seq for k in ("film", "cast", "place", "shots")):
     raise SystemExit("%s is not a shot script (it needs film, cast, place, shots). "
                      "studio/sequences/ holds edit analyses, not films." % _path)
 
+# SHOT OPTIONS (studio/shotscripts/<film>.options.json, set on shots & specs): the treatments a film or a shot
+# ASKS for - a camera move, beat sounds, impact frames, a grade - applied over the script when it is loaded; none
+# unless asked (studio/_tools/shot_options.py, LTX_PLAYBOOK §103, 2026-10-05)
+try:
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import shot_options as _shot_options
+    _seq = _shot_options.apply_script(_seq)
+except ImportError:
+    pass
+
 FILM = _seq["film"]
 OUT = os.path.join(STUDIO, "samples", "fight", FILM)
 REAL = _seq.get("realism", "")

@@ -2,7 +2,7 @@
 
 | family | status | last tested | best result |
 |---|---|---|---|
-| pipeline | works-with-caveats | 2026-10-01 | forest 305: four keys on their frames, 2 of 2, the whole exchange on a chosen timeline, grade A; the duel's F10 meteor, keyed, 2 of 2 where words failed 4 of 4, grade A- |
+| pipeline | works-with-caveats | 2026-10-05 | forest 305: four keys on their frames, 2 of 2, the whole exchange on a chosen timeline, grade A; the duel's F10 meteor, keyed, 2 of 2 where words failed 4 of 4, grade A- |
 
 **Also called:** key pose, key poses, posed keyframe, mid-take anchor, guide frame, AddGuide, drawn choreography
 **Not the same as:**
@@ -97,6 +97,11 @@ Write each blow as a key in the shot script, paint it with `set_test.py key`, lo
 - **Did:** keys for the three contacts - her hook at f30 (050), his palm at f14 (060), her uppercut as 110's last frame - and the catch as 140's last frame; two seeds each, the restyled seed (flagged x4.0-5.3) thrown away every time.
 - **Got:** all four land on their frames on both seeds; 110 ends ON the uppercut (an impact burst) so the cut to the pendant flying is a cut on the action. 060's kept seed drew the jester twice - lunging, and still standing where he had been: a key's `"fx"` may now be a list, and a second edit removed the copy. For the uppercut his mark was moved to 0.9 m in front of her so the key could be painted from the end frame without moving anyone across it.
 - **Learned:** pose a key from a frame in which the two are already within reach; erase a pose's leftover copy with a second edit, not a new seed.
+
+### 2026-10-05 · the fire esper · the poses a relay needs, the first frame keyed too · grade A-
+- **Did:** 16 keys in 10 shots of THE FIRE ESPER - the set's cast draws everyone standing, arms down, eyes open, so the prayer (020, 060, 090, 210, 220), a circle of runes round her feet (050), a flock in the sky (070), his fear (080), the column of fire in the esper's place (100) and her kneel (230) were painted. Two new mechanics in `set_test.py`: `"at": "start"` replaces the FIRST frame; `"from": "key:start"` paints a key from a key made before it, so both frames share one pose (060, 090, 220). 100 ran it backwards: the last frame (the esper beside her) painted first, then the first frame from it - "replace the demon with a column of fire as tall, in the same place" - and H3 grew the esper out of the column.
+- **Got:** every keyed shot holds its pose or its change; one seed of the editor repainted the whole frame on 9 of the 10 shots (flagged by the detail ratio, 3.6-6.9) - the other seed was clean each time. 050's circle came out paler than the shot it echoes; 220's "the glow has faded" barely dimmed it.
+- **Learned:** paint the END state of a beat into the last frame (080's grin came back when the last frame was the grin); key from a key when two frames must share a pose; a removal ("the light is gone") is weak on this editor.
 
 ## Failure modes
 

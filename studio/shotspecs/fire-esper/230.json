@@ -1,0 +1,77 @@
+{
+ "invariants": [
+  {
+   "id": "facing",
+   "title": "Facing",
+   "rule": "Terra faces screen-right (toward him), as the set's frames draw them.",
+   "why": "a take keeps the facing its two frames give it; the duel's were mirrored by a bug",
+   "check": {
+    "kind": "eye"
+   }
+  },
+  {
+   "id": "continues",
+   "title": "It starts where the last shot ended",
+   "rule": "Terra starts where 220 left her.",
+   "why": "a relay: each leg takes the moment from the one before",
+   "check": {
+    "kind": "eye"
+   }
+  },
+  {
+   "id": "leg",
+   "title": "Its leg of the relay: breath",
+   "rule": "A cutaway while time passes - story time 56 to 62 s.",
+   "why": "LTX_PLAYBOOK §101: every shot is a leg of one moment; an echo repeats time already told",
+   "check": {
+    "kind": "eye"
+   }
+  },
+  {
+   "id": "story1",
+   "title": "She ends kneeling",
+   "rule": "Alone, on her knees in the ash, looking up at the red sky (the key pose).",
+   "why": "the script (studio/shotscripts/fire-esper.md)",
+   "check": {
+    "kind": "eye"
+   }
+  },
+  {
+   "id": "length",
+   "title": "Length",
+   "rule": "4.38 seconds (105 frames at 24 fps).",
+   "why": "each leg's length is its share of the story time",
+   "check": {
+    "kind": "duration_between",
+    "min": 3.98,
+    "max": 4.98
+   }
+  }
+ ],
+ "flair": [
+  {
+   "id": "seed",
+   "title": "Seed",
+   "note": "free - the takes differ by seed"
+  },
+  {
+   "id": "timing",
+   "title": "Timing inside the shot",
+   "note": "the beats may land a few frames early or late"
+  },
+  {
+   "id": "place",
+   "title": "How far the place has burned",
+   "note": "the dress for this shot: volcanic (dusk, red, burning, volcanic - it only ever gets worse)"
+  },
+  {
+   "id": "sound",
+   "title": "Sound",
+   "note": "H3's own: wind, crackling fire, a distant rumble."
+  }
+ ],
+ "shot": "230",
+ "title": "alone",
+ "beat": "The cost. [breath · story t 56-62 s] (shot 23 of 23)",
+ "build": "frames first in the clearing set (set_test.py render + cast --ends), H3 between the set's two frames (set_film.py takes) - the camera, the marks and the facing come from the set; the place's state from the shot's dress"
+}

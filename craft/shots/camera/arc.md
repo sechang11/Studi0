@@ -2,7 +2,7 @@
 
 | family | status | last tested | best result |
 |---|---|---|---|
-| camera | works-with-caveats | 2026-10-01 | plaza 106, a 100° arc in a 3D set pinned at both ends, grade B+ |
+| camera | works-with-caveats | 2026-10-05 | plaza 106, a 100° arc in a 3D set pinned at both ends, grade B+ |
 
 **Also called:** arc shot, half orbit, quarter orbit, camera arcs around, semicircle move
 **Not the same as:**
@@ -64,6 +64,11 @@ One previz piece: `previz_blender.py --scene orbit` with `--degrees` set to the 
 - **Did:** three more of the set's views on the arc (9°, 60°, 112°) posed into the hook, the backfist and the lock forming, five waypoint keys in all plus the posed end (`orbit_way.py keys5`, `take5`); seeds 11 and 202.
 - **Got:** all five views in order, 2 of 2, in smaller steps; the parking stayed - seed 11's longest still run 13 frames (15 with two waypoints), seed 202's 5 either way.
 - **Learned:** denser waypoints shrink the steps, not the parking; for a glide, the depth.
+
+### 2026-10-05 · the fire esper 190 · a small orbit as a shot option, in a 3D set · grade n/a
+- **Did:** `camera_move` orbit_right 0.25 (7.5 degrees round the subject) on the high overview.
+- **Got:** a drift past the foreground tree while the crow crosses - the breath leg breathes.
+- **Learned:** a small orbit over a still place reads as time passing; check the line of action stays uncrossed.
 
 ## Failure modes
 

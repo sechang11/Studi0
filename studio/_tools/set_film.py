@@ -77,7 +77,7 @@ def stage_check():
     Five of the duel's 58 cameras were wrong in a way only the frames showed, 30 minutes of frames later."""
     import numpy as np
     acts = json.load(open(os.path.join(ROOT, "studio", "shotscripts", fight.FILM + ".acts.json")))
-    heights = {"terra": 1.62, "jester": 1.88}
+    heights = {"terra": 1.62, "jester": 1.88, "esper": 6.5}
 
     def proj(cam, look, lens, p, w=1280, h=720):
         c, l, q = (np.array(v, float) for v in (cam, look, p))
@@ -92,7 +92,7 @@ def stage_check():
         k = lens / 36.0 * w
         return w / 2 + (d @ r) / z * k, h / 2 - (d @ u) / z * k
 
-    bad = 0
+    bad, small, SMALL_PX = 0, 0, 200
     for s in fight.SHOTS:
         pz, sid = s["previz"], s["id"]
         for tag in ("start", "end"):
@@ -114,7 +114,14 @@ def stage_check():
                     print("  %s %-5s %s: out of frame (x %.0f, head y %.0f, feet y %.0f, %d px tall)" % (
                         sid, tag, who, cx, head[1], feet[1], feet[1] - head[1]))
                     bad += 1
-    print("check: %d character-frames out of the picture across %d shots" % (bad, len(fight.SHOTS)))
+                elif feet[1] - head[1] < SMALL_PX:
+                    # always on (LTX_PLAYBOOK §103): a figure this small does not read - its acting, its costume -
+                    # and H3 had drawn its worst artefacts there; a warning, the framing may be what the shot wants
+                    print("  %s %-5s %s: small - %d px tall (under %d: frame closer if they must act)" % (
+                        sid, tag, who, feet[1] - head[1], SMALL_PX))
+                    small += 1
+    print("check: %d character-frames out of the picture, %d small, across %d shots" % (bad, small,
+                                                                                         len(fight.SHOTS)))
 
 
 def h3_len(frames):
@@ -146,6 +153,9 @@ def stage_takes(only, seeds, force=False):
         wf["9"]["inputs"]["image"] = _inp(b, tag + "_b.png")
         wf["20"]["inputs"].update({"prompt": s["prompt"], "width": 1280, "height": 704,
                                    "length": h3_len(int(s["previz"]["frames"]))})
+        # 12 steps, not the turbo LoRA's 4: at 4 H3 draws a triangle lattice over small characters (LTX_PLAYBOOK §101.6,
+        # 2026-10-05: 8 steps faint traces, 12 clean, ~2x the time); H3_STEPS overrides
+        wf["32"]["inputs"]["steps"] = int(os.environ.get("H3_STEPS", "12"))
         wf["33"]["inputs"]["noise_seed"] = int(q)
         wf["51"]["inputs"]["filename_prefix"] = "claude-generated/fight/" + tag
         fight.wait_for_queue()

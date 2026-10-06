@@ -2,7 +2,7 @@
 
 | family | status | last tested | best result |
 |---|---|---|---|
-| pipeline | works-with-caveats | 2026-09-30 | cyber-alchemist 112, 210, grade A- |
+| pipeline | works-with-caveats | 2026-10-05 | cyber-alchemist 112, 210, grade A- |
 
 **Also called:** first-last frame, FLF, start and end frame, keyframe interpolation, in-between
 **Not the same as:**
@@ -52,11 +52,17 @@
 - **Got:** real moves.
 - **Learned:** as above.
 
+### 2026-10-05 · the fire esper 140 · H3 at 4 steps: a triangle lattice over small characters · grade n/a
+- **Did:** the director saw "some distortion of pixels on the characters" in the wides of THE FIRE ESPER (H3 first-last, workflow `65`, the turbo LoRA at its 4 steps). Shot 140 rendered with one change at a time.
+- **Got:** a regular mesh of triangles over the small figures from the take's first frame - not in the set frames, not in the sheet views, not from the VAE (a set frame through encode/decode: blurred, no triangles). 1536x832 and 1344x768 at 4 steps: still there; the LoRA at 0.7 with 8 steps: reduced; 8 steps: faint traces; 12 steps: clean, about twice the time.
+- **Learned:** H3 takes at 12 steps (`set_test.py`, `set_film.py`; `H3_STEPS` overrides). THE EMBER THIEF (4 steps) carries it on its small figures.
+
 ## Failure modes
 
 | symptom | cause | fix | seen in |
 |---|---|---|---|
 | a cross-fade | frames that disagree about the room | previz instead | cyber-alchemist 104 |
+| a triangle lattice over small characters, from frame 0 | H3's turbo LoRA at 4 steps | 12 steps | fire-esper 140, ember-thief 040 |
 
 ## Evidence
 
